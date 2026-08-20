@@ -6,7 +6,7 @@ Somente ambiente local existe. Não há projeto Supabase vinculado, QA, produç�
 
 ## Local
 
-Objetivo: desenvolvimento determinístico, testes, migrations e Context Pack. Dados permitidos: fixtures sintéticas. Secrets: nenhum necessário no fluxo atual. `.env*` não entra no Git.
+Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento determinístico, testes, migrations e Context Pack. Dados permitidos: fixtures sintéticas. Secrets: nenhum necessário no fluxo atual. `.env*` não entra no Git.
 
 ## QA planejado
 

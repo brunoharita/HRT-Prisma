@@ -79,6 +79,7 @@ for (const required of [
 }
 
 const files = await walk(root);
+const legacyRoot = ["C:", "Users", "Bruno", "Documents", "ChatGPT", "Prisma"].join("\\");
 const secretPatterns = [
   /\bsk-[A-Za-z0-9_-]{20,}\b/,
   /\bsb_secret_[A-Za-z0-9_-]{20,}\b/,
@@ -87,6 +88,9 @@ const secretPatterns = [
 for (const file of files) {
   const path = relative(root, file).replaceAll("\\", "/");
   const text = await readFile(file, "utf8");
+  if (path !== "scripts/check-foundation.mjs" && text.includes(legacyRoot)) {
+    errors.push(`${path}: reference to the former project root is prohibited`);
+  }
   for (const pattern of secretPatterns) {
     if (pattern.test(text)) errors.push(`${path}: possible committed secret matching ${pattern}`);
   }

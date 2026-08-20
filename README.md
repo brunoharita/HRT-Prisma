@@ -2,6 +2,8 @@
 
 Prisma is an explainable Talent Intelligence layer for transforming resumes and professional information into structured, searchable, comparable, traceable, and auditable knowledge. It supports human decision-making; it does not automatically approve, reject, hire, or eliminate people.
 
+Official local project root: `C:\Users\Bruno\Documents\Prisma`.
+
 ## Verified current state
 
 The repository currently provides a TypeScript CLI vertical slice that imports a representative text resume, extracts a structured profile, preserves evidence and provenance, derives limited versioned inferences, persists tenant-scoped data, performs structured natural-language retrieval, and produces an explained contextual match.

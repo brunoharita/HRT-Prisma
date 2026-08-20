@@ -9,3 +9,4 @@ tmp/
 !.env.example
 *.log
 coverage/
+/prisma-movimento-0-1-correcoes.pdf

@@ -10,6 +10,7 @@ last_verified: 2026-08-20
 
 ## Repositório
 
+- Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
 - Branch de trabalho verificada: `codex/prisma-foundation-governance`.
 - Repositório sem remoto configurado no momento desta verificação.
 - Stack local: Node.js, TypeScript e pnpm.
