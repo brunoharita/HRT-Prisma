@@ -1,0 +1,13 @@
+NOME: Fernanda Dias Exemplo
+RESUMO:
+Engenheira de dados.
+EXPERIÊNCIA:
+- Dados Modelo | Engenheira de Dados | 2021-03 a 2025-06 | Implementou pipelines ETL em Python e consultas SQL para analytics.
+COMPETÊNCIAS:
+- ETL
+- Python
+- SQL
+EDUCAÇÃO:
+- Instituto Modelo | Banco de Dados | concluído
+IDIOMAS:
+- Inglês | intermediário

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "tie-is-deterministic",
+    "fixtures": [
+      "../extraction/fixtures/cv-02-tableau-retail.txt",
+      "../extraction/fixtures/cv-10-sales-excel.txt"
+    ],
+    "query": "Pessoas com Excel",
+    "expectedNames": ["Gustavo Moraes Exemplo", "Rafael Lima Exemplo"]
+  },
+  {
+    "id": "no-candidate-found",
+    "fixtures": ["../extraction/fixtures/cv-10-sales-excel.txt"],
+    "query": "Pessoas com Power BI",
+    "expectedNames": []
+  }
+]

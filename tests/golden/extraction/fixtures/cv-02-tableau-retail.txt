@@ -1,0 +1,12 @@
+Nome: Rafael Lima Exemplo
+Perfil:
+Analista com experiência no varejo.
+Histórico profissional:
+- Rede Varejista Modelo | Analista Comercial | 2020-02 a 2025-03 | Construiu painéis no Tableau e analisou dados de vendas das lojas.
+Habilidades:
+- Tableau
+- Excel
+Formação:
+- Faculdade Modelo | Administração | concluído
+Idiomas:
+- Espanhol | básico

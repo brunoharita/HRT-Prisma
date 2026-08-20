@@ -1,0 +1,47 @@
+[
+  {
+    "id": "bi-industrial-explained",
+    "fixture": "../extraction/fixtures/cv-01-bi-industrial.txt",
+    "requirements": [
+      { "id": "bi", "label": "Business Intelligence", "competency": "Business Intelligence", "importance": "required", "transferableCompetencies": ["Power BI"] },
+      { "id": "industry", "label": "Operação industrial", "competency": "Industrial Operations", "importance": "required", "transferableCompetencies": [] },
+      { "id": "english", "label": "Inglês fluente", "competency": "English fluency", "importance": "desired", "transferableCompetencies": [] }
+    ],
+    "expectedStatuses": { "bi": "partially_met", "industry": "met", "english": "no_evidence" },
+    "expectedGapCount": 0,
+    "expectedSufficiency": "sufficient_evidence"
+  },
+  {
+    "id": "construction-project-gap",
+    "fixture": "../extraction/fixtures/cv-05-construction-pmo.txt",
+    "requirements": [
+      { "id": "leadership", "label": "Liderança de projetos", "competency": "Project Leadership", "importance": "required", "transferableCompetencies": ["Project Management"] },
+      { "id": "sql", "label": "SQL", "competency": "SQL", "importance": "required", "transferableCompetencies": [] }
+    ],
+    "expectedStatuses": { "leadership": "met", "sql": "no_evidence" },
+    "expectedGapCount": 1,
+    "expectedSufficiency": "insufficient_evidence"
+  },
+  {
+    "id": "tableau-transferable-bi",
+    "fixture": "../extraction/fixtures/cv-02-tableau-retail.txt",
+    "requirements": [
+      { "id": "bi", "label": "Business Intelligence", "competency": "Business Intelligence", "importance": "required", "transferableCompetencies": ["Tableau"] },
+      { "id": "power-bi", "label": "Power BI", "competency": "Power BI", "importance": "desired", "transferableCompetencies": ["Tableau"] }
+    ],
+    "expectedStatuses": { "bi": "partially_met", "power-bi": "partially_met" },
+    "expectedGapCount": 0,
+    "expectedSufficiency": "sufficient_evidence"
+  },
+  {
+    "id": "no-candidate-sufficient",
+    "fixture": "../extraction/fixtures/cv-10-sales-excel.txt",
+    "requirements": [
+      { "id": "power-bi", "label": "Power BI", "competency": "Power BI", "importance": "required", "transferableCompetencies": [] },
+      { "id": "sql", "label": "SQL", "competency": "SQL", "importance": "required", "transferableCompetencies": [] }
+    ],
+    "expectedStatuses": { "power-bi": "no_evidence", "sql": "no_evidence" },
+    "expectedGapCount": 2,
+    "expectedSufficiency": "insufficient_evidence"
+  }
+]

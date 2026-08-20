@@ -1,0 +1,11 @@
+node_modules/
+.pnpm-store/
+dist/
+.prisma-data/
+supabase/.temp/
+tmp/
+.env
+.env.*
+!.env.example
+*.log
+coverage/

@@ -1,0 +1,27 @@
+{
+  "name": "prisma-talent-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "node scripts/lint.mjs",
+    "check:foundation": "node scripts/check-foundation.mjs",
+    "generate:prisma-context": "node scripts/generate-prisma-context.mjs",
+    "check:prisma-context": "node scripts/check-prisma-context.mjs",
+    "test": "pnpm run build && node scripts/run-tests.mjs",
+    "test:golden": "pnpm run build && node dist/tests/golden/runner.js",
+    "demo": "pnpm run build && node dist/src/cli.js demo",
+    "audit:dependencies": "pnpm audit --prod --audit-level high",
+    "validate": "pnpm run lint && pnpm run check:foundation && pnpm run check:prisma-context && pnpm run typecheck && pnpm run test && pnpm run test:golden && pnpm run demo"
+  },
+  "devDependencies": {
+    "@types/node": "24.3.0",
+    "typescript": "5.9.2"
+  }
+}

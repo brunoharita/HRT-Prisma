@@ -1,0 +1,74 @@
+# Privacidade e LGPD
+
+## Estado
+
+Privacy by design está definida e parcialmente refletida no schema. Base legal, aviso de privacidade, retenção, subprocessadores, operações de titular e auditoria de acesso ainda não estão aprovados ou implementados. Dados reais não estão autorizados no fluxo local atual.
+
+## Mapa de dados
+
+| Categoria | Natureza | Origem | Finalidade inicial | Persistência atual | Acesso pretendido |
+| --- | --- | --- | --- | --- | --- |
+| Nome e lifecycle | pessoal | currículo/organização | identificar perfil | JSON local/migration | admin, recruiter, hiring manager limitado |
+| E-mail, telefone, localização | pessoal privado | currículo/pessoa | contato autorizado | migration separada; não usada localmente | admin e recruiter |
+| Experiência, educação, certificação | pessoal profissional | currículo | estruturar conhecimento | perfil/evidência | papéis autorizados |
+| Idioma, ferramentas, competências | pessoal profissional e inferência possível | currículo/regras | busca e matching | perfil/evidência/inferência | papéis autorizados |
+| Documento bruto | pessoal | upload | fonte e auditoria | JSON local representativo; storage planejado | admin e recruiter |
+| Avaliação e matching | pessoal derivado | vaga + perfil | apoio à decisão | JSON local/migration | admin, recruiter, hiring manager |
+| Telemetria | dado técnico ligado a IDs | sistema | custo e diagnóstico | JSON local/migration | admin/auditoria |
+
+## Dados sensíveis
+
+Currículo não autoriza inferência indiscriminada. Origem racial ou étnica, religião, opinião política, filiação sindical, saúde, vida sexual, biometria, diversidade e outros atributos sensíveis não devem ser extraídos, inferidos, usados em matching ou enviados a modelo sem fundamento jurídico, necessidade legítima, decisão explícita de produto, minimização e controle reforçado.
+
+## Finalidade e base legal
+
+Finalidade atual é prova técnica com fixtures sintéticas. A base legal para candidatos e colaboradores reais deve ser validada por responsável jurídico antes do piloto. Consentimento não deve ser assumido apenas porque existe currículo. Finalidade incompatível exige nova análise.
+
+## Onde persiste
+
+- Local: `.prisma-data`, ignorado pelo Git, somente fixtures representativas.
+- Banco planejado: PostgreSQL/Supabase com RLS.
+- Documento planejado: storage privado, não tabela pública.
+- Embeddings: não implementados; quando existirem, são dados derivados sujeitos ao mesmo tenant, retenção e exclusão.
+- Modelos externos: nenhum ativo; provider futuro exige DPA/subprocessador, retenção e região documentados.
+
+## Minimização
+
+Persistir apenas campos necessários à finalidade. Evidência usa trecho mínimo suficiente. Logs não recebem currículo, prompt completo com PII ou resposta integral. Dados privados ficam separados do perfil consultável.
+
+## Retenção e exclusão
+
+Política temporal está bloqueada por decisão jurídica e comercial. Antes do piloto real, definir por categoria: prazo, gatilho, legal hold, anonimização, deleção de documento, perfil, evidência, inferência, embedding, cache, backup e fornecedor externo.
+
+Exclusão deve localizar registros por pessoa e organização, revogar acessos, remover ou anonimizar derivados conforme obrigação, preservar somente auditoria legalmente necessária e produzir evidência da operação.
+
+## Exportação e correção
+
+Titular deve poder solicitar acesso, correção, exportação e exclusão pelos canais definidos pelo controlador. Correção cria trilha de origem e não reescreve evidência histórica sem registro. Formato de exportação deve ser legível e incluir proveniência e inferências identificadas.
+
+## Anonimização
+
+QA usa fixtures ou dados anonimizados. Anonimização deve considerar texto livre, nomes de empresas, datas, localização, metadados, embeddings e combinações reidentificáveis. Pseudonimização não deve ser chamada de anonimização.
+
+## Acesso e auditoria
+
+`authorization-model.md` define papéis. Antes do piloto, registrar visualização, exportação, alteração, reprocessamento, exclusão e configuração de IA com ator, tenant, alvo, finalidade, timestamp e resultado. Auditoria não contém o dado sensível integral.
+
+## Subprocessadores e fornecedores de IA
+
+Nenhum está aprovado. Antes de ativar: finalidade, categorias enviadas, base legal, contrato/DPA, região, retenção, treinamento, subprocessadores, segurança, exclusão, incidentes e mecanismo de transferência internacional devem ser avaliados.
+
+## Decisões automatizadas
+
+Prisma auxilia, recomenda e explica. Não rejeita, aprova, contrata ou elimina automaticamente. Recomendação, decisão humana e resultado observado são registros separados. Contestação deve permitir revisão humana e acesso à explicação.
+
+## Riscos abertos
+
+- base legal e aviso de privacidade;
+- retenção e backup;
+- storage privado e malware scanning;
+- operações de titular;
+- auditoria de acesso;
+- validação com dados reais autorizados;
+- subprocessador e transferência internacional para futuro provider;
+- política de embeddings e anonimização.

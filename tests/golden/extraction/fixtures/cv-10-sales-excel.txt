@@ -1,0 +1,9 @@
+Nome: Gustavo Moraes Exemplo
+Perfil:
+Profissional comercial com atuação em varejo.
+Experiência profissional:
+- Loja Modelo | Supervisor Comercial | 2016-01 a 2025-02 | Acompanhou metas e relatórios de vendas com Excel.
+Habilidades:
+- Excel
+Educação:
+- Faculdade Modelo | Gestão Comercial | concluído

@@ -1,0 +1,12 @@
+NOME: Camila Souza Exemplo
+RESUMO:
+Especialista em logística e supply chain.
+EXPERIÊNCIA:
+- Distribuidora Modelo | Analista de Logística | 2019-01 a 2025-01 | Utilizou SAP no controle de armazém e apoiou melhoria de processos logísticos.
+COMPETÊNCIAS:
+- SAP
+- Excel
+EDUCAÇÃO:
+- Centro Universitário Modelo | Logística | concluído
+CERTIFICAÇÕES:
+- Lean Yellow Belt

@@ -1,0 +1,14 @@
+NOME: Marina Costa Exemplo
+RESUMO:
+Profissional de dados com atuação em indústria de alimentos.
+EXPERIÊNCIA:
+- Fábrica Horizonte | Analista de Dados Sênior | 2021-01 a 2025-06 | Desenvolveu dashboards em Power BI e SQL para a operação industrial e coordenou projeto de indicadores.
+- Consultoria Delta | Analista de Dados | 2018-03 a 2020-12 | Criou rotinas ETL e relatórios gerenciais.
+COMPETÊNCIAS:
+- Power BI
+- SQL
+- ETL
+EDUCAÇÃO:
+- Universidade Exemplo | Sistemas de Informação | concluído
+IDIOMAS:
+- Inglês | intermediário

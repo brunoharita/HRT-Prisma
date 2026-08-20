@@ -1,0 +1,10 @@
+Nome: João Martins Exemplo
+Resumo:
+Analista de dados no setor de saúde.
+Experiência:
+- Hospital Modelo | Analista de Dados | 2022-01 a 2025-05 | Automatizou análise de dados assistenciais com Python e SQL.
+Tecnologias:
+- Python
+- SQL
+Educação:
+- Instituto Exemplo | Ciência de Dados | concluído

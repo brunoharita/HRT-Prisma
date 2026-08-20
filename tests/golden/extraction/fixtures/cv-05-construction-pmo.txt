@@ -1,0 +1,12 @@
+NOME: Ana Ribeiro Exemplo
+PERFIL:
+Engenheira com atuação em construção civil.
+EXPERIÊNCIA:
+- Construtora Modelo | Coordenadora de Projetos | 2018-06 a 2025-07 | Liderou projetos de obra, planejamento e gestão de projetos com equipes multidisciplinares.
+COMPETÊNCIAS:
+- Gestão de projetos
+- Excel
+EDUCAÇÃO:
+- Universidade Modelo | Engenharia Civil | concluído
+CERTIFICAÇÕES:
+- PMP

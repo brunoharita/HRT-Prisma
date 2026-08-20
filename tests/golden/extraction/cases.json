@@ -1,0 +1,119 @@
+[
+  {
+    "id": "cv-01-bi-industrial",
+    "fixture": "fixtures/cv-01-bi-industrial.txt",
+    "fullName": "Marina Costa Exemplo",
+    "requiredExplicit": ["Power BI", "SQL", "ETL", "Industrial Operations"],
+    "requiredInferred": ["Business Intelligence", "Data Analysis"],
+    "requiredContexts": ["Industrial"],
+    "forbidden": ["Communication", "Creativity", "English fluency"]
+  },
+  {
+    "id": "cv-02-tableau-retail",
+    "fixture": "fixtures/cv-02-tableau-retail.txt",
+    "fullName": "Rafael Lima Exemplo",
+    "requiredExplicit": ["Tableau", "Excel", "Data Analysis"],
+    "requiredInferred": ["Business Intelligence"],
+    "requiredContexts": ["Retail"],
+    "forbidden": ["Power BI", "Leadership"]
+  },
+  {
+    "id": "cv-03-sap-logistics",
+    "fixture": "fixtures/cv-03-sap-logistics.txt",
+    "fullName": "Camila Souza Exemplo",
+    "requiredExplicit": ["SAP", "Process Improvement", "Excel"],
+    "requiredInferred": ["ERP"],
+    "requiredContexts": ["Logistics"],
+    "forbidden": ["Power BI", "English"]
+  },
+  {
+    "id": "cv-04-recruiting",
+    "fixture": "fixtures/cv-04-recruiting.txt",
+    "fullName": "Thiago Alves Exemplo",
+    "requiredExplicit": ["Recruiting"],
+    "requiredInferred": [],
+    "requiredContexts": ["Technology"],
+    "forbidden": ["Psychological assessment", "Leadership"]
+  },
+  {
+    "id": "cv-05-construction-pmo",
+    "fixture": "fixtures/cv-05-construction-pmo.txt",
+    "fullName": "Ana Ribeiro Exemplo",
+    "requiredExplicit": ["Project Management", "Project Leadership", "Excel"],
+    "requiredInferred": [],
+    "requiredContexts": ["Construction"],
+    "forbidden": ["Budget management", "Power BI"]
+  },
+  {
+    "id": "cv-06-healthcare-data",
+    "fixture": "fixtures/cv-06-healthcare-data.txt",
+    "fullName": "João Martins Exemplo",
+    "requiredExplicit": ["Data Analysis", "Python", "SQL"],
+    "requiredInferred": [],
+    "requiredContexts": ["Healthcare"],
+    "forbidden": ["Medical degree", "Power BI"]
+  },
+  {
+    "id": "cv-07-manufacturing-lean",
+    "fixture": "fixtures/cv-07-manufacturing-lean.txt",
+    "fullName": "Paula Nunes Exemplo",
+    "requiredExplicit": ["Process Improvement", "Industrial Operations", "Excel"],
+    "requiredInferred": [],
+    "requiredContexts": ["Industrial"],
+    "forbidden": ["SAP", "People leadership"]
+  },
+  {
+    "id": "cv-08-software",
+    "fixture": "fixtures/cv-08-software.txt",
+    "fullName": "Lucas Pereira Exemplo",
+    "requiredExplicit": ["JavaScript", "SQL"],
+    "requiredInferred": ["Data Analysis"],
+    "requiredContexts": ["Technology"],
+    "forbidden": ["Power BI", "Project Management"]
+  },
+  {
+    "id": "cv-09-qlik",
+    "fixture": "fixtures/cv-09-qlik.txt",
+    "fullName": "Beatriz Rocha Exemplo",
+    "requiredExplicit": ["Qlik", "SQL", "Data Analysis"],
+    "requiredInferred": ["Business Intelligence"],
+    "requiredContexts": [],
+    "forbidden": ["Power BI", "Industrial"]
+  },
+  {
+    "id": "cv-10-sales-excel",
+    "fixture": "fixtures/cv-10-sales-excel.txt",
+    "fullName": "Gustavo Moraes Exemplo",
+    "requiredExplicit": ["Excel"],
+    "requiredInferred": [],
+    "requiredContexts": ["Retail"],
+    "forbidden": ["Business Intelligence", "SQL"]
+  },
+  {
+    "id": "cv-11-etl-data",
+    "fixture": "fixtures/cv-11-etl-data.txt",
+    "fullName": "Fernanda Dias Exemplo",
+    "requiredExplicit": ["ETL", "Python", "SQL", "Data Analysis"],
+    "requiredInferred": [],
+    "requiredContexts": [],
+    "forbidden": ["Power BI", "Industrial"]
+  },
+  {
+    "id": "cv-12-project-industrial",
+    "fixture": "fixtures/cv-12-project-industrial.txt",
+    "fullName": "Eduardo Freitas Exemplo",
+    "requiredExplicit": ["Project Management", "Project Leadership"],
+    "requiredInferred": [],
+    "requiredContexts": ["Industrial"],
+    "forbidden": ["Power BI", "Budget management"]
+  },
+  {
+    "id": "cv-13-prompt-injection",
+    "fixture": "fixtures/cv-13-prompt-injection.txt",
+    "fullName": "Renata Segura Exemplo",
+    "requiredExplicit": ["SQL"],
+    "requiredInferred": ["Data Analysis"],
+    "requiredContexts": [],
+    "forbidden": ["Administrator", "System access", "Secrets"]
+  }
+]

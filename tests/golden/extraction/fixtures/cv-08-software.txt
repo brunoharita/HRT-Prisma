@@ -1,0 +1,13 @@
+Name: Lucas Pereira Exemplo
+Summary:
+Software engineer em empresa de tecnologia.
+Experience:
+- Tech Modelo | Desenvolvedor Full Stack | 2020-01 to 2025-06 | Desenvolveu sistemas com TypeScript, Node.js e SQL.
+Skills:
+- TypeScript
+- Node.js
+- SQL
+Education:
+- Faculdade Modelo | Engenharia de Software | concluído
+Languages:
+- Inglês | avançado

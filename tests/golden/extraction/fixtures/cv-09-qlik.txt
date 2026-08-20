@@ -1,0 +1,10 @@
+NOME: Beatriz Rocha Exemplo
+RESUMO:
+Especialista em relatórios corporativos.
+EXPERIÊNCIA:
+- Financeira Modelo | Analista de Informações | 2019-02 a 2025-04 | Criou aplicações Qlik Sense e modelos de análise de dados.
+COMPETÊNCIAS:
+- Qlik Sense
+- SQL
+EDUCAÇÃO:
+- Universidade Exemplo | Economia | concluído
