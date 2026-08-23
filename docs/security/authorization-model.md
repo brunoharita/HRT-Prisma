@@ -2,7 +2,7 @@
 
 ## Estado
 
-Papéis e políticas estão modelados na migration. Auth e autorização de runtime não estão ativos. A UI futura nunca será a única barreira.
+Papéis e políticas estão modelados na migration. O shell web local agora valida sessão com Supabase Auth e aplica route guards no browser. A autorização material continua no banco e a UI nunca é a única barreira.
 
 ## Papéis
 
@@ -23,6 +23,7 @@ Papéis e políticas estão modelados na migration. Auth e autorização de runt
 ## Enforcement
 
 - Organização e papel vêm de `organization_memberships`, não de metadata editável pelo usuário.
+- O shell web valida identidade com `supabase.auth.getClaims()` e consulta `organization_memberships` com chave publicável e RLS.
 - Políticas usam `TO authenticated` com predicado de tenant e papel.
 - `anon` não possui grants.
 - Hiring manager não possui política de leitura para `documents` ou `person_private_data`.
@@ -32,7 +33,7 @@ Papéis e políticas estão modelados na migration. Auth e autorização de runt
 
 ## Fail-closed
 
-Usuário sem sessão, membership, tenant, papel conhecido ou versão de política compatível recebe negação. Falha de serviço de autorização não concede acesso. Service/secret key nunca vai para frontend e não é fallback de usuário.
+Usuário sem sessão, membership, tenant, papel conhecido ou versão de política compatível recebe negação. Falha de serviço de autorização ou de carregamento de memberships não concede acesso. Service/secret key nunca vai para frontend e não é fallback de usuário.
 
 ## Operações privilegiadas
 

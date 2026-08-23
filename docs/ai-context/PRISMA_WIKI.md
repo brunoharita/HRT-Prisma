@@ -38,6 +38,6 @@ Admin administra organização e acessos. Recruiter importa, consulta PII necess
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, perfil, evidência, inferência limitada, retrieval e matching. PDF, OCR, UI, Auth, storage, revisão humana, embeddings, LLM e operação real são futuros e dependem dos gates do piloto.
+O slice local cobre texto, perfil, evidência, inferência limitada, retrieval, matching e um shell web isolado para Supabase Auth com rotas protegidas. PDF, OCR, storage, revisão humana, embeddings, LLM, adaptador Supabase de domínio e operação real continuam futuros e dependem dos gates do piloto.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

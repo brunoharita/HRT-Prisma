@@ -6,9 +6,9 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 ## Verified current state
 
-The repository currently provides a TypeScript CLI vertical slice that imports a representative text resume, extracts a structured profile, preserves evidence and provenance, derives limited versioned inferences, persists tenant-scoped data, performs structured natural-language retrieval, and produces an explained contextual match.
+The repository currently provides a TypeScript CLI vertical slice that imports a representative text resume, extracts a structured profile, preserves evidence and provenance, derives limited versioned inferences, persists tenant-scoped data, performs structured natural-language retrieval, and produces an explained contextual match. It now also includes an isolated local web shell under `web/` that validates Supabase Auth sessions and enforces protected routes from `organization_memberships`.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted production persistence architecture. The executable runtime currently uses a tenant-scoped JSON adapter for local tests and demonstration. No remote Supabase project, QA environment, production environment, UI, live LLM, PDF parser, OCR, or vector embeddings are configured in this repository.
+PostgreSQL/Supabase with Row-Level Security is the accepted production persistence architecture. The executable runtime still uses a tenant-scoped JSON adapter for local tests and demonstration, and the new web shell currently proves only session and route protection. A remote QA Supabase project now exists for Auth and schema validation, but there is still no production environment, connected runtime data adapter, live LLM, PDF parser, OCR, or vector embeddings configured in this repository.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -32,11 +32,32 @@ pnpm run demo
 
 Expected marker: `VERTICAL_SLICE_OK`.
 
+Run the local web shell:
+
+```bash
+cp .env.example .env.local
+pnpm run dev:web
+```
+
+Required variables:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+
+Local port convention:
+
+- `http://127.0.0.1:5555` for the main local app
+- `http://127.0.0.1:5556` for the local QA variant
+
 ## Commands
 
 | Command | Purpose |
 | --- | --- |
 | `pnpm run build` | Compile TypeScript |
+| `pnpm run typecheck:web` | Run strict type checking for the isolated web shell |
+| `pnpm run dev:web` | Start the main local Vite app on port `5555` |
+| `pnpm run dev:web:qa` | Start the local QA Vite app on port `5556` |
+| `pnpm run build:web` | Build the local Vite app |
 | `pnpm run lint` | Check text hygiene and prohibited runtime shortcuts |
 | `pnpm run check:foundation` | Check contracts, versions, migration security, secrets, and critical markers |
 | `pnpm run typecheck` | Run strict TypeScript checking |
@@ -52,6 +73,7 @@ Expected marker: `VERTICAL_SLICE_OK`.
 
 ```text
 src/                    executable domain, AI, application, infrastructure, CLI
+web/                    isolated browser app for Supabase Auth and protected routes
 supabase/migrations/    production database and RLS contract
 tests/                  technical and golden regression evidence
 docs/product/           vision, scope, pilot, domain, glossary
@@ -71,5 +93,6 @@ docs/ai-context/        five canonical context sources for authorized AIs
 - Confidence is methodological, not model opinion.
 - Documents are untrusted input and cannot instruct the agent or reveal secrets.
 - Tenant isolation and authorization are enforced beyond the frontend.
+- The web shell validates the session locally, but it is not the authorization authority.
 - Real client resume validation remains an explicit open risk.
 - `TUDO_SOBRE_PRISMA.md` is generated and must not be edited manually.

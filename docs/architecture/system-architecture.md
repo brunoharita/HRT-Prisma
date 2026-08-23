@@ -2,7 +2,7 @@
 
 ## Estado e objetivo
 
-Estado: implementado localmente. A arquitetura prova um slice de Talent Intelligence por CLI sem UI, LLM remoto ou banco conectado. PostgreSQL/Supabase é o contrato de persistência aceito, mas a execução atual usa JSON tenant-scoped.
+Estado: implementado localmente. A arquitetura prova um slice de Talent Intelligence por CLI, um shell web isolado com Supabase Auth e rotas protegidas, sem LLM remoto nem banco de produção conectado. PostgreSQL/Supabase é o contrato de persistência aceito, mas a execução principal do domínio ainda usa JSON tenant-scoped.
 
 ## Fluxo atual
 
@@ -31,6 +31,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Application | Estados, validação e orquestração | `processResume.ts` | disponível localmente |
 | AI boundary | Extração, inferência, retrieval, confiança, matching | `src/ai` | provider determinístico |
 | Infrastructure | Persistência tenant-scoped | `JsonTalentRepository` | somente local/teste |
+| Web shell | Sessão Supabase, seleção de organization e route guards | `web/src` | disponível localmente |
 | Database contract | Modelo, integridade, grants e RLS | `supabase/migrations` | implementado, não ativado |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
 
@@ -40,8 +41,9 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - O domínio não conhece fornecedor de IA.
 - `TalentRepository` exige organização em todas as leituras.
 - Matching rejeita organizações diferentes antes da avaliação.
+- O shell web consome apenas sessão Supabase e `organization_memberships`; ele não substitui RLS nem backend privilegiado.
 - Documento bruto e dados privados são separados do perfil consultável no schema de produção.
-- Uma futura UI será consumidora dos contratos, nunca fonte de autorização ou verdade.
+- A UI existente continua consumidora dos contratos, nunca fonte de autorização ou verdade.
 
 ## Persistência
 
@@ -53,4 +55,4 @@ Formato não suportado, texto insuficiente, provider inválido, tenant incompat�
 
 ## Não implementado
 
-UI, Auth runtime, storage, PDF, OCR, fila, embeddings vetoriais, LLM produtivo, auditoria de visualização, QA remoto, produção e integrações externas.
+Adaptador Supabase de runtime para dados de domínio, API HTTP/BFF, storage, PDF, OCR, fila, embeddings vetoriais, LLM produtivo, auditoria de visualização, QA remoto, produção e integrações externas.

@@ -2,15 +2,15 @@
 
 ## Estado atual
 
-Somente ambiente local existe. Não há projeto Supabase vinculado, QA, produção, domínio, CI remoto ou secret store configurado.
+Existe ambiente local e existe um projeto Supabase remoto de QA (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) já usado para validação inicial de Auth e schema. Produção, domínio público dedicado, CI remoto e secret store ainda não estão configurados neste repositório.
 
 ## Local
 
-Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento determinístico, testes, migrations e Context Pack. Dados permitidos: fixtures sintéticas. Secrets: nenhum necessário no fluxo atual. `.env*` não entra no Git.
+Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento determinístico, testes, migrations, Context Pack e validação local do shell web. Dados permitidos: fixtures sintéticas. Secrets: o fluxo CLI não exige secrets; o shell web exige apenas `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` em `.env*`, fora do Git. Convenção local atual: app principal em `5555` e variante local QA em `5556`.
 
-## QA planejado
+## QA
 
-Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos antes de produção. Dados: fictícios ou anonimizados. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
+Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos antes de produção. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e, em 2026-08-23, recebeu a migration inicial do Prisma e a primeira membership administrativa para o shell web. Dados: fictícios ou anonimizados. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
 
 ## Produção planejada
 
@@ -18,7 +18,7 @@ Objetivo: uso real aprovado. Produção nunca é primeira superfície de teste. 
 
 ## Variáveis e secrets
 
-Frontend futuro pode receber somente URL pública e chave publicável adequada. Secret/service key, connection string privilegiada, provider key e credencial de storage ficam em backend/secret store. Logs, bundles e Context Pack não contêm valores.
+O shell web local recebe somente URL pública e chave publicável adequada. Secret/service key, connection string privilegiada, provider key e credencial de storage ficam em backend/secret store. Logs, bundles e Context Pack não contêm valores.
 
 ## Promoção
 

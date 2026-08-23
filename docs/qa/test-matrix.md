@@ -2,8 +2,8 @@
 
 | Área | Cenário positivo | Cenário negativo/limite | Estado |
 | --- | --- | --- | --- |
-| Auth | sessão válida | ausente, expirada, removida | planejado |
-| Autorização | ação permitida por papel | ação negada e tenant desconhecido | migration/documentado |
+| Auth | sessão válida | ausente, expirada, removida | shell web local testado; ambiente conectado pendente |
+| Autorização | ação permitida por papel | ação negada e tenant desconhecido | migration/documentado; route guard local testado |
 | Multi-tenant | dados do próprio tenant | leitura, update e vínculo cruzado | JSON testado; RLS pendente |
 | Upload | texto permitido | tipo, tamanho, malware, arquivo corrompido | parcial |
 | Formatos | texto PT/EN | PDF, scan, formato exótico | texto testado; demais fail-closed |
@@ -27,8 +27,8 @@
 | Resiliência | provider disponível | timeout, resposta inválida, fallback | timeout testado |
 | Concorrência | processamento único | corrida e reprocessamento duplicado | planejado |
 | Idempotência | mesma chave reutilizada | versão/conteúdo novo | checksum parcial |
-| Acessibilidade | navegação, leitura, contraste | teclado/screen reader | sem UI |
-| Responsividade | viewports definidos | overflow e mobile | sem UI |
+| Acessibilidade | navegação, leitura, contraste | teclado/screen reader | shell web local parcial |
+| Responsividade | viewports definidos | overflow e mobile | shell web local parcial |
 | Regression | suites estáveis | prompt/modelo/regra piora resultado | golden ativo |
 | Migrations | RLS/grants/tenant | missing policy, unsafe delete | static testado |
 | Secrets | nenhum no repositório | key em código, log ou bundle | lint/scan local |

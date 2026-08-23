@@ -10,6 +10,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
+    "dev:web": "vite --config web/vite.config.ts",
+    "dev:web:qa": "vite --config web/vite.config.ts --mode qa",
+    "build:web": "vite build --config web/vite.config.ts",
     "lint": "node scripts/lint.mjs",
     "check:foundation": "node scripts/check-foundation.mjs",
     "generate:prisma-context": "node scripts/generate-prisma-context.mjs",
@@ -18,10 +22,14 @@
     "test:golden": "pnpm run build && node dist/tests/golden/runner.js",
     "demo": "pnpm run build && node dist/src/cli.js demo",
     "audit:dependencies": "pnpm audit --prod --audit-level high",
-    "validate": "pnpm run lint && pnpm run check:foundation && pnpm run check:prisma-context && pnpm run typecheck && pnpm run test && pnpm run test:golden && pnpm run demo"
+    "validate": "pnpm run lint && pnpm run check:foundation && pnpm run check:prisma-context && pnpm run typecheck && pnpm run typecheck:web && pnpm run build:web && pnpm run test && pnpm run test:golden && pnpm run demo"
   },
   "devDependencies": {
     "@types/node": "24.3.0",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vite": "8.2.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.112.3"
   }
 }

@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.0.0
-last_verified: 2026-08-20
+version: 1.1.0
+last_verified: 2026-08-23
 ---
 
 # Estado atual do Prisma
@@ -12,12 +12,13 @@ last_verified: 2026-08-20
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
 - Branch de trabalho verificada: `codex/prisma-foundation-governance`.
-- Repositório sem remoto configurado no momento desta verificação.
+- Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
 
 - CLI de vertical slice.
+- Shell web isolado com Vite, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com convenção local `5555` principal e `5556` QA.
 - Importação de currículo textual UTF-8 representativo.
 - Extração determinística de identidade, experiências, educação, certificações, idiomas, competências e contextos reconhecidos.
 - Perfil profissional estruturado com fatos, evidências, proveniência, inferências, incertezas e campos não identificados.
@@ -27,20 +28,27 @@ last_verified: 2026-08-20
 - Confiança metodológica determinística.
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
+- Typecheck e build do shell web.
 
 ## Implementado como contrato, não ativado
 
 - Migration PostgreSQL/Supabase com organizações, memberships, papéis, posições, vagas, pessoas, documentos, perfil, evidência, inferência, competências, matching e uso de IA.
 - RLS, grants, índices e integridade multi-tenant na migration.
 - Políticas de autorização para admin, recruiter e hiring manager.
+- Consulta local de `organization_memberships` protegida por sessão Supabase validada com `getClaims()`.
 
-Não existe evidência de migration aplicada em QA ou produção.
+## Evidência remota
+
+- Projeto Supabase QA remoto ativo: `Prisma-QA` (`ioldpnqqvobprjiontre`).
+- Migration inicial do Prisma aplicada em QA em 2026-08-23.
+- Organization `Prisma` criada em QA com membership administrativa inicial para o shell web.
+
+Não existe evidência de rollout em produção.
 
 ## Não implementado
 
-- UI e API HTTP.
-- Auth de runtime e sessões.
-- Adaptador Supabase de runtime.
+- Adaptador Supabase de runtime para dados do domínio.
+- API HTTP/BFF.
 - Storage privado, upload real, malware scan, PDF e OCR.
 - Revisão humana e decisão humana persistida.
 - Embeddings vetoriais e LLM externo.
@@ -60,10 +68,10 @@ Não existe evidência de migration aplicada em QA ou produção.
 ## Riscos e bloqueios
 
 - `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`.
-- Schema/RLS ainda precisa de execução e testes conectados.
+- Schema/RLS ainda precisa de execução e testes conectados, inclusive para o shell web.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
 
-Em 2026-08-20, `pnpm validate` aprovou lint, invariantes de fundação, Context Pack, typecheck, build, 8 testes técnicos, 19 casos golden sem regressão e demo com marcador `VERTICAL_SLICE_OK`. A migration foi validada estaticamente com 18 tabelas públicas protegidas por declaração de RLS. Isso não substitui QA conectado nem comprova rollout.
+Em 2026-08-23, a base local adicionou o shell web `web/` com build Vite aprovado e guard testado localmente para sessão, membership e papel. No mesmo dia, o projeto remoto `Prisma-QA` recebeu a migration inicial e a membership administrativa necessária para o primeiro login funcional. O gate local `pnpm run validate` precisa ser reexecutado sempre que a documentação material mudar; a existência de QA não comprova rollout em produção.
