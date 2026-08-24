@@ -2,19 +2,19 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.0.0
-last_verified: 2026-08-20
+version: 1.1.0
+last_verified: 2026-08-24
 ---
 
 # Referência de IA do Prisma
 
 ## Estado
 
-Não existe LLM externo ativo. Extraction, inference, retrieval, matching e explanation são locais e determinísticos.
+Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos.
 
 ## Pipeline
 
-Documento não confiável vira `ExtractionDraft`; aplicação valida, cria evidência, deriva inferência limitada, persiste perfil e executa retrieval/matching estruturado. Falha não vira perfil vazio.
+Documento não confiável entra como texto manual ou PDF. PDF.js tenta texto nativo por página e Tesseract.js executa OCR local somente nas páginas insuficientes. O resultado vira `ExtractionDraft`; a aplicação valida, cria evidência, deriva inferência limitada, persiste perfil e executa retrieval/matching estruturado. Falha não vira perfil vazio.
 
 ## Proveniência
 
@@ -23,6 +23,9 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 ## Versões
 
 - extraction: `extraction-rules-1.0.0`;
+- PDF nativo: `pdfjs-5.4.296/native-v1`;
+- OCR: `tesseract.js-7.0.0/por+eng-v1`;
+- draft M2-B: `prisma-deterministic-profile-v1`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
@@ -39,7 +42,7 @@ Usa número de blocos independentes, evidência contextual e contradições. Lev
 
 ## Custo e latência
 
-Custo externo atual é USD 0. Budgets locais: extração média abaixo de 100 ms e p95 abaixo de 250 ms; busca/matching média abaixo de 50 ms e p95 abaixo de 150 ms para escala pequena. Devem ser medidos novamente em QA conectado.
+Custo externo atual é USD 0. Budgets do parser textual: média abaixo de 100 ms e p95 abaixo de 250 ms; busca/matching: média abaixo de 50 ms e p95 abaixo de 150 ms para escala pequena. PDF e OCR dependem do tamanho, número de páginas e dispositivo; precisam de baseline próprio antes de uso externo.
 
 ## Guardrails
 
@@ -47,4 +50,4 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 ## Limitações
 
-Sem dados reais, PDF, OCR, LLM, embeddings, contradição multi-documento, senioridade calculada, revisão humana ou provider aprovado.
+Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada, revisão humana ou provider aprovado.

@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.5.0
+version: 1.6.0
 last_verified: 2026-08-24
 ---
 
@@ -35,11 +35,11 @@ last_verified: 2026-08-24
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck, build e testes locais do shell web.
-- 32 testes técnicos aprovados, incluindo contratos M2-A/M2-B, PDF inválido, suficiência, RLS/Storage e member sem documento bruto.
+- 33 testes técnicos aprovados, incluindo contratos M2-A/M2-B, PDF inválido, suficiência, RLS/Storage e member sem documento bruto.
 
 ## Implementado como contrato
 
-- Foundation migration PostgreSQL/Supabase com organizações, memberships, papéis, posições, vagas, pessoas, documentos, perfil, evidência, inferência, competências, matching e uso de IA; ativa em QA e ausente em produção.
+- Foundation migration PostgreSQL/Supabase com organizações, memberships, papéis, posições, vagas, pessoas, documentos, perfil, evidência, inferência, competências, matching e uso de IA; ativa no único projeto remoto atual.
 - Migration local `20260824113000_m2_users_people` com `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id`, username case-insensitive normalizado, auditoria material e evolução de `membership_role`.
 - RLS, grants, índices e integridade multi-tenant ativos em QA.
 - Políticas de autorização da foundation para admin, recruiter e hiring manager ativas em QA.
@@ -57,11 +57,14 @@ last_verified: 2026-08-24
 - Dados sintéticos `[QA]` persistidos em duas organizações: 3 pessoas, 2 perfis atuais, 2 vagas abertas, evidências, inferências, competências e contatos privados sintéticos.
 - RLS conectado comprovado para Admin, Recruiter, Hiring Manager, IDs conhecidos cross-tenant e usuário autenticado sem membership. Hiring Manager recebeu zero linhas de PII privada e documentos.
 - Corte atômico do enum/papéis e matriz RLS M2-A aplicados em QA; `platform-users` e `operator-password-reset` ativos, além de `operator-sign-in`.
-- M2-B aplicado em QA com bucket privado, índices, RPC atômica e versões sintéticas v2/v3 para `[QA] Marina Dados`.
+- M2-B aplicado em QA com bucket privado, índices, RPC atômica e versões sintéticas v2 a v5 para `[QA] Marina Dados`.
 - Login `harita.super` validado no app local contra QA; módulos Pessoas e Usuários renderizados com a sessão Super Admin.
 - Fluxo conectado texto manual -> extração -> draft/evidência -> Perfil Prisma versionado comprovado no QA.
+- PDF sintético nativo persistido como documento v4 com uma página, 161 caracteres úteis, método `pdfjs-5.4.296/native-v1` e OCR não necessário.
+- PDF sintético image-only persistido como documento v5 com uma página, 360 caracteres úteis, método `tesseract.js-7.0.0/por+eng-v1` e Perfil Prisma v3 gerado explicitamente.
+- Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
-Não existe evidência de rollout em produção.
+Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
 
 ## Não implementado
 
@@ -71,7 +74,7 @@ Não existe evidência de rollout em produção.
 - Embeddings vetoriais e LLM externo.
 - Auditoria de visualização/exportação além do domínio de usuários.
 - Idempotência completa e proteção contra concorrência no versionamento documental.
-- Produção, deployment e rollback automatizados.
+- Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
 
@@ -86,13 +89,12 @@ Não existe evidência de rollout em produção.
 ## Riscos e bloqueios
 
 - `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`.
-- Validação de PDF nativo e OCR real no navegador ainda depende do upload dos fixtures sintéticos preparados e da confirmação de transferência.
 - A configuração local do M2-A endurece requisitos mínimos de senha, mas a proteção contra senhas vazadas do Supabase ainda não foi comprovada no ambiente remoto deste movimento.
 - O advisor de performance do QA ainda informa foreign keys sem índices de cobertura, índices ainda não utilizados e policies permissivas sobrepostas; não foram alterados fora do escopo deste movimento.
-- Não existe projeto Supabase de produção nem hosting configurado para o frontend; criação do projeto tem custo e exige confirmação específica.
+- O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
 
-Em 2026-08-24, M2-A e M2-B foram aplicados ao Prisma-QA. Edge Functions de login, recuperação e gestão de usuários estão ativas; o app local autenticado lista Pessoas e Usuários; a ingestão sintética por texto gerou tentativas, páginas, draft, evidência e novas versões de Perfil Prisma por RPC transacional. PDF.js e Tesseract.js estão empacotados, mas o upload conectado dos fixtures PDF/OCR aguarda confirmação. Produção e hosting continuam não provisionados; QA não comprova rollout em produção.
+Em 2026-08-24, M2-A e M2-B foram aplicados ao único projeto remoto Prisma-QA. Edge Functions de login, recuperação e gestão de usuários estão ativas; o app local autenticado lista Pessoas e Usuários; texto manual, PDF nativo e PDF image-only geraram tentativas, páginas, draft, evidência e perfis versionados por RPC transacional. O documento v4 comprovou extração nativa sem OCR; o documento v5 comprovou OCR local seletivo e geração explícita do Perfil Prisma v3. Não há frontend hospedado nem ambiente de produção separado por decisão atual de operação interna.

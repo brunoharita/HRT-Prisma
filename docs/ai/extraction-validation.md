@@ -54,7 +54,7 @@ Hipótese: texto de currículo tentando alterar instruções poderia contaminar 
 ### Ambiguidades e limitações
 
 - Períodos são preservados como texto e ainda não calculam duração ou recência.
-- PDFs, documentos escaneados e OCR não fazem parte do parser local.
+- O parser CLI continua textual; o fluxo web M2-B cobre PDF nativo e documento escaneado por OCR local seletivo, comprovados com fixtures sintéticas conectadas.
 - O formato de experiência usa separadores estruturados nas fixtures.
 - Contradições entre múltiplos documentos ainda não são detectadas.
 - Senioridade não é inferida automaticamente.

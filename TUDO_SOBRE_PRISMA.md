@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 791717e47dab1f271d87c1e8cecbe75e42f90c1d123340761b59cf8a57a48bb2
+source_manifest_sha256: e04dba8ead84033512ad5d7ff907074682ba71749d71d78d95b9713807676a9b
 -->
 
 # Tudo sobre o Prisma
@@ -159,7 +159,7 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, and M2-B person ingestion with manual text, private PDF upload, native page extraction, selective local OCR, evidence, deterministic drafts, versioned profiles, and document timeline.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. Prisma-QA has foundation, M2-A, M2-B, the private document bucket, atomic extraction RPC, and the three operator Edge Functions active. The local web app is connected to QA and has proven username login, Users, People, and synthetic manual ingestion through a versioned profile. There is still no production project or frontend hosting. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, the private document bucket, atomic extraction RPC, and the three operator Edge Functions active. The local web app is connected to that project and has proven username login, Users, People, manual ingestion, native PDF extraction, selective OCR, and versioned profile generation. By current product decision there is no separate production project or frontend hosting; the system is used only internally through the local frontend. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -311,7 +311,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.5.0
+version: 1.6.0
 last_verified: 2026-08-24
 ---
 
@@ -344,11 +344,11 @@ last_verified: 2026-08-24
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck, build e testes locais do shell web.
-- 32 testes técnicos aprovados, incluindo contratos M2-A/M2-B, PDF inválido, suficiência, RLS/Storage e member sem documento bruto.
+- 33 testes técnicos aprovados, incluindo contratos M2-A/M2-B, PDF inválido, suficiência, RLS/Storage e member sem documento bruto.
 
 ## Implementado como contrato
 
-- Foundation migration PostgreSQL/Supabase com organizações, memberships, papéis, posições, vagas, pessoas, documentos, perfil, evidência, inferência, competências, matching e uso de IA; ativa em QA e ausente em produção.
+- Foundation migration PostgreSQL/Supabase com organizações, memberships, papéis, posições, vagas, pessoas, documentos, perfil, evidência, inferência, competências, matching e uso de IA; ativa no único projeto remoto atual.
 - Migration local `20260824113000_m2_users_people` com `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id`, username case-insensitive normalizado, auditoria material e evolução de `membership_role`.
 - RLS, grants, índices e integridade multi-tenant ativos em QA.
 - Políticas de autorização da foundation para admin, recruiter e hiring manager ativas em QA.
@@ -366,11 +366,14 @@ last_verified: 2026-08-24
 - Dados sintéticos `[QA]` persistidos em duas organizações: 3 pessoas, 2 perfis atuais, 2 vagas abertas, evidências, inferências, competências e contatos privados sintéticos.
 - RLS conectado comprovado para Admin, Recruiter, Hiring Manager, IDs conhecidos cross-tenant e usuário autenticado sem membership. Hiring Manager recebeu zero linhas de PII privada e documentos.
 - Corte atômico do enum/papéis e matriz RLS M2-A aplicados em QA; `platform-users` e `operator-password-reset` ativos, além de `operator-sign-in`.
-- M2-B aplicado em QA com bucket privado, índices, RPC atômica e versões sintéticas v2/v3 para `[QA] Marina Dados`.
+- M2-B aplicado em QA com bucket privado, índices, RPC atômica e versões sintéticas v2 a v5 para `[QA] Marina Dados`.
 - Login `harita.super` validado no app local contra QA; módulos Pessoas e Usuários renderizados com a sessão Super Admin.
 - Fluxo conectado texto manual -> extração -> draft/evidência -> Perfil Prisma versionado comprovado no QA.
+- PDF sintético nativo persistido como documento v4 com uma página, 161 caracteres úteis, método `pdfjs-5.4.296/native-v1` e OCR não necessário.
+- PDF sintético image-only persistido como documento v5 com uma página, 360 caracteres úteis, método `tesseract.js-7.0.0/por+eng-v1` e Perfil Prisma v3 gerado explicitamente.
+- Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
-Não existe evidência de rollout em produção.
+Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
 
 ## Não implementado
 
@@ -380,7 +383,7 @@ Não existe evidência de rollout em produção.
 - Embeddings vetoriais e LLM externo.
 - Auditoria de visualização/exportação além do domínio de usuários.
 - Idempotência completa e proteção contra concorrência no versionamento documental.
-- Produção, deployment e rollback automatizados.
+- Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
 
@@ -395,16 +398,15 @@ Não existe evidência de rollout em produção.
 ## Riscos e bloqueios
 
 - `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`.
-- Validação de PDF nativo e OCR real no navegador ainda depende do upload dos fixtures sintéticos preparados e da confirmação de transferência.
 - A configuração local do M2-A endurece requisitos mínimos de senha, mas a proteção contra senhas vazadas do Supabase ainda não foi comprovada no ambiente remoto deste movimento.
 - O advisor de performance do QA ainda informa foreign keys sem índices de cobertura, índices ainda não utilizados e policies permissivas sobrepostas; não foram alterados fora do escopo deste movimento.
-- Não existe projeto Supabase de produção nem hosting configurado para o frontend; criação do projeto tem custo e exige confirmação específica.
+- O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
 
-Em 2026-08-24, M2-A e M2-B foram aplicados ao Prisma-QA. Edge Functions de login, recuperação e gestão de usuários estão ativas; o app local autenticado lista Pessoas e Usuários; a ingestão sintética por texto gerou tentativas, páginas, draft, evidência e novas versões de Perfil Prisma por RPC transacional. PDF.js e Tesseract.js estão empacotados, mas o upload conectado dos fixtures PDF/OCR aguarda confirmação. Produção e hosting continuam não provisionados; QA não comprova rollout em produção.
+Em 2026-08-24, M2-A e M2-B foram aplicados ao único projeto remoto Prisma-QA. Edge Functions de login, recuperação e gestão de usuários estão ativas; o app local autenticado lista Pessoas e Usuários; texto manual, PDF nativo e PDF image-only geraram tentativas, páginas, draft, evidência e perfis versionados por RPC transacional. O documento v4 comprovou extração nativa sem OCR; o documento v5 comprovou OCR local seletivo e geração explícita do Perfil Prisma v3. Não há frontend hospedado nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 
@@ -414,19 +416,19 @@ Em 2026-08-24, M2-A e M2-B foram aplicados ao Prisma-QA. Edge Functions de login
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.0.0
-last_verified: 2026-08-20
+version: 1.1.0
+last_verified: 2026-08-24
 ---
 
 # Referência de IA do Prisma
 
 ## Estado
 
-Não existe LLM externo ativo. Extraction, inference, retrieval, matching e explanation são locais e determinísticos.
+Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos.
 
 ## Pipeline
 
-Documento não confiável vira `ExtractionDraft`; aplicação valida, cria evidência, deriva inferência limitada, persiste perfil e executa retrieval/matching estruturado. Falha não vira perfil vazio.
+Documento não confiável entra como texto manual ou PDF. PDF.js tenta texto nativo por página e Tesseract.js executa OCR local somente nas páginas insuficientes. O resultado vira `ExtractionDraft`; a aplicação valida, cria evidência, deriva inferência limitada, persiste perfil e executa retrieval/matching estruturado. Falha não vira perfil vazio.
 
 ## Proveniência
 
@@ -435,6 +437,9 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 ## Versões
 
 - extraction: `extraction-rules-1.0.0`;
+- PDF nativo: `pdfjs-5.4.296/native-v1`;
+- OCR: `tesseract.js-7.0.0/por+eng-v1`;
+- draft M2-B: `prisma-deterministic-profile-v1`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
@@ -451,7 +456,7 @@ Usa número de blocos independentes, evidência contextual e contradições. Lev
 
 ## Custo e latência
 
-Custo externo atual é USD 0. Budgets locais: extração média abaixo de 100 ms e p95 abaixo de 250 ms; busca/matching média abaixo de 50 ms e p95 abaixo de 150 ms para escala pequena. Devem ser medidos novamente em QA conectado.
+Custo externo atual é USD 0. Budgets do parser textual: média abaixo de 100 ms e p95 abaixo de 250 ms; busca/matching: média abaixo de 50 ms e p95 abaixo de 150 ms para escala pequena. PDF e OCR dependem do tamanho, número de páginas e dispositivo; precisam de baseline próprio antes de uso externo.
 
 ## Guardrails
 
@@ -459,7 +464,7 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 ## Limitações
 
-Sem dados reais, PDF, OCR, LLM, embeddings, contradição multi-documento, senioridade calculada, revisão humana ou provider aprovado.
+Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada, revisão humana ou provider aprovado.
 
 ---
 
@@ -469,7 +474,7 @@ Sem dados reais, PDF, OCR, LLM, embeddings, contradição multi-documento, senio
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.2.0
+version: 1.3.0
 last_verified: 2026-08-24
 ---
 
@@ -481,13 +486,13 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth e route guards. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
+`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth, route guards, M2-A e M2-B. PDF.js e Tesseract.js processam PDFs no navegador; o adaptador Supabase persiste documentos, tentativas, páginas, drafts, evidências e perfis. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
 
 ## Banco
 
-A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona localmente `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id` e a evolução do contrato de `membership_role`. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
+A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id` e a evolução do contrato de `membership_role`. O M2-B adiciona Storage privado, tentativas, páginas, drafts, eventos e a RPC `persist_person_extraction`. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
 
-Migration existente não significa banco ativo. O adaptador Supabase para dados do domínio já atende leituras web da foundation, enquanto a nova mutation M2-A permanece apenas como contrato local até existir evidência remota explícita.
+Foundation, M2-A e M2-B estão ativos no Prisma-QA. O adaptador Supabase atende leituras e mutações autorizadas do frontend, enquanto operações compostas sensíveis usam Edge Functions ou RPC transacional.
 
 ## Segurança
 
@@ -495,7 +500,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI, shell web e Edge Functions versionadas. QA remoto existe no projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) com schema inicial aplicado para Auth e validação de acesso. O novo movimento M2-A ainda não foi aplicado nem validado remotamente. Produção continua não provisionada. Mudança sensível deve seguir local, QA, evidência, aprovação, produção e smoke.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B e as três Edge Functions ativos. Login, Usuários, Pessoas, texto, PDF nativo, OCR e perfil versionado foram comprovados com dados sintéticos. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -526,7 +531,7 @@ Telemetria básica existe. Audit log, domain events completos, alerts, deploymen
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.1.0
+version: 1.2.0
 last_verified: 2026-08-24
 ---
 
@@ -563,6 +568,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, perfil, evidência, inferência limitada, retrieval, matching e um shell web isolado para Supabase Auth com rotas protegidas. O movimento M2-A também existe localmente com distinção formal `Usuário != Pessoa`, login por username apresentado no produto, gestão de operadores e escopo Grupo -> Empresa. QA conectado e produção ainda não comprovam esse novo movimento.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. O M2-A distingue formalmente `Usuário != Pessoa`, apresenta login por username, gestão de operadores e escopo Grupo -> Empresa. O M2-B cadastra Pessoas, preserva documentos privados, extrai texto por página, usa OCR somente quando necessário e gera perfis versionados com proveniência. M2-A e M2-B estão comprovados no único projeto remoto interno; não há ambiente de produção separado nem frontend hospedado no estágio atual.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

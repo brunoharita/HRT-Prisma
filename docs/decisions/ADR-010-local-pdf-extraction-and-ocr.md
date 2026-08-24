@@ -32,8 +32,10 @@ Validated outputs are persisted through organization-scoped RLS. The original PD
 
 - deterministic unit and contract tests for thresholds, insufficient content, untrusted input, private storage, RLS, and member denial;
 - connected QA proof for text ingestion, atomic persistence, evidence, timeline, and profile versioning;
-- native PDF and OCR browser fixtures remain a release checkpoint before production activation.
+- connected native PDF fixture validated one page with 161 useful characters and no OCR;
+- connected image-only PDF fixture validated one page with 360 useful characters through `tesseract.js-7.0.0/por+eng-v1`, followed by explicit Perfil Prisma generation;
+- an intentionally insufficient scan remained fail-closed and was not persisted as a valid extraction.
 
 ## Rollout note
 
-The architecture and database pipeline are active in Prisma-QA. Production remains absent until a separate project and frontend hosting target are provisioned and validated.
+The architecture and database pipeline are active in the current single remote project, Prisma-QA. The product owner explicitly deferred a separate production project and frontend hosting while use remains internal and client-free. Environment isolation becomes mandatory before external or real-client use.

@@ -6,15 +6,16 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 
 | Capability | Local | QA | Produção | Observação |
 | --- | --- | --- | --- | --- |
-| `resume_text_import` | ativo | inexistente | inexistente | Somente texto UTF-8 representativo |
-| `structured_profile` | ativo | inexistente | inexistente | Schema 1.0.0 |
-| `evidence_provenance` | ativo | inexistente | inexistente | Página é nula em texto |
-| `limited_inference` | ativo | inexistente | inexistente | Ontologia determinística |
-| `natural_language_retrieval` | ativo | inexistente | inexistente | Vocabulário controlado |
-| `explainable_matching` | ativo | inexistente | inexistente | Sem score absoluto |
+| `platform_users` | ativo | ativo | não separado | M2-A, username e escopo Grupo -> Empresa |
+| `resume_text_import` | ativo | ativo | não separado | Texto manual versionado e rastreável |
+| `structured_profile` | ativo | ativo | não separado | Schema 1.0.0 e versões imutáveis |
+| `evidence_provenance` | ativo | ativo | não separado | Documento e página preservados |
+| `limited_inference` | ativo | ativo | não separado | Ontologia determinística |
+| `natural_language_retrieval` | ativo | não comprovado | não separado | Vocabulário controlado |
+| `explainable_matching` | ativo | não comprovado | não separado | Sem score absoluto |
 | `tenant_json_isolation` | ativo em teste | inexistente | inexistente | Não substitui RLS |
-| `postgres_rls_contract` | implementado | não ativado | não ativado | Migration existente |
-| `pdf_ocr_ingestion` | não implementado | não implementado | não implementado | Fail-closed |
+| `postgres_rls_contract` | implementado | ativo | não separado | Foundation, M2-A e M2-B aplicados |
+| `pdf_ocr_ingestion` | ativo | ativo | não separado | PDF.js nativo, Tesseract seletivo, Storage privado e RPC atômica |
 | `live_llm_extraction` | não implementado | não implementado | não implementado | Requer benchmark e ADR |
 | `vector_embeddings` | não implementado | não implementado | não implementado | Requer necessidade medida |
 

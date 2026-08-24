@@ -2,7 +2,7 @@
 
 ## Estado
 
-O runtime atual não usa LLM remoto. `DeterministicExtractionProvider` implementa extração por regras locais, com custo externo zero. Retrieval e matching também são determinísticos. Embeddings, OCR e provider produtivo estão planejados, não implementados.
+O runtime atual não usa LLM remoto. `DeterministicExtractionProvider` implementa extração por regras locais, com custo externo zero. No M2-B, PDF.js extrai texto nativo e Tesseract.js executa OCR local seletivo no navegador antes da estruturação determinística. Retrieval e matching também são determinísticos. Embeddings e provider LLM produtivo permanecem não implementados.
 
 ## Fronteiras lógicas
 
@@ -41,6 +41,9 @@ Currículos e vagas são dados. Texto tentando ignorar regras, mudar schema, rev
 | Artefato | Versão | Estado |
 | --- | --- | --- |
 | Extraction | `extraction-rules-1.0.0` | ativo local |
+| PDF nativo | `pdfjs-5.4.296/native-v1` | ativo local e remoto interno |
+| OCR | `tesseract.js-7.0.0/por+eng-v1` | ativo local e remoto interno |
+| Draft M2-B | `prisma-deterministic-profile-v1` | ativo local e remoto interno |
 | Inference | `inference-ontology-1.0.0` | ativo local |
 | Retrieval/embedding contract | `structured-lexical-1.0.0` | ativo local, sem vetores |
 | Matching | `matching-explainable-1.0.0` | ativo local |
@@ -87,7 +90,7 @@ Perfil, evidência e inferência persistem com versão. Embedding futuro usa `(o
 ## Limitações
 
 - Sem dados reais de cliente.
-- Sem PDF, OCR, multimodal ou documento parcialmente extraído.
+- PDF nativo e OCR local seletivo estão ativos; formatos exóticos, malware scan e multimodal genérico não estão implementados.
 - Sem embeddings ou busca semântica vetorial.
 - Sem detecção de contradição entre múltiplas fontes.
 - Sem senioridade calculada.

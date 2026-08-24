@@ -2,7 +2,7 @@
 
 ## Estado e objetivo
 
-Estado: implementado localmente. A arquitetura prova um slice de Talent Intelligence por CLI e um shell web React com Supabase Auth, rotas protegidas e App Shell autenticado reutilizável, sem LLM remoto nem banco de produção conectado. PostgreSQL/Supabase é o contrato de persistência aceito, mas a execução principal do domínio ainda usa JSON tenant-scoped.
+Estado: implementado localmente e conectado ao único projeto Supabase remoto interno. A arquitetura prova um slice de Talent Intelligence por CLI e um shell web React com Supabase Auth, rotas protegidas, App Shell autenticado, gestão de Usuários/Pessoas e ingestão M2-B, sem LLM remoto. O CLI continua usando JSON tenant-scoped; o frontend usa PostgreSQL, RLS, Storage privado e Edge Functions no Prisma-QA.
 
 ## Fluxo atual
 
@@ -31,8 +31,9 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Application | Estados, validação e orquestração | `processResume.ts` | disponível localmente |
 | AI boundary | Extração, inferência, retrieval, confiança, matching | `src/ai` | provider determinístico |
 | Infrastructure | Persistência tenant-scoped | `JsonTalentRepository` | somente local/teste |
-| Web shell | React, Ant Design, App Shell, sessão Supabase, organization ativa e route guards | `web/src` | disponível localmente |
-| Database contract | Modelo, integridade, grants e RLS | `supabase/migrations` | implementado, não ativado |
+| Web shell | React, Ant Design, App Shell, sessão Supabase, organization ativa, Usuários, Pessoas e route guards | `web/src` | local conectado ao remoto interno |
+| Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | ativo e comprovado |
+| Database contract | Modelo, integridade, grants, RLS, Storage e RPC atômica | `supabase/migrations` | ativo no Prisma-QA |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
 
 ## Fronteiras
@@ -56,4 +57,4 @@ Formato não suportado, texto insuficiente, provider inválido, tenant incompat�
 
 ## Não implementado
 
-Adaptador Supabase de runtime para dados de domínio, API HTTP/BFF, storage, PDF, OCR, fila, embeddings vetoriais, LLM produtivo, auditoria de visualização, QA remoto, produção e integrações externas.
+API HTTP/BFF dedicada, fila assíncrona, embeddings vetoriais, LLM produtivo, malware scan, auditoria de visualização, revisão humana, ambiente de produção separado, hosting e integrações externas.

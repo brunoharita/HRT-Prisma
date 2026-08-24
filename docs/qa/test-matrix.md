@@ -8,10 +8,10 @@
 | Usuários da plataforma | criar, listar e editar dentro da autoridade | Member/Recruter sem gestão, autoelevação, último Owner, cross-group/cross-company | schema/Edge/UI ativos em QA; lista Super Admin comprovada |
 | Pessoas | listar, cadastrar, editar e consultar perfis do tenant | PII/documento negados a perfil sem autoridade | M2-B ativo em QA; member negado por RLS e rota local |
 | Upload | texto/PDF privado até 15 MB | tipo, tamanho, assinatura, trailer e parse inválidos | contrato implementado; malware scan ausente |
-| Formatos | texto e PDF nativo/scan | formato exótico/corrompido | texto conectado; PDF/OCR local aguardam upload fixture conectado |
+| Formatos | texto e PDF nativo/scan | formato exótico/corrompido | texto, PDF nativo v4 e PDF image-only v5 comprovados no remoto interno |
 | Extração | perfil mínimo | sem texto, schema inválido, timeout | testado |
 | Prompt injection | documento normal | instrução maliciosa em currículo | golden testado |
-| OCR | scan legível com fallback seletivo | página insuficiente após OCR | Tesseract local implementado; fixture conectada pendente |
+| OCR | scan legível com fallback seletivo | página insuficiente após OCR | Tesseract local comprovado em uma página; fixture inicial insuficiente foi recusada e fixture válida gerou 360 caracteres úteis |
 | Parsing | seções conhecidas | variação, datas, caracteres | golden parcial |
 | Revisão manual | corrigir e aprovar | tentar promover parcial sem revisão | não implementado |
 | Duplicidade | primeira importação | mesma chave e concorrência | planejado |
@@ -30,7 +30,7 @@
 | Concorrência | persistência atômica da tentativa | corrida no número de versão documental | RPC atômica ativa; versionamento concorrente ainda aberto |
 | Idempotência | mesma chave reutilizada | versão/conteúdo novo | checksum parcial |
 | Acessibilidade | navegação semântica, labels, foco, contraste | teclado/screen reader | shell público local; autenticado conectado pendente |
-| Responsividade | desktop, sidebar recolhida, drawer mobile | overflow, perda de navegação e quebra do formulário de usuário | shell local validado; autenticação conectada do M2-A pendente |
+| Responsividade | desktop, sidebar recolhida, drawer mobile | overflow, perda de navegação e quebra do formulário de usuário | desktop e viewport 390x844 conectados; sem overflow horizontal |
 | Regression | suites estáveis | prompt/modelo/regra piora resultado | golden ativo |
 | Migrations | RLS/grants/tenant | missing policy, unsafe delete, role drift e group drift | foundation, M2-A e M2-B ativos no QA; advisors executados |
 | Secrets | nenhum no repositório | key em código, log ou bundle | lint/scan local |

@@ -2,7 +2,7 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.2.0
+version: 1.3.0
 last_verified: 2026-08-24
 ---
 
@@ -14,13 +14,13 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth e route guards. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
+`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth, route guards, M2-A e M2-B. PDF.js e Tesseract.js processam PDFs no navegador; o adaptador Supabase persiste documentos, tentativas, páginas, drafts, evidências e perfis. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
 
 ## Banco
 
-A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona localmente `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id` e a evolução do contrato de `membership_role`. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
+A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id` e a evolução do contrato de `membership_role`. O M2-B adiciona Storage privado, tentativas, páginas, drafts, eventos e a RPC `persist_person_extraction`. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
 
-Migration existente não significa banco ativo. O adaptador Supabase para dados do domínio já atende leituras web da foundation, enquanto a nova mutation M2-A permanece apenas como contrato local até existir evidência remota explícita.
+Foundation, M2-A e M2-B estão ativos no Prisma-QA. O adaptador Supabase atende leituras e mutações autorizadas do frontend, enquanto operações compostas sensíveis usam Edge Functions ou RPC transacional.
 
 ## Segurança
 
@@ -28,7 +28,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI, shell web e Edge Functions versionadas. QA remoto existe no projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) com schema inicial aplicado para Auth e validação de acesso. O novo movimento M2-A ainda não foi aplicado nem validado remotamente. Produção continua não provisionada. Mudança sensível deve seguir local, QA, evidência, aprovação, produção e smoke.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B e as três Edge Functions ativos. Login, Usuários, Pessoas, texto, PDF nativo, OCR e perfil versionado foram comprovados com dados sintéticos. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 

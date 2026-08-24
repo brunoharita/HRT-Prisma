@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-Existe ambiente local e existe um projeto Supabase remoto de QA (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) já usado para validação inicial de Auth e schema. Produção, domínio público dedicado, CI remoto e secret store ainda não estão configurados neste repositório.
+Existe ambiente local e um único projeto Supabase remoto (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) usado para desenvolvimento conectado e validação interna. Bruno decidiu não criar outro projeto enquanto somente a equipe interna usa o Prisma e não há clientes. Produção isolada, domínio público, frontend hospedado, CI remoto e secret store ainda não estão configurados.
 
 ## Local
 
@@ -10,11 +10,11 @@ Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento deter
 
 ## QA
 
-Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos antes de produção. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e recebeu a migration inicial, a migration `20260824021143_harden_rls_auto_enable_permissions` e memberships controladas para o shell web. Duas organizações contêm somente dados sintéticos identificados por `[QA]` para validar Home, Pessoas, perfil, troca de tenant e papéis. O advisor de segurança ainda registra proteção contra senhas vazadas desabilitada. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
+Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e contém foundation, M2-A, M2-B, memberships controladas e somente dados sintéticos identificados por `[QA]`. Foram comprovados Home, Pessoas, Usuários, perfil, troca de tenant, papéis, texto manual, PDF nativo e OCR local. O advisor de segurança ainda registra proteção contra senhas vazadas desabilitada. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
 
 ## Produção planejada
 
-Objetivo: uso real aprovado. Produção nunca é primeira superfície de teste. Exige aprovação explícita, release checklist, backup, rollback, incident response, auditoria e smoke pós-deploy.
+Objetivo: uso real aprovado quando houver cliente ou necessidade de exposição externa. Produção nunca será a primeira superfície de teste e exigirá projeto isolado, aprovação explícita, release checklist, backup, rollback, incident response, auditoria e smoke pós-deploy.
 
 ## Variáveis e secrets
 
@@ -23,7 +23,7 @@ O shell web local recebe somente URL pública e chave publicável adequada. Secr
 ## Promoção
 
 ```text
-local -> QA -> evidência -> aprovação -> produção -> smoke -> sincronização documental
+local -> remoto interno -> evidência -> futura separação QA/produção -> smoke -> sincronização documental
 ```
 
 Migration aplicada não prova aplicação publicada; aplicação publicada não prova capability ativa. Evidência por ambiente atualiza `PRISMA_CURRENT_STATE.md`.

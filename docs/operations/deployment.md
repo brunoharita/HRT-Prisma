@@ -2,7 +2,7 @@
 
 ## Estado
 
-O Supabase Prisma-QA existe e recebe migrations e Edge Functions. O frontend ainda roda localmente contra QA; não existe hosting de frontend nem projeto Supabase de produção.
+O projeto Supabase Prisma-QA é o único backend remoto atual e recebe migrations e Edge Functions. O frontend roda somente localmente contra esse projeto. Por decisão explícita de produto, não será criado agora outro projeto Supabase nem hosting de frontend, pois o Prisma é usado apenas pela equipe interna e ainda não possui clientes.
 
 ## Pré-requisitos
 
@@ -23,11 +23,11 @@ O Supabase Prisma-QA existe e recebe migrations e Edge Functions. O frontend ain
 5. registrar commit, migration, configurações, versões de IA e evidências;
 6. corrigir antes de solicitar produção.
 
-Evidência atual do QA em 2026-08-24: migrations foundation/M2-A/M2-B, RPC transacional de extração, bucket privado, Edge Functions `operator-sign-in`, `operator-password-reset` e `platform-users`, login `harita.super`, lista de Pessoas/Usuários e ingestão sintética texto -> perfil versionado.
+Evidência atual em 2026-08-24: migrations foundation/M2-A/M2-B, RPC transacional de extração, bucket privado, Edge Functions `operator-sign-in`, `operator-password-reset` e `platform-users`, login `harita.super`, lista de Pessoas/Usuários e ingestão sintética por texto, PDF nativo e OCR local até perfil versionado.
 
-## Produção
+## Produção futura
 
-Requer aprovação explícita. Confirmar backup, janela, compatibilidade, retenção, comunicação e rollback. Após deploy, executar smoke sem PII desnecessária, confirmar métricas e sincronizar estado documental.
+Não existe ambiente separado no estágio interno atual. Antes do primeiro cliente ou dado real, provisionar QA e produção isolados, definir hosting, backup, janela, compatibilidade, retenção, comunicação e rollback. Após o futuro deploy, executar smoke sem PII desnecessária, confirmar métricas e sincronizar o estado documental.
 
 ## Git
 
