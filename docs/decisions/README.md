@@ -17,6 +17,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-005](ADR-005-canonical-ai-context.md) | accepted | Five canonical AI context sources plus generated export |
 | [ADR-006](ADR-006-supabase-authenticated-web-shell.md) | accepted | Isolated local web shell with Supabase Auth and route guards |
 | [ADR-007](ADR-007-authenticated-app-shell-and-design-system.md) | accepted | Authenticated App Shell and Prisma design system |
+| [ADR-008](ADR-008-supabase-domain-read-adapter.md) | accepted | Supabase domain read adapter for the authenticated web app |
 
 ## Rules
 

@@ -2,9 +2,9 @@
 
 | Área | Cenário positivo | Cenário negativo/limite | Estado |
 | --- | --- | --- | --- |
-| Auth | sessão válida | ausente, expirada, removida | shell web local testado; ambiente conectado pendente |
-| Autorização | ação permitida por papel | ação negada e tenant desconhecido | migration/documentado; route guard local testado |
-| Multi-tenant | dados do próprio tenant | leitura, update e vínculo cruzado | JSON testado; RLS pendente |
+| Auth | sessão válida | ausente, inválida e sem membership | Auth e ausência de sessão conectados; inspeção visual autenticada pendente |
+| Autorização | ação permitida por papel | ação negada e tenant desconhecido | Admin, Recruiter e Hiring Manager testados no RLS QA; guards locais ativos |
+| Multi-tenant | dados do próprio tenant | ID conhecido e usuário sem membership | JSON e RLS QA testados em duas organizações sintéticas |
 | Upload | texto permitido | tipo, tamanho, malware, arquivo corrompido | parcial |
 | Formatos | texto PT/EN | PDF, scan, formato exótico | texto testado; demais fail-closed |
 | Extração | perfil mínimo | sem texto, schema inválido, timeout | testado |
@@ -18,7 +18,7 @@
 | Empate | ordem determinística | ranking arbitrário | golden testado |
 | Explicabilidade | conclusão com evidência | evidência ausente ou órfã | testado |
 | Busca natural | conceito conhecido | conceito sem candidato | golden testado |
-| Filtros | tenant e escopo | bypass de filtro | parcial |
+| Filtros | nome, lifecycle, tenant e escopo | organização persistida inválida e ID cross-tenant | adapter e testes locais; dados QA persistidos |
 | LGPD | exportação/correção | acesso ou retenção indevida | documentado, não implementado |
 | Exclusão | agregado completo | cache, embedding e backup residual | planejado |
 | Auditoria | ator/ação/resultado | log sem ator ou com PII | planejado |
@@ -28,7 +28,7 @@
 | Concorrência | processamento único | corrida e reprocessamento duplicado | planejado |
 | Idempotência | mesma chave reutilizada | versão/conteúdo novo | checksum parcial |
 | Acessibilidade | navegação semântica, labels, foco, contraste | teclado/screen reader | shell público local; autenticado conectado pendente |
-| Responsividade | desktop, sidebar recolhida, drawer mobile | overflow e perda de navegação | público desktop/mobile validado; autenticado conectado pendente |
+| Responsividade | desktop, sidebar recolhida, drawer mobile | overflow e perda de navegação | público desktop/mobile validado; autenticado conectado pendente por login manual |
 | Regression | suites estáveis | prompt/modelo/regra piora resultado | golden ativo |
 | Migrations | RLS/grants/tenant | missing policy, unsafe delete | static testado |
 | Secrets | nenhum no repositório | key em código, log ou bundle | lint/scan local |

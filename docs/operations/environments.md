@@ -10,7 +10,7 @@ Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento deter
 
 ## QA
 
-Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos antes de produção. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e recebeu a migration inicial, a migration `20260824021143_harden_rls_auto_enable_permissions` e a primeira membership administrativa para o shell web. O advisor de segurança ainda registra proteção contra senhas vazadas desabilitada. Dados: fictícios ou anonimizados. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
+Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos antes de produção. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e recebeu a migration inicial, a migration `20260824021143_harden_rls_auto_enable_permissions` e memberships controladas para o shell web. Duas organizações contêm somente dados sintéticos identificados por `[QA]` para validar Home, Pessoas, perfil, troca de tenant e papéis. O advisor de segurança ainda registra proteção contra senhas vazadas desabilitada. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
 
 ## Produção planejada
 

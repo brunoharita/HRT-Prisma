@@ -47,6 +47,23 @@ export function resolveActiveMembership(
   return memberships[0] ?? null;
 }
 
+export function resolvePreferredOrganizationId(
+  memberships: readonly OrganizationMembership[],
+  storedOrganizationId: string | null,
+): string | null {
+  if (storedOrganizationId && memberships.some((membership) => membership.organizationId === storedOrganizationId)) {
+    return storedOrganizationId;
+  }
+  return memberships[0]?.organizationId ?? null;
+}
+
+export function canActivateOrganization(
+  memberships: readonly OrganizationMembership[],
+  organizationId: string,
+): boolean {
+  return memberships.some((membership) => membership.organizationId === organizationId);
+}
+
 export function evaluateRouteAccess(
   snapshot: AuthorizationSnapshot,
   rule: RouteRule,

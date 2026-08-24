@@ -2,7 +2,7 @@
 
 ## Estado
 
-O modelo existe em TypeScript e em uma migration PostgreSQL/Supabase. A migration ainda não foi executada em ambiente versionado pelo repositório; portanto, o schema está implementado como código, não ativo em QA ou produção.
+O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. A migration inicial e o hardening posterior estão ativos no Prisma-QA. Não existe schema de produção provisionado.
 
 ## Agregados
 

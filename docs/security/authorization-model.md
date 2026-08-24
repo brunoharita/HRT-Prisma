@@ -2,7 +2,7 @@
 
 ## Estado
 
-Papéis e políticas estão modelados na migration. O shell web local agora valida sessão com Supabase Auth e aplica route guards no browser. A autorização material continua no banco e a UI nunca é a única barreira.
+Papéis e políticas estão ativos no Prisma-QA. O shell web valida sessão com Supabase Auth, aplica route guards e consulta o domínio por um adapter Supabase único. A autorização material continua no banco e a UI nunca é a única barreira.
 
 ## Papéis
 
@@ -30,7 +30,11 @@ Papéis e políticas estão modelados na migration. O shell web local agora vali
 - UPDATE exige `USING` e `WITH CHECK` quando aplicável.
 - Função privilegiada fica em schema privado e tem execução restrita.
 - O event trigger opcional `public.rls_auto_enable()` preserva execução apenas para papéis privilegiados; `PUBLIC`, `anon` e `authenticated` não recebem `EXECUTE`.
-- Queries futuras devem filtrar explicitamente `organization_id` mesmo sob RLS para previsibilidade e performance.
+- As queries web de domínio filtram explicitamente `organization_id` mesmo sob RLS para previsibilidade e performance.
+
+## Evidência conectada em QA
+
+Em 2026-08-24, testes transacionais com `role authenticated` e claims de um usuário Auth persistido comprovaram: Admin da organização A sem leitura por ID conhecido da B; Recruiter da B sem leitura por ID conhecido da A; Hiring Manager com acesso a perfil, evidência e inferência, mas sem linhas de `person_private_data` ou `documents`; usuário autenticado sem membership com zero linhas tenant-owned. As mudanças temporárias de membership e papel foram revertidas em cada transação.
 
 ## Fail-closed
 

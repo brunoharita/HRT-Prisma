@@ -22,10 +22,10 @@ Validar se uma base de currículos pode ser transformada em conhecimento profiss
 
 ## Gate antes do piloto conectado
 
-- [ ] provisionar ambiente QA separado;
-- [ ] executar migration e testes RLS com usuários e organizações diferentes;
+- [x] provisionar ambiente QA separado;
+- [x] executar migrations e testes RLS com papéis e organizações diferentes;
 - [ ] implementar storage privado e parser seguro de documentos;
-- [ ] implementar Auth e autorização de runtime;
+- [x] implementar Auth, memberships, organização ativa e autorização de leitura no runtime web;
 - [ ] definir base legal, retenção e operações de titular;
 - [ ] validar 10 a 15 currículos reais autorizados ou anonimizados;
 - [ ] implementar trilha de auditoria de acesso a PII;
