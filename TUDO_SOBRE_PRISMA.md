@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 42f126c516909adbef50ba9fc072ae53c014ad538b459f0dac5e7bccb96225c0
+source_manifest_sha256: 729256584993c42a02492353bb99c9a48f4ca8742dc238323819335e213ad2e7
 -->
 
 # Tudo sobre o Prisma
@@ -320,7 +320,7 @@ last_verified: 2026-08-24
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega verificada: `codex/m3-m2c-reliability-review`.
+- Branch integrada verificada: `main`; implementação M2-C no commit `1aa6840`.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 

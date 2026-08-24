@@ -3,7 +3,7 @@
 ## Escopo
 
 - Data: 2026-08-24.
-- Implementação base: commit `87b9733` na branch `codex/m2-users-people`.
+- Implementação M2-C: commit `1aa6840`, integrado em `main`.
 - Backend remoto: Prisma-QA (`ioldpnqqvobprjiontre`), único projeto Supabase atual.
 - Frontend: local em `http://127.0.0.1:5555`.
 - Operador: `harita.super`, validado como Super Admin.
