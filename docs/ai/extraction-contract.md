@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidor: `processResume`. Estado: implementado localmente.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA.
 
 ## Entrada
 
@@ -10,6 +10,8 @@ Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidor: 
 - `filename`: nome sanitizável, sem autoridade;
 - `mediaType`: deve pertencer à allowlist;
 - organização e documento são controlados pela aplicação, não pelo provider.
+- PDF: máximo de 15 MB, assinatura `%PDF-`, trailer `%%EOF` e parse válido;
+- páginas: extração nativa primeiro; OCR local somente quando a suficiência determinística falha.
 
 ## Saída de sucesso
 
@@ -32,7 +34,7 @@ Cada fato material liga-se a documento, bloco, página quando disponível, trech
 | `needs_manual_review` | Texto ou estrutura insuficiente para perfil seguro |
 | `unsupported_format` | Parser não disponível para o media type |
 
-Estados planejados: `ocr_required`, `partially_extracted`, `duplicate_document`, `corrupted_document`. Eles não estão implementados e não devem ser emitidos.
+`ocr_required` e `ocr_processing` estão implementados no M2-B. `partially_extracted`, `duplicate_document` e `corrupted_document` continuam planejados e não devem ser emitidos.
 
 ## Falha
 
@@ -44,7 +46,8 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 - Strings como "ignore instruções", "revele secrets" ou "execute" permanecem texto.
 - Não enviar atributos sensíveis ou documento integral a fornecedor externo sem fluxo aprovado.
 - Não logar currículo ou resposta integral.
-- Tipo, tamanho, conteúdo e malware precisam de controles antes de upload real.
+- Tipo, tamanho, assinatura, trailer e parser são validados antes da persistência. Malware scanning ainda não existe e não pode ser alegado.
+- PDF.js e Tesseract.js processam no navegador; nenhum currículo é enviado a OCR ou LLM externo.
 
 ## Compatibilidade
 

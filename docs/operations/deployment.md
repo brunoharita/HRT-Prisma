@@ -2,7 +2,7 @@
 
 ## Estado
 
-Não existe deployment configurado. Este documento define o fluxo mínimo para quando QA for criado.
+O Supabase Prisma-QA existe e recebe migrations e Edge Functions. O frontend ainda roda localmente contra QA; não existe hosting de frontend nem projeto Supabase de produção.
 
 ## Pré-requisitos
 
@@ -22,6 +22,8 @@ Não existe deployment configurado. Este documento define o fluxo mínimo para q
 4. executar smoke e matriz proporcional;
 5. registrar commit, migration, configurações, versões de IA e evidências;
 6. corrigir antes de solicitar produção.
+
+Evidência atual do QA em 2026-08-24: migrations foundation/M2-A/M2-B, RPC transacional de extração, bucket privado, Edge Functions `operator-sign-in`, `operator-password-reset` e `platform-users`, login `harita.super`, lista de Pessoas/Usuários e ingestão sintética texto -> perfil versionado.
 
 ## Produção
 

@@ -12,6 +12,7 @@ import {
   type ProfessionalExperience,
   type StructuredProfile,
 } from "../../domain/prismaData";
+import type { PlatformOperator } from "../../domain/platformUsersData";
 import { normalizeMembershipRole, type MembershipRole, type OrganizationMembership } from "../../shared/access";
 import { supabase } from "./client";
 import type { Json } from "./database.types";
@@ -19,7 +20,68 @@ import type { Json } from "./database.types";
 type ProfileRow = Awaited<ReturnType<typeof loadCurrentProfileRow>>;
 
 export const prismaRepository: PrismaDataRepository = {
+  async loadCurrentOperator(userId) {
+    const { data, error } = await supabase
+      .from("platform_users")
+      .select("id, auth_user_id, full_name, username, email, status, access_profile, group_id, must_change_password")
+      .eq("auth_user_id", userId)
+      .maybeSingle();
+    throwIfError(error, "Não foi possível carregar o operador autenticado.");
+    if (!data) return null;
+
+    let groupName: string | null = null;
+    if (data.group_id) {
+      const { data: group, error: groupError } = await supabase
+        .from("organization_groups")
+        .select("id, name")
+        .eq("id", data.group_id)
+        .maybeSingle();
+      throwIfError(groupError, "Não foi possível confirmar o grupo do operador.");
+      groupName = group?.name ?? null;
+    }
+
+    return {
+      id: data.id,
+      authUserId: data.auth_user_id,
+      fullName: data.full_name,
+      username: data.username,
+      email: data.email,
+      status: data.status,
+      profile: data.access_profile,
+      groupId: data.group_id,
+      groupName,
+      mustChangePassword: data.must_change_password,
+    } satisfies PlatformOperator;
+  },
+
   async loadMemberships(userId) {
+    const currentOperator = await this.loadCurrentOperator(userId);
+    if (!currentOperator || currentOperator.status !== "active") return [];
+
+    if (currentOperator.profile === "super_admin") {
+      const { data: organizationRows, error: organizationError } = await supabase
+        .from("organizations")
+        .select("id, name, group_id")
+        .order("name", { ascending: true });
+      throwIfError(organizationError, "Não foi possível consultar as empresas disponíveis para o Super Admin.");
+
+      const groupIds = [...new Set((organizationRows ?? []).map((row) => row.group_id))];
+      const { data: groupRows, error: groupError } = await supabase
+        .from("organization_groups")
+        .select("id, name")
+        .in("id", groupIds);
+      throwIfError(groupError, "Não foi possível confirmar os grupos visíveis do Super Admin.");
+      const groups = new Map((groupRows ?? []).map((row) => [row.id, row.name]));
+
+      return (organizationRows ?? []).map((row) => ({
+        organizationId: row.id,
+        organizationName: row.name,
+        groupId: row.group_id,
+        groupName: groups.get(row.group_id) ?? null,
+        role: "super_admin",
+      }));
+    }
+
     const { data: membershipRows, error } = await supabase
       .from("organization_memberships")
       .select("organization_id, role, created_at")
@@ -33,16 +95,29 @@ export const prismaRepository: PrismaDataRepository = {
 
     const { data: organizationRows, error: organizationError } = await supabase
       .from("organizations")
-      .select("id, name")
+      .select("id, name, group_id")
       .in("id", organizationIds);
     throwIfError(organizationError, "Não foi possível validar as organizações permitidas.");
-    const names = new Map((organizationRows ?? []).map((row) => [row.id, row.name]));
+    const groupIds = [...new Set((organizationRows ?? []).map((row) => row.group_id))];
+    const { data: groupRows, error: groupError } = await supabase
+      .from("organization_groups")
+      .select("id, name")
+      .in("id", groupIds);
+    throwIfError(groupError, "Não foi possível validar os grupos permitidos.");
+    const organizations = new Map((organizationRows ?? []).map((row) => [row.id, row]));
+    const groups = new Map((groupRows ?? []).map((row) => [row.id, row.name]));
 
     return memberships.flatMap((row): OrganizationMembership[] => {
       const role = normalizeMembershipRole(row.role);
-      const organizationName = names.get(row.organization_id);
-      if (!role || !organizationName) return [];
-      return [{ organizationId: row.organization_id, organizationName, role }];
+      const organization = organizations.get(row.organization_id);
+      if (!role || !organization) return [];
+      return [{
+        organizationId: row.organization_id,
+        organizationName: organization.name,
+        groupId: organization.group_id,
+        groupName: groups.get(organization.group_id) ?? null,
+        role,
+      }];
     });
   },
 
@@ -294,7 +369,7 @@ function sanitizeSearch(search: string): string {
 }
 
 function canReadPrivateContact(role: MembershipRole): boolean {
-  return role === "admin" || role === "recruiter";
+  return role === "super_admin" || role === "owner" || role === "admin" || role === "recruiter";
 }
 
 function throwIfError(error: PostgrestError | null, fallbackMessage: string): void {

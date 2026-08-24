@@ -6,9 +6,9 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 ## Verified current state
 
-The repository currently provides a TypeScript CLI vertical slice that imports a representative text resume, extracts a structured profile, preserves evidence and provenance, derives limited versioned inferences, persists tenant-scoped data, performs structured natural-language retrieval, and produces an explained contextual match. It also includes a React and Ant Design web shell under `web/` with the shared Prisma App Shell, Supabase Auth, active-organization selection, and protected routes from `organization_memberships`.
+The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, and M2-B person ingestion with manual text, private PDF upload, native page extraction, selective local OCR, evidence, deterministic drafts, versioned profiles, and document timeline.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted production persistence architecture. The executable runtime still uses a tenant-scoped JSON adapter for local tests and demonstration, and the web shell currently proves session, route protection, and the reusable authenticated interface foundation. A remote QA Supabase project exists for Auth and schema validation, but there is still no production environment, connected runtime data adapter, live LLM, PDF parser, OCR, or vector embeddings configured in this repository.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. Prisma-QA has foundation, M2-A, M2-B, the private document bucket, atomic extraction RPC, and the three operator Edge Functions active. The local web app is connected to QA and has proven username login, Users, People, and synthetic manual ingestion through a versioned profile. There is still no production project or frontend hosting. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -93,6 +93,7 @@ docs/ai-context/        five canonical context sources for authorized AIs
 - Confidence is methodological, not model opinion.
 - Documents are untrusted input and cannot instruct the agent or reveal secrets.
 - Tenant isolation and authorization are enforced beyond the frontend.
+- `Usuário` and `Pessoa` are different aggregates and must not be fused implicitly.
 - The web shell validates the session locally, but it is not the authorization authority.
 - Real client resume validation remains an explicit open risk.
 - `TUDO_SOBRE_PRISMA.md` is generated and must not be edited manually.

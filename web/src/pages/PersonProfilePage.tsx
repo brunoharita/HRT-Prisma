@@ -70,7 +70,7 @@ function ProfileContent({ membership, view }: { membership: OrganizationMembersh
       </PrismaCard>
 
       <PrismaCard className="prisma-profile-private" title="Contato privado">
-        {membership.role === "hiring_manager" ? (
+        {membership.role === "member" ? (
           <Alert icon={<LockOutlined />} message="Dados privados protegidos para este papel." showIcon type="info" />
         ) : view.privateContact ? (
           <Descriptions column={1} size="small">

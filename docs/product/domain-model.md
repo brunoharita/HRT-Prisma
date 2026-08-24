@@ -2,7 +2,9 @@
 
 ## Entidades
 
+- Grupo: camada acima das empresas para delimitar Owners, Admins, Recruiters e Members.
 - Organização: tenant cliente e limite de isolamento.
+- Usuário: operador autenticável do Prisma, ligado a identidade, autenticação, autorização, grupo, empresas permitidas, status e trilha de auditoria.
 - Unidade: componente hierárquico da organização.
 - Papel: definição reutilizável da função esperada.
 - Posição: cadeira concreta do organograma, ocupada, vaga, planejada ou inativa.
@@ -34,6 +36,9 @@ Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, comp
 6. Relações e avaliações entre organizações diferentes falham de forma segura.
 7. Falha ou extração parcial não produz perfil completo.
 8. Uma nova versão não reescreve silenciosamente o significado histórico.
+9. Usuário opera o Prisma; Pessoa é representada pelo Prisma.
+10. Criar, editar ou desativar um Usuário não cria nem altera uma Pessoa automaticamente.
+11. Pessoa não recebe username, senha, perfil de acesso ou permissão de sistema.
 
 ## Pipeline atual
 

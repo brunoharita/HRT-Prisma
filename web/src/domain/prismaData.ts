@@ -1,4 +1,5 @@
 import type { MembershipRole, OrganizationMembership } from "../shared/access";
+import type { PlatformOperator } from "./platformUsersData";
 
 export const PERSON_LIFECYCLES = [
   "candidate",
@@ -105,6 +106,7 @@ export interface PersonProfileView {
 }
 
 export interface PrismaDataRepository {
+  loadCurrentOperator(userId: string): Promise<PlatformOperator | null>;
   loadMemberships(userId: string): Promise<OrganizationMembership[]>;
   loadHomeSummary(organizationId: string): Promise<HomeSummary>;
   listPeople(organizationId: string, query: PeopleQuery): Promise<PersonListItem[]>;

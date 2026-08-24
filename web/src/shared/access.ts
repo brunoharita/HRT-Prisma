@@ -1,10 +1,17 @@
-export const MEMBERSHIP_ROLES = ["admin", "recruiter", "hiring_manager"] as const;
+import {
+  PLATFORM_ACCESS_PROFILES,
+  type PlatformAccessProfile,
+} from "./platformUsers.js";
 
-export type MembershipRole = (typeof MEMBERSHIP_ROLES)[number];
+export const MEMBERSHIP_ROLES = PLATFORM_ACCESS_PROFILES;
+
+export type MembershipRole = PlatformAccessProfile;
 
 export interface OrganizationMembership {
   organizationId: string;
   organizationName: string;
+  groupId: string | null;
+  groupName: string | null;
   role: MembershipRole;
 }
 
@@ -28,7 +35,7 @@ export interface AccessOutcome {
 }
 
 export function isMembershipRole(value: string): value is MembershipRole {
-  return MEMBERSHIP_ROLES.some((role) => role === value);
+  return MEMBERSHIP_ROLES.some((role: MembershipRole) => role === value);
 }
 
 export function normalizeMembershipRole(value: string): MembershipRole | null {

@@ -25,7 +25,8 @@ interface PrismaAppShellProps {
   selectedPath: string;
   memberships: OrganizationMembership[];
   activeMembership: OrganizationMembership | null;
-  email: string;
+  profileName: string;
+  profileSubtitle: string;
   onNavigate: (path: string) => void;
   onOrganizationChange: (organizationId: string) => void;
   onSignOut: () => void;
@@ -57,7 +58,8 @@ function SidebarContent({
   selectedPath,
   memberships,
   activeMembership,
-  email,
+  profileName,
+  profileSubtitle,
   onNavigate,
   onOrganizationChange,
   onSignOut,
@@ -96,9 +98,6 @@ function SidebarContent({
       label: "Sair",
     },
   ];
-
-  const profileName = email.split("@")[0] || "Usuário";
-  const roleLabel = describeRole(activeMembership?.role ?? null);
 
   return (
     <div className="prisma-sidebar-inner">
@@ -156,10 +155,10 @@ function SidebarContent({
             </Dropdown>
           ) : (
             <div className="prisma-organization-control">
-              <label htmlFor="prisma-organization">Organização ativa</label>
+              <label htmlFor="prisma-organization">Empresa ativa</label>
               <Select
                 id="prisma-organization"
-                aria-label="Organização ativa"
+                aria-label="Empresa ativa"
                 onChange={onOrganizationChange}
                 options={memberships.map((membership) => ({
                   label: membership.organizationName,
@@ -192,7 +191,7 @@ function SidebarContent({
               <>
                 <span className="prisma-user-copy">
                   <strong>{profileName}</strong>
-                  <small>{roleLabel}</small>
+                  <small>{profileSubtitle}</small>
                 </span>
                 <DownOutlined className="prisma-user-chevron" />
               </>
@@ -268,11 +267,4 @@ export function PrismaAppShell(props: PrismaAppShellProps) {
       </Layout>
     </Layout>
   );
-}
-
-function describeRole(role: OrganizationMembership["role"] | null): string {
-  if (role === "admin") return "Administrador";
-  if (role === "recruiter") return "Recrutador";
-  if (role === "hiring_manager") return "Gestor contratante";
-  return "Sem papel ativo";
 }

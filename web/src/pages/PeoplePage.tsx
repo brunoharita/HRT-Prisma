@@ -1,13 +1,10 @@
 import { useDeferredValue, useEffect, useState } from "react";
-import { ArrowRightOutlined, SearchOutlined } from "@ant-design/icons";
-import { Alert, Button, Empty, Input, Select, Skeleton, Tag } from "antd";
-import {
-  PERSON_LIFECYCLES,
-  describeLifecycle,
-  type PeopleQuery,
-  type PersonListItem,
-  type PrismaDataRepository,
-} from "../domain/prismaData";
+import { FilterOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { Alert, Button, Empty, Input, Skeleton, Space, Table, Tag, Typography } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import type { PersonWorkspaceSummary } from "../domain/personIngestion";
+import type { PrismaDataRepository } from "../domain/prismaData";
+import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -18,93 +15,111 @@ interface PeoplePageProps {
   onNavigate: (path: string) => void;
 }
 
-const initialQuery: PeopleQuery = { search: "", lifecycle: "all" };
-
-export function PeoplePage({ activeMembership, repository, onNavigate }: PeoplePageProps) {
-  const [query, setQuery] = useState(initialQuery);
-  const deferredSearch = useDeferredValue(query.search);
-  const [people, setPeople] = useState<PersonListItem[]>([]);
+export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
+  const canManagePeople = activeMembership.role !== "member";
+  const [search, setSearch] = useState("");
+  const deferredSearch = useDeferredValue(search);
+  const [people, setPeople] = useState<PersonWorkspaceSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let current = true;
-    setPeople([]);
     setLoading(true);
     setError(null);
-    void repository.listPeople(activeMembership.organizationId, { ...query, search: deferredSearch })
-      .then((result) => {
-        if (current) setPeople(result);
-      })
-      .catch(() => {
-        if (current) setError("Não foi possível consultar Pessoas no Supabase.");
-      })
-      .finally(() => {
-        if (current) setLoading(false);
-      });
-    return () => {
-      current = false;
-    };
-  }, [activeMembership.organizationId, deferredSearch, query.lifecycle, repository]);
+    void personIngestionService.listPeople(activeMembership.organizationId, deferredSearch, canManagePeople)
+      .then((result) => { if (current) setPeople(result); })
+      .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível consultar Pessoas."); })
+      .finally(() => { if (current) setLoading(false); });
+    return () => { current = false; };
+  }, [activeMembership.organizationId, canManagePeople, deferredSearch]);
+
+  const personPath = (personId: string) => canManagePeople ? `/profiles/${personId}/edit` : `/profiles/${personId}`;
+
+  const columns: ColumnsType<PersonWorkspaceSummary> = [
+    {
+      title: "Nome",
+      dataIndex: "fullName",
+      key: "fullName",
+      sorter: (left, right) => left.fullName.localeCompare(right.fullName),
+      render: (name: string, person) => (
+        <button className="prisma-person-name-button" onClick={() => onNavigate(personPath(person.id))} type="button">
+          <span className="prisma-person-avatar" aria-hidden="true">{initials(name)}</span>
+          <strong>{name}</strong>
+        </button>
+      ),
+    },
+    { title: "E-mail", key: "email", render: (_, person) => person.privateData.email || <span className="prisma-muted">Não informado</span> },
+    { title: "Celular", key: "phone", render: (_, person) => formatPhone(person) },
+    { title: "Origem mais recente", key: "source", render: (_, person) => describeSource(person.latestSourceType) },
+    { title: "Última atualização", dataIndex: "updatedAt", key: "updatedAt", render: (value: string) => formatDateTime(value) },
+    { title: "Status", dataIndex: "profileState", key: "profileState", render: (state: PersonWorkspaceSummary["profileState"]) => <ProfileStateTag state={state} /> },
+  ];
 
   return (
-    <PrismaPage>
+    <PrismaPage className="prisma-m2b-page">
       <PrismaPageHeader
         title="Pessoas"
-        description={`Consulta profissional restrita à organização ${activeMembership.organizationName}.`}
+        description={`Gerencie os registros de pessoas da organização ${activeMembership.organizationName}.`}
+        actions={canManagePeople ? <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/new")} type="primary">Nova Pessoa</Button> : undefined}
       />
-      <PrismaCard className="prisma-people-toolbar">
+      <PrismaCard className="prisma-people-toolbar prisma-m2b-toolbar">
         <Input
           allowClear
-          aria-label="Buscar pessoa por nome"
-          onChange={(event) => setQuery((current) => ({ ...current, search: event.target.value }))}
-          placeholder="Buscar por nome"
+          aria-label="Buscar por nome, e-mail ou telefone"
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Buscar por nome, e-mail ou telefone..."
           prefix={<SearchOutlined />}
-          value={query.search}
+          value={search}
         />
-        <Select
-          aria-label="Filtrar por vínculo"
-          onChange={(lifecycle: PeopleQuery["lifecycle"]) => setQuery((current) => ({ ...current, lifecycle }))}
-          options={[
-            { label: "Todos os vínculos", value: "all" },
-            ...PERSON_LIFECYCLES.map((lifecycle) => ({ label: describeLifecycle(lifecycle), value: lifecycle })),
-          ]}
-          value={query.lifecycle}
-        />
+        <Space>
+          <Button disabled icon={<FilterOutlined />}>Filtros</Button>
+          <Button disabled>Mais filtros</Button>
+        </Space>
       </PrismaCard>
       {error ? <Alert message={error} showIcon type="error" /> : null}
-      <PrismaCard className="prisma-people-card">
-        {loading ? <Skeleton active paragraph={{ rows: 5 }} /> : people.length > 0 ? (
-          <div className="prisma-people-list" role="list">
-            {people.map((person) => (
-              <article className="prisma-person-row" key={person.id} role="listitem">
-                <div className="prisma-person-avatar" aria-hidden="true">{initials(person.fullName)}</div>
-                <div className="prisma-person-copy">
-                  <strong>{person.fullName}</strong>
-                  <span>
-                    <Tag color="blue">{describeLifecycle(person.lifecycle)}</Tag>
-                    <Tag color={person.hasStructuredProfile ? "green" : "default"}>
-                      {person.hasStructuredProfile ? "Perfil estruturado" : "Sem perfil estruturado"}
-                    </Tag>
-                  </span>
-                </div>
-                <Button icon={<ArrowRightOutlined />} onClick={() => onNavigate(`/profiles/${person.id}`)}>
-                  Ver perfil
-                </Button>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <Empty
-            description={query.search || query.lifecycle !== "all"
-              ? "Nenhuma pessoa corresponde à busca e aos filtros."
-              : "Nenhuma pessoa cadastrada nesta organização."}
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
+      <PrismaCard className="prisma-people-table-card">
+        {loading ? <Skeleton active paragraph={{ rows: 7 }} /> : (
+          <Table
+            columns={columns}
+            dataSource={people}
+            locale={{ emptyText: <Empty description="Nenhuma Pessoa encontrada nesta empresa." image={Empty.PRESENTED_IMAGE_SIMPLE} /> }}
+            pagination={{ defaultPageSize: 10, showSizeChanger: true, showTotal: (total, range) => `${range[0]}-${range[1]} de ${total}` }}
+            rowKey="id"
+            scroll={{ x: 980 }}
+            size="middle"
+            onRow={(person) => ({ onDoubleClick: () => onNavigate(personPath(person.id)) })}
           />
         )}
       </PrismaCard>
+      <Typography.Text className="prisma-table-scope-note" type="secondary">
+        A busca e a tabela respeitam a empresa ativa e as políticas RLS do Prisma.
+      </Typography.Text>
     </PrismaPage>
   );
+}
+
+export function ProfileStateTag({ state }: { state: PersonWorkspaceSummary["profileState"] }) {
+  if (state === "generated") return <Tag color="green">Perfil gerado</Tag>;
+  if (state === "building") return <Tag color="blue">Em construção</Tag>;
+  if (state === "requires_attention") return <Tag color="orange">Requer atenção</Tag>;
+  if (state === "processing_failed") return <Tag color="red">Falha de processamento</Tag>;
+  return <Tag>Pendente</Tag>;
+}
+
+function describeSource(source: PersonWorkspaceSummary["latestSourceType"]): string {
+  if (source === "manual_text") return "Texto manual";
+  if (source === "resume_pdf") return "Currículo PDF";
+  return "A definir";
+}
+
+function formatPhone(person: PersonWorkspaceSummary): string {
+  const { phoneCountryCode, phoneNationalNumber } = person.privateData;
+  return [phoneCountryCode, phoneNationalNumber].filter(Boolean).join(" ") || "Não informado";
+}
+
+function formatDateTime(value: string): string {
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
 }
 
 function initials(fullName: string): string {

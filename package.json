@@ -36,7 +36,9 @@
     "@ant-design/icons": "6.3.2",
     "@supabase/supabase-js": "2.112.3",
     "antd": "6.6.1",
+    "pdfjs-dist": "5.4.296",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "tesseract.js": "7.0.0"
   }
 }

@@ -18,6 +18,12 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
 | `tenant-authorization` | security/data | 1.0.0 | Supabase Data API/web | ativo em QA | RLS migration e testes conectados | QA | negar acesso |
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
+| `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
+| `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
+| `person-ingestion` | application/data | 1.0.0 | Pessoas, documentos, perfil | ativo em QA | migrations M2-B, `personIngestionService`, RPC transacional | local/QA | bloquear processamento |
+| `pdf-native-extraction` | AI/application | 1.0.0 | ingestão PDF | ativo localmente | `pdfjs-5.4.296/native-v1` | local | exigir revisão/reprocessamento |
+| `selective-ocr` | AI/application | 1.0.0 | páginas sem texto nativo suficiente | ativo localmente | `tesseract.js-7.0.0/por+eng-v1` | local | falhar sem perfil |
+| `extraction-draft` | AI/domain | 1.0.0 | evidência e geração de perfil | ativo em QA | `extraction_drafts`, `prisma-deterministic-profile-v1` | local/QA | bloquear promoção |
 | `ai-usage-event` | operations/AI | 1.0.0 | observability | implementado | `ProcessingEvent`, table | local/migration | não agregar métricas |
 | `prisma-context-pack` | governance | 1.0.0 | authorized AIs | implementado | checker/generator | repository | checker falha |
 

@@ -13,12 +13,16 @@ import {
 const adminMembership: OrganizationMembership = {
   organizationId: "org-1",
   organizationName: "Org 1",
+  groupId: "group-1",
+  groupName: "Group 1",
   role: "admin",
 };
 
 const recruiterMembership: OrganizationMembership = {
   organizationId: "org-2",
   organizationName: "Org 2",
+  groupId: "group-1",
+  groupName: "Group 1",
   role: "recruiter",
 };
 
@@ -93,5 +97,5 @@ test("keeps Supabase domain queries behind one repository boundary", async () =>
 
   assert.equal(application.includes('.from("'), false);
   assert.equal(repository.includes('.eq("organization_id", organizationId)'), true);
-  assert.equal(repository.includes('role === "admin" || role === "recruiter"'), true);
+  assert.equal(repository.includes('role === "super_admin" || role === "owner" || role === "admin" || role === "recruiter"'), true);
 });

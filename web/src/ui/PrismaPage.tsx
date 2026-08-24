@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 interface PrismaPageProps {
   children: ReactNode;
+  className?: string;
 }
 
 interface PrismaPageHeaderProps {
@@ -12,8 +13,8 @@ interface PrismaPageHeaderProps {
   extras?: ReactNode;
 }
 
-export function PrismaPage({ children }: PrismaPageProps) {
-  return <div className="prisma-page">{children}</div>;
+export function PrismaPage({ children, className }: PrismaPageProps) {
+  return <div className={["prisma-page", className].filter(Boolean).join(" ")}>{children}</div>;
 }
 
 export function PrismaPageHeader({

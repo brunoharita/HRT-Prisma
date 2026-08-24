@@ -2,7 +2,7 @@
 
 ## Estado
 
-Privacy by design está definida e parcialmente refletida no schema. Base legal, aviso de privacidade, retenção, subprocessadores, operações de titular e auditoria de acesso ainda não estão aprovados ou implementados. Dados reais não estão autorizados no fluxo local atual.
+Privacy by design está definida e refletida na separação de PII, perfil e Storage privado. Base legal, aviso de privacidade, retenção, subprocessadores, operações de titular e auditoria de visualização/exportação ainda não estão aprovados. QA usa apenas fixtures sintéticas.
 
 ## Mapa de dados
 
@@ -12,7 +12,7 @@ Privacy by design está definida e parcialmente refletida no schema. Base legal,
 | E-mail, telefone, localização | pessoal privado | currículo/pessoa | contato autorizado | migration separada; não usada localmente | admin e recruiter |
 | Experiência, educação, certificação | pessoal profissional | currículo | estruturar conhecimento | perfil/evidência | papéis autorizados |
 | Idioma, ferramentas, competências | pessoal profissional e inferência possível | currículo/regras | busca e matching | perfil/evidência/inferência | papéis autorizados |
-| Documento bruto | pessoal | upload | fonte e auditoria | JSON local representativo; storage planejado | admin e recruiter |
+| Documento bruto | pessoal | upload | fonte e auditoria | bucket privado `person-documents` em QA | super admin, owner, admin e recruiter no tenant |
 | Avaliação e matching | pessoal derivado | vaga + perfil | apoio à decisão | JSON local/migration | admin, recruiter, hiring manager |
 | Telemetria | dado técnico ligado a IDs | sistema | custo e diagnóstico | JSON local/migration | admin/auditoria |
 
@@ -28,7 +28,7 @@ Finalidade atual é prova técnica com fixtures sintéticas. A base legal para c
 
 - Local: `.prisma-data`, ignorado pelo Git, somente fixtures representativas.
 - Banco planejado: PostgreSQL/Supabase com RLS.
-- Documento planejado: storage privado, não tabela pública.
+- Documento: Storage privado em QA; metadados e checksum na tabela `documents`.
 - Embeddings: não implementados; quando existirem, são dados derivados sujeitos ao mesmo tenant, retenção e exclusão.
 - Modelos externos: nenhum ativo; provider futuro exige DPA/subprocessador, retenção e região documentados.
 
@@ -66,7 +66,7 @@ Prisma auxilia, recomenda e explica. Não rejeita, aprova, contrata ou elimina a
 
 - base legal e aviso de privacidade;
 - retenção e backup;
-- storage privado e malware scanning;
+- malware scanning e quarentena;
 - operações de titular;
 - auditoria de acesso;
 - validação com dados reais autorizados;

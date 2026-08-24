@@ -2,31 +2,26 @@
 
 ## Estado
 
-Papéis e políticas estão ativos no Prisma-QA. O shell web valida sessão com Supabase Auth, aplica route guards e consulta o domínio por um adapter Supabase único. A autorização material continua no banco e a UI nunca é a única barreira.
+Foundation, M2-A e M2-B estão ativos no Prisma-QA. `platform_users`, hierarquia `Grupo -> Empresa`, username, recuperação, gestão de usuários, ingestão e Storage privado são aplicados no boundary correspondente e negam acesso quando sessão, status, papel ou tenant não são confirmados.
 
 ## Papéis
 
-| Ação | Admin | Recruiter/Talent | Hiring Manager/Search |
-| --- | --- | --- | --- |
-| Importar/cadastrar currículo | sim | sim | não |
-| Ver documento bruto | sim | sim, por necessidade | não |
-| Ver contato e PII completa | sim | sim, por necessidade | não |
-| Ver perfil profissional estruturado | sim | sim | sim, dados necessários |
-| Buscar pessoas | sim | sim | sim |
-| Ver matching explicado | sim | sim | sim |
-| Cadastrar vaga | sim | sim | não no contrato atual |
-| Alterar critérios de vaga | sim | sim | não no contrato atual |
-| Administrar organização e usuários | sim | não | não |
-| Configurar provider/prompt/modelo | sim, fluxo controlado | não | não |
-| Consultar auditoria | sim | limitado à operação, planejado | não |
+| Perfil | Escopo | Resumo |
+| --- | --- | --- |
+| Super Admin | plataforma inteira | controla todos os grupos e empresas; único com autoridade global |
+| Owner | um grupo | controla todas as empresas do grupo e administra usuários/configurações do próprio grupo |
+| Admin | uma ou mais empresas de um único grupo | administra somente seu subconjunto explícito de empresas |
+| Recruiter | uma ou mais empresas de um único grupo | opera Talent Intelligence no próprio escopo sem administrar usuários |
+| Member | uma empresa | atua operacionalmente na empresa atribuída, sem administrar papéis ou escopos |
 
 ## Enforcement
 
-- Organização e papel vêm de `organization_memberships`, não de metadata editável pelo usuário.
-- O shell web valida identidade com `supabase.auth.getClaims()` e consulta `organization_memberships` com chave publicável e RLS.
-- Políticas usam `TO authenticated` com predicado de tenant e papel.
+- Organização, grupo, perfil e status vêm de `platform_users`, `organization_groups`, `organizations` e `organization_memberships`, não de metadata editável pelo usuário.
+- O shell web valida identidade com `supabase.auth.getClaims()`, consulta o operador autenticado via `platform_users` e resolve as empresas visíveis com `organization_memberships` e RLS.
+- Políticas usam `TO authenticated`, status ativo e predicado de tenant/escopo.
 - `anon` não possui grants.
-- Hiring manager não possui política de leitura para `documents` ou `person_private_data`.
+- Username e recuperação de acesso passam por Edge Functions server-side para não expor resolução `username -> email` no browser.
+- `member` não lê `person_private_data` nem `documents`.
 - UPDATE exige `USING` e `WITH CHECK` quando aplicável.
 - Função privilegiada fica em schema privado e tem execução restrita.
 - O event trigger opcional `public.rls_auto_enable()` preserva execução apenas para papéis privilegiados; `PUBLIC`, `anon` e `authenticated` não recebem `EXECUTE`.
@@ -34,7 +29,7 @@ Papéis e políticas estão ativos no Prisma-QA. O shell web valida sessão com 
 
 ## Evidência conectada em QA
 
-Em 2026-08-24, testes transacionais com `role authenticated` e claims de um usuário Auth persistido comprovaram: Admin da organização A sem leitura por ID conhecido da B; Recruiter da B sem leitura por ID conhecido da A; Hiring Manager com acesso a perfil, evidência e inferência, mas sem linhas de `person_private_data` ou `documents`; usuário autenticado sem membership com zero linhas tenant-owned. As mudanças temporárias de membership e papel foram revertidas em cada transação.
+Em 2026-08-24, QA confirma foundation, corte de papéis M2-A, Edge Functions de login/recuperação/usuários e M2-B com bucket privado. A sessão `harita.super` foi validada como Super Admin; texto sintético criou versões documentais, draft, evidência e perfil via RPC transacional. `member` permanece sem políticas de PII, documentos, páginas, drafts ou Storage bruto e é roteado para o perfil profissional somente leitura.
 
 ## Fail-closed
 
@@ -42,15 +37,15 @@ Usuário sem sessão, membership, tenant, papel conhecido ou versão de polític
 
 ## Operações privilegiadas
 
-Provisionamento inicial, configuração de IA, exportação em massa, exclusão, retenção e alteração de membership exigem endpoint backend, checagem explícita, auditoria e proteção contra replay. `security definer` não é solução genérica de permissão.
+Provisionamento inicial, login por username, recuperação de acesso, alteração de perfil/escopo, exclusão, retenção e exportação em massa exigem endpoint backend, checagem explícita, auditoria e proteção contra replay. `security definer` não é solução genérica de permissão.
 
 ## Testes obrigatórios antes de QA
 
 - dois tenants, mesmos IDs lógicos e nenhum vazamento;
-- cada papel em cada tabela/ação;
+- cada perfil em cada tabela/ação;
 - usuário autenticado sem membership;
 - tentativa de trocar `organization_id` em update;
-- documento e PII negados a hiring manager;
+- documento e PII negados a `member`;
 - membership stale ou removida;
 - função privada não executável por anon/public;
 - grants da Data API e RLS testados separadamente.
