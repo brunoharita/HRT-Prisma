@@ -29,6 +29,7 @@ Papéis e políticas estão modelados na migration. O shell web local agora vali
 - Hiring manager não possui política de leitura para `documents` ou `person_private_data`.
 - UPDATE exige `USING` e `WITH CHECK` quando aplicável.
 - Função privilegiada fica em schema privado e tem execução restrita.
+- O event trigger opcional `public.rls_auto_enable()` preserva execução apenas para papéis privilegiados; `PUBLIC`, `anon` e `authenticated` não recebem `EXECUTE`.
 - Queries futuras devem filtrar explicitamente `organization_id` mesmo sob RLS para previsibilidade e performance.
 
 ## Fail-closed

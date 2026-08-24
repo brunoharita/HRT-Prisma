@@ -1,312 +1,698 @@
 :root {
-  color-scheme: light;
-  font-family: "Segoe UI", "Inter", sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #12263f;
-  background:
-    radial-gradient(circle at top left, rgba(74, 145, 226, 0.18), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(18, 38, 63, 0.12), transparent 25%),
-    linear-gradient(180deg, #f4f7fb 0%, #edf3fb 100%);
+  color: #10203a;
+  font-family: "Aptos", "Segoe UI Variable", "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --prisma-canvas: #f5f7fb;
+  --prisma-surface: #ffffff;
+  --prisma-border: #e2e8f2;
+  --prisma-text: #10203a;
+  --prisma-text-secondary: #62708a;
+  --prisma-primary: #155eef;
+  --prisma-primary-soft: #eef4ff;
+  --prisma-navy: #031531;
+  --prisma-navy-deep: #020b1d;
+  --prisma-cyan: #24b7f2;
+  --prisma-success: #15945f;
+  --prisma-radius-card: 12px;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
+html,
+body,
+#app {
+  min-height: 100%;
   margin: 0;
-  min-height: 100vh;
 }
 
-body,
+body {
+  min-width: 320px;
+  background: radial-gradient(circle at 92% 4%, rgba(36, 183, 242, 0.05), transparent 28rem), var(--prisma-canvas);
+}
+
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
-button,
-input,
-select {
-  border-radius: 14px;
-}
-
-code {
-  padding: 0.15rem 0.35rem;
-  border-radius: 8px;
-  background: rgba(18, 38, 63, 0.08);
-  font-family: "Cascadia Code", "Consolas", monospace;
-}
-
-#app {
+.prisma-app-shell,
+.prisma-main-layout {
   min-height: 100vh;
+  background: transparent;
 }
 
-.shell {
-  width: min(1180px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 24px 0 40px;
+.prisma-main-layout {
+  transition: margin-left 180ms ease;
 }
 
-.topbar {
-  display: grid;
-  gap: 18px;
-  padding: 24px;
-  border: 1px solid rgba(18, 38, 63, 0.1);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 18px 45px rgba(14, 30, 52, 0.08);
+.prisma-main-content {
+  min-width: 0;
+  padding: 26px clamp(22px, 2.2vw, 40px) 44px;
 }
 
-.brand-block {
-  display: grid;
-  gap: 4px;
+.prisma-sidebar.ant-layout-sider {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 20;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at 82% 6%, rgba(21, 94, 239, 0.36), transparent 18rem),
+    linear-gradient(165deg, var(--prisma-navy) 0%, var(--prisma-navy-deep) 78%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 10px 0 36px rgba(1, 12, 31, 0.09);
 }
 
-.brand {
-  color: #12263f;
-  font-size: 1.8rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.brand-subtitle {
-  margin: 0;
-  color: #526476;
-}
-
-.topbar-actions {
+.prisma-sidebar-inner {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 
-.organization-selector {
-  display: grid;
-  gap: 6px;
-  min-width: min(100%, 360px);
+.prisma-brand {
+  position: relative;
+  flex: 0 0 92px;
+  height: 92px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
 }
 
-.organization-selector span {
-  font-size: 0.85rem;
-  color: #526476;
-}
-
-.organization-selector select,
-.auth-form input {
+.prisma-brand a {
+  display: block;
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid rgba(18, 38, 63, 0.16);
-  background: #fff;
+  height: 100%;
+  overflow: hidden;
 }
 
-.session-badge {
+.prisma-brand img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 245px;
+  max-width: none;
+  height: 140px;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+
+.prisma-brand.is-collapsed img {
+  left: -18px;
+  width: 230px;
+  transform: translateY(-50%);
+}
+
+.prisma-sidebar-collapse.ant-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.prisma-sidebar-collapse.ant-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.prisma-navigation {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 0;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  scrollbar-width: thin;
+}
+
+.prisma-navigation .ant-menu {
+  border-inline-end: 0 !important;
+  background: transparent !important;
+}
+
+.prisma-navigation .ant-menu-item {
+  display: flex;
+  align-items: center;
+  font-weight: 540;
+}
+
+.prisma-navigation .ant-menu-item::after {
+  display: none;
+}
+
+.prisma-navigation .ant-menu-item a {
+  color: inherit;
+}
+
+.prisma-sidebar-utilities {
+  flex: 0 0 auto;
+  padding: 12px 10px 14px;
+  background: linear-gradient(180deg, rgba(2, 11, 29, 0), rgba(2, 11, 29, 0.78) 24%);
+}
+
+.prisma-organization-control {
+  padding: 0 2px 10px;
+}
+
+.prisma-organization-control label {
+  display: block;
+  margin: 0 4px 6px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.prisma-organization-control .ant-select {
+  width: 100%;
+}
+
+.prisma-organization-control .ant-select-selector {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+.prisma-organization-control .ant-select-arrow {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.prisma-sidebar-icon-button.ant-btn {
   display: grid;
-  gap: 2px;
-  padding: 10px 14px;
-  border-radius: 16px;
-  background: #12263f;
-  color: #f8fbff;
+  width: 56px;
+  height: 42px;
+  margin: 0 auto 8px;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.78);
 }
 
-.session-badge span {
-  color: rgba(248, 251, 255, 0.75);
-  font-size: 0.85rem;
+.prisma-sidebar-divider {
+  height: 1px;
+  margin: 0 4px 10px;
+  background: rgba(255, 255, 255, 0.09);
 }
 
-.navigation {
+.prisma-user-menu {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  transition: background-color 150ms ease;
+}
+
+.prisma-user-menu:hover,
+.prisma-user-menu:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.prisma-user-menu:focus-visible {
+  box-shadow: 0 0 0 2px var(--prisma-cyan);
+}
+
+.prisma-user-menu.is-collapsed {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.prisma-user-avatar.ant-avatar {
+  flex: 0 0 auto;
+  color: #ffffff;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--prisma-primary), var(--prisma-cyan));
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.prisma-user-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+}
+
+.prisma-user-copy strong,
+.prisma-user-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prisma-user-copy strong {
+  font-size: 0.86rem;
+}
+
+.prisma-user-copy small {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.72rem;
+}
+
+.prisma-user-chevron {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.68rem;
+}
+
+.prisma-page {
+  width: min(100%, 1680px);
+  margin: 0 auto;
+}
+
+.prisma-page-header {
+  margin-bottom: 22px;
+}
+
+.prisma-page-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.prisma-page-heading h1 {
+  margin: 0;
+  color: var(--prisma-text);
+  font-size: clamp(1.7rem, 2.2vw, 2.25rem);
+  font-weight: 720;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.prisma-page-heading p {
+  max-width: 760px;
+  margin: 7px 0 0;
+  color: var(--prisma-text-secondary);
+  line-height: 1.55;
+}
+
+.prisma-page-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 10px;
 }
 
-.nav-link {
-  padding: 10px 14px;
-  border-radius: 999px;
-  text-decoration: none;
-  color: #27425d;
-  background: rgba(39, 66, 93, 0.08);
+.prisma-page-extras {
+  margin-top: 12px;
 }
 
-.nav-link.active {
-  background: #2f6db1;
-  color: #fff;
+.prisma-page-breadcrumbs {
+  margin-bottom: 10px;
 }
 
-.alert {
-  margin-top: 18px;
-  padding: 14px 18px;
-  border-radius: 18px;
+.prisma-shell-alert {
+  width: min(100%, 1680px);
+  margin: 0 auto 18px;
 }
 
-.alert.error {
-  background: #fff1f0;
-  color: #8a2d23;
-  border: 1px solid rgba(138, 45, 35, 0.18);
+.prisma-card.ant-card {
+  overflow: hidden;
+  border-color: var(--prisma-border);
+  border-radius: var(--prisma-radius-card);
+  box-shadow: 0 1px 2px rgba(16, 32, 58, 0.025);
 }
 
-.alert.info {
-  background: #eef5ff;
-  color: #204067;
-  border: 1px solid rgba(32, 64, 103, 0.16);
+.prisma-card .ant-card-head {
+  min-height: 48px;
+  padding-inline: 18px;
+  border-bottom-color: #edf1f6;
 }
 
-.content {
-  margin-top: 24px;
-}
-
-.hero,
-.auth-shell {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  align-items: stretch;
-}
-
-.eyebrow {
-  margin: 0 0 8px;
-  color: #2f6db1;
+.prisma-card .ant-card-head-title {
+  color: var(--prisma-text);
+  font-size: 0.95rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.78rem;
 }
 
-.hero h1,
-.auth-shell h1,
-.page-copy h1 {
-  margin: 0 0 12px;
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  line-height: 1.05;
+.prisma-card .ant-card-body {
+  padding: 18px;
 }
 
-.lede,
-.page-copy p,
-.auth-copy p {
-  margin: 0;
-  color: #445569;
-  font-size: 1.02rem;
-}
-
-.panel,
-.card,
-.page-copy,
-.loading-shell {
-  padding: 24px;
-  border-radius: 24px;
-  border: 1px solid rgba(18, 38, 63, 0.1);
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 18px 45px rgba(14, 30, 52, 0.08);
-}
-
-.panel.inset {
-  background: linear-gradient(180deg, #12263f 0%, #21486f 100%);
-  color: #fff;
-}
-
-.panel-label,
-.card-label {
-  margin: 0 0 8px;
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #7a8fa8;
-}
-
-.panel.inset .panel-label,
-.panel.inset .panel-meta,
-.panel.inset .panel-title {
-  color: #fff;
-}
-
-.panel-title,
-.card h2 {
-  margin: 0 0 8px;
-  font-size: 1.4rem;
-}
-
-.cards {
+.prisma-dashboard-grid {
   display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  margin-top: 24px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
 }
 
-.card p,
-.panel-meta,
-.help-text {
-  margin: 0;
-  color: #526476;
+.prisma-status-card {
+  grid-column: span 4;
+  min-height: 154px;
 }
 
-.auth-form {
+.prisma-status-card .ant-card-body {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prisma-status-card .ant-statistic {
+  flex: 1;
+}
+
+.prisma-status-card .ant-statistic-title {
+  margin-bottom: 8px;
+  color: var(--prisma-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.prisma-status-card .ant-statistic-content {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--prisma-text);
+  font-size: clamp(1.25rem, 1.7vw, 1.65rem);
+  font-weight: 720;
+  letter-spacing: -0.025em;
+}
+
+.prisma-status-card:first-child .ant-statistic-content-prefix {
+  color: var(--prisma-success);
+}
+
+.prisma-foundation-card {
+  grid-column: span 7;
+}
+
+.prisma-contract-card {
+  grid-column: span 5;
+}
+
+.prisma-contract-card .ant-alert {
+  height: 100%;
+  border-color: #cfdcff;
+  background: var(--prisma-primary-soft);
+}
+
+.prisma-route-list {
   display: grid;
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
 }
 
-.auth-form label {
-  display: grid;
-  gap: 8px;
-}
-
-.auth-form span {
-  font-weight: 600;
-}
-
-.primary-button,
-.secondary-button {
-  border: 0;
+.prisma-route-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  padding: 11px;
+  color: var(--prisma-text);
+  text-align: left;
   cursor: pointer;
-  padding: 12px 18px;
-  transition: transform 120ms ease, opacity 120ms ease;
+  background: #f9fbfe;
+  border: 1px solid #e8edf5;
+  border-radius: 9px;
+  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
 }
 
-.primary-button {
-  background: #2f6db1;
-  color: #fff;
-}
-
-.secondary-button {
-  background: rgba(18, 38, 63, 0.08);
-  color: #12263f;
-}
-
-.primary-button:hover,
-.secondary-button:hover {
+.prisma-route-link:hover {
+  background: var(--prisma-primary-soft);
+  border-color: #bfd0ff;
   transform: translateY(-1px);
 }
 
-.primary-button:disabled {
-  opacity: 0.7;
-  cursor: wait;
+.prisma-route-link:focus-visible {
+  outline: 3px solid rgba(21, 94, 239, 0.24);
+  outline-offset: 1px;
 }
 
-.loading-shell {
+.prisma-route-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--prisma-primary);
+  background: #eaf1ff;
+  border-radius: 8px;
+}
+
+.prisma-route-link > span:last-child {
+  display: grid;
+  min-width: 0;
+}
+
+.prisma-route-link strong {
+  font-size: 0.86rem;
+}
+
+.prisma-route-link small {
+  overflow: hidden;
+  margin-top: 2px;
+  color: var(--prisma-text-secondary);
+  font-size: 0.73rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prisma-mobile-navigation-trigger.ant-btn {
+  position: fixed;
+  top: 18px;
+  left: 16px;
+  z-index: 30;
+  color: #ffffff;
+  background: var(--prisma-navy);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 22px rgba(3, 21, 49, 0.2);
+}
+
+.prisma-mobile-drawer .ant-drawer-content,
+.prisma-mobile-drawer .ant-drawer-body {
+  background: var(--prisma-navy);
+}
+
+.prisma-auth-shell {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: minmax(420px, 1.08fr) minmax(420px, 0.92fr);
+  background: #f8faff;
+}
+
+.prisma-auth-brand-panel {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: clamp(30px, 5vw, 72px);
+  background: radial-gradient(circle at 78% 18%, rgba(36, 183, 242, 0.28), transparent 28rem),
+    radial-gradient(circle at 16% 92%, rgba(21, 94, 239, 0.38), transparent 30rem),
+    linear-gradient(150deg, #020b1d 0%, #061b42 55%, #0b3b88 100%);
+}
+
+.prisma-auth-brand-panel::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  opacity: 0.18;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom right, black, transparent 72%);
+}
+
+.prisma-auth-brand-frame {
+  position: relative;
+  z-index: 1;
+  width: min(310px, 72%);
+  height: 92px;
+  overflow: hidden;
+}
+
+.prisma-auth-brand-frame img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 390px;
+  max-width: none;
+  height: 223px;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+
+.prisma-auth-message {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  color: #ffffff;
+}
+
+.prisma-auth-message h1 {
+  margin: 20px 0 16px;
+  font-size: clamp(2.35rem, 4vw, 4.8rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.prisma-auth-message p {
+  max-width: 560px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  line-height: 1.55;
+}
+
+.prisma-auth-form-panel {
+  display: grid;
+  padding: clamp(28px, 6vw, 96px);
+  place-items: center;
+  background: radial-gradient(circle at 90% 8%, rgba(21, 94, 239, 0.07), transparent 24rem), #f8faff;
+}
+
+.prisma-auth-form-wrap {
+  display: grid;
+  width: min(100%, 440px);
+  gap: 24px;
+}
+
+.prisma-auth-form-heading h2 {
+  margin: 8px 0 9px;
+  color: var(--prisma-text);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 720;
+  letter-spacing: -0.045em;
+}
+
+.prisma-auth-form-heading p,
+.prisma-auth-footnote {
+  margin: 0;
+  color: var(--prisma-text-secondary);
+  line-height: 1.55;
+}
+
+.prisma-auth-kicker {
+  color: var(--prisma-primary);
+  font-size: 0.76rem;
+  font-weight: 760;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.prisma-auth-form-wrap .ant-form-item-label > label {
+  color: var(--prisma-text);
+  font-weight: 650;
+}
+
+.prisma-auth-form-wrap .ant-btn-primary {
+  margin-top: 4px;
+}
+
+.prisma-auth-footnote {
+  padding-top: 20px;
+  font-size: 0.8rem;
   text-align: center;
-  color: #445569;
+  border-top: 1px solid var(--prisma-border);
 }
 
-@media (max-width: 720px) {
-  .shell {
-    width: min(100% - 20px, 100%);
-    padding: 16px 0 32px;
+.prisma-loading-screen {
+  display: grid;
+  min-height: 100vh;
+  align-content: center;
+  justify-items: center;
+  gap: 14px;
+  color: var(--prisma-text-secondary);
+  background: radial-gradient(circle at 50% 35%, rgba(21, 94, 239, 0.1), transparent 22rem), var(--prisma-canvas);
+}
+
+@media (max-width: 1040px) {
+  .prisma-status-card {
+    grid-column: span 6;
   }
 
-  .topbar,
-  .panel,
-  .card,
-  .page-copy,
-  .loading-shell {
-    padding: 20px;
+  .prisma-foundation-card,
+  .prisma-contract-card {
+    grid-column: 1 / -1;
   }
 
-  .hero h1,
-  .auth-shell h1,
-  .page-copy h1 {
-    font-size: 2rem;
+  .prisma-auth-shell {
+    grid-template-columns: minmax(340px, 0.88fr) minmax(400px, 1.12fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .prisma-main-content {
+    padding: 72px 16px 32px;
+  }
+
+  .prisma-page-header-row {
+    display: grid;
+  }
+
+  .prisma-page-actions {
+    justify-content: flex-start;
+  }
+
+  .prisma-status-card,
+  .prisma-foundation-card,
+  .prisma-contract-card {
+    grid-column: 1 / -1;
+  }
+
+  .prisma-route-list {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-auth-shell {
+    display: block;
+  }
+
+  .prisma-auth-brand-panel {
+    min-height: 315px;
+    padding: 26px 24px 32px;
+  }
+
+  .prisma-auth-brand-frame {
+    width: min(270px, 90%);
+    height: 68px;
+  }
+
+  .prisma-auth-brand-frame img {
+    width: 330px;
+    height: 189px;
+  }
+
+  .prisma-auth-message h1 {
+    margin-top: 14px;
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+
+  .prisma-auth-form-panel {
+    min-height: calc(100vh - 315px);
+    padding: 38px 22px 48px;
+  }
+}
+
+@media (max-width: 420px) {
+  .prisma-dashboard-grid {
+    gap: 10px;
+  }
+
+  .prisma-card .ant-card-body {
+    padding: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

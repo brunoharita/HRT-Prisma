@@ -84,7 +84,7 @@ Supersede only with an accepted ADR that defines the next UI/runtime boundary, m
 
 ## References
 
-`web/src/main.ts`, `web/src/shared/access.ts`, `tests/webProtectedRoutes.test.ts`, `docs/security/authorization-model.md`, `docs/architecture/system-architecture.md`, `docs/ai-context/PRISMA_CURRENT_STATE.md`, ADR-001, ADR-002.
+`web/src/main.tsx`, `web/src/app/PrismaApplication.tsx`, `web/src/shared/access.ts`, `tests/webProtectedRoutes.test.ts`, `docs/security/authorization-model.md`, `docs/architecture/system-architecture.md`, `docs/ai-context/PRISMA_CURRENT_STATE.md`, ADR-001, ADR-002, ADR-007.
 
 ## Change history
 

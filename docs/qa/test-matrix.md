@@ -27,8 +27,8 @@
 | Resiliência | provider disponível | timeout, resposta inválida, fallback | timeout testado |
 | Concorrência | processamento único | corrida e reprocessamento duplicado | planejado |
 | Idempotência | mesma chave reutilizada | versão/conteúdo novo | checksum parcial |
-| Acessibilidade | navegação, leitura, contraste | teclado/screen reader | shell web local parcial |
-| Responsividade | viewports definidos | overflow e mobile | shell web local parcial |
+| Acessibilidade | navegação semântica, labels, foco, contraste | teclado/screen reader | shell público local; autenticado conectado pendente |
+| Responsividade | desktop, sidebar recolhida, drawer mobile | overflow e perda de navegação | público desktop/mobile validado; autenticado conectado pendente |
 | Regression | suites estáveis | prompt/modelo/regra piora resultado | golden ativo |
 | Migrations | RLS/grants/tenant | missing policy, unsafe delete | static testado |
 | Secrets | nenhum no repositório | key em código, log ou bundle | lint/scan local |

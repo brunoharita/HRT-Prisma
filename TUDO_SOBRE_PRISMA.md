@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 4810119788b909877653f1b34c18c51d400678b6125a90d393891fe9c922b0dd
+source_manifest_sha256: 9da45f811b11ac20090d9cdca2b79c3d3b4def1ed9a00a4e60ef77abce2d9bbf
 -->
 
 # Tudo sobre o Prisma
@@ -157,9 +157,9 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 ## Verified current state
 
-The repository currently provides a TypeScript CLI vertical slice that imports a representative text resume, extracts a structured profile, preserves evidence and provenance, derives limited versioned inferences, persists tenant-scoped data, performs structured natural-language retrieval, and produces an explained contextual match. It now also includes an isolated local web shell under `web/` that validates Supabase Auth sessions and enforces protected routes from `organization_memberships`.
+The repository currently provides a TypeScript CLI vertical slice that imports a representative text resume, extracts a structured profile, preserves evidence and provenance, derives limited versioned inferences, persists tenant-scoped data, performs structured natural-language retrieval, and produces an explained contextual match. It also includes a React and Ant Design web shell under `web/` with the shared Prisma App Shell, Supabase Auth, active-organization selection, and protected routes from `organization_memberships`.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted production persistence architecture. The executable runtime still uses a tenant-scoped JSON adapter for local tests and demonstration, and the new web shell currently proves only session and route protection. A remote QA Supabase project now exists for Auth and schema validation, but there is still no production environment, connected runtime data adapter, live LLM, PDF parser, OCR, or vector embeddings configured in this repository.
+PostgreSQL/Supabase with Row-Level Security is the accepted production persistence architecture. The executable runtime still uses a tenant-scoped JSON adapter for local tests and demonstration, and the web shell currently proves session, route protection, and the reusable authenticated interface foundation. A remote QA Supabase project exists for Auth and schema validation, but there is still no production environment, connected runtime data adapter, live LLM, PDF parser, OCR, or vector embeddings configured in this repository.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -310,7 +310,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.1.0
+version: 1.2.1
 last_verified: 2026-08-23
 ---
 
@@ -326,7 +326,7 @@ last_verified: 2026-08-23
 ## Disponível localmente
 
 - CLI de vertical slice.
-- Shell web isolado com Vite, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com convenção local `5555` principal e `5556` QA.
+- Shell web React com Vite, Ant Design, App Shell autenticado reutilizável, sidebar responsiva, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com convenção local `5555` principal e `5556` QA.
 - Importação de currículo textual UTF-8 representativo.
 - Extração determinística de identidade, experiências, educação, certificações, idiomas, competências e contextos reconhecidos.
 - Perfil profissional estruturado com fatos, evidências, proveniência, inferências, incertezas e campos não identificados.
@@ -336,7 +336,7 @@ last_verified: 2026-08-23
 - Confiança metodológica determinística.
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
-- Typecheck e build do shell web.
+- Typecheck, build e validação visual pública em desktop e mobile do shell web.
 
 ## Implementado como contrato, não ativado
 
@@ -349,6 +349,7 @@ last_verified: 2026-08-23
 
 - Projeto Supabase QA remoto ativo: `Prisma-QA` (`ioldpnqqvobprjiontre`).
 - Migration inicial do Prisma aplicada em QA em 2026-08-23.
+- Migration `20260824021143_harden_rls_auto_enable_permissions` aplicada em QA; `anon` e `authenticated` não executam diretamente o event trigger de RLS.
 - Organization `Prisma` criada em QA com membership administrativa inicial para o shell web.
 
 Não existe evidência de rollout em produção.
@@ -363,6 +364,7 @@ Não existe evidência de rollout em produção.
 - Auditoria de visualização/exportação.
 - Idempotência completa e concorrência.
 - QA remoto, produção, deployment e rollback automatizados.
+- Validação visual conectada das rotas autenticadas em desktop e mobile com usuário QA autorizado.
 - Retenção, exclusão e exportação de titular.
 
 ## Validação factual
@@ -376,13 +378,15 @@ Não existe evidência de rollout em produção.
 ## Riscos e bloqueios
 
 - `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`.
-- Schema/RLS ainda precisa de execução e testes conectados, inclusive para o shell web.
+- Validação conectada completa de Auth, RLS e shell web ainda está pendente.
+- O advisor do QA ainda informa que a proteção contra senhas vazadas está desabilitada.
+- Não existe projeto Supabase de produção nem hosting configurado para o frontend.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
 
-Em 2026-08-23, a base local adicionou o shell web `web/` com build Vite aprovado e guard testado localmente para sessão, membership e papel. No mesmo dia, o projeto remoto `Prisma-QA` recebeu a migration inicial e a membership administrativa necessária para o primeiro login funcional. O gate local `pnpm run validate` precisa ser reexecutado sempre que a documentação material mudar; a existência de QA não comprova rollout em produção.
+Em 2026-08-23, o shell web `web/` evoluiu para React e Ant Design com App Shell único, sidebar responsiva, componentes de página e cards reutilizáveis e logos oficiais. O build e a tela pública foram validados localmente em desktop e mobile; a inspeção visual autenticada conectada continua pendente por ausência de credenciais QA no ambiente. No `Prisma-QA`, a migration de hardening revogou execução direta de `public.rls_auto_enable()` para `anon` e `authenticated`; o advisor manteve somente o alerta de proteção contra senhas vazadas desabilitada. Produção e hosting continuam não provisionados. O gate local `pnpm run validate` precisa ser reexecutado sempre que a documentação material mudar; a existência de QA não comprova rollout em produção.
 
 ---
 

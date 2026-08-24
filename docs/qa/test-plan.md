@@ -24,7 +24,7 @@ Local e QA usam fixtures sintéticas ou anonimizadas. Dados reais exigem autoriz
 
 ## Automação atual
 
-`pnpm run validate` executa lint, invariantes de fundação, Context Pack, typecheck do CLI, typecheck do shell web, build web, testes, golden tests, build e demo. A suite atual inclui `tests/webProtectedRoutes.test.ts` para o guard local de sessão, membership e papel. `pnpm run audit:dependencies` consulta advisories do registry e também integra a CI. Testes conectados de Auth/RLS/storage ainda não existem porque não há ambiente.
+`pnpm run validate` executa lint, invariantes de fundação, Context Pack, typecheck do CLI, typecheck do shell web, build web, testes, golden tests, build e demo. A suite atual inclui `tests/webProtectedRoutes.test.ts` para o guard local de sessão, membership e papel. O shell público deve ser inspecionado em desktop e mobile; as rotas autenticadas exigem usuário QA autorizado para validação visual conectada. `pnpm run audit:dependencies` consulta advisories do registry e também integra a CI. Testes conectados completos de Auth/RLS/storage ainda não existem.
 
 ## Critério de promoção
 

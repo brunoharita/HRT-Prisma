@@ -20,3 +20,16 @@ test("migration enables RLS and tenant ownership on every public table", async (
   assert.match(sql, /foreign key \(organization_id, person_id\)/i);
   assert.doesNotMatch(sql, /on delete set null\s*[,;]/i);
 });
+
+test("security hardening removes direct execution of the RLS event trigger", async () => {
+  const sql = await readFile(
+    "supabase/migrations/20260824021143_harden_rls_auto_enable_permissions.sql",
+    "utf8",
+  );
+
+  assert.match(sql, /to_regprocedure\('public\.rls_auto_enable\(\)'\)/i);
+  assert.match(
+    sql,
+    /revoke execute on function public\.rls_auto_enable\(\) from public, anon, authenticated/i,
+  );
+});

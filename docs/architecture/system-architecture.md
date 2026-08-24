@@ -2,7 +2,7 @@
 
 ## Estado e objetivo
 
-Estado: implementado localmente. A arquitetura prova um slice de Talent Intelligence por CLI, um shell web isolado com Supabase Auth e rotas protegidas, sem LLM remoto nem banco de produção conectado. PostgreSQL/Supabase é o contrato de persistência aceito, mas a execução principal do domínio ainda usa JSON tenant-scoped.
+Estado: implementado localmente. A arquitetura prova um slice de Talent Intelligence por CLI e um shell web React com Supabase Auth, rotas protegidas e App Shell autenticado reutilizável, sem LLM remoto nem banco de produção conectado. PostgreSQL/Supabase é o contrato de persistência aceito, mas a execução principal do domínio ainda usa JSON tenant-scoped.
 
 ## Fluxo atual
 
@@ -31,7 +31,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Application | Estados, validação e orquestração | `processResume.ts` | disponível localmente |
 | AI boundary | Extração, inferência, retrieval, confiança, matching | `src/ai` | provider determinístico |
 | Infrastructure | Persistência tenant-scoped | `JsonTalentRepository` | somente local/teste |
-| Web shell | Sessão Supabase, seleção de organization e route guards | `web/src` | disponível localmente |
+| Web shell | React, Ant Design, App Shell, sessão Supabase, organization ativa e route guards | `web/src` | disponível localmente |
 | Database contract | Modelo, integridade, grants e RLS | `supabase/migrations` | implementado, não ativado |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
 
@@ -42,6 +42,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - `TalentRepository` exige organização em todas as leituras.
 - Matching rejeita organizações diferentes antes da avaliação.
 - O shell web consome apenas sessão Supabase e `organization_memberships`; ele não substitui RLS nem backend privilegiado.
+- Toda rota autenticada reutiliza o App Shell com sidebar esquerda; não existe top bar global e headers pertencem às páginas.
 - Documento bruto e dados privados são separados do perfil consultável no schema de produção.
 - A UI existente continua consumidora dos contratos, nunca fonte de autorização ou verdade.
 
