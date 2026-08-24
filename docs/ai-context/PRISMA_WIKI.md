@@ -2,7 +2,7 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.2.0
+version: 1.3.0
 last_verified: 2026-08-24
 ---
 
@@ -39,6 +39,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. O M2-A distingue formalmente `Usuário != Pessoa`, apresenta login por username, gestão de operadores e escopo Grupo -> Empresa. O M2-B cadastra Pessoas, preserva documentos privados, extrai texto por página, usa OCR somente quando necessário e gera perfis versionados com proveniência. M2-A e M2-B estão comprovados no único projeto remoto interno; não há ambiente de produção separado nem frontend hospedado no estágio atual.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. O M2-A distingue `Usuário != Pessoa`; o M2-B cadastra Pessoas e extrai documentos privados; o M2-C centraliza documentos, torna cadastro/retry idempotentes, permite revisão humana por campo, comparação de versões e aprovação rastreável. M2-A, M2-B e M2-C estão comprovados no único projeto remoto interno; não há ambiente de produção separado nem frontend hospedado no estágio atual.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

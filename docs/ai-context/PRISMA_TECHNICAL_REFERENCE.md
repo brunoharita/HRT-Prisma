@@ -2,7 +2,7 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.3.0
+version: 1.4.0
 last_verified: 2026-08-24
 ---
 
@@ -14,13 +14,13 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth, route guards, M2-A e M2-B. PDF.js e Tesseract.js processam PDFs no navegador; o adaptador Supabase persiste documentos, tentativas, páginas, drafts, evidências e perfis. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
+`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth, route guards, M2-A, M2-B e M2-C. PDF.js e Tesseract.js processam PDFs no navegador; o adaptador Supabase usa RPCs para documentos, tentativas, drafts, revisão, evidências e perfis. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
 
 ## Banco
 
-A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id` e a evolução do contrato de `membership_role`. O M2-B adiciona Storage privado, tentativas, páginas, drafts, eventos e a RPC `persist_person_extraction`. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
+A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona grupos e operadores; o M2-B adiciona Storage privado, tentativas, páginas e drafts; o M2-C adiciona operações idempotentes, retries, revisões, mudanças por campo e promoção atômica de perfil. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
 
-Foundation, M2-A e M2-B estão ativos no Prisma-QA. O adaptador Supabase atende leituras e mutações autorizadas do frontend, enquanto operações compostas sensíveis usam Edge Functions ou RPC transacional.
+Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C.
 
 ## Segurança
 
@@ -28,7 +28,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B e as três Edge Functions ativos. Login, Usuários, Pessoas, texto, PDF nativo, OCR e perfil versionado foram comprovados com dados sintéticos. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B, M2-C e as três Edge Functions ativos. Login, Usuários, Pessoas, PDF/OCR, concorrência, retry, revisão e aprovação foram comprovados com dados sintéticos. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -45,8 +45,8 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Versionamento: `versioning.md`. ADRs aceitos: stack, RLS multi-tenant, boundary do provider, versionamento de IA, Context Pack e o boundary `username + group scope + platform users`.
+Catálogo: `docs/architecture/contracts.md`. Versionamento: `versioning.md`. A fronteira idempotente de documentos e revisão é definida pelo ADR-011 e por `document-review-contract.md`.
 
 ## Operação
 
-Telemetria básica existe. Audit log, domain events completos, alerts, deployment e incident owners não estão implementados. `.prisma-data`, `dist`, `node_modules`, `.env*` e caches ficam fora do Git.
+Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditoria global, alerts, deployment automatizado e incident owners não estão completos. `.prisma-data`, `dist`, `node_modules`, `.env*` e caches ficam fora do Git.

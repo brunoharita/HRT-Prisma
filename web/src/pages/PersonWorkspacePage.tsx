@@ -121,16 +121,20 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     }
   }
 
-  async function handleGenerateProfile() {
-    if (!workspace?.selectedDocument) return;
+  async function handleStartReview() {
+    if (!workspace?.selectedDocument?.latestAttempt) return;
     setBusy(true);
     setError(null);
     try {
-      await personIngestionService.generateProfile(activeMembership.organizationId, personId, workspace.selectedDocument.id);
-      await refresh(workspace.selectedDocument.id);
-      setSuccess("Nova versão rastreável do Perfil Prisma gerada. Revisão humana continua pendente.");
+      const reviewId = await personIngestionService.startProfileReview(
+        activeMembership.organizationId,
+        personId,
+        workspace.selectedDocument.id,
+        workspace.selectedDocument.latestAttempt.id,
+      );
+      onNavigate(`/profiles/${personId}/documents/${workspace.selectedDocument.id}/review/${reviewId}`);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "O Perfil Prisma não pôde ser gerado.");
+      setError(caught instanceof Error ? caught.message : "A revisão humana não pôde ser iniciada.");
     } finally {
       setBusy(false);
     }
@@ -154,8 +158,9 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 14 }} /></PrismaPage>;
   if (!workspace) return <PrismaPage><Alert message={error ?? "Pessoa não encontrada."} showIcon type="error" /></PrismaPage>;
   const currentPage = workspace.pages.find((page) => page.pageNumber === selectedPage) ?? workspace.pages[0];
-  const attempt = workspace.selectedDocument?.latestAttempt;
-  const canGenerate = attempt?.state === "structured" && Boolean(workspace.draft?.experiences.length);
+  const selectedDocument = workspace.selectedDocument;
+  const attempt = selectedDocument?.latestAttempt;
+  const canReview = attempt?.state === "structured" && Boolean(workspace.draft?.experiences.length);
 
   return (
     <PrismaPage className="prisma-m2b-page prisma-person-workspace">
@@ -164,8 +169,10 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         description={`Pessoa ${workspace.person.id.slice(0, 8)} · ${activeMembership.organizationName}`}
         actions={(
           <Space wrap>
+            <Button onClick={() => onNavigate("/profiles/processes")}>Processamento e revisões</Button>
+            <Button onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Comparar versões</Button>
             <Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/edit`)}>Editar dados</Button>
-            <Button disabled={!canGenerate} loading={busy} onClick={() => void handleGenerateProfile()} type="primary">Gerar Perfil Prisma</Button>
+            <Button disabled={!canReview} loading={busy} onClick={() => void handleStartReview()} type="primary">Iniciar revisão</Button>
           </Space>
         )}
       />
@@ -259,7 +266,10 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
       <section aria-labelledby="resultado" className="prisma-m2b-section prisma-extraction-section">
         <div className="prisma-section-heading">
           <Typography.Title id="resultado" level={3}>Resultado da extração e Perfil Prisma em construção</Typography.Title>
-          {attempt ? <Button disabled={busy} icon={<ReloadOutlined />} loading={busy} onClick={() => void handleReprocess()}>Reprocessar</Button> : null}
+          <Space wrap>
+            {selectedDocument ? <Button onClick={() => onNavigate(`/profiles/${personId}/documents/${selectedDocument.id}`)}>Detalhes do documento</Button> : null}
+            {attempt ? <Button disabled={busy} icon={<ReloadOutlined />} loading={busy} onClick={() => void handleReprocess()}>Reprocessar</Button> : null}
+          </Space>
         </div>
         <PrismaCard>
           <Tabs items={[

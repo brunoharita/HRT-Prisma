@@ -1200,11 +1200,85 @@ textarea {
   margin-top: 14px;
 }
 
+.prisma-m2c-page {
+  gap: 18px;
+  animation: prisma-m2c-reveal 260ms ease-out both;
+}
+
+.prisma-operations-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.prisma-operation-metric .ant-card-body {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.prisma-operation-metric-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: #52627d;
+  font-size: 1.15rem;
+  background: #f1f4f8;
+  border-radius: 14px;
+}
+
+.prisma-operation-metric--processing .prisma-operation-metric-icon { color: #9a6700; background: #fff5d6; }
+.prisma-operation-metric--review .prisma-operation-metric-icon { color: #155eef; background: #eaf2ff; }
+.prisma-operation-metric--success .prisma-operation-metric-icon { color: #087443; background: #e8f8ef; }
+.prisma-operation-metric--danger .prisma-operation-metric-icon { color: #b42318; background: #ffebe9; }
+
+.prisma-operation-metric .ant-statistic-title { color: var(--prisma-text-secondary); font-size: 0.75rem; }
+.prisma-operation-metric .ant-statistic-content { color: var(--prisma-text); font-size: 1.45rem; font-weight: 760; }
+
+.prisma-operations-toolbar .ant-card-body {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(190px, 240px);
+  gap: 12px;
+}
+
+.prisma-operations-table .ant-card-body { padding: 0; }
+.prisma-table-secondary { display: block; margin-top: 3px; color: var(--prisma-text-secondary); }
+.prisma-document-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+.prisma-document-summary-grid .prisma-card { height: 100%; }
+.prisma-document-summary-grid .ant-btn + .ant-btn { margin-top: 10px; }
+
+.prisma-review-workbench .ant-tabs-nav { margin-bottom: 22px; }
+.prisma-review-legend { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.prisma-review-compare { display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr); gap: 18px; align-items: start; }
+.prisma-review-compare > div { display: grid; gap: 8px; min-width: 0; }
+.prisma-extracted-value { padding: 14px; background: linear-gradient(145deg, #f7f9fd, #eef3fa); border: 1px solid #dfe6f1; border-radius: 10px; }
+.prisma-extracted-value pre,
+.prisma-version-value { margin: 0; color: #32435e; font-family: "Aptos Mono", "Cascadia Code", monospace; font-size: 0.76rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+.prisma-review-record { display: grid; grid-template-columns: 1fr 1fr minmax(130px, 0.55fr); gap: 8px; padding: 12px; background: #fbfcfe; border: 1px solid var(--prisma-border); border-radius: 10px; }
+.prisma-review-record small { grid-column: 1 / -1; color: var(--prisma-text-secondary); }
+.prisma-review-compare .ant-select { width: 100%; }
+
+.prisma-version-selectors .ant-card-body { display: grid; grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr); align-items: end; gap: 16px; }
+.prisma-version-selectors .ant-card-body > div { display: grid; gap: 7px; }
+.prisma-version-selectors .ant-select { width: 100%; }
+.prisma-version-provenance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.prisma-version-provenance > div { padding: 16px; background: #f8fafc; border: 1px solid var(--prisma-border); border-radius: 10px; }
+
+@keyframes prisma-m2c-reveal {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes prisma-spin {
   to { transform: rotate(360deg); }
 }
 
 @media (max-width: 1040px) {
+  .prisma-operations-stats { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
+  .prisma-document-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .prisma-person-form-layout,
   .prisma-structured-layout {
     grid-template-columns: minmax(0, 1fr) minmax(230px, 0.42fr);
@@ -1255,6 +1329,18 @@ textarea {
   .prisma-inference-list {
     grid-template-columns: 1fr;
   }
+
+  .prisma-operations-stats,
+  .prisma-document-summary-grid,
+  .prisma-review-compare,
+  .prisma-version-provenance,
+  .prisma-operations-toolbar .ant-card-body,
+  .prisma-version-selectors .ant-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-version-selectors .anticon-swap { transform: rotate(90deg); justify-self: center; }
+  .prisma-review-record { grid-template-columns: 1fr; }
 
   .prisma-person-form-layout,
   .prisma-form-grid-two,

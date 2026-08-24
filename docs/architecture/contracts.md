@@ -6,8 +6,8 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 
 | Contrato | Owner | Versão | Consumidores | Status | Evidência | Ambiente | Versão desconhecida |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `professional-profile` | AI/domain | 1.0.0 | retrieval, matching, repository | implementado | `ProfessionalProfile` | local | bloquear |
-| `document-processing-state` | application | 1.0.0 | importer, repository, operations | implementado | `DocumentStatus` | local/migration | bloquear e registrar falha |
+| `professional-profile` | AI/domain | 1.1.0 | review, retrieval, matching, repository | ativo em QA | perfil versionado e aprovação M2-C | local/QA | bloquear |
+| `document-processing-state` | application | 2.0.0 | importer, repository, operations, review | ativo em QA | enums e RPCs M2-C | local/QA | bloquear e registrar falha |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
 | `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |
 | `inference-ontology` | AI/domain | 1.0.0 | profile, search, matching | implementado | `inference-ontology-1.0.0` | local | bloquear inferência |
@@ -20,7 +20,9 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
-| `person-ingestion` | application/data | 1.0.0 | Pessoas, documentos, perfil | ativo em QA | migrations M2-B, `personIngestionService`, RPC transacional | local/QA | bloquear processamento |
+| `person-ingestion` | application/data | 2.0.0 | Pessoas, documentos, perfil | ativo em QA | migrations M2-B/M2-C e RPCs idempotentes | local/QA | bloquear processamento |
+| `human-profile-review` | application/domain | 1.0.0 | revisão, perfil, auditoria | ativo em QA | `profile_reviews`, revisões, mudanças e aprovação atômica | local/QA | bloquear promoção |
+| `document-operation-idempotency` | application/data | 1.0.0 | cadastro, retry, persistência e aprovação | ativo em QA | `document_operations`, fingerprints e locks | local/QA | rejeitar conflito |
 | `pdf-native-extraction` | AI/application | 1.0.0 | ingestão PDF | ativo localmente | `pdfjs-5.4.296/native-v1` | local | exigir revisão/reprocessamento |
 | `selective-ocr` | AI/application | 1.0.0 | páginas sem texto nativo suficiente | ativo localmente | `tesseract.js-7.0.0/por+eng-v1` | local | falhar sem perfil |
 | `extraction-draft` | AI/domain | 1.0.0 | evidência e geração de perfil | ativo em QA | `extraction_drafts`, `prisma-deterministic-profile-v1` | local/QA | bloquear promoção |
@@ -33,4 +35,4 @@ Tipos TypeScript provam contrato de código local. Migration prova intenção ex
 
 ## Eventos e APIs
 
-Não existe API HTTP nem event bus no estado atual. Eventos de domínio além da telemetria estão planejados e não possuem contrato produtivo. Nenhum consumidor deve assumir sua existência.
+Não existe API HTTP nem event bus no estado atual. O M2-C persiste eventos operacionais/auditoria no banco, mas eles não constituem um barramento público. Nenhum consumidor externo deve assumir sua existência.

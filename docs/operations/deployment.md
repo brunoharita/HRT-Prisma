@@ -23,7 +23,7 @@ O projeto Supabase Prisma-QA é o único backend remoto atual e recebe migration
 5. registrar commit, migration, configurações, versões de IA e evidências;
 6. corrigir antes de solicitar produção.
 
-Evidência atual em 2026-08-24: migrations foundation/M2-A/M2-B, RPC transacional de extração, bucket privado, Edge Functions `operator-sign-in`, `operator-password-reset` e `platform-users`, login `harita.super`, lista de Pessoas/Usuários e ingestão sintética por texto, PDF nativo e OCR local até perfil versionado.
+Evidência atual em 2026-08-24: migrations foundation/M2-A/M2-B/M2-C, RPCs transacionais idempotentes, bucket privado, Edge Functions `operator-sign-in`, `operator-password-reset` e `platform-users`, login `harita.super`, Pessoas/Usuários, ingestão PDF/OCR, central documental, retry vinculado, revisão humana e aprovação atômica de perfil.
 
 ## Produção futura
 

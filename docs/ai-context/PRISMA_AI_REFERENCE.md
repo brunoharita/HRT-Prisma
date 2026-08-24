@@ -2,7 +2,7 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.1.0
+version: 1.2.0
 last_verified: 2026-08-24
 ---
 
@@ -14,7 +14,7 @@ Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, m
 
 ## Pipeline
 
-Documento não confiável entra como texto manual ou PDF. PDF.js tenta texto nativo por página e Tesseract.js executa OCR local somente nas páginas insuficientes. O resultado vira `ExtractionDraft`; a aplicação valida, cria evidência, deriva inferência limitada, persiste perfil e executa retrieval/matching estruturado. Falha não vira perfil vazio.
+Documento não confiável entra como texto manual ou PDF. PDF.js tenta texto nativo por página e Tesseract.js executa OCR local somente nas páginas insuficientes. O resultado vira `ExtractionDraft`; a aplicação valida, cria evidência e deriva inferência limitada. O M2-C exige revisão humana antes de promover a versão aprovada de perfil. Falha não vira perfil vazio.
 
 ## Proveniência
 
@@ -31,6 +31,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
+- revisão humana: `human-profile-review-1.0.0`.
 
 ## Avaliação
 
@@ -50,4 +51,4 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 ## Limitações
 
-Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada, revisão humana ou provider aprovado.
+Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada ou provider externo aprovado.

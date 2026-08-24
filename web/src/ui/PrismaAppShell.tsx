@@ -249,7 +249,7 @@ export function PrismaAppShell(props: PrismaAppShellProps) {
             open={mobileOpen}
             placement="left"
             styles={{ body: { padding: 0 } }}
-            width={Math.min(prismaTokens.layout.sider, window.innerWidth - 32)}
+            size={Math.min(prismaTokens.layout.sider, window.innerWidth - 32)}
           >
             <SidebarContent
               {...props}

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: e04dba8ead84033512ad5d7ff907074682ba71749d71d78d95b9713807676a9b
+source_manifest_sha256: 42f126c516909adbef50ba9fc072ae53c014ad538b459f0dac5e7bccb96225c0
 -->
 
 # Tudo sobre o Prisma
@@ -157,9 +157,9 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 ## Verified current state
 
-The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, and M2-B person ingestion with manual text, private PDF upload, native page extraction, selective local OCR, evidence, deterministic drafts, versioned profiles, and document timeline.
+The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, and M2-C document operations with idempotent retries, human review, field-level changes, version comparison, and transactional profile approval.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, the private document bucket, atomic extraction RPC, and the three operator Edge Functions active. The local web app is connected to that project and has proven username login, Users, People, manual ingestion, native PDF extraction, selective OCR, and versioned profile generation. By current product decision there is no separate production project or frontend hosting; the system is used only internally through the local frontend. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, M2-C, the private document bucket, controlled transactional RPCs, and the three operator Edge Functions active. Connected evidence covers concurrent version allocation, idempotent retry, reviewer-role isolation, immutable review history, and atomic profile approval. By current product decision there is no separate production project or frontend hosting; the system is used only internally through the local frontend. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -257,8 +257,8 @@ docs/ai-context/        five canonical context sources for authorized AIs
 prisma_context_id: context-index
 owner: technical-governance
 status: current
-version: 1.0.0
-last_verified: 2026-08-20
+version: 1.0.1
+last_verified: 2026-08-24
 ---
 
 # Prisma Context Index
@@ -311,7 +311,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.6.0
+version: 1.7.0
 last_verified: 2026-08-24
 ---
 
@@ -320,7 +320,7 @@ last_verified: 2026-08-24
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de trabalho verificada: `codex/m2-users-people`.
+- Branch de entrega verificada: `codex/m3-m2c-reliability-review`.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -331,6 +331,7 @@ last_verified: 2026-08-24
 - Adapter Supabase web tipado e centralizado para memberships, operador autenticado e leituras de domínio.
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
+- Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
 - Home autenticada com contagens persistidas de pessoas, perfis estruturados e vagas abertas da organização ativa.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, evidências, proveniência, inferências, incertezas e campos não identificados; contato privado somente para perfis administrativos autorizados.
@@ -344,7 +345,7 @@ last_verified: 2026-08-24
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck, build e testes locais do shell web.
-- 33 testes técnicos aprovados, incluindo contratos M2-A/M2-B, PDF inválido, suficiência, RLS/Storage e member sem documento bruto.
+- 38 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C, PDF inválido, idempotência, concorrência, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -354,6 +355,7 @@ last_verified: 2026-08-24
 - Políticas de autorização da foundation para admin, recruiter e hiring manager ativas em QA.
 - Boundary local em Edge Functions para `operator-sign-in`, `operator-password-reset` e `platform-users`.
 - Migrations M2-B com bucket privado `person-documents`, tentativas, páginas, drafts, eventos e RPC transacional `persist_person_extraction`.
+- Migrations M2-C com ledger de operações, locks de versão/tentativa, retries vinculados, revisões/alterações imutáveis e RPCs de aprovação atômica.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 
 ## Evidência remota
@@ -371,6 +373,10 @@ last_verified: 2026-08-24
 - Fluxo conectado texto manual -> extração -> draft/evidência -> Perfil Prisma versionado comprovado no QA.
 - PDF sintético nativo persistido como documento v4 com uma página, 161 caracteres úteis, método `pdfjs-5.4.296/native-v1` e OCR não necessário.
 - PDF sintético image-only persistido como documento v5 com uma página, 360 caracteres úteis, método `tesseract.js-7.0.0/por+eng-v1` e Perfil Prisma v3 gerado explicitamente.
+- M2-C conectado criou versões documentais concorrentes 1/2/3, repetiu uma chave sem duplicação, vinculou tentativa 2 e rejeitou lock stale.
+- Revisão `d0c80fbf-ddcb-4e25-ba60-e8e7c9da5828` aprovou atomicamente o perfil `b00c35f6-5409-4621-b02f-4ee7611b5449` v1; nove eventos foram verificados sem texto-fonte integral.
+- Super Admin, Owner, Admin e Recruiter foram autorizados no escopo; uma sessão Member recebeu zero documentos e não iniciou revisão.
+- Auditoria pós-rollout confirmou zero versões/tentativas/perfis atuais duplicados, RLS nas quatro tabelas M2-C e zero foreign keys novas sem índice de cobertura.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
 Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
@@ -379,10 +385,8 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 - API HTTP/BFF.
 - Malware scan/quarentena.
-- Revisão humana e decisão humana persistida.
 - Embeddings vetoriais e LLM externo.
 - Auditoria de visualização/exportação além do domínio de usuários.
-- Idempotência completa e proteção contra concorrência no versionamento documental.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
@@ -400,13 +404,14 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`.
 - A configuração local do M2-A endurece requisitos mínimos de senha, mas a proteção contra senhas vazadas do Supabase ainda não foi comprovada no ambiente remoto deste movimento.
 - O advisor de performance do QA ainda informa foreign keys sem índices de cobertura, índices ainda não utilizados e policies permissivas sobrepostas; não foram alterados fora do escopo deste movimento.
+- O advisor de segurança identifica as seis RPCs públicas M2-C como `security definer`; o ADR-011 registra o uso controlado com `search_path` fixo, autorização interna e DML direto revogado. A proteção contra senhas vazadas continua desabilitada.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
 
-Em 2026-08-24, M2-A e M2-B foram aplicados ao único projeto remoto Prisma-QA. Edge Functions de login, recuperação e gestão de usuários estão ativas; o app local autenticado lista Pessoas e Usuários; texto manual, PDF nativo e PDF image-only geraram tentativas, páginas, draft, evidência e perfis versionados por RPC transacional. O documento v4 comprovou extração nativa sem OCR; o documento v5 comprovou OCR local seletivo e geração explícita do Perfil Prisma v3. Não há frontend hospedado nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-24, M2-A, M2-B e M2-C foram aplicados ao único projeto remoto Prisma-QA. O M2-C comprovou cadastro idempotente, versões concorrentes, retry vinculado, conflito de lock, revisão por papéis, aprovação atômica, isolamento de Member e auditoria sanitizada. O frontend permanece local; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 
@@ -416,7 +421,7 @@ Em 2026-08-24, M2-A e M2-B foram aplicados ao único projeto remoto Prisma-QA. E
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.1.0
+version: 1.2.0
 last_verified: 2026-08-24
 ---
 
@@ -428,7 +433,7 @@ Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, m
 
 ## Pipeline
 
-Documento não confiável entra como texto manual ou PDF. PDF.js tenta texto nativo por página e Tesseract.js executa OCR local somente nas páginas insuficientes. O resultado vira `ExtractionDraft`; a aplicação valida, cria evidência, deriva inferência limitada, persiste perfil e executa retrieval/matching estruturado. Falha não vira perfil vazio.
+Documento não confiável entra como texto manual ou PDF. PDF.js tenta texto nativo por página e Tesseract.js executa OCR local somente nas páginas insuficientes. O resultado vira `ExtractionDraft`; a aplicação valida, cria evidência e deriva inferência limitada. O M2-C exige revisão humana antes de promover a versão aprovada de perfil. Falha não vira perfil vazio.
 
 ## Proveniência
 
@@ -445,6 +450,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
+- revisão humana: `human-profile-review-1.0.0`.
 
 ## Avaliação
 
@@ -464,7 +470,7 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 ## Limitações
 
-Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada, revisão humana ou provider aprovado.
+Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada ou provider externo aprovado.
 
 ---
 
@@ -474,7 +480,7 @@ Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, emb
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.3.0
+version: 1.4.0
 last_verified: 2026-08-24
 ---
 
@@ -486,13 +492,13 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth, route guards, M2-A e M2-B. PDF.js e Tesseract.js processam PDFs no navegador; o adaptador Supabase persiste documentos, tentativas, páginas, drafts, evidências e perfis. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
+`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth, route guards, M2-A, M2-B e M2-C. PDF.js e Tesseract.js processam PDFs no navegador; o adaptador Supabase usa RPCs para documentos, tentativas, drafts, revisão, evidências e perfis. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
 
 ## Banco
 
-A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona `organization_groups`, `platform_users`, `platform_user_audit_events`, `organizations.group_id` e a evolução do contrato de `membership_role`. O M2-B adiciona Storage privado, tentativas, páginas, drafts, eventos e a RPC `persist_person_extraction`. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
+A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona grupos e operadores; o M2-B adiciona Storage privado, tentativas, páginas e drafts; o M2-C adiciona operações idempotentes, retries, revisões, mudanças por campo e promoção atômica de perfil. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
 
-Foundation, M2-A e M2-B estão ativos no Prisma-QA. O adaptador Supabase atende leituras e mutações autorizadas do frontend, enquanto operações compostas sensíveis usam Edge Functions ou RPC transacional.
+Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C.
 
 ## Segurança
 
@@ -500,7 +506,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B e as três Edge Functions ativos. Login, Usuários, Pessoas, texto, PDF nativo, OCR e perfil versionado foram comprovados com dados sintéticos. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B, M2-C e as três Edge Functions ativos. Login, Usuários, Pessoas, PDF/OCR, concorrência, retry, revisão e aprovação foram comprovados com dados sintéticos. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -517,11 +523,11 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Versionamento: `versioning.md`. ADRs aceitos: stack, RLS multi-tenant, boundary do provider, versionamento de IA, Context Pack e o boundary `username + group scope + platform users`.
+Catálogo: `docs/architecture/contracts.md`. Versionamento: `versioning.md`. A fronteira idempotente de documentos e revisão é definida pelo ADR-011 e por `document-review-contract.md`.
 
 ## Operação
 
-Telemetria básica existe. Audit log, domain events completos, alerts, deployment e incident owners não estão implementados. `.prisma-data`, `dist`, `node_modules`, `.env*` e caches ficam fora do Git.
+Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditoria global, alerts, deployment automatizado e incident owners não estão completos. `.prisma-data`, `dist`, `node_modules`, `.env*` e caches ficam fora do Git.
 
 ---
 
@@ -531,7 +537,7 @@ Telemetria básica existe. Audit log, domain events completos, alerts, deploymen
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.2.0
+version: 1.3.0
 last_verified: 2026-08-24
 ---
 
@@ -568,6 +574,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. O M2-A distingue formalmente `Usuário != Pessoa`, apresenta login por username, gestão de operadores e escopo Grupo -> Empresa. O M2-B cadastra Pessoas, preserva documentos privados, extrai texto por página, usa OCR somente quando necessário e gera perfis versionados com proveniência. M2-A e M2-B estão comprovados no único projeto remoto interno; não há ambiente de produção separado nem frontend hospedado no estágio atual.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. O M2-A distingue `Usuário != Pessoa`; o M2-B cadastra Pessoas e extrai documentos privados; o M2-C centraliza documentos, torna cadastro/retry idempotentes, permite revisão humana por campo, comparação de versões e aprovação rastreável. M2-A, M2-B e M2-C estão comprovados no único projeto remoto interno; não há ambiente de produção separado nem frontend hospedado no estágio atual.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

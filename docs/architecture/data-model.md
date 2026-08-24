@@ -2,7 +2,7 @@
 
 ## Estado
 
-O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M2-A e M2-B estão ativos no Prisma-QA. Não existe schema de produção provisionado.
+O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. Não existe schema de produção separado provisionado.
 
 ## Agregados
 
@@ -11,7 +11,8 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users` | Grupo delimita autoridade; empresa delimita dados; usuário opera o sistema |
 | Organização | `organization_units`, `job_roles`, `positions`, `vacancies` | Papel, posição e vaga são distintos |
 | Pessoa | `people`, `person_private_data` | PII privada separada da identidade profissional |
-| Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts` | Fonte versionada, checksum, método por página, tentativa e draft validado |
+| Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, checksum, tentativa, resultado e idempotência por operação |
+| Revisão humana | `profile_reviews`, `profile_review_revisions`, `profile_review_changes` | Rascunho, lock otimista, decisão por campo e aprovação rastreável |
 | Conhecimento | `professional_profiles`, `evidence`, `inferences`, `inference_evidence` | Fato e inferência não se confundem |
 | Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
 | Avaliação | `match_evaluations` | Contextual e versionada |
@@ -27,7 +28,9 @@ RLS está habilitado em toda tabela pública. Políticas usam `TO authenticated`
 
 ## Documento e falhas
 
-Estados de documento implementados: `pending`, `processing`, `processed`, `extraction_failed`, `needs_manual_review`, `unsupported_format`. O processamento M2-B registra `uploaded`, validação, extração nativa, OCR seletivo, estruturação, conclusão e falhas específicas em tentativas imutáveis. Falhas registram categoria, motivo, mensagem técnica sanitizável, versão e possibilidade de reprocessamento.
+Estados de documento implementados: `pending`, `received`, `processing`, `processed`, `ready_for_review`, `in_review`, `approved`, `failed`, `extraction_failed`, `needs_manual_review`, `unsupported_format`. O processamento registra validação, extração nativa, OCR seletivo, estruturação, revisão, aprovação e falhas específicas em tentativas imutáveis. Falhas registram categoria, motivo, mensagem técnica sanitizável, versão e possibilidade de reprocessamento.
+
+`document_operations` impede replay divergente e devolve o resultado anterior para a mesma chave/fingerprint. Locks por pessoa/documento serializam versões. A revisão mantém histórico imutável de alterações e somente `approve_profile_review` promove uma nova versão de perfil, com uma única versão atual por pessoa.
 
 `ocr_required` é um estado técnico implementado. `partially_extracted`, `duplicate_document` e `corrupted_document` continuam planejados e não devem ser emitidos.
 

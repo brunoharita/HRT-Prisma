@@ -20,6 +20,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-008](ADR-008-supabase-domain-read-adapter.md) | accepted | Supabase domain read adapter for the authenticated web app |
 | [ADR-009](ADR-009-platform-users-groups-and-username-auth.md) | accepted | Platform users, group scope, and username-auth boundary |
 | [ADR-010](ADR-010-local-pdf-extraction-and-ocr.md) | accepted | Browser-local PDF extraction, selective OCR, and atomic persistence |
+| [ADR-011](ADR-011-idempotent-document-review-boundary.md) | accepted | Idempotent document operations and transactional human profile review |
 
 ## Rules
 

@@ -2,7 +2,7 @@
 
 ## Estado
 
-Foundation, M2-A e M2-B estão ativos no Prisma-QA. `platform_users`, hierarquia `Grupo -> Empresa`, username, recuperação, gestão de usuários, ingestão e Storage privado são aplicados no boundary correspondente e negam acesso quando sessão, status, papel ou tenant não são confirmados.
+Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. `platform_users`, hierarquia `Grupo -> Empresa`, username, recuperação, gestão de usuários, ingestão, revisão e Storage privado são aplicados no boundary correspondente e negam acesso quando sessão, status, papel ou tenant não são confirmados.
 
 ## Papéis
 
@@ -23,13 +23,13 @@ Foundation, M2-A e M2-B estão ativos no Prisma-QA. `platform_users`, hierarquia
 - Username e recuperação de acesso passam por Edge Functions server-side para não expor resolução `username -> email` no browser.
 - `member` não lê `person_private_data` nem `documents`.
 - UPDATE exige `USING` e `WITH CHECK` quando aplicável.
-- Função privilegiada fica em schema privado e tem execução restrita.
+- RPC privilegiada pública usa `security definer` somente quando há checagem explícita de ator, organização, papel e estado, `search_path` fixo e DML direto revogado.
 - O event trigger opcional `public.rls_auto_enable()` preserva execução apenas para papéis privilegiados; `PUBLIC`, `anon` e `authenticated` não recebem `EXECUTE`.
 - As queries web de domínio filtram explicitamente `organization_id` mesmo sob RLS para previsibilidade e performance.
 
 ## Evidência conectada em QA
 
-Em 2026-08-24, QA confirma foundation, corte de papéis M2-A, Edge Functions de login/recuperação/usuários e M2-B com bucket privado. A sessão `harita.super` foi validada como Super Admin; texto sintético criou versões documentais, draft, evidência e perfil via RPC transacional. `member` permanece sem políticas de PII, documentos, páginas, drafts ou Storage bruto e é roteado para o perfil profissional somente leitura.
+Em 2026-08-24, QA confirma foundation, corte de papéis M2-A, Edge Functions de login/recuperação/usuários, M2-B e M2-C. A sessão `harita.super` foi validada como Super Admin. Operações sintéticas comprovaram versões concorrentes 1/2/3, retry vinculado, revisão, aprovação atômica e replay idempotente. Owner, Admin e Recruiter revisaram no próprio escopo; Member recebeu zero documentos e não iniciou revisão.
 
 ## Fail-closed
 
@@ -37,7 +37,7 @@ Usuário sem sessão, membership, tenant, papel conhecido ou versão de polític
 
 ## Operações privilegiadas
 
-Provisionamento inicial, login por username, recuperação de acesso, alteração de perfil/escopo, exclusão, retenção e exportação em massa exigem endpoint backend, checagem explícita, auditoria e proteção contra replay. `security definer` não é solução genérica de permissão.
+Provisionamento inicial, login por username, recuperação de acesso, alteração de perfil/escopo, exclusão, retenção e exportação em massa exigem endpoint backend, checagem explícita, auditoria e proteção contra replay. `security definer` não é solução genérica de permissão; no M2-C ele é uma exceção controlada para transações compostas com DML direto revogado.
 
 ## Testes obrigatórios antes de QA
 

@@ -12,6 +12,7 @@ export type PersonProfileState =
   | "processing_failed";
 
 export type DocumentSourceType = "manual_text" | "resume_pdf";
+export type DocumentReviewState = "not_ready" | "ready_for_review" | "in_review" | "approved" | "invalidated";
 export type PageExtractionOrigin = "native_pdf" | "ocr" | "manual_text";
 export type ProcessingState =
   | "uploaded"
@@ -92,11 +93,75 @@ export interface PersonDocumentTimelineItem {
   byteSize: number | null;
   pageCount: number | null;
   status: string;
+  reviewState: DocumentReviewState;
   createdAt: string;
   processedAt: string | null;
   profileVersion: number | null;
   isLegacyUnstored: boolean;
   latestAttempt: ProcessingAttemptView | null;
+}
+
+export interface DocumentOperationSummary extends PersonDocumentTimelineItem {
+  personId: string;
+  personName: string;
+  failureCode: string | null;
+}
+
+export interface ProcessingAuditEvent {
+  id: number;
+  eventType: string;
+  result: "success" | "failure" | "denied";
+  errorCode: string | null;
+  actorAuthUserId: string | null;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface ProfileReviewRevision {
+  id: string;
+  revisionNumber: number;
+  changeReason: string | null;
+  actorAuthUserId: string;
+  createdAt: string;
+}
+
+export interface ProfileReviewChange {
+  id: number;
+  fieldPath: keyof StructuredDraft;
+  reason: string;
+  actorAuthUserId: string;
+  createdAt: string;
+}
+
+export interface ProfileReviewWorkspace {
+  id: string;
+  personId: string;
+  personName: string;
+  documentId: string;
+  documentName: string;
+  processingAttemptId: string;
+  state: "draft" | "approved" | "invalidated";
+  lockVersion: number;
+  extractedData: StructuredDraft;
+  reviewedData: StructuredDraft;
+  baseProfileVersion: number | null;
+  approvedProfileId: string | null;
+  approvedAt: string | null;
+  revisions: ProfileReviewRevision[];
+  changes: ProfileReviewChange[];
+}
+
+export interface ProfileVersionView {
+  id: string;
+  profileVersion: number;
+  profileData: StructuredDraft;
+  reviewStatus: string;
+  sourceDocumentId: string;
+  processingAttemptId: string | null;
+  approvedByAuthUserId: string | null;
+  approvedAt: string | null;
+  createdAt: string;
+  supersededAt: string | null;
 }
 
 export interface ProcessingAttemptView {

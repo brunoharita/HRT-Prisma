@@ -24,7 +24,7 @@ Local e QA usam fixtures sintéticas ou anonimizadas. Dados reais exigem autoriz
 
 ## Automação atual
 
-`pnpm run validate` executa lint, invariantes de fundação, Context Pack, typechecks, build web, testes, golden tests e demo. A suite inclui guards, username/senha/celular, migrations M2-A/M2-B, PDF inválido, limiares determinísticos, ausência sem invenção, Storage privado, member sem documento bruto e boundaries Edge/RPC. O projeto remoto conectado comprova login, Usuários, Pessoas, ingestão sintética por texto, PDF nativo, OCR local seletivo e geração de perfil versionado. Desktop e viewport mobile foram validados sem overflow horizontal; o papel `member` conectado continua como checkpoint antes de uso externo. `pnpm run audit:dependencies` consulta advisories do registry.
+`pnpm run validate` executa lint, invariantes de fundação, Context Pack, typechecks, build web, testes, golden tests e demo. A suite inclui guards, username/senha/celular, migrations M2-A/M2-B/M2-C, PDF inválido, limiares determinísticos, Storage privado, idempotência, concorrência, revisão imutável, aprovação atômica, auditoria sem conteúdo integral e Member sem documento bruto. O projeto remoto conectado comprova os papéis Super Admin, Owner, Admin, Recruiter e Member. Desktop e viewport mobile precisam ser validados após qualquer alteração de layout. `pnpm run audit:dependencies` consulta advisories do registry.
 
 ## Critério de promoção
 

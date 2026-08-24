@@ -8,6 +8,7 @@ import {
   buildDeterministicDraft,
   processManualText,
   type ExtractedPage,
+  type DocumentOperationSummary,
   type PersonDocumentTimelineItem,
   type PersonEditorValue,
   type PersonIngestionWorkspace,
@@ -15,6 +16,9 @@ import {
   type PersonWorkspaceSummary,
   type ProcessedDocumentInput,
   type ProcessingAttemptView,
+  type ProcessingAuditEvent,
+  type ProfileReviewWorkspace,
+  type ProfileVersionView,
   type StructuredDraft,
 } from "../../domain/personIngestion";
 
@@ -63,7 +67,7 @@ export const personIngestionService = {
         .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
         .eq("organization_id", organizationId).eq("person_id", personId).maybeSingle(),
       supabase.from("documents")
-        .select("id, filename, source_type, document_version, byte_size, page_count, status, created_at, processed_at, is_legacy_unstored")
+        .select("id, filename, source_type, document_version, byte_size, page_count, status, review_state, created_at, processed_at, is_legacy_unstored")
         .eq("organization_id", organizationId).eq("person_id", personId).order("created_at", { ascending: false }),
       supabase.from("professional_profiles")
         .select("source_document_id, profile_version")
@@ -93,6 +97,7 @@ export const personIngestionService = {
       byteSize: document.byte_size,
       pageCount: document.page_count,
       status: document.status,
+      reviewState: document.review_state,
       createdAt: document.created_at,
       processedAt: document.processed_at,
       profileVersion: profileByDocument.get(document.id) ?? null,
@@ -165,135 +170,53 @@ export const personIngestionService = {
   },
 
   async processManualSource(organizationId: string, personId: string, text: string): Promise<string> {
-    const { data: claims } = await supabase.auth.getClaims();
-    const actorAuthUserId = typeof claims?.claims?.sub === "string" ? claims.claims.sub : null;
-    if (!actorAuthUserId) throw new Error("A sessão expirou antes do processamento.");
     const { page, draft } = processManualText(text);
     const checksum = await sha256Text(text);
-    const documentVersion = await nextDocumentVersion(organizationId, personId);
-    const { data: document, error } = await supabase.from("documents").insert({
-      organization_id: organizationId,
-      person_id: personId,
-      filename: `texto-manual-v${documentVersion}.txt`,
-      media_type: "text/plain",
-      storage_path: null,
-      checksum_sha256: checksum,
-      status: "processing",
-      extraction_version: STRUCTURING_VERSION,
-      source_type: "manual_text",
-      original_filename: null,
-      declared_mime_type: "text/plain",
-      validated_mime_type: "text/plain",
-      byte_size: new TextEncoder().encode(text).byteLength,
-      page_count: 1,
-      actor_auth_user_id: actorAuthUserId,
-      document_version: documentVersion,
-      storage_bucket: null,
-    }).select("id").single();
-    throwIfError(error, "Não foi possível registrar a fonte manual.");
-    if (!document) throw new Error("A fonte manual foi registrada sem identificador.");
-    await persistExtraction(organizationId, personId, document.id, [page], draft, 1, 0);
-    return document.id;
+    const operationKey = createOperationKey("manual-document");
+    const document = await registerDocument({
+      organizationId,
+      personId,
+      sourceType: "manual_text",
+      filename: "texto-manual.txt",
+      declaredMimeType: "text/plain",
+      validatedMimeType: "text/plain",
+      checksum,
+      byteSize: new TextEncoder().encode(text).byteLength,
+      pageCount: 1,
+      extractionVersion: STRUCTURING_VERSION,
+      idempotencyKey: operationKey,
+    });
+    await persistExtraction(organizationId, personId, document.documentId, [page], draft, 1, 0, createOperationKey("manual-extraction"), null);
+    return document.documentId;
   },
 
   async processPdf(organizationId: string, personId: string, input: ProcessedDocumentInput): Promise<string> {
-    const { data: claims } = await supabase.auth.getClaims();
-    const actorAuthUserId = typeof claims?.claims?.sub === "string" ? claims.claims.sub : null;
-    if (!actorAuthUserId) throw new Error("A sessão expirou antes do upload.");
-    const documentVersion = await nextDocumentVersion(organizationId, personId);
-    const internalFilename = `${crypto.randomUUID()}.pdf`;
-    const storagePath = `${organizationId}/${personId}/${internalFilename}`;
-    const { data: document, error } = await supabase.from("documents").insert({
-      organization_id: organizationId,
-      person_id: personId,
+    const document = await registerDocument({
+      organizationId,
+      personId,
+      sourceType: "resume_pdf",
       filename: input.file.name,
-      original_filename: input.file.name,
-      media_type: "application/pdf",
-      declared_mime_type: input.file.type || "application/pdf",
-      validated_mime_type: "application/pdf",
-      storage_path: storagePath,
-      storage_bucket: DOCUMENT_BUCKET,
-      checksum_sha256: input.sha256,
-      byte_size: input.file.size,
-      page_count: input.pages.length,
-      status: "pending",
-      extraction_version: NATIVE_EXTRACTION_VERSION,
-      source_type: "resume_pdf",
-      actor_auth_user_id: actorAuthUserId,
-      document_version: documentVersion,
-      can_reprocess: true,
-    }).select("id").single();
-    throwIfError(error, "Não foi possível registrar o PDF validado.");
-    if (!document) throw new Error("O PDF foi registrado sem identificador.");
-    const { error: uploadError } = await supabase.storage.from(DOCUMENT_BUCKET).upload(storagePath, input.file, {
+      declaredMimeType: input.file.type || "application/pdf",
+      validatedMimeType: "application/pdf",
+      checksum: input.sha256,
+      byteSize: input.file.size,
+      pageCount: input.pages.length,
+      extractionVersion: NATIVE_EXTRACTION_VERSION,
+      idempotencyKey: createOperationKey("pdf-document"),
+    });
+    if (!document.storagePath) throw new Error("O registro do PDF não reservou um caminho privado.");
+    const { error: uploadError } = await supabase.storage.from(DOCUMENT_BUCKET).upload(document.storagePath, input.file, {
       cacheControl: "3600",
       contentType: "application/pdf",
       upsert: false,
     });
     if (uploadError) {
-      await supabase.from("documents").update({
-        status: "extraction_failed",
-        failure_category: "storage_upload_failed",
-        failure_reason: "O documento foi registrado, mas o upload privado falhou.",
-        failure_technical_message: "storage_upload_failed",
-        can_reprocess: true,
-      }).eq("organization_id", organizationId).eq("id", document.id);
+      await recordFailure(organizationId, personId, document.documentId, "failed_extraction", "storage_upload_failed", "O documento foi registrado, mas o upload privado falhou.");
       throw new Error("O upload privado falhou. Nenhum Perfil Prisma foi gerado.");
     }
     const draft = buildDeterministicDraft(input.pages);
-    await persistExtraction(organizationId, personId, document.id, input.pages, draft, input.nativePageCount, input.ocrPageCount);
-    return document.id;
-  },
-
-  async generateProfile(organizationId: string, personId: string, documentId: string): Promise<void> {
-    const { data: attempt, error } = await supabase.from("document_processing_attempts")
-      .select("id, state").eq("organization_id", organizationId).eq("document_id", documentId)
-      .order("attempt_number", { ascending: false }).limit(1).maybeSingle();
-    throwIfError(error, "Não foi possível validar a tentativa de processamento.");
-    if (!attempt || !["structured", "profile_ready", "completed"].includes(attempt.state)) {
-      throw new Error("O processamento ainda não possui um rascunho estrutural válido.");
-    }
-    const [{ data: draft, error: draftError }, { count, error: countError }] = await Promise.all([
-      supabase.from("extraction_drafts").select("identified_fields, uncertainties, not_identified, validation_status")
-        .eq("organization_id", organizationId).eq("processing_attempt_id", attempt.id).maybeSingle(),
-      supabase.from("professional_profiles").select("id", { count: "exact", head: true })
-        .eq("organization_id", organizationId).eq("person_id", personId),
-    ]);
-    throwIfError(draftError, "Não foi possível validar o Extraction Draft.");
-    throwIfError(countError, "Não foi possível definir a versão do Perfil Prisma.");
-    if (!draft || draft.validation_status !== "valid") throw new Error("O Extraction Draft é insuficiente ou inválido.");
-    const { count: evidenceCount, error: evidenceError } = await supabase.from("evidence")
-      .select("id", { count: "exact", head: true }).eq("organization_id", organizationId)
-      .eq("document_id", documentId).eq("processing_attempt_id", attempt.id);
-    throwIfError(evidenceError, "Não foi possível validar as evidências.");
-    if (!evidenceCount) throw new Error("Nenhum fato material possui evidência rastreável.");
-    await supabase.from("professional_profiles").update({ superseded_at: new Date().toISOString() })
-      .eq("organization_id", organizationId).eq("person_id", personId).is("superseded_at", null);
-    const { error: profileError } = await supabase.from("professional_profiles").insert({
-      organization_id: organizationId,
-      person_id: personId,
-      source_document_id: documentId,
-      profile_data: draft.identified_fields,
-      uncertainties: draft.uncertainties,
-      not_identified: draft.not_identified,
-      extraction_version: NATIVE_EXTRACTION_VERSION,
-      inference_version: "none",
-      embedding_version: "none",
-      prompt_version: "none",
-      model_version: "deterministic",
-      processing_attempt_id: attempt.id,
-      profile_version: (count ?? 0) + 1,
-      review_status: "generated",
-    });
-    throwIfError(profileError, "Não foi possível persistir a nova versão do Perfil Prisma.");
-    await Promise.all([
-      supabase.from("document_processing_attempts").update({ state: "completed", current_method: "completed", completed_at: new Date().toISOString() })
-        .eq("organization_id", organizationId).eq("id", attempt.id),
-      supabase.from("documents").update({ status: "processed", processed_at: new Date().toISOString(), can_reprocess: true })
-        .eq("organization_id", organizationId).eq("id", documentId),
-      supabase.from("people").update({ profile_state: "generated", updated_at: new Date().toISOString() })
-        .eq("organization_id", organizationId).eq("id", personId),
-    ]);
+    await persistExtraction(organizationId, personId, document.documentId, input.pages, draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null);
+    return document.documentId;
   },
 
   async reprocessDocument(organizationId: string, personId: string, documentId: string): Promise<void> {
@@ -323,7 +246,199 @@ export const personIngestionService = {
       buildDeterministicDraft(pages),
       pages.filter((page) => page.origin === "native_pdf").length,
       pages.filter((page) => page.origin === "ocr").length,
+      createOperationKey("retry-processing"),
+      previousAttempt.id,
     );
+  },
+
+  async startProfileReview(organizationId: string, personId: string, documentId: string, processingAttemptId: string): Promise<string> {
+    const { data, error } = await supabase.rpc("start_profile_review", {
+      p_organization_id: organizationId,
+      p_person_id: personId,
+      p_document_id: documentId,
+      p_processing_attempt_id: processingAttemptId,
+      p_idempotency_key: createOperationKey("start-review"),
+    });
+    throwIfError(error, "Não foi possível iniciar a revisão humana.");
+    const reviewId = data?.[0]?.review_id;
+    if (!reviewId) throw new Error("A revisão foi iniciada sem identificador.");
+    return reviewId;
+  },
+
+  async saveProfileReview(
+    organizationId: string,
+    reviewId: string,
+    expectedLockVersion: number,
+    reviewedData: StructuredDraft,
+    reason: string,
+  ): Promise<number> {
+    const { data, error } = await supabase.rpc("save_profile_review", {
+      p_organization_id: organizationId,
+      p_review_id: reviewId,
+      p_expected_lock_version: expectedLockVersion,
+      p_reviewed_data: reviewedData as unknown as Json,
+      p_reason: reason,
+      p_idempotency_key: createOperationKey("save-review"),
+    });
+    throwReviewError(error, "Não foi possível salvar o rascunho da revisão.");
+    const lockVersion = data?.[0]?.lock_version;
+    if (!lockVersion) throw new Error("A revisão foi salva sem versão de concorrência.");
+    return lockVersion;
+  },
+
+  async approveProfileReview(organizationId: string, reviewId: string, expectedLockVersion: number): Promise<{ profileId: string; profileVersion: number }> {
+    const { data, error } = await supabase.rpc("approve_profile_review", {
+      p_organization_id: organizationId,
+      p_review_id: reviewId,
+      p_expected_lock_version: expectedLockVersion,
+      p_idempotency_key: createOperationKey("approve-review"),
+    });
+    throwReviewError(error, "Não foi possível aprovar a versão revisada.");
+    const approved = data?.[0];
+    if (!approved) throw new Error("A aprovação não retornou a versão persistida.");
+    return { profileId: approved.profile_id, profileVersion: approved.profile_version };
+  },
+
+  async listDocumentOperations(organizationId: string): Promise<DocumentOperationSummary[]> {
+    const [documentResult, peopleResult, profileResult] = await Promise.all([
+      supabase.from("documents")
+        .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, failure_category, created_at, processed_at, is_legacy_unstored")
+        .eq("organization_id", organizationId).not("person_id", "is", null).order("created_at", { ascending: false }),
+      supabase.from("people").select("id, full_name").eq("organization_id", organizationId),
+      supabase.from("professional_profiles").select("source_document_id, profile_version")
+        .eq("organization_id", organizationId),
+    ]);
+    throwIfError(documentResult.error, "Não foi possível carregar a central de processamento.");
+    throwIfError(peopleResult.error, "Não foi possível carregar as Pessoas da central.");
+    throwIfError(profileResult.error, "Não foi possível carregar as versões de perfil.");
+    const documents = documentResult.data ?? [];
+    const documentIds = documents.map((document) => document.id);
+    const { data: attempts, error: attemptError } = documentIds.length === 0
+      ? { data: [], error: null }
+      : await supabase.from("document_processing_attempts")
+        .select("id, document_id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
+        .eq("organization_id", organizationId).in("document_id", documentIds)
+        .order("attempt_number", { ascending: false });
+    throwIfError(attemptError, "Não foi possível carregar as tentativas da central.");
+    const people = new Map((peopleResult.data ?? []).map((person) => [person.id, person.full_name]));
+    const profiles = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
+    const latestAttempts = new Map<string, ProcessingAttemptView>();
+    for (const attempt of attempts ?? []) {
+      if (!latestAttempts.has(attempt.document_id)) latestAttempts.set(attempt.document_id, toAttemptView(attempt));
+    }
+    return documents.flatMap((document) => document.person_id ? [{
+      id: document.id,
+      personId: document.person_id,
+      personName: people.get(document.person_id) ?? "Pessoa não localizada",
+      filename: document.filename,
+      sourceType: document.source_type,
+      documentVersion: document.document_version,
+      byteSize: document.byte_size,
+      pageCount: document.page_count,
+      status: document.status,
+      reviewState: document.review_state,
+      failureCode: document.failure_category,
+      createdAt: document.created_at,
+      processedAt: document.processed_at,
+      profileVersion: profiles.get(document.id) ?? null,
+      isLegacyUnstored: document.is_legacy_unstored,
+      latestAttempt: latestAttempts.get(document.id) ?? null,
+    } satisfies DocumentOperationSummary] : []);
+  },
+
+  async listDocumentAttempts(organizationId: string, documentId: string): Promise<ProcessingAttemptView[]> {
+    const { data, error } = await supabase.from("document_processing_attempts")
+      .select("id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
+      .eq("organization_id", organizationId).eq("document_id", documentId).order("attempt_number", { ascending: false });
+    throwIfError(error, "Não foi possível carregar o histórico de tentativas.");
+    return (data ?? []).map(toAttemptView);
+  },
+
+  async listAuditEvents(organizationId: string, documentId: string): Promise<ProcessingAuditEvent[]> {
+    const { data, error } = await supabase.from("person_ingestion_events")
+      .select("id, event_type, result, error_code, actor_auth_user_id, metadata, created_at")
+      .eq("organization_id", organizationId).eq("document_id", documentId).order("created_at", { ascending: false });
+    throwIfError(error, "Não foi possível carregar a auditoria do documento.");
+    return (data ?? []).map((event) => ({
+      id: event.id,
+      eventType: event.event_type,
+      result: event.result,
+      errorCode: event.error_code,
+      actorAuthUserId: event.actor_auth_user_id,
+      metadata: isRecord(event.metadata) ? event.metadata : {},
+      createdAt: event.created_at,
+    }));
+  },
+
+  async loadProfileReview(organizationId: string, reviewId: string): Promise<ProfileReviewWorkspace | null> {
+    const { data: review, error } = await supabase.from("profile_reviews")
+      .select("id, person_id, document_id, processing_attempt_id, state, lock_version, extracted_data, reviewed_data, base_profile_version, approved_profile_id, approved_at")
+      .eq("organization_id", organizationId).eq("id", reviewId).maybeSingle();
+    throwIfError(error, "Não foi possível carregar a revisão.");
+    if (!review) return null;
+    const [personResult, documentResult, revisionResult, changeResult] = await Promise.all([
+      supabase.from("people").select("full_name").eq("organization_id", organizationId).eq("id", review.person_id).single(),
+      supabase.from("documents").select("filename").eq("organization_id", organizationId).eq("id", review.document_id).single(),
+      supabase.from("profile_review_revisions")
+        .select("id, revision_number, change_reason, actor_auth_user_id, created_at")
+        .eq("organization_id", organizationId).eq("review_id", reviewId).order("revision_number", { ascending: false }),
+      supabase.from("profile_review_changes")
+        .select("id, field_path, reason, actor_auth_user_id, created_at")
+        .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
+    ]);
+    throwIfError(personResult.error, "Não foi possível carregar a Pessoa da revisão.");
+    throwIfError(documentResult.error, "Não foi possível carregar o documento da revisão.");
+    throwIfError(revisionResult.error, "Não foi possível carregar as revisões salvas.");
+    throwIfError(changeResult.error, "Não foi possível carregar as correções da revisão.");
+    if (!personResult.data || !documentResult.data) throw new Error("A revisão perdeu a referência da Pessoa ou do documento.");
+    return {
+      id: review.id,
+      personId: review.person_id,
+      personName: personResult.data.full_name,
+      documentId: review.document_id,
+      documentName: documentResult.data.filename,
+      processingAttemptId: review.processing_attempt_id,
+      state: review.state,
+      lockVersion: review.lock_version,
+      extractedData: decodeReviewDraft(review.extracted_data),
+      reviewedData: decodeReviewDraft(review.reviewed_data),
+      baseProfileVersion: review.base_profile_version,
+      approvedProfileId: review.approved_profile_id,
+      approvedAt: review.approved_at,
+      revisions: (revisionResult.data ?? []).map((revision) => ({
+        id: revision.id,
+        revisionNumber: revision.revision_number,
+        changeReason: revision.change_reason,
+        actorAuthUserId: revision.actor_auth_user_id,
+        createdAt: revision.created_at,
+      })),
+      changes: (changeResult.data ?? []).map((change) => ({
+        id: change.id,
+        fieldPath: change.field_path as keyof StructuredDraft,
+        reason: change.reason,
+        actorAuthUserId: change.actor_auth_user_id,
+        createdAt: change.created_at,
+      })),
+    };
+  },
+
+  async listProfileVersions(organizationId: string, personId: string): Promise<ProfileVersionView[]> {
+    const { data, error } = await supabase.from("professional_profiles")
+      .select("id, profile_version, profile_data, review_status, source_document_id, processing_attempt_id, approved_by_auth_user_id, approved_at, created_at, superseded_at")
+      .eq("organization_id", organizationId).eq("person_id", personId).order("profile_version", { ascending: false });
+    throwIfError(error, "Não foi possível carregar as versões do Perfil Prisma.");
+    return (data ?? []).map((profile) => ({
+      id: profile.id,
+      profileVersion: profile.profile_version,
+      profileData: decodeReviewDraft(profile.profile_data),
+      reviewStatus: profile.review_status,
+      sourceDocumentId: profile.source_document_id,
+      processingAttemptId: profile.processing_attempt_id,
+      approvedByAuthUserId: profile.approved_by_auth_user_id,
+      approvedAt: profile.approved_at,
+      createdAt: profile.created_at,
+      supersededAt: profile.superseded_at,
+    }));
   },
 
   async createPrivateDownloadUrl(storagePath: string): Promise<string> {
@@ -342,6 +457,8 @@ async function persistExtraction(
   draft: StructuredDraft,
   pagesNative: number,
   pagesOcr: number,
+  idempotencyKey: string,
+  retryOfAttemptId: string | null,
 ) {
   const pagePayload = pages.map((page) => ({
     page_number: page.pageNumber,
@@ -363,6 +480,8 @@ async function persistExtraction(
     p_ocr_version: pagesOcr > 0 ? OCR_VERSION : null,
     p_structuring_version: STRUCTURING_VERSION,
     p_draft_version: EXTRACTION_DRAFT_VERSION,
+    p_idempotency_key: idempotencyKey,
+    p_retry_of_attempt_id: retryOfAttemptId,
   });
   throwIfError(error, "Não foi possível persistir atomicamente a extração.");
   if (!data?.[0]?.structured) {
@@ -370,11 +489,56 @@ async function persistExtraction(
   }
 }
 
-async function nextDocumentVersion(organizationId: string, personId: string): Promise<number> {
-  const { count, error } = await supabase.from("documents").select("id", { count: "exact", head: true })
-    .eq("organization_id", organizationId).eq("person_id", personId);
-  throwIfError(error, "Não foi possível versionar a fonte documental.");
-  return (count ?? 0) + 1;
+async function registerDocument(input: {
+  organizationId: string;
+  personId: string;
+  sourceType: "manual_text" | "resume_pdf";
+  filename: string;
+  declaredMimeType: string;
+  validatedMimeType: string;
+  checksum: string;
+  byteSize: number;
+  pageCount: number;
+  extractionVersion: string;
+  idempotencyKey: string;
+}): Promise<{ documentId: string; documentVersion: number; storagePath: string | null }> {
+  const { data, error } = await supabase.rpc("register_person_document", {
+    p_organization_id: input.organizationId,
+    p_person_id: input.personId,
+    p_source_type: input.sourceType,
+    p_filename: input.filename,
+    p_declared_mime_type: input.declaredMimeType,
+    p_validated_mime_type: input.validatedMimeType,
+    p_checksum_sha256: input.checksum,
+    p_byte_size: input.byteSize,
+    p_page_count: input.pageCount,
+    p_extraction_version: input.extractionVersion,
+    p_idempotency_key: input.idempotencyKey,
+  });
+  throwIfError(error, "Não foi possível registrar e versionar o documento.");
+  const document = data?.[0];
+  if (!document) throw new Error("O registro do documento não retornou identificador.");
+  return { documentId: document.document_id, documentVersion: document.document_version, storagePath: document.storage_path };
+}
+
+async function recordFailure(
+  organizationId: string,
+  personId: string,
+  documentId: string,
+  state: "failed_validation" | "failed_extraction" | "failed_ocr" | "failed_structuring",
+  code: string,
+  message: string,
+): Promise<void> {
+  const { error } = await supabase.rpc("record_document_failure", {
+    p_organization_id: organizationId,
+    p_person_id: personId,
+    p_document_id: documentId,
+    p_failure_state: state,
+    p_failure_code: code,
+    p_failure_message: message,
+    p_idempotency_key: createOperationKey("record-failure"),
+  });
+  throwIfError(error, "Não foi possível preservar a falha de processamento.");
 }
 
 function toPersonSummary(person: {
@@ -465,6 +629,23 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
   };
 }
 
+function decodeReviewDraft(value: Json): StructuredDraft {
+  const record = isRecord(value) ? value : {};
+  return decodeDraft(
+    record as Json,
+    Array.isArray(record.uncertainties) ? record.uncertainties as Json : [],
+    Array.isArray(record.notIdentified) ? record.notIdentified as Json : [],
+  );
+}
+
+function isRecord(value: unknown): value is Record<string, Json> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function createOperationKey(scope: string): string {
+  return `${scope}:${crypto.randomUUID()}`;
+}
+
 async function sha256Text(text: string): Promise<string> {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
@@ -481,4 +662,12 @@ function emptyToNull(value: string): string | null {
 
 function throwIfError(error: { message: string } | null, message: string): void {
   if (error) throw new Error(`${message} ${error.message}`);
+}
+
+function throwReviewError(error: { message: string; code?: string } | null, message: string): void {
+  if (!error) return;
+  if (error.code === "40001" || /review_conflict|profile_base_conflict|processing_base_conflict|serialize/i.test(error.message)) {
+    throw new Error("Conflito de revisão: os dados mudaram desde que esta tela foi aberta. Recarregue antes de continuar.");
+  }
+  throw new Error(`${message} ${error.message}`);
 }

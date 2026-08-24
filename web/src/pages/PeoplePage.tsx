@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useState } from "react";
-import { FilterOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { FileSearchOutlined, FilterOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Input, Skeleton, Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { PersonWorkspaceSummary } from "../domain/personIngestion";
@@ -61,7 +61,12 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       <PrismaPageHeader
         title="Pessoas"
         description={`Gerencie os registros de pessoas da organização ${activeMembership.organizationName}.`}
-        actions={canManagePeople ? <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/new")} type="primary">Nova Pessoa</Button> : undefined}
+        actions={canManagePeople ? (
+          <Space wrap>
+            <Button icon={<FileSearchOutlined />} onClick={() => onNavigate("/profiles/processes")}>Processamento e revisões</Button>
+            <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/new")} type="primary">Nova Pessoa</Button>
+          </Space>
+        ) : undefined}
       />
       <PrismaCard className="prisma-people-toolbar prisma-m2b-toolbar">
         <Input

@@ -20,10 +20,10 @@
 | Perfil, evidência e inferência versionada | implementado localmente | Provider determinístico |
 | Busca natural estruturada | implementado localmente | Vocabulário limitado |
 | Matching explicado | implementado localmente | Sem score absoluto |
-| PostgreSQL, modelo multi-tenant e RLS | ativo no remoto interno | Foundation, M2-A e M2-B aplicados |
+| PostgreSQL, modelo multi-tenant e RLS | ativo no remoto interno | Foundation, M2-A, M2-B e M2-C aplicados |
 | Upload de PDF e OCR | implementado e comprovado | PDF nativo, OCR local seletivo, Storage privado e proveniência por página |
 | UI e Auth | implementado e comprovado | Frontend local conectado ao Supabase remoto |
-| Revisão humana | não implementado | Perfil gerado permanece pendente de revisão humana |
+| Revisão humana de perfil | ativo no remoto interno | rascunho, mudanças por campo, comparação e aprovação versionada |
 | Embeddings vetoriais e LLM produtivo | não implementado | Depende de benchmark e ADR |
 | Mobilidade interna, sucessão e workforce planning | planejado | Fora do piloto inicial |
 

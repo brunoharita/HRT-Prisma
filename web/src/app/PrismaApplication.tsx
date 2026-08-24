@@ -17,9 +17,13 @@ import { platformUsersService } from "../infrastructure/supabase/platformUsersSe
 import { HomePage } from "../pages/HomePage";
 import { PasswordChangePage } from "../pages/PasswordChangePage";
 import { PeoplePage } from "../pages/PeoplePage";
+import { DocumentDetailPage } from "../pages/DocumentDetailPage";
+import { DocumentOperationsPage } from "../pages/DocumentOperationsPage";
 import { PersonFormPage } from "../pages/PersonFormPage";
 import { PersonProfilePage } from "../pages/PersonProfilePage";
 import { PersonWorkspacePage } from "../pages/PersonWorkspacePage";
+import { ProfileReviewPage } from "../pages/ProfileReviewPage";
+import { ProfileVersionsPage } from "../pages/ProfileVersionsPage";
 import { UserFormPage } from "../pages/UserFormPage";
 import { UsersPage } from "../pages/UsersPage";
 import {
@@ -54,6 +58,9 @@ interface AppRoute {
   icon?: ReactNode;
   profileId?: string;
   profileMode?: "view" | "edit" | "create";
+  profileView?: "workspace" | "operations" | "document" | "review" | "versions";
+  documentId?: string;
+  reviewId?: string;
   userId?: string;
 }
 
@@ -312,6 +319,18 @@ function renderRouteContent(
   if (route.path === "/profiles/new" && activeMembership) {
     return <PersonFormPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
+  if (route.path === "/profiles" && route.profileView === "operations" && activeMembership) {
+    return <DocumentOperationsPage activeMembership={activeMembership} onNavigate={onNavigate} />;
+  }
+  if (route.path === "/profiles" && route.profileView === "review" && route.profileId && route.documentId && route.reviewId && activeMembership) {
+    return <ProfileReviewPage activeMembership={activeMembership} personId={route.profileId} documentId={route.documentId} reviewId={route.reviewId} onNavigate={onNavigate} />;
+  }
+  if (route.path === "/profiles" && route.profileView === "document" && route.profileId && route.documentId && activeMembership) {
+    return <DocumentDetailPage activeMembership={activeMembership} personId={route.profileId} documentId={route.documentId} onNavigate={onNavigate} />;
+  }
+  if (route.path === "/profiles" && route.profileView === "versions" && route.profileId && activeMembership) {
+    return <ProfileVersionsPage activeMembership={activeMembership} personId={route.profileId} onNavigate={onNavigate} />;
+  }
   if (route.path === "/profiles" && route.profileId && route.profileMode === "edit" && activeMembership) {
     return <PersonFormPage activeMembership={activeMembership} personId={route.profileId} onNavigate={onNavigate} />;
   }
@@ -468,6 +487,14 @@ function findRoute(pathname: string): AppRoute {
   const exact = routes.find((route) => route.path === normalized);
   if (exact) return exact;
   if (normalized === "/profiles/new") return { path: "/profiles/new", profileMode: "create", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
+  const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };
+  if (normalized === "/profiles/processes") return { path: "/profiles", profileView: "operations", rule: reviewerRule };
+  const reviewMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)\/review\/([^/]+)$/.exec(normalized);
+  if (reviewMatch?.[1] && reviewMatch[2] && reviewMatch[3]) return { path: "/profiles", profileId: reviewMatch[1], documentId: reviewMatch[2], reviewId: reviewMatch[3], profileView: "review", rule: reviewerRule };
+  const documentMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)$/.exec(normalized);
+  if (documentMatch?.[1] && documentMatch[2]) return { path: "/profiles", profileId: documentMatch[1], documentId: documentMatch[2], profileView: "document", rule: reviewerRule };
+  const versionsMatch = /^\/profiles\/([^/]+)\/versions$/.exec(normalized);
+  if (versionsMatch?.[1]) return { path: "/profiles", profileId: versionsMatch[1], profileView: "versions", rule: reviewerRule };
   const profileEditMatch = /^\/profiles\/([^/]+)\/edit$/.exec(normalized);
   if (profileEditMatch?.[1]) return { path: "/profiles", profileId: profileEditMatch[1], profileMode: "edit", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   const profileMatch = /^\/profiles\/([^/]+)$/.exec(normalized);

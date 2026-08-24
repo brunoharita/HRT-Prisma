@@ -8,11 +8,11 @@ Erro sanitizado, correlation/process ID, etapa e duração. Sem currículo, prom
 
 ### Eventos de domínio
 
-Planejados: documento importado, extração concluída, revisão solicitada, vaga criada, matching executado, decisão humana registrada e resultado observado.
+Implementados para ingestão/revisão: documento importado, falha, extração concluída, revisão iniciada/salva e versão aprovada. Vaga, matching e resultado observado ainda não possuem eventos de domínio completos.
 
 ### Auditoria
 
-Planejada: ator, tenant, ação, alvo, finalidade, timestamp, resultado e ambiente para visualização, alteração, exportação, reprocessamento, exclusão, membership e configuração de IA.
+M2-C registra ator, tenant, ação, alvo, timestamp e referências de resultado para mutações documentais e revisão. Visualização, exportação, exclusão, membership e configuração de IA ainda não possuem cobertura completa.
 
 ### Métricas de IA
 
@@ -24,7 +24,7 @@ Fato correto, omissão, alucinação, ambiguidade, falso positivo, falso negativ
 
 ## Implementação atual
 
-`ProcessingEvent` e `ai_usage_events` cobrem somente telemetria básica de processamento. Auditoria e eventos de domínio completos não estão implementados.
+`ProcessingEvent` e `ai_usage_events` cobrem telemetria básica; `person_ingestion_events` e `document_operations` cobrem a trilha operacional M2-C sem conteúdo integral. A auditoria global da plataforma continua incompleta.
 
 ## Alertas planejados
 

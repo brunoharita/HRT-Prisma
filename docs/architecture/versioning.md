@@ -35,4 +35,4 @@ Versões anteriores permanecem identificáveis. Rollback reativa artefato anteri
 
 ## Versões atuais
 
-As constantes vigentes estão em `src/domain/versions.ts` e o catálogo proprietário está em `contracts.md`. `TUDO_SOBRE_PRISMA.md` usa versão própria de contexto, não substitui versões de domínio.
+As constantes de IA vigentes estão em `src/domain/versions.ts`; contratos de ingestão/revisão estão em `document-review-contract.md`; e o catálogo proprietário está em `contracts.md`. `TUDO_SOBRE_PRISMA.md` usa versão própria de contexto, não substitui versões de domínio.

@@ -2,8 +2,8 @@
 prisma_context_id: context-index
 owner: technical-governance
 status: current
-version: 1.0.0
-last_verified: 2026-08-20
+version: 1.0.1
+last_verified: 2026-08-24
 ---
 
 # Prisma Context Index

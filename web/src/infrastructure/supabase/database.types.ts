@@ -84,6 +84,10 @@ export interface Database {
         processing_attempt_id: string | null;
         profile_version: number;
         review_status: string;
+        review_id: string | null;
+        approved_by_auth_user_id: string | null;
+        approved_at: string | null;
+        base_profile_id: string | null;
         created_at: string;
         superseded_at: string | null;
       }>;
@@ -161,6 +165,7 @@ export interface Database {
         storage_path: string | null;
         checksum_sha256: string;
         status: string;
+        review_state: Database["public"]["Enums"]["document_review_state"];
         failure_category: string | null;
         failure_reason: string | null;
         failure_technical_message: string | null;
@@ -196,6 +201,8 @@ export interface Database {
         useful_character_count: number;
         failure_code: string | null;
         failure_message: string | null;
+        retry_of_attempt_id: string | null;
+        actor_auth_user_id: string | null;
         can_reprocess: boolean;
         started_at: string;
         completed_at: string | null;
@@ -229,6 +236,84 @@ export interface Database {
         validated_at: string | null;
         created_at: string;
       }>;
+      person_ingestion_events: Table<{
+        id: number;
+        organization_id: string;
+        person_id: string | null;
+        document_id: string | null;
+        processing_attempt_id: string | null;
+        actor_auth_user_id: string | null;
+        event_type: string;
+        result: "success" | "failure" | "denied";
+        error_code: string | null;
+        duration_ms: number | null;
+        metadata: Json;
+        created_at: string;
+      }>;
+      document_operations: Table<{
+        id: string;
+        organization_id: string;
+        person_id: string | null;
+        document_id: string | null;
+        processing_attempt_id: string | null;
+        review_id: string | null;
+        profile_id: string | null;
+        operation_type: string;
+        idempotency_key: string;
+        request_fingerprint: string;
+        status: Database["public"]["Enums"]["document_operation_status"];
+        result: Json;
+        error_code: string | null;
+        actor_auth_user_id: string;
+        started_at: string;
+        completed_at: string | null;
+        created_at: string;
+        updated_at: string;
+      }>;
+      profile_reviews: Table<{
+        id: string;
+        organization_id: string;
+        person_id: string;
+        document_id: string;
+        processing_attempt_id: string;
+        base_profile_id: string | null;
+        base_profile_version: number | null;
+        approved_profile_id: string | null;
+        state: Database["public"]["Enums"]["profile_review_state"];
+        extracted_data: Json;
+        reviewed_data: Json;
+        lock_version: number;
+        started_by_auth_user_id: string;
+        last_edited_by_auth_user_id: string;
+        approved_by_auth_user_id: string | null;
+        approved_at: string | null;
+        invalidated_at: string | null;
+        created_at: string;
+        updated_at: string;
+      }>;
+      profile_review_revisions: Table<{
+        id: string;
+        organization_id: string;
+        review_id: string;
+        revision_number: number;
+        reviewed_data: Json;
+        change_reason: string | null;
+        actor_auth_user_id: string;
+        created_at: string;
+      }>;
+      profile_review_changes: Table<{
+        id: number;
+        organization_id: string;
+        review_id: string;
+        review_revision_id: string;
+        field_path: string;
+        extracted_value: Json;
+        previous_value: Json;
+        reviewed_value: Json;
+        reason: string;
+        actor_auth_user_id: string;
+        created_at: string;
+      }>;
     };
     Views: Record<string, never>;
     Functions: {
@@ -245,8 +330,50 @@ export interface Database {
           p_ocr_version: string | null;
           p_structuring_version: string;
           p_draft_version: string;
+          p_idempotency_key: string;
+          p_retry_of_attempt_id: string | null;
         };
-        Returns: Array<{ processing_attempt_id: string; structured: boolean }>;
+        Returns: Array<{ processing_attempt_id: string; structured: boolean; attempt_number: number; reused: boolean }>;
+      };
+      register_person_document: {
+        Args: {
+          p_organization_id: string;
+          p_person_id: string;
+          p_source_type: Database["public"]["Enums"]["document_source_type"];
+          p_filename: string;
+          p_declared_mime_type: string;
+          p_validated_mime_type: string;
+          p_checksum_sha256: string;
+          p_byte_size: number;
+          p_page_count: number;
+          p_extraction_version: string;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ document_id: string; document_version: number; storage_path: string | null; reused: boolean }>;
+      };
+      record_document_failure: {
+        Args: {
+          p_organization_id: string;
+          p_person_id: string;
+          p_document_id: string;
+          p_failure_state: Database["public"]["Enums"]["processing_state"];
+          p_failure_code: string;
+          p_failure_message: string;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ processing_attempt_id: string; attempt_number: number; reused: boolean }>;
+      };
+      start_profile_review: {
+        Args: { p_organization_id: string; p_person_id: string; p_document_id: string; p_processing_attempt_id: string; p_idempotency_key: string };
+        Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
+      };
+      save_profile_review: {
+        Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_reviewed_data: Json; p_reason: string; p_idempotency_key: string };
+        Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
+      };
+      approve_profile_review: {
+        Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_idempotency_key: string };
+        Returns: Array<{ review_id: string; profile_id: string; profile_version: number; reused: boolean }>;
       };
     };
     Enums: {
@@ -273,6 +400,10 @@ export interface Database {
         | "failed_ocr"
         | "failed_structuring";
       page_extraction_origin: "native_pdf" | "ocr" | "manual_text";
+      document_status: "pending" | "processing" | "processed" | "extraction_failed" | "needs_manual_review" | "unsupported_format" | "received" | "ready_for_review" | "in_review" | "approved" | "failed";
+      document_review_state: "not_ready" | "ready_for_review" | "in_review" | "approved" | "invalidated";
+      document_operation_status: "started" | "completed" | "failed";
+      profile_review_state: "draft" | "approved" | "invalidated";
     };
     CompositeTypes: Record<string, never>;
   };
