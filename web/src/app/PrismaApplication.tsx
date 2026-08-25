@@ -10,8 +10,6 @@ import {
 } from "@ant-design/icons";
 import { Alert, Button, Form, Input, Result, Tag } from "antd";
 import type { JwtPayload } from "@supabase/supabase-js";
-import loginPrismaLogo from "../assets/brand/prisma-login-brand.svg";
-import loginPrismArtwork from "../assets/brand/prisma-login-prism.svg";
 import type { PlatformOperator } from "../domain/platformUsersData";
 import { supabase } from "../infrastructure/supabase/client";
 import { prismaRepository } from "../infrastructure/supabase/prismaRepository";
@@ -435,11 +433,10 @@ function SignInPage({
 
   return (
     <main className="prisma-auth-shell">
-      <div aria-hidden="true" className="prisma-auth-ambient" />
-      <img alt="" aria-hidden="true" className="prisma-auth-prism-art" src={loginPrismArtwork} />
-      <div aria-hidden="true" className="prisma-auth-hrt-mark"><span>HRT</span></div>
+      <img alt="" aria-hidden="true" className="prisma-auth-background" src="/assets/login/prisma-login-background.png" />
+      <div className="prisma-auth-hrt-frame"><img alt="HRT Solutions" src="/assets/login/hrt-logo-light.png" /></div>
       <section className="prisma-auth-brand-panel">
-        <div className="prisma-auth-brand-frame"><img src={loginPrismaLogo} alt="Prisma" /></div>
+        <div className="prisma-auth-brand-frame"><img src="/assets/login/prisma-logo-light.png" alt="Prisma" /></div>
         <div className="prisma-auth-message">
           <h1>Onde a evidência<br />encontra a <span>Inteligência.</span></h1>
           <div aria-hidden="true" className="prisma-auth-message-line" />
@@ -452,11 +449,11 @@ function SignInPage({
           <div className="prisma-auth-form-heading"><h2>Entrar no <span>Prisma</span></h2></div>
           {errorMessage || infoMessage ? <Alert closable message={errorMessage ?? infoMessage} onClose={onDismissAlert} showIcon type={errorMessage ? "error" : "success"} /> : null}
           <Form<SignInValues> className="prisma-auth-form" form={form} layout="vertical" onFinish={(values) => void onSignIn(values)} requiredMark={false}>
-            <Form.Item name="username" rules={[{ required: true, message: "Informe o username." }]}>
-              <Input aria-label="Usuário" autoComplete="username" placeholder="Usuário" prefix={<UserOutlined />} size="large" />
+            <Form.Item label="Username" name="username" rules={[{ required: true, message: "Informe o username." }]}>
+              <Input autoComplete="username" prefix={<UserOutlined />} size="large" />
             </Form.Item>
-            <Form.Item name="password" rules={[{ required: true, min: 1, message: "Informe sua senha." }]}>
-              <Input.Password aria-label="Senha" autoComplete="current-password" placeholder="Senha" prefix={<LockOutlined />} size="large" />
+            <Form.Item label="Senha" name="password" rules={[{ required: true, min: 1, message: "Informe sua senha." }]}>
+              <Input.Password autoComplete="current-password" prefix={<LockOutlined />} size="large" />
             </Form.Item>
             <Button block className="prisma-auth-submit" htmlType="submit" loading={signingIn} size="large" type="primary">Entrar</Button>
             <Button
