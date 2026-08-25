@@ -3,13 +3,15 @@ import {
   ApartmentOutlined,
   BankOutlined,
   HomeOutlined,
+  LockOutlined,
   SettingOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Alert, Button, Form, Input, Result, Tag } from "antd";
 import type { JwtPayload } from "@supabase/supabase-js";
-import darkBackgroundLogo from "../assets/brand/prisma-logo-dark-background.png";
+import loginPrismaLogo from "../assets/brand/prisma-login-brand.svg";
+import loginPrismArtwork from "../assets/brand/prisma-login-prism.svg";
 import type { PlatformOperator } from "../domain/platformUsersData";
 import { supabase } from "../infrastructure/supabase/client";
 import { prismaRepository } from "../infrastructure/supabase/prismaRepository";
@@ -433,24 +435,33 @@ function SignInPage({
 
   return (
     <main className="prisma-auth-shell">
+      <div aria-hidden="true" className="prisma-auth-ambient" />
+      <img alt="" aria-hidden="true" className="prisma-auth-prism-art" src={loginPrismArtwork} />
+      <div aria-hidden="true" className="prisma-auth-hrt-mark"><span>HRT</span></div>
       <section className="prisma-auth-brand-panel">
-        <div className="prisma-auth-brand-frame"><img src={darkBackgroundLogo} alt="Prisma" /></div>
-        <div className="prisma-auth-message"><Tag color="blue">Talent Intelligence</Tag><h1>Operação segura com identidade, escopo e evidência.</h1><p>O operador acessa o Prisma por username e senha. Pessoa continua sendo apenas um registro de informação.</p></div>
+        <div className="prisma-auth-brand-frame"><img src={loginPrismaLogo} alt="Prisma" /></div>
+        <div className="prisma-auth-message">
+          <h1>Onde a evidência<br />encontra a <span>Inteligência.</span></h1>
+          <div aria-hidden="true" className="prisma-auth-message-line" />
+          <p>Inteligência que conecta.<br />Evidência que transforma.</p>
+        </div>
       </section>
       <section className="prisma-auth-form-panel">
         <div className="prisma-auth-form-wrap">
-          <div className="prisma-auth-form-heading"><span className="prisma-auth-kicker">Acesso seguro</span><h2>Entrar no Prisma</h2><p>Use um operador provisionado com username, escopo válido e status ativo.</p></div>
+          <div aria-hidden="true" className="prisma-auth-lock-badge"><LockOutlined /></div>
+          <div className="prisma-auth-form-heading"><h2>Entrar no <span>Prisma</span></h2></div>
           {errorMessage || infoMessage ? <Alert closable message={errorMessage ?? infoMessage} onClose={onDismissAlert} showIcon type={errorMessage ? "error" : "success"} /> : null}
-          <Form<SignInValues> form={form} layout="vertical" onFinish={(values) => void onSignIn(values)} requiredMark={false}>
-            <Form.Item label="Username" name="username" rules={[{ required: true, message: "Informe o username." }]}>
-              <Input autoComplete="username" prefix={<UserOutlined />} size="large" />
+          <Form<SignInValues> className="prisma-auth-form" form={form} layout="vertical" onFinish={(values) => void onSignIn(values)} requiredMark={false}>
+            <Form.Item name="username" rules={[{ required: true, message: "Informe o username." }]}>
+              <Input aria-label="Usuário" autoComplete="username" placeholder="Usuário" prefix={<UserOutlined />} size="large" />
             </Form.Item>
-            <Form.Item label="Senha" name="password" rules={[{ required: true, min: 1, message: "Informe sua senha." }]}>
-              <Input.Password autoComplete="current-password" size="large" />
+            <Form.Item name="password" rules={[{ required: true, min: 1, message: "Informe sua senha." }]}>
+              <Input.Password aria-label="Senha" autoComplete="current-password" placeholder="Senha" prefix={<LockOutlined />} size="large" />
             </Form.Item>
-            <Button block htmlType="submit" loading={signingIn} size="large" type="primary">Entrar</Button>
+            <Button block className="prisma-auth-submit" htmlType="submit" loading={signingIn} size="large" type="primary">Entrar</Button>
             <Button
               block
+              className="prisma-auth-recovery"
               loading={recoveringAccess}
               onClick={() => void onRequestPasswordReset(form.getFieldValue("username") ?? "")}
               size="large"
@@ -459,9 +470,9 @@ function SignInPage({
               Esqueci minha senha
             </Button>
           </Form>
-          <p className="prisma-auth-footnote">Sem sessão, operador reconhecido, grupo válido ou empresa autorizada, o acesso permanece bloqueado.</p>
         </div>
       </section>
+      <footer className="prisma-auth-footer">Prisma <span>•</span> 2026 <span>•</span> v2.6.0 <span>•</span> HRT Solutions</footer>
     </main>
   );
 }
