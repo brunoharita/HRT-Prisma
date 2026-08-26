@@ -350,6 +350,53 @@ export interface Database {
         created_at: string;
         updated_at: string;
       }>;
+      knowledge_sources: Table<{
+        id: string; name: string; domain: string; source_class: Database["public"]["Enums"]["knowledge_source_class"];
+        publisher: string; method: string; allowed_scope: Database["public"]["Enums"]["knowledge_scope"];
+        status: Database["public"]["Enums"]["knowledge_status"]; license: string | null;
+        attribution_requirements: string | null; last_verified_at: string | null;
+        approved_by_auth_user_id: string | null; created_at: string; updated_at: string;
+      }>;
+      knowledge_source_versions: Table<{
+        id: string; source_id: string; external_version: string; release_date: string | null; retrieval_date: string | null;
+        checksum_sha256: string | null; format: string; license: string | null; import_status: string;
+        counts: Json; warnings: Json; previous_version_id: string | null; raw_storage_path: string | null;
+        created_at: string; published_at: string | null;
+      }>;
+      knowledge_concepts: Table<{
+        id: string; scope: Database["public"]["Enums"]["knowledge_scope"]; organization_id: string | null;
+        concept_type: Database["public"]["Enums"]["knowledge_concept_type"]; canonical_label: string;
+        description: string; language: string; status: Database["public"]["Enums"]["knowledge_status"];
+        version: number; change_set_id: string | null; provenance: Json; created_by_auth_user_id: string | null;
+        approved_by_auth_user_id: string | null; created_at: string; updated_at: string;
+      }>;
+      knowledge_inbox: Table<{
+        id: string; scope: Database["public"]["Enums"]["knowledge_scope"]; organization_id: string | null;
+        fingerprint: string; original_term: string; normalized_search_term: string; language: string;
+        first_seen_at: string; last_seen_at: string; occurrence_count: number;
+        status: Database["public"]["Enums"]["knowledge_inbox_status"];
+        candidate_concept_ids: string[]; evidence_reference_ids: string[]; cooldown_until: string | null;
+        created_by_auth_user_id: string | null;
+      }>;
+      knowledge_proposals: Table<{
+        id: string; inbox_id: string; research_run_id: string | null; scope: Database["public"]["Enums"]["knowledge_scope"];
+        organization_id: string | null; proposal_type: string; target_concept_id: string | null;
+        original_proposal: Json; human_edited_proposal: Json | null; status: string; provider: string | null;
+        model: string | null; prompt_version: string | null; output_schema_version: string | null;
+        source_policy_version: string | null; created_at: string; decided_at: string | null;
+        decided_by_auth_user_id: string | null; decision_reason: string | null; published_concept_id: string | null;
+      }>;
+      organization_knowledge_settings: Table<{
+        organization_id: string; allow_external_knowledge_enrichment: boolean;
+        reinterpretation_policy: Database["public"]["Enums"]["knowledge_reinterpretation_policy"];
+        custom_interval: string | null; inherit_global: boolean; source_check_frequency: string;
+        updated_by_auth_user_id: string | null; updated_at: string;
+      }>;
+      knowledge_reinterpretation_impacts: Table<{
+        id: string; organization_id: string; person_id: string; profile_id: string; change_set_id: string;
+        concept_id: string; policy: Database["public"]["Enums"]["knowledge_reinterpretation_policy"];
+        status: string; created_at: string; updated_at: string;
+      }>;
     };
     Views: Record<string, never>;
     Functions: {
@@ -450,10 +497,24 @@ export interface Database {
         Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_idempotency_key: string };
         Returns: Array<{ review_id: string; profile_id: string; profile_version: number; reused: boolean }>;
       };
+      approve_knowledge_proposal: {
+        Args: { p_proposal_id: string; p_human_edited_proposal?: Json | null; p_decision_reason?: string | null };
+        Returns: Array<{ proposal_id: string; concept_id: string; knowledge_version: number; reused: boolean }>;
+      };
+      dispatch_knowledge_reinterpretation: {
+        Args: { p_organization_id: string; p_impact_id: string; p_idempotency_key: string };
+        Returns: Array<{ job_id: string; status: string; reused: boolean }>;
+      };
     };
     Enums: {
       membership_role: "super_admin" | "owner" | "admin" | "recruiter" | "member";
       knowledge_classification: "explicit" | "inferred";
+      knowledge_scope: "global" | "organization";
+      knowledge_status: "draft" | "approved" | "deprecated" | "rejected";
+      knowledge_concept_type: "occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification";
+      knowledge_source_class: "official_occupational_taxonomy" | "official_vendor_documentation" | "official_certification_issuer" | "official_standard_body" | "official_government_or_public_body" | "recognized_nonprofit_foundation" | "secondary_recognized_source";
+      knowledge_inbox_status: "unresolved" | "research_queued" | "researching" | "proposal_ready" | "awaiting_human_review" | "approved" | "rejected" | "ambiguous" | "deferred" | "failed" | "budget_limited";
+      knowledge_reinterpretation_policy: "off" | "manual" | "daily" | "weekly" | "monthly" | "custom";
       platform_credential_mode: "manual_password" | "activation_link";
       platform_user_status: "pending_first_access" | "active" | "inactive" | "blocked";
       person_profile_state: "not_generated" | "building" | "generated" | "requires_attention" | "processing_failed";

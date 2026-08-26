@@ -14,6 +14,7 @@ Modelo é implementação substituível de uma função lógica. O projeto não 
 | Matching | Comparar requisitos sem score opaco | regras locais |
 | Explanation | Usar dados estruturados existentes | template local |
 | Embedding | Vetor estável, versionável e cacheável | não selecionado |
+| Knowledge research | Web Search, Structured Outputs e fontes rastreáveis | adapter OpenAI implementado, sem modelo aprovado/ativado |
 
 ## Seleção
 
@@ -29,6 +30,8 @@ Usar o menor modelo disponível que cumpra segurança, qualidade, contexto, Stru
 | Matching | local | `matching-explainable-1.0.0` | nenhum | 1.0.0 | ativo local |
 
 Nenhum modelo OpenAI ou de outro fornecedor está configurado no runtime.
+
+O Movimento 4 adiciona `KNOWLEDGE_RESEARCH_MODEL` como configuração server-side obrigatória, mas não fixa nem aprova um modelo no domínio. Sem avaliação, secret, flag e orçamento, o Knowledge Agent permanece desativado.
 
 ## Troca de modelo
 

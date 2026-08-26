@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-Não existe mecanismo de feature flags no runtime atual e nenhuma capability depende de flag. Esta ausência é intencional: não há ambientes remotos ou rollout parcial que justifiquem infraestrutura adicional.
+O Knowledge Agent introduz a primeira ativação sensível server-side. `KNOWLEDGE_AGENT_ENABLED` só ativa pesquisa quando vale exatamente `true`; ausência, valor desconhecido, modelo ausente, secret ausente ou caps iguais a zero mantêm a chamada externa bloqueada. Structured ingestion, normalization e automação de reinterpretação permanecem dependentes do rollout real de schema/configuração e não de controles visuais no frontend.
 
 ## Regra para adoção futura
 

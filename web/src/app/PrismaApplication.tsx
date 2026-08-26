@@ -3,6 +3,7 @@ import {
   ApartmentOutlined,
   BankOutlined,
   HomeOutlined,
+  BookOutlined,
   LockOutlined,
   SettingOutlined,
   TeamOutlined,
@@ -27,6 +28,7 @@ import { ProfileVersionsPage } from "../pages/ProfileVersionsPage";
 import { ResumeImportPage } from "../pages/ResumeImportPage";
 import { UserFormPage } from "../pages/UserFormPage";
 import { UsersPage } from "../pages/UsersPage";
+import { KnowledgePage } from "../pages/KnowledgePage";
 import {
   canActivateOrganization,
   evaluateRouteAccess,
@@ -92,6 +94,12 @@ const routes: AppRoute[] = [
     label: "Organizações",
     icon: <BankOutlined />,
     rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner"] },
+  },
+  {
+    path: "/knowledge",
+    label: "Conhecimento",
+    icon: <BookOutlined />,
+    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] },
   },
   {
     path: "/settings",
@@ -355,6 +363,9 @@ function renderRouteContent(
   }
   if (route.path === "/users") {
     return <UsersPage onNavigate={onNavigate} />;
+  }
+  if (route.path === "/knowledge" && currentOperator) {
+    return <KnowledgePage profile={currentOperator.profile} activeMembership={activeMembership} />;
   }
   if (route.path === "/change-password" && currentOperator) {
     return <PasswordChangePage currentOperator={currentOperator} onNavigate={onNavigate} onPasswordCompleted={onPasswordCompleted} />;

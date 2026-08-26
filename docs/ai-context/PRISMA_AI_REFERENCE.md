@@ -2,7 +2,7 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.3.0
+version: 1.4.0
 last_verified: 2026-08-26
 ---
 
@@ -10,7 +10,7 @@ last_verified: 2026-08-26
 
 ## Estado
 
-Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos.
+Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos. O adapter OpenAI do Knowledge Agent está implementado, porém não possui modelo aprovado, secret, budget ou ativação.
 
 ## Pipeline
 
@@ -33,6 +33,11 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - model: `deterministic-local-1.0.0`.
 - revisão humana: `human-profile-review-1.0.0`.
 - intake currículo-first: `resume-intake-1.0.0`.
+- normalização Knowledge: `knowledge-normalization-1.0.0`;
+- pesquisa Knowledge: `knowledge-research-1.0.0`;
+- prompt do agente: `knowledge-agent-1.0.0`;
+- schema de proposta: `knowledge-proposal-1.0.0`;
+- política de fontes: `trusted-sources-1.0.0`.
 
 ## Avaliação
 
@@ -52,4 +57,4 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 ## Limitações
 
-Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada ou provider externo aprovado.
+Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativo, embeddings, snapshots CBO/ESCO/O*NET carregados, contradição multi-documento, senioridade calculada ou provider externo aprovado.

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 2f5385184e2298439eb637eafe77af09d215813c5a6990b0c0db583253139c19
+source_manifest_sha256: 4e169981548ed0601971c0f940b9ddc659a3b6b0b42398b1ab163255e4d042f2
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.8.0
+version: 1.9.0
 last_verified: 2026-08-26
 ---
 
@@ -334,6 +334,9 @@ last_verified: 2026-08-26
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
 - Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
+- Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
+- Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
+- Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.
 - Home autenticada com contagens persistidas de pessoas, perfis estruturados e vagas abertas da organização ativa.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, evidências, proveniência, inferências, incertezas e campos não identificados; contato privado somente para perfis administrativos autorizados.
@@ -381,6 +384,9 @@ last_verified: 2026-08-26
 - Super Admin, Owner, Admin e Recruiter foram autorizados no escopo; uma sessão Member recebeu zero documentos e não iniciou revisão.
 - Auditoria pós-rollout confirmou zero versões/tentativas/perfis atuais duplicados, RLS nas quatro tabelas M2-C e zero foreign keys novas sem índice de cobertura.
 - Intake currículo-first aplicado em QA em 2026-08-26; transação sintética comprovou replay sem duplicação, criação e vínculo documentais atômicos, candidato duplicado, DML direto negado, `Member` negado e auditoria sem texto-fonte.
+- Movimento 4 aplicado em QA em 2026-08-26 pelas migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls`; 16 tabelas estão com RLS, 17 policies, zero grants anônimos de RPC Knowledge, zero colunas vetoriais e CBO/ESCO/O*NET catalogados com versões sem checksum inventado.
+- Transações sintéticas com rollback comprovaram precedência Organization sobre Global, fallback Global, falha segura para aliases ambíguos, leitura Global por autenticado sem vínculo e ocultação de Knowledge de outra organização.
+- Edge Function `knowledge-agent` v2 está `ACTIVE` com `verify_jwt=true`; não houve chamada externa porque flag, modelo, credencial e budgets continuam intencionalmente inativos.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
 Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
@@ -390,6 +396,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - API HTTP/BFF.
 - Malware scan/quarentena.
 - Embeddings vetoriais e LLM externo.
+- Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
 - Auditoria de visualização/exportação além do domínio de usuários.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
@@ -407,15 +414,17 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 - `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`.
 - A configuração local do M2-A endurece requisitos mínimos de senha, mas a proteção contra senhas vazadas do Supabase ainda não foi comprovada no ambiente remoto deste movimento.
-- O advisor de performance do QA ainda informa foreign keys sem índices de cobertura, índices ainda não utilizados e policies permissivas sobrepostas; não foram alterados fora do escopo deste movimento.
-- O advisor de segurança identifica as RPCs públicas M2-C e currículo-first como `security definer`; ADR-011/ADR-012 registram o uso controlado com `search_path` fixo, autorização interna e DML direto revogado. A proteção contra senhas vazadas continua desabilitada.
+- O hardening M4 eliminou do advisor as foreign keys Knowledge sem cobertura e a policy Knowledge sobreposta. Os índices novos aparecem como ainda não utilizados porque as filas estão vazias. O advisor de segurança sinaliza quatro RPCs Knowledge `security definer`; o uso é intencional e controlado por `search_path` fixo, autorização interna por papel/tenant e DML direto revogado.
+- O advisor de segurança também identifica RPCs públicas M2-C e currículo-first como `security definer`; ADR-011/ADR-012 registram o uso controlado. A proteção contra senhas vazadas continua desabilitada.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
+- Os snapshots oficiais CBO/ESCO/O*NET ainda não foram baixados, validados por checksum, diffados ou publicados. O catálogo e os adapters estão prontos, sem simular uma carga que não ocorreu.
+- Licenças e atribuições CBO/ESCO/O*NET estão catalogadas, mas a redistribuição de pacotes adaptados, especialmente CBO CC BY-ND, exige revisão jurídica antes de qualquer exposição externa.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
 
-Em 2026-08-26, M2-A, M2-B, M2-C e o backend currículo-first estão aplicados ao único projeto remoto Prisma-QA. O intake comprovou idempotência, identidade mínima, duplicidade tenant-scoped, resolução transacional, bloqueio de Member e auditoria sanitizada. O frontend currículo-first está implementado localmente; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-26, M2-A, M2-B, M2-C, currículo-first e a Fundação de Conhecimento do Movimento 4 estão aplicados ao único projeto remoto Prisma-QA. O M4 comprovou precedência Organization/Global, fallback, ambiguidade segura, isolamento tenant, RLS e hardening de índices. O Knowledge Agent está implantado, mas a chamada externa permanece deliberadamente desativada. Os frontends continuam locais; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 
@@ -425,7 +434,7 @@ Em 2026-08-26, M2-A, M2-B, M2-C e o backend currículo-first estão aplicados ao
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.3.0
+version: 1.4.0
 last_verified: 2026-08-26
 ---
 
@@ -433,7 +442,7 @@ last_verified: 2026-08-26
 
 ## Estado
 
-Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos.
+Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos. O adapter OpenAI do Knowledge Agent está implementado, porém não possui modelo aprovado, secret, budget ou ativação.
 
 ## Pipeline
 
@@ -456,6 +465,11 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - model: `deterministic-local-1.0.0`.
 - revisão humana: `human-profile-review-1.0.0`.
 - intake currículo-first: `resume-intake-1.0.0`.
+- normalização Knowledge: `knowledge-normalization-1.0.0`;
+- pesquisa Knowledge: `knowledge-research-1.0.0`;
+- prompt do agente: `knowledge-agent-1.0.0`;
+- schema de proposta: `knowledge-proposal-1.0.0`;
+- política de fontes: `trusted-sources-1.0.0`.
 
 ## Avaliação
 
@@ -475,7 +489,7 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 ## Limitações
 
-Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, embeddings, contradição multi-documento, senioridade calculada ou provider externo aprovado.
+Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativo, embeddings, snapshots CBO/ESCO/O*NET carregados, contradição multi-documento, senioridade calculada ou provider externo aprovado.
 
 ---
 
@@ -485,7 +499,7 @@ Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM, emb
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.5.0
+version: 1.6.0
 last_verified: 2026-08-26
 ---
 
@@ -497,13 +511,15 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos; `src/application` orquestra; `src/ai` implementa boundary, regras, retrieval e matching; `src/infrastructure` implementa repository; `src/cli.ts` demonstra o fluxo; `web/src` hospeda o shell web com Supabase Auth, route guards, M2-A, M2-B, M2-C e intake currículo-first. PDF.js e Tesseract.js processam PDFs no navegador; o adaptador Supabase usa RPCs para intake, documentos, tentativas, drafts, revisão, evidências e perfis. `supabase/functions` hospeda o boundary mínimo para `username`, recuperação de acesso e gestão de operadores. A convenção local atual usa porta `5555` para o app principal e `5556` para a variante QA.
+`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell e o módulo Conhecimento. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search. PDF/OCR e os contratos M2 permanecem inalterados.
 
 ## Banco
 
 A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona grupos e operadores; o M2-B adiciona Storage privado, tentativas, páginas e drafts; o M2-C adiciona operações idempotentes, retries, revisões, mudanças por campo e promoção atômica de perfil. O currículo-first adiciona `resume_intakes` antes da criação de Pessoa e resolve criar/vincular em transação. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
 
-Foundation, M2-A, M2-B, M2-C e intake currículo-first estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake.
+Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake/Knowledge.
+
+O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
 ## Segurança
 
@@ -511,7 +527,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B, M2-C, intake currículo-first e as três Edge Functions ativos. Login, Usuários, Pessoas, PDF/OCR, concorrência, retry, revisão, aprovação e resolução currículo-first foram comprovados com dados sintéticos. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B, M2-C, intake currículo-first, M4 e quatro Edge Functions ativas. Login, Usuários, Pessoas, PDF/OCR, concorrência, retry, revisão, aprovação, resolução currículo-first e resolução Knowledge foram comprovados com dados sintéticos. `knowledge-agent` está implantada com JWT obrigatório, porém sem pesquisa externa ativada. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -528,7 +544,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Versionamento: `versioning.md`. A fronteira idempotente de documentos e revisão é definida pelos ADR-011/ADR-012 e por `document-review-contract.md`.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Decisões: ADR-013 a ADR-015.
 
 ## Operação
 
@@ -542,7 +558,7 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.4.0
+version: 1.5.0
 last_verified: 2026-08-26
 ---
 
@@ -574,6 +590,9 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 - IA não decide contratação ou rejeição.
 - Currículo é uma entrada operacional principal: o arquivo pode existir em intake antes da Pessoa, mas a Pessoa só é criada após identidade mínima válida e verificação tenant-scoped de correspondência.
 - Correspondência é sinal explicável, não decisão; vínculo a cadastro existente ou criação apesar do sinal exige ação humana explícita.
+- Knowledge separa termo observado, conceito normalizado e inferência. Termo desconhecido é preservado e entra na Inbox.
+- Knowledge da empresa é overlay tenant-owned e precede a Global apenas no próprio escopo, sem alterar a base Prisma.
+- Internet enriquece Knowledge, nunca Pessoa; IA propõe e humano autorizado publica.
 
 ## Usuários do piloto
 
@@ -581,6 +600,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. O M2-A distingue `Usuário != Pessoa`; o M2-B cadastra Pessoas e extrai documentos privados; o M2-C centraliza documentos, torna cadastro/retry idempotentes, permite revisão humana por campo, comparação de versões e aprovação rastreável. O fluxo currículo-first recebe PDF, extrai apenas identidade mínima, verifica correspondências e então cria ou vincula a Pessoa antes de reutilizar M2-B/M2-C. O backend está comprovado no único projeto remoto interno; não há ambiente de produção separado nem frontend hospedado no estágio atual.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. M2-A/M2-B/M2-C e currículo-first estão ativos em QA. O Movimento 4 implementa localmente ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento. Schema e Edge Function M4 ainda não estão ativados no QA; snapshots oficiais estão apenas catalogados e o agente está desativado.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

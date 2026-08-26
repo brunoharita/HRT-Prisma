@@ -26,6 +26,7 @@ const metadataKeys = ["prisma_context_id", "owner", "status", "version", "last_v
 const allowedConsolidated = new Set([
   ...requiredContextFiles,
   "TUDO_SOBRE_PRISMA.md",
+  "knowledge-sources-setup.md",
 ]);
 const errors = [];
 

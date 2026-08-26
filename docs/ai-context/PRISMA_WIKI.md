@@ -2,7 +2,7 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.4.0
+version: 1.5.0
 last_verified: 2026-08-26
 ---
 
@@ -34,6 +34,9 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 - IA não decide contratação ou rejeição.
 - Currículo é uma entrada operacional principal: o arquivo pode existir em intake antes da Pessoa, mas a Pessoa só é criada após identidade mínima válida e verificação tenant-scoped de correspondência.
 - Correspondência é sinal explicável, não decisão; vínculo a cadastro existente ou criação apesar do sinal exige ação humana explícita.
+- Knowledge separa termo observado, conceito normalizado e inferência. Termo desconhecido é preservado e entra na Inbox.
+- Knowledge da empresa é overlay tenant-owned e precede a Global apenas no próprio escopo, sem alterar a base Prisma.
+- Internet enriquece Knowledge, nunca Pessoa; IA propõe e humano autorizado publica.
 
 ## Usuários do piloto
 
@@ -41,6 +44,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. O M2-A distingue `Usuário != Pessoa`; o M2-B cadastra Pessoas e extrai documentos privados; o M2-C centraliza documentos, torna cadastro/retry idempotentes, permite revisão humana por campo, comparação de versões e aprovação rastreável. O fluxo currículo-first recebe PDF, extrai apenas identidade mínima, verifica correspondências e então cria ou vincula a Pessoa antes de reutilizar M2-B/M2-C. O backend está comprovado no único projeto remoto interno; não há ambiente de produção separado nem frontend hospedado no estágio atual.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. M2-A/M2-B/M2-C e currículo-first estão ativos em QA. O Movimento 4 implementa localmente ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento. Schema e Edge Function M4 ainda não estão ativados no QA; snapshots oficiais estão apenas catalogados e o agente está desativado.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.
