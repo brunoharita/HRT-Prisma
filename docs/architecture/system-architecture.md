@@ -34,6 +34,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Web shell | React, Ant Design, App Shell, sessão Supabase, organization ativa, Usuários, Pessoas e route guards | `web/src` | local conectado ao remoto interno |
 | Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | ativo e comprovado |
 | Confiabilidade M2-C | central de documentos, retry, revisão humana, comparação e aprovação | `web/src/pages`, `personIngestionService`, RPCs | ativo e comprovado |
+| Intake currículo-first | PDF pré-Pessoa, identidade mínima, duplicidade e resolução transacional | `ResumeImportPage`, `resume_intakes`, RPCs | implementado localmente |
 | Database contract | Modelo, integridade, grants, RLS, Storage e RPC atômica | `supabase/migrations` | ativo no Prisma-QA |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
 
@@ -47,6 +48,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - Toda rota autenticada reutiliza o App Shell com sidebar esquerda; não existe top bar global e headers pertencem às páginas.
 - Documento bruto e dados privados são separados do perfil consultável no schema de produção.
 - A UI existente continua consumidora dos contratos, nunca fonte de autorização ou verdade.
+- O intake pré-Pessoa é tenant-owned desde o primeiro registro e converge para o pipeline M2-B/M2-C após uma única resolução explícita.
 
 ## Persistência
 

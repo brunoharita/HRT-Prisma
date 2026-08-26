@@ -5,7 +5,8 @@
 | Contrato | Versão | Regra material |
 | --- | --- | --- |
 | `document-processing-state` | 2.0.0 | estados operacionais e de revisão são explícitos e falham fechados |
-| `person-ingestion` | 2.0.0 | cadastro, retry e persistência são idempotentes e serializados no banco |
+| `person-ingestion` | 3.0.0 | cadastro, retry e persistência são idempotentes e serializados no banco; intake de currículo resolve a Pessoa antes do processamento completo |
+| `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
 | `human-profile-review` | 1.0.0 | revisão possui rascunho, revisões imutáveis, mudanças por campo e aprovação humana |
 | `document-operation-idempotency` | 1.0.0 | mesma chave e fingerprint retornam o mesmo resultado; payload diferente conflita |
 | `professional-profile` | 1.1.0 | perfil aprovado preserva proveniência da revisão e mantém somente uma versão atual |
@@ -22,6 +23,11 @@ Estado desconhecido, versão incompatível, sessão ausente, tenant não autoriz
 
 | RPC | Resultado |
 | --- | --- |
+| `start_resume_intake` | registra a intenção e reserva o caminho privado do arquivo sem criar Pessoa |
+| `identify_resume_intake` | persiste somente identidade mínima e devolve candidatos do mesmo tenant |
+| `resolve_resume_intake` | cria ou vincula Pessoa e registra o documento na mesma transação |
+| `complete_resume_intake` | conclui o intake somente quando o documento está pronto para revisão |
+| `fail_resume_intake` | preserva falha sanitizada e o estágio alcançado sem fabricar perfil válido |
 | `register_person_document` | cria uma versão documental e tentativa inicial idempotentes |
 | `record_document_failure` | registra falha sanitizada sem promover perfil |
 | `persist_person_extraction` | persiste páginas, draft, evidência e estado de revisão de forma atômica |
@@ -37,4 +43,4 @@ Cada mudança identifica campo, valor extraído, valor revisado, decisão e evid
 
 ## Compatibilidade
 
-Consumidores M2-B que não conhecem revisão não podem gravar diretamente nas tabelas críticas. Leitura histórica permanece válida; novas mutações devem usar as RPCs M2-C.
+Consumidores M2-B que não conhecem revisão não podem gravar diretamente nas tabelas críticas. Leitura histórica permanece válida; novas mutações devem usar as RPCs M2-C. Importação de currículo sem Pessoa prévia deve começar pelo contrato `resume-intake`; os fluxos manuais existentes continuam compatíveis.

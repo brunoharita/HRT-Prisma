@@ -22,6 +22,7 @@
 | Matching explicado | implementado localmente | Sem score absoluto |
 | PostgreSQL, modelo multi-tenant e RLS | ativo no remoto interno | Foundation, M2-A, M2-B e M2-C aplicados |
 | Upload de PDF e OCR | implementado e comprovado | PDF nativo, OCR local seletivo, Storage privado e proveniência por página |
+| Intake currículo-first | implementado localmente | PDF pré-Pessoa, identidade mínima, deduplicação tenant-scoped e resolução humana |
 | UI e Auth | implementado e comprovado | Frontend local conectado ao Supabase remoto |
 | Revisão humana de perfil | ativo no remoto interno | rascunho, mudanças por campo, comparação e aprovação versionada |
 | Embeddings vetoriais e LLM produtivo | não implementado | Depende de benchmark e ADR |
@@ -29,7 +30,7 @@
 
 ## Fora de escopo atual
 
-ATS completo, entrevistas, calendário, onboarding, folha, performance management, LMS, assessment psicológico, inferência de personalidade, análise facial, análise de voz, ranking eliminatório, mobile, microserviços, data lake, feature store, billing completo e integrações extensivas.
+ATS completo, upload em lote, DOC/DOCX, merge genérico de Pessoas, entrevistas, calendário, onboarding, folha, performance management, LMS, assessment psicológico, inferência de personalidade, análise facial, análise de voz, ranking eliminatório, microserviços, data lake, feature store, billing completo e integrações extensivas.
 
 ## Regra de expansão
 

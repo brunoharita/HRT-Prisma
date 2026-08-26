@@ -314,9 +314,84 @@ export interface Database {
         actor_auth_user_id: string;
         created_at: string;
       }>;
+      resume_intakes: Table<{
+        id: string;
+        organization_id: string;
+        idempotency_key: string;
+        request_fingerprint: string;
+        identity_fingerprint: string | null;
+        resolution_idempotency_key: string | null;
+        resolution_fingerprint: string | null;
+        status: Database["public"]["Enums"]["resume_intake_status"];
+        source_type: Database["public"]["Enums"]["document_source_type"];
+        filename: string;
+        declared_mime_type: string;
+        validated_mime_type: string;
+        storage_bucket: string;
+        storage_path: string;
+        checksum_sha256: string;
+        byte_size: number;
+        page_count: number;
+        extraction_version: string;
+        detected_name: string | null;
+        detected_email: string | null;
+        detected_phone: string | null;
+        normalized_name: string | null;
+        normalized_email: string | null;
+        normalized_phone: string | null;
+        resolved_person_id: string | null;
+        resolved_document_id: string | null;
+        resolution_type: Database["public"]["Enums"]["resume_identity_resolution"] | null;
+        actor_auth_user_id: string;
+        resolved_by_auth_user_id: string | null;
+        resolved_at: string | null;
+        error_code: string | null;
+        error_message: string | null;
+        created_at: string;
+        updated_at: string;
+      }>;
     };
     Views: Record<string, never>;
     Functions: {
+      start_resume_intake: {
+        Args: {
+          p_organization_id: string;
+          p_filename: string;
+          p_declared_mime_type: string;
+          p_validated_mime_type: string;
+          p_checksum_sha256: string;
+          p_byte_size: number;
+          p_page_count: number;
+          p_extraction_version: string;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{
+          intake_id: string;
+          storage_path: string;
+          intake_status: Database["public"]["Enums"]["resume_intake_status"];
+          resolved_person_id: string | null;
+          resolved_document_id: string | null;
+          document_version: number | null;
+          resolution_type: Database["public"]["Enums"]["resume_identity_resolution"] | null;
+          reused: boolean;
+        }>;
+      };
+      identify_resume_intake: {
+        Args: { p_organization_id: string; p_intake_id: string; p_detected_name: string | null; p_detected_email: string | null; p_detected_phone: string | null };
+        Returns: Array<{ intake_status: Database["public"]["Enums"]["resume_intake_status"]; identity_result: Database["public"]["Enums"]["resume_identity_resolution"] | null; candidates: Json }>;
+      };
+      resolve_resume_intake: {
+        Args: { p_organization_id: string; p_intake_id: string; p_resolution_action: string; p_existing_person_id: string | null; p_idempotency_key: string };
+        Returns: Array<{ person_id: string; document_id: string; document_version: number; resolution_type: Database["public"]["Enums"]["resume_identity_resolution"]; reused: boolean }>;
+      };
+      complete_resume_intake: {
+        Args: { p_organization_id: string; p_intake_id: string; p_document_id: string };
+        Returns: Database["public"]["Enums"]["resume_intake_status"];
+      };
+      fail_resume_intake: {
+        Args: { p_organization_id: string; p_intake_id: string; p_error_code: string; p_error_message: string };
+        Returns: Database["public"]["Enums"]["resume_intake_status"];
+      };
       persist_person_extraction: {
         Args: {
           p_organization_id: string;
@@ -404,6 +479,22 @@ export interface Database {
       document_review_state: "not_ready" | "ready_for_review" | "in_review" | "approved" | "invalidated";
       document_operation_status: "started" | "completed" | "failed";
       profile_review_state: "draft" | "approved" | "invalidated";
+      resume_intake_status:
+        | "file_received"
+        | "extracting_identity"
+        | "needs_human_identity"
+        | "needs_duplicate_resolution"
+        | "ready_to_resolve"
+        | "processing"
+        | "ready_for_review"
+        | "completed"
+        | "failed";
+      resume_identity_resolution:
+        | "created_new_person"
+        | "linked_existing_person"
+        | "needs_human_identity"
+        | "needs_duplicate_resolution"
+        | "failed";
     };
     CompositeTypes: Record<string, never>;
   };

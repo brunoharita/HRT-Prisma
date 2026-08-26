@@ -20,7 +20,8 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
-| `person-ingestion` | application/data | 2.0.0 | Pessoas, documentos, perfil | ativo em QA | migrations M2-B/M2-C e RPCs idempotentes | local/QA | bloquear processamento |
+| `person-ingestion` | application/data | 3.0.0 | intake, Pessoas, documentos, perfil | implementado localmente | intake currículo-first convergindo para M2-B/M2-C | local | bloquear processamento |
+| `resume-intake` | application/data/security | 1.0.0 | Home, Pessoas, importador | implementado localmente | `resume_intakes` e cinco RPCs controladas | local | bloquear criação/vínculo |
 | `human-profile-review` | application/domain | 1.0.0 | revisão, perfil, auditoria | ativo em QA | `profile_reviews`, revisões, mudanças e aprovação atômica | local/QA | bloquear promoção |
 | `document-operation-idempotency` | application/data | 1.0.0 | cadastro, retry, persistência e aprovação | ativo em QA | `document_operations`, fingerprints e locks | local/QA | rejeitar conflito |
 | `pdf-native-extraction` | AI/application | 1.0.0 | ingestão PDF | ativo localmente | `pdfjs-5.4.296/native-v1` | local | exigir revisão/reprocessamento |

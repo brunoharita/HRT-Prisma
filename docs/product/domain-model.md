@@ -11,6 +11,7 @@
 - Vaga: necessidade atual de preencher uma posição ou papel.
 - Pessoa: identidade profissional única no tenant, com lifecycle de candidata, colaboradora, ex-colaboradora, ex-candidata ou talent pool.
 - Documento: fonte associada a uma pessoa, inicialmente currículo.
+- Intake de currículo: operação temporária e tenant-scoped que preserva o PDF antes de resolver a Pessoa.
 - Perfil profissional: consolidação estruturada e versionada de fontes.
 - Evidência: fato encontrado explicitamente em uma fonte.
 - Inferência: conhecimento derivado de evidências, com regra e versão.
@@ -39,11 +40,14 @@ Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, comp
 9. Usuário opera o Prisma; Pessoa é representada pelo Prisma.
 10. Criar, editar ou desativar um Usuário não cria nem altera uma Pessoa automaticamente.
 11. Pessoa não recebe username, senha, perfil de acesso ou permissão de sistema.
+12. Intake sem nome e contato válidos não cria Pessoa.
+13. Possível correspondência nunca produz merge ou vínculo automático silencioso.
 
 ## Pipeline atual
 
 ```text
-document -> parsing -> extraction -> normalization -> evidence -> inference -> professional profile
+resume intake -> minimum identity -> tenant deduplication -> Person resolution
+  -> document -> parsing -> extraction -> evidence -> professional profile -> human review
 ```
 
 `ExtractionProvider` não conhece o repositório. O domínio não conhece fornecedor de IA. `processResume` orquestra estados, validação, persistência e telemetria.

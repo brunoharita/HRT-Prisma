@@ -14,8 +14,9 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 | `natural_language_retrieval` | ativo | não comprovado | não separado | Vocabulário controlado |
 | `explainable_matching` | ativo | não comprovado | não separado | Sem score absoluto |
 | `tenant_json_isolation` | ativo em teste | inexistente | inexistente | Não substitui RLS |
-| `postgres_rls_contract` | implementado | ativo | não separado | Foundation, M2-A, M2-B e M2-C aplicados |
+| `postgres_rls_contract` | implementado | ativo | não separado | Foundation, M2-A, M2-B, M2-C e intake currículo-first aplicados |
 | `pdf_ocr_ingestion` | ativo | ativo | não separado | PDF.js nativo, Tesseract seletivo, Storage privado e RPC atômica |
+| `curriculum_first_intake` | ativo | ativo | não separado | Intake pré-Pessoa, identidade mínima, deduplicação tenant-scoped e resolução transacional |
 | `live_llm_extraction` | não implementado | não implementado | não implementado | Requer benchmark e ADR |
 | `vector_embeddings` | não implementado | não implementado | não implementado | Requer necessidade medida |
 

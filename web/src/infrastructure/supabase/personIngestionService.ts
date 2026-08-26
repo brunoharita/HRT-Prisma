@@ -1,5 +1,6 @@
 import type { Json } from "./database.types";
 import { supabase } from "./client";
+import type { ResumeIdentity } from "../../../../src/domain/resumeIdentity.js";
 import {
   EXTRACTION_DRAFT_VERSION,
   NATIVE_EXTRACTION_VERSION,
@@ -19,12 +20,114 @@ import {
   type ProcessingAuditEvent,
   type ProfileReviewWorkspace,
   type ProfileVersionView,
+  type ResumeDuplicateCandidate,
+  type ResumeIntakeIdentityResult,
+  type ResumeIntakeResolutionResult,
   type StructuredDraft,
 } from "../../domain/personIngestion";
 
 const DOCUMENT_BUCKET = "person-documents";
 
 export const personIngestionService = {
+  async beginResumeIntake(
+    organizationId: string,
+    input: ProcessedDocumentInput,
+    identity: ResumeIdentity,
+    idempotencyKey: string,
+  ): Promise<ResumeIntakeIdentityResult | ResumeIntakeResolutionResult> {
+    const { data, error } = await supabase.rpc("start_resume_intake", {
+      p_organization_id: organizationId,
+      p_filename: input.file.name,
+      p_declared_mime_type: input.file.type || "application/pdf",
+      p_validated_mime_type: "application/pdf",
+      p_checksum_sha256: input.sha256,
+      p_byte_size: input.file.size,
+      p_page_count: input.pages.length,
+      p_extraction_version: NATIVE_EXTRACTION_VERSION,
+      p_idempotency_key: idempotencyKey,
+    });
+    throwIfError(error, "Não foi possível iniciar a importação do currículo.");
+    const intake = data?.[0];
+    if (!intake) throw new Error("A importação não retornou um identificador.");
+
+    if (
+      intake.resolved_person_id
+      && intake.resolved_document_id
+      && intake.document_version !== null
+      && isResolvedIdentityType(intake.resolution_type ?? "")
+    ) {
+      const resolvedResult: ResumeIntakeResolutionResult = {
+        kind: "resolved",
+        intakeId: intake.intake_id,
+        personId: intake.resolved_person_id,
+        documentId: intake.resolved_document_id,
+        documentVersion: intake.document_version,
+        resolutionType: intake.resolution_type as "created_new_person" | "linked_existing_person",
+        reused: true,
+      };
+      return intake.intake_status === "ready_for_review" || intake.intake_status === "completed"
+        ? resolvedResult
+        : processResolvedIntake(organizationId, input, resolvedResult);
+    }
+
+    if (!intake.reused || intake.intake_status === "failed") {
+      const { error: uploadError } = await supabase.storage.from(DOCUMENT_BUCKET).upload(intake.storage_path, input.file, {
+        cacheControl: "3600",
+        contentType: "application/pdf",
+        upsert: false,
+      });
+      if (uploadError) {
+        await failResumeIntake(organizationId, intake.intake_id, "storage_upload_failed", "O upload privado do currículo falhou.");
+        throw new Error("O upload privado falhou. Nenhuma Pessoa foi criada.");
+      }
+    }
+
+    return identifyResumeIntake(organizationId, intake.intake_id, intake.storage_path, identity, intake.reused);
+  },
+
+  async identifyResumeIntake(
+    organizationId: string,
+    intakeId: string,
+    storagePath: string,
+    identity: ResumeIdentity,
+    reused = true,
+  ): Promise<ResumeIntakeIdentityResult> {
+    return identifyResumeIntake(organizationId, intakeId, storagePath, identity, reused);
+  },
+
+  async resolveResumeIntake(
+    organizationId: string,
+    intakeId: string,
+    input: ProcessedDocumentInput,
+    action: "create_new_person" | "link_existing_person",
+    existingPersonId: string | null,
+    idempotencyKey: string,
+  ): Promise<ResumeIntakeResolutionResult> {
+    const { data, error } = await supabase.rpc("resolve_resume_intake", {
+      p_organization_id: organizationId,
+      p_intake_id: intakeId,
+      p_resolution_action: action,
+      p_existing_person_id: existingPersonId,
+      p_idempotency_key: idempotencyKey,
+    });
+    throwResolutionError(error, "Não foi possível resolver a identidade da importação.");
+    const resolved = data?.[0];
+    if (!resolved || !isResolvedIdentityType(resolved.resolution_type)) {
+      throw new Error("A resolução não retornou Pessoa e documento válidos.");
+    }
+
+    const result: ResumeIntakeResolutionResult = {
+      kind: "resolved",
+      intakeId,
+      personId: resolved.person_id,
+      documentId: resolved.document_id,
+      documentVersion: resolved.document_version,
+      resolutionType: resolved.resolution_type,
+      reused: resolved.reused,
+    };
+    return processResolvedIntake(organizationId, input, result);
+  },
+
   async listPeople(organizationId: string, search: string, includePrivateData = true): Promise<PersonWorkspaceSummary[]> {
     const { data: people, error } = await supabase
       .from("people")
@@ -528,6 +631,7 @@ async function recordFailure(
   state: "failed_validation" | "failed_extraction" | "failed_ocr" | "failed_structuring",
   code: string,
   message: string,
+  idempotencyKey = createOperationKey("record-failure"),
 ): Promise<void> {
   const { error } = await supabase.rpc("record_document_failure", {
     p_organization_id: organizationId,
@@ -536,9 +640,111 @@ async function recordFailure(
     p_failure_state: state,
     p_failure_code: code,
     p_failure_message: message,
-    p_idempotency_key: createOperationKey("record-failure"),
+    p_idempotency_key: idempotencyKey,
   });
   throwIfError(error, "Não foi possível preservar a falha de processamento.");
+}
+
+async function identifyResumeIntake(
+  organizationId: string,
+  intakeId: string,
+  storagePath: string,
+  identity: ResumeIdentity,
+  reused: boolean,
+): Promise<ResumeIntakeIdentityResult> {
+  const { data, error } = await supabase.rpc("identify_resume_intake", {
+    p_organization_id: organizationId,
+    p_intake_id: intakeId,
+    p_detected_name: identity.fullName,
+    p_detected_email: identity.email,
+    p_detected_phone: identity.phone,
+  });
+  throwIfError(error, "Não foi possível verificar a identidade do currículo.");
+  const identified = data?.[0];
+  if (!identified) throw new Error("A verificação de identidade não retornou resultado.");
+  return {
+    kind: "identity",
+    intakeId,
+    storagePath,
+    status: identified.intake_status,
+    identityResult: identified.identity_result,
+    candidates: decodeDuplicateCandidates(identified.candidates),
+    reused,
+  };
+}
+
+async function processResolvedIntake(
+  organizationId: string,
+  input: ProcessedDocumentInput,
+  result: ResumeIntakeResolutionResult,
+): Promise<ResumeIntakeResolutionResult> {
+  try {
+    const draft = buildDeterministicDraft(input.pages);
+    await persistExtraction(
+      organizationId,
+      result.personId,
+      result.documentId,
+      input.pages,
+      draft,
+      input.nativePageCount,
+      input.ocrPageCount,
+      `resume-intake-extraction:${result.intakeId}`,
+      null,
+    );
+    const { error: completeError } = await supabase.rpc("complete_resume_intake", {
+      p_organization_id: organizationId,
+      p_intake_id: result.intakeId,
+      p_document_id: result.documentId,
+    });
+    throwIfError(completeError, "O currículo foi processado, mas o intake não pôde ser concluído.");
+    return result;
+  } catch (caught) {
+    const message = caught instanceof Error ? caught.message : "Falha no processamento posterior à resolução de identidade.";
+    await recordFailure(
+      organizationId,
+      result.personId,
+      result.documentId,
+      "failed_structuring",
+      "resume_intake_processing_failed",
+      message,
+      `resume-intake-failure:${result.intakeId}`,
+    ).catch(() => undefined);
+    await failResumeIntake(organizationId, result.intakeId, "resume_intake_processing_failed", message).catch(() => undefined);
+    throw caught;
+  }
+}
+
+async function failResumeIntake(organizationId: string, intakeId: string, code: string, message: string): Promise<void> {
+  const { error } = await supabase.rpc("fail_resume_intake", {
+    p_organization_id: organizationId,
+    p_intake_id: intakeId,
+    p_error_code: code,
+    p_error_message: message,
+  });
+  throwIfError(error, "Não foi possível registrar a falha da importação.");
+}
+
+function decodeDuplicateCandidates(value: Json): ResumeDuplicateCandidate[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((candidate) => {
+    if (!isRecord(candidate) || typeof candidate.person_id !== "string" || typeof candidate.full_name !== "string") return [];
+    const reasons = Array.isArray(candidate.reasons)
+      ? candidate.reasons.filter((reason): reason is ResumeDuplicateCandidate["reasons"][number] =>
+        reason === "same_email" || reason === "same_phone" || reason === "same_name")
+      : [];
+    return [{
+      personId: candidate.person_id,
+      fullName: candidate.full_name,
+      email: typeof candidate.email === "string" ? candidate.email : null,
+      phone: typeof candidate.phone === "string" ? candidate.phone : null,
+      reasons,
+      strong: candidate.strong === true,
+    }];
+  });
+}
+
+function isResolvedIdentityType(value: string): value is "created_new_person" | "linked_existing_person" {
+  return value === "created_new_person" || value === "linked_existing_person";
 }
 
 function toPersonSummary(person: {
@@ -668,6 +874,14 @@ function throwReviewError(error: { message: string; code?: string } | null, mess
   if (!error) return;
   if (error.code === "40001" || /review_conflict|profile_base_conflict|processing_base_conflict|serialize/i.test(error.message)) {
     throw new Error("Conflito de revisão: os dados mudaram desde que esta tela foi aberta. Recarregue antes de continuar.");
+  }
+  throw new Error(`${message} ${error.message}`);
+}
+
+function throwResolutionError(error: { message: string; code?: string } | null, message: string): void {
+  if (!error) return;
+  if (error.code === "23505" || /already resolved|another decision|idempotency/i.test(error.message)) {
+    throw new Error("A importação já foi resolvida por outra ação. Atualize a tela antes de continuar.");
   }
   throw new Error(`${message} ${error.message}`);
 }

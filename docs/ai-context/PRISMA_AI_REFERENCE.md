@@ -2,8 +2,8 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.2.0
-last_verified: 2026-08-24
+version: 1.3.0
+last_verified: 2026-08-26
 ---
 
 # Referência de IA do Prisma
@@ -14,7 +14,7 @@ Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, m
 
 ## Pipeline
 
-Documento não confiável entra como texto manual ou PDF. PDF.js tenta texto nativo por página e Tesseract.js executa OCR local somente nas páginas insuficientes. O resultado vira `ExtractionDraft`; a aplicação valida, cria evidência e deriva inferência limitada. O M2-C exige revisão humana antes de promover a versão aprovada de perfil. Falha não vira perfil vazio.
+Documento não confiável entra como texto manual ou PDF. No currículo-first, PDF.js/Tesseract extraem primeiro somente nome e ao menos um contato explícito; nenhum atributo profissional é usado para decidir identidade. A deduplicação exata por e-mail/telefone e o sinal por nome são tenant-scoped e explicáveis. Depois da resolução humana ou determinística sem candidato, o pipeline M2-B/M2-C cria `ExtractionDraft`, evidência e revisão humana antes de promover perfil. Falha não vira Pessoa sem identidade nem perfil vazio.
 
 ## Proveniência
 
@@ -32,6 +32,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
 - revisão humana: `human-profile-review-1.0.0`.
+- intake currículo-first: `resume-intake-1.0.0`.
 
 ## Avaliação
 

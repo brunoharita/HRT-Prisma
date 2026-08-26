@@ -12,7 +12,7 @@ Nunca alterar silenciosamente o significado de contrato persistido.
 
 ## Contratos versionados
 
-Perfil profissional, extraction, inference, parser, retrieval/embedding, matching, confidence, prompts, modelos, taxonomias, contratos de busca, DTOs/APIs, eventos, regras de privacidade e Context Pack.
+Perfil profissional, extraction, inference, parser, intake de currículo, retrieval/embedding, matching, confidence, prompts, modelos, taxonomias, contratos de busca, DTOs/APIs, eventos, regras de privacidade e Context Pack.
 
 ## Compatibilidade
 

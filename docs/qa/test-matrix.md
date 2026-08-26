@@ -7,13 +7,15 @@
 | Multi-tenant | dados do próprio tenant | ID conhecido e usuário sem membership | JSON e RLS QA testados em duas organizações sintéticas |
 | Usuários da plataforma | criar, listar e editar dentro da autoridade | Member/Recruter sem gestão, autoelevação, último Owner, cross-group/cross-company | schema/Edge/UI ativos em QA; lista Super Admin comprovada |
 | Pessoas | listar, cadastrar, editar e consultar perfis do tenant | PII/documento negados a perfil sem autoridade | M2-B ativo em QA; member negado por RLS e rota local |
+| Currículo-first | PDF cria ou vincula Pessoa e converge para revisão | identidade insuficiente, duplicidade ambígua e sem nome não criam Pessoa | unit/contract local; evidência conectada pendente |
+| Deduplicação de Pessoa | mesmo e-mail/telefone sugere vínculo no tenant | nome isolado não faz merge; cross-tenant não aparece | migration e UI implementadas; QA pendente |
 | Upload | texto/PDF privado até 15 MB | tipo, tamanho, assinatura, trailer e parse inválidos | contrato implementado; malware scan ausente |
 | Formatos | texto e PDF nativo/scan | formato exótico/corrompido | texto, PDF nativo v4 e PDF image-only v5 comprovados no remoto interno |
 | Extração | perfil mínimo | sem texto, schema inválido, timeout | testado |
 | Prompt injection | documento normal | instrução maliciosa em currículo | golden testado |
 | OCR | scan legível com fallback seletivo | página insuficiente após OCR | Tesseract local comprovado em uma página; fixture inicial insuficiente foi recusada e fixture válida gerou 360 caracteres úteis |
 | Parsing | seções conhecidas | variação, datas, caracteres | golden parcial |
-| Revisão manual | corrigir e aprovar | tentar promover parcial sem revisão | não implementado |
+| Revisão manual | corrigir e aprovar | tentar promover parcial sem revisão | M2-C ativo no remoto interno |
 | Duplicidade | primeira importação | mesma chave com payload divergente e concorrência | M2-C local/QA aprovado |
 | Vagas | requisitos claros | vazio, incompatível, cross-tenant | contrato parcial |
 | Matching | atendido/parcial/gap | insuficiência e requisito ausente | golden testado |

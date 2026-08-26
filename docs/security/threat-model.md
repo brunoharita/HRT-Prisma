@@ -11,6 +11,9 @@ Ativos: currículos, PII, perfis, evidências, inferências, vagas, avaliações
 | Vazamento entre tenants | crítico | `organization_id`, FK composta, RLS, filtro de query | testes RLS com dois tenants |
 | Acesso indevido a currículo/PII | crítico | tabela privada, papel, deny by default | matriz negativa por papel |
 | Prompt injection em currículo | alto | documento como dado, schema validado, provider sem autoridade | golden fixture maliciosa |
+| Vazamento de duplicidade cross-tenant | crítico | busca dentro da organização em RPC controlada, RLS e teste negativo | teste conectado por papéis/tenants |
+| Pessoa fantasma por parsing parcial | alto | nome + contato válidos obrigatórios e resolução explícita | unit/contract/QA currículo-first |
+| Corrida na resolução do intake | alto | lock por intake, chave/fingerprint idempotentes e transação única | concorrência conectada |
 | Documento malicioso | alto | allowlist, limite, parser isolado, malware scan planejado | testes de tipo, tamanho e arquivo corrompido |
 | Upload inválido ou OCR enganoso | alto | estados explícitos, revisão manual | testes de falha e OCR |
 | Vazamento via logs | alto | IDs e métricas, sem conteúdo integral | scan e revisão de logs |

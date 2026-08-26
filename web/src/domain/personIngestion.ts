@@ -13,6 +13,22 @@ export type PersonProfileState =
 
 export type DocumentSourceType = "manual_text" | "resume_pdf";
 export type DocumentReviewState = "not_ready" | "ready_for_review" | "in_review" | "approved" | "invalidated";
+export type ResumeIntakeStatus =
+  | "file_received"
+  | "extracting_identity"
+  | "needs_human_identity"
+  | "needs_duplicate_resolution"
+  | "ready_to_resolve"
+  | "processing"
+  | "ready_for_review"
+  | "completed"
+  | "failed";
+export type ResumeIdentityResolution =
+  | "created_new_person"
+  | "linked_existing_person"
+  | "needs_human_identity"
+  | "needs_duplicate_resolution"
+  | "failed";
 export type PageExtractionOrigin = "native_pdf" | "ocr" | "manual_text";
 export type ProcessingState =
   | "uploaded"
@@ -72,6 +88,35 @@ export interface ProcessedDocumentInput {
   pages: ExtractedPage[];
   nativePageCount: number;
   ocrPageCount: number;
+}
+
+export interface ResumeDuplicateCandidate {
+  personId: string;
+  fullName: string;
+  email: string | null;
+  phone: string | null;
+  reasons: Array<"same_email" | "same_phone" | "same_name">;
+  strong: boolean;
+}
+
+export interface ResumeIntakeIdentityResult {
+  kind: "identity";
+  intakeId: string;
+  storagePath: string;
+  status: ResumeIntakeStatus;
+  identityResult: ResumeIdentityResolution | null;
+  candidates: ResumeDuplicateCandidate[];
+  reused: boolean;
+}
+
+export interface ResumeIntakeResolutionResult {
+  kind: "resolved";
+  intakeId: string;
+  personId: string;
+  documentId: string;
+  documentVersion: number;
+  resolutionType: "created_new_person" | "linked_existing_person";
+  reused: boolean;
 }
 
 export interface StructuredDraft {
@@ -228,9 +273,10 @@ export async function validateAndProcessPdf(
     const page = await pdfDocument.getPage(pageNumber);
     const textContent = await page.getTextContent();
     const text = textContent.items
-      .map((item) => ("str" in item ? item.str : ""))
-      .join(" ")
-      .replace(/\s+/g, " ")
+      .map((item) => ("str" in item ? `${item.str}${"hasEOL" in item && item.hasEOL ? "\n" : " "}` : ""))
+      .join("")
+      .replace(/[ \t]+/g, " ")
+      .replace(/ *\n+ */g, "\n")
       .trim();
     if (isNativeTextSufficient(text)) {
       pages.push(toExtractedPage(pageNumber, text, "native_pdf", "pdfjs", NATIVE_EXTRACTION_VERSION));

@@ -13,6 +13,7 @@ Privacy by design está definida e refletida na separação de PII, perfil e Sto
 | Experiência, educação, certificação | pessoal profissional | currículo | estruturar conhecimento | perfil/evidência | papéis autorizados |
 | Idioma, ferramentas, competências | pessoal profissional e inferência possível | currículo/regras | busca e matching | perfil/evidência/inferência | papéis autorizados |
 | Documento bruto | pessoal | upload | fonte e auditoria | bucket privado `person-documents` em QA | super admin, owner, admin e recruiter no tenant |
+| Intake pré-Pessoa | pessoal e técnico | upload | resolver identidade e vínculo | staging tenant-scoped sem texto integral | super admin, owner, admin e recruiter no tenant |
 | Avaliação e matching | pessoal derivado | vaga + perfil | apoio à decisão | JSON local/migration | admin, recruiter, hiring manager |
 | Telemetria | dado técnico ligado a IDs | sistema | custo e diagnóstico | JSON local/migration | admin/auditoria |
 
@@ -29,6 +30,7 @@ Finalidade atual é prova técnica com fixtures sintéticas. A base legal para c
 - Local: `.prisma-data`, ignorado pelo Git, somente fixtures representativas.
 - Banco planejado: PostgreSQL/Supabase com RLS.
 - Documento: Storage privado em QA; metadados e checksum na tabela `documents`.
+- Intake currículo-first: o PDF permanece no mesmo Storage privado, sob caminho iniciado por `organization_id`; `resume_intakes` guarda somente metadados, identificação mínima, decisão e erro sanitizado.
 - Embeddings: não implementados; quando existirem, são dados derivados sujeitos ao mesmo tenant, retenção e exclusão.
 - Modelos externos: nenhum ativo; provider futuro exige DPA/subprocessador, retenção e região documentados.
 
@@ -61,6 +63,8 @@ Nenhum está aprovado. Antes de ativar: finalidade, categorias enviadas, base le
 ## Decisões automatizadas
 
 Prisma auxilia, recomenda e explica. Não rejeita, aprova, contrata ou elimina automaticamente. Recomendação, decisão humana e resultado observado são registros separados. Contestação deve permitir revisão humana e acesso à explicação.
+
+Deduplicação é tenant-scoped e conservadora. E-mail ou telefone válidos são sinais fortes; nome é somente sinal possível. O sistema não expõe correspondências cross-tenant, não faz merge automático e não copia currículo integral para auditoria.
 
 ## Riscos abertos
 

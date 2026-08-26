@@ -26,6 +26,8 @@ Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. `platform_users`, hier
 - RPC privilegiada pública usa `security definer` somente quando há checagem explícita de ator, organização, papel e estado, `search_path` fixo e DML direto revogado.
 - O event trigger opcional `public.rls_auto_enable()` preserva execução apenas para papéis privilegiados; `PUBLIC`, `anon` e `authenticated` não recebem `EXECUTE`.
 - As queries web de domínio filtram explicitamente `organization_id` mesmo sob RLS para previsibilidade e performance.
+- Intake de currículo, identificação de duplicidade e resolução são permitidos apenas a Super Admin, Owner, Admin e Recruiter no escopo confirmado. `Member`, sessão sem membership e tenant divergente falham fechados.
+- Correspondências de identidade são consultadas dentro da organização pela RPC; a UI não recebe indicação de Pessoa existente em outro tenant.
 
 ## Evidência conectada em QA
 

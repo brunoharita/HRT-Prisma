@@ -24,6 +24,7 @@ import { PersonProfilePage } from "../pages/PersonProfilePage";
 import { PersonWorkspacePage } from "../pages/PersonWorkspacePage";
 import { ProfileReviewPage } from "../pages/ProfileReviewPage";
 import { ProfileVersionsPage } from "../pages/ProfileVersionsPage";
+import { ResumeImportPage } from "../pages/ResumeImportPage";
 import { UserFormPage } from "../pages/UserFormPage";
 import { UsersPage } from "../pages/UsersPage";
 import {
@@ -58,7 +59,7 @@ interface AppRoute {
   icon?: ReactNode;
   profileId?: string;
   profileMode?: "view" | "edit" | "create";
-  profileView?: "workspace" | "operations" | "document" | "review" | "versions";
+  profileView?: "workspace" | "operations" | "document" | "review" | "versions" | "import";
   documentId?: string;
   reviewId?: string;
   userId?: string;
@@ -319,6 +320,9 @@ function renderRouteContent(
   if (route.path === "/profiles/new" && activeMembership) {
     return <PersonFormPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
+  if (route.path === "/profiles" && route.profileView === "import" && activeMembership) {
+    return <ResumeImportPage activeMembership={activeMembership} onNavigate={onNavigate} />;
+  }
   if (route.path === "/profiles" && route.profileView === "operations" && activeMembership) {
     return <DocumentOperationsPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
@@ -494,8 +498,9 @@ function findRoute(pathname: string): AppRoute {
   const normalized = normalizePath(pathname);
   const exact = routes.find((route) => route.path === normalized);
   if (exact) return exact;
-  if (normalized === "/profiles/new") return { path: "/profiles/new", profileMode: "create", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };
+  if (normalized === "/profiles/new") return { path: "/profiles/new", profileMode: "create", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
+  if (normalized === "/profiles/import") return { path: "/profiles", profileView: "import", rule: reviewerRule };
   if (normalized === "/profiles/processes") return { path: "/profiles", profileView: "operations", rule: reviewerRule };
   const reviewMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)\/review\/([^/]+)$/.exec(normalized);
   if (reviewMatch?.[1] && reviewMatch[2] && reviewMatch[3]) return { path: "/profiles", profileId: reviewMatch[1], documentId: reviewMatch[2], reviewId: reviewMatch[3], profileView: "review", rule: reviewerRule };

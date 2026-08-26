@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ApartmentOutlined, DatabaseOutlined, TeamOutlined } from "@ant-design/icons";
-import { Alert, Badge, Empty, Skeleton, Statistic, Typography } from "antd";
+import { ApartmentOutlined, DatabaseOutlined, FileAddOutlined, TeamOutlined } from "@ant-design/icons";
+import { Alert, Badge, Button, Empty, Skeleton, Statistic, Typography } from "antd";
 import type { HomeSummary, PrismaDataRepository } from "../domain/prismaData";
 import type { OrganizationMembership } from "../shared/access";
 import type { PrismaNavigationItem } from "../ui/PrismaAppShell";
@@ -47,6 +47,19 @@ export function HomePage({ activeMembership, navigationItems, repository, onNavi
         extras={<Badge status="processing" text="Supabase QA" />}
       />
       {error ? <Alert message={error} showIcon type="error" /> : null}
+      {activeMembership.role !== "member" ? (
+        <PrismaCard className="prisma-curriculum-first-card">
+          <div>
+            <Typography.Title level={2}>Importar currículo</Typography.Title>
+            <Typography.Paragraph>
+              Importe um currículo e deixe o Prisma criar o cadastro e estruturar o Perfil profissional.
+            </Typography.Paragraph>
+          </div>
+          <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")} size="large" type="primary">
+            Importar currículo
+          </Button>
+        </PrismaCard>
+      ) : null}
       <section className="prisma-dashboard-grid" aria-label="Resumo da organização">
         {loading ? <HomeSkeleton /> : summary ? <HomeMetrics summary={summary} /> : null}
         {!loading && summary && summary.peopleCount === 0 && summary.structuredProfilesCount === 0 && summary.openVacanciesCount === 0 ? (

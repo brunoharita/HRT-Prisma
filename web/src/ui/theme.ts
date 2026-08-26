@@ -21,8 +21,8 @@ export const prismaTokens = {
     card: 12,
   },
   layout: {
-    sider: 248,
-    siderCollapsed: 76,
+    sider: 320,
+    siderCollapsed: 88,
     pageMax: 1680,
   },
 } as const;

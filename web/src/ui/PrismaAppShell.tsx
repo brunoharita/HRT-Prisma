@@ -10,7 +10,6 @@ import {
 import { Avatar, Button, Drawer, Dropdown, Layout, Menu, Select, Tooltip } from "antd";
 import type { MenuProps } from "antd";
 import type { OrganizationMembership } from "../shared/access";
-import darkBackgroundLogo from "../assets/brand/prisma-logo-dark-background.png";
 import { prismaTokens } from "./theme";
 
 export interface PrismaNavigationItem {
@@ -107,7 +106,7 @@ function SidebarContent({
           onNavigate("/");
           onNavigationComplete?.();
         }}>
-          <img src={darkBackgroundLogo} alt="Prisma" />
+          <img src="/assets/login/prisma-logo-light.png" alt="Prisma" />
         </a>
         {!mobile ? (
           <Tooltip title={collapsed ? "Expandir menu" : "Recolher menu"} placement="right">
@@ -184,7 +183,7 @@ function SidebarContent({
           trigger={["click"]}
         >
           <button className={["prisma-user-menu", collapsed ? "is-collapsed" : ""].join(" ")} type="button">
-            <Avatar className="prisma-user-avatar" size={36}>
+            <Avatar className="prisma-user-avatar" size={48}>
               {profileName.slice(0, 1).toUpperCase()}
             </Avatar>
             {!collapsed ? (

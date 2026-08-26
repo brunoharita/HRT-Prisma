@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.7.0
-last_verified: 2026-08-24
+version: 1.8.0
+last_verified: 2026-08-26
 ---
 
 # Estado atual do Prisma
@@ -11,7 +11,7 @@ last_verified: 2026-08-24
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch integrada verificada: `main`; implementação M2-C no commit `1aa6840`.
+- Branch integrada verificada: `main`; movimento currículo-first em validação na branch `codex/curriculum-first-intake`.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -23,6 +23,7 @@ last_verified: 2026-08-24
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
+- Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
 - Home autenticada com contagens persistidas de pessoas, perfis estruturados e vagas abertas da organização ativa.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, evidências, proveniência, inferências, incertezas e campos não identificados; contato privado somente para perfis administrativos autorizados.
@@ -36,7 +37,7 @@ last_verified: 2026-08-24
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck, build e testes locais do shell web.
-- 38 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C, PDF inválido, idempotência, concorrência, revisão imutável, auditoria e Member sem documento bruto.
+- 42 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/currículo-first, PDF inválido, idempotência, concorrência, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -47,6 +48,7 @@ last_verified: 2026-08-24
 - Boundary local em Edge Functions para `operator-sign-in`, `operator-password-reset` e `platform-users`.
 - Migrations M2-B com bucket privado `person-documents`, tentativas, páginas, drafts, eventos e RPC transacional `persist_person_extraction`.
 - Migrations M2-C com ledger de operações, locks de versão/tentativa, retries vinculados, revisões/alterações imutáveis e RPCs de aprovação atômica.
+- Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 
 ## Evidência remota
@@ -68,6 +70,7 @@ last_verified: 2026-08-24
 - Revisão `d0c80fbf-ddcb-4e25-ba60-e8e7c9da5828` aprovou atomicamente o perfil `b00c35f6-5409-4621-b02f-4ee7611b5449` v1; nove eventos foram verificados sem texto-fonte integral.
 - Super Admin, Owner, Admin e Recruiter foram autorizados no escopo; uma sessão Member recebeu zero documentos e não iniciou revisão.
 - Auditoria pós-rollout confirmou zero versões/tentativas/perfis atuais duplicados, RLS nas quatro tabelas M2-C e zero foreign keys novas sem índice de cobertura.
+- Intake currículo-first aplicado em QA em 2026-08-26; transação sintética comprovou replay sem duplicação, criação e vínculo documentais atômicos, candidato duplicado, DML direto negado, `Member` negado e auditoria sem texto-fonte.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
 Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
@@ -95,11 +98,11 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`.
 - A configuração local do M2-A endurece requisitos mínimos de senha, mas a proteção contra senhas vazadas do Supabase ainda não foi comprovada no ambiente remoto deste movimento.
 - O advisor de performance do QA ainda informa foreign keys sem índices de cobertura, índices ainda não utilizados e policies permissivas sobrepostas; não foram alterados fora do escopo deste movimento.
-- O advisor de segurança identifica as seis RPCs públicas M2-C como `security definer`; o ADR-011 registra o uso controlado com `search_path` fixo, autorização interna e DML direto revogado. A proteção contra senhas vazadas continua desabilitada.
+- O advisor de segurança identifica as RPCs públicas M2-C e currículo-first como `security definer`; ADR-011/ADR-012 registram o uso controlado com `search_path` fixo, autorização interna e DML direto revogado. A proteção contra senhas vazadas continua desabilitada.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
 
-Em 2026-08-24, M2-A, M2-B e M2-C foram aplicados ao único projeto remoto Prisma-QA. O M2-C comprovou cadastro idempotente, versões concorrentes, retry vinculado, conflito de lock, revisão por papéis, aprovação atômica, isolamento de Member e auditoria sanitizada. O frontend permanece local; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-26, M2-A, M2-B, M2-C e o backend currículo-first estão aplicados ao único projeto remoto Prisma-QA. O intake comprovou idempotência, identidade mínima, duplicidade tenant-scoped, resolução transacional, bloqueio de Member e auditoria sanitizada. O frontend currículo-first está implementado localmente; não há hosting nem ambiente de produção separado por decisão atual de operação interna.

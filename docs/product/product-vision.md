@@ -26,6 +26,11 @@ Hipótese ainda não validada comercialmente: transformar bases existentes de cu
 - Gaps e incertezas permanecem visíveis.
 - Currículo não autoriza inferência indiscriminada de atributos sensíveis.
 - Isolamento, privacidade, avaliação e versionamento nascem junto com o produto.
+- Currículo-first é o fluxo principal de entrada de Pessoas; cadastro manual é secundário.
+
+## Entrada de Pessoas
+
+Um currículo pode iniciar o cadastro de uma Pessoa sem que ela tenha sido previamente cadastrada. O Prisma extrai identificação mínima, verifica correspondências somente dentro da organização e cria a Pessoa quando há nome, contato válido e nenhuma ambiguidade relevante. Possível duplicidade ou identidade insuficiente exige resolução humana. Falha nunca cria uma Pessoa sem identidade suficiente.
 
 ## Resultado de longo prazo planejado
 

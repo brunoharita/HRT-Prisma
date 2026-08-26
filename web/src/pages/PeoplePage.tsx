@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useState } from "react";
-import { FileSearchOutlined, FilterOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { FileAddOutlined, FileSearchOutlined, FilterOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Input, Skeleton, Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { PersonWorkspaceSummary } from "../domain/personIngestion";
@@ -64,7 +64,8 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         actions={canManagePeople ? (
           <Space wrap>
             <Button icon={<FileSearchOutlined />} onClick={() => onNavigate("/profiles/processes")}>Processamento e revisões</Button>
-            <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/new")} type="primary">Nova Pessoa</Button>
+            <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/new")}>Cadastrar pessoa</Button>
+            <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")} type="primary">Importar currículo</Button>
           </Space>
         ) : undefined}
       />
