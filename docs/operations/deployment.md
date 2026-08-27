@@ -8,6 +8,7 @@ O projeto Supabase Prisma-QA é o único backend remoto atual e recebe migration
 
 - branch e commit identificados;
 - checks locais e CI aprovados;
+- scripts de instalação de dependências revisados e decididos explicitamente em `pnpm-workspace.yaml`; o `postinstall` não funcional do `tesseract.js` permanece bloqueado;
 - migration revisada e testada;
 - secrets no ambiente correto;
 - Context Pack atualizado;
