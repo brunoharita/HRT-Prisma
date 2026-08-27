@@ -16,10 +16,14 @@ export const canonicalSources = [
 ];
 export const outputPath = resolve(repositoryRoot, "TUDO_SOBRE_PRISMA.md");
 
+function normalizeSourceText(content) {
+  return content.replace(/\r\n?/g, "\n").trim();
+}
+
 export async function buildPrismaContext() {
   const sources = await Promise.all(canonicalSources.map(async (path) => ({
     path,
-    content: (await readFile(resolve(repositoryRoot, path), "utf8")).trim(),
+    content: normalizeSourceText(await readFile(resolve(repositoryRoot, path), "utf8")),
   })));
   const manifest = sources.map(({ path, content }) => `${path}:${createHash("sha256").update(content).digest("hex")}`).join("\n");
   const manifestHash = createHash("sha256").update(manifest).digest("hex");
