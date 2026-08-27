@@ -14,6 +14,7 @@ Privacy by design está definida e refletida na separação de PII, perfil e Sto
 | Idioma, ferramentas, competências | pessoal profissional e inferência possível | currículo/regras | busca e matching | perfil/evidência/inferência | papéis autorizados |
 | Documento bruto | pessoal | upload | fonte e auditoria | bucket privado `person-documents` em QA | super admin, owner, admin e recruiter no tenant |
 | Intake pré-Pessoa | pessoal e técnico | upload | resolver identidade e vínculo | staging tenant-scoped sem texto integral | super admin, owner, admin e recruiter no tenant |
+| Evidência espacial | pessoal profissional | seleção humana no PDF | sustentar correção ou complemento | página, região normalizada, método e trecho mínimo | super admin, owner, admin e recruiter no tenant |
 | Avaliação e matching | pessoal derivado | vaga + perfil | apoio à decisão | JSON local/migration | admin, recruiter, hiring manager |
 | Telemetria | dado técnico ligado a IDs | sistema | custo e diagnóstico | JSON local/migration | admin/auditoria |
 
@@ -31,12 +32,13 @@ Finalidade atual é prova técnica com fixtures sintéticas. A base legal para c
 - Banco planejado: PostgreSQL/Supabase com RLS.
 - Documento: Storage privado em QA; metadados e checksum na tabela `documents`.
 - Intake currículo-first: o PDF permanece no mesmo Storage privado, sob caminho iniciado por `organization_id`; `resume_intakes` guarda somente metadados, identificação mínima, decisão e erro sanitizado.
+- Evidência espacial: o PDF não é duplicado; a região referencia documento e versão. PDF.js e Tesseract.js processam localmente no browser e somente o recorte selecionado pode passar por OCR.
 - Embeddings: não implementados; quando existirem, são dados derivados sujeitos ao mesmo tenant, retenção e exclusão.
 - Modelos externos: nenhum ativo; provider futuro exige DPA/subprocessador, retenção e região documentados.
 
 ## Minimização
 
-Persistir apenas campos necessários à finalidade. Evidência usa trecho mínimo suficiente. Logs não recebem currículo, prompt completo com PII ou resposta integral. Dados privados ficam separados do perfil consultável.
+Persistir apenas campos necessários à finalidade. Evidência usa trecho mínimo suficiente e limita a seleção persistida a 2.000 caracteres. Logs M5 recebem IDs, ação e versões, não o trecho selecionado. Logs não recebem currículo, prompt completo com PII ou resposta integral. Dados privados ficam separados do perfil consultável.
 
 ## Retenção e exclusão
 

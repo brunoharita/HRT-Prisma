@@ -2,7 +2,7 @@
 
 ## Estado
 
-Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. `platform_users`, hierarquia `Grupo -> Empresa`, username, recuperação, gestão de usuários, ingestão, revisão e Storage privado são aplicados no boundary correspondente e negam acesso quando sessão, status, papel ou tenant não são confirmados.
+Foundation, M2-A, M2-B, M2-C e M5 estão ativos no Prisma-QA. `platform_users`, hierarquia `Grupo -> Empresa`, username, recuperação, gestão de usuários, ingestão, revisão com evidência espacial e Storage privado são aplicados no boundary correspondente e negam acesso quando sessão, status, papel ou tenant não são confirmados.
 
 ## Papéis
 
@@ -28,10 +28,13 @@ Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. `platform_users`, hier
 - As queries web de domínio filtram explicitamente `organization_id` mesmo sob RLS para previsibilidade e performance.
 - Intake de currículo, identificação de duplicidade e resolução são permitidos apenas a Super Admin, Owner, Admin e Recruiter no escopo confirmado. `Member`, sessão sem membership e tenant divergente falham fechados.
 - Correspondências de identidade são consultadas dentro da organização pela RPC; a UI não recebe indicação de Pessoa existente em outro tenant.
+- Regiões, vínculos e eventos M5 são legíveis somente por Super Admin, Owner, Admin e Recruiter autorizados. `authenticated` não possui DML direto; `record_profile_review_evidence` valida escopo, estado, lock, versão e coordenadas antes de qualquer mutação.
 
 ## Evidência conectada em QA
 
 Em 2026-08-24, QA confirma foundation, corte de papéis M2-A, Edge Functions de login/recuperação/usuários, M2-B e M2-C. A sessão `harita.super` foi validada como Super Admin. Operações sintéticas comprovaram versões concorrentes 1/2/3, retry vinculado, revisão, aprovação atômica e replay idempotente. Owner, Admin e Recruiter revisaram no próprio escopo; Member recebeu zero documentos e não iniciou revisão.
+
+Em 2026-08-27, uma transação revertida confirmou a mutação M5 para Admin. Coordenada fora do contrato e sessão Member falharam antes de persistir. As três tabelas M5 mantêm RLS e somente leitura direta para papéis revisores.
 
 ## Fail-closed
 
@@ -39,7 +42,7 @@ Usuário sem sessão, membership, tenant, papel conhecido ou versão de polític
 
 ## Operações privilegiadas
 
-Provisionamento inicial, login por username, recuperação de acesso, alteração de perfil/escopo, exclusão, retenção e exportação em massa exigem endpoint backend, checagem explícita, auditoria e proteção contra replay. `security definer` não é solução genérica de permissão; no M2-C ele é uma exceção controlada para transações compostas com DML direto revogado.
+Provisionamento inicial, login por username, recuperação de acesso, alteração de perfil/escopo, exclusão, retenção e exportação em massa exigem endpoint backend, checagem explícita, auditoria e proteção contra replay. `security definer` não é solução genérica de permissão; no M2-C/M5 ele é uma exceção controlada para transações compostas com DML direto revogado.
 
 ## Testes obrigatórios antes de QA
 

@@ -2,7 +2,7 @@
 
 ## Estado e objetivo
 
-Estado: implementado localmente e conectado ao único projeto Supabase remoto interno. A arquitetura prova um slice de Talent Intelligence por CLI e um shell web React com Supabase Auth, rotas protegidas, App Shell autenticado, gestão de Usuários/Pessoas, ingestão M2-B e confiabilidade/revisão M2-C, sem LLM remoto. O CLI continua usando JSON tenant-scoped; o frontend usa PostgreSQL, RLS, Storage privado, RPCs controladas e Edge Functions no Prisma-QA.
+Estado: implementado localmente e conectado ao único projeto Supabase remoto interno. A arquitetura prova um slice de Talent Intelligence por CLI e um shell web React com Supabase Auth, rotas protegidas, App Shell autenticado, gestão de Usuários/Pessoas, ingestão M2-B, confiabilidade M2-C e revisão M5 com evidência espacial, sem LLM remoto. O CLI continua usando JSON tenant-scoped; o frontend usa PostgreSQL, RLS, Storage privado, RPCs controladas e Edge Functions no Prisma-QA.
 
 ## Fluxo atual
 
@@ -34,6 +34,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Web shell | React, Ant Design, App Shell, sessão Supabase, organization ativa, Usuários, Pessoas e route guards | `web/src` | local conectado ao remoto interno |
 | Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | ativo e comprovado |
 | Confiabilidade M2-C | central de documentos, retry, revisão humana, comparação e aprovação | `web/src/pages`, `personIngestionService`, RPCs | ativo e comprovado |
+| Evidência espacial M5 | PDF-first, seleção normalizada, OCR local por região, vínculos e histórico | `DocumentEvidenceViewer`, `StructuredReviewPanel`, RPC M5 | ativo e comprovado |
 | Intake currículo-first | PDF pré-Pessoa, identidade mínima, duplicidade e resolução transacional | `ResumeImportPage`, `resume_intakes`, RPCs | implementado localmente |
 | Database contract | Modelo, integridade, grants, RLS, Storage e RPC atômica | `supabase/migrations` | ativo no Prisma-QA |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
@@ -49,6 +50,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - Documento bruto e dados privados são separados do perfil consultável no schema de produção.
 - A UI existente continua consumidora dos contratos, nunca fonte de autorização ou verdade.
 - O intake pré-Pessoa é tenant-owned desde o primeiro registro e converge para o pipeline M2-B/M2-C após uma única resolução explícita.
+- O frontend nunca inventa coordenadas. Uma nova região M5 nasce de seleção explícita na versão do documento exibida e o banco valida página, retângulo, tenant e lock.
 
 ## Persistência
 

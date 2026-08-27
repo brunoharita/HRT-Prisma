@@ -17,6 +17,7 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 | `postgres_rls_contract` | implementado | ativo | não separado | Foundation, M2-A, M2-B, M2-C e intake currículo-first aplicados |
 | `pdf_ocr_ingestion` | ativo | ativo | não separado | PDF.js nativo, Tesseract seletivo, Storage privado e RPC atômica |
 | `curriculum_first_intake` | ativo | ativo | não separado | Intake pré-Pessoa, identidade mínima, deduplicação tenant-scoped e resolução transacional |
+| `spatial_cv_evidence_review` | ativo | ativo | não separado | PDF-first, regiões normalizadas, OCR local por seleção e histórico imutável |
 | `live_llm_extraction` | não implementado | não implementado | não implementado | Requer benchmark e ADR |
 | `vector_embeddings` | não implementado | não implementado | não implementado | Requer necessidade medida |
 

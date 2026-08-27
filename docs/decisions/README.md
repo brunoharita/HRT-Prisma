@@ -25,6 +25,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-013](ADR-013-canonical-knowledge-organization-overlay.md) | accepted | Canonical Prisma Knowledge with organization overlay |
 | [ADR-014](ADR-014-knowledge-agent-trusted-sources.md) | accepted | Knowledge Agent with trusted-source and no-PII policy |
 | [ADR-015](ADR-015-knowledge-triggered-reinterpretation.md) | accepted | Knowledge-triggered profile reinterpretation through M2-C |
+| [ADR-016](ADR-016-spatial-cv-evidence-review.md) | accepted | PDF-first review with normalized spatial evidence and immutable human history |
 
 ## Rules
 

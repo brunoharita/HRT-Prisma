@@ -16,6 +16,7 @@
 | OCR | scan legível com fallback seletivo | página insuficiente após OCR | Tesseract local comprovado em uma página; fixture inicial insuficiente foi recusada e fixture válida gerou 360 caracteres úteis |
 | Parsing | seções conhecidas | variação, datas, caracteres | golden parcial |
 | Revisão manual | corrigir e aprovar | tentar promover parcial sem revisão | M2-C ativo no remoto interno |
+| Evidência espacial M5 | selecionar região, corrigir/complementar/substituir e navegar no histórico | coordenada/página/versão inválida, Member, cross-tenant e DML direto | local/QA aprovado; browser visual requerido |
 | Duplicidade | primeira importação | mesma chave com payload divergente e concorrência | M2-C local/QA aprovado |
 | Vagas | requisitos claros | vazio, incompatível, cross-tenant | contrato parcial |
 | Matching | atendido/parcial/gap | insuficiência e requisito ausente | golden testado |
@@ -34,7 +35,7 @@
 | Acessibilidade | navegação semântica, labels, foco, contraste | teclado/screen reader | shell público local; autenticado conectado pendente |
 | Responsividade | desktop, sidebar recolhida, drawer mobile | overflow, perda de navegação e quebra do formulário de usuário | desktop e viewport 390x844 conectados; sem overflow horizontal |
 | Regression | suites estáveis | prompt/modelo/regra piora resultado | golden ativo |
-| Migrations | RLS/grants/tenant | missing policy, unsafe delete, role drift e group drift | foundation, M2-A, M2-B e M2-C ativos no QA; advisors executados |
+| Migrations | RLS/grants/tenant | missing policy, unsafe delete, role drift e group drift | foundation, M2-A, M2-B, M2-C e M5 ativos no QA; advisors executados |
 | Secrets | nenhum no repositório | key em código, log ou bundle | lint/scan local |
 | Supply chain | lockfile fixado | advisory high/critical | CI planejado |
 
