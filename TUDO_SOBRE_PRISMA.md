@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 4e169981548ed0601971c0f940b9ddc659a3b6b0b42398b1ab163255e4d042f2
+source_manifest_sha256: dbfb624efb5e8817e463b1e73e153ed716fadba0d251a3cce347d1cb31014b1c
 -->
 
 # Tudo sobre o Prisma
@@ -157,9 +157,9 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 ## Verified current state
 
-The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability/review, and a curriculum-first intake that can resolve or create a Person before converging to the existing document pipeline.
+The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace with normalized spatial evidence and immutable human history.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, M2-C, the private document bucket, controlled transactional RPCs, and the three operator Edge Functions active. Connected evidence covers concurrent version allocation, idempotent retry, reviewer-role isolation, immutable review history, and atomic profile approval. By current product decision there is no separate production project or frontend hosting; the system is used only internally through the local frontend. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, M2-C, M5, the private document bucket, controlled transactional RPCs, and the three operator Edge Functions active. Connected evidence covers concurrent version allocation, idempotent retry, reviewer-role isolation, normalized-coordinate rejection, immutable review history, and atomic profile approval. By current product decision there is no separate production project or frontend hosting; the system is used only internally through the local frontend. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -312,8 +312,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 1.9.0
-last_verified: 2026-08-26
+version: 2.0.0
+last_verified: 2026-08-27
 ---
 
 # Estado atual do Prisma
@@ -321,7 +321,7 @@ last_verified: 2026-08-26
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch integrada verificada: `main`; movimento currículo-first em validação na branch `codex/curriculum-first-intake`.
+- Branch integrada verificada: `main`; movimento M5 em validação na branch `codex/m5-cv-evidence`.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -333,6 +333,7 @@ last_verified: 2026-08-26
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
+- Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável.
 - Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
@@ -350,7 +351,7 @@ last_verified: 2026-08-26
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck, build e testes locais do shell web.
-- 42 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/currículo-first, PDF inválido, idempotência, concorrência, revisão imutável, auditoria e Member sem documento bruto.
+- 57 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -361,6 +362,7 @@ last_verified: 2026-08-26
 - Boundary local em Edge Functions para `operator-sign-in`, `operator-password-reset` e `platform-users`.
 - Migrations M2-B com bucket privado `person-documents`, tentativas, páginas, drafts, eventos e RPC transacional `persist_person_extraction`.
 - Migrations M2-C com ledger de operações, locks de versão/tentativa, retries vinculados, revisões/alterações imutáveis e RPCs de aprovação atômica.
+- Migrations M5 `20260827034147_m5_spatial_cv_evidence`, `20260827041613_m5_spatial_evidence_fk_indexes` e `20260827042829_m5_spatial_evidence_idempotent_replay` com regiões normalizadas, vínculos, eventos append-only, RLS, índices e RPC transacional.
 - Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 
@@ -387,6 +389,8 @@ last_verified: 2026-08-26
 - Movimento 4 aplicado em QA em 2026-08-26 pelas migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls`; 16 tabelas estão com RLS, 17 policies, zero grants anônimos de RPC Knowledge, zero colunas vetoriais e CBO/ESCO/O*NET catalogados com versões sem checksum inventado.
 - Transações sintéticas com rollback comprovaram precedência Organization sobre Global, fallback Global, falha segura para aliases ambíguos, leitura Global por autenticado sem vínculo e ocultação de Knowledge de outra organização.
 - Edge Function `knowledge-agent` v2 está `ACTIVE` com `verify_jwt=true`; não houve chamada externa porque flag, modelo, credencial e budgets continuam intencionalmente inativos.
+- M5 aplicado em QA em 2026-08-27: três tabelas com RLS e DML direto revogado; 18 evidências originais vinculadas sem coordenadas inventadas; zero regiões ou vínculos inválidos.
+- Transações sintéticas revertidas comprovaram registro espacial por Admin, replay idempotente com `reused = true`, rejeição de coordenada fora do intervalo e negação de sessão Member. O advisor não aponta foreign key M5 sem índice de cobertura.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
 Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
@@ -416,6 +420,8 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - A configuração local do M2-A endurece requisitos mínimos de senha, mas a proteção contra senhas vazadas do Supabase ainda não foi comprovada no ambiente remoto deste movimento.
 - O hardening M4 eliminou do advisor as foreign keys Knowledge sem cobertura e a policy Knowledge sobreposta. Os índices novos aparecem como ainda não utilizados porque as filas estão vazias. O advisor de segurança sinaliza quatro RPCs Knowledge `security definer`; o uso é intencional e controlado por `search_path` fixo, autorização interna por papel/tenant e DML direto revogado.
 - O advisor de segurança também identifica RPCs públicas M2-C e currículo-first como `security definer`; ADR-011/ADR-012 registram o uso controlado. A proteção contra senhas vazadas continua desabilitada.
+- O advisor identifica a RPC M5 `record_profile_review_evidence` como `security definer`; o uso intencional, a autorização interna, o `search_path` vazio e o DML direto revogado estão registrados no ADR-016. Índices M5 recém-criados aparecem como não utilizados porque nenhum evento espacial foi persistido após os testes revertidos.
+- O build e os contratos responsivos do workspace M5 estão aprovados, mas a inspeção visual autenticada desktop/mobile permanece pendente porque o navegador disponível não possuía sessão e não havia credencial de QA no ambiente.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - Os snapshots oficiais CBO/ESCO/O*NET ainda não foram baixados, validados por checksum, diffados ou publicados. O catálogo e os adapters estão prontos, sem simular uma carga que não ocorreu.
 - Licenças e atribuições CBO/ESCO/O*NET estão catalogadas, mas a redistribuição de pacotes adaptados, especialmente CBO CC BY-ND, exige revisão jurídica antes de qualquer exposição externa.
@@ -424,7 +430,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-26, M2-A, M2-B, M2-C, currículo-first e a Fundação de Conhecimento do Movimento 4 estão aplicados ao único projeto remoto Prisma-QA. O M4 comprovou precedência Organization/Global, fallback, ambiguidade segura, isolamento tenant, RLS e hardening de índices. O Knowledge Agent está implantado, mas a chamada externa permanece deliberadamente desativada. Os frontends continuam locais; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-27, M2-A, M2-B, M2-C, currículo-first, M4 e M5 estão aplicados ao único projeto remoto Prisma-QA. O M5 comprovou contrato espacial normalizado, compatibilidade histórica sem coordenadas fabricadas, RLS, papel de revisor, rejeição de coordenadas inválidas e índices de foreign keys. O Knowledge Agent está implantado, mas a chamada externa permanece deliberadamente desativada. Os frontends continuam locais; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 

@@ -1,0 +1,288 @@
+import { useMemo, useState } from "react";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  FileSearchOutlined,
+  HistoryOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Button, Drawer, Empty, Input, Select, Space, Tabs, Tag, Timeline, Typography } from "antd";
+import type { ProfileReviewWorkspace, StructuredDraft } from "../../domain/personIngestion";
+import { fieldPathMatches, topLevelReviewField } from "../../domain/spatialEvidence";
+
+interface StructuredReviewPanelProps {
+  workspace: ProfileReviewWorkspace;
+  draft: StructuredDraft;
+  editable: boolean;
+  canStartSelection: boolean;
+  selectedFieldPath: string;
+  activeLinkId: string | null;
+  reason: string;
+  onReasonChange: (reason: string) => void;
+  onDraftChange: (draft: StructuredDraft) => void;
+  onFieldSelect: (fieldPath: string) => void;
+  onStartSelection: (fieldPath: string) => void;
+  onEvidenceNavigate: (input: { fieldPath: string; linkId: string; pageNumber: number; regionId: string | null }) => void;
+}
+
+export function StructuredReviewPanel({
+  workspace,
+  draft,
+  editable,
+  canStartSelection,
+  selectedFieldPath,
+  activeLinkId,
+  reason,
+  onReasonChange,
+  onDraftChange,
+  onFieldSelect,
+  onStartSelection,
+  onEvidenceNavigate,
+}: StructuredReviewPanelProps) {
+  const [experienceIndex, setExperienceIndex] = useState(0);
+  const [educationIndex, setEducationIndex] = useState(0);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const activeTab = tabForField(selectedFieldPath);
+
+  function selectTab(key: string) {
+    const defaults: Record<string, string> = {
+      summary: "summary",
+      experience: `experiences.${Math.min(experienceIndex, Math.max(draft.experiences.length - 1, 0))}.role`,
+      education: `education.${Math.min(educationIndex, Math.max(draft.education.length - 1, 0))}.course`,
+      skills: "competencies",
+      languages: "languages",
+      other: "certifications",
+    };
+    onFieldSelect(defaults[key] ?? "summary");
+  }
+
+  const evidenceLinks = workspace.evidenceLinks.filter((link) => link.state === "active" && fieldPathMatches(link.fieldPath, selectedFieldPath));
+  const fieldChanges = workspace.changes.filter((change) => topLevelReviewField(selectedFieldPath) === change.fieldPath);
+  const evidenceEvents = workspace.evidenceEvents.filter((event) => fieldPathMatches(event.fieldPath, selectedFieldPath));
+
+  return (
+    <section aria-label="Revisão estruturada" className="prisma-structured-review">
+      <div className="prisma-review-panel-topline">
+        <Typography.Text type="secondary">Modo de edição</Typography.Text>
+        <Tag color="blue"><FileSearchOutlined /> Assistida por evidência</Tag>
+      </div>
+      <Tabs
+        activeKey={activeTab}
+        className="prisma-review-tabs"
+        items={[
+          { key: "summary", label: "Resumo", children: <SummaryEditor {...commonProps()} /> },
+          { key: "experience", label: `Experiência (${draft.experiences.length})`, children: ExperienceEditor() },
+          { key: "education", label: `Formação (${draft.education.length})`, children: EducationEditor() },
+          { key: "skills", label: "Competências", children: TagField({ fieldPath: "competencies", label: "Competências explícitas" }) },
+          { key: "languages", label: "Idiomas", children: TagField({ fieldPath: "languages", label: "Idiomas" }) },
+          { key: "other", label: "Outros", children: <div className="prisma-review-field-stack">{TagField({ fieldPath: "certifications", label: "Certificações" })}{TagField({ fieldPath: "uncertainties", label: "Incertezas" })}{TagField({ fieldPath: "notIdentified", label: "Não identificados" })}</div> },
+        ]}
+        onChange={selectTab}
+      />
+
+      <section className="prisma-linked-evidence" aria-labelledby="linked-evidence-title">
+        <div className="prisma-review-section-title">
+          <div><Typography.Text id="linked-evidence-title" strong>Evidências vinculadas</Typography.Text><small>{selectedFieldPath}</small></div>
+          <Button disabled={!editable || !canStartSelection} icon={<PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} size="small">Adicionar evidência</Button>
+        </div>
+        {evidenceLinks.length ? (
+          <div className="prisma-evidence-card-grid">
+            {evidenceLinks.map((link) => {
+              const original = link.evidenceId ? workspace.originalEvidence.find((item) => item.id === link.evidenceId) : null;
+              const region = link.spatialRegionId ? workspace.spatialRegions.find((item) => item.id === link.spatialRegionId) : null;
+              const pageNumber = region?.pageNumber ?? original?.sourcePage;
+              return (
+                <button
+                  className={[
+                    "prisma-evidence-card",
+                    `prisma-evidence-card--${link.linkKind}`,
+                    activeLinkId === link.id ? "is-active" : "",
+                  ].filter(Boolean).join(" ")}
+                  disabled={!pageNumber}
+                  key={link.id}
+                  onClick={() => pageNumber && onEvidenceNavigate({ fieldPath: link.fieldPath, linkId: link.id, pageNumber, regionId: region?.id ?? null })}
+                  type="button"
+                >
+                  <span>{link.linkKind === "original" ? "Original (extração)" : link.linkKind === "reviewer" ? "Revisor (selecionada)" : "Complementar"}</span>
+                  <strong>{pageNumber ? `Página ${pageNumber}` : "Página não identificada"}</strong>
+                  <p>{region?.selectedText ?? original?.quotedText ?? "Evidência espacial sem texto reconhecido."}</p>
+                  {!region && original ? <small>Sem região espacial; coordenadas não foram inferidas.</small> : null}
+                </button>
+              );
+            })}
+          </div>
+        ) : <Empty description="Sem evidência vinculada" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+        <Button block className="prisma-add-evidence-card" disabled={!editable || !canStartSelection} icon={<PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} type="dashed">
+          Selecione uma nova área no documento
+        </Button>
+      </section>
+
+      {editable ? (
+        <section className="prisma-correction-reason">
+          <Typography.Text strong>Justificativa da correção</Typography.Text>
+          <Input.TextArea
+            aria-label="Justificativa da correção"
+            onChange={(event) => onReasonChange(event.target.value)}
+            placeholder="Necessária para alterações manuais sem uma operação de evidência autoexplicativa."
+            rows={3}
+            value={reason}
+          />
+          <Typography.Text type="secondary">Seleções explícitas registram automaticamente a operação; divergências interpretativas continuam exigindo justificativa.</Typography.Text>
+        </section>
+      ) : null}
+
+      <section className="prisma-field-history">
+        <div className="prisma-review-section-title">
+          <Typography.Text strong><HistoryOutlined /> Histórico do campo</Typography.Text>
+          <Button onClick={() => setHistoryOpen(true)} size="small" type="link">Histórico completo</Button>
+        </div>
+        {fieldChanges.length || evidenceEvents.length ? (
+          <Timeline items={compactHistory(fieldChanges, evidenceEvents).slice(0, 4)} />
+        ) : <Empty description="Nenhuma intervenção humana neste campo." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+      </section>
+
+      <Drawer open={historyOpen} onClose={() => setHistoryOpen(false)} placement="right" size="large" title="Histórico completo da revisão">
+        <Timeline items={fullHistory(workspace)} />
+      </Drawer>
+    </section>
+  );
+
+  function commonProps() {
+    return { workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect };
+  }
+
+  function ExperienceEditor() {
+    if (draft.experiences.length === 0) return <Empty description="Nenhuma experiência identificada. Use uma região do currículo para criar uma nova informação." />;
+    const index = Math.min(experienceIndex, draft.experiences.length - 1);
+    const reviewed = draft.experiences[index]!;
+    const extracted = workspace.extractedData.experiences[index];
+    const update = (patch: Partial<typeof reviewed>) => onDraftChange({ ...draft, experiences: draft.experiences.map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item) });
+    return (
+      <div className="prisma-entity-review">
+        <EntityNavigator count={draft.experiences.length} index={index} label="Experiência" onChange={(next) => { setExperienceIndex(next); onFieldSelect(`experiences.${next}.role`); }} />
+        <ReviewField editable={editable} extracted={extracted?.organization ?? "Não identificado"} fieldPath={`experiences.${index}.organization`} label="Empresa" onChange={(value) => update({ organization: value })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.organization`)} value={reviewed.organization} />
+        <ReviewField editable={editable} extracted={extracted?.role ?? "Não identificado"} fieldPath={`experiences.${index}.role`} label="Cargo" onChange={(value) => update({ role: value })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.role`)} value={reviewed.role} />
+        <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={`experiences.${index}.period`} label="Período" onChange={(value) => update({ period: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.period`)} value={reviewed.period ?? ""} />
+        <ReviewField editable={editable} extracted={extracted?.evidenceText ?? "Não identificado"} fieldPath={`experiences.${index}.description`} label="Descrição / Principais atividades" multiline onChange={(value) => update({ description: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.description`)} value={reviewed.description ?? reviewed.evidenceText} />
+      </div>
+    );
+  }
+
+  function EducationEditor() {
+    if (draft.education.length === 0) return <Empty description="Nenhuma formação identificada. Use uma região do currículo para criar uma nova informação." />;
+    const index = Math.min(educationIndex, draft.education.length - 1);
+    const reviewed = draft.education[index]!;
+    const extracted = workspace.extractedData.education[index];
+    const update = (patch: Partial<typeof reviewed>) => onDraftChange({ ...draft, education: draft.education.map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item) });
+    return (
+      <div className="prisma-entity-review">
+        <EntityNavigator count={draft.education.length} index={index} label="Formação" onChange={(next) => { setEducationIndex(next); onFieldSelect(`education.${next}.course`); }} />
+        <ReviewField editable={editable} extracted={extracted?.course ?? "Não identificado"} fieldPath={`education.${index}.course`} label="Curso" onChange={(value) => update({ course: value })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `education.${index}.course`)} value={reviewed.course} />
+        <ReviewField editable={editable} extracted={extracted?.institution ?? "Não identificado"} fieldPath={`education.${index}.institution`} label="Instituição" onChange={(value) => update({ institution: value })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `education.${index}.institution`)} value={reviewed.institution} />
+        <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={`education.${index}.period`} label="Período" onChange={(value) => update({ period: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `education.${index}.period`)} value={reviewed.period ?? ""} />
+      </div>
+    );
+  }
+
+  function TagField({ fieldPath, label }: { fieldPath: "certifications" | "languages" | "competencies" | "uncertainties" | "notIdentified"; label: string }) {
+    return (
+      <div className={["prisma-review-field", selectedFieldPath === fieldPath ? "is-selected" : ""].join(" ")} onClick={() => onFieldSelect(fieldPath)}>
+        <Typography.Text strong>{label}</Typography.Text>
+        <div className="prisma-review-value-grid">
+          <ValueSurface label="Extraído pelo Prisma" value={workspace.extractedData[fieldPath].join(", ") || "Não identificado"} />
+          <div className="prisma-reviewed-surface"><small>Revisado por você</small><Select disabled={!editable} mode="tags" onChange={(values) => onDraftChange({ ...draft, [fieldPath]: values })} open={false} tokenSeparators={[","]} value={draft[fieldPath]} /></div>
+        </div>
+      </div>
+    );
+  }
+}
+
+interface CommonEditorProps {
+  workspace: ProfileReviewWorkspace;
+  draft: StructuredDraft;
+  editable: boolean;
+  selectedFieldPath: string;
+  onDraftChange: (draft: StructuredDraft) => void;
+  onFieldSelect: (fieldPath: string) => void;
+}
+
+function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect }: CommonEditorProps) {
+  return <ReviewField editable={editable} extracted={workspace.extractedData.summary ?? "Não identificado"} fieldPath="summary" label="Resumo profissional" multiline onChange={(value) => onDraftChange({ ...draft, summary: value || null })} onSelect={onFieldSelect} selected={selectedFieldPath === "summary"} value={draft.summary ?? ""} />;
+}
+
+function ReviewField({ label, fieldPath, extracted, value, editable, multiline = false, selected, onSelect, onChange }: {
+  label: string;
+  fieldPath: string;
+  extracted: string;
+  value: string;
+  editable: boolean;
+  multiline?: boolean;
+  selected: boolean;
+  onSelect: (fieldPath: string) => void;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className={["prisma-review-field", selected ? "is-selected" : ""].join(" ")} onClick={() => onSelect(fieldPath)}>
+      <Typography.Text strong>{label}</Typography.Text>
+      <div className="prisma-review-value-grid">
+        <ValueSurface label="Extraído pelo Prisma" value={extracted} />
+        <div className="prisma-reviewed-surface"><small>Revisado por você</small>{multiline ? <Input.TextArea disabled={!editable} onFocus={() => onSelect(fieldPath)} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input disabled={!editable} onFocus={() => onSelect(fieldPath)} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
+      </div>
+    </div>
+  );
+}
+
+function ValueSurface({ label, value }: { label: string; value: string }) {
+  return <div className="prisma-extracted-surface"><small>{label}</small><p>{value}</p></div>;
+}
+
+function EntityNavigator({ label, index, count, onChange }: { label: string; index: number; count: number; onChange: (index: number) => void }) {
+  return (
+    <div className="prisma-entity-navigator">
+      <Button aria-label={`${label} anterior`} disabled={index <= 0} icon={<ArrowLeftOutlined />} onClick={() => onChange(index - 1)} size="small" />
+      <Typography.Text>{label} {index + 1} de {count}</Typography.Text>
+      <Button aria-label={`Próxima ${label.toLowerCase()}`} disabled={index >= count - 1} icon={<ArrowRightOutlined />} onClick={() => onChange(index + 1)} size="small" />
+    </div>
+  );
+}
+
+function tabForField(fieldPath: string): string {
+  if (fieldPath.startsWith("experiences.")) return "experience";
+  if (fieldPath.startsWith("education.")) return "education";
+  if (fieldPath === "competencies") return "skills";
+  if (fieldPath === "languages") return "languages";
+  if (["certifications", "uncertainties", "notIdentified"].includes(fieldPath)) return "other";
+  return "summary";
+}
+
+function compactHistory(changes: ProfileReviewWorkspace["changes"], events: ProfileReviewWorkspace["evidenceEvents"]) {
+  return [
+    ...changes.map((change) => ({ createdAt: change.createdAt, content: <HistoryEntry actor={change.actorAuthUserId} date={change.createdAt} description={change.reason} title="Valor alterado" /> })),
+    ...events.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={event.reason} title={eventLabel(event.eventType)} /> })),
+  ].sort((left, right) => right.createdAt.localeCompare(left.createdAt)).map((item) => ({ content: item.content }));
+}
+
+function fullHistory(workspace: ProfileReviewWorkspace) {
+  return [
+    ...workspace.changes.map((change) => ({ createdAt: change.createdAt, content: <HistoryEntry actor={change.actorAuthUserId} date={change.createdAt} description={`${change.reason}\nDe: ${formatHistoryValue(change.previousValue)}\nPara: ${formatHistoryValue(change.reviewedValue)}`} title={`Valor alterado · ${change.fieldPath}`} /> })),
+    ...workspace.evidenceEvents.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={event.reason} title={`${eventLabel(event.eventType)} · ${event.fieldPath}`} /> })),
+    ...workspace.revisions.map((revision) => ({ createdAt: revision.createdAt, content: <HistoryEntry actor={revision.actorAuthUserId} date={revision.createdAt} description={revision.changeReason ?? "Revisão versionada."} title={`Revisão ${revision.revisionNumber}`} /> })),
+  ].sort((left, right) => right.createdAt.localeCompare(left.createdAt)).map((item) => ({ content: item.content }));
+}
+
+function HistoryEntry({ title, date, actor, description }: { title: string; date: string; actor: string; description: string }) {
+  return <div className="prisma-history-entry"><strong>{title}</strong><small>{formatDate(date)} · {actor}</small><p>{description}</p></div>;
+}
+
+function eventLabel(event: ProfileReviewWorkspace["evidenceEvents"][number]["eventType"]): string {
+  return ({ human_region_added: "Evidência humana adicionada", review_evidence_replaced: "Evidência substituída", complementary_evidence_added: "Evidência complementar adicionada", new_information_created: "Nova informação criada" })[event];
+}
+
+function formatHistoryValue(value: unknown): string {
+  const rendered = typeof value === "string" ? value : JSON.stringify(value);
+  return rendered && rendered.length > 180 ? `${rendered.slice(0, 177)}...` : rendered ?? "Não identificado";
+}
+
+function formatDate(value: string): string {
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
+}

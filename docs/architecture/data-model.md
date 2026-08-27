@@ -2,7 +2,7 @@
 
 ## Estado
 
-O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M2-A, M2-B e M2-C estão ativos no Prisma-QA. Não existe schema de produção separado provisionado.
+O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M2-A, M2-B, M2-C e M5 estão ativos no Prisma-QA. Não existe schema de produção separado provisionado.
 
 ## Agregados
 
@@ -14,6 +14,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, checksum, tentativa, resultado e idempotência por operação |
 | Intake currículo-first | `resume_intakes` | PDF tenant-scoped, identidade mínima e resolução única antes do documento M2-B |
 | Revisão humana | `profile_reviews`, `profile_review_revisions`, `profile_review_changes` | Rascunho, lock otimista, decisão por campo e aprovação rastreável |
+| Evidência espacial | `spatial_evidence_regions`, `profile_review_evidence_links`, `profile_review_evidence_events` | Região normalizada, vínculo por campo, substituição não destrutiva e histórico imutável |
 | Conhecimento | `professional_profiles`, `evidence`, `inferences`, `inference_evidence` | Fato e inferência não se confundem |
 | Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
 | Avaliação | `match_evaluations` | Contextual e versionada |
@@ -32,6 +33,8 @@ RLS está habilitado em toda tabela pública. Políticas usam `TO authenticated`
 Estados de documento implementados: `pending`, `received`, `processing`, `processed`, `ready_for_review`, `in_review`, `approved`, `failed`, `extraction_failed`, `needs_manual_review`, `unsupported_format`. O processamento registra validação, extração nativa, OCR seletivo, estruturação, revisão, aprovação e falhas específicas em tentativas imutáveis. Falhas registram categoria, motivo, mensagem técnica sanitizável, versão e possibilidade de reprocessamento.
 
 `document_operations` impede replay divergente e devolve o resultado anterior para a mesma chave/fingerprint. Locks por pessoa/documento serializam versões. A revisão mantém histórico imutável de alterações e somente `approve_profile_review` promove uma nova versão de perfil, com uma única versão atual por pessoa.
+
+`spatial_evidence_regions` exige `organization_id`, documento, versão, review, página e coordenadas `x/y/width/height` entre 0 e 1, inclusive os limites somados. `profile_review_evidence_links` referencia exatamente uma evidência original ou uma região espacial. `profile_review_evidence_events` é append-only. A RPC M5 cria região, vínculo, revisão e evento atomicamente; evidências históricas anteriores permanecem válidas sem coordenadas.
 
 `resume_intakes` nasce com `organization_id`, chave idempotente, checksum e caminho privado. E-mail e telefone normalizados suportam correspondência forte; nome normalizado é apenas sinal possível. `resolve_resume_intake` bloqueia a operação, cria ou vincula a Pessoa e registra o documento na mesma transação. Somente depois o fluxo entra nas tentativas, drafts, evidências e revisão M2-B/M2-C.
 

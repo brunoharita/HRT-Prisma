@@ -25,6 +25,11 @@ import {
   type ResumeIntakeResolutionResult,
   type StructuredDraft,
 } from "../../domain/personIngestion";
+import type {
+  NormalizedPageRegion,
+  RegionExtractionMethod,
+  ReviewEvidenceAction,
+} from "../../domain/spatialEvidence";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -389,6 +394,46 @@ export const personIngestionService = {
     return lockVersion;
   },
 
+  async recordProfileReviewEvidence(input: {
+    organizationId: string;
+    reviewId: string;
+    expectedLockVersion: number;
+    fieldPath: string;
+    action: ReviewEvidenceAction;
+    documentVersion: number;
+    pageNumber: number;
+    region: NormalizedPageRegion;
+    selectedText: string | null;
+    extractionMethod: RegionExtractionMethod;
+    reviewedData: StructuredDraft | null;
+    reason: string | null;
+    replacesLinkId: string | null;
+  }): Promise<{ lockVersion: number; regionId: string; linkId: string }> {
+    const { data, error } = await supabase.rpc("record_profile_review_evidence", {
+      p_organization_id: input.organizationId,
+      p_review_id: input.reviewId,
+      p_expected_lock_version: input.expectedLockVersion,
+      p_field_path: input.fieldPath,
+      p_action: input.action,
+      p_document_version: input.documentVersion,
+      p_page_number: input.pageNumber,
+      p_x: input.region.x,
+      p_y: input.region.y,
+      p_width: input.region.width,
+      p_height: input.region.height,
+      p_selected_text: input.selectedText,
+      p_extraction_method: input.extractionMethod,
+      p_reviewed_data: input.reviewedData as unknown as Json | null,
+      p_reason: input.reason,
+      p_replaces_link_id: input.replacesLinkId,
+      p_idempotency_key: createOperationKey("record-review-evidence"),
+    });
+    throwReviewError(error, "Não foi possível registrar a evidência da revisão.");
+    const result = data?.[0];
+    if (!result) throw new Error("A evidência foi registrada sem confirmação persistida.");
+    return { lockVersion: result.lock_version, regionId: result.region_id, linkId: result.link_id };
+  },
+
   async approveProfileReview(organizationId: string, reviewId: string, expectedLockVersion: number): Promise<{ profileId: string; profileVersion: number }> {
     const { data, error } = await supabase.rpc("approve_profile_review", {
       p_organization_id: organizationId,
@@ -479,20 +524,48 @@ export const personIngestionService = {
       .eq("organization_id", organizationId).eq("id", reviewId).maybeSingle();
     throwIfError(error, "Não foi possível carregar a revisão.");
     if (!review) return null;
-    const [personResult, documentResult, revisionResult, changeResult] = await Promise.all([
+    const [
+      personResult,
+      documentResult,
+      revisionResult,
+      changeResult,
+      evidenceResult,
+      regionResult,
+      linkResult,
+      evidenceEventResult,
+    ] = await Promise.all([
       supabase.from("people").select("full_name").eq("organization_id", organizationId).eq("id", review.person_id).single(),
-      supabase.from("documents").select("filename").eq("organization_id", organizationId).eq("id", review.document_id).single(),
+      supabase.from("documents")
+        .select("filename, document_version, page_count, storage_path, source_type")
+        .eq("organization_id", organizationId).eq("id", review.document_id).single(),
       supabase.from("profile_review_revisions")
         .select("id, revision_number, change_reason, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("revision_number", { ascending: false }),
       supabase.from("profile_review_changes")
-        .select("id, field_path, reason, actor_auth_user_id, created_at")
+        .select("id, field_path, extracted_value, previous_value, reviewed_value, reason, actor_auth_user_id, created_at")
+        .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
+      supabase.from("evidence")
+        .select("id, kind, fact, source_page, source_block, quoted_text, extraction_origin, method, method_version, created_at")
+        .eq("organization_id", organizationId).eq("processing_attempt_id", review.processing_attempt_id)
+        .order("source_page"),
+      supabase.from("spatial_evidence_regions")
+        .select("id, organization_id, person_id, document_id, document_version, review_id, page_number, x, y, width, height, coordinate_system, selected_text, extraction_method, source, contract_version, created_by_auth_user_id, created_at")
+        .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at"),
+      supabase.from("profile_review_evidence_links")
+        .select("id, review_id, field_path, evidence_id, spatial_region_id, link_kind, state, replaces_link_id, superseded_by_link_id, reason, created_by_auth_user_id, created_at, superseded_at")
+        .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at"),
+      supabase.from("profile_review_evidence_events")
+        .select("id, review_id, review_revision_id, field_path, event_type, previous_link_id, new_link_id, reason, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
     ]);
     throwIfError(personResult.error, "Não foi possível carregar a Pessoa da revisão.");
     throwIfError(documentResult.error, "Não foi possível carregar o documento da revisão.");
     throwIfError(revisionResult.error, "Não foi possível carregar as revisões salvas.");
     throwIfError(changeResult.error, "Não foi possível carregar as correções da revisão.");
+    throwIfError(evidenceResult.error, "Não foi possível carregar as evidências originais da revisão.");
+    throwIfError(regionResult.error, "Não foi possível carregar as regiões espaciais da revisão.");
+    throwIfError(linkResult.error, "Não foi possível carregar os vínculos de evidência da revisão.");
+    throwIfError(evidenceEventResult.error, "Não foi possível carregar o histórico de evidências da revisão.");
     if (!personResult.data || !documentResult.data) throw new Error("A revisão perdeu a referência da Pessoa ou do documento.");
     return {
       id: review.id,
@@ -500,6 +573,10 @@ export const personIngestionService = {
       personName: personResult.data.full_name,
       documentId: review.document_id,
       documentName: documentResult.data.filename,
+      documentVersion: documentResult.data.document_version,
+      documentPageCount: documentResult.data.page_count ?? 0,
+      documentStoragePath: documentResult.data.storage_path,
+      documentSourceType: documentResult.data.source_type,
       processingAttemptId: review.processing_attempt_id,
       state: review.state,
       lockVersion: review.lock_version,
@@ -518,9 +595,71 @@ export const personIngestionService = {
       changes: (changeResult.data ?? []).map((change) => ({
         id: change.id,
         fieldPath: change.field_path as keyof StructuredDraft,
+        extractedValue: change.extracted_value,
+        previousValue: change.previous_value,
+        reviewedValue: change.reviewed_value,
         reason: change.reason,
         actorAuthUserId: change.actor_auth_user_id,
         createdAt: change.created_at,
+      })),
+      originalEvidence: (evidenceResult.data ?? []).map((evidence) => ({
+        id: evidence.id,
+        kind: evidence.kind,
+        fact: evidence.fact,
+        sourcePage: evidence.source_page,
+        sourceBlock: evidence.source_block,
+        quotedText: evidence.quoted_text,
+        extractionOrigin: evidence.extraction_origin,
+        method: evidence.method,
+        methodVersion: evidence.method_version,
+        createdAt: evidence.created_at,
+      })),
+      spatialRegions: (regionResult.data ?? []).map((region) => ({
+        id: region.id,
+        organizationId: region.organization_id,
+        personId: region.person_id,
+        documentId: region.document_id,
+        documentVersion: region.document_version,
+        reviewId: region.review_id,
+        pageNumber: region.page_number,
+        x: region.x,
+        y: region.y,
+        width: region.width,
+        height: region.height,
+        coordinateSystem: region.coordinate_system,
+        selectedText: region.selected_text,
+        extractionMethod: region.extraction_method,
+        source: region.source,
+        contractVersion: region.contract_version,
+        createdByAuthUserId: region.created_by_auth_user_id,
+        createdAt: region.created_at,
+      })),
+      evidenceLinks: (linkResult.data ?? []).map((link) => ({
+        id: link.id,
+        reviewId: link.review_id,
+        fieldPath: link.field_path,
+        evidenceId: link.evidence_id,
+        spatialRegionId: link.spatial_region_id,
+        linkKind: link.link_kind,
+        state: link.state,
+        replacesLinkId: link.replaces_link_id,
+        supersededByLinkId: link.superseded_by_link_id,
+        reason: link.reason,
+        createdByAuthUserId: link.created_by_auth_user_id,
+        createdAt: link.created_at,
+        supersededAt: link.superseded_at,
+      })),
+      evidenceEvents: (evidenceEventResult.data ?? []).map((event) => ({
+        id: event.id,
+        reviewId: event.review_id,
+        reviewRevisionId: event.review_revision_id,
+        fieldPath: event.field_path,
+        eventType: event.event_type,
+        previousLinkId: event.previous_link_id,
+        newLinkId: event.new_link_id,
+        reason: event.reason,
+        actorAuthUserId: event.actor_auth_user_id,
+        createdAt: event.created_at,
       })),
     };
   },
@@ -545,7 +684,7 @@ export const personIngestionService = {
   },
 
   async createPrivateDownloadUrl(storagePath: string): Promise<string> {
-    const { data, error } = await supabase.storage.from(DOCUMENT_BUCKET).createSignedUrl(storagePath, 60);
+    const { data, error } = await supabase.storage.from(DOCUMENT_BUCKET).createSignedUrl(storagePath, 30 * 60);
     throwIfError(error, "Não foi possível autorizar o download temporário.");
     if (!data) throw new Error("O download temporário não recebeu uma URL válida.");
     return data.signedUrl;

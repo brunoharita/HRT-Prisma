@@ -1,0 +1,7 @@
+create index profile_review_evidence_links_replaces_idx
+on public.profile_review_evidence_links (organization_id, replaces_link_id)
+where replaces_link_id is not null;
+
+create index profile_review_evidence_links_superseded_by_idx
+on public.profile_review_evidence_links (organization_id, superseded_by_link_id)
+where superseded_by_link_id is not null;

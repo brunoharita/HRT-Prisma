@@ -1,3 +1,10 @@
+import type {
+  OriginalReviewEvidence,
+  ReviewEvidenceEvent,
+  ReviewEvidenceLink,
+  SpatialEvidenceRegion,
+} from "./spatialEvidence.js";
+
 export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/native-v1";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
@@ -121,8 +128,8 @@ export interface ResumeIntakeResolutionResult {
 
 export interface StructuredDraft {
   summary: string | null;
-  experiences: Array<{ role: string; organization: string; period: string | null; evidenceText: string; page: number }>;
-  education: Array<{ course: string; institution: string; period: string | null; evidenceText: string; page: number }>;
+  experiences: Array<{ role: string; organization: string; period: string | null; description?: string | null; evidenceText: string; page: number }>;
+  education: Array<{ course: string; institution: string; period: string | null; description?: string | null; evidenceText: string; page: number }>;
   certifications: string[];
   languages: string[];
   competencies: string[];
@@ -173,6 +180,9 @@ export interface ProfileReviewRevision {
 export interface ProfileReviewChange {
   id: number;
   fieldPath: keyof StructuredDraft;
+  extractedValue: unknown;
+  previousValue: unknown;
+  reviewedValue: unknown;
   reason: string;
   actorAuthUserId: string;
   createdAt: string;
@@ -184,6 +194,10 @@ export interface ProfileReviewWorkspace {
   personName: string;
   documentId: string;
   documentName: string;
+  documentVersion: number;
+  documentPageCount: number;
+  documentStoragePath: string | null;
+  documentSourceType: DocumentSourceType;
   processingAttemptId: string;
   state: "draft" | "approved" | "invalidated";
   lockVersion: number;
@@ -194,6 +208,10 @@ export interface ProfileReviewWorkspace {
   approvedAt: string | null;
   revisions: ProfileReviewRevision[];
   changes: ProfileReviewChange[];
+  originalEvidence: OriginalReviewEvidence[];
+  spatialRegions: SpatialEvidenceRegion[];
+  evidenceLinks: ReviewEvidenceLink[];
+  evidenceEvents: ReviewEvidenceEvent[];
 }
 
 export interface ProfileVersionView {

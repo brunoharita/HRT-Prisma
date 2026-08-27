@@ -314,6 +314,55 @@ export interface Database {
         actor_auth_user_id: string;
         created_at: string;
       }>;
+      spatial_evidence_regions: Table<{
+        id: string;
+        organization_id: string;
+        person_id: string;
+        document_id: string;
+        document_version: number;
+        review_id: string;
+        page_number: number;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        coordinate_system: "normalized-page-v1";
+        selected_text: string | null;
+        extraction_method: "pdfjs-text-layer-v1" | "tesseract-region-v1" | "manual-region-v1";
+        source: "system" | "human";
+        contract_version: "1.0.0";
+        created_by_auth_user_id: string | null;
+        created_at: string;
+      }>;
+      profile_review_evidence_links: Table<{
+        id: string;
+        organization_id: string;
+        review_id: string;
+        field_path: string;
+        evidence_id: string | null;
+        spatial_region_id: string | null;
+        link_kind: "original" | "reviewer" | "complementary";
+        state: "active" | "superseded";
+        replaces_link_id: string | null;
+        superseded_by_link_id: string | null;
+        reason: string | null;
+        created_by_auth_user_id: string;
+        created_at: string;
+        superseded_at: string | null;
+      }>;
+      profile_review_evidence_events: Table<{
+        id: number;
+        organization_id: string;
+        review_id: string;
+        review_revision_id: string;
+        field_path: string;
+        event_type: "human_region_added" | "review_evidence_replaced" | "complementary_evidence_added" | "new_information_created";
+        previous_link_id: string | null;
+        new_link_id: string;
+        reason: string;
+        actor_auth_user_id: string;
+        created_at: string;
+      }>;
       resume_intakes: Table<{
         id: string;
         organization_id: string;
@@ -496,6 +545,28 @@ export interface Database {
       approve_profile_review: {
         Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_idempotency_key: string };
         Returns: Array<{ review_id: string; profile_id: string; profile_version: number; reused: boolean }>;
+      };
+      record_profile_review_evidence: {
+        Args: {
+          p_organization_id: string;
+          p_review_id: string;
+          p_expected_lock_version: number;
+          p_field_path: string;
+          p_action: "correct_current_field" | "add_complementary" | "replace_review_evidence" | "create_new_information";
+          p_document_version: number;
+          p_page_number: number;
+          p_x: number;
+          p_y: number;
+          p_width: number;
+          p_height: number;
+          p_selected_text: string | null;
+          p_extraction_method: "pdfjs-text-layer-v1" | "tesseract-region-v1" | "manual-region-v1";
+          p_reviewed_data: Json | null;
+          p_reason: string | null;
+          p_replaces_link_id: string | null;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ review_id: string; lock_version: number; region_id: string; link_id: string; reused: boolean }>;
       };
       approve_knowledge_proposal: {
         Args: { p_proposal_id: string; p_human_edited_proposal?: Json | null; p_decision_reason?: string | null };
