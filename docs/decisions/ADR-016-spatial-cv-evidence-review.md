@@ -11,12 +11,13 @@ O M2-C preservava a evidência textual original e a revisão por campo, mas não
 ## Decisão
 
 - A revisão mantém o PDF original visível ao lado dos campos estruturados e trata o documento como fonte primária.
-- Evidência espacial usa o contrato `spatial-evidence` 1.0.0: `document_id`, `document_version`, página e retângulo normalizado no intervalo de 0 a 1.
+- Evidência espacial nasceu no contrato `spatial-evidence` 1.0.0 e evoluiu de forma compatível para 1.1.0: `document_id`, `document_version`, página e retângulo normalizado no intervalo de 0 a 1.
 - Seleção textual usa a camada local do PDF.js. Quando ela não fornece texto, somente a região selecionada pode passar por OCR local com Tesseract.js. Nenhum documento é enviado a LLM ou serviço externo.
 - Evidência extraída permanece imutável. Evidência humana cria nova região, vínculo, revisão e evento. Substituição encerra o vínculo anterior sem apagá-lo.
 - Correção, complemento, substituição e criação de informação suportada passam pela RPC transacional `record_profile_review_evidence`, com lock otimista e idempotência.
 - DML direto nas três tabelas M5 é revogado. A RPC `security definer` usa `search_path` vazio e valida sessão, tenant, papel, estado, versão documental, página e coordenadas.
 - Registros históricos sem coordenadas continuam válidos como evidência original. Coordenadas nunca são inferidas ou fabricadas no backfill.
+- Em 1.1.0, seleção nativa usa `pdfjs-character-region-v2`: somente caracteres com centro visual contido no retângulo são recuperados. Interseção parcial com uma linha ou `span` não autoriza incluir todo o texto.
 
 ## Consequências
 
@@ -29,6 +30,7 @@ O advisor sinaliza a RPC pública como `security definer`. O uso é intencional 
 - Migrations `20260827034147_m5_spatial_cv_evidence.sql`, `20260827041613_m5_spatial_evidence_fk_indexes.sql` e `20260827042829_m5_spatial_evidence_idempotent_replay.sql`.
 - Componentes `DocumentEvidenceViewer` e `StructuredReviewPanel`.
 - Testes `tests/m5SpatialEvidence.test.ts`.
+- Migration `20260828160707_strict_pdf_character_region.sql`.
 - Evidência conectada `docs/qa/m5-spatial-evidence.md` no Prisma-QA.
 
 ## Rollback

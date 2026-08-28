@@ -23,7 +23,7 @@ last_verified: 2026-08-28
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
-- Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável.
+- Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` considera somente caracteres visualmente contidos no retângulo; evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Extração adaptativa v2 implementada localmente: PDF.js preserva linhas e geometria; a estruturação reconhece blocos completos, períodos abreviados, empresa em linha distinta e permanências com cargos subordinados; cada campo pode possuir região original navegável. Padrões organizacionais aprovados funcionam como sinais estruturais allowlisted, nunca como templates executáveis.
 - Revisão adaptativa v2 implementada localmente: evidência humana pode ser retirada sem apagar histórico; superfícies extraída/revisada navegam para suas respectivas regiões; uma correção relê a fonte original dos blocos irmãos, sugere cargo/empresa/período/descrição separadamente, preserva campos já revisados e mantém registros ambíguos sem alteração.
 - Aceite adaptativo implementado com seleção por campo, persistência atômica, lock otimista, replay idempotente, histórico metadata-only e recarga do rascunho sincronizado. A seleção de nova evidência permanece disponível após aplicar sugestões.
@@ -44,7 +44,7 @@ last_verified: 2026-08-28
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 66 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa v2, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 68 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa v2, contenção textual estrita, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -56,6 +56,7 @@ last_verified: 2026-08-28
 - Migrations M2-B com bucket privado `person-documents`, tentativas, páginas, drafts, eventos e RPC transacional `persist_person_extraction`.
 - Migrations M2-C com ledger de operações, locks de versão/tentativa, retries vinculados, revisões/alterações imutáveis e RPCs de aprovação atômica.
 - Migrations M5 `20260827034147_m5_spatial_cv_evidence`, `20260827041613_m5_spatial_evidence_fk_indexes` e `20260827042829_m5_spatial_evidence_idempotent_replay` com regiões normalizadas, vínculos, eventos append-only, RLS, índices e RPC transacional.
+- Migration local `20260828160707_strict_pdf_character_region`, aplicada no Prisma-QA como `20260828161125`, preserva evidências `1.0.0`, ativa default `spatial-evidence` 1.1.0 e libera `pdfjs-character-region-v2` na constraint e na RPC.
 - Migration `20260828055309_adaptive_resume_extraction` aplicada no Prisma-QA com layout por página, evidência espacial por campo, casos de aprendizado tenant-scoped e RPC auditável de retirada de evidência.
 - Arquivos locais `20260828111135_adaptive_review_learning_v2`, `20260828112737_adaptive_review_learning_v2_rpc_fix` e `20260828115300_adaptive_review_learning_v2_fk_indexes` aplicados no Prisma-QA como migrations remotas `20260828112434`, `20260828112756` e `20260828115139`, com eventos append-only, RPC de aceite transacional, padrões pós-aprovação e cobertura das novas foreign keys.
 - Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
@@ -86,6 +87,7 @@ last_verified: 2026-08-28
 - Edge Function `knowledge-agent` v2 está `ACTIVE` com `verify_jwt=true`; não houve chamada externa porque flag, modelo, credencial e budgets continuam intencionalmente inativos.
 - M5 aplicado em QA em 2026-08-27: três tabelas com RLS e DML direto revogado; 18 evidências originais vinculadas sem coordenadas inventadas; zero regiões ou vínculos inválidos.
 - Transações sintéticas revertidas comprovaram registro espacial por Admin, replay idempotente com `reused = true`, rejeição de coordenada fora do intervalo e negação de sessão Member. O advisor não aponta foreign key M5 sem índice de cobertura.
+- Uma transação revertida adicional comprovou que `record_profile_review_evidence` aceita `pdfjs-character-region-v2`; o rollback restaurou o lock 8 e deixou zero regiões/operações de teste.
 - Transações adaptativas revertidas comprovaram negação de sessão sem JWT, aceite atômico, incremento de lock, replay idempotente e promoção de padrão somente após `approve_profile_review`. Os testes deixaram zero eventos adaptativos e zero padrões organizacionais residuais.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
@@ -118,6 +120,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O advisor de segurança também identifica RPCs públicas M2-C e currículo-first como `security definer`; ADR-011/ADR-012 registram o uso controlado. A proteção contra senhas vazadas continua desabilitada.
 - O advisor identifica a RPC M5 `record_profile_review_evidence` como `security definer`; o uso intencional, a autorização interna, o `search_path` vazio e o DML direto revogado estão registrados no ADR-016. Índices M5 recém-criados aparecem como não utilizados porque nenhum evento espacial foi persistido após os testes revertidos.
 - O build e os contratos responsivos do workspace M5 estão aprovados, mas a inspeção visual autenticada desktop/mobile permanece pendente porque o navegador disponível não possuía sessão e não havia credencial de QA no ambiente.
+- A aba autenticada mostrada pelo usuário não foi exposta à sessão controlável do navegador; a inspeção local alcançou somente o login. A causa geométrica foi reproduzida por teste determinístico e a validação visual autenticada da seleção estrita permanece pendente.
 - A persistência adaptativa v2 está em QA e o runtime web permanece local. O advisor não aponta RLS ausente nem foreign key adaptativa sem índice; registra somente os novos índices ainda sem uso e a RPC `security definer` intencionalmente executável por `authenticated`, protegida por autorização interna e DML revogado. A qualidade possui regressões sanitizadas para HRT, Bencato, Scaffold, Servimed e NM Systems, mas ainda não foi medida em lote de currículos reais autorizados nem recebeu smoke visual autenticado.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - O CI usa a política fail-closed do pnpm para scripts de instalação de dependências; o `postinstall` não funcional do `tesseract.js` foi revisado e explicitamente negado em `pnpm-workspace.yaml`. A geração do Context Pack normaliza finais de linha para manter hash e conteúdo determinísticos em Windows e Linux.
@@ -128,4 +131,4 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-28, `CI=true pnpm run validate` aprovou lint de 161 arquivos, fundação, Context Pack, typechecks, build web, 66 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As migrations adaptativas estão aplicadas; RLS, grants, payload metadata-only, locks, replay, promoção pós-aprovação, cobertura de foreign keys e ausência de resíduo foram verificados. O frontend adaptativo continua local; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-28, `CI=true pnpm run validate` aprovou lint de 163 arquivos, fundação, Context Pack, typechecks, build web, 68 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As migrations adaptativas e de contenção textual estrita estão aplicadas; RLS, grants, payload metadata-only, locks, replay, promoção pós-aprovação, cobertura de foreign keys e ausência de resíduo foram verificados. O frontend adaptativo continua local; não há hosting nem ambiente de produção separado por decisão atual de operação interna.

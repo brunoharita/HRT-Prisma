@@ -14,7 +14,11 @@ import {
   fieldPathMatches,
   normalizePointerRegion,
   normalizedRegionStyle,
+  PDFJS_CHARACTER_REGION_METHOD,
+  textContainedByPixelRegion,
   type NormalizedPageRegion,
+  type PixelRect,
+  type PositionedTextUnit,
   type RegionExtractionMethod,
   type ReviewEvidenceLink,
   type SpatialEvidenceRegion,
@@ -239,7 +243,7 @@ export function DocumentEvidenceViewer({
     const text = textInsideRegion(region);
     if (text) {
       setSelectionStatus("Texto da região recuperado pela camada nativa do PDF.");
-      onSelectionComplete({ pageNumber: currentPage, region, selectedText: text, extractionMethod: "pdfjs-text-layer-v1", ocrState: "not_needed" });
+      onSelectionComplete({ pageNumber: currentPage, region, selectedText: text, extractionMethod: PDFJS_CHARACTER_REGION_METHOD, ocrState: "not_needed" });
       return;
     }
 
@@ -300,14 +304,7 @@ export function DocumentEvidenceViewer({
       right: pageRect.left + (region.x + region.width) * pageRect.width,
       bottom: pageRect.top + (region.y + region.height) * pageRect.height,
     };
-    const text = [...layer.querySelectorAll<HTMLElement>("span")]
-      .filter((span) => rectanglesIntersect(selectionRect, span.getBoundingClientRect()))
-      .map((span) => span.textContent?.trim() ?? "")
-      .filter(Boolean)
-      .join(" ")
-      .replace(/\s+/g, " ")
-      .trim();
-    return text || null;
+    return textContainedByPixelRegion(positionedTextUnits(layer, selectionRect), selectionRect);
   }
 
   function fitWidth() {
@@ -396,10 +393,45 @@ export function DocumentEvidenceViewer({
   );
 }
 
-function rectanglesIntersect(
-  left: { left: number; top: number; right: number; bottom: number },
-  right: { left: number; top: number; right: number; bottom: number },
-): boolean {
+function positionedTextUnits(layer: HTMLElement, selection: PixelRect): PositionedTextUnit[] {
+  const units: PositionedTextUnit[] = [];
+  const range = document.createRange();
+  let sourceIndex = 0;
+  layer.querySelectorAll<HTMLElement>("span").forEach((span) => {
+    const spanRect = span.getBoundingClientRect();
+    if (!pixelRectsOverlap(selection, spanRect)) {
+      sourceIndex += 1;
+      return;
+    }
+    const walker = document.createTreeWalker(span, NodeFilter.SHOW_TEXT);
+    let node = walker.nextNode();
+    while (node) {
+      const textNode = node as Text;
+      let sourceOffset = 0;
+      Array.from(textNode.data).forEach((character) => {
+        const nextOffset = sourceOffset + character.length;
+        range.setStart(textNode, sourceOffset);
+        range.setEnd(textNode, nextOffset);
+        const rect = range.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          units.push({
+            text: character,
+            sourceIndex,
+            sourceOffset,
+            rect: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom },
+          });
+        }
+        sourceOffset = nextOffset;
+      });
+      sourceIndex += 1;
+      node = walker.nextNode();
+    }
+  });
+  range.detach();
+  return units;
+}
+
+function pixelRectsOverlap(left: PixelRect, right: PixelRect): boolean {
   return left.left < right.right && left.right > right.left && left.top < right.bottom && left.bottom > right.top;
 }
 

@@ -24,7 +24,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `person-ingestion` | application/data | 5.0.0 | intake, Pessoas, documentos, perfil | schema ativo em QA; web local | intake, layout visual, evidência por campo e padrões aprovados por tenant | local/QA | bloquear processamento |
 | `resume-intake` | application/data/security | 1.0.0 | Home, Pessoas, importador | implementado localmente | `resume_intakes` e cinco RPCs controladas | local | bloquear criação/vínculo |
 | `human-profile-review` | application/domain | 2.0.0 | revisão, perfil, auditoria | schema ativo em QA; web local | releitura por bloco, aceite parcial atômico, histórico e exclusão auditável | local/QA | bloquear promoção |
-| `spatial-evidence` | application/data | 1.1.0 | PDF viewer, revisão, auditoria | schema ativo em QA; web local | regiões por campo e retirada não destrutiva | local/QA | bloquear mutação |
+| `spatial-evidence` | application/data | 1.1.0 | PDF viewer, revisão, auditoria | schema ativo em QA; web local | região normalizada, texto nativo estrito por caractere e retirada não destrutiva | local/QA | bloquear mutação |
 | `document-operation-idempotency` | application/data | 1.0.0 | cadastro, retry, persistência e aprovação | ativo em QA | `document_operations`, fingerprints e locks | local/QA | rejeitar conflito |
 | `pdf-native-extraction` | AI/application | 2.0.0 | ingestão PDF | implementado localmente | `pdfjs-5.4.296/layout-v2` | local | exigir revisão/reprocessamento |
 | `selective-ocr` | AI/application | 1.0.0 | páginas sem texto nativo suficiente | ativo localmente | `tesseract.js-7.0.0/por+eng-v1` | local | falhar sem perfil |

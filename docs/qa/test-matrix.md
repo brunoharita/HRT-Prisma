@@ -17,7 +17,7 @@
 | Parsing | seções conhecidas | variação, datas, caracteres | golden parcial |
 | Extração adaptativa | layout repetido, período abreviado, empresa em linha distinta, bloco completo e padrão aprovado do tenant | não copiar correção, não sobrescrever revisão humana, registro ambíguo, versão desconhecida e layout legado | regressão local e transação QA aprovadas; lote real autorizado pendente |
 | Revisão manual | corrigir e aprovar | tentar promover parcial sem revisão | M2-C ativo no remoto interno |
-| Evidência espacial M5 | selecionar região, corrigir/complementar/substituir e navegar no histórico | coordenada/página/versão inválida, Member, cross-tenant e DML direto | local/QA aprovado; browser visual requerido |
+| Evidência espacial M5 | selecionar somente caracteres visualmente contidos, corrigir/complementar/substituir e navegar no histórico | linha que apenas intersecta a borda, caractere com centro externo, coordenada/página/versão inválida, Member, cross-tenant e DML direto | regressão local e schema/RPC QA aprovados; browser autenticado pendente |
 | Evidência por campo | clicar extraído/revisado navega para a origem correta e retirar evidência humana preserva histórico | excluir original, link de outro tenant e lock stale | contrato e testes locais; QA pendente |
 | Aprendizado imediato | correção relê irmãos, aceite parcial salva revisão/evento/casos e aprovação promove padrão | sem JWT, DML direto, replay divergente, lock stale, promoção antes da aprovação e payload com valor/trecho | unit/contract e transações com rollback no QA aprovadas; smoke autenticado pendente |
 | Duplicidade | primeira importação | mesma chave com payload divergente e concorrência | M2-C local/QA aprovado |

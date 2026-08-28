@@ -1,5 +1,6 @@
-export const SPATIAL_EVIDENCE_CONTRACT_VERSION = "1.0.0";
+export const SPATIAL_EVIDENCE_CONTRACT_VERSION = "1.1.0";
 export const SPATIAL_EVIDENCE_COORDINATE_SYSTEM = "normalized-page-v1" as const;
+export const PDFJS_CHARACTER_REGION_METHOD = "pdfjs-character-region-v2" as const;
 
 export type ReviewEvidenceAction =
   | "correct_current_field"
@@ -9,7 +10,12 @@ export type ReviewEvidenceAction =
 
 export type ReviewEvidenceLinkKind = "original" | "reviewer" | "complementary";
 export type ReviewEvidenceLinkState = "active" | "superseded";
-export type RegionExtractionMethod = "pdfjs-text-layer-v1" | "tesseract-region-v1" | "manual-region-v1";
+export type RegionExtractionMethod =
+  | "pdfjs-text-layer-v1"
+  | typeof PDFJS_CHARACTER_REGION_METHOD
+  | "tesseract-region-v1"
+  | "manual-region-v1";
+export type SpatialEvidenceContractVersion = "1.0.0" | typeof SPATIAL_EVIDENCE_CONTRACT_VERSION;
 
 export interface NormalizedPageRegion {
   x: number;
@@ -30,7 +36,7 @@ export interface SpatialEvidenceRegion extends NormalizedPageRegion {
   selectedText: string | null;
   extractionMethod: RegionExtractionMethod;
   source: "system" | "human";
-  contractVersion: typeof SPATIAL_EVIDENCE_CONTRACT_VERSION;
+  contractVersion: SpatialEvidenceContractVersion;
   createdByAuthUserId: string | null;
   createdAt: string;
 }
@@ -80,6 +86,20 @@ export interface OriginalReviewEvidence {
 export interface PointerPoint {
   x: number;
   y: number;
+}
+
+export interface PixelRect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+export interface PositionedTextUnit {
+  text: string;
+  sourceIndex: number;
+  sourceOffset: number;
+  rect: PixelRect;
 }
 
 export function normalizePointerRegion(
@@ -133,6 +153,40 @@ export function fieldPathMatches(linkFieldPath: string, selectedFieldPath: strin
   return linkFieldPath === selectedFieldPath
     || linkFieldPath.startsWith(`${selectedFieldPath}.`)
     || selectedFieldPath.startsWith(`${linkFieldPath}.`);
+}
+
+export function textContainedByPixelRegion(units: PositionedTextUnit[], selection: PixelRect): string | null {
+  const selected = units.filter((unit) => {
+    const centerX = (unit.rect.left + unit.rect.right) / 2;
+    const centerY = (unit.rect.top + unit.rect.bottom) / 2;
+    return centerX >= selection.left && centerX <= selection.right
+      && centerY >= selection.top && centerY <= selection.bottom;
+  });
+  if (!selected.length) return null;
+
+  let result = "";
+  let previous: PositionedTextUnit | null = null;
+  selected.forEach((unit) => {
+    if (previous && shouldSeparateTextUnits(previous, unit) && result && !/\s$/.test(result) && !/^\s/.test(unit.text)) {
+      result += " ";
+    }
+    result += unit.text;
+    previous = unit;
+  });
+  const normalized = result.replace(/\s+/g, " ").trim();
+  return normalized || null;
+}
+
+function shouldSeparateTextUnits(previous: PositionedTextUnit, current: PositionedTextUnit): boolean {
+  const previousCenterY = (previous.rect.top + previous.rect.bottom) / 2;
+  const currentCenterY = (current.rect.top + current.rect.bottom) / 2;
+  const height = Math.max(previous.rect.bottom - previous.rect.top, current.rect.bottom - current.rect.top);
+  if (Math.abs(currentCenterY - previousCenterY) > height * 0.6) return true;
+  if (previous.sourceIndex === current.sourceIndex) {
+    return current.sourceOffset > previous.sourceOffset + previous.text.length;
+  }
+  const horizontalGap = current.rect.left - previous.rect.right;
+  return horizontalGap > Math.max(1, height * 0.12);
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {

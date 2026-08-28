@@ -330,9 +330,9 @@ export interface Database {
         height: number;
         coordinate_system: "normalized-page-v1";
         selected_text: string | null;
-        extraction_method: "pdfjs-text-layer-v1" | "tesseract-region-v1" | "manual-region-v1";
+        extraction_method: "pdfjs-text-layer-v1" | "pdfjs-character-region-v2" | "tesseract-region-v1" | "manual-region-v1";
         source: "system" | "human";
-        contract_version: "1.0.0";
+        contract_version: "1.0.0" | "1.1.0";
         created_by_auth_user_id: string | null;
         created_at: string;
       }>;
@@ -605,7 +605,7 @@ export interface Database {
           p_width: number;
           p_height: number;
           p_selected_text: string | null;
-          p_extraction_method: "pdfjs-text-layer-v1" | "tesseract-region-v1" | "manual-region-v1";
+          p_extraction_method: "pdfjs-text-layer-v1" | "pdfjs-character-region-v2" | "tesseract-region-v1" | "manual-region-v1";
           p_reviewed_data: Json | null;
           p_reason: string | null;
           p_replaces_link_id: string | null;

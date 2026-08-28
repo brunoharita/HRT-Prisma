@@ -50,7 +50,7 @@ Data: 2026-08-28. Ambientes: checkout local na branch `codex/adaptive-review-lea
 - lint, foundation e Context Pack aprovados;
 - typecheck raiz e web aprovados;
 - build web aprovado;
-- 66 testes técnicos, incluindo 9 regressões específicas da extração adaptativa v2;
+- 68 testes técnicos, incluindo 9 regressões específicas da extração adaptativa v2 e 2 regressões de contenção espacial estrita;
 - 19 casos golden aprovados, sem regressão;
 - demonstração vertical `VERTICAL_SLICE_OK`.
 

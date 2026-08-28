@@ -6,6 +6,7 @@ import {
   isNormalizedPageRegion,
   normalizePointerRegion,
   normalizedRegionStyle,
+  textContainedByPixelRegion,
   topLevelReviewField,
 } from "../web/src/domain/spatialEvidence.js";
 
@@ -34,6 +35,19 @@ test("M5 resolves granular review fields without losing their top-level M2-C con
   assert.equal(fieldPathMatches("competencies", "competencies"), true);
 });
 
+test("M5 includes only characters visually contained by the selected rectangle", () => {
+  const firstLine = positionedUnits("MBA | Universidade", 0, 0);
+  const secondLine = positionedUnits("Pós-graduação em Gestão de Processos de TI", 14, 100);
+  const selected = textContainedByPixelRegion([...firstLine, ...secondLine], {
+    left: 0,
+    top: 0,
+    right: 35,
+    bottom: 16,
+  });
+
+  assert.equal(selected, "MBA");
+});
+
 test("M5 migration persists versioned normalized regions and compatible legacy evidence links", async () => {
   const sql = await readFile(migrationPath, "utf8");
   assert.match(sql, /create table public\.spatial_evidence_regions/i);
@@ -46,6 +60,16 @@ test("M5 migration persists versioned normalized regions and compatible legacy e
   assert.match(sql, /evidence_id uuid,[\s\S]*spatial_region_id uuid/i);
   assert.match(sql, /legacy evidence remains valid without a spatial region/i);
   assert.doesNotMatch(sql, /update public\.evidence[\s\S]{0,200}(source_page|source_offset)/i);
+});
+
+test("M5 strict selection migration versions character containment without invalidating historical evidence", async () => {
+  const sql = await readFile("supabase/migrations/20260828160707_strict_pdf_character_region.sql", "utf8");
+  assert.match(sql, /pdfjs-character-region-v2/i);
+  assert.match(sql, /contract_version set default '1\.1\.0'/i);
+  assert.match(sql, /contract_version in \('1\.0\.0', '1\.1\.0'\)/i);
+  assert.match(sql, /pg_get_functiondef/i);
+  assert.match(sql, /unexpected shape/i);
+  assert.doesNotMatch(sql, /update public\.spatial_evidence_regions/i);
 });
 
 test("M5 migration fails closed for tenant, role, bounds, document version, page and direct DML", async () => {
@@ -101,6 +125,9 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(viewer, /new pdfjs\.TextLayer/);
   assert.match(viewer, /import\("tesseract\.js"\)/);
   assert.match(viewer, /normalizePointerRegion/);
+  assert.match(viewer, /PDFJS_CHARACTER_REGION_METHOD/);
+  assert.match(viewer, /textContainedByPixelRegion/);
+  assert.doesNotMatch(viewer, /rectanglesIntersect/);
   assert.match(viewer, /ocrVersionRef/);
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);
   assert.match(page, /Currículo[\s\S]*Revisão/);
@@ -109,3 +136,17 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(styles, /\.prisma-review-mobile-switch/);
   assert.match(styles, /\.mobile-pane-document/);
 });
+
+function positionedUnits(text: string, top: number, sourceIndex: number) {
+  let offset = 0;
+  return Array.from(text).map((character) => {
+    const unit = {
+      text: character,
+      sourceIndex,
+      sourceOffset: offset,
+      rect: { left: offset * 10, top, right: offset * 10 + 10, bottom: top + 10 },
+    };
+    offset += character.length;
+    return unit;
+  });
+}
