@@ -10,6 +10,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `document-processing-state` | application | 2.0.0 | importer, repository, operations, review | ativo em QA | enums e RPCs M2-C | local/QA | bloquear e registrar falha |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
 | `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |
+| `adaptive-resume-extraction` | AI/application | 1.0.0 | ingestão M2-B e revisão | implementado localmente | geometria, sinais semânticos e padrão document-local | local | exigir revisão/reprocessamento |
 | `inference-ontology` | AI/domain | 1.0.0 | profile, search, matching | implementado | `inference-ontology-1.0.0` | local | bloquear inferência |
 | `structured-retrieval` | AI | 1.0.0 | search | implementado | `structured-lexical-1.0.0` | local | bloquear consulta |
 | `explainable-matching` | AI/domain | 1.0.0 | vacancy evaluation | implementado | `matching-explainable-1.0.0` | local | bloquear avaliação |
@@ -20,14 +21,15 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
-| `person-ingestion` | application/data | 3.0.0 | intake, Pessoas, documentos, perfil | implementado localmente | intake currículo-first convergindo para M2-B/M2-C | local | bloquear processamento |
+| `person-ingestion` | application/data | 4.0.0 | intake, Pessoas, documentos, perfil | schema ativo em QA; web local | intake, layout visual e evidência por campo | local/QA | bloquear processamento |
 | `resume-intake` | application/data/security | 1.0.0 | Home, Pessoas, importador | implementado localmente | `resume_intakes` e cinco RPCs controladas | local | bloquear criação/vínculo |
-| `human-profile-review` | application/domain | 1.1.0 | revisão, perfil, auditoria | ativo em QA | revisão M2-C com evidência espacial M5 | local/QA | bloquear promoção |
-| `spatial-evidence` | application/data | 1.0.0 | PDF viewer, revisão, auditoria | ativo em QA | regiões normalizadas, vínculos, eventos e RPC transacional | local/QA | bloquear mutação |
+| `human-profile-review` | application/domain | 1.2.0 | revisão, perfil, auditoria | schema ativo em QA; web local | exclusão auditável e sugestões adaptativas | local/QA | bloquear promoção |
+| `spatial-evidence` | application/data | 1.1.0 | PDF viewer, revisão, auditoria | schema ativo em QA; web local | regiões por campo e retirada não destrutiva | local/QA | bloquear mutação |
 | `document-operation-idempotency` | application/data | 1.0.0 | cadastro, retry, persistência e aprovação | ativo em QA | `document_operations`, fingerprints e locks | local/QA | rejeitar conflito |
-| `pdf-native-extraction` | AI/application | 1.0.0 | ingestão PDF | ativo localmente | `pdfjs-5.4.296/native-v1` | local | exigir revisão/reprocessamento |
+| `pdf-native-extraction` | AI/application | 2.0.0 | ingestão PDF | implementado localmente | `pdfjs-5.4.296/layout-v2` | local | exigir revisão/reprocessamento |
 | `selective-ocr` | AI/application | 1.0.0 | páginas sem texto nativo suficiente | ativo localmente | `tesseract.js-7.0.0/por+eng-v1` | local | falhar sem perfil |
-| `extraction-draft` | AI/domain | 1.0.0 | evidência e geração de perfil | ativo em QA | `extraction_drafts`, `prisma-deterministic-profile-v1` | local/QA | bloquear promoção |
+| `extraction-draft` | AI/domain | 2.0.0 | evidência e geração de perfil | implementado localmente; 1.0 em QA | `prisma-layout-adaptive-v1` | local/QA | bloquear promoção |
+| `extraction-learning-case` | AI/data | 1.0.0 | avaliação e promoção de extração | ativo em QA | referências auditáveis a correções aprovadas | local/QA | bloquear aprendizado automático |
 | `ai-usage-event` | operations/AI | 1.0.0 | observability | implementado | `ProcessingEvent`, table | local/migration | não agregar métricas |
 | `prisma-context-pack` | governance | 1.0.0 | authorized AIs | implementado | checker/generator | repository | checker falha |
 | `knowledge-normalization` | domain/data | 1.0.0 | intake, profile, search | implementado localmente | `knowledge-normalization-1.0.0`, migration M4 | local | preservar observado e enviar à Inbox |

@@ -15,6 +15,7 @@ Privacy by design está definida e refletida na separação de PII, perfil e Sto
 | Documento bruto | pessoal | upload | fonte e auditoria | bucket privado `person-documents` em QA | super admin, owner, admin e recruiter no tenant |
 | Intake pré-Pessoa | pessoal e técnico | upload | resolver identidade e vínculo | staging tenant-scoped sem texto integral | super admin, owner, admin e recruiter no tenant |
 | Evidência espacial | pessoal profissional | seleção humana no PDF | sustentar correção ou complemento | página, região normalizada, método e trecho mínimo | super admin, owner, admin e recruiter no tenant |
+| Caso de aprendizado de extração | referência técnica ligada a dado pessoal | correção humana aprovada | avaliação controlada de qualidade | IDs de revisão/evento/campo, status e versões; sem duplicar currículo ou valor | super admin, owner, admin e recruiter no tenant |
 | Avaliação e matching | pessoal derivado | vaga + perfil | apoio à decisão | JSON local/migration | admin, recruiter, hiring manager |
 | Telemetria | dado técnico ligado a IDs | sistema | custo e diagnóstico | JSON local/migration | admin/auditoria |
 
@@ -38,7 +39,7 @@ Finalidade atual é prova técnica com fixtures sintéticas. A base legal para c
 
 ## Minimização
 
-Persistir apenas campos necessários à finalidade. Evidência usa trecho mínimo suficiente e limita a seleção persistida a 2.000 caracteres. Logs M5 recebem IDs, ação e versões, não o trecho selecionado. Logs não recebem currículo, prompt completo com PII ou resposta integral. Dados privados ficam separados do perfil consultável.
+Persistir apenas campos necessários à finalidade. Evidência usa trecho mínimo suficiente e limita a seleção persistida a 2.000 caracteres. Logs M5 recebem IDs, ação e versões, não o trecho selecionado. Casos de aprendizado referenciam a correção e só são aprovados junto com a revisão, sem copiar valores ou documento integral. Logs não recebem currículo, prompt completo com PII ou resposta integral. Dados privados ficam separados do perfil consultável.
 
 ## Retenção e exclusão
 

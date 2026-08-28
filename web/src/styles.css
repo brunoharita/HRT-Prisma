@@ -2338,12 +2338,13 @@ textarea {
 .prisma-evidence-card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
 
 .prisma-evidence-card {
+  position: relative;
   display: grid;
   min-width: 0;
   min-height: 104px;
   align-content: start;
   gap: 4px;
-  padding: 8px;
+  padding: 0;
   color: inherit;
   text-align: left;
   background: #f4fbf6;
@@ -2352,15 +2353,31 @@ textarea {
   cursor: pointer;
 }
 
+.prisma-evidence-card__navigate {
+  display: grid;
+  min-width: 0;
+  min-height: 102px;
+  align-content: start;
+  gap: 4px;
+  padding: 8px 34px 8px 8px;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.prisma-evidence-card__navigate:disabled { cursor: not-allowed; opacity: 0.65; }
+.prisma-evidence-card__delete { position: absolute; top: 4px; right: 4px; }
+
 .prisma-evidence-card--reviewer { background: #fff8ef; border-color: #f3c68c; }
 .prisma-evidence-card--complementary { background: #f2f6ff; border-color: #cbd9ff; }
 .prisma-evidence-card.is-active { border-color: #155eef; box-shadow: 0 0 0 2px rgba(21, 94, 239, 0.1); }
-.prisma-evidence-card > span { color: var(--prisma-success); font-size: 0.66rem; font-weight: 650; }
-.prisma-evidence-card--reviewer > span { color: #d66e09; }
-.prisma-evidence-card--complementary > span { color: #155eef; }
+.prisma-evidence-card__navigate > span { color: var(--prisma-success); font-size: 0.66rem; font-weight: 650; }
+.prisma-evidence-card--reviewer .prisma-evidence-card__navigate > span { color: #d66e09; }
+.prisma-evidence-card--complementary .prisma-evidence-card__navigate > span { color: #155eef; }
 .prisma-evidence-card p { display: -webkit-box; margin: 0; overflow: hidden; font-size: 0.72rem; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
 .prisma-evidence-card small { color: var(--prisma-text-secondary); font-size: 0.62rem; }
-.prisma-evidence-card:disabled { cursor: not-allowed; opacity: 0.65; }
 .prisma-add-evidence-card { min-height: 42px; }
 
 .prisma-correction-reason .ant-typography,

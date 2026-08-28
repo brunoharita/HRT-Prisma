@@ -36,3 +36,5 @@ Versões anteriores permanecem identificáveis. Rollback reativa artefato anteri
 ## Versões atuais
 
 As constantes de IA vigentes estão em `src/domain/versions.ts`; contratos de ingestão/revisão estão em `document-review-contract.md`; e o catálogo proprietário está em `contracts.md`. `TUDO_SOBRE_PRISMA.md` usa versão própria de contexto, não substitui versões de domínio.
+
+A extração adaptativa introduz `pdf-native-extraction` 2.0.0, `extraction-draft` 2.0.0, `person-ingestion` 4.0.0, `human-profile-review` 1.2.0 e `spatial-evidence` 1.1.0. A migration de dados/revisão está no QA, mas o runtime web adaptativo permanece local até smoke autenticado e promoção explícita. Casos de aprendizado aprovados não alteram essas versões automaticamente.

@@ -4,6 +4,8 @@
 
 `tests/golden/extraction` contém 13 currículos sintéticos representativos, o resultado mínimo esperado e conhecimentos proibidos. `tests/golden/matching` contém quatro avaliações pessoa-vaga e dois casos de retrieval para empate determinístico e ausência de candidato.
 
+`tests/adaptiveResumeExtraction.test.ts` adiciona regressão visual para cargo com descritor, período abreviado e empresa na linha seguinte. Casos humanos aprovados entram em `extraction_learning_cases` como candidatos de avaliação, sem atualização autônoma do runtime.
+
 ## Execução
 
 ```bash
@@ -46,6 +48,8 @@ Uma alteração de regra, prompt, modelo ou normalização somente pode substitu
 4. exemplos com dados reais, quando disponíveis, são revisados manualmente;
 5. custo e latência permanecem dentro do orçamento documentado;
 6. evidência e ausência de evidência continuam corretamente separadas.
+7. sugestões para registros irmãos usam o conteúdo e a evidência de cada irmão, nunca o valor corrigido como cópia;
+8. ganho de qualidade em currículo real autorizado é medido antes de qualquer promoção para QA.
 
 Não se altera o esperado apenas para acomodar uma saída nova. Primeiro deve existir justificativa de domínio.
 

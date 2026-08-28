@@ -6,7 +6,7 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 ## Verified current state
 
-The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace with normalized spatial evidence and immutable human history.
+The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace. The local adaptive extraction branch also preserves PDF layout, links evidence per field, proposes document-local sibling corrections, and supports auditable reviewer-evidence retirement.
 
 PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, M2-C, M5, the private document bucket, controlled transactional RPCs, and the three operator Edge Functions active. Connected evidence covers concurrent version allocation, idempotent retry, reviewer-role isolation, normalized-coordinate rejection, immutable review history, and atomic profile approval. By current product decision there is no separate production project or frontend hosting; the system is used only internally through the local frontend. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
 

@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta o contrato `adaptive-resume-extraction` 1.0.0, ainda somente local.
 
 ## Entrada
 
@@ -11,7 +11,9 @@ Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores
 - `mediaType`: deve pertencer à allowlist;
 - organização e documento são controlados pela aplicação, não pelo provider.
 - PDF: máximo de 15 MB, assinatura `%PDF-`, trailer `%%EOF` e parse válido;
-- páginas: extração nativa primeiro; OCR local somente quando a suficiência determinística falha.
+- páginas: extração nativa primeiro, preservando linhas visuais e coordenadas; OCR local somente quando a suficiência falha;
+- campos: cada fato estruturado pode apontar para uma região própria e para o método que a produziu;
+- adaptação: repetição no documento orienta a interpretação, mas não autoriza copiar valores entre registros.
 
 ## Saída de sucesso
 
@@ -21,7 +23,7 @@ Sucesso do provider não significa perfil processado. A aplicação exige identi
 
 ## Proveniência
 
-Cada fato material liga-se a documento, bloco, página quando disponível, trecho, versão de extração, timestamp e método. Inferência referencia evidências separadas. Prompt e modelo são registrados quando aplicáveis. Revisão humana ainda não possui runtime, mas deve ser campo explícito antes do piloto conectado.
+Cada fato material liga-se a documento, bloco, página quando disponível, região, trecho, versão de extração, timestamp e método. Inferência referencia evidências separadas. Prompt e modelo são registrados quando aplicáveis. Correções humanas permanecem decisões distintas e podem gerar casos de avaliação somente após aprovação.
 
 ## Estados
 

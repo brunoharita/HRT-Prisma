@@ -2,7 +2,7 @@
 
 ## Estado
 
-O runtime atual não usa LLM remoto. `DeterministicExtractionProvider` implementa extração por regras locais, com custo externo zero. No M2-B, PDF.js extrai texto nativo e Tesseract.js executa OCR local seletivo no navegador antes da estruturação determinística. Retrieval e matching também são determinísticos. Embeddings e provider LLM produtivo permanecem não implementados.
+O runtime atual não usa LLM remoto. No M2-B, PDF.js preserva texto, geometria e ênfase; Tesseract.js executa OCR local seletivo; e a estruturação adaptativa combina sinais semânticos com o padrão repetido do próprio documento. Retrieval e matching continuam determinísticos. Embeddings e provider LLM produtivo permanecem não implementados.
 
 ## Fronteiras lógicas
 
@@ -43,12 +43,14 @@ Currículos e vagas são dados. Texto tentando ignorar regras, mudar schema, rev
 | Extraction | `extraction-rules-1.0.0` | ativo local |
 | PDF nativo | `pdfjs-5.4.296/native-v1` | ativo local e remoto interno |
 | OCR | `tesseract.js-7.0.0/por+eng-v1` | ativo local e remoto interno |
-| Draft M2-B | `prisma-deterministic-profile-v1` | ativo local e remoto interno |
+| Draft M2-B | `prisma-layout-adaptive-v1` | implementado local; versão determinística anterior em QA |
 | Inference | `inference-ontology-1.0.0` | ativo local |
 | Retrieval/embedding contract | `structured-lexical-1.0.0` | ativo local, sem vetores |
 | Matching | `matching-explainable-1.0.0` | ativo local |
 | Prompt | `no-llm-prompt-1.0.0` | sentinel, nenhuma chamada |
 | Model | `deterministic-local-1.0.0` | ativo local |
+
+Correções com evidência geram casos de avaliação referenciados, não treinamento imediato. Sugestões document-local reinterpretam cada registro irmão com sua própria evidência e exigem confirmação. Alterar regra, prompt ou modelo continua exigindo versão, golden suite, QA e promoção explícita.
 
 ## Custo, latência e volume
 

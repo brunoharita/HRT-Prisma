@@ -6,7 +6,6 @@ import {
   NATIVE_EXTRACTION_VERSION,
   OCR_VERSION,
   STRUCTURING_VERSION,
-  buildDeterministicDraft,
   processManualText,
   type ExtractedPage,
   type DocumentOperationSummary,
@@ -30,6 +29,7 @@ import type {
   RegionExtractionMethod,
   ReviewEvidenceAction,
 } from "../../domain/spatialEvidence";
+import { attachFieldEvidence, buildAdaptiveExtraction } from "../../domain/adaptiveResumeExtraction";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -322,8 +322,9 @@ export const personIngestionService = {
       await recordFailure(organizationId, personId, document.documentId, "failed_extraction", "storage_upload_failed", "O documento foi registrado, mas o upload privado falhou.");
       throw new Error("O upload privado falhou. Nenhum Perfil Prisma foi gerado.");
     }
-    const draft = buildDeterministicDraft(input.pages);
-    await persistExtraction(organizationId, personId, document.documentId, input.pages, draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null);
+    const extraction = buildAdaptiveExtraction(input.pages);
+    const pages = attachFieldEvidence(input.pages, extraction.fieldEvidence);
+    await persistExtraction(organizationId, personId, document.documentId, pages, extraction.draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null);
     return document.documentId;
   },
 
@@ -334,7 +335,7 @@ export const personIngestionService = {
     throwIfError(attemptError, "Não foi possível localizar a tentativa anterior.");
     if (!previousAttempt) throw new Error("O documento ainda não possui extração preservada para reprocessar.");
     const { data: pageRows, error: pageError } = await supabase.from("document_page_extractions")
-      .select("page_number, text_content, origin, useful_character_count, method, method_version")
+      .select("page_number, text_content, origin, useful_character_count, method, method_version, layout_blocks, field_evidence")
       .eq("organization_id", organizationId).eq("processing_attempt_id", previousAttempt.id).order("page_number");
     throwIfError(pageError, "Não foi possível recuperar a extração anterior.");
     const pages: ExtractedPage[] = (pageRows ?? []).map((page) => ({
@@ -344,14 +345,17 @@ export const personIngestionService = {
       usefulCharacterCount: page.useful_character_count,
       method: page.method,
       methodVersion: page.method_version,
+      ...(Array.isArray(page.layout_blocks) ? { layoutLines: page.layout_blocks as unknown as NonNullable<ExtractedPage["layoutLines"]> } : {}),
+      ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
     }));
     if (pages.length === 0) throw new Error("A tentativa anterior não possui páginas extraídas válidas.");
+    const extraction = buildAdaptiveExtraction(pages);
     await persistExtraction(
       organizationId,
       personId,
       documentId,
-      pages,
-      buildDeterministicDraft(pages),
+      attachFieldEvidence(pages, extraction.fieldEvidence),
+      extraction.draft,
       pages.filter((page) => page.origin === "native_pdf").length,
       pages.filter((page) => page.origin === "ocr").length,
       createOperationKey("retry-processing"),
@@ -432,6 +436,27 @@ export const personIngestionService = {
     const result = data?.[0];
     if (!result) throw new Error("A evidência foi registrada sem confirmação persistida.");
     return { lockVersion: result.lock_version, regionId: result.region_id, linkId: result.link_id };
+  },
+
+  async retireProfileReviewEvidence(input: {
+    organizationId: string;
+    reviewId: string;
+    expectedLockVersion: number;
+    linkId: string;
+    reason: string;
+  }): Promise<number> {
+    const { data, error } = await supabase.rpc("retire_profile_review_evidence", {
+      p_organization_id: input.organizationId,
+      p_review_id: input.reviewId,
+      p_expected_lock_version: input.expectedLockVersion,
+      p_link_id: input.linkId,
+      p_reason: input.reason,
+      p_idempotency_key: createOperationKey("retire-review-evidence"),
+    });
+    throwReviewError(error, "Não foi possível excluir a evidência da revisão.");
+    const lockVersion = data?.[0]?.lock_version;
+    if (!lockVersion) throw new Error("A exclusão da evidência não retornou a versão da revisão.");
+    return lockVersion;
   },
 
   async approveProfileReview(organizationId: string, reviewId: string, expectedLockVersion: number): Promise<{ profileId: string; profileVersion: number }> {
@@ -709,7 +734,9 @@ async function persistExtraction(
     useful_character_count: page.usefulCharacterCount,
     method: page.method,
     method_version: page.methodVersion,
-  })) as Json;
+    layout_blocks: page.layoutLines ?? [],
+    field_evidence: page.fieldEvidence ?? [],
+  })) as unknown as Json;
   const { data, error } = await supabase.rpc("persist_person_extraction", {
     p_organization_id: organizationId,
     p_person_id: personId,
@@ -818,13 +845,13 @@ async function processResolvedIntake(
   result: ResumeIntakeResolutionResult,
 ): Promise<ResumeIntakeResolutionResult> {
   try {
-    const draft = buildDeterministicDraft(input.pages);
+    const extraction = buildAdaptiveExtraction(input.pages);
     await persistExtraction(
       organizationId,
       result.personId,
       result.documentId,
-      input.pages,
-      draft,
+      attachFieldEvidence(input.pages, extraction.fieldEvidence),
+      extraction.draft,
       input.nativePageCount,
       input.ocrPageCount,
       `resume-intake-extraction:${result.intakeId}`,

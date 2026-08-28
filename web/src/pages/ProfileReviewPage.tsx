@@ -5,6 +5,7 @@ import { DocumentEvidenceViewer, type EvidenceNavigationTarget, type RegionSelec
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import type { ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
 import type { ReviewEvidenceAction } from "../domain/spatialEvidence";
+import { proposeSiblingFieldCorrections } from "../domain/adaptiveResumeExtraction";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -38,6 +39,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [selectionReason, setSelectionReason] = useState("");
   const [newInformationType, setNewInformationType] = useState<NewInformationType>("experience");
   const [mobilePane, setMobilePane] = useState<"document" | "review">("review");
+  const [adaptiveSuggestions, setAdaptiveSuggestions] = useState<Array<{ index: number; fieldPath: string; currentValue: string | null; proposedValue: string | null }>>([]);
 
   async function refresh() {
     const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
@@ -94,13 +96,31 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     finally { setBusy(false); }
   }
 
-  function handleFieldSelect(fieldPath: string) {
+  function handleFieldSelect(fieldPath: string, preferredKind?: "original" | "reviewer") {
     setSelectedFieldPath(fieldPath);
-    const target = primaryEvidenceTarget(fieldPath, workspace);
+    const target = primaryEvidenceTarget(fieldPath, workspace, preferredKind);
     if (target) {
       setActiveLinkId(target.linkId);
       setNavigationTarget({ ...target, nonce: Date.now() });
     } else setActiveLinkId(null);
+  }
+
+  async function handleEvidenceDelete(input: { fieldPath: string; linkId: string }) {
+    if (!workspace) return;
+    setBusy(true); setError(null); setSuccess(null);
+    try {
+      await personIngestionService.retireProfileReviewEvidence({
+        organizationId: activeMembership.organizationId,
+        reviewId: workspace.id,
+        expectedLockVersion: workspace.lockVersion,
+        linkId: input.linkId,
+        reason: "Evidência retirada pelo revisor durante a conferência do campo.",
+      });
+      await refresh();
+      setActiveLinkId(null);
+      setSuccess("Evidência excluída da revisão. A região e o evento permanecem preservados no histórico.");
+    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível excluir a evidência."); }
+    finally { setBusy(false); }
   }
 
   function handleEvidenceNavigate(input: { fieldPath: string; linkId: string; pageNumber: number; regionId: string | null }) {
@@ -158,6 +178,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         replacesLinkId: pendingAction === "replace_review_evidence" ? replacementLinkId : null,
       });
       const refreshed = await refresh();
+      if (pendingAction === "correct_current_field" && nextDraft) {
+        const match = /^experiences\.(\d+)\.(role|organization|period)$/.exec(targetFieldPath);
+        if (match) setAdaptiveSuggestions(proposeSiblingFieldCorrections({ draft: nextDraft, extracted: workspace.extractedData, sourceIndex: Number(match[1]), field: match[2] as "role" | "organization" | "period" }));
+      }
       setSelectedFieldPath(targetFieldPath);
       const newest = [...refreshed.evidenceLinks].reverse().find((link) => link.fieldPath === targetFieldPath && link.state === "active");
       setActiveLinkId(newest?.id ?? null);
@@ -182,6 +206,14 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
+      {adaptiveSuggestions.length ? <Alert
+        action={<Space wrap><Button onClick={() => setAdaptiveSuggestions([])} size="small">Ignorar</Button><Button onClick={() => {
+          const next = adaptiveSuggestions.reduce((current, suggestion) => suggestion.proposedValue ? applyValueAtFieldPath(current, suggestion.fieldPath, suggestion.proposedValue) : current, draft);
+          setDraft(next); setReason("Sugestões adaptativas confirmadas pelo revisor com base no padrão repetido do próprio currículo."); setAdaptiveSuggestions([]);
+        }} size="small" type="primary">Aplicar {adaptiveSuggestions.length === 1 ? "sugestão" : `${adaptiveSuggestions.length} sugestões`}</Button></Space>}
+        description={adaptiveSuggestions.map((item) => `${item.fieldPath}: ${item.currentValue ?? "não identificado"} → ${item.proposedValue ?? "não identificado"}`).join(" | ")}
+        showIcon title="O Prisma reconheceu o mesmo padrão em outros registros. Revise antes de aplicar." type="info"
+      /> : null}
       <Segmented className="prisma-review-mobile-switch" onChange={(value) => setMobilePane(value as "document" | "review")} options={[{ label: "Currículo", value: "document" }, { label: "Revisão", value: "review" }]} value={mobilePane} />
 
       <div className={["prisma-review-split", `mobile-pane-${mobilePane}`].join(" ")}>
@@ -195,7 +227,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         </div>
         <div className="prisma-review-structured-pane">
           <StructuredReviewPanel
-            activeLinkId={activeLinkId} canStartSelection={!dirty} draft={draft} editable={Boolean(editable)} onDraftChange={setDraft} onEvidenceNavigate={handleEvidenceNavigate}
+            activeLinkId={activeLinkId} canStartSelection={!dirty} draft={draft} editable={Boolean(editable)} onDraftChange={setDraft} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
             onFieldSelect={handleFieldSelect} onReasonChange={setReason}
             onStartSelection={(fieldPath) => { if (dirty) { setError("Salve ou descarte as alterações manuais antes de vincular uma nova evidência."); return; } setSelectedFieldPath(fieldPath); setPendingSelection(null); setSelectionMode(true); setMobilePane("document"); }}
             reason={reason} selectedFieldPath={selectedFieldPath} workspace={workspace}
@@ -216,9 +248,9 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   );
 }
 
-function primaryEvidenceTarget(fieldPath: string, workspace: ProfileReviewWorkspace | null): Omit<EvidenceNavigationTarget, "nonce"> | null {
+function primaryEvidenceTarget(fieldPath: string, workspace: ProfileReviewWorkspace | null, preferredKind?: "original" | "reviewer"): Omit<EvidenceNavigationTarget, "nonce"> | null {
   if (!workspace) return null;
-  const candidates = workspace.evidenceLinks.filter((link) => link.state === "active" && fieldsOverlap(link.fieldPath, fieldPath)).sort((left, right) => linkPriority(left.linkKind) - linkPriority(right.linkKind));
+  const candidates = workspace.evidenceLinks.filter((link) => link.state === "active" && fieldsOverlap(link.fieldPath, fieldPath)).sort((left, right) => linkPriority(left.linkKind, preferredKind, Boolean(left.spatialRegionId)) - linkPriority(right.linkKind, preferredKind, Boolean(right.spatialRegionId)));
   for (const link of candidates) {
     const region = link.spatialRegionId ? workspace.spatialRegions.find((item) => item.id === link.spatialRegionId) : null;
     const original = link.evidenceId ? workspace.originalEvidence.find((item) => item.id === link.evidenceId) : null;
@@ -228,7 +260,12 @@ function primaryEvidenceTarget(fieldPath: string, workspace: ProfileReviewWorksp
   return null;
 }
 
-function linkPriority(kind: "original" | "reviewer" | "complementary"): number { return kind === "reviewer" ? 0 : kind === "original" ? 1 : 2; }
+function linkPriority(kind: "original" | "reviewer" | "complementary", preferredKind?: "original" | "reviewer", spatial = false): number {
+  if (preferredKind && kind === preferredKind) return spatial ? 0 : 1;
+  if (!preferredKind && kind === "reviewer") return 2;
+  if (kind === "original") return spatial ? 3 : 4;
+  return 5;
+}
 function fieldsOverlap(left: string, right: string): boolean { return left === right || left.startsWith(`${right}.`) || right.startsWith(`${left}.`); }
 
 function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value: string): StructuredDraft {
