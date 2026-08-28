@@ -7,7 +7,7 @@
 | `document-processing-state` | 2.0.0 | estados operacionais e de revisão são explícitos e falham fechados |
 | `person-ingestion` | 5.0.0 | cadastro, retry e persistência são idempotentes; intake resolve a Pessoa; extração e revisão consomem layout, evidência por campo e padrões aprovados do tenant |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
-| `human-profile-review` | 2.0.0 | revisão possui rascunho, releitura imediata por bloco, aceite parcial atômico, mudanças por campo e exclusão auditável |
+| `human-profile-review` | 2.0.0 | revisão possui rascunho, releitura imediata por bloco, aceite parcial atômico, mudanças por campo, validação contextual no modal e exclusão auditável |
 | `spatial-evidence` | 1.1.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas; texto nativo inclui somente caracteres visualmente contidos |
 | `document-operation-idempotency` | 1.0.0 | mesma chave e fingerprint retornam o mesmo resultado; payload diferente conflita |
 | `professional-profile` | 1.1.0 | perfil aprovado preserva proveniência da revisão e mantém somente uma versão atual |
@@ -44,6 +44,8 @@ O cliente deve gerar uma chave por intenção do usuário e reutilizá-la soment
 ## Proveniência e auditoria
 
 Cada mudança identifica campo, valor extraído, valor revisado, decisão e evidência aplicável. Evidência espacial nova contém página e retângulo normalizado, preserva o método local e limita o trecho selecionado ao mínimo necessário. Em `pdfjs-character-region-v2`, somente caracteres cujo centro visual está dentro do retângulo são considerados; a simples interseção com um `span` ou linha não inclui seu texto integral. A superfície extraída prioriza a região original; a revisada prioriza a região humana. Retirada de evidência é um evento append-only e nunca apaga a região. Aceite adaptativo registra somente caminhos de campo, página, método, versão e padrão estrutural; valores e trechos não são duplicados no ledger. A aprovação referencia documento, tentativa, review e revisão. Eventos registram IDs, estado, ator, método e versão; texto integral do documento e payload integral do perfil são proibidos.
+
+No modal de seleção, aplicar o texto reconhecido sem edição é uma operação autoexplicativa e não exige justificativa. Uma justificativa continua obrigatória quando o revisor altera semanticamente o texto recuperado ou informa manualmente conteúdo que a região não reconheceu. Validações e falhas da operação permanecem dentro do modal; nenhum erro pode ficar oculto atrás de sua camada de bloqueio.
 
 ## Compatibilidade
 

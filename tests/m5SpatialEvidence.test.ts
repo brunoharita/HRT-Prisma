@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
+  evidenceSelectionRequiresReason,
   fieldPathMatches,
   isNormalizedPageRegion,
   normalizePointerRegion,
@@ -46,6 +47,33 @@ test("M5 includes only characters visually contained by the selected rectangle",
   });
 
   assert.equal(selected, "MBA");
+});
+
+test("M5 applies recognized text without a reason and requires one only for a real interpretation", () => {
+  assert.equal(evidenceSelectionRequiresReason({
+    selectedText: "MBA em Gestão Estratégica de Negócios",
+    proposedValue: "MBA em Gestão Estratégica de Negócios",
+    valueEdited: false,
+    changesDraft: true,
+  }), false);
+  assert.equal(evidenceSelectionRequiresReason({
+    selectedText: "MBA em Gestão Estratégica de Negócios",
+    proposedValue: "MBA Executivo",
+    valueEdited: true,
+    changesDraft: true,
+  }), true);
+  assert.equal(evidenceSelectionRequiresReason({
+    selectedText: null,
+    proposedValue: "MBA Executivo",
+    valueEdited: true,
+    changesDraft: true,
+  }), true);
+  assert.equal(evidenceSelectionRequiresReason({
+    selectedText: "MBA",
+    proposedValue: "Outro valor",
+    valueEdited: true,
+    changesDraft: false,
+  }), false);
 });
 
 test("M5 migration persists versioned normalized regions and compatible legacy evidence links", async () => {
@@ -132,6 +160,9 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);
   assert.match(page, /Currículo[\s\S]*Revisão/);
   assert.match(page, /recordProfileReviewEvidence/);
+  assert.match(page, /selectionError \? <Alert title=\{selectionError\} showIcon type="error"/);
+  assert.match(page, /setSelectionValueEdited\(false\)/);
+  assert.match(page, /confirmLoading=\{busy\}/);
   assert.match(styles, /grid-template-columns: minmax\(410px, 44fr\) minmax\(520px, 56fr\)/);
   assert.match(styles, /\.prisma-review-mobile-switch/);
   assert.match(styles, /\.mobile-pane-document/);

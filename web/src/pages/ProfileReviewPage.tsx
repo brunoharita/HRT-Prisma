@@ -5,7 +5,7 @@ import { DocumentEvidenceViewer, type EvidenceNavigationTarget, type RegionSelec
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
 import type { ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
-import type { ReviewEvidenceAction } from "../domain/spatialEvidence";
+import { evidenceSelectionRequiresReason, type ReviewEvidenceAction } from "../domain/spatialEvidence";
 import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
   proposeSiblingBlockCorrections,
@@ -44,6 +44,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [pendingAction, setPendingAction] = useState<ReviewEvidenceAction>("correct_current_field");
   const [selectionValue, setSelectionValue] = useState("");
   const [selectionReason, setSelectionReason] = useState("");
+  const [selectionValueEdited, setSelectionValueEdited] = useState(false);
+  const [selectionError, setSelectionError] = useState<string | null>(null);
   const [newInformationType, setNewInformationType] = useState<NewInformationType>("experience");
   const [mobilePane, setMobilePane] = useState<"document" | "review">("review");
   const [adaptiveReport, setAdaptiveReport] = useState<AdaptiveSuggestionReport | null>(null);
@@ -165,36 +167,54 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   function handleSelectionComplete(selection: RegionSelectionResult) {
+    setError(null);
+    setSuccess(null);
     setPendingSelection(selection);
     setSelectionValue(selection.selectedText ?? "");
     setSelectionReason("");
+    setSelectionValueEdited(false);
+    setSelectionError(null);
     setPendingAction("correct_current_field");
+  }
+
+  function closePendingSelection() {
+    setPendingSelection(null);
+    setSelectionMode(false);
+    setSelectionValue("");
+    setSelectionReason("");
+    setSelectionValueEdited(false);
+    setSelectionError(null);
   }
 
   async function applyPendingSelection() {
     if (!workspace || !draft || !pendingSelection) return;
+    setSelectionError(null);
     const normalizedValue = selectionValue.trim();
     let nextDraft: StructuredDraft | null = null;
     let targetFieldPath = selectedFieldPath;
     if (pendingAction === "correct_current_field") {
-      if (!normalizedValue) { setError("Confirme ou informe o valor revisado para corrigir o campo."); return; }
+      if (!normalizedValue) { setSelectionError("Confirme ou informe o valor revisado para corrigir o campo."); return; }
       nextDraft = applyValueAtFieldPath(draft, selectedFieldPath, normalizedValue);
-      if (JSON.stringify(nextDraft) === JSON.stringify(draft)) { setError("O valor já é igual ao atual. Use Substituir evidência da revisão para trocar somente a origem."); return; }
+      if (JSON.stringify(nextDraft) === JSON.stringify(draft)) { setSelectionError("O valor já é igual ao atual. Use Substituir evidência da revisão para trocar somente a origem."); return; }
     }
     if (pendingAction === "create_new_information") {
-      if (!normalizedValue) { setError("Informe o conteúdo da nova informação."); return; }
+      if (!normalizedValue) { setSelectionError("Informe o conteúdo da nova informação."); return; }
       const created = addNewInformation(draft, newInformationType, normalizedValue, pendingSelection.pageNumber);
       nextDraft = created.draft;
       targetFieldPath = created.fieldPath;
-      if (JSON.stringify(nextDraft) === JSON.stringify(draft)) { setError("A informação selecionada já existe no campo de destino."); return; }
+      if (JSON.stringify(nextDraft) === JSON.stringify(draft)) { setSelectionError("A informação selecionada já existe no campo de destino."); return; }
     }
-    if (pendingAction === "replace_review_evidence" && !replacementLinkId) { setError("Este campo ainda não possui evidência ativa do revisor para substituir."); return; }
-    const changedFromRecognizedText = Boolean(pendingSelection.selectedText && normalizedValue && normalizeComparable(normalizedValue) !== normalizeComparable(pendingSelection.selectedText));
-    if ((changedFromRecognizedText || (!pendingSelection.selectedText && nextDraft)) && selectionReason.trim().length < 3) {
-      setError("Explique a divergência entre o valor informado e o texto reconhecido da região."); return;
+    if (pendingAction === "replace_review_evidence" && !replacementLinkId) { setSelectionError("Este campo ainda não possui evidência ativa do revisor para substituir."); return; }
+    if (evidenceSelectionRequiresReason({
+      selectedText: pendingSelection.selectedText,
+      proposedValue: normalizedValue,
+      valueEdited: selectionValueEdited,
+      changesDraft: Boolean(nextDraft),
+    }) && selectionReason.trim().length < 3) {
+      setSelectionError("Explique a divergência entre o valor informado e o texto reconhecido da região."); return;
     }
 
-    setBusy(true); setError(null); setSuccess(null);
+    setBusy(true); setError(null); setSuccess(null); setSelectionError(null);
     try {
       await personIngestionService.recordProfileReviewEvidence({
         organizationId: activeMembership.organizationId,
@@ -228,9 +248,9 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       setSelectedFieldPath(targetFieldPath);
       const newest = [...refreshed.evidenceLinks].reverse().find((link) => link.fieldPath === targetFieldPath && link.state === "active");
       setActiveLinkId(newest?.id ?? null);
-      setPendingSelection(null); setSelectionMode(false); setSelectionValue(""); setSelectionReason("");
+      closePendingSelection();
       setSuccess(pendingAction === "add_complementary" ? "Evidência complementar vinculada sem remover a original." : pendingAction === "replace_review_evidence" ? "Evidência ativa substituída com histórico preservado." : pendingAction === "create_new_information" ? "Nova informação humana criada e vinculada à região selecionada." : "Campo corrigido com evidência humana rastreável.");
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aplicar a seleção."); }
+    } catch (caught) { setSelectionError(caught instanceof Error ? caught.message : "Não foi possível aplicar a seleção."); }
     finally { setBusy(false); }
   }
 
@@ -268,7 +288,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           <DocumentEvidenceViewer
             activeLinkId={activeLinkId} fileName={workspace.documentName} links={workspace.evidenceLinks} navigationTarget={navigationTarget}
             onEvidenceClick={(fieldPath, linkId) => { setSelectedFieldPath(fieldPath); setActiveLinkId(linkId); setMobilePane("review"); }}
-            onSelectionCancel={() => { setSelectionMode(false); setPendingSelection(null); }} onSelectionComplete={handleSelectionComplete}
+            onSelectionCancel={closePendingSelection} onSelectionComplete={handleSelectionComplete}
             pageCount={workspace.documentPageCount} pdfUrl={pdfUrl} regions={workspace.spatialRegions} selectedFieldPath={selectedFieldPath} selectionMode={selectionMode}
           />
         </div>
@@ -276,19 +296,20 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           <StructuredReviewPanel
             activeLinkId={activeLinkId} canStartSelection={!dirty} draft={draft} editable={Boolean(editable)} onDraftChange={setDraft} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
             onFieldSelect={handleFieldSelect} onReasonChange={setReason}
-            onStartSelection={(fieldPath) => { if (dirty) { setError("Salve ou descarte as alterações manuais antes de vincular uma nova evidência."); return; } setSelectedFieldPath(fieldPath); setPendingSelection(null); setSelectionMode(true); setMobilePane("document"); }}
+            onStartSelection={(fieldPath) => { if (dirty) { setError("Salve ou descarte as alterações manuais antes de vincular uma nova evidência."); return; } setError(null); setSuccess(null); setSelectionError(null); setSelectedFieldPath(fieldPath); setPendingSelection(null); setSelectionMode(true); setMobilePane("document"); }}
             reason={reason} selectedFieldPath={selectedFieldPath} workspace={workspace}
           />
         </div>
       </div>
 
-      <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" okButtonProps={{ disabled: busy }} okText="Aplicar seleção" onCancel={() => { setPendingSelection(null); setSelectionMode(false); }} onOk={() => void applyPendingSelection()} open={Boolean(pendingSelection)} title="Usar região selecionada">
+      <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={Boolean(pendingSelection)} title="Usar região selecionada">
         {pendingSelection ? <div className="prisma-selection-dialog">
+          {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
           <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. A região continuará rastreável, mas uma correção exige conteúdo e justificativa manual." : "Revise o texto recuperado antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
-          <Radio.Group onChange={(event) => setPendingAction(event.target.value as ReviewEvidenceAction)} value={pendingAction}><Space orientation="vertical"><Radio value="correct_current_field">Corrigir campo atual</Radio><Radio value="add_complementary">Adicionar como evidência complementar</Radio>{replacementLinkId ? <Radio value="replace_review_evidence">Substituir evidência da revisão</Radio> : null}<Radio value="create_new_information">Criar nova informação</Radio></Space></Radio.Group>
+          <Radio.Group onChange={(event) => { setPendingAction(event.target.value as ReviewEvidenceAction); setSelectionError(null); }} value={pendingAction}><Space orientation="vertical"><Radio value="correct_current_field">Corrigir campo atual</Radio><Radio value="add_complementary">Adicionar como evidência complementar</Radio>{replacementLinkId ? <Radio value="replace_review_evidence">Substituir evidência da revisão</Radio> : null}<Radio value="create_new_information">Criar nova informação</Radio></Space></Radio.Group>
           {pendingAction === "create_new_information" ? <Select aria-label="Tipo da nova informação" onChange={setNewInformationType} options={[{ label: "Experiência", value: "experience" }, { label: "Formação", value: "education" }, { label: "Competência", value: "competency" }, { label: "Idioma", value: "language" }, { label: "Certificação", value: "certification" }]} value={newInformationType} /> : null}
-          {pendingAction === "correct_current_field" || pendingAction === "create_new_information" ? <Input.TextArea aria-label="Valor sugerido pela região" onChange={(event) => setSelectionValue(event.target.value)} placeholder="Valor revisado" rows={4} value={selectionValue} /> : null}
-          <Input.TextArea aria-label="Justificativa da operação de evidência" onChange={(event) => setSelectionReason(event.target.value)} placeholder="Justificativa, quando houver interpretação ou divergência" rows={3} value={selectionReason} />
+          {pendingAction === "correct_current_field" || pendingAction === "create_new_information" ? <Input.TextArea aria-label="Valor sugerido pela região" onChange={(event) => { setSelectionValue(event.target.value); setSelectionValueEdited(true); setSelectionError(null); }} placeholder="Valor revisado" rows={4} value={selectionValue} /> : null}
+          <Input.TextArea aria-label="Justificativa da operação de evidência" onChange={(event) => { setSelectionReason(event.target.value); setSelectionError(null); }} placeholder="Justificativa, quando houver interpretação ou divergência" rows={3} value={selectionReason} />
         </div> : null}
       </Modal>
     </PrismaPage>
@@ -341,5 +362,4 @@ function addNewInformation(draft: StructuredDraft, type: NewInformationType, val
 }
 
 function cloneDraft(draft: StructuredDraft): StructuredDraft { return JSON.parse(JSON.stringify(draft)) as StructuredDraft; }
-function normalizeComparable(value: string): string { return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim().toLowerCase(); }
 function formatDate(value: string | null): string { return value ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value)) : "data não registrada"; }

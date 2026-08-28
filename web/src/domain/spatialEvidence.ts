@@ -102,6 +102,13 @@ export interface PositionedTextUnit {
   rect: PixelRect;
 }
 
+export interface EvidenceSelectionReasonInput {
+  selectedText: string | null;
+  proposedValue: string;
+  valueEdited: boolean;
+  changesDraft: boolean;
+}
+
 export function normalizePointerRegion(
   start: PointerPoint,
   end: PointerPoint,
@@ -177,6 +184,13 @@ export function textContainedByPixelRegion(units: PositionedTextUnit[], selectio
   return normalized || null;
 }
 
+export function evidenceSelectionRequiresReason(input: EvidenceSelectionReasonInput): boolean {
+  if (!input.changesDraft) return false;
+  if (!input.selectedText) return true;
+  if (!input.valueEdited) return false;
+  return normalizeComparableText(input.proposedValue) !== normalizeComparableText(input.selectedText);
+}
+
 function shouldSeparateTextUnits(previous: PositionedTextUnit, current: PositionedTextUnit): boolean {
   const previousCenterY = (previous.rect.top + previous.rect.bottom) / 2;
   const currentCenterY = (current.rect.top + current.rect.bottom) / 2;
@@ -187,6 +201,15 @@ function shouldSeparateTextUnits(previous: PositionedTextUnit, current: Position
   }
   const horizontalGap = current.rect.left - previous.rect.right;
   return horizontalGap > Math.max(1, height * 0.12);
+}
+
+function normalizeComparableText(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {
