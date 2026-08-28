@@ -5,9 +5,9 @@
 | Contrato | Versão | Regra material |
 | --- | --- | --- |
 | `document-processing-state` | 2.0.0 | estados operacionais e de revisão são explícitos e falham fechados |
-| `person-ingestion` | 3.0.0 | cadastro, retry e persistência são idempotentes e serializados no banco; intake de currículo resolve a Pessoa antes do processamento completo |
+| `person-ingestion` | 5.0.0 | cadastro, retry e persistência são idempotentes; intake resolve a Pessoa; extração e revisão consomem layout, evidência por campo e padrões aprovados do tenant |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
-| `human-profile-review` | 1.2.0 | revisão possui rascunho, mudanças por campo, sugestão adaptativa confirmável e exclusão auditável |
+| `human-profile-review` | 2.0.0 | revisão possui rascunho, releitura imediata por bloco, aceite parcial atômico, mudanças por campo e exclusão auditável |
 | `spatial-evidence` | 1.1.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas normalizadas |
 | `document-operation-idempotency` | 1.0.0 | mesma chave e fingerprint retornam o mesmo resultado; payload diferente conflita |
 | `professional-profile` | 1.1.0 | perfil aprovado preserva proveniência da revisão e mantém somente uma versão atual |
@@ -34,6 +34,7 @@ Estado desconhecido, versão incompatível, sessão ausente, tenant não autoriz
 | `persist_person_extraction` | persiste páginas, draft, evidência e estado de revisão de forma atômica |
 | `start_profile_review` | abre ou devolve o rascunho existente para a tentativa |
 | `save_profile_review` | cria revisão imutável e mudanças por campo com lock otimista |
+| `apply_profile_review_adaptive_suggestions` | salva sugestões selecionadas, revisão, evento e casos de aprendizado na mesma transação |
 | `record_profile_review_evidence` | registra região, vínculo, revisão e evento humano na mesma transação |
 | `retire_profile_review_evidence` | encerra vínculo humano ativo, preserva histórico e rejeita evidência original |
 | `approve_profile_review` | cria e promove a versão de perfil na mesma transação |
@@ -42,7 +43,7 @@ O cliente deve gerar uma chave por intenção do usuário e reutilizá-la soment
 
 ## Proveniência e auditoria
 
-Cada mudança identifica campo, valor extraído, valor revisado, decisão e evidência aplicável. Evidência espacial nova contém página e retângulo normalizado, preserva o método local e limita o trecho selecionado ao mínimo necessário. A superfície extraída prioriza a região original; a revisada prioriza a região humana. Retirada de evidência é um evento append-only e nunca apaga a região. A aprovação referencia documento, tentativa, review e revisão. Eventos registram IDs, estado, ator, método e versão; texto integral do documento e payload integral do perfil são proibidos.
+Cada mudança identifica campo, valor extraído, valor revisado, decisão e evidência aplicável. Evidência espacial nova contém página e retângulo normalizado, preserva o método local e limita o trecho selecionado ao mínimo necessário. A superfície extraída prioriza a região original; a revisada prioriza a região humana. Retirada de evidência é um evento append-only e nunca apaga a região. Aceite adaptativo registra somente caminhos de campo, página, método, versão e padrão estrutural; valores e trechos não são duplicados no ledger. A aprovação referencia documento, tentativa, review e revisão. Eventos registram IDs, estado, ator, método e versão; texto integral do documento e payload integral do perfil são proibidos.
 
 ## Compatibilidade
 

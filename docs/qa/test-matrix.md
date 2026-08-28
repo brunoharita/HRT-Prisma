@@ -15,10 +15,11 @@
 | Prompt injection | documento normal | instrução maliciosa em currículo | golden testado |
 | OCR | scan legível com fallback seletivo | página insuficiente após OCR | Tesseract local comprovado em uma página; fixture inicial insuficiente foi recusada e fixture válida gerou 360 caracteres úteis |
 | Parsing | seções conhecidas | variação, datas, caracteres | golden parcial |
-| Extração adaptativa | layout repetido, período abreviado e empresa em linha distinta | não copiar correção entre registros, coordenada ausente e layout legado | regressão sintética local; lote real e QA pendentes |
+| Extração adaptativa | layout repetido, período abreviado, empresa em linha distinta, bloco completo e padrão aprovado do tenant | não copiar correção, não sobrescrever revisão humana, registro ambíguo, versão desconhecida e layout legado | regressão local e transação QA aprovadas; lote real autorizado pendente |
 | Revisão manual | corrigir e aprovar | tentar promover parcial sem revisão | M2-C ativo no remoto interno |
 | Evidência espacial M5 | selecionar região, corrigir/complementar/substituir e navegar no histórico | coordenada/página/versão inválida, Member, cross-tenant e DML direto | local/QA aprovado; browser visual requerido |
 | Evidência por campo | clicar extraído/revisado navega para a origem correta e retirar evidência humana preserva histórico | excluir original, link de outro tenant e lock stale | contrato e testes locais; QA pendente |
+| Aprendizado imediato | correção relê irmãos, aceite parcial salva revisão/evento/casos e aprovação promove padrão | sem JWT, DML direto, replay divergente, lock stale, promoção antes da aprovação e payload com valor/trecho | unit/contract e transações com rollback no QA aprovadas; smoke autenticado pendente |
 | Duplicidade | primeira importação | mesma chave com payload divergente e concorrência | M2-C local/QA aprovado |
 | Vagas | requisitos claros | vazio, incompatível, cross-tenant | contrato parcial |
 | Matching | atendido/parcial/gap | insuficiência e requisito ausente | golden testado |

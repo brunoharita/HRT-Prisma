@@ -3,9 +3,16 @@ import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from "@ant-design/icon
 import { Alert, Button, Input, Modal, Radio, Segmented, Select, Space, Tag, Typography } from "antd";
 import { DocumentEvidenceViewer, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
+import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
 import type { ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
 import type { ReviewEvidenceAction } from "../domain/spatialEvidence";
-import { proposeSiblingFieldCorrections } from "../domain/adaptiveResumeExtraction";
+import {
+  ADAPTIVE_REVIEW_METHOD_VERSION,
+  proposeSiblingBlockCorrections,
+  type AdaptiveFieldSuggestion,
+  type AdaptiveSuggestionReport,
+  type ExperienceFieldName,
+} from "../domain/adaptiveResumeExtraction";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -39,7 +46,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [selectionReason, setSelectionReason] = useState("");
   const [newInformationType, setNewInformationType] = useState<NewInformationType>("experience");
   const [mobilePane, setMobilePane] = useState<"document" | "review">("review");
-  const [adaptiveSuggestions, setAdaptiveSuggestions] = useState<Array<{ index: number; fieldPath: string; currentValue: string | null; proposedValue: string | null }>>([]);
+  const [adaptiveReport, setAdaptiveReport] = useState<AdaptiveSuggestionReport | null>(null);
 
   async function refresh() {
     const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
@@ -93,6 +100,33 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       const approved = await personIngestionService.approveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion);
       await refresh(); setSuccess(`Perfil Prisma v${approved.profileVersion} aprovado sem sobrescrever a versão anterior.`);
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aprovar a revisão."); }
+    finally { setBusy(false); }
+  }
+
+  async function handleApplyAdaptiveSuggestions(suggestions: AdaptiveFieldSuggestion[]) {
+    if (!workspace || !draft || !adaptiveReport || suggestions.length === 0) return;
+    const nextDraft = suggestions.reduce(
+      (current, suggestion) => applyValueAtFieldPath(current, suggestion.fieldPath, suggestion.proposedValue),
+      draft,
+    );
+    setBusy(true); setError(null); setSuccess(null);
+    try {
+      await personIngestionService.applyAdaptiveSuggestions({
+        organizationId: activeMembership.organizationId,
+        reviewId: workspace.id,
+        expectedLockVersion: workspace.lockVersion,
+        reviewedData: nextDraft,
+        sourceFieldPath: `experiences.${adaptiveReport.sourceIndex}.${adaptiveReport.sourceField}`,
+        patternKey: adaptiveReport.patternKey,
+        methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+        suggestions,
+        reason: "Sugestões adaptativas confirmadas pelo revisor após releitura dos blocos na fonte original.",
+      });
+      await refresh();
+      setAdaptiveReport(null);
+      setReason("");
+      setSuccess(`${suggestions.length} ${suggestions.length === 1 ? "correção adaptativa foi aplicada" : "correções adaptativas foram aplicadas"}, salvas e versionadas. A revisão por evidência permanece disponível.`);
+    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aplicar as sugestões adaptativas."); }
     finally { setBusy(false); }
   }
 
@@ -179,8 +213,17 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       });
       const refreshed = await refresh();
       if (pendingAction === "correct_current_field" && nextDraft) {
-        const match = /^experiences\.(\d+)\.(role|organization|period)$/.exec(targetFieldPath);
-        if (match) setAdaptiveSuggestions(proposeSiblingFieldCorrections({ draft: nextDraft, extracted: workspace.extractedData, sourceIndex: Number(match[1]), field: match[2] as "role" | "organization" | "period" }));
+        const match = /^experiences\.(\d+)\.(role|organization|period|description)$/.exec(targetFieldPath);
+        if (match) {
+          const report = proposeSiblingBlockCorrections({
+            pages: refreshed.pages,
+            draft: refreshed.reviewedData,
+            extracted: refreshed.extractedData,
+            sourceIndex: Number(match[1]),
+            sourceField: match[2] as ExperienceFieldName,
+          });
+          setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
+        }
       }
       setSelectedFieldPath(targetFieldPath);
       const newest = [...refreshed.evidenceLinks].reverse().find((link) => link.fieldPath === targetFieldPath && link.state === "active");
@@ -206,13 +249,17 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
-      {adaptiveSuggestions.length ? <Alert
-        action={<Space wrap><Button onClick={() => setAdaptiveSuggestions([])} size="small">Ignorar</Button><Button onClick={() => {
-          const next = adaptiveSuggestions.reduce((current, suggestion) => suggestion.proposedValue ? applyValueAtFieldPath(current, suggestion.fieldPath, suggestion.proposedValue) : current, draft);
-          setDraft(next); setReason("Sugestões adaptativas confirmadas pelo revisor com base no padrão repetido do próprio currículo."); setAdaptiveSuggestions([]);
-        }} size="small" type="primary">Aplicar {adaptiveSuggestions.length === 1 ? "sugestão" : `${adaptiveSuggestions.length} sugestões`}</Button></Space>}
-        description={adaptiveSuggestions.map((item) => `${item.fieldPath}: ${item.currentValue ?? "não identificado"} → ${item.proposedValue ?? "não identificado"}`).join(" | ")}
-        showIcon title="O Prisma reconheceu o mesmo padrão em outros registros. Revise antes de aplicar." type="info"
+      {adaptiveReport ? <AdaptiveSuggestionPanel
+        busy={busy}
+        onApply={(suggestions) => void handleApplyAdaptiveSuggestions(suggestions)}
+        onDismiss={() => setAdaptiveReport(null)}
+        onNavigate={(suggestion) => {
+          setSelectedFieldPath(suggestion.fieldPath);
+          setActiveLinkId(null);
+          setNavigationTarget({ pageNumber: suggestion.pageNumber, regionId: null, linkId: null, nonce: Date.now() });
+          setMobilePane("document");
+        }}
+        report={adaptiveReport}
       /> : null}
       <Segmented className="prisma-review-mobile-switch" onChange={(value) => setMobilePane(value as "document" | "review")} options={[{ label: "Currículo", value: "document" }, { label: "Revisão", value: "review" }]} value={mobilePane} />
 

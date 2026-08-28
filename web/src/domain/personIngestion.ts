@@ -15,7 +15,7 @@ export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
 export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
-export const EXTRACTION_DRAFT_VERSION = "2.0.0";
+export const EXTRACTION_DRAFT_VERSION = "3.0.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -196,6 +196,23 @@ export interface ProfileReviewChange {
   createdAt: string;
 }
 
+export interface ProfileReviewAdaptationEvent {
+  id: string;
+  reviewRevisionId: string;
+  sourceFieldPath: string;
+  patternKey: string;
+  methodVersion: string;
+  acceptedSuggestions: Array<{
+    fieldPath: string;
+    pageNumber: number;
+    evidenceMethod: "pdfjs-layout-v1" | "text-line-v1";
+    rationaleCode: "same-document-block-pattern";
+  }>;
+  lockVersion: number;
+  actorAuthUserId: string;
+  createdAt: string;
+}
+
 export interface ProfileReviewWorkspace {
   id: string;
   personId: string;
@@ -214,8 +231,10 @@ export interface ProfileReviewWorkspace {
   baseProfileVersion: number | null;
   approvedProfileId: string | null;
   approvedAt: string | null;
+  pages: ExtractedPage[];
   revisions: ProfileReviewRevision[];
   changes: ProfileReviewChange[];
+  adaptationEvents: ProfileReviewAdaptationEvent[];
   originalEvidence: OriginalReviewEvidence[];
   spatialRegions: SpatialEvidenceRegion[];
   evidenceLinks: ReviewEvidenceLink[];

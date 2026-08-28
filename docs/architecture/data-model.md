@@ -15,7 +15,9 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Intake currículo-first | `resume_intakes` | PDF tenant-scoped, identidade mínima e resolução única antes do documento M2-B |
 | Revisão humana | `profile_reviews`, `profile_review_revisions`, `profile_review_changes` | Rascunho, lock otimista, decisão por campo e aprovação rastreável |
 | Evidência espacial | `spatial_evidence_regions`, `profile_review_evidence_links`, `profile_review_evidence_events` | Região normalizada, vínculo por campo, substituição não destrutiva e histórico imutável |
-| Aprendizado de extração | `extraction_learning_cases` | referência tenant-scoped a correção humana candidata e aprovada para avaliação |
+| Aprendizado de extração | `extraction_learning_cases` | referência tenant-scoped a correção humana ou aceite adaptativo candidato e aprovado para avaliação |
+| Evento adaptativo | `profile_review_adaptation_events` | ledger append-only do padrão confirmado e dos campos aceitos, sem duplicar valores ou texto integral |
+| Padrão organizacional | `organization_extraction_patterns` | sinal estrutural versionado promovido somente após aprovação integral da revisão |
 | Conhecimento | `professional_profiles`, `evidence`, `inferences`, `inference_evidence` | Fato e inferência não se confundem |
 | Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
 | Avaliação | `match_evaluations` | Contextual e versionada |

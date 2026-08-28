@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta o contrato `adaptive-resume-extraction` 1.0.0, ainda somente local.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta o contrato `adaptive-resume-extraction` 2.0.0: runtime local e persistência/padrões ativos no Prisma-QA.
 
 ## Entrada
 
@@ -13,7 +13,7 @@ Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores
 - PDF: máximo de 15 MB, assinatura `%PDF-`, trailer `%%EOF` e parse válido;
 - páginas: extração nativa primeiro, preservando linhas visuais e coordenadas; OCR local somente quando a suficiência falha;
 - campos: cada fato estruturado pode apontar para uma região própria e para o método que a produziu;
-- adaptação: repetição no documento orienta a interpretação, mas não autoriza copiar valores entre registros.
+- adaptação: repetição no documento e sinais estruturais aprovados do próprio tenant orientam a interpretação, mas não autorizam copiar valores entre registros nem executar templates persistidos.
 
 ## Saída de sucesso
 
@@ -23,7 +23,7 @@ Sucesso do provider não significa perfil processado. A aplicação exige identi
 
 ## Proveniência
 
-Cada fato material liga-se a documento, bloco, página quando disponível, região, trecho, versão de extração, timestamp e método. Inferência referencia evidências separadas. Prompt e modelo são registrados quando aplicáveis. Correções humanas permanecem decisões distintas e podem gerar casos de avaliação somente após aprovação.
+Cada fato material liga-se a documento, bloco, página quando disponível, região, trecho, versão de extração, timestamp e método. Inferência referencia evidências separadas. Prompt e modelo são registrados quando aplicáveis. Uma correção humana permanece decisão distinta, pode orientar imediatamente a releitura de blocos irmãos e somente se torna padrão organizacional depois da aprovação integral da revisão.
 
 ## Estados
 
@@ -50,6 +50,7 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 - Não logar currículo ou resposta integral.
 - Tipo, tamanho, assinatura, trailer e parser são validados antes da persistência. Malware scanning ainda não existe e não pode ser alegado.
 - PDF.js e Tesseract.js processam no navegador; nenhum currículo é enviado a OCR ou LLM externo.
+- O ledger adaptativo recebe apenas caminhos de campo, página, método, versão, padrão e código de justificativa; valores e trechos não são duplicados.
 
 ## Compatibilidade
 
@@ -57,4 +58,4 @@ Versão desconhecida ou resposta fora do schema é rejeitada. Mudança de campo 
 
 ## Testes
 
-Unit tests cobrem sucesso, formato não suportado, texto insuficiente e timeout. Golden tests cobrem fatos, inferências permitidas, invenções proibidas e prompt injection documental.
+Unit tests cobrem sucesso, formato não suportado, texto insuficiente, timeout, releitura completa do bloco, preservação de correção humana anterior, aceite parcial e registro sem padrão seguro. Golden tests cobrem fatos, inferências permitidas, invenções proibidas e prompt injection documental.

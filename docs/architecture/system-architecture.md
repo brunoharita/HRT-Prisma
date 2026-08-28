@@ -35,6 +35,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | ativo e comprovado |
 | Confiabilidade M2-C | central de documentos, retry, revisão humana, comparação e aprovação | `web/src/pages`, `personIngestionService`, RPCs | ativo e comprovado |
 | Evidência espacial M5 | PDF-first, seleção normalizada, OCR local por região, vínculos e histórico | `DocumentEvidenceViewer`, `StructuredReviewPanel`, RPC M5 | ativo e comprovado |
+| Aprendizado adaptativo v2 | releitura do bloco completo, aceite parcial, eventos e sinais organizacionais aprovados | `adaptiveResumeExtraction`, `AdaptiveSuggestionPanel`, RPC adaptativa | runtime local; persistência comprovada em QA |
 | Intake currículo-first | PDF pré-Pessoa, identidade mínima, duplicidade e resolução transacional | `ResumeImportPage`, `resume_intakes`, RPCs | implementado localmente |
 | Database contract | Modelo, integridade, grants, RLS, Storage e RPC atômica | `supabase/migrations` | ativo no Prisma-QA |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
@@ -51,6 +52,8 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - A UI existente continua consumidora dos contratos, nunca fonte de autorização ou verdade.
 - O intake pré-Pessoa é tenant-owned desde o primeiro registro e converge para o pipeline M2-B/M2-C após uma única resolução explícita.
 - O frontend nunca inventa coordenadas. Uma nova região M5 nasce de seleção explícita na versão do documento exibida e o banco valida página, retângulo, tenant e lock.
+- A correção humana não é copiada para outros registros. Cada sugestão é reconstruída da fonte original do próprio bloco, campos já revisados são preservados e registros ambíguos permanecem sem proposta.
+- Padrões persistidos são sinais estruturais allowlisted e versionados, sem valores pessoais ou texto integral, promovidos somente na aprovação e sempre isolados por organização.
 
 ## Persistência
 

@@ -43,14 +43,15 @@ Currículos e vagas são dados. Texto tentando ignorar regras, mudar schema, rev
 | Extraction | `extraction-rules-1.0.0` | ativo local |
 | PDF nativo | `pdfjs-5.4.296/native-v1` | ativo local e remoto interno |
 | OCR | `tesseract.js-7.0.0/por+eng-v1` | ativo local e remoto interno |
-| Draft M2-B | `prisma-layout-adaptive-v1` | implementado local; versão determinística anterior em QA |
+| Draft M2-B | `prisma-layout-adaptive-v2` | implementado local; schema e padrões persistidos em QA |
+| Revisão adaptativa | `prisma-document-learning-v2` | releitura imediata local; aceite transacional em QA |
 | Inference | `inference-ontology-1.0.0` | ativo local |
 | Retrieval/embedding contract | `structured-lexical-1.0.0` | ativo local, sem vetores |
 | Matching | `matching-explainable-1.0.0` | ativo local |
 | Prompt | `no-llm-prompt-1.0.0` | sentinel, nenhuma chamada |
 | Model | `deterministic-local-1.0.0` | ativo local |
 
-Correções com evidência geram casos de avaliação referenciados, não treinamento imediato. Sugestões document-local reinterpretam cada registro irmão com sua própria evidência e exigem confirmação. Alterar regra, prompt ou modelo continua exigindo versão, golden suite, QA e promoção explícita.
+Correções com evidência produzem aprendizado imediato somente dentro do documento: o sistema volta ao texto/layout original, relê o bloco completo de cada registro irmão e exige confirmação por campo. O aceite persiste evento e casos candidatos, mas não altera autonomamente regra, prompt ou modelo. Após a aprovação integral, sinais estruturais sem valores pessoais podem orientar a primeira extração de novos currículos do mesmo tenant. Alterar parser, prompt, modelo ou schema continua exigindo versão, golden suite, QA e promoção explícita.
 
 ## Custo, latência e volume
 

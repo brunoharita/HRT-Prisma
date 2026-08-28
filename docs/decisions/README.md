@@ -27,6 +27,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-015](ADR-015-knowledge-triggered-reinterpretation.md) | accepted | Knowledge-triggered profile reinterpretation through M2-C |
 | [ADR-016](ADR-016-spatial-cv-evidence-review.md) | accepted | PDF-first review with normalized spatial evidence and immutable human history |
 | [ADR-017](ADR-017-adaptive-resume-extraction-and-review-learning.md) | accepted | Layout-aware extraction, document-local suggestions, and controlled review learning |
+| [ADR-018](ADR-018-immediate-block-learning-and-organization-patterns.md) | accepted | Immediate block relearning, atomic adaptive review, and approved organization patterns |
 
 ## Rules
 

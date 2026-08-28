@@ -365,6 +365,49 @@ export interface Database {
         actor_auth_user_id: string;
         created_at: string;
       }>;
+      profile_review_adaptation_events: Table<{
+        id: string;
+        organization_id: string;
+        review_id: string;
+        review_revision_id: string;
+        source_field_path: string;
+        pattern_key: string;
+        method_version: "prisma-document-learning-v2";
+        accepted_suggestions: Json;
+        idempotency_key: string;
+        request_fingerprint: string;
+        lock_version: number;
+        actor_auth_user_id: string;
+        created_at: string;
+      }>;
+      extraction_learning_cases: Table<{
+        id: string;
+        organization_id: string;
+        review_id: string;
+        evidence_event_id: number | null;
+        adaptation_event_id: string | null;
+        field_path: string;
+        learning_scope: "document_local" | "evaluation_candidate";
+        status: "candidate" | "approved" | "rejected";
+        source_contract_version: string;
+        reviewed_contract_version: string;
+        pattern_key: string | null;
+        source_method_version: string | null;
+        approved_at: string | null;
+        created_at: string;
+      }>;
+      organization_extraction_patterns: Table<{
+        id: string;
+        organization_id: string;
+        pattern_key: string;
+        method_version: "prisma-document-learning-v2";
+        status: "active" | "retired";
+        confirmation_count: number;
+        first_confirmed_at: string;
+        last_confirmed_at: string;
+        created_at: string;
+        updated_at: string;
+      }>;
       resume_intakes: Table<{
         id: string;
         organization_id: string;
@@ -580,6 +623,21 @@ export interface Database {
           p_idempotency_key: string;
         };
         Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
+      };
+      apply_profile_review_adaptive_suggestions: {
+        Args: {
+          p_organization_id: string;
+          p_review_id: string;
+          p_expected_lock_version: number;
+          p_reviewed_data: Json;
+          p_source_field_path: string;
+          p_pattern_key: string;
+          p_method_version: "prisma-document-learning-v2";
+          p_accepted_suggestions: Json;
+          p_reason: string;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ review_id: string; lock_version: number; adaptation_event_id: string; reused: boolean }>;
       };
       approve_knowledge_proposal: {
         Args: { p_proposal_id: string; p_human_edited_proposal?: Json | null; p_decision_reason?: string | null };

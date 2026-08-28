@@ -64,6 +64,7 @@ export function StructuredReviewPanel({
   const evidenceLinks = matchingEvidenceLinks.filter((link) => !(hasSpatialOriginal && link.linkKind === "original" && !link.spatialRegionId));
   const fieldChanges = workspace.changes.filter((change) => topLevelReviewField(selectedFieldPath) === change.fieldPath);
   const evidenceEvents = workspace.evidenceEvents.filter((event) => fieldPathMatches(event.fieldPath, selectedFieldPath));
+  const adaptationEvents = workspace.adaptationEvents.filter((event) => event.acceptedSuggestions.some((suggestion) => fieldPathMatches(suggestion.fieldPath, selectedFieldPath)));
 
   return (
     <section aria-label="Revisão estruturada" className="prisma-structured-review">
@@ -145,8 +146,8 @@ export function StructuredReviewPanel({
           <Typography.Text strong><HistoryOutlined /> Histórico do campo</Typography.Text>
           <Button onClick={() => setHistoryOpen(true)} size="small" type="link">Histórico completo</Button>
         </div>
-        {fieldChanges.length || evidenceEvents.length ? (
-          <Timeline items={compactHistory(fieldChanges, evidenceEvents).slice(0, 4)} />
+        {fieldChanges.length || evidenceEvents.length || adaptationEvents.length ? (
+          <Timeline items={compactHistory(fieldChanges, evidenceEvents, adaptationEvents).slice(0, 4)} />
         ) : <Empty description="Nenhuma intervenção humana neste campo." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </section>
 
@@ -264,10 +265,11 @@ function tabForField(fieldPath: string): string {
   return "summary";
 }
 
-function compactHistory(changes: ProfileReviewWorkspace["changes"], events: ProfileReviewWorkspace["evidenceEvents"]) {
+function compactHistory(changes: ProfileReviewWorkspace["changes"], events: ProfileReviewWorkspace["evidenceEvents"], adaptations: ProfileReviewWorkspace["adaptationEvents"]) {
   return [
     ...changes.map((change) => ({ createdAt: change.createdAt, content: <HistoryEntry actor={change.actorAuthUserId} date={change.createdAt} description={change.reason} title="Valor alterado" /> })),
     ...events.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={event.reason} title={eventLabel(event.eventType)} /> })),
+    ...adaptations.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={`Padrão ${event.patternKey} confirmado a partir de ${event.sourceFieldPath}.`} title="Sugestão adaptativa aceita" /> })),
   ].sort((left, right) => right.createdAt.localeCompare(left.createdAt)).map((item) => ({ content: item.content }));
 }
 
@@ -275,6 +277,7 @@ function fullHistory(workspace: ProfileReviewWorkspace) {
   return [
     ...workspace.changes.map((change) => ({ createdAt: change.createdAt, content: <HistoryEntry actor={change.actorAuthUserId} date={change.createdAt} description={`${change.reason}\nDe: ${formatHistoryValue(change.previousValue)}\nPara: ${formatHistoryValue(change.reviewedValue)}`} title={`Valor alterado · ${change.fieldPath}`} /> })),
     ...workspace.evidenceEvents.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={event.reason} title={`${eventLabel(event.eventType)} · ${event.fieldPath}`} /> })),
+    ...workspace.adaptationEvents.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={`Origem: ${event.sourceFieldPath}\nPadrão: ${event.patternKey}\nCampos aceitos: ${event.acceptedSuggestions.map((item) => item.fieldPath).join(", ")}`} title="Aprendizado adaptativo aplicado" /> })),
     ...workspace.revisions.map((revision) => ({ createdAt: revision.createdAt, content: <HistoryEntry actor={revision.actorAuthUserId} date={revision.createdAt} description={revision.changeReason ?? "Revisão versionada."} title={`Revisão ${revision.revisionNumber}`} /> })),
   ].sort((left, right) => right.createdAt.localeCompare(left.createdAt)).map((item) => ({ content: item.content }));
 }

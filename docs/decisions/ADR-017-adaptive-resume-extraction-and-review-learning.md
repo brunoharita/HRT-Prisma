@@ -50,3 +50,4 @@ Páginas antigas recebem arrays vazios de layout e evidência de campo. Evidênc
 ## Histórico
 
 - 2026-08-28: decisão aceita, implementação local criada e migration aplicada no Prisma-QA; produção não existe nem faz parte desta evidência.
+- 2026-08-28: ADR-018 amplia esta fundação com releitura imediata do bloco completo, aceite parcial atômico e padrões organizacionais metadata-only promovidos após aprovação.

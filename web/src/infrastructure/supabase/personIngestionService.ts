@@ -29,7 +29,12 @@ import type {
   RegionExtractionMethod,
   ReviewEvidenceAction,
 } from "../../domain/spatialEvidence";
-import { attachFieldEvidence, buildAdaptiveExtraction } from "../../domain/adaptiveResumeExtraction";
+import {
+  attachFieldEvidence,
+  buildAdaptiveExtraction,
+  type AdaptiveFieldSuggestion,
+  type ExtractionPatternSignal,
+} from "../../domain/adaptiveResumeExtraction";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -322,7 +327,7 @@ export const personIngestionService = {
       await recordFailure(organizationId, personId, document.documentId, "failed_extraction", "storage_upload_failed", "O documento foi registrado, mas o upload privado falhou.");
       throw new Error("O upload privado falhou. Nenhum Perfil Prisma foi gerado.");
     }
-    const extraction = buildAdaptiveExtraction(input.pages);
+    const extraction = buildAdaptiveExtraction(input.pages, await loadOrganizationExtractionPatterns(organizationId));
     const pages = attachFieldEvidence(input.pages, extraction.fieldEvidence);
     await persistExtraction(organizationId, personId, document.documentId, pages, extraction.draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null);
     return document.documentId;
@@ -349,7 +354,7 @@ export const personIngestionService = {
       ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
     }));
     if (pages.length === 0) throw new Error("A tentativa anterior não possui páginas extraídas válidas.");
-    const extraction = buildAdaptiveExtraction(pages);
+    const extraction = buildAdaptiveExtraction(pages, await loadOrganizationExtractionPatterns(organizationId));
     await persistExtraction(
       organizationId,
       personId,
@@ -396,6 +401,41 @@ export const personIngestionService = {
     const lockVersion = data?.[0]?.lock_version;
     if (!lockVersion) throw new Error("A revisão foi salva sem versão de concorrência.");
     return lockVersion;
+  },
+
+  async applyAdaptiveSuggestions(input: {
+    organizationId: string;
+    reviewId: string;
+    expectedLockVersion: number;
+    reviewedData: StructuredDraft;
+    sourceFieldPath: string;
+    patternKey: string;
+    methodVersion: "prisma-document-learning-v2";
+    suggestions: AdaptiveFieldSuggestion[];
+    reason: string;
+  }): Promise<{ lockVersion: number; adaptationEventId: string }> {
+    const suggestionMetadata = input.suggestions.map((suggestion) => ({
+      fieldPath: suggestion.fieldPath,
+      pageNumber: suggestion.pageNumber,
+      evidenceMethod: suggestion.evidence?.method ?? "text-line-v1",
+      rationaleCode: suggestion.rationaleCode,
+    })) as unknown as Json;
+    const { data, error } = await supabase.rpc("apply_profile_review_adaptive_suggestions", {
+      p_organization_id: input.organizationId,
+      p_review_id: input.reviewId,
+      p_expected_lock_version: input.expectedLockVersion,
+      p_reviewed_data: input.reviewedData as unknown as Json,
+      p_source_field_path: input.sourceFieldPath,
+      p_pattern_key: input.patternKey,
+      p_method_version: input.methodVersion,
+      p_accepted_suggestions: suggestionMetadata,
+      p_reason: input.reason,
+      p_idempotency_key: createOperationKey("adaptive-review"),
+    });
+    throwReviewError(error, "Não foi possível aplicar atomicamente as sugestões adaptativas.");
+    const result = data?.[0];
+    if (!result) throw new Error("O aprendizado adaptativo não retornou confirmação persistida.");
+    return { lockVersion: result.lock_version, adaptationEventId: result.adaptation_event_id };
   },
 
   async recordProfileReviewEvidence(input: {
@@ -558,6 +598,8 @@ export const personIngestionService = {
       regionResult,
       linkResult,
       evidenceEventResult,
+      pageResult,
+      adaptationEventResult,
     ] = await Promise.all([
       supabase.from("people").select("full_name").eq("organization_id", organizationId).eq("id", review.person_id).single(),
       supabase.from("documents")
@@ -582,6 +624,12 @@ export const personIngestionService = {
       supabase.from("profile_review_evidence_events")
         .select("id, review_id, review_revision_id, field_path, event_type, previous_link_id, new_link_id, reason, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
+      supabase.from("document_page_extractions")
+        .select("page_number, text_content, origin, useful_character_count, method, method_version, layout_blocks, field_evidence")
+        .eq("organization_id", organizationId).eq("processing_attempt_id", review.processing_attempt_id).order("page_number"),
+      supabase.from("profile_review_adaptation_events")
+        .select("id, review_revision_id, source_field_path, pattern_key, method_version, accepted_suggestions, lock_version, actor_auth_user_id, created_at")
+        .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
     ]);
     throwIfError(personResult.error, "Não foi possível carregar a Pessoa da revisão.");
     throwIfError(documentResult.error, "Não foi possível carregar o documento da revisão.");
@@ -591,6 +639,8 @@ export const personIngestionService = {
     throwIfError(regionResult.error, "Não foi possível carregar as regiões espaciais da revisão.");
     throwIfError(linkResult.error, "Não foi possível carregar os vínculos de evidência da revisão.");
     throwIfError(evidenceEventResult.error, "Não foi possível carregar o histórico de evidências da revisão.");
+    throwIfError(pageResult.error, "Não foi possível carregar a fonte original para o aprendizado da revisão.");
+    throwIfError(adaptationEventResult.error, "Não foi possível carregar o histórico de aprendizado da revisão.");
     if (!personResult.data || !documentResult.data) throw new Error("A revisão perdeu a referência da Pessoa ou do documento.");
     return {
       id: review.id,
@@ -610,6 +660,16 @@ export const personIngestionService = {
       baseProfileVersion: review.base_profile_version,
       approvedProfileId: review.approved_profile_id,
       approvedAt: review.approved_at,
+      pages: (pageResult.data ?? []).map((page) => ({
+        pageNumber: page.page_number,
+        text: page.text_content,
+        origin: page.origin,
+        usefulCharacterCount: page.useful_character_count,
+        method: page.method,
+        methodVersion: page.method_version,
+        ...(Array.isArray(page.layout_blocks) ? { layoutLines: page.layout_blocks as unknown as NonNullable<ExtractedPage["layoutLines"]> } : {}),
+        ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
+      })),
       revisions: (revisionResult.data ?? []).map((revision) => ({
         id: revision.id,
         revisionNumber: revision.revision_number,
@@ -626,6 +686,17 @@ export const personIngestionService = {
         reason: change.reason,
         actorAuthUserId: change.actor_auth_user_id,
         createdAt: change.created_at,
+      })),
+      adaptationEvents: (adaptationEventResult.data ?? []).map((event) => ({
+        id: event.id,
+        reviewRevisionId: event.review_revision_id,
+        sourceFieldPath: event.source_field_path,
+        patternKey: event.pattern_key,
+        methodVersion: event.method_version,
+        acceptedSuggestions: decodeAdaptiveSuggestionMetadata(event.accepted_suggestions),
+        lockVersion: event.lock_version,
+        actorAuthUserId: event.actor_auth_user_id,
+        createdAt: event.created_at,
       })),
       originalEvidence: (evidenceResult.data ?? []).map((evidence) => ({
         id: evidence.id,
@@ -845,7 +916,7 @@ async function processResolvedIntake(
   result: ResumeIntakeResolutionResult,
 ): Promise<ResumeIntakeResolutionResult> {
   try {
-    const extraction = buildAdaptiveExtraction(input.pages);
+    const extraction = buildAdaptiveExtraction(input.pages, await loadOrganizationExtractionPatterns(organizationId));
     await persistExtraction(
       organizationId,
       result.personId,
@@ -985,6 +1056,38 @@ function toAttemptView(attempt: {
     startedAt: attempt.started_at,
     completedAt: attempt.completed_at,
   };
+}
+
+async function loadOrganizationExtractionPatterns(organizationId: string): Promise<ExtractionPatternSignal[]> {
+  const { data, error } = await supabase.from("organization_extraction_patterns")
+    .select("pattern_key, method_version, confirmation_count")
+    .eq("organization_id", organizationId)
+    .eq("status", "active")
+    .order("confirmation_count", { ascending: false })
+    .limit(100);
+  throwIfError(error, "Não foi possível carregar os padrões de extração aprovados desta organização.");
+  return (data ?? []).map((pattern) => ({
+    patternKey: pattern.pattern_key,
+    methodVersion: pattern.method_version,
+    confirmationCount: pattern.confirmation_count,
+  }));
+}
+
+function decodeAdaptiveSuggestionMetadata(value: Json): ProfileReviewWorkspace["adaptationEvents"][number]["acceptedSuggestions"] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (!isRecord(item)
+      || typeof item.fieldPath !== "string"
+      || typeof item.pageNumber !== "number"
+      || (item.evidenceMethod !== "pdfjs-layout-v1" && item.evidenceMethod !== "text-line-v1")
+      || item.rationaleCode !== "same-document-block-pattern") return [];
+    return [{
+      fieldPath: item.fieldPath,
+      pageNumber: item.pageNumber,
+      evidenceMethod: item.evidenceMethod,
+      rationaleCode: item.rationaleCode,
+    }];
+  });
 }
 
 function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified: Json): StructuredDraft {
