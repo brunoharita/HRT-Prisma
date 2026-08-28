@@ -4,12 +4,18 @@ import type {
   ReviewEvidenceLink,
   SpatialEvidenceRegion,
 } from "./spatialEvidence.js";
+import {
+  ADAPTIVE_STRUCTURING_VERSION,
+  buildAdaptiveExtraction,
+  type FieldEvidenceDescriptor,
+  type LayoutTextLine,
+} from "./adaptiveResumeExtraction.js";
 
 export const MAX_PDF_BYTES = 15 * 1024 * 1024;
-export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/native-v1";
+export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
-export const STRUCTURING_VERSION = "prisma-deterministic-profile-v1";
-export const EXTRACTION_DRAFT_VERSION = "1.0.0";
+export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
+export const EXTRACTION_DRAFT_VERSION = "2.0.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -87,6 +93,8 @@ export interface ExtractedPage {
   usefulCharacterCount: number;
   method: string;
   methodVersion: string;
+  layoutLines?: LayoutTextLine[];
+  fieldEvidence?: FieldEvidenceDescriptor[];
 }
 
 export interface ProcessedDocumentInput {
@@ -290,14 +298,11 @@ export async function validateAndProcessPdf(
     });
     const page = await pdfDocument.getPage(pageNumber);
     const textContent = await page.getTextContent();
-    const text = textContent.items
-      .map((item) => ("str" in item ? `${item.str}${"hasEOL" in item && item.hasEOL ? "\n" : " "}` : ""))
-      .join("")
-      .replace(/[ \t]+/g, " ")
-      .replace(/ *\n+ */g, "\n")
-      .trim();
+    const layoutViewport = page.getViewport({ scale: 1 });
+    const layoutLines = buildPdfLayoutLines(textContent.items, layoutViewport.width, layoutViewport.height);
+    const text = layoutLines.map((line) => line.text).join("\n").trim();
     if (isNativeTextSufficient(text)) {
-      pages.push(toExtractedPage(pageNumber, text, "native_pdf", "pdfjs", NATIVE_EXTRACTION_VERSION));
+      pages.push({ ...toExtractedPage(pageNumber, text, "native_pdf", "pdfjs", NATIVE_EXTRACTION_VERSION), layoutLines });
       continue;
     }
     const viewport = page.getViewport({ scale: 1.5 });
@@ -356,37 +361,7 @@ export function processManualText(text: string): { page: ExtractedPage; draft: S
 }
 
 export function buildDeterministicDraft(pages: ExtractedPage[]): StructuredDraft {
-  const lines = pages.flatMap((page) => page.text.split(/\n|\s{2,}/).map((line) => ({ line: line.trim(), page: page.pageNumber })))
-    .filter((entry) => entry.line.length > 2);
-  const experiencePattern = /(.+?)\s+(?:em|at|[-|])\s+(.+?)(?:\s+([0-9]{4}[^|]*))?$/i;
-  const experiences = lines.flatMap((entry) => {
-    const match = experiencePattern.exec(entry.line);
-    if (!match?.[1] || !match[2] || !/(analista|desenvolvedor|developer|gerente|coordenador|especialista|consultor|engineer|recruiter|diretor)/i.test(match[1])) return [];
-    return [{ role: match[1].trim(), organization: match[2].trim(), period: match[3]?.trim() ?? null, evidenceText: entry.line, page: entry.page }];
-  }).slice(0, 12);
-  const education = lines.filter((entry) => /(universidade|faculdade|bacharel|tecnólogo|mba|pós-graduação|university|college)/i.test(entry.line))
-    .slice(0, 8)
-    .map((entry) => ({ course: entry.line, institution: "Não identificada", period: null, evidenceText: entry.line, page: entry.page }));
-  const competencyCatalog = ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL", "Power BI", "SAP", "Scrum", "Kanban", "Docker", "AWS", "Azure", "Supabase"];
-  const fullText = pages.map((page) => page.text).join("\n");
-  const competencies = competencyCatalog.filter((item) => new RegExp(`\\b${escapeRegExp(item)}\\b`, "i").test(fullText));
-  const languages = ["Português", "Inglês", "Espanhol", "English", "Spanish"].filter((item) => new RegExp(`\\b${item}\\b`, "i").test(fullText));
-  const notIdentified = [
-    ...(experiences.length === 0 ? ["experiências estruturáveis"] : []),
-    ...(education.length === 0 ? ["formação acadêmica"] : []),
-    ...(competencies.length === 0 ? ["competências explícitas"] : []),
-    ...(languages.length === 0 ? ["idiomas"] : []),
-  ];
-  return {
-    summary: experiences.length > 0 ? `${experiences[0]!.role} com experiência profissional documentada em ${experiences[0]!.organization}.` : null,
-    experiences,
-    education,
-    certifications: lines.filter((entry) => /(certificação|certified|certificate)/i.test(entry.line)).slice(0, 8).map((entry) => entry.line),
-    languages,
-    competencies,
-    uncertainties: [],
-    notIdentified,
-  };
+  return buildAdaptiveExtraction(pages).draft;
 }
 
 export function isNativeTextSufficient(text: string): boolean {
@@ -419,6 +394,54 @@ function toExtractedPage(
   return { pageNumber, text, origin, usefulCharacterCount: usefulCharacterCount(text), method, methodVersion };
 }
 
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function buildPdfLayoutLines(items: unknown[], pageWidth: number, pageHeight: number): LayoutTextLine[] {
+  const fragments = items.flatMap((raw) => {
+    if (!isPdfTextItem(raw) || !raw.str.trim()) return [];
+    const fontSize = Math.max(Math.abs(raw.transform[0]), Math.abs(raw.transform[3]), raw.height || 0);
+    return [{
+      text: raw.str.trim(),
+      x: clampNormalized(raw.transform[4] / pageWidth),
+      y: clampNormalized((pageHeight - raw.transform[5] - Math.max(raw.height, fontSize)) / pageHeight),
+      width: clampNormalized(Math.max(raw.width / pageWidth, 0.000001)),
+      height: clampNormalized(Math.max(raw.height, fontSize, 1) / pageHeight),
+      fontSize,
+      emphasis: /bold|black|semibold|heavy/i.test(raw.fontName ?? "") ? "strong" as const : "regular" as const,
+    }];
+  }).sort((left, right) => left.y - right.y || left.x - right.x);
+  const groups: typeof fragments[] = [];
+  for (const fragment of fragments) {
+    let group: (typeof fragments) | undefined;
+    for (let index = groups.length - 1; index >= 0; index -= 1) {
+      const candidate = groups[index]!;
+      if (Math.abs(candidate[0]!.y - fragment.y) <= Math.max(candidate[0]!.height, fragment.height) * 0.55) { group = candidate; break; }
+    }
+    if (group) group.push(fragment); else groups.push([fragment]);
+  }
+  return groups.map((group) => {
+    group.sort((left, right) => left.x - right.x);
+    const x = Math.min(...group.map((item) => item.x));
+    const y = Math.min(...group.map((item) => item.y));
+    const right = Math.max(...group.map((item) => item.x + item.width));
+    const bottom = Math.max(...group.map((item) => item.y + item.height));
+    return {
+      text: group.map((item) => item.text).join(" ").replace(/\s+/g, " ").trim(),
+      x,
+      y,
+      width: Math.min(1 - x, right - x),
+      height: Math.min(1 - y, bottom - y),
+      fontSize: Math.max(...group.map((item) => item.fontSize)),
+      emphasis: group.some((item) => item.emphasis === "strong") ? "strong" : "regular",
+    };
+  });
+}
+
+function isPdfTextItem(value: unknown): value is { str: string; transform: [number, number, number, number, number, number, ...number[]]; width: number; height: number; fontName?: string } {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return typeof item.str === "string" && Array.isArray(item.transform) && item.transform.length >= 6
+    && item.transform.every((entry) => typeof entry === "number") && typeof item.width === "number" && typeof item.height === "number";
+}
+
+function clampNormalized(value: number): number {
+  return Math.round(Math.min(1, Math.max(0, value)) * 1_000_000) / 1_000_000;
 }

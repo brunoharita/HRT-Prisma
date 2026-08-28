@@ -56,9 +56,9 @@ export interface ReviewEvidenceEvent {
   reviewId: string;
   reviewRevisionId: string;
   fieldPath: string;
-  eventType: "human_region_added" | "review_evidence_replaced" | "complementary_evidence_added" | "new_information_created";
+  eventType: "human_region_added" | "review_evidence_replaced" | "complementary_evidence_added" | "new_information_created" | "review_evidence_removed";
   previousLinkId: string | null;
-  newLinkId: string;
+  newLinkId: string | null;
   reason: string;
   actorAuthUserId: string;
   createdAt: string;

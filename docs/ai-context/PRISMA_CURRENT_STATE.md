@@ -11,7 +11,7 @@ last_verified: 2026-08-27
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch integrada verificada: `main`; movimento M5 em validação na branch `codex/m5-cv-evidence`.
+- Branch integrada verificada: `main`; M5 permanece em validação na branch `codex/m5-cv-evidence` e a extração adaptativa está implementada localmente na branch empilhada `codex/adaptive-resume-extraction`.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -24,6 +24,8 @@ last_verified: 2026-08-27
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável.
+- Extração adaptativa implementada localmente: PDF.js preserva linhas e geometria, a estruturação reconhece padrões do próprio currículo, períodos abreviados e empresa em linha distinta, e cada campo pode possuir região original navegável.
+- Revisão adaptativa implementada localmente: evidência humana pode ser retirada sem apagar histórico; superfícies extraída/revisada navegam para suas respectivas regiões; correções podem sugerir reinterpretações de registros irmãos e casos aprovados alimentam avaliação controlada.
 - Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
@@ -41,7 +43,7 @@ last_verified: 2026-08-27
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck, build e testes locais do shell web.
-- 57 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 61 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -53,6 +55,7 @@ last_verified: 2026-08-27
 - Migrations M2-B com bucket privado `person-documents`, tentativas, páginas, drafts, eventos e RPC transacional `persist_person_extraction`.
 - Migrations M2-C com ledger de operações, locks de versão/tentativa, retries vinculados, revisões/alterações imutáveis e RPCs de aprovação atômica.
 - Migrations M5 `20260827034147_m5_spatial_cv_evidence`, `20260827041613_m5_spatial_evidence_fk_indexes` e `20260827042829_m5_spatial_evidence_idempotent_replay` com regiões normalizadas, vínculos, eventos append-only, RLS, índices e RPC transacional.
+- Migration `20260828055309_adaptive_resume_extraction` aplicada no Prisma-QA com layout por página, evidência espacial por campo, casos de aprendizado tenant-scoped e RPC auditável de retirada de evidência.
 - Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 
@@ -112,6 +115,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O advisor de segurança também identifica RPCs públicas M2-C e currículo-first como `security definer`; ADR-011/ADR-012 registram o uso controlado. A proteção contra senhas vazadas continua desabilitada.
 - O advisor identifica a RPC M5 `record_profile_review_evidence` como `security definer`; o uso intencional, a autorização interna, o `search_path` vazio e o DML direto revogado estão registrados no ADR-016. Índices M5 recém-criados aparecem como não utilizados porque nenhum evento espacial foi persistido após os testes revertidos.
 - O build e os contratos responsivos do workspace M5 estão aprovados, mas a inspeção visual autenticada desktop/mobile permanece pendente porque o navegador disponível não possuía sessão e não havia credencial de QA no ambiente.
+- A migration adaptativa e seus contratos de banco estão em QA; a qualidade possui regressão sintética para o caso HRT, mas ainda não foi medida em lote de currículos reais autorizados nem recebeu smoke visual autenticado.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - O CI usa a política fail-closed do pnpm para scripts de instalação de dependências; o `postinstall` não funcional do `tesseract.js` foi revisado e explicitamente negado em `pnpm-workspace.yaml`. A geração do Context Pack normaliza finais de linha para manter hash e conteúdo determinísticos em Windows e Linux.
 - Os snapshots oficiais CBO/ESCO/O*NET ainda não foram baixados, validados por checksum, diffados ou publicados. O catálogo e os adapters estão prontos, sem simular uma carga que não ocorreu.
@@ -121,4 +125,4 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-27, M2-A, M2-B, M2-C, currículo-first, M4 e M5 estão aplicados ao único projeto remoto Prisma-QA. O M5 comprovou contrato espacial normalizado, compatibilidade histórica sem coordenadas fabricadas, RLS, papel de revisor, rejeição de coordenadas inválidas e índices de foreign keys. O Knowledge Agent está implantado, mas a chamada externa permanece deliberadamente desativada. Os frontends continuam locais; não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-28, o gate local da extração adaptativa aprovou lint, foundation, Context Pack, typechecks, build web, 61 testes técnicos, 19 casos golden sem regressão e demonstração vertical. A migration `20260828055309` foi aplicada no Prisma-QA; RLS, grants, trigger imutável e fronteiras das RPCs foram verificados. O Knowledge Agent está implantado, mas a chamada externa permanece deliberadamente desativada. O frontend adaptativo continua local; não há hosting nem ambiente de produção separado por decisão atual de operação interna.

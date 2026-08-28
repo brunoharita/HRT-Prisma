@@ -220,6 +220,8 @@ export interface Database {
         useful_character_count: number;
         method: string;
         method_version: string;
+        layout_blocks: Json;
+        field_evidence: Json;
         created_at: string;
       }>;
       extraction_drafts: Table<{
@@ -356,9 +358,9 @@ export interface Database {
         review_id: string;
         review_revision_id: string;
         field_path: string;
-        event_type: "human_region_added" | "review_evidence_replaced" | "complementary_evidence_added" | "new_information_created";
+        event_type: "human_region_added" | "review_evidence_replaced" | "complementary_evidence_added" | "new_information_created" | "review_evidence_removed";
         previous_link_id: string | null;
-        new_link_id: string;
+        new_link_id: string | null;
         reason: string;
         actor_auth_user_id: string;
         created_at: string;
@@ -567,6 +569,17 @@ export interface Database {
           p_idempotency_key: string;
         };
         Returns: Array<{ review_id: string; lock_version: number; region_id: string; link_id: string; reused: boolean }>;
+      };
+      retire_profile_review_evidence: {
+        Args: {
+          p_organization_id: string;
+          p_review_id: string;
+          p_expected_lock_version: number;
+          p_link_id: string;
+          p_reason: string;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
       };
       approve_knowledge_proposal: {
         Args: { p_proposal_id: string; p_human_edited_proposal?: Json | null; p_decision_reason?: string | null };

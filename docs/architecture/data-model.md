@@ -11,10 +11,11 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users` | Grupo delimita autoridade; empresa delimita dados; usuário opera o sistema |
 | Organização | `organization_units`, `job_roles`, `positions`, `vacancies` | Papel, posição e vaga são distintos |
 | Pessoa | `people`, `person_private_data` | PII privada separada da identidade profissional |
-| Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, checksum, tentativa, resultado e idempotência por operação |
+| Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, layout visual, evidência por campo, tentativa e idempotência |
 | Intake currículo-first | `resume_intakes` | PDF tenant-scoped, identidade mínima e resolução única antes do documento M2-B |
 | Revisão humana | `profile_reviews`, `profile_review_revisions`, `profile_review_changes` | Rascunho, lock otimista, decisão por campo e aprovação rastreável |
 | Evidência espacial | `spatial_evidence_regions`, `profile_review_evidence_links`, `profile_review_evidence_events` | Região normalizada, vínculo por campo, substituição não destrutiva e histórico imutável |
+| Aprendizado de extração | `extraction_learning_cases` | referência tenant-scoped a correção humana candidata e aprovada para avaliação |
 | Conhecimento | `professional_profiles`, `evidence`, `inferences`, `inference_evidence` | Fato e inferência não se confundem |
 | Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
 | Avaliação | `match_evaluations` | Contextual e versionada |
@@ -35,6 +36,8 @@ Estados de documento implementados: `pending`, `received`, `processing`, `proces
 `document_operations` impede replay divergente e devolve o resultado anterior para a mesma chave/fingerprint. Locks por pessoa/documento serializam versões. A revisão mantém histórico imutável de alterações e somente `approve_profile_review` promove uma nova versão de perfil, com uma única versão atual por pessoa.
 
 `spatial_evidence_regions` exige `organization_id`, documento, versão, review, página e coordenadas `x/y/width/height` entre 0 e 1, inclusive os limites somados. `profile_review_evidence_links` referencia exatamente uma evidência original ou uma região espacial. `profile_review_evidence_events` é append-only. A RPC M5 cria região, vínculo, revisão e evento atomicamente; evidências históricas anteriores permanecem válidas sem coordenadas.
+
+`document_page_extractions.layout_blocks` preserva linhas visuais normalizadas e `field_evidence` preserva descritores mínimos por campo. Ao abrir a revisão, somente coordenadas realmente extraídas geram regiões `source=system`. `extraction_learning_cases` referencia eventos humanos sem duplicar texto integral e só é promovida a caso aprovado quando a revisão é aprovada.
 
 `resume_intakes` nasce com `organization_id`, chave idempotente, checksum e caminho privado. E-mail e telefone normalizados suportam correspondência forte; nome normalizado é apenas sinal possível. `resolve_resume_intake` bloqueia a operação, cria ou vincula a Pessoa e registra o documento na mesma transação. Somente depois o fluxo entra nas tentativas, drafts, evidências e revisão M2-B/M2-C.
 

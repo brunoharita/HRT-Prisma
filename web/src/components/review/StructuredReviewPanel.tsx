@@ -2,11 +2,12 @@ import { useMemo, useState } from "react";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
+  DeleteOutlined,
   FileSearchOutlined,
   HistoryOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Button, Drawer, Empty, Input, Select, Space, Tabs, Tag, Timeline, Typography } from "antd";
+import { Button, Drawer, Empty, Input, Popconfirm, Select, Space, Tabs, Tag, Timeline, Typography } from "antd";
 import type { ProfileReviewWorkspace, StructuredDraft } from "../../domain/personIngestion";
 import { fieldPathMatches, topLevelReviewField } from "../../domain/spatialEvidence";
 
@@ -20,9 +21,10 @@ interface StructuredReviewPanelProps {
   reason: string;
   onReasonChange: (reason: string) => void;
   onDraftChange: (draft: StructuredDraft) => void;
-  onFieldSelect: (fieldPath: string) => void;
+  onFieldSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
   onStartSelection: (fieldPath: string) => void;
   onEvidenceNavigate: (input: { fieldPath: string; linkId: string; pageNumber: number; regionId: string | null }) => void;
+  onEvidenceDelete: (input: { fieldPath: string; linkId: string }) => void;
 }
 
 export function StructuredReviewPanel({
@@ -38,6 +40,7 @@ export function StructuredReviewPanel({
   onFieldSelect,
   onStartSelection,
   onEvidenceNavigate,
+  onEvidenceDelete,
 }: StructuredReviewPanelProps) {
   const [experienceIndex, setExperienceIndex] = useState(0);
   const [educationIndex, setEducationIndex] = useState(0);
@@ -56,7 +59,9 @@ export function StructuredReviewPanel({
     onFieldSelect(defaults[key] ?? "summary");
   }
 
-  const evidenceLinks = workspace.evidenceLinks.filter((link) => link.state === "active" && fieldPathMatches(link.fieldPath, selectedFieldPath));
+  const matchingEvidenceLinks = workspace.evidenceLinks.filter((link) => link.state === "active" && fieldPathMatches(link.fieldPath, selectedFieldPath));
+  const hasSpatialOriginal = matchingEvidenceLinks.some((link) => link.linkKind === "original" && Boolean(link.spatialRegionId));
+  const evidenceLinks = matchingEvidenceLinks.filter((link) => !(hasSpatialOriginal && link.linkKind === "original" && !link.spatialRegionId));
   const fieldChanges = workspace.changes.filter((change) => topLevelReviewField(selectedFieldPath) === change.fieldPath);
   const evidenceEvents = workspace.evidenceEvents.filter((event) => fieldPathMatches(event.fieldPath, selectedFieldPath));
 
@@ -92,22 +97,26 @@ export function StructuredReviewPanel({
               const region = link.spatialRegionId ? workspace.spatialRegions.find((item) => item.id === link.spatialRegionId) : null;
               const pageNumber = region?.pageNumber ?? original?.sourcePage;
               return (
-                <button
+                <div
                   className={[
                     "prisma-evidence-card",
                     `prisma-evidence-card--${link.linkKind}`,
                     activeLinkId === link.id ? "is-active" : "",
                   ].filter(Boolean).join(" ")}
-                  disabled={!pageNumber}
                   key={link.id}
-                  onClick={() => pageNumber && onEvidenceNavigate({ fieldPath: link.fieldPath, linkId: link.id, pageNumber, regionId: region?.id ?? null })}
-                  type="button"
                 >
-                  <span>{link.linkKind === "original" ? "Original (extração)" : link.linkKind === "reviewer" ? "Revisor (selecionada)" : "Complementar"}</span>
-                  <strong>{pageNumber ? `Página ${pageNumber}` : "Página não identificada"}</strong>
-                  <p>{region?.selectedText ?? original?.quotedText ?? "Evidência espacial sem texto reconhecido."}</p>
-                  {!region && original ? <small>Sem região espacial; coordenadas não foram inferidas.</small> : null}
-                </button>
+                  <button className="prisma-evidence-card__navigate" disabled={!pageNumber} onClick={() => pageNumber && onEvidenceNavigate({ fieldPath: link.fieldPath, linkId: link.id, pageNumber, regionId: region?.id ?? null })} type="button">
+                    <span>{link.linkKind === "original" ? "Original (extração)" : link.linkKind === "reviewer" ? "Revisor (selecionada)" : "Complementar"}</span>
+                    <strong>{pageNumber ? `Página ${pageNumber}` : "Página não identificada"}</strong>
+                    <p>{region?.selectedText ?? original?.quotedText ?? "Evidência espacial sem texto reconhecido."}</p>
+                    {!region && original ? <small>Sem região espacial; coordenadas não foram inferidas.</small> : null}
+                  </button>
+                  {link.linkKind !== "original" && editable ? (
+                    <Popconfirm cancelText="Manter" description="O vínculo será retirado da revisão, mas permanecerá no histórico auditável." okText="Excluir evidência" onConfirm={() => onEvidenceDelete({ fieldPath: link.fieldPath, linkId: link.id })} title="Excluir esta evidência do revisor?">
+                      <Button aria-label="Excluir evidência do revisor" className="prisma-evidence-card__delete" danger icon={<DeleteOutlined />} size="small" type="text" />
+                    </Popconfirm>
+                  ) : null}
+                </div>
               );
             })}
           </div>
@@ -163,7 +172,7 @@ export function StructuredReviewPanel({
         <ReviewField editable={editable} extracted={extracted?.organization ?? "Não identificado"} fieldPath={`experiences.${index}.organization`} label="Empresa" onChange={(value) => update({ organization: value })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.organization`)} value={reviewed.organization} />
         <ReviewField editable={editable} extracted={extracted?.role ?? "Não identificado"} fieldPath={`experiences.${index}.role`} label="Cargo" onChange={(value) => update({ role: value })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.role`)} value={reviewed.role} />
         <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={`experiences.${index}.period`} label="Período" onChange={(value) => update({ period: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.period`)} value={reviewed.period ?? ""} />
-        <ReviewField editable={editable} extracted={extracted?.evidenceText ?? "Não identificado"} fieldPath={`experiences.${index}.description`} label="Descrição / Principais atividades" multiline onChange={(value) => update({ description: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.description`)} value={reviewed.description ?? reviewed.evidenceText} />
+        <ReviewField editable={editable} extracted={extracted?.description ?? "Não identificado"} fieldPath={`experiences.${index}.description`} label="Descrição / Principais atividades" multiline onChange={(value) => update({ description: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, `experiences.${index}.description`)} value={reviewed.description ?? reviewed.evidenceText} />
       </div>
     );
   }
@@ -189,8 +198,8 @@ export function StructuredReviewPanel({
       <div className={["prisma-review-field", selectedFieldPath === fieldPath ? "is-selected" : ""].join(" ")} onClick={() => onFieldSelect(fieldPath)}>
         <Typography.Text strong>{label}</Typography.Text>
         <div className="prisma-review-value-grid">
-          <ValueSurface label="Extraído pelo Prisma" value={workspace.extractedData[fieldPath].join(", ") || "Não identificado"} />
-          <div className="prisma-reviewed-surface"><small>Revisado por você</small><Select disabled={!editable} mode="tags" onChange={(values) => onDraftChange({ ...draft, [fieldPath]: values })} open={false} tokenSeparators={[","]} value={draft[fieldPath]} /></div>
+          <ValueSurface label="Extraído pelo Prisma" onSelect={() => onFieldSelect(fieldPath, "original")} value={workspace.extractedData[fieldPath].join(", ") || "Não identificado"} />
+          <div className="prisma-reviewed-surface" onClick={(event) => { event.stopPropagation(); onFieldSelect(fieldPath, "reviewer"); }}><small>Revisado por você</small><Select disabled={!editable} mode="tags" onChange={(values) => onDraftChange({ ...draft, [fieldPath]: values })} open={false} tokenSeparators={[","]} value={draft[fieldPath]} /></div>
         </div>
       </div>
     );
@@ -203,7 +212,7 @@ interface CommonEditorProps {
   editable: boolean;
   selectedFieldPath: string;
   onDraftChange: (draft: StructuredDraft) => void;
-  onFieldSelect: (fieldPath: string) => void;
+  onFieldSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
 }
 
 function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect }: CommonEditorProps) {
@@ -218,22 +227,22 @@ function ReviewField({ label, fieldPath, extracted, value, editable, multiline =
   editable: boolean;
   multiline?: boolean;
   selected: boolean;
-  onSelect: (fieldPath: string) => void;
+  onSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
   onChange: (value: string) => void;
 }) {
   return (
     <div className={["prisma-review-field", selected ? "is-selected" : ""].join(" ")} onClick={() => onSelect(fieldPath)}>
       <Typography.Text strong>{label}</Typography.Text>
       <div className="prisma-review-value-grid">
-        <ValueSurface label="Extraído pelo Prisma" value={extracted} />
-        <div className="prisma-reviewed-surface"><small>Revisado por você</small>{multiline ? <Input.TextArea disabled={!editable} onFocus={() => onSelect(fieldPath)} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input disabled={!editable} onFocus={() => onSelect(fieldPath)} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
+        <ValueSurface label="Extraído pelo Prisma" onSelect={() => onSelect(fieldPath, "original")} value={extracted} />
+        <div className="prisma-reviewed-surface" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>Revisado por você</small>{multiline ? <Input.TextArea disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
       </div>
     </div>
   );
 }
 
-function ValueSurface({ label, value }: { label: string; value: string }) {
-  return <div className="prisma-extracted-surface"><small>{label}</small><p>{value}</p></div>;
+function ValueSurface({ label, value, onSelect }: { label: string; value: string; onSelect?: () => void }) {
+  return <div className="prisma-extracted-surface" onClick={(event) => { event.stopPropagation(); onSelect?.(); }}><small>{label}</small><p>{value}</p></div>;
 }
 
 function EntityNavigator({ label, index, count, onChange }: { label: string; index: number; count: number; onChange: (index: number) => void }) {
@@ -275,7 +284,7 @@ function HistoryEntry({ title, date, actor, description }: { title: string; date
 }
 
 function eventLabel(event: ProfileReviewWorkspace["evidenceEvents"][number]["eventType"]): string {
-  return ({ human_region_added: "Evidência humana adicionada", review_evidence_replaced: "Evidência substituída", complementary_evidence_added: "Evidência complementar adicionada", new_information_created: "Nova informação criada" })[event];
+  return ({ human_region_added: "Evidência humana adicionada", review_evidence_replaced: "Evidência substituída", complementary_evidence_added: "Evidência complementar adicionada", new_information_created: "Nova informação criada", review_evidence_removed: "Evidência do revisor excluída" })[event];
 }
 
 function formatHistoryValue(value: unknown): string {
