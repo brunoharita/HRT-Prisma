@@ -96,6 +96,14 @@ export interface CompetencySignal {
   contexts: string[];
 }
 
+export interface CustomProfileSection {
+  id: string;
+  name: string;
+  format: "text" | "list";
+  source: "extracted" | "human";
+  items: Array<{ id: string; value: string }>;
+}
+
 export interface ProfessionalProfile {
   id: UUID;
   organizationId: UUID;
@@ -108,6 +116,7 @@ export interface ProfessionalProfile {
   toolsAndTechnologies: string[];
   competencies: CompetencySignal[];
   professionalContexts: string[];
+  customSections: CustomProfileSection[];
   evidenceIds: UUID[];
   inferenceIds: UUID[];
   uncertainties: string[];
@@ -155,6 +164,7 @@ export interface ExtractionDraft {
   languages: Array<Omit<LanguageItem, "evidenceIds"> & { sourceBlockId: string }>;
   explicitCompetencies: Array<{ value: string; sourceBlockId: string; context: string | null }>;
   professionalContexts: Array<{ value: string; sourceBlockId: string }>;
+  customSections: CustomProfileSection[];
   uncertainties: string[];
   notIdentified: string[];
 }

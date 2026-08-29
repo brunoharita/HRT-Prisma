@@ -1,5 +1,6 @@
 import type { MembershipRole, OrganizationMembership } from "../shared/access";
 import type { PlatformOperator } from "./platformUsersData";
+import type { CustomProfileSection } from "./personIngestion";
 
 export const PERSON_LIFECYCLES = [
   "candidate",
@@ -59,6 +60,7 @@ export interface StructuredProfile {
   languages: LanguageItem[];
   toolsAndTechnologies: string[];
   professionalContexts: string[];
+  customSections: CustomProfileSection[];
   uncertainties: string[];
   notIdentified: string[];
   extractionVersion: string;

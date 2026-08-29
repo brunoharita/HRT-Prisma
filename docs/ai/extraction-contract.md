@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta o contrato `adaptive-resume-extraction` 2.0.0: runtime local e persistência/padrões ativos no Prisma-QA.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta o contrato `adaptive-resume-extraction` 2.1.0: schema, validação e catálogo de áreas personalizadas estão ativos no Prisma-QA; o runtime web que os consome continua local.
 
 ## Entrada
 
@@ -14,10 +14,11 @@ Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores
 - páginas: extração nativa primeiro, preservando linhas visuais e coordenadas; OCR local somente quando a suficiência falha;
 - campos: cada fato estruturado pode apontar para uma região própria e para o método que a produziu;
 - adaptação: repetição no documento e sinais estruturais aprovados do próprio tenant orientam a interpretação, mas não autorizam copiar valores entre registros nem executar templates persistidos.
+- áreas personalizadas: somente títulos previamente aprovados no mesmo tenant são candidatos; o título precisa coincidir após normalização e o conteúdo é relido no documento até o próximo cabeçalho reconhecido, com evidência por item.
 
 ## Saída de sucesso
 
-`ExtractionDraft` contém identidade possível, experiências, educação, certificações, idiomas, competências explícitas, contextos, incertezas e campos não identificados. O provider também retorna nome/modelo lógico e métricas de uso.
+`ExtractionDraft` contém identidade possível, experiências, educação, certificações, idiomas, competências explícitas, contextos, áreas personalizadas estruturadas, pendências de interpretação e informações não localizadas. O provider também retorna nome/modelo lógico e métricas de uso.
 
 Sucesso do provider não significa perfil processado. A aplicação exige identidade e ao menos uma experiência estruturável, cria evidências, executa inferência e persiste somente após validação.
 
@@ -51,6 +52,7 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 - Tipo, tamanho, assinatura, trailer e parser são validados antes da persistência. Malware scanning ainda não existe e não pode ser alegado.
 - PDF.js e Tesseract.js processam no navegador; nenhum currículo é enviado a OCR ou LLM externo.
 - O ledger adaptativo recebe apenas caminhos de campo, página, método, versão, padrão e código de justificativa; valores e trechos não são duplicados.
+- O catálogo de áreas personalizadas recebe apenas chave, título normalizado, formato, versão e confirmação; um ledger metadata-only referencia cada revisão aprovada. Conteúdo do currículo e evidência permanecem no perfil/review tenant-scoped.
 
 ## Compatibilidade
 

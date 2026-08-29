@@ -110,6 +110,13 @@ function ProfileContent({ membership, view }: { membership: OrganizationMembersh
               ...profile.professionalContexts,
             ]} />
           </ProfileSection>
+          {profile.customSections.map((section) => (
+            <ProfileSection key={section.id} title={section.name}>
+              {section.format === "list"
+                ? <FactList values={section.items.map((item) => item.value)} />
+                : <Typography.Paragraph>{section.items[0]?.value}</Typography.Paragraph>}
+            </ProfileSection>
+          ))}
         </>
       )}
 
@@ -139,10 +146,11 @@ function ProfileContent({ membership, view }: { membership: OrganizationMembersh
       </PrismaCard>
 
       {profile && (profile.uncertainties.length > 0 || profile.notIdentified.length > 0) ? (
-        <PrismaCard className="prisma-profile-wide" title="Incertezas e campos não identificados">
+        <PrismaCard className="prisma-profile-wide" title="Pendências da extração">
           <Space direction="vertical">
-            <FactList values={profile.uncertainties} />
-            <TagList values={profile.notIdentified.map((item) => `Não identificado: ${item}`)} />
+            <Typography.Text type="secondary">Registros diagnósticos da importação. Não constituem fatos do perfil nem avaliação negativa.</Typography.Text>
+            <FactList values={profile.uncertainties.map((item) => `Pendente de interpretação: ${item}`)} />
+            <TagList values={profile.notIdentified.map((item) => `Informação não localizada: ${item}`)} />
           </Space>
         </PrismaCard>
       ) : null}

@@ -173,6 +173,7 @@ export class DeterministicExtractionProvider implements ExtractionProvider {
       languages,
       explicitCompetencies,
       professionalContexts,
+      customSections: [],
       uncertainties,
       notIdentified,
     };

@@ -336,6 +336,7 @@ function StructuredDraftView({ draft }: { draft: NonNullable<PersonIngestionWork
         <List dataSource={draft.experiences} locale={{ emptyText: "Nenhuma experiência estruturável identificada." }} renderItem={(item) => <List.Item className="prisma-structured-item"><div><strong>{item.role}</strong><p>{item.organization}{item.period ? ` · ${item.period}` : ""}</p><Tag color="blue">Evidência na página {item.page}</Tag></div></List.Item>} />
         <Typography.Title level={4}>Formação acadêmica ({draft.education.length})</Typography.Title>
         <List dataSource={draft.education} locale={{ emptyText: "Formação não identificada." }} renderItem={(item) => <List.Item>{item.course}</List.Item>} />
+        {draft.customSections.map((section) => <div key={section.id}><Typography.Title level={4}>{section.name}</Typography.Title><List dataSource={section.items} renderItem={(item) => <List.Item>{item.value}</List.Item>} /></div>)}
       </div>
       <PrismaCard className="prisma-coverage-card">
         <Typography.Title level={4}>Cobertura dos dados</Typography.Title>

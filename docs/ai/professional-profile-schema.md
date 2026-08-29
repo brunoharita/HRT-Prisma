@@ -2,7 +2,7 @@
 
 ## Identificação
 
-Owner: AI and domain engineering. Contrato: `professional-profile`. Versão atual: `1.0.0`. Implementação: `src/domain/types.ts`. Estado: implementado localmente, não ativado em ambiente remoto.
+Owner: AI and domain engineering. Contrato: `professional-profile`. Versão atual: `1.2.0`. Implementação: `src/domain/types.ts` e `web/src/domain/personIngestion.ts`. Estado: schema compatível ativo em QA; runtime e apresentação web locais.
 
 Cada perfil contém `id`, `organizationId`, `personId`, `createdAt` e versões de extraction, inference, embedding/retrieval, matching, prompt e model.
 
@@ -20,6 +20,10 @@ ProfessionalProfile
   competencies[]
     normalizedName, classification(explicit|inferred), evidenceIds[], contexts[]
   professionalContexts[]
+  customSections[]
+    id, name, format(text|list), source(extracted|human)
+    items[]
+      id, value
   evidenceIds[]
   inferenceIds[]
   uncertainties[]
@@ -34,6 +38,8 @@ Evidência contém tipo, fato, documento, bloco, página quando disponível, tre
 ## Ausência e soft skills
 
 Campos não localizados entram em `notIdentified`; ambiguidades entram em `uncertainties`. Nenhum autoriza conclusão negativa. Comunicação, criatividade, resiliência, inteligência emocional e atributos similares não são extraídos como fatos pelo provider atual.
+
+Na interface, `uncertainties` é apresentado como `Pendências de interpretação` e `notIdentified` como `Informações não localizadas`. Áreas personalizadas são fatos somente quando possuem conteúdo explícito e evidência. Elas não geram automaticamente competência, inferência ou decisão de matching.
 
 ## Compatibilidade
 

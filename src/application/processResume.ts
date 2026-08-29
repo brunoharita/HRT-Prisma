@@ -284,6 +284,7 @@ export async function processResume(
       toolsAndTechnologies: groupedExplicit.map((item) => item.normalizedName).filter((name) => TOOL_NAMES.has(name)),
       competencies: [...groupedExplicit, ...inferredCompetencies],
       professionalContexts: [...new Set(draft.professionalContexts.map((item) => item.value))],
+      customSections: draft.customSections,
       evidenceIds: evidence.map((item) => item.id),
       inferenceIds: inferences.map((item) => item.id),
       uncertainties: draft.uncertainties,

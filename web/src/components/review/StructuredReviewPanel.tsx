@@ -7,7 +7,7 @@ import {
   HistoryOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Button, Drawer, Empty, Input, Popconfirm, Select, Space, Tabs, Tag, Timeline, Typography } from "antd";
+import { Alert, Button, Divider, Drawer, Empty, Input, Popconfirm, Select, Space, Tabs, Tag, Timeline, Typography } from "antd";
 import type { ProfileReviewWorkspace, StructuredDraft } from "../../domain/personIngestion";
 import { fieldPathMatches, topLevelReviewField } from "../../domain/spatialEvidence";
 
@@ -23,6 +23,7 @@ interface StructuredReviewPanelProps {
   onDraftChange: (draft: StructuredDraft) => void;
   onFieldSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
   onStartSelection: (fieldPath: string) => void;
+  onCreateCustomSection: () => void;
   onEvidenceNavigate: (input: { fieldPath: string; linkId: string; pageNumber: number; regionId: string | null }) => void;
   onEvidenceDelete: (input: { fieldPath: string; linkId: string }) => void;
 }
@@ -39,6 +40,7 @@ export function StructuredReviewPanel({
   onDraftChange,
   onFieldSelect,
   onStartSelection,
+  onCreateCustomSection,
   onEvidenceNavigate,
   onEvidenceDelete,
 }: StructuredReviewPanelProps) {
@@ -54,7 +56,7 @@ export function StructuredReviewPanel({
       education: `education.${Math.min(educationIndex, Math.max(draft.education.length - 1, 0))}.course`,
       skills: "competencies",
       languages: "languages",
-      other: "certifications",
+      other: firstOtherFieldPath(draft),
     };
     onFieldSelect(defaults[key] ?? "summary");
   }
@@ -81,7 +83,7 @@ export function StructuredReviewPanel({
           { key: "education", label: `Formação (${draft.education.length})`, children: EducationEditor() },
           { key: "skills", label: "Competências", children: TagField({ fieldPath: "competencies", label: "Competências explícitas" }) },
           { key: "languages", label: "Idiomas", children: TagField({ fieldPath: "languages", label: "Idiomas" }) },
-          { key: "other", label: "Outros", children: <div className="prisma-review-field-stack">{TagField({ fieldPath: "certifications", label: "Certificações" })}{TagField({ fieldPath: "uncertainties", label: "Incertezas" })}{TagField({ fieldPath: "notIdentified", label: "Não identificados" })}</div> },
+          { key: "other", label: "Outros", children: OtherEditor() },
         ]}
         onChange={selectTab}
       />
@@ -205,6 +207,66 @@ export function StructuredReviewPanel({
       </div>
     );
   }
+
+  function OtherEditor() {
+    return (
+      <div className="prisma-review-field-stack">
+        <div className="prisma-review-section-title prisma-custom-section-heading">
+          <div>
+            <Typography.Title level={5}>Informações do currículo</Typography.Title>
+            <Typography.Text type="secondary">Áreas confirmadas como conteúdo do perfil, inclusive estruturas próprias deste currículo.</Typography.Text>
+          </div>
+          <Button disabled={!editable || !canStartSelection} icon={<PlusOutlined />} onClick={onCreateCustomSection} size="small" type="primary">Criar área personalizada</Button>
+        </div>
+        {TagField({ fieldPath: "certifications", label: "Certificações" })}
+        {draft.customSections.map((section) => {
+          const extractedSection = workspace.extractedData.customSections.find((candidate) => candidate.id === section.id);
+          return (
+            <section className="prisma-custom-profile-section" key={section.id}>
+              <div className="prisma-review-section-title">
+                <div>
+                  <Typography.Text className="prisma-custom-profile-section__name" strong>{section.name}</Typography.Text>
+                  <Typography.Text type="secondary">Área personalizada · {section.format === "list" ? "lista" : "texto"} · origem {section.source === "human" ? "humana" : "extraída"}</Typography.Text>
+                </div>
+              </div>
+              {section.items.map((item, itemIndex) => {
+                const fieldPath = `customSections.${section.id}.items.${item.id}.value`;
+                const extractedItem = extractedSection?.items.find((candidate) => candidate.id === item.id);
+                return (
+                  <div className="prisma-custom-profile-section__item" key={item.id}>
+                    <ReviewField
+                      editable={editable}
+                      extracted={extractedItem?.value ?? "Não identificado na extração original"}
+                      fieldPath={fieldPath}
+                      label={section.format === "list" ? `Item ${itemIndex + 1}` : "Conteúdo"}
+                      multiline={section.format === "text"}
+                      onChange={(value) => onDraftChange({
+                        ...draft,
+                        customSections: draft.customSections.map((candidate) => candidate.id === section.id
+                          ? { ...candidate, items: candidate.items.map((candidateItem) => candidateItem.id === item.id ? { ...candidateItem, value } : candidateItem) }
+                          : candidate),
+                      })}
+                      onSelect={onFieldSelect}
+                      selected={fieldPathMatches(selectedFieldPath, fieldPath)}
+                      value={item.value}
+                    />
+                  </div>
+                );
+              })}
+            </section>
+          );
+        })}
+        {!draft.customSections.length ? <Alert description="Quando um currículo trouxer uma seção própria, crie a área e selecione sua região no documento. Depois de aprovada, essa estrutura poderá ser reconhecida em novas importações da mesma organização." showIcon type="info" /> : null}
+        <Divider />
+        <div>
+          <Typography.Title level={5}>Pendências da extração</Typography.Title>
+          <Typography.Text type="secondary">Estes registros explicam limites da importação. Não são fatos do perfil e não representam avaliação negativa da pessoa.</Typography.Text>
+        </div>
+        {TagField({ fieldPath: "uncertainties", label: "Pendências de interpretação" })}
+        {TagField({ fieldPath: "notIdentified", label: "Informações não localizadas" })}
+      </div>
+    );
+  }
 }
 
 interface CommonEditorProps {
@@ -261,8 +323,13 @@ function tabForField(fieldPath: string): string {
   if (fieldPath.startsWith("education.")) return "education";
   if (fieldPath === "competencies") return "skills";
   if (fieldPath === "languages") return "languages";
-  if (["certifications", "uncertainties", "notIdentified"].includes(fieldPath)) return "other";
+  if (["certifications", "uncertainties", "notIdentified"].includes(fieldPath) || fieldPath.startsWith("customSections.")) return "other";
   return "summary";
+}
+
+function firstOtherFieldPath(draft: StructuredDraft): string {
+  const firstCustom = draft.customSections[0]?.items[0];
+  return firstCustom ? `customSections.${draft.customSections[0]!.id}.items.${firstCustom.id}.value` : "certifications";
 }
 
 function compactHistory(changes: ProfileReviewWorkspace["changes"], events: ProfileReviewWorkspace["evidenceEvents"], adaptations: ProfileReviewWorkspace["adaptationEvents"]) {

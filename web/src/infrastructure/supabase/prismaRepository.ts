@@ -306,12 +306,32 @@ function decodeProfile(row: NonNullable<ProfileRow>, fallbackName: string): Stru
     languages: readLanguages(data.languages),
     toolsAndTechnologies: readStringArray(data.toolsAndTechnologies),
     professionalContexts: readStringArray(data.professionalContexts),
+    customSections: readCustomSections(data.customSections),
     uncertainties: readStringArray(row.uncertainties),
     notIdentified: readStringArray(row.not_identified),
     extractionVersion: row.extraction_version,
     inferenceVersion: row.inference_version,
     createdAt: row.created_at,
   };
+}
+
+function readCustomSections(value: Json | undefined): StructuredProfile["customSections"] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    const record = asRecord(item);
+    const id = readString(record?.id);
+    const name = readString(record?.name);
+    const format = readString(record?.format);
+    const source = readString(record?.source);
+    if (!record || !id || !name || (format !== "text" && format !== "list") || (source !== "extracted" && source !== "human") || !Array.isArray(record.items)) return [];
+    const items = record.items.flatMap((candidate) => {
+      const candidateRecord = asRecord(candidate);
+      const itemId = readString(candidateRecord?.id);
+      const itemValue = readString(candidateRecord?.value);
+      return itemId && itemValue ? [{ id: itemId, value: itemValue }] : [];
+    });
+    return items.length ? [{ id, name, format, source, items }] : [];
+  });
 }
 
 function readExperiences(value: Json | undefined): ProfessionalExperience[] {

@@ -66,13 +66,13 @@ export function ProfileVersionsPage({ activeMembership, personId, onNavigate }: 
 }
 
 function buildDifferences(left: StructuredDraft, right: StructuredDraft): DifferenceRow[] {
-  const fields: Array<[keyof StructuredDraft, string]> = [["summary", "Resumo profissional"], ["experiences", "Experiências"], ["education", "Formação"], ["competencies", "Competências"], ["languages", "Idiomas"], ["certifications", "Certificações"], ["uncertainties", "Incertezas"], ["notIdentified", "Não identificados"]];
+  const fields: Array<[keyof StructuredDraft, string]> = [["summary", "Resumo profissional"], ["experiences", "Experiências"], ["education", "Formação"], ["competencies", "Competências"], ["languages", "Idiomas"], ["certifications", "Certificações"], ["customSections", "Áreas personalizadas"], ["uncertainties", "Pendências de interpretação"], ["notIdentified", "Informações não localizadas"]];
   return fields.map(([key, field]) => {
     const leftValue = formatValue(left[key]); const rightValue = formatValue(right[key]);
     return { key, field, left: leftValue, right: rightValue, changed: leftValue !== rightValue };
   });
 }
 function VersionProvenance({ version }: { version: ProfileVersionView | null }) { return version ? <div><Tag color={version.supersededAt ? "default" : "green"}>v{version.profileVersion}{version.supersededAt ? "" : " · atual"}</Tag><p>Status: {version.reviewStatus}</p><p>Documento: {version.sourceDocumentId}</p><p>Tentativa: {version.processingAttemptId ?? "legada"}</p><p>Aprovado em: {version.approvedAt ? formatDate(version.approvedAt) : "sem aprovação M2-C"}</p><p>Ator: {version.approvedByAuthUserId ?? "não registrado na versão legada"}</p></div> : <Empty description="Selecione uma versão." image={Empty.PRESENTED_IMAGE_SIMPLE} />; }
-function formatValue(value: StructuredDraft[keyof StructuredDraft]): string { if (value === null) return "Não identificado"; if (typeof value === "string") return value || "Não identificado"; if (!value.length) return "Não identificado"; return value.map((item) => typeof item === "string" ? item : "role" in item ? `${item.role} · ${item.organization}${item.period ? ` · ${item.period}` : ""}` : `${item.course} · ${item.institution}`).join("\n"); }
+function formatValue(value: StructuredDraft[keyof StructuredDraft]): string { if (value === null) return "Não identificado"; if (typeof value === "string") return value || "Não identificado"; if (!value.length) return "Não identificado"; return value.map((item) => typeof item === "string" ? item : "role" in item ? `${item.role} · ${item.organization}${item.period ? ` · ${item.period}` : ""}` : "items" in item ? `${item.name}: ${item.items.map((entry) => entry.value).join("; ")}` : `${item.course} · ${item.institution}`).join("\n"); }
 function renderValue(value: string) { return <pre className="prisma-version-value">{value}</pre>; }
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value)); }

@@ -2306,6 +2306,22 @@ textarea {
 .prisma-review-field.is-selected { background: #f8fbff; border-color: #bdd3ff; box-shadow: inset 3px 0 0 #155eef; }
 .prisma-review-value-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 8px; }
 
+.prisma-custom-section-heading { align-items: flex-start; padding: 2px 0 4px; }
+.prisma-custom-section-heading .ant-typography,
+.prisma-review-field-stack > div > .ant-typography { margin: 0; }
+.prisma-custom-profile-section {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  background: #fbfcfe;
+  border: 1px solid #dce5f2;
+  border-radius: 9px;
+}
+.prisma-custom-profile-section__name { max-width: 360px; font-weight: 650; }
+.prisma-custom-profile-section__item { display: grid; }
+.prisma-custom-section-dialog { display: grid; width: 100%; }
+.prisma-custom-section-dialog .ant-space-item { width: 100%; }
+
 .prisma-extracted-surface,
 .prisma-reviewed-surface {
   min-width: 0;

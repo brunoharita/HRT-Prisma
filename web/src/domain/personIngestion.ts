@@ -15,7 +15,7 @@ export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
 export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
-export const EXTRACTION_DRAFT_VERSION = "3.0.0";
+export const EXTRACTION_DRAFT_VERSION = "3.1.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -134,6 +134,21 @@ export interface ResumeIntakeResolutionResult {
   reused: boolean;
 }
 
+export type CustomProfileSectionFormat = "text" | "list";
+
+export interface CustomProfileSectionItem {
+  id: string;
+  value: string;
+}
+
+export interface CustomProfileSection {
+  id: string;
+  name: string;
+  format: CustomProfileSectionFormat;
+  source: "extracted" | "human";
+  items: CustomProfileSectionItem[];
+}
+
 export interface StructuredDraft {
   summary: string | null;
   experiences: Array<{ role: string; organization: string; period: string | null; description?: string | null; evidenceText: string; page: number }>;
@@ -141,6 +156,7 @@ export interface StructuredDraft {
   certifications: string[];
   languages: string[];
   competencies: string[];
+  customSections: CustomProfileSection[];
   uncertainties: string[];
   notIdentified: string[];
 }

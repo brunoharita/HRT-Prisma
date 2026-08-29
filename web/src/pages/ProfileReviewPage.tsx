@@ -4,7 +4,7 @@ import { Alert, Button, Input, Modal, Radio, Segmented, Select, Space, Tag, Typo
 import { DocumentEvidenceViewer, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
-import type { ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
+import type { CustomProfileSectionFormat, ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
 import { evidenceSelectionRequiresReason, type ReviewEvidenceAction } from "../domain/spatialEvidence";
 import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
@@ -14,6 +14,12 @@ import {
   type ExperienceFieldName,
 } from "../domain/adaptiveResumeExtraction";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
+import {
+  addCustomSectionItem,
+  createCustomSection,
+  updateCustomSectionItemValue,
+  validateCustomSectionName,
+} from "../domain/customProfileSections";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -25,7 +31,7 @@ interface ProfileReviewPageProps {
   onNavigate: (path: string) => void;
 }
 
-type NewInformationType = "experience" | "education" | "competency" | "language" | "certification";
+type NewInformationType = "experience" | "education" | "competency" | "language" | "certification" | "custom_section" | "custom_item";
 
 export function ProfileReviewPage({ activeMembership, personId, documentId, reviewId, onNavigate }: ProfileReviewPageProps) {
   const [workspace, setWorkspace] = useState<ProfileReviewWorkspace | null>(null);
@@ -47,6 +53,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [selectionValueEdited, setSelectionValueEdited] = useState(false);
   const [selectionError, setSelectionError] = useState<string | null>(null);
   const [newInformationType, setNewInformationType] = useState<NewInformationType>("experience");
+  const [customSectionName, setCustomSectionName] = useState("");
+  const [customSectionFormat, setCustomSectionFormat] = useState<CustomProfileSectionFormat>("list");
+  const [customTargetSectionId, setCustomTargetSectionId] = useState("");
+  const [createCustomAfterSelection, setCreateCustomAfterSelection] = useState(false);
   const [mobilePane, setMobilePane] = useState<"document" | "review">("review");
   const [adaptiveReport, setAdaptiveReport] = useState<AdaptiveSuggestionReport | null>(null);
 
@@ -85,6 +95,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
   async function handleSave() {
     if (!workspace || !draft) return;
+    const customSectionError = validateCustomSections(draft);
+    if (customSectionError) { setError(customSectionError); return; }
     if (reason.trim().length < 3) { setError("Explique objetivamente a alteração manual antes de salvar."); return; }
     setBusy(true); setError(null); setSuccess(null);
     try {
@@ -174,7 +186,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setSelectionReason("");
     setSelectionValueEdited(false);
     setSelectionError(null);
-    setPendingAction("correct_current_field");
+    setPendingAction(createCustomAfterSelection ? "create_new_information" : "correct_current_field");
   }
 
   function closePendingSelection() {
@@ -184,6 +196,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setSelectionReason("");
     setSelectionValueEdited(false);
     setSelectionError(null);
+    setCreateCustomAfterSelection(false);
   }
 
   async function applyPendingSelection() {
@@ -199,7 +212,24 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     if (pendingAction === "create_new_information") {
       if (!normalizedValue) { setSelectionError("Informe o conteúdo da nova informação."); return; }
-      const created = addNewInformation(draft, newInformationType, normalizedValue, pendingSelection.pageNumber);
+      if (newInformationType === "custom_section") {
+        const nameError = validateCustomSectionName(customSectionName, draft.customSections);
+        if (nameError) { setSelectionError(nameError); return; }
+      }
+      if (newInformationType === "custom_item" && !customTargetSectionId) {
+        setSelectionError("Selecione a área personalizada que receberá o novo item."); return;
+      }
+      let created: { draft: StructuredDraft; fieldPath: string };
+      try {
+        created = addNewInformation(draft, newInformationType, normalizedValue, pendingSelection.pageNumber, {
+          customSectionName,
+          customSectionFormat,
+          customTargetSectionId,
+        });
+      } catch (caught) {
+        setSelectionError(caught instanceof Error ? caught.message : "Não foi possível criar a informação personalizada.");
+        return;
+      }
       nextDraft = created.draft;
       targetFieldPath = created.fieldPath;
       if (JSON.stringify(nextDraft) === JSON.stringify(draft)) { setSelectionError("A informação selecionada já existe no campo de destino."); return; }
@@ -295,8 +325,14 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         <div className="prisma-review-structured-pane">
           <StructuredReviewPanel
             activeLinkId={activeLinkId} canStartSelection={!dirty} draft={draft} editable={Boolean(editable)} onDraftChange={setDraft} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
+            onCreateCustomSection={() => {
+              if (dirty) { setError("Salve ou descarte as alterações manuais antes de criar uma área com evidência."); return; }
+              setError(null); setSuccess(null); setSelectionError(null);
+              setNewInformationType("custom_section"); setCustomSectionName(""); setCustomSectionFormat("list"); setCustomTargetSectionId("");
+              setPendingSelection(null); setCreateCustomAfterSelection(true); setSelectionMode(true); setMobilePane("document");
+            }}
             onFieldSelect={handleFieldSelect} onReasonChange={setReason}
-            onStartSelection={(fieldPath) => { if (dirty) { setError("Salve ou descarte as alterações manuais antes de vincular uma nova evidência."); return; } setError(null); setSuccess(null); setSelectionError(null); setSelectedFieldPath(fieldPath); setPendingSelection(null); setSelectionMode(true); setMobilePane("document"); }}
+            onStartSelection={(fieldPath) => { if (dirty) { setError("Salve ou descarte as alterações manuais antes de vincular uma nova evidência."); return; } setError(null); setSuccess(null); setSelectionError(null); setCreateCustomAfterSelection(false); setSelectedFieldPath(fieldPath); setPendingSelection(null); setSelectionMode(true); setMobilePane("document"); }}
             reason={reason} selectedFieldPath={selectedFieldPath} workspace={workspace}
           />
         </div>
@@ -307,7 +343,25 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
           <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. A região continuará rastreável, mas uma correção exige conteúdo e justificativa manual." : "Revise o texto recuperado antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
           <Radio.Group onChange={(event) => { setPendingAction(event.target.value as ReviewEvidenceAction); setSelectionError(null); }} value={pendingAction}><Space orientation="vertical"><Radio value="correct_current_field">Corrigir campo atual</Radio><Radio value="add_complementary">Adicionar como evidência complementar</Radio>{replacementLinkId ? <Radio value="replace_review_evidence">Substituir evidência da revisão</Radio> : null}<Radio value="create_new_information">Criar nova informação</Radio></Space></Radio.Group>
-          {pendingAction === "create_new_information" ? <Select aria-label="Tipo da nova informação" onChange={setNewInformationType} options={[{ label: "Experiência", value: "experience" }, { label: "Formação", value: "education" }, { label: "Competência", value: "competency" }, { label: "Idioma", value: "language" }, { label: "Certificação", value: "certification" }]} value={newInformationType} /> : null}
+          {pendingAction === "create_new_information" ? <Select aria-label="Tipo da nova informação" onChange={(value) => {
+            setNewInformationType(value);
+            if (value === "custom_item") setCustomTargetSectionId(draft.customSections.find((section) => section.format === "list")?.id ?? "");
+            setSelectionError(null);
+          }} options={[
+            { label: "Experiência", value: "experience" },
+            { label: "Formação", value: "education" },
+            { label: "Competência", value: "competency" },
+            { label: "Idioma", value: "language" },
+            { label: "Certificação", value: "certification" },
+            { label: "Nova área personalizada", value: "custom_section" },
+            ...(draft.customSections.some((section) => section.format === "list") ? [{ label: "Novo item em área personalizada", value: "custom_item" as const }] : []),
+          ]} value={newInformationType} /> : null}
+          {pendingAction === "create_new_information" && newInformationType === "custom_section" ? <Space className="prisma-custom-section-dialog" orientation="vertical" size="middle">
+            <Input aria-label="Nome da área personalizada" maxLength={80} onChange={(event) => { setCustomSectionName(event.target.value); setSelectionError(null); }} placeholder="Ex.: Publicações, Projetos relevantes, Trabalho voluntário" value={customSectionName} />
+            <Select aria-label="Formato da área personalizada" onChange={setCustomSectionFormat} options={[{ label: "Lista de itens", value: "list" }, { label: "Texto", value: "text" }]} value={customSectionFormat} />
+            <Typography.Text type="secondary">Após a aprovação, o Prisma aprenderá o título e a estrutura desta área para futuras importações da mesma organização. O conteúdo pessoal não será reutilizado.</Typography.Text>
+          </Space> : null}
+          {pendingAction === "create_new_information" && newInformationType === "custom_item" ? <Select aria-label="Área personalizada de destino" onChange={setCustomTargetSectionId} options={draft.customSections.filter((section) => section.format === "list").map((section) => ({ label: section.name, value: section.id }))} placeholder="Selecione a área" value={customTargetSectionId || null} /> : null}
           {pendingAction === "correct_current_field" || pendingAction === "create_new_information" ? <Input.TextArea aria-label="Valor sugerido pela região" onChange={(event) => { setSelectionValue(event.target.value); setSelectionValueEdited(true); setSelectionError(null); }} placeholder="Valor revisado" rows={4} value={selectionValue} /> : null}
           <Input.TextArea aria-label="Justificativa da operação de evidência" onChange={(event) => { setSelectionReason(event.target.value); setSelectionError(null); }} placeholder="Justificativa, quando houver interpretação ou divergência" rows={3} value={selectionReason} />
         </div> : null}
@@ -341,6 +395,7 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
   const segments = fieldPath.split(".");
   const root = segments[0];
   if (root === "summary") return { ...next, summary: value };
+  if (root === "customSections") return updateCustomSectionItemValue(next, fieldPath, value);
   if (["certifications", "languages", "competencies", "uncertainties", "notIdentified"].includes(root ?? "")) {
     const key = root as "certifications" | "languages" | "competencies" | "uncertainties" | "notIdentified";
     return { ...next, [key]: value.split(/[,;\n]/).map((item) => item.trim()).filter(Boolean) };
@@ -352,13 +407,32 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
   return next;
 }
 
-function addNewInformation(draft: StructuredDraft, type: NewInformationType, value: string, page: number): { draft: StructuredDraft; fieldPath: string } {
+function addNewInformation(
+  draft: StructuredDraft,
+  type: NewInformationType,
+  value: string,
+  page: number,
+  custom: { customSectionName: string; customSectionFormat: CustomProfileSectionFormat; customTargetSectionId: string },
+): { draft: StructuredDraft; fieldPath: string } {
   const next = cloneDraft(draft);
   if (type === "experience") { const index = next.experiences.length; next.experiences.push({ role: value, organization: "Não identificada", period: null, description: null, evidenceText: value, page }); return { draft: next, fieldPath: `experiences.${index}.role` }; }
   if (type === "education") { const index = next.education.length; next.education.push({ course: value, institution: "Não identificada", period: null, description: null, evidenceText: value, page }); return { draft: next, fieldPath: `education.${index}.course` }; }
+  if (type === "custom_section") return createCustomSection({ draft: next, name: custom.customSectionName, format: custom.customSectionFormat, value, source: "human" });
+  if (type === "custom_item") return addCustomSectionItem(next, custom.customTargetSectionId, value);
   const key = type === "competency" ? "competencies" : type === "language" ? "languages" : "certifications";
   if (!next[key].includes(value)) next[key].push(value);
   return { draft: next, fieldPath: key };
+}
+
+function validateCustomSections(draft: StructuredDraft): string | null {
+  for (const section of draft.customSections) {
+    const nameError = validateCustomSectionName(section.name, draft.customSections, section.id);
+    if (nameError) return `${section.name || "Área personalizada"}: ${nameError}`;
+    if (!section.items.length) return `A área “${section.name}” precisa ter ao menos um conteúdo.`;
+    if (section.format === "text" && section.items.length !== 1) return `A área “${section.name}” aceita apenas um conteúdo de texto.`;
+    if (section.items.some((item) => !item.value.trim())) return `A área “${section.name}” possui um item vazio.`;
+  }
+  return null;
 }
 
 function cloneDraft(draft: StructuredDraft): StructuredDraft { return JSON.parse(JSON.stringify(draft)) as StructuredDraft; }

@@ -1,7 +1,13 @@
 import type { ExtractedPage, StructuredDraft } from "./personIngestion.js";
+import {
+  CUSTOM_PROFILE_SECTION_METHOD_VERSION,
+  normalizeCustomSectionName,
+  stableCustomSectionKey,
+  type LearnedCustomSectionDefinition,
+} from "./customProfileSections.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "2.0.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v2";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "2.1.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v2.1";
 export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v2";
 
 export interface LayoutTextLine {
@@ -102,6 +108,7 @@ const COMPANY_MARKERS = /\b(solutions?|engenharia|empreendimentos?|consultoria|s
 export function buildAdaptiveExtraction(
   pages: ExtractedPage[],
   learnedPatterns: ExtractionPatternSignal[] = [],
+  learnedCustomSections: LearnedCustomSectionDefinition[] = [],
 ): AdaptiveExtractionResult {
   const lines = sliceExperienceSection(candidateLines(pages));
   const learnedPatternKeys = new Set(
@@ -140,6 +147,8 @@ export function buildAdaptiveExtraction(
   const competencyCatalog = ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL", "Power BI", "SAP", "Scrum", "Kanban", "Docker", "AWS", "Azure", "Supabase"];
   const competencies = competencyCatalog.filter((item) => new RegExp(`\\b${escapeRegExp(item)}\\b`, "i").test(fullText));
   const languages = ["Português", "Inglês", "Espanhol", "English", "Spanish"].filter((item) => new RegExp(`\\b${item}\\b`, "i").test(fullText));
+  const learnedCustom = extractLearnedCustomSections(allLines, learnedCustomSections);
+  fieldEvidence.push(...learnedCustom.fieldEvidence);
   const draft: StructuredDraft = {
     summary: experiences[0] ? `${experiences[0].role} com experiência profissional documentada em ${experiences[0].organization}.` : null,
     experiences,
@@ -147,6 +156,7 @@ export function buildAdaptiveExtraction(
     certifications: allLines.filter((entry) => /(certifica[cç][aã]o|certified|certificate)/i.test(entry.text)).slice(0, 8).map((entry) => entry.text),
     languages,
     competencies,
+    customSections: learnedCustom.sections,
     uncertainties: [],
     notIdentified: [
       ...(experiences.length ? [] : ["experiências estruturáveis"]),
@@ -164,6 +174,63 @@ export function buildAdaptiveExtraction(
       learnedSignalsUsed: [...learnedPatternKeys].filter((key) => blocks.some((block) => block.patternKey === key)),
     },
   };
+}
+
+function extractLearnedCustomSections(
+  lines: CandidateLine[],
+  definitions: LearnedCustomSectionDefinition[],
+): { sections: StructuredDraft["customSections"]; fieldEvidence: FieldEvidenceDescriptor[] } {
+  const activeDefinitions = definitions.filter((definition) => (
+    definition.methodVersion === CUSTOM_PROFILE_SECTION_METHOD_VERSION
+    && definition.confirmationCount > 0
+    && definition.sectionKey === stableCustomSectionKey(definition.displayName)
+    && normalizeCustomSectionName(definition.displayName) === definition.normalizedName
+  ));
+  if (!activeDefinitions.length) return { sections: [], fieldEvidence: [] };
+  const byHeading = new Map(activeDefinitions.map((definition) => [definition.normalizedName, definition]));
+  const sections: StructuredDraft["customSections"] = [];
+  const fieldEvidence: FieldEvidenceDescriptor[] = [];
+
+  lines.forEach((heading, headingIndex) => {
+    const definition = byHeading.get(normalizeCustomSectionName(heading.text));
+    if (!definition || sections.some((section) => section.id === definition.sectionKey)) return;
+    const contentLines: CandidateLine[] = [];
+    for (let index = headingIndex + 1; index < lines.length; index += 1) {
+      const candidate = lines[index]!;
+      if (candidate.pageNumber !== heading.pageNumber) break;
+      if (isLikelyCustomSectionBoundary(candidate, byHeading)) break;
+      if (!isPageFooter(candidate.text)) contentLines.push(candidate);
+    }
+    if (!contentLines.length) return;
+
+    if (definition.format === "text") {
+      const value = contentLines.map((line) => stripBullet(line.text)).filter(Boolean).join("\n").trim();
+      if (!value) return;
+      const itemId = `item_${stableToken(`${definition.sectionKey}:${heading.pageNumber}:${value}`)}`;
+      sections.push({ id: definition.sectionKey, name: definition.displayName, format: "text", source: "extracted", items: [{ id: itemId, value }] });
+      fieldEvidence.push(toCombinedEvidence(`customSections.${definition.sectionKey}.items.${itemId}.value`, contentLines));
+      return;
+    }
+
+    const items = contentLines.flatMap((line) => {
+      const value = stripBullet(line.text);
+      if (!value) return [];
+      const itemId = `item_${stableToken(`${definition.sectionKey}:${line.pageNumber}:${line.sequence}:${value}`)}`;
+      fieldEvidence.push(toEvidence(`customSections.${definition.sectionKey}.items.${itemId}.value`, line, value));
+      return [{ id: itemId, value }];
+    });
+    if (items.length) sections.push({ id: definition.sectionKey, name: definition.displayName, format: "list", source: "extracted", items });
+  });
+  return { sections, fieldEvidence };
+}
+
+function isLikelyCustomSectionBoundary(line: CandidateLine, learnedHeadings: Map<string, LearnedCustomSectionDefinition>): boolean {
+  if (SECTION_HEADING.test(line.text) || learnedHeadings.has(normalizeCustomSectionName(line.text))) return true;
+  return line.emphasis === "strong"
+    && line.text.length <= 80
+    && !isBullet(line.text)
+    && !extractPeriod(line.text)
+    && !/[.;,]$/.test(line.text.trim());
 }
 
 export function attachFieldEvidence(pages: ExtractedPage[], descriptors: FieldEvidenceDescriptor[]): ExtractedPage[] {
@@ -484,6 +551,15 @@ function comparable(value: string | null | undefined): string {
 function removePeriodFragments(value: string): string {
   const period = extractPeriod(value);
   return period ? removeExact(value, period) : value;
+}
+
+function stableToken(value: string): string {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(36).padStart(8, "0");
 }
 
 function stripBullet(value: string): string { return value.replace(/^[•·▪◦*-]\s*/, "").trim(); }

@@ -408,6 +408,32 @@ export interface Database {
         created_at: string;
         updated_at: string;
       }>;
+      organization_custom_section_definitions: Table<{
+        id: string;
+        organization_id: string;
+        section_key: string;
+        display_name: string;
+        normalized_name: string;
+        format: "text" | "list";
+        method_version: "prisma-custom-section-learning-v1";
+        contract_version: "1.0.0";
+        status: "active" | "retired";
+        confirmation_count: number;
+        first_confirmed_at: string;
+        last_confirmed_at: string;
+        created_at: string;
+        updated_at: string;
+      }>;
+      organization_custom_section_confirmations: Table<{
+        id: string;
+        organization_id: string;
+        definition_id: string;
+        review_id: string;
+        section_key: string;
+        method_version: "prisma-custom-section-learning-v1";
+        contract_version: "1.0.0";
+        confirmed_at: string;
+      }>;
       resume_intakes: Table<{
         id: string;
         organization_id: string;

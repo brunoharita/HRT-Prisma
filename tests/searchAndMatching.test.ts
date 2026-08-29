@@ -51,7 +51,7 @@ test("search uses structured facts and inference and matching exposes no-evidenc
 test("matching rejects cross-organization evaluation", () => {
   assert.throws(() => evaluateMatch({
     profile: {
-      id: "p", organizationId: "org-a", personId: "person", fullName: "Pessoa", experiences: [], education: [], certifications: [], languages: [], toolsAndTechnologies: [], competencies: [], professionalContexts: [], evidenceIds: [], inferenceIds: [], uncertainties: [], notIdentified: [],
+      id: "p", organizationId: "org-a", personId: "person", fullName: "Pessoa", experiences: [], education: [], certifications: [], languages: [], toolsAndTechnologies: [], competencies: [], professionalContexts: [], customSections: [], evidenceIds: [], inferenceIds: [], uncertainties: [], notIdentified: [],
       versions: { extractionVersion: "1", inferenceVersion: "1", embeddingVersion: "1", matchingVersion: "1", promptVersion: "1", modelVersion: "1" }, createdAt: new Date().toISOString(),
     },
     vacancy: { id: "v", organizationId: "org-b", roleName: "Role", requirements: [] },

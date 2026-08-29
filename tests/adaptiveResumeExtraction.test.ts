@@ -107,7 +107,7 @@ test("adaptive suggestions never copy the corrected value into sibling records",
       { role: "Diretor", organization: "Transformação Jan/25 - Atual", period: null, evidenceText: "", page: 1 },
       { role: "Gerente", organization: "Acme Ltda Fev/21 - Dez/24", period: null, evidenceText: "", page: 1 },
     ],
-    education: [], certifications: [], languages: [], competencies: [], uncertainties: [], notIdentified: [],
+    education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
   };
   const reviewed = structuredClone(extracted);
   reviewed.experiences[0]!.period = "Jan/25 - Atual";
@@ -151,7 +151,7 @@ test("a correction relearns complete sibling blocks from the original document a
       { role: "Analista de Sistemas e Inteligência de Negócios Sênior Nov/12", organization: "Abr/18", period: null, evidenceText: sourceLines[9]!, page: 2 },
       { role: "Desenvolvedor de Software", organization: "NM Sistemas Ltda. | Jun/08 - Nov/12 | Desenvolvimento de software e bancos de dados.", period: null, evidenceText: sourceLines[13]!, page: 2 },
     ],
-    education: [], certifications: [], languages: [], competencies: [], uncertainties: [], notIdentified: [],
+    education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
   };
   const reviewed = structuredClone(extracted);
   reviewed.experiences[0] = {
@@ -193,7 +193,7 @@ test("document learning reports an unresolved sibling instead of inventing a blo
       { role: "Diretor", organization: "Jan/25 - Atual", period: null, evidenceText: "Diretor Jan/25 - Atual", page: 1 },
       { role: "Gerente", organization: "Não identificada", period: null, evidenceText: "linha inexistente", page: 1 },
     ],
-    education: [], certifications: [], languages: [], competencies: [], uncertainties: [], notIdentified: [],
+    education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
   };
   const reviewed = structuredClone(extracted);
   reviewed.experiences[0]!.organization = "HRT Solutions";

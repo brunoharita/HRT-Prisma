@@ -35,6 +35,10 @@ import {
   type AdaptiveFieldSuggestion,
   type ExtractionPatternSignal,
 } from "../../domain/adaptiveResumeExtraction";
+import {
+  CUSTOM_PROFILE_SECTION_METHOD_VERSION,
+  type LearnedCustomSectionDefinition,
+} from "../../domain/customProfileSections";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -327,7 +331,7 @@ export const personIngestionService = {
       await recordFailure(organizationId, personId, document.documentId, "failed_extraction", "storage_upload_failed", "O documento foi registrado, mas o upload privado falhou.");
       throw new Error("O upload privado falhou. Nenhum Perfil Prisma foi gerado.");
     }
-    const extraction = buildAdaptiveExtraction(input.pages, await loadOrganizationExtractionPatterns(organizationId));
+    const extraction = await buildOrganizationAdaptiveExtraction(organizationId, input.pages);
     const pages = attachFieldEvidence(input.pages, extraction.fieldEvidence);
     await persistExtraction(organizationId, personId, document.documentId, pages, extraction.draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null);
     return document.documentId;
@@ -354,7 +358,7 @@ export const personIngestionService = {
       ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
     }));
     if (pages.length === 0) throw new Error("A tentativa anterior não possui páginas extraídas válidas.");
-    const extraction = buildAdaptiveExtraction(pages, await loadOrganizationExtractionPatterns(organizationId));
+    const extraction = await buildOrganizationAdaptiveExtraction(organizationId, pages);
     await persistExtraction(
       organizationId,
       personId,
@@ -916,7 +920,7 @@ async function processResolvedIntake(
   result: ResumeIntakeResolutionResult,
 ): Promise<ResumeIntakeResolutionResult> {
   try {
-    const extraction = buildAdaptiveExtraction(input.pages, await loadOrganizationExtractionPatterns(organizationId));
+    const extraction = await buildOrganizationAdaptiveExtraction(organizationId, input.pages);
     await persistExtraction(
       organizationId,
       result.personId,
@@ -1073,6 +1077,36 @@ async function loadOrganizationExtractionPatterns(organizationId: string): Promi
   }));
 }
 
+async function loadOrganizationCustomSections(organizationId: string): Promise<LearnedCustomSectionDefinition[]> {
+  const { data, error } = await supabase.from("organization_custom_section_definitions")
+    .select("section_key, display_name, normalized_name, format, confirmation_count, method_version")
+    .eq("organization_id", organizationId)
+    .eq("status", "active")
+    .order("confirmation_count", { ascending: false })
+    .limit(100);
+  throwIfError(error, "Não foi possível carregar as áreas personalizadas aprendidas desta organização.");
+  return (data ?? []).flatMap((definition) => {
+    if ((definition.format !== "text" && definition.format !== "list")
+      || definition.method_version !== CUSTOM_PROFILE_SECTION_METHOD_VERSION) return [];
+    return [{
+      sectionKey: definition.section_key,
+      displayName: definition.display_name,
+      normalizedName: definition.normalized_name,
+      format: definition.format,
+      confirmationCount: definition.confirmation_count,
+      methodVersion: definition.method_version,
+    }];
+  });
+}
+
+async function buildOrganizationAdaptiveExtraction(organizationId: string, pages: ExtractedPage[]) {
+  const [patterns, customSections] = await Promise.all([
+    loadOrganizationExtractionPatterns(organizationId),
+    loadOrganizationCustomSections(organizationId),
+  ]);
+  return buildAdaptiveExtraction(pages, patterns, customSections);
+}
+
 function decodeAdaptiveSuggestionMetadata(value: Json): ProfileReviewWorkspace["adaptationEvents"][number]["acceptedSuggestions"] {
   if (!Array.isArray(value)) return [];
   return value.flatMap((item) => {
@@ -1099,6 +1133,7 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
     certifications: Array.isArray(value.certifications) ? value.certifications : [],
     languages: Array.isArray(value.languages) ? value.languages : [],
     competencies: Array.isArray(value.competencies) ? value.competencies : [],
+    customSections: Array.isArray(value.customSections) ? value.customSections : [],
     uncertainties: Array.isArray(uncertainties) ? uncertainties.filter((item): item is string => typeof item === "string") : [],
     notIdentified: Array.isArray(notIdentified) ? notIdentified.filter((item): item is string => typeof item === "string") : [],
   };
