@@ -2,6 +2,7 @@ import type {
   OriginalReviewEvidence,
   ReviewEvidenceEvent,
   ReviewEvidenceLink,
+  ReviewEvidenceRefinement,
   SpatialEvidenceRegion,
 } from "./spatialEvidence.js";
 import {
@@ -254,6 +255,7 @@ export interface ProfileReviewWorkspace {
   originalEvidence: OriginalReviewEvidence[];
   spatialRegions: SpatialEvidenceRegion[];
   evidenceLinks: ReviewEvidenceLink[];
+  evidenceRefinements: ReviewEvidenceRefinement[];
   evidenceEvents: ReviewEvidenceEvent[];
 }
 

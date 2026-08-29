@@ -451,13 +451,15 @@ export const personIngestionService = {
     documentVersion: number;
     pageNumber: number;
     region: NormalizedPageRegion;
+    rawSelectedText: string | null;
     selectedText: string | null;
+    refinementDecisions: Array<{ linkId: string; decision: "excluded" | "included" }>;
     extractionMethod: RegionExtractionMethod;
     reviewedData: StructuredDraft | null;
     reason: string | null;
     replacesLinkId: string | null;
   }): Promise<{ lockVersion: number; regionId: string; linkId: string }> {
-    const { data, error } = await supabase.rpc("record_profile_review_evidence", {
+    const { data, error } = await supabase.rpc("record_profile_review_evidence_refined", {
       p_organization_id: input.organizationId,
       p_review_id: input.reviewId,
       p_expected_lock_version: input.expectedLockVersion,
@@ -469,7 +471,9 @@ export const personIngestionService = {
       p_y: input.region.y,
       p_width: input.region.width,
       p_height: input.region.height,
+      p_raw_selected_text: input.rawSelectedText,
       p_selected_text: input.selectedText,
+      p_refinement_decisions: input.refinementDecisions as unknown as Json,
       p_extraction_method: input.extractionMethod,
       p_reviewed_data: input.reviewedData as unknown as Json | null,
       p_reason: input.reason,
@@ -601,6 +605,7 @@ export const personIngestionService = {
       evidenceResult,
       regionResult,
       linkResult,
+      refinementResult,
       evidenceEventResult,
       pageResult,
       adaptationEventResult,
@@ -620,10 +625,13 @@ export const personIngestionService = {
         .eq("organization_id", organizationId).eq("processing_attempt_id", review.processing_attempt_id)
         .order("source_page"),
       supabase.from("spatial_evidence_regions")
-        .select("id, organization_id, person_id, document_id, document_version, review_id, page_number, x, y, width, height, coordinate_system, selected_text, extraction_method, source, contract_version, created_by_auth_user_id, created_at")
+        .select("id, organization_id, person_id, document_id, document_version, review_id, page_number, x, y, width, height, coordinate_system, raw_selected_text, selected_text, extraction_method, source, contract_version, created_by_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at"),
       supabase.from("profile_review_evidence_links")
         .select("id, review_id, field_path, evidence_id, spatial_region_id, link_kind, state, replaces_link_id, superseded_by_link_id, reason, created_by_auth_user_id, created_at, superseded_at")
+        .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at"),
+      supabase.from("profile_review_evidence_refinements")
+        .select("id, review_id, region_id, mapped_link_id, mapped_field_path, decision, basis, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at"),
       supabase.from("profile_review_evidence_events")
         .select("id, review_id, review_revision_id, field_path, event_type, previous_link_id, new_link_id, reason, actor_auth_user_id, created_at")
@@ -642,6 +650,7 @@ export const personIngestionService = {
     throwIfError(evidenceResult.error, "Não foi possível carregar as evidências originais da revisão.");
     throwIfError(regionResult.error, "Não foi possível carregar as regiões espaciais da revisão.");
     throwIfError(linkResult.error, "Não foi possível carregar os vínculos de evidência da revisão.");
+    throwIfError(refinementResult.error, "Não foi possível carregar os refinamentos de evidência da revisão.");
     throwIfError(evidenceEventResult.error, "Não foi possível carregar o histórico de evidências da revisão.");
     throwIfError(pageResult.error, "Não foi possível carregar a fonte original para o aprendizado da revisão.");
     throwIfError(adaptationEventResult.error, "Não foi possível carregar o histórico de aprendizado da revisão.");
@@ -727,6 +736,7 @@ export const personIngestionService = {
         width: region.width,
         height: region.height,
         coordinateSystem: region.coordinate_system,
+        rawSelectedText: region.raw_selected_text,
         selectedText: region.selected_text,
         extractionMethod: region.extraction_method,
         source: region.source,
@@ -748,6 +758,17 @@ export const personIngestionService = {
         createdByAuthUserId: link.created_by_auth_user_id,
         createdAt: link.created_at,
         supersededAt: link.superseded_at,
+      })),
+      evidenceRefinements: (refinementResult.data ?? []).map((refinement) => ({
+        id: refinement.id,
+        reviewId: refinement.review_id,
+        regionId: refinement.region_id,
+        mappedLinkId: refinement.mapped_link_id,
+        mappedFieldPath: refinement.mapped_field_path,
+        decision: refinement.decision,
+        basis: refinement.basis,
+        actorAuthUserId: refinement.actor_auth_user_id,
+        createdAt: refinement.created_at,
       })),
       evidenceEvents: (evidenceEventResult.data ?? []).map((event) => ({
         id: event.id,

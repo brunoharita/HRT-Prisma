@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from "@ant-design/icons";
-import { Alert, Button, Input, Modal, Radio, Segmented, Select, Space, Tag, Typography } from "antd";
-import { DocumentEvidenceViewer, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
+import { Alert, Button, Checkbox, Input, Modal, Radio, Segmented, Select, Space, Tag, Typography } from "antd";
+import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
 import type { CustomProfileSectionFormat, ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
@@ -51,6 +51,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [selectionValue, setSelectionValue] = useState("");
   const [selectionReason, setSelectionReason] = useState("");
   const [selectionValueEdited, setSelectionValueEdited] = useState(false);
+  const [excludedRefinementLinkIds, setExcludedRefinementLinkIds] = useState<string[]>([]);
   const [selectionError, setSelectionError] = useState<string | null>(null);
   const [newInformationType, setNewInformationType] = useState<NewInformationType>("experience");
   const [customSectionName, setCustomSectionName] = useState("");
@@ -183,6 +184,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setSuccess(null);
     setPendingSelection(selection);
     setSelectionValue(selection.selectedText ?? "");
+    setExcludedRefinementLinkIds(selection.refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.linkId));
     setSelectionReason("");
     setSelectionValueEdited(false);
     setSelectionError(null);
@@ -195,6 +197,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setSelectionValue("");
     setSelectionReason("");
     setSelectionValueEdited(false);
+    setExcludedRefinementLinkIds([]);
     setSelectionError(null);
     setCreateCustomAfterSelection(false);
   }
@@ -203,6 +206,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     if (!workspace || !draft || !pendingSelection) return;
     setSelectionError(null);
     const normalizedValue = selectionValue.trim();
+    const effectiveSelectedText = refinedSelectionText(pendingSelection, excludedRefinementLinkIds);
     let nextDraft: StructuredDraft | null = null;
     let targetFieldPath = selectedFieldPath;
     if (pendingAction === "correct_current_field") {
@@ -236,7 +240,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     if (pendingAction === "replace_review_evidence" && !replacementLinkId) { setSelectionError("Este campo ainda não possui evidência ativa do revisor para substituir."); return; }
     if (evidenceSelectionRequiresReason({
-      selectedText: pendingSelection.selectedText,
+      selectedText: effectiveSelectedText,
       proposedValue: normalizedValue,
       valueEdited: selectionValueEdited,
       changesDraft: Boolean(nextDraft),
@@ -255,7 +259,12 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         documentVersion: workspace.documentVersion,
         pageNumber: pendingSelection.pageNumber,
         region: pendingSelection.region,
-        selectedText: pendingSelection.selectedText,
+        rawSelectedText: pendingSelection.rawSelectedText,
+        selectedText: effectiveSelectedText,
+        refinementDecisions: pendingSelection.refinementCandidates.map((candidate) => ({
+          linkId: candidate.linkId,
+          decision: excludedRefinementLinkIds.includes(candidate.linkId) ? "excluded" as const : "included" as const,
+        })),
         extractionMethod: pendingSelection.extractionMethod,
         reviewedData: nextDraft,
         reason: selectionReason.trim() || null,
@@ -319,7 +328,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             activeLinkId={activeLinkId} fileName={workspace.documentName} links={workspace.evidenceLinks} navigationTarget={navigationTarget}
             onEvidenceClick={(fieldPath, linkId) => { setSelectedFieldPath(fieldPath); setActiveLinkId(linkId); setMobilePane("review"); }}
             onSelectionCancel={closePendingSelection} onSelectionComplete={handleSelectionComplete}
-            pageCount={workspace.documentPageCount} pdfUrl={pdfUrl} regions={workspace.spatialRegions} selectedFieldPath={selectedFieldPath} selectionMode={selectionMode}
+            pageCount={workspace.documentPageCount} pdfUrl={pdfUrl} refinementExcludedLinkIds={excludedRefinementLinkIds} regions={workspace.spatialRegions} selectedFieldPath={selectedFieldPath} selectionMode={selectionMode}
           />
         </div>
         <div className="prisma-review-structured-pane">
@@ -342,6 +351,33 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         {pendingSelection ? <div className="prisma-selection-dialog">
           {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
           <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. A região continuará rastreável, mas uma correção exige conteúdo e justificativa manual." : "Revise o texto recuperado antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
+          {pendingSelection.refinementCandidates.length ? <section className="prisma-selection-refinement" aria-labelledby="selection-refinement-title">
+            <div>
+              <Typography.Text id="selection-refinement-title" strong>Conteúdos já mapeados dentro da seleção</Typography.Text>
+              <Typography.Paragraph type="secondary">O Prisma desconta por padrão somente áreas confirmadas por uma pessoa. Desmarque uma área para reincluir seu conteúdo.</Typography.Paragraph>
+            </div>
+            <div className="prisma-selection-refinement__list">
+              {pendingSelection.refinementCandidates.map((candidate) => {
+                const excluded = excludedRefinementLinkIds.includes(candidate.linkId);
+                return <Checkbox checked={excluded} key={candidate.linkId} onChange={(event) => {
+                  const next = event.target.checked
+                    ? [...new Set([...excludedRefinementLinkIds, candidate.linkId])]
+                    : excludedRefinementLinkIds.filter((linkId) => linkId !== candidate.linkId);
+                  setExcludedRefinementLinkIds(next);
+                  if (!selectionValueEdited) setSelectionValue(refinedSelectionText(pendingSelection, next) ?? "");
+                  setSelectionError(null);
+                }}>
+                  <span><strong>{reviewFieldLabel(candidate.fieldPath)}</strong> · {candidate.overlapText}</span>
+                  <Tag color={candidate.source === "human" ? "green" : "blue"}>{candidate.source === "human" ? "Confirmada por pessoa" : "Extração automática"}</Tag>
+                </Checkbox>;
+              })}
+            </div>
+            {selectionValueEdited ? <Button onClick={() => {
+              setSelectionValue(refinedSelectionText(pendingSelection, excludedRefinementLinkIds) ?? "");
+              setSelectionValueEdited(false);
+              setSelectionError(null);
+            }} size="small">Restaurar texto refinado</Button> : null}
+          </section> : null}
           <Radio.Group onChange={(event) => { setPendingAction(event.target.value as ReviewEvidenceAction); setSelectionError(null); }} value={pendingAction}><Space orientation="vertical"><Radio value="correct_current_field">Corrigir campo atual</Radio><Radio value="add_complementary">Adicionar como evidência complementar</Radio>{replacementLinkId ? <Radio value="replace_review_evidence">Substituir evidência da revisão</Radio> : null}<Radio value="create_new_information">Criar nova informação</Radio></Space></Radio.Group>
           {pendingAction === "create_new_information" ? <Select aria-label="Tipo da nova informação" onChange={(value) => {
             setNewInformationType(value);
@@ -389,6 +425,11 @@ function linkPriority(kind: "original" | "reviewer" | "complementary", preferred
   return 5;
 }
 function fieldsOverlap(left: string, right: string): boolean { return left === right || left.startsWith(`${right}.`) || right.startsWith(`${left}.`); }
+
+function reviewFieldLabel(fieldPath: string): string {
+  const field = fieldPath.split(".").at(-1);
+  return ({ role: "Cargo", organization: "Empresa", period: "Período", description: "Descrição", course: "Curso", institution: "Instituição" })[field ?? ""] ?? fieldPath;
+}
 
 function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value: string): StructuredDraft {
   const next = cloneDraft(draft);

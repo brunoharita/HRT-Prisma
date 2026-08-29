@@ -98,6 +98,7 @@ export function StructuredReviewPanel({
             {evidenceLinks.map((link) => {
               const original = link.evidenceId ? workspace.originalEvidence.find((item) => item.id === link.evidenceId) : null;
               const region = link.spatialRegionId ? workspace.spatialRegions.find((item) => item.id === link.spatialRegionId) : null;
+              const excludedRefinements = region ? workspace.evidenceRefinements.filter((item) => item.regionId === region.id && item.decision === "excluded") : [];
               const pageNumber = region?.pageNumber ?? original?.sourcePage;
               return (
                 <div
@@ -112,6 +113,7 @@ export function StructuredReviewPanel({
                     <span>{link.linkKind === "original" ? "Original (extração)" : link.linkKind === "reviewer" ? "Revisor (selecionada)" : "Complementar"}</span>
                     <strong>{pageNumber ? `Página ${pageNumber}` : "Página não identificada"}</strong>
                     <p>{region?.selectedText ?? original?.quotedText ?? "Evidência espacial sem texto reconhecido."}</p>
+                    {excludedRefinements.length ? <small>{excludedRefinements.length} {excludedRefinements.length === 1 ? "área previamente mapeada foi descontada" : "áreas previamente mapeadas foram descontadas"} desta evidência.</small> : null}
                     {!region && original ? <small>Sem região espacial; coordenadas não foram inferidas.</small> : null}
                   </button>
                   {link.linkKind !== "original" && editable ? (

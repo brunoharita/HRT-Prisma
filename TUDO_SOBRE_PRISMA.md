@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: e431e8e23596c705e78b65c42a65a9683241d77b09c9b666e1b237103cf35938
+source_manifest_sha256: 7fb74b5fe81a89d6931c4be888130fff6b95ed1e65d16df0de5d062d8d0c65e3
 -->
 
 # Tudo sobre o Prisma
@@ -312,8 +312,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.2.0
-last_verified: 2026-08-28
+version: 2.3.0
+last_verified: 2026-08-29
 ---
 
 # Estado atual do Prisma
@@ -335,6 +335,7 @@ last_verified: 2026-08-28
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` considera somente caracteres visualmente contidos no retângulo; evidências `pdfjs-text-layer-v1` permanecem históricas.
 - O modal M5 aplica texto reconhecido e não editado sem justificativa, exige explicação somente para interpretação ou conteúdo manual e apresenta validação/falha dentro da própria janela.
+- Refinamento espacial 1.2 implementado localmente: uma nova seleção preserva o texto bruto, identifica regiões sobrepostas de campos irmãos do mesmo registro, desconta por padrão somente áreas humanas e permite reinclusão explícita. A subtração usa caracteres PDF.js ou símbolos posicionados do OCR; nenhum texto externo ao retângulo participa.
 - Extração adaptativa v2 implementada localmente: PDF.js preserva linhas e geometria; a estruturação reconhece blocos completos, períodos abreviados, empresa em linha distinta e permanências com cargos subordinados; cada campo pode possuir região original navegável. Padrões organizacionais aprovados funcionam como sinais estruturais allowlisted, nunca como templates executáveis.
 - Revisão adaptativa v2 implementada localmente: evidência humana pode ser retirada sem apagar histórico; superfícies extraída/revisada navegam para suas respectivas regiões; uma correção relê a fonte original dos blocos irmãos, sugere cargo/empresa/período/descrição separadamente, preserva campos já revisados e mantém registros ambíguos sem alteração.
 - Aceite adaptativo implementado com seleção por campo, persistência atômica, lock otimista, replay idempotente, histórico metadata-only e recarga do rascunho sincronizado. A seleção de nova evidência permanece disponível após aplicar sugestões.
@@ -357,7 +358,7 @@ last_verified: 2026-08-28
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 72 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 75 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -370,6 +371,7 @@ last_verified: 2026-08-28
 - Migrations M2-C com ledger de operações, locks de versão/tentativa, retries vinculados, revisões/alterações imutáveis e RPCs de aprovação atômica.
 - Migrations M5 `20260827034147_m5_spatial_cv_evidence`, `20260827041613_m5_spatial_evidence_fk_indexes` e `20260827042829_m5_spatial_evidence_idempotent_replay` com regiões normalizadas, vínculos, eventos append-only, RLS, índices e RPC transacional.
 - Migration local `20260828160707_strict_pdf_character_region`, aplicada no Prisma-QA como `20260828161125`, preserva evidências `1.0.0`, ativa default `spatial-evidence` 1.1.0 e libera `pdfjs-character-region-v2` na constraint e na RPC.
+- Migrations locais `20260829111414_spatial_evidence_refinement` e `20260829113452_spatial_evidence_refinement_rpc_fix`, aplicadas no Prisma-QA como `20260829113031` e `20260829113502`: a primeira adiciona texto bruto, ledger imutável de exclusão/reinclusão, RLS, DML direto revogado e RPC refinada; a segunda elimina de forma fail-closed a ambiguidade PostgreSQL do `ON CONFLICT` descoberta pela primeira transação conectada.
 - Migration `20260828055309_adaptive_resume_extraction` aplicada no Prisma-QA com layout por página, evidência espacial por campo, casos de aprendizado tenant-scoped e RPC auditável de retirada de evidência.
 - Arquivos locais `20260828111135_adaptive_review_learning_v2`, `20260828112737_adaptive_review_learning_v2_rpc_fix` e `20260828115300_adaptive_review_learning_v2_fk_indexes` aplicados no Prisma-QA como migrations remotas `20260828112434`, `20260828112756` e `20260828115139`, com eventos append-only, RPC de aceite transacional, padrões pós-aprovação e cobertura das novas foreign keys.
 - Migration local `20260829021015_custom_profile_sections`, aplicada no Prisma-QA como `20260829023309_custom_profile_sections`: valida `customSections`, amplia caminhos M5 e auditoria de mudanças, cria catálogo estrutural com RLS/DML revogado e aprende metadados somente na aprovação.
@@ -405,6 +407,7 @@ last_verified: 2026-08-28
 - Uma transação revertida adicional comprovou que `record_profile_review_evidence` aceita `pdfjs-character-region-v2`; o rollback restaurou o lock 8 e deixou zero regiões/operações de teste.
 - Transações adaptativas revertidas comprovaram negação de sessão sem JWT, aceite atômico, incremento de lock, replay idempotente e promoção de padrão somente após `approve_profile_review`. Os testes deixaram zero eventos adaptativos e zero padrões organizacionais residuais.
 - As migrations de áreas personalizadas foram verificadas remotamente com RLS ativo nas duas tabelas, uma policy tenant-scoped por tabela, zero grants diretos de escrita, cinco constraints de shape validadas, ledger imutável, gatilho presente e RPCs de evidência/salvamento reconhecendo `customSections`. Payload histórico e shape válido foram aceitos; nome canônico e chave inesperada foram rejeitados. Catálogo e ledger permaneceram com zero linhas. O advisor sinaliza apenas índices novos ainda sem uso, além dos avisos históricos já documentados.
+- O refinamento espacial 1.2 foi aplicado no Prisma-QA. A tabela está com RLS, policy tenant-scoped, `authenticated` somente com leitura, `anon` sem leitura e sem execução da RPC, e ledger imutável. Transação revertida comprovou rejeição de sobreposição falsa e registro diferente, persistência conjunta de texto bruto, texto efetivo e decisão excluída, e rollback sem resíduos. Sessão autenticada sem membership foi negada. O advisor acrescenta somente a RPC `security definer` intencional, protegida por autorização interna, e índices novos ainda não utilizados.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
 Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
@@ -439,6 +442,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - A aba autenticada mostrada pelo usuário não foi exposta à sessão controlável do navegador; a inspeção local alcançou somente o login. As causas geométrica e de validação do modal foram reproduzidas por testes determinísticos, mas o smoke visual autenticado permanece pendente.
 - A persistência adaptativa v2 está em QA e o runtime web permanece local. O advisor não aponta RLS ausente nem foreign key adaptativa sem índice; registra somente os novos índices ainda sem uso e a RPC `security definer` intencionalmente executável por `authenticated`, protegida por autorização interna e DML revogado. A qualidade possui regressões sanitizadas para HRT, Bencato, Scaffold, Servimed e NM Systems, mas ainda não foi medida em lote de currículos reais autorizados nem recebeu smoke visual autenticado.
 - O schema de áreas personalizadas e seu aprendizado estrutural está em QA; o frontend permanece local. O fluxo criar área -> evidência -> aprovação -> nova extração ainda precisa de smoke autenticado com dado sintético. Nenhuma revisão aprovada real foi rebaixada para simular o gatilho.
+- O schema do refinamento espacial 1.2 está ativo em QA e o frontend permanece local. A cobertura determinística e as transações revertidas comprovam subtração, limites do contrato, autorização e ausência de resíduos; ainda falta smoke visual autenticado com sobreposição real no PDF.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - O CI usa a política fail-closed do pnpm para scripts de instalação de dependências; o `postinstall` não funcional do `tesseract.js` foi revisado e explicitamente negado em `pnpm-workspace.yaml`. A geração do Context Pack normaliza finais de linha para manter hash e conteúdo determinísticos em Windows e Linux.
 - Os snapshots oficiais CBO/ESCO/O*NET ainda não foram baixados, validados por checksum, diffados ou publicados. O catálogo e os adapters estão prontos, sem simular uma carga que não ocorreu.
@@ -448,7 +452,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-28, `CI=true pnpm run validate` aprovou lint de 168 arquivos, fundação, Context Pack, dois typechecks, build web, 72 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As duas migrations de áreas personalizadas estão no Prisma-QA e passaram pelas verificações remotas de shape, RLS, grants, imutabilidade e contratos das RPCs. O frontend continua local, o smoke visual autenticado está pendente porque o conector nativo do Chrome não estava disponível e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-29, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 75 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As migrations do refinamento espacial 1.2 estão no Prisma-QA e passaram por transações revertidas de sucesso, sobreposição inválida, registro semântico incorreto e usuário sem membership, sem resíduos. O frontend continua local, o smoke visual autenticado está pendente porque nenhuma aba do Chrome estava conectada à sessão controlável e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 

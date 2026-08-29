@@ -26,6 +26,7 @@
 | Papel insuficiente | sessão `member` recebeu `organization scope is not authorized` | aprovado, fail-closed |
 | Tenant e versão | FKs compostas e validação interna exigem organização, documento e versão coincidentes | aprovado por migration/teste |
 | Imutabilidade | eventos não aceitam update/delete e substituição preserva o vínculo anterior | aprovado por migration/teste |
+| Refinamento subtrativo | caracteres ou símbolos dentro de áreas humanas já mapeadas são descontados, com reinclusão explícita e texto bruto preservado | regressão local e contrato remoto aprovados em 2026-08-29; smoke visual pendente |
 
 As três migrations originais M5 e a migration compatível de precisão textual estão ativas no Prisma-QA. As três tabelas possuem RLS, `authenticated` tem somente `SELECT` direto e a mutação ocorre exclusivamente pela RPC controlada. A auditoria pós-migração encontrou zero coordenadas inválidas, zero vínculos com duas fontes e 18 vínculos originais compatíveis.
 
@@ -47,3 +48,11 @@ A migration local `20260828160707_strict_pdf_character_region.sql` foi aplicada 
 ## Correção de aplicação em 2026-08-28
 
 O botão `Aplicar seleção` podia interromper o fluxo antes da RPC por uma validação de justificativa e exibia a mensagem no alerta global atrás do modal. O modal agora possui estado de erro próprio, limpa mensagens anteriores ao iniciar uma seleção, indica processamento e não exige justificativa quando o valor predefinido pelo texto reconhecido não foi editado. A justificativa permanece obrigatória quando há mudança semântica ou quando não existe texto reconhecido. A cobertura determinística confirma os quatro casos e a página mantém a falha de rede visível sem fechar a seleção.
+
+## Refinamento subtrativo em 2026-08-29
+
+A migration local `20260829111414_spatial_evidence_refinement.sql` introduz `spatial-evidence` 1.2.0 sem reclassificar regiões históricas. `raw_selected_text` preserva o retângulo completo, `selected_text` mantém somente o texto efetivo e `profile_review_evidence_refinements` registra decisões `excluded` ou `included` sem duplicar o conteúdo. A RPC refinada rejeita vínculo fora do tenant, revisão, documento, versão, página, registro semântico ou interseção geométrica. A tabela possui RLS, leitura tenant-scoped, DML direto revogado e trigger de imutabilidade. A primeira prova conectada encontrou ambiguidade entre o parâmetro de retorno `region_id` e a coluna homônima no alvo do `ON CONFLICT`; a transação foi revertida e a migration complementar `20260829113452_spatial_evidence_refinement_rpc_fix.sql` corrige exatamente essa cláusula, falhando se o corpo remoto não tiver o formato esperado.
+
+O runtime local filtra caracteres posicionados do PDF.js e símbolos com bounding boxes do Tesseract. Regiões humanas ficam selecionadas para desconto por padrão; regiões automáticas são apresentadas sem exclusão automática. O revisor pode alternar cada decisão e restaurar o texto refinado após uma edição manual. Os testes determinísticos cobrem contenção original, subtração, isolamento entre registros, contrato SQL e presença do fluxo na interface.
+
+As migrations foram aplicadas no Prisma-QA como `20260829113031_spatial_evidence_refinement` e `20260829113502_spatial_evidence_refinement_rpc_fix`. A tabela remota possui RLS, policy tenant-scoped, trigger imutável, `authenticated` com `SELECT` e sem `INSERT`, `anon` sem leitura e sem execução da RPC. Uma transação revertida rejeitou região sem sobreposição, rejeitou candidato de outro registro, persistiu temporariamente `raw_selected_text`, `selected_text`, contrato 1.2.0 e decisão `excluded`, e terminou com zero regiões e refinamentos residuais. Outra sessão autenticada sem membership foi negada sem mutação. O advisor registra a nova RPC `security definer` como alerta intencional e os índices recém-criados como ainda não utilizados; não foi observado novo problema de RLS ou foreign key.

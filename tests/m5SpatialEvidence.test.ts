@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
+  areSiblingReviewFields,
   evidenceSelectionRequiresReason,
   fieldPathMatches,
   isNormalizedPageRegion,
@@ -47,6 +48,21 @@ test("M5 includes only characters visually contained by the selected rectangle",
   });
 
   assert.equal(selected, "MBA");
+});
+
+test("M5 subtracts only characters covered by mapped sibling-field regions", () => {
+  const header = positionedUnits("Desenvolvedor | NM Sistemas | Jun/08 - Nov/12", 0, 0);
+  const description = positionedUnits("Desenvolvimento de software e bancos de dados", 14, 100);
+  const selection = { left: 0, top: 0, right: 500, bottom: 30 };
+  const headerRegion = { left: 0, top: 0, right: 460, bottom: 12 };
+
+  assert.equal(
+    textContainedByPixelRegion([...header, ...description], selection, [headerRegion]),
+    "Desenvolvimento de software e bancos de dados",
+  );
+  assert.equal(areSiblingReviewFields("experiences.4.description", "experiences.4.role"), true);
+  assert.equal(areSiblingReviewFields("experiences.4.description", "experiences.3.role"), false);
+  assert.equal(areSiblingReviewFields("experiences.4.description", "experiences.4"), false);
 });
 
 test("M5 applies recognized text without a reason and requires one only for a real interpretation", () => {
@@ -116,6 +132,31 @@ test("M5 migration fails closed for tenant, role, bounds, document version, page
   assert.match(sql, /review_conflict/i);
 });
 
+test("M5 refinement migration preserves raw text and validates immutable same-record geometric decisions", async () => {
+  const sql = await readFile("supabase/migrations/20260829111414_spatial_evidence_refinement.sql", "utf8");
+  assert.match(sql, /add column raw_selected_text text/i);
+  assert.match(sql, /contract_version in \('1\.0\.0', '1\.1\.0', '1\.2\.0'\)/i);
+  assert.match(sql, /create table public\.profile_review_evidence_refinements/i);
+  assert.match(sql, /decision text not null check \(decision in \('excluded', 'included'\)\)/i);
+  assert.match(sql, /profile_review_evidence_refinements_immutable[\s\S]*before update or delete/i);
+  assert.match(sql, /create policy profile_review_evidence_refinements_select[\s\S]*private\.has_org_role/i);
+  assert.match(sql, /revoke all on public\.profile_review_evidence_refinements from public, anon, authenticated/i);
+  assert.match(sql, /private\.review_field_record_scope\(link\.field_path\) = target_scope/i);
+  assert.match(sql, /region\.x < p_x \+ p_width[\s\S]*region\.y \+ region\.height > p_y/i);
+  assert.match(sql, /refinement link is not an active overlapping sibling field/i);
+  assert.match(sql, /from private\.record_profile_review_evidence\(/i);
+  assert.match(sql, /contract_version = '1\.2\.0'/i);
+  assert.doesNotMatch(sql, /jsonb_build_object\([\s\S]{0,500}p_raw_selected_text/i);
+});
+
+test("M5 refinement RPC fix removes output-column ambiguity without silently accepting schema drift", async () => {
+  const sql = await readFile("supabase/migrations/20260829113452_spatial_evidence_refinement_rpc_fix.sql", "utf8");
+  assert.match(sql, /pg_get_functiondef/i);
+  assert.match(sql, /on conflict \(organization_id, region_id, mapped_link_id\) do nothing/i);
+  assert.match(sql, /on conflict do nothing/i);
+  assert.match(sql, /unexpected shape/i);
+});
+
 test("M5 evidence operation versions value and evidence together and keeps history immutable", async () => {
   const sql = await readFile(migrationPath, "utf8");
   assert.match(sql, /create or replace function public\.record_profile_review_evidence/i);
@@ -155,6 +196,8 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(viewer, /normalizePointerRegion/);
   assert.match(viewer, /PDFJS_CHARACTER_REGION_METHOD/);
   assert.match(viewer, /textContainedByPixelRegion/);
+  assert.match(viewer, /refinementCandidates/);
+  assert.match(viewer, /positionedOcrTextUnits/);
   assert.doesNotMatch(viewer, /rectanglesIntersect/);
   assert.match(viewer, /ocrVersionRef/);
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);
@@ -163,6 +206,8 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(page, /selectionError \? <Alert title=\{selectionError\} showIcon type="error"/);
   assert.match(page, /setSelectionValueEdited\(false\)/);
   assert.match(page, /confirmLoading=\{busy\}/);
+  assert.match(page, /Conteúdos já mapeados dentro da seleção/);
+  assert.match(page, /refinementDecisions/);
   assert.match(styles, /grid-template-columns: minmax\(410px, 44fr\) minmax\(520px, 56fr\)/);
   assert.match(styles, /\.prisma-review-mobile-switch/);
   assert.match(styles, /\.mobile-pane-document/);

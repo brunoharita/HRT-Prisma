@@ -1,4 +1,4 @@
-export const SPATIAL_EVIDENCE_CONTRACT_VERSION = "1.1.0";
+export const SPATIAL_EVIDENCE_CONTRACT_VERSION = "1.2.0";
 export const SPATIAL_EVIDENCE_COORDINATE_SYSTEM = "normalized-page-v1" as const;
 export const PDFJS_CHARACTER_REGION_METHOD = "pdfjs-character-region-v2" as const;
 
@@ -15,7 +15,7 @@ export type RegionExtractionMethod =
   | typeof PDFJS_CHARACTER_REGION_METHOD
   | "tesseract-region-v1"
   | "manual-region-v1";
-export type SpatialEvidenceContractVersion = "1.0.0" | typeof SPATIAL_EVIDENCE_CONTRACT_VERSION;
+export type SpatialEvidenceContractVersion = "1.0.0" | "1.1.0" | typeof SPATIAL_EVIDENCE_CONTRACT_VERSION;
 
 export interface NormalizedPageRegion {
   x: number;
@@ -33,11 +33,24 @@ export interface SpatialEvidenceRegion extends NormalizedPageRegion {
   reviewId: string;
   pageNumber: number;
   coordinateSystem: typeof SPATIAL_EVIDENCE_COORDINATE_SYSTEM;
+  rawSelectedText: string | null;
   selectedText: string | null;
   extractionMethod: RegionExtractionMethod;
   source: "system" | "human";
   contractVersion: SpatialEvidenceContractVersion;
   createdByAuthUserId: string | null;
+  createdAt: string;
+}
+
+export interface ReviewEvidenceRefinement {
+  id: number;
+  reviewId: string;
+  regionId: string;
+  mappedLinkId: string;
+  mappedFieldPath: string;
+  decision: "excluded" | "included";
+  basis: "same-record-spatial-overlap";
+  actorAuthUserId: string;
   createdAt: string;
 }
 
@@ -162,12 +175,19 @@ export function fieldPathMatches(linkFieldPath: string, selectedFieldPath: strin
     || selectedFieldPath.startsWith(`${linkFieldPath}.`);
 }
 
-export function textContainedByPixelRegion(units: PositionedTextUnit[], selection: PixelRect): string | null {
+export function textContainedByPixelRegion(
+  units: PositionedTextUnit[],
+  selection: PixelRect,
+  excludedRegions: PixelRect[] = [],
+): string | null {
   const selected = units.filter((unit) => {
     const centerX = (unit.rect.left + unit.rect.right) / 2;
     const centerY = (unit.rect.top + unit.rect.bottom) / 2;
-    return centerX >= selection.left && centerX <= selection.right
+    const insideSelection = centerX >= selection.left && centerX <= selection.right
       && centerY >= selection.top && centerY <= selection.bottom;
+    const insideExcludedRegion = excludedRegions.some((region) => centerX >= region.left && centerX <= region.right
+      && centerY >= region.top && centerY <= region.bottom);
+    return insideSelection && !insideExcludedRegion;
   });
   if (!selected.length) return null;
 
@@ -182,6 +202,30 @@ export function textContainedByPixelRegion(units: PositionedTextUnit[], selectio
   });
   const normalized = result.replace(/\s+/g, " ").trim();
   return normalized || null;
+}
+
+export function siblingReviewFieldScope(fieldPath: string): string | null {
+  const canonical = /^(experiences|education)\.([0-9]+)\.[a-zA-Z]+$/.exec(fieldPath);
+  return canonical ? `${canonical[1]}.${canonical[2]}` : null;
+}
+
+export function areSiblingReviewFields(left: string, right: string): boolean {
+  const leftScope = siblingReviewFieldScope(left);
+  return Boolean(leftScope && leftScope === siblingReviewFieldScope(right) && left !== right);
+}
+
+export function pixelRectsOverlap(left: PixelRect, right: PixelRect): boolean {
+  return left.left < right.right && left.right > right.left && left.top < right.bottom && left.bottom > right.top;
+}
+
+export function intersectPixelRects(left: PixelRect, right: PixelRect): PixelRect | null {
+  if (!pixelRectsOverlap(left, right)) return null;
+  return {
+    left: Math.max(left.left, right.left),
+    top: Math.max(left.top, right.top),
+    right: Math.min(left.right, right.right),
+    bottom: Math.min(left.bottom, right.bottom),
+  };
 }
 
 export function evidenceSelectionRequiresReason(input: EvidenceSelectionReasonInput): boolean {

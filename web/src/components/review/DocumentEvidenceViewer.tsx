@@ -11,10 +11,13 @@ import { Alert, Button, InputNumber, Skeleton, Space, Tag, Tooltip, Typography }
 import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 import "pdfjs-dist/web/pdf_viewer.css";
 import {
+  areSiblingReviewFields,
   fieldPathMatches,
+  intersectPixelRects,
   normalizePointerRegion,
   normalizedRegionStyle,
   PDFJS_CHARACTER_REGION_METHOD,
+  pixelRectsOverlap,
   textContainedByPixelRegion,
   type NormalizedPageRegion,
   type PixelRect,
@@ -34,9 +37,24 @@ export interface EvidenceNavigationTarget {
 export interface RegionSelectionResult {
   pageNumber: number;
   region: NormalizedPageRegion;
+  rawSelectedText: string | null;
   selectedText: string | null;
   extractionMethod: RegionExtractionMethod;
   ocrState: "not_needed" | "completed" | "failed";
+  selectionRect: PixelRect | null;
+  textUnits: PositionedTextUnit[];
+  refinementCandidates: RegionRefinementCandidate[];
+}
+
+export interface RegionRefinementCandidate {
+  linkId: string;
+  regionId: string;
+  fieldPath: string;
+  linkKind: ReviewEvidenceLink["linkKind"];
+  source: SpatialEvidenceRegion["source"];
+  overlapText: string | null;
+  defaultExcluded: boolean;
+  pixelRegion: PixelRect;
 }
 
 interface DocumentEvidenceViewerProps {
@@ -48,6 +66,7 @@ interface DocumentEvidenceViewerProps {
   selectedFieldPath: string;
   activeLinkId: string | null;
   selectionMode: boolean;
+  refinementExcludedLinkIds?: string[];
   navigationTarget: EvidenceNavigationTarget | null;
   onSelectionCancel: () => void;
   onSelectionComplete: (selection: RegionSelectionResult) => void;
@@ -68,6 +87,7 @@ export function DocumentEvidenceViewer({
   selectedFieldPath,
   activeLinkId,
   selectionMode,
+  refinementExcludedLinkIds = [],
   navigationTarget,
   onSelectionCancel,
   onSelectionComplete,
@@ -240,10 +260,16 @@ export function DocumentEvidenceViewer({
 
   async function finishSelection(region: NormalizedPageRegion) {
     const version = ++ocrVersionRef.current;
-    const text = textInsideRegion(region);
-    if (text) {
+    const nativeSelection = nativeTextSelection(region);
+    if (nativeSelection?.rawSelectedText) {
       setSelectionStatus("Texto da região recuperado pela camada nativa do PDF.");
-      onSelectionComplete({ pageNumber: currentPage, region, selectedText: text, extractionMethod: PDFJS_CHARACTER_REGION_METHOD, ocrState: "not_needed" });
+      onSelectionComplete({
+        pageNumber: currentPage,
+        region,
+        ...nativeSelection,
+        extractionMethod: PDFJS_CHARACTER_REGION_METHOD,
+        ocrState: "not_needed",
+      });
       return;
     }
 
@@ -271,14 +297,21 @@ export function DocumentEvidenceViewer({
       const { createWorker } = await import("tesseract.js");
       const worker = await createWorker(["por", "eng"]);
       try {
-        const result = await worker.recognize(crop);
+        const result = await worker.recognize(crop, {}, { text: true, blocks: true });
         if (version !== ocrVersionRef.current) return;
         const recognized = result.data.text.replace(/\s+/g, " ").trim();
+        const ocrSelection = recognized
+          ? selectionFromUnits(
+            region,
+            positionedOcrTextUnits(result.data.blocks, region, crop.width, crop.height),
+            recognized,
+          )
+          : emptyTextSelection();
         setSelectionStatus(recognized ? "OCR local concluído. Revise a sugestão antes de aplicar." : "O OCR não reconheceu texto; a região permanece disponível como evidência.");
         onSelectionComplete({
           pageNumber: currentPage,
           region,
-          selectedText: recognized || null,
+          ...ocrSelection,
           extractionMethod: recognized ? "tesseract-region-v1" : "manual-region-v1",
           ocrState: recognized ? "completed" : "failed",
         });
@@ -288,23 +321,109 @@ export function DocumentEvidenceViewer({
     } catch {
       if (version !== ocrVersionRef.current) return;
       setSelectionStatus("O OCR local falhou. A região pode ser vinculada, mas uma correção exigirá texto e justificativa manual.");
-      onSelectionComplete({ pageNumber: currentPage, region, selectedText: null, extractionMethod: "manual-region-v1", ocrState: "failed" });
+      onSelectionComplete({ pageNumber: currentPage, region, ...emptyTextSelection(), extractionMethod: "manual-region-v1", ocrState: "failed" });
     } finally {
       if (version === ocrVersionRef.current) setOcrBusy(false);
     }
   }
 
-  function textInsideRegion(region: NormalizedPageRegion): string | null {
+  function nativeTextSelection(region: NormalizedPageRegion) {
     const pageRect = pageRef.current?.getBoundingClientRect();
     const layer = textLayerRef.current;
     if (!pageRect || !layer) return null;
-    const selectionRect = {
-      left: pageRect.left + region.x * pageRect.width,
-      top: pageRect.top + region.y * pageRect.height,
-      right: pageRect.left + (region.x + region.width) * pageRect.width,
-      bottom: pageRect.top + (region.y + region.height) * pageRect.height,
+    const selectionRect = normalizedToPixelRect(region, pageRect);
+    const units = positionedTextUnits(layer, selectionRect);
+    return selectionFromUnits(region, units, textContainedByPixelRegion(units, selectionRect));
+  }
+
+  function selectionFromUnits(region: NormalizedPageRegion, units: PositionedTextUnit[], rawText: string | null) {
+    const pageRect = pageRef.current?.getBoundingClientRect();
+    if (!pageRect || !rawText) return emptyTextSelection();
+    const selectionRect = normalizedToPixelRect(region, pageRect);
+    if (!units.length) {
+      return { rawSelectedText: rawText, selectedText: rawText, selectionRect, textUnits: [], refinementCandidates: [] };
+    }
+    const refinementCandidates = pageLinks.flatMap(({ link, region: mappedRegion }) => {
+      if (!areSiblingReviewFields(link.fieldPath, selectedFieldPath)) return [];
+      const pixelRegion = normalizedToPixelRect(mappedRegion, pageRect);
+      const overlap = intersectPixelRects(selectionRect, pixelRegion);
+      if (!overlap) return [];
+      const overlapText = textContainedByPixelRegion(units, overlap);
+      if (!overlapText) return [];
+      return [{
+        linkId: link.id,
+        regionId: mappedRegion.id,
+        fieldPath: link.fieldPath,
+        linkKind: link.linkKind,
+        source: mappedRegion.source,
+        overlapText,
+        defaultExcluded: mappedRegion.source === "human",
+        pixelRegion,
+      } satisfies RegionRefinementCandidate];
+    });
+    const defaultExclusions = refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.pixelRegion);
+    return {
+      rawSelectedText: rawText,
+      selectedText: textContainedByPixelRegion(units, selectionRect, defaultExclusions),
+      selectionRect,
+      textUnits: units,
+      refinementCandidates,
     };
-    return textContainedByPixelRegion(positionedTextUnits(layer, selectionRect), selectionRect);
+  }
+
+  function positionedOcrTextUnits(
+    blocks: OcrBlock[] | null,
+    region: NormalizedPageRegion,
+    cropWidth: number,
+    cropHeight: number,
+  ): PositionedTextUnit[] {
+    const pageRect = pageRef.current?.getBoundingClientRect();
+    if (!pageRect || !blocks?.length || cropWidth <= 0 || cropHeight <= 0) return [];
+    const cropRect = normalizedToPixelRect(region, pageRect);
+    const scaleX = (cropRect.right - cropRect.left) / cropWidth;
+    const scaleY = (cropRect.bottom - cropRect.top) / cropHeight;
+    const units: PositionedTextUnit[] = [];
+    let sourceIndex = 0;
+    blocks.forEach((block) => block.paragraphs.forEach((paragraph) => paragraph.lines.forEach((line) => {
+      let sourceOffset = 0;
+      line.words.forEach((word, wordIndex) => {
+        word.symbols.forEach((symbol) => {
+          Array.from(symbol.text).forEach((character) => {
+            units.push({
+              text: character,
+              sourceIndex,
+              sourceOffset,
+              rect: {
+                left: cropRect.left + symbol.bbox.x0 * scaleX,
+                top: cropRect.top + symbol.bbox.y0 * scaleY,
+                right: cropRect.left + symbol.bbox.x1 * scaleX,
+                bottom: cropRect.top + symbol.bbox.y1 * scaleY,
+              },
+            });
+            sourceOffset += character.length;
+          });
+        });
+        const lastSymbol = word.symbols.at(-1);
+        const nextSymbol = line.words[wordIndex + 1]?.symbols[0];
+        if (lastSymbol && nextSymbol) {
+          const centerX = cropRect.left + ((lastSymbol.bbox.x1 + nextSymbol.bbox.x0) / 2) * scaleX;
+          units.push({
+            text: " ",
+            sourceIndex,
+            sourceOffset,
+            rect: {
+              left: centerX - 0.5,
+              top: cropRect.top + Math.min(lastSymbol.bbox.y0, nextSymbol.bbox.y0) * scaleY,
+              right: centerX + 0.5,
+              bottom: cropRect.top + Math.max(lastSymbol.bbox.y1, nextSymbol.bbox.y1) * scaleY,
+            },
+          });
+          sourceOffset += 1;
+        }
+      });
+      sourceIndex += 1;
+    })));
+    return units;
   }
 
   function fitWidth() {
@@ -360,6 +479,7 @@ export function DocumentEvidenceViewer({
                     "prisma-evidence-highlight",
                     `prisma-evidence-highlight--${link.linkKind}`,
                     activeLinkId === link.id || fieldPathMatches(link.fieldPath, selectedFieldPath) ? "is-active" : "",
+                    refinementExcludedLinkIds.includes(link.id) ? "is-refinement-excluded" : "",
                   ].filter(Boolean).join(" ")}
                   data-region-id={region.id}
                   key={link.id}
@@ -431,8 +551,43 @@ function positionedTextUnits(layer: HTMLElement, selection: PixelRect): Position
   return units;
 }
 
-function pixelRectsOverlap(left: PixelRect, right: PixelRect): boolean {
-  return left.left < right.right && left.right > right.left && left.top < right.bottom && left.bottom > right.top;
+export function refinedSelectionText(selection: RegionSelectionResult, excludedLinkIds: string[]): string | null {
+  if (!selection.selectionRect || !selection.textUnits.length) return selection.selectedText;
+  const excluded = selection.refinementCandidates
+    .filter((candidate) => excludedLinkIds.includes(candidate.linkId))
+    .map((candidate) => candidate.pixelRegion);
+  return textContainedByPixelRegion(selection.textUnits, selection.selectionRect, excluded);
+}
+
+function normalizedToPixelRect(region: NormalizedPageRegion, pageRect: PixelRect): PixelRect {
+  const width = pageRect.right - pageRect.left;
+  const height = pageRect.bottom - pageRect.top;
+  return {
+    left: pageRect.left + region.x * width,
+    top: pageRect.top + region.y * height,
+    right: pageRect.left + (region.x + region.width) * width,
+    bottom: pageRect.top + (region.y + region.height) * height,
+  };
+}
+
+function emptyTextSelection() {
+  return {
+    rawSelectedText: null,
+    selectedText: null,
+    selectionRect: null,
+    textUnits: [],
+    refinementCandidates: [],
+  };
+}
+
+interface OcrBlock {
+  paragraphs: Array<{
+    lines: Array<{
+      words: Array<{
+        symbols: Array<{ text: string; bbox: { x0: number; y0: number; x1: number; y1: number } }>;
+      }>;
+    }>;
+  }>;
 }
 
 function dragStyle(drag: DragState, width: number, height: number) {

@@ -14,7 +14,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, layout visual, evidência por campo, tentativa e idempotência |
 | Intake currículo-first | `resume_intakes` | PDF tenant-scoped, identidade mínima e resolução única antes do documento M2-B |
 | Revisão humana | `profile_reviews`, `profile_review_revisions`, `profile_review_changes` | Rascunho, lock otimista, decisão por campo e aprovação rastreável |
-| Evidência espacial | `spatial_evidence_regions`, `profile_review_evidence_links`, `profile_review_evidence_events` | Região normalizada, vínculo por campo, substituição não destrutiva e histórico imutável |
+| Evidência espacial | `spatial_evidence_regions`, `profile_review_evidence_links`, `profile_review_evidence_refinements`, `profile_review_evidence_events` | Região normalizada, texto bruto e efetivo, máscara entre campos irmãos, vínculo por campo, substituição não destrutiva e histórico imutável |
 | Aprendizado de extração | `extraction_learning_cases` | referência tenant-scoped a correção humana ou aceite adaptativo candidato e aprovado para avaliação |
 | Evento adaptativo | `profile_review_adaptation_events` | ledger append-only do padrão confirmado e dos campos aceitos, sem duplicar valores ou texto integral |
 | Padrão organizacional | `organization_extraction_patterns` | sinal estrutural versionado promovido somente após aprovação integral da revisão |
@@ -38,6 +38,8 @@ Estados de documento implementados: `pending`, `received`, `processing`, `proces
 `document_operations` impede replay divergente e devolve o resultado anterior para a mesma chave/fingerprint. Locks por pessoa/documento serializam versões. A revisão mantém histórico imutável de alterações e somente `approve_profile_review` promove uma nova versão de perfil, com uma única versão atual por pessoa.
 
 `spatial_evidence_regions` exige `organization_id`, documento, versão, review, página e coordenadas `x/y/width/height` entre 0 e 1, inclusive os limites somados. `profile_review_evidence_links` referencia exatamente uma evidência original ou uma região espacial. `profile_review_evidence_events` é append-only. A RPC M5 cria região, vínculo, revisão e evento atomicamente; evidências históricas anteriores permanecem válidas sem coordenadas.
+
+Em `spatial-evidence` 1.2.0, `raw_selected_text` preserva o conteúdo do retângulo e `selected_text` preserva o conteúdo efetivamente vinculado. `profile_review_evidence_refinements` registra, de forma append-only, se cada região espacial sobreposta de um campo irmão foi excluída ou reincluída. O banco rejeita refinamento entre registros, páginas, documentos, versões ou tenants diferentes e mantém DML direto revogado.
 
 `document_page_extractions.layout_blocks` preserva linhas visuais normalizadas e `field_evidence` preserva descritores mínimos por campo. Ao abrir a revisão, somente coordenadas realmente extraídas geram regiões `source=system`. `extraction_learning_cases` referencia eventos humanos sem duplicar texto integral e só é promovida a caso aprovado quando a revisão é aprovada.
 

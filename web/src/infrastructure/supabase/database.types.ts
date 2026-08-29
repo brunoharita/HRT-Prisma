@@ -329,10 +329,11 @@ export interface Database {
         width: number;
         height: number;
         coordinate_system: "normalized-page-v1";
+        raw_selected_text: string | null;
         selected_text: string | null;
         extraction_method: "pdfjs-text-layer-v1" | "pdfjs-character-region-v2" | "tesseract-region-v1" | "manual-region-v1";
         source: "system" | "human";
-        contract_version: "1.0.0" | "1.1.0";
+        contract_version: "1.0.0" | "1.1.0" | "1.2.0";
         created_by_auth_user_id: string | null;
         created_at: string;
       }>;
@@ -351,6 +352,18 @@ export interface Database {
         created_by_auth_user_id: string;
         created_at: string;
         superseded_at: string | null;
+      }>;
+      profile_review_evidence_refinements: Table<{
+        id: number;
+        organization_id: string;
+        review_id: string;
+        region_id: string;
+        mapped_link_id: string;
+        mapped_field_path: string;
+        decision: "excluded" | "included";
+        basis: "same-record-spatial-overlap";
+        actor_auth_user_id: string;
+        created_at: string;
       }>;
       profile_review_evidence_events: Table<{
         id: number;
@@ -632,6 +645,30 @@ export interface Database {
           p_height: number;
           p_selected_text: string | null;
           p_extraction_method: "pdfjs-text-layer-v1" | "pdfjs-character-region-v2" | "tesseract-region-v1" | "manual-region-v1";
+          p_reviewed_data: Json | null;
+          p_reason: string | null;
+          p_replaces_link_id: string | null;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ review_id: string; lock_version: number; region_id: string; link_id: string; reused: boolean }>;
+      };
+      record_profile_review_evidence_refined: {
+        Args: {
+          p_organization_id: string;
+          p_review_id: string;
+          p_expected_lock_version: number;
+          p_field_path: string;
+          p_action: "correct_current_field" | "add_complementary" | "replace_review_evidence" | "create_new_information";
+          p_document_version: number;
+          p_page_number: number;
+          p_x: number;
+          p_y: number;
+          p_width: number;
+          p_height: number;
+          p_raw_selected_text: string | null;
+          p_selected_text: string | null;
+          p_extraction_method: "pdfjs-text-layer-v1" | "pdfjs-character-region-v2" | "tesseract-region-v1" | "manual-region-v1";
+          p_refinement_decisions: Json;
           p_reviewed_data: Json | null;
           p_reason: string | null;
           p_replaces_link_id: string | null;
