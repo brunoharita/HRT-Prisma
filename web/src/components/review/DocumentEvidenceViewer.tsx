@@ -12,13 +12,19 @@ import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 import "pdfjs-dist/web/pdf_viewer.css";
 import {
   areSiblingReviewFields,
+  boundingPixelRectForTextUnits,
+  characterReachRect,
   fieldPathMatches,
+  fitPixelRectToVisualSlot,
   intersectPixelRects,
   normalizePointerRegion,
   normalizedRegionStyle,
   PDFJS_CHARACTER_REGION_METHOD,
   pixelRectsOverlap,
   textContainedByPixelRegion,
+  textFromPositionedUnits,
+  textUnitsExcludingPixelRegions,
+  textUnitsReachedByPixelRegion,
   type NormalizedPageRegion,
   type PixelRect,
   type PositionedTextUnit,
@@ -43,6 +49,7 @@ export interface RegionSelectionResult {
   ocrState: "not_needed" | "completed" | "failed";
   selectionRect: PixelRect | null;
   textUnits: PositionedTextUnit[];
+  selectedTextUnits: PositionedTextUnit[];
   refinementCandidates: RegionRefinementCandidate[];
 }
 
@@ -102,6 +109,7 @@ export function DocumentEvidenceViewer({
   const [selectionStatus, setSelectionStatus] = useState<string | null>(null);
   const [drag, setDrag] = useState<DragState | null>(null);
   const [pendingRegion, setPendingRegion] = useState<NormalizedPageRegion | null>(null);
+  const [pendingVisualSelection, setPendingVisualSelection] = useState<RegionSelectionResult | null>(null);
   const [ocrBusy, setOcrBusy] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pageRef = useRef<HTMLDivElement | null>(null);
@@ -209,6 +217,7 @@ export function DocumentEvidenceViewer({
     if (!selectionMode) {
       setDrag(null);
       setPendingRegion(null);
+      setPendingVisualSelection(null);
       setSelectionStatus(null);
       ocrVersionRef.current += 1;
       setOcrBusy(false);
@@ -235,6 +244,7 @@ export function DocumentEvidenceViewer({
     if (!point) return;
     event.currentTarget.setPointerCapture(event.pointerId);
     setPendingRegion(null);
+    setPendingVisualSelection(null);
     setSelectionStatus("Arraste até o fim da evidência.");
     setDrag({ start: point, end: point });
   }
@@ -262,14 +272,16 @@ export function DocumentEvidenceViewer({
     const version = ++ocrVersionRef.current;
     const nativeSelection = nativeTextSelection(region);
     if (nativeSelection?.rawSelectedText) {
-      setSelectionStatus("Texto da região recuperado pela camada nativa do PDF.");
-      onSelectionComplete({
+      const completedSelection: RegionSelectionResult = {
         pageNumber: currentPage,
-        region,
         ...nativeSelection,
         extractionMethod: PDFJS_CHARACTER_REGION_METHOD,
         ocrState: "not_needed",
-      });
+      };
+      setPendingRegion(completedSelection.region);
+      setPendingVisualSelection(completedSelection);
+      setSelectionStatus("Seleção ajustada aos caracteres destacados. O texto recuperado corresponde exatamente ao destaque.");
+      onSelectionComplete(completedSelection);
       return;
     }
 
@@ -307,20 +319,28 @@ export function DocumentEvidenceViewer({
             recognized,
           )
           : emptyTextSelection();
-        setSelectionStatus(recognized ? "OCR local concluído. Revise a sugestão antes de aplicar." : "O OCR não reconheceu texto; a região permanece disponível como evidência.");
-        onSelectionComplete({
+        const completedSelection: RegionSelectionResult = {
           pageNumber: currentPage,
-          region,
           ...ocrSelection,
+          region: "region" in ocrSelection ? ocrSelection.region : region,
           extractionMethod: recognized ? "tesseract-region-v1" : "manual-region-v1",
           ocrState: recognized ? "completed" : "failed",
-        });
+        };
+        setPendingRegion(completedSelection.region);
+        setPendingVisualSelection(recognized ? completedSelection : null);
+        setSelectionStatus(recognized
+          ? completedSelection.selectedTextUnits.length
+            ? "OCR local concluído. Os símbolos destacados correspondem ao texto recuperado."
+            : "OCR local concluído sem geometria por símbolo. Revise o texto antes de aplicá-lo."
+          : "O OCR não reconheceu texto; a região permanece disponível como evidência.");
+        onSelectionComplete(completedSelection);
       } finally {
         await worker.terminate();
       }
     } catch {
       if (version !== ocrVersionRef.current) return;
       setSelectionStatus("O OCR local falhou. A região pode ser vinculada, mas uma correção exigirá texto e justificativa manual.");
+      setPendingVisualSelection(null);
       onSelectionComplete({ pageNumber: currentPage, region, ...emptyTextSelection(), extractionMethod: "manual-region-v1", ocrState: "failed" });
     } finally {
       if (version === ocrVersionRef.current) setOcrBusy(false);
@@ -338,17 +358,21 @@ export function DocumentEvidenceViewer({
 
   function selectionFromUnits(region: NormalizedPageRegion, units: PositionedTextUnit[], rawText: string | null) {
     const pageRect = pageRef.current?.getBoundingClientRect();
-    if (!pageRect || !rawText) return emptyTextSelection();
+    if (!pageRect || !rawText) return { region, ...emptyTextSelection() };
     const selectionRect = normalizedToPixelRect(region, pageRect);
+    const selectedTextUnits = textUnitsReachedByPixelRegion(units, selectionRect);
+    const resolvedRawText = textFromPositionedUnits(selectedTextUnits) ?? rawText;
     if (!units.length) {
-      return { rawSelectedText: rawText, selectedText: rawText, selectionRect, textUnits: [], refinementCandidates: [] };
+      return { region, rawSelectedText: rawText, selectedText: rawText, selectionRect, textUnits: [], selectedTextUnits: [], refinementCandidates: [] };
     }
+    const resolvedSelectionRect = boundingPixelRectForTextUnits(selectedTextUnits) ?? selectionRect;
+    const resolvedRegion = pixelRectToNormalizedRegion(resolvedSelectionRect, pageRect) ?? region;
     const refinementCandidates = pageLinks.flatMap(({ link, region: mappedRegion }) => {
       if (!areSiblingReviewFields(link.fieldPath, selectedFieldPath)) return [];
       const pixelRegion = normalizedToPixelRect(mappedRegion, pageRect);
-      const overlap = intersectPixelRects(selectionRect, pixelRegion);
+      const overlap = intersectPixelRects(resolvedSelectionRect, pixelRegion);
       if (!overlap) return [];
-      const overlapText = textContainedByPixelRegion(units, overlap);
+      const overlapText = textContainedByPixelRegion(selectedTextUnits, overlap);
       if (!overlapText) return [];
       return [{
         linkId: link.id,
@@ -363,10 +387,12 @@ export function DocumentEvidenceViewer({
     });
     const defaultExclusions = refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.pixelRegion);
     return {
-      rawSelectedText: rawText,
-      selectedText: textContainedByPixelRegion(units, selectionRect, defaultExclusions),
-      selectionRect,
+      region: resolvedRegion,
+      rawSelectedText: resolvedRawText,
+      selectedText: textFromPositionedUnits(textUnitsExcludingPixelRegions(selectedTextUnits, defaultExclusions)),
+      selectionRect: resolvedSelectionRect,
       textUnits: units,
+      selectedTextUnits,
       refinementCandidates,
     };
   }
@@ -437,6 +463,18 @@ export function DocumentEvidenceViewer({
     return <div className="prisma-document-viewer-empty"><Alert title="O documento original não está disponível para visualização." description="A revisão continua acessível, mas nenhuma coordenada espacial será criada sem o PDF e sua versão." showIcon type="warning" /></div>;
   }
 
+  const pendingCharacterRegions = pendingVisualSelection && pageRef.current
+    ? textUnitsExcludingPixelRegions(
+      pendingVisualSelection.selectedTextUnits,
+      pendingVisualSelection.refinementCandidates
+        .filter((candidate) => refinementExcludedLinkIds.includes(candidate.linkId))
+        .map((candidate) => candidate.pixelRegion),
+    ).flatMap((unit) => {
+      const normalized = pixelRectToNormalizedRegion(unit.rect, pageRef.current!.getBoundingClientRect());
+      return normalized ? [{ unit, normalized }] : [];
+    })
+    : [];
+
   return (
     <section aria-label="Currículo original" className="prisma-document-viewer">
       <div className="prisma-pdf-toolbar">
@@ -462,7 +500,11 @@ export function DocumentEvidenceViewer({
           <Button disabled={ocrBusy} onClick={onSelectionCancel} size="small" type="text">Cancelar seleção</Button>
         </div>
       ) : null}
-      {selectionStatus ? <div className="prisma-selection-status" role="status">{selectionStatus}</div> : null}
+      {selectionMode || selectionStatus ? (
+        <div className="prisma-selection-status" role="status">
+          {selectionStatus ?? "Arraste sobre a evidência desejada."}
+        </div>
+      ) : null}
 
       <div className="prisma-pdf-scroll" ref={scrollRef}>
         {loading ? <Skeleton active paragraph={{ rows: 14 }} /> : null}
@@ -488,7 +530,15 @@ export function DocumentEvidenceViewer({
                   type="button"
                 />
               ))}
-              {pendingRegion ? <div className="prisma-evidence-highlight prisma-evidence-highlight--pending" style={normalizedRegionStyle(pendingRegion)} /> : null}
+              {pendingCharacterRegions.map(({ unit, normalized }) => (
+                <span
+                  aria-hidden="true"
+                  className="prisma-evidence-character-highlight"
+                  key={`${unit.sourceIndex}-${unit.sourceOffset}`}
+                  style={normalizedRegionStyle(normalized)}
+                />
+              ))}
+              {!pendingCharacterRegions.length && pendingRegion ? <div className="prisma-evidence-highlight prisma-evidence-highlight--pending" style={normalizedRegionStyle(pendingRegion)} /> : null}
               {drag && pageRef.current ? <div className="prisma-evidence-highlight prisma-evidence-highlight--pending" style={dragStyle(drag, pageRef.current.clientWidth, pageRef.current.clientHeight)} /> : null}
             </div>
             <div
@@ -516,13 +566,16 @@ export function DocumentEvidenceViewer({
 function positionedTextUnits(layer: HTMLElement, selection: PixelRect): PositionedTextUnit[] {
   const units: PositionedTextUnit[] = [];
   const range = document.createRange();
+  const candidateRect = characterReachRect(selection);
+  const spans = Array.from(layer.querySelectorAll<HTMLElement>("span"));
   let sourceIndex = 0;
-  layer.querySelectorAll<HTMLElement>("span").forEach((span) => {
+  spans.forEach((span, spanIndex) => {
     const spanRect = span.getBoundingClientRect();
-    if (!pixelRectsOverlap(selection, spanRect)) {
+    if (!pixelRectsOverlap(candidateRect, spanRect)) {
       sourceIndex += 1;
       return;
     }
+    const nextVisualStart = nextSameLineVisualStart(spans, spanIndex, spanRect);
     const walker = document.createTreeWalker(span, NodeFilter.SHOW_TEXT);
     let node = walker.nextNode();
     while (node) {
@@ -534,11 +587,16 @@ function positionedTextUnits(layer: HTMLElement, selection: PixelRect): Position
         range.setEnd(textNode, nextOffset);
         const rect = range.getBoundingClientRect();
         if (rect.width > 0 && rect.height > 0) {
+          const fittedRect = fitPixelRectToVisualSlot(
+            { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom },
+            { left: spanRect.left, top: spanRect.top, right: spanRect.right, bottom: spanRect.bottom },
+            nextVisualStart,
+          );
           units.push({
             text: character,
             sourceIndex,
             sourceOffset,
-            rect: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom },
+            rect: fittedRect,
           });
         }
         sourceOffset = nextOffset;
@@ -551,12 +609,26 @@ function positionedTextUnits(layer: HTMLElement, selection: PixelRect): Position
   return units;
 }
 
+function nextSameLineVisualStart(spans: HTMLElement[], spanIndex: number, spanRect: DOMRect): number {
+  const currentCenterY = (spanRect.top + spanRect.bottom) / 2;
+  for (let index = spanIndex + 1; index < spans.length; index += 1) {
+    const candidate = spans[index];
+    if (!candidate) continue;
+    const candidateRect = candidate.getBoundingClientRect();
+    const candidateCenterY = (candidateRect.top + candidateRect.bottom) / 2;
+    const lineHeight = Math.max(spanRect.height, candidateRect.height);
+    if (Math.abs(candidateCenterY - currentCenterY) > lineHeight * 0.6) break;
+    if (candidateRect.left > spanRect.left) return Math.min(spanRect.right, candidateRect.left);
+  }
+  return spanRect.right;
+}
+
 export function refinedSelectionText(selection: RegionSelectionResult, excludedLinkIds: string[]): string | null {
-  if (!selection.selectionRect || !selection.textUnits.length) return selection.selectedText;
+  if (!selection.selectedTextUnits.length) return selection.selectedText;
   const excluded = selection.refinementCandidates
     .filter((candidate) => excludedLinkIds.includes(candidate.linkId))
     .map((candidate) => candidate.pixelRegion);
-  return textContainedByPixelRegion(selection.textUnits, selection.selectionRect, excluded);
+  return textFromPositionedUnits(textUnitsExcludingPixelRegions(selection.selectedTextUnits, excluded));
 }
 
 function normalizedToPixelRect(region: NormalizedPageRegion, pageRect: PixelRect): PixelRect {
@@ -570,12 +642,29 @@ function normalizedToPixelRect(region: NormalizedPageRegion, pageRect: PixelRect
   };
 }
 
+function pixelRectToNormalizedRegion(rect: PixelRect, pageRect: PixelRect): NormalizedPageRegion | null {
+  const width = pageRect.right - pageRect.left;
+  const height = pageRect.bottom - pageRect.top;
+  if (width <= 0 || height <= 0) return null;
+  const left = clampNormalized((rect.left - pageRect.left) / width);
+  const top = clampNormalized((rect.top - pageRect.top) / height);
+  const right = clampNormalized((rect.right - pageRect.left) / width);
+  const bottom = clampNormalized((rect.bottom - pageRect.top) / height);
+  if (right <= left || bottom <= top) return null;
+  return { x: left, y: top, width: right - left, height: bottom - top };
+}
+
+function clampNormalized(value: number): number {
+  return Math.min(1, Math.max(0, value));
+}
+
 function emptyTextSelection() {
   return {
     rawSelectedText: null,
     selectedText: null,
     selectionRect: null,
     textUnits: [],
+    selectedTextUnits: [],
     refinementCandidates: [],
   };
 }

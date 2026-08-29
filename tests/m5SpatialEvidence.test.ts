@@ -3,12 +3,15 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   areSiblingReviewFields,
+  boundingPixelRectForTextUnits,
   evidenceSelectionRequiresReason,
   fieldPathMatches,
+  fitPixelRectToVisualSlot,
   isNormalizedPageRegion,
   normalizePointerRegion,
   normalizedRegionStyle,
   textContainedByPixelRegion,
+  textUnitsReachedByPixelRegion,
   topLevelReviewField,
 } from "../web/src/domain/spatialEvidence.js";
 
@@ -48,6 +51,47 @@ test("M5 includes only characters visually contained by the selected rectangle",
   });
 
   assert.equal(selected, "MBA");
+});
+
+test("M5 keeps only the character that visibly starts inside the selection's right edge", () => {
+  const line = positionedUnits("TI|", 0, 0);
+  const verticallyOutside = positionedUnits("X", 20, 100);
+  const selected = textContainedByPixelRegion([...line, ...verticallyOutside], {
+    left: 0,
+    top: 0,
+    right: 11,
+    bottom: 10,
+  });
+
+  assert.equal(selected, "TI");
+});
+
+test("M5 rescues one contiguous right-edge character from subpixel drift and snaps to its full box", () => {
+  const units = [
+    { text: "T", sourceIndex: 0, sourceOffset: 0, rect: { left: 0, top: 0, right: 10, bottom: 10 } },
+    { text: "I", sourceIndex: 0, sourceOffset: 1, rect: { left: 10.6, top: 0, right: 20.6, bottom: 10 } },
+    { text: "|", sourceIndex: 0, sourceOffset: 2, rect: { left: 20.6, top: 0, right: 30.6, bottom: 10 } },
+  ];
+  const selection = { left: 0, top: 0, right: 10, bottom: 10 };
+  const reached = textUnitsReachedByPixelRegion(units, selection);
+
+  assert.equal(textContainedByPixelRegion(units, selection), "TI");
+  assert.deepEqual(reached.map((unit) => unit.text), ["T", "I"]);
+  assert.deepEqual(boundingPixelRectForTextUnits(reached), { left: 0, top: 0, right: 20.6, bottom: 10 });
+});
+
+test("M5 fits fallback-font character geometry before the next visual PDF item", () => {
+  const sourceBounds = { left: 100, top: 20, right: 200, bottom: 34 };
+  const lastCharacter = { left: 190, top: 20, right: 200, bottom: 34 };
+
+  assert.deepEqual(
+    fitPixelRectToVisualSlot(lastCharacter, sourceBounds, 180),
+    { left: 172, top: 20, right: 180, bottom: 34 },
+  );
+  assert.deepEqual(
+    fitPixelRectToVisualSlot(lastCharacter, sourceBounds, 210),
+    lastCharacter,
+  );
 });
 
 test("M5 subtracts only characters covered by mapped sibling-field regions", () => {
@@ -198,6 +242,9 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(viewer, /textContainedByPixelRegion/);
   assert.match(viewer, /refinementCandidates/);
   assert.match(viewer, /positionedOcrTextUnits/);
+  assert.match(viewer, /pendingCharacterRegions/);
+  assert.match(viewer, /prisma-evidence-character-highlight/);
+  assert.match(viewer, /selectedTextUnits/);
   assert.doesNotMatch(viewer, /rectanglesIntersect/);
   assert.match(viewer, /ocrVersionRef/);
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);
@@ -210,6 +257,7 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(page, /refinementDecisions/);
   assert.match(styles, /grid-template-columns: minmax\(410px, 44fr\) minmax\(520px, 56fr\)/);
   assert.match(styles, /\.prisma-review-mobile-switch/);
+  assert.match(styles, /\.prisma-evidence-character-highlight/);
   assert.match(styles, /\.mobile-pane-document/);
 });
 

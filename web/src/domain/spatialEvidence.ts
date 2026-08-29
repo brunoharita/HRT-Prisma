@@ -180,20 +180,60 @@ export function textContainedByPixelRegion(
   selection: PixelRect,
   excludedRegions: PixelRect[] = [],
 ): string | null {
-  const selected = units.filter((unit) => {
+  return textFromPositionedUnits(
+    textUnitsExcludingPixelRegions(textUnitsReachedByPixelRegion(units, selection), excludedRegions),
+  );
+}
+
+export function textUnitsReachedByPixelRegion(
+  units: PositionedTextUnit[],
+  selection: PixelRect,
+): PositionedTextUnit[] {
+  const directlyReached = units.filter((unit) => {
     const centerX = (unit.rect.left + unit.rect.right) / 2;
     const centerY = (unit.rect.top + unit.rect.bottom) / 2;
-    const insideSelection = centerX >= selection.left && centerX <= selection.right
+    return centerX >= selection.left && unit.rect.left < selection.right
       && centerY >= selection.top && centerY <= selection.bottom;
-    const insideExcludedRegion = excludedRegions.some((region) => centerX >= region.left && centerX <= region.right
-      && centerY >= region.top && centerY <= region.bottom);
-    return insideSelection && !insideExcludedRegion;
   });
-  if (!selected.length) return null;
+  if (!directlyReached.length) return [];
+
+  const tolerance = rightEdgeCharacterTolerance(selection);
+  const rescuedRightEdgeUnits: PositionedTextUnit[] = [];
+  units.forEach((candidate) => {
+    if (directlyReached.includes(candidate)) return;
+    const centerY = (candidate.rect.top + candidate.rect.bottom) / 2;
+    if (centerY < selection.top || centerY > selection.bottom) return;
+    if (candidate.rect.left < selection.right || candidate.rect.left > selection.right + tolerance) return;
+    if (rescuedRightEdgeUnits.some((unit) => sameVisualLine(unit, candidate))) return;
+    const hasReachedPredecessor = directlyReached.some((unit) => sameVisualLine(unit, candidate)
+      && unit.rect.left < candidate.rect.left
+      && candidate.rect.left - unit.rect.right <= tolerance * 2);
+    if (hasReachedPredecessor) rescuedRightEdgeUnits.push(candidate);
+  });
+
+  const selected = new Set([...directlyReached, ...rescuedRightEdgeUnits]);
+  return units.filter((unit) => selected.has(unit));
+}
+
+export function textUnitsExcludingPixelRegions(
+  units: PositionedTextUnit[],
+  excludedRegions: PixelRect[],
+): PositionedTextUnit[] {
+  if (!excludedRegions.length) return units;
+  return units.filter((unit) => {
+    const centerX = (unit.rect.left + unit.rect.right) / 2;
+    const centerY = (unit.rect.top + unit.rect.bottom) / 2;
+    return !excludedRegions.some((region) => centerX >= region.left && centerX <= region.right
+      && centerY >= region.top && centerY <= region.bottom);
+  });
+}
+
+export function textFromPositionedUnits(units: PositionedTextUnit[]): string | null {
+  if (!units.length) return null;
 
   let result = "";
   let previous: PositionedTextUnit | null = null;
-  selected.forEach((unit) => {
+  units.forEach((unit) => {
     if (previous && shouldSeparateTextUnits(previous, unit) && result && !/\s$/.test(result) && !/^\s/.test(unit.text)) {
       result += " ";
     }
@@ -202,6 +242,38 @@ export function textContainedByPixelRegion(
   });
   const normalized = result.replace(/\s+/g, " ").trim();
   return normalized || null;
+}
+
+export function characterReachRect(selection: PixelRect): PixelRect {
+  return { ...selection, right: selection.right + rightEdgeCharacterTolerance(selection) };
+}
+
+export function fitPixelRectToVisualSlot(
+  rect: PixelRect,
+  sourceBounds: PixelRect,
+  visualRight: number,
+): PixelRect {
+  const sourceWidth = sourceBounds.right - sourceBounds.left;
+  const visualWidth = visualRight - sourceBounds.left;
+  if (sourceWidth <= 0 || visualWidth <= 0 || visualRight >= sourceBounds.right) return rect;
+  const horizontalScale = visualWidth / sourceWidth;
+  return {
+    left: sourceBounds.left + (rect.left - sourceBounds.left) * horizontalScale,
+    top: rect.top,
+    right: sourceBounds.left + (rect.right - sourceBounds.left) * horizontalScale,
+    bottom: rect.bottom,
+  };
+}
+
+export function boundingPixelRectForTextUnits(units: PositionedTextUnit[]): PixelRect | null {
+  const [first, ...remaining] = units;
+  if (!first) return null;
+  return remaining.reduce<PixelRect>((bounds, unit) => ({
+    left: Math.min(bounds.left, unit.rect.left),
+    top: Math.min(bounds.top, unit.rect.top),
+    right: Math.max(bounds.right, unit.rect.right),
+    bottom: Math.max(bounds.bottom, unit.rect.bottom),
+  }), { ...first.rect });
 }
 
 export function siblingReviewFieldScope(fieldPath: string): string | null {
@@ -245,6 +317,17 @@ function shouldSeparateTextUnits(previous: PositionedTextUnit, current: Position
   }
   const horizontalGap = current.rect.left - previous.rect.right;
   return horizontalGap > Math.max(1, height * 0.12);
+}
+
+function rightEdgeCharacterTolerance(selection: PixelRect): number {
+  return Math.min(2, Math.max(0.75, (selection.bottom - selection.top) * 0.08));
+}
+
+function sameVisualLine(left: PositionedTextUnit, right: PositionedTextUnit): boolean {
+  const leftCenterY = (left.rect.top + left.rect.bottom) / 2;
+  const rightCenterY = (right.rect.top + right.rect.bottom) / 2;
+  const height = Math.max(left.rect.bottom - left.rect.top, right.rect.bottom - right.rect.top);
+  return Math.abs(leftCenterY - rightCenterY) <= height * 0.6;
 }
 
 function normalizeComparableText(value: string): string {

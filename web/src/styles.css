@@ -2228,6 +2228,13 @@ textarea {
 .prisma-evidence-highlight.is-active { background: rgba(36, 183, 242, 0.22); border-width: 2px; border-color: #0b97cf; box-shadow: 0 0 0 2px rgba(36, 183, 242, 0.13); }
 .prisma-evidence-highlight--reviewer.is-active { background: rgba(249, 155, 44, 0.2); border-color: #e47f18; box-shadow: 0 0 0 2px rgba(249, 155, 44, 0.13); }
 .prisma-evidence-highlight--pending { pointer-events: none; background: rgba(21, 94, 239, 0.08); border: 2px dashed #155eef; }
+.prisma-evidence-character-highlight {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  background: rgba(21, 94, 239, 0.2);
+  box-shadow: inset 0 -2px 0 #155eef;
+}
 .prisma-evidence-highlight.is-refinement-excluded {
   background: repeating-linear-gradient(135deg, rgba(94, 106, 126, 0.2) 0 6px, rgba(255, 255, 255, 0.18) 6px 12px);
   border-color: #5e6a7e;

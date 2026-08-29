@@ -17,7 +17,7 @@ O M2-C preservava a evidência textual original e a revisão por campo, mas não
 - Correção, complemento, substituição e criação de informação suportada passam pela RPC transacional `record_profile_review_evidence`, com lock otimista e idempotência.
 - DML direto nas três tabelas M5 é revogado. A RPC `security definer` usa `search_path` vazio e valida sessão, tenant, papel, estado, versão documental, página e coordenadas.
 - Registros históricos sem coordenadas continuam válidos como evidência original. Coordenadas nunca são inferidas ou fabricadas no backfill.
-- Em 1.1.0, seleção nativa usa `pdfjs-character-region-v2`: somente caracteres com centro visual contido no retângulo são recuperados. Interseção parcial com uma linha ou `span` não autoriza incluir todo o texto.
+- Em 1.1.0, seleção nativa usa `pdfjs-character-region-v2`: o arraste inicial resolve um conjunto explícito de caracteres, o texto é montado desse conjunto e o destaque pendente é redesenhado com as mesmas caixas. Esquerda, topo e base continuam usando o centro visual; no limite direito, no máximo um caractere contíguo pode ser recuperado dentro de tolerância subpixel. A região final se ajusta ao contorno das caixas resolvidas. Métricas de fonte de fallback que ultrapassem o próximo item da mesma linha são proporcionalmente encaixadas no intervalo visual disponível, e a faixa de status é reservada antes do arraste para impedir deslocamento do PDF durante o gesto. Interseção parcial com uma linha ou `span` não autoriza incluir todo o texto.
 
 ## Consequências
 
