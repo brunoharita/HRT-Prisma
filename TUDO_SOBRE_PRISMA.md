@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 57b0c3d97c947ff0b71986defd12d779ab4322fd5fd4c120724c699ce764591a
+source_manifest_sha256: d44949ccbea0193b8dc04ac0a09c308e684e5cc204ac29243b74f3eb160ea903
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.3.5
+version: 2.3.6
 last_verified: 2026-08-30
 ---
 
@@ -335,6 +335,7 @@ last_verified: 2026-08-30
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` define a escala total exigida pelo PDF.js e converte caracteres ou símbolos OCR para um mapa canônico `normalized-page-v1`; texto, refinamento e destaque usam exatamente o mesmo conjunto. Zoom, ajuste à largura e proporção da tela alteram apenas a projeção. A direita inclui somente caixas que começam dentro do contorno, sem tolerância fixa ou resgate externo. Evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Campos multilinha comparados na revisão mantêm paridade visual: as superfícies extraída e humana possuem a mesma altura, e o editor humano ocupa integralmente o espaço interno correspondente. Conteúdo excedente rola dentro do campo, sem permitir que um redimensionamento isolado quebre a proporção entre os lados.
+- Alterações manuais não salvas continuam impedindo operações espaciais e aprovação, mas o bloqueio deixou de ser silencioso. Um alerta contextual explica a dependência, controles com cadeado permanecem acionáveis para registrar a intenção, e `Salvar rascunho e continuar` ou `Descartar e continuar` retomam automaticamente adicionar evidência ou criar área personalizada. Justificativa ausente recebe erro e foco no próprio campo.
 - Destaques espaciais persistidos são filtrados pelo contexto de revisão aberto: Experiência e Formação exibem somente o registro atual; cada outra aba exibe apenas seus campos renderizados. O filtro é local, não destrutivo e não modifica o contrato `spatial-evidence` 1.2.0.
 - Evidências originais históricas sem região persistida recebem um fallback somente visual quando o valor extraído do campo ativo possui uma única correspondência exata na camada textual da página original. A região não é persistida nem tratada como evidência espacial inferida; zero ou múltiplas correspondências falham fechadas e não produzem destaque.
 - O modal M5 aplica texto reconhecido e não editado sem justificativa, exige explicação somente para interpretação ou conteúdo manual e apresenta validação/falha dentro da própria janela.
@@ -361,7 +362,7 @@ last_verified: 2026-08-30
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 83 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, legibilidade estrutural da central de processamento, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, mapa canônico invariável em 57%/100%/147%, paridade visual dos campos multilinha comparados, borda direita sem importação externa, filtro contextual de destaques por aba/registro, fallback visual exato para evidência original histórica, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 84 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, legibilidade estrutural da central de processamento, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, mapa canônico invariável em 57%/100%/147%, paridade visual dos campos multilinha comparados, bloqueio explicativo com retomada da intenção, borda direita sem importação externa, filtro contextual de destaques por aba/registro, fallback visual exato para evidência original histórica, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -454,7 +455,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 172 arquivos, fundação, Context Pack, dois typechecks, build web, 83 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado com o acesso QA salvo confirmou, na página 2 do currículo de Bruno Harita, que a descrição completa da Bencato resolve 1.063 unidades e 1.076 caracteres normalizados tanto em 57% quanto em 147%. Também confirmou a paridade do comparador multilinha: superfícies extraída e humana com `141,59 px`, editor ocupando todo o espaço interno disponível, `resize: none` e overflow vertical controlado. Os testes foram somente leitura. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 172 arquivos, fundação, Context Pack, dois typechecks, build web, 84 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado com o acesso QA salvo confirmou, na página 2 do currículo de Bruno Harita, que a descrição completa da Bencato resolve 1.063 unidades e 1.076 caracteres normalizados tanto em 57% quanto em 147%, além da paridade do comparador multilinha. Um segundo smoke criou somente uma alteração temporária no cargo, acionou `Adicionar evidência`, confirmou alerta e intenção preservada, foco automático da justificativa, descarte confirmado e retomada do modo de seleção. A seleção foi cancelada; o valor temporário desapareceu, o rascunho voltou a sincronizado e nenhum dado foi persistido. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 

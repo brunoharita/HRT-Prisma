@@ -2190,6 +2190,7 @@ textarea {
 
 .prisma-review-statusbar .ant-tag { margin: 0; white-space: nowrap; }
 .prisma-review-statusbar .ant-typography { overflow: hidden; font-size: 0.78rem; text-overflow: ellipsis; white-space: nowrap; }
+.prisma-disabled-action-tooltip { display: inline-flex; }
 
 .prisma-review-split {
   display: grid;
@@ -2393,6 +2394,16 @@ textarea {
 .prisma-review-tabs > .ant-tabs-nav { padding: 0 12px; margin: 0; }
 .prisma-review-tabs > .ant-tabs-content-holder { padding: 12px; }
 .prisma-review-tabs .ant-tabs-tab { padding-top: 8px; padding-bottom: 8px; font-size: 0.78rem; }
+
+.prisma-review-unsaved-alert { margin: 8px 12px 0; }
+.prisma-review-unsaved-alert .ant-alert-content { min-width: 0; }
+.prisma-review-action--blocked {
+  border-style: dashed;
+  opacity: 0.68;
+  cursor: not-allowed;
+}
+.prisma-review-action--blocked:hover,
+.prisma-review-action--blocked:focus-visible { opacity: 1; }
 
 .prisma-entity-review,
 .prisma-review-field-stack { display: grid; gap: 10px; }

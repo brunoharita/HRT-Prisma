@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from "@ant-design/icons";
-import { Alert, Button, Checkbox, Input, Modal, Radio, Segmented, Select, Space, Tag, Typography } from "antd";
+import { Alert, Button, Checkbox, Input, Modal, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
 import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
@@ -32,6 +32,9 @@ interface ProfileReviewPageProps {
 }
 
 type NewInformationType = "experience" | "education" | "competency" | "language" | "certification" | "custom_section" | "custom_item";
+type DeferredReviewAction =
+  | { type: "start_evidence_selection"; fieldPath: string }
+  | { type: "create_custom_section" };
 
 export function ProfileReviewPage({ activeMembership, personId, documentId, reviewId, onNavigate }: ProfileReviewPageProps) {
   const [workspace, setWorkspace] = useState<ProfileReviewWorkspace | null>(null);
@@ -60,6 +63,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [createCustomAfterSelection, setCreateCustomAfterSelection] = useState(false);
   const [mobilePane, setMobilePane] = useState<"document" | "review">("review");
   const [adaptiveReport, setAdaptiveReport] = useState<AdaptiveSuggestionReport | null>(null);
+  const [deferredReviewAction, setDeferredReviewAction] = useState<DeferredReviewAction | null>(null);
 
   async function refresh() {
     const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
@@ -106,15 +110,31 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     return { linkId: link.id, fieldPath: selectedFieldPath, pageNumber: original.sourcePage, text };
   }, [selectedFieldPath, workspace]);
 
-  async function handleSave() {
+  async function handleSave(continuation: DeferredReviewAction | null = deferredReviewAction) {
     if (!workspace || !draft) return;
     const customSectionError = validateCustomSections(draft);
     if (customSectionError) { setError(customSectionError); return; }
-    if (reason.trim().length < 3) { setError("Explique objetivamente a alteração manual antes de salvar."); return; }
+    if (reason.trim().length < 3) {
+      setError("Explique objetivamente a alteração manual antes de salvar.");
+      window.requestAnimationFrame(() => {
+        const reasonInput = document.getElementById("prisma-review-correction-reason");
+        reasonInput?.scrollIntoView({ behavior: "smooth", block: "center" });
+        reasonInput?.focus();
+      });
+      return;
+    }
     setBusy(true); setError(null); setSuccess(null);
     try {
       await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, draft, reason);
-      await refresh(); setReason(""); setSuccess("Rascunho salvo como nova revisão auditável.");
+      await refresh();
+      setReason("");
+      setDeferredReviewAction(null);
+      if (continuation) {
+        resumeDeferredReviewAction(continuation);
+        setSuccess(continuation.type === "create_custom_section"
+          ? "Rascunho salvo. Agora selecione no documento a área personalizada."
+          : "Rascunho salvo. Agora selecione no documento a evidência desejada.");
+      } else setSuccess("Rascunho salvo como nova revisão auditável.");
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível salvar o rascunho."); }
     finally { setBusy(false); }
   }
@@ -164,6 +184,60 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       setActiveLinkId(target.linkId);
       setNavigationTarget({ ...target, nonce: Date.now() });
     } else setActiveLinkId(null);
+  }
+
+  function startEvidenceSelection(fieldPath: string) {
+    setError(null);
+    setSuccess(null);
+    setSelectionError(null);
+    setCreateCustomAfterSelection(false);
+    setSelectedFieldPath(fieldPath);
+    setPendingSelection(null);
+    setSelectionMode(true);
+    setMobilePane("document");
+  }
+
+  function startCustomSectionSelection() {
+    setError(null);
+    setSuccess(null);
+    setSelectionError(null);
+    setNewInformationType("custom_section");
+    setCustomSectionName("");
+    setCustomSectionFormat("list");
+    setCustomTargetSectionId("");
+    setPendingSelection(null);
+    setCreateCustomAfterSelection(true);
+    setSelectionMode(true);
+    setMobilePane("document");
+  }
+
+  function resumeDeferredReviewAction(action: DeferredReviewAction) {
+    setDeferredReviewAction(null);
+    if (action.type === "create_custom_section") startCustomSectionSelection();
+    else startEvidenceSelection(action.fieldPath);
+  }
+
+  function deferReviewAction(action: DeferredReviewAction) {
+    setDeferredReviewAction(action);
+    setError(null);
+    setSuccess(null);
+    window.requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>("[data-review-unsaved-alert]")
+        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }
+
+  function discardUnsavedChangesAndContinue() {
+    if (!workspace) return;
+    const continuation = deferredReviewAction;
+    setDraft(cloneDraft(workspace.reviewedData));
+    setReason("");
+    setError(null);
+    setDeferredReviewAction(null);
+    if (continuation) {
+      resumeDeferredReviewAction(continuation);
+      setSuccess("Alterações descartadas. A ação solicitada foi retomada.");
+    } else setSuccess("Alterações não salvas foram descartadas.");
   }
 
   async function handleEvidenceDelete(input: { fieldPath: string; linkId: string }) {
@@ -308,12 +382,35 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   if (loading) return <PrismaPage><div className="prisma-review-loading"><Typography.Title level={3}>Preparando a bancada de revisão...</Typography.Title><Typography.Text type="secondary">Carregando documento, extração, evidências e histórico.</Typography.Text></div></PrismaPage>;
   if (!workspace || !draft) return <PrismaPage><Alert title={error ?? "Revisão não encontrada nesta empresa."} showIcon type="error" /></PrismaPage>;
 
+  const saveBlockedReason = !editable
+    ? "Esta revisão não está mais disponível para edição."
+    : pendingSelection
+      ? "Conclua ou cancele a seleção atual antes de salvar."
+      : !dirty
+        ? "Não há alterações para salvar."
+        : null;
+  const approvalBlockedReason = !editable
+    ? "Esta revisão já foi concluída."
+    : pendingSelection
+      ? "Conclua ou cancele a seleção atual antes de aprovar."
+      : dirty
+        ? "Salve o rascunho antes de aprovar esta versão."
+        : null;
+  const deferredReviewActionLabel = deferredReviewAction?.type === "create_custom_section"
+    ? "criar a área personalizada"
+    : deferredReviewAction?.type === "start_evidence_selection"
+      ? "adicionar a evidência"
+      : null;
+
   return (
     <PrismaPage className="prisma-m2c-page prisma-review-page prisma-review-page--workspace">
       <PrismaPageHeader
         title={`Revisão · ${workspace.personName}`}
         description={`${workspace.personName} · ${workspace.documentName} · Base de perfil ${workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "inicial"} · Lock ${workspace.lockVersion}`}
-        actions={<Space wrap><Button disabled={!editable || !dirty || busy || Boolean(pendingSelection)} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar rascunho</Button><Button disabled={!editable || busy || dirty || Boolean(pendingSelection)} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar versão</Button></Space>}
+        actions={<Space wrap>
+          <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar rascunho</Button></span></Tooltip>
+          <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar versão</Button></span></Tooltip>
+        </Space>}
       />
       <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)} type="text">Voltar para o documento</Button>
       <div className="prisma-review-statusbar"><Tag color="blue">Extraído: preservado</Tag><Tag color={dirty ? "gold" : "green"}>{dirty ? "Alterações não salvas" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A ausência de um campo permanece “não identificado”, nunca uma avaliação negativa.</Typography.Text></div>
@@ -346,15 +443,14 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         </div>
         <div className="prisma-review-structured-pane">
           <StructuredReviewPanel
-            activeLinkId={activeLinkId} canStartSelection={!dirty} draft={draft} editable={Boolean(editable)} onDraftChange={setDraft} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
+            activeLinkId={activeLinkId} busy={busy} deferredActionLabel={deferredReviewActionLabel} draft={draft} editable={Boolean(editable)} hasUnsavedChanges={dirty} onDiscardAndContinue={discardUnsavedChangesAndContinue} onDraftChange={setDraft} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
             onCreateCustomSection={() => {
-              if (dirty) { setError("Salve ou descarte as alterações manuais antes de criar uma área com evidência."); return; }
-              setError(null); setSuccess(null); setSelectionError(null);
-              setNewInformationType("custom_section"); setCustomSectionName(""); setCustomSectionFormat("list"); setCustomTargetSectionId("");
-              setPendingSelection(null); setCreateCustomAfterSelection(true); setSelectionMode(true); setMobilePane("document");
+              if (dirty) { deferReviewAction({ type: "create_custom_section" }); return; }
+              startCustomSectionSelection();
             }}
             onFieldSelect={handleFieldSelect} onReasonChange={setReason}
-            onStartSelection={(fieldPath) => { if (dirty) { setError("Salve ou descarte as alterações manuais antes de vincular uma nova evidência."); return; } setError(null); setSuccess(null); setSelectionError(null); setCreateCustomAfterSelection(false); setSelectedFieldPath(fieldPath); setPendingSelection(null); setSelectionMode(true); setMobilePane("document"); }}
+            onSaveAndContinue={() => void handleSave()}
+            onStartSelection={(fieldPath) => { if (dirty) { deferReviewAction({ type: "start_evidence_selection", fieldPath }); return; } startEvidenceSelection(fieldPath); }}
             reason={reason} selectedFieldPath={selectedFieldPath} workspace={workspace}
           />
         </div>

@@ -5,9 +5,10 @@ import {
   DeleteOutlined,
   FileSearchOutlined,
   HistoryOutlined,
+  LockOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Divider, Drawer, Empty, Input, Popconfirm, Select, Space, Tabs, Tag, Timeline, Typography } from "antd";
+import { Alert, Button, Divider, Drawer, Empty, Input, Popconfirm, Select, Space, Tabs, Tag, Timeline, Tooltip, Typography } from "antd";
 import type { ProfileReviewWorkspace, StructuredDraft } from "../../domain/personIngestion";
 import { fieldPathMatches, topLevelReviewField } from "../../domain/spatialEvidence";
 
@@ -15,11 +16,15 @@ interface StructuredReviewPanelProps {
   workspace: ProfileReviewWorkspace;
   draft: StructuredDraft;
   editable: boolean;
-  canStartSelection: boolean;
+  busy: boolean;
+  hasUnsavedChanges: boolean;
+  deferredActionLabel: string | null;
   selectedFieldPath: string;
   activeLinkId: string | null;
   reason: string;
   onReasonChange: (reason: string) => void;
+  onSaveAndContinue: () => void;
+  onDiscardAndContinue: () => void;
   onDraftChange: (draft: StructuredDraft) => void;
   onFieldSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
   onStartSelection: (fieldPath: string) => void;
@@ -32,11 +37,15 @@ export function StructuredReviewPanel({
   workspace,
   draft,
   editable,
-  canStartSelection,
+  busy,
+  hasUnsavedChanges,
+  deferredActionLabel,
   selectedFieldPath,
   activeLinkId,
   reason,
   onReasonChange,
+  onSaveAndContinue,
+  onDiscardAndContinue,
   onDraftChange,
   onFieldSelect,
   onStartSelection,
@@ -74,6 +83,35 @@ export function StructuredReviewPanel({
         <Typography.Text type="secondary">Modo de edição</Typography.Text>
         <Tag color="blue"><FileSearchOutlined /> Assistida por evidência</Tag>
       </div>
+      {editable && hasUnsavedChanges ? (
+        <Alert
+          action={<Space wrap>
+            <Popconfirm
+              cancelText="Manter alterações"
+              description={deferredActionLabel
+                ? `As alterações não salvas serão perdidas e o Prisma voltará a ${deferredActionLabel}.`
+                : "As alterações não salvas serão perdidas."}
+              okText={deferredActionLabel ? "Descartar e continuar" : "Descartar alterações"}
+              onConfirm={onDiscardAndContinue}
+              title="Descartar as alterações atuais?"
+            >
+              <Button disabled={busy} size="small">{deferredActionLabel ? "Descartar e continuar" : "Descartar alterações"}</Button>
+            </Popconfirm>
+            <Button loading={busy} onClick={onSaveAndContinue} size="small" type="primary">
+              {deferredActionLabel ? "Salvar rascunho e continuar" : "Salvar rascunho"}
+            </Button>
+          </Space>}
+          className="prisma-review-unsaved-alert"
+          data-review-unsaved-alert
+          description={deferredActionLabel
+            ? `Salve o rascunho para ${deferredActionLabel}. Depois do salvamento, o Prisma retomará essa ação automaticamente.`
+            : "Para manter evidências e áreas vinculadas à versão correta, salve o rascunho antes de iniciar uma dessas ações."}
+          id="prisma-review-unsaved-alert"
+          showIcon
+          title="Há alterações não salvas"
+          type="warning"
+        />
+      ) : null}
       <Tabs
         activeKey={activeTab}
         className="prisma-review-tabs"
@@ -91,7 +129,9 @@ export function StructuredReviewPanel({
       <section className="prisma-linked-evidence" aria-labelledby="linked-evidence-title">
         <div className="prisma-review-section-title">
           <div><Typography.Text id="linked-evidence-title" strong>Evidências vinculadas</Typography.Text><small>{selectedFieldPath}</small></div>
-          <Button disabled={!editable || !canStartSelection} icon={<PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} size="small">Adicionar evidência</Button>
+          <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para adicionar uma evidência." : null}>
+            <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={hasUnsavedChanges ? "Adicionar evidência. Salve as alterações atuais para continuar." : undefined} className={hasUnsavedChanges ? "prisma-review-action--blocked" : ""} disabled={!editable || busy} icon={hasUnsavedChanges ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} size="small">Adicionar evidência</Button>
+          </Tooltip>
         </div>
         {evidenceLinks.length ? (
           <div className="prisma-evidence-card-grid">
@@ -126,9 +166,11 @@ export function StructuredReviewPanel({
             })}
           </div>
         ) : <Empty description="Sem evidência vinculada" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-        <Button block className="prisma-add-evidence-card" disabled={!editable || !canStartSelection} icon={<PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} type="dashed">
+        <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para selecionar uma nova área." : null}>
+        <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={hasUnsavedChanges ? "Selecionar uma nova área. Salve as alterações atuais para continuar." : undefined} block className={["prisma-add-evidence-card", hasUnsavedChanges ? "prisma-review-action--blocked" : ""].filter(Boolean).join(" ")} disabled={!editable || busy} icon={hasUnsavedChanges ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} type="dashed">
           Selecione uma nova área no documento
         </Button>
+        </Tooltip>
       </section>
 
       {editable ? (
@@ -136,6 +178,7 @@ export function StructuredReviewPanel({
           <Typography.Text strong>Justificativa da correção</Typography.Text>
           <Input.TextArea
             aria-label="Justificativa da correção"
+            id="prisma-review-correction-reason"
             onChange={(event) => onReasonChange(event.target.value)}
             placeholder="Necessária para alterações manuais sem uma operação de evidência autoexplicativa."
             rows={3}
@@ -218,7 +261,9 @@ export function StructuredReviewPanel({
             <Typography.Title level={5}>Informações do currículo</Typography.Title>
             <Typography.Text type="secondary">Áreas confirmadas como conteúdo do perfil, inclusive estruturas próprias deste currículo.</Typography.Text>
           </div>
-          <Button disabled={!editable || !canStartSelection} icon={<PlusOutlined />} onClick={onCreateCustomSection} size="small" type="primary">Criar área personalizada</Button>
+          <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para criar uma área personalizada." : null}>
+            <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={hasUnsavedChanges ? "Criar área personalizada. Salve as alterações atuais para continuar." : undefined} className={hasUnsavedChanges ? "prisma-review-action--blocked" : ""} disabled={!editable || busy} icon={hasUnsavedChanges ? <LockOutlined /> : <PlusOutlined />} onClick={onCreateCustomSection} size="small" type="primary">Criar área personalizada</Button>
+          </Tooltip>
         </div>
         {TagField({ fieldPath: "certifications", label: "Certificações" })}
         {draft.customSections.map((section) => {

@@ -75,3 +75,9 @@ As regressões determinísticas comprovam a mesma sequência em 57%, 100% e 147%
 ## Paridade visual dos campos comparados em 2026-08-30
 
 Campos multilinha extraídos e revisados agora mantêm a mesma altura externa. O editor humano preenche integralmente o espaço restante abaixo do rótulo, preserva overflow vertical para conteúdo excedente e bloqueia redimensionamento manual isolado. No smoke autenticado, as duas superfícies de `Descrição / Principais atividades` mediram `141,59 px`; o editor ocupou `102 px` dos `103 px` internos disponíveis, diferença exclusiva da borda, com `overflow-y: auto` e `resize: none`. A validação foi somente leitura e não alterou o rascunho.
+
+## Bloqueio explicativo e retomada da intenção em 2026-08-30
+
+Enquanto o rascunho possui edição manual local, operações espaciais mantêm a precondição de salvamento, mas os controles exibem cadeado, texto acessível e tooltip em vez de ficarem silenciosamente inertes. O alerta contextual oferece salvar ou descartar, altera a mensagem após o operador escolher adicionar evidência ou criar área e preserva essa intenção até a resolução. `Salvar rascunho e continuar` mantém a justificativa obrigatória e leva foco ao campo quando ausente; após sucesso, retoma a operação. `Descartar e continuar` exige confirmação explícita e também retoma a intenção.
+
+No smoke autenticado, o cargo recebeu o sufixo temporário `[SMOKE UX]`, `Adicionar evidência` registrou a intenção, o salvamento sem justificativa exibiu o erro e focou `Justificativa da correção`, e o descarte confirmado restaurou o cargo original e abriu a seleção para `experiences.0.role`. A seleção foi cancelada; o status final foi `Rascunho sincronizado`, sem resíduo visual ou persistido.

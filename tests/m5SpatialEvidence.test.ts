@@ -312,6 +312,27 @@ test("M5 keeps extracted and reviewed multiline surfaces visually proportional",
   assert.match(styles, /\.prisma-reviewed-surface--multiline \.ant-input\s*\{[^}]*height: 100%;[^}]*min-height: 100%;[^}]*resize: none;[^}]*overflow-y: auto;/s);
 });
 
+test("M5 explains unsaved-change blockers and resumes the requested review action", async () => {
+  const [page, panel, styles] = await Promise.all([
+    readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
+    readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
+  ]);
+
+  assert.match(page, /type DeferredReviewAction/);
+  assert.match(page, /deferReviewAction\(\{ type: "start_evidence_selection", fieldPath \}\)/);
+  assert.match(page, /deferReviewAction\(\{ type: "create_custom_section" \}\)/);
+  assert.match(page, /resumeDeferredReviewAction\(continuation\)/);
+  assert.match(page, /prisma-review-correction-reason/);
+  assert.match(panel, /Há alterações não salvas/);
+  assert.match(panel, /Salvar rascunho e continuar/);
+  assert.match(panel, /Descartar e continuar/);
+  assert.match(panel, /aria-describedby=\{hasUnsavedChanges \? "prisma-review-unsaved-alert"/);
+  assert.match(panel, /LockOutlined/);
+  assert.doesNotMatch(panel, /canStartSelection/);
+  assert.match(styles, /\.prisma-review-action--blocked\s*\{/);
+});
+
 function positionedUnits(text: string, top: number, sourceIndex: number) {
   let offset = 0;
   return Array.from(text).map((character) => {
