@@ -655,6 +655,17 @@ export const personIngestionService = {
     throwIfError(pageResult.error, "Não foi possível carregar a fonte original para o aprendizado da revisão.");
     throwIfError(adaptationEventResult.error, "Não foi possível carregar o histórico de aprendizado da revisão.");
     if (!personResult.data || !documentResult.data) throw new Error("A revisão perdeu a referência da Pessoa ou do documento.");
+    const pages: ExtractedPage[] = (pageResult.data ?? []).map((page) => ({
+      pageNumber: page.page_number,
+      text: page.text_content,
+      origin: page.origin,
+      usefulCharacterCount: page.useful_character_count,
+      method: page.method,
+      methodVersion: page.method_version,
+      ...(Array.isArray(page.layout_blocks) ? { layoutLines: page.layout_blocks as unknown as NonNullable<ExtractedPage["layoutLines"]> } : {}),
+      ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
+    }));
+    const legacySummaryFallback = buildAdaptiveExtraction(pages).draft;
     return {
       id: review.id,
       personId: review.person_id,
@@ -668,21 +679,12 @@ export const personIngestionService = {
       processingAttemptId: review.processing_attempt_id,
       state: review.state,
       lockVersion: review.lock_version,
-      extractedData: decodeReviewDraft(review.extracted_data),
-      reviewedData: decodeReviewDraft(review.reviewed_data),
+      extractedData: decodeReviewDraft(review.extracted_data, legacySummaryFallback, true),
+      reviewedData: decodeReviewDraft(review.reviewed_data, legacySummaryFallback),
       baseProfileVersion: review.base_profile_version,
       approvedProfileId: review.approved_profile_id,
       approvedAt: review.approved_at,
-      pages: (pageResult.data ?? []).map((page) => ({
-        pageNumber: page.page_number,
-        text: page.text_content,
-        origin: page.origin,
-        usefulCharacterCount: page.useful_character_count,
-        method: page.method,
-        methodVersion: page.method_version,
-        ...(Array.isArray(page.layout_blocks) ? { layoutLines: page.layout_blocks as unknown as NonNullable<ExtractedPage["layoutLines"]> } : {}),
-        ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
-      })),
+      pages,
       revisions: (revisionResult.data ?? []).map((revision) => ({
         id: revision.id,
         revisionNumber: revision.revision_number,
@@ -1147,8 +1149,27 @@ function decodeAdaptiveSuggestionMetadata(value: Json): ProfileReviewWorkspace["
 
 function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified: Json): StructuredDraft {
   const value = identifiedFields as unknown as Partial<StructuredDraft>;
+  const identity: Record<string, Json> = isRecord(value.identity) ? value.identity : {};
+  const contact: Record<string, Json> = isRecord(value.contact) ? value.contact : {};
   return {
+    identity: { fullName: typeof identity.fullName === "string" ? identity.fullName : null },
+    contact: {
+      city: typeof contact.city === "string" ? contact.city : null,
+      state: typeof contact.state === "string" ? contact.state : null,
+      phone: typeof contact.phone === "string" ? contact.phone : null,
+      email: typeof contact.email === "string" ? contact.email : null,
+      linkedin: typeof contact.linkedin === "string" ? contact.linkedin : null,
+    },
+    professionalTitle: typeof value.professionalTitle === "string" ? value.professionalTitle : null,
+    areasOfExpertise: Array.isArray(value.areasOfExpertise) ? value.areasOfExpertise.filter((item): item is string => typeof item === "string") : [],
+    professionalObjective: typeof value.professionalObjective === "string" ? value.professionalObjective : null,
     summary: typeof value.summary === "string" ? value.summary : null,
+    keyResults: Array.isArray(value.keyResults) ? value.keyResults.flatMap((item) => (
+      item && typeof item === "object" && "id" in item && "value" in item
+        && typeof item.id === "string" && typeof item.value === "string"
+        ? [{ id: item.id, value: item.value }]
+        : []
+    )) : [],
     experiences: Array.isArray(value.experiences) ? value.experiences : [],
     education: Array.isArray(value.education) ? value.education : [],
     certifications: Array.isArray(value.certifications) ? value.certifications : [],
@@ -1160,13 +1181,24 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
   };
 }
 
-function decodeReviewDraft(value: Json): StructuredDraft {
+function decodeReviewDraft(value: Json, legacyFallback?: StructuredDraft, replaceLegacyGeneratedSummary = false): StructuredDraft {
   const record = isRecord(value) ? value : {};
-  return decodeDraft(
+  const decoded = decodeDraft(
     record as Json,
     Array.isArray(record.uncertainties) ? record.uncertainties as Json : [],
     Array.isArray(record.notIdentified) ? record.notIdentified as Json : [],
   );
+  if (!legacyFallback || record.identity || record.contact || "professionalTitle" in record) return decoded;
+  return {
+    ...decoded,
+    identity: legacyFallback.identity,
+    contact: legacyFallback.contact,
+    professionalTitle: legacyFallback.professionalTitle,
+    areasOfExpertise: legacyFallback.areasOfExpertise,
+    professionalObjective: legacyFallback.professionalObjective,
+    summary: replaceLegacyGeneratedSummary ? legacyFallback.summary : decoded.summary,
+    keyResults: legacyFallback.keyResults,
+  };
 }
 
 function isRecord(value: unknown): value is Record<string, Json> {

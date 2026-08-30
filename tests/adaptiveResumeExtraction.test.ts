@@ -14,6 +14,18 @@ function line(text: string, y: number, x = 0.08, width = 0.75, emphasis: LayoutT
   return { text, x, y, width, height: 0.018, fontSize: 11, emphasis };
 }
 
+function emptyStructuredSummary(): Pick<StructuredDraft, "identity" | "contact" | "professionalTitle" | "areasOfExpertise" | "professionalObjective" | "summary" | "keyResults"> {
+  return {
+    identity: { fullName: null },
+    contact: { city: null, state: null, phone: null, email: null, linkedin: null },
+    professionalTitle: null,
+    areasOfExpertise: [],
+    professionalObjective: null,
+    summary: null,
+    keyResults: [],
+  };
+}
+
 test("adaptive extraction separates role, descriptor, period and company on the next visual line", () => {
   const layoutLines = [
     line("Experiência profissional", 0.08, 0.08, 0.45, "strong"),
@@ -42,6 +54,51 @@ test("adaptive extraction separates role, descriptor, period and company on the 
   assert.equal(result.pattern.experienceHeader, "role-period-company-next-line");
   assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "experiences.0.organization" && item.y === 0.145));
   assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "experiences.0.period" && item.text === "Jan/25 - Atual"));
+});
+
+test("structured summary extracts only explicit identity, contact, positioning, summary and item-level results", () => {
+  const layoutLines = [
+    line("Bruno Harita Santos", 0.04, 0.08, 0.5, "strong"),
+    line("COO | Operações | Processos | Tecnologia", 0.07, 0.08, 0.7, "strong"),
+    line("Bauru, SP | bruno@example.com | +55 14 99999-0000 | linkedin.com/in/bruno-harita", 0.1, 0.08, 0.82),
+    line("Objetivo profissional | Liderar operações complexas com previsibilidade.", 0.14, 0.08, 0.75, "strong"),
+    line("Resumo profissional", 0.21, 0.08, 0.4, "strong"),
+    line("Executivo com experiência em transformação operacional.", 0.24),
+    line("Principais resultados", 0.28, 0.08, 0.4, "strong"),
+    line("• Redução de 90% no tempo de processamento", 0.31),
+    line("com automação e IA aplicada.", 0.33),
+    line("• Melhoria de 65% na previsibilidade de prazos.", 0.36),
+    line("Problemas empresariais que está preparado para assumir", 0.4, 0.08, 0.65, "strong"),
+    line("• Este conteúdo não pertence aos principais resultados.", 0.43),
+    line("Experiência profissional", 0.47, 0.08, 0.45, "strong"),
+  ];
+  const result = buildAdaptiveExtraction([{
+    pageNumber: 1,
+    text: layoutLines.map((item) => item.text).join("\n"),
+    origin: "native_pdf",
+    usefulCharacterCount: 420,
+    method: "pdfjs",
+    methodVersion: "fixture-layout-v2",
+    layoutLines,
+  }]);
+
+  assert.equal(result.draft.identity.fullName, "Bruno Harita Santos");
+  assert.deepEqual(result.draft.contact, {
+    city: "Bauru", state: "SP", phone: "+5514999990000", email: "bruno@example.com",
+    linkedin: "https://linkedin.com/in/bruno-harita",
+  });
+  assert.equal(result.draft.professionalTitle, "COO");
+  assert.deepEqual(result.draft.areasOfExpertise, ["Operações", "Processos", "Tecnologia"]);
+  assert.equal(result.draft.professionalObjective, "Liderar operações complexas com previsibilidade.");
+  assert.equal(result.draft.summary, "Executivo com experiência em transformação operacional.");
+  assert.deepEqual(result.draft.keyResults.map((item) => item.value), [
+    "Redução de 90% no tempo de processamento com automação e IA aplicada.",
+    "Melhoria de 65% na previsibilidade de prazos.",
+  ]);
+  assert.ok(result.draft.keyResults.every((item) => /^result_[a-z0-9]{8,64}$/.test(item.id)));
+  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "identity.fullName"));
+  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "contact.linkedin"));
+  assert.equal(result.fieldEvidence.filter((item) => item.fieldPath.startsWith("keyResults.")).length, 2);
 });
 
 test("first extraction keeps a company tenure with subordinate roles as one semantic block", () => {
@@ -102,7 +159,7 @@ test("an approved organization pattern can expand first extraction without becom
 
 test("adaptive suggestions never copy the corrected value into sibling records", () => {
   const extracted: StructuredDraft = {
-    summary: null,
+    ...emptyStructuredSummary(),
     experiences: [
       { role: "Diretor", organization: "Transformação Jan/25 - Atual", period: null, evidenceText: "", page: 1 },
       { role: "Gerente", organization: "Acme Ltda Fev/21 - Dez/24", period: null, evidenceText: "", page: 1 },
@@ -144,7 +201,7 @@ test("a correction relearns complete sibling blocks from the original document a
     methodVersion: "legacy-text-v1",
   };
   const extracted: StructuredDraft = {
-    summary: null,
+    ...emptyStructuredSummary(),
     experiences: [
       { role: "Fundador & Diretor Executivo", organization: "Transformação, Tecnologia e Produtos Digitais Jan/25 - Atual", period: null, evidenceText: sourceLines[1]!, page: 2 },
       { role: "Diretor de Operações Externo", organization: "Transformação Operacional Abr/25 - Mar/26", period: null, evidenceText: sourceLines[5]!, page: 2 },
@@ -188,7 +245,7 @@ test("document learning reports an unresolved sibling instead of inventing a blo
     methodVersion: "fixture-ocr-v1",
   };
   const extracted: StructuredDraft = {
-    summary: null,
+    ...emptyStructuredSummary(),
     experiences: [
       { role: "Diretor", organization: "Jan/25 - Atual", period: null, evidenceText: "Diretor Jan/25 - Atual", page: 1 },
       { role: "Gerente", organization: "Não identificada", period: null, evidenceText: "linha inexistente", page: 1 },
@@ -248,4 +305,17 @@ test("adaptive v2 persistence is tenant-scoped, metadata-only and promotes patte
   assert.match(indexMigration, /profile_review_adaptation_events \(actor_auth_user_id\)/i);
   assert.match(page, /applyAdaptiveSuggestions/);
   assert.match(page, /proposeSiblingBlockCorrections/);
+});
+
+test("structured summary migration keeps contact private and rejects PII promotion", async () => {
+  const migration = await readFile("supabase/migrations/20260830160132_structured_resume_summary.sql", "utf8");
+  assert.match(migration, /private\.is_valid_structured_resume_summary/);
+  assert.match(migration, /not \(profile_data \?\| array\['identity', 'contact'\]/);
+  assert.match(migration, /profile_payload := review\.reviewed_data - 'identity' - 'contact'/);
+  assert.match(migration, /insert into public\.person_private_data/);
+  assert.match(migration, /on conflict \(organization_id, person_id\) do update/);
+  assert.match(migration, /coalesce\(excluded\.email, public\.person_private_data\.email\)/);
+  assert.match(migration, /private\.require_document_reviewer\(p_organization_id\)/);
+  assert.doesNotMatch(migration, /grant select on public\.person_private_data to authenticated/);
+  assert.match(migration, /keyResults\\\.result_/);
 });

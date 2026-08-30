@@ -150,7 +150,9 @@ export interface Database {
         phone_national_number: string | null;
         birth_date: string | null;
         city: string | null;
+        state_code: string | null;
         country_code: string | null;
+        linkedin_url: string | null;
         notes: string | null;
         additional_data: Json;
         created_at: string;

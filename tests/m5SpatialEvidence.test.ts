@@ -49,6 +49,9 @@ test("M5 shows spatial evidence only for the review screen and entity currently 
   assert.equal(isReviewEvidenceVisibleOnCurrentScreen("education.2.institution", "education.2.course"), true);
   assert.equal(isReviewEvidenceVisibleOnCurrentScreen("education.1.period", "education.2.course"), false);
   assert.equal(isReviewEvidenceVisibleOnCurrentScreen("summary", "summary"), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("identity.fullName", "summary"), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("contact.email", "professionalObjective"), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("keyResults.result_12345678.value", "areasOfExpertise"), true);
   assert.equal(isReviewEvidenceVisibleOnCurrentScreen("competencies", "summary"), false);
 });
 

@@ -2,7 +2,7 @@
 
 ## Identificação
 
-Owner: AI and domain engineering. Contrato: `professional-profile`. Versão atual: `1.2.0`. Implementação: `src/domain/types.ts` e `web/src/domain/personIngestion.ts`. Estado: schema compatível ativo em QA; runtime e apresentação web locais.
+Owner: AI and domain engineering. Contrato: `professional-profile`. Versão atual: `2.0.0`. Implementação: `src/domain/types.ts` e `web/src/domain/personIngestion.ts`. Estado: schema ativo em QA; runtime e apresentação web locais.
 
 Cada perfil contém `id`, `organizationId`, `personId`, `createdAt` e versões de extraction, inference, embedding/retrieval, matching, prompt e model.
 
@@ -10,7 +10,12 @@ Cada perfil contém `id`, `organizationId`, `personId`, `createdAt` e versões d
 
 ```text
 ProfessionalProfile
-  fullName
+  professionalTitle?
+  areasOfExpertise[]
+  professionalObjective?
+  summary?
+  keyResults[]
+    id, value
   experiences[]
     organization, role, startDate?, endDate?, description, evidenceIds[]
   education[]
@@ -30,6 +35,8 @@ ProfessionalProfile
   notIdentified[]
   versions
 ```
+
+Nome e contato não pertencem ao payload profissional. A revisão pode confirmá-los, mas a aprovação grava nome em `people.full_name` e e-mail, telefone, cidade, estado e LinkedIn em `person_private_data`. A constraint de `professional_profiles` rejeita `identity` e `contact` mesmo que um cliente tente enviá-los.
 
 ## Evidência e inferência
 

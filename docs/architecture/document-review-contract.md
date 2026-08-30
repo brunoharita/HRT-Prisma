@@ -5,13 +5,14 @@
 | Contrato | Versão | Regra material |
 | --- | --- | --- |
 | `document-processing-state` | 2.0.0 | estados operacionais e de revisão são explícitos e falham fechados |
-| `person-ingestion` | 5.2.0 | cadastro, retry e persistência são idempotentes; intake resolve a Pessoa; extração e revisão consomem layout, evidência por campo, refinamento subtrativo, áreas personalizadas e padrões aprovados do tenant |
+| `person-ingestion` | 6.0.0 | cadastro, retry e persistência são idempotentes; aprovação separa perfil profissional de identificação e contato privados |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
-| `human-profile-review` | 2.2.0 | revisão possui rascunho, releitura imediata por bloco, refinamento subtrativo reversível, áreas personalizadas com evidência por item, aceite parcial atômico, mudanças por campo, validação contextual e exclusão auditável de evidência |
+| `human-profile-review` | 3.0.0 | revisão possui rascunho, resumo estruturado, resultado com evidência por item, releitura por bloco, refinamento reversível, mudanças por campo e aprovação atômica |
 | `spatial-evidence` | 1.2.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas; preserva texto bruto, texto efetivo e decisões de subtração entre campos irmãos |
 | `document-operation-idempotency` | 1.0.0 | mesma chave e fingerprint retornam o mesmo resultado; payload diferente conflita |
-| `professional-profile` | 1.2.0 | perfil aprovado preserva proveniência, aceita áreas personalizadas estruturadas e mantém somente uma versão atual |
+| `professional-profile` | 2.0.0 | perfil aprovado preserva proveniência, posicionamento, objetivo, resumo, resultados e áreas personalizadas, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
+| `structured-resume-summary` | 1.0.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; PII nunca é promovida ao perfil profissional |
 
 ## Estados
 
@@ -39,7 +40,7 @@ Estado desconhecido, versão incompatível, sessão ausente, tenant não autoriz
 | `record_profile_review_evidence` | registra região, vínculo, revisão e evento humano na mesma transação |
 | `record_profile_review_evidence_refined` | registra a mesma operação com texto bruto, texto efetivo e decisões imutáveis de subtração ou reinclusão |
 | `retire_profile_review_evidence` | encerra vínculo humano ativo, preserva histórico e rejeita evidência original |
-| `approve_profile_review` | cria e promove a versão de perfil na mesma transação |
+| `approve_profile_review` | atualiza nome/contato canônicos privados e cria a versão profissional sem PII na mesma transação |
 
 O cliente deve gerar uma chave por intenção do usuário e reutilizá-la somente em retry da mesma intenção. Reuso com fingerprint diferente retorna conflito. Números de versão nunca são calculados no frontend.
 

@@ -31,7 +31,7 @@ interface ProfileReviewPageProps {
   onNavigate: (path: string) => void;
 }
 
-type NewInformationType = "experience" | "education" | "competency" | "language" | "certification" | "custom_section" | "custom_item";
+type NewInformationType = "experience" | "education" | "competency" | "language" | "certification" | "key_result" | "custom_section" | "custom_item";
 type DeferredReviewAction =
   | { type: "start_evidence_selection"; fieldPath: string }
   | { type: "create_custom_section" };
@@ -112,6 +112,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
   async function handleSave(continuation: DeferredReviewAction | null = deferredReviewAction) {
     if (!workspace || !draft) return;
+    const summaryError = validateStructuredSummary(draft);
+    if (summaryError) { setError(summaryError); return; }
     const customSectionError = validateCustomSections(draft);
     if (customSectionError) { setError(customSectionError); return; }
     if (reason.trim().length < 3) {
@@ -498,6 +500,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             { label: "Competência", value: "competency" },
             { label: "Idioma", value: "language" },
             { label: "Certificação", value: "certification" },
+            { label: "Principal resultado", value: "key_result" },
             { label: "Nova área personalizada", value: "custom_section" },
             ...(draft.customSections.some((section) => section.format === "list") ? [{ label: "Novo item em área personalizada", value: "custom_item" as const }] : []),
           ]} value={newInformationType} /> : null}
@@ -540,8 +543,9 @@ function extractedTextAtFieldPath(source: unknown, fieldPath: string): string | 
   for (const segment of fieldPath.split(".")) {
     if (Array.isArray(value)) {
       const index = Number(segment);
-      if (!Number.isInteger(index)) return null;
-      value = value[index];
+      value = Number.isInteger(index)
+        ? value[index]
+        : value.find((item) => item && typeof item === "object" && (item as Record<string, unknown>).id === segment);
     } else if (value && typeof value === "object") {
       value = (value as Record<string, unknown>)[segment];
     } else return null;
@@ -558,6 +562,20 @@ function extractedTextAtFieldPath(source: unknown, fieldPath: string): string | 
 }
 
 function reviewFieldLabel(fieldPath: string): string {
+  const labels: Record<string, string> = {
+    "identity.fullName": "Nome completo",
+    "contact.city": "Cidade",
+    "contact.state": "Estado",
+    "contact.phone": "Telefone",
+    "contact.email": "E-mail",
+    "contact.linkedin": "Perfil do LinkedIn",
+    professionalTitle: "Cargo ou título profissional",
+    areasOfExpertise: "Áreas de atuação",
+    professionalObjective: "Objetivo profissional",
+    summary: "Resumo profissional",
+  };
+  if (labels[fieldPath]) return labels[fieldPath];
+  if (/^keyResults\.[a-z0-9_]+\.value$/.test(fieldPath)) return "Principal resultado";
   const field = fieldPath.split(".").at(-1);
   return ({ role: "Cargo", organization: "Empresa", period: "Período", description: "Descrição", course: "Curso", institution: "Instituição" })[field ?? ""] ?? fieldPath;
 }
@@ -566,7 +584,18 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
   const next = cloneDraft(draft);
   const segments = fieldPath.split(".");
   const root = segments[0];
+  if (root === "identity" && segments[1] === "fullName") return { ...next, identity: { fullName: value || null } };
+  if (root === "contact" && ["city", "state", "phone", "email", "linkedin"].includes(segments[1] ?? "")) {
+    return { ...next, contact: { ...next.contact, [segments[1]!]: value || null } };
+  }
+  if (root === "professionalTitle") return { ...next, professionalTitle: value || null };
+  if (root === "professionalObjective") return { ...next, professionalObjective: value || null };
   if (root === "summary") return { ...next, summary: value };
+  if (root === "areasOfExpertise") return { ...next, areasOfExpertise: splitList(value) };
+  if (root === "keyResults") {
+    const resultId = segments[1];
+    return { ...next, keyResults: next.keyResults.map((result) => result.id === resultId ? { ...result, value } : result) };
+  }
   if (root === "customSections") return updateCustomSectionItemValue(next, fieldPath, value);
   if (["certifications", "languages", "competencies", "uncertainties", "notIdentified"].includes(root ?? "")) {
     const key = root as "certifications" | "languages" | "competencies" | "uncertainties" | "notIdentified";
@@ -589,11 +618,44 @@ function addNewInformation(
   const next = cloneDraft(draft);
   if (type === "experience") { const index = next.experiences.length; next.experiences.push({ role: value, organization: "Não identificada", period: null, description: null, evidenceText: value, page }); return { draft: next, fieldPath: `experiences.${index}.role` }; }
   if (type === "education") { const index = next.education.length; next.education.push({ course: value, institution: "Não identificada", period: null, description: null, evidenceText: value, page }); return { draft: next, fieldPath: `education.${index}.course` }; }
+  if (type === "key_result") {
+    const id = `result_${crypto.randomUUID().replaceAll("-", "")}`;
+    next.keyResults.push({ id, value });
+    return { draft: next, fieldPath: `keyResults.${id}.value` };
+  }
   if (type === "custom_section") return createCustomSection({ draft: next, name: custom.customSectionName, format: custom.customSectionFormat, value, source: "human" });
   if (type === "custom_item") return addCustomSectionItem(next, custom.customTargetSectionId, value);
   const key = type === "competency" ? "competencies" : type === "language" ? "languages" : "certifications";
   if (!next[key].includes(value)) next[key].push(value);
   return { draft: next, fieldPath: key };
+}
+
+function splitList(value: string): string[] {
+  return [...new Set(value.split(/[,;|\n]/).map((item) => item.trim()).filter(Boolean))];
+}
+
+function validateStructuredSummary(draft: StructuredDraft): string | null {
+  const fields: Array<[string, string | null, number]> = [
+    ["Nome completo", draft.identity.fullName, 160],
+    ["Cidade", draft.contact.city, 120],
+    ["Estado", draft.contact.state, 80],
+    ["Telefone", draft.contact.phone, 40],
+    ["E-mail", draft.contact.email, 320],
+    ["Perfil do LinkedIn", draft.contact.linkedin, 500],
+    ["Cargo ou título profissional", draft.professionalTitle, 240],
+    ["Objetivo profissional", draft.professionalObjective, 4_000],
+    ["Resumo profissional", draft.summary, 12_000],
+  ];
+  const tooLong = fields.find(([, value, limit]) => value && value.trim().length > limit);
+  if (tooLong) return `${tooLong[0]} excede o limite de ${tooLong[2]} caracteres.`;
+  if (draft.contact.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.contact.email.trim())) return "Informe um e-mail válido.";
+  if (draft.contact.linkedin && !/^https:\/\/(?:[a-z0-9-]+\.)?linkedin\.com\/in\/[a-z0-9%_.-]+\/?$/i.test(draft.contact.linkedin.trim())) return "Informe a URL completa do perfil do LinkedIn.";
+  if (draft.areasOfExpertise.length > 30 || draft.areasOfExpertise.some((item) => !item.trim() || item.trim().length > 120)) return "Áreas de atuação deve conter até 30 itens válidos de no máximo 120 caracteres.";
+  if (new Set(draft.areasOfExpertise.map((item) => item.trim().toLocaleLowerCase("pt-BR"))).size !== draft.areasOfExpertise.length) return "Áreas de atuação possui itens duplicados.";
+  if (draft.keyResults.length > 50) return "Principais resultados deve conter no máximo 50 itens.";
+  if (draft.keyResults.some((item) => !/^result_[a-z0-9]{8,64}$/.test(item.id) || !item.value.trim() || item.value.trim().length > 4_000)) return "Principais resultados possui um item vazio ou inválido.";
+  if (new Set(draft.keyResults.map((item) => item.id)).size !== draft.keyResults.length) return "Principais resultados possui identificadores duplicados.";
+  return null;
 }
 
 function validateCustomSections(draft: StructuredDraft): string | null {

@@ -14,7 +14,16 @@ import {
 import type { ExtractedPage, StructuredDraft } from "../web/src/domain/personIngestion.js";
 
 function emptyDraft(): StructuredDraft {
-  return { summary: null, experiences: [], education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  return {
+    identity: { fullName: null },
+    contact: { city: null, state: null, phone: null, email: null, linkedin: null },
+    professionalTitle: null,
+    areasOfExpertise: [],
+    professionalObjective: null,
+    summary: null,
+    keyResults: [],
+    experiences: [], education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
+  };
 }
 
 function line(text: string, y: number, emphasis: LayoutTextLine["emphasis"] = "regular"): LayoutTextLine {

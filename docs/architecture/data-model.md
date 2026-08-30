@@ -43,6 +43,8 @@ Em `spatial-evidence` 1.2.0, `raw_selected_text` preserva o conteúdo do retâng
 
 `document_page_extractions.layout_blocks` preserva linhas visuais normalizadas e `field_evidence` preserva descritores mínimos por campo. Ao abrir a revisão, somente coordenadas realmente extraídas geram regiões `source=system`. `extraction_learning_cases` referencia eventos humanos sem duplicar texto integral e só é promovida a caso aprovado quando a revisão é aprovada.
 
+O resumo estruturado permanece integral no draft privado de revisão para permitir comparação e evidência. `approve_profile_review` separa o payload atomicamente: `identity.fullName` atualiza `people`, `contact` atualiza `person_private_data` e somente posicionamento, objetivo, resumo, resultados e demais fatos seguem para `professional_profiles.profile_data`. A constraint do perfil rejeita `identity` e `contact`; valores privados ausentes nunca apagam contato canônico existente.
+
 `resume_intakes` nasce com `organization_id`, chave idempotente, checksum e caminho privado. E-mail e telefone normalizados suportam correspondência forte; nome normalizado é apenas sinal possível. `resolve_resume_intake` bloqueia a operação, cria ou vincula a Pessoa e registra o documento na mesma transação. Somente depois o fluxo entra nas tentativas, drafts, evidências e revisão M2-B/M2-C.
 
 `ocr_required` é um estado técnico implementado. `partially_extracted`, `duplicate_document` e `corrupted_document` continuam planejados e não devem ser emitidos.

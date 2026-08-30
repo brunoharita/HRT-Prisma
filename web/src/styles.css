@@ -2408,6 +2408,10 @@ textarea {
 .prisma-entity-review,
 .prisma-review-field-stack { display: grid; gap: 10px; }
 
+.prisma-summary-review { align-content: start; }
+.prisma-summary-section-heading { display: grid; gap: 2px; padding: 2px 7px 0; }
+.prisma-summary-section-heading .ant-typography { margin: 0; }
+
 .prisma-entity-navigator {
   display: flex;
   align-items: center;

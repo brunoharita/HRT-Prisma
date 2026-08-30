@@ -397,6 +397,13 @@ function normalizeComparableText(value: string): string {
 function reviewScreenScope(fieldPath: string): string {
   const entity = /^(experiences|education)\.([0-9]+)(?:\.|$)/.exec(fieldPath);
   if (entity) return `${entity[1]}.${entity[2]}`;
+  if (fieldPath === "summary"
+    || fieldPath === "professionalTitle"
+    || fieldPath === "areasOfExpertise"
+    || fieldPath === "professionalObjective"
+    || fieldPath.startsWith("identity.")
+    || fieldPath.startsWith("contact.")
+    || fieldPath.startsWith("keyResults.")) return "summary";
   if (["certifications", "uncertainties", "notIdentified"].includes(fieldPath)
     || fieldPath.startsWith("customSections.")) return "other";
   return fieldPath;

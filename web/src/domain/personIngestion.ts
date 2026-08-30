@@ -16,7 +16,7 @@ export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
 export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
-export const EXTRACTION_DRAFT_VERSION = "3.1.0";
+export const EXTRACTION_DRAFT_VERSION = "4.0.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -150,8 +150,31 @@ export interface CustomProfileSection {
   items: CustomProfileSectionItem[];
 }
 
+export interface StructuredResumeIdentity {
+  fullName: string | null;
+}
+
+export interface StructuredResumeContact {
+  city: string | null;
+  state: string | null;
+  phone: string | null;
+  email: string | null;
+  linkedin: string | null;
+}
+
+export interface StructuredKeyResult {
+  id: string;
+  value: string;
+}
+
 export interface StructuredDraft {
+  identity: StructuredResumeIdentity;
+  contact: StructuredResumeContact;
+  professionalTitle: string | null;
+  areasOfExpertise: string[];
+  professionalObjective: string | null;
   summary: string | null;
+  keyResults: StructuredKeyResult[];
   experiences: Array<{ role: string; organization: string; period: string | null; description?: string | null; evidenceText: string; page: number }>;
   education: Array<{ course: string; institution: string; period: string | null; description?: string | null; evidenceText: string; page: number }>;
   certifications: string[];

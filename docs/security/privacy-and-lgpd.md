@@ -9,7 +9,7 @@ Privacy by design está definida e refletida na separação de PII, perfil e Sto
 | Categoria | Natureza | Origem | Finalidade inicial | Persistência atual | Acesso pretendido |
 | --- | --- | --- | --- | --- | --- |
 | Nome e lifecycle | pessoal | currículo/organização | identificar perfil | JSON local/migration | admin, recruiter, hiring manager limitado |
-| E-mail, telefone, localização | pessoal privado | currículo/pessoa | contato autorizado | migration separada; não usada localmente | admin e recruiter |
+| E-mail, telefone, cidade, estado e LinkedIn | pessoal privado | currículo/pessoa | contato autorizado | `person_private_data`; revisão auditável, fora do perfil profissional | super admin, owner, admin e recruiter no tenant |
 | Experiência, educação, certificação | pessoal profissional | currículo | estruturar conhecimento | perfil/evidência | papéis autorizados |
 | Idioma, ferramentas, competências | pessoal profissional e inferência possível | currículo/regras | busca e matching | perfil/evidência/inferência | papéis autorizados |
 | Documento bruto | pessoal | upload | fonte e auditoria | bucket privado `person-documents` em QA | super admin, owner, admin e recruiter no tenant |
@@ -42,6 +42,8 @@ Finalidade atual é prova técnica com fixtures sintéticas. A base legal para c
 ## Minimização
 
 Persistir apenas campos necessários à finalidade. Evidência usa trecho mínimo suficiente e limita a seleção persistida a 2.000 caracteres. Logs M5 recebem IDs, ação e versões, não o trecho selecionado. Eventos adaptativos e padrões organizacionais persistem somente metadados estruturais allowlisted. Casos de aprendizado referenciam a correção e só são aprovados junto com a revisão, sem copiar valores ou documento integral. Logs não recebem currículo, prompt completo com PII ou resposta integral. Dados privados ficam separados do perfil consultável.
+
+O draft de revisão pode conter temporariamente `identity` e `contact` porque deriva do documento privado e é visível somente aos papéis revisores. Na aprovação, esses objetos são removidos do payload profissional, nome é encaminhado a `people` e contato a `person_private_data`. A ausência de um valor revisado preserva o dado canônico existente; não significa solicitação de exclusão.
 
 ## Retenção e exclusão
 

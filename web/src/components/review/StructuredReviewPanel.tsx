@@ -60,7 +60,7 @@ export function StructuredReviewPanel({
 
   function selectTab(key: string) {
     const defaults: Record<string, string> = {
-      summary: "summary",
+      summary: "identity.fullName",
       experience: `experiences.${Math.min(experienceIndex, Math.max(draft.experiences.length - 1, 0))}.role`,
       education: `education.${Math.min(educationIndex, Math.max(draft.education.length - 1, 0))}.course`,
       skills: "competencies",
@@ -326,7 +326,69 @@ interface CommonEditorProps {
 }
 
 function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect }: CommonEditorProps) {
-  return <ReviewField editable={editable} extracted={workspace.extractedData.summary ?? "Não identificado"} fieldPath="summary" label="Resumo profissional" multiline onChange={(value) => onDraftChange({ ...draft, summary: value || null })} onSelect={onFieldSelect} selected={selectedFieldPath === "summary"} value={draft.summary ?? ""} />;
+  const fields = [
+    { path: "identity.fullName", label: "Nome completo", extracted: workspace.extractedData.identity.fullName, value: draft.identity.fullName, update: (value: string) => onDraftChange({ ...draft, identity: { fullName: value || null } }) },
+    { path: "contact.city", label: "Cidade", extracted: workspace.extractedData.contact.city, value: draft.contact.city, update: (value: string) => onDraftChange({ ...draft, contact: { ...draft.contact, city: value || null } }) },
+    { path: "contact.state", label: "Estado", extracted: workspace.extractedData.contact.state, value: draft.contact.state, update: (value: string) => onDraftChange({ ...draft, contact: { ...draft.contact, state: value || null } }) },
+    { path: "contact.phone", label: "Telefone", extracted: workspace.extractedData.contact.phone, value: draft.contact.phone, update: (value: string) => onDraftChange({ ...draft, contact: { ...draft.contact, phone: value || null } }) },
+    { path: "contact.email", label: "E-mail", extracted: workspace.extractedData.contact.email, value: draft.contact.email, update: (value: string) => onDraftChange({ ...draft, contact: { ...draft.contact, email: value || null } }) },
+    { path: "contact.linkedin", label: "Perfil do LinkedIn", extracted: workspace.extractedData.contact.linkedin, value: draft.contact.linkedin, update: (value: string) => onDraftChange({ ...draft, contact: { ...draft.contact, linkedin: value || null } }) },
+  ];
+  return (
+    <div className="prisma-review-field-stack prisma-summary-review">
+      <div className="prisma-summary-section-heading">
+        <Typography.Title level={5}>Identificação e contato</Typography.Title>
+        <Typography.Text type="secondary">Dados privados, visíveis somente para perfis autorizados.</Typography.Text>
+      </div>
+      {fields.map((field) => (
+        <ReviewField editable={editable} extracted={field.extracted ?? "Não identificado"} fieldPath={field.path} key={field.path} label={field.label} onChange={field.update} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, field.path)} value={field.value ?? ""} />
+      ))}
+
+      <Divider />
+      <div className="prisma-summary-section-heading">
+        <Typography.Title level={5}>Posicionamento profissional</Typography.Title>
+        <Typography.Text type="secondary">Título e áreas declaradas no currículo, sem inferir objetivo ou senioridade ausentes.</Typography.Text>
+      </div>
+      <ReviewField editable={editable} extracted={workspace.extractedData.professionalTitle ?? "Não identificado"} fieldPath="professionalTitle" label="Cargo ou título profissional" onChange={(value) => onDraftChange({ ...draft, professionalTitle: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "professionalTitle")} value={draft.professionalTitle ?? ""} />
+      <SummaryTagField editable={editable} extracted={workspace.extractedData.areasOfExpertise} fieldPath="areasOfExpertise" label="Áreas de atuação" onChange={(values) => onDraftChange({ ...draft, areasOfExpertise: values })} onSelect={onFieldSelect} selectedFieldPath={selectedFieldPath} value={draft.areasOfExpertise} />
+
+      <Divider />
+      <ReviewField editable={editable} extracted={workspace.extractedData.professionalObjective ?? "Não identificado"} fieldPath="professionalObjective" label="Objetivo profissional" multiline onChange={(value) => onDraftChange({ ...draft, professionalObjective: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "professionalObjective")} value={draft.professionalObjective ?? ""} />
+      <ReviewField editable={editable} extracted={workspace.extractedData.summary ?? "Não identificado"} fieldPath="summary" label="Resumo profissional" multiline onChange={(value) => onDraftChange({ ...draft, summary: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "summary")} value={draft.summary ?? ""} />
+
+      <Divider />
+      <div className="prisma-summary-section-heading">
+        <Typography.Title level={5}>Principais resultados</Typography.Title>
+        <Typography.Text type="secondary">Cada resultado possui revisão e evidência independentes.</Typography.Text>
+      </div>
+      {draft.keyResults.length ? draft.keyResults.map((result, index) => {
+        const fieldPath = `keyResults.${result.id}.value`;
+        const extracted = workspace.extractedData.keyResults.find((item) => item.id === result.id);
+        return <ReviewField editable={editable} extracted={extracted?.value ?? "Não identificado na extração original"} fieldPath={fieldPath} key={result.id} label={`Resultado ${index + 1}`} multiline onChange={(value) => onDraftChange({ ...draft, keyResults: draft.keyResults.map((item) => item.id === result.id ? { ...item, value } : item) })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, fieldPath)} value={result.value} />;
+      }) : <Empty description="Nenhum resultado principal identificado. Selecione uma região do currículo para criar um resultado com evidência." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+    </div>
+  );
+}
+
+function SummaryTagField({ fieldPath, label, extracted, value, editable, selectedFieldPath, onSelect, onChange }: {
+  fieldPath: "areasOfExpertise";
+  label: string;
+  extracted: string[];
+  value: string[];
+  editable: boolean;
+  selectedFieldPath: string;
+  onSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
+  onChange: (values: string[]) => void;
+}) {
+  return (
+    <div className={["prisma-review-field", fieldPathMatches(selectedFieldPath, fieldPath) ? "is-selected" : ""].join(" ")} onClick={() => onSelect(fieldPath)}>
+      <Typography.Text strong>{label}</Typography.Text>
+      <div className="prisma-review-value-grid">
+        <ValueSurface label="Extraído pelo Prisma" onSelect={() => onSelect(fieldPath, "original")} value={extracted.join(", ") || "Não identificado"} />
+        <div className="prisma-reviewed-surface" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>Revisado por você</small><Select disabled={!editable} mode="tags" onChange={onChange} open={false} tokenSeparators={[","]} value={value} /></div>
+      </div>
+    </div>
+  );
 }
 
 function ReviewField({ label, fieldPath, extracted, value, editable, multiline = false, selected, onSelect, onChange }: {

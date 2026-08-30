@@ -1,4 +1,5 @@
 import type { ExtractedPage, StructuredDraft } from "./personIngestion.js";
+import { extractResumeIdentity } from "../../../src/domain/resumeIdentity.js";
 import {
   CUSTOM_PROFILE_SECTION_METHOD_VERSION,
   normalizeCustomSectionName,
@@ -6,8 +7,8 @@ import {
   type LearnedCustomSectionDefinition,
 } from "./customProfileSections.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "2.1.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v2.1";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "3.0.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v3";
 export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v2";
 
 export interface LayoutTextLine {
@@ -99,6 +100,17 @@ type ParsedExperienceBlock = {
   patternKey: string;
 };
 
+interface StructuredSummaryExtraction {
+  identity: StructuredDraft["identity"];
+  contact: StructuredDraft["contact"];
+  professionalTitle: string | null;
+  areasOfExpertise: string[];
+  professionalObjective: string | null;
+  summary: string | null;
+  keyResults: StructuredDraft["keyResults"];
+  fieldEvidence: FieldEvidenceDescriptor[];
+}
+
 const ROLE_TERMS = /(analista|arquiteto|assistente|chief|consultor|coordenador|customer success|developer|desenvolvedor|diretor|engineer|engenheiro|especialista|executivo|founder|fundador|gerente|head|l[ií]der|manager|presidente|recruiter|supervisor|system analyst|technician|t[eé]cnico|vice[- ]presidente|coo|ceo|cto|cfo|cio)/i;
 const SECTION_HEADING = /^(experi[eê]ncia(s)?( profissional(is)?)?|trajet[oó]ria profissional|professional experience|forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|resumo|summary|perfil|s[ií]ntese de valor)/i;
 const NEXT_SECTION = /^(forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|projetos|projects|cursos|s[ií]ntese de valor)/i;
@@ -148,9 +160,17 @@ export function buildAdaptiveExtraction(
   const competencies = competencyCatalog.filter((item) => new RegExp(`\\b${escapeRegExp(item)}\\b`, "i").test(fullText));
   const languages = ["Português", "Inglês", "Espanhol", "English", "Spanish"].filter((item) => new RegExp(`\\b${item}\\b`, "i").test(fullText));
   const learnedCustom = extractLearnedCustomSections(allLines, learnedCustomSections);
+  const structuredSummary = extractStructuredSummary(pages, allLines);
+  fieldEvidence.push(...structuredSummary.fieldEvidence);
   fieldEvidence.push(...learnedCustom.fieldEvidence);
   const draft: StructuredDraft = {
-    summary: experiences[0] ? `${experiences[0].role} com experiência profissional documentada em ${experiences[0].organization}.` : null,
+    identity: structuredSummary.identity,
+    contact: structuredSummary.contact,
+    professionalTitle: structuredSummary.professionalTitle,
+    areasOfExpertise: structuredSummary.areasOfExpertise,
+    professionalObjective: structuredSummary.professionalObjective,
+    summary: structuredSummary.summary,
+    keyResults: structuredSummary.keyResults,
     experiences,
     education,
     certifications: allLines.filter((entry) => /(certifica[cç][aã]o|certified|certificate)/i.test(entry.text)).slice(0, 8).map((entry) => entry.text),
@@ -175,6 +195,130 @@ export function buildAdaptiveExtraction(
     },
   };
 }
+
+function extractStructuredSummary(pages: ExtractedPage[], lines: CandidateLine[]): StructuredSummaryExtraction {
+  const identity = extractResumeIdentity(pages.map((page) => ({ pageNumber: page.pageNumber, text: page.text })));
+  const headerLines = lines.filter((line) => line.pageNumber === pages[0]?.pageNumber).slice(0, 24);
+  const fieldEvidence: FieldEvidenceDescriptor[] = [];
+  const fullName = identity.fullName;
+  const email = identity.email;
+  const phone = identity.phone;
+  const nameLine = findExplicitLine(headerLines, fullName);
+  const emailLine = findExplicitLine(headerLines, email);
+  const phoneLine = phone
+    ? headerLines.find((line) => digits(line.text).includes(digits(phone).slice(-10))) ?? null
+    : null;
+  if (nameLine && fullName) fieldEvidence.push(toEvidence("identity.fullName", nameLine, fullName));
+  if (emailLine && email) fieldEvidence.push(toEvidence("contact.email", emailLine, email));
+  if (phoneLine && phone) fieldEvidence.push(toEvidence("contact.phone", phoneLine, phone));
+
+  const linkedinMatch = headerLines.flatMap((line) => {
+    const match = line.text.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[a-z0-9%_.-]+\/?/i)?.[0];
+    return match ? [{ line, value: normalizeLinkedinUrl(match) }] : [];
+  })[0] ?? null;
+  if (linkedinMatch) fieldEvidence.push(toEvidence("contact.linkedin", linkedinMatch.line, linkedinMatch.value));
+
+  const locationMatch = headerLines.flatMap((line) => {
+    const match = line.text.match(/(?:^|[|•])\s*([\p{L}][\p{L} .'-]{1,60}),\s*([A-Z]{2})\b/u);
+    return match?.[1] && match[2] ? [{ line, city: match[1].trim(), state: match[2] }] : [];
+  })[0] ?? null;
+  if (locationMatch) {
+    fieldEvidence.push(toEvidence("contact.city", locationMatch.line, locationMatch.city));
+    fieldEvidence.push(toEvidence("contact.state", locationMatch.line, locationMatch.state));
+  }
+
+  const titleLine = headerLines.find((line) => (
+    line !== nameLine
+    && !line.text.includes("@")
+    && !/linkedin\.com|\+?\d[\d\s().-]{8,}/i.test(line.text)
+    && (line.text.includes("|") || ROLE_TERMS.test(line.text))
+    && !SECTION_HEADING.test(line.text.trim())
+  )) ?? null;
+  const titleParts = titleLine?.text.split("|").map((item) => item.trim()).filter(Boolean) ?? [];
+  const professionalTitle = titleParts[0] ?? null;
+  const areasOfExpertise = uniqueText(titleParts.slice(1).filter((item) => !item.includes("@") && !/linkedin|\+?\d/.test(item)));
+  if (titleLine && professionalTitle) fieldEvidence.push(toEvidence("professionalTitle", titleLine, professionalTitle));
+  if (titleLine && areasOfExpertise.length) fieldEvidence.push(toEvidence("areasOfExpertise", titleLine, areasOfExpertise.join(", ")));
+
+  const objectiveLines = sectionContent(lines, /^(objetivo(?: profissional)?|professional objective|posicionamento executivo)(?:\s*[|:]\s*(.+))?$/i);
+  const summaryLines = sectionContent(lines, /^(resumo profissional|perfil profissional|perfil executivo|professional summary)(?:\s*[|:]\s*(.+))?$/i);
+  const resultGroups = groupedBulletSection(lines, /^(principais resultados|resultados(?: e transforma[cç][oõ]es selecionadas)?|principais conquistas|resultados de destaque|selected results|key achievements)(?:\s*[|:]\s*(.+))?$/i);
+  const professionalObjective = objectiveLines.length ? joinSectionText(objectiveLines) : null;
+  const summary = summaryLines.length ? joinSectionText(summaryLines) : null;
+  if (objectiveLines.length) fieldEvidence.push(toCombinedEvidence("professionalObjective", objectiveLines));
+  if (summaryLines.length) fieldEvidence.push(toCombinedEvidence("summary", summaryLines));
+
+  const keyResults = resultGroups.slice(0, 20).map((group) => {
+    const value = group.map((line) => stripBullet(line.text)).join(" ").replace(/\s+/g, " ").trim();
+    const id = `result_${stableToken(`${group[0]!.pageNumber}:${group[0]!.sequence}:${value}`)}`;
+    fieldEvidence.push(toCombinedEvidence(`keyResults.${id}.value`, group));
+    return { id, value };
+  }).filter((item) => item.value);
+
+  return {
+    identity: { fullName: identity.fullName },
+    contact: {
+      city: locationMatch?.city ?? null,
+      state: locationMatch?.state ?? null,
+      phone: identity.phone,
+      email: identity.email,
+      linkedin: linkedinMatch?.value ?? null,
+    },
+    professionalTitle,
+    areasOfExpertise,
+    professionalObjective,
+    summary,
+    keyResults,
+    fieldEvidence,
+  };
+}
+
+function sectionContent(lines: CandidateLine[], headingPattern: RegExp): CandidateLine[] {
+  const headingIndex = lines.findIndex((line) => headingPattern.test(line.text.trim()));
+  if (headingIndex < 0) return [];
+  const heading = lines[headingIndex]!;
+  const content: CandidateLine[] = [];
+  const inlineContent = heading.text.trim().match(headingPattern)?.[2]?.trim();
+  if (inlineContent) content.push({ ...heading, text: inlineContent });
+  for (let index = headingIndex + 1; index < lines.length; index += 1) {
+    const line = lines[index]!;
+    if (line.pageNumber !== heading.pageNumber || isSummarySectionHeading(line.text)) break;
+    if (!isPageFooter(line.text)) content.push(line);
+  }
+  return content.slice(0, 40);
+}
+
+function groupedBulletSection(lines: CandidateLine[], headingPattern: RegExp): CandidateLine[][] {
+  const content = sectionContent(lines, headingPattern);
+  const groups: CandidateLine[][] = [];
+  for (const line of content) {
+    if (isBullet(line.text) || !groups.length) groups.push([line]);
+    else groups.at(-1)!.push(line);
+  }
+  return groups.filter((group) => group.some((line) => stripBullet(line.text)));
+}
+
+function isSummarySectionHeading(value: string): boolean {
+  return /^(resumo profissional|perfil profissional|perfil executivo|professional summary|objetivo(?: profissional)?|professional objective|posicionamento executivo|principais resultados|resultados(?: e transforma[cç][oõ]es selecionadas)?|principais conquistas|resultados de destaque|selected results|key achievements|problemas empresariais(?: que est[aá] preparado para assumir)?|s[ií]ntese de valor|experi[eê]ncia(?: profissional)?|professional experience|forma[cç][aã]o|educa[cç][aã]o|compet[eê]ncias(?:-chave)?|idiomas|certifica[cç][oõ]es)(?:\s*[|:]|$)/i.test(value.trim());
+}
+
+function joinSectionText(lines: CandidateLine[]): string {
+  return lines.map((line) => stripBullet(line.text)).join("\n").trim();
+}
+
+function findExplicitLine(lines: CandidateLine[], value: string | null): CandidateLine | null {
+  if (!value) return null;
+  const normalized = comparable(value);
+  return lines.find((line) => comparable(line.text).includes(normalized)) ?? null;
+}
+
+function normalizeLinkedinUrl(value: string): string {
+  const normalized = value.replace(/\/$/, "");
+  return /^https?:\/\//i.test(normalized) ? normalized : `https://${normalized}`;
+}
+
+function digits(value: string): string { return value.replace(/\D/g, ""); }
+function uniqueText(values: string[]): string[] { return [...new Set(values.map((item) => item.trim()).filter(Boolean))]; }
 
 function extractLearnedCustomSections(
   lines: CandidateLine[],

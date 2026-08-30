@@ -31,6 +31,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-019](ADR-019-custom-profile-sections-and-structural-learning.md) | accepted | Structured custom profile sections and organization-scoped heading learning |
 | [ADR-020](ADR-020-spatial-evidence-refinement.md) | accepted | Character-level subtraction and immutable refinement decisions for overlapping evidence |
 | [ADR-021](ADR-021-canonical-visual-character-map.md) | accepted | Zoom-independent canonical character geometry for visual evidence |
+| [ADR-022](ADR-022-structured-resume-summary-and-private-contact-boundary.md) | accepted | Structured resume summary with private canonical contact boundary |
 
 ## Rules
 
