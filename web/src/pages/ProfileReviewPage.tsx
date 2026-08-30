@@ -5,7 +5,7 @@ import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTa
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
 import type { CustomProfileSectionFormat, ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
-import { evidenceSelectionRequiresReason, type ReviewEvidenceAction } from "../domain/spatialEvidence";
+import { evidenceSelectionRequiresReason, fieldPathMatches, type ReviewEvidenceAction } from "../domain/spatialEvidence";
 import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
   proposeSiblingBlockCorrections,
@@ -93,6 +93,18 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const dirty = Boolean(workspace && draft && JSON.stringify(workspace.reviewedData) !== JSON.stringify(draft));
   const editable = workspace?.state === "draft";
   const replacementLinkId = useMemo(() => workspace?.evidenceLinks.find((link) => link.state === "active" && link.linkKind === "reviewer" && fieldsOverlap(link.fieldPath, selectedFieldPath))?.id ?? null, [selectedFieldPath, workspace]);
+  const fallbackOriginalEvidence = useMemo(() => {
+    if (!workspace) return null;
+    const candidates = workspace.evidenceLinks.filter((item) => item.state === "active"
+      && item.linkKind === "original"
+      && !item.spatialRegionId
+      && fieldPathMatches(item.fieldPath, selectedFieldPath));
+    const link = candidates.find((item) => item.fieldPath === selectedFieldPath) ?? candidates[0];
+    const original = link?.evidenceId ? workspace.originalEvidence.find((item) => item.id === link.evidenceId) : null;
+    const text = extractedTextAtFieldPath(workspace.extractedData, selectedFieldPath);
+    if (!link || !original?.sourcePage || !text) return null;
+    return { linkId: link.id, fieldPath: selectedFieldPath, pageNumber: original.sourcePage, text };
+  }, [selectedFieldPath, workspace]);
 
   async function handleSave() {
     if (!workspace || !draft) return;
@@ -326,6 +338,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         <div className="prisma-review-document-pane">
           <DocumentEvidenceViewer
             activeLinkId={activeLinkId} fileName={workspace.documentName} links={workspace.evidenceLinks} navigationTarget={navigationTarget}
+            fallbackOriginalEvidence={fallbackOriginalEvidence}
             onEvidenceClick={(fieldPath, linkId) => { setSelectedFieldPath(fieldPath); setActiveLinkId(linkId); setMobilePane("review"); }}
             onSelectionCancel={closePendingSelection} onSelectionComplete={handleSelectionComplete}
             pageCount={workspace.documentPageCount} pdfUrl={pdfUrl} refinementExcludedLinkIds={excludedRefinementLinkIds} regions={workspace.spatialRegions} selectedFieldPath={selectedFieldPath} selectionMode={selectionMode}
@@ -425,6 +438,28 @@ function linkPriority(kind: "original" | "reviewer" | "complementary", preferred
   return 5;
 }
 function fieldsOverlap(left: string, right: string): boolean { return left === right || left.startsWith(`${right}.`) || right.startsWith(`${left}.`); }
+
+function extractedTextAtFieldPath(source: unknown, fieldPath: string): string | null {
+  let value = source;
+  for (const segment of fieldPath.split(".")) {
+    if (Array.isArray(value)) {
+      const index = Number(segment);
+      if (!Number.isInteger(index)) return null;
+      value = value[index];
+    } else if (value && typeof value === "object") {
+      value = (value as Record<string, unknown>)[segment];
+    } else return null;
+  }
+  if (typeof value === "string") {
+    const normalized = value.trim();
+    return normalized && normalized !== "Não identificado" ? normalized : null;
+  }
+  if (Array.isArray(value) && value.every((item) => typeof item === "string")) {
+    const normalized = value.join(", ").trim();
+    return normalized || null;
+  }
+  return null;
+}
 
 function reviewFieldLabel(fieldPath: string): string {
   const field = fieldPath.split(".").at(-1);

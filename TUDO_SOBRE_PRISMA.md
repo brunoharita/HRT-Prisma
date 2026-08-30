@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 0fe457b566b2418d86dccc01f96e097b1dc6bcf16c39ea59a601550fbcb0e0df
+source_manifest_sha256: d0ae7de0f0d89e7a09fe54d6e847e7c6fe33ada4e7368ce92d45ee6e71adb8f5
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.3.2
+version: 2.3.3
 last_verified: 2026-08-30
 ---
 
@@ -335,6 +335,7 @@ last_verified: 2026-08-30
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` resolve um conjunto explícito de caracteres e usa as mesmas caixas para texto, refinamento e destaque visual pendente; na direita, somente um caractere contíguo pode ser recuperado por tolerância subpixel, sem ampliar esquerda, topo ou base. A geometria de fonte de fallback é limitada pelo próximo item visual da mesma linha e a faixa de status é reservada antes do arraste, evitando invasão do conteúdo vizinho e deslocamento do PDF durante o gesto. Evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Destaques espaciais persistidos são filtrados pelo contexto de revisão aberto: Experiência e Formação exibem somente o registro atual; cada outra aba exibe apenas seus campos renderizados. O filtro é local, não destrutivo e não modifica o contrato `spatial-evidence` 1.2.0.
+- Evidências originais históricas sem região persistida recebem um fallback somente visual quando o valor extraído do campo ativo possui uma única correspondência exata na camada textual da página original. A região não é persistida nem tratada como evidência espacial inferida; zero ou múltiplas correspondências falham fechadas e não produzem destaque.
 - O modal M5 aplica texto reconhecido e não editado sem justificativa, exige explicação somente para interpretação ou conteúdo manual e apresenta validação/falha dentro da própria janela.
 - Refinamento espacial 1.2 implementado localmente: uma nova seleção preserva o texto bruto, identifica regiões sobrepostas de campos irmãos do mesmo registro, desconta por padrão somente áreas humanas e permite reinclusão explícita. A subtração usa caracteres PDF.js ou símbolos posicionados do OCR; nenhum texto externo ao retângulo participa.
 - Extração adaptativa v2 implementada localmente: PDF.js preserva linhas e geometria; a estruturação reconhece blocos completos, períodos abreviados, empresa em linha distinta e permanências com cargos subordinados; cada campo pode possuir região original navegável. Padrões organizacionais aprovados funcionam como sinais estruturais allowlisted, nunca como templates executáveis.
@@ -359,7 +360,7 @@ last_verified: 2026-08-30
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 81 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, legibilidade estrutural da central de processamento, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, recuperação subpixel do último caractere, encaixe geométrico antes do próximo item visual, filtro contextual de destaques por aba/registro, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 82 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, legibilidade estrutural da central de processamento, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, recuperação subpixel do último caractere, encaixe geométrico antes do próximo item visual, filtro contextual de destaques por aba/registro, fallback visual exato para evidência original histórica, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -453,7 +454,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 81 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A cobertura confirma o refinamento estrutural da central `Processamento e revisões`: Pessoa e Documento possuem largura e composição próprias, nomes longos são limitados visualmente a duas linhas com tooltip e as colunas operacionais permanecem compactas. A nova sessão controlável não possuía autenticação e o Chrome não estava conectado, portanto o smoke visual autenticado desktop/mobile permanece pendente. O smoke autenticado anterior continua comprovando a seleção espacial exata terminada em `TI`. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 82 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A cobertura inclui o fallback visual fail-closed para evidência original histórica sem coordenadas. O smoke autenticado com o acesso QA salvo confirmou, na revisão de Bruno Harita, página 2 e campo `experiences.0.role`, exatamente um destaque `Original` sobre “Fundador & Diretor Executivo”; as demais regiões visíveis pertenciam somente aos campos irmãos do mesmo registro `experiences.0`, preservando o filtro contextual. O resultado permaneceu correto após `Ajustar largura` e não criou nem persistiu coordenadas. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 

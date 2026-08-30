@@ -12,6 +12,7 @@ import {
   normalizePointerRegion,
   normalizedRegionStyle,
   textContainedByPixelRegion,
+  uniqueTextUnitMatch,
   textUnitsReachedByPixelRegion,
   topLevelReviewField,
 } from "../web/src/domain/spatialEvidence.js";
@@ -59,6 +60,19 @@ test("M5 treats all fields rendered together on the Other screen as one visible 
   assert.equal(isReviewEvidenceVisibleOnCurrentScreen("customSections.projects.items.item-2.value", customField), true);
   assert.equal(isReviewEvidenceVisibleOnCurrentScreen("languages", customField), false);
   assert.equal(isReviewEvidenceVisibleOnCurrentScreen("unknown.path", customField), false);
+});
+
+test("M5 locates one exact legacy original value for a visual-only PDF highlight", () => {
+  const first = positionedUnits("Fundador & ", 0, 0);
+  const second = positionedUnits("Diretor Executivo", 0, 1).map((unit) => ({
+    ...unit,
+    rect: { ...unit.rect, left: unit.rect.left + 120, right: unit.rect.right + 120 },
+  }));
+  const units = [...first, ...second];
+  assert.equal(uniqueTextUnitMatch(units, "Fundador & Diretor Executivo").map((unit) => unit.text).join(""), "Fundador & Diretor Executivo");
+  assert.deepEqual(uniqueTextUnitMatch([...units, ...units], "Fundador & Diretor Executivo"), []);
+  assert.deepEqual(uniqueTextUnitMatch(units, "Diretor de Operações"), []);
+  assert.deepEqual(uniqueTextUnitMatch(positionedUnits("Cofundador & Diretor Executivo", 0, 2), "Fundador & Diretor Executivo"), []);
 });
 
 test("M5 includes only characters visually contained by the selected rectangle", () => {
@@ -267,11 +281,13 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(viewer, /prisma-evidence-character-highlight/);
   assert.match(viewer, /selectedTextUnits/);
   assert.match(viewer, /isReviewEvidenceVisibleOnCurrentScreen\(link\.fieldPath, selectedFieldPath\)/);
+  assert.match(viewer, /data-visual-fallback="exact-pdf-text"/);
   assert.doesNotMatch(viewer, /rectanglesIntersect/);
   assert.match(viewer, /ocrVersionRef/);
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);
   assert.match(page, /Currículo[\s\S]*Revisão/);
   assert.match(page, /recordProfileReviewEvidence/);
+  assert.match(page, /fieldPathMatches\(item\.fieldPath, selectedFieldPath\)/);
   assert.match(page, /selectionError \? <Alert title=\{selectionError\} showIcon type="error"/);
   assert.match(page, /setSelectionValueEdited\(false\)/);
   assert.match(page, /confirmLoading=\{busy\}/);

@@ -26,6 +26,7 @@ import {
   textFromPositionedUnits,
   textUnitsExcludingPixelRegions,
   textUnitsReachedByPixelRegion,
+  uniqueTextUnitMatch,
   type NormalizedPageRegion,
   type PixelRect,
   type PositionedTextUnit,
@@ -71,6 +72,12 @@ interface DocumentEvidenceViewerProps {
   pageCount: number;
   regions: SpatialEvidenceRegion[];
   links: ReviewEvidenceLink[];
+  fallbackOriginalEvidence: {
+    linkId: string;
+    fieldPath: string;
+    pageNumber: number;
+    text: string;
+  } | null;
   selectedFieldPath: string;
   activeLinkId: string | null;
   selectionMode: boolean;
@@ -92,6 +99,7 @@ export function DocumentEvidenceViewer({
   pageCount,
   regions,
   links,
+  fallbackOriginalEvidence,
   selectedFieldPath,
   activeLinkId,
   selectionMode,
@@ -111,6 +119,7 @@ export function DocumentEvidenceViewer({
   const [drag, setDrag] = useState<DragState | null>(null);
   const [pendingRegion, setPendingRegion] = useState<NormalizedPageRegion | null>(null);
   const [pendingVisualSelection, setPendingVisualSelection] = useState<RegionSelectionResult | null>(null);
+  const [fallbackOriginalRegion, setFallbackOriginalRegion] = useState<NormalizedPageRegion | null>(null);
   const [ocrBusy, setOcrBusy] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pageRef = useRef<HTMLDivElement | null>(null);
@@ -204,6 +213,24 @@ export function DocumentEvidenceViewer({
     if (!navigationTarget) return;
     setCurrentPage(navigationTarget.pageNumber);
   }, [navigationTarget]);
+
+  useEffect(() => {
+    setFallbackOriginalRegion(null);
+    if (rendering || !fallbackOriginalEvidence || fallbackOriginalEvidence.pageNumber !== currentPage) return;
+    const pageElement = pageRef.current;
+    const textElement = textLayerRef.current;
+    if (!pageElement || !textElement) return;
+    const pageRect = pageElement.getBoundingClientRect();
+    const units = positionedTextUnits(textElement, {
+      left: pageRect.left,
+      top: pageRect.top,
+      right: pageRect.right,
+      bottom: pageRect.bottom,
+    });
+    const matchedUnits = uniqueTextUnitMatch(units, fallbackOriginalEvidence.text);
+    const matchedRect = boundingPixelRectForTextUnits(matchedUnits);
+    setFallbackOriginalRegion(matchedRect ? pixelRectToNormalizedRegion(matchedRect, pageRect) : null);
+  }, [currentPage, fallbackOriginalEvidence, rendering, zoom]);
 
   useEffect(() => {
     if (!navigationTarget?.regionId || rendering) return;
@@ -532,6 +559,21 @@ export function DocumentEvidenceViewer({
                   type="button"
                 />
               ))}
+              {fallbackOriginalEvidence && fallbackOriginalRegion ? (
+                <button
+                  aria-label={`Evidência original localizada visualmente de ${fallbackOriginalEvidence.fieldPath}`}
+                  className={[
+                    "prisma-evidence-highlight",
+                    "prisma-evidence-highlight--original",
+                    activeLinkId === fallbackOriginalEvidence.linkId ? "is-active" : "",
+                  ].filter(Boolean).join(" ")}
+                  data-visual-fallback="exact-pdf-text"
+                  key={`fallback-${fallbackOriginalEvidence.linkId}`}
+                  onClick={() => onEvidenceClick(fallbackOriginalEvidence.fieldPath, fallbackOriginalEvidence.linkId)}
+                  style={normalizedRegionStyle(fallbackOriginalRegion)}
+                  type="button"
+                />
+              ) : null}
               {pendingCharacterRegions.map(({ unit, normalized }) => (
                 <span
                   aria-hidden="true"

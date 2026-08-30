@@ -283,6 +283,58 @@ export function boundingPixelRectForTextUnits(units: PositionedTextUnit[]): Pixe
   }), { ...first.rect });
 }
 
+export function uniqueTextUnitMatch(
+  units: PositionedTextUnit[],
+  expectedText: string,
+): PositionedTextUnit[] {
+  const expected = normalizeComparableText(expectedText);
+  if (!expected) return [];
+
+  const projected: string[] = [];
+  const unitByCharacter: Array<PositionedTextUnit | null> = [];
+  let previous: PositionedTextUnit | null = null;
+
+  units.forEach((unit) => {
+    if (previous && shouldSeparateTextUnits(previous, unit)) appendSearchCharacter(" ", null);
+    Array.from(unit.text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
+      .forEach((character) => appendSearchCharacter(character, unit));
+    previous = unit;
+  });
+
+  const searchable = projected.join("");
+  const matches: number[] = [];
+  let offset = searchable.indexOf(expected);
+  while (offset >= 0) {
+    const before = searchable[offset - 1];
+    const after = searchable[offset + expected.length];
+    const startsInsideWord = isSearchWordCharacter(expected.at(0)) && isSearchWordCharacter(before);
+    const endsInsideWord = isSearchWordCharacter(expected.at(-1)) && isSearchWordCharacter(after);
+    if (!startsInsideWord && !endsInsideWord) matches.push(offset);
+    offset = searchable.indexOf(expected, offset + 1);
+  }
+  const matchOffset = matches.length === 1 ? matches[0] : undefined;
+  if (matchOffset === undefined) return [];
+
+  const matchedUnits = unitByCharacter.slice(matchOffset, matchOffset + expected.length)
+    .filter((unit): unit is PositionedTextUnit => Boolean(unit));
+  return matchedUnits.filter((unit, index) => matchedUnits.indexOf(unit) === index);
+
+  function appendSearchCharacter(character: string, unit: PositionedTextUnit | null) {
+    if (/\s/.test(character)) {
+      if (projected.at(-1) === " ") return;
+      projected.push(" ");
+      unitByCharacter.push(unit);
+      return;
+    }
+    projected.push(character);
+    unitByCharacter.push(unit);
+  }
+}
+
+function isSearchWordCharacter(value: string | undefined): boolean {
+  return Boolean(value && /[a-z0-9]/i.test(value));
+}
+
 export function siblingReviewFieldScope(fieldPath: string): string | null {
   const canonical = /^(experiences|education)\.([0-9]+)\.[a-zA-Z]+$/.exec(fieldPath);
   return canonical ? `${canonical[1]}.${canonical[2]}` : null;
