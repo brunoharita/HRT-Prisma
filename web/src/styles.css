@@ -2444,6 +2444,17 @@ textarea {
 }
 
 .prisma-reviewed-surface { background: #f1f9f3; border-color: #cbe8d2; }
+.prisma-reviewed-surface--multiline {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-self: stretch;
+}
+.prisma-reviewed-surface--multiline .ant-input {
+  height: 100%;
+  min-height: 100%;
+  resize: none;
+  overflow-y: auto;
+}
 .prisma-extracted-surface small,
 .prisma-reviewed-surface small { display: block; margin-bottom: 5px; color: var(--prisma-text-secondary); font-size: 0.66rem; }
 .prisma-extracted-surface p { margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }

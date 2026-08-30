@@ -301,6 +301,17 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(styles, /\.mobile-pane-document/);
 });
 
+test("M5 keeps extracted and reviewed multiline surfaces visually proportional", async () => {
+  const [panel, styles] = await Promise.all([
+    readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
+  ]);
+
+  assert.match(panel, /multiline \? "prisma-reviewed-surface--multiline"/);
+  assert.match(styles, /\.prisma-reviewed-surface--multiline\s*\{[^}]*display: grid;[^}]*grid-template-rows: auto minmax\(0, 1fr\);[^}]*align-self: stretch;/s);
+  assert.match(styles, /\.prisma-reviewed-surface--multiline \.ant-input\s*\{[^}]*height: 100%;[^}]*min-height: 100%;[^}]*resize: none;[^}]*overflow-y: auto;/s);
+});
+
 function positionedUnits(text: string, top: number, sourceIndex: number) {
   let offset = 0;
   return Array.from(text).map((character) => {

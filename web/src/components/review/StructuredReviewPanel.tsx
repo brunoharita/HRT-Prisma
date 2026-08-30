@@ -300,7 +300,7 @@ function ReviewField({ label, fieldPath, extracted, value, editable, multiline =
       <Typography.Text strong>{label}</Typography.Text>
       <div className="prisma-review-value-grid">
         <ValueSurface label="Extraído pelo Prisma" onSelect={() => onSelect(fieldPath, "original")} value={extracted} />
-        <div className="prisma-reviewed-surface" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>Revisado por você</small>{multiline ? <Input.TextArea disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
+        <div className={["prisma-reviewed-surface", multiline ? "prisma-reviewed-surface--multiline" : ""].filter(Boolean).join(" ")} onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>Revisado por você</small>{multiline ? <Input.TextArea disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
       </div>
     </div>
   );
