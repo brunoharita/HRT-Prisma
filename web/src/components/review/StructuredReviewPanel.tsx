@@ -14,7 +14,10 @@ import type { ProfileReviewWorkspace, StructuredDraft } from "../../domain/perso
 import { fieldPathMatches, topLevelReviewField } from "../../domain/spatialEvidence";
 import {
   createReviewEntityId,
+  isEducationEmpty,
+  isExperienceEmpty,
   reviewEntityFieldPath,
+  reviewFieldPathExists,
   type ReviewDraftIssue,
 } from "../../domain/reviewFieldLifecycle";
 
@@ -24,6 +27,7 @@ interface StructuredReviewPanelProps {
   editable: boolean;
   busy: boolean;
   hasUnsavedChanges: boolean;
+  hasTransientChanges: boolean;
   deferredActionLabel: string | null;
   selectedFieldPath: string;
   activeLinkId: string | null;
@@ -53,6 +57,7 @@ export function StructuredReviewPanel({
   editable,
   busy,
   hasUnsavedChanges,
+  hasTransientChanges,
   deferredActionLabel,
   selectedFieldPath,
   activeLinkId,
@@ -99,15 +104,20 @@ export function StructuredReviewPanel({
     if (entry.kind === "experience") {
       const experiences = [...draft.experiences]; experiences.splice(entry.index, 0, entry.item);
       onDraftChange({ ...draft, experiences }); setExperienceIndex(entry.index);
+      onFieldSelect(reviewEntityFieldPath("experience", entry.item, "role"));
     } else if (entry.kind === "education") {
       const education = [...draft.education]; education.splice(entry.index, 0, entry.item);
       onDraftChange({ ...draft, education }); setEducationIndex(entry.index);
+      onFieldSelect(reviewEntityFieldPath("education", entry.item, "course"));
     } else if (entry.kind === "result") {
       const keyResults = [...draft.keyResults]; keyResults.splice(entry.index, 0, entry.item);
       onDraftChange({ ...draft, keyResults });
+      onFieldSelect(`keyResults.${entry.item.id}.value`);
     } else if (entry.kind === "custom-section") {
       const customSections = [...draft.customSections]; customSections.splice(entry.index, 0, entry.item);
       onDraftChange({ ...draft, customSections });
+      const restoredItem = entry.item.items[0];
+      onFieldSelect(restoredItem ? `customSections.${entry.item.id}.items.${restoredItem.id}.value` : "certifications");
     } else {
       onDraftChange({
         ...draft,
@@ -117,6 +127,7 @@ export function StructuredReviewPanel({
           return { ...section, items };
         }),
       });
+      onFieldSelect(`customSections.${entry.sectionId}.items.${entry.item.id}.value`);
     }
     setRemovedEntries((current) => current.filter((item) => item.key !== entry.key));
   }
@@ -126,6 +137,11 @@ export function StructuredReviewPanel({
   }
 
   function addResult() {
+    const existingIndex = draft.keyResults.findIndex((item) => !workspace.reviewedData.keyResults.some((persisted) => persisted.id === item.id) && !item.value.trim());
+    if (existingIndex >= 0) {
+      onFieldSelect(`keyResults.${draft.keyResults[existingIndex]!.id}.value`);
+      return;
+    }
     const item = { id: `result_${crypto.randomUUID().replaceAll("-", "")}`, value: "" };
     onDraftChange({ ...draft, keyResults: [...draft.keyResults, item] });
     onFieldSelect(`keyResults.${item.id}.value`);
@@ -135,8 +151,13 @@ export function StructuredReviewPanel({
     const index = draft.keyResults.findIndex((item) => item.id === resultId);
     const item = draft.keyResults[index];
     if (!item) return;
-    rememberRemoval({ key: `result:${item.id}`, kind: "result", index, item, label: `O resultado ${index + 1} será removido` });
-    onDraftChange({ ...draft, keyResults: draft.keyResults.filter((candidate) => candidate.id !== resultId) });
+    if (workspace.reviewedData.keyResults.some((candidate) => candidate.id === item.id)) {
+      rememberRemoval({ key: `result:${item.id}`, kind: "result", index, item, label: `O resultado ${index + 1} será removido` });
+    }
+    const keyResults = draft.keyResults.filter((candidate) => candidate.id !== resultId);
+    onDraftChange({ ...draft, keyResults });
+    const next = keyResults[Math.min(index, keyResults.length - 1)];
+    onFieldSelect(next ? `keyResults.${next.id}.value` : "summary");
   }
 
   const matchingEvidenceLinks = workspace.evidenceLinks.filter((link) => link.state === "active" && fieldPathMatches(link.fieldPath, selectedFieldPath));
@@ -145,6 +166,12 @@ export function StructuredReviewPanel({
   const fieldChanges = workspace.changes.filter((change) => topLevelReviewField(selectedFieldPath) === change.fieldPath);
   const evidenceEvents = workspace.evidenceEvents.filter((event) => fieldPathMatches(event.fieldPath, selectedFieldPath));
   const adaptationEvents = workspace.adaptationEvents.filter((event) => event.acceptedSuggestions.some((suggestion) => fieldPathMatches(suggestion.fieldPath, selectedFieldPath)));
+  const canSelectEvidence = reviewFieldPathExists(draft, selectedFieldPath);
+  const evidenceBlockedReason = hasUnsavedChanges
+    ? "Salve as alterações atuais para continuar."
+    : !canSelectEvidence
+      ? "Adicione ou selecione um campo antes de escolher uma evidência."
+      : null;
 
   return (
     <section aria-label="Revisão estruturada" className="prisma-structured-review">
@@ -181,6 +208,7 @@ export function StructuredReviewPanel({
           type="warning"
         />
       ) : null}
+      {editable && hasTransientChanges && !hasUnsavedChanges ? <Alert description="Preencha o campo manualmente ou selecione sua área no documento. Um formulário vazio pode ser cancelado e não exige salvamento nem justificativa." showIcon title="Novo campo aguardando conteúdo" type="info" /> : null}
       <Tabs
         activeKey={activeTab}
         className="prisma-review-tabs"
@@ -198,8 +226,8 @@ export function StructuredReviewPanel({
       <section className="prisma-linked-evidence" aria-labelledby="linked-evidence-title">
         <div className="prisma-review-section-title">
           <div><Typography.Text id="linked-evidence-title" strong>Evidências vinculadas</Typography.Text><small>{selectedFieldPath}</small></div>
-          <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para adicionar uma evidência." : null}>
-            <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={hasUnsavedChanges ? "Adicionar evidência. Salve as alterações atuais para continuar." : undefined} className={hasUnsavedChanges ? "prisma-review-action--blocked" : ""} disabled={!editable || busy} icon={hasUnsavedChanges ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} size="small">Adicionar evidência</Button>
+          <Tooltip title={evidenceBlockedReason}>
+            <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={evidenceBlockedReason ? `Adicionar evidência. ${evidenceBlockedReason}` : undefined} className={evidenceBlockedReason ? "prisma-review-action--blocked" : ""} disabled={!editable || busy || !canSelectEvidence} icon={hasUnsavedChanges || !canSelectEvidence ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} size="small">Adicionar evidência</Button>
           </Tooltip>
         </div>
         {evidenceLinks.length ? (
@@ -235,8 +263,8 @@ export function StructuredReviewPanel({
             })}
           </div>
         ) : <Empty description="Sem evidência vinculada" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-        <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para selecionar uma nova área." : null}>
-        <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={hasUnsavedChanges ? "Selecionar uma nova área. Salve as alterações atuais para continuar." : undefined} block className={["prisma-add-evidence-card", hasUnsavedChanges ? "prisma-review-action--blocked" : ""].filter(Boolean).join(" ")} disabled={!editable || busy} icon={hasUnsavedChanges ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} type="dashed">
+        <Tooltip title={evidenceBlockedReason}>
+        <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={evidenceBlockedReason ? `Selecionar uma nova área. ${evidenceBlockedReason}` : undefined} block className={["prisma-add-evidence-card", evidenceBlockedReason ? "prisma-review-action--blocked" : ""].filter(Boolean).join(" ")} disabled={!editable || busy || !canSelectEvidence} icon={hasUnsavedChanges || !canSelectEvidence ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} type="dashed">
           Selecione uma nova área no documento
         </Button>
         </Tooltip>
@@ -279,6 +307,12 @@ export function StructuredReviewPanel({
 
   function ExperienceEditor() {
     const addExperience = () => {
+      const existingIndex = draft.experiences.findIndex((item) => !workspace.reviewedData.experiences.some((persisted) => persisted.id === item.id) && isExperienceEmpty(item));
+      if (existingIndex >= 0) {
+        setExperienceIndex(existingIndex);
+        onFieldSelect(reviewEntityFieldPath("experience", draft.experiences[existingIndex]!, "organization"));
+        return;
+      }
       const item: StructuredDraft["experiences"][number] = {
         id: createReviewEntityId("experience"), source: "human", role: null, organization: null,
         period: null, description: null, evidenceText: "", page: null,
@@ -297,16 +331,20 @@ export function StructuredReviewPanel({
     const rolePath = reviewEntityFieldPath("experience", reviewed, "role");
     const periodPath = reviewEntityFieldPath("experience", reviewed, "period");
     const descriptionPath = reviewEntityFieldPath("experience", reviewed, "description");
+    const persisted = workspace.reviewedData.experiences.some((item) => item.id === reviewed.id);
     const removeExperience = () => {
-      rememberRemoval({ key: `experience:${reviewed.id}`, kind: "experience", index, item: reviewed, label: `A experiência ${index + 1} será removida` });
+      if (persisted) rememberRemoval({ key: `experience:${reviewed.id}`, kind: "experience", index, item: reviewed, label: `A experiência ${index + 1} será removida` });
       const experiences = draft.experiences.filter((item) => item.id !== reviewed.id);
       onDraftChange({ ...draft, experiences });
-      setExperienceIndex(Math.max(0, Math.min(index, experiences.length - 1)));
+      const nextIndex = Math.max(0, Math.min(index, experiences.length - 1));
+      setExperienceIndex(nextIndex);
+      const next = experiences[nextIndex];
+      onFieldSelect(next ? reviewEntityFieldPath("experience", next, "role") : "experiences");
     };
     return (
       <div className="prisma-entity-review">
-        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.experiences.length} index={index} label="Experiência" onChange={(next) => { setExperienceIndex(next); const item = draft.experiences[next]; if (item) onFieldSelect(reviewEntityFieldPath("experience", item, "role")); }} /><Space wrap><Button disabled={!editable} icon={<PlusOutlined />} onClick={addExperience} size="small">Adicionar experiência</Button><Popconfirm onConfirm={removeExperience} title="Não incluir esta experiência no perfil?"><Button danger disabled={!editable} icon={<DeleteOutlined />} size="small">Remover experiência</Button></Popconfirm></Space></div>
-        <Typography.Text type="secondary">Origem {reviewed.source === "human" ? "humana" : "extraída"}. Informe ao menos Empresa ou Cargo.</Typography.Text>
+        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.experiences.length} index={index} label="Experiência" onChange={(next) => { setExperienceIndex(next); const item = draft.experiences[next]; if (item) onFieldSelect(reviewEntityFieldPath("experience", item, "role")); }} /><Space wrap><Button disabled={!editable} icon={<PlusOutlined />} onClick={addExperience} size="small">Adicionar experiência</Button><Popconfirm onConfirm={removeExperience} title={persisted ? "Não incluir esta experiência no perfil?" : "Cancelar a inclusão desta experiência?"}><Button danger={persisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{persisted ? "Remover experiência" : "Cancelar inclusão"}</Button></Popconfirm></Space></div>
+        <Typography.Text type="secondary">{persisted ? `Origem ${reviewed.source === "human" ? "humana" : "extraída"}. Informe ao menos Empresa ou Cargo.` : "Nova experiência. Preencha Empresa ou Cargo manualmente, ou selecione uma área no documento sem salvar antes."}</Typography.Text>
         <ReviewField editable={editable} extracted={extracted?.organization ?? "Não identificado"} fieldPath={organizationPath} label="Empresa" onChange={(value) => update({ organization: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, organizationPath)} validationMessage={validationMessage(organizationPath)} value={reviewed.organization ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.role ?? "Não identificado"} fieldPath={rolePath} label="Cargo" onChange={(value) => update({ role: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, rolePath)} validationMessage={validationMessage(rolePath)} value={reviewed.role ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} value={reviewed.period ?? ""} />
@@ -318,6 +356,12 @@ export function StructuredReviewPanel({
 
   function EducationEditor() {
     const addEducation = () => {
+      const existingIndex = draft.education.findIndex((item) => !workspace.reviewedData.education.some((persisted) => persisted.id === item.id) && isEducationEmpty(item));
+      if (existingIndex >= 0) {
+        setEducationIndex(existingIndex);
+        onFieldSelect(reviewEntityFieldPath("education", draft.education[existingIndex]!, "course"));
+        return;
+      }
       const item: StructuredDraft["education"][number] = {
         id: createReviewEntityId("education"), source: "human", course: null, institution: null,
         period: null, description: null, evidenceText: "", page: null,
@@ -335,16 +379,20 @@ export function StructuredReviewPanel({
     const coursePath = reviewEntityFieldPath("education", reviewed, "course");
     const institutionPath = reviewEntityFieldPath("education", reviewed, "institution");
     const periodPath = reviewEntityFieldPath("education", reviewed, "period");
+    const persisted = workspace.reviewedData.education.some((item) => item.id === reviewed.id);
     const removeEducation = () => {
-      rememberRemoval({ key: `education:${reviewed.id}`, kind: "education", index, item: reviewed, label: `A formação ${index + 1} será removida` });
+      if (persisted) rememberRemoval({ key: `education:${reviewed.id}`, kind: "education", index, item: reviewed, label: `A formação ${index + 1} será removida` });
       const education = draft.education.filter((item) => item.id !== reviewed.id);
       onDraftChange({ ...draft, education });
-      setEducationIndex(Math.max(0, Math.min(index, education.length - 1)));
+      const nextIndex = Math.max(0, Math.min(index, education.length - 1));
+      setEducationIndex(nextIndex);
+      const next = education[nextIndex];
+      onFieldSelect(next ? reviewEntityFieldPath("education", next, "course") : "education");
     };
     return (
       <div className="prisma-entity-review">
-        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.education.length} index={index} label="Formação" onChange={(next) => { setEducationIndex(next); const item = draft.education[next]; if (item) onFieldSelect(reviewEntityFieldPath("education", item, "course")); }} /><Space wrap><Button disabled={!editable} icon={<PlusOutlined />} onClick={addEducation} size="small">Adicionar formação</Button><Popconfirm onConfirm={removeEducation} title="Não incluir esta formação no perfil?"><Button danger disabled={!editable} icon={<DeleteOutlined />} size="small">Remover formação</Button></Popconfirm></Space></div>
-        <Typography.Text type="secondary">Origem {reviewed.source === "human" ? "humana" : "extraída"}. Informe ao menos Curso ou Instituição.</Typography.Text>
+        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.education.length} index={index} label="Formação" onChange={(next) => { setEducationIndex(next); const item = draft.education[next]; if (item) onFieldSelect(reviewEntityFieldPath("education", item, "course")); }} /><Space wrap><Button disabled={!editable} icon={<PlusOutlined />} onClick={addEducation} size="small">Adicionar formação</Button><Popconfirm onConfirm={removeEducation} title={persisted ? "Não incluir esta formação no perfil?" : "Cancelar a inclusão desta formação?"}><Button danger={persisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{persisted ? "Remover formação" : "Cancelar inclusão"}</Button></Popconfirm></Space></div>
+        <Typography.Text type="secondary">{persisted ? `Origem ${reviewed.source === "human" ? "humana" : "extraída"}. Informe ao menos Curso ou Instituição.` : "Nova formação. Preencha Curso ou Instituição manualmente, ou selecione uma área no documento sem salvar antes."}</Typography.Text>
         <ReviewField editable={editable} extracted={extracted?.course ?? "Não identificado"} fieldPath={coursePath} label="Curso" onChange={(value) => update({ course: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, coursePath)} validationMessage={validationMessage(coursePath)} value={reviewed.course ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.institution ?? "Não identificado"} fieldPath={institutionPath} label="Instituição" onChange={(value) => update({ institution: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, institutionPath)} validationMessage={validationMessage(institutionPath)} value={reviewed.institution ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} value={reviewed.period ?? ""} />
@@ -383,11 +431,20 @@ export function StructuredReviewPanel({
         {draft.customSections.map((section) => {
           const extractedSection = workspace.extractedData.customSections.find((candidate) => candidate.id === section.id);
           const sectionIndex = draft.customSections.findIndex((candidate) => candidate.id === section.id);
+          const sectionPersisted = workspace.reviewedData.customSections.some((candidate) => candidate.id === section.id);
           const removeSection = () => {
-            rememberRemoval({ key: `custom-section:${section.id}`, kind: "custom-section", index: sectionIndex, item: section, label: `A área ${section.name} será removida` });
-            onDraftChange({ ...draft, customSections: draft.customSections.filter((candidate) => candidate.id !== section.id) });
+            if (sectionPersisted) rememberRemoval({ key: `custom-section:${section.id}`, kind: "custom-section", index: sectionIndex, item: section, label: `A área ${section.name} será removida` });
+            const customSections = draft.customSections.filter((candidate) => candidate.id !== section.id);
+            const nextDraft = { ...draft, customSections };
+            onDraftChange(nextDraft);
+            onFieldSelect(firstOtherFieldPath(nextDraft));
           };
           const addItem = () => {
+            const existing = section.items.find((item) => !workspace.reviewedData.customSections.find((candidate) => candidate.id === section.id)?.items.some((persisted) => persisted.id === item.id) && !item.value.trim());
+            if (existing) {
+              onFieldSelect(`customSections.${section.id}.items.${existing.id}.value`);
+              return;
+            }
             const item = { id: `item_${crypto.randomUUID().replaceAll("-", "")}`, value: "" };
             onDraftChange({ ...draft, customSections: draft.customSections.map((candidate) => candidate.id === section.id ? { ...candidate, items: [...candidate.items, item] } : candidate) });
             onFieldSelect(`customSections.${section.id}.items.${item.id}.value`);
@@ -399,14 +456,18 @@ export function StructuredReviewPanel({
                   <Typography.Text className="prisma-custom-profile-section__name" strong>{section.name}</Typography.Text>
                   <Typography.Text type="secondary">Área personalizada · {section.format === "list" ? "lista" : "texto"} · origem {section.source === "human" ? "humana" : "extraída"}</Typography.Text>
                 </div>
-                <Space wrap>{section.format === "list" ? <Button disabled={!editable} icon={<PlusOutlined />} onClick={addItem} size="small">Adicionar item</Button> : null}<Popconfirm onConfirm={removeSection} title="Remover esta área personalizada do perfil?"><Button danger disabled={!editable} icon={<DeleteOutlined />} size="small">Remover área</Button></Popconfirm></Space>
+                <Space wrap>{section.format === "list" ? <Button disabled={!editable} icon={<PlusOutlined />} onClick={addItem} size="small">Adicionar item</Button> : null}<Popconfirm onConfirm={removeSection} title={sectionPersisted ? "Remover esta área personalizada do perfil?" : "Cancelar a inclusão desta área?"}><Button danger={sectionPersisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{sectionPersisted ? "Remover área" : "Cancelar inclusão"}</Button></Popconfirm></Space>
               </div>
               {section.items.map((item, itemIndex) => {
                 const fieldPath = `customSections.${section.id}.items.${item.id}.value`;
                 const extractedItem = extractedSection?.items.find((candidate) => candidate.id === item.id);
+                const itemPersisted = workspace.reviewedData.customSections.find((candidate) => candidate.id === section.id)?.items.some((candidate) => candidate.id === item.id) ?? false;
                 const removeItem = () => {
-                  rememberRemoval({ key: `custom-item:${section.id}:${item.id}`, kind: "custom-item", sectionId: section.id, index: itemIndex, item, label: `O item ${itemIndex + 1} de ${section.name} será removido` });
-                  onDraftChange({ ...draft, customSections: draft.customSections.map((candidate) => candidate.id === section.id ? { ...candidate, items: candidate.items.filter((candidateItem) => candidateItem.id !== item.id) } : candidate) });
+                  if (itemPersisted) rememberRemoval({ key: `custom-item:${section.id}:${item.id}`, kind: "custom-item", sectionId: section.id, index: itemIndex, item, label: `O item ${itemIndex + 1} de ${section.name} será removido` });
+                  const customSections = draft.customSections.map((candidate) => candidate.id === section.id ? { ...candidate, items: candidate.items.filter((candidateItem) => candidateItem.id !== item.id) } : candidate);
+                  const nextDraft = { ...draft, customSections };
+                  onDraftChange(nextDraft);
+                  onFieldSelect(firstOtherFieldPath(nextDraft));
                 };
                 return (
                   <div className="prisma-custom-profile-section__item" key={item.id}>
@@ -427,8 +488,8 @@ export function StructuredReviewPanel({
                       validationMessage={validationMessage(fieldPath)}
                       value={item.value}
                     />
-                    {section.format === "list" ? <Popconfirm onConfirm={removeItem} title="Remover este item da área?"><Button danger disabled={!editable} icon={<DeleteOutlined />} size="small">Remover item</Button></Popconfirm> : null}
-                    {!item.value.trim() ? <Typography.Text type="secondary">Item vazio será descartado ao salvar.</Typography.Text> : null}
+                    {section.format === "list" ? <Popconfirm onConfirm={removeItem} title={itemPersisted ? "Remover este item da área?" : "Cancelar a inclusão deste item?"}><Button danger={itemPersisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{itemPersisted ? "Remover item" : "Cancelar inclusão"}</Button></Popconfirm> : null}
+                    {!item.value.trim() ? <Typography.Text type="secondary">Novo item. Preencha-o ou cancele a inclusão; não é necessário salvar enquanto estiver vazio.</Typography.Text> : null}
                   </div>
                 );
               })}
@@ -506,7 +567,8 @@ function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftC
       {draft.keyResults.length ? draft.keyResults.map((result, index) => {
         const fieldPath = `keyResults.${result.id}.value`;
         const extracted = workspace.extractedData.keyResults.find((item) => item.id === result.id);
-        return <div className="prisma-repeatable-review-item" key={result.id}><ReviewField editable={editable} extracted={extracted?.value ?? "Não identificado na extração original"} fieldPath={fieldPath} label={`Resultado ${index + 1}`} multiline onChange={(value) => onDraftChange({ ...draft, keyResults: draft.keyResults.map((item) => item.id === result.id ? { ...item, value } : item) })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, fieldPath)} validationMessage={validationMessage(fieldPath)} value={result.value} /><Popconfirm onConfirm={() => onRemoveResult(result.id)} title="Não incluir este resultado no perfil?"><Button danger disabled={!editable} icon={<DeleteOutlined />} size="small">Remover resultado</Button></Popconfirm>{!result.value.trim() ? <Typography.Text type="secondary">Resultado vazio será descartado ao salvar.</Typography.Text> : null}</div>;
+        const persisted = workspace.reviewedData.keyResults.some((item) => item.id === result.id);
+        return <div className="prisma-repeatable-review-item" key={result.id}><ReviewField editable={editable} extracted={extracted?.value ?? "Não identificado na extração original"} fieldPath={fieldPath} label={`Resultado ${index + 1}`} multiline onChange={(value) => onDraftChange({ ...draft, keyResults: draft.keyResults.map((item) => item.id === result.id ? { ...item, value } : item) })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, fieldPath)} validationMessage={validationMessage(fieldPath)} value={result.value} /><Popconfirm onConfirm={() => onRemoveResult(result.id)} title={persisted ? "Não incluir este resultado no perfil?" : "Cancelar a inclusão deste resultado?"}><Button danger={persisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{persisted ? "Remover resultado" : "Cancelar inclusão"}</Button></Popconfirm>{!result.value.trim() ? <Typography.Text type="secondary">Novo resultado. Preencha-o ou cancele a inclusão; não é necessário salvar enquanto estiver vazio.</Typography.Text> : null}</div>;
       }) : <Empty description="Nenhum resultado principal identificado. Selecione uma região do currículo para criar um resultado com evidência." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       {removedResults.map((entry) => <Alert action={<Button onClick={() => onUndoRemoval(entry)} size="small">Desfazer</Button>} key={entry.key} showIcon title={`${entry.label} ao salvar.`} type="warning" />)}
     </div>
@@ -587,8 +649,8 @@ function EntityNavigator({ label, index, count, onChange }: { label: string; ind
 }
 
 function tabForField(fieldPath: string): string {
-  if (fieldPath.startsWith("experiences.")) return "experience";
-  if (fieldPath.startsWith("education.")) return "education";
+  if (fieldPath === "experiences" || fieldPath.startsWith("experiences.")) return "experience";
+  if (fieldPath === "education" || fieldPath.startsWith("education.")) return "education";
   if (fieldPath === "competencies") return "skills";
   if (fieldPath === "languages") return "languages";
   if (["certifications", "uncertainties", "notIdentified"].includes(fieldPath) || fieldPath.startsWith("customSections.")) return "other";

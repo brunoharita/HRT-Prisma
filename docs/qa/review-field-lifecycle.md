@@ -10,6 +10,11 @@ Data: 2026-08-30. Ambientes: checkout local e Prisma-QA `ioldpnqqvobprjiontre`. 
 - IDs estáveis após reordenação e compatibilidade com caminhos numéricos;
 - reconhecimento de campos irmãos para IDs estáveis;
 - presença das ações Adicionar, Remover e Desfazer e de erro associado ao campo;
+- distinção entre formulário transitório vazio e mudança semântica persistível;
+- bloqueio de duplicatas vazias, cancelamento sem remoção e descarte sem revisão artificial;
+- seleção de evidência para campo novo com validação e persistência atômicas;
+- fallback de seleção após remoção e rejeição de caminhos inexistentes;
+- confirmação de saída diante de qualquer diferença local;
 - typechecks, build e suíte técnica sem regressão.
 
 ## Banco Prisma-QA
@@ -30,3 +35,5 @@ O advisor não acrescentou ausência de RLS, grants privados ou foreign keys. Pe
 ## Smoke autenticado
 
 No navegador interno, com a sessão Super Admin reutilizada, a revisão real carregou sem erro. O smoke confirmou inclusão de uma sexta experiência, caminho estável `experiences.experience_<id>.organization`, remoção pendente, aviso explícito, Desfazer e retorno à contagem anterior. A aba Resumo mostrou Nome completo como obrigatório, Adicionar resultado e três ações visíveis de inclusão em campos de tags. As alterações temporárias foram descartadas e a página terminou sincronizada, sem salvamento ou resíduo.
+
+O smoke complementar autenticado confirmou que formação, experiência e resultado abrem um único formulário transitório mesmo após cliques repetidos. O estado informa que o campo aguarda conteúdo, mantém Salvar desabilitado e permite iniciar a seleção espacial sem justificativa nem salvamento prévio. Cancelar a seleção e depois a inclusão restaura as contagens originais, mantém a aba correta e devolve `Rascunho sincronizado`, sem pendência de remoção ou gravação remota. A suíte técnica cobriu também no-op semântico, caminho removido, seleção defensiva e raízes vazias de Experiência/Formação.

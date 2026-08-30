@@ -4,7 +4,9 @@ import type { StructuredDraft } from "../web/src/domain/personIngestion.js";
 import {
   hasMaterialProfessionalInformation,
   normalizeReviewDraft,
+  reviewDraftChangeState,
   reviewEntityFieldPath,
+  reviewFieldPathExists,
   validateReviewDraftForSave,
 } from "../web/src/domain/reviewFieldLifecycle.js";
 
@@ -76,4 +78,32 @@ test("partially declared repeatable records require their identifying pair", () 
   const issues = validateReviewDraftForSave(input);
   assert.ok(issues.some((issue) => issue.fieldPath === "experiences.experience_12345678.role"));
   assert.ok(issues.some((issue) => issue.fieldPath === "education.education_12345678.course"));
+});
+
+test("empty repeatable forms are transient and do not become saveable changes", () => {
+  const baseline = draft();
+  const withEmptyEducation = structuredClone(baseline);
+  withEmptyEducation.education.push({
+    id: "education_12345678", source: "human", course: null, institution: null,
+    period: null, description: null, evidenceText: "", page: null,
+  });
+  assert.deepEqual(reviewDraftChangeState(baseline, withEmptyEducation), {
+    rawChanged: true,
+    meaningfulChanged: false,
+    transientOnly: true,
+  });
+  withEmptyEducation.education[0]!.course = "Gestão de Projetos";
+  assert.equal(reviewDraftChangeState(baseline, withEmptyEducation).meaningfulChanged, true);
+});
+
+test("field existence distinguishes temporary targets from removed or root paths", () => {
+  const input = draft();
+  input.education.push({
+    id: "education_12345678", source: "human", course: null, institution: null,
+    period: null, description: null, evidenceText: "", page: null,
+  });
+  assert.equal(reviewFieldPathExists(input, "education.education_12345678.course"), true);
+  assert.equal(reviewFieldPathExists(input, "education"), false);
+  assert.equal(reviewFieldPathExists(input, "education.education_removed.course"), false);
+  assert.equal(reviewFieldPathExists(input, "summary"), true);
 });

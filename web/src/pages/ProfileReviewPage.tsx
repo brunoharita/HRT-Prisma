@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from "@ant-design/icons";
-import { Alert, Button, Checkbox, Input, Modal, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
+import { Alert, Button, Checkbox, Input, Modal, Popconfirm, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
 import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
@@ -23,8 +23,10 @@ import {
 import {
   createReviewEntityId,
   normalizeReviewDraft,
+  reviewDraftChangeState,
   reviewEntityFieldPath,
   reviewEntityPathSegment,
+  reviewFieldPathExists,
   validateReviewDraftForSave,
   type ReviewDraftIssue,
 } from "../domain/reviewFieldLifecycle";
@@ -106,7 +108,12 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     return () => { current = false; };
   }, [activeMembership.organizationId, reviewId]);
 
-  const dirty = Boolean(workspace && draft && JSON.stringify(workspace.reviewedData) !== JSON.stringify(draft));
+  const changeState = useMemo(
+    () => workspace && draft ? reviewDraftChangeState(workspace.reviewedData, draft) : { rawChanged: false, meaningfulChanged: false, transientOnly: false },
+    [draft, workspace],
+  );
+  const dirty = changeState.meaningfulChanged;
+  const transientOnly = changeState.transientOnly;
   const editable = workspace?.state === "draft";
   const replacementLinkId = useMemo(() => workspace?.evidenceLinks.find((link) => link.state === "active" && link.linkKind === "reviewer" && fieldsOverlap(link.fieldPath, selectedFieldPath))?.id ?? null, [selectedFieldPath, workspace]);
   const fallbackOriginalEvidence = useMemo(() => {
@@ -125,6 +132,19 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   async function handleSave(continuation: DeferredReviewAction | null = deferredReviewAction) {
     if (!workspace || !draft) return;
     const normalizedDraft = normalizeReviewDraft(draft);
+    const normalizedBaseline = normalizeReviewDraft(workspace.reviewedData);
+    if (JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline)) {
+      setDraft(cloneDraft(workspace.reviewedData));
+      setReason("");
+      setValidationIssues([]);
+      setError(null);
+      setDeferredReviewAction(null);
+      if (continuation) {
+        resumeDeferredReviewAction(continuation);
+        setSuccess("O formulário vazio foi descartado. A ação solicitada foi retomada sem criar uma revisão desnecessária.");
+      } else setSuccess("Nenhuma alteração real precisava ser salva. Formulários vazios foram descartados.");
+      return;
+    }
     const issues = validateReviewDraftForSave(normalizedDraft, {
       existingPhone: workspace.personPrivateContact.phone,
       existingEmail: workspace.personPrivateContact.email,
@@ -170,6 +190,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
   async function handleApprove() {
     if (!workspace || !draft) return;
+    if (transientOnly) { setError("Preencha ou cancele o novo campo antes de aprovar a versão."); return; }
     if (dirty || pendingSelection) { setError("Conclua ou cancele a seleção e salve as alterações antes de aprovar."); return; }
     const issues = validateReviewDraftForSave(normalizeReviewDraft(draft), {
       existingPhone: workspace.personPrivateContact.phone,
@@ -226,6 +247,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   function startEvidenceSelection(fieldPath: string) {
+    if (!draft || !reviewFieldPathExists(draft, fieldPath)) {
+      setError("Selecione um campo existente ou adicione um novo campo antes de escolher sua evidência.");
+      return;
+    }
     setError(null);
     setSuccess(null);
     setSelectionError(null);
@@ -364,6 +389,14 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       if (JSON.stringify(nextDraft) === JSON.stringify(draft)) { setSelectionError("A informação selecionada já existe no campo de destino."); return; }
     }
     if (pendingAction === "replace_review_evidence" && !replacementLinkId) { setSelectionError("Este campo ainda não possui evidência ativa do revisor para substituir."); return; }
+    if (nextDraft) {
+      nextDraft = normalizeReviewDraft(nextDraft);
+      const issues = validateReviewDraftForSave(nextDraft, {
+        existingPhone: workspace.personPrivateContact.phone,
+        existingEmail: workspace.personPrivateContact.email,
+      });
+      if (issues.length) { setSelectionError(issues[0]!.message); return; }
+    }
     if (evidenceSelectionRequiresReason({
       selectedText: effectiveSelectedText,
       proposedValue: normalizedValue,
@@ -429,7 +462,9 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     : pendingSelection
       ? "Conclua ou cancele a seleção atual antes de salvar."
       : !dirty
-        ? "Não há alterações para salvar."
+        ? transientOnly
+          ? "Preencha o novo campo ou selecione uma área no documento. Formulários vazios não precisam ser salvos."
+          : "Não há alterações para salvar."
         : null;
   const approvalBlockedReason = !editable
     ? "Esta revisão já foi concluída."
@@ -437,7 +472,11 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       ? "Conclua ou cancele a seleção atual antes de aprovar."
       : dirty
         ? "Salve o rascunho antes de aprovar esta versão."
+        : transientOnly
+          ? "Preencha ou cancele o novo campo antes de aprovar esta versão."
         : null;
+  const selectedFieldIsTransient = reviewFieldPathExists(draft, selectedFieldPath)
+    && !reviewFieldPathExists(workspace.reviewedData, selectedFieldPath);
   const deferredReviewActionLabel = deferredReviewAction?.type === "create_custom_section"
     ? "criar a área personalizada"
     : deferredReviewAction?.type === "start_evidence_selection"
@@ -454,8 +493,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar versão</Button></span></Tooltip>
         </Space>}
       />
-      <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)} type="text">Voltar para o documento</Button>
-      <div className="prisma-review-statusbar"><Tag color="blue">Extraído: preservado</Tag><Tag color={dirty ? "gold" : "green"}>{dirty ? "Alterações não salvas" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A ausência de um campo permanece “não identificado”, nunca uma avaliação negativa.</Typography.Text></div>
+      {changeState.rawChanged ? <Popconfirm cancelText="Continuar revisando" description="Formulários temporários e alterações não salvas serão perdidos." okText="Sair sem salvar" onConfirm={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)} title="Voltar para o documento?"><Button className="prisma-review-back" icon={<ArrowLeftOutlined />} type="text">Voltar para o documento</Button></Popconfirm> : <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)} type="text">Voltar para o documento</Button>}
+      <div className="prisma-review-statusbar"><Tag color="blue">Extraído: preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A ausência de um campo permanece “não identificado”, nunca uma avaliação negativa.</Typography.Text></div>
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
@@ -485,7 +524,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         </div>
         <div className="prisma-review-structured-pane">
           <StructuredReviewPanel
-            activeLinkId={activeLinkId} busy={busy} deferredActionLabel={deferredReviewActionLabel} draft={draft} editable={Boolean(editable)} hasUnsavedChanges={dirty} onDiscardAndContinue={discardUnsavedChangesAndContinue} onDraftChange={(nextDraft) => { setDraft(nextDraft); setValidationIssues([]); setError(null); }} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
+            activeLinkId={activeLinkId} busy={busy} deferredActionLabel={deferredReviewActionLabel} draft={draft} editable={Boolean(editable)} hasTransientChanges={transientOnly} hasUnsavedChanges={dirty} onDiscardAndContinue={discardUnsavedChangesAndContinue} onDraftChange={(nextDraft) => { setDraft(nextDraft); setValidationIssues([]); setError(null); }} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
             onCreateCustomSection={() => {
               if (dirty) { deferReviewAction({ type: "create_custom_section" }); return; }
               startCustomSectionSelection();
@@ -501,7 +540,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={Boolean(pendingSelection)} title="Usar região selecionada">
         {pendingSelection ? <div className="prisma-selection-dialog">
           {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
-          <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. A região continuará rastreável, mas uma correção exige conteúdo e justificativa manual." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
+          <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={selectedFieldIsTransient ? "Este é um novo campo. A seleção preencherá seu conteúdo e salvará a evidência em uma única operação." : pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. A região continuará rastreável, mas uma correção exige conteúdo e justificativa manual." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
           {pendingSelection.refinementCandidates.length ? <section className="prisma-selection-refinement" aria-labelledby="selection-refinement-title">
             <div>
               <Typography.Text id="selection-refinement-title" strong>Conteúdos já mapeados dentro da seleção</Typography.Text>
@@ -529,7 +568,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
               setSelectionError(null);
             }} size="small">Restaurar texto refinado</Button> : null}
           </section> : null}
-          <Radio.Group onChange={(event) => { setPendingAction(event.target.value as ReviewEvidenceAction); setSelectionError(null); }} value={pendingAction}><Space orientation="vertical"><Radio value="correct_current_field">Corrigir campo atual</Radio><Radio value="add_complementary">Adicionar como evidência complementar</Radio>{replacementLinkId ? <Radio value="replace_review_evidence">Substituir evidência da revisão</Radio> : null}<Radio value="create_new_information">Criar nova informação</Radio></Space></Radio.Group>
+          <Radio.Group onChange={(event) => { setPendingAction(event.target.value as ReviewEvidenceAction); setSelectionError(null); }} value={pendingAction}><Space orientation="vertical"><Radio value="correct_current_field">{selectedFieldIsTransient ? "Preencher novo campo" : "Corrigir campo atual"}</Radio>{!selectedFieldIsTransient ? <Radio value="add_complementary">Adicionar como evidência complementar</Radio> : null}{replacementLinkId && !selectedFieldIsTransient ? <Radio value="replace_review_evidence">Substituir evidência da revisão</Radio> : null}<Radio value="create_new_information">Criar nova informação</Radio></Space></Radio.Group>
           {pendingAction === "create_new_information" ? <Select aria-label="Tipo da nova informação" onChange={(value) => {
             setNewInformationType(value);
             if (value === "custom_item") setCustomTargetSectionId(draft.customSections.find((section) => section.format === "list")?.id ?? "");

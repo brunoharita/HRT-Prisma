@@ -16,6 +16,12 @@ export interface ReviewDraftValidationContext {
   existingEmail?: string | null;
 }
 
+export interface ReviewDraftChangeState {
+  rawChanged: boolean;
+  meaningfulChanged: boolean;
+  transientOnly: boolean;
+}
+
 const EXPERIENCE_ID_PATTERN = /^experience_[a-z0-9]{8,64}$/;
 const EDUCATION_ID_PATTERN = /^education_[a-z0-9]{8,64}$/;
 const RESULT_ID_PATTERN = /^result_[a-z0-9]{8,64}$/;
@@ -103,6 +109,52 @@ export function normalizeReviewDraft(draft: StructuredDraft): StructuredDraft {
     uncertainties: normalizeTags(draft.uncertainties),
     notIdentified: normalizeTags(draft.notIdentified),
   };
+}
+
+export function reviewDraftChangeState(
+  baseline: StructuredDraft,
+  draft: StructuredDraft,
+): ReviewDraftChangeState {
+  const rawChanged = JSON.stringify(baseline) !== JSON.stringify(draft);
+  const meaningfulChanged = JSON.stringify(normalizeReviewDraft(baseline)) !== JSON.stringify(normalizeReviewDraft(draft));
+  return { rawChanged, meaningfulChanged, transientOnly: rawChanged && !meaningfulChanged };
+}
+
+export function reviewFieldPathExists(draft: StructuredDraft, fieldPath: string): boolean {
+  if ([
+    "identity.fullName",
+    "contact.city",
+    "contact.state",
+    "contact.phone",
+    "contact.email",
+    "contact.linkedin",
+    "professionalTitle",
+    "areasOfExpertise",
+    "professionalObjective",
+    "summary",
+    "certifications",
+    "languages",
+    "competencies",
+    "uncertainties",
+    "notIdentified",
+  ].includes(fieldPath)) return true;
+
+  const segments = fieldPath.split(".");
+  if (segments[0] === "experiences" && segments.length === 3) {
+    return ["role", "organization", "period", "description"].includes(segments[2] ?? "")
+      && draft.experiences.some((item) => item.id === segments[1] || reviewEntityPathSegment("experience", item.id) === segments[1]);
+  }
+  if (segments[0] === "education" && segments.length === 3) {
+    return ["course", "institution", "period", "description"].includes(segments[2] ?? "")
+      && draft.education.some((item) => item.id === segments[1] || reviewEntityPathSegment("education", item.id) === segments[1]);
+  }
+  if (segments[0] === "keyResults" && segments.length === 3 && segments[2] === "value") {
+    return draft.keyResults.some((item) => item.id === segments[1]);
+  }
+  if (segments[0] === "customSections" && segments.length === 5 && segments[2] === "items" && segments[4] === "value") {
+    return draft.customSections.some((section) => section.id === segments[1] && section.items.some((item) => item.id === segments[3]));
+  }
+  return false;
 }
 
 export function validateReviewDraftForSave(
