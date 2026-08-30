@@ -39,6 +39,7 @@ import {
   CUSTOM_PROFILE_SECTION_METHOD_VERSION,
   type LearnedCustomSectionDefinition,
 } from "../../domain/customProfileSections";
+import { legacyReviewEntityId } from "../../domain/reviewFieldLifecycle";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -599,6 +600,7 @@ export const personIngestionService = {
     if (!review) return null;
     const [
       personResult,
+      personPrivateResult,
       documentResult,
       revisionResult,
       changeResult,
@@ -611,6 +613,7 @@ export const personIngestionService = {
       adaptationEventResult,
     ] = await Promise.all([
       supabase.from("people").select("full_name").eq("organization_id", organizationId).eq("id", review.person_id).single(),
+      supabase.from("person_private_data").select("phone, phone_e164, phone_national_number, email").eq("organization_id", organizationId).eq("person_id", review.person_id).maybeSingle(),
       supabase.from("documents")
         .select("filename, document_version, page_count, storage_path, source_type")
         .eq("organization_id", organizationId).eq("id", review.document_id).single(),
@@ -644,6 +647,7 @@ export const personIngestionService = {
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
     ]);
     throwIfError(personResult.error, "Não foi possível carregar a Pessoa da revisão.");
+    throwIfError(personPrivateResult.error, "Não foi possível carregar o contato privado da Pessoa.");
     throwIfError(documentResult.error, "Não foi possível carregar o documento da revisão.");
     throwIfError(revisionResult.error, "Não foi possível carregar as revisões salvas.");
     throwIfError(changeResult.error, "Não foi possível carregar as correções da revisão.");
@@ -670,6 +674,10 @@ export const personIngestionService = {
       id: review.id,
       personId: review.person_id,
       personName: personResult.data.full_name,
+      personPrivateContact: {
+        phone: personPrivateResult.data?.phone_e164 ?? personPrivateResult.data?.phone_national_number ?? personPrivateResult.data?.phone ?? null,
+        email: personPrivateResult.data?.email ?? null,
+      },
       documentId: review.document_id,
       documentName: documentResult.data.filename,
       documentVersion: documentResult.data.document_version,
@@ -1170,8 +1178,34 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
         ? [{ id: item.id, value: item.value }]
         : []
     )) : [],
-    experiences: Array.isArray(value.experiences) ? value.experiences : [],
-    education: Array.isArray(value.education) ? value.education : [],
+    experiences: Array.isArray(value.experiences) ? value.experiences.flatMap((item, index) => {
+      if (!item || typeof item !== "object") return [];
+      const candidate = item as Partial<StructuredDraft["experiences"][number]>;
+      return [{
+        id: typeof candidate.id === "string" ? candidate.id : legacyReviewEntityId("experience", index),
+        source: candidate.source === "human" ? "human" : "extracted",
+        role: typeof candidate.role === "string" ? candidate.role : null,
+        organization: typeof candidate.organization === "string" ? candidate.organization : null,
+        period: typeof candidate.period === "string" ? candidate.period : null,
+        description: typeof candidate.description === "string" ? candidate.description : null,
+        evidenceText: typeof candidate.evidenceText === "string" ? candidate.evidenceText : "",
+        page: typeof candidate.page === "number" ? candidate.page : null,
+      }];
+    }) : [],
+    education: Array.isArray(value.education) ? value.education.flatMap((item, index) => {
+      if (!item || typeof item !== "object") return [];
+      const candidate = item as Partial<StructuredDraft["education"][number]>;
+      return [{
+        id: typeof candidate.id === "string" ? candidate.id : legacyReviewEntityId("education", index),
+        source: candidate.source === "human" ? "human" : "extracted",
+        course: typeof candidate.course === "string" ? candidate.course : null,
+        institution: typeof candidate.institution === "string" ? candidate.institution : null,
+        period: typeof candidate.period === "string" ? candidate.period : null,
+        description: typeof candidate.description === "string" ? candidate.description : null,
+        evidenceText: typeof candidate.evidenceText === "string" ? candidate.evidenceText : "",
+        page: typeof candidate.page === "number" ? candidate.page : null,
+      }];
+    }) : [],
     certifications: Array.isArray(value.certifications) ? value.certifications : [],
     languages: Array.isArray(value.languages) ? value.languages : [],
     competencies: Array.isArray(value.competencies) ? value.competencies : [],

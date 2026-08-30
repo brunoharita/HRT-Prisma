@@ -32,6 +32,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-020](ADR-020-spatial-evidence-refinement.md) | accepted | Character-level subtraction and immutable refinement decisions for overlapping evidence |
 | [ADR-021](ADR-021-canonical-visual-character-map.md) | accepted | Zoom-independent canonical character geometry for visual evidence |
 | [ADR-022](ADR-022-structured-resume-summary-and-private-contact-boundary.md) | accepted | Structured resume summary with private canonical contact boundary |
+| [ADR-023](ADR-023-stable-review-field-lifecycle.md) | accepted | Stable repeatable-field identity, optional-value normalization, and explicit add/remove lifecycle |
 
 ## Rules
 

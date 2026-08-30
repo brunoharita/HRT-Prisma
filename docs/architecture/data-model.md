@@ -39,6 +39,8 @@ Estados de documento implementados: `pending`, `received`, `processing`, `proces
 
 `spatial_evidence_regions` exige `organization_id`, documento, versão, review, página e coordenadas `x/y/width/height` entre 0 e 1, inclusive os limites somados. `profile_review_evidence_links` referencia exatamente uma evidência original ou uma região espacial. `profile_review_evidence_events` é append-only. A RPC M5 cria região, vínculo, revisão e evento atomicamente; evidências históricas anteriores permanecem válidas sem coordenadas.
 
+Experiências e formações novas carregam `id` estável e `source`. Vínculos de evidência, refinamentos e sugestões adaptativas usam esse ID, de modo que inserir ou remover outro item não desloca o registro semântico. Caminhos numéricos permanecem válidos apenas para compatibilidade histórica. O banco valida novas extrações e cada atualização do rascunho, exigindo nome, contato efetivo e conteúdo profissional material sem promover PII ao perfil.
+
 Em `spatial-evidence` 1.2.0, `raw_selected_text` preserva o conteúdo do retângulo e `selected_text` preserva o conteúdo efetivamente vinculado. `profile_review_evidence_refinements` registra, de forma append-only, se cada região espacial sobreposta de um campo irmão foi excluída ou reincluída. O banco rejeita refinamento entre registros, páginas, documentos, versões ou tenants diferentes e mantém DML direto revogado.
 
 `document_page_extractions.layout_blocks` preserva linhas visuais normalizadas e `field_evidence` preserva descritores mínimos por campo. Ao abrir a revisão, somente coordenadas realmente extraídas geram regiões `source=system`. `extraction_learning_cases` referencia eventos humanos sem duplicar texto integral e só é promovida a caso aprovado quando a revisão é aprovada.

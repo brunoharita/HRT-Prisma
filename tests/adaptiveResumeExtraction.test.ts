@@ -26,6 +26,10 @@ function emptyStructuredSummary(): Pick<StructuredDraft, "identity" | "contact" 
   };
 }
 
+function legacyExperience(index: number, input: Omit<StructuredDraft["experiences"][number], "id" | "source">): StructuredDraft["experiences"][number] {
+  return { id: `experience_legacy${String(index).padStart(8, "0")}`, source: "extracted", ...input };
+}
+
 test("adaptive extraction separates role, descriptor, period and company on the next visual line", () => {
   const layoutLines = [
     line("Experiência profissional", 0.08, 0.08, 0.45, "strong"),
@@ -52,8 +56,9 @@ test("adaptive extraction separates role, descriptor, period and company on the 
   assert.equal(result.draft.experiences[0]?.period, "Jan/25 - Atual");
   assert.equal(result.draft.experiences[1]?.organization, "Bencato Engenharia e Empreendimentos");
   assert.equal(result.pattern.experienceHeader, "role-period-company-next-line");
-  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "experiences.0.organization" && item.y === 0.145));
-  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "experiences.0.period" && item.text === "Jan/25 - Atual"));
+  const firstId = result.draft.experiences[0]!.id;
+  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === `experiences.${firstId}.organization` && item.y === 0.145));
+  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === `experiences.${firstId}.period` && item.text === "Jan/25 - Atual"));
 });
 
 test("structured summary extracts only explicit identity, contact, positioning, summary and item-level results", () => {
@@ -161,8 +166,8 @@ test("adaptive suggestions never copy the corrected value into sibling records",
   const extracted: StructuredDraft = {
     ...emptyStructuredSummary(),
     experiences: [
-      { role: "Diretor", organization: "Transformação Jan/25 - Atual", period: null, evidenceText: "", page: 1 },
-      { role: "Gerente", organization: "Acme Ltda Fev/21 - Dez/24", period: null, evidenceText: "", page: 1 },
+      legacyExperience(0, { role: "Diretor", organization: "Transformação Jan/25 - Atual", period: null, evidenceText: "", page: 1 }),
+      legacyExperience(1, { role: "Gerente", organization: "Acme Ltda Fev/21 - Dez/24", period: null, evidenceText: "", page: 1 }),
     ],
     education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
   };
@@ -203,10 +208,10 @@ test("a correction relearns complete sibling blocks from the original document a
   const extracted: StructuredDraft = {
     ...emptyStructuredSummary(),
     experiences: [
-      { role: "Fundador & Diretor Executivo", organization: "Transformação, Tecnologia e Produtos Digitais Jan/25 - Atual", period: null, evidenceText: sourceLines[1]!, page: 2 },
-      { role: "Diretor de Operações Externo", organization: "Transformação Operacional Abr/25 - Mar/26", period: null, evidenceText: sourceLines[5]!, page: 2 },
-      { role: "Analista de Sistemas e Inteligência de Negócios Sênior Nov/12", organization: "Abr/18", period: null, evidenceText: sourceLines[9]!, page: 2 },
-      { role: "Desenvolvedor de Software", organization: "NM Sistemas Ltda. | Jun/08 - Nov/12 | Desenvolvimento de software e bancos de dados.", period: null, evidenceText: sourceLines[13]!, page: 2 },
+      legacyExperience(0, { role: "Fundador & Diretor Executivo", organization: "Transformação, Tecnologia e Produtos Digitais Jan/25 - Atual", period: null, evidenceText: sourceLines[1]!, page: 2 }),
+      legacyExperience(1, { role: "Diretor de Operações Externo", organization: "Transformação Operacional Abr/25 - Mar/26", period: null, evidenceText: sourceLines[5]!, page: 2 }),
+      legacyExperience(2, { role: "Analista de Sistemas e Inteligência de Negócios Sênior Nov/12", organization: "Abr/18", period: null, evidenceText: sourceLines[9]!, page: 2 }),
+      legacyExperience(3, { role: "Desenvolvedor de Software", organization: "NM Sistemas Ltda. | Jun/08 - Nov/12 | Desenvolvimento de software e bancos de dados.", period: null, evidenceText: sourceLines[13]!, page: 2 }),
     ],
     education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
   };
@@ -247,8 +252,8 @@ test("document learning reports an unresolved sibling instead of inventing a blo
   const extracted: StructuredDraft = {
     ...emptyStructuredSummary(),
     experiences: [
-      { role: "Diretor", organization: "Jan/25 - Atual", period: null, evidenceText: "Diretor Jan/25 - Atual", page: 1 },
-      { role: "Gerente", organization: "Não identificada", period: null, evidenceText: "linha inexistente", page: 1 },
+      legacyExperience(0, { role: "Diretor", organization: "Jan/25 - Atual", period: null, evidenceText: "Diretor Jan/25 - Atual", page: 1 }),
+      legacyExperience(1, { role: "Gerente", organization: "Não identificada", period: null, evidenceText: "linha inexistente", page: 1 }),
     ],
     education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
   };

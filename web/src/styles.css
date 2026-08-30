@@ -2408,6 +2408,14 @@ textarea {
 .prisma-entity-review,
 .prisma-review-field-stack { display: grid; gap: 10px; }
 
+.prisma-entity-review__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .prisma-summary-review { align-content: start; }
 .prisma-summary-section-heading { display: grid; gap: 2px; padding: 2px 7px 0; }
 .prisma-summary-section-heading .ant-typography { margin: 0; }
@@ -2430,7 +2438,16 @@ textarea {
 }
 
 .prisma-review-field.is-selected { background: #f8fbff; border-color: #bdd3ff; box-shadow: inset 3px 0 0 #155eef; }
+.prisma-review-field.has-validation-error { background: #fff7f6; border-color: #ffccc7; }
+.prisma-required-marker { color: #cf1322; }
 .prisma-review-value-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 8px; }
+
+.prisma-repeatable-review-item { display: grid; gap: 6px; }
+.prisma-repeatable-review-item > .ant-btn { justify-self: end; }
+
+.prisma-tag-editor { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 6px; }
+.prisma-tag-editor > small,
+.prisma-tag-editor > .ant-typography { grid-column: 1 / -1; }
 
 .prisma-custom-section-heading { align-items: flex-start; padding: 2px 0 4px; }
 .prisma-custom-section-heading .ant-typography,

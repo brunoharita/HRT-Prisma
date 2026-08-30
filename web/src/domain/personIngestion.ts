@@ -16,7 +16,7 @@ export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
 export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
-export const EXTRACTION_DRAFT_VERSION = "4.0.0";
+export const EXTRACTION_DRAFT_VERSION = "5.0.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -167,6 +167,28 @@ export interface StructuredKeyResult {
   value: string;
 }
 
+export interface StructuredExperience {
+  id: string;
+  source: "extracted" | "human";
+  role: string | null;
+  organization: string | null;
+  period: string | null;
+  description?: string | null;
+  evidenceText: string;
+  page: number | null;
+}
+
+export interface StructuredEducation {
+  id: string;
+  source: "extracted" | "human";
+  course: string | null;
+  institution: string | null;
+  period: string | null;
+  description?: string | null;
+  evidenceText: string;
+  page: number | null;
+}
+
 export interface StructuredDraft {
   identity: StructuredResumeIdentity;
   contact: StructuredResumeContact;
@@ -175,8 +197,8 @@ export interface StructuredDraft {
   professionalObjective: string | null;
   summary: string | null;
   keyResults: StructuredKeyResult[];
-  experiences: Array<{ role: string; organization: string; period: string | null; description?: string | null; evidenceText: string; page: number }>;
-  education: Array<{ course: string; institution: string; period: string | null; description?: string | null; evidenceText: string; page: number }>;
+  experiences: StructuredExperience[];
+  education: StructuredEducation[];
   certifications: string[];
   languages: string[];
   competencies: string[];
@@ -257,6 +279,7 @@ export interface ProfileReviewWorkspace {
   id: string;
   personId: string;
   personName: string;
+  personPrivateContact: { phone: string | null; email: string | null };
   documentId: string;
   documentName: string;
   documentVersion: number;

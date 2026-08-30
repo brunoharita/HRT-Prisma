@@ -6,11 +6,11 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 
 | Contrato | Owner | Versão | Consumidores | Status | Evidência | Ambiente | Versão desconhecida |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `professional-profile` | AI/domain | 2.0.0 | review, retrieval, matching, repository | schema ativo em QA; runtime web local | perfil versionado com posicionamento, objetivo, resumo, resultados e áreas personalizadas; PII de contato excluída | local/QA | bloquear |
+| `professional-profile` | AI/domain | 3.0.0 | review, retrieval, matching, repository | schema ativo em QA; runtime web local | perfil versionado com IDs estáveis para experiências e formações; PII de contato excluída | local/QA | bloquear |
 | `document-processing-state` | application | 2.0.0 | importer, repository, operations, review | ativo em QA | enums e RPCs M2-C | local/QA | bloquear e registrar falha |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
 | `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |
-| `adaptive-resume-extraction` | AI/application | 3.0.0 | ingestão M2-B e revisão | persistência ativa em QA; runtime web local | geometria, blocos profissionais e resumo estruturado estritamente documental | local/QA | exigir revisão/reprocessamento |
+| `adaptive-resume-extraction` | AI/application | 4.0.0 | ingestão M2-B e revisão | persistência ativa em QA; runtime web local | geometria, blocos profissionais, resumo documental e IDs estáveis | local/QA | exigir revisão/reprocessamento |
 | `inference-ontology` | AI/domain | 1.0.0 | profile, search, matching | implementado | `inference-ontology-1.0.0` | local | bloquear inferência |
 | `structured-retrieval` | AI | 1.0.0 | search | implementado | `structured-lexical-1.0.0` | local | bloquear consulta |
 | `explainable-matching` | AI/domain | 1.0.0 | vacancy evaluation | implementado | `matching-explainable-1.0.0` | local | bloquear avaliação |
@@ -21,15 +21,16 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
-| `person-ingestion` | application/data | 6.0.0 | intake, Pessoas, documentos, perfil | schema ativo em QA; runtime web local | intake, layout, evidência por campo e promoção separada entre perfil profissional e contato privado | local/QA | bloquear processamento |
+| `person-ingestion` | application/data | 7.0.0 | intake, Pessoas, documentos, perfil | schema ativo em QA; runtime web local | intake, layout, evidência por campo, ciclo de vida repetível e promoção privada | local/QA | bloquear processamento |
 | `resume-intake` | application/data/security | 1.0.0 | Home, Pessoas, importador | implementado localmente | `resume_intakes` e cinco RPCs controladas | local | bloquear criação/vínculo |
-| `human-profile-review` | application/domain | 3.0.0 | revisão, perfil, auditoria | schema ativo em QA; runtime web local | revisão estruturada de identificação, contato, posicionamento, resumo e resultados com evidência independente | local/QA | bloquear promoção |
+| `human-profile-review` | application/domain | 4.0.0 | revisão, perfil, auditoria | schema ativo em QA; runtime web local | obrigatoriedade sensível, normalização de vazios, inclusão e remoção reversível com identidade estável | local/QA | bloquear promoção |
 | `spatial-evidence` | application/data | 1.2.0 | PDF viewer, revisão, auditoria | schema ativo em QA; web local | região bruta, texto efetivo, máscara por caractere ou símbolo e decisões imutáveis | local/QA | bloquear mutação |
 | `document-operation-idempotency` | application/data | 1.0.0 | cadastro, retry, persistência e aprovação | ativo em QA | `document_operations`, fingerprints e locks | local/QA | rejeitar conflito |
 | `pdf-native-extraction` | AI/application | 2.0.0 | ingestão PDF | implementado localmente | `pdfjs-5.4.296/layout-v2` | local | exigir revisão/reprocessamento |
 | `selective-ocr` | AI/application | 1.0.0 | páginas sem texto nativo suficiente | ativo localmente | `tesseract.js-7.0.0/por+eng-v1` | local | falhar sem perfil |
-| `extraction-draft` | AI/domain | 4.0.0 | evidência e geração de perfil | schema ativo em QA; runtime web local | `prisma-layout-adaptive-v3` | local/QA | bloquear promoção |
+| `extraction-draft` | AI/domain | 5.0.0 | evidência e geração de perfil | schema ativo em QA; runtime web local | `prisma-layout-adaptive-v4` | local/QA | bloquear promoção |
 | `structured-resume-summary` | AI/domain/security | 1.0.0 | extração, revisão, Pessoas e perfil | schema ativo em QA; runtime web local | campos explícitos, IDs estáveis de resultados e fronteira privada de PII | local/QA | bloquear promoção |
+| `review-field-lifecycle` | application/domain/data | 1.0.0 | revisão, evidência, extração e aprovação | schema ativo em QA; runtime web local | IDs estáveis, compatibilidade numérica, descarte de vazios e gates de salvamento | local/QA | bloquear escrita |
 | `extraction-learning-case` | AI/data | 1.0.0 | avaliação e promoção de extração | ativo em QA | referências auditáveis a correções aprovadas | local/QA | bloquear aprendizado automático |
 | `organization-extraction-pattern` | AI/data | 1.0.0 | primeira extração de currículos futuros | ativo em QA, consumo no runtime local | sinal estrutural tenant-scoped sem valores pessoais | local/QA | ignorar versão desconhecida |
 | `custom-profile-section` | AI/domain | 1.0.0 | extração, revisão, perfil | schema ativo em QA; web local | estrutura limitada e evidência por item | local/QA | bloquear promoção |

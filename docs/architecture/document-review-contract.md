@@ -5,14 +5,15 @@
 | Contrato | Versão | Regra material |
 | --- | --- | --- |
 | `document-processing-state` | 2.0.0 | estados operacionais e de revisão são explícitos e falham fechados |
-| `person-ingestion` | 6.0.0 | cadastro, retry e persistência são idempotentes; aprovação separa perfil profissional de identificação e contato privados |
+| `person-ingestion` | 7.0.0 | cadastro, retry e persistência são idempotentes; aprovação separa perfil profissional de identificação e contato privados |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
-| `human-profile-review` | 3.0.0 | revisão possui rascunho, resumo estruturado, resultado com evidência por item, releitura por bloco, refinamento reversível, mudanças por campo e aprovação atômica |
+| `human-profile-review` | 4.0.0 | revisão possui obrigatoriedade sensível, normalização de vazios, conjuntos repetíveis com ID estável, remoção reversível e aprovação atômica |
 | `spatial-evidence` | 1.2.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas; preserva texto bruto, texto efetivo e decisões de subtração entre campos irmãos |
 | `document-operation-idempotency` | 1.0.0 | mesma chave e fingerprint retornam o mesmo resultado; payload diferente conflita |
-| `professional-profile` | 2.0.0 | perfil aprovado preserva proveniência, posicionamento, objetivo, resumo, resultados e áreas personalizadas, sem contato privado |
+| `professional-profile` | 3.0.0 | perfil aprovado preserva proveniência e IDs estáveis de experiências e formações, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
 | `structured-resume-summary` | 1.0.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; PII nunca é promovida ao perfil profissional |
+| `review-field-lifecycle` | 1.0.0 | vazios opcionais são normalizados; nome, contato e conteúdo profissional mínimo bloqueiam salvamento inválido; caminhos antigos continuam legíveis |
 
 ## Estados
 
@@ -53,6 +54,8 @@ No refinamento 1.2.0, o retângulo bruto permanece em `raw_selected_text` e o re
 Operações espaciais e aprovação permanecem indisponíveis enquanto uma edição manual existir somente no estado local. A interface deve explicar essa dependência no contexto da ação, permitir que o operador registre a intenção mesmo com o bloqueio visível e retomar adicionar evidência ou criar área personalizada somente depois de salvar ou descartar explicitamente as mudanças. Salvamento manual continua exigindo justificativa; ausência de justificativa direciona o foco ao campo correspondente. O bloqueio nunca pode depender apenas de cor, opacidade ou conhecimento prévio do fluxo.
 
 Uma área personalizada usa o caminho `customSections.<sectionId>.items.<itemId>.value`. Sua criação começa por seleção explícita no documento. A aprovação pode promover somente título normalizado, formato, versão e contagem de confirmação ao catálogo estrutural da organização; um ledger append-only referencia a revisão confirmadora. O valor do item e o trecho de evidência não são copiados para nenhum dos dois. `uncertainties` e `notIdentified` são pendências diagnósticas da extração, não fatos do perfil.
+
+Experiências e formações novas usam caminhos `experiences.<experienceId>.<campo>` e `education.<educationId>.<campo>`. Caminhos numéricos históricos permanecem aceitos. O salvamento converte escalares opcionais vazios em `null`, remove itens repetíveis inteiramente vazios e mantém listas como arrays, sem fabricar “Não identificado”. Nome completo, telefone ou e-mail e ao menos uma informação profissional material são gates explícitos. Experiência exige Empresa ou Cargo; formação exige Curso ou Instituição. Inclusão e remoção são decisões humanas reversíveis antes do salvamento.
 
 No modal de seleção, aplicar o texto reconhecido sem edição é uma operação autoexplicativa e não exige justificativa. Uma justificativa continua obrigatória quando o revisor altera semanticamente o texto recuperado ou informa manualmente conteúdo que a região não reconheceu. Validações e falhas da operação permanecem dentro do modal; nenhum erro pode ficar oculto atrás de sua camada de bloqueio.
 

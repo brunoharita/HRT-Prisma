@@ -20,6 +20,14 @@ import {
   updateCustomSectionItemValue,
   validateCustomSectionName,
 } from "../domain/customProfileSections";
+import {
+  createReviewEntityId,
+  normalizeReviewDraft,
+  reviewEntityFieldPath,
+  reviewEntityPathSegment,
+  validateReviewDraftForSave,
+  type ReviewDraftIssue,
+} from "../domain/reviewFieldLifecycle";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -64,12 +72,14 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [mobilePane, setMobilePane] = useState<"document" | "review">("review");
   const [adaptiveReport, setAdaptiveReport] = useState<AdaptiveSuggestionReport | null>(null);
   const [deferredReviewAction, setDeferredReviewAction] = useState<DeferredReviewAction | null>(null);
+  const [validationIssues, setValidationIssues] = useState<ReviewDraftIssue[]>([]);
 
   async function refresh() {
     const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
     if (!result) throw new Error("Revisão não encontrada nesta empresa.");
     setWorkspace(result);
     setDraft(cloneDraft(result.reviewedData));
+    setValidationIssues([]);
     return result;
   }
 
@@ -83,7 +93,9 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         if (!result) throw new Error("Revisão não encontrada nesta empresa.");
         setWorkspace(result);
         setDraft(cloneDraft(result.reviewedData));
-        setSelectedFieldPath(result.reviewedData.experiences.length ? "experiences.0.role" : "summary");
+        setSelectedFieldPath(result.reviewedData.experiences[0]
+          ? reviewEntityFieldPath("experience", result.reviewedData.experiences[0], "role")
+          : "identity.fullName");
         if (result.documentStoragePath) {
           const url = await personIngestionService.createPrivateDownloadUrl(result.documentStoragePath);
           if (current) setPdfUrl(url);
@@ -112,10 +124,25 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
   async function handleSave(continuation: DeferredReviewAction | null = deferredReviewAction) {
     if (!workspace || !draft) return;
-    const summaryError = validateStructuredSummary(draft);
-    if (summaryError) { setError(summaryError); return; }
-    const customSectionError = validateCustomSections(draft);
-    if (customSectionError) { setError(customSectionError); return; }
+    const normalizedDraft = normalizeReviewDraft(draft);
+    const issues = validateReviewDraftForSave(normalizedDraft, {
+      existingPhone: workspace.personPrivateContact.phone,
+      existingEmail: workspace.personPrivateContact.email,
+    });
+    const customSectionError = validateCustomSections(normalizedDraft);
+    if (issues.length || customSectionError) {
+      const nextIssues = customSectionError ? [...issues, { fieldPath: "customSections", message: customSectionError }] : issues;
+      setDraft(normalizedDraft);
+      setValidationIssues(nextIssues);
+      setError(nextIssues[0]!.message);
+      setSelectedFieldPath(nextIssues[0]!.fieldPath);
+      window.requestAnimationFrame(() => {
+        const field = document.querySelector(`[data-review-field-path="${nextIssues[0]!.fieldPath}"]`);
+        field?.scrollIntoView({ behavior: "smooth", block: "center" });
+        field?.querySelector<HTMLElement>("input, textarea, [role=combobox]")?.focus();
+      });
+      return;
+    }
     if (reason.trim().length < 3) {
       setError("Explique objetivamente a alteração manual antes de salvar.");
       window.requestAnimationFrame(() => {
@@ -127,7 +154,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     setBusy(true); setError(null); setSuccess(null);
     try {
-      await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, draft, reason);
+      await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft, reason);
       await refresh();
       setReason("");
       setDeferredReviewAction(null);
@@ -144,6 +171,16 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   async function handleApprove() {
     if (!workspace || !draft) return;
     if (dirty || pendingSelection) { setError("Conclua ou cancele a seleção e salve as alterações antes de aprovar."); return; }
+    const issues = validateReviewDraftForSave(normalizeReviewDraft(draft), {
+      existingPhone: workspace.personPrivateContact.phone,
+      existingEmail: workspace.personPrivateContact.email,
+    });
+    if (issues.length) {
+      setValidationIssues(issues);
+      setError(issues[0]!.message);
+      setSelectedFieldPath(issues[0]!.fieldPath);
+      return;
+    }
     setBusy(true); setError(null); setSuccess(null);
     try {
       const approved = await personIngestionService.approveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion);
@@ -165,7 +202,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         reviewId: workspace.id,
         expectedLockVersion: workspace.lockVersion,
         reviewedData: nextDraft,
-        sourceFieldPath: `experiences.${adaptiveReport.sourceIndex}.${adaptiveReport.sourceField}`,
+        sourceFieldPath: reviewEntityFieldPath("experience", draft.experiences[adaptiveReport.sourceIndex]!, adaptiveReport.sourceField),
         patternKey: adaptiveReport.patternKey,
         methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
         suggestions,
@@ -360,16 +397,19 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       });
       const refreshed = await refresh();
       if (pendingAction === "correct_current_field" && nextDraft) {
-        const match = /^experiences\.(\d+)\.(role|organization|period|description)$/.exec(targetFieldPath);
+        const match = /^experiences\.([a-z0-9_]+)\.(role|organization|period|description)$/.exec(targetFieldPath);
         if (match) {
-          const report = proposeSiblingBlockCorrections({
-            pages: refreshed.pages,
-            draft: refreshed.reviewedData,
-            extracted: refreshed.extractedData,
-            sourceIndex: Number(match[1]),
-            sourceField: match[2] as ExperienceFieldName,
-          });
-          setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
+          const sourceIndex = findReviewEntityIndex(refreshed.reviewedData.experiences, "experience", match[1]!);
+          if (sourceIndex >= 0) {
+            const report = proposeSiblingBlockCorrections({
+              pages: refreshed.pages,
+              draft: refreshed.reviewedData,
+              extracted: refreshed.extractedData,
+              sourceIndex,
+              sourceField: match[2] as ExperienceFieldName,
+            });
+            setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
+          }
         }
       }
       setSelectedFieldPath(targetFieldPath);
@@ -445,7 +485,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         </div>
         <div className="prisma-review-structured-pane">
           <StructuredReviewPanel
-            activeLinkId={activeLinkId} busy={busy} deferredActionLabel={deferredReviewActionLabel} draft={draft} editable={Boolean(editable)} hasUnsavedChanges={dirty} onDiscardAndContinue={discardUnsavedChangesAndContinue} onDraftChange={setDraft} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
+            activeLinkId={activeLinkId} busy={busy} deferredActionLabel={deferredReviewActionLabel} draft={draft} editable={Boolean(editable)} hasUnsavedChanges={dirty} onDiscardAndContinue={discardUnsavedChangesAndContinue} onDraftChange={(nextDraft) => { setDraft(nextDraft); setValidationIssues([]); setError(null); }} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
             onCreateCustomSection={() => {
               if (dirty) { deferReviewAction({ type: "create_custom_section" }); return; }
               startCustomSectionSelection();
@@ -453,7 +493,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             onFieldSelect={handleFieldSelect} onReasonChange={setReason}
             onSaveAndContinue={() => void handleSave()}
             onStartSelection={(fieldPath) => { if (dirty) { deferReviewAction({ type: "start_evidence_selection", fieldPath }); return; } startEvidenceSelection(fieldPath); }}
-            reason={reason} selectedFieldPath={selectedFieldPath} workspace={workspace}
+            reason={reason} selectedFieldPath={selectedFieldPath} validationIssues={validationIssues} workspace={workspace}
           />
         </div>
       </div>
@@ -536,7 +576,7 @@ function linkPriority(kind: "original" | "reviewer" | "complementary", preferred
   if (kind === "original") return spatial ? 3 : 4;
   return 5;
 }
-function fieldsOverlap(left: string, right: string): boolean { return left === right || left.startsWith(`${right}.`) || right.startsWith(`${left}.`); }
+function fieldsOverlap(left: string, right: string): boolean { return fieldPathMatches(left, right); }
 
 function extractedTextAtFieldPath(source: unknown, fieldPath: string): string | null {
   let value = source;
@@ -601,10 +641,16 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
     const key = root as "certifications" | "languages" | "competencies" | "uncertainties" | "notIdentified";
     return { ...next, [key]: value.split(/[,;\n]/).map((item) => item.trim()).filter(Boolean) };
   }
-  const index = Number(segments[1]);
+  const entitySegment = segments[1] ?? "";
   const field = segments[2];
-  if (root === "experiences" && Number.isInteger(index) && next.experiences[index]) next.experiences[index] = { ...next.experiences[index]!, [field ?? "description"]: value };
-  if (root === "education" && Number.isInteger(index) && next.education[index]) next.education[index] = { ...next.education[index]!, [field ?? "description"]: value };
+  const experienceIndex = root === "experiences" ? findReviewEntityIndex(next.experiences, "experience", entitySegment) : -1;
+  const educationIndex = root === "education" ? findReviewEntityIndex(next.education, "education", entitySegment) : -1;
+  if (experienceIndex >= 0 && next.experiences[experienceIndex]) {
+    next.experiences[experienceIndex] = { ...next.experiences[experienceIndex]!, [field ?? "description"]: value || null };
+  }
+  if (educationIndex >= 0 && next.education[educationIndex]) {
+    next.education[educationIndex] = { ...next.education[educationIndex]!, [field ?? "description"]: value || null };
+  }
   return next;
 }
 
@@ -616,8 +662,16 @@ function addNewInformation(
   custom: { customSectionName: string; customSectionFormat: CustomProfileSectionFormat; customTargetSectionId: string },
 ): { draft: StructuredDraft; fieldPath: string } {
   const next = cloneDraft(draft);
-  if (type === "experience") { const index = next.experiences.length; next.experiences.push({ role: value, organization: "Não identificada", period: null, description: null, evidenceText: value, page }); return { draft: next, fieldPath: `experiences.${index}.role` }; }
-  if (type === "education") { const index = next.education.length; next.education.push({ course: value, institution: "Não identificada", period: null, description: null, evidenceText: value, page }); return { draft: next, fieldPath: `education.${index}.course` }; }
+  if (type === "experience") {
+    const item = { id: createReviewEntityId("experience"), source: "human" as const, role: value, organization: null, period: null, description: null, evidenceText: value, page };
+    next.experiences.push(item);
+    return { draft: next, fieldPath: reviewEntityFieldPath("experience", item, "role") };
+  }
+  if (type === "education") {
+    const item = { id: createReviewEntityId("education"), source: "human" as const, course: value, institution: null, period: null, description: null, evidenceText: value, page };
+    next.education.push(item);
+    return { draft: next, fieldPath: reviewEntityFieldPath("education", item, "course") };
+  }
   if (type === "key_result") {
     const id = `result_${crypto.randomUUID().replaceAll("-", "")}`;
     next.keyResults.push({ id, value });
@@ -634,28 +688,15 @@ function splitList(value: string): string[] {
   return [...new Set(value.split(/[,;|\n]/).map((item) => item.trim()).filter(Boolean))];
 }
 
-function validateStructuredSummary(draft: StructuredDraft): string | null {
-  const fields: Array<[string, string | null, number]> = [
-    ["Nome completo", draft.identity.fullName, 160],
-    ["Cidade", draft.contact.city, 120],
-    ["Estado", draft.contact.state, 80],
-    ["Telefone", draft.contact.phone, 40],
-    ["E-mail", draft.contact.email, 320],
-    ["Perfil do LinkedIn", draft.contact.linkedin, 500],
-    ["Cargo ou título profissional", draft.professionalTitle, 240],
-    ["Objetivo profissional", draft.professionalObjective, 4_000],
-    ["Resumo profissional", draft.summary, 12_000],
-  ];
-  const tooLong = fields.find(([, value, limit]) => value && value.trim().length > limit);
-  if (tooLong) return `${tooLong[0]} excede o limite de ${tooLong[2]} caracteres.`;
-  if (draft.contact.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.contact.email.trim())) return "Informe um e-mail válido.";
-  if (draft.contact.linkedin && !/^https:\/\/(?:[a-z0-9-]+\.)?linkedin\.com\/in\/[a-z0-9%_.-]+\/?$/i.test(draft.contact.linkedin.trim())) return "Informe a URL completa do perfil do LinkedIn.";
-  if (draft.areasOfExpertise.length > 30 || draft.areasOfExpertise.some((item) => !item.trim() || item.trim().length > 120)) return "Áreas de atuação deve conter até 30 itens válidos de no máximo 120 caracteres.";
-  if (new Set(draft.areasOfExpertise.map((item) => item.trim().toLocaleLowerCase("pt-BR"))).size !== draft.areasOfExpertise.length) return "Áreas de atuação possui itens duplicados.";
-  if (draft.keyResults.length > 50) return "Principais resultados deve conter no máximo 50 itens.";
-  if (draft.keyResults.some((item) => !/^result_[a-z0-9]{8,64}$/.test(item.id) || !item.value.trim() || item.value.trim().length > 4_000)) return "Principais resultados possui um item vazio ou inválido.";
-  if (new Set(draft.keyResults.map((item) => item.id)).size !== draft.keyResults.length) return "Principais resultados possui identificadores duplicados.";
-  return null;
+function findReviewEntityIndex(
+  items: Array<{ id: string }>,
+  kind: "experience" | "education",
+  segment: string,
+): number {
+  const direct = items.findIndex((item) => item.id === segment || reviewEntityPathSegment(kind, item.id) === segment);
+  if (direct >= 0) return direct;
+  const legacyIndex = Number(segment);
+  return Number.isInteger(legacyIndex) ? legacyIndex : -1;
 }
 
 function validateCustomSections(draft: StructuredDraft): string | null {

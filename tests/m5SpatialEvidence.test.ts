@@ -144,6 +144,8 @@ test("M5 subtracts only characters covered by mapped sibling-field regions", () 
   assert.equal(areSiblingReviewFields("experiences.4.description", "experiences.4.role"), true);
   assert.equal(areSiblingReviewFields("experiences.4.description", "experiences.3.role"), false);
   assert.equal(areSiblingReviewFields("experiences.4.description", "experiences.4"), false);
+  assert.equal(areSiblingReviewFields("experiences.experience_abcdefgh.description", "experiences.experience_abcdefgh.role"), true);
+  assert.equal(areSiblingReviewFields("education.education_abcdefgh.course", "education.education_ijklmnop.period"), false);
 });
 
 test("M5 applies recognized text without a reason and requires one only for a real interpretation", () => {

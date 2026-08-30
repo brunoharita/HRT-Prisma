@@ -1,4 +1,5 @@
 import type { ExtractedPage, StructuredDraft } from "./personIngestion.js";
+import { reviewEntityFieldPath, stableReviewEntityId } from "./reviewFieldLifecycle.js";
 import { extractResumeIdentity } from "../../../src/domain/resumeIdentity.js";
 import {
   CUSTOM_PROFILE_SECTION_METHOD_VERSION,
@@ -7,8 +8,8 @@ import {
   type LearnedCustomSectionDefinition,
 } from "./customProfileSections.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "3.0.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v3";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "4.0.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v4";
 export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v2";
 
 export interface LayoutTextLine {
@@ -135,19 +136,21 @@ export function buildAdaptiveExtraction(
   let sameLineCount = 0;
 
   for (const block of blocks.slice(0, 16)) {
-    const itemIndex = experiences.length;
-    experiences.push({
+    const experience = {
+      id: stableReviewEntityId("experience", `${block.anchor.pageNumber}:${block.anchor.sequence}:${block.role}:${block.organization}`),
+      source: "extracted",
       role: block.role,
       organization: block.organization,
       period: block.period,
       description: block.description,
       evidenceText: [block.anchor.text, block.organizationLine?.text].filter(Boolean).join("\n"),
       page: block.anchor.pageNumber,
-    });
-    fieldEvidence.push(toEvidence(`experiences.${itemIndex}.role`, block.anchor, block.role));
-    fieldEvidence.push(toEvidence(`experiences.${itemIndex}.organization`, block.organizationLine ?? block.anchor, block.organization));
-    if (block.period) fieldEvidence.push(toEvidence(`experiences.${itemIndex}.period`, block.anchor, block.period));
-    if (block.descriptionLines.length) fieldEvidence.push(toCombinedEvidence(`experiences.${itemIndex}.description`, block.descriptionLines));
+    } satisfies StructuredDraft["experiences"][number];
+    experiences.push(experience);
+    fieldEvidence.push(toEvidence(reviewEntityFieldPath("experience", experience, "role"), block.anchor, block.role));
+    fieldEvidence.push(toEvidence(reviewEntityFieldPath("experience", experience, "organization"), block.organizationLine ?? block.anchor, block.organization));
+    if (block.period) fieldEvidence.push(toEvidence(reviewEntityFieldPath("experience", experience, "period"), block.anchor, block.period));
+    if (block.descriptionLines.length) fieldEvidence.push(toCombinedEvidence(reviewEntityFieldPath("experience", experience, "description"), block.descriptionLines));
     if (block.organizationLine) nextLineCompanyCount += 1;
     else sameLineCount += 1;
   }
@@ -155,7 +158,15 @@ export function buildAdaptiveExtraction(
   const fullText = pages.map((page) => page.text).join("\n");
   const allLines = candidateLines(pages);
   const educationLines = allLines.filter((entry) => /(universidade|faculdade|bacharel|tecn[oó]logo|mba|p[oó]s-gradua[cç][aã]o|university|college)/i.test(entry.text));
-  const education = educationLines.slice(0, 8).map((entry) => ({ course: entry.text, institution: "Não identificada", period: extractPeriod(entry.text), evidenceText: entry.text, page: entry.pageNumber }));
+  const education = educationLines.slice(0, 8).map((entry) => ({
+    id: stableReviewEntityId("education", `${entry.pageNumber}:${entry.sequence}:${entry.text}`),
+    source: "extracted" as const,
+    course: entry.text,
+    institution: "Não identificada",
+    period: extractPeriod(entry.text),
+    evidenceText: entry.text,
+    page: entry.pageNumber,
+  }));
   const competencyCatalog = ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL", "Power BI", "SAP", "Scrum", "Kanban", "Docker", "AWS", "Azure", "Supabase"];
   const competencies = competencyCatalog.filter((item) => new RegExp(`\\b${escapeRegExp(item)}\\b`, "i").test(fullText));
   const languages = ["Português", "Inglês", "Espanhol", "English", "Spanish"].filter((item) => new RegExp(`\\b${item}\\b`, "i").test(fullText));
@@ -396,7 +407,7 @@ export function proposeSiblingBlockCorrections(input: {
     patternKey: "experience:block-unconfirmed",
     methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
     suggestions: [],
-    unresolved: sourceAfter ? [{ experienceIndex: input.sourceIndex, label: sourceAfter.role, reasonCode: reason, explanation }] : [],
+    unresolved: sourceAfter ? [{ experienceIndex: input.sourceIndex, label: sourceAfter.role ?? sourceAfter.organization ?? "Experiência", reasonCode: reason, explanation }] : [],
   });
   if (!sourceBefore || !sourceAfter || comparable(fieldValue(sourceBefore, input.sourceField)) === comparable(fieldValue(sourceAfter, input.sourceField))) {
     return emptyReport("source-correction-not-confirmed", "A correção de origem não alterou o campo e não confirma um padrão novo.");
@@ -420,7 +431,7 @@ export function proposeSiblingBlockCorrections(input: {
     if (!extractedExperience || !block) {
       unresolved.push({
         experienceIndex,
-        label: experience.role,
+        label: experience.role ?? experience.organization ?? `Experiência ${experienceIndex + 1}`,
         reasonCode: "source-block-not-found",
         explanation: "O Prisma não encontrou um bloco-fonte inequívoco e, por segurança, não propôs alteração.",
       });
@@ -433,15 +444,16 @@ export function proposeSiblingBlockCorrections(input: {
       if (!proposedValue || comparable(proposedValue) === comparable(currentValue)) return [];
       if (comparable(currentValue) !== comparable(extractedValue)) return [];
       const evidenceLine = evidenceLineForField(block, field);
+      const fieldPath = reviewEntityFieldPath("experience", experience, field);
       return [{
-        fieldPath: `experiences.${experienceIndex}.${field}`,
+        fieldPath,
         experienceIndex,
         field,
         currentValue,
         proposedValue,
         pageNumber: evidenceLine.pageNumber,
         evidenceText: evidenceLine.text,
-        evidence: toEvidence(`experiences.${experienceIndex}.${field}`, evidenceLine, proposedValue),
+        evidence: toEvidence(fieldPath, evidenceLine, proposedValue),
         rationaleCode: "same-document-block-pattern" as const,
         explanation: fieldExplanation(field, block.patternKey),
       }];
@@ -457,7 +469,7 @@ export function proposeSiblingBlockCorrections(input: {
     } else {
       unresolved.push({
         experienceIndex,
-        label: experience.role,
+        label: experience.role ?? experience.organization ?? `Experiência ${experienceIndex + 1}`,
         reasonCode: "no-safe-change",
         explanation: "O bloco foi localizado, mas não existe uma alteração segura que ainda não tenha sido revisada.",
       });
@@ -488,7 +500,7 @@ export function proposeSiblingFieldCorrections(input: {
     if (!extracted) return [];
     const proposedValue = reinterpretLegacySiblingField(input.field, extracted);
     if (!proposedValue || proposedValue === experience[input.field]) return [];
-    return [{ index, fieldPath: `experiences.${index}.${input.field}`, currentValue: experience[input.field] ?? null, proposedValue }];
+    return [{ index, fieldPath: reviewEntityFieldPath("experience", experience, input.field), currentValue: experience[input.field] ?? null, proposedValue }];
   });
 }
 
@@ -608,7 +620,7 @@ function locateAnchor(lines: CandidateLine[], experience: StructuredDraft["exper
     const exact = lines.findIndex((line) => line.pageNumber === experience.page && comparable(line.text) === comparable(evidenceAnchor));
     if (exact >= 0) return exact;
   }
-  const normalizedRole = comparable(removePeriodFragments(experience.role));
+  const normalizedRole = comparable(removePeriodFragments(experience.role ?? ""));
   let bestIndex = -1;
   let bestScore = 0;
   lines.forEach((line, index) => {
@@ -658,13 +670,14 @@ function isLikelyOrganizationLine(line: CandidateLine): boolean {
 }
 
 function reinterpretLegacySiblingField(field: "role" | "organization" | "period", experience: StructuredDraft["experiences"][number]): string | null {
-  if (field === "period") return extractPeriod(`${experience.evidenceText} ${experience.role} ${experience.organization} ${experience.period ?? ""}`);
+  if (field === "period") return extractPeriod(`${experience.evidenceText} ${experience.role ?? ""} ${experience.organization ?? ""} ${experience.period ?? ""}`);
   if (field === "organization") {
-    const period = extractPeriod(experience.organization);
-    const candidate = period ? removeExact(experience.organization, period) : experience.organization;
+    const organization = experience.organization ?? "";
+    const period = extractPeriod(organization);
+    const candidate = period ? removeExact(organization, period) : organization;
     return isPlausibleOrganization(candidate) ? candidate.trim() : null;
   }
-  return removePeriodFragments(experience.role).trim() || null;
+  return removePeriodFragments(experience.role ?? "").trim() || null;
 }
 
 function fieldValue(value: StructuredDraft["experiences"][number] | ParsedExperienceBlock, field: ExperienceFieldName): string | null {

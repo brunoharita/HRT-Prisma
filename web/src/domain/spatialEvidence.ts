@@ -343,7 +343,7 @@ function isSearchWordCharacter(value: string | undefined): boolean {
 }
 
 export function siblingReviewFieldScope(fieldPath: string): string | null {
-  const canonical = /^(experiences|education)\.([0-9]+)\.[a-zA-Z]+$/.exec(fieldPath);
+  const canonical = /^(experiences|education)\.([a-zA-Z0-9_]+)\.[a-zA-Z]+$/.exec(fieldPath);
   return canonical ? `${canonical[1]}.${canonical[2]}` : null;
 }
 
@@ -395,7 +395,7 @@ function normalizeComparableText(value: string): string {
 }
 
 function reviewScreenScope(fieldPath: string): string {
-  const entity = /^(experiences|education)\.([0-9]+)(?:\.|$)/.exec(fieldPath);
+  const entity = /^(experiences|education)\.([a-zA-Z0-9_]+)(?:\.|$)/.exec(fieldPath);
   if (entity) return `${entity[1]}.${entity[2]}`;
   if (fieldPath === "summary"
     || fieldPath === "professionalTitle"

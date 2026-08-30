@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta o contrato `adaptive-resume-extraction` 3.0.0: resumo estruturado e respectivos caminhos de evidência estão ativos no schema do Prisma-QA; o runtime web permanece local.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta o contrato `adaptive-resume-extraction` 4.0.0: resumo estruturado, IDs estáveis de experiência/formação e respectivos caminhos de evidência estão ativos no schema do Prisma-QA; o runtime web permanece local.
 
 ## Entrada
 
