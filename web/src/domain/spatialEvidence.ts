@@ -109,9 +109,13 @@ export interface PixelRect {
 }
 
 export interface PositionedTextUnit {
+  unitId: string;
   text: string;
   sourceIndex: number;
   sourceOffset: number;
+  lineIndex: number;
+  source: "native" | "ocr";
+  confidence: number | null;
   rect: PixelRect;
 }
 
@@ -196,30 +200,12 @@ export function textUnitsReachedByPixelRegion(
   units: PositionedTextUnit[],
   selection: PixelRect,
 ): PositionedTextUnit[] {
-  const directlyReached = units.filter((unit) => {
+  return units.filter((unit) => {
     const centerX = (unit.rect.left + unit.rect.right) / 2;
     const centerY = (unit.rect.top + unit.rect.bottom) / 2;
     return centerX >= selection.left && unit.rect.left < selection.right
       && centerY >= selection.top && centerY <= selection.bottom;
   });
-  if (!directlyReached.length) return [];
-
-  const tolerance = rightEdgeCharacterTolerance(selection);
-  const rescuedRightEdgeUnits: PositionedTextUnit[] = [];
-  units.forEach((candidate) => {
-    if (directlyReached.includes(candidate)) return;
-    const centerY = (candidate.rect.top + candidate.rect.bottom) / 2;
-    if (centerY < selection.top || centerY > selection.bottom) return;
-    if (candidate.rect.left < selection.right || candidate.rect.left > selection.right + tolerance) return;
-    if (rescuedRightEdgeUnits.some((unit) => sameVisualLine(unit, candidate))) return;
-    const hasReachedPredecessor = directlyReached.some((unit) => sameVisualLine(unit, candidate)
-      && unit.rect.left < candidate.rect.left
-      && candidate.rect.left - unit.rect.right <= tolerance * 2);
-    if (hasReachedPredecessor) rescuedRightEdgeUnits.push(candidate);
-  });
-
-  const selected = new Set([...directlyReached, ...rescuedRightEdgeUnits]);
-  return units.filter((unit) => selected.has(unit));
 }
 
 export function textUnitsExcludingPixelRegions(
@@ -251,25 +237,46 @@ export function textFromPositionedUnits(units: PositionedTextUnit[]): string | n
   return normalized || null;
 }
 
-export function characterReachRect(selection: PixelRect): PixelRect {
-  return { ...selection, right: selection.right + rightEdgeCharacterTolerance(selection) };
+export function normalizedPageRegionToRect(region: NormalizedPageRegion): PixelRect {
+  return {
+    left: region.x,
+    top: region.y,
+    right: region.x + region.width,
+    bottom: region.y + region.height,
+  };
 }
 
-export function fitPixelRectToVisualSlot(
-  rect: PixelRect,
-  sourceBounds: PixelRect,
-  visualRight: number,
-): PixelRect {
-  const sourceWidth = sourceBounds.right - sourceBounds.left;
-  const visualWidth = visualRight - sourceBounds.left;
-  if (sourceWidth <= 0 || visualWidth <= 0 || visualRight >= sourceBounds.right) return rect;
-  const horizontalScale = visualWidth / sourceWidth;
-  return {
-    left: sourceBounds.left + (rect.left - sourceBounds.left) * horizontalScale,
-    top: rect.top,
-    right: sourceBounds.left + (rect.right - sourceBounds.left) * horizontalScale,
-    bottom: rect.bottom,
+export function normalizedRectToPageRegion(rect: PixelRect): NormalizedPageRegion | null {
+  const left = clamp(rect.left, 0, 1);
+  const top = clamp(rect.top, 0, 1);
+  const right = clamp(rect.right, 0, 1);
+  const bottom = clamp(rect.bottom, 0, 1);
+  if (right <= left || bottom <= top) return null;
+  const region = {
+    x: roundNormalized(left),
+    y: roundNormalized(top),
+    width: roundNormalized(right - left),
+    height: roundNormalized(bottom - top),
   };
+  return isNormalizedPageRegion(region) ? region : null;
+}
+
+export function canonicalizePositionedTextUnits(
+  units: PositionedTextUnit[],
+  pageRect: PixelRect,
+): PositionedTextUnit[] {
+  const pageWidth = pageRect.right - pageRect.left;
+  const pageHeight = pageRect.bottom - pageRect.top;
+  if (pageWidth <= 0 || pageHeight <= 0) return [];
+  return units.flatMap((unit) => {
+    const region = normalizedRectToPageRegion({
+      left: (unit.rect.left - pageRect.left) / pageWidth,
+      top: (unit.rect.top - pageRect.top) / pageHeight,
+      right: (unit.rect.right - pageRect.left) / pageWidth,
+      bottom: (unit.rect.bottom - pageRect.top) / pageHeight,
+    });
+    return region ? [{ ...unit, rect: normalizedPageRegionToRect(region) }] : [];
+  });
 }
 
 export function boundingPixelRectForTextUnits(units: PositionedTextUnit[]): PixelRect | null {
@@ -375,18 +382,7 @@ function shouldSeparateTextUnits(previous: PositionedTextUnit, current: Position
     return current.sourceOffset > previous.sourceOffset + previous.text.length;
   }
   const horizontalGap = current.rect.left - previous.rect.right;
-  return horizontalGap > Math.max(1, height * 0.12);
-}
-
-function rightEdgeCharacterTolerance(selection: PixelRect): number {
-  return Math.min(2, Math.max(0.75, (selection.bottom - selection.top) * 0.08));
-}
-
-function sameVisualLine(left: PositionedTextUnit, right: PositionedTextUnit): boolean {
-  const leftCenterY = (left.rect.top + left.rect.bottom) / 2;
-  const rightCenterY = (right.rect.top + right.rect.bottom) / 2;
-  const height = Math.max(left.rect.bottom - left.rect.top, right.rect.bottom - right.rect.top);
-  return Math.abs(leftCenterY - rightCenterY) <= height * 0.6;
+  return horizontalGap > Math.max(0.000001, height * 0.12);
 }
 
 function normalizeComparableText(value: string): string {

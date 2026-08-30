@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: d0ae7de0f0d89e7a09fe54d6e847e7c6fe33ada4e7368ce92d45ee6e71adb8f5
+source_manifest_sha256: a9d3516a60c8fa172defc5590c345e329972193dd9701e9d816d813b717141b7
 -->
 
 # Tudo sobre o Prisma
@@ -157,7 +157,7 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 ## Verified current state
 
-The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace. Adaptive extraction preserves PDF layout, relearns complete experience blocks immediately after an evidence-backed correction, applies accepted suggestions atomically, and promotes metadata-only organization patterns only after full review approval. The local review evolution also supports evidence-backed custom profile sections under `Outros`; approved titles and formats can improve future first extraction without copying personal content.
+The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace. M5 resolves native PDF characters and OCR symbols into normalized canonical page coordinates, so zoom and viewport size change only presentation, not selected text. Adaptive extraction preserves PDF layout, relearns complete experience blocks immediately after an evidence-backed correction, applies accepted suggestions atomically, and promotes metadata-only organization patterns only after full review approval. The local review evolution also supports evidence-backed custom profile sections under `Outros`; approved titles and formats can improve future first extraction without copying personal content.
 
 PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, M2-C, M5, custom profile section persistence/learning, the private document bucket, controlled transactional RPCs, and the three operator Edge Functions active. Connected evidence covers concurrent version allocation, idempotent retry, reviewer-role isolation, normalized-coordinate rejection, immutable review history, and atomic profile approval. By current product decision there is no separate production project or frontend hosting; the system is used only internally through the local frontend. No live LLM or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
 
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.3.3
+version: 2.3.4
 last_verified: 2026-08-30
 ---
 
@@ -333,7 +333,7 @@ last_verified: 2026-08-30
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
-- Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` resolve um conjunto explícito de caracteres e usa as mesmas caixas para texto, refinamento e destaque visual pendente; na direita, somente um caractere contíguo pode ser recuperado por tolerância subpixel, sem ampliar esquerda, topo ou base. A geometria de fonte de fallback é limitada pelo próximo item visual da mesma linha e a faixa de status é reservada antes do arraste, evitando invasão do conteúdo vizinho e deslocamento do PDF durante o gesto. Evidências `pdfjs-text-layer-v1` permanecem históricas.
+- Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` define a escala total exigida pelo PDF.js e converte caracteres ou símbolos OCR para um mapa canônico `normalized-page-v1`; texto, refinamento e destaque usam exatamente o mesmo conjunto. Zoom, ajuste à largura e proporção da tela alteram apenas a projeção. A direita inclui somente caixas que começam dentro do contorno, sem tolerância fixa ou resgate externo. Evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Destaques espaciais persistidos são filtrados pelo contexto de revisão aberto: Experiência e Formação exibem somente o registro atual; cada outra aba exibe apenas seus campos renderizados. O filtro é local, não destrutivo e não modifica o contrato `spatial-evidence` 1.2.0.
 - Evidências originais históricas sem região persistida recebem um fallback somente visual quando o valor extraído do campo ativo possui uma única correspondência exata na camada textual da página original. A região não é persistida nem tratada como evidência espacial inferida; zero ou múltiplas correspondências falham fechadas e não produzem destaque.
 - O modal M5 aplica texto reconhecido e não editado sem justificativa, exige explicação somente para interpretação ou conteúdo manual e apresenta validação/falha dentro da própria janela.
@@ -360,7 +360,7 @@ last_verified: 2026-08-30
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 82 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, legibilidade estrutural da central de processamento, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, recuperação subpixel do último caractere, encaixe geométrico antes do próximo item visual, filtro contextual de destaques por aba/registro, fallback visual exato para evidência original histórica, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 82 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, legibilidade estrutural da central de processamento, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, mapa canônico invariável em 57%/100%/147%, borda direita sem importação externa, filtro contextual de destaques por aba/registro, fallback visual exato para evidência original histórica, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -440,8 +440,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O hardening M4 eliminou do advisor as foreign keys Knowledge sem cobertura e a policy Knowledge sobreposta. Os índices novos aparecem como ainda não utilizados porque as filas estão vazias. O advisor de segurança sinaliza quatro RPCs Knowledge `security definer`; o uso é intencional e controlado por `search_path` fixo, autorização interna por papel/tenant e DML direto revogado.
 - O advisor de segurança também identifica RPCs públicas M2-C e currículo-first como `security definer`; ADR-011/ADR-012 registram o uso controlado. A proteção contra senhas vazadas continua desabilitada.
 - O advisor identifica a RPC M5 `record_profile_review_evidence` como `security definer`; o uso intencional, a autorização interna, o `search_path` vazio e o DML direto revogado estão registrados no ADR-016. Índices M5 recém-criados aparecem como não utilizados porque nenhum evento espacial foi persistido após os testes revertidos.
-- O build e os contratos responsivos do workspace M5 estão aprovados, mas a inspeção visual autenticada desktop/mobile permanece pendente porque o navegador disponível não possuía sessão e não havia credencial de QA no ambiente.
-- A aba autenticada mostrada pelo usuário não foi exposta à sessão controlável do navegador; a inspeção local alcançou somente o login. As causas geométrica e de validação do modal foram reproduzidas por testes determinísticos, mas o smoke visual autenticado permanece pendente.
+- O smoke autenticado desktop do mapa canônico foi concluído no currículo real em 57% e 147%; a mesma região recuperou 1.063 unidades e o texto integral. A alternância mobile e o gesto por arraste em dispositivo táctil continuam sem evidência específica deste movimento.
 - A persistência adaptativa v2 está em QA e o runtime web permanece local. O advisor não aponta RLS ausente nem foreign key adaptativa sem índice; registra somente os novos índices ainda sem uso e a RPC `security definer` intencionalmente executável por `authenticated`, protegida por autorização interna e DML revogado. A qualidade possui regressões sanitizadas para HRT, Bencato, Scaffold, Servimed e NM Systems, mas ainda não foi medida em lote de currículos reais autorizados nem recebeu smoke visual autenticado.
 - O schema de áreas personalizadas e seu aprendizado estrutural está em QA; o frontend permanece local. O fluxo criar área -> evidência -> aprovação -> nova extração ainda precisa de smoke autenticado com dado sintético. Nenhuma revisão aprovada real foi rebaixada para simular o gatilho.
 - O schema do refinamento espacial 1.2 está ativo em QA e o frontend permanece local. A cobertura determinística e as transações revertidas comprovam subtração, limites do contrato, autorização e ausência de resíduos; ainda falta smoke visual autenticado com sobreposição real no PDF.
@@ -454,7 +453,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 82 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A cobertura inclui o fallback visual fail-closed para evidência original histórica sem coordenadas. O smoke autenticado com o acesso QA salvo confirmou, na revisão de Bruno Harita, página 2 e campo `experiences.0.role`, exatamente um destaque `Original` sobre “Fundador & Diretor Executivo”; as demais regiões visíveis pertenciam somente aos campos irmãos do mesmo registro `experiences.0`, preservando o filtro contextual. O resultado permaneceu correto após `Ajustar largura` e não criou nem persistiu coordenadas. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 172 arquivos, fundação, Context Pack, dois typechecks, build web, 82 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado com o acesso QA salvo confirmou, na página 2 do currículo de Bruno Harita, que a descrição completa da Bencato resolve 1.063 unidades e 1.076 caracteres normalizados tanto em 57% quanto em 147%. Foram recuperados os finais anteriormente ausentes: “fornecedores e liderança”, “e retrabalhos”, “impacto”, “disciplina” e “dos novos fluxos”. O teste foi somente leitura. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 
@@ -533,8 +532,8 @@ Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativ
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.6.0
-last_verified: 2026-08-26
+version: 1.6.1
+last_verified: 2026-08-30
 ---
 
 # Referência técnica do Prisma
@@ -545,7 +544,7 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell e o módulo Conhecimento. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search. PDF/OCR e os contratos M2 permanecem inalterados.
+`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell, o módulo Conhecimento e o motor de evidência visual. `spatialEvidence` converte unidades PDF.js/OCR para `normalized-page-v1`, de modo que seleção, texto, refinamento e destaque independam do zoom. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search.
 
 ## Banco
 
@@ -592,8 +591,8 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.5.0
-last_verified: 2026-08-26
+version: 1.5.1
+last_verified: 2026-08-30
 ---
 
 # Prisma Wiki
@@ -634,6 +633,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. M2-A/M2-B/M2-C e currículo-first estão ativos em QA. O Movimento 4 implementa localmente ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento. Schema e Edge Function M4 ainda não estão ativados no QA; snapshots oficiais estão apenas catalogados e o agente está desativado.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas, mantendo seleção e texto invariáveis ao zoom. M2-A/M2-B/M2-C e currículo-first estão ativos em QA. O Movimento 4 implementa localmente ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento. Schema e Edge Function M4 ainda não estão ativados no QA; snapshots oficiais estão apenas catalogados e o agente está desativado.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

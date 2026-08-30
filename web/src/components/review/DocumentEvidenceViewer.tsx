@@ -13,15 +13,15 @@ import "pdfjs-dist/web/pdf_viewer.css";
 import {
   areSiblingReviewFields,
   boundingPixelRectForTextUnits,
-  characterReachRect,
+  canonicalizePositionedTextUnits,
   fieldPathMatches,
-  fitPixelRectToVisualSlot,
   intersectPixelRects,
   isReviewEvidenceVisibleOnCurrentScreen,
   normalizePointerRegion,
+  normalizedPageRegionToRect,
+  normalizedRectToPageRegion,
   normalizedRegionStyle,
   PDFJS_CHARACTER_REGION_METHOD,
-  pixelRectsOverlap,
   textContainedByPixelRegion,
   textFromPositionedUnits,
   textUnitsExcludingPixelRegions,
@@ -63,7 +63,7 @@ export interface RegionRefinementCandidate {
   source: SpatialEvidenceRegion["source"];
   overlapText: string | null;
   defaultExcluded: boolean;
-  pixelRegion: PixelRect;
+  canonicalRegion: PixelRect;
 }
 
 interface DocumentEvidenceViewerProps {
@@ -120,6 +120,7 @@ export function DocumentEvidenceViewer({
   const [pendingRegion, setPendingRegion] = useState<NormalizedPageRegion | null>(null);
   const [pendingVisualSelection, setPendingVisualSelection] = useState<RegionSelectionResult | null>(null);
   const [fallbackOriginalRegion, setFallbackOriginalRegion] = useState<NormalizedPageRegion | null>(null);
+  const [pageTextUnits, setPageTextUnits] = useState<PositionedTextUnit[]>([]);
   const [ocrBusy, setOcrBusy] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pageRef = useRef<HTMLDivElement | null>(null);
@@ -166,6 +167,7 @@ export function DocumentEvidenceViewer({
     let textLayer: { cancel: () => void } | null = null;
     setRendering(true);
     setError(null);
+    setPageTextUnits([]);
     setPendingRegion(null);
     setDrag(null);
     void pdfDocument.getPage(currentPage).then(async (loadedPage) => {
@@ -181,10 +183,13 @@ export function DocumentEvidenceViewer({
       canvas.style.height = `${viewport.height}px`;
       pageElement.style.width = `${viewport.width}px`;
       pageElement.style.height = `${viewport.height}px`;
+      pageElement.style.setProperty("--scale-factor", String(viewport.scale));
+      pageElement.style.setProperty("--total-scale-factor", String(viewport.scale));
       textElement.replaceChildren();
       textElement.style.width = `${viewport.width}px`;
       textElement.style.height = `${viewport.height}px`;
       textElement.style.setProperty("--scale-factor", String(viewport.scale));
+      textElement.style.setProperty("--total-scale-factor", String(viewport.scale));
       const context = canvas.getContext("2d", { willReadFrequently: true });
       if (!context) throw new Error("O navegador não conseguiu preparar a página do PDF.");
       renderTask = loadedPage.render({ canvas, canvasContext: context, viewport });
@@ -194,6 +199,9 @@ export function DocumentEvidenceViewer({
       const layer = new pdfjs.TextLayer({ textContentSource: textContent, container: textElement, viewport });
       textLayer = layer;
       await layer.render();
+      if (renderVersion === renderVersionRef.current) {
+        setPageTextUnits(canonicalTextUnits(textElement, pageElement.getBoundingClientRect()));
+      }
     }).catch((caught: unknown) => {
       if (renderVersion !== renderVersionRef.current) return;
       if (caught instanceof Error && /cancel/i.test(caught.name)) return;
@@ -217,20 +225,11 @@ export function DocumentEvidenceViewer({
   useEffect(() => {
     setFallbackOriginalRegion(null);
     if (rendering || !fallbackOriginalEvidence || fallbackOriginalEvidence.pageNumber !== currentPage) return;
-    const pageElement = pageRef.current;
-    const textElement = textLayerRef.current;
-    if (!pageElement || !textElement) return;
-    const pageRect = pageElement.getBoundingClientRect();
-    const units = positionedTextUnits(textElement, {
-      left: pageRect.left,
-      top: pageRect.top,
-      right: pageRect.right,
-      bottom: pageRect.bottom,
-    });
-    const matchedUnits = uniqueTextUnitMatch(units, fallbackOriginalEvidence.text);
+    if (!pageTextUnits.length) return;
+    const matchedUnits = uniqueTextUnitMatch(pageTextUnits, fallbackOriginalEvidence.text);
     const matchedRect = boundingPixelRectForTextUnits(matchedUnits);
-    setFallbackOriginalRegion(matchedRect ? pixelRectToNormalizedRegion(matchedRect, pageRect) : null);
-  }, [currentPage, fallbackOriginalEvidence, rendering, zoom]);
+    setFallbackOriginalRegion(matchedRect ? normalizedRectToPageRegion(matchedRect) : null);
+  }, [currentPage, fallbackOriginalEvidence, pageTextUnits, rendering]);
 
   useEffect(() => {
     if (!navigationTarget?.regionId || rendering) return;
@@ -377,29 +376,25 @@ export function DocumentEvidenceViewer({
   }
 
   function nativeTextSelection(region: NormalizedPageRegion) {
-    const pageRect = pageRef.current?.getBoundingClientRect();
-    const layer = textLayerRef.current;
-    if (!pageRect || !layer) return null;
-    const selectionRect = normalizedToPixelRect(region, pageRect);
-    const units = positionedTextUnits(layer, selectionRect);
-    return selectionFromUnits(region, units, textContainedByPixelRegion(units, selectionRect));
+    if (!pageTextUnits.length) return null;
+    const selectionRect = normalizedPageRegionToRect(region);
+    return selectionFromUnits(region, pageTextUnits, textContainedByPixelRegion(pageTextUnits, selectionRect));
   }
 
   function selectionFromUnits(region: NormalizedPageRegion, units: PositionedTextUnit[], rawText: string | null) {
-    const pageRect = pageRef.current?.getBoundingClientRect();
-    if (!pageRect || !rawText) return { region, ...emptyTextSelection() };
-    const selectionRect = normalizedToPixelRect(region, pageRect);
+    if (!rawText) return { region, ...emptyTextSelection() };
+    const selectionRect = normalizedPageRegionToRect(region);
     const selectedTextUnits = textUnitsReachedByPixelRegion(units, selectionRect);
     const resolvedRawText = textFromPositionedUnits(selectedTextUnits) ?? rawText;
     if (!units.length) {
       return { region, rawSelectedText: rawText, selectedText: rawText, selectionRect, textUnits: [], selectedTextUnits: [], refinementCandidates: [] };
     }
     const resolvedSelectionRect = boundingPixelRectForTextUnits(selectedTextUnits) ?? selectionRect;
-    const resolvedRegion = pixelRectToNormalizedRegion(resolvedSelectionRect, pageRect) ?? region;
+    const resolvedRegion = normalizedRectToPageRegion(resolvedSelectionRect) ?? region;
     const refinementCandidates = pageLinks.flatMap(({ link, region: mappedRegion }) => {
       if (!areSiblingReviewFields(link.fieldPath, selectedFieldPath)) return [];
-      const pixelRegion = normalizedToPixelRect(mappedRegion, pageRect);
-      const overlap = intersectPixelRects(resolvedSelectionRect, pixelRegion);
+      const canonicalRegion = normalizedPageRegionToRect(mappedRegion);
+      const overlap = intersectPixelRects(resolvedSelectionRect, canonicalRegion);
       if (!overlap) return [];
       const overlapText = textContainedByPixelRegion(selectedTextUnits, overlap);
       if (!overlapText) return [];
@@ -411,10 +406,10 @@ export function DocumentEvidenceViewer({
         source: mappedRegion.source,
         overlapText,
         defaultExcluded: mappedRegion.source === "human",
-        pixelRegion,
+        canonicalRegion,
       } satisfies RegionRefinementCandidate];
     });
-    const defaultExclusions = refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.pixelRegion);
+    const defaultExclusions = refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.canonicalRegion);
     return {
       region: resolvedRegion,
       rawSelectedText: resolvedRawText,
@@ -432,11 +427,10 @@ export function DocumentEvidenceViewer({
     cropWidth: number,
     cropHeight: number,
   ): PositionedTextUnit[] {
-    const pageRect = pageRef.current?.getBoundingClientRect();
-    if (!pageRect || !blocks?.length || cropWidth <= 0 || cropHeight <= 0) return [];
-    const cropRect = normalizedToPixelRect(region, pageRect);
-    const scaleX = (cropRect.right - cropRect.left) / cropWidth;
-    const scaleY = (cropRect.bottom - cropRect.top) / cropHeight;
+    if (!blocks?.length || cropWidth <= 0 || cropHeight <= 0) return [];
+    const cropRect = normalizedPageRegionToRect(region);
+    const scaleX = region.width / cropWidth;
+    const scaleY = region.height / cropHeight;
     const units: PositionedTextUnit[] = [];
     let sourceIndex = 0;
     blocks.forEach((block) => block.paragraphs.forEach((paragraph) => paragraph.lines.forEach((line) => {
@@ -445,9 +439,13 @@ export function DocumentEvidenceViewer({
         word.symbols.forEach((symbol) => {
           Array.from(symbol.text).forEach((character) => {
             units.push({
+              unitId: `ocr:${sourceIndex}:${sourceOffset}`,
               text: character,
               sourceIndex,
               sourceOffset,
+              lineIndex: sourceIndex,
+              source: "ocr",
+              confidence: null,
               rect: {
                 left: cropRect.left + symbol.bbox.x0 * scaleX,
                 top: cropRect.top + symbol.bbox.y0 * scaleY,
@@ -461,15 +459,22 @@ export function DocumentEvidenceViewer({
         const lastSymbol = word.symbols.at(-1);
         const nextSymbol = line.words[wordIndex + 1]?.symbols[0];
         if (lastSymbol && nextSymbol) {
-          const centerX = cropRect.left + ((lastSymbol.bbox.x1 + nextSymbol.bbox.x0) / 2) * scaleX;
+          const previousRight = cropRect.left + lastSymbol.bbox.x1 * scaleX;
+          const nextLeft = cropRect.left + nextSymbol.bbox.x0 * scaleX;
+          const centerX = (previousRight + nextLeft) / 2;
+          const halfWidth = Math.max(Math.abs(nextLeft - previousRight) / 2, scaleX / 2);
           units.push({
+            unitId: `ocr:${sourceIndex}:${sourceOffset}`,
             text: " ",
             sourceIndex,
             sourceOffset,
+            lineIndex: sourceIndex,
+            source: "ocr",
+            confidence: null,
             rect: {
-              left: centerX - 0.5,
+              left: centerX - halfWidth,
               top: cropRect.top + Math.min(lastSymbol.bbox.y0, nextSymbol.bbox.y0) * scaleY,
-              right: centerX + 0.5,
+              right: centerX + halfWidth,
               bottom: cropRect.top + Math.max(lastSymbol.bbox.y1, nextSymbol.bbox.y1) * scaleY,
             },
           });
@@ -497,9 +502,9 @@ export function DocumentEvidenceViewer({
       pendingVisualSelection.selectedTextUnits,
       pendingVisualSelection.refinementCandidates
         .filter((candidate) => refinementExcludedLinkIds.includes(candidate.linkId))
-        .map((candidate) => candidate.pixelRegion),
+        .map((candidate) => candidate.canonicalRegion),
     ).flatMap((unit) => {
-      const normalized = pixelRectToNormalizedRegion(unit.rect, pageRef.current!.getBoundingClientRect());
+      const normalized = normalizedRectToPageRegion(unit.rect);
       return normalized ? [{ unit, normalized }] : [];
     })
     : [];
@@ -607,19 +612,12 @@ export function DocumentEvidenceViewer({
   );
 }
 
-function positionedTextUnits(layer: HTMLElement, selection: PixelRect): PositionedTextUnit[] {
+function canonicalTextUnits(layer: HTMLElement, pageRect: PixelRect): PositionedTextUnit[] {
   const units: PositionedTextUnit[] = [];
   const range = document.createRange();
-  const candidateRect = characterReachRect(selection);
   const spans = Array.from(layer.querySelectorAll<HTMLElement>("span"));
   let sourceIndex = 0;
-  spans.forEach((span, spanIndex) => {
-    const spanRect = span.getBoundingClientRect();
-    if (!pixelRectsOverlap(candidateRect, spanRect)) {
-      sourceIndex += 1;
-      return;
-    }
-    const nextVisualStart = nextSameLineVisualStart(spans, spanIndex, spanRect);
+  spans.forEach((span) => {
     const walker = document.createTreeWalker(span, NodeFilter.SHOW_TEXT);
     let node = walker.nextNode();
     while (node) {
@@ -631,16 +629,15 @@ function positionedTextUnits(layer: HTMLElement, selection: PixelRect): Position
         range.setEnd(textNode, nextOffset);
         const rect = range.getBoundingClientRect();
         if (rect.width > 0 && rect.height > 0) {
-          const fittedRect = fitPixelRectToVisualSlot(
-            { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom },
-            { left: spanRect.left, top: spanRect.top, right: spanRect.right, bottom: spanRect.bottom },
-            nextVisualStart,
-          );
           units.push({
+            unitId: `native:${sourceIndex}:${sourceOffset}`,
             text: character,
             sourceIndex,
             sourceOffset,
-            rect: fittedRect,
+            lineIndex: sourceIndex,
+            source: "native",
+            confidence: 1,
+            rect: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom },
           });
         }
         sourceOffset = nextOffset;
@@ -650,56 +647,15 @@ function positionedTextUnits(layer: HTMLElement, selection: PixelRect): Position
     }
   });
   range.detach();
-  return units;
-}
-
-function nextSameLineVisualStart(spans: HTMLElement[], spanIndex: number, spanRect: DOMRect): number {
-  const currentCenterY = (spanRect.top + spanRect.bottom) / 2;
-  for (let index = spanIndex + 1; index < spans.length; index += 1) {
-    const candidate = spans[index];
-    if (!candidate) continue;
-    const candidateRect = candidate.getBoundingClientRect();
-    const candidateCenterY = (candidateRect.top + candidateRect.bottom) / 2;
-    const lineHeight = Math.max(spanRect.height, candidateRect.height);
-    if (Math.abs(candidateCenterY - currentCenterY) > lineHeight * 0.6) break;
-    if (candidateRect.left > spanRect.left) return Math.min(spanRect.right, candidateRect.left);
-  }
-  return spanRect.right;
+  return canonicalizePositionedTextUnits(units, pageRect);
 }
 
 export function refinedSelectionText(selection: RegionSelectionResult, excludedLinkIds: string[]): string | null {
   if (!selection.selectedTextUnits.length) return selection.selectedText;
   const excluded = selection.refinementCandidates
     .filter((candidate) => excludedLinkIds.includes(candidate.linkId))
-    .map((candidate) => candidate.pixelRegion);
+    .map((candidate) => candidate.canonicalRegion);
   return textFromPositionedUnits(textUnitsExcludingPixelRegions(selection.selectedTextUnits, excluded));
-}
-
-function normalizedToPixelRect(region: NormalizedPageRegion, pageRect: PixelRect): PixelRect {
-  const width = pageRect.right - pageRect.left;
-  const height = pageRect.bottom - pageRect.top;
-  return {
-    left: pageRect.left + region.x * width,
-    top: pageRect.top + region.y * height,
-    right: pageRect.left + (region.x + region.width) * width,
-    bottom: pageRect.top + (region.y + region.height) * height,
-  };
-}
-
-function pixelRectToNormalizedRegion(rect: PixelRect, pageRect: PixelRect): NormalizedPageRegion | null {
-  const width = pageRect.right - pageRect.left;
-  const height = pageRect.bottom - pageRect.top;
-  if (width <= 0 || height <= 0) return null;
-  const left = clampNormalized((rect.left - pageRect.left) / width);
-  const top = clampNormalized((rect.top - pageRect.top) / height);
-  const right = clampNormalized((rect.right - pageRect.left) / width);
-  const bottom = clampNormalized((rect.bottom - pageRect.top) / height);
-  if (right <= left || bottom <= top) return null;
-  return { x: left, y: top, width: right - left, height: bottom - top };
-}
-
-function clampNormalized(value: number): number {
-  return Math.min(1, Math.max(0, value));
 }
 
 function emptyTextSelection() {

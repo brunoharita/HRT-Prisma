@@ -2,8 +2,8 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.6.0
-last_verified: 2026-08-26
+version: 1.6.1
+last_verified: 2026-08-30
 ---
 
 # Referência técnica do Prisma
@@ -14,7 +14,7 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell e o módulo Conhecimento. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search. PDF/OCR e os contratos M2 permanecem inalterados.
+`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell, o módulo Conhecimento e o motor de evidência visual. `spatialEvidence` converte unidades PDF.js/OCR para `normalized-page-v1`, de modo que seleção, texto, refinamento e destaque independam do zoom. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search.
 
 ## Banco
 

@@ -4,9 +4,9 @@ import test from "node:test";
 import {
   areSiblingReviewFields,
   boundingPixelRectForTextUnits,
+  canonicalizePositionedTextUnits,
   evidenceSelectionRequiresReason,
   fieldPathMatches,
-  fitPixelRectToVisualSlot,
   isNormalizedPageRegion,
   isReviewEvidenceVisibleOnCurrentScreen,
   normalizePointerRegion,
@@ -101,32 +101,31 @@ test("M5 keeps only the character that visibly starts inside the selection's rig
   assert.equal(selected, "TI");
 });
 
-test("M5 rescues one contiguous right-edge character from subpixel drift and snaps to its full box", () => {
-  const units = [
-    { text: "T", sourceIndex: 0, sourceOffset: 0, rect: { left: 0, top: 0, right: 10, bottom: 10 } },
-    { text: "I", sourceIndex: 0, sourceOffset: 1, rect: { left: 10.6, top: 0, right: 20.6, bottom: 10 } },
-    { text: "|", sourceIndex: 0, sourceOffset: 2, rect: { left: 20.6, top: 0, right: 30.6, bottom: 10 } },
-  ];
-  const selection = { left: 0, top: 0, right: 10, bottom: 10 };
-  const reached = textUnitsReachedByPixelRegion(units, selection);
+test("M5 resolves the same canonical characters at every viewport zoom", () => {
+  const sourceText = "fornecedores e impacto disciplina dos novos fluxos";
+  const fullSize = scaledPositionedUnits(sourceText, 1);
+  const fitWidth = scaledPositionedUnits(sourceText, 0.57);
+  const enlarged = scaledPositionedUnits(sourceText, 1.47);
+  const canonicalFull = canonicalizePositionedTextUnits(fullSize, { left: 0, top: 0, right: 1000, bottom: 500 });
+  const canonicalFit = canonicalizePositionedTextUnits(fitWidth, { left: 0, top: 0, right: 570, bottom: 285 });
+  const canonicalEnlarged = canonicalizePositionedTextUnits(enlarged, { left: 0, top: 0, right: 1470, bottom: 735 });
+  const selection = { left: 0.1, top: 0.19, right: 0.65, bottom: 0.23 };
 
-  assert.equal(textContainedByPixelRegion(units, selection), "TI");
-  assert.deepEqual(reached.map((unit) => unit.text), ["T", "I"]);
-  assert.deepEqual(boundingPixelRectForTextUnits(reached), { left: 0, top: 0, right: 20.6, bottom: 10 });
+  assert.deepEqual(canonicalFit.map((unit) => unit.rect), canonicalFull.map((unit) => unit.rect));
+  assert.deepEqual(canonicalEnlarged.map((unit) => unit.rect), canonicalFull.map((unit) => unit.rect));
+  assert.equal(textContainedByPixelRegion(canonicalFull, selection), sourceText);
+  assert.equal(textContainedByPixelRegion(canonicalFit, selection), sourceText);
+  assert.equal(textContainedByPixelRegion(canonicalEnlarged, selection), sourceText);
 });
 
-test("M5 fits fallback-font character geometry before the next visual PDF item", () => {
-  const sourceBounds = { left: 100, top: 20, right: 200, bottom: 34 };
-  const lastCharacter = { left: 190, top: 20, right: 200, bottom: 34 };
+test("M5 never imports a canonical character whose visual box starts outside the right edge", () => {
+  const units = canonicalizePositionedTextUnits(positionedUnits("TI|", 0, 0), {
+    left: 0, top: 0, right: 30, bottom: 10,
+  });
+  const reached = textUnitsReachedByPixelRegion(units, { left: 0, top: 0, right: 2 / 3, bottom: 1 });
 
-  assert.deepEqual(
-    fitPixelRectToVisualSlot(lastCharacter, sourceBounds, 180),
-    { left: 172, top: 20, right: 180, bottom: 34 },
-  );
-  assert.deepEqual(
-    fitPixelRectToVisualSlot(lastCharacter, sourceBounds, 210),
-    lastCharacter,
-  );
+  assert.deepEqual(reached.map((unit) => unit.text), ["T", "I"]);
+  assert.deepEqual(boundingPixelRectForTextUnits(reached), { left: 0, top: 0, right: 0.666666, bottom: 1 });
 });
 
 test("M5 subtracts only characters covered by mapped sibling-field regions", () => {
@@ -274,6 +273,9 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(viewer, /import\("tesseract\.js"\)/);
   assert.match(viewer, /normalizePointerRegion/);
   assert.match(viewer, /PDFJS_CHARACTER_REGION_METHOD/);
+  assert.match(viewer, /--total-scale-factor/);
+  assert.match(viewer, /canonicalTextUnits/);
+  assert.match(viewer, /canonicalizePositionedTextUnits/);
   assert.match(viewer, /textContainedByPixelRegion/);
   assert.match(viewer, /refinementCandidates/);
   assert.match(viewer, /positionedOcrTextUnits/);
@@ -303,12 +305,28 @@ function positionedUnits(text: string, top: number, sourceIndex: number) {
   let offset = 0;
   return Array.from(text).map((character) => {
     const unit = {
+      unitId: `native:${sourceIndex}:${offset}`,
       text: character,
       sourceIndex,
       sourceOffset: offset,
+      lineIndex: sourceIndex,
+      source: "native" as const,
+      confidence: 1,
       rect: { left: offset * 10, top, right: offset * 10 + 10, bottom: top + 10 },
     };
     offset += character.length;
     return unit;
   });
+}
+
+function scaledPositionedUnits(text: string, scale: number) {
+  return positionedUnits(text, 100, 0).map((unit) => ({
+    ...unit,
+    rect: {
+      left: (100 + unit.rect.left) * scale,
+      top: unit.rect.top * scale,
+      right: (100 + unit.rect.right) * scale,
+      bottom: unit.rect.bottom * scale,
+    },
+  }));
 }

@@ -63,3 +63,11 @@ As migrations foram aplicadas no Prisma-QA como `20260829113031_spatial_evidence
 ## Filtro contextual de destaques em 2026-08-29
 
 O visualizador agora deriva um escopo semântico do campo selecionado antes de renderizar regiões persistidas. Para `experiences.<índice>.*` e `education.<índice>.*`, somente vínculos do mesmo índice permanecem visíveis; Resumo, Competências e Idiomas são isolados por aba; Certificações, áreas personalizadas e pendências permanecem juntas porque são renderizadas simultaneamente em Outros. Caminhos desconhecidos falham de forma restritiva e somente coincidem por igualdade exata. O filtro não escreve no banco, não altera a navegação por evidência e mantém o contrato `spatial-evidence` 1.2.0. As regressões cobrem troca de campo no mesmo registro, troca de registro, troca de aba, agrupamento de Outros e caminho desconhecido.
+
+## Mapa canônico e invariância de zoom em 2026-08-30
+
+O currículo real revelou que `pdfjs-dist` 5.4.296 exige `--total-scale-factor` no ancestral do `TextLayer`. Sem a variável, o canvas permanecia correto, mas a camada invisível herdava fonte de 14 px: no ajuste à largura, uma linha visual de aproximadamente 289 px recebia caixa textual próxima de 894 px. O corte recorrente na direita era consequência dessa divergência, não de OCR ou ausência de texto no PDF.
+
+O runtime agora define a escala total do viewport e converte imediatamente caracteres PDF.js e símbolos OCR para `normalized-page-v1`. Seleção, texto, refinamento e destaque usam essas mesmas unidades canônicas. A compensação de um caractere por tolerância de pixel foi removida; conteúdo fora da borda direita não entra.
+
+As regressões determinísticas comprovam a mesma sequência em 57%, 100% e 147% e rejeitam o primeiro caractere cuja caixa começa fora do limite. No smoke autenticado local, a página 2 do currículo de Bruno Harita foi aberta pela sessão `harita.super`; a mesma região da descrição da Bencato recuperou 1.063 unidades e 1.076 caracteres normalizados em 57% e 147%. Foram confirmados `fornecedores e liderança`, `e retrabalhos`, `impacto`, `disciplina` e `dos novos fluxos`. A página variou de 346,13 px para 896,92 px, enquanto o conjunto e o texto permaneceram iguais. O teste foi somente leitura e não criou região, revisão ou evento.

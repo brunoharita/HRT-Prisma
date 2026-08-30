@@ -29,6 +29,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-017](ADR-017-adaptive-resume-extraction-and-review-learning.md) | accepted | Layout-aware extraction, document-local suggestions, and controlled review learning |
 | [ADR-018](ADR-018-immediate-block-learning-and-organization-patterns.md) | accepted | Immediate block relearning, atomic adaptive review, and approved organization patterns |
 | [ADR-019](ADR-019-custom-profile-sections-and-structural-learning.md) | accepted | Structured custom profile sections and organization-scoped heading learning |
+| [ADR-020](ADR-020-spatial-evidence-refinement.md) | accepted | Character-level subtraction and immutable refinement decisions for overlapping evidence |
+| [ADR-021](ADR-021-canonical-visual-character-map.md) | accepted | Zoom-independent canonical character geometry for visual evidence |
 
 ## Rules
 
