@@ -17,6 +17,7 @@ import {
   fieldPathMatches,
   fitPixelRectToVisualSlot,
   intersectPixelRects,
+  isReviewEvidenceVisibleOnCurrentScreen,
   normalizePointerRegion,
   normalizedRegionStyle,
   PDFJS_CHARACTER_REGION_METHOD,
@@ -225,10 +226,11 @@ export function DocumentEvidenceViewer({
   }, [selectionMode]);
 
   const pageLinks = useMemo(() => links.flatMap((link) => {
-    if (link.state !== "active" || !link.spatialRegionId) return [];
+    if (link.state !== "active" || !link.spatialRegionId
+      || !isReviewEvidenceVisibleOnCurrentScreen(link.fieldPath, selectedFieldPath)) return [];
     const region = regions.find((item) => item.id === link.spatialRegionId && item.pageNumber === currentPage);
     return region ? [{ link, region }] : [];
-  }), [currentPage, links, regions]);
+  }), [currentPage, links, regions, selectedFieldPath]);
 
   const totalPages = pdfDocument?.numPages ?? pageCount;
 

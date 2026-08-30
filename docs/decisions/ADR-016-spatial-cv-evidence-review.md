@@ -18,10 +18,11 @@ O M2-C preservava a evidência textual original e a revisão por campo, mas não
 - DML direto nas três tabelas M5 é revogado. A RPC `security definer` usa `search_path` vazio e valida sessão, tenant, papel, estado, versão documental, página e coordenadas.
 - Registros históricos sem coordenadas continuam válidos como evidência original. Coordenadas nunca são inferidas ou fabricadas no backfill.
 - Em 1.1.0, seleção nativa usa `pdfjs-character-region-v2`: o arraste inicial resolve um conjunto explícito de caracteres, o texto é montado desse conjunto e o destaque pendente é redesenhado com as mesmas caixas. Esquerda, topo e base continuam usando o centro visual; no limite direito, no máximo um caractere contíguo pode ser recuperado dentro de tolerância subpixel. A região final se ajusta ao contorno das caixas resolvidas. Métricas de fonte de fallback que ultrapassem o próximo item da mesma linha são proporcionalmente encaixadas no intervalo visual disponível, e a faixa de status é reservada antes do arraste para impedir deslocamento do PDF durante o gesto. Interseção parcial com uma linha ou `span` não autoriza incluir todo o texto.
+- O visualizador apresenta somente regiões do escopo semântico aberto. Em Experiência e Formação, o escopo é o índice do registro; nas demais abas, é o conjunto de campos renderizado conjuntamente. Regiões fora desse contexto permanecem preservadas e voltam a aparecer ao abrir o registro ou a aba correspondente.
 
 ## Consequências
 
-A decisão humana fica navegável e verificável no documento, sem misturar extração original com revisão. O contrato exige uma região explícita para novas evidências espaciais e bloqueia coordenadas inválidas ou versão documental divergente. Em telas menores, documento e revisão alternam por um controle de visão sem duplicar estado.
+A decisão humana fica navegável e verificável no documento, sem misturar extração original com revisão. O contrato exige uma região explícita para novas evidências espaciais e bloqueia coordenadas inválidas ou versão documental divergente. O filtro contextual reduz ruído visual sem apagar ou reclassificar evidência; por ser uma regra de apresentação compatível, não exige nova versão de `spatial-evidence`. Em telas menores, documento e revisão alternam por um controle de visão sem duplicar estado.
 
 O advisor sinaliza a RPC pública como `security definer`. O uso é intencional e segue a exceção controlada do ADR-011: autorização interna explícita, DML direto revogado, trilha imutável e testes negativos.
 

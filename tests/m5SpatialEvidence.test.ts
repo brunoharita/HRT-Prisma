@@ -8,6 +8,7 @@ import {
   fieldPathMatches,
   fitPixelRectToVisualSlot,
   isNormalizedPageRegion,
+  isReviewEvidenceVisibleOnCurrentScreen,
   normalizePointerRegion,
   normalizedRegionStyle,
   textContainedByPixelRegion,
@@ -38,6 +39,26 @@ test("M5 resolves granular review fields without losing their top-level M2-C con
   assert.equal(fieldPathMatches("experiences.2", "experiences.2.role"), true);
   assert.equal(fieldPathMatches("experiences.1", "experiences.2.role"), false);
   assert.equal(fieldPathMatches("competencies", "competencies"), true);
+});
+
+test("M5 shows spatial evidence only for the review screen and entity currently open", () => {
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("experiences.0.organization", "experiences.0.role"), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("experiences.0.period", "experiences.0.role"), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("experiences.1.period", "experiences.0.role"), false);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("education.2.institution", "education.2.course"), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("education.1.period", "education.2.course"), false);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("summary", "summary"), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("competencies", "summary"), false);
+});
+
+test("M5 treats all fields rendered together on the Other screen as one visible scope", () => {
+  const customField = "customSections.additional.items.item-1.value";
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("certifications", customField), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("uncertainties", customField), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("notIdentified", customField), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("customSections.projects.items.item-2.value", customField), true);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("languages", customField), false);
+  assert.equal(isReviewEvidenceVisibleOnCurrentScreen("unknown.path", customField), false);
 });
 
 test("M5 includes only characters visually contained by the selected rectangle", () => {
@@ -245,6 +266,7 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(viewer, /pendingCharacterRegions/);
   assert.match(viewer, /prisma-evidence-character-highlight/);
   assert.match(viewer, /selectedTextUnits/);
+  assert.match(viewer, /isReviewEvidenceVisibleOnCurrentScreen\(link\.fieldPath, selectedFieldPath\)/);
   assert.doesNotMatch(viewer, /rectanglesIntersect/);
   assert.match(viewer, /ocrVersionRef/);
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);

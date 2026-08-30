@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: cc8bf3bb1d9952862e0f4a69a597b01e5c1daf0ff1182c0fb942a345d26c25a5
+source_manifest_sha256: 1bc0ee7c6426248efedf439d1714f214a6d3756604deddc391cce40c0aa59045
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.3.0
+version: 2.3.1
 last_verified: 2026-08-29
 ---
 
@@ -334,6 +334,7 @@ last_verified: 2026-08-29
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` resolve um conjunto explícito de caracteres e usa as mesmas caixas para texto, refinamento e destaque visual pendente; na direita, somente um caractere contíguo pode ser recuperado por tolerância subpixel, sem ampliar esquerda, topo ou base. A geometria de fonte de fallback é limitada pelo próximo item visual da mesma linha e a faixa de status é reservada antes do arraste, evitando invasão do conteúdo vizinho e deslocamento do PDF durante o gesto. Evidências `pdfjs-text-layer-v1` permanecem históricas.
+- Destaques espaciais persistidos são filtrados pelo contexto de revisão aberto: Experiência e Formação exibem somente o registro atual; cada outra aba exibe apenas seus campos renderizados. O filtro é local, não destrutivo e não modifica o contrato `spatial-evidence` 1.2.0.
 - O modal M5 aplica texto reconhecido e não editado sem justificativa, exige explicação somente para interpretação ou conteúdo manual e apresenta validação/falha dentro da própria janela.
 - Refinamento espacial 1.2 implementado localmente: uma nova seleção preserva o texto bruto, identifica regiões sobrepostas de campos irmãos do mesmo registro, desconta por padrão somente áreas humanas e permite reinclusão explícita. A subtração usa caracteres PDF.js ou símbolos posicionados do OCR; nenhum texto externo ao retângulo participa.
 - Extração adaptativa v2 implementada localmente: PDF.js preserva linhas e geometria; a estruturação reconhece blocos completos, períodos abreviados, empresa em linha distinta e permanências com cargos subordinados; cada campo pode possuir região original navegável. Padrões organizacionais aprovados funcionam como sinais estruturais allowlisted, nunca como templates executáveis.
@@ -358,7 +359,7 @@ last_verified: 2026-08-29
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 78 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, recuperação subpixel do último caractere, encaixe geométrico antes do próximo item visual, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 80 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, recuperação subpixel do último caractere, encaixe geométrico antes do próximo item visual, filtro contextual de destaques por aba/registro, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -452,7 +453,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-29, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 78 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As migrations do refinamento espacial 1.2 estão no Prisma-QA e passaram por transações revertidas de sucesso, sobreposição inválida, registro semântico incorreto e usuário sem membership, sem resíduos. No navegador interno autenticado, o smoke do currículo real de Bruno Harita confirmou que a seleção de `Pós-graduação em Gestão de Processos de TI` inclui o `I`, exclui a instituição à direita e mantém destaque e texto idênticos; a operação foi cancelada sem persistência. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-29, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 80 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A regressão nova confirma que os destaques espaciais acompanham somente a aba e o registro abertos, inclusive o agrupamento explícito de Outros e a falha restritiva para caminhos desconhecidos. As migrations do refinamento espacial 1.2 estão no Prisma-QA e passaram por transações revertidas de sucesso, sobreposição inválida, registro semântico incorreto e usuário sem membership, sem resíduos. No navegador interno autenticado, o smoke anterior do currículo real de Bruno Harita confirmou que a seleção de `Pós-graduação em Gestão de Processos de TI` inclui o `I`, exclui a instituição à direita e mantém destaque e texto idênticos; a operação foi cancelada sem persistência. A nova sessão controlável abriu sem autenticação, portanto o filtro contextual permanece sem novo smoke visual autenticado. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 

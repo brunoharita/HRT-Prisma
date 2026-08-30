@@ -175,6 +175,13 @@ export function fieldPathMatches(linkFieldPath: string, selectedFieldPath: strin
     || selectedFieldPath.startsWith(`${linkFieldPath}.`);
 }
 
+export function isReviewEvidenceVisibleOnCurrentScreen(
+  linkFieldPath: string,
+  selectedFieldPath: string,
+): boolean {
+  return reviewScreenScope(linkFieldPath) === reviewScreenScope(selectedFieldPath);
+}
+
 export function textContainedByPixelRegion(
   units: PositionedTextUnit[],
   selection: PixelRect,
@@ -337,6 +344,14 @@ function normalizeComparableText(value: string): string {
     .replace(/\s+/g, " ")
     .trim()
     .toLowerCase();
+}
+
+function reviewScreenScope(fieldPath: string): string {
+  const entity = /^(experiences|education)\.([0-9]+)(?:\.|$)/.exec(fieldPath);
+  if (entity) return `${entity[1]}.${entity[2]}`;
+  if (["certifications", "uncertainties", "notIdentified"].includes(fieldPath)
+    || fieldPath.startsWith("customSections.")) return "other";
+  return fieldPath;
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {
