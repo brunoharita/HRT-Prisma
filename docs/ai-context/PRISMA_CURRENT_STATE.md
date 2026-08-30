@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.3.1
-last_verified: 2026-08-29
+version: 2.3.2
+last_verified: 2026-08-30
 ---
 
 # Estado atual do Prisma
@@ -22,7 +22,7 @@ last_verified: 2026-08-29
 - Adapter Supabase web tipado e centralizado para memberships, operador autenticado e leituras de domínio.
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
-- Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional.
+- Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` resolve um conjunto explícito de caracteres e usa as mesmas caixas para texto, refinamento e destaque visual pendente; na direita, somente um caractere contíguo pode ser recuperado por tolerância subpixel, sem ampliar esquerda, topo ou base. A geometria de fonte de fallback é limitada pelo próximo item visual da mesma linha e a faixa de status é reservada antes do arraste, evitando invasão do conteúdo vizinho e deslocamento do PDF durante o gesto. Evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Destaques espaciais persistidos são filtrados pelo contexto de revisão aberto: Experiência e Formação exibem somente o registro atual; cada outra aba exibe apenas seus campos renderizados. O filtro é local, não destrutivo e não modifica o contrato `spatial-evidence` 1.2.0.
 - O modal M5 aplica texto reconhecido e não editado sem justificativa, exige explicação somente para interpretação ou conteúdo manual e apresenta validação/falha dentro da própria janela.
@@ -49,7 +49,7 @@ last_verified: 2026-08-29
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 80 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, recuperação subpixel do último caractere, encaixe geométrico antes do próximo item visual, filtro contextual de destaques por aba/registro, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
+- 81 testes técnicos aprovados, incluindo contratos M2-A/M2-B/M2-C/M5/currículo-first, legibilidade estrutural da central de processamento, extração adaptativa v2.1, áreas personalizadas, aprendizado metadata-only, contenção textual estrita, recuperação subpixel do último caractere, encaixe geométrico antes do próximo item visual, filtro contextual de destaques por aba/registro, refinamento espacial com subtração de áreas irmãs, aplicação contextual da seleção, PDF inválido, idempotência, concorrência, coordenadas, revisão imutável, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -143,4 +143,4 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-29, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 80 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A regressão nova confirma que os destaques espaciais acompanham somente a aba e o registro abertos, inclusive o agrupamento explícito de Outros e a falha restritiva para caminhos desconhecidos. As migrations do refinamento espacial 1.2 estão no Prisma-QA e passaram por transações revertidas de sucesso, sobreposição inválida, registro semântico incorreto e usuário sem membership, sem resíduos. No navegador interno autenticado, o smoke anterior do currículo real de Bruno Harita confirmou que a seleção de `Pós-graduação em Gestão de Processos de TI` inclui o `I`, exclui a instituição à direita e mantém destaque e texto idênticos; a operação foi cancelada sem persistência. A nova sessão controlável abriu sem autenticação, portanto o filtro contextual permanece sem novo smoke visual autenticado. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 81 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A cobertura confirma o refinamento estrutural da central `Processamento e revisões`: Pessoa e Documento possuem largura e composição próprias, nomes longos são limitados visualmente a duas linhas com tooltip e as colunas operacionais permanecem compactas. A nova sessão controlável não possuía autenticação e o Chrome não estava conectado, portanto o smoke visual autenticado desktop/mobile permanece pendente. O smoke autenticado anterior continua comprovando a seleção espacial exata terminada em `TI`. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.

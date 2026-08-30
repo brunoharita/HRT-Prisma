@@ -85,3 +85,20 @@ test("M2-C exposes four local flows under Pessoas without adding a global naviga
   assert.match(versions, /Compare versões aprovadas/);
   assert.doesNotMatch(application, /label: "Processamento e revisões"/);
 });
+
+test("M2-C operations table preserves readable person and document columns", async () => {
+  const [operations, styles] = await Promise.all([
+    readFile("web/src/pages/DocumentOperationsPage.tsx", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
+  ]);
+
+  assert.match(operations, /title: "Pessoa"[\s\S]*?width: 280/);
+  assert.match(operations, /title: "Documento"[\s\S]*?width: 270/);
+  assert.match(operations, /prisma-operation-person-copy/);
+  assert.match(operations, /prisma-operation-document-copy/);
+  assert.match(operations, /tableLayout="fixed"/);
+  assert.match(operations, /Mostrando \$\{range\[0\]\} a \$\{range\[1\]\}/);
+  assert.match(styles, /\.prisma-operation-person-copy strong[\s\S]*?-webkit-line-clamp: 2/);
+  assert.match(styles, /\.prisma-operation-document[\s\S]*?grid-template-columns: 34px minmax\(0, 1fr\)/);
+  assert.match(styles, /\.prisma-operations-table \.ant-table-tbody > tr > td[\s\S]*?vertical-align: middle/);
+});

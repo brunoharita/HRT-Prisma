@@ -48,3 +48,9 @@
 - As seis RPCs públicas M2-C aparecem no advisor como `security definer`; o ADR-011 registra a exceção controlada, checks internos e DML direto revogado.
 - A proteção contra senhas vazadas permanece desabilitada no projeto Supabase atual.
 - Não há frontend hospedado nem ambiente de produção separado por decisão explícita enquanto o uso for somente interno e sem clientes.
+
+## Refinamento visual da central em 2026-08-30
+
+A tela `Processamento e revisões` preserva o fluxo e o contrato M2-C, mas passou a distribuir a tabela por necessidade de leitura. `Pessoa` e `Documento` possuem larguras explícitas maiores, composição com avatar ou ícone, hierarquia de nome e metadado, limite visual de duas linhas e tooltip para o conteúdo integral. Status, Tentativa, Perfil, data e Ações permanecem compactos. A tabela usa layout fixo com rolagem interna em viewports menores, alinhamento vertical comum e paginação integrada ao cartão; filtros, consulta, estados e navegação não foram alterados.
+
+`CI=true pnpm run validate` aprovou lint de 171 arquivos, fundação, Context Pack, dois typechecks, build web, 81 testes técnicos, 19 casos golden e demonstração `VERTICAL_SLICE_OK`. A cobertura inclui regressões estáticas para largura das duas colunas textuais, limite de linhas, composição interna, alinhamento das células e rodapé. A nova sessão de navegador disponível não possuía autenticação reutilizável e o Chrome não estava conectado, portanto o smoke visual autenticado desktop/mobile desta revisão permanece pendente e não é apresentado como aprovado.

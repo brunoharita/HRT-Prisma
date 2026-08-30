@@ -2033,10 +2033,109 @@ textarea {
 .prisma-operations-toolbar .ant-card-body {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(190px, 240px);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.prisma-operations-toolbar .ant-input-affix-wrapper,
+.prisma-operations-toolbar .ant-select-selector {
+  min-height: 40px;
+}
+
+.prisma-operations-toolbar .ant-select { width: 100%; }
+
+.prisma-operations-table .ant-card-body { padding: 0; }
+.prisma-operations-table .ant-table-thead > tr > th {
+  padding-block: 15px;
+  color: #53627a;
+  font-size: 0.73rem;
+  font-weight: 740;
+  letter-spacing: 0.018em;
+  background: #fafbfd;
+}
+
+.prisma-operations-table .ant-table-tbody > tr > td {
+  min-height: 78px;
+  padding-block: 15px;
+  vertical-align: middle;
+}
+
+.prisma-operations-table .ant-table-tbody > tr:last-child > td { border-bottom: 0; }
+.prisma-operations-table .ant-table-pagination { margin: 14px 16px; }
+.prisma-operations-table .ant-pagination-total-text { margin-right: auto; color: var(--prisma-text-secondary); }
+
+.prisma-operation-person {
+  width: 100%;
+  grid-template-columns: 42px minmax(0, 1fr);
   gap: 12px;
 }
 
-.prisma-operations-table .ant-card-body { padding: 0; }
+.prisma-operation-person .prisma-person-avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: #175a91;
+  font-size: 0.78rem;
+  font-weight: 760;
+  background: linear-gradient(145deg, #dff3ff, #cfe8fb);
+  border: 1px solid rgba(57, 137, 204, 0.12);
+}
+
+.prisma-operation-person-copy,
+.prisma-operation-document-copy {
+  display: grid;
+  min-width: 0;
+}
+
+.prisma-operation-person-copy strong,
+.prisma-operation-document-copy strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--prisma-text);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.prisma-operation-person-copy small {
+  margin-top: 4px;
+  color: var(--prisma-text-secondary);
+  font-size: 0.75rem;
+}
+
+.prisma-operation-document {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.prisma-operation-document-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 38px;
+  color: #31567f;
+  font-size: 1rem;
+  background: #f7f9fc;
+  border: 1px solid #dfe6f0;
+  border-radius: 9px;
+}
+
+.prisma-operation-compact-value,
+.prisma-operation-date {
+  color: #42526b;
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.prisma-operation-date { white-space: nowrap; }
+.prisma-operation-open { min-width: 84px; }
+.prisma-operations-table .ant-tag { margin-inline-end: 0; white-space: nowrap; }
 .prisma-table-secondary { display: block; margin-top: 3px; color: var(--prisma-text-secondary); }
 .prisma-document-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
 .prisma-document-summary-grid .prisma-card { height: 100%; }
