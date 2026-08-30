@@ -94,3 +94,22 @@ test("custom area migration validates shape, isolates tenants and learns metadat
   assert.match(provenanceSql, /revoke all on public\.organization_custom_section_confirmations from public, anon, authenticated/);
   assert.doesNotMatch(provenanceSql, /selected_text|quoted_text|item_value|profile_content/);
 });
+
+test("the effective custom-section approval trigger has no PL/pgSQL variable collision", async () => {
+  const sql = await readFile("supabase/migrations/20260830201029_review_approval_runtime_hardening.sql", "utf8");
+  const declaredVariables = new Set(Array.from(
+    sql.matchAll(/^\s{2}([a-z_][a-z0-9_]*)\s+(?:uuid|text|jsonb|integer|boolean|record)(?:\s|;)/gim),
+    (match) => match[1] ?? "",
+  ));
+  const conflictColumns = new Set(Array.from(
+    sql.matchAll(/on\s+conflict\s*\(([^)]+)\)/gim),
+    (match) => match[1]!.split(",").map((column) => column.trim()),
+  ).flat());
+  const collisions = Array.from(declaredVariables).filter((variable) => conflictColumns.has(variable));
+
+  assert.deepEqual(collisions, []);
+  assert.match(sql, /#variable_conflict error/);
+  assert.match(sql, /v_definition_id uuid/);
+  assert.match(sql, /new\.organization_id, v_definition_id, new\.id/);
+  assert.doesNotMatch(sql, /^\s{2}definition_id uuid;/m);
+});

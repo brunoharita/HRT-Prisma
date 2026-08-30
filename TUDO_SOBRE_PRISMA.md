@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: b55d0aa8cf2def6d9136ec0a096cbe1361a81f2bb001ed860853b44abefb0acc
+source_manifest_sha256: 028ec9ca3350cd6466cb3c29cfe2b453c482f0ccb80f4a627dda85e5002e17bb
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.3.6
+version: 2.3.7
 last_verified: 2026-08-30
 ---
 
@@ -321,7 +321,7 @@ last_verified: 2026-08-30
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega verificada: `codex/review-action-unblocking`, construída sobre `codex/review-field-lifecycle` e destinada a preservar compatibilidade com o histórico já ativo em QA.
+- Branch de entrega verificada: `codex/review-approval-hardening`, construída sobre `codex/review-action-unblocking` e destinada a preservar compatibilidade com o histórico já ativo em QA.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -349,6 +349,7 @@ last_verified: 2026-08-30
 - Ciclo de vida de campos 1.0.0 implementado localmente e no Prisma-QA: Nome completo, contato efetivo e conteúdo profissional material são gates de salvamento; vazios opcionais são normalizados; resultados, experiências, formações e itens personalizados podem ser incluídos ou removidos com Desfazer; experiências preservam Empresa, Cargo, Período e Descrição. IDs estáveis impedem deslocamento de evidência, com leitura compatível dos caminhos numéricos históricos.
 - Coordenação UX de ações implementada localmente: a sujeira do rascunho é calculada pela forma normalizada, inclusões vazias podem ser canceladas sem resíduo, cliques repetidos focalizam o mesmo formulário, campos removidos não mantêm ações de evidência apontando para caminhos inexistentes, raízes vazias preservam sua aba e sair com qualquer diferença local exige confirmação.
 - A fronteira privada da aprovação foi endurecida localmente: `identity` e `contact` são removidos antes de criar `professional_profiles`; nome e contato confirmados atualizam `people` e `person_private_data`, valores ausentes não apagam dados existentes e a constraint rejeita PII de contato no perfil profissional. RLS e papéis não foram ampliados.
+- A execução final da aprovação foi endurecida localmente e no Prisma-QA: o gatilho de aprendizado de áreas personalizadas usa variáveis `v_` e falha em compilação diante de identificadores ambíguos. O adapter web converte concorrência, estado, autorização, evidência, identidade, contato, shape e idempotência em mensagens acionáveis, e sanitiza falhas inesperadas sem expor SQL ou nomes internos.
 - Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
@@ -366,7 +367,7 @@ last_verified: 2026-08-30
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 93 testes técnicos aprovados, incluindo ciclo de vida dos campos, IDs estáveis e compatibilidade histórica, além dos contratos M2-A/M2-B/M2-C/M5/currículo-first, resumo estruturado com fronteira privada, extração adaptativa, áreas personalizadas, contenção textual, refinamento espacial, idempotência, auditoria e Member sem documento bruto.
+- 99 testes técnicos aprovados, incluindo hardening da aprovação e sanitização de erros, ciclo de vida dos campos, IDs estáveis e compatibilidade histórica, além dos contratos M2-A/M2-B/M2-C/M5/currículo-first, resumo estruturado com fronteira privada, extração adaptativa, áreas personalizadas, contenção textual, refinamento espacial, idempotência, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -386,6 +387,7 @@ last_verified: 2026-08-30
 - Migration local `20260829024200_custom_section_learning_provenance`, aplicada no Prisma-QA como `20260829024007_custom_section_learning_provenance`: cria confirmações append-only ligadas à revisão aprovada, com RLS e DML direto revogado, sem valores dos itens.
 - Migration local `20260830160132_structured_resume_summary`, aplicada no Prisma-QA como `20260830162510_structured_resume_summary`, valida o novo shape, amplia caminhos de evidência/auditoria, adiciona estado e LinkedIn à tabela privada e redefine a aprovação para separar PII do perfil profissional.
 - Migration local `20260830175144_review_field_lifecycle`, aplicada no Prisma-QA como `20260830181745_review_field_lifecycle`, adiciona validação de identidade estável para campos repetíveis, gates autoritativos de salvamento, compatibilidade de caminhos históricos e gatilhos privados com `search_path` vazio.
+- Migration local `20260830201029_review_approval_runtime_hardening`, aplicada no Prisma-QA como `20260830201459_review_approval_runtime_hardening`, substitui o gatilho de aprendizado de áreas personalizadas com variáveis prefixadas, `#variable_conflict error`, verificação pós-instalação e execução direta revogada.
 - Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 
@@ -420,6 +422,7 @@ last_verified: 2026-08-30
 - O refinamento espacial 1.2 foi aplicado no Prisma-QA. A tabela está com RLS, policy tenant-scoped, `authenticated` somente com leitura, `anon` sem leitura e sem execução da RPC, e ledger imutável. Transação revertida comprovou rejeição de sobreposição falsa e registro diferente, persistência conjunta de texto bruto, texto efetivo e decisão excluída, e rollback sem resíduos. Sessão autenticada sem membership foi negada. O advisor acrescenta somente a RPC `security definer` intencional, protegida por autorização interna, e índices novos ainda não utilizados.
 - O resumo estruturado foi aplicado no Prisma-QA. Cinco constraints estão validadas, `person_private_data` preserva RLS, não existe perfil com `identity` ou `contact`, shapes com e-mail inválido, área duplicada ou ID de resultado inválido são rejeitados e Member continua vendo zero linhas privadas. Uma aprovação autenticada em transação revertida comprovou atualização de nome/contato canônicos, promoção de posicionamento e remoção de PII do perfil; o rollback deixou zero operações ou perfis residuais. O advisor acrescenta somente o alerta esperado da RPC `approve_profile_review` como `security definer`, protegida por autorização interna, e mantém avisos históricos sem nova ausência de RLS.
 - A migration local `20260830175144_review_field_lifecycle`, aplicada no Prisma-QA como `20260830181745_review_field_lifecycle`, mantém seis constraints de ciclo de vida e a constraint de caminhos validadas, protege novas extrações e salvamentos por gatilhos privados, aceita caminhos estáveis e numéricos e não amplia grants. Uma transação revertida rejeitou nome, contato, conteúdo material e ID inválidos, aceitou o payload válido e deixou zero resíduos. O smoke autenticado confirmou Adicionar experiência, remoção pendente, Desfazer, Nome completo obrigatório e ações visíveis de inclusão, encerrando com rascunho sincronizado.
+- O hardening final da aprovação está ativo no Prisma-QA. O gatilho privado contém `#variable_conflict error`, usa `v_definition_id` e continua sem execução para `anon` ou `authenticated`. A revisão real que havia falhado foi aprovada dentro de uma transação de QA: estado, perfil profissional e confirmação da área personalizada foram comprovados antes do rollback deliberado. A revisão permaneceu `draft`, lock 14, sem perfil, confirmação ou operação residual. Os advisors não acrescentaram alerta relacionado ao novo gatilho; avisos históricos permanecem documentados.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
 Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
@@ -453,6 +456,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O smoke autenticado desktop do mapa canônico foi concluído no currículo real em 57% e 147%; a mesma região recuperou 1.063 unidades e o texto integral. A alternância mobile e o gesto por arraste em dispositivo táctil continuam sem evidência específica deste movimento.
 - A persistência adaptativa v2 está em QA e o runtime web permanece local. O advisor não aponta RLS ausente nem foreign key adaptativa sem índice; registra somente os novos índices ainda sem uso e a RPC `security definer` intencionalmente executável por `authenticated`, protegida por autorização interna e DML revogado. A qualidade possui regressões sanitizadas para HRT, Bencato, Scaffold, Servimed e NM Systems, mas ainda não foi medida em lote de currículos reais autorizados nem recebeu smoke visual autenticado.
 - O schema de áreas personalizadas e seu aprendizado estrutural está em QA; o frontend permanece local. O fluxo criar área -> evidência -> aprovação -> nova extração ainda precisa de smoke autenticado com dado sintético. Nenhuma revisão aprovada real foi rebaixada para simular o gatilho.
+- O smoke visual protegido específico deste hardening não foi concluído porque a sessão do navegador interno expirou e não havia Chrome conectado. A aprovação real foi exercitada com identidade administrativa autenticada em transação revertida; nenhuma revisão real foi promovida como efeito do teste.
 - O schema do refinamento espacial 1.2 está ativo em QA e o frontend permanece local. A cobertura determinística e as transações revertidas comprovam subtração, limites do contrato, autorização e ausência de resíduos; ainda falta smoke visual autenticado com sobreposição real no PDF.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - O CI usa a política fail-closed do pnpm para scripts de instalação de dependências; o `postinstall` não funcional do `tesseract.js` foi revisado e explicitamente negado em `pnpm-workspace.yaml`. A geração do Context Pack normaliza finais de linha para manter hash e conteúdo determinísticos em Windows e Linux.
@@ -463,7 +467,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 180 arquivos, fundação, Context Pack, dois typechecks, build web, 96 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. O Prisma-QA recebeu anteriormente a migration `20260830181745_review_field_lifecycle`; este refinamento não altera schema, RLS ou RPC. O smoke visual autenticado confirmou inclusão idempotente de formação, experiência e resultado; seleção espacial de formação transitória sem salvamento ou justificativa; cancelamento sem remoção, revisão ou resíduo; contagens e aba restauradas; e encerramento com rascunho sincronizado. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 184 arquivos, fundação, Context Pack, dois typechecks, build web, 99 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A migration `20260830201029_review_approval_runtime_hardening` foi aplicada ao Prisma-QA, a definição e os grants do gatilho foram verificados e a revisão que originou o incidente percorreu `approve_profile_review` por completo em uma transação autenticada: revisão aprovada, perfil criado e confirmação da área personalizada existiram antes do rollback deliberado. A verificação posterior confirmou zero resíduos. O smoke visual protegido permaneceu indisponível por sessão expirada; o frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 

@@ -40,6 +40,7 @@ import {
   type LearnedCustomSectionDefinition,
 } from "../../domain/customProfileSections";
 import { legacyReviewEntityId } from "../../domain/reviewFieldLifecycle";
+import { reviewOperationErrorMessage } from "../../domain/reviewOperationErrors";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -1263,10 +1264,7 @@ function throwIfError(error: { message: string } | null, message: string): void 
 
 function throwReviewError(error: { message: string; code?: string } | null, message: string): void {
   if (!error) return;
-  if (error.code === "40001" || /review_conflict|profile_base_conflict|processing_base_conflict|serialize/i.test(error.message)) {
-    throw new Error("Conflito de revisão: os dados mudaram desde que esta tela foi aberta. Recarregue antes de continuar.");
-  }
-  throw new Error(`${message} ${error.message}`);
+  throw new Error(reviewOperationErrorMessage(error, message));
 }
 
 function throwResolutionError(error: { message: string; code?: string } | null, message: string): void {
