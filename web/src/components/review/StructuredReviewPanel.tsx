@@ -25,6 +25,7 @@ interface StructuredReviewPanelProps {
   workspace: ProfileReviewWorkspace;
   draft: StructuredDraft;
   editable: boolean;
+  viewOnly?: boolean;
   busy: boolean;
   hasUnsavedChanges: boolean;
   hasTransientChanges: boolean;
@@ -55,6 +56,7 @@ export function StructuredReviewPanel({
   workspace,
   draft,
   editable,
+  viewOnly = false,
   busy,
   hasUnsavedChanges,
   hasTransientChanges,
@@ -176,8 +178,8 @@ export function StructuredReviewPanel({
   return (
     <section aria-label="Revisão estruturada" className="prisma-structured-review">
       <div className="prisma-review-panel-topline">
-        <Typography.Text type="secondary">Modo de edição</Typography.Text>
-        <Tag color="blue"><FileSearchOutlined /> Assistida por evidência</Tag>
+        <Typography.Text type="secondary">{viewOnly ? "Modo de visualização" : "Modo de edição"}</Typography.Text>
+        <Tag color="blue"><FileSearchOutlined /> {viewOnly ? "Somente leitura" : "Assistida por evidência"}</Tag>
       </div>
       {editable && hasUnsavedChanges ? (
         <Alert
@@ -226,9 +228,9 @@ export function StructuredReviewPanel({
       <section className="prisma-linked-evidence" aria-labelledby="linked-evidence-title">
         <div className="prisma-review-section-title">
           <div><Typography.Text id="linked-evidence-title" strong>Evidências vinculadas</Typography.Text><small>{selectedFieldPath}</small></div>
-          <Tooltip title={evidenceBlockedReason}>
+          {editable ? <Tooltip title={evidenceBlockedReason}>
             <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={evidenceBlockedReason ? `Adicionar evidência. ${evidenceBlockedReason}` : undefined} className={evidenceBlockedReason ? "prisma-review-action--blocked" : ""} disabled={!editable || busy || !canSelectEvidence} icon={hasUnsavedChanges || !canSelectEvidence ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} size="small">Adicionar evidência</Button>
-          </Tooltip>
+          </Tooltip> : null}
         </div>
         {evidenceLinks.length ? (
           <div className="prisma-evidence-card-grid">
@@ -263,11 +265,11 @@ export function StructuredReviewPanel({
             })}
           </div>
         ) : <Empty description="Sem evidência vinculada" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-        <Tooltip title={evidenceBlockedReason}>
+        {editable ? <Tooltip title={evidenceBlockedReason}>
         <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={evidenceBlockedReason ? `Selecionar uma nova área. ${evidenceBlockedReason}` : undefined} block className={["prisma-add-evidence-card", evidenceBlockedReason ? "prisma-review-action--blocked" : ""].filter(Boolean).join(" ")} disabled={!editable || busy || !canSelectEvidence} icon={hasUnsavedChanges || !canSelectEvidence ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} type="dashed">
           Selecione uma nova área no documento
         </Button>
-        </Tooltip>
+        </Tooltip> : null}
       </section>
 
       {editable ? (
@@ -322,7 +324,7 @@ export function StructuredReviewPanel({
       setExperienceIndex(index);
       onFieldSelect(reviewEntityFieldPath("experience", item, "organization"));
     };
-    if (draft.experiences.length === 0) return <div className="prisma-entity-review"><Empty description="Nenhuma experiência mantida neste perfil." /><Button disabled={!editable} icon={<PlusOutlined />} onClick={addExperience} type="dashed">Adicionar experiência</Button>{removedEntries.filter((entry) => entry.kind === "experience").map(removalNotice)}</div>;
+    if (draft.experiences.length === 0) return <div className="prisma-entity-review"><Empty description="Nenhuma experiência mantida neste perfil." />{editable ? <Button icon={<PlusOutlined />} onClick={addExperience} type="dashed">Adicionar experiência</Button> : null}{removedEntries.filter((entry) => entry.kind === "experience").map(removalNotice)}</div>;
     const index = Math.min(experienceIndex, draft.experiences.length - 1);
     const reviewed = draft.experiences[index]!;
     const extracted = workspace.extractedData.experiences.find((item) => item.id === reviewed.id);
@@ -343,7 +345,7 @@ export function StructuredReviewPanel({
     };
     return (
       <div className="prisma-entity-review">
-        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.experiences.length} index={index} label="Experiência" onChange={(next) => { setExperienceIndex(next); const item = draft.experiences[next]; if (item) onFieldSelect(reviewEntityFieldPath("experience", item, "role")); }} /><Space wrap><Button disabled={!editable} icon={<PlusOutlined />} onClick={addExperience} size="small">Adicionar experiência</Button><Popconfirm onConfirm={removeExperience} title={persisted ? "Não incluir esta experiência no perfil?" : "Cancelar a inclusão desta experiência?"}><Button danger={persisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{persisted ? "Remover experiência" : "Cancelar inclusão"}</Button></Popconfirm></Space></div>
+        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.experiences.length} index={index} label="Experiência" onChange={(next) => { setExperienceIndex(next); const item = draft.experiences[next]; if (item) onFieldSelect(reviewEntityFieldPath("experience", item, "role")); }} />{editable ? <Space wrap><Button icon={<PlusOutlined />} onClick={addExperience} size="small">Adicionar experiência</Button><Popconfirm onConfirm={removeExperience} title={persisted ? "Não incluir esta experiência no perfil?" : "Cancelar a inclusão desta experiência?"}><Button danger={persisted} icon={<DeleteOutlined />} size="small">{persisted ? "Remover experiência" : "Cancelar inclusão"}</Button></Popconfirm></Space> : null}</div>
         <Typography.Text type="secondary">{persisted ? `Origem ${reviewed.source === "human" ? "humana" : "extraída"}. Informe ao menos Empresa ou Cargo.` : "Nova experiência. Preencha Empresa ou Cargo manualmente, ou selecione uma área no documento sem salvar antes."}</Typography.Text>
         <ReviewField editable={editable} extracted={extracted?.organization ?? "Não identificado"} fieldPath={organizationPath} label="Empresa" onChange={(value) => update({ organization: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, organizationPath)} validationMessage={validationMessage(organizationPath)} value={reviewed.organization ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.role ?? "Não identificado"} fieldPath={rolePath} label="Cargo" onChange={(value) => update({ role: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, rolePath)} validationMessage={validationMessage(rolePath)} value={reviewed.role ?? ""} />
@@ -371,7 +373,7 @@ export function StructuredReviewPanel({
       setEducationIndex(index);
       onFieldSelect(reviewEntityFieldPath("education", item, "course"));
     };
-    if (draft.education.length === 0) return <div className="prisma-entity-review"><Empty description="Nenhuma formação mantida neste perfil." /><Button disabled={!editable} icon={<PlusOutlined />} onClick={addEducation} type="dashed">Adicionar formação</Button>{removedEntries.filter((entry) => entry.kind === "education").map(removalNotice)}</div>;
+    if (draft.education.length === 0) return <div className="prisma-entity-review"><Empty description="Nenhuma formação mantida neste perfil." />{editable ? <Button icon={<PlusOutlined />} onClick={addEducation} type="dashed">Adicionar formação</Button> : null}{removedEntries.filter((entry) => entry.kind === "education").map(removalNotice)}</div>;
     const index = Math.min(educationIndex, draft.education.length - 1);
     const reviewed = draft.education[index]!;
     const extracted = workspace.extractedData.education.find((item) => item.id === reviewed.id);
@@ -391,7 +393,7 @@ export function StructuredReviewPanel({
     };
     return (
       <div className="prisma-entity-review">
-        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.education.length} index={index} label="Formação" onChange={(next) => { setEducationIndex(next); const item = draft.education[next]; if (item) onFieldSelect(reviewEntityFieldPath("education", item, "course")); }} /><Space wrap><Button disabled={!editable} icon={<PlusOutlined />} onClick={addEducation} size="small">Adicionar formação</Button><Popconfirm onConfirm={removeEducation} title={persisted ? "Não incluir esta formação no perfil?" : "Cancelar a inclusão desta formação?"}><Button danger={persisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{persisted ? "Remover formação" : "Cancelar inclusão"}</Button></Popconfirm></Space></div>
+        <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.education.length} index={index} label="Formação" onChange={(next) => { setEducationIndex(next); const item = draft.education[next]; if (item) onFieldSelect(reviewEntityFieldPath("education", item, "course")); }} />{editable ? <Space wrap><Button icon={<PlusOutlined />} onClick={addEducation} size="small">Adicionar formação</Button><Popconfirm onConfirm={removeEducation} title={persisted ? "Não incluir esta formação no perfil?" : "Cancelar a inclusão desta formação?"}><Button danger={persisted} icon={<DeleteOutlined />} size="small">{persisted ? "Remover formação" : "Cancelar inclusão"}</Button></Popconfirm></Space> : null}</div>
         <Typography.Text type="secondary">{persisted ? `Origem ${reviewed.source === "human" ? "humana" : "extraída"}. Informe ao menos Curso ou Instituição.` : "Nova formação. Preencha Curso ou Instituição manualmente, ou selecione uma área no documento sem salvar antes."}</Typography.Text>
         <ReviewField editable={editable} extracted={extracted?.course ?? "Não identificado"} fieldPath={coursePath} label="Curso" onChange={(value) => update({ course: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, coursePath)} validationMessage={validationMessage(coursePath)} value={reviewed.course ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.institution ?? "Não identificado"} fieldPath={institutionPath} label="Instituição" onChange={(value) => update({ institution: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, institutionPath)} validationMessage={validationMessage(institutionPath)} value={reviewed.institution ?? ""} />
@@ -423,9 +425,11 @@ export function StructuredReviewPanel({
             <Typography.Title level={5}>Informações do currículo</Typography.Title>
             <Typography.Text type="secondary">Áreas confirmadas como conteúdo do perfil, inclusive estruturas próprias deste currículo.</Typography.Text>
           </div>
-          <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para criar uma área personalizada." : null}>
-            <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={hasUnsavedChanges ? "Criar área personalizada. Salve as alterações atuais para continuar." : undefined} className={hasUnsavedChanges ? "prisma-review-action--blocked" : ""} disabled={!editable || busy} icon={hasUnsavedChanges ? <LockOutlined /> : <PlusOutlined />} onClick={onCreateCustomSection} size="small" type="primary">Criar área personalizada</Button>
-          </Tooltip>
+          {editable ? (
+            <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para criar uma área personalizada." : null}>
+              <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={hasUnsavedChanges ? "Criar área personalizada. Salve as alterações atuais para continuar." : undefined} className={hasUnsavedChanges ? "prisma-review-action--blocked" : ""} disabled={busy} icon={hasUnsavedChanges ? <LockOutlined /> : <PlusOutlined />} onClick={onCreateCustomSection} size="small" type="primary">Criar área personalizada</Button>
+            </Tooltip>
+          ) : null}
         </div>
         {TagField({ fieldPath: "certifications", label: "Certificações" })}
         {draft.customSections.map((section) => {
@@ -456,7 +460,7 @@ export function StructuredReviewPanel({
                   <Typography.Text className="prisma-custom-profile-section__name" strong>{section.name}</Typography.Text>
                   <Typography.Text type="secondary">Área personalizada · {section.format === "list" ? "lista" : "texto"} · origem {section.source === "human" ? "humana" : "extraída"}</Typography.Text>
                 </div>
-                <Space wrap>{section.format === "list" ? <Button disabled={!editable} icon={<PlusOutlined />} onClick={addItem} size="small">Adicionar item</Button> : null}<Popconfirm onConfirm={removeSection} title={sectionPersisted ? "Remover esta área personalizada do perfil?" : "Cancelar a inclusão desta área?"}><Button danger={sectionPersisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{sectionPersisted ? "Remover área" : "Cancelar inclusão"}</Button></Popconfirm></Space>
+                {editable ? <Space wrap>{section.format === "list" ? <Button icon={<PlusOutlined />} onClick={addItem} size="small">Adicionar item</Button> : null}<Popconfirm onConfirm={removeSection} title={sectionPersisted ? "Remover esta área personalizada do perfil?" : "Cancelar a inclusão desta área?"}><Button danger={sectionPersisted} icon={<DeleteOutlined />} size="small">{sectionPersisted ? "Remover área" : "Cancelar inclusão"}</Button></Popconfirm></Space> : null}
               </div>
               {section.items.map((item, itemIndex) => {
                 const fieldPath = `customSections.${section.id}.items.${item.id}.value`;
@@ -488,15 +492,15 @@ export function StructuredReviewPanel({
                       validationMessage={validationMessage(fieldPath)}
                       value={item.value}
                     />
-                    {section.format === "list" ? <Popconfirm onConfirm={removeItem} title={itemPersisted ? "Remover este item da área?" : "Cancelar a inclusão deste item?"}><Button danger={itemPersisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{itemPersisted ? "Remover item" : "Cancelar inclusão"}</Button></Popconfirm> : null}
-                    {!item.value.trim() ? <Typography.Text type="secondary">Novo item. Preencha-o ou cancele a inclusão; não é necessário salvar enquanto estiver vazio.</Typography.Text> : null}
+                    {editable && section.format === "list" ? <Popconfirm onConfirm={removeItem} title={itemPersisted ? "Remover este item da área?" : "Cancelar a inclusão deste item?"}><Button danger={itemPersisted} icon={<DeleteOutlined />} size="small">{itemPersisted ? "Remover item" : "Cancelar inclusão"}</Button></Popconfirm> : null}
+                    {editable && !item.value.trim() ? <Typography.Text type="secondary">Novo item. Preencha-o ou cancele a inclusão; não é necessário salvar enquanto estiver vazio.</Typography.Text> : null}
                   </div>
                 );
               })}
             </section>
           );
         })}
-        {!draft.customSections.length ? <Alert description="Quando um currículo trouxer uma seção própria, crie a área e selecione sua região no documento. Depois de aprovada, essa estrutura poderá ser reconhecida em novas importações da mesma organização." showIcon type="info" /> : null}
+        {!draft.customSections.length ? <Alert description={editable ? "Quando um currículo trouxer uma seção própria, crie a área e selecione sua região no documento. Depois de aprovada, essa estrutura poderá ser reconhecida em novas importações da mesma organização." : "Este currículo não possui áreas personalizadas aprovadas."} showIcon type="info" /> : null}
         {removedEntries.filter((entry) => entry.kind === "custom-section" || entry.kind === "custom-item").map(removalNotice)}
         <Divider />
         <div>
@@ -562,14 +566,14 @@ function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftC
       <Divider />
       <div className="prisma-summary-section-heading prisma-review-section-title">
         <div><Typography.Title level={5}>Principais resultados</Typography.Title><Typography.Text type="secondary">Cada resultado possui revisão e evidência independentes.</Typography.Text></div>
-        <Button disabled={!editable} icon={<PlusOutlined />} onClick={onAddResult} size="small">Adicionar resultado</Button>
+        {editable ? <Button icon={<PlusOutlined />} onClick={onAddResult} size="small">Adicionar resultado</Button> : null}
       </div>
       {draft.keyResults.length ? draft.keyResults.map((result, index) => {
         const fieldPath = `keyResults.${result.id}.value`;
         const extracted = workspace.extractedData.keyResults.find((item) => item.id === result.id);
         const persisted = workspace.reviewedData.keyResults.some((item) => item.id === result.id);
-        return <div className="prisma-repeatable-review-item" key={result.id}><ReviewField editable={editable} extracted={extracted?.value ?? "Não identificado na extração original"} fieldPath={fieldPath} label={`Resultado ${index + 1}`} multiline onChange={(value) => onDraftChange({ ...draft, keyResults: draft.keyResults.map((item) => item.id === result.id ? { ...item, value } : item) })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, fieldPath)} validationMessage={validationMessage(fieldPath)} value={result.value} /><Popconfirm onConfirm={() => onRemoveResult(result.id)} title={persisted ? "Não incluir este resultado no perfil?" : "Cancelar a inclusão deste resultado?"}><Button danger={persisted} disabled={!editable} icon={<DeleteOutlined />} size="small">{persisted ? "Remover resultado" : "Cancelar inclusão"}</Button></Popconfirm>{!result.value.trim() ? <Typography.Text type="secondary">Novo resultado. Preencha-o ou cancele a inclusão; não é necessário salvar enquanto estiver vazio.</Typography.Text> : null}</div>;
-      }) : <Empty description="Nenhum resultado principal identificado. Selecione uma região do currículo para criar um resultado com evidência." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+        return <div className="prisma-repeatable-review-item" key={result.id}><ReviewField editable={editable} extracted={extracted?.value ?? "Não identificado na extração original"} fieldPath={fieldPath} label={`Resultado ${index + 1}`} multiline onChange={(value) => onDraftChange({ ...draft, keyResults: draft.keyResults.map((item) => item.id === result.id ? { ...item, value } : item) })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, fieldPath)} validationMessage={validationMessage(fieldPath)} value={result.value} />{editable ? <Popconfirm onConfirm={() => onRemoveResult(result.id)} title={persisted ? "Não incluir este resultado no perfil?" : "Cancelar a inclusão deste resultado?"}><Button danger={persisted} icon={<DeleteOutlined />} size="small">{persisted ? "Remover resultado" : "Cancelar inclusão"}</Button></Popconfirm> : null}{editable && !result.value.trim() ? <Typography.Text type="secondary">Novo resultado. Preencha-o ou cancele a inclusão; não é necessário salvar enquanto estiver vazio.</Typography.Text> : null}</div>;
+      }) : <Empty description={editable ? "Nenhum resultado principal identificado. Selecione uma região do currículo para criar um resultado com evidência." : "Nenhum resultado principal foi aprovado para este currículo."} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       {removedResults.map((entry) => <Alert action={<Button onClick={() => onUndoRemoval(entry)} size="small">Desfazer</Button>} key={entry.key} showIcon title={`${entry.label} ao salvar.`} type="warning" />)}
     </div>
   );
@@ -606,7 +610,7 @@ function EditableTagSurface({ fieldPath, value, editable, onSelect, onChange }: 
   onChange: (values: string[]) => void;
 }) {
   const selectRef = useRef<RefSelectProps | null>(null);
-  return <div className="prisma-reviewed-surface prisma-tag-editor" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>Revisado por você</small><Select disabled={!editable} mode="tags" onChange={onChange} open={false} ref={selectRef} tokenSeparators={[","]} value={value} /><Button disabled={!editable} icon={<PlusOutlined />} onClick={() => selectRef.current?.focus()} size="small">Adicionar</Button><Typography.Text type="secondary">Digite a informação e pressione Enter.</Typography.Text></div>;
+  return <div className="prisma-reviewed-surface prisma-tag-editor" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>{editable ? "Revisado por você" : "Valor aprovado"}</small><Select disabled={!editable} mode="tags" onChange={onChange} open={false} ref={selectRef} tokenSeparators={[","]} value={value} />{editable ? <><Button icon={<PlusOutlined />} onClick={() => selectRef.current?.focus()} size="small">Adicionar</Button><Typography.Text type="secondary">Digite a informação e pressione Enter.</Typography.Text></> : null}</div>;
 }
 
 function ReviewField({ label, fieldPath, extracted, value, editable, multiline = false, required = false, selected, validationMessage = null, onSelect, onChange }: {
@@ -627,7 +631,7 @@ function ReviewField({ label, fieldPath, extracted, value, editable, multiline =
       <Typography.Text strong>{label}{required ? <span aria-label="obrigatório" className="prisma-required-marker"> *</span> : null}</Typography.Text>
       <div className="prisma-review-value-grid">
         <ValueSurface label="Extraído pelo Prisma" onSelect={() => onSelect(fieldPath, "original")} value={extracted} />
-        <div className={["prisma-reviewed-surface", multiline ? "prisma-reviewed-surface--multiline" : ""].filter(Boolean).join(" ")} onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>Revisado por você</small>{multiline ? <Input.TextArea aria-invalid={Boolean(validationMessage)} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input aria-invalid={Boolean(validationMessage)} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
+        <div className={["prisma-reviewed-surface", multiline ? "prisma-reviewed-surface--multiline" : ""].filter(Boolean).join(" ")} onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>{editable ? "Revisado por você" : "Valor aprovado"}</small>{multiline ? <Input.TextArea aria-invalid={Boolean(validationMessage)} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input aria-invalid={Boolean(validationMessage)} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
       </div>
       {validationMessage ? <Typography.Text type="danger">{validationMessage}</Typography.Text> : null}
     </div>

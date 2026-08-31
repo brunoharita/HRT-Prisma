@@ -219,7 +219,7 @@ export const personIngestionService = {
       .maybeSingle();
     throwIfError(error, "Não foi possível carregar a Pessoa.");
     if (!person) return null;
-    const [privateResult, documentResult, profileResult] = await Promise.all([
+    const [privateResult, documentResult, profileResult, reviewResult] = await Promise.all([
       supabase.from("person_private_data")
         .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
         .eq("organization_id", organizationId).eq("person_id", personId).maybeSingle(),
@@ -229,10 +229,14 @@ export const personIngestionService = {
       supabase.from("professional_profiles")
         .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
         .eq("organization_id", organizationId).eq("person_id", personId),
+      supabase.from("profile_reviews")
+        .select("id, document_id, state, created_at")
+        .eq("organization_id", organizationId).eq("person_id", personId).order("created_at", { ascending: false }),
     ]);
     throwIfError(privateResult.error, "Não foi possível carregar os dados básicos da Pessoa.");
     throwIfError(documentResult.error, "Não foi possível carregar a linha do tempo documental.");
     throwIfError(profileResult.error, "Não foi possível carregar as versões de perfil.");
+    throwIfError(reviewResult.error, "Não foi possível carregar as verificações dos documentos.");
     const documents = documentResult.data ?? [];
     const documentIds = documents.map((document) => document.id);
     const { data: attemptRows, error: attemptError } = documentIds.length === 0
@@ -243,7 +247,11 @@ export const personIngestionService = {
     throwIfError(attemptError, "Não foi possível carregar as tentativas de processamento.");
     const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
     const profileByDocument = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
-    const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, profileByDocument));
+    const reviewByDocument = new Map<string, string>();
+    for (const review of reviewResult.data ?? []) {
+      if (!reviewByDocument.has(review.document_id)) reviewByDocument.set(review.document_id, review.id);
+    }
+    const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, profileByDocument, reviewByDocument));
     const currentProfileRow = (profileResult.data ?? []).find((profile) => profile.superseded_at === null);
     const selectedDocument = timeline.find((document) => document.id === selectedDocumentId) ?? timeline[0] ?? null;
     const attemptId = selectedDocument?.latestAttempt?.id;
@@ -589,6 +597,7 @@ export const personIngestionService = {
       createdAt: document.created_at,
       processedAt: document.processed_at,
       profileVersion: profiles.get(document.id) ?? null,
+      verificationReviewId: null,
       isLegacyUnstored: document.is_legacy_unstored,
       latestAttempt: latestAttempts.get(document.id) ?? null,
       currentProfile: currentProfiles.get(document.person_id) ?? null,
@@ -1157,7 +1166,7 @@ function toTimelineItem(document: {
   created_at: string;
   processed_at: string | null;
   is_legacy_unstored: boolean;
-}, latestAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>): PersonDocumentTimelineItem {
+}, latestAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>, reviews: Map<string, string> = new Map()): PersonDocumentTimelineItem {
   return {
     id: document.id,
     filename: document.filename,
@@ -1170,6 +1179,7 @@ function toTimelineItem(document: {
     createdAt: document.created_at,
     processedAt: document.processed_at,
     profileVersion: profiles.get(document.id) ?? null,
+    verificationReviewId: reviews.get(document.id) ?? null,
     isLegacyUnstored: document.is_legacy_unstored,
     latestAttempt: latestAttempts.get(document.id) ?? null,
   };

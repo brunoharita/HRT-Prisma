@@ -231,6 +231,7 @@ export interface PersonDocumentTimelineItem {
   createdAt: string;
   processedAt: string | null;
   profileVersion: number | null;
+  verificationReviewId: string | null;
   isLegacyUnstored: boolean;
   latestAttempt: ProcessingAttemptView | null;
 }

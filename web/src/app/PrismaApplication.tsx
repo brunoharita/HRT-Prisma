@@ -61,7 +61,7 @@ interface AppRoute {
   icon?: ReactNode;
   profileId?: string;
   profileMode?: "view" | "edit" | "create";
-  profileView?: "workspace" | "operations" | "document" | "review" | "versions" | "import";
+  profileView?: "workspace" | "operations" | "document" | "review" | "verification" | "versions" | "import";
   documentId?: string;
   reviewId?: string;
   userId?: string;
@@ -337,6 +337,9 @@ function renderRouteContent(
   if (route.path === "/profiles" && route.profileView === "review" && route.profileId && route.documentId && route.reviewId && activeMembership) {
     return <ProfileReviewPage activeMembership={activeMembership} personId={route.profileId} documentId={route.documentId} reviewId={route.reviewId} onNavigate={onNavigate} />;
   }
+  if (route.path === "/profiles" && route.profileView === "verification" && route.profileId && route.documentId && route.reviewId && activeMembership) {
+    return <ProfileReviewPage activeMembership={activeMembership} mode="view" personId={route.profileId} documentId={route.documentId} reviewId={route.reviewId} onNavigate={onNavigate} />;
+  }
   if (route.path === "/profiles" && route.profileView === "document" && route.profileId && route.documentId && activeMembership) {
     return <DocumentDetailPage activeMembership={activeMembership} personId={route.profileId} documentId={route.documentId} onNavigate={onNavigate} />;
   }
@@ -515,6 +518,8 @@ function findRoute(pathname: string): AppRoute {
   if (normalized === "/profiles/processes") return { path: "/profiles", profileView: "operations", rule: reviewerRule };
   const reviewMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)\/review\/([^/]+)$/.exec(normalized);
   if (reviewMatch?.[1] && reviewMatch[2] && reviewMatch[3]) return { path: "/profiles", profileId: reviewMatch[1], documentId: reviewMatch[2], reviewId: reviewMatch[3], profileView: "review", rule: reviewerRule };
+  const verificationMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)\/verification\/([^/]+)$/.exec(normalized);
+  if (verificationMatch?.[1] && verificationMatch[2] && verificationMatch[3]) return { path: "/profiles", profileId: verificationMatch[1], documentId: verificationMatch[2], reviewId: verificationMatch[3], profileView: "verification", rule: reviewerRule };
   const documentMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)$/.exec(normalized);
   if (documentMatch?.[1] && documentMatch[2]) return { path: "/profiles", profileId: documentMatch[1], documentId: documentMatch[2], profileView: "document", rule: reviewerRule };
   const versionsMatch = /^\/profiles\/([^/]+)\/versions$/.exec(normalized);

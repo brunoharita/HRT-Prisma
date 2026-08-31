@@ -46,6 +46,7 @@ Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, comp
 15. O perfil aprovado com `superseded_at is null` permanece vigente até outra revisão ser aprovada.
 16. Versão documental e versão de perfil são sequências independentes; Documento v2 não implica Perfil v2.
 17. Descartar uma pendência documental preserva fonte, tentativas, revisão e eventos; não apaga o perfil atual.
+18. Consultar um documento com revisão registrada mostra a fonte original e os campos estruturados juntos, sem habilitar mutações; detalhes operacionais permanecem uma consulta separada.
 
 ## Pipeline atual
 

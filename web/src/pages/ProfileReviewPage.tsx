@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, CheckOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckOutlined, EyeOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import { Alert, Button, Checkbox, Input, Modal, Popconfirm, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
 import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
@@ -38,6 +38,7 @@ interface ProfileReviewPageProps {
   personId: string;
   documentId: string;
   reviewId: string;
+  mode?: "review" | "view";
   onNavigate: (path: string) => void;
 }
 
@@ -46,7 +47,7 @@ type DeferredReviewAction =
   | { type: "start_evidence_selection"; fieldPath: string }
   | { type: "create_custom_section" };
 
-export function ProfileReviewPage({ activeMembership, personId, documentId, reviewId, onNavigate }: ProfileReviewPageProps) {
+export function ProfileReviewPage({ activeMembership, personId, documentId, reviewId, mode = "review", onNavigate }: ProfileReviewPageProps) {
   const [workspace, setWorkspace] = useState<ProfileReviewWorkspace | null>(null);
   const [draft, setDraft] = useState<StructuredDraft | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -79,6 +80,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   async function refresh() {
     const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
     if (!result) throw new Error("Revisão não encontrada nesta empresa.");
+    if (result.personId !== personId || result.documentId !== documentId) throw new Error("A revisão não pertence à Pessoa e ao documento informados.");
     setWorkspace(result);
     setDraft(cloneDraft(result.reviewedData));
     setValidationIssues([]);
@@ -93,6 +95,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       .then(async (result) => {
         if (!current) return;
         if (!result) throw new Error("Revisão não encontrada nesta empresa.");
+        if (result.personId !== personId || result.documentId !== documentId) throw new Error("A revisão não pertence à Pessoa e ao documento informados.");
         setWorkspace(result);
         setDraft(cloneDraft(result.reviewedData));
         setSelectedFieldPath(result.reviewedData.experiences[0]
@@ -106,7 +109,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível carregar a revisão."); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
-  }, [activeMembership.organizationId, reviewId]);
+  }, [activeMembership.organizationId, documentId, personId, reviewId]);
 
   const changeState = useMemo(
     () => workspace && draft ? reviewDraftChangeState(workspace.reviewedData, draft) : { rawChanged: false, meaningfulChanged: false, transientOnly: false },
@@ -114,7 +117,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   );
   const dirty = changeState.meaningfulChanged;
   const transientOnly = changeState.transientOnly;
-  const editable = workspace?.state === "draft";
+  const viewOnly = mode === "view";
+  const editable = !viewOnly && workspace?.state === "draft";
   const replacementLinkId = useMemo(() => workspace?.evidenceLinks.find((link) => link.state === "active" && link.linkKind === "reviewer" && fieldsOverlap(link.fieldPath, selectedFieldPath))?.id ?? null, [selectedFieldPath, workspace]);
   const fallbackOriginalEvidence = useMemo(() => {
     if (!workspace) return null;
@@ -514,15 +518,19 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   return (
     <PrismaPage className="prisma-m2c-page prisma-review-page prisma-review-page--workspace">
       <PrismaPageHeader
-        title="Revisão da nova importação"
-        description={`Revise e estruture o conteúdo de ${workspace.documentName} para ${workspace.personName}. A versão atual permanece válida até a aprovação.`}
-        actions={<Space wrap>
-          <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar revisão</Button></span></Tooltip>
-          <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar nova versão</Button></span></Tooltip>
-        </Space>}
+        title={viewOnly ? "Verificação do currículo" : "Revisão da nova importação"}
+        description={viewOnly
+          ? `Consulte o currículo original de ${workspace.personName} e os campos extraídos de ${workspace.documentName}, sem alterar a versão aprovada.`
+          : `Revise e estruture o conteúdo de ${workspace.documentName} para ${workspace.personName}. A versão atual permanece válida até a aprovação.`}
+        actions={viewOnly
+          ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)}>Detalhes técnicos</Button>
+          : <Space wrap>
+            <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar revisão</Button></span></Tooltip>
+            <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar nova versão</Button></span></Tooltip>
+          </Space>}
       />
       {changeState.rawChanged ? <Popconfirm cancelText="Continuar revisando" description="Formulários temporários e alterações não salvas serão perdidos." okText="Sair sem salvar" onConfirm={() => onNavigate(`/profiles/${personId}`)} title="Voltar para a Central da Pessoa?"><Button className="prisma-review-back" icon={<ArrowLeftOutlined />} type="text">Voltar para a Central da Pessoa</Button></Popconfirm> : <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>}
-      {workspace.state === "draft" && draft.experiences.length === 0 ? (
+      {!viewOnly && workspace.state === "draft" && draft.experiences.length === 0 ? (
         <Alert
           action={<Space wrap><Button onClick={() => addMissingExperience(true)} type="primary">Selecionar área no currículo</Button><Button icon={<PlusOutlined />} onClick={() => addMissingExperience(false)}>Adicionar experiência manualmente</Button></Space>}
           className="prisma-review-recovery-alert"
@@ -532,11 +540,13 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           type="warning"
         />
       ) : null}
-      <div className="prisma-review-statusbar"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Extraído: preservado</Tag><Tag color="gold">Requer revisão</Tag><Tag color="green">Perfil atual {workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "ainda não aprovado"} preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente após salvar e aprovar.</Typography.Text></div>
+      {viewOnly ? (
+        <div className="prisma-review-statusbar prisma-review-statusbar--view"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Currículo original</Tag><Tag color={workspace.state === "approved" ? "green" : workspace.state === "invalidated" ? "default" : "gold"}>{workspace.state === "approved" ? "Perfil aprovado" : workspace.state === "invalidated" ? "Importação arquivada" : "Revisão em andamento"}</Tag><Tag icon={<EyeOutlined />}>Somente leitura</Tag><Typography.Text type="secondary">Nenhuma informação pode ser alterada neste modo.</Typography.Text></div>
+      ) : <div className="prisma-review-statusbar"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Extraído: preservado</Tag><Tag color="gold">Requer revisão</Tag><Tag color="green">Perfil atual {workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "ainda não aprovado"} preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente após salvar e aprovar.</Typography.Text></div>}
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
-      {adaptiveReport ? <AdaptiveSuggestionPanel
+      {!viewOnly && adaptiveReport ? <AdaptiveSuggestionPanel
         busy={busy}
         onApply={(suggestions) => void handleApplyAdaptiveSuggestions(suggestions)}
         onDismiss={() => setAdaptiveReport(null)}
@@ -570,12 +580,12 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             onFieldSelect={handleFieldSelect} onReasonChange={setReason}
             onSaveAndContinue={() => void handleSave()}
             onStartSelection={(fieldPath) => { if (dirty) { deferReviewAction({ type: "start_evidence_selection", fieldPath }); return; } startEvidenceSelection(fieldPath); }}
-            reason={reason} selectedFieldPath={selectedFieldPath} validationIssues={validationIssues} workspace={workspace}
+            reason={reason} selectedFieldPath={selectedFieldPath} validationIssues={validationIssues} viewOnly={viewOnly} workspace={workspace}
           />
         </div>
       </div>
 
-      <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={Boolean(pendingSelection)} title="Usar região selecionada">
+      <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={!viewOnly && Boolean(pendingSelection)} title="Usar região selecionada">
         {pendingSelection ? <div className="prisma-selection-dialog">
           {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
           <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={selectedFieldIsTransient ? "Este é um novo campo. A seleção preencherá seu conteúdo e salvará a evidência em uma única operação." : pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. A região continuará rastreável, mas uma correção exige conteúdo e justificativa manual." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />

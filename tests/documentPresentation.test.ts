@@ -47,11 +47,13 @@ test("does not invent a pending import and treats invalidation as an archived hi
 });
 
 test("people, operations, hub, and review source preserve navigation and entity boundaries", async () => {
-  const [people, operations, hub, review] = await Promise.all([
+  const [people, operations, hub, review, application, structuredReview] = await Promise.all([
     readFile("web/src/pages/PeoplePage.tsx", "utf8"),
     readFile("web/src/pages/DocumentOperationsPage.tsx", "utf8"),
     readFile("web/src/pages/PersonWorkspacePage.tsx", "utf8"),
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
+    readFile("web/src/app/PrismaApplication.tsx", "utf8"),
+    readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
   ]);
 
   assert.match(people, /const personPath = \(personId: string\) => `\/profiles\/\$\{personId\}`/);
@@ -67,6 +69,20 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(review, /Não identificamos automaticamente uma experiência profissional neste currículo/);
   assert.match(review, /Selecionar área no currículo/);
   assert.match(review, /Adicionar experiência manualmente/);
+  assert.match(hub, /documentViewerPath\(personId, latestDocument\)/);
+  assert.match(hub, /verificationReviewId \? "Ver documento" : "Detalhes técnicos"/);
+  assert.match(hub, /\/verification\/\$\{document\.verificationReviewId\}/);
+  assert.match(application, /profileView === "verification"/);
+  assert.match(application, /<ProfileReviewPage[^>]+mode="view"/);
+  assert.match(review, /mode\?: "review" \| "view"/);
+  assert.match(review, /const viewOnly = mode === "view"/);
+  assert.match(review, /result\.personId !== personId \|\| result\.documentId !== documentId/);
+  assert.match(review, /Verificação do currículo/);
+  assert.match(review, /Somente leitura/);
+  assert.match(review, /Detalhes técnicos/);
+  assert.match(structuredReview, /viewOnly\?: boolean/);
+  assert.match(structuredReview, /Modo de visualização/);
+  assert.match(structuredReview, /Valor aprovado/);
   assert.match(hub, /const canReview = isReviewableDocument\(latestDocument\)/);
   assert.doesNotMatch(hub, /canReview[\s\S]{0,100}experiences\.length/);
 });
@@ -107,6 +123,7 @@ function makeDocument(overrides: Partial<PersonDocumentTimelineItem> = {}): Pers
     createdAt: "2026-08-30T10:00:00.000Z",
     processedAt: "2026-08-30T10:01:00.000Z",
     profileVersion: null,
+    verificationReviewId: "review-v2",
     isLegacyUnstored: false,
     latestAttempt: makeAttempt("structured"),
     ...overrides,

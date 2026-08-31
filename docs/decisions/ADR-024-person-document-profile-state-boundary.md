@@ -16,10 +16,11 @@ Definir uma representação e uma navegação únicas que preservem a Pessoa e o
 
 - A Pessoa é a raiz estável de navegação. Nome e ação `Abrir` levam à Central da Pessoa; edição é sempre uma ação explícita.
 - O perfil atual é a única linha de `professional_profiles` da Pessoa com `superseded_at is null`. Sua apresentação não deriva do estado da última importação.
-- A situação operacional deriva do documento, de `review_state` e da tentativa mais recente por meio do contrato local `document-presentation` 1.0.0.
+- A situação operacional deriva do documento, de `review_state` e da tentativa mais recente por meio do contrato local `document-presentation` 1.1.0.
 - `ready_for_review` e `in_review` significam `Requer revisão`; somente estados `failed_*` da tentativa significam `Falha técnica`.
 - Documento vN e Perfil vN permanecem versões independentes. Documento preservado sem aprovação comunica `Nenhuma nova versão criada`.
 - Extração parcial não bloqueia a abertura da revisão. Experiência ausente recebe recuperação assistida por seleção espacial ou inclusão manual no workspace M5.
+- Na Central da Pessoa, `Ver documento` abre o mesmo workspace M5 com o currículo original à esquerda e os campos extraídos e revisados à direita, em modo estritamente somente leitura. Metadados, tentativas e auditoria permanecem acessíveis por `Detalhes técnicos`.
 - Descartar uma importação significa invalidar sua pendência de revisão de forma auditável. A RPC `invalidate_document_review` preserva documento, tentativa, revisão, eventos e perfil atual; não executa `DELETE` e falha fechada quando `status` ou `review_state` indica aprovação ou quando o documento ainda não está vinculado a uma Pessoa.
 
 ## Alternatives considered
@@ -38,6 +39,7 @@ O modelo composto usa fontes autoritativas já existentes, mantém a semântica 
 - Falha ou pendência documental não contamina a identidade da Pessoa nem o perfil vigente.
 - Ação principal e próximo passo passam a ser explicáveis.
 - Navegação converge na Central da Pessoa e reduz saltos para formulários técnicos.
+- Consulta documental preserva o contexto visual da revisão sem expor ações de edição, salvamento, seleção de evidência ou aprovação.
 - Revisão parcial continua evidence-first e recuperável.
 
 ## Negative consequences
@@ -80,7 +82,7 @@ Documentos e revisões históricos permanecem legíveis. O estado `invalidated` 
 
 ## Validation strategy
 
-Testes determinísticos cobrem perfil v1 preservado com documento v2 em revisão, processamento concluído, falha técnica, ausência de importação, navegação para a Central da Pessoa, recuperação de experiência ausente e invariantes da RPC. QA conectado deve provar autorização, preservação de perfil, ausência de `DELETE`, idempotência e remoção da pendência ativa.
+Testes determinísticos cobrem perfil v1 preservado com documento v2 em revisão, processamento concluído, falha técnica, ausência de importação, navegação para a Central da Pessoa, visualização documental M5 sem mutações, recuperação de experiência ausente e invariantes da RPC. QA conectado deve provar autorização, preservação de perfil, ausência de `DELETE`, idempotência e remoção da pendência ativa.
 
 ## Review criterion
 
@@ -103,3 +105,4 @@ Substituir somente por um contrato versionado que mantenha Pessoa, documento, te
 ## Change history
 
 - 2026-08-30: accepted with local implementation and QA validation pending.
+- 2026-08-31: `document-presentation` 1.1.0 separa visualização curricular M5, somente leitura, de detalhes técnicos.

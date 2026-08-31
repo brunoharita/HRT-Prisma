@@ -8,7 +8,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `professional-profile` | AI/domain | 3.0.0 | review, retrieval, matching, repository | schema ativo em QA; runtime web local | perfil versionado com IDs estáveis para experiências e formações; PII de contato excluída | local/QA | bloquear |
 | `document-processing-state` | application | 2.1.0 | importer, repository, operations, review | schema e invalidação ativos em QA; apresentação web local | enums, RPCs M2-C e separação de estado documental | local/QA | bloquear e registrar falha |
-| `document-presentation` | application/UI | 1.0.0 | Pessoas, processamento, Central da Pessoa, revisão | implementado localmente | composição de documento, tentativa, revisão e perfil atual | local | falhar fechado sem misturar entidades |
+| `document-presentation` | application/UI | 1.1.0 | Pessoas, processamento, Central da Pessoa, revisão | implementado localmente | composição de documento, tentativa, revisão e perfil atual; visualização M5 somente leitura separada dos detalhes técnicos | local | falhar fechado sem misturar entidades |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
 | `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |
 | `adaptive-resume-extraction` | AI/application | 4.0.0 | ingestão M2-B e revisão | persistência ativa em QA; runtime web local | geometria, blocos profissionais, resumo documental e IDs estáveis | local/QA | exigir revisão/reprocessamento |

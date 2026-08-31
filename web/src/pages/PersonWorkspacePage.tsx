@@ -232,7 +232,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           {canReview && latestDocument ? <Button loading={busy} onClick={() => void handleStartReview(latestDocument)} type="primary">Revisar nova importação</Button> : null}
           <Space wrap>
             <Button disabled={!workspace.person.currentProfile} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Ver perfil atual</Button>
-            {latestDocument ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${latestDocument.id}`)}>Ver documento</Button> : null}
+            {latestDocument ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(documentViewerPath(personId, latestDocument))}>{latestDocument.verificationReviewId ? "Ver documento" : "Detalhes técnicos"}</Button> : null}
             {latestDocument && ["requires_review", "technical_failure"].includes(latestPresentation.state) ? <Button disabled={busy} icon={<ReloadOutlined />} loading={busy} onClick={() => void handleReprocess(latestDocument)}>Reprocessar</Button> : null}
             {latestDocument && ["requires_review", "technical_failure"].includes(latestPresentation.state) ? (
               <Popconfirm
@@ -277,7 +277,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         <PrismaCard>
           <Table
             columns={workspaceDocumentColumns({
-              onOpen: (document) => onNavigate(`/profiles/${personId}/documents/${document.id}`),
+              onOpen: (document) => onNavigate(documentViewerPath(personId, document)),
               onReview: (document) => void handleStartReview(document),
             })}
             dataSource={workspace.documents}
@@ -551,9 +551,15 @@ function workspaceDocumentColumns({ onOpen, onReview }: {
       width: 150,
       render: (_, document) => isReviewableDocument(document)
         ? <Button onClick={() => onReview(document)} type="primary" ghost>Abrir revisão</Button>
-        : <Button icon={<EyeOutlined />} onClick={() => onOpen(document)}>Ver documento</Button>,
+        : <Button icon={<EyeOutlined />} onClick={() => onOpen(document)}>{document.verificationReviewId ? "Ver documento" : "Detalhes técnicos"}</Button>,
     },
   ];
+}
+
+function documentViewerPath(personId: string, document: PersonDocumentTimelineItem): string {
+  return document.verificationReviewId
+    ? `/profiles/${personId}/documents/${document.id}/verification/${document.verificationReviewId}`
+    : `/profiles/${personId}/documents/${document.id}`;
 }
 
 function formatBytes(bytes: number): string {
