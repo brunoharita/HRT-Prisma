@@ -2675,9 +2675,15 @@ textarea {
   font-size: 1rem;
 }
 
-.prisma-imported-identity span,
-.prisma-duplicate-candidate span {
+.prisma-imported-identity > span,
+.prisma-duplicate-candidate > div > span {
   color: var(--prisma-text-secondary);
+}
+
+.prisma-duplicate-candidate .ant-btn-primary,
+.prisma-duplicate-candidate .ant-btn-primary:hover,
+.prisma-duplicate-candidate .ant-btn-primary:focus-visible {
+  color: #ffffff;
 }
 
 .prisma-duplicate-candidates {

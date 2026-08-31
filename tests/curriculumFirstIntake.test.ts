@@ -64,11 +64,12 @@ test("curriculum-first migration stages the PDF before Person and resolves once 
 });
 
 test("curriculum-first UI makes import primary and keeps manual Person registration secondary", async () => {
-  const [home, people, importer, service] = await Promise.all([
+  const [home, people, importer, service, styles] = await Promise.all([
     readFile("web/src/pages/HomePage.tsx", "utf8"),
     readFile("web/src/pages/PeoplePage.tsx", "utf8"),
     readFile("web/src/pages/ResumeImportPage.tsx", "utf8"),
     readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
   ]);
 
   assert.match(home, /Importar currículo/);
@@ -81,4 +82,6 @@ test("curriculum-first UI makes import primary and keeps manual Person registrat
   assert.match(importer, /Tentar novamente/);
   assert.match(service, /persistExtraction\(/);
   assert.match(service, /complete_resume_intake/);
+  assert.match(styles, /\.prisma-duplicate-candidate > div > span[\s\S]*?color: var\(--prisma-text-secondary\)/);
+  assert.match(styles, /\.prisma-duplicate-candidate \.ant-btn-primary[\s\S]*?color: #ffffff/);
 });
