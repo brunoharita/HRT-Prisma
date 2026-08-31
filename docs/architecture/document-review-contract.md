@@ -4,12 +4,13 @@
 
 | Contrato | Versão | Regra material |
 | --- | --- | --- |
-| `document-processing-state` | 2.0.0 | estados operacionais e de revisão são explícitos e falham fechados |
+| `document-processing-state` | 2.1.0 | estados operacionais e de revisão são explícitos, pertencem ao documento e falham fechados |
+| `document-presentation` | 1.0.0 | perfil vigente, documento, tentativa e revisão são compostos sem condensar estado na Pessoa |
 | `person-ingestion` | 7.0.0 | cadastro, retry e persistência são idempotentes; aprovação separa perfil profissional de identificação e contato privados |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
 | `human-profile-review` | 4.0.0 | revisão possui obrigatoriedade sensível, normalização de vazios, conjuntos repetíveis com ID estável, remoção reversível e aprovação atômica |
 | `spatial-evidence` | 1.2.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas; preserva texto bruto, texto efetivo e decisões de subtração entre campos irmãos |
-| `document-operation-idempotency` | 1.0.0 | mesma chave e fingerprint retornam o mesmo resultado; payload diferente conflita |
+| `document-operation-idempotency` | 1.1.0 | mesma chave e fingerprint retornam o mesmo resultado; invalidação também preserva histórico e perfil atual |
 | `professional-profile` | 3.0.0 | perfil aprovado preserva proveniência e IDs estáveis de experiências e formações, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
 | `structured-resume-summary` | 1.0.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; PII nunca é promovida ao perfil profissional |
@@ -42,6 +43,7 @@ Estado desconhecido, versão incompatível, sessão ausente, tenant não autoriz
 | `record_profile_review_evidence_refined` | registra a mesma operação com texto bruto, texto efetivo e decisões imutáveis de subtração ou reinclusão |
 | `retire_profile_review_evidence` | encerra vínculo humano ativo, preserva histórico e rejeita evidência original |
 | `approve_profile_review` | atualiza nome/contato canônicos privados e cria a versão profissional sem PII na mesma transação |
+| `invalidate_document_review` | encerra uma pendência revisável ou tecnicamente falha sem apagar documento, tentativa, revisão, evento ou perfil atual |
 
 O cliente deve gerar uma chave por intenção do usuário e reutilizá-la somente em retry da mesma intenção. Reuso com fingerprint diferente retorna conflito. Números de versão nunca são calculados no frontend.
 
@@ -50,6 +52,10 @@ A transição final de revisão deve permanecer executável com todas as estrutu
 Falhas esperadas de aprovação são apresentadas ao operador por categoria acionável: concorrência/versão, estado da revisão, autorização/tenant, evidência material, nome, contato, shape/versão e idempotência. Mensagens SQL, nomes de tabela, função ou coluna e códigos internos não são exibidos. Falha inesperada recebe mensagem sanitizada e preserva o rascunho; o backend continua como autoridade de todos os gates.
 
 Depois que `approve_profile_review` retorna sucesso, a revisão encerra seu fluxo e navega para `Processamento e revisões`. A navegação nunca ocorre antes da confirmação transacional nem no caminho de erro; uma falha mantém o operador na revisão com o rascunho e a mensagem acionável visíveis.
+
+Pessoa, perfil vigente e importação possuem leitura independente. O perfil atual é a versão com `superseded_at is null`; uma nova importação nunca o substitui antes de `approve_profile_review`. A apresentação documental 1.0.0 mapeia `ready_for_review` e `in_review` para `Requer revisão`, reserva `Falha técnica` aos estados `failed_*` da tentativa e comunica `Nenhuma nova versão criada` enquanto o documento ainda não promoveu perfil. O clique no nome ou em `Abrir` leva à Central da Pessoa, não à edição. Extração parcial não bloqueia `start_profile_review` quando existe draft válido; o workspace M5 oferece seleção espacial ou inclusão manual do bloco ausente.
+
+`invalidate_document_review` usa autorização interna de revisor, `search_path` vazio e ledger M2-C. Documento aprovado é imutável quando `status` ou `review_state` indica aprovação, e documento ainda sem Pessoa vinculada falha fechado. Documento revisável precisa possuir revisão draft, criada ou reutilizada antes da invalidação; documento sem revisão só pode ser invalidado quando a tentativa mais recente terminou em falha técnica. A operação atualiza `documents.review_state` e, quando aplicável, `profile_reviews.state/invalidated_at`, registra evento metadata-only e nunca executa `DELETE` nem altera `professional_profiles`.
 
 ## Proveniência e auditoria
 

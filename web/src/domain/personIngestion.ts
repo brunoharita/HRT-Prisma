@@ -85,6 +85,18 @@ export interface PersonWorkspaceSummary {
   latestSourceAt: string | null;
   updatedAt: string;
   privateData: PersonEditorValue;
+  currentProfile: CurrentProfileSummary | null;
+  latestDocument: PersonDocumentTimelineItem | null;
+  documentCount: number;
+  pendingReviewCount: number;
+}
+
+export interface CurrentProfileSummary {
+  id: string;
+  profileVersion: number;
+  sourceDocumentId: string;
+  approvedAt: string | null;
+  createdAt: string;
 }
 
 export interface ExtractedPage {
@@ -227,6 +239,7 @@ export interface DocumentOperationSummary extends PersonDocumentTimelineItem {
   personId: string;
   personName: string;
   failureCode: string | null;
+  currentProfile: CurrentProfileSummary | null;
 }
 
 export interface ProcessingAuditEvent {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import { Alert, Button, Checkbox, Input, Modal, Popconfirm, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
 import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
@@ -275,6 +275,34 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setMobilePane("document");
   }
 
+  function addMissingExperience(selectArea: boolean) {
+    if (!draft) return;
+    const existing = draft.experiences.find((item) => !workspace?.reviewedData.experiences.some((persisted) => persisted.id === item.id));
+    const experience = existing ?? {
+      id: createReviewEntityId("experience"),
+      source: "human" as const,
+      role: null,
+      organization: null,
+      period: null,
+      description: null,
+      evidenceText: "",
+      page: null,
+    };
+    const fieldPath = reviewEntityFieldPath("experience", experience, "organization");
+    if (!existing) setDraft({ ...draft, experiences: [...draft.experiences, experience] });
+    setSelectedFieldPath(fieldPath);
+    setActiveLinkId(null);
+    setError(null);
+    setSuccess(null);
+    setMobilePane(selectArea ? "document" : "review");
+    if (selectArea) {
+      setSelectionError(null);
+      setCreateCustomAfterSelection(false);
+      setPendingSelection(null);
+      setSelectionMode(true);
+    }
+  }
+
   function resumeDeferredReviewAction(action: DeferredReviewAction) {
     setDeferredReviewAction(null);
     if (action.type === "create_custom_section") startCustomSectionSelection();
@@ -486,15 +514,25 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   return (
     <PrismaPage className="prisma-m2c-page prisma-review-page prisma-review-page--workspace">
       <PrismaPageHeader
-        title={`Revisão · ${workspace.personName}`}
-        description={`${workspace.personName} · ${workspace.documentName} · Base de perfil ${workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "inicial"} · Lock ${workspace.lockVersion}`}
+        title="Revisão da nova importação"
+        description={`Revise e estruture o conteúdo de ${workspace.documentName} para ${workspace.personName}. A versão atual permanece válida até a aprovação.`}
         actions={<Space wrap>
-          <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar rascunho</Button></span></Tooltip>
-          <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar versão</Button></span></Tooltip>
+          <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar revisão</Button></span></Tooltip>
+          <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar nova versão</Button></span></Tooltip>
         </Space>}
       />
-      {changeState.rawChanged ? <Popconfirm cancelText="Continuar revisando" description="Formulários temporários e alterações não salvas serão perdidos." okText="Sair sem salvar" onConfirm={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)} title="Voltar para o documento?"><Button className="prisma-review-back" icon={<ArrowLeftOutlined />} type="text">Voltar para o documento</Button></Popconfirm> : <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)} type="text">Voltar para o documento</Button>}
-      <div className="prisma-review-statusbar"><Tag color="blue">Extraído: preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A ausência de um campo permanece “não identificado”, nunca uma avaliação negativa.</Typography.Text></div>
+      {changeState.rawChanged ? <Popconfirm cancelText="Continuar revisando" description="Formulários temporários e alterações não salvas serão perdidos." okText="Sair sem salvar" onConfirm={() => onNavigate(`/profiles/${personId}`)} title="Voltar para a Central da Pessoa?"><Button className="prisma-review-back" icon={<ArrowLeftOutlined />} type="text">Voltar para a Central da Pessoa</Button></Popconfirm> : <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>}
+      {workspace.state === "draft" && draft.experiences.length === 0 ? (
+        <Alert
+          action={<Space wrap><Button onClick={() => addMissingExperience(true)} type="primary">Selecionar área no currículo</Button><Button icon={<PlusOutlined />} onClick={() => addMissingExperience(false)}>Adicionar experiência manualmente</Button></Space>}
+          className="prisma-review-recovery-alert"
+          description="O conteúdo foi preservado. Selecione a área correspondente no documento ou adicione a experiência manualmente para estruturar esta seção."
+          showIcon
+          title="Não identificamos automaticamente uma experiência profissional neste currículo."
+          type="warning"
+        />
+      ) : null}
+      <div className="prisma-review-statusbar"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Extraído: preservado</Tag><Tag color="gold">Requer revisão</Tag><Tag color="green">Perfil atual {workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "ainda não aprovado"} preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente após salvar e aprovar.</Typography.Text></div>
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}

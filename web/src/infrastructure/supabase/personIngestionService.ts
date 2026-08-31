@@ -7,6 +7,7 @@ import {
   OCR_VERSION,
   STRUCTURING_VERSION,
   processManualText,
+  type CurrentProfileSummary,
   type ExtractedPage,
   type DocumentOperationSummary,
   type PersonDocumentTimelineItem,
@@ -24,6 +25,7 @@ import {
   type ResumeIntakeResolutionResult,
   type StructuredDraft,
 } from "../../domain/personIngestion";
+import { countPendingReviews } from "../../domain/documentPresentation";
 import type {
   NormalizedPageRegion,
   RegionExtractionMethod,
@@ -153,17 +155,53 @@ export const personIngestionService = {
     throwIfError(error, "Não foi possível carregar as Pessoas.");
     const rows = people ?? [];
     if (rows.length === 0) return [];
-    const { data: privateRows, error: privateError } = includePrivateData
-      ? await supabase
-        .from("person_private_data")
-        .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
-        .eq("organization_id", organizationId)
-        .in("person_id", rows.map((person) => person.id))
-      : { data: [], error: null };
+    const personIds = rows.map((person) => person.id);
+    const [privateResult, documentResult, profileResult] = await Promise.all([
+      includePrivateData
+        ? supabase.from("person_private_data")
+          .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
+          .eq("organization_id", organizationId).in("person_id", personIds)
+        : Promise.resolve({ data: [], error: null }),
+      supabase.from("documents")
+        .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, created_at, processed_at, is_legacy_unstored")
+        .eq("organization_id", organizationId).in("person_id", personIds).order("created_at", { ascending: false }),
+      supabase.from("professional_profiles")
+        .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
+        .eq("organization_id", organizationId).in("person_id", personIds),
+    ]);
+    const { data: privateRows, error: privateError } = privateResult;
     throwIfError(privateError, "Não foi possível carregar os dados privados permitidos.");
+    throwIfError(documentResult.error, "Não foi possível carregar o histórico documental das Pessoas.");
+    throwIfError(profileResult.error, "Não foi possível carregar os perfis atuais das Pessoas.");
+    const documents = documentResult.data ?? [];
+    const documentIds = documents.map((document) => document.id);
+    const { data: attemptRows, error: attemptError } = documentIds.length === 0
+      ? { data: [], error: null }
+      : await supabase.from("document_processing_attempts")
+        .select("id, document_id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
+        .eq("organization_id", organizationId).in("document_id", documentIds).order("attempt_number", { ascending: false });
+    throwIfError(attemptError, "Não foi possível carregar as tentativas das importações.");
     const privateByPerson = new Map((privateRows ?? []).map((row) => [row.person_id, row]));
+    const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
+    const profileByDocument = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
+    const currentProfileByPerson = new Map((profileResult.data ?? [])
+      .filter((profile) => profile.superseded_at === null)
+      .map((profile) => [profile.person_id, toCurrentProfileSummary(profile)]));
+    const documentsByPerson = new Map<string, PersonDocumentTimelineItem[]>();
+    for (const document of documents) {
+      if (!document.person_id) continue;
+      const timeline = documentsByPerson.get(document.person_id) ?? [];
+      timeline.push(toTimelineItem(document, latestAttemptByDocument, profileByDocument));
+      documentsByPerson.set(document.person_id, timeline);
+    }
     const normalizedSearch = normalizeSearch(search);
-    return rows.map((person) => toPersonSummary(person, privateByPerson.get(person.id)))
+    return rows.map((person) => {
+      const timeline = documentsByPerson.get(person.id) ?? [];
+      return toPersonSummary(person, privateByPerson.get(person.id), {
+        currentProfile: currentProfileByPerson.get(person.id) ?? null,
+        documents: timeline,
+      });
+    })
       .filter((person) => !normalizedSearch || normalizeSearch([
         person.fullName,
         person.privateData.email,
@@ -189,7 +227,7 @@ export const personIngestionService = {
         .select("id, filename, source_type, document_version, byte_size, page_count, status, review_state, created_at, processed_at, is_legacy_unstored")
         .eq("organization_id", organizationId).eq("person_id", personId).order("created_at", { ascending: false }),
       supabase.from("professional_profiles")
-        .select("source_document_id, profile_version")
+        .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
         .eq("organization_id", organizationId).eq("person_id", personId),
     ]);
     throwIfError(privateResult.error, "Não foi possível carregar os dados básicos da Pessoa.");
@@ -203,26 +241,10 @@ export const personIngestionService = {
         .select("id, document_id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
         .eq("organization_id", organizationId).in("document_id", documentIds).order("attempt_number", { ascending: false });
     throwIfError(attemptError, "Não foi possível carregar as tentativas de processamento.");
-    const latestAttemptByDocument = new Map<string, ProcessingAttemptView>();
-    for (const attempt of attemptRows ?? []) {
-      if (!latestAttemptByDocument.has(attempt.document_id)) latestAttemptByDocument.set(attempt.document_id, toAttemptView(attempt));
-    }
+    const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
     const profileByDocument = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
-    const timeline = documents.map((document) => ({
-      id: document.id,
-      filename: document.filename,
-      sourceType: document.source_type,
-      documentVersion: document.document_version,
-      byteSize: document.byte_size,
-      pageCount: document.page_count,
-      status: document.status,
-      reviewState: document.review_state,
-      createdAt: document.created_at,
-      processedAt: document.processed_at,
-      profileVersion: profileByDocument.get(document.id) ?? null,
-      isLegacyUnstored: document.is_legacy_unstored,
-      latestAttempt: latestAttemptByDocument.get(document.id) ?? null,
-    } satisfies PersonDocumentTimelineItem));
+    const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, profileByDocument));
+    const currentProfileRow = (profileResult.data ?? []).find((profile) => profile.superseded_at === null);
     const selectedDocument = timeline.find((document) => document.id === selectedDocumentId) ?? timeline[0] ?? null;
     const attemptId = selectedDocument?.latestAttempt?.id;
     const [pageResult, draftResult] = attemptId ? await Promise.all([
@@ -236,7 +258,10 @@ export const personIngestionService = {
     throwIfError(pageResult.error, "Não foi possível carregar o texto extraído.");
     throwIfError(draftResult.error, "Não foi possível carregar os dados estruturados.");
     return {
-      person: toPersonSummary(person, privateResult.data ?? undefined),
+      person: toPersonSummary(person, privateResult.data ?? undefined, {
+        currentProfile: currentProfileRow ? toCurrentProfileSummary(currentProfileRow) : null,
+        documents: timeline,
+      }),
       documents: timeline,
       selectedDocument,
       pages: (pageResult.data ?? []).map((page) => ({
@@ -528,7 +553,7 @@ export const personIngestionService = {
         .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, failure_category, created_at, processed_at, is_legacy_unstored")
         .eq("organization_id", organizationId).not("person_id", "is", null).order("created_at", { ascending: false }),
       supabase.from("people").select("id, full_name").eq("organization_id", organizationId),
-      supabase.from("professional_profiles").select("source_document_id, profile_version")
+      supabase.from("professional_profiles").select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
         .eq("organization_id", organizationId),
     ]);
     throwIfError(documentResult.error, "Não foi possível carregar a central de processamento.");
@@ -545,10 +570,10 @@ export const personIngestionService = {
     throwIfError(attemptError, "Não foi possível carregar as tentativas da central.");
     const people = new Map((peopleResult.data ?? []).map((person) => [person.id, person.full_name]));
     const profiles = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
-    const latestAttempts = new Map<string, ProcessingAttemptView>();
-    for (const attempt of attempts ?? []) {
-      if (!latestAttempts.has(attempt.document_id)) latestAttempts.set(attempt.document_id, toAttemptView(attempt));
-    }
+    const currentProfiles = new Map((profileResult.data ?? [])
+      .filter((profile) => profile.superseded_at === null)
+      .map((profile) => [profile.person_id, toCurrentProfileSummary(profile)]));
+    const latestAttempts = latestAttemptsByDocument(attempts ?? []);
     return documents.flatMap((document) => document.person_id ? [{
       id: document.id,
       personId: document.person_id,
@@ -566,7 +591,20 @@ export const personIngestionService = {
       profileVersion: profiles.get(document.id) ?? null,
       isLegacyUnstored: document.is_legacy_unstored,
       latestAttempt: latestAttempts.get(document.id) ?? null,
+      currentProfile: currentProfiles.get(document.person_id) ?? null,
     } satisfies DocumentOperationSummary] : []);
+  },
+
+  async discardDocumentReview(organizationId: string, documentId: string): Promise<{ reviewId: string | null; reused: boolean }> {
+    const { data, error } = await supabase.rpc("invalidate_document_review", {
+      p_organization_id: organizationId,
+      p_document_id: documentId,
+      p_idempotency_key: createOperationKey("invalidate-review"),
+    });
+    throwReviewError(error, "Não foi possível arquivar a nova importação.");
+    const result = data?.[0];
+    if (!result) throw new Error("O arquivamento não retornou confirmação.");
+    return { reviewId: result.review_id, reused: result.reused };
   },
 
   async listDocumentAttempts(organizationId: string, documentId: string): Promise<ProcessingAttemptView[]> {
@@ -1040,7 +1078,7 @@ function toPersonSummary(person: {
   city: string | null;
   country_code: string | null;
   notes: string | null;
-}>): PersonWorkspaceSummary {
+}>, context: { currentProfile: CurrentProfileSummary | null; documents: PersonDocumentTimelineItem[] } = { currentProfile: null, documents: [] }): PersonWorkspaceSummary {
   return {
     id: person.id,
     organizationId: person.organization_id,
@@ -1050,6 +1088,10 @@ function toPersonSummary(person: {
     latestSourceType: person.latest_source_type,
     latestSourceAt: person.latest_source_at,
     updatedAt: person.updated_at,
+    currentProfile: context.currentProfile,
+    latestDocument: context.documents[0] ?? null,
+    documentCount: context.documents.length,
+    pendingReviewCount: countPendingReviews(context.documents),
     privateData: {
       fullName: person.full_name,
       email: privateRow?.email ?? "",
@@ -1063,6 +1105,73 @@ function toPersonSummary(person: {
       countryCode: privateRow?.country_code ?? "BR",
       notes: privateRow?.notes ?? "",
     },
+  };
+}
+
+function toCurrentProfileSummary(profile: {
+  id: string;
+  profile_version: number;
+  source_document_id: string;
+  approved_at: string | null;
+  created_at: string;
+}): CurrentProfileSummary {
+  return {
+    id: profile.id,
+    profileVersion: profile.profile_version,
+    sourceDocumentId: profile.source_document_id,
+    approvedAt: profile.approved_at,
+    createdAt: profile.created_at,
+  };
+}
+
+function latestAttemptsByDocument(attempts: Array<{
+  id: string;
+  document_id: string;
+  attempt_number: number;
+  state: ProcessingAttemptView["state"];
+  current_method: string;
+  pages_native: number;
+  pages_ocr: number;
+  useful_character_count: number;
+  failure_code: string | null;
+  failure_message: string | null;
+  started_at: string;
+  completed_at: string | null;
+}>): Map<string, ProcessingAttemptView> {
+  const latest = new Map<string, ProcessingAttemptView>();
+  for (const attempt of attempts) {
+    if (!latest.has(attempt.document_id)) latest.set(attempt.document_id, toAttemptView(attempt));
+  }
+  return latest;
+}
+
+function toTimelineItem(document: {
+  id: string;
+  filename: string;
+  source_type: PersonDocumentTimelineItem["sourceType"];
+  document_version: number;
+  byte_size: number | null;
+  page_count: number | null;
+  status: string;
+  review_state: PersonDocumentTimelineItem["reviewState"];
+  created_at: string;
+  processed_at: string | null;
+  is_legacy_unstored: boolean;
+}, latestAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>): PersonDocumentTimelineItem {
+  return {
+    id: document.id,
+    filename: document.filename,
+    sourceType: document.source_type,
+    documentVersion: document.document_version,
+    byteSize: document.byte_size,
+    pageCount: document.page_count,
+    status: document.status,
+    reviewState: document.review_state,
+    createdAt: document.created_at,
+    processedAt: document.processed_at,
+    profileVersion: profiles.get(document.id) ?? null,
+    isLegacyUnstored: document.is_legacy_unstored,
+    latestAttempt: latestAttempts.get(document.id) ?? null,
   };
 }
 

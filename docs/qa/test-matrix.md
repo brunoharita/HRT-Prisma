@@ -7,6 +7,7 @@
 | Multi-tenant | dados do próprio tenant | ID conhecido e usuário sem membership | JSON e RLS QA testados em duas organizações sintéticas |
 | Usuários da plataforma | criar, listar e editar dentro da autoridade | Member/Recruter sem gestão, autoelevação, último Owner, cross-group/cross-company | schema/Edge/UI ativos em QA; lista Super Admin comprovada |
 | Pessoas | listar, cadastrar, editar e consultar perfis do tenant | PII/documento negados a perfil sem autoridade | M2-B ativo em QA; member negado por RLS e rota local |
+| Pessoa, documento e perfil vigente | perfil atual independente da importação, Central da Pessoa, revisão parcial e descarte auditável | Member/sem sessão, documento aprovado, replay, falha técnica e ausência de importação | 105 testes locais e transações revertidas aprovados no QA; smoke visual autenticado pendente por sessão expirada |
 | Currículo-first | PDF cria ou vincula Pessoa e converge para revisão | identidade insuficiente, duplicidade ambígua e sem nome não criam Pessoa | unit/contract local; evidência conectada pendente |
 | Deduplicação de Pessoa | mesmo e-mail/telefone sugere vínculo no tenant | nome isolado não faz merge; cross-tenant não aparece | migration e UI implementadas; QA pendente |
 | Upload | texto/PDF privado até 15 MB | tipo, tamanho, assinatura, trailer e parse inválidos | contrato implementado; malware scan ausente |

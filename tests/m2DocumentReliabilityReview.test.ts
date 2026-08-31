@@ -79,7 +79,7 @@ test("M2-C exposes four local flows under Pessoas without adding a global naviga
   assert.match(application, /profileView === "review"/);
   assert.match(application, /profileView === "versions"/);
   assert.match(people, /Processamento e revisões/);
-  assert.match(operations, /Aguardando revisão/);
+  assert.match(operations, /Requer revisão/);
   assert.match(detail, /Tentativas de processamento/);
   assert.match(review, /Extraído: preservado/);
   assert.match(versions, /Compare versões aprovadas/);

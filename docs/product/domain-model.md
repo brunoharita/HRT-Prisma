@@ -42,12 +42,17 @@ Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, comp
 11. Pessoa não recebe username, senha, perfil de acesso ou permissão de sistema.
 12. Intake sem nome e contato válidos não cria Pessoa.
 13. Possível correspondência nunca produz merge ou vínculo automático silencioso.
+14. Pessoa é a entidade estável de navegação; falha ou pendência de documento não se torna estado principal da Pessoa.
+15. O perfil aprovado com `superseded_at is null` permanece vigente até outra revisão ser aprovada.
+16. Versão documental e versão de perfil são sequências independentes; Documento v2 não implica Perfil v2.
+17. Descartar uma pendência documental preserva fonte, tentativas, revisão e eventos; não apaga o perfil atual.
 
 ## Pipeline atual
 
 ```text
 resume intake -> minimum identity -> tenant deduplication -> Person resolution
-  -> document -> parsing -> extraction -> evidence -> professional profile -> human review
+  -> document -> processing attempt -> extraction -> evidence -> human review
+  -> approved professional profile version
 ```
 
 `ExtractionProvider` não conhece o repositório. O domínio não conhece fornecedor de IA. `processResume` orquestra estados, validação, persistência e telemetria.
