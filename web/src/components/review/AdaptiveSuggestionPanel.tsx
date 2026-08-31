@@ -101,7 +101,7 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
             key: "unresolved",
             label: `${report.unresolved.length} ${report.unresolved.length === 1 ? "registro sem proposta segura" : "registros sem proposta segura"}`,
             children: report.unresolved.map((item) => (
-              <Alert key={`${item.experienceIndex}-${item.reasonCode}`} message={`Experiência ${item.experienceIndex + 1}: ${item.label}`} description={item.explanation} showIcon type="warning" />
+              <Alert key={`${item.experienceIndex}-${item.reasonCode}`} title={`Experiência ${item.experienceIndex + 1}: ${item.label}`} description={item.explanation} showIcon type="warning" />
             )),
           }]}
         />
