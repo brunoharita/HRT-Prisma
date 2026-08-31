@@ -204,8 +204,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     setBusy(true); setError(null); setSuccess(null);
     try {
-      const approved = await personIngestionService.approveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion);
-      await refresh(); setSuccess(`Perfil Prisma v${approved.profileVersion} aprovado sem sobrescrever a versão anterior.`);
+      await personIngestionService.approveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion);
+      onNavigate("/profiles/processes");
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aprovar a revisão."); }
     finally { setBusy(false); }
   }

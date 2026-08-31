@@ -102,3 +102,12 @@ test("M2-C operations table preserves readable person and document columns", asy
   assert.match(styles, /\.prisma-operation-document[\s\S]*?grid-template-columns: 34px minmax\(0, 1fr\)/);
   assert.match(styles, /\.prisma-operations-table \.ant-table-tbody > tr > td[\s\S]*?vertical-align: middle/);
 });
+
+test("M2-C returns to the processing list only after a successful approval", async () => {
+  const review = await readFile("web/src/pages/ProfileReviewPage.tsx", "utf8");
+  const approvalHandler = review.match(/async function handleApprove\(\)[\s\S]*?\n  }/)?.[0] ?? "";
+
+  assert.match(approvalHandler, /await personIngestionService\.approveProfileReview[\s\S]*?onNavigate\("\/profiles\/processes"\)/);
+  assert.match(approvalHandler, /catch \(caught\)[\s\S]*?setError/);
+  assert.doesNotMatch(approvalHandler, /await refresh\(\)/);
+});

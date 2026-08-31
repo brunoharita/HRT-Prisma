@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.3.7
+version: 2.3.8
 last_verified: 2026-08-30
 ---
 
@@ -40,6 +40,7 @@ last_verified: 2026-08-30
 - Coordenação UX de ações implementada localmente: a sujeira do rascunho é calculada pela forma normalizada, inclusões vazias podem ser canceladas sem resíduo, cliques repetidos focalizam o mesmo formulário, campos removidos não mantêm ações de evidência apontando para caminhos inexistentes, raízes vazias preservam sua aba e sair com qualquer diferença local exige confirmação.
 - A fronteira privada da aprovação foi endurecida localmente: `identity` e `contact` são removidos antes de criar `professional_profiles`; nome e contato confirmados atualizam `people` e `person_private_data`, valores ausentes não apagam dados existentes e a constraint rejeita PII de contato no perfil profissional. RLS e papéis não foram ampliados.
 - A execução final da aprovação foi endurecida localmente e no Prisma-QA: o gatilho de aprendizado de áreas personalizadas usa variáveis `v_` e falha em compilação diante de identificadores ambíguos. O adapter web converte concorrência, estado, autorização, evidência, identidade, contato, shape e idempotência em mensagens acionáveis, e sanitiza falhas inesperadas sem expor SQL ou nomes internos.
+- Após confirmação transacional da aprovação, a revisão retorna automaticamente para `Processamento e revisões`. O caminho de erro permanece na tela atual, preservando o rascunho e a mensagem acionável; a navegação não depende de recarregar uma revisão que já deixou o estado `draft`.
 - Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
@@ -57,7 +58,7 @@ last_verified: 2026-08-30
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 99 testes técnicos aprovados, incluindo hardening da aprovação e sanitização de erros, ciclo de vida dos campos, IDs estáveis e compatibilidade histórica, além dos contratos M2-A/M2-B/M2-C/M5/currículo-first, resumo estruturado com fronteira privada, extração adaptativa, áreas personalizadas, contenção textual, refinamento espacial, idempotência, auditoria e Member sem documento bruto.
+- 100 testes técnicos aprovados, incluindo retorno pós-aprovação, hardening da aprovação e sanitização de erros, ciclo de vida dos campos, IDs estáveis e compatibilidade histórica, além dos contratos M2-A/M2-B/M2-C/M5/currículo-first, resumo estruturado com fronteira privada, extração adaptativa, áreas personalizadas, contenção textual, refinamento espacial, idempotência, auditoria e Member sem documento bruto.
 
 ## Implementado como contrato
 
@@ -157,4 +158,4 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 184 arquivos, fundação, Context Pack, dois typechecks, build web, 99 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A migration `20260830201029_review_approval_runtime_hardening` foi aplicada ao Prisma-QA, a definição e os grants do gatilho foram verificados e a revisão que originou o incidente percorreu `approve_profile_review` por completo em uma transação autenticada: revisão aprovada, perfil criado e confirmação da área personalizada existiram antes do rollback deliberado. A verificação posterior confirmou zero resíduos. O smoke visual protegido permaneceu indisponível por sessão expirada; o frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-30, `CI=true pnpm run validate` aprovou lint de 184 arquivos, fundação, Context Pack, dois typechecks, build web, 100 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A navegação pós-aprovação retorna a `Processamento e revisões` somente depois do sucesso da RPC; falhas permanecem na revisão e a recarga inválida do registro já aprovado foi removida. A migration `20260830201029_review_approval_runtime_hardening` permanece ativa no Prisma-QA e a aprovação conectada anterior comprovou revisão, perfil e confirmação antes de rollback sem resíduos. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
