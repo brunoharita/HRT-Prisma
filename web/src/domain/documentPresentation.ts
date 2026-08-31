@@ -5,7 +5,7 @@ import type {
   ProcessingAttemptView,
 } from "./personIngestion.js";
 
-export const DOCUMENT_PRESENTATION_VERSION = "1.0.0";
+export const DOCUMENT_PRESENTATION_VERSION = "1.2.0";
 
 export type DocumentOperationalState =
   | "none"
@@ -27,7 +27,7 @@ export interface DocumentPresentation {
   requiresAction: boolean;
 }
 
-type PresentableDocument = Pick<PersonDocumentTimelineItem, "reviewState" | "status" | "latestAttempt">;
+type PresentableDocument = Pick<PersonDocumentTimelineItem, "reviewState" | "status" | "latestAttempt" | "reviewAttempt">;
 
 export function presentDocument(document: PresentableDocument | null): DocumentPresentation {
   if (!document) return {
@@ -48,6 +48,26 @@ export function presentDocument(document: PresentableDocument | null): DocumentP
     requiresAction: false,
   };
 
+  if (document.reviewState === "approved" || document.status === "approved") return {
+    state: "processed",
+    label: "Processado",
+    description: "Documento estruturado e revisão concluída.",
+    nextAction: "Nenhuma ação necessária",
+    tone: "success",
+    requiresAction: false,
+  };
+
+  if (document.reviewAttempt && isRecoverableReviewAttempt(document.reviewAttempt)) return {
+    state: "requires_review",
+    label: "Requer revisão",
+    description: document.reviewAttempt.state === "failed_structuring"
+      ? "Conteúdo recuperado, mas o reconhecimento automático precisa de complementação humana."
+      : "Conteúdo recuperado, revisão humana necessária.",
+    nextAction: "Revisar nova importação",
+    tone: "review",
+    requiresAction: true,
+  };
+
   if (isTechnicalFailure(document.latestAttempt)) return {
     state: "technical_failure",
     label: "Falha técnica",
@@ -64,15 +84,6 @@ export function presentDocument(document: PresentableDocument | null): DocumentP
     nextAction: "Revisar nova importação",
     tone: "review",
     requiresAction: true,
-  };
-
-  if (document.reviewState === "approved" || document.status === "approved") return {
-    state: "processed",
-    label: "Processado",
-    description: "Documento estruturado e revisão concluída.",
-    nextAction: "Nenhuma ação necessária",
-    tone: "success",
-    requiresAction: false,
   };
 
   if (!document.latestAttempt) return {
@@ -103,8 +114,8 @@ export function currentProfileDescription(profile: CurrentProfileSummary | null)
 }
 
 export function isReviewableDocument(document: PresentableDocument | null): boolean {
-  if (!document || presentDocument(document).state !== "requires_review") return false;
-  return document.latestAttempt?.state === "structured" || document.latestAttempt?.state === "profile_ready";
+  return Boolean(document?.reviewAttempt && presentDocument(document).state === "requires_review"
+    && isRecoverableReviewAttempt(document.reviewAttempt));
 }
 
 export function countPendingReviews(documents: PresentableDocument[]): number {
@@ -113,6 +124,15 @@ export function countPendingReviews(documents: PresentableDocument[]): number {
 
 export function isTechnicalFailure(attempt: ProcessingAttemptView | null): boolean {
   return Boolean(attempt?.state.startsWith("failed"));
+}
+
+export function isRecoverableReviewAttempt(attempt: ProcessingAttemptView | null): boolean {
+  if (!attempt) return false;
+  if (attempt.state === "structured" || attempt.state === "profile_ready") return true;
+  return attempt.state === "failed_structuring"
+    && attempt.failureCode === "insufficient_structured_facts"
+    && attempt.usefulCharacterCount > 0
+    && attempt.pagesNative + attempt.pagesOcr > 0;
 }
 
 export function isDocumentReviewState(value: string): value is DocumentReviewState {

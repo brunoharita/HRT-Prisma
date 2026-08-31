@@ -25,7 +25,7 @@ import {
   type ResumeIntakeResolutionResult,
   type StructuredDraft,
 } from "../../domain/personIngestion";
-import { countPendingReviews } from "../../domain/documentPresentation";
+import { countPendingReviews, isRecoverableReviewAttempt } from "../../domain/documentPresentation";
 import type {
   NormalizedPageRegion,
   RegionExtractionMethod,
@@ -183,6 +183,7 @@ export const personIngestionService = {
     throwIfError(attemptError, "Não foi possível carregar as tentativas das importações.");
     const privateByPerson = new Map((privateRows ?? []).map((row) => [row.person_id, row]));
     const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
+    const reviewAttemptByDocument = reviewAttemptsByDocument(attemptRows ?? []);
     const profileByDocument = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
     const currentProfileByPerson = new Map((profileResult.data ?? [])
       .filter((profile) => profile.superseded_at === null)
@@ -191,7 +192,7 @@ export const personIngestionService = {
     for (const document of documents) {
       if (!document.person_id) continue;
       const timeline = documentsByPerson.get(document.person_id) ?? [];
-      timeline.push(toTimelineItem(document, latestAttemptByDocument, profileByDocument));
+      timeline.push(toTimelineItem(document, latestAttemptByDocument, reviewAttemptByDocument, profileByDocument));
       documentsByPerson.set(document.person_id, timeline);
     }
     const normalizedSearch = normalizeSearch(search);
@@ -246,15 +247,16 @@ export const personIngestionService = {
         .eq("organization_id", organizationId).in("document_id", documentIds).order("attempt_number", { ascending: false });
     throwIfError(attemptError, "Não foi possível carregar as tentativas de processamento.");
     const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
+    const reviewAttemptByDocument = reviewAttemptsByDocument(attemptRows ?? []);
     const profileByDocument = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
     const reviewByDocument = new Map<string, string>();
     for (const review of reviewResult.data ?? []) {
       if (!reviewByDocument.has(review.document_id)) reviewByDocument.set(review.document_id, review.id);
     }
-    const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, profileByDocument, reviewByDocument));
+    const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, reviewAttemptByDocument, profileByDocument, reviewByDocument));
     const currentProfileRow = (profileResult.data ?? []).find((profile) => profile.superseded_at === null);
     const selectedDocument = timeline.find((document) => document.id === selectedDocumentId) ?? timeline[0] ?? null;
-    const attemptId = selectedDocument?.latestAttempt?.id;
+    const attemptId = selectedDocument?.reviewAttempt?.id ?? selectedDocument?.latestAttempt?.id;
     const [pageResult, draftResult] = attemptId ? await Promise.all([
       supabase.from("document_page_extractions")
         .select("page_number, text_content, origin, useful_character_count, method, method_version")
@@ -373,16 +375,18 @@ export const personIngestionService = {
   },
 
   async reprocessDocument(organizationId: string, personId: string, documentId: string): Promise<void> {
-    const { data: previousAttempt, error: attemptError } = await supabase.from("document_processing_attempts")
-      .select("id").eq("organization_id", organizationId).eq("document_id", documentId)
-      .order("attempt_number", { ascending: false }).limit(1).maybeSingle();
+    const { data: attemptRows, error: attemptError } = await supabase.from("document_processing_attempts")
+      .select("id, attempt_number").eq("organization_id", organizationId).eq("document_id", documentId)
+      .order("attempt_number", { ascending: false });
     throwIfError(attemptError, "Não foi possível localizar a tentativa anterior.");
-    if (!previousAttempt) throw new Error("O documento ainda não possui extração preservada para reprocessar.");
     const { data: pageRows, error: pageError } = await supabase.from("document_page_extractions")
-      .select("page_number, text_content, origin, useful_character_count, method, method_version, layout_blocks, field_evidence")
-      .eq("organization_id", organizationId).eq("processing_attempt_id", previousAttempt.id).order("page_number");
+      .select("processing_attempt_id, page_number, text_content, origin, useful_character_count, method, method_version, layout_blocks, field_evidence")
+      .eq("organization_id", organizationId).eq("document_id", documentId).order("page_number");
     throwIfError(pageError, "Não foi possível recuperar a extração anterior.");
-    const pages: ExtractedPage[] = (pageRows ?? []).map((page) => ({
+    const pageAttemptIds = new Set((pageRows ?? []).map((page) => page.processing_attempt_id));
+    const previousAttempt = (attemptRows ?? []).find((attempt) => pageAttemptIds.has(attempt.id));
+    if (!previousAttempt) throw new Error("O documento ainda não possui uma tentativa com páginas extraídas para reprocessar.");
+    const pages: ExtractedPage[] = (pageRows ?? []).filter((page) => page.processing_attempt_id === previousAttempt.id).map((page) => ({
       pageNumber: page.page_number,
       text: page.text_content,
       origin: page.origin,
@@ -392,7 +396,7 @@ export const personIngestionService = {
       ...(Array.isArray(page.layout_blocks) ? { layoutLines: page.layout_blocks as unknown as NonNullable<ExtractedPage["layoutLines"]> } : {}),
       ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
     }));
-    if (pages.length === 0) throw new Error("A tentativa anterior não possui páginas extraídas válidas.");
+    if (pages.length === 0) throw new Error("Nenhuma tentativa anterior possui páginas extraídas válidas.");
     const extraction = await buildOrganizationAdaptiveExtraction(organizationId, pages);
     await persistExtraction(
       organizationId,
@@ -582,6 +586,7 @@ export const personIngestionService = {
       .filter((profile) => profile.superseded_at === null)
       .map((profile) => [profile.person_id, toCurrentProfileSummary(profile)]));
     const latestAttempts = latestAttemptsByDocument(attempts ?? []);
+    const reviewAttempts = reviewAttemptsByDocument(attempts ?? []);
     return documents.flatMap((document) => document.person_id ? [{
       id: document.id,
       personId: document.person_id,
@@ -600,6 +605,7 @@ export const personIngestionService = {
       verificationReviewId: null,
       isLegacyUnstored: document.is_legacy_unstored,
       latestAttempt: latestAttempts.get(document.id) ?? null,
+      reviewAttempt: reviewAttempts.get(document.id) ?? null,
       currentProfile: currentProfiles.get(document.person_id) ?? null,
     } satisfies DocumentOperationSummary] : []);
   },
@@ -907,9 +913,7 @@ async function persistExtraction(
     p_retry_of_attempt_id: retryOfAttemptId,
   });
   throwIfError(error, "Não foi possível persistir atomicamente a extração.");
-  if (!data?.[0]?.structured) {
-    throw new Error("A fonte foi preservada, mas os dados são insuficientes para gerar um Perfil Prisma.");
-  }
+  if (!data?.[0]?.processing_attempt_id) throw new Error("A extração foi persistida sem identificar a tentativa de processamento.");
 }
 
 async function registerDocument(input: {
@@ -1133,7 +1137,7 @@ function toCurrentProfileSummary(profile: {
   };
 }
 
-function latestAttemptsByDocument(attempts: Array<{
+type ProcessingAttemptRow = {
   id: string;
   document_id: string;
   attempt_number: number;
@@ -1146,12 +1150,24 @@ function latestAttemptsByDocument(attempts: Array<{
   failure_message: string | null;
   started_at: string;
   completed_at: string | null;
-}>): Map<string, ProcessingAttemptView> {
+};
+
+function latestAttemptsByDocument(attempts: ProcessingAttemptRow[]): Map<string, ProcessingAttemptView> {
   const latest = new Map<string, ProcessingAttemptView>();
   for (const attempt of attempts) {
     if (!latest.has(attempt.document_id)) latest.set(attempt.document_id, toAttemptView(attempt));
   }
   return latest;
+}
+
+function reviewAttemptsByDocument(attempts: ProcessingAttemptRow[]): Map<string, ProcessingAttemptView> {
+  const reviewable = new Map<string, ProcessingAttemptView>();
+  for (const attempt of attempts) {
+    if (reviewable.has(attempt.document_id)) continue;
+    const candidate = toAttemptView(attempt);
+    if (isRecoverableReviewAttempt(candidate)) reviewable.set(attempt.document_id, candidate);
+  }
+  return reviewable;
 }
 
 function toTimelineItem(document: {
@@ -1166,7 +1182,7 @@ function toTimelineItem(document: {
   created_at: string;
   processed_at: string | null;
   is_legacy_unstored: boolean;
-}, latestAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>, reviews: Map<string, string> = new Map()): PersonDocumentTimelineItem {
+}, latestAttempts: Map<string, ProcessingAttemptView>, reviewAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>, reviews: Map<string, string> = new Map()): PersonDocumentTimelineItem {
   return {
     id: document.id,
     filename: document.filename,
@@ -1182,6 +1198,7 @@ function toTimelineItem(document: {
     verificationReviewId: reviews.get(document.id) ?? null,
     isLegacyUnstored: document.is_legacy_unstored,
     latestAttempt: latestAttempts.get(document.id) ?? null,
+    reviewAttempt: reviewAttempts.get(document.id) ?? null,
   };
 }
 

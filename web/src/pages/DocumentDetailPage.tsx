@@ -59,10 +59,10 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
     finally { setBusy(false); }
   }
   async function handleReview() {
-    if (!document?.latestAttempt) return;
+    if (!document?.reviewAttempt) return;
     setBusy(true); setError(null);
     try {
-      const reviewId = await personIngestionService.startProfileReview(activeMembership.organizationId, personId, document.id, document.latestAttempt.id);
+      const reviewId = await personIngestionService.startProfileReview(activeMembership.organizationId, personId, document.id, document.reviewAttempt.id);
       onNavigate(`/profiles/${personId}/documents/${document.id}/review/${reviewId}`);
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível iniciar a revisão."); }
     finally { setBusy(false); }
@@ -70,6 +70,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
 
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 14 }} /></PrismaPage>;
   if (!workspace || !document) return <PrismaPage><Alert title={error ?? "Documento não encontrado nesta empresa."} showIcon type="error" /></PrismaPage>;
+  const recoveryMode = document.reviewAttempt?.state === "failed_structuring";
 
   const attemptColumns: ColumnsType<ProcessingAttemptView> = [
     { title: "Tentativa", dataIndex: "attemptNumber", render: (value) => `#${value}` },
@@ -85,7 +86,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
       <PrismaPageHeader
         title={document.filename}
         description={`${workspace.person.fullName} · Documento v${document.documentVersion}`}
-        actions={<Space wrap><Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>Reprocessar</Button><Button disabled={document.latestAttempt?.state !== "structured"} loading={busy} onClick={() => void handleReview()} type="primary">Revisar perfil</Button></Space>}
+        actions={<Space wrap><Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>Reprocessar</Button><Button disabled={!document.reviewAttempt} loading={busy} onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações" : "Revisar perfil"}</Button></Space>}
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/processes")} type="text">Voltar para a central</Button>
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
@@ -108,7 +109,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
           </Space>
         </PrismaCard>
         <PrismaCard title="Próximos passos">
-          {document.reviewState === "approved" ? <Alert title="Documento concluído e perfil aprovado." showIcon type="success" /> : document.latestAttempt?.state === "structured" ? <Button block onClick={() => void handleReview()} type="primary">Iniciar ou continuar revisão</Button> : <Alert title="Reprocesse quando houver uma falha recuperável." showIcon type="info" />}
+          {document.reviewState === "approved" ? <Alert title="Documento concluído e perfil aprovado." showIcon type="success" /> : document.reviewAttempt ? <><Alert title={recoveryMode ? "O conteúdo foi recuperado, mas o reconhecimento automático precisa de complementação." : "O conteúdo está pronto para revisão humana."} description={recoveryMode ? "Abra o currículo original e selecione as informações que não foram reconhecidas." : undefined} showIcon type={recoveryMode ? "warning" : "info"} /><Button block onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações no currículo" : "Iniciar ou continuar revisão"}</Button></> : <Alert title="Reprocesse quando não houver conteúdo recuperável." showIcon type="info" />}
           <Button block onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Comparar versões do perfil</Button>
         </PrismaCard>
       </div>

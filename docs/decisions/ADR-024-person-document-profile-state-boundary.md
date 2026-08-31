@@ -16,8 +16,8 @@ Definir uma representação e uma navegação únicas que preservem a Pessoa e o
 
 - A Pessoa é a raiz estável de navegação. Nome e ação `Abrir` levam à Central da Pessoa; edição é sempre uma ação explícita.
 - O perfil atual é a única linha de `professional_profiles` da Pessoa com `superseded_at is null`. Sua apresentação não deriva do estado da última importação.
-- A situação operacional deriva do documento, de `review_state` e da tentativa mais recente por meio do contrato local `document-presentation` 1.1.0.
-- `ready_for_review` e `in_review` significam `Requer revisão`; somente estados `failed_*` da tentativa significam `Falha técnica`.
+- A situação operacional deriva do documento, de `review_state`, da tentativa mais recente e da última tentativa revisável por meio do contrato local `document-presentation` 1.2.0.
+- `ready_for_review` e `in_review` significam `Requer revisão`; estados `failed_*` significam `Falha técnica`, exceto `failed_structuring` com `insufficient_structured_facts`, páginas, caracteres úteis e draft preservado, que significa reconhecimento parcial recuperável.
 - Documento vN e Perfil vN permanecem versões independentes. Documento preservado sem aprovação comunica `Nenhuma nova versão criada`.
 - Extração parcial não bloqueia a abertura da revisão. Experiência ausente recebe recuperação assistida por seleção espacial ou inclusão manual no workspace M5.
 - Na Central da Pessoa, `Ver documento` abre o mesmo workspace M5 com o currículo original à esquerda e os campos extraídos e revisados à direita, em modo estritamente somente leitura. Metadados, tentativas e auditoria permanecem acessíveis por `Detalhes técnicos`.
@@ -106,3 +106,4 @@ Substituir somente por um contrato versionado que mantenha Pessoa, documento, te
 
 - 2026-08-30: accepted with local implementation and QA validation pending.
 - 2026-08-31: `document-presentation` 1.1.0 separa visualização curricular M5, somente leitura, de detalhes técnicos.
+- 2026-08-31: `document-presentation` 1.2.0 e `human-profile-review` 4.1.0 implementam a recuperação humana de extração parcial, sem promover conteúdo automaticamente.

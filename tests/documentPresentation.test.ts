@@ -32,12 +32,33 @@ test("keeps the approved profile independent from a later document that requires
 });
 
 test("classifies only execution errors as technical failure", () => {
-  const failed = makeDocument({ reviewState: "not_ready", latestAttempt: makeAttempt("failed_extraction") });
+  const failed = makeDocument({ reviewState: "not_ready", latestAttempt: makeAttempt("failed_extraction"), reviewAttempt: null });
   const partial = makeDocument({ reviewState: "ready_for_review", latestAttempt: makeAttempt("structured") });
 
   assert.equal(presentDocument(failed).state, "technical_failure");
   assert.equal(presentDocument(failed).nextAction, "Reprocessar ou substituir arquivo");
   assert.equal(presentDocument(partial).state, "requires_review");
+});
+
+test("keeps a preserved partial extraction reviewable when a later failure has no pages", () => {
+  const latestFailure = makeAttempt("failed_structuring");
+  latestFailure.attemptNumber = 2;
+  latestFailure.pagesNative = 0;
+  latestFailure.usefulCharacterCount = 0;
+  latestFailure.failureCode = "resume_intake_processing_failed";
+  const preservedAttempt = makeAttempt("failed_structuring");
+  preservedAttempt.failureCode = "insufficient_structured_facts";
+
+  const document = makeDocument({
+    status: "failed",
+    reviewState: "not_ready",
+    latestAttempt: latestFailure,
+    reviewAttempt: preservedAttempt,
+  });
+
+  assert.equal(presentDocument(document).state, "requires_review");
+  assert.equal(presentDocument(document).nextAction, "Revisar nova importação");
+  assert.equal(isReviewableDocument(document), true);
 });
 
 test("does not invent a pending import and treats invalidation as an archived history", () => {
@@ -126,6 +147,7 @@ function makeDocument(overrides: Partial<PersonDocumentTimelineItem> = {}): Pers
     verificationReviewId: "review-v2",
     isLegacyUnstored: false,
     latestAttempt: makeAttempt("structured"),
+    reviewAttempt: makeAttempt("structured"),
     ...overrides,
   };
 }

@@ -134,7 +134,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   }
 
   async function handleStartReview(document = workspace?.selectedDocument) {
-    if (!document?.latestAttempt) return;
+    if (!document?.reviewAttempt) return;
     setBusy(true);
     setError(null);
     try {
@@ -142,7 +142,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         activeMembership.organizationId,
         personId,
         document.id,
-        document.latestAttempt.id,
+        document.reviewAttempt.id,
       );
       onNavigate(`/profiles/${personId}/documents/${document.id}/review/${reviewId}`);
     } catch (caught) {
@@ -173,12 +173,12 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     setSuccess(null);
     try {
       if (presentDocument(document).state === "requires_review") {
-        if (!document.latestAttempt) throw new Error("A importação não possui tentativa revisável.");
+        if (!document.reviewAttempt) throw new Error("A importação não possui tentativa revisável.");
         await personIngestionService.startProfileReview(
           activeMembership.organizationId,
           personId,
           document.id,
-          document.latestAttempt.id,
+          document.reviewAttempt.id,
         );
       }
       await personIngestionService.discardDocumentReview(activeMembership.organizationId, document.id);
@@ -229,7 +229,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           </div>
         </div>
         <div className="prisma-person-current-banner__actions">
-          {canReview && latestDocument ? <Button loading={busy} onClick={() => void handleStartReview(latestDocument)} type="primary">Revisar nova importação</Button> : null}
+          {canReview && latestDocument ? <Button loading={busy} onClick={() => void handleStartReview(latestDocument)} type="primary">{latestDocument.reviewAttempt?.state === "failed_structuring" ? "Recuperar informações" : "Revisar nova importação"}</Button> : null}
           <Space wrap>
             <Button disabled={!workspace.person.currentProfile} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Ver perfil atual</Button>
             {latestDocument ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(documentViewerPath(personId, latestDocument))}>{latestDocument.verificationReviewId ? "Ver documento" : "Detalhes técnicos"}</Button> : null}
@@ -550,7 +550,7 @@ function workspaceDocumentColumns({ onOpen, onReview }: {
       key: "actions",
       width: 150,
       render: (_, document) => isReviewableDocument(document)
-        ? <Button onClick={() => onReview(document)} type="primary" ghost>Abrir revisão</Button>
+        ? <Button onClick={() => onReview(document)} type="primary" ghost>{document.reviewAttempt?.state === "failed_structuring" ? "Recuperar informações" : "Abrir revisão"}</Button>
         : <Button icon={<EyeOutlined />} onClick={() => onOpen(document)}>{document.verificationReviewId ? "Ver documento" : "Detalhes técnicos"}</Button>,
     },
   ];

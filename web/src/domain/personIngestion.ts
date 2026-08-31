@@ -234,6 +234,7 @@ export interface PersonDocumentTimelineItem {
   verificationReviewId: string | null;
   isLegacyUnstored: boolean;
   latestAttempt: ProcessingAttemptView | null;
+  reviewAttempt: ProcessingAttemptView | null;
 }
 
 export interface DocumentOperationSummary extends PersonDocumentTimelineItem {

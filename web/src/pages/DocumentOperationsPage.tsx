@@ -200,7 +200,7 @@ function LegendItem({ icon, label, description, tone }: { icon: React.ReactNode;
   return <div className={`prisma-operation-legend-item prisma-operation-legend-item--${tone}`}><span>{icon}</span><div><strong>{label}</strong><small>{description}</small></div></div>;
 }
 
-export function OperationalStatusTag({ document }: { document: { reviewState: DocumentReviewState; status: string; latestAttempt: DocumentOperationSummary["latestAttempt"] } }) {
+export function OperationalStatusTag({ document }: { document: { reviewState: DocumentReviewState; status: string; latestAttempt: DocumentOperationSummary["latestAttempt"]; reviewAttempt: DocumentOperationSummary["reviewAttempt"] } }) {
   const presentation = presentDocument(document);
   if (presentation.state === "technical_failure") return <Tag color="red">Falha técnica</Tag>;
   if (presentation.state === "processed") return <Tag color="green">Processado</Tag>;

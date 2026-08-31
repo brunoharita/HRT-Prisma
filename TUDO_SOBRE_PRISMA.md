@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 1a81555c69317d22bf644f58c8b0a8cd4f41ebb8b732e80421d472713cc9d46c
+source_manifest_sha256: efd4429325f1c66d6f3fd9e11938889af0e9e3a5d3bb0ecf2c0df74268b755c7
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.4.2
+version: 2.5.0
 last_verified: 2026-08-31
 ---
 
@@ -333,7 +333,7 @@ last_verified: 2026-08-31
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
-- Fronteira Pessoa, Documento e Perfil Vigente 1.1.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. A revisão M5 pode recuperar extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual.
+- Fronteira Pessoa, Documento e Perfil Vigente 1.2.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. Tentativa operacional vazia não oculta a última tentativa revisável com páginas e draft preservados. A revisão M5 recupera extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual, enquanto tentativa sem fonte continua bloqueada.
 - Descarte não destrutivo implementado localmente e no Prisma-QA pela RPC `invalidate_document_review`: somente Admin, Owner, Recruiter ou Super Admin invalidam uma revisão ou importação tecnicamente falha; documento, tentativa, revisão, eventos e perfil vigente permanecem preservados; replay é idempotente e nenhuma linha é apagada.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` define a escala total exigida pelo PDF.js e converte caracteres ou símbolos OCR para um mapa canônico `normalized-page-v1`; texto, refinamento e destaque usam exatamente o mesmo conjunto. Zoom, ajuste à largura e proporção da tela alteram apenas a projeção. A direita inclui somente caixas que começam dentro do contorno, sem tolerância fixa ou resgate externo. Evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Campos multilinha comparados na revisão mantêm paridade visual: as superfícies extraída e humana possuem a mesma altura, e o editor humano ocupa integralmente o espaço interno correspondente. Conteúdo excedente rola dentro do campo, sem permitir que um redimensionamento isolado quebre a proporção entre os lados.
@@ -370,7 +370,7 @@ last_verified: 2026-08-31
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 106 testes técnicos aprovados, incluindo separação entre perfil vigente e última importação, apresentação documental, navegação centrada na Pessoa, recuperação de extração parcial e invalidação auditável, destaque de descrições históricas com marcadores, além do retorno pós-aprovação, hardening da aprovação, ciclo de vida dos campos e contratos M2-A/M2-B/M2-C/M5/currículo-first.
+- 109 testes técnicos aprovados, incluindo separação entre perfil vigente e última importação, apresentação documental, navegação centrada na Pessoa, recuperação conectada de extração parcial, rejeição de tentativa vazia, invalidação auditável e destaque de descrições históricas com marcadores, além do retorno pós-aprovação, hardening da aprovação, ciclo de vida dos campos e contratos M2-A/M2-B/M2-C/M5/currículo-first.
 
 ## Implementado como contrato
 
@@ -392,6 +392,7 @@ last_verified: 2026-08-31
 - Migration local `20260830175144_review_field_lifecycle`, aplicada no Prisma-QA como `20260830181745_review_field_lifecycle`, adiciona validação de identidade estável para campos repetíveis, gates autoritativos de salvamento, compatibilidade de caminhos históricos e gatilhos privados com `search_path` vazio.
 - Migration local `20260830201029_review_approval_runtime_hardening`, aplicada no Prisma-QA como `20260830201459_review_approval_runtime_hardening`, substitui o gatilho de aprendizado de áreas personalizadas com variáveis prefixadas, `#variable_conflict error`, verificação pós-instalação e execução direta revogada.
 - Migration local `20260831022615_invalidate_document_review`, aplicada no Prisma-QA como `20260831024503_invalidate_document_review`, adiciona a operação idempotente `invalidate_review`, autorização interna por tenant e papel, estado `invalidated` já previsto pelos contratos e auditoria metadata-only, sem DELETE, alteração de perfil vigente, nova tabela, política RLS ou grant anônimo. A migration corretiva local `20260831025456_invalidate_document_review_approved_guard`, aplicada no QA como `20260831025522`, também falha fechada quando apenas `documents.status` indica aprovação ou quando o documento ainda não está vinculado a uma Pessoa.
+- Migration local `20260831204334_recover_partial_resume_review`, aplicada no Prisma-QA como `20260831205547`, mantém `failed_structuring` como diagnóstico da automação, mas torna revisável somente a tentativa com `insufficient_structured_facts`, caracteres úteis, páginas persistidas e draft `valid` ou `insufficient`. O backfill reclassificou o Documento v2 de Bruno Harita como `ready_for_review` sem alterar tentativas, draft, páginas, evidências ou Perfil v1. Admin abriu revisão em transação revertida sobre a tentativa 1; tentativa 2 vazia e usuário sem membership foram rejeitados. Nenhuma operação de QA permaneceu persistida.
 - Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 
@@ -472,7 +473,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-31, `CI=true pnpm run validate` aprovou lint de 190 arquivos, fundação, Context Pack, dois typechecks, build web, 106 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As migrations `20260831022615_invalidate_document_review` e `20260831025456_invalidate_document_review_approved_guard` estão ativas no Prisma-QA como `20260831024503` e `20260831025522`; autorização, preservação, auditoria, replay, drift, vínculo à Pessoa e rollback foram comprovados sem resíduos. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-31, `CI=true pnpm run validate` aprovou lint de 192 arquivos, fundação, Context Pack, dois typechecks, build web, 109 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A migration de recuperação parcial está ativa no Prisma-QA como `20260831205547`; autorização, tentativa recuperável, rejeição de tentativa vazia, preservação do Perfil v1 e rollback sem resíduos foram comprovados. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 
