@@ -78,6 +78,21 @@ test("M5 locates one exact legacy original value for a visual-only PDF highlight
   assert.deepEqual(uniqueTextUnitMatch(positionedUnits("Cofundador & Diretor Executivo", 0, 2), "Fundador & Diretor Executivo"), []);
 });
 
+test("M5 locates a legacy multiline description when the PDF keeps decorative bullets", () => {
+  const source = [
+    ...positionedUnits("Atuação executiva e consultiva em transformação operacional.", 0, 0),
+    ...positionedUnits("• Condução de diagnósticos organizacionais.", 14, 1),
+    ...positionedUnits("• Desenho de modelos operacionais.", 28, 2),
+  ];
+  const expected = "Atuação executiva e consultiva em transformação operacional.\nCondução de diagnósticos organizacionais.\nDesenho de modelos operacionais.";
+  const matched = uniqueTextUnitMatch(source, expected);
+
+  assert.ok(matched.length > 0);
+  assert.equal(matched.some((unit) => unit.text === "•"), false);
+  assert.deepEqual(boundingPixelRectForTextUnits(matched), { left: 0, top: 0, right: 600, bottom: 38 });
+  assert.deepEqual(uniqueTextUnitMatch([...source, ...source], expected), []);
+});
+
 test("M5 includes only characters visually contained by the selected rectangle", () => {
   const firstLine = positionedUnits("MBA | Universidade", 0, 0);
   const secondLine = positionedUnits("Pós-graduação em Gestão de Processos de TI", 14, 100);

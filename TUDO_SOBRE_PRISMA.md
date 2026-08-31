@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: d5df2ebc56defb24c9291b92d7dd11469e6135522aa1c65a407fdd2a9e132dbf
+source_manifest_sha256: 1a81555c69317d22bf644f58c8b0a8cd4f41ebb8b732e80421d472713cc9d46c
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.4.1
+version: 2.4.2
 last_verified: 2026-08-31
 ---
 
@@ -339,7 +339,7 @@ last_verified: 2026-08-31
 - Campos multilinha comparados na revisão mantêm paridade visual: as superfícies extraída e humana possuem a mesma altura, e o editor humano ocupa integralmente o espaço interno correspondente. Conteúdo excedente rola dentro do campo, sem permitir que um redimensionamento isolado quebre a proporção entre os lados.
 - Alterações manuais materiais não salvas continuam impedindo operações espaciais e aprovação, mas o bloqueio deixou de ser silencioso. Um alerta contextual explica a dependência, controles com cadeado permanecem acionáveis para registrar a intenção, e `Salvar rascunho e continuar` ou `Descartar e continuar` retomam automaticamente adicionar evidência ou criar área personalizada. Formulários repetíveis recém-abertos e vazios são transitórios: não habilitam salvamento, não exigem justificativa, não duplicam e podem receber a primeira evidência em uma operação atômica. Justificativa ausente recebe erro e foco no próprio campo.
 - Destaques espaciais persistidos são filtrados pelo contexto de revisão aberto: Experiência e Formação exibem somente o registro atual; cada outra aba exibe apenas seus campos renderizados. O filtro é local, não destrutivo e não modifica o contrato `spatial-evidence` 1.2.0.
-- Evidências originais históricas sem região persistida recebem um fallback somente visual quando o valor extraído do campo ativo possui uma única correspondência exata na camada textual da página original. A região não é persistida nem tratada como evidência espacial inferida; zero ou múltiplas correspondências falham fechadas e não produzem destaque.
+- Evidências originais históricas sem região persistida recebem um fallback somente visual quando o valor extraído do campo ativo possui uma única correspondência na camada textual da página original. A comparação tolera marcadores decorativos de lista removidos pela extração, mas preserva a exigência de unicidade. A região não é persistida nem tratada como evidência espacial inferida; zero ou múltiplas correspondências falham fechadas e não produzem destaque.
 - O modal M5 aplica texto reconhecido e não editado sem justificativa, exige explicação somente para interpretação ou conteúdo manual e apresenta validação/falha dentro da própria janela.
 - Refinamento espacial 1.2 implementado localmente: uma nova seleção preserva o texto bruto, identifica regiões sobrepostas de campos irmãos do mesmo registro, desconta por padrão somente áreas humanas e permite reinclusão explícita. A subtração usa caracteres PDF.js ou símbolos posicionados do OCR; nenhum texto externo ao retângulo participa.
 - Extração adaptativa v2 implementada localmente: PDF.js preserva linhas e geometria; a estruturação reconhece blocos completos, períodos abreviados, empresa em linha distinta e permanências com cargos subordinados; cada campo pode possuir região original navegável. Padrões organizacionais aprovados funcionam como sinais estruturais allowlisted, nunca como templates executáveis.
@@ -370,7 +370,7 @@ last_verified: 2026-08-31
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 105 testes técnicos aprovados, incluindo separação entre perfil vigente e última importação, apresentação documental, navegação centrada na Pessoa, recuperação de extração parcial e invalidação auditável, além do retorno pós-aprovação, hardening da aprovação, ciclo de vida dos campos e contratos M2-A/M2-B/M2-C/M5/currículo-first.
+- 106 testes técnicos aprovados, incluindo separação entre perfil vigente e última importação, apresentação documental, navegação centrada na Pessoa, recuperação de extração parcial e invalidação auditável, destaque de descrições históricas com marcadores, além do retorno pós-aprovação, hardening da aprovação, ciclo de vida dos campos e contratos M2-A/M2-B/M2-C/M5/currículo-first.
 
 ## Implementado como contrato
 
@@ -472,7 +472,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-31, `CI=true pnpm run validate` aprovou lint de 190 arquivos, fundação, Context Pack, dois typechecks, build web, 105 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As migrations `20260831022615_invalidate_document_review` e `20260831025456_invalidate_document_review_approved_guard` estão ativas no Prisma-QA como `20260831024503` e `20260831025522`; autorização, preservação, auditoria, replay, drift, vínculo à Pessoa e rollback foram comprovados sem resíduos. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-31, `CI=true pnpm run validate` aprovou lint de 190 arquivos, fundação, Context Pack, dois typechecks, build web, 106 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. As migrations `20260831022615_invalidate_document_review` e `20260831025456_invalidate_document_review_approved_guard` estão ativas no Prisma-QA como `20260831024503` e `20260831025522`; autorização, preservação, auditoria, replay, drift, vínculo à Pessoa e rollback foram comprovados sem resíduos. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
 
 ---
 

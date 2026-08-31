@@ -304,7 +304,10 @@ export function uniqueTextUnitMatch(
   units.forEach((unit) => {
     if (previous && shouldSeparateTextUnits(previous, unit)) appendSearchCharacter(" ", null);
     Array.from(unit.text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
-      .forEach((character) => appendSearchCharacter(character, unit));
+      .forEach((character) => {
+        const decorativeMarker = isDecorativeListMarker(character);
+        appendSearchCharacter(decorativeMarker ? " " : character, decorativeMarker ? null : unit);
+      });
     previous = unit;
   });
 
@@ -389,9 +392,14 @@ function normalizeComparableText(value: string): string {
   return value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[•·▪●◦‣⁃∙]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
     .toLowerCase();
+}
+
+function isDecorativeListMarker(value: string): boolean {
+  return /[•·▪●◦‣⁃∙]/.test(value);
 }
 
 function reviewScreenScope(fieldPath: string): string {
