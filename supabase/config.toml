@@ -394,6 +394,9 @@ verify_jwt = false
 [functions.assessment-access]
 verify_jwt = false
 
+[functions.assessment-item-generator]
+verify_jwt = true
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

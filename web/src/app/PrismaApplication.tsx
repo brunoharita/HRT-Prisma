@@ -5,6 +5,7 @@ import {
   BranchesOutlined,
   HomeOutlined,
   BookOutlined,
+  DatabaseOutlined,
   LockOutlined,
   SafetyCertificateOutlined,
   SettingOutlined,
@@ -35,6 +36,7 @@ import { KnowledgePage } from "../pages/KnowledgePage";
 import { CompetencyVerificationPage } from "../pages/CompetencyVerificationPage";
 import { VerificationOperationsPage } from "../pages/VerificationOperationsPage";
 import { VerificationSessionPage } from "../pages/VerificationSessionPage";
+import { AssessmentItemBankPage } from "../pages/AssessmentItemBankPage";
 import {
   canActivateOrganization,
   evaluateRouteAccess,
@@ -104,6 +106,12 @@ const routes: AppRoute[] = [
     label: "Verificações",
     icon: <SafetyCertificateOutlined />,
     rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
+  },
+  {
+    path: "/item-bank",
+    label: "Banco de Itens",
+    icon: <DatabaseOutlined />,
+    rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin"] },
   },
   {
     path: "/users",
@@ -399,6 +407,9 @@ function renderRouteContent(
   }
   if (route.path === "/verifications" && activeMembership) {
     return <VerificationOperationsPage activeMembership={activeMembership} {...(route.verificationPreparedAssessmentId ? { preparedAssessmentId: route.verificationPreparedAssessmentId } : {})} onNavigate={onNavigate} />;
+  }
+  if (route.path === "/item-bank" && activeMembership) {
+    return <AssessmentItemBankPage activeMembership={activeMembership} />;
   }
   if (route.path === "/knowledge" && currentOperator) {
     return <KnowledgePage profile={currentOperator.profile} activeMembership={activeMembership} />;

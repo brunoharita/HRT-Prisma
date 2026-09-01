@@ -37,6 +37,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-025](ADR-025-resume-product-journey-and-publication-delta.md) | accepted | Six-step resume journey, canonical product states, and omission-safe publication Delta |
 | [ADR-026](ADR-026-competency-verification-as-demonstrated-evidence.md) | accepted | Competency verification as demonstrated evidence |
 | [ADR-027](ADR-027-tokenized-public-assessment-boundary.md) | accepted | Tokenized public assessment boundary without Person accounts |
+| [ADR-028](ADR-028-governed-item-bank-expansion-and-calibration-boundary.md) | accepted | Governed Item Bank expansion, cost boundary and progressive calibration |
 
 ## Rules
 

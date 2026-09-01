@@ -1,7 +1,7 @@
 ---
 owner: security
-status: partially_implemented
-version: 0.3.1
+status: verified_in_prisma_qa
+version: 0.4.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Este documento descreve os controles aplicados no M5.1A e no M5.1B ativo no Prisma-QA. O M5.1B adiciona token de convite com hash SHA-256, Edge Function pública estreita, tentativa, respostas, ledger factual, correção, integridade e Evidência Demonstrada. O uso com Pessoas reais continua condicionado às decisões de privacidade e à aprovação específica do piloto.
+Este documento descreve os controles aplicados no M5.1A, M5.1B e M5.1C ativos no Prisma-QA. O uso com Pessoas reais e qualquer provider externo continuam condicionados a privacidade, retenção, base legal, modelo, orçamento e aprovação específica.
 
 ## Ativos
 
@@ -70,6 +70,18 @@ No M5.1B:
 - Answer key permanece apenas no snapshot protegido da Question Instance e nunca entra na resposta pública.
 - Eventos guardam metadata mínima. Não há webcam, microfone, screen recording, conteúdo de clipboard, nomes de outras abas, IP persistido ou fingerprint cross-session.
 - Rate limit existe no worker e no banco para tokens válidos; erros públicos são sanitizados e não revelam SQL ou enumeração de IDs.
+
+No M5.1C:
+
+- Oito tabelas de governança inicial, mais os campos analíticos e de policy, possuem RLS e grants mínimos; `anon` não lê nem executa RPCs.
+- `authenticated` recebe somente SELECT direto nas tabelas administrativas. Need, Request, Review, publicação e analytics passam por RPCs com autorização interna fail-closed.
+- Escrita Global exige `super_admin`; Owner/Admin atuam apenas na organização; Recruiter e Member não administram o Banco.
+- Proposal publicada fica travada para nova revisão e retries de criação/publicação são idempotentes.
+- Itens Organization continuam tenant-scoped. Teste cross-tenant em transação revertida retornou zero linhas para um Member ligado somente a outra organização.
+- A Edge Function `assessment-item-generator` v2 está ativa com `verify_jwt=true`, mas a flag e todas as policies externas permanecem desativadas.
+- Secrets ficam no runtime server-side. PII e Web Search são bloqueados por policy, schema e validação de conteúdo.
+- Reservation, usage e release formam ledger append-only. Teste revertido comprovou reserva de 100, liberação de 100 e saldo zero sem chamar provider.
+- Analytics de item não carregam identidade de Pessoa. Snapshots Global são filtrados pelo tenant que produziu a amostra e fixture sintética não pode receber `calibrated`.
 
 ## Integridade
 

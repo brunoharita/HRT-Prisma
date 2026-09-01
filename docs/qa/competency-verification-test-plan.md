@@ -1,7 +1,7 @@
 ---
 owner: qa
 status: verified_in_prisma_qa
-version: 0.3.1
+version: 0.4.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Plano completo do M5.1 e evidência local, conectada e visual do M5.1B. Além do M5.1A, existem testes executáveis para scoring, métricas ligadas à questão ativa, incidente técnico separado, integridade, confiança, Evidência Demonstrada independente e limites de grants/RLS da migration. O smoke conectado e os dois contextos visuais foram executados somente com dados sintéticos.
+Plano completo do M5.1 e evidência local/conectada do M5.1C, além da preparação e execução M5.1A/B. O M5.1C possui testes para gap elegível, provider fake, schema, PII, resposta exposta, fingerprint, similaridade, budget e calibração sintética. O smoke visual M5.1C ficou limitado pela policy do navegador interno nesta execução e não deve ser tratado como aprovado.
 
 ## Estratégia
 
@@ -131,3 +131,24 @@ Em 2026-09-01:
 - o primeiro passe do detalhe revelou os enums técnicos `adequate`; a UI foi corrigida para `Adequada` em confiança e integridade e revalidada sem o valor técnico exposto.
 
 Não foram usados nomes ou dados de Pessoas reais. O registro de QA foi criado como `Pessoa Sintética M5.1B QA` com domínio `example.invalid`. Nenhum e-mail ou WhatsApp foi enviado.
+
+## Evidência M5.1C local e conectada
+
+Em 2026-09-01:
+
+- migrations `20260901145444`, `20260901150902`, `20260901152207`, `20260901152216`, `20260901152451` e `20260901153011` aplicadas ao Prisma-QA; a primeira cria a governança e as seguintes fazem hardening forward-only de idempotência, estados, analytics, orçamento, deduplicação e auditoria;
+- Edge Function `assessment-item-generator` v2 publicada com `verify_jwt=true` e flag externa desativada;
+- testes focados aprovaram gap, fake determinístico, ausência de gap, PII, answer leakage, fingerprint/Jaccard, synthetic never calibrated, estados de amostra, budget e markers de segurança;
+- replay do request `51c11083-fcc9-488d-ae8d-c2ad59b32213` devolveu o mesmo pedido com `replayed=true`, custo zero e uma proposal; replay da publicação devolveu o mesmo item `9983c4ad-f5e0-4dc2-ab85-eeab556d3d0b`;
+- nova revisão de proposal publicada falhou com `M51C_PUBLISHED_PROPOSAL_LOCKED`; publicação sem review falhou com `M51C_HUMAN_REVIEW_REQUIRED`;
+- uma segunda proposal idêntica foi marcada `duplicate_candidate`, similaridade 1, reason `EXACT_DUPLICATE_REVIEW_REQUIRED` e rejeitada por humano sem publicação;
+- um item privado sintético foi aprovado e publicado como Organization, preservando review e provenance; teste cross-tenant revertido manteve uma membership em outro tenant e retornou zero linhas para o item privado;
+- Owner foi negado em escopo Global com `M51C_GLOBAL_SCOPE_REQUIRES_SUPER_ADMIN`; Recruiter foi negado na administração com `M51C_GOVERNANCE_ROLE_REQUIRED`; `authenticated` recebeu `permission denied` em INSERT direto no ledger;
+- snapshot sintético calculou uma aplicação, acerto, omissão, mudança, P25/mediana/P75 e incidentes excluídos, permaneceu `collecting_data` e `realCalibration=false`; zero snapshot sintético ficou `calibrated`;
+- teste transacional de budget reservou 100 centavos, liberou 100, terminou líquido zero e não chamou provider; cenário de limite retornou `M51C_BUDGET_EXCEEDED`;
+- políticas externas habilitadas: zero; custo externo real: zero centavos; nenhuma chamada viva de IA;
+- o primeiro teste de failure release encontrou o enum de auditoria `failed` incompatível com `failure`; a transação reverteu integralmente e a migration `20260901153011` corrigiu o contrato antes da repetição aprovada;
+- a UI implementa as 12 superfícies administrativas no App Shell, mas a navegação visual local não pôde ser retomada depois que a policy do navegador bloqueou a URL local originada de uma página interna de erro. Typecheck e build cobrem o código, porém os cinco viewports continuam pendentes de inspeção visual.
+- `CI=true pnpm run validate` aprovou lint de 237 arquivos, foundation, Context Pack, dois typechecks, build web, 142 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`.
+
+Dados persistidos de QA são deliberadamente sintéticos: um item Global publicado, uma proposal duplicada rejeitada, um item Organization publicado, reviews/audits correspondentes e um snapshot analítico `synthetic_qa`. Não existe produção.

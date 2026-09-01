@@ -1,7 +1,7 @@
 ---
 owner: architecture
-status: partially_implemented
-version: 0.3.0
+status: implemented_for_internal_qa
+version: 1.0.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Este documento descreve a arquitetura do plano completo M5.1. O M5.1A prepara o instrumento; o M5.1B implementa localmente convite, tentativa, resposta, telemetria, correção, integridade, avaliação, Evidência Demonstrada e reavaliação explicável. Produção separada, provider de delivery, uso com Pessoas reais e geração de itens por IA não existem.
+Este documento descreve a arquitetura do M5.1. O M5.1A prepara o instrumento; o M5.1B executa a verificação; o M5.1C governa expansão, custo, revisão, analytics e calibração progressiva do Banco de Itens. Produção separada, provider de delivery, uso com Pessoas reais e geração externa ativa não existem.
 
 ## Bounded context
 
@@ -73,6 +73,16 @@ A Edge Function `assessment-access` é a fronteira pública definida pelo ADR-02
 Início e submissão são transacionais. A primeira operação materializa snapshots imutáveis de itens, opções, resposta correta e versões. A segunda bloqueia a tentativa, calcula resultado bruto, métricas, flags, Rubrica, confiança, Evidência Demonstrada, resolução da Need e um novo `match_evaluations`. Integridade nunca modifica o resultado bruto e browser telemetry permanece sinal observável, não prova de conduta.
 
 ## Escopo global e organizacional
+
+## Implementação M5.1C
+
+O M5.1C adiciona `assessment_item_generation_needs`, `assessment_item_generation_requests`, `assessment_item_generation_proposals`, `assessment_item_generation_reviews`, `assessment_item_calibration_snapshots`, `assessment_item_quality_flags`, `assessment_ai_policies` e `assessment_ai_budget_ledger`. Todas as tabelas têm RLS, `anon` sem acesso e DML crítico encapsulado em RPCs autorizadas.
+
+O fluxo é `Blueprint -> cobertura elegível -> gap -> Need -> Request -> Proposal -> validação/deduplicação -> Review -> Item`. Chaves idempotentes são serializadas por transaction advisory lock. Publicação é atômica e repetível, exige aprovação humana e preserva proposal, provider, modelo, prompt e schema. Um trigger mantém a Need entre revisão parcial, resolvida ou falha.
+
+`assessment-item-generator` exige JWT, CORS local explícito, flag server-side, policy, orçamento, teto por pedido, limite diário, cooldown, schema estrito e validação adicional. O provider fake não usa LLM. A rota externa usa a Responses API somente quando toda configuração estiver aprovada; hoje falha fechado antes de qualquer chamada.
+
+Snapshots analíticos são tenant-scoped mesmo para itens Global. Eles separam defined de observed, registram P25, mediana, P75, acerto, omissão, mudança e incidentes excluídos. `synthetic_qa` nunca pode receber `calibrated`. Global real não agrega tenants privados.
 
 Knowledge Global e Organization overlay continuam separados. A mesma regra vale para avaliação:
 

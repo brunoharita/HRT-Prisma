@@ -533,6 +533,524 @@ export interface Database {
         status: string; created_at: string; updated_at: string;
       }>;
     };
+      assessment_ai_budget_ledger: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          created_by_auth_user_id: string
+          entry_type: string
+          generation_request_id: string | null
+          id: number
+          model: string | null
+          organization_id: string
+          provider: string | null
+          usage_metadata: Json
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          created_by_auth_user_id: string
+          entry_type: string
+          generation_request_id?: string | null
+          id?: never
+          model?: string | null
+          organization_id: string
+          provider?: string | null
+          usage_metadata?: Json
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          created_by_auth_user_id?: string
+          entry_type?: string
+          generation_request_id?: string | null
+          id?: never
+          model?: string | null
+          organization_id?: string
+          provider?: string | null
+          usage_metadata?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_ai_budget_ledger_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_ai_budget_ledger_organization_id_generation_req_fkey"
+            columns: ["organization_id", "generation_request_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_item_generation_requests"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
+      assessment_ai_policies: {
+        Row: {
+          allow_pii: boolean
+          allow_web_search: boolean
+          allowed_competencies: Json
+          budget_alert_percent: number
+          cooldown_seconds: number
+          generation_enabled: boolean
+          id: string
+          maximum_cost_per_request_cents: number | null
+          maximum_items_per_request: number
+          maximum_requests_per_day: number
+          model: string | null
+          monthly_limit_cents: number | null
+          organization_id: string
+          policy_version: string
+          provider: string | null
+          require_human_review: boolean
+          updated_at: string
+          updated_by_auth_user_id: string | null
+        }
+        Insert: {
+          allow_pii?: boolean
+          allow_web_search?: boolean
+          allowed_competencies?: Json
+          budget_alert_percent?: number
+          cooldown_seconds?: number
+          generation_enabled?: boolean
+          id?: string
+          maximum_cost_per_request_cents?: number | null
+          maximum_items_per_request?: number
+          maximum_requests_per_day?: number
+          model?: string | null
+          monthly_limit_cents?: number | null
+          organization_id: string
+          policy_version?: string
+          provider?: string | null
+          require_human_review?: boolean
+          updated_at?: string
+          updated_by_auth_user_id?: string | null
+        }
+        Update: {
+          allow_pii?: boolean
+          allow_web_search?: boolean
+          allowed_competencies?: Json
+          budget_alert_percent?: number
+          cooldown_seconds?: number
+          generation_enabled?: boolean
+          id?: string
+          maximum_cost_per_request_cents?: number | null
+          maximum_items_per_request?: number
+          maximum_requests_per_day?: number
+          model?: string | null
+          monthly_limit_cents?: number | null
+          organization_id?: string
+          policy_version?: string
+          provider?: string | null
+          require_human_review?: boolean
+          updated_at?: string
+          updated_by_auth_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_ai_policies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_item_calibration_snapshots: {
+        Row: {
+          analytics_version: string
+          answer_change_rate: number | null
+          application_count: number
+          assessment_item_id: string
+          calculated_at: string
+          calibration_state: string
+          correct_rate: number | null
+          created_at: string
+          excluded_technical_incident_count: number
+          id: string
+          median_time_seconds: number | null
+          observed_difficulty: number | null
+          omission_rate: number | null
+          organization_id: string | null
+          p25_time_seconds: number | null
+          p75_time_seconds: number | null
+          reason_codes: Json
+          sample_kind: string
+        }
+        Insert: {
+          analytics_version?: string
+          answer_change_rate?: number | null
+          application_count?: number
+          assessment_item_id: string
+          calculated_at?: string
+          calibration_state: string
+          correct_rate?: number | null
+          created_at?: string
+          excluded_technical_incident_count?: number
+          id?: string
+          median_time_seconds?: number | null
+          observed_difficulty?: number | null
+          omission_rate?: number | null
+          organization_id?: string | null
+          p25_time_seconds?: number | null
+          p75_time_seconds?: number | null
+          reason_codes: Json
+          sample_kind: string
+        }
+        Update: {
+          analytics_version?: string
+          answer_change_rate?: number | null
+          application_count?: number
+          assessment_item_id?: string
+          calculated_at?: string
+          calibration_state?: string
+          correct_rate?: number | null
+          created_at?: string
+          excluded_technical_incident_count?: number
+          id?: string
+          median_time_seconds?: number | null
+          observed_difficulty?: number | null
+          omission_rate?: number | null
+          organization_id?: string | null
+          p25_time_seconds?: number | null
+          p75_time_seconds?: number | null
+          reason_codes?: Json
+          sample_kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_item_calibration_snapshots_assessment_item_id_fkey"
+            columns: ["assessment_item_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_item_calibration_snapshots_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_item_generation_needs: {
+        Row: {
+          analysis_version: string
+          blueprint_id: string
+          competency_key: string
+          created_at: string
+          created_by_auth_user_id: string
+          deficit: number
+          dimension: string
+          eligible_items: number
+          id: string
+          language: string
+          modality: string
+          organization_id: string
+          reason_codes: Json
+          required_items: number
+          status: string
+          target_level: string
+          updated_at: string
+        }
+        Insert: {
+          analysis_version?: string
+          blueprint_id: string
+          competency_key: string
+          created_at?: string
+          created_by_auth_user_id: string
+          deficit: number
+          dimension: string
+          eligible_items: number
+          id?: string
+          language?: string
+          modality?: string
+          organization_id: string
+          reason_codes: Json
+          required_items: number
+          status?: string
+          target_level: string
+          updated_at?: string
+        }
+        Update: {
+          analysis_version?: string
+          blueprint_id?: string
+          competency_key?: string
+          created_at?: string
+          created_by_auth_user_id?: string
+          deficit?: number
+          dimension?: string
+          eligible_items?: number
+          id?: string
+          language?: string
+          modality?: string
+          organization_id?: string
+          reason_codes?: Json
+          required_items?: number
+          status?: string
+          target_level?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_item_generation_needs_blueprint_id_fkey"
+            columns: ["blueprint_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_blueprints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_item_generation_needs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_item_generation_proposals: {
+        Row: {
+          content_fingerprint: string
+          created_at: string
+          duplicate_candidates: Json
+          generation_request_id: string
+          id: string
+          maximum_lexical_similarity: number
+          organization_id: string
+          proposal_sequence: number
+          proposed_item: Json
+          provider_provenance: Json
+          status: string
+          updated_at: string
+          validation_result: Json
+        }
+        Insert: {
+          content_fingerprint: string
+          created_at?: string
+          duplicate_candidates?: Json
+          generation_request_id: string
+          id?: string
+          maximum_lexical_similarity?: number
+          organization_id: string
+          proposal_sequence: number
+          proposed_item: Json
+          provider_provenance: Json
+          status?: string
+          updated_at?: string
+          validation_result: Json
+        }
+        Update: {
+          content_fingerprint?: string
+          created_at?: string
+          duplicate_candidates?: Json
+          generation_request_id?: string
+          id?: string
+          maximum_lexical_similarity?: number
+          organization_id?: string
+          proposal_sequence?: number
+          proposed_item?: Json
+          provider_provenance?: Json
+          status?: string
+          updated_at?: string
+          validation_result?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_item_generation_pr_organization_id_generation_r_fkey"
+            columns: ["organization_id", "generation_request_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_item_generation_requests"
+            referencedColumns: ["organization_id", "id"]
+          },
+          {
+            foreignKeyName: "assessment_item_generation_proposals_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_item_generation_requests: {
+        Row: {
+          actual_cost_cents: number | null
+          completed_at: string | null
+          created_at: string
+          created_by_auth_user_id: string
+          directives: Json
+          estimated_cost_cents: number | null
+          generation_need_id: string
+          id: string
+          idempotency_key: string
+          model: string | null
+          organization_id: string
+          prompt_version: string
+          provider: string
+          requested_quantity: number
+          schema_version: string
+          status: string
+          target_scope: string
+        }
+        Insert: {
+          actual_cost_cents?: number | null
+          completed_at?: string | null
+          created_at?: string
+          created_by_auth_user_id: string
+          directives?: Json
+          estimated_cost_cents?: number | null
+          generation_need_id: string
+          id?: string
+          idempotency_key: string
+          model?: string | null
+          organization_id: string
+          prompt_version: string
+          provider: string
+          requested_quantity: number
+          schema_version?: string
+          status?: string
+          target_scope: string
+        }
+        Update: {
+          actual_cost_cents?: number | null
+          completed_at?: string | null
+          created_at?: string
+          created_by_auth_user_id?: string
+          directives?: Json
+          estimated_cost_cents?: number | null
+          generation_need_id?: string
+          id?: string
+          idempotency_key?: string
+          model?: string | null
+          organization_id?: string
+          prompt_version?: string
+          provider?: string
+          requested_quantity?: number
+          schema_version?: string
+          status?: string
+          target_scope?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_item_generation_re_organization_id_generation_n_fkey"
+            columns: ["organization_id", "generation_need_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_item_generation_needs"
+            referencedColumns: ["organization_id", "id"]
+          },
+          {
+            foreignKeyName: "assessment_item_generation_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_item_generation_reviews: {
+        Row: {
+          created_at: string
+          decision: string
+          id: number
+          organization_id: string
+          proposal_id: string
+          rationale: string
+          review_version: string
+          reviewed_snapshot: Json
+          reviewer_auth_user_id: string
+        }
+        Insert: {
+          created_at?: string
+          decision: string
+          id?: never
+          organization_id: string
+          proposal_id: string
+          rationale: string
+          review_version?: string
+          reviewed_snapshot: Json
+          reviewer_auth_user_id: string
+        }
+        Update: {
+          created_at?: string
+          decision?: string
+          id?: never
+          organization_id?: string
+          proposal_id?: string
+          rationale?: string
+          review_version?: string
+          reviewed_snapshot?: Json
+          reviewer_auth_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_item_generation_rev_organization_id_proposal_id_fkey"
+            columns: ["organization_id", "proposal_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_item_generation_proposals"
+            referencedColumns: ["organization_id", "id"]
+          },
+          {
+            foreignKeyName: "assessment_item_generation_reviews_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_item_quality_flags: {
+        Row: {
+          assessment_item_id: string
+          created_at: string
+          evidence: Json
+          flag_code: string
+          id: string
+          organization_id: string | null
+          resolved_at: string | null
+          severity: string
+          status: string
+        }
+        Insert: {
+          assessment_item_id: string
+          created_at?: string
+          evidence?: Json
+          flag_code: string
+          id?: string
+          organization_id?: string | null
+          resolved_at?: string | null
+          severity: string
+          status?: string
+        }
+        Update: {
+          assessment_item_id?: string
+          created_at?: string
+          evidence?: Json
+          flag_code?: string
+          id?: string
+          organization_id?: string | null
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_item_quality_flags_assessment_item_id_fkey"
+            columns: ["assessment_item_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_item_quality_flags_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     Views: Record<string, never>;
     Functions: {
       start_resume_intake: {
@@ -721,6 +1239,52 @@ export interface Database {
         Returns: Array<{ job_id: string; status: string; reused: boolean }>;
       };
     };
+      complete_m51c_external_generation: {
+        Args: { p_proposals: Json; p_request_id: string; p_usage: Json }
+        Returns: Json
+      }
+      create_m51c_fake_generation_request: {
+        Args: {
+          p_blueprint_id: string
+          p_dimension: string
+          p_idempotency_key: string
+          p_organization_id: string
+          p_quantity: number
+          p_target_scope: string
+        }
+        Returns: Json
+      }
+      fail_m51c_external_generation: {
+        Args: { p_error_class: string; p_request_id: string }
+        Returns: Json
+      }
+      load_m51c_item_bank_workspace: {
+        Args: { p_organization_id: string }
+        Returns: Json
+      }
+      publish_m51c_approved_proposals: {
+        Args: { p_organization_id: string; p_proposal_ids: string[] }
+        Returns: Json
+      }
+      refresh_m51c_synthetic_item_analytics: {
+        Args: { p_assessment_item_id: string; p_organization_id: string }
+        Returns: Json
+      }
+      request_m51c_item_generation: {
+        Args: {
+          p_estimated_cost_cents: number
+          p_generation_need_id: string
+          p_idempotency_key: string
+          p_organization_id: string
+          p_quantity: number
+          p_target_scope: string
+        }
+        Returns: Json
+      }
+      review_m51c_item_proposal: {
+        Args: { p_decision: string; p_proposal_id: string; p_rationale: string }
+        Returns: Json
+      }
     Enums: {
       membership_role: "super_admin" | "owner" | "admin" | "recruiter" | "member";
       knowledge_classification: "explicit" | "inferred";

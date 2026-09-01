@@ -1,7 +1,7 @@
 ---
 owner: product
-status: partially_implemented
-version: 0.3.0
+status: implemented_for_internal_qa
+version: 1.0.0
 last_verified: 2026-09-01
 ---
 
@@ -26,6 +26,14 @@ O M5.1A implementa a primeira fatia interna de preparação, sem convite, tentat
 O M5.1B implementa localmente o vertical slice de execução com dados sintéticos: emissão de convite sem fingir delivery externo, acesso público tokenizado sem conta de Usuário, ciência das condições, tentativa única, questões materializadas, autosave com versão, navegação livre, marcação, pausa e retomada, telemetria factual ligada à questão ativa, submissão idempotente, correção determinística, métricas, integridade explicável, Rubrica, confiança, Evidência Demonstrada independente e reavaliação de suficiência/matching sem decisão automática.
 
 A Pessoa vê somente o resultado autorizado por `participant_result_visibility`, cujo padrão é `completion_only`. O comprovante confirma conclusão e não é certificado profissional. A capacidade permanece interna/QA e não pode ser usada com Pessoas reais enquanto base legal, retenção, exportação, exclusão, hosting e privacidade não estiverem aprovados.
+
+## Estado M5.1C
+
+O M5.1C está implementado localmente e ativo no Prisma-QA para uso sintético interno. O Prisma calcula cobertura elegível por Blueprint, registra lacunas, cria Need e Request separadas, gera propostas pelo provider falso determinístico, valida schema e conteúdo, compara fingerprint e similaridade lexical, exige revisão humana e publica itens Global ou Organization com proveniência preservada.
+
+A geração externa está implementada como boundary, mas permanece desativada. Não existe provider ou modelo aprovado, secret configurado, orçamento liberado, chamada viva ou custo externo. O Item Bank continua disponível sem IA. Analytics calculam aplicações, acerto, omissão, mudança de resposta, incidentes técnicos excluídos e P25, mediana e P75. Fixtures são marcadas `synthetic_qa` e nunca produzem calibração real.
+
+As 12 superfícies administrativas do storyboard foram integradas ao App Shell existente em Banco de Itens: gaps, geração, estado do pedido, propostas, comparação, publicação, Banco Global, analytics, calibração, versões, Banco da Organização e configurações/orçamento.
 
 Superfícies implementadas localmente:
 

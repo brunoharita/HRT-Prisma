@@ -1,7 +1,7 @@
 ---
 owner: ai-quality
-status: partially_implemented
-version: 0.3.0
+status: implemented_for_internal_qa
+version: 1.0.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,23 @@ last_verified: 2026-09-01
 
 ## Estado
 
-O M5.1A implementa Sufficiency Engine, Item Bank sintético SQL avançado, composer, Blueprint e Rubric. O M5.1B implementa localmente attempt, resposta, correção, métricas, integridade, confiança, Evidência Demonstrada e reavaliação explicável. Não há LLM, geração de itens, calibração observada, provider de delivery ou uso com Pessoas reais.
+O M5.1A implementa Sufficiency Engine, Item Bank, Composer, Blueprint e Rubric. O M5.1B implementa tentativa, resposta, correção, métricas, integridade, confiança, Evidência Demonstrada e reavaliação explicável. O M5.1C implementa gap analysis, provider fake, boundary externo desativado, validação, deduplicação, revisão humana, orçamento e analytics sintéticos. Não há LLM vivo, calibração real, provider de delivery ou uso com Pessoas reais.
+
+## Contratos implementados no M5.1C
+
+| Contrato | Versão |
+| --- | --- |
+| Gap analysis | `m51c-gap-analysis-1.0.0` |
+| Proposal schema | `m51c-item-proposal-1.0.0` |
+| Deduplicação lexical | `m51c-lexical-deduplication-1.0.0` |
+| Prompt de geração | `m51c-ai-item-generation-1.0.0` |
+| Analytics | `m51c-item-analytics-1.0.0` |
+| Calibração | `m51c-item-calibration-1.0.0` |
+| Budget | `m51c-ai-budget-1.0.0` |
+
+O prompt recebe somente competência, nível, dimensão, modalidade, idioma, quantidade e diretrizes metodológicas limitadas. Pessoa, currículo, resposta, e-mail, telefone, tenant secret e pesquisa web são proibidos. Structured Output estrito e validação adicional bloqueiam metadata divergente, alternativas inválidas, tempos incoerentes, PII provável e vazamento de resposta.
+
+Fingerprint exato e Jaccard lexical produzem candidatos explicáveis. Similaridade não aprova nem rejeita por si só. Confidence do modelo é ignorada. A qualidade depende de contrato, validação, revisão humana e futura evidência empírica autorizada.
 
 ## Contratos implementados no M5.1B
 

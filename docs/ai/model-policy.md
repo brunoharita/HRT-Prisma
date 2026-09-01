@@ -15,6 +15,7 @@ Modelo é implementação substituível de uma função lógica. O projeto não 
 | Explanation | Usar dados estruturados existentes | template local |
 | Embedding | Vetor estável, versionável e cacheável | não selecionado |
 | Knowledge research | Web Search, Structured Outputs e fontes rastreáveis | adapter OpenAI implementado, sem modelo aprovado/ativado |
+| Assessment item generation | Structured Output, aderência metodológica, no PII e custo controlado | provider fake ativo; adapter externo implantado e desativado |
 
 ## Seleção
 
@@ -28,6 +29,8 @@ Usar o menor modelo disponível que cumpra segurança, qualidade, contexto, Stru
 | Inference | local | `inference-ontology-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Retrieval | local | `structured-lexical-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Matching | local | `matching-explainable-1.0.0` | nenhum | 1.0.0 | ativo local |
+| Assessment item generation | local | `fake-deterministic` | nenhum | 1.0.0 | ativo local/QA, sintético |
+| Assessment item generation external | não aprovado | nenhum | provider fake | 1.0.0 | desativado |
 
 Nenhum modelo OpenAI ou de outro fornecedor está configurado no runtime.
 

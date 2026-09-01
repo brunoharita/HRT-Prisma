@@ -10,7 +10,7 @@ last_verified: 2026-08-31
 
 ## Estado
 
-Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos. O adapter OpenAI do Knowledge Agent está implementado, porém não possui modelo aprovado, secret, budget ou ativação.
+Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, matching e explanation são locais e determinísticos. Os adapters externos do Knowledge Agent e da geração M5.1C estão implementados, porém não possuem modelo aprovado, secret, budget ou ativação.
 
 ## Pipeline
 
@@ -49,7 +49,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 ## Avaliação
 
-O M5.1 implementa estratégia determinística primeiro. M5.1A usa Item Bank sintético, blueprint e rubrica sem LLM; M5.1B corrige múltipla escolha, deriva métricas, integridade, confiança e Evidência Demonstrada sem provider ou custo de IA. Geração de lacunas e variantes permanece no M5.1C e exigirá revisão humana antes de item Global ativo.
+O M5.1 implementa estratégia determinística primeiro. M5.1A usa Item Bank, blueprint e rubrica sem LLM; M5.1B corrige múltipla escolha e deriva Evidência Demonstrada; M5.1C resolve gaps, usa fake provider em QA, valida Structured Output, bloqueia PII/Web Search, deduplica, exige revisão humana e controla custo. O adapter externo usa Responses API com `store:false`, mas não é chamado porque a flag e as policies estão desativadas. Nenhum modelo externo está aprovado.
 
 Golden suite cobre 13 extrações, 4 avaliações e 2 retrievals. Inclui invenção proibida, prompt injection, gap, insuficiência, competência transferível, empate e nenhum resultado. Mudança de prompt/modelo/regra precisa comparar com baseline.
 

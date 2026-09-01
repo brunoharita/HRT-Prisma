@@ -26,7 +26,7 @@ Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão 
 
 O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
-O M5.1 possui M5.1A para preparação e M5.1B para execução, ambos ativos no Prisma-QA. O runtime inclui tabelas/RPCs versionadas, `assessment-access`, App Shell do operador, superfície pública sem login, tentativa, resposta, telemetria por questão, avaliação determinística, integridade explicável e Evidência Demonstrada. O rollout conectado e os smokes visuais público e autenticado foram comprovados com dados sintéticos; produção não existe.
+O M5.1 possui M5.1A para preparação, M5.1B para execução e M5.1C para governança do Item Bank, ativos no Prisma-QA. M5.1C adiciona oito tabelas iniciais de governança, RPCs idempotentes, deduplicação lexical, ledger de budget, snapshots analíticos tenant-scoped e `assessment-item-generator` v2 com JWT. O provider fake está ativo; a geração externa está implantada e fail-closed. O rollout conectado foi comprovado com dados sintéticos; o smoke visual M5.1C nos cinco viewports permanece pendente.
 
 ## Segurança
 
@@ -34,7 +34,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B, M2-C, intake currículo-first, M4 e quatro Edge Functions ativas. Login, Usuários, Pessoas, PDF/OCR, concorrência, retry, revisão, aprovação, resolução currículo-first e resolução Knowledge foram comprovados com dados sintéticos. `knowledge-agent` está implantada com JWT obrigatório, porém sem pesquisa externa ativada. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B, M2-C, intake currículo-first, M4, M5 e M5.1A/B/C. `knowledge-agent` e `assessment-item-generator` estão implantadas com JWT obrigatório e chamadas externas desativadas. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -50,7 +50,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: documentos especializados, ADR-026 aceito e ADR-027 para a fronteira pública tokenizada.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração.
 
 ## Operação
 

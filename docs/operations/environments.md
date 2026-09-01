@@ -10,7 +10,7 @@ Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento deter
 
 ## QA
 
-Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e contém foundation, M2-A, M2-B, M2-C, intake currículo-first, memberships controladas e somente dados sintéticos identificados por `[QA]`. Foram comprovados Home, Pessoas, Usuários, perfil, troca de tenant, papéis, texto manual, PDF/OCR, central documental, retry, revisão, aprovação e a transação currículo-first. O advisor de segurança registra as RPCs `security definer` controladas de M2-C/intake e proteção contra senhas vazadas desabilitada. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
+Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e contém foundation, M2-A, M2-B, M2-C, intake currículo-first, M4, M5 e M5.1A/B/C. O M5.1C mantém a Edge Function `assessment-item-generator` com JWT obrigatório e geração externa desativada. Gap, fake provider, dedup, revisão, publicação Global/Organization, isolamento tenant, analytics sintético e ledger de orçamento foram comprovados sem chamada externa. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
 
 ## Produção planejada
 
