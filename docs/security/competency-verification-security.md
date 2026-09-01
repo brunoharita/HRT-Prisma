@@ -58,6 +58,7 @@ No M5.1A:
 - `verification_needs` e `prepared_assessments` ficam com leitura direta para `authenticated`, mas sem grant direto de escrita; mutações passam pelas RPCs autorizadas.
 - RPCs `ensure_m51a_demo_need`, `load_m51a_verification_workspace` e `prepare_m51a_assessment` validam o ator com `private.require_document_reviewer(...)` antes de criar ou alterar registros.
 - Auditoria registra IDs, ação, resultado e payload operacional, sem currículo integral, enunciado integral externo ou resposta de Pessoa.
+- A migration corretiva `20260901111841_m51a_grant_hardening` revoga explicitamente permissões herdadas de `anon` e `authenticated`, reabre somente os grants mínimos e substitui policies `for all` por policies específicas para INSERT, UPDATE e DELETE nas tabelas de catálogo.
 
 ## Integridade
 

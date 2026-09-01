@@ -790,6 +790,15 @@ revoke all on public.assessment_item_families from anon;
 revoke all on public.assessment_items from anon;
 revoke all on public.prepared_assessments from anon;
 revoke all on public.verification_audit_events from anon;
+revoke all on public.verification_definitions from authenticated;
+revoke all on public.verification_policies from authenticated;
+revoke all on public.verification_needs from authenticated;
+revoke all on public.assessment_blueprints from authenticated;
+revoke all on public.assessment_rubrics from authenticated;
+revoke all on public.assessment_item_families from authenticated;
+revoke all on public.assessment_items from authenticated;
+revoke all on public.prepared_assessments from authenticated;
+revoke all on public.verification_audit_events from authenticated;
 
 grant select on public.verification_definitions to authenticated;
 grant select on public.verification_policies to authenticated;

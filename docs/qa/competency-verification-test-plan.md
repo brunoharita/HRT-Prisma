@@ -19,7 +19,7 @@ Para M5.1A, a validação local cobre:
 
 - `evaluateEvidenceSufficiency` com política obrigatória, recomendação por criticidade e evidência demonstrada vigente.
 - `composePreparedAssessment` com seleção determinística de itens ativos compatíveis e falha fechada quando a cobertura do banco é insuficiente.
-- Migration M5.1A com RLS em todas as tabelas, grants explícitos, ausência de `auth.role()` e RPC com `search_path` fixo.
+- Migrations M5.1A com RLS em todas as tabelas, grants explícitos, ausência de `auth.role()`, RPC com `search_path` fixo e hardening de grants herdados.
 - Typecheck base e web.
 - Test suite técnica completa.
 
@@ -92,11 +92,13 @@ Em 2026-09-01:
 - `CI=true pnpm run typecheck:web` aprovado.
 - `CI=true pnpm run test` aprovado com 124 testes.
 - Migração criada via Supabase CLI como `20260901082542_m51a_verification_intelligence.sql`.
+- Migração corretiva criada via Supabase CLI como `20260901111841_m51a_grant_hardening.sql`.
 - Busca por travessão nos arquivos verificados retornou zero ocorrências.
 
 Limitações remanescentes:
 
 - Nenhum smoke visual autenticado foi registrado ainda.
-- Nenhuma migration M5.1A foi aplicada ao Prisma-QA nesta evidência local.
+- Migrations M5.1A aplicadas ao Prisma-QA por `supabase db query --linked --file` e registradas no histórico remoto por `supabase migration repair --linked --status applied`.
+- Validação remota confirmou nove tabelas com RLS, três RPCs disponíveis somente para `authenticated`, catálogo sintético com 1 definition, 1 blueprint, 1 rubric, 15 itens e 2 policies, além de grants críticos somente de leitura em `verification_needs`, `prepared_assessments` e `verification_audit_events`.
 - Nenhuma verificação real foi enviada ou executada.
 - Nenhuma evidência demonstrada foi gerada.

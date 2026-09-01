@@ -174,6 +174,8 @@ test("assessment composer fails closed when item bank coverage is insufficient",
 
 test("M5.1A migration keeps RLS, grants and security-definer boundaries explicit", async () => {
   const sql = await readFile("supabase/migrations/20260901082542_m51a_verification_intelligence.sql", "utf8");
+  const hardeningSql = await readFile("supabase/migrations/20260901111841_m51a_grant_hardening.sql", "utf8");
+  const completeSql = `${sql}\n${hardeningSql}`;
   for (const tableName of [
     "verification_definitions",
     "verification_policies",
@@ -185,14 +187,14 @@ test("M5.1A migration keeps RLS, grants and security-definer boundaries explicit
     "prepared_assessments",
     "verification_audit_events",
   ]) {
-    assert.match(sql, new RegExp(`alter table public\\.${tableName} enable row level security`, "i"));
-    assert.match(sql, new RegExp(`grant select on public\\.${tableName} to authenticated`, "i"));
+    assert.match(completeSql, new RegExp(`alter table public\\.${tableName} enable row level security`, "i"));
+    assert.match(completeSql, new RegExp(`grant select on public\\.${tableName} to authenticated`, "i"));
   }
-  assert.doesNotMatch(sql, /auth\.role\(\)/i);
-  assert.doesNotMatch(sql, /grant insert, update, delete on public\.verification_needs to authenticated/i);
-  assert.doesNotMatch(sql, /grant insert, update, delete on public\.prepared_assessments to authenticated/i);
-  assert.match(sql, /revoke all on function public\.prepare_m51a_assessment\(uuid, uuid, uuid, text, text\) from public/i);
-  assert.match(sql, /set search_path = ''/i);
+  assert.doesNotMatch(completeSql, /auth\.role\(\)/i);
+  assert.doesNotMatch(completeSql, /grant insert, update, delete on public\.verification_needs to authenticated/i);
+  assert.doesNotMatch(completeSql, /grant insert, update, delete on public\.prepared_assessments to authenticated/i);
+  assert.match(hardeningSql, /revoke all on function public\.prepare_m51a_assessment\(uuid, uuid, uuid, text, text\) from public, anon, authenticated/i);
+  assert.match(completeSql, /set search_path = ''/i);
 });
 
 function item(id: string, dimension: string, state: AssessmentItem["state"]): AssessmentItem {

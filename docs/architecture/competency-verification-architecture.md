@@ -37,7 +37,7 @@ Arquivos principais:
 | --- | --- |
 | Domínio puro | `src/domain/competencyVerification.ts` |
 | Matching | `src/ai/matching.ts` expõe `verificationSufficiency` quando requisito traz nível, criticidade e policy |
-| Schema | `supabase/migrations/20260901082542_m51a_verification_intelligence.sql` |
+| Schema | `supabase/migrations/20260901082542_m51a_verification_intelligence.sql` e hardening `20260901111841_m51a_grant_hardening.sql` |
 | Web service | `web/src/infrastructure/supabase/competencyVerificationService.ts` |
 | UI | `web/src/pages/CompetencyVerificationPage.tsx` e rota `/matching` |
 | Testes | `tests/competencyVerification.test.ts` |
@@ -61,6 +61,8 @@ RPCs implementadas:
 - `prepare_m51a_assessment(p_need_id uuid, p_definition_id uuid, p_blueprint_id uuid, p_status text, p_idempotency_key text)`: compõe instrumento deterministicamente a partir do blueprint e grava rascunho ou preparação.
 
 Todas as tabelas públicas novas têm RLS habilitado, grants explícitos para `authenticated` e revogação de `anon`. As RPCs `security definer` usam `set search_path = ''`, chamam `private.require_document_reviewer(...)` antes de mutações tenant-owned e registram auditoria metadata-only.
+
+O hardening M5.1A garante que `verification_needs`, `prepared_assessments` e `verification_audit_events` tenham apenas leitura direta para `authenticated`; criação e alteração de necessidades e preparações passam pelas RPCs autorizadas.
 
 ## Escopo global e organizacional
 
