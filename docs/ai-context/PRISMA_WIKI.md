@@ -50,4 +50,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O Movimento 4 mantém ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento; snapshots oficiais continuam apenas catalogados e o agente está desativado.
 
-Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.
+O M5.1 - Verificação de Competências possui plano diretor documental planejado. Ele define evidência demonstrada, Necessidade de Verificação, Evidence Sufficiency, Verification Policy, Verification Definition, Item Bank, blueprint, attempt, integridade e QA como fundamentos futuros. O runtime atual não executa assessment, não possui Item Bank, não gera itens, não coleta respostas e não altera matching com evidência demonstrada.
+
+Mobilidade interna, sucessão, concentração de competências, senioridade e workforce planning pertencem à visão futura, não ao runtime atual.

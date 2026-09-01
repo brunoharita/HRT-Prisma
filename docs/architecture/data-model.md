@@ -21,6 +21,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Conhecimento | `professional_profiles`, `evidence`, `inferences`, `inference_evidence` | Fato e inferência não se confundem |
 | Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
 | Avaliação | `match_evaluations` | Contextual e versionada |
+| M5.1 Verificação de Competências | planejado; sem tabelas atuais | Verification Need, Policy, Definition, Item Bank, Blueprint, Attempt e Demonstrated Evidence futuros |
 | Telemetria | `ai_usage_events` | Custo, latência, versão e erro |
 | Auditoria de usuários | `platform_user_audit_events` | Senha e tokens nunca entram no log material |
 | Timeline de ingestão | `person_ingestion_events` | Mudanças de documento, tentativa e perfil sem copiar o conteúdo integral |
@@ -58,6 +59,12 @@ O PDF original fica no bucket privado `person-documents`, limitado a 15 MB e MIM
 ## JSONB
 
 Identidade, autorização e relações permanecem normalizadas. Partes evolutivas de perfil e avaliação usam JSONB junto com tabelas relacionais de evidência, inferência e competência. JSONB não pode esconder authority, tenant, versão ou proveniência material.
+
+## M5.1 planejado
+
+O M5.1 deverá ser aditivo ao modelo atual. Verification Needs, Policies, Attempts e Demonstrated Evidence serão tenant-owned e deverão carregar `organization_id`. Verification Definitions, blueprints e itens poderão ter origem global ou organizacional, preservando a separação entre acervo compartilhado Prisma e acervo privado da organização.
+
+Assessment histórico deverá guardar as versões de definition, blueprint, item, rubrica, método e policy aplicada. Evidência demonstrada será uma camada independente e não poderá sobrescrever `profile_competencies`, evidências documentais ou inferências existentes.
 
 ## Retenção e exclusão
 

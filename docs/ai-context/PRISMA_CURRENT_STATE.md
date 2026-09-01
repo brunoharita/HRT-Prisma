@@ -49,6 +49,7 @@ last_verified: 2026-08-31
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
 - Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.
+- M5.1 - Verificação de Competências documentado como plano diretor planejado: evidência demonstrada, Necessidade de Verificação, Evidence Sufficiency, Verification Policy, Verification Definition, Item Bank, blueprint, attempt, integridade e QA futura. Nenhuma funcionalidade executável do M5.1 foi implementada.
 - Home autenticada com contagens persistidas de pessoas, perfis estruturados e vagas abertas da organização ativa.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, áreas personalizadas, evidências, proveniência, inferências e pendências diagnósticas; contato privado somente para perfis administrativos autorizados.
@@ -132,6 +133,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Embeddings vetoriais e LLM externo.
 - Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
 - Auditoria de visualização/exportação além do domínio de usuários.
+- M5.1 executável: Verification Need, Sufficiency Engine, Verification Policy, Verification Definition, Item Bank, Composer, assessment, tentativa, telemetria por questão, evidência demonstrada e reavaliação de matching.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.

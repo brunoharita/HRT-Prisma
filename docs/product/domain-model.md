@@ -20,6 +20,8 @@
 - Resultado observado: consequência posterior preservada sem reescrever a decisão.
 - Competência: conceito normalizado sustentado por sinais explícitos ou inferidos.
 - Avaliação: comparação contextual entre pessoa e vaga ou, futuramente, papel.
+- Necessidade de Verificação: lacuna explicável de evidência sobre uma competência, criada em contexto profissional e resolvida, quando apropriado, por assessment.
+- Evidência demonstrada: evidência produzida por avaliação prática estruturada, independente de evidências declaradas, contextuais e confirmadas.
 
 ## Papel, posição e vaga
 
@@ -50,6 +52,9 @@ Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, comp
 19. Nova importação é proposta e não substitui o perfil vigente antes da publicação atômica.
 20. Omissão no documento novo significa `não citado`; somente decisão humana explícita e justificada remove fato aprovado.
 21. Estado de produto é derivado de documento, tentativa, draft, revisão e perfil, sem ser persistido como atributo da Pessoa.
+22. Verificação de competência nasce prioritariamente de uma necessidade profissional, não do Perfil individual.
+23. Evidência demonstrada não sobrescreve evidência documental, contextual ou confirmada.
+24. Assessment não determina nível absoluto da Pessoa nem senioridade consolidada.
 
 ## Pipeline atual
 
@@ -60,3 +65,14 @@ resume intake -> minimum identity -> tenant deduplication -> Person resolution
 ```
 
 `ExtractionProvider` não conhece o repositório. O domínio não conhece fornecedor de IA. `processResume` orquestra estados, validação, persistência e telemetria.
+
+## Pipeline futuro M5.1
+
+```text
+necessidade profissional -> requisito -> competencia -> Pessoa encontrada
+  -> evidencias existentes -> analise de suficiencia
+  -> necessidade de verificacao -> assessment
+  -> evidencia demonstrada -> reavaliacao da necessidade
+```
+
+Esse pipeline está planejado e não existe no runtime atual.

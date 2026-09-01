@@ -26,6 +26,8 @@ Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão 
 
 O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
+O M5.1 possui apenas arquitetura documental planejada para Verification Need, Policy, Definition, Item Bank, Blueprint, Composer, Attempt, Integrity Analysis e Demonstrated Evidence. Nenhuma tabela, migration, RPC, Edge Function, componente ou integração do M5.1 existe no runtime atual.
+
 ## Segurança
 
 Autorização usa membership persistida e `platform_users`, não `user_metadata`. `anon` não recebe grants. `member` não lê documento ou PII privada nem publica perfil. O shell web valida sessão com `getClaims()` e usa apenas a chave publicável. Secret/service key nunca vai para frontend. Documento é input não confiável.
@@ -49,7 +51,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: `docs/product/m5-1-competency-verification.md`, `docs/architecture/competency-verification-architecture.md`, `docs/ai/competency-verification-evaluation.md`, `docs/security/competency-verification-security.md`, `docs/qa/competency-verification-test-plan.md` e ADR-026 proposto.
 
 ## Operação
 

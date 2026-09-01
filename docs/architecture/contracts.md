@@ -45,6 +45,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `knowledge-proposal` | AI/data | 1.0.0 | agent, aprovação | implementado localmente | JSON Schema e `knowledge_proposals` | local | rejeitar output |
 | `trusted-source-policy` | security/AI | 1.0.0 | agent, source catalogue | implementado localmente | `trusted-sources-1.0.0` | local | rejeitar fonte |
 | `knowledge-reinterpretation` | application/domain | 1.0.0 | impacts, M2-C | implementado localmente | jobs, draft e profile version metadata | local | manter impacto pendente |
+| `competency-verification-plan` | product/architecture/AI/security/QA | 0.1.0 | movimentos futuros M5.1 | planejado, documentação canônica | plano diretor de Verification Need, Evidence Sufficiency, Item Bank, blueprint, attempt e evidência demonstrada | docs | não implementar runtime sem contrato específico |
 
 ## Evidência não é rollout
 
@@ -53,3 +54,5 @@ Tipos TypeScript provam contrato de código local. Migration prova intenção ex
 ## Eventos e APIs
 
 Não existe API HTTP nem event bus no estado atual. O M2-C persiste eventos operacionais/auditoria no banco, mas eles não constituem um barramento público. Nenhum consumidor externo deve assumir sua existência.
+
+O contrato `competency-verification-plan` não autoriza execução. Implementações futuras do M5.1 deverão introduzir contratos próprios para Sufficiency Engine, Verification Definition, Verification Policy, Item Bank, Composer, Attempt, Integrity Analysis e Demonstrated Evidence.

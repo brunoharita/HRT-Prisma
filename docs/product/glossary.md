@@ -17,6 +17,11 @@
 | Posição | Cadeira real no organograma |
 | Vaga | Necessidade atual de preenchimento |
 | Matching | Avaliação contextual entre pessoa e vaga ou papel |
+| Evidência demonstrada | Evidência produzida por uma verificação estruturada de competência, com contexto, método, versão, rubrica e momento |
+| Necessidade de Verificação | Lacuna explicável de evidência sobre uma competência em uma necessidade profissional concreta |
+| Verification Policy | Política tenant-owned que define quando uma organização considera uma evidência suficiente ou exige verificação |
+| Verification Definition | Contrato versionado que define como uma competência pode ser demonstrada, por dimensões, níveis, modalidades e limites |
+| Assessment Blueprint | Especificação de cobertura, modalidade, distribuição e rubrica para compor uma verificação equivalente |
 | Proveniência | Cadeia que liga conclusão, evidência, trecho e fonte |
 | Tenant | Organização cliente e limite de isolamento |
 | Golden test | Caso versionado que detecta regressão sem depender de texto livre exato |

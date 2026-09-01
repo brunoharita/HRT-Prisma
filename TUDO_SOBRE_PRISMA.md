@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: eb3294d8e99ac04d69e0e62f00ce3755c0a88a3b026b4e150fd1bafad440451b
+source_manifest_sha256: 7cd7d3e67a3b060b96943f01db7710dea8d8accdc67ecf7fe3f53bacc333435e
 -->
 
 # Tudo sobre o Prisma
@@ -359,6 +359,7 @@ last_verified: 2026-08-31
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
 - Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.
+- M5.1 - Verificação de Competências documentado como plano diretor planejado: evidência demonstrada, Necessidade de Verificação, Evidence Sufficiency, Verification Policy, Verification Definition, Item Bank, blueprint, attempt, integridade e QA futura. Nenhuma funcionalidade executável do M5.1 foi implementada.
 - Home autenticada com contagens persistidas de pessoas, perfis estruturados e vagas abertas da organização ativa.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, áreas personalizadas, evidências, proveniência, inferências e pendências diagnósticas; contato privado somente para perfis administrativos autorizados.
@@ -442,6 +443,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Embeddings vetoriais e LLM externo.
 - Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
 - Auditoria de visualização/exportação além do domínio de usuários.
+- M5.1 executável: Verification Need, Sufficiency Engine, Verification Policy, Verification Definition, Item Bank, Composer, assessment, tentativa, telemetria por questão, evidência demonstrada e reavaliação de matching.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
@@ -532,6 +534,8 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 ## Avaliação
 
+O M5.1 planejado adiciona diretrizes documentais para avaliação de competência demonstrada. A estratégia futura é determinística primeiro: usar Item Bank e blueprint quando houver cobertura, recorrer à IA apenas para lacunas, exigir revisão humana antes de item global ativo e preservar rubrica, versões, integridade e limitações. Não há provider, modelo, prompt, item bank, assessment ou custo ativo para M5.1.
+
 Golden suite cobre 13 extrações, 4 avaliações e 2 retrievals. Inclui invenção proibida, prompt injection, gap, insuficiência, competência transferível, empate e nenhum resultado. Mudança de prompt/modelo/regra precisa comparar com baseline.
 
 ## Confiança
@@ -549,6 +553,8 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 ## Limitações
 
 Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativo, embeddings, snapshots CBO/ESCO/O*NET carregados, contradição multi-documento, senioridade calculada ou provider externo aprovado.
+
+M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista automática ou decisão de contratação. Browser telemetry futura será apenas sinal observável e nunca prova absoluta de conduta.
 
 ---
 
@@ -582,6 +588,8 @@ Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão 
 
 O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
+O M5.1 possui apenas arquitetura documental planejada para Verification Need, Policy, Definition, Item Bank, Blueprint, Composer, Attempt, Integrity Analysis e Demonstrated Evidence. Nenhuma tabela, migration, RPC, Edge Function, componente ou integração do M5.1 existe no runtime atual.
+
 ## Segurança
 
 Autorização usa membership persistida e `platform_users`, não `user_metadata`. `anon` não recebe grants. `member` não lê documento ou PII privada nem publica perfil. O shell web valida sessão com `getClaims()` e usa apenas a chave publicável. Secret/service key nunca vai para frontend. Documento é input não confiável.
@@ -605,7 +613,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: `docs/product/m5-1-competency-verification.md`, `docs/architecture/competency-verification-architecture.md`, `docs/ai/competency-verification-evaluation.md`, `docs/security/competency-verification-security.md`, `docs/qa/competency-verification-test-plan.md` e ADR-026 proposto.
 
 ## Operação
 
@@ -667,4 +675,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O Movimento 4 mantém ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento; snapshots oficiais continuam apenas catalogados e o agente está desativado.
 
-Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.
+O M5.1 - Verificação de Competências possui plano diretor documental planejado. Ele define evidência demonstrada, Necessidade de Verificação, Evidence Sufficiency, Verification Policy, Verification Definition, Item Bank, blueprint, attempt, integridade e QA como fundamentos futuros. O runtime atual não executa assessment, não possui Item Bank, não gera itens, não coleta respostas e não altera matching com evidência demonstrada.
+
+Mobilidade interna, sucessão, concentração de competências, senioridade e workforce planning pertencem à visão futura, não ao runtime atual.
