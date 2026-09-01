@@ -68,13 +68,14 @@ test("does not invent a pending import and treats invalidation as an archived hi
 });
 
 test("people, operations, hub, and review source preserve navigation and entity boundaries", async () => {
-  const [people, operations, hub, review, application, structuredReview] = await Promise.all([
+  const [people, operations, hub, review, application, structuredReview, styles] = await Promise.all([
     readFile("web/src/pages/PeoplePage.tsx", "utf8"),
     readFile("web/src/pages/DocumentOperationsPage.tsx", "utf8"),
     readFile("web/src/pages/PersonWorkspacePage.tsx", "utf8"),
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
     readFile("web/src/app/PrismaApplication.tsx", "utf8"),
     readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
   ]);
 
   assert.match(people, /const personPath = \(personId: string\) => `\/profiles\/\$\{personId\}`/);
@@ -106,6 +107,9 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(structuredReview, /Valor aprovado/);
   assert.match(hub, /const canReview = isReviewableDocument\(latestDocument\)/);
   assert.doesNotMatch(hub, /canReview[\s\S]{0,100}experiences\.length/);
+  assert.match(hub, /className="prisma-person-competency-tags"/);
+  assert.match(styles, /\.prisma-person-competency-tags\s*\{[\s\S]*?width: 100%;[\s\S]*?min-width: 0;[\s\S]*?max-width: 100%;/);
+  assert.match(styles, /\.prisma-person-competency-tags \.ant-tag\s*\{[\s\S]*?max-width: 100%;[\s\S]*?white-space: normal;[\s\S]*?overflow-wrap: anywhere;/);
 });
 
 test("discard operation is tenant-authorized, audit-only, and never mutates the current profile", async () => {
