@@ -4078,3 +4078,143 @@ textarea {
     width: 100%;
   }
 }
+
+.prisma-m51a-page,
+.prisma-m51a-page .prisma-page-header,
+.prisma-m51a-page .prisma-card,
+.prisma-m51a-page .ant-card,
+.prisma-m51a-page .ant-tabs,
+.prisma-m51a-page .ant-table-wrapper {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.prisma-m51a-full {
+  width: 100%;
+  min-width: 0;
+}
+
+.prisma-m51a-profile-card > .ant-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.prisma-m51a-score {
+  display: grid;
+  min-width: 128px;
+  justify-items: end;
+  color: #1473e6;
+}
+
+.prisma-m51a-score strong {
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1;
+}
+
+.prisma-m51a-score span {
+  color: #65758f;
+  font-size: 12px;
+}
+
+.prisma-m51a-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 16px;
+  color: #5f6f89;
+  font-size: 12px;
+}
+
+.prisma-m51a-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.prisma-m51a-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #9da8ba;
+}
+
+.prisma-m51a-legend i.is-green { background: #35b26f; }
+.prisma-m51a-legend i.is-gold { background: #f0a320; }
+.prisma-m51a-legend i.is-red { background: #ef4f5f; }
+
+.prisma-m51a-reason-list {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prisma-m51a-reason-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #334766;
+}
+
+.prisma-m51a-reason-list .anticon {
+  margin-top: 3px;
+  color: #27a160;
+}
+
+.prisma-m51a-two-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.prisma-m51a-three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.prisma-m51a-page pre {
+  overflow: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f6f8fb;
+  color: #334766;
+}
+
+.prisma-m51a-page .ant-steps {
+  overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .prisma-m51a-profile-card > .ant-card-body,
+  .prisma-m51a-two-grid,
+  .prisma-m51a-three-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-m51a-profile-card > .ant-card-body {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .prisma-m51a-score {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .prisma-m51a-page .ant-btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .prisma-m51a-page .ant-space {
+    max-width: 100%;
+  }
+}

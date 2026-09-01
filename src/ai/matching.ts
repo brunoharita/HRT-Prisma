@@ -8,6 +8,7 @@ import type {
   Vacancy,
 } from "../domain/types.js";
 import { CURRENT_VERSIONS } from "../domain/versions.js";
+import { evaluateEvidenceSufficiency } from "../domain/competencyVerification.js";
 import { explainConfidence } from "./confidence.js";
 
 export function evaluateMatch(input: {
@@ -46,6 +47,23 @@ export function evaluateMatch(input: {
     const relevantInferences = [directInference, transferable ? inferred.get(transferable) : undefined]
       .filter((item): item is Inference => item !== undefined);
 
+    const buildVerificationSufficiency = (status: RequirementAssessment["status"], evidenceCount: number) => {
+      if (!requirement.targetLevel || !requirement.criticality) return undefined;
+      return evaluateEvidenceSufficiency({
+        organizationId: input.profile.organizationId,
+        personId: input.profile.personId,
+        competencyKey: requirement.competency,
+        targetLevel: requirement.targetLevel,
+        criticality: requirement.criticality,
+        documentaryEvidenceStrength: evidenceCount >= 2 || status === "met" ? "strong" : evidenceCount === 1 ? "limited" : "none",
+        hasContextualEvidence: input.profile.professionalContexts.length > 0,
+        hasHumanConfirmedEvidence: false,
+        hasDemonstratedEvidence: false,
+        policyRequirement: requirement.verificationPolicyRequirement ?? "optional",
+        definitionAvailable: true,
+      });
+    };
+
     if (directSignal?.classification === "explicit" || languageSignal) {
       return {
         requirementId: requirement.id,
@@ -58,6 +76,7 @@ export function evaluateMatch(input: {
           ? `Requisito atendido por idioma explicitamente informado: ${languageSignal.language} (${languageSignal.proficiency ?? "nível não identificado"}).`
           : `Requisito atendido por menção explícita de ${requirement.competency}.`,
         confidence: explainConfidence(evidence),
+        ...optionalVerification(buildVerificationSufficiency("met", evidence.length)),
       };
     }
     if (directInference || transferable) {
@@ -71,6 +90,7 @@ export function evaluateMatch(input: {
         inferences: relevantInferences,
         explanation: `Requisito parcialmente atendido por ${basis}; requer validação humana.`,
         confidence: explainConfidence(evidence),
+        ...optionalVerification(buildVerificationSufficiency("partially_met", evidence.length)),
       };
     }
     return {
@@ -82,6 +102,7 @@ export function evaluateMatch(input: {
       inferences: [],
       explanation: `Não foi identificada evidência para ${requirement.competency}; isto não prova ausência da competência.`,
       confidence: explainConfidence([]),
+      ...optionalVerification(buildVerificationSufficiency("no_evidence", 0)),
     };
   });
 
@@ -114,4 +135,10 @@ export function evaluateMatch(input: {
     matchingVersion: CURRENT_VERSIONS.matchingVersion,
     createdAt: new Date().toISOString(),
   };
+}
+
+function optionalVerification(
+  verificationSufficiency: RequirementAssessment["verificationSufficiency"] | undefined,
+): Pick<RequirementAssessment, "verificationSufficiency"> | Record<string, never> {
+  return verificationSufficiency ? { verificationSufficiency } : {};
 }

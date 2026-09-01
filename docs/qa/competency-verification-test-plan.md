@@ -1,7 +1,7 @@
 ---
 owner: qa
-status: planned
-version: 0.1.0
+status: active_for_m51a
+version: 0.2.0
 last_verified: 2026-09-01
 ---
 
@@ -9,11 +9,19 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Plano futuro. Não há testes executáveis do M5.1 porque não há implementação funcional do movimento.
+Plano completo do M5.1 e evidência ativa do M5.1A. O M5.1A tem testes executáveis para suficiência, composição, seleção de item bank e limites de segurança da migration. Tentativa real, resposta da Pessoa, correção, telemetria e Evidência Demonstrada continuam fora do escopo implementado.
 
 ## Estratégia
 
 O M5.1 é classe D/E quando implementado: envolve tenant, PII profissional, avaliação, IA potencial, políticas, telemetria, integridade e impacto em matching. A validação futura deve combinar unit, contract, integration, security, golden, UX e regressão de fairness/acessibilidade.
+
+Para M5.1A, a validação local cobre:
+
+- `evaluateEvidenceSufficiency` com política obrigatória, recomendação por criticidade e evidência demonstrada vigente.
+- `composePreparedAssessment` com seleção determinística de itens ativos compatíveis e falha fechada quando a cobertura do banco é insuficiente.
+- Migration M5.1A com RLS em todas as tabelas, grants explícitos, ausência de `auth.role()` e RPC com `search_path` fixo.
+- Typecheck base e web.
+- Test suite técnica completa.
 
 ## Matriz futura
 
@@ -75,3 +83,20 @@ Implementação só poderá ser promovida quando:
 Registrar ambiente, branch, commit, migrations, versões de contratos, dados sintéticos, comandos, resultado, limitações, screenshots quando houver UI, transações revertidas quando houver banco remoto e status de produção separado.
 
 Produção permanece fora do M5.1 até aprovação explícita e ambiente dedicado.
+
+## Evidência M5.1A local
+
+Em 2026-09-01:
+
+- `CI=true pnpm run typecheck` aprovado.
+- `CI=true pnpm run typecheck:web` aprovado.
+- `CI=true pnpm run test` aprovado com 124 testes.
+- Migração criada via Supabase CLI como `20260901082542_m51a_verification_intelligence.sql`.
+- Busca por travessão nos arquivos verificados retornou zero ocorrências.
+
+Limitações remanescentes:
+
+- Nenhum smoke visual autenticado foi registrado ainda.
+- Nenhuma migration M5.1A foi aplicada ao Prisma-QA nesta evidência local.
+- Nenhuma verificação real foi enviada ou executada.
+- Nenhuma evidência demonstrada foi gerada.

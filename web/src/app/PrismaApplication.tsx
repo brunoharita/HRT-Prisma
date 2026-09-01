@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import {
   ApartmentOutlined,
   BankOutlined,
+  BranchesOutlined,
   HomeOutlined,
   BookOutlined,
   LockOutlined,
@@ -30,6 +31,7 @@ import { ResumeImportPage } from "../pages/ResumeImportPage";
 import { UserFormPage } from "../pages/UserFormPage";
 import { UsersPage } from "../pages/UsersPage";
 import { KnowledgePage } from "../pages/KnowledgePage";
+import { CompetencyVerificationPage } from "../pages/CompetencyVerificationPage";
 import {
   canActivateOrganization,
   evaluateRouteAccess,
@@ -66,6 +68,8 @@ interface AppRoute {
   documentId?: string;
   reviewId?: string;
   userId?: string;
+  verificationNeedId?: string;
+  verificationMode?: "detail" | "prepare";
 }
 
 interface SignInValues {
@@ -82,6 +86,12 @@ const routes: AppRoute[] = [
     path: "/vacancies",
     label: "Vagas",
     icon: <ApartmentOutlined />,
+    rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
+  },
+  {
+    path: "/matching",
+    label: "Matching",
+    icon: <BranchesOutlined />,
     rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
   {
@@ -296,7 +306,7 @@ export function PrismaApplication() {
       onSignOut={() => void handleSignOut()}
       profileName={profileName}
       profileSubtitle={profileSubtitle}
-      selectedPath={route.profileId ? "/profiles" : route.userId ? "/users" : route.path}
+      selectedPath={route.profileId ? "/profiles" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/matching" : route.path}
     >
       {state.errorMessage || state.infoMessage ? (
         <Alert
@@ -370,6 +380,9 @@ function renderRouteContent(
   }
   if (route.path === "/users") {
     return <UsersPage onNavigate={onNavigate} />;
+  }
+  if (route.path === "/matching" && activeMembership) {
+    return <CompetencyVerificationPage activeMembership={activeMembership} mode={route.verificationMode ?? "matching"} {...(route.verificationNeedId ? { needId: route.verificationNeedId } : {})} onNavigate={onNavigate} />;
   }
   if (route.path === "/knowledge" && currentOperator) {
     return <KnowledgePage profile={currentOperator.profile} activeMembership={activeMembership} />;
@@ -534,6 +547,10 @@ function findRoute(pathname: string): AppRoute {
   if (profileEditMatch?.[1]) return { path: "/profiles", profileId: profileEditMatch[1], profileMode: "edit", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   const profileMatch = /^\/profiles\/([^/]+)$/.exec(normalized);
   if (profileMatch?.[1]) return { path: "/profiles", profileId: profileMatch[1], profileMode: "view", rule: { requiresAuth: true, requiresMembership: true } };
+  const matchingPrepare = /^\/matching\/verification-needs\/([^/]+)\/prepare$/.exec(normalized);
+  if (matchingPrepare?.[1]) return { path: "/matching", verificationNeedId: matchingPrepare[1], verificationMode: "prepare", rule: reviewerRule };
+  const matchingDetail = /^\/matching\/verification-needs\/([^/]+)$/.exec(normalized);
+  if (matchingDetail?.[1]) return { path: "/matching", verificationNeedId: matchingDetail[1], verificationMode: "detail", rule: reviewerRule };
   if (normalized === "/users/new") return { path: "/users/new", rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] } };
   const userMatch = /^\/users\/([^/]+)$/.exec(normalized);
   if (userMatch?.[1]) {

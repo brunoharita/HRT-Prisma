@@ -197,6 +197,9 @@ export interface VacancyRequirement {
   competency: string;
   importance: "required" | "desired";
   transferableCompetencies: string[];
+  targetLevel?: "basic" | "intermediate" | "advanced";
+  criticality?: "low" | "medium" | "high" | "critical";
+  verificationPolicyRequirement?: "none" | "optional" | "recommended" | "required_by_policy";
 }
 
 export interface Vacancy {
@@ -217,6 +220,19 @@ export interface RequirementAssessment {
   inferences: Inference[];
   explanation: string;
   confidence: ConfidenceExplanation;
+  verificationSufficiency?: {
+    status:
+      | "sufficient"
+      | "verification_optional"
+      | "verification_recommended"
+      | "verification_required_by_policy"
+      | "insufficient_information";
+    reasonCodes: string[];
+    requirement: "none" | "optional" | "recommended" | "required_by_policy";
+    engineVersion: string;
+    evaluatedAt: string;
+    explanation: string;
+  };
 }
 
 export interface MatchEvaluation {

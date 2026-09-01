@@ -1,7 +1,7 @@
 ---
 owner: product
-status: planned
-version: 0.1.0
+status: partially_implemented
+version: 0.2.0
 last_verified: 2026-09-01
 ---
 
@@ -16,6 +16,21 @@ O M5.1 adiciona ao Prisma uma nova classe de evidência profissional: a evidênc
 O produto do M5.1 não é o teste. É a redução inteligente da incerteza sobre competências. Uma avaliação não determina o nível absoluto de uma Pessoa; ela produz uma evidência demonstrada sobre uma competência, em determinado contexto, método, versão e momento.
 
 O M5.1 não transforma o Prisma em plataforma genérica de provas técnicas, entrevistas automáticas, ranking ou certificação. Ele identifica quando as evidências atuais são insuficientes para uma necessidade profissional concreta, explica por que a verificação é recomendada ou exigida por política e permite obter uma nova evidência de forma estruturada.
+
+## Estado M5.1A
+
+O M5.1A implementa a primeira fatia interna de preparação, sem convite, tentativa, resposta de Pessoa, correção ou evidência demonstrada final. O operador consegue ver uma necessidade de verificação originada do matching, revisar suficiência de evidência, selecionar competência e nível, escolher uma Verification Definition, visualizar Blueprint, Rubric e Item Bank e salvar ou confirmar um instrumento preparado para execução futura.
+
+Superfícies implementadas localmente:
+
+- Matching com verificação recomendada ou exigida por política.
+- Detalhe da Necessidade de Verificação.
+- Preparação com competência, nível e contexto.
+- Seleção de Verification Definition.
+- Prévia de instrumento com Blueprint, Rubric e Item Bank.
+- Resumo da verificação proposta com versões e próximos passos.
+
+Fora do M5.1A continuam convite, link público, autenticação externa, tentativa real, respostas, correção, telemetria de browser, integridade de execução, geração de Evidência Demonstrada, reavaliação pós-assessment, proctoring, webcam, microfone, reconhecimento facial, geração por LLM em runtime, senioridade, ranking e decisão automática.
 
 ## Problema
 
@@ -72,7 +87,7 @@ Mensagem sugerida em matching: "Aderência documental encontrada. Esta competên
 
 A Necessidade de Verificação representa a lacuna que precisa ser resolvida antes de qualquer assessment. Ela registra Pessoa, competência, contexto, nível esperado, criticidade, evidências disponíveis, evidência considerada insuficiente, política aplicada, explicação e estado.
 
-Estados conceituais mínimos:
+Estados conceituais do plano completo:
 
 | Estado | Significado |
 | --- | --- |
@@ -170,6 +185,14 @@ Fora do M5.1 inicial:
 - ranking de Pessoas;
 - decisão automática de contratação;
 - senioridade consolidada.
+
+Escopo M5.1A entregue:
+
+- Motor determinístico de suficiência para `sufficient`, `verification_optional`, `verification_recommended`, `verification_required_by_policy` e `insufficient_information`.
+- Versionamento explícito de Sufficiency Engine, Verification Policy, Verification Definition, Blueprint, Rubric, Item e Composer.
+- Catálogo global sintético `[QA/demo]` para SQL avançado, com 15 itens múltipla escolha.
+- RPCs internas para garantir uma necessidade demonstrativa por organização ativa e preparar assessment em estado `draft` ou `prepared`.
+- UI interna no menu `Matching`, sem plataforma de provas ou menu isolado de LMS.
 
 ## Métricas planejadas
 

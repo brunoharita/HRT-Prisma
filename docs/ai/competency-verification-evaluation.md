@@ -1,7 +1,7 @@
 ---
 owner: ai-quality
-status: planned
-version: 0.1.0
+status: partially_implemented
+version: 0.2.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-M5.1 é planejado. Não há LLM, item bank, composer, assessment, rubrica ou avaliação de competência demonstrada implementados.
+O plano completo do M5.1 permanece maior que a entrega atual. O M5.1A implementa Sufficiency Engine determinístico, Item Bank sintético SQL avançado, composer determinístico, Blueprint e Rubric para preparação interna. Não há LLM, attempt real, resposta da Pessoa, correção, telemetria, integridade, calibração observada ou evidência demonstrada final.
 
 ## Princípios
 
@@ -19,6 +19,23 @@ M5.1 é planejado. Não há LLM, item bank, composer, assessment, rubrica ou ava
 - Resultado precisa ser explicável por blueprint, rubrica, itens e versões.
 - Evidência demonstrada não apaga evidência documental, contextual ou humana.
 - Confiança é metodológica, não opinião do modelo.
+
+## Contratos implementados no M5.1A
+
+Versões atuais:
+
+| Contrato | Versão |
+| --- | --- |
+| Sufficiency Engine | `m51a-evidence-sufficiency-1.0.0` |
+| Verification Policy | `m51a-verification-policy-1.0.0` |
+| Verification Definition | `m51a-verification-definition-1.0.0` |
+| Blueprint | `m51a-assessment-blueprint-1.0.0` |
+| Rubric | `m51a-assessment-rubric-1.0.0` |
+| Item | `m51a-assessment-item-1.0.0` |
+| Composer | `m51a-assessment-composer-1.0.0` |
+| Prepared Assessment | `m51a-prepared-assessment-1.0.0` |
+
+O composer atual só seleciona itens ativos, compatíveis com competência, nível, modalidade, idioma e distribuição do blueprint. Se a cobertura for insuficiente, falha fechado com `INSUFFICIENT_ITEM_BANK_COVERAGE`.
 
 ## Verification Definition
 

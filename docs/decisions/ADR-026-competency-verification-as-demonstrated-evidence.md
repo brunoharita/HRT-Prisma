@@ -1,6 +1,6 @@
 # ADR-026: Verificação de competências como evidência demonstrada
 
-- Status: proposed
+- Status: accepted
 - Date: 2026-09-01
 - Owners: product, architecture, AI, security, QA
 
@@ -62,7 +62,7 @@ Contratos separados para nível-alvo, dificuldade e nível demonstrado; Item Ban
 
 ## Technical impact
 
-Nenhum impacto executável neste movimento. Implementação futura exigirá contratos, schema, RLS, composer, attempt runtime, evidência demonstrada, policy engine, UX e integração ao matching.
+O M5.1A implementa contratos, schema, RLS, policy, Sufficiency Engine, Item Bank sintético, Blueprint, Rubric, composer, preparation runtime e UI interna. Implementação futura ainda exigirá convite, attempt runtime, respostas, correção, telemetria, integridade, evidência demonstrada, reavaliação de matching e QA remoto.
 
 ## Data impact
 
@@ -103,3 +103,4 @@ Superseder se o Prisma adotar uma modalidade central diferente, alterar o papel 
 ## Change history
 
 - 2026-09-01: proposed.
+- 2026-09-01: accepted for M5.1A local implementation.

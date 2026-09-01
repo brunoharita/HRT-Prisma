@@ -1,7 +1,7 @@
 ---
 owner: security
-status: planned
-version: 0.1.0
+status: partially_implemented
+version: 0.2.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Este documento descreve requisitos futuros. O M5.1 não possui runtime, storage, tabelas, tokens de convite, RLS, Edge Functions ou telemetria implementados.
+Este documento descreve requisitos do plano completo e controles já aplicados no M5.1A. O M5.1A possui tabelas, RLS, grants explícitos, RPCs internas e auditoria metadata-only para preparação. Não possui storage de respostas, tokens de convite, Edge Functions, telemetria de browser, tentativa real, correção ou evidência demonstrada.
 
 ## Ativos
 
@@ -47,6 +47,17 @@ Eventos de browser não provam fraude. Devem ser tratados como comportamento obs
 Toda tabela tenant-owned futura deve carregar `organization_id`. Relações críticas devem usar FKs compostas. RLS em schemas expostos é obrigatório. Políticas devem combinar `TO authenticated` com escopo real de organização e papel. `anon` não deve receber grants diretos em dados do assessment.
 
 RPC `security definer`, se necessária, deve ter `search_path` fixo, validação explícita de ator, organização, papel, estado, versão e idempotência, além de DML direto revogado nas tabelas críticas.
+
+No M5.1A:
+
+- Todas as tabelas públicas novas têm RLS habilitado.
+- `anon` não recebe leitura nem execução de RPC.
+- `authenticated` recebe grants explícitos por causa da mudança recente da Supabase Data API.
+- Leitura global de Definition, Blueprint, Rubric, Item Family e Item permite `organization_id is null`; linhas de organização exigem membership.
+- Tabelas tenant-owned exigem `private.has_org_role(...)`.
+- `verification_needs` e `prepared_assessments` ficam com leitura direta para `authenticated`, mas sem grant direto de escrita; mutações passam pelas RPCs autorizadas.
+- RPCs `ensure_m51a_demo_need`, `load_m51a_verification_workspace` e `prepare_m51a_assessment` validam o ator com `private.require_document_reviewer(...)` antes de criar ou alterar registros.
+- Auditoria registra IDs, ação, resultado e payload operacional, sem currículo integral, enunciado integral externo ou resposta de Pessoa.
 
 ## Integridade
 

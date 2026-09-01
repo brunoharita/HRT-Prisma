@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 7cd7d3e67a3b060b96943f01db7710dea8d8accdc67ecf7fe3f53bacc333435e
+source_manifest_sha256: 1442fb1126fa2f6feff3c52f1e2106afc64ea0c549738d9acd9526054e550fbb
 -->
 
 # Tudo sobre o Prisma
@@ -312,8 +312,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.6.0
-last_verified: 2026-08-31
+version: 2.7.0
+last_verified: 2026-09-01
 ---
 
 # Estado atual do Prisma
@@ -321,7 +321,7 @@ last_verified: 2026-08-31
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/resume-ingestion-product-ux`, construída sobre `codex/person-document-state-ux` e destinada a preservar compatibilidade com o histórico já ativo em QA.
+- Branch de entrega em validação: `codex/m5-1a-verification-intelligence`, construída sobre a documentação M5.1 e destinada a implementar a primeira preparação interna de verificação de competências.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -359,7 +359,7 @@ last_verified: 2026-08-31
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
 - Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.
-- M5.1 - Verificação de Competências documentado como plano diretor planejado: evidência demonstrada, Necessidade de Verificação, Evidence Sufficiency, Verification Policy, Verification Definition, Item Bank, blueprint, attempt, integridade e QA futura. Nenhuma funcionalidade executável do M5.1 foi implementada.
+- M5.1 - Verificação de Competências possui plano diretor documentado e fatia M5.1A implementada localmente: Sufficiency Engine determinístico, Verification Need, Verification Policy, Verification Definition, Item Bank global sintético `[QA/demo]`, Blueprint, Rubric, composer, preparação `draft` ou `prepared`, rota `/matching` e seis superfícies internas de preparação. Convite, tentativa real, resposta da Pessoa, correção, telemetria, integridade, Evidência Demonstrada e reavaliação pós-assessment continuam fora do escopo implementado.
 - Home autenticada com contagens persistidas de pessoas, perfis estruturados e vagas abertas da organização ativa.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, áreas personalizadas, evidências, proveniência, inferências e pendências diagnósticas; contato privado somente para perfis administrativos autorizados.
@@ -373,7 +373,7 @@ last_verified: 2026-08-31
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 109 testes técnicos aprovados, incluindo separação entre perfil vigente e última importação, apresentação documental, navegação centrada na Pessoa, recuperação conectada de extração parcial, rejeição de tentativa vazia, invalidação auditável e destaque de descrições históricas com marcadores, além do retorno pós-aprovação, hardening da aprovação, ciclo de vida dos campos e contratos M2-A/M2-B/M2-C/M5/currículo-first.
+- 124 testes técnicos aprovados, incluindo separação entre perfil vigente e última importação, apresentação documental, navegação centrada na Pessoa, recuperação conectada de extração parcial, rejeição de tentativa vazia, invalidação auditável, destaque de descrições históricas com marcadores, retorno pós-aprovação, hardening da aprovação, ciclo de vida dos campos, contratos M2-A/M2-B/M2-C/M5/currículo-first e contratos M5.1A de suficiência, composer e segurança de migration.
 
 ## Implementado como contrato
 
@@ -398,6 +398,7 @@ last_verified: 2026-08-31
 - Migration local `20260831204334_recover_partial_resume_review`, aplicada no Prisma-QA como `20260831205547`, mantém `failed_structuring` como diagnóstico da automação, mas torna revisável somente a tentativa com `insufficient_structured_facts`, caracteres úteis, páginas persistidas e draft `valid` ou `insufficient`. O backfill reclassificou o Documento v2 de Bruno Harita como `ready_for_review` sem alterar tentativas, draft, páginas, evidências ou Perfil v1. Admin abriu revisão em transação revertida sobre a tentativa 1; tentativa 2 vazia e usuário sem membership foram rejeitados. Nenhuma operação de QA permaneceu persistida.
 - Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
+- Migration local M5.1A `20260901082542_m51a_verification_intelligence` com nove tabelas públicas versionadas, RLS, grants explícitos para `authenticated`, revogação de `anon`, helper privado de policy/suficiência, RPCs `ensure_m51a_demo_need`, `load_m51a_verification_workspace` e `prepare_m51a_assessment`, catálogo global sintético SQL avançado e auditoria metadata-only.
 
 ## Evidência remota
 
@@ -443,7 +444,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Embeddings vetoriais e LLM externo.
 - Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
 - Auditoria de visualização/exportação além do domínio de usuários.
-- M5.1 executável: Verification Need, Sufficiency Engine, Verification Policy, Verification Definition, Item Bank, Composer, assessment, tentativa, telemetria por questão, evidência demonstrada e reavaliação de matching.
+- M5.1 pós-preparação: convite, link público, autenticação externa, assessment executável, tentativa, resposta, correção, telemetria por questão, integridade, evidência demonstrada e reavaliação de matching.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
@@ -478,6 +479,8 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 ## Última evidência local
 
 Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
+
+Em 2026-09-01, a fatia M5.1A foi implementada localmente na branch `codex/m5-1a-verification-intelligence`. `CI=true pnpm run validate` aprovou lint de 217 arquivos, foundation, Context Pack, dois typechecks, build web, 124 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. A migration foi criada pelo Supabase CLI. A tentativa de listar e aplicar a migration no Prisma-QA por `npx supabase migration list --linked` e `npx supabase db push --linked --dry-run --skip-vault` falhou antes de alteração remota com `LegacyDbConfigLoginRoleStatusError` e HTTP 403 de privilégios da conta Supabase. Smoke visual autenticado ainda precisa ser registrado após a migration estar disponível no QA.
 
 ---
 
