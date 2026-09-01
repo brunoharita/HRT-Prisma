@@ -144,3 +144,19 @@ test("M5.1B entry workspace aggregates item-bank counts before building its JSON
   assert.doesNotMatch(migration, /'availableItems', count\(\*\)/i);
   assert.match(migration, /grant execute on function public\.load_m51a_verification_workspace\(uuid\) to authenticated/i);
 });
+
+test("M5.1B keeps one local browser origin so the authenticated session is reusable", async () => {
+  const [viteConfig, packageJson, supabaseConfig, assessmentBoundary] = await Promise.all([
+    readFile("web/vite.config.ts", "utf8"),
+    readFile("package.json", "utf8"),
+    readFile("supabase/config.toml", "utf8"),
+    readFile("supabase/functions/assessment-access/index.ts", "utf8"),
+  ]);
+  assert.match(viteConfig, /port:\s*5555/);
+  assert.doesNotMatch(viteConfig, /5556/);
+  assert.doesNotMatch(packageJson, /dev:web:qa/);
+  assert.match(supabaseConfig, /site_url\s*=\s*"http:\/\/127\.0\.0\.1:5555"/);
+  assert.doesNotMatch(supabaseConfig, /5556/);
+  assert.match(assessmentBoundary, /http:\/\/127\.0\.0\.1:5555/);
+  assert.doesNotMatch(assessmentBoundary, /5556/);
+});

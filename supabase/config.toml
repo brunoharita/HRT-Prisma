@@ -162,9 +162,7 @@ site_url = "http://127.0.0.1:5555"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 additional_redirect_urls = [
   "http://127.0.0.1:5555",
-  "http://127.0.0.1:5556",
   "http://localhost:5555",
-  "http://localhost:5556",
 ]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
@@ -197,7 +195,7 @@ password_requirements = "lower_upper_letters_digits_symbols"
 # [auth.webauthn]
 # rp_display_name = "Supabase"
 # rp_id = "localhost"
-# rp_origins = ["http://127.0.0.1:5555", "http://127.0.0.1:5556"]
+# rp_origins = ["http://127.0.0.1:5555"]
 
 [auth.rate_limit]
 # Number of emails that can be sent per hour. Requires auth.email.smtp to be enabled.

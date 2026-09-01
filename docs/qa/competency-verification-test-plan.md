@@ -1,7 +1,7 @@
 ---
 owner: qa
-status: active_for_m51b_local
-version: 0.3.0
+status: verified_in_prisma_qa
+version: 0.3.1
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Plano completo do M5.1 e evidência local e conectada do M5.1B. Além do M5.1A, existem testes executáveis para scoring, métricas ligadas à questão ativa, incidente técnico separado, integridade, confiança, Evidência Demonstrada independente e limites de grants/RLS da migration. O smoke conectado foi executado somente com dados sintéticos; o smoke visual permanece separado.
+Plano completo do M5.1 e evidência local, conectada e visual do M5.1B. Além do M5.1A, existem testes executáveis para scoring, métricas ligadas à questão ativa, incidente técnico separado, integridade, confiança, Evidência Demonstrada independente e limites de grants/RLS da migration. O smoke conectado e os dois contextos visuais foram executados somente com dados sintéticos.
 
 ## Estratégia
 
@@ -97,7 +97,7 @@ Em 2026-09-01:
 
 Limitações remanescentes:
 
-- Nenhum smoke visual autenticado foi registrado ainda.
+- A preparação M5.1A isolada não teve smoke visual registrado naquele movimento; o monitoramento autenticado do M5.1B foi validado na sequência.
 - Migrations M5.1A aplicadas ao Prisma-QA por `supabase db query --linked --file` e registradas no histórico remoto por `supabase migration repair --linked --status applied`.
 - Validação remota confirmou nove tabelas com RLS, três RPCs disponíveis somente para `authenticated`, catálogo sintético com 1 definition, 1 blueprint, 1 rubric, 15 itens e 2 policies, além de grants críticos somente de leitura em `verification_needs`, `prepared_assessments` e `verification_audit_events`.
 - Nenhuma verificação real foi enviada ou executada.
@@ -123,8 +123,11 @@ Em 2026-09-01:
 - submissão produziu avaliação determinística, integridade `adequate`, confiança `adequate`, qualidade metodológica `limited`, Evidência Demonstrada, Need resolvida e exatamente uma reavaliação de matching;
 - o primeiro submit revelou incompatibilidade com `jsonb_object_length`; a transação foi revertida, a causa foi corrigida em migration fail-closed e o mesmo submit foi concluído;
 - `supabase db lint --linked --level warning --schema public` não reporta erro M5.1A/M5.1B após a correção. Permanecem dois warnings históricos de cast no currículo e um erro histórico em `enqueue_knowledge_observation`, fora deste movimento.
-- `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 132 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`.
+- `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 133 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`.
 - smoke visual da Pessoa aprovado em desktop e `390x844`, incluindo autosave, pausa, retomada e preservação da resposta; um overflow horizontal identificado no primeiro passe foi corrigido com `min-width: 0` nos grids e controles com wrap, e a repetição confirmou `documentWidth <= viewport`. O segundo convite sintético usado nessa inspeção foi revogado ao final, sem apagar o ledger.
-- smoke visual do operador não foi executado: o navegador interno não possuía sessão autenticada e não havia Chrome conectado. A RPC, os dados de monitoramento e a autorização do operador foram validados no banco, mas isso não substitui a evidência visual.
+- a origem local foi consolidada em `5555`: o script e a configuração Vite de `5556`, os redirects Auth e a origem CORS redundante foram removidos. Isso permitiu reutilizar a sessão Supabase já autenticada, sem duplicar login por origem.
+- `assessment-access` foi republicada no Prisma-QA após a consolidação. O preflight de `http://localhost:5555` retornou HTTP 200 com `Access-Control-Allow-Origin` correspondente; o mesmo preflight pela origem removida `http://localhost:5556` retornou HTTP 403 e `Access-Control-Allow-Origin: null`.
+- smoke visual do operador aprovado em desktop e `390x844`: a lista exibiu os convites sintéticos revogado e concluído, o registro concluído abriu o detalhe com resultado bruto, confiança e integridade, e a página móvel confirmou `documentWidth = viewport = 390`.
+- o primeiro passe do detalhe revelou os enums técnicos `adequate`; a UI foi corrigida para `Adequada` em confiança e integridade e revalidada sem o valor técnico exposto.
 
 Não foram usados nomes ou dados de Pessoas reais. O registro de QA foi criado como `Pessoa Sintética M5.1B QA` com domínio `example.invalid`. Nenhum e-mail ou WhatsApp foi enviado.

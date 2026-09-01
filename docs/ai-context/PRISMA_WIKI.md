@@ -2,8 +2,8 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.6.0
-last_verified: 2026-08-31
+version: 1.6.1
+last_verified: 2026-09-01
 ---
 
 # Prisma Wiki
@@ -50,6 +50,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O Movimento 4 mantém ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento; snapshots oficiais continuam apenas catalogados e o agente está desativado.
 
-O M5.1 - Verificação de Competências possui preparação M5.1A e execução M5.1B local. O operador prepara o instrumento, emite link sem fingir envio externo e monitora; a Pessoa sintética acessa sem conta, responde com autosave, pausa, retoma e submete; o Prisma preserva eventos por questão, calcula resultado, integridade e confiança, cria Evidência Demonstrada independente e reavalia matching sem decisão automática. Itens permanecem sintéticos `[QA/demo]`, sem IA ou calibração real.
+O M5.1 - Verificação de Competências possui preparação M5.1A e execução M5.1B ativas no Prisma-QA. O operador prepara o instrumento, emite link sem fingir envio externo e monitora; a Pessoa sintética acessa sem conta, responde com autosave, pausa, retoma e submete; o Prisma preserva eventos por questão, calcula resultado, integridade e confiança, cria Evidência Demonstrada independente e reavalia matching sem decisão automática. Itens permanecem sintéticos `[QA/demo]`, sem IA ou calibração real.
 
 Mobilidade interna, sucessão, concentração de competências, senioridade e workforce planning pertencem à visão futura, não ao runtime atual.

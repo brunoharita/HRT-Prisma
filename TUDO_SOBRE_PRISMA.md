@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: c35af291661b24dabb36b1380176422dfb451425bbd01309aa3350449691841f
+source_manifest_sha256: 317275aec49627dd7e001b3c8b626b1232756ca356bc5d681e8556af30da37e6
 -->
 
 # Tudo sobre o Prisma
@@ -197,8 +197,7 @@ Required variables:
 
 Local port convention:
 
-- `http://127.0.0.1:5555` for the main local app
-- `http://127.0.0.1:5556` for the local QA variant
+- `http://127.0.0.1:5555` for the local app connected to the configured environment
 
 ## Commands
 
@@ -206,8 +205,7 @@ Local port convention:
 | --- | --- |
 | `pnpm run build` | Compile TypeScript |
 | `pnpm run typecheck:web` | Run strict type checking for the isolated web shell |
-| `pnpm run dev:web` | Start the main local Vite app on port `5555` |
-| `pnpm run dev:web:qa` | Start the local QA Vite app on port `5556` |
+| `pnpm run dev:web` | Start the local Vite app on port `5555` |
 | `pnpm run build:web` | Build the local Vite app |
 | `pnpm run lint` | Check text hygiene and prohibited runtime shortcuts |
 | `pnpm run check:foundation` | Check contracts, versions, migration security, secrets, and critical markers |
@@ -312,7 +310,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.8.0
+version: 2.8.1
 last_verified: 2026-09-01
 ---
 
@@ -328,7 +326,7 @@ last_verified: 2026-09-01
 ## Disponível localmente
 
 - CLI de vertical slice.
-- Shell web React com Vite, Ant Design, App Shell autenticado reutilizável, sidebar responsiva, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com convenção local `5555` principal e `5556` QA.
+- Shell web React com Vite, Ant Design, App Shell autenticado reutilizável, sidebar responsiva, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com uma única origem local em `5555`; o backend conectado é selecionado pelas variáveis `VITE_SUPABASE_*`.
 - Adapter Supabase web tipado e centralizado para memberships, operador autenticado e leituras de domínio.
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
@@ -373,7 +371,7 @@ last_verified: 2026-09-01
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 132 testes técnicos compõem a suíte local, incluindo os contratos M5.1B de scoring, métricas, integridade, incidente técnico, evidência independente, segurança das migrations e as duas correções de compatibilidade encontradas no QA; o número só é considerado aprovado após o gate final do movimento.
+- 133 testes técnicos compõem a suíte local, incluindo os contratos M5.1B de scoring, métricas, integridade, incidente técnico, evidência independente, segurança das migrations, origem local única e as duas correções de compatibilidade encontradas no QA; o número só é considerado aprovado após o gate final do movimento.
 
 ## Implementado como contrato
 
@@ -447,7 +445,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Embeddings vetoriais e LLM externo.
 - Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
 - Auditoria de visualização/exportação além do domínio de usuários.
-- Smoke visual autenticado do operador para o M5.1B. A superfície pública já foi validada em desktop e `390x844`, sem overflow após a correção responsiva; a fronteira conectada, o CORS, os grants negativos e o slice sintético também foram comprovados. Rate limit prolongado e negação cross-tenant dedicada continuam pendentes.
+- Rate limit prolongado e negação cross-tenant dedicada para o M5.1B. As superfícies pública e autenticada do operador já foram validadas em desktop e `390x844`; a fronteira conectada, o CORS, os grants negativos e o slice sintético também foram comprovados.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
@@ -485,7 +483,7 @@ Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Del
 
 Em 2026-09-01, a fatia M5.1A foi implementada localmente na branch `codex/m5-1a-verification-intelligence`. `CI=true pnpm run validate` aprovou lint de 218 arquivos, foundation, Context Pack, dois typechecks, build web, 124 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. Após nova autenticação Supabase, a migration M5.1A e o hardening de grants foram aplicados ao Prisma-QA por query direta e registrados no histórico remoto. Smoke visual autenticado ainda precisa ser registrado.
 
-Em 2026-09-01, o M5.1B foi implementado na branch `codex/m5-1b-verification-execution`, aplicado ao Prisma-QA e publicado como Edge Function `assessment-access`. `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 132 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke conectado sintético percorreu convite, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, Evidência Demonstrada, Need e matching. O smoke visual público passou em desktop e `390x844`, confirmou autosave, pausa, retomada e resposta preservada; a primeira execução revelou overflow móvel, corrigido e revalidado sem overflow. O convite incompleto do smoke visual foi revogado sem apagar o ledger. A superfície visual do operador permanece sem evidência porque nenhum navegador disponível tinha sessão autenticada.
+Em 2026-09-01, o M5.1B foi implementado na branch `codex/m5-1b-verification-execution`, aplicado ao Prisma-QA e publicado como Edge Function `assessment-access`. `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 133 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke conectado sintético percorreu convite, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, Evidência Demonstrada, Need e matching. O smoke visual público passou em desktop e `390x844`, confirmou autosave, pausa, retomada e resposta preservada; a primeira execução revelou overflow móvel, corrigido e revalidado sem overflow. O convite incompleto do smoke visual foi revogado sem apagar o ledger. A segunda porta local `5556` foi removida do Vite, Auth, CORS e documentação; `assessment-access` foi republicada no QA, onde o preflight `5555` passou com HTTP 200 e o `5556` foi recusado com HTTP 403. A sessão autenticada em `5555` foi então reutilizada para aprovar o monitoramento do operador em desktop e `390x844`, incluindo a abertura do resultado concluído. Esse passe também corrigiu a exposição dos enums técnicos de confiança e integridade para rótulos em português.
 
 ---
 
@@ -572,8 +570,8 @@ M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista a
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.7.0
-last_verified: 2026-08-31
+version: 1.7.1
+last_verified: 2026-09-01
 ---
 
 # Referência técnica do Prisma
@@ -596,7 +594,7 @@ Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão 
 
 O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
-O M5.1 possui M5.1A para preparação e M5.1B local para execução. O runtime inclui tabelas/RPCs versionadas, `assessment-access`, App Shell do operador, superfície pública sem login, tentativa, resposta, telemetria por questão, avaliação determinística, integridade explicável e Evidência Demonstrada. O rollout M5.1B no Prisma-QA precisa ser comprovado separadamente; produção não existe.
+O M5.1 possui M5.1A para preparação e M5.1B para execução, ambos ativos no Prisma-QA. O runtime inclui tabelas/RPCs versionadas, `assessment-access`, App Shell do operador, superfície pública sem login, tentativa, resposta, telemetria por questão, avaliação determinística, integridade explicável e Evidência Demonstrada. O rollout conectado e os smokes visuais público e autenticado foram comprovados com dados sintéticos; produção não existe.
 
 ## Segurança
 
@@ -613,7 +611,6 @@ pnpm install
 pnpm run validate
 pnpm run demo
 pnpm run dev:web
-pnpm run dev:web:qa
 pnpm run build:web
 pnpm run generate:prisma-context
 pnpm run check:prisma-context
@@ -635,8 +632,8 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.6.0
-last_verified: 2026-08-31
+version: 1.6.1
+last_verified: 2026-09-01
 ---
 
 # Prisma Wiki
@@ -683,6 +680,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O Movimento 4 mantém ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento; snapshots oficiais continuam apenas catalogados e o agente está desativado.
 
-O M5.1 - Verificação de Competências possui preparação M5.1A e execução M5.1B local. O operador prepara o instrumento, emite link sem fingir envio externo e monitora; a Pessoa sintética acessa sem conta, responde com autosave, pausa, retoma e submete; o Prisma preserva eventos por questão, calcula resultado, integridade e confiança, cria Evidência Demonstrada independente e reavalia matching sem decisão automática. Itens permanecem sintéticos `[QA/demo]`, sem IA ou calibração real.
+O M5.1 - Verificação de Competências possui preparação M5.1A e execução M5.1B ativas no Prisma-QA. O operador prepara o instrumento, emite link sem fingir envio externo e monitora; a Pessoa sintética acessa sem conta, responde com autosave, pausa, retoma e submete; o Prisma preserva eventos por questão, calcula resultado, integridade e confiança, cria Evidência Demonstrada independente e reavalia matching sem decisão automática. Itens permanecem sintéticos `[QA/demo]`, sem IA ou calibração real.
 
 Mobilidade interna, sucessão, concentração de competências, senioridade e workforce planning pertencem à visão futura, não ao runtime atual.

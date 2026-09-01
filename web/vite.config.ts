@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   root: currentDirectory,
   envDir: resolve(currentDirectory, ".."),
   plugins: [react()],
@@ -29,10 +29,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
   server: {
-    port: mode === "qa" ? 5556 : 5555,
+    port: 5555,
     strictPort: true,
     fs: {
       allow: [resolve(currentDirectory, "..")],
     },
   },
-}));
+});

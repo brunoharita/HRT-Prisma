@@ -1,7 +1,7 @@
 ---
 owner: security
 status: partially_implemented
-version: 0.3.0
+version: 0.3.1
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Este documento descreve os controles aplicados no M5.1A e no M5.1B local. O M5.1B adiciona token de convite com hash SHA-256, Edge Function pública estreita, tentativa, respostas, ledger factual, correção, integridade e Evidência Demonstrada. O rollout remoto e o uso real continuam condicionados à validação QA e às decisões de privacidade.
+Este documento descreve os controles aplicados no M5.1A e no M5.1B ativo no Prisma-QA. O M5.1B adiciona token de convite com hash SHA-256, Edge Function pública estreita, tentativa, respostas, ledger factual, correção, integridade e Evidência Demonstrada. O uso com Pessoas reais continua condicionado às decisões de privacidade e à aprovação específica do piloto.
 
 ## Ativos
 
@@ -63,7 +63,7 @@ No M5.1A:
 No M5.1B:
 
 - A Pessoa externa não recebe conta, JWT, membership ou App Shell.
-- `assessment-access` aceita somente origens locais documentadas, payload limitado e schema version conhecido.
+- `assessment-access` aceita somente a origem local documentada em `5555`, payload limitado e schema version conhecido.
 - O token bruto é aleatório, retornado somente na emissão e nunca persistido; o banco armazena SHA-256.
 - `anon` não possui grant de tabela nem de RPC. A RPC pública interna é executável somente por `service_role` e valida token, expiração, status, invitation, attempt, question e versão.
 - Operator actions continuam sob JWT e `private.require_document_reviewer`.

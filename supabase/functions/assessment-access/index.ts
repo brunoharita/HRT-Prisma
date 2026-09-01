@@ -4,9 +4,7 @@ const BOUNDARY_VERSION = "m51b-assessment-access-boundary-1.0.0";
 const REQUEST_SCHEMA_VERSION = "m51b-assessment-access-request-1.0.0";
 const ALLOWED_ORIGINS = new Set([
   "http://127.0.0.1:5555",
-  "http://127.0.0.1:5556",
   "http://localhost:5555",
-  "http://localhost:5556",
 ]);
 const MAX_BODY_BYTES = 64 * 1024;
 const memoryRateWindow = new Map<string, number[]>();

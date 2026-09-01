@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.8.0
+version: 2.8.1
 last_verified: 2026-09-01
 ---
 
@@ -18,7 +18,7 @@ last_verified: 2026-09-01
 ## Disponível localmente
 
 - CLI de vertical slice.
-- Shell web React com Vite, Ant Design, App Shell autenticado reutilizável, sidebar responsiva, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com convenção local `5555` principal e `5556` QA.
+- Shell web React com Vite, Ant Design, App Shell autenticado reutilizável, sidebar responsiva, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com uma única origem local em `5555`; o backend conectado é selecionado pelas variáveis `VITE_SUPABASE_*`.
 - Adapter Supabase web tipado e centralizado para memberships, operador autenticado e leituras de domínio.
 - Movimento M2-A implementado localmente com distinção formal `Usuário != Pessoa`, menu `Usuários`, listagem/edição/cadastro de operadores e fluxo apresentado ao produto como `username + senha`.
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
@@ -63,7 +63,7 @@ last_verified: 2026-09-01
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 132 testes técnicos compõem a suíte local, incluindo os contratos M5.1B de scoring, métricas, integridade, incidente técnico, evidência independente, segurança das migrations e as duas correções de compatibilidade encontradas no QA; o número só é considerado aprovado após o gate final do movimento.
+- 133 testes técnicos compõem a suíte local, incluindo os contratos M5.1B de scoring, métricas, integridade, incidente técnico, evidência independente, segurança das migrations, origem local única e as duas correções de compatibilidade encontradas no QA; o número só é considerado aprovado após o gate final do movimento.
 
 ## Implementado como contrato
 
@@ -137,7 +137,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Embeddings vetoriais e LLM externo.
 - Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
 - Auditoria de visualização/exportação além do domínio de usuários.
-- Smoke visual autenticado do operador para o M5.1B. A superfície pública já foi validada em desktop e `390x844`, sem overflow após a correção responsiva; a fronteira conectada, o CORS, os grants negativos e o slice sintético também foram comprovados. Rate limit prolongado e negação cross-tenant dedicada continuam pendentes.
+- Rate limit prolongado e negação cross-tenant dedicada para o M5.1B. As superfícies pública e autenticada do operador já foram validadas em desktop e `390x844`; a fronteira conectada, o CORS, os grants negativos e o slice sintético também foram comprovados.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
@@ -175,4 +175,4 @@ Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Del
 
 Em 2026-09-01, a fatia M5.1A foi implementada localmente na branch `codex/m5-1a-verification-intelligence`. `CI=true pnpm run validate` aprovou lint de 218 arquivos, foundation, Context Pack, dois typechecks, build web, 124 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. Após nova autenticação Supabase, a migration M5.1A e o hardening de grants foram aplicados ao Prisma-QA por query direta e registrados no histórico remoto. Smoke visual autenticado ainda precisa ser registrado.
 
-Em 2026-09-01, o M5.1B foi implementado na branch `codex/m5-1b-verification-execution`, aplicado ao Prisma-QA e publicado como Edge Function `assessment-access`. `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 132 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke conectado sintético percorreu convite, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, Evidência Demonstrada, Need e matching. O smoke visual público passou em desktop e `390x844`, confirmou autosave, pausa, retomada e resposta preservada; a primeira execução revelou overflow móvel, corrigido e revalidado sem overflow. O convite incompleto do smoke visual foi revogado sem apagar o ledger. A superfície visual do operador permanece sem evidência porque nenhum navegador disponível tinha sessão autenticada.
+Em 2026-09-01, o M5.1B foi implementado na branch `codex/m5-1b-verification-execution`, aplicado ao Prisma-QA e publicado como Edge Function `assessment-access`. `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 133 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke conectado sintético percorreu convite, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, Evidência Demonstrada, Need e matching. O smoke visual público passou em desktop e `390x844`, confirmou autosave, pausa, retomada e resposta preservada; a primeira execução revelou overflow móvel, corrigido e revalidado sem overflow. O convite incompleto do smoke visual foi revogado sem apagar o ledger. A segunda porta local `5556` foi removida do Vite, Auth, CORS e documentação; `assessment-access` foi republicada no QA, onde o preflight `5555` passou com HTTP 200 e o `5556` foi recusado com HTTP 403. A sessão autenticada em `5555` foi então reutilizada para aprovar o monitoramento do operador em desktop e `390x844`, incluindo a abertura do resultado concluído. Esse passe também corrigiu a exposição dos enums técnicos de confiança e integridade para rótulos em português.

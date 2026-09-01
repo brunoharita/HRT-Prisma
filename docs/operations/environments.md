@@ -6,7 +6,7 @@ Existe ambiente local e um único projeto Supabase remoto (`Prisma-QA`, ref `iol
 
 ## Local
 
-Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento determinístico, testes, migrations, Context Pack e validação local do shell web. Dados permitidos: fixtures sintéticas. Secrets: o fluxo CLI não exige secrets; o shell web exige apenas `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` em `.env*`, fora do Git. Convenção local atual: app principal em `5555` e variante local QA em `5556`.
+Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento determinístico, testes, migrations, Context Pack e validação local do shell web. Dados permitidos: fixtures sintéticas. Secrets: o fluxo CLI não exige secrets; o shell web exige apenas `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` em `.env*`, fora do Git. O shell possui uma única origem local em `http://127.0.0.1:5555`; o ambiente conectado é definido pelas variáveis `VITE_SUPABASE_*`, sem criar uma segunda porta para QA.
 
 ## QA
 

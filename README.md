@@ -46,8 +46,7 @@ Required variables:
 
 Local port convention:
 
-- `http://127.0.0.1:5555` for the main local app
-- `http://127.0.0.1:5556` for the local QA variant
+- `http://127.0.0.1:5555` for the local app connected to the configured environment
 
 ## Commands
 
@@ -55,8 +54,7 @@ Local port convention:
 | --- | --- |
 | `pnpm run build` | Compile TypeScript |
 | `pnpm run typecheck:web` | Run strict type checking for the isolated web shell |
-| `pnpm run dev:web` | Start the main local Vite app on port `5555` |
-| `pnpm run dev:web:qa` | Start the local QA Vite app on port `5556` |
+| `pnpm run dev:web` | Start the local Vite app on port `5555` |
 | `pnpm run build:web` | Build the local Vite app |
 | `pnpm run lint` | Check text hygiene and prohibited runtime shortcuts |
 | `pnpm run check:foundation` | Check contracts, versions, migration security, secrets, and critical markers |

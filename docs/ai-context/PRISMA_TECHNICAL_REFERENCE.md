@@ -2,8 +2,8 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.7.0
-last_verified: 2026-08-31
+version: 1.7.1
+last_verified: 2026-09-01
 ---
 
 # Referência técnica do Prisma
@@ -26,7 +26,7 @@ Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão 
 
 O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
-O M5.1 possui M5.1A para preparação e M5.1B local para execução. O runtime inclui tabelas/RPCs versionadas, `assessment-access`, App Shell do operador, superfície pública sem login, tentativa, resposta, telemetria por questão, avaliação determinística, integridade explicável e Evidência Demonstrada. O rollout M5.1B no Prisma-QA precisa ser comprovado separadamente; produção não existe.
+O M5.1 possui M5.1A para preparação e M5.1B para execução, ambos ativos no Prisma-QA. O runtime inclui tabelas/RPCs versionadas, `assessment-access`, App Shell do operador, superfície pública sem login, tentativa, resposta, telemetria por questão, avaliação determinística, integridade explicável e Evidência Demonstrada. O rollout conectado e os smokes visuais público e autenticado foram comprovados com dados sintéticos; produção não existe.
 
 ## Segurança
 
@@ -43,7 +43,6 @@ pnpm install
 pnpm run validate
 pnpm run demo
 pnpm run dev:web
-pnpm run dev:web:qa
 pnpm run build:web
 pnpm run generate:prisma-context
 pnpm run check:prisma-context

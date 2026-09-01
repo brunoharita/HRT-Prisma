@@ -162,6 +162,27 @@ function StatusTag({ status }: { status: VerificationMonitoringRow["status"] }) 
   return <Tag color={config[status].color}>{config[status].label}</Tag>;
 }
 
+function labelConfidence(value: VerificationMonitoringRow["confidenceState"]) {
+  if (!value) return "Ainda não avaliada";
+  const labels: Record<NonNullable<VerificationMonitoringRow["confidenceState"]>, string> = {
+    high: "Alta",
+    adequate: "Adequada",
+    reduced: "Reduzida",
+    inconclusive: "Inconclusiva",
+  };
+  return labels[value];
+}
+
+function labelIntegrity(value: VerificationMonitoringRow["integrityState"]) {
+  if (!value) return "Ainda não avaliada";
+  const labels: Record<NonNullable<VerificationMonitoringRow["integrityState"]>, string> = {
+    adequate: "Adequada",
+    reduced: "Reduzida",
+    inconclusive: "Inconclusiva",
+  };
+  return labels[value];
+}
+
 function VerificationDetail({ value }: { value: VerificationMonitoringRow }) {
   return (
     <Space direction="vertical" size="large" style={{ width: "100%" }}>
@@ -169,8 +190,8 @@ function VerificationDetail({ value }: { value: VerificationMonitoringRow }) {
         { key: "person", label: "Pessoa", children: value.personName },
         { key: "competency", label: "Competência", children: `${value.competency} · ${labelLevel(value.targetLevel)}` },
         { key: "status", label: "Status", children: <StatusTag status={value.status} /> },
-        { key: "confidence", label: "Confiança da evidência", children: value.confidenceState ?? "Ainda não avaliada" },
-        { key: "integrity", label: "Integridade da execução", children: value.integrityState ?? "Ainda não avaliada" },
+        { key: "confidence", label: "Confiança da evidência", children: labelConfidence(value.confidenceState) },
+        { key: "integrity", label: "Integridade da execução", children: labelIntegrity(value.integrityState) },
       ]} />
       {value.rawResult ? <PrismaCard title="Resultado bruto"><Progress type="circle" percent={value.rawResult.percentage} /><Typography.Paragraph>{value.rawResult.correct} corretas, {value.rawResult.incorrect} incorretas e {value.rawResult.unanswered} não respondidas. O resultado bruto não é alterado por sinais de integridade.</Typography.Paragraph></PrismaCard> : <Empty description="A tentativa ainda não possui avaliação." />}
       <Alert message="Mudanças de foco, visibilidade e interrupções são condições observadas. Não constituem prova de conduta ou fraude." showIcon type="info" />

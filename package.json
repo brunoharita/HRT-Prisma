@@ -12,7 +12,6 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
     "dev:web": "vite --config web/vite.config.ts",
-    "dev:web:qa": "vite --config web/vite.config.ts --mode qa",
     "build:web": "vite build --config web/vite.config.ts",
     "lint": "node scripts/lint.mjs",
     "check:foundation": "node scripts/check-foundation.mjs",
