@@ -60,6 +60,24 @@ interface PersonWorkspacePageProps {
   onNavigate: (path: string) => void;
 }
 
+const competencyClassificationGuide = [
+  {
+    key: "explicit",
+    label: "Explícita",
+    description: "Identificada diretamente em um currículo ou em outra fonte aprovada.",
+  },
+  {
+    key: "inferred",
+    label: "Inferida",
+    description: "Derivada de sinais relacionados, com justificativa e evidências rastreáveis.",
+  },
+  {
+    key: "demonstrated",
+    label: "Demonstrada",
+    description: "Comprovada por uma verificação concluída, com método e resultado preservados.",
+  },
+] as const;
+
 export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: PersonWorkspacePageProps) {
   const [workspace, setWorkspace] = useState<PersonIngestionWorkspace | null>(null);
   const [loading, setLoading] = useState(true);
@@ -292,8 +310,19 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         <div className="prisma-person-knowledge-grid">
           <section><Typography.Text strong>Experiências</Typography.Text>{currentProfileVersion.profileData.experiences.length ? <List dataSource={currentProfileVersion.profileData.experiences} renderItem={(item) => <List.Item><div><strong>{item.organization || "Organização não informada"}</strong><small>{[item.role, item.period].filter(Boolean).join(" · ")}</small></div></List.Item>} /> : <Typography.Paragraph type="secondary">Nenhuma experiência explícita foi publicada.</Typography.Paragraph>}</section>
           <section><Typography.Text strong>Formação</Typography.Text>{currentProfileVersion.profileData.education.length ? <List dataSource={currentProfileVersion.profileData.education} renderItem={(item) => <List.Item><div><strong>{item.course || "Formação"}</strong><small>{[item.institution, item.period].filter(Boolean).join(" · ")}</small></div></List.Item>} /> : <Typography.Paragraph type="secondary">Nenhuma formação explícita foi publicada.</Typography.Paragraph>}</section>
-          <section><Typography.Text strong>Competências confirmadas</Typography.Text>{currentProfileVersion.profileData.competencies.length ? <Space className="prisma-person-competency-tags" wrap>{currentProfileVersion.profileData.competencies.map((competency) => <Tag color="blue" key={competency}>{competency} · explícita</Tag>)}</Space> : <Typography.Paragraph type="secondary">Nenhuma competência explícita foi identificada nos documentos aprovados.</Typography.Paragraph>}</section>
+          <section><Typography.Text strong>Competências confirmadas</Typography.Text>{currentProfileVersion.profileData.competencies.length ? <Space className="prisma-person-competency-tags" wrap>{currentProfileVersion.profileData.competencies.map((competency) => <Tag className="prisma-person-competency-tag prisma-person-competency-tag--explicit" color="blue" key={competency}>{competency}</Tag>)}</Space> : <Typography.Paragraph type="secondary">Nenhuma competência explícita foi identificada nos documentos aprovados.</Typography.Paragraph>}</section>
           <section><Typography.Text strong>Inferências / sinais</Typography.Text><Typography.Paragraph type="secondary">Inferências permanecem separadas dos fatos confirmados e nunca são publicadas automaticamente como competência.</Typography.Paragraph></section>
+        </div>
+        <div aria-label="Legenda das classificações de competência" className="prisma-competency-classification-guide">
+          <Typography.Text strong>Como interpretar as classificações</Typography.Text>
+          <div className="prisma-competency-classification-guide__items">
+            {competencyClassificationGuide.map((classification) => (
+              <div className="prisma-competency-classification-guide__item" key={classification.key}>
+                <span aria-hidden="true" className={`prisma-competency-classification-guide__swatch prisma-competency-classification-guide__swatch--${classification.key}`} />
+                <div><strong>{classification.label}</strong><span>{classification.description}</span></div>
+              </div>
+            ))}
+          </div>
         </div>
         <Typography.Text type="secondary">Publicado em {formatDate(currentProfileVersion.approvedAt ?? currentProfileVersion.createdAt)} · fonte: {workspace.documents.find((document) => document.id === currentProfileVersion.sourceDocumentId)?.filename ?? "documento preservado"}</Typography.Text>
       </PrismaCard> : null}

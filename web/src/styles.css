@@ -3905,6 +3905,58 @@ textarea {
   overflow-wrap: anywhere;
 }
 
+.prisma-competency-classification-guide {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid #e5eaf2;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.prisma-competency-classification-guide__items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 12px;
+}
+
+.prisma-competency-classification-guide__item {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.prisma-competency-classification-guide__item > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.prisma-competency-classification-guide__item strong {
+  color: var(--prisma-text);
+  font-size: 0.78rem;
+}
+
+.prisma-competency-classification-guide__item span:not(.prisma-competency-classification-guide__swatch) {
+  color: var(--prisma-text-secondary);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.prisma-competency-classification-guide__swatch {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+}
+
+.prisma-competency-classification-guide__swatch--explicit { background: #1677ff; }
+.prisma-competency-classification-guide__swatch--inferred { background: #722ed1; }
+.prisma-competency-classification-guide__swatch--demonstrated { background: #16a34a; }
+
 .prisma-delta-transition {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -4549,5 +4601,9 @@ textarea {
   .prisma-m51c-page .ant-space,
   .prisma-m51c-page .ant-space-item {
     max-width: 100%;
+  }
+
+  .prisma-competency-classification-guide__items {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

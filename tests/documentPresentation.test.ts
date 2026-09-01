@@ -108,8 +108,17 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(hub, /const canReview = isReviewableDocument\(latestDocument\)/);
   assert.doesNotMatch(hub, /canReview[\s\S]{0,100}experiences\.length/);
   assert.match(hub, /className="prisma-person-competency-tags"/);
+  assert.match(hub, /Competências confirmadas/);
+  assert.doesNotMatch(hub, /\{competency\} · explícita/);
+  assert.match(hub, /Como interpretar as classificações/);
+  assert.match(hub, /Identificada diretamente em um currículo ou em outra fonte aprovada/);
+  assert.match(hub, /Derivada de sinais relacionados, com justificativa e evidências rastreáveis/);
+  assert.match(hub, /Comprovada por uma verificação concluída, com método e resultado preservados/);
   assert.match(styles, /\.prisma-person-competency-tags\s*\{[\s\S]*?width: 100%;[\s\S]*?min-width: 0;[\s\S]*?max-width: 100%;/);
   assert.match(styles, /\.prisma-person-competency-tags \.ant-tag\s*\{[\s\S]*?max-width: 100%;[\s\S]*?white-space: normal;[\s\S]*?overflow-wrap: anywhere;/);
+  assert.match(styles, /\.prisma-competency-classification-guide__swatch--explicit \{ background: #1677ff; \}/);
+  assert.match(styles, /\.prisma-competency-classification-guide__swatch--inferred \{ background: #722ed1; \}/);
+  assert.match(styles, /\.prisma-competency-classification-guide__swatch--demonstrated \{ background: #16a34a; \}/);
 });
 
 test("discard operation is tenant-authorized, audit-only, and never mutates the current profile", async () => {
