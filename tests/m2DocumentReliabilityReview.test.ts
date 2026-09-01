@@ -103,11 +103,15 @@ test("M2-C operations table preserves readable person and document columns", asy
   assert.match(styles, /\.prisma-operations-table \.ant-table-tbody > tr > td[\s\S]*?vertical-align: middle/);
 });
 
-test("M2-C returns to the processing list only after a successful approval", async () => {
-  const review = await readFile("web/src/pages/ProfileReviewPage.tsx", "utf8");
-  const approvalHandler = review.match(/async function handleApprove\(\)[\s\S]*?\n  }/)?.[0] ?? "";
+test("M2-C closes review through Delta and returns to the Person only after publication", async () => {
+  const [review, delta] = await Promise.all([
+    readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
+    readFile("web/src/pages/ProfileDeltaPage.tsx", "utf8"),
+  ]);
 
-  assert.match(approvalHandler, /await personIngestionService\.approveProfileReview[\s\S]*?onNavigate\("\/profiles\/processes"\)/);
-  assert.match(approvalHandler, /catch \(caught\)[\s\S]*?setError/);
-  assert.doesNotMatch(approvalHandler, /await refresh\(\)/);
+  assert.match(review, /Comparar com o perfil atual/);
+  assert.match(review, /\/review\/\$\{reviewId\}\/delta/);
+  assert.match(delta, /await personIngestionService\.publishProfileReview/);
+  assert.match(delta, /onNavigate\(`\/profiles\/\$\{personId\}`\)/);
+  assert.doesNotMatch(delta, /onNavigate\("\/profiles\/processes"\)/);
 });

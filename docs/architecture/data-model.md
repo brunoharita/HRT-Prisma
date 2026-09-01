@@ -35,7 +35,9 @@ RLS está habilitado em toda tabela pública. Políticas usam `TO authenticated`
 
 Estados de documento implementados: `pending`, `received`, `processing`, `processed`, `ready_for_review`, `in_review`, `approved`, `failed`, `extraction_failed`, `needs_manual_review`, `unsupported_format`. O processamento registra validação, extração nativa, OCR seletivo, estruturação, revisão, aprovação e falhas específicas em tentativas imutáveis. Falhas registram categoria, motivo, mensagem técnica sanitizável, versão e possibilidade de reprocessamento.
 
-`document_operations` impede replay divergente e devolve o resultado anterior para a mesma chave/fingerprint. Locks por pessoa/documento serializam versões. A revisão mantém histórico imutável de alterações e somente `approve_profile_review` promove uma nova versão de perfil, com uma única versão atual por pessoa.
+`document_operations` impede replay divergente e devolve o resultado anterior para a mesma chave/fingerprint. Locks por pessoa/documento serializam versões. A revisão mantém histórico imutável de alterações e somente `publish_profile_review`, pela comparação Delta, é executável pelo cliente para promover uma nova versão de perfil. `approve_profile_review` permanece uma primitiva interna sem grant a `authenticated`.
+
+`profile_publication_removals` é o ledger imutável das únicas perdas de conhecimento autorizadas. Cada linha identifica organização, revisão, campo, valor anterior, motivo e ator. Omissões nunca criam linha e são mescladas do perfil-base para a nova versão. RLS permite leitura apenas a papéis revisores e DML direto permanece revogado.
 
 `spatial_evidence_regions` exige `organization_id`, documento, versão, review, página e coordenadas `x/y/width/height` entre 0 e 1, inclusive os limites somados. `profile_review_evidence_links` referencia exatamente uma evidência original ou uma região espacial. `profile_review_evidence_events` é append-only. A RPC M5 cria região, vínculo, revisão e evento atomicamente; evidências históricas anteriores permanecem válidas sem coordenadas.
 

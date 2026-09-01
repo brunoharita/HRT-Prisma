@@ -2,8 +2,8 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.5.1
-last_verified: 2026-08-30
+version: 1.6.0
+last_verified: 2026-08-31
 ---
 
 # Prisma Wiki
@@ -34,6 +34,10 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 - IA não decide contratação ou rejeição.
 - Currículo é uma entrada operacional principal: o arquivo pode existir em intake antes da Pessoa, mas a Pessoa só é criada após identidade mínima válida e verificação tenant-scoped de correspondência.
 - Correspondência é sinal explicável, não decisão; vínculo a cadastro existente ou criação apesar do sinal exige ação humana explícita.
+- A jornada do currículo possui seis etapas compreensíveis e um estado de produto derivado; tentativas permanecem em detalhes técnicos.
+- Nova importação é proposta. O perfil vigente continua disponível até a publicação de outra versão.
+- Omissão no currículo novo preserva o conhecimento aprovado. Remoção exige confirmação humana explícita, motivo e trilha de auditoria.
+- A revisão salva conduz à comparação Delta; publicação confirmada encerra na Central da Pessoa.
 - Knowledge separa termo observado, conceito normalizado e inferência. Termo desconhecido é preservado e entra na Inbox.
 - Knowledge da empresa é overlay tenant-owned e precede a Global apenas no próprio escopo, sem alterar a base Prisma.
 - Internet enriquece Knowledge, nunca Pessoa; IA propõe e humano autorizado publica.
@@ -44,6 +48,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas, mantendo seleção e texto invariáveis ao zoom. M2-A/M2-B/M2-C e currículo-first estão ativos em QA. O Movimento 4 implementa localmente ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento. Schema e Edge Function M4 ainda não estão ativados no QA; snapshots oficiais estão apenas catalogados e o agente está desativado.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O Movimento 4 mantém ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento; snapshots oficiais continuam apenas catalogados e o agente está desativado.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

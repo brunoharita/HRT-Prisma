@@ -154,6 +154,17 @@ export interface CustomProfileSectionItem {
   value: string;
 }
 
+export interface ResumeProcessingProgress {
+  stage: "structuring" | "persisting" | "ready_for_review";
+  message: string;
+}
+
+export interface PublicationRemovalDecision {
+  fieldPath: string;
+  previousValue: unknown;
+  reason: string;
+}
+
 export interface CustomProfileSection {
   id: string;
   name: string;

@@ -34,6 +34,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-022](ADR-022-structured-resume-summary-and-private-contact-boundary.md) | accepted | Structured resume summary with private canonical contact boundary |
 | [ADR-023](ADR-023-stable-review-field-lifecycle.md) | accepted | Stable repeatable-field identity, optional-value normalization, and explicit add/remove lifecycle |
 | [ADR-024](ADR-024-person-document-profile-state-boundary.md) | accepted | Stable Person navigation and explicit document, review, and current-profile state boundaries |
+| [ADR-025](ADR-025-resume-product-journey-and-publication-delta.md) | accepted | Six-step resume journey, canonical product states, and omission-safe publication Delta |
 
 ## Rules
 

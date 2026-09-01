@@ -4,14 +4,16 @@
 
 | Contrato | Versão | Regra material |
 | --- | --- | --- |
-| `document-processing-state` | 2.2.0 | estados operacionais distinguem falha técnica de reconhecimento parcial recuperável |
-| `document-presentation` | 1.2.0 | tentativa operacional e última tentativa revisável são compostas sem ocultar páginas preservadas |
-| `person-ingestion` | 7.1.0 | cadastro, retry e persistência são idempotentes; retry reutiliza a tentativa mais recente com páginas |
+| `document-processing-state` | 2.3.0 | estados operacionais distinguem falha técnica de reconhecimento parcial e alimentam o estado canônico de produto |
+| `document-presentation` | 2.0.0 | as seis etapas compartilham tentativa revisável, estado e próximo passo sem ocultar páginas preservadas |
+| `resume-product-state` | 1.0.0 | sete estados de produto são derivados e nunca persistidos na Pessoa |
+| `profile-publication-delta` | 1.0.0 | comparação preserva omissões e exige remoção humana explícita e auditada |
+| `person-ingestion` | 8.0.0 | cadastro, retry, revisão e publicação Delta são idempotentes |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
-| `human-profile-review` | 4.1.0 | revisão aceita extração parcial com páginas preservadas e mantém obrigatoriedade, evidência e aprovação atômica |
+| `human-profile-review` | 5.0.0 | revisão aceita extração parcial e termina em Delta antes da publicação atômica |
 | `spatial-evidence` | 1.2.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas; preserva texto bruto, texto efetivo e decisões de subtração entre campos irmãos |
 | `document-operation-idempotency` | 1.1.0 | mesma chave e fingerprint retornam o mesmo resultado; invalidação também preserva histórico e perfil atual |
-| `professional-profile` | 3.0.0 | perfil aprovado preserva proveniência e IDs estáveis de experiências e formações, sem contato privado |
+| `professional-profile` | 4.0.0 | perfil aprovado preserva proveniência, IDs estáveis e fatos omitidos, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
 | `structured-resume-summary` | 1.0.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; PII nunca é promovida ao perfil profissional |
 | `review-field-lifecycle` | 1.0.0 | vazios opcionais são normalizados; nome, contato e conteúdo profissional mínimo bloqueiam salvamento inválido; caminhos antigos continuam legíveis |
@@ -42,7 +44,8 @@ Estado desconhecido, versão incompatível, sessão ausente, tenant não autoriz
 | `record_profile_review_evidence` | registra região, vínculo, revisão e evento humano na mesma transação |
 | `record_profile_review_evidence_refined` | registra a mesma operação com texto bruto, texto efetivo e decisões imutáveis de subtração ou reinclusão |
 | `retire_profile_review_evidence` | encerra vínculo humano ativo, preserva histórico e rejeita evidência original |
-| `approve_profile_review` | atualiza nome/contato canônicos privados e cria a versão profissional sem PII na mesma transação |
+| `approve_profile_review` | primitiva interna sem grant ao cliente; separa PII e cria a versão profissional na transação de publicação |
+| `publish_profile_review` | autoridade cliente final; mescla perfil-base e proposta, preserva omissões e registra remoções explícitas |
 | `invalidate_document_review` | encerra uma pendência revisável ou tecnicamente falha sem apagar documento, tentativa, revisão, evento ou perfil atual |
 
 O cliente deve gerar uma chave por intenção do usuário e reutilizá-la somente em retry da mesma intenção. Reuso com fingerprint diferente retorna conflito. Números de versão nunca são calculados no frontend.
@@ -51,7 +54,7 @@ A transição final de revisão deve permanecer executável com todas as estrutu
 
 Falhas esperadas de aprovação são apresentadas ao operador por categoria acionável: concorrência/versão, estado da revisão, autorização/tenant, evidência material, nome, contato, shape/versão e idempotência. Mensagens SQL, nomes de tabela, função ou coluna e códigos internos não são exibidos. Falha inesperada recebe mensagem sanitizada e preserva o rascunho; o backend continua como autoridade de todos os gates.
 
-Depois que `approve_profile_review` retorna sucesso, a revisão encerra seu fluxo e navega para `Processamento e revisões`. A navegação nunca ocorre antes da confirmação transacional nem no caminho de erro; uma falha mantém o operador na revisão com o rascunho e a mensagem acionável visíveis.
+Depois de salvar a revisão, o cliente navega para o Delta. Somente quando `publish_profile_review` retorna sucesso a revisão encerra seu fluxo e a interface navega para a Central da Pessoa. A navegação nunca ocorre antes da confirmação transacional nem no caminho de erro.
 
 Pessoa, perfil vigente e importação possuem leitura independente. O perfil atual é a versão com `superseded_at is null`; uma nova importação nunca o substitui antes de `approve_profile_review`. A apresentação documental 1.2.0 combina a tentativa operacional mais recente com a última tentativa revisável: `failed_structuring` com `insufficient_structured_facts`, caracteres úteis e páginas persistidas significa `Requer revisão`, enquanto tentativas sem fonte recuperável permanecem `Falha técnica`. O clique no nome ou em `Abrir` leva à Central da Pessoa, não à edição. Na Central da Pessoa, `Ver documento` resolve a revisão tenant-scoped associada ao documento e abre o workspace M5 com PDF original e campos estruturados em modo somente leitura. A carga falha fechada quando o review ID não pertence exatamente à Pessoa e ao documento da rota. Esse modo não exibe salvamento, aprovação, inclusão, remoção, seleção ou alteração de evidência; `Detalhes técnicos` mantém acesso separado a metadados, tentativas e auditoria. Extração parcial não bloqueia `start_profile_review` quando existe draft `valid` ou `insufficient` associado a páginas preservadas; o workspace M5 oferece seleção espacial ou inclusão manual do bloco ausente. Retry procura a tentativa mais recente que possua páginas, sem deixar uma tentativa vazia ocultar a fonte recuperável.
 

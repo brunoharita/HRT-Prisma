@@ -2,8 +2,8 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.5.0
-last_verified: 2026-08-28
+version: 1.5.1
+last_verified: 2026-08-31
 ---
 
 # Referência de IA do Prisma
@@ -15,6 +15,8 @@ Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, m
 ## Pipeline
 
 Documento não confiável entra como texto manual ou PDF. No currículo-first, PDF.js/Tesseract extraem primeiro somente nome e ao menos um contato explícito; nenhum atributo profissional é usado para decidir identidade. A deduplicação exata por e-mail/telefone e o sinal por nome são tenant-scoped e explicáveis. Depois da resolução humana ou determinística sem candidato, o pipeline M2-B/M2-C cria `ExtractionDraft`, evidência e revisão humana antes de promover perfil. Falha não vira Pessoa sem identidade nem perfil vazio.
+
+Extração parcial útil conduz à revisão, nunca a um perfil completo nem a `Falha técnica`. O Delta de publicação não cria inferência: ele compara fatos revisados com o perfil vigente, preserva omissões e aplica somente remoções confirmadas por humano. Competências explícitas, normalizadas, humanas e inferidas mantêm sua origem separada, e a falta de competências não bloqueia a publicação.
 
 A extração adaptativa pode reconhecer títulos personalizados previamente aprovados na mesma organização. Ela reutiliza somente metadados de estrutura, relê os valores no currículo atual e cria evidência própria. Conteúdo personalizado não vira competência, inferência ou matching automaticamente.
 
@@ -33,7 +35,9 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
-- revisão humana: `human-profile-review-2.1.0`;
+- revisão humana: `human-profile-review-5.0.0`;
+- estado de produto: `resume-product-state-1.0.0`;
+- publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;
 - aprendizado de título personalizado: `organization-custom-section-definition-1.0.0`;
 - intake currículo-first: `resume-intake-1.0.0`.

@@ -10,6 +10,9 @@
 | Gap | Requisito obrigatório sem evidência identificada, nunca prova de ausência |
 | Incerteza | Limitação ou ambiguidade que impede conclusão segura |
 | Perfil profissional | Representação estruturada e versionada de conhecimento sobre uma pessoa |
+| Proposta de perfil | Conteúdo revisado de uma nova fonte que ainda não substituiu o perfil vigente |
+| Delta de publicação | Comparação entre perfil vigente e proposta, com adição, atualização, manutenção, não citado e remoção explícita |
+| Não citado | Fato aprovado ausente da nova fonte que permanece preservado no perfil |
 | Papel | Definição esperada de uma função |
 | Posição | Cadeira real no organograma |
 | Vaga | Necessidade atual de preenchimento |

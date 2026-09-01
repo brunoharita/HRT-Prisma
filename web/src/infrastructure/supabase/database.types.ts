@@ -632,6 +632,10 @@ export interface Database {
         Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_idempotency_key: string };
         Returns: Array<{ review_id: string; profile_id: string; profile_version: number; reused: boolean }>;
       };
+      publish_profile_review: {
+        Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_explicit_removals: Json; p_idempotency_key: string };
+        Returns: Array<{ review_id: string; profile_id: string; profile_version: number; reused: boolean }>;
+      };
       invalidate_document_review: {
         Args: { p_organization_id: string; p_document_id: string; p_idempotency_key: string };
         Returns: Array<{ document_id: string; review_id: string | null; reused: boolean }>;

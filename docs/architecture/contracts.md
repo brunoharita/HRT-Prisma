@@ -6,9 +6,11 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 
 | Contrato | Owner | Versão | Consumidores | Status | Evidência | Ambiente | Versão desconhecida |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `professional-profile` | AI/domain | 3.0.0 | review, retrieval, matching, repository | schema ativo em QA; runtime web local | perfil versionado com IDs estáveis para experiências e formações; PII de contato excluída | local/QA | bloquear |
-| `document-processing-state` | application | 2.2.0 | importer, repository, operations, review | schema e recuperação parcial ativos em QA; apresentação web local | estados documentais, tentativa recuperável e revisão humana | local/QA | bloquear sem páginas preservadas |
-| `document-presentation` | application/UI | 1.2.0 | Pessoas, processamento, Central da Pessoa, revisão | implementado localmente | composição de documento, tentativa atual, tentativa revisável e perfil atual | local | falhar fechado sem tentativa recuperável |
+| `professional-profile` | AI/domain | 4.0.0 | review, retrieval, matching, repository | publicação Delta ativa em QA; runtime web local | perfil versionado, PII excluída e omissões preservadas na promoção | local/QA | bloquear |
+| `document-processing-state` | application | 2.3.0 | importer, repository, operations, review | schema e recuperação parcial ativos em QA; apresentação web local | estados técnicos alimentam um estado de produto único | local/QA | bloquear sem páginas preservadas |
+| `document-presentation` | application/UI | 2.0.0 | Pessoas, processamento, Central da Pessoa, revisão | implementado localmente | jornada de seis etapas, tentativa revisável e perfil atual | local | falhar fechado sem tentativa recuperável |
+| `resume-product-state` | product/application | 1.0.0 | importação, análise, Pessoas, Central da Pessoa | implementado localmente | sete estados canônicos derivados sem contaminar a Pessoa | local | falhar fechado como falha técnica |
+| `profile-publication-delta` | product/application/data | 1.0.0 | revisão, publicação, Central da Pessoa | schema ativo em QA; runtime web local | omissões preservadas e remoções explícitas auditadas | local/QA | bloquear publicação |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
 | `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |
 | `adaptive-resume-extraction` | AI/application | 4.0.0 | ingestão M2-B e revisão | persistência ativa em QA; runtime web local | geometria, blocos profissionais, resumo documental e IDs estáveis | local/QA | exigir revisão/reprocessamento |
@@ -22,9 +24,9 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
-| `person-ingestion` | application/data | 7.1.0 | intake, Pessoas, documentos, perfil | schema ativo em QA; runtime web local | intake, layout, evidência por campo, recuperação de extração parcial e promoção privada | local/QA | bloquear sem fonte recuperável |
+| `person-ingestion` | application/data | 8.0.0 | intake, Pessoas, documentos, perfil | publicação Delta ativa em QA; runtime web local | jornada completa, recuperação parcial e publicação omission-safe | local/QA | bloquear sem fonte recuperável |
 | `resume-intake` | application/data/security | 1.0.0 | Home, Pessoas, importador | implementado localmente | `resume_intakes` e cinco RPCs controladas | local | bloquear criação/vínculo |
-| `human-profile-review` | application/domain | 4.1.0 | revisão, perfil, auditoria | schema ativo em QA; runtime web local | revisão de draft válido ou insuficiente com páginas, obrigatoriedade sensível e evidência humana | local/QA | bloquear promoção inválida |
+| `human-profile-review` | application/domain | 5.0.0 | revisão, Delta, perfil, auditoria | publicação Delta ativa em QA; runtime web local | revisão não publica diretamente; Delta é a autoridade final | local/QA | bloquear promoção inválida |
 | `spatial-evidence` | application/data | 1.2.0 | PDF viewer, revisão, auditoria | schema ativo em QA; web local | região bruta, texto efetivo, máscara por caractere ou símbolo e decisões imutáveis | local/QA | bloquear mutação |
 | `document-operation-idempotency` | application/data | 1.1.0 | cadastro, retry, persistência, aprovação e invalidação | base e invalidação ativas em QA | `document_operations`, fingerprints, locks e descarte auditável | local/QA | rejeitar conflito |
 | `pdf-native-extraction` | AI/application | 2.0.0 | ingestão PDF | implementado localmente | `pdfjs-5.4.296/layout-v2` | local | exigir revisão/reprocessamento |

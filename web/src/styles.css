@@ -3574,6 +3574,29 @@ textarea {
   .prisma-review-split { height: calc(100svh - 315px); min-height: 520px; }
   .prisma-review-value-grid,
   .prisma-evidence-card-grid { grid-template-columns: 1fr; }
+  .prisma-review-structured-pane { overflow-x: hidden; }
+  .prisma-structured-review,
+  .prisma-review-tabs,
+  .prisma-review-tabs > .ant-tabs-content-holder,
+  .prisma-review-tabs .ant-tabs-content,
+  .prisma-review-tabs .ant-tabs-tabpane,
+  .prisma-entity-review,
+  .prisma-review-field,
+  .prisma-linked-evidence,
+  .prisma-correction-reason,
+  .prisma-field-history {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .prisma-entity-review__toolbar,
+  .prisma-review-section-title,
+  .prisma-entity-navigator {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .prisma-review-section-title > div { min-width: 0; }
+  .prisma-linked-evidence > .ant-btn { width: 100%; white-space: normal; }
   .prisma-pdf-toolbar { padding: 6px; }
   .prisma-pdf-toolbar .ant-space { row-gap: 4px; }
   .prisma-pdf-scroll { padding: 8px; }
@@ -3671,6 +3694,387 @@ textarea {
 
   .prisma-adaptive-field__comparison {
     grid-template-columns: 1fr;
+    width: 100%;
+  }
+}
+/* Resume ingestion product journey and publication delta */
+.prisma-resume-journey,
+.prisma-delta-page {
+  display: grid;
+  gap: 16px;
+}
+
+.prisma-journey-upload-card {
+  max-width: 920px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.prisma-journey-upload-card .ant-upload-drag {
+  min-height: 300px;
+  border: 1px dashed #8fb8ff;
+  background: #fbfdff;
+}
+
+.prisma-journey-upload-card .ant-upload-drag-icon {
+  margin-bottom: 12px;
+  font-size: 42px;
+}
+
+.prisma-upload-contract {
+  margin-top: 14px;
+  color: #6f7f9c;
+  font-size: 12px;
+}
+
+.prisma-journey-upload-submit {
+  display: block;
+  margin: 18px 0 0 auto;
+}
+
+.prisma-journey-explainer > .ant-card-body > div {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.prisma-journey-explainer article {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 12px;
+  text-align: center;
+}
+
+.prisma-journey-explainer article:not(:last-child)::after {
+  position: absolute;
+  top: 29px;
+  right: -13px;
+  width: 26px;
+  height: 1px;
+  background: #cddaf0;
+  content: "";
+}
+
+.prisma-journey-explainer article > span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: #edf4ff;
+  color: #1264f3;
+  font-size: 18px;
+}
+
+.prisma-journey-explainer small,
+.prisma-journey-file-card small,
+.prisma-delta-file-card small,
+.prisma-journey-match small,
+.prisma-delta-transition small,
+.prisma-delta-item small {
+  display: block;
+  color: #71809c;
+}
+
+.prisma-journey-file-card,
+.prisma-delta-file-card {
+  min-width: 250px;
+}
+
+.prisma-journey-file-card .ant-card-body,
+.prisma-delta-file-card .ant-card-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.prisma-journey-file-card .anticon,
+.prisma-delta-file-card .anticon {
+  color: #ef4444;
+  font-size: 22px;
+}
+
+.prisma-journey-file-card span,
+.prisma-delta-file-card span {
+  flex: 1;
+  min-width: 0;
+}
+
+.prisma-journey-contact-card,
+.prisma-journey-matches,
+.prisma-journey-processing-timeline,
+.prisma-journey-analysis-grid,
+.prisma-analysis-pages {
+  width: 100%;
+}
+
+.prisma-journey-match {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr) minmax(180px, auto) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-top: 1px solid #edf0f5;
+}
+
+.prisma-journey-match--new {
+  margin-top: 8px;
+  border: 1px solid #dfe6f1;
+  border-radius: 10px;
+}
+
+.prisma-match-avatar {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #155eef, #7c3aed);
+  color: #fff;
+  font-weight: 700;
+}
+
+.prisma-journey-processing-grid,
+.prisma-journey-analysis-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(300px, .7fr);
+  gap: 16px;
+}
+
+.prisma-analysis-pages > .ant-card-body > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.prisma-analysis-pages .ant-card-body {
+  display: grid;
+  gap: 8px;
+}
+
+.prisma-delta-summary-card > .ant-card-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(420px, .8fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.prisma-person-knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.prisma-person-knowledge-grid section {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #e5eaf2;
+  border-radius: 10px;
+  background: #fbfcfe;
+}
+
+.prisma-person-knowledge-grid .ant-list-item {
+  padding-block: 8px;
+}
+
+.prisma-person-knowledge-grid small {
+  display: block;
+  color: #71809c;
+}
+
+.prisma-delta-transition {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.prisma-delta-transition > div {
+  display: grid;
+  gap: 4px;
+}
+
+.prisma-delta-transition > span {
+  color: #6e7f9f;
+  font-size: 22px;
+}
+
+.prisma-delta-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.prisma-delta-stats .ant-statistic {
+  padding: 10px;
+  border-radius: 10px;
+  background: #f7f9fc;
+  text-align: center;
+}
+
+.prisma-delta-groups {
+  display: grid;
+  gap: 22px;
+}
+
+.prisma-delta-groups section {
+  display: grid;
+  gap: 8px;
+}
+
+.prisma-delta-group-title {
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.prisma-delta-group-title.is-added { color: #168646; }
+.prisma-delta-group-title.is-updated { color: #ad6800; }
+.prisma-delta-group-title.is-explicit_removal { color: #cf1322; }
+
+.prisma-delta-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  padding: 14px;
+  border: 1px solid #e5eaf2;
+  border-left-width: 4px;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.prisma-delta-item.is-added { border-left-color: #3bbb73; background: #fbfffc; }
+.prisma-delta-item.is-updated { border-left-color: #f0a320; background: #fffdf8; }
+.prisma-delta-item.is-maintained { border-left-color: #4c84e8; }
+.prisma-delta-item.is-not_cited { border-left-color: #b7c0ce; background: #fafbfc; }
+.prisma-delta-item.is-explicit_removal { border-left-color: #ef4f5f; background: #fffafa; }
+
+.prisma-delta-item-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.prisma-delta-preservation-alert {
+  margin-bottom: 70px;
+}
+
+.prisma-delta-footer {
+  position: sticky;
+  z-index: 4;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 -4px;
+  padding: 14px;
+  border: 1px solid #dfe6f1;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 -10px 30px rgb(15 35 70 / 8%);
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 900px) {
+  .prisma-journey-explainer > .ant-card-body > div {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-journey-explainer article {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .prisma-journey-explainer article:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -12px;
+    left: 31px;
+    width: 1px;
+    height: 24px;
+  }
+
+  .prisma-journey-match,
+  .prisma-journey-processing-grid,
+  .prisma-journey-analysis-grid,
+  .prisma-delta-summary-card > .ant-card-body,
+  .prisma-delta-item {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-person-knowledge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-journey-match {
+    justify-items: start;
+  }
+
+  .prisma-delta-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .prisma-delta-item-action {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .prisma-delta-page,
+  .prisma-delta-page .prisma-page-header,
+  .prisma-delta-page .prisma-page-header-row,
+  .prisma-delta-summary-card,
+  .prisma-delta-summary-card > .ant-card-body,
+  .prisma-delta-transition,
+  .prisma-delta-stats,
+  .prisma-delta-content-card,
+  .prisma-delta-content-card > .ant-card-body,
+  .prisma-delta-content-card .ant-tabs,
+  .prisma-delta-content-card .ant-tabs-content-holder,
+  .prisma-delta-groups,
+  .prisma-delta-groups section,
+  .prisma-delta-item,
+  .prisma-delta-preservation-alert,
+  .prisma-delta-footer {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .prisma-delta-page .ant-typography,
+  .prisma-delta-item { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 520px) {
+  .prisma-journey-file-card,
+  .prisma-delta-file-card {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .prisma-delta-transition {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-delta-transition > span {
+    width: auto;
+    height: auto;
+    font-size: 0;
+    transform: none;
+  }
+
+  .prisma-delta-transition > span::after { content: "↓"; font-size: 22px; }
+
+  .prisma-delta-footer {
+    flex-direction: column-reverse;
+    margin-inline: 0;
+  }
+
+  .prisma-delta-footer .ant-btn {
     width: 100%;
   }
 }

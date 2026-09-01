@@ -4,8 +4,9 @@ import type {
   PersonDocumentTimelineItem,
   ProcessingAttemptView,
 } from "./personIngestion.js";
+import { deriveResumeProductState, isReviewableAttempt, isTechnicalFailure as isResumeTechnicalFailure } from "./resumeProductState.js";
 
-export const DOCUMENT_PRESENTATION_VERSION = "1.2.0";
+export const DOCUMENT_PRESENTATION_VERSION = "2.0.0";
 
 export type DocumentOperationalState =
   | "none"
@@ -39,70 +40,18 @@ export function presentDocument(document: PresentableDocument | null): DocumentP
     requiresAction: false,
   };
 
-  if (document.reviewState === "invalidated") return {
-    state: "discarded",
-    label: "Importação arquivada",
-    description: "A pendência foi encerrada e o histórico foi preservado.",
-    nextAction: "Nenhuma pendência ativa",
-    tone: "neutral",
-    requiresAction: false,
-  };
-
-  if (document.reviewState === "approved" || document.status === "approved") return {
-    state: "processed",
-    label: "Processado",
-    description: "Documento estruturado e revisão concluída.",
-    nextAction: "Nenhuma ação necessária",
-    tone: "success",
-    requiresAction: false,
-  };
-
-  if (document.reviewAttempt && isRecoverableReviewAttempt(document.reviewAttempt)) return {
-    state: "requires_review",
-    label: "Requer revisão",
-    description: document.reviewAttempt.state === "failed_structuring"
-      ? "Conteúdo recuperado, mas o reconhecimento automático precisa de complementação humana."
-      : "Conteúdo recuperado, revisão humana necessária.",
-    nextAction: "Revisar nova importação",
-    tone: "review",
-    requiresAction: true,
-  };
-
-  if (isTechnicalFailure(document.latestAttempt)) return {
-    state: "technical_failure",
-    label: "Falha técnica",
-    description: "O arquivo ou o processamento encontrou um erro técnico.",
-    nextAction: "Reprocessar ou substituir arquivo",
-    tone: "danger",
-    requiresAction: true,
-  };
-
-  if (document.reviewState === "ready_for_review" || document.reviewState === "in_review") return {
-    state: "requires_review",
-    label: "Requer revisão",
-    description: "Conteúdo recuperado, revisão humana necessária.",
-    nextAction: "Revisar nova importação",
-    tone: "review",
-    requiresAction: true,
-  };
-
-  if (!document.latestAttempt) return {
-    state: "received",
-    label: "Recebido",
-    description: "Documento preservado e aguardando processamento.",
-    nextAction: "Aguardar processamento",
-    tone: "neutral",
-    requiresAction: false,
-  };
-
-  return {
-    state: "processing",
-    label: "Processando",
-    description: "Documento preservado e em processamento.",
-    nextAction: "Aguardar processamento",
-    tone: "processing",
-    requiresAction: false,
-  };
+  const product = deriveResumeProductState({
+    documentStatus: document.status,
+    reviewState: document.reviewState,
+    latestAttempt: document.latestAttempt,
+    reviewAttempt: document.reviewAttempt,
+  });
+  if (product.state === "discarded") return { state: "discarded", label: product.label, description: product.message, nextAction: product.nextActionLabel, tone: "neutral", requiresAction: false };
+  if (product.state === "profile_updated") return { state: "processed", label: product.label, description: product.message, nextAction: product.nextActionLabel, tone: "success", requiresAction: false };
+  if (product.state === "requires_review" || product.state === "ready_to_publish") return { state: "requires_review", label: product.label, description: product.message, nextAction: product.nextActionLabel, tone: "review", requiresAction: true };
+  if (product.state === "technical_failure") return { state: "technical_failure", label: product.label, description: product.message, nextAction: product.nextActionLabel, tone: "danger", requiresAction: true };
+  if (!document.latestAttempt) return { state: "received", label: "Recebido", description: "Documento recebido e preservado, aguardando processamento.", nextAction: product.nextActionLabel, tone: "neutral", requiresAction: false };
+  return { state: "processing", label: product.label, description: product.message, nextAction: product.nextActionLabel, tone: "processing", requiresAction: false };
 }
 
 export function currentProfileLabel(profile: CurrentProfileSummary | null): string {
@@ -123,16 +72,11 @@ export function countPendingReviews(documents: PresentableDocument[]): number {
 }
 
 export function isTechnicalFailure(attempt: ProcessingAttemptView | null): boolean {
-  return Boolean(attempt?.state.startsWith("failed"));
+  return isResumeTechnicalFailure(attempt);
 }
 
 export function isRecoverableReviewAttempt(attempt: ProcessingAttemptView | null): boolean {
-  if (!attempt) return false;
-  if (attempt.state === "structured" || attempt.state === "profile_ready") return true;
-  return attempt.state === "failed_structuring"
-    && attempt.failureCode === "insufficient_structured_facts"
-    && attempt.usefulCharacterCount > 0
-    && attempt.pagesNative + attempt.pagesOcr > 0;
+  return isReviewableAttempt(attempt);
 }
 
 export function isDocumentReviewState(value: string): value is DocumentReviewState {

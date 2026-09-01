@@ -40,6 +40,7 @@ import {
   type PersonDocumentTimelineItem,
   type PersonIngestionWorkspace,
   type PdfProcessingProgress,
+  type ProfileVersionView,
   type ProcessingState,
 } from "../domain/personIngestion";
 import {
@@ -70,11 +71,16 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   const [progress, setProgress] = useState<PdfProcessingProgress | null>(null);
   const [selectedPage, setSelectedPage] = useState(1);
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | undefined>();
+  const [currentProfileVersion, setCurrentProfileVersion] = useState<ProfileVersionView | null>(null);
 
   async function refresh(documentId = selectedDocumentId) {
-    const result = await personIngestionService.loadWorkspace(activeMembership.organizationId, personId, documentId);
+    const [result, versions] = await Promise.all([
+      personIngestionService.loadWorkspace(activeMembership.organizationId, personId, documentId),
+      personIngestionService.listProfileVersions(activeMembership.organizationId, personId),
+    ]);
     if (!result) throw new Error("Pessoa não encontrada nesta empresa.");
     setWorkspace(result);
+    setCurrentProfileVersion(versions.find((version) => version.supersededAt === null) ?? null);
     setSelectedDocumentId(result.selectedDocument?.id);
     setSelectedPage(result.pages[0]?.pageNumber ?? 1);
   }
@@ -82,8 +88,20 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   useEffect(() => {
     let current = true;
     setLoading(true);
-    void personIngestionService.loadWorkspace(activeMembership.organizationId, personId)
-      .then((result) => { if (current) setWorkspace(result); })
+    void Promise.all([
+      personIngestionService.loadWorkspace(activeMembership.organizationId, personId),
+      personIngestionService.listProfileVersions(activeMembership.organizationId, personId),
+    ])
+      .then(([result, versions]) => {
+        if (!current) return;
+        setWorkspace(result);
+        setCurrentProfileVersion(versions.find((version) => version.supersededAt === null) ?? null);
+        const publicationMessage = window.sessionStorage.getItem(`prisma.profile-published.${personId}`);
+        if (publicationMessage) {
+          window.sessionStorage.removeItem(`prisma.profile-published.${personId}`);
+          setSuccess(publicationMessage);
+        }
+      })
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível carregar a Pessoa."); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
@@ -233,7 +251,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           <Space wrap>
             <Button disabled={!workspace.person.currentProfile} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Ver perfil atual</Button>
             {latestDocument ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(documentViewerPath(personId, latestDocument))}>{latestDocument.verificationReviewId ? "Ver documento" : "Detalhes técnicos"}</Button> : null}
-            {latestDocument && ["requires_review", "technical_failure"].includes(latestPresentation.state) ? <Button disabled={busy} icon={<ReloadOutlined />} loading={busy} onClick={() => void handleReprocess(latestDocument)}>Reprocessar</Button> : null}
+            {latestDocument && latestPresentation.state === "technical_failure" ? <Button disabled={busy} icon={<ReloadOutlined />} loading={busy} onClick={() => void handleReprocess(latestDocument)}>Reprocessar</Button> : null}
             {latestDocument && ["requires_review", "technical_failure"].includes(latestPresentation.state) ? (
               <Popconfirm
                 cancelText="Manter pendência"
@@ -269,6 +287,16 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           <Timeline items={recentHistory(workspace)} />
         </PrismaCard>
       </div>
+
+      {currentProfileVersion ? <PrismaCard className="prisma-person-current-knowledge" title={`Conhecimento profissional publicado · Perfil v${currentProfileVersion.profileVersion}`}>
+        <div className="prisma-person-knowledge-grid">
+          <section><Typography.Text strong>Experiências</Typography.Text>{currentProfileVersion.profileData.experiences.length ? <List dataSource={currentProfileVersion.profileData.experiences} renderItem={(item) => <List.Item><div><strong>{item.organization || "Organização não informada"}</strong><small>{[item.role, item.period].filter(Boolean).join(" · ")}</small></div></List.Item>} /> : <Typography.Paragraph type="secondary">Nenhuma experiência explícita foi publicada.</Typography.Paragraph>}</section>
+          <section><Typography.Text strong>Formação</Typography.Text>{currentProfileVersion.profileData.education.length ? <List dataSource={currentProfileVersion.profileData.education} renderItem={(item) => <List.Item><div><strong>{item.course || "Formação"}</strong><small>{[item.institution, item.period].filter(Boolean).join(" · ")}</small></div></List.Item>} /> : <Typography.Paragraph type="secondary">Nenhuma formação explícita foi publicada.</Typography.Paragraph>}</section>
+          <section><Typography.Text strong>Competências confirmadas</Typography.Text>{currentProfileVersion.profileData.competencies.length ? <Space wrap>{currentProfileVersion.profileData.competencies.map((competency) => <Tag color="blue" key={competency}>{competency} · explícita</Tag>)}</Space> : <Typography.Paragraph type="secondary">Nenhuma competência explícita foi identificada nos documentos aprovados.</Typography.Paragraph>}</section>
+          <section><Typography.Text strong>Inferências / sinais</Typography.Text><Typography.Paragraph type="secondary">Inferências permanecem separadas dos fatos confirmados e nunca são publicadas automaticamente como competência.</Typography.Paragraph></section>
+        </div>
+        <Typography.Text type="secondary">Publicado em {formatDate(currentProfileVersion.approvedAt ?? currentProfileVersion.createdAt)} · fonte: {workspace.documents.find((document) => document.id === currentProfileVersion.sourceDocumentId)?.filename ?? "documento preservado"}</Typography.Text>
+      </PrismaCard> : null}
 
       <section aria-labelledby="documentos-versoes" className="prisma-m2b-section prisma-person-documents-section">
         <div className="prisma-section-heading">
@@ -361,7 +389,6 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
                 <Descriptions.Item label="Tamanho">{formatBytes(workspace.selectedDocument.byteSize ?? 0)}</Descriptions.Item>
                 <Descriptions.Item label="Páginas">{workspace.selectedDocument.pageCount ?? "Aguardando"}</Descriptions.Item>
                 <Descriptions.Item label="Método atual">{attempt.currentMethod}</Descriptions.Item>
-                <Descriptions.Item label="Tentativa">v{attempt.attemptNumber}</Descriptions.Item>
                 <Descriptions.Item label="Caracteres úteis">{attempt.usefulCharacterCount}</Descriptions.Item>
               </Descriptions>
               {isProcessing(attempt.state) ? <div className="prisma-processing-active"><Spin size="small" /><span>Processamento em andamento</span></div> : null}
@@ -376,7 +403,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           <Typography.Title id="resultado" level={3}>Resultado da extração e Perfil Prisma em construção</Typography.Title>
           <Space wrap>
             {selectedDocument ? <Button onClick={() => onNavigate(`/profiles/${personId}/documents/${selectedDocument.id}`)}>Detalhes do documento</Button> : null}
-            {attempt ? <Button disabled={busy} icon={<ReloadOutlined />} loading={busy} onClick={() => void handleReprocess()}>Reprocessar</Button> : null}
+            {attempt && presentDocument(selectedDocument).state === "technical_failure" ? <Button disabled={busy} icon={<ReloadOutlined />} loading={busy} onClick={() => void handleReprocess()}>Reprocessar</Button> : null}
           </Space>
         </div>
         <PrismaCard>

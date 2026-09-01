@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: b75dc70038a8ce2ce81414b3419814f88d6e11e16fb7a54cc508267743b74588
+source_manifest_sha256: eb3294d8e99ac04d69e0e62f00ce3755c0a88a3b026b4e150fd1bafad440451b
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.5.0
+version: 2.6.0
 last_verified: 2026-08-31
 ---
 
@@ -321,7 +321,7 @@ last_verified: 2026-08-31
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega verificada: `codex/person-document-state-ux`, construída sobre `codex/review-approval-hardening` e destinada a preservar compatibilidade com o histórico já ativo em QA.
+- Branch de entrega em validação: `codex/resume-ingestion-product-ux`, construída sobre `codex/person-document-state-ux` e destinada a preservar compatibilidade com o histórico já ativo em QA.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -334,6 +334,8 @@ last_verified: 2026-08-31
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Fronteira Pessoa, Documento e Perfil Vigente 1.2.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. Tentativa operacional vazia não oculta a última tentativa revisável com páginas e draft preservados. A revisão M5 recupera extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual, enquanto tentativa sem fonte continua bloqueada.
+- Jornada de ingestão 2.0.0 implementada localmente em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `resume-product-state` 1.0.0 deriva sete estados canônicos sem persistir estado na Pessoa. `profile-publication-delta` 1.0.0 preserva fatos aprovados não citados, exige decisão humana e motivo para remoção e retorna à Central da Pessoa somente depois da publicação transacional.
+- Publicação Delta ativa no Prisma-QA: `profile_publication_removals` possui RLS e DML direto revogado; `publish_profile_review` é a única autoridade cliente, enquanto `approve_profile_review` perdeu o grant de `authenticated`. Provas revertidas confirmaram preservação de experiência e competência omitidas, remoção apenas explícita, Perfil v2 atômico, negação de Member/cross-tenant e zero resíduos.
 - Descarte não destrutivo implementado localmente e no Prisma-QA pela RPC `invalidate_document_review`: somente Admin, Owner, Recruiter ou Super Admin invalidam uma revisão ou importação tecnicamente falha; documento, tentativa, revisão, eventos e perfil vigente permanecem preservados; replay é idempotente e nenhuma linha é apagada.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` define a escala total exigida pelo PDF.js e converte caracteres ou símbolos OCR para um mapa canônico `normalized-page-v1`; texto, refinamento e destaque usam exatamente o mesmo conjunto. Zoom, ajuste à largura e proporção da tela alteram apenas a projeção. A direita inclui somente caixas que começam dentro do contorno, sem tolerância fixa ou resgate externo. Evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Campos multilinha comparados na revisão mantêm paridade visual: as superfícies extraída e humana possuem a mesma altura, e o editor humano ocupa integralmente o espaço interno correspondente. Conteúdo excedente rola dentro do campo, sem permitir que um redimensionamento isolado quebre a proporção entre os lados.
@@ -473,7 +475,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-31, `CI=true pnpm run validate` aprovou lint de 192 arquivos, fundação, Context Pack, dois typechecks, build web, 109 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A migration de recuperação parcial está ativa no Prisma-QA como `20260831205547`; autorização, tentativa recuperável, rejeição de tentativa vazia, preservação do Perfil v1 e rollback sem resíduos foram comprovados. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
 
 ---
 
@@ -483,8 +485,8 @@ Em 2026-08-31, `CI=true pnpm run validate` aprovou lint de 192 arquivos, fundaç
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.5.0
-last_verified: 2026-08-28
+version: 1.5.1
+last_verified: 2026-08-31
 ---
 
 # Referência de IA do Prisma
@@ -496,6 +498,8 @@ Não existe LLM externo ativo. Extraction, OCR seletivo, inference, retrieval, m
 ## Pipeline
 
 Documento não confiável entra como texto manual ou PDF. No currículo-first, PDF.js/Tesseract extraem primeiro somente nome e ao menos um contato explícito; nenhum atributo profissional é usado para decidir identidade. A deduplicação exata por e-mail/telefone e o sinal por nome são tenant-scoped e explicáveis. Depois da resolução humana ou determinística sem candidato, o pipeline M2-B/M2-C cria `ExtractionDraft`, evidência e revisão humana antes de promover perfil. Falha não vira Pessoa sem identidade nem perfil vazio.
+
+Extração parcial útil conduz à revisão, nunca a um perfil completo nem a `Falha técnica`. O Delta de publicação não cria inferência: ele compara fatos revisados com o perfil vigente, preserva omissões e aplica somente remoções confirmadas por humano. Competências explícitas, normalizadas, humanas e inferidas mantêm sua origem separada, e a falta de competências não bloqueia a publicação.
 
 A extração adaptativa pode reconhecer títulos personalizados previamente aprovados na mesma organização. Ela reutiliza somente metadados de estrutura, relê os valores no currículo atual e cria evidência própria. Conteúdo personalizado não vira competência, inferência ou matching automaticamente.
 
@@ -514,7 +518,9 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
-- revisão humana: `human-profile-review-2.1.0`;
+- revisão humana: `human-profile-review-5.0.0`;
+- estado de produto: `resume-product-state-1.0.0`;
+- publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;
 - aprendizado de título personalizado: `organization-custom-section-definition-1.0.0`;
 - intake currículo-first: `resume-intake-1.0.0`.
@@ -552,8 +558,8 @@ Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativ
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.6.1
-last_verified: 2026-08-30
+version: 1.7.0
+last_verified: 2026-08-31
 ---
 
 # Referência técnica do Prisma
@@ -570,13 +576,15 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona grupos e operadores; o M2-B adiciona Storage privado, tentativas, páginas e drafts; o M2-C adiciona operações idempotentes, retries, revisões, mudanças por campo e promoção atômica de perfil. O currículo-first adiciona `resume_intakes` antes da criação de Pessoa e resolve criar/vincular em transação. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
 
+A publicação Delta adiciona `profile_publication_removals` como ledger imutável e `publish_profile_review` como autoridade cliente. A RPC mescla perfil-base e proposta, preserva omissões, aplica somente remoções explícitas e chama a promoção atômica interna. A antiga `approve_profile_review` não possui mais grant para `authenticated`.
+
 Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake/Knowledge.
 
 O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
 ## Segurança
 
-Autorização usa membership persistida e `platform_users`, não `user_metadata`. `anon` não recebe grants. `member` não lê documento ou PII privada. O shell web valida sessão com `getClaims()` e usa apenas a chave publicável. Secret/service key nunca vai para frontend. Documento é input não confiável.
+Autorização usa membership persistida e `platform_users`, não `user_metadata`. `anon` não recebe grants. `member` não lê documento ou PII privada nem publica perfil. O shell web valida sessão com `getClaims()` e usa apenas a chave publicável. Secret/service key nunca vai para frontend. Documento é input não confiável.
 
 ## Ambientes
 
@@ -597,7 +605,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Decisões: ADR-013 a ADR-015.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025.
 
 ## Operação
 
@@ -611,8 +619,8 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.5.1
-last_verified: 2026-08-30
+version: 1.6.0
+last_verified: 2026-08-31
 ---
 
 # Prisma Wiki
@@ -643,6 +651,10 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 - IA não decide contratação ou rejeição.
 - Currículo é uma entrada operacional principal: o arquivo pode existir em intake antes da Pessoa, mas a Pessoa só é criada após identidade mínima válida e verificação tenant-scoped de correspondência.
 - Correspondência é sinal explicável, não decisão; vínculo a cadastro existente ou criação apesar do sinal exige ação humana explícita.
+- A jornada do currículo possui seis etapas compreensíveis e um estado de produto derivado; tentativas permanecem em detalhes técnicos.
+- Nova importação é proposta. O perfil vigente continua disponível até a publicação de outra versão.
+- Omissão no currículo novo preserva o conhecimento aprovado. Remoção exige confirmação humana explícita, motivo e trilha de auditoria.
+- A revisão salva conduz à comparação Delta; publicação confirmada encerra na Central da Pessoa.
 - Knowledge separa termo observado, conceito normalizado e inferência. Termo desconhecido é preservado e entra na Inbox.
 - Knowledge da empresa é overlay tenant-owned e precede a Global apenas no próprio escopo, sem alterar a base Prisma.
 - Internet enriquece Knowledge, nunca Pessoa; IA propõe e humano autorizado publica.
@@ -653,6 +665,6 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas, mantendo seleção e texto invariáveis ao zoom. M2-A/M2-B/M2-C e currículo-first estão ativos em QA. O Movimento 4 implementa localmente ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento. Schema e Edge Function M4 ainda não estão ativados no QA; snapshots oficiais estão apenas catalogados e o agente está desativado.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O Movimento 4 mantém ontologia canônica, overlay organizacional, catálogo de fontes, Inbox, proposals, impactos, reinterpretação via M2-C e módulo Conhecimento; snapshots oficiais continuam apenas catalogados e o agente está desativado.
 
 Mobilidade interna, sucessão, concentração de competências e workforce planning pertencem à visão futura, não ao runtime atual.

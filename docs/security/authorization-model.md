@@ -4,6 +4,8 @@
 
 Foundation, M2-A, M2-B, M2-C e M5 estão ativos no Prisma-QA. `platform_users`, hierarquia `Grupo -> Empresa`, username, recuperação, gestão de usuários, ingestão, revisão com evidência espacial e Storage privado são aplicados no boundary correspondente e negam acesso quando sessão, status, papel ou tenant não são confirmados.
 
+Publicação de perfil usa somente `publish_profile_review` para clientes autenticados. A primitiva `approve_profile_review` não possui grant para `authenticated`; o wrapper autorizado valida tenant e papel, preserva omissões, registra remoções explícitas em ledger RLS e promove a versão na mesma transação.
+
 ## Papéis
 
 | Perfil | Escopo | Resumo |

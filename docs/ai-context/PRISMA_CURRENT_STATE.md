@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.5.0
+version: 2.6.0
 last_verified: 2026-08-31
 ---
 
@@ -11,7 +11,7 @@ last_verified: 2026-08-31
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega verificada: `codex/person-document-state-ux`, construída sobre `codex/review-approval-hardening` e destinada a preservar compatibilidade com o histórico já ativo em QA.
+- Branch de entrega em validação: `codex/resume-ingestion-product-ux`, construída sobre `codex/person-document-state-ux` e destinada a preservar compatibilidade com o histórico já ativo em QA.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -24,6 +24,8 @@ last_verified: 2026-08-31
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Fronteira Pessoa, Documento e Perfil Vigente 1.2.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. Tentativa operacional vazia não oculta a última tentativa revisável com páginas e draft preservados. A revisão M5 recupera extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual, enquanto tentativa sem fonte continua bloqueada.
+- Jornada de ingestão 2.0.0 implementada localmente em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `resume-product-state` 1.0.0 deriva sete estados canônicos sem persistir estado na Pessoa. `profile-publication-delta` 1.0.0 preserva fatos aprovados não citados, exige decisão humana e motivo para remoção e retorna à Central da Pessoa somente depois da publicação transacional.
+- Publicação Delta ativa no Prisma-QA: `profile_publication_removals` possui RLS e DML direto revogado; `publish_profile_review` é a única autoridade cliente, enquanto `approve_profile_review` perdeu o grant de `authenticated`. Provas revertidas confirmaram preservação de experiência e competência omitidas, remoção apenas explícita, Perfil v2 atômico, negação de Member/cross-tenant e zero resíduos.
 - Descarte não destrutivo implementado localmente e no Prisma-QA pela RPC `invalidate_document_review`: somente Admin, Owner, Recruiter ou Super Admin invalidam uma revisão ou importação tecnicamente falha; documento, tentativa, revisão, eventos e perfil vigente permanecem preservados; replay é idempotente e nenhuma linha é apagada.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` define a escala total exigida pelo PDF.js e converte caracteres ou símbolos OCR para um mapa canônico `normalized-page-v1`; texto, refinamento e destaque usam exatamente o mesmo conjunto. Zoom, ajuste à largura e proporção da tela alteram apenas a projeção. A direita inclui somente caixas que começam dentro do contorno, sem tolerância fixa ou resgate externo. Evidências `pdfjs-text-layer-v1` permanecem históricas.
 - Campos multilinha comparados na revisão mantêm paridade visual: as superfícies extraída e humana possuem a mesma altura, e o editor humano ocupa integralmente o espaço interno correspondente. Conteúdo excedente rola dentro do campo, sem permitir que um redimensionamento isolado quebre a proporção entre os lados.
@@ -163,4 +165,4 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-08-31, `CI=true pnpm run validate` aprovou lint de 192 arquivos, fundação, Context Pack, dois typechecks, build web, 109 testes técnicos, 19 casos golden sem regressão e demonstração `VERTICAL_SLICE_OK`. A migration de recuperação parcial está ativa no Prisma-QA como `20260831205547`; autorização, tentativa recuperável, rejeição de tentativa vazia, preservação do Perfil v1 e rollback sem resíduos foram comprovados. O frontend continua local e não há hosting nem ambiente de produção separado por decisão atual de operação interna.
+Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.

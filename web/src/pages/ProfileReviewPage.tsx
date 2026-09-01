@@ -192,7 +192,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     finally { setBusy(false); }
   }
 
-  async function handleApprove() {
+  function handleContinueToDelta() {
     if (!workspace || !draft) return;
     if (transientOnly) { setError("Preencha ou cancele o novo campo antes de aprovar a versão."); return; }
     if (dirty || pendingSelection) { setError("Conclua ou cancele a seleção e salve as alterações antes de aprovar."); return; }
@@ -206,12 +206,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       setSelectedFieldPath(issues[0]!.fieldPath);
       return;
     }
-    setBusy(true); setError(null); setSuccess(null);
-    try {
-      await personIngestionService.approveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion);
-      onNavigate("/profiles/processes");
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aprovar a revisão."); }
-    finally { setBusy(false); }
+    setError(null);
+    onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}/delta`);
   }
 
   async function handleApplyAdaptiveSuggestions(suggestions: AdaptiveFieldSuggestion[]) {
@@ -501,11 +497,11 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const approvalBlockedReason = !editable
     ? "Esta revisão já foi concluída."
     : pendingSelection
-      ? "Conclua ou cancele a seleção atual antes de aprovar."
+        ? "Conclua ou cancele a seleção atual antes de comparar."
       : dirty
-        ? "Salve o rascunho antes de aprovar esta versão."
+        ? "Salve o rascunho antes de comparar esta proposta."
         : transientOnly
-          ? "Preencha ou cancele o novo campo antes de aprovar esta versão."
+          ? "Preencha ou cancele o novo campo antes de comparar esta proposta."
         : null;
   const selectedFieldIsTransient = reviewFieldPathExists(draft, selectedFieldPath)
     && !reviewFieldPathExists(workspace.reviewedData, selectedFieldPath);
@@ -526,7 +522,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)}>Detalhes técnicos</Button>
           : <Space wrap>
             <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar revisão</Button></span></Tooltip>
-            <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={() => void handleApprove()} type="primary">Aprovar nova versão</Button></span></Tooltip>
+            <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={handleContinueToDelta} type="primary">Comparar com o perfil atual</Button></span></Tooltip>
           </Space>}
       />
       {changeState.rawChanged ? <Popconfirm cancelText="Continuar revisando" description="Formulários temporários e alterações não salvas serão perdidos." okText="Sair sem salvar" onConfirm={() => onNavigate(`/profiles/${personId}`)} title="Voltar para a Central da Pessoa?"><Button className="prisma-review-back" icon={<ArrowLeftOutlined />} type="text">Voltar para a Central da Pessoa</Button></Popconfirm> : <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>}
@@ -542,7 +538,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       ) : null}
       {viewOnly ? (
         <div className="prisma-review-statusbar prisma-review-statusbar--view"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Currículo original</Tag><Tag color={workspace.state === "approved" ? "green" : workspace.state === "invalidated" ? "default" : "gold"}>{workspace.state === "approved" ? "Perfil aprovado" : workspace.state === "invalidated" ? "Importação arquivada" : "Revisão em andamento"}</Tag><Tag icon={<EyeOutlined />}>Somente leitura</Tag><Typography.Text type="secondary">Nenhuma informação pode ser alterada neste modo.</Typography.Text></div>
-      ) : <div className="prisma-review-statusbar"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Extraído: preservado</Tag><Tag color="gold">Requer revisão</Tag><Tag color="green">Perfil atual {workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "ainda não aprovado"} preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente após salvar e aprovar.</Typography.Text></div>}
+      ) : <div className="prisma-review-statusbar"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Extraído: preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "cyan"}>{dirty || transientOnly ? "Requer revisão" : "Pronto para comparação"}</Tag><Tag color="green">Perfil atual {workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "ainda não aprovado"} preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente depois da comparação e publicação.</Typography.Text></div>}
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}

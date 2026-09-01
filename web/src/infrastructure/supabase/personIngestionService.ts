@@ -20,9 +20,11 @@ import {
   type ProcessingAuditEvent,
   type ProfileReviewWorkspace,
   type ProfileVersionView,
+  type PublicationRemovalDecision,
   type ResumeDuplicateCandidate,
   type ResumeIntakeIdentityResult,
   type ResumeIntakeResolutionResult,
+  type ResumeProcessingProgress,
   type StructuredDraft,
 } from "../../domain/personIngestion";
 import { countPendingReviews, isRecoverableReviewAttempt } from "../../domain/documentPresentation";
@@ -120,6 +122,7 @@ export const personIngestionService = {
     action: "create_new_person" | "link_existing_person",
     existingPersonId: string | null,
     idempotencyKey: string,
+    onProgress?: (progress: ResumeProcessingProgress) => void,
   ): Promise<ResumeIntakeResolutionResult> {
     const { data, error } = await supabase.rpc("resolve_resume_intake", {
       p_organization_id: organizationId,
@@ -143,7 +146,7 @@ export const personIngestionService = {
       resolutionType: resolved.resolution_type,
       reused: resolved.reused,
     };
-    return processResolvedIntake(organizationId, input, result);
+    return processResolvedIntake(organizationId, input, result, onProgress);
   },
 
   async listPeople(organizationId: string, search: string, includePrivateData = true): Promise<PersonWorkspaceSummary[]> {
@@ -547,15 +550,30 @@ export const personIngestionService = {
   },
 
   async approveProfileReview(organizationId: string, reviewId: string, expectedLockVersion: number): Promise<{ profileId: string; profileVersion: number }> {
-    const { data, error } = await supabase.rpc("approve_profile_review", {
+    const { data, error } = await supabase.rpc("publish_profile_review", {
       p_organization_id: organizationId,
       p_review_id: reviewId,
       p_expected_lock_version: expectedLockVersion,
-      p_idempotency_key: createOperationKey("approve-review"),
+      p_explicit_removals: [] as Json,
+      p_idempotency_key: publicationOperationKey(reviewId, []),
     });
-    throwReviewError(error, "Não foi possível aprovar a versão revisada.");
+    throwReviewError(error, "Não foi possível publicar a versão revisada.");
     const approved = data?.[0];
-    if (!approved) throw new Error("A aprovação não retornou a versão persistida.");
+    if (!approved) throw new Error("A publicação não retornou a versão persistida.");
+    return { profileId: approved.profile_id, profileVersion: approved.profile_version };
+  },
+
+  async publishProfileReview(organizationId: string, reviewId: string, expectedLockVersion: number, explicitRemovals: PublicationRemovalDecision[]): Promise<{ profileId: string; profileVersion: number }> {
+    const { data, error } = await supabase.rpc("publish_profile_review", {
+      p_organization_id: organizationId,
+      p_review_id: reviewId,
+      p_expected_lock_version: expectedLockVersion,
+      p_explicit_removals: explicitRemovals as unknown as Json,
+      p_idempotency_key: publicationOperationKey(reviewId, explicitRemovals),
+    });
+    throwReviewError(error, "Não foi possível publicar a nova versão.");
+    const approved = data?.[0];
+    if (!approved) throw new Error("A publicação não retornou a versão persistida.");
     return { profileId: approved.profile_id, profileVersion: approved.profile_version };
   },
 
@@ -1001,9 +1019,12 @@ async function processResolvedIntake(
   organizationId: string,
   input: ProcessedDocumentInput,
   result: ResumeIntakeResolutionResult,
+  onProgress?: (progress: ResumeProcessingProgress) => void,
 ): Promise<ResumeIntakeResolutionResult> {
   try {
+    onProgress?.({ stage: "structuring", message: "Estruturando as informações profissionais recuperadas." });
     const extraction = await buildOrganizationAdaptiveExtraction(organizationId, input.pages);
+    onProgress?.({ stage: "persisting", message: "Preservando páginas, campos extraídos e evidências para revisão." });
     await persistExtraction(
       organizationId,
       result.personId,
@@ -1021,6 +1042,7 @@ async function processResolvedIntake(
       p_document_id: result.documentId,
     });
     throwIfError(completeError, "O currículo foi processado, mas o intake não pôde ser concluído.");
+    onProgress?.({ stage: "ready_for_review", message: "Análise concluída. O documento está pronto para revisão." });
     return result;
   } catch (caught) {
     const message = caught instanceof Error ? caught.message : "Falha no processamento posterior à resolução de identidade.";
@@ -1119,6 +1141,16 @@ function toPersonSummary(person: {
       notes: privateRow?.notes ?? "",
     },
   };
+}
+
+function publicationOperationKey(reviewId: string, removals: PublicationRemovalDecision[]): string {
+  const fingerprint = removals.map((item) => item.fieldPath).sort().join("|") || "preserve-all";
+  const storageKey = `prisma.profile-publication.${reviewId}.${fingerprint}`;
+  const existing = window.sessionStorage.getItem(storageKey);
+  if (existing) return existing;
+  const created = `publish-review:${crypto.randomUUID()}`;
+  window.sessionStorage.setItem(storageKey, created);
+  return created;
 }
 
 function toCurrentProfileSummary(profile: {
