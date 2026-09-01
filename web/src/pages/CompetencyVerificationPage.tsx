@@ -97,10 +97,11 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
         status,
       });
       setInfo(status === "prepared"
-        ? `Verificação preparada com ${result.itemCount} itens. Convite e execução continuam fora deste movimento.`
+        ? `Verificação preparada com ${result.itemCount} itens. Agora o convite pode ser emitido.`
         : `Rascunho salvo com ${result.itemCount} itens versionados.`);
       const refreshed = await competencyVerificationService.loadWorkspace(activeMembership.organizationId);
       setWorkspace(refreshed);
+      if (status === "prepared") onNavigate(`/verifications/new/${result.preparedAssessmentId}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Não foi possível salvar a preparação.");
     } finally {
@@ -424,14 +425,14 @@ function VerificationSummary(props: Parameters<typeof PrepareFlow>[0]) {
           <Typography.Paragraph>{props.selectedDefinition?.content.what_is_verified as string ?? props.selectedDefinition?.description}</Typography.Paragraph>
           <Typography.Title level={5}>Próximos passos</Typography.Title>
           <ol>
-            <li>Aguardar aprovação e publicação da verificação, se aplicável.</li>
-            <li>Convidar a pessoa para realizar a verificação em movimento futuro.</li>
-            <li>Acompanhar execução e resultado em movimento futuro.</li>
-            <li>Nova evidência será gerada ao final, fora deste escopo.</li>
+            <li>Confirmar a preparação versionada do instrumento.</li>
+            <li>Emitir um convite pessoal e copiar o link de QA.</li>
+            <li>Acompanhar execução, telemetria factual e resultado.</li>
+            <li>Gerar Evidência Demonstrada sem sobrescrever evidências anteriores.</li>
           </ol>
         </PrismaCard>
       </div>
-      <Alert message="Após a execução futura, uma Evidência Demonstrada poderá ser criada e associada ao perfil da Pessoa." showIcon type="info" />
+      <Alert message="Após a execução, o Prisma cria uma Evidência Demonstrada independente e reavalia a suficiência sem decisão automática de contratação." showIcon type="info" />
       <Space>
         <Button onClick={() => props.onStepChange(2)}>Voltar</Button>
         <Button loading={props.saving === "draft"} onClick={() => void props.onPrepare("draft")}>Salvar como rascunho</Button>

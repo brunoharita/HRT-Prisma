@@ -49,7 +49,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 ## Avaliação
 
-O M5.1 planejado adiciona diretrizes documentais para avaliação de competência demonstrada. A estratégia futura é determinística primeiro: usar Item Bank e blueprint quando houver cobertura, recorrer à IA apenas para lacunas, exigir revisão humana antes de item global ativo e preservar rubrica, versões, integridade e limitações. Não há provider, modelo, prompt, item bank, assessment ou custo ativo para M5.1.
+O M5.1 implementa estratégia determinística primeiro. M5.1A usa Item Bank sintético, blueprint e rubrica sem LLM; M5.1B corrige múltipla escolha, deriva métricas, integridade, confiança e Evidência Demonstrada sem provider ou custo de IA. Geração de lacunas e variantes permanece no M5.1C e exigirá revisão humana antes de item Global ativo.
 
 Golden suite cobre 13 extrações, 4 avaliações e 2 retrievals. Inclui invenção proibida, prompt injection, gap, insuficiência, competência transferível, empate e nenhum resultado. Mudança de prompt/modelo/regra precisa comparar com baseline.
 
@@ -69,4 +69,4 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativo, embeddings, snapshots CBO/ESCO/O*NET carregados, contradição multi-documento, senioridade calculada ou provider externo aprovado.
 
-M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista automática ou decisão de contratação. Browser telemetry futura será apenas sinal observável e nunca prova absoluta de conduta.
+M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista automática ou decisão de contratação. Browser telemetry do M5.1B é sinal observável ligado à questão ativa e nunca prova absoluta de conduta.

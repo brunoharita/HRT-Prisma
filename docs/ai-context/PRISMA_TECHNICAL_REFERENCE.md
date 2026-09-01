@@ -26,7 +26,7 @@ Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão 
 
 O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
 
-O M5.1 possui apenas arquitetura documental planejada para Verification Need, Policy, Definition, Item Bank, Blueprint, Composer, Attempt, Integrity Analysis e Demonstrated Evidence. Nenhuma tabela, migration, RPC, Edge Function, componente ou integração do M5.1 existe no runtime atual.
+O M5.1 possui M5.1A para preparação e M5.1B local para execução. O runtime inclui tabelas/RPCs versionadas, `assessment-access`, App Shell do operador, superfície pública sem login, tentativa, resposta, telemetria por questão, avaliação determinística, integridade explicável e Evidência Demonstrada. O rollout M5.1B no Prisma-QA precisa ser comprovado separadamente; produção não existe.
 
 ## Segurança
 
@@ -51,7 +51,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: `docs/product/m5-1-competency-verification.md`, `docs/architecture/competency-verification-architecture.md`, `docs/ai/competency-verification-evaluation.md`, `docs/security/competency-verification-security.md`, `docs/qa/competency-verification-test-plan.md` e ADR-026 proposto.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: documentos especializados, ADR-026 aceito e ADR-027 para a fronteira pública tokenizada.
 
 ## Operação
 

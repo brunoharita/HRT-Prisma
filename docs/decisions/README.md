@@ -35,7 +35,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-023](ADR-023-stable-review-field-lifecycle.md) | accepted | Stable repeatable-field identity, optional-value normalization, and explicit add/remove lifecycle |
 | [ADR-024](ADR-024-person-document-profile-state-boundary.md) | accepted | Stable Person navigation and explicit document, review, and current-profile state boundaries |
 | [ADR-025](ADR-025-resume-product-journey-and-publication-delta.md) | accepted | Six-step resume journey, canonical product states, and omission-safe publication Delta |
-| [ADR-026](ADR-026-competency-verification-as-demonstrated-evidence.md) | proposed | Competency verification as demonstrated evidence |
+| [ADR-026](ADR-026-competency-verification-as-demonstrated-evidence.md) | accepted | Competency verification as demonstrated evidence |
+| [ADR-027](ADR-027-tokenized-public-assessment-boundary.md) | accepted | Tokenized public assessment boundary without Person accounts |
 
 ## Rules
 

@@ -25,7 +25,10 @@ export type EvidenceSufficiencyReasonCode =
   | "CRITICAL_NEED_REQUIRES_HUMAN_CONFIRMATION"
   | "ADVANCED_LEVEL_REQUIRES_DEMONSTRATION"
   | "DEFINITION_NOT_AVAILABLE"
-  | "UNKNOWN_CONTRACT_VERSION";
+  | "UNKNOWN_CONTRACT_VERSION"
+  | "DEMONSTRATED_LEVEL_BELOW_TARGET"
+  | "DEMONSTRATED_EVIDENCE_REDUCED_CONFIDENCE"
+  | "DEMONSTRATED_EVIDENCE_INCONCLUSIVE";
 
 export const M51A_VERSIONS = {
   sufficiencyEngine: "m51a-evidence-sufficiency-1.0.0",
@@ -49,6 +52,8 @@ export interface EvidenceSufficiencyInput {
   hasHumanConfirmedEvidence: boolean;
   hasDemonstratedEvidence: boolean;
   demonstratedEvidenceFresh?: boolean;
+  demonstratedLevel?: VerificationLevel | "insufficient_evidence" | "inconclusive";
+  demonstratedConfidence?: "high" | "adequate" | "reduced" | "inconclusive";
   policyRequirement: VerificationRequirement;
   definitionAvailable: boolean;
   contractVersion?: string;
@@ -164,6 +169,15 @@ export function evaluateEvidenceSufficiency(input: EvidenceSufficiencyInput): Ev
     return buildEvaluation("insufficient_information", "required_by_policy", ["DEFINITION_NOT_AVAILABLE"], evaluatedAt);
   }
   if (input.hasDemonstratedEvidence && input.demonstratedEvidenceFresh !== false) {
+    if (input.demonstratedLevel === "inconclusive" || input.demonstratedConfidence === "inconclusive") {
+      return buildEvaluation("insufficient_information", input.policyRequirement, ["DEMONSTRATED_EVIDENCE_INCONCLUSIVE"], evaluatedAt);
+    }
+    if (input.demonstratedLevel && !meetsLevel(input.demonstratedLevel, input.targetLevel)) {
+      return buildEvaluation("verification_recommended", input.policyRequirement, ["DEMONSTRATED_LEVEL_BELOW_TARGET"], evaluatedAt);
+    }
+    if (input.demonstratedConfidence === "reduced") {
+      return buildEvaluation("verification_recommended", input.policyRequirement, ["DEMONSTRATED_EVIDENCE_REDUCED_CONFIDENCE"], evaluatedAt);
+    }
     return buildEvaluation("sufficient", input.policyRequirement, ["DEMONSTRATED_EVIDENCE_CONFIRMS_LEVEL"], evaluatedAt);
   }
   if (input.policyRequirement === "required_by_policy") {
@@ -195,6 +209,12 @@ export function evaluateEvidenceSufficiency(input: EvidenceSufficiencyInput): Ev
     return buildEvaluation("insufficient_information", input.policyRequirement, [...reasonCodes], evaluatedAt);
   }
   return buildEvaluation(needsVerification ? "verification_recommended" : "verification_optional", input.policyRequirement, [...reasonCodes], evaluatedAt);
+}
+
+function meetsLevel(demonstratedLevel: EvidenceSufficiencyInput["demonstratedLevel"], targetLevel: VerificationLevel): boolean {
+  if (!demonstratedLevel || demonstratedLevel === "insufficient_evidence" || demonstratedLevel === "inconclusive") return false;
+  const order: Record<VerificationLevel, number> = { basic: 1, intermediate: 2, advanced: 3 };
+  return order[demonstratedLevel] >= order[targetLevel];
 }
 
 export function createVerificationNeed(input: {

@@ -6,6 +6,7 @@ import {
   HomeOutlined,
   BookOutlined,
   LockOutlined,
+  SafetyCertificateOutlined,
   SettingOutlined,
   TeamOutlined,
   UserOutlined,
@@ -32,6 +33,8 @@ import { UserFormPage } from "../pages/UserFormPage";
 import { UsersPage } from "../pages/UsersPage";
 import { KnowledgePage } from "../pages/KnowledgePage";
 import { CompetencyVerificationPage } from "../pages/CompetencyVerificationPage";
+import { VerificationOperationsPage } from "../pages/VerificationOperationsPage";
+import { VerificationSessionPage } from "../pages/VerificationSessionPage";
 import {
   canActivateOrganization,
   evaluateRouteAccess,
@@ -70,6 +73,8 @@ interface AppRoute {
   userId?: string;
   verificationNeedId?: string;
   verificationMode?: "detail" | "prepare";
+  verificationPreparedAssessmentId?: string;
+  participantToken?: string;
 }
 
 interface SignInValues {
@@ -92,6 +97,12 @@ const routes: AppRoute[] = [
     path: "/matching",
     label: "Matching",
     icon: <BranchesOutlined />,
+    rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
+  },
+  {
+    path: "/verifications",
+    label: "Verificações",
+    icon: <SafetyCertificateOutlined />,
     rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
   {
@@ -277,6 +288,8 @@ export function PrismaApplication() {
     if (pathname.startsWith("/profiles/")) handleNavigate("/profiles");
   };
 
+  if (route.participantToken) return <VerificationSessionPage token={route.participantToken} />;
+
   if (!state.initialized || redirectTo) return <LoadingScreen />;
   if (route.path === "/sign-in") {
     return <SignInPage
@@ -306,7 +319,7 @@ export function PrismaApplication() {
       onSignOut={() => void handleSignOut()}
       profileName={profileName}
       profileSubtitle={profileSubtitle}
-      selectedPath={route.profileId ? "/profiles" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/matching" : route.path}
+      selectedPath={route.profileId ? "/profiles" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/matching" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
     >
       {state.errorMessage || state.infoMessage ? (
         <Alert
@@ -383,6 +396,9 @@ function renderRouteContent(
   }
   if (route.path === "/matching" && activeMembership) {
     return <CompetencyVerificationPage activeMembership={activeMembership} mode={route.verificationMode ?? "matching"} {...(route.verificationNeedId ? { needId: route.verificationNeedId } : {})} onNavigate={onNavigate} />;
+  }
+  if (route.path === "/verifications" && activeMembership) {
+    return <VerificationOperationsPage activeMembership={activeMembership} {...(route.verificationPreparedAssessmentId ? { preparedAssessmentId: route.verificationPreparedAssessmentId } : {})} onNavigate={onNavigate} />;
   }
   if (route.path === "/knowledge" && currentOperator) {
     return <KnowledgePage profile={currentOperator.profile} activeMembership={activeMembership} />;
@@ -527,6 +543,8 @@ function getNavigationItems(
 
 function findRoute(pathname: string): AppRoute {
   const normalized = normalizePath(pathname);
+  const participantMatch = /^\/verify\/([A-Za-z0-9_-]{40,200})$/.exec(normalized);
+  if (participantMatch?.[1]) return { path: "/verify", participantToken: participantMatch[1], rule: { requiresAuth: false, requiresMembership: false } };
   const exact = routes.find((route) => route.path === normalized);
   if (exact) return exact;
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };
@@ -551,6 +569,8 @@ function findRoute(pathname: string): AppRoute {
   if (matchingPrepare?.[1]) return { path: "/matching", verificationNeedId: matchingPrepare[1], verificationMode: "prepare", rule: reviewerRule };
   const matchingDetail = /^\/matching\/verification-needs\/([^/]+)$/.exec(normalized);
   if (matchingDetail?.[1]) return { path: "/matching", verificationNeedId: matchingDetail[1], verificationMode: "detail", rule: reviewerRule };
+  const verificationInvite = /^\/verifications\/new\/([^/]+)$/.exec(normalized);
+  if (verificationInvite?.[1]) return { path: "/verifications", verificationPreparedAssessmentId: verificationInvite[1], rule: reviewerRule };
   if (normalized === "/users/new") return { path: "/users/new", rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] } };
   const userMatch = /^\/users\/([^/]+)$/.exec(normalized);
   if (userMatch?.[1]) {

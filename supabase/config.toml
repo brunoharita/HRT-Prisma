@@ -393,6 +393,9 @@ verify_jwt = false
 [functions.operator-password-reset]
 verify_jwt = false
 
+[functions.assessment-access]
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

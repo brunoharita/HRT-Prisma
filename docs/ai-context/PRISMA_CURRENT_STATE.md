@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.7.0
+version: 2.8.0
 last_verified: 2026-09-01
 ---
 
@@ -11,7 +11,7 @@ last_verified: 2026-09-01
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/m5-1a-verification-intelligence`, construída sobre a documentação M5.1 e destinada a implementar a primeira preparação interna de verificação de competências.
+- Branch de entrega em validação: `codex/m5-1b-verification-execution`, construída sobre o M5.1A para implementar execução, integridade e Evidência Demonstrada.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -49,7 +49,7 @@ last_verified: 2026-09-01
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
 - Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.
-- M5.1 - Verificação de Competências possui plano diretor documentado e fatia M5.1A implementada localmente: Sufficiency Engine determinístico, Verification Need, Verification Policy, Verification Definition, Item Bank global sintético `[QA/demo]`, Blueprint, Rubric, composer, preparação `draft` ou `prepared`, rota `/matching` e seis superfícies internas de preparação. Convite, tentativa real, resposta da Pessoa, correção, telemetria, integridade, Evidência Demonstrada e reavaliação pós-assessment continuam fora do escopo implementado.
+- M5.1A prepara o instrumento. M5.1B está implementado localmente e ativo no Prisma-QA com convite emitido sem delivery externo fictício, Edge Function tokenizada, superfície pública sem conta de Usuário, tentativa, Question Instances, autosave versionado, navegação, pausa, ledger factual ligado à questão ativa, correção determinística, métricas, integridade sem acusação, Rubrica, confiança, Evidência Demonstrada independente, resolução da Need, novo matching explicável e monitoramento em `Verificações`. O uso permanece sintético e interno/QA.
 - Home autenticada com contagens persistidas de pessoas, perfis estruturados e vagas abertas da organização ativa.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, áreas personalizadas, evidências, proveniência, inferências e pendências diagnósticas; contato privado somente para perfis administrativos autorizados.
@@ -63,7 +63,7 @@ last_verified: 2026-09-01
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 124 testes técnicos aprovados, incluindo separação entre perfil vigente e última importação, apresentação documental, navegação centrada na Pessoa, recuperação conectada de extração parcial, rejeição de tentativa vazia, invalidação auditável, destaque de descrições históricas com marcadores, retorno pós-aprovação, hardening da aprovação, ciclo de vida dos campos, contratos M2-A/M2-B/M2-C/M5/currículo-first e contratos M5.1A de suficiência, composer e segurança de migration.
+- 132 testes técnicos compõem a suíte local, incluindo os contratos M5.1B de scoring, métricas, integridade, incidente técnico, evidência independente, segurança das migrations e as duas correções de compatibilidade encontradas no QA; o número só é considerado aprovado após o gate final do movimento.
 
 ## Implementado como contrato
 
@@ -89,6 +89,7 @@ last_verified: 2026-09-01
 - Migrations `20260826114333_curriculum_first_resume_intake` e `20260826125000_curriculum_first_idempotent_completion` com staging privado, RLS, índices de identidade e cinco RPCs transacionais de início, identificação, resolução, conclusão idempotente e falha.
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 - Migrations M5.1A `20260901082542_m51a_verification_intelligence` e `20260901111841_m51a_grant_hardening` com nove tabelas públicas versionadas, RLS, grants explícitos para `authenticated`, revogação de `anon`, hardening de grants herdados, helper privado de policy/suficiência, RPCs `ensure_m51a_demo_need`, `load_m51a_verification_workspace` e `prepare_m51a_assessment`, catálogo global sintético SQL avançado e auditoria metadata-only.
+- Migrations M5.1B `20260901115938_m51b_verification_execution`, `20260901124012_m51b_submission_dimension_coverage_fix` e `20260901124345_m51a_workspace_item_bank_summary_fix` ativas no Prisma-QA, com dez tabelas públicas protegidas, snapshots de questões, respostas versionadas, eventos append-only, avaliação transacional, Evidência Demonstrada e correções fail-closed descobertas no smoke remoto. A Edge Function `assessment-access` está publicada e media toda ação da Pessoa por token, mantendo `anon` sem acesso direto.
 
 ## Evidência remota
 
@@ -124,6 +125,7 @@ last_verified: 2026-09-01
 - O hardening final da aprovação está ativo no Prisma-QA. O gatilho privado contém `#variable_conflict error`, usa `v_definition_id` e continua sem execução para `anon` ou `authenticated`. A revisão real que havia falhado foi aprovada dentro de uma transação de QA: estado, perfil profissional e confirmação da área personalizada foram comprovados antes do rollback deliberado. A revisão permaneceu `draft`, lock 14, sem perfil, confirmação ou operação residual. Os advisors não acrescentaram alerta relacionado ao novo gatilho; avisos históricos permanecem documentados.
 - A invalidação documental está ativa no Prisma-QA. Transações revertidas comprovaram negação sem identidade e para Member, bloqueio de documento aprovado inclusive diante de drift entre `status` e `review_state`, bloqueio de documento sem Pessoa, invalidação conjunta de documento e revisão, invalidação de tentativa tecnicamente falha sem revisão, preservação do mesmo perfil vigente, operação/evento únicos, replay com `reused = true` e zero resíduos. `anon` não executa a RPC; o advisor registra somente o aviso esperado de função `security definer` exposta a `authenticated`, protegida por autorização interna fail-closed.
 - M5.1A foi aplicado ao Prisma-QA em 2026-09-01 por `supabase db query --linked --file` para as migrations `20260901082542_m51a_verification_intelligence` e `20260901111841_m51a_grant_hardening`, depois registradas no histórico remoto por `supabase migration repair --linked --status applied`. Validação remota confirmou nove tabelas com RLS, RPCs M5.1A executáveis somente por `authenticated`, catálogo sintético com 1 definition, 1 blueprint, 1 rubric, 15 itens e 2 policies, e grants críticos somente de leitura em `verification_needs`, `prepared_assessments` e `verification_audit_events`. O advisor ainda aponta funções `security definer` M5.1A para `authenticated`, intencionalmente protegidas por `private.require_document_reviewer(...)`, e não aponta mais execução `anon` para essas RPCs após o hardening.
+- M5.1B foi aplicado ao Prisma-QA em 2026-09-01 e a Edge Function `assessment-access` foi publicada. Smoke sintético confirmou CORS local, workspace público sem answer key, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, confiança, Evidência Demonstrada, resolução da Need e uma reavaliação de matching. Privilégios negativos confirmaram `anon` sem SELECT de tentativa ou execução de `m51b_public_access`, `authenticated` sem INSERT de tentativa ou execução dessa RPC e `service_role` como único executor. O lint não aponta erro M5.1A/M5.1B; os dois warnings históricos de cast do currículo e o erro histórico de enum em Knowledge permanecem fora deste movimento.
 - Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
 
 Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
@@ -135,7 +137,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Embeddings vetoriais e LLM externo.
 - Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
 - Auditoria de visualização/exportação além do domínio de usuários.
-- M5.1 pós-preparação: convite, link público, autenticação externa, assessment executável, tentativa, resposta, correção, telemetria por questão, integridade, evidência demonstrada e reavaliação de matching.
+- Smoke visual autenticado do operador para o M5.1B. A superfície pública já foi validada em desktop e `390x844`, sem overflow após a correção responsiva; a fronteira conectada, o CORS, os grants negativos e o slice sintético também foram comprovados. Rate limit prolongado e negação cross-tenant dedicada continuam pendentes.
 - Ambiente de produção isolado, deployment e rollback automatizados.
 - Hosting de frontend em QA/produção.
 - Retenção, exclusão e exportação de titular.
@@ -172,3 +174,5 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
 
 Em 2026-09-01, a fatia M5.1A foi implementada localmente na branch `codex/m5-1a-verification-intelligence`. `CI=true pnpm run validate` aprovou lint de 218 arquivos, foundation, Context Pack, dois typechecks, build web, 124 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. Após nova autenticação Supabase, a migration M5.1A e o hardening de grants foram aplicados ao Prisma-QA por query direta e registrados no histórico remoto. Smoke visual autenticado ainda precisa ser registrado.
+
+Em 2026-09-01, o M5.1B foi implementado na branch `codex/m5-1b-verification-execution`, aplicado ao Prisma-QA e publicado como Edge Function `assessment-access`. `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 132 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke conectado sintético percorreu convite, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, Evidência Demonstrada, Need e matching. O smoke visual público passou em desktop e `390x844`, confirmou autosave, pausa, retomada e resposta preservada; a primeira execução revelou overflow móvel, corrigido e revalidado sem overflow. O convite incompleto do smoke visual foi revogado sem apagar o ledger. A superfície visual do operador permanece sem evidência porque nenhum navegador disponível tinha sessão autenticada.

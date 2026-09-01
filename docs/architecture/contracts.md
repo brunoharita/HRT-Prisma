@@ -45,7 +45,13 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `knowledge-proposal` | AI/data | 1.0.0 | agent, aprovação | implementado localmente | JSON Schema e `knowledge_proposals` | local | rejeitar output |
 | `trusted-source-policy` | security/AI | 1.0.0 | agent, source catalogue | implementado localmente | `trusted-sources-1.0.0` | local | rejeitar fonte |
 | `knowledge-reinterpretation` | application/domain | 1.0.0 | impacts, M2-C | implementado localmente | jobs, draft e profile version metadata | local | manter impacto pendente |
-| `competency-verification-plan` | product/architecture/AI/security/QA | 0.1.0 | movimentos futuros M5.1 | planejado, documentação canônica | plano diretor de Verification Need, Evidence Sufficiency, Item Bank, blueprint, attempt e evidência demonstrada | docs | não implementar runtime sem contrato específico |
+| `competency-verification-plan` | product/architecture/AI/security/QA | 0.3.0 | M5.1A e M5.1B | parcialmente implementado | preparação e execução sintética local | local | bloquear escopo não implementado |
+| `assessment-invitation` | application/security/data | 1.0.0 | operador, boundary público | implementado localmente | token SHA-256, expiração, revogação e emissão sem delivery fictício | local | negar acesso |
+| `assessment-attempt` | application/data | 1.0.0 | Pessoa, avaliação, QA | implementado localmente | tentativa única, lock, snapshots e estados reais | local | bloquear mutação |
+| `assessment-event` | application/data/security | 1.0.0 | métricas e integridade | implementado localmente | ledger append-only com questão ativa e sessão lógica | local | rejeitar evento |
+| `assessment-integrity-analysis` | domain/data/QA | 1.0.0 | avaliação e operador | implementado localmente | flags determinísticas sem antifraud score | local | tornar inconclusivo |
+| `demonstrated-evidence` | domain/data/matching | 1.0.0 | Need, matching e perfil | implementado localmente | evidência independente, resultado bruto e versões preservados | local | não promover evidência |
+| `participant-result-visibility` | product/security | 1.0.0 | superfície pública | implementado localmente | `completion_only`, `summary`, `detailed`, default fechado | local | `completion_only` |
 
 ## Evidência não é rollout
 
@@ -55,4 +61,4 @@ Tipos TypeScript provam contrato de código local. Migration prova intenção ex
 
 Não existe API HTTP nem event bus no estado atual. O M2-C persiste eventos operacionais/auditoria no banco, mas eles não constituem um barramento público. Nenhum consumidor externo deve assumir sua existência.
 
-O contrato `competency-verification-plan` não autoriza execução. Implementações futuras do M5.1 deverão introduzir contratos próprios para Sufficiency Engine, Verification Definition, Verification Policy, Item Bank, Composer, Attempt, Integrity Analysis e Demonstrated Evidence.
+O M5.1B autoriza somente execução sintética local/QA pela fronteira tokenizada. Não autoriza Pessoas reais, provider externo, produção, geração por IA, proctoring, certificação ou decisão automática.

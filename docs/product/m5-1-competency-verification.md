@@ -1,7 +1,7 @@
 ---
 owner: product
 status: partially_implemented
-version: 0.2.0
+version: 0.3.0
 last_verified: 2026-09-01
 ---
 
@@ -20,6 +20,12 @@ O M5.1 não transforma o Prisma em plataforma genérica de provas técnicas, ent
 ## Estado M5.1A
 
 O M5.1A implementa a primeira fatia interna de preparação, sem convite, tentativa, resposta de Pessoa, correção ou evidência demonstrada final. O operador consegue ver uma necessidade de verificação originada do matching, revisar suficiência de evidência, selecionar competência e nível, escolher uma Verification Definition, visualizar Blueprint, Rubric e Item Bank e salvar ou confirmar um instrumento preparado para execução futura.
+
+## Estado M5.1B
+
+O M5.1B implementa localmente o vertical slice de execução com dados sintéticos: emissão de convite sem fingir delivery externo, acesso público tokenizado sem conta de Usuário, ciência das condições, tentativa única, questões materializadas, autosave com versão, navegação livre, marcação, pausa e retomada, telemetria factual ligada à questão ativa, submissão idempotente, correção determinística, métricas, integridade explicável, Rubrica, confiança, Evidência Demonstrada independente e reavaliação de suficiência/matching sem decisão automática.
+
+A Pessoa vê somente o resultado autorizado por `participant_result_visibility`, cujo padrão é `completion_only`. O comprovante confirma conclusão e não é certificado profissional. A capacidade permanece interna/QA e não pode ser usada com Pessoas reais enquanto base legal, retenção, exportação, exclusão, hosting e privacidade não estiverem aprovados.
 
 Superfícies implementadas localmente:
 

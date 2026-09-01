@@ -1,7 +1,7 @@
 ---
 owner: ai-quality
 status: partially_implemented
-version: 0.2.0
+version: 0.3.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,11 @@ last_verified: 2026-09-01
 
 ## Estado
 
-O plano completo do M5.1 permanece maior que a entrega atual. O M5.1A implementa Sufficiency Engine determinístico, Item Bank sintético SQL avançado, composer determinístico, Blueprint e Rubric para preparação interna. Não há LLM, attempt real, resposta da Pessoa, correção, telemetria, integridade, calibração observada ou evidência demonstrada final.
+O M5.1A implementa Sufficiency Engine, Item Bank sintético SQL avançado, composer, Blueprint e Rubric. O M5.1B implementa localmente attempt, resposta, correção, métricas, integridade, confiança, Evidência Demonstrada e reavaliação explicável. Não há LLM, geração de itens, calibração observada, provider de delivery ou uso com Pessoas reais.
+
+## Contratos implementados no M5.1B
+
+Scoring múltipla escolha, métricas por questão, integrity ruleset, confidence ruleset, evaluation, demonstrated evidence e matching reassessment são determinísticos e versionados. O resultado bruto permanece imutável; integridade produz fatos, flags e razões, nunca score de fraude. Os itens atuais continuam marcados `[QA/demo]` e geram qualidade metodológica `limited`, não `calibrated`.
 
 ## Princípios
 

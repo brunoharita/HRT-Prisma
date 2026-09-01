@@ -1,7 +1,7 @@
 ---
 owner: qa
-status: active_for_m51a
-version: 0.2.0
+status: active_for_m51b_local
+version: 0.3.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Plano completo do M5.1 e evidência ativa do M5.1A. O M5.1A tem testes executáveis para suficiência, composição, seleção de item bank e limites de segurança da migration. Tentativa real, resposta da Pessoa, correção, telemetria e Evidência Demonstrada continuam fora do escopo implementado.
+Plano completo do M5.1 e evidência local e conectada do M5.1B. Além do M5.1A, existem testes executáveis para scoring, métricas ligadas à questão ativa, incidente técnico separado, integridade, confiança, Evidência Demonstrada independente e limites de grants/RLS da migration. O smoke conectado foi executado somente com dados sintéticos; o smoke visual permanece separado.
 
 ## Estratégia
 
@@ -102,3 +102,29 @@ Limitações remanescentes:
 - Validação remota confirmou nove tabelas com RLS, três RPCs disponíveis somente para `authenticated`, catálogo sintético com 1 definition, 1 blueprint, 1 rubric, 15 itens e 2 policies, além de grants críticos somente de leitura em `verification_needs`, `prepared_assessments` e `verification_audit_events`.
 - Nenhuma verificação real foi enviada ou executada.
 - Nenhuma evidência demonstrada foi gerada.
+
+## Evidência M5.1B local
+
+- Domínio puro cobre resultado bruto, métricas de visibility/focus, execução normal com itens não calibrados, incidente técnico inconclusivo e proveniência da Evidência Demonstrada.
+- Migration exige RLS nas dez novas tabelas, revoga `anon`, restringe mutações críticas às RPCs e reserva `m51b_public_access` para `service_role`.
+- Edge Function aplica CORS explícito, token SHA-256, rate limit, erros sanitizados e nunca registra token bruto ou answer key.
+- UI implementa as 12 superfícies do storyboard em dois contextos: App Shell do operador e experiência pública sem sidebar.
+- Produção e Pessoas reais permanecem fora de escopo.
+
+## Evidência M5.1B conectada no Prisma QA
+
+Em 2026-09-01:
+
+- migrations `20260901115938_m51b_verification_execution`, `20260901124012_m51b_submission_dimension_coverage_fix` e `20260901124345_m51a_workspace_item_bank_summary_fix` aplicadas por `supabase db query --linked --file` e registradas no histórico remoto;
+- Edge Function `assessment-access` publicada com validação própria de token opaco e `verify_jwt=false`; isso não concede acesso anônimo a tabelas ou à RPC interna;
+- dez tabelas M5.1B confirmadas com RLS; `anon` não possui leitura de tentativa nem execução da RPC pública interna, `authenticated` não possui INSERT de tentativa nem execução dessa RPC, e apenas `service_role` a executa;
+- CORS aceitou `http://localhost:5555` e a resposta pública omitiu answer key, dificuldade, rubrica e dados internos;
+- convite sintético criou uma tentativa com 15 Question Instances, salvou 15 respostas, preservou 52 eventos e gerou 15 métricas;
+- submissão produziu avaliação determinística, integridade `adequate`, confiança `adequate`, qualidade metodológica `limited`, Evidência Demonstrada, Need resolvida e exatamente uma reavaliação de matching;
+- o primeiro submit revelou incompatibilidade com `jsonb_object_length`; a transação foi revertida, a causa foi corrigida em migration fail-closed e o mesmo submit foi concluído;
+- `supabase db lint --linked --level warning --schema public` não reporta erro M5.1A/M5.1B após a correção. Permanecem dois warnings históricos de cast no currículo e um erro histórico em `enqueue_knowledge_observation`, fora deste movimento.
+- `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 132 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`.
+- smoke visual da Pessoa aprovado em desktop e `390x844`, incluindo autosave, pausa, retomada e preservação da resposta; um overflow horizontal identificado no primeiro passe foi corrigido com `min-width: 0` nos grids e controles com wrap, e a repetição confirmou `documentWidth <= viewport`. O segundo convite sintético usado nessa inspeção foi revogado ao final, sem apagar o ledger.
+- smoke visual do operador não foi executado: o navegador interno não possuía sessão autenticada e não havia Chrome conectado. A RPC, os dados de monitoramento e a autorização do operador foram validados no banco, mas isso não substitui a evidência visual.
+
+Não foram usados nomes ou dados de Pessoas reais. O registro de QA foi criado como `Pessoa Sintética M5.1B QA` com domínio `example.invalid`. Nenhum e-mail ou WhatsApp foi enviado.

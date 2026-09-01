@@ -18,6 +18,9 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 | `pdf_ocr_ingestion` | ativo | ativo | não separado | PDF.js nativo, Tesseract seletivo, Storage privado e RPC atômica |
 | `curriculum_first_intake` | ativo | ativo | não separado | Intake pré-Pessoa, identidade mínima, deduplicação tenant-scoped e resolução transacional |
 | `spatial_cv_evidence_review` | ativo | ativo | não separado | PDF-first, regiões normalizadas, OCR local por seleção e histórico imutável |
+| `competency_verification_preparation` | ativo | ativo | não separado | M5.1A, sufficiency, Item Bank sintético, blueprint, rubrica e preparation |
+| `competency_verification_execution` | ativo | rollout pendente | não separado | M5.1B, somente dados sintéticos e uso interno/QA; sem provider de delivery |
+| `public_assessment_access` | ativo | rollout pendente | não separado | Edge Function tokenizada, sem conta de Pessoa e sem grants anon em tabelas |
 | `live_llm_extraction` | não implementado | não implementado | não implementado | Requer benchmark e ADR |
 | `vector_embeddings` | não implementado | não implementado | não implementado | Requer necessidade medida |
 

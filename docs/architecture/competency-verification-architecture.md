@@ -1,7 +1,7 @@
 ---
 owner: architecture
 status: partially_implemented
-version: 0.2.0
+version: 0.3.0
 last_verified: 2026-09-01
 ---
 
@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Este documento descreve a arquitetura do plano completo M5.1 e a fatia M5.1A já implementada localmente. O M5.1A possui migration, tabelas, RLS, RPCs, contratos determinísticos, testes e UI interna de preparação. Não existem ainda convite, tentativa, resposta da Pessoa, correção, telemetria de execução, integridade, Evidência Demonstrada, reavaliação pós-assessment, Edge Function ou produção separada.
+Este documento descreve a arquitetura do plano completo M5.1. O M5.1A prepara o instrumento; o M5.1B implementa localmente convite, tentativa, resposta, telemetria, correção, integridade, avaliação, Evidência Demonstrada e reavaliação explicável. Produção separada, provider de delivery, uso com Pessoas reais e geração de itens por IA não existem.
 
 ## Bounded context
 
@@ -63,6 +63,14 @@ RPCs implementadas:
 Todas as tabelas públicas novas têm RLS habilitado, grants explícitos para `authenticated` e revogação de `anon`. As RPCs `security definer` usam `set search_path = ''`, chamam `private.require_document_reviewer(...)` antes de mutações tenant-owned e registram auditoria metadata-only.
 
 O hardening M5.1A garante que `verification_needs`, `prepared_assessments` e `verification_audit_events` tenham apenas leitura direta para `authenticated`; criação e alteração de necessidades e preparações passam pelas RPCs autorizadas.
+
+## Implementação M5.1B
+
+O M5.1B adiciona `assessment_invitations`, `assessment_attempts`, `assessment_question_instances`, `assessment_responses`, `assessment_events`, `assessment_question_metrics`, `assessment_integrity_analyses`, `assessment_evaluations`, `competency_demonstrated_evidence` e `assessment_access_requests`.
+
+A Edge Function `assessment-access` é a fronteira pública definida pelo ADR-027. Operadores autenticados emitem ou revogam convites por RPC autorizada. Pessoas externas apresentam somente token opaco; a função calcula SHA-256 e usa a RPC `m51b_public_access`, executável apenas por `service_role`. Nenhuma tabela crítica possui grant `anon` ou DML direto para clientes.
+
+Início e submissão são transacionais. A primeira operação materializa snapshots imutáveis de itens, opções, resposta correta e versões. A segunda bloqueia a tentativa, calcula resultado bruto, métricas, flags, Rubrica, confiança, Evidência Demonstrada, resolução da Need e um novo `match_evaluations`. Integridade nunca modifica o resultado bruto e browser telemetry permanece sinal observável, não prova de conduta.
 
 ## Escopo global e organizacional
 
@@ -185,7 +193,7 @@ PostgreSQL/Supabase continua o contrato de produção planejado. Qualquer futura
 
 Pessoa pode receber convite sem se tornar Usuário operacional. O acesso ao assessment deve ser tokenizado, limitado, auditável e separado de `platform_users`.
 
-No M5.1A, `prepared_assessments` é apenas preparação interna. Ele não autoriza execução, não gera link e não cria sessão para Pessoa.
+No M5.1A, `prepared_assessments` é apenas preparação interna. No M5.1B, somente uma emissão autorizada cria convite e o token correspondente; o assessment preparado isoladamente continua sem autorizar acesso externo.
 
 ## Relação com contratos existentes
 

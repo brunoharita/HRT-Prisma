@@ -102,6 +102,113 @@ export interface PrepareAssessmentResult {
   itemCount: number;
 }
 
+export type VerificationRuntimeStatus = "pending" | "opened" | "in_progress" | "paused" | "completed" | "inconclusive" | "expired" | "cancelled" | "revoked";
+export type ParticipantResultVisibility = "completion_only" | "summary" | "detailed";
+
+export interface PreparedVerificationOption {
+  id: string;
+  needId: string;
+  personId: string;
+  personName: string;
+  email: string | null;
+  phone: string | null;
+  competency: string;
+  competencyKey: string;
+  targetLevel: VerificationLevel;
+  criticality: VerificationCriticality;
+  context: string | null;
+  itemCount: number;
+  estimatedMinutes: number;
+  createdAt: string;
+}
+
+export interface VerificationMonitoringRow {
+  invitationId: string;
+  preparedAssessmentId: string;
+  personId: string;
+  personName: string;
+  competency: string;
+  targetLevel: VerificationLevel;
+  status: VerificationRuntimeStatus;
+  expiresAt: string;
+  lastActivityAt: string;
+  progress: number;
+  confidenceState: "high" | "adequate" | "reduced" | "inconclusive" | null;
+  demonstratedLevel: VerificationLevel | "insufficient_evidence" | "inconclusive" | null;
+  rawResult: { totalQuestions: number; correct: number; incorrect: number; unanswered: number; percentage: number } | null;
+  integrityState: "adequate" | "reduced" | "inconclusive" | null;
+  issuedAt: string;
+  completedAt: string | null;
+  automaticDeliveryConfigured: false;
+}
+
+export interface VerificationOperatorWorkspace {
+  preparedAssessments: PreparedVerificationOption[];
+  verifications: VerificationMonitoringRow[];
+}
+
+export interface IssuedInvitation {
+  invitationId: string;
+  status: string;
+  expiresAt: string;
+  deliveryChannel: string;
+  automaticDeliveryConfigured: false;
+  resultVisibility: ParticipantResultVisibility;
+  token: string;
+  relativePath: string;
+}
+
+export interface ParticipantQuestion {
+  id: string;
+  sequence: number;
+  itemCode: string;
+  itemVersion: string;
+  stem: string;
+  options: Array<{ id: string; label: string }>;
+  dimension: string;
+  status: "not_presented" | "active" | "answered" | "marked" | "submitted";
+  response: { selectedOptionId: string | null; markedForReview: boolean; version: number } | null;
+}
+
+export interface ParticipantAttempt {
+  id: string;
+  status: "not_started" | "in_progress" | "paused" | "submitted" | "evaluated" | "expired" | "cancelled" | "invalidated" | "inconclusive";
+  startedAt: string;
+  submittedAt: string | null;
+  elapsedTotalSeconds: number;
+  lockVersion: number;
+  currentQuestionInstanceId: string | null;
+  questions: ParticipantQuestion[];
+  result: {
+    completionCode: string;
+    completedAt: string;
+    rawResult: { totalQuestions: number; correct: number; incorrect: number; unanswered: number; percentage: number } | null;
+    dimensionResults: Record<string, { total: number; correct: number; percentage: number }> | null;
+    demonstratedLevel: string | null;
+  } | null;
+}
+
+export interface ParticipantVerificationWorkspace {
+  invitationId: string;
+  status: string;
+  expiresAt: string;
+  resultVisibility: ParticipantResultVisibility;
+  person: { name: string };
+  verification: {
+    competency: string;
+    competencyKey: string;
+    targetLevel: VerificationLevel;
+    criticality: VerificationCriticality;
+    context: string | null;
+    estimatedMinutes: number;
+    itemCount: number;
+    modality: "multiple_choice";
+  };
+  attempt: ParticipantAttempt | null;
+  privacy: { recorded: string[]; notRecorded: string[] };
+  versions: { invitation: string; instructions: string; publicBoundary: string };
+}
+
 export function labelLevel(level: VerificationLevel): string {
   return { basic: "Básico", intermediate: "Intermediário", advanced: "Avançado" }[level];
 }
