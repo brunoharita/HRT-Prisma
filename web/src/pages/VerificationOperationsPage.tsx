@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { CopyOutlined, LinkOutlined, PlusOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
-import { Alert, Button, Descriptions, Drawer, Empty, Form, Input, Progress, Radio, Select, Space, Table, Tabs, Tag, Typography, message } from "antd";
+import { Alert, Button, Descriptions, Drawer, Empty, Form, Input, Progress, Radio, Select, Space, Table, Tabs, Typography, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type {
   IssuedInvitation,
@@ -14,6 +14,7 @@ import { competencyVerificationService } from "../infrastructure/supabase/compet
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
+import { PrismaStatusTag, type PrismaStatusTone } from "../ui/PrismaStatusTag";
 
 interface Props {
   activeMembership: OrganizationMembership;
@@ -62,7 +63,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
         || (tab === "in_progress" && ["in_progress", "paused"].includes(item.status))
         || (tab === "completed" && ["completed", "inconclusive"].includes(item.status))
         || (tab === "expired" && ["expired", "cancelled", "revoked"].includes(item.status));
-      return tabMatches && (!normalized || `${item.personName} ${item.competency} ${item.status}`.toLowerCase().includes(normalized));
+      return tabMatches && (!normalized || `${item.personName} ${item.competency} ${verificationStatus(item.status).label}`.toLowerCase().includes(normalized));
     });
   }, [search, tab, workspace?.verifications]);
 
@@ -87,7 +88,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
         <PrismaPageHeader title="Emitir convite" description="Gere um acesso pessoal para a verificação preparada. Nenhuma mensagem externa será enviada automaticamente." />
         <Button onClick={() => onNavigate("/verifications")} type="link">Voltar para verificações</Button>
         {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
-        {!prepared && !loading ? <PrismaCard><Empty description="Assessment preparado não encontrado." /></PrismaCard> : null}
+        {!prepared && !loading ? <PrismaCard><Empty description="Instrumento preparado não encontrado." /></PrismaCard> : null}
         {prepared ? (
           <>
             <PrismaCard className="prisma-m51b-context-card">
@@ -99,7 +100,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
               </Space>
             </PrismaCard>
             <PrismaCard title="Convite">
-              <Alert message="Envio automático por e-mail ainda não configurado. O Prisma emitirá um link para cópia manual em QA." showIcon type="info" />
+              <Alert message="O Prisma gerará um link seguro para compartilhamento manual. Nenhuma mensagem será enviada automaticamente." showIcon type="info" />
               <Form<InviteFormValues>
                 form={form}
                 initialValues={{
@@ -114,14 +115,14 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
                 <Form.Item label="Canal pretendido" name="deliveryChannel"><Radio.Group><Radio value="link">Link</Radio><Radio value="email">E-mail</Radio><Radio value="whatsapp">WhatsApp</Radio></Radio.Group></Form.Item>
                 <Form.Item label="Validade" name="validDays"><Select options={[1, 3, 7, 14].map((value) => ({ value, label: `${value} dia${value > 1 ? "s" : ""}` }))} /></Form.Item>
                 <Form.Item label="Resultado visível para a Pessoa" name="resultVisibility"><Select options={[{ value: "completion_only", label: "Somente conclusão, padrão seguro" }, { value: "summary", label: "Resumo de desempenho" }, { value: "detailed", label: "Resumo detalhado por dimensão" }]} /></Form.Item>
-                <Form.Item label="Preview da mensagem" name="message"><Input.TextArea maxLength={2000} rows={5} /></Form.Item>
+                <Form.Item label="Prévia da mensagem" name="message"><Input.TextArea maxLength={2000} rows={5} /></Form.Item>
                 <Button htmlType="submit" loading={issuing} type="primary">Emitir convite</Button>
               </Form>
             </PrismaCard>
             {issued ? (
               <PrismaCard title="Convite emitido">
-                <Alert message="O token bruto é exibido somente nesta emissão. Copie o link agora para o smoke em sessão separada ou anônima." showIcon type="success" />
-                <Input.Group compact><Input aria-label="Link da verificação" readOnly style={{ width: "calc(100% - 210px)" }} value={verificationUrl} /><Button icon={<CopyOutlined />} onClick={() => void navigator.clipboard.writeText(verificationUrl).then(() => message.success("Link copiado."))}>Copiar link</Button><Button icon={<LinkOutlined />} onClick={() => window.open(verificationUrl, "_blank", "noopener,noreferrer")}>Abrir</Button></Input.Group>
+                <Alert message="Este link pessoal é exibido apenas agora. Copie-o antes de sair desta tela." showIcon type="success" />
+                <div className="prisma-invitation-link"><Input aria-label="Link da verificação" readOnly value={verificationUrl} /><Button icon={<CopyOutlined />} onClick={() => void navigator.clipboard.writeText(verificationUrl).then(() => message.success("Link copiado."))}>Copiar link</Button><Button icon={<LinkOutlined />} onClick={() => window.open(verificationUrl, "_blank", "noopener,noreferrer")}>Abrir</Button></div>
               </PrismaCard>
             ) : null}
           </>
@@ -131,22 +132,22 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   }
 
   const columns: ColumnsType<VerificationMonitoringRow> = [
-    { title: "Pessoa", dataIndex: "personName", key: "personName" },
-    { title: "Competência", dataIndex: "competency", key: "competency" },
-    { title: "Nível", dataIndex: "targetLevel", key: "targetLevel", render: (value) => labelLevel(value) },
-    { title: "Status", dataIndex: "status", key: "status", render: (value) => <StatusTag status={value} /> },
-    { title: "Prazo", dataIndex: "expiresAt", key: "expiresAt", render: (value) => new Date(value).toLocaleDateString("pt-BR") },
-    { title: "Progresso", dataIndex: "progress", key: "progress", render: (value) => <Progress percent={value} size="small" status={value === 100 ? "success" : "normal"} /> },
-    { title: "Ação", key: "action", render: (_, row) => <Button onClick={() => setSelected(row)} size="small">Abrir</Button> },
+    { title: "Pessoa", dataIndex: "personName", key: "personName", ellipsis: true, width: 150 },
+    { title: "Competência", dataIndex: "competency", key: "competency", ellipsis: true, responsive: ["sm"], width: 120 },
+    { title: "Nível", dataIndex: "targetLevel", key: "targetLevel", render: (value) => labelLevel(value), responsive: ["md"], width: 100 },
+    { title: "Status", dataIndex: "status", key: "status", render: (value) => <StatusTag status={value} />, width: 112 },
+    { title: "Prazo", dataIndex: "expiresAt", key: "expiresAt", render: (value) => new Date(value).toLocaleDateString("pt-BR"), responsive: ["lg"], width: 112 },
+    { title: "Progresso", dataIndex: "progress", key: "progress", render: (value, row) => <VerificationProgress row={row} value={value} />, responsive: ["sm"], width: 160 },
+    { title: "Ação", key: "action", render: (_, row) => <Button aria-label={`Abrir verificação de ${row.personName}`} onClick={() => setSelected(row)} size="small">Abrir</Button>, width: 58 },
   ];
   return (
     <PrismaPage className="prisma-m51b-operator-page">
-      <PrismaPageHeader title="Verificações" description="Acompanhe convites, tentativas, resultados e força metodológica da evidência." actions={<Button icon={<PlusOutlined />} onClick={() => workspace?.preparedAssessments[0] && onNavigate(`/verifications/new/${workspace.preparedAssessments[0].id}`)} type="primary">Nova verificação</Button>} />
+      <PrismaPageHeader title="Verificações" description="Acompanhe convites, andamento, resultados e qualidade das evidências." actions={<Button disabled={!workspace?.preparedAssessments.length} icon={<PlusOutlined />} onClick={() => workspace?.preparedAssessments[0] && onNavigate(`/verifications/new/${workspace.preparedAssessments[0].id}`)} type="primary">Nova verificação</Button>} />
       {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       <PrismaCard>
-        <Tabs activeKey={tab} items={[{ key: "all", label: "Todas" }, { key: "pending", label: "Pendentes" }, { key: "in_progress", label: "Em andamento" }, { key: "completed", label: "Concluídas" }, { key: "expired", label: "Expiradas" }]} onChange={setTab} />
+        <Tabs activeKey={tab} items={[{ key: "all", label: "Todas" }, { key: "pending", label: "Pendentes" }, { key: "in_progress", label: "Em andamento" }, { key: "completed", label: "Concluídas" }, { key: "expired", label: "Encerradas" }]} onChange={setTab} />
         <Input.Search allowClear onChange={(event) => setSearch(event.target.value)} placeholder="Buscar por pessoa, competência ou status" value={search} />
-        <Table columns={columns} dataSource={filtered} loading={loading} pagination={{ pageSize: 8 }} rowKey="invitationId" scroll={{ x: 900 }} />
+        <Table className="prisma-responsive-table prisma-verification-table" columns={columns} dataSource={filtered} loading={loading} pagination={{ pageSize: 8 }} rowKey="invitationId" tableLayout="fixed" />
       </PrismaCard>
       <Drawer onClose={() => setSelected(null)} open={Boolean(selected)} title="Resultado da verificação" width={560}>
         {selected ? <VerificationDetail value={selected} /> : null}
@@ -155,11 +156,22 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   );
 }
 
-function StatusTag({ status }: { status: VerificationMonitoringRow["status"] }) {
-  const config: Record<VerificationMonitoringRow["status"], { color: string; label: string }> = {
-    pending: { color: "default", label: "Pendente" }, opened: { color: "blue", label: "Aberta" }, in_progress: { color: "processing", label: "Em andamento" }, paused: { color: "warning", label: "Pausada" }, completed: { color: "success", label: "Concluída" }, inconclusive: { color: "warning", label: "Inconclusiva" }, expired: { color: "error", label: "Expirada" }, cancelled: { color: "default", label: "Cancelada" }, revoked: { color: "error", label: "Revogada" },
+function verificationStatus(status: VerificationMonitoringRow["status"]): { label: string; tone: PrismaStatusTone } {
+  const config: Record<VerificationMonitoringRow["status"], { label: string; tone: PrismaStatusTone }> = {
+    pending: { label: "Pendente", tone: "neutral" }, opened: { label: "Aberta", tone: "info" }, in_progress: { label: "Em andamento", tone: "purple" }, paused: { label: "Pausada", tone: "warning" }, completed: { label: "Concluída", tone: "success" }, inconclusive: { label: "Inconclusiva", tone: "warning" }, expired: { label: "Expirada", tone: "danger" }, cancelled: { label: "Cancelada", tone: "neutral" }, revoked: { label: "Revogada", tone: "danger" },
   };
-  return <Tag color={config[status].color}>{config[status].label}</Tag>;
+  return config[status];
+}
+
+function StatusTag({ status }: { status: VerificationMonitoringRow["status"] }) {
+  const presentation = verificationStatus(status);
+  return <PrismaStatusTag compact label={presentation.label} tone={presentation.tone} />;
+}
+
+function VerificationProgress({ row, value }: { row: VerificationMonitoringRow; value: number }) {
+  if (["expired", "cancelled", "revoked"].includes(row.status)) return <Typography.Text type="secondary">Encerrada</Typography.Text>;
+  if (["pending", "opened"].includes(row.status) && value === 0) return <Typography.Text type="secondary">Não iniciada</Typography.Text>;
+  return <Progress format={(percent) => `${percent ?? 0}%`} percent={value} size="small" status={value === 100 ? "success" : "normal"} />;
 }
 
 function labelConfidence(value: VerificationMonitoringRow["confidenceState"]) {

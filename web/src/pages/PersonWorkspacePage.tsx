@@ -42,6 +42,8 @@ import {
   type PdfProcessingProgress,
   type ProfileVersionView,
   type ProcessingState,
+  type StructuredEducation,
+  type StructuredExperience,
 } from "../domain/personIngestion";
 import {
   currentProfileDescription,
@@ -308,8 +310,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
 
       {currentProfileVersion ? <PrismaCard className="prisma-person-current-knowledge" title={`Conhecimento profissional publicado · Perfil v${currentProfileVersion.profileVersion}`}>
         <div className="prisma-person-knowledge-grid">
-          <section><Typography.Text strong>Experiências</Typography.Text>{currentProfileVersion.profileData.experiences.length ? <List dataSource={currentProfileVersion.profileData.experiences} renderItem={(item) => <List.Item><div><strong>{item.organization || "Organização não informada"}</strong><small>{[item.role, item.period].filter(Boolean).join(" · ")}</small></div></List.Item>} /> : <Typography.Paragraph type="secondary">Nenhuma experiência explícita foi publicada.</Typography.Paragraph>}</section>
-          <section><Typography.Text strong>Formação</Typography.Text>{currentProfileVersion.profileData.education.length ? <List dataSource={currentProfileVersion.profileData.education} renderItem={(item) => <List.Item><div><strong>{item.course || "Formação"}</strong><small>{[item.institution, item.period].filter(Boolean).join(" · ")}</small></div></List.Item>} /> : <Typography.Paragraph type="secondary">Nenhuma formação explícita foi publicada.</Typography.Paragraph>}</section>
+          <section><Typography.Text strong>Experiências</Typography.Text>{currentProfileVersion.profileData.experiences.length ? <List dataSource={currentProfileVersion.profileData.experiences} renderItem={(item) => <PublishedExperienceItem item={item} />} /> : <Typography.Paragraph type="secondary">Nenhuma experiência explícita foi publicada.</Typography.Paragraph>}</section>
+          <section><Typography.Text strong>Formação</Typography.Text>{currentProfileVersion.profileData.education.length ? <List dataSource={currentProfileVersion.profileData.education} renderItem={(item) => <PublishedEducationItem item={item} />} /> : <Typography.Paragraph type="secondary">Nenhuma formação explícita foi publicada.</Typography.Paragraph>}</section>
           <section><Typography.Text strong>Competências confirmadas</Typography.Text>{currentProfileVersion.profileData.competencies.length ? <Space className="prisma-person-competency-tags" wrap>{currentProfileVersion.profileData.competencies.map((competency) => <Tag className="prisma-person-competency-tag prisma-person-competency-tag--explicit" color="blue" key={competency}>{competency}</Tag>)}</Space> : <Typography.Paragraph type="secondary">Nenhuma competência explícita foi identificada nos documentos aprovados.</Typography.Paragraph>}</section>
           <section><Typography.Text strong>Inferências / sinais</Typography.Text><Typography.Paragraph type="secondary">Inferências permanecem separadas dos fatos confirmados e nunca são publicadas automaticamente como competência.</Typography.Paragraph></section>
         </div>
@@ -541,6 +543,53 @@ function stepIndex(state: ProcessingState): number {
 
 function isProcessing(state: ProcessingState): boolean {
   return !state.startsWith("failed") && !["structured", "profile_ready", "completed"].includes(state);
+}
+
+function PublishedExperienceItem({ item }: { item: StructuredExperience }) {
+  const role = conciseRecordValue(item.role);
+  const organization = conciseRecordValue(item.organization);
+  const title = role ?? organization ?? "Experiência profissional registrada";
+  const metadata = [organization && organization !== title ? organization : null, conciseRecordValue(item.period)].filter(Boolean).join(" · ");
+  const detail = recordDetail([item.description, item.evidenceText, role ? null : item.role, organization ? null : item.organization], title, metadata);
+  return <PublishedRecord detail={detail} metadata={metadata} title={title} />;
+}
+
+function PublishedEducationItem({ item }: { item: StructuredEducation }) {
+  const course = conciseRecordValue(item.course);
+  const institution = conciseRecordValue(item.institution);
+  const title = course ?? institution ?? "Formação registrada";
+  const metadata = [institution && institution !== title ? institution : null, conciseRecordValue(item.period)].filter(Boolean).join(" · ");
+  const detail = recordDetail([item.description, item.evidenceText, course ? null : item.course, institution ? null : item.institution], title, metadata);
+  return <PublishedRecord detail={detail} metadata={metadata} title={title} />;
+}
+
+function PublishedRecord({ detail, metadata, title }: { detail: string | null; metadata: string; title: string }) {
+  return (
+    <List.Item className="prisma-published-record">
+      <div>
+        <strong>{title}</strong>
+        {metadata ? <small>{metadata}</small> : null}
+        {detail ? <Typography.Paragraph ellipsis={{ rows: 3, expandable: true, symbol: "Ver mais" }}>{detail}</Typography.Paragraph> : null}
+      </div>
+    </List.Item>
+  );
+}
+
+function conciseRecordValue(value: string | null | undefined): string | null {
+  const normalized = value?.replace(/\s+/g, " ").trim() ?? "";
+  return normalized && normalized.length <= 96 ? normalized : null;
+}
+
+function recordDetail(values: Array<string | null | undefined>, title: string, metadata: string): string | null {
+  const detail = values.map((value) => value?.replace(/\s+/g, " ").trim() ?? "").find((value) => value.length > 0 && value !== title && !metadata.includes(value));
+  if (!detail) return null;
+  const normalizedDetail = normalizeComparable(detail);
+  const normalizedSummary = normalizeComparable(`${title} ${metadata}`);
+  return normalizedDetail === normalizedSummary ? null : detail;
+}
+
+function normalizeComparable(value: string): string {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
 function SummaryMetric({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: string; tone: string }) {

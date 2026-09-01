@@ -194,7 +194,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         )}
       </PrismaCard>
       <Typography.Text className="prisma-table-scope-note" type="secondary">
-        Perfil aprovado e importação são estados independentes. A busca respeita a empresa ativa e as políticas RLS do Prisma.
+        Perfil aprovado e importação são estados independentes. A busca mostra apenas informações acessíveis na empresa ativa.
       </Typography.Text>
     </PrismaPage>
   );

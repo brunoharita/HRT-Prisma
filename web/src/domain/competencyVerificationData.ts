@@ -221,8 +221,20 @@ export function labelSufficiency(status: VerificationSufficiencyStatus): string 
   return {
     sufficient: "Suficiente",
     verification_optional: "Verificação opcional",
-    verification_recommended: "Verification recommended",
-    verification_required_by_policy: "Verification required by policy",
+    verification_recommended: "Verificação recomendada",
+    verification_required_by_policy: "Verificação exigida pela política",
     insufficient_information: "Informação insuficiente",
   }[status];
+}
+
+export function labelAssessmentDimension(dimension: string): string {
+  const labels: Record<string, string> = {
+    query_modeling: "Modelagem de consultas",
+    performance: "Desempenho",
+    troubleshooting: "Diagnóstico e solução",
+    fundamentals: "Fundamentos",
+    security: "Segurança",
+    architecture: "Arquitetura",
+  };
+  return labels[dimension] ?? dimension.replaceAll("_", " ").replace(/^./, (character) => character.toUpperCase());
 }

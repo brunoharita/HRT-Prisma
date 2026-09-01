@@ -148,7 +148,8 @@ Em 2026-09-01:
 - teste transacional de budget reservou 100 centavos, liberou 100, terminou líquido zero e não chamou provider; cenário de limite retornou `M51C_BUDGET_EXCEEDED`;
 - políticas externas habilitadas: zero; custo externo real: zero centavos; nenhuma chamada viva de IA;
 - o primeiro teste de failure release encontrou o enum de auditoria `failed` incompatível com `failure`; a transação reverteu integralmente e a migration `20260901153011` corrigiu o contrato antes da repetição aprovada;
-- a UI implementa as 12 superfícies administrativas no App Shell, mas a navegação visual local não pôde ser retomada depois que a policy do navegador bloqueou a URL local originada de uma página interna de erro. Typecheck e build cobrem o código, porém os cinco viewports continuam pendentes de inspeção visual.
+- a UI implementa as 12 superfícies administrativas no App Shell; uma revisão visual autenticada posterior aprovou a navegação agrupada, a linguagem operacional e a tabela de lacunas em desktop e 390 px, sem rolagem horizontal;
+- o mesmo passe validou Home, Matching e Verificações em desktop e 390 px, além do Perfil em desktop. Foram corrigidos durante a inspeção a compressão do cabeçalho do Matching e o corte dos estados na tabela móvel de Verificações. Os demais viewports específicos do storyboard continuam como ampliação de cobertura, não como bloqueio das superfícies validadas.
 - `CI=true pnpm run validate` aprovou lint de 237 arquivos, foundation, Context Pack, dois typechecks, build web, 142 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`.
 
 Dados persistidos de QA são deliberadamente sintéticos: um item Global publicado, uma proposal duplicada rejeitada, um item Organization publicado, reviews/audits correspondentes e um snapshot analítico `synthetic_qa`. Não existe produção.

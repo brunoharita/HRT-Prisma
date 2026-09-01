@@ -355,7 +355,7 @@ function renderRouteContent(
   onPasswordCompleted: () => Promise<void>,
 ) {
   if (route.path === "/" && activeMembership) {
-    return <HomePage activeMembership={activeMembership} navigationItems={navigationItems} repository={prismaRepository} onNavigate={onNavigate} />;
+    return <HomePage activeMembership={activeMembership} repository={prismaRepository} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles/new" && activeMembership) {
     return <PersonFormPage activeMembership={activeMembership} onNavigate={onNavigate} />;

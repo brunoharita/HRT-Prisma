@@ -11,7 +11,7 @@ export const prismaTokens = {
     canvas: "#f5f7fb",
     border: "#e2e8f2",
     text: "#10203a",
-    textSecondary: "#62708a",
+    textSecondary: "#53637d",
     success: "#15945f",
     warning: "#d97706",
     danger: "#d92d20",
@@ -21,7 +21,7 @@ export const prismaTokens = {
     card: 12,
   },
   layout: {
-    sider: 320,
+    sider: 288,
     siderCollapsed: 88,
     pageMax: 1680,
   },
@@ -41,9 +41,9 @@ export const prismaTheme: ThemeConfig = {
     colorBgContainer: prismaTokens.color.surface,
     borderRadius: prismaTokens.radius.control,
     borderRadiusLG: prismaTokens.radius.card,
-    controlHeight: 36,
+    controlHeight: 38,
     fontFamily: '"Aptos", "Segoe UI Variable", "Segoe UI", sans-serif',
-    fontSize: 14,
+    fontSize: 15,
   },
   components: {
     Button: {

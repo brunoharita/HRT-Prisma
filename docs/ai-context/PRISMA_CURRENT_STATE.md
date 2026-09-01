@@ -11,7 +11,7 @@ last_verified: 2026-09-01
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/m5-1c-item-bank-governance`, construída sobre M5.1A/B para implementar IA governada, escala, orçamento, analytics e calibração progressiva do Banco de Itens.
+- Branch de entrega em validação: `codex/m5-1-ux-polish`, construída sobre M5.1A/B/C para consolidar linguagem, hierarquia, responsividade, estados e explicabilidade das superfícies existentes.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -63,7 +63,7 @@ last_verified: 2026-09-01
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 142 testes técnicos compõem a suíte local, incluindo M5.1C gap, fake provider, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
+- 143 testes técnicos compõem a suíte local, incluindo a regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -144,7 +144,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Hosting de frontend em QA/produção.
 - Provider/modelo externo aprovado para M5.1C e qualquer chamada viva de geração.
 - Calibração real do Item Bank. O único snapshot M5.1C atual é `synthetic_qa`, não calibrado.
-- Smoke visual M5.1C nos cinco viewports do storyboard; a policy do navegador interno bloqueou a retomada da URL local nesta execução.
+- Evidência visual ampliada para os demais viewports do storyboard M5.1C além do desktop e do breakpoint móvel de 390 px já validados.
 - Retenção, exclusão e exportação de titular.
 
 ## Validação factual
@@ -182,4 +182,6 @@ Em 2026-09-01, a fatia M5.1A foi implementada localmente na branch `codex/m5-1a-
 
 Em 2026-09-01, o M5.1B foi implementado na branch `codex/m5-1b-verification-execution`, aplicado ao Prisma-QA e publicado como Edge Function `assessment-access`. `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 133 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke conectado sintético percorreu convite, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, Evidência Demonstrada, Need e matching. O smoke visual público passou em desktop e `390x844`, confirmou autosave, pausa, retomada e resposta preservada; a primeira execução revelou overflow móvel, corrigido e revalidado sem overflow. O convite incompleto do smoke visual foi revogado sem apagar o ledger. A segunda porta local `5556` foi removida do Vite, Auth, CORS e documentação; `assessment-access` foi republicada no QA, onde o preflight `5555` passou com HTTP 200 e o `5556` foi recusado com HTTP 403. A sessão autenticada em `5555` foi então reutilizada para aprovar o monitoramento do operador em desktop e `390x844`, incluindo a abertura do resultado concluído. Esse passe também corrigiu a exposição dos enums técnicos de confiança e integridade para rótulos em português.
 
-Em 2026-09-01, o M5.1C foi implementado na branch `codex/m5-1c-item-bank-governance` e aplicado somente ao Prisma-QA. O estado conectado inclui um item Global sintético publicado, uma proposal duplicada rejeitada, um item Organization sintético publicado, reviews/audits e um snapshot `synthetic_qa`. Testes negativos provaram autoridade Global, papel insuficiente, DML direto negado, item privado invisível em outro tenant, publicação sem review bloqueada e proposal publicada imutável. Budget em transação revertida reservou e liberou 100 centavos com saldo zero, sem provider. A primeira execução expôs um enum inválido no audit de falha; o rollback foi integral e a migration forward `20260901153011` corrigiu o contrato. `CI=true pnpm run validate` aprovou lint de 237 arquivos, foundation, Context Pack, dois typechecks, build web, 142 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. A UI contém as 12 superfícies do storyboard, mas a inspeção visual nos cinco viewports permanece pendente por bloqueio da policy do navegador interno.
+Em 2026-09-01, o M5.1C foi implementado na branch `codex/m5-1c-item-bank-governance` e aplicado somente ao Prisma-QA. O estado conectado inclui um item Global sintético publicado, uma proposal duplicada rejeitada, um item Organization sintético publicado, reviews/audits e um snapshot `synthetic_qa`. Testes negativos provaram autoridade Global, papel insuficiente, DML direto negado, item privado invisível em outro tenant, publicação sem review bloqueada e proposal publicada imutável. Budget em transação revertida reservou e liberou 100 centavos com saldo zero, sem provider. A primeira execução expôs um enum inválido no audit de falha; o rollback foi integral e a migration forward `20260901153011` corrigiu o contrato. `CI=true pnpm run validate` aprovou lint de 237 arquivos, foundation, Context Pack, dois typechecks, build web, 142 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. A UI contém as 12 superfícies do storyboard; a evidência visual foi ampliada no movimento transversal de UX descrito abaixo.
+
+Em 2026-09-01, a branch `codex/m5-1-ux-polish` consolidou uma revisão transversal das superfícies existentes, sem criar nova capacidade. O Home deixou de expor infraestrutura; Matching removeu o percentual fixo e passou a resumir evidências e suficiência; Verificações passou a diferenciar encerramento de progresso; Banco de Itens recebeu navegação agrupada e linguagem operacional; o Perfil passou a separar título, contexto e descrição com expansão progressiva; estados passaram a compartilhar rótulos, cores e ícones. A inspeção autenticada local aprovou Home, Matching, Verificações, Banco de Itens e Perfil em desktop, além de Home, Matching, Verificações e Banco de Itens em 390 px sem rolagem horizontal. O passe móvel revelou e corrigiu compressão do Matching e corte de status em Verificações.

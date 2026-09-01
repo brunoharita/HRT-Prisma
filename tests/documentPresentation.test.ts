@@ -121,6 +121,43 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(styles, /\.prisma-competency-classification-guide__swatch--demonstrated \{ background: #16a34a; \}/);
 });
 
+test("M5.1 operational surfaces use explainable, responsive, and user-facing presentation", async () => {
+  const [matching, verifications, itemBank, home, people, profile, hub, statusTag, styles] = await Promise.all([
+    readFile("web/src/pages/CompetencyVerificationPage.tsx", "utf8"),
+    readFile("web/src/pages/VerificationOperationsPage.tsx", "utf8"),
+    readFile("web/src/pages/AssessmentItemBankPage.tsx", "utf8"),
+    readFile("web/src/pages/HomePage.tsx", "utf8"),
+    readFile("web/src/pages/PeoplePage.tsx", "utf8"),
+    readFile("web/src/pages/PersonProfilePage.tsx", "utf8"),
+    readFile("web/src/pages/PersonWorkspacePage.tsx", "utf8"),
+    readFile("web/src/ui/PrismaStatusTag.tsx", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
+  ]);
+
+  assert.doesNotMatch(matching, /87%/);
+  assert.match(matching, /Resumo das evidências/);
+  assert.match(matching, /hasDemonstratedEvidence/);
+  assert.match(matching, /Resultado baseado nas evidências atualmente disponíveis/);
+  assert.match(matching, /className="prisma-responsive-table prisma-matching-table"/);
+  assert.match(verifications, /verificationStatus/);
+  assert.match(verifications, /Encerradas/);
+  assert.match(verifications, /className="prisma-responsive-table prisma-verification-table"/);
+  assert.match(itemBank, /label: "Operação"/);
+  assert.match(itemBank, /label: "Governança"/);
+  assert.match(itemBank, /label: "Lacunas"/);
+  assert.doesNotMatch(itemBank, /<Tabs activeKey=\{surface\}/);
+  assert.match(home, /Confiança em cada etapa/);
+  assert.doesNotMatch(home, /Supabase QA|tenant ativo|RLS/);
+  assert.doesNotMatch(people, /políticas RLS/);
+  assert.doesNotMatch(profile, /conexão com o Supabase/);
+  assert.match(hub, /PublishedExperienceItem/);
+  assert.match(hub, /ellipsis=\{\{ rows: 3, expandable: true/);
+  assert.match(statusTag, /PrismaStatusTone/);
+  assert.match(styles, /\.prisma-status-tag--success/);
+  assert.match(styles, /\.prisma-mobile-only \{ display: none; \}/);
+  assert.match(styles, /\.prisma-m51c-navigation__group/);
+});
+
 test("discard operation is tenant-authorized, audit-only, and never mutates the current profile", async () => {
   const sql = await readFile("supabase/migrations/20260831022615_invalidate_document_review.sql", "utf8");
   const guardSql = await readFile("supabase/migrations/20260831025456_invalidate_document_review_approved_guard.sql", "utf8");

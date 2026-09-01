@@ -25,7 +25,7 @@
 | Intake currículo-first | implementado localmente | PDF pré-Pessoa, identidade mínima, deduplicação tenant-scoped e resolução humana |
 | UI e Auth | implementado e comprovado | Frontend local conectado ao Supabase remoto |
 | Revisão humana de perfil | ativo no remoto interno | rascunho, mudanças por campo, comparação e aprovação versionada |
-| M5.1 Verificação de Competências | planejado | plano diretor documental; sem runtime, assessment, Item Bank, schema ou IA ativa |
+| M5.1 Verificação de Competências | ativo no remoto interno | Preparação, execução e banco de itens governado ativos em QA; geração externa e calibração real permanecem desativadas |
 | Embeddings vetoriais e LLM produtivo | não implementado | Depende de benchmark e ADR |
 | Mobilidade interna, sucessão e workforce planning | planejado | Fora do piloto inicial |
 

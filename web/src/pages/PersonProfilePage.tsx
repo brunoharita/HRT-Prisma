@@ -29,7 +29,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
         if (current) setView(result);
       })
       .catch(() => {
-        if (current) setError("O perfil não pôde ser consultado. Verifique acesso e conexão com o Supabase.");
+        if (current) setError("O perfil não pôde ser consultado. Verifique seu acesso e tente novamente.");
       })
       .finally(() => {
         if (current) setLoading(false);
