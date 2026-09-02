@@ -17,7 +17,7 @@
 | `document-operation-idempotency` | 1.1.0 | mesma chave e fingerprint retornam o mesmo resultado; invalidação também preserva histórico e perfil atual |
 | `professional-profile` | 5.0.0 | perfil aprovado preserva proveniência, IDs estáveis, classificação acadêmica confirmada e fatos omitidos, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
-| `structured-resume-summary` | 1.0.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; PII nunca é promovida ao perfil profissional |
+| `structured-resume-summary` | 1.1.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; o resumo termina na próxima seção e PII nunca é promovida ao perfil profissional |
 | `review-field-lifecycle` | 1.0.0 | vazios opcionais são normalizados; nome, contato e conteúdo profissional mínimo bloqueiam salvamento inválido; caminhos antigos continuam legíveis |
 
 ## Estados

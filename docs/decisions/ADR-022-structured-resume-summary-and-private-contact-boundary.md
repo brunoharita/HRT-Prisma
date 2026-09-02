@@ -43,6 +43,12 @@ Na aprovação, `identity` e `contact` são removidos antes da criação de `pro
 
 `spatial-evidence` permanece 1.2.0: novos caminhos usam a mesma semântica canônica de região, caracteres e projeção já vigente.
 
+## Evolução compatível em 2026-09-02
+
+`structured-resume-summary` 1.1.0 preserva o mesmo campo opcional `summary` e amplia somente seu reconhecimento documental. O runtime aceita títulos explícitos equivalentes em português e inglês, recupera conteúdo unido ao cabeçalho por um parser PDF e encerra a captura diante da próxima seção conhecida, inclusive expertise técnica. Sem seção explícita, o valor permanece nulo e `resumo profissional` é registrado em `notIdentified`; nenhuma síntese ou inferência é criada.
+
+Essa evolução também avança `adaptive-resume-extraction` para 6.1.0 e `extraction-draft` para 7.1.0, com método `prisma-layout-adaptive-v7`. Schema, autoridade, aprovação, fronteira privada e evidência espacial permanecem inalterados.
+
 ## Reversão
 
 O frontend pode deixar de apresentar os novos campos sem apagar dados. A migration não remove colunas anteriores. Uma reversão de aprovação deve restaurar a função anterior e remover as constraints somente depois de confirmar que nenhum perfil 2.0.0 depende da nova estrutura. `state_code` e `linkedin_url` permanecem dados privados compatíveis mesmo se a interface for revertida.

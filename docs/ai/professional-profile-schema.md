@@ -13,7 +13,7 @@ ProfessionalProfile
   professionalTitle?
   areasOfExpertise[]
   professionalObjective?
-  summary?
+  summary?  # resumo profissional explícito; ausência não autoriza síntese automática
   keyResults[]
     id, value
   experiences[]
@@ -56,6 +56,8 @@ Na formação, `classifierSnapshot` preserva o resultado determinístico inicial
 ## Ausência e soft skills
 
 Campos não localizados entram em `notIdentified`; ambiguidades entram em `uncertainties`. Nenhum autoriza conclusão negativa. Comunicação, criatividade, resiliência, inteligência emocional e atributos similares não são extraídos como fatos pelo provider atual.
+
+`summary` recebe somente o conteúdo de uma seção explícita de resumo/perfil/síntese profissional. O extrator encerra a captura no próximo cabeçalho conhecido, inclusive expertise técnica, competências, formação e experiência. Texto introdutório sem seção identificável não é promovido automaticamente para o campo.
 
 Na interface, `uncertainties` é apresentado como `Pendências de interpretação` e `notIdentified` como `Informações não localizadas`. Áreas personalizadas são fatos somente quando possuem conteúdo explícito e evidência. Elas não geram automaticamente competência, inferência ou decisão de matching.
 

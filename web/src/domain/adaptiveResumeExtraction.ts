@@ -9,8 +9,8 @@ import {
   type LearnedCustomSectionDefinition,
 } from "./customProfileSections.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "6.0.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v6";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "6.1.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v7";
 export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v3";
 export const ADAPTIVE_SIBLING_ALGORITHM_VERSION = "adaptive-sibling-block-v1";
 export const ADAPTIVE_SIBLING_SIGNATURE_VERSION = "experience-sibling-signature-v1";
@@ -159,6 +159,11 @@ interface StructuredSummaryExtraction {
 const ROLE_TERMS = /(analista|arquiteto|assistente|chief|consultor|coordenador|customer success|developer|desenvolvedor|diretor|engineer|engenheiro|especialista|executivo|founder|fundador|gerente|head|l[ií]der|manager|mgmt|pm\/po|product owner|project manager|presidente|recruiter|supervisor|system analyst|technician|t[eé]cnico|vice[- ]presidente|coo|ceo|cto|cfo|cio)/i;
 const SECTION_HEADING = /^(experi[eê]ncia(s)?( profissional(is)?)?|trajet[oó]ria profissional|professional experience|forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|resumo|summary|perfil|s[ií]ntese de valor)/i;
 const NEXT_SECTION = /^(forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|projetos|projects|cursos|s[ií]ntese de valor)/i;
+const PROFESSIONAL_SUMMARY_LABEL = "(?:resumo profissional|resumo executivo|perfil profissional|perfil executivo|s[ií]ntese profissional|s[ií]ntese de qualifica[cç][oõ]es|professional summary|professional profile|career summary|executive summary)";
+const PROFESSIONAL_SUMMARY_HEADING = new RegExp(`^${PROFESSIONAL_SUMMARY_LABEL}\\s*$`, "i");
+const PROFESSIONAL_SUMMARY_INLINE_HEADING = new RegExp(`^${PROFESSIONAL_SUMMARY_LABEL}\\s*(?:[|:]|[-–—])\\s*(.+)$`, "i");
+const PROFESSIONAL_SUMMARY_MERGED_HEADING = new RegExp(`^${PROFESSIONAL_SUMMARY_LABEL}\\s+(.{24,})$`, "i");
+const RESUME_SECTION_BOUNDARY = /^(?:resumo profissional|resumo executivo|perfil profissional|perfil executivo|s[ií]ntese profissional|s[ií]ntese de qualifica[cç][oõ]es|professional summary|professional profile|career summary|executive summary|objetivo(?: profissional)?|professional objective|posicionamento executivo|principais resultados|resultados(?: e transforma[cç][oõ]es selecionadas)?|principais conquistas|resultados de destaque|selected results|key achievements|problemas empresariais(?: que est[aá] preparado para assumir)?|s[ií]ntese de valor|experi[eê]ncia(?: profissional)?|hist[oó]rico profissional|trajet[oó]ria profissional|professional experience|forma[cç][aã]o(?: acad[eê]mica)?|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|habilidades|skills|expertise(?: t[eé]cnica)?|conhecimentos(?: t[eé]cnicos)?|technical skills|core competencies|ferramentas(?: e tecnologias)?|tecnologias|idiomas|languages|certifica[cç][oõ]es|certifications|projetos|projects|cursos|courses|publica[cç][oõ]es|publications|informa[cç][oõ]es adicionais|additional information|voluntariado|volunteer experience|refer[eê]ncias|references)(?:\s*[|:]|$)/i;
 const PERIOD_TOKEN = /\b(?:jan(?:eiro|uary)?|fev(?:ereiro)?|feb(?:ruary)?|mar(?:[cç]o|ch)?|abr(?:il)?|apr(?:il)?|mai(?:o)?|may|jun(?:ho|e)?|jul(?:ho|y)?|ago(?:sto)?|aug(?:ust)?|set(?:embro)?|sep(?:tember)?|out(?:ubro)?|oct(?:ober)?|nov(?:embro|ember)?|dez(?:embro)?|dec(?:ember)?|0?[1-9]|1[0-2])[\/.\- ](?:\d{2}|\d{4})\s*(?:a|at[eé]|to|[-–])\s*(?:atual|presente|present|current|(?:jan(?:eiro|uary)?|fev(?:ereiro)?|feb(?:ruary)?|mar(?:[cç]o|ch)?|abr(?:il)?|apr(?:il)?|mai(?:o)?|may|jun(?:ho|e)?|jul(?:ho|y)?|ago(?:sto)?|aug(?:ust)?|set(?:embro)?|sep(?:tember)?|out(?:ubro)?|oct(?:ober)?|nov(?:embro|ember)?|dez(?:embro)?|dec(?:ember)?|0?[1-9]|1[0-2])[\/.\- ](?:\d{2}|\d{4}))\b|\b(?:19|20)\d{2}\s*(?:a|at[eé]|to|[-–])\s*(?:atual|presente|present|current|(?:19|20)\d{2})\b/i;
 const COMPANY_MARKERS = /\b(solutions?|engenharia|empreendimentos?|consultoria|sistemas?|education|educa[cç][aã]o|comercial|ltda|s\.?a\.?|inc\.?|corp\.?|group|company|companhia|banco|universidade|faculdade|tecnologia)\b/i;
 const SAME_LINE_COMPANY_MARKERS = /\b(solutions?|engenharia|empreendimentos?|sistemas?|education|educa[cç][aã]o|comercial|ltda|s\.?a\.?|inc\.?|corp\.?|group|company|companhia|banco|universidade|faculdade)\b/i;
@@ -248,6 +253,7 @@ export function buildAdaptiveExtraction(
       ...(education.length ? [] : ["formação acadêmica"]),
       ...(competencies.length ? [] : ["competências explícitas"]),
       ...(languages.length ? [] : ["idiomas"]),
+      ...(structuredSummary.summary ? [] : ["resumo profissional"]),
     ],
   };
   return {
@@ -306,7 +312,7 @@ function extractStructuredSummary(pages: ExtractedPage[], lines: CandidateLine[]
   if (titleLine && areasOfExpertise.length) fieldEvidence.push(toEvidence("areasOfExpertise", titleLine, areasOfExpertise.join(", ")));
 
   const objectiveLines = sectionContent(lines, /^(objetivo(?: profissional)?|professional objective|posicionamento executivo)(?:\s*[|:]\s*(.+))?$/i);
-  const summaryLines = sectionContent(lines, /^(resumo profissional|perfil profissional|perfil executivo|professional summary)(?:\s*[|:]\s*(.+))?$/i);
+  const summaryLines = professionalSummarySectionContent(lines);
   const resultGroups = groupedBulletSection(lines, /^(principais resultados|resultados(?: e transforma[cç][oõ]es selecionadas)?|principais conquistas|resultados de destaque|selected results|key achievements)(?:\s*[|:]\s*(.+))?$/i);
   const professionalObjective = objectiveLines.length ? joinSectionText(objectiveLines) : null;
   const summary = summaryLines.length ? joinSectionText(summaryLines) : null;
@@ -353,6 +359,30 @@ function sectionContent(lines: CandidateLine[], headingPattern: RegExp): Candida
   return content.slice(0, 40);
 }
 
+function professionalSummarySectionContent(lines: CandidateLine[]): CandidateLine[] {
+  const headingIndex = lines.findIndex((line) => professionalSummaryHeading(line) !== undefined);
+  if (headingIndex < 0) return [];
+  const heading = lines[headingIndex]!;
+  const content: CandidateLine[] = [];
+  const inlineContent = professionalSummaryHeading(heading);
+  if (inlineContent) content.push({ ...heading, text: inlineContent });
+  for (let index = headingIndex + 1; index < lines.length; index += 1) {
+    const line = lines[index]!;
+    if (line.pageNumber !== heading.pageNumber || isSummarySectionHeading(line.text)) break;
+    if (!isPageFooter(line.text)) content.push(line);
+  }
+  return content.slice(0, 40);
+}
+
+function professionalSummaryHeading(line: CandidateLine): string | null | undefined {
+  const value = line.text.trim();
+  if (PROFESSIONAL_SUMMARY_HEADING.test(value)) return null;
+  const delimited = value.match(PROFESSIONAL_SUMMARY_INLINE_HEADING)?.[1]?.trim();
+  if (delimited) return delimited;
+  const merged = line.emphasis === "strong" ? value.match(PROFESSIONAL_SUMMARY_MERGED_HEADING)?.[1]?.trim() : null;
+  return merged || undefined;
+}
+
 function groupedBulletSection(lines: CandidateLine[], headingPattern: RegExp): CandidateLine[][] {
   const content = sectionContent(lines, headingPattern);
   const groups: CandidateLine[][] = [];
@@ -364,7 +394,7 @@ function groupedBulletSection(lines: CandidateLine[], headingPattern: RegExp): C
 }
 
 function isSummarySectionHeading(value: string): boolean {
-  return /^(resumo profissional|perfil profissional|perfil executivo|professional summary|objetivo(?: profissional)?|professional objective|posicionamento executivo|principais resultados|resultados(?: e transforma[cç][oõ]es selecionadas)?|principais conquistas|resultados de destaque|selected results|key achievements|problemas empresariais(?: que est[aá] preparado para assumir)?|s[ií]ntese de valor|experi[eê]ncia(?: profissional)?|professional experience|forma[cç][aã]o|educa[cç][aã]o|compet[eê]ncias(?:-chave)?|idiomas|certifica[cç][oõ]es)(?:\s*[|:]|$)/i.test(value.trim());
+  return RESUME_SECTION_BOUNDARY.test(value.trim());
 }
 
 function joinSectionText(lines: CandidateLine[]): string {

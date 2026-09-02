@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 3842c0ad16811a6a32677015d82fab965789f3bc9add5d735a43c5dff66207a8
+source_manifest_sha256: 22b538825acbf525a7579879a4ab1af40c6de0afe5c0f6c143afa9a0c70c7bd5
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.12.0
+version: 2.13.0
 last_verified: 2026-09-02
 ---
 
@@ -335,7 +335,7 @@ last_verified: 2026-09-02
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Fronteira Pessoa, Documento e Perfil Vigente 1.2.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. Tentativa operacional vazia não oculta a última tentativa revisável com páginas e draft preservados. A revisão M5 recupera extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual, enquanto tentativa sem fonte continua bloqueada.
 - Central da Pessoa 1.0 redesenhada localmente: `person-action-center` 1.0.0 compõe um view model tipado e deriva todas as pendências documentais reais sem estado paralelo. Cabeçalho profissional, pendências acionáveis, Perfil vigente, resumo contextual, conhecimento editorial, documentos com painel contextual e atividade recente foram organizados nas perspectivas Visão geral, Documentos e versões e Nova importação. O CTA `Revisar documento agora` resolve diretamente documento e tentativa revisável; Member continua fora da superfície operacional. Nenhum schema, RLS, score, IA ou estado persistido mudou. O smoke autenticado foi aprovado nas cinco resoluções de referência.
-- Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. `ExtractionDraft` está em 7.0.0, extração adaptativa em 6.0.0 e regras/modelo determinísticos em 2.0.0.
+- Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. `ExtractionDraft` está em 7.1.0, extração adaptativa em 6.1.0 e regras/modelo determinísticos em 2.0.0.
 - Jornada de ingestão 2.0.0 implementada localmente em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `resume-product-state` 1.1.0 e `document-presentation` 2.1.0 derivam sete estados canônicos e a recuperação possível a partir da fonte preservada, sem persistir estado na Pessoa. `profile-publication-delta` 1.0.0 preserva fatos aprovados não citados, exige decisão humana e motivo para remoção e retorna à Central da Pessoa somente depois da publicação transacional.
 - `operation-feedback` 1.0.0 implementado localmente: ingestão, revisão, evidência, aprendizado adaptativo, classificação acadêmica, arquivamento e publicação convertem códigos e contratos técnicos em causa, preservação e próxima ação seguras. Detalhes internos não chegam ao operador; confirmação remota seguida de falha de recarga não é apresentada como mutação não realizada.
 - `decision-centered-interaction` 1.0.0 implementado localmente no descarte adaptativo e normativo para o produto: cliques e teclas obrigatórios representam julgamento, autoridade ou risco material; coordenação determinística, avisos sem proposta, auditoria factual e falhas de telemetria opcional não interrompem o operador. Relatórios sem assinatura registrável usam `Fechar aviso` sem RPC; sugestões válidas fecham imediatamente e registram descarte em segundo plano.
@@ -354,7 +354,7 @@ last_verified: 2026-09-02
 - Aceite adaptativo implementado com seleção por campo, persistência atômica, lock otimista, replay idempotente, histórico metadata-only e recarga do rascunho sincronizado. A seleção de nova evidência permanece disponível após aplicar sugestões.
 - Áreas personalizadas implementadas na revisão, com schema ativo em QA e frontend local: criação evidence-first sob `Outros`, estrutura limitada por seção/item, navegação e destaque pelo mesmo contrato M5, persistência versionada e apresentação no perfil. `Pendências de interpretação` e `Informações não localizadas` aparecem separadas dos fatos do currículo.
 - Aprendizado de títulos personalizados ativo no schema QA e consumido pelo runtime local: somente após aprovação integral, o catálogo tenant-scoped registra chave, título normalizado, formato, versão e confirmação. Conteúdo pessoal não é copiado; uma importação futura relê o documento e cria evidência própria para cada item.
-- Resumo estruturado 1.0.0 implementado localmente: a aba Resumo preserva o campo Resumo profissional e separa nome, cidade, estado, telefone, e-mail, LinkedIn, título profissional, áreas de atuação, objetivo e principais resultados. A extração usa somente conteúdo explícito, cada resultado possui ID/caminho de evidência estável e revisões históricas recebem fallback determinístico sem reescrita silenciosa.
+- Resumo estruturado 1.1.0 implementado localmente: a aba Resumo apresenta uma área explícita de narrativa com o campo Resumo profissional e separa nome, cidade, estado, telefone, e-mail, LinkedIn, título profissional, áreas de atuação, objetivo e principais resultados. A extração aceita títulos explícitos PT/EN, conteúdo fundido ao cabeçalho pelo PDF e encerra no próximo cabeçalho conhecido; ausência permanece nula e registrada em `notIdentified`. Cada resultado possui ID/caminho de evidência estável e revisões históricas recebem fallback determinístico sem reescrita silenciosa.
 - Ciclo de vida de campos 1.0.0 implementado localmente e no Prisma-QA: Nome completo, contato efetivo e conteúdo profissional material são gates de salvamento; vazios opcionais são normalizados; resultados, experiências, formações e itens personalizados podem ser incluídos ou removidos com Desfazer; experiências preservam Empresa, Cargo, Período e Descrição. IDs estáveis impedem deslocamento de evidência, com leitura compatível dos caminhos numéricos históricos.
 - Coordenação UX de ações implementada localmente: a sujeira do rascunho é calculada pela forma normalizada, inclusões vazias podem ser canceladas sem resíduo, cliques repetidos focalizam o mesmo formulário, campos removidos não mantêm ações de evidência apontando para caminhos inexistentes, raízes vazias preservam sua aba e sair com qualquer diferença local exige confirmação.
 - A fronteira privada da aprovação foi endurecida localmente: `identity` e `contact` são removidos antes de criar `professional_profiles`; nome e contato confirmados atualizam `people` e `person_private_data`, valores ausentes não apagam dados existentes e a constraint rejeita PII de contato no perfil profissional. RLS e papéis não foram ampliados.
@@ -378,7 +378,7 @@ last_verified: 2026-09-02
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 200 testes técnicos compõem a suíte local, incluindo classificação acadêmica, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, feedback operacional acionável, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
+- 203 testes técnicos compõem a suíte local, incluindo classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, feedback operacional acionável, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -518,6 +518,8 @@ Também em 2026-09-02, o contrato local `decision-centered-interaction` 1.0.0 re
 
 Ainda em 2026-09-02, `competency-list-segmentation` 1.0.0 passou a preservar a estrutura de listas selecionadas no currículo. `competency-list-spatial-v1` separa células pela geometria real, aceita delimitadores explícitos, conserva competências compostas e mostra a lista em chips antes de aplicar; múltiplos blocos sem fronteira confiável não podem ser gravados como uma única competência. O editor direto recebeu os mesmos separadores. A mudança é local e não altera schema, RPC, RLS, grants ou payload de evidência. `pnpm run validate` aprovou lint de 262 arquivos, fundação, Context Pack, dois typechecks, build web, 200 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. O smoke autenticado comprovou três chips separados para `Product Ownership; Gestão de Processos; BPM/BPMN`, sem salvamento; o documento QA disponível não contém a mesma grade da ocorrência original, portanto o smoke específico da separação geométrica permanece pendente.
 
+Ainda em 2026-09-02, `structured-resume-summary` 1.1.0 consolidou `Resumo profissional` como campo explícito da narrativa na aba Resumo. O runtime `prisma-layout-adaptive-v7` reconhece aliases PT/EN, recupera cabeçalho e conteúdo fundidos pelo PDF e interrompe a captura na próxima seção curricular, sem misturar expertise, competências, formação ou experiências. Ausência continua nula e é apresentada em `notIdentified`; não há síntese automática. Três novas regressões determinísticas cobrem alias e limite, linha fundida e ausência segura. O smoke autenticado confirmou a nova seção visual e reproduziu, sem salvar, a contaminação `EXPERTISE TÉCNICA` preservada no draft anterior; a correção vale para novos processamentos versionados, sem reescrever dados históricos silenciosamente. `pnpm run validate` aprovou lint de 262 arquivos, fundação, Context Pack, dois typechecks, build web, 203 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`.
+
 ---
 
 ## Source: `docs/ai-context/PRISMA_AI_REFERENCE.md`
@@ -526,8 +528,8 @@ Ainda em 2026-09-02, `competency-list-segmentation` 1.0.0 passou a preservar a e
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.7.0
-last_verified: 2026-09-01
+version: 1.8.0
+last_verified: 2026-09-02
 ---
 
 # Referência de IA do Prisma
@@ -544,6 +546,8 @@ Extração parcial útil conduz à revisão, nunca a um perfil completo nem a `F
 
 A extração adaptativa pode reconhecer títulos personalizados previamente aprovados na mesma organização. Ela reutiliza somente metadados de estrutura, relê os valores no currículo atual e cria evidência própria. Conteúdo personalizado não vira competência, inferência ou matching automaticamente.
 
+O resumo profissional é um fato textual opcional separado de objetivo e posicionamento. Ele exige seção explícita em português ou inglês, aceita cabeçalho e conteúdo fundidos pelo PDF e termina no próximo cabeçalho conhecido. Sem seção segura, permanece nulo e aparece em `notIdentified`; o Prisma não sintetiza um resumo a partir de experiências.
+
 Uma experiência completa corrigida pelo operador e ligada a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma compara critérios nomeados e propõe blocos irmãos ausentes com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
 
 ## Proveniência
@@ -555,7 +559,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`;
-- draft web: `extraction-draft-7.0.0` / `prisma-layout-adaptive-v6`;
+- draft web: `extraction-draft-7.1.0` / `prisma-layout-adaptive-v7`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
@@ -565,6 +569,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - revisão humana: `human-profile-review-7.1.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
+- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-6.1.0`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;

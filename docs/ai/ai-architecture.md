@@ -40,10 +40,10 @@ Currículos e vagas são dados. Texto tentando ignorar regras, mudar schema, rev
 
 | Artefato | Versão | Estado |
 | --- | --- | --- |
-| Extraction | `extraction-rules-1.0.0` | ativo local |
-| PDF nativo | `pdfjs-5.4.296/native-v1` | ativo local e remoto interno |
+| Extraction | `extraction-rules-2.0.0` | ativo local |
+| PDF nativo | `pdfjs-5.4.296/layout-v2` | ativo local e remoto interno |
 | OCR | `tesseract.js-7.0.0/por+eng-v1` | texto e linhas posicionadas ativos localmente; versão anterior em QA |
-| Draft M2-B | `prisma-layout-adaptive-v5` | implementado local; schema v6 aguarda QA |
+| Draft M2-B | `prisma-layout-adaptive-v7` / `extraction-draft-7.1.0` | implementado local; schema base ativo em QA |
 | Revisão adaptativa | `prisma-document-learning-v3` | assinatura e blocos irmãos locais; v2 ativo em QA |
 | Inference | `inference-ontology-1.0.0` | ativo local |
 | Retrieval/embedding contract | `structured-lexical-1.0.0` | ativo local, sem vetores |

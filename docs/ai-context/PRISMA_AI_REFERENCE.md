@@ -2,8 +2,8 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.7.0
-last_verified: 2026-09-01
+version: 1.8.0
+last_verified: 2026-09-02
 ---
 
 # Referência de IA do Prisma
@@ -20,6 +20,8 @@ Extração parcial útil conduz à revisão, nunca a um perfil completo nem a `F
 
 A extração adaptativa pode reconhecer títulos personalizados previamente aprovados na mesma organização. Ela reutiliza somente metadados de estrutura, relê os valores no currículo atual e cria evidência própria. Conteúdo personalizado não vira competência, inferência ou matching automaticamente.
 
+O resumo profissional é um fato textual opcional separado de objetivo e posicionamento. Ele exige seção explícita em português ou inglês, aceita cabeçalho e conteúdo fundidos pelo PDF e termina no próximo cabeçalho conhecido. Sem seção segura, permanece nulo e aparece em `notIdentified`; o Prisma não sintetiza um resumo a partir de experiências.
+
 Uma experiência completa corrigida pelo operador e ligada a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma compara critérios nomeados e propõe blocos irmãos ausentes com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
 
 ## Proveniência
@@ -31,7 +33,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`;
-- draft web: `extraction-draft-7.0.0` / `prisma-layout-adaptive-v6`;
+- draft web: `extraction-draft-7.1.0` / `prisma-layout-adaptive-v7`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
@@ -41,6 +43,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - revisão humana: `human-profile-review-7.1.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
+- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-6.1.0`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;

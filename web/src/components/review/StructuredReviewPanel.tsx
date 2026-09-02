@@ -575,6 +575,10 @@ function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftC
       <SummaryTagField editable={editable} extracted={workspace.extractedData.areasOfExpertise} fieldPath="areasOfExpertise" label="Áreas de atuação" onChange={(values) => onDraftChange({ ...draft, areasOfExpertise: values })} onSelect={onFieldSelect} selectedFieldPath={selectedFieldPath} validationMessage={validationMessage("areasOfExpertise")} value={draft.areasOfExpertise} />
 
       <Divider />
+      <div className="prisma-summary-section-heading">
+        <Typography.Title level={5}>Narrativa profissional</Typography.Title>
+        <Typography.Text type="secondary">O resumo é extraído da seção correspondente do currículo. Quando ela não existe, o campo permanece vazio para revisão, sem síntese automática.</Typography.Text>
+      </div>
       <ReviewField editable={editable} extracted={workspace.extractedData.professionalObjective ?? "Não identificado"} fieldPath="professionalObjective" label="Objetivo profissional" multiline onChange={(value) => onDraftChange({ ...draft, professionalObjective: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "professionalObjective")} validationMessage={validationMessage("professionalObjective")} value={draft.professionalObjective ?? ""} />
       <ReviewField editable={editable} extracted={workspace.extractedData.summary ?? "Não identificado"} fieldPath="summary" label="Resumo profissional" multiline onChange={(value) => onDraftChange({ ...draft, summary: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "summary")} validationMessage={validationMessage("summary")} value={draft.summary ?? ""} />
 

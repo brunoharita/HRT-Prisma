@@ -19,6 +19,7 @@
 | Contenção textual estrita | seleção nativa inclui somente caracteres cujo centro visual está dentro do retângulo; linhas que apenas encostam ficam fora | regressão local aprovada em 2026-08-28 |
 | Aplicação da seleção | texto reconhecido, interpretação revisada ou conteúdo manual seguem para a RPC sem texto livre; ação e mudança recebem descrição automática | regressão local aprovada em 2026-09-02 |
 | Lista de competências | linhas e células reais viram chips separados; nomes compostos permanecem íntegros e múltiplos blocos ambíguos não podem ser aplicados como item único | regressão determinística e colagem autenticada aprovadas em 2026-09-02; smoke da grade espacial pendente |
+| Resumo profissional | seção explícita PT/EN preenche `summary`, conteúdo unido ao cabeçalho é recuperado, a próxima seção encerra a captura e ausência permanece nula | regressão determinística e apresentação autenticada aprovadas em 2026-09-02 |
 | Erro no modal | validação e falha de persistência aparecem dentro do modal, sem alerta oculto atrás da sobreposição | contrato estático e build aprovados; smoke autenticado pendente |
 | Compatibilidade | 18 evidências originais foram vinculadas sem fabricar coordenadas | aprovado em QA |
 | Transação positiva | Admin registrou evidência complementar, criou revisão/região/vínculo e a transação foi revertida | aprovado em QA |
@@ -40,6 +41,12 @@ O advisor de performance não aponta foreign key M5 sem índice após a migraç�
 - A sessão do navegador interno não estava autenticada e não havia Chrome conectado nem credencial de QA no ambiente. A inspeção visual autenticada desktop/mobile permanece pendente e não é apresentada como aprovada.
 - Não houve uso de currículo real, LLM externo ou embeddings.
 - O frontend continua local. Não existe ambiente de produção separado e nenhuma ação de produção foi realizada.
+
+## Reconhecimento do resumo profissional em 2026-09-02
+
+O campo `summary` já pertencia à aba Resumo, mas o reconhecimento dependia de poucos títulos exatamente separados do conteúdo. `structured-resume-summary` 1.1.0 amplia aliases explícitos PT/EN, recupera linhas em que o PDF funde título e conteúdo e reconhece cabeçalhos como `Expertise técnica` como limite. Os testes também comprovam que um parágrafo introdutório sem seção explícita não é promovido e entra em `notIdentified`, mantendo a separação entre fato documental e síntese inexistente.
+
+No smoke autenticado, a aba Resumo apresentou a nova seção `Narrativa profissional` e o campo `Resumo profissional` com as superfícies extraída e revisada. O documento v2 de Bruno Harita preserva uma extração anterior que contém `EXPERTISE TÉCNICA` e competências no valor gravado, reproduzindo o defeito que motivou o novo limite. O smoke não reprocessou, salvou ou publicou essa revisão; a correção do parser foi comprovada pela regressão equivalente e passa a valer para processamentos em `prisma-layout-adaptive-v7`.
 
 ## Correção de precisão em 2026-08-28
 

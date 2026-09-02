@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta `adaptive-resume-extraction` 6.0.0 e `education-academic-classification` 1.0.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística e descoberta de blocos irmãos estão implementados localmente.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta `adaptive-resume-extraction` 6.1.0 e `education-academic-classification` 1.0.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística e descoberta de blocos irmãos estão implementados localmente.
 
 ## Entrada
 
@@ -16,11 +16,12 @@ Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores
 - adaptação: repetição no documento e sinais estruturais aprovados do próprio tenant orientam a interpretação, mas não autorizam copiar valores entre registros nem executar templates persistidos.
 - blocos irmãos: uma experiência humana completa e com evidência espacial gera uma assinatura temporária do documento. Seção, cabeçalho, período, corpo, espaçamento e coluna são avaliados por critérios nomeados. Fontes sem geometria, colunas distintas, ambiguidades e duplicidades não geram novas experiências seguras.
 - áreas personalizadas: somente títulos previamente aprovados no mesmo tenant são candidatos; o título precisa coincidir após normalização e o conteúdo é relido no documento até o próximo cabeçalho reconhecido, com evidência por item.
+- resumo profissional: somente uma seção explicitamente intitulada é extraída. Variações PT/EN e conteúdo unido ao cabeçalho pelo PDF são aceitos; a próxima seção reconhecida encerra a captura, e a ausência permanece nula em vez de produzir uma síntese automática.
 - formação: curso, nível, qualificação e situação são dimensões independentes. Regras PT/EN ignoram caixa, acentos e variações de hífen. Período encerrado não prova conclusão; `Atual/Present` apenas sugere andamento; pós-graduação genérica não vira especialização; `Tecnologia em` é graduação tecnológica, nunca curso técnico.
 
 ## Saída de sucesso
 
-`ExtractionDraft` contém identidade possível, experiências, educação estruturada, certificações, idiomas, competências explícitas, contextos, áreas personalizadas, pendências de interpretação e informações não localizadas. Cada formação nova preserva texto original, resultado do classificador, motivos, versão, origem por dimensão e necessidade de revisão. Não existe confiança percentual acadêmica.
+`ExtractionDraft` contém identidade possível, título e áreas, objetivo, resumo profissional opcional, resultados, experiências, educação estruturada, certificações, idiomas, competências explícitas, contextos, áreas personalizadas, pendências de interpretação e informações não localizadas. Cada formação nova preserva texto original, resultado do classificador, motivos, versão, origem por dimensão e necessidade de revisão. Não existe confiança percentual acadêmica.
 
 Sucesso do provider não significa perfil processado. A aplicação exige identidade e ao menos uma experiência estruturável, cria evidências, executa inferência e persiste somente após validação.
 

@@ -108,6 +108,72 @@ test("structured summary extracts only explicit identity, contact, positioning, 
   assert.equal(result.fieldEvidence.filter((item) => item.fieldPath.startsWith("keyResults.")).length, 2);
 });
 
+test("professional summary accepts explicit aliases and stops before the next curriculum section", () => {
+  const layoutLines = [
+    line("Bruno Harita Santos", 0.04, 0.08, 0.5, "strong"),
+    line("Síntese profissional", 0.1, 0.08, 0.35, "strong"),
+    line("Profissional que conecta negócio, processos e tecnologia.", 0.13),
+    line("Expertise técnica", 0.18, 0.08, 0.35, "strong"),
+    line("SAP | Scrum | SQL", 0.21),
+    line("Experiência profissional", 0.27, 0.08, 0.4, "strong"),
+  ];
+  const result = buildAdaptiveExtraction([{
+    pageNumber: 1,
+    text: layoutLines.map((item) => item.text).join("\n"),
+    origin: "native_pdf",
+    usefulCharacterCount: 180,
+    method: "pdfjs",
+    methodVersion: "fixture-layout-v2",
+    layoutLines,
+  }]);
+
+  assert.equal(result.draft.summary, "Profissional que conecta negócio, processos e tecnologia.");
+  assert.doesNotMatch(result.draft.summary ?? "", /SAP|Scrum|SQL|Expertise/i);
+  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "summary" && item.text === result.draft.summary));
+});
+
+test("professional summary recovers content merged into a strong PDF heading", () => {
+  const layoutLines = [
+    line("Bruno Harita Santos", 0.04, 0.08, 0.5, "strong"),
+    line("Resumo profissional Profissional com vinte anos de atuação em tecnologia e operações.", 0.1, 0.08, 0.85, "strong"),
+    line("Transforma contextos complexos em execução organizada.", 0.13),
+    line("Formação acadêmica", 0.2, 0.08, 0.35, "strong"),
+  ];
+  const result = buildAdaptiveExtraction([{
+    pageNumber: 1,
+    text: layoutLines.map((item) => item.text).join("\n"),
+    origin: "native_pdf",
+    usefulCharacterCount: 170,
+    method: "pdfjs",
+    methodVersion: "fixture-layout-v2",
+    layoutLines,
+  }]);
+
+  assert.equal(result.draft.summary, "Profissional com vinte anos de atuação em tecnologia e operações.\nTransforma contextos complexos em execução organizada.");
+  assert.ok(result.fieldEvidence.some((item) => item.fieldPath === "summary"));
+});
+
+test("professional summary remains absent without an explicit section", () => {
+  const layoutLines = [
+    line("Bruno Harita Santos", 0.04, 0.08, 0.5, "strong"),
+    line("Profissional com ampla atuação em tecnologia e operações.", 0.1),
+    line("Experiência profissional", 0.17, 0.08, 0.4, "strong"),
+  ];
+  const result = buildAdaptiveExtraction([{
+    pageNumber: 1,
+    text: layoutLines.map((item) => item.text).join("\n"),
+    origin: "native_pdf",
+    usefulCharacterCount: 120,
+    method: "pdfjs",
+    methodVersion: "fixture-layout-v2",
+    layoutLines,
+  }]);
+
+  assert.equal(result.draft.summary, null);
+  assert.ok(result.draft.notIdentified.includes("resumo profissional"));
+  assert.equal(result.fieldEvidence.some((item) => item.fieldPath === "summary"), false);
+});
+
 test("first extraction keeps a company tenure with subordinate roles as one semantic block", () => {
   const layoutLines = [
     line("Experiência profissional", 0.08, 0.08, 0.45, "strong"),
