@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 36305e80f62acd01bf38c35b475f8a517b4135bc210648fae77be3096008da30
+source_manifest_sha256: 4b0ddbd066f2ed9e839511e3b90fd367f6d611747977fbe5247e94cdc26a4170
 -->
 
 # Tudo sobre o Prisma
@@ -32,6 +32,7 @@ Repository instructions never override platform safety, user authority, legal ob
 - Authorization is enforced outside the frontend and fails closed when organization, role, contract, or version is unknown.
 - Do not log complete resumes, unnecessary personal data, secrets, or prompts containing integral PII.
 - AI supports human decisions and is never the authority for hiring, rejection, access control, or sensitive data mutation.
+- Minimize human interaction: every required click or keystroke must represent judgment, authority, risk acceptance, or an otherwise unavoidable choice. Deterministic coordination, reversible presentation state, audit metadata and retries are system responsibilities; optional guidance or telemetry failure must never block the operator.
 
 ## 3. Documentation ownership and precedence
 
@@ -336,6 +337,7 @@ last_verified: 2026-09-02
 - Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. `ExtractionDraft` está em 7.0.0, extração adaptativa em 6.0.0 e regras/modelo determinísticos em 2.0.0.
 - Jornada de ingestão 2.0.0 implementada localmente em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `resume-product-state` 1.1.0 e `document-presentation` 2.1.0 derivam sete estados canônicos e a recuperação possível a partir da fonte preservada, sem persistir estado na Pessoa. `profile-publication-delta` 1.0.0 preserva fatos aprovados não citados, exige decisão humana e motivo para remoção e retorna à Central da Pessoa somente depois da publicação transacional.
 - `operation-feedback` 1.0.0 implementado localmente: ingestão, revisão, evidência, aprendizado adaptativo, classificação acadêmica, arquivamento e publicação convertem códigos e contratos técnicos em causa, preservação e próxima ação seguras. Detalhes internos não chegam ao operador; confirmação remota seguida de falha de recarga não é apresentada como mutação não realizada.
+- `decision-centered-interaction` 1.0.0 implementado localmente no descarte adaptativo e normativo para o produto: cliques e teclas obrigatórios representam julgamento, autoridade ou risco material; coordenação determinística, avisos sem proposta, auditoria factual e falhas de telemetria opcional não interrompem o operador. Relatórios sem assinatura registrável usam `Fechar aviso` sem RPC; sugestões válidas fecham imediatamente e registram descarte em segundo plano.
 - Publicação Delta ativa no Prisma-QA: `profile_publication_removals` possui RLS e DML direto revogado; `publish_profile_review` é a única autoridade cliente, enquanto `approve_profile_review` perdeu o grant de `authenticated`. Provas revertidas confirmaram preservação de experiência e competência omitidas, remoção apenas explícita, Perfil v2 atômico, negação de Member/cross-tenant e zero resíduos.
 - Descarte não destrutivo implementado localmente e no Prisma-QA pela RPC `invalidate_document_review`: somente Admin, Owner, Recruiter ou Super Admin invalidam uma revisão ou importação tecnicamente falha; documento, tentativa, revisão, eventos e perfil vigente permanecem preservados; replay é idempotente e nenhuma linha é apagada.
 - Movimento M5 implementado com PDF original e revisão estruturada lado a lado, navegação campo/evidência, seleção espacial normalizada, OCR local por região, vínculos e histórico imutável. A seleção nativa `pdfjs-character-region-v2` define a escala total exigida pelo PDF.js e converte caracteres ou símbolos OCR para um mapa canônico `normalized-page-v1`; texto, refinamento e destaque usam exatamente o mesmo conjunto. Zoom, ajuste à largura e proporção da tela alteram apenas a projeção. A direita inclui somente caixas que começam dentro do contorno, sem tolerância fixa ou resgate externo. Evidências `pdfjs-text-layer-v1` permanecem históricas.
@@ -510,6 +512,8 @@ Em 2026-09-02, a branch `codex/education-academic-classification` implementou a 
 
 Ainda em 2026-09-02, `human-profile-review` 7.1.0 removeu da revisão comum e do modal espacial os dois campos de justificativa livre. A migration `20260902181013` foi aplicada diretamente ao Prisma-QA e registrada no histórico remoto porque os aliases históricos impedem `db push`; consulta pós-aplicação confirmou fallback automático, `anon` negado, fronteira pública para `authenticated` e núcleo privado revogado. No smoke autenticado, uma alteração local tornou `Salvar revisão` acionável sem qualquer campo de justificativa; o valor original foi restaurado antes de persistir, encerrando em `Rascunho sincronizado`, sem publicação ou resíduo remoto. `pnpm run validate` aprovou lint de 260 arquivos, fundação, Context Pack, dois typechecks, build web, 196 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`.
 
+Também em 2026-09-02, o contrato local `decision-centered-interaction` 1.0.0 removeu o bloqueio causado pelo descarte de um relatório estrutural sem proposta segura. O cliente agora valida a mesma forma mínima da assinatura antes de considerar o scan registrável, não chama a RPC para diagnóstico vazio, fecha descartes válidos antes da telemetria e reserva intervenção obrigatória para decisões materiais. A mudança não altera banco, RLS, grants, perfil ou evidência. `pnpm run validate` aprovou lint, fundação, Context Pack, dois typechecks, build web, 197 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`; o smoke autenticado permanece pendente porque o navegador interno iniciou sem sessão salva.
+
 ---
 
 ## Source: `docs/ai-context/PRISMA_AI_REFERENCE.md`
@@ -555,6 +559,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - model: `deterministic-local-1.0.0`.
 - revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
 - revisão humana: `human-profile-review-7.1.0`;
+- interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;

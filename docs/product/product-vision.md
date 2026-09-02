@@ -27,6 +27,7 @@ Hipótese ainda não validada comercialmente: transformar bases existentes de cu
 - Currículo não autoriza inferência indiscriminada de atributos sensíveis.
 - Isolamento, privacidade, avaliação e versionamento nascem junto com o produto.
 - Currículo-first é o fluxo principal de entrada de Pessoas; cadastro manual é secundário.
+- Cada intervenção humana deve representar uma decisão real. O Prisma automatiza coordenação determinística, preenchimento conhecido, auditoria e recuperação; avisos opcionais e telemetria não interrompem o trabalho.
 
 ## Entrada de Pessoas
 

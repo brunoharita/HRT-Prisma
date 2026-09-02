@@ -21,6 +21,7 @@
 | Evidência espacial M5 | selecionar somente caracteres visualmente contidos, aplicar ou corrigir sem texto livre, registrar auditoria automática, complementar/substituir e navegar no histórico | linha que apenas intersecta a borda, conteúdo obrigatório vazio, erro oculto atrás do modal, coordenada/página/versão inválida, Member, cross-tenant e DML direto | regressão local, schema/RPC QA e browser autenticado aprovados |
 | Evidência por campo | clicar extraído/revisado navega para a origem correta e retirar evidência humana preserva histórico | excluir original, link de outro tenant e lock stale | contrato e testes locais; QA pendente |
 | Aprendizado imediato | correção relê irmãos, aceite parcial salva revisão/evento/casos e aprovação promove padrão | sem JWT, DML direto, replay divergente, lock stale, promoção antes da aprovação e payload com valor/trecho | unit/contract e transações com rollback no QA aprovadas; smoke autenticado pendente |
+| Interação centrada em decisão | aviso sem proposta fecha localmente; descarte válido não bloqueia e registra telemetria em segundo plano | assinatura ausente, RPC indisponível, zero proposta e erro secundário | regressão local obrigatória; smoke autenticado do descarte pendente |
 | Duplicidade | primeira importação | mesma chave com payload divergente e concorrência | M2-C local/QA aprovado |
 | Vagas | requisitos claros | vazio, incompatível, cross-tenant | contrato parcial |
 | Matching | atendido/parcial/gap | insuficiência e requisito ausente | golden testado |

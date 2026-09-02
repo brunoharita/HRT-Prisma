@@ -34,3 +34,7 @@ Comprovar que uma experiência corrigida e completa pode revelar blocos profissi
 ## Limitações aceitas
 
 Texto achatado sem coordenadas não cria nova experiência. Layouts heterogêneos, períodos ambíguos, colunas divergentes e candidatos parciais continuam sob revisão manual. O smoke usa conteúdo sintético e não sustenta alegação de precisão em currículos reais antes de amostra autorizada.
+
+## Interação sem bloqueio auxiliar
+
+Em 2026-09-02, um relatório sem proposta segura expôs `Descartar sugestões`, tentou registrar uma assinatura estrutural vazia e recebeu `22023`, embora a correção humana já estivesse preservada. A regressão foi eliminada no cliente: relatório sem assinatura registrável é apresentado como diagnóstico sem ação necessária, o CTA vira `Fechar aviso` e não chama a RPC. Quando existem propostas válidas, o descarte fecha imediatamente e o evento metadata-only é tentado em segundo plano; falha dessa telemetria opcional não interrompe a revisão. Aplicar sugestões, publicar e remover fatos aprovados mantêm as proteções humanas e transacionais existentes.

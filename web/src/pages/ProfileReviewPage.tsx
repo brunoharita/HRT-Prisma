@@ -8,6 +8,7 @@ import type { CustomProfileSectionFormat, ProfileReviewWorkspace, StructuredDraf
 import { fieldPathMatches, type ReviewEvidenceAction } from "../domain/spatialEvidence";
 import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
+  isRecordableSiblingScan,
   proposeSiblingBlockCorrections,
   type AdaptiveFieldSuggestion,
   type AdaptiveSuggestionReport,
@@ -193,11 +194,11 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             sourceField: structuralAnchor.field,
             sourceRegion: spatialAnchorRegion(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? ""),
           });
-          if (report.anchorExperienceId && hasRecordableSiblingSignature(report) && (report.suggestions.length || report.unresolved.length)) {
+          if (isRecordableSiblingScan(report) && (report.suggestions.length || report.unresolved.length)) {
             await personIngestionService.recordSiblingScan({
               organizationId: activeMembership.organizationId,
               reviewId: refreshed.id,
-              anchorExperienceId: report.anchorExperienceId,
+              anchorExperienceId: report.anchorExperienceId!,
               methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
               algorithmVersion: report.algorithmVersion,
               signatureVersion: report.signatureVersion,
@@ -317,25 +318,26 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     finally { setBusy(false); }
   }
 
-  async function dismissAdaptiveSuggestions() {
-    if (!workspace || !adaptiveReport?.anchorExperienceId) { setAdaptiveReport(null); return; }
-    setBusy(true); setError(null);
-    try {
-      await personIngestionService.recordSiblingScan({
-        organizationId: activeMembership.organizationId,
-        reviewId: workspace.id,
-        anchorExperienceId: adaptiveReport.anchorExperienceId,
-        methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
-        algorithmVersion: adaptiveReport.algorithmVersion,
-        signatureVersion: adaptiveReport.signatureVersion,
-        signatureSummary: adaptiveReport.signatureSummary,
-        candidateSummary: adaptiveReport.candidateSummary,
-        decision: "discarded",
-      });
-      setAdaptiveReport(null);
-      setSuccess("As sugestões foram descartadas e a decisão ficou registrada na trilha da importação.");
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível registrar o descarte das sugestões."); }
-    finally { setBusy(false); }
+  function dismissAdaptiveSuggestions() {
+    const report = adaptiveReport;
+    setAdaptiveReport(null);
+    setError(null);
+    if (!workspace || !report || report.suggestions.length === 0 || !isRecordableSiblingScan(report)) {
+      setSuccess(null);
+      return;
+    }
+    setSuccess("Sugestões descartadas. Você pode continuar a revisão.");
+    void personIngestionService.recordSiblingScan({
+      organizationId: activeMembership.organizationId,
+      reviewId: workspace.id,
+      anchorExperienceId: report.anchorExperienceId!,
+      methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+      algorithmVersion: report.algorithmVersion,
+      signatureVersion: report.signatureVersion,
+      signatureSummary: report.signatureSummary,
+      candidateSummary: report.candidateSummary,
+      decision: "discarded",
+    }).catch(() => undefined);
   }
 
   function handleFieldSelect(fieldPath: string, preferredKind?: "original" | "reviewer") {
@@ -773,10 +775,6 @@ function spatialAnchorRegion(workspace: ProfileReviewWorkspace, experienceId: st
   const link = workspace.evidenceLinks.find((candidate) => candidate.state === "active" && Boolean(candidate.spatialRegionId) && candidate.fieldPath.startsWith(prefix));
   const region = workspace.spatialRegions.find((candidate) => candidate.id === link?.spatialRegionId);
   return region ? { pageNumber: region.pageNumber, x: region.x, y: region.y, width: region.width, height: region.height } : null;
-}
-
-function hasRecordableSiblingSignature(report: AdaptiveSuggestionReport): boolean {
-  return report.signatureSummary.spatial === true && typeof report.signatureSummary.columnBand === "number";
 }
 
 function primaryEvidenceTarget(fieldPath: string, workspace: ProfileReviewWorkspace | null, preferredKind?: "original" | "reviewer"): Omit<EvidenceNavigationTarget, "nonce"> | null {

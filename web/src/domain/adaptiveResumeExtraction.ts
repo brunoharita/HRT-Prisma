@@ -100,6 +100,28 @@ export interface AdaptiveSourceRegion {
   height: number;
 }
 
+export function isRecordableSiblingScan(report: AdaptiveSuggestionReport): boolean {
+  const signature = report.signatureSummary;
+  const summary = report.candidateSummary;
+  const signatureKeys = Object.keys(signature).sort();
+  return Boolean(
+    report.anchorExperienceId
+      && /^experience_[a-z0-9]{8,64}$/.test(report.anchorExperienceId)
+      && signatureKeys.join("|") === "columnBand|companyPlacement|hasBullets|headerEmphasis|periodPlacement|spatial"
+      && ["same-line", "next-line"].includes(String(signature.companyPlacement))
+      && signature.periodPlacement === "header"
+      && ["regular", "strong"].includes(String(signature.headerEmphasis))
+      && signature.spatial === true
+      && typeof signature.hasBullets === "boolean"
+      && typeof signature.columnBand === "number"
+      && Number.isFinite(signature.columnBand)
+      && signature.columnBand >= 0
+      && signature.columnBand <= 1
+      && [summary.detected, summary.strong, summary.possible, summary.rejected].every((count) => Number.isInteger(count) && count >= 0 && count <= 1000)
+      && summary.detected === summary.strong + summary.possible + summary.rejected
+  );
+}
+
 export interface AdaptiveExtractionResult {
   draft: StructuredDraft;
   fieldEvidence: FieldEvidenceDescriptor[];

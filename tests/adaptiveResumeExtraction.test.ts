@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
   buildAdaptiveExtraction,
+  isRecordableSiblingScan,
   proposeSiblingBlockCorrections,
   proposeSiblingFieldCorrections,
   type LayoutTextLine,
@@ -278,6 +279,30 @@ test("document learning reports an unresolved sibling instead of inventing a blo
   const report = proposeSiblingBlockCorrections({ pages: [page], draft: reviewed, extracted, sourceIndex: 0, sourceField: "organization" });
   assert.equal(report.suggestions.length, 0);
   assert.equal(report.unresolved[0]?.reasonCode, "source-incomplete");
+  assert.equal(isRecordableSiblingScan(report), false);
+});
+
+test("an unlocatable corrected block remains a non-blocking and non-recordable diagnostic", () => {
+  const page: ExtractedPage = {
+    pageNumber: 2,
+    text: "EXPERIÊNCIA PROFISSIONAL\nConteúdo sem o cabeçalho corrigido",
+    origin: "native_pdf",
+    usefulCharacterCount: 58,
+    method: "pdfjs",
+    methodVersion: "fixture-layout-v2",
+    layoutLines: [line("EXPERIÊNCIA PROFISSIONAL", 0.08, 0.08, 0.45, "strong"), line("Conteúdo sem o cabeçalho corrigido", 0.12)],
+  };
+  const extracted: StructuredDraft = {
+    ...emptyStructuredSummary(),
+    experiences: [legacyExperience(0, { role: "Analista", organization: "Organização original", period: "2012 - 2018", description: "Atuação profissional.", evidenceText: "Cabeçalho original", page: 2 })],
+    education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
+  };
+  const reviewed = structuredClone(extracted);
+  reviewed.experiences[0]!.organization = "Servimed Comercial";
+  const report = proposeSiblingBlockCorrections({ pages: [page], draft: reviewed, extracted, sourceIndex: 0, sourceField: "organization" });
+  assert.equal(report.suggestions.length, 0);
+  assert.equal(report.unresolved[0]?.reasonCode, "source-block-not-found");
+  assert.equal(isRecordableSiblingScan(report), false);
 });
 
 test("text-only and OCR fallback never invent spatial coordinates", () => {
@@ -327,6 +352,7 @@ test("a complete human anchor discovers missing comma-header sibling experiences
   assert.equal(report.methodVersion, "prisma-document-learning-v3");
   assert.equal(report.algorithmVersion, "adaptive-sibling-block-v1");
   assert.equal(report.signatureVersion, "experience-sibling-signature-v1");
+  assert.equal(isRecordableSiblingScan(report), true);
   assert.equal(report.suggestions.length, 2);
   assert.ok(report.suggestions.every((item) => item.kind === "new" && item.classification === "strong"));
   assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["HRT Solutions", "Bencato Engenharia"]);
@@ -462,6 +488,11 @@ test("adaptive v3 persists structural audit metadata and field evidence without 
   assert.match(service, /recordSiblingScan/);
   assert.match(page, /hasSpatialAnchorEvidence/);
   assert.match(page, /dismissAdaptiveSuggestions/);
+  assert.match(page, /setAdaptiveReport\(null\)[\s\S]*report\.suggestions\.length === 0[\s\S]*isRecordableSiblingScan\(report\)/);
+  assert.match(page, /void personIngestionService\.recordSiblingScan/);
+  const panel = await readFile("web/src/components/review/AdaptiveSuggestionPanel.tsx", "utf8");
+  assert.match(panel, /Nenhuma ação necessária/);
+  assert.match(panel, /Fechar aviso/);
 });
 
 test("adaptive v3 hardening rejects metadata-only and mismatched sibling suggestions at the RPC boundary", async () => {

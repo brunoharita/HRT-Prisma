@@ -39,6 +39,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - model: `deterministic-local-1.0.0`.
 - revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
 - revisão humana: `human-profile-review-7.1.0`;
+- interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;

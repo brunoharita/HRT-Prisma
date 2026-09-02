@@ -19,6 +19,7 @@ Repository instructions never override platform safety, user authority, legal ob
 - Authorization is enforced outside the frontend and fails closed when organization, role, contract, or version is unknown.
 - Do not log complete resumes, unnecessary personal data, secrets, or prompts containing integral PII.
 - AI supports human decisions and is never the authority for hiring, rejection, access control, or sensitive data mutation.
+- Minimize human interaction: every required click or keystroke must represent judgment, authority, risk acceptance, or an otherwise unavoidable choice. Deterministic coordination, reversible presentation state, audit metadata and retries are system responsibilities; optional guidance or telemetry failure must never block the operator.
 
 ## 3. Documentation ownership and precedence
 
