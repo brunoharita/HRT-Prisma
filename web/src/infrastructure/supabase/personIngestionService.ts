@@ -28,6 +28,7 @@ import {
   type StructuredDraft,
 } from "../../domain/personIngestion";
 import { countPendingReviews, isRecoverableReviewAttempt } from "../../domain/documentPresentation";
+import { resolveEducationClassification } from "../../../../src/domain/educationClassification";
 import type {
   NormalizedPageRegion,
   RegionExtractionMethod,
@@ -1412,6 +1413,7 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
     education: Array.isArray(value.education) ? value.education.flatMap((item, index) => {
       if (!item || typeof item !== "object") return [];
       const candidate = item as Partial<StructuredDraft["education"][number]>;
+      const classification = resolveEducationClassification(candidate);
       return [{
         id: typeof candidate.id === "string" ? candidate.id : legacyReviewEntityId("education", index),
         source: candidate.source === "human" ? "human" : "extracted",
@@ -1421,6 +1423,7 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
         description: typeof candidate.description === "string" ? candidate.description : null,
         evidenceText: typeof candidate.evidenceText === "string" ? candidate.evidenceText : "",
         page: typeof candidate.page === "number" ? candidate.page : null,
+        ...classification,
       }];
     }) : [],
     certifications: Array.isArray(value.certifications) ? value.certifications : [],

@@ -37,6 +37,16 @@ test("matches repeated entities by stable business identity and detects material
   assert.equal(delta.items.find((item) => item.key === "experiences::old-id")?.kind, "updated");
 });
 
+test("academic enrichment updates a stable formation instead of duplicating it", () => {
+  const previous = education("old-id", "UNESP", "Bacharelado em Sistemas de Informação");
+  const next = education("new-id", "UNESP", "Sistemas de Informação");
+  next.level = "undergraduate";
+  next.qualification = "bachelor";
+  const delta = deriveProfileDelta(draft({ education: [previous] }), draft({ education: [next] }));
+  assert.equal(delta.items.filter((item) => item.section === "education").length, 1);
+  assert.equal(delta.items.find((item) => item.section === "education")?.kind, "updated");
+});
+
 function draft(overrides: Partial<StructuredDraft> = {}): StructuredDraft {
   return {
     identity: { fullName: "Pessoa Teste" },
@@ -49,4 +59,8 @@ function draft(overrides: Partial<StructuredDraft> = {}): StructuredDraft {
 
 function experience(id: string, organization: string, role: string): StructuredDraft["experiences"][number] {
   return { id, source: "extracted", organization, role, period: null, description: null, evidenceText: `${organization} ${role}`, page: 1 };
+}
+
+function education(id: string, institution: string, course: string): StructuredDraft["education"][number] {
+  return { id, source: "extracted", institution, course, period: null, description: null, evidenceText: `${course} ${institution}`, page: 1 };
 }

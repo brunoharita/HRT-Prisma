@@ -3,6 +3,11 @@ import type {
   StructuredEducation,
   StructuredExperience,
 } from "./personIngestion.js";
+import {
+  educationClassificationNeedsReview,
+  isEducationLevelQualificationCompatible,
+  resolveEducationClassification,
+} from "../../../src/domain/educationClassification.js";
 
 export type ReviewEntityKind = "experience" | "education";
 
@@ -95,6 +100,7 @@ export function normalizeReviewDraft(draft: StructuredDraft): StructuredDraft {
         institution: nullableText(item.institution),
         period: nullableText(item.period),
         description: nullableText(item.description),
+        ...resolveEducationClassification(item),
       }))
       .filter((item) => !isEducationEmpty(item)),
     certifications: normalizeTags(draft.certifications),
@@ -145,7 +151,7 @@ export function reviewFieldPathExists(draft: StructuredDraft, fieldPath: string)
       && draft.experiences.some((item) => item.id === segments[1] || reviewEntityPathSegment("experience", item.id) === segments[1]);
   }
   if (segments[0] === "education" && segments.length === 3) {
-    return ["course", "institution", "period", "description"].includes(segments[2] ?? "")
+    return ["course", "institution", "period", "description", "level", "qualification", "status", "classificationOrigin"].includes(segments[2] ?? "")
       && draft.education.some((item) => item.id === segments[1] || reviewEntityPathSegment("education", item.id) === segments[1]);
   }
   if (segments[0] === "keyResults" && segments.length === 3 && segments[2] === "value") {
@@ -221,11 +227,13 @@ export function validateReviewDraftForSave(
 
   draft.education.forEach((item) => {
     const base = reviewEntityFieldPath("education", item);
+    const classification = resolveEducationClassification(item);
     if (!EDUCATION_ID_PATTERN.test(item.id)) issues.push({ fieldPath: base, message: "A formação possui um identificador inválido." });
     if (!item.course?.trim() && !item.institution?.trim()) issues.push({ fieldPath: `${base}.course`, message: "Informe Curso ou Instituição, ou remova esta formação." });
     if (item.course && item.course.trim().length > 500) issues.push({ fieldPath: `${base}.course`, message: "Curso deve ter no máximo 500 caracteres." });
     if (item.institution && item.institution.trim().length > 240) issues.push({ fieldPath: `${base}.institution`, message: "Instituição deve ter no máximo 240 caracteres." });
     if (item.period && item.period.trim().length > 160) issues.push({ fieldPath: `${base}.period`, message: "Período deve ter no máximo 160 caracteres." });
+    if (!isEducationLevelQualificationCompatible(classification.level, classification.qualification)) issues.push({ fieldPath: `${base}.qualification`, message: "A qualificação não é compatível com o nível acadêmico selecionado." });
   });
   if (hasDuplicateIds(draft.education)) issues.push({ fieldPath: "education", message: "Formações possui identificadores duplicados." });
 
@@ -233,6 +241,19 @@ export function validateReviewDraftForSave(
     issues.push({ fieldPath: "professionalTitle", message: "Informe ao menos uma informação profissional material antes de salvar." });
   }
   return issues;
+}
+
+export function validateEducationClassificationsForApproval(draft: StructuredDraft): ReviewDraftIssue[] {
+  return draft.education.flatMap((item) => {
+    const classification = resolveEducationClassification(item);
+    if (!isEducationLevelQualificationCompatible(classification.level, classification.qualification)) {
+      return [{ fieldPath: `${reviewEntityFieldPath("education", item)}.qualification`, message: "Revise a combinação entre nível acadêmico e qualificação antes de comparar." }];
+    }
+    if (educationClassificationNeedsReview(classification)) {
+      return [{ fieldPath: `${reviewEntityFieldPath("education", item)}.classificationOrigin`, message: "Confirme a classificação acadêmica sinalizada antes de comparar com o perfil atual." }];
+    }
+    return [];
+  });
 }
 
 export function hasMaterialProfessionalInformation(draft: StructuredDraft): boolean {

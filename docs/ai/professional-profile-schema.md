@@ -2,7 +2,7 @@
 
 ## Identificação
 
-Owner: AI and domain engineering. Contrato: `professional-profile`. Versão atual: `2.0.0`. Implementação: `src/domain/types.ts` e `web/src/domain/personIngestion.ts`. Estado: schema ativo em QA; runtime e apresentação web locais.
+Owner: AI and domain engineering. Contrato: `professional-profile`. Versão atual: `5.0.0`. Implementação: `src/domain/types.ts` e `web/src/domain/personIngestion.ts`. Estado: evolução acadêmica local; perfil 4.0.0 ativo em QA até aplicação da migration.
 
 Cada perfil contém `id`, `organizationId`, `personId`, `createdAt` e versões de extraction, inference, embedding/retrieval, matching, prompt e model.
 
@@ -19,6 +19,15 @@ ProfessionalProfile
   experiences[]
     organization, role, startDate?, endDate?, description, evidenceIds[]
   education[]
+    id, source, course, institution, period, evidenceText, page
+    originalText
+    level(secondary|technical|undergraduate|postgraduate|unknown)
+    qualification(technical_course|technologist|bachelor|licentiate|specialization|mba|master|doctorate|postdoctorate|other|unknown)
+    status(completed|in_progress|interrupted|suspended|unknown)
+    classificationOrigin(explicit|inferred|human|unknown)
+    classificationSources(level, qualification, status)
+    classificationReasons[], classificationMethodVersion, classificationReviewed
+    classifierSnapshot?
   certifications[]
   languages[]
   toolsAndTechnologies[]
@@ -41,6 +50,8 @@ Nome e contato não pertencem ao payload profissional. A revisão pode confirmá
 ## Evidência e inferência
 
 Evidência contém tipo, fato, documento, bloco, página quando disponível, trecho exato, versão e data. Inferência contém tipo, valor, justificativa, evidências de suporte, versão e data. Inferência nunca é serializada como evidência.
+
+Na formação, `classifierSnapshot` preserva o resultado determinístico inicial. Ajuste humano altera o valor efetivo e a origem, sem reescrever o snapshot. Inferência e `unknown` permanecem revisáveis; perfil novo rejeita classificação presente e não confirmada. Perfis históricos sem os campos novos são lidos com fallback `unknown`, sem inventar backfill.
 
 ## Ausência e soft skills
 

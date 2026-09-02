@@ -2662,6 +2662,34 @@ textarea {
 .prisma-required-marker { color: #cf1322; }
 .prisma-review-value-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 8px; }
 
+.prisma-education-classification-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: linear-gradient(145deg, #fbfdff 0%, #f7faff 100%);
+  border: 1px solid #cfe0fa;
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgb(32 78 142 / 6%);
+}
+.prisma-education-classification-card.requires-review { background: linear-gradient(145deg, #fffdf8 0%, #fff9ed 100%); border-color: #f4cf82; }
+.prisma-education-classification-card.is-confirmed { background: linear-gradient(145deg, #fbfffd 0%, #f5fcf8 100%); border-color: #bfe1cd; }
+.prisma-education-classification-card__header,
+.prisma-education-classification-card__footer { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.prisma-education-classification-card__header > div,
+.prisma-education-classification-card__footer > div { display: grid; min-width: 0; gap: 2px; }
+.prisma-education-classification-card__header strong { color: #142b49; font-size: .9rem; }
+.prisma-education-classification-card__header span,
+.prisma-education-classification-card__footer span { color: #687991; font-size: .69rem; line-height: 1.45; }
+.prisma-education-classification-card__footer { padding: 11px 12px; background: rgb(255 255 255 / 68%); border: 1px solid rgb(205 218 237 / 78%); border-radius: 9px; }
+.prisma-education-classification-card__footer small { color: #6a7890; font-size: .65rem; }
+.prisma-education-classification-card__footer strong { color: #17375f; font-size: .78rem; }
+.prisma-education-classification-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.prisma-academic-select { display: grid; min-width: 0; gap: 5px; padding: 10px; background: rgb(255 255 255 / 82%); border: 1px solid #dce5f2; border-radius: 9px; }
+.prisma-academic-select.is-selected { border-color: #9ebef8; box-shadow: 0 0 0 2px rgb(21 94 239 / 8%); }
+.prisma-academic-select > span { color: #344969; font-size: .69rem; font-weight: 700; }
+.prisma-academic-select > small { color: #7b899b; font-size: .62rem; }
+.prisma-academic-select .ant-select { width: 100%; }
+
 .prisma-repeatable-review-item { display: grid; gap: 6px; }
 .prisma-repeatable-review-item > .ant-btn { justify-self: end; }
 
@@ -3610,7 +3638,11 @@ textarea {
   .prisma-review-statusbar .ant-typography { width: 100%; }
   .prisma-review-split { height: calc(100svh - 315px); min-height: 520px; }
   .prisma-review-value-grid,
-  .prisma-evidence-card-grid { grid-template-columns: 1fr; }
+  .prisma-evidence-card-grid,
+  .prisma-education-classification-grid { grid-template-columns: 1fr; }
+  .prisma-education-classification-card__header,
+  .prisma-education-classification-card__footer { align-items: stretch; flex-direction: column; }
+  .prisma-education-classification-card__footer > .ant-btn { width: 100%; }
   .prisma-review-structured-pane { overflow-x: hidden; }
   .prisma-structured-review,
   .prisma-review-tabs,
@@ -4307,6 +4339,8 @@ textarea {
 .prisma-person-experience-section .prisma-published-record::before { position: absolute; top: 20px; left: 1px; width: 7px; height: 7px; content: ""; background: #2c6ed4; border: 2px solid #dce9ff; border-radius: 50%; box-shadow: 0 0 0 3px #eef4ff; }
 .prisma-person-experience-section .prisma-published-record:not(:last-child)::after { position: absolute; top: 31px; bottom: -4px; left: 4px; width: 1px; content: ""; background: #dce5f2; }
 .prisma-person-education-list .prisma-published-record { padding-left: 15px !important; border-left: 2px solid #d9e6fb; }
+.prisma-published-record__badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 7px; }
+.prisma-published-record__badges .ant-tag { margin: 0; font-size: .63rem; line-height: 18px; }
 .prisma-person-complementary-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .prisma-person-complementary-list > span { display: grid; min-width: 0; gap: 2px; padding: 10px; background: #f7f9fc; border-radius: 8px; }
 .prisma-person-complementary-list small { color: #768399; font-size: .66rem; }
@@ -4356,6 +4390,28 @@ textarea {
 .prisma-person-document-context__summary small { color: #6d7a90; font-size: .65rem; }
 .prisma-person-document-context__summary strong { overflow-wrap: anywhere; color: #143050; font-size: 1.02rem; }
 .prisma-person-document-context__summary span { color: #8290a3; font-size: .62rem; line-height: 1.35; }
+.prisma-document-education-summary { display: grid; gap: 10px; padding: 14px; background: #fbfcff; border: 1px solid #dce6f5; border-radius: 10px; }
+.prisma-document-education-summary__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.prisma-document-education-summary__heading > div { display: grid; gap: 2px; }
+.prisma-document-education-summary__heading small { color: #536a8a; font-size: .65rem; font-weight: 720; text-transform: uppercase; }
+.prisma-document-education-summary__heading strong { color: #17375f; font-size: .82rem; }
+.prisma-document-education-summary__list { display: grid; gap: 6px; }
+.prisma-document-education-summary__list article { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 9px 10px; background: #fff; border: 1px solid #e5ebf4; border-radius: 8px; }
+.prisma-document-education-summary__list article > div:first-child { display: grid; min-width: 0; gap: 1px; }
+.prisma-document-education-summary__list article strong { overflow: hidden; color: #1d3655; font-size: .7rem; text-overflow: ellipsis; white-space: nowrap; }
+.prisma-document-education-summary__list article span { color: #74839a; font-size: .63rem; }
+.prisma-document-education-summary__list article > div:last-child { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.prisma-document-education-summary__list .ant-tag { margin: 0; font-size: .6rem; line-height: 17px; }
+.prisma-document-education-summary__legend { display: flex; gap: 12px; flex-wrap: wrap; color: #6c7b91; font-size: .61rem; }
+.prisma-document-education-summary__legend span { display: inline-flex; align-items: center; gap: 5px; }
+.prisma-document-education-summary__legend i { width: 7px; height: 7px; border-radius: 50%; background: #155eef; }
+.prisma-document-education-summary__legend i.inferred { background: #e99b13; }
+
+@media (max-width: 640px) {
+  .prisma-document-education-summary__list article { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .prisma-document-education-summary__list article > div:last-child { justify-content: flex-start; }
+  .prisma-document-education-summary__list article strong { white-space: normal; }
+}
 .prisma-person-document-context__next { padding: 15px; background: #f2f7ff; border: 1px solid #c9dcfa; border-radius: 10px; }
 .prisma-person-document-context__next > small { display: block; color: #426da9; font-size: .65rem; font-weight: 720; text-transform: uppercase; }
 .prisma-person-document-context__next > strong { display: block; margin-top: 3px; color: #17375f; font-size: .86rem; }

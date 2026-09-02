@@ -11,10 +11,10 @@
 | `profile-publication-delta` | 1.0.0 | comparação preserva omissões e exige remoção humana explícita e auditada |
 | `person-ingestion` | 8.0.0 | cadastro, retry, revisão e publicação Delta são idempotentes |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
-| `human-profile-review` | 5.0.0 | revisão aceita extração parcial e termina em Delta antes da publicação atômica |
+| `human-profile-review` | 7.0.0 | revisão aceita extração parcial, exige confirmação acadêmica revisável e termina em Delta antes da publicação atômica |
 | `spatial-evidence` | 1.2.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas; preserva texto bruto, texto efetivo e decisões de subtração entre campos irmãos |
 | `document-operation-idempotency` | 1.1.0 | mesma chave e fingerprint retornam o mesmo resultado; invalidação também preserva histórico e perfil atual |
-| `professional-profile` | 4.0.0 | perfil aprovado preserva proveniência, IDs estáveis e fatos omitidos, sem contato privado |
+| `professional-profile` | 5.0.0 | perfil aprovado preserva proveniência, IDs estáveis, classificação acadêmica confirmada e fatos omitidos, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
 | `structured-resume-summary` | 1.0.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; PII nunca é promovida ao perfil profissional |
 | `review-field-lifecycle` | 1.0.0 | vazios opcionais são normalizados; nome, contato e conteúdo profissional mínimo bloqueiam salvamento inválido; caminhos antigos continuam legíveis |
@@ -76,6 +76,8 @@ Operações espaciais e aprovação permanecem indisponíveis enquanto uma ediç
 Uma área personalizada usa o caminho `customSections.<sectionId>.items.<itemId>.value`. Sua criação começa por seleção explícita no documento. A aprovação pode promover somente título normalizado, formato, versão e contagem de confirmação ao catálogo estrutural da organização; um ledger append-only referencia a revisão confirmadora. O valor do item e o trecho de evidência não são copiados para nenhum dos dois. `uncertainties` e `notIdentified` são pendências diagnósticas da extração, não fatos do perfil.
 
 Experiências e formações novas usam caminhos `experiences.<experienceId>.<campo>` e `education.<educationId>.<campo>`. Caminhos numéricos históricos permanecem aceitos. O salvamento converte escalares opcionais vazios em `null`, remove itens repetíveis inteiramente vazios e mantém listas como arrays, sem fabricar “Não identificado”. Nome completo, telefone ou e-mail e ao menos uma informação profissional material são gates explícitos. Experiência exige Empresa ou Cargo; formação exige Curso ou Instituição. Inclusão e remoção são decisões humanas reversíveis antes do salvamento.
+
+Formações novas também aceitam caminhos `level`, `qualification`, `status` e `classificationOrigin`. Salvar permite uma classificação ainda pendente para continuidade do trabalho; comparar/publicar exige confirmação humana quando houver inferência ou `unknown`. Trocar o nível limpa uma qualificação incompatível. O texto original, os motivos, a versão e o snapshot do classificador permanecem auditáveis.
 
 O estado de edição é comparado semanticamente após a mesma normalização usada na persistência. Diferença apenas transitória não cria revisão vazia nem solicita justificativa. Ao remover ou cancelar o item atualmente selecionado, a interface escolhe um campo irmão válido ou a raiz da mesma aba; ações de evidência falham fechadas para caminhos inexistentes. Sair da revisão com qualquer diferença local, inclusive transitória, exige confirmação explícita para evitar perda acidental.
 

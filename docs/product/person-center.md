@@ -25,7 +25,7 @@ Uma importação incompleta ou uma falha técnica nunca invalida a Pessoa nem o 
 - Pendências: ações reais derivadas dos estados documentais, com documento, data, explicação e CTA direto.
 - Perfil vigente: versão publicada e fonte preservadas em bloco estável, sem competir com a ação principal.
 - Resumo: documentos, pendências, experiências e competências explícitas com contexto.
-- Conhecimento profissional: resumo, experiências, formação, competências e demais fatos publicados, sem logos ou métricas inventadas.
+- Conhecimento profissional: resumo, experiências, formação acadêmica estruturada, competências e demais fatos publicados, sem logos ou métricas inventadas. Formação apresenta curso, instituição, período, situação, nível e qualificação; a origem permanece visível sem score arbitrário.
 - Documentos e versões: lista selecionável e painel contextual com estado, dados recuperados, pontos pendentes, resultado no Perfil e próxima ação.
 - Atividade recente: no máximo cinco eventos de produto; auditoria técnica permanece fora da visão geral.
 
@@ -49,6 +49,7 @@ A Central operacional continua restrita aos papéis já autorizados. Member perm
 
 - Não cria pendência persistida quando o estado pode ser derivado.
 - Não exibe confiança ou score sem contrato metodológico.
+- Não transforma ano final em conclusão nem apresenta inferência acadêmica como fato confirmado.
 - Não interpreta falta de evidência como característica negativa.
 - Não inventa título profissional, empresas, logos, datas, evidências ou competências.
 - Evidência Demonstrada do M5.1 permanece separada do Perfil factual e só aparece quando a consulta real correspondente existir.

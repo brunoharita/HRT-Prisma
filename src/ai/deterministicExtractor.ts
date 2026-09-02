@@ -1,4 +1,5 @@
 import type { ExtractionDraft } from "../domain/types.js";
+import { classifyEducationRecord } from "../domain/educationClassification.js";
 import type { ExtractionProvider, ExtractionRequest, ExtractionResponse } from "./provider.js";
 
 interface TextBlock {
@@ -99,7 +100,13 @@ function parseEducation(block: TextBlock): ExtractionDraft["education"][number] 
   const parts = cleanBullet(block.text).split("|").map((part) => part.trim());
   const [institution, course, status] = parts;
   if (!institution || !course) return null;
-  return { institution, course, status: status || null, sourceBlockId: block.id };
+  const classification = classifyEducationRecord({ course, status: status || null, originalText: block.text });
+  return {
+    institution,
+    ...classification,
+    course: classification.course ?? course,
+    sourceBlockId: block.id,
+  };
 }
 
 function parseLanguage(block: TextBlock): ExtractionDraft["languages"][number] | null {

@@ -79,7 +79,16 @@ export interface Experience {
 export interface EducationItem {
   institution: string;
   course: string;
-  status: string | null;
+  status: import("./educationClassification.js").EducationStatus;
+  originalText: string;
+  level: import("./educationClassification.js").EducationLevel;
+  qualification: import("./educationClassification.js").EducationQualification;
+  classificationOrigin: import("./educationClassification.js").EducationClassificationOrigin;
+  classificationSources: import("./educationClassification.js").EducationClassificationSources;
+  classificationReasons: string[];
+  classificationMethodVersion: string;
+  classificationReviewed: boolean;
+  classifierSnapshot: import("./educationClassification.js").EducationClassifierSnapshot;
   evidenceIds: UUID[];
 }
 

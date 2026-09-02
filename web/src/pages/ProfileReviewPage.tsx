@@ -27,6 +27,7 @@ import {
   reviewEntityFieldPath,
   reviewEntityPathSegment,
   reviewFieldPathExists,
+  validateEducationClassificationsForApproval,
   validateReviewDraftForSave,
   type ReviewDraftIssue,
 } from "../domain/reviewFieldLifecycle";
@@ -221,10 +222,11 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     if (!workspace || !draft) return;
     if (transientOnly) { setError("Preencha ou cancele o novo campo antes de aprovar a versão."); return; }
     if (dirty || pendingSelection) { setError("Conclua ou cancele a seleção e salve as alterações antes de aprovar."); return; }
-    const issues = validateReviewDraftForSave(normalizeReviewDraft(draft), {
+    const normalizedDraft = normalizeReviewDraft(draft);
+    const issues = [...validateReviewDraftForSave(normalizedDraft, {
       existingPhone: workspace.personPrivateContact.phone,
       existingEmail: workspace.personPrivateContact.email,
-    });
+    }), ...validateEducationClassificationsForApproval(normalizedDraft)];
     if (issues.length) {
       setValidationIssues(issues);
       setError(issues[0]!.message);
@@ -843,7 +845,7 @@ function addNewInformation(
     return { draft: next, fieldPath: reviewEntityFieldPath("experience", item, "role") };
   }
   if (type === "education") {
-    const item = { id: createReviewEntityId("education"), source: "human" as const, course: value, institution: null, period: null, description: null, evidenceText: value, page };
+    const item = { id: createReviewEntityId("education"), source: "human" as const, course: value, institution: null, period: null, description: null, evidenceText: value, page, originalText: value, level: "unknown" as const, qualification: "unknown" as const, status: "unknown" as const, classificationOrigin: "human" as const, classificationSources: { level: "human" as const, qualification: "human" as const, status: "human" as const }, classificationReasons: ["human_record_created"], classificationMethodVersion: "human-review-1.0.0", classificationReviewed: false };
     next.education.push(item);
     return { draft: next, fieldPath: reviewEntityFieldPath("education", item, "course") };
   }

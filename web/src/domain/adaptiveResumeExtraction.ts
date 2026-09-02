@@ -1,4 +1,5 @@
 import type { ExtractedPage, StructuredDraft } from "./personIngestion.js";
+import { classifyEducationRecord } from "../../../src/domain/educationClassification.js";
 import { reviewEntityFieldPath, stableReviewEntityId } from "./reviewFieldLifecycle.js";
 import { extractResumeIdentity } from "../../../src/domain/resumeIdentity.js";
 import {
@@ -8,8 +9,8 @@ import {
   type LearnedCustomSectionDefinition,
 } from "./customProfileSections.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "5.0.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v5";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "6.0.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v6";
 export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v3";
 export const ADAPTIVE_SIBLING_ALGORITHM_VERSION = "adaptive-sibling-block-v1";
 export const ADAPTIVE_SIBLING_SIGNATURE_VERSION = "experience-sibling-signature-v1";
@@ -179,16 +180,25 @@ export function buildAdaptiveExtraction(
 
   const fullText = pages.map((page) => page.text).join("\n");
   const allLines = candidateLines(pages);
-  const educationLines = allLines.filter((entry) => /(universidade|faculdade|bacharel|tecn[oó]logo|mba|p[oó]s-gradua[cç][aã]o|university|college)/i.test(entry.text));
-  const education = educationLines.slice(0, 8).map((entry) => ({
-    id: stableReviewEntityId("education", `${entry.pageNumber}:${entry.sequence}:${entry.text}`),
-    source: "extracted" as const,
-    course: entry.text,
-    institution: "Não identificada",
-    period: extractPeriod(entry.text),
-    evidenceText: entry.text,
-    page: entry.pageNumber,
-  }));
+  const educationLines = allLines.filter((entry) => /(universidade|faculdade|bacharel|licenciatura|tecnologia em|tecn[oó]logo|curso t[eé]cnico|t[eé]cnico em|mba|especializa[cç][aã]o|p[oó]s[- ]?gradua[cç][aã]o|mestrado|doutorado|p[oó]s[- ]?doutorado|university|college|bachelor|licentiate|technologist|technical (?:course|diploma|program)|master|doctorate|postdoctoral)/i.test(entry.text));
+  const education = educationLines.slice(0, 8).map((entry) => {
+    const period = extractPeriod(entry.text);
+    const classification = classifyEducationRecord({ course: entry.text, originalText: entry.text, period });
+    const educationItem = {
+      id: stableReviewEntityId("education", `${entry.pageNumber}:${entry.sequence}:${entry.text}`),
+      source: "extracted" as const,
+      institution: "Não identificada",
+      period,
+      evidenceText: entry.text,
+      page: entry.pageNumber,
+      ...classification,
+    };
+    fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "course"), entry, educationItem.course ?? entry.text));
+    if (classification.level !== "unknown") fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "level"), entry, classification.level));
+    if (classification.qualification !== "unknown") fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "qualification"), entry, classification.qualification));
+    if (classification.status !== "unknown") fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "status"), entry, classification.status));
+    return educationItem;
+  });
   const competencyCatalog = ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL", "Power BI", "SAP", "Scrum", "Kanban", "Docker", "AWS", "Azure", "Supabase"];
   const competencies = competencyCatalog.filter((item) => new RegExp(`\\b${escapeRegExp(item)}\\b`, "i").test(fullText));
   const languages = ["Português", "Inglês", "Espanhol", "English", "Spanish"].filter((item) => new RegExp(`\\b${item}\\b`, "i").test(fullText));

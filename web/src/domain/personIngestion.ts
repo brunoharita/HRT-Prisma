@@ -16,7 +16,7 @@ export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
 export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
-export const EXTRACTION_DRAFT_VERSION = "6.0.0";
+export const EXTRACTION_DRAFT_VERSION = "7.0.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -210,6 +210,16 @@ export interface StructuredEducation {
   description?: string | null;
   evidenceText: string;
   page: number | null;
+  originalText?: string;
+  level?: import("../../../src/domain/educationClassification.js").EducationLevel;
+  qualification?: import("../../../src/domain/educationClassification.js").EducationQualification;
+  status?: import("../../../src/domain/educationClassification.js").EducationStatus;
+  classificationOrigin?: import("../../../src/domain/educationClassification.js").EducationClassificationOrigin;
+  classificationSources?: import("../../../src/domain/educationClassification.js").EducationClassificationSources;
+  classificationReasons?: string[];
+  classificationMethodVersion?: string;
+  classificationReviewed?: boolean;
+  classifierSnapshot?: import("../../../src/domain/educationClassification.js").EducationClassifierSnapshot;
 }
 
 export interface StructuredDraft {

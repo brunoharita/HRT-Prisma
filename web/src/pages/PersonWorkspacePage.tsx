@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -55,6 +56,14 @@ import {
   type StructuredExperience,
 } from "../domain/personIngestion";
 import { isReviewableDocument, presentDocument } from "../domain/documentPresentation";
+import {
+  EDUCATION_LEVEL_LABELS,
+  EDUCATION_ORIGIN_LABELS,
+  EDUCATION_QUALIFICATION_LABELS,
+  EDUCATION_STATUS_LABELS,
+  educationClassificationNeedsReview,
+  resolveEducationClassification,
+} from "../../../src/domain/educationClassification";
 import {
   buildPersonCenterViewModel,
   type PersonActionKind,
@@ -545,7 +554,8 @@ function DocumentContextPanel({ document, draft, busy, onAction, onDiscard }: { 
     <aside aria-label={`Detalhes de ${document.filename}`} className="prisma-person-document-context">
       <PrismaCard>
         <div className="prisma-person-document-context__header"><FilePdfOutlined /><div><small>Documento selecionado</small><Typography.Title level={3}>{document.filename}</Typography.Title><span>Importado em {formatDate(document.createdAt)}</span></div><PrismaStatusTag label={presentation.label} tone={statusTone(presentation.tone)} /></div>
-        <div className="prisma-person-document-context__summary"><article><small>Campos recuperados</small><strong>{metrics.recovered}</strong><span>Informações estruturadas nesta fonte</span></article><article><small>Pontos pendentes</small><strong>{metrics.pending}</strong><span>Itens explicitamente não identificados</span></article><article><small>Resultado no Perfil</small><strong>{document.profileVersion ? `v${document.profileVersion}` : "Sem nova versão"}</strong><span>{document.profileVersion ? "Perfil publicado" : "Perfil vigente preservado"}</span></article></div>
+        <div className="prisma-person-document-context__summary"><article><small>Campos recuperados</small><strong>{metrics.recovered}</strong><span>Informações estruturadas nesta fonte</span></article><article><small>Pontos pendentes</small><strong>{metrics.pending}</strong><span>Campos não identificados ou que exigem validação</span></article><article><small>Resultado no Perfil</small><strong>{document.profileVersion ? `v${document.profileVersion}` : "Sem nova versão"}</strong><span>{document.profileVersion ? "Perfil publicado" : "Perfil vigente preservado"}</span></article></div>
+        {draft?.education.length ? <DocumentEducationSummary education={draft.education} /> : null}
         <section className="prisma-person-document-context__next"><small>Próxima ação</small><strong>{presentation.nextAction}</strong><p>{presentation.description}</p>{reviewable ? <Button block icon={<ArrowRightOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Abrir revisão M5</Button> : presentation.state === "technical_failure" && document.latestAttempt && document.latestAttempt.pagesNative + document.latestAttempt.pagesOcr > 0 ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("reprocess", document)} type="primary">Reprocessar documento</Button> : null}</section>
         <div className="prisma-person-document-context__actions"><Button icon={<EyeOutlined />} onClick={() => onAction(document.verificationReviewId ? "open_document" : "open_details", document)}>{document.verificationReviewId ? "Visualizar documento" : "Detalhes técnicos"}</Button>{canDiscard ? <Popconfirm cancelText="Manter pendência" description="Documento, histórico e Perfil vigente permanecerão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(document)} title="Descartar esta importação do fluxo ativo?"><Button danger disabled={busy} icon={<DeleteOutlined />}>Descartar</Button></Popconfirm> : null}</div>
       </PrismaCard>
@@ -557,7 +567,8 @@ function draftMetrics(draft: PersonIngestionWorkspace["draft"]): { recovered: nu
   if (!draft) return { recovered: 0, pending: 0 };
   const scalarValues = [draft.professionalTitle, draft.professionalObjective, draft.summary].filter((value) => value?.trim()).length;
   const collectionValues = draft.keyResults.length + draft.experiences.length + draft.education.length + draft.certifications.length + draft.languages.length + draft.competencies.length + draft.customSections.reduce((sum, section) => sum + section.items.length, 0);
-  return { recovered: scalarValues + collectionValues, pending: draft.notIdentified.length };
+  const pendingEducation = draft.education.filter((item) => educationClassificationNeedsReview(resolveEducationClassification(item))).length;
+  return { recovered: scalarValues + collectionValues, pending: draft.notIdentified.length + pendingEducation };
 }
 
 function statusTone(tone: ReturnType<typeof presentDocument>["tone"]): "success" | "info" | "warning" | "danger" | "neutral" {
@@ -650,23 +661,36 @@ function PublishedExperienceItem({ item }: { item: StructuredExperience }) {
 }
 
 function PublishedEducationItem({ item }: { item: StructuredEducation }) {
+  const classification = resolveEducationClassification(item);
   const course = conciseRecordValue(item.course);
   const institution = conciseRecordValue(item.institution);
   const title = course ?? institution ?? "Formação registrada";
   const metadata = [institution && institution !== title ? institution : null, conciseRecordValue(item.period)].filter(Boolean).join(" · ");
   const detail = recordDetail([item.description, item.evidenceText, course ? null : item.course, institution ? null : item.institution], title, metadata);
-  return <PublishedRecord detail={detail} metadata={metadata} title={title} />;
+  return <PublishedRecord detail={detail} metadata={metadata} title={title} badges={<><Tag color={classification.status === "completed" ? "green" : classification.status === "in_progress" ? "blue" : "default"}>{EDUCATION_STATUS_LABELS[classification.status]}</Tag><Tag color="geekblue">{EDUCATION_LEVEL_LABELS[classification.level]}</Tag><Tag color="purple">{EDUCATION_QUALIFICATION_LABELS[classification.qualification]}</Tag><Tag>{EDUCATION_ORIGIN_LABELS[classification.classificationOrigin]}</Tag></>} />;
 }
 
-function PublishedRecord({ detail, metadata, title }: { detail: string | null; metadata: string; title: string }) {
+function PublishedRecord({ detail, metadata, title, badges }: { detail: string | null; metadata: string; title: string; badges?: ReactNode }) {
   return (
     <List.Item className="prisma-published-record">
       <div>
         <strong>{title}</strong>
         {metadata ? <small>{metadata}</small> : null}
+        {badges ? <div className="prisma-published-record__badges">{badges}</div> : null}
         {detail ? <Typography.Paragraph ellipsis={{ rows: 3, expandable: true, symbol: "Ver mais" }}>{detail}</Typography.Paragraph> : null}
       </div>
     </List.Item>
+  );
+}
+
+function DocumentEducationSummary({ education }: { education: StructuredEducation[] }) {
+  const pending = education.filter((item) => educationClassificationNeedsReview(resolveEducationClassification(item))).length;
+  return (
+    <section className="prisma-document-education-summary">
+      <div className="prisma-document-education-summary__heading"><div><small>Formação acadêmica identificada</small><strong>{education.length} {education.length === 1 ? "registro" : "registros"}</strong></div>{pending ? <Tag color="gold">{pending} requer {pending === 1 ? "validação" : "validações"}</Tag> : <Tag color="green">Classificação confirmada</Tag>}</div>
+      <div className="prisma-document-education-summary__list">{education.slice(0, 4).map((item) => { const classification = resolveEducationClassification(item); return <article key={item.id}><div><strong>{item.course || "Curso não identificado"}</strong><span>{item.institution || "Instituição não identificada"}</span></div><div><Tag color="geekblue">{EDUCATION_LEVEL_LABELS[classification.level]}</Tag><Tag color={educationClassificationNeedsReview(classification) ? "gold" : "green"}>{EDUCATION_QUALIFICATION_LABELS[classification.qualification]}</Tag></div></article>; })}</div>
+      <div className="prisma-document-education-summary__legend"><span><i className="explicit" />Explícita: informada diretamente no documento</span><span><i className="inferred" />Inferida: deduzida por regra e sujeita à validação</span></div>
+    </section>
   );
 }
 

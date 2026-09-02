@@ -6,33 +6,34 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 
 | Contrato | Owner | Versão | Consumidores | Status | Evidência | Ambiente | Versão desconhecida |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `professional-profile` | AI/domain | 4.0.0 | review, retrieval, matching, repository | publicação Delta ativa em QA; runtime web local | perfil versionado, PII excluída e omissões preservadas na promoção | local/QA | bloquear |
+| `professional-profile` | AI/domain | 5.0.0 | review, retrieval, matching, repository | publicação Delta v1 ativa em QA; classificação acadêmica local | perfil versionado, PII excluída, omissões preservadas e formação qualificada | local/QA | bloquear |
 | `document-processing-state` | application | 2.3.0 | importer, repository, operations, review | schema e recuperação parcial ativos em QA; apresentação web local | estados técnicos alimentam um estado de produto único | local/QA | bloquear sem páginas preservadas |
 | `document-presentation` | application/UI | 2.0.0 | Pessoas, processamento, Central da Pessoa, revisão | implementado localmente | jornada de seis etapas, tentativa revisável e perfil atual | local | falhar fechado sem tentativa recuperável |
 | `resume-product-state` | product/application | 1.0.0 | importação, análise, Pessoas, Central da Pessoa | implementado localmente | sete estados canônicos derivados sem contaminar a Pessoa | local | falhar fechado como falha técnica |
 | `person-action-center` | product/application/UI | 1.0.0 | Central da Pessoa, documentos, M5 | implementado localmente | view model tipado e pendências derivadas com alvo documental explícito | local | não exibir ação sem destino disponível |
 | `profile-publication-delta` | product/application/data | 1.0.0 | revisão, publicação, Central da Pessoa | schema ativo em QA; runtime web local | omissões preservadas e remoções explícitas auditadas | local/QA | bloquear publicação |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
-| `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |
-| `adaptive-resume-extraction` | AI/application | 5.0.0 | ingestão M2-B e revisão | sibling discovery e persistência v3 ativos em QA | assinatura document-local, blocos irmãos, geometria, resumo e IDs estáveis | local/QA | exigir revisão/reprocessamento |
+| `extraction-rules` | AI | 2.0.0 | provider local | implementado | `extraction-rules-2.0.0` + classificação acadêmica determinística | local | revisão/reprocessamento |
+| `adaptive-resume-extraction` | AI/application | 6.0.0 | ingestão M2-B e revisão | sibling discovery v3 ativo em QA; classificação acadêmica local | assinatura document-local, blocos irmãos, formação qualificada, geometria, resumo e IDs estáveis | local/QA | exigir revisão/reprocessamento |
+| `education-academic-classification` | AI/domain/application/data | 1.0.0 | extração, M5, Delta, Central da Pessoa, documentos | implementado localmente; migration preparada | nível, qualificação, status e origem com regra e snapshot preservados | local | exigir revisão humana |
 | `inference-ontology` | AI/domain | 1.0.0 | profile, search, matching | implementado | `inference-ontology-1.0.0` | local | bloquear inferência |
 | `structured-retrieval` | AI | 1.0.0 | search | implementado | `structured-lexical-1.0.0` | local | bloquear consulta |
 | `explainable-matching` | AI/domain | 1.0.0 | vacancy evaluation | implementado | `matching-explainable-1.0.0` | local | bloquear avaliação |
 | `prompt-selection` | AI | 1.0.0 | extraction provider | implementado sem LLM | `no-llm-prompt-1.0.0` | local | bloquear processamento |
-| `model-selection` | AI/operations | 1.0.0 | extraction provider | implementado localmente | `deterministic-local-1.0.0` | local | bloquear processamento |
+| `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
 | `tenant-authorization` | security/data | 1.0.0 | Supabase Data API/web | ativo em QA | RLS migration e testes conectados | QA | negar acesso |
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
-| `person-ingestion` | application/data | 9.0.0 | intake, Pessoas, documentos, perfil | schema v9 e publicação Delta ativos em QA; runtime web local | OCR posicionado, jornada completa, recuperação parcial e publicação omission-safe | local/QA | bloquear sem fonte recuperável |
+| `person-ingestion` | application/data | 10.0.0 | intake, Pessoas, documentos, perfil | schema v9 ativo em QA; evolução acadêmica local | OCR posicionado, jornada completa, recuperação parcial e publicação omission-safe | local/QA | bloquear sem fonte recuperável |
 | `resume-intake` | application/data/security | 1.0.0 | Home, Pessoas, importador | implementado localmente | `resume_intakes` e cinco RPCs controladas | local | bloquear criação/vínculo |
-| `human-profile-review` | application/domain | 6.0.0 | revisão, Delta, perfil, auditoria | RPCs v3 e publicação Delta ativas em QA; runtime web local | propostas completas com aceite auditável; Delta continua autoridade final | local/QA | bloquear promoção inválida |
+| `human-profile-review` | application/domain | 7.0.0 | revisão, Delta, perfil, auditoria | RPCs v3 ativas em QA; classificação acadêmica local | classificação inferida ou desconhecida exige confirmação; Delta continua autoridade final | local/QA | bloquear promoção inválida |
 | `spatial-evidence` | application/data | 1.2.0 | PDF viewer, revisão, auditoria | schema ativo em QA; web local | região bruta, texto efetivo, máscara por caractere ou símbolo e decisões imutáveis | local/QA | bloquear mutação |
 | `document-operation-idempotency` | application/data | 1.1.0 | cadastro, retry, persistência, aprovação e invalidação | base e invalidação ativas em QA | `document_operations`, fingerprints, locks e descarte auditável | local/QA | rejeitar conflito |
 | `pdf-native-extraction` | AI/application | 2.0.0 | ingestão PDF | implementado localmente | `pdfjs-5.4.296/layout-v2` | local | exigir revisão/reprocessamento |
 | `selective-ocr` | AI/application | 1.1.0 | páginas sem texto nativo suficiente | linhas posicionadas ativas localmente | `tesseract.js-7.0.0/por+eng-v1` + caixas normalizadas | local | falhar sem perfil |
-| `extraction-draft` | AI/domain | 6.0.0 | evidência e geração de perfil | schema compatível ativo em QA; runtime v6 local | `prisma-layout-adaptive-v5` | local/QA | bloquear promoção |
+| `extraction-draft` | AI/domain | 7.0.0 | evidência e geração de perfil | schema v6 ativo em QA; runtime v7 local | `prisma-layout-adaptive-v6` + `education-classifier-1.0.0` | local/QA | bloquear promoção |
 | `structured-resume-summary` | AI/domain/security | 1.0.0 | extração, revisão, Pessoas e perfil | schema ativo em QA; runtime web local | campos explícitos, IDs estáveis de resultados e fronteira privada de PII | local/QA | bloquear promoção |
 | `review-field-lifecycle` | application/domain/data | 1.0.0 | revisão, evidência, extração e aprovação | schema ativo em QA; runtime web local | IDs estáveis, compatibilidade numérica, descarte de vazios e gates de salvamento | local/QA | bloquear escrita |
 | `extraction-learning-case` | AI/data | 1.0.0 | avaliação e promoção de extração | ativo em QA | referências auditáveis a correções aprovadas | local/QA | bloquear aprendizado automático |

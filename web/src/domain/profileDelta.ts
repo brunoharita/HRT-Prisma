@@ -1,4 +1,5 @@
 import type { StructuredDraft } from "./personIngestion.js";
+import { educationCourseIdentity } from "../../../src/domain/educationClassification.js";
 
 export const PROFILE_PUBLICATION_DELTA_VERSION = "1.0.0";
 
@@ -132,7 +133,7 @@ function experienceIdentity(item: StructuredDraft["experiences"][number]): strin
   return `${normalized(item.organization)}|${normalized(item.role)}`;
 }
 function experienceLabel(item: StructuredDraft["experiences"][number]): string { return [item.organization, item.role].filter(Boolean).join(" · ") || "Experiência profissional"; }
-function educationIdentity(item: StructuredDraft["education"][number]): string { return `${normalized(item.institution)}|${normalized(item.course)}`; }
+function educationIdentity(item: StructuredDraft["education"][number]): string { return `${normalized(item.institution)}|${educationCourseIdentity(item.course)}`; }
 function educationLabel(item: StructuredDraft["education"][number]): string { return [item.institution, item.course].filter(Boolean).join(" · ") || "Formação"; }
 function describeEntity(value: unknown): string { return JSON.stringify(value); }
 function equivalent(left: unknown, right: unknown): boolean { return normalized(JSON.stringify(left, replacer)) === normalized(JSON.stringify(right, replacer)); }
