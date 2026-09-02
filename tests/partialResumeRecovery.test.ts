@@ -37,5 +37,5 @@ test("partial resume recovery uses preserved pages instead of the latest empty a
   assert.match(detail, /document\.reviewAttempt\.id/);
   assert.match(detail, /Recuperar informações no currículo/);
   assert.match(workspace, /document\.reviewAttempt\.id/);
-  assert.match(workspace, /Recuperar informações/);
+  assert.match(workspace, /Reprocessar documento/);
 });

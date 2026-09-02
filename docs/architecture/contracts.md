@@ -10,6 +10,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `document-processing-state` | application | 2.3.0 | importer, repository, operations, review | schema e recuperação parcial ativos em QA; apresentação web local | estados técnicos alimentam um estado de produto único | local/QA | bloquear sem páginas preservadas |
 | `document-presentation` | application/UI | 2.0.0 | Pessoas, processamento, Central da Pessoa, revisão | implementado localmente | jornada de seis etapas, tentativa revisável e perfil atual | local | falhar fechado sem tentativa recuperável |
 | `resume-product-state` | product/application | 1.0.0 | importação, análise, Pessoas, Central da Pessoa | implementado localmente | sete estados canônicos derivados sem contaminar a Pessoa | local | falhar fechado como falha técnica |
+| `person-action-center` | product/application/UI | 1.0.0 | Central da Pessoa, documentos, M5 | implementado localmente | view model tipado e pendências derivadas com alvo documental explícito | local | não exibir ação sem destino disponível |
 | `profile-publication-delta` | product/application/data | 1.0.0 | revisão, publicação, Central da Pessoa | schema ativo em QA; runtime web local | omissões preservadas e remoções explícitas auditadas | local/QA | bloquear publicação |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
 | `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 5fb5eea8e12b2db2d30bae1da3eaf7f9d20128ebe913e10fed5b1febc9b0fd7b
+source_manifest_sha256: 252e60d0f4a4dece1b19bff887a1a543dcf8b015d2cc00c14f152bfb1cfdde3a
 -->
 
 # Tudo sobre o Prisma
@@ -310,8 +310,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.9.0
-last_verified: 2026-09-01
+version: 2.10.0
+last_verified: 2026-09-02
 ---
 
 # Estado atual do Prisma
@@ -319,7 +319,7 @@ last_verified: 2026-09-01
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/m5-sibling-block-learning`, construída sobre a fundação M5 para fechar o aprendizado estrutural intra-documento com persistência, hardening e smoke autenticado no Prisma-QA.
+- Branch de entrega em validação: `codex/central-da-pessoa-redesign`, dedicada à composição operacional e ao redesign responsivo da Central da Pessoa sem mudança de backend.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -332,6 +332,7 @@ last_verified: 2026-09-01
 - Movimento M2-B implementado com cadastro/edição de Pessoa, entrada manual e PDF, extração nativa por página, OCR local seletivo, evidência, draft, perfil versionado e timeline.
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Fronteira Pessoa, Documento e Perfil Vigente 1.2.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. Tentativa operacional vazia não oculta a última tentativa revisável com páginas e draft preservados. A revisão M5 recupera extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual, enquanto tentativa sem fonte continua bloqueada.
+- Central da Pessoa 1.0 redesenhada localmente: `person-action-center` 1.0.0 compõe um view model tipado e deriva todas as pendências documentais reais sem estado paralelo. Cabeçalho profissional, pendências acionáveis, Perfil vigente, resumo contextual, conhecimento editorial, documentos com painel contextual e atividade recente foram organizados nas perspectivas Visão geral, Documentos e versões e Nova importação. O CTA `Revisar documento agora` resolve diretamente documento e tentativa revisável; Member continua fora da superfície operacional. Nenhum schema, RLS, score, IA ou estado persistido mudou. O smoke autenticado aguarda sessão ativa no navegador interno.
 - Jornada de ingestão 2.0.0 implementada localmente em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `resume-product-state` 1.0.0 deriva sete estados canônicos sem persistir estado na Pessoa. `profile-publication-delta` 1.0.0 preserva fatos aprovados não citados, exige decisão humana e motivo para remoção e retorna à Central da Pessoa somente depois da publicação transacional.
 - Publicação Delta ativa no Prisma-QA: `profile_publication_removals` possui RLS e DML direto revogado; `publish_profile_review` é a única autoridade cliente, enquanto `approve_profile_review` perdeu o grant de `authenticated`. Provas revertidas confirmaram preservação de experiência e competência omitidas, remoção apenas explícita, Perfil v2 atômico, negação de Member/cross-tenant e zero resíduos.
 - Descarte não destrutivo implementado localmente e no Prisma-QA pela RPC `invalidate_document_review`: somente Admin, Owner, Recruiter ou Super Admin invalidam uma revisão ou importação tecnicamente falha; documento, tentativa, revisão, eventos e perfil vigente permanecem preservados; replay é idempotente e nenhuma linha é apagada.
@@ -371,7 +372,7 @@ last_verified: 2026-09-01
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 151 testes técnicos compõem a suíte local, incluindo aprendizado estrutural intra-documento, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
+- 157 testes técnicos compõem a suíte local, incluindo Central da Pessoa, aprendizado estrutural intra-documento, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -497,6 +498,8 @@ Em 2026-09-01, o M5.1C foi implementado na branch `codex/m5-1c-item-bank-governa
 Em 2026-09-01, a branch `codex/m5-1-ux-polish` consolidou uma revisão transversal das superfícies existentes, sem criar nova capacidade. O Home deixou de expor infraestrutura; Matching removeu o percentual fixo e passou a resumir evidências e suficiência; Verificações passou a diferenciar encerramento de progresso; Banco de Itens recebeu navegação agrupada e linguagem operacional; o Perfil passou a separar título, contexto e descrição com expansão progressiva; estados passaram a compartilhar rótulos, cores e ícones. A inspeção autenticada local aprovou Home, Matching, Verificações, Banco de Itens e Perfil em desktop, além de Home, Matching, Verificações e Banco de Itens em 390 px sem rolagem horizontal. O passe móvel revelou e corrigiu compressão do Matching e corte de status em Verificações.
 
 Em 2026-09-02, a branch `codex/m5-sibling-block-learning` fechou o smoke autenticado do aprendizado estrutural intra-documento. Um PDF sintético no Prisma-QA revelou regressões de compatibilidade na persistência de geometria, na allowlist de caminhos estáveis e na localização de uma experiência criada pelo humano; as correções preservam a recuperação parcial, usam a região espacial como âncora e mantêm a primeira extração conservadora. O Prisma sugeriu exatamente duas experiências fortes, aplicou oito campos com evidência complementar e registrou um evento adaptativo metadata-only. A revisão permaneceu `draft`, sem perfil aprovado. Desktop e `390x844` passaram sem overflow horizontal. `pnpm run validate` aprovou lint de 243 arquivos, foundation, Context Pack, dois typechecks, build web, 151 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`.
+
+Em 2026-09-02, a branch `codex/central-da-pessoa-redesign` reorganizou a Central da Pessoa como workspace operacional responsivo, sem criar schema, estado paralelo ou nova funcionalidade. O contrato `person-action-center` 1.0.0 deriva pendências documentais reais, mantém o Perfil vigente independente, prioriza a ação humana, reúne conhecimento publicado, documentos, contexto e atividade e preserva a entrada direta na revisão M5. `pnpm run validate` aprovou lint de 248 arquivos, foundation, Context Pack, dois typechecks, build web, 157 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. O smoke autenticado nas cinco resoluções de referência ainda depende de uma sessão ativa no navegador interno; a tela local de login permanece disponível e nenhuma credencial ou bypass foi criado.
 
 ---
 

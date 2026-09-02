@@ -68,10 +68,11 @@ test("does not invent a pending import and treats invalidation as an archived hi
 });
 
 test("people, operations, hub, and review source preserve navigation and entity boundaries", async () => {
-  const [people, operations, hub, review, application, structuredReview, styles] = await Promise.all([
+  const [people, operations, hub, actionCenter, review, application, structuredReview, styles] = await Promise.all([
     readFile("web/src/pages/PeoplePage.tsx", "utf8"),
     readFile("web/src/pages/DocumentOperationsPage.tsx", "utf8"),
     readFile("web/src/pages/PersonWorkspacePage.tsx", "utf8"),
+    readFile("web/src/domain/personActionCenter.ts", "utf8"),
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
     readFile("web/src/app/PrismaApplication.tsx", "utf8"),
     readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
@@ -85,13 +86,15 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(operations, /title: "Status do documento"/);
   assert.match(operations, /title: "Perfil atual"/);
   assert.match(operations, /currentProfileLabel\(document\.currentProfile\)/);
-  assert.match(hub, /Revisar nova importação/);
-  assert.match(hub, /Nenhuma nova versão de perfil foi criada/);
-  assert.match(hub, /Descartar nova importação/);
+  assert.match(hub, /Perfil vigente/);
+  assert.match(hub, /Descartar esta importação do fluxo ativo/);
+  assert.match(actionCenter, /derivePersonPendingActions/);
+  assert.match(actionCenter, /Nova importação requer revisão/);
+  assert.match(actionCenter, /Revisar documento agora/);
   assert.match(review, /Não identificamos automaticamente uma experiência profissional neste currículo/);
   assert.match(review, /Selecionar área no currículo/);
   assert.match(review, /Adicionar experiência manualmente/);
-  assert.match(hub, /documentViewerPath\(personId, latestDocument\)/);
+  assert.match(hub, /documentViewerPath\(personId, document\)/);
   assert.match(hub, /verificationReviewId \? "Ver documento" : "Detalhes técnicos"/);
   assert.match(hub, /\/verification\/\$\{document\.verificationReviewId\}/);
   assert.match(application, /profileView === "verification"/);
@@ -105,10 +108,11 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(structuredReview, /viewOnly\?: boolean/);
   assert.match(structuredReview, /Modo de visualização/);
   assert.match(structuredReview, /Valor aprovado/);
-  assert.match(hub, /const canReview = isReviewableDocument\(latestDocument\)/);
-  assert.doesNotMatch(hub, /canReview[\s\S]{0,100}experiences\.length/);
+  assert.match(hub, /isReviewableDocument\(document\)/);
+  assert.doesNotMatch(actionCenter, /experiences\.length[\s\S]{0,100}review_document/);
+  assert.match(application, /activeMembership\.role === "member"[\s\S]{0,160}<PersonProfilePage/);
   assert.match(hub, /className="prisma-person-competency-tags"/);
-  assert.match(hub, /Competências confirmadas/);
+  assert.match(hub, /Competências/);
   assert.doesNotMatch(hub, /\{competency\} · explícita/);
   assert.match(hub, /Como interpretar as classificações/);
   assert.match(hub, /Identificada diretamente em um currículo ou em outra fonte aprovada/);
