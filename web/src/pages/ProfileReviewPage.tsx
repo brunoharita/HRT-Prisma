@@ -1,11 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckOutlined, EyeOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import { Alert, Button, Checkbox, Input, Modal, Popconfirm, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
-import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
+import { DocumentEvidenceViewer, refinedSelectionText, refinedSelectionUnits, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
 import type { CustomProfileSectionFormat, ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
-import { fieldPathMatches, type ReviewEvidenceAction } from "../domain/spatialEvidence";
+import {
+  COMPETENCY_LIST_SEGMENTATION_VERSION,
+  fieldPathMatches,
+  resolveSpatialListValues,
+  splitExplicitListValues,
+  type ReviewEvidenceAction,
+  type SpatialListResolution,
+} from "../domain/spatialEvidence";
 import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
   isRecordableSiblingScan,
@@ -76,6 +83,17 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [adaptiveReport, setAdaptiveReport] = useState<AdaptiveSuggestionReport | null>(null);
   const [deferredReviewAction, setDeferredReviewAction] = useState<DeferredReviewAction | null>(null);
   const [validationIssues, setValidationIssues] = useState<ReviewDraftIssue[]>([]);
+  const competencySelectionTarget = pendingAction === "correct_current_field" && selectedFieldPath === "competencies"
+    || pendingAction === "create_new_information" && newInformationType === "competency";
+  const competencySelectionResolution = useMemo<SpatialListResolution | null>(() => {
+    if (!pendingSelection || !competencySelectionTarget) return null;
+    if (selectionValueEdited) return resolveSpatialListValues([], selectionValue);
+    const effectiveText = refinedSelectionText(pendingSelection, excludedRefinementLinkIds);
+    return resolveSpatialListValues(
+      refinedSelectionUnits(pendingSelection, excludedRefinementLinkIds),
+      effectiveText,
+    );
+  }, [competencySelectionTarget, excludedRefinementLinkIds, pendingSelection, selectionValue, selectionValueEdited]);
 
   async function refresh() {
     const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
@@ -470,8 +488,9 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setError(null);
     setSuccess(null);
     setPendingSelection(selection);
-    setSelectionValue(selection.selectedText ?? "");
-    setExcludedRefinementLinkIds(selection.refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.linkId));
+    const defaultExclusions = selection.refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.linkId);
+    setSelectionValue(selectionValueForField(selection, defaultExclusions, selectedFieldPath));
+    setExcludedRefinementLinkIds(defaultExclusions);
     setSelectionValueEdited(false);
     setSelectionError(null);
     setPendingAction(createCustomAfterSelection ? "create_new_information" : "correct_current_field");
@@ -495,11 +514,16 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setSelectionError(null);
     const normalizedValue = selectionValue.trim();
     const effectiveSelectedText = refinedSelectionText(pendingSelection, excludedRefinementLinkIds);
+    const resolvedCompetencies = competencySelectionResolution?.values ?? [];
+    if (competencySelectionResolution?.ambiguous) {
+      setSelectionError("A área contém mais de um bloco de texto, mas a separação entre as competências não pôde ser confirmada. Ajuste a seleção ou separe os itens por linha, vírgula ou ponto e vírgula.");
+      return;
+    }
     let nextDraft: StructuredDraft | null = null;
     let targetFieldPath = selectedFieldPath;
     if (pendingAction === "correct_current_field") {
       if (!normalizedValue) { setSelectionError("Confirme ou informe o valor revisado para corrigir o campo."); return; }
-      nextDraft = applyValueAtFieldPath(draft, selectedFieldPath, normalizedValue);
+      nextDraft = applyValueAtFieldPath(draft, selectedFieldPath, normalizedValue, selectedFieldPath === "competencies" ? resolvedCompetencies : undefined);
       if (JSON.stringify(nextDraft) === JSON.stringify(draft)) { setSelectionError("O valor já é igual ao atual. Use Substituir evidência da revisão para trocar somente a origem."); return; }
     }
     if (pendingAction === "create_new_information") {
@@ -517,7 +541,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           customSectionName,
           customSectionFormat,
           customTargetSectionId,
-        });
+        }, newInformationType === "competency" ? resolvedCompetencies : undefined);
       } catch (caught) {
         setSelectionError(caught instanceof Error ? caught.message : "Não foi possível criar a informação personalizada.");
         return;
@@ -691,7 +715,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         </div>
       </div>
 
-      <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={!viewOnly && Boolean(pendingSelection)} title="Usar região selecionada">
+      <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy || Boolean(competencySelectionResolution?.ambiguous) }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={!viewOnly && Boolean(pendingSelection)} title="Usar região selecionada">
         {pendingSelection ? <div className="prisma-selection-dialog">
           {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
           <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={selectedFieldIsTransient ? "Este é um novo campo. A seleção preencherá seu conteúdo e salvará a evidência em uma única operação." : pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. Informe o valor correto; a região, a autoria e a mudança ficarão registradas automaticamente." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
@@ -708,7 +732,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
                     ? [...new Set([...excludedRefinementLinkIds, candidate.linkId])]
                     : excludedRefinementLinkIds.filter((linkId) => linkId !== candidate.linkId);
                   setExcludedRefinementLinkIds(next);
-                  if (!selectionValueEdited) setSelectionValue(refinedSelectionText(pendingSelection, next) ?? "");
+                  if (!selectionValueEdited) setSelectionValue(selectionValueForField(pendingSelection, next, selectedFieldPath));
                   setSelectionError(null);
                 }}>
                   <span><strong>{reviewFieldLabel(candidate.fieldPath)}</strong> · {candidate.overlapText}</span>
@@ -717,7 +741,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
               })}
             </div>
             {selectionValueEdited ? <Button onClick={() => {
-              setSelectionValue(refinedSelectionText(pendingSelection, excludedRefinementLinkIds) ?? "");
+              setSelectionValue(selectionValueForField(pendingSelection, excludedRefinementLinkIds, selectedFieldPath));
               setSelectionValueEdited(false);
               setSelectionError(null);
             }} size="small">Restaurar texto refinado</Button> : null}
@@ -744,6 +768,13 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           </Space> : null}
           {pendingAction === "create_new_information" && newInformationType === "custom_item" ? <Select aria-label="Área personalizada de destino" onChange={setCustomTargetSectionId} options={draft.customSections.filter((section) => section.format === "list").map((section) => ({ label: section.name, value: section.id }))} placeholder="Selecione a área" value={customTargetSectionId || null} /> : null}
           {pendingAction === "correct_current_field" || pendingAction === "create_new_information" ? <Input.TextArea aria-label="Valor sugerido pela região" onChange={(event) => { setSelectionValue(event.target.value); setSelectionValueEdited(true); setSelectionError(null); }} placeholder="Valor revisado" rows={4} value={selectionValue} /> : null}
+          {competencySelectionResolution ? competencySelectionResolution.ambiguous
+            ? <Alert description="Ajuste a seleção ou separe o texto por linha, vírgula ou ponto e vírgula. O Prisma não criará uma competência única a partir de vários blocos sem uma separação confiável." showIcon title="Separação das competências precisa de revisão" type="warning" />
+            : <section className="prisma-competency-selection-preview" data-segmentation-version={COMPETENCY_LIST_SEGMENTATION_VERSION}>
+              <div><Typography.Text strong>{competencySelectionResolution.values.length} {competencySelectionResolution.values.length === 1 ? "competência identificada" : "competências identificadas"}</Typography.Text><Tag color="green">Registros separados</Tag></div>
+              <Space wrap>{competencySelectionResolution.values.map((value) => <Tag color="blue" key={value}>{value}</Tag>)}</Space>
+              <Typography.Text type="secondary">Cada item será armazenado separadamente e permanecerá vinculado à mesma evidência selecionada.</Typography.Text>
+            </section> : null}
         </div> : null}
       </Modal>
     </PrismaPage>
@@ -839,7 +870,7 @@ function reviewFieldLabel(fieldPath: string): string {
   return ({ role: "Cargo", organization: "Empresa", period: "Período", description: "Descrição", course: "Curso", institution: "Instituição" })[field ?? ""] ?? fieldPath;
 }
 
-function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value: string): StructuredDraft {
+function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value: string, resolvedListValues?: string[]): StructuredDraft {
   const next = cloneDraft(draft);
   const segments = fieldPath.split(".");
   const root = segments[0];
@@ -850,7 +881,7 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
   if (root === "professionalTitle") return { ...next, professionalTitle: value || null };
   if (root === "professionalObjective") return { ...next, professionalObjective: value || null };
   if (root === "summary") return { ...next, summary: value };
-  if (root === "areasOfExpertise") return { ...next, areasOfExpertise: splitList(value) };
+  if (root === "areasOfExpertise") return { ...next, areasOfExpertise: splitExplicitListValues(value) };
   if (root === "keyResults") {
     const resultId = segments[1];
     return { ...next, keyResults: next.keyResults.map((result) => result.id === resultId ? { ...result, value } : result) };
@@ -858,7 +889,7 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
   if (root === "customSections") return updateCustomSectionItemValue(next, fieldPath, value);
   if (["certifications", "languages", "competencies", "uncertainties", "notIdentified"].includes(root ?? "")) {
     const key = root as "certifications" | "languages" | "competencies" | "uncertainties" | "notIdentified";
-    return { ...next, [key]: value.split(/[,;\n]/).map((item) => item.trim()).filter(Boolean) };
+    return { ...next, [key]: key === "competencies" && resolvedListValues?.length ? resolvedListValues : splitExplicitListValues(value) };
   }
   const entitySegment = segments[1] ?? "";
   const field = segments[2];
@@ -879,6 +910,7 @@ function addNewInformation(
   value: string,
   page: number,
   custom: { customSectionName: string; customSectionFormat: CustomProfileSectionFormat; customTargetSectionId: string },
+  resolvedListValues?: string[],
 ): { draft: StructuredDraft; fieldPath: string } {
   const next = cloneDraft(draft);
   if (type === "experience") {
@@ -899,12 +931,17 @@ function addNewInformation(
   if (type === "custom_section") return createCustomSection({ draft: next, name: custom.customSectionName, format: custom.customSectionFormat, value, source: "human" });
   if (type === "custom_item") return addCustomSectionItem(next, custom.customTargetSectionId, value);
   const key = type === "competency" ? "competencies" : type === "language" ? "languages" : "certifications";
-  if (!next[key].includes(value)) next[key].push(value);
+  const values = type === "competency" && resolvedListValues?.length ? resolvedListValues : splitExplicitListValues(value);
+  values.forEach((candidate) => {
+    if (!next[key].includes(candidate)) next[key].push(candidate);
+  });
   return { draft: next, fieldPath: key };
 }
 
-function splitList(value: string): string[] {
-  return [...new Set(value.split(/[,;|\n]/).map((item) => item.trim()).filter(Boolean))];
+function selectionValueForField(selection: RegionSelectionResult, excludedLinkIds: string[], fieldPath: string): string {
+  const text = refinedSelectionText(selection, excludedLinkIds) ?? "";
+  if (fieldPath !== "competencies") return text;
+  return resolveSpatialListValues(refinedSelectionUnits(selection, excludedLinkIds), text).values.join("\n");
 }
 
 function findReviewEntityIndex(

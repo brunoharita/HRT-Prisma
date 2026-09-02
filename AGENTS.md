@@ -13,6 +13,7 @@ Repository instructions never override platform safety, user authority, legal ob
 - Keep extracted facts, inferences, recommendations, human decisions, and observed outcomes separate.
 - Never interpret missing evidence as a negative fact.
 - Never turn parsing failure or partial extraction into a valid complete profile.
+- List-shaped evidence must remain a list: preserve explicit delimiters and real spatial row/cell boundaries, keep multiword values intact, and never silently collapse multiple ambiguous blocks into one fact.
 - Never introduce an unexplained score, confidence label, ranking, or automatic hiring decision.
 - Every material conclusion must remain traceable to evidence, provenance, method, and version.
 - Every tenant-owned record carries `organizationId` in TypeScript and `organization_id` in PostgreSQL.

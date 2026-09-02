@@ -40,6 +40,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-028](ADR-028-governed-item-bank-expansion-and-calibration-boundary.md) | accepted | Governed Item Bank expansion, cost boundary and progressive calibration |
 | [ADR-029](ADR-029-intra-document-sibling-block-learning.md) | accepted | Deterministic intra-document learning and governed sibling block discovery |
 | [ADR-030](ADR-030-decision-centered-interaction.md) | accepted | Minimum human intervention and non-blocking advisory interaction |
+| [ADR-031](ADR-031-spatial-list-segmentation.md) | accepted | Deterministic competency-list segmentation from explicit delimiters and real document geometry |
 
 ## Rules
 

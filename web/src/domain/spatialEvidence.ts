@@ -1,6 +1,7 @@
 export const SPATIAL_EVIDENCE_CONTRACT_VERSION = "1.2.0";
 export const SPATIAL_EVIDENCE_COORDINATE_SYSTEM = "normalized-page-v1" as const;
 export const PDFJS_CHARACTER_REGION_METHOD = "pdfjs-character-region-v2" as const;
+export const COMPETENCY_LIST_SEGMENTATION_VERSION = "competency-list-spatial-v1" as const;
 
 export type ReviewEvidenceAction =
   | "correct_current_field"
@@ -119,6 +120,12 @@ export interface PositionedTextUnit {
   rect: PixelRect;
 }
 
+export interface SpatialListResolution {
+  values: string[];
+  basis: "empty" | "single-value" | "explicit-delimiters" | "spatial-cells";
+  ambiguous: boolean;
+}
+
 export function normalizePointerRegion(
   start: PointerPoint,
   end: PointerPoint,
@@ -228,6 +235,41 @@ export function textFromPositionedUnits(units: PositionedTextUnit[]): string | n
   });
   const normalized = result.replace(/\s+/g, " ").trim();
   return normalized || null;
+}
+
+export function splitExplicitListValues(value: string): string[] {
+  return uniqueListValues(value.split(/(?:\r?\n|\t|[,;|]|[•▪●◦‣⁃∙])+/));
+}
+
+export function resolveSpatialListValues(
+  units: PositionedTextUnit[],
+  fallbackText: string | null,
+): SpatialListResolution {
+  const explicitValues = splitExplicitListValues(fallbackText ?? "");
+  if (explicitValues.length > 1) {
+    return { values: explicitValues, basis: "explicit-delimiters", ambiguous: false };
+  }
+
+  const lines = clusterVisualLines(units.filter((unit) => unit.text.trim() || /\s/.test(unit.text)));
+  const cellsByLine = lines.map(splitVisualLineIntoCells).filter((line) => line.length > 0);
+  if (cellsByLine.some((line) => line.length > 1)) {
+    return {
+      values: uniqueListValues(cellsByLine.flat()),
+      basis: "spatial-cells",
+      ambiguous: false,
+    };
+  }
+
+  const spatialText = cellsByLine.flat().join(" ").trim();
+  const singleValue = explicitValues[0] ?? spatialText ?? fallbackText?.trim() ?? "";
+  const sourceCount = new Set(units.filter((unit) => unit.text.trim()).map((unit) => unit.sourceIndex)).size;
+  const wordCount = singleValue.split(/\s+/).filter(Boolean).length;
+  const ambiguous = Boolean(singleValue) && (cellsByLine.length > 1 || (wordCount >= 8 && sourceCount >= 3));
+  return {
+    values: singleValue ? [singleValue] : [],
+    basis: singleValue ? "single-value" : "empty",
+    ambiguous,
+  };
 }
 
 export function normalizedPageRegionToRect(region: NormalizedPageRegion): PixelRect {
@@ -372,6 +414,72 @@ function shouldSeparateTextUnits(previous: PositionedTextUnit, current: Position
   }
   const horizontalGap = current.rect.left - previous.rect.right;
   return horizontalGap > Math.max(0.000001, height * 0.12);
+}
+
+function clusterVisualLines(units: PositionedTextUnit[]): Array<{ units: PositionedTextUnit[]; centerY: number; height: number }> {
+  const lines: Array<{ units: PositionedTextUnit[]; centerY: number; height: number }> = [];
+  [...units]
+    .sort((left, right) => unitCenterY(left) - unitCenterY(right) || left.rect.left - right.rect.left)
+    .forEach((unit) => {
+      const centerY = unitCenterY(unit);
+      const height = unitHeight(unit);
+      const line = lines.find((candidate) => Math.abs(candidate.centerY - centerY) <= Math.max(candidate.height, height) * 0.55);
+      if (!line) {
+        lines.push({ units: [unit], centerY, height });
+        return;
+      }
+      line.units.push(unit);
+      line.centerY = line.units.reduce((sum, candidate) => sum + unitCenterY(candidate), 0) / line.units.length;
+      line.height = Math.max(line.height, height);
+    });
+  return lines.sort((left, right) => left.centerY - right.centerY);
+}
+
+function splitVisualLineIntoCells(line: { units: PositionedTextUnit[]; height: number }): string[] {
+  const cells: PositionedTextUnit[][] = [];
+  let current: PositionedTextUnit[] = [];
+  const flush = () => {
+    const value = textFromPositionedUnits(current)?.replace(/^[\s:·•|,;]+|[\s:·•|,;]+$/g, "").trim();
+    if (value) cells.push(current);
+    current = [];
+  };
+
+  [...line.units].sort((left, right) => left.rect.left - right.rect.left).forEach((unit) => {
+    if (/[|•▪●◦‣⁃∙;,]/.test(unit.text)) {
+      flush();
+      return;
+    }
+    const previous = current.at(-1);
+    const horizontalGap = previous ? unit.rect.left - previous.rect.right : 0;
+    const previousIsWideWhitespace = Boolean(previous && /^\s+$/.test(previous.text) && unitWidth(previous) > line.height * 0.72);
+    if (previous && (horizontalGap > line.height * 0.82 || previousIsWideWhitespace)) flush();
+    current.push(unit);
+  });
+  flush();
+  return cells.flatMap((cell) => splitExplicitListValues(textFromPositionedUnits(cell) ?? ""));
+}
+
+function uniqueListValues(values: string[]): string[] {
+  const seen = new Set<string>();
+  return values.flatMap((value) => {
+    const trimmed = value.replace(/\s+/g, " ").trim();
+    const comparable = normalizeComparableText(trimmed);
+    if (!trimmed || seen.has(comparable)) return [];
+    seen.add(comparable);
+    return [trimmed];
+  });
+}
+
+function unitCenterY(unit: PositionedTextUnit): number {
+  return (unit.rect.top + unit.rect.bottom) / 2;
+}
+
+function unitHeight(unit: PositionedTextUnit): number {
+  return Math.max(unit.rect.bottom - unit.rect.top, 0.000001);
+}
+
+function unitWidth(unit: PositionedTextUnit): number {
+  return Math.max(unit.rect.right - unit.rect.left, 0);
 }
 
 function normalizeComparableText(value: string): string {

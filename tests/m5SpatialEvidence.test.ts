@@ -10,6 +10,8 @@ import {
   isReviewEvidenceVisibleOnCurrentScreen,
   normalizePointerRegion,
   normalizedRegionStyle,
+  resolveSpatialListValues,
+  splitExplicitListValues,
   textContainedByPixelRegion,
   uniqueTextUnitMatch,
   textUnitsReachedByPixelRegion,
@@ -162,6 +164,52 @@ test("M5 subtracts only characters covered by mapped sibling-field regions", () 
   assert.equal(areSiblingReviewFields("education.education_abcdefgh.course", "education.education_ijklmnop.period"), false);
 });
 
+test("M5 separates competency cells by their real PDF geometry without breaking multiword names", () => {
+  const units = [
+    ...positionedCell("Product Ownership", 0, 0, 0),
+    ...positionedCell("Gestão e Priorização de Backlog", 120, 0, 1),
+    ...positionedCell("Scrum e Métodos Ágeis", 330, 0, 2),
+    ...positionedCell("Roadmap de Produto", 0, 14, 3),
+    ...positionedCell("User Stories e Critérios de Aceite", 120, 14, 4),
+    ...positionedCell("Alinhamento com Stakeholders", 330, 14, 5),
+  ];
+  const resolved = resolveSpatialListValues(units, "Product Ownership Gestão e Priorização de Backlog Scrum e Métodos Ágeis Roadmap de Produto User Stories e Critérios de Aceite Alinhamento com Stakeholders");
+
+  assert.equal(resolved.basis, "spatial-cells");
+  assert.equal(resolved.ambiguous, false);
+  assert.deepEqual(resolved.values, [
+    "Product Ownership",
+    "Gestão e Priorização de Backlog",
+    "Scrum e Métodos Ágeis",
+    "Roadmap de Produto",
+    "User Stories e Critérios de Aceite",
+    "Alinhamento com Stakeholders",
+  ]);
+});
+
+test("M5 accepts explicit list separators, preserves slash names and removes equivalent duplicates", () => {
+  assert.deepEqual(
+    splitExplicitListValues("SQL; Power BI\nScrum\tBPM/BPMN | sql • Gestão de Processos"),
+    ["SQL", "Power BI", "Scrum", "BPM/BPMN", "Gestão de Processos"],
+  );
+  assert.deepEqual(resolveSpatialListValues([], "Product Ownership"), {
+    values: ["Product Ownership"],
+    basis: "single-value",
+    ambiguous: false,
+  });
+});
+
+test("M5 refuses to silently collapse multiple unseparated visual lines into one competency", () => {
+  const units = [
+    ...positionedCell("Primeiro bloco sem delimitador", 0, 0, 0),
+    ...positionedCell("Segundo bloco sem delimitador", 0, 14, 1),
+  ];
+  const resolved = resolveSpatialListValues(units, "Primeiro bloco sem delimitador Segundo bloco sem delimitador");
+
+  assert.equal(resolved.basis, "single-value");
+  assert.equal(resolved.ambiguous, true);
+});
+
 test("M5 records ordinary human changes without asking the operator for a free-text reason", async () => {
   const [page, panel, service, migration, verification, delta] = await Promise.all([
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
@@ -279,9 +327,10 @@ test("M5 replays a completed correction before checking whether its value is alr
 });
 
 test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback", async () => {
-  const [viewer, page, styles] = await Promise.all([
+  const [viewer, page, panel, styles] = await Promise.all([
     readFile("web/src/components/review/DocumentEvidenceViewer.tsx", "utf8"),
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
+    readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
     readFile("web/src/styles.css", "utf8"),
   ]);
   assert.match(viewer, /import\("pdfjs-dist"\)/);
@@ -311,9 +360,16 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(page, /confirmLoading=\{busy\}/);
   assert.match(page, /Conteúdos já mapeados dentro da seleção/);
   assert.match(page, /refinementDecisions/);
+  assert.match(page, /resolveSpatialListValues/);
+  assert.match(page, /competências identificadas/);
+  assert.match(page, /data-segmentation-version=\{COMPETENCY_LIST_SEGMENTATION_VERSION\}/);
+  assert.match(viewer, /refinedSelectionUnits/);
+  assert.match(panel, /tokenSeparators=\{\[",", ";", "\\n", "\\t", "\|"\]\}/);
+  assert.match(panel, /vírgulas, linhas e colunas criam itens separados/);
   assert.match(styles, /grid-template-columns: minmax\(410px, 44fr\) minmax\(520px, 56fr\)/);
   assert.match(styles, /\.prisma-review-mobile-switch/);
   assert.match(styles, /\.prisma-evidence-character-highlight/);
+  assert.match(styles, /\.prisma-competency-selection-preview/);
   assert.match(styles, /\.mobile-pane-document/);
 });
 
@@ -365,6 +421,26 @@ function positionedUnits(text: string, top: number, sourceIndex: number) {
     offset += character.length;
     return unit;
   });
+}
+
+function positionedCell(text: string, left: number, top: number, sourceIndex: number) {
+  const characterWidth = 5;
+  const height = 10;
+  return Array.from(text).map((character, sourceOffset) => ({
+    unitId: `native:${sourceIndex}:${sourceOffset}`,
+    text: character,
+    sourceIndex,
+    sourceOffset,
+    lineIndex: sourceIndex,
+    source: "native" as const,
+    confidence: 1,
+    rect: {
+      left: left + sourceOffset * characterWidth,
+      top,
+      right: left + (sourceOffset + 1) * characterWidth,
+      bottom: top + height,
+    },
+  }));
 }
 
 function scaledPositionedUnits(text: string, scale: number) {

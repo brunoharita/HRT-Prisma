@@ -652,10 +652,15 @@ function canonicalTextUnits(layer: HTMLElement, pageRect: PixelRect): Positioned
 
 export function refinedSelectionText(selection: RegionSelectionResult, excludedLinkIds: string[]): string | null {
   if (!selection.selectedTextUnits.length) return selection.selectedText;
+  return textFromPositionedUnits(refinedSelectionUnits(selection, excludedLinkIds));
+}
+
+export function refinedSelectionUnits(selection: RegionSelectionResult, excludedLinkIds: string[]): PositionedTextUnit[] {
+  if (!selection.selectedTextUnits.length) return [];
   const excluded = selection.refinementCandidates
     .filter((candidate) => excludedLinkIds.includes(candidate.linkId))
     .map((candidate) => candidate.canonicalRegion);
-  return textFromPositionedUnits(textUnitsExcludingPixelRegions(selection.selectedTextUnits, excluded));
+  return textUnitsExcludingPixelRegions(selection.selectedTextUnits, excluded);
 }
 
 function emptyTextSelection() {

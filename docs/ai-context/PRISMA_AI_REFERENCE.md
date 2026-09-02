@@ -2,7 +2,7 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.6.0
+version: 1.7.0
 last_verified: 2026-09-01
 ---
 
@@ -40,6 +40,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
 - revisão humana: `human-profile-review-7.1.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
+- segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;

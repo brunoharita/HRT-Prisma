@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.11.0
+version: 2.12.0
 last_verified: 2026-09-02
 ---
 
@@ -40,6 +40,7 @@ last_verified: 2026-09-02
 - Refinamento espacial 1.2 implementado localmente: uma nova seleção preserva o texto bruto, identifica regiões sobrepostas de campos irmãos do mesmo registro, desconta por padrão somente áreas humanas e permite reinclusão explícita. A subtração usa caracteres PDF.js ou símbolos posicionados do OCR; nenhum texto externo ao retângulo participa.
 - Extração adaptativa v2 implementada localmente: PDF.js preserva linhas e geometria; a estruturação reconhece blocos completos, períodos abreviados, empresa em linha distinta e permanências com cargos subordinados; cada campo pode possuir região original navegável. Padrões organizacionais aprovados funcionam como sinais estruturais allowlisted, nunca como templates executáveis.
 - Revisão adaptativa v2 implementada localmente: evidência humana pode ser retirada sem apagar histórico; superfícies extraída/revisada navegam para suas respectivas regiões; uma correção relê a fonte original dos blocos irmãos, sugere cargo/empresa/período/descrição separadamente, preserva campos já revisados e mantém registros ambíguos sem alteração.
+- Segmentação de competências 1.0.0 implementada localmente: seleções M5 preservam separadores explícitos e usam a geometria canônica para converter linhas e células em itens independentes, mantendo competências compostas, ordem e deduplicação. O modal apresenta a lista em chips antes da confirmação e impede que múltiplos blocos sem fronteira segura sejam gravados silenciosamente como uma única competência. O editor direto aceita vírgula, ponto e vírgula, linha, tabulação, barra vertical e marcadores. Nenhum schema, RPC, RLS ou grant mudou.
 - Aceite adaptativo implementado com seleção por campo, persistência atômica, lock otimista, replay idempotente, histórico metadata-only e recarga do rascunho sincronizado. A seleção de nova evidência permanece disponível após aplicar sugestões.
 - Áreas personalizadas implementadas na revisão, com schema ativo em QA e frontend local: criação evidence-first sob `Outros`, estrutura limitada por seção/item, navegação e destaque pelo mesmo contrato M5, persistência versionada e apresentação no perfil. `Pendências de interpretação` e `Informações não localizadas` aparecem separadas dos fatos do currículo.
 - Aprendizado de títulos personalizados ativo no schema QA e consumido pelo runtime local: somente após aprovação integral, o catálogo tenant-scoped registra chave, título normalizado, formato, versão e confirmação. Conteúdo pessoal não é copiado; uma importação futura relê o documento e cria evidência própria para cada item.
@@ -67,7 +68,7 @@ last_verified: 2026-09-02
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 196 testes técnicos compõem a suíte local, incluindo classificação acadêmica, Central da Pessoa, aprendizado estrutural intra-documento, feedback operacional acionável, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
+- 200 testes técnicos compõem a suíte local, incluindo classificação acadêmica, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, feedback operacional acionável, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -204,3 +205,5 @@ Em 2026-09-02, a branch `codex/education-academic-classification` implementou a 
 Ainda em 2026-09-02, `human-profile-review` 7.1.0 removeu da revisão comum e do modal espacial os dois campos de justificativa livre. A migration `20260902181013` foi aplicada diretamente ao Prisma-QA e registrada no histórico remoto porque os aliases históricos impedem `db push`; consulta pós-aplicação confirmou fallback automático, `anon` negado, fronteira pública para `authenticated` e núcleo privado revogado. No smoke autenticado, uma alteração local tornou `Salvar revisão` acionável sem qualquer campo de justificativa; o valor original foi restaurado antes de persistir, encerrando em `Rascunho sincronizado`, sem publicação ou resíduo remoto. `pnpm run validate` aprovou lint de 260 arquivos, fundação, Context Pack, dois typechecks, build web, 196 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`.
 
 Também em 2026-09-02, o contrato local `decision-centered-interaction` 1.0.0 removeu o bloqueio causado pelo descarte de um relatório estrutural sem proposta segura. O cliente agora valida a mesma forma mínima da assinatura antes de considerar o scan registrável, não chama a RPC para diagnóstico vazio, fecha descartes válidos antes da telemetria e reserva intervenção obrigatória para decisões materiais. A mudança não altera banco, RLS, grants, perfil ou evidência. `pnpm run validate` aprovou lint, fundação, Context Pack, dois typechecks, build web, 197 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`; o smoke autenticado permanece pendente porque o navegador interno iniciou sem sessão salva.
+
+Ainda em 2026-09-02, `competency-list-segmentation` 1.0.0 passou a preservar a estrutura de listas selecionadas no currículo. `competency-list-spatial-v1` separa células pela geometria real, aceita delimitadores explícitos, conserva competências compostas e mostra a lista em chips antes de aplicar; múltiplos blocos sem fronteira confiável não podem ser gravados como uma única competência. O editor direto recebeu os mesmos separadores. A mudança é local e não altera schema, RPC, RLS, grants ou payload de evidência. `pnpm run validate` aprovou lint de 262 arquivos, fundação, Context Pack, dois typechecks, build web, 200 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. O smoke autenticado comprovou três chips separados para `Product Ownership; Gestão de Processos; BPM/BPMN`, sem salvamento; o documento QA disponível não contém a mesma grade da ocorrência original, portanto o smoke específico da separação geométrica permanece pendente.

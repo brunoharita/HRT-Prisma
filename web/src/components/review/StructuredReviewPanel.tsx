@@ -29,7 +29,7 @@ import {
   type EducationQualification,
   type EducationStatus,
 } from "../../../../src/domain/educationClassification";
-import { fieldPathMatches, topLevelReviewField } from "../../domain/spatialEvidence";
+import { fieldPathMatches, splitExplicitListValues, topLevelReviewField } from "../../domain/spatialEvidence";
 import {
   createReviewEntityId,
   isEducationEmpty,
@@ -625,7 +625,7 @@ function EditableTagSurface({ fieldPath, value, editable, onSelect, onChange }: 
   onChange: (values: string[]) => void;
 }) {
   const selectRef = useRef<RefSelectProps | null>(null);
-  return <div className="prisma-reviewed-surface prisma-tag-editor" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>{editable ? "Revisado por você" : "Valor aprovado"}</small><Select disabled={!editable} mode="tags" onChange={onChange} open={false} ref={selectRef} tokenSeparators={[","]} value={value} />{editable ? <><Button icon={<PlusOutlined />} onClick={() => selectRef.current?.focus()} size="small">Adicionar</Button><Typography.Text type="secondary">Digite a informação e pressione Enter.</Typography.Text></> : null}</div>;
+  return <div className="prisma-reviewed-surface prisma-tag-editor" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>{editable ? "Revisado por você" : "Valor aprovado"}</small><Select disabled={!editable} mode="tags" onChange={(values) => onChange(values.flatMap(splitExplicitListValues))} open={false} ref={selectRef} tokenSeparators={[",", ";", "\n", "\t", "|"]} value={value} />{editable ? <><Button icon={<PlusOutlined />} onClick={() => selectRef.current?.focus()} size="small">Adicionar</Button><Typography.Text type="secondary">Digite ou cole uma lista; vírgulas, linhas e colunas criam itens separados.</Typography.Text></> : null}</div>;
 }
 
 function ReviewField({ label, fieldPath, extracted, value, editable, multiline = false, required = false, selected, validationMessage = null, onSelect, onChange }: {
