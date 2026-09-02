@@ -28,18 +28,18 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 ## Versões
 
-- extraction: `extraction-rules-1.0.0`;
+- extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`;
-- draft web: `extraction-draft-6.0.0` / `prisma-layout-adaptive-v5`;
+- draft web: `extraction-draft-7.0.0` / `prisma-layout-adaptive-v6`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
 - revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
-- revisão humana: `human-profile-review-6.0.0`;
-- estado de produto: `resume-product-state-1.0.0`;
+- revisão humana: `human-profile-review-7.1.0`;
+- estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;
 - aprendizado de título personalizado: `organization-custom-section-definition-1.0.0`;

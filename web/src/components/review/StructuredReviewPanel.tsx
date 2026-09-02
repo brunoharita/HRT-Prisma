@@ -50,9 +50,7 @@ interface StructuredReviewPanelProps {
   deferredActionLabel: string | null;
   selectedFieldPath: string;
   activeLinkId: string | null;
-  reason: string;
   validationIssues: ReviewDraftIssue[];
-  onReasonChange: (reason: string) => void;
   onSaveAndContinue: () => void;
   onDiscardAndContinue: () => void;
   onDraftChange: (draft: StructuredDraft) => void;
@@ -81,9 +79,7 @@ export function StructuredReviewPanel({
   deferredActionLabel,
   selectedFieldPath,
   activeLinkId,
-  reason,
   validationIssues,
-  onReasonChange,
   onSaveAndContinue,
   onDiscardAndContinue,
   onDraftChange,
@@ -289,21 +285,6 @@ export function StructuredReviewPanel({
         </Button>
         </Tooltip> : null}
       </section>
-
-      {editable ? (
-        <section className="prisma-correction-reason">
-          <Typography.Text strong>Justificativa da correção</Typography.Text>
-          <Input.TextArea
-            aria-label="Justificativa da correção"
-            id="prisma-review-correction-reason"
-            onChange={(event) => onReasonChange(event.target.value)}
-            placeholder="Necessária para alterações manuais sem uma operação de evidência autoexplicativa."
-            rows={3}
-            value={reason}
-          />
-          <Typography.Text type="secondary">Seleções explícitas registram automaticamente a operação; divergências interpretativas continuam exigindo justificativa.</Typography.Text>
-        </section>
-      ) : null}
 
       <section className="prisma-field-history">
         <div className="prisma-review-section-title">

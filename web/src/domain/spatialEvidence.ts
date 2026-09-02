@@ -119,13 +119,6 @@ export interface PositionedTextUnit {
   rect: PixelRect;
 }
 
-export interface EvidenceSelectionReasonInput {
-  selectedText: string | null;
-  proposedValue: string;
-  valueEdited: boolean;
-  changesDraft: boolean;
-}
-
 export function normalizePointerRegion(
   start: PointerPoint,
   end: PointerPoint,
@@ -367,13 +360,6 @@ export function intersectPixelRects(left: PixelRect, right: PixelRect): PixelRec
     right: Math.min(left.right, right.right),
     bottom: Math.min(left.bottom, right.bottom),
   };
-}
-
-export function evidenceSelectionRequiresReason(input: EvidenceSelectionReasonInput): boolean {
-  if (!input.changesDraft) return false;
-  if (!input.selectedText) return true;
-  if (!input.valueEdited) return false;
-  return normalizeComparableText(input.proposedValue) !== normalizeComparableText(input.selectedText);
 }
 
 function shouldSeparateTextUnits(previous: PositionedTextUnit, current: PositionedTextUnit): boolean {

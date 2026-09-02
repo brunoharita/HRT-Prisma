@@ -2741,7 +2741,6 @@ textarea {
 .prisma-reviewed-surface .ant-select { width: 100%; }
 
 .prisma-linked-evidence,
-.prisma-correction-reason,
 .prisma-field-history {
   display: grid;
   gap: 8px;
@@ -2798,7 +2797,6 @@ textarea {
 .prisma-evidence-card small { color: var(--prisma-text-secondary); font-size: 0.62rem; }
 .prisma-add-evidence-card { min-height: 42px; }
 
-.prisma-correction-reason .ant-typography,
 .prisma-field-history .ant-typography { font-size: 0.76rem; }
 .prisma-field-history .ant-timeline { margin-top: 5px; }
 .prisma-history-entry { display: grid; gap: 2px; }
@@ -3652,7 +3650,6 @@ textarea {
   .prisma-entity-review,
   .prisma-review-field,
   .prisma-linked-evidence,
-  .prisma-correction-reason,
   .prisma-field-history {
     width: 100%;
     min-width: 0;

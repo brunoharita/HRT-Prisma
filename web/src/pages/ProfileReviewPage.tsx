@@ -5,7 +5,7 @@ import { DocumentEvidenceViewer, refinedSelectionText, type EvidenceNavigationTa
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
 import type { CustomProfileSectionFormat, ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
-import { evidenceSelectionRequiresReason, fieldPathMatches, type ReviewEvidenceAction } from "../domain/spatialEvidence";
+import { fieldPathMatches, type ReviewEvidenceAction } from "../domain/spatialEvidence";
 import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
   proposeSiblingBlockCorrections,
@@ -52,7 +52,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [workspace, setWorkspace] = useState<ProfileReviewWorkspace | null>(null);
   const [draft, setDraft] = useState<StructuredDraft | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +63,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [pendingSelection, setPendingSelection] = useState<RegionSelectionResult | null>(null);
   const [pendingAction, setPendingAction] = useState<ReviewEvidenceAction>("correct_current_field");
   const [selectionValue, setSelectionValue] = useState("");
-  const [selectionReason, setSelectionReason] = useState("");
   const [selectionValueEdited, setSelectionValueEdited] = useState(false);
   const [excludedRefinementLinkIds, setExcludedRefinementLinkIds] = useState<string[]>([]);
   const [selectionError, setSelectionError] = useState<string | null>(null);
@@ -143,7 +141,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     const normalizedBaseline = normalizeReviewDraft(workspace.reviewedData);
     if (JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline)) {
       setDraft(cloneDraft(workspace.reviewedData));
-      setReason("");
       setValidationIssues([]);
       setError(null);
       setDeferredReviewAction(null);
@@ -171,26 +168,16 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       });
       return;
     }
-    if (reason.trim().length < 3) {
-      setError("Explique objetivamente a alteração manual antes de salvar.");
-      window.requestAnimationFrame(() => {
-        const reasonInput = document.getElementById("prisma-review-correction-reason");
-        reasonInput?.scrollIntoView({ behavior: "smooth", block: "center" });
-        reasonInput?.focus();
-      });
-      return;
-    }
     setBusy(true); setError(null); setSuccess(null);
     try {
       const structuralAnchor = findCompletedExperienceChange(normalizedBaseline, normalizedDraft);
-      const lockVersion = await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft, reason);
+      const lockVersion = await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft);
       setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(normalizedDraft), lockVersion } : current);
       setDraft(cloneDraft(normalizedDraft));
       let refreshed: ProfileReviewWorkspace;
       try {
         refreshed = await refresh();
       } catch {
-        setReason("");
         setDeferredReviewAction(null);
         setError("O rascunho foi salvo, mas a tela não conseguiu carregar a confirmação atualizada. Não repita a alteração; recarregue a revisão para continuar.");
         return;
@@ -225,7 +212,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           learningNotice = " O rascunho foi salvo, mas a busca opcional por experiências semelhantes não pôde ser concluída agora.";
         }
       }
-      setReason("");
       setDeferredReviewAction(null);
       if (continuation) {
         resumeDeferredReviewAction(continuation);
@@ -321,12 +307,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         await refresh();
       } catch {
         setAdaptiveReport(null);
-        setReason("");
         setError("As sugestões foram aplicadas e preservadas, mas a tela não conseguiu atualizar a confirmação. Não aplique novamente; recarregue a revisão para continuar.");
         return;
       }
       setAdaptiveReport(null);
-      setReason("");
       const appliedExperienceCount = adaptiveReport.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length;
       setSuccess(`${appliedExperienceCount} ${appliedExperienceCount === 1 ? "experiência foi aplicada" : "experiências foram aplicadas"}, com evidência e versão auditável. A revisão humana permanece disponível.`);
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aplicar as sugestões adaptativas."); }
@@ -440,7 +424,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     if (!workspace) { setError("Não foi possível recuperar a versão salva da revisão. Recarregue a página antes de descartar alterações."); return; }
     const continuation = deferredReviewAction;
     setDraft(cloneDraft(workspace.reviewedData));
-    setReason("");
     setError(null);
     setDeferredReviewAction(null);
     if (continuation) {
@@ -487,7 +470,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setPendingSelection(selection);
     setSelectionValue(selection.selectedText ?? "");
     setExcludedRefinementLinkIds(selection.refinementCandidates.filter((candidate) => candidate.defaultExcluded).map((candidate) => candidate.linkId));
-    setSelectionReason("");
     setSelectionValueEdited(false);
     setSelectionError(null);
     setPendingAction(createCustomAfterSelection ? "create_new_information" : "correct_current_field");
@@ -497,7 +479,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setPendingSelection(null);
     setSelectionMode(false);
     setSelectionValue("");
-    setSelectionReason("");
     setSelectionValueEdited(false);
     setExcludedRefinementLinkIds([]);
     setSelectionError(null);
@@ -552,15 +533,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       });
       if (issues.length) { setSelectionError(issues[0]!.message); return; }
     }
-    if (evidenceSelectionRequiresReason({
-      selectedText: effectiveSelectedText,
-      proposedValue: normalizedValue,
-      valueEdited: selectionValueEdited,
-      changesDraft: Boolean(nextDraft),
-    }) && selectionReason.trim().length < 3) {
-      setSelectionError("Explique a divergência entre o valor informado e o texto reconhecido da região."); return;
-    }
-
     setBusy(true); setError(null); setSuccess(null); setSelectionError(null);
     try {
       const recorded = await personIngestionService.recordProfileReviewEvidence({
@@ -580,7 +552,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         })),
         extractionMethod: pendingSelection.extractionMethod,
         reviewedData: nextDraft,
-        reason: selectionReason.trim() || null,
         replacesLinkId: pendingAction === "replace_review_evidence" ? replacementLinkId : null,
       });
       setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(nextDraft ?? current.reviewedData), lockVersion: recorded.lockVersion } : current);
@@ -710,10 +681,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
               if (dirty) { deferReviewAction({ type: "create_custom_section" }); return; }
               startCustomSectionSelection();
             }}
-            onFieldSelect={handleFieldSelect} onReasonChange={setReason}
+            onFieldSelect={handleFieldSelect}
             onSaveAndContinue={() => void handleSave()}
             onStartSelection={(fieldPath) => { if (dirty) { deferReviewAction({ type: "start_evidence_selection", fieldPath }); return; } startEvidenceSelection(fieldPath); }}
-            reason={reason} selectedFieldPath={selectedFieldPath} validationIssues={validationIssues} viewOnly={viewOnly} workspace={workspace}
+            selectedFieldPath={selectedFieldPath} validationIssues={validationIssues} viewOnly={viewOnly} workspace={workspace}
           />
         </div>
       </div>
@@ -721,7 +692,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={!viewOnly && Boolean(pendingSelection)} title="Usar região selecionada">
         {pendingSelection ? <div className="prisma-selection-dialog">
           {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
-          <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={selectedFieldIsTransient ? "Este é um novo campo. A seleção preencherá seu conteúdo e salvará a evidência em uma única operação." : pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. A região continuará rastreável, mas uma correção exige conteúdo e justificativa manual." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
+          <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={selectedFieldIsTransient ? "Este é um novo campo. A seleção preencherá seu conteúdo e salvará a evidência em uma única operação." : pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. Informe o valor correto; a região, a autoria e a mudança ficarão registradas automaticamente." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
           {pendingSelection.refinementCandidates.length ? <section className="prisma-selection-refinement" aria-labelledby="selection-refinement-title">
             <div>
               <Typography.Text id="selection-refinement-title" strong>Conteúdos já mapeados dentro da seleção</Typography.Text>
@@ -771,7 +742,6 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           </Space> : null}
           {pendingAction === "create_new_information" && newInformationType === "custom_item" ? <Select aria-label="Área personalizada de destino" onChange={setCustomTargetSectionId} options={draft.customSections.filter((section) => section.format === "list").map((section) => ({ label: section.name, value: section.id }))} placeholder="Selecione a área" value={customTargetSectionId || null} /> : null}
           {pendingAction === "correct_current_field" || pendingAction === "create_new_information" ? <Input.TextArea aria-label="Valor sugerido pela região" onChange={(event) => { setSelectionValue(event.target.value); setSelectionValueEdited(true); setSelectionError(null); }} placeholder="Valor revisado" rows={4} value={selectionValue} /> : null}
-          <Input.TextArea aria-label="Justificativa da operação de evidência" onChange={(event) => { setSelectionReason(event.target.value); setSelectionError(null); }} placeholder="Justificativa, quando houver interpretação ou divergência" rows={3} value={selectionReason} />
         </div> : null}
       </Modal>
     </PrismaPage>

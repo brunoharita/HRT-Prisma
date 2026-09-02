@@ -5,7 +5,6 @@ import {
   areSiblingReviewFields,
   boundingPixelRectForTextUnits,
   canonicalizePositionedTextUnits,
-  evidenceSelectionRequiresReason,
   fieldPathMatches,
   isNormalizedPageRegion,
   isReviewEvidenceVisibleOnCurrentScreen,
@@ -163,31 +162,28 @@ test("M5 subtracts only characters covered by mapped sibling-field regions", () 
   assert.equal(areSiblingReviewFields("education.education_abcdefgh.course", "education.education_ijklmnop.period"), false);
 });
 
-test("M5 applies recognized text without a reason and requires one only for a real interpretation", () => {
-  assert.equal(evidenceSelectionRequiresReason({
-    selectedText: "MBA em Gestão Estratégica de Negócios",
-    proposedValue: "MBA em Gestão Estratégica de Negócios",
-    valueEdited: false,
-    changesDraft: true,
-  }), false);
-  assert.equal(evidenceSelectionRequiresReason({
-    selectedText: "MBA em Gestão Estratégica de Negócios",
-    proposedValue: "MBA Executivo",
-    valueEdited: true,
-    changesDraft: true,
-  }), true);
-  assert.equal(evidenceSelectionRequiresReason({
-    selectedText: null,
-    proposedValue: "MBA Executivo",
-    valueEdited: true,
-    changesDraft: true,
-  }), true);
-  assert.equal(evidenceSelectionRequiresReason({
-    selectedText: "MBA",
-    proposedValue: "Outro valor",
-    valueEdited: true,
-    changesDraft: false,
-  }), false);
+test("M5 records ordinary human changes without asking the operator for a free-text reason", async () => {
+  const [page, panel, service, migration, verification, delta] = await Promise.all([
+    readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
+    readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
+    readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8"),
+    readFile("supabase/migrations/20260902181013_automatic_review_audit_reason.sql", "utf8"),
+    readFile("supabase/qa/automatic_review_audit_reason_verification.sql", "utf8"),
+    readFile("web/src/pages/ProfileDeltaPage.tsx", "utf8"),
+  ]);
+
+  assert.doesNotMatch(page, /Justificativa da operação de evidência|selectionReason|evidenceSelectionRequiresReason/);
+  assert.doesNotMatch(panel, /Justificativa da correção|prisma-review-correction-reason/);
+  assert.match(service, /automaticReviewChangeReason\(\)/);
+  assert.match(service, /automaticEvidenceReason\(input\.action, input\.pageNumber\)/);
+  assert.match(migration, /Alteração registrada pelo operador; valores anterior e novo preservados no histórico\./);
+  assert.match(migration, /function public\.save_profile_review/);
+  assert.match(migration, /private\.record_profile_review_evidence/);
+  assert.match(migration, /replace\(function_definition, manual_reason_block, ''\)/);
+  assert.match(verification, /public\.save_profile_review\([\s\S]*?null,[\s\S]*?qa:automatic-review-audit/);
+  assert.match(verification, /rollback;/);
+  assert.match(delta, /removalReason\.trim\(\)\.length < 5/);
+  assert.match(delta, /Justificativa das remoções/);
 });
 
 test("M5 migration persists versioned normalized regions and compatible legacy evidence links", async () => {
@@ -343,7 +339,7 @@ test("M5 explains unsaved-change blockers and resumes the requested review actio
   assert.match(page, /deferReviewAction\(\{ type: "start_evidence_selection", fieldPath \}\)/);
   assert.match(page, /deferReviewAction\(\{ type: "create_custom_section" \}\)/);
   assert.match(page, /resumeDeferredReviewAction\(continuation\)/);
-  assert.match(page, /prisma-review-correction-reason/);
+  assert.doesNotMatch(page, /prisma-review-correction-reason/);
   assert.match(panel, /Há alterações não salvas/);
   assert.match(panel, /Salvar rascunho e continuar/);
   assert.match(panel, /Descartar e continuar/);

@@ -434,14 +434,13 @@ export const personIngestionService = {
     reviewId: string,
     expectedLockVersion: number,
     reviewedData: StructuredDraft,
-    reason: string,
   ): Promise<number> {
     const { data, error } = await supabase.rpc("save_profile_review", {
       p_organization_id: organizationId,
       p_review_id: reviewId,
       p_expected_lock_version: expectedLockVersion,
       p_reviewed_data: reviewedData as unknown as Json,
-      p_reason: reason,
+      p_reason: automaticReviewChangeReason(),
       p_idempotency_key: createOperationKey("save-review"),
     });
     throwReviewError(error, "Não foi possível salvar o rascunho da revisão.");
@@ -547,7 +546,6 @@ export const personIngestionService = {
     refinementDecisions: Array<{ linkId: string; decision: "excluded" | "included" }>;
     extractionMethod: RegionExtractionMethod;
     reviewedData: StructuredDraft | null;
-    reason: string | null;
     replacesLinkId: string | null;
   }): Promise<{ lockVersion: number; regionId: string; linkId: string }> {
     const { data, error } = await supabase.rpc("record_profile_review_evidence_refined", {
@@ -567,7 +565,7 @@ export const personIngestionService = {
       p_refinement_decisions: input.refinementDecisions as unknown as Json,
       p_extraction_method: input.extractionMethod,
       p_reviewed_data: input.reviewedData as unknown as Json | null,
-      p_reason: input.reason,
+      p_reason: automaticEvidenceReason(input.action, input.pageNumber),
       p_replaces_link_id: input.replacesLinkId,
       p_idempotency_key: createOperationKey("record-review-evidence"),
     });
@@ -1461,6 +1459,23 @@ function isRecord(value: unknown): value is Record<string, Json> {
 
 function createOperationKey(scope: string): string {
   return `${scope}:${crypto.randomUUID()}`;
+}
+
+function automaticReviewChangeReason(): string {
+  return "Alteração registrada pelo operador; valores anterior e novo preservados no histórico.";
+}
+
+function automaticEvidenceReason(action: ReviewEvidenceAction, pageNumber: number): string {
+  switch (action) {
+    case "correct_current_field":
+      return `Campo corrigido com evidência da página ${pageNumber}; valores anterior e novo preservados.`;
+    case "add_complementary":
+      return `Evidência complementar adicionada a partir da página ${pageNumber}.`;
+    case "replace_review_evidence":
+      return `Evidência ativa substituída por região da página ${pageNumber}.`;
+    case "create_new_information":
+      return `Nova informação criada com evidência da página ${pageNumber}.`;
+  }
 }
 
 async function sha256Text(text: string): Promise<string> {

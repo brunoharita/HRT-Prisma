@@ -22,6 +22,7 @@ O Prisma já preservava Pessoa, Documento, Tentativa, Rascunho, Revisão e Perfi
 - O contrato local `operation-feedback` 1.0.0 classifica interrupções como validação, conflito, sessão, autorização, estado desatualizado, indisponibilidade ou falha interna. A mensagem sempre informa preservação e recuperação, sem expor SQL, nomes internos ou payloads.
 - O cliente valida o rascunho antes de aplicar aprendizado ou publicar. Falha posterior a uma confirmação transacional é apresentada como atualização de tela incompleta, nunca como mutação não realizada; a interface não incentiva repetição ambígua.
 - Recuperação de falha técnica deriva das páginas e dos caracteres úteis preservados. Reprocessar só aparece quando existe fonte reutilizável; nos demais casos a ação é substituir o arquivo.
+- Correções comuns não exigem que o operador redija uma justificativa. O ledger já preserva ator, instante, revisão, campo, antes/depois e evidência; a RPC completa o campo legado `reason` com uma descrição operacional determinística. Motivo humano continua obrigatório somente para remover explicitamente um fato já aprovado no Delta.
 
 ## Consequences
 
@@ -36,6 +37,8 @@ O ledger carrega `organization_id`, RLS tenant-scoped e escrita direta revogada.
 Documentos, revisões e perfis históricos permanecem legíveis. O fluxo cliente antigo de aprovação direta deixa de ser autorizado, portanto `human-profile-review` e `person-ingestion` avançam major. A representação profissional avança major porque a publicação passa a mesclar perfil-base e proposta com remoção explícita auditada. Nenhum prompt, modelo ou contrato de inferência muda.
 
 Em 2026-09-02, a recuperação determinística de falhas avança `resume-product-state` para 1.1.0 e `document-presentation` para 2.1.0, além de introduzir `operation-feedback` 1.0.0. A mudança é compatível e local ao cliente: nenhum estado, payload, grant, RPC ou significado persistido mudou.
+
+Na mesma data, `human-profile-review` avança de 7.0.0 para 7.1.0. `p_reason` continua aceito para compatibilidade, mas deixa de ser uma precondição de correções comuns; descrições automáticas mantêm revisões e eventos históricos legíveis. A regra de remoção explícita e justificada de `profile-publication-delta` 1.0.0 não muda.
 
 ## Validation
 
