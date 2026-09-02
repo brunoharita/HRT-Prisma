@@ -9,6 +9,7 @@ import {
   type LayoutTextLine,
 } from "../web/src/domain/adaptiveResumeExtraction.js";
 import type { ExtractedPage, StructuredDraft } from "../web/src/domain/personIngestion.js";
+import { buildOcrLayoutLines } from "../web/src/domain/personIngestion.js";
 
 function line(text: string, y: number, x = 0.08, width = 0.75, emphasis: LayoutTextLine["emphasis"] = "regular"): LayoutTextLine {
   return { text, x, y, width, height: 0.018, fontSize: 11, emphasis };
@@ -261,7 +262,7 @@ test("document learning reports an unresolved sibling instead of inventing a blo
   reviewed.experiences[0]!.organization = "HRT Solutions";
   const report = proposeSiblingBlockCorrections({ pages: [page], draft: reviewed, extracted, sourceIndex: 0, sourceField: "organization" });
   assert.equal(report.suggestions.length, 0);
-  assert.equal(report.unresolved[0]?.reasonCode, "source-block-not-found");
+  assert.equal(report.unresolved[0]?.reasonCode, "source-incomplete");
 });
 
 test("text-only and OCR fallback never invent spatial coordinates", () => {
@@ -276,6 +277,80 @@ test("text-only and OCR fallback never invent spatial coordinates", () => {
   const result = buildAdaptiveExtraction([page]);
   assert.ok(result.fieldEvidence.length > 0);
   assert.ok(result.fieldEvidence.every((item) => item.x === null && item.y === null && item.width === null && item.height === null));
+});
+
+test("a complete human anchor discovers missing comma-header sibling experiences without publishing them", () => {
+  const layoutLines = [
+    line("EXPERIÊNCIA PROFISSIONAL", 0.08, 0.08, 0.5, "strong"),
+    line("TI Mgmt - PM/PO, Scaffold Education Abr 2018 - Jan 2025", 0.13, 0.08, 0.82, "strong"),
+    line("• Atuação na interface entre negócio, tecnologia e operação.", 0.16, 0.09, 0.76),
+    line("• Liderança de squads multidisciplinares.", 0.185, 0.09, 0.7),
+    line("Fundador & Diretor Executivo, HRT Solutions Jan 2025 - Atual", 0.25, 0.08, 0.82, "strong"),
+    line("• Condução de projetos de estruturação operacional.", 0.28, 0.09, 0.75),
+    line("• Tradução de necessidades de negócio em soluções práticas.", 0.305, 0.09, 0.78),
+    line("Diretor de Operações, Bencato Engenharia Jan 2025 - Abr 2026", 0.37, 0.08, 0.82, "strong"),
+    line("• Condução da estruturação operacional da empresa.", 0.40, 0.09, 0.75),
+    line("• Implantação de indicadores e práticas de monitoramento.", 0.425, 0.09, 0.78),
+    line("FORMAÇÃO", 0.5, 0.08, 0.3, "strong"),
+  ];
+  const page: ExtractedPage = {
+    pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf",
+    usefulCharacterCount: 650, method: "pdfjs", methodVersion: "fixture-layout-v2", layoutLines,
+  };
+  const anchor = legacyExperience(0, {
+    role: "TI Mgmt - PM/PO", organization: "Scaffold Education", period: "Abr 2018 - Jan 2025",
+    description: "Atuação na interface entre negócio, tecnologia e operação.\nLiderança de squads multidisciplinares.",
+    evidenceText: layoutLines[1]!.text, page: 1,
+  });
+  const draft: StructuredDraft = {
+    ...emptyStructuredSummary(), experiences: [anchor], education: [], certifications: [], languages: [], competencies: [],
+    customSections: [], uncertainties: [], notIdentified: [],
+  };
+  const extracted: StructuredDraft = { ...draft, experiences: [] };
+  const report = proposeSiblingBlockCorrections({ pages: [page], draft, extracted, sourceIndex: 0, sourceField: "role" });
+
+  assert.equal(report.methodVersion, "prisma-document-learning-v3");
+  assert.equal(report.algorithmVersion, "adaptive-sibling-block-v1");
+  assert.equal(report.signatureVersion, "experience-sibling-signature-v1");
+  assert.equal(report.suggestions.length, 2);
+  assert.ok(report.suggestions.every((item) => item.kind === "new" && item.classification === "strong"));
+  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["HRT Solutions", "Bencato Engenharia"]);
+  assert.ok(report.suggestions.flatMap((item) => item.fields).every((field) => field.evidences.length > 0));
+  assert.equal(draft.experiences.length, 1, "discovery must not mutate or publish the reviewed draft");
+});
+
+test("new sibling discovery rejects text-only sources and a visually separate column", () => {
+  const textPage: ExtractedPage = {
+    pageNumber: 1,
+    text: "Experiência profissional\nDiretor, HRT Solutions Jan 2025 - Atual\n• Estruturação da operação.\nGerente, Acme Ltda Jan 2020 - Dez 2024\n• Gestão da operação.",
+    origin: "ocr", usefulCharacterCount: 180, method: "tesseract.js", methodVersion: "legacy-flat-v1",
+  };
+  const anchor = legacyExperience(0, { role: "Diretor", organization: "HRT Solutions", period: "Jan 2025 - Atual", description: "Estruturação da operação.", evidenceText: "Diretor, HRT Solutions Jan 2025 - Atual", page: 1 });
+  const draft: StructuredDraft = { ...emptyStructuredSummary(), experiences: [anchor], education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  const flatReport = proposeSiblingBlockCorrections({ pages: [textPage], draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "role" });
+  assert.equal(flatReport.suggestions.length, 0);
+  assert.ok(flatReport.unresolved.some((item) => item.reasonCode === "ambiguous-candidate"));
+
+  const positioned = [
+    line("Experiência profissional", 0.05, 0.08, 0.4, "strong"),
+    line("Diretor, HRT Solutions Jan 2025 - Atual", 0.1, 0.08, 0.38, "strong"),
+    line("• Estruturação da operação.", 0.13, 0.09, 0.35),
+    line("Gerente, Acme Ltda Jan 2020 - Dez 2024", 0.1, 0.58, 0.35, "strong"),
+    line("• Gestão da operação.", 0.13, 0.59, 0.32),
+  ];
+  const columnReport = proposeSiblingBlockCorrections({
+    pages: [{ ...textPage, origin: "native_pdf", layoutLines: positioned, text: positioned.map((item) => item.text).join("\n") }],
+    draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "role",
+  });
+  assert.equal(columnReport.suggestions.length, 0);
+  assert.ok(columnReport.unresolved.some((item) => item.reasonCode === "column-mismatch"));
+});
+
+test("OCR blocks are normalized into positioned lines for deterministic sibling analysis", () => {
+  const lines = buildOcrLayoutLines([{ paragraphs: [{ lines: [{ text: "Diretor, HRT Solutions", bbox: { x0: 100, y0: 200, x1: 700, y1: 240 } }] }] }], 1000, 2000);
+  assert.deepEqual(lines[0], {
+    text: "Diretor, HRT Solutions", x: 0.1, y: 0.1, width: 0.6, height: 0.02, fontSize: 40, emphasis: "regular",
+  });
 });
 
 test("adaptive persistence and reviewer evidence retirement remain tenant-scoped and auditable", async () => {
@@ -310,6 +385,42 @@ test("adaptive v2 persistence is tenant-scoped, metadata-only and promotes patte
   assert.match(indexMigration, /profile_review_adaptation_events \(actor_auth_user_id\)/i);
   assert.match(page, /applyAdaptiveSuggestions/);
   assert.match(page, /proposeSiblingBlockCorrections/);
+});
+
+test("adaptive v3 persists structural audit metadata and field evidence without leaking selected text into learning events", async () => {
+  const migration = await readFile("supabase/migrations/20260902003617_m5_sibling_block_learning.sql", "utf8");
+  const service = await readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8");
+  const page = await readFile("web/src/pages/ProfileReviewPage.tsx", "utf8");
+  assert.match(migration, /create or replace function public\.apply_profile_review_adaptive_suggestions_v3/i);
+  assert.match(migration, /private\.require_document_reviewer\(p_organization_id\)/i);
+  assert.match(migration, /adaptive-sibling-block-v1/);
+  assert.match(migration, /experience-sibling-signature-v1/);
+  assert.match(migration, /insert into public\.spatial_evidence_regions/i);
+  assert.match(migration, /insert into public\.profile_review_evidence_links/i);
+  assert.match(migration, /'complementary'/i);
+  assert.match(migration, /safe_suggestions/);
+  const adaptationInsert = migration.match(/insert into public\.profile_review_adaptation_events[\s\S]*?returning id into new_event_id;/i)?.[0] ?? "";
+  assert.doesNotMatch(adaptationInsert, /selectedText|raw_selected_text/);
+  assert.match(migration, /record_profile_review_sibling_scan/);
+  assert.match(migration, /sibling_blocks_detected/);
+  assert.match(migration, /sibling_suggestions_discarded/);
+  assert.match(service, /apply_profile_review_adaptive_suggestions_v3/);
+  assert.match(service, /recordSiblingScan/);
+  assert.match(page, /hasSpatialAnchorEvidence/);
+  assert.match(page, /dismissAdaptiveSuggestions/);
+});
+
+test("adaptive v3 hardening rejects metadata-only and mismatched sibling suggestions at the RPC boundary", async () => {
+  const migration = await readFile("supabase/migrations/20260902011222_m5_sibling_block_learning_hardening.sql", "utf8");
+  assert.match(migration, /private\.is_valid_sibling_signature_summary/);
+  assert.match(migration, /private\.is_valid_sibling_candidate_summary/);
+  assert.match(migration, /private\.is_valid_sibling_suggestion/);
+  assert.match(migration, /split_part\(p_suggestion ->> 'fieldPath', '\.', 2\) <> p_suggestion ->> 'candidateId'/i);
+  assert.match(migration, /jsonb_array_length\(p_suggestion -> 'evidenceRegions'\) not between 1 and 8/i);
+  assert.doesNotMatch(migration, /'text-line-v1'/);
+  assert.match(migration, /record_profile_review_sibling_scan_v3_impl/);
+  assert.match(migration, /apply_profile_review_adaptive_suggestions_v3_impl/);
+  assert.match(migration, /from public, anon, authenticated/i);
 });
 
 test("structured summary migration keeps contact private and rejects PII promotion", async () => {

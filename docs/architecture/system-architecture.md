@@ -35,7 +35,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | ativo e comprovado |
 | Confiabilidade M2-C | central de documentos, retry, revisão humana, comparação e aprovação | `web/src/pages`, `personIngestionService`, RPCs | ativo e comprovado |
 | Evidência espacial M5 | representação visual normalizada, mapa canônico por caractere/símbolo, OCR local por região, vínculos e histórico | `DocumentEvidenceViewer`, `spatialEvidence`, `StructuredReviewPanel`, RPC M5 | PDF ativo e comprovado; adaptadores futuros ainda não ativados |
-| Aprendizado adaptativo v2 | releitura do bloco completo, aceite parcial, eventos e sinais organizacionais aprovados | `adaptiveResumeExtraction`, `AdaptiveSuggestionPanel`, RPC adaptativa | runtime local; persistência comprovada em QA |
+| Aprendizado adaptativo v3 | releitura, assinatura temporária, descoberta de blocos ausentes, aceite governado e sinais aprovados | `adaptiveResumeExtraction`, `AdaptiveSuggestionPanel`, RPCs v3 | runtime local; persistência v3 ativa em QA |
 | Intake currículo-first | PDF pré-Pessoa, identidade mínima, duplicidade e resolução transacional | `ResumeImportPage`, `resume_intakes`, RPCs | implementado localmente |
 | Database contract | Modelo, integridade, grants, RLS, Storage e RPC atômica | `supabase/migrations` | ativo no Prisma-QA |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
@@ -54,6 +54,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - O frontend nunca inventa coordenadas. Uma nova região M5 nasce de seleção explícita na versão do documento exibida e o banco valida página, retângulo, tenant e lock.
 - Seleção e destaque M5 operam em coordenadas canônicas da página; pixels, zoom e densidade da tela são apenas transformações de entrada e saída. Adaptadores de formato devem produzir as mesmas unidades visuais antes de usar o motor comum.
 - A correção humana não é copiada para outros registros. Cada sugestão é reconstruída da fonte original do próprio bloco, campos já revisados são preservados e registros ambíguos permanecem sem proposta.
+- Uma experiência completa só vira âncora estrutural quando possui evidência espacial. Novos blocos exigem mesma seção e coluna, repetição geométrica e conteúdo próprio; texto achatado nunca recebe coordenadas inventadas.
 - Padrões persistidos são sinais estruturais allowlisted e versionados, sem valores pessoais ou texto integral, promovidos somente na aprovação e sempre isolados por organização.
 
 ## Persistência

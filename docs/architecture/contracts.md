@@ -13,7 +13,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `profile-publication-delta` | product/application/data | 1.0.0 | revisão, publicação, Central da Pessoa | schema ativo em QA; runtime web local | omissões preservadas e remoções explícitas auditadas | local/QA | bloquear publicação |
 | `extraction-provider` | AI | 1.0.0 | `processResume` | implementado | `ExtractionProvider` | local | rejeitar resposta |
 | `extraction-rules` | AI | 1.0.0 | provider local | implementado | `extraction-rules-1.0.0` | local | revisão/reprocessamento |
-| `adaptive-resume-extraction` | AI/application | 4.0.0 | ingestão M2-B e revisão | persistência ativa em QA; runtime web local | geometria, blocos profissionais, resumo documental e IDs estáveis | local/QA | exigir revisão/reprocessamento |
+| `adaptive-resume-extraction` | AI/application | 5.0.0 | ingestão M2-B e revisão | sibling discovery e persistência v3 ativos em QA | assinatura document-local, blocos irmãos, geometria, resumo e IDs estáveis | local/QA | exigir revisão/reprocessamento |
 | `inference-ontology` | AI/domain | 1.0.0 | profile, search, matching | implementado | `inference-ontology-1.0.0` | local | bloquear inferência |
 | `structured-retrieval` | AI | 1.0.0 | search | implementado | `structured-lexical-1.0.0` | local | bloquear consulta |
 | `explainable-matching` | AI/domain | 1.0.0 | vacancy evaluation | implementado | `matching-explainable-1.0.0` | local | bloquear avaliação |
@@ -24,14 +24,14 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
-| `person-ingestion` | application/data | 8.0.0 | intake, Pessoas, documentos, perfil | publicação Delta ativa em QA; runtime web local | jornada completa, recuperação parcial e publicação omission-safe | local/QA | bloquear sem fonte recuperável |
+| `person-ingestion` | application/data | 9.0.0 | intake, Pessoas, documentos, perfil | schema v9 e publicação Delta ativos em QA; runtime web local | OCR posicionado, jornada completa, recuperação parcial e publicação omission-safe | local/QA | bloquear sem fonte recuperável |
 | `resume-intake` | application/data/security | 1.0.0 | Home, Pessoas, importador | implementado localmente | `resume_intakes` e cinco RPCs controladas | local | bloquear criação/vínculo |
-| `human-profile-review` | application/domain | 5.0.0 | revisão, Delta, perfil, auditoria | publicação Delta ativa em QA; runtime web local | revisão não publica diretamente; Delta é a autoridade final | local/QA | bloquear promoção inválida |
+| `human-profile-review` | application/domain | 6.0.0 | revisão, Delta, perfil, auditoria | RPCs v3 e publicação Delta ativas em QA; runtime web local | propostas completas com aceite auditável; Delta continua autoridade final | local/QA | bloquear promoção inválida |
 | `spatial-evidence` | application/data | 1.2.0 | PDF viewer, revisão, auditoria | schema ativo em QA; web local | região bruta, texto efetivo, máscara por caractere ou símbolo e decisões imutáveis | local/QA | bloquear mutação |
 | `document-operation-idempotency` | application/data | 1.1.0 | cadastro, retry, persistência, aprovação e invalidação | base e invalidação ativas em QA | `document_operations`, fingerprints, locks e descarte auditável | local/QA | rejeitar conflito |
 | `pdf-native-extraction` | AI/application | 2.0.0 | ingestão PDF | implementado localmente | `pdfjs-5.4.296/layout-v2` | local | exigir revisão/reprocessamento |
-| `selective-ocr` | AI/application | 1.0.0 | páginas sem texto nativo suficiente | ativo localmente | `tesseract.js-7.0.0/por+eng-v1` | local | falhar sem perfil |
-| `extraction-draft` | AI/domain | 5.0.0 | evidência e geração de perfil | schema ativo em QA; runtime web local | `prisma-layout-adaptive-v4` | local/QA | bloquear promoção |
+| `selective-ocr` | AI/application | 1.1.0 | páginas sem texto nativo suficiente | linhas posicionadas ativas localmente | `tesseract.js-7.0.0/por+eng-v1` + caixas normalizadas | local | falhar sem perfil |
+| `extraction-draft` | AI/domain | 6.0.0 | evidência e geração de perfil | schema compatível ativo em QA; runtime v6 local | `prisma-layout-adaptive-v5` | local/QA | bloquear promoção |
 | `structured-resume-summary` | AI/domain/security | 1.0.0 | extração, revisão, Pessoas e perfil | schema ativo em QA; runtime web local | campos explícitos, IDs estáveis de resultados e fronteira privada de PII | local/QA | bloquear promoção |
 | `review-field-lifecycle` | application/domain/data | 1.0.0 | revisão, evidência, extração e aprovação | schema ativo em QA; runtime web local | IDs estáveis, compatibilidade numérica, descarte de vazios e gates de salvamento | local/QA | bloquear escrita |
 | `extraction-learning-case` | AI/data | 1.0.0 | avaliação e promoção de extração | ativo em QA | referências auditáveis a correções aprovadas | local/QA | bloquear aprendizado automático |

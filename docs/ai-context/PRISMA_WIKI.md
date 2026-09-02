@@ -2,7 +2,7 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.6.1
+version: 1.7.0
 last_verified: 2026-09-01
 ---
 
@@ -38,6 +38,7 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 - Nova importação é proposta. O perfil vigente continua disponível até a publicação de outra versão.
 - Omissão no currículo novo preserva o conhecimento aprovado. Remoção exige confirmação humana explícita, motivo e trilha de auditoria.
 - A revisão salva conduz à comparação Delta; publicação confirmada encerra na Central da Pessoa.
+- Uma experiência corrigida pode revelar experiências irmãs somente no mesmo currículo; propostas exigem revisão, mantêm evidência própria e não alteram o perfil vigente.
 - Knowledge separa termo observado, conceito normalizado e inferência. Termo desconhecido é preservado e entra na Inbox.
 - Knowledge da empresa é overlay tenant-owned e precede a Global apenas no próprio escopo, sem alterar a base Prisma.
 - Internet enriquece Knowledge, nunca Pessoa; IA propõe e humano autorizado publica.

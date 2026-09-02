@@ -4,7 +4,7 @@
 
 `tests/golden/extraction` contém 13 currículos sintéticos representativos, o resultado mínimo esperado e conhecimentos proibidos. `tests/golden/matching` contém quatro avaliações pessoa-vaga e dois casos de retrieval para empate determinístico e ausência de candidato.
 
-`tests/adaptiveResumeExtraction.test.ts` cobre cargo com descritor, período abreviado, empresa na linha seguinte, permanência com cargos subordinados, recuperação do período a partir da fonte, preservação de campo já revisado, registro ambíguo não alterado e padrão organizacional aprovado. Aceites entram em `extraction_learning_cases` como candidatos; somente a aprovação integral promove o sinal estrutural tenant-scoped.
+`tests/adaptiveResumeExtraction.test.ts` cobre cargo com descritor, período abreviado, empresa na linha seguinte, permanência com cargos subordinados, recuperação do período, preservação humana, registro ambíguo, padrão organizacional, cabeçalho `Cargo, Empresa`, descoberta de experiências ausentes, fonte sem geometria, colunas separadas e OCR posicionado. Aceites entram em `extraction_learning_cases` como candidatos; somente a aprovação integral promove o sinal estrutural tenant-scoped.
 
 ## Execução
 

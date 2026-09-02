@@ -3640,9 +3640,10 @@ textarea {
   .prisma-evidence-legend { gap: 8px; overflow-x: auto; white-space: nowrap; }
 }
 .prisma-adaptive-suggestions {
-  background: #f4f8ff;
-  border: 1px solid #91b7ff;
-  border-radius: 10px;
+  background: linear-gradient(145deg, #f6faff 0%, #f9fcff 62%, #f4fbf8 100%);
+  border: 1px solid #b8d1f6;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgb(24 75 135 / 8%);
   display: grid;
   gap: 14px;
   padding: 16px;
@@ -3663,10 +3664,28 @@ textarea {
 .prisma-adaptive-experience {
   background: #fff;
   border: 1px solid #d6e4ff;
-  border-radius: 8px;
+  border-radius: 10px;
   display: grid;
   gap: 10px;
   padding: 12px;
+  position: relative;
+}
+
+.prisma-adaptive-experience::before {
+  background: #1677ff;
+  border-radius: 10px 0 0 10px;
+  content: "";
+  inset: 0 auto 0 0;
+  position: absolute;
+  width: 4px;
+}
+
+.prisma-adaptive-experience--strong::before { background: #1f9d61; }
+.prisma-adaptive-experience--possible::before { background: #d99a15; }
+
+.prisma-adaptive-experience__criteria {
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .prisma-adaptive-experience__title {
@@ -3684,7 +3703,7 @@ textarea {
   display: grid;
   gap: 6px;
   grid-template-columns: minmax(150px, 0.7fr) minmax(280px, 2fr) auto;
-  padding-top: 9px;
+  padding: 10px 0 0 8px;
 }
 
 .prisma-adaptive-field > .ant-typography {

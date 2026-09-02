@@ -42,16 +42,16 @@ Currículos e vagas são dados. Texto tentando ignorar regras, mudar schema, rev
 | --- | --- | --- |
 | Extraction | `extraction-rules-1.0.0` | ativo local |
 | PDF nativo | `pdfjs-5.4.296/native-v1` | ativo local e remoto interno |
-| OCR | `tesseract.js-7.0.0/por+eng-v1` | ativo local e remoto interno |
-| Draft M2-B | `prisma-layout-adaptive-v2` | implementado local; schema e padrões persistidos em QA |
-| Revisão adaptativa | `prisma-document-learning-v2` | releitura imediata local; aceite transacional em QA |
+| OCR | `tesseract.js-7.0.0/por+eng-v1` | texto e linhas posicionadas ativos localmente; versão anterior em QA |
+| Draft M2-B | `prisma-layout-adaptive-v5` | implementado local; schema v6 aguarda QA |
+| Revisão adaptativa | `prisma-document-learning-v3` | assinatura e blocos irmãos locais; v2 ativo em QA |
 | Inference | `inference-ontology-1.0.0` | ativo local |
 | Retrieval/embedding contract | `structured-lexical-1.0.0` | ativo local, sem vetores |
 | Matching | `matching-explainable-1.0.0` | ativo local |
 | Prompt | `no-llm-prompt-1.0.0` | sentinel, nenhuma chamada |
 | Model | `deterministic-local-1.0.0` | ativo local |
 
-Correções com evidência produzem aprendizado imediato somente dentro do documento: o sistema volta ao texto/layout original, relê o bloco completo de cada registro irmão e exige confirmação por campo. O aceite persiste evento e casos candidatos, mas não altera autonomamente regra, prompt ou modelo. Após a aprovação integral, sinais estruturais sem valores pessoais podem orientar a primeira extração de novos currículos do mesmo tenant. Alterar parser, prompt, modelo ou schema continua exigindo versão, golden suite, QA e promoção explícita.
+Correções completas com evidência produzem aprendizado imediato somente dentro do documento: o sistema cria uma assinatura temporária, volta ao layout original e propõe blocos irmãos fortes ou possíveis sem score numérico. O aceite persiste dados, evidência própria, evento e casos candidatos, mas não publica perfil nem altera autonomamente regra, prompt ou modelo. Após a aprovação integral, somente sinais estruturais sem valores pessoais podem orientar currículos futuros do mesmo tenant.
 
 ## Custo, latência e volume
 

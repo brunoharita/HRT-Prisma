@@ -387,7 +387,12 @@ export interface Database {
         review_revision_id: string;
         source_field_path: string;
         pattern_key: string;
-        method_version: "prisma-document-learning-v2";
+        method_version: "prisma-document-learning-v2" | "prisma-document-learning-v3";
+        algorithm_version: string;
+        signature_version: string | null;
+        anchor_experience_id: string | null;
+        signature_summary: Json;
+        candidate_summary: Json;
         accepted_suggestions: Json;
         idempotency_key: string;
         request_fingerprint: string;
@@ -415,7 +420,7 @@ export interface Database {
         id: string;
         organization_id: string;
         pattern_key: string;
-        method_version: "prisma-document-learning-v2";
+        method_version: "prisma-document-learning-v2" | "prisma-document-learning-v3";
         status: "active" | "retired";
         confirmation_count: number;
         first_confirmed_at: string;
@@ -1229,6 +1234,41 @@ export interface Database {
           p_idempotency_key: string;
         };
         Returns: Array<{ review_id: string; lock_version: number; adaptation_event_id: string; reused: boolean }>;
+      };
+      apply_profile_review_adaptive_suggestions_v3: {
+        Args: {
+          p_organization_id: string;
+          p_review_id: string;
+          p_expected_lock_version: number;
+          p_reviewed_data: Json;
+          p_source_field_path: string;
+          p_pattern_key: string;
+          p_method_version: "prisma-document-learning-v3";
+          p_algorithm_version: string;
+          p_signature_version: string;
+          p_anchor_experience_id: string;
+          p_signature_summary: Json;
+          p_candidate_summary: Json;
+          p_accepted_suggestions: Json;
+          p_reason: string;
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ review_id: string; lock_version: number; adaptation_event_id: string; reused: boolean }>;
+      };
+      record_profile_review_sibling_scan: {
+        Args: {
+          p_organization_id: string;
+          p_review_id: string;
+          p_anchor_experience_id: string;
+          p_method_version: "prisma-document-learning-v3";
+          p_algorithm_version: string;
+          p_signature_version: string;
+          p_signature_summary: Json;
+          p_candidate_summary: Json;
+          p_decision: "detected" | "discarded";
+          p_idempotency_key: string;
+        };
+        Returns: Array<{ event_id: number; reused: boolean }>;
       };
       approve_knowledge_proposal: {
         Args: { p_proposal_id: string; p_human_edited_proposal?: Json | null; p_decision_reason?: string | null };

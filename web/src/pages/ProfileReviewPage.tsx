@@ -178,8 +178,32 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     setBusy(true); setError(null); setSuccess(null);
     try {
+      const structuralAnchor = findCompletedExperienceChange(normalizedBaseline, normalizedDraft);
       await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft, reason);
-      await refresh();
+      const refreshed = await refresh();
+      if (structuralAnchor && hasSpatialAnchorEvidence(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? "")) {
+        const report = proposeSiblingBlockCorrections({
+          pages: refreshed.pages,
+          draft: refreshed.reviewedData,
+          extracted: refreshed.extractedData,
+          sourceIndex: structuralAnchor.index,
+          sourceField: structuralAnchor.field,
+        });
+        if (report.anchorExperienceId && (report.suggestions.length || report.unresolved.length)) {
+          await personIngestionService.recordSiblingScan({
+            organizationId: activeMembership.organizationId,
+            reviewId: refreshed.id,
+            anchorExperienceId: report.anchorExperienceId,
+            methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+            algorithmVersion: report.algorithmVersion,
+            signatureVersion: report.signatureVersion,
+            signatureSummary: report.signatureSummary,
+            candidateSummary: report.candidateSummary,
+            decision: "detected",
+          });
+        }
+        setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
+      }
       setReason("");
       setDeferredReviewAction(null);
       if (continuation) {
@@ -212,9 +236,18 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
   async function handleApplyAdaptiveSuggestions(suggestions: AdaptiveFieldSuggestion[]) {
     if (!workspace || !draft || !adaptiveReport || suggestions.length === 0) return;
+    const selectedPaths = new Set(suggestions.map((suggestion) => suggestion.fieldPath));
+    const addedExperiences = adaptiveReport.suggestions.flatMap((candidate) => (
+      candidate.kind === "new" && candidate.proposedExperience && candidate.fields.some((field) => selectedPaths.has(field.fieldPath))
+        ? [candidate.proposedExperience]
+        : []
+    ));
+    const baseDraft = addedExperiences.length
+      ? { ...draft, experiences: [...draft.experiences, ...addedExperiences.filter((candidate) => !draft.experiences.some((item) => item.id === candidate.id))] }
+      : draft;
     const nextDraft = suggestions.reduce(
       (current, suggestion) => applyValueAtFieldPath(current, suggestion.fieldPath, suggestion.proposedValue),
-      draft,
+      baseDraft,
     );
     setBusy(true); setError(null); setSuccess(null);
     try {
@@ -226,14 +259,40 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         sourceFieldPath: reviewEntityFieldPath("experience", draft.experiences[adaptiveReport.sourceIndex]!, adaptiveReport.sourceField),
         patternKey: adaptiveReport.patternKey,
         methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+        algorithmVersion: adaptiveReport.algorithmVersion,
+        signatureVersion: adaptiveReport.signatureVersion,
+        anchorExperienceId: adaptiveReport.anchorExperienceId ?? draft.experiences[adaptiveReport.sourceIndex]!.id,
+        signatureSummary: adaptiveReport.signatureSummary,
+        candidateSummary: adaptiveReport.candidateSummary,
         suggestions,
         reason: "Sugestões adaptativas confirmadas pelo revisor após releitura dos blocos na fonte original.",
       });
       await refresh();
       setAdaptiveReport(null);
       setReason("");
-      setSuccess(`${suggestions.length} ${suggestions.length === 1 ? "correção adaptativa foi aplicada" : "correções adaptativas foram aplicadas"}, salvas e versionadas. A revisão por evidência permanece disponível.`);
+      setSuccess(`${adaptiveReport.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length} ${adaptiveReport.suggestions.length === 1 ? "experiência foi aplicada" : "experiências foram aplicadas"}, com evidência e versão auditável. A revisão humana permanece disponível.`);
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aplicar as sugestões adaptativas."); }
+    finally { setBusy(false); }
+  }
+
+  async function dismissAdaptiveSuggestions() {
+    if (!workspace || !adaptiveReport?.anchorExperienceId) { setAdaptiveReport(null); return; }
+    setBusy(true); setError(null);
+    try {
+      await personIngestionService.recordSiblingScan({
+        organizationId: activeMembership.organizationId,
+        reviewId: workspace.id,
+        anchorExperienceId: adaptiveReport.anchorExperienceId,
+        methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+        algorithmVersion: adaptiveReport.algorithmVersion,
+        signatureVersion: adaptiveReport.signatureVersion,
+        signatureSummary: adaptiveReport.signatureSummary,
+        candidateSummary: adaptiveReport.candidateSummary,
+        decision: "discarded",
+      });
+      setAdaptiveReport(null);
+      setSuccess("As sugestões foram descartadas e a decisão ficou registrada na trilha da importação.");
+    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível registrar o descarte das sugestões."); }
     finally { setBusy(false); }
   }
 
@@ -545,7 +604,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       {!viewOnly && adaptiveReport ? <AdaptiveSuggestionPanel
         busy={busy}
         onApply={(suggestions) => void handleApplyAdaptiveSuggestions(suggestions)}
-        onDismiss={() => setAdaptiveReport(null)}
+        onDismiss={() => void dismissAdaptiveSuggestions()}
         onNavigate={(suggestion) => {
           setSelectedFieldPath(suggestion.fieldPath);
           setActiveLinkId(null);
@@ -639,6 +698,27 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       </Modal>
     </PrismaPage>
   );
+}
+
+function findCompletedExperienceChange(
+  before: StructuredDraft,
+  after: StructuredDraft,
+): { index: number; field: ExperienceFieldName } | null {
+  for (let index = after.experiences.length - 1; index >= 0; index -= 1) {
+    const current = after.experiences[index]!;
+    if (!current.role?.trim() || !current.organization?.trim() || !current.period?.trim() || !current.description?.trim()) continue;
+    const previous = before.experiences.find((item) => item.id === current.id);
+    if (!previous) return { index, field: "role" };
+    const changedField = (["role", "organization", "period", "description"] as const).find((field) => (previous[field] ?? "").trim() !== (current[field] ?? "").trim());
+    if (changedField) return { index, field: changedField };
+  }
+  return null;
+}
+
+function hasSpatialAnchorEvidence(workspace: ProfileReviewWorkspace, experienceId: string): boolean {
+  if (!experienceId) return false;
+  const prefix = `experiences.${reviewEntityPathSegment("experience", experienceId)}.`;
+  return workspace.evidenceLinks.some((link) => link.state === "active" && Boolean(link.spatialRegionId) && link.fieldPath.startsWith(prefix));
 }
 
 function primaryEvidenceTarget(fieldPath: string, workspace: ProfileReviewWorkspace | null, preferredKind?: "original" | "reviewer"): Omit<EvidenceNavigationTarget, "nonce"> | null {

@@ -456,17 +456,34 @@ export const personIngestionService = {
     reviewedData: StructuredDraft;
     sourceFieldPath: string;
     patternKey: string;
-    methodVersion: "prisma-document-learning-v2";
+    methodVersion: "prisma-document-learning-v3";
+    algorithmVersion: string;
+    signatureVersion: string;
+    anchorExperienceId: string;
+    signatureSummary: Record<string, string | number | boolean | null>;
+    candidateSummary: { detected: number; strong: number; possible: number; rejected: number };
     suggestions: AdaptiveFieldSuggestion[];
     reason: string;
   }): Promise<{ lockVersion: number; adaptationEventId: string }> {
     const suggestionMetadata = input.suggestions.map((suggestion) => ({
+      candidateId: suggestion.fieldPath.split(".")[1],
       fieldPath: suggestion.fieldPath,
       pageNumber: suggestion.pageNumber,
       evidenceMethod: suggestion.evidence?.method ?? "text-line-v1",
       rationaleCode: suggestion.rationaleCode,
+      evidenceRegions: suggestion.evidences.flatMap((evidence) => (
+        evidence.x === null || evidence.y === null || evidence.width === null || evidence.height === null ? [] : [{
+          pageNumber: evidence.pageNumber,
+          x: evidence.x,
+          y: evidence.y,
+          width: evidence.width,
+          height: evidence.height,
+          selectedText: evidence.text,
+          extractionMethod: evidence.method === "tesseract-layout-v1" ? "tesseract-region-v1" : "pdfjs-text-layer-v1",
+        }]
+      )),
     })) as unknown as Json;
-    const { data, error } = await supabase.rpc("apply_profile_review_adaptive_suggestions", {
+    const { data, error } = await supabase.rpc("apply_profile_review_adaptive_suggestions_v3", {
       p_organization_id: input.organizationId,
       p_review_id: input.reviewId,
       p_expected_lock_version: input.expectedLockVersion,
@@ -474,6 +491,11 @@ export const personIngestionService = {
       p_source_field_path: input.sourceFieldPath,
       p_pattern_key: input.patternKey,
       p_method_version: input.methodVersion,
+      p_algorithm_version: input.algorithmVersion,
+      p_signature_version: input.signatureVersion,
+      p_anchor_experience_id: input.anchorExperienceId,
+      p_signature_summary: input.signatureSummary as unknown as Json,
+      p_candidate_summary: input.candidateSummary as unknown as Json,
       p_accepted_suggestions: suggestionMetadata,
       p_reason: input.reason,
       p_idempotency_key: createOperationKey("adaptive-review"),
@@ -482,6 +504,32 @@ export const personIngestionService = {
     const result = data?.[0];
     if (!result) throw new Error("O aprendizado adaptativo não retornou confirmação persistida.");
     return { lockVersion: result.lock_version, adaptationEventId: result.adaptation_event_id };
+  },
+
+  async recordSiblingScan(input: {
+    organizationId: string;
+    reviewId: string;
+    anchorExperienceId: string;
+    methodVersion: "prisma-document-learning-v3";
+    algorithmVersion: string;
+    signatureVersion: string;
+    signatureSummary: Record<string, string | number | boolean | null>;
+    candidateSummary: { detected: number; strong: number; possible: number; rejected: number };
+    decision: "detected" | "discarded";
+  }): Promise<void> {
+    const { error } = await supabase.rpc("record_profile_review_sibling_scan", {
+      p_organization_id: input.organizationId,
+      p_review_id: input.reviewId,
+      p_anchor_experience_id: input.anchorExperienceId,
+      p_method_version: input.methodVersion,
+      p_algorithm_version: input.algorithmVersion,
+      p_signature_version: input.signatureVersion,
+      p_signature_summary: input.signatureSummary as unknown as Json,
+      p_candidate_summary: input.candidateSummary as unknown as Json,
+      p_decision: input.decision,
+      p_idempotency_key: createOperationKey(`sibling-${input.decision}`),
+    });
+    throwReviewError(error, "Não foi possível registrar a decisão sobre as sugestões estruturais.");
   },
 
   async recordProfileReviewEvidence(input: {
@@ -1313,7 +1361,7 @@ function decodeAdaptiveSuggestionMetadata(value: Json): ProfileReviewWorkspace["
     if (!isRecord(item)
       || typeof item.fieldPath !== "string"
       || typeof item.pageNumber !== "number"
-      || (item.evidenceMethod !== "pdfjs-layout-v1" && item.evidenceMethod !== "text-line-v1")
+      || (item.evidenceMethod !== "pdfjs-layout-v1" && item.evidenceMethod !== "tesseract-layout-v1" && item.evidenceMethod !== "text-line-v1")
       || item.rationaleCode !== "same-document-block-pattern") return [];
     return [{
       fieldPath: item.fieldPath,

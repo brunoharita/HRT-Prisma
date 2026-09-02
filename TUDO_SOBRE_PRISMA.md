@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 8ffabbe1ab4ac5b6902c4855e65791e9f55f413356ad4433bb83cb25243af2b6
+source_manifest_sha256: e9e1a6550eadd170edf1dd22aab2d7f5f41293bbadc05d027de7a38c18823611
 -->
 
 # Tudo sobre o Prisma
@@ -371,7 +371,7 @@ last_verified: 2026-09-01
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 143 testes técnicos compõem a suíte local, incluindo a regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
+- 148 testes técnicos compõem a suíte local, incluindo aprendizado estrutural intra-documento, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -387,6 +387,7 @@ last_verified: 2026-09-01
 - Migrations locais `20260829111414_spatial_evidence_refinement` e `20260829113452_spatial_evidence_refinement_rpc_fix`, aplicadas no Prisma-QA como `20260829113031` e `20260829113502`: a primeira adiciona texto bruto, ledger imutável de exclusão/reinclusão, RLS, DML direto revogado e RPC refinada; a segunda elimina de forma fail-closed a ambiguidade PostgreSQL do `ON CONFLICT` descoberta pela primeira transação conectada.
 - Migration `20260828055309_adaptive_resume_extraction` aplicada no Prisma-QA com layout por página, evidência espacial por campo, casos de aprendizado tenant-scoped e RPC auditável de retirada de evidência.
 - Arquivos locais `20260828111135_adaptive_review_learning_v2`, `20260828112737_adaptive_review_learning_v2_rpc_fix` e `20260828115300_adaptive_review_learning_v2_fk_indexes` aplicados no Prisma-QA como migrations remotas `20260828112434`, `20260828112756` e `20260828115139`, com eventos append-only, RPC de aceite transacional, padrões pós-aprovação e cobertura das novas foreign keys.
+- Aprendizado estrutural intra-documento v3 implementado localmente e com persistência ativa no Prisma-QA: experiência humana completa e espacialmente evidenciada gera assinatura temporária; candidatos irmãos usam seção, geometria, período, corpo, espaçamento e coluna; fortes podem ser aplicados em lote, possíveis exigem revisão e ambiguidades são rejeitadas. OCR preserva linhas normalizadas. As migrations `20260902003617_m5_sibling_block_learning` e `20260902011222_m5_sibling_block_learning_hardening` adicionam RPCs v3, evidência complementar, auditoria metadata-only e validação espacial equivalente na fronteira pública; implementações internas não são executáveis por `authenticated`. Nenhuma publicação de perfil ocorre nesse fluxo.
 - Migration local `20260829021015_custom_profile_sections`, aplicada no Prisma-QA como `20260829023309_custom_profile_sections`: valida `customSections`, amplia caminhos M5 e auditoria de mudanças, cria catálogo estrutural com RLS/DML revogado e aprende metadados somente na aprovação.
 - Migration local `20260829024200_custom_section_learning_provenance`, aplicada no Prisma-QA como `20260829024007_custom_section_learning_provenance`: cria confirmações append-only ligadas à revisão aprovada, com RLS e DML direto revogado, sem valores dos itens.
 - Migration local `20260830160132_structured_resume_summary`, aplicada no Prisma-QA como `20260830162510_structured_resume_summary`, valida o novo shape, amplia caminhos de evidência/auditoria, adiciona estado e LinkedIn à tabela privada e redefine a aprovação para separar PII do perfil profissional.
@@ -472,6 +473,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O advisor identifica a RPC M5 `record_profile_review_evidence` como `security definer`; o uso intencional, a autorização interna, o `search_path` vazio e o DML direto revogado estão registrados no ADR-016. Índices M5 recém-criados aparecem como não utilizados porque nenhum evento espacial foi persistido após os testes revertidos.
 - O smoke autenticado desktop do mapa canônico foi concluído no currículo real em 57% e 147%; a mesma região recuperou 1.063 unidades e o texto integral. A alternância mobile e o gesto por arraste em dispositivo táctil continuam sem evidência específica deste movimento.
 - A persistência adaptativa v2 está em QA e o runtime web permanece local. O advisor não aponta RLS ausente nem foreign key adaptativa sem índice; registra somente os novos índices ainda sem uso e a RPC `security definer` intencionalmente executável por `authenticated`, protegida por autorização interna e DML revogado. A qualidade possui regressões sanitizadas para HRT, Bencato, Scaffold, Servimed e NM Systems, mas ainda não foi medida em lote de currículos reais autorizados nem recebeu smoke visual autenticado.
+- A descoberta de blocos irmãos v3 e seu hardening estão persistidos no Prisma-QA, mas o smoke visual autenticado com uma correção real ainda é obrigatório. O navegador interno bloqueou `localhost:5555` antes do carregamento com `ERR_BLOCKED_BY_CLIENT`. Texto sem geometria e layouts heterogêneos continuam deliberadamente conservadores.
 - O schema de áreas personalizadas e seu aprendizado estrutural está em QA; o frontend permanece local. O fluxo criar área -> evidência -> aprovação -> nova extração ainda precisa de smoke autenticado com dado sintético. Nenhuma revisão aprovada real foi rebaixada para simular o gatilho.
 - O smoke visual protegido da recuperação parcial foi concluído no navegador interno com o documento real `Bruno Harita - Product Owner.pdf`. A tela técnica preservou as duas tentativas, selecionou a tentativa 1 com duas páginas como fonte revisável e abriu o workspace com PDF original à esquerda e campos à direita. Uma nova experiência foi iniciada sem exigir reconhecimento automático, `HRT Solutions` foi selecionada diretamente na página 1, ajustada aos caracteres e persistida no campo Empresa com evidência humana rastreável. O Perfil v1 permaneceu preservado e nenhuma nova versão foi aprovada. O acesso salvo foi utilizado sem expor credenciais e nenhum bypass ou credencial temporária foi criado.
 - O schema do refinamento espacial 1.2 está ativo em QA e o frontend permanece local. A cobertura determinística e as transações revertidas comprovam subtração, limites do contrato, autorização e ausência de resíduos; ainda falta smoke visual autenticado com sobreposição real no PDF.
@@ -502,8 +504,8 @@ Em 2026-09-01, a branch `codex/m5-1-ux-polish` consolidou uma revisão transvers
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.5.1
-last_verified: 2026-08-31
+version: 1.6.0
+last_verified: 2026-09-01
 ---
 
 # Referência de IA do Prisma
@@ -520,6 +522,8 @@ Extração parcial útil conduz à revisão, nunca a um perfil completo nem a `F
 
 A extração adaptativa pode reconhecer títulos personalizados previamente aprovados na mesma organização. Ela reutiliza somente metadados de estrutura, relê os valores no currículo atual e cria evidência própria. Conteúdo personalizado não vira competência, inferência ou matching automaticamente.
 
+Uma experiência completa corrigida pelo operador e ligada a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma compara critérios nomeados e propõe blocos irmãos ausentes com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
+
 ## Proveniência
 
 Fato liga-se a documento, bloco, trecho, página quando disponível, método, versão e timestamp. Inferência liga-se a evidências e versão. Matching aponta requisitos, sinais, gaps, insuficiência e incertezas.
@@ -529,13 +533,14 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - extraction: `extraction-rules-1.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`;
-- draft web: `extraction-draft-3.1.0` / `prisma-layout-adaptive-v2.1`;
+- draft web: `extraction-draft-6.0.0` / `prisma-layout-adaptive-v5`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
-- revisão humana: `human-profile-review-5.0.0`;
+- revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
+- revisão humana: `human-profile-review-6.0.0`;
 - estado de produto: `resume-product-state-1.0.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;
@@ -579,7 +584,7 @@ M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista a
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.7.1
+version: 1.8.0
 last_verified: 2026-09-01
 ---
 
@@ -598,6 +603,8 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 A foundation migration cria organizações, memberships, unidades, papéis, posições, vagas, pessoas, dados privados, documentos, perfis, evidências, inferências, competências, requisitos, avaliações e telemetria. O M2-A adiciona grupos e operadores; o M2-B adiciona Storage privado, tentativas, páginas e drafts; o M2-C adiciona operações idempotentes, retries, revisões, mudanças por campo e promoção atômica de perfil. O currículo-first adiciona `resume_intakes` antes da criação de Pessoa e resolve criar/vincular em transação. `organization_id`, foreign keys compostas, índices, grants e RLS formam a estratégia multi-tenant aceita.
 
 A publicação Delta adiciona `profile_publication_removals` como ledger imutável e `publish_profile_review` como autoridade cliente. A RPC mescla perfil-base e proposta, preserva omissões, aplica somente remoções explícitas e chama a promoção atômica interna. A antiga `approve_profile_review` não possui mais grant para `authenticated`.
+
+O aprendizado estrutural v3 preserva linhas PDF.js/Tesseract, aprende assinatura somente no documento atual e usa RPCs fail-closed para auditar detecção/descarte e aplicar sugestões com regiões complementares por campo. A migration `20260902003617_m5_sibling_block_learning` está ativa no Prisma-QA; a RPC v2 permanece compatível.
 
 Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake/Knowledge.
 
@@ -627,7 +634,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029.
 
 ## Operação
 
@@ -641,7 +648,7 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.6.1
+version: 1.7.0
 last_verified: 2026-09-01
 ---
 
@@ -677,6 +684,7 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 - Nova importação é proposta. O perfil vigente continua disponível até a publicação de outra versão.
 - Omissão no currículo novo preserva o conhecimento aprovado. Remoção exige confirmação humana explícita, motivo e trilha de auditoria.
 - A revisão salva conduz à comparação Delta; publicação confirmada encerra na Central da Pessoa.
+- Uma experiência corrigida pode revelar experiências irmãs somente no mesmo currículo; propostas exigem revisão, mantêm evidência própria e não alteram o perfil vigente.
 - Knowledge separa termo observado, conceito normalizado e inferência. Termo desconhecido é preservado e entra na Inbox.
 - Knowledge da empresa é overlay tenant-owned e precede a Global apenas no próprio escopo, sem alterar a base Prisma.
 - Internet enriquece Knowledge, nunca Pessoa; IA propõe e humano autorizado publica.

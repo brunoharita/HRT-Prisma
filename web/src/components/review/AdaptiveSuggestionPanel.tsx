@@ -20,14 +20,23 @@ const FIELD_LABELS: Record<AdaptiveFieldSuggestion["field"], string> = {
   period: "Período",
   description: "Descrição e atividades",
 };
+const CRITERION_LABELS = {
+  "same-section": "mesma seção",
+  "header-geometry": "cabeçalho equivalente",
+  "period-alignment": "período alinhado",
+  "body-pattern": "corpo semelhante",
+  spacing: "espaçamento consistente",
+  "column-continuity": "mesma coluna",
+} as const;
 
 export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNavigate }: AdaptiveSuggestionPanelProps) {
   const allSuggestions = useMemo(() => report.suggestions.flatMap((suggestion) => suggestion.fields), [report]);
-  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(() => new Set(allSuggestions.map((item) => item.fieldPath)));
+  const strongPaths = useMemo(() => report.suggestions.filter((item) => item.classification === "strong").flatMap((item) => item.fields.map((field) => field.fieldPath)), [report]);
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(() => new Set(strongPaths));
 
   useEffect(() => {
-    setSelectedPaths(new Set(allSuggestions.map((item) => item.fieldPath)));
-  }, [allSuggestions]);
+    setSelectedPaths(new Set(strongPaths));
+  }, [strongPaths]);
 
   function toggleField(fieldPath: string, checked: boolean) {
     setSelectedPaths((current) => {
@@ -52,7 +61,7 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
         <div>
           <Typography.Title level={5}><BulbOutlined /> Aprendizado imediato do currículo</Typography.Title>
           <Typography.Text>
-            A correção foi confirmada na fonte original. O Prisma releu os demais blocos e encontrou {report.suggestions.length} {report.suggestions.length === 1 ? "experiência relacionada" : "experiências relacionadas"}.
+            Encontramos outras {report.suggestions.length} {report.suggestions.length === 1 ? "experiência com estrutura semelhante" : "experiências com estrutura semelhante"}. Nada será incorporado sem sua confirmação.
           </Typography.Text>
         </div>
         <Tag color="blue">Revisão humana obrigatória</Tag>
@@ -62,7 +71,7 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
         const fieldPaths = suggestion.fields.map((field) => field.fieldPath);
         const selectedCount = fieldPaths.filter((fieldPath) => selectedPaths.has(fieldPath)).length;
         return (
-          <div className="prisma-adaptive-experience" key={suggestion.experienceIndex}>
+          <div className={`prisma-adaptive-experience prisma-adaptive-experience--${suggestion.classification}`} key={suggestion.candidateId}>
             <div className="prisma-adaptive-experience__title">
               <Checkbox
                 checked={selectedCount === fieldPaths.length}
@@ -71,16 +80,23 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
               >
                 Experiência {suggestion.experienceIndex + 1}: {suggestion.label}
               </Checkbox>
+              <Space wrap>
+                <Tag color={suggestion.kind === "new" ? "green" : "blue"}>{suggestion.kind === "new" ? "Sugerida pelo Prisma" : "Correção sugerida"}</Tag>
+                <Tag color={suggestion.classification === "strong" ? "cyan" : "gold"}>{suggestion.classification === "strong" ? "Estrutura consistente" : "Revisão individual"}</Tag>
+              </Space>
               <Typography.Text type="secondary">{suggestion.explanation}</Typography.Text>
+              <Typography.Text className="prisma-adaptive-experience__criteria" type="secondary">
+                Critérios observados: {suggestion.criteria.map((criterion) => CRITERION_LABELS[criterion]).join(" · ")}.
+              </Typography.Text>
             </div>
             <div className="prisma-adaptive-field-list">
               {suggestion.fields.map((field) => (
                 <div className="prisma-adaptive-field" key={field.fieldPath}>
-                  <Checkbox checked={selectedPaths.has(field.fieldPath)} onChange={(event) => toggleField(field.fieldPath, event.target.checked)}>
+                  <Checkbox checked={selectedPaths.has(field.fieldPath)} disabled={suggestion.kind === "new"} onChange={(event) => toggleField(field.fieldPath, event.target.checked)}>
                     <strong>{FIELD_LABELS[field.field]}</strong>
                   </Checkbox>
                   <div className="prisma-adaptive-field__comparison">
-                    <span><small>Atual</small>{field.currentValue ?? "Não identificado"}</span>
+                    <span><small>{suggestion.kind === "new" ? "No perfil" : "Atual"}</small>{field.currentValue ?? "Ainda não existe"}</span>
                     <span><small>Proposto</small>{field.proposedValue}</span>
                   </div>
                   <Button icon={<FileSearchOutlined />} onClick={() => onNavigate(field)} size="small" type="link">
@@ -108,9 +124,9 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
       ) : null}
 
       <Space className="prisma-adaptive-suggestions__actions" wrap>
-        <Button disabled={busy} onClick={onDismiss}>Ignorar por enquanto</Button>
+        <Button disabled={busy} onClick={onDismiss}>Descartar sugestões</Button>
         <Button disabled={busy || selectedSuggestions.length === 0} loading={busy} onClick={() => onApply(selectedSuggestions)} type="primary">
-          Aplicar e salvar {selectedSuggestions.length} {selectedSuggestions.length === 1 ? "correção" : "correções"}
+          Revisar e aplicar {report.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length}
         </Button>
       </Space>
     </section>

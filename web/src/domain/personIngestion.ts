@@ -16,7 +16,7 @@ export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
 export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
-export const EXTRACTION_DRAFT_VERSION = "5.0.0";
+export const EXTRACTION_DRAFT_VERSION = "6.0.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -293,7 +293,7 @@ export interface ProfileReviewAdaptationEvent {
   acceptedSuggestions: Array<{
     fieldPath: string;
     pageNumber: number;
-    evidenceMethod: "pdfjs-layout-v1" | "text-line-v1";
+    evidenceMethod: "pdfjs-layout-v1" | "tesseract-layout-v1" | "text-line-v1";
     rationaleCode: "same-document-block-pattern";
   }>;
   lockVersion: number;
@@ -435,12 +435,13 @@ export async function validateAndProcessPdf(
           pageCount: pdfDocument.numPages,
           message: `Executando OCR local na página ${candidate.pageNumber} de ${pdfDocument.numPages}.`,
         });
-        const result = await worker.recognize(candidate.canvas);
-        const text = result.data.text.replace(/\s+/g, " ").trim();
+        const result = await worker.recognize(candidate.canvas, {}, { text: true, blocks: true });
+        const layoutLines = buildOcrLayoutLines(result.data.blocks, candidate.canvas.width, candidate.canvas.height);
+        const text = (layoutLines.length ? layoutLines.map((line) => line.text).join("\n") : result.data.text).replace(/[ \t]+/g, " ").trim();
         if (!isOcrTextSufficient(text)) {
           throw new Error(`A página ${candidate.pageNumber} continuou sem texto suficiente após o OCR.`);
         }
-        pages.push(toExtractedPage(candidate.pageNumber, text, "ocr", "tesseract.js", OCR_VERSION));
+        pages.push({ ...toExtractedPage(candidate.pageNumber, text, "ocr", "tesseract.js", OCR_VERSION), layoutLines });
       }
     } finally {
       await worker.terminate();
@@ -542,6 +543,39 @@ function buildPdfLayoutLines(items: unknown[], pageWidth: number, pageHeight: nu
       emphasis: group.some((item) => item.emphasis === "strong") ? "strong" : "regular",
     };
   });
+}
+
+export function buildOcrLayoutLines(blocks: unknown, pageWidth: number, pageHeight: number): LayoutTextLine[] {
+  if (!Array.isArray(blocks) || pageWidth <= 0 || pageHeight <= 0) return [];
+  return blocks.flatMap((rawBlock) => {
+    if (!isObject(rawBlock) || !Array.isArray(rawBlock.paragraphs)) return [];
+    return rawBlock.paragraphs.flatMap((rawParagraph) => {
+      if (!isObject(rawParagraph) || !Array.isArray(rawParagraph.lines)) return [];
+      return rawParagraph.lines.flatMap((rawLine) => {
+        if (!isObject(rawLine) || typeof rawLine.text !== "string" || !isOcrBbox(rawLine.bbox)) return [];
+        const text = rawLine.text.replace(/\s+/g, " ").trim();
+        if (!text) return [];
+        const bbox = rawLine.bbox;
+        return [{
+          text,
+          x: clampNormalized(bbox.x0 / pageWidth),
+          y: clampNormalized(bbox.y0 / pageHeight),
+          width: clampNormalized(Math.max(1, bbox.x1 - bbox.x0) / pageWidth),
+          height: clampNormalized(Math.max(1, bbox.y1 - bbox.y0) / pageHeight),
+          fontSize: Math.max(1, bbox.y1 - bbox.y0),
+          emphasis: "regular" as const,
+        }];
+      });
+    });
+  }).sort((left, right) => left.y - right.y || left.x - right.x);
+}
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isOcrBbox(value: unknown): value is { x0: number; y0: number; x1: number; y1: number } {
+  return isObject(value) && [value.x0, value.y0, value.x1, value.y1].every((entry) => typeof entry === "number" && Number.isFinite(entry));
 }
 
 function isPdfTextItem(value: unknown): value is { str: string; transform: [number, number, number, number, number, number, ...number[]]; width: number; height: number; fontName?: string } {

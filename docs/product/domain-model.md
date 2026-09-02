@@ -52,6 +52,7 @@ Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, comp
 19. Nova importação é proposta e não substitui o perfil vigente antes da publicação atômica.
 20. Omissão no documento novo significa `não citado`; somente decisão humana explícita e justificada remove fato aprovado.
 21. Estado de produto é derivado de documento, tentativa, draft, revisão e perfil, sem ser persistido como atributo da Pessoa.
+22. Uma experiência humana completa e espacialmente evidenciada pode ensinar a estrutura apenas dentro do currículo atual; experiências irmãs permanecem propostas até aceite e nunca publicam diretamente o perfil.
 22. Verificação de competência nasce prioritariamente de uma necessidade profissional, não do Perfil individual.
 23. Evidência demonstrada não sobrescreve evidência documental, contextual ou confirmada.
 24. Assessment não determina nível absoluto da Pessoa nem senioridade consolidada.

@@ -2,8 +2,8 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.5.1
-last_verified: 2026-08-31
+version: 1.6.0
+last_verified: 2026-09-01
 ---
 
 # Referência de IA do Prisma
@@ -20,6 +20,8 @@ Extração parcial útil conduz à revisão, nunca a um perfil completo nem a `F
 
 A extração adaptativa pode reconhecer títulos personalizados previamente aprovados na mesma organização. Ela reutiliza somente metadados de estrutura, relê os valores no currículo atual e cria evidência própria. Conteúdo personalizado não vira competência, inferência ou matching automaticamente.
 
+Uma experiência completa corrigida pelo operador e ligada a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma compara critérios nomeados e propõe blocos irmãos ausentes com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
+
 ## Proveniência
 
 Fato liga-se a documento, bloco, trecho, página quando disponível, método, versão e timestamp. Inferência liga-se a evidências e versão. Matching aponta requisitos, sinais, gaps, insuficiência e incertezas.
@@ -29,13 +31,14 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - extraction: `extraction-rules-1.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`;
-- draft web: `extraction-draft-3.1.0` / `prisma-layout-adaptive-v2.1`;
+- draft web: `extraction-draft-6.0.0` / `prisma-layout-adaptive-v5`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
-- revisão humana: `human-profile-review-5.0.0`;
+- revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
+- revisão humana: `human-profile-review-6.0.0`;
 - estado de produto: `resume-product-state-1.0.0`;
 - publicação: `profile-publication-delta-1.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;

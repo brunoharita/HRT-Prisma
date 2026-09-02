@@ -41,6 +41,8 @@ Estado desconhecido, versão incompatível, sessão ausente, tenant não autoriz
 | `start_profile_review` | abre ou devolve o rascunho existente para a tentativa |
 | `save_profile_review` | cria revisão imutável e mudanças por campo com lock otimista |
 | `apply_profile_review_adaptive_suggestions` | salva sugestões selecionadas, revisão, evento e casos de aprendizado na mesma transação |
+| `record_profile_review_sibling_scan` | registra detecção ou descarte metadata-only de candidatos irmãos |
+| `apply_profile_review_adaptive_suggestions_v3` | cria ou corrige experiências sugeridas, revisão, evidência espacial por campo, evento e casos na mesma transação |
 | `record_profile_review_evidence` | registra região, vínculo, revisão e evento humano na mesma transação |
 | `record_profile_review_evidence_refined` | registra a mesma operação com texto bruto, texto efetivo e decisões imutáveis de subtração ou reinclusão |
 | `retire_profile_review_evidence` | encerra vínculo humano ativo, preserva histórico e rejeita evidência original |

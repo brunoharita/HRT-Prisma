@@ -8,9 +8,11 @@ import {
   type LearnedCustomSectionDefinition,
 } from "./customProfileSections.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "4.0.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v4";
-export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v2";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "5.0.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v5";
+export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v3";
+export const ADAPTIVE_SIBLING_ALGORITHM_VERSION = "adaptive-sibling-block-v1";
+export const ADAPTIVE_SIBLING_SIGNATURE_VERSION = "experience-sibling-signature-v1";
 
 export interface LayoutTextLine {
   text: string;
@@ -30,7 +32,7 @@ export interface FieldEvidenceDescriptor {
   y: number | null;
   width: number | null;
   height: number | null;
-  method: "pdfjs-layout-v1" | "text-line-v1";
+  method: "pdfjs-layout-v1" | "tesseract-layout-v1" | "text-line-v1";
 }
 
 export interface ExtractionPatternSignal {
@@ -50,14 +52,20 @@ export interface AdaptiveFieldSuggestion {
   pageNumber: number;
   evidenceText: string;
   evidence: FieldEvidenceDescriptor | null;
+  evidences: FieldEvidenceDescriptor[];
   rationaleCode: "same-document-block-pattern";
   explanation: string;
 }
 
 export interface AdaptiveExperienceSuggestion {
+  candidateId: string;
   experienceIndex: number;
   label: string;
   patternKey: string;
+  kind: "correction" | "new";
+  classification: "strong" | "possible";
+  proposedExperience: StructuredDraft["experiences"][number] | null;
+  criteria: Array<"same-section" | "header-geometry" | "period-alignment" | "body-pattern" | "spacing" | "column-continuity">;
   explanation: string;
   fields: AdaptiveFieldSuggestion[];
 }
@@ -65,7 +73,7 @@ export interface AdaptiveExperienceSuggestion {
 export interface AdaptiveUnresolvedSibling {
   experienceIndex: number;
   label: string;
-  reasonCode: "source-block-not-found" | "source-correction-not-confirmed" | "no-safe-change";
+  reasonCode: "source-block-not-found" | "source-correction-not-confirmed" | "source-incomplete" | "no-safe-change" | "ambiguous-candidate" | "duplicate-candidate" | "column-mismatch";
   explanation: string;
 }
 
@@ -74,6 +82,11 @@ export interface AdaptiveSuggestionReport {
   sourceField: ExperienceFieldName;
   patternKey: string;
   methodVersion: string;
+  algorithmVersion: string;
+  signatureVersion: string;
+  anchorExperienceId: string | null;
+  signatureSummary: Record<string, string | number | boolean | null>;
+  candidateSummary: { detected: number; strong: number; possible: number; rejected: number };
   suggestions: AdaptiveExperienceSuggestion[];
   unresolved: AdaptiveUnresolvedSibling[];
 }
@@ -88,7 +101,7 @@ export interface AdaptiveExtractionResult {
   };
 }
 
-type CandidateLine = LayoutTextLine & { pageNumber: number; sequence: number };
+type CandidateLine = LayoutTextLine & { pageNumber: number; sequence: number; origin: ExtractedPage["origin"] };
 type ParsedExperienceBlock = {
   anchor: CandidateLine;
   anchorIndex: number;
@@ -112,11 +125,12 @@ interface StructuredSummaryExtraction {
   fieldEvidence: FieldEvidenceDescriptor[];
 }
 
-const ROLE_TERMS = /(analista|arquiteto|assistente|chief|consultor|coordenador|customer success|developer|desenvolvedor|diretor|engineer|engenheiro|especialista|executivo|founder|fundador|gerente|head|l[ií]der|manager|presidente|recruiter|supervisor|system analyst|technician|t[eé]cnico|vice[- ]presidente|coo|ceo|cto|cfo|cio)/i;
+const ROLE_TERMS = /(analista|arquiteto|assistente|chief|consultor|coordenador|customer success|developer|desenvolvedor|diretor|engineer|engenheiro|especialista|executivo|founder|fundador|gerente|head|l[ií]der|manager|mgmt|pm\/po|product owner|project manager|presidente|recruiter|supervisor|system analyst|technician|t[eé]cnico|vice[- ]presidente|coo|ceo|cto|cfo|cio)/i;
 const SECTION_HEADING = /^(experi[eê]ncia(s)?( profissional(is)?)?|trajet[oó]ria profissional|professional experience|forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|resumo|summary|perfil|s[ií]ntese de valor)/i;
 const NEXT_SECTION = /^(forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|projetos|projects|cursos|s[ií]ntese de valor)/i;
 const PERIOD_TOKEN = /\b(?:jan(?:eiro|uary)?|fev(?:ereiro)?|feb(?:ruary)?|mar(?:[cç]o|ch)?|abr(?:il)?|apr(?:il)?|mai(?:o)?|may|jun(?:ho|e)?|jul(?:ho|y)?|ago(?:sto)?|aug(?:ust)?|set(?:embro)?|sep(?:tember)?|out(?:ubro)?|oct(?:ober)?|nov(?:embro|ember)?|dez(?:embro)?|dec(?:ember)?|0?[1-9]|1[0-2])[\/.\- ](?:\d{2}|\d{4})\s*(?:a|at[eé]|to|[-–])\s*(?:atual|presente|present|current|(?:jan(?:eiro|uary)?|fev(?:ereiro)?|feb(?:ruary)?|mar(?:[cç]o|ch)?|abr(?:il)?|apr(?:il)?|mai(?:o)?|may|jun(?:ho|e)?|jul(?:ho|y)?|ago(?:sto)?|aug(?:ust)?|set(?:embro)?|sep(?:tember)?|out(?:ubro)?|oct(?:ober)?|nov(?:embro|ember)?|dez(?:embro)?|dec(?:ember)?|0?[1-9]|1[0-2])[\/.\- ](?:\d{2}|\d{4}))\b|\b(?:19|20)\d{2}\s*(?:a|at[eé]|to|[-–])\s*(?:atual|presente|present|current|(?:19|20)\d{2})\b/i;
 const COMPANY_MARKERS = /\b(solutions?|engenharia|empreendimentos?|consultoria|sistemas?|education|educa[cç][aã]o|comercial|ltda|s\.?a\.?|inc\.?|corp\.?|group|company|companhia|banco|universidade|faculdade|tecnologia)\b/i;
+const SAME_LINE_COMPANY_MARKERS = /\b(solutions?|engenharia|empreendimentos?|sistemas?|education|educa[cç][aã]o|comercial|ltda|s\.?a\.?|inc\.?|corp\.?|group|company|companhia|banco|universidade|faculdade)\b/i;
 
 export function buildAdaptiveExtraction(
   pages: ExtractedPage[],
@@ -126,7 +140,7 @@ export function buildAdaptiveExtraction(
   const lines = sliceExperienceSection(candidateLines(pages));
   const learnedPatternKeys = new Set(
     learnedPatterns
-      .filter((signal) => signal.methodVersion === ADAPTIVE_REVIEW_METHOD_VERSION && signal.confirmationCount > 0)
+      .filter((signal) => [ADAPTIVE_REVIEW_METHOD_VERSION, "prisma-document-learning-v2"].includes(signal.methodVersion) && signal.confirmationCount > 0)
       .map((signal) => signal.patternKey),
   );
   const blocks = detectTopLevelExperienceBlocks(lines, learnedPatternKeys);
@@ -406,83 +420,248 @@ export function proposeSiblingBlockCorrections(input: {
     sourceField: input.sourceField,
     patternKey: "experience:block-unconfirmed",
     methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+    algorithmVersion: ADAPTIVE_SIBLING_ALGORITHM_VERSION,
+    signatureVersion: ADAPTIVE_SIBLING_SIGNATURE_VERSION,
+    anchorExperienceId: sourceAfter?.id ?? null,
+    signatureSummary: {},
+    candidateSummary: { detected: 0, strong: 0, possible: 0, rejected: 0 },
     suggestions: [],
     unresolved: sourceAfter ? [{ experienceIndex: input.sourceIndex, label: sourceAfter.role ?? sourceAfter.organization ?? "Experiência", reasonCode: reason, explanation }] : [],
   });
-  if (!sourceBefore || !sourceAfter || comparable(fieldValue(sourceBefore, input.sourceField)) === comparable(fieldValue(sourceAfter, input.sourceField))) {
+  if (!sourceAfter) return emptyReport("source-block-not-found", "A experiência revisada não existe mais no rascunho atual.");
+  if (!isCompleteExperience(sourceAfter)) {
+    return emptyReport("source-incomplete", "Conclua cargo, empresa, período e descrição antes de usar esta experiência como referência estrutural.");
+  }
+  if (sourceBefore && comparable(fieldValue(sourceBefore, input.sourceField)) === comparable(fieldValue(sourceAfter, input.sourceField))) {
     return emptyReport("source-correction-not-confirmed", "A correção de origem não alterou o campo e não confirma um padrão novo.");
   }
 
   const lines = sliceExperienceSection(candidateLines(input.pages));
-  const located = locateExistingExperienceBlocks(lines, input.extracted.experiences);
-  const sourceBlock = located[input.sourceIndex];
+  const sourceAnchorIndex = locateAnchor(lines, sourceAfter);
+  const sourceBlock = sourceAnchorIndex >= 0 ? parseBlock(lines, sourceAnchorIndex, findNextTopLevelBoundary(lines, sourceAnchorIndex + 1, lines.length), true) : null;
   if (!sourceBlock) return emptyReport("source-block-not-found", "O bloco corrigido não pôde ser reencontrado com segurança na fonte original.");
-  const interpretedSourceValue = fieldValue(sourceBlock, input.sourceField);
-  if (!interpretedSourceValue || comparable(interpretedSourceValue) !== comparable(fieldValue(sourceAfter, input.sourceField))) {
+  if (!(["role", "organization", "period"] as const).every((field) => comparable(fieldValue(sourceBlock, field)) === comparable(fieldValue(sourceAfter, field)))) {
     return emptyReport("source-correction-not-confirmed", "A fonte original não confirmou a mesma transformação aplicada pelo revisor.");
   }
 
+  const signature = buildSiblingSignature(sourceBlock);
+  const blocks = detectTopLevelExperienceBlocks(lines, new Set([sourceBlock.patternKey]));
   const suggestions: AdaptiveExperienceSuggestion[] = [];
   const unresolved: AdaptiveUnresolvedSibling[] = [];
-  input.draft.experiences.forEach((experience, experienceIndex) => {
-    if (experienceIndex === input.sourceIndex) return;
-    const extractedExperience = input.extracted.experiences[experienceIndex];
-    const block = located[experienceIndex];
-    if (!extractedExperience || !block) {
+  let rejected = 0;
+  for (const block of blocks) {
+    if (sameSourceRegion(block, sourceBlock)) continue;
+    const existingIndex = findMatchingExperienceIndex(input.draft.experiences, block);
+    const classification = existingIndex >= 0 && !signature.spatial
+      ? { kind: "strong" as const, criteria: ["same-section"] as SiblingCriterion[] }
+      : classifySiblingCandidate(signature, block);
+    if (classification.kind === "rejected") {
+      rejected += 1;
       unresolved.push({
-        experienceIndex,
-        label: experience.role ?? experience.organization ?? `Experiência ${experienceIndex + 1}`,
-        reasonCode: "source-block-not-found",
-        explanation: "O Prisma não encontrou um bloco-fonte inequívoco e, por segurança, não propôs alteração.",
-      });
-      return;
-    }
-    const fields = (["role", "organization", "period", "description"] as const).flatMap((field) => {
-      const currentValue = fieldValue(experience, field);
-      const extractedValue = fieldValue(extractedExperience, field);
-      const proposedValue = fieldValue(block, field);
-      if (!proposedValue || comparable(proposedValue) === comparable(currentValue)) return [];
-      if (comparable(currentValue) !== comparable(extractedValue)) return [];
-      const evidenceLine = evidenceLineForField(block, field);
-      const fieldPath = reviewEntityFieldPath("experience", experience, field);
-      return [{
-        fieldPath,
-        experienceIndex,
-        field,
-        currentValue,
-        proposedValue,
-        pageNumber: evidenceLine.pageNumber,
-        evidenceText: evidenceLine.text,
-        evidence: toEvidence(fieldPath, evidenceLine, proposedValue),
-        rationaleCode: "same-document-block-pattern" as const,
-        explanation: fieldExplanation(field, block.patternKey),
-      }];
-    });
-    if (fields.length) {
-      suggestions.push({
-        experienceIndex,
+        experienceIndex: existingIndex >= 0 ? existingIndex : input.draft.experiences.length + suggestions.length,
         label: block.role,
-        patternKey: sourceBlock.patternKey,
-        explanation: "O bloco foi reinterpretado na fonte original com a estrutura confirmada pela correção humana.",
-        fields,
+        reasonCode: classification.reason,
+        explanation: classification.explanation,
       });
-    } else {
-      unresolved.push({
-        experienceIndex,
-        label: experience.role ?? experience.organization ?? `Experiência ${experienceIndex + 1}`,
-        reasonCode: "no-safe-change",
-        explanation: "O bloco foi localizado, mas não existe uma alteração segura que ainda não tenha sido revisada.",
-      });
+      continue;
     }
-  });
+    if (existingIndex >= 0) {
+      const experience = input.draft.experiences[existingIndex]!;
+      const extractedExperience = input.extracted.experiences.find((candidate) => candidate.id === experience.id)
+        ?? input.extracted.experiences[existingIndex];
+      const fields = buildAdaptiveFields(block, experience, existingIndex, extractedExperience ?? null);
+      if (fields.length) suggestions.push({
+        candidateId: candidateId(block), experienceIndex: existingIndex, label: block.role, patternKey: sourceBlock.patternKey,
+        kind: "correction", classification: classification.kind, proposedExperience: null, criteria: classification.criteria,
+        explanation: "O bloco já existia no rascunho e foi relido sem sobrescrever campos alterados pelo revisor.", fields,
+      });
+      else unresolved.push({
+        experienceIndex: existingIndex, label: experience.role ?? experience.organization ?? `Experiência ${existingIndex + 1}`,
+        reasonCode: "no-safe-change", explanation: "O bloco já está revisado ou não contém uma alteração segura.",
+      });
+      continue;
+    }
+    if (isDuplicateBlockSuggestion(input.draft.experiences, suggestions, block)) {
+      rejected += 1;
+      unresolved.push({
+        experienceIndex: input.draft.experiences.length + suggestions.length, label: block.role,
+        reasonCode: "duplicate-candidate", explanation: "O bloco coincide com uma experiência já identificada e não foi duplicado.",
+      });
+      continue;
+    }
+    const experienceIndex = input.draft.experiences.length + suggestions.filter((item) => item.kind === "new").length;
+    const proposedExperience = toSuggestedExperience(block);
+    suggestions.push({
+      candidateId: candidateId(block), experienceIndex, label: block.role, patternKey: sourceBlock.patternKey,
+      kind: "new", classification: classification.kind, proposedExperience, criteria: classification.criteria,
+      explanation: classification.kind === "strong"
+        ? "O bloco ausente repete a estrutura confirmada e pode ser aplicado após sua revisão."
+        : "O bloco parece relacionado, mas possui uma diferença estrutural e exige revisão individual.",
+      fields: buildAdaptiveFields(block, proposedExperience, experienceIndex, null, true),
+    });
+  }
+  const strong = suggestions.filter((item) => item.classification === "strong").length;
+  const possible = suggestions.filter((item) => item.classification === "possible").length;
   return {
     sourceIndex: input.sourceIndex,
     sourceField: input.sourceField,
     patternKey: sourceBlock.patternKey,
     methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+    algorithmVersion: ADAPTIVE_SIBLING_ALGORITHM_VERSION,
+    signatureVersion: ADAPTIVE_SIBLING_SIGNATURE_VERSION,
+    anchorExperienceId: sourceAfter.id,
+    signatureSummary: signature.summary,
+    candidateSummary: { detected: blocks.length - 1, strong, possible, rejected },
     suggestions,
     unresolved,
   };
+}
+
+type SiblingCriterion = AdaptiveExperienceSuggestion["criteria"][number];
+type SiblingSignature = {
+  companyPlacement: "same-line" | "next-line";
+  x: number;
+  width: number;
+  fontSize: number;
+  emphasis: LayoutTextLine["emphasis"];
+  hasBullets: boolean;
+  spatial: boolean;
+  summary: AdaptiveSuggestionReport["signatureSummary"];
+};
+
+function isCompleteExperience(experience: StructuredDraft["experiences"][number]): boolean {
+  return Boolean(experience.role?.trim() && experience.organization?.trim() && experience.period?.trim() && experience.description?.trim());
+}
+
+function buildSiblingSignature(block: ParsedExperienceBlock): SiblingSignature {
+  const companyPlacement = block.organizationLine ? "next-line" : "same-line";
+  const hasBullets = block.descriptionLines.some((line) => isBullet(line.text));
+  const spatial = block.anchor.fontSize > 0;
+  return {
+    companyPlacement,
+    x: block.anchor.x,
+    width: block.anchor.width,
+    fontSize: block.anchor.fontSize,
+    emphasis: block.anchor.emphasis,
+    hasBullets,
+    spatial,
+    summary: {
+      companyPlacement,
+      periodPlacement: "header",
+      headerEmphasis: block.anchor.emphasis,
+      spatial,
+      hasBullets,
+      columnBand: spatial ? Math.round(block.anchor.x * 10) / 10 : null,
+    },
+  };
+}
+
+function classifySiblingCandidate(
+  signature: SiblingSignature,
+  block: ParsedExperienceBlock,
+): { kind: "strong" | "possible"; criteria: SiblingCriterion[] } | { kind: "rejected"; reason: AdaptiveUnresolvedSibling["reasonCode"]; explanation: string } {
+  if (!signature.spatial || block.anchor.fontSize <= 0) {
+    return { kind: "rejected", reason: "ambiguous-candidate", explanation: "A fonte não possui geometria posicionada suficiente para reconhecer um novo bloco com segurança." };
+  }
+  const sameColumn = Math.abs(block.anchor.x - signature.x) <= 0.08;
+  if (!sameColumn) return { kind: "rejected", reason: "column-mismatch", explanation: "O cabeçalho pertence a outra coluna visual e foi descartado por segurança." };
+  const criteria: SiblingCriterion[] = ["same-section", "column-continuity"];
+  const fontRatio = Math.min(block.anchor.fontSize, signature.fontSize) / Math.max(block.anchor.fontSize, signature.fontSize, 0.001);
+  if (fontRatio >= 0.82 && block.anchor.emphasis === signature.emphasis && Math.abs(block.anchor.width - signature.width) <= 0.35) criteria.push("header-geometry");
+  if (block.period && block.patternKey.includes("period-header")) criteria.push("period-alignment");
+  if (Boolean(block.descriptionLines.some((line) => isBullet(line.text))) === signature.hasBullets && block.descriptionLines.length > 0) criteria.push("body-pattern");
+  if (block.descriptionLines[0] && block.descriptionLines[0].y >= block.anchor.y) criteria.push("spacing");
+  if (criteria.length >= 6 && (block.organizationLine ? "next-line" : "same-line") === signature.companyPlacement) return { kind: "strong", criteria };
+  if (criteria.length >= 5) return { kind: "possible", criteria };
+  return { kind: "rejected", reason: "ambiguous-candidate", explanation: "O bloco não repetiu critérios estruturais suficientes para virar uma sugestão segura." };
+}
+
+function buildAdaptiveFields(
+  block: ParsedExperienceBlock,
+  experience: StructuredDraft["experiences"][number],
+  experienceIndex: number,
+  extractedExperience: StructuredDraft["experiences"][number] | null,
+  isNew = false,
+): AdaptiveFieldSuggestion[] {
+  return (["role", "organization", "period", "description"] as const).flatMap((field) => {
+    const proposedValue = fieldValue(block, field);
+    if (!proposedValue) return [];
+    const currentValue = isNew ? null : fieldValue(experience, field);
+    if (!isNew) {
+      if (comparable(proposedValue) === comparable(currentValue)) return [];
+      if (!extractedExperience || comparable(currentValue) !== comparable(fieldValue(extractedExperience, field))) return [];
+    }
+    const fieldPath = reviewEntityFieldPath("experience", experience, field);
+    const evidenceLines = field === "description" ? block.descriptionLines : [evidenceLineForField(block, field)];
+    const evidences = toEvidenceByPage(fieldPath, evidenceLines, proposedValue);
+    const evidence = evidences[0] ?? null;
+    return [{
+      fieldPath, experienceIndex, field, currentValue, proposedValue,
+      pageNumber: evidence?.pageNumber ?? block.anchor.pageNumber,
+      evidenceText: evidence?.text ?? proposedValue,
+      evidence, evidences,
+      rationaleCode: "same-document-block-pattern" as const,
+      explanation: fieldExplanation(field, block.patternKey),
+    }];
+  });
+}
+
+function toEvidenceByPage(fieldPath: string, lines: CandidateLine[], fallbackText: string): FieldEvidenceDescriptor[] {
+  if (!lines.length) return [];
+  const pageNumbers = [...new Set(lines.map((line) => line.pageNumber))];
+  return pageNumbers.map((pageNumber) => {
+    const pageLines = lines.filter((line) => line.pageNumber === pageNumber);
+    return pageLines.length === 1 ? toEvidence(fieldPath, pageLines[0]!, fallbackText) : toCombinedEvidence(fieldPath, pageLines);
+  });
+}
+
+function toSuggestedExperience(block: ParsedExperienceBlock): StructuredDraft["experiences"][number] {
+  return {
+    id: stableReviewEntityId("experience", `sibling:${block.anchor.pageNumber}:${block.anchor.sequence}:${block.role}:${block.organization}:${block.period}`),
+    source: "extracted",
+    role: block.role,
+    organization: block.organization,
+    period: block.period,
+    description: block.description,
+    evidenceText: [block.anchor.text, block.organizationLine?.text].filter(Boolean).join("\n"),
+    page: block.anchor.pageNumber,
+  };
+}
+
+function candidateId(block: ParsedExperienceBlock): string {
+  return `candidate_${stableToken(`${block.anchor.pageNumber}:${block.anchor.sequence}:${block.role}:${block.organization}:${block.period}`)}`;
+}
+
+function sameSourceRegion(left: ParsedExperienceBlock, right: ParsedExperienceBlock): boolean {
+  return left.anchor.pageNumber === right.anchor.pageNumber && left.anchor.sequence === right.anchor.sequence;
+}
+
+function findMatchingExperienceIndex(experiences: StructuredDraft["experiences"], block: ParsedExperienceBlock): number {
+  const evidenceMatch = experiences.findIndex((experience) => experience.page === block.anchor.pageNumber
+    && comparable(experience.evidenceText.split(/\r?\n/)[0]) === comparable(block.anchor.text));
+  if (evidenceMatch >= 0) return evidenceMatch;
+  const regional = experiences.findIndex((experience) => (
+    experience.page === block.anchor.pageNumber
+    && comparable(experience.role) === comparable(block.role)
+    && (comparable(experience.organization) === comparable(block.organization) || comparable(experience.period) === comparable(block.period))
+  ));
+  if (regional >= 0) return regional;
+  return experiences.findIndex((experience) => (
+    comparable(experience.role) === comparable(block.role)
+    && comparable(experience.organization) === comparable(block.organization)
+    && comparable(experience.period) === comparable(block.period)
+  ));
+}
+
+function isDuplicateBlockSuggestion(
+  experiences: StructuredDraft["experiences"],
+  suggestions: AdaptiveExperienceSuggestion[],
+  block: ParsedExperienceBlock,
+): boolean {
+  const key = `${comparable(block.role)}|${comparable(block.organization)}|${comparable(block.period)}`;
+  return experiences.some((item) => `${comparable(item.role)}|${comparable(item.organization)}|${comparable(item.period)}` === key)
+    || suggestions.some((item) => item.proposedExperience
+      && `${comparable(item.proposedExperience.role)}|${comparable(item.proposedExperience.organization)}|${comparable(item.proposedExperience.period)}` === key);
 }
 
 export function proposeSiblingFieldCorrections(input: {
@@ -568,11 +747,17 @@ function parseSameLineHeader(value: string, period: string): { role: string; org
   const before = value.slice(0, periodIndex).replace(/[|,;:\s]+$/, "").trim();
   const after = value.slice(periodIndex + period.length).replace(/^[|,;:\s]+/, "").trim();
   const atMatch = /^(.*?)\s+(?:at|em|@)\s+(.+)$/i.exec(before);
-  if (atMatch && ROLE_TERMS.test(atMatch[1] ?? "") && isPlausibleOrganization(atMatch[2] ?? "")) {
+  if (atMatch && ROLE_TERMS.test(atMatch[1] ?? "") && SAME_LINE_COMPANY_MARKERS.test(atMatch[2] ?? "") && isPlausibleOrganization(atMatch[2] ?? "")) {
     return { role: atMatch[1]!.trim(), organization: atMatch[2]!.trim(), description: after || null };
   }
+  const commaIndex = before.lastIndexOf(",");
+  if (commaIndex > 0) {
+    const role = before.slice(0, commaIndex).trim();
+    const organization = before.slice(commaIndex + 1).trim();
+    if (ROLE_TERMS.test(role) && SAME_LINE_COMPANY_MARKERS.test(organization) && isPlausibleOrganization(organization)) return { role, organization, description: after || null };
+  }
   const parts = before.split(/\s+[|]\s+|\s+[-–]\s+/).map((part) => part.trim()).filter(Boolean);
-  if (parts.length >= 2 && ROLE_TERMS.test(parts[0]!) && isPlausibleOrganization(parts.at(-1)!)) {
+  if (parts.length >= 2 && ROLE_TERMS.test(parts[0]!) && SAME_LINE_COMPANY_MARKERS.test(parts.at(-1)!) && isPlausibleOrganization(parts.at(-1)!)) {
     return { role: parts[0]!, organization: parts.at(-1)!, description: after || null };
   }
   return null;
@@ -635,8 +820,8 @@ function locateAnchor(lines: CandidateLine[], experience: StructuredDraft["exper
 function candidateLines(pages: ExtractedPage[]): CandidateLine[] {
   let sequence = 0;
   return pages.flatMap((page) => {
-    if (page.layoutLines?.length) return page.layoutLines.map((line) => ({ ...line, pageNumber: page.pageNumber, sequence: sequence++ }));
-    return page.text.split(/\r?\n|\s{2,}/).map((text, lineIndex) => ({ text: text.trim(), x: 0, y: Math.min(0.999, lineIndex / 100), width: 1, height: 0.012, fontSize: 0, emphasis: "regular" as const, pageNumber: page.pageNumber, sequence: sequence++ }));
+    if (page.layoutLines?.length) return page.layoutLines.map((line) => ({ ...line, pageNumber: page.pageNumber, sequence: sequence++, origin: page.origin }));
+    return page.text.split(/\r?\n|\s{2,}/).map((text, lineIndex) => ({ text: text.trim(), x: 0, y: Math.min(0.999, lineIndex / 100), width: 1, height: 0.012, fontSize: 0, emphasis: "regular" as const, pageNumber: page.pageNumber, sequence: sequence++, origin: page.origin }));
   }).filter((line) => line.text.length > 1);
 }
 
@@ -727,7 +912,7 @@ function escapeRegExp(value: string): string { return value.replace(/[.*+?^${}()
 
 function toEvidence(fieldPath: string, line: CandidateLine, text: string): FieldEvidenceDescriptor {
   const spatial = line.fontSize > 0;
-  return { fieldPath, pageNumber: line.pageNumber, text, x: spatial ? line.x : null, y: spatial ? line.y : null, width: spatial ? line.width : null, height: spatial ? line.height : null, method: spatial ? "pdfjs-layout-v1" : "text-line-v1" };
+  return { fieldPath, pageNumber: line.pageNumber, text, x: spatial ? line.x : null, y: spatial ? line.y : null, width: spatial ? line.width : null, height: spatial ? line.height : null, method: spatial ? line.origin === "ocr" ? "tesseract-layout-v1" : "pdfjs-layout-v1" : "text-line-v1" };
 }
 
 function toCombinedEvidence(fieldPath: string, lines: CandidateLine[]): FieldEvidenceDescriptor {
@@ -737,5 +922,5 @@ function toCombinedEvidence(fieldPath: string, lines: CandidateLine[]): FieldEvi
   const right = Math.max(...pageLines.map((line) => line.x + line.width));
   const bottom = Math.max(...pageLines.map((line) => line.y + line.height));
   const spatial = pageLines[0]!.fontSize > 0;
-  return { fieldPath, pageNumber: pageLines[0]!.pageNumber, text: pageLines.map((line) => line.text).join("\n"), x: spatial ? left : null, y: spatial ? top : null, width: spatial ? right - left : null, height: spatial ? bottom - top : null, method: spatial ? "pdfjs-layout-v1" : "text-line-v1" };
+  return { fieldPath, pageNumber: pageLines[0]!.pageNumber, text: pageLines.map((line) => line.text).join("\n"), x: spatial ? left : null, y: spatial ? top : null, width: spatial ? right - left : null, height: spatial ? bottom - top : null, method: spatial ? pageLines[0]!.origin === "ocr" ? "tesseract-layout-v1" : "pdfjs-layout-v1" : "text-line-v1" };
 }
