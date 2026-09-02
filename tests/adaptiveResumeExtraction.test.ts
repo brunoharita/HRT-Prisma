@@ -239,6 +239,21 @@ test("a correction relearns complete sibling blocks from the original document a
   humanReviewed.experiences[1]!.organization = "Bencato Engenharia confirmada manualmente";
   const preserved = proposeSiblingBlockCorrections({ pages: [page], draft: humanReviewed, extracted, sourceIndex: 0, sourceField: "organization" });
   assert.equal(preserved.suggestions[0]?.fields.some((field) => field.field === "organization"), false);
+
+  const alreadyComplete = structuredClone(reviewed);
+  for (const suggestion of report.suggestions) {
+    const experience = alreadyComplete.experiences[suggestion.experienceIndex]!;
+    for (const field of suggestion.fields) {
+      if (field.field === "role") experience.role = field.proposedValue;
+      if (field.field === "organization") experience.organization = field.proposedValue;
+      if (field.field === "period") experience.period = field.proposedValue;
+      if (field.field === "description") experience.description = field.proposedValue;
+    }
+  }
+  const noChange = proposeSiblingBlockCorrections({ pages: [page], draft: alreadyComplete, extracted, sourceIndex: 0, sourceField: "organization" });
+  assert.equal(noChange.suggestions.length, 0);
+  assert.ok(noChange.unresolved.some((item) => item.reasonCode === "no-safe-change"));
+  assert.deepEqual(noChange.candidateSummary, { detected: 0, strong: 0, possible: 0, rejected: 0 });
 });
 
 test("document learning reports an unresolved sibling instead of inventing a block", () => {

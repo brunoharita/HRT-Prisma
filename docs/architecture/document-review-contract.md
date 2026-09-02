@@ -5,11 +5,12 @@
 | Contrato | Versão | Regra material |
 | --- | --- | --- |
 | `document-processing-state` | 2.3.0 | estados operacionais distinguem falha técnica de reconhecimento parcial e alimentam o estado canônico de produto |
-| `document-presentation` | 2.0.0 | as seis etapas compartilham tentativa revisável, estado e próximo passo sem ocultar páginas preservadas |
-| `resume-product-state` | 1.0.0 | sete estados de produto são derivados e nunca persistidos na Pessoa |
+| `document-presentation` | 2.1.0 | as seis etapas compartilham tentativa revisável, estado e próximo passo; falha deriva recuperação da fonte preservada |
+| `resume-product-state` | 1.1.0 | sete estados de produto e a recuperação de falha são derivados e nunca persistidos na Pessoa |
+| `operation-feedback` | 1.0.0 | toda interrupção informa categoria, preservação e próxima ação sem expor detalhes internos |
 | `person-action-center` | 1.0.0 | compõe identidade, Perfil vigente, pendências, conhecimento, documentos e atividade sem criar estado paralelo |
 | `profile-publication-delta` | 1.0.0 | comparação preserva omissões e exige remoção humana explícita e auditada |
-| `person-ingestion` | 8.0.0 | cadastro, retry, revisão e publicação Delta são idempotentes |
+| `person-ingestion` | 10.0.0 | cadastro, retry, revisão, classificação acadêmica e publicação Delta são idempotentes |
 | `resume-intake` | 1.0.0 | arquivo, identificação mínima e decisão criar/vincular formam uma intenção única, auditável e idempotente |
 | `human-profile-review` | 7.0.0 | revisão aceita extração parcial, exige confirmação acadêmica revisável e termina em Delta antes da publicação atômica |
 | `spatial-evidence` | 1.2.0 | região explícita referencia tenant, documento, versão, página, campo e coordenadas; preserva texto bruto, texto efetivo e decisões de subtração entre campos irmãos |
@@ -56,6 +57,8 @@ O cliente deve gerar uma chave por intenção do usuário e reutilizá-la soment
 A transição final de revisão deve permanecer executável com todas as estruturas opcionais válidas, inclusive áreas personalizadas. Funções PL/pgSQL participantes usam variáveis locais prefixadas com `v_` e `#variable_conflict error`; identificadores de coluna em `ON CONFLICT` não podem colidir com variáveis locais. A regressão obrigatória executa `approve_profile_review` com ao menos uma área personalizada e comprova, na mesma transação, revisão aprovada, perfil criado e confirmação estrutural antes do rollback.
 
 Falhas esperadas de aprovação são apresentadas ao operador por categoria acionável: concorrência/versão, estado da revisão, autorização/tenant, evidência material, nome, contato, shape/versão e idempotência. Mensagens SQL, nomes de tabela, função ou coluna e códigos internos não são exibidos. Falha inesperada recebe mensagem sanitizada e preserva o rascunho; o backend continua como autoridade de todos os gates.
+
+O mesmo contrato cobre ingestão, evidência espacial, refinamento, aprendizado adaptativo, classificação acadêmica, arquivamento e publicação. Validação ocorre antes da chamada remota sempre que o cliente possui os fatos necessários. Se a mutação for confirmada e a recarga subsequente falhar, a interface registra localmente a nova versão de lock, encerra a intenção já concluída e orienta recarregar sem repetir a operação. A confirmação de remoção permanece aberta em qualquer falha de publicação.
 
 Depois de salvar a revisão, o cliente navega para o Delta. Somente quando `publish_profile_review` retorna sucesso a revisão encerra seu fluxo e a interface navega para a Central da Pessoa. A navegação nunca ocorre antes da confirmação transacional nem no caminho de erro.
 

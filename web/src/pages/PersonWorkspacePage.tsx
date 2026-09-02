@@ -56,6 +56,7 @@ import {
   type StructuredExperience,
 } from "../domain/personIngestion";
 import { isReviewableDocument, presentDocument } from "../domain/documentPresentation";
+import { processingFailureMessage } from "../domain/resumeProductState";
 import {
   EDUCATION_LEVEL_LABELS,
   EDUCATION_ORIGIN_LABELS,
@@ -193,7 +194,10 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   }
 
   async function handleStartReview(document = workspace?.selectedDocument) {
-    if (!document?.reviewAttempt) return;
+    if (!document?.reviewAttempt) {
+      setError("Este documento ainda não possui uma tentativa pronta para revisão. Atualize a Central da Pessoa para ver o estado atual e a próxima ação disponível.");
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -212,7 +216,10 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   }
 
   async function handleReprocess(document = workspace?.selectedDocument) {
-    if (!document) return;
+    if (!document) {
+      setError("Selecione um documento com falha recuperável antes de reprocessar.");
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -256,7 +263,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   );
 
   if (loading) return <PrismaPage className="prisma-person-center"><PersonCenterSkeleton /></PrismaPage>;
-  if (!workspace || !viewModel) return <PrismaPage><Alert description="O Perfil vigente, quando existente, permanece seguro. Tente carregar a Central novamente." message={error ?? "Não foi possível carregar esta Pessoa."} showIcon type="error" /></PrismaPage>;
+  if (!workspace || !viewModel) return <PrismaPage><Alert action={<Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="O Perfil vigente, quando existente, permanece seguro. Volte à lista e abra a Central novamente." title={error ?? "Não foi possível carregar esta Pessoa."} showIcon type="error" /></PrismaPage>;
 
   const currentPage = workspace.pages.find((page) => page.pageNumber === selectedPage) ?? workspace.pages[0];
   const selectedDocument = workspace.selectedDocument;
@@ -308,14 +315,14 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
             <div className="prisma-section-heading"><div><Typography.Title id="entrada-dados" level={3}>Nova importação</Typography.Title><Typography.Text type="secondary">Adicione uma nova fonte sem substituir o Perfil vigente antes da revisão e publicação.</Typography.Text></div></div>
             <PrismaCard>
               <Tabs items={[
-                { key: "manual", label: "Texto manual", children: <div className="prisma-manual-input"><Alert message="O texto será preservado como fonte documental desta Pessoa e nunca será interpretado como instrução ao sistema." showIcon type="info" /><Input.TextArea aria-label="Texto profissional manual" onChange={(event) => setManualText(event.target.value)} placeholder="Cole aqui experiências, formação, competências e demais informações profissionais..." rows={12} value={manualText} /><Space className="prisma-ingestion-actions"><Button disabled={busy || !manualText} icon={<DeleteOutlined />} onClick={() => setManualText("")}>Limpar</Button><Button disabled={busy || manualText.trim().length < 120} loading={busy} onClick={() => void handleManualProcessing()} type="primary">Processar texto</Button></Space></div> },
-                { key: "upload", label: "Upload de currículo", children: <div className="prisma-upload-panel"><Upload.Dragger accept="application/pdf,.pdf" beforeUpload={() => false} fileList={fileList} maxCount={1} onChange={({ fileList: next }) => setFileList(next.slice(-1))} onRemove={() => { setFileList([]); return true; }}><p className="ant-upload-drag-icon"><CloudUploadOutlined /></p><p className="ant-upload-text">Arraste e solte o arquivo aqui</p><p className="ant-upload-hint">ou clique para selecionar · Apenas PDF · Tamanho máximo: 15 MB</p></Upload.Dragger>{fileList[0] ? <div className="prisma-selected-file"><FilePdfOutlined /><div><strong>{fileList[0].name}</strong><span>{formatBytes(fileList[0].size ?? 0)}</span></div><Tag color="green">Pronto para validar</Tag></div> : null}{progress ? <Alert message={progress.message} showIcon type="info" /> : null}<Button disabled={busy || fileList.length === 0} loading={busy} onClick={() => void handlePdfProcessing()} type="primary">Processar</Button></div> },
+                { key: "manual", label: "Texto manual", children: <div className="prisma-manual-input"><Alert title="O texto será preservado como fonte documental desta Pessoa e nunca será interpretado como instrução ao sistema." showIcon type="info" /><Input.TextArea aria-label="Texto profissional manual" onChange={(event) => setManualText(event.target.value)} placeholder="Cole aqui experiências, formação, competências e demais informações profissionais..." rows={12} value={manualText} /><Space className="prisma-ingestion-actions"><Button disabled={busy || !manualText} icon={<DeleteOutlined />} onClick={() => setManualText("")}>Limpar</Button><Button disabled={busy || manualText.trim().length < 120} loading={busy} onClick={() => void handleManualProcessing()} type="primary">Processar texto</Button></Space></div> },
+                { key: "upload", label: "Upload de currículo", children: <div className="prisma-upload-panel"><Upload.Dragger accept="application/pdf,.pdf" beforeUpload={() => false} fileList={fileList} maxCount={1} onChange={({ fileList: next }) => setFileList(next.slice(-1))} onRemove={() => { setFileList([]); return true; }}><p className="ant-upload-drag-icon"><CloudUploadOutlined /></p><p className="ant-upload-text">Arraste e solte o arquivo aqui</p><p className="ant-upload-hint">ou clique para selecionar · Apenas PDF · Tamanho máximo: 15 MB</p></Upload.Dragger>{fileList[0] ? <div className="prisma-selected-file"><FilePdfOutlined /><div><strong>{fileList[0].name}</strong><span>{formatBytes(fileList[0].size ?? 0)}</span></div><Tag color="green">Pronto para validar</Tag></div> : null}{progress ? <Alert title={progress.message} showIcon type="info" /> : null}<Button disabled={busy || fileList.length === 0} loading={busy} onClick={() => void handlePdfProcessing()} type="primary">Processar</Button></div> },
               ]} />
             </PrismaCard>
           </section>
           <section aria-labelledby="processamento" className="prisma-m2b-section">
             <div className="prisma-section-heading"><Typography.Title id="processamento" level={3}>Processamento do documento</Typography.Title>{attempt ? <ProcessingTag state={attempt.state} /> : null}</div>
-            <PrismaCard>{attempt && selectedDocument ? <><Steps className="prisma-processing-steps" current={stepIndex(attempt.state)} items={processingSteps(attempt.state, attempt.pagesOcr)} responsive /><Descriptions bordered column={{ xs: 1, sm: 2, lg: 3 }} size="small" title="Detalhes do processamento"><Descriptions.Item label="Arquivo">{selectedDocument.filename}</Descriptions.Item><Descriptions.Item label="Tamanho">{formatBytes(selectedDocument.byteSize ?? 0)}</Descriptions.Item><Descriptions.Item label="Páginas">{selectedDocument.pageCount ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{attempt.currentMethod}</Descriptions.Item><Descriptions.Item label="Caracteres úteis">{attempt.usefulCharacterCount}</Descriptions.Item></Descriptions>{isProcessing(attempt.state) ? <div className="prisma-processing-active"><Spin size="small" /><span>Processamento em andamento</span></div> : null}{attempt.failureMessage ? <Alert description="A fonte, as tentativas e o Perfil vigente permanecem preservados." message={attempt.failureMessage} showIcon type="error" /> : null}</> : <Empty description="Nenhuma fonte foi processada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>
+            <PrismaCard>{attempt && selectedDocument ? <><Steps className="prisma-processing-steps" current={stepIndex(attempt.state)} items={processingSteps(attempt.state, attempt.pagesOcr)} responsive /><Descriptions bordered column={{ xs: 1, sm: 2, lg: 3 }} size="small" title="Detalhes do processamento"><Descriptions.Item label="Arquivo">{selectedDocument.filename}</Descriptions.Item><Descriptions.Item label="Tamanho">{formatBytes(selectedDocument.byteSize ?? 0)}</Descriptions.Item><Descriptions.Item label="Páginas">{selectedDocument.pageCount ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{attempt.currentMethod}</Descriptions.Item><Descriptions.Item label="Caracteres úteis">{attempt.usefulCharacterCount}</Descriptions.Item></Descriptions>{isProcessing(attempt.state) ? <div className="prisma-processing-active"><Spin size="small" /><span>Processamento em andamento</span></div> : null}{attempt.failureCode ? <Alert description="A fonte, as tentativas e o Perfil vigente permanecem preservados." title={processingFailureMessage(attempt)} showIcon type="error" /> : null}</> : <Empty description="Nenhuma fonte foi processada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>
           </section>
           <section aria-labelledby="resultado" className="prisma-m2b-section prisma-extraction-section">
             <div className="prisma-section-heading"><Typography.Title id="resultado" level={3}>Resultado da extração</Typography.Title>{selectedDocument ? <Button onClick={() => onNavigate(`/profiles/${personId}/documents/${selectedDocument.id}`)}>Detalhes técnicos</Button> : null}</div>
@@ -339,8 +346,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         onEdit={() => onNavigate(`/profiles/${personId}/edit`)}
         onOpenOperations={() => onNavigate("/profiles/processes")}
       />
-      {error ? <Alert closable description="O Perfil vigente permanece preservado." message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
-      {success ? <Alert closable message={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
+      {error ? <Alert closable description="O Perfil vigente permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
       <Tabs activeKey={activeView} className="prisma-person-center-navigation" items={viewItems} onChange={(key) => setActiveView(key as typeof activeView)} />
     </PrismaPage>
   );
@@ -604,7 +611,7 @@ function StructuredDraftView({ draft }: { draft: NonNullable<PersonIngestionWork
         <Coverage label="Competências" complete={draft.competencies.length > 0} />
         <Coverage label="Idiomas" complete={draft.languages.length > 0} />
         <Typography.Text type="secondary">Sem score global arbitrário. Cada indicador possui regra binária e explicável.</Typography.Text>
-        {draft.notIdentified.length > 0 ? <Alert message="Campos não identificados" description={draft.notIdentified.join(", ")} showIcon type="warning" /> : null}
+        {draft.notIdentified.length > 0 ? <Alert title="Campos não identificados" description={draft.notIdentified.join(", ")} showIcon type="warning" /> : null}
       </PrismaCard>
     </div>
   );

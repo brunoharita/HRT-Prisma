@@ -3,6 +3,7 @@ import { ArrowLeftOutlined, CheckCircleOutlined, DeleteOutlined, FilePdfOutlined
 import { Alert, Button, Card, Checkbox, Empty, Input, Modal, Skeleton, Space, Statistic, Tabs, Tag, Typography } from "antd";
 import { deriveProfileDelta, type ProfileDeltaItem, type ProfileDeltaKind, type ProfileDeltaSection } from "../domain/profileDelta";
 import type { ProfileReviewWorkspace, ProfileVersionView, PublicationRemovalDecision } from "../domain/personIngestion";
+import { normalizeReviewDraft, validateEducationClassificationsForApproval, validateReviewDraftForSave } from "../domain/reviewFieldLifecycle";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -67,7 +68,22 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
   }
 
   async function publish() {
-    if (!workspace || !delta) return;
+    if (!workspace || !delta) {
+      setError("A comparação ainda não terminou de carregar. Aguarde alguns instantes e tente novamente.");
+      return;
+    }
+    const normalizedDraft = normalizeReviewDraft(workspace.reviewedData);
+    const reviewIssues = [
+      ...validateReviewDraftForSave(normalizedDraft, {
+        existingPhone: workspace.personPrivateContact.phone,
+        existingEmail: workspace.personPrivateContact.email,
+      }),
+      ...validateEducationClassificationsForApproval(normalizedDraft),
+    ];
+    if (reviewIssues.length) {
+      setError(`A publicação foi interrompida antes de qualquer alteração: ${reviewIssues[0]!.message} Volte à revisão para corrigir o campo indicado.`);
+      return;
+    }
     const removedItems = delta.items.filter((item) => item.kind === "explicit_removal");
     if (removedItems.length && removalReason.trim().length < 5) {
       setError("Explique por que as informações anteriormente aprovadas serão removidas.");
@@ -82,17 +98,17 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
     try {
       const approved = await personIngestionService.publishProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, removals);
       window.sessionStorage.setItem(`prisma.profile-published.${personId}`, `Perfil v${approved.profileVersion} publicado com sucesso.`);
+      setConfirmOpen(false);
       onNavigate(`/profiles/${personId}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Não foi possível publicar a nova versão.");
     } finally {
       setBusy(false);
-      setConfirmOpen(false);
     }
   }
 
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 10 }} /></PrismaPage>;
-  if (!workspace || !delta) return <PrismaPage><Alert showIcon title={error ?? "Comparação não encontrada."} type="error" /></PrismaPage>;
+  if (!workspace || !delta) return <PrismaPage><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="Nenhuma publicação foi realizada. Abra novamente o documento para carregar o estado atual." showIcon title={error ?? "Comparação não encontrada."} type="error" /></PrismaPage>;
   const nextVersion = (currentProfile?.profileVersion ?? 0) + 1;
   const removalItems = delta.items.filter((item) => item.kind === "explicit_removal");
 
@@ -104,8 +120,6 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.documentName}</strong><small>Documento v{workspace.documentVersion}</small></span></Card>}
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`)} type="text">Voltar para revisão</Button>
-      {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
-
       <Card className="prisma-delta-summary-card">
         <div className="prisma-delta-transition">
           <div><Typography.Text type="secondary">Perfil atual</Typography.Text><strong>{currentProfile ? `v${currentProfile.profileVersion} aprovado` : "Nenhum perfil publicado"}</strong><small>{currentProfile?.approvedAt ? formatDate(currentProfile.approvedAt) : "Primeira publicação"}</small></div>
@@ -128,6 +142,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         }))} />
       </Card>
 
+      {error ? <Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`)}>Voltar para revisão</Button>} className="prisma-delta-publish-error" closable description="Nada foi publicado e sua comparação permanece preservada nesta tela." onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
       <Alert
         className="prisma-delta-preservation-alert"
         description="Itens não citados aparecem como mantidos. Uma remoção só acontece quando você a marca explicitamente e confirma sua justificativa."
@@ -145,6 +160,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
 
       <Modal cancelText="Voltar à comparação" confirmLoading={busy} okText={`Confirmar ${removalItems.length} ${removalItems.length === 1 ? "remoção" : "remoções"}`} onCancel={() => setConfirmOpen(false)} onOk={() => void publish()} open={confirmOpen} title={`Esta publicação removerá ${removalItems.length} ${removalItems.length === 1 ? "informação anteriormente aprovada" : "informações anteriormente aprovadas"}.`}>
         <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+          {error ? <Alert description="A janela continuará aberta para você corrigir a justificativa ou voltar à revisão." showIcon title={error} type="error" /> : null}
           {removalItems.map((item) => <Tag color="red" icon={<DeleteOutlined />} key={item.key}>{item.label}: {preview(item.before)}</Tag>)}
           <Input.TextArea aria-label="Justificativa das remoções" onChange={(event) => setRemovalReason(event.target.value)} placeholder="Explique por que estas informações devem deixar o perfil vigente" rows={4} value={removalReason} />
         </Space>

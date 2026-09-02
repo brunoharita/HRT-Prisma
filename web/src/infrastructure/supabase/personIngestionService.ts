@@ -45,7 +45,7 @@ import {
   type LearnedCustomSectionDefinition,
 } from "../../domain/customProfileSections";
 import { legacyReviewEntityId } from "../../domain/reviewFieldLifecycle";
-import { reviewOperationErrorMessage } from "../../domain/reviewOperationErrors";
+import { reviewOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -1477,19 +1477,19 @@ function emptyToNull(value: string): string | null {
   return normalized || null;
 }
 
-function throwIfError(error: { message: string } | null, message: string): void {
-  if (error) throw new Error(`${message} ${error.message}`);
+function throwIfError(error: { message: string; code?: string; details?: string | null; hint?: string | null } | null, message: string): void {
+  if (error) throw supabaseOperationError(error, message);
 }
 
 function throwReviewError(error: { message: string; code?: string } | null, message: string): void {
   if (!error) return;
-  throw new Error(reviewOperationErrorMessage(error, message));
+  throw reviewOperationError(error, message);
 }
 
 function throwResolutionError(error: { message: string; code?: string } | null, message: string): void {
   if (!error) return;
   if (error.code === "23505" || /already resolved|another decision|idempotency/i.test(error.message)) {
-    throw new Error("A importação já foi resolvida por outra ação. Atualize a tela antes de continuar.");
+    throw reviewOperationError({ ...error, message: "idempotency_conflict" }, message);
   }
-  throw new Error(`${message} ${error.message}`);
+  throw supabaseOperationError(error, message);
 }

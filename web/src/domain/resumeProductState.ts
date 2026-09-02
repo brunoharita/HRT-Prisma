@@ -1,6 +1,6 @@
 import type { DocumentReviewState, ProcessingAttemptView, ResumeIntakeStatus } from "./personIngestion.js";
 
-export const RESUME_PRODUCT_STATE_VERSION = "1.0.0";
+export const RESUME_PRODUCT_STATE_VERSION = "1.1.0";
 
 export type ResumeProductState =
   | "processing"
@@ -46,6 +46,22 @@ export interface ResumeProductStateView {
   documentPreserved: boolean;
   reviewPossible: boolean;
   publicationPossible: boolean;
+}
+
+export type ProcessingFailureRecovery = "reprocess" | "replace_file";
+
+export function processingFailureRecovery(attempt: ProcessingAttemptView | null | undefined): ProcessingFailureRecovery {
+  if (!attempt) return "replace_file";
+  return attempt.pagesNative + attempt.pagesOcr > 0 && attempt.usefulCharacterCount > 0 ? "reprocess" : "replace_file";
+}
+
+export function processingFailureMessage(attempt: ProcessingAttemptView | null | undefined): string {
+  if (!attempt) return "O processamento não foi concluído. Envie novamente o currículo para continuar.";
+  const code = (attempt.failureCode ?? "").toLowerCase();
+  if (/unsupported|invalid_pdf|encrypted|password/.test(code)) return "Este arquivo não pôde ser lido com segurança. Envie outra cópia em PDF, sem senha e com texto selecionável.";
+  if (/empty|no_text|insufficient_text|unreadable/.test(code)) return "Não encontramos conteúdo legível suficiente neste arquivo. Envie outra cópia, preferencialmente em PDF com texto selecionável.";
+  if (processingFailureRecovery(attempt) === "reprocess") return "A leitura foi preservada, mas a estruturação não terminou. Você pode reprocessar sem reenviar o arquivo.";
+  return "O processamento não foi concluído e não há conteúdo seguro para reutilizar. Substitua o arquivo para tentar novamente.";
 }
 
 export function deriveResumeProductState(input: ResumeProductStateInput): ResumeProductStateView {
@@ -112,17 +128,20 @@ export function deriveResumeProductState(input: ResumeProductStateInput): Resume
     publicationPossible: false,
   };
 
-  if (isTechnicalFailure(input.latestAttempt) || input.intakeStatus === "failed" || input.documentStatus === "failed" || input.documentStatus === "extraction_failed" || input.documentStatus === "unsupported_format") return {
+  if (isTechnicalFailure(input.latestAttempt) || input.intakeStatus === "failed" || input.documentStatus === "failed" || input.documentStatus === "extraction_failed" || input.documentStatus === "unsupported_format") {
+    const recoverable = input.failureRecoverable ?? processingFailureRecovery(input.latestAttempt) === "reprocess";
+    return {
     ...base,
     state: "technical_failure",
     label: "Falha técnica",
     message: "O Prisma não conseguiu continuar tecnicamente. O documento recebido permaneceu preservado.",
-    nextAction: input.failureRecoverable ? "reprocess" : "replace_file",
-    nextActionLabel: input.failureRecoverable ? "Reprocessar" : "Substituir arquivo",
+    nextAction: recoverable ? "reprocess" : "replace_file",
+    nextActionLabel: recoverable ? "Reprocessar" : "Substituir arquivo",
     severity: "error",
     reviewPossible: false,
     publicationPossible: false,
-  };
+    };
+  }
 
   return {
     ...base,

@@ -36,7 +36,7 @@ test("classifies only execution errors as technical failure", () => {
   const partial = makeDocument({ reviewState: "ready_for_review", latestAttempt: makeAttempt("structured") });
 
   assert.equal(presentDocument(failed).state, "technical_failure");
-  assert.equal(presentDocument(failed).nextAction, "Substituir arquivo");
+  assert.equal(presentDocument(failed).nextAction, "Reprocessar");
   assert.equal(presentDocument(partial).state, "requires_review");
 });
 

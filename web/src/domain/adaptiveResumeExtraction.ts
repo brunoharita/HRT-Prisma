@@ -539,7 +539,10 @@ export function proposeSiblingBlockCorrections(input: {
     signatureVersion: ADAPTIVE_SIBLING_SIGNATURE_VERSION,
     anchorExperienceId: sourceAfter.id,
     signatureSummary: signature.summary,
-    candidateSummary: { detected: blocks.length - 1, strong, possible, rejected },
+    // The server contract counts only classified candidates. Existing siblings
+    // that produce no safe change remain visible as unresolved context, but are
+    // not candidates for application and must not inflate `detected`.
+    candidateSummary: { detected: strong + possible + rejected, strong, possible, rejected },
     suggestions,
     unresolved,
   };

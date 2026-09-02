@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { deriveResumeProductState } from "../web/src/domain/resumeProductState.js";
+import { deriveResumeProductState, processingFailureMessage, processingFailureRecovery } from "../web/src/domain/resumeProductState.js";
 import type { ProcessingAttemptView } from "../web/src/domain/personIngestion.js";
 
 test("derives the seven product states from technical facts without contaminating the Person", () => {
@@ -31,6 +31,22 @@ test("classifies useful partial structuring as review instead of technical failu
       publicationPossible: false,
     },
   );
+});
+
+test("derives a consistent recovery action from preserved processing facts", () => {
+  const recoverable = attempt("failed_extraction");
+  assert.equal(processingFailureRecovery(recoverable), "reprocess");
+  assert.equal(deriveResumeProductState({ latestAttempt: recoverable }).nextAction, "reprocess");
+  assert.match(processingFailureMessage(recoverable), /reprocessar sem reenviar/);
+
+  const replacement = attempt("failed_extraction");
+  replacement.pagesNative = 0;
+  replacement.usefulCharacterCount = 0;
+  replacement.failureCode = "no_text";
+  assert.equal(processingFailureRecovery(replacement), "replace_file");
+  assert.equal(deriveResumeProductState({ latestAttempt: replacement }).nextAction, "replace_file");
+  assert.match(processingFailureMessage(replacement), /conteúdo legível/);
+  assert.doesNotMatch(processingFailureMessage(replacement), /fixture/);
 });
 
 function attempt(state: ProcessingAttemptView["state"]): ProcessingAttemptView {

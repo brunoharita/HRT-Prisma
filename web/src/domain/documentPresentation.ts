@@ -6,7 +6,7 @@ import type {
 } from "./personIngestion.js";
 import { deriveResumeProductState, isReviewableAttempt, isTechnicalFailure as isResumeTechnicalFailure } from "./resumeProductState.js";
 
-export const DOCUMENT_PRESENTATION_VERSION = "2.0.0";
+export const DOCUMENT_PRESENTATION_VERSION = "2.1.0";
 
 export type DocumentOperationalState =
   | "none"

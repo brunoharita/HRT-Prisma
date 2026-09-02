@@ -135,7 +135,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }, [selectedFieldPath, workspace]);
 
   async function handleSave(continuation: DeferredReviewAction | null = deferredReviewAction) {
-    if (!workspace || !draft) return;
+    if (!workspace || !draft) {
+      setError("A revisão ainda não terminou de carregar. Aguarde alguns instantes e tente novamente.");
+      return;
+    }
     const normalizedDraft = normalizeReviewDraft(draft);
     const normalizedBaseline = normalizeReviewDraft(workspace.reviewedData);
     if (JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline)) {
@@ -180,31 +183,47 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setBusy(true); setError(null); setSuccess(null);
     try {
       const structuralAnchor = findCompletedExperienceChange(normalizedBaseline, normalizedDraft);
-      await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft, reason);
-      const refreshed = await refresh();
+      const lockVersion = await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft, reason);
+      setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(normalizedDraft), lockVersion } : current);
+      setDraft(cloneDraft(normalizedDraft));
+      let refreshed: ProfileReviewWorkspace;
+      try {
+        refreshed = await refresh();
+      } catch {
+        setReason("");
+        setDeferredReviewAction(null);
+        setError("O rascunho foi salvo, mas a tela não conseguiu carregar a confirmação atualizada. Não repita a alteração; recarregue a revisão para continuar.");
+        return;
+      }
+      let learningNotice: string | null = null;
       if (structuralAnchor && hasSpatialAnchorEvidence(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? "")) {
-        const report = proposeSiblingBlockCorrections({
-          pages: refreshed.pages,
-          draft: refreshed.reviewedData,
-          extracted: refreshed.extractedData,
-          sourceIndex: structuralAnchor.index,
-          sourceField: structuralAnchor.field,
-          sourceRegion: spatialAnchorRegion(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? ""),
-        });
-        if (report.anchorExperienceId && hasRecordableSiblingSignature(report) && (report.suggestions.length || report.unresolved.length)) {
-          await personIngestionService.recordSiblingScan({
-            organizationId: activeMembership.organizationId,
-            reviewId: refreshed.id,
-            anchorExperienceId: report.anchorExperienceId,
-            methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
-            algorithmVersion: report.algorithmVersion,
-            signatureVersion: report.signatureVersion,
-            signatureSummary: report.signatureSummary,
-            candidateSummary: report.candidateSummary,
-            decision: "detected",
+        try {
+          const report = proposeSiblingBlockCorrections({
+            pages: refreshed.pages,
+            draft: refreshed.reviewedData,
+            extracted: refreshed.extractedData,
+            sourceIndex: structuralAnchor.index,
+            sourceField: structuralAnchor.field,
+            sourceRegion: spatialAnchorRegion(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? ""),
           });
+          if (report.anchorExperienceId && hasRecordableSiblingSignature(report) && (report.suggestions.length || report.unresolved.length)) {
+            await personIngestionService.recordSiblingScan({
+              organizationId: activeMembership.organizationId,
+              reviewId: refreshed.id,
+              anchorExperienceId: report.anchorExperienceId,
+              methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
+              algorithmVersion: report.algorithmVersion,
+              signatureVersion: report.signatureVersion,
+              signatureSummary: report.signatureSummary,
+              candidateSummary: report.candidateSummary,
+              decision: "detected",
+            });
+          }
+          setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
+        } catch {
+          setAdaptiveReport(null);
+          learningNotice = " O rascunho foi salvo, mas a busca opcional por experiências semelhantes não pôde ser concluída agora.";
         }
-        setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
       }
       setReason("");
       setDeferredReviewAction(null);
@@ -213,13 +232,16 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         setSuccess(continuation.type === "create_custom_section"
           ? "Rascunho salvo. Agora selecione no documento a área personalizada."
           : "Rascunho salvo. Agora selecione no documento a evidência desejada.");
-      } else setSuccess("Rascunho salvo como nova revisão auditável.");
+      } else setSuccess(`Rascunho salvo como nova revisão auditável.${learningNotice ?? ""}`);
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível salvar o rascunho."); }
     finally { setBusy(false); }
   }
 
   function handleContinueToDelta() {
-    if (!workspace || !draft) return;
+    if (!workspace || !draft) {
+      setError("A revisão ainda não terminou de carregar. Aguarde alguns instantes e tente novamente.");
+      return;
+    }
     if (transientOnly) { setError("Preencha ou cancele o novo campo antes de aprovar a versão."); return; }
     if (dirty || pendingSelection) { setError("Conclua ou cancele a seleção e salve as alterações antes de aprovar."); return; }
     const normalizedDraft = normalizeReviewDraft(draft);
@@ -238,7 +260,19 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   async function handleApplyAdaptiveSuggestions(suggestions: AdaptiveFieldSuggestion[]) {
-    if (!workspace || !draft || !adaptiveReport || suggestions.length === 0) return;
+    if (!workspace || !draft || !adaptiveReport) {
+      setError("As sugestões não estão mais vinculadas ao estado atual da revisão. Recarregue a página antes de continuar.");
+      return;
+    }
+    if (suggestions.length === 0) {
+      setError("Selecione ao menos uma sugestão para aplicar.");
+      return;
+    }
+    const sourceExperience = draft.experiences[adaptiveReport.sourceIndex];
+    if (!sourceExperience) {
+      setError("A experiência usada como referência não existe mais no rascunho. Recarregue a revisão para recalcular as sugestões.");
+      return;
+    }
     const selectedPaths = new Set(suggestions.map((suggestion) => suggestion.fieldPath));
     const addedExperiences = adaptiveReport.suggestions.flatMap((candidate) => (
       candidate.kind === "new" && candidate.proposedExperience && candidate.fields.some((field) => selectedPaths.has(field.fieldPath))
@@ -248,32 +282,53 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     const baseDraft = addedExperiences.length
       ? { ...draft, experiences: [...draft.experiences, ...addedExperiences.filter((candidate) => !draft.experiences.some((item) => item.id === candidate.id))] }
       : draft;
-    const nextDraft = suggestions.reduce(
+    const nextDraft = normalizeReviewDraft(suggestions.reduce(
       (current, suggestion) => applyValueAtFieldPath(current, suggestion.fieldPath, suggestion.proposedValue),
       baseDraft,
-    );
+    ));
+    const issues = validateReviewDraftForSave(nextDraft, {
+      existingPhone: workspace.personPrivateContact.phone,
+      existingEmail: workspace.personPrivateContact.email,
+    });
+    if (issues.length) {
+      setDraft(nextDraft);
+      setValidationIssues(issues);
+      setSelectedFieldPath(issues[0]!.fieldPath);
+      setError(`A sugestão não pode ser aplicada enquanto este campo estiver incompleto: ${issues[0]!.message}`);
+      return;
+    }
     setBusy(true); setError(null); setSuccess(null);
     try {
-      await personIngestionService.applyAdaptiveSuggestions({
+      const applied = await personIngestionService.applyAdaptiveSuggestions({
         organizationId: activeMembership.organizationId,
         reviewId: workspace.id,
         expectedLockVersion: workspace.lockVersion,
         reviewedData: nextDraft,
-        sourceFieldPath: reviewEntityFieldPath("experience", draft.experiences[adaptiveReport.sourceIndex]!, adaptiveReport.sourceField),
+        sourceFieldPath: reviewEntityFieldPath("experience", sourceExperience, adaptiveReport.sourceField),
         patternKey: adaptiveReport.patternKey,
         methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
         algorithmVersion: adaptiveReport.algorithmVersion,
         signatureVersion: adaptiveReport.signatureVersion,
-        anchorExperienceId: adaptiveReport.anchorExperienceId ?? draft.experiences[adaptiveReport.sourceIndex]!.id,
+        anchorExperienceId: adaptiveReport.anchorExperienceId ?? sourceExperience.id,
         signatureSummary: adaptiveReport.signatureSummary,
         candidateSummary: adaptiveReport.candidateSummary,
         suggestions,
         reason: "Sugestões adaptativas confirmadas pelo revisor após releitura dos blocos na fonte original.",
       });
-      await refresh();
+      setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(nextDraft), lockVersion: applied.lockVersion } : current);
+      setDraft(cloneDraft(nextDraft));
+      try {
+        await refresh();
+      } catch {
+        setAdaptiveReport(null);
+        setReason("");
+        setError("As sugestões foram aplicadas e preservadas, mas a tela não conseguiu atualizar a confirmação. Não aplique novamente; recarregue a revisão para continuar.");
+        return;
+      }
       setAdaptiveReport(null);
       setReason("");
-      setSuccess(`${adaptiveReport.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length} ${adaptiveReport.suggestions.length === 1 ? "experiência foi aplicada" : "experiências foram aplicadas"}, com evidência e versão auditável. A revisão humana permanece disponível.`);
+      const appliedExperienceCount = adaptiveReport.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length;
+      setSuccess(`${appliedExperienceCount} ${appliedExperienceCount === 1 ? "experiência foi aplicada" : "experiências foram aplicadas"}, com evidência e versão auditável. A revisão humana permanece disponível.`);
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aplicar as sugestões adaptativas."); }
     finally { setBusy(false); }
   }
@@ -338,7 +393,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   function addMissingExperience(selectArea: boolean) {
-    if (!draft) return;
+    if (!draft) { setError("A revisão ainda não terminou de carregar. Aguarde alguns instantes e tente novamente."); return; }
     const existing = draft.experiences.find((item) => !workspace?.reviewedData.experiences.some((persisted) => persisted.id === item.id));
     const experience = existing ?? {
       id: createReviewEntityId("experience"),
@@ -382,7 +437,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   function discardUnsavedChangesAndContinue() {
-    if (!workspace) return;
+    if (!workspace) { setError("Não foi possível recuperar a versão salva da revisão. Recarregue a página antes de descartar alterações."); return; }
     const continuation = deferredReviewAction;
     setDraft(cloneDraft(workspace.reviewedData));
     setReason("");
@@ -395,17 +450,24 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   async function handleEvidenceDelete(input: { fieldPath: string; linkId: string }) {
-    if (!workspace) return;
+    if (!workspace) { setError("A revisão ainda não terminou de carregar. Aguarde alguns instantes e tente novamente."); return; }
     setBusy(true); setError(null); setSuccess(null);
     try {
-      await personIngestionService.retireProfileReviewEvidence({
+      const lockVersion = await personIngestionService.retireProfileReviewEvidence({
         organizationId: activeMembership.organizationId,
         reviewId: workspace.id,
         expectedLockVersion: workspace.lockVersion,
         linkId: input.linkId,
         reason: "Evidência retirada pelo revisor durante a conferência do campo.",
       });
-      await refresh();
+      setWorkspace((current) => current ? { ...current, lockVersion, evidenceLinks: current.evidenceLinks.filter((link) => link.id !== input.linkId) } : current);
+      try {
+        await refresh();
+      } catch {
+        setActiveLinkId(null);
+        setSuccess("A evidência foi excluída e o histórico foi preservado, mas a tela não conseguiu atualizar os demais dados. Recarregue a revisão antes de outra alteração.");
+        return;
+      }
       setActiveLinkId(null);
       setSuccess("Evidência excluída da revisão. A região e o evento permanecem preservados no histórico.");
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível excluir a evidência."); }
@@ -443,7 +505,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   async function applyPendingSelection() {
-    if (!workspace || !draft || !pendingSelection) return;
+    if (!workspace || !draft || !pendingSelection) {
+      setSelectionError("A seleção não está mais vinculada ao estado atual da revisão. Feche esta janela, recarregue a página e selecione novamente.");
+      return;
+    }
     setSelectionError(null);
     const normalizedValue = selectionValue.trim();
     const effectiveSelectedText = refinedSelectionText(pendingSelection, excludedRefinementLinkIds);
@@ -498,7 +563,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
     setBusy(true); setError(null); setSuccess(null); setSelectionError(null);
     try {
-      await personIngestionService.recordProfileReviewEvidence({
+      const recorded = await personIngestionService.recordProfileReviewEvidence({
         organizationId: activeMembership.organizationId,
         reviewId: workspace.id,
         expectedLockVersion: workspace.lockVersion,
@@ -518,7 +583,16 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         reason: selectionReason.trim() || null,
         replacesLinkId: pendingAction === "replace_review_evidence" ? replacementLinkId : null,
       });
-      const refreshed = await refresh();
+      setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(nextDraft ?? current.reviewedData), lockVersion: recorded.lockVersion } : current);
+      if (nextDraft) setDraft(cloneDraft(nextDraft));
+      let refreshed: ProfileReviewWorkspace;
+      try {
+        refreshed = await refresh();
+      } catch {
+        closePendingSelection();
+        setError("A evidência foi registrada e preservada, mas a tela não conseguiu carregar a confirmação atualizada. Não repita a seleção; recarregue a revisão para continuar.");
+        return;
+      }
       if (pendingAction === "correct_current_field" && nextDraft) {
         const match = /^experiences\.([a-z0-9_]+)\.(role|organization|period|description)$/.exec(targetFieldPath);
         if (match) {
@@ -546,7 +620,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   if (loading) return <PrismaPage><div className="prisma-review-loading"><Typography.Title level={3}>Preparando a bancada de revisão...</Typography.Title><Typography.Text type="secondary">Carregando documento, extração, evidências e histórico.</Typography.Text></div></PrismaPage>;
-  if (!workspace || !draft) return <PrismaPage><Alert title={error ?? "Revisão não encontrada nesta empresa."} showIcon type="error" /></PrismaPage>;
+  if (!workspace || !draft) return <PrismaPage><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="O Perfil vigente permanece preservado. Reabra o documento pela Central para carregar o estado atual." title={error ?? "Revisão não encontrada nesta empresa."} showIcon type="error" /></PrismaPage>;
 
   const saveBlockedReason = !editable
     ? "Esta revisão não está mais disponível para edição."

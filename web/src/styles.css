@@ -4591,6 +4591,10 @@ textarea {
   margin-bottom: 70px;
 }
 
+.prisma-delta-publish-error {
+  margin-bottom: 12px;
+}
+
 .prisma-delta-footer {
   position: sticky;
   z-index: 4;

@@ -2,7 +2,7 @@
 
 ## Escopo
 
-Validar `resume-product-state` 1.0.0, `profile-publication-delta` 1.0.0 e a jornada de seis telas sem alterar autenticação, IA, matching ou produção.
+Validar `resume-product-state` 1.1.0, `document-presentation` 2.1.0, `operation-feedback` 1.0.0, `profile-publication-delta` 1.0.0 e a jornada de seis telas sem alterar autenticação, IA, matching ou produção.
 
 ## Matriz funcional
 
@@ -16,13 +16,20 @@ Validar `resume-product-state` 1.0.0, `profile-publication-delta` 1.0.0 e a jorn
 8. Publicação retorna à Central da Pessoa, com a nova versão e fonte identificáveis.
 9. Reprocessamento aparece somente para falha técnica recuperável.
 10. Perfil pode ser publicado sem competências; inferências e recomendações não se tornam fatos aprovados.
+11. Aplicação adaptativa valida o draft normalizado e envia `detected = strong + possible + rejected`; irmãos já completos permanecem apenas como contexto não aplicável.
+12. Evidência, refinamento, classificação acadêmica, arquivamento e publicação exibem causa sanitizada, preservação e ação de recuperação específica.
+13. Falha de recarga após confirmação remota não afirma que a mutação falhou e não convida a repeti-la.
+14. Processamento orienta manter a página aberta enquanto a sessão cliente conclui a estruturação; falha reutilizável oferece retry e falha sem fonte útil oferece substituição.
+15. O modal de remoção continua aberto após falha de publicação, com erro contextual e retorno direto à revisão.
 
 ## Evidência determinística
 
 - `tests/resumeProductState.test.ts` cobre os sete estados e a extração parcial.
 - `tests/profileDelta.test.ts` cobre primeira publicação, atualização, manutenção, omissão, identidade estável e remoção explícita.
 - `tests/profilePublicationDeltaMigration.test.ts` cobre RLS, DML revogado, autoridade única, recuperação de tentativa útil e integração das seis telas.
-- O gate `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`.
+- `tests/reviewOperationErrors.test.ts` cobre categorias, mensagens sanitizadas e recuperação representativa para evidência, aprendizado, classificação, publicação, arquivamento e transporte.
+- `tests/resumeInterruptionUx.test.ts` protege preflight, confirmação remota versus falha de recarga, modal de publicação e ausência de mensagens técnicas cruas.
+- O gate `pnpm run validate` aprovou lint de 258 arquivos, fundação, Context Pack, dois typechecks, build web, 196 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`.
 
 ## Evidência conectada no Prisma-QA
 

@@ -15,6 +15,7 @@ import {
   type ResumeIntakeResolutionResult, type ResumeProcessingProgress,
 } from "../domain/personIngestion";
 import { deriveResumeProductState } from "../domain/resumeProductState";
+import { operationRecovery, type OperationRecovery } from "../domain/reviewOperationErrors";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -23,6 +24,7 @@ import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 interface ResumeImportPageProps { activeMembership: OrganizationMembership; onNavigate: (path: string) => void; }
 interface IdentityFormValue { fullName: string; email: string; phone: string; }
 type JourneyPhase = "upload" | "identity" | "processing" | "analysis";
+type ResolutionAttempt = { action: "create_new_person" | "link_existing_person"; personId: string | null };
 
 export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportPageProps) {
   const [phase, setPhase] = useState<JourneyPhase>("upload");
@@ -36,6 +38,22 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   const [processingProgress, setProcessingProgress] = useState<ResumeProcessingProgress | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [processingRecovery, setProcessingRecovery] = useState<OperationRecovery>("none");
+  const [lastResolution, setLastResolution] = useState<ResolutionAttempt | null>(null);
+
+  function restartImport() {
+    setPhase("upload");
+    setFileList([]);
+    setProcessed(null);
+    setIdentity(null);
+    setIntake(null);
+    setResult(null);
+    setAnalysis(null);
+    setProcessingProgress(null);
+    setProcessingRecovery("none");
+    setLastResolution(null);
+    setError(null);
+  }
 
   async function handleImport() {
     const file = fileList[0]?.originFileObj;
@@ -59,7 +77,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   }
 
   async function handleIdentityReview(value: IdentityFormValue) {
-    if (!intake) return;
+    if (!intake) { setError("A identificação desta importação não está mais disponível. Volte ao envio e abra o fluxo novamente."); return; }
     const nextIdentity: ResumeIdentity = {
       fullName: normalizeResumeName(value.fullName) || null,
       email: normalizeResumeEmail(value.email), phone: normalizeResumePhone(value.phone),
@@ -75,8 +93,14 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   }
 
   async function resolveIntake(action: "create_new_person" | "link_existing_person", personId: string | null) {
-    if (!intake || !processed) return;
+    if (!intake || !processed) {
+      setError("Os dados necessários para continuar não estão mais disponíveis nesta tela. Volte ao envio e abra a importação novamente.");
+      setPhase("upload");
+      return;
+    }
+    setLastResolution({ action, personId });
     setBusy(true); setError(null); setPhase("processing");
+    setProcessingRecovery("none");
     setProcessingProgress({ stage: "structuring", message: "Preparando a análise das informações profissionais." });
     try {
       const resolved = await personIngestionService.resolveResumeIntake(
@@ -86,15 +110,17 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
       );
       setResult(resolved);
       setAnalysis(await personIngestionService.loadWorkspace(activeMembership.organizationId, resolved.personId, resolved.documentId));
+      setLastResolution(null);
       setPhase("analysis");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Não foi possível concluir o processamento.");
+      setProcessingRecovery(operationRecovery(caught));
       setPhase("processing");
     } finally { setBusy(false); }
   }
 
   function handleCreateDespiteMatch() {
-    if (!intake) return;
+    if (!intake) { setError("A identificação desta importação não está mais disponível. Volte ao envio e abra o fluxo novamente."); return; }
     if (intake.status === "needs_duplicate_resolution") {
       Modal.confirm({
         title: "Criar uma nova Pessoa?",
@@ -105,7 +131,10 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   }
 
   async function startReview() {
-    if (!result || !analysis?.selectedDocument?.reviewAttempt) return;
+    if (!result || !analysis?.selectedDocument?.reviewAttempt) {
+      setError("Esta importação ainda não possui uma tentativa pronta para revisão. Reabra a Central da Pessoa para ver o estado atual e a próxima ação disponível.");
+      return;
+    }
     setBusy(true); setError(null);
     try {
       const reviewId = await personIngestionService.startProfileReview(activeMembership.organizationId, result.personId, result.documentId, analysis.selectedDocument.reviewAttempt.id);
@@ -117,7 +146,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase}`}>
     {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} /> : null}
     {phase === "identity" && intake ? <IdentityScreen busy={busy} error={error} identity={identity} intake={intake} onBack={() => setPhase("upload")} onCreate={handleCreateDespiteMatch} onIdentityReview={handleIdentityReview} onLink={(candidate) => void resolveIntake("link_existing_person", candidate.personId)} processed={processed} /> : null}
-    {phase === "processing" ? <ProcessingScreen error={error} onBack={() => onNavigate("/profiles")} processed={processed} progress={processingProgress} /> : null}
+    {phase === "processing" ? <ProcessingScreen busy={busy} error={error} onBack={() => onNavigate("/profiles")} onReplace={restartImport} onRetry={processingRecovery === "retry" && lastResolution ? () => void resolveIntake(lastResolution.action, lastResolution.personId) : null} processed={processed} progress={processingProgress} recovery={processingRecovery} /> : null}
     {phase === "analysis" && result && analysis ? <AnalysisScreen analysis={analysis} busy={busy} error={error} onBack={() => onNavigate(`/profiles/${result.personId}`)} onReview={() => void startReview()} processed={processed} reused={result.reused} /> : null}
   </PrismaPage>;
 }
@@ -171,15 +200,22 @@ function IdentityForm({ busy, identity, onSubmit }: { busy: boolean; identity: R
   return <Form<IdentityFormValue> initialValues={{ fullName: identity?.fullName ?? "", email: identity?.email ?? "", phone: identity?.phone ?? "" }} layout="vertical" onFinish={onSubmit}><div className="prisma-identity-fields"><Form.Item label="Nome" name="fullName" rules={[{ required: true, message: "Informe o nome da Pessoa." }]}><Input autoComplete="name" /></Form.Item><Form.Item label="E-mail" name="email"><Input autoComplete="email" /></Form.Item><Form.Item label="Telefone" name="phone"><Input autoComplete="tel" /></Form.Item></div><Button htmlType="submit" loading={busy} type="primary">Confirmar identificação</Button></Form>;
 }
 
-function ProcessingScreen({ error, onBack, processed, progress }: { error: string | null; onBack: () => void; processed: ProcessedDocumentInput | null; progress: ResumeProcessingProgress | null }) {
+function ProcessingScreen({ busy, error, onBack, onReplace, onRetry, processed, progress, recovery }: { busy: boolean; error: string | null; onBack: () => void; onReplace: () => void; onRetry: (() => void) | null; processed: ProcessedDocumentInput | null; progress: ResumeProcessingProgress | null; recovery: OperationRecovery }) {
   const current = progress?.stage === "structuring" ? 2 : progress?.stage === "persisting" ? 3 : 4;
+  const recoveryAction = onRetry
+    ? <Button disabled={busy} onClick={onRetry} type="primary">Tentar novamente</Button>
+    : recovery === "sign-in"
+      ? <Button onClick={onBack}>Entrar novamente</Button>
+      : recovery === "reload" || recovery === "return-to-review"
+        ? <Button onClick={onBack}>Abrir Central da Pessoa</Button>
+        : <Button onClick={onReplace}>Substituir arquivo</Button>;
   return <>
     <PrismaPageHeader title="Processamento do documento" description="Acompanhe o processamento do currículo enviado." actions={<FileCard file={processed?.file ?? null} />} />
-    <Button icon={<ArrowLeftOutlined />} onClick={onBack} type="text">Voltar para Pessoas</Button>
+    <Button disabled={busy} icon={<ArrowLeftOutlined />} onClick={onBack} type="text">Voltar para Pessoas</Button>
     <PrismaCard className="prisma-journey-processing-timeline"><Steps current={current} items={[{ title: "Recebido" }, { title: "Extraindo texto" }, { title: "Estruturando" }, { title: "Revisão" }, { title: "Pronto" }]} responsive /></PrismaCard>
-    {error ? <Alert description="O documento foi preservado. Verifique a mensagem e tente novamente somente se a falha for recuperável." showIcon title={error} type="error" /> : null}
+    {error ? <Alert action={recoveryAction} description={onRetry ? "O documento foi preservado com o progresso concluído. Você pode repetir a etapa interrompida sem reenviar o currículo." : "O documento foi preservado e nenhum perfil foi publicado. Use a ação indicada para continuar por um caminho seguro."} showIcon title={error} type="error" /> : null}
     <div className="prisma-journey-processing-grid"><PrismaCard title="Status atual"><Progress percent={progress?.stage === "ready_for_review" ? 100 : 70} showInfo={false} status={error ? "exception" : "active"} /><Typography.Title level={4}>{progress?.message ?? "Preparando processamento..."}</Typography.Title><Typography.Text type="secondary">Isso pode levar alguns instantes.</Typography.Text></PrismaCard><PrismaCard title="Detalhes"><Descriptions column={1} size="small"><Descriptions.Item label="Páginas detectadas">{processed?.pages.length ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{processed?.ocrPageCount ? "Extração nativa e OCR local" : "Extração nativa do PDF"}</Descriptions.Item><Descriptions.Item label="OCR necessário">{processed?.ocrPageCount ? "Sim" : "Não"}</Descriptions.Item><Descriptions.Item label="Arquivo recebido">Preservado</Descriptions.Item></Descriptions></PrismaCard></div>
-    <Alert showIcon title="Você pode sair desta página" description="O arquivo já foi recebido. Se permanecer nesta tela, o resultado da análise aparecerá automaticamente." type="info" />
+    {!error ? <Alert showIcon title="Mantenha esta página aberta durante o processamento" description="O arquivo já foi recebido, mas a extração e a estruturação ainda são concluídas por esta sessão. Ao final, a revisão será aberta automaticamente." type="info" /> : null}
   </>;
 }
 

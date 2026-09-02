@@ -3,6 +3,8 @@ import { ArrowLeftOutlined, AuditOutlined, ReloadOutlined } from "@ant-design/ic
 import { Alert, Button, Descriptions, Empty, Skeleton, Space, Table, Tag, Timeline } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { PersonIngestionWorkspace, ProcessingAttemptView, ProcessingAuditEvent } from "../domain/personIngestion";
+import { isReviewableDocument, presentDocument } from "../domain/documentPresentation";
+import { processingFailureMessage } from "../domain/resumeProductState";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -52,14 +54,20 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
 
   const document = workspace?.selectedDocument;
   async function handleRetry() {
-    if (!document) return;
+    if (!document || presentDocument(document).nextAction !== "Reprocessar") {
+      setError("Este documento não possui uma extração reutilizável para reprocessamento. Volte à Central da Pessoa e substitua o arquivo.");
+      return;
+    }
     setBusy(true); setError(null);
     try { await personIngestionService.reprocessDocument(activeMembership.organizationId, personId, document.id); await refresh(); }
     catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível reprocessar o documento."); }
     finally { setBusy(false); }
   }
   async function handleReview() {
-    if (!document?.reviewAttempt) return;
+    if (!document?.reviewAttempt || !isReviewableDocument(document)) {
+      setError("Este documento ainda não está pronto para revisão. Consulte a próxima ação indicada nesta página.");
+      return;
+    }
     setBusy(true); setError(null);
     try {
       const reviewId = await personIngestionService.startProfileReview(activeMembership.organizationId, personId, document.id, document.reviewAttempt.id);
@@ -69,8 +77,11 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
   }
 
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 14 }} /></PrismaPage>;
-  if (!workspace || !document) return <PrismaPage><Alert title={error ?? "Documento não encontrado nesta empresa."} showIcon type="error" /></PrismaPage>;
+  if (!workspace || !document) return <PrismaPage><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="O documento e o Perfil vigente permanecem preservados. Reabra o item pela Central para carregar o estado atual." title={error ?? "Documento não encontrado nesta empresa."} showIcon type="error" /></PrismaPage>;
   const recoveryMode = document.reviewAttempt?.state === "failed_structuring";
+  const presentation = presentDocument(document);
+  const canReview = isReviewableDocument(document);
+  const canReprocess = presentation.state === "technical_failure" && presentation.nextAction === "Reprocessar";
 
   const attemptColumns: ColumnsType<ProcessingAttemptView> = [
     { title: "Tentativa", dataIndex: "attemptNumber", render: (value) => `#${value}` },
@@ -86,7 +97,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
       <PrismaPageHeader
         title={document.filename}
         description={`${workspace.person.fullName} · Documento v${document.documentVersion}`}
-        actions={<Space wrap><Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>Reprocessar</Button><Button disabled={!document.reviewAttempt} loading={busy} onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações" : "Revisar perfil"}</Button></Space>}
+        actions={<Space wrap>{canReprocess ? <Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>Reprocessar</Button> : null}{presentation.state === "technical_failure" && !canReprocess ? <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Substituir arquivo</Button> : null}{canReview ? <Button loading={busy} onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações" : "Revisar perfil"}</Button> : null}</Space>}
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/processes")} type="text">Voltar para a central</Button>
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
@@ -109,7 +120,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
           </Space>
         </PrismaCard>
         <PrismaCard title="Próximos passos">
-          {document.reviewState === "approved" ? <Alert title="Documento concluído e perfil aprovado." showIcon type="success" /> : document.reviewAttempt ? <><Alert title={recoveryMode ? "O conteúdo foi recuperado, mas o reconhecimento automático precisa de complementação." : "O conteúdo está pronto para revisão humana."} description={recoveryMode ? "Abra o currículo original e selecione as informações que não foram reconhecidas." : undefined} showIcon type={recoveryMode ? "warning" : "info"} /><Button block onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações no currículo" : "Iniciar ou continuar revisão"}</Button></> : <Alert title="Reprocesse quando não houver conteúdo recuperável." showIcon type="info" />}
+          {document.reviewState === "approved" ? <Alert title="Documento concluído e perfil aprovado." showIcon type="success" /> : canReview ? <><Alert title={recoveryMode ? "O conteúdo foi recuperado, mas o reconhecimento automático precisa de complementação." : "O conteúdo está pronto para revisão humana."} description={recoveryMode ? "Abra o currículo original e selecione as informações que não foram reconhecidas." : undefined} showIcon type={recoveryMode ? "warning" : "info"} /><Button block onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações no currículo" : "Iniciar ou continuar revisão"}</Button></> : presentation.state === "technical_failure" ? <Alert action={canReprocess ? <Button onClick={() => void handleRetry()}>Reprocessar</Button> : <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Substituir arquivo</Button>} description="O documento e o Perfil vigente permanecem preservados." title={processingFailureMessage(document.latestAttempt)} showIcon type="error" /> : <Alert description="Aguarde a conclusão antes de iniciar uma nova ação." title={presentation.description} showIcon type="info" />}
           <Button block onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Comparar versões do perfil</Button>
         </PrismaCard>
       </div>
