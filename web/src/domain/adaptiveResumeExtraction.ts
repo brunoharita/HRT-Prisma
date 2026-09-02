@@ -91,6 +91,14 @@ export interface AdaptiveSuggestionReport {
   unresolved: AdaptiveUnresolvedSibling[];
 }
 
+export interface AdaptiveSourceRegion {
+  pageNumber: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export interface AdaptiveExtractionResult {
   draft: StructuredDraft;
   fieldEvidence: FieldEvidenceDescriptor[];
@@ -412,6 +420,7 @@ export function proposeSiblingBlockCorrections(input: {
   sourceIndex: number;
   sourceField: ExperienceFieldName;
   extracted: StructuredDraft;
+  sourceRegion?: AdaptiveSourceRegion | null;
 }): AdaptiveSuggestionReport {
   const sourceBefore = input.extracted.experiences[input.sourceIndex];
   const sourceAfter = input.draft.experiences[input.sourceIndex];
@@ -437,8 +446,17 @@ export function proposeSiblingBlockCorrections(input: {
   }
 
   const lines = sliceExperienceSection(candidateLines(input.pages));
-  const sourceAnchorIndex = locateAnchor(lines, sourceAfter);
-  const sourceBlock = sourceAnchorIndex >= 0 ? parseBlock(lines, sourceAnchorIndex, findNextTopLevelBoundary(lines, sourceAnchorIndex + 1, lines.length), true) : null;
+  const sourceAnchorIndex = locateAnchor(lines, sourceAfter, input.sourceRegion);
+  const strictSourceBlock = sourceAnchorIndex >= 0
+    ? parseBlock(lines, sourceAnchorIndex, findNextTopLevelBoundary(lines, sourceAnchorIndex + 1, lines.length), true)
+    : null;
+  const strictSourceConfirmed = strictSourceBlock
+    && (["role", "organization", "period"] as const).every((field) => comparable(fieldValue(strictSourceBlock, field)) === comparable(fieldValue(sourceAfter, field)));
+  const sourceBlock = strictSourceConfirmed
+    ? strictSourceBlock
+    : sourceAnchorIndex >= 0
+      ? parseBlock(lines, sourceAnchorIndex, findNextTopLevelBoundary(lines, sourceAnchorIndex + 1, lines.length, true), true, true)
+      : null;
   if (!sourceBlock) return emptyReport("source-block-not-found", "O bloco corrigido não pôde ser reencontrado com segurança na fonte original.");
   if (!(["role", "organization", "period"] as const).every((field) => comparable(fieldValue(sourceBlock, field)) === comparable(fieldValue(sourceAfter, field)))) {
     return emptyReport("source-correction-not-confirmed", "A fonte original não confirmou a mesma transformação aplicada pelo revisor.");
@@ -684,10 +702,11 @@ export function proposeSiblingFieldCorrections(input: {
 }
 
 function detectTopLevelExperienceBlocks(lines: CandidateLine[], learnedPatterns: Set<string>): ParsedExperienceBlock[] {
+  const learnedSameLine = [...learnedPatterns].some((key) => key.includes("company-same-line"));
   const seeds = lines.flatMap((line, index) => {
     const period = extractPeriod(line.text);
     if (!period || isBullet(line.text) || SECTION_HEADING.test(line.text)) return [];
-    const sameLine = parseSameLineHeader(line.text, period);
+    const sameLine = parseSameLineHeader(line.text, period, learnedSameLine);
     const nextCompany = findAdjacentOrganization(lines, index, 1);
     const learnedNextLine = [...learnedPatterns].some((key) => key.includes("company-next-line"));
     const semanticHeader = ROLE_TERMS.test(line.text) || /^trajet[oó]ria\b/i.test(line.text) || line.emphasis === "strong";
@@ -697,7 +716,7 @@ function detectTopLevelExperienceBlocks(lines: CandidateLine[], learnedPatterns:
   });
   return seeds.flatMap((seed, seedIndex) => {
     const nextAnchorIndex = seeds[seedIndex + 1]?.index ?? lines.length;
-    const block = parseBlock(lines, seed.index, nextAnchorIndex);
+    const block = parseBlock(lines, seed.index, nextAnchorIndex, false, learnedSameLine);
     return block ? [block] : [];
   });
 }
@@ -712,18 +731,18 @@ function locateExistingExperienceBlocks(lines: CandidateLine[], experiences: Str
   });
 }
 
-function parseBlock(lines: CandidateLine[], anchorIndex: number, nextAnchorIndex: number, allowNearbyCompany = false): ParsedExperienceBlock | null {
+function parseBlock(lines: CandidateLine[], anchorIndex: number, nextAnchorIndex: number, allowNearbyCompany = false, allowUnmarkedSameLine = false): ParsedExperienceBlock | null {
   const anchor = lines[anchorIndex];
   if (!anchor) return null;
   const period = extractPeriod(anchor.text) ?? extractPeriod(`${anchor.text} ${lines[anchorIndex + 1]?.text ?? ""}`);
-  const sameLine = period ? parseSameLineHeader(anchor.text, period) : null;
+  const sameLine = period ? parseSameLineHeader(anchor.text, period, allowUnmarkedSameLine) : null;
   let organizationLine = sameLine ? null : findAdjacentOrganization(lines, anchorIndex, 1);
   if (!organizationLine && allowNearbyCompany) organizationLine = findNearbyOrganization(lines, anchorIndex);
   const organization = sameLine?.organization ?? organizationLine?.text.trim() ?? "";
   const role = sameLine?.role ?? cleanHeaderRole(period ? removeExact(anchor.text, period) : anchor.text);
   if (!role || !organization || !isPlausibleOrganization(organization)) return null;
   const startIndex = organizationLine ? lines.indexOf(organizationLine) + 1 : anchorIndex + 1;
-  const detectedBoundary = findNextTopLevelBoundary(lines, startIndex, nextAnchorIndex);
+  const detectedBoundary = findNextTopLevelBoundary(lines, startIndex, nextAnchorIndex, allowUnmarkedSameLine);
   const endIndex = Math.min(nextAnchorIndex, detectedBoundary);
   const descriptionLines = lines.slice(startIndex, endIndex).filter((line) => !SECTION_HEADING.test(line.text) && !isPageFooter(line.text));
   const sameLineDescription = sameLine?.description ?? null;
@@ -741,23 +760,23 @@ function parseBlock(lines: CandidateLine[], anchorIndex: number, nextAnchorIndex
   };
 }
 
-function parseSameLineHeader(value: string, period: string): { role: string; organization: string; description: string | null } | null {
+function parseSameLineHeader(value: string, period: string, allowUnmarkedOrganization = false): { role: string; organization: string; description: string | null } | null {
   const periodIndex = value.toLowerCase().indexOf(period.toLowerCase());
   if (periodIndex < 0) return null;
   const before = value.slice(0, periodIndex).replace(/[|,;:\s]+$/, "").trim();
   const after = value.slice(periodIndex + period.length).replace(/^[|,;:\s]+/, "").trim();
   const atMatch = /^(.*?)\s+(?:at|em|@)\s+(.+)$/i.exec(before);
-  if (atMatch && ROLE_TERMS.test(atMatch[1] ?? "") && SAME_LINE_COMPANY_MARKERS.test(atMatch[2] ?? "") && isPlausibleOrganization(atMatch[2] ?? "")) {
+  if (atMatch && ROLE_TERMS.test(atMatch[1] ?? "") && (allowUnmarkedOrganization || SAME_LINE_COMPANY_MARKERS.test(atMatch[2] ?? "")) && isPlausibleOrganization(atMatch[2] ?? "")) {
     return { role: atMatch[1]!.trim(), organization: atMatch[2]!.trim(), description: after || null };
   }
   const commaIndex = before.lastIndexOf(",");
   if (commaIndex > 0) {
     const role = before.slice(0, commaIndex).trim();
     const organization = before.slice(commaIndex + 1).trim();
-    if (ROLE_TERMS.test(role) && SAME_LINE_COMPANY_MARKERS.test(organization) && isPlausibleOrganization(organization)) return { role, organization, description: after || null };
+    if (ROLE_TERMS.test(role) && (allowUnmarkedOrganization || SAME_LINE_COMPANY_MARKERS.test(organization)) && isPlausibleOrganization(organization)) return { role, organization, description: after || null };
   }
   const parts = before.split(/\s+[|]\s+|\s+[-–]\s+/).map((part) => part.trim()).filter(Boolean);
-  if (parts.length >= 2 && ROLE_TERMS.test(parts[0]!) && SAME_LINE_COMPANY_MARKERS.test(parts.at(-1)!) && isPlausibleOrganization(parts.at(-1)!)) {
+  if (parts.length >= 2 && ROLE_TERMS.test(parts[0]!) && (allowUnmarkedOrganization || SAME_LINE_COMPANY_MARKERS.test(parts.at(-1)!)) && isPlausibleOrganization(parts.at(-1)!)) {
     return { role: parts[0]!, organization: parts.at(-1)!, description: after || null };
   }
   return null;
@@ -786,20 +805,40 @@ function findNearbyOrganization(lines: CandidateLine[], anchorIndex: number): Ca
     })();
 }
 
-function findNextTopLevelBoundary(lines: CandidateLine[], startIndex: number, hardEnd: number): number {
+function findNextTopLevelBoundary(lines: CandidateLine[], startIndex: number, hardEnd: number, allowUnmarkedSameLine = false): number {
   for (let index = startIndex; index < hardEnd; index += 1) {
     const candidate = lines[index]!;
     if (NEXT_SECTION.test(candidate.text)) return index;
     const period = extractPeriod(candidate.text);
     if (!period || isBullet(candidate.text)) continue;
-    const sameLine = parseSameLineHeader(candidate.text, period);
+    const sameLine = parseSameLineHeader(candidate.text, period, allowUnmarkedSameLine);
     const nextCompany = findAdjacentOrganization(lines, index, 1);
     if (sameLine || nextCompany) return index;
   }
   return hardEnd;
 }
 
-function locateAnchor(lines: CandidateLine[], experience: StructuredDraft["experiences"][number]): number {
+function locateAnchor(
+  lines: CandidateLine[],
+  experience: StructuredDraft["experiences"][number],
+  sourceRegion?: AdaptiveSourceRegion | null,
+): number {
+  if (sourceRegion) {
+    const regionCenterX = sourceRegion.x + (sourceRegion.width / 2);
+    const regionCenterY = sourceRegion.y + (sourceRegion.height / 2);
+    let nearestIndex = -1;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    lines.forEach((line, index) => {
+      if (line.pageNumber !== sourceRegion.pageNumber) return;
+      const lineCenterY = line.y + (line.height / 2);
+      const horizontallyAligned = regionCenterX >= line.x - 0.02 && regionCenterX <= line.x + line.width + 0.02;
+      const verticallyAligned = regionCenterY >= line.y - 0.02 && regionCenterY <= line.y + line.height + 0.02;
+      if (!horizontallyAligned || !verticallyAligned) return;
+      const distance = Math.abs(lineCenterY - regionCenterY);
+      if (distance < nearestDistance) { nearestDistance = distance; nearestIndex = index; }
+    });
+    if (nearestIndex >= 0) return nearestIndex;
+  }
   const evidenceAnchor = experience.evidenceText.split(/\r?\n/)[0]?.trim();
   if (evidenceAnchor) {
     const exact = lines.findIndex((line) => line.pageNumber === experience.page && comparable(line.text) === comparable(evidenceAnchor));

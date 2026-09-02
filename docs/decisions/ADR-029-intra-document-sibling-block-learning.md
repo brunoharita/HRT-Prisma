@@ -52,7 +52,7 @@ Gates de coluna e seção, comparação estrutural conservadora, deduplicação 
 
 ## Technical impact
 
-`adaptive-resume-extraction` 5.0.0, `extraction-draft` 6.0.0, `person-ingestion` 9.0.0 e `human-profile-review` 6.0.0. O OCR passa a preservar linhas normalizadas. A migration `20260902003617_m5_sibling_block_learning` estende o ledger v2 e cria RPCs v3, mantendo a RPC histórica. A migration `20260902011222_m5_sibling_block_learning_hardening` isola as implementações internas e adiciona validação espacial independente na fronteira pública.
+`adaptive-resume-extraction` 5.0.0, `extraction-draft` 6.0.0, `person-ingestion` 9.0.0 e `human-profile-review` 6.0.0. O OCR passa a preservar linhas normalizadas. A migration `20260902003617_m5_sibling_block_learning` estende o ledger v2 e cria RPCs v3, mantendo a RPC histórica. A migration `20260902011222_m5_sibling_block_learning_hardening` isola as implementações internas e adiciona validação espacial independente na fronteira pública. As migrations `20260902021134_restore_adaptive_page_geometry` e `20260902022059_accept_current_adaptive_field_paths` preservam esse contrato quando a extração parcial delega ao wrapper posterior e aceitam somente os caminhos canônicos, numéricos históricos ou IDs estáveis atuais.
 
 ## Data impact
 
@@ -89,3 +89,4 @@ ADR-016, ADR-017, ADR-018, ADR-020, ADR-023 e ADR-025; `web/src/domain/adaptiveR
 ## Change history
 
 - 2026-09-01: accepted for local implementation and QA-first rollout.
+- 2026-09-02: smoke sintético confirmou dois blocos irmãos fortes e revelou duas compatibilidades obrigatórias: a geometria adaptativa deve sobreviver à recuperação parcial, e uma experiência criada pelo humano deve ser localizada pela região espacial persistida mesmo sem `page` ou `evidenceText` no draft. A ampliação de nomes de organização permanece condicionada à âncora humana; a primeira extração continua conservadora.

@@ -188,8 +188,9 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           extracted: refreshed.extractedData,
           sourceIndex: structuralAnchor.index,
           sourceField: structuralAnchor.field,
+          sourceRegion: spatialAnchorRegion(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? ""),
         });
-        if (report.anchorExperienceId && (report.suggestions.length || report.unresolved.length)) {
+        if (report.anchorExperienceId && hasRecordableSiblingSignature(report) && (report.suggestions.length || report.unresolved.length)) {
           await personIngestionService.recordSiblingScan({
             organizationId: activeMembership.organizationId,
             reviewId: refreshed.id,
@@ -527,6 +528,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
               extracted: refreshed.extractedData,
               sourceIndex,
               sourceField: match[2] as ExperienceFieldName,
+              sourceRegion: spatialAnchorRegion(refreshed, refreshed.reviewedData.experiences[sourceIndex]?.id ?? ""),
             });
             setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
           }
@@ -716,9 +718,19 @@ function findCompletedExperienceChange(
 }
 
 function hasSpatialAnchorEvidence(workspace: ProfileReviewWorkspace, experienceId: string): boolean {
-  if (!experienceId) return false;
+  return spatialAnchorRegion(workspace, experienceId) !== null;
+}
+
+function spatialAnchorRegion(workspace: ProfileReviewWorkspace, experienceId: string) {
+  if (!experienceId) return null;
   const prefix = `experiences.${reviewEntityPathSegment("experience", experienceId)}.`;
-  return workspace.evidenceLinks.some((link) => link.state === "active" && Boolean(link.spatialRegionId) && link.fieldPath.startsWith(prefix));
+  const link = workspace.evidenceLinks.find((candidate) => candidate.state === "active" && Boolean(candidate.spatialRegionId) && candidate.fieldPath.startsWith(prefix));
+  const region = workspace.spatialRegions.find((candidate) => candidate.id === link?.spatialRegionId);
+  return region ? { pageNumber: region.pageNumber, x: region.x, y: region.y, width: region.width, height: region.height } : null;
+}
+
+function hasRecordableSiblingSignature(report: AdaptiveSuggestionReport): boolean {
+  return report.signatureSummary.spatial === true && typeof report.signatureSummary.columnBand === "number";
 }
 
 function primaryEvidenceTarget(fieldPath: string, workspace: ProfileReviewWorkspace | null, preferredKind?: "original" | "reviewer"): Omit<EvidenceNavigationTarget, "nonce"> | null {

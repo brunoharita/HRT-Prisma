@@ -319,6 +319,45 @@ test("a complete human anchor discovers missing comma-header sibling experiences
   assert.equal(draft.experiences.length, 1, "discovery must not mutate or publish the reviewed draft");
 });
 
+test("a human-confirmed same-line pattern recognizes plausible organizations outside the initial marker catalog", () => {
+  const layoutLines = [
+    line("EXPERIÊNCIA PROFISSIONAL", 0.08, 0.08, 0.5, "strong"),
+    line("Gerente de Operacoes, Prisma Labs Jan 2023 - Atual", 0.13, 0.08, 0.82, "strong"),
+    line("• Estruturou rotinas operacionais e indicadores.", 0.16, 0.09, 0.76),
+    line("Coordenadora de Projetos, Prisma Digital Fev 2020 - Dez 2022", 0.25, 0.08, 0.82, "strong"),
+    line("• Planejou cronogramas, riscos e entregas.", 0.28, 0.09, 0.75),
+    line("Analista de Processos, Prisma Consultoria Mar 2017 - Jan 2020", 0.37, 0.08, 0.82, "strong"),
+    line("• Mapeou processos e oportunidades de automacao.", 0.40, 0.09, 0.78),
+    line("FORMAÇÃO", 0.5, 0.08, 0.3, "strong"),
+  ];
+  const page: ExtractedPage = {
+    pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf",
+    usefulCharacterCount: 520, method: "pdfjs", methodVersion: "fixture-layout-v2", layoutLines,
+  };
+  assert.equal(buildAdaptiveExtraction([page]).draft.experiences.length, 0, "initial extraction must remain conservative");
+  const anchor = legacyExperience(0, {
+    role: "Gerente de Operacoes", organization: "Prisma Labs", period: "Jan 2023 - Atual",
+    description: "Estruturou rotinas operacionais e indicadores.", evidenceText: layoutLines[1]!.text, page: 1,
+  });
+  const draft: StructuredDraft = {
+    ...emptyStructuredSummary(), experiences: [anchor], education: [], certifications: [], languages: [], competencies: [],
+    customSections: [], uncertainties: [], notIdentified: [],
+  };
+  const report = proposeSiblingBlockCorrections({ pages: [page], draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "role" });
+  assert.equal(report.suggestions.length, 2);
+  assert.ok(report.suggestions.every((item) => item.classification === "strong"));
+  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["Prisma Digital", "Prisma Consultoria"]);
+
+  const humanAnchor = { ...anchor, evidenceText: "", page: null };
+  const humanDraft = { ...draft, experiences: [humanAnchor] };
+  const spatialReport = proposeSiblingBlockCorrections({
+    pages: [page], draft: humanDraft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "role",
+    sourceRegion: { pageNumber: 1, x: 0.34, y: 0.12, width: 0.16, height: 0.025 },
+  });
+  assert.equal(spatialReport.suggestions.length, 2, "a human-created anchor must be locatable from its persisted spatial evidence");
+  assert.ok(spatialReport.suggestions.every((item) => item.classification === "strong"));
+});
+
 test("new sibling discovery rejects text-only sources and a visually separate column", () => {
   const textPage: ExtractedPage = {
     pageNumber: 1,
@@ -421,6 +460,33 @@ test("adaptive v3 hardening rejects metadata-only and mismatched sibling suggest
   assert.match(migration, /record_profile_review_sibling_scan_v3_impl/);
   assert.match(migration, /apply_profile_review_adaptive_suggestions_v3_impl/);
   assert.match(migration, /from public, anon, authenticated/i);
+});
+
+test("partial recovery preserves adaptive page geometry behind the public RPC boundary", async () => {
+  const migration = await readFile("supabase/migrations/20260902021134_restore_adaptive_page_geometry.sql", "utf8");
+  assert.match(migration, /alter function public\.persist_person_extraction[\s\S]*set schema private/i);
+  assert.match(migration, /revoke all on function private\.persist_person_extraction[\s\S]*from public, anon, authenticated/i);
+  assert.match(migration, /create function public\.persist_person_extraction/i);
+  assert.match(migration, /jsonb_typeof\(coalesce\(page\.value -> 'layout_blocks'/i);
+  assert.match(migration, /adaptive extraction payload exceeds safe limits/i);
+  assert.match(migration, /select \* into result from private\.persist_person_extraction/i);
+  assert.match(migration, /set layout_blocks = coalesce\(payload\.value -> 'layout_blocks'/i);
+  assert.match(migration, /field_evidence = coalesce\(payload\.value -> 'field_evidence'/i);
+  assert.match(migration, /where page\.organization_id = p_organization_id[\s\S]*page\.processing_attempt_id = result\.processing_attempt_id/i);
+  assert.match(migration, /grant execute on function public\.persist_person_extraction[\s\S]*to authenticated/i);
+});
+
+test("adaptive page evidence accepts canonical stable field paths and rejects arbitrary paths", async () => {
+  const migration = await readFile("supabase/migrations/20260902022059_accept_current_adaptive_field_paths.sql", "utf8");
+  assert.match(migration, /create or replace function public\.persist_person_extraction/i);
+  assert.match(migration, /identity\\\.fullName/);
+  assert.match(migration, /keyResults\\\.result_\[a-z0-9\]\{8,64\}\\\.value/);
+  assert.match(migration, /experiences\\\.\(\[0-9\]\+\|experience_\[a-z0-9\]\{8,64\}\)/);
+  assert.match(migration, /education\\\.\(\[0-9\]\+\|education_\[a-z0-9\]\{8,64\}\)/);
+  assert.match(migration, /customSections\\\./);
+  assert.match(migration, /adaptive field evidence is invalid/i);
+  assert.match(migration, /select \* into result from private\.persist_person_extraction/i);
+  assert.doesNotMatch(migration, /\|[^']*arbitrary/i);
 });
 
 test("structured summary migration keeps contact private and rejects PII promotion", async () => {
