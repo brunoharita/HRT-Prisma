@@ -37,4 +37,14 @@ Usar uma Pessoa sintética do Prisma-QA com Perfil publicado e importação parc
 - Implementação local: concluída.
 - Gate `pnpm run validate`: aprovado com lint de 248 arquivos, foundation, Context Pack, dois typechecks, build web, 157 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`.
 - Backend/migration: não aplicável.
-- Smoke visual autenticado: pendente de sessão ativa no navegador interno.
+- Smoke visual autenticado: aprovado com a Pessoa real Bruno Harita, Perfil v1 publicado e documento v2 aguardando revisão.
+
+## Evidência visual autenticada
+
+- `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`: zero overflow horizontal global, controle horizontalmente fora da tela ou overlay de erro do Vite.
+- A primeira execução em `390x844` revelou rolagem horizontal na navegação das perspectivas; a barra foi substituída por três opções compactas e a correção foi revalidada nas cinco resoluções.
+- `Visão geral`: pendência acionável antes do Perfil vigente, conhecimento publicado e resumo derivados de dados reais.
+- `Documentos e versões`: dois documentos reais, seleção responsiva, painel contextual e Perfil vigente preservado.
+- `Nova importação`: entrada por PDF ou texto, processamento e extração preservados sem mutação durante o smoke.
+- `Abrir revisão M5` resolveu a rota da Pessoa `6e810283-89fa-4906-a20f-b31471f7aebd`, documento `c961c3db-b752-4f51-8d54-5843c1819d4b` e revisão `0a08caa5-ed45-4226-8ea2-d0a8923cfea8`.
+- Nenhum descarte, aprovação ou publicação foi acionado.

@@ -4404,8 +4404,34 @@ textarea {
   .prisma-person-center-header__actions,
   .prisma-person-center-header__actions .ant-btn { width: 100%; }
   .prisma-person-center-navigation > .ant-tabs-nav { margin-top: 10px; }
-  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-nav-wrap { overflow: auto; }
-  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-nav-list { min-width: max-content; }
+  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-nav-wrap { overflow: visible; }
+  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-nav-list {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+    transform: none !important;
+  }
+  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-tab {
+    justify-content: center;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 10px 4px !important;
+    border-radius: 8px 8px 0 0;
+  }
+  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-tab-active {
+    background: #eef4ff;
+    box-shadow: inset 0 -2px #1677ff;
+  }
+  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-tab-btn {
+    white-space: normal;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-ink-bar,
+  .prisma-person-center-navigation > .ant-tabs-nav .ant-tabs-nav-operations { display: none !important; }
   .prisma-person-action-center,
   .prisma-person-current-profile { padding: 17px; border-radius: 13px; }
   .prisma-person-action-card { grid-template-columns: minmax(0, 1fr); padding: 15px; }
