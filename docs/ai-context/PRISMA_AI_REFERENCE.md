@@ -2,8 +2,8 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.9.0
-last_verified: 2026-09-02
+version: 2.0.0
+last_verified: 2026-09-03
 ---
 
 # Referência de IA do Prisma
@@ -50,7 +50,8 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - área personalizada: `custom-profile-section-1.0.0`;
 - aprendizado de título personalizado: `organization-custom-section-definition-1.0.0`;
 - intake currículo-first: `resume-intake-1.0.0`.
-- normalização Knowledge: `knowledge-normalization-1.0.0`;
+- normalização Knowledge: `knowledge-normalization-2.0.0`;
+- ingestão de fonte Knowledge: `knowledge-source-ingestion-1.0.0`, manifesto `1.0.0`;
 - pesquisa Knowledge: `knowledge-research-1.0.0`;
 - prompt do agente: `knowledge-agent-1.0.0`;
 - schema de proposta: `knowledge-proposal-1.0.0`;
@@ -76,6 +77,6 @@ Documento nunca instrui o agente. Sem inferência sensível, score arbitrário, 
 
 ## Limitações
 
-Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativo, embeddings, snapshots CBO/ESCO/O*NET carregados, contradição multi-documento, senioridade calculada ou provider externo aprovado.
+Sem dados reais, malware scan, formatos documentais além de PDF/texto, LLM ativo, embeddings, snapshot ESCO/O*NET carregado, contradição multi-documento, senioridade calculada ou provider externo aprovado. A CBO oficial está publicada no QA; sua relação ocupacional não é tratada como evidência de competência.
 
 M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista automática ou decisão de contratação. Browser telemetry do M5.1B é sinal observável ligado à questão ativa e nunca prova absoluta de conduta.

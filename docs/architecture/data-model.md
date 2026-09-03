@@ -22,6 +22,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
 | Avaliação | `match_evaluations` | Contextual e versionada |
 | M5.1 Verificação de Competências | `verification_*`, `assessment_*`, `competency_demonstrated_evidence` | preparação, execução, ledger factual, avaliação versionada e evidência independente |
+| Normalização Knowledge M5.2 | `knowledge_source_versions`, `knowledge_source_stage_records`, `knowledge_concepts`, `knowledge_terms`, `knowledge_relations`, `knowledge_external_mappings`, `knowledge_observations`, `knowledge_inbox` | snapshot oficial imutável, staging/diff, termo literal, conceito resolvido, ambiguidade e decisão humana |
 | Telemetria | `ai_usage_events` | Custo, latência, versão e erro |
 | Auditoria de usuários | `platform_user_audit_events` | Senha e tokens nunca entram no log material |
 | Timeline de ingestão | `person_ingestion_events` | Mudanças de documento, tentativa e perfil sem copiar o conteúdo integral |
@@ -61,6 +62,8 @@ O PDF original fica no bucket privado `person-documents`, limitado a 15 MB e MIM
 ## JSONB
 
 Identidade, autorização e relações permanecem normalizadas. Partes evolutivas de perfil e avaliação usam JSONB junto com tabelas relacionais de evidência, inferência e competência. JSONB não pode esconder authority, tenant, versão ou proveniência material.
+
+`knowledge_source_versions.is_current` identifica a única versão publicada ativa de cada fonte; manifestos registram arquivo, tamanho, encoding, contagem e checksum. Termos e relações apontam à versão de origem. `knowledge_observations` pode referenciar evidência M2 ou review M5, preserva texto literal, perfil, método e versão resolutora. `resolved` exige conceito; `ambiguous` e `unresolved` proíbem conceito. `knowledge_inbox.observation_ids` liga a decisão humana às ocorrências sem copiar currículo integral.
 
 ## M5.1 implementado localmente
 

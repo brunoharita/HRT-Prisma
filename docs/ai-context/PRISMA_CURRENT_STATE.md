@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.14.0
-last_verified: 2026-09-02
+version: 2.15.0
+last_verified: 2026-09-03
 ---
 
 # Estado atual do Prisma
@@ -11,7 +11,7 @@ last_verified: 2026-09-02
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/education-academic-classification`, dedicada à classificação acadêmica estruturada na extração, revisão M5, publicação Delta, Central da Pessoa e contexto de Documentos.
+- Branch de entrega em validação: `codex/m5-2-knowledge-normalization`, dedicada à ingestão oficial versionada, resolução determinística, Inbox humana, Perfil e busca por conceito.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -52,6 +52,7 @@ last_verified: 2026-09-02
 - Após confirmação transacional da aprovação, a revisão retorna automaticamente para `Processamento e revisões`. O caminho de erro permanece na tela atual, preservando o rascunho e a mensagem acionável; a navegação não depende de recarregar uma revisão que já deixou o estado `draft`.
 - Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
+- M5.2 implementado localmente e ativo no Prisma-QA: `knowledge-normalization-2.0.0`, source ingestion 1.0.0, manifest 1.0.0 e Knowledge UI 2.0.0 estendem M4 com staging/diff/publicação humana, source version corrente, observação por Perfil/evidência, alias Organization, proposta, busca por conceito e apresentação do termo original. A CBO `CBO 2002-2025-06-06` está publicada; ESCO v1.2.1 permanece catalogada porque o download oficial exige etapa humana.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação; pesquisa externa permanece desativada por ausência deliberada de configuração/credencial/orçamento.
 - Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.
 - M5.1A prepara o instrumento. M5.1B executa a verificação e produz Evidência Demonstrada. M5.1C governa cobertura, geração fake, boundary externa desativada, propostas, deduplicação, revisão, publicação, budget e analytics. O uso permanece sintético e interno/QA; nenhuma chamada viva de IA ou calibração real existe.
@@ -68,7 +69,7 @@ last_verified: 2026-09-02
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 206 testes técnicos compõem a suíte local, incluindo compatibilidade histórica da publicação, foco em campo pendente, classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, feedback operacional acionável e segurança das migrations.
+- 213 testes técnicos compõem a suíte local, incluindo compatibilidade histórica da publicação, foco em campo pendente, classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, normalização Knowledge M5.2, feedback operacional acionável e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -99,6 +100,7 @@ last_verified: 2026-09-02
 - Consulta de `platform_users`, `organization_memberships` e domínio protegida por sessão Supabase validada com `getClaims()` e RLS ou boundary server-side, conforme a operação.
 - Migrations M5.1A `20260901082542_m51a_verification_intelligence` e `20260901111841_m51a_grant_hardening` com nove tabelas públicas versionadas, RLS, grants explícitos para `authenticated`, revogação de `anon`, hardening de grants herdados, helper privado de policy/suficiência, RPCs `ensure_m51a_demo_need`, `load_m51a_verification_workspace` e `prepare_m51a_assessment`, catálogo global sintético SQL avançado e auditoria metadata-only.
 - Migrations M5.1B `20260901115938_m51b_verification_execution`, `20260901124012_m51b_submission_dimension_coverage_fix` e `20260901124345_m51a_workspace_item_bank_summary_fix` ativas no Prisma-QA, com dez tabelas públicas protegidas, snapshots de questões, respostas versionadas, eventos append-only, avaliação transacional, Evidência Demonstrada e correções fail-closed descobertas no smoke remoto. A Edge Function `assessment-access` está publicada e media toda ação da Pessoa por token, mantendo `anon` sem acesso direto.
+- Migrations M5.2 `20260903094700_m52_knowledge_normalization`, `20260903100340_m52_knowledge_stage_rpc_fix`, `20260903101644_m52_knowledge_observation_state_fix` e `20260903102721_m52_knowledge_publish_mapping_fix` ativas no Prisma-QA. Elas adicionam staging RLS, manifesto/versionamento, resolver por escopo do termo, captura não retroativa, Inbox humana, busca canônica, métricas e fixes forward-only para conflito PL/pgSQL, compatibilidade do estado `resolved` e publicação sem tabela temporária.
 - Migrations M5.1C `20260901145444`, `20260901150902`, `20260901152207`, `20260901152216`, `20260901152451` e `20260901153011` ativas no Prisma-QA, com governança do Item Bank, hardening transacional, estados de calibração, analytics, budget reservation/release, deduplicação lexical e audit fix. `assessment-item-generator` v2 está publicada com JWT obrigatório e chamada externa desativada.
 
 ## Evidência remota
@@ -122,6 +124,7 @@ last_verified: 2026-09-02
 - Auditoria pós-rollout confirmou zero versões/tentativas/perfis atuais duplicados, RLS nas quatro tabelas M2-C e zero foreign keys novas sem índice de cobertura.
 - Intake currículo-first aplicado em QA em 2026-08-26; transação sintética comprovou replay sem duplicação, criação e vínculo documentais atômicos, candidato duplicado, DML direto negado, `Member` negado e auditoria sem texto-fonte.
 - Movimento 4 aplicado em QA em 2026-08-26 pelas migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls`; 16 tabelas estão com RLS, 17 policies, zero grants anônimos de RPC Knowledge, zero colunas vetoriais e CBO/ESCO/O*NET catalogados com versões sem checksum inventado.
+- M5.2 aplicado em QA em 2026-09-03: o snapshot CBO oficial publicou 3.320 conceitos, 11.097 termos e 2.694 relações. Smoke transacional com rollback encontrou duas Pessoas por um conceito CBO apesar de termos literais diferentes, preservou ambiguidade/unresolved, comprovou alias Organization sem vazamento, escrita direta de staging negada e Perfil aprovado imutável.
 - Transações sintéticas com rollback comprovaram precedência Organization sobre Global, fallback Global, falha segura para aliases ambíguos, leitura Global por autenticado sem vínculo e ocultação de Knowledge de outra organização.
 - Edge Function `knowledge-agent` v2 está `ACTIVE` com `verify_jwt=true`; não houve chamada externa porque flag, modelo, credencial e budgets continuam intencionalmente inativos.
 - M5 aplicado em QA em 2026-08-27: três tabelas com RLS e DML direto revogado; 18 evidências originais vinculadas sem coordenadas inventadas; zero regiões ou vínculos inválidos.
@@ -147,7 +150,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - API HTTP/BFF.
 - Malware scan/quarentena.
 - Embeddings vetoriais e LLM externo.
-- Snapshots CBO/ESCO/O*NET efetivamente carregados, validados, diffados e publicados; o catálogo existe sem checksum fictício.
+- Snapshot ESCO v1.2.1 e O*NET efetivamente carregados. A CBO já está validada, diffada e publicada; O*NET continua fora do escopo M5.2.
 - Auditoria de visualização/exportação além do domínio de usuários.
 - Rate limit prolongado e negação cross-tenant dedicada para o M5.1B. As superfícies pública e autenticada do operador já foram validadas em desktop e `390x844`; a fronteira conectada, o CORS, os grants negativos e o slice sintético também foram comprovados.
 - Ambiente de produção isolado, deployment e rollback automatizados.
@@ -180,7 +183,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O schema do refinamento espacial 1.2 está ativo em QA e o frontend permanece local. A cobertura determinística e as transações revertidas comprovam subtração, limites do contrato, autorização e ausência de resíduos; ainda falta smoke visual autenticado com sobreposição real no PDF.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - O CI usa a política fail-closed do pnpm para scripts de instalação de dependências; o `postinstall` não funcional do `tesseract.js` foi revisado e explicitamente negado em `pnpm-workspace.yaml`. A geração do Context Pack normaliza finais de linha para manter hash e conteúdo determinísticos em Windows e Linux.
-- Os snapshots oficiais CBO/ESCO/O*NET ainda não foram baixados, validados por checksum, diffados ou publicados. O catálogo e os adapters estão prontos, sem simular uma carga que não ocorreu.
+- O snapshot oficial ESCO v1.2.1 ainda não foi recebido: o portal exige aceite, e-mail e link. Importer e fixture PT/EN estão prontos, mas nenhum checksum ou status foi inventado. O snapshot CBO está publicado e O*NET foi explicitamente adiado.
 - Licenças e atribuições CBO/ESCO/O*NET estão catalogadas, mas a redistribuição de pacotes adaptados, especialmente CBO CC BY-ND, exige revisão jurídica antes de qualquer exposição externa.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
@@ -210,3 +213,5 @@ Também em 2026-09-02, o contrato local `decision-centered-interaction` 1.0.0 re
 Ainda em 2026-09-02, `competency-list-segmentation` 1.0.0 passou a preservar a estrutura de listas selecionadas no currículo. `competency-list-spatial-v1` separa células pela geometria real, aceita delimitadores explícitos, conserva competências compostas e mostra a lista em chips antes de aplicar; múltiplos blocos sem fronteira confiável não podem ser gravados como uma única competência. O editor direto recebeu os mesmos separadores. A mudança é local e não altera schema, RPC, RLS, grants ou payload de evidência. `pnpm run validate` aprovou lint de 262 arquivos, fundação, Context Pack, dois typechecks, build web, 200 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. O smoke autenticado comprovou três chips separados para `Product Ownership; Gestão de Processos; BPM/BPMN`, sem salvamento; o documento QA disponível não contém a mesma grade da ocorrência original, portanto o smoke específico da separação geométrica permanece pendente.
 
 Ainda em 2026-09-02, `structured-resume-summary` 1.1.0 consolidou `Resumo profissional` como campo explícito da narrativa na aba Resumo. O runtime `prisma-layout-adaptive-v7` reconhece aliases PT/EN, recupera cabeçalho e conteúdo fundidos pelo PDF e interrompe a captura na próxima seção curricular, sem misturar expertise, competências, formação ou experiências. Ausência continua nula e é apresentada em `notIdentified`; não há síntese automática. Três novas regressões determinísticas cobrem alias e limite, linha fundida e ausência segura. O smoke autenticado confirmou a nova seção visual e reproduziu, sem salvar, a contaminação `EXPERTISE TÉCNICA` preservada no draft anterior; a correção vale para novos processamentos versionados, sem reescrever dados históricos silenciosamente. `pnpm run validate` aprovou lint de 262 arquivos, fundação, Context Pack, dois typechecks, build web, 203 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`.
+
+Em 2026-09-03, a branch `codex/m5-2-knowledge-normalization` operacionalizou o M5.2 sem reescrever Perfis históricos. O snapshot oficial CBO `CBO 2002-2025-06-06` foi validado por encoding, headers, campos obrigatórios, contagens e SHA-256, passou por staging, diff e publicação humana auditada no Prisma-QA e criou Knowledge Global v1 com 3.320 conceitos, 11.097 termos e 2.694 relações. A repetição da publicação retornou `reused = true`. Um smoke sintético com rollback comprovou resolução canônica por termos diferentes, ambiguidade preservada, Inbox para termo não resolvido, alias Organization isolado, Perfil imutável, observações rastreáveis e escrita direta no staging negada. O importer ESCO PT/EN está testado por URI estável, mas o snapshot oficial continua pendente da etapa humana de aceite e entrega do portal europeu. O frontend permanece local, e a inspeção visual autenticada não ocorreu porque o navegador disponível não continha sessão reutilizável.

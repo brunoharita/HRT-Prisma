@@ -92,6 +92,19 @@ export interface ProfileCompetency {
   classification: "explicit" | "inferred";
 }
 
+export interface ProfileKnowledgeResolution {
+  observationId: string;
+  originalTerm: string;
+  state: "resolved" | "ambiguous" | "unresolved";
+  canonicalLabel: string | null;
+  conceptId: string | null;
+  method: string;
+  sourceName: string | null;
+  sourceVersion: string | null;
+  externalId: string | null;
+  externalUri: string | null;
+}
+
 export interface PrivateContact {
   email: string | null;
   phone: string | null;
@@ -104,6 +117,7 @@ export interface PersonProfileView {
   evidence: ProfileEvidence[];
   inferences: ProfileInference[];
   competencies: ProfileCompetency[];
+  normalizedKnowledge: ProfileKnowledgeResolution[];
   privateContact: PrivateContact | null;
 }
 

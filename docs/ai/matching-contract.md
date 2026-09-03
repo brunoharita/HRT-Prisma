@@ -45,3 +45,7 @@ Competências transferíveis são declaradas na vaga. O mecanismo não inventa a
 ## Versionamento
 
 Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM também deverá persistir `promptVersion` e `modelVersion`.
+
+## Normalização conceitual M5.2
+
+Busca e matching podem consumir `concept_id` apenas de observações `resolved` ligadas ao Perfil vigente. O texto original e sua evidência continuam sendo o fato; o conceito é uma resolução versionada. `ambiguous`, `unresolved`, prefixo, substring e relações `is_a/related_to` não satisfazem requisitos e não são convertidos em evidência. A ausência de resolução não é ausência da competência e não bloqueia o Perfil.

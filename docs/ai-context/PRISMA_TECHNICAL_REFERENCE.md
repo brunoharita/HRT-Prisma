@@ -2,8 +2,8 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.8.0
-last_verified: 2026-09-01
+version: 1.9.0
+last_verified: 2026-09-03
 ---
 
 # Referência técnica do Prisma
@@ -26,7 +26,7 @@ O aprendizado estrutural v3 preserva linhas PDF.js/Tesseract, aprende assinatura
 
 Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake/Knowledge.
 
-O Movimento 4 adiciona 16 tabelas Knowledge, RLS global/tenant, source versions, change sets, resolução com precedência, Inbox, research/proposals, impacts e jobs. Reinterpretação prepara um draft `profile_reviews` e a promoção continua em M2-C. As migrations `20260826204413_m4_knowledge_foundation` e `20260826205027_m4_knowledge_indexes_rls` estão aplicadas ao QA.
+O Movimento 4 adiciona a fundação Knowledge. O M5.2 a estende com source ingestion por CSV, SHA-256, manifestos, staging RLS, diff, publicação humana, source version corrente, observações ligadas ao Perfil/review/evidência, resolver 2.0.0, Inbox de aliases/propostas e busca de Pessoas por conceito. As migrations `20260903094700`, `20260903100340`, `20260903101644` e `20260903102721` estão ativas no QA; CBO está publicada e ESCO permanece bloqueada no download oficial.
 
 O M5.1 possui M5.1A para preparação, M5.1B para execução e M5.1C para governança do Item Bank, ativos no Prisma-QA. M5.1C adiciona oito tabelas iniciais de governança, RPCs idempotentes, deduplicação lexical, ledger de budget, snapshots analíticos tenant-scoped e `assessment-item-generator` v2 com JWT. O provider fake está ativo; a geração externa está implantada e fail-closed. O rollout conectado foi comprovado com dados sintéticos; o smoke visual M5.1C nos cinco viewports permanece pendente.
 
@@ -52,7 +52,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md`. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md` e ADR-032. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029.
 
 ## Operação
 

@@ -185,7 +185,7 @@ export const prismaRepository: PrismaDataRepository = {
 
     const profileRow = await loadCurrentProfileRow(organizationId, personId);
     const profile = profileRow ? decodeProfile(profileRow, person.full_name) : null;
-    const [evidenceResult, inferenceResult, competencyResult, contactResult] = await Promise.all([
+    const [evidenceResult, inferenceResult, competencyResult, knowledgeResult, contactResult] = await Promise.all([
       supabase
         .from("evidence")
         .select("id, kind, fact, quoted_text, source_page, source_block, extraction_version")
@@ -199,6 +199,7 @@ export const prismaRepository: PrismaDataRepository = {
         .eq("person_id", personId)
         .order("created_at", { ascending: true }),
       profileRow ? loadCompetencies(organizationId, profileRow.id) : Promise.resolve([]),
+      profileRow ? loadKnowledgeResolutions(organizationId, profileRow.id) : Promise.resolve([]),
       canReadPrivateContact(role) ? loadPrivateContact(organizationId, personId) : Promise.resolve(null),
     ]);
     throwIfError(evidenceResult.error, "Não foi possível carregar as evidências do perfil.");
@@ -224,6 +225,7 @@ export const prismaRepository: PrismaDataRepository = {
         inferenceVersion: item.inference_version,
       })),
       competencies: competencyResult,
+      normalizedKnowledge: knowledgeResult,
       privateContact: contactResult,
     } satisfies PersonProfileView;
   },
@@ -241,6 +243,54 @@ async function loadCurrentProfileRow(organizationId: string, personId: string) {
     .maybeSingle();
   throwIfError(error, "Não foi possível carregar o perfil profissional estruturado.");
   return data;
+}
+
+async function loadKnowledgeResolutions(organizationId: string, profileId: string) {
+  const { data: observations, error } = await supabase
+    .from("knowledge_observations")
+    .select("id, original_term, resolution_state, concept_id, normalization_method, resolution_source_version_id")
+    .eq("organization_id", organizationId)
+    .eq("profile_id", profileId)
+    .order("original_term");
+  throwIfError(error, "Não foi possível carregar a normalização do perfil.");
+  const rows = observations ?? [];
+  const conceptIds = [...new Set(rows.flatMap((row) => row.concept_id ? [row.concept_id] : []))];
+  const { data: concepts, error: conceptError } = conceptIds.length
+    ? await supabase.from("knowledge_concepts").select("id, canonical_label").in("id", conceptIds)
+    : { data: [], error: null };
+  throwIfError(conceptError, "Não foi possível resolver os conceitos do perfil.");
+  const { data: mappings, error: mappingError } = conceptIds.length
+    ? await supabase.from("knowledge_external_mappings").select("concept_id, source_id, source_version_id, external_id, external_uri").in("concept_id", conceptIds)
+    : { data: [], error: null };
+  throwIfError(mappingError, "Não foi possível carregar a origem dos conceitos.");
+  const currentMappings = mappings ?? [];
+  const versionIds = [...new Set(currentMappings.map((mapping) => mapping.source_version_id))];
+  const sourceIds = [...new Set(currentMappings.map((mapping) => mapping.source_id))];
+  const [versionResult, sourceResult] = await Promise.all([
+    versionIds.length ? supabase.from("knowledge_source_versions").select("id, external_version, is_current").in("id", versionIds) : Promise.resolve({ data: [], error: null }),
+    sourceIds.length ? supabase.from("knowledge_sources").select("id, name").in("id", sourceIds) : Promise.resolve({ data: [], error: null }),
+  ]);
+  throwIfError(versionResult.error, "Não foi possível carregar a versão dos conceitos.");
+  throwIfError(sourceResult.error, "Não foi possível carregar a fonte dos conceitos.");
+  const labels = new Map((concepts ?? []).map((concept) => [concept.id, concept.canonical_label]));
+  const versions = new Map((versionResult.data ?? []).map((version) => [version.id, version]));
+  const sources = new Map((sourceResult.data ?? []).map((source) => [source.id, source.name]));
+  return rows.map((row) => {
+    const mapping = currentMappings.find((item) => item.concept_id === row.concept_id && versions.get(item.source_version_id)?.is_current)
+      ?? currentMappings.find((item) => item.concept_id === row.concept_id);
+    return {
+      observationId: row.id,
+      originalTerm: row.original_term,
+      state: row.resolution_state as "resolved" | "ambiguous" | "unresolved",
+      canonicalLabel: row.concept_id ? labels.get(row.concept_id) ?? null : null,
+      conceptId: row.concept_id,
+      method: row.normalization_method,
+      sourceName: mapping ? sources.get(mapping.source_id) ?? null : null,
+      sourceVersion: mapping ? versions.get(mapping.source_version_id)?.external_version ?? null : null,
+      externalId: mapping?.external_id ?? null,
+      externalUri: mapping?.external_uri ?? null,
+    };
+  });
 }
 
 async function loadCompetencies(organizationId: string, profileId: string) {

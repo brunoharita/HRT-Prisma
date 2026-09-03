@@ -200,6 +200,11 @@ export const personIngestionService = {
       documentsByPerson.set(document.person_id, timeline);
     }
     const normalizedSearch = normalizeSearch(search);
+    const knowledgeMatches = normalizedSearch
+      ? await supabase.rpc("search_people_by_knowledge_concept", { p_organization_id: organizationId, p_query: search })
+      : { data: [], error: null };
+    throwIfError(knowledgeMatches.error, "Não foi possível pesquisar Pessoas por conceito profissional.");
+    const knowledgePersonIds = new Set((knowledgeMatches.data ?? []).map((match) => match.person_id));
     return rows.map((person) => {
       const timeline = documentsByPerson.get(person.id) ?? [];
       return toPersonSummary(person, privateByPerson.get(person.id), {
@@ -207,7 +212,7 @@ export const personIngestionService = {
         documents: timeline,
       });
     })
-      .filter((person) => !normalizedSearch || normalizeSearch([
+      .filter((person) => !normalizedSearch || knowledgePersonIds.has(person.id) || normalizeSearch([
         person.fullName,
         person.privateData.email,
         person.privateData.phoneE164,

@@ -41,6 +41,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-029](ADR-029-intra-document-sibling-block-learning.md) | accepted | Deterministic intra-document learning and governed sibling block discovery |
 | [ADR-030](ADR-030-decision-centered-interaction.md) | accepted | Minimum human intervention and non-blocking advisory interaction |
 | [ADR-031](ADR-031-spatial-list-segmentation.md) | accepted | Deterministic competency-list segmentation from explicit delimiters and real document geometry |
+| [ADR-032](ADR-032-versioned-official-knowledge-source-ingestion.md) | accepted | Versioned CBO/ESCO ingestion and deterministic concept normalization |
 
 ## Rules
 

@@ -25,6 +25,7 @@ test("organization Knowledge overlays Global without mutating it", () => {
   const tenantA = resolveKnowledgeTerm("Microsoft PBI", "tenant-a", catalog);
   const tenantB = resolveKnowledgeTerm("Microsoft PBI", "tenant-b", catalog);
   assert.equal(tenantA.concept?.id, "org-power-bi");
+  assert.equal(tenantA.state, "resolved");
   assert.equal(tenantA.method, "organization_exact");
   assert.equal(tenantB.concept?.id, "global-power-bi");
   assert.equal(catalog.concepts[0]?.canonicalLabel, "Microsoft Power BI");

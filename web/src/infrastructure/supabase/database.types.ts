@@ -501,7 +501,8 @@ export interface Database {
         id: string; source_id: string; external_version: string; release_date: string | null; retrieval_date: string | null;
         checksum_sha256: string | null; format: string; license: string | null; import_status: string;
         counts: Json; warnings: Json; previous_version_id: string | null; raw_storage_path: string | null;
-        created_at: string; published_at: string | null;
+        created_at: string; published_at: string | null; official_url: string | null; manifest: Json;
+        validation_summary: Json; is_current: boolean; validated_at: string | null; staged_at: string | null;
       }>;
       knowledge_concepts: Table<{
         id: string; scope: Database["public"]["Enums"]["knowledge_scope"]; organization_id: string | null;
@@ -516,7 +517,36 @@ export interface Database {
         first_seen_at: string; last_seen_at: string; occurrence_count: number;
         status: Database["public"]["Enums"]["knowledge_inbox_status"];
         candidate_concept_ids: string[]; evidence_reference_ids: string[]; cooldown_until: string | null;
-        created_by_auth_user_id: string | null;
+        created_by_auth_user_id: string | null; observation_ids: string[];
+      }>;
+      knowledge_terms: Table<{
+        id: string; concept_id: string; scope: Database["public"]["Enums"]["knowledge_scope"];
+        organization_id: string | null; term: string; normalized_term: string; language: string;
+        term_type: string; source_id: string | null; source_version_id: string | null;
+        status: Database["public"]["Enums"]["knowledge_status"]; ambiguous: boolean; version: number;
+        approved_by_auth_user_id: string | null; created_at: string;
+      }>;
+      knowledge_relations: Table<{
+        id: string; source_concept_id: string; target_concept_id: string;
+        relation_type: Database["public"]["Enums"]["knowledge_relation_type"];
+        scope: Database["public"]["Enums"]["knowledge_scope"]; organization_id: string | null;
+        source_id: string | null; source_version_id: string | null; provenance: Json;
+        status: Database["public"]["Enums"]["knowledge_status"]; version: number;
+        approved_by_auth_user_id: string | null; created_at: string;
+      }>;
+      knowledge_external_mappings: Table<{
+        id: string; concept_id: string; source_id: string; source_version_id: string;
+        external_id: string; external_uri: string | null;
+        mapping_type: Database["public"]["Enums"]["knowledge_mapping_type"]; provenance: Json; created_at: string;
+      }>;
+      knowledge_observations: Table<{
+        id: string; organization_id: string; person_id: string; evidence_id: string | null;
+        profile_id: string | null; review_id: string | null; evidence_link_id: string | null;
+        source_field_path: string | null; original_term: string; normalized_term: string; language: string;
+        resolution_state: string; concept_id: string | null; candidate_concept_ids: string[];
+        normalization_method: string; knowledge_global_version: number; knowledge_organization_version: number | null;
+        resolution_source_version_id: string | null; resolution_method_version: string;
+        resolved_at: string | null; resolved_by_auth_user_id: string | null; created_at: string;
       }>;
       knowledge_proposals: Table<{
         id: string; inbox_id: string; research_run_id: string | null; scope: Database["public"]["Enums"]["knowledge_scope"];
@@ -1278,6 +1308,26 @@ export interface Database {
         Args: { p_organization_id: string; p_impact_id: string; p_idempotency_key: string };
         Returns: Array<{ job_id: string; status: string; reused: boolean }>;
       };
+      suggest_knowledge_concepts: {
+        Args: { p_organization_id: string; p_query: string; p_limit?: number };
+        Returns: Array<{ concept_id: string; canonical_label: string; concept_type: Database["public"]["Enums"]["knowledge_concept_type"];
+          concept_scope: Database["public"]["Enums"]["knowledge_scope"]; description: string; aliases: string[];
+          source_name: string | null; source_version: string | null; external_id: string | null; external_uri: string | null; suggestion_method: string }>;
+      };
+      resolve_knowledge_inbox_alias: {
+        Args: { p_inbox_id: string; p_concept_id: string; p_scope: Database["public"]["Enums"]["knowledge_scope"]; p_reason: string };
+        Returns: Array<{ inbox_id: string; concept_id: string; knowledge_version: number; observations_updated: number }>;
+      };
+      propose_knowledge_concept_from_inbox: {
+        Args: { p_inbox_id: string; p_scope: Database["public"]["Enums"]["knowledge_scope"]; p_canonical_label: string;
+          p_concept_type: Database["public"]["Enums"]["knowledge_concept_type"]; p_description: string; p_reason: string };
+        Returns: string;
+      };
+      search_people_by_knowledge_concept: {
+        Args: { p_organization_id: string; p_query: string };
+        Returns: Array<{ person_id: string; profile_id: string; full_name: string; concept_id: string; canonical_label: string;
+          observed_terms: string[]; source_name: string | null; source_version: string | null; external_id: string | null; external_uri: string | null }>;
+      };
     };
       complete_m51c_external_generation: {
         Args: { p_proposals: Json; p_request_id: string; p_usage: Json }
@@ -1331,6 +1381,8 @@ export interface Database {
       knowledge_scope: "global" | "organization";
       knowledge_status: "draft" | "approved" | "deprecated" | "rejected";
       knowledge_concept_type: "occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification";
+      knowledge_relation_type: "is_a" | "part_of" | "related_to" | "requires" | "uses" | "applies_to" | "supports" | "equivalent_to" | "broader_than" | "narrower_than";
+      knowledge_mapping_type: "exact" | "close" | "broader" | "narrower" | "related";
       knowledge_source_class: "official_occupational_taxonomy" | "official_vendor_documentation" | "official_certification_issuer" | "official_standard_body" | "official_government_or_public_body" | "recognized_nonprofit_foundation" | "secondary_recognized_source";
       knowledge_inbox_status: "unresolved" | "research_queued" | "researching" | "proposal_ready" | "awaiting_human_review" | "approved" | "rejected" | "ambiguous" | "deferred" | "failed" | "budget_limited";
       knowledge_reinterpretation_policy: "off" | "manual" | "daily" | "weekly" | "monthly" | "custom";

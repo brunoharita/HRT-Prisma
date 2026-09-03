@@ -105,10 +105,16 @@ function ProfileContent({ membership, view }: { membership: OrganizationMembersh
             ]} />
           </ProfileSection>
           <ProfileSection title="Competências e contextos">
-            <TagList values={[
-              ...view.competencies.map((item) => `${item.name} · ${item.classification === "explicit" ? "explícita" : "inferida"}`),
-              ...profile.professionalContexts,
-            ]} />
+            {view.normalizedKnowledge.length ? <Space direction="vertical" size="small" style={{ width: "100%" }}>
+              {view.normalizedKnowledge.map((item) => <article key={item.observationId}>
+                <Space wrap>
+                  <Tag color={item.state === "resolved" ? "green" : item.state === "ambiguous" ? "gold" : "default"}>{item.state === "resolved" ? item.canonicalLabel : item.state === "ambiguous" ? "Ambíguo" : "Não resolvido"}</Tag>
+                  <Typography.Text>Fonte no currículo: <strong>{item.originalTerm}</strong></Typography.Text>
+                </Space>
+                {item.sourceName ? <Typography.Text type="secondary"><small>{item.sourceName} {item.sourceVersion}{item.externalId ? ` · ${item.externalId}` : ""}</small></Typography.Text> : null}
+              </article>)}
+            </Space> : <TagList values={view.competencies.map((item) => `${item.name} · ${item.classification === "explicit" ? "explícita" : "inferida"}`)} />}
+            {profile.professionalContexts.length ? <div style={{ marginTop: 12 }}><TagList values={profile.professionalContexts} /></div> : null}
           </ProfileSection>
           {profile.customSections.map((section) => (
             <ProfileSection key={section.id} title={section.name}>

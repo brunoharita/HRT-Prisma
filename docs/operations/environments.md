@@ -10,7 +10,7 @@ Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento deter
 
 ## QA
 
-Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e contém foundation, M2-A, M2-B, M2-C, intake currículo-first, M4, M5 e M5.1A/B/C. O M5.1C mantém a Edge Function `assessment-item-generator` com JWT obrigatório e geração externa desativada. Gap, fake provider, dedup, revisão, publicação Global/Organization, isolamento tenant, analytics sintético e ledger de orçamento foram comprovados sem chamada externa. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
+Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e contém foundation, M2-A, M2-B, M2-C, intake currículo-first, M4, M5, M5.1A/B/C e M5.2. O M5.2 publicou a versão oficial CBO `CBO 2002-2025-06-06`; o snapshot ESCO v1.2.1 continua bloqueado pelo download oficial com etapa humana. O M5.1C mantém a Edge Function `assessment-item-generator` com JWT obrigatório e geração externa desativada. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
 
 ## Produção planejada
 

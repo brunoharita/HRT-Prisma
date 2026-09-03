@@ -49,6 +49,8 @@ Usuário sem sessão, membership, tenant, papel conhecido ou versão de polític
 
 Provisionamento inicial, login por username, recuperação de acesso, alteração de perfil/escopo, exclusão, retenção e exportação em massa exigem endpoint backend, checagem explícita, auditoria e proteção contra replay. `security definer` não é solução genérica de permissão; no M2-C/M5 ele é uma exceção controlada para transações compostas com DML direto revogado.
 
+No M5.2, somente `service_role` executa staging, validação, diff e publicação de source versions. A publicação também exige o UUID de um Super Admin ativo e registra sua autoria no change set. `authenticated` pode ler staging apenas quando Super Admin e não possui INSERT. Decisões de alias/proposta exigem o administrador Knowledge apropriado e validam tenant; um alias Organization nunca é visível fora de sua organização.
+
 ## Testes obrigatórios antes de QA
 
 - dois tenants, mesmos IDs lógicos e nenhum vazamento;

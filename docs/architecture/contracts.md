@@ -45,7 +45,9 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `organization-custom-section-definition` | AI/data | 1.0.0 | primeira extração de currículos futuros | ativo em QA; consumo web local | metadados de título/formato pós-aprovação, sem conteúdo pessoal | local/QA | ignorar versão desconhecida |
 | `ai-usage-event` | operations/AI | 1.0.0 | observability | implementado | `ProcessingEvent`, table | local/migration | não agregar métricas |
 | `prisma-context-pack` | governance | 1.0.0 | authorized AIs | implementado | checker/generator | repository | checker falha |
-| `knowledge-normalization` | domain/data | 1.0.0 | intake, profile, search | implementado localmente | `knowledge-normalization-1.0.0`, migration M4 | local | preservar observado e enviar à Inbox |
+| `knowledge-normalization` | domain/data | 2.0.0 | publicação de perfil, Inbox, busca, matching | ativo em Prisma-QA | termo exato Organization -> Global, `resolved/ambiguous/unresolved`, fonte e versão | local/QA | preservar observado e enviar à Inbox |
+| `knowledge-source-ingestion` | data/operations | 1.0.0 | CBO, ESCO, Fontes | CBO ativa em QA; ESCO preparada e bloqueada no download oficial | manifesto 1.0.0, SHA-256, staging, diff e publicação humana | local/QA | não publicar snapshot ausente ou inválido |
+| `knowledge-ui` | application/product | 2.0.0 | Conhecimento, Perfil, Pessoas | implementado localmente; smoke autenticado pendente | fonte/versão, aliases, mappings, relações, Inbox humana e termo original | local | não exibir versão não publicada como ativa |
 | `knowledge-research` | AI/security | 1.0.0 | Knowledge Agent | implementado, desativado | `knowledge-research-1.0.0` | local | não chamar provider |
 | `knowledge-proposal` | AI/data | 1.0.0 | agent, aprovação | implementado localmente | JSON Schema e `knowledge_proposals` | local | rejeitar output |
 | `trusted-source-policy` | security/AI | 1.0.0 | agent, source catalogue | implementado localmente | `trusted-sources-1.0.0` | local | rejeitar fonte |

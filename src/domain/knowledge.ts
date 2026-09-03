@@ -9,7 +9,7 @@ export const KNOWLEDGE_RELATION_TYPES = [
   "equivalent_to", "broader_than", "narrower_than",
 ] as const;
 
-export const KNOWLEDGE_NORMALIZATION_VERSION = "knowledge-normalization-1.0.0";
+export const KNOWLEDGE_NORMALIZATION_VERSION = "knowledge-normalization-2.0.0";
 export type KnowledgeConceptType = typeof KNOWLEDGE_CONCEPT_TYPES[number];
 export type KnowledgeRelationType = typeof KNOWLEDGE_RELATION_TYPES[number];
 export type KnowledgeScope = "global" | "organization";
@@ -41,7 +41,7 @@ export interface KnowledgeCatalog {
 
 export interface KnowledgeResolution {
   observedTerm: string; normalizedSearchTerm: string;
-  state: "normalized" | "ambiguous" | "unresolved";
+  state: "resolved" | "ambiguous" | "unresolved";
   concept: KnowledgeConcept | null; candidates: KnowledgeConcept[];
   knowledgeGlobalVersion: number; knowledgeOrganizationVersion: number | null;
   method: "organization_exact" | "global_exact" | "ambiguous_exact" | "no_safe_match";
@@ -81,7 +81,7 @@ export function resolveKnowledgeTerm(
   const candidates = organizationCandidates.length > 0 ? organizationCandidates : globalCandidates;
   const ambiguous = candidates.length > 1 || matchingTerms.some((term) => candidates.some((candidate) => candidate.id === term.conceptId) && term.ambiguous);
   if (candidates.length === 1 && !ambiguous) {
-    return { observedTerm, normalizedSearchTerm, state: "normalized", concept: candidates[0]!, candidates,
+    return { observedTerm, normalizedSearchTerm, state: "resolved", concept: candidates[0]!, candidates,
       knowledgeGlobalVersion: catalog.globalVersion, knowledgeOrganizationVersion: catalog.organizationVersion,
       method: organizationCandidates.length > 0 ? "organization_exact" : "global_exact" };
   }
