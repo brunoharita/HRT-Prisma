@@ -52,6 +52,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - intake currículo-first: `resume-intake-1.0.0`.
 - normalização Knowledge: `knowledge-normalization-2.0.0`;
 - ingestão de fonte Knowledge: `knowledge-source-ingestion-1.0.0`, manifesto `1.0.0`;
+- monitoramento de fonte Knowledge: `knowledge-source-monitor-1.0.1`;
 - pesquisa Knowledge: `knowledge-research-1.0.0`;
 - prompt do agente: `knowledge-agent-1.0.0`;
 - schema de proposta: `knowledge-proposal-1.0.0`;

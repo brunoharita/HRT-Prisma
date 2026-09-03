@@ -38,6 +38,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | Aprendizado adaptativo v3 | releitura, assinatura temporária, descoberta de blocos ausentes, aceite governado e sinais aprovados | `adaptiveResumeExtraction`, `AdaptiveSuggestionPanel`, RPCs v3 | runtime local; persistência v3 ativa em QA |
 | Intake currículo-first | PDF pré-Pessoa, identidade mínima, duplicidade e resolução transacional | `ResumeImportPage`, `resume_intakes`, RPCs | implementado localmente |
 | Database contract | Modelo, integridade, grants, RLS, Storage e RPC atômica | `supabase/migrations` | ativo no Prisma-QA |
+| Monitor de fontes | Cron por vencimento, Vault, detecção oficial e ledger append-only | `knowledge-source-monitor`, `knowledge_source_checks` | ativo no Prisma-QA |
 | Verification | Unit, negative, isolation, migration, golden, vertical | `tests` | disponível localmente |
 
 ## Fronteiras
@@ -50,6 +51,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - Toda rota autenticada reutiliza o App Shell com sidebar esquerda; não existe top bar global e headers pertencem às páginas.
 - Documento bruto e dados privados são separados do perfil consultável no schema de produção.
 - A UI existente continua consumidora dos contratos, nunca fonte de autorização ou verdade.
+- A Home lê o resumo das fontes pelo mesmo `PrismaDataRepository`; cron e Edge Function atualizam o backend sem depender de navegador aberto.
 - O intake pré-Pessoa é tenant-owned desde o primeiro registro e converge para o pipeline M2-B/M2-C após uma única resolução explícita.
 - O frontend nunca inventa coordenadas. Uma nova região M5 nasce de seleção explícita na versão do documento exibida e o banco valida página, retângulo, tenant e lock.
 - Seleção e destaque M5 operam em coordenadas canônicas da página; pixels, zoom e densidade da tela são apenas transformações de entrada e saída. Adaptadores de formato devem produzir as mesmas unidades visuais antes de usar o motor comum.

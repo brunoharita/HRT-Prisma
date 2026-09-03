@@ -519,6 +519,99 @@ textarea {
   grid-column: 1 / -1;
 }
 
+.prisma-knowledge-health-card {
+  grid-column: 1 / -1;
+}
+
+.prisma-knowledge-health-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prisma-knowledge-health-title .anticon {
+  color: var(--prisma-primary);
+}
+
+.prisma-knowledge-health-intro {
+  margin-bottom: 14px !important;
+}
+
+.prisma-knowledge-health-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.prisma-knowledge-source {
+  display: grid;
+  min-width: 0;
+  padding: 16px;
+  gap: 14px;
+  border: 1px solid #dbe5f5;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #fbfdff, #f5f8fc);
+}
+
+.prisma-knowledge-source__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.prisma-knowledge-source__heading > div {
+  display: grid;
+  gap: 2px;
+}
+
+.prisma-knowledge-source__heading strong {
+  color: var(--prisma-text);
+  font-size: 1rem;
+}
+
+.prisma-knowledge-source__heading small,
+.prisma-knowledge-source dl dt {
+  color: var(--prisma-text-secondary);
+  font-size: 0.75rem;
+}
+
+.prisma-knowledge-source__heading .ant-tag {
+  margin-inline-end: 0;
+  white-space: normal;
+  text-align: center;
+}
+
+.prisma-knowledge-source__version {
+  overflow-wrap: anywhere;
+  color: var(--prisma-text) !important;
+  font-size: 0.95rem;
+  font-weight: 680;
+}
+
+.prisma-knowledge-source dl {
+  display: grid;
+  margin: 0;
+  gap: 8px;
+}
+
+.prisma-knowledge-source dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.prisma-knowledge-source dl dt,
+.prisma-knowledge-source dl dd {
+  margin: 0;
+}
+
+.prisma-knowledge-source dl dd {
+  color: var(--prisma-text);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
 .prisma-contract-card .ant-alert {
   height: 100%;
   border-color: #cfdcff;
@@ -2994,6 +3087,7 @@ textarea {
   }
 
   .prisma-foundation-card,
+  .prisma-knowledge-health-card,
   .prisma-contract-card {
     grid-column: 1 / -1;
   }
@@ -3027,6 +3121,7 @@ textarea {
 
   .prisma-status-card,
   .prisma-foundation-card,
+  .prisma-knowledge-health-card,
   .prisma-contract-card {
     grid-column: 1 / -1;
   }
@@ -3036,6 +3131,10 @@ textarea {
   }
 
   .prisma-home-principles {
+    grid-template-columns: 1fr;
+  }
+
+  .prisma-knowledge-health-grid {
     grid-template-columns: 1fr;
   }
 

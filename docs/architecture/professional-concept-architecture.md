@@ -8,6 +8,8 @@ Fontes seguem `catalogue -> source version -> upload/fetch -> validate -> stage 
 
 A CBO `CBO 2002-2025-06-06` está publicada no Prisma-QA com 3.320 registros conceituais, 11.097 termos e 2.694 relações ocupação-família. Ocupação, Sinônimo e Família foram importados; Perfil Ocupacional ficou fora por não agregar valor lexical imediato. A ESCO v1.2.1 possui importer e fixture PT/EN, mas o snapshot oficial não foi obtido porque o portal exige aceite, e-mail e entrega do link; ela permanece somente catalogada.
 
+O monitor `knowledge-source-monitor-1.0.1` verifica CBO, ESCO e O*NET no primeiro dia de cada mês às 01:00 em `America/Sao_Paulo`. `knowledge_source_checks` preserva cada resultado e `knowledge_sources` mantém o resumo consultado pela Home. O cron horário apenas encontra fontes com `next_check_at` vencido e suporta retentativas em 6h, 24h e 72h. CBO compara hashes dos três CSVs oficiais com o manifesto publicado; ESCO e O*NET comparam versão e data nas páginas oficiais. Detecção pode catalogar uma versão, mas nunca executa `publish_knowledge_source_version`.
+
 `knowledge-normalization-2.0.0` usa o escopo do termo, não o escopo do conceito, para aplicar precedência Organization -> Global. Somente correspondência exata e inequívoca resolve. Sugestões por prefixo ou substring servem apenas à decisão humana na Inbox. Relações como `is_a` nunca viram equivalência nem evidência profissional.
 
 Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.

@@ -42,6 +42,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-030](ADR-030-decision-centered-interaction.md) | accepted | Minimum human intervention and non-blocking advisory interaction |
 | [ADR-031](ADR-031-spatial-list-segmentation.md) | accepted | Deterministic competency-list segmentation from explicit delimiters and real document geometry |
 | [ADR-032](ADR-032-versioned-official-knowledge-source-ingestion.md) | accepted | Versioned CBO/ESCO ingestion and deterministic concept normalization |
+| [ADR-033](ADR-033-scheduled-official-knowledge-source-monitoring.md) | accepted | Scheduled CBO, ESCO and O*NET monitoring with human-gated publication |
 
 ## Rules
 

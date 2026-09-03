@@ -28,6 +28,8 @@ Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão 
 
 O Movimento 4 adiciona a fundação Knowledge. O M5.2 a estende com source ingestion por CSV, SHA-256, manifestos, staging RLS, diff, publicação humana, source version corrente, observações ligadas ao Perfil/review/evidência, resolver 2.0.0, Inbox de aliases/propostas e busca de Pessoas por conceito. As migrations `20260903094700`, `20260903100340`, `20260903101644` e `20260903102721` estão ativas no QA; CBO está publicada e ESCO permanece bloqueada no download oficial.
 
+As migrations `20260903161003` e `20260903163053` e a Edge Function `knowledge-source-monitor` adicionam monitoramento mensal CBO/ESCO/O*NET. Supabase Cron desperta um scanner de vencimento horário, `next_check_at` fixa a execução real no primeiro dia às 01:00 em `America/Sao_Paulo`, Vault protege a chamada e `knowledge_source_checks` mantém o ledger RLS. Falhas repetem em 6h, 24h e 72h. A Home lê versão, data, estado e última checagem por `PrismaDataRepository`; detecção nunca publica snapshot.
+
 O M5.1 possui M5.1A para preparação, M5.1B para execução e M5.1C para governança do Item Bank, ativos no Prisma-QA. M5.1C adiciona oito tabelas iniciais de governança, RPCs idempotentes, deduplicação lexical, ledger de budget, snapshots analíticos tenant-scoped e `assessment-item-generator` v2 com JWT. O provider fake está ativo; a geração externa está implantada e fail-closed. O rollout conectado foi comprovado com dados sintéticos; o smoke visual M5.1C nos cinco viewports permanece pendente.
 
 ## Segurança

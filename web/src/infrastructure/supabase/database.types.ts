@@ -495,7 +495,17 @@ export interface Database {
         publisher: string; method: string; allowed_scope: Database["public"]["Enums"]["knowledge_scope"];
         status: Database["public"]["Enums"]["knowledge_status"]; license: string | null;
         attribution_requirements: string | null; last_verified_at: string | null;
+        monitoring_enabled: boolean; monitor_strategy: string | null; monitor_url: string | null;
+        monitor_status: string; detected_version: string | null; detected_release_date: string | null;
+        detected_fingerprint: string | null; last_checked_at: string | null; last_successful_check_at: string | null;
+        next_check_at: string | null; consecutive_check_failures: number; last_check_error_code: string | null;
         approved_by_auth_user_id: string | null; created_at: string; updated_at: string;
+      }>;
+      knowledge_source_checks: Table<{
+        id: string; source_id: string; invocation_type: string; attempt: number; status: string;
+        detected_version: string | null; detected_release_date: string | null; detected_fingerprint: string | null;
+        artifacts: Json; error_code: string | null; monitor_version: string; idempotency_key: string;
+        started_at: string; completed_at: string; created_at: string;
       }>;
       knowledge_source_versions: Table<{
         id: string; source_id: string; external_version: string; release_date: string | null; retrieval_date: string | null;

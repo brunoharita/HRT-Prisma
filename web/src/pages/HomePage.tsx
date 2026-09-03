@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { ApartmentOutlined, CheckCircleOutlined, DatabaseOutlined, FileAddOutlined, SafetyCertificateOutlined, TeamOutlined } from "@ant-design/icons";
-import { Alert, Button, Empty, Skeleton, Statistic, Typography } from "antd";
-import type { HomeSummary, PrismaDataRepository } from "../domain/prismaData";
+import { ApartmentOutlined, CheckCircleOutlined, ClockCircleOutlined, DatabaseOutlined, FileAddOutlined, SafetyCertificateOutlined, SyncOutlined, TeamOutlined } from "@ant-design/icons";
+import { Alert, Button, Empty, Skeleton, Statistic, Tag, Typography } from "antd";
+import type { HomeSummary, KnowledgeSourceHealth, KnowledgeSourceMonitorStatus, PrismaDataRepository } from "../domain/prismaData";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -64,6 +64,13 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
             <Empty description="Esta organização ainda não possui dados estruturados." image={Empty.PRESENTED_IMAGE_SIMPLE} />
           </PrismaCard>
         ) : null}
+        {!loading && summary ? (
+          <KnowledgeSourcesCard
+            sources={summary.knowledgeSources}
+            canManage={activeMembership.role === "super_admin"}
+            onNavigate={onNavigate}
+          />
+        ) : null}
         <PrismaCard className="prisma-contract-card" title="Confiança em cada etapa">
           <div className="prisma-home-principles">
             <div><CheckCircleOutlined /><span><strong>Decisão humana</strong><small>O Prisma organiza evidências, mas não decide contratações.</small></span></div>
@@ -101,4 +108,75 @@ function HomeSkeleton() {
       {[0, 1, 2].map((item) => <PrismaCard key={item} className="prisma-status-card"><Skeleton active paragraph={{ rows: 1 }} /></PrismaCard>)}
     </>
   );
+}
+
+function KnowledgeSourcesCard({
+  sources,
+  canManage,
+  onNavigate,
+}: {
+  sources: KnowledgeSourceHealth[];
+  canManage: boolean;
+  onNavigate: (path: string) => void;
+}) {
+  return (
+    <PrismaCard
+      className="prisma-knowledge-health-card"
+      title={<span className="prisma-knowledge-health-title"><SyncOutlined /> Bases de conhecimento</span>}
+      extra={canManage ? <Button onClick={() => onNavigate("/knowledge")} size="small" type="link">Abrir governança</Button> : undefined}
+    >
+      <Typography.Paragraph className="prisma-knowledge-health-intro" type="secondary">
+        Referências profissionais verificadas mensalmente, no primeiro dia às 01:00, no horário de São Paulo.
+      </Typography.Paragraph>
+      <div className="prisma-knowledge-health-grid">
+        {sources.map((source) => {
+          const status = describeMonitorStatus(source.status);
+          return (
+            <article className="prisma-knowledge-source" key={source.id}>
+              <div className="prisma-knowledge-source__heading">
+                <div>
+                  <strong>{source.name}</strong>
+                  <small>{source.published ? "Versão publicada" : "Versão detectada"}</small>
+                </div>
+                <Tag color={status.color}>{status.label}</Tag>
+              </div>
+              <Typography.Text className="prisma-knowledge-source__version">
+                {source.version ?? "Versão ainda não identificada"}
+              </Typography.Text>
+              <dl>
+                <div><dt>Data da versão</dt><dd>{formatReleaseDate(source.releaseDate)}</dd></div>
+                {source.published && source.detectedVersion && source.detectedVersion !== source.version ? (
+                  <div><dt>Nova versão detectada</dt><dd>{source.detectedVersion} · {formatReleaseDate(source.detectedReleaseDate)}</dd></div>
+                ) : null}
+                <div><dt><ClockCircleOutlined /> Última checagem</dt><dd>{formatCheckedAt(source.lastCheckedAt)}</dd></div>
+              </dl>
+            </article>
+          );
+        })}
+      </div>
+    </PrismaCard>
+  );
+}
+
+function describeMonitorStatus(status: KnowledgeSourceMonitorStatus): { label: string; color: string } {
+  if (status === "current") return { label: "Atualizada", color: "success" };
+  if (status === "update_available") return { label: "Nova versão disponível", color: "processing" };
+  if (status === "action_required") return { label: "Aguardando ação humana", color: "warning" };
+  if (status === "temporary_failure") return { label: "Falha temporária", color: "error" };
+  if (status === "validation_failed") return { label: "Validação rejeitada", color: "error" };
+  return { label: "Ainda não verificada", color: "default" };
+}
+
+function formatReleaseDate(value: string | null): string {
+  if (!value) return "Não informada pela fonte";
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${value}T12:00:00Z`));
+}
+
+function formatCheckedAt(value: string | null): string {
+  if (!value) return "Aguardando primeira checagem";
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date(value));
 }

@@ -26,7 +26,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
 | `tenant-authorization` | security/data | 1.0.0 | Supabase Data API/web | ativo em QA | RLS migration e testes conectados | QA | negar acesso |
-| `web-domain-read` | product-engineering | 1.0.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository` | local/QA | bloquear consulta |
+| `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
 | `person-ingestion` | application/data | 10.1.0 | intake, Pessoas, documentos, perfil | sincronização técnica local e normalização de fronteira ativa em QA | OCR posicionado, jornada completa, recuperação parcial e compatibilidade automática | local/QA | bloquear sem fonte recuperável |
@@ -47,6 +47,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `prisma-context-pack` | governance | 1.0.0 | authorized AIs | implementado | checker/generator | repository | checker falha |
 | `knowledge-normalization` | domain/data | 2.0.0 | publicação de perfil, Inbox, busca, matching | ativo em Prisma-QA | termo exato Organization -> Global, `resolved/ambiguous/unresolved`, fonte e versão | local/QA | preservar observado e enviar à Inbox |
 | `knowledge-source-ingestion` | data/operations | 1.0.0 | CBO, ESCO, Fontes | CBO ativa em QA; ESCO preparada e bloqueada no download oficial | manifesto 1.0.0, SHA-256, staging, diff e publicação humana | local/QA | não publicar snapshot ausente ou inválido |
+| `knowledge-source-monitor` | data/operations/security | 1.0.1 | CBO, ESCO, O*NET e Home | ativo no Prisma-QA | Cron por vencimento, Vault, ledger append-only, versão/data/fingerprint e retries 6h/24h/72h | local/QA | preservar versão ativa e marcar falha |
 | `knowledge-ui` | application/product | 2.0.0 | Conhecimento, Perfil, Pessoas | implementado localmente; smoke autenticado pendente | fonte/versão, aliases, mappings, relações, Inbox humana e termo original | local | não exibir versão não publicada como ativa |
 | `knowledge-research` | AI/security | 1.0.0 | Knowledge Agent | implementado, desativado | `knowledge-research-1.0.0` | local | não chamar provider |
 | `knowledge-proposal` | AI/data | 1.0.0 | agent, aprovação | implementado localmente | JSON Schema e `knowledge_proposals` | local | rejeitar output |

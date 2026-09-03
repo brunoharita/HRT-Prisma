@@ -2,7 +2,7 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.8.0
+version: 1.9.0
 last_verified: 2026-09-03
 ---
 
@@ -42,6 +42,7 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 - Knowledge separa termo observado, conceito normalizado e inferência. Termo desconhecido é preservado e entra na Inbox.
 - Knowledge da empresa é overlay tenant-owned e precede a Global apenas no próprio escopo, sem alterar a base Prisma.
 - Internet enriquece Knowledge, nunca Pessoa; IA propõe e humano autorizado publica.
+- CBO, ESCO e O*NET são verificadas mensalmente; versão detectada não substitui snapshot publicado sem validação e decisão humana.
 
 ## Usuários do piloto
 
@@ -49,7 +50,7 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O M5.2 estende a Knowledge canônica com ingestão oficial versionada, resolução exata Organization -> Global, Inbox humana, Perfil e busca por conceito. A CBO oficial está publicada no QA; a ESCO permanece catalogada até conclusão do download humano no portal. O agente externo continua desativado.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O M5.2 estende a Knowledge canônica com ingestão oficial versionada, resolução exata Organization -> Global, Inbox humana, Perfil e busca por conceito. A CBO oficial está publicada no QA; ESCO e O*NET permanecem catalogadas até a ingestão humana. As três fontes são monitoradas mensalmente e a Home apresenta versão, data, estado e última checagem. O agente externo continua desativado.
 
 O M5.1 - Verificação de Competências possui preparação M5.1A, execução M5.1B e governança M5.1C ativas no Prisma-QA. O M5.1C calcula gaps elegíveis, gera proposals sintéticas sem LLM, valida e deduplica, exige revisão humana, separa Banco Global e Organization, controla orçamento por ledger e produz analytics sintéticos sem declarar calibração real. A boundary externa está implantada, mas flag, provider, modelo, secret e budget permanecem desativados.
 

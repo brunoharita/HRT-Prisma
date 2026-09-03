@@ -4,6 +4,8 @@ import {
   isPersonLifecycle,
   type EducationItem,
   type HomeSummary,
+  type KnowledgeSourceHealth,
+  type KnowledgeSourceMonitorStatus,
   type LanguageItem,
   type PeopleQuery,
   type PersonListItem,
@@ -122,7 +124,7 @@ export const prismaRepository: PrismaDataRepository = {
   },
 
   async loadHomeSummary(organizationId) {
-    const [people, profiles, vacancies] = await Promise.all([
+    const [people, profiles, vacancies, sourceResult] = await Promise.all([
       supabase.from("people").select("id", { count: "exact", head: true }).eq("organization_id", organizationId),
       supabase
         .from("professional_profiles")
@@ -134,14 +136,50 @@ export const prismaRepository: PrismaDataRepository = {
         .select("id", { count: "exact", head: true })
         .eq("organization_id", organizationId)
         .eq("status", "open"),
+      supabase
+        .from("knowledge_sources")
+        .select("id,name,monitor_status,detected_version,detected_release_date,last_checked_at,next_check_at")
+        .in("name", ["CBO", "ESCO", "O*NET"]),
     ]);
     throwIfError(people.error, "Não foi possível contar as pessoas da organização.");
     throwIfError(profiles.error, "Não foi possível contar os perfis estruturados.");
     throwIfError(vacancies.error, "Não foi possível contar as vagas abertas.");
+    throwIfError(sourceResult.error, "Não foi possível consultar a atualização das bases de conhecimento.");
+    const sources = sourceResult.data ?? [];
+    if (sources.length !== 3) {
+      throw new DataAccessFailure("invalid_data", "O catálogo das três bases centrais está incompleto.");
+    }
+    const { data: sourceVersions, error: sourceVersionError } = sources.length
+      ? await supabase
+          .from("knowledge_source_versions")
+          .select("source_id,external_version,release_date,is_current,created_at")
+          .in("source_id", sources.map((source) => source.id))
+          .order("created_at", { ascending: false })
+      : { data: [], error: null };
+    throwIfError(sourceVersionError, "Não foi possível consultar as versões das bases de conhecimento.");
     return {
       peopleCount: people.count ?? 0,
       structuredProfilesCount: profiles.count ?? 0,
       openVacanciesCount: vacancies.count ?? 0,
+      knowledgeSources: sources
+        .map((source): KnowledgeSourceHealth => {
+          const versions = (sourceVersions ?? []).filter((version) => version.source_id === source.id);
+          const published = versions.find((version) => version.is_current);
+          const fallback = versions[0];
+          return {
+            id: source.id,
+            name: requireCentralSourceName(source.name),
+            version: published?.external_version ?? source.detected_version ?? fallback?.external_version ?? null,
+            releaseDate: published?.release_date ?? source.detected_release_date ?? fallback?.release_date ?? null,
+            detectedVersion: source.detected_version,
+            detectedReleaseDate: source.detected_release_date,
+            lastCheckedAt: source.last_checked_at,
+            nextCheckAt: source.next_check_at,
+            status: requireMonitorStatus(source.monitor_status),
+            published: Boolean(published),
+          };
+        })
+        .sort((left, right) => centralSourceOrder(left.name) - centralSourceOrder(right.name)),
     } satisfies HomeSummary;
   },
 
@@ -230,6 +268,22 @@ export const prismaRepository: PrismaDataRepository = {
     } satisfies PersonProfileView;
   },
 };
+
+function requireCentralSourceName(value: string): "CBO" | "ESCO" | "O*NET" {
+  if (value === "CBO" || value === "ESCO" || value === "O*NET") return value;
+  throw new DataAccessFailure("invalid_data", "A base central retornada não pertence ao contrato conhecido.");
+}
+
+function requireMonitorStatus(value: string): KnowledgeSourceMonitorStatus {
+  if (["not_checked", "current", "update_available", "action_required", "temporary_failure", "validation_failed"].includes(value)) {
+    return value as KnowledgeSourceMonitorStatus;
+  }
+  throw new DataAccessFailure("invalid_data", "A base central possui um estado de atualização desconhecido.");
+}
+
+function centralSourceOrder(value: KnowledgeSourceHealth["name"]): number {
+  return value === "CBO" ? 0 : value === "ESCO" ? 1 : 2;
+}
 
 async function loadCurrentProfileRow(organizationId: string, personId: string) {
   const { data, error } = await supabase

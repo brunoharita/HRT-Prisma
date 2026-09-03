@@ -16,6 +16,28 @@ export interface HomeSummary {
   peopleCount: number;
   structuredProfilesCount: number;
   openVacanciesCount: number;
+  knowledgeSources: KnowledgeSourceHealth[];
+}
+
+export type KnowledgeSourceMonitorStatus =
+  | "not_checked"
+  | "current"
+  | "update_available"
+  | "action_required"
+  | "temporary_failure"
+  | "validation_failed";
+
+export interface KnowledgeSourceHealth {
+  id: string;
+  name: "CBO" | "ESCO" | "O*NET";
+  version: string | null;
+  releaseDate: string | null;
+  detectedVersion: string | null;
+  detectedReleaseDate: string | null;
+  lastCheckedAt: string | null;
+  nextCheckAt: string | null;
+  status: KnowledgeSourceMonitorStatus;
+  published: boolean;
 }
 
 export interface PeopleQuery {
