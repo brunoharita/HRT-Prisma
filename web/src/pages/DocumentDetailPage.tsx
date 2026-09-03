@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ArrowLeftOutlined, AuditOutlined, ReloadOutlined } from "@ant-design/icons";
-import { Alert, Button, Descriptions, Empty, Skeleton, Space, Table, Tag, Timeline } from "antd";
+import { ArrowLeftOutlined, AuditOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Alert, Button, Descriptions, Empty, Modal, Skeleton, Space, Table, Tag, Timeline } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { PersonIngestionWorkspace, ProcessingAttemptView, ProcessingAuditEvent } from "../domain/personIngestion";
 import { isReviewableDocument, presentDocument } from "../domain/documentPresentation";
@@ -76,6 +76,26 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
     finally { setBusy(false); }
   }
 
+  function handleDelete() {
+    if (!document) return;
+    Modal.confirm({
+      title: "Excluir documento?",
+      content: "O arquivo e as informações exclusivas desta importação serão removidos. Evidências independentes, verificações concluídas, conhecimento validado e as demais versões continuarão preservados.",
+      okText: "Excluir documento", okButtonProps: { danger: true }, cancelText: "Cancelar",
+      onOk: async () => {
+        setBusy(true); setError(null);
+        try {
+          const result = await personIngestionService.deleteDocument(activeMembership.organizationId, personId, document.id);
+          window.sessionStorage.setItem(`prisma.document-deleted.${personId}`, result.profileRebuilt
+            ? `Documento excluído. O Perfil v${result.profileVersion} foi recomposto com as informações válidas restantes.`
+            : "Documento excluído. As demais informações da Pessoa foram preservadas.");
+          onNavigate(`/profiles/${personId}`);
+        } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível excluir o documento."); }
+        finally { setBusy(false); }
+      },
+    });
+  }
+
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 14 }} /></PrismaPage>;
   if (!workspace || !document) return <PrismaPage><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="O documento e o Perfil vigente permanecem preservados. Reabra o item pela Central para carregar o estado atual." title={error ?? "Documento não encontrado nesta empresa."} showIcon type="error" /></PrismaPage>;
   const recoveryMode = document.reviewAttempt?.state === "failed_structuring";
@@ -97,7 +117,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
       <PrismaPageHeader
         title={document.filename}
         description={`${workspace.person.fullName} · Documento v${document.documentVersion}`}
-        actions={<Space wrap>{canReprocess ? <Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>Reprocessar</Button> : null}{presentation.state === "technical_failure" && !canReprocess ? <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Substituir arquivo</Button> : null}{canReview ? <Button loading={busy} onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações" : "Revisar perfil"}</Button> : null}</Space>}
+        actions={<Space wrap>{canReprocess ? <Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>Reprocessar</Button> : null}{presentation.state === "technical_failure" && !canReprocess ? <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Substituir arquivo</Button> : null}{canReview ? <Button loading={busy} onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações" : "Revisar perfil"}</Button> : null}<Button danger icon={<DeleteOutlined />} loading={busy} onClick={handleDelete}>Excluir documento</Button></Space>}
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/processes")} type="text">Voltar para a central</Button>
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}

@@ -72,7 +72,7 @@ export interface Database {
         id: string;
         organization_id: string;
         person_id: string;
-        source_document_id: string;
+        source_document_id: string | null;
         profile_data: Json;
         uncertainties: Json;
         not_identified: Json;
@@ -88,6 +88,9 @@ export interface Database {
         approved_by_auth_user_id: string | null;
         approved_at: string | null;
         base_profile_id: string | null;
+        publication_origin: "legacy" | "review_merge" | "review_replace" | "restored" | "document_deletion_rebuild";
+        restored_from_profile_id: string | null;
+        source_document_snapshot: Json | null;
         created_at: string;
         superseded_at: string | null;
       }>;
@@ -552,7 +555,7 @@ export interface Database {
       knowledge_observations: Table<{
         id: string; organization_id: string; person_id: string; evidence_id: string | null;
         profile_id: string | null; review_id: string | null; evidence_link_id: string | null;
-        source_field_path: string | null; original_term: string; normalized_term: string; language: string;
+        source_field_path: string | null; source_snapshot: Json | null; original_term: string; normalized_term: string; language: string;
         resolution_state: string; concept_id: string | null; candidate_concept_ids: string[];
         normalization_method: string; knowledge_global_version: number; knowledge_organization_version: number | null;
         resolution_source_version_id: string | null; resolution_method_version: string;
@@ -1196,8 +1199,24 @@ export interface Database {
         Returns: Array<{ review_id: string; profile_id: string; profile_version: number; reused: boolean }>;
       };
       publish_profile_review: {
-        Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_explicit_removals: Json; p_idempotency_key: string };
+        Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_publication_mode: "merge" | "replace"; p_block_decisions: Json; p_idempotency_key: string };
         Returns: Array<{ review_id: string; profile_id: string; profile_version: number; reused: boolean }>;
+      };
+      restore_profile_version: {
+        Args: { p_organization_id: string; p_person_id: string; p_profile_id: string; p_idempotency_key: string };
+        Returns: Array<{ profile_id: string; profile_version: number; reused: boolean }>;
+      };
+      reset_person_profile: {
+        Args: { p_organization_id: string; p_person_id: string; p_idempotency_key: string };
+        Returns: Array<{ person_id: string; reused: boolean }>;
+      };
+      prepare_document_deletion: {
+        Args: { p_organization_id: string; p_person_id: string; p_document_id: string; p_idempotency_key: string };
+        Returns: Array<{ operation_id: string; storage_bucket: string | null; storage_path: string | null; reused: boolean }>;
+      };
+      finalize_document_deletion: {
+        Args: { p_organization_id: string; p_operation_id: string };
+        Returns: Array<{ document_id: string; profile_version: number | null; profile_rebuilt: boolean; reused: boolean }>;
       };
       invalidate_document_review: {
         Args: { p_organization_id: string; p_document_id: string; p_idempotency_key: string };

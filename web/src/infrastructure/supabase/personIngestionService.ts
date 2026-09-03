@@ -20,7 +20,8 @@ import {
   type ProcessingAuditEvent,
   type ProfileReviewWorkspace,
   type ProfileVersionView,
-  type PublicationRemovalDecision,
+  type ProfileBlockDecision,
+  type ProfilePublicationMode,
   type ResumeDuplicateCandidate,
   type ResumeIntakeIdentityResult,
   type ResumeIntakeResolutionResult,
@@ -45,7 +46,7 @@ import {
   type LearnedCustomSectionDefinition,
 } from "../../domain/customProfileSections";
 import { legacyReviewEntityIdFromValue, reviewDraftNeedsContractUpgrade } from "../../domain/reviewFieldLifecycle";
-import { reviewOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
+import { reviewOperationError, supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -188,7 +189,7 @@ export const personIngestionService = {
     const privateByPerson = new Map((privateRows ?? []).map((row) => [row.person_id, row]));
     const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
     const reviewAttemptByDocument = reviewAttemptsByDocument(attemptRows ?? []);
-    const profileByDocument = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
+    const profileByDocument = new Map((profileResult.data ?? []).flatMap((profile) => profile.source_document_id ? [[profile.source_document_id, profile.profile_version] as const] : []));
     const currentProfileByPerson = new Map((profileResult.data ?? [])
       .filter((profile) => profile.superseded_at === null)
       .map((profile) => [profile.person_id, toCurrentProfileSummary(profile)]));
@@ -257,7 +258,7 @@ export const personIngestionService = {
     throwIfError(attemptError, "Não foi possível carregar as tentativas de processamento.");
     const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
     const reviewAttemptByDocument = reviewAttemptsByDocument(attemptRows ?? []);
-    const profileByDocument = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
+    const profileByDocument = new Map((profileResult.data ?? []).flatMap((profile) => profile.source_document_id ? [[profile.source_document_id, profile.profile_version] as const] : []));
     const reviewByDocument = new Map<string, string>();
     for (const review of reviewResult.data ?? []) {
       if (!reviewByDocument.has(review.document_id)) reviewByDocument.set(review.document_id, review.id);
@@ -626,8 +627,9 @@ export const personIngestionService = {
       p_organization_id: organizationId,
       p_review_id: reviewId,
       p_expected_lock_version: expectedLockVersion,
-      p_explicit_removals: [] as Json,
-      p_idempotency_key: publicationOperationKey(reviewId, []),
+      p_publication_mode: "merge",
+      p_block_decisions: [] as Json,
+      p_idempotency_key: publicationOperationKey(reviewId, "merge", []),
     });
     throwReviewError(error, "Não foi possível publicar a versão revisada.");
     const approved = data?.[0];
@@ -635,13 +637,14 @@ export const personIngestionService = {
     return { profileId: approved.profile_id, profileVersion: approved.profile_version };
   },
 
-  async publishProfileReview(organizationId: string, reviewId: string, expectedLockVersion: number, explicitRemovals: PublicationRemovalDecision[]): Promise<{ profileId: string; profileVersion: number }> {
+  async publishProfileReview(organizationId: string, reviewId: string, expectedLockVersion: number, mode: ProfilePublicationMode, blockDecisions: ProfileBlockDecision[]): Promise<{ profileId: string; profileVersion: number }> {
     const { data, error } = await supabase.rpc("publish_profile_review", {
       p_organization_id: organizationId,
       p_review_id: reviewId,
       p_expected_lock_version: expectedLockVersion,
-      p_explicit_removals: explicitRemovals as unknown as Json,
-      p_idempotency_key: publicationOperationKey(reviewId, explicitRemovals),
+      p_publication_mode: mode,
+      p_block_decisions: blockDecisions as unknown as Json,
+      p_idempotency_key: publicationOperationKey(reviewId, mode, blockDecisions),
     });
     throwReviewError(error, "Não foi possível publicar a nova versão.");
     const approved = data?.[0];
@@ -671,7 +674,7 @@ export const personIngestionService = {
         .order("attempt_number", { ascending: false });
     throwIfError(attemptError, "Não foi possível carregar as tentativas da central.");
     const people = new Map((peopleResult.data ?? []).map((person) => [person.id, person.full_name]));
-    const profiles = new Map((profileResult.data ?? []).map((profile) => [profile.source_document_id, profile.profile_version]));
+    const profiles = new Map((profileResult.data ?? []).flatMap((profile) => profile.source_document_id ? [[profile.source_document_id, profile.profile_version] as const] : []));
     const currentProfiles = new Map((profileResult.data ?? [])
       .filter((profile) => profile.superseded_at === null)
       .map((profile) => [profile.person_id, toCurrentProfileSummary(profile)]));
@@ -710,6 +713,41 @@ export const personIngestionService = {
     const result = data?.[0];
     if (!result) throw new Error("O arquivamento não retornou confirmação.");
     return { reviewId: result.review_id, reused: result.reused };
+  },
+
+  async restoreProfileVersion(organizationId: string, personId: string, profileId: string): Promise<{ profileId: string; profileVersion: number }> {
+    const operationStorageKey = `prisma.restore-profile.${personId}.${profileId}`;
+    const { data, error } = await supabase.rpc("restore_profile_version", {
+      p_organization_id: organizationId, p_person_id: personId, p_profile_id: profileId,
+      p_idempotency_key: stableSessionOperationKey(operationStorageKey, "restore-profile"),
+    });
+    throwReviewError(error, "Não foi possível restaurar esta versão.");
+    const restored = data?.[0];
+    if (!restored) throw new Error("A restauração não retornou a nova versão do perfil.");
+    window.sessionStorage.removeItem(operationStorageKey);
+    return { profileId: restored.profile_id, profileVersion: restored.profile_version };
+  },
+
+  async resetProfile(organizationId: string, personId: string): Promise<void> {
+    const operationStorageKey = `prisma.reset-profile.${personId}`;
+    const { error } = await supabase.rpc("reset_person_profile", {
+      p_organization_id: organizationId, p_person_id: personId,
+      p_idempotency_key: stableSessionOperationKey(operationStorageKey, "reset-profile"),
+    });
+    throwReviewError(error, "Não foi possível reiniciar o Perfil.");
+    window.sessionStorage.removeItem(operationStorageKey);
+  },
+
+  async deleteDocument(organizationId: string, personId: string, documentId: string): Promise<{ profileRebuilt: boolean; profileVersion: number | null }> {
+    const operationStorageKey = `prisma.delete-document.${documentId}`;
+    const { data, error } = await supabase.functions.invoke("person-document-lifecycle", { body: {
+      action: "delete_document", organizationId, personId, documentId,
+      idempotencyKey: stableSessionOperationKey(operationStorageKey, "delete-document"),
+    } });
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível excluir o documento.");
+    const result = data as { profile_rebuilt?: boolean; profile_version?: number | null } | null;
+    window.sessionStorage.removeItem(operationStorageKey);
+    return { profileRebuilt: Boolean(result?.profile_rebuilt), profileVersion: result?.profile_version ?? null };
   },
 
   async listDocumentAttempts(organizationId: string, documentId: string): Promise<ProcessingAttemptView[]> {
@@ -942,7 +980,7 @@ export const personIngestionService = {
 
   async listProfileVersions(organizationId: string, personId: string): Promise<ProfileVersionView[]> {
     const { data, error } = await supabase.from("professional_profiles")
-      .select("id, profile_version, profile_data, review_status, source_document_id, processing_attempt_id, approved_by_auth_user_id, approved_at, created_at, superseded_at")
+      .select("id, profile_version, profile_data, review_status, source_document_id, processing_attempt_id, approved_by_auth_user_id, approved_at, created_at, superseded_at, publication_origin, restored_from_profile_id, source_document_snapshot")
       .eq("organization_id", organizationId).eq("person_id", personId).order("profile_version", { ascending: false });
     throwIfError(error, "Não foi possível carregar as versões do Perfil Prisma.");
     return (data ?? []).map((profile) => ({
@@ -951,6 +989,9 @@ export const personIngestionService = {
       profileData: decodeReviewDraft(profile.profile_data),
       reviewStatus: profile.review_status,
       sourceDocumentId: profile.source_document_id,
+      origin: profile.publication_origin,
+      restoredFromProfileId: profile.restored_from_profile_id,
+      sourceDocumentName: isRecord(profile.source_document_snapshot) && typeof profile.source_document_snapshot.filename === "string" ? profile.source_document_snapshot.filename : null,
       processingAttemptId: profile.processing_attempt_id,
       approvedByAuthUserId: profile.approved_by_auth_user_id,
       approvedAt: profile.approved_at,
@@ -1216,9 +1257,9 @@ function toPersonSummary(person: {
   };
 }
 
-function publicationOperationKey(reviewId: string, removals: PublicationRemovalDecision[]): string {
-  const fingerprint = removals.map((item) => item.fieldPath).sort().join("|") || "preserve-all";
-  const storageKey = `prisma.profile-publication.${reviewId}.${fingerprint}`;
+function publicationOperationKey(reviewId: string, mode: ProfilePublicationMode, decisions: ProfileBlockDecision[]): string {
+  const fingerprint = decisions.map((item) => `${item.fieldPath}:${item.action}:${item.targetBlockId ?? ""}`).sort().join("|") || "automatic";
+  const storageKey = `prisma.profile-publication.${reviewId}.${mode}.${fingerprint}`;
   const existing = window.sessionStorage.getItem(storageKey);
   if (existing) return existing;
   const created = `publish-review:${crypto.randomUUID()}`;
@@ -1226,10 +1267,18 @@ function publicationOperationKey(reviewId: string, removals: PublicationRemovalD
   return created;
 }
 
+function stableSessionOperationKey(storageKey: string, scope: string): string {
+  const existing = window.sessionStorage.getItem(storageKey);
+  if (existing) return existing;
+  const created = `${scope}:${crypto.randomUUID()}`;
+  window.sessionStorage.setItem(storageKey, created);
+  return created;
+}
+
 function toCurrentProfileSummary(profile: {
   id: string;
   profile_version: number;
-  source_document_id: string;
+  source_document_id: string | null;
   approved_at: string | null;
   created_at: string;
 }): CurrentProfileSummary {

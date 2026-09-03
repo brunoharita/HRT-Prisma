@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, CheckCircleOutlined, DeleteOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, Checkbox, Empty, Input, Modal, Skeleton, Space, Statistic, Tabs, Tag, Typography } from "antd";
+import { ArrowLeftOutlined, CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import { Alert, Button, Card, Empty, Radio, Select, Skeleton, Statistic, Tabs, Tag, Typography } from "antd";
 import { deriveProfileDelta, type ProfileDeltaItem, type ProfileDeltaKind, type ProfileDeltaSection } from "../domain/profileDelta";
-import type { ProfileReviewWorkspace, ProfileVersionView, PublicationRemovalDecision } from "../domain/personIngestion";
+import type { ProfileBlockAction, ProfileBlockDecision, ProfilePublicationMode, ProfileReviewWorkspace, ProfileVersionView } from "../domain/personIngestion";
 import { normalizeReviewDraft, validateEducationClassificationsForApproval, validateReviewDraftForSave } from "../domain/reviewFieldLifecycle";
 import { operationRecovery, PrismaOperationError, type OperationRecovery } from "../domain/reviewOperationErrors";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
@@ -32,8 +32,8 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
   const [workspace, setWorkspace] = useState<ProfileReviewWorkspace | null>(null);
   const [currentProfile, setCurrentProfile] = useState<ProfileVersionView | null>(null);
   const [removalKeys, setRemovalKeys] = useState<Set<string>>(new Set());
-  const [removalReason, setRemovalReason] = useState("");
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [publicationMode, setPublicationMode] = useState<ProfilePublicationMode>("merge");
+  const [blockActions, setBlockActions] = useState<Map<string, ProfileBlockAction>>(new Map());
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -107,12 +107,13 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
     onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`);
   }
 
-  function toggleRemoval(item: ProfileDeltaItem, checked: boolean) {
+  function setBlockAction(item: ProfileDeltaItem, action: ProfileBlockAction) {
     setRemovalKeys((current) => {
       const next = new Set(current);
-      if (checked) next.add(item.key); else next.delete(item.key);
+      if (action === "remove") next.add(item.key); else next.delete(item.key);
       return next;
     });
+    setBlockActions((current) => new Map(current).set(item.key, action));
   }
 
   async function publish() {
@@ -125,23 +126,18 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       setErrorFieldPath(validationIssues[0]!.fieldPath);
       return;
     }
-    const removedItems = delta.items.filter((item) => item.kind === "explicit_removal");
-    if (removedItems.length && removalReason.trim().length < 5) {
-      setError("Explique por que as informações anteriormente aprovadas serão removidas.");
-      setErrorFieldPath(null);
-      setErrorRecovery("none");
-      return;
-    }
-    const removals: PublicationRemovalDecision[] = removedItems.map((item) => ({
+    const decisions: ProfileBlockDecision[] = delta.items.map((item) => ({
       fieldPath: item.key,
+      action: blockActions.get(item.key) ?? defaultBlockAction(item, publicationMode),
+      targetBlockId: item.targetBlockId,
+      resolver: item.resolver,
+      sourceBlockId: item.sourceBlockId,
       previousValue: parseDeltaValue(item.before),
-      reason: removalReason.trim(),
     }));
     setBusy(true); setError(null); setErrorFieldPath(null);
     try {
-      const approved = await personIngestionService.publishProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, removals);
+      const approved = await personIngestionService.publishProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, publicationMode, decisions);
       window.sessionStorage.setItem(`prisma.profile-published.${personId}`, `Perfil v${approved.profileVersion} publicado com sucesso.`);
-      setConfirmOpen(false);
       onNavigate(`/profiles/${personId}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Não foi possível publicar a nova versão.");
@@ -155,8 +151,6 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 10 }} /></PrismaPage>;
   if (!workspace || !delta) return <PrismaPage><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="Nenhuma publicação foi realizada. Abra novamente o documento para carregar o estado atual." showIcon title={error ?? "Comparação não encontrada."} type="error" /></PrismaPage>;
   const nextVersion = (currentProfile?.profileVersion ?? 0) + 1;
-  const removalItems = delta.items.filter((item) => item.kind === "explicit_removal");
-
   return (
     <PrismaPage className="prisma-delta-page">
       <PrismaPageHeader
@@ -166,6 +160,14 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => returnToReview()} type="text">Voltar para revisão</Button>
       <Card className="prisma-delta-summary-card">
+        {!delta.firstPublication ? <div className="prisma-publication-mode" aria-label="Escolha como o perfil será publicado">
+          <Typography.Title level={4}>Como esta revisão deve formar o Perfil?</Typography.Title>
+          <Radio.Group buttonStyle="solid" onChange={(event) => { setPublicationMode(event.target.value as ProfilePublicationMode); setBlockActions(new Map()); setRemovalKeys(new Set()); }} value={publicationMode}>
+            <Radio.Button value="merge">Atualizar Perfil</Radio.Button>
+            <Radio.Button value="replace">Substituir Perfil</Radio.Button>
+          </Radio.Group>
+          <Typography.Text type="secondary">{publicationMode === "merge" ? "Combina as informações revisadas com o perfil atual e preserva o que não foi citado." : "Usa esta revisão como o novo perfil completo. O que não aparece nela deixa de fazer parte do perfil vigente, sem apagar o histórico."}</Typography.Text>
+        </div> : null}
         <div className="prisma-delta-transition">
           <div><Typography.Text type="secondary">Perfil atual</Typography.Text><strong>{currentProfile ? `v${currentProfile.profileVersion} aprovado` : "Nenhum perfil publicado"}</strong><small>{currentProfile?.approvedAt ? formatDate(currentProfile.approvedAt) : "Primeira publicação"}</small></div>
           <span>→</span>
@@ -183,7 +185,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         <Tabs items={sections.map((section) => ({
           key: section.key,
           label: `${section.label} ${delta.items.filter((item) => item.section === section.key).length || ""}`.trim(),
-          children: <DeltaSection items={delta.items.filter((item) => item.section === section.key)} onToggleRemoval={toggleRemoval} />,
+          children: <DeltaSection actions={blockActions} items={delta.items.filter((item) => item.section === section.key)} mode={publicationMode} onAction={setBlockAction} />,
         }))} />
       </Card>
 
@@ -198,31 +200,23 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       {error ? <Alert action={errorAction(errorRecovery, errorFieldPath, returnToReview, onNavigate)} className="prisma-delta-publish-error" closable description="Nada foi publicado e sua comparação permanece preservada nesta tela." onClose={() => { setError(null); setErrorFieldPath(null); }} showIcon title={error} type="error" /> : null}
       <Alert
         className="prisma-delta-preservation-alert"
-        description="Itens não citados aparecem como mantidos. Uma remoção só acontece quando você a marca explicitamente e confirma sua justificativa."
+        description={publicationMode === "merge" ? "Itens não citados permanecem no perfil. Você só precisa agir quando quiser substituir ou remover algo já aprovado." : "Esta revisão será o novo perfil completo. O histórico e os documentos permanecem disponíveis para restauração."}
         icon={<SafetyCertificateOutlined />}
         showIcon
-        title="A omissão de informações no novo currículo não remove dados já aprovados."
+        title={publicationMode === "merge" ? "Atualizar Perfil preserva informações já aprovadas." : "Substituir Perfil remove do perfil vigente o que não estiver nesta revisão."}
         type="info"
       />
       <div className="prisma-delta-footer">
         <Button onClick={() => returnToReview()}>Voltar para revisão</Button>
-        <Button icon={<CheckCircleOutlined />} loading={busy} onClick={() => validationIssues.length ? returnToReview(validationIssues[0]!.fieldPath) : removalItems.length ? setConfirmOpen(true) : void publish()} type="primary">
-          {validationIssues.length ? "Revisar pendência" : delta.firstPublication ? `Publicar Perfil v${nextVersion}` : "Publicar nova versão"}
+        <Button danger={publicationMode === "replace"} icon={<CheckCircleOutlined />} loading={busy} onClick={() => validationIssues.length ? returnToReview(validationIssues[0]!.fieldPath) : void publish()} type={publicationMode === "replace" ? "default" : "primary"}>
+          {validationIssues.length ? "Revisar pendência" : delta.firstPublication ? `Publicar Perfil v${nextVersion}` : publicationMode === "merge" ? "Atualizar Perfil" : "Substituir Perfil"}
         </Button>
       </div>
-
-      <Modal cancelText="Voltar à comparação" confirmLoading={busy} okText={`Confirmar ${removalItems.length} ${removalItems.length === 1 ? "remoção" : "remoções"}`} onCancel={() => setConfirmOpen(false)} onOk={() => void publish()} open={confirmOpen} title={`Esta publicação removerá ${removalItems.length} ${removalItems.length === 1 ? "informação anteriormente aprovada" : "informações anteriormente aprovadas"}.`}>
-        <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-          {error ? <Alert description="A janela continuará aberta para você corrigir a justificativa ou voltar à revisão." showIcon title={error} type="error" /> : null}
-          {removalItems.map((item) => <Tag color="red" icon={<DeleteOutlined />} key={item.key}>{item.label}: {preview(item.before)}</Tag>)}
-          <Input.TextArea aria-label="Justificativa das remoções" onChange={(event) => setRemovalReason(event.target.value)} placeholder="Explique por que estas informações devem deixar o perfil vigente" rows={4} value={removalReason} />
-        </Space>
-      </Modal>
     </PrismaPage>
   );
 }
 
-function DeltaSection({ items, onToggleRemoval }: { items: ProfileDeltaItem[]; onToggleRemoval: (item: ProfileDeltaItem, checked: boolean) => void }) {
+function DeltaSection({ actions, items, mode, onAction }: { actions: Map<string, ProfileBlockAction>; items: ProfileDeltaItem[]; mode: ProfilePublicationMode; onAction: (item: ProfileDeltaItem, action: ProfileBlockAction) => void }) {
   if (!items.length) return <Empty description="Nenhuma informação nesta seção" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
   const order: ProfileDeltaKind[] = ["added", "updated", "maintained", "not_cited", "explicit_removal"];
   return <div className="prisma-delta-groups">{order.map((kind) => {
@@ -230,7 +224,7 @@ function DeltaSection({ items, onToggleRemoval }: { items: ProfileDeltaItem[]; o
     if (!group.length) return null;
     return <section key={kind}><Typography.Text className={`prisma-delta-group-title is-${kind}`} strong>{kindLabel(kind)} ({group.length})</Typography.Text>{group.map((item) => <article className={`prisma-delta-item is-${kind}`} key={item.key}>
       <div><strong>{item.label}</strong><Tag>{provenanceLabel(item.provenance)}</Tag>{item.kind === "updated" ? <><small>Antes: {preview(item.before)}</small><small>Depois: {preview(item.after)}</small></> : <small>{preview(item.after ?? item.before)}</small>}</div>
-      <div className="prisma-delta-item-action"><Tag color={kindColor(kind)}>{kindBadge(kind)}</Tag>{item.kind === "not_cited" ? <Typography.Text type="secondary">Mantido por já estar aprovado</Typography.Text> : null}{item.removable ? <Checkbox checked={item.kind === "explicit_removal"} onChange={(event) => onToggleRemoval(item, event.target.checked)}>Remover desta versão</Checkbox> : null}</div>
+      <div className="prisma-delta-item-action"><Tag color={kindColor(kind)}>{kindBadge(kind)}</Tag>{item.kind === "not_cited" ? <Typography.Text type="secondary">{mode === "merge" ? "Mantido por já estar aprovado" : "Não fará parte do novo perfil"}</Typography.Text> : null}<Select aria-label={`Ação para ${item.label}`} onChange={(value) => onAction(item, value)} options={blockActionOptions(item, mode)} value={actions.get(item.key) ?? defaultBlockAction(item, mode)} /></div>
     </article>)}</section>;
   })}</div>;
 }
@@ -241,6 +235,20 @@ function kindColor(kind: ProfileDeltaKind): string { return ({ added: "green", u
 function provenanceLabel(value: ProfileDeltaItem["provenance"]): string { return ({ approved: "Já aprovado", explicit: "Explícita no currículo", normalized: "Termo normalizado", human: "Confirmada por pessoa" })[value]; }
 function preview(value: string | null): string { if (!value) return "Sem valor"; try { const parsed = JSON.parse(value) as Record<string, unknown>; return Object.entries(parsed).filter(([key]) => !["id", "source", "evidenceText", "page", "items"].includes(key)).map(([, item]) => String(item ?? "")).filter(Boolean).join(" · ") || value; } catch { return value; } }
 function parseDeltaValue(value: string | null): unknown { if (!value) return null; try { return JSON.parse(value) as unknown; } catch { return value; } }
+function defaultBlockAction(item: ProfileDeltaItem, mode: ProfilePublicationMode): ProfileBlockAction {
+  if (item.kind === "added") return "add";
+  if (item.kind === "updated") return "update";
+  if (item.kind === "explicit_removal" || (mode === "replace" && item.kind === "not_cited")) return "remove";
+  return "keep";
+}
+function blockActionOptions(item: ProfileDeltaItem, mode: ProfilePublicationMode) {
+  const options: Array<{ value: ProfileBlockAction; label: string }> = [];
+  if (item.after && !item.before) options.push({ value: "add", label: "Adicionar" });
+  if (item.after && item.before) options.push({ value: "update", label: "Atualizar" }, { value: "replace", label: "Substituir" });
+  if (item.before) options.push({ value: "keep", label: "Manter atual" }, { value: "remove", label: "Remover do novo Perfil" });
+  if (mode === "replace" && item.kind === "not_cited") return options.filter((option) => option.value === "remove" || option.value === "keep");
+  return options;
+}
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(new Date(value)); }
 function reviewFocusStorageKey(reviewId: string): string { return `prisma.review-focus.${reviewId}`; }
 function errorAction(recovery: OperationRecovery, fieldPath: string | null, returnToReview: (fieldPath?: string | null) => void, onNavigate: (path: string) => void) {

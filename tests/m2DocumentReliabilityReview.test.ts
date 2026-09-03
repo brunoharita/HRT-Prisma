@@ -82,7 +82,7 @@ test("M2-C exposes four local flows under Pessoas without adding a global naviga
   assert.match(operations, /Requer revisão/);
   assert.match(detail, /Tentativas de processamento/);
   assert.match(review, /Extraído: preservado/);
-  assert.match(versions, /Compare versões aprovadas/);
+  assert.match(versions, /Compare ou restaure versões/);
   assert.doesNotMatch(application, /label: "Processamento e revisões"/);
 });
 

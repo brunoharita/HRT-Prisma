@@ -4628,6 +4628,19 @@ textarea {
   gap: 20px;
 }
 
+.prisma-publication-mode {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #dce6f7;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8fbff, #fff);
+}
+
+.prisma-publication-mode .ant-typography { margin: 0; }
+.prisma-publication-mode .ant-radio-group { display: flex; }
+.prisma-publication-mode .ant-radio-button-wrapper { flex: 1; text-align: center; }
+
 .prisma-delta-transition > div {
   display: grid;
   gap: 4px;
@@ -4692,6 +4705,18 @@ textarea {
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
+}
+
+.prisma-delta-item-action .ant-select { min-width: 190px; }
+
+.prisma-version-restore {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #dce6f7;
+  border-radius: 10px;
+  background: #f8fbff;
 }
 
 .prisma-delta-preservation-alert {
@@ -4765,6 +4790,8 @@ textarea {
     align-items: flex-start;
     flex-direction: column;
   }
+  .prisma-delta-item-action .ant-select { width: 100%; }
+  .prisma-version-restore { align-items: stretch; flex-direction: column; }
 
   .prisma-delta-page,
   .prisma-delta-page .prisma-page-header,
@@ -4792,6 +4819,71 @@ textarea {
 }
 
 @media (max-width: 520px) {
+  .prisma-version-table .ant-table-content {
+    overflow: visible !important;
+  }
+
+  .prisma-version-table table {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .prisma-version-table colgroup {
+    display: none;
+  }
+
+  .prisma-version-table .ant-table-thead {
+    display: none;
+  }
+
+  .prisma-version-table .ant-table-tbody {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .prisma-version-table .ant-table-tbody > tr {
+    display: grid;
+    width: 100% !important;
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid var(--prisma-border);
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .prisma-version-table .ant-table-tbody > tr > td {
+    display: grid;
+    grid-template-columns: minmax(88px, 0.72fr) minmax(0, 1.28fr);
+    gap: 10px;
+    align-items: start;
+    width: 100% !important;
+    padding: 12px !important;
+    border-bottom: 1px solid #edf1f6 !important;
+    white-space: normal;
+  }
+
+  .prisma-version-table .ant-table-tbody > tr > td:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .prisma-version-table .ant-table-tbody > tr > td::before {
+    content: attr(data-label);
+    color: #70809a;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .prisma-version-table .ant-table-tbody > tr > td:first-child {
+    background: #f8fbff;
+    color: #152846;
+    font-weight: 700;
+  }
+
   .prisma-journey-file-card,
   .prisma-delta-file-card {
     min-width: 0;

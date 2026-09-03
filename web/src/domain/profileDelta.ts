@@ -1,7 +1,7 @@
 import type { StructuredDraft } from "./personIngestion.js";
 import { educationCourseIdentity } from "../../../src/domain/educationClassification.js";
 
-export const PROFILE_PUBLICATION_DELTA_VERSION = "1.0.0";
+export const PROFILE_PUBLICATION_DELTA_VERSION = "2.0.0";
 
 export type ProfileDeltaKind = "added" | "updated" | "maintained" | "not_cited" | "explicit_removal";
 export type ProfileDeltaSection = "summary" | "experiences" | "competencies" | "education" | "languages" | "certifications" | "others" | "private_contact";
@@ -15,6 +15,9 @@ export interface ProfileDeltaItem {
   after: string | null;
   removable: boolean;
   provenance: "approved" | "explicit" | "normalized" | "human";
+  resolver: "same_block" | "new_block" | "ambiguous";
+  sourceBlockId: string | null;
+  targetBlockId: string | null;
 }
 
 export interface ProfileDelta {
@@ -73,6 +76,9 @@ function scalar(
     after: next,
     removable: removable && Boolean(previous),
     provenance: previous && !next ? "approved" : "explicit",
+    resolver: previous ? "same_block" : "new_block",
+    sourceBlockId: null,
+    targetBlockId: null,
   });
 }
 
@@ -95,11 +101,14 @@ function list(
       after: nextByKey.get(normalizedValue) ?? null,
       removable: true,
       provenance: !nextByKey.has(normalizedValue) ? "approved" : nextByKey.get(normalizedValue) !== value.trim() ? "normalized" : "explicit",
+      resolver: nextByKey.has(normalizedValue) ? "same_block" : "ambiguous",
+      sourceBlockId: null,
+      targetBlockId: null,
     });
   }
   for (const [normalizedValue, value] of nextByKey) {
     if (currentKeys.has(normalizedValue)) continue;
-    output.push({ key: `${root}::${normalizedValue}`, section, kind: "added", label, before: null, after: value, removable: false, provenance: "explicit" });
+    output.push({ key: `${root}::${normalizedValue}`, section, kind: "added", label, before: null, after: value, removable: false, provenance: "explicit", resolver: "new_block", sourceBlockId: null, targetBlockId: null });
   }
 }
 
@@ -110,7 +119,9 @@ function entities<T extends { id: string }>(
   const remaining = [...proposal];
   for (const previous of current) {
     const identityKey = identity(previous);
-    const index = remaining.findIndex((candidate) => candidate.id === previous.id || identity(candidate) === identityKey);
+    const sameIdIndex = remaining.findIndex((candidate) => candidate.id === previous.id);
+    const identityMatches = remaining.map((candidate, index) => ({ candidate, index })).filter(({ candidate }) => identity(candidate) === identityKey);
+    const index = sameIdIndex >= 0 ? sameIdIndex : identityMatches.length === 1 ? identityMatches[0]!.index : -1;
     const next = index >= 0 ? remaining.splice(index, 1)[0]! : null;
     const key = `${root}::${previous.id}`;
     output.push({
@@ -122,10 +133,13 @@ function entities<T extends { id: string }>(
       after: next ? describeEntity(next) : null,
       removable: true,
       provenance: !next ? "approved" : previous.id.startsWith("human_") || next.id.startsWith("human_") ? "human" : "explicit",
+      resolver: next ? "same_block" : identityMatches.length > 1 ? "ambiguous" : "ambiguous",
+      sourceBlockId: next?.id ?? null,
+      targetBlockId: previous.id,
     });
   }
   for (const next of remaining) {
-    output.push({ key: `${root}::${next.id}`, section, kind: "added", label: label(next), before: null, after: describeEntity(next), removable: false, provenance: next.id.startsWith("human_") ? "human" : "explicit" });
+    output.push({ key: `${root}::${next.id}`, section, kind: "added", label: label(next), before: null, after: describeEntity(next), removable: false, provenance: next.id.startsWith("human_") ? "human" : "explicit", resolver: "new_block", sourceBlockId: next.id, targetBlockId: null });
   }
 }
 

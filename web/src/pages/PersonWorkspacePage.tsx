@@ -30,6 +30,7 @@ import {
   Empty,
   Input,
   List,
+  Modal,
   Popconfirm,
   Skeleton,
   Space,
@@ -143,6 +144,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           window.sessionStorage.removeItem(`prisma.profile-published.${personId}`);
           setSuccess(publicationMessage);
         }
+        const deletionMessage = window.sessionStorage.getItem(`prisma.document-deleted.${personId}`);
+        if (deletionMessage) { window.sessionStorage.removeItem(`prisma.document-deleted.${personId}`); setSuccess(deletionMessage); }
       })
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível carregar a Pessoa."); })
       .finally(() => { if (current) setLoading(false); });
@@ -257,6 +260,23 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     }
   }
 
+  function handleDelete(document: PersonDocumentTimelineItem) {
+    Modal.confirm({
+      title: "Excluir documento?",
+      content: "O arquivo e apenas as informações exclusivas desta importação serão removidos. Evidências independentes, verificações concluídas, conhecimento validado e as demais versões permanecerão preservados.",
+      okText: "Excluir documento", okButtonProps: { danger: true }, cancelText: "Cancelar",
+      onOk: async () => {
+        setBusy(true); setError(null); setSuccess(null);
+        try {
+          const result = await personIngestionService.deleteDocument(activeMembership.organizationId, personId, document.id);
+          await refresh();
+          setSuccess(result.profileRebuilt ? `Documento excluído e Perfil v${result.profileVersion} recomposto com as fontes válidas restantes.` : "Documento excluído. As demais informações da Pessoa foram preservadas.");
+        } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível excluir o documento."); }
+        finally { setBusy(false); }
+      },
+    });
+  }
+
   const viewModel = useMemo(
     () => workspace ? buildPersonCenterViewModel(workspace, currentProfileVersion) : null,
     [currentProfileVersion, workspace],
@@ -301,6 +321,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         model={viewModel}
         onAction={runDocumentAction}
         onDiscard={(document) => void handleDiscard(document)}
+        onDelete={handleDelete}
         onSelect={selectDocument}
         selectedDocument={selectedDocument}
         selectedDraft={workspace.draft}
@@ -516,7 +537,7 @@ function RecentActivity({ model }: { model: PersonCenterViewModel }) {
   return <PrismaCard className="prisma-person-recent-history" title="Atividade recente">{model.recentActivity.length ? <Timeline items={model.recentActivity.map((item) => ({ color: timelineColor(item.tone), children: <HistoryItem date={item.occurredAt} description={item.description} title={item.title} /> }))} /> : <Empty description="Nenhuma atividade relevante foi registrada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>;
 }
 
-function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onSelect, onAction, onDiscard }: {
+function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onSelect, onAction, onDiscard, onDelete }: {
   model: PersonCenterViewModel;
   selectedDocument: PersonDocumentTimelineItem | null;
   selectedDraft: PersonIngestionWorkspace["draft"];
@@ -524,6 +545,7 @@ function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onS
   onSelect: (document: PersonDocumentTimelineItem) => void;
   onAction: (kind: PersonActionKind, document: PersonDocumentTimelineItem) => void;
   onDiscard: (document: PersonDocumentTimelineItem) => void;
+  onDelete: (document: PersonDocumentTimelineItem) => void;
 }) {
   return (
     <div className="prisma-person-documents-view">
@@ -546,12 +568,12 @@ function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onS
           <div className="prisma-mobile-only prisma-person-document-cards">{model.documents.map((document) => { const presentation = presentDocument(document); return <button className={selectedDocument?.id === document.id ? "is-selected" : ""} key={document.id} onClick={() => onSelect(document)} type="button"><span><FilePdfOutlined /><strong>{document.filename}</strong></span><small>Documento v{document.documentVersion} · {formatDate(document.createdAt)}</small><PrismaStatusTag compact label={presentation.label} tone={statusTone(presentation.tone)} /></button>; })}</div>
         </PrismaCard>
       </section>
-      <DocumentContextPanel busy={busy} document={selectedDocument} draft={selectedDraft} onAction={onAction} onDiscard={onDiscard} />
+      <DocumentContextPanel busy={busy} document={selectedDocument} draft={selectedDraft} onAction={onAction} onDelete={onDelete} onDiscard={onDiscard} />
     </div>
   );
 }
 
-function DocumentContextPanel({ document, draft, busy, onAction, onDiscard }: { document: PersonDocumentTimelineItem | null; draft: PersonIngestionWorkspace["draft"]; busy: boolean; onAction: (kind: PersonActionKind, document: PersonDocumentTimelineItem) => void; onDiscard: (document: PersonDocumentTimelineItem) => void }) {
+function DocumentContextPanel({ document, draft, busy, onAction, onDiscard, onDelete }: { document: PersonDocumentTimelineItem | null; draft: PersonIngestionWorkspace["draft"]; busy: boolean; onAction: (kind: PersonActionKind, document: PersonDocumentTimelineItem) => void; onDiscard: (document: PersonDocumentTimelineItem) => void; onDelete: (document: PersonDocumentTimelineItem) => void }) {
   if (!document) return <PrismaCard className="prisma-person-document-context"><Empty description="Selecione um documento para ver seu contexto." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard>;
   const presentation = presentDocument(document);
   const metrics = draftMetrics(draft);
@@ -564,7 +586,7 @@ function DocumentContextPanel({ document, draft, busy, onAction, onDiscard }: { 
         <div className="prisma-person-document-context__summary"><article><small>Campos recuperados</small><strong>{metrics.recovered}</strong><span>Informações estruturadas nesta fonte</span></article><article><small>Pontos pendentes</small><strong>{metrics.pending}</strong><span>Campos não identificados ou que exigem validação</span></article><article><small>Resultado no Perfil</small><strong>{document.profileVersion ? `v${document.profileVersion}` : "Sem nova versão"}</strong><span>{document.profileVersion ? "Perfil publicado" : "Perfil vigente preservado"}</span></article></div>
         {draft?.education.length ? <DocumentEducationSummary education={draft.education} /> : null}
         <section className="prisma-person-document-context__next"><small>Próxima ação</small><strong>{presentation.nextAction}</strong><p>{presentation.description}</p>{reviewable ? <Button block icon={<ArrowRightOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Abrir revisão M5</Button> : presentation.state === "technical_failure" && document.latestAttempt && document.latestAttempt.pagesNative + document.latestAttempt.pagesOcr > 0 ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("reprocess", document)} type="primary">Reprocessar documento</Button> : null}</section>
-        <div className="prisma-person-document-context__actions"><Button icon={<EyeOutlined />} onClick={() => onAction(document.verificationReviewId ? "open_document" : "open_details", document)}>{document.verificationReviewId ? "Visualizar documento" : "Detalhes técnicos"}</Button>{canDiscard ? <Popconfirm cancelText="Manter pendência" description="Documento, histórico e Perfil vigente permanecerão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(document)} title="Descartar esta importação do fluxo ativo?"><Button danger disabled={busy} icon={<DeleteOutlined />}>Descartar</Button></Popconfirm> : null}</div>
+        <div className="prisma-person-document-context__actions"><Button icon={<EyeOutlined />} onClick={() => onAction(document.verificationReviewId ? "open_document" : "open_details", document)}>{document.verificationReviewId ? "Visualizar documento" : "Detalhes técnicos"}</Button>{canDiscard ? <Popconfirm cancelText="Manter pendência" description="Documento, histórico e Perfil vigente permanecerão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(document)} title="Descartar esta importação do fluxo ativo?"><Button disabled={busy}>Arquivar revisão</Button></Popconfirm> : null}<Button danger disabled={busy} icon={<DeleteOutlined />} onClick={() => onDelete(document)}>Excluir documento</Button></div>
       </PrismaCard>
     </aside>
   );

@@ -11,14 +11,13 @@ test("resume review validates adaptive data before persistence and distinguishes
   assert.match(page, /A evidência foi registrada e preservada, mas a tela não conseguiu carregar a confirmação/);
 });
 
-test("publication preflight keeps the confirmation open after failure and points back to review", async () => {
+test("publication preflight preserves the comparison after failure and points back to review", async () => {
   const page = await readFile("web/src/pages/ProfileDeltaPage.tsx", "utf8");
   assert.match(page, /validateEducationClassificationsForApproval\(normalizedDraft\)/);
   assert.match(page, /Antes de publicar, falta concluir/);
   assert.match(page, /Revisar o campo/);
-  assert.match(page, /setConfirmOpen\(false\);\s*onNavigate/);
-  const finallyBlock = page.match(/finally \{([\s\S]*?)\n    \}/)?.[1] ?? "";
-  assert.doesNotMatch(finallyBlock, /setConfirmOpen/);
+  assert.match(page, /Nada foi publicado e sua comparação permanece preservada nesta tela/);
+  assert.match(page, /onNavigate\(`\/profiles\/\$\{personId\}`\)/);
 });
 
 test("processing failures expose a concrete recovery and never display raw persisted backend failures", async () => {

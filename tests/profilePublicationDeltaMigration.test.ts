@@ -35,8 +35,8 @@ test("the six-screen journey uses one state source and publishes from Delta", as
   assert.match(importer, /deriveResumeProductState/);
   assert.match(review, /Revisão da nova importação/);
   assert.match(delta, /Comparação com o perfil atual/);
-  assert.match(delta, /A omissão de informações no novo currículo não remove dados já aprovados/);
-  assert.match(delta, /Publicar nova versão/);
+  assert.match(delta, /Atualizar Perfil preserva informações já aprovadas/);
+  assert.match(delta, /Substituir Perfil/);
   assert.match(application, /profileView === "delta"/);
 });
 

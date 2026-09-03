@@ -230,8 +230,9 @@ test("M5 records ordinary human changes without asking the operator for a free-t
   assert.match(migration, /replace\(function_definition, manual_reason_block, ''\)/);
   assert.match(verification, /public\.save_profile_review\([\s\S]*?null,[\s\S]*?qa:automatic-review-audit/);
   assert.match(verification, /rollback;/);
-  assert.match(delta, /removalReason\.trim\(\)\.length < 5/);
-  assert.match(delta, /Justificativa das remoções/);
+  assert.doesNotMatch(delta, /removalReason\.trim\(\)\.length < 5/);
+  assert.doesNotMatch(delta, /Justificativa das remoções/);
+  assert.match(delta, /Remover do novo Perfil/);
 });
 
 test("M5 migration persists versioned normalized regions and compatible legacy evidence links", async () => {

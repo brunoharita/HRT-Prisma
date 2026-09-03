@@ -94,7 +94,7 @@ export interface PersonWorkspaceSummary {
 export interface CurrentProfileSummary {
   id: string;
   profileVersion: number;
-  sourceDocumentId: string;
+  sourceDocumentId: string | null;
   approvedAt: string | null;
   createdAt: string;
 }
@@ -162,7 +162,18 @@ export interface ResumeProcessingProgress {
 export interface PublicationRemovalDecision {
   fieldPath: string;
   previousValue: unknown;
-  reason: string;
+}
+
+export type ProfilePublicationMode = "merge" | "replace";
+export type ProfileBlockAction = "add" | "update" | "replace" | "keep" | "remove";
+
+export interface ProfileBlockDecision {
+  fieldPath: string;
+  action: ProfileBlockAction;
+  resolver: "same_block" | "new_block" | "ambiguous";
+  sourceBlockId: string | null;
+  targetBlockId: string | null;
+  previousValue: unknown;
 }
 
 export interface CustomProfileSection {
@@ -347,7 +358,10 @@ export interface ProfileVersionView {
   profileVersion: number;
   profileData: StructuredDraft;
   reviewStatus: string;
-  sourceDocumentId: string;
+  sourceDocumentId: string | null;
+  origin?: "review_merge" | "review_replace" | "restored" | "document_deletion_rebuild" | "legacy";
+  restoredFromProfileId?: string | null;
+  sourceDocumentName?: string | null;
   processingAttemptId: string | null;
   approvedByAuthUserId: string | null;
   approvedAt: string | null;

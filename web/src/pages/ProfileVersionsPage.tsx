@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { ArrowLeftOutlined, SwapOutlined } from "@ant-design/icons";
-import { Alert, Button, Empty, Select, Skeleton, Table, Tabs, Tag, Typography } from "antd";
+import type { TdHTMLAttributes } from "react";
+import { ArrowLeftOutlined, HistoryOutlined, SwapOutlined } from "@ant-design/icons";
+import { Alert, Button, Empty, Modal, Select, Skeleton, Table, Tabs, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ProfileVersionView, StructuredDraft } from "../domain/personIngestion";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
@@ -18,6 +19,33 @@ export function ProfileVersionsPage({ activeMembership, personId, onNavigate }: 
   const [differencesOnly, setDifferencesOnly] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function restore(version: ProfileVersionView) {
+    setBusy(true); setError(null);
+    try {
+      const result = await personIngestionService.restoreProfileVersion(activeMembership.organizationId, personId, version.id);
+      setNotice(`Perfil v${version.profileVersion} restaurado como a nova versão v${result.profileVersion}.`);
+      const refreshed = await personIngestionService.listProfileVersions(activeMembership.organizationId, personId);
+      setVersions(refreshed); setRightId(refreshed[0]?.id ?? null);
+    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível restaurar esta versão."); }
+    finally { setBusy(false); }
+  }
+
+  function resetProfile() {
+    Modal.confirm({
+      title: "Reiniciar Perfil?",
+      content: "A Pessoa, os documentos e todas as versões continuarão disponíveis. Apenas o perfil vigente deixará de existir até uma nova publicação ou restauração.",
+      okText: "Reiniciar Perfil", okButtonProps: { danger: true }, cancelText: "Cancelar",
+      onOk: async () => {
+        setBusy(true); setError(null);
+        try { await personIngestionService.resetProfile(activeMembership.organizationId, personId); setNotice("Perfil reiniciado. O histórico e os documentos foram preservados."); setVersions(await personIngestionService.listProfileVersions(activeMembership.organizationId, personId)); }
+        catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível reiniciar o Perfil."); }
+        finally { setBusy(false); }
+      },
+    });
+  }
 
   useEffect(() => {
     let current = true;
@@ -35,17 +63,18 @@ export function ProfileVersionsPage({ activeMembership, personId, onNavigate }: 
   const options = versions.map((version) => ({ value: version.id, label: `Perfil v${version.profileVersion}${version.supersededAt ? "" : " · atual"}` }));
   const rows = left && right ? buildDifferences(left.profileData, right.profileData).filter((row) => !differencesOnly || row.changed) : [];
   const columns: ColumnsType<DifferenceRow> = [
-    { title: "Campo", dataIndex: "field", width: 180 },
-    { title: left ? `Versão ${left.profileVersion}` : "Versão anterior", dataIndex: "left", render: renderValue },
-    { title: right ? `Versão ${right.profileVersion}` : "Versão atual", dataIndex: "right", render: renderValue },
-    { title: "Diferença", dataIndex: "changed", width: 120, render: (changed: boolean) => <Tag color={changed ? "gold" : "default"}>{changed ? "Alterado" : "Igual"}</Tag> },
+    { title: "Campo", dataIndex: "field", width: 180, onCell: () => mobileCellLabel("Campo") },
+    { title: left ? `Versão ${left.profileVersion}` : "Versão anterior", dataIndex: "left", render: renderValue, onCell: () => mobileCellLabel(left ? `Versão ${left.profileVersion}` : "Versão anterior") },
+    { title: right ? `Versão ${right.profileVersion}` : "Versão atual", dataIndex: "right", render: renderValue, onCell: () => mobileCellLabel(right ? `Versão ${right.profileVersion}` : "Versão atual") },
+    { title: "Diferença", dataIndex: "changed", width: 120, render: (changed: boolean) => <Tag color={changed ? "gold" : "default"}>{changed ? "Alterado" : "Igual"}</Tag>, onCell: () => mobileCellLabel("Diferença") },
   ];
 
   return (
     <PrismaPage className="prisma-m2c-page prisma-version-page">
-      <PrismaPageHeader title="Comparar versões do Perfil Prisma" description="Compare versões aprovadas sem apagar fatos, evidências ou decisões anteriores." actions={<Button onClick={() => setDifferencesOnly((value) => !value)}>{differencesOnly ? "Mostrar todos os campos" : "Mostrar apenas diferenças"}</Button>} />
+      <PrismaPageHeader title="Comparar versões do Perfil Prisma" description="Compare ou restaure versões sem apagar fatos, evidências ou decisões anteriores." actions={<><Button onClick={() => setDifferencesOnly((value) => !value)}>{differencesOnly ? "Mostrar todos os campos" : "Mostrar apenas diferenças"}</Button><Button danger disabled={!versions.some((version) => !version.supersededAt)} loading={busy} onClick={resetProfile}>Reiniciar Perfil</Button></>} />
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Pessoa</Button>
       {error ? <Alert title={error} showIcon type="error" /> : null}
+      {notice ? <Alert closable onClose={() => setNotice(null)} showIcon title={notice} type="success" /> : null}
       {versions.length === 0 ? <PrismaCard><Empty description="Nenhuma versão de perfil foi aprovada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : (
         <>
           <PrismaCard className="prisma-version-selectors">
@@ -55,10 +84,11 @@ export function ProfileVersionsPage({ activeMembership, personId, onNavigate }: 
           </PrismaCard>
           <PrismaCard>
             <Tabs items={[
-              { key: "data", label: "Dados estruturados", children: <Table columns={columns} dataSource={rows} pagination={false} rowKey="key" scroll={{ x: 900 }} /> },
+              { key: "data", label: "Dados estruturados", children: <Table className="prisma-version-table" columns={columns} dataSource={rows} pagination={false} rowKey="key" scroll={{ x: 900 }} /> },
               { key: "provenance", label: "Proveniência", children: <div className="prisma-version-provenance"><VersionProvenance version={left} /><VersionProvenance version={right} /></div> },
             ]} />
           </PrismaCard>
+          {left?.supersededAt ? <div className="prisma-version-restore"><Button icon={<HistoryOutlined />} loading={busy} onClick={() => void restore(left)}>Restaurar versão v{left.profileVersion}</Button><Typography.Text type="secondary">A restauração criará uma nova versão vigente e manterá todo o histórico.</Typography.Text></div> : null}
         </>
       )}
     </PrismaPage>
@@ -72,7 +102,8 @@ function buildDifferences(left: StructuredDraft, right: StructuredDraft): Differ
     return { key, field, left: leftValue, right: rightValue, changed: leftValue !== rightValue };
   });
 }
-function VersionProvenance({ version }: { version: ProfileVersionView | null }) { return version ? <div><Tag color={version.supersededAt ? "default" : "green"}>v{version.profileVersion}{version.supersededAt ? "" : " · atual"}</Tag><p>Status: {version.reviewStatus}</p><p>Documento: {version.sourceDocumentId}</p><p>Tentativa: {version.processingAttemptId ?? "legada"}</p><p>Aprovado em: {version.approvedAt ? formatDate(version.approvedAt) : "sem aprovação M2-C"}</p><p>Ator: {version.approvedByAuthUserId ?? "não registrado na versão legada"}</p></div> : <Empty description="Selecione uma versão." image={Empty.PRESENTED_IMAGE_SIMPLE} />; }
+function VersionProvenance({ version }: { version: ProfileVersionView | null }) { return version ? <div><Tag color={version.supersededAt ? "default" : "green"}>v{version.profileVersion}{version.supersededAt ? "" : " · atual"}</Tag><p>Origem: {originLabel(version.origin)}</p>{version.restoredFromProfileId ? <p>Restaurada de uma versão anterior</p> : null}<p>Documento: {version.sourceDocumentName ?? version.sourceDocumentId ?? "Documento excluído, referência preservada no histórico"}</p><p>Tentativa: {version.processingAttemptId ?? "não aplicável"}</p><p>Aprovado em: {version.approvedAt ? formatDate(version.approvedAt) : "sem aprovação M2-C"}</p><p>Ator: {version.approvedByAuthUserId ?? "não registrado na versão legada"}</p></div> : <Empty description="Selecione uma versão." image={Empty.PRESENTED_IMAGE_SIMPLE} />; }
+function originLabel(origin: ProfileVersionView["origin"]): string { return ({ legacy: "Versão histórica", review_merge: "Atualização de Perfil", review_replace: "Substituição de Perfil", restored: "Versão restaurada", document_deletion_rebuild: "Perfil recomposto após exclusão de documento" })[origin ?? "legacy"]; }
 function formatValue(value: StructuredDraft[keyof StructuredDraft]): string {
   if (value === null) return "Não identificado";
   if (typeof value === "string") return value || "Não identificado";
@@ -87,4 +118,5 @@ function formatValue(value: StructuredDraft[keyof StructuredDraft]): string {
   }).join("\n");
 }
 function renderValue(value: string) { return <pre className="prisma-version-value">{value}</pre>; }
+function mobileCellLabel(label: string): TdHTMLAttributes<HTMLTableCellElement> { return { "data-label": label } as TdHTMLAttributes<HTMLTableCellElement>; }
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value)); }

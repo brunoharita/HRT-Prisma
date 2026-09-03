@@ -63,6 +63,30 @@ export function reviewOperationError(error: ReviewOperationError, fallback: stri
     if (actionable.reason === "review_contract_sync_failed") {
       return asOperationError(error, "O Prisma não conseguiu atualizar automaticamente os dados antigos desta revisão. Nenhum campo precisa ser corrigido manualmente e nenhuma alteração foi perdida. Atualize a página e tente novamente.", "internal", "reload");
     }
+    if (actionable.reason === "profile_publication_mode_required") {
+      return asOperationError(error, "Escolha Atualizar Perfil ou Substituir Perfil antes de publicar.", "validation", "review-fields");
+    }
+    if (actionable.reason === "profile_block_target_required") {
+      return asOperationError(error, "Escolha qual registro atual deve receber esta alteração.", "validation", "review-fields", actionable.fieldPath);
+    }
+    if (actionable.reason === "profile_block_target_type_mismatch") {
+      return asOperationError(error, "A informação selecionada pertence a outro tipo de conteúdo. Escolha um registro do mesmo grupo.", "validation", "review-fields", actionable.fieldPath);
+    }
+    if (actionable.reason === "profile_block_target_not_found") {
+      return asOperationError(error, "O registro escolhido mudou desde que a tela foi aberta. Atualize a comparação e escolha novamente.", "stale-state", "reload", actionable.fieldPath);
+    }
+    if (/profile_block_decision/.test(actionable.reason)) {
+      return asOperationError(error, "Uma ação da comparação está incompleta. Revise o item destacado e escolha como ele deve ficar no novo Perfil.", "validation", "review-fields", actionable.fieldPath);
+    }
+    if (/profile_version_not_found/.test(actionable.reason)) {
+      return asOperationError(error, "Esta versão não está mais disponível para restauração. Atualize o histórico e escolha outra versão.", "stale-state", "reload");
+    }
+    if (/document_(?:not_found_for_deletion|changed_before_deletion)/.test(actionable.reason)) {
+      return asOperationError(error, "Este documento mudou ou já foi excluído. Atualize a Central da Pessoa para ver o estado atual.", "stale-state", "reload");
+    }
+    if (actionable.reason === "document_deletion_operation_not_found") {
+      return asOperationError(error, "A exclusão anterior não pôde ser retomada. Volte ao documento e tente excluir novamente.", "stale-state", "return-to-review");
+    }
   }
 
   if (error.code === "40001" || /review_conflict|profile_base_conflict|processing_base_conflict|serialize/.test(technicalMessage)) {

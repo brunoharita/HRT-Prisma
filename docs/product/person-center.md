@@ -37,6 +37,12 @@ Uma importação incompleta ou uma falha técnica nunca invalida a Pessoa nem o 
 
 As perspectivas reorganizam capacidades existentes. Não criam novos estados persistidos, menus globais, scores, inferências ou decisões automáticas.
 
+## Ações de ciclo de vida
+
+- A comparação oferece `Atualizar Perfil` como padrão e `Substituir Perfil` quando a revisão deve se tornar o perfil completo.
+- O histórico permite `Restaurar versão` criando uma nova versão vigente e `Reiniciar Perfil` sem apagar Pessoa, documentos ou versões.
+- O contexto documental oferece `Excluir documento` separado de `Arquivar revisão`. Exclusão física é destrutiva, recebe confirmação e preserva dados independentes.
+
 ## Linguagem
 
 Usar `Perfil vigente`, `Nova importação`, `Requer revisão`, `Revisar documento agora`, `Documentos e versões` e `Atividade recente`. Vermelho é reservado a falha técnica real ou ação destrutiva; âmbar comunica revisão; verde comunica publicação vigente; azul comunica ação.
