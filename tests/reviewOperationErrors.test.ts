@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { readdir, readFile } from "node:fs/promises";
+import path from "node:path";
 import test from "node:test";
-import { operationRecovery, reviewOperationError, reviewOperationErrorMessage, supabaseOperationError } from "../web/src/domain/reviewOperationErrors.js";
+import { operationRecovery, reviewOperationError, reviewOperationErrorMessage, supabaseFunctionOperationError, supabaseOperationError } from "../web/src/domain/reviewOperationErrors.js";
 
 test("review operations turn approval gates into actionable messages", () => {
   assert.match(reviewOperationErrorMessage({ code: "23514", message: "material evidence is required before approval" }, "Falha."), /Vincule ao menos uma evidência/);
@@ -13,6 +15,8 @@ test("review operations turn approval gates into actionable messages", () => {
   assert.match(reviewOperationErrorMessage({ code: "28000", message: "authenticated user required" }, "Falha."), /sessão expirou/);
   assert.match(reviewOperationErrorMessage({ code: "P0002", message: "active review evidence to replace was not found" }, "Falha."), /evidência já foi alterada/);
   assert.match(reviewOperationErrorMessage({ code: "42501", message: "original extraction evidence cannot be retired" }, "Falha."), /evidência original/);
+  assert.equal(reviewOperationError({ code: "23514", message: "full name is required to save a resume" }, "Falha.").fieldPath, "identity.fullName");
+  assert.equal(reviewOperationError({ code: "23514", message: "phone or email is required to save a resume" }, "Falha.").fieldPath, "contact.phone");
 });
 
 test("review operations never expose unknown database details to the operator", () => {
@@ -70,6 +74,63 @@ test("Supabase transport and intake failures expose safe recovery without raw ba
   assert.doesNotMatch(unsupportedFile.message, /DOCX/);
 
   const genericInvalid = reviewOperationError({ code: "22023", message: "unknown_private_contract leaked" }, "Falha.");
-  assert.match(genericInvalid.message, /inconsistência interna/);
+  assert.match(genericInvalid.message, /falha interna/);
   assert.doesNotMatch(genericInvalid.message, /unknown_private_contract/);
+});
+
+test("operation-feedback 2.0 identifies the exact field in natural language", () => {
+  const classification = reviewOperationError({
+    code: "22023",
+    message: "prisma_action_required",
+    details: JSON.stringify({
+      contract: "operation-feedback-2.0.0",
+      reason: "education_classification_required",
+      fieldPath: "education.education_12345678.classificationOrigin",
+      itemNumber: 2,
+    }),
+  }, "Falha.");
+  assert.equal(classification.message, "Formação 2: confirme a classificação acadêmica apresentada antes de publicar.");
+  assert.equal(classification.fieldPath, "education.education_12345678.classificationOrigin");
+  assert.equal(classification.recovery, "review-fields");
+
+  const legacy = reviewOperationError({ code: "22023", message: "reviewed data has an invalid current contract" }, "Falha.");
+  assert.match(legacy.message, /Nenhum campo precisa ser corrigido manualmente/);
+  assert.equal(legacy.recovery, "reload");
+});
+
+test("verification, item-bank and knowledge failures say what the operator must do", () => {
+  assert.match(supabaseOperationError({ message: "M51A_REQUIRES_PERSON_AND_VACANCY" }, "Falha.").message, /Selecione a pessoa e a vaga/);
+  assert.match(supabaseOperationError({ message: "M51A_INSUFFICIENT_ITEM_BANK_COVERAGE" }, "Falha.").message, /perguntas suficientes/);
+  assert.match(supabaseOperationError({ message: "M51B_INVALID_EXPIRY" }, "Falha.").message, /por quantos dias/);
+  assert.match(supabaseOperationError({ message: "M51B_INVALID_OPTION" }, "Falha.").message, /alternativas disponíveis/);
+  assert.match(supabaseOperationError({ message: "M51C_QUANTITY_EXCEEDS_GAP" }, "Falha.").message, /Reduza a quantidade/);
+  assert.match(supabaseOperationError({ message: "M51C_HUMAN_REVIEW_REQUIRED" }, "Falha.").message, /revisão humana/);
+  assert.match(supabaseOperationError({ message: "canonical label is required" }, "Falha.").message, /nome padronizado/);
+});
+
+test("Edge Function response bodies are translated without exposing technical payloads", async () => {
+  const translated = await supabaseFunctionOperationError({
+    message: "Edge Function returned a non-2xx status code",
+    context: new Response(JSON.stringify({ error: "Muitas tentativas. Aguarde um minuto." }), {
+      status: 429,
+      headers: { "content-type": "application/json" },
+    }),
+  }, "Falha.");
+  assert.equal(translated.recovery, "retry");
+  assert.match(translated.message, /Aguarde um minuto/);
+  assert.doesNotMatch(translated.message, /non-2xx|Edge Function/);
+});
+
+test("Supabase service boundaries cannot throw raw backend messages", async () => {
+  const baseDirectory = path.resolve("web/src/infrastructure/supabase");
+  const entries = await readdir(baseDirectory, { recursive: true });
+  const sourceFiles = entries.filter((entry) => entry.endsWith(".ts"));
+  const violations: string[] = [];
+  for (const entry of sourceFiles) {
+    const source = await readFile(path.join(baseDirectory, entry), "utf8");
+    if (/throw\s+new\s+Error\([^\n]*(?:error|result\.error)\.message/.test(source) || /throw\s+(?:error|result\.error)\s*;/.test(source)) {
+      violations.push(entry);
+    }
+  }
+  assert.deepEqual(violations, [], `Mensagens técnicas expostas em: ${violations.join(", ")}`);
 });

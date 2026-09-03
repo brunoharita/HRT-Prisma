@@ -19,7 +19,7 @@ O Prisma já preservava Pessoa, Documento, Tentativa, Rascunho, Revisão e Perfi
 - `publish_profile_review` é a única autoridade executável pelo cliente para publicar. `approve_profile_review` permanece como primitiva interna sem grant para `authenticated`.
 - Competência explícita, normalizada, confirmada por humano e inferida mantêm origem distinta. A publicação não depende da existência de competências.
 - Tentativas e detalhes operacionais permanecem disponíveis em consulta técnica, sem dominar a jornada comum.
-- O contrato local `operation-feedback` 1.0.0 classifica interrupções como validação, conflito, sessão, autorização, estado desatualizado, indisponibilidade ou falha interna. A mensagem sempre informa preservação e recuperação, sem expor SQL, nomes internos ou payloads.
+- O contrato `operation-feedback` 2.0.0 classifica interrupções como validação, conflito, sessão, autorização, estado desatualizado, indisponibilidade ou falha interna. Quando a pessoa pode resolver, o envelope informa motivo, campo e item; a interface traduz, lista, navega e destaca a correção exata. Quando não pode, o Prisma assume a falha e não pede uma ação manual impossível.
 - O cliente valida o rascunho antes de aplicar aprendizado ou publicar. Falha posterior a uma confirmação transacional é apresentada como atualização de tela incompleta, nunca como mutação não realizada; a interface não incentiva repetição ambígua.
 - Recuperação de falha técnica deriva das páginas e dos caracteres úteis preservados. Reprocessar só aparece quando existe fonte reutilizável; nos demais casos a ação é substituir o arquivo.
 - Correções comuns não exigem que o operador redija uma justificativa. O ledger já preserva ator, instante, revisão, campo, antes/depois e evidência; a RPC completa o campo legado `reason` com uma descrição operacional determinística. Motivo humano continua obrigatório somente para remover explicitamente um fato já aprovado no Delta.
@@ -40,6 +40,8 @@ Em 2026-09-02, a recuperação determinística de falhas avança `resume-product
 
 Na mesma data, `human-profile-review` avança de 7.0.0 para 7.1.0. `p_reason` continua aceito para compatibilidade, mas deixa de ser uma precondição de correções comuns; descrições automáticas mantêm revisões e eventos históricos legíveis. A regra de remoção explícita e justificada de `profile-publication-delta` 1.0.0 não muda.
 
+Ainda em 2026-09-02, `profile-publication-delta` avança para 1.1.0, `human-profile-review` para 7.2.0, `person-ingestion` para 10.1.0 e `professional-profile` para 5.1.0. O rascunho antigo é sincronizado automaticamente e a fronteira transacional normaliza entidades herdadas do perfil-base. IDs são determinísticos; formação histórica aprovada permanece `unknown` quando não havia classificação, com razão de compatibilidade e sem reclassificação retroativa. Formação proposta ou alterada continua pendente até confirmação humana.
+
 ## Validation
 
 Testes determinísticos cobrem os sete estados, extração parcial, Delta inicial, atualização, manutenção, omissão e remoção explícita. QA conectado comprova autorização, RLS, mesclagem, idempotência, rejeição cross-tenant e publicação revertida sem resíduos. Smoke autenticado usa o navegador interno nos cinco viewports definidos pela matriz de QA.
@@ -52,3 +54,4 @@ Testes determinísticos cobrem os sete estados, extração parcial, Delta inicia
 - `web/src/domain/profileDelta.ts`
 - `supabase/migrations/20260831230000_profile_publication_delta.sql`
 - `supabase/migrations/20260901000000_enforce_profile_publication_boundary.sql`
+- `supabase/migrations/20260902213000_actionable_review_errors_and_legacy_publication.sql`

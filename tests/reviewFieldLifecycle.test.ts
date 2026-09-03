@@ -3,7 +3,9 @@ import test from "node:test";
 import type { StructuredDraft } from "../web/src/domain/personIngestion.js";
 import {
   hasMaterialProfessionalInformation,
+  legacyReviewEntityIdFromValue,
   normalizeReviewDraft,
+  reviewDraftNeedsContractUpgrade,
   reviewDraftChangeState,
   reviewEntityFieldPath,
   reviewFieldPathExists,
@@ -106,4 +108,17 @@ test("field existence distinguishes temporary targets from removed or root paths
   assert.equal(reviewFieldPathExists(input, "education"), false);
   assert.equal(reviewFieldPathExists(input, "education.education_removed.course"), false);
   assert.equal(reviewFieldPathExists(input, "summary"), true);
+});
+
+test("legacy entities receive deterministic content-aware ids and require one technical synchronization", () => {
+  const first = legacyReviewEntityIdFromValue("education", 0, { course: "MBA", institution: "USC", period: "2019 - 2020" });
+  const repeated = legacyReviewEntityIdFromValue("education", 0, { course: "MBA", institution: "USC", period: "2019 - 2020" });
+  const changed = legacyReviewEntityIdFromValue("education", 0, { course: "Bacharelado", institution: "UNESP", period: "2010 - 2013" });
+  assert.equal(first, repeated);
+  assert.notEqual(first, changed);
+  assert.match(first, /^education_legacy[0-9]{8}[a-z0-9]{12}$/);
+
+  const legacy = { professionalTitle: "Diretor", experiences: [{ role: "Diretor", organization: "HRT" }] };
+  assert.equal(reviewDraftNeedsContractUpgrade(legacy), true);
+  assert.equal(reviewDraftNeedsContractUpgrade(draft()), false);
 });

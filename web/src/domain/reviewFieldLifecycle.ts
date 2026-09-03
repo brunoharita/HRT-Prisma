@@ -43,9 +43,40 @@ export function legacyReviewEntityId(kind: ReviewEntityKind, index: number): str
   return `${kind}_legacy${String(index).padStart(8, "0")}`;
 }
 
+export function legacyReviewEntityIdFromValue(kind: ReviewEntityKind, index: number, value: unknown): string {
+  return `${legacyReviewEntityId(kind, index)}${stableToken(JSON.stringify(value)).slice(0, 12)}`;
+}
+
 export function reviewEntityPathSegment(kind: ReviewEntityKind, id: string): string {
-  const legacy = new RegExp(`^${kind}_legacy([0-9]{8})$`).exec(id);
+  const legacy = new RegExp(`^${kind}_legacy([0-9]{8})(?:[a-z0-9]+)?$`).exec(id);
   return legacy ? String(Number(legacy[1])) : id;
+}
+
+export function reviewDraftNeedsContractUpgrade(value: unknown): boolean {
+  if (!isRecord(value)) return true;
+  const requiredRoots = [
+    "identity", "contact", "professionalTitle", "areasOfExpertise", "professionalObjective", "summary",
+    "keyResults", "experiences", "education", "certifications", "languages", "competencies",
+    "customSections", "uncertainties", "notIdentified",
+  ];
+  if (requiredRoots.some((key) => !(key in value))) return true;
+  if (!isRecord(value.identity) || !isRecord(value.contact)) return true;
+  if (!Array.isArray(value.keyResults) || value.keyResults.some((item) => !isRecord(item) || !RESULT_ID_PATTERN.test(stringValue(item.id)))) return true;
+  if (!Array.isArray(value.experiences) || value.experiences.some((item) => (
+    !isRecord(item)
+    || !EXPERIENCE_ID_PATTERN.test(stringValue(item.id))
+    || !["extracted", "human"].includes(stringValue(item.source))
+  ))) return true;
+  if (!Array.isArray(value.education) || value.education.some((item) => (
+    !isRecord(item)
+    || !EDUCATION_ID_PATTERN.test(stringValue(item.id))
+    || !["extracted", "human"].includes(stringValue(item.source))
+    || [
+      "originalText", "level", "qualification", "status", "classificationOrigin", "classificationSources",
+      "classificationReasons", "classificationMethodVersion", "classificationReviewed",
+    ].some((key) => !(key in item))
+  ))) return true;
+  return false;
 }
 
 export function reviewEntityFieldPath(
@@ -244,13 +275,21 @@ export function validateReviewDraftForSave(
 }
 
 export function validateEducationClassificationsForApproval(draft: StructuredDraft): ReviewDraftIssue[] {
-  return draft.education.flatMap((item) => {
+  return draft.education.flatMap((item, index) => {
     const classification = resolveEducationClassification(item);
     if (!isEducationLevelQualificationCompatible(classification.level, classification.qualification)) {
-      return [{ fieldPath: `${reviewEntityFieldPath("education", item)}.qualification`, message: "Revise a combinação entre nível acadêmico e qualificação antes de comparar." }];
+      return [{ fieldPath: `${reviewEntityFieldPath("education", item)}.qualification`, message: `Formação ${index + 1}: selecione uma qualificação compatível com o nível acadêmico informado.` }];
     }
     if (educationClassificationNeedsReview(classification)) {
-      return [{ fieldPath: `${reviewEntityFieldPath("education", item)}.classificationOrigin`, message: "Confirme a classificação acadêmica sinalizada antes de comparar com o perfil atual." }];
+      const missing = [
+        classification.level === "unknown" ? "Nível acadêmico" : null,
+        classification.qualification === "unknown" ? "Qualificação" : null,
+        classification.status === "unknown" ? "Situação" : null,
+      ].filter((value): value is string => Boolean(value));
+      const message = missing.length
+        ? `Formação ${index + 1}: confirme que ${joinNaturalLanguage(missing)} permanecem como não identificados ou preencha esses campos.`
+        : `Formação ${index + 1}: confirme a classificação acadêmica apresentada antes de publicar.`;
+      return [{ fieldPath: `${reviewEntityFieldPath("education", item)}.classificationOrigin`, message }];
     }
     return [];
   });
@@ -307,4 +346,17 @@ function stableToken(value: string): string {
     hash = Math.imul(hash, 16777619);
   }
   return `${(hash >>> 0).toString(36).padStart(8, "0")}${value.length.toString(36).padStart(4, "0")}`;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function stringValue(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
+function joinNaturalLanguage(values: string[]): string {
+  if (values.length <= 1) return values[0] ?? "a classificação";
+  return `${values.slice(0, -1).join(", ")} e ${values.at(-1)}`;
 }

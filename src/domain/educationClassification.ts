@@ -242,7 +242,8 @@ export function isEducationLevelQualificationCompatible(level: EducationLevel, q
 
 export function educationClassificationNeedsReview(input: Pick<EducationClassificationResult, "level" | "qualification" | "status" | "classificationOrigin" | "classificationReviewed">): boolean {
   return !input.classificationReviewed
-    && (input.level === "unknown" || input.qualification === "unknown" || input.status === "unknown" || input.classificationOrigin === "inferred");
+    && (input.classificationOrigin === "human" || input.classificationOrigin === "inferred"
+      || input.level === "unknown" || input.qualification === "unknown" || input.status === "unknown");
 }
 
 export function normalizeEducationText(value: string): string {

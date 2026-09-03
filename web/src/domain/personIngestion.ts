@@ -325,6 +325,7 @@ export interface ProfileReviewWorkspace {
   processingAttemptId: string;
   state: "draft" | "approved" | "invalidated";
   lockVersion: number;
+  requiresContractUpgrade: boolean;
   extractedData: StructuredDraft;
   reviewedData: StructuredDraft;
   baseProfileVersion: number | null;

@@ -1,10 +1,11 @@
 import type { ItemBankGovernanceWorkspace } from "../../domain/assessmentItemGovernanceData";
+import { supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import { supabase } from "./client";
 
 export const assessmentItemGovernanceService = {
   async loadWorkspace(organizationId: string): Promise<ItemBankGovernanceWorkspace> {
     const { data, error } = await supabase.rpc("load_m51c_item_bank_workspace" as never, { p_organization_id: organizationId } as never);
-    if (error) throw new Error(error.message || "Não foi possível carregar o Banco de Itens.");
+    if (error) throw supabaseOperationError(error, "Não foi possível carregar o Banco de Itens.");
     if (!isRecord(data)) throw new Error("Resposta inválida do Banco de Itens.");
     const payload: Record<string, unknown> = data;
     return {
@@ -23,7 +24,7 @@ export const assessmentItemGovernanceService = {
       p_organization_id: input.organizationId, p_blueprint_id: input.blueprintId, p_dimension: input.dimension,
       p_quantity: input.quantity, p_target_scope: input.targetScope, p_idempotency_key: crypto.randomUUID(),
     } as never);
-    if (error) throw new Error(error.message || "Não foi possível executar a geração sintética.");
+    if (error) throw supabaseOperationError(error, "Não foi possível executar a geração sintética.");
     return isRecord(data) ? data : {};
   },
 
@@ -31,7 +32,7 @@ export const assessmentItemGovernanceService = {
     const { data, error } = await supabase.functions.invoke("assessment-item-generator", {
       body: { schemaVersion: "m51c-assessment-item-generation-request-1.0.0", ...input, idempotencyKey: crypto.randomUUID() },
     });
-    if (error) throw new Error(error.message || "Não foi possível solicitar a geração externa.");
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível solicitar a geração externa.");
     return isRecord(data) ? data : {};
   },
 
@@ -39,14 +40,14 @@ export const assessmentItemGovernanceService = {
     const { error } = await supabase.rpc("review_m51c_item_proposal" as never, {
       p_proposal_id: proposalId, p_decision: decision, p_rationale: rationale,
     } as never);
-    if (error) throw new Error(error.message || "Não foi possível registrar a revisão.");
+    if (error) throw supabaseOperationError(error, "Não foi possível registrar a revisão.");
   },
 
   async publishApproved(organizationId: string, proposalIds: string[]) {
     const { data, error } = await supabase.rpc("publish_m51c_approved_proposals" as never, {
       p_organization_id: organizationId, p_proposal_ids: proposalIds,
     } as never);
-    if (error) throw new Error(error.message || "Não foi possível publicar os itens aprovados.");
+    if (error) throw supabaseOperationError(error, "Não foi possível publicar os itens aprovados.");
     return isRecord(data) ? data : {};
   },
 
@@ -54,7 +55,7 @@ export const assessmentItemGovernanceService = {
     const { data, error } = await supabase.rpc("refresh_m51c_synthetic_item_analytics" as never, {
       p_organization_id: organizationId, p_assessment_item_id: assessmentItemId,
     } as never);
-    if (error) throw new Error(error.message || "Não foi possível atualizar a prévia analítica.");
+    if (error) throw supabaseOperationError(error, "Não foi possível atualizar a prévia analítica.");
     return isRecord(data) ? data : {};
   },
 };

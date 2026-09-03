@@ -1,5 +1,6 @@
 import type { PlatformAccessProfile } from "../../shared/platformUsers";
 import type { KnowledgeDashboard, KnowledgeProposalView, KnowledgeSettingsView } from "../../domain/knowledgeData";
+import { supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import type { Json } from "./database.types";
 import { supabase } from "./client";
 
@@ -14,7 +15,7 @@ export const knowledgeService = {
       organizationId ? supabase.from("organization_knowledge_settings").select("*").eq("organization_id", organizationId).maybeSingle() : Promise.resolve({ data: null, error: null }),
     ]);
     for (const result of [sourcesResult, conceptsResult, inboxResult, proposalsResult, impactsResult, settingsResult]) {
-      if (result.error) throw new Error(result.error.message);
+      if (result.error) throw supabaseOperationError(result.error, "Não foi possível carregar o ambiente de Conhecimento.");
     }
     const concepts = (conceptsResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.scope === "global" || row.organization_id === organizationId);
     const inbox = (inboxResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.organization_id === organizationId);
@@ -30,12 +31,12 @@ export const knowledgeService = {
   },
   async research(inboxId: string) {
     const { data, error } = await supabase.functions.invoke("knowledge-agent", { body: { inboxId } });
-    if (error) throw new Error(error.message);
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível pesquisar este termo.");
     return data;
   },
   async approveProposal(proposalId: string) {
     const { data, error } = await supabase.rpc("approve_knowledge_proposal", { p_proposal_id: proposalId, p_human_edited_proposal: null, p_decision_reason: "Aprovado na administração de Conhecimento" });
-    if (error) throw new Error(error.message);
+    if (error) throw supabaseOperationError(error, "Não foi possível aprovar esta proposta.");
     return data[0];
   },
   async saveSettings(organizationId: string, settings: KnowledgeSettingsView) {
@@ -45,13 +46,13 @@ export const knowledgeService = {
       reinterpretation_policy: settings.reinterpretationPolicy,
       updated_at: new Date().toISOString(),
     });
-    if (error) throw new Error(error.message);
+    if (error) throw supabaseOperationError(error, "Não foi possível salvar as configurações de Conhecimento.");
   },
   async dispatchReinterpretation(organizationId: string, impactId: string) {
     const { data, error } = await supabase.rpc("dispatch_knowledge_reinterpretation", {
       p_organization_id: organizationId, p_impact_id: impactId, p_idempotency_key: `knowledge-ui-${impactId}`,
     });
-    if (error) throw new Error(error.message);
+    if (error) throw supabaseOperationError(error, "Não foi possível iniciar a reanálise dos perfis afetados.");
     return data[0];
   },
 };

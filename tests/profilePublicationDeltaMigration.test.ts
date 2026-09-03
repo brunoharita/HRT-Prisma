@@ -57,3 +57,20 @@ test("legacy approval is private and recoverable review sources survive later em
   assert.match(actorIndex, /profile_publication_removals_actor_idx[\s\S]*actor_auth_user_id/i);
   assert.match(service, /async approveProfileReview[\s\S]*supabase\.rpc\("publish_profile_review"/i);
 });
+
+test("legacy profile entities are upgraded at publication and operator gates identify the exact field", async () => {
+  const [migration, delta, errors] = await Promise.all([
+    readFile("supabase/migrations/20260902213000_actionable_review_errors_and_legacy_publication.sql", "utf8"),
+    readFile("web/src/pages/ProfileDeltaPage.tsx", "utf8"),
+    readFile("web/src/domain/reviewOperationErrors.ts", "utf8"),
+  ]);
+  assert.match(migration, /normalize_profile_review_contract[\s\S]*new\.reviewed_data := private\.normalize_profile_review_contract/i);
+  assert.match(migration, /historical_profile_approved_before_academic_classification/i);
+  assert.match(migration, /operation-feedback-2\.0\.0/i);
+  assert.match(migration, /education_classification_required[\s\S]*classificationOrigin/i);
+  assert.match(migration, /education_qualification_incompatible[\s\S]*qualification/i);
+  assert.match(delta, /synchronizeProfileReviewContract/);
+  assert.match(delta, /Revisar o campo/);
+  assert.match(errors, /fieldPath/);
+  assert.match(errors, /Nenhum campo precisa ser corrigido manualmente/);
+});

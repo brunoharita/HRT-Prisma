@@ -2,7 +2,7 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.8.0
+version: 1.9.0
 last_verified: 2026-09-02
 ---
 
@@ -40,12 +40,13 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
 - revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
-- revisão humana: `human-profile-review-7.1.0`;
+- revisão humana: `human-profile-review-7.2.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
 - resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-6.1.0`;
 - estado de produto: `resume-product-state-1.1.0`;
-- publicação: `profile-publication-delta-1.0.0`;
+- publicação: `profile-publication-delta-1.1.0`;
+- feedback operacional: `operation-feedback-2.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;
 - aprendizado de título personalizado: `organization-custom-section-definition-1.0.0`;
 - intake currículo-first: `resume-intake-1.0.0`.
@@ -57,7 +58,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 ## Avaliação
 
-O M5.1 implementa estratégia determinística primeiro. M5.1A usa Item Bank, blueprint e rubrica sem LLM; M5.1B corrige múltipla escolha e deriva Evidência Demonstrada; M5.1C resolve gaps, usa fake provider em QA, valida Structured Output, bloqueia PII/Web Search, deduplica, exige revisão humana e controla custo. O adapter externo usa Responses API com `store:false`, mas não é chamado porque a flag e as policies estão desativadas. Nenhum modelo externo está aprovado.
+O M5.1 implementa estratégia determinística primeiro. M5.1A usa Item Bank, blueprint e rubrica sem LLM; M5.1B corrige múltipla escolha e deriva Evidência Demonstrada; M5.1C resolve gaps, usa fake provider em QA, valida Structured Output, bloqueia PII/Web Search, deduplica, exige revisão humana e controla custo. Falhas conhecidas dessas superfícies são traduzidas em linguagem natural com a ação exata esperada, e mensagens remotas desconhecidas são sanitizadas como responsabilidade interna do Prisma. O adapter externo usa Responses API com `store:false`, mas não é chamado porque a flag e as policies estão desativadas. Nenhum modelo externo está aprovado.
 
 Golden suite cobre 13 extrações, 4 avaliações e 2 retrievals. Inclui invenção proibida, prompt injection, gap, insuficiência, competência transferível, empate e nenhum resultado. Mudança de prompt/modelo/regra precisa comparar com baseline.
 

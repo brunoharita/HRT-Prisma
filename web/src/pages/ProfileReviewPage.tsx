@@ -39,6 +39,7 @@ import {
   validateReviewDraftForSave,
   type ReviewDraftIssue,
 } from "../domain/reviewFieldLifecycle";
+import { PrismaOperationError } from "../domain/reviewOperationErrors";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -54,7 +55,8 @@ interface ProfileReviewPageProps {
 type NewInformationType = "experience" | "education" | "competency" | "language" | "certification" | "key_result" | "custom_section" | "custom_item";
 type DeferredReviewAction =
   | { type: "start_evidence_selection"; fieldPath: string }
-  | { type: "create_custom_section" };
+  | { type: "create_custom_section" }
+  | { type: "continue_to_delta" };
 
 export function ProfileReviewPage({ activeMembership, personId, documentId, reviewId, mode = "review", onNavigate }: ProfileReviewPageProps) {
   const [workspace, setWorkspace] = useState<ProfileReviewWorkspace | null>(null);
@@ -116,9 +118,25 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         if (result.personId !== personId || result.documentId !== documentId) throw new Error("A revisão não pertence à Pessoa e ao documento informados.");
         setWorkspace(result);
         setDraft(cloneDraft(result.reviewedData));
-        setSelectedFieldPath(result.reviewedData.experiences[0]
-          ? reviewEntityFieldPath("experience", result.reviewedData.experiences[0], "role")
-          : "identity.fullName");
+        const requestedFieldPath = window.sessionStorage.getItem(reviewFocusStorageKey(reviewId));
+        if (requestedFieldPath) window.sessionStorage.removeItem(reviewFocusStorageKey(reviewId));
+        const initialFieldPath = requestedFieldPath && reviewFieldPathExists(result.reviewedData, requestedFieldPath)
+          ? requestedFieldPath
+          : result.reviewedData.experiences[0]
+            ? reviewEntityFieldPath("experience", result.reviewedData.experiences[0], "role")
+            : "identity.fullName";
+        setSelectedFieldPath(initialFieldPath);
+        if (requestedFieldPath) {
+          const issues = [
+            ...validateReviewDraftForSave(result.reviewedData, {
+              existingPhone: result.personPrivateContact.phone,
+              existingEmail: result.personPrivateContact.email,
+            }),
+            ...validateEducationClassificationsForApproval(result.reviewedData),
+          ];
+          setValidationIssues(issues);
+          window.setTimeout(() => focusReviewField(initialFieldPath), 0);
+        }
         if (result.documentStoragePath) {
           const url = await personIngestionService.createPrivateDownloadUrl(result.documentStoragePath);
           if (current) setPdfUrl(url);
@@ -151,6 +169,16 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     return { linkId: link.id, fieldPath: selectedFieldPath, pageNumber: original.sourcePage, text };
   }, [selectedFieldPath, workspace]);
 
+  function showReviewOperationError(caught: unknown, fallback: string) {
+    const message = caught instanceof Error ? caught.message : fallback;
+    setError(message);
+    if (caught instanceof PrismaOperationError && caught.fieldPath && draft && reviewFieldPathExists(draft, caught.fieldPath)) {
+      setValidationIssues([{ fieldPath: caught.fieldPath, message }]);
+      setSelectedFieldPath(caught.fieldPath);
+      window.requestAnimationFrame(() => focusReviewField(caught.fieldPath!));
+    }
+  }
+
   async function handleSave(continuation: DeferredReviewAction | null = deferredReviewAction) {
     if (!workspace || !draft) {
       setError("A revisão ainda não terminou de carregar. Aguarde alguns instantes e tente novamente.");
@@ -158,7 +186,9 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     const normalizedDraft = normalizeReviewDraft(draft);
     const normalizedBaseline = normalizeReviewDraft(workspace.reviewedData);
-    if (JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline)) {
+    const technicalSynchronizationOnly = workspace.requiresContractUpgrade
+      && JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline);
+    if (!workspace.requiresContractUpgrade && JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline)) {
       setDraft(cloneDraft(workspace.reviewedData));
       setValidationIssues([]);
       setError(null);
@@ -190,8 +220,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setBusy(true); setError(null); setSuccess(null);
     try {
       const structuralAnchor = findCompletedExperienceChange(normalizedBaseline, normalizedDraft);
-      const lockVersion = await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft);
-      setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(normalizedDraft), lockVersion } : current);
+      const lockVersion = technicalSynchronizationOnly
+        ? await personIngestionService.synchronizeProfileReviewContract(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft)
+        : await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft);
+      setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(normalizedDraft), lockVersion, requiresContractUpgrade: false } : current);
       setDraft(cloneDraft(normalizedDraft));
       let refreshed: ProfileReviewWorkspace;
       try {
@@ -234,21 +266,23 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       setDeferredReviewAction(null);
       if (continuation) {
         resumeDeferredReviewAction(continuation);
-        setSuccess(continuation.type === "create_custom_section"
-          ? "Rascunho salvo. Agora selecione no documento a área personalizada."
-          : "Rascunho salvo. Agora selecione no documento a evidência desejada.");
+        if (continuation.type !== "continue_to_delta") {
+          setSuccess(continuation.type === "create_custom_section"
+            ? "Rascunho salvo. Agora selecione no documento a área personalizada."
+            : "Rascunho salvo. Agora selecione no documento a evidência desejada.");
+        }
       } else setSuccess(`Rascunho salvo como nova revisão auditável.${learningNotice ?? ""}`);
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível salvar o rascunho."); }
+    } catch (caught) { showReviewOperationError(caught, "Não foi possível salvar o rascunho."); }
     finally { setBusy(false); }
   }
 
-  function handleContinueToDelta() {
+  async function handleContinueToDelta() {
     if (!workspace || !draft) {
       setError("A revisão ainda não terminou de carregar. Aguarde alguns instantes e tente novamente.");
       return;
     }
     if (transientOnly) { setError("Preencha ou cancele o novo campo antes de aprovar a versão."); return; }
-    if (dirty || pendingSelection) { setError("Conclua ou cancele a seleção e salve as alterações antes de aprovar."); return; }
+    if (pendingSelection) { setError("Conclua ou cancele a seleção de evidência antes de comparar."); return; }
     const normalizedDraft = normalizeReviewDraft(draft);
     const issues = [...validateReviewDraftForSave(normalizedDraft, {
       existingPhone: workspace.personPrivateContact.phone,
@@ -258,6 +292,11 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       setValidationIssues(issues);
       setError(issues[0]!.message);
       setSelectedFieldPath(issues[0]!.fieldPath);
+      window.requestAnimationFrame(() => focusReviewField(issues[0]!.fieldPath));
+      return;
+    }
+    if (dirty || workspace.requiresContractUpgrade) {
+      await handleSave({ type: "continue_to_delta" });
       return;
     }
     setError(null);
@@ -332,7 +371,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       setAdaptiveReport(null);
       const appliedExperienceCount = adaptiveReport.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length;
       setSuccess(`${appliedExperienceCount} ${appliedExperienceCount === 1 ? "experiência foi aplicada" : "experiências foram aplicadas"}, com evidência e versão auditável. A revisão humana permanece disponível.`);
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível aplicar as sugestões adaptativas."); }
+    } catch (caught) { showReviewOperationError(caught, "Não foi possível aplicar as sugestões adaptativas."); }
     finally { setBusy(false); }
   }
 
@@ -427,7 +466,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   function resumeDeferredReviewAction(action: DeferredReviewAction) {
     setDeferredReviewAction(null);
     if (action.type === "create_custom_section") startCustomSectionSelection();
-    else startEvidenceSelection(action.fieldPath);
+    else if (action.type === "start_evidence_selection") startEvidenceSelection(action.fieldPath);
+    else onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}/delta`);
   }
 
   function deferReviewAction(action: DeferredReviewAction) {
@@ -473,7 +513,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       }
       setActiveLinkId(null);
       setSuccess("Evidência excluída da revisão. A região e o evento permanecem preservados no histórico.");
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível excluir a evidência."); }
+    } catch (caught) { showReviewOperationError(caught, "Não foi possível excluir a evidência."); }
     finally { setBusy(false); }
   }
 
@@ -964,6 +1004,13 @@ function validateCustomSections(draft: StructuredDraft): string | null {
     if (section.items.some((item) => !item.value.trim())) return `A área “${section.name}” possui um item vazio.`;
   }
   return null;
+}
+
+function reviewFocusStorageKey(reviewId: string): string { return `prisma.review-focus.${reviewId}`; }
+function focusReviewField(fieldPath: string): void {
+  const field = document.querySelector(`[data-review-field-path="${fieldPath}"]`);
+  field?.scrollIntoView({ behavior: "smooth", block: "center" });
+  field?.querySelector<HTMLElement>("button, input, textarea, [role=combobox]")?.focus();
 }
 
 function cloneDraft(draft: StructuredDraft): StructuredDraft { return JSON.parse(JSON.stringify(draft)) as StructuredDraft; }

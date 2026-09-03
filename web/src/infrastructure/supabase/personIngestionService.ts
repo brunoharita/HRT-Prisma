@@ -44,7 +44,7 @@ import {
   CUSTOM_PROFILE_SECTION_METHOD_VERSION,
   type LearnedCustomSectionDefinition,
 } from "../../domain/customProfileSections";
-import { legacyReviewEntityId } from "../../domain/reviewFieldLifecycle";
+import { legacyReviewEntityIdFromValue, reviewDraftNeedsContractUpgrade } from "../../domain/reviewFieldLifecycle";
 import { reviewOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 
 const DOCUMENT_BUCKET = "person-documents";
@@ -449,6 +449,26 @@ export const personIngestionService = {
     return lockVersion;
   },
 
+  async synchronizeProfileReviewContract(
+    organizationId: string,
+    reviewId: string,
+    expectedLockVersion: number,
+    reviewedData: StructuredDraft,
+  ): Promise<number> {
+    const { data, error } = await supabase.rpc("save_profile_review", {
+      p_organization_id: organizationId,
+      p_review_id: reviewId,
+      p_expected_lock_version: expectedLockVersion,
+      p_reviewed_data: reviewedData as unknown as Json,
+      p_reason: "Atualização técnica automática para o contrato vigente; conteúdo e proveniência preservados.",
+      p_idempotency_key: createOperationKey("synchronize-review-contract"),
+    });
+    throwReviewError(error, "Não foi possível atualizar automaticamente esta revisão antiga.");
+    const lockVersion = data?.[0]?.lock_version;
+    if (!lockVersion) throw new Error("A atualização automática terminou sem confirmar a versão da revisão.");
+    return lockVersion;
+  },
+
   async applyAdaptiveSuggestions(input: {
     organizationId: string;
     reviewId: string;
@@ -806,6 +826,7 @@ export const personIngestionService = {
       processingAttemptId: review.processing_attempt_id,
       state: review.state,
       lockVersion: review.lock_version,
+      requiresContractUpgrade: reviewDraftNeedsContractUpgrade(review.reviewed_data),
       extractedData: decodeReviewDraft(review.extracted_data, legacySummaryFallback, true),
       reviewedData: decodeReviewDraft(review.reviewed_data, legacySummaryFallback),
       baseProfileVersion: review.base_profile_version,
@@ -1398,7 +1419,9 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
       if (!item || typeof item !== "object") return [];
       const candidate = item as Partial<StructuredDraft["experiences"][number]>;
       return [{
-        id: typeof candidate.id === "string" ? candidate.id : legacyReviewEntityId("experience", index),
+        id: typeof candidate.id === "string" ? candidate.id : legacyReviewEntityIdFromValue("experience", index, {
+          role: candidate.role, organization: candidate.organization, period: candidate.period,
+        }),
         source: candidate.source === "human" ? "human" : "extracted",
         role: typeof candidate.role === "string" ? candidate.role : null,
         organization: typeof candidate.organization === "string" ? candidate.organization : null,
@@ -1413,7 +1436,9 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
       const candidate = item as Partial<StructuredDraft["education"][number]>;
       const classification = resolveEducationClassification(candidate);
       return [{
-        id: typeof candidate.id === "string" ? candidate.id : legacyReviewEntityId("education", index),
+        id: typeof candidate.id === "string" ? candidate.id : legacyReviewEntityIdFromValue("education", index, {
+          course: candidate.course, institution: candidate.institution, period: candidate.period,
+        }),
         source: candidate.source === "human" ? "human" : "extracted",
         course: typeof candidate.course === "string" ? candidate.course : null,
         institution: typeof candidate.institution === "string" ? candidate.institution : null,
@@ -1496,7 +1521,7 @@ function throwIfError(error: { message: string; code?: string; details?: string 
   if (error) throw supabaseOperationError(error, message);
 }
 
-function throwReviewError(error: { message: string; code?: string } | null, message: string): void {
+function throwReviewError(error: { message: string; code?: string; details?: string | null; hint?: string | null } | null, message: string): void {
   if (!error) return;
   throw reviewOperationError(error, message);
 }

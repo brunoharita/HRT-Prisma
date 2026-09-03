@@ -4,6 +4,7 @@ import { Alert, Button, Card, Checkbox, Empty, Input, Modal, Skeleton, Space, St
 import { deriveProfileDelta, type ProfileDeltaItem, type ProfileDeltaKind, type ProfileDeltaSection } from "../domain/profileDelta";
 import type { ProfileReviewWorkspace, ProfileVersionView, PublicationRemovalDecision } from "../domain/personIngestion";
 import { normalizeReviewDraft, validateEducationClassificationsForApproval, validateReviewDraftForSave } from "../domain/reviewFieldLifecycle";
+import { operationRecovery, PrismaOperationError, type OperationRecovery } from "../domain/reviewOperationErrors";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -36,21 +37,52 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorFieldPath, setErrorFieldPath] = useState<string | null>(null);
+  const [errorRecovery, setErrorRecovery] = useState<OperationRecovery>("retry");
 
   useEffect(() => {
     let active = true;
     setLoading(true);
-    Promise.all([
-      personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId),
-      personIngestionService.listProfileVersions(activeMembership.organizationId, personId),
-    ]).then(([review, versions]) => {
-      if (!active) return;
-      if (!review || review.personId !== personId || review.documentId !== documentId) throw new Error("A proposta não pertence à Pessoa e ao documento informados.");
-      if (review.state !== "draft") throw new Error("Esta proposta não está mais disponível para publicação.");
-      setWorkspace(review);
-      setCurrentProfile(versions.find((version) => version.supersededAt === null) ?? null);
-    }).catch((caught: unknown) => { if (active) setError(caught instanceof Error ? caught.message : "Não foi possível preparar a comparação."); })
-      .finally(() => { if (active) setLoading(false); });
+    void (async () => {
+      try {
+        let [review, versions] = await Promise.all([
+          personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId),
+          personIngestionService.listProfileVersions(activeMembership.organizationId, personId),
+        ]);
+        if (!review || review.personId !== personId || review.documentId !== documentId) throw new Error("A proposta não pertence à Pessoa e ao documento informados.");
+        if (review.state !== "draft") throw new Error("Esta proposta não está mais disponível para publicação.");
+
+        if (review.requiresContractUpgrade) {
+          const normalizedDraft = normalizeReviewDraft(review.reviewedData);
+          const saveIssues = validateReviewDraftForSave(normalizedDraft, {
+            existingPhone: review.personPrivateContact.phone,
+            existingEmail: review.personPrivateContact.email,
+          });
+          if (!saveIssues.length) {
+            await personIngestionService.synchronizeProfileReviewContract(
+              activeMembership.organizationId,
+              review.id,
+              review.lockVersion,
+              normalizedDraft,
+            );
+            const refreshed = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
+            if (refreshed) review = refreshed;
+            versions = await personIngestionService.listProfileVersions(activeMembership.organizationId, personId);
+          }
+        }
+
+        if (!active) return;
+        setWorkspace(review);
+        setCurrentProfile(versions.find((version) => version.supersededAt === null) ?? null);
+      } catch (caught) {
+        if (!active) return;
+        setError(caught instanceof Error ? caught.message : "Não foi possível preparar a comparação.");
+        setErrorFieldPath(caught instanceof PrismaOperationError ? caught.fieldPath : null);
+        setErrorRecovery(operationRecovery(caught));
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
     return () => { active = false; };
   }, [activeMembership.organizationId, documentId, personId, reviewId]);
 
@@ -58,6 +90,22 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
     currentContact: workspace.personPrivateContact,
     explicitRemovalKeys: removalKeys,
   }) : null, [currentProfile, removalKeys, workspace]);
+  const validationIssues = useMemo(() => {
+    if (!workspace) return [];
+    const normalizedDraft = normalizeReviewDraft(workspace.reviewedData);
+    return [
+      ...validateReviewDraftForSave(normalizedDraft, {
+        existingPhone: workspace.personPrivateContact.phone,
+        existingEmail: workspace.personPrivateContact.email,
+      }),
+      ...validateEducationClassificationsForApproval(normalizedDraft),
+    ];
+  }, [workspace]);
+
+  function returnToReview(fieldPath?: string | null) {
+    if (fieldPath) window.sessionStorage.setItem(reviewFocusStorageKey(reviewId), fieldPath);
+    onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`);
+  }
 
   function toggleRemoval(item: ProfileDeltaItem, checked: boolean) {
     setRemovalKeys((current) => {
@@ -72,21 +120,16 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       setError("A comparação ainda não terminou de carregar. Aguarde alguns instantes e tente novamente.");
       return;
     }
-    const normalizedDraft = normalizeReviewDraft(workspace.reviewedData);
-    const reviewIssues = [
-      ...validateReviewDraftForSave(normalizedDraft, {
-        existingPhone: workspace.personPrivateContact.phone,
-        existingEmail: workspace.personPrivateContact.email,
-      }),
-      ...validateEducationClassificationsForApproval(normalizedDraft),
-    ];
-    if (reviewIssues.length) {
-      setError(`A publicação foi interrompida antes de qualquer alteração: ${reviewIssues[0]!.message} Volte à revisão para corrigir o campo indicado.`);
+    if (validationIssues.length) {
+      setError(`Antes de publicar, falta concluir ${validationIssues.length === 1 ? "este item" : "estes itens"}.`);
+      setErrorFieldPath(validationIssues[0]!.fieldPath);
       return;
     }
     const removedItems = delta.items.filter((item) => item.kind === "explicit_removal");
     if (removedItems.length && removalReason.trim().length < 5) {
       setError("Explique por que as informações anteriormente aprovadas serão removidas.");
+      setErrorFieldPath(null);
+      setErrorRecovery("none");
       return;
     }
     const removals: PublicationRemovalDecision[] = removedItems.map((item) => ({
@@ -94,7 +137,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       previousValue: parseDeltaValue(item.before),
       reason: removalReason.trim(),
     }));
-    setBusy(true); setError(null);
+    setBusy(true); setError(null); setErrorFieldPath(null);
     try {
       const approved = await personIngestionService.publishProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, removals);
       window.sessionStorage.setItem(`prisma.profile-published.${personId}`, `Perfil v${approved.profileVersion} publicado com sucesso.`);
@@ -102,6 +145,8 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       onNavigate(`/profiles/${personId}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Não foi possível publicar a nova versão.");
+      setErrorFieldPath(caught instanceof PrismaOperationError ? caught.fieldPath : null);
+      setErrorRecovery(operationRecovery(caught));
     } finally {
       setBusy(false);
     }
@@ -119,12 +164,12 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         description={delta.firstPublication ? "Revise o conhecimento que formará o primeiro Perfil Prisma antes de publicar." : "Veja exatamente o que a nova versão altera e o que permanece preservado antes de publicar."}
         actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.documentName}</strong><small>Documento v{workspace.documentVersion}</small></span></Card>}
       />
-      <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`)} type="text">Voltar para revisão</Button>
+      <Button icon={<ArrowLeftOutlined />} onClick={() => returnToReview()} type="text">Voltar para revisão</Button>
       <Card className="prisma-delta-summary-card">
         <div className="prisma-delta-transition">
           <div><Typography.Text type="secondary">Perfil atual</Typography.Text><strong>{currentProfile ? `v${currentProfile.profileVersion} aprovado` : "Nenhum perfil publicado"}</strong><small>{currentProfile?.approvedAt ? formatDate(currentProfile.approvedAt) : "Primeira publicação"}</small></div>
           <span>→</span>
-          <div><Typography.Text type="secondary">Proposta nova</Typography.Text><strong>v{nextVersion} pronta para publicação</strong><small>Revisão concluída</small></div>
+          <div><Typography.Text type="secondary">Proposta nova</Typography.Text><strong>v{nextVersion} {validationIssues.length ? "aguardando revisão" : "pronta para publicação"}</strong><small>{validationIssues.length ? `${validationIssues.length} ${validationIssues.length === 1 ? "item precisa" : "itens precisam"} de confirmação` : "Revisão concluída"}</small></div>
         </div>
         <div className="prisma-delta-stats" aria-label="Impacto geral da publicação">
           <Statistic title="Adições" value={delta.counts.added} />
@@ -142,7 +187,15 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         }))} />
       </Card>
 
-      {error ? <Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`)}>Voltar para revisão</Button>} className="prisma-delta-publish-error" closable description="Nada foi publicado e sua comparação permanece preservada nesta tela." onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
+      {validationIssues.length ? <Alert
+        action={<Button onClick={() => returnToReview(validationIssues[0]!.fieldPath)}>Revisar o campo</Button>}
+        className="prisma-delta-publish-error"
+        description={<ul className="prisma-delta-validation-list">{validationIssues.map((issue) => <li key={`${issue.fieldPath}-${issue.message}`}>{issue.message}</li>)}</ul>}
+        showIcon
+        title={`Antes de publicar, ${validationIssues.length === 1 ? "falta concluir este item" : `faltam concluir ${validationIssues.length} itens`}.`}
+        type="warning"
+      /> : null}
+      {error ? <Alert action={errorAction(errorRecovery, errorFieldPath, returnToReview, onNavigate)} className="prisma-delta-publish-error" closable description="Nada foi publicado e sua comparação permanece preservada nesta tela." onClose={() => { setError(null); setErrorFieldPath(null); }} showIcon title={error} type="error" /> : null}
       <Alert
         className="prisma-delta-preservation-alert"
         description="Itens não citados aparecem como mantidos. Uma remoção só acontece quando você a marca explicitamente e confirma sua justificativa."
@@ -152,9 +205,9 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         type="info"
       />
       <div className="prisma-delta-footer">
-        <Button onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`)}>Voltar para revisão</Button>
-        <Button icon={<CheckCircleOutlined />} loading={busy} onClick={() => removalItems.length ? setConfirmOpen(true) : void publish()} type="primary">
-          {delta.firstPublication ? `Publicar Perfil v${nextVersion}` : "Publicar nova versão"}
+        <Button onClick={() => returnToReview()}>Voltar para revisão</Button>
+        <Button icon={<CheckCircleOutlined />} loading={busy} onClick={() => validationIssues.length ? returnToReview(validationIssues[0]!.fieldPath) : removalItems.length ? setConfirmOpen(true) : void publish()} type="primary">
+          {validationIssues.length ? "Revisar pendência" : delta.firstPublication ? `Publicar Perfil v${nextVersion}` : "Publicar nova versão"}
         </Button>
       </div>
 
@@ -189,3 +242,11 @@ function provenanceLabel(value: ProfileDeltaItem["provenance"]): string { return
 function preview(value: string | null): string { if (!value) return "Sem valor"; try { const parsed = JSON.parse(value) as Record<string, unknown>; return Object.entries(parsed).filter(([key]) => !["id", "source", "evidenceText", "page", "items"].includes(key)).map(([, item]) => String(item ?? "")).filter(Boolean).join(" · ") || value; } catch { return value; } }
 function parseDeltaValue(value: string | null): unknown { if (!value) return null; try { return JSON.parse(value) as unknown; } catch { return value; } }
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(new Date(value)); }
+function reviewFocusStorageKey(reviewId: string): string { return `prisma.review-focus.${reviewId}`; }
+function errorAction(recovery: OperationRecovery, fieldPath: string | null, returnToReview: (fieldPath?: string | null) => void, onNavigate: (path: string) => void) {
+  if (fieldPath) return <Button onClick={() => returnToReview(fieldPath)}>Ir para a correção</Button>;
+  if (recovery === "sign-in") return <Button onClick={() => onNavigate("/sign-in")}>Entrar novamente</Button>;
+  if (recovery === "return-to-review" || recovery === "review-fields") return <Button onClick={() => returnToReview()}>Voltar para revisão</Button>;
+  if (recovery === "reload" || recovery === "retry") return <Button onClick={() => window.location.reload()}>Atualizar e tentar novamente</Button>;
+  return null;
+}

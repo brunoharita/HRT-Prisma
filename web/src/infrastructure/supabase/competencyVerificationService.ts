@@ -6,6 +6,7 @@ import type {
   VerificationOperatorWorkspace,
   VerificationWorkspaceView,
 } from "../../domain/competencyVerificationData";
+import { supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import { supabase } from "./client";
 
 export const competencyVerificationService = {
@@ -14,7 +15,7 @@ export const competencyVerificationService = {
       "load_m51a_verification_workspace" as never,
       { p_organization_id: organizationId } as never,
     );
-    if (error) throw new Error(error.message || "Não foi possível carregar o workspace de verificação.");
+    if (error) throw supabaseOperationError(error, "Não foi possível carregar o ambiente de verificação.");
     return decodeWorkspace(data);
   },
 
@@ -34,13 +35,13 @@ export const competencyVerificationService = {
         p_idempotency_key: crypto.randomUUID(),
       } as never,
     );
-    if (error) throw new Error(error.message || "Não foi possível preparar a verificação.");
+    if (error) throw supabaseOperationError(error, "Não foi possível preparar a verificação.");
     return decodePrepareResult(data);
   },
 
   async loadOperatorWorkspace(organizationId: string): Promise<VerificationOperatorWorkspace> {
     const { data, error } = await supabase.rpc("load_m51b_operator_workspace" as never, { p_organization_id: organizationId } as never);
-    if (error) throw new Error(error.message || "Não foi possível carregar as verificações.");
+    if (error) throw supabaseOperationError(error, "Não foi possível carregar as verificações.");
     const payload: Record<string, unknown> = isRecord(data) ? data : {};
     return { preparedAssessments: asArray(payload.preparedAssessments), verifications: asArray(payload.verifications) } as VerificationOperatorWorkspace;
   },
@@ -59,7 +60,7 @@ export const competencyVerificationService = {
         payload: { ...input, idempotencyKey: crypto.randomUUID() },
       },
     });
-    if (error) throw new Error(error.message || "Não foi possível emitir o convite.");
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível emitir o convite.");
     if (!isRecord(data) || typeof data.token !== "string" || typeof data.relativePath !== "string") throw new Error("Resposta inválida na emissão do convite.");
     return data as unknown as IssuedInvitation;
   },
@@ -68,14 +69,14 @@ export const competencyVerificationService = {
     const { error } = await supabase.functions.invoke("assessment-access", {
       body: { action, schemaVersion: "m51b-assessment-access-request-1.0.0", payload: { invitationId } },
     });
-    if (error) throw new Error(error.message || "Não foi possível atualizar o convite.");
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível atualizar o convite.");
   },
 
   async participantAction<T = ParticipantVerificationWorkspace>(token: string, action: string, payload: Record<string, unknown> = {}): Promise<T> {
     const { data, error } = await supabase.functions.invoke("assessment-access", {
       body: { action, token, schemaVersion: "m51b-assessment-access-request-1.0.0", payload },
     });
-    if (error) throw new Error(error.message || "Não foi possível acessar a verificação.");
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível acessar a verificação.");
     if (!isRecord(data)) throw new Error("Resposta inválida da verificação.");
     return data as unknown as T;
   },

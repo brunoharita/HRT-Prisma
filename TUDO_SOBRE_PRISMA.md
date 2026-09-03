@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 22b538825acbf525a7579879a4ab1af40c6de0afe5c0f6c143afa9a0c70c7bd5
+source_manifest_sha256: 9caaf42782a6e014f91a3c7359cf5d4e0ab22f11c3d40e5798ce9294ca78f69b
 -->
 
 # Tudo sobre o Prisma
@@ -312,7 +312,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.13.0
+version: 2.14.0
 last_verified: 2026-09-02
 ---
 
@@ -336,8 +336,8 @@ last_verified: 2026-09-02
 - Fronteira Pessoa, Documento e Perfil Vigente 1.2.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. Tentativa operacional vazia não oculta a última tentativa revisável com páginas e draft preservados. A revisão M5 recupera extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual, enquanto tentativa sem fonte continua bloqueada.
 - Central da Pessoa 1.0 redesenhada localmente: `person-action-center` 1.0.0 compõe um view model tipado e deriva todas as pendências documentais reais sem estado paralelo. Cabeçalho profissional, pendências acionáveis, Perfil vigente, resumo contextual, conhecimento editorial, documentos com painel contextual e atividade recente foram organizados nas perspectivas Visão geral, Documentos e versões e Nova importação. O CTA `Revisar documento agora` resolve diretamente documento e tentativa revisável; Member continua fora da superfície operacional. Nenhum schema, RLS, score, IA ou estado persistido mudou. O smoke autenticado foi aprovado nas cinco resoluções de referência.
 - Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. `ExtractionDraft` está em 7.1.0, extração adaptativa em 6.1.0 e regras/modelo determinísticos em 2.0.0.
-- Jornada de ingestão 2.0.0 implementada localmente em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `resume-product-state` 1.1.0 e `document-presentation` 2.1.0 derivam sete estados canônicos e a recuperação possível a partir da fonte preservada, sem persistir estado na Pessoa. `profile-publication-delta` 1.0.0 preserva fatos aprovados não citados, exige decisão humana e motivo para remoção e retorna à Central da Pessoa somente depois da publicação transacional.
-- `operation-feedback` 1.0.0 implementado localmente: ingestão, revisão, evidência, aprendizado adaptativo, classificação acadêmica, arquivamento e publicação convertem códigos e contratos técnicos em causa, preservação e próxima ação seguras. Detalhes internos não chegam ao operador; confirmação remota seguida de falha de recarga não é apresentada como mutação não realizada.
+- Jornada de ingestão 2.0.0 implementada localmente em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `profile-publication-delta` 1.1.0 preserva fatos aprovados não citados, sincroniza rascunhos antigos sem clique e normaliza fatos históricos do perfil-base sem inventar classificação acadêmica. Remoção continua exigindo decisão e motivo humanos.
+- `operation-feedback` 2.0.0 implementado localmente: impedimentos corrigíveis informam motivo, item e caminho do campo em envelope estável; a interface traduz para linguagem natural, lista as pendências, retorna ao campo exato, rola e destaca. O mesmo tradutor protege todas as fronteiras Supabase de ingestão, revisão, Verificações, Item Bank e Conhecimento, inclusive respostas de Edge Functions; regressão arquitetural impede `throw` direto da mensagem remota. Falhas internas declaram que não há campo a corrigir e nunca expõem SQL, função, tabela, payload ou código técnico.
 - `decision-centered-interaction` 1.0.0 implementado localmente no descarte adaptativo e normativo para o produto: cliques e teclas obrigatórios representam julgamento, autoridade ou risco material; coordenação determinística, avisos sem proposta, auditoria factual e falhas de telemetria opcional não interrompem o operador. Relatórios sem assinatura registrável usam `Fechar aviso` sem RPC; sugestões válidas fecham imediatamente e registram descarte em segundo plano.
 - Publicação Delta ativa no Prisma-QA: `profile_publication_removals` possui RLS e DML direto revogado; `publish_profile_review` é a única autoridade cliente, enquanto `approve_profile_review` perdeu o grant de `authenticated`. Provas revertidas confirmaram preservação de experiência e competência omitidas, remoção apenas explícita, Perfil v2 atômico, negação de Member/cross-tenant e zero resíduos.
 - Descarte não destrutivo implementado localmente e no Prisma-QA pela RPC `invalidate_document_review`: somente Admin, Owner, Recruiter ou Super Admin invalidam uma revisão ou importação tecnicamente falha; documento, tentativa, revisão, eventos e perfil vigente permanecem preservados; replay é idempotente e nenhuma linha é apagada.
@@ -378,7 +378,7 @@ last_verified: 2026-09-02
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 203 testes técnicos compõem a suíte local, incluindo classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, feedback operacional acionável, regressão de apresentação M5.1, gap, geração determinística, validação de conteúdo, deduplicação, orçamento, synthetic never calibrated e segurança das migrations.
+- 206 testes técnicos compõem a suíte local, incluindo compatibilidade histórica da publicação, foco em campo pendente, classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, feedback operacional acionável e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -392,6 +392,7 @@ last_verified: 2026-09-02
 - Migrations M5 `20260827034147_m5_spatial_cv_evidence`, `20260827041613_m5_spatial_evidence_fk_indexes` e `20260827042829_m5_spatial_evidence_idempotent_replay` com regiões normalizadas, vínculos, eventos append-only, RLS, índices e RPC transacional.
 - Migrations `20260902122414_education_academic_classification` e `20260902125511_education_academic_classification_legacy_compatibility` ativas no Prisma-QA: ampliam o JSON canônico sem tabela paralela, validam shape e compatibilidade, bloqueiam publicação não confirmada, registram somente metadados, preservam históricos sem snapshot fictício e estendem a evidência M5 às dimensões acadêmicas sem ampliar grants.
 - Migration `20260902181013_automatic_review_audit_reason` ativa no Prisma-QA: `save_profile_review` e o núcleo privado de evidência resolvem descrições operacionais determinísticas quando `p_reason` está vazio, sem alterar assinatura, tenant, lock, idempotência ou grants. `anon` continua sem executar o salvamento, `authenticated` executa apenas a fronteira pública e o núcleo privado permanece revogado. Uma prova transacional salvou com razão nula, confirmou descrição automática e retornou por rollback ao lock 9, sem revisão ou operação residual. O texto livre continua obrigatório somente na remoção explícita do Delta.
+- Migration `20260902213000_actionable_review_errors_and_legacy_publication` ativa no Prisma-QA: normaliza entidades históricas na escrita de publicação, preserva classificação desconhecida sem invenção, mantém proposta nova dependente de confirmação e emite `operation-feedback-2.0.0` com campo e item para causas corrigíveis. Prova transacional com rollback validou os shapes, a distinção histórico/proposta e a negação de execução das funções privadas para `anon` e `authenticated`; nenhum grant público foi acrescentado. O smoke autenticado confirmou Delta com lista completa, status aguardando revisão e retorno com rolagem e destaque no campo exato, sem publicar perfil.
 - Migration local `20260828160707_strict_pdf_character_region`, aplicada no Prisma-QA como `20260828161125`, preserva evidências `1.0.0`, ativa default `spatial-evidence` 1.1.0 e libera `pdfjs-character-region-v2` na constraint e na RPC.
 - Migrations locais `20260829111414_spatial_evidence_refinement` e `20260829113452_spatial_evidence_refinement_rpc_fix`, aplicadas no Prisma-QA como `20260829113031` e `20260829113502`: a primeira adiciona texto bruto, ledger imutável de exclusão/reinclusão, RLS, DML direto revogado e RPC refinada; a segunda elimina de forma fail-closed a ambiguidade PostgreSQL do `ON CONFLICT` descoberta pela primeira transação conectada.
 - Migration `20260828055309_adaptive_resume_extraction` aplicada no Prisma-QA com layout por página, evidência espacial por campo, casos de aprendizado tenant-scoped e RPC auditável de retirada de evidência.
@@ -528,7 +529,7 @@ Ainda em 2026-09-02, `structured-resume-summary` 1.1.0 consolidou `Resumo profis
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 1.8.0
+version: 1.9.0
 last_verified: 2026-09-02
 ---
 
@@ -566,12 +567,13 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
 - revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
-- revisão humana: `human-profile-review-7.1.0`;
+- revisão humana: `human-profile-review-7.2.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
 - resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-6.1.0`;
 - estado de produto: `resume-product-state-1.1.0`;
-- publicação: `profile-publication-delta-1.0.0`;
+- publicação: `profile-publication-delta-1.1.0`;
+- feedback operacional: `operation-feedback-2.0.0`;
 - área personalizada: `custom-profile-section-1.0.0`;
 - aprendizado de título personalizado: `organization-custom-section-definition-1.0.0`;
 - intake currículo-first: `resume-intake-1.0.0`.
@@ -583,7 +585,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 ## Avaliação
 
-O M5.1 implementa estratégia determinística primeiro. M5.1A usa Item Bank, blueprint e rubrica sem LLM; M5.1B corrige múltipla escolha e deriva Evidência Demonstrada; M5.1C resolve gaps, usa fake provider em QA, valida Structured Output, bloqueia PII/Web Search, deduplica, exige revisão humana e controla custo. O adapter externo usa Responses API com `store:false`, mas não é chamado porque a flag e as policies estão desativadas. Nenhum modelo externo está aprovado.
+O M5.1 implementa estratégia determinística primeiro. M5.1A usa Item Bank, blueprint e rubrica sem LLM; M5.1B corrige múltipla escolha e deriva Evidência Demonstrada; M5.1C resolve gaps, usa fake provider em QA, valida Structured Output, bloqueia PII/Web Search, deduplica, exige revisão humana e controla custo. Falhas conhecidas dessas superfícies são traduzidas em linguagem natural com a ação exata esperada, e mensagens remotas desconhecidas são sanitizadas como responsabilidade interna do Prisma. O adapter externo usa Responses API com `store:false`, mas não é chamado porque a flag e as policies estão desativadas. Nenhum modelo externo está aprovado.
 
 Golden suite cobre 13 extrações, 4 avaliações e 2 retrievals. Inclui invenção proibida, prompt injection, gap, insuficiência, competência transferível, empate e nenhum resultado. Mudança de prompt/modelo/regra precisa comparar com baseline.
 
