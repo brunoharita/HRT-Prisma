@@ -2,18 +2,28 @@ import type { PostgrestError } from "@supabase/supabase-js";
 import {
   DataAccessFailure,
   isPersonLifecycle,
-  type EducationItem,
   type HomeSummary,
   type KnowledgeSourceHealth,
   type KnowledgeSourceMonitorStatus,
-  type LanguageItem,
   type PeopleQuery,
   type PersonListItem,
   type PersonProfileView,
   type PrismaDataRepository,
-  type ProfessionalExperience,
   type StructuredProfile,
 } from "../../domain/prismaData";
+import type { StructuredDraft } from "../../domain/personIngestion";
+import { legacyReviewEntityIdFromValue } from "../../domain/reviewFieldLifecycle";
+import {
+  EDUCATION_CLASSIFICATION_ORIGINS,
+  EDUCATION_LEVELS,
+  EDUCATION_QUALIFICATIONS,
+  EDUCATION_STATUSES,
+  resolveEducationClassification,
+  type EducationClassificationOrigin,
+  type EducationLevel,
+  type EducationQualification,
+  type EducationStatus,
+} from "../../../../src/domain/educationClassification";
 import type { PlatformOperator } from "../../domain/platformUsersData";
 import { normalizeMembershipRole, type MembershipRole, type OrganizationMembership } from "../../shared/access";
 import { supabase } from "./client";
@@ -288,7 +298,7 @@ function centralSourceOrder(value: KnowledgeSourceHealth["name"]): number {
 async function loadCurrentProfileRow(organizationId: string, personId: string) {
   const { data, error } = await supabase
     .from("professional_profiles")
-    .select("id, profile_data, uncertainties, not_identified, extraction_version, inference_version, created_at")
+    .select("id, profile_version, profile_data, uncertainties, not_identified, extraction_version, inference_version, approved_at, created_at, superseded_at")
     .eq("organization_id", organizationId)
     .eq("person_id", personId)
     .is("superseded_at", null)
@@ -401,18 +411,34 @@ function toPersonListItem(
 function decodeProfile(row: NonNullable<ProfileRow>, fallbackName: string): StructuredProfile {
   const data = asRecord(row.profile_data);
   if (!data) throw new DataAccessFailure("invalid_data", "O perfil persistido não corresponde ao contrato estruturado.");
+  const identity = asRecord(data.identity);
+  const contact = asRecord(data.contact);
   return {
     id: row.id,
-    fullName: readString(data.fullName) ?? fallbackName,
+    profileVersion: row.profile_version,
+    approvedAt: row.approved_at,
+    current: row.superseded_at === null,
+    identity: { fullName: readString(identity?.fullName) ?? readString(data.fullName) ?? fallbackName },
+    contact: {
+      city: readString(contact?.city),
+      state: readString(contact?.state),
+      phone: readString(contact?.phone),
+      email: readString(contact?.email),
+      linkedin: readString(contact?.linkedin),
+    },
+    professionalTitle: readString(data.professionalTitle),
+    areasOfExpertise: readHistoricalTextList(data.areasOfExpertise, ["name", "value"]),
+    professionalObjective: readString(data.professionalObjective),
+    summary: readString(data.summary),
+    keyResults: readKeyResults(data.keyResults),
     experiences: readExperiences(data.experiences),
     education: readEducation(data.education),
-    certifications: readStringArray(data.certifications),
-    languages: readLanguages(data.languages),
-    toolsAndTechnologies: readStringArray(data.toolsAndTechnologies),
-    professionalContexts: readStringArray(data.professionalContexts),
+    certifications: readHistoricalTextList(data.certifications, ["name", "certification", "title", "value"], ["issuer", "institution"]),
+    languages: readHistoricalTextList(data.languages, ["language", "name", "value"], ["proficiency", "level"]),
+    competencies: readHistoricalTextList(data.competencies, ["name", "competency", "normalizedName", "value"]),
     customSections: readCustomSections(data.customSections),
-    uncertainties: readStringArray(row.uncertainties),
-    notIdentified: readStringArray(row.not_identified),
+    uncertainties: readStringArray(data.uncertainties).length ? readStringArray(data.uncertainties) : readStringArray(row.uncertainties),
+    notIdentified: readStringArray(data.notIdentified).length ? readStringArray(data.notIdentified) : readStringArray(row.not_identified),
     extractionVersion: row.extraction_version,
     inferenceVersion: row.inference_version,
     createdAt: row.created_at,
@@ -438,42 +464,84 @@ function readCustomSections(value: Json | undefined): StructuredProfile["customS
   });
 }
 
-function readExperiences(value: Json | undefined): ProfessionalExperience[] {
+function readKeyResults(value: Json | undefined): StructuredDraft["keyResults"] {
   if (!Array.isArray(value)) return [];
-  return value.flatMap((item) => {
+  return value.flatMap((item, index) => {
+    if (typeof item === "string" && item.trim()) return [{ id: `result_${index}`, value: item.trim() }];
+    const record = asRecord(item);
+    const result = readString(record?.value);
+    return result ? [{ id: readString(record?.id) ?? `result_${index}`, value: result }] : [];
+  });
+}
+
+function readExperiences(value: Json | undefined): StructuredDraft["experiences"] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item, index) => {
     const record = asRecord(item);
     const organization = readString(record?.organization);
     const role = readString(record?.role);
-    if (!record || !organization || !role) return [];
+    const period = readString(record?.period) ?? formatLegacyPeriod(readString(record?.startDate), readString(record?.endDate));
+    if (!record || (!organization && !role && !period && !readString(record.description))) return [];
     return [{
+      id: readString(record.id) ?? legacyReviewEntityIdFromValue("experience", index, { organization, role, period }),
+      source: readString(record.source) === "human" ? "human" as const : "extracted" as const,
       organization,
       role,
-      startDate: readString(record.startDate),
-      endDate: readString(record.endDate),
-      description: readString(record.description) ?? "",
+      period,
+      description: readString(record.description),
+      evidenceText: readString(record.evidenceText) ?? "",
+      page: typeof record.page === "number" ? record.page : null,
     }];
   });
 }
 
-function readEducation(value: Json | undefined): EducationItem[] {
+function readEducation(value: Json | undefined): StructuredDraft["education"] {
   if (!Array.isArray(value)) return [];
-  return value.flatMap((item) => {
+  return value.flatMap((item, index) => {
     const record = asRecord(item);
     const institution = readString(record?.institution);
     const course = readString(record?.course);
-    if (!record || !institution || !course) return [];
-    return [{ institution, course, status: readString(record.status) }];
+    const period = readString(record?.period);
+    if (!record || (!institution && !course && !period)) return [];
+    const storedStatus = readString(record.status);
+    const storedLevel = readString(record.level);
+    const storedQualification = readString(record.qualification);
+    const storedOrigin = readString(record.classificationOrigin);
+    const candidate = {
+      course,
+      institution,
+      period,
+      description: readString(record.description),
+      evidenceText: readString(record.evidenceText),
+      ...(isEducationStatus(storedStatus) ? { status: storedStatus } : {}),
+      ...(isEducationLevel(storedLevel) ? { level: storedLevel } : {}),
+      ...(isEducationQualification(storedQualification) ? { qualification: storedQualification } : {}),
+      ...(isEducationOrigin(storedOrigin) ? { classificationOrigin: storedOrigin } : {}),
+    };
+    return [{
+      id: readString(record.id) ?? legacyReviewEntityIdFromValue("education", index, { institution, course, period }),
+      source: readString(record.source) === "human" ? "human" as const : "extracted" as const,
+      course,
+      institution,
+      period,
+      description: candidate.description,
+      evidenceText: candidate.evidenceText ?? "",
+      page: typeof record.page === "number" ? record.page : null,
+      ...resolveEducationClassification(candidate),
+    }];
   });
 }
 
-function readLanguages(value: Json | undefined): LanguageItem[] {
+function readHistoricalTextList(value: Json | undefined, primaryKeys: string[], qualifierKeys: string[] = []): string[] {
   if (!Array.isArray(value)) return [];
-  return value.flatMap((item) => {
+  return Array.from(new Set(value.flatMap((item) => {
+    if (typeof item === "string" && item.trim()) return [item.trim()];
     const record = asRecord(item);
-    const language = readString(record?.language);
-    if (!record || !language) return [];
-    return [{ language, proficiency: readString(record.proficiency) }];
-  });
+    const primary = primaryKeys.map((key) => readString(record?.[key])).find(Boolean);
+    if (!primary) return [];
+    const qualifier = qualifierKeys.map((key) => readString(record?.[key])).find(Boolean);
+    return [`${primary}${qualifier ? ` · ${qualifier}` : ""}`];
+  })));
 }
 
 function readStringArray(value: Json | undefined): string[] {
@@ -487,6 +555,16 @@ function asRecord(value: Json | undefined): { [key: string]: Json | undefined } 
 function readString(value: Json | undefined): string | null {
   return typeof value === "string" && value.trim() ? value : null;
 }
+
+function formatLegacyPeriod(startDate: string | null, endDate: string | null): string | null {
+  if (!startDate && !endDate) return null;
+  return `${startDate ?? "Início não informado"} a ${endDate ?? "atual"}`;
+}
+
+function isEducationStatus(value: string | null): value is EducationStatus { return Boolean(value && EDUCATION_STATUSES.includes(value as EducationStatus)); }
+function isEducationLevel(value: string | null): value is EducationLevel { return Boolean(value && EDUCATION_LEVELS.includes(value as EducationLevel)); }
+function isEducationQualification(value: string | null): value is EducationQualification { return Boolean(value && EDUCATION_QUALIFICATIONS.includes(value as EducationQualification)); }
+function isEducationOrigin(value: string | null): value is EducationClassificationOrigin { return Boolean(value && EDUCATION_CLASSIFICATION_ORIGINS.includes(value as EducationClassificationOrigin)); }
 
 function sanitizeSearch(search: string): string {
   return search.trim().replace(/[%_]/g, "").slice(0, 80);

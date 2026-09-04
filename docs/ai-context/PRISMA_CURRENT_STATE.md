@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.17.0
-last_verified: 2026-09-04
+version: 2.18.0
+last_verified: 2026-09-03
 ---
 
 # Estado atual do Prisma
@@ -11,12 +11,13 @@ last_verified: 2026-09-04
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/m5-3-pilot-operational-resilience`, dedicada à reutilização, correção e recuperação operacional de Pessoa, Documento, Revisão e Perfil.
+- Branch de entrega em validação: `codex/profile-professional-standard`, dedicada ao Perfil profissional canônico, descoberta explicável e comparação de Pessoas.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
 
+- Padrão Prisma de Perfil Profissional 1.0 implementado localmente: `prisma-profile-view` deriva do Perfil vigente uma apresentação única para Central, Perfil completo, versões e comparação; `profile-discovery` pesquisa Perfis atuais do tenant por experiência, formação, competências, credenciais e contexto, reutiliza equivalências publicadas no Knowledge e explica por que cada Pessoa apareceu. A comparação aceita exatamente duas Pessoas e não declara vencedor, score ou decisão automática. Nenhum schema, migration, RLS, contrato persistido ou fonte de verdade foi criado. O smoke autenticado aprovou Central, Perfil, busca, resultados, comparação e histórico em `1440x900`, `1280x720`, `768x1024`, `390x844` e `360x800`, sem overflow horizontal, controle fora do viewport ou erro de console; nenhuma mutação foi acionada. O gate completo aprovou lint de 310 arquivos, 240 testes de regressão, 19 casos golden, build web e demonstração vertical `VERTICAL_SLICE_OK`.
 - CLI de vertical slice.
 - Shell web React com Vite, Ant Design, App Shell autenticado reutilizável, sidebar responsiva, Supabase Auth no browser, seleção de organization ativa e route guards por papel, com uma única origem local em `5555`; o backend conectado é selecionado pelas variáveis `VITE_SUPABASE_*`.
 - Adapter Supabase web tipado e centralizado para memberships, operador autenticado e leituras de domínio.

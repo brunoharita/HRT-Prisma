@@ -1,6 +1,6 @@
 import type { MembershipRole, OrganizationMembership } from "../shared/access";
 import type { PlatformOperator } from "./platformUsersData";
-import type { CustomProfileSection } from "./personIngestion";
+import type { StructuredDraft } from "./personIngestion";
 
 export const PERSON_LIFECYCLES = [
   "candidate",
@@ -54,37 +54,11 @@ export interface PersonListItem {
   hasStructuredProfile: boolean;
 }
 
-export interface ProfessionalExperience {
-  organization: string;
-  role: string;
-  startDate: string | null;
-  endDate: string | null;
-  description: string;
-}
-
-export interface EducationItem {
-  institution: string;
-  course: string;
-  status: string | null;
-}
-
-export interface LanguageItem {
-  language: string;
-  proficiency: string | null;
-}
-
-export interface StructuredProfile {
+export interface StructuredProfile extends StructuredDraft {
   id: string;
-  fullName: string;
-  experiences: ProfessionalExperience[];
-  education: EducationItem[];
-  certifications: string[];
-  languages: LanguageItem[];
-  toolsAndTechnologies: string[];
-  professionalContexts: string[];
-  customSections: CustomProfileSection[];
-  uncertainties: string[];
-  notIdentified: string[];
+  profileVersion: number;
+  approvedAt: string | null;
+  current: boolean;
   extractionVersion: string;
   inferenceVersion: string;
   createdAt: string;

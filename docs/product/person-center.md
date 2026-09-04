@@ -42,7 +42,7 @@ As perspectivas reorganizam capacidades existentes. Não criam novos estados per
 - A comparação oferece `Atualizar Perfil` como padrão e `Substituir Perfil` quando a revisão deve se tornar o perfil completo.
 - O histórico permite `Restaurar versão` criando uma nova versão vigente e `Reiniciar Perfil` sem apagar Pessoa, documentos ou versões.
 - O contexto documental oferece `Excluir documento` separado de `Arquivar revisão`. Exclusão física é destrutiva, recebe confirmação e preserva dados independentes.
-- O cabeçalho oferece uma única ação primária, `Criar nova revisão`, com Perfil atual, versão anterior ou documento existente como origem. Quando a origem já é conhecida, a ação segue diretamente sem repetir perguntas.
+- O cabeçalho prioriza `Ver perfil`; `Criar nova revisão` permanece secundária e usa Perfil atual, versão anterior ou documento existente como origem. Quando a origem já é conhecida, a ação segue diretamente sem repetir perguntas.
 - Cada documento mostra uma ação principal derivada do estado: `Continuar revisão`, `Revisar agora`, `Revisar novamente`, `Reabrir` ou `Abrir currículo`; `Corrigir Pessoa vinculada` e `Excluir documento` ficam entre as ações excepcionais.
 - `Mesclar com outra Pessoa`, `Arquivar Pessoa`, `Reativar Pessoa` e a troca imediata de vínculo permanecem no contexto da mesma Pessoa.
 - A busca normal omite Pessoas mescladas e arquivadas por padrão, mas o filtro recupera arquivadas e referências antigas à Pessoa absorvida conduzem ao cadastro principal.
@@ -63,3 +63,9 @@ A Central operacional continua restrita aos papéis já autorizados. Member perm
 - Não interpreta falta de evidência como característica negativa.
 - Não inventa título profissional, empresas, logos, datas, evidências ou competências.
 - Evidência Demonstrada do M5.1 permanece separada do Perfil factual e só aparece quando a consulta real correspondente existir.
+
+## Perfil e descoberta profissional
+
+A Central resume o Perfil vigente sem duplicá-lo: resumo profissional, no máximo duas experiências recentes e até seis competências principais conduzem à apresentação completa. O Perfil completo, versões históricas, busca e comparação compartilham o contrato `prisma-profile-view` 1.0.0 descrito em `professional-profile-standard.md`.
+
+A busca avançada usa somente Perfis vigentes do tenant e o Knowledge já publicado. Os resultados explicam os critérios atendidos e a comparação reapresenta exatamente dois Perfis sem score, vencedor ou inferência de adequação.

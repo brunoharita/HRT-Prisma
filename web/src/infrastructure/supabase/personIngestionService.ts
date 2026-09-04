@@ -1648,6 +1648,10 @@ function decodeReviewDraft(value: Json, legacyFallback?: StructuredDraft, replac
   };
 }
 
+export function decodeProfileDataForPresentation(value: Json): StructuredDraft {
+  return decodeReviewDraft(value);
+}
+
 function isRecord(value: unknown): value is Record<string, Json> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }

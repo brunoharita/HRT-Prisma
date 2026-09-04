@@ -379,7 +379,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         onAction={runDocumentAction}
         onDiscard={(document) => void handleDiscard(document)}
         onOpenDocuments={() => setActiveView("documents")}
-        onOpenProfile={() => onNavigate(`/profiles/${personId}/versions`)}
+        onOpenProfile={() => onNavigate(`/profiles/${personId}/profile`)}
       />,
     },
     {
@@ -442,6 +442,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         onEdit={() => onNavigate(`/profiles/${personId}/edit`)}
         onLifecycle={(value) => void changeLifecycle(value)}
         onMerge={() => onNavigate(`/profiles/${personId}/merge`)}
+        onOpenProfile={() => onNavigate(`/profiles/${personId}/profile`)}
         onOpenOperations={() => onNavigate("/profiles/processes")}
       />
       {error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
@@ -467,7 +468,7 @@ function PersonCenterSkeleton() {
   return <div className="prisma-person-center-skeleton"><Skeleton active avatar paragraph={{ rows: 3 }} /><div className="prisma-person-center-skeleton__grid"><Skeleton active paragraph={{ rows: 5 }} /><Skeleton active paragraph={{ rows: 5 }} /></div><Skeleton active paragraph={{ rows: 10 }} /></div>;
 }
 
-function PersonCenterHeader({ model, lifecycle, operationalStatus, onBack, onCreateRevision, onEdit, onOpenOperations, onArchive, onMerge, onLifecycle }: {
+function PersonCenterHeader({ model, lifecycle, operationalStatus, onBack, onCreateRevision, onEdit, onOpenProfile, onOpenOperations, onArchive, onMerge, onLifecycle }: {
   model: PersonCenterViewModel;
   lifecycle: string;
   operationalStatus: "active" | "archived" | "merged";
@@ -477,6 +478,7 @@ function PersonCenterHeader({ model, lifecycle, operationalStatus, onBack, onCre
   onOpenOperations: () => void;
   onArchive: () => void;
   onMerge: () => void;
+  onOpenProfile: () => void;
   onLifecycle: (value: string) => void;
 }) {
   return (
@@ -493,7 +495,8 @@ function PersonCenterHeader({ model, lifecycle, operationalStatus, onBack, onCre
           </div>
         </div>
         <Space className="prisma-person-center-header__actions" wrap>
-          <Button disabled={operationalStatus === "archived"} icon={<EditOutlined />} onClick={onCreateRevision} type="primary">Criar nova revisão</Button>
+          <Button disabled={!model.currentProfile} icon={<EyeOutlined />} onClick={onOpenProfile} type="primary">Ver perfil</Button>
+          <Button disabled={operationalStatus === "archived"} icon={<EditOutlined />} onClick={onCreateRevision}>Criar nova revisão</Button>
           <Button icon={<SafetyCertificateOutlined />} onClick={onOpenOperations}>Processamento e revisões</Button>
           <Button icon={<EditOutlined />} onClick={onEdit}>Editar dados</Button>
           <Dropdown menu={{ items: [
@@ -526,7 +529,7 @@ function PersonOverview({ model, busy, onAction, onDiscard, onOpenDocuments, onO
         <CurrentProfileCard currentProfile={model.currentProfile} onOpen={onOpenProfile} />
       </div>
       <PersonSummary model={model} />
-      <ProfessionalKnowledge model={model} />
+      <ProfessionalKnowledge model={model} onOpenProfile={onOpenProfile} />
       <div className="prisma-person-context-grid">
         <RecentDocuments model={model} onAction={onAction} onOpenAll={onOpenDocuments} />
         <RecentActivity model={model} />
@@ -614,18 +617,18 @@ function PersonStat({ context, icon, label, tone, value }: { context: string; ic
   return <article className={`prisma-person-stat prisma-person-stat--${tone}`}><span>{icon}</span><div><small>{label}</small><strong>{value}</strong><p>{context}</p></div></article>;
 }
 
-function ProfessionalKnowledge({ model }: { model: PersonCenterViewModel }) {
+function ProfessionalKnowledge({ model, onOpenProfile }: { model: PersonCenterViewModel; onOpenProfile: () => void }) {
   const knowledge = model.professionalKnowledge;
   if (!knowledge) return <PrismaCard className="prisma-person-professional-knowledge" title="Conhecimento profissional publicado"><Empty description="Ainda não existe conhecimento profissional publicado neste Perfil." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard>;
   const complementary = [...knowledge.certifications.map((value) => ({ type: "Certificação", value })), ...knowledge.languages.map((value) => ({ type: "Idioma", value }))];
   return (
     <PrismaCard className="prisma-person-professional-knowledge" extra={<Typography.Text type="secondary">Perfil v{model.currentProfile?.version}</Typography.Text>} title="Conhecimento profissional publicado">
-      {knowledge.summary ? <Typography.Paragraph className="prisma-person-professional-summary" ellipsis={{ rows: 3, expandable: true, symbol: "Ver mais" }}>{knowledge.summary}</Typography.Paragraph> : null}
+      {knowledge.summary ? <section className="prisma-person-professional-summary"><div className="prisma-person-subsection-title"><IdcardOutlined /><div><Typography.Title level={3}>Resumo profissional</Typography.Title><span>Perfil vigente</span></div></div><Typography.Paragraph ellipsis={{ rows: 3 }}>{knowledge.summary}</Typography.Paragraph><Button onClick={onOpenProfile} type="link">Ver perfil completo</Button></section> : null}
       <div className="prisma-person-knowledge-editorial">
-        <section className="prisma-person-experience-section"><div className="prisma-person-subsection-title"><BookOutlined /><div><Typography.Title level={3}>Experiências</Typography.Title><span>{knowledge.experiences.length} publicadas</span></div></div>{knowledge.experiences.length ? <List dataSource={knowledge.experiences.slice(0, 5)} renderItem={(item) => <PublishedExperienceItem item={item} />} /> : <Typography.Paragraph type="secondary">Nenhuma experiência profissional foi publicada neste perfil.</Typography.Paragraph>}</section>
+        <section className="prisma-person-experience-section"><div className="prisma-person-subsection-title"><BookOutlined /><div><Typography.Title level={3}>Experiência recente</Typography.Title><span>{knowledge.experiences.length} publicadas</span></div></div>{knowledge.experiences.length ? <List dataSource={knowledge.experiences.slice(0, 2)} renderItem={(item) => <PublishedExperienceItem item={item} />} /> : <Typography.Paragraph type="secondary">Nenhuma experiência profissional foi publicada neste perfil.</Typography.Paragraph>}<Button onClick={onOpenProfile} type="link">Ver todas as experiências</Button></section>
         <div className="prisma-person-knowledge-side">
           <section><div className="prisma-person-subsection-title"><TeamOutlined /><div><Typography.Title level={3}>Formação</Typography.Title><span>{knowledge.education.length} publicadas</span></div></div>{knowledge.education.length ? <List className="prisma-person-education-list" dataSource={knowledge.education.slice(0, 5)} renderItem={(item) => <PublishedEducationItem item={item} />} /> : <Typography.Paragraph type="secondary">Nenhuma formação foi publicada neste perfil.</Typography.Paragraph>}</section>
-          <section><div className="prisma-person-subsection-title"><SafetyCertificateOutlined /><div><Typography.Title level={3}>Competências</Typography.Title><span>{knowledge.competencies.length} explícitas</span></div></div>{knowledge.competencies.length ? <Space className="prisma-person-competency-tags" wrap>{knowledge.competencies.slice(0, 18).map((competency) => <Tag className="prisma-person-competency-tag prisma-person-competency-tag--explicit" color="blue" key={competency}>{competency}</Tag>)}</Space> : <Typography.Paragraph type="secondary">Nenhuma competência explícita foi identificada nos documentos aprovados.</Typography.Paragraph>}</section>
+          <section><div className="prisma-person-subsection-title"><SafetyCertificateOutlined /><div><Typography.Title level={3}>Competências principais</Typography.Title><span>{knowledge.competencies.length} explícitas</span></div></div>{knowledge.competencies.length ? <Space className="prisma-person-competency-tags" wrap>{knowledge.competencies.slice(0, 6).map((competency) => <Tag className="prisma-person-competency-tag prisma-person-competency-tag--explicit" color="blue" key={competency}>{competency}</Tag>)}</Space> : <Typography.Paragraph type="secondary">Nenhuma competência explícita foi identificada nos documentos aprovados.</Typography.Paragraph>}<Button onClick={onOpenProfile} type="link">Ver todas as competências</Button></section>
           {complementary.length ? <section><div className="prisma-person-subsection-title"><FileDoneOutlined /><div><Typography.Title level={3}>Outros dados publicados</Typography.Title><span>{complementary.length} registros</span></div></div><div className="prisma-person-complementary-list">{complementary.map((item) => <span key={`${item.type}:${item.value}`}><small>{item.type}</small><strong>{item.value}</strong></span>)}</div></section> : null}
         </div>
       </div>

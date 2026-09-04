@@ -63,7 +63,7 @@ test("curriculum-first migration stages the PDF before Person and resolves once 
   assert.doesNotMatch(sql, /text_content|quoted_text|reviewed_data|extracted_data/i);
 });
 
-test("curriculum-first UI makes import primary and keeps manual Person registration secondary", async () => {
+test("curriculum-first UI keeps import directly available while profile discovery is primary", async () => {
   const [home, people, importer, service, styles] = await Promise.all([
     readFile("web/src/pages/HomePage.tsx", "utf8"),
     readFile("web/src/pages/PeoplePage.tsx", "utf8"),
@@ -73,7 +73,8 @@ test("curriculum-first UI makes import primary and keeps manual Person registrat
   ]);
 
   assert.match(home, /Importar currículo/);
-  assert.match(people, /type="primary">Importar currículo/);
+  assert.match(people, /type="primary">Encontrar pessoas/);
+  assert.match(people, /onNavigate\("\/profiles\/import"\)[\s\S]{0,120}>Importar currículo/);
   assert.match(people, />Cadastrar pessoa</);
   assert.match(importer, /Possíveis correspondências/);
   assert.match(importer, /Identificação da pessoa/);

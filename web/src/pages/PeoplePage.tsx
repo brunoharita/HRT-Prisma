@@ -129,13 +129,14 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       <PrismaPageHeader
         title="Pessoas"
         description="Gerencie as pessoas e acompanhe, separadamente, o Perfil atual e as importações recentes."
-        actions={canManagePeople ? (
-          <Space wrap>
+        actions={<Space wrap>
+            <Button icon={<SearchOutlined />} onClick={() => onNavigate("/profiles/search")} type="primary">Encontrar pessoas</Button>
+            {canManagePeople ? <>
             <Button icon={<FileSearchOutlined />} onClick={() => onNavigate("/profiles/processes")}>Processamento e revisões</Button>
             <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/new")}>Cadastrar pessoa</Button>
-            <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")} type="primary">Importar currículo</Button>
-          </Space>
-        ) : undefined}
+            <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")}>Importar currículo</Button>
+            </> : null}
+          </Space>}
       />
 
       <div className="prisma-people-stats">
