@@ -443,7 +443,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         onLifecycle={(value) => void changeLifecycle(value)}
         onMerge={() => onNavigate(`/profiles/${personId}/merge`)}
         onOpenProfile={() => onNavigate(`/profiles/${personId}/profile`)}
-        onOpenOperations={() => onNavigate("/profiles/processes")}
+        onOpenOperations={() => onNavigate(`/profiles/${personId}/processes`)}
       />
       {error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}

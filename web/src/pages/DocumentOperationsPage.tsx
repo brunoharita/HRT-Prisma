@@ -25,10 +25,11 @@ import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
 interface DocumentOperationsPageProps {
   activeMembership: OrganizationMembership;
+  personId?: string;
   onNavigate: (path: string) => void;
 }
 
-export function DocumentOperationsPage({ activeMembership, onNavigate }: DocumentOperationsPageProps) {
+export function DocumentOperationsPage({ activeMembership, personId, onNavigate }: DocumentOperationsPageProps) {
   const [documents, setDocuments] = useState<DocumentOperationSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,12 +41,14 @@ export function DocumentOperationsPage({ activeMembership, onNavigate }: Documen
     let current = true;
     setLoading(true);
     setError(null);
-    void personIngestionService.listDocumentOperations(activeMembership.organizationId)
+    void personIngestionService.listDocumentOperations(activeMembership.organizationId, personId)
       .then((result) => { if (current) setDocuments(result); })
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível carregar a central."); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
-  }, [activeMembership.organizationId]);
+  }, [activeMembership.organizationId, personId]);
+
+  const scopedPersonName = personId ? documents.find((document) => document.personId === personId)?.personName : null;
 
   const filtered = documents.filter((document) => {
     const matchesSearch = !deferredSearch || `${document.personName} ${document.filename}`.toLocaleLowerCase("pt-BR").includes(deferredSearch);
@@ -138,9 +141,16 @@ export function DocumentOperationsPage({ activeMembership, onNavigate }: Documen
   return (
     <PrismaPage className="prisma-m2c-page prisma-document-operations-page">
       <PrismaPageHeader
-        title="Processamento e revisões"
-        description="Acompanhe documentos, tentativas, revisões humanas e o impacto no perfil atual."
-        actions={<Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>}
+        title={personId ? "Processamento e revisões da Pessoa" : "Processamento e revisões"}
+        description={personId
+          ? `${scopedPersonName ?? "Pessoa selecionada"}: acompanhe somente seus documentos, tentativas e revisões.`
+          : "Acompanhe documentos, tentativas, revisões humanas e o impacto no perfil atual."}
+        actions={personId ? (
+          <>
+            <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar para a Pessoa</Button>
+            <Button onClick={() => onNavigate("/profiles/processes")}>Ver toda a organização</Button>
+          </>
+        ) : <Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>}
       />
 
       <PrismaCard className="prisma-operation-legend">
@@ -157,7 +167,7 @@ export function DocumentOperationsPage({ activeMembership, onNavigate }: Documen
         <OperationMetric icon={<CloseCircleOutlined />} label="Falha técnica" value={counts.failed} tone="danger" />
       </div>
       <PrismaCard className="prisma-operations-toolbar">
-        <Input.Search allowClear onChange={(event) => setSearch(event.target.value)} placeholder="Buscar por pessoa, documento ou organização..." value={search} />
+        <Input.Search allowClear onChange={(event) => setSearch(event.target.value)} placeholder={personId ? "Buscar documento desta Pessoa..." : "Buscar por pessoa, documento ou organização..."} value={search} />
         <Select
           aria-label="Filtrar status operacional"
           onChange={setStatus}
@@ -179,7 +189,7 @@ export function DocumentOperationsPage({ activeMembership, onNavigate }: Documen
           <Table
             columns={columns}
             dataSource={filtered}
-            locale={{ emptyText: <Empty description="Nenhum documento corresponde aos filtros." image={Empty.PRESENTED_IMAGE_SIMPLE} /> }}
+            locale={{ emptyText: <Empty description={personId ? "Nenhum documento desta Pessoa corresponde aos filtros." : "Nenhum documento corresponde aos filtros."} image={Empty.PRESENTED_IMAGE_SIMPLE} /> }}
             pagination={{ defaultPageSize: 10, showSizeChanger: true, showTotal: (total, range) => `Mostrando ${range[0]} a ${range[1]} de ${total} ${total === 1 ? "resultado" : "resultados"}` }}
             rowKey="id"
             scroll={{ x: 1415 }}

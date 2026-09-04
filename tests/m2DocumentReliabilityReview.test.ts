@@ -103,6 +103,26 @@ test("M2-C operations table preserves readable person and document columns", asy
   assert.match(styles, /\.prisma-operations-table \.ant-table-tbody > tr > td[\s\S]*?vertical-align: middle/);
 });
 
+test("Person Center opens processing and reviews already scoped to the selected Person", async () => {
+  const [application, workspace, operations, service] = await Promise.all([
+    readFile("web/src/app/PrismaApplication.tsx", "utf8"),
+    readFile("web/src/pages/PersonWorkspacePage.tsx", "utf8"),
+    readFile("web/src/pages/DocumentOperationsPage.tsx", "utf8"),
+    readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8"),
+  ]);
+
+  assert.match(workspace, /onNavigate\(`\/profiles\/\$\{personId\}\/processes`\)/);
+  assert.match(application, /\^\\\/profiles\\\/\(\[\^\/\]\+\)\\\/processes\$/);
+  assert.match(application, /personId=\{route\.profileId\}/);
+  assert.match(operations, /listDocumentOperations\(activeMembership\.organizationId, personId\)/);
+  assert.match(operations, /Ver toda a organização/);
+  assert.match(operations, /Voltar para a Pessoa/);
+  assert.match(service, /personId \? documentQuery\.eq\("person_id", personId\)/);
+  assert.match(service, /personId \? peopleQuery\.eq\("id", personId\)/);
+  assert.match(service, /personId \? profileQuery\.eq\("person_id", personId\)/);
+  assert.match(application, /normalized === "\/profiles\/processes"/);
+});
+
 test("M2-C closes review through Delta and returns to the Person only after publication", async () => {
   const [review, delta] = await Promise.all([
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),

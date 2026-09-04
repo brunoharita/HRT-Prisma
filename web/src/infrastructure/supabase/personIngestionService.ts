@@ -669,14 +669,18 @@ export const personIngestionService = {
     return { profileId: approved.profile_id, profileVersion: approved.profile_version };
   },
 
-  async listDocumentOperations(organizationId: string): Promise<DocumentOperationSummary[]> {
+  async listDocumentOperations(organizationId: string, personId?: string): Promise<DocumentOperationSummary[]> {
+    const documentQuery = supabase.from("documents")
+      .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, failure_category, created_at, processed_at, is_legacy_unstored")
+      .eq("organization_id", organizationId);
+    const peopleQuery = supabase.from("people").select("id, full_name").eq("organization_id", organizationId);
+    const profileQuery = supabase.from("professional_profiles").select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
+      .eq("organization_id", organizationId);
     const [documentResult, peopleResult, profileResult] = await Promise.all([
-      supabase.from("documents")
-        .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, failure_category, created_at, processed_at, is_legacy_unstored")
-        .eq("organization_id", organizationId).not("person_id", "is", null).order("created_at", { ascending: false }),
-      supabase.from("people").select("id, full_name").eq("organization_id", organizationId),
-      supabase.from("professional_profiles").select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
-        .eq("organization_id", organizationId),
+      (personId ? documentQuery.eq("person_id", personId) : documentQuery.not("person_id", "is", null))
+        .order("created_at", { ascending: false }),
+      personId ? peopleQuery.eq("id", personId) : peopleQuery,
+      personId ? profileQuery.eq("person_id", personId) : profileQuery,
     ]);
     throwIfError(documentResult.error, "Não foi possível carregar a central de processamento.");
     throwIfError(peopleResult.error, "Não foi possível carregar as Pessoas da central.");

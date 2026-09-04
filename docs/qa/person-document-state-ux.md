@@ -18,6 +18,7 @@ Validar o contrato `document-presentation` 1.2.0, a navegação centrada na Pess
 10. Documento sem revisão registrada: a ação é `Detalhes técnicos` e nenhum review ID ou conteúdo estruturado é inventado.
 11. Tentativa mais recente vazia não oculta uma tentativa anterior com páginas, caracteres úteis, draft `insufficient` e `insufficient_structured_facts`; a ação é `Recuperar informações`.
 12. `start_profile_review` aceita a tentativa parcial recuperável e rejeita tentativa vazia, sem páginas, outro tenant ou operador sem papel de revisão.
+13. `Processamento e revisões`, aberto pela Central da Pessoa, usa `/profiles/:personId/processes`, filtra documentos, Pessoas e Perfis por `person_id` ainda na consulta e permite sair explicitamente para a visão de toda a organização.
 
 Cobertura automatizada: `tests/documentPresentation.test.ts`, além das regressões M2-B, M2-C e M5 existentes.
 
@@ -43,6 +44,7 @@ Validar em desktop e viewport estreito:
 
 - cards, busca, filtros e quatro colunas da tela Pessoas sem esmagamento;
 - legenda, cinco métricas e sete colunas da central operacional com rolagem interna;
+- entrada contextual pela Central da Pessoa mostrando somente seus documentos, nomeando o escopo e preservando a saída `Ver toda a organização`;
 - banner, ações, resumo, histórico e tabela `Documentos e versões` da Central da Pessoa;
 - `Ver documento` abrindo o workspace M5 lado a lado em modo somente leitura, sem controles de mutação, e `Detalhes técnicos` retornando à página operacional;
 - ação primária `Revisar nova importação` e descarte com confirmação explícita;

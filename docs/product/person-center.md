@@ -43,6 +43,7 @@ As perspectivas reorganizam capacidades existentes. Não criam novos estados per
 - O histórico permite `Restaurar versão` criando uma nova versão vigente e `Reiniciar Perfil` sem apagar Pessoa, documentos ou versões.
 - O contexto documental oferece `Excluir documento` separado de `Arquivar revisão`. Exclusão física é destrutiva, recebe confirmação e preserva dados independentes.
 - O cabeçalho prioriza `Ver perfil`; `Criar nova revisão` permanece secundária e usa Perfil atual, versão anterior ou documento existente como origem. Quando a origem já é conhecida, a ação segue diretamente sem repetir perguntas.
+- `Processamento e revisões`, quando acionado dentro da Central da Pessoa, abre a central operacional já limitada à Pessoa selecionada. A interface explicita o contexto, oferece retorno direto à Pessoa e mantém `Ver toda a organização` como saída consciente para a visão global.
 - Cada documento mostra uma ação principal derivada do estado: `Continuar revisão`, `Revisar agora`, `Revisar novamente`, `Reabrir` ou `Abrir currículo`; `Corrigir Pessoa vinculada` e `Excluir documento` ficam entre as ações excepcionais.
 - `Mesclar com outra Pessoa`, `Arquivar Pessoa`, `Reativar Pessoa` e a troca imediata de vínculo permanecem no contexto da mesma Pessoa.
 - A busca normal omite Pessoas mescladas e arquivadas por padrão, mas o filtro recupera arquivadas e referências antigas à Pessoa absorvida conduzem ao cadastro principal.

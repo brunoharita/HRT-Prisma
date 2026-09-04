@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 44c8be5f56cd605e3d4f11b78bf57cba0c2cb27a8bd515b7df0ee918409a6bc3
+source_manifest_sha256: 6069604b3cb9ecf3b48731f93f7220b06507e1720a0f34224f1e2bcaf3978d45
 -->
 
 # Tudo sobre o Prisma
@@ -580,6 +580,8 @@ Em 2026-09-03, a branch `codex/m5-2-knowledge-normalization` operacionalizou o M
 Ainda em 2026-09-03, a branch `codex/knowledge-source-monitoring` ativou no Prisma-QA o monitor `knowledge-source-monitor-1.0.1`. O Supabase Cron executa um scanner de vencimento horário protegido por segredo aleatório no Vault; as checagens reais vencem no primeiro dia às 01:00 em `America/Sao_Paulo`, com retries 6h/24h/72h. A primeira execução oficial confirmou CBO `CBO 2002-2025-06-06` de 06/06/2025 como `current`, ESCO `v1.2.1` de 10/12/2025 como `action_required` e O*NET `31.0` de agosto/2026 como `action_required`. Chamada sem segredo retornou 401, RLS ficou ativo, `anon` ficou sem grant e `authenticated` somente com SELECT condicionado a Super Admin. A Home local recebeu o painel de versões pelo repository boundary. O build aprovou, mas o smoke visual autenticado ficou pendente porque o navegador interno abriu sem sessão salva.
 
 Ainda em 2026-09-03, a branch `codex/m5-3-pilot-operational-resilience` fechou as lacunas operacionais do piloto sem criar outro pipeline. Cinco migrations forward-only foram aplicadas e registradas no Prisma-QA; a prova SQL transacional foi revertida após validar revisão por Perfil ou documento, restauração incremental, exclusão com Perfil imutável, correção integral de vínculo, mesclagem idempotente, tenant, papel e grants. O smoke autenticado percorreu versões completas, confirmação de restauração, preflight de exclusão, correção de Pessoa, comparação de mesclagem e arquivamento seguido de reativação da Pessoa sintética, sem deixar o cadastro arquivado. A Central da Pessoa foi aprovada em `360x800`, `390x844`, `768x1024`, `1280x720` e `1440x900`, com zero overflow horizontal global ou interno. O passe também corrigiu a leitura de idiomas estruturados em versões históricas, exibindo `Inglês · avançado` em vez de `[object Object]`. Produção não foi alterada.
+
+Em 2026-09-04, a entrada `Processamento e revisões` da Central da Pessoa passou a preservar o contexto da Pessoa na rota e na consulta Supabase. A rota `/profiles/:personId/processes` limita documentos, cadastro e Perfis por `person_id`, identifica visualmente o escopo e oferece saída explícita para a visão global; `/profiles/processes` permanece como central de toda a organização. Não houve mudança de schema, RLS, grants ou dados remotos.
 
 ---
 

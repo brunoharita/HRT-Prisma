@@ -368,7 +368,7 @@ function renderRouteContent(
     return <ResumeImportPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles" && route.profileView === "operations" && activeMembership) {
-    return <DocumentOperationsPage activeMembership={activeMembership} onNavigate={onNavigate} />;
+    return <DocumentOperationsPage activeMembership={activeMembership} {...(route.profileId ? { personId: route.profileId } : {})} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles" && route.profileView === "search" && activeMembership) {
     return <ProfileSearchPage activeMembership={activeMembership} onNavigate={onNavigate} />;
@@ -579,6 +579,8 @@ function findRoute(pathname: string): AppRoute {
   if (normalized === "/profiles/import") return { path: "/profiles", profileView: "import", rule: reviewerRule };
   if (normalized === "/profiles/processes") return { path: "/profiles", profileView: "operations", rule: reviewerRule };
   if (normalized === "/profiles/search") return { path: "/profiles", profileView: "search", rule: { requiresAuth: true, requiresMembership: true } };
+  const personOperationsMatch = /^\/profiles\/([^/]+)\/processes$/.exec(normalized);
+  if (personOperationsMatch?.[1]) return { path: "/profiles", profileId: personOperationsMatch[1], profileView: "operations", rule: reviewerRule };
   const comparisonMatch = /^\/profiles\/compare\/([^/]+)\/([^/]+)$/.exec(normalized);
   if (comparisonMatch?.[1] && comparisonMatch[2]) return { path: "/profiles", profileView: "compare", comparePersonIds: [comparisonMatch[1], comparisonMatch[2]], rule: { requiresAuth: true, requiresMembership: true } };
   const reviewMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)\/review\/([^/]+)$/.exec(normalized);
