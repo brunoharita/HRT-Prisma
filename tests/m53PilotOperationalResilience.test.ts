@@ -11,6 +11,15 @@ test("M5.3 normalizes structured lists from historical profile versions", async 
   assert.match(service, /decodeHistoricalTextList\(value\.competencies/);
 });
 
+test("M5.3 keeps a long historical Profile independently scrollable during review", async () => {
+  const [review, styles] = await Promise.all([
+    readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
+  ]);
+  assert.match(review, /className="prisma-profile-review-source"/);
+  assert.match(styles, /\.prisma-profile-review-source\s*\{[^}]*height: 100%;[^}]*min-height: 0;[^}]*overflow-y: auto;[^}]*overscroll-behavior: contain;[^}]*scrollbar-gutter: stable;/s);
+});
+
 test("M5.3 reuses immutable profiles and existing documents as revision sources", async () => {
   const [sql, application, center, versions, review] = await Promise.all([
     readFile(migrationPath, "utf8"),

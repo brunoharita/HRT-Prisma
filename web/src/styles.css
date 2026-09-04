@@ -2527,6 +2527,14 @@ textarea {
   border-right: 1px solid var(--prisma-border);
 }
 
+.prisma-profile-review-source {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
 .prisma-review-structured-pane {
   overflow: auto;
   overscroll-behavior: contain;
