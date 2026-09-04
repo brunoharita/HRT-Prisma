@@ -31,6 +31,10 @@ export interface ProfileDeltaContext {
   explicitRemovalKeys?: ReadonlySet<string>;
 }
 
+export function isProfileBlockDecisionItem(item: ProfileDeltaItem): boolean {
+  return item.section !== "private_contact";
+}
+
 export function deriveProfileDelta(current: StructuredDraft | null, proposal: StructuredDraft, context: ProfileDeltaContext = {}): ProfileDelta {
   const removals = context.explicitRemovalKeys ?? new Set<string>();
   const items: ProfileDeltaItem[] = [];

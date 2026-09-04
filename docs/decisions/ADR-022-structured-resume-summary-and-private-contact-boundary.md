@@ -23,6 +23,8 @@ A extração é estritamente documental: campos ausentes permanecem nulos ou vaz
 
 Na aprovação, `identity` e `contact` são removidos antes da criação de `professional_profiles`. Nome confirmado atualiza `people.full_name`; contato confirmado atualiza `person_private_data`. Valores nulos não apagam valores canônicos existentes. Constraints impedem que `identity` ou `contact` sejam promovidos para o perfil profissional e validam limites, formato, IDs estáveis e duplicidades. RLS e papéis não são ampliados.
 
+No Delta, os contatos permanecem visíveis para que o operador confirme o efeito da publicação, mas não recebem nem produzem decisões de bloco do Perfil profissional. A aprovação os persiste exclusivamente pelo fluxo privado descrito acima.
+
 ## Consequências
 
 - comparação e evidência passam a existir por informação real do currículo;
@@ -48,6 +50,8 @@ Na aprovação, `identity` e `contact` são removidos antes da criação de `pro
 `structured-resume-summary` 1.1.0 preserva o mesmo campo opcional `summary` e amplia somente seu reconhecimento documental. O runtime aceita títulos explícitos equivalentes em português e inglês, recupera conteúdo unido ao cabeçalho por um parser PDF e encerra a captura diante da próxima seção conhecida, inclusive expertise técnica. Sem seção explícita, o valor permanece nulo e `resumo profissional` é registrado em `notIdentified`; nenhuma síntese ou inferência é criada.
 
 Essa evolução também avança `adaptive-resume-extraction` para 6.1.0 e `extraction-draft` para 7.1.0, com método `prisma-layout-adaptive-v7`. Schema, autoridade, aprovação, fronteira privada e evidência espacial permanecem inalterados.
+
+Em 2026-09-04, uma correção compatível alinhou o Delta à fronteira já aceita: itens `contact.*` continuam comparáveis, mas ficam fora de `p_block_decisions`. Nenhuma versão de contrato, schema, RPC, RLS ou grant mudou.
 
 ## Reversão
 

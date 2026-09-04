@@ -1,12 +1,26 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { deriveProfileDelta } from "../web/src/domain/profileDelta.js";
+import { deriveProfileDelta, isProfileBlockDecisionItem } from "../web/src/domain/profileDelta.js";
 import type { StructuredDraft } from "../web/src/domain/personIngestion.js";
 
 test("first publication classifies every reviewed fact as an addition", () => {
   const delta = deriveProfileDelta(null, draft({ competencies: ["Scrum"] }));
   assert.equal(delta.firstPublication, true);
   assert.equal(delta.items.every((item) => item.kind === "added"), true);
+});
+
+test("first publication keeps private contact visible but outside profile block decisions", () => {
+  const proposal = draft({
+    contact: { city: "Bauru", state: "SP", phone: "5511999999999", email: "pessoa@example.com", linkedin: null },
+    competencies: ["Scrum"],
+  });
+  const delta = deriveProfileDelta(null, proposal, { currentContact: { city: null, state: null, phone: null, email: null, linkedin: null } });
+  const contactItems = delta.items.filter((item) => item.section === "private_contact");
+
+  assert.deepEqual(contactItems.map((item) => item.key), ["contact.city", "contact.state", "contact.phone", "contact.email"]);
+  assert.equal(contactItems.every((item) => item.kind === "added"), true);
+  assert.equal(contactItems.some(isProfileBlockDecisionItem), false);
+  assert.equal(delta.items.filter(isProfileBlockDecisionItem).some((item) => item.key === "competencies::scrum"), true);
 });
 
 test("omission never becomes removal and keeps approved experience and competency visible", () => {

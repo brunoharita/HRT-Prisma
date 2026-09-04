@@ -25,11 +25,12 @@ Validar `resume-product-state` 1.1.0, `document-presentation` 2.1.0, `operation-
 17. O Delta lista todas as pendências conhecidas e troca `Publicar` por `Revisar pendência`; a ação retorna ao campo exato, rola a tela e aplica destaque visual.
 18. Erro corrigível do servidor contém `reason`, `fieldPath` e item no envelope `operation-feedback-2.0.0`; falha interna afirma explicitamente que nenhum campo precisa ser corrigido manualmente.
 19. Toda fronteira Supabase usa o tradutor operacional central; respostas controladas de Edge Functions são lidas e traduzidas, e nenhuma mensagem técnica bruta pode ser lançada diretamente por um service.
+20. Contato permanece visível no Delta como atualização do cadastro privado, sem seletor de ação nem envio em `p_block_decisions`; título, resumo, listas e registros profissionais continuam produzindo decisões normalmente.
 
 ## Evidência determinística
 
 - `tests/resumeProductState.test.ts` cobre os sete estados e a extração parcial.
-- `tests/profileDelta.test.ts` cobre primeira publicação, atualização, manutenção, omissão, identidade estável e remoção explícita.
+- `tests/profileDelta.test.ts` cobre primeira publicação, atualização, manutenção, omissão, identidade estável, remoção explícita e a exclusão de contato privado das decisões de bloco sem retirá-lo da comparação.
 - `tests/profilePublicationDeltaMigration.test.ts` cobre RLS, DML revogado, autoridade única, recuperação de tentativa útil e integração das seis telas.
 - `tests/reviewOperationErrors.test.ts` cobre categorias, mensagens sanitizadas e recuperação representativa para evidência, aprendizado, classificação, publicação, arquivamento, transporte, M5.1A/B/C e Conhecimento; também varre os services Supabase e falha diante de qualquer lançamento direto de mensagem do backend.
 - `tests/resumeInterruptionUx.test.ts` protege preflight, confirmação remota versus falha de recarga, modal de publicação e ausência de mensagens técnicas cruas.

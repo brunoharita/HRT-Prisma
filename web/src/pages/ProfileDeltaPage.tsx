@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, Empty, Radio, Select, Skeleton, Statistic, Tabs, Tag, Typography } from "antd";
-import { deriveProfileDelta, type ProfileDeltaItem, type ProfileDeltaKind, type ProfileDeltaSection } from "../domain/profileDelta";
+import { deriveProfileDelta, isProfileBlockDecisionItem, type ProfileDeltaItem, type ProfileDeltaKind, type ProfileDeltaSection } from "../domain/profileDelta";
 import type { ProfileBlockAction, ProfileBlockDecision, ProfilePublicationMode, ProfileReviewWorkspace, ProfileVersionView } from "../domain/personIngestion";
 import { normalizeReviewDraft, validateEducationClassificationsForApproval, validateReviewDraftForSave } from "../domain/reviewFieldLifecycle";
 import { operationRecovery, PrismaOperationError, type OperationRecovery } from "../domain/reviewOperationErrors";
@@ -126,7 +126,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       setErrorFieldPath(validationIssues[0]!.fieldPath);
       return;
     }
-    const decisions: ProfileBlockDecision[] = delta.items.map((item) => ({
+    const decisions: ProfileBlockDecision[] = delta.items.filter(isProfileBlockDecisionItem).map((item) => ({
       fieldPath: item.key,
       action: blockActions.get(item.key) ?? defaultBlockAction(item, publicationMode),
       targetBlockId: item.targetBlockId,
@@ -224,7 +224,7 @@ function DeltaSection({ actions, items, mode, onAction }: { actions: Map<string,
     if (!group.length) return null;
     return <section key={kind}><Typography.Text className={`prisma-delta-group-title is-${kind}`} strong>{kindLabel(kind)} ({group.length})</Typography.Text>{group.map((item) => <article className={`prisma-delta-item is-${kind}`} key={item.key}>
       <div><strong>{item.label}</strong><Tag>{provenanceLabel(item.provenance)}</Tag>{item.kind === "updated" ? <><small>Antes: {preview(item.before)}</small><small>Depois: {preview(item.after)}</small></> : <small>{preview(item.after ?? item.before)}</small>}</div>
-      <div className="prisma-delta-item-action"><Tag color={kindColor(kind)}>{kindBadge(kind)}</Tag>{item.kind === "not_cited" ? <Typography.Text type="secondary">{mode === "merge" ? "Mantido por já estar aprovado" : "Não fará parte do novo perfil"}</Typography.Text> : null}<Select aria-label={`Ação para ${item.label}`} onChange={(value) => onAction(item, value)} options={blockActionOptions(item, mode)} value={actions.get(item.key) ?? defaultBlockAction(item, mode)} /></div>
+      <div className="prisma-delta-item-action"><Tag color={kindColor(kind)}>{kindBadge(kind)}</Tag>{item.section === "private_contact" ? <Typography.Text type="secondary">Atualizado no cadastro privado</Typography.Text> : <>{item.kind === "not_cited" ? <Typography.Text type="secondary">{mode === "merge" ? "Mantido por já estar aprovado" : "Não fará parte do novo perfil"}</Typography.Text> : null}<Select aria-label={`Ação para ${item.label}`} onChange={(value) => onAction(item, value)} options={blockActionOptions(item, mode)} value={actions.get(item.key) ?? defaultBlockAction(item, mode)} /></>}</div>
     </article>)}</section>;
   })}</div>;
 }

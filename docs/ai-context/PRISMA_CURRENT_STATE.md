@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.18.0
-last_verified: 2026-09-03
+version: 2.18.1
+last_verified: 2026-09-04
 ---
 
 # Estado atual do Prisma
@@ -11,7 +11,7 @@ last_verified: 2026-09-03
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/profile-professional-standard`, dedicada ao Perfil profissional canônico, descoberta explicável e comparação de Pessoas.
+- Branch de entrega em validação: `codex/m53-profile-publication-contact-fix`, dedicada à correção da publicação do Perfil com contato privado no Delta.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
@@ -28,6 +28,7 @@ last_verified: 2026-09-03
 - Central da Pessoa 1.0 redesenhada localmente: `person-action-center` 1.0.0 compõe um view model tipado e deriva todas as pendências documentais reais sem estado paralelo. Cabeçalho profissional, pendências acionáveis, Perfil vigente, resumo contextual, conhecimento editorial, documentos com painel contextual e atividade recente foram organizados nas perspectivas Visão geral, Documentos e versões e Nova importação. O CTA `Revisar documento agora` resolve diretamente documento e tentativa revisável; Member continua fora da superfície operacional. Nenhum schema, RLS, score, IA ou estado persistido mudou. O smoke autenticado foi aprovado nas cinco resoluções de referência.
 - Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. `ExtractionDraft` está em 7.1.0, extração adaptativa em 6.1.0 e regras/modelo determinísticos em 2.0.0.
 - Jornada de ingestão 2.0.0 implementada em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `profile-publication-delta` 2.0.0 está ativo no Prisma-QA: Atualizar preserva fatos aprovados omitidos; Substituir trata a revisão como Perfil completo; decisões por bloco registram ação, origem, alvo e resolução determinística. Remoção explícita de fato aprovado continua exigindo uma decisão humana, sem exigir texto livre nas correções comuns.
+- Correção compatível da publicação Delta implementada localmente: contato permanece visível como atualização do cadastro privado, sem seletor enganoso, e itens `contact.*` não são enviados em `p_block_decisions`. A aprovação continua atualizando `person_private_data` pela fronteira existente; decisões profissionais, schema, RPC, RLS, grants e versões de contrato não mudaram. O gate completo aprovou lint de 310 arquivos, fundação, Context Pack, dois typechecks, build web, 242 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`.
 - `operation-feedback` 2.0.0 implementado localmente: impedimentos corrigíveis informam motivo, item e caminho do campo em envelope estável; a interface traduz para linguagem natural, lista as pendências, retorna ao campo exato, rola e destaca. O mesmo tradutor protege todas as fronteiras Supabase de ingestão, revisão, Verificações, Item Bank e Conhecimento, inclusive respostas de Edge Functions; regressão arquitetural impede `throw` direto da mensagem remota. Falhas internas declaram que não há campo a corrigir e nunca expõem SQL, função, tabela, payload ou código técnico.
 - `decision-centered-interaction` 1.0.0 implementado localmente no descarte adaptativo e normativo para o produto: cliques e teclas obrigatórios representam julgamento, autoridade ou risco material; coordenação determinística, avisos sem proposta, auditoria factual e falhas de telemetria opcional não interrompem o operador. Relatórios sem assinatura registrável usam `Fechar aviso` sem RPC; sugestões válidas fecham imediatamente e registram descarte em segundo plano.
 - Ciclo de vida de Perfil e documentos 1.0.0 implementado localmente e ativo no Prisma-QA: `Atualizar Perfil` preserva omissões, `Substituir Perfil` usa a revisão como versão completa, decisões por bloco mantêm identidade e alvo explícitos, restauração cria uma nova versão vigente, reinício remove somente o vigente e exclusão física usa saga retomável com Storage API. Dependências exclusivas são removidas apenas dentro da operação `delete_document` autoritativa; Knowledge, Evidência Demonstrada, avaliações, Pessoa, demais documentos e histórico independente permanecem. A prova conectada com rollback validou composição, idempotência, recomposição, ausência de órfãos e negações de autoridade. O smoke autenticado aprovou as superfícies de comparação, versões e documento em 1920x1080, 1600x900, 1440x900, 1366x768 e 390x844; no mobile, diferenças são cartões rotulados sem rolagem horizontal global ou interna.
@@ -73,7 +74,7 @@ last_verified: 2026-09-03
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 231 testes técnicos compõem a suíte local, incluindo compatibilidade histórica da publicação, resiliência operacional M5.3, foco em campo pendente, classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, normalização Knowledge M5.2, monitoramento das fontes oficiais, feedback operacional acionável e segurança das migrations.
+- 242 testes técnicos compõem a suíte local, incluindo compatibilidade histórica da publicação, fronteira privada do contato no Delta, resiliência operacional M5.3, foco em campo pendente, classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, normalização Knowledge M5.2, monitoramento das fontes oficiais, feedback operacional acionável e segurança das migrations.
 
 ## Implementado como contrato
 
