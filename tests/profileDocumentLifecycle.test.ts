@@ -67,9 +67,9 @@ test("operator UX exposes the official lifecycle language without per-item reaso
   for (const label of ["Atualizar Perfil", "Substituir Perfil", "Adicionar", "Atualizar", "Substituir", "Manter atual", "Remover do novo Perfil"]) assert.match(delta, new RegExp(label));
   assert.match(versions, /Restaurar versão/);
   assert.match(versions, /Reiniciar Perfil/);
-  assert.match(versions, /className="prisma-version-table"/);
-  assert.match(versions, /mobileCellLabel\(left \? `Versão/);
-  assert.match(styles, /@media \(max-width: 520px\)[\s\S]*\.prisma-version-table \.ant-table-thead[\s\S]*display: none/);
+  assert.match(versions, /className="prisma-version-history-layout"/);
+  assert.match(versions, /Visualização da versão v/);
+  assert.match(styles, /@media \(max-width: 1000px\)[\s\S]*\.prisma-version-history-layout[\s\S]*grid-template-columns: 1fr/);
   assert.match(detail, /Excluir documento/);
   assert.match(center, /Excluir documento/);
   assert.doesNotMatch(delta, /Justificativa das remoções/);

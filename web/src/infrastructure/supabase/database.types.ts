@@ -51,6 +51,12 @@ export interface Database {
         organization_id: string;
         full_name: string;
         lifecycle: string;
+        operational_status: "active" | "archived" | "merged";
+        archived_at: string | null;
+        archived_by_auth_user_id: string | null;
+        merged_into_person_id: string | null;
+        merged_at: string | null;
+        merged_by_auth_user_id: string | null;
         profile_state: Database["public"]["Enums"]["person_profile_state"];
         latest_source_type: Database["public"]["Enums"]["document_source_type"] | null;
         latest_source_at: string | null;
@@ -88,7 +94,7 @@ export interface Database {
         approved_by_auth_user_id: string | null;
         approved_at: string | null;
         base_profile_id: string | null;
-        publication_origin: "legacy" | "review_merge" | "review_replace" | "restored" | "document_deletion_rebuild";
+        publication_origin: "legacy" | "review_merge" | "review_replace" | "restored" | "document_deletion_rebuild" | "merged_person_profile";
         restored_from_profile_id: string | null;
         source_document_snapshot: Json | null;
         created_at: string;
@@ -265,6 +271,8 @@ export interface Database {
         processing_attempt_id: string | null;
         review_id: string | null;
         profile_id: string | null;
+        target_person_id: string | null;
+        source_profile_id: string | null;
         operation_type: string;
         idempotency_key: string;
         request_fingerprint: string;
@@ -281,10 +289,15 @@ export interface Database {
         id: string;
         organization_id: string;
         person_id: string;
-        document_id: string;
-        processing_attempt_id: string;
+        document_id: string | null;
+        processing_attempt_id: string | null;
         base_profile_id: string | null;
         base_profile_version: number | null;
+        source_kind: "document" | "profile";
+        source_profile_id: string | null;
+        current_profile_id_at_start: string | null;
+        current_profile_version_at_start: number | null;
+        source_document_snapshot: Json | null;
         approved_profile_id: string | null;
         state: Database["public"]["Enums"]["profile_review_state"];
         extracted_data: Json;
@@ -1190,6 +1203,14 @@ export interface Database {
         Args: { p_organization_id: string; p_person_id: string; p_document_id: string; p_processing_attempt_id: string; p_idempotency_key: string };
         Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
       };
+      start_document_revision: {
+        Args: { p_organization_id: string; p_person_id: string; p_document_id: string; p_processing_attempt_id: string; p_idempotency_key: string };
+        Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
+      };
+      start_profile_version_review: {
+        Args: { p_organization_id: string; p_person_id: string; p_profile_id: string; p_idempotency_key: string };
+        Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
+      };
       save_profile_review: {
         Args: { p_organization_id: string; p_review_id: string; p_expected_lock_version: number; p_reviewed_data: Json; p_reason: string; p_idempotency_key: string };
         Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;
@@ -1217,6 +1238,26 @@ export interface Database {
       finalize_document_deletion: {
         Args: { p_organization_id: string; p_operation_id: string };
         Returns: Array<{ document_id: string; profile_version: number | null; profile_rebuilt: boolean; reused: boolean }>;
+      };
+      preview_document_deletion: {
+        Args: { p_organization_id: string; p_person_id: string; p_document_id: string };
+        Returns: Array<{ document_id: string; filename: string; processing_count: number; evidence_count: number; review_count: number; historical_profile_count: number; other_document_count: number; current_profile_preserved: boolean }>;
+      };
+      move_person_document: {
+        Args: { p_organization_id: string; p_document_id: string; p_target_person_id: string; p_idempotency_key: string };
+        Returns: Array<{ document_id: string; source_person_id: string; target_person_id: string; current_profile_affected: boolean; reused: boolean }>;
+      };
+      update_person_lifecycle: {
+        Args: { p_organization_id: string; p_person_id: string; p_lifecycle: string; p_expected_updated_at: string; p_idempotency_key: string };
+        Returns: Array<{ person_id: string; lifecycle: string; updated_at: string; reused: boolean }>;
+      };
+      set_person_archive_state: {
+        Args: { p_organization_id: string; p_person_id: string; p_archive: boolean; p_expected_updated_at: string; p_idempotency_key: string };
+        Returns: Array<{ person_id: string; operational_status: "active" | "archived"; updated_at: string; reused: boolean }>;
+      };
+      merge_people: {
+        Args: { p_organization_id: string; p_source_person_id: string; p_target_person_id: string; p_contact_choices: Json; p_profile_choice: string; p_idempotency_key: string };
+        Returns: Array<{ primary_person_id: string; absorbed_person_id: string; profile_version: number | null; reused: boolean }>;
       };
       invalidate_document_review: {
         Args: { p_organization_id: string; p_document_id: string; p_idempotency_key: string };

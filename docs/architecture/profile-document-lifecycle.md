@@ -4,9 +4,10 @@
 
 - `profile-publication-delta` 2.0.0
 - `professional-profile` 6.0.0
-- `person-ingestion` 11.0.0
-- `document-operation-idempotency` 2.0.0
-- `profile-document-lifecycle` 1.0.0
+- `person-ingestion` 12.0.0
+- `document-operation-idempotency` 3.0.0
+- `profile-document-lifecycle` 2.0.0
+- `pilot-operational-resilience` 1.0.0
 
 ## Autoridade
 
@@ -40,3 +41,17 @@ Dependências que só existem dentro da revisão ou da evidência daquele docume
 - Evidência Demonstrada M5.1 e avaliações não dependem do documento e permanecem.
 - Knowledge validado permanece; observações que apontavam para evidência removida preservam o snapshot da fonte e deixam apenas o vínculo físico ausente.
 - Não há referência viva a `documents.id` inexistente.
+
+## Revisão universal
+
+`profile_reviews.source_kind` distingue `document` e `profile`. Uma revisão por Perfil registra `source_profile_id` e snapshots de lock do Perfil atual, mas não cria `evidence` nem simula documento. Uma revisão documental reutiliza tentativa, páginas, draft e evidências preservados por `start_document_revision`.
+
+## Correção de vínculo
+
+`move_person_document` invalida somente rascunhos concorrentes e chama `private.reassign_document_person` na mesma transação. Documento, tentativa, páginas, draft, regiões espaciais, evidências, revisões e observações documentais mudam juntos; Perfis publicados mantêm Pessoa e conteúdo originais. A FK espacial é diferida para que a troca coordenada não produza estado intermediário inválido.
+
+## Mesclagem e situação da Pessoa
+
+`merge_people` bloqueia as duas Pessoas, exige escolhas apenas para valores canônicos incompatíveis e move documentos pela mesma autoridade de vínculo. Perfis da Pessoa absorvida permanecem imutáveis e históricos; se o Perfil dela for escolhido, um novo snapshot é publicado na principal. A absorvida recebe `operational_status = merged` e `merged_into_person_id` para redirecionamento e auditoria.
+
+`update_person_lifecycle` altera somente o vínculo de domínio. `set_person_archive_state` alterna `active` e `archived`; nenhuma das duas operações cria Perfil, reprocessa documento ou remove histórico. Ambas usam `updated_at` como precondição otimista e retornam feedback acionável em conflito.

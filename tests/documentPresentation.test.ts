@@ -86,7 +86,7 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(operations, /title: "Status do documento"/);
   assert.match(operations, /title: "Perfil atual"/);
   assert.match(operations, /currentProfileLabel\(document\.currentProfile\)/);
-  assert.match(hub, /Perfil vigente/);
+  assert.match(hub, /Perfil atual/);
   assert.match(hub, /Descartar esta importação do fluxo ativo/);
   assert.match(actionCenter, /derivePersonPendingActions/);
   assert.match(actionCenter, /Nova importação requer revisão/);
@@ -101,7 +101,7 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(application, /<ProfileReviewPage[^>]+mode="view"/);
   assert.match(review, /mode\?: "review" \| "view"/);
   assert.match(review, /const viewOnly = mode === "view"/);
-  assert.match(review, /result\.personId !== personId \|\| result\.documentId !== documentId/);
+  assert.match(review, /result\.personId !== personId \|\| \(documentId && result\.documentId !== documentId\)/);
   assert.match(review, /Verificação do currículo/);
   assert.match(review, /Somente leitura/);
   assert.match(review, /Detalhes técnicos/);

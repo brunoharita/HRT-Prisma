@@ -17,21 +17,27 @@ import {
   FilePdfOutlined,
   FileTextOutlined,
   FolderOpenOutlined,
+  HistoryOutlined,
   IdcardOutlined,
   ImportOutlined,
+  MoreOutlined,
   ReloadOutlined,
   SafetyCertificateOutlined,
   TeamOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons";
 import {
   Alert,
   Button,
   Descriptions,
+  Dropdown,
   Empty,
   Input,
   List,
   Modal,
   Popconfirm,
+  Radio,
+  Select,
   Skeleton,
   Space,
   Spin,
@@ -52,6 +58,7 @@ import {
   type PersonIngestionWorkspace,
   type PdfProcessingProgress,
   type ProfileVersionView,
+  type PersonWorkspaceSummary,
   type ProcessingState,
   type StructuredEducation,
   type StructuredExperience,
@@ -114,7 +121,14 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   const [selectedPage, setSelectedPage] = useState(1);
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | undefined>();
   const [currentProfileVersion, setCurrentProfileVersion] = useState<ProfileVersionView | null>(null);
+  const [profileVersions, setProfileVersions] = useState<ProfileVersionView[]>([]);
   const [activeView, setActiveView] = useState<"overview" | "documents" | "ingestion">("overview");
+  const [revisionOpen, setRevisionOpen] = useState(false);
+  const [revisionSource, setRevisionSource] = useState<"current" | "version" | "document">("current");
+  const [revisionVersionId, setRevisionVersionId] = useState<string | null>(null);
+  const [revisionDocumentId, setRevisionDocumentId] = useState<string | null>(null);
+  const [moveDocument, setMoveDocument] = useState<PersonDocumentTimelineItem | null>(null);
+  const [peopleOptions, setPeopleOptions] = useState<PersonWorkspaceSummary[]>([]);
 
   async function refresh(documentId = selectedDocumentId) {
     const [result, versions] = await Promise.all([
@@ -124,6 +138,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     if (!result) throw new Error("Pessoa não encontrada nesta empresa.");
     setWorkspace(result);
     setCurrentProfileVersion(versions.find((version) => version.supersededAt === null) ?? null);
+    setProfileVersions(versions);
     setSelectedDocumentId(result.selectedDocument?.id);
     setSelectedPage(result.pages[0]?.pageNumber ?? 1);
   }
@@ -139,6 +154,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         if (!current) return;
         setWorkspace(result);
         setCurrentProfileVersion(versions.find((version) => version.supersededAt === null) ?? null);
+        setProfileVersions(versions);
         const publicationMessage = window.sessionStorage.getItem(`prisma.profile-published.${personId}`);
         if (publicationMessage) {
           window.sessionStorage.removeItem(`prisma.profile-published.${personId}`);
@@ -146,6 +162,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         }
         const deletionMessage = window.sessionStorage.getItem(`prisma.document-deleted.${personId}`);
         if (deletionMessage) { window.sessionStorage.removeItem(`prisma.document-deleted.${personId}`); setSuccess(deletionMessage); }
+        const mergeMessage = window.sessionStorage.getItem(`prisma.people-merged.${personId}`);
+        if (mergeMessage) { window.sessionStorage.removeItem(`prisma.people-merged.${personId}`); setSuccess(mergeMessage); }
       })
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível carregar a Pessoa."); })
       .finally(() => { if (current) setLoading(false); });
@@ -218,6 +236,21 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     }
   }
 
+  async function handleCreateRevision() {
+    const versionId = revisionSource === "current" ? currentProfileVersion?.id : revisionSource === "version" ? revisionVersionId : null;
+    const document = revisionSource === "document" ? workspace?.documents.find((item) => item.id === revisionDocumentId) : null;
+    if (versionId) {
+      setBusy(true); setError(null);
+      try {
+        const reviewId = await personIngestionService.startProfileVersionReview(activeMembership.organizationId, personId, versionId);
+        setRevisionOpen(false); onNavigate(`/profiles/${personId}/reviews/${reviewId}`);
+      } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível criar a revisão."); setBusy(false); }
+      return;
+    }
+    if (document) { setRevisionOpen(false); await handleStartReview(document); return; }
+    setError("Escolha um Perfil ou documento disponível para criar a revisão.");
+  }
+
   async function handleReprocess(document = workspace?.selectedDocument) {
     if (!document) {
       setError("Selecione um documento com falha recuperável antes de reprocessar.");
@@ -260,21 +293,56 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     }
   }
 
-  function handleDelete(document: PersonDocumentTimelineItem) {
-    Modal.confirm({
-      title: "Excluir documento?",
-      content: "O arquivo e apenas as informações exclusivas desta importação serão removidos. Evidências independentes, verificações concluídas, conhecimento validado e as demais versões permanecerão preservados.",
+  async function handleDelete(document: PersonDocumentTimelineItem) {
+    setBusy(true); setError(null);
+    try {
+      const preview = await personIngestionService.previewDocumentDeletion(activeMembership.organizationId, personId, document.id);
+      setBusy(false);
+      Modal.confirm({
+      title: `Excluir ${preview.filename}?`,
+      width: 680,
+      content: <div className="prisma-delete-preflight"><Typography.Paragraph>Este arquivo será excluído definitivamente.</Typography.Paragraph><div><section><strong>Será excluído</strong><ul><li>O documento selecionado</li><li>{preview.processingCount} {preview.processingCount === 1 ? "processamento exclusivo" : "processamentos exclusivos"}</li><li>{preview.evidenceCount} {preview.evidenceCount === 1 ? "evidência exclusiva" : "evidências exclusivas"}</li></ul></section><section><strong>Continuará disponível</strong><ul><li>A Pessoa e o Perfil atual</li><li>{preview.historicalProfileCount} {preview.historicalProfileCount === 1 ? "versão do Perfil" : "versões do Perfil"}</li><li>{preview.otherDocumentCount} {preview.otherDocumentCount === 1 ? "outro documento" : "outros documentos"}</li></ul></section></div><Alert showIcon title="Esta ação não pode ser desfeita. Nenhuma versão de Perfil será reescrita." type="warning" /></div>,
       okText: "Excluir documento", okButtonProps: { danger: true }, cancelText: "Cancelar",
       onOk: async () => {
         setBusy(true); setError(null); setSuccess(null);
         try {
           const result = await personIngestionService.deleteDocument(activeMembership.organizationId, personId, document.id);
           await refresh();
-          setSuccess(result.profileRebuilt ? `Documento excluído e Perfil v${result.profileVersion} recomposto com as fontes válidas restantes.` : "Documento excluído. As demais informações da Pessoa foram preservadas.");
+          setSuccess(`Documento excluído. O Perfil atual${result.profileVersion ? ` v${result.profileVersion}` : ""}, as versões anteriores e os demais dados foram preservados.`);
         } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível excluir o documento."); }
         finally { setBusy(false); }
       },
-    });
+      });
+    } catch (caught) { setBusy(false); setError(caught instanceof Error ? caught.message : "Não foi possível calcular o impacto da exclusão."); }
+  }
+
+  async function openMoveDocument(document: PersonDocumentTimelineItem) {
+    setBusy(true); setError(null);
+    try {
+      const people = await personIngestionService.listPeople(activeMembership.organizationId, "", true);
+      setPeopleOptions(people.filter((item) => item.id !== personId && item.operationalStatus === "active"));
+      setMoveDocument(document);
+    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível carregar as Pessoas disponíveis."); }
+    finally { setBusy(false); }
+  }
+
+  async function changeLifecycle(lifecycle: string) {
+    if (!workspace) return;
+    setBusy(true); setError(null);
+    try { await personIngestionService.updateLifecycle(activeMembership.organizationId, personId, lifecycle, workspace.person.updatedAt); await refresh(); setSuccess("Vínculo da Pessoa atualizado sem criar uma nova versão de Perfil."); }
+    catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível atualizar o vínculo."); }
+    finally { setBusy(false); }
+  }
+
+  function toggleArchive() {
+    if (!workspace) return;
+    const archive = workspace.person.operationalStatus !== "archived";
+    Modal.confirm({ title: archive ? "Arquivar esta Pessoa?" : "Reativar esta Pessoa?", content: archive ? "Ela sairá da lista principal, mas documentos, Perfis, revisões e histórico continuarão disponíveis." : "Ela voltará à lista principal com todo o histórico preservado.", okText: archive ? "Arquivar Pessoa" : "Reativar Pessoa", cancelText: "Cancelar", onOk: async () => {
+      setBusy(true); setError(null);
+      try { await personIngestionService.setArchived(activeMembership.organizationId, personId, archive, workspace.person.updatedAt); await refresh(); setSuccess(archive ? "Pessoa arquivada com todo o histórico preservado." : "Pessoa reativada e disponível para operação."); }
+      catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível atualizar esta Pessoa."); }
+      finally { setBusy(false); }
+    } });
   }
 
   const viewModel = useMemo(
@@ -283,7 +351,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   );
 
   if (loading) return <PrismaPage className="prisma-person-center"><PersonCenterSkeleton /></PrismaPage>;
-  if (!workspace || !viewModel) return <PrismaPage><Alert action={<Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="O Perfil vigente, quando existente, permanece seguro. Volte à lista e abra a Central novamente." title={error ?? "Não foi possível carregar esta Pessoa."} showIcon type="error" /></PrismaPage>;
+  if (!workspace || !viewModel) return <PrismaPage><Alert action={<Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="O Perfil atual, quando existente, permanece seguro. Volte à lista e abra a Central novamente." title={error ?? "Não foi possível carregar esta Pessoa."} showIcon type="error" /></PrismaPage>;
+  if (workspace.person.operationalStatus === "merged") return <PrismaPage className="prisma-m53-page"><Alert action={workspace.person.mergedIntoPersonId ? <Button onClick={() => onNavigate(`/profiles/${workspace.person.mergedIntoPersonId}`)} type="primary">Abrir cadastro principal</Button> : <Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="Este cadastro foi incorporado a outra Pessoa. Seus documentos, versões e histórico permanecem preservados no cadastro principal." showIcon title={`${workspace.person.fullName} foi mesclado`} type="info" /></PrismaPage>;
 
   const currentPage = workspace.pages.find((page) => page.pageNumber === selectedPage) ?? workspace.pages[0];
   const selectedDocument = workspace.selectedDocument;
@@ -322,6 +391,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         onAction={runDocumentAction}
         onDiscard={(document) => void handleDiscard(document)}
         onDelete={handleDelete}
+        onMove={(document) => void openMoveDocument(document)}
+        onOpenVersions={() => onNavigate(`/profiles/${personId}/versions`)}
         onSelect={selectDocument}
         selectedDocument={selectedDocument}
         selectedDraft={workspace.draft}
@@ -333,7 +404,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
       children: (
         <div className="prisma-person-ingestion-view">
           <section aria-labelledby="entrada-dados" className="prisma-m2b-section">
-            <div className="prisma-section-heading"><div><Typography.Title id="entrada-dados" level={3}>Nova importação</Typography.Title><Typography.Text type="secondary">Adicione uma nova fonte sem substituir o Perfil vigente antes da revisão e publicação.</Typography.Text></div></div>
+            <div className="prisma-section-heading"><div><Typography.Title id="entrada-dados" level={3}>Nova importação</Typography.Title><Typography.Text type="secondary">Adicione uma nova fonte sem substituir o Perfil atual antes da revisão e publicação.</Typography.Text></div></div>
             <PrismaCard>
               <Tabs items={[
                 { key: "manual", label: "Texto manual", children: <div className="prisma-manual-input"><Alert title="O texto será preservado como fonte documental desta Pessoa e nunca será interpretado como instrução ao sistema." showIcon type="info" /><Input.TextArea aria-label="Texto profissional manual" onChange={(event) => setManualText(event.target.value)} placeholder="Cole aqui experiências, formação, competências e demais informações profissionais..." rows={12} value={manualText} /><Space className="prisma-ingestion-actions"><Button disabled={busy || !manualText} icon={<DeleteOutlined />} onClick={() => setManualText("")}>Limpar</Button><Button disabled={busy || manualText.trim().length < 120} loading={busy} onClick={() => void handleManualProcessing()} type="primary">Processar texto</Button></Space></div> },
@@ -343,7 +414,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           </section>
           <section aria-labelledby="processamento" className="prisma-m2b-section">
             <div className="prisma-section-heading"><Typography.Title id="processamento" level={3}>Processamento do documento</Typography.Title>{attempt ? <ProcessingTag state={attempt.state} /> : null}</div>
-            <PrismaCard>{attempt && selectedDocument ? <><Steps className="prisma-processing-steps" current={stepIndex(attempt.state)} items={processingSteps(attempt.state, attempt.pagesOcr)} responsive /><Descriptions bordered column={{ xs: 1, sm: 2, lg: 3 }} size="small" title="Detalhes do processamento"><Descriptions.Item label="Arquivo">{selectedDocument.filename}</Descriptions.Item><Descriptions.Item label="Tamanho">{formatBytes(selectedDocument.byteSize ?? 0)}</Descriptions.Item><Descriptions.Item label="Páginas">{selectedDocument.pageCount ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{attempt.currentMethod}</Descriptions.Item><Descriptions.Item label="Caracteres úteis">{attempt.usefulCharacterCount}</Descriptions.Item></Descriptions>{isProcessing(attempt.state) ? <div className="prisma-processing-active"><Spin size="small" /><span>Processamento em andamento</span></div> : null}{attempt.failureCode ? <Alert description="A fonte, as tentativas e o Perfil vigente permanecem preservados." title={processingFailureMessage(attempt)} showIcon type="error" /> : null}</> : <Empty description="Nenhuma fonte foi processada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>
+            <PrismaCard>{attempt && selectedDocument ? <><Steps className="prisma-processing-steps" current={stepIndex(attempt.state)} items={processingSteps(attempt.state, attempt.pagesOcr)} responsive /><Descriptions bordered column={{ xs: 1, sm: 2, lg: 3 }} size="small" title="Detalhes do processamento"><Descriptions.Item label="Arquivo">{selectedDocument.filename}</Descriptions.Item><Descriptions.Item label="Tamanho">{formatBytes(selectedDocument.byteSize ?? 0)}</Descriptions.Item><Descriptions.Item label="Páginas">{selectedDocument.pageCount ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{attempt.currentMethod}</Descriptions.Item><Descriptions.Item label="Caracteres úteis">{attempt.usefulCharacterCount}</Descriptions.Item></Descriptions>{isProcessing(attempt.state) ? <div className="prisma-processing-active"><Spin size="small" /><span>Processamento em andamento</span></div> : null}{attempt.failureCode ? <Alert description="A fonte, as tentativas e o Perfil atual permanecem preservados." title={processingFailureMessage(attempt)} showIcon type="error" /> : null}</> : <Empty description="Nenhuma fonte foi processada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>
           </section>
           <section aria-labelledby="resultado" className="prisma-m2b-section prisma-extraction-section">
             <div className="prisma-section-heading"><Typography.Title id="resultado" level={3}>Resultado da extração</Typography.Title>{selectedDocument ? <Button onClick={() => onNavigate(`/profiles/${personId}/documents/${selectedDocument.id}`)}>Detalhes técnicos</Button> : null}</div>
@@ -363,13 +434,31 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     <PrismaPage className="prisma-m2b-page prisma-person-workspace prisma-person-center">
       <PersonCenterHeader
         model={viewModel}
+        lifecycle={workspace.person.lifecycle}
+        operationalStatus={workspace.person.operationalStatus}
         onBack={() => onNavigate("/profiles")}
+        onArchive={toggleArchive}
+        onCreateRevision={() => { setRevisionSource(currentProfileVersion ? "current" : "document"); setRevisionVersionId(profileVersions.find((item) => item.supersededAt)?.id ?? null); setRevisionDocumentId(workspace.documents[0]?.id ?? null); setRevisionOpen(true); }}
         onEdit={() => onNavigate(`/profiles/${personId}/edit`)}
+        onLifecycle={(value) => void changeLifecycle(value)}
+        onMerge={() => onNavigate(`/profiles/${personId}/merge`)}
         onOpenOperations={() => onNavigate("/profiles/processes")}
       />
-      {error ? <Alert closable description="O Perfil vigente permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
+      {workspace.person.operationalStatus === "archived" ? <Alert action={<Button onClick={toggleArchive}>Reativar Pessoa</Button>} description="Documentos, Perfis e histórico permanecem disponíveis para consulta. Reative a Pessoa antes de iniciar uma nova operação." showIcon title="Pessoa arquivada" type="warning" /> : null}
       <Tabs activeKey={activeView} className="prisma-person-center-navigation" items={viewItems} onChange={(key) => setActiveView(key as typeof activeView)} />
+      <Modal cancelText="Cancelar" confirmLoading={busy} okButtonProps={{ disabled: revisionSource === "current" ? !currentProfileVersion : revisionSource === "version" ? !revisionVersionId : !revisionDocumentId }} okText="Criar revisão" onCancel={() => setRevisionOpen(false)} onOk={() => void handleCreateRevision()} open={revisionOpen} title="Criar nova revisão" width={620}>
+        <Typography.Paragraph type="secondary">Escolha de onde deseja partir. A origem permanecerá imutável e a nova revisão ficará salva para continuar depois.</Typography.Paragraph>
+        <Radio.Group className="prisma-revision-source-options" onChange={(event) => setRevisionSource(event.target.value as typeof revisionSource)} value={revisionSource}>
+          <Radio.Button disabled={!currentProfileVersion} value="current"><strong>Perfil atual</strong><span>Use o conteúdo atual como base</span></Radio.Button>
+          <Radio.Button disabled={!profileVersions.some((item) => item.supersededAt)} value="version"><strong>Versão anterior</strong><span>Escolha qualquer versão histórica</span></Radio.Button>
+          <Radio.Button disabled={!workspace.documents.some((item) => item.reviewAttempt)} value="document"><strong>Documento existente</strong><span>Reaproveite extração e evidências</span></Radio.Button>
+        </Radio.Group>
+        {revisionSource === "version" ? <Select aria-label="Versão histórica" className="prisma-revision-source-select" onChange={setRevisionVersionId} options={profileVersions.filter((item) => item.supersededAt).map((item) => ({ value: item.id, label: `Perfil v${item.profileVersion} · ${formatDate(item.approvedAt ?? item.createdAt)}` }))} placeholder="Escolha uma versão" value={revisionVersionId} /> : null}
+        {revisionSource === "document" ? <Select aria-label="Documento existente" className="prisma-revision-source-select" onChange={setRevisionDocumentId} options={workspace.documents.filter((item) => item.reviewAttempt).map((item) => ({ value: item.id, label: `${item.filename} · documento v${item.documentVersion}` }))} placeholder="Escolha um documento" value={revisionDocumentId} /> : null}
+      </Modal>
+      <MoveDocumentModal activeMembership={activeMembership} document={moveDocument} onClose={() => setMoveDocument(null)} onComplete={(targetPersonId: string, affected: boolean) => { setMoveDocument(null); setSuccess(affected ? "Vínculo corrigido. O Perfil publicado da Pessoa de origem foi preservado; revise-o quando desejar." : "Documento movido para a Pessoa correta. Todo o histórico foi preservado."); onNavigate(`/profiles/${targetPersonId}`); }} people={peopleOptions} />
     </PrismaPage>
   );
 }
@@ -378,11 +467,17 @@ function PersonCenterSkeleton() {
   return <div className="prisma-person-center-skeleton"><Skeleton active avatar paragraph={{ rows: 3 }} /><div className="prisma-person-center-skeleton__grid"><Skeleton active paragraph={{ rows: 5 }} /><Skeleton active paragraph={{ rows: 5 }} /></div><Skeleton active paragraph={{ rows: 10 }} /></div>;
 }
 
-function PersonCenterHeader({ model, onBack, onEdit, onOpenOperations }: {
+function PersonCenterHeader({ model, lifecycle, operationalStatus, onBack, onCreateRevision, onEdit, onOpenOperations, onArchive, onMerge, onLifecycle }: {
   model: PersonCenterViewModel;
+  lifecycle: string;
+  operationalStatus: "active" | "archived" | "merged";
   onBack: () => void;
+  onCreateRevision: () => void;
   onEdit: () => void;
   onOpenOperations: () => void;
+  onArchive: () => void;
+  onMerge: () => void;
+  onLifecycle: (value: string) => void;
 }) {
   return (
     <header className="prisma-person-center-header">
@@ -398,8 +493,18 @@ function PersonCenterHeader({ model, onBack, onEdit, onOpenOperations }: {
           </div>
         </div>
         <Space className="prisma-person-center-header__actions" wrap>
+          <Button disabled={operationalStatus === "archived"} icon={<EditOutlined />} onClick={onCreateRevision} type="primary">Criar nova revisão</Button>
           <Button icon={<SafetyCertificateOutlined />} onClick={onOpenOperations}>Processamento e revisões</Button>
           <Button icon={<EditOutlined />} onClick={onEdit}>Editar dados</Button>
+          <Dropdown menu={{ items: [
+            { key: "merge", icon: <UserSwitchOutlined />, label: "Mesclar Pessoas", onClick: onMerge },
+            { type: "divider" },
+            { key: "candidate", label: "Vínculo: Candidato", disabled: lifecycle === "candidate", onClick: () => onLifecycle("candidate") },
+            { key: "employee", label: "Vínculo: Colaborador", disabled: lifecycle === "employee", onClick: () => onLifecycle("employee") },
+            { key: "talent_pool", label: "Vínculo: Banco de talentos", disabled: lifecycle === "talent_pool", onClick: () => onLifecycle("talent_pool") },
+            { type: "divider" },
+            { key: "archive", danger: operationalStatus !== "archived", label: operationalStatus === "archived" ? "Reativar Pessoa" : "Arquivar Pessoa", onClick: onArchive },
+          ] }} trigger={["click"]}><Button aria-label="Mais ações" icon={<MoreOutlined />}>Mais ações</Button></Dropdown>
         </Space>
       </div>
     </header>
@@ -466,7 +571,7 @@ function PendingActionCard({ action, busy, onAction, onDiscard }: {
           {action.primaryAction?.available ? <Button icon={<ArrowRightOutlined />} loading={busy} onClick={() => onAction(action.primaryAction!.kind, action.document)} type="primary">{action.primaryAction.label}</Button> : null}
           <Space wrap>
             {action.secondaryActions.filter((item) => item.kind !== "discard").map((item) => <Button icon={<EyeOutlined />} key={item.kind} onClick={() => onAction(item.kind, action.document)}>{item.label}</Button>)}
-            <Popconfirm cancelText="Manter pendência" description="Documento, tentativas, revisão, histórico e Perfil vigente serão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(action.document)} title="Descartar esta importação do fluxo ativo?"><Button danger disabled={busy} icon={<DeleteOutlined />}>Descartar</Button></Popconfirm>
+            <Popconfirm cancelText="Manter pendência" description="Documento, tentativas, revisão, histórico e Perfil atual serão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(action.document)} title="Descartar esta importação do fluxo ativo?"><Button danger disabled={busy} icon={<DeleteOutlined />}>Descartar</Button></Popconfirm>
           </Space>
         </div>
       </div>
@@ -480,7 +585,7 @@ function CurrentProfileCard({ currentProfile, onOpen }: { currentProfile: Person
   }
   return (
     <section className="prisma-person-current-profile">
-      <div className="prisma-person-section-label prisma-person-section-label--success"><CheckCircleOutlined /><div><span>Perfil vigente</span><Typography.Title level={2}>v{currentProfile.version} publicado</Typography.Title></div></div>
+      <div className="prisma-person-section-label prisma-person-section-label--success"><CheckCircleOutlined /><div><span>Perfil atual</span><Typography.Title level={2}>v{currentProfile.version} publicado</Typography.Title></div></div>
       <Typography.Paragraph>Este é o conhecimento profissional atualmente publicado. Ele permanece vigente enquanto novas importações estão em análise ou revisão.</Typography.Paragraph>
       <div className="prisma-person-current-profile__meta"><span>Publicado em {formatDate(currentProfile.publishedAt)}</span>{currentProfile.sourceDocumentName ? <span>Fonte: {currentProfile.sourceDocumentName}</span> : null}</div>
       <Button icon={<EyeOutlined />} onClick={onOpen}>Ver perfil atual</Button>
@@ -537,7 +642,7 @@ function RecentActivity({ model }: { model: PersonCenterViewModel }) {
   return <PrismaCard className="prisma-person-recent-history" title="Atividade recente">{model.recentActivity.length ? <Timeline items={model.recentActivity.map((item) => ({ color: timelineColor(item.tone), children: <HistoryItem date={item.occurredAt} description={item.description} title={item.title} /> }))} /> : <Empty description="Nenhuma atividade relevante foi registrada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>;
 }
 
-function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onSelect, onAction, onDiscard, onDelete }: {
+function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onSelect, onAction, onDiscard, onDelete, onMove, onOpenVersions }: {
   model: PersonCenterViewModel;
   selectedDocument: PersonDocumentTimelineItem | null;
   selectedDraft: PersonIngestionWorkspace["draft"];
@@ -546,11 +651,13 @@ function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onS
   onAction: (kind: PersonActionKind, document: PersonDocumentTimelineItem) => void;
   onDiscard: (document: PersonDocumentTimelineItem) => void;
   onDelete: (document: PersonDocumentTimelineItem) => void;
+  onMove: (document: PersonDocumentTimelineItem) => void;
+  onOpenVersions: () => void;
 }) {
   return (
     <div className="prisma-person-documents-view">
       <section aria-labelledby="documentos-versoes" className="prisma-person-documents-list">
-        <div className="prisma-person-view-heading"><div><Typography.Title id="documentos-versoes" level={2}>Documentos e versões</Typography.Title><Typography.Paragraph>Documento e Perfil possuem versões independentes. Selecione uma fonte para entender seu estado e a próxima ação.</Typography.Paragraph></div><PrismaStatusTag label={`${model.summary.documents.total} documentos`} tone="info" /></div>
+        <div className="prisma-person-view-heading"><div><Typography.Title id="documentos-versoes" level={2}>Documentos e versões</Typography.Title><Typography.Paragraph>Documento e Perfil possuem versões independentes. Selecione uma fonte para entender seu estado e a próxima ação.</Typography.Paragraph></div><Space wrap><PrismaStatusTag label={`${model.summary.documents.total} documentos`} tone="info" /><Button icon={<HistoryOutlined />} onClick={onOpenVersions}>Ver versões do Perfil</Button></Space></div>
         <PrismaCard className="prisma-person-documents-table">
           <Table className="prisma-desktop-only" columns={workspaceDocumentColumns({ onOpen: (document) => onAction(document.verificationReviewId ? "open_document" : "open_details", document), onReview: (document) => onAction("review", document) })} dataSource={model.documents} locale={{ emptyText: "Nenhum documento foi associado a esta Pessoa." }} onRow={(document) => ({
             "aria-label": `Selecionar ${document.filename}`,
@@ -568,12 +675,12 @@ function PersonDocumentsView({ model, selectedDocument, selectedDraft, busy, onS
           <div className="prisma-mobile-only prisma-person-document-cards">{model.documents.map((document) => { const presentation = presentDocument(document); return <button className={selectedDocument?.id === document.id ? "is-selected" : ""} key={document.id} onClick={() => onSelect(document)} type="button"><span><FilePdfOutlined /><strong>{document.filename}</strong></span><small>Documento v{document.documentVersion} · {formatDate(document.createdAt)}</small><PrismaStatusTag compact label={presentation.label} tone={statusTone(presentation.tone)} /></button>; })}</div>
         </PrismaCard>
       </section>
-      <DocumentContextPanel busy={busy} document={selectedDocument} draft={selectedDraft} onAction={onAction} onDelete={onDelete} onDiscard={onDiscard} />
+      <DocumentContextPanel busy={busy} document={selectedDocument} draft={selectedDraft} onAction={onAction} onDelete={onDelete} onDiscard={onDiscard} onMove={onMove} />
     </div>
   );
 }
 
-function DocumentContextPanel({ document, draft, busy, onAction, onDiscard, onDelete }: { document: PersonDocumentTimelineItem | null; draft: PersonIngestionWorkspace["draft"]; busy: boolean; onAction: (kind: PersonActionKind, document: PersonDocumentTimelineItem) => void; onDiscard: (document: PersonDocumentTimelineItem) => void; onDelete: (document: PersonDocumentTimelineItem) => void }) {
+function DocumentContextPanel({ document, draft, busy, onAction, onDiscard, onDelete, onMove }: { document: PersonDocumentTimelineItem | null; draft: PersonIngestionWorkspace["draft"]; busy: boolean; onAction: (kind: PersonActionKind, document: PersonDocumentTimelineItem) => void; onDiscard: (document: PersonDocumentTimelineItem) => void; onDelete: (document: PersonDocumentTimelineItem) => void; onMove: (document: PersonDocumentTimelineItem) => void }) {
   if (!document) return <PrismaCard className="prisma-person-document-context"><Empty description="Selecione um documento para ver seu contexto." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard>;
   const presentation = presentDocument(document);
   const metrics = draftMetrics(draft);
@@ -583,12 +690,74 @@ function DocumentContextPanel({ document, draft, busy, onAction, onDiscard, onDe
     <aside aria-label={`Detalhes de ${document.filename}`} className="prisma-person-document-context">
       <PrismaCard>
         <div className="prisma-person-document-context__header"><FilePdfOutlined /><div><small>Documento selecionado</small><Typography.Title level={3}>{document.filename}</Typography.Title><span>Importado em {formatDate(document.createdAt)}</span></div><PrismaStatusTag label={presentation.label} tone={statusTone(presentation.tone)} /></div>
-        <div className="prisma-person-document-context__summary"><article><small>Campos recuperados</small><strong>{metrics.recovered}</strong><span>Informações estruturadas nesta fonte</span></article><article><small>Pontos pendentes</small><strong>{metrics.pending}</strong><span>Campos não identificados ou que exigem validação</span></article><article><small>Resultado no Perfil</small><strong>{document.profileVersion ? `v${document.profileVersion}` : "Sem nova versão"}</strong><span>{document.profileVersion ? "Perfil publicado" : "Perfil vigente preservado"}</span></article></div>
+        <div className="prisma-person-document-context__summary"><article><small>Campos recuperados</small><strong>{metrics.recovered}</strong><span>Informações estruturadas nesta fonte</span></article><article><small>Pontos pendentes</small><strong>{metrics.pending}</strong><span>Campos não identificados ou que exigem validação</span></article><article><small>Resultado no Perfil</small><strong>{document.profileVersion ? `v${document.profileVersion}` : "Sem nova versão"}</strong><span>{document.profileVersion ? "Perfil publicado" : "Perfil atual preservado"}</span></article></div>
         {draft?.education.length ? <DocumentEducationSummary education={draft.education} /> : null}
-        <section className="prisma-person-document-context__next"><small>Próxima ação</small><strong>{presentation.nextAction}</strong><p>{presentation.description}</p>{reviewable ? <Button block icon={<ArrowRightOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Abrir revisão M5</Button> : presentation.state === "technical_failure" && document.latestAttempt && document.latestAttempt.pagesNative + document.latestAttempt.pagesOcr > 0 ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("reprocess", document)} type="primary">Reprocessar documento</Button> : null}</section>
-        <div className="prisma-person-document-context__actions"><Button icon={<EyeOutlined />} onClick={() => onAction(document.verificationReviewId ? "open_document" : "open_details", document)}>{document.verificationReviewId ? "Visualizar documento" : "Detalhes técnicos"}</Button>{canDiscard ? <Popconfirm cancelText="Manter pendência" description="Documento, histórico e Perfil vigente permanecerão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(document)} title="Descartar esta importação do fluxo ativo?"><Button disabled={busy}>Arquivar revisão</Button></Popconfirm> : null}<Button danger disabled={busy} icon={<DeleteOutlined />} onClick={() => onDelete(document)}>Excluir documento</Button></div>
+        <section className="prisma-person-document-context__next"><small>Próxima ação</small><strong>{presentation.nextAction}</strong><p>{presentation.description}</p>{reviewable ? <Button block icon={<ArrowRightOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Continuar revisão</Button> : document.reviewAttempt ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Revisar novamente</Button> : presentation.state === "technical_failure" && document.latestAttempt && document.latestAttempt.pagesNative + document.latestAttempt.pagesOcr > 0 ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("reprocess", document)} type="primary">Reabrir importação</Button> : null}</section>
+        <div className="prisma-person-document-context__actions"><Button icon={<EyeOutlined />} onClick={() => onAction(document.verificationReviewId ? "open_document" : "open_details", document)}>{document.verificationReviewId ? "Abrir currículo" : "Detalhes técnicos"}</Button><Button icon={<UserSwitchOutlined />} onClick={() => onMove(document)}>Corrigir Pessoa vinculada</Button>{canDiscard ? <Popconfirm cancelText="Manter pendência" description="Documento, histórico e Perfil atual permanecerão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(document)} title="Descartar esta importação do fluxo ativo?"><Button disabled={busy}>Arquivar revisão</Button></Popconfirm> : null}<Button danger disabled={busy} icon={<DeleteOutlined />} onClick={() => onDelete(document)}>Excluir documento</Button></div>
       </PrismaCard>
     </aside>
+  );
+}
+
+function MoveDocumentModal({ activeMembership, document, people, onClose, onComplete }: {
+  activeMembership: OrganizationMembership;
+  document: PersonDocumentTimelineItem | null;
+  people: PersonWorkspaceSummary[];
+  onClose: () => void;
+  onComplete: (targetPersonId: string, currentProfileAffected: boolean) => void;
+}) {
+  const [targetPersonId, setTargetPersonId] = useState<string | null>(null);
+  const [moving, setMoving] = useState(false);
+  const [moveError, setMoveError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setTargetPersonId(null);
+    setMoveError(null);
+  }, [document?.id]);
+
+  async function submit() {
+    if (!document || !targetPersonId) return;
+    setMoving(true);
+    setMoveError(null);
+    try {
+      const result = await personIngestionService.moveDocument(activeMembership.organizationId, document.id, targetPersonId);
+      onComplete(targetPersonId, result.currentProfileAffected);
+    } catch (caught) {
+      setMoveError(caught instanceof Error ? caught.message : "Não foi possível corrigir a Pessoa vinculada.");
+    } finally {
+      setMoving(false);
+    }
+  }
+
+  return (
+    <Modal
+      cancelText="Cancelar"
+      confirmLoading={moving}
+      okButtonProps={{ disabled: !targetPersonId }}
+      okText="Mover documento"
+      onCancel={onClose}
+      onOk={() => void submit()}
+      open={Boolean(document)}
+      title="Corrigir Pessoa vinculada"
+      width={620}
+    >
+      <div className="prisma-move-document-modal">
+        <section><FilePdfOutlined /><div><small>Documento selecionado</small><strong>{document?.filename}</strong></div></section>
+        <Typography.Paragraph>Escolha a Pessoa correta. O documento, sua extração, evidências e histórico serão movidos juntos.</Typography.Paragraph>
+        <Select
+          aria-label="Pessoa correta"
+          autoFocus
+          filterOption={(input, option) => String(option?.label ?? "").toLocaleLowerCase("pt-BR").includes(input.toLocaleLowerCase("pt-BR"))}
+          onChange={setTargetPersonId}
+          options={people.map((person) => ({ value: person.id, label: `${person.fullName}${person.privateData.email ? ` · ${person.privateData.email}` : ""}` }))}
+          placeholder="Procure a Pessoa correta"
+          showSearch
+          value={targetPersonId}
+        />
+        <Alert description="O Perfil atual da Pessoa de origem não será apagado nem reescrito. Se ele tiver usado este documento, o Prisma apenas sinalizará que uma revisão pode ser necessária." showIcon title="Histórico e Perfis permanecem preservados" type="info" />
+        {moveError ? <Alert showIcon title={moveError} type="error" /> : null}
+      </div>
+    </Modal>
   );
 }
 

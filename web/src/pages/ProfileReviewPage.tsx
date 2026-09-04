@@ -3,6 +3,7 @@ import { ArrowLeftOutlined, CheckOutlined, EyeOutlined, PlusOutlined, SaveOutlin
 import { Alert, Button, Checkbox, Input, Modal, Popconfirm, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
 import { DocumentEvidenceViewer, refinedSelectionText, refinedSelectionUnits, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
+import { StructuredProfileView } from "../components/profile/StructuredProfileView";
 import { AdaptiveSuggestionPanel } from "../components/review/AdaptiveSuggestionPanel";
 import type { CustomProfileSectionFormat, ProfileReviewWorkspace, StructuredDraft } from "../domain/personIngestion";
 import {
@@ -46,7 +47,7 @@ import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 interface ProfileReviewPageProps {
   activeMembership: OrganizationMembership;
   personId: string;
-  documentId: string;
+  documentId?: string;
   reviewId: string;
   mode?: "review" | "view";
   onNavigate: (path: string) => void;
@@ -100,7 +101,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   async function refresh() {
     const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
     if (!result) throw new Error("Revisão não encontrada nesta empresa.");
-    if (result.personId !== personId || result.documentId !== documentId) throw new Error("A revisão não pertence à Pessoa e ao documento informados.");
+    if (result.personId !== personId || (documentId && result.documentId !== documentId)) throw new Error("A revisão não pertence à origem informada.");
     setWorkspace(result);
     setDraft(cloneDraft(result.reviewedData));
     setValidationIssues([]);
@@ -115,7 +116,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       .then(async (result) => {
         if (!current) return;
         if (!result) throw new Error("Revisão não encontrada nesta empresa.");
-        if (result.personId !== personId || result.documentId !== documentId) throw new Error("A revisão não pertence à Pessoa e ao documento informados.");
+        if (result.personId !== personId || (documentId && result.documentId !== documentId)) throw new Error("A revisão não pertence à origem informada.");
         setWorkspace(result);
         setDraft(cloneDraft(result.reviewedData));
         const requestedFieldPath = window.sessionStorage.getItem(reviewFocusStorageKey(reviewId));
@@ -300,7 +301,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       return;
     }
     setError(null);
-    onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}/delta`);
+    onNavigate(reviewDeltaPath(personId, reviewId, documentId));
   }
 
   async function handleApplyAdaptiveSuggestions(suggestions: AdaptiveFieldSuggestion[]) {
@@ -467,7 +468,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     setDeferredReviewAction(null);
     if (action.type === "create_custom_section") startCustomSectionSelection();
     else if (action.type === "start_evidence_selection") startEvidenceSelection(action.fieldPath);
-    else onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}/delta`);
+    else onNavigate(reviewDeltaPath(personId, reviewId, documentId));
   }
 
   function deferReviewAction(action: DeferredReviewAction) {
@@ -599,6 +600,10 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       });
       if (issues.length) { setSelectionError(issues[0]!.message); return; }
     }
+    if (workspace.documentVersion === null) {
+      setSelectionError("Esta revisão usa uma versão do Perfil como base. Para adicionar uma nova evidência documental, inicie a revisão pelo documento correspondente.");
+      return;
+    }
     setBusy(true); setError(null); setSuccess(null); setSelectionError(null);
     try {
       const recorded = await personIngestionService.recordProfileReviewEvidence({
@@ -688,12 +693,14 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   return (
     <PrismaPage className="prisma-m2c-page prisma-review-page prisma-review-page--workspace">
       <PrismaPageHeader
-        title={viewOnly ? "Verificação do currículo" : "Revisão da nova importação"}
+        title={viewOnly ? "Verificação do currículo" : workspace.sourceKind === "profile" ? "Nova revisão do Perfil" : "Revisão do documento"}
         description={viewOnly
-          ? `Consulte o currículo original de ${workspace.personName} e os campos extraídos de ${workspace.documentName}, sem alterar a versão aprovada.`
-          : `Revise e estruture o conteúdo de ${workspace.documentName} para ${workspace.personName}. A versão atual permanece válida até a aprovação.`}
+          ? `Consulte o currículo original de ${workspace.personName} e os campos extraídos, sem alterar a versão aprovada.`
+          : workspace.sourceKind === "profile"
+            ? `Edite uma cópia da versão v${workspace.sourceProfileVersion ?? workspace.baseProfileVersion ?? "selecionada"}. A origem e o Perfil vigente permanecem imutáveis até a publicação.`
+            : `Revise e estruture o conteúdo de ${workspace.documentName ?? "documento existente"} para ${workspace.personName}. A versão atual permanece válida até a aprovação.`}
         actions={viewOnly
-          ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${documentId}`)}>Detalhes técnicos</Button>
+          ? workspace.documentId ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${workspace.documentId}`)}>Detalhes técnicos</Button> : undefined
           : <Space wrap>
             <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar revisão</Button></span></Tooltip>
             <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={handleContinueToDelta} type="primary">Comparar com o perfil atual</Button></span></Tooltip>
@@ -711,8 +718,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         />
       ) : null}
       {viewOnly ? (
-        <div className="prisma-review-statusbar prisma-review-statusbar--view"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Currículo original</Tag><Tag color={workspace.state === "approved" ? "green" : workspace.state === "invalidated" ? "default" : "gold"}>{workspace.state === "approved" ? "Perfil aprovado" : workspace.state === "invalidated" ? "Importação arquivada" : "Revisão em andamento"}</Tag><Tag icon={<EyeOutlined />}>Somente leitura</Tag><Typography.Text type="secondary">Nenhuma informação pode ser alterada neste modo.</Typography.Text></div>
-      ) : <div className="prisma-review-statusbar"><Tag color="blue">Documento v{workspace.documentVersion}</Tag><Tag color="blue">Extraído: preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "cyan"}>{dirty || transientOnly ? "Requer revisão" : "Pronto para comparação"}</Tag><Tag color="green">Perfil atual {workspace.baseProfileVersion ? `v${workspace.baseProfileVersion}` : "ainda não aprovado"} preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente depois da comparação e publicação.</Typography.Text></div>}
+        <div className="prisma-review-statusbar prisma-review-statusbar--view"><Tag color="blue">{workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion}` : `Documento v${workspace.documentVersion}`}</Tag><Tag color={workspace.state === "approved" ? "green" : workspace.state === "invalidated" ? "default" : "gold"}>{workspace.state === "approved" ? "Perfil aprovado" : workspace.state === "invalidated" ? "Revisão arquivada" : "Revisão em andamento"}</Tag><Tag icon={<EyeOutlined />}>Somente leitura</Tag><Typography.Text type="secondary">Nenhuma informação pode ser alterada neste modo.</Typography.Text></div>
+      ) : <div className="prisma-review-statusbar"><Tag color="blue">{workspace.sourceKind === "profile" ? `Base: Perfil v${workspace.sourceProfileVersion}` : `Base: Documento v${workspace.documentVersion}`}</Tag><Tag color="blue">Origem preservada</Tag><Tag color={dirty || transientOnly ? "gold" : "cyan"}>{dirty || transientOnly ? "Requer revisão" : "Pronto para comparação"}</Tag><Tag color="green">Perfil vigente preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente depois da comparação e publicação.</Typography.Text></div>}
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
@@ -732,13 +739,13 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
       <div className={["prisma-review-split", `mobile-pane-${mobilePane}`].join(" ")}>
         <div className="prisma-review-document-pane">
-          <DocumentEvidenceViewer
+          {workspace.sourceKind === "document" && workspace.documentName ? <DocumentEvidenceViewer
             activeLinkId={activeLinkId} fileName={workspace.documentName} links={workspace.evidenceLinks} navigationTarget={navigationTarget}
             fallbackOriginalEvidence={fallbackOriginalEvidence}
             onEvidenceClick={(fieldPath, linkId) => { setSelectedFieldPath(fieldPath); setActiveLinkId(linkId); setMobilePane("review"); }}
             onSelectionCancel={closePendingSelection} onSelectionComplete={handleSelectionComplete}
             pageCount={workspace.documentPageCount} pdfUrl={pdfUrl} refinementExcludedLinkIds={excludedRefinementLinkIds} regions={workspace.spatialRegions} selectedFieldPath={selectedFieldPath} selectionMode={selectionMode}
-          />
+          /> : <div className="prisma-profile-review-source"><Alert showIcon title="Você está editando uma cópia. Esta versão histórica não será alterada." type="info" /><StructuredProfileView profile={workspace.extractedData} /></div>}
         </div>
         <div className="prisma-review-structured-pane">
           <StructuredReviewPanel
@@ -1015,3 +1022,4 @@ function focusReviewField(fieldPath: string): void {
 
 function cloneDraft(draft: StructuredDraft): StructuredDraft { return JSON.parse(JSON.stringify(draft)) as StructuredDraft; }
 function formatDate(value: string | null): string { return value ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value)) : "data não registrada"; }
+function reviewDeltaPath(personId: string, reviewId: string, documentId?: string): string { return documentId ? `/profiles/${personId}/documents/${documentId}/review/${reviewId}/delta` : `/profiles/${personId}/reviews/${reviewId}/delta`; }

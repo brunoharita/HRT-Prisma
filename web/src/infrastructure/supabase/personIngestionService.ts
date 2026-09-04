@@ -8,6 +8,7 @@ import {
   STRUCTURING_VERSION,
   processManualText,
   type CurrentProfileSummary,
+  type DocumentDeletionPreview,
   type ExtractedPage,
   type DocumentOperationSummary,
   type PersonDocumentTimelineItem,
@@ -154,8 +155,9 @@ export const personIngestionService = {
   async listPeople(organizationId: string, search: string, includePrivateData = true): Promise<PersonWorkspaceSummary[]> {
     const { data: people, error } = await supabase
       .from("people")
-      .select("id, organization_id, full_name, lifecycle, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
+      .select("id, organization_id, full_name, lifecycle, operational_status, archived_at, merged_into_person_id, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
       .eq("organization_id", organizationId)
+      .neq("operational_status", "merged")
       .order("updated_at", { ascending: false });
     throwIfError(error, "Não foi possível carregar as Pessoas.");
     const rows = people ?? [];
@@ -224,7 +226,7 @@ export const personIngestionService = {
   async loadWorkspace(organizationId: string, personId: string, selectedDocumentId?: string): Promise<PersonIngestionWorkspace | null> {
     const { data: person, error } = await supabase
       .from("people")
-      .select("id, organization_id, full_name, lifecycle, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
+      .select("id, organization_id, full_name, lifecycle, operational_status, archived_at, merged_into_person_id, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
       .eq("organization_id", organizationId)
       .eq("id", personId)
       .maybeSingle();
@@ -261,7 +263,7 @@ export const personIngestionService = {
     const profileByDocument = new Map((profileResult.data ?? []).flatMap((profile) => profile.source_document_id ? [[profile.source_document_id, profile.profile_version] as const] : []));
     const reviewByDocument = new Map<string, string>();
     for (const review of reviewResult.data ?? []) {
-      if (!reviewByDocument.has(review.document_id)) reviewByDocument.set(review.document_id, review.id);
+      if (review.document_id && !reviewByDocument.has(review.document_id)) reviewByDocument.set(review.document_id, review.id);
     }
     const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, reviewAttemptByDocument, profileByDocument, reviewByDocument));
     const currentProfileRow = (profileResult.data ?? []).find((profile) => profile.superseded_at === null);
@@ -422,7 +424,7 @@ export const personIngestionService = {
   },
 
   async startProfileReview(organizationId: string, personId: string, documentId: string, processingAttemptId: string): Promise<string> {
-    const { data, error } = await supabase.rpc("start_profile_review", {
+    const { data, error } = await supabase.rpc("start_document_revision", {
       p_organization_id: organizationId,
       p_person_id: personId,
       p_document_id: documentId,
@@ -432,6 +434,21 @@ export const personIngestionService = {
     throwIfError(error, "Não foi possível iniciar a revisão humana.");
     const reviewId = data?.[0]?.review_id;
     if (!reviewId) throw new Error("A revisão foi iniciada sem identificador.");
+    return reviewId;
+  },
+
+  async startProfileVersionReview(organizationId: string, personId: string, profileId: string): Promise<string> {
+    const storageKey = `prisma.start-profile-review.${personId}.${profileId}`;
+    const { data, error } = await supabase.rpc("start_profile_version_review", {
+      p_organization_id: organizationId,
+      p_person_id: personId,
+      p_profile_id: profileId,
+      p_idempotency_key: stableSessionOperationKey(storageKey, "start-profile-review"),
+    });
+    throwReviewError(error, "Não foi possível criar a revisão a partir desta versão.");
+    const reviewId = data?.[0]?.review_id;
+    if (!reviewId) throw new Error("A revisão foi criada sem identificador.");
+    window.sessionStorage.removeItem(storageKey);
     return reviewId;
   },
 
@@ -750,6 +767,68 @@ export const personIngestionService = {
     return { profileRebuilt: Boolean(result?.profile_rebuilt), profileVersion: result?.profile_version ?? null };
   },
 
+  async previewDocumentDeletion(organizationId: string, personId: string, documentId: string): Promise<DocumentDeletionPreview> {
+    const { data, error } = await supabase.rpc("preview_document_deletion", {
+      p_organization_id: organizationId, p_person_id: personId, p_document_id: documentId,
+    });
+    throwReviewError(error, "Não foi possível calcular o impacto da exclusão.");
+    const preview = data?.[0];
+    if (!preview) throw new Error("Este documento já não está disponível.");
+    return {
+      documentId: preview.document_id, filename: preview.filename,
+      processingCount: preview.processing_count, evidenceCount: preview.evidence_count,
+      reviewCount: preview.review_count, historicalProfileCount: preview.historical_profile_count,
+      otherDocumentCount: preview.other_document_count,
+      currentProfilePreserved: preview.current_profile_preserved,
+    };
+  },
+
+  async moveDocument(organizationId: string, documentId: string, targetPersonId: string): Promise<{ currentProfileAffected: boolean }> {
+    const storageKey = `prisma.move-document.${documentId}.${targetPersonId}`;
+    const { data, error } = await supabase.rpc("move_person_document", {
+      p_organization_id: organizationId, p_document_id: documentId, p_target_person_id: targetPersonId,
+      p_idempotency_key: stableSessionOperationKey(storageKey, "move-document"),
+    });
+    throwReviewError(error, "Não foi possível corrigir a Pessoa vinculada.");
+    const result = data?.[0];
+    if (!result) throw new Error("A correção terminou sem confirmação.");
+    window.sessionStorage.removeItem(storageKey);
+    return { currentProfileAffected: result.current_profile_affected };
+  },
+
+  async updateLifecycle(organizationId: string, personId: string, lifecycle: string, expectedUpdatedAt: string): Promise<void> {
+    const { error } = await supabase.rpc("update_person_lifecycle", {
+      p_organization_id: organizationId, p_person_id: personId, p_lifecycle: lifecycle,
+      p_expected_updated_at: expectedUpdatedAt, p_idempotency_key: createOperationKey("person-lifecycle"),
+    });
+    throwReviewError(error, "Não foi possível atualizar o vínculo da Pessoa.");
+  },
+
+  async setArchived(organizationId: string, personId: string, archive: boolean, expectedUpdatedAt: string): Promise<void> {
+    const storageKey = `prisma.person-archive.${personId}.${archive}`;
+    const { error } = await supabase.rpc("set_person_archive_state", {
+      p_organization_id: organizationId, p_person_id: personId, p_archive: archive,
+      p_expected_updated_at: expectedUpdatedAt,
+      p_idempotency_key: stableSessionOperationKey(storageKey, archive ? "archive-person" : "reactivate-person"),
+    });
+    throwReviewError(error, archive ? "Não foi possível arquivar esta Pessoa." : "Não foi possível reativar esta Pessoa.");
+    window.sessionStorage.removeItem(storageKey);
+  },
+
+  async mergePeople(organizationId: string, sourcePersonId: string, targetPersonId: string, contactChoices: Record<string, "source" | "target">, profileChoice: "source" | "target" | "automatic"): Promise<string> {
+    const storageKey = `prisma.merge-people.${sourcePersonId}.${targetPersonId}`;
+    const { data, error } = await supabase.rpc("merge_people", {
+      p_organization_id: organizationId, p_source_person_id: sourcePersonId, p_target_person_id: targetPersonId,
+      p_contact_choices: contactChoices as unknown as Json, p_profile_choice: profileChoice,
+      p_idempotency_key: stableSessionOperationKey(storageKey, "merge-people"),
+    });
+    throwReviewError(error, "Não foi possível mesclar as Pessoas.");
+    const result = data?.[0];
+    if (!result) throw new Error("A mesclagem terminou sem identificar o cadastro principal.");
+    window.sessionStorage.removeItem(storageKey);
+    return result.primary_person_id;
+  },
+
   async listDocumentAttempts(organizationId: string, documentId: string): Promise<ProcessingAttemptView[]> {
     const { data, error } = await supabase.from("document_processing_attempts")
       .select("id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
@@ -776,7 +855,7 @@ export const personIngestionService = {
 
   async loadProfileReview(organizationId: string, reviewId: string): Promise<ProfileReviewWorkspace | null> {
     const { data: review, error } = await supabase.from("profile_reviews")
-      .select("id, person_id, document_id, processing_attempt_id, state, lock_version, extracted_data, reviewed_data, base_profile_version, approved_profile_id, approved_at")
+      .select("id, person_id, document_id, processing_attempt_id, source_kind, source_profile_id, state, lock_version, extracted_data, reviewed_data, base_profile_version, approved_profile_id, approved_at")
       .eq("organization_id", organizationId).eq("id", reviewId).maybeSingle();
     throwIfError(error, "Não foi possível carregar a revisão.");
     if (!review) return null;
@@ -793,22 +872,24 @@ export const personIngestionService = {
       evidenceEventResult,
       pageResult,
       adaptationEventResult,
+      sourceProfileResult,
     ] = await Promise.all([
       supabase.from("people").select("full_name").eq("organization_id", organizationId).eq("id", review.person_id).single(),
       supabase.from("person_private_data").select("phone, phone_e164, phone_national_number, email").eq("organization_id", organizationId).eq("person_id", review.person_id).maybeSingle(),
-      supabase.from("documents")
+      review.document_id ? supabase.from("documents")
         .select("filename, document_version, page_count, storage_path, source_type")
-        .eq("organization_id", organizationId).eq("id", review.document_id).single(),
+        .eq("organization_id", organizationId).eq("id", review.document_id).maybeSingle()
+        : Promise.resolve({ data: null, error: null }),
       supabase.from("profile_review_revisions")
         .select("id, revision_number, change_reason, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("revision_number", { ascending: false }),
       supabase.from("profile_review_changes")
         .select("id, field_path, extracted_value, previous_value, reviewed_value, reason, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
-      supabase.from("evidence")
+      review.processing_attempt_id ? supabase.from("evidence")
         .select("id, kind, fact, source_page, source_block, quoted_text, extraction_origin, method, method_version, created_at")
         .eq("organization_id", organizationId).eq("processing_attempt_id", review.processing_attempt_id)
-        .order("source_page"),
+        .order("source_page") : Promise.resolve({ data: [], error: null }),
       supabase.from("spatial_evidence_regions")
         .select("id, organization_id, person_id, document_id, document_version, review_id, page_number, x, y, width, height, coordinate_system, raw_selected_text, selected_text, extraction_method, source, contract_version, created_by_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at"),
@@ -821,12 +902,16 @@ export const personIngestionService = {
       supabase.from("profile_review_evidence_events")
         .select("id, review_id, review_revision_id, field_path, event_type, previous_link_id, new_link_id, reason, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
-      supabase.from("document_page_extractions")
+      review.processing_attempt_id ? supabase.from("document_page_extractions")
         .select("page_number, text_content, origin, useful_character_count, method, method_version, layout_blocks, field_evidence")
-        .eq("organization_id", organizationId).eq("processing_attempt_id", review.processing_attempt_id).order("page_number"),
+        .eq("organization_id", organizationId).eq("processing_attempt_id", review.processing_attempt_id).order("page_number")
+        : Promise.resolve({ data: [], error: null }),
       supabase.from("profile_review_adaptation_events")
         .select("id, review_revision_id, source_field_path, pattern_key, method_version, accepted_suggestions, lock_version, actor_auth_user_id, created_at")
         .eq("organization_id", organizationId).eq("review_id", reviewId).order("created_at", { ascending: false }),
+      review.source_profile_id ? supabase.from("professional_profiles")
+        .select("profile_version").eq("organization_id", organizationId).eq("id", review.source_profile_id).maybeSingle()
+        : Promise.resolve({ data: null, error: null }),
     ]);
     throwIfError(personResult.error, "Não foi possível carregar a Pessoa da revisão.");
     throwIfError(personPrivateResult.error, "Não foi possível carregar o contato privado da Pessoa.");
@@ -840,7 +925,8 @@ export const personIngestionService = {
     throwIfError(evidenceEventResult.error, "Não foi possível carregar o histórico de evidências da revisão.");
     throwIfError(pageResult.error, "Não foi possível carregar a fonte original para o aprendizado da revisão.");
     throwIfError(adaptationEventResult.error, "Não foi possível carregar o histórico de aprendizado da revisão.");
-    if (!personResult.data || !documentResult.data) throw new Error("A revisão perdeu a referência da Pessoa ou do documento.");
+    throwIfError(sourceProfileResult.error, "Não foi possível carregar a versão usada como base.");
+    if (!personResult.data) throw new Error("A revisão perdeu a referência da Pessoa.");
     const pages: ExtractedPage[] = (pageResult.data ?? []).map((page) => ({
       pageNumber: page.page_number,
       text: page.text_content,
@@ -860,12 +946,15 @@ export const personIngestionService = {
         phone: personPrivateResult.data?.phone_e164 ?? personPrivateResult.data?.phone_national_number ?? personPrivateResult.data?.phone ?? null,
         email: personPrivateResult.data?.email ?? null,
       },
+      sourceKind: review.source_kind,
+      sourceProfileId: review.source_profile_id,
+      sourceProfileVersion: sourceProfileResult.data?.profile_version ?? null,
       documentId: review.document_id,
-      documentName: documentResult.data.filename,
-      documentVersion: documentResult.data.document_version,
-      documentPageCount: documentResult.data.page_count ?? 0,
-      documentStoragePath: documentResult.data.storage_path,
-      documentSourceType: documentResult.data.source_type,
+      documentName: documentResult.data?.filename ?? null,
+      documentVersion: documentResult.data?.document_version ?? null,
+      documentPageCount: documentResult.data?.page_count ?? 0,
+      documentStoragePath: documentResult.data?.storage_path ?? null,
+      documentSourceType: documentResult.data?.source_type ?? null,
       processingAttemptId: review.processing_attempt_id,
       state: review.state,
       lockVersion: review.lock_version,
@@ -1212,6 +1301,9 @@ function toPersonSummary(person: {
   organization_id: string;
   full_name: string;
   lifecycle: string;
+  operational_status: "active" | "archived" | "merged";
+  archived_at: string | null;
+  merged_into_person_id: string | null;
   profile_state: PersonProfileState;
   latest_source_type: "manual_text" | "resume_pdf" | null;
   latest_source_at: string | null;
@@ -1233,6 +1325,9 @@ function toPersonSummary(person: {
     organizationId: person.organization_id,
     fullName: person.full_name,
     lifecycle: person.lifecycle,
+    operationalStatus: person.operational_status,
+    archivedAt: person.archived_at,
+    mergedIntoPersonId: person.merged_into_person_id,
     profileState: person.profile_state,
     latestSourceType: person.latest_source_type,
     latestSourceAt: person.latest_source_at,
@@ -1319,7 +1414,7 @@ function reviewAttemptsByDocument(attempts: ProcessingAttemptRow[]): Map<string,
   for (const attempt of attempts) {
     if (reviewable.has(attempt.document_id)) continue;
     const candidate = toAttemptView(attempt);
-    if (isRecoverableReviewAttempt(candidate)) reviewable.set(attempt.document_id, candidate);
+    if (isRecoverableReviewAttempt(candidate) || (candidate.state === "completed" && candidate.usefulCharacterCount > 0)) reviewable.set(attempt.document_id, candidate);
   }
   return reviewable;
 }
@@ -1503,13 +1598,34 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
         ...classification,
       }];
     }) : [],
-    certifications: Array.isArray(value.certifications) ? value.certifications : [],
-    languages: Array.isArray(value.languages) ? value.languages : [],
-    competencies: Array.isArray(value.competencies) ? value.competencies : [],
+    certifications: decodeHistoricalTextList(value.certifications, ["name", "certification", "title", "value"], ["issuer", "institution"]),
+    languages: decodeHistoricalTextList(value.languages, ["language", "name", "value"], ["proficiency", "level"]),
+    competencies: decodeHistoricalTextList(value.competencies, ["name", "competency", "normalizedName", "value"]),
     customSections: Array.isArray(value.customSections) ? value.customSections : [],
     uncertainties: Array.isArray(uncertainties) ? uncertainties.filter((item): item is string => typeof item === "string") : [],
     notIdentified: Array.isArray(notIdentified) ? notIdentified.filter((item): item is string => typeof item === "string") : [],
   };
+}
+
+function decodeHistoricalTextList(
+  value: unknown,
+  primaryKeys: string[],
+  qualifierKeys: string[] = [],
+): string[] {
+  if (!Array.isArray(value)) return [];
+  return Array.from(new Set(value.flatMap((item) => {
+    if (typeof item === "string" && item.trim()) return [item.trim()];
+    if (!item || typeof item !== "object" || Array.isArray(item)) return [];
+    const record = item as Record<string, unknown>;
+    const primary = primaryKeys
+      .map((key) => record[key])
+      .find((candidate): candidate is string => typeof candidate === "string" && Boolean(candidate.trim()));
+    if (!primary) return [];
+    const qualifier = qualifierKeys
+      .map((key) => record[key])
+      .find((candidate): candidate is string => typeof candidate === "string" && Boolean(candidate.trim()));
+    return [`${primary.trim()}${qualifier ? ` · ${qualifier.trim()}` : ""}`];
+  })));
 }
 
 function decodeReviewDraft(value: Json, legacyFallback?: StructuredDraft, replaceLegacyGeneratedSummary = false): StructuredDraft {

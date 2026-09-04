@@ -80,6 +80,9 @@ export interface PersonWorkspaceSummary {
   organizationId: string;
   fullName: string;
   lifecycle: string;
+  operationalStatus: "active" | "archived" | "merged";
+  archivedAt: string | null;
+  mergedIntoPersonId: string | null;
   profileState: PersonProfileState;
   latestSourceType: DocumentSourceType | null;
   latestSourceAt: string | null;
@@ -327,13 +330,16 @@ export interface ProfileReviewWorkspace {
   personId: string;
   personName: string;
   personPrivateContact: { phone: string | null; email: string | null };
-  documentId: string;
-  documentName: string;
-  documentVersion: number;
+  sourceKind: "document" | "profile";
+  sourceProfileId: string | null;
+  sourceProfileVersion: number | null;
+  documentId: string | null;
+  documentName: string | null;
+  documentVersion: number | null;
   documentPageCount: number;
   documentStoragePath: string | null;
-  documentSourceType: DocumentSourceType;
-  processingAttemptId: string;
+  documentSourceType: DocumentSourceType | null;
+  processingAttemptId: string | null;
   state: "draft" | "approved" | "invalidated";
   lockVersion: number;
   requiresContractUpgrade: boolean;
@@ -359,7 +365,7 @@ export interface ProfileVersionView {
   profileData: StructuredDraft;
   reviewStatus: string;
   sourceDocumentId: string | null;
-  origin?: "review_merge" | "review_replace" | "restored" | "document_deletion_rebuild" | "legacy";
+  origin?: "review_merge" | "review_replace" | "restored" | "document_deletion_rebuild" | "merged_person_profile" | "legacy";
   restoredFromProfileId?: string | null;
   sourceDocumentName?: string | null;
   processingAttemptId: string | null;
@@ -497,6 +503,17 @@ export function processManualText(text: string): { page: ExtractedPage; draft: S
 
 export function buildDeterministicDraft(pages: ExtractedPage[]): StructuredDraft {
   return buildAdaptiveExtraction(pages).draft;
+}
+
+export interface DocumentDeletionPreview {
+  documentId: string;
+  filename: string;
+  processingCount: number;
+  evidenceCount: number;
+  reviewCount: number;
+  historicalProfileCount: number;
+  otherDocumentCount: number;
+  currentProfilePreserved: boolean;
 }
 
 export function isNativeTextSufficient(text: string): boolean {

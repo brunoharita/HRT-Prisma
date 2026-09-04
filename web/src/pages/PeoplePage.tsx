@@ -34,12 +34,14 @@ interface PeoplePageProps {
 
 type ProfileFilter = "all" | "approved" | "without_profile";
 type ImportFilter = "all" | DocumentOperationalState;
+type OperationalFilter = "active" | "archived" | "all";
 
 export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   const canManagePeople = activeMembership.role !== "member";
   const [search, setSearch] = useState("");
   const [profileFilter, setProfileFilter] = useState<ProfileFilter>("all");
   const [importFilter, setImportFilter] = useState<ImportFilter>("all");
+  const [operationalFilter, setOperationalFilter] = useState<OperationalFilter>("active");
   const deferredSearch = useDeferredValue(search);
   const [people, setPeople] = useState<PersonWorkspaceSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,15 +60,17 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
 
   const personPath = (personId: string) => `/profiles/${personId}`;
   const filteredPeople = useMemo(() => people.filter((person) => {
+    const matchesOperational = operationalFilter === "all" || person.operationalStatus === operationalFilter;
     const matchesProfile = profileFilter === "all"
       || (profileFilter === "approved" && Boolean(person.currentProfile))
       || (profileFilter === "without_profile" && !person.currentProfile);
     const matchesImport = importFilter === "all" || presentDocument(person.latestDocument).state === importFilter;
-    return matchesProfile && matchesImport;
-  }), [importFilter, people, profileFilter]);
-  const approvedProfiles = people.filter((person) => person.currentProfile).length;
-  const awaitingReview = people.filter((person) => person.pendingReviewCount > 0).length;
-  const importedToday = people.filter((person) => person.latestDocument && isToday(person.latestDocument.createdAt)).length;
+    return matchesOperational && matchesProfile && matchesImport;
+  }), [importFilter, operationalFilter, people, profileFilter]);
+  const activePeople = people.filter((person) => person.operationalStatus === "active");
+  const approvedProfiles = activePeople.filter((person) => person.currentProfile).length;
+  const awaitingReview = activePeople.filter((person) => person.pendingReviewCount > 0).length;
+  const importedToday = activePeople.filter((person) => person.latestDocument && isToday(person.latestDocument.createdAt)).length;
 
   const columns: ColumnsType<PersonWorkspaceSummary> = [
     {
@@ -79,7 +83,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         <button className="prisma-person-name-button prisma-person-primary-cell" onClick={() => onNavigate(personPath(person.id))} type="button">
           <span className="prisma-person-avatar" aria-hidden="true">{initials(name)}</span>
           <span className="prisma-person-primary-copy">
-            <strong>{name}</strong>
+            <strong>{name} {person.operationalStatus === "archived" ? <Tag>Arquivada</Tag> : null}</strong>
             <small>{person.privateData.email || activeMembership.organizationName}</small>
           </span>
         </button>
@@ -124,7 +128,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     <PrismaPage className="prisma-m2b-page prisma-people-page">
       <PrismaPageHeader
         title="Pessoas"
-        description="Gerencie as pessoas e acompanhe, separadamente, o perfil vigente e as importações recentes."
+        description="Gerencie as pessoas e acompanhe, separadamente, o Perfil atual e as importações recentes."
         actions={canManagePeople ? (
           <Space wrap>
             <Button icon={<FileSearchOutlined />} onClick={() => onNavigate("/profiles/processes")}>Processamento e revisões</Button>
@@ -135,7 +139,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       />
 
       <div className="prisma-people-stats">
-        <PeopleMetric icon={<TeamOutlined />} label="Pessoas" value={people.length} tone="neutral" />
+        <PeopleMetric icon={<TeamOutlined />} label="Pessoas ativas" value={activePeople.length} tone="neutral" />
         <PeopleMetric icon={<CheckCircleOutlined />} label="Com perfil aprovado" value={approvedProfiles} tone="success" />
         <PeopleMetric icon={<ClockCircleOutlined />} label="Aguardando revisão" value={awaitingReview} tone="review" />
         <PeopleMetric icon={<UploadOutlined />} label="Importações hoje" value={importedToday} tone="processing" />
@@ -151,6 +155,16 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
           value={search}
         />
         <div className="prisma-people-filters">
+          <Select<OperationalFilter>
+            aria-label="Filtrar situação da Pessoa"
+            onChange={setOperationalFilter}
+            options={[
+              { value: "active", label: "Pessoas ativas" },
+              { value: "archived", label: "Pessoas arquivadas" },
+              { value: "all", label: "Ativas e arquivadas" },
+            ]}
+            value={operationalFilter}
+          />
           <Select<ProfileFilter>
             aria-label="Filtrar perfil atual"
             onChange={setProfileFilter}

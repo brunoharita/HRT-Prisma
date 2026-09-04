@@ -12,7 +12,7 @@ import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 interface ProfileDeltaPageProps {
   activeMembership: OrganizationMembership;
   personId: string;
-  documentId: string;
+  documentId?: string;
   reviewId: string;
   onNavigate: (path: string) => void;
 }
@@ -49,7 +49,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
           personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId),
           personIngestionService.listProfileVersions(activeMembership.organizationId, personId),
         ]);
-        if (!review || review.personId !== personId || review.documentId !== documentId) throw new Error("A proposta não pertence à Pessoa e ao documento informados.");
+        if (!review || review.personId !== personId || (documentId && review.documentId !== documentId)) throw new Error("A proposta não pertence à origem informada.");
         if (review.state !== "draft") throw new Error("Esta proposta não está mais disponível para publicação.");
 
         if (review.requiresContractUpgrade) {
@@ -104,7 +104,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
 
   function returnToReview(fieldPath?: string | null) {
     if (fieldPath) window.sessionStorage.setItem(reviewFocusStorageKey(reviewId), fieldPath);
-    onNavigate(`/profiles/${personId}/documents/${documentId}/review/${reviewId}`);
+    onNavigate(reviewPath(personId, reviewId, documentId));
   }
 
   function setBlockAction(item: ProfileDeltaItem, action: ProfileBlockAction) {
@@ -156,7 +156,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       <PrismaPageHeader
         title={delta.firstPublication ? "Revisão da primeira versão do perfil" : "Comparação com o perfil atual"}
         description={delta.firstPublication ? "Revise o conhecimento que formará o primeiro Perfil Prisma antes de publicar." : "Veja exatamente o que a nova versão altera e o que permanece preservado antes de publicar."}
-        actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.documentName}</strong><small>Documento v{workspace.documentVersion}</small></span></Card>}
+        actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion ?? workspace.baseProfileVersion}` : workspace.documentName}</strong><small>{workspace.sourceKind === "profile" ? "Versão usada como base" : `Documento v${workspace.documentVersion}`}</small></span></Card>}
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => returnToReview()} type="text">Voltar para revisão</Button>
       <Card className="prisma-delta-summary-card">
@@ -258,3 +258,5 @@ function errorAction(recovery: OperationRecovery, fieldPath: string | null, retu
   if (recovery === "reload" || recovery === "retry") return <Button onClick={() => window.location.reload()}>Atualizar e tentar novamente</Button>;
   return null;
 }
+
+function reviewPath(personId: string, reviewId: string, documentId?: string): string { return documentId ? `/profiles/${personId}/documents/${documentId}/review/${reviewId}` : `/profiles/${personId}/reviews/${reviewId}`; }

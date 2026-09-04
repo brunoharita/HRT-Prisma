@@ -15,6 +15,11 @@
 | Excluir documento do Perfil vigente | nova versão recomposta ou nenhum vigente |
 | Interromper após Storage | repetição conclui a mesma operação |
 | Outro tenant, member e anon | operação negada |
+| Perfil atual, versão ou documento -> nova revisão | fonte imutável e rascunho próprio, sem reupload |
+| Corrigir Pessoa vinculada | árvore documental movida atomicamente; Perfis publicados preservados |
+| Mesclar Pessoas e repetir | uma absorção auditável, sem duplicar efeitos |
+| Alterar vínculo | Pessoa atualizada sem nova versão de Perfil |
+| Arquivar e reativar | busca operacional muda; histórico permanece |
 
 ## Gates
 
@@ -26,5 +31,14 @@
 - smoke autenticado em 1920x1080, 1600x900, 1440x900, 1366x768 e 390x844
 - revisão visual de overflow, foco, hierarquia destrutiva e textos naturais
 - histórico responsivo apresenta cada diferença como cartão rotulado em 390x844, sem exigir rolagem horizontal
+
+## Evidência M5.3 no Prisma-QA
+
+- migrations `20260903232237`, `20260904000509`, `20260904000810`, `20260904001336` e `20260904001602` aplicadas e registradas;
+- `db lint --linked --level error --fail-on error`: zero erros;
+- `m53_pilot_operational_resilience_verification.sql`: transação revertida após provar revisão por versão e replay, exclusão da fonte sem reescrever Perfil, restauração para a próxima versão, movimentação integral da árvore documental, mesclagem idempotente e grants fechados para `anon`/núcleo privado;
+- a regressão encontrou uma FK espacial imediata durante a movimentação; a correção forward-only tornou a relação diferível e passou a atualizar região e documento na mesma transação.
+- smoke autenticado concluiu a jornada de consulta completa das versões, compatibilidade de idioma histórico, confirmação de restauração, preflight de exclusão, correção de Pessoa vinculada, comparação de cadastros para mesclagem e ciclo reversível arquivar -> reativar em uma Pessoa sintética;
+- a Central da Pessoa passou em `360x800`, `390x844`, `768x1024`, `1280x720` e `1440x900`, com zero overflow horizontal global ou em descendentes do conteúdo principal.
 
 Produção não é inferida a partir de QA.

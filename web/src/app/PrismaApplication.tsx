@@ -29,6 +29,7 @@ import { PersonWorkspacePage } from "../pages/PersonWorkspacePage";
 import { ProfileReviewPage } from "../pages/ProfileReviewPage";
 import { ProfileDeltaPage } from "../pages/ProfileDeltaPage";
 import { ProfileVersionsPage } from "../pages/ProfileVersionsPage";
+import { PersonMergePage } from "../pages/PersonMergePage";
 import { ResumeImportPage } from "../pages/ResumeImportPage";
 import { UserFormPage } from "../pages/UserFormPage";
 import { UsersPage } from "../pages/UsersPage";
@@ -69,7 +70,7 @@ interface AppRoute {
   icon?: ReactNode;
   profileId?: string;
   profileMode?: "view" | "edit" | "create";
-  profileView?: "workspace" | "operations" | "document" | "review" | "delta" | "verification" | "versions" | "import";
+  profileView?: "workspace" | "operations" | "document" | "review" | "delta" | "verification" | "versions" | "import" | "merge";
   documentId?: string;
   reviewId?: string;
   userId?: string;
@@ -366,11 +367,11 @@ function renderRouteContent(
   if (route.path === "/profiles" && route.profileView === "operations" && activeMembership) {
     return <DocumentOperationsPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
-  if (route.path === "/profiles" && route.profileView === "review" && route.profileId && route.documentId && route.reviewId && activeMembership) {
-    return <ProfileReviewPage activeMembership={activeMembership} personId={route.profileId} documentId={route.documentId} reviewId={route.reviewId} onNavigate={onNavigate} />;
+  if (route.path === "/profiles" && route.profileView === "review" && route.profileId && route.reviewId && activeMembership) {
+    return <ProfileReviewPage activeMembership={activeMembership} personId={route.profileId} {...(route.documentId ? { documentId: route.documentId } : {})} reviewId={route.reviewId} onNavigate={onNavigate} />;
   }
-  if (route.path === "/profiles" && route.profileView === "delta" && route.profileId && route.documentId && route.reviewId && activeMembership) {
-    return <ProfileDeltaPage activeMembership={activeMembership} personId={route.profileId} documentId={route.documentId} reviewId={route.reviewId} onNavigate={onNavigate} />;
+  if (route.path === "/profiles" && route.profileView === "delta" && route.profileId && route.reviewId && activeMembership) {
+    return <ProfileDeltaPage activeMembership={activeMembership} personId={route.profileId} {...(route.documentId ? { documentId: route.documentId } : {})} reviewId={route.reviewId} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles" && route.profileView === "verification" && route.profileId && route.documentId && route.reviewId && activeMembership) {
     return <ProfileReviewPage activeMembership={activeMembership} mode="view" personId={route.profileId} documentId={route.documentId} reviewId={route.reviewId} onNavigate={onNavigate} />;
@@ -380,6 +381,9 @@ function renderRouteContent(
   }
   if (route.path === "/profiles" && route.profileView === "versions" && route.profileId && activeMembership) {
     return <ProfileVersionsPage activeMembership={activeMembership} personId={route.profileId} onNavigate={onNavigate} />;
+  }
+  if (route.path === "/profiles" && route.profileView === "merge" && route.profileId && activeMembership) {
+    return <PersonMergePage activeMembership={activeMembership} personId={route.profileId} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles" && route.profileId && route.profileMode === "edit" && activeMembership) {
     return <PersonFormPage activeMembership={activeMembership} personId={route.profileId} onNavigate={onNavigate} />;
@@ -566,12 +570,18 @@ function findRoute(pathname: string): AppRoute {
   if (reviewMatch?.[1] && reviewMatch[2] && reviewMatch[3]) return { path: "/profiles", profileId: reviewMatch[1], documentId: reviewMatch[2], reviewId: reviewMatch[3], profileView: "review", rule: reviewerRule };
   const deltaMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)\/review\/([^/]+)\/delta$/.exec(normalized);
   if (deltaMatch?.[1] && deltaMatch[2] && deltaMatch[3]) return { path: "/profiles", profileId: deltaMatch[1], documentId: deltaMatch[2], reviewId: deltaMatch[3], profileView: "delta", rule: reviewerRule };
+  const profileSourceDeltaMatch = /^\/profiles\/([^/]+)\/reviews\/([^/]+)\/delta$/.exec(normalized);
+  if (profileSourceDeltaMatch?.[1] && profileSourceDeltaMatch[2]) return { path: "/profiles", profileId: profileSourceDeltaMatch[1], reviewId: profileSourceDeltaMatch[2], profileView: "delta", rule: reviewerRule };
+  const profileSourceReviewMatch = /^\/profiles\/([^/]+)\/reviews\/([^/]+)$/.exec(normalized);
+  if (profileSourceReviewMatch?.[1] && profileSourceReviewMatch[2]) return { path: "/profiles", profileId: profileSourceReviewMatch[1], reviewId: profileSourceReviewMatch[2], profileView: "review", rule: reviewerRule };
   const verificationMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)\/verification\/([^/]+)$/.exec(normalized);
   if (verificationMatch?.[1] && verificationMatch[2] && verificationMatch[3]) return { path: "/profiles", profileId: verificationMatch[1], documentId: verificationMatch[2], reviewId: verificationMatch[3], profileView: "verification", rule: reviewerRule };
   const documentMatch = /^\/profiles\/([^/]+)\/documents\/([^/]+)$/.exec(normalized);
   if (documentMatch?.[1] && documentMatch[2]) return { path: "/profiles", profileId: documentMatch[1], documentId: documentMatch[2], profileView: "document", rule: reviewerRule };
   const versionsMatch = /^\/profiles\/([^/]+)\/versions$/.exec(normalized);
   if (versionsMatch?.[1]) return { path: "/profiles", profileId: versionsMatch[1], profileView: "versions", rule: reviewerRule };
+  const mergeMatch = /^\/profiles\/([^/]+)\/merge$/.exec(normalized);
+  if (mergeMatch?.[1]) return { path: "/profiles", profileId: mergeMatch[1], profileView: "merge", rule: reviewerRule };
   const profileEditMatch = /^\/profiles\/([^/]+)\/edit$/.exec(normalized);
   if (profileEditMatch?.[1]) return { path: "/profiles", profileId: profileEditMatch[1], profileMode: "edit", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   const profileMatch = /^\/profiles\/([^/]+)$/.exec(normalized);

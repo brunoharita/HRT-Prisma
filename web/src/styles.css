@@ -4621,6 +4621,97 @@ textarea {
   .prisma-person-recent-documents .prisma-status-tag { order: 3; margin-left: 44px; }
 }
 
+/* M5.3 - flexibilidade e recuperação operacional */
+.prisma-m53-page { max-width: 1680px; margin-inline: auto; }
+
+.prisma-revision-source-options { display: grid; gap: 10px; width: 100%; }
+.prisma-revision-source-options .ant-radio-button-wrapper { display: flex; min-height: 72px; height: auto; padding: 14px 16px; border: 1px solid #dce5f2 !important; border-radius: 12px !important; box-shadow: none; }
+.prisma-revision-source-options .ant-radio-button-wrapper::before { display: none; }
+.prisma-revision-source-options .ant-radio-button-wrapper > span:last-child { display: grid; gap: 3px; }
+.prisma-revision-source-options .ant-radio-button-wrapper span span { color: #68768d; font-size: .82rem; white-space: normal; }
+.prisma-revision-source-options .ant-radio-button-wrapper-checked { border-color: #7aa7ff !important; background: #f3f7ff; }
+.prisma-revision-source-select { width: 100%; margin-top: 14px; }
+
+.prisma-delete-preflight { display: grid; gap: 14px; }
+.prisma-delete-preflight > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.prisma-delete-preflight section { padding: 14px 16px; border: 1px solid #e4e9f1; border-radius: 12px; background: #f8fafc; }
+.prisma-delete-preflight section:last-child { border-color: #bde7d4; background: #f1fbf6; }
+.prisma-delete-preflight ul { margin: 10px 0 0; padding-left: 18px; color: #536178; }
+
+.prisma-move-document-modal { display: grid; gap: 16px; }
+.prisma-move-document-modal > section { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid #dce5f2; border-radius: 12px; background: #f7f9fd; }
+.prisma-move-document-modal > section > .anticon { color: #e84b4b; font-size: 1.65rem; }
+.prisma-move-document-modal > section div { display: grid; gap: 2px; }
+.prisma-move-document-modal > section small { color: #718098; }
+.prisma-move-document-modal .ant-select { width: 100%; }
+
+.prisma-version-history-layout { display: grid; grid-template-columns: minmax(260px, .34fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.prisma-version-timeline-card { position: sticky; top: 20px; }
+.prisma-version-timeline-card .ant-timeline { margin: 10px 0 -14px; }
+.prisma-version-list-item { display: grid; width: 100%; padding: 11px 12px; color: #1d2a41; text-align: left; border: 1px solid transparent; border-radius: 10px; background: transparent; cursor: pointer; }
+.prisma-version-list-item:hover, .prisma-version-list-item.is-selected { border-color: #b9cffb; background: #f2f6ff; }
+.prisma-version-list-item > span { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.prisma-version-list-item small, .prisma-version-list-item time { color: #6d7b92; font-size: .78rem; }
+.prisma-version-metadata { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+.prisma-version-metadata > span { display: grid; gap: 3px; padding: 11px; border: 1px solid #e5eaf2; border-radius: 10px; color: #59677d; font-size: .8rem; background: #fafbfd; }
+.prisma-version-metadata strong { color: #162139; }
+.prisma-version-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e6ebf3; }
+
+.prisma-structured-profile { display: grid; gap: 14px; }
+.prisma-profile-intro, .prisma-profile-section { padding: 16px; border: 1px solid #e5eaf2; border-radius: 12px; background: #fff; }
+.prisma-profile-intro { background: linear-gradient(135deg, #f7f9ff, #fff); }
+.prisma-profile-intro > div { margin-top: 12px; }
+.prisma-profile-section > header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #155eef; }
+.prisma-profile-section > header .ant-typography { margin: 0; }
+.prisma-profile-record { padding: 11px 0; border-top: 1px solid #edf0f5; }
+.prisma-profile-record:first-of-type { border-top: 0; }
+.prisma-profile-record > div { display: flex; justify-content: space-between; gap: 14px; }
+.prisma-profile-record > div span { color: #758197; font-size: .8rem; }
+.prisma-profile-record .ant-typography { margin-bottom: 3px; }
+.prisma-structured-profile.is-compact .prisma-profile-intro, .prisma-structured-profile.is-compact .prisma-profile-section { padding: 12px; }
+.prisma-version-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.prisma-version-compare > section { min-width: 0; }
+.prisma-version-compare > section > header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 12px; border-radius: 10px; background: #f3f6fb; }
+.prisma-version-compare-picker { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; padding: 12px; border-top: 1px solid #dfe6f1; background: rgba(255,255,255,.96); }
+
+.prisma-merge-target-picker .ant-card-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, .7fr); align-items: center; gap: 20px; }
+.prisma-merge-target-picker .ant-typography { margin-bottom: 2px; }
+.prisma-merge-target-picker .ant-select { width: 100%; }
+.prisma-merge-people-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.prisma-merge-person-card.is-primary { border-color: #9e8cff; box-shadow: 0 8px 28px rgba(91, 62, 210, .09); }
+.prisma-merge-person-card header { display: flex; align-items: center; gap: 12px; }
+.prisma-merge-person-card header > div { min-width: 0; }
+.prisma-merge-person-card header .ant-typography { margin: 4px 0 0; }
+.prisma-merge-person-card header div > span:last-child { color: #6b7890; }
+.prisma-merge-person-card dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 16px 0 0; }
+.prisma-merge-person-card dl div { min-width: 0; padding: 10px; border-radius: 9px; background: #f7f9fc; }
+.prisma-merge-person-card dt { color: #68758b; font-size: .78rem; }
+.prisma-merge-person-card dd { overflow: hidden; margin: 3px 0 0; color: #17233c; font-weight: 600; text-overflow: ellipsis; }
+.prisma-merge-conflicts > .ant-card-body > div { display: grid; gap: 10px; }
+.prisma-merge-conflicts section { display: grid; grid-template-columns: 180px minmax(0, 1fr); align-items: center; gap: 12px; }
+.prisma-merge-conflicts .ant-radio-group, .prisma-merge-profile-choice .ant-radio-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.prisma-merge-conflicts .ant-radio-button-wrapper, .prisma-merge-profile-choice .ant-radio-button-wrapper { overflow: hidden; height: auto; padding: 10px 12px; text-align: center; text-overflow: ellipsis; border: 1px solid #dce4f0 !important; border-radius: 9px !important; }
+.prisma-merge-conflicts .ant-radio-button-wrapper::before, .prisma-merge-profile-choice .ant-radio-button-wrapper::before { display: none; }
+.prisma-merge-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 18px; border: 1px solid #bbe7d2; border-radius: 12px; background: #f2fbf7; }
+.prisma-merge-footer > div { display: flex; align-items: center; gap: 8px; color: #13764c; }
+.prisma-merge-confirm { display: grid; gap: 8px; }
+
+@media (max-width: 1000px) {
+  .prisma-version-history-layout, .prisma-merge-people-grid, .prisma-version-compare { grid-template-columns: 1fr; }
+  .prisma-version-timeline-card { position: static; }
+  .prisma-version-metadata { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prisma-merge-target-picker .ant-card-body { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .prisma-delete-preflight > div, .prisma-version-metadata, .prisma-merge-person-card dl { grid-template-columns: 1fr; }
+  .prisma-version-actions, .prisma-version-compare-picker, .prisma-merge-footer { align-items: stretch; flex-direction: column; }
+  .prisma-version-actions .ant-btn, .prisma-merge-footer .ant-btn { width: 100%; }
+  .prisma-merge-conflicts section { grid-template-columns: 1fr; }
+  .prisma-merge-conflicts .ant-radio-group, .prisma-merge-profile-choice .ant-radio-group { grid-template-columns: 1fr; }
+  .prisma-profile-record > div { flex-direction: column; gap: 2px; }
+}
+
 .prisma-delta-transition {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
