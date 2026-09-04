@@ -8,7 +8,7 @@
 - Unidade: componente hierárquico da organização.
 - Papel: definição reutilizável da função esperada.
 - Posição: cadeira concreta do organograma, ocupada, vaga, planejada ou inativa.
-- Vaga: necessidade atual de preencher uma posição ou papel.
+- Vaga: necessidade profissional estruturada e contextual de uma posição, ocupada ou não ocupada; não é campanha de recrutamento.
 - Pessoa: identidade profissional única no tenant, com lifecycle de candidata, colaboradora, ex-colaboradora, ex-candidata ou talent pool.
 - Documento: fonte associada a uma pessoa, inicialmente currículo.
 - Intake de currículo: operação temporária e tenant-scoped que preserva o PDF antes de resolver a Pessoa.
@@ -25,7 +25,7 @@
 
 ## Papel, posição e vaga
 
-Papel define missão, responsabilidades e expectativas. Posição representa uma cadeira real em uma unidade. Vaga representa uma necessidade de preenchimento. A vaga referencia o papel e guarda somente contexto ou requisitos específicos, sem duplicar toda a arquitetura funcional.
+Papel define missão, responsabilidades e expectativas reutilizáveis pela empresa. Posição representa uma cadeira real em uma unidade. Vaga representa a necessidade profissional contextual dessa posição, inclusive quando já ocupada. Cada versão preserva missão, responsabilidades, resultados, requisitos e contexto usados em descoberta ou comparação. Uma referência ocupacional global pode apoiar a definição, mas não substitui a função privada da organização nem publica automaticamente novo conhecimento.
 
 Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, complexidade, stakeholders, setor, localização, regime, senioridade e criticidade. Esses campos estão planejados e não participam do matching atual.
 
@@ -56,6 +56,9 @@ Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, comp
 22. Verificação de competência nasce prioritariamente de uma necessidade profissional, não do Perfil individual.
 23. Evidência demonstrada não sobrescreve evidência documental, contextual ou confirmada.
 24. Assessment não determina nível absoluto da Pessoa nem senioridade consolidada.
+25. O mesmo título pode representar Vagas com requisitos diferentes; matching usa a versão da definição, não apenas o título.
+26. Sinal relacionado confirmado para uma Vaga não comprova o requisito e não vira equivalência Knowledge.
+27. Comparação de Pessoas não produz score, ranking, vencedor ou decisão automática.
 
 ## Pipeline atual
 

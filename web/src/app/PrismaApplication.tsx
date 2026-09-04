@@ -41,6 +41,14 @@ import { VerificationOperationsPage } from "../pages/VerificationOperationsPage"
 import { VerificationSessionPage } from "../pages/VerificationSessionPage";
 import { AssessmentItemBankPage } from "../pages/AssessmentItemBankPage";
 import {
+  VacanciesPage,
+  VacancyAssistPage,
+  VacancyComparePage,
+  VacancyDetailPage,
+  VacancyEditorPage,
+  VacancyPeoplePage,
+} from "../pages/VacancyPages";
+import {
   canActivateOrganization,
   evaluateRouteAccess,
   resolvePreferredOrganizationId,
@@ -81,6 +89,9 @@ interface AppRoute {
   verificationMode?: "detail" | "prepare";
   verificationPreparedAssessmentId?: string;
   participantToken?: string;
+  vacancyId?: string;
+  vacancyView?: "list" | "create" | "assist" | "detail" | "edit" | "people" | "compare";
+  vacancyComparePersonIds?: [string, string];
 }
 
 interface SignInValues {
@@ -298,6 +309,7 @@ export function PrismaApplication() {
     persistActiveOrganizationId(organizationId);
     setState((current) => ({ ...current, activeOrganizationId: organizationId, infoMessage: "Empresa ativa atualizada." }));
     if (pathname.startsWith("/profiles/")) handleNavigate("/profiles");
+    if (pathname.startsWith("/vacancies/")) handleNavigate("/vacancies");
   };
 
   if (route.participantToken) return <VerificationSessionPage token={route.participantToken} />;
@@ -331,7 +343,7 @@ export function PrismaApplication() {
       onSignOut={() => void handleSignOut()}
       profileName={profileName}
       profileSubtitle={profileSubtitle}
-      selectedPath={route.profileId ? "/profiles" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/matching" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
+      selectedPath={route.profileId ? "/profiles" : route.vacancyId || route.vacancyView ? "/vacancies" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/matching" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
     >
       {state.errorMessage || state.infoMessage ? (
         <Alert
@@ -433,8 +445,14 @@ function renderRouteContent(
   if (route.path === "/change-password" && currentOperator) {
     return <PasswordChangePage currentOperator={currentOperator} onNavigate={onNavigate} onPasswordCompleted={onPasswordCompleted} />;
   }
-  if (route.path === "/vacancies") {
-    return <PlaceholderPage title="Vagas" description="Vagas e requisitos da empresa ativa." />;
+  if (route.path === "/vacancies" && activeMembership) {
+    if (route.vacancyView === "create") return <VacancyEditorPage activeMembership={activeMembership} onNavigate={onNavigate} />;
+    if (route.vacancyView === "assist") return <VacancyAssistPage activeMembership={activeMembership} onNavigate={onNavigate} />;
+    if (route.vacancyView === "edit" && route.vacancyId) return <VacancyEditorPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
+    if (route.vacancyView === "people" && route.vacancyId) return <VacancyPeoplePage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
+    if (route.vacancyView === "compare" && route.vacancyId && route.vacancyComparePersonIds) return <VacancyComparePage activeMembership={activeMembership} onNavigate={onNavigate} personIds={route.vacancyComparePersonIds} vacancyId={route.vacancyId} />;
+    if (route.vacancyId) return <VacancyDetailPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
+    return <VacanciesPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
   if (route.path === "/organizations") {
     return <PlaceholderPage title="Organizações" description="Gestão estrutural de grupos e empresas permanece fora deste movimento." />;
@@ -575,6 +593,16 @@ function findRoute(pathname: string): AppRoute {
   const exact = routes.find((route) => route.path === normalized);
   if (exact) return exact;
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };
+  if (normalized === "/vacancies/new") return { path: "/vacancies", vacancyView: "create", rule: reviewerRule };
+  if (normalized === "/vacancies/assist") return { path: "/vacancies", vacancyView: "assist", rule: reviewerRule };
+  const vacancyCompareMatch = /^\/vacancies\/([^/]+)\/compare\/([^/]+)\/([^/]+)$/.exec(normalized);
+  if (vacancyCompareMatch?.[1] && vacancyCompareMatch[2] && vacancyCompareMatch[3]) return { path: "/vacancies", vacancyId: vacancyCompareMatch[1], vacancyView: "compare", vacancyComparePersonIds: [vacancyCompareMatch[2], vacancyCompareMatch[3]], rule: reviewerRule };
+  const vacancyPeopleMatch = /^\/vacancies\/([^/]+)\/people$/.exec(normalized);
+  if (vacancyPeopleMatch?.[1]) return { path: "/vacancies", vacancyId: vacancyPeopleMatch[1], vacancyView: "people", rule: reviewerRule };
+  const vacancyEditMatch = /^\/vacancies\/([^/]+)\/edit$/.exec(normalized);
+  if (vacancyEditMatch?.[1]) return { path: "/vacancies", vacancyId: vacancyEditMatch[1], vacancyView: "edit", rule: reviewerRule };
+  const vacancyMatch = /^\/vacancies\/([^/]+)$/.exec(normalized);
+  if (vacancyMatch?.[1]) return { path: "/vacancies", vacancyId: vacancyMatch[1], vacancyView: "detail", rule: reviewerRule };
   if (normalized === "/profiles/new") return { path: "/profiles/new", profileMode: "create", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   if (normalized === "/profiles/import") return { path: "/profiles", profileView: "import", rule: reviewerRule };
   if (normalized === "/profiles/processes") return { path: "/profiles", profileView: "operations", rule: reviewerRule };

@@ -26,6 +26,8 @@ Local e QA usam fixtures sintéticas ou anonimizadas. Dados reais exigem autoriz
 
 `pnpm run validate` executa lint, invariantes de fundação, Context Pack, typechecks, build web, testes, golden tests e demo. A suite inclui guards, username/senha/celular, migrations M2-A/M2-B/M2-C/M5, currículo-first, PDF inválido, identidade insuficiente, Storage privado, idempotência, concorrência, revisão imutável, coordenadas normalizadas, aprovação atômica, auditoria sem conteúdo integral, Member sem documento bruto, releitura completa do bloco, aceite parcial e promoção controlada de padrão. O projeto remoto conectado deve comprovar Pessoa nova, vínculo existente, identidade insuficiente, Super Admin, Owner, Admin, Recruiter, Member, cross-tenant, coordenada inválida, DML direto revogado, aceite adaptativo atômico e promoção somente após aprovação. Desktop e viewport mobile precisam ser validados após qualquer alteração de layout. `pnpm run audit:dependencies` consulta advisories do registry.
 
+Para M5.4, a suíte deve manter duas Vagas de mesmo título com requisitos diferentes, termo desconhecido privado à organização, relação Figma/UX apenas como sinal, ausência de idioma como `Sem evidência suficiente`, ordenação sem score, edição com nova versão e comparação de exatamente duas Pessoas. A prova SQL usa rollback e cobre autoria, ocupante, versão imutável, relação tenant-scoped e grants negativos. O smoke cobre lista, criação, assistência, detalhe, Pessoas e comparação em `1440x900`, `1280x720`, `768x1024`, `390x844` e `360x800`.
+
 ## Critério de promoção
 
 Sem regressão não justificada, contratos compatíveis, segurança negativa aprovada, custo/latência dentro do budget, documentação/contexto atualizados, QA com evidência e aprovação explícita para produção.

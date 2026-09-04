@@ -2,14 +2,14 @@
 
 ## Estado
 
-O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M2-A, M2-B, M2-C e M5 estão ativos no Prisma-QA. Não existe schema de produção separado provisionado.
+O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M2-A, M2-B, M2-C, M5, M5.1, M5.2, M5.3 e M5.4 estão ativos no Prisma-QA. Não existe schema de produção separado provisionado.
 
 ## Agregados
 
 | Agregado | Tabelas | Regra |
 | --- | --- | --- |
 | Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users` | Grupo delimita autoridade; empresa delimita dados; usuário opera o sistema |
-| Organização | `organization_units`, `job_roles`, `positions`, `vacancies` | Papel, posição e vaga são distintos |
+| Organização | `organization_units`, `job_roles`, `positions`, `vacancies`, `vacancy_versions`, `vacancy_requirements`, `vacancy_requirement_relations`, `vacancy_events` | Função, posição, Vaga versionada, requisito e relação local são distintos |
 | Pessoa | `people`, `person_private_data` | PII privada separada da identidade profissional |
 | Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, layout visual, evidência por campo, tentativa e idempotência |
 | Intake currículo-first | `resume_intakes` | PDF tenant-scoped, identidade mínima e resolução única antes do documento M2-B |
@@ -33,6 +33,10 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 Tabelas pai expõem `unique (organization_id, id)`. Relações críticas usam foreign keys compostas com `organization_id`, impedindo referências cruzadas mesmo diante de erro de aplicação. Em `M2-A`, `organizations.group_id` formaliza a hierarquia `Plataforma -> Grupo -> Empresa`, enquanto `platform_users` separa o operador autenticável da entidade `people`.
 
 RLS está habilitado em toda tabela pública. Políticas usam `TO authenticated`, `platform_users.status`, `organization_memberships` e helpers privados com `search_path` vazio. `anon` não recebe acesso. O boundary de Auth admin, username e mutações de usuário permanece server-side em Edge Functions.
+
+## Vagas
+
+`vacancies` mantém a identidade da necessidade profissional e aponta para seu snapshot atual em `vacancy_versions`. Cada mudança material acrescenta uma versão; `vacancy_requirements.stable_id` preserva a identidade conceitual do requisito entre snapshots. `vacancy_requirement_relations` registra sinais relacionados confirmados somente para aquela versão, sem promover aliases ou relações no Knowledge. `positions.occupant_person_id` só pode existir quando a posição está `occupied`, e `match_evaluations.vacancy_version_id` preserva a definição usada na avaliação. A escrita transacional ocorre por `save_vacancy_definition`; DML direto das tabelas versionadas permanece revogado.
 
 ## Documento e falhas
 

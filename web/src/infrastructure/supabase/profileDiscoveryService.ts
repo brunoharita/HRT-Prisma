@@ -18,7 +18,7 @@ export const profileDiscoveryService = {
     includePrivateLocation: boolean,
   ): Promise<ProfileSearchResult[]> {
     const [candidates, knowledgeMatches] = await Promise.all([
-      loadCandidates(organizationId, includePrivateLocation),
+      loadPublishedProfileCandidates(organizationId, includePrivateLocation),
       loadKnowledgeMatches(organizationId, query.competencies),
     ]);
     return searchPublishedProfiles(candidates, query, knowledgeMatches);
@@ -31,7 +31,7 @@ export const profileDiscoveryService = {
   ): Promise<PublishedProfileCandidate[]> {
     const allowedIds = [...new Set(personIds.filter(Boolean))].slice(0, 2);
     if (!allowedIds.length) return [];
-    const candidates = await loadCandidates(organizationId, includePrivateLocation, allowedIds);
+    const candidates = await loadPublishedProfileCandidates(organizationId, includePrivateLocation, allowedIds);
     return allowedIds.flatMap((personId) => {
       const candidate = candidates.find((item) => item.personId === personId);
       return candidate ? [candidate] : [];
@@ -39,7 +39,7 @@ export const profileDiscoveryService = {
   },
 };
 
-async function loadCandidates(
+export async function loadPublishedProfileCandidates(
   organizationId: string,
   includePrivateLocation: boolean,
   personIds?: string[],

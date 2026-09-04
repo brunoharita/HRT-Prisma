@@ -24,9 +24,10 @@
 | Aprendizado imediato | correção relê irmãos, aceite parcial salva revisão/evento/casos e aprovação promove padrão | sem JWT, DML direto, replay divergente, lock stale, promoção antes da aprovação e payload com valor/trecho | unit/contract e transações com rollback no QA aprovadas; smoke autenticado pendente |
 | Interação centrada em decisão | aviso sem proposta fecha localmente; descarte válido não bloqueia e registra telemetria em segundo plano | assinatura ausente, RPC indisponível, zero proposta e erro secundário | regressão local obrigatória; smoke autenticado do descarte pendente |
 | Duplicidade | primeira importação | mesma chave com payload divergente e concorrência | M2-C local/QA aprovado |
-| Vagas | requisitos claros | vazio, incompatível, cross-tenant | contrato parcial |
-| Matching | atendido/parcial/gap | insuficiência e requisito ausente | golden testado |
-| Empate | ordem determinística | ranking arbitrário | golden testado |
+| Vagas M5.4 | criar manualmente ou por referência, ocupada/não ocupada, editar com nova versão e histórico | Vaga vazia, ocupante incompatível, relação inválida, Member, anon e cross-tenant | migrations, prova revertida e smoke autenticado `1280x720` aprovados no QA; quatro viewports adicionais pendentes |
+| Matching por Vaga | evidência direta, equivalência Knowledge, parcial rastreável e sinal relacionado | ausência apresentada como insuficiência, requisito ausente e relação local tratada como prova | testes determinísticos e descoberta autenticada aprovados no QA |
+| Comparação M5.4 | exatamente duas Pessoas por requisito | uma/três Pessoas, score, ranking, vencedor e overflow mobile | contrato e comparação autenticada aprovados; captura real mobile pendente |
+| Empate | ordem determinística | ranking arbitrário | golden e M5.4 testados |
 | Explicabilidade | conclusão com evidência | evidência ausente ou órfã | testado |
 | Busca natural | conceito conhecido | conceito sem candidato | golden testado |
 | Filtros | nome, lifecycle, tenant e escopo | organização persistida inválida e ID cross-tenant | adapter e testes locais; dados QA persistidos |

@@ -35,6 +35,8 @@ Versões anteriores permanecem identificáveis. Rollback reativa artefato anteri
 
 ## Versões atuais
 
+O M5.4 de 2026-09-04 introduz `vacancy-definition` 1.0.0, `vacancy-matching-explainable` 1.0.0 e `vacancy-structure-assistant` 1.0.0. A definição é um snapshot imutável com requisitos de identidade estável; cada avaliação registra `vacancy_version_id`. Relações confirmadas para uma Vaga permanecem sinais locais, não equivalências do Knowledge. Vagas e avaliações históricas sem versão continuam legíveis, mas novas escritas M5.4 falham fechadas sem versão atual e autoridade tenant-scoped.
+
 O ciclo de vida reversível de 2026-09-03 introduz `profile-document-lifecycle` 1.0.0 e avança `profile-publication-delta` para 2.0.0, `professional-profile` para 6.0.0, `person-ingestion` para 11.0.0 e `document-operation-idempotency` para 2.0.0. A mudança é major porque publicação passa a aceitar `merge` ou `replace`, decisões por bloco tornam-se parte do contrato persistido e exclusão física passa a coordenar PostgreSQL e Storage. Leitura histórica permanece compatível; restauração sempre cria nova versão e reset nunca apaga histórico.
 
 O M5.3 de 2026-09-04 introduz `pilot-operational-resilience` 1.0.0 e avança `profile-document-lifecycle` para 2.0.0, `person-ingestion` para 12.0.0 e `document-operation-idempotency` para 3.0.0. A evolução é major porque revisão passa a aceitar fonte documental ou snapshot de Perfil, `people` passa a distinguir situação operacional e absorção, e o ledger passa a coordenar vínculo documental, lifecycle e mesclagem com replay após a mutação terminal. Perfis e documentos históricos continuam legíveis; nenhuma evidência é fabricada ou reclassificada.

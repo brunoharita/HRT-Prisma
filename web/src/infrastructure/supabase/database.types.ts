@@ -63,6 +63,31 @@ export interface Database {
         created_at: string;
         updated_at: string;
       }>;
+      job_roles: Table<{
+        id: string;
+        organization_id: string;
+        name: string;
+        mission: string | null;
+        responsibilities: Json;
+        context: Json;
+        reference_concept_id: string | null;
+        expected_outcomes: Json;
+        requirements_template: Json;
+        context_items: Json;
+        created_at: string;
+        updated_at: string;
+      }>;
+      positions: Table<{
+        id: string;
+        organization_id: string;
+        organization_unit_id: string | null;
+        job_role_id: string;
+        status: "occupied" | "vacant" | "planned" | "inactive";
+        title: string;
+        occupant_person_id: string | null;
+        created_at: string;
+        updated_at: string;
+      }>;
       vacancies: Table<{
         id: string;
         organization_id: string;
@@ -71,8 +96,94 @@ export interface Database {
         title: string;
         status: string;
         context_overrides: Json;
+        area: string | null;
+        location: string | null;
+        work_arrangement: "onsite" | "hybrid" | "remote" | "flexible" | null;
+        employment_type: string | null;
+        source_kind: "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
+        source_vacancy_id: string | null;
+        reference_concept_id: string | null;
+        definition_version: number;
+        current_version_id: string | null;
         created_at: string;
         updated_at: string;
+      }>;
+      vacancy_versions: Table<{
+        id: string;
+        organization_id: string;
+        vacancy_id: string;
+        version: number;
+        title: string;
+        area: string | null;
+        location: string | null;
+        work_arrangement: "onsite" | "hybrid" | "remote" | "flexible" | null;
+        employment_type: string | null;
+        mission: string | null;
+        responsibilities: Json;
+        expected_outcomes: Json;
+        context_items: Json;
+        source_kind: "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
+        source_vacancy_id: string | null;
+        source_job_role_id: string | null;
+        reference_concept_id: string | null;
+        change_kind: "material" | "editorial";
+        contract_version: string;
+        created_by_auth_user_id: string | null;
+        created_at: string;
+      }>;
+      vacancy_requirements: Table<{
+        id: string;
+        organization_id: string;
+        vacancy_id: string;
+        vacancy_version_id: string | null;
+        stable_id: string;
+        competency_id: string | null;
+        label: string;
+        importance: "required" | "desired";
+        transferable_competencies: Json;
+        category: "experience" | "competency" | "knowledge" | "technology" | "education" | "certification" | "language" | "context";
+        observed_term: string | null;
+        concept_id: string | null;
+        relation_mode: "direct" | "related";
+        target_level: "basic" | "intermediate" | "advanced" | null;
+        criticality: "low" | "medium" | "high" | "critical" | null;
+        verification_policy_requirement: "none" | "optional" | "recommended" | "required_by_policy" | null;
+        created_at: string;
+      }>;
+      vacancy_requirement_relations: Table<{
+        id: string;
+        organization_id: string;
+        vacancy_id: string;
+        vacancy_version_id: string;
+        requirement_id: string;
+        related_label: string;
+        related_concept_id: string | null;
+        suggestion_origin: "operator" | "knowledge" | "deterministic_assistant" | "external_assistant";
+        confirmed_by_auth_user_id: string;
+        confirmed_at: string;
+        created_at: string;
+      }>;
+      vacancy_events: Table<{
+        id: number;
+        organization_id: string;
+        vacancy_id: string;
+        vacancy_version_id: string | null;
+        event_type: "created" | "definition_updated" | "occupancy_updated" | "match_evaluated";
+        actor_auth_user_id: string | null;
+        metadata: Json;
+        created_at: string;
+      }>;
+      match_evaluations: Table<{
+        id: string;
+        organization_id: string;
+        person_id: string;
+        vacancy_id: string;
+        vacancy_version_id: string | null;
+        evaluation_data: Json;
+        matching_version: string;
+        prompt_version: string;
+        model_version: string;
+        created_at: string;
       }>;
       professional_profiles: Table<{
         id: string;
@@ -1114,6 +1225,31 @@ export interface Database {
       }
     Views: Record<string, never>;
     Functions: {
+      save_vacancy_definition: {
+        Args: {
+          p_organization_id: string;
+          p_vacancy_id: string | null;
+          p_title: string;
+          p_area: string;
+          p_location: string;
+          p_work_arrangement: "onsite" | "hybrid" | "remote" | "flexible" | null;
+          p_employment_type: string;
+          p_occupancy_status: "occupied" | "vacant";
+          p_occupant_person_id: string | null;
+          p_mission: string;
+          p_responsibilities: Json;
+          p_expected_outcomes: Json;
+          p_requirements: Json;
+          p_context_items: Json;
+          p_source_kind: "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
+          p_source_vacancy_id: string | null;
+          p_job_role_id: string | null;
+          p_reference_concept_id: string | null;
+          p_save_as_role: boolean;
+          p_change_kind: "material" | "editorial";
+        };
+        Returns: Array<{ vacancy_id: string; vacancy_version_id: string; version: number; created: boolean }>;
+      };
       start_resume_intake: {
         Args: {
           p_organization_id: string;

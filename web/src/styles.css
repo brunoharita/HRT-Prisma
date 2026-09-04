@@ -5905,3 +5905,168 @@ textarea {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* M5.4 - Vagas */
+.prisma-vacancies-page,
+.prisma-vacancy-editor-page,
+.prisma-vacancy-assist-page,
+.prisma-vacancy-detail-page,
+.prisma-vacancy-people-page,
+.prisma-vacancy-compare-page {
+  width: 100%;
+  max-width: none;
+}
+
+.prisma-vacancy-toolbar > .ant-card-body {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto minmax(180px, 240px);
+  gap: 14px;
+  align-items: center;
+}
+
+.prisma-vacancy-table-wrap {
+  margin-top: 16px;
+  overflow: hidden;
+  border: 1px solid var(--prisma-border);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.prisma-vacancy-table-wrap .ant-table-cell { vertical-align: middle; }
+.prisma-vacancy-title-link {
+  display: grid;
+  gap: 3px;
+  padding: 0;
+  color: var(--prisma-navy);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.prisma-vacancy-title-link:hover strong { color: var(--prisma-blue); }
+.prisma-vacancy-title-link small { color: var(--prisma-text-muted); font-weight: 500; }
+.prisma-vacancy-pagination { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 16px; }
+
+.prisma-vacancy-start-card { margin-bottom: 16px; }
+.prisma-vacancy-start-card > .ant-card-body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 12px;
+  align-items: end;
+}
+.prisma-vacancy-start-card label { display: grid; gap: 6px; color: var(--prisma-text-muted); font-size: 0.78rem; font-weight: 650; }
+.prisma-vacancy-form-section { margin-bottom: 16px; }
+.prisma-vacancy-form-section .ant-input-textarea { margin-top: 10px; }
+.prisma-vacancy-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+.prisma-vacancy-two-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.prisma-string-list { display: grid; gap: 8px; margin-bottom: 10px; }
+.prisma-string-list > div { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+.prisma-requirement-editor-list { display: grid; gap: 10px; }
+.prisma-requirement-editor {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(200px, 1.5fr) minmax(150px, 0.8fr) auto minmax(190px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fbfdff;
+}
+.prisma-vacancy-save-bar { position: sticky; z-index: 5; bottom: 12px; margin-top: 16px; box-shadow: 0 14px 30px rgba(3, 21, 49, 0.12); }
+.prisma-vacancy-save-bar > .ant-card-body { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.prisma-vacancy-advisor-answer { margin-top: 12px; }
+
+.prisma-vacancy-assist-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr); gap: 16px; margin-top: 16px; }
+.prisma-vacancy-assist-grid > .ant-card { min-width: 0; }
+.prisma-vacancy-assist-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; }
+.prisma-assist-suggestion-group { display: grid; gap: 8px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; }
+.prisma-assist-suggestion-group + .prisma-assist-suggestion-group { margin-top: 10px; }
+.prisma-assist-suggestion-group .ant-checkbox-wrapper { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 8px; align-items: start; }
+.prisma-assist-suggestion-group .ant-checkbox { grid-row: 1 / span 2; margin-top: 3px; }
+.prisma-assist-suggestion-group .ant-checkbox-wrapper > span:last-child { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 8px; width: 100%; }
+.prisma-assist-suggestion-group small { display: block; grid-column: 1 / -1; color: var(--prisma-text-muted); }
+
+.prisma-vacancy-detail-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin: 8px 0 16px; }
+.prisma-vacancy-detail-header h1.ant-typography { margin: 0; font-size: clamp(1.7rem, 3vw, 2.45rem); }
+.prisma-vacancy-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; color: var(--prisma-text-muted); }
+.prisma-vacancy-detail-stack { display: grid; gap: 14px; }
+.prisma-vacancy-editorial-list { display: grid; gap: 8px; margin: 0; padding-left: 21px; }
+.prisma-vacancy-requirement-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.prisma-vacancy-requirement-groups section { display: grid; gap: 10px; padding: 12px; border: 1px solid #e6eaf0; border-radius: 10px; }
+
+.prisma-vacancy-match-list { display: grid; gap: 14px; }
+.prisma-vacancy-match-card { transition: border-color 160ms ease, box-shadow 160ms ease; }
+.prisma-vacancy-match-card.is-selected { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.11); }
+.prisma-vacancy-match-card article > header { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.prisma-vacancy-match-card article > header h3.ant-typography { margin: 0; }
+.prisma-vacancy-match-card article > header small,
+.prisma-match-person small { display: block; color: var(--prisma-text-muted); }
+.prisma-vacancy-avatar { display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px; border-radius: 50%; color: #2b1a68; background: #ede9fe; font-weight: 800; }
+.prisma-match-reasons { display: grid; gap: 8px; margin: 12px 0; }
+.prisma-match-evidence-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.prisma-match-bucket { display: grid; align-content: start; gap: 8px; min-height: 92px; padding: 11px; border: 1px solid; border-radius: 10px; }
+.prisma-match-bucket.is-success { border-color: #b7ebc6; background: #f2fff6; }
+.prisma-match-bucket.is-warning { border-color: #ffe0a3; background: #fffaf0; }
+.prisma-match-bucket.is-error { border-color: #ffc9d0; background: #fff5f6; }
+.is-success { color: #138a47; }
+.is-warning { color: #c77800; }
+.is-error { color: #cf2941; }
+
+.prisma-vacancy-compare-people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 16px; }
+.prisma-comparison-mobile { display: none; }
+.prisma-match-person { display: flex; align-items: center; gap: 12px; }
+.prisma-match-person h3.ant-typography { margin: 0; }
+.prisma-match-highlight-card ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.prisma-match-highlight-card li { display: grid; grid-template-columns: auto 1fr; gap: 8px; }
+
+@media (max-width: 1100px) {
+  .prisma-vacancy-start-card > .ant-card-body { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prisma-requirement-editor { grid-template-columns: minmax(180px, 1fr) minmax(140px, 0.7fr); }
+  .prisma-requirement-editor > :nth-child(3),
+  .prisma-requirement-editor > :nth-child(4) { grid-column: span 1; }
+  .prisma-requirement-editor > :last-child { position: absolute; right: 34px; }
+  .prisma-match-evidence-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .prisma-vacancy-toolbar > .ant-card-body,
+  .prisma-vacancy-start-card > .ant-card-body,
+  .prisma-vacancy-form-grid,
+  .prisma-vacancy-two-columns,
+  .prisma-vacancy-assist-grid,
+  .prisma-vacancy-requirement-groups,
+  .prisma-vacancy-compare-people { grid-template-columns: 1fr; }
+  .prisma-vacancy-toolbar .ant-segmented { width: 100%; overflow: auto; }
+  .prisma-vacancy-toolbar .ant-segmented-group { min-width: max-content; }
+  .prisma-vacancy-pagination,
+  .prisma-vacancy-save-bar > .ant-card-body,
+  .prisma-vacancy-detail-header { align-items: stretch; flex-direction: column; }
+  .prisma-vacancy-save-bar { position: static; }
+  .prisma-vacancy-save-bar .ant-space { width: 100%; }
+  .prisma-vacancy-save-bar .ant-space-item { flex: 1; }
+  .prisma-vacancy-save-bar .ant-btn { width: 100%; }
+  .prisma-requirement-editor { position: relative; grid-template-columns: 1fr; padding-right: 46px; }
+  .prisma-requirement-editor > :nth-child(3),
+  .prisma-requirement-editor > :nth-child(4) { grid-column: auto; }
+  .prisma-requirement-editor > :last-child { top: 8px; right: 8px; }
+  .prisma-vacancy-match-card article > header { grid-template-columns: auto auto 1fr; }
+  .prisma-vacancy-match-card article > header > .ant-space { grid-column: 1 / -1; width: 100%; flex-direction: row; }
+  .prisma-vacancy-match-card article > header > .ant-space .ant-space-item { flex: 1; }
+  .prisma-vacancy-match-card article > header > .ant-space .ant-btn { width: 100%; }
+  .prisma-vacancy-table-wrap { overflow-x: auto; }
+  .prisma-vacancy-table-wrap .ant-table { min-width: 540px; }
+  .prisma-vacancy-assist-actions { flex-direction: column-reverse; }
+  .prisma-comparison-table { display: none; }
+  .prisma-comparison-mobile { display: grid; gap: 12px; }
+  .prisma-comparison-mobile .ant-card-body { display: grid; gap: 12px; }
+  .prisma-comparison-mobile .ant-card-body > div { display: grid; gap: 6px; padding: 10px; border: 1px solid #e6eaf0; border-radius: 10px; }
+  .prisma-comparison-mobile .ant-card-body .ant-typography { margin: 0; }
+}
+
+@media (max-width: 420px) {
+  .prisma-vacancy-table-wrap .ant-table { min-width: 480px; }
+  .prisma-vacancy-match-card article > header { grid-template-columns: auto 1fr; }
+  .prisma-vacancy-match-card article > header > .ant-checkbox-wrapper { grid-row: 1; }
+  .prisma-vacancy-match-card .prisma-vacancy-avatar { display: none; }
+}
