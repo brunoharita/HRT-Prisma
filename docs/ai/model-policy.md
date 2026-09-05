@@ -14,7 +14,7 @@ Modelo é implementação substituível de uma função lógica. O projeto não 
 | Matching | Comparar requisitos sem score opaco | regras locais |
 | Explanation | Usar dados estruturados existentes | template local |
 | Embedding | Vetor estável, versionável e cacheável | não selecionado |
-| Knowledge research | Web Search, Structured Outputs e fontes rastreáveis | adapter OpenAI implementado, sem modelo aprovado/ativado |
+| Knowledge research | Web Search, Structured Outputs e fontes rastreáveis | adapter OpenAI e modelo econômico configurados em QA; chamada bloqueada sem credencial |
 | Assessment item generation | Structured Output, aderência metodológica, no PII e custo controlado | provider fake ativo; adapter externo implantado e desativado |
 
 ## Seleção
@@ -29,12 +29,11 @@ Usar o menor modelo disponível que cumpra segurança, qualidade, contexto, Stru
 | Inference | local | `inference-ontology-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Retrieval | local | `structured-lexical-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Matching | local | `matching-explainable-1.0.0` | nenhum | 1.0.0 | ativo local |
+| Knowledge research | OpenAI | `gpt-5.6-luna` | nenhum | 1.0.0 | configurado no Prisma-QA; bloqueado sem `OPENAI_API_KEY` |
 | Assessment item generation | local | `fake-deterministic` | nenhum | 1.0.0 | ativo local/QA, sintético |
 | Assessment item generation external | não aprovado | nenhum | provider fake | 1.0.0 | desativado |
 
-Nenhum modelo OpenAI ou de outro fornecedor está configurado no runtime.
-
-O Movimento 4 adiciona `KNOWLEDGE_RESEARCH_MODEL` como configuração server-side obrigatória, mas não fixa nem aprova um modelo no domínio. Sem avaliação, secret, flag e orçamento, o Knowledge Agent permanece desativado.
+Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no catálogo oficial atual para workloads sensíveis a custo e compatível com Responses API, Web Search e Structured Outputs. A seleção fica em configuração server-side, não no domínio. Caps de QA limitam 10 pesquisas por dia e 100 por mês; no máximo quatro chamadas de Web Search são permitidas por resposta. Sem `OPENAI_API_KEY`, o Knowledge Agent continua falhando de forma fechada.
 
 ## Troca de modelo
 

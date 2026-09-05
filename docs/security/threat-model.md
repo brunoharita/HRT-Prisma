@@ -18,7 +18,7 @@ Ativos: currículos, PII, perfis, evidências, inferências, vagas, avaliações
 | Upload inválido ou OCR enganoso | alto | estados explícitos, revisão manual | testes de falha e OCR |
 | Vazamento via logs | alto | IDs e métricas, sem conteúdo integral | scan e revisão de logs |
 | Vazamento via embeddings | alto | tenant, minimização, cache versionado, exclusão planejada | teste cross-tenant e deleção |
-| Vazamento para provider | crítico | nenhum provider ativo; DPA, minimização e redaction antes de ativar | revisão jurídica e tráfego QA |
+| Vazamento para provider | crítico | Vagas envia somente pergunta, título, área, idioma e data, bloqueia PII evidente, usa `store: false` e não persiste a pergunta; demais fluxos continuam bloqueados | smoke público, revisão de logs e revisão jurídica antes de produção |
 | Enumeração de candidatos | alto | autorização, paginação, rate limit planejado | teste de enumeração |
 | Escalonamento de privilégio | crítico | membership persistida, RLS, backend privileged flow | testes de papel e update |
 | Exposição de secrets | crítico | `.env` ignorado, backend only, secret store planejado | secret scan e build scan |

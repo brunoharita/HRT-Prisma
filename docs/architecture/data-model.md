@@ -9,7 +9,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Agregado | Tabelas | Regra |
 | --- | --- | --- |
 | Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users` | Grupo delimita autoridade; empresa delimita dados; usuário opera o sistema |
-| Organização | `organization_units`, `job_roles`, `positions`, `vacancies`, `vacancy_versions`, `vacancy_requirements`, `vacancy_requirement_relations`, `vacancy_events` | Função, posição, Vaga versionada, requisito e relação local são distintos |
+| Organização | `organization_units`, `job_roles`, `positions`, `vacancies`, `vacancy_versions`, `vacancy_requirements`, `vacancy_requirement_relations`, `vacancy_events`, `vacancy_advisor_research_runs` | Função, posição, Vaga versionada, requisito e relação local são distintos; pesquisa externa possui ledger próprio sem pergunta ou PII |
 | Pessoa | `people`, `person_private_data` | PII privada separada da identidade profissional |
 | Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, layout visual, evidência por campo, tentativa e idempotência |
 | Intake currículo-first | `resume_intakes` | PDF tenant-scoped, identidade mínima e resolução única antes do documento M2-B |
@@ -37,6 +37,8 @@ RLS está habilitado em toda tabela pública. Políticas usam `TO authenticated`
 ## Vagas
 
 `vacancies` mantém a identidade da necessidade profissional e aponta para seu snapshot atual em `vacancy_versions`. Cada mudança material acrescenta uma versão; `vacancy_requirements.stable_id` preserva a identidade conceitual do requisito entre snapshots. `vacancy_requirement_relations` registra sinais relacionados confirmados somente para aquela versão, sem promover aliases ou relações no Knowledge. `positions.occupant_person_id` só pode existir quando a posição está `occupied`, e `match_evaluations.vacancy_version_id` preserva a definição usada na avaliação. A escrita transacional ocorre por `save_vacancy_definition`; DML direto das tabelas versionadas permanece revogado.
+
+`vacancy_advisor_research_runs` é um ledger tenant-scoped de execução externa. Guarda fingerprint, assunto mínimo, output estruturado, fontes, versões, tokens, duração e falha sanitizada. A pergunta e dados de Pessoas não são persistidos. RLS permite leitura somente a Super Admin, Owner, Admin e Recruiter; DML direto permanece revogado.
 
 ## Documento e falhas
 

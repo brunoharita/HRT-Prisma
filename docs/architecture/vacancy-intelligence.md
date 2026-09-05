@@ -13,6 +13,7 @@ A implementação reutiliza `job_roles`, `positions`, `vacancies`, `vacancy_requ
 - `positions.occupant_person_id` representa a Pessoa atual somente quando a posição está `occupied`.
 - `match_evaluations.vacancy_version_id` prende cada avaliação à definição usada.
 - `vacancy_events` registra metadados operacionais, sem copiar Perfil ou currículo.
+- `vacancy_advisor_research_runs` registra organização, ator, versões, consumo, resposta e fontes da pesquisa, sem armazenar a pergunta, Perfil ou PII no metadata do assunto.
 
 `save_vacancy_definition` é a fronteira autoritativa de escrita. A RPC valida papel, tenant, Pessoa ocupante, referência Knowledge, listas, categorias e relações; cria posição e primeira versão ou acrescenta uma nova versão sem reescrever a anterior.
 
@@ -22,7 +23,7 @@ O cliente carrega apenas Perfis publicados do tenant por meio da fundação de p
 
 ## Assistência
 
-`vacancy-structure-deterministic-1.0.0` identifica somente padrões locais explícitos e separa derivações visíveis, inicialmente desmarcadas. A pergunta pontual também é local e apenas orientativa. Nenhum dado é enviado a provedor externo e nenhuma sugestão é persistida antes da confirmação humana.
+`vacancy-structure-deterministic-1.0.0` identifica somente padrões locais explícitos e separa derivações visíveis, inicialmente desmarcadas. O Assistente contextual mantém a leitura interna determinística e aciona o modo `vacancy_advisor` do Knowledge Agent somente quando a pergunta depende de informação atual de mercado. O provider recebe pergunta, título, área, idioma e data, sem Perfis, Pessoas, organização ou descrição interna da Vaga. Web Search é server-side, limitado a fontes aprovadas, Structured Output, `store: false`, orçamento compartilhado e cache tenant-scoped de 24 horas. Resposta, recomendação e fontes permanecem orientativas e não alteram a Vaga automaticamente.
 
 ## Compatibilidade e rollback
 

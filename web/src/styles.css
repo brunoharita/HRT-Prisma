@@ -5980,6 +5980,7 @@ textarea {
 .prisma-vacancy-advisor-answer section { display: grid; gap: 4px; }
 .prisma-vacancy-advisor-answer section strong { color: #172554; }
 .prisma-vacancy-advisor-answer .ant-typography { margin: 0; }
+.prisma-vacancy-advisor-sources a { display: block; overflow-wrap: anywhere; }
 .prisma-vacancy-advisor-answer footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding-top: 2px; }
 .prisma-vacancy-context-text { margin: 0 !important; white-space: pre-line; }
 .prisma-vacancy-save-bar { position: sticky; z-index: 5; bottom: 12px; margin-top: 16px; box-shadow: 0 14px 30px rgba(3, 21, 49, 0.12); }

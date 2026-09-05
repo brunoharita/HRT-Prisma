@@ -173,6 +173,28 @@ export interface Database {
         metadata: Json;
         created_at: string;
       }>;
+      vacancy_advisor_research_runs: Table<{
+        id: string;
+        organization_id: string;
+        actor_auth_user_id: string;
+        request_fingerprint: string;
+        subject_metadata: Json;
+        response_data: Json | null;
+        provider: string;
+        model: string;
+        prompt_version: string;
+        output_schema_version: string;
+        source_policy_version: string;
+        status: "researching" | "completed" | "failed" | "budget_limited";
+        request_count: number;
+        input_tokens: number | null;
+        output_tokens: number | null;
+        estimated_cost_usd: number | null;
+        duration_ms: number | null;
+        error_code: string | null;
+        created_at: string;
+        completed_at: string | null;
+      }>;
       match_evaluations: Table<{
         id: string;
         organization_id: string;

@@ -11,3 +11,9 @@ O resolver 2.0.0 é determinístico e anterior ao agente: alias Organization apr
 A implementação OpenAI usa Responses API, Web Search, domínio filtrado, Structured Outputs por JSON Schema, limite explícito de saída e `store: false`. Modelo é configuração server-side e deve ser aprovado conforme `model-policy.md`. Resposta e URLs são pós-validadas contra as citações efetivamente retornadas pelo Web Search; classe e publisher vêm do catálogo aprovado, não da afirmação do modelo. Página web é input não confiável e não pode alterar policy, pedir secret, publicar conceito ou adicionar domínio.
 
 Sem `OPENAI_API_KEY`, modelo, flag explícita e caps positivos, o provider falha de forma segura como `implemented, not activated`. Testes obrigatórios usam fixture/mock; o gate local não chama LLM nem web.
+
+## Modo contextual de Vagas
+
+O mesmo Knowledge Agent aceita `vacancy-advisor-request-1.0.0`. Esse modo não cria conceito nem proposta Knowledge. Ele pesquisa somente quando a interface identifica dependência de informação atual, recebe pergunta, título, área, idioma e data, e nunca recebe Perfil, currículo, Pessoa, nome da organização, missão, responsabilidades ou contexto interno.
+
+O prompt `vacancy-advisor-web-1.0.0` e o schema `vacancy-advisor-market-answer-1.0.0` separam síntese factual, recomendação e ressalvas. Toda fonte retornada deve estar tanto nas citações reais do Web Search quanto no catálogo aprovado; publisher, classe e instante de consulta são definidos pelo servidor. Uma fonte oficial basta; sem fonte oficial, são necessárias duas secundárias independentes. O resultado fica em cache tenant-scoped por 24 horas e o ledger não persiste a pergunta.

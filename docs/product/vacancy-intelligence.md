@@ -21,6 +21,7 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 4. consultar o detalhe editorial e o histórico;
 5. encontrar Pessoas pelos Perfis publicados do tenant;
 6. comparar exatamente duas Pessoas por requisito, sem score, ranking ou vencedor.
+7. consultar o Assistente Prisma; perguntas atuais de mercado pesquisam a Web automaticamente e mostram as fontes usadas.
 
 ## Regras de aderência
 
@@ -35,6 +36,6 @@ A ordenação é determinística e operacional. Ela prioriza evidência direta, 
 
 - sem candidatura, pipeline, entrevista, proposta, contratação, página pública ou integração externa;
 - sem publicação automática na Knowledge;
-- sem provedor externo para estruturar descrições;
+- sem provedor externo para estruturar descrições; Web Search existe somente na pergunta contextual e não altera a definição;
 - sem avaliação automática M5.1;
 - sem decisão de contratação.

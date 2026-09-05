@@ -34,9 +34,19 @@ O gate `pnpm run validate` aprovou lint de 322 arquivos, fundação, Context Pac
 
 O refinamento posterior preserva o schema e as migrations ativas. A interface passa a pedir somente requisito e importância; a classificação técnica continua interna e não limita o matching. Testes determinísticos confirmam que uma categoria interna incompatível não impede evidência em experiência, competências, conhecimentos, ferramentas, formação, certificações, idiomas, áreas personalizadas e Knowledge, e que a explicação lista as áreas encontradas.
 
-O Contexto da vaga usa texto aberto opcional, ajuda humana e placeholder de cenário. A estruturação determinística deixa mercado, tecnologia e experiência no bloco de requisitos e propõe como contexto somente situações da área ou posição. O Assistente Prisma aceita pergunta livre, consulta Vagas, funções e Knowledge permitidas, separa `Na sua empresa`, `No mercado` e `Sugestão do Prisma`, e declara quando a Web não foi consultada. Ações continuam humanas; pesquisa externa permanece no Knowledge Agent existente e desativado enquanto flag, modelo, secret e orçamento não estiverem ativos.
+O Contexto da vaga usa texto aberto opcional, ajuda humana e placeholder de cenário. A estruturação determinística deixa mercado, tecnologia e experiência no bloco de requisitos e propõe como contexto somente situações da área ou posição. O Assistente Prisma aceita pergunta livre, consulta Vagas, funções e Knowledge permitidas, separa `Na sua empresa`, `No mercado` e `Sugestão do Prisma`, e declara quando a Web não foi consultada. Ações continuam humanas. Naquele ajuste, a pesquisa externa ainda permanecia no Knowledge Agent existente e bloqueada enquanto flag, modelo, secret e orçamento não estivessem ativos; a ativação parcial posterior está registrada em M5.4.2.
 
 O novo gate completo aprovou 322 arquivos no lint, fundação, Context Pack, dois typechecks, build web, 252 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno confirmou ausência de categoria e taxonomia no editor, requisito mais importância como únicas entradas, help e texto livre no Contexto da vaga, pergunta aberta e resposta nos três blocos. Nenhuma Vaga foi salva e o rascunho sintético do navegador foi limpo. O viewport do harness permaneceu fixo; responsividade adicional foi revisada no CSS e no build.
+
+## Web Search contextual M5.4.2
+
+A migration `20260904235900_m54_vacancy_advisor_web_search` foi aplicada no Prisma-QA. Ela criou `vacancy_advisor_research_runs` com RLS, DML direto revogado, índices tenant/fingerprint e catálogo Web ampliado com O*NET Online, BLS, CNCF, GitHub Octoverse e Stack Overflow Developer Survey. O advisor apontou a foreign key de ator sem cobertura; a migration complementar `20260905023000_m54_vacancy_advisor_actor_index` foi então aplicada e eliminou o alerta. Os três avisos restantes para a tabela são apenas índices ainda sem uso porque nenhuma pesquisa foi executada. A Edge Function `knowledge-agent` v5 está ativa em QA com JWT obrigatório e modo `vacancy_advisor`.
+
+A pergunta `Quais são as linguagens mais utilizadas atualmente no desenvolvimento de sistemas em cloud?` agora é classificada como dependente de atualidade. O frontend chama Web Search server-side, mostra `Web pesquisada agora`, síntese, recomendação, ressalvas e fontes clicáveis. O payload externo contém apenas pergunta, título, área, idioma e data; nenhuma Pessoa, Perfil, organização ou descrição interna é enviada.
+
+Modelo `gpt-5.6-luna`, flag, 10 pesquisas/dia, 100/mês, cooldown de 24 horas e opt-in da organização `Prisma` estão configurados em QA. O inventário de secrets confirmou que `OPENAI_API_KEY` ainda não existe. Por isso, a compilação e o rollout do boundary estão ativos, mas o smoke vivo do provider permanece bloqueado de forma fechada até o secret ser cadastrado no cofre do Supabase.
+
+O gate final `pnpm run validate` aprovou lint de 324 arquivos, fundação, Context Pack, dois typechecks, build web, 254 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`.
 
 ## Smoke autenticado
 
@@ -56,3 +66,5 @@ O harness de browser disponível nesta execução manteve viewport fixa em `1280
 ## Limitações operacionais
 
 O dry-run do Supabase CLI continua bloqueado pela divergência histórica já existente entre aliases de migration locais e versões registradas no projeto remoto. Nenhum `migration repair` foi executado. As migrations M5.4 foram aplicadas pela API oficial do projeto, registradas no histórico remoto e verificadas diretamente.
+
+O único bloqueio da chamada Web viva é a credencial `OPENAI_API_KEY`, que não deve ser enviada em chat nem gravada no repositório. Produção não foi acionada.

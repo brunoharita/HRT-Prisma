@@ -2,7 +2,7 @@ import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 
 export const VACANCY_DEFINITION_VERSION = "1.0.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-1.1.0";
-export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.1.0";
+export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.2.0";
 
 export type VacancyOccupancy = "occupied" | "vacant";
 export type VacancySourceKind = "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
@@ -119,8 +119,31 @@ export interface VacancyAdvisorAnswer {
   internal: string;
   market: string;
   suggestion: string;
+  sources: VacancyAdvisorSource[];
+  webSearched: boolean;
   allowKnowledgeReview: boolean;
   suggestedRequirement: { label: string; importance: VacancyRequirementImportance } | null;
+}
+
+export interface VacancyAdvisorSource {
+  url: string;
+  title: string;
+  publisher: string;
+  sourceClass: string;
+  retrievedAt: string;
+}
+
+export interface VacancyAdvisorMarketResearch {
+  marketSummary: string;
+  recommendation: string;
+  caveats: string[];
+  sources: VacancyAdvisorSource[];
+  provider: string;
+  model: string;
+  promptVersion: string;
+  outputSchemaVersion: string;
+  sourcePolicyVersion: string;
+  reused: boolean;
 }
 
 export function emptyVacancyDraft(): VacancyDraft {
@@ -249,6 +272,8 @@ export function answerVacancyQuestion(question: string, draft: VacancyDraft, con
       internal: "Escreva uma pergunta sobre esta Vaga.",
       market: "Nenhuma pesquisa externa foi realizada.",
       suggestion: "Você pode perguntar sobre lacunas, exigências, funções semelhantes ou um requisito específico.",
+      sources: [],
+      webSearched: false,
       allowKnowledgeReview: false,
       suggestedRequirement: null,
     };
@@ -297,9 +322,9 @@ export function answerVacancyQuestion(question: string, draft: VacancyDraft, con
     suggestion = "Formule a decisão que você quer tomar e indique o requisito ou bloco da Vaga envolvido. O Prisma responderá sem alterar a definição automaticamente.";
   }
 
-  const marketRelevant = /mercado|costum|diferenc|excessiv|anos?|benchmark|tend[eê]ncia/.test(normalizedQuestion);
+  const marketRelevant = shouldResearchVacancyMarket(question);
   const market = marketRelevant
-    ? "Esta resposta não consultou a Web. Pesquisa atual de mercado deve passar pelo Knowledge Agent, com fontes confiáveis, orçamento e revisão humana; o agente externo permanece desativado enquanto esses controles não estiverem ativos."
+    ? "Esta pergunta depende de informação atual de mercado. A pesquisa externa ainda não foi concluída."
     : "Esta resposta usou somente o contexto interno disponível. Nenhuma pesquisa externa foi realizada.";
   if (!context.knowledgeLookupAvailable) internal += " A consulta complementar à Knowledge não estava disponível, então a resposta preservou apenas o contexto já carregado.";
 
@@ -307,9 +332,17 @@ export function answerVacancyQuestion(question: string, draft: VacancyDraft, con
     internal,
     market,
     suggestion,
+    sources: [],
+    webSearched: false,
     allowKnowledgeReview: marketRelevant || /knowledge|conceito|compet[eê]ncia|tecnologia|ferramenta/.test(normalizedQuestion),
     suggestedRequirement: explicitAddition,
   };
+}
+
+export function shouldResearchVacancyMarket(question: string): boolean {
+  const normalizedQuestion = normalize(question);
+  return /\b(?:mercado|costum\w*|diferenc\w*|excessiv\w*|anos?|benchmark|tendencia\w*|atual\w*|recent\w*|hoje|popular\w*|demanda|escassez|salario\w*|faixa|remot\w*|setor|industria|cloud|nuvem)\b/.test(normalizedQuestion)
+    || /\bmais\s+(?:usad|utilizad)\w*/.test(normalizedQuestion);
 }
 
 export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCandidateMatch[] {

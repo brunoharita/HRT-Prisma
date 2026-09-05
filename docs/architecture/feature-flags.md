@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-O Knowledge Agent introduz a primeira ativação sensível server-side. `KNOWLEDGE_AGENT_ENABLED` só ativa pesquisa quando vale exatamente `true`; ausência, valor desconhecido, modelo ausente, secret ausente ou caps iguais a zero mantêm a chamada externa bloqueada. Structured ingestion, normalization e automação de reinterpretação permanecem dependentes do rollout real de schema/configuração e não de controles visuais no frontend.
+O Knowledge Agent introduz a primeira ativação sensível server-side. `KNOWLEDGE_AGENT_ENABLED` só ativa pesquisa quando vale exatamente `true`; ausência, valor desconhecido, modelo ausente, secret ausente ou caps iguais a zero mantêm a chamada externa bloqueada. Em Prisma-QA, flag, modelo e caps estão configurados para o modo contextual de Vagas, mas a ausência de `OPENAI_API_KEY` mantém o provider bloqueado. Structured ingestion, normalization e automação de reinterpretação permanecem dependentes do rollout real de schema/configuração e não de controles visuais no frontend.
 
 O M5.1C adiciona `M51C_AI_ITEM_GENERATION_ENABLED`. Ela é server-side, tem default `false` e somente libera a boundary depois de JWT, policy tenant-scoped, provider, modelo, secret, estimativa, teto por pedido, limite diário, cooldown e orçamento. Valor ausente ou diferente de `true` bloqueia a chamada externa sem afetar o uso do Item Bank existente. Owner: AI/operations/security. Audience: operadores autorizados. Rollback: definir `false`; requisições existentes e ledger são preservados.
 

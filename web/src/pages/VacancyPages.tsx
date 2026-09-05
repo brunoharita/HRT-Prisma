@@ -13,6 +13,7 @@ import {
   FileSearchOutlined,
   HistoryOutlined,
   InfoCircleOutlined,
+  LinkOutlined,
   PlusOutlined,
   RobotOutlined,
   SearchOutlined,
@@ -49,6 +50,7 @@ import {
   emptyVacancyDraft,
   inferRequirementCategory,
   newVacancyRequirement,
+  shouldResearchVacancyMarket,
   structureVacancyDescription,
   validateVacancyDraft,
   type VacancyCandidateMatch,
@@ -192,12 +194,33 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     let knowledge: Awaited<ReturnType<typeof vacancyService.suggestAdvisorKnowledge>> = [];
     try { knowledge = await vacancyService.suggestAdvisorKnowledge(activeMembership.organizationId, advisorQuestion); }
     catch { knowledgeLookupAvailable = false; }
-    setAdvisorAnswer(answerVacancyQuestion(advisorQuestion, draft, {
+    const answer = answerVacancyQuestion(advisorQuestion, draft, {
       otherVacancies: previous.map((item) => ({ title: item.title, area: item.area })),
       roles: roles.map((item) => ({ name: item.name, requirements: item.requirements.map((requirement) => requirement.label) })),
       knowledge: knowledge.map((item) => ({ label: item.label, scope: item.scope, source: item.source })),
       knowledgeLookupAvailable,
-    }));
+    });
+    if (shouldResearchVacancyMarket(advisorQuestion)) {
+      try {
+        const research = await vacancyService.researchAdvisorMarket({
+          organizationId: activeMembership.organizationId,
+          question: advisorQuestion,
+          roleTitle: draft.title,
+          area: draft.area,
+        });
+        setAdvisorAnswer({
+          ...answer,
+          market: [research.marketSummary, ...research.caveats].filter(Boolean).join(" "),
+          suggestion: research.recommendation || answer.suggestion,
+          sources: research.sources,
+          webSearched: true,
+        });
+      } catch (caught) {
+        setAdvisorAnswer({ ...answer, market: errorMessage(caught, "Não foi possível consultar o mercado agora. A análise interna foi preservada."), sources: [], webSearched: false });
+      }
+    } else {
+      setAdvisorAnswer(answer);
+    }
     setAdvisorLoading(false);
   }
   function addAdvisorRequirement() {
@@ -245,12 +268,13 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         <Input.TextArea onChange={(event) => update("contextItems", event.target.value ? [event.target.value] : [])} placeholder="Ex.: A área está sendo estruturada e precisa ganhar previsibilidade comercial. A pessoa terá autonomia para revisar processos e apoiar o crescimento da equipe." rows={5} value={draft.contextItems.join("\n\n")} />
       </PrismaCard>
       <PrismaCard className="prisma-vacancy-form-section prisma-vacancy-advisor" title={<span><RobotOutlined /> Assistente Prisma</span>}>
-        <Typography.Paragraph type="secondary">Pergunte livremente sobre a Vaga. O assistente usa o contexto interno permitido e deixa explícito quando o mercado não foi consultado. Nenhuma resposta altera dados automaticamente.</Typography.Paragraph>
+        <Typography.Paragraph type="secondary">Pergunte livremente sobre a Vaga. Quando a pergunta depender do mercado atual, o Prisma pesquisa fontes externas aprovadas e mostra as referências usadas. Não inclua nomes ou dados pessoais. Nenhuma resposta altera dados automaticamente.</Typography.Paragraph>
         <Input.TextArea autoSize={{ minRows: 3, maxRows: 7 }} onChange={(event) => setAdvisorQuestion(event.target.value)} onPressEnter={(event) => { if (!event.shiftKey) { event.preventDefault(); void askAdvisor(); } }} placeholder="Ex.: O que está faltando nesta vaga de Product Owner?" value={advisorQuestion} />
         <div className="prisma-vacancy-advisor-submit"><Typography.Text type="secondary">Enter para enviar, Shift + Enter para nova linha</Typography.Text><Button disabled={!advisorQuestion.trim()} icon={<BulbOutlined />} loading={advisorLoading} onClick={() => void askAdvisor()} type="primary">Perguntar ao Prisma</Button></div>
         {advisorAnswer ? <div className="prisma-vacancy-advisor-answer">
           <section><strong>Na sua empresa</strong><Typography.Paragraph>{advisorAnswer.internal}</Typography.Paragraph></section>
-          <section><strong>No mercado</strong><Typography.Paragraph>{advisorAnswer.market}</Typography.Paragraph></section>
+          <section><Space><strong>No mercado</strong><Tag color={advisorAnswer.webSearched ? "blue" : "default"}>{advisorAnswer.webSearched ? "Web pesquisada agora" : "Somente contexto interno"}</Tag></Space><Typography.Paragraph>{advisorAnswer.market}</Typography.Paragraph></section>
+          {advisorAnswer.sources.length ? <section className="prisma-vacancy-advisor-sources"><strong>Fontes consultadas</strong>{advisorAnswer.sources.map((source) => <a href={source.url} key={source.url} rel="noreferrer" target="_blank"><LinkOutlined /> {source.title} · {source.publisher}</a>)}</section> : null}
           <section><strong>Sugestão do Prisma</strong><Typography.Paragraph>{advisorAnswer.suggestion}</Typography.Paragraph></section>
           <footer><Button onClick={() => setAdvisorAnswer(null)}>Ignorar</Button>{advisorAnswer.suggestedRequirement ? <Button onClick={addAdvisorRequirement} type="primary">Adicionar à vaga</Button> : null}{advisorAnswer.allowKnowledgeReview ? <Button onClick={() => onNavigate("/knowledge")}>Revisar na Knowledge</Button> : null}</footer>
         </div> : null}

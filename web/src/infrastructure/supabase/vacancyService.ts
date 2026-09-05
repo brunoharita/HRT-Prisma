@@ -4,11 +4,13 @@ import {
   matchVacancyCandidate,
   sortVacancyMatches,
   type VacancyCandidateMatch,
+  type VacancyAdvisorMarketResearch,
   type VacancyDetail,
   type VacancyDraft,
   type VacancyRequirementDraft,
   type VacancySummary,
 } from "../../domain/vacancy.js";
+import { supabaseFunctionOperationError } from "../../domain/reviewOperationErrors.js";
 import type { Json } from "./database.types.js";
 import { supabase } from "./client.js";
 import { loadPublishedProfileCandidates } from "./profileDiscoveryService.js";
@@ -232,6 +234,21 @@ export const vacancyService = {
     }));
   },
 
+  async researchAdvisorMarket(input: { organizationId: string; question: string; roleTitle: string; area: string }): Promise<VacancyAdvisorMarketResearch> {
+    const { data, error } = await supabase.functions.invoke("knowledge-agent", { body: {
+      mode: "vacancy_advisor",
+      contract: "vacancy-advisor-request-1.0.0",
+      organizationId: input.organizationId,
+      question: input.question,
+      roleTitle: input.roleTitle,
+      area: input.area,
+      language: "pt-BR",
+    } });
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível consultar o mercado agora.");
+    if (!isVacancyAdvisorMarketResearch(data)) throw new Error("A pesquisa de mercado retornou um formato inválido e foi descartada.");
+    return data;
+  },
+
   async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true): Promise<VacancyCandidateMatch[]> {
     const candidates = await loadPublishedProfileCandidates(organizationId, includePrivateLocation);
     return sortVacancyMatches(candidates.map((candidate) => matchVacancyCandidate(vacancy, candidate)));
@@ -314,3 +331,24 @@ function humanizeVacancyError(error: PostgrestError): string {
 }
 
 function throwIfError(error: PostgrestError | null, message: string): void { if (error) throw new Error(message); }
+
+function isVacancyAdvisorMarketResearch(value: unknown): value is VacancyAdvisorMarketResearch {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const item = value as Record<string, unknown>;
+  return typeof item.marketSummary === "string"
+    && typeof item.recommendation === "string"
+    && Array.isArray(item.caveats) && item.caveats.every((caveat) => typeof caveat === "string")
+    && Array.isArray(item.sources) && item.sources.length > 0
+    && item.sources.every((source) => Boolean(source) && typeof source === "object" && !Array.isArray(source)
+      && typeof (source as Record<string, unknown>).url === "string"
+      && typeof (source as Record<string, unknown>).title === "string"
+      && typeof (source as Record<string, unknown>).publisher === "string"
+      && typeof (source as Record<string, unknown>).sourceClass === "string"
+      && typeof (source as Record<string, unknown>).retrievedAt === "string")
+    && typeof item.provider === "string"
+    && typeof item.model === "string"
+    && typeof item.promptVersion === "string"
+    && typeof item.outputSchemaVersion === "string"
+    && typeof item.sourcePolicyVersion === "string"
+    && typeof item.reused === "boolean";
+}

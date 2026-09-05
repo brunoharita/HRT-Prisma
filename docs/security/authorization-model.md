@@ -33,6 +33,7 @@ Publicação de perfil usa somente `publish_profile_review` para clientes autent
 - Regiões, vínculos e eventos M5 são legíveis somente por Super Admin, Owner, Admin e Recruiter autorizados. `authenticated` não possui DML direto; `record_profile_review_evidence` valida escopo, estado, lock, versão e coordenadas antes de qualquer mutação.
 - Aceites adaptativos usam `apply_profile_review_adaptive_suggestions`, que exige sessão revisora, tenant, review aberto, lock e payload metadata-only. Eventos, casos e padrões têm RLS; DML direto permanece revogado e padrão só é promovido pela aprovação integral.
 - Vagas, versões, requisitos, relações locais e avaliações M5.4 são legíveis apenas por Super Admin, Owner, Admin e Recruiter no escopo confirmado. `save_vacancy_definition` valida tenant e papel em `security definer` com `search_path` vazio; `member`, `anon`, referências cross-tenant e DML direto das tabelas versionadas falham fechados.
+- A pesquisa Web contextual de Vagas exige sessão ativa, Super Admin ou membership Owner, Admin ou Recruiter na organização informada e `allow_external_knowledge_enrichment = true`. O ledger possui RLS para os mesmos papéis; `anon`, Member, cross-tenant e DML direto falham fechados.
 
 ## Evidência conectada em QA
 

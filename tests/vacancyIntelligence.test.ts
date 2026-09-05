@@ -7,6 +7,7 @@ import {
   emptyVacancyDraft,
   matchVacancyCandidate,
   newVacancyRequirement,
+  shouldResearchVacancyMarket,
   sortVacancyMatches,
   structureVacancyDescription,
   type VacancyDetail,
@@ -152,6 +153,41 @@ test("Assistente Prisma separa contexto interno, mercado e sugestão sem fingir 
   assert.match(answer.internal, /contexto da vaga/i);
   assert.match(answer.market, /nenhuma pesquisa externa/i);
   assert.match(answer.suggestion, /momento da área/i);
+});
+
+test("Assistente Prisma identifica pergunta atual de mercado para Web Search", () => {
+  const question = "Quais são as linguagens mais utilizadas atualmente no desenvolvimento de sistemas em cloud?";
+  const answer = answerVacancyQuestion(question, vacancy("Engenheiro Cloud", ["Desenvolvimento cloud"]), {
+    otherVacancies: [], roles: [], knowledge: [], knowledgeLookupAvailable: true,
+  });
+  assert.equal(shouldResearchVacancyMarket(question), true);
+  assert.equal(answer.webSearched, false);
+  assert.match(answer.market, /depende de informação atual de mercado/i);
+});
+
+test("Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e auditoria fail-closed", async () => {
+  const [agent, migration, actorIndex, page] = await Promise.all([
+    readFile("supabase/functions/knowledge-agent/index.ts", "utf8"),
+    readFile("supabase/migrations/20260904235900_m54_vacancy_advisor_web_search.sql", "utf8"),
+    readFile("supabase/migrations/20260905023000_m54_vacancy_advisor_actor_index.sql", "utf8"),
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+  ]);
+  assert.match(agent, /payload\?\.mode === "vacancy_advisor"/);
+  assert.match(agent, /vacancy-advisor-request-1\.0\.0/);
+  assert.match(agent, /store: false/);
+  assert.match(agent, /tool_choice: "required"/);
+  assert.match(agent, /include: \["web_search_call\.action\.sources"\]/);
+  assert.match(agent, /rejectObviousPii\(\[input\.question, input\.roleTitle, input\.area\]/);
+  assert.match(agent, /requireVacancyAdvisorAuthority/);
+  assert.match(agent, /filters: \{ allowed_domains: allowedDomains \}/);
+  assert.match(migration, /create table public\.vacancy_advisor_research_runs/i);
+  assert.match(migration, /enable row level security/i);
+  assert.match(migration, /revoke all on table public\.vacancy_advisor_research_runs from public, anon, authenticated/i);
+  assert.match(migration, /github\.blog/i);
+  assert.match(migration, /survey\.stackoverflow\.co/i);
+  assert.match(actorIndex, /on public\.vacancy_advisor_research_runs \(actor_auth_user_id\)/i);
+  assert.match(page, /Web pesquisada agora/);
+  assert.match(page, /Fontes consultadas/);
 });
 
 test("migration M5.4 mantém tenant, versões e escrita autorizada fail-closed", async () => {
