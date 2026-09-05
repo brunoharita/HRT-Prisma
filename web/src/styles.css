@@ -5965,17 +5965,25 @@ textarea {
 .prisma-requirement-editor {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(200px, 1.5fr) minmax(150px, 0.8fr) auto minmax(190px, 1fr) auto;
-  gap: 8px;
-  align-items: center;
+  grid-template-columns: minmax(220px, 1fr) minmax(280px, auto) auto;
+  gap: 12px;
+  align-items: end;
   padding: 10px;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: #fbfdff;
 }
+.prisma-requirement-editor > label { display: grid; gap: 6px; min-width: 0; color: var(--prisma-text-muted); font-size: 0.78rem; font-weight: 650; }
+.prisma-vacancy-advisor > .ant-card-body { display: grid; gap: 12px; }
+.prisma-vacancy-advisor-submit { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.prisma-vacancy-advisor-answer { display: grid; gap: 10px; padding: 14px; border: 1px solid #d7ddff; border-radius: 12px; background: linear-gradient(135deg, #f8f7ff 0%, #f6faff 100%); }
+.prisma-vacancy-advisor-answer section { display: grid; gap: 4px; }
+.prisma-vacancy-advisor-answer section strong { color: #172554; }
+.prisma-vacancy-advisor-answer .ant-typography { margin: 0; }
+.prisma-vacancy-advisor-answer footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding-top: 2px; }
+.prisma-vacancy-context-text { margin: 0 !important; white-space: pre-line; }
 .prisma-vacancy-save-bar { position: sticky; z-index: 5; bottom: 12px; margin-top: 16px; box-shadow: 0 14px 30px rgba(3, 21, 49, 0.12); }
 .prisma-vacancy-save-bar > .ant-card-body { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.prisma-vacancy-advisor-answer { margin-top: 12px; }
 
 .prisma-vacancy-assist-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr); gap: 16px; margin-top: 16px; }
 .prisma-vacancy-assist-grid > .ant-card { min-width: 0; }
@@ -6022,10 +6030,7 @@ textarea {
 
 @media (max-width: 1100px) {
   .prisma-vacancy-start-card > .ant-card-body { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .prisma-requirement-editor { grid-template-columns: minmax(180px, 1fr) minmax(140px, 0.7fr); }
-  .prisma-requirement-editor > :nth-child(3),
-  .prisma-requirement-editor > :nth-child(4) { grid-column: span 1; }
-  .prisma-requirement-editor > :last-child { position: absolute; right: 34px; }
+  .prisma-requirement-editor { grid-template-columns: minmax(180px, 1fr) minmax(260px, auto) auto; }
   .prisma-match-evidence-grid { grid-template-columns: 1fr; }
 }
 
@@ -6047,9 +6052,11 @@ textarea {
   .prisma-vacancy-save-bar .ant-space-item { flex: 1; }
   .prisma-vacancy-save-bar .ant-btn { width: 100%; }
   .prisma-requirement-editor { position: relative; grid-template-columns: 1fr; padding-right: 46px; }
-  .prisma-requirement-editor > :nth-child(3),
-  .prisma-requirement-editor > :nth-child(4) { grid-column: auto; }
-  .prisma-requirement-editor > :last-child { top: 8px; right: 8px; }
+  .prisma-requirement-editor > :last-child { position: absolute; top: 8px; right: 8px; }
+  .prisma-vacancy-advisor-submit { align-items: stretch; flex-direction: column; }
+  .prisma-vacancy-advisor-submit .ant-btn { width: 100%; }
+  .prisma-vacancy-advisor-answer footer { align-items: stretch; flex-direction: column; }
+  .prisma-vacancy-advisor-answer footer .ant-btn { width: 100%; }
   .prisma-vacancy-match-card article > header { grid-template-columns: auto auto 1fr; }
   .prisma-vacancy-match-card article > header > .ant-space { grid-column: 1 / -1; width: 100%; flex-direction: row; }
   .prisma-vacancy-match-card article > header > .ant-space .ant-space-item { flex: 1; }

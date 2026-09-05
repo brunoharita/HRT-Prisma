@@ -12,6 +12,7 @@ import {
   ExclamationCircleOutlined,
   FileSearchOutlined,
   HistoryOutlined,
+  InfoCircleOutlined,
   PlusOutlined,
   RobotOutlined,
   SearchOutlined,
@@ -38,20 +39,23 @@ import {
   Table,
   Tabs,
   Tag,
+  Tooltip,
   Typography,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   applyStructureSuggestions,
+  answerVacancyQuestion,
   emptyVacancyDraft,
+  inferRequirementCategory,
   newVacancyRequirement,
   structureVacancyDescription,
   validateVacancyDraft,
   type VacancyCandidateMatch,
+  type VacancyAdvisorAnswer,
   type VacancyDetail,
   type VacancyDraft,
   type VacancyMatchStatus,
-  type VacancyRequirementCategory,
   type VacancyRequirementDraft,
   type VacancyStructureSuggestion,
   type VacancySummary,
@@ -127,7 +131,8 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [error, setError] = useState<string | null>(null);
   const [savedLocally, setSavedLocally] = useState(false);
   const [advisorQuestion, setAdvisorQuestion] = useState("");
-  const [advisorAnswer, setAdvisorAnswer] = useState<string | null>(null);
+  const [advisorAnswer, setAdvisorAnswer] = useState<VacancyAdvisorAnswer | null>(null);
+  const [advisorLoading, setAdvisorLoading] = useState(false);
 
   useEffect(() => {
     let current = true;
@@ -177,6 +182,30 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     } catch (caught) { setError(errorMessage(caught, "Não foi possível salvar a Vaga.")); }
     finally { setSaving(false); }
   }
+  async function askAdvisor() {
+    if (!advisorQuestion.trim()) {
+      setAdvisorAnswer(answerVacancyQuestion("", draft, { otherVacancies: previous, roles: [], knowledge: [], knowledgeLookupAvailable: true }));
+      return;
+    }
+    setAdvisorLoading(true);
+    let knowledgeLookupAvailable = true;
+    let knowledge: Awaited<ReturnType<typeof vacancyService.suggestAdvisorKnowledge>> = [];
+    try { knowledge = await vacancyService.suggestAdvisorKnowledge(activeMembership.organizationId, advisorQuestion); }
+    catch { knowledgeLookupAvailable = false; }
+    setAdvisorAnswer(answerVacancyQuestion(advisorQuestion, draft, {
+      otherVacancies: previous.map((item) => ({ title: item.title, area: item.area })),
+      roles: roles.map((item) => ({ name: item.name, requirements: item.requirements.map((requirement) => requirement.label) })),
+      knowledge: knowledge.map((item) => ({ label: item.label, scope: item.scope, source: item.source })),
+      knowledgeLookupAvailable,
+    }));
+    setAdvisorLoading(false);
+  }
+  function addAdvisorRequirement() {
+    const proposed = advisorAnswer?.suggestedRequirement;
+    if (!proposed || draft.requirements.some((item) => normalize(item.label) === normalize(proposed.label))) return;
+    update("requirements", [...draft.requirements, { ...newVacancyRequirement(proposed.label), importance: proposed.importance }]);
+    setAdvisorAnswer(null);
+  }
 
   if (loading) return <PrismaPage><PrismaCard><Skeleton active paragraph={{ rows: 18 }} /></PrismaCard></PrismaPage>;
   return <PrismaPage className="prisma-vacancy-editor-page">
@@ -207,15 +236,24 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         <StringListEditor label="4. Resultados esperados" onChange={(value) => update("expectedOutcomes", value)} placeholder="O que esperamos que esta Pessoa entregue?" values={draft.expectedOutcomes} />
       </div>
       <PrismaCard className="prisma-vacancy-form-section" title="5. O que a Pessoa precisa trazer">
-        <Typography.Paragraph type="secondary">Classifique somente o que importa para esta Vaga. Não há pesos ou notas.</Typography.Paragraph>
+        <Typography.Paragraph type="secondary">Informe o requisito e se ele é obrigatório ou desejável. O Prisma procura evidências em todo o Perfil publicado e explica onde encontrou.</Typography.Paragraph>
         <div className="prisma-requirement-editor-list">{draft.requirements.map((item, index) => <RequirementEditor item={item} key={item.stableId} onChange={(next) => update("requirements", draft.requirements.map((current, currentIndex) => currentIndex === index ? next : current))} onRemove={() => update("requirements", draft.requirements.filter((_, currentIndex) => currentIndex !== index))} />)}</div>
         <Button icon={<PlusOutlined />} onClick={() => update("requirements", [...draft.requirements, newVacancyRequirement()])} type="link">Adicionar requisito</Button>
       </PrismaCard>
-      <PrismaCard className="prisma-vacancy-form-section" title="6. Contexto"><Select mode="tags" onChange={(value) => update("contextItems", value)} open={false} placeholder="Ex.: B2B, Enterprise, expansão regional" tokenSeparators={[",", ";"]} value={draft.contextItems} /></PrismaCard>
-      <PrismaCard className="prisma-vacancy-form-section" title={<span><BulbOutlined /> Pergunta pontual ao Prisma</span>}>
-        <Typography.Paragraph type="secondary">Use esta orientação local para revisar um ponto da definição. Ela não altera campos nem envia dados a terceiros.</Typography.Paragraph>
-        <Input.Search enterButton="Analisar pergunta" onChange={(event) => setAdvisorQuestion(event.target.value)} onSearch={() => setAdvisorAnswer(answerVacancyQuestion(advisorQuestion, draft))} placeholder="Ex.: Há requisitos demais para esta Vaga?" value={advisorQuestion} />
-        {advisorAnswer ? <Alert className="prisma-vacancy-advisor-answer" title={advisorAnswer} showIcon type="info" /> : null}
+      <PrismaCard className="prisma-vacancy-form-section" title={<span>6. Contexto da vaga <Tooltip title="Use este campo para explicar o cenário da vaga: o momento da área, o desafio da posição e o ambiente em que essa Pessoa irá atuar. Requisitos profissionais ficam no item 5."><InfoCircleOutlined aria-label="Para que serve o contexto da vaga?" /></Tooltip></span>}>
+        <Typography.Paragraph type="secondary"><strong>Para que serve?</strong> Use este campo para explicar o cenário da vaga: o momento da área, o desafio da posição e o ambiente em que essa Pessoa irá atuar. Não use este espaço para requisitos do candidato; esses ficam em “O que a Pessoa precisa trazer”.</Typography.Paragraph>
+        <Input.TextArea onChange={(event) => update("contextItems", event.target.value ? [event.target.value] : [])} placeholder="Ex.: A área está sendo estruturada e precisa ganhar previsibilidade comercial. A pessoa terá autonomia para revisar processos e apoiar o crescimento da equipe." rows={5} value={draft.contextItems.join("\n\n")} />
+      </PrismaCard>
+      <PrismaCard className="prisma-vacancy-form-section prisma-vacancy-advisor" title={<span><RobotOutlined /> Assistente Prisma</span>}>
+        <Typography.Paragraph type="secondary">Pergunte livremente sobre a Vaga. O assistente usa o contexto interno permitido e deixa explícito quando o mercado não foi consultado. Nenhuma resposta altera dados automaticamente.</Typography.Paragraph>
+        <Input.TextArea autoSize={{ minRows: 3, maxRows: 7 }} onChange={(event) => setAdvisorQuestion(event.target.value)} onPressEnter={(event) => { if (!event.shiftKey) { event.preventDefault(); void askAdvisor(); } }} placeholder="Ex.: O que está faltando nesta vaga de Product Owner?" value={advisorQuestion} />
+        <div className="prisma-vacancy-advisor-submit"><Typography.Text type="secondary">Enter para enviar, Shift + Enter para nova linha</Typography.Text><Button disabled={!advisorQuestion.trim()} icon={<BulbOutlined />} loading={advisorLoading} onClick={() => void askAdvisor()} type="primary">Perguntar ao Prisma</Button></div>
+        {advisorAnswer ? <div className="prisma-vacancy-advisor-answer">
+          <section><strong>Na sua empresa</strong><Typography.Paragraph>{advisorAnswer.internal}</Typography.Paragraph></section>
+          <section><strong>No mercado</strong><Typography.Paragraph>{advisorAnswer.market}</Typography.Paragraph></section>
+          <section><strong>Sugestão do Prisma</strong><Typography.Paragraph>{advisorAnswer.suggestion}</Typography.Paragraph></section>
+          <footer><Button onClick={() => setAdvisorAnswer(null)}>Ignorar</Button>{advisorAnswer.suggestedRequirement ? <Button onClick={addAdvisorRequirement} type="primary">Adicionar à vaga</Button> : null}{advisorAnswer.allowKnowledgeReview ? <Button onClick={() => onNavigate("/knowledge")}>Revisar na Knowledge</Button> : null}</footer>
+        </div> : null}
       </PrismaCard>
       <PrismaCard className="prisma-vacancy-save-bar"><Checkbox checked={draft.saveAsRole} onChange={(event) => update("saveAsRole", event.target.checked)}>Usar esta definição como referência da empresa</Checkbox><Space><Button onClick={() => onNavigate(vacancyId ? `/vacancies/${vacancyId}` : "/vacancies")}>Cancelar</Button><Button htmlType="submit" loading={saving} type="primary">Salvar vaga</Button></Space></PrismaCard>
     </Form>
@@ -268,7 +306,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
     <div className="prisma-vacancy-detail-header"><div><Space wrap><Typography.Title level={1}>{detail.title}</Typography.Title><OccupancyTag occupancy={detail.occupancy} /></Space><div className="prisma-vacancy-meta"><span><ApartmentOutlined /> {detail.area || "Área não informada"}</span><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span>{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}<span>Definição v{detail.version}</span></div></div><Space wrap><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar vaga</Button><Button icon={<TeamOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button></Space></div>
     {error ? <Alert showIcon title={error} type="error" /> : null}
     <Tabs items={[
-      { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack"><DetailSection icon={<AimOutlined />} title="Missão da vaga"><Typography.Paragraph>{detail.mission}</Typography.Paragraph></DetailSection><DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /><DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /><PrismaCard title={<span><StarOutlined /> O que procuramos</span>}><div className="prisma-vacancy-requirement-groups"><RequirementTags items={required} label="Obrigatório" /><RequirementTags items={desired} label="Desejável" /></div></PrismaCard><DetailTags icon={<EnvironmentOutlined />} items={detail.contextItems} title="Contexto" /></div> },
+      { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack"><DetailSection icon={<AimOutlined />} title="Missão da vaga"><Typography.Paragraph>{detail.mission}</Typography.Paragraph></DetailSection><DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /><DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /><PrismaCard title={<span><StarOutlined /> O que procuramos</span>}><div className="prisma-vacancy-requirement-groups"><RequirementTags items={required} label="Obrigatório" /><RequirementTags items={desired} label="Desejável" /></div></PrismaCard><DetailText icon={<EnvironmentOutlined />} items={detail.contextItems} title="Contexto da vaga" /></div> },
       { key: "people", label: "Pessoas encontradas", children: <Empty description="A descoberta é calculada sob demanda para não carregar todos os Perfis na abertura."><Button onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">Encontrar pessoas</Button></Empty> },
       { key: "history", label: "Histórico", children: <PrismaCard><List dataSource={history} locale={{ emptyText: "Nenhuma alteração registrada." }} renderItem={(item) => <List.Item><List.Item.Meta avatar={<HistoryOutlined />} title={historyLabel(item.type)} description={`${item.version ? `Definição v${item.version} · ` : ""}${formatDate(item.createdAt)}`} /></List.Item>} /></PrismaCard> },
     ]} />
@@ -342,7 +380,7 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
 }
 
 function RequirementEditor({ item, onChange, onRemove }: { item: VacancyRequirementDraft; onChange: (item: VacancyRequirementDraft) => void; onRemove: () => void }) {
-  return <div className="prisma-requirement-editor"><Input aria-label="Requisito" onChange={(event) => onChange({ ...item, label: event.target.value, observedTerm: event.target.value })} placeholder="Ex.: Gestão de pipeline" value={item.label} /><Select aria-label="Categoria do requisito" onChange={(value) => onChange({ ...item, category: value })} options={requirementCategoryOptions} value={item.category} /><Segmented onChange={(value) => onChange({ ...item, importance: value as VacancyRequirementDraft["importance"] })} options={[{ label: "Obrigatório", value: "required" }, { label: "Desejável", value: "desired" }]} value={item.importance} /><Select aria-label="Sinais relacionados confirmados" mode="tags" onChange={(values) => onChange({ ...item, relatedSignals: values.map((label) => ({ label, conceptId: null, origin: "operator" })) })} open={false} placeholder="Sinais relacionados, se confirmados" tokenSeparators={[",", ";"]} value={item.relatedSignals.map((signal) => signal.label)} /><Popconfirm description="Remover este requisito da definição atual?" onConfirm={onRemove} title="Remover requisito"><Button aria-label="Remover requisito" danger icon={<DeleteOutlined />} type="text" /></Popconfirm></div>;
+  return <div className="prisma-requirement-editor"><label><span>Requisito</span><Input aria-label="Requisito" onChange={(event) => onChange({ ...item, label: event.target.value, observedTerm: event.target.value, category: inferRequirementCategory(event.target.value), conceptId: null, conceptLabel: null, relatedSignals: [] })} placeholder="Ex.: Gestão de pipeline" value={item.label} /></label><label><span>Importância</span><Segmented block onChange={(value) => onChange({ ...item, importance: value as VacancyRequirementDraft["importance"] })} options={[{ label: "Obrigatório", value: "required" }, { label: "Desejável", value: "desired" }]} value={item.importance} /></label><Popconfirm description="Remover este requisito da definição atual?" onConfirm={onRemove} title="Remover requisito"><Button aria-label="Remover requisito" danger icon={<DeleteOutlined />} type="text" /></Popconfirm></div>;
 }
 
 function StringListEditor({ label, onChange, placeholder, values }: { label: string; onChange: (values: string[]) => void; placeholder: string; values: string[] }) {
@@ -369,7 +407,7 @@ function MatchStatusTag({ status }: { status: VacancyMatchStatus }) { const map 
 function StatusIcon({ status }: { status: VacancyMatchStatus }) { return status === "met" ? <CheckCircleOutlined className="is-success" /> : status === "no_evidence" ? <ExclamationCircleOutlined className="is-error" /> : <ClockCircleOutlined className="is-warning" />; }
 function DetailSection({ children, icon, title }: { children: React.ReactNode; icon: React.ReactNode; title: string }) { return <PrismaCard title={<span>{icon} {title}</span>}>{children}</PrismaCard>; }
 function DetailList({ icon, items, title }: { icon: React.ReactNode; items: string[]; title: string }) { return <DetailSection icon={icon} title={title}>{items.length ? <ul className="prisma-vacancy-editorial-list">{items.map((item) => <li key={item}>{item}</li>)}</ul> : <Typography.Text type="secondary">Não informado.</Typography.Text>}</DetailSection>; }
-function DetailTags({ icon, items, title }: { icon: React.ReactNode; items: string[]; title: string }) { return <DetailSection icon={icon} title={title}><Space wrap>{items.map((item) => <Tag key={item}>{item}</Tag>)}</Space></DetailSection>; }
+function DetailText({ icon, items, title }: { icon: React.ReactNode; items: string[]; title: string }) { return <DetailSection icon={icon} title={title}>{items.length ? <Typography.Paragraph className="prisma-vacancy-context-text">{items.join("\n\n")}</Typography.Paragraph> : <Typography.Text type="secondary">Não informado.</Typography.Text>}</DetailSection>; }
 function RequirementTags({ items, label }: { items: VacancyRequirementDraft[]; label: string }) { return <section><strong>{label}</strong><Space wrap>{items.length ? items.map((item) => <Tag color={label === "Obrigatório" ? "purple" : "blue"} key={item.stableId}>{item.label}</Tag>) : <Typography.Text type="secondary">Nenhum</Typography.Text>}</Space></section>; }
 
 function vacancyColumns(onNavigate: (path: string) => void): ColumnsType<VacancySummary> { return [
@@ -386,32 +424,9 @@ function comparisonColumns(matches: VacancyCandidateMatch[]): ColumnsType<{ key:
   { title: matches[1]?.candidate.fullName ?? "Pessoa B", dataIndex: "right", key: "right", render: (value) => value ? <Space orientation="vertical" size={2}><MatchStatusTag status={value.status} /><small>{value.evidence[0]?.label ?? "Nenhuma evidência publicada"}</small></Space> : null },
 ]; }
 
-const requirementCategoryOptions = [
-  ["experience", "Experiência"], ["competency", "Competência"], ["knowledge", "Conhecimento"], ["technology", "Tecnologia/ferramenta"],
-  ["education", "Formação"], ["certification", "Certificação"], ["language", "Idioma"], ["context", "Contexto"],
-].map(([value, label]) => ({ value: value as VacancyRequirementCategory, label }));
 const workArrangementOptions = [{ value: "onsite", label: "Presencial" }, { value: "hybrid", label: "Híbrido" }, { value: "remote", label: "Remoto" }, { value: "flexible", label: "Flexível" }];
 
-function answerVacancyQuestion(question: string, draft: VacancyDraft): string {
-  const normalizedQuestion = normalize(question);
-  if (!normalizedQuestion) return "Escreva uma pergunta objetiva sobre a definição desta Vaga.";
-  if (/requisit|exig[eê]ncia|demais|muitos/.test(normalizedQuestion)) {
-    const required = draft.requirements.filter((item) => item.importance === "required").length;
-    const requirementLabel = required === 1 ? "requisito obrigatório" : "requisitos obrigatórios";
-    return required > 6
-      ? `Há ${required} ${requirementLabel}. Vale revisar quais são realmente indispensáveis e mover diferenciais para Desejável.`
-      : `Há ${required} ${requirementLabel}. A quantidade não indica um problema por si só; confirme se cada item é indispensável para esta necessidade específica.`;
-  }
-  if (/t[ií]tulo|nome/.test(normalizedQuestion)) return draft.title.trim()
-    ? `O título atual é “${draft.title.trim()}”. Verifique se ele representa a necessidade específica sem misturar nível, área e contexto desnecessariamente.`
-    : "O título ainda não foi informado. Prefira o nome reconhecido da função e mantenha contexto específico nos demais campos.";
-  if (/miss[aã]o|prop[oó]sito/.test(normalizedQuestion)) return draft.mission.trim()
-    ? "A missão está preenchida. Confirme se ela descreve propósito e impacto, sem repetir uma lista de atividades."
-    : "A missão ainda está vazia. Resuma em uma frase por que esta posição existe e qual resultado principal ela viabiliza.";
-  return "Posso orientar sobre título, missão ou quantidade de requisitos usando apenas os campos atuais. Outras análises exigem uma pergunta mais específica ou evidência adicional.";
-}
-
-function groupSuggestions(items: VacancyStructureSuggestion[]): Record<string, VacancyStructureSuggestion[]> { const labels: Record<string, string> = { mission: "Missão", responsibility: "Responsabilidades", outcome: "Resultados esperados", experience: "Experiência", competency: "Competências", knowledge: "Conhecimentos", technology: "Tecnologias e ferramentas", education: "Formação", certification: "Certificações", language: "Idiomas", context: "Contexto" }; return items.reduce<Record<string, VacancyStructureSuggestion[]>>((groups, item) => { const key = labels[item.category] ?? item.category; (groups[key] ??= []).push(item); return groups; }, {}); }
+function groupSuggestions(items: VacancyStructureSuggestion[]): Record<string, VacancyStructureSuggestion[]> { const labels: Record<string, string> = { mission: "Missão", responsibility: "Responsabilidades", outcome: "Resultados esperados", experience: "O que a Pessoa precisa trazer", competency: "O que a Pessoa precisa trazer", knowledge: "O que a Pessoa precisa trazer", technology: "O que a Pessoa precisa trazer", education: "O que a Pessoa precisa trazer", certification: "O que a Pessoa precisa trazer", language: "O que a Pessoa precisa trazer", context: "Contexto da vaga" }; return items.reduce<Record<string, VacancyStructureSuggestion[]>>((groups, item) => { const key = labels[item.category] ?? item.category; (groups[key] ??= []).push(item); return groups; }, {}); }
 function inferTitle(value: string): string { return value.match(/(?:busca(?:mos)?|procuramos)\s+(?:de\s+)?(?:um|uma)\s+([^,.]+)/i)?.[1]?.trim() ?? ""; }
 function historyLabel(value: string): string { return ({ created: "Vaga criada", definition_updated: "Definição atualizada", occupancy_updated: "Ocupação atualizada", match_evaluated: "Aderência avaliada" } as Record<string, string>)[value] ?? "Atualização registrada"; }
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); }

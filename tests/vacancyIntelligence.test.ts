@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   applyStructureSuggestions,
+  answerVacancyQuestion,
   emptyVacancyDraft,
   matchVacancyCandidate,
   newVacancyRequirement,
@@ -97,6 +98,20 @@ test("ausência de idioma permanece sem evidência suficiente e nunca vira fato 
   assert.doesNotMatch(result.requirements[0]?.explanation ?? "", /não possui inglês|não sabe inglês/i);
 });
 
+test("requisito procura evidência em todo o Perfil e explica as fontes sem depender da categoria interna", () => {
+  const need = vacancy("Analista ERP", ["SAP"]);
+  need.requirements[0]!.category = "language";
+  const person = candidate("sap", "Pessoa SAP", profile({
+    competencies: ["SAP"],
+    experiences: [{ id: "exp-sap", source: "human", role: "Analista de Sistemas", organization: "Empresa", period: "2024", description: "Implantação do SAP", evidenceText: "Projeto SAP", page: 1 }],
+  }));
+  const result = matchVacancyCandidate(need, person);
+  assert.equal(result.requirements[0]?.status, "met");
+  assert.deepEqual(new Set(result.requirements[0]?.evidence.map((item) => item.source)), new Set(["Competências, conhecimentos e ferramentas", "Experiência profissional"]));
+  assert.match(result.requirements[0]?.explanation ?? "", /Competências, conhecimentos e ferramentas/);
+  assert.match(result.requirements[0]?.explanation ?? "", /Experiência profissional/);
+});
+
 test("ordenação é determinística e explicável sem score exposto", () => {
   const need = vacancy("Gerente Comercial", ["Negociação", "Salesforce"]);
   const one = candidate("one", "Ana", profile({ competencies: ["Negociação"] }));
@@ -107,7 +122,7 @@ test("ordenação é determinística e explicável sem score exposto", () => {
 });
 
 test("estruturação livre confirma itens explícitos e deixa inferência derivada pendente", () => {
-  const suggestions = structureVacancyDescription("Buscamos um Gerente Comercial para liderar o time de vendas B2B enterprise e gerenciar o pipeline. Salesforce é desejável. Trabalho híbrido.");
+  const suggestions = structureVacancyDescription("Buscamos um Gerente Comercial para liderar o time de vendas B2B enterprise e gerenciar o pipeline. Salesforce é desejável. A área está em processo de estruturação.");
   assert.equal(suggestions.find((item) => item.label === "Salesforce")?.selected, true);
   assert.equal(suggestions.find((item) => item.label === "Salesforce")?.importance, "desired");
   assert.equal(suggestions.find((item) => item.label === "Liderança de equipes")?.origin, "derived");
@@ -115,7 +130,28 @@ test("estruturação livre confirma itens explícitos e deixa inferência deriva
   const draft = applyStructureSuggestions(emptyVacancyDraft(), suggestions);
   assert.ok(draft.requirements.some((item) => item.label === "Vendas B2B enterprise"));
   assert.ok(!draft.requirements.some((item) => item.label === "Liderança de equipes"));
-  assert.ok(draft.contextItems.includes("Híbrido"));
+  assert.ok(draft.contextItems.some((item) => /estruturação/i.test(item)));
+});
+
+test("estruturação não expõe contexto profissional como cenário da vaga", () => {
+  const suggestions = structureVacancyDescription("Buscamos experiência no mercado farmacêutico. A área está em processo de estruturação e possui baixa previsibilidade.");
+  assert.equal(suggestions.find((item) => item.label === "Mercado farmacêutico")?.category, "experience");
+  assert.ok(suggestions.some((item) => item.category === "context" && /estruturação/i.test(item.label)));
+  assert.ok(suggestions.some((item) => item.category === "context" && /previsibilidade/i.test(item.label)));
+});
+
+test("Assistente Prisma separa contexto interno, mercado e sugestão sem fingir pesquisa externa", () => {
+  const draft = vacancy("Product Owner", ["Discovery de produto"]);
+  draft.contextItems = [];
+  const answer = answerVacancyQuestion("O que está faltando nesta vaga de Product Owner?", draft, {
+    otherVacancies: [{ title: "Product Manager", area: "Produto" }],
+    roles: [{ name: "Product Owner", requirements: ["Discovery de produto"] }],
+    knowledge: [{ label: "Product Owner", scope: "global", source: "CBO" }],
+    knowledgeLookupAvailable: true,
+  });
+  assert.match(answer.internal, /contexto da vaga/i);
+  assert.match(answer.market, /nenhuma pesquisa externa/i);
+  assert.match(answer.suggestion, /momento da área/i);
 });
 
 test("migration M5.4 mantém tenant, versões e escrita autorizada fail-closed", async () => {

@@ -30,6 +30,14 @@ O advisor de performance encerrou sem achado novo de chave estrangeira sem cober
 
 O gate `pnpm run validate` aprovou lint de 322 arquivos, fundação, Context Pack, dois typechecks, build web, 249 testes técnicos, 19 casos golden e demonstração `VERTICAL_SLICE_OK`.
 
+## Ajustes pontuais M5.4
+
+O refinamento posterior preserva o schema e as migrations ativas. A interface passa a pedir somente requisito e importância; a classificação técnica continua interna e não limita o matching. Testes determinísticos confirmam que uma categoria interna incompatível não impede evidência em experiência, competências, conhecimentos, ferramentas, formação, certificações, idiomas, áreas personalizadas e Knowledge, e que a explicação lista as áreas encontradas.
+
+O Contexto da vaga usa texto aberto opcional, ajuda humana e placeholder de cenário. A estruturação determinística deixa mercado, tecnologia e experiência no bloco de requisitos e propõe como contexto somente situações da área ou posição. O Assistente Prisma aceita pergunta livre, consulta Vagas, funções e Knowledge permitidas, separa `Na sua empresa`, `No mercado` e `Sugestão do Prisma`, e declara quando a Web não foi consultada. Ações continuam humanas; pesquisa externa permanece no Knowledge Agent existente e desativado enquanto flag, modelo, secret e orçamento não estiverem ativos.
+
+O novo gate completo aprovou 322 arquivos no lint, fundação, Context Pack, dois typechecks, build web, 252 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno confirmou ausência de categoria e taxonomia no editor, requisito mais importância como únicas entradas, help e texto livre no Contexto da vaga, pergunta aberta e resposta nos três blocos. Nenhuma Vaga foi salva e o rascunho sintético do navegador foi limpo. O viewport do harness permaneceu fixo; responsividade adicional foi revisada no CSS e no build.
+
 ## Smoke autenticado
 
 Na sessão Super Admin já existente, o navegador interno em `1280x720` validou:

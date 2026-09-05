@@ -31,6 +31,10 @@ export interface VacancyReferenceSuggestion {
   source: string | null;
 }
 
+export interface VacancyAdvisorKnowledgeSuggestion extends VacancyReferenceSuggestion {
+  conceptType: string;
+}
+
 export interface VacancyHistoryItem {
   id: number;
   type: string;
@@ -210,6 +214,19 @@ export const vacancyService = {
     return (result.data ?? []).filter((item) => item.concept_type === "occupation").map((item) => ({
       conceptId: item.concept_id,
       label: item.canonical_label,
+      scope: item.concept_scope,
+      source: item.source_name,
+    }));
+  },
+
+  async suggestAdvisorKnowledge(organizationId: string, query: string): Promise<VacancyAdvisorKnowledgeSuggestion[]> {
+    if (query.trim().length < 2) return [];
+    const result = await supabase.rpc("suggest_knowledge_concepts", { p_organization_id: organizationId, p_query: query.trim(), p_limit: 8 });
+    throwIfError(result.error, "Não foi possível consultar a Knowledge para esta pergunta.");
+    return (result.data ?? []).map((item) => ({
+      conceptId: item.concept_id,
+      label: item.canonical_label,
+      conceptType: item.concept_type,
       scope: item.concept_scope,
       source: item.source_name,
     }));

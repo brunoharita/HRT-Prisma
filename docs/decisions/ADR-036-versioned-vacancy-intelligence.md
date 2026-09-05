@@ -10,7 +10,7 @@ O schema já distinguia função, posição e Vaga, e o Prisma já possuía Perf
 
 ## Decisão
 
-Estender a fundação existente com snapshots imutáveis de Vaga, requisitos estáveis por versão, relações específicas confirmadas e ocupante opcional da posição. Toda escrita passa pela RPC tenant-scoped. A busca reutiliza profile-discovery e Knowledge; sinais relacionados não se tornam equivalência canônica nem atendem automaticamente um requisito. A interface cobre as seis superfícies do M5.4 e proíbe score, ranking e vencedor.
+Estender a fundação existente com snapshots imutáveis de Vaga, requisitos estáveis por versão, relações específicas confirmadas e ocupante opcional da posição. Toda escrita passa pela RPC tenant-scoped. A busca reutiliza profile-discovery e Knowledge; o operador informa somente requisito e importância, enquanto a categoria técnica permanece interna e não restringe as áreas consultadas no Perfil. Sinais relacionados não se tornam equivalência canônica nem atendem automaticamente um requisito. O assistente contextual reaproveita Vagas, funções e Knowledge acessíveis, e qualquer pesquisa Web permanece no Knowledge Agent governado. A interface cobre as seis superfícies do M5.4 e proíbe score, ranking e vencedor.
 
 ## Alternativas avaliadas
 
@@ -25,6 +25,9 @@ Estender a fundação existente com snapshots imutáveis de Vaga, requisitos est
 - Vaga, posição, função e referência ocupacional permanecem distintas.
 - Alteração material cria nova versão e avaliações futuras apontam para ela.
 - Relações Figma/UX e equivalentes exigem confirmação e ficam limitadas à versão.
+- Cada requisito é procurado em todo o Perfil publicado e a explicação identifica as áreas que sustentam a evidência.
+- Contexto da Vaga descreve cenário e desafio em texto livre; requisitos profissionais permanecem no bloco próprio.
+- O assistente não altera Vaga ou Knowledge automaticamente e não apresenta pesquisa de mercado como realizada quando o Knowledge Agent está desativado.
 - `member`, `anon` e outro tenant não recebem acesso às Vagas ou avaliações.
 - O histórico cresce de forma append-only; paginação e retenção podem ser otimizadas quando o volume real justificar.
 
