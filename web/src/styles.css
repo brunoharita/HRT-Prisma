@@ -4766,25 +4766,30 @@ textarea {
 .prisma-canonical-evidence-list article > div { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: #64748b; font-size: 0.8rem; }
 .prisma-canonical-evidence-list blockquote { margin: 9px 0 0; padding-left: 12px; color: #526078; border-left: 2px solid #a8c2f6; }
 
-.prisma-profile-search-layout { display: grid; grid-template-columns: minmax(360px, 0.82fr) minmax(0, 1.5fr); align-items: start; gap: 20px; }
-.prisma-profile-search-filters { display: grid; gap: 12px; }
-.prisma-search-filter-section .ant-card-head { min-height: 46px; }
-.prisma-search-filter-section .ant-card-head-title > span { display: flex; align-items: center; gap: 8px; color: #1a2943; }
-.prisma-search-filter-section .ant-card-head-title .anticon { color: #2563eb; }
-.prisma-search-filter-section .ant-card-body { display: grid; gap: 12px; padding: 15px 17px; }
+.prisma-profile-search-back { margin: -6px 0 8px -12px; }
+.prisma-profile-search-workspace > .ant-card-head { min-height: 52px; }
+.prisma-profile-search-workspace > .ant-card-body { padding: 0; }
+.prisma-profile-search-workspace-title { display: inline-flex; align-items: center; gap: 8px; color: #1a2943; }
+.prisma-profile-search-workspace-title .anticon { color: #2563eb; }
+.prisma-profile-search-filter-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 18px; }
+.prisma-search-filter-section { min-width: 0; overflow: hidden; border: 1px solid #e2e8f2; border-radius: 12px; background: #f9fbfe; }
+.prisma-search-filter-section.is-wide { grid-column: span 2; }
+.prisma-search-filter-section > header { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 10px 14px; color: #1a2943; border-bottom: 1px solid #e8edf5; background: #fff; }
+.prisma-search-filter-section > header > span { color: #2563eb; }
+.prisma-search-filter-section > div { display: grid; gap: 12px; padding: 14px; }
 .prisma-search-field { display: grid; gap: 6px; min-width: 0; }
 .prisma-search-field > span { color: #526078; font-size: 0.76rem; font-weight: 700; }
 .prisma-search-field .ant-select,
 .prisma-search-field .ant-input-number { width: 100%; }
 .prisma-search-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .prisma-search-switch { display: flex; align-items: center; min-height: 32px; gap: 8px; color: #526078; font-size: 0.8rem; }
-.prisma-profile-search-actions { position: sticky; bottom: 12px; z-index: 3; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 10px; padding: 12px; border: 1px solid #d9e2f1; border-radius: 12px; background: rgba(255, 255, 255, 0.96); box-shadow: 0 12px 26px rgba(33, 58, 103, 0.12); backdrop-filter: blur(10px); }
-.prisma-profile-search-results { display: grid; gap: 14px; min-width: 0; }
-.prisma-search-welcome { text-align: center; }
-.prisma-search-welcome .ant-card-body { display: grid; justify-items: center; gap: 8px; padding: 72px 28px; }
-.prisma-search-welcome .anticon { color: #8da8d7; font-size: 2.2rem; }
-.prisma-search-welcome h2 { margin: 4px 0 0 !important; }
-.prisma-search-welcome p { max-width: 620px; color: #64748b; }
+.prisma-profile-search-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 18px; border-top: 1px solid #e8edf5; background: #fbfcfe; }
+.prisma-profile-search-actions .ant-btn { min-width: 132px; }
+.prisma-profile-search-results { display: grid; gap: 14px; min-width: 0; margin-top: 18px; }
+.prisma-search-welcome .ant-card-body { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 18px; padding: 26px 28px; }
+.prisma-search-welcome-icon { display: grid; place-items: center; width: 52px; height: 52px; color: #2563eb; font-size: 1.35rem; border: 1px solid #cfe0ff; border-radius: 14px; background: #edf4ff; }
+.prisma-search-welcome h2 { margin: 0 0 5px !important; font-size: 1.16rem !important; }
+.prisma-search-welcome p { max-width: 900px; margin-bottom: 10px; color: #64748b; }
 .prisma-search-results-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .prisma-search-results-heading h2 { margin: 0 0 3px !important; }
 .prisma-search-result-list { display: grid; gap: 12px; }
@@ -4822,14 +4827,14 @@ textarea {
 
 @media (max-width: 1180px) {
   .prisma-canonical-education-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .prisma-profile-search-layout { grid-template-columns: minmax(320px, 0.75fr) minmax(0, 1fr); }
-  .prisma-search-result-highlights { grid-template-columns: 1fr; }
+  .prisma-profile-search-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 900px) {
-  .prisma-profile-search-layout,
   .prisma-profile-compare-grid { grid-template-columns: minmax(0, 1fr); }
-  .prisma-profile-search-actions { position: static; }
+  .prisma-profile-search-filter-grid { grid-template-columns: minmax(0, 1fr); }
+  .prisma-search-filter-section.is-wide { grid-column: auto; }
+  .prisma-search-result-highlights { grid-template-columns: 1fr; }
   .prisma-canonical-education-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
@@ -4851,7 +4856,13 @@ textarea {
   .prisma-search-result-card article > header .ant-checkbox-wrapper { grid-column: 1 / -1; }
   .prisma-search-result-card footer { flex-direction: column; }
   .prisma-search-result-card footer .ant-btn { width: 100%; }
-  .prisma-profile-search-actions { grid-template-columns: 1fr; }
+  .prisma-profile-search-workspace > .ant-card-head { align-items: flex-start; padding-block: 12px; }
+  .prisma-profile-search-workspace > .ant-card-head .ant-card-head-wrapper { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .prisma-profile-search-filter-grid { padding: 12px; }
+  .prisma-search-field-grid { grid-template-columns: minmax(0, 1fr); }
+  .prisma-profile-search-actions { align-items: stretch; flex-direction: column-reverse; padding: 12px; }
+  .prisma-profile-search-actions .ant-btn { width: 100%; }
+  .prisma-search-welcome .ant-card-body { grid-template-columns: minmax(0, 1fr); justify-items: start; padding: 20px; }
 }
 
 /* M5.3 - flexibilidade e recuperação operacional */

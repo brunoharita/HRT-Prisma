@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  ArrowLeftOutlined,
   BankOutlined,
   BookOutlined,
   BulbOutlined,
@@ -51,9 +52,14 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
   }
 
   return <PrismaPage className="prisma-profile-search-page">
-    <PrismaPageHeader title="Encontrar pessoas" description="Use os mesmos blocos do Perfil para encontrar as pessoas adequadas." actions={<Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} />
-    <div className="prisma-profile-search-layout">
-      <aside className="prisma-profile-search-filters" aria-label="Filtros de Perfil">
+    <Button className="prisma-profile-search-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>
+    <PrismaPageHeader title="Encontrar pessoas" description="Use os mesmos blocos do Perfil para encontrar as pessoas adequadas." />
+    <PrismaCard
+      className="prisma-profile-search-workspace"
+      extra={activeFilterCount(query) ? <Tag color="blue">{activeFilterCount(query)} filtros ativos</Tag> : <Typography.Text type="secondary">Comece pelos critérios essenciais</Typography.Text>}
+      title={<span className="prisma-profile-search-workspace-title"><SearchOutlined /> Critérios de busca</span>}
+    >
+      <div className="prisma-profile-search-filter-grid" aria-label="Filtros de Perfil">
         <FilterSection icon={<BankOutlined />} title="Experiência">
           <Field label="Cargo"><Input allowClear onChange={(event) => update("role", event.target.value)} placeholder="Ex.: Gerente de Projetos" value={query.role} /></Field>
           <div className="prisma-search-field-grid"><Field label="Área"><Input allowClear onChange={(event) => update("area", event.target.value)} placeholder="Ex.: Operações" value={query.area} /></Field><Field label="Organização"><Input allowClear onChange={(event) => update("organization", event.target.value)} placeholder="Nome da organização" value={query.organization} /></Field></div>
@@ -75,31 +81,31 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
           <div className="prisma-search-field-grid"><Field label="Vínculo"><Select allowClear onChange={(value) => update("lifecycle", value ?? "")} options={lifecycleOptions} placeholder="Qualquer vínculo" value={query.lifecycle || undefined} /></Field>{canReadLocation ? <Field label="Cidade"><Input allowClear onChange={(event) => update("city", event.target.value)} placeholder="Ex.: Bauru" value={query.city} /></Field> : null}</div>
           <Field label="Estado da Pessoa"><Select onChange={(value) => update("operationalStatus", value)} options={[{ label: "Ativas", value: "active" }, { label: "Arquivadas", value: "archived" }, { label: "Ativas e arquivadas", value: "" }]} value={query.operationalStatus} /></Field>
         </FilterSection>
-        <div className="prisma-profile-search-actions"><Button onClick={() => { window.sessionStorage.removeItem(SEARCH_SESSION_KEY); setQuery(emptyProfileSearchQuery()); setResults(null); setSelectedIds([]); }}>Limpar filtros</Button><Button icon={<SearchOutlined />} loading={loading} onClick={() => void executeSearch()} type="primary">Buscar perfis</Button></div>
-      </aside>
+      </div>
+      <div className="prisma-profile-search-actions"><Button onClick={() => { window.sessionStorage.removeItem(SEARCH_SESSION_KEY); setQuery(emptyProfileSearchQuery()); setResults(null); setSelectedIds([]); }}>Limpar filtros</Button><Button icon={<SearchOutlined />} loading={loading} onClick={() => void executeSearch()} type="primary">Buscar perfis</Button></div>
+    </PrismaCard>
 
-      <main className="prisma-profile-search-results">
-        {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
-        {loading ? <PrismaCard><Skeleton active avatar paragraph={{ rows: 12 }} /></PrismaCard> : null}
-        {!loading && results === null ? <SearchWelcome count={activeFilterCount(query)} /> : null}
-        {!loading && results?.length === 0 ? <PrismaCard><Empty description="Nenhum Perfil corresponde aos critérios informados. Ajuste somente os filtros que forem essenciais." /></PrismaCard> : null}
-        {!loading && results?.length ? <>
-          <div className="prisma-search-results-heading"><div><Typography.Title level={2}>{results.length} {results.length === 1 ? "Perfil encontrado" : "Perfis encontrados"}</Typography.Title><Typography.Text type="secondary">Ordenação determinística pela quantidade de critérios atendidos, sem nota ou decisão automática.</Typography.Text></div>{selectedIds.length ? <Button disabled={selectedIds.length !== 2} icon={<SwapOutlined />} onClick={() => { persistSearchSession(query, selectedIds); onNavigate(`/profiles/compare/${selectedIds.join("/")}`); }} type="primary">Comparar selecionados ({selectedIds.length}/2)</Button> : null}</div>
-          <div className="prisma-search-result-list">{pageResults.map((result) => <SearchResultCard key={result.candidate.personId} onNavigate={onNavigate} onToggle={() => toggleSelection(result.candidate.personId)} result={result} selected={selectedIds.includes(result.candidate.personId)} />)}</div>
-          <Pagination current={page} onChange={setPage} pageSize={PAGE_SIZE} showSizeChanger={false} total={results.length} />
-        </> : null}
-      </main>
-    </div>
+    <main className="prisma-profile-search-results">
+      {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
+      {loading ? <PrismaCard><Skeleton active avatar paragraph={{ rows: 12 }} /></PrismaCard> : null}
+      {!loading && results === null ? <SearchWelcome count={activeFilterCount(query)} /> : null}
+      {!loading && results?.length === 0 ? <PrismaCard><Empty description="Nenhum Perfil corresponde aos critérios informados. Ajuste somente os filtros que forem essenciais." /></PrismaCard> : null}
+      {!loading && results?.length ? <>
+        <div className="prisma-search-results-heading"><div><Typography.Title level={2}>{results.length} {results.length === 1 ? "Perfil encontrado" : "Perfis encontrados"}</Typography.Title><Typography.Text type="secondary">Ordenação determinística pela quantidade de critérios atendidos, sem nota ou decisão automática.</Typography.Text></div>{selectedIds.length ? <Button disabled={selectedIds.length !== 2} icon={<SwapOutlined />} onClick={() => { persistSearchSession(query, selectedIds); onNavigate(`/profiles/compare/${selectedIds.join("/")}`); }} type="primary">Comparar selecionados ({selectedIds.length}/2)</Button> : null}</div>
+        <div className="prisma-search-result-list">{pageResults.map((result) => <SearchResultCard key={result.candidate.personId} onNavigate={onNavigate} onToggle={() => toggleSelection(result.candidate.personId)} result={result} selected={selectedIds.includes(result.candidate.personId)} />)}</div>
+        <Pagination current={page} onChange={setPage} pageSize={PAGE_SIZE} showSizeChanger={false} total={results.length} />
+      </> : null}
+    </main>
   </PrismaPage>;
 }
 
 function FilterSection({ children, icon, title }: { children: React.ReactNode; icon: React.ReactNode; title: string }) {
-  return <PrismaCard className="prisma-search-filter-section" title={<span>{icon}{title}</span>}>{children}</PrismaCard>;
+  return <section className={`prisma-search-filter-section${title === "Experiência" ? " is-wide" : ""}`}><header><span>{icon}</span><strong>{title}</strong></header><div>{children}</div></section>;
 }
 function Field({ children, label }: { children: React.ReactNode; label: string }) { return <label className="prisma-search-field"><span>{label}</span>{children}</label>; }
 
 function SearchWelcome({ count }: { count: number }) {
-  return <PrismaCard className="prisma-search-welcome"><SearchOutlined /><Typography.Title level={2}>Encontre Perfis pela estrutura profissional</Typography.Title><Typography.Paragraph>Experiência, Formação, Competências, Credenciais e Contexto usam a mesma linguagem do Perfil. A ausência de informação nunca será apresentada como avaliação negativa.</Typography.Paragraph>{count ? <Tag color="blue">{count} filtros preparados</Tag> : <Tag>Comece pelos critérios essenciais</Tag>}</PrismaCard>;
+  return <PrismaCard className="prisma-search-welcome"><span className="prisma-search-welcome-icon"><SearchOutlined /></span><div><Typography.Title level={2}>Encontre Perfis pela estrutura profissional</Typography.Title><Typography.Paragraph>Experiência, Formação, Competências, Credenciais e Contexto usam a mesma linguagem do Perfil. A ausência de informação nunca será apresentada como avaliação negativa.</Typography.Paragraph>{count ? <Tag color="blue">{count} filtros preparados</Tag> : <Tag>Preencha os critérios acima para começar</Tag>}</div></PrismaCard>;
 }
 
 function SearchResultCard({ onNavigate, onToggle, result, selected }: { onNavigate: (path: string) => void; onToggle: () => void; result: ProfileSearchResult; selected: boolean }) {

@@ -121,6 +121,8 @@ test("the six product surfaces share the canonical Profile language and responsi
   assert.match(profile, /CanonicalProfileView/);
   assert.match(versions, /StructuredProfileView/);
   assert.match(search, /Encontrar pessoas/);
+  assert.match(search, /prisma-profile-search-workspace/);
+  assert.match(search, /prisma-profile-search-filter-grid/);
   assert.match(search, /Por que apareceu nesta busca/);
   assert.match(search, /Comparar selecionados/);
   assert.match(compare, /Comparar perfis/);
@@ -128,6 +130,8 @@ test("the six product surfaces share the canonical Profile language and responsi
   assert.match(compare, /Ver perfil completo/);
   assert.match(application, /\/profiles\/search/);
   assert.match(application, /profileView: "compare"/);
+  assert.match(styles, /\.prisma-profile-search-filter-grid \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /@media \(max-width: 900px\)[\s\S]*\.prisma-profile-search-filter-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
   assert.match(styles, /@media \(max-width: 900px\)[\s\S]*\.prisma-profile-compare-grid[\s\S]*grid-template-columns: minmax\(0, 1fr\)/);
   assert.doesNotMatch(`${profile}\n${search}\n${compare}`, /seniorityScore|skillSeniority|melhor candidato|Top candidate|% match/i);
 });
