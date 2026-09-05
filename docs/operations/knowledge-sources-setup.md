@@ -28,6 +28,6 @@ Estados operacionais: `current`, `update_available`, `action_required`, `tempora
 
 Configurar como secrets server-side: `OPENAI_API_KEY`, `KNOWLEDGE_RESEARCH_MODEL`, `KNOWLEDGE_AGENT_ENABLED`, caps diário/mensal e cooldown. Fonte allowlisted vem do banco, não de constante dispersa. Smoke QA só usa conceito ou pergunta profissional pública sintética, registra no-PII e não publica automaticamente.
 
-Em 2026-09-04, o Prisma-QA recebeu `gpt-5.6-luna`, flag `true`, caps de 10 pesquisas/dia e 100/mês e cooldown de 24 horas. A organização `Prisma` autorizou enriquecimento externo. `OPENAI_API_KEY` permanece ausente; portanto, nenhuma chamada viva pode ocorrer até o secret ser cadastrado diretamente no cofre do Supabase. Depois do cadastro, executar um smoke com pergunta pública e confirmar fonte, ledger e ausência de PII nos logs.
+Em 2026-09-04, o Prisma-QA recebeu `gpt-5.6-luna`, flag `true`, caps de 10 pesquisas/dia e 100/mês e cooldown de 24 horas. A organização `Prisma` autorizou enriquecimento externo e `OPENAI_API_KEY` foi cadastrada diretamente no cofre do Supabase. O smoke com pergunta profissional pública concluiu com três fontes pós-validadas, ledger `completed`, um request, uso de tokens registrado e nenhuma pergunta em `subject_metadata`.
 
 O fluxo operacional é `monitor -> fetch/upload -> validate -> stage -> diff -> map -> publish snapshot`. Falha preserva a versão anterior ativa. O monitor mensal é independente da política de reinterpretação.

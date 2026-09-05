@@ -44,7 +44,7 @@ A migration `20260904235900_m54_vacancy_advisor_web_search` foi aplicada no Pris
 
 A pergunta `Quais são as linguagens mais utilizadas atualmente no desenvolvimento de sistemas em cloud?` agora é classificada como dependente de atualidade. O frontend chama Web Search server-side, mostra `Web pesquisada agora`, síntese, recomendação, ressalvas e fontes clicáveis. O payload externo contém apenas pergunta, título, área, idioma e data; nenhuma Pessoa, Perfil, organização ou descrição interna é enviada.
 
-Modelo `gpt-5.6-luna`, flag, 10 pesquisas/dia, 100/mês, cooldown de 24 horas e opt-in da organização `Prisma` estão configurados em QA. O inventário de secrets confirmou que `OPENAI_API_KEY` ainda não existe. Por isso, a compilação e o rollout do boundary estão ativos, mas o smoke vivo do provider permanece bloqueado de forma fechada até o secret ser cadastrado no cofre do Supabase.
+Modelo `gpt-5.6-luna`, flag, 10 pesquisas/dia, 100/mês, cooldown de 24 horas e opt-in da organização `Prisma` estão configurados em QA. O inventário de secrets confirmou `OPENAI_API_KEY` no cofre, sem expor seu valor. O smoke vivo pela interface respondeu em 15,9 segundos com o estado `Web pesquisada agora`, síntese, ressalvas, recomendação e três links pós-validados de GitHub e Stack Overflow. O ledger remoto registrou `completed`, um request, 32.188 tokens de entrada, 1.065 de saída e nenhuma pergunta em `subject_metadata`.
 
 O gate final `pnpm run validate` aprovou lint de 324 arquivos, fundação, Context Pack, dois typechecks, build web, 254 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`.
 
@@ -67,4 +67,4 @@ O harness de browser disponível nesta execução manteve viewport fixa em `1280
 
 O dry-run do Supabase CLI continua bloqueado pela divergência histórica já existente entre aliases de migration locais e versões registradas no projeto remoto. Nenhum `migration repair` foi executado. As migrations M5.4 foram aplicadas pela API oficial do projeto, registradas no histórico remoto e verificadas diretamente.
 
-O único bloqueio da chamada Web viva é a credencial `OPENAI_API_KEY`, que não deve ser enviada em chat nem gravada no repositório. Produção não foi acionada.
+A Web Search contextual está ativa e validada no Prisma-QA. `OPENAI_API_KEY` permanece somente no cofre do Supabase e não deve ser enviada em chat nem gravada no repositório. Produção não foi acionada.
