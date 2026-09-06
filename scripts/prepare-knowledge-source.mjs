@@ -1,19 +1,22 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { buildKnowledgeSourceSqlBatches, prepareCboSource, prepareEscoSource } from "../dist/src/knowledge/sourceIngestion.js";
+import { buildKnowledgeSourceSqlBatches, prepareCboSource, prepareEscoSource, prepareOnetSource } from "../dist/src/knowledge/sourceIngestion.js";
 
-const [sourceArg, directory, externalVersion, releaseDate, outputDirectory] = process.argv.slice(2);
+const [sourceArg, directory, externalVersion, releaseDate, outputDirectory, batchSizeArg] = process.argv.slice(2);
 if (!sourceArg || !directory || !externalVersion || !releaseDate || !outputDirectory) {
-  throw new Error("Uso: node scripts/prepare-knowledge-source.mjs <cbo|esco> <diretorio> <versao> <data-lancamento> <saida>");
+  throw new Error("Uso: node scripts/prepare-knowledge-source.mjs <cbo|esco|onet> <diretorio> <versao> <data-lancamento> <saida>");
 }
 const downloadedAt = new Date().toISOString();
 const packageData = sourceArg.toLowerCase() === "cbo"
   ? await prepareCboSource({ directory, externalVersion, releaseDate, downloadedAt })
   : sourceArg.toLowerCase() === "esco"
     ? await prepareEscoSource({ directory, externalVersion, releaseDate, downloadedAt })
-    : (() => { throw new Error("Fonte suportada: cbo ou esco"); })();
-const sql = buildKnowledgeSourceSqlBatches(packageData, 250);
+    : sourceArg.toLowerCase() === "onet"
+      ? await prepareOnetSource({ directory, externalVersion, releaseDate, downloadedAt })
+      : (() => { throw new Error("Fonte suportada: cbo, esco ou onet"); })();
+const batchSize = batchSizeArg ? Number(batchSizeArg) : 250;
+const sql = buildKnowledgeSourceSqlBatches(packageData, batchSize);
 await mkdir(outputDirectory, { recursive: true });
 await Promise.all([
   writeFile(path.join(outputDirectory, "manifest.json"), `${JSON.stringify(packageData.manifest, null, 2)}\n`, "utf8"),

@@ -12,6 +12,14 @@ Download: `https://esco.ec.europa.eu/en/use-esco/download`. Versão verificada: 
 
 Database: `https://www.onetcenter.org/database.html`. Web Services: `https://services.onetcenter.org/`. Versão verificada: 31.0. O database usa CC BY 4.0 com exceções documentadas. Snapshot é a carga principal. Se Web Services for ativado, `ONET_API_KEY` permanece server-side e a atribuição do serviço é obrigatória.
 
+Para a referência ocupacional, usar somente o subconjunto `Occupation Data`, `Content Model Reference`, `Essential Skills`, `Knowledge` e `Software Skills` do ZIP oficial. Executar:
+
+```bash
+pnpm run knowledge:prepare -- onet <diretorio-extraido> 31.0 2026-08-01 <saida>
+```
+
+O manifesto registra SHA-256 por arquivo e pelo pacote lógico. `IM` e `LV` permanecem respectivamente `Importância` e `Nível` no atributo da relação; não criar escala Prisma. O ZIP e os SQLs gerados ficam fora do Git. A atribuição exibida deve identificar O*NET 31.0 Database, USDOL/ETA, CC BY 4.0 e indicar adaptações do Prisma quando existirem.
+
 ## Monitoramento mensal
 
 `knowledge-source-monitor` está implantada no Prisma-QA. Depois de aplicar as migrations e publicar a função em um novo ambiente, executar uma vez, como conexão administrativa e sem registrar secrets no terminal ou no Git:

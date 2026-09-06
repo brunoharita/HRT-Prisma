@@ -76,7 +76,13 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
       ]} /><Typography.Paragraph style={{ marginTop: 20 }}>{selectedConcept.description || "Sem descrição publicada."}</Typography.Paragraph>
       <Typography.Title level={5}>Aliases publicados</Typography.Title><Space wrap>{selectedConcept.aliases.map((alias) => <Tag key={alias}>{alias}</Tag>)}</Space>
       <Typography.Title level={5}>Mapeamentos externos</Typography.Title>{selectedConcept.mappings.length ? selectedConcept.mappings.map((mapping) => <p key={`${mapping.source}-${mapping.externalId}`}>{mapping.source} {mapping.sourceVersion} · {mapping.externalUri ? <a href={mapping.externalUri} target="_blank" rel="noreferrer">{mapping.externalId}</a> : mapping.externalId}</p>) : <Typography.Text type="secondary">Sem autoridade externa vinculada.</Typography.Text>}
-      <Typography.Title level={5}>Relações</Typography.Title>{selectedConcept.relations.length ? selectedConcept.relations.map((relation) => <p key={`${relation.type}-${relation.targetLabel}`}>{relation.type.replaceAll("_", " ")} · {relation.targetLabel}</p>) : <Typography.Text type="secondary">Sem relações publicadas.</Typography.Text>}
+      <Typography.Title level={5}>Referências profissionais</Typography.Title>{selectedConcept.relations.length ? <Table size="small" rowKey={(relation) => `${relation.type}-${relation.targetLabel}-${relation.source}-${relation.sourceVersion}`} pagination={false} scroll={{ x: 620 }} dataSource={selectedConcept.relations} columns={[
+        { title: "Conhecimento ou habilidade", dataIndex: "targetLabel" },
+        { title: "Relação", render: (_, relation) => describeRelation(relation.attributes, relation.type) },
+        { title: "Nível ou importância", render: (_, relation) => describeMeasures(relation.attributes) },
+        { title: "Fonte", render: (_, relation) => `${relation.source} ${relation.sourceVersion}` },
+      ]} /> : <Typography.Text type="secondary">Sem relações publicadas.</Typography.Text>}
+      <Alert type="info" showIcon style={{ marginTop: 16 }} message="Sobre os níveis" description="Os valores vêm das fontes oficiais e preservam sua escala original. Essencial no ESCO representa relevância para a ocupação. Nível e Importância no O*NET são medidas próprias da fonte e não comprovam senioridade ou competência de uma Pessoa." />
       <Alert type="info" showIcon message={selectedConcept.scope === "global" ? "Conceito global somente leitura fora da autoridade Super Admin." : "Especialização válida apenas no escopo desta organização."} /></> : null}
     </Drawer>
     <Drawer open={Boolean(selectedInbox)} onClose={() => setSelectedInbox(null)} title="Revisar termo observado" width={600}>
@@ -158,6 +164,10 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
 
 function statusTag(value: string) { const color = ["approved", "completed", "proposal_ready"].includes(value) ? "green" : ["failed", "rejected", "budget_limited"].includes(value) ? "red" : "gold"; return <Tag color={color}>{value.replaceAll("_", " ")}</Tag>; }
 function describeType(value: string) { return ({ occupation: "Ocupação", skill: "Habilidade", knowledge: "Conhecimento", technology: "Tecnologia", methodology: "Metodologia", certification: "Certificação" } as Record<string, string>)[value] ?? value; }
+function describeRelation(attributes: unknown, fallback: string) { const value = isRecord(attributes) ? attributes.relevance : null; return value === "essential" ? "Essencial" : value === "optional" ? "Opcional" : fallback.replaceAll("_", " "); }
+function describeMeasures(attributes: unknown) { if (!isRecord(attributes) || !Array.isArray(attributes.measurements)) return "—"; const values = attributes.measurements.flatMap((measure) => isRecord(measure) && typeof measure.scaleId === "string" && typeof measure.rawValue === "string" ? [`${describeScale(measure.scaleId)} ${measure.rawValue}`] : []); return values.length ? values.join(" · ") : "—"; }
+function describeScale(scale: string) { return ({ IM: "Importância", LV: "Nível" } as Record<string, string>)[scale] ?? scale; }
+function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }
 function formatDate(value: string) { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value)); }
 const ZERO_UUID = "00000000-0000-0000-0000-000000000000";
 function describeCounts(value: unknown) { if (!value || typeof value !== "object" || Array.isArray(value)) return "0"; const counts = value as Record<string, unknown>; return `${counts.conceptsPublished ?? counts.conceptRecords ?? 0} conceitos · ${counts.termsPublished ?? 0} termos`; }

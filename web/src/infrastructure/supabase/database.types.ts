@@ -689,7 +689,7 @@ export interface Database {
         id: string; source_concept_id: string; target_concept_id: string;
         relation_type: Database["public"]["Enums"]["knowledge_relation_type"];
         scope: Database["public"]["Enums"]["knowledge_scope"]; organization_id: string | null;
-        source_id: string | null; source_version_id: string | null; provenance: Json;
+        source_id: string | null; source_version_id: string | null; provenance: Json; relation_attributes: Json;
         status: Database["public"]["Enums"]["knowledge_status"]; version: number;
         approved_by_auth_user_id: string | null; created_at: string;
       }>;

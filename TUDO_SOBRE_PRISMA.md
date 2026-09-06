@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 53ae677b0fc1316af75793fea7874c3cd66f689a0ed300fb20c69653238cce3c
+source_manifest_sha256: 5205706d2a0a907af3355b6060d629b2dd7f6b9361b67518668f2705ea5dea5e
 -->
 
 # Tudo sobre o Prisma
@@ -547,7 +547,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O schema do refinamento espacial 1.2 está ativo em QA e o frontend permanece local. A cobertura determinística e as transações revertidas comprovam subtração, limites do contrato, autorização e ausência de resíduos; ainda falta smoke visual autenticado com sobreposição real no PDF.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - O CI usa a política fail-closed do pnpm para scripts de instalação de dependências; o `postinstall` não funcional do `tesseract.js` foi revisado e explicitamente negado em `pnpm-workspace.yaml`. A geração do Context Pack normaliza finais de linha para manter hash e conteúdo determinísticos em Windows e Linux.
-- O snapshot oficial ESCO v1.2.1 ainda não foi recebido: o portal exige aceite, e-mail e link. Importer e fixture PT/EN estão prontos, mas nenhum checksum ou status foi inventado. O snapshot CBO está publicado e O*NET foi explicitamente adiado.
+- O snapshot oficial ESCO v1.2.1 ainda não foi recebido: o portal exige aceite, e-mail e link. O importer PT/EN cobre ocupações, skills e relações `essential/optional`, mas nenhum checksum ou status foi inventado. O pacote oficial O*NET 31.0 foi validado com SHA-256 do ZIP `6883548adf5fde64cf6f801b35d15519c9225f2732c3cab0e281c652d16b23a9`; o snapshot integral está em staging/diff no Prisma-QA com 9.968 conceitos, 40.921 relações e 9.100 relações com medidas, e ainda aguarda publicação humana. As medidas `IM` e `LV` permanecem rastreáveis e separadas, sem inferência sobre Pessoas.
 - Licenças e atribuições CBO/ESCO/O*NET estão catalogadas, mas a redistribuição de pacotes adaptados, especialmente CBO CC BY-ND, exige revisão jurídica antes de qualquer exposição externa.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.

@@ -21,6 +21,8 @@ export interface KnowledgeSourceStageRecord {
   sourceExternalId: string | null;
   targetExternalId: string | null;
   relationType: KnowledgeRelationType | null;
+  /** Source-defined semantics and measurements. Never normalized into a Prisma proficiency score. */
+  relationAttributes: Record<string, unknown>;
   sourceFile: string;
   sourceRow: number;
   contentHash: string;
@@ -35,17 +37,17 @@ export interface KnowledgeSourceFileManifest {
 }
 
 export interface KnowledgeSourcePackage {
-  sourceName: "CBO" | "ESCO";
+  sourceName: "CBO" | "ESCO" | "O*NET";
   externalVersion: string;
   officialUrl: string;
   manifest: {
     schemaVersion: "1.0.0";
     ingestionVersion: string;
-    source: "CBO" | "ESCO";
+    source: "CBO" | "ESCO" | "O*NET";
     externalVersion: string;
     releaseDate: string;
     downloadedAt: string;
-    format: "CSV";
+    format: "CSV" | "TXT";
     packageSha256: string;
     files: KnowledgeSourceFileManifest[];
     counts: { conceptRecords: number; relationRecords: number };
@@ -126,10 +128,15 @@ export async function prepareEscoSource(input: {
 }): Promise<KnowledgeSourcePackage> {
   const files = await listFilesRecursive(input.directory);
   const skillFiles = files.filter((file) => /skills?_[a-z-]+\.csv$/i.test(path.basename(file)) || /skills?\.csv$/i.test(path.basename(file)));
+  const occupationFiles = files.filter((file) => /^occupations?_[a-z-]+\.csv$/i.test(path.basename(file)) || /^occupations?\.csv$/i.test(path.basename(file)));
   if (skillFiles.length === 0) throw new Error("esco_required_file_missing:skills_<language>.csv");
-  const parsedSkills = await Promise.all(skillFiles.map((file) => parseCsvFile(file, "utf-8", ",")));
+  if (occupationFiles.length === 0) throw new Error("esco_required_file_missing:occupations_<language>.csv");
+  const [parsedSkills, parsedOccupations] = await Promise.all([
+    Promise.all(skillFiles.map((file) => parseCsvFile(file, "utf-8", ","))),
+    Promise.all(occupationFiles.map((file) => parseCsvFile(file, "utf-8", ","))),
+  ]);
   const recordsByIdentity = new Map<string, KnowledgeSourceStageRecord>();
-  for (const parsed of parsedSkills) {
+  for (const parsed of [...parsedSkills, ...parsedOccupations]) {
     requireAnyHeader(parsed, ["concepturi", "concept_uri", "uri"]);
     requireAnyHeader(parsed, ["preferredlabel", "preferred_label", "label"]);
     const language = inferLanguage(parsed.file.name);
@@ -137,13 +144,32 @@ export async function prepareEscoSource(input: {
       const uri = requiredAny(row, ["concepturi", "concept_uri", "uri"], parsed.file.name);
       const label = requiredAny(row, ["preferredlabel", "preferred_label", "label"], parsed.file.name);
       const aliases = splitEscoLabels(optionalAny(row, ["altlabels", "alt_labels", "alternativelabel"]));
-      const conceptType = classifyEscoConcept(optionalAny(row, ["concepttype", "concept_type", "type"]), uri);
+      const conceptType = parsedOccupations.includes(parsed) ? "occupation" : classifyEscoConcept(optionalAny(row, ["concepttype", "concept_type", "type"]), uri);
       const record = stageConcept({
         externalId: uri, externalUri: uri, preferredLabel: label,
         description: optionalAny(row, ["description", "definition", "scopenote"]),
         aliases, language, conceptType, sourceFile: parsed.file.name, sourceRow: index + 2,
       });
       recordsByIdentity.set(`${uri}|${language}`, record);
+    }
+  }
+
+  const occupationSkillPaths = files.filter((file) => /occupations?skills?relations/i.test(path.basename(file)) && /\.csv$/i.test(file));
+  const parsedOccupationSkills = await Promise.all(occupationSkillPaths.map((file) => parseCsvFile(file, "utf-8", ",")));
+  const occupationSkillRelations: KnowledgeSourceStageRecord[] = [];
+  for (const parsed of parsedOccupationSkills) {
+    for (const [index, row] of parsed.rows.entries()) {
+      const occupation = optionalAny(row, ["occupationuri", "occupation_uri", "sourceuri", "source_uri"]);
+      const skill = optionalAny(row, ["skilluri", "skill_uri", "targeturi", "target_uri"]);
+      const relation = optionalAny(row, ["relationtype", "relation_type", "type"]).toLowerCase();
+      if (!occupation || !skill || !hasConcept(recordsByIdentity, occupation) || !hasConcept(recordsByIdentity, skill)) continue;
+      const semantic = relation.includes("essential") ? "essential" : relation.includes("optional") ? "optional" : relation || "official_relation";
+      occupationSkillRelations.push(stageRelation({
+        externalId: `ESCO:occupation-skill:${sha256(`${occupation}|${skill}|${semantic}`)}`,
+        sourceExternalId: occupation, targetExternalId: skill, relationType: "requires",
+        sourceFile: parsed.file.name, sourceRow: index + 2,
+        relationAttributes: { sourceRelationCode: semantic, relevance: semantic === "essential" || semantic === "optional" ? semantic : null },
+      }));
     }
   }
 
@@ -162,7 +188,97 @@ export async function prepareEscoSource(input: {
       }));
     }
   }
-  return buildPackage("ESCO", input, [...parsedSkills, ...parsedRelations].map((item) => item.file), [...recordsByIdentity.values(), ...relations], []);
+  return buildPackage("ESCO", input, [...parsedSkills, ...parsedOccupations, ...parsedRelations, ...parsedOccupationSkills].map((item) => item.file), [...recordsByIdentity.values(), ...relations, ...occupationSkillRelations], []);
+}
+
+export async function prepareOnetSource(input: {
+  directory: string;
+  externalVersion: string;
+  releaseDate: string;
+  downloadedAt: string;
+}): Promise<KnowledgeSourcePackage> {
+  const occupationPath = await requireMatchingFile(input.directory, /^occupation data\.(txt|csv)$/i);
+  const contentModelPath = await requireMatchingFile(input.directory, /^content model reference\.(txt|csv)$/i);
+  const skillPath = await requireMatchingFile(input.directory, /^(essential )?skills\.(txt|csv)$/i);
+  const knowledgePath = await requireMatchingFile(input.directory, /^knowledge\.(txt|csv)$/i);
+  const technologyPath = await findMatchingFile(input.directory, /^(technology skills|tools and technology|software skills)\.(txt|csv)$/i);
+  const [occupations, contentModel, skills, knowledge, technology] = await Promise.all([
+    parseDelimitedFile(occupationPath), parseDelimitedFile(contentModelPath), parseDelimitedFile(skillPath),
+    parseDelimitedFile(knowledgePath), technologyPath ? parseDelimitedFile(technologyPath) : Promise.resolve(null),
+  ]);
+  for (const item of [occupations, contentModel, skills, knowledge]) {
+    requireAnyHeader(item, ["onet-soccode", "onet-soccode", "elementid"]);
+  }
+  requireAnyHeader(occupations, ["onet-soccode", "onet soc code"]);
+  requireAnyHeader(occupations, ["title"]);
+  requireAnyHeader(contentModel, ["elementid", "element id"]);
+  requireAnyHeader(contentModel, ["elementname", "element name"]);
+
+  const records: KnowledgeSourceStageRecord[] = [];
+  const elementTypes = new Map<string, KnowledgeConceptType>();
+  const elementLabels = new Map<string, string>();
+  for (const [index, row] of contentModel.rows.entries()) {
+    const id = requiredAny(row, ["elementid", "element id"], contentModel.file.name);
+    const label = requiredAny(row, ["elementname", "element name"], contentModel.file.name);
+    const domain = optionalAny(row, ["domain", "domain source", "element category"]);
+    const type = /knowledge/i.test(domain) || /^2\.C\./.test(id) ? "knowledge" : "skill";
+    if (!/^2\.(A|B)/.test(id) && !/skills?|knowledge/i.test(domain)) continue;
+    elementTypes.set(id, type); elementLabels.set(id, label);
+    records.push(stageConcept({ externalId: `O*NET:element:${id}`, preferredLabel: label, aliases: [], language: "en",
+      conceptType: type, description: optionalAny(row, ["description"]), sourceFile: contentModel.file.name, sourceRow: index + 2 }));
+  }
+  for (const [index, row] of occupations.rows.entries()) {
+    const code = requiredAny(row, ["onet-soccode", "onet soc code"], occupations.file.name);
+    records.push(stageConcept({ externalId: `O*NET:occupation:${code}`, preferredLabel: requiredAny(row, ["title"], occupations.file.name),
+      aliases: [], language: "en", conceptType: "occupation", description: optionalAny(row, ["description"]), sourceFile: occupations.file.name, sourceRow: index + 2 }));
+  }
+  const relationMap = new Map<string, KnowledgeSourceStageRecord>();
+  for (const parsed of [skills, knowledge]) {
+    for (const [index, row] of parsed.rows.entries()) {
+      const occupationCode = requiredAny(row, ["onet-soccode", "onet soc code"], parsed.file.name);
+      const elementId = requiredAny(row, ["elementid", "element id"], parsed.file.name);
+      const type = elementTypes.get(elementId);
+      if (!type || !elementLabels.has(elementId)) continue;
+      const scaleId = requiredAny(row, ["scaleid", "scale id"], parsed.file.name);
+      const value = requiredAny(row, ["datavalue", "data value"], parsed.file.name);
+      const sourceExternalId = `O*NET:occupation:${occupationCode}`;
+      const targetExternalId = `O*NET:element:${elementId}`;
+      const identity = `${sourceExternalId}|${targetExternalId}`;
+      const current = relationMap.get(identity) ?? stageRelation({ externalId: `O*NET:relation:${sha256(identity)}`,
+        sourceExternalId, targetExternalId, relationType: "requires", sourceFile: parsed.file.name, sourceRow: index + 2,
+        relationAttributes: { sourceRelationCode: type === "knowledge" ? "knowledge" : "skill", measurements: [] } });
+      const measurements = current.relationAttributes.measurements as Array<Record<string, unknown>>;
+      measurements.push({ scaleId, rawValue: value, sourceFile: parsed.file.name, sourceRow: index + 2,
+        standardError: optionalAny(row, ["standarderror", "standard error"]), suppress: optionalAny(row, ["suppress"]) });
+      current.relationAttributes.measurements = measurements;
+      current.contentHash = sha256(JSON.stringify({ ...current, contentHash: undefined }));
+      relationMap.set(identity, current);
+    }
+  }
+  if (technology) {
+    const technologyByKey = new Map<string, string>();
+    for (const [index, row] of technology.rows.entries()) {
+      const occupationCode = optionalAny(row, ["onet-soccode", "onet soc code"]);
+      const label = optionalAny(row, ["workplaceexample", "workplace example", "example", "commoditytitle", "commodity title", "technology"]);
+      if (!occupationCode || !label) continue;
+      const externalKey = [optionalAny(row, ["elementid", "element id"]), sha256(label.toLocaleLowerCase())].filter(Boolean).join(":");
+      const technologyId = `O*NET:technology:${externalKey}`;
+      if (!technologyByKey.has(technologyId)) {
+        technologyByKey.set(technologyId, label);
+        records.push(stageConcept({ externalId: technologyId, preferredLabel: label, aliases: [], language: "en", conceptType: "technology",
+          sourceFile: technology.file.name, sourceRow: index + 2 }));
+      }
+      const sourceExternalId = `O*NET:occupation:${occupationCode}`;
+      const identity = `${sourceExternalId}|${technologyId}`;
+      relationMap.set(identity, stageRelation({ externalId: `O*NET:relation:${sha256(identity)}`, sourceExternalId, targetExternalId: technologyId,
+        relationType: "uses", sourceFile: technology.file.name, sourceRow: index + 2,
+        relationAttributes: { sourceRelationCode: "technology_skill", technologyCategory: optionalAny(row, ["commoditytitle", "commodity title"]) } }));
+    }
+  }
+  records.push(...relationMap.values());
+  return buildPackage("O*NET", input, [occupations.file, contentModel.file, skills.file, knowledge.file, ...(technology ? [technology.file] : [])], records, [
+    { name: "Abilities", reason: "Fora do objetivo inicial: o contrato atual cobre habilidade, conhecimento e tecnologia sem transformar capacidade em competência pessoal." },
+  ]);
 }
 
 export function buildKnowledgeSourceSql(packageData: KnowledgeSourcePackage, batchSize = 500): { stageSql: string; publishSqlTemplate: string } {
@@ -181,13 +297,13 @@ export function buildKnowledgeSourceSqlBatches(packageData: KnowledgeSourcePacka
   const batches: string[] = [];
   for (let offset = 0; offset < packageData.records.length; offset += batchSize) {
     const batch = packageData.records.slice(offset, offset + batchSize);
-    batches.push(["begin;", `select * from public.stage_knowledge_source_batch(${source}, ${version}, ${url}, ${manifest}, ${sqlJson(batch)}, ${offset === 0 ? "true" : "false"});`, "commit;"].join("\n"));
+    batches.push(["begin;", `select * from public.stage_knowledge_source_batch_v2(${source}, ${version}, ${url}, ${manifest}, ${sqlJson(batch)}, ${offset === 0 ? "true" : "false"});`, "commit;"].join("\n"));
   }
   const versionSelector = `(select version.id from public.knowledge_source_versions version join public.knowledge_sources source on source.id = version.source_id where source.name = ${source} and version.external_version = ${version})`;
   return {
     stageBatchSql: batches,
     finalizeAndDiffSql: ["begin;", `select * from public.finalize_knowledge_source_stage(${versionSelector});`, `select * from public.diff_knowledge_source_version(${versionSelector});`, "commit;"].join("\n"),
-    publishSqlTemplate: ["begin;", "-- Substitua o marcador pelo UUID de um Super Admin ativo que tomou a decisão de publicar.", `select * from public.publish_knowledge_source_version(${versionSelector}, '<SUPER_ADMIN_AUTH_USER_ID>'::uuid);`, "commit;"].join("\n"),
+    publishSqlTemplate: ["begin;", "-- Substitua o marcador pelo UUID de um Super Admin ativo que tomou a decisão de publicar.", `select * from public.publish_knowledge_source_version_v2(${versionSelector}, '<SUPER_ADMIN_AUTH_USER_ID>'::uuid);`, "commit;"].join("\n"),
   };
 }
 
@@ -201,6 +317,11 @@ async function parseCsvFile(filePath: string, encoding: "windows-1252" | "utf-8"
   const metadata = await stat(filePath);
   const bytes = await readFile(filePath);
   return { file: { name: path.basename(filePath), bytes: metadata.size, sha256: sha256(bytes), encoding, records: rows.length }, rows };
+}
+
+async function parseDelimitedFile(filePath: string): Promise<ParsedCsv> {
+  const delimiter = path.extname(filePath).toLowerCase() === ".txt" ? "\t" : ",";
+  return parseCsvFile(filePath, "utf-8", delimiter);
 }
 
 class DecodeTransform extends Transform {
@@ -218,13 +339,13 @@ function stageConcept(input: { externalId: string; externalUri?: string; preferr
   return completeStageRecord({ recordKind: "concept", externalId: input.externalId, externalUri: input.externalUri ?? null,
     conceptType: input.conceptType, preferredLabel: input.preferredLabel, description: input.description ?? "", language: input.language,
     aliases: uniqueLabels(input.aliases, input.preferredLabel), sourceStatus: "active", sourceExternalId: null, targetExternalId: null,
-    relationType: null, sourceFile: input.sourceFile, sourceRow: input.sourceRow });
+    relationType: null, relationAttributes: {}, sourceFile: input.sourceFile, sourceRow: input.sourceRow });
 }
 
-function stageRelation(input: { externalId: string; sourceExternalId: string; targetExternalId: string; relationType: KnowledgeRelationType; sourceFile: string; sourceRow: number }): KnowledgeSourceStageRecord {
+function stageRelation(input: { externalId: string; sourceExternalId: string; targetExternalId: string; relationType: KnowledgeRelationType; sourceFile: string; sourceRow: number; relationAttributes?: Record<string, unknown> }): KnowledgeSourceStageRecord {
   return completeStageRecord({ recordKind: "relation", externalId: input.externalId, externalUri: null, conceptType: null,
     preferredLabel: null, description: "", language: "und", aliases: [], sourceStatus: "active",
-    sourceExternalId: input.sourceExternalId, targetExternalId: input.targetExternalId, relationType: input.relationType,
+    sourceExternalId: input.sourceExternalId, targetExternalId: input.targetExternalId, relationType: input.relationType, relationAttributes: input.relationAttributes ?? {},
     sourceFile: input.sourceFile, sourceRow: input.sourceRow });
 }
 
@@ -232,15 +353,15 @@ function completeStageRecord(input: Omit<KnowledgeSourceStageRecord, "contentHas
   return { ...input, contentHash: sha256(JSON.stringify(input)) };
 }
 
-function buildPackage(sourceName: "CBO" | "ESCO", input: { externalVersion: string; releaseDate: string; downloadedAt: string }, files: KnowledgeSourceFileManifest[], records: KnowledgeSourceStageRecord[], excludedFiles: Array<{ name: string; reason: string }>): KnowledgeSourcePackage {
-  const officialUrl = sourceName === "CBO" ? "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/cbo/servicos/downloads" : "https://esco.ec.europa.eu/en/use-esco/download";
+function buildPackage(sourceName: "CBO" | "ESCO" | "O*NET", input: { externalVersion: string; releaseDate: string; downloadedAt: string }, files: KnowledgeSourceFileManifest[], records: KnowledgeSourceStageRecord[], excludedFiles: Array<{ name: string; reason: string }>): KnowledgeSourcePackage {
+  const officialUrl = sourceName === "CBO" ? "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/cbo/servicos/downloads" : sourceName === "ESCO" ? "https://esco.ec.europa.eu/en/use-esco/download" : "https://www.onetcenter.org/database.html";
   const conceptRecords = records.filter((record) => record.recordKind === "concept").length;
   const relationRecords = records.length - conceptRecords;
   const packageSha256 = sha256(files.map((file) => `${file.name}:${file.sha256}`).sort().join("\n"));
   return { sourceName, externalVersion: input.externalVersion, officialUrl, records,
     manifest: { schemaVersion: "1.0.0", ingestionVersion: KNOWLEDGE_SOURCE_INGESTION_VERSION, source: sourceName,
       externalVersion: input.externalVersion, releaseDate: input.releaseDate, downloadedAt: input.downloadedAt,
-      format: "CSV", packageSha256, files, counts: { conceptRecords, relationRecords }, excludedFiles } };
+      format: sourceName === "O*NET" ? "TXT" : "CSV", packageSha256, files, counts: { conceptRecords, relationRecords }, excludedFiles } };
 }
 
 async function requireMatchingFile(directory: string, pattern: RegExp): Promise<string> {
@@ -248,6 +369,7 @@ async function requireMatchingFile(directory: string, pattern: RegExp): Promise<
   if (!match) throw new Error(`source_file_missing:${pattern.source}`);
   return match;
 }
+async function findMatchingFile(directory: string, pattern: RegExp): Promise<string | null> { return (await listFilesRecursive(directory)).find((file) => pattern.test(path.basename(file))) ?? null; }
 
 async function listFilesRecursive(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });

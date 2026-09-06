@@ -10,7 +10,7 @@ export interface KnowledgeConceptView {
   id: string; canonicalLabel: string; conceptType: string; scope: "global" | "organization";
   description: string; version: number; status: string; updatedAt: string; aliases: string[];
   mappings: Array<{ source: string; sourceVersion: string; externalId: string; externalUri: string | null }>;
-  relations: Array<{ type: string; targetLabel: string }>;
+  relations: Array<{ type: string; targetLabel: string; source: string; sourceVersion: string; attributes: Json }>;
 }
 export interface KnowledgeInboxView {
   id: string; originalTerm: string; occurrenceCount: number; firstSeenAt: string; lastSeenAt: string;
