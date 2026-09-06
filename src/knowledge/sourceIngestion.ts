@@ -136,6 +136,7 @@ export async function prepareEscoSource(input: {
     Promise.all(occupationFiles.map((file) => parseCsvFile(file, "utf-8", ","))),
   ]);
   const recordsByIdentity = new Map<string, KnowledgeSourceStageRecord>();
+  const conceptExternalIds = new Set<string>();
   for (const parsed of [...parsedSkills, ...parsedOccupations]) {
     requireAnyHeader(parsed, ["concepturi", "concept_uri", "uri"]);
     requireAnyHeader(parsed, ["preferredlabel", "preferred_label", "label"]);
@@ -151,6 +152,7 @@ export async function prepareEscoSource(input: {
         aliases, language, conceptType, sourceFile: parsed.file.name, sourceRow: index + 2,
       });
       recordsByIdentity.set(`${uri}|${language}`, record);
+      conceptExternalIds.add(uri);
     }
   }
 
@@ -162,7 +164,7 @@ export async function prepareEscoSource(input: {
       const occupation = optionalAny(row, ["occupationuri", "occupation_uri", "sourceuri", "source_uri"]);
       const skill = optionalAny(row, ["skilluri", "skill_uri", "targeturi", "target_uri"]);
       const relation = optionalAny(row, ["relationtype", "relation_type", "type"]).toLowerCase();
-      if (!occupation || !skill || !hasConcept(recordsByIdentity, occupation) || !hasConcept(recordsByIdentity, skill)) continue;
+      if (!occupation || !skill || !conceptExternalIds.has(occupation) || !conceptExternalIds.has(skill)) continue;
       const semantic = relation.includes("essential") ? "essential" : relation.includes("optional") ? "optional" : relation || "official_relation";
       occupationSkillRelations.push(stageRelation({
         externalId: `ESCO:occupation-skill:${sha256(`${occupation}|${skill}|${semantic}`)}`,
@@ -180,7 +182,7 @@ export async function prepareEscoSource(input: {
     for (const [index, row] of parsed.rows.entries()) {
       const source = optionalAny(row, ["concepturi", "concept_uri", "sourceuri", "source_uri", "skilluri"]);
       const target = optionalAny(row, ["broaderuri", "broader_uri", "targeturi", "target_uri", "relatedskilluri"]);
-      if (!source || !target || source === target || !hasConcept(recordsByIdentity, source) || !hasConcept(recordsByIdentity, target)) continue;
+      if (!source || !target || source === target || !conceptExternalIds.has(source) || !conceptExternalIds.has(target)) continue;
       relations.push(stageRelation({
         externalId: `ESCO:relation:${sha256(`${source}|broader_than|${target}`)}`,
         sourceExternalId: source, targetExternalId: target, relationType: "is_a",
@@ -312,7 +314,7 @@ async function parseCsvFile(filePath: string, encoding: "windows-1252" | "utf-8"
   const parser = createReadStream(filePath)
     .pipe(new DecodeTransform(encoding))
     .pipe(parse({ columns: (headers: string[]) => headers.map(normalizeHeader), delimiter, bom: true,
-      relax_column_count: false, relax_quotes: true, skip_empty_lines: true, trim: true }));
+      relax_column_count_less: true, relax_column_count_more: false, relax_quotes: true, skip_empty_lines: true, trim: true }));
   for await (const row of parser) rows.push(row as Record<string, string>);
   const metadata = await stat(filePath);
   const bytes = await readFile(filePath);
