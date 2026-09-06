@@ -23,6 +23,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-011](ADR-011-idempotent-document-review-boundary.md) | accepted | Idempotent document operations and transactional human profile review |
 | [ADR-012](ADR-012-curriculum-first-resume-intake.md) | accepted | Tenant-scoped resume intake before transactional Person resolution |
 | [ADR-013](ADR-013-canonical-knowledge-organization-overlay.md) | accepted | Canonical Prisma Knowledge with organization overlay |
+| [ADR-038](ADR-038-occupation-reconciliation.md) | accepted | One user-facing occupation reconciles approved official references |
 | [ADR-014](ADR-014-knowledge-agent-trusted-sources.md) | accepted | Knowledge Agent with trusted-source and no-PII policy |
 | [ADR-015](ADR-015-knowledge-triggered-reinterpretation.md) | accepted | Knowledge-triggered profile reinterpretation through M2-C |
 | [ADR-016](ADR-016-spatial-cv-evidence-review.md) | accepted | PDF-first review with normalized spatial evidence and immutable human history |

@@ -40,6 +40,15 @@ test("ambiguous alias never becomes an arbitrary match and unknown term is finge
   assert.equal(createKnowledgeInboxFingerprint({ normalizedTerm: unresolved.normalizedSearchTerm, language: "pt-BR", scope: "organization", organizationId: "tenant-a" }).length, 64);
 });
 
+test("occupation reconciliation stays explicit, global, and Super-Admin approved", async () => {
+  const migration = await readFile("supabase/migrations/20260906213519_occupation_reconciliation.sql", "utf8");
+  assert.match(migration, /create table public\.knowledge_occupation_reconciliations/i);
+  assert.match(migration, /unique \(source_occupation_concept_id\)/i);
+  assert.match(migration, /private\.is_super_admin\(v_actor\)/i);
+  assert.match(migration, /concept_type = 'occupation'/i);
+  assert.doesNotMatch(migration, /similarity|embedding|auto.?merge/i);
+});
+
 test("research payload contains only a sanitized concept and blocks PII", () => {
   const request = buildSanitizedResearchRequest({ term: "Databricks Unity Catalog", language: "pt-BR", scope: "global" });
   const payload = JSON.stringify(request);
