@@ -10,6 +10,7 @@ import {
   shouldResearchVacancyMarket,
   sortVacancyMatches,
   structureVacancyDescription,
+  occupationResolutionMessage,
   type VacancyDetail,
 } from "../web/src/domain/vacancy.js";
 import type { PublishedProfileCandidate } from "../web/src/domain/profileDiscovery.js";
@@ -188,6 +189,34 @@ test("Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e audito
   assert.match(actorIndex, /on public\.vacancy_advisor_research_runs \(actor_auth_user_id\)/i);
   assert.match(page, /Web pesquisada agora/);
   assert.match(page, /Fontes consultadas/);
+});
+
+test("resolução ocupacional explica segurança sem score e nunca deriva evidência da Pessoa", () => {
+  assert.match(occupationResolutionMessage({ attemptId: "attempt", status: "resolved", decisionOrigin: "existing_reconciliation", canonicalConceptId: "occupation", canonicalLabel: "Desenvolvedor de sistemas de tecnologia da informação (técnico)", normalizedTerm: "programador de sistemas de informação", candidates: [], ambiguityReason: null, reused: false }), /Referência profissional/);
+  assert.match(occupationResolutionMessage({ attemptId: "attempt", status: "ambiguous", decisionOrigin: "no_safe_decision", canonicalConceptId: null, canonicalLabel: null, normalizedTerm: "programador", candidates: [], ambiguityReason: "official_candidates_require_reconciliation", reused: false }), /continuar preenchendo/i);
+  const developer = vacancy("Desenvolvedor de Software", ["Java"]);
+  const withoutJava = candidate("without-java", "Pessoa sem Java", profile({ professionalTitle: "Desenvolvedor de Software" }));
+  assert.equal(matchVacancyCandidate(developer, withoutJava).requirements[0]?.status, "no_evidence");
+});
+
+test("resolver ocupacional consulta snapshots seletivamente, é idempotente e mantém RLS", async () => {
+  const [migration, service, page] = await Promise.all([
+    readFile("supabase/migrations/20260906233411_occupation_resolution_on_demand.sql", "utf8"),
+    readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+  ]);
+  assert.match(migration, /create table public\.occupation_resolution_attempts/i);
+  assert.match(migration, /unique \(organization_id, idempotency_key\)/i);
+  assert.match(migration, /knowledge_occupation_reconciliations/i);
+  assert.match(migration, /knowledge_source_stage_records/i);
+  assert.match(migration, /limit 12/i);
+  assert.match(migration, /enable row level security/i);
+  assert.match(migration, /OCCUPATION_RESOLUTION_UNAUTHORIZED/i);
+  assert.match(migration, /revoke all on function public\.resolve_occupation_on_demand/i);
+  assert.doesNotMatch(migration, /person_id|professional_profiles/i);
+  assert.match(service, /resolve_occupation_on_demand/);
+  assert.match(page, /Consultando referências profissionais oficiais/);
+  assert.match(page, /onBlur=\{\(\) => void resolveOccupation\(\)\}/);
 });
 
 test("migration M5.4 mantém tenant, versões e escrita autorizada fail-closed", async () => {

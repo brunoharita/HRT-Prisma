@@ -50,6 +50,7 @@ import {
   emptyVacancyDraft,
   inferRequirementCategory,
   newVacancyRequirement,
+  occupationResolutionMessage,
   shouldResearchVacancyMarket,
   structureVacancyDescription,
   validateVacancyDraft,
@@ -61,6 +62,7 @@ import {
   type VacancyRequirementDraft,
   type VacancyStructureSuggestion,
   type VacancySummary,
+  type OccupationResolution,
 } from "../domain/vacancy.js";
 import {
   vacancyService,
@@ -135,6 +137,8 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [advisorQuestion, setAdvisorQuestion] = useState("");
   const [advisorAnswer, setAdvisorAnswer] = useState<VacancyAdvisorAnswer | null>(null);
   const [advisorLoading, setAdvisorLoading] = useState(false);
+  const [occupationResolution, setOccupationResolution] = useState<OccupationResolution | null>(null);
+  const [occupationLoading, setOccupationLoading] = useState(false);
 
   useEffect(() => {
     let current = true;
@@ -173,6 +177,18 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   async function searchReferences(value: string) {
     try { setReferences(await vacancyService.suggestReferences(activeMembership.organizationId, value)); }
     catch (caught) { setError(errorMessage(caught, "Não foi possível consultar as referências profissionais.")); }
+  }
+  async function resolveOccupation() {
+    if (draft.title.trim().length < 2) return;
+    setOccupationLoading(true);
+    try {
+      const resolution = await vacancyService.resolveOccupation(activeMembership.organizationId, draft.title, vacancyId ?? null);
+      setOccupationResolution(resolution);
+      if (resolution.status === "resolved" && resolution.canonicalConceptId) {
+        setDraft((current) => ({ ...current, referenceConceptId: resolution.canonicalConceptId, sourceKind: current.sourceKind === "manual" ? "knowledge_reference" : current.sourceKind }));
+      }
+    } catch (caught) { setOccupationResolution(null); setError(errorMessage(caught, "A referência profissional não está disponível agora. Você pode continuar preenchendo a Vaga manualmente.")); }
+    finally { setOccupationLoading(false); }
   }
   async function save() {
     const errors = validateVacancyDraft(draft);
@@ -244,13 +260,15 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     <Form layout="vertical" onFinish={() => void save()}>
       <PrismaCard className="prisma-vacancy-form-section" title="1. Informações básicas">
         <div className="prisma-vacancy-form-grid">
-          <Form.Item label="Título da Vaga" required><Input maxLength={240} onChange={(event) => update("title", event.target.value)} placeholder="Ex.: Gerente Comercial Enterprise" value={draft.title} /></Form.Item>
+          <Form.Item label="Título da Vaga" required><Input maxLength={240} onBlur={() => void resolveOccupation()} onChange={(event) => { update("title", event.target.value); setOccupationResolution(null); }} placeholder="Ex.: Gerente Comercial Enterprise" value={draft.title} /></Form.Item>
           <Form.Item label="Área"><Input onChange={(event) => update("area", event.target.value)} placeholder="Ex.: Comercial" value={draft.area} /></Form.Item>
           <Form.Item label="Localidade"><Input onChange={(event) => update("location", event.target.value)} placeholder="Ex.: São Paulo, SP" value={draft.location} /></Form.Item>
           <Form.Item label="Regime de trabalho"><Select allowClear onChange={(value) => update("workArrangement", value ?? null)} options={workArrangementOptions} placeholder="Não informado" value={draft.workArrangement} /></Form.Item>
           <Form.Item label="Tipo de vínculo"><Input onChange={(event) => update("employmentType", event.target.value)} placeholder="Ex.: CLT" value={draft.employmentType} /></Form.Item>
           <Form.Item label="Situação de ocupação"><Segmented block onChange={(value) => setDraft((current) => ({ ...current, occupancy: value as VacancyDraft["occupancy"], occupantPersonId: value === "occupied" ? current.occupantPersonId : null }))} options={[{ label: "Não ocupada", value: "vacant" }, { label: "Ocupada", value: "occupied" }]} value={draft.occupancy} /></Form.Item>
         </div>
+        {occupationLoading ? <Typography.Text type="secondary">Consultando referências profissionais oficiais...</Typography.Text> : null}
+        {occupationResolution ? <Alert showIcon type={occupationResolution.status === "resolved" ? "success" : "info"} message={occupationResolutionMessage(occupationResolution)} description={occupationResolution.status === "ambiguous" && occupationResolution.candidates.length ? `Referências consultadas: ${occupationResolution.candidates.map((candidate) => `${candidate.label} (${candidate.sourceName})`).join(", ")}.` : undefined} /> : null}
         {draft.occupancy === "occupied" ? <Form.Item label="Pessoa que ocupa a posição" required><Select showSearch optionFilterProp="label" onChange={(value) => update("occupantPersonId", value)} options={occupants} placeholder="Selecione uma Pessoa existente" value={draft.occupantPersonId} /></Form.Item> : null}
       </PrismaCard>
       <PrismaCard className="prisma-vacancy-form-section" title="2. Missão da vaga"><Typography.Text type="secondary">Qual é o principal propósito desta Vaga?</Typography.Text><Input.TextArea maxLength={700} onChange={(event) => update("mission", event.target.value)} rows={4} showCount value={draft.mission} /></PrismaCard>

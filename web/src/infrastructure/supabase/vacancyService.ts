@@ -8,6 +8,7 @@ import {
   type VacancyDetail,
   type VacancyDraft,
   type VacancyRequirementDraft,
+  type OccupationResolution,
   type VacancySummary,
 } from "../../domain/vacancy.js";
 import { supabaseFunctionOperationError } from "../../domain/reviewOperationErrors.js";
@@ -43,6 +44,12 @@ export interface VacancyHistoryItem {
   version: number | null;
   createdAt: string;
 }
+
+type OccupationResolutionRow = {
+  attempt_id: string; resolution_status: OccupationResolution["status"]; decision_origin: OccupationResolution["decisionOrigin"];
+  canonical_concept_id: string | null; canonical_label: string | null; normalized_term: string;
+  candidates: unknown; ambiguity_reason: string | null; reused: boolean;
+};
 
 export const vacancyService = {
   async list(organizationId: string): Promise<VacancySummary[]> {
@@ -221,6 +228,18 @@ export const vacancyService = {
     }));
   },
 
+  async resolveOccupation(organizationId: string, observedTerm: string, vacancyId: string | null = null): Promise<OccupationResolution> {
+    const result = await supabase.rpc("resolve_occupation_on_demand" as never, {
+      p_organization_id: organizationId, p_observed_term: observedTerm, p_vacancy_id: vacancyId, p_language: "pt-BR",
+    } as never);
+    if (result.error) throw new Error("Não foi possível consultar a referência profissional agora. Você pode continuar preenchendo a Vaga manualmente.");
+    const row = (result.data as OccupationResolutionRow[] | null)?.[0];
+    if (!row || !isOccupationResolutionRow(row)) throw new Error("A referência profissional retornou um formato inválido. Você pode continuar preenchendo a Vaga manualmente.");
+    return { attemptId: row.attempt_id, status: row.resolution_status, decisionOrigin: row.decision_origin,
+      canonicalConceptId: row.canonical_concept_id, canonicalLabel: row.canonical_label, normalizedTerm: row.normalized_term,
+      candidates: readOccupationCandidates(row.candidates), ambiguityReason: row.ambiguity_reason, reused: row.reused };
+  },
+
   async suggestAdvisorKnowledge(organizationId: string, query: string): Promise<VacancyAdvisorKnowledgeSuggestion[]> {
     if (query.trim().length < 2) return [];
     const result = await supabase.rpc("suggest_knowledge_concepts", { p_organization_id: organizationId, p_query: query.trim(), p_limit: 8 });
@@ -351,4 +370,20 @@ function isVacancyAdvisorMarketResearch(value: unknown): value is VacancyAdvisor
     && typeof item.outputSchemaVersion === "string"
     && typeof item.sourcePolicyVersion === "string"
     && typeof item.reused === "boolean";
+}
+
+function isOccupationResolutionRow(value: OccupationResolutionRow): boolean {
+  return typeof value.attempt_id === "string" && typeof value.normalized_term === "string" && typeof value.reused === "boolean"
+    && ["resolved", "ambiguous", "completed", "service_unavailable", "failed"].includes(value.resolution_status)
+    && ["existing_reconciliation", "deterministic_official_resolution", "agent_assisted_resolution", "human_reconciliation", "no_safe_decision"].includes(value.decision_origin);
+}
+function readOccupationCandidates(value: unknown): OccupationResolution["candidates"] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object" || Array.isArray(item)) return [];
+    const row = item as Record<string, unknown>;
+    return typeof row.sourceName === "string" && typeof row.sourceVersion === "string" && typeof row.externalId === "string" && typeof row.label === "string" && typeof row.description === "string" && typeof row.reasonCode === "string"
+      ? [{ sourceName: row.sourceName, sourceVersion: row.sourceVersion, externalId: row.externalId, externalUri: typeof row.externalUri === "string" ? row.externalUri : null, label: row.label, description: row.description, reasonCode: row.reasonCode }]
+      : [];
+  });
 }

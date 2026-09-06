@@ -3,6 +3,7 @@ import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 export const VACANCY_DEFINITION_VERSION = "1.0.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-1.1.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.2.0";
+export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-1.0.0";
 
 export type VacancyOccupancy = "occupied" | "vacant";
 export type VacancySourceKind = "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
@@ -144,6 +145,24 @@ export interface VacancyAdvisorMarketResearch {
   outputSchemaVersion: string;
   sourcePolicyVersion: string;
   reused: boolean;
+}
+
+export interface OccupationResolution {
+  attemptId: string;
+  status: "resolved" | "ambiguous" | "completed" | "service_unavailable" | "failed";
+  decisionOrigin: "existing_reconciliation" | "deterministic_official_resolution" | "agent_assisted_resolution" | "human_reconciliation" | "no_safe_decision";
+  canonicalConceptId: string | null;
+  canonicalLabel: string | null;
+  normalizedTerm: string;
+  candidates: Array<{ sourceName: string; sourceVersion: string; externalId: string; externalUri: string | null; label: string; description: string; reasonCode: string }>;
+  ambiguityReason: string | null;
+  reused: boolean;
+}
+
+export function occupationResolutionMessage(resolution: OccupationResolution): string {
+  if (resolution.status === "resolved" && resolution.canonicalLabel) return `Referência profissional: ${resolution.canonicalLabel}.`;
+  if (resolution.status === "service_unavailable") return "A referência profissional está indisponível agora. Você pode continuar preenchendo a Vaga manualmente.";
+  return "O Prisma encontrou mais de uma interpretação possível. Você pode continuar preenchendo a Vaga; a referência ficará disponível após revisão na Knowledge.";
 }
 
 export function emptyVacancyDraft(): VacancyDraft {
