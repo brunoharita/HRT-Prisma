@@ -194,6 +194,15 @@ export const vacancyService = {
     return { id: saved.vacancy_id, version: saved.version };
   },
 
+  async cancel(organizationId: string, vacancyId: string): Promise<void> {
+    const result = await supabase.rpc("cancel_vacancy", {
+      p_organization_id: organizationId,
+      p_vacancy_id: vacancyId,
+      p_reason: "Vaga excluída pela administração.",
+    });
+    if (result.error) throw new Error(humanizeVacancyError(result.error));
+  },
+
   async listRoleTemplates(organizationId: string): Promise<OrganizationRoleTemplate[]> {
     const result = await supabase.from("job_roles").select("*").eq("organization_id", organizationId).order("name");
     throwIfError(result.error, "Não foi possível carregar as funções da empresa.");
@@ -341,7 +350,8 @@ function isCategory(value: string | null): value is VacancyRequirementDraft["cat
 
 function humanizeVacancyError(error: PostgrestError): string {
   const text = `${error.message} ${error.details ?? ""}`;
-  if (/VACANCY_UNAUTHORIZED/.test(text)) return "Seu perfil não possui autorização para criar ou editar Vagas nesta empresa.";
+  if (/VACANCY_UNAUTHORIZED/.test(text)) return "Seu perfil não possui autorização para gerenciar Vagas nesta empresa.";
+  if (/VACANCY_NOT_FOUND/.test(text)) return "Esta Vaga não existe mais na empresa ativa. Atualize a lista para continuar.";
   if (/VACANCY_OCCUPANT_REQUIRED/.test(text)) return "Selecione a Pessoa que ocupa esta posição antes de salvar.";
   if (/VACANCY_OCCUPANT_INVALID/.test(text)) return "A Pessoa selecionada não está disponível na empresa ativa.";
   if (/VACANCY_REFERENCE_INVALID|VACANCY_REQUIREMENT_CONCEPT_INVALID/.test(text)) return "Uma referência profissional não está mais disponível. Revise o item indicado e tente novamente.";

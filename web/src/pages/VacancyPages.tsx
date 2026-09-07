@@ -87,6 +87,7 @@ export function VacanciesPage({ activeMembership, onNavigate }: CommonProps) {
   const [occupancy, setOccupancy] = useState<"all" | "occupied" | "vacant">("all");
   const [area, setArea] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     let current = true;
@@ -106,6 +107,19 @@ export function VacanciesPage({ activeMembership, onNavigate }: CommonProps) {
   }), [items, search, occupancy, area]);
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  async function removeVacancy(item: VacancySummary) {
+    setDeletingId(item.id); setError(null);
+    try {
+      await vacancyService.cancel(activeMembership.organizationId, item.id);
+      setItems((current) => current.filter((vacancy) => vacancy.id !== item.id));
+      setPage((current) => Math.min(current, Math.max(1, Math.ceil((items.length - 1) / PAGE_SIZE))));
+    } catch (caught) {
+      setError(errorMessage(caught, "Não foi possível excluir a Vaga."));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   return <PrismaPage className="prisma-vacancies-page">
     <PrismaPageHeader title="Vagas" description="Gerencie as necessidades profissionais da sua empresa." actions={<Button icon={<PlusOutlined />} onClick={() => { clearDraft(); onNavigate("/vacancies/new"); }} type="primary">Nova vaga</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
@@ -118,7 +132,7 @@ export function VacanciesPage({ activeMembership, onNavigate }: CommonProps) {
     {!loading && !items.length ? <PrismaCard><Empty description={<span>Ainda não há Vagas cadastradas.<br />Cadastre a primeira necessidade profissional da sua empresa.</span>}><Button icon={<PlusOutlined />} onClick={() => onNavigate("/vacancies/new")} type="primary">Nova vaga</Button></Empty></PrismaCard> : null}
     {!loading && items.length && !filtered.length ? <PrismaCard><Empty description="Nenhuma Vaga corresponde aos filtros informados." /></PrismaCard> : null}
     {!loading && visible.length ? <>
-      <div className="prisma-vacancy-table-wrap"><Table<VacancySummary> columns={vacancyColumns(onNavigate)} dataSource={visible} pagination={false} rowKey="id" /></div>
+      <div className="prisma-vacancy-table-wrap"><Table<VacancySummary> columns={vacancyColumns(onNavigate, removeVacancy, deletingId)} dataSource={visible} pagination={false} rowKey="id" /></div>
       <div className="prisma-vacancy-pagination"><Typography.Text type="secondary">Mostrando {visible.length} de {filtered.length} Vagas</Typography.Text><Pagination current={page} onChange={setPage} pageSize={PAGE_SIZE} showSizeChanger={false} total={filtered.length} /></div>
     </> : null}
   </PrismaPage>;
@@ -331,6 +345,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
   const [history, setHistory] = useState<VacancyHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
   useEffect(() => {
     let current = true;
     void Promise.all([vacancyService.load(activeMembership.organizationId, vacancyId), vacancyService.history(activeMembership.organizationId, vacancyId)])
@@ -341,11 +356,23 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
   }, [activeMembership.organizationId, vacancyId]);
   if (loading) return <PrismaPage><PrismaCard><Skeleton active paragraph={{ rows: 18 }} /></PrismaCard></PrismaPage>;
   if (!detail) return <PrismaPage><Alert showIcon title={error ?? "Vaga não encontrada."} type="error" /></PrismaPage>;
+  const detailId = detail.id!;
   const required = detail.requirements.filter((item) => item.importance === "required");
   const desired = detail.requirements.filter((item) => item.importance === "desired");
+  async function removeVacancy() {
+    setDeleting(true); setError(null);
+    try {
+      await vacancyService.cancel(activeMembership.organizationId, detailId);
+      onNavigate("/vacancies");
+    } catch (caught) {
+      setError(errorMessage(caught, "Não foi possível excluir a Vaga."));
+    } finally {
+      setDeleting(false);
+    }
+  }
   return <PrismaPage className="prisma-vacancy-detail-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/vacancies")} type="text">Voltar para Vagas</Button>
-    <div className="prisma-vacancy-detail-header"><div><Space wrap><Typography.Title level={1}>{detail.title}</Typography.Title><OccupancyTag occupancy={detail.occupancy} /></Space><div className="prisma-vacancy-meta"><span><ApartmentOutlined /> {detail.area || "Área não informada"}</span><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span>{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}<span>Definição v{detail.version}</span></div></div><Space wrap><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar vaga</Button><Button icon={<TeamOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button></Space></div>
+    <div className="prisma-vacancy-detail-header"><div><Space wrap><Typography.Title level={1}>{detail.title}</Typography.Title><OccupancyTag occupancy={detail.occupancy} /></Space><div className="prisma-vacancy-meta"><span><ApartmentOutlined /> {detail.area || "Área não informada"}</span><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span>{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}<span>Definição v{detail.version}</span></div></div><Space wrap><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar vaga</Button><Popconfirm cancelText="Cancelar" description="A Vaga sairá da lista. A posição, versões e avaliações anteriores serão preservadas." okButtonProps={{ danger: true, loading: deleting }} okText="Excluir vaga" onConfirm={() => void removeVacancy()} title="Excluir esta Vaga?"><Button danger icon={<DeleteOutlined />} loading={deleting}>Excluir</Button></Popconfirm><Button icon={<TeamOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button></Space></div>
     {error ? <Alert showIcon title={error} type="error" /> : null}
     <Tabs items={[
       { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack"><DetailSection icon={<AimOutlined />} title="Missão da vaga"><Typography.Paragraph>{detail.mission}</Typography.Paragraph></DetailSection><DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /><DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /><PrismaCard title={<span><StarOutlined /> O que procuramos</span>}><div className="prisma-vacancy-requirement-groups"><RequirementTags items={required} label="Obrigatório" /><RequirementTags items={desired} label="Desejável" /></div></PrismaCard><DetailText icon={<EnvironmentOutlined />} items={detail.contextItems} title="Contexto da vaga" /></div> },
@@ -452,12 +479,12 @@ function DetailList({ icon, items, title }: { icon: React.ReactNode; items: stri
 function DetailText({ icon, items, title }: { icon: React.ReactNode; items: string[]; title: string }) { return <DetailSection icon={icon} title={title}>{items.length ? <Typography.Paragraph className="prisma-vacancy-context-text">{items.join("\n\n")}</Typography.Paragraph> : <Typography.Text type="secondary">Não informado.</Typography.Text>}</DetailSection>; }
 function RequirementTags({ items, label }: { items: VacancyRequirementDraft[]; label: string }) { return <section><strong>{label}</strong><Space wrap>{items.length ? items.map((item) => <Tag color={label === "Obrigatório" ? "purple" : "blue"} key={item.stableId}>{item.label}</Tag>) : <Typography.Text type="secondary">Nenhum</Typography.Text>}</Space></section>; }
 
-function vacancyColumns(onNavigate: (path: string) => void): ColumnsType<VacancySummary> { return [
+function vacancyColumns(onNavigate: (path: string) => void, onDelete: (item: VacancySummary) => Promise<void>, deletingId: string | null): ColumnsType<VacancySummary> { return [
   { title: "Vaga", dataIndex: "title", key: "title", render: (value, item) => <button className="prisma-vacancy-title-link" onClick={() => onNavigate(`/vacancies/${item.id}`)} type="button"><strong>{value}</strong><small>Definição v{item.definitionVersion}</small></button> },
   { title: "Área", dataIndex: "area", key: "area", responsive: ["md"], render: (value) => value || "Não informada" },
   { title: "Situação", dataIndex: "occupancy", key: "occupancy", render: (value) => <OccupancyTag occupancy={value} /> },
   { title: "Pessoa vinculada", dataIndex: "occupantName", key: "occupantName", responsive: ["lg"], render: (value) => value || "Nenhuma" },
-  { title: "Ação", key: "action", align: "right", render: (_, item) => <Button onClick={() => onNavigate(item.occupancy === "occupied" ? `/vacancies/${item.id}/people` : `/vacancies/${item.id}/people`)}>{item.occupancy === "occupied" ? "Avaliar aderência" : "Encontrar pessoas"}</Button> },
+  { title: "Ação", key: "action", align: "right", render: (_, item) => <Space wrap size="small"><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${item.id}/edit`)}>Editar</Button><Popconfirm cancelText="Cancelar" description="A Vaga sairá da lista. A posição, versões e avaliações anteriores serão preservadas." okButtonProps={{ danger: true, loading: deletingId === item.id }} okText="Excluir vaga" onConfirm={() => void onDelete(item)} title="Excluir esta Vaga?"><Button aria-label={`Excluir ${item.title}`} danger icon={<DeleteOutlined />} loading={deletingId === item.id}>Excluir</Button></Popconfirm><Button onClick={() => onNavigate(`/vacancies/${item.id}/people`)}>{item.occupancy === "occupied" ? "Avaliar aderência" : "Encontrar pessoas"}</Button></Space> },
 ]; }
 
 function comparisonColumns(matches: VacancyCandidateMatch[]): ColumnsType<{ key: string; label: string; left: VacancyCandidateMatch["requirements"][number] | undefined; right: VacancyCandidateMatch["requirements"][number] | undefined }> { return [
@@ -470,7 +497,7 @@ const workArrangementOptions = [{ value: "onsite", label: "Presencial" }, { valu
 
 function groupSuggestions(items: VacancyStructureSuggestion[]): Record<string, VacancyStructureSuggestion[]> { const labels: Record<string, string> = { mission: "Missão", responsibility: "Responsabilidades", outcome: "Resultados esperados", experience: "O que a Pessoa precisa trazer", competency: "O que a Pessoa precisa trazer", knowledge: "O que a Pessoa precisa trazer", technology: "O que a Pessoa precisa trazer", education: "O que a Pessoa precisa trazer", certification: "O que a Pessoa precisa trazer", language: "O que a Pessoa precisa trazer", context: "Contexto da vaga" }; return items.reduce<Record<string, VacancyStructureSuggestion[]>>((groups, item) => { const key = labels[item.category] ?? item.category; (groups[key] ??= []).push(item); return groups; }, {}); }
 function inferTitle(value: string): string { return value.match(/(?:busca(?:mos)?|procuramos)\s+(?:de\s+)?(?:um|uma)\s+([^,.]+)/i)?.[1]?.trim() ?? ""; }
-function historyLabel(value: string): string { return ({ created: "Vaga criada", definition_updated: "Definição atualizada", occupancy_updated: "Ocupação atualizada", match_evaluated: "Aderência avaliada" } as Record<string, string>)[value] ?? "Atualização registrada"; }
+function historyLabel(value: string): string { return ({ created: "Vaga criada", definition_updated: "Definição atualizada", occupancy_updated: "Ocupação atualizada", match_evaluated: "Aderência avaliada", cancelled: "Vaga excluída da lista" } as Record<string, string>)[value] ?? "Atualização registrada"; }
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); }
 function normalize(value: string): string { return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").trim(); }
 function errorMessage(value: unknown, fallback: string): string { return value instanceof Error ? value.message : fallback; }

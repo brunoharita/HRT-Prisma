@@ -168,7 +168,7 @@ export interface Database {
         organization_id: string;
         vacancy_id: string;
         vacancy_version_id: string | null;
-        event_type: "created" | "definition_updated" | "occupancy_updated" | "match_evaluated";
+        event_type: "created" | "definition_updated" | "occupancy_updated" | "match_evaluated" | "cancelled";
         actor_auth_user_id: string | null;
         metadata: Json;
         created_at: string;
@@ -1247,6 +1247,10 @@ export interface Database {
       }
     Views: Record<string, never>;
     Functions: {
+      cancel_vacancy: {
+        Args: { p_organization_id: string; p_vacancy_id: string; p_reason: string };
+        Returns: Array<{ vacancy_id: string; status: string }>;
+      };
       save_vacancy_definition: {
         Args: {
           p_organization_id: string;

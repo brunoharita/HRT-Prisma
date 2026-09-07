@@ -30,6 +30,8 @@ Estender a fundação existente com snapshots imutáveis de Vaga, requisitos est
 - O assistente não altera Vaga ou Knowledge automaticamente e não apresenta pesquisa de mercado como realizada quando o Knowledge Agent está desativado.
 - `member`, `anon` e outro tenant não recebem acesso às Vagas ou avaliações.
 - O histórico cresce de forma append-only; paginação e retenção podem ser otimizadas quando o volume real justificar.
+- Excluir uma Vaga é um cancelamento auditável: ela deixa a lista operacional, mas posição, Pessoa vinculada, versões e avaliações históricas permanecem preservadas.
+- O cancelamento é aditivo ao ciclo de vida e não altera o contrato `vacancy-definition-1.0.0` nem a versão usada por avaliações já emitidas.
 
 ## Rollback
 

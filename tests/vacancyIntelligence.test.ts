@@ -239,3 +239,22 @@ test("migration M5.4 mantém tenant, versões e escrita autorizada fail-closed",
   assert.match(positionGuard, /VACANCY_POSITION_STATUS_INVALID/i);
   assert.match(positionGuard, /revoke all on function private\.enforce_vacancy_position_status/i);
 });
+
+test("exclusão de Vaga é cancelamento auditável e a lista oferece edição e exclusão", async () => {
+  const [migration, service, page] = await Promise.all([
+    readFile("supabase/migrations/20260907000000_m54_vacancy_cancellation.sql", "utf8"),
+    readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+  ]);
+  assert.match(migration, /create or replace function public\.cancel_vacancy/i);
+  assert.match(migration, /security definer/i);
+  assert.match(migration, /private\.has_org_role\(p_organization_id/i);
+  assert.match(migration, /VACANCY_UNAUTHORIZED/i);
+  assert.match(migration, /'cancelled'/i);
+  assert.match(migration, /revoke all on function public\.cancel_vacancy/i);
+  assert.doesNotMatch(migration, /delete from public\.vacancies/i);
+  assert.match(service, /rpc\("cancel_vacancy"/);
+  assert.match(page, /Editar/);
+  assert.match(page, /Excluir esta Vaga/);
+  assert.match(page, /posição, versões e avaliações anteriores serão preservadas/i);
+});
