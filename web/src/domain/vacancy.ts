@@ -3,7 +3,7 @@ import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 export const VACANCY_DEFINITION_VERSION = "1.0.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-1.1.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.2.0";
-export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-1.0.0";
+export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 
 export type VacancyOccupancy = "occupied" | "vacant";
 export type VacancySourceKind = "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
@@ -149,8 +149,8 @@ export interface VacancyAdvisorMarketResearch {
 
 export interface OccupationResolution {
   attemptId: string;
-  status: "resolved" | "ambiguous" | "completed" | "service_unavailable" | "failed";
-  decisionOrigin: "existing_reconciliation" | "deterministic_official_resolution" | "agent_assisted_resolution" | "human_reconciliation" | "no_safe_decision";
+  status: "resolved" | "ambiguous" | "completed" | "service_unavailable" | "failed" | "pending_agent" | "needs_human_review" | "manual_allowed";
+  decisionOrigin: "existing_reconciliation" | "deterministic_official_resolution" | "agent_assisted_resolution" | "human_reconciliation" | "no_safe_decision" | "no_official_reference" | "manual_organization_concept";
   canonicalConceptId: string | null;
   canonicalLabel: string | null;
   normalizedTerm: string;
@@ -161,8 +161,11 @@ export interface OccupationResolution {
 
 export function occupationResolutionMessage(resolution: OccupationResolution): string {
   if (resolution.status === "resolved" && resolution.canonicalLabel) return `Referência profissional: ${resolution.canonicalLabel}.`;
-  if (resolution.status === "service_unavailable") return "A referência profissional está indisponível agora. Você pode continuar preenchendo a Vaga manualmente.";
-  return "O Prisma encontrou mais de uma interpretação possível. Você pode continuar preenchendo a Vaga; a referência ficará disponível após revisão na Knowledge.";
+  if (resolution.status === "pending_agent") return "O Prisma está validando a referência somente nos snapshots oficiais ESCO e O*NET.";
+  if (resolution.status === "needs_human_review") return "O Prisma não tomou uma decisão segura. Escolha uma referência oficial no explorador ou declare explicitamente que ela não existe.";
+  if (resolution.status === "manual_allowed") return "A ausência de referência oficial foi registrada. Agora é possível cadastrar um conceito ocupacional interno da empresa.";
+  if (resolution.status === "service_unavailable") return "A referência profissional está indisponível agora. O rascunho foi preservado para nova tentativa.";
+  return "O Prisma não tomou uma decisão segura. Use o explorador de referências oficiais para continuar.";
 }
 
 export function emptyVacancyDraft(): VacancyDraft {

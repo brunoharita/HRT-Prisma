@@ -193,10 +193,35 @@ test("Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e audito
 
 test("resolução ocupacional explica segurança sem score e nunca deriva evidência da Pessoa", () => {
   assert.match(occupationResolutionMessage({ attemptId: "attempt", status: "resolved", decisionOrigin: "existing_reconciliation", canonicalConceptId: "occupation", canonicalLabel: "Desenvolvedor de sistemas de tecnologia da informação (técnico)", normalizedTerm: "programador de sistemas de informação", candidates: [], ambiguityReason: null, reused: false }), /Referência profissional/);
-  assert.match(occupationResolutionMessage({ attemptId: "attempt", status: "ambiguous", decisionOrigin: "no_safe_decision", canonicalConceptId: null, canonicalLabel: null, normalizedTerm: "programador", candidates: [], ambiguityReason: "official_candidates_require_reconciliation", reused: false }), /continuar preenchendo/i);
+  assert.match(occupationResolutionMessage({ attemptId: "attempt", status: "needs_human_review", decisionOrigin: "no_safe_decision", canonicalConceptId: null, canonicalLabel: null, normalizedTerm: "programador", candidates: [], ambiguityReason: "agent_no_safe_decision", reused: false }), /Explorador/i);
   const developer = vacancy("Desenvolvedor de Software", ["Java"]);
   const withoutJava = candidate("without-java", "Pessoa sem Java", profile({ professionalTitle: "Desenvolvedor de Software" }));
   assert.equal(matchVacancyCandidate(developer, withoutJava).requirements[0]?.status, "no_evidence");
+});
+
+test("M5.4.4 ordena empresa, Global, Agent, explorador e manual sem contaminar Pessoas", async () => {
+  const [migration, agent, service, page] = await Promise.all([
+    readFile("supabase/migrations/20260907010000_m544_occupation_resolution_ai_explorer.sql", "utf8"),
+    readFile("supabase/functions/knowledge-agent/index.ts", "utf8"),
+    readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+  ]);
+  assert.match(migration, /resolve_occupation_on_demand_v2/i);
+  assert.match(migration, /organization_knowledge/i);
+  assert.match(migration, /global_knowledge/i);
+  assert.match(migration, /pending_agent/i);
+  assert.match(migration, /needs_human_review/i);
+  assert.match(migration, /declare_no_official_occupation_reference/i);
+  assert.match(migration, /create_manual_organization_occupation/i);
+  assert.match(migration, /grant execute on function public\.complete_occupation_resolution_agent.*service_role/i);
+  assert.doesNotMatch(migration, /professional_profiles|person_id/);
+  assert.match(agent, /mode === "occupation_resolution"/);
+  assert.match(agent, /No web_search tool is present here/);
+  assert.match(agent, /Software Engineer versus Software Developer/);
+  assert.match(agent, /complete_occupation_resolution_agent/);
+  assert.match(service, /resolveOccupationV2/);
+  assert.match(page, /Explorador de Referências Oficiais/);
+  assert.match(page, /Não existe referência oficial/);
 });
 
 test("resolver ocupacional consulta snapshots seletivamente, é idempotente e mantém RLS", async () => {

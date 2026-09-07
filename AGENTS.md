@@ -177,3 +177,7 @@ Golden fixtures must specify required extraction, acceptable inference, forbidde
 ## 11. Material-change rule
 
 A change is material when it alters behavior, fields, states, roles, authority, contracts, schema, integration, dependency, architecture, prompt, model, AI behavior, matching, extraction, data handling, environment, rollout, privacy, or a documented limitation. Material changes require owner documentation, Context Pack refresh, generated export, checker, and a version decision. Never change the meaning of a persisted contract silently.
+
+## 12. Numbered requirement contracts
+
+When a numbered RF contract is accepted for implementation, an agent may optimize its implementation but cannot remove, substitute, reorder, postpone, or reinterpret a requirement without a Product Owner decision. The delivery must trace requirement to implementation, test, and evidence; an unproven required item is not done.

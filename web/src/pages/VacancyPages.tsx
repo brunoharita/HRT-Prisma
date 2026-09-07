@@ -153,6 +153,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [advisorLoading, setAdvisorLoading] = useState(false);
   const [occupationResolution, setOccupationResolution] = useState<OccupationResolution | null>(null);
   const [occupationLoading, setOccupationLoading] = useState(false);
+  const [occupationExplorerOpen, setOccupationExplorerOpen] = useState(false);
 
   useEffect(() => {
     let current = true;
@@ -196,17 +197,33 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     if (draft.title.trim().length < 2) return;
     setOccupationLoading(true);
     try {
-      const resolution = await vacancyService.resolveOccupation(activeMembership.organizationId, draft.title, vacancyId ?? null);
+      const resolution = await vacancyService.resolveOccupationV2(activeMembership.organizationId, draft.title, vacancyId ?? null);
       setOccupationResolution(resolution);
       if (resolution.status === "resolved" && resolution.canonicalConceptId) {
         setDraft((current) => ({ ...current, referenceConceptId: resolution.canonicalConceptId, sourceKind: current.sourceKind === "manual" ? "knowledge_reference" : current.sourceKind }));
       }
-    } catch (caught) { setOccupationResolution(null); setError(errorMessage(caught, "A referência profissional não está disponível agora. Você pode continuar preenchendo a Vaga manualmente.")); }
+    } catch (caught) { setOccupationResolution(null); setError(errorMessage(caught, "A referência profissional não está disponível agora. O rascunho foi preservado para nova tentativa.")); }
     finally { setOccupationLoading(false); }
+  }
+  async function selectOfficialOccupation(externalId: string) {
+    if (!occupationResolution) return;
+    try { const conceptId = await vacancyService.selectOfficialOccupation(activeMembership.organizationId, occupationResolution.attemptId, externalId); const candidate = occupationResolution.candidates.find((item) => item.externalId === externalId); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: "knowledge_reference", title: current.title || candidate?.label || current.title })); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "human_reconciliation", canonicalConceptId: conceptId, canonicalLabel: candidate?.label ?? draft.title }); setOccupationExplorerOpen(false); }
+    catch (caught) { setError(errorMessage(caught, "Não foi possível registrar a referência oficial.")); }
+  }
+  async function enableManualOccupation() {
+    if (!occupationResolution) return;
+    try { await vacancyService.declareNoOfficialOccupation(activeMembership.organizationId, occupationResolution.attemptId); setOccupationResolution({ ...occupationResolution, status: "manual_allowed", decisionOrigin: "no_official_reference" }); }
+    catch (caught) { setError(errorMessage(caught, "Não foi possível registrar a ausência de referência oficial.")); }
+  }
+  async function createManualOccupation() {
+    if (!occupationResolution) return;
+    try { const conceptId = await vacancyService.createManualOccupation(activeMembership.organizationId, occupationResolution.attemptId, draft.title); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: "knowledge_reference" })); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "manual_organization_concept", canonicalConceptId: conceptId, canonicalLabel: draft.title }); setOccupationExplorerOpen(false); }
+    catch (caught) { setError(errorMessage(caught, "Não foi possível criar o conceito ocupacional interno.")); }
   }
   async function save() {
     const errors = validateVacancyDraft(draft);
     if (errors.length) { setError(errors.join(" ")); return; }
+    if (!draft.referenceConceptId) { setError("Conclua a resolução ocupacional pela referência oficial ou, após o explorador, pelo conceito interno da empresa antes de salvar a Vaga."); return; }
     setSaving(true); setError(null);
     try {
       const result = await vacancyService.save(activeMembership.organizationId, draft);
@@ -282,9 +299,14 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
           <Form.Item label="Situação de ocupação"><Segmented block onChange={(value) => setDraft((current) => ({ ...current, occupancy: value as VacancyDraft["occupancy"], occupantPersonId: value === "occupied" ? current.occupantPersonId : null }))} options={[{ label: "Não ocupada", value: "vacant" }, { label: "Ocupada", value: "occupied" }]} value={draft.occupancy} /></Form.Item>
         </div>
         {occupationLoading ? <Typography.Text type="secondary">Consultando referências profissionais oficiais...</Typography.Text> : null}
-        {occupationResolution ? <Alert showIcon type={occupationResolution.status === "resolved" ? "success" : "info"} message={occupationResolutionMessage(occupationResolution)} description={occupationResolution.status === "ambiguous" && occupationResolution.candidates.length ? `Referências consultadas: ${occupationResolution.candidates.map((candidate) => `${candidate.label} (${candidate.sourceName})`).join(", ")}.` : undefined} /> : null}
+        {occupationResolution ? <Alert showIcon type={occupationResolution.status === "resolved" ? "success" : "info"} message={occupationResolutionMessage(occupationResolution)} description={occupationResolution.status === "needs_human_review" ? <Button onClick={() => setOccupationExplorerOpen(true)} size="small" type="primary">Explorar ESCO e O*NET</Button> : occupationResolution.status === "manual_allowed" ? <Button onClick={() => void createManualOccupation()} size="small" type="primary">Cadastrar conceito interno da empresa</Button> : undefined} /> : null}
         {draft.occupancy === "occupied" ? <Form.Item label="Pessoa que ocupa a posição" required><Select showSearch optionFilterProp="label" onChange={(value) => update("occupantPersonId", value)} options={occupants} placeholder="Selecione uma Pessoa existente" value={draft.occupantPersonId} /></Form.Item> : null}
       </PrismaCard>
+      <Drawer destroyOnClose onClose={() => setOccupationExplorerOpen(false)} open={occupationExplorerOpen} title="Explorador de Referências Oficiais" width={560}>
+        <Typography.Paragraph>Escolha uma referência ESCO ou O*NET somente se ela representar a Vaga. Esta escolha cria uma reconciliação reutilizável apenas para a empresa.</Typography.Paragraph>
+        <List dataSource={occupationResolution?.candidates ?? []} locale={{ emptyText: "Nenhuma referência oficial foi encontrada no snapshot consultado." }} renderItem={(candidate) => <List.Item actions={[<Button key="select" onClick={() => void selectOfficialOccupation(candidate.externalId)} type="primary">Usar referência</Button>]}><List.Item.Meta title={`${candidate.label} · ${candidate.sourceName}`} description={`${candidate.externalId}${candidate.description ? ` · ${candidate.description}` : ""}`} /></List.Item>} />
+        <Button danger onClick={() => void enableManualOccupation()}>Não existe referência oficial aplicável</Button>
+      </Drawer>
       <PrismaCard className="prisma-vacancy-form-section" title="2. Missão da vaga"><Typography.Text type="secondary">Qual é o principal propósito desta Vaga?</Typography.Text><Input.TextArea maxLength={700} onChange={(event) => update("mission", event.target.value)} rows={4} showCount value={draft.mission} /></PrismaCard>
       <div className="prisma-vacancy-two-columns">
         <StringListEditor label="3. Responsabilidades" onChange={(value) => update("responsibilities", value)} placeholder="O que esta Pessoa fará?" values={draft.responsibilities} />

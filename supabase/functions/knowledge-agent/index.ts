@@ -30,6 +30,8 @@ interface VacancyAdvisorRequest {
   language: "pt-BR";
 }
 
+interface OccupationResolutionRequest { organizationId: string; attemptId: string; contract: string; }
+
 interface VacancyAdvisorSource {
   url: string;
   title: string;
@@ -57,6 +59,8 @@ const outputSchemaVersion = "knowledge-proposal-1.0.0";
 const sourcePolicyVersion = "trusted-sources-1.0.0";
 const vacancyAdvisorPromptVersion = "vacancy-advisor-web-1.0.0";
 const vacancyAdvisorOutputSchemaVersion = "vacancy-advisor-market-answer-1.0.0";
+const occupationResolutionPromptVersion = "occupation-resolution-agent-1.0.0";
+const occupationResolutionOutputSchemaVersion = "occupation-resolution-answer-1.0.0";
 
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -69,6 +73,9 @@ Deno.serve(async (request) => {
     const payload = await request.json();
     if (payload?.mode === "vacancy_advisor") {
       return await handleVacancyAdvisor(serviceClient, authUser.id, payload, startedAt);
+    }
+    if (payload?.mode === "occupation_resolution") {
+      return await handleOccupationResolution(serviceClient, authUser.id, payload, startedAt);
     }
     const inboxId = String(payload?.inboxId ?? "");
     if (!inboxId) throw new HttpError(400, "Inbox não informada.");
@@ -138,6 +145,51 @@ Deno.serve(async (request) => {
     return jsonResponse(status, { error: message });
   }
 });
+
+async function handleOccupationResolution(
+  serviceClient: ReturnType<typeof createServiceClient>, authUserId: string, payload: Record<string, unknown>, startedAt: number,
+) {
+  if (payload.contract !== "occupation-resolution-agent-request-1.0.0") throw new HttpError(400, "Contrato de resolução ocupacional não suportado.");
+  const input: OccupationResolutionRequest = {
+    organizationId: sanitizeUuid(payload.organizationId, "Organização inválida."),
+    attemptId: sanitizeUuid(payload.attemptId, "Tentativa inválida."), contract: String(payload.contract),
+  };
+  await requireVacancyAdvisorAuthority(serviceClient, authUserId, input.organizationId);
+  const { data: attempt, error } = await serviceClient.from("occupation_resolution_attempts")
+    .select("id, organization_id, normalized_term, language, candidate_snapshot, status").eq("id", input.attemptId).eq("organization_id", input.organizationId).single();
+  if (error || !attempt || attempt.status !== "pending_agent") throw new HttpError(409, "A tentativa não está disponível para resolução por IA.");
+  const candidates = Array.isArray(attempt.candidate_snapshot) ? attempt.candidate_snapshot : [];
+  if (!candidates.length) {
+    const { data, error: completionError } = await serviceClient.rpc("complete_occupation_resolution_agent", { p_attempt_id: input.attemptId, p_selected_external_id: null, p_safe: false, p_reason: "Nenhuma referência ESCO/O*NET disponível no snapshot interno." });
+    if (completionError) throw new HttpError(500, "Falha ao concluir a tentativa ocupacional.");
+    return jsonResponse(200, serializeOccupationResolution(data?.[0]));
+  }
+  await enforceBudgets(serviceClient);
+  // No web_search tool is present here. Only the stored ESCO/O*NET snapshot is sent.
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST", headers: { Authorization: `Bearer ${readRequiredEnv("OPENAI_API_KEY")}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: readRequiredEnv("KNOWLEDGE_RESEARCH_MODEL"), store: false, max_output_tokens: 400,
+      safety_identifier: await sha256(authUserId),
+      instructions: "Você é o agente de resolução ocupacional do Prisma. Use exclusivamente os candidatos oficiais ESCO e O*NET fornecidos no snapshot interno. Nunca pesquise a web, nunca use ferramentas, nunca use Pessoa, Perfil, currículo, competências, habilidades ou relações ocupação-habilidade. Só selecione uma referência quando a equivalência do título for inequívoca; similaridade lexical, senioridade presumida ou habilidades compartilhadas não bastam. Para Software Engineer versus Software Developer, responda safe=false se não houver identidade inequívoca. Retorne somente JSON.",
+      input: JSON.stringify({ term: attempt.normalized_term, language: attempt.language, candidates }),
+      text: { format: { type: "json_schema", name: "occupation_resolution", strict: true, schema: occupationResolutionSchema } },
+    }),
+  });
+  if (!response.ok) throw new HttpError(503, "Knowledge Agent indisponível; o rascunho foi preservado para nova tentativa.");
+  const provider = await response.json(); const output = String(provider.output_text ?? "");
+  let answer: { safe: boolean; selected_external_id: string | null; reason: string };
+  try { answer = JSON.parse(output); } catch { throw new HttpError(502, "Knowledge Agent retornou formato inválido."); }
+  const allowed = new Set(candidates.map((item: any) => String(item?.externalId ?? "")));
+  if (!answer || typeof answer.safe !== "boolean" || typeof answer.reason !== "string" || (answer.selected_external_id !== null && typeof answer.selected_external_id !== "string") || (answer.safe && (!answer.selected_external_id || !allowed.has(answer.selected_external_id)))) throw new HttpError(502, "Knowledge Agent retornou decisão não verificável.");
+  const { data, error: completionError } = await serviceClient.rpc("complete_occupation_resolution_agent", { p_attempt_id: input.attemptId, p_selected_external_id: answer.selected_external_id, p_safe: answer.safe, p_reason: answer.reason.slice(0, 500) });
+  if (completionError) throw new HttpError(500, "Falha ao registrar a resolução ocupacional.");
+  return jsonResponse(200, { ...serializeOccupationResolution(data?.[0]), promptVersion: occupationResolutionPromptVersion, outputSchemaVersion: occupationResolutionOutputSchemaVersion, durationMs: Date.now() - startedAt });
+}
+
+function serializeOccupationResolution(row: any) {
+  if (!row || typeof row !== "object") throw new HttpError(502, "Resultado de resolução inválido.");
+  return { attemptId: row.attempt_id, status: row.resolution_status, decisionOrigin: row.decision_origin, canonicalConceptId: row.canonical_concept_id, canonicalLabel: row.canonical_label, normalizedTerm: row.normalized_term, candidates: row.candidates ?? [], ambiguityReason: row.ambiguity_reason, reused: Boolean(row.reused) };
+}
 
 async function handleVacancyAdvisor(
   serviceClient: ReturnType<typeof createServiceClient>,
@@ -572,4 +624,9 @@ const vacancyAdvisorSchema = {
       },
     },
   },
+};
+
+const occupationResolutionSchema = {
+  type: "object", additionalProperties: false, required: ["safe", "selected_external_id", "reason"],
+  properties: { safe: { type: "boolean" }, selected_external_id: { type: ["string", "null"] }, reason: { type: "string" } },
 };

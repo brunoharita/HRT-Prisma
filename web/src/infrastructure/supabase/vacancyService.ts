@@ -241,12 +241,38 @@ export const vacancyService = {
     const result = await supabase.rpc("resolve_occupation_on_demand" as never, {
       p_organization_id: organizationId, p_observed_term: observedTerm, p_vacancy_id: vacancyId, p_language: "pt-BR",
     } as never);
-    if (result.error) throw new Error("Não foi possível consultar a referência profissional agora. Você pode continuar preenchendo a Vaga manualmente.");
+    if (result.error) throw new Error("Não foi possível consultar a referência profissional agora. O rascunho foi preservado para nova tentativa.");
     const row = (result.data as OccupationResolutionRow[] | null)?.[0];
-    if (!row || !isOccupationResolutionRow(row)) throw new Error("A referência profissional retornou um formato inválido. Você pode continuar preenchendo a Vaga manualmente.");
+    if (!row || !isOccupationResolutionRow(row)) throw new Error("A referência profissional retornou um formato inválido. O rascunho foi preservado para nova tentativa.");
     return { attemptId: row.attempt_id, status: row.resolution_status, decisionOrigin: row.decision_origin,
       canonicalConceptId: row.canonical_concept_id, canonicalLabel: row.canonical_label, normalizedTerm: row.normalized_term,
       candidates: readOccupationCandidates(row.candidates), ambiguityReason: row.ambiguity_reason, reused: row.reused };
+  },
+
+  async resolveOccupationV2(organizationId: string, observedTerm: string, vacancyId: string | null = null): Promise<OccupationResolution> {
+    const result = await supabase.rpc("resolve_occupation_on_demand_v2" as never, { p_organization_id: organizationId, p_observed_term: observedTerm, p_vacancy_id: vacancyId, p_language: "pt-BR" } as never);
+    if (result.error) throw new Error("Não foi possível iniciar a resolução ocupacional. O rascunho foi preservado para nova tentativa.");
+    const row = (result.data as OccupationResolutionRow[] | null)?.[0];
+    if (!row || !isOccupationResolutionRow(row)) throw new Error("A resolução ocupacional retornou um formato inválido.");
+    const resolution = mapOccupationResolution(row);
+    if (resolution.status !== "pending_agent") return resolution;
+    const { data, error } = await supabase.functions.invoke("knowledge-agent", { body: { mode: "occupation_resolution", contract: "occupation-resolution-agent-request-1.0.0", organizationId, attemptId: resolution.attemptId } });
+    if (error) throw await supabaseFunctionOperationError(error, "Knowledge Agent indisponível. O rascunho foi preservado para nova tentativa.");
+    if (!data || typeof data !== "object") throw new Error("Knowledge Agent retornou formato inválido.");
+    return data as OccupationResolution;
+  },
+
+  async selectOfficialOccupation(organizationId: string, attemptId: string, externalId: string): Promise<string> {
+    const result: any = await supabase.rpc("select_official_occupation_reference" as never, { p_organization_id: organizationId, p_attempt_id: attemptId, p_external_id: externalId } as never);
+    if (result.error || typeof result.data !== "string") throw new Error("Não foi possível registrar a referência oficial selecionada."); return result.data;
+  },
+  async declareNoOfficialOccupation(organizationId: string, attemptId: string): Promise<void> {
+    const result = await supabase.rpc("declare_no_official_occupation_reference" as never, { p_organization_id: organizationId, p_attempt_id: attemptId, p_reason: "Operador declarou ausência após explorar ESCO/O*NET." } as never);
+    if (result.error) throw new Error("Não foi possível registrar a ausência de referência oficial.");
+  },
+  async createManualOccupation(organizationId: string, attemptId: string, label: string): Promise<string> {
+    const result: any = await supabase.rpc("create_manual_organization_occupation" as never, { p_organization_id: organizationId, p_attempt_id: attemptId, p_label: label } as never);
+    if (result.error || typeof result.data !== "string") throw new Error("Não foi possível criar o conceito ocupacional interno."); return result.data;
   },
 
   async suggestAdvisorKnowledge(organizationId: string, query: string): Promise<VacancyAdvisorKnowledgeSuggestion[]> {
@@ -384,9 +410,10 @@ function isVacancyAdvisorMarketResearch(value: unknown): value is VacancyAdvisor
 
 function isOccupationResolutionRow(value: OccupationResolutionRow): boolean {
   return typeof value.attempt_id === "string" && typeof value.normalized_term === "string" && typeof value.reused === "boolean"
-    && ["resolved", "ambiguous", "completed", "service_unavailable", "failed"].includes(value.resolution_status)
-    && ["existing_reconciliation", "deterministic_official_resolution", "agent_assisted_resolution", "human_reconciliation", "no_safe_decision"].includes(value.decision_origin);
+    && ["resolved", "ambiguous", "completed", "service_unavailable", "failed", "pending_agent", "needs_human_review", "manual_allowed"].includes(value.resolution_status)
+    && ["existing_reconciliation", "deterministic_official_resolution", "agent_assisted_resolution", "human_reconciliation", "no_safe_decision", "no_official_reference", "manual_organization_concept"].includes(value.decision_origin);
 }
+function mapOccupationResolution(row: OccupationResolutionRow): OccupationResolution { return { attemptId: row.attempt_id, status: row.resolution_status, decisionOrigin: row.decision_origin, canonicalConceptId: row.canonical_concept_id, canonicalLabel: row.canonical_label, normalizedTerm: row.normalized_term, candidates: readOccupationCandidates(row.candidates), ambiguityReason: row.ambiguity_reason, reused: row.reused }; }
 function readOccupationCandidates(value: unknown): OccupationResolution["candidates"] {
   if (!Array.isArray(value)) return [];
   return value.flatMap((item) => {
