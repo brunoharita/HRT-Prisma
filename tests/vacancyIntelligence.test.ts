@@ -251,6 +251,61 @@ test("Assistente Prisma identifica pergunta atual de mercado para Web Search", (
   assert.match(answer.market, /depende de informação atual de mercado/i);
 });
 
+test("Assistente Prisma responde semanticamente com Knowledge interna, relações publicadas e metadados secundários", () => {
+  const draft = vacancy("Engenheiro Cloud", ["Kubernetes", "Azure"]);
+  const sufficient = answerVacancyQuestion("Como Kubernetes e Azure se relacionam nesta empresa?", draft, {
+    otherVacancies: [{ title: "SRE", area: "Tecnologia" }],
+    roles: [{ name: "Engenheiro Cloud", requirements: ["Kubernetes", "Azure"] }],
+    knowledge: [
+      { label: "Kubernetes", scope: "global", source: "CNCF", relatedLabels: ["Azure", "Orquestração de contêineres"] },
+      { label: "Azure", scope: "global", source: "Microsoft Learn", relatedLabels: ["Kubernetes"] },
+    ],
+    knowledgeLookupAvailable: true,
+  });
+  assert.equal(sufficient.internalStatus, "sufficient");
+  assert.match(sufficient.internal, /Vaga atual.*Kubernetes.*Azure/i);
+  assert.match(sufficient.internal, /relações publicadas.*Kubernetes.*Azure/i);
+  assert.match(sufficient.internal, /Contexto considerado:/i);
+  assert.doesNotMatch(sufficient.internal, /^Considerei a Vaga atual/i);
+
+  const partial = answerVacancyQuestion("O que a empresa registra sobre Kubernetes?", draft, {
+    otherVacancies: [], roles: [],
+    knowledge: [{ label: "Kubernetes", scope: "global", source: "CNCF" }], knowledgeLookupAvailable: true,
+  });
+  assert.equal(partial.internalStatus, "partial");
+  assert.match(partial.internal, /Kubernetes/i);
+
+  const insufficient = answerVacancyQuestion("A empresa usa Rust?", draft, {
+    otherVacancies: [], roles: [], knowledge: [], knowledgeLookupAvailable: true,
+  });
+  assert.equal(insufficient.internalStatus, "insufficient");
+  assert.match(insufficient.internal, /Não há informação suficiente na empresa para responder com segurança\./);
+  assert.match(insufficient.internal, /Contexto considerado:/);
+});
+
+test("Assistente Prisma preserva a análise interna quando a pesquisa externa falha e não usa Web para compô-la", async () => {
+  const question = "Quais tecnologias cloud são mais utilizadas atualmente?";
+  const internal = answerVacancyQuestion(question, vacancy("Engenheiro Cloud", ["Kubernetes"]), {
+    otherVacancies: [], roles: [], knowledge: [{ label: "Kubernetes", scope: "global", source: "CNCF", relatedLabels: ["Orquestração"] }], knowledgeLookupAvailable: true,
+  });
+  assert.equal(shouldResearchVacancyMarket(question), true);
+  const externalFailure = { ...internal, market: "Não foi possível consultar o mercado agora. A análise interna foi preservada.", sources: [], webSearched: false };
+  assert.equal(externalFailure.internal, internal.internal);
+  assert.match(externalFailure.market, /análise interna foi preservada/i);
+
+  const [page, service, relations] = await Promise.all([
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+    readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("supabase/migrations/20260826201154_m4_knowledge_foundation.sql", "utf8"),
+  ]);
+  assert.match(page, /const answer = answerVacancyQuestion\(/);
+  assert.match(page, /\.\.\.answer, market: errorMessage/);
+  assert.match(service, /suggest_knowledge_concepts", \{ p_organization_id: organizationId/);
+  assert.match(service, /from\("knowledge_relations"\)\.select/);
+  assert.doesNotMatch(service.match(/async suggestAdvisorKnowledge[\s\S]*?async researchAdvisorMarket/)?.[0] ?? "", /\.insert\(|\.update\(|\.delete\(/);
+  assert.match(relations, /knowledge_relations_read.*private\.has_org_role/i);
+});
+
 test("Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e auditoria fail-closed", async () => {
   const [agent, migration, actorIndex, page] = await Promise.all([
     readFile("supabase/functions/knowledge-agent/index.ts", "utf8"),

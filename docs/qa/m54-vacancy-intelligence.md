@@ -1,5 +1,11 @@
 # Evidência M5.4: Vagas
 
+## M5.4.7 — Assistente Prisma, resposta interna completa
+
+- A regressão determinística cobre resposta interna suficiente com Kubernetes/Azure e relações publicadas, resposta parcial, insuficiência com a frase canônica, metadados secundários, preservação diante de falha externa, isolamento tenant-scoped por RPC/RLS e ausência de mutação no caminho de leitura.
+- A consulta interna continua sem Web Search, agente novo, pipeline ou escrita. Relações e conceitos são lidos somente por `suggest_knowledge_concepts` e tabelas Knowledge já protegidas por RLS.
+- Smoke autenticado permanece pendente enquanto não houver sessão de navegador disponível. Produção não é parte desta rodada.
+
 ## M5.4.6 — revisão e visualização canônicas
 
 - `supabase/migrations/20260907130000_m546_vacancy_canonical_review.sql` e correção incremental `20260907130500_m546_dimension_feedback_conflict_fix.sql` permitem `unclassified` somente no rascunho, preservam snapshots históricos e mantêm a RPC, RLS e grants fechados.

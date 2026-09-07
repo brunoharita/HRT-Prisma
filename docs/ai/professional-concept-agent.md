@@ -14,6 +14,8 @@ Sem `OPENAI_API_KEY`, modelo, flag explícita e caps positivos, o provider falha
 
 ## Modo contextual de Vagas
 
+`Na sua empresa` não usa o Agent, modelo ou Web Search. A interface combina somente fontes internas já autorizadas: Vaga atual, demais Vagas e funções acessíveis, Knowledge Global publicada e Knowledge organizacional publicada, incluindo relações publicadas quando a consulta as retorna. A resposta mostra evidência suficiente, parcial ou insuficiente e não inventa relação ausente; seu texto continua disponível se o bloco externo falhar.
+
 O mesmo Knowledge Agent aceita `vacancy-advisor-request-1.0.0`. Esse modo não cria conceito nem proposta Knowledge. Ele pesquisa somente quando a interface identifica dependência de informação atual, recebe pergunta, título, área, idioma e data, e nunca recebe Perfil, currículo, Pessoa, nome da organização, missão, responsabilidades ou contexto interno.
 
 O prompt `vacancy-advisor-web-1.0.0` e o schema `vacancy-advisor-market-answer-1.0.0` separam síntese factual, recomendação e ressalvas. Toda fonte retornada deve estar tanto nas citações reais do Web Search quanto no catálogo aprovado; publisher, classe e instante de consulta são definidos pelo servidor. Uma fonte oficial basta; sem fonte oficial, são necessárias duas secundárias independentes. O resultado fica em cache tenant-scoped por 24 horas e o ledger não persiste a pergunta.

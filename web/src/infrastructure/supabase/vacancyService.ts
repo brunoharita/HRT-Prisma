@@ -36,6 +36,7 @@ export interface VacancyReferenceSuggestion {
 
 export interface VacancyAdvisorKnowledgeSuggestion extends VacancyReferenceSuggestion {
   conceptType: string;
+  relatedLabels: string[];
 }
 
 export interface VacancyHistoryItem {
@@ -289,12 +290,34 @@ export const vacancyService = {
     if (query.trim().length < 2) return [];
     const result = await supabase.rpc("suggest_knowledge_concepts", { p_organization_id: organizationId, p_query: query.trim(), p_limit: 8 });
     throwIfError(result.error, "Não foi possível consultar a Knowledge para esta pergunta.");
-    return (result.data ?? []).map((item) => ({
+    const suggestions = (result.data ?? []).map((item) => ({
       conceptId: item.concept_id,
       label: item.canonical_label,
       conceptType: item.concept_type,
       scope: item.concept_scope,
       source: item.source_name,
+      relatedLabels: [],
+    }));
+    const conceptIds = suggestions.map((item) => item.conceptId);
+    if (!conceptIds.length) return suggestions;
+    const [outgoing, incoming] = await Promise.all([
+      supabase.from("knowledge_relations").select("source_concept_id, target_concept_id").eq("status", "approved").in("source_concept_id", conceptIds).limit(24),
+      supabase.from("knowledge_relations").select("source_concept_id, target_concept_id").eq("status", "approved").in("target_concept_id", conceptIds).limit(24),
+    ]);
+    throwIfError(outgoing.error, "Não foi possível consultar as relações publicadas da Knowledge.");
+    throwIfError(incoming.error, "Não foi possível consultar as relações publicadas da Knowledge.");
+    const relations = [...(outgoing.data ?? []), ...(incoming.data ?? [])];
+    const relatedIds = [...new Set(relations.flatMap((relation) => [relation.source_concept_id, relation.target_concept_id]).filter((id) => !conceptIds.includes(id)))];
+    if (!relatedIds.length) return suggestions;
+    const concepts = await supabase.from("knowledge_concepts").select("id, canonical_label").eq("status", "approved").in("id", relatedIds);
+    throwIfError(concepts.error, "Não foi possível consultar os conceitos relacionados da Knowledge.");
+    const labels = new Map((concepts.data ?? []).map((concept) => [concept.id, concept.canonical_label]));
+    return suggestions.map((suggestion) => ({
+      ...suggestion,
+      relatedLabels: [...new Set(relations.flatMap((relation) => relation.source_concept_id === suggestion.conceptId
+        ? [labels.get(relation.target_concept_id)]
+        : relation.target_concept_id === suggestion.conceptId ? [labels.get(relation.source_concept_id)] : [])
+        .filter((label): label is string => Boolean(label)))],
     }));
   },
 

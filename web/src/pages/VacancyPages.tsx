@@ -272,7 +272,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     const answer = answerVacancyQuestion(advisorQuestion, draft, {
       otherVacancies: previous.map((item) => ({ title: item.title, area: item.area })),
       roles: roles.map((item) => ({ name: item.name, requirements: item.requirements.map((requirement) => requirement.label) })),
-      knowledge: knowledge.map((item) => ({ label: item.label, scope: item.scope, source: item.source })),
+      knowledge: knowledge.map((item) => ({ label: item.label, scope: item.scope, source: item.source, relatedLabels: item.relatedLabels })),
       knowledgeLookupAvailable,
     });
     if (shouldResearchVacancyMarket(advisorQuestion)) {
@@ -363,7 +363,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         <Input.TextArea autoSize={{ minRows: 3, maxRows: 7 }} onChange={(event) => setAdvisorQuestion(event.target.value)} onPressEnter={(event) => { if (!event.shiftKey) { event.preventDefault(); void askAdvisor(); } }} placeholder="Ex.: O que está faltando nesta vaga de Product Owner?" value={advisorQuestion} />
         <div className="prisma-vacancy-advisor-submit"><Typography.Text type="secondary">Enter para enviar, Shift + Enter para nova linha</Typography.Text><Button disabled={!advisorQuestion.trim()} icon={<BulbOutlined />} loading={advisorLoading} onClick={() => void askAdvisor()} type="primary">Perguntar ao Prisma</Button></div>
         {advisorAnswer ? <div className="prisma-vacancy-advisor-answer">
-          <section><strong>Na sua empresa</strong><Typography.Paragraph>{advisorAnswer.internal}</Typography.Paragraph></section>
+          <section><Space><strong>Na sua empresa</strong><Tag color={advisorAnswer.internalStatus === "sufficient" ? "success" : advisorAnswer.internalStatus === "partial" ? "gold" : "default"}>{({ sufficient: "Informação suficiente", partial: "Informação parcial", insufficient: "Informação insuficiente" } as const)[advisorAnswer.internalStatus]}</Tag></Space><Typography.Paragraph>{advisorAnswer.internal}</Typography.Paragraph></section>
           <section><Space><strong>No mercado</strong><Tag color={advisorAnswer.webSearched ? "blue" : "default"}>{advisorAnswer.webSearched ? "Web pesquisada agora" : "Somente contexto interno"}</Tag></Space><Typography.Paragraph>{advisorAnswer.market}</Typography.Paragraph></section>
           {advisorAnswer.sources.length ? <section className="prisma-vacancy-advisor-sources"><strong>Fontes consultadas</strong>{advisorAnswer.sources.map((source) => <a href={source.url} key={source.url} rel="noreferrer" target="_blank"><LinkOutlined /> {source.title} · {source.publisher}</a>)}</section> : null}
           <section><strong>Sugestão do Prisma</strong><Typography.Paragraph>{advisorAnswer.suggestion}</Typography.Paragraph></section>

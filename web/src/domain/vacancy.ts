@@ -132,12 +132,13 @@ export interface VacancyRestructureDelta {
 export interface VacancyAdvisorContext {
   otherVacancies: Array<{ title: string; area: string | null }>;
   roles: Array<{ name: string; requirements: string[] }>;
-  knowledge: Array<{ label: string; scope: "global" | "organization"; source: string | null }>;
+  knowledge: Array<{ label: string; scope: "global" | "organization"; source: string | null; relatedLabels?: string[] }>;
   knowledgeLookupAvailable: boolean;
 }
 
 export interface VacancyAdvisorAnswer {
   internal: string;
+  internalStatus: "sufficient" | "partial" | "insufficient";
   market: string;
   suggestion: string;
   sources: VacancyAdvisorSource[];
@@ -340,6 +341,7 @@ export function answerVacancyQuestion(question: string, draft: VacancyDraft, con
   if (!normalizedQuestion) {
     return {
       internal: "Escreva uma pergunta sobre esta Vaga.",
+      internalStatus: "insufficient",
       market: "Nenhuma pesquisa externa foi realizada.",
       suggestion: "Você pode perguntar sobre lacunas, exigências, funções semelhantes ou um requisito específico.",
       sources: [],
@@ -360,18 +362,20 @@ export function answerVacancyQuestion(question: string, draft: VacancyDraft, con
   ].filter((item): item is string => Boolean(item));
   const similarVacancies = context.otherVacancies.filter((item) => isSimilarVacancy(item.title, item.area, draft)).slice(0, 4);
   const similarRoles = context.roles.filter((item) => sharesRelevantWord(item.name, draft.title)).slice(0, 4);
-  const knowledgeLabels = unique(context.knowledge.map((item) => item.label)).slice(0, 5);
   const explicitAddition = extractExplicitRequirementAddition(question);
 
   let internal: string;
+  let internalStatus: VacancyAdvisorAnswer["internalStatus"];
   let suggestion: string;
   if (/figma/.test(normalizedQuestion) && /\bux\b|user experience/.test(normalizedQuestion)) {
     internal = "Figma pode aparecer como evidência relacionada a UX, mas a ferramenta, isoladamente, não comprova experiência em UX. O Prisma só considera atendimento pleno quando encontra evidência direta ou equivalência canônica publicada.";
+    internalStatus = "sufficient";
     suggestion = "Se Figma for relevante para a execução, mantenha-o como requisito próprio. Preserve UX como requisito separado e deixe a aderência explicar a evidência encontrada para cada um.";
   } else if (/falt|lacuna|complet|revis/.test(normalizedQuestion)) {
     internal = missing.length
       ? `A definição ainda não informa: ${joinHumanList(missing)}.`
       : `Os seis blocos estão preenchidos. A Vaga possui ${required} ${required === 1 ? "requisito obrigatório" : "requisitos obrigatórios"}; isso descreve a definição, não uma nota de qualidade.`;
+    internalStatus = missing.length ? "partial" : "sufficient";
     suggestion = missing.includes("contexto da vaga")
       ? "Explique o momento da área, o desafio da posição e o ambiente em que a Pessoa irá atuar, sem repetir requisitos profissionais."
       : "Revise se cada requisito obrigatório é realmente indispensável e se os resultados esperados são observáveis.";
@@ -380,26 +384,33 @@ export function answerVacancyQuestion(question: string, draft: VacancyDraft, con
     internal = references.length
       ? `Encontrei referências internas semelhantes: ${joinHumanList(references)}.`
       : "Não encontrei outra Vaga ou função interna claramente semelhante pelos dados atualmente disponíveis.";
+    internalStatus = references.length ? "sufficient" : "insufficient";
     suggestion = "Use as referências internas para comparar propósito, responsabilidades e requisitos, preservando as diferenças do cenário desta Vaga.";
   } else if (/requisit|exig[eê]ncia|demais|muitos|anos?/.test(normalizedQuestion)) {
     internal = `A Vaga possui ${required} ${required === 1 ? "requisito obrigatório" : "requisitos obrigatórios"}. O Prisma não conclui que a exigência é adequada apenas pela quantidade ou pelo tempo informado.`;
+    internalStatus = "partial";
     suggestion = required > 6
       ? "Revise quais itens são indispensáveis e mova diferenciais para Desejável. Para tempo de experiência, descreva a evidência prática esperada sempre que isso for mais preciso do que um número de anos."
       : "Confirme se cada item obrigatório é indispensável para esta necessidade e se existe uma forma mais direta de descrever a experiência esperada.";
   } else {
-    const knowledgeText = knowledgeLabels.length ? ` A Knowledge reconheceu referências relacionadas à pergunta: ${joinHumanList(knowledgeLabels)}.` : "";
-    internal = `Considerei a Vaga atual, ${context.otherVacancies.length} outras Vagas e ${context.roles.length} funções acessíveis nesta empresa.${knowledgeText}`;
-    suggestion = "Formule a decisão que você quer tomar e indique o requisito ou bloco da Vaga envolvido. O Prisma responderá sem alterar a definição automaticamente.";
+    const evidence = advisorInternalEvidence(normalizedQuestion, draft, context);
+    internal = evidence.answer;
+    internalStatus = evidence.status;
+    suggestion = evidence.status === "insufficient"
+      ? "Indique o requisito ou bloco da Vaga que deseja avaliar. O Prisma responderá somente com o que estiver representado nas fontes internas autorizadas."
+      : "Use esta leitura para revisar a Vaga. Nenhuma resposta altera a definição automaticamente.";
   }
 
   const marketRelevant = shouldResearchVacancyMarket(question);
   const market = marketRelevant
     ? "Esta pergunta depende de informação atual de mercado. A pesquisa externa ainda não foi concluída."
     : "Esta resposta usou somente o contexto interno disponível. Nenhuma pesquisa externa foi realizada.";
-  if (!context.knowledgeLookupAvailable) internal += " A consulta complementar à Knowledge não estava disponível, então a resposta preservou apenas o contexto já carregado.";
+  if (!context.knowledgeLookupAvailable) internal += " A consulta complementar à Knowledge não estava disponível; a resposta preserva somente o contexto interno já carregado.";
+  internal += ` ${advisorContextMetadata(context)}`;
 
   return {
     internal,
+    internalStatus,
     market,
     suggestion,
     sources: [],
@@ -594,6 +605,43 @@ function matchesPhrase(value: string, query: string): boolean {
   if (!normalizedQuery) return false;
   return normalizedValue === normalizedQuery || normalizedValue.includes(normalizedQuery);
 }
+
+function advisorInternalEvidence(question: string, draft: VacancyDraft, context: VacancyAdvisorContext): { answer: string; status: VacancyAdvisorAnswer["internalStatus"] } {
+  const queryWords = new Set(question.split(" ").filter((word) => word.length > 2 && !advisorStopWords.has(word)));
+  const questionIncludes = (value: string) => {
+    const normalizedValue = normalize(value);
+    return normalizedValue.length > 2 && (question.includes(normalizedValue) || normalizedValue.split(" ").some((word) => queryWords.has(word)));
+  };
+  const knowledge = context.knowledge
+    .map((item) => ({ ...item, relatedLabels: unique(item.relatedLabels ?? []) }))
+    .filter((item) => questionIncludes(item.label) || item.relatedLabels.some(questionIncludes));
+  const vacancyTerms = [draft.title, draft.mission, ...draft.responsibilities, ...draft.expectedOutcomes, ...draft.contextItems, ...draft.requirements.map((item) => item.label)]
+    .filter(Boolean)
+    .filter(questionIncludes);
+  const roleTerms = context.roles.flatMap((role) => [role.name, ...role.requirements]).filter(questionIncludes);
+  const knowledgeLabels = unique(knowledge.map((item) => item.label));
+  const related = knowledge.flatMap((item) => item.relatedLabels.map((label) => `${item.label} → ${label}`));
+  const statements: string[] = [];
+  if (vacancyTerms.length) statements.push(`Na Vaga atual, ${joinHumanList(unique(vacancyTerms).slice(0, 4))} aparece ${vacancyTerms.length === 1 ? "como informação relacionada" : "como informações relacionadas"}.`);
+  if (roleTerms.length) statements.push(`Nas funções acessíveis, há referência a ${joinHumanList(unique(roleTerms).slice(0, 4))}.`);
+  if (knowledgeLabels.length) {
+    const provenance = unique(knowledge.map((item) => item.scope === "organization" ? "Knowledge da empresa" : item.source ? `Knowledge Global (${item.source})` : "Knowledge Global"));
+    statements.push(`${joinHumanList(provenance)} reconhece ${joinHumanList(knowledgeLabels)}.`);
+  }
+  if (related.length) statements.push(`As relações publicadas disponíveis conectam ${joinHumanList(unique(related).slice(0, 6))}.`);
+
+  if (!statements.length) return { answer: "Não há informação suficiente na empresa para responder com segurança.", status: "insufficient" };
+  if (knowledgeLabels.length && related.length && vacancyTerms.length) return { answer: statements.join(" "), status: "sufficient" };
+  return { answer: statements.join(" "), status: "partial" };
+}
+
+function advisorContextMetadata(context: VacancyAdvisorContext): string {
+  return `Contexto considerado: Vaga atual, ${context.otherVacancies.length} ${context.otherVacancies.length === 1 ? "outra Vaga" : "outras Vagas"} e ${context.roles.length} ${context.roles.length === 1 ? "função acessível" : "funções acessíveis"}.`;
+}
+
+const advisorStopWords = new Set([
+  "como", "qual", "quais", "porque", "para", "esta", "esse", "isso", "sobre", "entre", "com", "sem", "uma", "uns", "das", "dos", "que", "sao", "são", "tem", "temos", "vaga", "empresa", "prisma", "atual", "relacionam", "relaciona", "relacao", "relação",
+]);
 
 function normalize(value: string): string {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9+#.]+/g, " ").trim();

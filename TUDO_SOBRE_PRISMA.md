@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 96d9051a6ede89b2c9db45dc98149ed1b41021a5e71eb434107c11370c2cd23b
+source_manifest_sha256: 83f99596d00254b91760c98a284871edd543f4a6c62a80fd53bc3e5f72f8c3df
 -->
 
 # Tudo sobre o Prisma
@@ -396,6 +396,8 @@ last_verified: 2026-09-06
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
+
+- M5.4.7 Assistente Prisma está implementado localmente: `Na sua empresa` deixou de responder apenas com contagens e agora compõe leitura determinística da Vaga atual, Vagas/funções acessíveis e conceitos/relações Knowledge publicados que a RLS permite ler. Expõe estados de informação suficiente, parcial ou insuficiente, mantém contagens como metadados e não aciona Web, Agent, pipeline ou escrita para esse bloco. Uma eventual falha da pesquisa externa de mercado preserva a resposta interna. Smoke autenticado depende de sessão disponível; produção não foi acionada.
 
 - M5.4.6 Vagas tem schema ativo no Prisma-QA e interface implementada localmente: a Vaga pronta usa Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados, ocultando vazios. O estruturador propõe a dimensão, mas a classificação é humana; `unclassified` é permitido em rascunho e bloqueia matching. Reestruturação produz delta, preserva itens humanos e nunca remove item não encontrado automaticamente. Correção de dimensão é auditável e encaminhada somente ao Inbox da Knowledge organizacional, sem alterar Global. A prova SQL revertida confirmou RLS/grants e persistência; o smoke autenticado responsivo desta entrega ainda está bloqueado por indisponibilidade de sessão. Produção não foi acionada.
 

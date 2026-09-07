@@ -21,7 +21,7 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 4. consultar o detalhe editorial e o histórico;
 5. encontrar Pessoas pelos Perfis publicados do tenant;
 6. comparar exatamente duas Pessoas por requisito, sem score, ranking ou vencedor.
-7. consultar o Assistente Prisma; perguntas atuais de mercado pesquisam a Web automaticamente e mostram as fontes usadas.
+7. consultar o Assistente Prisma. Em `Na sua empresa`, a resposta usa somente a Vaga atual, Vagas e funções acessíveis e Knowledge publicada autorizada, incluindo relações publicadas quando disponíveis. Ela informa se a evidência interna é suficiente, parcial ou insuficiente; contagens são apenas metadados. Perguntas atuais de mercado pesquisam a Web separadamente e mostram as fontes usadas, sem substituir a leitura interna.
 
 ## Regras de aderência
 
