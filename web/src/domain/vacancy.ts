@@ -200,6 +200,11 @@ export function emptyVacancyDraft(): VacancyDraft {
   };
 }
 
+export function sourceKindAfterOccupationReference(draft: Pick<VacancyDraft, "sourceKind" | "structureSource">): VacancySourceKind {
+  if (draft.structureSource) return "assisted_description";
+  return draft.sourceKind === "manual" ? "knowledge_reference" : draft.sourceKind;
+}
+
 export function newVacancyRequirement(label = "", category: VacancyRequirementCategory = inferRequirementCategory(label)): VacancyRequirementDraft {
   return {
     stableId: createId(),

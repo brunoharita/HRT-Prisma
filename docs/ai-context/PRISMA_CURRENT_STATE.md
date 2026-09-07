@@ -17,7 +17,7 @@ last_verified: 2026-09-06
 
 ## Disponível localmente
 
-- M5.4.5 Estruturar descrição alinhado ao Perfil Prisma está ativo no Prisma-QA: a descrição livre é preservada em `vacancy_versions.structure_source`; o estruturador determinístico decompõe narrativa e requisitos comparáveis conforme a matriz `docs/architecture/vacancy-profile-matrix.md`, mantém proveniência por item e não usa Web Search, conteúdo externo, Pessoa ou Perfil. Campos sem evidência permanecem vazios; versões históricas não recebem backfill. Produção não foi acionada.
+- M5.4.5 Estruturar descrição alinhado ao Perfil Prisma está ativo no Prisma-QA: a descrição livre é preservada em `vacancy_versions.structure_source`; o estruturador determinístico decompõe narrativa e requisitos comparáveis conforme a matriz `docs/architecture/vacancy-profile-matrix.md`, mantém proveniência por item e não usa Web Search, conteúdo externo, Pessoa ou Perfil. A escolha posterior de referência ocupacional complementa a Vaga e nunca substitui sua origem `assisted_description`; a migração de correção também recupera uma versão parcial previamente gravada como `knowledge_reference`. Campos sem evidência permanecem vazios; versões históricas não recebem backfill. Produção não foi acionada.
 
 - Protocolo permanente de fidelidade de acordos ativo: toda melhoria material passa por Contrato de Acordos, Prompt de Execução e AoT. `AGENTS.md` exige classificar DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e critérios de aceite antes do prompt; pendência material exige pergunta, acordo congelado não pode ser reinterpretado, e requisito sem prova não permite conclusão. Templates e protocolo de QA ficam em `docs/qa`; `check-foundation` valida sua presença. Não altera produto, schema, permissões ou produção.
 

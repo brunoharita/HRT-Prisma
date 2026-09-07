@@ -53,6 +53,7 @@ import {
   occupationResolutionMessage,
   shouldResearchVacancyMarket,
   structureVacancyDescription,
+  sourceKindAfterOccupationReference,
   validateVacancyDraft,
   type VacancyCandidateMatch,
   type VacancyAdvisorAnswer,
@@ -213,7 +214,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   }
   async function selectOfficialOccupation(externalId: string) {
     if (!occupationResolution) return;
-    try { const conceptId = await vacancyService.selectOfficialOccupation(activeMembership.organizationId, occupationResolution.attemptId, externalId); const candidate = occupationResolution.candidates.find((item) => item.externalId === externalId); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: "knowledge_reference", title: current.title || candidate?.label || current.title })); setValidationTarget(null); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "human_reconciliation", canonicalConceptId: conceptId, canonicalLabel: candidate?.label ?? draft.title }); setOccupationExplorerOpen(false); }
+    try { const conceptId = await vacancyService.selectOfficialOccupation(activeMembership.organizationId, occupationResolution.attemptId, externalId); const candidate = occupationResolution.candidates.find((item) => item.externalId === externalId); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: sourceKindAfterOccupationReference(current), title: current.title || candidate?.label || current.title })); setValidationTarget(null); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "human_reconciliation", canonicalConceptId: conceptId, canonicalLabel: candidate?.label ?? draft.title }); setOccupationExplorerOpen(false); }
     catch (caught) { setError(errorMessage(caught, "Não foi possível registrar a referência oficial.")); }
   }
   async function enableManualOccupation() {
@@ -223,7 +224,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   }
   async function createManualOccupation() {
     if (!occupationResolution) return;
-    try { const conceptId = await vacancyService.createManualOccupation(activeMembership.organizationId, occupationResolution.attemptId, draft.title); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: "knowledge_reference" })); setValidationTarget(null); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "manual_organization_concept", canonicalConceptId: conceptId, canonicalLabel: draft.title }); setOccupationExplorerOpen(false); }
+    try { const conceptId = await vacancyService.createManualOccupation(activeMembership.organizationId, occupationResolution.attemptId, draft.title); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: sourceKindAfterOccupationReference(current) })); setValidationTarget(null); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "manual_organization_concept", canonicalConceptId: conceptId, canonicalLabel: draft.title }); setOccupationExplorerOpen(false); }
     catch (caught) { setError(errorMessage(caught, "Não foi possível criar o conceito ocupacional interno.")); }
   }
   async function save() {
@@ -294,7 +295,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     {!vacancyId ? <PrismaCard className={`prisma-vacancy-start-card ${validationTarget === "occupation" ? "has-validation-error" : ""}`} title="Como você quer começar?">
       <div><label>Função da empresa<Select allowClear onChange={useRole} options={roles.map((item) => ({ label: item.name, value: item.id }))} placeholder="Usar uma função validada" /></label></div>
       <div><label>Vaga anterior<Select allowClear onChange={(value) => void usePrevious(value)} options={previous.map((item) => ({ label: item.title, value: item.id }))} placeholder="Reutilizar somente a definição" /></label></div>
-      <div className={validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} ref={occupationReferenceRef}><label>Referência profissional<Select allowClear filterOption={false} onSearch={(value) => void searchReferences(value)} onSelect={(value) => { const reference = references.find((item) => item.conceptId === value); if (reference) { setDraft((current) => ({ ...current, title: current.title || reference.label, referenceConceptId: value, sourceKind: "knowledge_reference" })); setValidationTarget(null); } }} options={references.map((item) => ({ label: `${item.label} · ${item.scope === "global" ? "Global" : "Empresa"}`, value: item.conceptId }))} placeholder="Buscar na Knowledge" showSearch /></label>{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}</div>
+      <div className={validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} ref={occupationReferenceRef}><label>Referência profissional<Select allowClear filterOption={false} onSearch={(value) => void searchReferences(value)} onSelect={(value) => { const reference = references.find((item) => item.conceptId === value); if (reference) { setDraft((current) => ({ ...current, title: current.title || reference.label, referenceConceptId: value, sourceKind: sourceKindAfterOccupationReference(current) })); setValidationTarget(null); } }} options={references.map((item) => ({ label: `${item.label} · ${item.scope === "global" ? "Global" : "Empresa"}`, value: item.conceptId }))} placeholder="Buscar na Knowledge" showSearch /></label>{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}</div>
       <Button icon={<RobotOutlined />} onClick={() => onNavigate("/vacancies/assist")}>Começar com uma descrição</Button>
     </PrismaCard> : null}
     <Form layout="vertical" onFinish={() => void save()}>

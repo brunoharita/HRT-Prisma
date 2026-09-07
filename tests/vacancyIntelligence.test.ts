@@ -13,6 +13,7 @@ import {
   applyStructuredDescription,
   VACANCY_PROFILE_MATRIX,
   occupationResolutionMessage,
+  sourceKindAfterOccupationReference,
   type VacancyDetail,
 } from "../web/src/domain/vacancy.js";
 import type { PublishedProfileCandidate } from "../web/src/domain/profileDiscovery.js";
@@ -158,6 +159,15 @@ test("M5.4.5 decompõe descrição backend sem cópia, invenção ou requisito a
   assert.equal(draft.structureSource?.originalDescription, source);
   assert.ok((draft.structureSource?.items.length ?? 0) > 0);
   assert.ok(VACANCY_PROFILE_MATRIX.filter((item) => item.matching).every((item) => ["experience", "competency", "knowledge", "technology", "education", "certification", "language"].includes(item.category)));
+});
+
+test("referência ocupacional complementa a descrição estruturada sem substituir sua origem", async () => {
+  const structured = applyStructuredDescription(emptyVacancyDraft(), "Buscamos uma pessoa para desenvolver APIs em Node.js.", structureVacancyDescription("Buscamos uma pessoa para desenvolver APIs em Node.js."));
+  assert.equal(sourceKindAfterOccupationReference(structured), "assisted_description");
+  assert.equal(sourceKindAfterOccupationReference(emptyVacancyDraft()), "knowledge_reference");
+  const hotfix = await readFile("supabase/migrations/20260907110000_m545_preserve_assisted_description_origin.sql", "utf8");
+  assert.match(hotfix, /source_kind = 'assisted_description'/);
+  assert.match(hotfix, /source_kind in \('assisted_description', 'knowledge_reference'\)/);
 });
 
 test("M5.4.5 preserva proveniência no snapshot sem reescrever versões históricas", async () => {
