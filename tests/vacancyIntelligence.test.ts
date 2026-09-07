@@ -10,6 +10,8 @@ import {
   shouldResearchVacancyMarket,
   sortVacancyMatches,
   structureVacancyDescription,
+  applyStructuredDescription,
+  VACANCY_PROFILE_MATRIX,
   occupationResolutionMessage,
   type VacancyDetail,
 } from "../web/src/domain/vacancy.js";
@@ -140,6 +142,32 @@ test("estruturação não expõe contexto profissional como cenário da vaga", (
   assert.equal(suggestions.find((item) => item.label === "Mercado farmacêutico")?.category, "experience");
   assert.ok(suggestions.some((item) => item.category === "context" && /estruturação/i.test(item.label)));
   assert.ok(suggestions.some((item) => item.category === "context" && /previsibilidade/i.test(item.label)));
+});
+
+test("M5.4.5 decompõe descrição backend sem cópia, invenção ou requisito ausente", () => {
+  const source = "Buscamos desenvolvedor backend para projetar APIs REST seguras usando Node.js e PostgreSQL. Deve aplicar Clean Architecture e trabalhar com Docker. Não há certificação, idioma ou Kubernetes.";
+  const suggestions = structureVacancyDescription(source);
+  const draft = applyStructuredDescription(emptyVacancyDraft(), source, suggestions);
+  assert.notEqual(draft.mission, source);
+  assert.ok(draft.responsibilities.every((item) => item !== source));
+  assert.ok(draft.requirements.some((item) => item.label === "Node.js" && item.category === "technology"));
+  assert.ok(draft.requirements.some((item) => item.label === "PostgreSQL" && item.category === "technology"));
+  assert.ok(draft.requirements.some((item) => item.label === "Clean Architecture" && item.category === "knowledge"));
+  assert.ok(!draft.requirements.some((item) => item.label === "Kubernetes"));
+  assert.ok(!draft.requirements.some((item) => item.category === "language" || item.category === "certification"));
+  assert.equal(draft.structureSource?.originalDescription, source);
+  assert.ok((draft.structureSource?.items.length ?? 0) > 0);
+  assert.ok(VACANCY_PROFILE_MATRIX.filter((item) => item.matching).every((item) => ["experience", "competency", "knowledge", "technology", "education", "certification", "language"].includes(item.category)));
+});
+
+test("M5.4.5 preserva proveniência no snapshot sem reescrever versões históricas", async () => {
+  const migration = await readFile("supabase/migrations/20260907020000_m545_vacancy_structure_provenance.sql", "utf8");
+  assert.match(migration, /add column if not exists structure_source/i);
+  assert.match(migration, /record_vacancy_structure_source/i);
+  assert.match(migration, /VACANCY_STRUCTURE_SOURCE_INVALID/);
+  assert.match(migration, /private\.has_org_role/);
+  assert.match(migration, /revoke all on function/i);
+  assert.doesNotMatch(migration, /professional_profiles|web_search/i);
 });
 
 test("Assistente Prisma separa contexto interno, mercado e sugestão sem fingir pesquisa externa", () => {

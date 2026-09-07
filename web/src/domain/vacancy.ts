@@ -4,6 +4,7 @@ export const VACANCY_DEFINITION_VERSION = "1.0.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-1.1.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.2.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
+export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.0.0";
 
 export type VacancyOccupancy = "occupied" | "vacant";
 export type VacancySourceKind = "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
@@ -52,7 +53,10 @@ export interface VacancyDraft {
   referenceConceptId: string | null;
   saveAsRole: boolean;
   changeKind: "material" | "editorial";
+  structureSource: VacancyStructureSource | null;
 }
+
+export interface VacancyStructureSource { originalDescription: string; contractVersion: string; structuredAt: string; items: Array<{ suggestionId: string; category: string; start: number; end: number; method: "explicit" | "faithful_synthesis" }>; }
 
 export interface VacancySummary {
   id: string;
@@ -107,6 +111,9 @@ export interface VacancyStructureSuggestion {
   origin: "explicit" | "derived";
   reason: string;
   selected: boolean;
+  sourceStart: number;
+  sourceEnd: number;
+  method: "explicit" | "faithful_synthesis";
 }
 
 export interface VacancyAdvisorContext {
@@ -189,6 +196,7 @@ export function emptyVacancyDraft(): VacancyDraft {
     referenceConceptId: null,
     saveAsRole: false,
     changeKind: "material",
+    structureSource: null,
   };
 }
 
@@ -218,10 +226,8 @@ export function inferRequirementCategory(label: string): VacancyRequirementCateg
 export function validateVacancyDraft(draft: VacancyDraft): string[] {
   const errors: string[] = [];
   if (!draft.title.trim()) errors.push("Informe o título da Vaga.");
-  if (!draft.mission.trim()) errors.push("Explique a missão principal da Vaga.");
   if (draft.occupancy === "occupied" && !draft.occupantPersonId) errors.push("Selecione a Pessoa que ocupa esta posição.");
   if (draft.requirements.some((item) => !item.label.trim())) errors.push("Preencha ou remova os requisitos vazios.");
-  if (!draft.requirements.length) errors.push("Adicione ao menos um requisito comparável.");
   return errors;
 }
 
@@ -379,14 +385,22 @@ export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCan
     );
 }
 
+export const VACANCY_PROFILE_MATRIX = [
+  { category: "experience", profileDimension: "experiences", matching: true }, { category: "competency", profileDimension: "competencies", matching: true },
+  { category: "knowledge", profileDimension: "competencies", matching: true }, { category: "technology", profileDimension: "toolsAndTechnologies", matching: true },
+  { category: "education", profileDimension: "education", matching: true }, { category: "certification", profileDimension: "certifications", matching: true },
+  { category: "language", profileDimension: "languages", matching: true }, { category: "mission", profileDimension: "professionalObjective", matching: false },
+  { category: "responsibility", profileDimension: "experiences", matching: false }, { category: "outcome", profileDimension: "keyResults", matching: false }, { category: "context", profileDimension: "professionalContexts", matching: false },
+] as const;
+
 export function structureVacancyDescription(description: string): VacancyStructureSuggestion[] {
-  const text = description.replace(/\s+/g, " ").trim();
+  const text = description.trim();
   if (!text) return [];
   const normalized = normalize(text);
   const suggestions: VacancyStructureSuggestion[] = [];
-  const add = (label: string, category: VacancyStructureSuggestion["category"], importance: VacancyRequirementImportance, origin: "explicit" | "derived", reason: string) => {
+  const add = (label: string, category: VacancyStructureSuggestion["category"], importance: VacancyRequirementImportance, origin: "explicit" | "derived", reason: string, start = text.toLocaleLowerCase("pt-BR").indexOf(label.toLocaleLowerCase("pt-BR")), method: VacancyStructureSuggestion["method"] = "explicit", end = Math.max(0, start) + Math.max(label.length, 1)) => {
     if (suggestions.some((item) => item.category === category && normalize(item.label) === normalize(label))) return;
-    suggestions.push({ id: createId(), label, category, importance, origin, reason, selected: origin === "explicit" });
+    suggestions.push({ id: createId(), label, category, importance, origin, reason, selected: origin === "explicit", sourceStart: Math.max(0, start), sourceEnd: end, method });
   };
 
   const termRules: Array<[RegExp, string, VacancyRequirementCategory, VacancyRequirementImportance]> = [
@@ -398,9 +412,12 @@ export function structureVacancyDescription(description: string): VacancyStructu
     [/ingl[eê]s\s+avan[cç]ado/, "Inglês avançado", "language", "required"],
     [/figma/, "Figma", "technology", "desired"],
     [/\bux\b|user\s+experience/, "UX", "competency", "required"],
+    [/\bnode\.?(?:js)?\b/i, "Node.js", "technology", "required"], [/\btypescript\b/i, "TypeScript", "technology", "required"], [/\bpython\b/i, "Python", "technology", "required"], [/\bjava\b/i, "Java", "technology", "required"], [/\bgo\b|golang/i, "Go", "technology", "required"],
+    [/\bpostgresql\b/i, "PostgreSQL", "technology", "required"], [/\bmongodb\b/i, "MongoDB", "technology", "required"], [/\bredis\b/i, "Redis", "technology", "required"], [/\brabbitmq\b/i, "RabbitMQ", "technology", "required"], [/\bkafka\b/i, "Kafka", "technology", "required"], [/\bdocker\b/i, "Docker", "technology", "required"], [/\bkubernetes\b/i, "Kubernetes", "technology", "required"], [/\baws\b|amazon web services/i, "AWS", "technology", "required"], [/\bgoogle cloud\b/i, "Google Cloud", "technology", "required"], [/\bazure\b/i, "Azure", "technology", "required"], [/\bterraform\b/i, "Terraform", "technology", "required"], [/\bgithub actions\b/i, "GitHub Actions", "technology", "required"], [/\bjest\b/i, "Jest", "technology", "required"], [/\bpytest\b/i, "PyTest", "technology", "required"], [/\bjunit\b/i, "JUnit", "technology", "required"],
+    [/clean architecture/i, "Clean Architecture", "knowledge", "required"], [/design patterns?/i, "Design Patterns", "knowledge", "required"], [/arquitetura de software/i, "Arquitetura de software", "knowledge", "required"], [/seguran[cç]a/i, "Segurança de aplicações", "knowledge", "required"], [/apis? rest/i, "Desenvolvimento de APIs REST", "knowledge", "required"],
   ];
   for (const [pattern, label, category, importance] of termRules) {
-    if (pattern.test(normalized)) add(label, category, importance, "explicit", `O termo aparece na descrição fornecida.`);
+    if (pattern.test(normalized) && !isExplicitlyNegated(text, pattern)) add(label, category, importance, "explicit", `O termo aparece na descrição fornecida.`);
   }
   if (/liderar|lideran[cç]a/.test(normalized)) {
     const explicit = /lideran[cç]a/.test(normalized);
@@ -415,7 +432,12 @@ export function structureVacancyDescription(description: string): VacancyStructu
   for (const sentence of sentences.filter((item) => /\b(meta|resultado|crescimento|receita|expans[aã]o|previsibilidade|reten[cç][aã]o)\b/i.test(item)).slice(0, 4)) {
     add(stripLead(sentence), "outcome", "required", "explicit", "Resultado ou impacto mencionado no texto.");
   }
-  if (sentences[0]) add(sentences[0].replace(/[.]$/, ""), "mission", "required", "explicit", "Primeira afirmação usada apenas como proposta de missão.");
+  const missionSource = sentences.find((item) => /\b(busca|buscamos|respons[aá]vel|atuar|construir|evoluir|desenvolvedor|analista|gerente)\b/i.test(item));
+  if (missionSource) {
+    const concise = synthesizeMission(missionSource);
+    const sourceStart = text.indexOf(missionSource);
+    if (concise && normalize(concise) !== normalize(text)) add(concise, "mission", "required", "explicit", "Síntese fiel de propósito presente na descrição.", sourceStart, "faithful_synthesis", sourceStart + missionSource.length);
+  }
 
   const contextRules: Array<[RegExp, string]> = [
     [/(?:equipe|[aá]rea)\s+(?:est[aá]\s+)?(?:em\s+processo\s+de\s+)?estrutura[cç][aã]o/, "Equipe ou área em processo de estruturação"],
@@ -439,7 +461,22 @@ export function applyStructureSuggestions(base: VacancyDraft, suggestions: Vacan
   const requirements = selected.flatMap((item) => requirementCategories.includes(item.category as VacancyRequirementCategory)
     ? [{ ...newVacancyRequirement(item.label, item.category as VacancyRequirementCategory), importance: item.importance }]
     : []);
-  return { ...base, mission, responsibilities, expectedOutcomes, contextItems, requirements: [...base.requirements, ...requirements], sourceKind: "assisted_description" };
+  const items = selected.map((item) => ({ suggestionId: item.id, category: item.category, start: item.sourceStart, end: item.sourceEnd, method: item.method }));
+  return { ...base, mission, responsibilities, expectedOutcomes, contextItems, requirements: [...base.requirements, ...requirements], sourceKind: "assisted_description", structureSource: base.structureSource ? { ...base.structureSource, items } : null };
+}
+
+export function applyStructuredDescription(base: VacancyDraft, description: string, suggestions: VacancyStructureSuggestion[]): VacancyDraft {
+  return applyStructureSuggestions({ ...base, structureSource: { originalDescription: description, contractVersion: VACANCY_STRUCTURE_CONTRACT, structuredAt: new Date().toISOString(), items: [] } }, suggestions);
+}
+
+function synthesizeMission(sentence: string): string {
+  const cleaned = stripLead(sentence).replace(/\bde alto nível\b/gi, "").replace(/\s+/g, " ").trim().replace(/[.]$/, "");
+  if (cleaned.length > 220) return cleaned.slice(0, 217).replace(/\s+\S*$/, "") + "...";
+  return cleaned;
+}
+
+function isExplicitlyNegated(text: string, pattern: RegExp): boolean {
+  return text.split(/(?<=[.!?])\s+/).some((sentence) => /\b(?:n[aã]o|sem|nunca)\s+(?:h[aá]|exige|requer|possui|tem)?/i.test(sentence) && new RegExp(pattern.source, pattern.flags.replace("g", "")).test(sentence));
 }
 
 function allProfileEvidence(candidate: PublishedProfileCandidate): VacancyMatchEvidence[] {

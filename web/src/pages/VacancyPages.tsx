@@ -45,7 +45,7 @@ import {
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
-  applyStructureSuggestions,
+  applyStructuredDescription,
   answerVacancyQuestion,
   emptyVacancyDraft,
   inferRequirementCategory,
@@ -344,17 +344,17 @@ export function VacancyAssistPage({ onNavigate }: CommonProps) {
   function analyze() { setSuggestions(structureVacancyDescription(description)); }
   function confirm() {
     const base = readDraft();
-    const structured = applyStructureSuggestions({ ...base, title: base.title || inferTitle(description) }, suggestions);
+    const structured = applyStructuredDescription({ ...base, title: base.title || inferTitle(description) }, description, suggestions);
     persistDraft(structured); onNavigate("/vacancies/new");
   }
   const grouped = groupSuggestions(suggestions);
   return <PrismaPage className="prisma-vacancy-assist-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/vacancies/new")} type="text">Voltar para Nova vaga</Button>
-    <PrismaPageHeader title="Estruturar vaga com ajuda do Prisma" description="Cole uma descrição livre. O Prisma organiza somente o que está no texto e separa sugestões que exigem sua confirmação." />
+    <PrismaPageHeader title="Estruturar vaga com ajuda do Prisma" description="Descrição da vaga é a fonte original. A estrutura sugerida é uma interpretação revisável, sem enriquecimento externo." />
     <Alert icon={<RobotOutlined />} message="A assistência externa permanece desativada. Esta preparação é determinística, não envia dados a terceiros e não salva nada antes da sua revisão." showIcon type="info" />
     <div className="prisma-vacancy-assist-grid">
-      <PrismaCard title="1. Descrição da vaga"><Input.TextArea maxLength={5000} onChange={(event) => setDescription(event.target.value)} placeholder="Cole aqui a descrição profissional..." rows={23} showCount value={description} /><div className="prisma-vacancy-assist-actions"><Button icon={<DeleteOutlined />} onClick={() => { setDescription(""); setSuggestions([]); }}>Limpar texto</Button><Button disabled={!description.trim()} icon={<BulbOutlined />} onClick={analyze} type="primary">Estruturar descrição</Button></div></PrismaCard>
-      <PrismaCard title="2. Estrutura sugerida pelo Prisma">
+      <PrismaCard title="1. Descrição da vaga · fonte original"><Input.TextArea maxLength={5000} onChange={(event) => setDescription(event.target.value)} placeholder="Cole aqui a descrição profissional..." rows={23} showCount value={description} /><div className="prisma-vacancy-assist-actions"><Button icon={<DeleteOutlined />} onClick={() => { setDescription(""); setSuggestions([]); }}>Limpar texto</Button><Button disabled={!description.trim()} icon={<BulbOutlined />} onClick={analyze} type="primary">Estruturar descrição</Button></div></PrismaCard>
+      <PrismaCard title="2. Estrutura sugerida pelo Prisma · interpretação revisável">
         {!suggestions.length ? <Empty description="A estrutura sugerida aparecerá aqui para revisão." /> : Object.entries(grouped).map(([category, items]) => <section className="prisma-assist-suggestion-group" key={category}><strong>{category}</strong>{items.map((item) => <Checkbox checked={item.selected} key={item.id} onChange={(event) => setSuggestions((current) => current.map((candidate) => candidate.id === item.id ? { ...candidate, selected: event.target.checked } : candidate))}><span>{item.label}</span>{item.origin === "derived" ? <Tag color="purple">Sugestão para revisão</Tag> : null}<small>{item.reason}</small></Checkbox>)}</section>)}
       </PrismaCard>
     </div>

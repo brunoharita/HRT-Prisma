@@ -160,6 +160,7 @@ export const vacancyService = {
       referenceConceptId: version.reference_concept_id,
       saveAsRole: false,
       changeKind: "material",
+      structureSource: readStructureSource((version as any).structure_source),
       createdAt: vacancy.created_at,
       updatedAt: vacancy.updated_at,
     };
@@ -191,6 +192,10 @@ export const vacancyService = {
     if (result.error) throw new Error(humanizeVacancyError(result.error));
     const saved = result.data?.[0];
     if (!saved) throw new Error("A Vaga não foi confirmada pelo banco. Seu preenchimento foi preservado.");
+    if (draft.structureSource) {
+      const provenance = await supabase.rpc("record_vacancy_structure_source" as never, { p_organization_id: organizationId, p_vacancy_version_id: saved.vacancy_version_id, p_source: draft.structureSource as unknown as Json } as never);
+      if (provenance.error) throw new Error("A Vaga foi salva, mas a proveniência da estrutura não pôde ser preservada. Tente novamente antes de continuar.");
+    }
     return { id: saved.vacancy_id, version: saved.version };
   },
 
@@ -304,6 +309,7 @@ export const vacancyService = {
   },
 
   async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true): Promise<VacancyCandidateMatch[]> {
+    if (!vacancy.referenceConceptId || !vacancy.requirements.some((item) => item.label.trim())) throw new Error("Esta Vaga ainda é um rascunho estrutural. Defina a ocupação e ao menos um requisito comparável antes de buscar Pessoas.");
     const candidates = await loadPublishedProfileCandidates(organizationId, includePrivateLocation);
     return sortVacancyMatches(candidates.map((candidate) => matchVacancyCandidate(vacancy, candidate)));
   },
@@ -369,6 +375,7 @@ function readRequirements(value: Json): VacancyRequirementDraft[] {
 }
 
 function readStringArray(value: Json): string[] { return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && Boolean(item.trim())) : []; }
+function readStructureSource(value: unknown): VacancyDraft["structureSource"] { if (!value || typeof value !== "object" || Array.isArray(value)) return null; const row = value as Record<string, unknown>; if (typeof row.originalDescription !== "string" || typeof row.contractVersion !== "string" || typeof row.structuredAt !== "string" || !Array.isArray(row.items)) return null; return { originalDescription: row.originalDescription, contractVersion: row.contractVersion, structuredAt: row.structuredAt, items: row.items.flatMap((item) => item && typeof item === "object" && !Array.isArray(item) && typeof (item as any).suggestionId === "string" && typeof (item as any).category === "string" && typeof (item as any).start === "number" && typeof (item as any).end === "number" && ((item as any).method === "explicit" || (item as any).method === "faithful_synthesis") ? [{ suggestionId: (item as any).suggestionId, category: (item as any).category, start: (item as any).start, end: (item as any).end, method: (item as any).method }] : []) }; }
 function asRecord(value: Json | undefined): { [key: string]: Json | undefined } | null { return value !== null && typeof value === "object" && !Array.isArray(value) ? value : null; }
 function readString(value: Json | undefined): string | null { return typeof value === "string" && value.trim() ? value.trim() : null; }
 function readNumber(value: Json | undefined): number | null { return typeof value === "number" ? value : null; }

@@ -25,6 +25,8 @@ O cliente carrega apenas Perfis publicados do tenant por meio da fundação de p
 
 `vacancy-structure-deterministic-1.0.0` identifica somente padrões locais explícitos e separa derivações visíveis, inicialmente desmarcadas. O Assistente contextual mantém a leitura interna determinística e aciona o modo `vacancy_advisor` do Knowledge Agent somente quando a pergunta depende de informação atual de mercado. O provider recebe pergunta, título, área, idioma e data, sem Perfis, Pessoas, organização ou descrição interna da Vaga. Web Search é server-side, limitado a fontes aprovadas, Structured Output, `store: false`, orçamento compartilhado e cache tenant-scoped de 24 horas. Resposta, recomendação e fontes permanecem orientativas e não alteram a Vaga automaticamente.
 
+`vacancy-structure-profile-aligned-2.0.0` estrutura somente a descrição fornecida: narrativa fica em missão, responsabilidades, resultados e contexto; dimensões comparáveis usam as categorias já existentes de requisito. A matriz versionada [Perfil ↔ Vaga](vacancy-profile-matrix.md) é a fonte única dessa correspondência. `structure_source` preserva texto original e offsets/metadados por item na versão imutável, sem PII de Pessoa, Web Search ou enriquecimento.
+
 ## Compatibilidade e rollback
 
 Vagas históricas recebem versão inicial sem alterar sua identidade. A UI pode ser retirada e a execução da RPC revogada sem apagar os snapshots. Avaliações existentes sem `vacancy_version_id` continuam legíveis; novas avaliações da M5.4 sempre informam a versão.

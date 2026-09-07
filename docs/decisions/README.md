@@ -25,6 +25,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-013](ADR-013-canonical-knowledge-organization-overlay.md) | accepted | Canonical Prisma Knowledge with organization overlay |
 | [ADR-038](ADR-038-occupation-reconciliation.md) | accepted | One user-facing occupation reconciles approved official references |
 | [ADR-040](ADR-040-m544-ai-occupation-resolution.md) | accepted | AI-assisted ESCO/O*NET resolution with a human explorer before manual occupation creation |
+| [ADR-041](ADR-041-canonical-vacancy-structure-profile-alignment.md) | accepted | Fixed vacancy structure aligned to canonical Prisma Profile dimensions |
 | [ADR-014](ADR-014-knowledge-agent-trusted-sources.md) | accepted | Knowledge Agent with trusted-source and no-PII policy |
 | [ADR-015](ADR-015-knowledge-triggered-reinterpretation.md) | accepted | Knowledge-triggered profile reinterpretation through M2-C |
 | [ADR-016](ADR-016-spatial-cv-evidence-review.md) | accepted | PDF-first review with normalized spatial evidence and immutable human history |
