@@ -5985,6 +5985,22 @@ textarea {
   background: #fbfdff;
 }
 .prisma-requirement-editor > label { display: grid; gap: 6px; min-width: 0; color: var(--prisma-text-muted); font-size: 0.78rem; font-weight: 650; }
+.prisma-requirement-importance.ant-segmented {
+  padding: 3px;
+  border: 1px solid #bfcee4;
+  background: #e9eff8;
+  box-shadow: inset 0 1px 2px rgba(15, 42, 82, 0.08);
+}
+.prisma-requirement-importance .ant-segmented-item { color: #405572; font-weight: 750; }
+.prisma-requirement-importance .ant-segmented-item:hover { color: #102a50; background: rgba(255, 255, 255, 0.58); }
+.prisma-requirement-importance .ant-segmented-item-selected,
+.prisma-requirement-importance .ant-segmented-item-selected:hover {
+  color: #fff;
+  background: #0d4aa0;
+  box-shadow: 0 1px 3px rgba(7, 35, 77, 0.34);
+}
+.prisma-requirement-importance .ant-segmented-item-selected .ant-segmented-item-label { color: inherit; }
+.prisma-requirement-importance:focus-within { outline: 3px solid rgba(37, 99, 235, 0.28); outline-offset: 2px; }
 .prisma-vacancy-advisor > .ant-card-body { display: grid; gap: 12px; }
 .prisma-vacancy-advisor-submit { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .prisma-vacancy-advisor-answer { display: grid; gap: 10px; padding: 14px; border: 1px solid #d7ddff; border-radius: 12px; background: linear-gradient(135deg, #f8f7ff 0%, #f6faff 100%); }
