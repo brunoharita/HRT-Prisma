@@ -35,3 +35,7 @@ Sem regressão não justificada, contratos compatíveis, segurança negativa apr
 ## Evidência
 
 Registrar commit, ambiente, versões, fixtures, comando, resultado, falhas, correções, limitações e timestamp. Snapshot de UI ou log não substitui assertiva reproduzível quando automação é possível.
+
+## Rastreabilidade de acordos
+
+Movimentos materiais usam o [Contrato de Acordos](agreement-contract-template.md) antes do Prompt Mestre e encerram com o [AoT](aot-template.md). Todo `D-*` possui critério de aceite e evidência; todo `P-*` material e testável possui prova negativa. Consulte o [protocolo de rastreabilidade](product-agreement-traceability.md) para estados, supersessão e critérios que impedem concluir uma entrega.

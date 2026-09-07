@@ -181,3 +181,24 @@ A change is material when it alters behavior, fields, states, roles, authority, 
 ## 12. Numbered requirement contracts
 
 When a numbered RF contract is accepted for implementation, an agent may optimize its implementation but cannot remove, substitute, reorder, postpone, or reinterpret a requirement without a Product Owner decision. The delivery must trace requirement to implementation, test, and evidence; an unproven required item is not done.
+
+## 13. Product Agreement and Prompt Fidelity Protocol
+
+For every material Prisma movement, product authority flows in this order: **Agreement Contract -> Execution Prompt -> AoT closeout**. None replaces another. The most recent explicit Product Owner decision prevails, followed by the frozen Agreement Contract, its Execution Prompt, current product contracts/ADRs, existing architecture, and engineering preference. Platform safety, legal, authorization, secrets, and production constraints always prevail.
+
+Before generating an Execution Prompt, classify the agreed product behavior in a reusable Agreement Contract:
+
+- **DEVE (`D-*`)**: non-negotiable behavior, sequence, authority, state, UX, or outcome.
+- **PROIBIDO (`P-*`)**: behavior that must never occur; use negative proof where testable.
+- **FORA DE ESCOPO (`F-*`)**: valid work intentionally excluded from this movement.
+- **AUTONOMIA (`A-*`)**: implementation choices delegated to engineering.
+- **PENDENTE (`Q-*`)**: unresolved material decision.
+- **CRITÉRIO DE ACEITE (`CA-*`)**: objective evidence for each `D-*`.
+
+Do not produce the final Execution Prompt while a `Q-*` can materially change behavior, authority, sequence, data, UX, scope, architecture, cost, AI use, external source, destructive action, or production. Ask only the objective questions needed to resolve it. Do not ask about mechanical details or an answer already delegated to engineering.
+
+Once the Product Owner approves the Agreement Contract, it is frozen. The Execution Prompt must reproduce all `D-*`, `P-*`, `F-*`, and `A-*` without reinterpretation. Reuse-first, best practice, cost, convenience, or a more elegant implementation optimize the **how** only; they never authorize changing the **what**. If a real technical conflict appears, stop the affected rule, state the contract conflict, alternatives, and impact, and obtain a new Product Owner decision before proceeding.
+
+Before material implementation under a frozen prompt, declare concisely: what `D-*` will be implemented, which `P-*` cannot occur, what is `F-*`, and where `A-*` applies. This is an understanding check, not a new approval. A subsequent Product Owner change must supersede the affected ID explicitly, update the Agreement/Prompt, tests, and AoT; never leave conflicting rules active.
+
+Close every such movement with an **AoT** (Agreements -> Implementation -> Test -> Evidence) using the repository template. It records operational traceability, never private chain-of-thought. Each `D-*` and applicable `P-*` needs implementation, test/evidence, and status. Permitted statuses are `PASS`, `FAIL`, `PARTIAL`, `BLOCKED`, and `NOT TESTED`. Do not declare completion if any required `D-*` is not `PASS`, if a `P-*` is violated, or if evidence is missing where technically provable. State contract deviations explicitly; “none” is valid only when true.

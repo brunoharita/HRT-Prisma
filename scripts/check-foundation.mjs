@@ -43,6 +43,19 @@ const requiredDocuments = [
 
 await Promise.all(requiredDocuments.map(requireFile));
 
+const governanceAgent = await requireFile("AGENTS.md");
+const agreementTemplate = await requireFile("docs/qa/agreement-contract-template.md");
+const aotTemplate = await requireFile("docs/qa/aot-template.md");
+const traceabilityProtocol = await requireFile("docs/qa/product-agreement-traceability.md");
+for (const [name, content, required] of [
+  ["AGENTS.md governance protocol", governanceAgent, ["Product Agreement and Prompt Fidelity Protocol", "DEVE (`D-*`)", "PROIBIDO (`P-*`)", "FORA DE ESCOPO (`F-*`)", "AUTONOMIA (`A-*`)", "PENDENTE (`Q-*`)", "AoT"]],
+  ["agreement contract template", agreementTemplate, ["DEVE — Inegociável", "PROIBIDO", "FORA DE ESCOPO", "AUTONOMIA DE ENGENHARIA", "PENDÊNCIAS", "CRITÉRIOS DE ACEITE", "draft", "agreed", "superseded"]],
+  ["AoT template", aotTemplate, ["Matriz de Acordos", "Implementação", "Teste", "Evidência", "Status", "Proibições verificadas", "Desvios do contrato"]],
+  ["QA traceability protocol", traceabilityProtocol, ["teste negativo", "PASS", "PARTIAL", "NOT TESTED", "não está concluído"]],
+]) {
+  for (const item of required) if (!content.includes(item)) errors.push(`${name}: required governance element is missing: ${item}`);
+}
+
 const versionsSource = await requireFile("src/domain/versions.ts");
 const contracts = await requireFile("docs/architecture/contracts.md");
 const versionValues = [...versionsSource.matchAll(/\w+Version:\s*"([^"]+)"/g)].map((match) => match[1]);
