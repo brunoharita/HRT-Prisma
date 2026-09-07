@@ -227,6 +227,23 @@ test("resolução ocupacional explica segurança sem score e nunca deriva evidê
   assert.equal(matchVacancyCandidate(developer, withoutJava).requirements[0]?.status, "no_evidence");
 });
 
+test("validação de Vaga destaca o campo acionável que bloqueia o salvamento", async () => {
+  const [page, styles, adr, contracts] = await Promise.all([
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+    readFile("web/src/styles.css", "utf8"),
+    readFile("docs/decisions/ADR-042-actionable-field-validation-feedback.md", "utf8"),
+    readFile("docs/architecture/contracts.md", "utf8"),
+  ]);
+  assert.match(page, /focusValidationTarget\("occupation"\)/);
+  assert.match(page, /prisma-vacancy-reference-field has-validation-error/);
+  assert.match(page, /validationTarget === "title" \? \{ help: "Informe o título da Vaga\.", validateStatus: "error"/);
+  assert.match(page, /aria-invalid=\{invalid\}/);
+  assert.match(styles, /prisma-vacancy-reference-field\.has-validation-error/);
+  assert.match(styles, /prisma-requirement-editor\.has-validation-error/);
+  assert.match(adr, /destacar visualmente o campo ou bloco exato/i);
+  assert.match(contracts, /operation-feedback.*2\.1\.0.*destaque acionável/i);
+});
+
 test("M5.4.4 ordena empresa, Global, Agent, explorador e manual sem contaminar Pessoas", async () => {
   const [migration, agent, service, page] = await Promise.all([
     readFile("supabase/migrations/20260907010000_m544_occupation_resolution_ai_explorer.sql", "utf8"),
