@@ -25,7 +25,7 @@
 
 ## Papel, posição e vaga
 
-Papel define missão, responsabilidades e expectativas reutilizáveis pela empresa. Posição representa uma cadeira real em uma unidade. Vaga representa a necessidade profissional contextual dessa posição, inclusive quando já ocupada. Cada versão preserva missão, responsabilidades, resultados, requisitos e contexto usados em descoberta ou comparação. Uma referência ocupacional global pode apoiar a definição, mas não substitui a função privada da organização nem publica automaticamente novo conhecimento.
+Papel define propósito, responsabilidades e expectativas reutilizáveis pela empresa. Posição representa uma cadeira real em uma unidade. Vaga representa a necessidade profissional contextual dessa posição, inclusive quando já ocupada. Cada versão preserva Sobre a posição, responsabilidades, resultados, requisitos e contexto interno usados em descoberta ou comparação. Uma referência ocupacional global pode apoiar a definição, mas não substitui a função privada da organização nem publica automaticamente novo conhecimento.
 
 Contextos futuros de papel podem incluir equipe, budget, autonomia, escopo, complexidade, stakeholders, setor, localização, regime, senioridade e criticidade. Esses campos estão planejados e não participam do matching atual.
 

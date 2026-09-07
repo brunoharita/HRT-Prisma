@@ -1,15 +1,17 @@
 import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 
-export const VACANCY_DEFINITION_VERSION = "1.0.0";
+export const VACANCY_DEFINITION_VERSION = "1.1.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-1.1.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.2.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
-export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.0.0";
+export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
 
 export type VacancyOccupancy = "occupied" | "vacant";
 export type VacancySourceKind = "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
 export type VacancyRequirementCategory = "experience" | "competency" | "knowledge" | "technology" | "education" | "certification" | "language" | "context";
-export type VacancyRequirementImportance = "required" | "desired";
+export type VacancyRequirementImportance = "required" | "desired" | "unclassified";
+export type VacancyRequirementOrigin = "description" | "human";
+export type VacancyRestructureDeltaKind = "maintained" | "new" | "changed" | "not_found";
 export type VacancyMatchStatus = "met" | "partially_met" | "related_signal" | "no_evidence";
 
 export interface VacancyRelatedSignal {
@@ -23,6 +25,11 @@ export interface VacancyRequirementDraft {
   label: string;
   category: VacancyRequirementCategory;
   importance: VacancyRequirementImportance;
+  origin?: VacancyRequirementOrigin;
+  proposedCategory?: VacancyRequirementCategory;
+  categoryConfirmed?: boolean;
+  importanceConfirmed?: boolean;
+  sourceSuggestionId?: string | null;
   observedTerm: string | null;
   conceptId: string | null;
   conceptLabel?: string | null;
@@ -114,6 +121,12 @@ export interface VacancyStructureSuggestion {
   sourceStart: number;
   sourceEnd: number;
   method: "explicit" | "faithful_synthesis";
+}
+
+export interface VacancyRestructureDelta {
+  kind: VacancyRestructureDeltaKind;
+  requirement: VacancyRequirementDraft;
+  proposed: VacancyRequirementDraft | null;
 }
 
 export interface VacancyAdvisorContext {
@@ -210,12 +223,30 @@ export function newVacancyRequirement(label = "", category: VacancyRequirementCa
     stableId: createId(),
     label,
     category,
-    importance: "required",
+    proposedCategory: category,
+    importance: "unclassified",
+    origin: "human",
+    categoryConfirmed: false,
+    importanceConfirmed: false,
     observedTerm: label || null,
     conceptId: null,
     relationMode: "direct",
     relatedSignals: [],
   };
+}
+
+export const vacancyRequirementCategories: Array<{ value: VacancyRequirementCategory; label: string }> = [
+  { value: "experience", label: "Experiência" },
+  { value: "knowledge", label: "Conhecimentos" },
+  { value: "competency", label: "Competências" },
+  { value: "technology", label: "Tecnologias e ferramentas" },
+  { value: "education", label: "Formação" },
+  { value: "certification", label: "Certificações" },
+  { value: "language", label: "Idiomas" },
+];
+
+export function vacancyRequirementCategoryLabel(category: VacancyRequirementCategory): string {
+  return vacancyRequirementCategories.find((item) => item.value === category)?.label ?? "Requisitos";
 }
 
 export function inferRequirementCategory(label: string): VacancyRequirementCategory {
@@ -234,6 +265,12 @@ export function validateVacancyDraft(draft: VacancyDraft): string[] {
   if (draft.occupancy === "occupied" && !draft.occupantPersonId) errors.push("Selecione a Pessoa que ocupa esta posição.");
   if (draft.requirements.some((item) => !item.label.trim())) errors.push("Preencha ou remova os requisitos vazios.");
   return errors;
+}
+
+export function validateVacancyReady(draft: Pick<VacancyDraft, "requirements">): string[] {
+  return draft.requirements.some((item) => item.label.trim() && item.importance === "unclassified")
+    ? ["Classifique cada requisito ativo como obrigatório ou desejável antes de usar a Vaga no matching."]
+    : [];
 }
 
 export function matchVacancyCandidate(vacancy: VacancyDetail, candidate: PublishedProfileCandidate): VacancyCandidateMatch {
@@ -432,8 +469,11 @@ export function structureVacancyDescription(description: string): VacancyStructu
   }
 
   const sentences = text.split(/(?<=[.!?])\s+/).map((item) => item.trim()).filter(Boolean);
-  const responsibilitySentences = sentences.filter((item) => /\b(liderar|gerenciar|desenvolver|executar|identificar|estruturar|negociar|garantir)\b/i.test(item)).slice(0, 5);
-  for (const sentence of responsibilitySentences) add(stripLead(sentence), "responsibility", "required", "explicit", "Atividade descrita explicitamente.");
+  const responsibilitySentences = sentences.filter((item) => /\b(liderar|gerenciar|desenvolver|executar|identificar|estruturar|negociar|garantir|projetar|documentar|implementar|integrar|colaborar)\b/i.test(item)).slice(0, 5);
+  for (const sentence of responsibilitySentences) {
+    const responsibility = operationalResponsibility(sentence);
+    if (responsibility) add(responsibility, "responsibility", "unclassified", "explicit", "Atividade descrita explicitamente.");
+  }
   for (const sentence of sentences.filter((item) => /\b(meta|resultado|crescimento|receita|expans[aã]o|previsibilidade|reten[cç][aã]o)\b/i.test(item)).slice(0, 4)) {
     add(stripLead(sentence), "outcome", "required", "explicit", "Resultado ou impacto mencionado no texto.");
   }
@@ -464,10 +504,50 @@ export function applyStructureSuggestions(base: VacancyDraft, suggestions: Vacan
   const contextItems = unique([...base.contextItems, ...selected.filter((item) => item.category === "context").map((item) => item.label)]);
   const requirementCategories: VacancyRequirementCategory[] = ["experience", "competency", "knowledge", "technology", "education", "certification", "language"];
   const requirements = selected.flatMap((item) => requirementCategories.includes(item.category as VacancyRequirementCategory)
-    ? [{ ...newVacancyRequirement(item.label, item.category as VacancyRequirementCategory), importance: item.importance }]
+    ? [{
+      ...newVacancyRequirement(item.label, item.category as VacancyRequirementCategory),
+      origin: "description" as const,
+      sourceSuggestionId: item.id,
+      importance: "unclassified" as const,
+      importanceConfirmed: false,
+    }]
     : []);
   const items = selected.map((item) => ({ suggestionId: item.id, category: item.category, start: item.sourceStart, end: item.sourceEnd, method: item.method }));
   return { ...base, mission, responsibilities, expectedOutcomes, contextItems, requirements: [...base.requirements, ...requirements], sourceKind: "assisted_description", structureSource: base.structureSource ? { ...base.structureSource, items } : null };
+}
+
+export function compareVacancyRequirements(current: VacancyRequirementDraft[], proposed: VacancyRequirementDraft[]): VacancyRestructureDelta[] {
+  const unmatched = new Set(proposed.map((item) => item.stableId));
+  const result: VacancyRestructureDelta[] = [];
+  for (const item of current) {
+    if (item.origin === "human") {
+      result.push({ kind: "maintained", requirement: item, proposed: null });
+      continue;
+    }
+    const candidate = proposed.find((next) => normalize(next.label) === normalize(item.label));
+    if (!candidate) {
+      result.push({ kind: "not_found", requirement: item, proposed: null });
+      continue;
+    }
+    unmatched.delete(candidate.stableId);
+    const changed = item.category !== candidate.category || normalize(item.label) !== normalize(candidate.label);
+    result.push({
+      kind: changed ? "changed" : "maintained",
+      requirement: { ...candidate, ...item, ...(candidate.sourceSuggestionId ?? item.sourceSuggestionId ? { sourceSuggestionId: candidate.sourceSuggestionId ?? item.sourceSuggestionId } : {}) },
+      proposed: candidate,
+    });
+  }
+  for (const item of proposed.filter((candidate) => unmatched.has(candidate.stableId))) result.push({ kind: "new", requirement: item, proposed: item });
+  return result;
+}
+
+export function applyVacancyRestructureDelta(current: VacancyRequirementDraft[], delta: VacancyRestructureDelta[], removedStableIds: string[] = []): VacancyRequirementDraft[] {
+  const removed = new Set(removedStableIds);
+  return delta.flatMap((item) => {
+    if (removed.has(item.requirement.stableId)) return [];
+    if (item.kind === "new") return [item.requirement];
+    return [item.requirement];
+  });
 }
 
 export function applyStructuredDescription(base: VacancyDraft, description: string, suggestions: VacancyStructureSuggestion[]): VacancyDraft {
@@ -546,6 +626,14 @@ function extractExplicitRequirementAddition(question: string): VacancyAdvisorAns
 
 function stripLead(value: string): string {
   return value.replace(/^(a pessoa ser[aá] respons[aá]vel por|ser[aá] respons[aá]vel por|respons[aá]vel por|estamos buscando[^.]*? para)\s*/i, "").replace(/[.]$/, "").trim();
+}
+
+function operationalResponsibility(value: string): string {
+  const cleaned = stripLead(value)
+    .replace(/\b(usando|com conhecimento em|com experiência em|utilizando)\s+(?:node\.?js|php|laravel|docker|java|python|kafka|aws|azure)(?:\s*(?:,|e|ou)\s*(?:node\.?js|php|laravel|docker|java|python|kafka|aws|azure))*\b/ig, "")
+    .replace(/\s{2,}/g, " ").replace(/\s+,/g, ",").replace(/[,:;\-\s]+$/, "").trim();
+  if (!cleaned || /^(node\.?js|php|laravel|docker|java|python|kafka|aws|azure)$/i.test(cleaned)) return "";
+  return cleaned;
 }
 
 function createId(): string { return globalThis.crypto.randomUUID(); }

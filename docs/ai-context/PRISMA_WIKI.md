@@ -8,6 +8,10 @@ last_verified: 2026-09-03
 
 # Prisma Wiki
 
+## Vagas: revisão canônica M5.4.6
+
+A Vaga pronta separa narrativa de matching: Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados. O operador decide a importância de cada requisito; rascunho pode ter item não classificado, mas matching não. Correções e itens manuais são preservados quando uma descrição é reestruturada.
+
 ## Produto
 
 Prisma é uma camada de Talent Intelligence para transformar currículos e informações profissionais em conhecimento estruturado, pesquisável, comparável, explicável, auditável e versionável.

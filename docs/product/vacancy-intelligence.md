@@ -9,7 +9,7 @@
 - Referência ocupacional global: conceito reutilizável da Knowledge Global, como CBO, ESCO ou O*NET.
 - Função da organização: definição privada e reutilizável da empresa em `job_roles`.
 - Posição: lugar concreto no desenho organizacional, com situação e Pessoa ocupante quando houver.
-- Vaga: versão contextual da necessidade, com missão, responsabilidades, resultados, requisitos e contexto próprios.
+- Vaga: versão contextual da necessidade, com Sobre a posição, responsabilidades, resultados e requisitos próprios. O contexto relevante é consolidado em Sobre a posição, sem card final separado.
 
 Vagas com o mesmo título podem ter requisitos diferentes. O título nunca substitui a definição versionada.
 
@@ -17,7 +17,7 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 
 1. listar e filtrar Vagas;
 2. criar manualmente ou iniciar por função, Vaga anterior, referência Knowledge ou descrição livre;
-3. revisar sugestões determinísticas antes de aplicá-las;
+3. revisar sugestões determinísticas, corrigir a dimensão e decidir obrigatório/desejável antes do matching;
 4. consultar o detalhe editorial e o histórico;
 5. encontrar Pessoas pelos Perfis publicados do tenant;
 6. comparar exatamente duas Pessoas por requisito, sem score, ranking ou vencedor.
@@ -31,6 +31,10 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 - `Sem evidência suficiente`: o Perfil atual não traz evidência suficiente; nunca significa que a Pessoa não possui a experiência ou o conhecimento.
 
 A ordenação é determinística e operacional. Ela prioriza evidência direta, depois inferência rastreável, sinal relacionado e menor quantidade de requisitos obrigatórios sem evidência, usando nome apenas como desempate. Essa ordem não é score nem recomendação de contratação.
+
+## Estrutura canônica da Vaga pronta
+
+`Sobre a posição` e `Resultados esperados` são opcionais. `Responsabilidades` descreve ações e entregas, nunca uma tecnologia isolada. O matching consome somente requisitos classificados pelo humano em `Requisitos obrigatórios` ou `Requisitos desejáveis`, agrupados nas mesmas dimensões do Perfil Prisma. A ausência de desejável ou de dimensão não exigida não é gap obrigatório. Requisitos manuais e correções humanas permanecem em reestruturações; uma alteração da descrição mostra delta e nunca remove item não encontrado automaticamente.
 
 ## Limites do piloto
 

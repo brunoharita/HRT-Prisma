@@ -8,6 +8,10 @@ last_verified: 2026-09-03
 
 # Referência técnica do Prisma
 
+## M5.4.6 Vagas
+
+`vacancy-definition-1.1.0` usa `vacancy_requirements.importance = required|desired|unclassified`, origem e confirmação de dimensão/importância. A RPC versiona toda escrita; `vacancy_requirement_dimension_feedback` registra correção humana tenant-scoped e alimenta o `knowledge_inbox` organizacional sem DML direto ou publicação automática. `VacancyPages.tsx` projeta somente seções preenchidas e `vacancyService.findPeople` falha fechado quando houver requisito não classificado.
+
 ## Stack
 
 TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o shell web, PostgreSQL/Supabase como contrato de produção e JSON tenant-scoped para execução local.

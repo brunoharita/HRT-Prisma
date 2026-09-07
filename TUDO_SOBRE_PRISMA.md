@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 7da63d8430a6f6f1887efb1e2c4e57dcc4dac0eba9a837968a0b4e2df1ea975e
+source_manifest_sha256: 96d9051a6ede89b2c9db45dc98149ed1b41021a5e71eb434107c11370c2cd23b
 -->
 
 # Tudo sobre o Prisma
@@ -382,7 +382,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.21.0
+version: 2.22.0
 last_verified: 2026-09-06
 ---
 
@@ -397,7 +397,7 @@ last_verified: 2026-09-06
 
 ## Disponível localmente
 
-- M5.4.5 Estruturar descrição alinhado ao Perfil Prisma está ativo no Prisma-QA: a descrição livre é preservada em `vacancy_versions.structure_source`; o estruturador determinístico decompõe narrativa e requisitos comparáveis conforme a matriz `docs/architecture/vacancy-profile-matrix.md`, mantém proveniência por item e não usa Web Search, conteúdo externo, Pessoa ou Perfil. A escolha posterior de referência ocupacional complementa a Vaga e nunca substitui sua origem `assisted_description`; a migração de correção também recupera uma versão parcial previamente gravada como `knowledge_reference`. Campos sem evidência permanecem vazios; versões históricas não recebem backfill. Produção não foi acionada.
+- M5.4.6 Vagas tem schema ativo no Prisma-QA e interface implementada localmente: a Vaga pronta usa Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados, ocultando vazios. O estruturador propõe a dimensão, mas a classificação é humana; `unclassified` é permitido em rascunho e bloqueia matching. Reestruturação produz delta, preserva itens humanos e nunca remove item não encontrado automaticamente. Correção de dimensão é auditável e encaminhada somente ao Inbox da Knowledge organizacional, sem alterar Global. A prova SQL revertida confirmou RLS/grants e persistência; o smoke autenticado responsivo desta entrega ainda está bloqueado por indisponibilidade de sessão. Produção não foi acionada.
 
 - Protocolo permanente de fidelidade de acordos ativo: toda melhoria material passa por Contrato de Acordos, Prompt de Execução e AoT. `AGENTS.md` exige classificar DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e critérios de aceite antes do prompt; pendência material exige pergunta, acordo congelado não pode ser reinterpretado, e requisito sem prova não permite conclusão. Templates e protocolo de QA ficam em `docs/qa`; `check-foundation` valida sua presença. Não altera produto, schema, permissões ou produção.
 
@@ -718,6 +718,10 @@ last_verified: 2026-09-03
 
 # Referência técnica do Prisma
 
+## M5.4.6 Vagas
+
+`vacancy-definition-1.1.0` usa `vacancy_requirements.importance = required|desired|unclassified`, origem e confirmação de dimensão/importância. A RPC versiona toda escrita; `vacancy_requirement_dimension_feedback` registra correção humana tenant-scoped e alimenta o `knowledge_inbox` organizacional sem DML direto ou publicação automática. `VacancyPages.tsx` projeta somente seções preenchidas e `vacancyService.findPeople` falha fechado quando houver requisito não classificado.
+
 ## Stack
 
 TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o shell web, PostgreSQL/Supabase como contrato de produção e JSON tenant-scoped para execução local.
@@ -783,6 +787,10 @@ last_verified: 2026-09-03
 ---
 
 # Prisma Wiki
+
+## Vagas: revisão canônica M5.4.6
+
+A Vaga pronta separa narrativa de matching: Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados. O operador decide a importância de cada requisito; rascunho pode ter item não classificado, mas matching não. Correções e itens manuais são preservados quando uma descrição é reestruturada.
 
 ## Produto
 

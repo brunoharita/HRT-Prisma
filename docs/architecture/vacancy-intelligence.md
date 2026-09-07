@@ -10,6 +10,7 @@ A implementação reutiliza `job_roles`, `positions`, `vacancies`, `vacancy_requ
 - `vacancy_versions` preserva snapshots imutáveis da definição.
 - `vacancy_requirements.stable_id` mantém a identidade conceitual de um requisito entre versões.
 - `vacancy_requirement_relations` registra sinais relacionados confirmados, com origem, ator, instante e versão da Vaga.
+- `vacancy_requirement_dimension_feedback` audita somente correções humanas de dimensão e alimenta o `knowledge_inbox` existente no escopo da organização; não publica nem altera Knowledge Global.
 - `positions.occupant_person_id` representa a Pessoa atual somente quando a posição está `occupied`.
 - `match_evaluations.vacancy_version_id` prende cada avaliação à definição usada.
 - `vacancy_events` registra metadados operacionais, sem copiar Perfil ou currículo.
@@ -19,13 +20,13 @@ A implementação reutiliza `job_roles`, `positions`, `vacancies`, `vacancy_requ
 
 ## Matching
 
-O cliente carrega apenas Perfis publicados do tenant por meio da fundação de profile-discovery. Evidência direta e equivalência canônica publicada podem atender um requisito. Relações confirmadas na Vaga permanecem `related_signal`, sem promoção para Knowledge e sem equivalência forte. Resultados sem nenhum sinal rastreável não são exibidos na descoberta automática.
+O cliente carrega apenas Perfis publicados do tenant por meio da fundação de profile-discovery. Evidência direta e equivalência canônica publicada podem atender um requisito. Relações confirmadas na Vaga permanecem `related_signal`, sem promoção para Knowledge e sem equivalência forte. Requisito `unclassified` é permitido somente em rascunho e bloqueia matching. Resultados sem nenhum sinal rastreável não são exibidos na descoberta automática.
 
 ## Assistência
 
 `vacancy-structure-deterministic-1.0.0` identifica somente padrões locais explícitos e separa derivações visíveis, inicialmente desmarcadas. O Assistente contextual mantém a leitura interna determinística e aciona o modo `vacancy_advisor` do Knowledge Agent somente quando a pergunta depende de informação atual de mercado. O provider recebe pergunta, título, área, idioma e data, sem Perfis, Pessoas, organização ou descrição interna da Vaga. Web Search é server-side, limitado a fontes aprovadas, Structured Output, `store: false`, orçamento compartilhado e cache tenant-scoped de 24 horas. Resposta, recomendação e fontes permanecem orientativas e não alteram a Vaga automaticamente.
 
-`vacancy-structure-profile-aligned-2.0.0` estrutura somente a descrição fornecida: narrativa fica em missão, responsabilidades, resultados e contexto; dimensões comparáveis usam as categorias já existentes de requisito. A matriz versionada [Perfil ↔ Vaga](vacancy-profile-matrix.md) é a fonte única dessa correspondência. `structure_source` preserva texto original e offsets/metadados por item na versão imutável, sem PII de Pessoa, Web Search ou enriquecimento.
+`vacancy-structure-profile-aligned-2.1.0` estrutura somente a descrição fornecida: narrativa fica em Sobre a posição, responsabilidades e resultados; contexto relevante é consolidado em Sobre a posição. O Prisma propõe a dimensão, mas nunca a obrigatoriedade. A matriz versionada [Perfil ↔ Vaga](vacancy-profile-matrix.md) é a fonte única dessa correspondência. `structure_source` preserva texto original e offsets/metadados por item na versão imutável, sem PII de Pessoa, Web Search ou enriquecimento. A reestruturação compara delta e preserva correções humanas e requisitos manuais.
 
 ## Compatibilidade e rollback
 

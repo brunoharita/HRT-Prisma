@@ -1,5 +1,12 @@
 # Evidência M5.4: Vagas
 
+## M5.4.6 — revisão e visualização canônicas
+
+- `supabase/migrations/20260907130000_m546_vacancy_canonical_review.sql` e correção incremental `20260907130500_m546_dimension_feedback_conflict_fix.sql` permitem `unclassified` somente no rascunho, preservam snapshots históricos e mantêm a RPC, RLS e grants fechados.
+- `supabase/qa/m546_vacancy_canonical_review_verification.sql` foi executado com rollback no Prisma-QA: confirmou rascunho `unclassified`, origem/proposta de dimensão, feedback e Inbox somente da organização, negação de `anon` e de insert direto no ledger.
+- Os testes determinísticos cobrem dimensão canônica, decisão humana de importância, stack fora de responsabilidades, delta com requisito manual e não encontrado, projeção sem agrupadores removidos e bloqueio de matching com item não classificado.
+- Smoke autenticado responsivo permanece pendente para esta rodada e não deve ser interpretado como aprovado até haver sessão de navegador disponível.
+
 - Data: 2026-09-04
 - Ambiente: local e Prisma-QA `ioldpnqqvobprjiontre`
 - Branch: `codex/m5-4-vacancies`

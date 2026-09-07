@@ -139,9 +139,14 @@ export interface Database {
         stable_id: string;
         competency_id: string | null;
         label: string;
-        importance: "required" | "desired";
+        importance: "required" | "desired" | "unclassified";
         transferable_competencies: Json;
         category: "experience" | "competency" | "knowledge" | "technology" | "education" | "certification" | "language" | "context";
+        origin: "description" | "human";
+        proposed_category: "experience" | "competency" | "knowledge" | "technology" | "education" | "certification" | "language" | "context" | null;
+        category_confirmed: boolean;
+        importance_confirmed: boolean;
+        source_suggestion_id: string | null;
         observed_term: string | null;
         concept_id: string | null;
         relation_mode: "direct" | "related";

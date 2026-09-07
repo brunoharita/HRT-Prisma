@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   AimOutlined,
   ApartmentOutlined,
@@ -46,6 +46,7 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import {
   applyStructuredDescription,
+  applyVacancyRestructureDelta,
   answerVacancyQuestion,
   emptyVacancyDraft,
   inferRequirementCategory,
@@ -54,7 +55,10 @@ import {
   shouldResearchVacancyMarket,
   structureVacancyDescription,
   sourceKindAfterOccupationReference,
+  compareVacancyRequirements,
   validateVacancyDraft,
+  vacancyRequirementCategories,
+  vacancyRequirementCategoryLabel,
   type VacancyCandidateMatch,
   type VacancyAdvisorAnswer,
   type VacancyDetail,
@@ -155,6 +159,9 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [occupationResolution, setOccupationResolution] = useState<OccupationResolution | null>(null);
   const [occupationLoading, setOccupationLoading] = useState(false);
   const [occupationExplorerOpen, setOccupationExplorerOpen] = useState(false);
+  const [restructureOpen, setRestructureOpen] = useState(false);
+  const [restructureDescription, setRestructureDescription] = useState("");
+  const [restructureDelta, setRestructureDelta] = useState<ReturnType<typeof compareVacancyRequirements>>([]);
   const [validationTarget, setValidationTarget] = useState<"occupation" | "title" | "occupant" | "requirement" | null>(null);
   const occupationReferenceRef = useRef<HTMLDivElement>(null);
 
@@ -241,6 +248,17 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     } catch (caught) { setError(errorMessage(caught, "Não foi possível salvar a Vaga.")); }
     finally { setSaving(false); }
   }
+  function previewRestructure() {
+    const suggestions = structureVacancyDescription(restructureDescription);
+    const proposed = applyStructuredDescription({ ...emptyVacancyDraft(), requirements: [] }, restructureDescription, suggestions).requirements;
+    setRestructureDelta(compareVacancyRequirements(draft.requirements, proposed));
+  }
+  function applyRestructure() {
+    const suggestions = structureVacancyDescription(restructureDescription);
+    const rebuilt = applyStructuredDescription({ ...draft, requirements: [] }, restructureDescription, suggestions);
+    setDraft({ ...rebuilt, requirements: applyVacancyRestructureDelta(draft.requirements, restructureDelta), structureSource: { originalDescription: restructureDescription, contractVersion: rebuilt.structureSource?.contractVersion ?? "vacancy-structure-profile-aligned-2.1.0", structuredAt: new Date().toISOString(), items: rebuilt.structureSource?.items ?? [] } });
+    setRestructureOpen(false); setRestructureDelta([]);
+  }
   async function askAdvisor() {
     if (!advisorQuestion.trim()) {
       setAdvisorAnswer(answerVacancyQuestion("", draft, { otherVacancies: previous, roles: [], knowledge: [], knowledgeLookupAvailable: true }));
@@ -290,7 +308,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   if (loading) return <PrismaPage><PrismaCard><Skeleton active paragraph={{ rows: 18 }} /></PrismaCard></PrismaPage>;
   return <PrismaPage className="prisma-vacancy-editor-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(vacancyId ? `/vacancies/${vacancyId}` : "/vacancies")} type="text">Voltar</Button>
-    <PrismaPageHeader title={vacancyId ? "Editar vaga" : "Nova vaga"} description="Explique a necessidade em blocos simples. O Prisma preserva a estrutura e a versão usadas nas avaliações." actions={savedLocally ? <Tag icon={<CheckCircleOutlined />} color="success">Rascunho salvo neste navegador</Tag> : null} />
+    <PrismaPageHeader title={vacancyId ? "Editar vaga" : "Nova vaga"} description="Explique a necessidade em blocos simples. O Prisma preserva a estrutura e a versão usadas nas avaliações." actions={<Space>{vacancyId && draft.structureSource ? <Button onClick={() => { setRestructureDescription(draft.structureSource?.originalDescription ?? ""); setRestructureOpen(true); }}>Editar descrição e reestruturar</Button> : null}{savedLocally ? <Tag icon={<CheckCircleOutlined />} color="success">Rascunho salvo neste navegador</Tag> : null}</Space>} />
     {error ? <Alert closable onClose={() => { setError(null); setValidationTarget(null); }} showIcon title={error} type="error" /> : null}
     {!vacancyId ? <PrismaCard className={`prisma-vacancy-start-card ${validationTarget === "occupation" ? "has-validation-error" : ""}`} title="Como você quer começar?">
       <div><label>Função da empresa<Select allowClear onChange={useRole} options={roles.map((item) => ({ label: item.name, value: item.id }))} placeholder="Usar uma função validada" /></label></div>
@@ -317,13 +335,21 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         <List dataSource={occupationResolution?.candidates ?? []} locale={{ emptyText: "Nenhuma referência oficial foi encontrada no snapshot consultado." }} renderItem={(candidate) => <List.Item actions={[<Button key="select" onClick={() => void selectOfficialOccupation(candidate.externalId)} type="primary">Usar referência</Button>]}><List.Item.Meta title={`${candidate.label} · ${candidate.sourceName}`} description={`${candidate.externalId}${candidate.description ? ` · ${candidate.description}` : ""}`} /></List.Item>} />
         <Button danger onClick={() => void enableManualOccupation()}>Não existe referência oficial aplicável</Button>
       </Drawer>
-      <PrismaCard className="prisma-vacancy-form-section" title="2. Missão da vaga"><Typography.Text type="secondary">Qual é o principal propósito desta Vaga?</Typography.Text><Input.TextArea maxLength={700} onChange={(event) => update("mission", event.target.value)} rows={4} showCount value={draft.mission} /></PrismaCard>
+      <Drawer destroyOnClose onClose={() => setRestructureOpen(false)} open={restructureOpen} title="Editar descrição e reestruturar" width={680}>
+        <Typography.Paragraph>O Prisma comparará a nova descrição com a estrutura atual. Decisões humanas e requisitos manuais permanecem; itens não encontrados nunca são removidos automaticamente.</Typography.Paragraph>
+        <Input.TextArea maxLength={5000} onChange={(event) => setRestructureDescription(event.target.value)} rows={10} value={restructureDescription} />
+        <Space style={{ marginTop: 12 }}><Button disabled={!restructureDescription.trim()} onClick={previewRestructure} type="primary">Reestruturar e comparar</Button></Space>
+        {restructureDelta.length ? <div className="prisma-restructure-delta">{restructureDelta.map((item) => <div key={item.requirement.stableId}><Tag color={item.kind === "new" ? "blue" : item.kind === "not_found" ? "gold" : "green"}>{({ maintained: "Mantido", new: "Novo", changed: "Alterado", not_found: "Não encontrado" } as Record<string, string>)[item.kind]}</Tag><span>{item.requirement.label}</span>{item.kind === "not_found" ? <Space><Button size="small">Manter requisito</Button><Button danger onClick={() => setRestructureDelta((current) => current.filter((candidate) => candidate.requirement.stableId !== item.requirement.stableId))} size="small">Remover requisito</Button></Space> : null}</div>)}</div> : null}
+        {restructureDelta.length ? <Button onClick={applyRestructure} type="primary">Aplicar reestruturação</Button> : null}
+      </Drawer>
+      <PrismaCard className="prisma-vacancy-form-section" title="2. Sobre a posição"><Typography.Text type="secondary">Contextualize de forma breve o propósito da posição, sem listar tarefas.</Typography.Text><Input.TextArea maxLength={700} onChange={(event) => update("mission", event.target.value)} rows={4} showCount value={draft.mission} /></PrismaCard>
       <div className="prisma-vacancy-two-columns">
         <StringListEditor label="3. Responsabilidades" onChange={(value) => update("responsibilities", value)} placeholder="O que esta Pessoa fará?" values={draft.responsibilities} />
         <StringListEditor label="4. Resultados esperados" onChange={(value) => update("expectedOutcomes", value)} placeholder="O que esperamos que esta Pessoa entregue?" values={draft.expectedOutcomes} />
       </div>
-      <PrismaCard className="prisma-vacancy-form-section" title="5. O que a Pessoa precisa trazer">
-        <Typography.Paragraph type="secondary">Informe o requisito e se ele é obrigatório ou desejável. O Prisma procura evidências em todo o Perfil publicado e explica onde encontrou.</Typography.Paragraph>
+      <PrismaCard className="prisma-vacancy-form-section" title="5. Requisitos da Vaga">
+        <Typography.Paragraph type="secondary">O Prisma propõe a dimensão profissional. A decisão entre obrigatório e desejável é sempre sua.</Typography.Paragraph>
+        <Space wrap><Button onClick={() => update("requirements", draft.requirements.map((item) => ({ ...item, importance: "required", importanceConfirmed: true })))}>Todos obrigatórios</Button><Button onClick={() => update("requirements", draft.requirements.map((item) => ({ ...item, importance: "desired", importanceConfirmed: true })))}>Todos desejáveis</Button><Button type="primary">Quero classificar</Button></Space>
         <div className="prisma-requirement-editor-list">{draft.requirements.map((item, index) => <RequirementEditor invalid={validationTarget === "requirement" && !item.label.trim()} item={item} key={item.stableId} onChange={(next) => { update("requirements", draft.requirements.map((current, currentIndex) => currentIndex === index ? next : current)); if (validationTarget === "requirement" && next.label.trim()) setValidationTarget(null); }} onRemove={() => update("requirements", draft.requirements.filter((_, currentIndex) => currentIndex !== index))} />)}</div>
         {validationTarget === "requirement" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Preencha ou remova o requisito sem descrição.</Typography.Text> : null}
         <Button icon={<PlusOutlined />} onClick={() => update("requirements", [...draft.requirements, newVacancyRequirement()])} type="link">Adicionar requisito</Button>
@@ -352,24 +378,30 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
 export function VacancyAssistPage({ onNavigate }: CommonProps) {
   const [description, setDescription] = useState("");
   const [suggestions, setSuggestions] = useState<VacancyStructureSuggestion[]>([]);
-  function analyze() { setSuggestions(structureVacancyDescription(description)); }
+  const [reviewRequirements, setReviewRequirements] = useState<VacancyRequirementDraft[]>([]);
+  const [classificationMode, setClassificationMode] = useState<"batch" | "individual">("batch");
+  function analyze() {
+    const next = structureVacancyDescription(description);
+    setSuggestions(next);
+    setReviewRequirements(applyStructuredDescription(emptyVacancyDraft(), description, next).requirements);
+    setClassificationMode("batch");
+  }
   function confirm() {
     const base = readDraft();
-    const structured = applyStructuredDescription({ ...base, title: base.title || inferTitle(description) }, description, suggestions);
+    const structured = { ...applyStructuredDescription({ ...base, title: base.title || inferTitle(description) }, description, suggestions), requirements: reviewRequirements };
     persistDraft(structured); onNavigate("/vacancies/new");
   }
-  const grouped = groupSuggestions(suggestions);
   return <PrismaPage className="prisma-vacancy-assist-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/vacancies/new")} type="text">Voltar para Nova vaga</Button>
     <PrismaPageHeader title="Estruturar vaga com ajuda do Prisma" description="Descrição da vaga é a fonte original. A estrutura sugerida é uma interpretação revisável, sem enriquecimento externo." />
     <Alert icon={<RobotOutlined />} message="A assistência externa permanece desativada. Esta preparação é determinística, não envia dados a terceiros e não salva nada antes da sua revisão." showIcon type="info" />
     <div className="prisma-vacancy-assist-grid">
       <PrismaCard title="1. Descrição da vaga · fonte original"><Input.TextArea maxLength={5000} onChange={(event) => setDescription(event.target.value)} placeholder="Cole aqui a descrição profissional..." rows={23} showCount value={description} /><div className="prisma-vacancy-assist-actions"><Button icon={<DeleteOutlined />} onClick={() => { setDescription(""); setSuggestions([]); }}>Limpar texto</Button><Button disabled={!description.trim()} icon={<BulbOutlined />} onClick={analyze} type="primary">Estruturar descrição</Button></div></PrismaCard>
-      <PrismaCard title="2. Estrutura sugerida pelo Prisma · interpretação revisável">
-        {!suggestions.length ? <Empty description="A estrutura sugerida aparecerá aqui para revisão." /> : Object.entries(grouped).map(([category, items]) => <section className="prisma-assist-suggestion-group" key={category}><strong>{category}</strong>{items.map((item) => <Checkbox checked={item.selected} key={item.id} onChange={(event) => setSuggestions((current) => current.map((candidate) => candidate.id === item.id ? { ...candidate, selected: event.target.checked } : candidate))}><span>{item.label}</span>{item.origin === "derived" ? <Tag color="purple">Sugestão para revisão</Tag> : null}<small>{item.reason}</small></Checkbox>)}</section>)}
+      <PrismaCard title="2. Revisar e ajustar">
+        {!suggestions.length ? <Empty description="A estrutura sugerida aparecerá aqui para revisão." /> : <><section className="prisma-assist-suggestion-group"><strong>Sobre a posição, responsabilidades e resultados</strong>{suggestions.filter((item) => ["mission", "responsibility", "outcome", "context"].includes(item.category)).map((item) => <Checkbox checked={item.selected} key={item.id} onChange={(event) => setSuggestions((current) => current.map((candidate) => candidate.id === item.id ? { ...candidate, selected: event.target.checked } : candidate))}><span>{item.label}</span><small>{item.category === "mission" ? "Sobre a posição" : item.category === "context" ? "Contexto consolidado em Sobre a posição" : item.category === "responsibility" ? "Responsabilidade" : "Resultado esperado"}</small></Checkbox>)}</section><section className="prisma-assist-suggestion-group"><strong>Requisitos identificados pelo Prisma</strong><Space wrap><Button onClick={() => { setReviewRequirements((current) => current.map((item) => ({ ...item, importance: "required", importanceConfirmed: true }))); setClassificationMode("batch"); }}>Todos obrigatórios</Button><Button onClick={() => { setReviewRequirements((current) => current.map((item) => ({ ...item, importance: "desired", importanceConfirmed: true }))); setClassificationMode("batch"); }}>Todos desejáveis</Button><Button onClick={() => setClassificationMode("individual")} type="primary">Quero classificar</Button><Button icon={<PlusOutlined />} onClick={() => { setReviewRequirements((current) => [...current, newVacancyRequirement()]); setClassificationMode("individual"); }}>Adicionar requisito</Button></Space>{classificationMode === "individual" ? <div className="prisma-requirement-editor-list">{reviewRequirements.map((item, index) => <RequirementEditor invalid={!item.label.trim()} item={item} key={item.stableId} onChange={(next) => setReviewRequirements((current) => current.map((candidate, candidateIndex) => candidateIndex === index ? next : candidate))} onRemove={() => setReviewRequirements((current) => current.filter((_, candidateIndex) => candidateIndex !== index))} />)}</div> : <Typography.Paragraph type="secondary">Escolha um modo em lote ou “Quero classificar” para revisar item a item.</Typography.Paragraph>}</section></>}
       </PrismaCard>
     </div>
-    <PrismaCard className="prisma-vacancy-save-bar"><Typography.Text type="secondary">Revise, desmarque ou ajuste tudo antes de salvar a Vaga.</Typography.Text><Space><Button onClick={() => onNavigate("/vacancies/new")}>Editar manualmente</Button><Button disabled={!suggestions.some((item) => item.selected)} onClick={confirm} type="primary">Confirmar estrutura</Button></Space></PrismaCard>
+    <PrismaCard className="prisma-vacancy-save-bar"><Typography.Text type="secondary">Rascunhos podem permanecer incompletos. A Vaga só entra no matching após classificar cada requisito ativo.</Typography.Text><Space><Button onClick={() => onNavigate("/vacancies/new")}>Editar manualmente</Button><Button disabled={!suggestions.some((item) => item.selected)} onClick={confirm} type="primary">Confirmar estrutura</Button></Space></PrismaCard>
   </PrismaPage>;
 }
 
@@ -408,7 +440,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
     <div className="prisma-vacancy-detail-header"><div><Space wrap><Typography.Title level={1}>{detail.title}</Typography.Title><OccupancyTag occupancy={detail.occupancy} /></Space><div className="prisma-vacancy-meta"><span><ApartmentOutlined /> {detail.area || "Área não informada"}</span><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span>{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}<span>Definição v{detail.version}</span></div></div><Space wrap><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar vaga</Button><Popconfirm cancelText="Cancelar" description="A Vaga sairá da lista. A posição, versões e avaliações anteriores serão preservadas." okButtonProps={{ danger: true, loading: deleting }} okText="Excluir vaga" onConfirm={() => void removeVacancy()} title="Excluir esta Vaga?"><Button danger icon={<DeleteOutlined />} loading={deleting}>Excluir</Button></Popconfirm><Button icon={<TeamOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button></Space></div>
     {error ? <Alert showIcon title={error} type="error" /> : null}
     <Tabs items={[
-      { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack"><DetailSection icon={<AimOutlined />} title="Missão da vaga"><Typography.Paragraph>{detail.mission}</Typography.Paragraph></DetailSection><DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /><DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /><PrismaCard title={<span><StarOutlined /> O que procuramos</span>}><div className="prisma-vacancy-requirement-groups"><RequirementTags items={required} label="Obrigatório" /><RequirementTags items={desired} label="Desejável" /></div></PrismaCard><DetailText icon={<EnvironmentOutlined />} items={detail.contextItems} title="Contexto da vaga" /></div> },
+      { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack">{[detail.mission, ...detail.contextItems].some((item) => item.trim()) ? <DetailSection icon={<AimOutlined />} title="Sobre a posição"><Typography.Paragraph>{[detail.mission, ...detail.contextItems].filter(Boolean).join(" ")}</Typography.Paragraph></DetailSection> : null}{detail.responsibilities.length ? <DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /> : null}{required.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={required} title="Requisitos obrigatórios" /> : null}{desired.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={desired} title="Requisitos desejáveis" /> : null}{detail.expectedOutcomes.length ? <DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /> : null}</div> },
       { key: "people", label: "Pessoas encontradas", children: <Empty description="A descoberta é calculada sob demanda para não carregar todos os Perfis na abertura."><Button onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">Encontrar pessoas</Button></Empty> },
       { key: "history", label: "Histórico", children: <PrismaCard><List dataSource={history} locale={{ emptyText: "Nenhuma alteração registrada." }} renderItem={(item) => <List.Item><List.Item.Meta avatar={<HistoryOutlined />} title={historyLabel(item.type)} description={`${item.version ? `Definição v${item.version} · ` : ""}${formatDate(item.createdAt)}`} /></List.Item>} /></PrismaCard> },
     ]} />
@@ -482,7 +514,12 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
 }
 
 function RequirementEditor({ invalid, item, onChange, onRemove }: { invalid: boolean; item: VacancyRequirementDraft; onChange: (item: VacancyRequirementDraft) => void; onRemove: () => void }) {
-  return <div className={`prisma-requirement-editor ${invalid ? "has-validation-error" : ""}`}><label><span>Requisito</span><Input {...(invalid ? { status: "error" as const } : {})} aria-invalid={invalid} aria-label="Requisito" onChange={(event) => onChange({ ...item, label: event.target.value, observedTerm: event.target.value, category: inferRequirementCategory(event.target.value), conceptId: null, conceptLabel: null, relatedSignals: [] })} placeholder="Ex.: Gestão de pipeline" value={item.label} /></label><label><span>Importância</span><Segmented block className="prisma-requirement-importance" onChange={(value) => onChange({ ...item, importance: value as VacancyRequirementDraft["importance"] })} options={[{ label: "Obrigatório", value: "required" }, { label: "Desejável", value: "desired" }]} value={item.importance} /></label><Popconfirm description="Remover este requisito da definição atual?" onConfirm={onRemove} title="Remover requisito"><Button aria-label="Remover requisito" danger icon={<DeleteOutlined />} type="text" /></Popconfirm></div>;
+  return <div className={`prisma-requirement-editor ${invalid ? "has-validation-error" : ""}`}><label><span>Requisito</span><Input {...(invalid ? { status: "error" as const } : {})} aria-invalid={invalid} aria-label="Requisito" onChange={(event) => { const category = inferRequirementCategory(event.target.value); onChange({ ...item, label: event.target.value, observedTerm: event.target.value, category, proposedCategory: category, categoryConfirmed: false, conceptId: null, conceptLabel: null, relatedSignals: [] }); }} placeholder="Ex.: Gestão de pipeline" value={item.label} /></label><label><span>Dimensão profissional</span><Select aria-label="Dimensão profissional" onChange={(category) => onChange({ ...item, category, categoryConfirmed: true })} options={vacancyRequirementCategories} value={item.category} /></label><label><span>Importância</span><Segmented block className="prisma-requirement-importance" onChange={(value) => onChange({ ...item, importance: value as VacancyRequirementDraft["importance"], importanceConfirmed: true })} options={[{ label: "Obrigatório", value: "required" }, { label: "Desejável", value: "desired" }]} value={item.importance === "unclassified" ? undefined : item.importance} /></label><Popconfirm description="Remover este requisito da definição atual?" onConfirm={onRemove} title="Remover requisito"><Button aria-label="Remover requisito" danger icon={<DeleteOutlined />} type="text" /></Popconfirm></div>;
+}
+
+function RequirementDimensionGroups({ icon, items, title }: { icon: ReactNode; items: VacancyRequirementDraft[]; title: string }) {
+  const groups = vacancyRequirementCategories.map((category) => ({ ...category, items: items.filter((item) => item.category === category.value) })).filter((group) => group.items.length);
+  return <PrismaCard title={<span>{icon} {title}</span>}><div className="prisma-vacancy-dimension-groups">{groups.map((group) => <section key={group.value}><strong>{group.label}</strong><ul>{group.items.map((item) => <li key={item.stableId}>{item.label}</li>)}</ul></section>)}</div></PrismaCard>;
 }
 
 function StringListEditor({ label, onChange, placeholder, values }: { label: string; onChange: (values: string[]) => void; placeholder: string; values: string[] }) {

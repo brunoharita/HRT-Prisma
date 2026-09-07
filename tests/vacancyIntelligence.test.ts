@@ -14,6 +14,9 @@ import {
   VACANCY_PROFILE_MATRIX,
   occupationResolutionMessage,
   sourceKindAfterOccupationReference,
+  compareVacancyRequirements,
+  validateVacancyReady,
+  vacancyRequirementCategoryLabel,
   type VacancyDetail,
 } from "../web/src/domain/vacancy.js";
 import type { PublishedProfileCandidate } from "../web/src/domain/profileDiscovery.js";
@@ -54,7 +57,7 @@ function vacancy(title: string, requirementLabels: string[]): VacancyDetail {
     title,
     area: "Comercial",
     mission: "Estruturar a necessidade profissional específica.",
-    requirements: requirementLabels.map((label) => newVacancyRequirement(label, "competency")),
+    requirements: requirementLabels.map((label) => ({ ...newVacancyRequirement(label, "competency"), importance: "required", importanceConfirmed: true })),
     jobRoleName: "Gerente Comercial",
     occupantName: null,
     createdAt: "2026-09-04T12:00:00Z",
@@ -154,11 +157,55 @@ test("M5.4.5 decompõe descrição backend sem cópia, invenção ou requisito a
   assert.ok(draft.requirements.some((item) => item.label === "Node.js" && item.category === "technology"));
   assert.ok(draft.requirements.some((item) => item.label === "PostgreSQL" && item.category === "technology"));
   assert.ok(draft.requirements.some((item) => item.label === "Clean Architecture" && item.category === "knowledge"));
+  assert.ok(draft.requirements.every((item) => item.importance === "unclassified"));
   assert.ok(!draft.requirements.some((item) => item.label === "Kubernetes"));
   assert.ok(!draft.requirements.some((item) => item.category === "language" || item.category === "certification"));
   assert.equal(draft.structureSource?.originalDescription, source);
   assert.ok((draft.structureSource?.items.length ?? 0) > 0);
   assert.ok(VACANCY_PROFILE_MATRIX.filter((item) => item.matching).every((item) => ["experience", "competency", "knowledge", "technology", "education", "certification", "language"].includes(item.category)));
+});
+
+test("M5.4.6 exige decisão humana de importância e mantém dimensões canônicas", () => {
+  const requirement = newVacancyRequirement("Node.js", "technology");
+  assert.equal(requirement.importance, "unclassified");
+  assert.match(validateVacancyReady({ requirements: [requirement] })[0] ?? "", /classifique/i);
+  requirement.importance = "desired";
+  assert.deepEqual(validateVacancyReady({ requirements: [requirement] }), []);
+  assert.equal(vacancyRequirementCategoryLabel("technology"), "Tecnologias e ferramentas");
+});
+
+test("M5.4.6 não promove stack isolada a responsabilidade e preserva decisão humana no delta", () => {
+  const suggestions = structureVacancyDescription("Desenvolver aplicações usando Node.js e Docker. Implementar APIs REST.");
+  const responsibilities = suggestions.filter((item) => item.category === "responsibility").map((item) => item.label);
+  assert.ok(responsibilities.every((item) => !/^(node\.?js|docker)$/i.test(item)));
+  const human = { ...newVacancyRequirement("Inglês avançado", "language"), origin: "human" as const, importance: "desired" as const, importanceConfirmed: true };
+  const described = { ...newVacancyRequirement("Node.js", "technology"), origin: "description" as const, importance: "required" as const, importanceConfirmed: true };
+  const delta = compareVacancyRequirements([human, described], [{ ...newVacancyRequirement("Kafka", "technology"), origin: "description" as const }]);
+  assert.equal(delta.find((item) => item.requirement.stableId === human.stableId)?.kind, "maintained");
+  assert.equal(delta.find((item) => item.requirement.stableId === described.stableId)?.kind, "not_found");
+  assert.equal(delta.find((item) => item.requirement.label === "Kafka")?.kind, "new");
+});
+
+test("M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organizacional", async () => {
+  const [page, migration, service] = await Promise.all([
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+    readFile("supabase/migrations/20260907130000_m546_vacancy_canonical_review.sql", "utf8"),
+    readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+  ]);
+  assert.match(page, /title="Sobre a posição"/);
+  assert.match(page, /title="Requisitos obrigatórios"/);
+  assert.match(page, /title="Requisitos desejáveis"/);
+  assert.match(page, /Todos obrigatórios/);
+  assert.match(page, /Todos desejáveis/);
+  assert.match(page, /Quero classificar/);
+  assert.match(page, /vacancyRequirementCategories/);
+  assert.doesNotMatch(page.match(/export function VacancyDetailPage[\s\S]*?export function VacancyPeoplePage/)?.[0] ?? "", /Missão da vaga|O que procuramos|Contexto da vaga/);
+  assert.match(migration, /unclassified/);
+  assert.match(migration, /vacancy_requirement_dimension_feedback/);
+  assert.match(migration, /insert into public\.knowledge_inbox/);
+  assert.match(migration, /scope.*organization/);
+  assert.match(migration, /revoke all on function public\.save_vacancy_definition/);
+  assert.match(service, /Classifique cada requisito ativo/);
 });
 
 test("referência ocupacional complementa a descrição estruturada sem substituir sua origem", async () => {

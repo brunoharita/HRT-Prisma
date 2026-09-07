@@ -139,6 +139,11 @@ export const vacancyService = {
         label: item.label,
         category: item.category,
         importance: item.importance,
+        origin: item.origin === "human" ? "human" : "description",
+        proposedCategory: isCategory(item.proposed_category) ? item.proposed_category : item.category,
+        categoryConfirmed: item.category_confirmed,
+        importanceConfirmed: item.importance_confirmed,
+        sourceSuggestionId: item.source_suggestion_id,
         observedTerm: item.observed_term,
         conceptId: item.concept_id,
         conceptLabel: item.concept_id ? conceptResult.get(item.concept_id) ?? null : null,
@@ -310,6 +315,7 @@ export const vacancyService = {
 
   async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true): Promise<VacancyCandidateMatch[]> {
     if (!vacancy.referenceConceptId || !vacancy.requirements.some((item) => item.label.trim())) throw new Error("Esta Vaga ainda é um rascunho estrutural. Defina a ocupação e ao menos um requisito comparável antes de buscar Pessoas.");
+    if (vacancy.requirements.some((item) => item.importance === "unclassified")) throw new Error("Classifique cada requisito ativo como obrigatório ou desejável antes de buscar Pessoas.");
     const candidates = await loadPublishedProfileCandidates(organizationId, includePrivateLocation);
     return sortVacancyMatches(candidates.map((candidate) => matchVacancyCandidate(vacancy, candidate)));
   },
@@ -369,8 +375,8 @@ function readRequirements(value: Json): VacancyRequirementDraft[] {
     const stableId = readString(record?.stableId);
     const category = readString(record?.category);
     const importance = readString(record?.importance);
-    if (!label || !stableId || !isCategory(category) || (importance !== "required" && importance !== "desired")) return [];
-    return [{ stableId, label, category, importance, observedTerm: readString(record?.observedTerm), conceptId: readString(record?.conceptId), relationMode: "direct" as const, relatedSignals: [] }];
+    if (!label || !stableId || !isCategory(category) || (importance !== "required" && importance !== "desired" && importance !== "unclassified")) return [];
+    return [{ stableId, label, category, importance, origin: record?.origin === "human" ? "human" : "description", proposedCategory: isCategory(readString(record?.proposedCategory)) ? readString(record?.proposedCategory) as VacancyRequirementDraft["category"] : category, categoryConfirmed: record?.categoryConfirmed === true, importanceConfirmed: record?.importanceConfirmed === true, sourceSuggestionId: readString(record?.sourceSuggestionId), observedTerm: readString(record?.observedTerm), conceptId: readString(record?.conceptId), relationMode: "direct" as const, relatedSignals: [] }];
   });
 }
 
