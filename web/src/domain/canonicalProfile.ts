@@ -8,6 +8,9 @@ export interface CanonicalKnowledgeTerm {
   originalTerm: string;
   canonicalLabel: string | null;
   state: "resolved" | "ambiguous" | "unresolved";
+  conceptId?: string | null;
+  conceptType?: "occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification" | null;
+  sourceFieldPath?: string | null;
 }
 
 export interface PrismaProfileView {
@@ -75,7 +78,7 @@ export function buildPrismaProfileView(source: PrismaProfileSource): PrismaProfi
         keyResults: uniqueText(profile.keyResults.map((item) => item.value)),
       }
     : null;
-  const competencyGroups = groupCompetencies(profile.competencies, source.knowledge ?? []);
+  const competencyGroups = groupCompetencies(profile.competencies, source.knowledge ?? [], profile.toolsAndTechnologies ?? []);
   const certifications = uniqueText(profile.certifications);
   const languages = profile.languages.flatMap(parseLanguage).filter(uniqueLanguage);
 
@@ -100,6 +103,7 @@ export function buildPrismaProfileView(source: PrismaProfileSource): PrismaProfi
 export function groupCompetencies(
   observedTerms: string[],
   knowledge: CanonicalKnowledgeTerm[] = [],
+  explicitTools: string[] = [],
 ): PrismaProfileView["competencyGroups"] {
   const resolvedByOriginal = new Map(
     knowledge
@@ -111,12 +115,13 @@ export function groupCompetencies(
   ]);
   const seen = new Set<string>();
 
-  for (const observed of uniqueText(observedTerms)) {
+  const explicitToolKeys = new Set(uniqueText(explicitTools).map(normalize));
+  for (const observed of uniqueText([...observedTerms, ...explicitTools])) {
     const canonical = resolvedByOriginal.get(normalize(observed)) ?? observed;
     const deduplicationKey = normalize(canonical);
     if (seen.has(deduplicationKey)) continue;
     seen.add(deduplicationKey);
-    const key = classifyCompetency(canonical);
+    const key = explicitToolKeys.has(normalize(observed)) ? "tools" : classifyCompetency(canonical);
     grouped.get(key)!.push({ label: canonical, originalTerm: canonical === observed ? null : observed });
   }
 

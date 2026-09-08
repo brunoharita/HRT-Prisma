@@ -7,14 +7,18 @@ import {
   type VacancyAdvisorMarketResearch,
   type VacancyDetail,
   type VacancyDraft,
+  type VacancyOccupationReference,
+  type VacancyPeopleDiscovery,
+  type VacancyPositionRelationDecision,
   type VacancyRequirementDraft,
+  type ProfessionalReferenceProposal,
   type OccupationResolution,
   type VacancySummary,
 } from "../../domain/vacancy.js";
 import { supabaseFunctionOperationError } from "../../domain/reviewOperationErrors.js";
 import type { Json } from "./database.types.js";
 import { supabase } from "./client.js";
-import { loadPublishedProfileCandidates } from "./profileDiscoveryService.js";
+import { loadPublishedProfileCandidateCollection, loadPublishedProfileCandidates } from "./profileDiscoveryService.js";
 
 export interface OrganizationRoleTemplate {
   id: string;
@@ -248,6 +252,34 @@ export const vacancyService = {
     }));
   },
 
+  async loadProfessionalReferenceProposal(organizationId: string, conceptId: string): Promise<ProfessionalReferenceProposal> {
+    const concept = await supabase.from("knowledge_concepts").select("id, canonical_label, description").eq("id", conceptId).eq("concept_type", "occupation").eq("status", "approved").maybeSingle();
+    throwIfError(concept.error, "Não foi possível preparar a referência profissional.");
+    if (!concept.data) throw new Error("A referência profissional não está disponível para a empresa ativa.");
+    const conceptData = concept.data;
+    const [terms, mappings, relations] = await Promise.all([
+      supabase.from("knowledge_terms").select("term").eq("concept_id", conceptId).eq("status", "approved").limit(24),
+      supabase.from("knowledge_external_mappings").select("source_id, source_version_id, external_id, external_uri").eq("concept_id", conceptId).limit(12),
+      supabase.from("knowledge_relations").select("id, target_concept_id, relation_type, source_id, source_version_id").eq("source_concept_id", conceptId).eq("status", "approved").limit(48),
+    ]);
+    throwIfError(terms.error, "Não foi possível recuperar os termos oficiais da referência.");
+    throwIfError(mappings.error, "Não foi possível recuperar os mappings oficiais da referência.");
+    throwIfError(relations.error, "Não foi possível recuperar as relações oficiais da referência.");
+    const targetIds = [...new Set((relations.data ?? []).map((item) => item.target_concept_id))];
+    const targets = targetIds.length ? await supabase.from("knowledge_concepts").select("id, canonical_label, concept_type").eq("status", "approved").in("id", targetIds) : { data: [], error: null };
+    throwIfError(targets.error, "Não foi possível recuperar os conceitos relacionados da referência.");
+    const targetById = new Map((targets.data ?? []).map((item) => [item.id, item]));
+    const mapping = (mappings.data ?? [])[0] ?? null;
+    return {
+      conceptId: conceptData.id, label: conceptData.canonical_label, description: conceptData.description ?? "", aliases: (terms.data ?? []).map((item) => item.term).filter((term) => term !== conceptData.canonical_label),
+      source: mapping ? "Fonte oficial reconciliada" : null, sourceVersion: mapping?.source_version_id ?? null, externalId: mapping?.external_id ?? null, externalUri: mapping?.external_uri ?? null,
+      relations: (relations.data ?? []).flatMap((relation) => {
+        const target = targetById.get(relation.target_concept_id); if (!target) return [];
+        return [{ id: relation.id, targetConceptId: target.id, label: target.canonical_label, conceptType: target.concept_type, relationType: relation.relation_type, source: relation.source_id, sourceVersion: relation.source_version_id, externalId: null, externalUri: null }];
+      }),
+    };
+  },
+
   async resolveOccupation(organizationId: string, observedTerm: string, vacancyId: string | null = null): Promise<OccupationResolution> {
     const result = await supabase.rpc("resolve_occupation_on_demand" as never, {
       p_organization_id: organizationId, p_observed_term: observedTerm, p_vacancy_id: vacancyId, p_language: "pt-BR",
@@ -336,19 +368,56 @@ export const vacancyService = {
     return data;
   },
 
-  async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true): Promise<VacancyCandidateMatch[]> {
-    if (!vacancy.referenceConceptId || !vacancy.requirements.some((item) => item.label.trim())) throw new Error("Esta Vaga ainda é um rascunho estrutural. Defina a ocupação e ao menos um requisito comparável antes de buscar Pessoas.");
-    if (vacancy.requirements.some((item) => item.importance === "unclassified")) throw new Error("Classifique cada requisito ativo como obrigatório ou desejável antes de buscar Pessoas.");
-    const candidates = await loadPublishedProfileCandidates(organizationId, includePrivateLocation);
-    return sortVacancyMatches(candidates.map((candidate) => matchVacancyCandidate(vacancy, candidate)));
+  async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true): Promise<VacancyPeopleDiscovery> {
+    if (!vacancy.title.trim()) throw new Error("Informe o título da Vaga antes de buscar Pessoas.");
+    const [collection, occupationReference, decisions] = await Promise.all([
+      loadPublishedProfileCandidateCollection(organizationId, includePrivateLocation),
+      loadVacancyOccupationReference(organizationId, vacancy),
+      loadPositionRelationDecisions(organizationId, vacancy.id!),
+    ]);
+    const matches = sortVacancyMatches(collection.candidates.map((candidate) => ({
+      ...matchVacancyCandidate(vacancy, candidate, occupationReference),
+      positionDecision: decisions.get(candidate.personId) ?? null,
+    })));
+    return {
+      matches,
+      analyzedProfileCount: collection.analyzedProfileCount,
+      publishedProfileCount: collection.publishedProfileCount,
+      complete: collection.complete,
+      unclassifiedRequirementCount: vacancy.requirements.filter((item) => item.importance === "unclassified").length,
+    };
   },
 
   async loadPeopleByIds(organizationId: string, vacancy: VacancyDetail, personIds: string[], includePrivateLocation = true): Promise<VacancyCandidateMatch[]> {
-    const candidates = await loadPublishedProfileCandidates(organizationId, includePrivateLocation, personIds.slice(0, 2));
+    const [candidates, occupationReference, decisions] = await Promise.all([
+      loadPublishedProfileCandidates(organizationId, includePrivateLocation, personIds.slice(0, 2)),
+      loadVacancyOccupationReference(organizationId, vacancy),
+      loadPositionRelationDecisions(organizationId, vacancy.id!),
+    ]);
     return personIds.flatMap((id) => {
       const candidate = candidates.find((item) => item.personId === id);
-      return candidate ? [matchVacancyCandidate(vacancy, candidate)] : [];
+      return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
     });
+  },
+
+  async recordPositionRelationDecision(vacancy: VacancyDetail, match: VacancyCandidateMatch, decision: Exclude<VacancyPositionRelationDecision, null>): Promise<void> {
+    const result = await supabase.from("match_evaluations").insert({
+      organization_id: vacancy.organizationId,
+      person_id: match.candidate.personId,
+      vacancy_id: vacancy.id!,
+      vacancy_version_id: vacancy.versionId,
+      evaluation_data: {
+        type: "position_relation_decision",
+        decision,
+        vacancyVersion: vacancy.version,
+        positionRelation: match.positionRelation,
+        decidedAt: new Date().toISOString(),
+      } as unknown as Json,
+      matching_version: VACANCY_MATCHING_VERSION,
+      prompt_version: "no-llm-prompt-1.0.0",
+      model_version: "deterministic-local-3.0.0",
+    });
+    throwIfError(result.error, "Não foi possível registrar sua decisão sobre esta relação. O resultado permanece disponível.");
   },
 
   async recordEvaluation(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<void> {
@@ -366,11 +435,15 @@ export const vacancyService = {
           explanation: item.explanation,
           evidence: item.evidence,
         })),
-        sufficiency: match.missingRequiredCount ? "insufficient_evidence" : "sufficient_evidence",
+        positionRelation: match.positionRelation,
+        positionDecision: match.positionDecision,
+        detailedStatus: match.detailedStatus,
+        evidenceAssessment: match.evidenceAssessment,
+        sufficiency: match.detailedStatus !== "ready" ? "pending_classification" : match.missingRequiredCount ? "insufficient_evidence" : "sufficient_evidence",
       } as unknown as Json,
       matching_version: VACANCY_MATCHING_VERSION,
       prompt_version: "no-llm-prompt-1.0.0",
-      model_version: "deterministic-local-2.0.0",
+      model_version: "deterministic-local-3.0.0",
     });
     throwIfError(result.error, "A aderência foi calculada, mas o histórico não pôde ser registrado. Nenhuma conclusão foi perdida nesta tela.");
   },
@@ -382,6 +455,75 @@ export const vacancyService = {
     return (result.data ?? []).map((item) => ({ id: item.id, type: item.event_type, version: readNumber(asRecord(item.metadata)?.version), createdAt: item.created_at }));
   },
 };
+
+const POSITION_DECISION_PAGE_SIZE = 200;
+const OCCUPATION_RELATION_TYPES = ["equivalent_to", "related_to", "is_a", "broader_than", "narrower_than"] as const;
+
+async function loadVacancyOccupationReference(organizationId: string, vacancy: VacancyDetail): Promise<VacancyOccupationReference | null> {
+  if (!vacancy.referenceConceptId) return null;
+  const conceptId = vacancy.referenceConceptId;
+  const [concept, terms, outgoing, incoming] = await Promise.all([
+    supabase.from("knowledge_concepts").select("id, canonical_label").eq("id", conceptId).eq("concept_type", "occupation").eq("status", "approved").maybeSingle(),
+    supabase.from("knowledge_terms").select("term, ambiguous").eq("concept_id", conceptId).eq("status", "approved").eq("ambiguous", false),
+    supabase.from("knowledge_relations").select("source_concept_id, target_concept_id, relation_type").eq("source_concept_id", conceptId).eq("status", "approved").in("relation_type", [...OCCUPATION_RELATION_TYPES]),
+    supabase.from("knowledge_relations").select("source_concept_id, target_concept_id, relation_type").eq("target_concept_id", conceptId).eq("status", "approved").in("relation_type", [...OCCUPATION_RELATION_TYPES]),
+  ]);
+  throwIfError(concept.error, "Não foi possível consultar a referência ocupacional da Vaga.");
+  throwIfError(terms.error, "Não foi possível consultar os títulos equivalentes da referência ocupacional.");
+  throwIfError(outgoing.error, "Não foi possível consultar as relações ocupacionais publicadas.");
+  throwIfError(incoming.error, "Não foi possível consultar as relações ocupacionais publicadas.");
+  if (!concept.data) return null;
+  const relations = [...(outgoing.data ?? []), ...(incoming.data ?? [])];
+  const relatedIds = [...new Set(relations.map((relation) => relation.source_concept_id === conceptId ? relation.target_concept_id : relation.source_concept_id))];
+  const relatedConcepts = relatedIds.length
+    ? await supabase.from("knowledge_concepts").select("id, canonical_label, concept_type").eq("status", "approved").eq("concept_type", "occupation").in("id", relatedIds)
+    : { data: [], error: null };
+  throwIfError(relatedConcepts.error, "Não foi possível consultar as ocupações relacionadas.");
+  const labels = new Map((relatedConcepts.data ?? []).map((item) => [item.id, item.canonical_label]));
+  return {
+    conceptId,
+    canonicalLabel: concept.data.canonical_label,
+    aliases: [...new Set((terms.data ?? []).map((item) => item.term).filter(Boolean))],
+    relations: relations.flatMap((relation) => {
+      const relatedConceptId = relation.source_concept_id === conceptId ? relation.target_concept_id : relation.source_concept_id;
+      const label = labels.get(relatedConceptId);
+      return label && isOccupationRelationType(relation.relation_type)
+        ? [{ conceptId: relatedConceptId, label, relationType: relation.relation_type }]
+        : [];
+    }),
+  };
+}
+
+async function loadPositionRelationDecisions(organizationId: string, vacancyId: string): Promise<Map<string, Exclude<VacancyPositionRelationDecision, null>>> {
+  const decisions = new Map<string, Exclude<VacancyPositionRelationDecision, null>>();
+  let page = 0;
+  while (true) {
+    const from = page * POSITION_DECISION_PAGE_SIZE;
+    const result = await supabase.from("match_evaluations")
+      .select("id, person_id, evaluation_data, created_at")
+      .eq("organization_id", organizationId)
+      .eq("vacancy_id", vacancyId)
+      .contains("evaluation_data", { type: "position_relation_decision" })
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(from, from + POSITION_DECISION_PAGE_SIZE - 1);
+    throwIfError(result.error, "Não foi possível recuperar as decisões anteriores sobre as relações encontradas.");
+    const rows = result.data ?? [];
+    for (const row of rows) {
+      if (decisions.has(row.person_id)) continue;
+      const data = asRecord(row.evaluation_data);
+      const decision = readString(data?.decision);
+      if (data?.type === "position_relation_decision" && (decision === "confirmed" || decision === "dismissed")) decisions.set(row.person_id, decision);
+    }
+    if (rows.length < POSITION_DECISION_PAGE_SIZE) break;
+    page += 1;
+  }
+  return decisions;
+}
+
+function isOccupationRelationType(value: string): value is VacancyOccupationReference["relations"][number]["relationType"] {
+  return (OCCUPATION_RELATION_TYPES as readonly string[]).includes(value);
+}
 
 async function loadConceptLabels(ids: string[]): Promise<Map<string, string>> {
   if (!ids.length) return new Map();

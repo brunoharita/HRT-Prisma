@@ -53,6 +53,8 @@ Evidência contém tipo, fato, documento, bloco, página quando disponível, tre
 
 Na formação, `classifierSnapshot` preserva o resultado determinístico inicial. Ajuste humano altera o valor efetivo e a origem, sem reescrever o snapshot. Inferência e `unknown` permanecem revisáveis; perfil novo rejeita classificação presente e não confirmada. Perfis históricos sem os campos novos são lidos com fallback `unknown`, sem inventar backfill.
 
+Na leitura para descoberta de Vagas, `toolsAndTechnologies` é a dimensão preferencial. Perfis históricos que registraram ferramentas dentro de `competencies` recebem uma projeção de compatibilidade determinística em tempo de leitura, preservando o termo original e seu campo de origem; isso não reescreve o Perfil nem inventa nova competência.
+
 ## Ausência e soft skills
 
 Campos não localizados entram em `notIdentified`; ambiguidades entram em `uncertainties`. Nenhum autoriza conclusão negativa. Comunicação, criatividade, resiliência, inteligência emocional e atributos similares não são extraídos como fatos pelo provider atual.

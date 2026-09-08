@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import {
   AimOutlined,
   ApartmentOutlined,
@@ -15,6 +15,7 @@ import {
   InfoCircleOutlined,
   LinkOutlined,
   PlusOutlined,
+  QuestionCircleOutlined,
   RobotOutlined,
   SearchOutlined,
   StarOutlined,
@@ -31,6 +32,7 @@ import {
   Form,
   Input,
   List,
+  Modal,
   Pagination,
   Popconfirm,
   Segmented,
@@ -43,6 +45,7 @@ import {
   Tooltip,
   Typography,
 } from "antd";
+import type { InputRef } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   applyStructuredDescription,
@@ -50,9 +53,10 @@ import {
   answerVacancyQuestion,
   emptyVacancyDraft,
   inferRequirementCategory,
+  materializeVacancyFromProfessionalReference,
   newVacancyRequirement,
   occupationResolutionMessage,
-  shouldResearchVacancyMarket,
+  sortVacancyMatches,
   structureVacancyDescription,
   sourceKindAfterOccupationReference,
   compareVacancyRequirements,
@@ -64,6 +68,9 @@ import {
   type VacancyDetail,
   type VacancyDraft,
   type VacancyMatchStatus,
+  type VacancyPeopleDiscovery,
+  type VacancyPositionRelationDecision,
+  type VacancyPositionRelationStatus,
   type VacancyRequirementDraft,
   type VacancyStructureSuggestion,
   type VacancySummary,
@@ -156,8 +163,12 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [advisorQuestion, setAdvisorQuestion] = useState("");
   const [advisorAnswer, setAdvisorAnswer] = useState<VacancyAdvisorAnswer | null>(null);
   const [advisorLoading, setAdvisorLoading] = useState(false);
+  const [advisorScope, setAdvisorScope] = useState<"market" | "internal">("market");
+  const [advisorHelpOpen, setAdvisorHelpOpen] = useState(false);
   const [occupationResolution, setOccupationResolution] = useState<OccupationResolution | null>(null);
   const [occupationLoading, setOccupationLoading] = useState(false);
+  const [referencePreparing, setReferencePreparing] = useState(false);
+  const [referencePrepared, setReferencePrepared] = useState(false);
   const [occupationExplorerOpen, setOccupationExplorerOpen] = useState(false);
   const [restructureOpen, setRestructureOpen] = useState(false);
   const [restructureDescription, setRestructureDescription] = useState("");
@@ -206,6 +217,22 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   async function searchReferences(value: string) {
     try { setReferences(await vacancyService.suggestReferences(activeMembership.organizationId, value)); }
     catch (caught) { setError(errorMessage(caught, "Não foi possível consultar as referências profissionais.")); }
+  }
+  async function useProfessionalReference(conceptId: string) {
+    const reference = references.find((item) => item.conceptId === conceptId); if (!reference) return;
+    if (draft.sourceKind === "assisted_description") {
+      setDraft((current) => ({ ...current, referenceConceptId: conceptId, title: current.title || reference.label }));
+      setReferencePrepared(false); setValidationTarget(null); return;
+    }
+    const hasHumanContent = Boolean(draft.title || draft.mission || draft.responsibilities.length || draft.requirements.length);
+    if (hasHumanContent && draft.sourceKind !== "knowledge_reference" && !window.confirm("Esta referência prepara uma nova proposta e substituirá o conteúdo ainda não salvo. Deseja continuar?")) return;
+    setReferencePreparing(true); setError(null);
+    try {
+      const proposal = await vacancyService.loadProfessionalReferenceProposal(activeMembership.organizationId, conceptId);
+      setDraft((current) => materializeVacancyFromProfessionalReference(current, proposal));
+      setReferencePrepared(true); setValidationTarget(null);
+    } catch (caught) { setError(errorMessage(caught, "Não foi possível preparar a estrutura a partir da referência profissional.")); }
+    finally { setReferencePreparing(false); }
   }
   async function resolveOccupation() {
     if (draft.title.trim().length < 2) return;
@@ -275,7 +302,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
       knowledge: knowledge.map((item) => ({ label: item.label, scope: item.scope, source: item.source, relatedLabels: item.relatedLabels })),
       knowledgeLookupAvailable,
     });
-    if (shouldResearchVacancyMarket(advisorQuestion)) {
+    if (advisorScope === "market") {
       try {
         const research = await vacancyService.researchAdvisorMarket({
           organizationId: activeMembership.organizationId,
@@ -294,7 +321,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         setAdvisorAnswer({ ...answer, market: errorMessage(caught, "Não foi possível consultar o mercado agora. A análise interna foi preservada."), sources: [], webSearched: false });
       }
     } else {
-      setAdvisorAnswer(answer);
+      setAdvisorAnswer({ ...answer, market: "Você escolheu consultar somente as fontes internas autorizadas: a Vaga atual, Vagas e funções acessíveis da empresa e a Knowledge publicada disponível.", sources: [], webSearched: false });
     }
     setAdvisorLoading(false);
   }
@@ -313,10 +340,13 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     {!vacancyId ? <PrismaCard className={`prisma-vacancy-start-card ${validationTarget === "occupation" ? "has-validation-error" : ""}`} title="Como você quer começar?">
       <div><label>Função da empresa<Select allowClear onChange={useRole} options={roles.map((item) => ({ label: item.name, value: item.id }))} placeholder="Usar uma função validada" /></label></div>
       <div><label>Vaga anterior<Select allowClear onChange={(value) => void usePrevious(value)} options={previous.map((item) => ({ label: item.title, value: item.id }))} placeholder="Reutilizar somente a definição" /></label></div>
-      <div className={validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} ref={occupationReferenceRef}><label>Referência profissional<Select allowClear filterOption={false} onSearch={(value) => void searchReferences(value)} onSelect={(value) => { const reference = references.find((item) => item.conceptId === value); if (reference) { setDraft((current) => ({ ...current, title: current.title || reference.label, referenceConceptId: value, sourceKind: sourceKindAfterOccupationReference(current) })); setValidationTarget(null); } }} options={references.map((item) => ({ label: `${item.label} · ${item.scope === "global" ? "Global" : "Empresa"}`, value: item.conceptId }))} placeholder="Buscar na Knowledge" showSearch /></label>{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}</div>
+      <div className={validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} ref={occupationReferenceRef}><label>Referência profissional<Select allowClear disabled={referencePreparing} filterOption={false} loading={referencePreparing} onSearch={(value) => void searchReferences(value)} onSelect={(value) => void useProfessionalReference(value)} options={references.map((item) => ({ label: `${item.label} · ${item.scope === "global" ? "Global" : "Empresa"}`, value: item.conceptId }))} placeholder="Buscar na Knowledge" showSearch /></label>{referencePreparing ? <Typography.Text type="secondary">Prisma está preparando a estrutura da Vaga...</Typography.Text> : null}{referencePrepared ? <Typography.Text type="secondary">Estrutura preparada a partir da referência profissional selecionada. Revise e adapte para a necessidade da sua empresa.</Typography.Text> : null}{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}</div>
       <Button icon={<RobotOutlined />} onClick={() => onNavigate("/vacancies/assist")}>Começar com uma descrição</Button>
     </PrismaCard> : null}
-    <Form layout="vertical" onFinish={() => void save()}>
+    <Form layout="vertical" onFinish={() => void save()} onKeyDown={(event) => {
+      const target = event.target as HTMLElement;
+      if (event.key === "Enter" && target instanceof HTMLInputElement && !target.closest(".ant-select")) event.preventDefault();
+    }}>
       <PrismaCard className="prisma-vacancy-form-section" title="1. Informações básicas">
         <div className="prisma-vacancy-form-grid">
           <Form.Item {...(validationTarget === "title" ? { help: "Informe o título da Vaga.", validateStatus: "error" as const } : {})} label="Título da Vaga" required><Input maxLength={240} onBlur={() => void resolveOccupation()} onChange={(event) => { update("title", event.target.value); setOccupationResolution(null); if (validationTarget === "title") setValidationTarget(null); }} placeholder="Ex.: Gerente Comercial Enterprise" value={draft.title} /></Form.Item>
@@ -359,7 +389,8 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         <Input.TextArea onChange={(event) => update("contextItems", event.target.value ? [event.target.value] : [])} placeholder="Ex.: A área está sendo estruturada e precisa ganhar previsibilidade comercial. A pessoa terá autonomia para revisar processos e apoiar o crescimento da equipe." rows={5} value={draft.contextItems.join("\n\n")} />
       </PrismaCard>
       <PrismaCard className="prisma-vacancy-form-section prisma-vacancy-advisor" title={<span><RobotOutlined /> Assistente Prisma</span>}>
-        <Typography.Paragraph type="secondary">Pergunte livremente sobre a Vaga. Quando a pergunta depender do mercado atual, o Prisma pesquisa fontes externas aprovadas e mostra as referências usadas. Não inclua nomes ou dados pessoais. Nenhuma resposta altera dados automaticamente.</Typography.Paragraph>
+        <Typography.Paragraph type="secondary">Pergunte livremente sobre a Vaga. Por padrão, o Prisma consulta fontes externas aprovadas e mostra as referências usadas. Escolha “Somente fontes internas” apenas quando não quiser consultar o mercado. Não inclua nomes ou dados pessoais. Nenhuma resposta altera dados automaticamente.</Typography.Paragraph>
+        <Space align="center" wrap><strong>Onde pesquisar?</strong><Segmented onChange={(value) => setAdvisorScope(value as "market" | "internal")} options={[{ label: "Mercado e fontes externas", value: "market" }, { label: "Somente fontes internas", value: "internal" }]} value={advisorScope} /><Button icon={<QuestionCircleOutlined />} onClick={() => setAdvisorHelpOpen(true)} type="text">Como funciona?</Button></Space>
         <Input.TextArea autoSize={{ minRows: 3, maxRows: 7 }} onChange={(event) => setAdvisorQuestion(event.target.value)} onPressEnter={(event) => { if (!event.shiftKey) { event.preventDefault(); void askAdvisor(); } }} placeholder="Ex.: O que está faltando nesta vaga de Product Owner?" value={advisorQuestion} />
         <div className="prisma-vacancy-advisor-submit"><Typography.Text type="secondary">Enter para enviar, Shift + Enter para nova linha</Typography.Text><Button disabled={!advisorQuestion.trim()} icon={<BulbOutlined />} loading={advisorLoading} onClick={() => void askAdvisor()} type="primary">Perguntar ao Prisma</Button></div>
         {advisorAnswer ? <div className="prisma-vacancy-advisor-answer">
@@ -369,6 +400,14 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
           <section><strong>Sugestão do Prisma</strong><Typography.Paragraph>{advisorAnswer.suggestion}</Typography.Paragraph></section>
           <footer><Button onClick={() => setAdvisorAnswer(null)}>Ignorar</Button>{advisorAnswer.suggestedRequirement ? <Button onClick={addAdvisorRequirement} type="primary">Adicionar à vaga</Button> : null}{advisorAnswer.allowKnowledgeReview ? <Button onClick={() => onNavigate("/knowledge")}>Revisar na Knowledge</Button> : null}</footer>
         </div> : null}
+        <Modal footer={<Button onClick={() => setAdvisorHelpOpen(false)} type="primary">Entendi</Button>} onCancel={() => setAdvisorHelpOpen(false)} open={advisorHelpOpen} title="Como o Assistente Prisma pesquisa">
+          <Typography.Paragraph><strong>Mercado e fontes externas</strong> é o modo padrão. Qualquer pergunta enviada consulta fontes externas aprovadas e apresenta uma síntese, ressalvas e links para as fontes utilizadas.</Typography.Paragraph>
+          <Typography.Paragraph><strong>Somente fontes internas</strong> não consulta a Web. A resposta usa apenas a Vaga atual, Vagas e funções acessíveis da empresa e conceitos publicados na Knowledge permitida.</Typography.Paragraph>
+          <Typography.Paragraph><strong>Exemplos de mercado:</strong> “Quais competências são mais pedidas para esta função?”; “Como essa posição aparece em empresas maiores?”; “Quais tecnologias são relevantes hoje?”</Typography.Paragraph>
+          <Typography.Paragraph><strong>Exemplos internos:</strong> “O que esta Vaga exige?”; “Quais requisitos aparecem nas nossas Vagas?”; “O que a empresa já registra sobre esta tecnologia?”</Typography.Paragraph>
+          <Typography.Paragraph>Na pesquisa externa, o Prisma envia somente a pergunta, o título e a área da Vaga, o idioma e a data. Não envia Pessoas, Perfis, currículos, descrição completa da Vaga, nome da empresa ou dados pessoais. A mesma consulta pode reutilizar um resultado verificado das últimas 24 horas.</Typography.Paragraph>
+          <Typography.Paragraph>Nenhuma resposta altera a Vaga automaticamente. Fontes externas só são usadas quando aprovadas e verificáveis; se a pesquisa não puder ocorrer, a análise interna é preservada e o Prisma informa a falha.</Typography.Paragraph>
+        </Modal>
       </PrismaCard>
       <PrismaCard className="prisma-vacancy-save-bar"><Checkbox checked={draft.saveAsRole} onChange={(event) => update("saveAsRole", event.target.checked)}>Usar esta definição como referência da empresa</Checkbox><Space><Button onClick={() => onNavigate(vacancyId ? `/vacancies/${vacancyId}` : "/vacancies")}>Cancelar</Button><Button htmlType="submit" loading={saving} type="primary">Salvar vaga</Button></Space></PrismaCard>
     </Form>
@@ -424,6 +463,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
   const detailId = detail.id!;
   const required = detail.requirements.filter((item) => item.importance === "required");
   const desired = detail.requirements.filter((item) => item.importance === "desired");
+  const pending = detail.requirements.filter((item) => item.importance === "unclassified");
   async function removeVacancy() {
     setDeleting(true); setError(null);
     try {
@@ -440,7 +480,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
     <div className="prisma-vacancy-detail-header"><div><Space wrap><Typography.Title level={1}>{detail.title}</Typography.Title><OccupancyTag occupancy={detail.occupancy} /></Space><div className="prisma-vacancy-meta"><span><ApartmentOutlined /> {detail.area || "Área não informada"}</span><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span>{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}<span>Definição v{detail.version}</span></div></div><Space wrap><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar vaga</Button><Popconfirm cancelText="Cancelar" description="A Vaga sairá da lista. A posição, versões e avaliações anteriores serão preservadas." okButtonProps={{ danger: true, loading: deleting }} okText="Excluir vaga" onConfirm={() => void removeVacancy()} title="Excluir esta Vaga?"><Button danger icon={<DeleteOutlined />} loading={deleting}>Excluir</Button></Popconfirm><Button icon={<TeamOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button></Space></div>
     {error ? <Alert showIcon title={error} type="error" /> : null}
     <Tabs items={[
-      { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack">{[detail.mission, ...detail.contextItems].some((item) => item.trim()) ? <DetailSection icon={<AimOutlined />} title="Sobre a posição"><Typography.Paragraph>{[detail.mission, ...detail.contextItems].filter(Boolean).join(" ")}</Typography.Paragraph></DetailSection> : null}{detail.responsibilities.length ? <DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /> : null}{required.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={required} title="Requisitos obrigatórios" /> : null}{desired.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={desired} title="Requisitos desejáveis" /> : null}{detail.expectedOutcomes.length ? <DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /> : null}</div> },
+      { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack">{[detail.mission, ...detail.contextItems].some((item) => item.trim()) ? <DetailSection icon={<AimOutlined />} title="Sobre a posição"><Typography.Paragraph>{[detail.mission, ...detail.contextItems].filter(Boolean).join(" ")}</Typography.Paragraph></DetailSection> : null}{detail.responsibilities.length ? <DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /> : null}{pending.length ? <RequirementDimensionGroups icon={<ClockCircleOutlined />} items={pending} title="Requisitos para classificar" /> : null}{required.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={required} title="Requisitos obrigatórios" /> : null}{desired.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={desired} title="Requisitos desejáveis" /> : null}{detail.expectedOutcomes.length ? <DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /> : null}</div> },
       { key: "people", label: "Pessoas encontradas", children: <Empty description="A descoberta é calculada sob demanda para não carregar todos os Perfis na abertura."><Button onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">Encontrar pessoas</Button></Empty> },
       { key: "history", label: "Histórico", children: <PrismaCard><List dataSource={history} locale={{ emptyText: "Nenhuma alteração registrada." }} renderItem={(item) => <List.Item><List.Item.Meta avatar={<HistoryOutlined />} title={historyLabel(item.type)} description={`${item.version ? `Definição v${item.version} · ` : ""}${formatDate(item.createdAt)}`} /></List.Item>} /></PrismaCard> },
     ]} />
@@ -450,8 +490,10 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
 export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: CommonProps & { vacancyId: string }) {
   const [vacancy, setVacancy] = useState<VacancyDetail | null>(null);
   const [matches, setMatches] = useState<VacancyCandidateMatch[]>([]);
+  const [discovery, setDiscovery] = useState<Omit<VacancyPeopleDiscovery, "matches"> | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
   const [activeMatch, setActiveMatch] = useState<VacancyCandidateMatch | null>(null);
+  const [decidingPersonId, setDecidingPersonId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -459,7 +501,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     void vacancyService.load(activeMembership.organizationId, vacancyId).then(async (detail) => {
       if (!detail) throw new Error("A Vaga não foi encontrada.");
       const result = await vacancyService.findPeople(activeMembership.organizationId, detail, true);
-      if (current) { setVacancy(detail); setMatches(result); }
+      if (current) { const { matches: found, ...summary } = result; setVacancy(detail); setMatches(found); setDiscovery(summary); }
     }).catch((caught) => { if (current) setError(errorMessage(caught, "Não foi possível encontrar Pessoas.")); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
@@ -469,14 +511,24 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     try { if (vacancy) await vacancyService.recordEvaluation(vacancy, match); }
     catch (caught) { setError(errorMessage(caught, "A aderência foi calculada, mas não pôde ser registrada.")); }
   }
+  async function decidePosition(match: VacancyCandidateMatch, decision: Exclude<VacancyPositionRelationDecision, null>) {
+    if (!vacancy) return;
+    setDecidingPersonId(match.candidate.personId); setError(null);
+    try {
+      await vacancyService.recordPositionRelationDecision(vacancy, match, decision);
+      setMatches((current) => sortVacancyMatches(current.map((item) => item.candidate.personId === match.candidate.personId ? { ...item, positionDecision: decision } : item)));
+    } catch (caught) { setError(errorMessage(caught, "Não foi possível registrar sua decisão sobre esta relação.")); }
+    finally { setDecidingPersonId(null); }
+  }
   function toggle(personId: string) { setSelected((current) => current.includes(personId) ? current.filter((id) => id !== personId) : current.length < 2 ? [...current, personId] : [current[1]!, personId]); }
   return <PrismaPage className="prisma-vacancy-people-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}`)} type="text">Voltar para a Vaga</Button>
-    <PrismaPageHeader title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="Resultados internos explicados pelos requisitos desta Vaga, sem score e sem vencedor." actions={<Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button>} />
+    <PrismaPageHeader title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="Relação com a posição e aderência por requisito são explicadas separadamente, sem score e sem vencedor." actions={<Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
+    {discovery ? <Alert showIcon type={discovery.unclassifiedRequirementCount ? "warning" : "info"} title={`${discovery.analyzedProfileCount} de ${discovery.publishedProfileCount} Perfis publicados analisados.`} description={discovery.unclassifiedRequirementCount ? `${discovery.unclassifiedRequirementCount} requisito${discovery.unclassifiedRequirementCount === 1 ? " aguarda" : "s aguardam"} classificação. A descoberta ocupacional continua disponível; conclua a classificação para fechar a aderência detalhada.` : "A análise percorreu todos os Perfis publicados acessíveis da empresa."} action={discovery.unclassifiedRequirementCount ? <Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Classificar requisitos</Button> : undefined} /> : null}
     {loading ? <PrismaCard><Skeleton active avatar paragraph={{ rows: 14 }} /></PrismaCard> : null}
-    {!loading && !matches.length ? <PrismaCard><Empty description="Ainda não encontramos Perfis com evidências suficientes para estes critérios."><Space wrap><Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Revisar requisitos</Button><Button onClick={() => onNavigate("/profiles/search")}>Consultar Pessoas manualmente</Button></Space></Empty></PrismaCard> : null}
-    <div className="prisma-vacancy-match-list">{matches.map((match) => <CandidateMatchCard key={match.candidate.personId} match={match} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div>
+    {!loading && !matches.length ? <PrismaCard><Empty description="Não há Perfis publicados acessíveis para esta empresa."><Button onClick={() => onNavigate("/profiles/search")}>Consultar Pessoas</Button></Empty></PrismaCard> : null}
+    <div className="prisma-vacancy-match-list">{matches.map((match) => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} match={match} onDecision={(decision) => void decidePosition(match, decision)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div>
     <MatchDrawer match={activeMatch} onClose={() => setActiveMatch(null)} open={Boolean(activeMatch)} />
   </PrismaPage>;
 }
@@ -505,7 +557,8 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
     {loading ? <PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard> : null}
     {!loading && matches.length !== 2 ? <PrismaCard><Empty description="Selecione exatamente duas Pessoas com Perfil publicado." /></PrismaCard> : null}
     {matches.length === 2 ? <>
-      <div className="prisma-vacancy-compare-people">{matches.map((match) => <PrismaCard key={match.candidate.personId}><div className="prisma-match-person"><AvatarInitials name={match.candidate.fullName} /><div><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title><Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small></div></div></PrismaCard>)}</div>
+      {matches.some((match) => match.detailedStatus !== "ready") ? <Alert showIcon type="warning" title="Aderência detalhada ainda incompleta" description="A relação ocupacional continua comparável. Classifique os requisitos pendentes para concluir obrigatórios e lacunas." /> : null}
+      <div className="prisma-vacancy-compare-people">{matches.map((match) => <PrismaCard key={match.candidate.personId}><div className="prisma-match-person"><AvatarInitials name={match.candidate.fullName} /><div><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title><Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small><Space wrap><PositionRelationTag status={match.positionRelation.status} />{match.positionDecision === "confirmed" ? <Tag color="green">Relação confirmada</Tag> : match.positionDecision === "dismissed" ? <Tag>Não considerar</Tag> : null}</Space><Typography.Paragraph>{match.positionRelation.explanation}</Typography.Paragraph></div></div></PrismaCard>)}</div>
       <PrismaCard className="prisma-comparison-table"><Table columns={comparisonColumns(matches)} dataSource={rows} pagination={false} scroll={{ x: 620 }} /></PrismaCard>
       <div className="prisma-comparison-mobile">{rows.map((row) => <PrismaCard key={row.key} title={row.label}><div><strong>{matches[0]!.candidate.fullName}</strong>{row.left ? <MatchStatusTag status={row.left.status} /> : <Tag>Não avaliado</Tag>}<Typography.Paragraph>{row.left?.explanation}</Typography.Paragraph></div><div><strong>{matches[1]!.candidate.fullName}</strong>{row.right ? <MatchStatusTag status={row.right.status} /> : <Tag>Não avaliado</Tag>}<Typography.Paragraph>{row.right?.explanation}</Typography.Paragraph></div></PrismaCard>)}</div>
       <Typography.Title level={2}>Destaques objetivos</Typography.Title><div className="prisma-vacancy-compare-people">{matches.map((match) => <PrismaCard className="prisma-match-highlight-card" key={match.candidate.personId} title={match.candidate.fullName}><ul>{match.requirements.filter((item) => item.status !== "no_evidence").slice(0, 5).map((item) => <li key={item.requirement.stableId}><CheckCircleOutlined /> {item.explanation}</li>)}</ul></PrismaCard>)}</div>
@@ -524,25 +577,31 @@ function RequirementDimensionGroups({ icon, items, title }: { icon: ReactNode; i
 
 function StringListEditor({ label, onChange, placeholder, values }: { label: string; onChange: (values: string[]) => void; placeholder: string; values: string[] }) {
   const [input, setInput] = useState("");
+  const inputRef = useRef<InputRef>(null);
   function add() { const value = input.trim(); if (!value) return; onChange([...values, value]); setInput(""); }
-  return <PrismaCard className="prisma-vacancy-form-section" title={label}><div className="prisma-string-list">{values.map((value, index) => <div key={`${value}-${index}`}><Input onChange={(event) => onChange(values.map((item, currentIndex) => currentIndex === index ? event.target.value : item))} value={value} /><Button aria-label={`Remover ${value}`} danger icon={<DeleteOutlined />} onClick={() => onChange(values.filter((_, currentIndex) => currentIndex !== index))} type="text" /></div>)}</div><Input onChange={(event) => setInput(event.target.value)} onPressEnter={add} placeholder={placeholder} suffix={<Button icon={<PlusOutlined />} onClick={add} size="small" type="text" />} value={input} /></PrismaCard>;
+  function addFromEnter(event: KeyboardEvent<HTMLInputElement>) { event.preventDefault(); add(); window.requestAnimationFrame(() => inputRef.current?.focus()); }
+  return <PrismaCard className="prisma-vacancy-form-section" title={label}><div className="prisma-string-list">{values.map((value, index) => <div key={`${value}-${index}`}><Input onChange={(event) => onChange(values.map((item, currentIndex) => currentIndex === index ? event.target.value : item))} value={value} /><Button aria-label={`Remover ${value}`} danger icon={<DeleteOutlined />} onClick={() => onChange(values.filter((_, currentIndex) => currentIndex !== index))} type="text" /></div>)}</div><Input onChange={(event) => setInput(event.target.value)} onPressEnter={addFromEnter} placeholder={placeholder} ref={inputRef} suffix={<Button icon={<PlusOutlined />} onClick={add} size="small" type="text" />} value={input} /></PrismaCard>;
 }
 
-function CandidateMatchCard({ match, onEvaluate, onNavigate, onToggle, selected }: { match: VacancyCandidateMatch; onEvaluate: () => void; onNavigate: (path: string) => void; onToggle: () => void; selected: boolean }) {
+function CandidateMatchCard({ deciding, match, onDecision, onEvaluate, onNavigate, onToggle, selected }: { deciding: boolean; match: VacancyCandidateMatch; onDecision: (decision: Exclude<VacancyPositionRelationDecision, null>) => void; onEvaluate: () => void; onNavigate: (path: string) => void; onToggle: () => void; selected: boolean }) {
   const met = match.requirements.filter((item) => item.status === "met");
+  const partial = match.requirements.filter((item) => item.status === "partially_met");
   const related = match.requirements.filter((item) => item.status === "related_signal");
   const missing = match.requirements.filter((item) => item.status === "no_evidence");
-  return <PrismaCard className={`prisma-vacancy-match-card${selected ? " is-selected" : ""}`}><article><header><Checkbox checked={selected} onChange={onToggle} /><AvatarInitials name={match.candidate.fullName} /><div><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title><Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small></div><Space orientation="vertical"><Button onClick={() => onNavigate(`/profiles/${match.candidate.personId}/profile`)} type="primary">Ver perfil</Button><Button onClick={onEvaluate}>Avaliar aderência</Button></Space></header>{match.candidate.profileData.summary ? <Typography.Paragraph ellipsis={{ rows: 2 }}>{match.candidate.profileData.summary}</Typography.Paragraph> : null}<section className="prisma-match-reasons"><strong><FileSearchOutlined /> Por que apareceu</strong><Space wrap>{match.reasons.slice(0, 5).map((reason) => <Tag key={reason}>{reason}</Tag>)}</Space></section><div className="prisma-match-evidence-grid"><MatchBucket color="success" items={met.map((item) => item.requirement.label)} title={`Evidências encontradas (${met.length})`} /><MatchBucket color="warning" items={related.map((item) => `${item.relatedSignal}: sinal relacionado`)} title={`Sinais relacionados (${related.length})`} /><MatchBucket color="error" items={missing.map((item) => item.requirement.label)} title={`Ainda sem evidência suficiente (${missing.length})`} /></div></article></PrismaCard>;
+  return <PrismaCard className={`prisma-vacancy-match-card${selected ? " is-selected" : ""}${match.positionDecision === "dismissed" ? " is-dismissed" : ""}`}><article><header><Checkbox checked={selected} onChange={onToggle} /><AvatarInitials name={match.candidate.fullName} /><div><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title><Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small><Space className="prisma-position-relation-tags" wrap><PositionRelationTag status={match.positionRelation.status} />{match.positionDecision === "confirmed" ? <Tag color="green">Relação confirmada por você</Tag> : match.positionDecision === "dismissed" ? <Tag>Não considerar</Tag> : null}<DetailedStatusTag match={match} /></Space></div><Space orientation="vertical"><Button onClick={() => onNavigate(`/profiles/${match.candidate.personId}/profile`)} type="primary">Ver perfil</Button><Button onClick={onEvaluate}>Ver evidências</Button></Space></header>{match.candidate.profileData.summary ? <Typography.Paragraph ellipsis={{ rows: 2 }}>{match.candidate.profileData.summary}</Typography.Paragraph> : null}<section className="prisma-position-relation"><strong>Relação com a posição</strong><Typography.Paragraph>{match.positionRelation.explanation}</Typography.Paragraph><Space wrap><Button disabled={match.positionDecision === "confirmed"} loading={deciding} onClick={() => onDecision("confirmed")} size="small" type={match.positionDecision === "confirmed" ? "default" : "primary"}>Confirmar relação</Button><Button disabled={match.positionDecision === "dismissed"} loading={deciding} onClick={() => onDecision("dismissed")} size="small">Não considerar</Button></Space></section><section className="prisma-match-reasons"><strong><FileSearchOutlined /> Por que apareceu</strong><Space wrap>{match.reasons.slice(0, 5).map((reason) => <Tag key={reason}>{reason}</Tag>)}</Space></section><div className="prisma-match-evidence-grid"><MatchBucket color="success" items={met.map((item) => item.requirement.label)} title={`Atendidos (${met.length})`} /><MatchBucket color="warning" items={partial.map((item) => item.requirement.label)} title={`Parciais para revisão (${partial.length})`} /><MatchBucket color="warning" items={related.map((item) => `${item.relatedSignal}: sinal relacionado`)} title={`Sinais relacionados (${related.length})`} /><MatchBucket color="error" items={missing.map((item) => item.requirement.label)} title={`Sem evidência suficiente (${missing.length})`} /></div></article></PrismaCard>;
 }
 
 function MatchDrawer({ match, onClose, open }: { match: VacancyCandidateMatch | null; onClose: () => void; open: boolean }) {
-  return <Drawer onClose={onClose} open={open} size="large" title={match ? `Aderência de ${match.candidate.fullName}` : "Aderência"}>{match ? <><Alert title="Esta leitura compara evidências publicadas com a versão atual da Vaga. Não é avaliação de desempenho nem decisão de contratação." showIcon type="info" /><List dataSource={match.requirements} renderItem={(item) => <List.Item><List.Item.Meta avatar={<StatusIcon status={item.status} />} title={<Space wrap>{item.requirement.label}<MatchStatusTag status={item.status} /></Space>} description={<><Typography.Paragraph>{item.explanation}</Typography.Paragraph>{item.evidence.map((evidence) => <Tag key={`${evidence.source}-${evidence.label}`}>{evidence.label} · {evidence.source}</Tag>)}</>} /></List.Item>} /></> : null}</Drawer>;
+  return <Drawer onClose={onClose} open={open} size="large" title={match ? `Evidências de ${match.candidate.fullName}` : "Evidências"}>{match ? <><Alert title="Esta leitura compara evidências publicadas com a versão atual da Vaga. Não é avaliação de desempenho nem decisão de contratação." showIcon type="info" /><PrismaCard title="Relação com a posição"><Space wrap><PositionRelationTag status={match.positionRelation.status} /><EvidenceLevelTag level={match.evidenceAssessment.level} /></Space><Typography.Paragraph>{match.positionRelation.explanation}</Typography.Paragraph>{match.positionRelation.evidence.map((item) => <Tag key={`${item.sourceId}-${item.label}`}>{item.label} · {item.source}</Tag>)}<details><summary>Como a evidência foi avaliada</summary><ul>{match.evidenceAssessment.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details></PrismaCard>{match.detailedStatus !== "ready" ? <Alert title={match.detailedStatus === "pending_classification" ? "Aderência detalhada pendente" : "A Vaga ainda não possui requisitos comparáveis"} description={match.detailedStatus === "pending_classification" ? "A relação ocupacional e as evidências já estão visíveis. Classifique os requisitos para concluir quais lacunas são obrigatórias." : "A relação ocupacional continua disponível para sua análise."} showIcon type="warning" /> : null}<List dataSource={match.requirements} renderItem={(item) => <List.Item><List.Item.Meta avatar={<StatusIcon status={item.status} />} title={<Space wrap>{item.requirement.label}<MatchStatusTag status={item.status} />{item.requirement.importance === "unclassified" ? <Tag>Importância pendente</Tag> : null}</Space>} description={<><Typography.Paragraph>{item.explanation}</Typography.Paragraph>{item.evidence.map((evidence) => <Tag key={`${evidence.sourceId}-${evidence.label}`}>{evidence.label} · {evidence.source}</Tag>)}</>} /></List.Item>} /></> : null}</Drawer>;
 }
 
 function MatchBucket({ color, items, title }: { color: "success" | "warning" | "error"; items: string[]; title: string }) { return <section className={`prisma-match-bucket is-${color}`}><strong>{title}</strong>{items.length ? <Space wrap>{items.map((item) => <Tag color={color} key={item}>{item}</Tag>)}</Space> : <Typography.Text type="secondary">Nenhum item nesta categoria.</Typography.Text>}</section>; }
 function AvatarInitials({ name }: { name: string }) { return <div aria-hidden="true" className="prisma-vacancy-avatar">{name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>; }
 function OccupancyTag({ occupancy }: { occupancy: VacancyDraft["occupancy"] }) { return occupancy === "occupied" ? <Tag color="blue">Ocupada</Tag> : <Tag color="green">Não ocupada</Tag>; }
 function MatchStatusTag({ status }: { status: VacancyMatchStatus }) { const map = { met: ["success", "Atendido"], partially_met: ["warning", "Parcial"], related_signal: ["purple", "Sinal relacionado"], no_evidence: ["error", "Sem evidência suficiente"] } as const; return <Tag color={map[status][0]}>{map[status][1]}</Tag>; }
+function PositionRelationTag({ status }: { status: VacancyPositionRelationStatus }) { const map = { same_reference: ["green", "Mesma referência ocupacional"], equivalent_reference: ["cyan", "Ocupação equivalente"], related_reference: ["blue", "Ocupação relacionada"], possible_title_relation: ["gold", "Possível relação de posição"], none: ["default", "Sem relação automática"] } as const; return <Tag color={map[status][0]}>{map[status][1]}</Tag>; }
+function DetailedStatusTag({ match }: { match: VacancyCandidateMatch }) { return match.detailedStatus === "ready" ? <Tag color="blue">Aderência detalhada disponível</Tag> : match.detailedStatus === "pending_classification" ? <Tag color="gold">Aderência pendente · {match.unclassifiedRequirementCount} para classificar</Tag> : <Tag>Sem requisitos comparáveis</Tag>; }
+function EvidenceLevelTag({ level }: { level: VacancyCandidateMatch["evidenceAssessment"]["level"] }) { return <Tag color={level === "corroborated" ? "green" : level === "supported" ? "blue" : "default"}>{level === "corroborated" ? "Evidência corroborada" : level === "supported" ? "Evidência sustentada" : "Evidência limitada"}</Tag>; }
 function StatusIcon({ status }: { status: VacancyMatchStatus }) { return status === "met" ? <CheckCircleOutlined className="is-success" /> : status === "no_evidence" ? <ExclamationCircleOutlined className="is-error" /> : <ClockCircleOutlined className="is-warning" />; }
 function DetailSection({ children, icon, title }: { children: React.ReactNode; icon: React.ReactNode; title: string }) { return <PrismaCard title={<span>{icon} {title}</span>}>{children}</PrismaCard>; }
 function DetailList({ icon, items, title }: { icon: React.ReactNode; items: string[]; title: string }) { return <DetailSection icon={icon} title={title}>{items.length ? <ul className="prisma-vacancy-editorial-list">{items.map((item) => <li key={item}>{item}</li>)}</ul> : <Typography.Text type="secondary">Não informado.</Typography.Text>}</DetailSection>; }

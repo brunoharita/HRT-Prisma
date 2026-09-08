@@ -27,6 +27,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-040](ADR-040-m544-ai-occupation-resolution.md) | accepted | AI-assisted ESCO/O*NET resolution with a human explorer before manual occupation creation |
 | [ADR-041](ADR-041-canonical-vacancy-structure-profile-alignment.md) | accepted | Fixed vacancy structure aligned to canonical Prisma Profile dimensions |
 | [ADR-043](ADR-043-canonical-vacancy-review-and-presentation.md) | accepted | Human classification, delta preservation and canonical vacancy presentation |
+| [ADR-044](ADR-044-inclusive-position-first-vacancy-discovery.md) | accepted | Inclusive Person discovery with separate occupational relation and dimensional adherence |
 | [ADR-042](ADR-042-actionable-field-validation-feedback.md) | accepted | Actionable field-level validation feedback |
 | [ADR-014](ADR-014-knowledge-agent-trusted-sources.md) | accepted | Knowledge Agent with trusted-source and no-PII policy |
 | [ADR-015](ADR-015-knowledge-triggered-reinterpretation.md) | accepted | Knowledge-triggered profile reinterpretation through M2-C |

@@ -16,4 +16,6 @@ Contrato: `vacancy-structure-profile-aligned-2.1.0`. Fonte profissional: `profes
 | `keyResults` | resultados esperados | contextual | não | narrativo | lista | não | vazio |
 | `professionalContexts` | consolidado em Sobre a posição | contextual | não | narrativo | lista | não | vazio |
 
-Narrativa não é requisito automático. Cada requisito comparável usa a categoria existente, termo observado e, quando disponível, conceito Knowledge. A ausência de dimensão na Vaga não cria gap na Pessoa.
+Narrativa não é requisito automático. A relação ocupacional é calculada separadamente da aderência detalhada e pode usar referência oficial, alias publicado, relação Knowledge aprovada, título profissional e cargos de experiências. Uma relação textual aproximada aparece apenas como possibilidade e exige confirmação humana.
+
+Cada requisito comparável consulta exclusivamente sua dimensão correspondente, preservando termo, campo, origem e conceito Knowledge quando disponível. Correspondência exata ou canônica pode ser `met`; substring ou aproximação na mesma dimensão é `partially_met`; narrativa nunca comprova requisito. A ausência de dimensão na Vaga não cria gap na Pessoa, e requisitos ainda sem classificação não impedem que os Perfis publicados sejam descobertos.

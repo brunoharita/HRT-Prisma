@@ -6046,13 +6046,17 @@ textarea {
 .prisma-vacancy-match-list { display: grid; gap: 14px; }
 .prisma-vacancy-match-card { transition: border-color 160ms ease, box-shadow 160ms ease; }
 .prisma-vacancy-match-card.is-selected { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.11); }
+.prisma-vacancy-match-card.is-dismissed { opacity: 0.72; background: #f8fafc; }
 .prisma-vacancy-match-card article > header { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
 .prisma-vacancy-match-card article > header h3.ant-typography { margin: 0; }
 .prisma-vacancy-match-card article > header small,
 .prisma-match-person small { display: block; color: var(--prisma-text-muted); }
 .prisma-vacancy-avatar { display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px; border-radius: 50%; color: #2b1a68; background: #ede9fe; font-weight: 800; }
+.prisma-position-relation-tags { display: flex; margin-top: 7px; }
+.prisma-position-relation { display: grid; gap: 7px; margin-top: 14px; padding: 12px; border: 1px solid #cfe0ff; border-radius: 10px; background: #f6f9ff; }
+.prisma-position-relation .ant-typography { margin: 0; }
 .prisma-match-reasons { display: grid; gap: 8px; margin: 12px 0; }
-.prisma-match-evidence-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.prisma-match-evidence-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .prisma-match-bucket { display: grid; align-content: start; gap: 8px; min-height: 92px; padding: 11px; border: 1px solid; border-radius: 10px; }
 .prisma-match-bucket.is-success { border-color: #b7ebc6; background: #f2fff6; }
 .prisma-match-bucket.is-warning { border-color: #ffe0a3; background: #fffaf0; }

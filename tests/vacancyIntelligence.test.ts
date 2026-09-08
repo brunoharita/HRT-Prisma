@@ -13,6 +13,7 @@ import {
   applyStructuredDescription,
   VACANCY_PROFILE_MATRIX,
   occupationResolutionMessage,
+  materializeVacancyFromProfessionalReference,
   sourceKindAfterOccupationReference,
   compareVacancyRequirements,
   validateVacancyReady,
@@ -106,18 +107,56 @@ test("ausência de idioma permanece sem evidência suficiente e nunca vira fato 
   assert.doesNotMatch(result.requirements[0]?.explanation ?? "", /não possui inglês|não sabe inglês/i);
 });
 
-test("requisito procura evidência em todo o Perfil e explica as fontes sem depender da categoria interna", () => {
+test("requisito consulta somente a dimensão profissional correspondente", () => {
   const need = vacancy("Analista ERP", ["SAP"]);
   need.requirements[0]!.category = "language";
   const person = candidate("sap", "Pessoa SAP", profile({
     competencies: ["SAP"],
     experiences: [{ id: "exp-sap", source: "human", role: "Analista de Sistemas", organization: "Empresa", period: "2024", description: "Implantação do SAP", evidenceText: "Projeto SAP", page: 1 }],
   }));
-  const result = matchVacancyCandidate(need, person);
-  assert.equal(result.requirements[0]?.status, "met");
-  assert.deepEqual(new Set(result.requirements[0]?.evidence.map((item) => item.source)), new Set(["Competências, conhecimentos e ferramentas", "Experiência profissional"]));
-  assert.match(result.requirements[0]?.explanation ?? "", /Competências, conhecimentos e ferramentas/);
-  assert.match(result.requirements[0]?.explanation ?? "", /Experiência profissional/);
+  assert.equal(matchVacancyCandidate(need, person).requirements[0]?.status, "no_evidence");
+  need.requirements[0]!.category = "technology";
+  const technology = matchVacancyCandidate(need, person);
+  assert.equal(technology.requirements[0]?.status, "met");
+  assert.deepEqual(new Set(technology.requirements[0]?.evidence.map((item) => item.source)), new Set(["Tecnologias e ferramentas"]));
+});
+
+test("narrativa não comprova requisito e correspondência textual parcial exige revisão humana", () => {
+  const need = vacancy("Gerente de Projetos", ["Gestão de projetos"]);
+  const narrativeOnly = candidate("narrative", "Pessoa Narrativa", profile({ summary: "Responsável por gestão de projetos", competencies: [] }));
+  assert.equal(matchVacancyCandidate(need, narrativeOnly).requirements[0]?.status, "no_evidence");
+  const partial = candidate("partial", "Pessoa Parcial", profile({ competencies: ["Gestão de projetos complexos"] }));
+  assert.equal(matchVacancyCandidate(need, partial).requirements[0]?.status, "partially_met");
+});
+
+test("descoberta ocupacional encontra títulos equivalentes por referência ou experiência sem declarar aderência", () => {
+  const need = vacancy("Gerente de projetos de tecnologia da informação", []);
+  need.referenceConceptId = "occupation-project-manager";
+  const bruno = candidate("bruno", "Bruno Harita Santos", profile({
+    professionalTitle: "Executivo de Transformação & Tecnologia",
+    experiences: [{ id: "project", source: "human", role: "Trajetória em Customer Success, Projetos, Produto e Liderança de Tecnologia", organization: "Empresa", period: "2020 - 2024", description: "Gestão de projetos", evidenceText: "Projetos e Liderança de Tecnologia", page: 1 }],
+  }));
+  const relation = matchVacancyCandidate(need, bruno, { conceptId: "occupation-project-manager", canonicalLabel: need.title, aliases: ["Gestor de projetos de TI"], relations: [] });
+  assert.equal(relation.positionRelation.status, "possible_title_relation");
+  assert.equal(relation.detailedStatus, "no_requirements");
+  assert.match(relation.positionRelation.explanation, /Projetos, Produto e Liderança de Tecnologia/);
+
+  const sameReference = candidate("same", "Pessoa Mesma Referência", profile(), [{ originalTerm: "Gestor de projetos de TI", canonicalLabel: need.title, state: "resolved", conceptId: "occupation-project-manager", conceptType: "occupation", sourceFieldPath: "professionalTitle" }]);
+  assert.equal(matchVacancyCandidate(need, sameReference, { conceptId: "occupation-project-manager", canonicalLabel: need.title, aliases: [], relations: [] }).positionRelation.status, "same_reference");
+});
+
+test("todos os Perfis permanecem visíveis e decisões humanas influenciam apenas a ordem", () => {
+  const need = vacancy("Gerente de Projetos", ["Gestão de projetos"]);
+  const related = matchVacancyCandidate(need, candidate("related", "Relacionada", profile({ competencies: ["Gestão de projetos"] })));
+  const manual = matchVacancyCandidate(need, candidate("manual", "Análise Manual", profile({ professionalTitle: "Analista Financeiro" })));
+  manual.positionDecision = "dismissed";
+  const ordered = sortVacancyMatches([manual, related]);
+  assert.deepEqual(ordered.map((item) => item.candidate.personId), ["related", "manual"]);
+  assert.equal(ordered.length, 2);
+  assert.match(manual.reasons[0] ?? "", /análise manual/i);
+
+  manual.positionDecision = "confirmed";
+  assert.deepEqual(sortVacancyMatches([related, manual]).map((item) => item.candidate.personId), ["manual", "related"]);
 });
 
 test("ordenação é determinística e explicável sem score exposto", () => {
@@ -127,6 +166,41 @@ test("ordenação é determinística e explicável sem score exposto", () => {
   const ordered = sortVacancyMatches([matchVacancyCandidate(need, one), matchVacancyCandidate(need, two)]);
   assert.deepEqual(ordered.map((item) => item.candidate.personId), ["two", "one"]);
   assert.ok(ordered.every((item) => item.reasons.every((reason) => !/%|nota|vencedor/i.test(reason))));
+});
+
+test("evidência inclui dimensão, origem observável e nível explicável sem score", () => {
+  const need = vacancy("Gerente Comercial", ["Negociação"]);
+  const person = candidate("evidence", "Pessoa com Evidência", profile({ competencies: ["Negociação"] }));
+  const match = matchVacancyCandidate(need, person);
+  assert.equal(match.requirements[0]?.evidence[0]?.dimension, "competency");
+  assert.equal(match.evidenceAssessment.level, "corroborated");
+  assert.equal(match.evidenceAssessment.contradictionReview, "not_automatically_evaluated");
+  assert.ok(match.evidenceAssessment.reasons.some((reason) => /fonte/i.test(reason)));
+});
+
+test("tecnologias explícitas e legadas são materializadas na dimensão correta", () => {
+  const need = vacancy("Engenheiro Cloud", ["AWS"]);
+  need.requirements[0]!.category = "technology";
+  const explicit = candidate("explicit-tool", "Ferramenta Explícita", profile({ competencies: [], toolsAndTechnologies: ["AWS"] }));
+  const legacy = candidate("legacy-tool", "Ferramenta Legada", profile({ competencies: ["AWS"] }));
+  assert.equal(matchVacancyCandidate(need, explicit).requirements[0]?.status, "met");
+  assert.equal(matchVacancyCandidate(need, legacy).requirements[0]?.status, "met");
+});
+
+test("descoberta pagina todos os Perfis e persiste confirmação ou descarte sem tabela paralela", async () => {
+  const [profileService, vacancyServiceSource, page] = await Promise.all([
+    readFile("web/src/infrastructure/supabase/profileDiscoveryService.ts", "utf8"),
+    readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+  ]);
+  assert.match(profileService, /PROFILE_DISCOVERY_PAGE_SIZE = 200/);
+  assert.match(profileService, /while \(true\)[\s\S]*?\.range\(from, from \+ PROFILE_DISCOVERY_PAGE_SIZE - 1\)/);
+  assert.doesNotMatch(profileService, /MAX_PILOT_PROFILES/);
+  assert.match(vacancyServiceSource, /type: "position_relation_decision"/);
+  assert.match(vacancyServiceSource, /recordPositionRelationDecision/);
+  assert.match(page, /Confirmar relação/);
+  assert.match(page, /Não considerar/);
+  assert.match(page, /Perfis publicados analisados/);
 });
 
 test("estruturação livre confirma itens explícitos e deixa inferência derivada pendente", () => {
@@ -162,13 +236,13 @@ test("M5.4.5 decompõe descrição backend sem cópia, invenção ou requisito a
   assert.ok(!draft.requirements.some((item) => item.category === "language" || item.category === "certification"));
   assert.equal(draft.structureSource?.originalDescription, source);
   assert.ok((draft.structureSource?.items.length ?? 0) > 0);
-  assert.ok(VACANCY_PROFILE_MATRIX.filter((item) => item.matching).every((item) => ["experience", "competency", "knowledge", "technology", "education", "certification", "language"].includes(item.category)));
+  assert.ok(VACANCY_PROFILE_MATRIX.filter((item) => item.matching).every((item) => ["professionalTitle", "experience", "competency", "knowledge", "technology", "education", "certification", "language"].includes(item.category)));
 });
 
 test("M5.4.6 exige decisão humana de importância e mantém dimensões canônicas", () => {
   const requirement = newVacancyRequirement("Node.js", "technology");
   assert.equal(requirement.importance, "unclassified");
-  assert.match(validateVacancyReady({ requirements: [requirement] })[0] ?? "", /classifique/i);
+  assert.match(validateVacancyReady({ requirements: [requirement] })[0] ?? "", /descoberta.*disponível/i);
   requirement.importance = "desired";
   assert.deepEqual(validateVacancyReady({ requirements: [requirement] }), []);
   assert.equal(vacancyRequirementCategoryLabel("technology"), "Tecnologias e ferramentas");
@@ -205,7 +279,8 @@ test("M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organ
   assert.match(migration, /insert into public\.knowledge_inbox/);
   assert.match(migration, /scope.*organization/);
   assert.match(migration, /revoke all on function public\.save_vacancy_definition/);
-  assert.match(service, /Classifique cada requisito ativo/);
+  assert.doesNotMatch(service.match(/async findPeople[\s\S]*?async loadPeopleByIds/)?.[0] ?? "", /Classifique cada requisito ativo/);
+  assert.match(page, /Requisitos para classificar/);
 });
 
 test("referência ocupacional complementa a descrição estruturada sem substituir sua origem", async () => {
@@ -215,6 +290,24 @@ test("referência ocupacional complementa a descrição estruturada sem substitu
   const hotfix = await readFile("supabase/migrations/20260907110000_m545_preserve_assisted_description_origin.sql", "utf8");
   assert.match(hotfix, /source_kind = 'assisted_description'/);
   assert.match(hotfix, /source_kind in \('assisted_description', 'knowledge_reference'\)/);
+});
+
+test("referência profissional materializa proposta canônica sem inventar dados da empresa", () => {
+  const proposal = materializeVacancyFromProfessionalReference(emptyVacancyDraft(), {
+    conceptId: "occupation-project-manager", label: "Gerente de projetos de tecnologia da informação", description: "Planeja e coordena projetos de tecnologia da informação.", aliases: ["Gerente de projetos TI"], source: "O*NET", sourceVersion: "31.0", externalId: "O*NET:occupation:15-1299.09", externalUri: "https://www.onetonline.org/", relations: [
+      { id: "11111111-1111-4111-8111-111111111111", targetConceptId: "knowledge-project", label: "Administração de projetos", conceptType: "knowledge", relationType: "requires", source: "O*NET", sourceVersion: "31.0", externalId: null, externalUri: null },
+      { id: "22222222-2222-4222-8222-222222222222", targetConceptId: "technology-jira", label: "Jira", conceptType: "technology", relationType: "uses", source: "O*NET", sourceVersion: "31.0", externalId: null, externalUri: null },
+      { id: "33333333-3333-4333-8333-333333333333", targetConceptId: "related-occupation", label: "Analista de projetos", conceptType: "occupation", relationType: "related_to", source: "O*NET", sourceVersion: "31.0", externalId: null, externalUri: null },
+    ],
+  });
+  assert.equal(proposal.sourceKind, "knowledge_reference");
+  assert.equal(proposal.title, "Gerente de projetos de tecnologia da informação");
+  assert.match(proposal.mission, /coordena projetos/i);
+  assert.deepEqual(proposal.responsibilities, []);
+  assert.deepEqual(proposal.expectedOutcomes, []);
+  assert.equal(proposal.location, ""); assert.equal(proposal.workArrangement, null); assert.equal(proposal.employmentType, "");
+  assert.deepEqual(proposal.requirements.map((item) => [item.label, item.category, item.importance]), [["Administração de projetos", "knowledge", "unclassified"], ["Jira", "technology", "unclassified"]]);
+  assert.equal(proposal.requirements.every((item) => item.conceptId && item.sourceSuggestionId && !item.importanceConfirmed), true);
 });
 
 test("M5.4.5 preserva proveniência no snapshot sem reescrever versões históricas", async () => {
@@ -237,11 +330,11 @@ test("Assistente Prisma separa contexto interno, mercado e sugestão sem fingir 
     knowledgeLookupAvailable: true,
   });
   assert.match(answer.internal, /contexto da vaga/i);
-  assert.match(answer.market, /nenhuma pesquisa externa/i);
+  assert.match(answer.market, /pesquisa externa ainda não foi concluída/i);
   assert.match(answer.suggestion, /momento da área/i);
 });
 
-test("Assistente Prisma identifica pergunta atual de mercado para Web Search", () => {
+test("Assistente Prisma encaminha qualquer pergunta preenchida para pesquisa de mercado por padrão", () => {
   const question = "Quais são as linguagens mais utilizadas atualmente no desenvolvimento de sistemas em cloud?";
   const answer = answerVacancyQuestion(question, vacancy("Engenheiro Cloud", ["Desenvolvimento cloud"]), {
     otherVacancies: [], roles: [], knowledge: [], knowledgeLookupAvailable: true,
@@ -249,6 +342,12 @@ test("Assistente Prisma identifica pergunta atual de mercado para Web Search", (
   assert.equal(shouldResearchVacancyMarket(question), true);
   assert.equal(answer.webSearched, false);
   assert.match(answer.market, /depende de informação atual de mercado/i);
+  assert.equal(shouldResearchVacancyMarket("Explique este requisito da Vaga."), true);
+  assert.equal(shouldResearchVacancyMarket("   "), false);
+});
+
+test("Assistente Prisma encaminha requisitos comuns em vagas do mercado", () => {
+  assert.equal(shouldResearchVacancyMarket("Quais são os requisitos mais comuns para gerente de projetos de TI? Traga os 5 mais requisitados em vagas de grandes empresas."), true);
 });
 
 test("Assistente Prisma responde semanticamente com Knowledge interna, relações publicadas e metadados secundários", () => {
@@ -321,6 +420,11 @@ test("Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e audito
   assert.match(agent, /rejectObviousPii\(\[input\.question, input\.roleTitle, input\.area\]/);
   assert.match(agent, /requireVacancyAdvisorAuthority/);
   assert.match(agent, /filters: \{ allowed_domains: allowedDomains \}/);
+  assert.match(agent, /market_summary: answer\.market_summary\.trim\(\)\.slice\(0, 1_200\)\.trim\(\)/);
+  assert.match(agent, /recommendation: answer\.recommendation\.trim\(\)\.slice\(0, 800\)\.trim\(\)/);
+  assert.match(agent, /caveats: answer\.caveats\.map\(\(item\) => item\.trim\(\)\)\.filter\(Boolean\)\.slice\(0, 4\)/);
+  assert.match(agent, /sources: answer\.sources\.slice\(0, 6\)/);
+  assert.doesNotMatch(agent, /Market answer exceeds safe limits/);
   assert.match(migration, /create table public\.vacancy_advisor_research_runs/i);
   assert.match(migration, /enable row level security/i);
   assert.match(migration, /revoke all on table public\.vacancy_advisor_research_runs from public, anon, authenticated/i);
@@ -329,6 +433,10 @@ test("Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e audito
   assert.match(actorIndex, /on public\.vacancy_advisor_research_runs \(actor_auth_user_id\)/i);
   assert.match(page, /Web pesquisada agora/);
   assert.match(page, /Fontes consultadas/);
+  assert.match(page, /useState<"market" \| "internal">\("market"\)/);
+  assert.match(page, /advisorScope === "market"/);
+  assert.match(page, /Somente fontes internas/);
+  assert.match(page, /Como o Assistente Prisma pesquisa/);
 });
 
 test("resolução ocupacional explica segurança sem score e nunca deriva evidência da Pessoa", () => {

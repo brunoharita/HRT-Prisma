@@ -1,5 +1,16 @@
 # Evidência M5.4: Vagas
 
+## M5.4.9 — descoberta ocupacional inclusiva e aderência dimensional
+
+- O contrato `vacancy-matching-explainable-2.0.0` separa relação com a posição de aderência por requisito, mantém todos os Perfis publicados visíveis e pagina a coleção completa com total analisado.
+- Referência oficial, equivalência/relação Knowledge aprovada, título profissional e cargos de experiências explicam a relação ocupacional. Relação aproximada exige confirmação ou descarte humano auditado no `match_evaluations` existente.
+- Cada requisito consulta somente a dimensão correspondente; igualdade exata/canônica é atendida, substring é parcial, sinal relacionado continua separado e narrativa nunca comprova requisito.
+- Requisitos sem classificação deixam a aderência detalhada pendente, mas não bloqueiam a descoberta. Ferramentas históricas em `competencies` são projetadas deterministicamente para a dimensão tecnológica, sem regravar o Perfil.
+- A regressão determinística cobre o caso `Gerente de projetos de TI` versus experiência em Projetos e Liderança de Tecnologia, ausência de falso positivo entre idioma e tecnologia, parcial real, proveniência, decisão humana, inclusão sem sinal e paginação sem teto de 500.
+- A consulta read-only no Prisma-QA confirmou a Vaga real `Gerente de projetos de tecnologia da informação` v4, com referência ocupacional e cinco requisitos ainda não classificados, além do Perfil publicado v5 de Bruno Harita Santos com o título `Executivo de Transformação & Tecnologia` e experiência explícita em Projetos e Liderança de Tecnologia. A fixture foi alinhada a esses termos atuais e confirma que Bruno aparece como possível relação ocupacional, sem receber aderência automática inventada.
+- Não há migration nova: a mudança reutiliza Perfis publicados, Knowledge, RLS e `match_evaluations`. Produção não foi acionada.
+- O navegador local abriu corretamente, mas a sessão disponível foi redirecionada para login. Credenciais não foram automatizadas; portanto, o smoke autenticado das novas superfícies permanece pendente e não é tratado como evidência aprovada.
+
 ## M5.4.7 — Assistente Prisma, resposta interna completa
 
 - A regressão determinística cobre resposta interna suficiente com Kubernetes/Azure e relações publicadas, resposta parcial, insuficiência com a frase canônica, metadados secundários, preservação diante de falha externa, isolamento tenant-scoped por RPC/RLS e ausência de mutação no caminho de leitura.
@@ -10,7 +21,7 @@
 
 - `supabase/migrations/20260907130000_m546_vacancy_canonical_review.sql` e correção incremental `20260907130500_m546_dimension_feedback_conflict_fix.sql` permitem `unclassified` somente no rascunho, preservam snapshots históricos e mantêm a RPC, RLS e grants fechados.
 - `supabase/qa/m546_vacancy_canonical_review_verification.sql` foi executado com rollback no Prisma-QA: confirmou rascunho `unclassified`, origem/proposta de dimensão, feedback e Inbox somente da organização, negação de `anon` e de insert direto no ledger.
-- Os testes determinísticos cobrem dimensão canônica, decisão humana de importância, stack fora de responsabilidades, delta com requisito manual e não encontrado, projeção sem agrupadores removidos e bloqueio de matching com item não classificado.
+- Os testes determinísticos daquela versão cobriam dimensão canônica, decisão humana de importância, stack fora de responsabilidades, delta com requisito manual e não encontrado, projeção sem agrupadores removidos e bloqueio de matching com item não classificado. O bloqueio foi posteriormente substituído pela descoberta não bloqueante definida no ADR-044.
 - Smoke autenticado responsivo permanece pendente para esta rodada e não deve ser interpretado como aprovado até haver sessão de navegador disponível.
 
 - Data: 2026-09-04

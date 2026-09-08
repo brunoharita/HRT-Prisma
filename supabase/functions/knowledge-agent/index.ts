@@ -316,9 +316,14 @@ function parseAndValidateVacancyMarketAnswer(text: string, sources: SourceRow[],
   try { answer = JSON.parse(text); } catch { throw new HttpError(502, "Invalid structured output."); }
   if (!answer.market_summary?.trim() || !answer.recommendation?.trim()) throw new HttpError(502, "Incomplete structured output.");
   if (!Array.isArray(answer.caveats) || !Array.isArray(answer.sources) || answer.sources.length === 0) throw new HttpError(502, "Market answer has no source.");
-  if (answer.market_summary.length > 1_200 || answer.recommendation.length > 800 || answer.caveats.length > 4 || answer.sources.length > 6) {
-    throw new HttpError(502, "Market answer exceeds safe limits.");
-  }
+  // Presentation bounds must not discard an otherwise verified market answer.
+  // Provenance is still validated below; only excess display content is compacted.
+  answer = {
+    market_summary: answer.market_summary.trim().slice(0, 1_200).trim(),
+    recommendation: answer.recommendation.trim().slice(0, 800).trim(),
+    caveats: answer.caveats.map((item) => item.trim()).filter(Boolean).slice(0, 4),
+    sources: answer.sources.slice(0, 6),
+  };
   const citedKeys = new Set(citedUrls.map(normalizeCitationUrl));
   const retrievedAt = new Date().toISOString();
   const validatedSources: VacancyAdvisorSource[] = answer.sources.map((source) => {

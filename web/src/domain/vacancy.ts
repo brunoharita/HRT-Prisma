@@ -1,8 +1,9 @@
 import type { PublishedProfileCandidate } from "./profileDiscovery.js";
+import { groupCompetencies, parseLanguage } from "./canonicalProfile.js";
 
 export const VACANCY_DEFINITION_VERSION = "1.1.0";
-export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-1.1.0";
-export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.2.0";
+export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-2.0.0";
+export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
 
@@ -63,6 +64,9 @@ export interface VacancyDraft {
   structureSource: VacancyStructureSource | null;
 }
 
+export interface ProfessionalReferenceRelation { id: string; targetConceptId: string; label: string; conceptType: string; relationType: string; source: string | null; sourceVersion: string | null; externalId: string | null; externalUri: string | null; }
+export interface ProfessionalReferenceProposal { conceptId: string; label: string; description: string; aliases: string[]; source: string | null; sourceVersion: string | null; externalId: string | null; externalUri: string | null; relations: ProfessionalReferenceRelation[]; }
+
 export interface VacancyStructureSource { originalDescription: string; contractVersion: string; structuredAt: string; items: Array<{ suggestionId: string; category: string; start: number; end: number; method: "explicit" | "faithful_synthesis" }>; }
 
 export interface VacancySummary {
@@ -90,6 +94,36 @@ export interface VacancyDetail extends VacancyDraft {
 export interface VacancyMatchEvidence {
   label: string;
   source: string;
+  sourceId?: string;
+  fieldPath?: string;
+  dimension?: VacancyRequirementCategory | "professionalTitle";
+  canonicalLabel?: string | null;
+}
+
+export type VacancyPositionRelationStatus = "same_reference" | "equivalent_reference" | "related_reference" | "possible_title_relation" | "none";
+export type VacancyPositionRelationDecision = "confirmed" | "dismissed" | null;
+export type VacancyDetailedEvaluationStatus = "ready" | "pending_classification" | "no_requirements";
+
+export interface VacancyOccupationReference {
+  conceptId: string | null;
+  canonicalLabel: string;
+  aliases: string[];
+  relations: Array<{ conceptId: string; label: string; relationType: "equivalent_to" | "related_to" | "is_a" | "broader_than" | "narrower_than" }>;
+}
+
+export interface VacancyPositionRelation {
+  status: VacancyPositionRelationStatus;
+  explanation: string;
+  evidence: VacancyMatchEvidence[];
+}
+
+export interface VacancyEvidenceAssessment {
+  level: "corroborated" | "supported" | "limited";
+  evidenceCount: number;
+  independentSourceCount: number;
+  professionalContextEvidenceCount: number;
+  contradictionReview: "not_automatically_evaluated";
+  reasons: string[];
 }
 
 export interface VacancyRequirementMatch {
@@ -102,12 +136,25 @@ export interface VacancyRequirementMatch {
 
 export interface VacancyCandidateMatch {
   candidate: PublishedProfileCandidate;
+  positionRelation: VacancyPositionRelation;
+  positionDecision: VacancyPositionRelationDecision;
+  detailedStatus: VacancyDetailedEvaluationStatus;
+  unclassifiedRequirementCount: number;
+  evidenceAssessment: VacancyEvidenceAssessment;
   requirements: VacancyRequirementMatch[];
   reasons: string[];
   directCount: number;
   partialCount: number;
   relatedCount: number;
   missingRequiredCount: number;
+}
+
+export interface VacancyPeopleDiscovery {
+  matches: VacancyCandidateMatch[];
+  analyzedProfileCount: number;
+  publishedProfileCount: number;
+  complete: boolean;
+  unclassifiedRequirementCount: number;
 }
 
 export interface VacancyStructureSuggestion {
@@ -236,6 +283,35 @@ export function newVacancyRequirement(label = "", category: VacancyRequirementCa
   };
 }
 
+export function materializeVacancyFromProfessionalReference(draft: VacancyDraft, reference: ProfessionalReferenceProposal): VacancyDraft {
+  const requirements = reference.relations.flatMap((relation) => {
+    const category = referenceRelationCategory(relation);
+    if (!category || !relation.label.trim()) return [];
+    return [{ ...newVacancyRequirement(relation.label, category), origin: "description" as const, observedTerm: relation.label, conceptId: relation.targetConceptId,
+      sourceSuggestionId: relation.id, proposedCategory: category, categoryConfirmed: false, importance: "unclassified" as const, importanceConfirmed: false }];
+  });
+  const deduplicated = requirements.filter((item, index, all) => all.findIndex((candidate) => candidate.conceptId === item.conceptId || (candidate.category === item.category && normalize(candidate.label) === normalize(item.label))) === index);
+  return {
+    ...draft,
+    title: reference.label,
+    mission: reference.description.trim(),
+    responsibilities: [],
+    expectedOutcomes: [],
+    requirements: deduplicated,
+    sourceKind: "knowledge_reference",
+    referenceConceptId: reference.conceptId,
+  };
+}
+
+function referenceRelationCategory(relation: ProfessionalReferenceRelation): VacancyRequirementCategory | null {
+  if (!/^(requires|uses)$/i.test(relation.relationType)) return null;
+  if (relation.conceptType === "technology" || relation.relationType === "uses") return "technology";
+  if (relation.conceptType === "knowledge") return "knowledge";
+  if (relation.conceptType === "skill") return "competency";
+  if (relation.conceptType === "certification") return "certification";
+  return null;
+}
+
 export const vacancyRequirementCategories: Array<{ value: VacancyRequirementCategory; label: string }> = [
   { value: "experience", label: "Experiência" },
   { value: "knowledge", label: "Conhecimentos" },
@@ -270,20 +346,34 @@ export function validateVacancyDraft(draft: VacancyDraft): string[] {
 
 export function validateVacancyReady(draft: Pick<VacancyDraft, "requirements">): string[] {
   return draft.requirements.some((item) => item.label.trim() && item.importance === "unclassified")
-    ? ["Classifique cada requisito ativo como obrigatório ou desejável antes de usar a Vaga no matching."]
+    ? ["A descoberta de Pessoas está disponível. Classifique os requisitos pendentes para concluir a avaliação detalhada de aderência."]
     : [];
 }
 
-export function matchVacancyCandidate(vacancy: VacancyDetail, candidate: PublishedProfileCandidate): VacancyCandidateMatch {
+export function matchVacancyCandidate(
+  vacancy: VacancyDetail,
+  candidate: PublishedProfileCandidate,
+  occupationReference: VacancyOccupationReference | null = null,
+): VacancyCandidateMatch {
+  const positionRelation = matchVacancyPosition(vacancy, candidate, occupationReference);
   const requirements = vacancy.requirements.map((requirement): VacancyRequirementMatch => {
-    const searchable = allProfileEvidence(candidate);
+    const searchable = profileEvidenceForCategory(candidate, requirement.category);
     const directLabels = unique([requirement.label, requirement.observedTerm ?? "", requirement.conceptLabel ?? ""]);
-    const direct = findEvidence(searchable, directLabels);
+    const direct = findExactEvidence(searchable, directLabels);
     const canonical = candidate.knowledge.find((item) =>
-      item.state === "resolved" && directLabels.some((label) => normalize(item.canonicalLabel ?? "") === normalize(label)),
+      item.state === "resolved"
+      && directLabels.some((label) => normalize(item.canonicalLabel ?? "") === normalize(label))
+      && knowledgeSupportsCategory(item, requirement.category, searchable),
     );
     if (direct.length || canonical) {
-      const evidence = direct.length ? direct : [{ label: canonical!.originalTerm, source: "Knowledge publicada" }];
+      const evidence = direct.length ? direct : [{
+        label: canonical!.originalTerm,
+        canonicalLabel: canonical!.canonicalLabel,
+        source: "Knowledge publicada",
+        sourceId: canonical!.conceptId ?? `knowledge:${normalize(canonical!.originalTerm)}`,
+        fieldPath: canonical!.sourceFieldPath ?? "knowledge",
+        dimension: requirement.category,
+      }];
       const observed = evidence[0]!.label;
       const sources = joinHumanList(unique(evidence.map((item) => item.source)));
       return {
@@ -297,8 +387,21 @@ export function matchVacancyCandidate(vacancy: VacancyDetail, candidate: Publish
       };
     }
 
+    const partial = findPartialEvidence(searchable, directLabels);
+    if (partial.length) {
+      const observed = partial[0]!.label;
+      const sources = joinHumanList(unique(partial.map((item) => item.source)));
+      return {
+        requirement,
+        status: "partially_met",
+        evidence: partial,
+        relatedSignal: null,
+        explanation: `${observed} foi encontrado em ${sources} como evidência parcial. O trecho se relaciona a ${requirement.label}, mas não comprova atendimento integral sem revisão humana.`,
+      };
+    }
+
     for (const relation of requirement.relatedSignals) {
-      const related = findEvidence(allProfileEvidence(candidate), [relation.label]);
+      const related = findRelatedSignalEvidence(candidate, relation.label);
       if (related.length) {
         const sources = joinHumanList(unique(related.map((item) => item.source)));
         return {
@@ -323,12 +426,29 @@ export function matchVacancyCandidate(vacancy: VacancyDetail, candidate: Publish
   const partialCount = requirements.filter((item) => item.status === "partially_met").length;
   const relatedCount = requirements.filter((item) => item.status === "related_signal").length;
   const missingRequiredCount = requirements.filter((item) => item.status === "no_evidence" && item.requirement.importance === "required").length;
+  const unclassifiedRequirementCount = vacancy.requirements.filter((item) => item.importance === "unclassified").length;
+  const detailedStatus: VacancyDetailedEvaluationStatus = !vacancy.requirements.length
+    ? "no_requirements"
+    : unclassifiedRequirementCount
+      ? "pending_classification"
+      : "ready";
+  const evidenceAssessment = assessVacancyEvidence(positionRelation, requirements);
+  const requirementReasons = requirements.filter((item) => item.status !== "no_evidence").map((item) => item.status === "related_signal"
+    ? `${item.relatedSignal} é um sinal relacionado a ${item.requirement.label}`
+    : item.status === "partially_met" ? `${item.requirement.label} possui evidência parcial para revisão` : `${item.requirement.label} possui evidência no Perfil`);
   return {
     candidate,
+    positionRelation,
+    positionDecision: null,
+    detailedStatus,
+    unclassifiedRequirementCount,
+    evidenceAssessment,
     requirements,
-    reasons: requirements.filter((item) => item.status !== "no_evidence").map((item) => item.status === "related_signal"
-      ? `${item.relatedSignal} é um sinal relacionado a ${item.requirement.label}`
-      : `${item.requirement.label} possui evidência no Perfil`),
+    reasons: unique([
+      ...(positionRelation.status !== "none" ? [positionRelation.explanation] : []),
+      ...requirementReasons,
+      ...(positionRelation.status === "none" && !requirementReasons.length ? ["Perfil publicado disponível para análise manual"] : []),
+    ]),
     directCount,
     partialCount,
     relatedCount,
@@ -421,16 +541,15 @@ export function answerVacancyQuestion(question: string, draft: VacancyDraft, con
 }
 
 export function shouldResearchVacancyMarket(question: string): boolean {
-  const normalizedQuestion = normalize(question);
-  return /\b(?:mercado|costum\w*|diferenc\w*|excessiv\w*|anos?|benchmark|tendencia\w*|atual\w*|recent\w*|hoje|popular\w*|demanda|escassez|salario\w*|faixa|remot\w*|setor|industria|cloud|nuvem)\b/.test(normalizedQuestion)
-    || /\bmais\s+(?:usad|utilizad)\w*/.test(normalizedQuestion);
+  return Boolean(question.trim());
 }
 
 export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCandidateMatch[] {
   return [...matches]
-    .filter((item) => item.directCount + item.partialCount + item.relatedCount > 0)
     .sort((left, right) =>
-      right.directCount - left.directCount
+      decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision)
+      || positionRelationPriority(right.positionRelation.status) - positionRelationPriority(left.positionRelation.status)
+      || right.directCount - left.directCount
       || right.partialCount - left.partialCount
       || right.relatedCount - left.relatedCount
       || left.missingRequiredCount - right.missingRequiredCount
@@ -439,6 +558,7 @@ export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCan
 }
 
 export const VACANCY_PROFILE_MATRIX = [
+  { category: "professionalTitle", profileDimension: "professionalTitle", matching: true },
   { category: "experience", profileDimension: "experiences", matching: true }, { category: "competency", profileDimension: "competencies", matching: true },
   { category: "knowledge", profileDimension: "competencies", matching: true }, { category: "technology", profileDimension: "toolsAndTechnologies", matching: true },
   { category: "education", profileDimension: "education", matching: true }, { category: "certification", profileDimension: "certifications", matching: true },
@@ -575,35 +695,181 @@ function isExplicitlyNegated(text: string, pattern: RegExp): boolean {
   return text.split(/(?<=[.!?])\s+/).some((sentence) => /\b(?:n[aã]o|sem|nunca)\s+(?:h[aá]|exige|requer|possui|tem)?/i.test(sentence) && new RegExp(pattern.source, pattern.flags.replace("g", "")).test(sentence));
 }
 
-function allProfileEvidence(candidate: PublishedProfileCandidate): VacancyMatchEvidence[] {
+function profileEvidenceForCategory(candidate: PublishedProfileCandidate, category: VacancyRequirementCategory): VacancyMatchEvidence[] {
   const profile = candidate.profileData;
-  return [
-    ...(profile.professionalTitle ? [{ label: profile.professionalTitle, source: "Título profissional" }] : []),
-    ...(profile.summary ? [{ label: profile.summary, source: "Resumo profissional" }] : []),
-    ...(profile.professionalObjective ? [{ label: profile.professionalObjective, source: "Objetivo profissional" }] : []),
-    ...profile.keyResults.map((item) => ({ label: item.value, source: "Resultados profissionais" })),
-    ...profile.competencies.map((label) => ({ label, source: "Competências, conhecimentos e ferramentas" })),
-    ...profile.areasOfExpertise.map((label) => ({ label, source: "Áreas de atuação" })),
-    ...profile.certifications.map((label) => ({ label, source: "Certificações" })),
-    ...profile.languages.map((label) => ({ label, source: "Idiomas" })),
-    ...profile.experiences.flatMap((item) => [item.role, item.organization, item.description, item.evidenceText]
-      .filter((value): value is string => Boolean(value)).map((label) => ({ label, source: "Experiência profissional" }))),
-    ...profile.education.flatMap((item) => [item.course, item.institution, item.level, item.qualification]
-      .filter((value): value is string => Boolean(value)).map((label) => ({ label, source: "Formação" }))),
-    ...profile.customSections.flatMap((section) => section.items.map((item) => ({ label: item.value, source: section.name }))),
-    ...candidate.knowledge.filter((item) => item.state === "resolved").map((item) => ({ label: item.originalTerm, source: "Knowledge publicada" })),
+  const capabilityGroups = groupCompetencies(profile.competencies, candidate.knowledge, profile.toolsAndTechnologies ?? []);
+  const capabilities = (key: "competencies" | "knowledge" | "tools", dimension: VacancyRequirementCategory, source: string) =>
+    capabilityGroups.find((group) => group.key === key)?.values.map((item, index) => ({
+      label: item.originalTerm ?? item.label,
+      canonicalLabel: item.label,
+      source,
+      sourceId: `${key}:${index}:${normalize(item.originalTerm ?? item.label)}`,
+      fieldPath: key === "tools" ? "toolsAndTechnologies" : "competencies",
+      dimension,
+    })) ?? [];
+
+  if (category === "experience") return profile.experiences.flatMap((item) => [
+    item.role ? evidence(item.role, "Experiência profissional", `experience:${item.id}:role`, `experiences.${item.id}.role`, category) : null,
+    item.description ? evidence(item.description, "Experiência profissional", `experience:${item.id}:description`, `experiences.${item.id}.description`, category) : null,
+    item.evidenceText ? evidence(item.evidenceText, "Experiência profissional", `experience:${item.id}:evidence`, `experiences.${item.id}.evidenceText`, category) : null,
+  ].filter((item): item is VacancyMatchEvidence => Boolean(item)));
+  if (category === "competency") return capabilities("competencies", category, "Competências");
+  if (category === "knowledge") return capabilities("knowledge", category, "Conhecimentos");
+  if (category === "technology") return capabilities("tools", category, "Tecnologias e ferramentas");
+  if (category === "education") return profile.education.flatMap((item) => [item.course, item.level, item.qualification, item.institution]
+    .filter((value): value is string => Boolean(value)).map((label, index) => evidence(label, "Formação", `education:${item.id}:${index}`, `education.${item.id}`, category)));
+  if (category === "certification") return profile.certifications.map((label, index) => evidence(label, "Certificações", `certification:${index}`, `certifications.${index}`, category));
+  if (category === "language") return profile.languages.flatMap((value, index) => parseLanguage(value).map((item) => evidence(
+    [item.language, item.level].filter(Boolean).join(" · "), "Idiomas", `language:${index}`, `languages.${index}`, category,
+  )));
+  return [];
+}
+
+function evidence(label: string, source: string, sourceId: string, fieldPath: string, dimension: NonNullable<VacancyMatchEvidence["dimension"]>): VacancyMatchEvidence {
+  return { label, source, sourceId, fieldPath, dimension };
+}
+
+function findExactEvidence(evidenceItems: VacancyMatchEvidence[], labels: string[]): VacancyMatchEvidence[] {
+  return uniqueEvidence(evidenceItems.filter((item) => labels.some((label) => {
+    const normalizedLabel = normalize(label);
+    return Boolean(normalizedLabel) && [item.label, item.canonicalLabel ?? ""].some((value) => normalize(value) === normalizedLabel);
+  }))).slice(0, 3);
+}
+
+function findPartialEvidence(evidenceItems: VacancyMatchEvidence[], labels: string[]): VacancyMatchEvidence[] {
+  return uniqueEvidence(evidenceItems.filter((item) => labels.some((label) => {
+    const observed = normalize(item.canonicalLabel ?? item.label);
+    const expected = normalize(label);
+    if (observed.length < 4 || expected.length < 4 || observed === expected) return false;
+    return observed.includes(expected) || expected.includes(observed);
+  }))).slice(0, 3);
+}
+
+function findRelatedSignalEvidence(candidate: PublishedProfileCandidate, label: string): VacancyMatchEvidence[] {
+  const normalizedLabel = normalize(label);
+  if (!normalizedLabel) return [];
+  return uniqueEvidence((["experience", "competency", "knowledge", "technology", "education", "certification", "language"] as VacancyRequirementCategory[])
+    .flatMap((category) => profileEvidenceForCategory(candidate, category))
+    .filter((item) => [item.label, item.canonicalLabel ?? ""].some((value) => normalize(value) === normalizedLabel || normalize(value).includes(normalizedLabel))))
+    .slice(0, 3);
+}
+
+function knowledgeSupportsCategory(
+  item: PublishedProfileCandidate["knowledge"][number],
+  category: VacancyRequirementCategory,
+  categoryEvidence: VacancyMatchEvidence[],
+): boolean {
+  const expectedTypes: Partial<Record<VacancyRequirementCategory, string[]>> = {
+    competency: ["skill"], knowledge: ["knowledge", "methodology"], technology: ["technology"], certification: ["certification"],
+  };
+  if (item.conceptType) return Boolean(expectedTypes[category]?.includes(item.conceptType));
+  return categoryEvidence.some((candidate) => normalize(candidate.label) === normalize(item.originalTerm));
+}
+
+function matchVacancyPosition(
+  vacancy: Pick<VacancyDetail, "title" | "referenceConceptId">,
+  candidate: PublishedProfileCandidate,
+  reference: VacancyOccupationReference | null,
+): VacancyPositionRelation {
+  const titleEvidence: VacancyMatchEvidence[] = [
+    ...(candidate.profileData.professionalTitle ? [evidence(candidate.profileData.professionalTitle, "Título profissional", "professionalTitle", "professionalTitle", "professionalTitle")] : []),
+    ...candidate.profileData.experiences.flatMap((item) => item.role
+      ? [evidence(item.role, "Experiência profissional", `experience:${item.id}:role`, `experiences.${item.id}.role`, "professionalTitle")]
+      : []),
   ];
+  const occupationKnowledge = candidate.knowledge.filter((item) => item.state === "resolved" && item.conceptType === "occupation" && item.conceptId);
+  const referenceConceptId = reference?.conceptId ?? vacancy.referenceConceptId;
+  const sameReference = referenceConceptId ? occupationKnowledge.find((item) => item.conceptId === referenceConceptId) : null;
+  if (sameReference) return {
+    status: "same_reference",
+    explanation: `Mesma referência ocupacional identificada a partir de “${sameReference.originalTerm}”.`,
+    evidence: [{ label: sameReference.originalTerm, canonicalLabel: sameReference.canonicalLabel, source: "Knowledge publicada", sourceId: sameReference.conceptId!, fieldPath: sameReference.sourceFieldPath ?? "knowledge", dimension: "professionalTitle" }],
+  };
+
+  const equivalent = reference?.relations.find((relation) => relation.relationType === "equivalent_to" && occupationKnowledge.some((item) => item.conceptId === relation.conceptId));
+  if (equivalent) return {
+    status: "equivalent_reference",
+    explanation: `A Knowledge publicada reconhece ${equivalent.label} como referência ocupacional equivalente.`,
+    evidence: occupationKnowledge.filter((item) => item.conceptId === equivalent.conceptId).slice(0, 2).map((item) => ({ label: item.originalTerm, canonicalLabel: item.canonicalLabel, source: "Knowledge publicada", sourceId: item.conceptId!, fieldPath: item.sourceFieldPath ?? "knowledge", dimension: "professionalTitle" })),
+  };
+
+  const related = reference?.relations.find((relation) => relation.relationType !== "equivalent_to" && occupationKnowledge.some((item) => item.conceptId === relation.conceptId));
+  if (related) return {
+    status: "related_reference",
+    explanation: `A Knowledge publicada relaciona a posição com ${related.label}; isso não comprova equivalência.`,
+    evidence: occupationKnowledge.filter((item) => item.conceptId === related.conceptId).slice(0, 2).map((item) => ({ label: item.originalTerm, canonicalLabel: item.canonicalLabel, source: "Knowledge publicada", sourceId: item.conceptId!, fieldPath: item.sourceFieldPath ?? "knowledge", dimension: "professionalTitle" })),
+  };
+
+  const referenceLabels = unique([vacancy.title, reference?.canonicalLabel ?? "", ...(reference?.aliases ?? [])]);
+  const titleRelation = titleEvidence.find((item) => referenceLabels.some((label) => occupationalTitlesRelate(label, item.label)));
+  if (titleRelation) return {
+    status: "possible_title_relation",
+    explanation: `Possível relação com a posição identificada em “${titleRelation.label}”. Revise antes de confirmar.`,
+    evidence: [titleRelation],
+  };
+  return { status: "none", explanation: "Nenhuma relação ocupacional automática foi identificada; o Perfil permanece disponível para análise manual.", evidence: [] };
 }
 
-function findEvidence(evidence: VacancyMatchEvidence[], labels: string[]): VacancyMatchEvidence[] {
-  return evidence.filter((item) => labels.some((label) => matchesPhrase(item.label, label))).slice(0, 3);
+function occupationalTitlesRelate(left: string, right: string): boolean {
+  const normalizedLeft = normalize(left);
+  const normalizedRight = normalize(right);
+  if (!normalizedLeft || !normalizedRight) return false;
+  if (normalizedLeft === normalizedRight || normalizedLeft.includes(normalizedRight) || normalizedRight.includes(normalizedLeft)) return true;
+  const leftTokens = occupationalTokens(normalizedLeft);
+  const rightTokens = occupationalTokens(normalizedRight);
+  return [...leftTokens].filter((token) => rightTokens.has(token)).length >= 2;
 }
 
-function matchesPhrase(value: string, query: string): boolean {
-  const normalizedValue = normalize(value);
-  const normalizedQuery = normalize(query);
-  if (!normalizedQuery) return false;
-  return normalizedValue === normalizedQuery || normalizedValue.includes(normalizedQuery);
+function occupationalTokens(value: string): Set<string> {
+  const stopWords = new Set(["de", "da", "do", "das", "dos", "em", "para", "com", "senior", "pleno", "junior", "especialista"]);
+  const aliases: Record<string, string> = {
+    gerente: "lideranca", gestor: "lideranca", gestora: "lideranca", coordenador: "lideranca", coordenadora: "lideranca", manager: "lideranca", coordinator: "lideranca", lider: "lideranca", head: "lideranca",
+    projeto: "projeto", projetos: "projeto", project: "projeto", pm: "projeto", pmo: "projeto",
+    ti: "tecnologia", it: "tecnologia", tecnologia: "tecnologia", tecnologias: "tecnologia", informacao: "tecnologia", informatica: "tecnologia",
+  };
+  return new Set(value.split(" ").filter((token) => token.length > 1 && !stopWords.has(token)).map((token) => aliases[token] ?? token));
+}
+
+function assessVacancyEvidence(position: VacancyPositionRelation, requirements: VacancyRequirementMatch[]): VacancyEvidenceAssessment {
+  const evidenceItems = uniqueEvidence([...position.evidence, ...requirements.flatMap((item) => item.evidence)]);
+  const independentSourceCount = new Set(evidenceItems.map((item) => item.sourceId ?? `${item.fieldPath}:${normalize(item.label)}`)).size;
+  const professionalContextEvidenceCount = evidenceItems.filter((item) => item.fieldPath === "professionalTitle" || item.fieldPath?.startsWith("experiences.")).length;
+  const level = independentSourceCount >= 2 && professionalContextEvidenceCount > 0
+    ? "corroborated"
+    : professionalContextEvidenceCount > 0 || independentSourceCount >= 2
+      ? "supported"
+      : "limited";
+  return {
+    level,
+    evidenceCount: evidenceItems.length,
+    independentSourceCount,
+    professionalContextEvidenceCount,
+    contradictionReview: "not_automatically_evaluated",
+    reasons: [
+      `${evidenceItems.length} evidência${evidenceItems.length === 1 ? "" : "s"} rastreável${evidenceItems.length === 1 ? "" : "is"}.`,
+      `${independentSourceCount} fonte${independentSourceCount === 1 ? "" : "s"} independente${independentSourceCount === 1 ? "" : "s"}.`,
+      professionalContextEvidenceCount ? `${professionalContextEvidenceCount} evidência${professionalContextEvidenceCount === 1 ? "" : "s"} em título ou experiência profissional.` : "Nenhuma evidência contextual em título ou experiência profissional.",
+      "Contradições não são concluídas automaticamente; permanecem para revisão humana.",
+    ],
+  };
+}
+
+function uniqueEvidence(items: VacancyMatchEvidence[]): VacancyMatchEvidence[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.sourceId ?? item.fieldPath ?? item.source}:${normalize(item.label)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function positionRelationPriority(status: VacancyPositionRelationStatus): number {
+  return ({ same_reference: 4, equivalent_reference: 3, related_reference: 2, possible_title_relation: 1, none: 0 } as const)[status];
+}
+
+function decisionPriority(decision: VacancyPositionRelationDecision): number {
+  return decision === "confirmed" ? 1 : decision === "dismissed" ? -1 : 0;
 }
 
 function advisorInternalEvidence(question: string, draft: VacancyDraft, context: VacancyAdvisorContext): { answer: string; status: VacancyAdvisorAnswer["internalStatus"] } {

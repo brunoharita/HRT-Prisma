@@ -248,7 +248,9 @@ export interface StructuredDraft {
   education: StructuredEducation[];
   certifications: string[];
   languages: string[];
+  toolsAndTechnologies?: string[];
   competencies: string[];
+  professionalContexts?: string[];
   customSections: CustomProfileSection[];
   uncertainties: string[];
   notIdentified: string[];

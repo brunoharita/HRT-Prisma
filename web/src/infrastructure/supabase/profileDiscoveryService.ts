@@ -9,7 +9,14 @@ import {
 import { supabase } from "./client";
 import { decodeProfileDataForPresentation } from "./personIngestionService";
 
-const MAX_PILOT_PROFILES = 500;
+const PROFILE_DISCOVERY_PAGE_SIZE = 200;
+
+export interface PublishedProfileCandidateCollection {
+  candidates: PublishedProfileCandidate[];
+  publishedProfileCount: number;
+  analyzedProfileCount: number;
+  complete: boolean;
+}
 
 export const profileDiscoveryService = {
   async search(
@@ -44,17 +51,53 @@ export async function loadPublishedProfileCandidates(
   includePrivateLocation: boolean,
   personIds?: string[],
 ): Promise<PublishedProfileCandidate[]> {
-  let profileQuery = supabase.from("professional_profiles")
-    .select("id, person_id, profile_version, profile_data, approved_at, created_at")
-    .eq("organization_id", organizationId)
-    .is("superseded_at", null)
-    .order("approved_at", { ascending: false })
-    .range(0, MAX_PILOT_PROFILES - 1);
-  if (personIds?.length) profileQuery = profileQuery.in("person_id", personIds);
-  const profileResult = await profileQuery;
-  throwIfError(profileResult.error, "Não foi possível consultar os Perfis publicados desta empresa.");
-  const profiles = profileResult.data ?? [];
-  if (!profiles.length) return [];
+  return (await loadPublishedProfileCandidateCollection(organizationId, includePrivateLocation, personIds)).candidates;
+}
+
+export async function loadPublishedProfileCandidateCollection(
+  organizationId: string,
+  includePrivateLocation: boolean,
+  personIds?: string[],
+): Promise<PublishedProfileCandidateCollection> {
+  const candidates: PublishedProfileCandidate[] = [];
+  let publishedProfileCount = 0;
+  let processedProfileCount = 0;
+  let page = 0;
+
+  while (true) {
+    const from = page * PROFILE_DISCOVERY_PAGE_SIZE;
+    let profileQuery = supabase.from("professional_profiles")
+      .select("id, person_id, profile_version, profile_data, approved_at, created_at", { count: "exact" })
+      .eq("organization_id", organizationId)
+      .is("superseded_at", null)
+      .order("approved_at", { ascending: false })
+      .order("id", { ascending: true })
+      .range(from, from + PROFILE_DISCOVERY_PAGE_SIZE - 1);
+    if (personIds?.length) profileQuery = profileQuery.in("person_id", [...new Set(personIds.filter(Boolean))]);
+    const profileResult = await profileQuery;
+    throwIfError(profileResult.error, "Não foi possível consultar os Perfis publicados desta empresa.");
+    const profiles = profileResult.data ?? [];
+    if (page === 0) publishedProfileCount = profileResult.count ?? profiles.length;
+    if (!profiles.length) break;
+    processedProfileCount += profiles.length;
+    candidates.push(...await materializePublishedProfileCandidates(organizationId, includePrivateLocation, profiles));
+    if (profiles.length < PROFILE_DISCOVERY_PAGE_SIZE) break;
+    page += 1;
+  }
+
+  return {
+    candidates,
+    publishedProfileCount: candidates.length,
+    analyzedProfileCount: candidates.length,
+    complete: processedProfileCount >= publishedProfileCount,
+  };
+}
+
+async function materializePublishedProfileCandidates(
+  organizationId: string,
+  includePrivateLocation: boolean,
+  profiles: Array<{ id: string; person_id: string; profile_version: number; profile_data: import("./database.types.js").Json; approved_at: string | null; created_at: string }>,
+): Promise<PublishedProfileCandidate[]> {
   const ids = profiles.map((profile) => profile.person_id);
   const [peopleResult, privateResult, observationsResult] = await Promise.all([
     supabase.from("people")
@@ -66,7 +109,7 @@ export async function loadPublishedProfileCandidates(
       ? supabase.from("person_private_data").select("person_id, city, country_code").eq("organization_id", organizationId).in("person_id", ids)
       : Promise.resolve({ data: [], error: null }),
     supabase.from("knowledge_observations")
-      .select("profile_id, original_term, resolution_state, concept_id")
+      .select("profile_id, original_term, resolution_state, concept_id, source_field_path")
       .eq("organization_id", organizationId)
       .in("profile_id", profiles.map((profile) => profile.id)),
   ]);
@@ -76,12 +119,12 @@ export async function loadPublishedProfileCandidates(
 
   const conceptIds = [...new Set((observationsResult.data ?? []).flatMap((item) => item.concept_id ? [item.concept_id] : []))];
   const conceptResult = conceptIds.length
-    ? await supabase.from("knowledge_concepts").select("id, canonical_label").in("id", conceptIds)
+    ? await supabase.from("knowledge_concepts").select("id, canonical_label, concept_type").in("id", conceptIds)
     : { data: [], error: null };
   throwIfError(conceptResult.error, "Não foi possível resolver os conceitos profissionais encontrados.");
   const people = new Map((peopleResult.data ?? []).map((person) => [person.id, person]));
   const locations = new Map((privateResult.data ?? []).map((item) => [item.person_id, [item.city, item.country_code].filter(Boolean).join(", ") || null]));
-  const concepts = new Map((conceptResult.data ?? []).map((item) => [item.id, item.canonical_label]));
+  const concepts = new Map((conceptResult.data ?? []).map((item) => [item.id, item]));
   const observations = observationsResult.data ?? [];
 
   return profiles.flatMap((profile): PublishedProfileCandidate[] => {
@@ -99,8 +142,11 @@ export async function loadPublishedProfileCandidates(
       profileData: decodeProfileDataForPresentation(profile.profile_data),
       knowledge: observations.filter((item) => item.profile_id === profile.id).map((item) => ({
         originalTerm: item.original_term,
-        canonicalLabel: item.concept_id ? concepts.get(item.concept_id) ?? null : null,
+        canonicalLabel: item.concept_id ? concepts.get(item.concept_id)?.canonical_label ?? null : null,
         state: knowledgeResolutionState(item.resolution_state),
+        conceptId: item.concept_id,
+        conceptType: item.concept_id ? concepts.get(item.concept_id)?.concept_type ?? null : null,
+        sourceFieldPath: item.source_field_path,
       })),
     }];
   });
