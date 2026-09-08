@@ -2,7 +2,7 @@ import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 import { groupCompetencies, parseLanguage } from "./canonicalProfile.js";
 
 export const VACANCY_DEFINITION_VERSION = "1.1.0";
-export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-2.0.0";
+export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-2.1.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
@@ -555,6 +555,14 @@ export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCan
       || left.missingRequiredCount - right.missingRequiredCount
       || left.candidate.fullName.localeCompare(right.candidate.fullName, "pt-BR"),
     );
+}
+
+export function isVacancyDiscoveryCandidate(match: VacancyCandidateMatch): boolean {
+  return match.positionDecision === "confirmed"
+    || match.positionRelation.status !== "none"
+    || match.directCount > 0
+    || match.partialCount > 0
+    || match.relatedCount > 0;
 }
 
 export const VACANCY_PROFILE_MATRIX = [

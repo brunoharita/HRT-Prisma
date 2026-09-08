@@ -1,6 +1,7 @@
 import type { PostgrestError } from "@supabase/supabase-js";
 import {
   VACANCY_MATCHING_VERSION,
+  isVacancyDiscoveryCandidate,
   matchVacancyCandidate,
   sortVacancyMatches,
   type VacancyCandidateMatch,
@@ -378,7 +379,7 @@ export const vacancyService = {
     const matches = sortVacancyMatches(collection.candidates.map((candidate) => ({
       ...matchVacancyCandidate(vacancy, candidate, occupationReference),
       positionDecision: decisions.get(candidate.personId) ?? null,
-    })));
+    })).filter(isVacancyDiscoveryCandidate));
     return {
       matches,
       analyzedProfileCount: collection.analyzedProfileCount,

@@ -1,5 +1,14 @@
 # Evidência M5.4: Vagas
 
+## M5.4.10 — resultado exige sinal rastreável
+
+- Todos os Perfis publicados elegíveis continuam paginados e analisados, sem teto silencioso.
+- O resultado exclui Perfis com zero relação ocupacional, zero evidência direta, zero parcial e zero sinal relacionado. Confirmação humana anterior preserva a inclusão.
+- O estado vazio informa se não existem Perfis publicados ou se nenhum Perfil possui sinal para a Vaga, oferecendo revisão da definição no segundo caso.
+- A regressão determinística cobre exclusão de zero sinal, inclusão por requisito, inclusão por relação ocupacional e preservação de confirmação humana.
+- A consulta read-only de 2026-09-08 confirmou no Prisma-QA que a Vaga `Gerente de projetos de tecnologia da informação` está na definição v4 com sete requisitos e que o Perfil sintético apontado permanece publicado e elegível como entrada; por não possuir título profissional nem qualquer sinal na análise exibida, o novo filtro determinístico não o retorna.
+- Não há migration, alteração de RLS, reescrita de Perfil ou mudança em Knowledge. Produção não foi acionada.
+
 ## M5.4.9 — descoberta ocupacional inclusiva e aderência dimensional
 
 - O contrato `vacancy-matching-explainable-2.0.0` separa relação com a posição de aderência por requisito, mantém todos os Perfis publicados visíveis e pagina a coleção completa com total analisado.

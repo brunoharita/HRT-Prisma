@@ -5,6 +5,7 @@ import {
   applyStructureSuggestions,
   answerVacancyQuestion,
   emptyVacancyDraft,
+  isVacancyDiscoveryCandidate,
   matchVacancyCandidate,
   newVacancyRequirement,
   shouldResearchVacancyMarket,
@@ -145,17 +146,16 @@ test("descoberta ocupacional encontra títulos equivalentes por referência ou e
   assert.equal(matchVacancyCandidate(need, sameReference, { conceptId: "occupation-project-manager", canonicalLabel: need.title, aliases: [], relations: [] }).positionRelation.status, "same_reference");
 });
 
-test("todos os Perfis permanecem visíveis e decisões humanas influenciam apenas a ordem", () => {
+test("descoberta exclui Perfil sem qualquer sinal e preserva confirmação humana", () => {
   const need = vacancy("Gerente de Projetos", ["Gestão de projetos"]);
   const related = matchVacancyCandidate(need, candidate("related", "Relacionada", profile({ competencies: ["Gestão de projetos"] })));
   const manual = matchVacancyCandidate(need, candidate("manual", "Análise Manual", profile({ professionalTitle: "Analista Financeiro" })));
   manual.positionDecision = "dismissed";
-  const ordered = sortVacancyMatches([manual, related]);
-  assert.deepEqual(ordered.map((item) => item.candidate.personId), ["related", "manual"]);
-  assert.equal(ordered.length, 2);
-  assert.match(manual.reasons[0] ?? "", /análise manual/i);
+  assert.equal(isVacancyDiscoveryCandidate(related), true);
+  assert.equal(isVacancyDiscoveryCandidate(manual), false);
 
   manual.positionDecision = "confirmed";
+  assert.equal(isVacancyDiscoveryCandidate(manual), true);
   assert.deepEqual(sortVacancyMatches([related, manual]).map((item) => item.candidate.personId), ["manual", "related"]);
 });
 
@@ -198,9 +198,11 @@ test("descoberta pagina todos os Perfis e persiste confirmação ou descarte sem
   assert.doesNotMatch(profileService, /MAX_PILOT_PROFILES/);
   assert.match(vacancyServiceSource, /type: "position_relation_decision"/);
   assert.match(vacancyServiceSource, /recordPositionRelationDecision/);
+  assert.match(vacancyServiceSource, /\.filter\(isVacancyDiscoveryCandidate\)/);
   assert.match(page, /Confirmar relação/);
   assert.match(page, /Não considerar/);
   assert.match(page, /Perfis publicados analisados/);
+  assert.match(page, /Nenhum Perfil apresentou relação ocupacional ou evidência rastreável/);
 });
 
 test("estruturação livre confirma itens explícitos e deixa inferência derivada pendente", () => {

@@ -22,7 +22,7 @@ A implementação reutiliza `job_roles`, `positions`, `vacancies`, `vacancy_requ
 
 O cliente pagina todos os Perfis publicados do tenant por meio da fundação de profile-discovery, em ordem estável, e informa quantos foram analisados do total acessível. Não existe teto silencioso. A descoberta ocupacional é separada da aderência detalhada: referência oficial, alias/relação Knowledge aprovada, título profissional e cargos de experiências podem explicar por que uma Pessoa apareceu. Aproximação textual permanece possível relação até confirmação humana, auditada no `match_evaluations` existente.
 
-Cada requisito consulta somente a dimensão canônica correspondente. Igualdade textual ou canônica publicada pode atender; substring na dimensão correta é parcial; relação confirmada permanece `related_signal`; campos narrativos nunca comprovam requisito. Requisito `unclassified` continua permitido apenas no rascunho, mas não bloqueia a descoberta: a UI mostra a pendência e mantém a aderência detalhada incompleta. Perfis sem sinal automático permanecem visíveis para análise manual.
+Cada requisito consulta somente a dimensão canônica correspondente. Igualdade textual ou canônica publicada pode atender; substring na dimensão correta é parcial; relação confirmada permanece `related_signal`; campos narrativos nunca comprovam requisito. Requisito `unclassified` continua permitido apenas no rascunho, mas não bloqueia a descoberta: a UI mostra a pendência e mantém a aderência detalhada incompleta. Todo Perfil publicado elegível é analisado, porém Perfis sem relação ocupacional, evidência direta, parcial, sinal relacionado ou confirmação humana não são retornados.
 
 ## Assistência
 

@@ -19,7 +19,7 @@ O resultado agrega requisitos atendidos, parcialmente atendidos, sinais relacion
 
 A descoberta da posição é separada da aderência detalhada. Ela usa, nesta ordem, a mesma referência oficial, referência equivalente publicada, relação ocupacional publicada e possível relação textual entre o título da Vaga, o título profissional e cargos das experiências. A última hipótese nunca vira equivalência automática. O operador pode confirmar ou descartar a relação; essa decisão fica auditada, altera apenas a ordenação e nunca muda o Perfil, a Vaga ou a Knowledge.
 
-Todos os Perfis publicados acessíveis permanecem disponíveis, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. A interface apresenta esses estados como pendência ou análise manual, sem convertê-los em ausência profissional.
+Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. O resultado exibe somente quem possui ao menos uma relação ocupacional, evidência direta, evidência parcial, sinal relacionado ou confirmação humana anterior. Zero sinal não é convertido em ausência profissional, mas também não gera resultado.
 
 ## Suficiência
 

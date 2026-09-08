@@ -32,7 +32,7 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 
 A relação com a posição aparece separada da aderência por requisitos: mesma referência, referência equivalente, referência relacionada, possível relação por título/experiência ou nenhuma relação automática. O usuário pode confirmar ou descartar a relação; sua decisão prevalece na ordenação, sem alterar Perfil, Vaga ou Knowledge.
 
-A ordenação é determinística e operacional. Primeiro respeita a decisão humana, depois a força da relação ocupacional, evidência direta, parcial, sinal relacionado e menor quantidade de requisitos obrigatórios sem evidência, usando nome apenas como desempate. Todos os Perfis publicados acessíveis permanecem listados, e a tela informa quantos foram analisados do total. Essa ordem não é score nem recomendação de contratação.
+A ordenação é determinística e operacional. Primeiro respeita a decisão humana, depois a força da relação ocupacional, evidência direta, parcial, sinal relacionado e menor quantidade de requisitos obrigatórios sem evidência, usando nome apenas como desempate. Todos os Perfis publicados acessíveis são analisados, mas somente Perfis com algum sinal rastreável ou confirmação humana aparecem; a tela informa quantos foram analisados do total. Essa ordem não é score nem recomendação de contratação.
 
 ## Estrutura canônica da Vaga pronta
 
