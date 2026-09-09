@@ -74,6 +74,8 @@ test("Edge monitor requires its private invocation secret and uses fixed officia
   assert.match(config, /\[functions\.knowledge-source-monitor\]\s+verify_jwt = false/i);
   assert.match(source, /isAuthorizedManualOperator/);
   assert.match(source, /SUPER_ADMIN_REQUIRED/);
+  assert.match(source, /request\.method === "OPTIONS"/);
+  assert.match(source, /Access-Control-Allow-Origin/);
 });
 
 test("Home exposes version, release date and latest check through the repository boundary", async () => {

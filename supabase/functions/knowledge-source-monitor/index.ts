@@ -44,6 +44,7 @@ const cboFiles = {
 } as const;
 
 Deno.serve(async (request) => {
+  if (request.method === "OPTIONS") return jsonResponse(204, null);
   if (request.method !== "POST") return jsonResponse(405, { error: "METHOD_NOT_ALLOWED" });
   const startedAt = new Date();
   try {
@@ -274,5 +275,14 @@ function safeErrorCode(error: unknown): string {
 }
 
 function jsonResponse(status: number, body: unknown): Response {
-  return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+  return new Response(body === null ? null : JSON.stringify(body), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-prisma-monitor-secret",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+    },
+  });
 }
