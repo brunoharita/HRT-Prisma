@@ -81,9 +81,10 @@ Deno.serve(async (request) => {
     for (const source of dueSources) {
       const sourceVersions = versions.filter((version) => version.source_id === source.id);
       const trigger = resolveTrigger(source, payload.trigger);
-      const slot = source.next_check_at ?? startedAt.toISOString().slice(0, 13);
-      const idempotencyKey = await sha256(`${source.id}|${trigger}|${slot}|${KNOWLEDGE_SOURCE_MONITOR_VERSION}`);
       const sourceStartedAt = new Date();
+      const slot = source.next_check_at ?? startedAt.toISOString().slice(0, 13);
+      const idempotencySlot = trigger === "manual" ? sourceStartedAt.toISOString() : slot;
+      const idempotencyKey = await sha256(`${source.id}|${trigger}|${idempotencySlot}|${KNOWLEDGE_SOURCE_MONITOR_VERSION}`);
       try {
         const detection = await detectSource(source, sourceVersions);
         const published = sourceVersions.find((version) => version.is_current)?.external_version ?? null;

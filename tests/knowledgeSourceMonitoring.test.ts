@@ -28,6 +28,7 @@ test("official source pages produce stable CBO, ESCO and O*NET release identitie
 
 test("monitor distinguishes published, catalogued and newly detected releases", () => {
   assert.equal(assessDetectedRelease({ detectedVersion: "31.0", publishedVersion: "31.0", knownVersions: ["31.0"] }), "current");
+  assert.equal(assessDetectedRelease({ detectedVersion: "v1.2.1", publishedVersion: "1.2.1", knownVersions: ["1.2.1"] }), "current");
   assert.equal(assessDetectedRelease({ detectedVersion: "31.0", publishedVersion: null, knownVersions: ["31.0"] }), "action_required");
   assert.equal(assessDetectedRelease({ detectedVersion: "31.1", publishedVersion: "31.0", knownVersions: ["31.0"] }), "update_available");
 });

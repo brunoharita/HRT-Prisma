@@ -120,7 +120,7 @@ function toIsoMonth(month: string, year: string): string {
 }
 
 function normalizeVersion(value: string): string {
-  return value.trim().toLowerCase().replace(/\s+/g, " ");
+  return value.trim().toLowerCase().replace(/^v(?=\d)/, "").replace(/\s+/g, " ");
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
