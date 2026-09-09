@@ -6122,3 +6122,41 @@ textarea {
   .prisma-vacancy-match-card article > header > .ant-checkbox-wrapper { grid-row: 1; }
   .prisma-vacancy-match-card .prisma-vacancy-avatar { display: none; }
 }
+
+.prisma-person-data-shell {
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #ede9fe 0, transparent 34%), #f8fafc;
+  color: var(--prisma-text);
+}
+.prisma-person-data-shell > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 68px;
+  padding: 0 32px;
+  border-bottom: 1px solid #e6eaf0;
+  background: rgba(255, 255, 255, 0.92);
+}
+.prisma-person-data-shell > header span { color: #4c1d95; font-size: 20px; font-weight: 800; }
+.prisma-person-data-shell > header small { color: var(--prisma-text-muted); font-weight: 700; }
+.prisma-person-data-shell > main { width: min(860px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0; }
+.prisma-person-data-card { border: 1px solid #e6eaf0; box-shadow: 0 18px 52px rgba(54, 31, 105, 0.1); }
+.prisma-person-data-card > .ant-card-body { display: grid; gap: 20px; padding: 40px; }
+.prisma-person-data-card h1.ant-typography { margin: 0; color: #24104f; font-size: clamp(30px, 5vw, 46px); }
+.prisma-person-data-card .ant-typography { margin: 0; }
+.prisma-person-data-eyebrow { color: #6d28d9; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.prisma-person-data-expiry { font-size: 12px; }
+.prisma-person-data-loading { display: grid; place-items: center; gap: 14px; min-height: 55vh; color: var(--prisma-text-muted); }
+.prisma-person-delete-impact { display: grid; gap: 18px; }
+.prisma-person-delete-impact.is-compact { padding: 22px; border: 1px solid #eadcff; border-radius: 14px; background: #fcfaff; }
+.prisma-person-delete-impact__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.prisma-person-delete-impact__grid section { padding: 16px; border: 1px solid #e6eaf0; border-radius: 12px; background: #fff; }
+.prisma-person-delete-impact__grid ul { display: grid; gap: 8px; margin: 10px 0 0; padding-left: 20px; }
+
+@media (max-width: 680px) {
+  .prisma-person-data-shell > header { padding: 0 20px; }
+  .prisma-person-data-shell > main { width: min(100% - 24px, 860px); padding: 24px 0; }
+  .prisma-person-data-card > .ant-card-body { padding: 24px 18px; }
+  .prisma-person-delete-impact__grid { grid-template-columns: 1fr; }
+  .prisma-person-data-card .ant-btn { width: 100%; white-space: normal; height: auto; min-height: 44px; }
+}

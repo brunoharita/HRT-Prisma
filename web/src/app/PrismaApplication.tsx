@@ -39,6 +39,7 @@ import { KnowledgePage } from "../pages/KnowledgePage";
 import { CompetencyVerificationPage } from "../pages/CompetencyVerificationPage";
 import { VerificationOperationsPage } from "../pages/VerificationOperationsPage";
 import { VerificationSessionPage } from "../pages/VerificationSessionPage";
+import { PersonDataSelfServicePage } from "../pages/PersonDataSelfServicePage";
 import { AssessmentItemBankPage } from "../pages/AssessmentItemBankPage";
 import {
   VacanciesPage,
@@ -89,6 +90,7 @@ interface AppRoute {
   verificationMode?: "detail" | "prepare";
   verificationPreparedAssessmentId?: string;
   participantToken?: string;
+  selfDataToken?: string;
   vacancyId?: string;
   vacancyView?: "list" | "create" | "assist" | "detail" | "edit" | "people" | "compare";
   vacancyComparePersonIds?: [string, string];
@@ -313,6 +315,7 @@ export function PrismaApplication() {
   };
 
   if (route.participantToken) return <VerificationSessionPage token={route.participantToken} />;
+  if (route.selfDataToken) return <PersonDataSelfServicePage token={route.selfDataToken} />;
 
   if (!state.initialized || redirectTo) return <LoadingScreen />;
   if (route.path === "/sign-in") {
@@ -590,6 +593,8 @@ function findRoute(pathname: string): AppRoute {
   const normalized = normalizePath(pathname);
   const participantMatch = /^\/verify\/([A-Za-z0-9_-]{40,200})$/.exec(normalized);
   if (participantMatch?.[1]) return { path: "/verify", participantToken: participantMatch[1], rule: { requiresAuth: false, requiresMembership: false } };
+  const selfDataMatch = /^\/my-data\/([A-Za-z0-9_-]{40,200})$/.exec(normalized);
+  if (selfDataMatch?.[1]) return { path: "/my-data", selfDataToken: selfDataMatch[1], rule: { requiresAuth: false, requiresMembership: false } };
   const exact = routes.find((route) => route.path === normalized);
   if (exact) return exact;
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };

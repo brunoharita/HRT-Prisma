@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 3347de5350202f5ed9e56282f486e7e8fd59f7138c6c926c4729ff039142cf05
+source_manifest_sha256: d76308426c1730d79eaa65994684685120d87cb30eb3da6d2333e96b5185cbea
 -->
 
 # Tudo sobre o Prisma
@@ -382,8 +382,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.22.0
-last_verified: 2026-09-07
+version: 2.23.0
+last_verified: 2026-09-09
 ---
 
 # Estado atual do Prisma
@@ -391,11 +391,13 @@ last_verified: 2026-09-07
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/m5-4-vacancies`, dedicada à necessidade profissional estruturada e explicável.
+- Branch de entrega em validação: `codex/m5-5-person-definitive-deletion`, dedicada à exclusão definitiva de Pessoa.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
+
+- M5.5 Exclusão definitiva de Pessoa 1.0.0 está implementado localmente e ativo no Prisma-QA. Super Admin, Owner e Admin atuam somente no escopo confirmado; Recruiter e Member são negados. O titular usa capability HMAC exclusiva, curta, revogável, single-use e distinta de assessment, sem se tornar usuário. Uma saga única mantém ledger mínimo desacoplado, bloqueia a Pessoa em `deleting`, coordena Storage, purga o agregado individual e só conclui após verificador determinístico de zero resíduos. Vagas, Knowledge, Item Bank e usuários da plataforma permanecem; auditoria retém somente nome, organização, ator, data, operação e resultado. Provas transacionais revertidas cobriram autoridade, falha parcial, concorrência, purga rica, recadastro com novo UUID e replay. A Edge Function `person-data-deletion` v1 está `ACTIVE`; produção não foi acionada.
 
 - M5.4.7 Assistente Prisma está implementado localmente: `Na sua empresa` deixou de responder apenas com contagens e agora compõe leitura determinística da Vaga atual, Vagas/funções acessíveis e conceitos/relações Knowledge publicados que a RLS permite ler. Expõe estados de informação suficiente, parcial ou insuficiente, mantém contagens como metadados e não aciona Web, Agent, pipeline ou escrita para esse bloco. Toda pergunta preenchida consulta fontes externas aprovadas por padrão, sem classificador oculto por palavras-chave; o operador pode escolher explicitamente `Somente fontes internas` e consultar a ajuda no próprio campo. Uma eventual falha da pesquisa externa de mercado preserva a resposta interna. Smoke autenticado depende de sessão disponível; produção não foi acionada.
 
@@ -463,7 +465,7 @@ last_verified: 2026-09-07
 - Telemetria básica de processamento.
 - Testes técnicos, golden tests, build, lint, typecheck e demo.
 - Typecheck e build do shell web aprovados.
-- 242 testes técnicos compõem a suíte local, incluindo compatibilidade histórica da publicação, fronteira privada do contato no Delta, resiliência operacional M5.3, foco em campo pendente, classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, normalização Knowledge M5.2, monitoramento das fontes oficiais, feedback operacional acionável e segurança das migrations.
+- 288 testes técnicos compõem a suíte local, incluindo exclusão definitiva M5.5, compatibilidade histórica da publicação, fronteira privada do contato no Delta, resiliência operacional M5.3, foco em campo pendente, classificação acadêmica, resumo profissional seccionado, segmentação espacial de competências, Central da Pessoa, aprendizado estrutural intra-documento, normalização Knowledge M5.2, monitoramento das fontes oficiais, feedback operacional acionável e segurança das migrations.
 
 ## Implementado como contrato
 
@@ -499,6 +501,8 @@ last_verified: 2026-09-07
 - Migrations M5.1C `20260901145444`, `20260901150902`, `20260901152207`, `20260901152216`, `20260901152451` e `20260901153011` ativas no Prisma-QA, com governança do Item Bank, hardening transacional, estados de calibração, analytics, budget reservation/release, deduplicação lexical e audit fix. `assessment-item-generator` v2 está publicada com JWT obrigatório e chamada externa desativada.
 
 ## Evidência remota
+
+- M5.5 foi aplicado somente ao Prisma-QA pelas migrations remotas `20260909183606`, `20260909184825` e `20260909185007`; a Edge Function `person-data-deletion` v1 está `ACTIVE`. Provas sintéticas com rollback validaram Super Admin, Owner, Admin, negação de Recruiter/Member e cross-tenant, capability própria sem troca de alvo, assessment negado, replay negado, Storage pendente sem falso sucesso, lock contra mutação, purga integral, zero resíduos, auditoria mínima com nome, preservação de Knowledge/Item Bank/Usuários/Vaga e recadastro com novo UUID. Advisors não acrescentaram alerta de segurança ou performance específico da exclusão. A fixture visual foi removida após o smoke.
 
 - Projeto Supabase QA remoto ativo: `Prisma-QA` (`ioldpnqqvobprjiontre`).
 - Migration inicial do Prisma aplicada em QA em 2026-08-23.
@@ -585,6 +589,8 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
+
+Em 2026-09-09, a branch `codex/m5-5-person-definitive-deletion` implementou a exclusão definitiva administrativa e de titularidade pelo mesmo pipeline autoritativo. O Prisma-QA recebeu três migrations forward-only e a Edge Function `person-data-deletion` v1; todas as provas sintéticas foram revertidas e a fixture visual foi removida. O smoke seguro aprovou estado inválido neutro, contexto válido, categorias, CTA e confirmação única sem executar a exclusão em desktop, largura de tablet e `390x844`; a sessão Super Admin também confirmou a separação visual entre Arquivar, Meus dados e Excluir definitivamente e cancelou o modal administrativo. `pnpm run validate` aprovou lint de 373 arquivos, foundation, Context Pack, dois typechecks, build web, 288 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. O reset local integral continua bloqueado por migrations históricas incompatíveis com PostgreSQL 17; produção não foi acionada.
 
 Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
 

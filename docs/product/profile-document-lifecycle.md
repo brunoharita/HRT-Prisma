@@ -33,3 +33,9 @@ O processamento local de PDF pode pausar quando o navegador é fechado. O Prisma
 ## Mensagens e interação
 
 Toda falha corrigível informa o que falta e oferece a ação correspondente. Falha interna não culpa um campo do operador. Confirmação adicional existe apenas para exclusão física e reinício do Perfil, pois representam risco material. Metadados de auditoria são automáticos.
+
+## Exclusão definitiva da Pessoa
+
+Arquivar continua reversível e preserva todo o agregado. `Excluir definitivamente` é uma ação crítica separada, disponível somente a Super Admin, Owner ou Admin no escopo autorizado, ou ao próprio titular por uma capability exclusiva de Meus dados. Uma única confirmação explica a irreversibilidade e as categorias removidas, sem decisões técnicas item a item.
+
+Depois da confirmação, a Pessoa entra em `deleting`, novas mutações incompatíveis falham fechadas e uma única saga retomável remove documentos e Storage, Perfis, revisões, evidências, matching, verificações e demais dependências individuais. Vagas, Knowledge, Item Bank e usuários da plataforma permanecem. A conclusão exige zero resíduo e preserva somente auditoria mínima desacoplada com nome, organização, ator, data, operação e resultado. Um cadastro futuro usa novo ID e histórico vazio.

@@ -47,9 +47,9 @@ O draft de revisão pode conter temporariamente `identity` e `contact` porque de
 
 ## Retenção e exclusão
 
-Política temporal está bloqueada por decisão jurídica e comercial. Antes do piloto real, definir por categoria: prazo, gatilho, legal hold, anonimização, deleção de documento, perfil, evidência, inferência, embedding, cache, backup e fornecedor externo.
+Política temporal continua bloqueada por decisão jurídica e comercial. Antes do piloto real, definir por categoria: prazo, gatilho, legal hold, anonimização, backup e fornecedor externo.
 
-Exclusão deve localizar registros por pessoa e organização, revogar acessos, remover ou anonimizar derivados conforme obrigação, preservar somente auditoria legalmente necessária e produzir evidência da operação.
+O fluxo explícito `person-definitive-deletion` 1.0.0 está ativo no Prisma-QA. Ele localiza o agregado por Pessoa e organização, revoga capabilities, remove Storage e dependências individuais, verifica ausência e preserva somente o ledger mínimo deliberadamente aprovado: nome, organização, ator, timestamp, operation ID e resultado. O ledger não mantém e-mail, telefone, currículo, respostas, evidência textual ou payload profissional. Conhecimento e acervos compartilhados permanecem sem proveniência individual falsa. Isso não resolve política temporal, legal hold ou backups gerenciados.
 
 ## Exportação e correção
 

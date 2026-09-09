@@ -32,7 +32,7 @@
 | Busca natural | conceito conhecido | conceito sem candidato | golden testado |
 | Filtros | nome, lifecycle, tenant e escopo | organização persistida inválida e ID cross-tenant | adapter e testes locais; dados QA persistidos |
 | LGPD | exportação/correção | acesso ou retenção indevida | documentado, não implementado |
-| Exclusão | agregado completo | cache, embedding e backup residual | planejado |
+| Exclusão definitiva de Pessoa | saga administrativa e titular remove agregado e Storage, preserva auditoria mínima, compartilhados e recadastro futuro | Recruiter/Member/cross-tenant, token expirado/revogado/replay/assessment, concorrência, Storage pendente e resíduo | contratos locais e prova rica revertida aprovados no Prisma-QA; produção não acionada |
 | Auditoria | criação e mudança material de usuário | segredo, token ou senha em trilha | M2-A local cria contrato e tabela; evidência conectada pendente |
 | Custo | evento de uso | limite excedido/retry duplicado | telemetria parcial |
 | Latência | média e p95 | timeout/degradação | baseline local parcial |
@@ -42,7 +42,7 @@
 | Acessibilidade | navegação semântica, labels, foco, contraste | teclado/screen reader | shell público local; autenticado conectado pendente |
 | Responsividade | desktop, sidebar recolhida, drawer mobile | overflow, perda de navegação e quebra do formulário de usuário | desktop e viewport 390x844 conectados; sem overflow horizontal |
 | Regression | suites estáveis | prompt/modelo/regra piora resultado | golden ativo |
-| Migrations | RLS/grants/tenant | missing policy, unsafe delete, role drift e group drift | foundation, M2-A, M2-B, M2-C e M5 ativos no QA; advisors executados |
+| Migrations | RLS/grants/tenant | missing policy, unsafe delete, role drift e group drift | foundation, M2-A, M2-B, M2-C, M5 e M5.5 ativos no QA; advisors executados sem alerta novo de exclusão |
 | Secrets | nenhum no repositório | key em código, log ou bundle | lint/scan local |
 | Supply chain | lockfile fixado | advisory high/critical | CI planejado |
 

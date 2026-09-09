@@ -28,6 +28,8 @@ Local e QA usam fixtures sintéticas ou anonimizadas. Dados reais exigem autoriz
 
 Para M5.4, a suíte deve manter duas Vagas de mesmo título com requisitos diferentes, termo desconhecido privado à organização, relação Figma/UX apenas como sinal, ausência de idioma como `Sem evidência suficiente`, ordenação sem score, edição com nova versão e comparação de exatamente duas Pessoas. A prova SQL usa rollback e cobre autoria, ocupante, versão imutável, relação tenant-scoped e grants negativos. O smoke cobre lista, criação, assistência, detalhe, Pessoas e comparação em `1440x900`, `1280x720`, `768x1024`, `390x844` e `360x800`.
 
+Para M5.5, a prova rica deve iniciar uma exclusão, simular Storage pendente sem falso sucesso, negar mutações concorrentes, retomar, remover todo o agregado individual, verificar zero resíduos, manter auditoria mínima com nome e preservar Knowledge, Item Bank, Vaga e usuários da plataforma. Matrizes separadas cobrem Super Admin, Owner, Admin, Recruiter, Member, cross-tenant, titularidade, token expirado/revogado/replayado e rejeição de assessment. O recadastro posterior precisa criar novo UUID e histórico vazio. O smoke público é somente leitura até a confirmação e não executa a exclusão visual sem confirmação humana de ação externa irreversível.
+
 ## Critério de promoção
 
 Sem regressão não justificada, contratos compatíveis, segurança negativa aprovada, custo/latência dentro do budget, documentação/contexto atualizados, QA com evidência e aprovação explícita para produção.

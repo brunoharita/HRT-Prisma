@@ -27,6 +27,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Telemetria | `ai_usage_events` | Custo, latência, versão e erro |
 | Auditoria de usuários | `platform_user_audit_events` | Senha e tokens nunca entram no log material |
 | Timeline de ingestão | `person_ingestion_events` | Mudanças de documento, tentativa e perfil sem copiar o conteúdo integral |
+| Exclusão definitiva de Pessoa | `person_deletion_operations`, `person_deletion_storage_items`, `person_self_service_capabilities` | ledger mínimo desacoplado, plano retomável de Storage e capability titular single-purpose |
 
 ## Isolamento estrutural
 
@@ -82,4 +83,6 @@ Question Instances preservam exatamente definition, blueprint, item, opções, o
 
 ## Retenção e exclusão
 
-Cascade existe para agregados técnicos, mas política legal de retenção ainda não está definida. Antes do piloto real, exclusão, anonimização, exportação e preservação de auditoria devem possuir fluxo e teste próprios.
+`person-definitive-deletion` 1.0.0 está ativo no Prisma-QA. `people.operational_status=deleting` fecha concorrência; o ledger sobrevive sem FK para `people`; Storage precisa estar removido antes da purga SQL e um verificador determinístico bloqueia `completed` diante de qualquer resíduo. Cascatas continuam restritas a filhos comprovadamente exclusivos. Knowledge, Vagas, Item Bank e usuários da plataforma não integram o agregado eliminado.
+
+A política jurídica temporal, legal hold, backups, exportação e anonimização continuam sem decisão neste contrato e precisam de tratamento próprio antes do piloto real.

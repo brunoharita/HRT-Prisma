@@ -34,6 +34,7 @@ Publicação de perfil usa somente `publish_profile_review` para clientes autent
 - Aceites adaptativos usam `apply_profile_review_adaptive_suggestions`, que exige sessão revisora, tenant, review aberto, lock e payload metadata-only. Eventos, casos e padrões têm RLS; DML direto permanece revogado e padrão só é promovido pela aprovação integral.
 - Vagas, versões, requisitos, relações locais e avaliações M5.4 são legíveis apenas por Super Admin, Owner, Admin e Recruiter no escopo confirmado. `save_vacancy_definition` valida tenant e papel em `security definer` com `search_path` vazio; `member`, `anon`, referências cross-tenant e DML direto das tabelas versionadas falham fechados.
 - A pesquisa Web contextual de Vagas exige sessão ativa, Super Admin ou membership Owner, Admin ou Recruiter na organização informada e `allow_external_knowledge_enrichment = true`. O ledger possui RLS para os mesmos papéis; `anon`, Member, cross-tenant e DML direto falham fechados.
+- A exclusão definitiva de outra Pessoa exige Super Admin, Owner ou Admin no escopo resolvido no backend. Recruiter e Member são negados. A própria Pessoa usa capability separada da conta de operador e de assessment, vinculada a tenant, Pessoa, finalidade e versão, armazenada por hash, curta, revogável e de uso único. `anon` e `authenticated` não recebem DML direto no ledger, plano de Storage ou capabilities; autoatendimento e finalização pertencem ao boundary `service_role` da Edge Function.
 
 ## Evidência conectada em QA
 

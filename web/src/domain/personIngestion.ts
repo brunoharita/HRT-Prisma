@@ -80,7 +80,7 @@ export interface PersonWorkspaceSummary {
   organizationId: string;
   fullName: string;
   lifecycle: string;
-  operationalStatus: "active" | "archived" | "merged";
+  operationalStatus: "active" | "archived" | "merged" | "deleting";
   archivedAt: string | null;
   mergedIntoPersonId: string | null;
   profileState: PersonProfileState;

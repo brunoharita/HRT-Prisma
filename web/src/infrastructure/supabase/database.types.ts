@@ -51,7 +51,7 @@ export interface Database {
         organization_id: string;
         full_name: string;
         lifecycle: string;
-        operational_status: "active" | "archived" | "merged";
+        operational_status: "active" | "archived" | "merged" | "deleting";
         archived_at: string | null;
         archived_by_auth_user_id: string | null;
         merged_into_person_id: string | null;

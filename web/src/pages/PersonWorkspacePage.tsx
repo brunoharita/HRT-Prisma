@@ -65,6 +65,7 @@ import {
 } from "../domain/personIngestion";
 import { isReviewableDocument, presentDocument } from "../domain/documentPresentation";
 import { processingFailureMessage } from "../domain/resumeProductState";
+import type { PersonDeletionImpactSummary } from "../domain/personDeletion";
 import {
   EDUCATION_LEVEL_LABELS,
   EDUCATION_ORIGIN_LABELS,
@@ -80,6 +81,7 @@ import {
   type PersonPendingAction,
 } from "../domain/personActionCenter";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
+import { personDeletionService } from "../infrastructure/supabase/personDeletionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage } from "../ui/PrismaPage";
@@ -129,6 +131,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   const [revisionDocumentId, setRevisionDocumentId] = useState<string | null>(null);
   const [moveDocument, setMoveDocument] = useState<PersonDocumentTimelineItem | null>(null);
   const [peopleOptions, setPeopleOptions] = useState<PersonWorkspaceSummary[]>([]);
+  const canDeletePerson = ["super_admin", "owner", "admin"].includes(activeMembership.role);
 
   async function refresh(documentId = selectedDocumentId) {
     const [result, versions] = await Promise.all([
@@ -345,6 +348,66 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     } });
   }
 
+  async function handleDeletePerson() {
+    setBusy(true); setError(null); setSuccess(null);
+    try {
+      const preview = await personDeletionService.preview(activeMembership.organizationId, personId);
+      setBusy(false);
+      Modal.confirm({
+        title: `Excluir definitivamente ${preview.personName}?`,
+        width: 720,
+        icon: <DeleteOutlined />,
+        content: <PersonDeletionImpact impact={preview.impactSummary} />,
+        okText: "Excluir Pessoa definitivamente",
+        okButtonProps: { danger: true },
+        cancelText: "Cancelar",
+        onOk: async () => {
+          setBusy(true); setError(null);
+          try {
+            await personDeletionService.delete(activeMembership.organizationId, personId, preview.preflightFingerprint);
+            Modal.success({
+              title: "Pessoa excluída definitivamente",
+              content: "Banco e arquivos foram verificados. Vagas, Knowledge compartilhado e Banco de Itens permaneceram preservados.",
+              okText: "Voltar para Pessoas",
+              onOk: () => onNavigate("/profiles"),
+            });
+          } catch (caught) {
+            setError(caught instanceof Error ? caught.message : "A exclusão não pôde ser concluída agora.");
+            throw caught;
+          } finally { setBusy(false); }
+        },
+      });
+    } catch (caught) {
+      setBusy(false);
+      setError(caught instanceof Error ? caught.message : "Não foi possível calcular o impacto da exclusão.");
+    }
+  }
+
+  function issueSelfServiceAccess(contactKind: "email" | "phone") {
+    const contactLabel = contactKind === "email" ? "e-mail" : "telefone";
+    Modal.confirm({
+      title: `Gerar acesso por ${contactLabel}?`,
+      width: 620,
+      content: <>Confirme que você validou a identidade da Pessoa fora do Prisma usando o {contactLabel} já cadastrado. O link será individual, expirará em 30 minutos e servirá somente para a área Meus dados.</>,
+      okText: "Confirmo a validação e quero gerar",
+      cancelText: "Cancelar",
+      onOk: async () => {
+        setBusy(true); setError(null);
+        try {
+          const access = await personDeletionService.issueSelfServiceLink(activeMembership.organizationId, personId, contactKind);
+          const link = new URL(access.relativePath, window.location.origin).toString();
+          await navigator.clipboard.writeText(link).catch(() => undefined);
+          Modal.success({
+            title: "Acesso individual gerado",
+            content: <div><Typography.Paragraph>Envie o link somente pelo canal cuja identidade você confirmou. Ele já foi copiado quando o navegador permitiu.</Typography.Paragraph><Input.TextArea aria-label="Link de Meus dados" autoSize readOnly value={link} /><Typography.Paragraph type="secondary">Válido até {new Date(access.expiresAt).toLocaleString("pt-BR")}.</Typography.Paragraph></div>,
+            okText: "Concluir",
+          });
+        } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível gerar o acesso."); throw caught; }
+        finally { setBusy(false); }
+      },
+    });
+  }
+
   const viewModel = useMemo(
     () => workspace ? buildPersonCenterViewModel(workspace, currentProfileVersion) : null,
     [currentProfileVersion, workspace],
@@ -433,6 +496,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   return (
     <PrismaPage className="prisma-m2b-page prisma-person-workspace prisma-person-center">
       <PersonCenterHeader
+        canDeletePerson={canDeletePerson}
         model={viewModel}
         lifecycle={workspace.person.lifecycle}
         operationalStatus={workspace.person.operationalStatus}
@@ -442,12 +506,15 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         onEdit={() => onNavigate(`/profiles/${personId}/edit`)}
         onLifecycle={(value) => void changeLifecycle(value)}
         onMerge={() => onNavigate(`/profiles/${personId}/merge`)}
+        onDeletePerson={() => void handleDeletePerson()}
+        onIssueSelfAccess={issueSelfServiceAccess}
         onOpenProfile={() => onNavigate(`/profiles/${personId}/profile`)}
         onOpenOperations={() => onNavigate(`/profiles/${personId}/processes`)}
       />
       {error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
       {workspace.person.operationalStatus === "archived" ? <Alert action={<Button onClick={toggleArchive}>Reativar Pessoa</Button>} description="Documentos, Perfis e histórico permanecem disponíveis para consulta. Reative a Pessoa antes de iniciar uma nova operação." showIcon title="Pessoa arquivada" type="warning" /> : null}
+      {workspace.person.operationalStatus === "deleting" ? <Alert action={canDeletePerson ? <Button danger loading={busy} onClick={() => void handleDeletePerson()}>Retomar exclusão</Button> : undefined} description="Novas alterações estão bloqueadas. O Prisma retomará a mesma operação idempotente e só informará sucesso depois de verificar banco e arquivos." showIcon title="Exclusão definitiva em andamento" type="error" /> : null}
       <Tabs activeKey={activeView} className="prisma-person-center-navigation" items={viewItems} onChange={(key) => setActiveView(key as typeof activeView)} />
       <Modal cancelText="Cancelar" confirmLoading={busy} okButtonProps={{ disabled: revisionSource === "current" ? !currentProfileVersion : revisionSource === "version" ? !revisionVersionId : !revisionDocumentId }} okText="Criar revisão" onCancel={() => setRevisionOpen(false)} onOk={() => void handleCreateRevision()} open={revisionOpen} title="Criar nova revisão" width={620}>
         <Typography.Paragraph type="secondary">Escolha de onde deseja partir. A origem permanecerá imutável e a nova revisão ficará salva para continuar depois.</Typography.Paragraph>
@@ -468,16 +535,19 @@ function PersonCenterSkeleton() {
   return <div className="prisma-person-center-skeleton"><Skeleton active avatar paragraph={{ rows: 3 }} /><div className="prisma-person-center-skeleton__grid"><Skeleton active paragraph={{ rows: 5 }} /><Skeleton active paragraph={{ rows: 5 }} /></div><Skeleton active paragraph={{ rows: 10 }} /></div>;
 }
 
-function PersonCenterHeader({ model, lifecycle, operationalStatus, onBack, onCreateRevision, onEdit, onOpenProfile, onOpenOperations, onArchive, onMerge, onLifecycle }: {
+function PersonCenterHeader({ model, lifecycle, operationalStatus, canDeletePerson, onBack, onCreateRevision, onEdit, onOpenProfile, onOpenOperations, onArchive, onMerge, onDeletePerson, onIssueSelfAccess, onLifecycle }: {
   model: PersonCenterViewModel;
   lifecycle: string;
-  operationalStatus: "active" | "archived" | "merged";
+  operationalStatus: "active" | "archived" | "merged" | "deleting";
+  canDeletePerson: boolean;
   onBack: () => void;
   onCreateRevision: () => void;
   onEdit: () => void;
   onOpenOperations: () => void;
   onArchive: () => void;
   onMerge: () => void;
+  onDeletePerson: () => void;
+  onIssueSelfAccess: (contactKind: "email" | "phone") => void;
   onOpenProfile: () => void;
   onLifecycle: (value: string) => void;
 }) {
@@ -495,23 +565,52 @@ function PersonCenterHeader({ model, lifecycle, operationalStatus, onBack, onCre
           </div>
         </div>
         <Space className="prisma-person-center-header__actions" wrap>
-          <Button disabled={!model.currentProfile} icon={<EyeOutlined />} onClick={onOpenProfile} type="primary">Ver perfil</Button>
-          <Button disabled={operationalStatus === "archived"} icon={<EditOutlined />} onClick={onCreateRevision}>Criar nova revisão</Button>
-          <Button icon={<SafetyCertificateOutlined />} onClick={onOpenOperations}>Processamento e revisões</Button>
-          <Button icon={<EditOutlined />} onClick={onEdit}>Editar dados</Button>
+          <Button disabled={!model.currentProfile || operationalStatus === "deleting"} icon={<EyeOutlined />} onClick={onOpenProfile} type="primary">Ver perfil</Button>
+          <Button disabled={operationalStatus === "archived" || operationalStatus === "deleting"} icon={<EditOutlined />} onClick={onCreateRevision}>Criar nova revisão</Button>
+          <Button disabled={operationalStatus === "deleting"} icon={<SafetyCertificateOutlined />} onClick={onOpenOperations}>Processamento e revisões</Button>
+          <Button disabled={operationalStatus === "deleting"} icon={<EditOutlined />} onClick={onEdit}>Editar dados</Button>
           <Dropdown menu={{ items: [
-            { key: "merge", icon: <UserSwitchOutlined />, label: "Mesclar Pessoas", onClick: onMerge },
+            { key: "merge", disabled: operationalStatus === "deleting", icon: <UserSwitchOutlined />, label: "Mesclar Pessoas", onClick: onMerge },
             { type: "divider" },
-            { key: "candidate", label: "Vínculo: Candidato", disabled: lifecycle === "candidate", onClick: () => onLifecycle("candidate") },
-            { key: "employee", label: "Vínculo: Colaborador", disabled: lifecycle === "employee", onClick: () => onLifecycle("employee") },
-            { key: "talent_pool", label: "Vínculo: Banco de talentos", disabled: lifecycle === "talent_pool", onClick: () => onLifecycle("talent_pool") },
+            { key: "candidate", label: "Vínculo: Candidato", disabled: operationalStatus === "deleting" || lifecycle === "candidate", onClick: () => onLifecycle("candidate") },
+            { key: "employee", label: "Vínculo: Colaborador", disabled: operationalStatus === "deleting" || lifecycle === "employee", onClick: () => onLifecycle("employee") },
+            { key: "talent_pool", label: "Vínculo: Banco de talentos", disabled: operationalStatus === "deleting" || lifecycle === "talent_pool", onClick: () => onLifecycle("talent_pool") },
             { type: "divider" },
-            { key: "archive", danger: operationalStatus !== "archived", label: operationalStatus === "archived" ? "Reativar Pessoa" : "Arquivar Pessoa", onClick: onArchive },
+            { key: "archive", disabled: operationalStatus === "deleting", danger: operationalStatus !== "archived", label: operationalStatus === "archived" ? "Reativar Pessoa" : "Arquivar Pessoa", onClick: onArchive },
+            ...(canDeletePerson ? [
+              { type: "divider" as const },
+              { key: "self-email", disabled: operationalStatus === "deleting", label: "Gerar acesso a Meus dados por e-mail", onClick: () => onIssueSelfAccess("email") },
+              { key: "self-phone", disabled: operationalStatus === "deleting", label: "Gerar acesso a Meus dados por telefone", onClick: () => onIssueSelfAccess("phone") },
+              { type: "divider" as const },
+              { key: "delete-person", danger: true, icon: <DeleteOutlined />, label: operationalStatus === "deleting" ? "Retomar exclusão definitiva" : "Excluir Pessoa definitivamente", onClick: onDeletePerson },
+            ] : []),
           ] }} trigger={["click"]}><Button aria-label="Mais ações" icon={<MoreOutlined />}>Mais ações</Button></Dropdown>
         </Space>
       </div>
     </header>
   );
+}
+
+function PersonDeletionImpact({ impact }: { impact: PersonDeletionImpactSummary }) {
+  return <div className="prisma-delete-preflight prisma-person-delete-preflight">
+    <Typography.Paragraph><strong>Esta ação é irreversível.</strong> O Prisma bloqueará novas alterações, removerá os arquivos e só concluirá após verificar a ausência do agregado individual.</Typography.Paragraph>
+    <div>
+      <section><strong>Será excluído</strong><ul>
+        <li>Cadastro, contato e dados privados</li>
+        <li>{impact.documents} {impact.documents === 1 ? "documento" : "documentos"} e {impact.storageObjects} {impact.storageObjects === 1 ? "arquivo" : "arquivos"}</li>
+        <li>{impact.profiles} {impact.profiles === 1 ? "Perfil" : "Perfis"} e {impact.reviews} {impact.reviews === 1 ? "revisão" : "revisões"}</li>
+        <li>{impact.matching} {impact.matching === 1 ? "matching" : "matchings"}, {impact.verifications} {impact.verifications === 1 ? "verificação" : "verificações"} e {impact.assessmentAttempts} {impact.assessmentAttempts === 1 ? "tentativa" : "tentativas"}</li>
+        <li>{impact.knowledgeProvenances} {impact.knowledgeProvenances === 1 ? "proveniência individual" : "proveniências individuais"} de Knowledge</li>
+      </ul></section>
+      <section><strong>Continuará disponível</strong><ul>
+        <li>Vagas e posições, sem ocupante excluído</li>
+        <li>Knowledge compartilhado, taxonomias e aliases</li>
+        <li>Banco de Itens, rubricas e definições</li>
+        <li>Auditoria mínima da exclusão, sem contato, currículo ou respostas</li>
+      </ul></section>
+    </div>
+    <Alert description="Nenhum currículo, relatório, recomendação ou exportação será gerado com base nos dados excluídos." message="A exclusão é restrita à Pessoa selecionada." showIcon type="warning" />
+  </div>;
 }
 
 function PersonOverview({ model, busy, onAction, onDiscard, onOpenDocuments, onOpenProfile }: {
