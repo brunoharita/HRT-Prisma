@@ -168,6 +168,15 @@ function KnowledgeSourcesCard({
                 ) : null}
                 <div><dt><ClockCircleOutlined /> Última checagem</dt><dd>{formatCheckedAt(source.lastCheckedAt)}</dd></div>
               </dl>
+              {source.status === "action_required" ? (
+                <Alert
+                  className="prisma-knowledge-source__action"
+                  description={describeRequiredAction(source)}
+                  message="O que falta fazer"
+                  showIcon
+                  type="warning"
+                />
+              ) : null}
               {canManage ? <Button block loading={checkingSourceId === source.id} onClick={() => void onCheck(source.id)} size="small">Checar agora</Button> : null}
             </article>
           );
@@ -175,6 +184,16 @@ function KnowledgeSourcesCard({
       </div>
     </PrismaCard>
   );
+}
+
+function describeRequiredAction(source: KnowledgeSourceHealth): string {
+  if (source.pendingPublication) {
+    return `A versão ${source.detectedVersion ?? source.version ?? "detectada"} já foi preparada e comparada. Falta revisar e aprovar a publicação em Governança.`;
+  }
+  if (!source.published) {
+    return `A versão ${source.detectedVersion ?? source.version ?? "detectada"} foi encontrada, mas ainda precisa ser preparada, validada e aprovada antes de ser usada pelo Prisma.`;
+  }
+  return "Foi identificada uma diferença em relação à versão publicada. Revise a nova versão antes de substituir a atual.";
 }
 
 function describeMonitorStatus(status: KnowledgeSourceMonitorStatus): { label: string; color: string } {

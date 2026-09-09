@@ -38,6 +38,7 @@ export interface KnowledgeSourceHealth {
   nextCheckAt: string | null;
   status: KnowledgeSourceMonitorStatus;
   published: boolean;
+  pendingPublication: boolean;
 }
 
 export interface PeopleQuery {

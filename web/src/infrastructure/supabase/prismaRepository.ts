@@ -162,7 +162,7 @@ export const prismaRepository: PrismaDataRepository = {
     const { data: sourceVersions, error: sourceVersionError } = sources.length
       ? await supabase
           .from("knowledge_source_versions")
-          .select("source_id,external_version,release_date,is_current,created_at")
+          .select("source_id,external_version,release_date,is_current,import_status,created_at")
           .in("source_id", sources.map((source) => source.id))
           .order("created_at", { ascending: false })
       : { data: [], error: null };
@@ -187,6 +187,7 @@ export const prismaRepository: PrismaDataRepository = {
             nextCheckAt: source.next_check_at,
             status: requireMonitorStatus(source.monitor_status),
             published: Boolean(published),
+            pendingPublication: versions.some((version) => !version.is_current && version.import_status === "diff_ready"),
           };
         })
         .sort((left, right) => centralSourceOrder(left.name) - centralSourceOrder(right.name)),
