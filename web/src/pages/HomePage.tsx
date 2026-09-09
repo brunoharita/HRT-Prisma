@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ApartmentOutlined, CheckCircleOutlined, ClockCircleOutlined, DatabaseOutlined, FileAddOutlined, SafetyCertificateOutlined, SyncOutlined, TeamOutlined } from "@ant-design/icons";
-import { Alert, Button, Empty, Skeleton, Statistic, Tag, Typography } from "antd";
+import { Alert, Button, Drawer, Empty, Skeleton, Statistic, Steps, Tag, Typography } from "antd";
 import type { HomeSummary, KnowledgeSourceHealth, KnowledgeSourceMonitorStatus, PrismaDataRepository } from "../domain/prismaData";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -17,6 +17,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [checkingSourceId, setCheckingSourceId] = useState<string | null>(null);
+  const [resolutionSource, setResolutionSource] = useState<KnowledgeSourceHealth | null>(null);
 
   useEffect(() => {
     let current = true;
@@ -71,6 +72,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
             canManage={activeMembership.role === "super_admin"}
             onNavigate={onNavigate}
             checkingSourceId={checkingSourceId}
+            onResolve={setResolutionSource}
             onCheck={async (sourceId) => {
               setCheckingSourceId(sourceId);
               try {
@@ -85,14 +87,15 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
             }}
           />
         ) : null}
-        <PrismaCard className="prisma-contract-card" title="Confiança em cada etapa">
+      <PrismaCard className="prisma-contract-card" title="Confiança em cada etapa">
           <div className="prisma-home-principles">
             <div><CheckCircleOutlined /><span><strong>Decisão humana</strong><small>O Prisma organiza evidências, mas não decide contratações.</small></span></div>
             <div><SafetyCertificateOutlined /><span><strong>Origem preservada</strong><small>Cada informação permanece vinculada à sua fonte e versão.</small></span></div>
             <div><DatabaseOutlined /><span><strong>Dados protegidos</strong><small>O acesso respeita a empresa ativa e o papel de cada usuário.</small></span></div>
           </div>
-        </PrismaCard>
+      </PrismaCard>
       </section>
+      <SourceResolutionDrawer source={resolutionSource} onClose={() => setResolutionSource(null)} onNavigate={onNavigate} />
     </PrismaPage>
   );
 }
@@ -130,12 +133,14 @@ function KnowledgeSourcesCard({
   onNavigate,
   checkingSourceId,
   onCheck,
+  onResolve,
 }: {
   sources: KnowledgeSourceHealth[];
   canManage: boolean;
   onNavigate: (path: string) => void;
   checkingSourceId: string | null;
   onCheck: (sourceId: string) => Promise<void>;
+  onResolve: (source: KnowledgeSourceHealth) => void;
 }) {
   return (
     <PrismaCard
@@ -177,6 +182,7 @@ function KnowledgeSourcesCard({
                   type="warning"
                 />
               ) : null}
+              {source.status !== "current" ? <Button block onClick={() => onResolve(source)} type="primary">Resolver pendências</Button> : null}
               {canManage ? <Button block loading={checkingSourceId === source.id} onClick={() => void onCheck(source.id)} size="small">Checar agora</Button> : null}
             </article>
           );
@@ -184,6 +190,70 @@ function KnowledgeSourcesCard({
       </div>
     </PrismaCard>
   );
+}
+
+function SourceResolutionDrawer({
+  source,
+  onClose,
+  onNavigate,
+}: {
+  source: KnowledgeSourceHealth | null;
+  onClose: () => void;
+  onNavigate: (path: string) => void;
+}) {
+  const plan = source ? buildResolutionPlan(source) : null;
+  return <Drawer open={Boolean(source)} onClose={onClose} title={plan?.title ?? "Resolver pendências"} width={560}>
+    {plan ? <>
+      <Alert showIcon type={plan.tone} message={plan.summary} />
+      <Typography.Title level={5} style={{ marginTop: 24 }}>O que o Prisma fará</Typography.Title>
+      <Steps direction="vertical" size="small" items={plan.steps.map((step) => ({ title: step }))} />
+      <Alert style={{ marginTop: 20 }} type="info" showIcon message="Decisão necessária" description={plan.humanDecision} />
+      {plan.canOpenGovernance ? <Button block onClick={() => { onClose(); onNavigate("/knowledge"); }} style={{ marginTop: 20 }} type="primary">Abrir governança</Button> : null}
+    </> : null}
+  </Drawer>;
+}
+
+function buildResolutionPlan(source: KnowledgeSourceHealth): {
+  title: string;
+  summary: string;
+  steps: string[];
+  humanDecision: string;
+  tone: "info" | "warning" | "error";
+  canOpenGovernance: boolean;
+} {
+  const version = source.detectedVersion ?? source.version ?? "a versão encontrada";
+  if (source.pendingPublication) return {
+    title: `Resolver pendências · ${source.name}`,
+    summary: `A versão ${version} já foi preparada e comparada com a versão atual.`,
+    steps: ["Abrir a Governança", "Revisar o que mudou", "Confirmar a publicação da nova versão"],
+    humanDecision: "A publicação altera a base global usada pelo Prisma e precisa da aprovação de um Super Admin.",
+    tone: "warning",
+    canOpenGovernance: true,
+  };
+  if (source.status === "temporary_failure") return {
+    title: `Tentar novamente · ${source.name}`,
+    summary: "A fonte não respondeu corretamente nesta tentativa.",
+    steps: ["Repetir a consulta à fonte oficial", "Registrar o novo resultado", "Manter a versão atual se a fonte continuar indisponível"],
+    humanDecision: "Nenhuma decisão de publicação é necessária enquanto a consulta não for concluída.",
+    tone: "error",
+    canOpenGovernance: false,
+  };
+  if (source.status === "validation_failed") return {
+    title: `Revisar validação · ${source.name}`,
+    summary: "A fonte respondeu, mas o conteúdo não passou pela validação esperada.",
+    steps: ["Consultar novamente a fonte oficial", "Identificar o que não pôde ser validado", "Preparar uma nova tentativa quando o conteúdo estiver íntegro"],
+    humanDecision: "A versão atual continua protegida; nenhuma publicação será feita com conteúdo não validado.",
+    tone: "error",
+    canOpenGovernance: true,
+  };
+  return {
+    title: `Preparar atualização · ${source.name}`,
+    summary: `A versão ${version} foi encontrada, mas ainda não está pronta para uso no Prisma.`,
+    steps: ["Obter o pacote oficial", "Validar estrutura, origem e licença", "Comparar com a versão atual", "Enviar para revisão humana"],
+    humanDecision: "Depois da preparação, um Super Admin revisará as diferenças antes da publicação.",
+    tone: "info",
+    canOpenGovernance: true,
+  };
 }
 
 function describeRequiredAction(source: KnowledgeSourceHealth): string {

@@ -88,6 +88,8 @@ test("Home exposes version, release date and latest check through the repository
   assert.match(page, /Checar agora/);
   assert.match(page, /O que falta fazer/);
   assert.match(page, /preparada e comparada/);
+  assert.match(page, /Resolver pendências/);
+  assert.match(page, /Revisar o que mudou/);
   assert.match(repository, /functions\.invoke\("knowledge-source-monitor"/);
   assert.doesNotMatch(page, /\.from\(/);
   assert.match(repository, /\.from\("knowledge_sources"\)/);
