@@ -43,3 +43,15 @@ O fluxo operacional é `monitor -> fetch/upload -> validate -> stage -> diff -> 
 Na Home, cada base central possui o botão `Checar agora`, visível ao Super Admin. A ação reutiliza a Edge Function `knowledge-source-monitor` com `trigger=manual` e o ID da base; a função valida o JWT, o operador ativo e o perfil `super_admin` antes de consultar a fonte oficial. Cada acionamento manual recebe uma chave própria, sem ser confundido com uma checagem anterior. A checagem apenas atualiza o estado e o ledger de monitoramento; não publica uma nova versão.
 
 Quando o estado for `action_required`, o cartão também informa em linguagem operacional se a versão precisa ser preparada, validada, revisada ou aprovada. Para uma versão já em `diff_ready`, a pendência é a revisão e aprovação da publicação, não uma nova checagem da fonte.
+
+## Fluxo pela interface de Governança
+
+Para um Super Admin, o fluxo completo é:
+
+1. Na Home, selecionar `Checar agora` na CBO, ESCO ou O*NET. Essa ação consulta a fonte oficial e atualiza o estado; ela não publica nada.
+2. Se houver uma versão nova, a Home explica a pendência. Quando o pacote já estiver validado e comparado, selecionar `Resolver pendências` e abrir a Governança.
+3. Em `Conhecimento > Fontes`, a tabela mostra separadamente a versão publicada e a `Versão preparada`. A ação `Revisar e publicar` abre os dados da versão, seus registros e o estado `diff_ready`.
+4. Após revisar, o Super Admin seleciona `Publicar versão`. A interface chama a Edge Function autenticada, que confirma o operador ativo, executa o RPC restrito em lotes de até 10.000 registros e só conclui quando conceitos, termos e relações estiverem finalizados.
+5. Ao finalizar, a versão passa a ser corrente, a versão anterior deixa de ser corrente, o staging é removido e a Governança passa a exibir a data de publicação e a contagem publicada. Uma falha interrompe o processamento sem substituir a versão anterior.
+
+Não existe publicação automática após a checagem. Para CBO, ESCO e O*NET, o princípio é o mesmo: detectar, preparar, validar, revisar e publicar explicitamente. Se a versão ainda estiver apenas `catalogued`, a interface não oferece um botão de publicação falso; primeiro é necessário preparar o pacote oficial e gerar o `diff_ready`.

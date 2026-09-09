@@ -2,7 +2,7 @@ import type { Json } from "../infrastructure/supabase/database.types";
 
 export interface KnowledgeSourceView {
   id: string; name: string; domain: string; sourceClass: string; method: string; license: string | null;
-  lastVerifiedAt: string | null; status: string; currentVersion: KnowledgeSourceVersionView | null;
+  lastVerifiedAt: string | null; status: string; currentVersion: KnowledgeSourceVersionView | null; pendingVersion: KnowledgeSourceVersionView | null;
 }
 export interface KnowledgeSourceVersionView { id: string; externalVersion: string; releaseDate: string | null; retrievalDate: string | null;
   checksumSha256: string | null; importStatus: string; isCurrent: boolean; publishedAt: string | null; counts: Json; officialUrl: string | null; }

@@ -3,7 +3,7 @@ import { GlobalOutlined, LinkOutlined, ReloadOutlined, SafetyCertificateOutlined
 import { Alert, Button, Descriptions, Drawer, Empty, Form, Input, Select, Space, Switch, Table, Tabs, Tag, Typography, message } from "antd";
 import type { PlatformAccessProfile } from "../shared/platformUsers";
 import type { OrganizationMembership } from "../shared/access";
-import type { KnowledgeConceptSuggestion, KnowledgeConceptView, KnowledgeDashboard, KnowledgeInboxView, KnowledgeSettingsView } from "../domain/knowledgeData";
+import type { KnowledgeConceptSuggestion, KnowledgeConceptView, KnowledgeDashboard, KnowledgeInboxView, KnowledgeSettingsView, KnowledgeSourceView } from "../domain/knowledgeData";
 import { knowledgeService } from "../infrastructure/supabase/knowledgeService";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -14,6 +14,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   const [dashboard, setDashboard] = useState<KnowledgeDashboard | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<KnowledgeConceptView | null>(null);
   const [selectedInbox, setSelectedInbox] = useState<KnowledgeInboxView | null>(null);
+  const [selectedSource, setSelectedSource] = useState<KnowledgeSourceView | null>(null);
   const [suggestions, setSuggestions] = useState<KnowledgeConceptSuggestion[]>([]);
   const [decisionReason, setDecisionReason] = useState("");
   const [proposalLabel, setProposalLabel] = useState("");
@@ -106,6 +107,20 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
         <Button loading={decisionLoading} disabled={!proposalLabel.trim() || decisionReason.trim().length < 5} onClick={async () => { setDecisionLoading(true); try { await knowledgeService.proposeConcept({ inboxId: selectedInbox.id, scope: isGlobal ? "global" : "organization", canonicalLabel: proposalLabel, conceptType: proposalType, description: "", reason: decisionReason }); message.success("Proposta criada para revisão humana e pesquisa de fontes."); setSelectedInbox(null); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha ao criar proposta."); } finally { setDecisionLoading(false); } }}>Criar proposta, sem publicar</Button>
       </Space> : null}
     </Drawer>
+    <Drawer open={Boolean(selectedSource)} onClose={() => setSelectedSource(null)} title={selectedSource ? `Revisar versão · ${selectedSource.name}` : "Revisar versão"} width={560}>
+      {selectedSource?.pendingVersion ? <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+        <Alert type="warning" showIcon message="Versão preparada para publicação" description="A checagem já validou e comparou esta versão. Publicá-la substituirá a versão corrente da base global do Prisma." />
+        <Descriptions column={1} bordered size="small" items={[
+          { key: "version", label: "Versão", children: selectedSource.pendingVersion.externalVersion },
+          { key: "status", label: "Estado", children: statusTag(selectedSource.pendingVersion.importStatus) },
+          { key: "release", label: "Data da versão", children: selectedSource.pendingVersion.releaseDate ? formatDate(selectedSource.pendingVersion.releaseDate) : "Não informada" },
+          { key: "retrieved", label: "Preparada em", children: selectedSource.pendingVersion.retrievalDate ? formatDate(selectedSource.pendingVersion.retrievalDate) : "Não informada" },
+          { key: "records", label: "Registros", children: describeCounts(selectedSource.pendingVersion.counts) },
+        ]} />
+        <Typography.Paragraph type="secondary">A publicação é uma decisão administrativa do Super Admin. O processamento ocorre em lotes e mantém a origem e a versão auditáveis.</Typography.Paragraph>
+        <Button type="primary" onClick={async () => { setDecisionLoading(true); try { const result = await knowledgeService.publishSourceVersion(selectedSource.pendingVersion!.id); message.success(`${result.source} ${result.version} publicada como versão corrente.`); setSelectedSource(null); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha ao publicar a versão."); } finally { setDecisionLoading(false); } }} loading={decisionLoading}>Publicar versão</Button>
+      </Space> : <Empty description="Não há uma versão preparada para publicação." />}
+    </Drawer>
   </PrismaPage>;
 
   function conceptsPanel(scope?: "global" | "organization") {
@@ -120,6 +135,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
     return <Table rowKey="id" loading={loading} dataSource={dashboard?.sources ?? []} pagination={{ pageSize: 10 }} scroll={{ x: 850 }} columns={[
       { title: "Fonte", dataIndex: "name", render: (value: string) => <Space><SafetyCertificateOutlined />{value}</Space> },
       { title: "Versão publicada", render: (_, row) => row.currentVersion?.externalVersion ?? "Nenhuma" },
+      { title: "Versão preparada", render: (_, row) => row.pendingVersion ? <Space direction="vertical" size={0}><Typography.Text>{row.pendingVersion.externalVersion}</Typography.Text><Button type="link" size="small" onClick={() => setSelectedSource(row)}>Revisar e publicar</Button></Space> : "Nenhuma" },
       { title: "Importação", render: (_, row) => row.currentVersion ? statusTag(row.currentVersion.importStatus) : <Tag>catalogued</Tag> },
       { title: "Publicada em", render: (_, row) => row.currentVersion?.publishedAt ? formatDate(row.currentVersion.publishedAt) : "Não publicada" },
       { title: "Registros", render: (_, row) => row.currentVersion ? describeCounts(row.currentVersion.counts) : "0" },

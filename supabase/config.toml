@@ -400,6 +400,9 @@ verify_jwt = true
 [functions.knowledge-source-monitor]
 verify_jwt = false
 
+[functions.knowledge-source-publish]
+verify_jwt = true
+
 [functions.person-document-lifecycle]
 verify_jwt = true
 

@@ -79,6 +79,20 @@ test("Edge monitor requires its private invocation secret and uses fixed officia
   assert.match(source, /Access-Control-Allow-Origin/);
 });
 
+test("source publication is an explicit Super Admin action and remains batch-based", async () => {
+  const source = await readFile("supabase/functions/knowledge-source-publish/index.ts", "utf8");
+  const page = await readFile("web/src/pages/KnowledgePage.tsx", "utf8");
+  const service = await readFile("web/src/infrastructure/supabase/knowledgeService.ts", "utf8");
+  assert.match(source, /authorizedSuperAdmin/);
+  assert.match(source, /publish_knowledge_source_version_batch/);
+  assert.match(source, /import_status !== "diff_ready"/);
+  assert.match(source, /sourceVersionId/);
+  assert.match(page, /Versão preparada/);
+  assert.match(page, /Revisar e publicar/);
+  assert.match(page, /Publicar versão/);
+  assert.match(service, /knowledge-source-publish/);
+});
+
 test("Home exposes version, release date and latest check through the repository boundary", async () => {
   const page = await readFile("web/src/pages/HomePage.tsx", "utf8");
   const repository = await readFile("web/src/infrastructure/supabase/prismaRepository.ts", "utf8");

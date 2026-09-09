@@ -28,8 +28,8 @@ export const knowledgeService = {
     const sourcesById = new Map((sourcesResult.data ?? []).map((row) => [row.id, row]));
     const versionsById = new Map((versionsResult.data ?? []).map((row) => [row.id, row]));
     return {
-      sources: (sourcesResult.data ?? []).map((row) => { const version = (versionsResult.data ?? []).find((item) => item.source_id === row.id && item.is_current) ?? null; return { id: row.id, name: row.name, domain: row.domain, sourceClass: row.source_class, method: row.method, license: row.license, lastVerifiedAt: row.last_verified_at, status: row.status,
-        currentVersion: version ? { id: version.id, externalVersion: version.external_version, releaseDate: version.release_date, retrievalDate: version.retrieval_date, checksumSha256: version.checksum_sha256, importStatus: version.import_status, isCurrent: version.is_current, publishedAt: version.published_at, counts: version.counts, officialUrl: version.official_url } : null }; }),
+      sources: (sourcesResult.data ?? []).map((row) => { const sourceVersions = (versionsResult.data ?? []).filter((item) => item.source_id === row.id); const version = sourceVersions.find((item) => item.is_current) ?? null; const pending = sourceVersions.find((item) => item.import_status === "diff_ready" && !item.is_current) ?? null; const mapVersion = (item: typeof version) => item ? { id: item.id, externalVersion: item.external_version, releaseDate: item.release_date, retrievalDate: item.retrieval_date, checksumSha256: item.checksum_sha256, importStatus: item.import_status, isCurrent: item.is_current, publishedAt: item.published_at, counts: item.counts, officialUrl: item.official_url } : null; return { id: row.id, name: row.name, domain: row.domain, sourceClass: row.source_class, method: row.method, license: row.license, lastVerifiedAt: row.last_verified_at, status: row.status,
+        currentVersion: mapVersion(version), pendingVersion: mapVersion(pending) }; }),
       concepts: concepts.map((row) => ({ id: row.id, canonicalLabel: row.canonical_label, conceptType: row.concept_type, scope: row.scope, description: row.description, version: row.version, status: row.status, updatedAt: row.updated_at,
         aliases: (termsResult.data ?? []).filter((term) => term.concept_id === row.id).map((term) => term.term),
         mappings: (mappingsResult.data ?? []).filter((mapping) => mapping.concept_id === row.id).map((mapping) => ({ source: sourcesById.get(mapping.source_id)?.name ?? "Fonte", sourceVersion: versionsById.get(mapping.source_version_id)?.external_version ?? "Versão não disponível", externalId: mapping.external_id, externalUri: mapping.external_uri })),
@@ -64,6 +64,11 @@ export const knowledgeService = {
     const { data, error } = await supabase.functions.invoke("knowledge-agent", { body: { inboxId } });
     if (error) throw await supabaseFunctionOperationError(error, "Não foi possível pesquisar este termo.");
     return data;
+  },
+  async publishSourceVersion(sourceVersionId: string) {
+    const { data, error } = await supabase.functions.invoke("knowledge-source-publish", { body: { sourceVersionId, batchSize: 10000 } });
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível publicar esta versão da base.");
+    return data as { source: string; version: string; result: { done: boolean; concepts_published: number; terms_published: number; relations_published: number }; batches: number };
   },
   async approveProposal(proposalId: string) {
     const { data, error } = await supabase.rpc("approve_knowledge_proposal", { p_proposal_id: proposalId, p_human_edited_proposal: null, p_decision_reason: "Aprovado na administração de Conhecimento" });

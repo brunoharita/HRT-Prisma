@@ -47,3 +47,7 @@ Staging tem RLS, leitura de Super Admin e nenhuma escrita direta para `authentic
 ## Validação local
 
 `pnpm run test` aprovou 213 testes após o M5.2. `pnpm run typecheck:web` e `pnpm run build:web` foram aprovados. O smoke visual autenticado não foi executado: o único navegador disponível abriu `/sign-in` sem sessão reutilizável. Nenhuma credencial foi criada ou alterada para contornar o bloqueio. Desktop e mobile permanecem pendentes de inspeção autenticada, embora o build responsivo esteja aprovado. O snapshot ESCO `1.2.1` foi publicado em QA por chamadas resumíveis de até 10.000 registros: `import_status=published`, `is_current=true`, 16.941 conceitos e 126.040 relações novas, com staging zerado e fase `finalized`. O monitor ainda exibe `action_required` porque sua última checagem é anterior à publicação e precisa ser atualizada pelo próximo ciclo do monitor.
+
+### Publicação explícita pela Governança
+
+O*NET `31.0` foi detectado, validado e preparado em QA como `import_status=diff_ready`, com 9.968 conceitos e 40.921 relações em staging. A Governança agora separa `Versão publicada` de `Versão preparada`, oferece `Revisar e publicar` e executa a publicação pela Edge Function autenticada `knowledge-source-publish`, que exige operador ativo com perfil `super_admin` e usa o RPC resumível em lotes. A publicação permanece deliberada; a checagem nunca altera a base global sozinha.
