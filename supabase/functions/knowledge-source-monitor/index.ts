@@ -49,10 +49,15 @@ Deno.serve(async (request) => {
   try {
     const payload = await parsePayload(request);
     const serviceClient = createServiceClient();
-    const secret = request.headers.get("x-prisma-monitor-secret") ?? "";
-    const { data: authorized, error: authorizationError } = await serviceClient
-      .rpc("authorize_knowledge_source_monitor", { p_secret: secret });
-    if (authorizationError || authorized !== true) return jsonResponse(401, { error: "UNAUTHORIZED_MONITOR_INVOCATION" });
+    if (payload.trigger === "manual") {
+      if (!(await isAuthorizedManualOperator(request, serviceClient))) return jsonResponse(403, { error: "SUPER_ADMIN_REQUIRED" });
+      if (!payload.sourceId) return jsonResponse(400, { error: "SOURCE_REQUIRED" });
+    } else {
+      const secret = request.headers.get("x-prisma-monitor-secret") ?? "";
+      const { data: authorized, error: authorizationError } = await serviceClient
+        .rpc("authorize_knowledge_source_monitor", { p_secret: secret });
+      if (authorizationError || authorized !== true) return jsonResponse(401, { error: "UNAUTHORIZED_MONITOR_INVOCATION" });
+    }
 
     const { data: sourceData, error: sourceError } = await serviceClient
       .from("knowledge_sources")
@@ -241,6 +246,20 @@ function createServiceClient() {
   const key = Deno.env.get("SUPABASE_SECRET_KEY") ?? Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!key) throw new Error("MISSING_SERVICE_CONFIGURATION");
   return createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } });
+}
+
+async function isAuthorizedManualOperator(request: Request, serviceClient: ReturnType<typeof createServiceClient>): Promise<boolean> {
+  const authorization = request.headers.get("Authorization") ?? "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
+  if (!token) return false;
+  const { data, error } = await serviceClient.auth.getUser(token);
+  if (error || !data.user) return false;
+  const { data: operator, error: operatorError } = await serviceClient
+    .from("platform_users")
+    .select("access_profile,status")
+    .eq("auth_user_id", data.user.id)
+    .maybeSingle();
+  return !operatorError && operator?.status === "active" && operator.access_profile === "super_admin";
 }
 
 function readRequiredEnv(name: string): string {

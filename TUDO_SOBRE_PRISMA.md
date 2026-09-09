@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 6de727481a4fb4704b79b11c7f4e8e9e8c03f25862e12cd93ae2a4671f9f1a73
+source_manifest_sha256: 3fc0cab0a918f439933199e98e13074b7f5e5f20641526f39362ef51cab330e4
 -->
 
 # Tudo sobre o Prisma
@@ -450,7 +450,7 @@ last_verified: 2026-09-07
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação. Para Vagas, modelo, flag, caps, opt-in e credencial estão configurados e a chamada viva foi validada; ausência futura de qualquer requisito mantém a pesquisa bloqueada de forma fechada.
 - Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.
 - M5.1A prepara o instrumento. M5.1B executa a verificação e produz Evidência Demonstrada. M5.1C governa cobertura, geração fake, boundary externa desativada, propostas, deduplicação, revisão, publicação, budget e analytics. O uso permanece sintético e interno/QA; nenhuma chamada viva de IA ou calibração real existe.
-- Home autenticada com contagens persistidas da organização ativa e painel das três bases centrais, incluindo estado, versão, data oficial e última checagem.
+- Home autenticada com contagens persistidas da organização ativa e painel das três bases centrais, incluindo estado, versão, data oficial e última checagem. Cada base exibe `Checar agora` para Super Admin; o gatilho manual valida JWT e perfil ativo, consulta somente a fonte oficial e não publica snapshot.
 - Pessoas com tabela, busca por nome/e-mail/telefone, formulário com resumo lateral e perfil profissional estruturado.
 - Perfil com fatos, competências, áreas personalizadas, evidências, proveniência, inferências e pendências diagnósticas; contato privado somente para perfis administrativos autorizados.
 - Importação de currículo textual UTF-8 representativo.

@@ -37,3 +37,9 @@ Todas registraram `consecutive_check_failures = 0` e `last_check_error_code = nu
 `pnpm run typecheck`, `pnpm run typecheck:web`, `pnpm run build:web` e `pnpm run test` aprovados. A suíte contém 219 testes técnicos, incluindo parsers das três fontes, estados, comparação de hashes CBO, segurança da migration, segredo da Edge Function e boundary da Home.
 
 O smoke visual autenticado da Home ficou pendente porque o navegador interno abriu `/sign-in` sem sessão salva e o repositório não guarda credenciais de QA. Nenhuma credencial foi criada ou alterada para contornar essa ausência.
+
+## Checagem manual por base
+
+- A Home exibe `Checar agora` em cada cartão CBO, ESCO e O*NET para Super Admin.
+- A ação chama `knowledge-source-monitor` com `trigger=manual` e `sourceId`; a Edge Function valida o JWT e confirma operador ativo `super_admin` antes de consultar a fonte oficial.
+- A checagem registra apenas evidência e estado no monitoramento e não publica snapshot automaticamente.

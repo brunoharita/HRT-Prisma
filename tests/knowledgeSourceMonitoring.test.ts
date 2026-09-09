@@ -72,6 +72,8 @@ test("Edge monitor requires its private invocation secret and uses fixed officia
   assert.match(migration, /onetcenter\.org/i);
   assert.doesNotMatch(source, /publish_knowledge_source_version/i);
   assert.match(config, /\[functions\.knowledge-source-monitor\]\s+verify_jwt = false/i);
+  assert.match(source, /isAuthorizedManualOperator/);
+  assert.match(source, /SUPER_ADMIN_REQUIRED/);
 });
 
 test("Home exposes version, release date and latest check through the repository boundary", async () => {
@@ -80,6 +82,8 @@ test("Home exposes version, release date and latest check through the repository
   assert.match(page, /Bases de conhecimento/);
   assert.match(page, /Data da versão/);
   assert.match(page, /Última checagem/);
+  assert.match(page, /Checar agora/);
+  assert.match(repository, /functions\.invoke\("knowledge-source-monitor"/);
   assert.doesNotMatch(page, /\.from\(/);
   assert.match(repository, /\.from\("knowledge_sources"\)/);
   assert.match(repository, /\.from\("knowledge_source_versions"\)/);

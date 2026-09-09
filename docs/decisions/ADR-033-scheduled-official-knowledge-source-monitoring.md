@@ -15,7 +15,7 @@ Cada fonte vence no primeiro dia do mês às 01:00 em `America/Sao_Paulo`. Um cr
 
 O cron chama uma Edge Function sem JWT público, mas com segredo aleatório gerado e mantido no Vault. A função valida o segredo por RPC acessível somente a `service_role`. Chamadas sem segredo falham antes de qualquer fetch. Usuários autenticados podem ler o resumo aprovado; somente Super Admin lê o ledger e nenhum cliente autenticado escreve nele.
 
-Detecção não é publicação. Uma versão nova entra apenas como `catalogued`, com a evidência do monitor, e recebe `update_available` ou `action_required`. Download completo, licença, validação estrutural, staging, diff e publicação continuam seguindo o gate M5.2. A ESCO permanece condicionada ao aceite e ao link por e-mail do portal. O O*NET permanece catalogado até existir importer aprovado. A Home mostra o estado operacional, versão, data da versão e última checagem das três fontes.
+Detecção não é publicação. Uma versão nova entra apenas como `catalogued`, com a evidência do monitor, e recebe `update_available` ou `action_required`. Download completo, licença, validação estrutural, staging, diff e publicação continuam seguindo o gate M5.2. A ESCO permanece condicionada ao aceite e ao link por e-mail do portal. O O*NET permanece catalogado até existir importer aprovado. A Home mostra o estado operacional, versão, data da versão e última checagem das três fontes. O Super Admin pode iniciar uma checagem individual pela Home; o gatilho manual exige JWT e operador ativo com perfil `super_admin`, e mantém a separação entre detecção e publicação.
 
 ## Alternativas consideradas
 

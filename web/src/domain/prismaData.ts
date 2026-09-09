@@ -121,6 +121,7 @@ export interface PrismaDataRepository {
   loadCurrentOperator(userId: string): Promise<PlatformOperator | null>;
   loadMemberships(userId: string): Promise<OrganizationMembership[]>;
   loadHomeSummary(organizationId: string): Promise<HomeSummary>;
+  checkKnowledgeSource(sourceId: string): Promise<void>;
   listPeople(organizationId: string, query: PeopleQuery): Promise<PersonListItem[]>;
   loadPersonProfile(
     organizationId: string,

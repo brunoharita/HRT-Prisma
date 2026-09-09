@@ -16,6 +16,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
   const [summary, setSummary] = useState<HomeSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [checkingSourceId, setCheckingSourceId] = useState<string | null>(null);
 
   useEffect(() => {
     let current = true;
@@ -65,10 +66,23 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
           </PrismaCard>
         ) : null}
         {!loading && summary ? (
-          <KnowledgeSourcesCard
+        <KnowledgeSourcesCard
             sources={summary.knowledgeSources}
             canManage={activeMembership.role === "super_admin"}
             onNavigate={onNavigate}
+            checkingSourceId={checkingSourceId}
+            onCheck={async (sourceId) => {
+              setCheckingSourceId(sourceId);
+              try {
+                await repository.checkKnowledgeSource(sourceId);
+                const refreshed = await repository.loadHomeSummary(activeMembership.organizationId);
+                setSummary(refreshed);
+              } catch {
+                setError("Não foi possível checar esta base de conhecimento agora.");
+              } finally {
+                setCheckingSourceId(null);
+              }
+            }}
           />
         ) : null}
         <PrismaCard className="prisma-contract-card" title="Confiança em cada etapa">
@@ -114,10 +128,14 @@ function KnowledgeSourcesCard({
   sources,
   canManage,
   onNavigate,
+  checkingSourceId,
+  onCheck,
 }: {
   sources: KnowledgeSourceHealth[];
   canManage: boolean;
   onNavigate: (path: string) => void;
+  checkingSourceId: string | null;
+  onCheck: (sourceId: string) => Promise<void>;
 }) {
   return (
     <PrismaCard
@@ -150,6 +168,7 @@ function KnowledgeSourcesCard({
                 ) : null}
                 <div><dt><ClockCircleOutlined /> Última checagem</dt><dd>{formatCheckedAt(source.lastCheckedAt)}</dd></div>
               </dl>
+              {canManage ? <Button block loading={checkingSourceId === source.id} onClick={() => void onCheck(source.id)} size="small">Checar agora</Button> : null}
             </article>
           );
         })}

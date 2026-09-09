@@ -193,6 +193,13 @@ export const prismaRepository: PrismaDataRepository = {
     } satisfies HomeSummary;
   },
 
+  async checkKnowledgeSource(sourceId) {
+    const { error } = await supabase.functions.invoke("knowledge-source-monitor", {
+      body: { trigger: "manual", sourceId },
+    });
+    if (error) throw new DataAccessFailure("unavailable", "Não foi possível checar esta base de conhecimento agora.");
+  },
+
   async listPeople(organizationId, query) {
     let peopleQuery = supabase
       .from("people")
