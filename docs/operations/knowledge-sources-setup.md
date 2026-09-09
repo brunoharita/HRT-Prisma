@@ -38,4 +38,4 @@ Configurar como secrets server-side: `OPENAI_API_KEY`, `KNOWLEDGE_RESEARCH_MODEL
 
 Em 2026-09-04, o Prisma-QA recebeu `gpt-5.6-luna`, flag `true`, caps de 10 pesquisas/dia e 100/mês e cooldown de 24 horas. A organização `Prisma` autorizou enriquecimento externo e `OPENAI_API_KEY` foi cadastrada diretamente no cofre do Supabase. O smoke com pergunta profissional pública concluiu com três fontes pós-validadas, ledger `completed`, um request, uso de tokens registrado e nenhuma pergunta em `subject_metadata`.
 
-O fluxo operacional é `monitor -> fetch/upload -> validate -> stage -> diff -> map -> publish snapshot`. Falha preserva a versão anterior ativa. O monitor mensal é independente da política de reinterpretação.
+O fluxo operacional é `monitor -> fetch/upload -> validate -> stage -> diff -> map -> publish snapshot`. A publicação usa operações set-based em lotes para conceitos, termos e relações, preservando a transação única, o change set e a aprovação do Super Admin sem percorrer cada registro em loop. Falha preserva a versão anterior ativa. O monitor mensal é independente da política de reinterpretação.

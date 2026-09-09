@@ -91,7 +91,8 @@ test("source SQL separates staging and diff from auditable human publication", a
     assert.match(sql.stageSql, /diff_knowledge_source_version/);
     assert.doesNotMatch(sql.stageSql, /publish_knowledge_source_version/);
     assert.match(sql.publishSqlTemplate, /<SUPER_ADMIN_AUTH_USER_ID>/);
-    assert.match(sql.publishSqlTemplate, /publish_knowledge_source_version/);
+    assert.match(sql.publishSqlTemplate, /publish_knowledge_source_version_batch/);
+    assert.match(sql.publishSqlTemplate, /done = true/);
     const batched = buildKnowledgeSourceSqlBatches(prepared, 2);
     assert.equal(batched.stageBatchSql.length, 2);
     assert.ok(batched.stageBatchSql.every((batch) => /^begin;/i.test(batch) && /commit;$/i.test(batch)));
@@ -121,6 +122,14 @@ test("M5.2 migration is fail-closed, tenant-aware, versioned and has no silent b
   const publishFix = await readFile("supabase/migrations/20260903102721_m52_knowledge_publish_mapping_fix.sql", "utf8");
   assert.doesNotMatch(publishFix, /create temporary table/i);
   assert.match(publishFix, /join public\.knowledge_external_mappings source_mapping/i);
+  const batchingFix = await readFile("supabase/migrations/20260909090000_m52_knowledge_publish_set_based_batches.sql", "utf8");
+  assert.match(batchingFix, /create temporary table m52_publish_concept_map/i);
+  assert.match(batchingFix, /with term_rows as/i);
+  assert.match(batchingFix, /get diagnostics v_term_count = row_count/i);
+  assert.match(batchingFix, /get diagnostics v_relation_count = row_count/i);
+  assert.doesNotMatch(batchingFix, /for v_stage_concept in/i);
+  assert.doesNotMatch(batchingFix, /for v_stage_term in/i);
+  assert.doesNotMatch(batchingFix, /for v_stage_relation in/i);
 });
 
 test("M5.5 keeps official relation attributes separate and fixes the staging wrapper ambiguity", async () => {

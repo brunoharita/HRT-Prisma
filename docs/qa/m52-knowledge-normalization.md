@@ -25,7 +25,7 @@ O importer e a fixture mínima PT/EN estão aprovados localmente. Labels de idio
 
 ## Contrato e segurança
 
-Migrations `20260903094700`, `20260903100340`, `20260903101644` e `20260903102721` estão ativas no Prisma-QA. A segunda corrige forward-only a ambiguidade PL/pgSQL encontrada no primeiro lote, revertido. A terceira remove o check M4 que ainda exigia o estado antigo `normalized` e o substitui pelo invariante `resolved -> concept_id`. A quarta substitui a tabela temporária interna por mappings persistidos da source version; o lint remoto encerrou sem erro M5.2 e preservou apenas warnings históricos de outros movimentos.
+Migrations `20260903094700`, `20260903100340`, `20260903101644`, `20260903102721`, `20260909090000` e `20260909093000` estão ativas no Prisma-QA. A segunda corrige forward-only a ambiguidade PL/pgSQL encontrada no primeiro lote, revertido. A terceira remove o check M4 que ainda exigia o estado antigo `normalized` e o substitui pelo invariante `resolved -> concept_id`. A quarta substitui a tabela temporária interna por mappings persistidos da source version. A quinta substitui a publicação row-by-row por operações set-based. A sexta adiciona publicação resumível em lotes de 100 a 10.000 registros, com commit por lote, retomada idempotente e encerramento auditado.
 
 Staging tem RLS, leitura de Super Admin e nenhuma escrita direta para `authenticated`. Apenas `service_role` executa stage/finalize/diff/publish; publicação exige Super Admin ativo explícito. Aliases Organization exigem autoridade e não cruzam tenant. Não há extensão vetorial, `pg_trgm`, score ou LLM no resolver.
 
@@ -46,4 +46,4 @@ Staging tem RLS, leitura de Super Admin e nenhuma escrita direta para `authentic
 
 ## Validação local
 
-`pnpm run test` aprovou 213 testes após o M5.2. `pnpm run typecheck:web` e `pnpm run build:web` foram aprovados. O smoke visual autenticado não foi executado: o único navegador disponível abriu `/sign-in` sem sessão reutilizável. Nenhuma credencial foi criada ou alterada para contornar o bloqueio. Desktop e mobile permanecem pendentes de inspeção autenticada, embora o build responsivo esteja aprovado.
+`pnpm run test` aprovou 213 testes após o M5.2. `pnpm run typecheck:web` e `pnpm run build:web` foram aprovados. O smoke visual autenticado não foi executado: o único navegador disponível abriu `/sign-in` sem sessão reutilizável. Nenhuma credencial foi criada ou alterada para contornar o bloqueio. Desktop e mobile permanecem pendentes de inspeção autenticada, embora o build responsivo esteja aprovado. O snapshot ESCO `1.2.1` foi publicado em QA por chamadas resumíveis de até 10.000 registros: `import_status=published`, `is_current=true`, 16.941 conceitos e 126.040 relações novas, com staging zerado e fase `finalized`. O monitor ainda exibe `action_required` porque sua última checagem é anterior à publicação e precisa ser atualizada pelo próximo ciclo do monitor.

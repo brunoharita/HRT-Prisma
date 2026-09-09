@@ -305,7 +305,11 @@ export function buildKnowledgeSourceSqlBatches(packageData: KnowledgeSourcePacka
   return {
     stageBatchSql: batches,
     finalizeAndDiffSql: ["begin;", `select * from public.finalize_knowledge_source_stage(${versionSelector});`, `select * from public.diff_knowledge_source_version(${versionSelector});`, "commit;"].join("\n"),
-    publishSqlTemplate: ["begin;", "-- Substitua o marcador pelo UUID de um Super Admin ativo que tomou a decisão de publicar.", `select * from public.publish_knowledge_source_version_v2(${versionSelector}, '<SUPER_ADMIN_AUTH_USER_ID>'::uuid);`, "commit;"].join("\n"),
+    publishSqlTemplate: [
+      "-- Execute esta instrução repetidamente até done = true; cada chamada confirma um lote e pode ser retomada com segurança.",
+      "-- Substitua o marcador pelo UUID de um Super Admin ativo que tomou a decisão de publicar.",
+      `select * from public.publish_knowledge_source_version_batch(${versionSelector}, '<SUPER_ADMIN_AUTH_USER_ID>'::uuid, 5000);`,
+    ].join("\n"),
   };
 }
 

@@ -25,7 +25,7 @@ O projeto Supabase Prisma-QA é o único backend remoto atual e recebe migration
 5. registrar commit, migration, configurações, versões de IA e evidências;
 6. corrigir antes de solicitar produção.
 
-Para fontes Knowledge, executar `pnpm run knowledge:prepare -- <cbo|esco> <diretorio> <versao> <data> <saida>`. Aplicar os lotes `stage-NNNN.sql`, executar `finalize-and-diff.sql`, revisar o diff e somente então preencher `publish.sql` com o Super Admin que aprovou. Replays com o mesmo hash são idempotentes; divergência e tentativa de sobrescrever versão publicada falham fechadas.
+Para fontes Knowledge, executar `pnpm run knowledge:prepare -- <cbo|esco> <diretorio> <versao> <data> <saida>`. Aplicar os lotes `stage-NNNN.sql`, executar `finalize-and-diff.sql`, revisar o diff e somente então executar repetidamente a instrução de `publish.sql` com o Super Admin que aprovou até `done = true`. Cada chamada processa um lote confirmado em transação própria; replays com o mesmo hash são idempotentes, a retomada preserva o cursor e divergência ou tentativa de sobrescrever versão publicada falham fechadas.
 
 Evidência atual em 2026-08-28: migrations foundation/M2-A/M2-B/M2-C/M5, currículo-first e aprendizado adaptativo v2 estão no Prisma-QA, incluindo o ajuste de RPC, índices de cobertura e `strict_pdf_character_region`. RPCs transacionais, bucket privado, Edge Functions de acesso, ingestão PDF/OCR, contenção textual estrita, central documental, revisão, evidência espacial e promoção pós-aprovação foram verificadas. O frontend adaptativo permanece local porque não existe hosting remoto; o smoke visual autenticado continua obrigatório antes de um rollout futuro.
 
