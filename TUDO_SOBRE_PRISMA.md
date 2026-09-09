@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 0063a7ba5b350fbdab792c03490a9ec503d43ea0005534e11807377c1f9ff73f
+source_manifest_sha256: 3347de5350202f5ed9e56282f486e7e8fd59f7138c6c926c4729ff039142cf05
 -->
 
 # Tudo sobre o Prisma
@@ -445,7 +445,7 @@ last_verified: 2026-09-07
 - Após confirmação transacional da aprovação, a revisão retorna automaticamente para `Processamento e revisões`. O caminho de erro permanece na tela atual, preservando o rascunho e a mensagem acionável; a navegação não depende de recarregar uma revisão que já deixou o estado `draft`.
 - Fluxo principal currículo-first implementado localmente: upload PDF antes da Pessoa, identidade mínima determinística, deduplicação por tenant, decisão humana em correspondência ambígua e retomada idempotente.
 - Movimento 4 implementado localmente: Knowledge canônica Global e Organization overlay, tipos conceituais explícitos, aliases, relações, mappings, source catalogue/version, Inbox, proposals/approvals, normalização com precedência e módulo administrativo Conhecimento.
-- M5.2 implementado localmente e ativo no Prisma-QA: `knowledge-normalization-2.0.0`, source ingestion 1.0.0, manifest 1.0.0 e Knowledge UI 2.1.0 estendem M4 com staging/diff/publicação humana, source version corrente, observação por Perfil/evidência, alias Organization, proposta, busca por conceito e apresentação do termo original. A CBO `CBO 2002-2025-06-06` e o snapshot ESCO `1.2.1` estão publicados e correntes no QA; ESCO foi finalizado pelo RPC resumível em lotes, com 16.941 conceitos e 126.040 relações novas. O*NET `31.0` está validado em `diff_ready` e pode ser revisado e publicado por Super Admin na Governança. A checagem permanece separada da publicação.
+- M5.2 implementado localmente e ativo no Prisma-QA: `knowledge-normalization-2.0.0`, source ingestion 1.0.0, manifest 1.0.0 e Knowledge UI 2.1.0 estendem M4 com staging/diff/publicação humana, source version corrente, observação por Perfil/evidência, alias Organization, proposta, busca por conceito e apresentação do termo original. A CBO `CBO 2002-2025-06-06`, o snapshot ESCO `1.2.1` e o snapshot O*NET `31.0` estão publicados e correntes no QA. ESCO foi finalizado pelo RPC resumível em lotes, com 16.941 conceitos e 126.040 relações novas; O*NET foi publicado com 9.968 conceitos, 9.968 termos e 40.921 relações. A checagem permanece separada da publicação.
 - Monitor de fontes Knowledge 1.0.1 implementado e ativo no Prisma-QA: CBO, ESCO e O*NET vencem no primeiro dia do mês às 01:00 em `America/Sao_Paulo`; Vault protege a Edge Function, o ledger é append-only/RLS e falhas repetem em 6h, 24h e 72h sem substituir a versão publicada.
 - Knowledge Agent implementado e implantado no Prisma-QA como Edge Function com JWT obrigatório, Responses API, Web Search, Structured Outputs, allowlist persistida, no-PII, budget, cooldown e deduplicação. Para Vagas, modelo, flag, caps, opt-in e credencial estão configurados e a chamada viva foi validada; ausência futura de qualquer requisito mantém a pesquisa bloqueada de forma fechada.
 - Impactos e reinterpretação Knowledge implementados localmente: somente perfis relacionados, default organizacional `off`, dispatch idempotente e draft reutilizando M2-C sem alterar evidência ou perfil aprovado.

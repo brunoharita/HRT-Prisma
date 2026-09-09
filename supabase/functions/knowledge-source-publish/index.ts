@@ -35,21 +35,16 @@ Deno.serve(async (request) => {
     if (version.is_current || version.import_status === "published") return jsonResponse(409, { error: "SOURCE_VERSION_ALREADY_PUBLISHED" });
     if (version.import_status !== "diff_ready") return jsonResponse(409, { error: "SOURCE_VERSION_NOT_READY" });
 
-    const results: PublishResult[] = [];
     const batchSize = payload.batchSize ?? 10000;
-    for (let attempt = 0; attempt < 1000; attempt += 1) {
-      const { data, error } = await serviceClient.rpc("publish_knowledge_source_version_batch", {
-        p_source_version_id: payload.sourceVersionId,
-        p_approved_by_auth_user_id: actor,
-        p_batch_size: batchSize,
-      });
-      if (error) throw new Error(error.message || "SOURCE_PUBLICATION_FAILED");
-      const result = Array.isArray(data) ? data[0] as PublishResult | undefined : data as PublishResult | null;
-      if (!result) throw new Error("SOURCE_PUBLICATION_EMPTY_RESULT");
-      results.push(result);
-      if (result.done) return jsonResponse(200, { source: version.knowledge_sources.name, version: version.external_version, result, batches: results.length });
-    }
-    throw new Error("SOURCE_PUBLICATION_BATCH_LIMIT");
+    const { data, error } = await serviceClient.rpc("publish_knowledge_source_version_batch", {
+      p_source_version_id: payload.sourceVersionId,
+      p_approved_by_auth_user_id: actor,
+      p_batch_size: batchSize,
+    });
+    if (error) throw new Error(error.message || "SOURCE_PUBLICATION_FAILED");
+    const result = Array.isArray(data) ? data[0] as PublishResult | undefined : data as PublishResult | null;
+    if (!result) throw new Error("SOURCE_PUBLICATION_EMPTY_RESULT");
+    return jsonResponse(200, { source: version.knowledge_sources.name, version: version.external_version, result });
   } catch (error) {
     return jsonResponse(500, { error: safeErrorCode(error) });
   }

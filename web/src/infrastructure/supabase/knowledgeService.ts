@@ -66,9 +66,13 @@ export const knowledgeService = {
     return data;
   },
   async publishSourceVersion(sourceVersionId: string) {
-    const { data, error } = await supabase.functions.invoke("knowledge-source-publish", { body: { sourceVersionId, batchSize: 10000 } });
-    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível publicar esta versão da base.");
-    return data as { source: string; version: string; result: { done: boolean; concepts_published: number; terms_published: number; relations_published: number }; batches: number };
+    for (let attempt = 0; attempt < 100; attempt += 1) {
+      const { data, error } = await supabase.functions.invoke("knowledge-source-publish", { body: { sourceVersionId, batchSize: 5000 } });
+      if (error) throw await supabaseFunctionOperationError(error, "Não foi possível concluir a publicação desta versão. A operação pode ser retomada pelo mesmo botão.");
+      const result = data as { source: string; version: string; result: { done: boolean; phase: string; processed: number; concepts_published: number; terms_published: number; relations_published: number } };
+      if (result.result.done) return result;
+    }
+    throw new Error("A publicação foi interrompida antes da conclusão. Tente novamente para continuar.");
   },
   async approveProposal(proposalId: string) {
     const { data, error } = await supabase.rpc("approve_knowledge_proposal", { p_proposal_id: proposalId, p_human_edited_proposal: null, p_decision_reason: "Aprovado na administração de Conhecimento" });

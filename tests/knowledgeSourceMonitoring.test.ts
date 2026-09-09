@@ -85,12 +85,14 @@ test("source publication is an explicit Super Admin action and remains batch-bas
   const service = await readFile("web/src/infrastructure/supabase/knowledgeService.ts", "utf8");
   assert.match(source, /authorizedSuperAdmin/);
   assert.match(source, /publish_knowledge_source_version_batch/);
+  assert.doesNotMatch(source, /for \(let attempt = 0; attempt < 1000/);
   assert.match(source, /import_status !== "diff_ready"/);
   assert.match(source, /sourceVersionId/);
   assert.match(page, /Versão preparada/);
   assert.match(page, /Revisar e publicar/);
   assert.match(page, /Publicar versão/);
   assert.match(service, /knowledge-source-publish/);
+  assert.match(service, /batchSize: 5000/);
 });
 
 test("Home exposes version, release date and latest check through the repository boundary", async () => {
