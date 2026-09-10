@@ -26,7 +26,7 @@ A foundation migration cria organizações, memberships, unidades, papéis, posi
 
 A publicação Delta adiciona `profile_publication_removals` como ledger imutável e `publish_profile_review` como autoridade cliente. A RPC mescla perfil-base e proposta, preserva omissões, aplica somente remoções explícitas e chama a promoção atômica interna. A antiga `approve_profile_review` não possui mais grant para `authenticated`.
 
-O aprendizado estrutural v3 preserva linhas PDF.js/Tesseract, aprende assinatura somente no documento atual e usa RPCs fail-closed para auditar detecção/descarte e aplicar sugestões com regiões complementares por campo. A migration `20260902003617_m5_sibling_block_learning` está ativa no Prisma-QA; a RPC v2 permanece compatível.
+O aprendizado estrutural v3 preserva linhas PDF.js/Tesseract, aprende assinatura somente no documento atual e usa RPCs fail-closed para auditar detecção/descarte e aplicar sugestões com regiões complementares por campo. A migration `20260902003617_m5_sibling_block_learning` está ativa no Prisma-QA; a RPC v2 permanece compatível. A migration `20260910104122_allow_ocr_spatial_field_evidence` corrige a fronteira de persistência para aceitar geometria OCR somente quando o método é `tesseract-layout-v1`, mantendo rejeição de combinações cruzadas.
 
 Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake/Knowledge.
 

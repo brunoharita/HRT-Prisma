@@ -32,7 +32,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
-- OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web;
+- OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web; evidência espacial OCR persiste somente com o método compatível `tesseract-layout-v1`;
 - draft web: `extraction-draft-7.1.0` / `prisma-layout-adaptive-v7`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;

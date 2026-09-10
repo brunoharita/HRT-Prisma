@@ -73,6 +73,11 @@ test("Supabase transport and intake failures expose safe recovery without raw ba
   assert.match(unsupportedFile.message, /PDF/);
   assert.doesNotMatch(unsupportedFile.message, /DOCX/);
 
+  const invalidOcrEvidence = supabaseOperationError({ code: "22023", message: "adaptive field evidence is invalid" }, "Falha.");
+  assert.equal(invalidOcrEvidence.recovery, "retry");
+  assert.match(invalidOcrEvidence.message, /currículo foi lido/);
+  assert.doesNotMatch(invalidOcrEvidence.message, /adaptive|field evidence|22023/);
+
   const genericInvalid = reviewOperationError({ code: "22023", message: "unknown_private_contract leaked" }, "Falha.");
   assert.match(genericInvalid.message, /falha interna/);
   assert.doesNotMatch(genericInvalid.message, /unknown_private_contract/);

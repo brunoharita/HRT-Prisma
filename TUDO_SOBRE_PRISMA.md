@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: fa76e5ffee4bc0ef446c9bae855cdc08b3d6ba108f2e025f39c8a3858afe3c59
+source_manifest_sha256: 99d0447ce8ee99ca48211c3cce63191eb20ff16615c47aab4473c735b1417191
 -->
 
 # Tudo sobre o Prisma
@@ -590,7 +590,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-09-10, o M5.5 de robustecimento do PDF image-only eliminou a dependência externa completa da inicialização do OCR no bundle web: worker, core WASM e dados de idioma `por+eng` do Tesseract são assets locais carregados dinamicamente apenas no navegador, mantendo o mesmo pipeline PDF.js/Tesseract. O build web e a suíte completa passaram com 289 testes; nenhuma migration, autorização, RLS, envio externo ou produção foi acionado. O smoke autenticado do arquivo de referência do Product Owner e as medições reais de OCR ainda permanecem pendentes.
+Em 2026-09-10, o M5.5 de robustecimento do PDF image-only eliminou a dependência externa completa da inicialização do OCR no bundle web: worker, core WASM e dados de idioma `por+eng` do Tesseract são assets locais carregados dinamicamente apenas no navegador, mantendo o mesmo pipeline PDF.js/Tesseract. O arquivo real do Product Owner revelou ainda `PERSISTENCE_DROPPED_OCR`: a RPC aceitava coordenadas somente para `native_pdf`, embora o frontend produzisse geometria OCR com `tesseract-layout-v1`. A migration `20260910104122_allow_ocr_spatial_field_evidence`, ativa no Prisma-QA, passou a aceitar apenas os pares espaciais `native_pdf + pdfjs-layout-v1` e `ocr + tesseract-layout-v1`; prova SQL confirmou o par OCR válido chegando à barreira de autenticação e o método cruzado sendo recusado com `22023`. RLS, autorização, endpoint e produção não mudaram. O smoke autenticado final do arquivo de referência, as fixtures obrigatórias restantes e as medições comparativas de OCR permanecem pendentes.
 
 Em 2026-09-09, a branch `codex/m5-5-person-definitive-deletion` implementou a exclusão definitiva administrativa e de titularidade pelo mesmo pipeline autoritativo. O Prisma-QA recebeu três migrations forward-only e a Edge Function `person-data-deletion` v1; todas as provas sintéticas foram revertidas e a fixture visual foi removida. O smoke seguro aprovou estado inválido neutro, contexto válido, categorias, CTA e confirmação única sem executar a exclusão em desktop, largura de tablet e `390x844`; a sessão Super Admin também confirmou a separação visual entre Arquivar, Meus dados e Excluir definitivamente e cancelou o modal administrativo. `pnpm run validate` aprovou lint de 373 arquivos, foundation, Context Pack, dois typechecks, build web, 288 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. O reset local integral continua bloqueado por migrations históricas incompatíveis com PostgreSQL 17; produção não foi acionada.
 
@@ -664,7 +664,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
-- OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web;
+- OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web; evidência espacial OCR persiste somente com o método compatível `tesseract-layout-v1`;
 - draft web: `extraction-draft-7.1.0` / `prisma-layout-adaptive-v7`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
@@ -746,7 +746,7 @@ A foundation migration cria organizações, memberships, unidades, papéis, posi
 
 A publicação Delta adiciona `profile_publication_removals` como ledger imutável e `publish_profile_review` como autoridade cliente. A RPC mescla perfil-base e proposta, preserva omissões, aplica somente remoções explícitas e chama a promoção atômica interna. A antiga `approve_profile_review` não possui mais grant para `authenticated`.
 
-O aprendizado estrutural v3 preserva linhas PDF.js/Tesseract, aprende assinatura somente no documento atual e usa RPCs fail-closed para auditar detecção/descarte e aplicar sugestões com regiões complementares por campo. A migration `20260902003617_m5_sibling_block_learning` está ativa no Prisma-QA; a RPC v2 permanece compatível.
+O aprendizado estrutural v3 preserva linhas PDF.js/Tesseract, aprende assinatura somente no documento atual e usa RPCs fail-closed para auditar detecção/descarte e aplicar sugestões com regiões complementares por campo. A migration `20260902003617_m5_sibling_block_learning` está ativa no Prisma-QA; a RPC v2 permanece compatível. A migration `20260910104122_allow_ocr_spatial_field_evidence` corrige a fronteira de persistência para aceitar geometria OCR somente quando o método é `tesseract-layout-v1`, mantendo rejeição de combinações cruzadas.
 
 Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake/Knowledge.
 

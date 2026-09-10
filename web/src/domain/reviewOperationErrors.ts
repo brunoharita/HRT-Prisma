@@ -239,6 +239,9 @@ export function supabaseOperationError(error: ReviewOperationError, fallback: st
   if (/a structured draft object is required|extraction draft has an invalid/.test(technicalMessage)) {
     return asOperationError(error, "O conteúdo foi lido, mas não pôde ser estruturado com segurança. O arquivo permanece preservado; tente reprocessar pela Central da Pessoa.", "internal", "return-to-review");
   }
+  if (/adaptive field evidence is invalid|adaptive extraction payload exceeds safe limits|layout blocks and field evidence must be arrays/.test(technicalMessage)) {
+    return asOperationError(error, "O currículo foi lido, mas suas evidências não puderam ser preservadas com segurança. Nenhum Perfil foi gerado. Atualize a página e processe o arquivo novamente.", "internal", "retry");
+  }
   if (/invalid sha256 checksum|invalid document size|invalid page count|invalid idempotency key|invalid failure (?:state|code)|invalid intake failure code|invalid identity resolution action|only validated pdf intake is supported|filename is required/.test(technicalMessage)) {
     return asOperationError(error, "A importação contém metadados inválidos e foi interrompida antes de alterar o perfil. Volte ao envio, selecione o arquivo novamente e tente outra vez.", "validation", "none");
   }

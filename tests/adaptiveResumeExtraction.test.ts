@@ -499,6 +499,30 @@ test("OCR blocks are normalized into positioned lines for deterministic sibling 
   });
 });
 
+test("OCR field evidence keeps spatial coordinates with the Tesseract method", () => {
+  const layoutLines = [
+    line("TAINÁ MARQUES", 0.05, 0.08, 0.25, "strong"),
+    line("Desenvolvedora Júnior", 0.08, 0.08, 0.3, "strong"),
+    line("RESUMO", 0.14, 0.08, 0.15, "strong"),
+    line("Desenvolvedora com experiência em Javascript, Node.js e React.", 0.17, 0.08, 0.7),
+  ];
+  const page: ExtractedPage = {
+    pageNumber: 1,
+    text: layoutLines.map((item) => item.text).join("\n"),
+    origin: "ocr",
+    usefulCharacterCount: 100,
+    method: "tesseract.js",
+    methodVersion: "fixture-ocr-v1",
+    layoutLines,
+  };
+
+  const extraction = buildAdaptiveExtraction([page]);
+  const spatialEvidence = extraction.fieldEvidence.filter((descriptor) => descriptor.x !== null);
+
+  assert.ok(spatialEvidence.length > 0);
+  assert.ok(spatialEvidence.every((descriptor) => descriptor.method === "tesseract-layout-v1"));
+});
+
 test("adaptive persistence and reviewer evidence retirement remain tenant-scoped and auditable", async () => {
   const migration = await readFile("supabase/migrations/20260828055309_adaptive_resume_extraction.sql", "utf8");
   const panel = await readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8");
@@ -599,6 +623,16 @@ test("adaptive page evidence accepts canonical stable field paths and rejects ar
   assert.match(migration, /adaptive field evidence is invalid/i);
   assert.match(migration, /select \* into result from private\.persist_person_extraction/i);
   assert.doesNotMatch(migration, /\|[^']*arbitrary/i);
+});
+
+test("adaptive persistence accepts matched OCR geometry and rejects cross-origin spatial methods", async () => {
+  const migration = await readFile("supabase/migrations/20260910104122_allow_ocr_spatial_field_evidence.sql", "utf8");
+  assert.match(migration, /page\.value ->> 'origin' = 'native_pdf'[\s\S]*descriptor\.value ->> 'method' = 'pdfjs-layout-v1'/i);
+  assert.match(migration, /page\.value ->> 'origin' = 'ocr'[\s\S]*descriptor\.value ->> 'method' = 'tesseract-layout-v1'/i);
+  assert.match(migration, /and not \([\s\S]*native_pdf[\s\S]*pdfjs-layout-v1[\s\S]*ocr[\s\S]*tesseract-layout-v1[\s\S]*\)\)/i);
+  assert.doesNotMatch(migration, /page\.value ->> 'origin' <> 'native_pdf'/i);
+  assert.match(migration, /from public, anon/i);
+  assert.match(migration, /to authenticated/i);
 });
 
 test("structured summary migration keeps contact private and rejects PII promotion", async () => {
