@@ -62,6 +62,8 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 
 Versão desconhecida ou resposta fora do schema é rejeitada. Mudança de campo opcional compatível é minor; mudança de semântica ou obrigatoriedade é major.
 
+O M5.6 acrescenta, atrás de `VITE_DOCUMENT_INTELLIGENCE_MODE`, `document-intelligence-provider` 1.0.0 e `canonical-document` 1.0.0. PDF.js permanece no caminho rápido; PP-StructureV3/PP-OCRv6 atendem estrutura e visão; PaddleOCR-VL 1.6 e Tesseract.js são recuperações por página. Todo JSON Paddle é convertido na infraestrutura para `normalized-page-v1`; `ExtractionDraft` e o parser profissional não conhecem tipos Paddle. Detalhes e limites comprovados estão em `docs/ai/document-intelligence.md`.
+
 ## Testes
 
 Unit tests cobrem sucesso, formato não suportado, texto insuficiente, timeout, releitura completa do bloco, preservação de correção humana anterior, aceite parcial e registro sem padrão seguro. Golden tests cobrem fatos, inferências permitidas, invenções proibidas e prompt injection documental.

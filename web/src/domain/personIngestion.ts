@@ -12,6 +12,17 @@ import {
   type LayoutTextLine,
 } from "./adaptiveResumeExtraction.js";
 import { createLocalOcrWorker } from "./ocrWorker.js";
+import {
+  DOCUMENT_INTELLIGENCE_CONTRACT_VERSION,
+  canonicalPageToLayoutLines,
+  diagnosticCategory,
+  preflightDocument,
+  resolveDocumentIntelligenceMode,
+  type DocumentIntelligenceMode,
+  type DocumentIntelligenceProvider,
+  type DocumentIntelligenceTrace,
+  type NativePagePreflight,
+} from "./documentIntelligence.js";
 
 export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
@@ -120,6 +131,7 @@ export interface ProcessedDocumentInput {
   pages: ExtractedPage[];
   nativePageCount: number;
   ocrPageCount: number;
+  documentIntelligence?: DocumentIntelligenceTrace;
 }
 
 export interface ResumeDuplicateCandidate {
@@ -401,7 +413,7 @@ export interface PersonIngestionWorkspace {
 }
 
 export interface PdfProcessingProgress {
-  stage: "validating" | "extracting_native" | "ocr" | "completed";
+  stage: "validating" | "extracting_native" | "document_intelligence" | "ocr" | "completed";
   pageNumber?: number;
   pageCount?: number;
   message: string;
@@ -410,6 +422,7 @@ export interface PdfProcessingProgress {
 export async function validateAndProcessPdf(
   file: File,
   onProgress?: (progress: PdfProcessingProgress) => void,
+  options: ResumeProcessingOptions = {},
 ): Promise<ProcessedDocumentInput> {
   onProgress?.({ stage: "validating", message: "Validando assinatura, tamanho e estrutura do PDF." });
   if (file.size === 0) throw new Error("O arquivo está vazio.");
@@ -430,7 +443,9 @@ export async function validateAndProcessPdf(
   const pdfDocument = await pdfjs.getDocument({ data: bytes.slice() }).promise;
   if (pdfDocument.numPages < 1 || pdfDocument.numPages > 200) throw new Error("O PDF não possui uma quantidade de páginas suportada.");
 
-  const pages: ExtractedPage[] = [];
+  const nativeStartedAt = performance.now();
+  let pages: ExtractedPage[] = [];
+  const nativePages: NativePagePreflight[] = [];
   const ocrCandidates: Array<{ pageNumber: number; canvas: HTMLCanvasElement }> = [];
   for (let pageNumber = 1; pageNumber <= pdfDocument.numPages; pageNumber += 1) {
     onProgress?.({
@@ -444,7 +459,9 @@ export async function validateAndProcessPdf(
     const layoutViewport = page.getViewport({ scale: 1 });
     const layoutLines = buildPdfLayoutLines(textContent.items, layoutViewport.width, layoutViewport.height);
     const text = layoutLines.map((line) => line.text).join("\n").trim();
-    if (isNativeTextSufficient(text)) {
+    const textSufficient = isNativeTextSufficient(text);
+    nativePages.push({ pageNumber, text, layoutLines, textSufficient });
+    if (textSufficient) {
       pages.push({ ...toExtractedPage(pageNumber, text, "native_pdf", "pdfjs", NATIVE_EXTRACTION_VERSION), layoutLines });
       continue;
     }
@@ -458,7 +475,127 @@ export async function validateAndProcessPdf(
     ocrCandidates.push({ pageNumber, canvas });
   }
 
+  const preflightStartedAt = performance.now();
+  const preflight = preflightDocument(nativePages);
+  const mode = options.documentIntelligenceMode ?? resolveDocumentIntelligenceMode(undefined);
+  const trace: DocumentIntelligenceTrace = {
+    contractVersion: DOCUMENT_INTELLIGENCE_CONTRACT_VERSION,
+    mode,
+    selectedRoute: preflight.route,
+    effectiveRoute: "native-fast",
+    provider: null,
+    providerVersion: null,
+    model: null,
+    modelVersion: null,
+    fallbackUsed: false,
+    diagnostics: [],
+    metrics: [{
+      stage: "preflight",
+      route: preflight.route,
+      durationMs: roundedMilliseconds(performance.now() - preflightStartedAt),
+      pageCount: nativePages.length,
+      outcome: "success",
+      diagnosticCategory: null,
+    }, {
+      stage: "native",
+      route: preflight.route,
+      durationMs: roundedMilliseconds(performance.now() - nativeStartedAt),
+      pageCount: nativePages.length,
+      outcome: "success",
+      diagnosticCategory: null,
+    }],
+  };
+
+  if (preflight.route !== "native-fast" && mode !== "baseline" && options.documentIntelligenceProvider) {
+    onProgress?.({
+      stage: "document_intelligence",
+      pageCount: pdfDocument.numPages,
+      message: "Analisando a estrutura visual do currículo.",
+    });
+    const providerStartedAt = performance.now();
+    try {
+      let canonical = await options.documentIntelligenceProvider.analyze({ bytes, mimeType: "application/pdf", route: preflight.route });
+      if (!canonicalPagesComplete(canonical.pages, pdfDocument.numPages)) {
+        trace.diagnostics.push("page_incomplete");
+        const recoveryStartedAt = performance.now();
+        const recoveredPages = [];
+        for (const pageNumber of missingCanonicalPages(canonical.pages, pdfDocument.numPages)) {
+          const candidate = ocrCandidates.find((item) => item.pageNumber === pageNumber);
+          if (!candidate) continue;
+          const imageBytes = await canvasToPngBytes(candidate.canvas);
+          const recovered = await options.documentIntelligenceProvider.analyze({
+            bytes: imageBytes,
+            mimeType: "image/png",
+            route: "recovery",
+            pageNumbers: [pageNumber],
+          });
+          recoveredPages.push(...recovered.pages);
+        }
+        canonical = { ...canonical, pages: [...canonical.pages, ...recoveredPages].sort((left, right) => left.pageNumber - right.pageNumber) };
+        const recovered = canonicalPagesComplete(canonical.pages, pdfDocument.numPages);
+        trace.metrics.push({
+          stage: "recovery",
+          route: "recovery",
+          durationMs: roundedMilliseconds(performance.now() - recoveryStartedAt),
+          pageCount: canonical.pages.length,
+          outcome: recovered ? "success" : "failure",
+          diagnosticCategory: recovered ? null : "page_incomplete",
+        });
+      }
+      if (!canonicalPagesComplete(canonical.pages, pdfDocument.numPages)) throw new Error("Canonical response is incomplete.");
+      const providerPages = canonical.pages.map((page) => {
+        const layoutLines = canonicalPageToLayoutLines(page);
+        const text = (page.text || layoutLines.map((line) => line.text).join("\n")).trim();
+        const origin: PageExtractionOrigin = preflight.route === "vision" ? "ocr" : "native_pdf";
+        return {
+          ...toExtractedPage(page.pageNumber, text, origin, canonical.provenance.model, canonical.provenance.modelVersion),
+          layoutLines,
+        };
+      });
+      if (providerPages.some((page) => !isOcrTextSufficient(page.text))) throw new Error("Canonical response contains insufficient content.");
+      trace.provider = canonical.provenance.provider;
+      trace.providerVersion = canonical.provenance.providerVersion;
+      trace.model = canonical.provenance.model;
+      trace.modelVersion = canonical.provenance.modelVersion;
+      trace.metrics.push({
+        stage: preflight.route,
+        route: preflight.route,
+        durationMs: roundedMilliseconds(performance.now() - providerStartedAt),
+        pageCount: providerPages.length,
+        outcome: mode === "enabled" ? "success" : "skipped",
+        diagnosticCategory: null,
+      });
+      if (mode === "enabled") {
+        pages = providerPages;
+        ocrCandidates.length = 0;
+        trace.effectiveRoute = preflight.route;
+      }
+    } catch (error) {
+      const category = diagnosticCategory(error);
+      trace.diagnostics.push(category);
+      trace.fallbackUsed = true;
+      trace.metrics.push({
+        stage: preflight.route,
+        route: preflight.route,
+        durationMs: roundedMilliseconds(performance.now() - providerStartedAt),
+        pageCount: pdfDocument.numPages,
+        outcome: "fallback",
+        diagnosticCategory: category,
+      });
+    }
+  } else if (preflight.route !== "native-fast") {
+    trace.metrics.push({
+      stage: preflight.route,
+      route: preflight.route,
+      durationMs: 0,
+      pageCount: pdfDocument.numPages,
+      outcome: "skipped",
+      diagnosticCategory: mode === "baseline" ? null : "provider_unavailable",
+    });
+  }
+
   if (ocrCandidates.length > 0) {
+    const ocrStartedAt = performance.now();
     const worker = await createLocalOcrWorker();
     try {
       for (const candidate of ocrCandidates) {
@@ -479,6 +616,17 @@ export async function validateAndProcessPdf(
     } finally {
       await worker.terminate();
     }
+    trace.fallbackUsed = preflight.route !== "native-fast";
+    trace.effectiveRoute = "recovery";
+    if (!trace.diagnostics.includes("fallback_used")) trace.diagnostics.push("fallback_used");
+    trace.metrics.push({
+      stage: "fallback",
+      route: "recovery",
+      durationMs: roundedMilliseconds(performance.now() - ocrStartedAt),
+      pageCount: ocrCandidates.length,
+      outcome: "fallback",
+      diagnosticCategory: null,
+    });
   }
 
   pages.sort((left, right) => left.pageNumber - right.pageNumber);
@@ -491,6 +639,7 @@ export async function validateAndProcessPdf(
     pages,
     nativePageCount: pages.filter((page) => page.origin === "native_pdf").length,
     ocrPageCount: pages.filter((page) => page.origin === "ocr").length,
+    documentIntelligence: trace,
   };
 }
 
@@ -505,6 +654,11 @@ export function processManualText(text: string): { page: ExtractedPage; draft: S
 
 export function buildDeterministicDraft(pages: ExtractedPage[]): StructuredDraft {
   return buildAdaptiveExtraction(pages).draft;
+}
+
+export interface ResumeProcessingOptions {
+  documentIntelligenceMode?: DocumentIntelligenceMode;
+  documentIntelligenceProvider?: DocumentIntelligenceProvider;
 }
 
 export interface DocumentDeletionPreview {
@@ -548,7 +702,7 @@ function toExtractedPage(
   return { pageNumber, text, origin, usefulCharacterCount: usefulCharacterCount(text), method, methodVersion };
 }
 
-function buildPdfLayoutLines(items: unknown[], pageWidth: number, pageHeight: number): LayoutTextLine[] {
+export function buildPdfLayoutLines(items: unknown[], pageWidth: number, pageHeight: number): LayoutTextLine[] {
   const fragments = items.flatMap((raw) => {
     if (!isPdfTextItem(raw) || !raw.str.trim()) return [];
     const fontSize = Math.max(Math.abs(raw.transform[0]), Math.abs(raw.transform[3]), raw.height || 0);
@@ -567,7 +721,12 @@ function buildPdfLayoutLines(items: unknown[], pageWidth: number, pageHeight: nu
     let group: (typeof fragments) | undefined;
     for (let index = groups.length - 1; index >= 0; index -= 1) {
       const candidate = groups[index]!;
-      if (Math.abs(candidate[0]!.y - fragment.y) <= Math.max(candidate[0]!.height, fragment.height) * 0.55) { group = candidate; break; }
+      const candidateRight = Math.max(...candidate.map((item) => item.x + item.width));
+      const horizontalGap = Math.max(0, fragment.x - candidateRight);
+      if (
+        Math.abs(candidate[0]!.y - fragment.y) <= Math.max(candidate[0]!.height, fragment.height) * 0.55
+        && horizontalGap <= 0.08
+      ) { group = candidate; break; }
     }
     if (group) group.push(fragment); else groups.push([fragment]);
   }
@@ -631,4 +790,25 @@ function isPdfTextItem(value: unknown): value is { str: string; transform: [numb
 
 function clampNormalized(value: number): number {
   return Math.round(Math.min(1, Math.max(0, value)) * 1_000_000) / 1_000_000;
+}
+
+function canonicalPagesComplete(pages: Array<{ pageNumber: number }>, expectedCount: number): boolean {
+  return pages.length === expectedCount
+    && new Set(pages.map((page) => page.pageNumber)).size === expectedCount
+    && pages.every((page) => page.pageNumber >= 1 && page.pageNumber <= expectedCount);
+}
+
+function missingCanonicalPages(pages: Array<{ pageNumber: number }>, expectedCount: number): number[] {
+  const present = new Set(pages.map((page) => page.pageNumber));
+  return Array.from({ length: expectedCount }, (_, index) => index + 1).filter((pageNumber) => !present.has(pageNumber));
+}
+
+function roundedMilliseconds(value: number): number {
+  return Math.max(0, Math.round(value * 1000) / 1000);
+}
+
+async function canvasToPngBytes(canvas: HTMLCanvasElement): Promise<Uint8Array> {
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+  if (!blob) throw new Error("O navegador não conseguiu preparar a página para recuperação visual.");
+  return new Uint8Array(await blob.arrayBuffer());
 }

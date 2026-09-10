@@ -10,4 +10,7 @@ tmp/
 !.env.example
 *.log
 coverage/
+services/paddle/.cache/
+benchmarks/m5.6/private/
+benchmarks/m5.6/output/
 /prisma-movimento-0-1-correcoes.pdf

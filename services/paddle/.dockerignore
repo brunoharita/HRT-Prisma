@@ -1,0 +1,7 @@
+.git
+node_modules
+dist
+web/dist
+.env
+.env.*
+.tmp.driveupload

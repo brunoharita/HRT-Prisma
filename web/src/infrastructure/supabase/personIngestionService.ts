@@ -383,6 +383,7 @@ export const personIngestionService = {
     const extraction = await buildOrganizationAdaptiveExtraction(organizationId, input.pages);
     const pages = attachFieldEvidence(input.pages, extraction.fieldEvidence);
     await persistExtraction(organizationId, personId, document.documentId, pages, extraction.draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null);
+    await recordDocumentIntelligenceRun(organizationId, personId, document.documentId, input).catch(() => undefined);
     return document.documentId;
   },
 
@@ -1243,6 +1244,7 @@ async function processResolvedIntake(
       `resume-intake-extraction:${result.intakeId}`,
       null,
     );
+    await recordDocumentIntelligenceRun(organizationId, result.personId, result.documentId, input).catch(() => undefined);
     const { error: completeError } = await supabase.rpc("complete_resume_intake", {
       p_organization_id: organizationId,
       p_intake_id: result.intakeId,
@@ -1354,6 +1356,33 @@ function toPersonSummary(person: {
       notes: privateRow?.notes ?? "",
     },
   };
+}
+
+async function recordDocumentIntelligenceRun(
+  organizationId: string,
+  personId: string,
+  documentId: string,
+  input: ProcessedDocumentInput,
+): Promise<void> {
+  const trace = input.documentIntelligence;
+  if (!trace) return;
+  const { error } = await supabase.from("document_intelligence_runs").insert({
+    organization_id: organizationId,
+    person_id: personId,
+    document_id: documentId,
+    contract_version: trace.contractVersion,
+    mode: trace.mode,
+    selected_route: trace.selectedRoute,
+    effective_route: trace.effectiveRoute,
+    provider: trace.provider,
+    provider_version: trace.providerVersion,
+    model: trace.model,
+    model_version: trace.modelVersion,
+    fallback_used: trace.fallbackUsed,
+    diagnostic_categories: trace.diagnostics,
+    stage_metrics: trace.metrics as unknown as Json,
+  });
+  if (error) throw new Error("A telemetria técnica opcional do processamento não pôde ser preservada.");
 }
 
 function publicationOperationKey(reviewId: string, mode: ProfilePublicationMode, decisions: ProfileBlockDecision[]): string {

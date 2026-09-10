@@ -357,6 +357,25 @@ export interface Database {
         completed_at: string | null;
         updated_at: string;
       }>;
+      document_intelligence_runs: Table<{
+        id: string;
+        organization_id: string;
+        person_id: string;
+        document_id: string;
+        contract_version: "1.0.0";
+        mode: "baseline" | "shadow" | "enabled";
+        selected_route: "native-fast" | "structure" | "vision" | "recovery";
+        effective_route: "native-fast" | "structure" | "vision" | "recovery";
+        provider: string | null;
+        provider_version: string | null;
+        model: string | null;
+        model_version: string | null;
+        fallback_used: boolean;
+        diagnostic_categories: string[];
+        stage_metrics: Json;
+        actor_auth_user_id: string;
+        created_at: string;
+      }>;
       document_page_extractions: Table<{
         id: string;
         organization_id: string;
@@ -579,6 +598,11 @@ export interface Database {
         confirmation_count: number;
         first_confirmed_at: string;
         last_confirmed_at: string;
+        structural_signature_version: string;
+        provider_family: "provider-neutral" | "pdfjs" | "tesseract" | "paddleocr";
+        applicability: Json;
+        invalidation_reason: string | null;
+        retired_at: string | null;
         created_at: string;
         updated_at: string;
       }>;

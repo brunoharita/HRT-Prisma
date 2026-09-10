@@ -26,6 +26,8 @@ Fato correto, omissão, alucinação, ambiguidade, falso positivo, falso negativ
 
 `ProcessingEvent` e `ai_usage_events` cobrem telemetria básica; `person_ingestion_events` e `document_operations` cobrem a trilha operacional M2-C sem conteúdo integral. A auditoria global da plataforma continua incompleta.
 
+O M5.6 adiciona `document_intelligence_runs` para rota selecionada/efetiva, modo, provider/modelo/versionamento, fallback, diagnóstico allowlisted e duração por estágio. O registro é organization-scoped, protegido por RLS e não contém texto, imagem, PII, prompt ou resposta integral. A gravação é opcional e sua falha não bloqueia revisão humana. Métricas de qualidade detalhadas ficam no harness privado de benchmark e somente relatórios sanitizados podem ser versionados.
+
 ## Alertas planejados
 
 Cross-tenant denial anômalo, pico de exportação, falhas de Auth, custo por tenant, timeout, regressão, revisão manual crescente, parser failure e indisponibilidade de provider.

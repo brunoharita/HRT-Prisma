@@ -38,6 +38,7 @@ Finalidade atual é prova técnica com fixtures sintéticas. A base legal para c
 - Evidência espacial: o PDF não é duplicado; a região referencia documento e versão. PDF.js e Tesseract.js processam localmente no browser e somente o recorte selecionado pode passar por OCR.
 - Embeddings: não implementados; quando existirem, são dados derivados sujeitos ao mesmo tenant, retenção e exclusão.
 - Modelos externos: nenhum ativo; provider futuro exige DPA/subprocessador, retenção e região documentados.
+- Document Intelligence M5.6: PaddleOCR roda self-hosted em loopback, sem API externa. Os bytes transitam apenas entre o navegador Prisma e o serviço local controlado; a telemetria persistida contém metadados técnicos allowlisted, nunca o currículo integral.
 
 ## Minimização
 

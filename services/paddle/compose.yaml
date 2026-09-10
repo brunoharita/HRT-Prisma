@@ -1,0 +1,35 @@
+services:
+  structure:
+    build:
+      context: ../..
+      dockerfile: services/paddle/Dockerfile.cpu
+    command: ["--pipeline", "PP-StructureV3", "--device", "cpu", "--host", "0.0.0.0", "--port", "8080"]
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - paddle-structure-models:/var/cache/paddlex
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+
+  vision-recovery:
+    profiles: ["vision-recovery"]
+    build:
+      context: ../..
+      dockerfile: services/paddle/Dockerfile.cpu
+    command: ["--pipeline", "PaddleOCR-VL", "--device", "cpu", "--host", "0.0.0.0", "--port", "8081"]
+    ports:
+      - "127.0.0.1:8081:8081"
+    volumes:
+      - paddle-vision-models:/var/cache/paddlex
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+
+volumes:
+  paddle-structure-models:
+  paddle-vision-models:

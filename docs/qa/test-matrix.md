@@ -15,6 +15,7 @@
 | Extração | perfil mínimo | sem texto, schema inválido, timeout | testado |
 | Prompt injection | documento normal | instrução maliciosa em currículo | golden testado |
 | OCR | scan legível com fallback seletivo, assets locais e geometria persistível | página insuficiente após OCR, worker/core/idioma indisponível, método espacial incompatível com a origem | Tesseract local comprovado em uma página; worker, core WASM e dados `por+eng` entram no bundle web; QA aceita `ocr + tesseract-layout-v1` e rejeita `ocr + pdfjs-layout-v1` |
+| Document Intelligence M5.6 | PDF nativo rápido, estrutura complexa, scan/image-only e recuperação por página | provider indisponível, timeout, JSON inválido, página incompleta, flag desconhecida e coordenada inválida | contratos e testes locais aprovados; runtime Paddle, amostra real, meta 90%, performance e cutover bloqueados |
 | Parsing | seções conhecidas | variação, datas, caracteres | golden parcial |
 | Extração adaptativa | layout repetido, período abreviado, empresa em linha distinta, bloco completo e padrão aprovado do tenant | não copiar correção, não sobrescrever revisão humana, registro ambíguo, versão desconhecida e layout legado | regressão local e transação QA aprovadas; lote real autorizado pendente |
 | Revisão manual | corrigir e aprovar, inclusive com área personalizada | lock stale, estado inválido, tenant/papel, dados mínimos, evidência, shape, duplicidade e falha interna sanitizada | M2-C ativo; regressão local e aprovação completa com rollback aprovadas no Prisma-QA |

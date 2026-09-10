@@ -14,6 +14,12 @@ pnpm run test:golden
 
 O runner retorna `passed`, `failed` ou `regression`, além das diferenças. A execução não chama serviço externo.
 
+## Benchmark M5.6
+
+`pnpm run benchmark:m56` compara baseline e M5.6 no mesmo conjunto de 8 a 12 currículos reais autorizados, usando referência humana. O harness mede separadamente Document Intelligence, parser semântico, evidência, intervenção e performance; mostra resultados por documento e campo e não reduz o resultado a score opaco.
+
+Arquivos com PII ficam em `benchmarks/m5.6/private/`, ignorado pelo Git. A meta de cutover exige pelo menos 90% de campos/blocos corretos nos documentos claros suportados, ganho sobre baseline e nenhuma regressão crítica de invenção ou evidência. Amostra ausente, insuficiente ou inconclusiva encerra com `BLOCKED`, nunca com aprovação sintética.
+
 ## Critérios semânticos
 
 Extraction verifica:

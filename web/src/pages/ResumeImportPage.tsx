@@ -17,6 +17,7 @@ import {
 import { deriveResumeProductState } from "../domain/resumeProductState";
 import { operationRecovery, type OperationRecovery } from "../domain/reviewOperationErrors";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
+import { documentIntelligenceRuntime } from "../infrastructure/documentIntelligenceRuntime";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -60,7 +61,10 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     if (!file) { setError("Selecione um currículo em PDF antes de iniciar."); return; }
     setBusy(true); setError(null); setResult(null);
     try {
-      const nextProcessed = await validateAndProcessPdf(file, setProgress);
+      const nextProcessed = await validateAndProcessPdf(file, setProgress, {
+        documentIntelligenceMode: documentIntelligenceRuntime.mode,
+        documentIntelligenceProvider: documentIntelligenceRuntime.provider,
+      });
       const nextIdentity = extractResumeIdentity(nextProcessed.pages);
       const nextIntake = await personIngestionService.beginResumeIntake(activeMembership.organizationId, nextProcessed, nextIdentity, intakeKey(activeMembership.organizationId, nextProcessed.sha256));
       setProcessed(nextProcessed); setIdentity(nextIdentity);
