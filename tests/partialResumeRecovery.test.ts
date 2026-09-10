@@ -39,3 +39,22 @@ test("partial resume recovery uses preserved pages instead of the latest empty a
   assert.match(workspace, /document\.reviewAttempt\.id/);
   assert.match(workspace, /Reabrir importação/);
 });
+
+test("reused resume intake restores a missing private object before reuse", async () => {
+  const service = await readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8");
+
+  assert.match(service, /intake\.reused && intake\.storage_path/);
+  assert.match(service, /ensureDocumentObject\(intake\.storage_path, input\.file\)/);
+  assert.match(service, /bucket\.download\(storagePath\)/);
+  assert.match(service, /upsert: true/);
+  assert.match(service, /isMissingStorageObject/);
+});
+
+test("an existing draft review remains authoritative over a stale document failure state", async () => {
+  const service = await readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8");
+
+  assert.match(service, /const reviewStateByDocument = new Map<string, string>\(\)/);
+  assert.match(service, /reviewStateByDocument\.set\(review\.document_id, review\.state\)/);
+  assert.match(service, /persistedReviewState === "draft"/);
+  assert.match(service, /\? "in_review"/);
+});

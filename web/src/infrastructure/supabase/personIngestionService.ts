@@ -51,6 +51,27 @@ import { reviewOperationError, supabaseFunctionOperationError, supabaseOperation
 
 const DOCUMENT_BUCKET = "person-documents";
 
+async function ensureDocumentObject(storagePath: string, file: File): Promise<void> {
+  const bucket = supabase.storage.from(DOCUMENT_BUCKET);
+  const { error: downloadError } = await bucket.download(storagePath);
+  if (!downloadError) return;
+  if (!isMissingStorageObject(downloadError)) {
+    throw new Error("O arquivo privado existente não pôde ser validado.");
+  }
+  const { error: uploadError } = await bucket.upload(storagePath, file, {
+    cacheControl: "3600",
+    contentType: "application/pdf",
+    upsert: true,
+  });
+  if (uploadError) throw new Error("O arquivo privado existente não pôde ser restaurado.");
+}
+
+function isMissingStorageObject(error: { statusCode?: string | number | undefined; message?: string | undefined }): boolean {
+  const status = String(error.statusCode ?? "");
+  const message = (error.message ?? "").toLowerCase();
+  return status === "404" || /not found|no such object|object not found|does not exist/.test(message);
+}
+
 export const personIngestionService = {
   async beginResumeIntake(
     organizationId: string,
@@ -72,6 +93,13 @@ export const personIngestionService = {
     throwIfError(error, "Não foi possível iniciar a importação do currículo.");
     const intake = data?.[0];
     if (!intake) throw new Error("A importação não retornou um identificador.");
+
+    // Idempotent intake may point to a document row whose private object was
+    // removed by an interrupted/older lifecycle operation. Restore only that
+    // exact checksum-addressed object before reusing the intake.
+    if (intake.reused && intake.storage_path) {
+      await ensureDocumentObject(intake.storage_path, input.file);
+    }
 
     if (
       intake.resolved_person_id
@@ -262,10 +290,14 @@ export const personIngestionService = {
     const reviewAttemptByDocument = reviewAttemptsByDocument(attemptRows ?? []);
     const profileByDocument = new Map((profileResult.data ?? []).flatMap((profile) => profile.source_document_id ? [[profile.source_document_id, profile.profile_version] as const] : []));
     const reviewByDocument = new Map<string, string>();
+    const reviewStateByDocument = new Map<string, string>();
     for (const review of reviewResult.data ?? []) {
-      if (review.document_id && !reviewByDocument.has(review.document_id)) reviewByDocument.set(review.document_id, review.id);
+      if (review.document_id && !reviewByDocument.has(review.document_id)) {
+        reviewByDocument.set(review.document_id, review.id);
+        reviewStateByDocument.set(review.document_id, review.state);
+      }
     }
-    const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, reviewAttemptByDocument, profileByDocument, reviewByDocument));
+    const timeline = documents.map((document) => toTimelineItem(document, latestAttemptByDocument, reviewAttemptByDocument, profileByDocument, reviewByDocument, reviewStateByDocument));
     const currentProfileRow = (profileResult.data ?? []).find((profile) => profile.superseded_at === null);
     const selectedDocument = timeline.find((document) => document.id === selectedDocumentId) ?? timeline[0] ?? null;
     const attemptId = selectedDocument?.reviewAttempt?.id ?? selectedDocument?.latestAttempt?.id;
@@ -1464,7 +1496,17 @@ function toTimelineItem(document: {
   created_at: string;
   processed_at: string | null;
   is_legacy_unstored: boolean;
-}, latestAttempts: Map<string, ProcessingAttemptView>, reviewAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>, reviews: Map<string, string> = new Map()): PersonDocumentTimelineItem {
+}, latestAttempts: Map<string, ProcessingAttemptView>, reviewAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>, reviews: Map<string, string> = new Map(), reviewStates: Map<string, string> = new Map()): PersonDocumentTimelineItem {
+  const persistedReviewState = reviewStates.get(document.id);
+  const reviewState: PersonDocumentTimelineItem["reviewState"] = document.review_state === "approved" || document.review_state === "invalidated"
+    ? document.review_state
+    : persistedReviewState === "approved"
+      ? "approved"
+      : persistedReviewState === "invalidated"
+        ? "invalidated"
+        : persistedReviewState === "draft"
+          ? "in_review"
+          : document.review_state;
   return {
     id: document.id,
     filename: document.filename,
@@ -1473,7 +1515,7 @@ function toTimelineItem(document: {
     byteSize: document.byte_size,
     pageCount: document.page_count,
     status: document.status,
-    reviewState: document.review_state,
+    reviewState,
     createdAt: document.created_at,
     processedAt: document.processed_at,
     profileVersion: profiles.get(document.id) ?? null,
