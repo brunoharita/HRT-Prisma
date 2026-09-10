@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, InputNumber, Skeleton, Space, Tag, Tooltip, Typography } from "antd";
+import { Alert, Button, InputNumber, Skeleton, Space, Spin, Tag, Tooltip, Typography } from "antd";
 import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 import "pdfjs-dist/web/pdf_viewer.css";
 import {
@@ -510,7 +510,7 @@ export function DocumentEvidenceViewer({
     : [];
 
   return (
-    <section aria-label="Currículo original" className="prisma-document-viewer">
+    <section aria-busy={ocrBusy} aria-label="Currículo original" className="prisma-document-viewer">
       <div className="prisma-pdf-toolbar">
         <Space size={4} wrap>
           <Typography.Text strong>Página</Typography.Text>
@@ -537,6 +537,16 @@ export function DocumentEvidenceViewer({
       {selectionMode || selectionStatus ? (
         <div className="prisma-selection-status" role="status">
           {selectionStatus ?? "Arraste sobre a evidência desejada."}
+        </div>
+      ) : null}
+
+      {ocrBusy ? (
+        <div aria-live="polite" className="prisma-selection-processing" role="status">
+          <Spin size="small" />
+          <div>
+            <strong>O Prisma está lendo a área selecionada</strong>
+            <span>O OCR local está recuperando o texto. Aguarde a conclusão antes de clicar novamente.</span>
+          </div>
         </div>
       ) : null}
 

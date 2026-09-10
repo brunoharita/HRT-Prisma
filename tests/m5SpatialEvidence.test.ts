@@ -352,6 +352,10 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(viewer, /data-visual-fallback="exact-pdf-text"/);
   assert.doesNotMatch(viewer, /rectanglesIntersect/);
   assert.match(viewer, /ocrVersionRef/);
+  assert.match(viewer, /aria-busy=\{ocrBusy\}/);
+  assert.match(viewer, /O Prisma está lendo a área selecionada/);
+  assert.match(viewer, /Aguarde a conclusão antes de clicar novamente/);
+  assert.match(viewer, /<Spin size="small" \/>/);
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);
   assert.match(page, /Currículo[\s\S]*Revisão/);
   assert.match(page, /recordProfileReviewEvidence/);
@@ -368,6 +372,7 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.match(panel, /tokenSeparators=\{\[",", ";", "\\n", "\\t", "\|"\]\}/);
   assert.match(panel, /vírgulas, linhas e colunas criam itens separados/);
   assert.match(styles, /grid-template-columns: minmax\(410px, 44fr\) minmax\(520px, 56fr\)/);
+  assert.match(styles, /\.prisma-selection-processing/);
   assert.match(styles, /\.prisma-review-mobile-switch/);
   assert.match(styles, /\.prisma-evidence-character-highlight/);
   assert.match(styles, /\.prisma-competency-selection-preview/);
