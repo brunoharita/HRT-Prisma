@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 48ea9810d46e520866f84dd6128f4e237d158b837abbd4600bd43d0e3743062f
+source_manifest_sha256: fa76e5ffee4bc0ef446c9bae855cdc08b3d6ba108f2e025f39c8a3858afe3c59
 -->
 
 # Tudo sobre o Prisma
@@ -590,7 +590,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-09-09, o M5.5 de robustecimento do PDF image-only corrigiu a inicialização do OCR no bundle web: o worker e o core WASM do Tesseract agora são assets locais carregados dinamicamente apenas no navegador, mantendo `por+eng` e o mesmo pipeline PDF.js/Tesseract. O build web e a suíte completa passaram com 289 testes; nenhuma migration, autorização, RLS, envio externo ou produção foi acionado. O smoke autenticado do arquivo de referência do Product Owner e as medições reais de OCR ainda permanecem pendentes.
+Em 2026-09-10, o M5.5 de robustecimento do PDF image-only eliminou a dependência externa completa da inicialização do OCR no bundle web: worker, core WASM e dados de idioma `por+eng` do Tesseract são assets locais carregados dinamicamente apenas no navegador, mantendo o mesmo pipeline PDF.js/Tesseract. O build web e a suíte completa passaram com 289 testes; nenhuma migration, autorização, RLS, envio externo ou produção foi acionado. O smoke autenticado do arquivo de referência do Product Owner e as medições reais de OCR ainda permanecem pendentes.
 
 Em 2026-09-09, a branch `codex/m5-5-person-definitive-deletion` implementou a exclusão definitiva administrativa e de titularidade pelo mesmo pipeline autoritativo. O Prisma-QA recebeu três migrations forward-only e a Edge Function `person-data-deletion` v1; todas as provas sintéticas foram revertidas e a fixture visual foi removida. O smoke seguro aprovou estado inválido neutro, contexto válido, categorias, CTA e confirmação única sem executar a exclusão em desktop, largura de tablet e `390x844`; a sessão Super Admin também confirmou a separação visual entre Arquivar, Meus dados e Excluir definitivamente e cancelou o modal administrativo. `pnpm run validate` aprovou lint de 373 arquivos, foundation, Context Pack, dois typechecks, build web, 288 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. O reset local integral continua bloqueado por migrations históricas incompatíveis com PostgreSQL 17; produção não foi acionada.
 
@@ -664,7 +664,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
-- OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker e core WASM carregados de assets locais do bundle web;
+- OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web;
 - draft web: `extraction-draft-7.1.0` / `prisma-layout-adaptive-v7`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
@@ -738,7 +738,7 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell, o módulo Conhecimento e o motor de evidência visual. `spatialEvidence` converte unidades PDF.js/OCR para `normalized-page-v1`, de modo que seleção, texto, refinamento e destaque independam do zoom. `web/src/domain/ocrWorker.ts` carrega dinamicamente o worker e o core WASM locais do Tesseract para evitar dependência de CDN na inicialização do OCR. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search.
+`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell, o módulo Conhecimento e o motor de evidência visual. `spatialEvidence` converte unidades PDF.js/OCR para `normalized-page-v1`, de modo que seleção, texto, refinamento e destaque independam do zoom. `web/src/domain/ocrWorker.ts` carrega dinamicamente o worker, o core WASM e os dados `por+eng` locais do Tesseract para evitar dependência de CDN na inicialização do OCR. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search.
 
 ## Banco
 

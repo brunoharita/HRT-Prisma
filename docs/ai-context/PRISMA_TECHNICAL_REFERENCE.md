@@ -18,7 +18,7 @@ TypeScript estrito, Node.js 22+, pnpm, testes nativos do Node, CLI, Vite para o 
 
 ## Arquitetura
 
-`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell, o módulo Conhecimento e o motor de evidência visual. `spatialEvidence` converte unidades PDF.js/OCR para `normalized-page-v1`, de modo que seleção, texto, refinamento e destaque independam do zoom. `web/src/domain/ocrWorker.ts` carrega dinamicamente o worker e o core WASM locais do Tesseract para evitar dependência de CDN na inicialização do OCR. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search.
+`src/domain` define contratos, incluindo normalização Knowledge; `src/ai` contém providers determinísticos e a abstração de pesquisa. `web/src` hospeda o shell, o módulo Conhecimento e o motor de evidência visual. `spatialEvidence` converte unidades PDF.js/OCR para `normalized-page-v1`, de modo que seleção, texto, refinamento e destaque independam do zoom. `web/src/domain/ocrWorker.ts` carrega dinamicamente o worker, o core WASM e os dados `por+eng` locais do Tesseract para evitar dependência de CDN na inicialização do OCR. `supabase/functions/knowledge-agent` é o boundary opcional para Responses API/Web Search.
 
 ## Banco
 

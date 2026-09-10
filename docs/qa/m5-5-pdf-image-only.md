@@ -18,7 +18,7 @@
 | D-012 | Retry | retry existente preservado | testes de idempotência/retry | PASS |
 | D-013 | Nativo sem OCR desnecessário | worker só é carregado quando há candidato OCR | código e build | PASS |
 | D-014 | PDF misto | decisão por página preservada | cobertura existente; smoke real pendente | PARTIAL |
-| D-015 | OCR local | worker e core WASM no bundle web | build sem dependência de CDN para inicialização | PASS |
+| D-015 | OCR local | worker, core WASM e dados `por+eng` no bundle web | build sem dependência de CDN para inicialização | PASS |
 | D-016 | `por+eng` | configuração mantida | teste de worker | PASS |
 | D-017 | Arquivo de referência | não disponível nesta sessão | smoke pendente | NOT TESTED |
 | D-018 a D-020 | Regressões image-only, falso nativo e falha OCR | infraestrutura/testes existentes preservados; novas fixtures reais pendentes | suíte determinística | PARTIAL |

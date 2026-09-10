@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import test from "node:test";
 import {
   buildDeterministicDraft,
@@ -51,8 +51,12 @@ test("M5.5 keeps OCR worker and WASM assets inside the application bundle", asyn
 
   assert.match(ingestion, /tesseract\.js-core\/tesseract-core\.wasm\.js\?url/);
   assert.match(ingestion, /tesseract\.js\/dist\/worker\.min\.js\?url/);
-  assert.match(ingestion, /createWorker\(\["por", "eng"\], 1, \{ workerPath, corePath \}\)/);
+  assert.match(ingestion, /createWorker\(\["por", "eng"\], 1, \{ workerPath, corePath, langPath, gzip: true \}\)/);
+  assert.match(ingestion, /new URL\("tessdata\//);
+  assert.match(ingestion, /langPath, gzip: true/);
   assert.match(evidenceViewer, /createLocalOcrWorker/);
+  assert.ok((await stat("web/public/tessdata/por.traineddata.gz")).size > 1_000_000);
+  assert.ok((await stat("web/public/tessdata/eng.traineddata.gz")).size > 1_000_000);
 });
 
 test("M2-B rejects a file whose signature is not PDF before parsing or OCR", async () => {

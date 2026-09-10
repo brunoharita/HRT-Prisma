@@ -35,6 +35,8 @@
   "dependencies": {
     "@ant-design/icons": "6.3.2",
     "@supabase/supabase-js": "2.112.3",
+    "@tesseract.js-data/eng": "1.0.0",
+    "@tesseract.js-data/por": "1.0.0",
     "antd": "6.6.1",
     "csv-parse": "7.0.2",
     "pdfjs-dist": "5.4.296",

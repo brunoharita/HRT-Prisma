@@ -4,5 +4,6 @@ export async function createLocalOcrWorker() {
     import("tesseract.js/dist/worker.min.js?url"),
     import("tesseract.js-core/tesseract-core.wasm.js?url"),
   ]);
-  return createWorker(["por", "eng"], 1, { workerPath, corePath });
+  const langPath = new URL("tessdata/", document.baseURI).toString();
+  return createWorker(["por", "eng"], 1, { workerPath, corePath, langPath, gzip: true });
 }
