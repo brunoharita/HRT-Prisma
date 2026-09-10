@@ -359,6 +359,8 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   assert.doesNotMatch(viewer, /openai|anthropic|embedding/i);
   assert.match(page, /Currículo[\s\S]*Revisão/);
   assert.match(page, /recordProfileReviewEvidence/);
+  assert.match(page, /anchorExperienceFromSelection\(nextDraft, targetFieldPath, pendingSelection\.pageNumber, effectiveSelectedText\)/);
+  assert.match(page, /experience\.page !== null && experience\.evidenceText\.trim\(\)/);
   assert.match(page, /fieldPathMatches\(item\.fieldPath, selectedFieldPath\)/);
   assert.match(page, /selectionError \? <Alert title=\{selectionError\} showIcon type="error"/);
   assert.match(page, /setSelectionValueEdited\(false\)/);

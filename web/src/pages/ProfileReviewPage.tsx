@@ -593,6 +593,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     if (pendingAction === "replace_review_evidence" && !replacementLinkId) { setSelectionError("Este campo ainda não possui evidência ativa do revisor para substituir."); return; }
     if (nextDraft) {
+      nextDraft = anchorExperienceFromSelection(nextDraft, targetFieldPath, pendingSelection.pageNumber, effectiveSelectedText);
       nextDraft = normalizeReviewDraft(nextDraft);
       const issues = validateReviewDraftForSave(nextDraft, {
         existingPhone: workspace.personPrivateContact.phone,
@@ -949,6 +950,20 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
     next.education[educationIndex] = { ...next.education[educationIndex]!, [field ?? "description"]: value || null };
   }
   return next;
+}
+
+function anchorExperienceFromSelection(draft: StructuredDraft, fieldPath: string, pageNumber: number, evidenceText: string | null): StructuredDraft {
+  const match = /^experiences\.([a-z0-9_]+)\.(role|organization|period|description)$/.exec(fieldPath);
+  if (!match) return draft;
+  const index = findReviewEntityIndex(draft.experiences, "experience", match[1]!);
+  const experience = draft.experiences[index];
+  if (!experience || (experience.page !== null && experience.evidenceText.trim())) return draft;
+  return {
+    ...draft,
+    experiences: draft.experiences.map((item, itemIndex) => itemIndex === index
+      ? { ...item, page: item.page ?? pageNumber, evidenceText: item.evidenceText.trim() || evidenceText?.trim() || item.evidenceText }
+      : item),
+  };
 }
 
 function addNewInformation(
