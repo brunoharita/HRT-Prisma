@@ -888,6 +888,7 @@ function locateAnchor(
   experience: StructuredDraft["experiences"][number],
   sourceRegion?: AdaptiveSourceRegion | null,
 ): number {
+  const sourcePage = experience.page ?? sourceRegion?.pageNumber ?? null;
   if (sourceRegion) {
     const regionCenterX = sourceRegion.x + (sourceRegion.width / 2);
     const regionCenterY = sourceRegion.y + (sourceRegion.height / 2);
@@ -913,7 +914,7 @@ function locateAnchor(
   let bestIndex = -1;
   let bestScore = 0;
   lines.forEach((line, index) => {
-    if (line.pageNumber !== experience.page) return;
+    if (sourcePage !== null && line.pageNumber !== sourcePage) return;
     const candidate = comparable(line.text);
     const score = normalizedRole && candidate.includes(normalizedRole) ? normalizedRole.length : sharedTokenScore(normalizedRole, candidate);
     if (score > bestScore) { bestScore = score; bestIndex = index; }

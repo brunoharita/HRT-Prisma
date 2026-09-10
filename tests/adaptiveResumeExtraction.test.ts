@@ -302,6 +302,18 @@ test("a correction relearns complete sibling blocks from the original document a
   assert.ok(report.suggestions.every((suggestion) => suggestion.fields.some((field) => field.field === "description")));
   assert.ok(report.suggestions.flatMap((suggestion) => suggestion.fields).every((field) => field.evidenceText.length > 0));
 
+  const legacyWithoutAnchor = structuredClone(reviewed);
+  legacyWithoutAnchor.experiences[0] = { ...legacyWithoutAnchor.experiences[0]!, page: null, evidenceText: "" };
+  const recoveredFromSpatialEvidence = proposeSiblingBlockCorrections({
+    pages: [page],
+    draft: legacyWithoutAnchor,
+    extracted,
+    sourceIndex: 0,
+    sourceField: "organization",
+    sourceRegion: { pageNumber: 2, x: 0.1, y: 0.005, width: 0.8, height: 0.012 },
+  });
+  assert.equal(recoveredFromSpatialEvidence.suggestions.length, 3);
+
   const humanReviewed = structuredClone(reviewed);
   humanReviewed.experiences[1]!.organization = "Bencato Engenharia confirmada manualmente";
   const preserved = proposeSiblingBlockCorrections({ pages: [page], draft: humanReviewed, extracted, sourceIndex: 0, sourceField: "organization" });
