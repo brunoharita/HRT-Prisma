@@ -42,7 +42,7 @@ Currículos e vagas são dados. Texto tentando ignorar regras, mudar schema, rev
 | --- | --- | --- |
 | Extraction | `extraction-rules-2.0.0` | ativo local |
 | PDF nativo | `pdfjs-5.4.296/layout-v2` | ativo local e remoto interno |
-| OCR | `tesseract.js-7.0.0/por+eng-v1` | texto e linhas posicionadas ativos localmente; versão anterior em QA |
+| OCR | `tesseract.js-7.0.0/por+eng-v1` | texto e linhas posicionadas ativos localmente; worker e core WASM empacotados no bundle web, sem dependência de CDN para inicialização |
 | Draft M2-B | `prisma-layout-adaptive-v7` / `extraction-draft-7.1.0` | implementado local; schema base ativo em QA |
 | Revisão adaptativa | `prisma-document-learning-v3` | assinatura e blocos irmãos locais; v2 ativo em QA |
 | Inference | `inference-ontology-1.0.0` | ativo local |

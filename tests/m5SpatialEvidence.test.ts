@@ -336,7 +336,7 @@ test("M5 workspace uses the pinned local PDF and OCR stack with mobile fallback"
   ]);
   assert.match(viewer, /import\("pdfjs-dist"\)/);
   assert.match(viewer, /new pdfjs\.TextLayer/);
-  assert.match(viewer, /import\("tesseract\.js"\)/);
+  assert.match(viewer, /createLocalOcrWorker/);
   assert.match(viewer, /normalizePointerRegion/);
   assert.match(viewer, /PDFJS_CHARACTER_REGION_METHOD/);
   assert.match(viewer, /--total-scale-factor/);

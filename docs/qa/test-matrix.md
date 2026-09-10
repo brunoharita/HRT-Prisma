@@ -14,7 +14,7 @@
 | Formatos | texto e PDF nativo/scan | formato exótico/corrompido | texto, PDF nativo v4 e PDF image-only v5 comprovados no remoto interno |
 | Extração | perfil mínimo | sem texto, schema inválido, timeout | testado |
 | Prompt injection | documento normal | instrução maliciosa em currículo | golden testado |
-| OCR | scan legível com fallback seletivo | página insuficiente após OCR | Tesseract local comprovado em uma página; fixture inicial insuficiente foi recusada e fixture válida gerou 360 caracteres úteis |
+| OCR | scan legível com fallback seletivo e assets locais | página insuficiente após OCR, worker/core indisponível | Tesseract local comprovado em uma página; worker e core WASM entram no bundle web; fixture inicial insuficiente foi recusada e fixture válida gerou 360 caracteres úteis |
 | Parsing | seções conhecidas | variação, datas, caracteres | golden parcial |
 | Extração adaptativa | layout repetido, período abreviado, empresa em linha distinta, bloco completo e padrão aprovado do tenant | não copiar correção, não sobrescrever revisão humana, registro ambíguo, versão desconhecida e layout legado | regressão local e transação QA aprovadas; lote real autorizado pendente |
 | Revisão manual | corrigir e aprovar, inclusive com área personalizada | lock stale, estado inválido, tenant/papel, dados mínimos, evidência, shape, duplicidade e falha interna sanitizada | M2-C ativo; regressão local e aprovação completa com rollback aprovadas no Prisma-QA |

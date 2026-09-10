@@ -34,6 +34,7 @@ import {
   type ReviewEvidenceLink,
   type SpatialEvidenceRegion,
 } from "../../domain/spatialEvidence";
+import { createLocalOcrWorker } from "../../domain/ocrWorker";
 
 export interface EvidenceNavigationTarget {
   pageNumber: number;
@@ -334,8 +335,7 @@ export function DocumentEvidenceViewer({
         crop.width,
         crop.height,
       );
-      const { createWorker } = await import("tesseract.js");
-      const worker = await createWorker(["por", "eng"]);
+      const worker = await createLocalOcrWorker();
       try {
         const result = await worker.recognize(crop, {}, { text: true, blocks: true });
         if (version !== ocrVersionRef.current) return;

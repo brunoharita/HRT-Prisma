@@ -11,7 +11,7 @@ Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores
 - `mediaType`: deve pertencer à allowlist;
 - organização e documento são controlados pela aplicação, não pelo provider.
 - PDF: máximo de 15 MB, assinatura `%PDF-`, trailer `%%EOF` e parse válido;
-- páginas: extração nativa primeiro, preservando linhas visuais e coordenadas; OCR local somente quando a suficiência falha;
+- páginas: extração nativa primeiro, preservando linhas visuais e coordenadas; OCR local somente quando a suficiência falha. O worker e o core WASM do Tesseract são carregados como assets locais do bundle web, em carregamento dinâmico browser-only; os idiomas vigentes continuam `por+eng`;
 - campos: cada fato estruturado pode apontar para uma região própria e para o método que a produziu;
 - adaptação: repetição no documento e sinais estruturais aprovados do próprio tenant orientam a interpretação, mas não autorizam copiar valores entre registros nem executar templates persistidos.
 - blocos irmãos: uma experiência humana completa e com evidência espacial gera uma assinatura temporária do documento. Seção, cabeçalho, período, corpo, espaçamento e coluna são avaliados por critérios nomeados. Fontes sem geometria, colunas distintas, ambiguidades e duplicidades não geram novas experiências seguras.

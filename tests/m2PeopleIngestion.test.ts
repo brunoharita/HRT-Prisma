@@ -45,6 +45,16 @@ test("M2-B native sufficiency is deterministic", () => {
   assert.equal(isNativeTextSufficient("Experiência profissional comprovada com desenvolvimento de sistemas, processos, dados e governança. ".repeat(2)), true);
 });
 
+test("M5.5 keeps OCR worker and WASM assets inside the application bundle", async () => {
+  const ingestion = await readFile("web/src/domain/ocrWorker.ts", "utf8");
+  const evidenceViewer = await readFile("web/src/components/review/DocumentEvidenceViewer.tsx", "utf8");
+
+  assert.match(ingestion, /tesseract\.js-core\/tesseract-core\.wasm\.js\?url/);
+  assert.match(ingestion, /tesseract\.js\/dist\/worker\.min\.js\?url/);
+  assert.match(ingestion, /createWorker\(\["por", "eng"\], 1, \{ workerPath, corePath \}\)/);
+  assert.match(evidenceViewer, /createLocalOcrWorker/);
+});
+
 test("M2-B rejects a file whose signature is not PDF before parsing or OCR", async () => {
   const file = new File(["not-a-pdf%%EOF"], "curriculo.pdf", { type: "application/pdf" });
   await assert.rejects(() => validateAndProcessPdf(file), /assinatura do arquivo não corresponde a um PDF/i);
