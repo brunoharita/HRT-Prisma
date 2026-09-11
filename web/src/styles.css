@@ -2701,8 +2701,8 @@ textarea {
 
 .prisma-evidence-highlight--complementary { background: rgba(21, 94, 239, 0.09); border-color: rgba(21, 94, 239, 0.42); }
 .prisma-evidence-highlight--reviewer { background: rgba(249, 155, 44, 0.14); border-color: rgba(232, 126, 16, 0.6); }
-.prisma-evidence-highlight.is-active { background: rgba(36, 183, 242, 0.22); border-width: 2px; border-color: #0b97cf; box-shadow: 0 0 0 2px rgba(36, 183, 242, 0.13); }
-.prisma-evidence-highlight--reviewer.is-active { background: rgba(249, 155, 44, 0.2); border-color: #e47f18; box-shadow: 0 0 0 2px rgba(249, 155, 44, 0.13); }
+.prisma-evidence-highlight.is-active { z-index: 2; background: rgba(36, 183, 242, 0.34); border-width: 3px; border-color: #087eaf; box-shadow: 0 0 0 3px rgba(36, 183, 242, 0.2), 0 2px 8px rgba(11, 91, 125, 0.22); }
+.prisma-evidence-highlight--reviewer.is-active { background: rgba(249, 155, 44, 0.3); border-color: #d86f0d; box-shadow: 0 0 0 3px rgba(249, 155, 44, 0.2), 0 2px 8px rgba(133, 73, 11, 0.2); }
 .prisma-evidence-highlight--pending { pointer-events: none; background: rgba(21, 94, 239, 0.08); border: 2px dashed #155eef; }
 .prisma-evidence-character-highlight {
   position: absolute;
