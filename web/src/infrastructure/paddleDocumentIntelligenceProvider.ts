@@ -8,9 +8,11 @@ import {
   type CanonicalRegion,
   type DocumentIntelligenceProvider,
   type DocumentIntelligenceRequest,
+  type DocumentIntelligenceDiagnosticCategory,
+  type DocumentIntelligenceProviderDescriptor,
 } from "../domain/documentIntelligence.js";
 
-export const PADDLE_PROVIDER_VERSION = "paddleocr-3.7.0/prisma-adapter-1.0.0";
+export const PADDLE_PROVIDER_VERSION = "paddleocr-3.7.0/prisma-adapter-1.1.0";
 export const PADDLE_STRUCTURE_MODEL_VERSION = "PP-StructureV3/PP-OCRv6";
 export const PADDLE_VISION_MODEL_VERSION = "PaddleOCR-VL-1.6";
 
@@ -24,8 +26,21 @@ interface PaddleProviderOptions {
 const DEFAULT_OPTIONS: PaddleProviderOptions = {
   structureEndpoint: "/document-intelligence/layout-parsing",
   recoveryEndpoint: "/document-intelligence-vl/layout-parsing",
-  timeoutMs: 120_000,
+  timeoutMs: 240_000,
 };
+
+export class PaddleProviderError extends Error {
+  constructor(
+    message: string,
+    readonly diagnosticCategory: DocumentIntelligenceDiagnosticCategory,
+    readonly reasonCode: string,
+    readonly httpStatus: number | null = null,
+    readonly providerErrorCode: number | string | null = null,
+  ) {
+    super(message);
+    this.name = "PaddleProviderError";
+  }
+}
 
 export class PaddleDocumentIntelligenceProvider implements DocumentIntelligenceProvider {
   readonly providerName = "paddleocr-self-hosted";
@@ -33,6 +48,16 @@ export class PaddleDocumentIntelligenceProvider implements DocumentIntelligenceP
 
   constructor(options: Partial<PaddleProviderOptions> = {}) {
     this.options = { ...DEFAULT_OPTIONS, ...options };
+  }
+
+  describe(route: DocumentIntelligenceRequest["route"]): DocumentIntelligenceProviderDescriptor {
+    const recovery = route === "recovery";
+    return {
+      provider: this.providerName,
+      providerVersion: PADDLE_PROVIDER_VERSION,
+      model: recovery ? "PaddleOCR-VL" : "PP-StructureV3",
+      modelVersion: recovery ? PADDLE_VISION_MODEL_VERSION : PADDLE_STRUCTURE_MODEL_VERSION,
+    };
   }
 
   async analyze(request: DocumentIntelligenceRequest): Promise<CanonicalDocument> {
@@ -58,23 +83,59 @@ export class PaddleDocumentIntelligenceProvider implements DocumentIntelligenceP
           visualize: false,
         }),
       });
-      if (!response.ok) throw new Error(`Paddle provider unavailable (${response.status}).`);
-      const payload: unknown = await response.json();
+      if (!response.ok) {
+        throw new PaddleProviderError(
+          "Paddle provider returned a non-success HTTP status.",
+          response.status >= 500 || response.status === 429 ? "provider_unavailable" : "provider_invalid_response",
+          `http_${response.status}`,
+          response.status,
+        );
+      }
+      let payload: unknown;
+      try {
+        payload = await response.json();
+      } catch {
+        throw new PaddleProviderError("Paddle provider returned invalid JSON.", "provider_invalid_response", "invalid_json", response.status);
+      }
+      const root = record(payload);
+      const providerErrorCode = finiteNumber(root?.errorCode);
+      if (providerErrorCode !== null && providerErrorCode !== 0) {
+        throw new PaddleProviderError("Paddle provider rejected the document.", "provider_invalid_response", "provider_error", response.status, providerErrorCode);
+      }
+      const descriptor = this.describe(request.route);
       const canonical = mapPaddleLayoutResponse(payload, {
         route: request.route,
-        providerVersion: PADDLE_PROVIDER_VERSION,
-        model: isRecovery ? "PaddleOCR-VL" : "PP-StructureV3",
-        modelVersion: isRecovery ? PADDLE_VISION_MODEL_VERSION : PADDLE_STRUCTURE_MODEL_VERSION,
+        providerVersion: descriptor.providerVersion,
+        model: descriptor.model,
+        modelVersion: descriptor.modelVersion,
       });
       const requestedPage = request.pageNumbers?.length === 1 ? request.pageNumbers[0] : undefined;
       return requestedPage === undefined ? canonical : {
         ...canonical,
         pages: canonical.pages.map((page) => ({ ...page, pageNumber: requestedPage })),
       };
+    } catch (error) {
+      if (error instanceof PaddleProviderError) throw error;
+      if (error instanceof DOMException && error.name === "AbortError") {
+        throw new PaddleProviderError("Paddle provider exceeded the configured timeout.", "provider_timeout", "request_timeout");
+      }
+      if (error instanceof Error && /Paddle response|CanonicalDocument/.test(error.message)) {
+        throw new PaddleProviderError("Paddle provider response did not satisfy the canonical contract.", "provider_invalid_response", canonicalFailureReason(error.message));
+      }
+      throw new PaddleProviderError("Paddle provider could not be reached.", "provider_unavailable", "network_failure");
     } finally {
       clearTimeout(timeout);
     }
   }
+}
+
+function canonicalFailureReason(message: string): string {
+  if (/layoutParsingResults/.test(message)) return "missing_layout_results";
+  if (/prunedResult/.test(message)) return "missing_pruned_result";
+  if (/page dimensions/.test(message)) return "invalid_page_dimensions";
+  if (/sem páginas/.test(message)) return "empty_canonical_document";
+  if (/coordenadas|região|limites/.test(message)) return "invalid_geometry";
+  return "canonical_contract_failure";
 }
 
 export function mapPaddleLayoutResponse(

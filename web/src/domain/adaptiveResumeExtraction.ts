@@ -18,8 +18,8 @@ import {
   type RelativeRecordSignature,
 } from "./documentRecordPatterns.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "7.0.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v8";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "7.1.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v9";
 export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v4";
 export const ADAPTIVE_SIBLING_ALGORITHM_VERSION = GENERIC_RECORD_PATTERN_VERSION;
 export const ADAPTIVE_SIBLING_SIGNATURE_VERSION = GENERIC_RECORD_SIGNATURE_VERSION;
@@ -192,9 +192,9 @@ interface StructuredSummaryExtraction {
   fieldEvidence: FieldEvidenceDescriptor[];
 }
 
-const ROLE_TERMS = /(analista|arquiteto|assistente|chief|consultor|coordenador|customer success|developer|desenvolvedor|diretor|engineer|engenheiro|especialista|executivo|founder|fundador|gerente|head|l[ií]der|manager|mgmt|pm\/po|product owner|project manager|presidente|recruiter|supervisor|system analyst|technician|t[eé]cnico|vice[- ]presidente|coo|ceo|cto|cfo|cio)/i;
+const ROLE_TERMS = /(analista|arquiteto|assistente|chief|consultor|coordenador|customer success|developer|desenvolvedor|diretor|engineer|engenheir[oa]|especialista|executivo|founder|fundador|gerente|head|l[ií]der|manager|mgmt|pm\/po|product owner|project manager|presidente|recruiter|supervisor|system analyst|technician|t[eé]cnico|vice[- ]presidente|coo|ceo|cto|cfo|cio)/i;
 const SECTION_HEADING = /^(experi[eê]ncia(s)?( profissional(is)?)?|trajet[oó]ria profissional|professional experience|forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|resumo|summary|perfil|s[ií]ntese de valor)/i;
-const NEXT_SECTION = /^(forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|projetos|projects|cursos|s[ií]ntese de valor)/i;
+const NEXT_SECTION = /^(forma[cç][aã]o|educa[cç][aã]o|education|compet[eê]ncias(?:-chave)?|skills|idiomas|languages|certifica[cç][oõ]es|certifications|projetos|projects|cursos|s[ií]ntese de valor|informa[cç][oõ]es adicionais|additional information)/i;
 const PROFESSIONAL_SUMMARY_LABEL = "(?:resumo profissional|resumo executivo|perfil profissional|perfil executivo|s[ií]ntese profissional|s[ií]ntese de qualifica[cç][oõ]es|professional summary|professional profile|career summary|executive summary)";
 const PROFESSIONAL_SUMMARY_HEADING = new RegExp(`^${PROFESSIONAL_SUMMARY_LABEL}\\s*$`, "i");
 const PROFESSIONAL_SUMMARY_INLINE_HEADING = new RegExp(`^${PROFESSIONAL_SUMMARY_LABEL}\\s*(?:[|:]|[-–—])\\s*(.+)$`, "i");
@@ -240,7 +240,7 @@ export function buildAdaptiveExtraction(
     experiences.push(experience);
     fieldEvidence.push(toEvidence(reviewEntityFieldPath("experience", experience, "role"), block.anchor, block.role));
     fieldEvidence.push(toEvidence(reviewEntityFieldPath("experience", experience, "organization"), block.organizationLine ?? block.anchor, block.organization));
-    if (block.period) fieldEvidence.push(toEvidence(reviewEntityFieldPath("experience", experience, "period"), block.anchor, block.period));
+    if (block.period) fieldEvidence.push(toEvidence(reviewEntityFieldPath("experience", experience, "period"), evidenceLineForField(block, "period"), block.period));
     if (block.descriptionLines.length) fieldEvidence.push(toCombinedEvidence(reviewEntityFieldPath("experience", experience, "description"), block.descriptionLines));
     if (block.organizationLine) nextLineCompanyCount += 1;
     else sameLineCount += 1;
@@ -646,8 +646,9 @@ export function proposeSiblingBlockCorrections(input: {
   const sourceBlock = strictSourceConfirmed
     ? strictSourceBlock
     : sourceAnchorIndex >= 0
-      ? parseBlock(lines, sourceAnchorIndex, findNextTopLevelBoundary(lines, sourceAnchorIndex + 1, lines.length, true), true, true)
-        ?? parseGroupedExperienceBlock(lines, sourceAnchorIndex)
+      ? parseGroupedExperienceBlock(lines, sourceAnchorIndex)
+        ?? parseParallelExperienceBlock(lines, sourceAnchorIndex)
+        ?? parseBlock(lines, sourceAnchorIndex, findNextTopLevelBoundary(lines, sourceAnchorIndex + 1, lines.length, true), true, true)
       : null;
   if (!sourceBlock) return emptyReport("source-block-not-found", "O bloco corrigido não pôde ser reencontrado com segurança na fonte original.");
   // A persisted reviewer region establishes which source block was corrected.
@@ -991,6 +992,7 @@ export function proposeSiblingCertificationCorrections(input: {
 type SiblingCriterion = AdaptiveExperienceSuggestion["criteria"][number];
 type SiblingSignature = {
   companyPlacement: "same-line" | "next-line";
+  hasPeriodValue: boolean;
   relative: RelativeRecordSignature;
   summary: AdaptiveSuggestionReport["signatureSummary"];
 };
@@ -1004,6 +1006,7 @@ function buildSiblingSignature(block: ParsedExperienceBlock): SiblingSignature {
   const relative = buildRelativeRecordSignature(blockLines(block));
   return {
     companyPlacement,
+    hasPeriodValue: Boolean(block.period),
     relative,
     summary: {
       recordKind: "experience",
@@ -1029,7 +1032,8 @@ function classifySiblingCandidate(
   }
   const criteria = comparison.criteria.map((criterion): SiblingCriterion => criterion === "period-structure" ? "period-alignment" : criterion);
   if ((block.organizationLine ? "next-line" : "same-line") === signature.companyPlacement) criteria.push("spacing");
-  if (comparison.classification === "strong") return { kind: "strong", criteria };
+  if (comparison.classification === "strong" && signature.hasPeriodValue === Boolean(block.period)) return { kind: "strong", criteria };
+  if (comparison.classification === "strong") return { kind: "possible", criteria };
   if (comparison.classification === "possible") return { kind: "possible", criteria };
   return { kind: "rejected", reason: "ambiguous-candidate", explanation: "O bloco não repetiu topologia, tipografia e conteúdo suficientes para virar uma sugestão segura." };
 }
@@ -1165,7 +1169,64 @@ function detectTopLevelExperienceBlocks(lines: CandidateLine[], learnedPatterns:
     return block ? [block] : [];
   });
   const groupedBlocks = detectGroupedExperienceBlocks(lines);
-  return [...new Map([...semanticBlocks, ...groupedBlocks].map((block) => [block.anchor.blockId ?? `${block.anchor.pageNumber}:${block.anchor.sequence}`, block])).values()];
+  const parallelBlocks = detectParallelExperienceBlocks(lines);
+  return [...new Map([...semanticBlocks, ...parallelBlocks, ...groupedBlocks].map((block) => [block.anchor.blockId ?? `${block.anchor.pageNumber}:${block.anchor.sequence}`, block])).values()];
+}
+
+function detectParallelExperienceBlocks(lines: CandidateLine[]): ParsedExperienceBlock[] {
+  const periodLines = lines.filter((line) => Boolean(extractPeriod(line.text)) && !isBullet(line.text));
+  return periodLines.flatMap((periodLine, periodIndex) => {
+    const period = extractPeriod(periodLine.text);
+    if (!period) return [];
+    const periodCenterY = periodLine.y + periodLine.height / 2;
+    const roleLine = lines
+      .filter((line) => line.pageNumber === periodLine.pageNumber
+        && line.sequence !== periodLine.sequence
+        && line.x > periodLine.x + periodLine.width
+        && Math.abs((line.y + line.height / 2) - periodCenterY) <= Math.max(0.022, periodLine.height, line.height)
+        && !isBullet(line.text)
+        && !SECTION_HEADING.test(line.text)
+        && !extractPeriod(line.text)
+        && (ROLE_TERMS.test(line.text) || line.emphasis === "strong"))
+      .sort((left, right) => Number(ROLE_TERMS.test(right.text)) - Number(ROLE_TERMS.test(left.text))
+        || Math.abs((left.y + left.height / 2) - periodCenterY) - Math.abs((right.y + right.height / 2) - periodCenterY)
+        || left.x - right.x)[0] ?? null;
+    if (!roleLine) return [];
+    const nextPeriodY = periodLines
+      .filter((candidate, index) => index > periodIndex && candidate.pageNumber === periodLine.pageNumber && candidate.y > periodLine.y)
+      .map((candidate) => candidate.y)
+      .sort((left, right) => left - right)[0] ?? 1;
+    const organizationLine = lines
+      .filter((line) => line.pageNumber === roleLine.pageNumber
+        && line.y > roleLine.y
+        && line.y <= roleLine.y + Math.max(0.05, roleLine.height * 3)
+        && Math.abs(line.x - roleLine.x) <= 0.06
+        && isLikelyOrganizationLine(line))
+      .sort((left, right) => left.y - right.y)[0] ?? null;
+    if (!organizationLine) return [];
+    const descriptionLines = lines.filter((line) => line.pageNumber === roleLine.pageNumber
+      && line.sequence !== roleLine.sequence
+      && line.sequence !== organizationLine.sequence
+      && line.sequence !== periodLine.sequence
+      && line.y > organizationLine.y
+      && line.y < nextPeriodY
+      && line.x >= roleLine.x - 0.04
+      && !SECTION_HEADING.test(line.text)
+      && !extractPeriod(line.text));
+    return [{
+      anchor: roleLine,
+      anchorIndex: lines.indexOf(roleLine),
+      organizationLine,
+      roleLine,
+      periodLine,
+      role: cleanHeaderRole(roleLine.text),
+      organization: cleanOrganizationValue(organizationLine.text),
+      period,
+      description: descriptionLines.map((line) => stripBullet(line.text)).filter(Boolean).join("\n") || null,
+      descriptionLines,
+      patternKey: "experience:block-v4:parallel-period-role:company-next-line",
+    }];
+  });
 }
 
 function detectGroupedExperienceBlocks(lines: CandidateLine[]): ParsedExperienceBlock[] {
@@ -1179,17 +1240,22 @@ function detectGroupedExperienceBlocks(lines: CandidateLine[]): ParsedExperience
   return [...groups.values()].flatMap((group) => {
     const ordered = [...group].sort((left, right) => left.sequence - right.sequence);
     const roleIndex = ordered.findIndex((line) => /^\s*cargo\s*:/i.test(line.text));
-    const periodIndex = ordered.findIndex((line) => /^\s*per[ií]odo\s*:/i.test(line.text));
-    if (roleIndex < 0 || periodIndex <= roleIndex) return [];
-    const organizationIndex = ordered.findIndex((line, index) => index < roleIndex && !/^\s*(pela\s+)?terceirizad[ao]\s*:/i.test(line.text));
+    if (roleIndex < 0) return parseUnlabeledGroupedExperience(ordered);
+    const labeledPeriodIndex = ordered.findIndex((line) => /^\s*per[ií]odo\s*:/i.test(line.text));
+    const periodIndex = labeledPeriodIndex >= 0 ? labeledPeriodIndex : ordered.findIndex((line) => Boolean(extractPeriod(line.text)));
+    const organizationIndex = ordered.findIndex((line, index) => index < roleIndex
+      && index !== periodIndex
+      && !/^\s*(pela\s+)?terceirizad[ao]\s*:/i.test(line.text));
     if (organizationIndex < 0) return [];
     const organizationLine = ordered[organizationIndex]!;
-    const roleLines = ordered.slice(roleIndex, periodIndex);
+    const roleEndIndex = periodIndex > roleIndex ? periodIndex : roleIndex + 1;
+    const roleLines = ordered.slice(roleIndex, roleEndIndex);
     const role = roleLines.map((line, index) => index === 0 ? line.text.replace(/^\s*cargo\s*:\s*/i, "") : line.text).join(" ").trim();
-    const periodLine = ordered[periodIndex]!;
-    const period = periodLine.text.replace(/^\s*per[ií]odo\s*:\s*/i, "").trim();
-    const descriptionLines = ordered.filter((_, index) => index !== organizationIndex && index !== periodIndex);
-    if (!role || !period || !isPlausibleOrganization(organizationLine.text)) return [];
+    const periodLine = periodIndex >= 0 ? ordered[periodIndex]! : null;
+    const period = periodLine ? (extractPeriod(periodLine.text) ?? periodLine.text.replace(/^\s*per[ií]odo\s*:\s*/i, "").trim()) : null;
+    const roleLineSet = new Set(roleLines);
+    const descriptionLines = ordered.filter((line, index) => index !== organizationIndex && index !== periodIndex && !roleLineSet.has(line));
+    if (!role || !isPlausibleOrganization(organizationLine.text) || (!period && descriptionLines.length === 0)) return [];
     return [{
       anchor: organizationLine,
       anchorIndex: lines.indexOf(organizationLine),
@@ -1201,15 +1267,51 @@ function detectGroupedExperienceBlocks(lines: CandidateLine[]): ParsedExperience
       period,
       description: descriptionLines.map((line) => line.text.replace(/^\s*cargo\s*:\s*/i, "").trim()).filter(Boolean).join("\n") || null,
       descriptionLines,
-      patternKey: "experience:block-v3:grouped-layout:organization-role-period",
+      patternKey: `experience:block-v3:grouped-layout:organization-role-${labeledPeriodIndex >= 0 ? "labeled-period" : period ? "period" : "period-missing"}`,
     }];
   });
+}
+
+function parseUnlabeledGroupedExperience(ordered: CandidateLine[]): ParsedExperienceBlock[] {
+  const organizationLine = ordered[0];
+  if (!organizationLine || !isLikelyOrganizationLine(organizationLine)) return [];
+  const contentLines = ordered.slice(1).filter((line) => !RESUME_SECTION_BOUNDARY.test(line.text));
+  const durationLines = contentLines.filter((line) => /\b\d+\s*(?:anos?|meses?|years?|months?)\b/i.test(line.text));
+  if (durationLines.length === 0 || durationLines.length !== contentLines.length) return [];
+  const roles = contentLines.map((line) => line.text
+    .replace(/\s*[-–]?\s*(?:trabalho\s+)?aut[oô]nomo.*$/i, "")
+    .replace(/\s*\([^)]*\)\s*$/, "")
+    .trim()).filter(Boolean);
+  if (roles.length === 0) return [];
+  return [{
+    anchor: organizationLine,
+    anchorIndex: -1,
+    organizationLine,
+    roleLine: contentLines[0] ?? null,
+    periodLine: null,
+    role: roles.join(" / "),
+    organization: cleanOrganizationValue(organizationLine.text),
+    period: null,
+    description: contentLines.map((line) => line.text).join("\n"),
+    descriptionLines: contentLines,
+    patternKey: "experience:block-v3:grouped-layout:organization-multiple-roles-duration-only",
+  }];
 }
 
 function parseGroupedExperienceBlock(lines: CandidateLine[], anchorIndex: number): ParsedExperienceBlock | null {
   const blockId = lines[anchorIndex]?.blockId;
   if (!blockId) return null;
   return detectGroupedExperienceBlocks(lines.filter((line) => line.blockId === blockId))[0] ?? null;
+}
+
+function parseParallelExperienceBlock(lines: CandidateLine[], anchorIndex: number): ParsedExperienceBlock | null {
+  const anchor = lines[anchorIndex];
+  if (!anchor) return null;
+  return detectParallelExperienceBlocks(lines).find((block) => block.roleLine?.pageNumber === anchor.pageNumber
+    && (block.roleLine.sequence === anchor.sequence
+      || block.descriptionLines.some((line) => line.sequence === anchor.sequence)
+      || block.organizationLine?.sequence === anchor.sequence
+      || block.periodLine?.sequence === anchor.sequence)) ?? null;
 }
 
 function locateExistingExperienceBlocks(lines: CandidateLine[], experiences: StructuredDraft["experiences"]): Array<ParsedExperienceBlock | null> {

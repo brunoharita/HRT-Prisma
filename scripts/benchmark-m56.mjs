@@ -29,6 +29,7 @@ for (const item of manifest.cases) {
     id: item.id,
     kind: item.kind,
     clearAndSupported: item.clearAndSupported === true,
+    requiresDocumentIntelligence: item.requiresDocumentIntelligence === true,
     baseline: scoreRun(groundTruth, baseline),
     m56: scoreRun(groundTruth, m56),
   });
@@ -42,9 +43,13 @@ const consolidated = {
 };
 const criticalRegression = consolidated.m56.semantic.unsupportedFacts > consolidated.baseline.semantic.unsupportedFacts
   || consolidated.m56.evidence.spatialCorrectRate < consolidated.baseline.evidence.spatialCorrectRate;
+const providerFallbacks = results.filter((item) => item.requiresDocumentIntelligence && item.m56.documentIntelligence.fallbackUsed).length;
+const humanWorkImproved = consolidated.m56.semantic.interventionRate < consolidated.baseline.semantic.interventionRate;
 const cutover = eligible.length > 0
   && consolidated.eligibleM56CorrectFieldRate >= 0.9
   && consolidated.m56.semantic.correctFieldRate > consolidated.baseline.semantic.correctFieldRate
+  && humanWorkImproved
+  && providerFallbacks === 0
   && !criticalRegression;
 const report = {
   contractVersion: "m5.6-benchmark-1.0.0",
@@ -57,7 +62,15 @@ const report = {
     status: cutover ? "PASS" : "BLOCKED",
     targetCorrectFieldRate: 0.9,
     criticalRegression,
-    reason: cutover ? "quality_target_and_superiority_proven" : "quality_target_or_superiority_not_proven",
+    providerFallbacks,
+    humanWorkImproved,
+    reasons: cutover ? ["quality_target_superiority_and_human_work_reduction_proven"] : [
+      ...(consolidated.eligibleM56CorrectFieldRate < 0.9 ? ["quality_target_not_met"] : []),
+      ...(consolidated.m56.semantic.correctFieldRate <= consolidated.baseline.semantic.correctFieldRate ? ["baseline_superiority_not_proven"] : []),
+      ...(!humanWorkImproved ? ["human_work_reduction_not_proven"] : []),
+      ...(providerFallbacks > 0 ? ["required_provider_fallback_detected"] : []),
+      ...(criticalRegression ? ["critical_regression_detected"] : []),
+    ],
   },
 };
 await mkdir(dirname(outputPath), { recursive: true });

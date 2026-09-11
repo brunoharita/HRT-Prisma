@@ -57,11 +57,15 @@ export default defineConfig({
       "/document-intelligence-vl": {
         target: "http://127.0.0.1:8081",
         changeOrigin: false,
+        timeout: 300_000,
+        proxyTimeout: 300_000,
         rewrite: (path) => path.replace(/^\/document-intelligence-vl/, ""),
       },
       "/document-intelligence": {
         target: "http://127.0.0.1:8080",
         changeOrigin: false,
+        timeout: 300_000,
+        proxyTimeout: 300_000,
         rewrite: (path) => path.replace(/^\/document-intelligence/, ""),
       },
     },

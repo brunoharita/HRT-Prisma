@@ -88,7 +88,15 @@ export interface DocumentIntelligenceRequest {
 
 export interface DocumentIntelligenceProvider {
   readonly providerName: string;
+  describe(route: DocumentIntelligenceRequest["route"]): DocumentIntelligenceProviderDescriptor;
   analyze(request: DocumentIntelligenceRequest): Promise<CanonicalDocument>;
+}
+
+export interface DocumentIntelligenceProviderDescriptor {
+  provider: string;
+  providerVersion: string;
+  model: string;
+  modelVersion: string;
 }
 
 export interface NativePagePreflight {
@@ -112,6 +120,11 @@ export interface DocumentIntelligenceMetric {
   pageCount: number;
   outcome: "success" | "fallback" | "failure" | "skipped";
   diagnosticCategory: DocumentIntelligenceDiagnosticCategory | null;
+  reasonCode?: string | null;
+  httpStatus?: number | null;
+  providerErrorCode?: number | string | null;
+  blockCount?: number;
+  lineCount?: number;
 }
 
 export interface DocumentIntelligenceTrace {
@@ -195,10 +208,44 @@ export function assertCanonicalDocument(value: CanonicalDocument): CanonicalDocu
 }
 
 export function diagnosticCategory(error: unknown): DocumentIntelligenceDiagnosticCategory {
+  if (hasDiagnosticCategory(error)) return error.diagnosticCategory;
   if (error instanceof DOMException && error.name === "AbortError") return "provider_timeout";
   if (error instanceof Error && /timeout|timed out|tempo limite/i.test(error.message)) return "provider_timeout";
   if (error instanceof Error && /canonical|response|resposta|schema|json/i.test(error.message)) return "provider_invalid_response";
   return "provider_unavailable";
+}
+
+export function safeDocumentIntelligenceFailure(error: unknown): {
+  diagnosticCategory: DocumentIntelligenceDiagnosticCategory;
+  reasonCode: string;
+  httpStatus: number | null;
+  providerErrorCode: number | string | null;
+} {
+  const diagnostic = diagnosticCategory(error);
+  if (typeof error !== "object" || error === null) {
+    return { diagnosticCategory: diagnostic, reasonCode: "provider_failure", httpStatus: null, providerErrorCode: null };
+  }
+  const value = error as Record<string, unknown>;
+  return {
+    diagnosticCategory: diagnostic,
+    reasonCode: typeof value.reasonCode === "string" && /^[a-z0-9_]{3,80}$/.test(value.reasonCode) ? value.reasonCode : "provider_failure",
+    httpStatus: typeof value.httpStatus === "number" && Number.isInteger(value.httpStatus) ? value.httpStatus : null,
+    providerErrorCode: typeof value.providerErrorCode === "number"
+      ? value.providerErrorCode
+      : typeof value.providerErrorCode === "string" && /^[a-z0-9_-]{1,40}$/i.test(value.providerErrorCode)
+        ? value.providerErrorCode
+        : null,
+  };
+}
+
+function hasDiagnosticCategory(error: unknown): error is { diagnosticCategory: DocumentIntelligenceDiagnosticCategory } {
+  if (typeof error !== "object" || error === null) return false;
+  const value = (error as { diagnosticCategory?: unknown }).diagnosticCategory;
+  return typeof value === "string" && [
+    "document_ocr_failure", "layout_reading_order_failure", "structural_failure", "semantic_failure",
+    "unknown_pattern", "real_ambiguity", "provider_unavailable", "provider_timeout",
+    "provider_invalid_response", "page_incomplete", "content_insufficient", "fallback_used", "unsupported_input",
+  ].includes(value);
 }
 
 function hasComplexLayout(lines: LayoutTextLine[]): boolean {

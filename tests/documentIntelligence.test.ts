@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   CANONICAL_COORDINATE_SYSTEM,
@@ -6,10 +7,12 @@ import {
   canonicalPageToLayoutLines,
   preflightDocument,
   resolveDocumentIntelligenceMode,
+  safeDocumentIntelligenceFailure,
   type NativePagePreflight,
 } from "../web/src/domain/documentIntelligence.js";
 import {
   PaddleDocumentIntelligenceProvider,
+  PaddleProviderError,
   mapPaddleLayoutResponse,
 } from "../web/src/infrastructure/paddleDocumentIntelligenceProvider.js";
 import { buildPdfLayoutLines } from "../web/src/domain/personIngestion.js";
@@ -166,4 +169,64 @@ test("provider calls only the configured self-hosted boundary with minimized out
   assert.equal(requestedBody.returnMarkdownImages, false);
   assert.equal(requestedBody.useFormulaRecognition, false);
   assert.equal(requestedBody.useDocUnwarping, true);
+});
+
+test("Paddle failures expose only allowlisted operational metadata", async () => {
+  const provider = new PaddleDocumentIntelligenceProvider({
+    structureEndpoint: "http://127.0.0.1:8080/layout-parsing",
+    fetchImplementation: (async () => new Response(JSON.stringify({ errorCode: 17, errorMsg: "sensitive provider detail" }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    })) as typeof fetch,
+  });
+  await assert.rejects(
+    () => provider.analyze({ bytes: new Uint8Array([1]), mimeType: "application/pdf", route: "structure" }),
+    (error) => {
+      assert.ok(error instanceof PaddleProviderError);
+      assert.deepEqual(safeDocumentIntelligenceFailure(error), {
+        diagnosticCategory: "provider_invalid_response",
+        reasonCode: "provider_error",
+        httpStatus: 200,
+        providerErrorCode: 17,
+      });
+      assert.doesNotMatch(JSON.stringify(safeDocumentIntelligenceFailure(error)), /sensitive provider detail/);
+      return true;
+    },
+  );
+  assert.equal(safeDocumentIntelligenceFailure({
+    diagnosticCategory: "provider_invalid_response",
+    reasonCode: "provider_error",
+    providerErrorCode: "sensitive provider detail",
+  }).providerErrorCode, null);
+});
+
+test("Paddle timeout is distinguishable from invalid response and unavailable provider", async () => {
+  const provider = new PaddleDocumentIntelligenceProvider({
+    timeoutMs: 5,
+    fetchImplementation: ((_: string | URL | Request, init?: RequestInit) => new Promise<Response>((_resolve, reject) => {
+      init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")));
+    })) as typeof fetch,
+  });
+  await assert.rejects(
+    () => provider.analyze({ bytes: new Uint8Array([1]), mimeType: "application/pdf", route: "structure" }),
+    (error) => {
+      assert.deepEqual(safeDocumentIntelligenceFailure(error), {
+        diagnosticCategory: "provider_timeout",
+        reasonCode: "request_timeout",
+        httpStatus: null,
+        providerErrorCode: null,
+      });
+      return true;
+    },
+  );
+});
+
+test("M5.6 cutover requires quality, superiority, less human work and no provider fallback", async () => {
+  const script = await readFile("scripts/benchmark-m56.mjs", "utf8");
+  assert.match(script, /manifest\.cases\.length < 8 \|\| manifest\.cases\.length > 12/);
+  assert.match(script, /eligibleM56CorrectFieldRate >= 0\.9/);
+  assert.match(script, /m56\.semantic\.correctFieldRate > consolidated\.baseline\.semantic\.correctFieldRate/);
+  assert.match(script, /humanWorkImproved/);
+  assert.match(script, /providerFallbacks === 0/);
+  assert.match(script, /!criticalRegression/);
 });

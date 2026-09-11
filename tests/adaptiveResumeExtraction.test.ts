@@ -498,6 +498,35 @@ test("a selection inside the experience body resolves the complete source block 
   assert.ok(report.suggestions.some((item) => item.criteria.includes("relative-topology") && item.proposedExperience?.organization === "Vtex"));
 });
 
+test("Paddle-style parallel period and content columns preserve complete experience records", () => {
+  const layoutLines = [
+    line("EXPERIÊNCIA", 0.34, 0.09, 0.2, "strong"),
+    line("06/2021-09/2023", 0.367, 0.09, 0.13),
+    line("Desenvolvedora de Software", 0.369, 0.27, 0.35, "strong"),
+    line("Movile", 0.385, 0.27, 0.15, "strong"),
+    line("• Desenvolveu funcionalidades para e-commerce.", 0.405, 0.27, 0.56),
+    { ...line("01/2019-05/2021", 0.512, 0.09, 0.13), blockId: "parallel-header-2", blockType: "paragraph_title" },
+    { ...line("Ta", 0.513, 0.252, 0.02, "strong"), blockId: "parallel-header-2", blockType: "paragraph_title" },
+    { ...line("Engenheira de Software Front-End", 0.514, 0.27, 0.42, "strong"), blockId: "parallel-header-2", blockType: "paragraph_title" },
+    line("Vtex", 0.53, 0.27, 0.12, "strong"),
+    line("• Desenvolveu componentes em React.", 0.55, 0.27, 0.5),
+    line("01/2018-12/2018", 0.645, 0.09, 0.13),
+    line("Programadora Web", 0.647, 0.27, 0.3, "strong"),
+    line("Catho", 0.663, 0.27, 0.12, "strong"),
+    line("• Codificou melhorias em uma plataforma web.", 0.683, 0.27, 0.52),
+    line("EDUCAÇÃO", 0.77, 0.09, 0.2, "strong"),
+    line("01/2020-01/2022", 0.80, 0.09, 0.13),
+    line("Mestrado em Ciência da Computação", 0.80, 0.27, 0.4, "strong"),
+  ];
+  const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "ocr", usefulCharacterCount: 520, method: "PP-StructureV3", methodVersion: "PP-StructureV3/PP-OCRv6", layoutLines };
+  const extraction = buildAdaptiveExtraction([page]);
+  assert.deepEqual(extraction.draft.experiences.map((item) => item.organization), ["Movile", "Vtex", "Catho"]);
+  assert.deepEqual(extraction.draft.experiences.map((item) => item.role), ["Desenvolvedora de Software", "Engenheira de Software Front-End", "Programadora Web"]);
+  assert.deepEqual(extraction.draft.experiences.map((item) => item.period), ["06/2021-09/2023", "01/2019-05/2021", "01/2018-12/2018"]);
+  const periodEvidence = extraction.fieldEvidence.find((item) => item.fieldPath.endsWith(".period"));
+  assert.equal(periodEvidence?.x, 0.09);
+});
+
 test("reviewer geometry learns repeated OCR blocks even when OCR corrupted separators and the corrected company", () => {
   const layoutLines = [
     line("EXPERIÊNCIA", 0.34, 0.142, 0.2, "strong"),
@@ -551,15 +580,39 @@ test("organization-first grouped blocks are learned across columns without a dat
     grouped("DURATEX", 0.715, 0.51, "right-2"),
     grouped("Cargo: Limpador de vidros", 0.745, 0.51, "right-2"),
     grouped("Periodo: 21/06/2014 (1 ano e 6 meses)", 0.757, 0.51, "right-2"),
+    grouped("BATERIAS TUDOR", 0.78, 0.51, "right-3"),
+    grouped("Cargo: Auxiliar de produção", 0.795, 0.51, "right-3"),
+    grouped("Atuação na linha de produção e apoio logístico", 0.81, 0.51, "right-3"),
   ];
   const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf", usefulCharacterCount: 620, method: "pdfjs", methodVersion: "pdfjs-layout-v1", layoutLines };
   const initial = buildAdaptiveExtraction([page]);
-  assert.deepEqual(initial.draft.experiences.map((item) => item.organization), ["JAD ZOGHEIB & CIA LTDA", "T-GESTIONA", "ORIGEM DO BRASIL LTDA", "DURATEX"]);
+  assert.deepEqual(initial.draft.experiences.map((item) => item.organization), ["JAD ZOGHEIB & CIA LTDA", "T-GESTIONA", "ORIGEM DO BRASIL LTDA", "DURATEX", "BATERIAS TUDOR"]);
   const anchor = { ...initial.draft.experiences[0]!, source: "human" as const, description: "Operador de empilhadeira, conferencia, logistica e expedição" };
   const draft: StructuredDraft = { ...emptyStructuredSummary(), experiences: [anchor], education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
   const report = proposeSiblingBlockCorrections({ pages: [page], draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "organization", sourceRegion: { pageNumber: 1, x: 0.05, y: 0.57, width: 0.43, height: 0.07 } });
-  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["T-GESTIONA", "ORIGEM DO BRASIL LTDA", "DURATEX"]);
-  assert.ok(report.suggestions.every((item) => item.proposedExperience?.period));
+  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["T-GESTIONA", "ORIGEM DO BRASIL LTDA", "DURATEX", "BATERIAS TUDOR"]);
+  assert.ok(report.suggestions.slice(0, 3).every((item) => item.proposedExperience?.period));
+  assert.equal(report.suggestions[3]?.classification, "possible");
+  assert.equal(report.suggestions[3]?.proposedExperience?.period, null);
+  assert.match(report.suggestions[3]?.explanation ?? "", /revisão individual/i);
+});
+
+test("an organization-first grouped block with explicit durations remains a partial experience", () => {
+  const layoutLines: LayoutTextLine[] = [
+    { ...line("EXPERIÊNCIA PROFISSIONAL", 0.55, 0.06, 0.3, "strong"), blockId: "heading", blockType: "paragraph_title", blockReadingOrder: 0 },
+    { ...line("AUTÔNOMO", 0.81, 0.06, 0.2), blockId: "self-employed", blockType: "text", blockReadingOrder: 1 },
+    { ...line("MOTORISTA - Caminhão - Trabalho autônomo (2 anos)", 0.826, 0.06, 0.42), blockId: "self-employed", blockType: "text", blockReadingOrder: 1 },
+    { ...line("SEGURANÇA PATRIMONIAL - Trabalho autônomo (1 ano)", 0.84, 0.06, 0.44), blockId: "self-employed", blockType: "text", blockReadingOrder: 1 },
+    { ...line("INFORMAÇÕES ADICIONAIS", 0.854, 0.06, 0.3, "strong"), blockId: "next", blockType: "paragraph_title", blockReadingOrder: 2 },
+    { ...line("Facilidade de comunicação", 0.88, 0.06, 0.3), blockId: "next-body", blockType: "text", blockReadingOrder: 3 },
+  ];
+  const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf", usefulCharacterCount: 280, method: "PP-StructureV3", methodVersion: "PP-StructureV3/PP-OCRv6", layoutLines };
+  const extraction = buildAdaptiveExtraction([page]);
+  assert.equal(extraction.draft.experiences.length, 1);
+  assert.equal(extraction.draft.experiences[0]?.organization, "AUTÔNOMO");
+  assert.equal(extraction.draft.experiences[0]?.role, "MOTORISTA - Caminhão / SEGURANÇA PATRIMONIAL");
+  assert.equal(extraction.draft.experiences[0]?.period, null);
+  assert.doesNotMatch(extraction.draft.experiences[0]?.description ?? "", /INFORMAÇÕES ADICIONAIS|Facilidade/);
 });
 
 test("human-confirmed education pattern finds academic siblings across columns", () => {

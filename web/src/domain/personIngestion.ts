@@ -15,9 +15,9 @@ import { createLocalOcrWorker } from "./ocrWorker.js";
 import {
   DOCUMENT_INTELLIGENCE_CONTRACT_VERSION,
   canonicalPageToLayoutLines,
-  diagnosticCategory,
   preflightDocument,
   resolveDocumentIntelligenceMode,
+  safeDocumentIntelligenceFailure,
   type DocumentIntelligenceMode,
   type DocumentIntelligenceProvider,
   type DocumentIntelligenceTrace,
@@ -28,7 +28,7 @@ export const MAX_PDF_BYTES = 15 * 1024 * 1024;
 export const NATIVE_EXTRACTION_VERSION = "pdfjs-5.4.296/layout-v2";
 export const OCR_VERSION = "tesseract.js-7.0.0/por+eng-v1";
 export const STRUCTURING_VERSION = ADAPTIVE_STRUCTURING_VERSION;
-export const EXTRACTION_DRAFT_VERSION = "8.0.0";
+export const EXTRACTION_DRAFT_VERSION = "8.1.0";
 
 export type PersonProfileState =
   | "not_generated"
@@ -513,6 +513,11 @@ export async function validateAndProcessPdf(
       message: "Analisando a estrutura visual do currículo.",
     });
     const providerStartedAt = performance.now();
+    const descriptor = options.documentIntelligenceProvider.describe(preflight.route);
+    trace.provider = descriptor.provider;
+    trace.providerVersion = descriptor.providerVersion;
+    trace.model = descriptor.model;
+    trace.modelVersion = descriptor.modelVersion;
     try {
       let canonical = await options.documentIntelligenceProvider.analyze({ bytes, mimeType: "application/pdf", route: preflight.route });
       if (!canonicalPagesComplete(canonical.pages, pdfDocument.numPages)) {
@@ -564,6 +569,9 @@ export async function validateAndProcessPdf(
         pageCount: providerPages.length,
         outcome: mode === "enabled" ? "success" : "skipped",
         diagnosticCategory: null,
+        reasonCode: "canonical_document_valid",
+        blockCount: canonical.pages.reduce((total, page) => total + page.blocks.length, 0),
+        lineCount: canonical.pages.reduce((total, page) => total + page.lines.length, 0),
       });
       if (mode === "enabled") {
         pages = providerPages;
@@ -571,8 +579,8 @@ export async function validateAndProcessPdf(
         trace.effectiveRoute = preflight.route;
       }
     } catch (error) {
-      const category = diagnosticCategory(error);
-      trace.diagnostics.push(category);
+      const failure = safeDocumentIntelligenceFailure(error);
+      trace.diagnostics.push(failure.diagnosticCategory);
       trace.fallbackUsed = true;
       trace.metrics.push({
         stage: preflight.route,
@@ -580,7 +588,10 @@ export async function validateAndProcessPdf(
         durationMs: roundedMilliseconds(performance.now() - providerStartedAt),
         pageCount: pdfDocument.numPages,
         outcome: "fallback",
-        diagnosticCategory: category,
+        diagnosticCategory: failure.diagnosticCategory,
+        reasonCode: failure.reasonCode,
+        httpStatus: failure.httpStatus,
+        providerErrorCode: failure.providerErrorCode,
       });
     }
   } else if (preflight.route !== "native-fast") {

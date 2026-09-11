@@ -88,3 +88,13 @@ test("curriculum-first UI keeps import directly available while profile discover
   assert.match(styles, /\.prisma-journey-match[\s\S]*?grid-template-columns/);
   assert.match(styles, /\.prisma-match-avatar[\s\S]*?background: linear-gradient/);
 });
+
+test("human-confirmed linking accepts a name-only intake without weakening new-person identity", async () => {
+  const sql = await readFile("supabase/migrations/20260911144500_allow_human_confirmed_name_only_resume_link.sql", "utf8");
+
+  assert.match(sql, /p_resolution_action = 'link_existing_person'[\s\S]*claimed\.status not in \('ready_to_resolve', 'needs_duplicate_resolution', 'needs_human_identity'\)/i);
+  assert.match(sql, /link_existing_person'[\s\S]*claimed\.detected_name is null[\s\S]*detected name is required before linking a resume/i);
+  assert.match(sql, /else[\s\S]*claimed\.status not in \('ready_to_resolve', 'needs_duplicate_resolution'\)[\s\S]*normalized_email is null and claimed\.normalized_phone is null[\s\S]*minimum identity is required before creating a person/i);
+  assert.match(sql, /private\.require_document_reviewer\(p_organization_id\)/i);
+  assert.match(sql, /where person\.organization_id = p_organization_id and person\.id = p_existing_person_id[\s\S]*for update/i);
+});

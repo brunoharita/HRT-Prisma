@@ -33,7 +33,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web; evidência espacial OCR persiste somente com o método compatível `tesseract-layout-v1`;
-- draft web: `extraction-draft-8.0.0` / `prisma-layout-adaptive-v8`;
+- draft web: `extraction-draft-8.1.0` / `prisma-layout-adaptive-v9`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
@@ -43,7 +43,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - revisão humana: `human-profile-review-7.2.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
-- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-7.0.0`;
+- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-7.1.0`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.1.0`;
 - feedback operacional: `operation-feedback-2.0.0`;

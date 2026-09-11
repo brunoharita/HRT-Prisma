@@ -13,6 +13,7 @@ O manifesto precisa conter de 8 a 12 casos autorizados e cobrir, na medida do po
       "id": "cv-hash-curto-sem-pii",
       "kind": "native-simple",
       "clearAndSupported": true,
+      "requiresDocumentIntelligence": false,
       "groundTruth": "ground-truth/caso-01.json",
       "baseline": "baseline/caso-01.json",
       "m56": "m56/caso-01.json"
@@ -29,4 +30,4 @@ Execução:
 pnpm run benchmark:m56 -- --manifest benchmarks/m5.6/private/manifest.json
 ```
 
-O processo encerra com código 2 e `BLOCKED` quando a amostra real está ausente, fora de 8 a 12 casos, abaixo da meta de 90%, sem ganho sobre o baseline ou com regressão crítica de invenção/evidência.
+Marque `requiresDocumentIntelligence=true` nos casos em que estrutura, visão ou recuperação sejam necessárias. O processo encerra com código 2 e `BLOCKED` quando a amostra real está ausente, fora de 8 a 12 casos, abaixo da meta de 90%, sem ganho sobre o baseline, sem redução mensurável de intervenção humana, com fallback em caso que exige Document Intelligence ou com regressão crítica de invenção/evidência.

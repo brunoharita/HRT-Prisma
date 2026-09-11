@@ -27,6 +27,8 @@ docker compose -f services/paddle/compose.yaml --profile vision-recovery up --bu
 
 As portas são publicadas somente em `127.0.0.1`. O primeiro uso baixa modelos oficiais para volumes nomeados e pode ter latência maior. O frontend em desenvolvimento encaminha os endpoints pelo proxy Vite.
 
+O cliente usa 240 segundos por padrão, aceita `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS` somente entre 30 e 300 segundos e o proxy Vite usa 300 segundos. Para ativar o provider no ambiente local, defina `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`; `baseline` mantém o pipeline anterior. Reinicie o Vite após mudar variáveis de ambiente.
+
 ## Verificação mínima
 
 1. confirmar que `http://127.0.0.1:8080/docs` responde localmente;
@@ -36,10 +38,19 @@ As portas são publicadas somente em `127.0.0.1`. O primeiro uso baixa modelos o
 5. revisar `document_intelligence_runs` sem texto ou PII;
 6. executar o benchmark autorizado antes de qualquer `enabled`.
 
+Probe local sanitizado para arquivos explicitamente autorizados:
+
+```powershell
+pnpm run build
+pnpm run probe:paddle -- --file "C:\caminho\curriculo.pdf"
+```
+
+O probe rejeita endpoint fora de loopback e imprime somente hash curto, tempo, páginas, blocos, linhas e versões técnicas.
+
 ## Falha e rollback
 
 Timeout, indisponibilidade, JSON inválido, página ausente ou texto insuficiente retornam ao pipeline existente. Defina `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e pare os containers para rollback. Não reprocese perfis históricos e não promova flag para produção.
 
 ## Evidência desta execução
 
-Em 2026-09-10, `docker version` confirmou o cliente 28.3.3, mas o daemon não respondeu e a chamada elevada ficou bloqueada até interrupção. Assim, build do container, download de modelos, warm-up, latência e memória não foram medidos nesta máquina. O código e a configuração são verificáveis estaticamente, porém o runtime permanece `NOT TESTED` até o daemon estar funcional.
+Em 2026-09-11, o container `structure` respondeu em `127.0.0.1:8080`. Os dois arquivos autorizados completaram o adaptador real sem fallback: Tainá em aproximadamente 83 segundos, com 40 blocos e 71 linhas; Vagner em aproximadamente 66 segundos, com 27 blocos e 60 linhas. Uma execução autenticada posterior pela interface variou até cerca de dois minutos no mesmo CPU, dentro do novo limite. Memória e comportamento com concorrência ainda não foram medidos.
