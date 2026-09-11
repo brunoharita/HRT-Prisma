@@ -16,7 +16,13 @@ Demonstrar comportamento, segurança, compatibilidade e explicabilidade proporci
 
 ## Estratégia por risco
 
-Classes A/B usam checks focados. Classe C inclui integração e regressão afetada. Classes D/E exigem teste negativo, ADR/contrato quando duradouro, QA-first, rollback, evidência e gate completo.
+Classes A/B usam checks focados. Classe C inclui integração e regressão afetada. Classes D/E exigem teste negativo, ADR/contrato quando duradouro, QA-first, rollback e evidência nas áreas afetadas. A suíte completa do repositório só pode ser executada com autorização explícita do Product Owner, depois de explicar qual risco transversal não pode ser coberto por testes direcionados.
+
+## Escopo proporcional e autorização
+
+Os testes devem cobrir somente as áreas alteradas, as áreas comprovadamente afetadas e os cenários condizentes com a mudança. Testes de módulos sem relação causal com o diff não devem ser executados por padrão.
+
+`pnpm run validate` é o gate completo da fundação, mas não é o gate automático de toda alteração. Sua execução exige autorização explícita do Product Owner e uma justificativa objetiva sobre o risco transversal, a regressão potencial e por que a validação direcionada seria insuficiente. Sem essa autorização, o agente deve executar apenas os checks proporcionais e registrar claramente o que ficou fora do escopo.
 
 ## Dados
 

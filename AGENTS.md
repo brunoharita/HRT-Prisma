@@ -78,7 +78,7 @@ Documentation does not prove implementation. Code does not prove rollout. A migr
 ### Before completion
 
 1. Review the full diff and Git status.
-2. Run validation proportional to risk, including negative tests for sensitive changes.
+2. Run only the tests and checks that cover the changed areas, the areas demonstrably affected by the change, and scenarios consistent with its risk. Include negative tests for sensitive changes.
 3. Update specialized documentation and `PRISMA_CURRENT_STATE.md` for material changes.
 4. Run `pnpm run generate:prisma-context` and `pnpm run check:prisma-context`.
 5. Confirm local branch, commit, remote ref, QA, and production only when those surfaces exist and are in scope.
@@ -133,7 +133,7 @@ Before asking how to build something, ask whether someone has already solved it 
 | A: mechanical | Local, repetitive, clear, reversible, non-sensitive | Focused check |
 | B: bounded functional | Known flow, few components, clear rule | Unit or targeted functional tests |
 | C: integrated | Multiple layers or relevant side effects | Integration checks and affected regression suite |
-| D: sensitive | Auth, RLS, tenant isolation, schema, migration, PII, secrets, AI contracts, matching, ingestion | Negative tests, security review, QA-first evidence |
+| D: sensitive | Auth, RLS, tenant isolation, schema, migration, PII, secrets, AI contracts, matching, ingestion | Negative tests, security review, QA-first evidence in affected areas |
 | E: architectural/investigative | Multiple hypotheses, boundary or durable architecture change | ADR, broad validation, rollback and compatibility review |
 
 Use the least costly available model that can complete the whole task safely. Do not bind this repository to model names that will age. Escalate model capability and reasoning for Classes D and E or when the current model cannot reliably close the full scope. Model selection must follow `docs/ai/model-policy.md`.
@@ -152,8 +152,9 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 - Apply the reuse-first decision process in Section 5 before committing development effort to a material custom solution.
 - Do not repeat extensive prompts in reports.
 - Do not use subagents without clear independent benefit.
-- Rerun only validations affected by a new edit, then run the final required gate.
-- Do not remove critical security, contract, migration, or AI regression validation to save time or tokens.
+- Rerun only validations affected by a new edit; do not run unrelated suites merely because they exist.
+- Full repository validation is exceptional. It requires explicit Product Owner authorization after the agent explains why the change creates cross-cutting regression risk that targeted validation cannot cover.
+- Do not remove critical security, contract, migration, or AI regression validation in the areas affected by the change to save time or tokens.
 
 ## 9. Git and environments
 
@@ -166,11 +167,14 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 
 ## 10. Required validation
 
-Use pnpm. The final foundation gate is:
+Use pnpm and select the least costly validation that proves the change safely:
 
-```bash
-pnpm run validate
-```
+- mechanical or documentation-only changes: formatting/lint and the directly affected documentation or generator checks;
+- bounded frontend or backend changes: typecheck/build and targeted tests for changed and affected modules;
+- integrated or sensitive changes: targeted integration, security, negative and contract tests for the affected boundaries;
+- full repository validation, including `pnpm run validate`, only with explicit Product Owner authorization and a written explanation of the cross-cutting risk that justifies it.
+
+The existence of `pnpm run validate` as the complete foundation gate does not make it automatic for every change. A complete run is evidence for a broader risk decision, not a default response to a local edit.
 
 Golden fixtures must specify required extraction, acceptable inference, forbidden invention, and expected explanation behavior. Runtime demonstrations must not require a live LLM or production database. PostgreSQL/Supabase is the production persistence contract; the JSON adapter is only for deterministic local execution and tests.
 

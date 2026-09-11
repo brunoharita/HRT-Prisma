@@ -66,7 +66,7 @@ Local port convention:
 | `pnpm run check:prisma-context` | Fail on missing, stale, conflicting, or divergent context |
 | `pnpm run knowledge:prepare` | Validate an official CBO/ESCO snapshot and generate auditable stage, diff and publication SQL |
 | `pnpm run audit:dependencies` | Query the package registry for high-severity production dependency advisories |
-| `pnpm run validate` | Run the complete local foundation gate |
+| `pnpm run validate` | Run the complete local foundation gate when explicitly authorized for a broad-risk change |
 
 ## Repository map
 

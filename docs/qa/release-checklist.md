@@ -10,10 +10,12 @@
 
 ## Código e contratos
 
+- [ ] escopo de validação definido a partir das áreas alteradas e afetadas;
 - [ ] lint, typecheck e build aprovados;
 - [ ] unit, integration e negative tests proporcionais aprovados;
-- [ ] golden extraction/matching aprovados;
-- [ ] contract, migration, security e Context Pack checks aprovados;
+- [ ] suíte completa somente se houver autorização explícita do Product Owner e justificativa registrada;
+- [ ] golden extraction/matching aprovados quando a alteração afetar extração ou matching;
+- [ ] checks de contrato, migration e segurança executados quando suas fronteiras forem afetadas, além do Context Pack quando a documentação canônica mudar;
 - [ ] versão classificada e catálogo atualizado;
 - [ ] nenhum mock acidental, TODO crítico ou fallback inseguro.
 
