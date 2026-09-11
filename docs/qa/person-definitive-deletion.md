@@ -2,7 +2,9 @@
 
 ## Escopo e ambiente
 
-Implementação local e no projeto `Prisma-QA` (`ioldpnqqvobprjiontre`). Produção, hosting, exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831` e `20260909184943` e a Edge Function `person-data-deletion` v1 estão ativas apenas em QA.
+Implementação local e no projeto `Prisma-QA` (`ioldpnqqvobprjiontre`). Produção, hosting, exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831`, `20260909184943` e `20260911153000` e a Edge Function `person-data-deletion` v1 estão ativas apenas em QA.
+
+A migration `20260911153000_person_deletion_learning_metadata_shape` permite que casos de aprendizado aprovados ou rejeitados sobrevivam como metadata-only quando a revisão da Pessoa é purgada. Isso evita que a restrição de forma do aprendizado impeça a conclusão da exclusão definitiva; casos candidatos continuam sendo removidos.
 
 ## Decisão e reuso
 
