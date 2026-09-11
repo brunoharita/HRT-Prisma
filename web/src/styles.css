@@ -2840,6 +2840,24 @@ textarea {
 .prisma-education-classification-card__footer.has-validation-error { background: #fff4f2; border-color: #ff9c91; box-shadow: 0 0 0 3px rgb(207 19 34 / 8%); }
 .prisma-education-classification-card__footer small { color: #526078; font-size: .65rem; }
 .prisma-education-classification-card__footer strong { color: #17375f; font-size: .78rem; }
+.prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary {
+  color: #fff !important;
+  background: #155eef !important;
+  border-color: #155eef !important;
+  opacity: 1;
+}
+.prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary:hover,
+.prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary:focus-visible {
+  color: #fff !important;
+  background: #0d4fc9 !important;
+  border-color: #0d4fc9 !important;
+}
+.prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary:disabled,
+.prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary.ant-btn-disabled {
+  color: #244267 !important;
+  background: #dbe8ff !important;
+  border-color: #8fb4f4 !important;
+}
 .prisma-education-classification-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .prisma-academic-select { display: grid; min-width: 0; gap: 5px; padding: 10px; background: rgb(255 255 255 / 82%); border: 1px solid #dce5f2; border-radius: 9px; }
 .prisma-academic-select.is-selected { border-color: #9ebef8; box-shadow: 0 0 0 2px rgb(21 94 239 / 8%); }
