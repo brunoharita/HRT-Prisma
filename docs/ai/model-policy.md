@@ -1,5 +1,11 @@
 # Política de modelos
 
+## Escopo
+
+As funções, registry, benchmarks e gates de troca abaixo governam modelos utilizados pelo produto Prisma. Não são um procedimento para alternar o agente que desenvolve o repositório.
+
+Para o agente de desenvolvimento, respeitar a seleção do usuário e preferir capacidade suficiente com custo proporcional ao risco. Avaliar maior capacidade em mudanças sensíveis ou arquiteturais quando necessário, sem impor benchmarks de produção para uma troca de agente. O agente não deve afirmar que alterou o próprio modelo sem uma operação suportada e comprovada. Segurança, requisitos aceitos e testes proporcionais permanecem iguais entre modelos; nenhuma dispensa depende do nome do modelo.
+
 ## Princípio
 
 Modelo é implementação substituível de uma função lógica. O projeto não fixa nomes permanentes em `AGENTS.md`; catálogos e aliases mudam. A escolha técnica atual deve existir somente em registry versionado e ser verificada na documentação oficial do fornecedor no momento da decisão.

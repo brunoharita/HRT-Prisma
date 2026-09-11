@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.25.0
+version: 2.25.1
 last_verified: 2026-09-11
 ---
 
@@ -11,11 +11,13 @@ last_verified: 2026-09-11
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/m5-6-resume-parser-upgrade`, dedicada ao upgrade do parser e aprendizado estrutural de currículos.
+- Baseline funcional desta revisão documental: `7cfd22bc963c2abc49d9242156c7f53c9c799778`, proveniente de `codex/m5-6-resume-parser-upgrade`. Branch da auditoria de instruções: `codex/instruction-audit-20260911`; a troca de branch não representa rollout.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
+
+- Auditoria de instruções 2026-09-11 aplicada localmente: contrato do agente 1.1.0, leitura temática, distinção entre evidência e autoridade, acordos incorporados por referência imutável, templates sem resultados presumidos e prompt de redesign consolidado em especificação editorial 2.0.0. ADR-048 e `docs/qa/instruction-audit-20260911.md` registram escopo e prova. O registry inventaria três prompts LLM encontrados no código sem mudar seu texto, versão ou ativação. Nenhuma funcionalidade, migração, QA ou produção foi modificada nesta entrega.
 
 - M5.5 Exclusão definitiva de Pessoa 1.0.0 está implementado localmente e ativo no Prisma-QA. Super Admin, Owner e Admin atuam somente no escopo confirmado; Recruiter e Member são negados. O titular usa capability HMAC exclusiva, curta, revogável, single-use e distinta de assessment, sem se tornar usuário. Uma saga única mantém ledger mínimo desacoplado, bloqueia a Pessoa em `deleting`, coordena Storage, purga o agregado individual e só conclui após verificador determinístico de zero resíduos. Vagas, Knowledge, Item Bank e usuários da plataforma permanecem; auditoria retém somente nome, organização, ator, data, operação e resultado. Provas transacionais revertidas cobriram autoridade, falha parcial, concorrência, purga rica, recadastro com novo UUID e replay. A Edge Function `person-data-deletion` v1 está `ACTIVE`; produção não foi acionada.
 - M5.6/M5.7 Resume Parser Upgrade está implementado localmente e validado no Prisma-QA, fora de produção. `DocumentIntelligenceProvider` e `CanonicalDocument` 1.0.0 isolam o domínio do JSON Paddle; o adaptador 1.1.0 preserva identidade técnica na falha, códigos allowlisted, contagens estruturais e timeout configurável. `adaptive-resume-extraction` 7.1.0, `extraction-draft` 8.1.0, runtime `prisma-layout-adaptive-v9` e `generic-record-pattern-v1` reconhecem blocos paralelos e agrupados sem usar posição absoluta como identidade, priorizam a estrutura específica sobre agrupamentos concorrentes e mantêm registros incompletos como possíveis sem inventar campos. Os dois currículos autorizados completaram Paddle local sem fallback; o smoke autenticado recuperou três experiências e duas formações para Tainá e sete sinais de experiência para Vagner. O vínculo humano name-only a Pessoa existente foi corrigido em QA sem relaxar a criação de Pessoa. Cutover e meta de 90% permanecem bloqueados até amostra cega de 8 a 12 currículos autorizados. Produção não foi acionada.
@@ -24,7 +26,7 @@ last_verified: 2026-09-11
 
 - M5.4.6 Vagas tem schema ativo no Prisma-QA e interface implementada localmente: a Vaga pronta usa Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados, ocultando vazios. O estruturador propõe a dimensão, mas a importância é humana; `unclassified` é permitido em rascunho e mantém a aderência detalhada pendente sem bloquear a descoberta de Pessoas. Reestruturação produz delta, preserva itens humanos e nunca remove item não encontrado automaticamente. Correção de dimensão é auditável e encaminhada somente ao Inbox da Knowledge organizacional, sem alterar Global. A prova SQL revertida confirmou RLS/grants e persistência; o smoke autenticado responsivo desta entrega ainda está bloqueado por indisponibilidade de sessão. Produção não foi acionada.
 
-- Protocolo permanente de fidelidade de acordos ativo: toda melhoria material passa por Contrato de Acordos, Prompt de Execução e AoT. `AGENTS.md` exige classificar DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e critérios de aceite antes do prompt; pendência material exige pergunta, acordo congelado não pode ser reinterpretado, e requisito sem prova não permite conclusão. Templates e protocolo de QA ficam em `docs/qa`; `check-foundation` valida sua presença. Não altera produto, schema, permissões ou produção.
+- Protocolo permanente de fidelidade de acordos ativo: mudança material referencia Contrato de Acordos, Prompt de Execução e AoT; correção que restaura acordo existente pode registrar apenas seu delta. `AGENTS.md` exige preservar DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e aceites, inclusive quando incorporados por caminho e versão/revisão imutável. Pendência material exige pergunta, acordo congelado não pode ser reinterpretado, e requisito sem prova não permite conclusão. Templates e protocolo de QA ficam em `docs/qa`; `check-foundation` valida sua presença. Não altera produto, schema, permissões ou produção.
 
 - Padrão Prisma de Perfil Profissional 1.0 implementado localmente: `prisma-profile-view` deriva do Perfil vigente uma apresentação única para Central, Perfil completo, versões e comparação; `profile-discovery` pesquisa Perfis atuais do tenant por experiência, formação, competências, credenciais e contexto, reutiliza equivalências publicadas no Knowledge e explica por que cada Pessoa apareceu. A comparação aceita exatamente duas Pessoas e não declara vencedor, score ou decisão automática. Nenhum schema, migration, RLS, contrato persistido ou fonte de verdade foi criado. O smoke autenticado aprovou Central, Perfil, busca, resultados, comparação e histórico em `1440x900`, `1280x720`, `768x1024`, `390x844` e `360x800`, sem overflow horizontal, controle fora do viewport ou erro de console; nenhuma mutação foi acionada. O gate completo aprovou lint de 310 arquivos, 240 testes de regressão, 19 casos golden, build web e demonstração vertical `VERTICAL_SLICE_OK`.
 - CLI de vertical slice.

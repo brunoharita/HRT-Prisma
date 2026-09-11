@@ -54,6 +54,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-033](ADR-033-scheduled-official-knowledge-source-monitoring.md) | accepted | Scheduled CBO, ESCO and O*NET monitoring with human-gated publication |
 | [ADR-034](ADR-034-reversible-profile-document-lifecycle.md) | accepted | Reversible Profile publication, restoration, reset and document deletion |
 | [ADR-035](ADR-035-pilot-operational-resilience.md) | accepted | Person-centered recovery, reuse, reassignment, merge and archive operations |
+| [ADR-048](ADR-048-scoped-agent-instructions.md) | accepted | Scoped instruction loading, explicit authority and reference-based agreement fidelity |
 
 ## Rules
 

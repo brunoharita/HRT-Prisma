@@ -2,6 +2,10 @@
 
 ## Objetivo
 
+- Versão do contrato:
+- Fonte da decisão / tarefa:
+- Contrato anterior e delta, se for correção de comportamento já aprovado:
+
 ## DEVE — Inegociável
 
 - D-01 —
@@ -34,3 +38,5 @@
 
 - Product Owner:
 - Data:
+- Evidência de aprovação:
+- Referência imutável para o prompt: versão deste contrato ou Git revisão/hash.

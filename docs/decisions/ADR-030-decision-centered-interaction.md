@@ -95,3 +95,4 @@ Somente um ADR posterior pode ampliar intervenções obrigatórias, identificand
 ## Change history
 
 - 2026-09-02: accepted and implemented locally for the adaptive suggestion dismissal flow.
+- 2026-09-11: clarificação editorial aprovada na auditoria de instruções, registrada em ADR-048. A regra elimina confirmações e trabalho de coordenação redundantes; não proíbe navegação, busca, exploração ou escolhas voluntárias úteis. Não altera o runtime `decision-centered-interaction` 1.0.0 nem autoriza automação de decisão humana.
