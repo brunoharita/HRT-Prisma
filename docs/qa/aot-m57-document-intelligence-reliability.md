@@ -56,7 +56,7 @@ Nenhum. D-11 foi registrado como aditivo autorizado após o smoke revelar um blo
 - testes focais: 47/47 PASS.
 - runtime real: 2/2 PASS sem fallback.
 - benchmark sem amostra: `BLOCKED` como exigido.
-- validação integral `pnpm run validate`: NOT TESTED, pois a política do repositório exige autorização específica e o risco foi coberto por gates focais.
+- validação integral `pnpm run validate`: PASS após autorização explícita do Product Owner, com lint de 405 arquivos, foundation de 18 tabelas públicas e 6 versões de processamento, Context Pack, dois typechecks, build web, 319 testes técnicos, 19 casos golden sem falha ou regressão e demonstração vertical concluída.
 
 ## Git / QA / ambiente
 
