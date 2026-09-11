@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: e7e4f147bb165433f0f8839eba5df5dedc46297ff301225193b21331a7da7a06
+source_manifest_sha256: 79e06f5fe89868f6b92248a60829093454775211f5dab82057c7c3af5c94647e
 -->
 
 # Tudo sobre o Prisma
@@ -296,6 +296,9 @@ Local port convention:
 | `pnpm run check:foundation` | Check contracts, versions, migration security, secrets, and critical markers |
 | `pnpm run typecheck` | Run strict TypeScript checking |
 | `pnpm test` | Run unit, isolation, failure, migration, security, and vertical-slice tests |
+| `pnpm run validate:person-flow` | Build, typecheck web, build web and run the focused Person flow with a local timing report; see [coverage and limits](docs/qa/person-flow-validation.md) |
+| `pnpm run test:person-flow` | Compile once and run the explicit Person-flow test selection |
+| `pnpm run test:tooling` | Test the validation runner, selection, failure handling and report metadata |
 | `pnpm run test:golden` | Run extraction and matching regression cases |
 | `pnpm run demo` | Reproduce the end-to-end proof |
 | `pnpm run generate:prisma-context` | Regenerate `TUDO_SOBRE_PRISMA.md` from canonical sources |
@@ -396,7 +399,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.25.1
+version: 2.26.0
 last_verified: 2026-09-11
 ---
 
@@ -405,11 +408,13 @@ last_verified: 2026-09-11
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Baseline funcional desta revisão documental: `7cfd22bc963c2abc49d9242156c7f53c9c799778`, proveniente de `codex/m5-6-resume-parser-upgrade`. Branch da auditoria de instruções: `codex/instruction-audit-20260911`; a troca de branch não representa rollout.
+- Baseline funcional: `7cfd22bc963c2abc49d9242156c7f53c9c799778`, proveniente de `codex/m5-6-resume-parser-upgrade`; auditoria de instruções entregue em `e8fb794`. Branch da estrutura de validação local: `codex/reproducible-person-flow-validation`, derivada dessa auditoria; a troca de branch não representa rollout.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
+
+- Validação reproduzível local `person-flow-validation-1.0.0`: `pnpm run validate:person-flow` compila a base/testes uma vez, verifica tipos e build web e executa seleção explícita de 30 arquivos do fluxo importar → revisar → publicar → consultar Perfil. Medição de 2026-09-11: 226 testes aprovados, 29,179 s totais; os seis cenários sintéticos usam funções reais e snapshots de entrada, sem simular publicação SQL. Relatórios por fase ficam em `tmp/validation/person-flow/`; seleção ausente, erro, sinal ou timeout não produzem sucesso. `pnpm test` mantém seleção integral de fontes (44 arquivos no momento). Runbook e limites em `docs/qa/person-flow-validation.md`, aceite/evidência em `docs/qa/aot-person-flow-validation.md`. Nenhum código runtime, schema, QA, produção ou dado real foi alterado. Não comprova RLS ativa, smoke visual, provider real ou economia entre entregas/modelos.
 
 - Auditoria de instruções 2026-09-11 aplicada localmente: contrato do agente 1.1.0, leitura temática, distinção entre evidência e autoridade, acordos incorporados por referência imutável, templates sem resultados presumidos e prompt de redesign consolidado em especificação editorial 2.0.0. ADR-048 e `docs/qa/instruction-audit-20260911.md` registram escopo e prova. O registry inventaria três prompts LLM encontrados no código sem mudar seu texto, versão ou ativação. Nenhuma funcionalidade, migração, QA ou produção foi modificada nesta entrega.
 

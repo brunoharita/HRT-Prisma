@@ -60,6 +60,9 @@ Local port convention:
 | `pnpm run check:foundation` | Check contracts, versions, migration security, secrets, and critical markers |
 | `pnpm run typecheck` | Run strict TypeScript checking |
 | `pnpm test` | Run unit, isolation, failure, migration, security, and vertical-slice tests |
+| `pnpm run validate:person-flow` | Build, typecheck web, build web and run the focused Person flow with a local timing report; see [coverage and limits](docs/qa/person-flow-validation.md) |
+| `pnpm run test:person-flow` | Compile once and run the explicit Person-flow test selection |
+| `pnpm run test:tooling` | Test the validation runner, selection, failure handling and report metadata |
 | `pnpm run test:golden` | Run extraction and matching regression cases |
 | `pnpm run demo` | Reproduce the end-to-end proof |
 | `pnpm run generate:prisma-context` | Regenerate `TUDO_SOBRE_PRISMA.md` from canonical sources |
