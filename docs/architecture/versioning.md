@@ -1,5 +1,40 @@
 # Versionamento
 
+## Versão de produto exibida no Prisma
+
+O Prisma usa uma versão de produto própria, separada das versões semânticas dos contratos técnicos:
+
+`Prisma v<geração>.<movimento>.<entrega>`
+
+- `geração`: geração principal do produto, atualmente `1`;
+- `movimento`: movimento de produto em execução, atualmente `5`;
+- `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
+
+A versão atual oficial é **Prisma v1.5.10**, correspondente à décima entrega oficial do Movimento 5. Ao iniciar o Movimento 6, o contador será reiniciado em `Prisma v1.6.1`. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+
+### Registro oficial do Movimento 5
+
+| Entrega | Marco | Situação considerada para o contador |
+|---:|---|---|
+| 1 | M5: revisão de currículo com evidência espacial | oficial |
+| 2 | M5.1A: preparação da verificação de competências | oficial |
+| 3 | M5.1B: execução da verificação | oficial |
+| 4 | M5.1C: governança do Item Bank | oficial |
+| 5 | M5.2: normalização do Knowledge | oficial |
+| 6 | M5.3: resiliência operacional | oficial |
+| 7 | M5.4: Vagas e matching explicável | oficial |
+| 8 | M5.4.2: pesquisa Web contextual | oficial |
+| 9 | M5.4.4: resolução ocupacional por IA | oficial |
+| 10 | M5.5: exclusão definitiva de Pessoa | oficial |
+
+M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora do contador até terem fechamento e evidência oficial próprios.
+
+### Relação entre versão e build Git
+
+A tela de login deve sempre consumir a fonte única `web/src/config/release.ts` para a versão do produto. O build Vite injeta automaticamente o commit Git (`VITE_PRISMA_GIT_COMMIT`) usado para gerar o bundle; quando o diretório possui alterações não commitadas, o identificador recebe o sufixo `-dirty`. A tela exibe esse identificador ao lado da versão, permitindo relacionar diretamente a versão apresentada ao código efetivamente compilado.
+
+Em CI ou release reproduzível, `VITE_PRISMA_GIT_COMMIT` deve receber o SHA exato do commit de origem. O contador de entrega só deve ser alterado quando uma nova entrega oficial for aceita e registrada nesta documentação e no Context Pack.
+
 ## Regra geral
 
 Contratos materiais usam versão semântica `major.minor.patch` e nome estável. A versão persiste com o artefato produzido quando necessária para reconstruir comportamento.

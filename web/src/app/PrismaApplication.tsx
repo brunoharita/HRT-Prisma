@@ -15,6 +15,7 @@ import {
 import { Alert, Button, Form, Input, Result, Tag } from "antd";
 import type { JwtPayload } from "@supabase/supabase-js";
 import type { PlatformOperator } from "../domain/platformUsersData";
+import { PRISMA_BUILD, PRISMA_RELEASE } from "../config/release";
 import { supabase } from "../infrastructure/supabase/client";
 import { prismaRepository } from "../infrastructure/supabase/prismaRepository";
 import { platformUsersService } from "../infrastructure/supabase/platformUsersService";
@@ -568,7 +569,7 @@ function SignInPage({
           </Form>
         </div>
       </section>
-      <footer className="prisma-auth-footer">Prisma <span>•</span> 2026 <span>•</span> v2.6.0 <span>•</span> HRT Solutions</footer>
+      <footer className="prisma-auth-footer">Prisma <span>•</span> 2026 <span>•</span> {PRISMA_RELEASE.displayVersion} <span>•</span> build {PRISMA_BUILD.gitCommit} <span>•</span> HRT Solutions</footer>
     </main>
   );
 }
