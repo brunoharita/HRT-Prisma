@@ -22,7 +22,7 @@ A extração adaptativa pode reconhecer títulos personalizados previamente apro
 
 O resumo profissional é um fato textual opcional separado de objetivo e posicionamento. Ele exige seção explícita em português ou inglês, aceita cabeçalho e conteúdo fundidos pelo PDF e termina no próximo cabeçalho conhecido. Sem seção segura, permanece nulo e aparece em `notIdentified`; o Prisma não sintetiza um resumo a partir de experiências.
 
-Uma experiência completa corrigida pelo operador e ligada a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma compara critérios nomeados e propõe blocos irmãos ausentes com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
+Um registro completo de experiência, formação, curso ou certificação corrigido pelo operador e ligado a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma resolve qualquer seleção dentro do bloco, compara topologia relativa e critérios nomeados e propõe irmãos ausentes em outra coluna, página ou altura com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
 
 ## Proveniência
 
@@ -33,17 +33,17 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web; evidência espacial OCR persiste somente com o método compatível `tesseract-layout-v1`;
-- draft web: `extraction-draft-7.1.0` / `prisma-layout-adaptive-v7`;
+- draft web: `extraction-draft-8.0.0` / `prisma-layout-adaptive-v8`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
-- revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
+- revisão adaptativa: `prisma-document-learning-v4` / `generic-record-pattern-v1` / `relative-record-signature-v1`;
 - revisão humana: `human-profile-review-7.2.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
-- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-6.1.0`;
+- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-7.0.0`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.1.0`;
 - feedback operacional: `operation-feedback-2.0.0`;

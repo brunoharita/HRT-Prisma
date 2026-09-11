@@ -37,6 +37,8 @@ import type {
   ReviewEvidenceAction,
 } from "../../domain/spatialEvidence";
 import {
+  ADAPTIVE_SIBLING_ALGORITHM_VERSION,
+  ADAPTIVE_SIBLING_SIGNATURE_VERSION,
   attachFieldEvidence,
   buildAdaptiveExtraction,
   type AdaptiveFieldSuggestion,
@@ -532,17 +534,18 @@ export const personIngestionService = {
     reviewedData: StructuredDraft;
     sourceFieldPath: string;
     patternKey: string;
-    methodVersion: "prisma-document-learning-v3";
-    algorithmVersion: string;
-    signatureVersion: string;
-    anchorExperienceId: string;
+    methodVersion: "prisma-document-learning-v4";
+    algorithmVersion: typeof ADAPTIVE_SIBLING_ALGORITHM_VERSION;
+    signatureVersion: typeof ADAPTIVE_SIBLING_SIGNATURE_VERSION;
+    anchorRecordKind: "experience" | "education" | "certification";
+    anchorRecordId: string;
     signatureSummary: Record<string, string | number | boolean | null>;
     candidateSummary: { detected: number; strong: number; possible: number; rejected: number };
     suggestions: AdaptiveFieldSuggestion[];
     reason: string;
   }): Promise<{ lockVersion: number; adaptationEventId: string }> {
     const suggestionMetadata = input.suggestions.map((suggestion) => ({
-      candidateId: suggestion.fieldPath.split(".")[1],
+      candidateId: suggestion.candidateId,
       fieldPath: suggestion.fieldPath,
       pageNumber: suggestion.pageNumber,
       evidenceMethod: suggestion.evidence?.method ?? "text-line-v1",
@@ -559,7 +562,7 @@ export const personIngestionService = {
         }]
       )),
     })) as unknown as Json;
-    const { data, error } = await supabase.rpc("apply_profile_review_adaptive_suggestions_v3", {
+    const { data, error } = await supabase.rpc("apply_profile_review_adaptive_suggestions_v4", {
       p_organization_id: input.organizationId,
       p_review_id: input.reviewId,
       p_expected_lock_version: input.expectedLockVersion,
@@ -569,7 +572,8 @@ export const personIngestionService = {
       p_method_version: input.methodVersion,
       p_algorithm_version: input.algorithmVersion,
       p_signature_version: input.signatureVersion,
-      p_anchor_experience_id: input.anchorExperienceId,
+      p_anchor_record_kind: input.anchorRecordKind,
+      p_anchor_record_id: input.anchorRecordId,
       p_signature_summary: input.signatureSummary as unknown as Json,
       p_candidate_summary: input.candidateSummary as unknown as Json,
       p_accepted_suggestions: suggestionMetadata,
@@ -585,18 +589,20 @@ export const personIngestionService = {
   async recordSiblingScan(input: {
     organizationId: string;
     reviewId: string;
-    anchorExperienceId: string;
-    methodVersion: "prisma-document-learning-v3";
-    algorithmVersion: string;
-    signatureVersion: string;
+    anchorRecordKind: "experience" | "education" | "certification";
+    anchorRecordId: string;
+    methodVersion: "prisma-document-learning-v4";
+    algorithmVersion: typeof ADAPTIVE_SIBLING_ALGORITHM_VERSION;
+    signatureVersion: typeof ADAPTIVE_SIBLING_SIGNATURE_VERSION;
     signatureSummary: Record<string, string | number | boolean | null>;
     candidateSummary: { detected: number; strong: number; possible: number; rejected: number };
     decision: "detected" | "discarded";
   }): Promise<void> {
-    const { error } = await supabase.rpc("record_profile_review_sibling_scan", {
+    const { error } = await supabase.rpc("record_profile_review_record_scan", {
       p_organization_id: input.organizationId,
       p_review_id: input.reviewId,
-      p_anchor_experience_id: input.anchorExperienceId,
+      p_anchor_record_kind: input.anchorRecordKind,
+      p_anchor_record_id: input.anchorRecordId,
       p_method_version: input.methodVersion,
       p_algorithm_version: input.algorithmVersion,
       p_signature_version: input.signatureVersion,

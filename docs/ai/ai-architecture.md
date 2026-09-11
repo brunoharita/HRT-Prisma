@@ -43,15 +43,15 @@ Currículos e vagas são dados. Texto tentando ignorar regras, mudar schema, rev
 | Extraction | `extraction-rules-2.0.0` | ativo local |
 | PDF nativo | `pdfjs-5.4.296/layout-v2` | ativo local e remoto interno |
 | OCR | `tesseract.js-7.0.0/por+eng-v1` | texto, linhas posicionadas, worker, core WASM e dados de idioma empacotados no bundle web, sem dependência de CDN; geometria persistida somente com método Tesseract compatível |
-| Draft M2-B | `prisma-layout-adaptive-v7` / `extraction-draft-7.1.0` | implementado local; schema base ativo em QA |
-| Revisão adaptativa | `prisma-document-learning-v3` | assinatura e blocos irmãos locais; v2 ativo em QA |
+| Draft M2-B | `prisma-layout-adaptive-v8` / `extraction-draft-8.0.0` | padrões genéricos implementados localmente; runtime anterior ativo em QA |
+| Revisão adaptativa | `prisma-document-learning-v4` / `generic-record-pattern-v1` / `relative-record-signature-v1` | experiência, formação, curso e certificação locais; v3 ativo em QA |
 | Inference | `inference-ontology-1.0.0` | ativo local |
 | Retrieval/embedding contract | `structured-lexical-1.0.0` | ativo local, sem vetores |
 | Matching | `matching-explainable-1.0.0` | ativo local |
 | Prompt | `no-llm-prompt-1.0.0` | sentinel, nenhuma chamada |
 | Model | `deterministic-local-1.0.0` | ativo local |
 
-Correções completas com evidência produzem aprendizado imediato somente dentro do documento: o sistema cria uma assinatura temporária, volta ao layout original e propõe blocos irmãos fortes ou possíveis sem score numérico. O aceite persiste dados, evidência própria, evento e casos candidatos, mas não publica perfil nem altera autonomamente regra, prompt ou modelo. Após a aprovação integral, somente sinais estruturais sem valores pessoais podem orientar currículos futuros do mesmo tenant.
+Correções completas com evidência produzem aprendizado imediato somente dentro do documento: o sistema cria uma assinatura relativa, volta ao layout original e propõe blocos irmãos fortes ou possíveis sem score numérico. Página, altura e coluna absolutas não definem identidade; título, semântica e posição são sinais combinados. O aceite persiste dados, evidência própria, evento e casos candidatos, mas não publica perfil nem altera autonomamente regra, prompt ou modelo. Após a aprovação integral, somente sinais estruturais sem valores pessoais podem orientar currículos futuros do mesmo tenant.
 
 ## Custo, latência e volume
 

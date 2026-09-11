@@ -30,6 +30,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-044](ADR-044-inclusive-position-first-vacancy-discovery.md) | accepted | Inclusive Person discovery with separate occupational relation and dimensional adherence |
 | [ADR-045](ADR-045-vacancy-discovery-requires-traceable-signal.md) | accepted | Vacancy discovery result requires at least one traceable signal |
 | [ADR-046](ADR-046-authoritative-person-definitive-deletion.md) | accepted | One resumable authoritative saga permanently deletes a Person while preserving minimal audit and shared assets |
+| [ADR-047](ADR-047-generic-record-pattern-learning.md) | accepted | Relative document-local patterns generalize human-confirmed records across position and record type |
 | [ADR-042](ADR-042-actionable-field-validation-feedback.md) | accepted | Actionable field-level validation feedback |
 | [ADR-014](ADR-014-knowledge-agent-trusted-sources.md) | accepted | Knowledge Agent with trusted-source and no-PII policy |
 | [ADR-015](ADR-015-knowledge-triggered-reinterpretation.md) | accepted | Knowledge-triggered profile reinterpretation through M2-C |

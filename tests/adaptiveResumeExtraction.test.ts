@@ -6,6 +6,8 @@ import {
   buildAdaptiveExtraction,
   isRecordableSiblingScan,
   proposeSiblingBlockCorrections,
+  proposeSiblingCertificationCorrections,
+  proposeSiblingEducationCorrections,
   proposeSiblingFieldCorrections,
   type LayoutTextLine,
 } from "../web/src/domain/adaptiveResumeExtraction.js";
@@ -427,9 +429,9 @@ test("a complete human anchor discovers missing comma-header sibling experiences
   const extracted: StructuredDraft = { ...draft, experiences: [] };
   const report = proposeSiblingBlockCorrections({ pages: [page], draft, extracted, sourceIndex: 0, sourceField: "role" });
 
-  assert.equal(report.methodVersion, "prisma-document-learning-v3");
-  assert.equal(report.algorithmVersion, "adaptive-sibling-block-v1");
-  assert.equal(report.signatureVersion, "experience-sibling-signature-v1");
+  assert.equal(report.methodVersion, "prisma-document-learning-v4");
+  assert.equal(report.algorithmVersion, "generic-record-pattern-v1");
+  assert.equal(report.signatureVersion, "relative-record-signature-v1");
   assert.equal(isRecordableSiblingScan(report), true);
   assert.equal(report.suggestions.length, 2);
   assert.ok(report.suggestions.every((item) => item.kind === "new" && item.classification === "strong"));
@@ -477,7 +479,128 @@ test("a human-confirmed same-line pattern recognizes plausible organizations out
   assert.ok(spatialReport.suggestions.every((item) => item.classification === "strong"));
 });
 
-test("new sibling discovery rejects text-only sources and a visually separate column", () => {
+test("a selection inside the experience body resolves the complete source block and finds its siblings", () => {
+  const layoutLines = [
+    line("EXPERIÊNCIA", 0.08, 0.08, 0.3, "strong"),
+    line("Desenvolvedora de Software, Movile 06/2021 - 09/2023", 0.14, 0.08, 0.82, "strong"),
+    line("• Desenvolveu funcionalidades para um sistema de e-commerce.", 0.18, 0.10, 0.72),
+    line("Engenheira de Software Front-End, Vtex 01/2019 - 05/2021", 0.30, 0.58, 0.38, "strong"),
+    line("• Desenvolveu componentes em React e melhorou a performance.", 0.34, 0.60, 0.34),
+    line("Programadora Web, Catho 01/2018 - 12/2018", 0.46, 0.08, 0.82, "strong"),
+    line("• Codificou melhorias em uma plataforma web.", 0.50, 0.10, 0.72),
+  ];
+  const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf", usefulCharacterCount: 500, method: "pdfjs", methodVersion: "fixture-layout-v2", layoutLines };
+  const anchor = legacyExperience(0, { role: "Desenvolvedora de Software", organization: "Movile", period: "06/2021 - 09/2023", description: "Desenvolveu funcionalidades para um sistema de e-commerce.", evidenceText: layoutLines[2]!.text, page: 1 });
+  const draft: StructuredDraft = { ...emptyStructuredSummary(), experiences: [anchor], education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  const report = proposeSiblingBlockCorrections({ pages: [page], draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "description", sourceRegion: { pageNumber: 1, x: 0.1, y: 0.18, width: 0.72, height: 0.02 } });
+  assert.equal(report.suggestions.length, 2);
+  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["Vtex", "Catho"]);
+  assert.ok(report.suggestions.some((item) => item.criteria.includes("relative-topology") && item.proposedExperience?.organization === "Vtex"));
+});
+
+test("reviewer geometry learns repeated OCR blocks even when OCR corrupted separators and the corrected company", () => {
+  const layoutLines = [
+    line("EXPERIÊNCIA", 0.34, 0.142, 0.2, "strong"),
+    line("06/2021-09/2023 ? Desenvolvedora de Software", 0.368, 0.142, 0.347),
+    line("São Pao, Brasil Movite", 0.385, 0.142, 0.191),
+    line("+ Desenvolveu funcionalidades para um sistema de e-commerce.", 0.397, 0.301, 0.53),
+    line("+ Implementou uma arquitetura de microsserviços.", 0.416, 0.301, 0.51),
+    line("01/2010 -05/2021 ? Engenheira de Software Front-End", 0.491, 0.142, 0.384),
+    line("São Pato, Brasil Vtex", 0.508, 0.142, 0.177),
+    line("+ Desenvolveu componentes em React.", 0.52, 0.298, 0.55),
+    line("+ Implementou ferramentas de monitoramento.", 0.597, 0.298, 0.50),
+    line("01/2018 12/2018 * Programadora Web", 0.614, 0.142, 0.275),
+    line("São Paulo, Brasil Catho", 0.63, 0.142, 0.184),
+    line("+ Codificou melhorias em uma plataforma web.", 0.642, 0.296, 0.56),
+    line("+ Atuou na manutenção de front-end.", 0.681, 0.296, 0.53),
+  ];
+  const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "ocr", usefulCharacterCount: 650, method: "tesseract.js", methodVersion: "tesseract-layout-v1", layoutLines };
+  const anchor = legacyExperience(0, {
+    role: "Desenvolvedora de Software", organization: "Movile", period: "06/2021 - 09/2023",
+    description: "Desenvolveu funcionalidades e implementou uma arquitetura de microsserviços.", evidenceText: "", page: 1,
+  });
+  const draft: StructuredDraft = { ...emptyStructuredSummary(), experiences: [anchor], education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  const report = proposeSiblingBlockCorrections({
+    pages: [page], draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "organization",
+    sourceRegion: { pageNumber: 1, x: 0.11, y: 0.35, width: 0.75, height: 0.13 },
+  });
+  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["Vtex", "Catho"]);
+  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.role), ["Engenheira de Software Front-End", "Programadora Web"]);
+  assert.equal(report.suggestions[1]?.proposedExperience?.period, "01/2018 12/2018");
+});
+
+test("organization-first grouped blocks are learned across columns without a date range", () => {
+  let sequence = 0;
+  const grouped = (text: string, y: number, x: number, blockId: string): LayoutTextLine => ({
+    ...line(text, y, x, 0.4), blockId, blockType: "text", blockReadingOrder: sequence++,
+  });
+  const layoutLines = [
+    { ...line("EXPERIENCIA PROFISSIONAL", 0.551, 0.37, 0.25, "strong"), blockId: "heading", blockType: "paragraph_title", blockReadingOrder: sequence++ },
+    grouped("JAD ZOGHEIB & CIA LTDA", 0.58, 0.057, "left-1"),
+    grouped("Cargo: Operador de empilhadeira, conferencia, logistica", 0.594, 0.057, "left-1"),
+    grouped("e expedição", 0.609, 0.057, "left-1"),
+    grouped("Periodo: 5 anos", 0.622, 0.057, "left-1"),
+    grouped("T-GESTIONA", 0.648, 0.057, "left-2"),
+    grouped("Cargo: Operador de empilhadeira e logistica", 0.69, 0.057, "left-2"),
+    grouped("Periodo: 2021 (Temporario)", 0.703, 0.057, "left-2"),
+    { ...line("INFORMAÇOES ADICIONAIS", 0.854, 0.065, 0.24, "strong"), blockId: "next-heading", blockType: "paragraph_title", blockReadingOrder: sequence++ },
+    grouped("ORIGEM DO BRASIL LTDA", 0.594, 0.51, "right-1"),
+    grouped("Cargo: Auxiliar de mecânico de campo de máquinas", 0.609, 0.51, "right-1"),
+    grouped("agricolas II", 0.62, 0.51, "right-1"),
+    grouped("Periodo: 14/02/2022 - 2 anos e 6 meses", 0.634, 0.51, "right-1"),
+    grouped("DURATEX", 0.715, 0.51, "right-2"),
+    grouped("Cargo: Limpador de vidros", 0.745, 0.51, "right-2"),
+    grouped("Periodo: 21/06/2014 (1 ano e 6 meses)", 0.757, 0.51, "right-2"),
+  ];
+  const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf", usefulCharacterCount: 620, method: "pdfjs", methodVersion: "pdfjs-layout-v1", layoutLines };
+  const initial = buildAdaptiveExtraction([page]);
+  assert.deepEqual(initial.draft.experiences.map((item) => item.organization), ["JAD ZOGHEIB & CIA LTDA", "T-GESTIONA", "ORIGEM DO BRASIL LTDA", "DURATEX"]);
+  const anchor = { ...initial.draft.experiences[0]!, source: "human" as const, description: "Operador de empilhadeira, conferencia, logistica e expedição" };
+  const draft: StructuredDraft = { ...emptyStructuredSummary(), experiences: [anchor], education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  const report = proposeSiblingBlockCorrections({ pages: [page], draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "organization", sourceRegion: { pageNumber: 1, x: 0.05, y: 0.57, width: 0.43, height: 0.07 } });
+  assert.deepEqual(report.suggestions.map((item) => item.proposedExperience?.organization), ["T-GESTIONA", "ORIGEM DO BRASIL LTDA", "DURATEX"]);
+  assert.ok(report.suggestions.every((item) => item.proposedExperience?.period));
+});
+
+test("human-confirmed education pattern finds academic siblings across columns", () => {
+  const layoutLines = [
+    line("FORMAÇÃO", 0.06, 0.08, 0.3, "strong"),
+    line("Mestrado em Ciência da Computação 2020 - 2022", 0.12, 0.08, 0.42, "strong"),
+    line("Universidade de São Paulo", 0.15, 0.08, 0.36),
+    line("Pesquisa em sistemas distribuídos.", 0.18, 0.09, 0.38),
+    line("Bacharelado em Engenharia de Software 2014 - 2018", 0.30, 0.58, 0.38, "strong"),
+    line("Universidade Estadual de Campinas", 0.33, 0.58, 0.36),
+    line("Projeto final em arquitetura de software.", 0.36, 0.59, 0.35),
+  ];
+  const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf", usefulCharacterCount: 420, method: "pdfjs", methodVersion: "fixture-layout-v2", layoutLines };
+  const education = {
+    id: "education_human000001", source: "human" as const, course: "Mestrado em Ciência da Computação", institution: "Universidade de São Paulo", period: "2020 - 2022", description: "Pesquisa em sistemas distribuídos.", evidenceText: layoutLines[3]!.text, page: 1,
+  };
+  const draft: StructuredDraft = { ...emptyStructuredSummary(), experiences: [], education: [education], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  const report = proposeSiblingEducationCorrections({ pages: [page], draft, extracted: { ...draft, education: [] }, sourceIndex: 0, sourceField: "course", sourceRegion: { pageNumber: 1, x: 0.09, y: 0.18, width: 0.38, height: 0.02 } });
+  assert.equal(report.recordKind, "education");
+  assert.equal(report.suggestions.length, 1);
+  assert.equal(report.suggestions[0]?.proposedEducation?.institution, "Universidade Estadual de Campinas");
+  assert.ok(report.suggestions[0]?.criteria.includes("relative-topology"));
+});
+
+test("human-confirmed course or certification pattern keeps each sibling value and evidence", () => {
+  const layoutLines = [
+    line("CERTIFICAÇÕES", 0.08, 0.08, 0.3, "strong"),
+    line("AWS Certified Cloud Practitioner", 0.14, 0.10, 0.42),
+    line("Scrum Foundation Certificate", 0.20, 0.60, 0.34),
+  ];
+  const page: ExtractedPage = { pageNumber: 1, text: layoutLines.map((item) => item.text).join("\n"), origin: "native_pdf", usefulCharacterCount: 120, method: "pdfjs", methodVersion: "fixture-layout-v2", layoutLines };
+  const draft: StructuredDraft = { ...emptyStructuredSummary(), experiences: [], education: [], certifications: ["AWS Certified Cloud Practitioner"], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  const report = proposeSiblingCertificationCorrections({ pages: [page], draft, extracted: { ...draft, certifications: [] }, sourceIndex: 0, sourceRegion: { pageNumber: 1, x: 0.10, y: 0.14, width: 0.42, height: 0.02 } });
+  assert.equal(report.recordKind, "certification");
+  assert.equal(report.suggestions.length, 1);
+  assert.equal(report.suggestions[0]?.proposedCertification, "Scrum Foundation Certificate");
+  assert.equal(report.suggestions[0]?.fields[0]?.evidenceText, "Scrum Foundation Certificate");
+  assert.notEqual(report.suggestions[0]?.fields[0]?.proposedValue, draft.certifications[0]);
+});
+
+test("new sibling discovery rejects text-only sources but recognizes the same relative pattern in another column", () => {
   const textPage: ExtractedPage = {
     pageNumber: 1,
     text: "Experiência profissional\nDiretor, HRT Solutions Jan 2025 - Atual\n• Estruturação da operação.\nGerente, Acme Ltda Jan 2020 - Dez 2024\n• Gestão da operação.",
@@ -500,8 +623,8 @@ test("new sibling discovery rejects text-only sources and a visually separate co
     pages: [{ ...textPage, origin: "native_pdf", layoutLines: positioned, text: positioned.map((item) => item.text).join("\n") }],
     draft, extracted: { ...draft, experiences: [] }, sourceIndex: 0, sourceField: "role",
   });
-  assert.equal(columnReport.suggestions.length, 0);
-  assert.ok(columnReport.unresolved.some((item) => item.reasonCode === "column-mismatch"));
+  assert.equal(columnReport.suggestions.length, 1);
+  assert.ok(columnReport.suggestions[0]?.criteria.includes("relative-topology"));
 });
 
 test("OCR blocks are normalized into positioned lines for deterministic sibling analysis", () => {
@@ -569,8 +692,9 @@ test("adaptive v2 persistence is tenant-scoped, metadata-only and promotes patte
   assert.match(page, /proposeSiblingBlockCorrections/);
 });
 
-test("adaptive v3 persists structural audit metadata and field evidence without leaking selected text into learning events", async () => {
+test("adaptive v4 generalizes structural audit metadata without leaking selected text into learning events", async () => {
   const migration = await readFile("supabase/migrations/20260902003617_m5_sibling_block_learning.sql", "utf8");
+  const genericMigration = await readFile("supabase/migrations/20260910193000_generic_record_pattern_learning.sql", "utf8");
   const service = await readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8");
   const page = await readFile("web/src/pages/ProfileReviewPage.tsx", "utf8");
   assert.match(migration, /create or replace function public\.apply_profile_review_adaptive_suggestions_v3/i);
@@ -586,9 +710,15 @@ test("adaptive v3 persists structural audit metadata and field evidence without 
   assert.match(migration, /record_profile_review_sibling_scan/);
   assert.match(migration, /sibling_blocks_detected/);
   assert.match(migration, /sibling_suggestions_discarded/);
-  assert.match(service, /apply_profile_review_adaptive_suggestions_v3/);
+  assert.match(genericMigration, /apply_profile_review_adaptive_suggestions_v4/);
+  assert.match(genericMigration, /private\.is_valid_record_pattern_signature/);
+  assert.match(genericMigration, /record_profile_review_record_scan/);
+  assert.match(genericMigration, /p_anchor_record_kind = 'education'/);
+  assert.match(genericMigration, /p_anchor_record_kind = 'certification'/);
+  assert.doesNotMatch(genericMigration.match(/insert into public\.profile_review_adaptation_events[\s\S]*?returning id into new_event_id;/i)?.[0] ?? "", /selectedText|raw_selected_text/);
+  assert.match(service, /apply_profile_review_adaptive_suggestions_v4/);
   assert.match(service, /recordSiblingScan/);
-  assert.match(page, /hasSpatialAnchorEvidence/);
+  assert.match(page, /spatialAnchorRegion/);
   assert.match(page, /dismissAdaptiveSuggestions/);
   assert.match(page, /setAdaptiveReport\(null\)[\s\S]*report\.suggestions\.length === 0[\s\S]*isRecordableSiblingScan\(report\)/);
   assert.match(page, /void personIngestionService\.recordSiblingScan/);

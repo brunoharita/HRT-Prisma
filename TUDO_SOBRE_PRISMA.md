@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: b5f2382fed8f12cfa2395445f73fc3adf5939a7abb8ef640aba13d19bdb4874d
+source_manifest_sha256: f89afe37b5ec8c2a05be81ceab46c9fa76f22e9f5562cc916def97576ce09fd6
 -->
 
 # Tudo sobre o Prisma
@@ -382,8 +382,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.23.0
-last_verified: 2026-09-09
+version: 2.24.0
+last_verified: 2026-09-10
 ---
 
 # Estado atual do Prisma
@@ -391,14 +391,14 @@ last_verified: 2026-09-09
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Branch de entrega em validação: `codex/m5-5-person-definitive-deletion`, dedicada à exclusão definitiva de Pessoa.
+- Branch de entrega em validação: `codex/m5-6-resume-parser-upgrade`, dedicada ao upgrade do parser e aprendizado estrutural de currículos.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
 
 - M5.5 Exclusão definitiva de Pessoa 1.0.0 está implementado localmente e ativo no Prisma-QA. Super Admin, Owner e Admin atuam somente no escopo confirmado; Recruiter e Member são negados. O titular usa capability HMAC exclusiva, curta, revogável, single-use e distinta de assessment, sem se tornar usuário. Uma saga única mantém ledger mínimo desacoplado, bloqueia a Pessoa em `deleting`, coordena Storage, purga o agregado individual e só conclui após verificador determinístico de zero resíduos. Vagas, Knowledge, Item Bank e usuários da plataforma permanecem; auditoria retém somente nome, organização, ator, data, operação e resultado. Provas transacionais revertidas cobriram autoridade, falha parcial, concorrência, purga rica, recadastro com novo UUID e replay. A Edge Function `person-data-deletion` v1 está `ACTIVE`; produção não foi acionada.
-- M5.6 Resume Parser Upgrade está implementado apenas na camada local e permanece desligado por default. `DocumentIntelligenceProvider` e `CanonicalDocument` 1.0.0 isolam o domínio do JSON Paddle e convertem blocos, linhas, reading order, polígonos, scores e versões para `normalized-page-v1`. O preflight mantém PDF.js no caminho nativo simples, direciona estrutura/scan ao PP-StructureV3 com PP-OCRv6 e reserva PaddleOCR-VL 1.6 e Tesseract.js para recuperação por página. A configuração self-hosted CPU, a flag `baseline|shadow|enabled`, a telemetria tenant-scoped e o harness A/B estão preparados. O daemon Docker não respondeu no spike, a migration não foi aplicada, não há amostra real autorizada, a meta de 90%, performance, QA e cutover não foram comprovados. Produção não foi acionada.
+- M5.6 Resume Parser Upgrade está implementado localmente e permanece fora de produção. `DocumentIntelligenceProvider` e `CanonicalDocument` 1.0.0 isolam o domínio do JSON Paddle e convertem blocos, linhas, reading order, polígonos, scores e versões para `normalized-page-v1`. Sobre essa base, `adaptive-resume-extraction` 7.0.0 e `generic-record-pattern-v1` preservam tipo de bloco e ordem, removem ruído repetido de margem, resolvem uma seleção interna para o registro completo e comparam topologia relativa sem usar página, altura ou coluna absoluta como identidade. Uma revisão humana com evidência pode propor irmãos de experiência, formação, curso ou certificação, sempre com valores e regiões próprios, confirmação explícita e sem publicar diretamente no Perfil. O runtime Paddle, a migration v4, QA e os testes reais ainda precisam ser comprovados antes do fechamento. Produção não foi acionada.
 
 - M5.4.7 Assistente Prisma está implementado localmente: `Na sua empresa` deixou de responder apenas com contagens e agora compõe leitura determinística da Vaga atual, Vagas/funções acessíveis e conceitos/relações Knowledge publicados que a RLS permite ler. Expõe estados de informação suficiente, parcial ou insuficiente, mantém contagens como metadados e não aciona Web, Agent, pipeline ou escrita para esse bloco. Toda pergunta preenchida consulta fontes externas aprovadas por padrão, sem classificador oculto por palavras-chave; o operador pode escolher explicitamente `Somente fontes internas` e consultar a ajuda no próprio campo. Uma eventual falha da pesquisa externa de mercado preserva a resposta interna. Smoke autenticado depende de sessão disponível; produção não foi acionada.
 
@@ -415,7 +415,7 @@ last_verified: 2026-09-09
 - Movimento M2-C implementado com central documental, detalhe/tentativas/auditoria, retry vinculado, revisão humana por campo, comparação de versões e aprovação transacional. A central `Processamento e revisões` usa composição legível para Pessoa e Documento, larguras semânticas, colunas operacionais compactas e rolagem interna responsiva, sem alterar consulta, filtros ou navegação.
 - Fronteira Pessoa, Documento e Perfil Vigente 1.2.0 implementada localmente: Pessoas apresenta o perfil aprovado atual independentemente da última importação; `Processamento e revisões` usa estados documentais derivados; nome e ação `Abrir` convergem para a Central da Pessoa; perfil vigente, histórico, documentos e ações ficam reunidos sem transformar o clique no nome em edição. Na Central da Pessoa, `Ver documento` abre o currículo original e os campos estruturados no workspace M5 em modo somente leitura; `Detalhes técnicos` preserva metadados, tentativas e auditoria em página separada. Tentativa operacional vazia não oculta a última tentativa revisável com páginas e draft preservados. A revisão M5 recupera extração parcial sem experiência reconhecida por seleção espacial ou inclusão manual, enquanto tentativa sem fonte continua bloqueada.
 - Central da Pessoa 1.0 redesenhada localmente: `person-action-center` 1.0.0 compõe um view model tipado e deriva todas as pendências documentais reais sem estado paralelo. Cabeçalho profissional, pendências acionáveis, Perfil vigente, resumo contextual, conhecimento editorial, documentos com painel contextual e atividade recente foram organizados nas perspectivas Visão geral, Documentos e versões e Nova importação. O CTA `Revisar documento agora` resolve diretamente documento e tentativa revisável; Member continua fora da superfície operacional. Nenhum schema, RLS, score, IA ou estado persistido mudou. O smoke autenticado foi aprovado nas cinco resoluções de referência.
-- Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. `ExtractionDraft` está em 7.1.0, extração adaptativa em 6.1.0 e regras/modelo determinísticos em 2.0.0.
+- Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. O runtime local usa `ExtractionDraft` 8.0.0 e extração adaptativa 7.0.0; QA permanece na versão anterior até promoção comprovada.
 - Jornada de ingestão 2.0.0 implementada em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `profile-publication-delta` 2.0.0 está ativo no Prisma-QA: Atualizar preserva fatos aprovados omitidos; Substituir trata a revisão como Perfil completo; decisões por bloco registram ação, origem, alvo e resolução determinística. Remoção explícita de fato aprovado continua exigindo uma decisão humana, sem exigir texto livre nas correções comuns.
 - Correção compatível da publicação Delta implementada localmente: contato permanece visível como atualização do cadastro privado, sem seletor enganoso, e itens `contact.*` não são enviados em `p_block_decisions`. A aprovação continua atualizando `person_private_data` pela fronteira existente; decisões profissionais, schema, RPC, RLS, grants e versões de contrato não mudaram. O gate completo aprovou lint de 310 arquivos, fundação, Context Pack, dois typechecks, build web, 242 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`.
 - `operation-feedback` 2.1.0 implementado localmente: impedimentos corrigíveis informam motivo, item e caminho do campo em envelope estável; a interface traduz para linguagem natural, lista as pendências, retorna ao campo exato, rola e destaca. A criação de Vagas aplica o mesmo padrão à referência ocupacional, título, ocupante e requisito inválido. Todo novo formulário deve destacar localmente o campo ou bloco acionável, inclusive em conflitos, e remover o estado após a correção válida. O mesmo tradutor protege todas as fronteiras Supabase de ingestão, revisão, Verificações, Item Bank e Conhecimento, inclusive respostas de Edge Functions; regressão arquitetural impede `throw` direto da mensagem remota. Falhas internas declaram que não há campo a corrigir e nunca expõem SQL, função, tabela, payload ou código técnico.
@@ -591,7 +591,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 ## Última evidência local
 
-Em 2026-09-10, a branch `codex/m5-6-resume-parser-upgrade` adicionou a fronteira provider-neutral, o adaptador real para o serviço oficial self-hosted do PaddleX, rotas adaptativas, fallback preservado, configuração de containers CPU, migration de telemetria/Structural Pattern Knowledge e harness A/B. `pnpm run validate` aprovou lint de 391 arquivos, foundation, Context Pack, dois typechecks, build web, 301 testes técnicos, 19 goldens e `VERTICAL_SLICE_OK`; `docker compose config` confirmou a topologia loopback. O harness encerrou como `BLOCKED` porque `benchmarks/m5.6/private/manifest.json` não existe, preservando a exigência de currículos reais autorizados. O daemon Docker local não respondeu, logo o runtime Paddle e suas métricas continuam não testados. Migration, QA, cutover e produção não foram acionados.
+Em 2026-09-10, a branch `codex/m5-6-resume-parser-upgrade` evoluiu o aprendizado intra-documento para um motor genérico de padrões relativos, sem criar parser ou documento paralelo. Linhas canônicas podem ser agrupadas por `blockId`, `blockType` e `blockReadingOrder`; a assinatura compara topologia, tipografia, período, corpo, coluna e ordem relativa, sem transformar posição absoluta ou título em identidade. A região humana confirma o bloco mesmo quando corrige OCR imperfeito, enquanto cada irmão é relido em sua própria evidência. A migration `20260910193000_generic_record_pattern_learning.sql` está ativa somente no Prisma-QA, com `anon` negado, execução autenticada controlada e validação privada tenant-scoped. No smoke local autenticado ligado ao QA, o currículo autorizado de Tainá Marques gerou exatamente Vtex e Catho após uma correção Movile, sem falso positivo acadêmico; o currículo autorizado de Vagner Novais Pereira gerou T-GESTIONA, ORIGEM DO BRASIL, IMEDIATO AMBEV e DURATEX após uma correção JAD ZOGHEIB, inclusive na coluna oposta. BATERIAS TUDOR e AUTÔNOMO permaneceram fora por não repetirem o contrato estrutural completo. As quatro sugestões do segundo caso foram aplicadas ao rascunho auditável e nenhum Perfil foi publicado. `pnpm run validate` aprovou lint de 398 arquivos, foundation, Context Pack, dois typechecks, build web, 311 testes técnicos, 19 goldens e `VERTICAL_SLICE_OK`. Produção não foi alterada.
 
 Em 2026-09-10, o M5.5 de robustecimento do PDF image-only eliminou a dependência externa completa da inicialização do OCR no bundle web: worker, core WASM e dados de idioma `por+eng` do Tesseract são assets locais carregados dinamicamente apenas no navegador, mantendo o mesmo pipeline PDF.js/Tesseract. O arquivo real do Product Owner revelou ainda `PERSISTENCE_DROPPED_OCR`: a RPC aceitava coordenadas somente para `native_pdf`, embora o frontend produzisse geometria OCR com `tesseract-layout-v1`. A migration `20260910104122_allow_ocr_spatial_field_evidence`, ativa no Prisma-QA, passou a aceitar apenas os pares espaciais `native_pdf + pdfjs-layout-v1` e `ocr + tesseract-layout-v1`; prova SQL confirmou o par OCR válido chegando à barreira de autenticação e o método cruzado sendo recusado com `22023`. RLS, autorização, endpoint e produção não mudaram. O smoke autenticado final do arquivo de referência, as fixtures obrigatórias restantes e as medições comparativas de OCR permanecem pendentes.
 
@@ -657,7 +657,7 @@ A extração adaptativa pode reconhecer títulos personalizados previamente apro
 
 O resumo profissional é um fato textual opcional separado de objetivo e posicionamento. Ele exige seção explícita em português ou inglês, aceita cabeçalho e conteúdo fundidos pelo PDF e termina no próximo cabeçalho conhecido. Sem seção segura, permanece nulo e aparece em `notIdentified`; o Prisma não sintetiza um resumo a partir de experiências.
 
-Uma experiência completa corrigida pelo operador e ligada a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma compara critérios nomeados e propõe blocos irmãos ausentes com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
+Um registro completo de experiência, formação, curso ou certificação corrigido pelo operador e ligado a evidência espacial pode ensinar temporariamente a estrutura do currículo atual. O Prisma resolve qualquer seleção dentro do bloco, compara topologia relativa e critérios nomeados e propõe irmãos ausentes em outra coluna, página ou altura com conteúdo e evidência próprios; nenhuma proposta publica perfil, cruza documento ou usa porcentagem probabilística.
 
 ## Proveniência
 
@@ -668,17 +668,17 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - extraction: `extraction-rules-2.0.0`;
 - PDF nativo: `pdfjs-5.4.296/native-v1`;
 - OCR: `tesseract.js-7.0.0/por+eng-v1`, com worker, core WASM e dados `por+eng` carregados de assets locais do bundle web; evidência espacial OCR persiste somente com o método compatível `tesseract-layout-v1`;
-- draft web: `extraction-draft-7.1.0` / `prisma-layout-adaptive-v7`;
+- draft web: `extraction-draft-8.0.0` / `prisma-layout-adaptive-v8`;
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching: `matching-explainable-1.0.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model: `deterministic-local-1.0.0`.
-- revisão adaptativa: `prisma-document-learning-v3` / `adaptive-sibling-block-v1`;
+- revisão adaptativa: `prisma-document-learning-v4` / `generic-record-pattern-v1` / `relative-record-signature-v1`;
 - revisão humana: `human-profile-review-7.2.0`;
 - interação centrada em decisão: `decision-centered-interaction-1.0.0`;
 - segmentação de competências: `competency-list-segmentation-1.0.0` / `competency-list-spatial-v1`;
-- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-6.1.0`;
+- resumo estruturado: `structured-resume-summary-1.1.0` / `adaptive-resume-extraction-7.0.0`;
 - estado de produto: `resume-product-state-1.1.0`;
 - publicação: `profile-publication-delta-1.1.0`;
 - feedback operacional: `operation-feedback-2.0.0`;

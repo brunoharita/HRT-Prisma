@@ -19,6 +19,9 @@ const FIELD_LABELS: Record<AdaptiveFieldSuggestion["field"], string> = {
   organization: "Empresa",
   period: "Período",
   description: "Descrição e atividades",
+  course: "Curso",
+  institution: "Instituição",
+  certification: "Curso ou certificação",
 };
 const CRITERION_LABELS = {
   "same-section": "mesma seção",
@@ -27,6 +30,10 @@ const CRITERION_LABELS = {
   "body-pattern": "corpo semelhante",
   spacing: "espaçamento consistente",
   "column-continuity": "mesma coluna",
+  "relative-topology": "topologia relativa equivalente",
+  typography: "tipografia equivalente",
+  "block-type": "tipo visual compatível",
+  "reading-order": "ordem interna consistente",
 } as const;
 
 export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNavigate }: AdaptiveSuggestionPanelProps) {
@@ -56,13 +63,15 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
 
   const selectedSuggestions = allSuggestions.filter((item) => selectedPaths.has(item.fieldPath));
   const hasSuggestions = report.suggestions.length > 0;
+  const recordSingular = report.recordKind === "experience" ? "experiência" : report.recordKind === "education" ? "formação" : "curso ou certificação";
+  const recordPlural = report.recordKind === "experience" ? "experiências" : report.recordKind === "education" ? "formações" : "cursos ou certificações";
   return (
     <section aria-label="Sugestões de aprendizado do currículo" className="prisma-adaptive-suggestions">
       <div className="prisma-adaptive-suggestions__header">
         <div>
           <Typography.Title level={5}><BulbOutlined /> Aprendizado imediato do currículo</Typography.Title>
           <Typography.Text>{hasSuggestions
-            ? `Encontramos outras ${report.suggestions.length} ${report.suggestions.length === 1 ? "experiência com estrutura semelhante" : "experiências com estrutura semelhante"}. Nada será incorporado sem sua confirmação.`
+            ? `Encontramos ${report.suggestions.length} ${report.suggestions.length === 1 ? `${recordSingular} com estrutura semelhante` : `${recordPlural} com estrutura semelhante`}. Nada será incorporado sem sua confirmação.`
             : "Nenhuma alteração adicional segura foi encontrada. Sua correção já está preservada e você pode continuar a revisão."}
           </Typography.Text>
         </div>
@@ -80,7 +89,7 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
                 indeterminate={selectedCount > 0 && selectedCount < fieldPaths.length}
                 onChange={(event) => toggleExperience(fieldPaths, event.target.checked)}
               >
-                Experiência {suggestion.experienceIndex + 1}: {suggestion.label}
+                {recordSingular.charAt(0).toUpperCase() + recordSingular.slice(1)} {suggestion.experienceIndex + 1}: {suggestion.label}
               </Checkbox>
               <Space wrap>
                 <Tag color={suggestion.kind === "new" ? "green" : "blue"}>{suggestion.kind === "new" ? "Sugerida pelo Prisma" : "Correção sugerida"}</Tag>
@@ -119,7 +128,7 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
             key: "unresolved",
             label: `${report.unresolved.length} ${report.unresolved.length === 1 ? "registro sem proposta segura" : "registros sem proposta segura"}`,
             children: report.unresolved.map((item) => (
-              <Alert key={`${item.experienceIndex}-${item.reasonCode}`} title={`Experiência ${item.experienceIndex + 1}: ${item.label}`} description={item.explanation} showIcon type="warning" />
+              <Alert key={`${item.experienceIndex}-${item.reasonCode}`} title={`${recordSingular.charAt(0).toUpperCase() + recordSingular.slice(1)} ${item.experienceIndex + 1}: ${item.label}`} description={item.explanation} showIcon type="warning" />
             )),
           }]}
         />

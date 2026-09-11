@@ -159,15 +159,21 @@ export function canonicalPageToLayoutLines(page: CanonicalPage): LayoutTextLine[
   return source
     .filter((line) => line.text.trim().length > 0)
     .sort((left, right) => left.readingOrder - right.readingOrder || left.region.y - right.region.y || left.region.x - right.region.x)
-    .map((line) => ({
-      text: line.text.replace(/\s+/g, " ").trim(),
-      x: line.region.x,
-      y: line.region.y,
-      width: line.region.width,
-      height: line.region.height,
-      fontSize: Math.max(1, line.region.height * page.height),
-      emphasis: isHeadingBlock(page.blocks, line.id) ? "strong" : "regular",
-    }));
+    .map((line) => {
+      const block = containingBlock(page.blocks, line.id, line.region);
+      return {
+        text: line.text.replace(/\s+/g, " ").trim(),
+        x: line.region.x,
+        y: line.region.y,
+        width: line.region.width,
+        height: line.region.height,
+        fontSize: Math.max(1, line.region.height * page.height),
+        emphasis: isHeadingBlock(page.blocks, line.id) ? "strong" : "regular",
+        blockId: block?.id ?? null,
+        blockType: block?.type ?? null,
+        blockReadingOrder: block?.readingOrder ?? line.readingOrder,
+      };
+    });
 }
 
 export function assertCanonicalDocument(value: CanonicalDocument): CanonicalDocument {
@@ -206,6 +212,17 @@ function hasComplexLayout(lines: LayoutTextLine[]): boolean {
 
 function isHeadingBlock(blocks: CanonicalBlock[], lineId: string): boolean {
   return blocks.some((block) => block.lines.some((line) => line.id === lineId) && /title|heading|header|section/i.test(block.type));
+}
+
+function containingBlock(blocks: CanonicalBlock[], lineId: string, region: CanonicalRegion): CanonicalBlock | null {
+  const explicit = blocks.find((block) => block.lines.some((line) => line.id === lineId));
+  if (explicit) return explicit;
+  const centerX = region.x + region.width / 2;
+  const centerY = region.y + region.height / 2;
+  return blocks
+    .filter((block) => centerX >= block.region.x && centerX <= block.region.x + block.region.width
+      && centerY >= block.region.y && centerY <= block.region.y + block.region.height)
+    .sort((left, right) => (left.region.width * left.region.height) - (right.region.width * right.region.height))[0] ?? null;
 }
 
 function validateRegion(region: CanonicalRegion): void {

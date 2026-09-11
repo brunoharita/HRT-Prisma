@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta `adaptive-resume-extraction` 6.1.0 e `education-academic-classification` 1.0.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística e descoberta de blocos irmãos estão implementados localmente.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência anterior validada em QA. A ingestão web acrescenta `adaptive-resume-extraction` 7.0.0 e `education-academic-classification` 1.0.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística e descoberta genérica de registros irmãos estão implementados localmente.
 
 ## Entrada
 

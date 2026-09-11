@@ -18,8 +18,12 @@ import {
   ADAPTIVE_REVIEW_METHOD_VERSION,
   isRecordableSiblingScan,
   proposeSiblingBlockCorrections,
+  proposeSiblingCertificationCorrections,
+  proposeSiblingEducationCorrections,
   type AdaptiveFieldSuggestion,
+  type AdaptiveRecordKind,
   type AdaptiveSuggestionReport,
+  type EducationFieldName,
   type ExperienceFieldName,
 } from "../domain/adaptiveResumeExtraction";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
@@ -220,7 +224,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     setBusy(true); setError(null); setSuccess(null);
     try {
-      const structuralAnchor = findCompletedExperienceChange(normalizedBaseline, normalizedDraft);
+      const structuralAnchor = findCompletedRecordChange(normalizedBaseline, normalizedDraft);
       const lockVersion = technicalSynchronizationOnly
         ? await personIngestionService.synchronizeProfileReviewContract(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft)
         : await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft);
@@ -235,21 +239,17 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         return;
       }
       let learningNotice: string | null = null;
-      if (structuralAnchor && hasSpatialAnchorEvidence(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? "")) {
-        try {
-          const report = proposeSiblingBlockCorrections({
-            pages: refreshed.pages,
-            draft: refreshed.reviewedData,
-            extracted: refreshed.extractedData,
-            sourceIndex: structuralAnchor.index,
-            sourceField: structuralAnchor.field,
-            sourceRegion: spatialAnchorRegion(refreshed, normalizedDraft.experiences[structuralAnchor.index]?.id ?? ""),
-          });
+      if (structuralAnchor) {
+        const anchorId = recordAnchorId(normalizedDraft, structuralAnchor);
+        const sourceRegion = spatialAnchorRegion(refreshed, structuralAnchor.kind, anchorId);
+        if (sourceRegion) try {
+          const report = proposeRecordSiblingCorrections(refreshed, structuralAnchor, sourceRegion);
           if (isRecordableSiblingScan(report) && (report.suggestions.length || report.unresolved.length)) {
             await personIngestionService.recordSiblingScan({
               organizationId: activeMembership.organizationId,
               reviewId: refreshed.id,
-              anchorExperienceId: report.anchorExperienceId!,
+              anchorRecordKind: report.recordKind,
+              anchorRecordId: report.anchorRecordId!,
               methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
               algorithmVersion: report.algorithmVersion,
               signatureVersion: report.signatureVersion,
@@ -261,7 +261,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
         } catch {
           setAdaptiveReport(null);
-          learningNotice = " O rascunho foi salvo, mas a busca opcional por experiências semelhantes não pôde ser concluída agora.";
+          learningNotice = " O rascunho foi salvo, mas a busca opcional por registros semelhantes não pôde ser concluída agora.";
         }
       }
       setDeferredReviewAction(null);
@@ -313,22 +313,27 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       setError("Selecione ao menos uma sugestão para aplicar.");
       return;
     }
-    const sourceExperience = draft.experiences[adaptiveReport.sourceIndex];
-    if (!sourceExperience) {
-      setError("A experiência usada como referência não existe mais no rascunho. Recarregue a revisão para recalcular as sugestões.");
+    const sourceRecordId = adaptiveReport.anchorRecordId;
+    if (!sourceRecordId) {
+      setError("O registro usado como referência não existe mais no rascunho. Recarregue a revisão para recalcular as sugestões.");
       return;
     }
     const selectedPaths = new Set(suggestions.map((suggestion) => suggestion.fieldPath));
     const addedExperiences = adaptiveReport.suggestions.flatMap((candidate) => (
-      candidate.kind === "new" && candidate.proposedExperience && candidate.fields.some((field) => selectedPaths.has(field.fieldPath))
+      candidate.recordKind === "experience" && candidate.kind === "new" && candidate.proposedExperience && candidate.fields.some((field) => selectedPaths.has(field.fieldPath))
         ? [candidate.proposedExperience]
         : []
     ));
-    const baseDraft = addedExperiences.length
-      ? { ...draft, experiences: [...draft.experiences, ...addedExperiences.filter((candidate) => !draft.experiences.some((item) => item.id === candidate.id))] }
-      : draft;
+    const addedEducation = adaptiveReport.suggestions.flatMap((candidate) => candidate.recordKind === "education" && candidate.kind === "new" && candidate.proposedEducation && candidate.fields.some((field) => selectedPaths.has(field.fieldPath)) ? [candidate.proposedEducation] : []);
+    const addedCertifications = adaptiveReport.suggestions.flatMap((candidate) => candidate.recordKind === "certification" && candidate.proposedCertification && candidate.fields.some((field) => selectedPaths.has(field.fieldPath)) ? [candidate.proposedCertification] : []);
+    const baseDraft = {
+      ...draft,
+      experiences: [...draft.experiences, ...addedExperiences.filter((candidate) => !draft.experiences.some((item) => item.id === candidate.id))],
+      education: [...draft.education, ...addedEducation.filter((candidate) => !draft.education.some((item) => item.id === candidate.id))],
+      certifications: [...draft.certifications, ...addedCertifications.filter((candidate) => !draft.certifications.some((item) => comparableReviewValue(item) === comparableReviewValue(candidate)))],
+    };
     const nextDraft = normalizeReviewDraft(suggestions.reduce(
-      (current, suggestion) => applyValueAtFieldPath(current, suggestion.fieldPath, suggestion.proposedValue),
+      (current, suggestion) => suggestion.recordKind === "certification" ? current : applyValueAtFieldPath(current, suggestion.fieldPath, suggestion.proposedValue),
       baseDraft,
     ));
     const issues = validateReviewDraftForSave(nextDraft, {
@@ -349,12 +354,17 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         reviewId: workspace.id,
         expectedLockVersion: workspace.lockVersion,
         reviewedData: nextDraft,
-        sourceFieldPath: reviewEntityFieldPath("experience", sourceExperience, adaptiveReport.sourceField),
+        sourceFieldPath: adaptiveReport.recordKind === "experience"
+          ? reviewEntityFieldPath("experience", draft.experiences[adaptiveReport.sourceIndex]!, adaptiveReport.sourceField as ExperienceFieldName)
+          : adaptiveReport.recordKind === "education"
+            ? reviewEntityFieldPath("education", draft.education[adaptiveReport.sourceIndex]!, adaptiveReport.sourceField as EducationFieldName)
+            : "certifications",
         patternKey: adaptiveReport.patternKey,
         methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
         algorithmVersion: adaptiveReport.algorithmVersion,
         signatureVersion: adaptiveReport.signatureVersion,
-        anchorExperienceId: adaptiveReport.anchorExperienceId ?? sourceExperience.id,
+        anchorRecordKind: adaptiveReport.recordKind,
+        anchorRecordId: sourceRecordId,
         signatureSummary: adaptiveReport.signatureSummary,
         candidateSummary: adaptiveReport.candidateSummary,
         suggestions,
@@ -370,8 +380,11 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         return;
       }
       setAdaptiveReport(null);
-      const appliedExperienceCount = adaptiveReport.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length;
-      setSuccess(`${appliedExperienceCount} ${appliedExperienceCount === 1 ? "experiência foi aplicada" : "experiências foram aplicadas"}, com evidência e versão auditável. A revisão humana permanece disponível.`);
+      const appliedRecordCount = adaptiveReport.suggestions.filter((candidate) => candidate.fields.some((field) => selectedPaths.has(field.fieldPath))).length;
+      const singular = adaptiveReport.recordKind === "experience" ? "experiência" : adaptiveReport.recordKind === "education" ? "formação" : "curso ou certificação";
+      const plural = adaptiveReport.recordKind === "experience" ? "experiências" : adaptiveReport.recordKind === "education" ? "formações" : "cursos ou certificações";
+      const agreement = adaptiveReport.recordKind === "certification" ? "aplicados" : "aplicadas";
+      setSuccess(`${appliedRecordCount} ${appliedRecordCount === 1 ? `${singular} foi ${adaptiveReport.recordKind === "certification" ? "aplicado" : "aplicada"}` : `${plural} foram ${agreement}`}, com evidência e versão auditável. A revisão humana permanece disponível.`);
     } catch (caught) { showReviewOperationError(caught, "Não foi possível aplicar as sugestões adaptativas."); }
     finally { setBusy(false); }
   }
@@ -388,7 +401,8 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     void personIngestionService.recordSiblingScan({
       organizationId: activeMembership.organizationId,
       reviewId: workspace.id,
-      anchorExperienceId: report.anchorExperienceId!,
+      anchorRecordKind: report.recordKind,
+      anchorRecordId: report.anchorRecordId!,
       methodVersion: ADAPTIVE_REVIEW_METHOD_VERSION,
       algorithmVersion: report.algorithmVersion,
       signatureVersion: report.signatureVersion,
@@ -593,7 +607,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     }
     if (pendingAction === "replace_review_evidence" && !replacementLinkId) { setSelectionError("Este campo ainda não possui evidência ativa do revisor para substituir."); return; }
     if (nextDraft) {
-      nextDraft = anchorExperienceFromSelection(nextDraft, targetFieldPath, pendingSelection.pageNumber, effectiveSelectedText);
+      nextDraft = anchorRecordFromSelection(nextDraft, targetFieldPath, pendingSelection.pageNumber, effectiveSelectedText);
       nextDraft = normalizeReviewDraft(nextDraft);
       const issues = validateReviewDraftForSave(nextDraft, {
         existingPhone: workspace.personPrivateContact.phone,
@@ -637,20 +651,11 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         return;
       }
       if (pendingAction === "correct_current_field" && nextDraft) {
-        const match = /^experiences\.([a-z0-9_]+)\.(role|organization|period|description)$/.exec(targetFieldPath);
-        if (match) {
-          const sourceIndex = findReviewEntityIndex(refreshed.reviewedData.experiences, "experience", match[1]!);
-          if (sourceIndex >= 0) {
-            const report = proposeSiblingBlockCorrections({
-              pages: refreshed.pages,
-              draft: refreshed.reviewedData,
-              extracted: refreshed.extractedData,
-              sourceIndex,
-              sourceField: match[2] as ExperienceFieldName,
-              sourceRegion: spatialAnchorRegion(refreshed, refreshed.reviewedData.experiences[sourceIndex]?.id ?? ""),
-            });
-            setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
-          }
+        const structuralAnchor = recordChangeFromFieldPath(refreshed.reviewedData, targetFieldPath);
+        if (structuralAnchor) {
+          const sourceRegion = { pageNumber: pendingSelection.pageNumber, ...pendingSelection.region };
+          const report = proposeRecordSiblingCorrections(refreshed, structuralAnchor, sourceRegion);
+          setAdaptiveReport(report.suggestions.length || report.unresolved.length ? report : null);
         }
       }
       setSelectedFieldPath(targetFieldPath);
@@ -829,31 +834,84 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   );
 }
 
-function findCompletedExperienceChange(
+type CompletedRecordChange =
+  | { kind: "experience"; index: number; field: ExperienceFieldName }
+  | { kind: "education"; index: number; field: EducationFieldName }
+  | { kind: "certification"; index: number; field: "certification" };
+
+function findCompletedRecordChange(
   before: StructuredDraft,
   after: StructuredDraft,
-): { index: number; field: ExperienceFieldName } | null {
+): CompletedRecordChange | null {
   for (let index = after.experiences.length - 1; index >= 0; index -= 1) {
     const current = after.experiences[index]!;
     if (!current.role?.trim() || !current.organization?.trim() || !current.period?.trim() || !current.description?.trim()) continue;
     const previous = before.experiences.find((item) => item.id === current.id);
-    if (!previous) return { index, field: "role" };
+    if (!previous) return { kind: "experience", index, field: "role" };
     const changedField = (["role", "organization", "period", "description"] as const).find((field) => (previous[field] ?? "").trim() !== (current[field] ?? "").trim());
-    if (changedField) return { index, field: changedField };
+    if (changedField) return { kind: "experience", index, field: changedField };
+  }
+  for (let index = after.education.length - 1; index >= 0; index -= 1) {
+    const current = after.education[index]!;
+    if (!current.course?.trim() || !current.institution?.trim() || current.institution === "Não identificada") continue;
+    const previous = before.education.find((item) => item.id === current.id);
+    if (!previous) return { kind: "education", index, field: "course" };
+    const changedField = (["course", "institution", "period", "description"] as const).find((field) => (previous[field] ?? "").trim() !== (current[field] ?? "").trim());
+    if (changedField) return { kind: "education", index, field: changedField };
+  }
+  for (let index = after.certifications.length - 1; index >= 0; index -= 1) {
+    if (!before.certifications.some((value) => comparableReviewValue(value) === comparableReviewValue(after.certifications[index]!))) return { kind: "certification", index, field: "certification" };
   }
   return null;
 }
 
-function hasSpatialAnchorEvidence(workspace: ProfileReviewWorkspace, experienceId: string): boolean {
-  return spatialAnchorRegion(workspace, experienceId) !== null;
+function recordChangeFromFieldPath(draft: StructuredDraft, fieldPath: string): CompletedRecordChange | null {
+  const experience = /^experiences\.([a-z0-9_]+)\.(role|organization|period|description)$/.exec(fieldPath);
+  if (experience) {
+    const index = findReviewEntityIndex(draft.experiences, "experience", experience[1]!);
+    return index >= 0 ? { kind: "experience", index, field: experience[2] as ExperienceFieldName } : null;
+  }
+  const education = /^education\.([a-z0-9_]+)\.(course|institution|period|description)$/.exec(fieldPath);
+  if (education) {
+    const index = findReviewEntityIndex(draft.education, "education", education[1]!);
+    return index >= 0 ? { kind: "education", index, field: education[2] as EducationFieldName } : null;
+  }
+  if (fieldPath === "certifications" && draft.certifications.length > 0) return { kind: "certification", index: draft.certifications.length - 1, field: "certification" };
+  return null;
 }
 
-function spatialAnchorRegion(workspace: ProfileReviewWorkspace, experienceId: string) {
-  if (!experienceId) return null;
-  const prefix = `experiences.${reviewEntityPathSegment("experience", experienceId)}.`;
-  const link = workspace.evidenceLinks.find((candidate) => candidate.state === "active" && Boolean(candidate.spatialRegionId) && candidate.fieldPath.startsWith(prefix));
+function recordAnchorId(draft: StructuredDraft, change: CompletedRecordChange): string {
+  if (change.kind === "experience") return draft.experiences[change.index]?.id ?? "";
+  if (change.kind === "education") return draft.education[change.index]?.id ?? "";
+  return `certification_${stableUiToken(draft.certifications[change.index] ?? "")}`;
+}
+
+function spatialAnchorRegion(workspace: ProfileReviewWorkspace, kind: AdaptiveRecordKind, recordId: string) {
+  if (!recordId) return null;
+  const prefix = kind === "experience"
+    ? `experiences.${reviewEntityPathSegment("experience", recordId)}.`
+    : kind === "education"
+      ? `education.${reviewEntityPathSegment("education", recordId)}.`
+      : "certifications";
+  const link = workspace.evidenceLinks.find((candidate) => candidate.state === "active" && Boolean(candidate.spatialRegionId) && (kind === "certification" ? candidate.fieldPath === prefix : candidate.fieldPath.startsWith(prefix)));
   const region = workspace.spatialRegions.find((candidate) => candidate.id === link?.spatialRegionId);
   return region ? { pageNumber: region.pageNumber, x: region.x, y: region.y, width: region.width, height: region.height } : null;
+}
+
+function proposeRecordSiblingCorrections(workspace: ProfileReviewWorkspace, change: CompletedRecordChange, sourceRegion: { pageNumber: number; x: number; y: number; width: number; height: number }): AdaptiveSuggestionReport {
+  if (change.kind === "experience") return proposeSiblingBlockCorrections({ pages: workspace.pages, draft: workspace.reviewedData, extracted: workspace.extractedData, sourceIndex: change.index, sourceField: change.field, sourceRegion });
+  if (change.kind === "education") return proposeSiblingEducationCorrections({ pages: workspace.pages, draft: workspace.reviewedData, extracted: workspace.extractedData, sourceIndex: change.index, sourceField: change.field, sourceRegion });
+  return proposeSiblingCertificationCorrections({ pages: workspace.pages, draft: workspace.reviewedData, extracted: workspace.extractedData, sourceIndex: change.index, sourceRegion });
+}
+
+function comparableReviewValue(value: string): string {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, " ").trim().toLowerCase();
+}
+
+function stableUiToken(value: string): string {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) { hash ^= value.charCodeAt(index); hash = Math.imul(hash, 0x01000193); }
+  return (hash >>> 0).toString(36).padStart(8, "0");
 }
 
 function primaryEvidenceTarget(fieldPath: string, workspace: ProfileReviewWorkspace | null, preferredKind?: "original" | "reviewer"): Omit<EvidenceNavigationTarget, "nonce"> | null {
@@ -952,18 +1010,20 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
   return next;
 }
 
-function anchorExperienceFromSelection(draft: StructuredDraft, fieldPath: string, pageNumber: number, evidenceText: string | null): StructuredDraft {
-  const match = /^experiences\.([a-z0-9_]+)\.(role|organization|period|description)$/.exec(fieldPath);
-  if (!match) return draft;
-  const index = findReviewEntityIndex(draft.experiences, "experience", match[1]!);
-  const experience = draft.experiences[index];
-  if (!experience || (experience.page !== null && experience.evidenceText.trim())) return draft;
-  return {
-    ...draft,
-    experiences: draft.experiences.map((item, itemIndex) => itemIndex === index
-      ? { ...item, page: item.page ?? pageNumber, evidenceText: item.evidenceText.trim() || evidenceText?.trim() || item.evidenceText }
-      : item),
-  };
+function anchorRecordFromSelection(draft: StructuredDraft, fieldPath: string, pageNumber: number, evidenceText: string | null): StructuredDraft {
+  const experienceMatch = /^experiences\.([a-z0-9_]+)\.(role|organization|period|description)$/.exec(fieldPath);
+  if (experienceMatch) {
+    const index = findReviewEntityIndex(draft.experiences, "experience", experienceMatch[1]!);
+    const experience = draft.experiences[index];
+    if (!experience || (experience.page !== null && experience.evidenceText.trim())) return draft;
+    return { ...draft, experiences: draft.experiences.map((item, itemIndex) => itemIndex === index ? { ...item, page: item.page ?? pageNumber, evidenceText: item.evidenceText.trim() || evidenceText?.trim() || item.evidenceText } : item) };
+  }
+  const educationMatch = /^education\.([a-z0-9_]+)\.(course|institution|period|description)$/.exec(fieldPath);
+  if (!educationMatch) return draft;
+  const index = findReviewEntityIndex(draft.education, "education", educationMatch[1]!);
+  const education = draft.education[index];
+  if (!education || (education.page !== null && education.evidenceText.trim())) return draft;
+  return { ...draft, education: draft.education.map((item, itemIndex) => itemIndex === index ? { ...item, page: item.page ?? pageNumber, evidenceText: item.evidenceText.trim() || evidenceText?.trim() || item.evidenceText } : item) };
 }
 
 function addNewInformation(

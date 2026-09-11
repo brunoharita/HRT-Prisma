@@ -109,6 +109,9 @@ test("Paddle adapter maps provider data to provider-neutral normalized geometry"
   const lines = canonicalPageToLayoutLines(canonical.pages[0]!);
   assert.equal(lines[0]?.text, "ANA SILVA");
   assert.equal(lines[0]?.emphasis, "strong");
+  assert.equal(lines[0]?.blockId, "p1-b0008");
+  assert.equal(lines[0]?.blockType, "doc_title");
+  assert.equal(lines[1]?.blockReadingOrder, 1);
   assert.equal(lines[1]?.y, 0.15);
 });
 
