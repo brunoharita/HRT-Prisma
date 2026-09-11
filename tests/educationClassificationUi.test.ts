@@ -29,3 +29,10 @@ test("academic dimensions participate in evidence navigation", () => {
   assert.match(review, /AcademicSelect[\s\S]*onSelect=\{onFieldSelect\}/);
   assert.match(review, /onFocus=\{\(\) => onSelect\(fieldPath, "reviewer"\)\}/);
 });
+
+test("education review adapts fields to the selected academic level", () => {
+  assert.match(review, /educationFieldVisibility\(classification\.level\)/);
+  assert.match(review, /fieldVisibility\.showInstitution/);
+  assert.match(review, /fieldVisibility\.showPeriod/);
+  assert.match(review, /fieldVisibility\.showQualification/);
+});

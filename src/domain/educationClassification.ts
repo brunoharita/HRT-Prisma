@@ -46,6 +46,13 @@ export interface EducationClassificationInput {
   evidenceText?: string | null;
 }
 
+export interface EducationFieldVisibility {
+  showCourse: boolean;
+  showInstitution: boolean;
+  showPeriod: boolean;
+  showQualification: boolean;
+}
+
 export type EducationClassificationFields = Omit<EducationClassificationResult, "classifierSnapshot" | "course"> & {
   classifierSnapshot?: EducationClassifierSnapshot;
 };
@@ -176,6 +183,12 @@ export function qualificationOptionsForLevel(level: EducationLevel): readonly Ed
   return QUALIFICATIONS_BY_LEVEL[level];
 }
 
+export function educationFieldVisibility(level: EducationLevel): EducationFieldVisibility {
+  if (level === "secondary") return { showCourse: true, showInstitution: false, showPeriod: false, showQualification: false };
+  if (level === "technical") return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false };
+  return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: true };
+}
+
 export function resolveEducationClassification(input: EducationClassificationInput & Partial<EducationClassificationFields>): EducationClassificationFields {
   const originalText = typeof input.originalText === "string" ? input.originalText : input.evidenceText ?? input.course ?? "";
   const level = isEducationLevel(input.level) ? input.level : "unknown";
@@ -206,7 +219,8 @@ export function withHumanEducationClassification<T extends EducationClassificati
   const current = resolveEducationClassification(input);
   const nextLevel = patch.level ?? current.level;
   const requestedQualification = patch.qualification ?? current.qualification;
-  const qualification = isEducationLevelQualificationCompatible(nextLevel, requestedQualification) ? requestedQualification : "unknown";
+  const derivedQualification = nextLevel === "secondary" ? "other" : nextLevel === "technical" ? "technical_course" : null;
+  const qualification = derivedQualification ?? (isEducationLevelQualificationCompatible(nextLevel, requestedQualification) ? requestedQualification : "unknown");
   const changedSources = {
     level: patch.level === undefined ? current.classificationSources.level : "human",
     qualification: patch.qualification === undefined && qualification === current.qualification ? current.classificationSources.qualification : "human",

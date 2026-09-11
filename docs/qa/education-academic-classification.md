@@ -17,6 +17,9 @@ Valida `education-academic-classification` 1.0.0 na extração determinística, 
 | Texto ambíguo | valores `unknown`, sem invenção |
 | Override humano | valor efetivo humano e snapshot original preservado |
 | Mudança de nível incompatível | qualificação limpa para `unknown` |
+| Ensino Fundamental/Médio | instituição, período e qualificação deixam de ser exibidos; curso e situação permanecem disponíveis |
+| Técnico | qualificação `technical_course` é derivada e o seletor redundante deixa de ser exibido |
+| Níveis superiores | curso, instituição, período, nível, qualificação e situação permanecem disponíveis |
 | Perfil histórico | leitura com fallback `legacy-unclassified` |
 | Delta acadêmico | prefixo qualificado e nome limpo correspondem ao mesmo registro |
 

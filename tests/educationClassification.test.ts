@@ -6,6 +6,7 @@ import {
   confirmEducationClassification,
   educationClassificationNeedsReview,
   educationCourseIdentity,
+  educationFieldVisibility,
   isEducationLevelQualificationCompatible,
   resolveEducationClassification,
   withHumanEducationClassification,
@@ -100,6 +101,15 @@ test("invalid academic combinations are rejected and level changes clear them", 
   const mba = classifyEducationRecord({ course: "MBA em Gestão", status: "Concluído" });
   const changed = withHumanEducationClassification(mba, { level: "undergraduate" });
   assert.equal(changed.qualification, "unknown");
+});
+
+test("basic education hides fields that do not add value and derives technical qualification", () => {
+  assert.deepEqual(educationFieldVisibility("secondary"), { showCourse: true, showInstitution: false, showPeriod: false, showQualification: false });
+  assert.deepEqual(educationFieldVisibility("technical"), { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false });
+  const secondary = withHumanEducationClassification({ course: null, level: "unknown", qualification: "unknown", status: "unknown" }, { level: "secondary" });
+  assert.equal(secondary.qualification, "other");
+  const technical = withHumanEducationClassification({ course: "Processamento de Dados", level: "unknown", qualification: "unknown", status: "unknown" }, { level: "technical" });
+  assert.equal(technical.qualification, "technical_course");
 });
 
 test("historical records remain readable without retroactive invention", () => {
