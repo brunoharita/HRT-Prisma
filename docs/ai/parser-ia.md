@@ -1,6 +1,6 @@
 # M5.7 Parser IA
 
-Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.0. Decisão: ADR-049. Estado: implementação local com avaliação real parcial.
+Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.0. Decisão: ADR-049. Estado: ativado para uso direto local; avaliação de qualidade parcial.
 
 ## Funcionamento
 

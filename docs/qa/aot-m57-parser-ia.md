@@ -38,7 +38,7 @@ Artefatos completos somente em `tmp/m57-parser-ia/`; relatório final local em `
 
 ## Git e ambiente
 
-Branch local `codex/m5-7-parser-ia`, derivada de `43c36e0`. Implementação não integrada à branch usada pelo diretório principal, flag web desligada por padrão e backend não iniciado permanentemente. Somente .env.local privado contém a credencial configurada anteriormente. Commit/sincronização do movimento são registrados na resposta de entrega; não representam rollout.
+Branch local `codex/m5-7-parser-ia`, derivada de `43c36e0`. Na primeira entrega a implementação não estava integrada. Na ativação autorizada, a raiz oficial recebeu fast-forward, .env.local passou a habilitar IA e o backend foi iniciado em loopback, preservando o Vite existente e o material alheio .tmp.driveupload/. Somente .env.local privado contém a credencial configurada anteriormente. Commit/sincronização do movimento são registrados na resposta de entrega; não representam rollout.
 
 ## Desvios e conclusão
 
@@ -46,6 +46,6 @@ D-07 revisado explicitamente pelo PO: outras duas amostras dispensadas. Validaç
 
 ## Ativação para uso direto, autorizada em 2026-09-12
 
-O PO pediu preparar o Prisma para usar diretamente. Comando único `pnpm run dev:ia`, flag DEV, aviso visível e leitura nativa anterior à IA implementados. Integração na raiz oficial conserva configuração Supabase e ledger privado existente. O operador continua usando as mesmas etapas de identificação, revisão e publicação. O smoke do agente não grava currículo no Supabase nem envia outras amostras ao fornecedor. Evidência operacional final será registrada após iniciar os serviços.
+O PO pediu preparar o Prisma para usar diretamente. Comando único `pnpm run dev:ia`, flag DEV, aviso visível e leitura nativa anterior à IA implementados. Integração na raiz oficial conserva configuração Supabase e ledger privado existente. O operador continua usando as mesmas etapas de identificação, revisão e publicação. O smoke do agente não grava currículo no Supabase nem envia outras amostras ao fornecedor. Ativação concluída: Vite da raiz oficial entrega parserIaClient com flag true e a tela com aviso de IA; parser escuta 127.0.0.1:8787. O proxy real retornou 200 usando exclusivamente cache autorizado de João: quatro páginas, 50 fatos, status partial, ledger byte a byte inalterado. Origem externa negada com 403. Zero reenvios externos e zero gravações Supabase neste smoke. Navegador exibiu login com o build integrado; não houve sessão autenticada nem prova interativa de importação/persistência. Acesso direto: http://localhost:5555/profiles/import. Reinício: pnpm run dev:ia.
 
 Gate de ativação: `pnpm run validate` aprovado conforme gate solicitado nas instruções fornecidas nesta rodada: lint 440 arquivos, foundation, contexto, typechecks, build web, 385 testes, 19 golden e demo local. Também passaram os 30 testes específicos M5.7. Varredura dos 11 assets JavaScript e diff: segredo ausente. Aviso preexistente de chunk grande permanece.
