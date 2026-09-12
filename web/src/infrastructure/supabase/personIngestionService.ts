@@ -7,6 +7,7 @@ import {
   OCR_VERSION,
   STRUCTURING_VERSION,
   processManualText,
+  validateAndProcessPdf,
   type CurrentProfileSummary,
   type DocumentDeletionPreview,
   type ExtractedPage,
@@ -51,6 +52,7 @@ import {
 import { legacyReviewEntityIdFromValue, reviewDraftNeedsContractUpgrade } from "../../domain/reviewFieldLifecycle";
 import { reviewOperationError, supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import { PARSER_IA_VERSION, PARSER_IA_SOURCE_VERSION, parserIaMethodVersion, preparedParserIa } from "../../domain/parserIa";
+import { parserIaEnabled, prepareParserIa } from "../parserIaClient";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -203,7 +205,7 @@ export const personIngestionService = {
           .eq("organization_id", organizationId).in("person_id", personIds)
         : Promise.resolve({ data: [], error: null }),
       supabase.from("documents")
-        .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, created_at, processed_at, is_legacy_unstored")
+        .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, created_at, processed_at, is_legacy_unstored, extraction_version")
         .eq("organization_id", organizationId).in("person_id", personIds).order("created_at", { ascending: false }),
       supabase.from("professional_profiles")
         .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
@@ -270,7 +272,7 @@ export const personIngestionService = {
         .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
         .eq("organization_id", organizationId).eq("person_id", personId).maybeSingle(),
       supabase.from("documents")
-        .select("id, filename, source_type, document_version, byte_size, page_count, status, review_state, created_at, processed_at, is_legacy_unstored")
+        .select("id, filename, source_type, document_version, byte_size, page_count, status, review_state, created_at, processed_at, is_legacy_unstored, extraction_version")
         .eq("organization_id", organizationId).eq("person_id", personId).order("created_at", { ascending: false }),
       supabase.from("professional_profiles")
         .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
@@ -460,6 +462,31 @@ export const personIngestionService = {
       createOperationKey("retry-processing"),
       previousAttempt.id,
     );
+  },
+
+  async resumeFailedAiIntake(organizationId: string, personId: string, documentId: string): Promise<void> {
+    if (!parserIaEnabled()) throw new Error("Ative a importação local com IA para retomar este documento.");
+    const { data: document, error: documentError } = await supabase.from("documents")
+      .select("id, document_version, storage_path, filename, checksum_sha256, review_state, status, extraction_version")
+      .eq("organization_id", organizationId).eq("person_id", personId).eq("id", documentId).single();
+    throwIfError(documentError, "Não foi possível localizar o documento nesta organização e Pessoa.");
+    if (!document?.storage_path || document.extraction_version !== PARSER_IA_SOURCE_VERSION || document.status !== "failed" || document.review_state !== "not_ready") throw new Error("Este documento não está disponível para retomada da importação por IA.");
+    const { data: intake, error: intakeError } = await supabase.from("resume_intakes")
+      .select("id, resolved_person_id, resolved_document_id, resolution_type, storage_path, checksum_sha256")
+      .eq("organization_id", organizationId).eq("resolved_person_id", personId).eq("resolved_document_id", documentId).eq("status", "failed").single();
+    throwIfError(intakeError, "Não foi possível localizar a importação interrompida.");
+    if (!intake || !isResolvedIdentityType(intake.resolution_type ?? "") || intake.storage_path !== document.storage_path || intake.checksum_sha256 !== document.checksum_sha256) throw new Error("A origem da importação não corresponde ao documento preservado.");
+    const { data: source, error: downloadError } = await supabase.storage.from(DOCUMENT_BUCKET).download(document.storage_path);
+    throwIfError(downloadError, "Não foi possível recuperar o PDF original. O documento permanece preservado.");
+    if (!source) throw new Error("O PDF original não está disponível para esta retomada.");
+    const file = new File([source], document.filename, { type: "application/pdf" });
+    const native = await validateAndProcessPdf(file, undefined, { documentIntelligenceMode: "baseline" });
+    if (native.sha256 !== document.checksum_sha256) throw new Error("O PDF recuperado não corresponde ao arquivo original. A retomada foi interrompida.");
+    const input = await prepareParserIa(native, organizationId);
+    await processResolvedIntake(organizationId, input, {
+      kind: "resolved", intakeId: intake.id, personId, documentId, documentVersion: document.document_version,
+      resolutionType: intake.resolution_type as "created_new_person" | "linked_existing_person", reused: true,
+    });
   },
 
   async startProfileReview(organizationId: string, personId: string, documentId: string, processingAttemptId: string): Promise<string> {
@@ -714,7 +741,7 @@ export const personIngestionService = {
 
   async listDocumentOperations(organizationId: string, personId?: string): Promise<DocumentOperationSummary[]> {
     const documentQuery = supabase.from("documents")
-      .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, failure_category, created_at, processed_at, is_legacy_unstored")
+      .select("id, person_id, filename, source_type, document_version, byte_size, page_count, status, review_state, failure_category, created_at, processed_at, is_legacy_unstored, extraction_version")
       .eq("organization_id", organizationId);
     const peopleQuery = supabase.from("people").select("id, full_name").eq("organization_id", organizationId);
     const profileQuery = supabase.from("professional_profiles").select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
@@ -761,6 +788,7 @@ export const personIngestionService = {
       profileVersion: profiles.get(document.id) ?? null,
       verificationReviewId: null,
       isLegacyUnstored: document.is_legacy_unstored,
+      extractionVersion: document.extraction_version ?? null,
       latestAttempt: latestAttempts.get(document.id) ?? null,
       reviewAttempt: reviewAttempts.get(document.id) ?? null,
       currentProfile: currentProfiles.get(document.person_id) ?? null,
@@ -1508,6 +1536,7 @@ function toTimelineItem(document: {
   created_at: string;
   processed_at: string | null;
   is_legacy_unstored: boolean;
+  extraction_version?: string | null;
 }, latestAttempts: Map<string, ProcessingAttemptView>, reviewAttempts: Map<string, ProcessingAttemptView>, profiles: Map<string, number>, reviews: Map<string, string> = new Map(), reviewStates: Map<string, string> = new Map()): PersonDocumentTimelineItem {
   const persistedReviewState = reviewStates.get(document.id);
   const reviewState: PersonDocumentTimelineItem["reviewState"] = document.review_state === "approved" || document.review_state === "invalidated"
@@ -1533,6 +1562,7 @@ function toTimelineItem(document: {
     profileVersion: profiles.get(document.id) ?? null,
     verificationReviewId: reviews.get(document.id) ?? null,
     isLegacyUnstored: document.is_legacy_unstored,
+    extractionVersion: document.extraction_version ?? null,
     latestAttempt: latestAttempts.get(document.id) ?? null,
     reviewAttempt: reviewAttempts.get(document.id) ?? null,
   };

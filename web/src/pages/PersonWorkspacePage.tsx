@@ -81,7 +81,8 @@ import {
   type PersonPendingAction,
 } from "../domain/personActionCenter";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
-import { prepareParserIa } from "../infrastructure/parserIaClient";
+import { canResumeFailedAiIntake } from "../domain/parserIa";
+import { parserIaEnabled, prepareParserIa } from "../infrastructure/parserIaClient";
 import { personDeletionService } from "../infrastructure/supabase/personDeletionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -264,7 +265,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     setBusy(true);
     setError(null);
     try {
-      await personIngestionService.reprocessDocument(activeMembership.organizationId, personId, document.id);
+      if (parserIaEnabled() && canResumeFailedAiIntake(document)) await personIngestionService.resumeFailedAiIntake(activeMembership.organizationId, personId, document.id);
+      else await personIngestionService.reprocessDocument(activeMembership.organizationId, personId, document.id);
       await refresh(document.id);
       setSuccess("Nova tentativa técnica criada sem apagar a extração ou o perfil anterior.");
     } catch (caught) {
@@ -479,7 +481,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
           </section>
           <section aria-labelledby="processamento" className="prisma-m2b-section">
             <div className="prisma-section-heading"><Typography.Title id="processamento" level={3}>Processamento do documento</Typography.Title>{attempt ? <ProcessingTag state={attempt.state} /> : null}</div>
-            <PrismaCard>{attempt && selectedDocument ? <><Steps className="prisma-processing-steps" current={stepIndex(attempt.state)} items={processingSteps(attempt.state, attempt.pagesOcr)} responsive /><Descriptions bordered column={{ xs: 1, sm: 2, lg: 3 }} size="small" title="Detalhes do processamento"><Descriptions.Item label="Arquivo">{selectedDocument.filename}</Descriptions.Item><Descriptions.Item label="Tamanho">{formatBytes(selectedDocument.byteSize ?? 0)}</Descriptions.Item><Descriptions.Item label="Páginas">{selectedDocument.pageCount ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{attempt.currentMethod}</Descriptions.Item><Descriptions.Item label="Caracteres úteis">{attempt.usefulCharacterCount}</Descriptions.Item></Descriptions>{isProcessing(attempt.state) ? <div className="prisma-processing-active"><Spin size="small" /><span>Processamento em andamento</span></div> : null}{attempt.failureCode ? <Alert description="A fonte, as tentativas e o Perfil atual permanecem preservados." title={processingFailureMessage(attempt)} showIcon type="error" /> : null}</> : <Empty description="Nenhuma fonte foi processada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>
+            <PrismaCard>{attempt && selectedDocument ? <><Steps className="prisma-processing-steps" current={stepIndex(attempt.state)} items={processingSteps(attempt.state, attempt.pagesOcr)} responsive /><Descriptions bordered column={{ xs: 1, sm: 2, lg: 3 }} size="small" title="Detalhes do processamento"><Descriptions.Item label="Arquivo">{selectedDocument.filename}</Descriptions.Item><Descriptions.Item label="Tamanho">{formatBytes(selectedDocument.byteSize ?? 0)}</Descriptions.Item><Descriptions.Item label="Páginas">{selectedDocument.pageCount ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{attempt.currentMethod}</Descriptions.Item><Descriptions.Item label="Caracteres úteis">{attempt.usefulCharacterCount}</Descriptions.Item></Descriptions>{isProcessing(attempt.state) ? <div className="prisma-processing-active"><Spin size="small" /><span>Processamento em andamento</span></div> : null}{attempt.failureCode ? <Alert action={parserIaEnabled() && canResumeFailedAiIntake(selectedDocument) ? <Button loading={busy} onClick={() => void handleReprocess(selectedDocument)} type="primary">Retomar importação com IA</Button> : undefined} description="A fonte, as tentativas e o Perfil atual permanecem preservados." title={parserIaEnabled() && canResumeFailedAiIntake(selectedDocument) ? "A gravação da leitura falhou. Retome a importação usando o PDF original preservado." : processingFailureMessage(attempt)} showIcon type="error" /> : null}</> : <Empty description="Nenhuma fonte foi processada para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />}</PrismaCard>
           </section>
           <section aria-labelledby="resultado" className="prisma-m2b-section prisma-extraction-section">
             <div className="prisma-section-heading"><Typography.Title id="resultado" level={3}>Resultado da extração</Typography.Title>{selectedDocument ? <Button onClick={() => onNavigate(`/profiles/${personId}/documents/${selectedDocument.id}`)}>Detalhes técnicos</Button> : null}</div>

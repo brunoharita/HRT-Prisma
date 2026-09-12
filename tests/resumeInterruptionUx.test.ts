@@ -30,7 +30,12 @@ test("processing failures expose a concrete recovery and never display raw persi
   assert.match(importPage, /Substituir arquivo/);
   assert.match(workspacePage, /processingFailureMessage\(attempt\)/);
   assert.doesNotMatch(workspacePage, /message=\{attempt\.failureMessage\}/);
-  assert.match(detailPage, /const canReprocess = presentation\.state === "technical_failure" && presentation\.nextAction === "Reprocessar"/);
+  assert.match(detailPage, /const canReprocess = presentation\.state === "technical_failure" && \(presentation\.nextAction === "Reprocessar" \|\| canResumeSource\)/);
+  assert.match(detailPage, /const canResumeSource = parserIaEnabled\(\) && canResumeFailedAiIntake\(document\)/);
+  for (const page of [workspacePage, detailPage]) {
+    assert.match(page, /Retomar importação com IA/);
+    assert.match(page, /personIngestionService\.resumeFailedAiIntake\(activeMembership\.organizationId, personId, document\.id\)/);
+  }
   assert.match(detailPage, /processingFailureMessage\(document\.latestAttempt\)/);
   assert.match(service, /throw supabaseOperationError\(error, message\)/);
   assert.doesNotMatch(service, /throw new Error\(`\$\{message\} \$\{error\.message\}`\)/);

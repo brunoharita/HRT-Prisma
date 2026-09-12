@@ -1,4 +1,4 @@
-import type { ExtractedPage, ProcessedDocumentInput, StructuredDraft } from "./personIngestion.js";
+import type { ExtractedPage, PersonDocumentTimelineItem, ProcessedDocumentInput, StructuredDraft } from "./personIngestion.js";
 import type { FieldEvidenceDescriptor } from "./adaptiveResumeExtraction.js";
 import { classifyEducationRecord } from "../../../src/domain/educationClassification.js";
 import { stableReviewEntityId } from "./reviewFieldLifecycle.js";
@@ -7,6 +7,13 @@ import { normalizeResumeEmail, normalizeResumePhone, type ResumeIdentity } from 
 export const PARSER_IA_VERSION = "parser-ia-1.0.0";
 export const PARSER_IA_SOURCE_VERSION = "pdfjs-5.4.296/parser-ia-spans-v1";
 export const PARSER_IA_MAX_PAGES = 30;
+export function canResumeFailedAiIntake(document: PersonDocumentTimelineItem | null | undefined): boolean {
+  return Boolean(document && document.sourceType === "resume_pdf" && !document.isLegacyUnstored
+    && document.extractionVersion === PARSER_IA_SOURCE_VERSION && document.status === "failed" && document.reviewState === "not_ready"
+    && document.latestAttempt?.state === "failed_structuring"
+    && document.latestAttempt.failureCode === "resume_intake_processing_failed"
+    && document.latestAttempt.usefulCharacterCount === 0 && !document.reviewAttempt);
+}
 export interface ParserSourceLine { id: string; pageNumber: number; text: string; x: number; y: number; width: number; height: number; }
 export interface ParserFact { path: string; value: string; sources: string[]; }
 export interface ParserPayload { status: "complete" | "partial"; facts: ParserFact[]; uncertainties: string[]; }

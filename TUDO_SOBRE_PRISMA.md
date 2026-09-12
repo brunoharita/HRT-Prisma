@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: c3316dc6cf5830ac189e24d8a9541c904ac95052fdddb3fb25c8f1801dd373b1
+source_manifest_sha256: f8b31412109a8690427a547d34ce0f602d1f2309de0eaa391cc610235ad32421
 -->
 
 # Tudo sobre o Prisma
@@ -402,7 +402,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.3
+version: 2.29.4
 last_verified: 2026-09-12
 ---
 
@@ -423,6 +423,8 @@ Correção compatível após a primeira tentativa do PO: `PARSER_PROVENANCE_INVA
 Ajuste visual local dos cartões de documento na jornada e no Delta: ícone de PDF com largura fixa, nome flexível com quebra segura e ação Ver documento compacta. Seletores limitados aos filhos diretos impedem que regras de metadados alterem ícones e texto internos do botão. Sem alteração de parsing, contratos persistidos, navegação ou evidências.
 
 Correção da persistência de listas da IA: competências, idiomas, certificações e áreas de atuação usam o caminho raiz de evidência já aceito pela revisão/RPC, preservando itens, spans e coordenadas. A retomada adapta também propostas já presentes em memória, sem mutá-las ou chamar novamente a IA. A regra vigente do único Supabase foi consultada por leitura; nenhuma migração ou alteração remota foi aplicada.
+
+Retomada local de M5.7 interrompido disponível na Central da Pessoa e no detalhe: recupera PDF original privado com verificação de vínculo/hash e reutiliza intake/Pessoa/documento existentes. Consulta ao único Supabase confirmou a fonte preservada e zero páginas persistidas no caso relatado; reprocessamento anterior exigia páginas e não oferecia recuperação a partir da fonte. Teste do serviço real com resposta salva e persistência simulada validou nove experiências, duas formações e descritores aceitos pelo contrato; negativos sintéticos bloqueiam fonte/vínculo/versão divergentes antes de IA ou gravação. Persistência autenticada ainda não demonstrada pelo agente; nenhuma mutação remota nesta correção. Acordo/execução 1.1.1; contrato parser-ia-1.0.0 preservado.
 
 ## Repositório
 

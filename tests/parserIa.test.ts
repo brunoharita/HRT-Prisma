@@ -1,7 +1,27 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parserIaSource, structureParserIa, validateParserPayload, parserIaIdentity, preparedParserIa, parserIaMethodVersion, type ParserFact } from "../web/src/domain/parserIa.js";
-import type { ExtractedPage } from "../web/src/domain/personIngestion.js";
+import { canResumeFailedAiIntake, PARSER_IA_SOURCE_VERSION, parserIaSource, structureParserIa, validateParserPayload, parserIaIdentity, preparedParserIa, parserIaMethodVersion, type ParserFact } from "../web/src/domain/parserIa.js";
+import type { ExtractedPage, PersonDocumentTimelineItem } from "../web/src/domain/personIngestion.js";
+
+test("M5.7 only offers source recovery for a failed AI intake without reusable review", () => {
+  const document: PersonDocumentTimelineItem = {
+    id: "doc", filename: "synthetic.pdf", extractionVersion: PARSER_IA_SOURCE_VERSION, sourceType: "resume_pdf",
+    documentVersion: 1, byteSize: 100, pageCount: 1, status: "failed", reviewState: "not_ready",
+    createdAt: "2026-09-12", processedAt: null, profileVersion: null, verificationReviewId: null, isLegacyUnstored: false,
+    latestAttempt: { id: "attempt", attemptNumber: 1, state: "failed_structuring", currentMethod: "failed",
+      pagesNative: 0, pagesOcr: 0, usefulCharacterCount: 0, failureCode: "resume_intake_processing_failed",
+      failureMessage: null, startedAt: "2026-09-12", completedAt: null }, reviewAttempt: null,
+  };
+  assert.equal(canResumeFailedAiIntake(document), true);
+  for (const change of [{ extractionVersion: null }, { isLegacyUnstored: true }, { reviewState: "approved" },
+    { status: "ready_for_review" }, { reviewState: "invalidated" }, { latestAttempt: null },
+    { reviewAttempt: document.latestAttempt }]) {
+    assert.equal(canResumeFailedAiIntake({ ...document, ...change } as PersonDocumentTimelineItem), false);
+  }
+  assert.equal(canResumeFailedAiIntake({ ...document, latestAttempt: { ...document.latestAttempt!, usefulCharacterCount: 10 } }), false);
+  assert.equal(canResumeFailedAiIntake({ ...document, latestAttempt: { ...document.latestAttempt!, failureCode: "other" } }), false);
+  assert.equal(canResumeFailedAiIntake(null), false);
+});
 
 const page = (pageNumber: number, lines: string[]): ExtractedPage => ({ pageNumber, text: lines.join("\n"), origin: "native_pdf", usefulCharacterCount: 300, method: "pdfjs", methodVersion: "synthetic", layoutLines: lines.map((text, index) => ({ text, x: 0.1, y: 0.05 + index * 0.02, width: 0.7, height: 0.013, fontSize: 10, emphasis: "regular" })) });
 const binding = { sourceSha256: "a".repeat(64), organizationId: "local-test", provenance: { model: "synthetic", promptSha256: "b".repeat(64), responseId: "resp_fake", inputTokens: 0, outputTokens: 0, costUsd: 0, durationMs: 1 } };

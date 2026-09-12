@@ -1,6 +1,6 @@
 # M5.7 Parser IA
 
-Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.0. Decisão: ADR-049. Estado: ativado para uso direto local; avaliação de qualidade parcial.
+Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.1. Decisão: ADR-049. Estado: ativado para uso direto local; avaliação de qualidade parcial.
 
 ## Funcionamento
 
@@ -51,3 +51,5 @@ Nenhuma validação semântica/espacial humana da saída nova, teste ponta a pon
 Correção de proveniência (2026-09-12): identificadores de modelo aceitam ponto, hífen e sublinhado, mantendo limites e rejeição de separadores de caminho/espaços. A validação de versão/org/hash/modelo/prompt ocorre também no cliente dentro do tratamento amigável de falha, antes de iniciar o intake. Compatível com parser-ia-1.0.0; modelo, prompt, cache, dados e contratos persistidos permanecem iguais.
 
 Compatibilidade de evidência de listas: a proposta do modelo mantém índices por item; a revisão/persistência recebe competências, idiomas, certificações e áreas de atuação no caminho raiz. Cada trecho mantém seu próprio descritor e coordenadas. preparedParserIa adapta resultados já em memória para permitir retomada sem reenvio. Correção compatível, sem migração ou mudança de modelo/prompt.
+
+Retomada de intake interrompido: na Central da Pessoa e no detalhe do documento, a ação Retomar importação com IA fica disponível em DEV para documento M5.7 failed/not_ready, tentativa resume_intake_processing_failed, zero caracteres persistidos e nenhuma tentativa revisável. A sessão autorizada recupera o PDF privado; organização, Pessoa, intake, documento, caminho e SHA-256 precisam corresponder antes da IA. O cache existente é reutilizado quando elegível; sem cache aplicam-se os limites e orçamento normais. Persistência e conclusão reutilizam os RPCs/idempotência existentes. Nenhuma nova Pessoa é criada, nem Perfil publicado. Compatível com parser-ia-1.0.0, sem mudança de prompt, modelo ou schema.

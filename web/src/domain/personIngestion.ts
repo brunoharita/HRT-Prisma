@@ -272,6 +272,7 @@ export interface StructuredDraft {
 
 export interface PersonDocumentTimelineItem {
   id: string;
+  extractionVersion?: string | null;
   filename: string;
   sourceType: DocumentSourceType;
   documentVersion: number;
