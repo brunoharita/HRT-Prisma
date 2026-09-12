@@ -132,6 +132,7 @@ export interface ProcessedDocumentInput {
   nativePageCount: number;
   ocrPageCount: number;
   documentIntelligence?: DocumentIntelligenceTrace;
+  parserIa?: import("./parserIa.js").ParserIaResult;
 }
 
 export interface ResumeDuplicateCandidate {

@@ -50,6 +50,7 @@ import {
 } from "../../domain/customProfileSections";
 import { legacyReviewEntityIdFromValue, reviewDraftNeedsContractUpgrade } from "../../domain/reviewFieldLifecycle";
 import { reviewOperationError, supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
+import { PARSER_IA_VERSION, PARSER_IA_SOURCE_VERSION, parserIaMethodVersion, preparedParserIa } from "../../domain/parserIa";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -81,6 +82,7 @@ export const personIngestionService = {
     identity: ResumeIdentity,
     idempotencyKey: string,
   ): Promise<ResumeIntakeIdentityResult | ResumeIntakeResolutionResult> {
+    assertParserIaScope(organizationId, input);
     const { data, error } = await supabase.rpc("start_resume_intake", {
       p_organization_id: organizationId,
       p_filename: input.file.name,
@@ -89,7 +91,7 @@ export const personIngestionService = {
       p_checksum_sha256: input.sha256,
       p_byte_size: input.file.size,
       p_page_count: input.pages.length,
-      p_extraction_version: NATIVE_EXTRACTION_VERSION,
+      p_extraction_version: input.parserIa ? PARSER_IA_SOURCE_VERSION : NATIVE_EXTRACTION_VERSION,
       p_idempotency_key: idempotencyKey,
     });
     throwIfError(error, "Não foi possível iniciar a importação do currículo.");
@@ -157,6 +159,7 @@ export const personIngestionService = {
     idempotencyKey: string,
     onProgress?: (progress: ResumeProcessingProgress) => void,
   ): Promise<ResumeIntakeResolutionResult> {
+    assertParserIaScope(organizationId, input);
     const { data, error } = await supabase.rpc("resolve_resume_intake", {
       p_organization_id: organizationId,
       p_intake_id: intakeId,
@@ -391,6 +394,7 @@ export const personIngestionService = {
   },
 
   async processPdf(organizationId: string, personId: string, input: ProcessedDocumentInput): Promise<string> {
+    assertParserIaScope(organizationId, input);
     const document = await registerDocument({
       organizationId,
       personId,
@@ -401,7 +405,7 @@ export const personIngestionService = {
       checksum: input.sha256,
       byteSize: input.file.size,
       pageCount: input.pages.length,
-      extractionVersion: NATIVE_EXTRACTION_VERSION,
+      extractionVersion: input.parserIa ? PARSER_IA_SOURCE_VERSION : NATIVE_EXTRACTION_VERSION,
       idempotencyKey: createOperationKey("pdf-document"),
     });
     if (!document.storagePath) throw new Error("O registro do PDF não reservou um caminho privado.");
@@ -414,9 +418,9 @@ export const personIngestionService = {
       await recordFailure(organizationId, personId, document.documentId, "failed_extraction", "storage_upload_failed", "O documento foi registrado, mas o upload privado falhou.");
       throw new Error("O upload privado falhou. Nenhum Perfil Prisma foi gerado.");
     }
-    const extraction = await buildOrganizationAdaptiveExtraction(organizationId, input.pages);
+    const extraction = await buildPreparedExtraction(organizationId, input);
     const pages = attachFieldEvidence(input.pages, extraction.fieldEvidence);
-    await persistExtraction(organizationId, personId, document.documentId, pages, extraction.draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null);
+    await persistExtraction(organizationId, personId, document.documentId, pages, extraction.draft, input.nativePageCount, input.ocrPageCount, createOperationKey("pdf-extraction"), null, input.parserIa ? parserIaMethodVersion(input.parserIa) : STRUCTURING_VERSION);
     await recordDocumentIntelligenceRun(organizationId, personId, document.documentId, input).catch(() => undefined);
     return document.documentId;
   },
@@ -1150,6 +1154,7 @@ async function persistExtraction(
   pagesOcr: number,
   idempotencyKey: string,
   retryOfAttemptId: string | null,
+  structuringVersion: string = STRUCTURING_VERSION,
 ) {
   const pagePayload = pages.map((page) => ({
     page_number: page.pageNumber,
@@ -1169,9 +1174,9 @@ async function persistExtraction(
     p_draft: draft as unknown as Json,
     p_pages_native: pagesNative,
     p_pages_ocr: pagesOcr,
-    p_native_extraction_version: NATIVE_EXTRACTION_VERSION,
+    p_native_extraction_version: structuringVersion.startsWith(`${PARSER_IA_VERSION}/`) ? PARSER_IA_SOURCE_VERSION : NATIVE_EXTRACTION_VERSION,
     p_ocr_version: pagesOcr > 0 ? OCR_VERSION : null,
-    p_structuring_version: STRUCTURING_VERSION,
+    p_structuring_version: structuringVersion,
     p_draft_version: EXTRACTION_DRAFT_VERSION,
     p_idempotency_key: idempotencyKey,
     p_retry_of_attempt_id: retryOfAttemptId,
@@ -1269,7 +1274,7 @@ async function processResolvedIntake(
 ): Promise<ResumeIntakeResolutionResult> {
   try {
     onProgress?.({ stage: "structuring", message: "Estruturando as informações profissionais recuperadas." });
-    const extraction = await buildOrganizationAdaptiveExtraction(organizationId, input.pages);
+    const extraction = await buildPreparedExtraction(organizationId, input);
     onProgress?.({ stage: "persisting", message: "Preservando páginas, campos extraídos e evidências para revisão." });
     await persistExtraction(
       organizationId,
@@ -1281,6 +1286,7 @@ async function processResolvedIntake(
       input.ocrPageCount,
       `resume-intake-extraction:${result.intakeId}`,
       null,
+      input.parserIa ? parserIaMethodVersion(input.parserIa) : STRUCTURING_VERSION,
     );
     await recordDocumentIntelligenceRun(organizationId, result.personId, result.documentId, input).catch(() => undefined);
     const { error: completeError } = await supabase.rpc("complete_resume_intake", {
@@ -1289,7 +1295,7 @@ async function processResolvedIntake(
       p_document_id: result.documentId,
     });
     throwIfError(completeError, "O currículo foi processado, mas o intake não pôde ser concluído.");
-    onProgress?.({ stage: "ready_for_review", message: "Análise concluída. O documento está pronto para revisão." });
+    onProgress?.({ stage: "ready_for_review", message: input.parserIa?.status === "partial" ? "Interpretação parcial preservada. Confira as pendências na revisão." : "Análise concluída. O documento está pronto para revisão." });
     return result;
   } catch (caught) {
     const message = caught instanceof Error ? caught.message : "Falha no processamento posterior à resolução de identidade.";
@@ -1603,6 +1609,19 @@ async function buildOrganizationAdaptiveExtraction(organizationId: string, pages
     loadOrganizationCustomSections(organizationId),
   ]);
   return buildAdaptiveExtraction(pages, patterns, customSections);
+}
+
+async function buildPreparedExtraction(organizationId: string, input: ProcessedDocumentInput) {
+  assertParserIaScope(organizationId, input);
+  const prepared = preparedParserIa(input, organizationId);
+  if (!prepared) return buildOrganizationAdaptiveExtraction(organizationId, input.pages);
+  return prepared;
+}
+
+function assertParserIaScope(organizationId: string, input: ProcessedDocumentInput): void {
+  if (!input.parserIa) return;
+  if (!import.meta.env.DEV) throw new Error("O Parser IA deste movimento está disponível somente no ambiente local.");
+  preparedParserIa(input, organizationId);
 }
 
 function decodeAdaptiveSuggestionMetadata(value: Json): ProfileReviewWorkspace["adaptationEvents"][number]["acceptedSuggestions"] {

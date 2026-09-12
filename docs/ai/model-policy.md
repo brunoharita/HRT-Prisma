@@ -32,6 +32,7 @@ Usar o menor modelo disponível que cumpra segurança, qualidade, contexto, Stru
 | Função | Fornecedor | Modelo técnico | Fallback | Versão | Estado |
 | --- | --- | --- | --- | --- | --- |
 | Extraction | local | `deterministic-local-1.0.0` | nenhum | 1.0.0 | ativo local |
+| Extraction M5.7 experimental | OpenAI | `gpt-5.6-luna` | leitura local somente por decisão explícita após falha | parser-ia-1.0.0 | implementação DEV/loopback, uma amostra real, sem cutover; ver `parser-ia.md` |
 | Inference | local | `inference-ontology-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Retrieval | local | `structured-lexical-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Matching | local | `matching-explainable-1.0.0` | nenhum | 1.0.0 | ativo local |

@@ -81,6 +81,7 @@ import {
   type PersonPendingAction,
 } from "../domain/personActionCenter";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
+import { prepareParserIa } from "../infrastructure/parserIaClient";
 import { personDeletionService } from "../infrastructure/supabase/personDeletionService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -201,12 +202,13 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     setError(null);
     setSuccess(null);
     try {
-      const processed = await validateAndProcessPdf(file, setProgress);
+      const nativeProcessed = await validateAndProcessPdf(file, setProgress);
+      const processed = await prepareParserIa(nativeProcessed, activeMembership.organizationId);
       const documentId = await personIngestionService.processPdf(activeMembership.organizationId, personId, processed);
       setSelectedDocumentId(documentId);
       setFileList([]);
       await refresh(documentId);
-      setSuccess(processed.ocrPageCount > 0
+      setSuccess(processed.parserIa ? (processed.parserIa.status === "partial" ? "Interpretação por IA preservada com pendências para revisão." : "Interpretação por IA concluída; confira os campos na revisão.") : processed.ocrPageCount > 0
         ? `PDF processado com OCR local em ${processed.ocrPageCount} página(s).`
         : "PDF processado integralmente por extração nativa; OCR não necessário.");
     } catch (caught) {

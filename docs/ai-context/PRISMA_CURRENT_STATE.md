@@ -2,11 +2,19 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.27.0
+version: 2.28.0
 last_verified: 2026-09-12
 ---
 
 # Estado atual do Prisma
+
+## M5.7 Parser IA - etapa local
+
+Em 2026-09-12, Bruno autorizou M5.7 Parser IA: interpretar o PDF via IA antes de preencher campos, preservando revisão e evidências. Implementação em `codex/m5-7-parser-ia`, contrato `parser-ia-1.0.0`, ADR-049 e acordo/execução `docs/qa/*m57-parser-ia.md`. Backend Node exclusivamente loopback, OpenAI Responses com PDF inline, validação de spans/campos, segredo server-side, orçamento US$2, cache e timeout. Integração DEV desligada por padrão antes da identidade e nos uploads da Central da Pessoa, sem migração ou cutover.
+
+Uma amostra real (evaluation-03) completou: 49/50 campos iguais à referência após normalização e uma diferença de grafia, com nove experiências; uma proposta de país como estado foi rejeitada. Custo superior estimado US$0,0086535 e 20,736 s. Replays locais sem reenvio. Comparação mecânica em regressão conhecida, não métrica geral nem aprovação semântica/espacial humana. Envio de Diego/Ivan bloqueado pelo auto-review e depende de aprovação explícita; Julia não avaliada por decisão do PO. Estado do movimento: PARTIAL; ver `docs/qa/aot-m57-parser-ia.md`.
+
+Bruno esclareceu que existe apenas um ambiente Supabase: nomes históricos "QA" nos registros não provam isolamento em relação a outro projeto de produção. Esta etapa não escreveu nesse ambiente. Interface em localhost pode continuar conectada ao Supabase configurado; somente o probe/benchmark M5.7 usado aqui é independente do banco. Publicação Hostinger e atualização Supabase são posteriores à validação local e exigem backend online apropriado; não expor o servidor experimental.
 
 ## Repositório
 

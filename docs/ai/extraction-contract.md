@@ -6,6 +6,8 @@ Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores
 
 ## Entrada
 
+Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR-049. Acrescenta interpretação via backend local antes do preenchimento, com propostas ancoradas aos spans originais, verificação e revisão humana. ExtractionDraft 8.1.0 e publicação permanecem existentes; a versão de estruturação da nova rota inclui contrato/modelo/hash do prompt. Não está ativa online nem substitui silenciosamente a extração padrão.
+
 - `sourceText`: texto tratado como payload não confiável;
 - `filename`: nome sanitizável, sem autoridade;
 - `mediaType`: deve pertencer à allowlist;

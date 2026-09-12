@@ -54,6 +54,13 @@ export default defineConfig({
       allow: [resolve(currentDirectory, "..")],
     },
     proxy: {
+      "/parser-ia-local": {
+        target: "http://127.0.0.1:8787",
+        changeOrigin: true,
+        timeout: 145_000,
+        proxyTimeout: 145_000,
+        rewrite: (path) => path.replace(/^\/parser-ia-local/, ""),
+      },
       "/document-intelligence-vl": {
         target: "http://127.0.0.1:8081",
         changeOrigin: false,
