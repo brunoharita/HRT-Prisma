@@ -1,6 +1,6 @@
 # Prisma agent contract
 
-Instruction contract version: 1.1.0. Approved instruction-audit revision: 2026-09-11. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.1.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -149,6 +149,8 @@ For the development agent, prefer the least costly available capability that can
 ## 7. Controlled autonomy
 
 An explicit request to implement, fix, develop, or execute authorizes, within that scope: diagnosis, implementation, own-diff review, directly related tests, evidence, documentation, context regeneration, coherent commit, push, integration according to the repository flow, and QA deployment or validation when the environment exists.
+
+Standing authorization from Bruno (2026-09-12): after completing and proportionally validating authorized Prisma improvements, commit the scoped changes and push the delivery branch to the existing `origin`, `git@github.com:brunoharita/HRT-Prisma.git` (equivalent HTTPS URL for this same repository is acceptable), without asking for a new user confirmation each time. Verify the destination and scope before sending; preserve unrelated work and exclude secrets or unauthorized real data. This authorization does not grant force-push, ref deletion, a new repository/destination, merge, deployment or production changes. When a tool requires approval, cite this standing authorization; platform safety checks and explicit tool denials still apply and must never be bypassed.
 
 Managerial discussion, comparison, audit or a request for advice authorizes the requested analysis, not implementation or changes to governance. Present proposals and wait for the Product Owner's decision. Once implementation is explicitly approved, continue within that scope without repeating approval checkpoints. One-step-at-a-time guidance applies when the user is operating the tools manually, not to already authorized agent execution.
 

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 79e06f5fe89868f6b92248a60829093454775211f5dab82057c7c3af5c94647e
+source_manifest_sha256: 3ed804d472cdb4d15c03a99f2380294297a180ecd5e335b15695a15845ff4484
 -->
 
 # Tudo sobre o Prisma
@@ -13,7 +13,7 @@ Esta exportação é gerada automaticamente. Corrija as fontes canônicas e exec
 
 # Prisma agent contract
 
-Instruction contract version: 1.1.0. Approved instruction-audit revision: 2026-09-11. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.1.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -162,6 +162,8 @@ For the development agent, prefer the least costly available capability that can
 ## 7. Controlled autonomy
 
 An explicit request to implement, fix, develop, or execute authorizes, within that scope: diagnosis, implementation, own-diff review, directly related tests, evidence, documentation, context regeneration, coherent commit, push, integration according to the repository flow, and QA deployment or validation when the environment exists.
+
+Standing authorization from Bruno (2026-09-12): after completing and proportionally validating authorized Prisma improvements, commit the scoped changes and push the delivery branch to the existing `origin`, `git@github.com:brunoharita/HRT-Prisma.git` (equivalent HTTPS URL for this same repository is acceptable), without asking for a new user confirmation each time. Verify the destination and scope before sending; preserve unrelated work and exclude secrets or unauthorized real data. This authorization does not grant force-push, ref deletion, a new repository/destination, merge, deployment or production changes. When a tool requires approval, cite this standing authorization; platform safety checks and explicit tool denials still apply and must never be bypassed.
 
 Managerial discussion, comparison, audit or a request for advice authorizes the requested analysis, not implementation or changes to governance. Present proposals and wait for the Product Owner's decision. Once implementation is explicitly approved, continue within that scope without repeating approval checkpoints. One-step-at-a-time guidance applies when the user is operating the tools manually, not to already authorized agent execution.
 
@@ -399,8 +401,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.26.0
-last_verified: 2026-09-11
+version: 2.26.1
+last_verified: 2026-09-12
 ---
 
 # Estado atual do Prisma
@@ -410,6 +412,7 @@ last_verified: 2026-09-11
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
 - Baseline funcional: `7cfd22bc963c2abc49d9242156c7f53c9c799778`, proveniente de `codex/m5-6-resume-parser-upgrade`; auditoria de instruções entregue em `e8fb794`. Branch da estrutura de validação local: `codex/reproducible-person-flow-validation`, derivada dessa auditoria; a troca de branch não representa rollout.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
+- Em 2026-09-12, Bruno autorizou permanentemente commit/push das melhorias aprovadas e validadas na branch de entrega para esse mesmo repositório, sem nova confirmação por entrega. Registrado em `AGENTS.md` 1.1.1; não amplia permissão para merge, deploy, force-push, outro destino ou bypass de segurança. O push da validação reproduzível (`fa50b40`) foi confirmado no origin.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente

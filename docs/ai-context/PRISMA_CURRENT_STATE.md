@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.26.0
-last_verified: 2026-09-11
+version: 2.26.1
+last_verified: 2026-09-12
 ---
 
 # Estado atual do Prisma
@@ -13,6 +13,7 @@ last_verified: 2026-09-11
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
 - Baseline funcional: `7cfd22bc963c2abc49d9242156c7f53c9c799778`, proveniente de `codex/m5-6-resume-parser-upgrade`; auditoria de instruções entregue em `e8fb794`. Branch da estrutura de validação local: `codex/reproducible-person-flow-validation`, derivada dessa auditoria; a troca de branch não representa rollout.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
+- Em 2026-09-12, Bruno autorizou permanentemente commit/push das melhorias aprovadas e validadas na branch de entrega para esse mesmo repositório, sem nova confirmação por entrega. Registrado em `AGENTS.md` 1.1.1; não amplia permissão para merge, deploy, force-push, outro destino ou bypass de segurança. O push da validação reproduzível (`fa50b40`) foi confirmado no origin.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente

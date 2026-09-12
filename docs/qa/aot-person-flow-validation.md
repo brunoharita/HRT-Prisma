@@ -10,7 +10,7 @@ Contrato: [agreement-person-flow-validation.md](agreement-person-flow-validation
 | D-02 | `pnpm run validate:person-flow` e comandos focados | Build base 5,622 s; typecheck web 18,013 s; build web 2,174 s; fase de testes 3,112 s, todos exit 0 | PASS | Processo local sem serviços externos |
 | D-03 | Fábricas sintéticas e PF-01..PF-06 | Seis cenários passaram em funções reais de extração, identidade, Delta, estados e apresentação; instâncias independentes | PASS | Publicação SQL não é implementada em mock nem comprovada |
 | D-04 | Relatório metadata-only único e plano interrompido em falha | Nove testes de tooling, incluindo subprocessos reais de sucesso/falha; primeira execução FAIL preservada e segunda PASS | PASS | Tempo local inicial, não medição de ganho |
-| D-05 | Runbook, comandos README, plano de testes e Context Pack | Documentação/validação aprovadas e commit local; push bloqueado pela revisão automática de segurança | PARTIAL | Falta autorização específica para enviar ao origin após o bloqueio |
+| D-05 | Runbook, comandos README, plano de testes e Context Pack | Documentação/validação aprovadas; push de `fa50b40` confirmado em 2026-09-12 após autorização explícita | PASS | Branch remota confirmada, sem merge ou deploy |
 
 ## Proibições verificadas
 
@@ -50,6 +50,10 @@ O Node herda `NODE_TEST_CONTEXT` em subprocessos de testes e, no modo process, p
 
 ## Git, limites e conclusão
 
-Branch `codex/reproducible-person-flow-validation`, baseada em `e8fb794`; implementação registrada em commit local. A revisão automática bloqueou o push, mesmo após conferir que `origin` é o mesmo `git@github.com:brunoharita/HRT-Prisma.git` usado pela auditoria anterior. Nenhum conteúdo desta entrega foi enviado. O fechamento aguarda autorização explícita do usuário para esse destino após o bloqueio; não há merge automático na branch funcional. Artefatos de compilação e relatórios ficam ignorados; `.tmp.driveupload/` não pertence à entrega.
+Branch `codex/reproducible-person-flow-validation`, baseada em `e8fb794`. A revisão automática inicialmente bloqueou o push. Após Bruno autorizar explicitamente "fazer o push", em 2026-09-12 o commit `fa50b409037523db0d2bf6ccf9bdf35f9566ccc4` foi enviado para `git@github.com:brunoharita/HRT-Prisma.git` e confirmado com `git ls-remote --heads origin codex/reproducible-person-flow-validation`. O bloqueio anterior ficou resolvido para essa entrega; não houve merge ou deploy. Artefatos de compilação e relatórios ficam ignorados; `.tmp.driveupload/` não pertence à entrega.
 
-Estrutura local pronta com evidência reproduzível; movimento ainda não integralmente concluído porque D-05 depende do push autorizado. Não há alegação de E2E conectado, economia de tokens ou regressão zero fora da seleção. Nenhum desvio material de escopo identificado; a correção do executor era necessária ao aceite. Segurança do banco e fluxo visual continuam exigindo evidências próprias quando forem alterados.
+Estrutura local entregue com evidência reproduzível e commit remoto confirmado; D-05 concluído em 2026-09-12. Não há alegação de E2E conectado, economia de tokens ou regressão zero fora da seleção. Nenhum desvio material de escopo identificado; a correção do executor era necessária ao aceite. Segurança do banco e fluxo visual continuam exigindo evidências próprias quando forem alterados.
+
+## Delta autorizado: confirmação permanente de push
+
+Em 2026-09-12, Bruno pediu retirar a necessidade de nova confirmação e autorizou push ao final das melhorias. O delta de instruções está em `AGENTS.md` 1.1.1: escopo de entrega já aprovado, validação proporcional, destino Prisma confirmado e preservação de trabalho alheio/segredos. O aceite é a regra explícita com esses limites, Context Pack atualizado e checks documentais; não representa alteração das configurações de segurança da plataforma nem autorização de merge/deploy. Nenhum requisito funcional de D-01..D-05 foi alterado.
