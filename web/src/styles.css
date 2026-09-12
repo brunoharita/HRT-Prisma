@@ -4057,7 +4057,8 @@ textarea {
 
 .prisma-journey-file-card,
 .prisma-delta-file-card {
-  min-width: 250px;
+  width: min(480px, 100%);
+  min-width: 0;
 }
 
 .prisma-journey-file-card .ant-card-body,
@@ -4067,16 +4068,24 @@ textarea {
   gap: 10px;
 }
 
-.prisma-journey-file-card .anticon,
-.prisma-delta-file-card .anticon {
+.prisma-journey-file-card .ant-card-body > .anticon,
+.prisma-delta-file-card .ant-card-body > .anticon {
+  flex: 0 0 auto;
   color: #ef4444;
   font-size: 22px;
 }
 
-.prisma-journey-file-card span,
-.prisma-delta-file-card span {
+.prisma-journey-file-card .ant-card-body > span:not(.anticon),
+.prisma-delta-file-card .ant-card-body > span:not(.anticon) {
   flex: 1;
   min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.prisma-journey-file-card .ant-card-body > .ant-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .prisma-journey-contact-card,

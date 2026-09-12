@@ -57,3 +57,9 @@ Causa comprovada: regex de modelo aceitava o fixture synthetic, mas rejeitava o 
 28 testes direcionados aprovados, incluindo regressão sintética fornecedor -> transporte JSON -> revalidação -> proveniência de intake, em primeira resposta e cache, com negativos de identificador vazio, separador, espaço, tamanho e quebra de linha. Typecheck web aprovado. Smoke executou o cliente real via Vite e o proxy local com o cache da tentativa do PO: nove experiências, duas formações, gate aprovado e erro de proveniência sintético traduzido. Ledger inalterado, zero reenvios externos e zero escritas Supabase. O primeiro ensaio no sandbox não conseguiu adquirir lock no diretório canônico; a execução autorizada seguinte passou. A persistência autenticada não foi simulada como sucesso.
 
 Gate final da correção: pnpm run validate aprovado (386 testes técnicos, 19 golden, lint, foundation, Context Pack, typechecks, build web e demo local). Diff e assets verificados sem segredo. A correção segue para a raiz oficial por fast-forward; não requer migração ou nova chamada ao modelo.
+
+## Correção visual do cartão de documento
+
+PO apontou desalinhamento do ícone, nome e ação Ver documento. Causa: seletores de span e anticon atingiam todos os descendentes, inclusive ícones e texto do botão. CSS agora limita essas regras aos filhos diretos, fixa o ícone, permite quebra do nome e mantém a ação compacta. Cartões compartilhados da jornada/Delta preservam comportamento. Conferência visual com componentes Ant Design e CSS reais, conteúdo sintético, larguras 445 e 342 px: ícones de 22 px, botões contidos e nenhum overflow, inclusive nome longo sem espaços. Prévia temporária removida. Sem alteração de extração, navegação, dados ou contratos persistidos.
+
+Validação da correção visual: pnpm run validate aprovado; 386 testes, 19 golden, typechecks/build, foundation e Context Pack. Diff revisado; apenas CSS e documentação alterados.

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: d96c39e255556b5ac451baf2d3af50c09c72f1a7a07ccd1284c7368deafb0c01
+source_manifest_sha256: 410acbfc01bb5ae1a75afdc996606da0c865f872a985c258c2ee3bb203547e7f
 -->
 
 # Tudo sobre o Prisma
@@ -402,7 +402,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.1
+version: 2.29.2
 last_verified: 2026-09-12
 ---
 
@@ -419,6 +419,8 @@ Bruno esclareceu que existe apenas um ambiente Supabase: nomes históricos "QA" 
 Em 2026-09-12, o PO autorizou preparar o Prisma para uso direto local. Acordo/execução revisados para 1.1.0. `pnpm run dev:ia` inicia interface e parser em loopback num só processo; a tela sinaliza IA ativada e a preparação usa leitura nativa/OCR, sem aguardar o provedor Paddle anterior. Ativação confirmada na raiz oficial: interface localhost:5555 e parser 127.0.0.1:8787 em execução. Smoke pelo proxy retornou HTTP 200, cache de quatro páginas/50 fatos e orçamento inalterado; origem externa recebeu 403. Navegador abriu a versão atual na tela de login; importação autenticada com persistência não foi executada pelo agente. Evidências no AoT; nenhum schema ou contrato persistido foi alterado.
 
 Correção compatível após a primeira tentativa do PO: `PARSER_PROVENANCE_INVALID` era causado pelo validador de modelo sem suporte a ponto, embora o modelo contratado fosse `gpt-5.6-luna`. O identificador agora aceita ponto e a proveniência é validada dentro da fronteira de erro amigável do cliente, antes do intake. Regressão cobre fornecedor, transporte, revalidação e gate de importação; replay do cache da tentativa real pelo cliente confirmou nove experiências e duas formações sem rede externa ou escrita Supabase. Publicação autenticada permanece não demonstrada pelo agente.
+
+Ajuste visual local dos cartões de documento na jornada e no Delta: ícone de PDF com largura fixa, nome flexível com quebra segura e ação Ver documento compacta. Seletores limitados aos filhos diretos impedem que regras de metadados alterem ícones e texto internos do botão. Sem alteração de parsing, contratos persistidos, navegação ou evidências.
 
 ## Repositório
 
