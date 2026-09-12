@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 3ed804d472cdb4d15c03a99f2380294297a180ecd5e335b15695a15845ff4484
+source_manifest_sha256: cfef299f6f8ec651dad4dd21fe1be06abd72a68c73b5a97119de3905d4b9a35e
 -->
 
 # Tudo sobre o Prisma
@@ -401,7 +401,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.26.1
+version: 2.27.0
 last_verified: 2026-09-12
 ---
 
@@ -416,6 +416,8 @@ last_verified: 2026-09-12
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
+
+- Avaliação experimental de PDF LinkedIn `linkedin-pdf-evaluation-1.0.2`, isolada da aplicação, com runner `benchmark:linkedin`: reutiliza PDF.js, StructuredDraft, IDs, evidências e classificador; preserva linhas/links/páginas e compara baseline nativo com protótipo local. Cinco fontes autorizadas (21 páginas) foram lidas sem alteração dos originais, com resultados pessoais apenas em `tmp/` ignorado. A primeira rodada usou quatro amostras independentes; após detectar e corrigir e-mail quebrado, curso ausente e título decorativo, reexecuções foram registradas como regressão conhecida. 69 testes direcionados passaram, incluindo 21 novos. Pacotes GPT são somente preparação offline, sem chamadas, credenciais ou ativação. Referência humana, métricas semânticas, tempo de correção e comparação externa permanecem pendentes; movimento completo PARTIAL, sem superioridade geral, QA, implantação ou produção. Contrato/instruções parciais/AoT em `docs/qa/*linkedin-pdf-evaluation.md`; owner em `docs/ai/linkedin-pdf-evaluation.md`.
 
 - Validação reproduzível local `person-flow-validation-1.0.0`: `pnpm run validate:person-flow` compila a base/testes uma vez, verifica tipos e build web e executa seleção explícita de 30 arquivos do fluxo importar → revisar → publicar → consultar Perfil. Medição de 2026-09-11: 226 testes aprovados, 29,179 s totais; os seis cenários sintéticos usam funções reais e snapshots de entrada, sem simular publicação SQL. Relatórios por fase ficam em `tmp/validation/person-flow/`; seleção ausente, erro, sinal ou timeout não produzem sucesso. `pnpm test` mantém seleção integral de fontes (44 arquivos no momento). Runbook e limites em `docs/qa/person-flow-validation.md`, aceite/evidência em `docs/qa/aot-person-flow-validation.md`. Nenhum código runtime, schema, QA, produção ou dado real foi alterado. Não comprova RLS ativa, smoke visual, provider real ou economia entre entregas/modelos.
 

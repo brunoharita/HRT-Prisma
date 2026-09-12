@@ -24,6 +24,7 @@
     "validate:person-flow": "node scripts/validate-person-flow.mjs",
     "test:golden": "pnpm run build && node dist/tests/golden/runner.js",
     "benchmark:m56": "node scripts/benchmark-m56.mjs",
+    "benchmark:linkedin": "pnpm run build && node scripts/evaluate-linkedin-pdf.mjs",
     "probe:paddle": "pnpm run build && node scripts/probe-paddle-runtime.mjs",
     "demo": "pnpm run build && node dist/src/cli.js demo",
     "audit:dependencies": "pnpm audit --prod --audit-level high",
