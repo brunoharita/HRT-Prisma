@@ -170,7 +170,7 @@ export function parserIaIdentity(result: ParserIaResult): ResumeIdentity {
 }
 
 export function parserIaMethodVersion(result: ParserIaResult): string {
-  if (result.version !== PARSER_IA_VERSION || !/^[a-zA-Z0-9_-]{1,80}$/.test(result.provenance?.model ?? "") || !/^[a-f0-9]{64}$/.test(result.provenance?.promptSha256 ?? "")) throw new Error("PARSER_PROVENANCE_INVALID");
+  if (result.version !== PARSER_IA_VERSION || !/^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$/.test(result.provenance?.model ?? "") || !/^[a-f0-9]{64}$/.test(result.provenance?.promptSha256 ?? "")) throw new Error("PARSER_PROVENANCE_INVALID");
   return `${PARSER_IA_VERSION}/${result.provenance.model}/${result.provenance.promptSha256}`;
 }
 

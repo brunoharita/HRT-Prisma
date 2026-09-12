@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.0
+version: 2.29.1
 last_verified: 2026-09-12
 ---
 
@@ -17,6 +17,8 @@ Uma amostra real (evaluation-03) completou: 49/50 campos iguais à referência a
 Bruno esclareceu que existe apenas um ambiente Supabase: nomes históricos "QA" nos registros não provam isolamento em relação a outro projeto de produção. Esta etapa não escreveu nesse ambiente. Interface em localhost pode continuar conectada ao Supabase configurado; somente o probe/benchmark M5.7 usado aqui é independente do banco. Publicação Hostinger e atualização Supabase são posteriores à validação local e exigem backend online apropriado; não expor o servidor experimental.
 
 Em 2026-09-12, o PO autorizou preparar o Prisma para uso direto local. Acordo/execução revisados para 1.1.0. `pnpm run dev:ia` inicia interface e parser em loopback num só processo; a tela sinaliza IA ativada e a preparação usa leitura nativa/OCR, sem aguardar o provedor Paddle anterior. Ativação confirmada na raiz oficial: interface localhost:5555 e parser 127.0.0.1:8787 em execução. Smoke pelo proxy retornou HTTP 200, cache de quatro páginas/50 fatos e orçamento inalterado; origem externa recebeu 403. Navegador abriu a versão atual na tela de login; importação autenticada com persistência não foi executada pelo agente. Evidências no AoT; nenhum schema ou contrato persistido foi alterado.
+
+Correção compatível após a primeira tentativa do PO: `PARSER_PROVENANCE_INVALID` era causado pelo validador de modelo sem suporte a ponto, embora o modelo contratado fosse `gpt-5.6-luna`. O identificador agora aceita ponto e a proveniência é validada dentro da fronteira de erro amigável do cliente, antes do intake. Regressão cobre fornecedor, transporte, revalidação e gate de importação; replay do cache da tentativa real pelo cliente confirmou nove experiências e duas formações sem rede externa ou escrita Supabase. Publicação autenticada permanece não demonstrada pelo agente.
 
 ## Repositório
 

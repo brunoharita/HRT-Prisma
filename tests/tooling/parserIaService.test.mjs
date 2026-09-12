@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { createParserService, readParserPdf, parserRequest, parseProviderResponse, safeParserError, allowedLocalRequest, readLimitedProviderBody, PARSER_MODEL } from "../../scripts/parser-ia-service.mjs";
+import { structureParserIa, preparedParserIa, parserIaMethodVersion } from "../../dist/web/src/domain/parserIa.js";
 
 function syntheticPdf() {
   const content = "BT /F1 16 Tf 50 740 Td (Synthetic Person) Tj ET";
@@ -96,4 +97,20 @@ test("M5.7 offline replay cannot access credentials or the network", async () =>
 test("M5.7 provider response body is bounded while reading", async () => {
   await assert.rejects(readLimitedProviderBody(new Response("too long"), 3), /RESPONSE_LIMIT/);
   assert.equal(await readLimitedProviderBody(new Response("ok"), 3), "ok");
+});
+
+test("M5.7 provider model survives transport, frontend validation and intake provenance gate", async () => {
+  const parse = createParserService({ directory: await directory(), keyProvider: async () => "synthetic-secret", fetchImpl: async () => new Response(JSON.stringify(provider()), { status: 200 }) });
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const output = JSON.parse(JSON.stringify(await parse(input)));
+    const received = output.result;
+    const parsed = structureParserIa({ status: received.status === "partial" ? "partial" : "complete", facts: received.acceptedFacts, uncertainties: received.draft.uncertainties }, output.pages, { sourceSha256: input.sourceSha256, organizationId: input.organizationId, provenance: received.provenance });
+    const prepared = preparedParserIa({ sha256: input.sourceSha256, parserIa: parsed }, input.organizationId);
+    assert.equal(prepared.provenance.model, PARSER_MODEL);
+    assert.equal(parserIaMethodVersion(prepared), `parser-ia-1.0.0/${PARSER_MODEL}/${received.provenance.promptSha256}`);
+    assert.equal(output.cached, attempt === 1);
+    for (const model of ["", "a/b", "bad model", "a".repeat(81), ".hidden", "model\n"]) {
+      assert.throws(() => preparedParserIa({ sha256: input.sourceSha256, parserIa: { ...parsed, provenance: { ...parsed.provenance, model } } }, input.organizationId), /PROVENANCE_INVALID/);
+    }
+  }
 });

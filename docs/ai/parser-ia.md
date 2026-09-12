@@ -47,3 +47,5 @@ Comparação mecânica final: 50 campos observados, 49 iguais à referência ap�
 Diego e Ivan não foram enviados: houve rejeição do auto-review e nenhum contorno. Depois disso, o PO dispensou os envios adicionais como condição para avançar. Não há benchmark pendente dessas amostras nesta etapa. Julia não foi avaliada por decisão do PO.
 
 Nenhuma validação semântica/espacial humana da saída nova, teste ponta a ponta com persistência, alteração Supabase ou implantação Hostinger foi concluída. Consulte o AoT para o estado por requisito.
+
+Correção de proveniência (2026-09-12): identificadores de modelo aceitam ponto, hífen e sublinhado, mantendo limites e rejeição de separadores de caminho/espaços. A validação de versão/org/hash/modelo/prompt ocorre também no cliente dentro do tratamento amigável de falha, antes de iniciar o intake. Compatível com parser-ia-1.0.0; modelo, prompt, cache, dados e contratos persistidos permanecem iguais.

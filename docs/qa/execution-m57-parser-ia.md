@@ -9,3 +9,5 @@ Versão 1.1.0. Implementar integralmente `docs/qa/agreement-m57-parser-ia.md` ve
 5. Revisar diff, executar testes afetados, typecheck/build pertinentes, atualizar documentação/AoT/Context Pack e gerar/verificar export. Commit/push somente código, testes e documentação, nunca fontes pessoais, referências privadas ou segredos. Implantação posterior exige as condições próprias do ambiente online.
 
 6. Delta de ativação autorizado: integrar por fast-forward na raiz oficial preservando alterações alheias, conservar o ledger de custos existente, ativar a configuração privada e disponibilizar localhost:5555. Oferecer `pnpm run dev:ia` para iniciar os dois serviços. Verificar a tela e o proxy sem gravar currículo no Supabase.
+
+Correção autorizada pelo relato de erro de importação: aceitar o ponto no identificador do modelo já contratado, validar proveniência dentro da fronteira de erro amigável do cliente e provar transporte/revalidação/gate pré-intake com resposta sintética e cache existente. Não alterar modelo, prompt, autoridade, schema, referências ou orçamento. Correção compatível de parser-ia-1.0.0; sem novo contrato persistido.
