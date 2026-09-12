@@ -55,6 +55,7 @@ Local port convention:
 | `pnpm run build` | Compile TypeScript |
 | `pnpm run typecheck:web` | Run strict type checking for the isolated web shell |
 | `pnpm run dev:web` | Start the local Vite app on port `5555` |
+| `pnpm run dev:ia` | Start the local app and AI parser together; requires server-only `OPENAI_API_KEY` in ignored `.env.local`; uses the configured Supabase |
 | `pnpm run build:web` | Build the local Vite app |
 | `pnpm run lint` | Check text hygiene and prohibited runtime shortcuts |
 | `pnpm run check:foundation` | Check contracts, versions, migration security, secrets, and critical markers |

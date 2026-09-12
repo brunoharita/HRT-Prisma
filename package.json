@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
     "dev:web": "vite --config web/vite.config.ts",
+    "dev:ia": "pnpm run build && node scripts/start-prisma-ia-local.mjs",
     "build:web": "vite build --config web/vite.config.ts",
     "lint": "node scripts/lint.mjs",
     "check:foundation": "node scripts/check-foundation.mjs",

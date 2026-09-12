@@ -1,6 +1,6 @@
 # AoT - M5.7 Parser IA
 
-Contrato: `agreement-m57-parser-ia.md` 1.0.0; execução 1.0.0. Data: 2026-09-12. Estado geral: PARTIAL.
+Contrato: `agreement-m57-parser-ia.md` 1.1.0; execução 1.1.0. Data: 2026-09-12. Estado geral: PARTIAL.
 
 | ID | Implementação e evidência | Status | Limite |
 | --- | --- | --- | --- |
@@ -10,7 +10,7 @@ Contrato: `agreement-m57-parser-ia.md` 1.0.0; execução 1.0.0. Data: 2026-09-12
 | D-04 | Preparação antes da identidade nas telas existentes; rascunho reutilizado, org/hash e versão modelo/prompt | PARTIAL | Build e contratos locais passam; persistência e navegação ponta a ponta não executadas |
 | D-05 | Erros sanitizados, parcial explícito, ausência de fatos rejeitada e opção de leitura local após falha | PASS | Smoke interativo ainda não executado |
 | D-06 | Testes negativos de segredo, origem/host, cache por organização, limite de resposta, timeout, concorrência e orçamento persistido | PASS | Serviço experimental não é backend online |
-| D-07 | Resposta real de evaluation-03 e replay contra referência aprovada | PARTIAL | Diego/Ivan BLOCKED por auto-review; nova aprovação explícita pendente |
+| D-07 | Resposta real de evaluation-03, replay e testes negativos | PASS | PO dispensou novos envios de Diego/Ivan; regressão conhecida, sem generalização |
 | D-08 | ADR-049, contrato, prompt, documentação, estado atual e export regenerado/verificado | PASS | Estado geral permanece PARTIAL pelos itens anteriores |
 
 ## Proibições
@@ -42,4 +42,10 @@ Branch local `codex/m5-7-parser-ia`, derivada de `43c36e0`. Implementação não
 
 ## Desvios e conclusão
 
-Sem remoção de requisito. Execução real de duas amostras e validação ponta a ponta ainda pendentes; portanto M5.7 não está concluído nem autorizado para publicar o backend local. Atualizar Supabase existente e Hostinger permanece etapa posterior. Git contém somente código/testes/documentação, nunca currículos, chaves ou referência humana privada.
+D-07 revisado explicitamente pelo PO: outras duas amostras dispensadas. Validação ponta a ponta com persistência permanece não demonstrada; portanto M5.7 não está concluído nem autorizado para publicar o backend local. Atualizar Supabase existente e Hostinger permanece etapa posterior. Git contém somente código/testes/documentação, nunca currículos, chaves ou referência humana privada.
+
+## Ativação para uso direto, autorizada em 2026-09-12
+
+O PO pediu preparar o Prisma para usar diretamente. Comando único `pnpm run dev:ia`, flag DEV, aviso visível e leitura nativa anterior à IA implementados. Integração na raiz oficial conserva configuração Supabase e ledger privado existente. O operador continua usando as mesmas etapas de identificação, revisão e publicação. O smoke do agente não grava currículo no Supabase nem envia outras amostras ao fornecedor. Evidência operacional final será registrada após iniciar os serviços.
+
+Gate de ativação: `pnpm run validate` aprovado conforme gate solicitado nas instruções fornecidas nesta rodada: lint 440 arquivos, foundation, contexto, typechecks, build web, 385 testes, 19 golden e demo local. Também passaram os 30 testes específicos M5.7. Varredura dos 11 assets JavaScript e diff: segredo ausente. Aviso preexistente de chunk grande permanece.

@@ -66,7 +66,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     setBusy(true); setError(null); setResult(null);
     try {
       const nativeProcessed = localRetry?.file === file ? localRetry : await validateAndProcessPdf(file, setProgress, {
-        documentIntelligenceMode: documentIntelligenceRuntime.mode,
+        documentIntelligenceMode: parserIaEnabled() ? "baseline" : documentIntelligenceRuntime.mode,
         documentIntelligenceProvider: documentIntelligenceRuntime.provider,
       });
       let nextProcessed = nativeProcessed;
@@ -173,6 +173,7 @@ function UploadScreen(props: { busy: boolean; error: string | null; fileList: Up
   return <>
     <PrismaPageHeader title="Importar currículo" description="Envie o currículo para iniciarmos a análise e a construção do Perfil Prisma." />
     <Button icon={<ArrowLeftOutlined />} onClick={props.onBack} type="text">Voltar para Pessoas</Button>
+    {parserIaEnabled() ? <Alert showIcon title="Importação com IA ativada" description="O PDF será enviado à OpenAI para organizar os campos. Você poderá conferir e corrigir o resultado antes de publicar o perfil." type="info" /> : null}
     {props.error ? <Alert showIcon title={props.error} type="error" /> : null}
     <PrismaCard className="prisma-journey-upload-card">
       <Upload.Dragger accept="application/pdf,.pdf" beforeUpload={() => false} disabled={props.busy} fileList={props.fileList} maxCount={1} onChange={({ fileList }) => props.onChange(fileList.slice(-1))} onRemove={() => { props.onChange([]); return true; }}>

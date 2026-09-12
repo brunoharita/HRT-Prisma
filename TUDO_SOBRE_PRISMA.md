@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: f49279e493c83c0f052d71e6ddd5782e632c69042ff8232a41a4df48032f29e6
+source_manifest_sha256: 598df6bc25be8698048fe4e6e95d343b66bd5803eb9b80cd09efd027891111a7
 -->
 
 # Tudo sobre o Prisma
@@ -293,6 +293,7 @@ Local port convention:
 | `pnpm run build` | Compile TypeScript |
 | `pnpm run typecheck:web` | Run strict type checking for the isolated web shell |
 | `pnpm run dev:web` | Start the local Vite app on port `5555` |
+| `pnpm run dev:ia` | Start the local app and AI parser together; requires server-only `OPENAI_API_KEY` in ignored `.env.local`; uses the configured Supabase |
 | `pnpm run build:web` | Build the local Vite app |
 | `pnpm run lint` | Check text hygiene and prohibited runtime shortcuts |
 | `pnpm run check:foundation` | Check contracts, versions, migration security, secrets, and critical markers |
@@ -401,7 +402,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.28.0
+version: 2.29.0
 last_verified: 2026-09-12
 ---
 
@@ -411,9 +412,11 @@ last_verified: 2026-09-12
 
 Em 2026-09-12, Bruno autorizou M5.7 Parser IA: interpretar o PDF via IA antes de preencher campos, preservando revisão e evidências. Implementação em `codex/m5-7-parser-ia`, contrato `parser-ia-1.0.0`, ADR-049 e acordo/execução `docs/qa/*m57-parser-ia.md`. Backend Node exclusivamente loopback, OpenAI Responses com PDF inline, validação de spans/campos, segredo server-side, orçamento US$2, cache e timeout. Integração DEV desligada por padrão antes da identidade e nos uploads da Central da Pessoa, sem migração ou cutover.
 
-Uma amostra real (evaluation-03) completou: 49/50 campos iguais à referência após normalização e uma diferença de grafia, com nove experiências; uma proposta de país como estado foi rejeitada. Custo superior estimado US$0,0086535 e 20,736 s. Replays locais sem reenvio. Comparação mecânica em regressão conhecida, não métrica geral nem aprovação semântica/espacial humana. Envio de Diego/Ivan bloqueado pelo auto-review e depende de aprovação explícita; Julia não avaliada por decisão do PO. Estado do movimento: PARTIAL; ver `docs/qa/aot-m57-parser-ia.md`.
+Uma amostra real (evaluation-03) completou: 49/50 campos iguais à referência após normalização e uma diferença de grafia, com nove experiências; uma proposta de país como estado foi rejeitada. Custo superior estimado US$0,0086535 e 20,736 s. Replays locais sem reenvio. Comparação mecânica em regressão conhecida, não métrica geral nem aprovação semântica/espacial humana. Envios adicionais de Diego/Ivan dispensados pelo PO após o bloqueio do auto-review; Julia não avaliada por decisão do PO. Estado do movimento: PARTIAL; ver `docs/qa/aot-m57-parser-ia.md`.
 
 Bruno esclareceu que existe apenas um ambiente Supabase: nomes históricos "QA" nos registros não provam isolamento em relação a outro projeto de produção. Esta etapa não escreveu nesse ambiente. Interface em localhost pode continuar conectada ao Supabase configurado; somente o probe/benchmark M5.7 usado aqui é independente do banco. Publicação Hostinger e atualização Supabase são posteriores à validação local e exigem backend online apropriado; não expor o servidor experimental.
+
+Em 2026-09-12, o PO autorizou preparar o Prisma para uso direto local. Acordo/execução revisados para 1.1.0. `pnpm run dev:ia` inicia interface e parser em loopback num só processo; a tela sinaliza IA ativada e a preparação usa leitura nativa/OCR, sem aguardar o provedor Paddle anterior. Ativação na raiz oficial e smoke operacional são registrados no AoT; nenhum schema ou contrato persistido foi alterado.
 
 ## Repositório
 

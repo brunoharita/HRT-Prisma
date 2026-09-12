@@ -1,6 +1,6 @@
 # M5.7 Parser IA
 
-Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.0.0. Decisão: ADR-049. Estado: implementação local com avaliação real parcial.
+Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.0. Decisão: ADR-049. Estado: implementação local com avaliação real parcial.
 
 ## Funcionamento
 
@@ -11,6 +11,8 @@ As coordenadas de evidência são exclusivamente da fonte. Vários spans/página
 O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa também recebe a preparação. Reprocessamento histórico mantém a rota anterior nesta etapa. A rota fica desligada por padrão, habilitável somente em DEV/loopback. Falha na importação oferece continuação explícita pela leitura local, sem vender fallback como sucesso da IA. Resultado parcial mostra aviso e pendências.
 
 ## Executar localmente
+
+Ativação autorizada para uso direto local em 2026-09-12. Na raiz oficial, `pnpm run dev:ia` inicia a interface e o parser no mesmo processo, ativa IA somente em DEV e encerra ambos com Ctrl+C. O comando preserva o ledger existente e falha se a chave estiver ausente ou as portas ocupadas. Alternativa com processos separados:
 
 1. `OPENAI_API_KEY` em `.env.local` do backend, sem prefixo VITE, ignorado pelo Git.
 2. `pnpm run parser:ia:local` inicia somente `127.0.0.1:8787`; o segredo não é enviado ao cliente.
@@ -42,6 +44,6 @@ Um teste real autorizado, `evaluation-03`, completou em 20.736 ms; 21.630 tokens
 
 Comparação mecânica final: 50 campos observados, 49 iguais à referência após normalização, uma diferença de grafia no cargo; nove experiências associadas por âncoras únicas. Uma proposta adicional de país no campo de estado foi rejeitada e mantém o resultado parcial. Referência humana permanece inalterada. O baseline PDF.js congelado é comparador técnico, não reprodução integral de toda configuração da interface atual; igualdade estrita/âncoras não equivale a uma nota de qualidade de produto.
 
-Diego e Ivan ainda não enviados: o auto-review rejeitou a egressão desse conjunto, inclusive após reapresentação com contexto de autorização. Precisam de aprovação explícita para esse envio. O acordo de desenvolvimento não foi usado para contornar a rejeição. Julia não foi avaliada por decisão do PO.
+Diego e Ivan não foram enviados: houve rejeição do auto-review e nenhum contorno. Depois disso, o PO dispensou os envios adicionais como condição para avançar. Não há benchmark pendente dessas amostras nesta etapa. Julia não foi avaliada por decisão do PO.
 
 Nenhuma validação semântica/espacial humana da saída nova, teste ponta a ponta com persistência, alteração Supabase ou implantação Hostinger foi concluída. Consulte o AoT para o estado por requisito.

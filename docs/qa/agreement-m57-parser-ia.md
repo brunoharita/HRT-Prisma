@@ -1,6 +1,8 @@
 # Contrato de Acordos - M5.7 Parser IA
 
-Versão 1.0.0. Estado: agreed para implementação e validação locais. PO: Bruno, 2026-09-12, "Ok... pode começar... vamos chamar de movimento M5.7 Parser IA". Autorizou usar a credencial fornecida localmente, adiando sua troca até antes da publicação.
+Versão 1.1.0. Estado: agreed para implementação e validação locais. PO: Bruno, 2026-09-12, "Ok... pode começar... vamos chamar de movimento M5.7 Parser IA". Autorizou usar a credencial fornecida localmente, adiando sua troca até antes da publicação.
+
+Delta autorizado em 2026-09-12: "pode preparar o prisma para eu usar diretamente". Integrar na raiz oficial, ativar a flag local e iniciar os serviços para uso humano. A interface mantém o único Supabase já configurado; não há migração ou publicação online. O agente não cria registros reais para provar o smoke. O uso da importação pelo operador continua persistindo pelo fluxo existente. D-07 deixa de exigir novos envios.
 
 ## Objetivo e precedência
 
@@ -14,7 +16,7 @@ Interpretar o PDF por IA antes de preencher os campos, reutilizando StructuredDr
 - D-04: integrar antes da identificação e do rascunho da importação existente, mantendo revisão, autorização, identidade mínima, Delta e publicação. Proveniência identifica a interpretação por IA separadamente da leitura PDF.js.
 - D-05: timeout, recusa, resposta incompleta, referência inválida e ausência de configuração têm estados explícitos. Resposta sem fatos suportados não é perfil válido. O modo local anterior continua disponível ao desativar a integração.
 - D-06: chave somente server-side; serviço experimental ligado apenas ao loopback e não utilizável como backend online. Limites de tamanho, páginas, tempo, chamadas, orçamento e concorrência; erros sanitizados, sem PII em logs/Git.
-- D-07: testes sintéticos negativos e comparação privada com Diego, Ivan e João, cujas referências foram aprovadas. Esses três são regressão conhecida, não avaliação cega. Julia não integra a avaliação humana por decisão do PO.
+- D-07: testes sintéticos negativos e comparação privada já obtida com João como regressão conhecida, não avaliação cega. Por decisão do PO em 2026-09-12, envios adicionais de Diego/Ivan foram dispensados para avançar com a integração local. Julia permanece fora da avaliação humana.
 - D-08: documentar pacote, contratos, versões, limites, resultados reais e AoT; preservar fontes e referências humanas.
 
 ## Pacote de execução local
