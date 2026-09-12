@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 410acbfc01bb5ae1a75afdc996606da0c865f872a985c258c2ee3bb203547e7f
+source_manifest_sha256: c3316dc6cf5830ac189e24d8a9541c904ac95052fdddb3fb25c8f1801dd373b1
 -->
 
 # Tudo sobre o Prisma
@@ -402,7 +402,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.2
+version: 2.29.3
 last_verified: 2026-09-12
 ---
 
@@ -421,6 +421,8 @@ Em 2026-09-12, o PO autorizou preparar o Prisma para uso direto local. Acordo/ex
 Correção compatível após a primeira tentativa do PO: `PARSER_PROVENANCE_INVALID` era causado pelo validador de modelo sem suporte a ponto, embora o modelo contratado fosse `gpt-5.6-luna`. O identificador agora aceita ponto e a proveniência é validada dentro da fronteira de erro amigável do cliente, antes do intake. Regressão cobre fornecedor, transporte, revalidação e gate de importação; replay do cache da tentativa real pelo cliente confirmou nove experiências e duas formações sem rede externa ou escrita Supabase. Publicação autenticada permanece não demonstrada pelo agente.
 
 Ajuste visual local dos cartões de documento na jornada e no Delta: ícone de PDF com largura fixa, nome flexível com quebra segura e ação Ver documento compacta. Seletores limitados aos filhos diretos impedem que regras de metadados alterem ícones e texto internos do botão. Sem alteração de parsing, contratos persistidos, navegação ou evidências.
+
+Correção da persistência de listas da IA: competências, idiomas, certificações e áreas de atuação usam o caminho raiz de evidência já aceito pela revisão/RPC, preservando itens, spans e coordenadas. A retomada adapta também propostas já presentes em memória, sem mutá-las ou chamar novamente a IA. A regra vigente do único Supabase foi consultada por leitura; nenhuma migração ou alteração remota foi aplicada.
 
 ## Repositório
 

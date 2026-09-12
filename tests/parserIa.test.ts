@@ -82,3 +82,30 @@ test("M5.7 prepared draft is reused only for the exact source and organization",
   assert.equal(parserIaMethodVersion(result), `parser-ia-1.0.0/synthetic/${"b".repeat(64)}`);
   assert.throws(() => parserIaMethodVersion({ ...result, provenance: { ...result.provenance, promptSha256: "unknown" } }), /PROVENANCE_INVALID/);
 });
+
+test("M5.7 repeatable list facts retain distinct source regions under persisted review roots", () => {
+  const kinds = ["competencies", "languages", "certifications", "areasOfExpertise"] as const;
+  const pages = [page(1, ["Item composto A", "Item composto B"])];
+  const facts = kinds.flatMap((kind) => [fact(`${kind}.0`, "Item composto A", "p1l1"), fact(`${kind}.1`, "Item composto B", "p1l2")]);
+  const result = run(pages, facts);
+  for (const kind of kinds) {
+    assert.deepEqual(result.draft[kind], ["Item composto A", "Item composto B"]);
+    const descriptors = result.fieldEvidence.filter((item) => item.fieldPath === kind);
+    assert.equal(descriptors.length, 2);
+    assert.deepEqual(descriptors.map((item) => item.text), ["Item composto A", "Item composto B"]);
+    assert.deepEqual(descriptors.map((item) => item.y), pages[0]!.layoutLines!.map((line) => line.y));
+    assert.ok(result.acceptedFacts.some((item) => item.path === `${kind}.1`));
+  }
+  assert.equal(result.fieldEvidence.length, facts.length);
+});
+
+test("M5.7 retry adapts an already prepared list without mutating its facts or evidence", () => {
+  const result = run([page(1, ["Gestão de contas"])], [fact("competencies.0", "Gestão de contas", "p1l1")]);
+  const old = { ...result, fieldEvidence: result.fieldEvidence.map((item) => ({ ...item, fieldPath: "competencies.0" })) };
+  const retry = preparedParserIa({ sha256: binding.sourceSha256, parserIa: old }, binding.organizationId)!;
+  assert.equal(retry.fieldEvidence[0]!.fieldPath, "competencies");
+  assert.equal(old.fieldEvidence[0]!.fieldPath, "competencies.0");
+  assert.equal(retry.draft, old.draft);
+  assert.equal(retry.acceptedFacts, old.acceptedFacts);
+  assert.deepEqual({ ...retry.fieldEvidence[0], fieldPath: "competencies.0" }, old.fieldEvidence[0]);
+});

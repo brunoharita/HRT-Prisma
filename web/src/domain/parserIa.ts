@@ -30,6 +30,7 @@ const customPath = /^customSections\.([a-zA-Z][a-zA-Z0-9_-]{0,63})\.(name|items\
 const forbiddenIds = new Set(["__proto__", "prototype", "constructor"]);
 const clean = (s: string) => s.normalize("NFKC").replace(/&amp;/g, "&").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim();
 const compact = (s: string) => clean(s).replace(/[•▪●]/g, "").replace(/\s/g, "");
+const reviewListFieldPath = (path: string) => path.replace(/^(competencies|languages|certifications|areasOfExpertise)\.(0|[1-9][0-9]{0,2})$/, "$1");
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 
 export function parserIaSource(pages: readonly ExtractedPage[]): ParserSourceLine[] {
@@ -135,7 +136,9 @@ export function structureParserIa(raw: unknown, pages: ExtractedPage[], binding:
   }
   for (const kind of ["competencies", "languages", "certifications", "areasOfExpertise", "toolsAndTechnologies", "professionalContexts"] as const) {
     const list = acceptedFacts.filter((fact) => fact.path.startsWith(`${kind}.`)).sort((a, b) => Number(a.path.split(".")[1]) - Number(b.path.split(".")[1]));
-    if (list.length) draft[kind] = list.map((fact, index) => { paths.set(fact.path, `${kind}.${index}`); return clean(fact.value); });
+    // The existing review/persistence contract anchors these lists at the field root.
+    // Each item's source regions remain separate descriptors; only the field address changes.
+    if (list.length) draft[kind] = list.map((fact, index) => { paths.set(fact.path, reviewListFieldPath(`${kind}.${index}`)); return clean(fact.value); });
   }
   for (const fact of acceptedFacts.filter((fact) => resultPath.test(fact.path))) {
     const id = fact.path.split(".")[1]!;
@@ -179,5 +182,9 @@ export function preparedParserIa(input: Pick<ProcessedDocumentInput, "sha256" | 
   if (!result) return null;
   if (result.version !== PARSER_IA_VERSION || result.organizationId !== organizationId || result.sourceSha256 !== input.sha256) throw new Error("PARSER_BINDING_INVALID");
   parserIaMethodVersion(result);
+  // A retry may still hold the previously prepared result in the open page.
+  if (result.fieldEvidence.some((item) => reviewListFieldPath(item.fieldPath) !== item.fieldPath)) {
+    return { ...result, fieldEvidence: result.fieldEvidence.map((item) => ({ ...item, fieldPath: reviewListFieldPath(item.fieldPath) })) };
+  }
   return result;
 }

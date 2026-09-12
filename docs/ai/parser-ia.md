@@ -49,3 +49,5 @@ Diego e Ivan não foram enviados: houve rejeição do auto-review e nenhum conto
 Nenhuma validação semântica/espacial humana da saída nova, teste ponta a ponta com persistência, alteração Supabase ou implantação Hostinger foi concluída. Consulte o AoT para o estado por requisito.
 
 Correção de proveniência (2026-09-12): identificadores de modelo aceitam ponto, hífen e sublinhado, mantendo limites e rejeição de separadores de caminho/espaços. A validação de versão/org/hash/modelo/prompt ocorre também no cliente dentro do tratamento amigável de falha, antes de iniciar o intake. Compatível com parser-ia-1.0.0; modelo, prompt, cache, dados e contratos persistidos permanecem iguais.
+
+Compatibilidade de evidência de listas: a proposta do modelo mantém índices por item; a revisão/persistência recebe competências, idiomas, certificações e áreas de atuação no caminho raiz. Cada trecho mantém seu próprio descritor e coordenadas. preparedParserIa adapta resultados já em memória para permitir retomada sem reenvio. Correção compatível, sem migração ou mudança de modelo/prompt.
