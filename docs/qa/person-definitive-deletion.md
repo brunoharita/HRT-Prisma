@@ -2,9 +2,23 @@
 
 ## Escopo e ambiente
 
-Implementação local e no projeto `Prisma-QA` (`ioldpnqqvobprjiontre`). Produção, hosting, exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831`, `20260909184943` e `20260911153000` e a Edge Function `person-data-deletion` v1 estão ativas apenas em QA.
+Implementação local e no projeto `Prisma-QA` (`ioldpnqqvobprjiontre`). Produção, hosting, exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831`, `20260909184943`, `20260911153000` e `20260913132559` e a Edge Function `person-data-deletion` v1 estão ativas apenas em QA.
 
 A migration `20260911153000_person_deletion_learning_metadata_shape` permite que casos de aprendizado aprovados ou rejeitados sobrevivam como metadata-only quando a revisão da Pessoa é purgada. Isso evita que a restrição de forma do aprendizado impeça a conclusão da exclusão definitiva; casos candidatos continuam sendo removidos.
+
+## Correção dos guards em escrita autenticada — 2026-09-13
+
+A migration `20260913132559_fix_person_deletion_trigger_execution` corrige a execução dos guards que protegem referências a Pessoas em exclusão. O helper `private.person_deletion_context_allows` havia sido declarado como `SECURITY DEFINER`, embora sua própria proteção dependesse de distinguir o `current_user` da rotina autoritativa. Além disso, o `EXECUTE` estava revogado para o papel autenticado. Como consequência, qualquer escrita protegida pelo gatilho falhava antes mesmo de avaliar que a Pessoa estava ativa, inclusive a decisão humana “Não considerar” em `match_evaluations`.
+
+A correção torna o helper `SECURITY INVOKER` e concede somente `EXECUTE` aos papéis operacionais `authenticated` e `service_role`. Uma chamada comum continua retornando `false`; durante a finalização autoritativa, o contexto do owner da rotina é preservado. O formatter imutável de feedback também recebe `EXECUTE` para que uma rejeição intencional produza o erro de domínio previsto.
+
+O verificador `supabase/qa/position_relation_decision_verification.sql`, executado no Prisma-QA com rollback, comprovou que uma sessão `authenticated` grava a decisão `dismissed` para a Vaga `Analista de Marketing` e a Pessoa ativa exibida na interface. A mesma prova definiu um contexto de exclusão forjado, confirmou que o helper permaneceu fail-closed e rejeitou a escrita para uma Pessoa sintética em `deleting` com o erro de domínio previsto. Nenhuma fixture ou decisão de teste ficou persistida.
+
+| Agreement existente | Implementação | Teste/Evidência | Status |
+| --- | --- | --- | --- |
+| D-016 concorrência protegida sem bloquear Pessoa ativa | helper com contexto do invocador e grants mínimos | teste Node específico e prova conectada com rollback | PASS |
+| P-013 sem travessia ou bypass de autoridade | chamada autenticada forjada retorna `false` | prova negativa conectada | PASS |
+| P-024 sem detalhe técnico na UI | falha de infraestrutura eliminada no banco; mensagens continuam sanitizadas | reprodução exata do insert pela sessão autenticada | PASS |
 
 ## Decisão e reuso
 

@@ -42,6 +42,7 @@ Testes determinísticos, prova SQL transacional rica em Prisma-QA, matriz de pap
 ## References
 
 - `supabase/migrations/20260909175124_person_definitive_deletion.sql`
+- `supabase/migrations/20260913132559_fix_person_deletion_trigger_execution.sql`
 - `supabase/functions/person-data-deletion/index.ts`
 - `docs/qa/person-definitive-deletion.md`
 - `tests/personDefinitiveDeletion.test.ts`
@@ -49,3 +50,4 @@ Testes determinísticos, prova SQL transacional rica em Prisma-QA, matriz de pap
 ## Change history
 
 - 2026-09-09: accepted and active in Prisma-QA; no production rollout.
+- 2026-09-13: corrected nested trigger execution for authenticated writes while preserving the authoritative deletion context fail-closed; active in Prisma-QA only.

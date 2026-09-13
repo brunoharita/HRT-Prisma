@@ -1,5 +1,12 @@
 # Evidência M5.4: Vagas
 
+## Correção da decisão “Não considerar” — 2026-09-13
+
+- A falha foi reproduzida no Prisma-QA como `permission denied for function person_deletion_context_allows`. O gatilho de exclusão definitiva interceptava o insert de `match_evaluations` antes de verificar que a Pessoa estava ativa.
+- A migration forward-only `20260913132559_fix_person_deletion_trigger_execution` restaura a escrita autenticada sem ampliar autoridade sobre tenant, decisão, Pessoa ou exclusão.
+- `supabase/qa/position_relation_decision_verification.sql` repetiu o payload real de `recordPositionRelationDecision` com o papel `authenticated`, registrou `dismissed` e reverteu a transação. Uma tentativa de forjar o contexto autoritativo continuou retornando `false`, e a escrita equivalente para uma Pessoa sintética em `deleting` foi rejeitada.
+- O contrato de matching, a versão da Vaga, a RLS e o comportamento visual não mudaram. Produção não foi acionada.
+
 ## M5.4.10 — resultado exige sinal rastreável
 
 - Todos os Perfis publicados elegíveis continuam paginados e analisados, sem teto silencioso.

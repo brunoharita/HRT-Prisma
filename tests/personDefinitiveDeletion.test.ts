@@ -12,6 +12,7 @@ import {
 } from "../src/domain/personDefinitiveDeletion.js";
 
 const migrationPath = "supabase/migrations/20260909175124_person_definitive_deletion.sql";
+const triggerExecutionFixPath = "supabase/migrations/20260913132559_fix_person_deletion_trigger_execution.sql";
 
 test("M5.5 authority and self-service scopes fail closed", () => {
   for (const allowed of ["super_admin", "owner", "admin"]) assert.equal(canAdministrativelyDeletePerson(allowed), true);
@@ -79,6 +80,24 @@ test("M5.5 SQL coordinates Storage and refuses completion with residues", async 
   assert.match(edge, /fail_person_deletion_retryable/);
   assert.match(edge, /finalize_person_definitive_deletion/);
   assert.match(config, /\[functions\.person-data-deletion\][\s\S]*verify_jwt = false/);
+});
+
+test("M5.5 deletion guards allow protected writes without exposing the authoritative context", async () => {
+  const [fix, qa] = await Promise.all([
+    readFile(triggerExecutionFixPath, "utf8"),
+    readFile("supabase/qa/position_relation_decision_verification.sql", "utf8"),
+  ]);
+  assert.match(fix, /alter function private\.person_deletion_context_allows\(uuid, uuid\) security invoker/i);
+  assert.match(fix, /grant execute on function private\.person_deletion_context_allows\(uuid, uuid\)[\s\S]*to authenticated, service_role/i);
+  assert.match(fix, /grant execute on function private\.person_deletion_feedback\(text, text\)[\s\S]*to authenticated, service_role/i);
+  assert.match(qa, /set local role authenticated/i);
+  assert.match(qa, /if private\.person_deletion_context_allows[\s\S]*raise exception 'authenticated caller bypassed/i);
+  assert.match(qa, /insert into public\.match_evaluations/i);
+  assert.match(qa, /'decision', 'dismissed'/i);
+  assert.match(qa, /operational_status[\s\S]*'deleting'/i);
+  assert.match(qa, /when object_not_in_prerequisite_state/i);
+  assert.match(qa, /authenticated write accepted a Person in deletion/i);
+  assert.match(qa, /rollback/i);
 });
 
 test("M5.5 self-service never accepts assessment authority and never takes a person id", async () => {
