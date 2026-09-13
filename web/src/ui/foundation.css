@@ -13,12 +13,30 @@ body { background: var(--prisma-canvas); }
 .prisma-main-content { container-type: inline-size; }
 .prisma-page { min-width: 0; }
 .prisma-table-scroll-hint { display: none; color: #53637d; font-size: 13px; margin: 0; }
-.prisma-reference-flow-intro { grid-column: 1 / -1; max-width: 92ch; margin: 0 0 4px; color: #53637d; line-height: 1.6; }
 .prisma-reference-search-help, .prisma-reference-search-feedback { display: flex; align-items: center; gap: 7px; margin-top: 6px; line-height: 1.45; }
 .prisma-reference-search-feedback.is-success { color: #166534; }
 .prisma-reference-search-status { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
 .prisma-reference-search-status.is-error { color: #b42318; }
 .prisma-reference-search-error { margin-top: 10px; }
+.prisma-vacancy-start-card > .ant-card-body { display: flex; flex-direction: column; align-items: stretch; gap: 20px; }
+.prisma-start-description { display: grid; gap: 14px; margin: 0; }
+.prisma-start-description > p { max-width: 76ch; margin: 0; color: #53637d; line-height: 1.55; }
+.prisma-start-source-guide { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.prisma-start-source-guide > div { display: grid; gap: 3px; padding: 12px 14px; border: 1px solid #dde4ee; border-radius: 10px; background: #f8faff; }
+.prisma-start-source-guide strong { color: #25466f; font-size: 13px; }
+.prisma-start-source-guide span, .prisma-start-choice-heading small, .prisma-start-assist-choice span { color: #53637d; font-size: 13px; line-height: 1.45; }
+.prisma-start-choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.prisma-start-choice { display: grid; align-content: start; gap: 10px; min-width: 0; padding: 16px; border: 1px solid #dde4ee; border-radius: 12px; background: #fff; }
+.prisma-start-choice-heading { display: flex; align-items: flex-start; gap: 10px; min-height: 42px; }
+.prisma-start-choice-heading > span:last-child { display: grid; gap: 3px; min-width: 0; }
+.prisma-start-choice-heading strong { color: #10203a; font-size: 14px; }
+.prisma-start-choice-number { display: inline-grid; flex: 0 0 26px; width: 26px; height: 26px; place-items: center; border-radius: 50%; color: #155eef; background: #eef4ff; font-size: 13px; font-weight: 700; }
+.prisma-start-choice .ant-select { width: 100%; }
+.prisma-start-assist-choice { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px; border: 1px dashed #9bb4d8; border-radius: 12px; background: #f8faff; }
+.prisma-start-assist-choice > div { display: grid; gap: 3px; min-width: 0; }
+.prisma-start-assist-choice strong { color: #25466f; font-size: 14px; }
+.prisma-start-assist-choice .ant-btn { flex: 0 0 auto; }
+.prisma-reference-search-feedback .ant-spin { flex: 0 0 auto; }
 .prisma-page-header-row { align-items: flex-start; flex-wrap: wrap; gap: 20px; }
 .prisma-page-heading { flex: 1 1 320px; min-width: 0; }
 .prisma-page-heading h1 { font-size: clamp(26px, 2.2vw, 34px); line-height: 1.2; letter-spacing: -.025em; overflow-wrap: anywhere; }
@@ -68,6 +86,9 @@ body { background: var(--prisma-canvas); }
   .prisma-form-grid-two, .prisma-vacancy-form-grid, .prisma-vacancy-two-columns, .prisma-profile-search-filter-grid, .prisma-vacancy-requirement-groups, .prisma-person-form-layout { grid-template-columns: minmax(0, 1fr); }
   .prisma-page-heading { flex-basis: 100%; }
   .prisma-page-actions { width: 100%; }
+  .prisma-start-source-guide, .prisma-start-choice-grid { grid-template-columns: minmax(0, 1fr); }
+  .prisma-start-assist-choice { align-items: stretch; flex-direction: column; }
+  .prisma-start-assist-choice .ant-btn { align-self: flex-start; }
 }
 @media (max-width: 767px) {
   .prisma-table-scroll-hint { display: block; }

@@ -452,7 +452,7 @@ test("resolução ocupacional explica segurança sem score e nunca deriva evidê
 test("busca de referência profissional comunica origem, progresso e recuperação", async () => {
   const page = await readFile("web/src/pages/VacancyPages.tsx", "utf8");
   const styles = await readFile("web/src/ui/foundation.css", "utf8");
-  assert.match(page, /Knowledge publicada interna/);
+  assert.match(page, /Knowledge interna/);
   assert.match(page, /ESCO, CBO e O\*NET/);
   assert.match(page, /Buscando na Knowledge interna/);
   assert.match(page, /Nenhuma correspondência interna/);
