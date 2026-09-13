@@ -451,7 +451,7 @@ function findExplicitLine(lines: CandidateLine[], value: string | null): Candida
   return lines.find((line) => comparable(line.text).includes(normalized)) ?? null;
 }
 
-function normalizeLinkedinUrl(value: string): string {
+export function normalizeLinkedinUrl(value: string): string {
   const normalized = value.replace(/\/$/, "");
   return /^https?:\/\//i.test(normalized) ? normalized : `https://${normalized}`;
 }

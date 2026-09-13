@@ -1,5 +1,5 @@
 import type { ExtractedPage, PersonDocumentTimelineItem, ProcessedDocumentInput, StructuredDraft } from "./personIngestion.js";
-import type { FieldEvidenceDescriptor } from "./adaptiveResumeExtraction.js";
+import { normalizeLinkedinUrl, type FieldEvidenceDescriptor } from "./adaptiveResumeExtraction.js";
 import { classifyEducationRecord } from "../../../src/domain/educationClassification.js";
 import { stableReviewEntityId } from "./reviewFieldLifecycle.js";
 import { normalizeResumeEmail, normalizeResumePhone, type ResumeIdentity } from "../../../src/domain/resumeIdentity.js";
@@ -7,6 +7,10 @@ import { normalizeResumeEmail, normalizeResumePhone, type ResumeIdentity } from 
 export const PARSER_IA_VERSION = "parser-ia-1.0.0";
 export const PARSER_IA_SOURCE_VERSION = "pdfjs-5.4.296/parser-ia-spans-v1";
 export const PARSER_IA_MAX_PAGES = 30;
+function canonicalLinkedinUrl(value: string): string {
+  const normalized = normalizeLinkedinUrl(value).replace(/^http:\/\//i, "https://");
+  try { return new URL(normalized).href; } catch { return normalized; }
+}
 export function canResumeFailedAiIntake(document: PersonDocumentTimelineItem | null | undefined): boolean {
   return Boolean(document && document.sourceType === "resume_pdf" && !document.isLegacyUnstored
     && document.extractionVersion === PARSER_IA_SOURCE_VERSION && document.status === "failed" && document.reviewState === "not_ready"
@@ -118,7 +122,7 @@ export function structureParserIa(raw: unknown, pages: ExtractedPage[], binding:
     const value = values.get(path);
     if (!value) continue;
     if (path === "identity.fullName") draft.identity.fullName = value;
-    else if (path.startsWith("contact.")) draft.contact[path.slice(8) as keyof StructuredDraft["contact"]] = value;
+    else if (path.startsWith("contact.")) draft.contact[path.slice(8) as keyof StructuredDraft["contact"]] = path === "contact.linkedin" ? canonicalLinkedinUrl(value) : value;
     else draft[path as "summary" | "professionalTitle" | "professionalObjective"] = value;
     paths.set(path, path);
   }
@@ -189,9 +193,10 @@ export function preparedParserIa(input: Pick<ProcessedDocumentInput, "sha256" | 
   if (!result) return null;
   if (result.version !== PARSER_IA_VERSION || result.organizationId !== organizationId || result.sourceSha256 !== input.sha256) throw new Error("PARSER_BINDING_INVALID");
   parserIaMethodVersion(result);
+  const linkedin = result.draft.contact.linkedin ? canonicalLinkedinUrl(result.draft.contact.linkedin) : null;
   // A retry may still hold the previously prepared result in the open page.
-  if (result.fieldEvidence.some((item) => reviewListFieldPath(item.fieldPath) !== item.fieldPath)) {
-    return { ...result, fieldEvidence: result.fieldEvidence.map((item) => ({ ...item, fieldPath: reviewListFieldPath(item.fieldPath) })) };
+  if (linkedin !== result.draft.contact.linkedin || result.fieldEvidence.some((item) => reviewListFieldPath(item.fieldPath) !== item.fieldPath)) {
+    return { ...result, draft: linkedin === result.draft.contact.linkedin ? result.draft : { ...result.draft, contact: { ...result.draft.contact, linkedin } }, fieldEvidence: result.fieldEvidence.map((item) => ({ ...item, fieldPath: reviewListFieldPath(item.fieldPath) })) };
   }
   return result;
 }

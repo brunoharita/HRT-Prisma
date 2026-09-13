@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.4
+version: 2.29.5
 last_verified: 2026-09-12
 ---
 
@@ -25,6 +25,8 @@ Ajuste visual local dos cartões de documento na jornada e no Delta: ícone de P
 Correção da persistência de listas da IA: competências, idiomas, certificações e áreas de atuação usam o caminho raiz de evidência já aceito pela revisão/RPC, preservando itens, spans e coordenadas. A retomada adapta também propostas já presentes em memória, sem mutá-las ou chamar novamente a IA. A regra vigente do único Supabase foi consultada por leitura; nenhuma migração ou alteração remota foi aplicada.
 
 Retomada local de M5.7 interrompido disponível na Central da Pessoa e no detalhe: recupera PDF original privado com verificação de vínculo/hash e reutiliza intake/Pessoa/documento existentes. Consulta ao único Supabase confirmou a fonte preservada e zero páginas persistidas no caso relatado; reprocessamento anterior exigia páginas e não oferecia recuperação a partir da fonte. Teste do serviço real com resposta salva e persistência simulada validou nove experiências, duas formações e descritores aceitos pelo contrato; negativos sintéticos bloqueiam fonte/vínculo/versão divergentes antes de IA ou gravação. Persistência autenticada ainda não demonstrada pelo agente; nenhuma mutação remota nesta correção. Acordo/execução 1.1.1; contrato parser-ia-1.0.0 preservado.
+
+Correção de contato M5.7: LinkedIn agora recebe HTTPS e codificação Unicode no rascunho, conservando o valor original nos fatos/evidências. O currículo real violava o contrato de resumo estruturado por URL sem protocolo e caminho acentuado. Consulta ao validador vigente confirmou rejeição dos formatos originais e aceitação do formato canônico; replay privado passou de uma pendência contact.linkedin para zero, mantendo nove experiências e duas formações. Validação ponta a ponta autenticada está em execução, sem declaração antecipada de sucesso.
 
 ## Repositório
 

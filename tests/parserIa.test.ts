@@ -28,6 +28,32 @@ const binding = { sourceSha256: "a".repeat(64), organizationId: "local-test", pr
 const fact = (path: string, value: string, ...sources: string[]): ParserFact => ({ path, value, sources });
 const run = (pages: ExtractedPage[], facts: ParserFact[], status: "partial" | "complete" = "complete") => structureParserIa({ status, facts, uncertainties: [] }, pages, binding);
 
+test("M5.7 normalizes LinkedIn transport format while preserving source value and evidence", () => {
+  for (const url of ["www.linkedin.com/in/synthetic-profile", "linkedin.com/in/synthetic-profile/", "http://www.linkedin.com/in/synthetic-profile", "https://www.linkedin.com/in/synthetic-profile"]) {
+    const result = run([page(1, [url])], [fact("contact.linkedin", url, "p1l1")]);
+    assert.match(result.draft.contact.linkedin!, /^https:\/\/(?:www\.)?linkedin\.com\/in\/synthetic-profile$/);
+    assert.equal(result.acceptedFacts[0]!.value, url);
+    assert.equal(result.fieldEvidence[0]!.text, url);
+    const old = { ...result, draft: { ...result.draft, contact: { ...result.draft.contact, linkedin: url } } };
+    const snapshot = JSON.stringify(old);
+    const retry = preparedParserIa({ sha256: binding.sourceSha256, parserIa: old }, binding.organizationId)!;
+    assert.equal(retry.draft.contact.linkedin, result.draft.contact.linkedin);
+    assert.equal(JSON.stringify(old), snapshot);
+    assert.equal(retry.acceptedFacts, old.acceptedFacts);
+  }
+});
+
+test("M5.7 encodes accented LinkedIn paths without double encoding or changing evidence", () => {
+  for (const url of ["www.linkedin.com/in/joão-exemplo", "https://www.linkedin.com/in/jo%C3%A3o-exemplo"]) {
+    const result = run([page(1, [url])], [fact("contact.linkedin", url, "p1l1")]);
+    assert.equal(result.draft.contact.linkedin, "https://www.linkedin.com/in/jo%C3%A3o-exemplo");
+    assert.equal(result.acceptedFacts[0]!.value, url);
+    assert.equal(result.fieldEvidence[0]!.text, url);
+    const old = { ...result, draft: { ...result.draft, contact: { ...result.draft.contact, linkedin: url } } };
+    assert.equal(preparedParserIa({ sha256: binding.sourceSha256, parserIa: old }, binding.organizationId)!.draft.contact.linkedin, result.draft.contact.linkedin);
+  }
+});
+
 test("M5.7 joins wrapped email with both source spans and retains original geometry", () => {
   const pages = [page(1, ["Pessoa Exemplo", "pessoa@example.co", "m"])];
   const original = JSON.stringify(pages);

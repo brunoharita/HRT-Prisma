@@ -6,9 +6,10 @@ import { createServer } from 'vite';
 import { readParserPdf } from '../../scripts/parser-ia-service.mjs';
 import { structureParserIa } from '../../dist/web/src/domain/parserIa.js';
 import * as pdfjs from 'pdfjs-dist';
+import { validateReviewDraftForSave } from '../../dist/web/src/domain/reviewFieldLifecycle.js';
 
 function sourcePdf(extra = '') {
-  const content = `BT /F1 12 Tf 50 740 Td (Synthetic Person) Tj 0 -20 Td (Senior Analyst) Tj 0 -20 Td (Example Company) Tj 0 -20 Td (Responsible for reporting, process analysis and documented improvements to the existing operating procedures. ${'Documented project delivery. '.repeat(10)}${extra}) Tj ET`;
+  const content = `BT /F1 12 Tf 50 740 Td (Synthetic Person) Tj 0 -20 Td (Senior Analyst) Tj 0 -20 Td (Example Company) Tj 0 -20 Td (synthetic@example.com) Tj 0 -20 Td (www.linkedin.com/in/synthetic-profile) Tj 0 -20 Td (Responsible for reporting, process analysis and documented improvements to the existing operating procedures. ${'Documented project delivery. '.repeat(10)}${extra}) Tj ET`;
   const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Count 1 /Kids [3 0 R] >>', '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1000 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>', `<< /Length ${content.length} >>\nstream\n${content}\nendstream`];
   let pdf = '%PDF-1.4\n'; const offsets = [0];
   objects.forEach((object, index) => { offsets.push(Buffer.byteLength(pdf)); pdf += `${index + 1} 0 obj\n${object}\nendobj\n`; });
@@ -26,6 +27,8 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
   const pages = await readParserPdf(bytes);
   const result = structureParserIa({ status: 'complete', facts: [
     { path: 'identity.fullName', value: 'Synthetic Person', sources: ['p1l1'] },
+    { path: 'contact.email', value: 'synthetic@example.com', sources: ['p1l4'] },
+    { path: 'contact.linkedin', value: 'www.linkedin.com/in/synthetic-profile', sources: ['p1l5'] },
     { path: 'experiences.a.role', value: 'Senior Analyst', sources: ['p1l2'] },
     { path: 'experiences.a.organization', value: 'Example Company', sources: ['p1l3'] },
   ], uncertainties: [] }, pages, { organizationId: 'org', sourceSha256: checksum, provenance: { model: 'gpt-5.6-luna', promptSha256: 'b'.repeat(64), responseId: 'resp_fake', inputTokens: 0, outputTokens: 0, costUsd: 0, durationMs: 1 } });
@@ -52,6 +55,8 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
       if (name === 'persist_person_extraction') {
         assert.equal(args.p_person_id, 'person'); assert.equal(args.p_document_id, 'doc'); assert.equal(args.p_idempotency_key, 'resume-intake-extraction:intake');
         assert.equal(args.p_draft.experiences.length, 1);
+        assert.equal(args.p_draft.contact.linkedin, 'https://www.linkedin.com/in/synthetic-profile');
+        assert.deepEqual(validateReviewDraftForSave(args.p_draft), []);
         for (const page of args.p_pages) for (const evidence of page.field_evidence) assert.ok(pattern.test(evidence.fieldPath), evidence.fieldPath);
         return { data: [{ processing_attempt_id: 'attempt', structured: true }], error: null };
       }
