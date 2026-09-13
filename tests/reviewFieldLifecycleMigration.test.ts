@@ -38,15 +38,16 @@ test("review UI exposes add, explicit removal, undo and field-local validation",
 });
 
 test("review UI keeps empty forms transient and never blocks evidence behind a no-op save", async () => {
-  const [panel, page] = await Promise.all([
+  const [panel, page, navigation] = await Promise.all([
     readFile("web/src/components/review/StructuredReviewPanel.tsx", "utf8"),
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
+    readFile("web/src/ui/PrismaNavigation.tsx", "utf8"),
   ]);
   assert.match(page, /reviewDraftChangeState\(workspace\.reviewedData, draft\)/);
   assert.match(page, /selectedFieldIsTransient/);
   assert.match(page, /Preencher novo campo/);
   assert.match(page, /Nenhuma alteração real precisava ser salva/);
-  assert.match(page, /Formulários temporários e alterações não salvas serão perdidos/);
+  assert.match(navigation, /Você tem alterações não salvas no Prisma\. Deseja sair sem salvar\?/);
   assert.match(panel, /hasTransientChanges/);
   assert.match(panel, /Cancelar inclusão/);
   assert.match(panel, /sem salvar antes/);

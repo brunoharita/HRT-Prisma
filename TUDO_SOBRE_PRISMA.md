@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 5cdc39dd0adb28e54cd869f11b884327a9c55b9267401edd34d5c2ef9236b855
+source_manifest_sha256: 9989cf75d031f54d092ba4aff3d2c1bf1c65e444df259812895dd522154563e5
 -->
 
 # Tudo sobre o Prisma
@@ -402,15 +402,21 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.11
+version: 2.29.12
 last_verified: 2026-09-13
 ---
 
 # Estado atual do Prisma
 
+## Sincronização de versão — 2026-09-13
+
+A linha acumulada de desenvolvimento foi consolidada a partir de `codex/ux-shared-foundation` para avançar `main` por fast-forward, sem reescrever histórico. O frontend continua exclusivamente local em `http://127.0.0.1:5555`, conectado ao único backend remoto Prisma-QA. As dez Edge Functions presentes no repositório foram reimplantadas e confirmadas `ACTIVE` no projeto `ioldpnqqvobprjiontre`; nenhuma função remota ficou sem correspondente local.
+
+O schema necessário à versão atual já estava ativo no Prisma-QA e a correção de matching 2.3.0 não exige migration. O histórico remoto antigo possui timestamps distintos dos arquivos locais equivalentes; `supabase db push --dry-run` falha fechado antes de aplicar qualquer SQL. Esse metadado legado não foi reparado nem mascarado. A migration mais recente de ambos os lados é `20260913132559`. O gate completo passou com 415 testes, 19 casos golden, build web e demonstração executável; duas expectativas estáticas obsoletas foram alinhadas à linguagem e à navegação canônicas sem reduzir proteção. Evidência e limites em `docs/qa/release-sync-20260913.md`.
+
 ## Base compartilhada de UX — 2026-09-13
 
-Implementação local na branch `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.0.0`, ADR-050. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
+Implementação consolidada na linha atual de `main`, contrato de apresentação `prisma-ux-foundation-1.0.0`, ADR-050. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
 Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT em `docs/qa/*ux-foundation.md`. Validação dirigida e limites no AoT. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. Versão pública permanece v1.5.11; o contrato de apresentação inicia 1.0.0, sem mudança semântica de contratos persistidos.
 

@@ -117,7 +117,7 @@ test("Knowledge Agent contract is server-side, structured, allowlisted and never
   assert.match(agent, /Provider returned no verifiable web citation/);
   assert.match(agent, /source\.source_class !== trustedSource\.source_class/);
   assert.doesNotMatch(agent, /approve_knowledge_proposal/);
-  assert.match(page, /Knowledge da empresa/);
+  assert.match(page, /Conhecimento da empresa/);
   assert.match(page, /Base Prisma/);
   assert.match(page, /Sem topbar|Conhecimento/);
 });
