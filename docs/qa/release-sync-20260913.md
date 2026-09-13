@@ -8,7 +8,7 @@ Consolidar a última versão acumulada entre workspace local, Git remoto e o ún
 
 | Contrato | Implementação | Evidência | Status |
 | --- | --- | --- | --- |
-| D-SYNC-001: preservar uma única linha acumulada de código | `main` avança por fast-forward até o fechamento desta sincronização | relação de ancestralidade e refs local/remota | PASS |
+| D-SYNC-001: preservar uma única linha acumulada de código | linha consolidada em `codex/ux-shared-foundation`; fast-forward de `main` preparado | branch local/remota idêntica; push de `main` bloqueado pela revisão automática até autorização nominal | BLOCKED |
 | D-SYNC-002: backend QA usa as Edge Functions locais atuais | implantação conjunta das dez funções do repositório, sem `prune` | listagem remota pós-deploy: dez funções `ACTIVE` | PASS |
 | D-SYNC-003: não aplicar SQL quando o histórico não for seguro | `supabase db push --dry-run` antes de qualquer push | CLI retornou `LegacyDbPushMissingLocalError` e nenhum SQL foi executado | PASS |
 | D-SYNC-004: aplicação local executa a mesma revisão | servidor Vite em `127.0.0.1:5555` a partir do workspace oficial | resposta HTTP 200 e processo Vite ligado ao workspace canônico | PASS |
@@ -32,6 +32,7 @@ Foram implantadas e confirmadas `ACTIVE`: `assessment-access`, `assessment-item-
 - Não existe frontend hospedado; a interface permanece local.
 - Não existe projeto de produção separado.
 - A sincronização funcional não declara o ledger histórico de migrations reconciliado.
+- `main` ainda não aponta para a linha consolidada; a branch de entrega e o Prisma-QA estão atualizados, mas a sincronização Git final depende de autorização nominal para o fast-forward.
 
 ## Validação local
 
