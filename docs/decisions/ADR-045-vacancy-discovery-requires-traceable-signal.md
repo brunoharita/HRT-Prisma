@@ -16,6 +16,8 @@ Evitar que disponibilidade para análise manual seja interpretada como relação
 
 Todos os Perfis publicados elegíveis continuam paginados e analisados, mas um Perfil só é retornado quando possui relação ocupacional automática, requisito atendido, evidência parcial, sinal relacionado ou confirmação humana anterior. Zero sinal produz lista vazia, nunca card de candidato.
 
+Uma relação textual possível pode usar um domínio ocupacional distintivo compartilhado entre a referência da Vaga e um cargo do Perfil, mesmo quando a função é diferente. O domínio sustenta descoberta para revisão humana, não equivalência ou aderência. Marcadores genéricos de função isolados não constituem sinal. Entre vários cargos relacionados, a interface explica o mais específico.
+
 ## Alternatives considered
 
 - Manter todos visíveis em seção recolhida: rejeitado porque ainda transforma ausência total de sinal em resultado da Vaga.
@@ -44,7 +46,7 @@ Manter relação ocupacional ampla, equivalências Knowledge, evidência parcial
 
 ## Technical impact
 
-`vacancy-matching-explainable` passa a 2.1.0. O filtro é determinístico após a análise e não altera a consulta tenant-scoped.
+O filtro inicial foi versionado como `vacancy-matching-explainable` 2.1.0. O refinamento de domínio ocupacional distintivo avança o contrato para 2.2.0, permanece determinístico após a análise e não altera a consulta tenant-scoped.
 
 ## Data impact
 
@@ -83,3 +85,4 @@ Somente por critério igualmente rastreável, sem score oculto e com decisão hu
 ## Change history
 
 - 2026-09-08: accepted; supersedes somente a regra do ADR-044 que mantinha Perfis sem sinal visíveis.
+- 2026-09-13: refined textual relation to recover a shared distinctive occupational domain without accepting generic role markers alone; matching contract advanced to 2.2.0.

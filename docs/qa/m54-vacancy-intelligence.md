@@ -1,5 +1,12 @@
 # Evidência M5.4: Vagas
 
+## Falso negativo de domínio ocupacional — 2026-09-13
+
+- O Prisma-QA confirmou que Beatriz Galazzini possui Perfil v1 publicado e ativo, com os cargos `Comercial, Marketing e Operações`, `Outbound Marketing` e `Assistente de Marketing & Business Development`. A Posição `Analista de Marketing` está vinculada à referência oficial publicada e ao alias aprovado `Analista de marketing`.
+- O contrato 2.1.0 exigia dois termos ocupacionais comuns. Como `Analista` e `Assistente` são marcadores diferentes e apenas `Marketing` coincidia, Beatriz era analisada, recebia zero sinal e era retirada pelo filtro final.
+- O contrato `vacancy-matching-explainable-2.2.0` aceita um domínio profissional distintivo compartilhado somente como relação possível e escolhe o cargo mais específico para explicar o resultado. Marcadores genéricos isolados continuam insuficientes.
+- A regressão reproduz os cargos publicados da Beatriz, confirma sua inclusão por `Assistente de Marketing & Business Development` e mantém `Analista Financeiro` fora da Posição. Não há score, equivalência automática, inferência de competência, alteração de Perfil, Knowledge, RLS ou migration.
+
 ## Correção da decisão “Não considerar” — 2026-09-13
 
 - A falha foi reproduzida no Prisma-QA como `permission denied for function person_deletion_context_allows`. O gatilho de exclusão definitiva interceptava o insert de `match_evaluations` antes de verificar que a Pessoa estava ativa.

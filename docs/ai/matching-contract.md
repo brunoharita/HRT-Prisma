@@ -19,6 +19,8 @@ O resultado agrega requisitos atendidos, parcialmente atendidos, sinais relacion
 
 A descoberta da posição é separada da aderência detalhada. Ela usa, nesta ordem, a mesma referência oficial, referência equivalente publicada, relação ocupacional publicada e possível relação textual entre o título da Vaga, o título profissional e cargos das experiências. A última hipótese nunca vira equivalência automática. O operador pode confirmar ou descartar a relação; essa decisão fica auditada, altera apenas a ordenação e nunca muda o Perfil, a Vaga ou a Knowledge.
 
+Na relação textual, igualdade, inclusão e dois ou mais termos ocupacionais comuns continuam sendo sinais diretos da hipótese. Um único termo também pode sustentar apenas uma relação possível quando representa um domínio profissional distintivo, como `marketing`, `dados` ou `projetos`. Marcadores genéricos de função ou senioridade, como `analista`, `assistente`, `gerente` ou `especialista`, nunca geram relação isoladamente. Quando mais de um cargo do Perfil se relaciona à Vaga, a explicação seleciona a evidência mais específica e preserva o texto publicado.
+
 Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. O resultado exibe somente quem possui ao menos uma relação ocupacional, evidência direta, evidência parcial, sinal relacionado ou confirmação humana anterior. Zero sinal não é convertido em ausência profissional, mas também não gera resultado.
 
 ## Suficiência
@@ -52,6 +54,8 @@ Competências transferíveis são declaradas na vaga. O mecanismo não inventa a
 ## Versionamento
 
 Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM também deverá persistir `promptVersion` e `modelVersion`.
+
+O refinamento de domínio ocupacional distintivo está versionado como `vacancy-matching-explainable-2.2.0`.
 
 ## Normalização conceitual M5.2
 

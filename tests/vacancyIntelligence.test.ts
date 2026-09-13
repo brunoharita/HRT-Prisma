@@ -146,6 +146,32 @@ test("descoberta ocupacional encontra títulos equivalentes por referência ou e
   assert.equal(matchVacancyCandidate(need, sameReference, { conceptId: "occupation-project-manager", canonicalLabel: need.title, aliases: [], relations: [] }).positionRelation.status, "same_reference");
 });
 
+test("domínio ocupacional distintivo recupera Beatriz sem transformar função diferente em equivalência", () => {
+  const need = vacancy("Analista de Marketing", []);
+  need.referenceConceptId = "occupation-marketing-analyst";
+  const beatriz = candidate("beatriz", "Beatriz Galazzini", profile({
+    professionalTitle: null,
+    experiences: [
+      { id: "area", source: "human", role: "Comercial, Marketing e Operações", organization: "Empresa", period: "2025", description: "", evidenceText: "", page: 1 },
+      { id: "outbound", source: "human", role: "Outbound Marketing", organization: "Empresa", period: "2024", description: "", evidenceText: "", page: 1 },
+      { id: "assistant", source: "human", role: "Assistente de Marketing & Business Development", organization: "Empresa", period: "2022", description: "", evidenceText: "", page: 1 },
+    ],
+  }));
+  const match = matchVacancyCandidate(need, beatriz, {
+    conceptId: "occupation-marketing-analyst",
+    canonicalLabel: "Analista de pesquisa de mercado",
+    aliases: ["Analista de marketing", "Analista de inteligência de mercado"],
+    relations: [],
+  });
+  assert.equal(match.positionRelation.status, "possible_title_relation");
+  assert.match(match.positionRelation.explanation, /Assistente de Marketing & Business Development/);
+  assert.equal(isVacancyDiscoveryCandidate(match), true);
+
+  const unrelated = matchVacancyCandidate(need, candidate("finance", "Analista sem domínio comum", profile({ professionalTitle: "Analista Financeiro" })));
+  assert.equal(unrelated.positionRelation.status, "none");
+  assert.equal(isVacancyDiscoveryCandidate(unrelated), false);
+});
+
 test("descoberta exclui Perfil sem qualquer sinal e preserva confirmação humana", () => {
   const need = vacancy("Gerente de Projetos", ["Gestão de projetos"]);
   const related = matchVacancyCandidate(need, candidate("related", "Relacionada", profile({ competencies: ["Gestão de projetos"] })));

@@ -2,7 +2,7 @@ import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 import { groupCompetencies, parseLanguage } from "./canonicalProfile.js";
 
 export const VACANCY_DEFINITION_VERSION = "1.1.0";
-export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-2.1.0";
+export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-2.2.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
@@ -809,7 +809,14 @@ function matchVacancyPosition(
   };
 
   const referenceLabels = unique([vacancy.title, reference?.canonicalLabel ?? "", ...(reference?.aliases ?? [])]);
-  const titleRelation = titleEvidence.find((item) => referenceLabels.some((label) => occupationalTitlesRelate(label, item.label)));
+  const titleRelation = titleEvidence
+    .map((item, index) => ({
+      item,
+      index,
+      strength: Math.max(...referenceLabels.map((label) => occupationalTitleRelationStrength(label, item.label))),
+    }))
+    .filter((item) => item.strength > 0)
+    .sort((left, right) => right.strength - left.strength || left.index - right.index)[0]?.item;
   if (titleRelation) return {
     status: "possible_title_relation",
     explanation: `Possível relação com a posição identificada em “${titleRelation.label}”. Revise antes de confirmar.`,
@@ -818,25 +825,41 @@ function matchVacancyPosition(
   return { status: "none", explanation: "Nenhuma relação ocupacional automática foi identificada; o Perfil permanece disponível para análise manual.", evidence: [] };
 }
 
-function occupationalTitlesRelate(left: string, right: string): boolean {
+function occupationalTitleRelationStrength(left: string, right: string): number {
   const normalizedLeft = normalize(left);
   const normalizedRight = normalize(right);
-  if (!normalizedLeft || !normalizedRight) return false;
-  if (normalizedLeft === normalizedRight || normalizedLeft.includes(normalizedRight) || normalizedRight.includes(normalizedLeft)) return true;
+  if (!normalizedLeft || !normalizedRight) return 0;
+  if (normalizedLeft === normalizedRight) return 100;
+  if (normalizedLeft.includes(normalizedRight) || normalizedRight.includes(normalizedLeft)) return 80;
   const leftTokens = occupationalTokens(normalizedLeft);
   const rightTokens = occupationalTokens(normalizedRight);
-  return [...leftTokens].filter((token) => rightTokens.has(token)).length >= 2;
+  const sharedTokens = [...leftTokens].filter((token) => rightTokens.has(token));
+  if (sharedTokens.length >= 2) return 60 + sharedTokens.length;
+  const sharedDomainTokens = sharedTokens.filter((token) => !OCCUPATIONAL_ROLE_MARKERS.has(token));
+  if (!sharedDomainTokens.length) return 0;
+  const bothDescribeRoles = [...leftTokens].some((token) => OCCUPATIONAL_ROLE_MARKERS.has(token))
+    && [...rightTokens].some((token) => OCCUPATIONAL_ROLE_MARKERS.has(token));
+  return 40 + sharedDomainTokens.length + (bothDescribeRoles ? 10 : 0);
 }
 
 function occupationalTokens(value: string): Set<string> {
-  const stopWords = new Set(["de", "da", "do", "das", "dos", "em", "para", "com", "senior", "pleno", "junior", "especialista"]);
+  const stopWords = new Set(["de", "da", "do", "das", "dos", "em", "para", "com", "senior", "pleno", "junior"]);
   const aliases: Record<string, string> = {
-    gerente: "lideranca", gestor: "lideranca", gestora: "lideranca", coordenador: "lideranca", coordenadora: "lideranca", manager: "lideranca", coordinator: "lideranca", lider: "lideranca", head: "lideranca",
+    gerente: "lideranca", gerentes: "lideranca", gestor: "lideranca", gestora: "lideranca", gestores: "lideranca", gestoras: "lideranca", coordenador: "lideranca", coordenadora: "lideranca", coordenadores: "lideranca", coordenadoras: "lideranca", manager: "lideranca", managers: "lideranca", coordinator: "lideranca", coordinators: "lideranca", lider: "lideranca", lideres: "lideranca", head: "lideranca",
+    analistas: "analista", assistentes: "assistente", auxiliares: "auxiliar", estagiaria: "estagiario", estagiarias: "estagiario", estagiarios: "estagiario",
+    especialistas: "especialista", consultora: "consultor", consultoras: "consultor", consultores: "consultor", engenheira: "engenheiro", engenheiras: "engenheiro", engenheiros: "engenheiro",
+    diretora: "diretor", diretoras: "diretor", diretores: "diretor", executiva: "executivo", executivas: "executivo", executivos: "executivo", supervisora: "supervisor", supervisoras: "supervisor", supervisores: "supervisor",
+    tecnica: "tecnico", tecnicas: "tecnico", tecnicos: "tecnico", desenvolvedora: "desenvolvedor", desenvolvedoras: "desenvolvedor", desenvolvedores: "desenvolvedor", designers: "designer", vendedora: "vendedor", vendedoras: "vendedor", vendedores: "vendedor", operadora: "operador", operadoras: "operador", operadores: "operador",
     projeto: "projeto", projetos: "projeto", project: "projeto", pm: "projeto", pmo: "projeto",
     ti: "tecnologia", it: "tecnologia", tecnologia: "tecnologia", tecnologias: "tecnologia", informacao: "tecnologia", informatica: "tecnologia",
   };
   return new Set(value.split(" ").filter((token) => token.length > 1 && !stopWords.has(token)).map((token) => aliases[token] ?? token));
 }
+
+const OCCUPATIONAL_ROLE_MARKERS = new Set([
+  "lideranca", "analista", "assistente", "auxiliar", "estagiario", "especialista", "consultor", "engenheiro",
+  "diretor", "executivo", "supervisor", "tecnico", "desenvolvedor", "designer", "vendedor", "operador",
+]);
 
 function assessVacancyEvidence(position: VacancyPositionRelation, requirements: VacancyRequirementMatch[]): VacancyEvidenceAssessment {
   const evidenceItems = uniqueEvidence([...position.evidence, ...requirements.flatMap((item) => item.evidence)]);
