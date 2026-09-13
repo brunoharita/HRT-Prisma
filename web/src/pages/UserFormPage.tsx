@@ -33,6 +33,7 @@ import {
   type CredentialDeliveryMode,
   type PlatformAccessProfile,
 } from "../shared/platformUsers";
+import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -74,6 +75,8 @@ const defaultValues: UserFormValues = {
 
 export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
   const [form] = Form.useForm<UserFormValues>();
+  const [dirty, setDirty] = useState(false);
+  const markSaved = useUnsavedChanges(dirty);
   const [groups, setGroups] = useState<GroupScopeOption[]>([]);
   const [currentOperator, setCurrentOperator] = useState<PlatformOperator | null>(null);
   const [loading, setLoading] = useState(true);
@@ -232,6 +235,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
         await platformUsersService.updateUser(userId, payload);
         setInfo("Usuário atualizado com sucesso.");
       }
+      setDirty(false); markSaved();
       onNavigate("/users");
     } catch (submissionError) {
       setError(submissionError instanceof Error ? submissionError.message : "A gravação do usuário falhou.");
@@ -284,7 +288,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
       />
       {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" /> : null}
       {info ? <Alert className="prisma-shell-alert" message={info} showIcon type="success" /> : null}
-      <Form<UserFormValues> form={form} initialValues={defaultValues} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>
+      <Form<UserFormValues> onValuesChange={() => setDirty(true)} form={form} initialValues={defaultValues} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>
         <PrismaCard className="prisma-user-form-card">
           <section className="prisma-user-form-section">
             <h2>Dados básicos</h2>
@@ -293,15 +297,15 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
                 <Input prefix={<UserOutlined />} placeholder="João Carlos da Silva" />
               </Form.Item>
               <Form.Item
-                label="Username *"
+                label="Nome de usuário *"
                 name="username"
                 normalize={(value: string) => normalizeUsername(value)}
                 rules={[
-                  { required: true, message: "Informe o username." },
+                  { required: true, message: "Informe o nome de usuário." },
                   {
                     validator: async (_, value) => {
                       const normalized = normalizeUsername(String(value ?? ""));
-                      if (!normalized) throw new Error("Informe o username.");
+                      if (!normalized) throw new Error("Informe o nome de usuário.");
                       if (!/^[a-z0-9](?:[a-z0-9._-]{1,30}[a-z0-9])?$/.test(normalized)) {
                         throw new Error("Use apenas letras, números, ponto, hífen e underscore.");
                       }

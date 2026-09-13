@@ -1,3 +1,4 @@
+import { useViewState } from "../ui/PrismaNavigation";
 import { useDeferredValue, useEffect, useState } from "react";
 import {
   CheckCircleOutlined,
@@ -33,8 +34,8 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
   const [documents, setDocuments] = useState<DocumentOperationSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<"all" | DocumentOperationalState>("all");
+  const [search, setSearch] = useViewState("search", "");
+  const [status, setStatus] = useViewState<"all" | DocumentOperationalState>("status", "all");
   const deferredSearch = useDeferredValue(search.trim().toLocaleLowerCase("pt-BR"));
 
   useEffect(() => {

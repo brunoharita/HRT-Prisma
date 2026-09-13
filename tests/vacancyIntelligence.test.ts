@@ -458,7 +458,7 @@ test("validação de Vaga destaca o campo acionável que bloqueia o salvamento",
   ]);
   assert.match(page, /focusValidationTarget\("occupation"\)/);
   assert.match(page, /prisma-vacancy-reference-field has-validation-error/);
-  assert.match(page, /validationTarget === "title" \? \{ help: "Informe o título da Vaga\.", validateStatus: "error"/);
+  assert.match(page, /validationTarget === "title" \? \{ help: "Informe o título da Posição\.", validateStatus: "error"/);
   assert.match(page, /aria-invalid=\{invalid\}/);
   assert.match(styles, /prisma-vacancy-reference-field\.has-validation-error/);
   assert.match(styles, /prisma-requirement-editor\.has-validation-error/);
@@ -547,6 +547,6 @@ test("exclusão de Vaga é cancelamento auditável e a lista oferece edição e 
   assert.doesNotMatch(migration, /delete from public\.vacancies/i);
   assert.match(service, /rpc\("cancel_vacancy"/);
   assert.match(page, /Editar/);
-  assert.match(page, /Excluir esta Vaga/);
-  assert.match(page, /posição, versões e avaliações anteriores serão preservadas/i);
+  assert.match(page, /Excluir esta Posição/);
+  assert.match(page, /histórico de definições e avaliações será preservado/i);
 });

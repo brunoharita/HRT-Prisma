@@ -1,3 +1,5 @@
+import { PrismaState } from "../ui/PrismaState";
+import { PrismaPublicShell } from "../ui/PrismaPublicShell";
 import { useEffect, useMemo, useState } from "react";
 import { DeleteOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, Modal, Result, Spin, Typography } from "antd";
@@ -50,9 +52,9 @@ export function PersonDataSelfServicePage({ token }: Props) {
     });
   }
 
-  if (loading) return <PublicDataShell><div className="prisma-person-data-loading"><Spin size="large" /><span>Validando seu acesso...</span></div></PublicDataShell>;
+  if (loading) return <PublicDataShell><PrismaState kind="loading" title="Confirmando seu acesso…" /></PublicDataShell>;
   if (completed) return <PublicDataShell><Result status="success" title="Seus dados foram excluídos" subTitle="A exclusão definitiva foi concluída. Este acesso não pode mais ser utilizado." /></PublicDataShell>;
-  if (!preview) return <PublicDataShell><Result status="error" title="Acesso indisponível" subTitle={error ?? "Este acesso expirou, foi revogado ou já foi utilizado."} /></PublicDataShell>;
+  if (!preview) return <PublicDataShell><PrismaState kind="unavailable" title="Acesso indisponível" description={error ?? "Este acesso expirou, foi revogado ou já foi utilizado."} /></PublicDataShell>;
 
   return <PublicDataShell>
     <Card className="prisma-person-data-card">
@@ -81,7 +83,7 @@ function DeletionImpact({ preview, compact = false }: { preview: PersonSelfServi
         <li>{impact.knowledgeProvenances} {impact.knowledgeProvenances === 1 ? "proveniência individual" : "proveniências individuais"} de Knowledge</li>
       </ul></section>
       <section><strong>Continuará disponível</strong><ul>
-        <li>Vagas e posições da empresa, sem vínculo com você</li>
+        <li>Posições e histórico da empresa, sem vínculo com você</li>
         <li>Knowledge compartilhado, taxonomias e aliases publicados</li>
         <li>Banco de itens, rubricas e definições de avaliação</li>
         <li>Auditoria mínima da operação, sem contato, currículo ou respostas</li>
@@ -92,5 +94,5 @@ function DeletionImpact({ preview, compact = false }: { preview: PersonSelfServi
 }
 
 function PublicDataShell({ children }: { children: React.ReactNode }) {
-  return <div className="prisma-person-data-shell"><header><span><SafetyCertificateOutlined /> prisma</span><small>Meus dados</small></header><main>{children}</main></div>;
+  return <PrismaPublicShell label="Meus dados" className="prisma-person-data-shell">{children}</PrismaPublicShell>;
 }

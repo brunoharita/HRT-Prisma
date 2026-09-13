@@ -1,3 +1,4 @@
+import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckOutlined, EyeOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import { Alert, Button, Checkbox, Input, Modal, Popconfirm, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
@@ -160,6 +161,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const transientOnly = changeState.transientOnly;
   const viewOnly = mode === "view";
   const editable = !viewOnly && workspace?.state === "draft";
+  const markSaved = useUnsavedChanges(Boolean(editable && (changeState.rawChanged || pendingSelection)));
   const replacementLinkId = useMemo(() => workspace?.evidenceLinks.find((link) => link.state === "active" && link.linkKind === "reviewer" && fieldsOverlap(link.fieldPath, selectedFieldPath))?.id ?? null, [selectedFieldPath, workspace]);
   const fallbackOriginalEvidence = useMemo(() => {
     if (!workspace) return null;
@@ -230,6 +232,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         : await personIngestionService.saveProfileReview(activeMembership.organizationId, workspace.id, workspace.lockVersion, normalizedDraft);
       setWorkspace((current) => current ? { ...current, reviewedData: cloneDraft(normalizedDraft), lockVersion, requiresContractUpgrade: false } : current);
       setDraft(cloneDraft(normalizedDraft));
+      markSaved();
       let refreshed: ProfileReviewWorkspace;
       try {
         refreshed = await refresh();
@@ -712,7 +715,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={handleContinueToDelta} type="primary">Comparar com o perfil atual</Button></span></Tooltip>
           </Space>}
       />
-      {changeState.rawChanged ? <Popconfirm cancelText="Continuar revisando" description="Formulários temporários e alterações não salvas serão perdidos." okText="Sair sem salvar" onConfirm={() => onNavigate(`/profiles/${personId}`)} title="Voltar para a Central da Pessoa?"><Button className="prisma-review-back" icon={<ArrowLeftOutlined />} type="text">Voltar para a Central da Pessoa</Button></Popconfirm> : <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>}
+      <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>
       {!viewOnly && workspace.state === "draft" && draft.experiences.length === 0 ? (
         <Alert
           action={<Space wrap><Button onClick={() => addMissingExperience(true)} type="primary">Selecionar área no currículo</Button><Button icon={<PlusOutlined />} onClick={() => addMissingExperience(false)}>Adicionar experiência manualmente</Button></Space>}

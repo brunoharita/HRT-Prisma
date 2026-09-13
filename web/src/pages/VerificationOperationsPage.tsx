@@ -12,6 +12,8 @@ import type {
 import { labelCriticality, labelLevel } from "../domain/competencyVerificationData";
 import { competencyVerificationService } from "../infrastructure/supabase/competencyVerificationService";
 import type { OrganizationMembership } from "../shared/access";
+import { useViewState, useUnsavedChanges } from "../ui/PrismaNavigation";
+import { PrismaState } from "../ui/PrismaState";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 import { PrismaStatusTag, type PrismaStatusTone } from "../ui/PrismaStatusTag";
@@ -35,10 +37,12 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   const [loading, setLoading] = useState(true);
   const [issuing, setIssuing] = useState(false);
   const [issued, setIssued] = useState<IssuedInvitation | null>(null);
-  const [search, setSearch] = useState("");
-  const [tab, setTab] = useState("all");
+  const [search, setSearch] = useViewState("search", "");
+  const [tab, setTab] = useViewState("tab", "all");
   const [selected, setSelected] = useState<VerificationMonitoringRow | null>(null);
   const [form] = Form.useForm<InviteFormValues>();
+  const [dirty, setDirty] = useState(false);
+  const markSaved = useUnsavedChanges(dirty && !issued);
 
   const load = async () => {
     try {
@@ -72,6 +76,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
     try {
       setIssuing(true);
       const result = await competencyVerificationService.issueInvitation({ preparedAssessmentId: prepared.id, ...values });
+      setDirty(false); markSaved();
       setIssued(result);
       await load();
     } catch (issueError) {
@@ -85,7 +90,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   if (preparedAssessmentId) {
     return (
       <PrismaPage className="prisma-m51b-operator-page">
-        <PrismaPageHeader title="Emitir convite" description="Gere um acesso pessoal para a verificação preparada. Nenhuma mensagem externa será enviada automaticamente." />
+        <PrismaPageHeader title="Gerar link de convite" description="Gere um acesso pessoal para a verificação preparada. Nenhuma mensagem externa será enviada automaticamente." />
         <Button onClick={() => onNavigate("/verifications")} type="link">Voltar para verificações</Button>
         {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
         {!prepared && !loading ? <PrismaCard><Empty description="Instrumento preparado não encontrado." /></PrismaCard> : null}
@@ -102,6 +107,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
             <PrismaCard title="Convite">
               <Alert message="O Prisma gerará um link seguro para compartilhamento manual. Nenhuma mensagem será enviada automaticamente." showIcon type="info" />
               <Form<InviteFormValues>
+                onValuesChange={() => setDirty(true)}
                 form={form}
                 initialValues={{
                   deliveryChannel: "link",
@@ -116,11 +122,11 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
                 <Form.Item label="Validade" name="validDays"><Select options={[1, 3, 7, 14].map((value) => ({ value, label: `${value} dia${value > 1 ? "s" : ""}` }))} /></Form.Item>
                 <Form.Item label="Resultado visível para a Pessoa" name="resultVisibility"><Select options={[{ value: "completion_only", label: "Somente conclusão, padrão seguro" }, { value: "summary", label: "Resumo de desempenho" }, { value: "detailed", label: "Resumo detalhado por dimensão" }]} /></Form.Item>
                 <Form.Item label="Prévia da mensagem" name="message"><Input.TextArea maxLength={2000} rows={5} /></Form.Item>
-                <Button htmlType="submit" loading={issuing} type="primary">Emitir convite</Button>
+                <Button htmlType="submit" loading={issuing} type="primary">Gerar link de convite</Button>
               </Form>
             </PrismaCard>
             {issued ? (
-              <PrismaCard title="Convite emitido">
+              <PrismaCard title="Link de convite gerado">
                 <Alert message="Este link pessoal é exibido apenas agora. Copie-o antes de sair desta tela." showIcon type="success" />
                 <div className="prisma-invitation-link"><Input aria-label="Link da verificação" readOnly value={verificationUrl} /><Button icon={<CopyOutlined />} onClick={() => void navigator.clipboard.writeText(verificationUrl).then(() => message.success("Link copiado."))}>Copiar link</Button><Button icon={<LinkOutlined />} onClick={() => window.open(verificationUrl, "_blank", "noopener,noreferrer")}>Abrir</Button></div>
               </PrismaCard>
@@ -142,12 +148,13 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   ];
   return (
     <PrismaPage className="prisma-m51b-operator-page">
-      <PrismaPageHeader title="Verificações" description="Acompanhe convites, andamento, resultados e qualidade das evidências." actions={<Button disabled={!workspace?.preparedAssessments.length} icon={<PlusOutlined />} onClick={() => workspace?.preparedAssessments[0] && onNavigate(`/verifications/new/${workspace.preparedAssessments[0].id}`)} type="primary">Nova verificação</Button>} />
+      <PrismaPageHeader title="Verificações" description="Acompanhe convites, andamento, resultados e qualidade das evidências." actions={<Button icon={<PlusOutlined />} onClick={() => onNavigate("/matching")} type="primary">Preparar verificação</Button>} />
+      {workspace?.preparedAssessments.length ? <PrismaCard title="Preparações disponíveis"><Select aria-label="Escolher pessoa e verificação para gerar convite" placeholder="Escolha uma preparação para gerar o convite" style={{ width: "100%" }} options={workspace.preparedAssessments.map((item) => ({ value: item.id, label: `${item.personName} · ${item.competency} · ${labelLevel(item.targetLevel)}` }))} onChange={(id) => onNavigate(`/verifications/new/${id}`)} /></PrismaCard> : null}
       {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       <PrismaCard>
         <Tabs activeKey={tab} items={[{ key: "all", label: "Todas" }, { key: "pending", label: "Pendentes" }, { key: "in_progress", label: "Em andamento" }, { key: "completed", label: "Concluídas" }, { key: "expired", label: "Encerradas" }]} onChange={setTab} />
         <Input.Search allowClear onChange={(event) => setSearch(event.target.value)} placeholder="Buscar por pessoa, competência ou status" value={search} />
-        <Table className="prisma-responsive-table prisma-verification-table" columns={columns} dataSource={filtered} loading={loading} pagination={{ pageSize: 8 }} rowKey="invitationId" tableLayout="fixed" />
+        <Table locale={{ emptyText: <PrismaState compact kind={loading ? "loading" : error ? "error" : search || tab !== "all" ? "filtered" : "empty"} description={error ?? (search || tab !== "all" ? "Ajuste a busca ou as abas para encontrar a verificação." : "Prepare uma verificação para gerar o primeiro convite.")} action={error ? { label: "Tentar novamente", onClick: () => void load() } : search || tab !== "all" ? { label: "Limpar filtros", onClick: () => { setSearch(""); setTab("all"); } } : { label: "Ver necessidades", onClick: () => onNavigate("/matching") }} /> }} className="prisma-responsive-table prisma-verification-table" columns={columns} dataSource={filtered} loading={loading} pagination={{ pageSize: 8 }} rowKey="invitationId" tableLayout="fixed" />
       </PrismaCard>
       <Drawer onClose={() => setSelected(null)} open={Boolean(selected)} title="Resultado da verificação" width={560}>
         {selected ? <VerificationDetail value={selected} /> : null}

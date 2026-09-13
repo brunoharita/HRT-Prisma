@@ -60,6 +60,9 @@ import {
 } from "../shared/access";
 import { describePlatformAccessProfile } from "../shared/platformUsers";
 import { PrismaAppShell, type PrismaNavigationItem } from "../ui/PrismaAppShell";
+import { isDeliveredNavigation } from "../shared/uxFoundation";
+import { PrismaState } from "../ui/PrismaState";
+import { confirmPrismaNavigation, PrismaViewStateProvider, usePrismaNavigation } from "../ui/PrismaNavigation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -105,11 +108,11 @@ interface SignInValues {
 const ACTIVE_ORGANIZATION_STORAGE_KEY = "prisma.activeOrganizationId";
 
 const routes: AppRoute[] = [
-  { path: "/", label: "Home", icon: <HomeOutlined />, rule: { requiresAuth: true, requiresMembership: true } },
+  { path: "/", label: "Início", icon: <HomeOutlined />, rule: { requiresAuth: true, requiresMembership: true } },
   { path: "/profiles", label: "Pessoas", icon: <TeamOutlined />, rule: { requiresAuth: true, requiresMembership: true } },
   {
     path: "/vacancies",
-    label: "Vagas",
+    label: "Posições",
     icon: <ApartmentOutlined />,
     rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
@@ -175,13 +178,14 @@ const initialState: AppState = {
 
 export function PrismaApplication() {
   const [state, setState] = useState<AppState>(initialState);
-  const [pathname, setPathname] = useState(() => normalizePath(window.location.pathname));
+  const viewScope = `${state.claims?.session_id ?? "no-session"}:${state.claims?.sub ?? "anonymous"}:${state.currentOperator?.profile ?? "none"}:${state.activeOrganizationId ?? "none"}:${resolveActiveMembership(state.memberships, state.activeOrganizationId)?.role ?? "none"}`;
+  const { pathname, navigate } = usePrismaNavigation(viewScope);
 
   async function refreshAuthState() {
     const { data, error } = await supabase.auth.getClaims();
     if (error) {
       clearStoredActiveOrganizationId();
-      setState({ ...initialState, initialized: true, errorMessage: "Não foi possível validar a sessão atual no Supabase Auth." });
+      setState({ ...initialState, initialized: true, errorMessage: "Não foi possível confirmar seu acesso. Entre novamente." });
       return;
     }
 
@@ -225,21 +229,18 @@ export function PrismaApplication() {
         memberships: [],
         activeOrganizationId: null,
         initialized: true,
-        errorMessage: "A sessão foi validada, mas o contexto do operador não pôde ser confirmado.",
+        errorMessage: "Não foi possível carregar suas permissões. Tente entrar novamente.",
       }));
     }
   }
 
   useEffect(() => {
-    const handlePopState = () => setPathname(normalizePath(window.location.pathname));
-    window.addEventListener("popstate", handlePopState);
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
       window.setTimeout(() => void refreshAuthState(), 0);
     });
     void refreshAuthState();
     return () => {
       subscription.unsubscribe();
-      window.removeEventListener("popstate", handlePopState);
     };
   }, []);
 
@@ -254,14 +255,12 @@ export function PrismaApplication() {
 
   useEffect(() => {
     if (!redirectTo || !state.initialized) return;
-    navigate(redirectTo, true);
-    setPathname(redirectTo);
+    navigate(redirectTo, true, true);
   }, [redirectTo, state.initialized]);
 
   const handleNavigate = (path: string) => {
     const normalized = normalizePath(path);
     navigate(normalized);
-    setPathname(normalized);
   };
 
   const handleSignIn = async ({ username, password }: SignInValues) => {
@@ -270,7 +269,7 @@ export function PrismaApplication() {
       await platformUsersService.signInWithUsername(username, password);
       setState((current) => ({ ...current, signingIn: false, infoMessage: "Sessão iniciada com sucesso." }));
     } catch {
-      setState((current) => ({ ...current, signingIn: false, errorMessage: "Username, senha ou sessão inválidos." }));
+      setState((current) => ({ ...current, signingIn: false, errorMessage: "Nome de usuário, senha ou sessão inválidos." }));
     }
   };
 
@@ -293,6 +292,7 @@ export function PrismaApplication() {
   };
 
   const handleSignOut = async () => {
+    if (!await confirmPrismaNavigation()) return;
     const { error } = await supabase.auth.signOut();
     if (error) {
       setState((current) => ({ ...current, errorMessage: "Não foi possível encerrar a sessão com segurança." }));
@@ -300,10 +300,11 @@ export function PrismaApplication() {
     }
     clearStoredActiveOrganizationId();
     setState({ ...initialState, initialized: true, infoMessage: "Sessão encerrada." });
-    handleNavigate("/sign-in");
+    navigate("/sign-in", false, true);
   };
 
-  const handleOrganizationChange = (organizationId: string) => {
+  const handleOrganizationChange = async (organizationId: string) => {
+    if (organizationId === state.activeOrganizationId || !await confirmPrismaNavigation()) return;
     if (!canActivateOrganization(state.memberships, organizationId)) {
       clearStoredActiveOrganizationId();
       setState((current) => ({ ...current, activeOrganizationId: null, errorMessage: "Empresa não autorizada." }));
@@ -311,8 +312,9 @@ export function PrismaApplication() {
     }
     persistActiveOrganizationId(organizationId);
     setState((current) => ({ ...current, activeOrganizationId: organizationId, infoMessage: "Empresa ativa atualizada." }));
-    if (pathname.startsWith("/profiles/")) handleNavigate("/profiles");
-    if (pathname.startsWith("/vacancies/")) handleNavigate("/vacancies");
+    if (pathname.startsWith("/profiles/")) navigate("/profiles", false, true);
+    if (pathname.startsWith("/vacancies/")) navigate("/vacancies", false, true);
+    if (pathname.startsWith("/matching") || pathname.startsWith("/verifications/")) navigate("/verifications", false, true);
   };
 
   if (route.participantToken) return <VerificationSessionPage token={route.participantToken} />;
@@ -347,7 +349,7 @@ export function PrismaApplication() {
       onSignOut={() => void handleSignOut()}
       profileName={profileName}
       profileSubtitle={profileSubtitle}
-      selectedPath={route.profileId ? "/profiles" : route.vacancyId || route.vacancyView ? "/vacancies" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/matching" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
+      selectedPath={route.profileId ? "/profiles" : route.vacancyId || route.vacancyView ? "/vacancies" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/verifications" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
     >
       {state.errorMessage || state.infoMessage ? (
         <Alert
@@ -359,9 +361,11 @@ export function PrismaApplication() {
           type={state.errorMessage ? "error" : "success"}
         />
       ) : null}
-      <div key={activeMembership?.organizationId ?? state.currentOperator?.authUserId ?? "no-context"}>
+      <PrismaViewStateProvider key={viewScope} scope={viewScope}>
+      <div key={pathname}>
         {renderRouteContent(route, state.currentOperator, activeMembership, navigationItems, handleNavigate, refreshAuthState)}
       </div>
+      </PrismaViewStateProvider>
     </PrismaAppShell>
   );
 }
@@ -374,6 +378,9 @@ function renderRouteContent(
   onNavigate: (path: string) => void,
   onPasswordCompleted: () => Promise<void>,
 ) {
+  if (["/not-found", "/organizations", "/settings"].includes(route.path)) {
+    return <PrismaPage><PrismaPageHeader title={route.path === "/not-found" ? "Página não encontrada" : "Área em preparação"} /><PrismaState kind="unavailable" description={route.path === "/not-found" ? "Este endereço não está disponível. Volte ao início para continuar." : "Esta área ainda não está disponível. As funcionalidades atuais continuam acessíveis pelo menu."} action={{ label: "Voltar ao início", onClick: () => onNavigate("/") }} /></PrismaPage>;
+  }
   if (route.path === "/" && activeMembership) {
     return <HomePage activeMembership={activeMembership} repository={prismaRepository} onNavigate={onNavigate} />;
   }
@@ -491,12 +498,12 @@ function AccessResult({
   currentOperator: PlatformOperator | null;
 }) {
   const subtitle = unauthorized
-    ? `O perfil ${describeRole(currentOperator?.profile ?? activeMembership?.role ?? null)} não libera esta rota.`
+    ? `O perfil ${describeRole(currentOperator?.profile ?? activeMembership?.role ?? null)} não permite acessar esta área.`
     : currentOperator?.mustChangePassword
       ? "Finalize a troca de senha para concluir o primeiro acesso."
       : currentOperator
-        ? "A sessão é válida, mas o operador não possui contexto ativo suficiente."
-        : "A sessão é válida, mas nenhum operador do Prisma foi encontrado.";
+        ? "Seu acesso precisa de uma empresa e permissões ativas. Consulte o administrador da sua empresa."
+        : "Seu cadastro de acesso não foi encontrado. Consulte o administrador da sua empresa.";
 
   return (
     <PrismaPage>
@@ -549,7 +556,7 @@ function SignInPage({
           <div className="prisma-auth-form-heading"><h2>Entrar no <span>Prisma</span></h2></div>
           {errorMessage || infoMessage ? <Alert closable message={errorMessage ?? infoMessage} onClose={onDismissAlert} showIcon type={errorMessage ? "error" : "success"} /> : null}
           <Form<SignInValues> className="prisma-auth-form" form={form} layout="vertical" onFinish={(values) => void onSignIn(values)} requiredMark={false}>
-            <Form.Item label="Username" name="username" rules={[{ required: true, message: "Informe o username." }]}>
+            <Form.Item label="Nome de usuário" name="username" rules={[{ required: true, message: "Informe seu nome de usuário." }]}>
               <Input autoComplete="username" prefix={<UserOutlined />} size="large" />
             </Form.Item>
             <Form.Item label="Senha" name="password" rules={[{ required: true, min: 1, message: "Informe sua senha." }]}>
@@ -575,7 +582,7 @@ function SignInPage({
 }
 
 function LoadingScreen() {
-  return <div className="prisma-loading-screen" role="status" aria-live="polite"><span className="prisma-loading-mark" /><span>Validando sessão, operador e escopo...</span></div>;
+  return <div className="prisma-loading-screen" role="status" aria-live="polite"><span className="prisma-loading-mark" /><span>Preparando seu acesso...</span></div>;
 }
 
 function getNavigationItems(
@@ -585,8 +592,9 @@ function getNavigationItems(
   if (!currentOperator) return [];
   return routes
     .filter((route): route is AppRoute & { label: string; icon: ReactNode } => Boolean(route.label && route.icon))
+    .filter((route) => isDeliveredNavigation(route.path))
     .filter((route) => !route.rule.allowedRoles || route.rule.allowedRoles.includes(currentOperator.profile))
-    .filter((route) => route.rule.requiresMembership !== true || Boolean(activeMembership))
+    .filter((route) => route.rule.requiresMembership !== true || Boolean(activeMembership && (!route.rule.allowedRoles || route.rule.allowedRoles.includes(activeMembership.role))))
     .map((route) => ({ path: route.path, label: route.label, icon: route.icon }));
 }
 
@@ -650,7 +658,7 @@ function findRoute(pathname: string): AppRoute {
   if (userMatch?.[1]) {
     return { path: "/users", userId: userMatch[1], rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] } };
   }
-  return routes[0]!;
+  return { path: "/not-found", rule: { requiresAuth: true, requiresMembership: false } };
 }
 
 function resolveRedirect(route: AppRoute, state: AppState, access: ReturnType<typeof evaluateRouteAccess>): string | null {
@@ -674,10 +682,6 @@ function normalizePath(pathname: string): string {
   return pathname.replace(/\/+$/, "") || "/";
 }
 
-function navigate(path: string, replace = false): void {
-  if (replace) window.history.replaceState({}, "", path);
-  else window.history.pushState({}, "", path);
-}
 
 function persistActiveOrganizationId(organizationId: string): void {
   window.localStorage.setItem(ACTIVE_ORGANIZATION_STORAGE_KEY, organizationId);

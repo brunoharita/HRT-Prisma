@@ -1,3 +1,4 @@
+import { useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import { GlobalOutlined, LinkOutlined, ReloadOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Alert, Button, Descriptions, Drawer, Empty, Form, Input, Select, Space, Switch, Table, Tabs, Tag, Typography, message } from "antd";
@@ -11,6 +12,7 @@ import { PrismaCard } from "../ui/PrismaCard";
 interface Props { profile: PlatformAccessProfile; activeMembership: OrganizationMembership | null; }
 
 export function KnowledgePage({ profile, activeMembership }: Props) {
+  const [activeTab, setActiveTab] = useViewState("tab", profile === "super_admin" ? "global" : "organization");
   const [dashboard, setDashboard] = useState<KnowledgeDashboard | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<KnowledgeConceptView | null>(null);
   const [selectedInbox, setSelectedInbox] = useState<KnowledgeInboxView | null>(null);
@@ -20,8 +22,8 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   const [proposalLabel, setProposalLabel] = useState("");
   const [proposalType, setProposalType] = useState<"occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification">("skill");
   const [decisionLoading, setDecisionLoading] = useState(false);
-  const [conceptSearch, setConceptSearch] = useState("");
-  const [conceptTypeFilter, setConceptTypeFilter] = useState("all");
+  const [conceptSearch, setConceptSearch] = useViewState("conceptSearch", "");
+  const [conceptTypeFilter, setConceptTypeFilter] = useViewState("conceptTypeFilter", "all");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<KnowledgeSettingsView>({ allowExternalKnowledgeEnrichment: false, reinterpretationPolicy: "off" });
@@ -48,25 +50,25 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
 
   if (error && !dashboard) return <PrismaPage><Alert message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
   const tabs = isGlobal ? [
-    { key: "global", label: "Knowledge Global", children: conceptsPanel() },
+    { key: "global", label: "Base global de conhecimento", children: conceptsPanel() },
     { key: "sources", label: "Fontes", children: sourcesPanel() },
-    { key: "inbox", label: "Inbox", children: inboxPanel() },
+    { key: "inbox", label: "Termos para revisar", children: inboxPanel() },
     { key: "proposals", label: "Propostas", children: proposalsPanel() },
     { key: "impacts", label: "Impactos", children: impactsPanel() },
   ] : [
-    { key: "organization", label: "Knowledge da empresa", children: conceptsPanel("organization") },
+    { key: "organization", label: "Conhecimento da empresa", children: conceptsPanel("organization") },
     { key: "global", label: "Base Prisma", children: conceptsPanel("global") },
-    { key: "inbox", label: "Inbox da empresa", children: inboxPanel() },
+    { key: "inbox", label: "Termos para revisar", children: inboxPanel() },
     { key: "proposals", label: "Propostas", children: proposalsPanel() },
     { key: "impacts", label: "Impactos", children: impactsPanel() },
     { key: "settings", label: "Configurações", children: settingsPanel() },
   ];
 
   return <PrismaPage>
-    <PrismaPageHeader title="Conhecimento" description={isGlobal ? "Base canônica global, fontes, propostas e impactos versionados." : "Overlay da empresa sobre a base global, sem alterar a definição Prisma."}
+    <PrismaPageHeader title="Conhecimento" description={isGlobal ? "Consulte a base de conhecimento, revise propostas e acompanhe fontes e atualizações." : "Organize o conhecimento da empresa a partir da base Prisma e acompanhe suas contribuições."}
       actions={<Button icon={<ReloadOutlined />} loading={loading} onClick={() => void load()}>Atualizar</Button>} />
     {error ? <Alert message={error} type="error" showIcon closable onClose={() => setError(null)} /> : null}
-    <PrismaCard><Tabs items={tabs} /></PrismaCard>
+    <PrismaCard><Tabs activeKey={activeTab} onChange={setActiveTab} items={tabs} /></PrismaCard>
     <Drawer open={Boolean(selectedConcept)} onClose={() => setSelectedConcept(null)} title="Detalhe do conceito" width={520}>
       {selectedConcept ? <><Descriptions column={1} bordered size="small" items={[
         { key: "name", label: "Nome canônico", children: selectedConcept.canonicalLabel },
@@ -136,9 +138,9 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
       { title: "Fonte", dataIndex: "name", render: (value: string) => <Space><SafetyCertificateOutlined />{value}</Space> },
       { title: "Versão publicada", render: (_, row) => row.currentVersion?.externalVersion ?? "Nenhuma" },
       { title: "Versão preparada", render: (_, row) => row.pendingVersion ? <Space direction="vertical" size={0}><Typography.Text>{row.pendingVersion.externalVersion}</Typography.Text><Button type="link" size="small" onClick={() => setSelectedSource(row)}>Revisar e publicar</Button></Space> : "Nenhuma" },
-      { title: "Importação", render: (_, row) => row.currentVersion ? statusTag(row.currentVersion.importStatus) : <Tag>catalogued</Tag> },
+      { title: "Importação", render: (_, row) => row.currentVersion ? statusTag(row.currentVersion.importStatus) : <Tag>Catalogada</Tag> },
       { title: "Publicada em", render: (_, row) => row.currentVersion?.publishedAt ? formatDate(row.currentVersion.publishedAt) : "Não publicada" },
-      { title: "Registros", render: (_, row) => row.currentVersion ? describeCounts(row.currentVersion.counts) : "0" },
+      { title: "Registros", render: (_, row) => row.currentVersion ? describeCounts(row.currentVersion.counts) : "Ainda sem dados" },
       { title: "SHA-256", render: (_, row) => row.currentVersion?.checksumSha256 ? <Typography.Text code copyable>{row.currentVersion.checksumSha256.slice(0, 12)}…</Typography.Text> : "Não disponível" },
       { title: "Licença", dataIndex: "license", render: (value: string | null) => value ?? "Revisão por fonte" },
       { title: "Status da fonte", dataIndex: "status", render: statusTag },
@@ -178,7 +180,11 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   }
 }
 
-function statusTag(value: string) { const color = ["approved", "completed", "proposal_ready"].includes(value) ? "green" : ["failed", "rejected", "budget_limited"].includes(value) ? "red" : "gold"; return <Tag color={color}>{value.replaceAll("_", " ")}</Tag>; }
+function statusTag(value: string) {
+  const labels: Record<string, string> = { approved: "Aprovado", published: "Publicado", completed: "Concluído", proposal_ready: "Proposta para revisar", failed: "Falha", rejected: "Rejeitado", budget_limited: "Limite de orçamento", pending: "Pendente", in_review: "Em revisão", processing: "Processando", queued: "Na fila", imported: "Importado", importing: "Importando", staged: "Aguardando publicação", catalogued: "Catalogado", active: "Ativo", inactive: "Inativo", superseded: "Substituído", draft: "Rascunho", resolved: "Resolvido", unresolved: "Aguardando análise", ambiguous: "Requer esclarecimento", action_required: "Ação necessária" };
+  const color = ["approved", "published", "completed", "resolved", "active"].includes(value) ? "green" : ["failed", "rejected", "budget_limited"].includes(value) ? "red" : ["pending", "in_review", "proposal_ready", "unresolved", "ambiguous", "action_required"].includes(value) ? "gold" : "default";
+  return <Tag color={color} title={labels[value] ? undefined : `Código do estado: ${value}`}>{labels[value] ?? "Estado não identificado"}</Tag>;
+}
 function describeType(value: string) { return ({ occupation: "Ocupação", skill: "Habilidade", knowledge: "Conhecimento", technology: "Tecnologia", methodology: "Metodologia", certification: "Certificação" } as Record<string, string>)[value] ?? value; }
 function describeRelation(attributes: unknown, fallback: string) { const value = isRecord(attributes) ? attributes.relevance : null; return value === "essential" ? "Essencial" : value === "optional" ? "Opcional" : fallback.replaceAll("_", " "); }
 function describeMeasures(attributes: unknown) { if (!isRecord(attributes) || !Array.isArray(attributes.measurements)) return "—"; const values = attributes.measurements.flatMap((measure) => isRecord(measure) && typeof measure.scaleId === "string" && typeof measure.rawValue === "string" ? [`${describeScale(measure.scaleId)} ${measure.rawValue}`] : []); return values.length ? values.join(" · ") : "—"; }

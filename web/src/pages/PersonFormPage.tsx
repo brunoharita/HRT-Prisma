@@ -1,9 +1,12 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { PrismaDisclosure } from "../ui/PrismaDisclosure";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import { Alert, Button, Form, Input, Select, Skeleton, Space, Typography } from "antd";
 import type { PersonEditorValue, PersonWorkspaceSummary } from "../domain/personIngestion";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
+import { PrismaState } from "../ui/PrismaState";
+import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 import { ProfileStateTag } from "./PeoplePage";
@@ -38,6 +41,9 @@ const EMPTY_PERSON: PersonEditorValue = {
 
 export function PersonFormPage({ activeMembership, personId, onNavigate }: PersonFormPageProps) {
   const [form] = Form.useForm<PersonEditorValue & { phoneCountry: string }>();
+  const baseline = useRef("");
+  const [dirty, setDirty] = useState(false);
+  const markSaved = useUnsavedChanges(dirty);
   const [person, setPerson] = useState<PersonWorkspaceSummary | null>(null);
   const [loading, setLoading] = useState(Boolean(personId));
   const [saving, setSaving] = useState(false);
@@ -46,6 +52,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
   useEffect(() => {
     if (!personId) {
       form.setFieldsValue({ ...EMPTY_PERSON, phoneCountry: "BR|Brasil|+55" });
+      baseline.current = JSON.stringify(form.getFieldsValue(true));
       return;
     }
     let current = true;
@@ -57,6 +64,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
         setPerson(workspace.person);
         const value = workspace.person.privateData;
         form.setFieldsValue({ ...value, phoneCountry: `${value.phoneCountryIso2}|${value.phoneCountryLabel}|${value.phoneCountryCode}` });
+        baseline.current = JSON.stringify(form.getFieldsValue(true));
       })
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível carregar a Pessoa."); })
       .finally(() => { if (current) setLoading(false); });
@@ -78,6 +86,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
         phoneNationalNumber: values.phoneNationalNumber.trim(),
         phoneE164: digits ? `${normalizedCountryCode}${digits}` : "",
       });
+      setDirty(false); markSaved();
       onNavigate(`/profiles/${savedId}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Não foi possível salvar a Pessoa.");
@@ -86,13 +95,14 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
     }
   }
 
-  if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 10 }} /></PrismaPage>;
+  if (loading) return <PrismaPage><PrismaState kind="loading" /></PrismaPage>;
+  if (personId && !person) return <PrismaPage><PrismaPageHeader title="Pessoa indisponível" /><PrismaState kind="unavailable" description={error ?? "Esta pessoa não está disponível nesta empresa."} action={{ label: "Voltar para Pessoas", onClick: () => onNavigate("/profiles") }} /></PrismaPage>;
 
   return (
     <PrismaPage className="prisma-m2b-page">
       <PrismaPageHeader
         title={personId ? "Editar Pessoa" : "Nova Pessoa"}
-        description="Informe os dados básicos da Pessoa. Este cadastro não cria usuário, senha ou acesso ao Prisma."
+        description="Cadastre os dados básicos para organizar as informações e acompanhar o perfil profissional."
         actions={<Button icon={<SaveOutlined />} loading={saving} onClick={() => form.submit()} type="primary">Salvar</Button>}
       />
       {error ? <Alert message={error} showIcon type="error" /> : null}
@@ -100,7 +110,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
         <PrismaCard className="prisma-person-form-card">
           <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>
           <Typography.Title level={4}>Dados básicos</Typography.Title>
-          <Form form={form} layout="vertical" onFinish={(values) => void handleSave(values)} requiredMark="optional">
+          <Form onValuesChange={() => setDirty(JSON.stringify(form.getFieldsValue(true)) !== baseline.current)} form={form} layout="vertical" onFinish={(values) => void handleSave(values)} requiredMark="optional">
             <Form.Item label="Nome completo" name="fullName" rules={[{ required: true, whitespace: true, message: "Informe o nome completo." }]}>
               <Input autoComplete="name" placeholder="Nome completo da Pessoa" />
             </Form.Item>
@@ -141,12 +151,12 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
           <SummaryRow label="Última atualização" value={person ? formatDate(person.updatedAt) : "A definir"} />
           <SummaryRow label="Status" value={<ProfileStateTag state={person?.profileState ?? "not_generated"} />} />
           <SummaryRow label="Perfil Prisma" value={describeProfile(person?.profileState ?? "not_generated")} />
-          <Alert
-            message="Usuário e Pessoa são registros distintos"
-            description="Salvar esta Pessoa não cria login, username, senha, membership ou permissão."
+          <PrismaDisclosure title="Sobre este cadastro"><Alert
+            message="Pessoa e acesso ao Prisma"
+            description="Este cadastro organiza informações profissionais. Para conceder acesso ao Prisma, utilize a área Usuários."
             showIcon
             type="info"
-          />
+          /></PrismaDisclosure>
         </PrismaCard>
       </div>
       <Space className="prisma-page-bottom-actions">

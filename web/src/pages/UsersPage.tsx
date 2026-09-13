@@ -1,3 +1,4 @@
+import { useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Alert, Breadcrumb, Button, Empty, Input, Select, Space, Table, Tag } from "antd";
@@ -28,7 +29,7 @@ const initialQuery: PlatformUserQuery = {
 };
 
 export function UsersPage({ onNavigate }: UsersPageProps) {
-  const [query, setQuery] = useState<PlatformUserQuery>(initialQuery);
+  const [query, setQuery] = useViewState<PlatformUserQuery>("query", initialQuery);
   const [users, setUsers] = useState<PlatformUserListItem[]>([]);
   const [groups, setGroups] = useState<GroupScopeOption[]>([]);
   const [currentOperator, setCurrentOperator] = useState<PlatformOperator | null>(null);

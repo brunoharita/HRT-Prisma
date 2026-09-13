@@ -1,0 +1,107 @@
+/* prisma-ux-foundation-1.0.0: shared presentation, no evidence geometry overrides. */
+body { background: var(--prisma-canvas); }
+.prisma-sidebar.ant-layout-sider { background: #071a35; border-radius: 0; box-shadow: none; }
+.prisma-sidebar.ant-layout-sider::before, .prisma-sidebar.ant-layout-sider::after { display: none; }
+.prisma-navigation .ant-menu-item-group-title { padding: 16px 24px 4px; color: #a9bbd5; font-size: 12px; font-weight: 600; letter-spacing: .025em; }
+.prisma-collapsed-company { display: block; max-width: 100%; padding: 4px 8px; color: #d5dfef; text-align: center; overflow-wrap: anywhere; }
+.prisma-mobile-drawer .ant-drawer-header { color: white; background: #071a35; border-color: #31435c; }
+.prisma-mobile-drawer .ant-drawer-close { color: white; width: 40px; height: 40px; }
+.prisma-skip-link { position: fixed; z-index: 2000; top: 8px; left: 8px; padding: 12px 20px; color: white; background: #123c85; border-radius: 8px; transform: translateY(-150%); }
+.prisma-skip-link:focus { transform: none; color: white; }
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible { outline: 3px solid #155eef; outline-offset: 3px; }
+.prisma-sidebar :where(a, button):focus-visible { outline-color: #8fc5ff; }
+.prisma-main-content { container-type: inline-size; }
+.prisma-page { min-width: 0; }
+.prisma-table-scroll-hint { display: none; color: #53637d; font-size: 13px; margin: 0; }
+.prisma-page-header-row { align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+.prisma-page-heading { flex: 1 1 320px; min-width: 0; }
+.prisma-page-heading h1 { font-size: clamp(26px, 2.2vw, 34px); line-height: 1.2; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.prisma-page-heading p { max-width: 76ch; color: #53637d; line-height: 1.6; }
+.prisma-page-actions { flex: 0 1 auto; min-width: 0; max-width: 100%; }
+.prisma-page-actions .ant-space, .prisma-page-bottom-actions { flex-wrap: wrap; }
+.prisma-card.ant-card { box-shadow: none; border-color: #dde4ee; }
+.ant-card-head-title { white-space: normal; overflow-wrap: anywhere; }
+.ant-form-item-extra, .ant-form-item-explain, .ant-descriptions-item-content { overflow-wrap: anywhere; }
+.ant-form-item-label > label { height: auto; }
+.ant-btn { min-height: 38px; }
+.ant-btn-sm { min-height: 32px; }
+.ant-input::placeholder, .ant-select-selection-placeholder { color: #65738a; }
+.prisma-state { display: grid; justify-items: center; gap: 12px; padding: 32px 20px; text-align: center; }
+.prisma-state .ant-result { padding: 8px 0; }
+.prisma-state .ant-result-title { font-size: 21px; line-height: 1.4; }
+.prisma-state .ant-result-subtitle, .prisma-state p { max-width: 68ch; color: #53637d; font-size: 15px; line-height: 1.6; }
+.prisma-state.is-compact { padding: 16px 8px; }
+.prisma-state--loading { display: block; text-align: left; }
+.prisma-state-loading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: #53637d; }
+.prisma-metric { min-width: 0; }
+.prisma-metric .ant-statistic-content { font-size: clamp(20px, 2vw, 28px); overflow-wrap: anywhere; }
+.prisma-metric .ant-skeleton-input { max-width: 100%; }
+.prisma-disclosure { min-width: 0; margin-block: 12px; border: 1px solid #dde4ee; border-radius: 10px; background: white; }
+.prisma-disclosure > summary { padding: 14px 18px; cursor: pointer; color: #25466f; font-weight: 600; min-height: 44px; }
+.prisma-disclosure > div { padding: 0 18px 18px; }
+.prisma-public-shell { min-height: 100dvh; padding: 0 0 32px; background: #f5f7fb; color: #10203a; }
+.prisma-public-shell > .prisma-public-brand { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px max(20px, calc((100% - 1160px) / 2)); background: #071a35; color: #fff; }
+.prisma-public-logo { position: relative; flex: 0 0 142px; width: 142px; height: 35px; overflow: hidden; }
+.prisma-public-logo img { position: absolute; width: 136.9%; max-width: none; top: -103.5%; left: -22.1%; }
+.prisma-public-shell > .prisma-public-content { width: min(100% - 40px, 1160px); margin: 32px auto; padding: 0; }
+.prisma-public-help { max-width: 68ch; padding-inline: 20px; margin: 24px auto 0; text-align: center; color: #53637d; line-height: 1.6; }
+.prisma-public-shell .ant-btn-primary { background: #155eef; }
+.prisma-public-shell .ant-progress-bg { background: #155eef; }
+.prisma-person-action-layout { grid-template-columns: minmax(0, 1.4fr) minmax(260px, .8fr); }
+.prisma-person-stat small, .prisma-person-stat p { color: #53637d; font-size: 12px; }
+.prisma-person-stat--purple > span { color: #155eef; background: #eef4ff; }
+.prisma-person-center-header__actions { flex-wrap: wrap; }
+.prisma-person-current-profile, .prisma-person-action-center { box-shadow: none; }
+.prisma-people-metric { box-shadow: none; }
+@container (max-width: 1040px) {
+  .prisma-person-action-layout, .prisma-vacancy-start-card > .ant-card-body, .prisma-vacancy-assist-grid, .prisma-merge-target-picker .ant-card-body { grid-template-columns: minmax(0, 1fr); }
+  .prisma-person-center-header__main { display: grid; }
+  .prisma-person-center-header__actions { justify-content: flex-start; }
+}
+@container (max-width: 650px) {
+  .prisma-form-grid-two, .prisma-vacancy-form-grid, .prisma-vacancy-two-columns, .prisma-profile-search-filter-grid, .prisma-vacancy-requirement-groups, .prisma-person-form-layout { grid-template-columns: minmax(0, 1fr); }
+  .prisma-page-heading { flex-basis: 100%; }
+  .prisma-page-actions { width: 100%; }
+}
+@media (max-width: 767px) {
+  .prisma-table-scroll-hint { display: block; }
+  .prisma-main-content { padding: 72px 16px 32px; }
+  .prisma-page-header-row { gap: 16px; }
+  .prisma-page-actions .ant-space-item { max-width: 100%; }
+  .prisma-page-actions .ant-btn, .prisma-page-bottom-actions .ant-btn { white-space: normal; height: auto; min-height: 44px; padding-block: 10px; text-align: center; }
+  .ant-btn-icon-only, .ant-pagination-item, .ant-pagination-prev, .ant-pagination-next { min-width: 40px; min-height: 40px; }
+  .prisma-public-shell > .prisma-public-brand { padding: 16px; gap: 12px; flex-wrap: wrap; }
+  .prisma-public-shell > .prisma-public-content { width: calc(100% - 32px); margin-top: 24px; }
+  .prisma-public-content .ant-card-body { padding: 20px 16px; }
+  .prisma-state { padding: 24px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+.prisma-navigation .ant-menu-item-selected { background: #155eef; border-color: transparent; box-shadow: none; }
+.prisma-user-avatar.ant-avatar { background: #155eef; box-shadow: none; }
+.prisma-brand:not(.is-collapsed) a { width: 180px; height: 44px; top: 40px; }
+.prisma-brand:not(.is-collapsed) .prisma-sidebar-collapse.ant-btn { right: 12px; width: 36px; height: 36px; border-radius: 8px; box-shadow: none; }
+.prisma-metric .ant-statistic-title { color: #53637d; font-size: 13px; }
+
+.prisma-navigation .ant-menu-item-selected { background: #155eef !important; }
+.prisma-person-action-layout { align-items: start; }
+.prisma-person-action-cards--multiple { grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); }
+.prisma-person-action-card__heading { flex-wrap: wrap; }
+.prisma-person-action-card__actions .ant-btn { max-width: 100%; height: auto; white-space: normal; padding-block: 8px; }
+.prisma-person-action-card__date { color: #53637d; font-size: 12px; }
+@media (max-width: 480px) { .prisma-person-action-card { grid-template-columns: minmax(0, 1fr); padding: 16px; } .prisma-person-action-card__icon { width: 36px; height: 36px; } }
+
+.prisma-public-shell > .prisma-public-brand > span { color: white; font-size: 15px; font-weight: 500; }
+
+.prisma-collapsed-company { padding: 4px 0; font-size: 11px; }
+.prisma-people-toolbar .ant-card-body { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(0, 1.7fr); }
+.prisma-people-filters { display: grid; min-width: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ant-tag-green, .ant-tag-success { color: #166534; background: #f0fdf4; border-color: #bbf7d0; }
+.ant-tag-gold, .ant-tag-warning { color: #854d0e; background: #fffbeb; border-color: #fde68a; }
+.ant-tag-red, .ant-tag-error { color: #b91c1c; background: #fef2f2; border-color: #fecaca; }
+@container (max-width: 1040px) { .prisma-people-toolbar .ant-card-body { grid-template-columns: minmax(0, 1fr); } }
+@container (max-width: 480px) { .prisma-people-filters { grid-template-columns: minmax(0, 1fr); } }
+
+.prisma-public-brand h1 { margin: 0; color: white; font-size: 15px; font-weight: 500; line-height: 1.4; }

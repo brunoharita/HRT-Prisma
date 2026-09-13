@@ -52,11 +52,11 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
 
   return (
     <PrismaPage className="prisma-profile-page">
-      <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>
+      <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(canReview ? `/profiles/${personId}` : "/profiles")} type="text">{canReview ? "Voltar para a Central da Pessoa" : "Voltar para Pessoas"}</Button>
       <PrismaPageHeader
         title="Perfil"
         description="Representação profissional estruturada, comparável e rastreável do Prisma."
-        actions={<Space wrap><Button icon={<HistoryOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Versões do perfil</Button>{canReview ? <Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)} type="primary">Criar nova revisão</Button> : null}</Space>}
+        actions={<Space wrap>{canReview ? <Button icon={<HistoryOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Versões do perfil</Button> : null}{canReview ? <Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)} type="primary">Criar nova revisão</Button> : null}</Space>}
       />
       {loading ? <ProfileSkeleton /> : null}
       {error ? <Alert message={error} showIcon type="error" /> : null}

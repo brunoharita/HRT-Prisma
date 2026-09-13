@@ -54,7 +54,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
     return () => { current = false; };
   }, [activeMembership.organizationId, documentId, personId]);
 
-  const document = workspace?.selectedDocument;
+  const document = workspace?.selectedDocument?.id === documentId ? workspace.selectedDocument : null;
   async function handleRetry() {
     if (!document || presentDocument(document).nextAction !== "Reprocessar" && !(parserIaEnabled() && canResumeFailedAiIntake(document))) {
       setError("Este documento não possui uma extração reutilizável para reprocessamento. Volte à Central da Pessoa e substitua o arquivo.");

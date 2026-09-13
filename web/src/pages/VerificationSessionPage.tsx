@@ -1,3 +1,5 @@
+import { PrismaState } from "../ui/PrismaState";
+import { PrismaPublicShell } from "../ui/PrismaPublicShell";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircleOutlined, ClockCircleOutlined, EyeInvisibleOutlined, FlagOutlined, InfoCircleOutlined, PauseOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, Checkbox, Descriptions, Divider, Modal, Progress, Radio, Result, Space, Steps, Tag, Typography } from "antd";
@@ -182,8 +184,8 @@ export function VerificationSessionPage({ token }: Props) {
     finally { setLoading(false); }
   };
 
-  if (loading && !workspace) return <PublicShell><Result status="info" title="Carregando verificação" subTitle="Validando convite, escopo e versões." /></PublicShell>;
-  if (error && !workspace) return <PublicShell><Result status="error" title="Convite indisponível" subTitle={error} /></PublicShell>;
+  if (loading && !workspace) return <PublicShell><PrismaState kind="loading" title="Confirmando seu acesso à verificação…" /></PublicShell>;
+  if (error && !workspace) return <PublicShell><PrismaState kind="unavailable" title="Convite indisponível" description={error} /></PublicShell>;
   if (!workspace) return null;
 
   if (stage === "paused") return <PublicShell><Result icon={<PauseOutlined />} title="Sessão pausada" subTitle="Suas respostas foram salvas. Você pode retomar antes do prazo final." extra={<><Descriptions column={2} items={[{ key: "expires", label: "Prazo", children: new Date(workspace.expiresAt).toLocaleString("pt-BR") }, { key: "time", label: "Tempo utilizado", children: formatTime(elapsedSeconds) }]} /><Button onClick={() => void resume()} size="large" type="primary">Continuar de onde parou</Button></>} /></PublicShell>;
@@ -204,7 +206,7 @@ export function VerificationSessionPage({ token }: Props) {
     return <PublicShell compact>
       {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
       <header className="prisma-m51b-question-header"><Button icon={<PauseOutlined />} onClick={() => void pause()}>Pausar</Button><strong>Questão {activeIndex + 1} de {workspace.attempt.questions.length}</strong><span aria-label={`Tempo total decorrido ${formatTime(elapsedSeconds)}`}><ClockCircleOutlined /> {formatTime(elapsedSeconds)}</span></header>
-      <main className="prisma-m51b-question-layout">
+      <section className="prisma-m51b-question-layout" aria-label="Questões">
         <Card className="prisma-m51b-question-card">
           <Typography.Text type="secondary">Considere a situação e selecione a alternativa mais adequada.</Typography.Text>
           <Typography.Title level={4}>{activeQuestion.stem}</Typography.Title>
@@ -219,7 +221,7 @@ export function VerificationSessionPage({ token }: Props) {
           <QuestionGrid activeIndex={activeIndex} onSelect={(index) => void goToQuestion(index)} questions={workspace.attempt.questions} />
           <Space direction="vertical"><span><Tag color="success">{answered}</Tag> Respondidas</span><span><Tag color="warning">{marked}</Tag> Marcadas</span><span><Tag>{workspace.attempt.questions.length - answered}</Tag> Não respondidas</span></Space>
         </Card>
-      </main>
+      </section>
       <Modal footer={<Button onClick={() => setNavigationOpen(false)}>Fechar</Button>} onCancel={() => setNavigationOpen(false)} open={navigationOpen} title="Ir para a questão"><QuestionGrid activeIndex={activeIndex} onSelect={(index) => void goToQuestion(index)} questions={workspace.attempt.questions} /></Modal>
       <Modal cancelText="Continuar revisão" okButtonProps={{ loading }} okText="Submeter definitivamente" onCancel={() => setSubmitOpen(false)} onOk={() => void submit()} open={submitOpen} title="Finalizar verificação">
         <Typography.Paragraph>Você respondeu {answered} de {workspace.attempt.questions.length} questões e marcou {marked} para revisão.</Typography.Paragraph>
@@ -239,7 +241,7 @@ export function VerificationSessionPage({ token }: Props) {
 }
 
 function PublicShell({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
-  return <div className={`prisma-m51b-public-shell${compact ? " prisma-m51b-public-shell-compact" : ""}`}><header className="prisma-m51b-public-brand"><span className="prisma-m51b-logo"><SafetyCertificateOutlined /> prisma</span><a href="mailto:suporte@example.invalid">Precisa de ajuda?</a></header><div className="prisma-m51b-public-content">{children}</div></div>;
+  return <PrismaPublicShell label="Verificação de competências" compact={compact} className="prisma-m51b-public-shell">{children}</PrismaPublicShell>;
 }
 
 function Welcome({ workspace, onContinue }: { workspace: ParticipantVerificationWorkspace; onContinue: () => void }) {

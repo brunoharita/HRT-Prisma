@@ -10,6 +10,7 @@ import {
 import { Avatar, Button, Drawer, Dropdown, Layout, Menu, Select, Tooltip } from "antd";
 import type { MenuProps } from "antd";
 import type { OrganizationMembership } from "../shared/access";
+import { navigationGroup, navigationGroups } from "../shared/uxFoundation";
 import { prismaTokens } from "./theme";
 
 export interface PrismaNavigationItem {
@@ -67,13 +68,14 @@ function SidebarContent({
   onCollapse,
   onNavigationComplete,
 }: SidebarContentProps) {
-  const navigationMenuItems: MenuProps["items"] = navigationItems.map((item) => ({
+  const links = navigationItems.map((item) => ({
     key: item.path,
     icon: item.icon,
     label: (
       <a
         href={item.path}
         onClick={(event) => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
           onNavigate(item.path);
           onNavigationComplete?.();
@@ -83,6 +85,8 @@ function SidebarContent({
       </a>
     ),
   }));
+
+  const navigationMenuItems: MenuProps["items"] = collapsed ? links : navigationGroups.map((group) => ({ key: group, type: "group" as const, label: group, children: links.filter((item) => navigationGroup(item.key) === group) })).filter((group) => group.children.length > 0);
 
   const membershipMenuItems: MenuProps["items"] = memberships.map((membership) => ({
     key: membership.organizationId,
@@ -146,7 +150,7 @@ function SidebarContent({
               trigger={["click"]}
             >
               <Button
-                aria-label="Trocar organização"
+                aria-label={`Empresa ativa: ${activeMembership?.organizationName ?? "nenhuma"}. Trocar empresa`}
                 className="prisma-sidebar-icon-button"
                 icon={<BankOutlined />}
                 type="text"
@@ -170,6 +174,7 @@ function SidebarContent({
           )
         ) : null}
 
+        {collapsed && activeMembership ? <small className="prisma-collapsed-company">{activeMembership.organizationName}</small> : null}
         <div className="prisma-sidebar-divider" />
 
         <Dropdown
@@ -182,7 +187,7 @@ function SidebarContent({
           placement="topLeft"
           trigger={["click"]}
         >
-          <button className={["prisma-user-menu", collapsed ? "is-collapsed" : ""].join(" ")} type="button">
+          <button aria-label={`Menu de ${profileName}, ${profileSubtitle}`} className={["prisma-user-menu", collapsed ? "is-collapsed" : ""].join(" ")} type="button">
             <Avatar className="prisma-user-avatar" size={48}>
               {profileName.slice(0, 1).toUpperCase()}
             </Avatar>
@@ -216,6 +221,7 @@ export function PrismaAppShell(props: PrismaAppShellProps) {
 
   return (
     <Layout className="prisma-app-shell">
+      <a className="prisma-skip-link" href="#prisma-main-content">Ir para o conteúdo</a>
       {!isMobile ? (
         <Layout.Sider
           className="prisma-sidebar"
@@ -243,7 +249,8 @@ export function PrismaAppShell(props: PrismaAppShellProps) {
           />
           <Drawer
             className="prisma-mobile-drawer"
-            closeIcon={null}
+            title="Navegação"
+            aria-label="Navegação principal"
             onClose={() => setMobileOpen(false)}
             open={mobileOpen}
             placement="left"
@@ -262,7 +269,7 @@ export function PrismaAppShell(props: PrismaAppShellProps) {
       )}
 
       <Layout className="prisma-main-layout" style={{ marginLeft: isMobile ? 0 : siderWidth }}>
-        <Layout.Content className="prisma-main-content">{props.children}</Layout.Content>
+        <Layout.Content id="prisma-main-content" tabIndex={-1} className="prisma-main-content">{props.children}</Layout.Content>
       </Layout>
     </Layout>
   );

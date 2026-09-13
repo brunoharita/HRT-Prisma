@@ -1,3 +1,4 @@
+import { useViewState, useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import {
@@ -121,12 +122,13 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   const [success, setSuccess] = useState<string | null>(null);
   const [manualText, setManualText] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  useUnsavedChanges(manualText.trim().length > 0 || fileList.length > 0);
   const [progress, setProgress] = useState<PdfProcessingProgress | null>(null);
   const [selectedPage, setSelectedPage] = useState(1);
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | undefined>();
   const [currentProfileVersion, setCurrentProfileVersion] = useState<ProfileVersionView | null>(null);
   const [profileVersions, setProfileVersions] = useState<ProfileVersionView[]>([]);
-  const [activeView, setActiveView] = useState<"overview" | "documents" | "ingestion">("overview");
+  const [activeView, setActiveView] = useViewState<"overview" | "documents" | "ingestion">("activeView", "overview");
   const [revisionOpen, setRevisionOpen] = useState(false);
   const [revisionSource, setRevisionSource] = useState<"current" | "version" | "document">("current");
   const [revisionVersionId, setRevisionVersionId] = useState<string | null>(null);
@@ -371,7 +373,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
             await personDeletionService.delete(activeMembership.organizationId, personId, preview.preflightFingerprint);
             Modal.success({
               title: "Pessoa excluída definitivamente",
-              content: "Banco e arquivos foram verificados. Vagas, Knowledge compartilhado e Banco de Itens permaneceram preservados.",
+              content: "Banco e arquivos foram verificados. Posições, Knowledge compartilhado e Banco de Itens permaneceram preservados.",
               okText: "Voltar para Pessoas",
               onOk: () => onNavigate("/profiles"),
             });
@@ -607,7 +609,7 @@ function PersonDeletionImpact({ impact }: { impact: PersonDeletionImpactSummary 
         <li>{impact.knowledgeProvenances} {impact.knowledgeProvenances === 1 ? "proveniência individual" : "proveniências individuais"} de Knowledge</li>
       </ul></section>
       <section><strong>Continuará disponível</strong><ul>
-        <li>Vagas e posições, sem ocupante excluído</li>
+        <li>Posições e histórico, sem a pessoa excluída como ocupante</li>
         <li>Knowledge compartilhado, taxonomias e aliases</li>
         <li>Banco de Itens, rubricas e definições</li>
         <li>Auditoria mínima da exclusão, sem contato, currículo ou respostas</li>

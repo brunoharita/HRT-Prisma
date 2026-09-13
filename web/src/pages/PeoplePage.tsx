@@ -23,6 +23,8 @@ import type { PersonWorkspaceSummary } from "../domain/personIngestion";
 import type { PrismaDataRepository } from "../domain/prismaData";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
+import { useViewState } from "../ui/PrismaNavigation";
+import { PrismaState, PrismaMetric } from "../ui/PrismaState";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -38,10 +40,12 @@ type OperationalFilter = "active" | "archived" | "all";
 
 export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   const canManagePeople = activeMembership.role !== "member";
-  const [search, setSearch] = useState("");
-  const [profileFilter, setProfileFilter] = useState<ProfileFilter>("all");
-  const [importFilter, setImportFilter] = useState<ImportFilter>("all");
-  const [operationalFilter, setOperationalFilter] = useState<OperationalFilter>("active");
+  const [search, setSearch] = useViewState("search", "");
+  const [profileFilter, setProfileFilter] = useViewState<ProfileFilter>("profileFilter", "all");
+  const [importFilter, setImportFilter] = useViewState<ImportFilter>("importFilter", "all");
+  const [operationalFilter, setOperationalFilter] = useViewState<OperationalFilter>("operationalFilter", "active");
+  const [pagination, setPagination] = useViewState("pagination", { current: 1, pageSize: 10 });
+  const [retry, setRetry] = useState(0);
   const deferredSearch = useDeferredValue(search);
   const [people, setPeople] = useState<PersonWorkspaceSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +60,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível consultar Pessoas."); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
-  }, [activeMembership.organizationId, canManagePeople, deferredSearch]);
+  }, [activeMembership.organizationId, canManagePeople, deferredSearch, retry]);
 
   const personPath = (personId: string) => `/profiles/${personId}`;
   const filteredPeople = useMemo(() => people.filter((person) => {
@@ -67,6 +71,9 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     const matchesImport = importFilter === "all" || presentDocument(person.latestDocument).state === importFilter;
     return matchesOperational && matchesProfile && matchesImport;
   }), [importFilter, operationalFilter, people, profileFilter]);
+  const hasFilters = Boolean(search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "active");
+  const resetPage = () => setPagination((current) => ({ ...current, current: 1 }));
+  const clearFilters = () => { setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("active"); resetPage(); };
   const activePeople = people.filter((person) => person.operationalStatus === "active");
   const approvedProfiles = activePeople.filter((person) => person.currentProfile).length;
   const awaitingReview = activePeople.filter((person) => person.pendingReviewCount > 0).length;
@@ -140,17 +147,17 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       />
 
       <div className="prisma-people-stats">
-        <PeopleMetric icon={<TeamOutlined />} label="Pessoas ativas" value={activePeople.length} tone="neutral" />
-        <PeopleMetric icon={<CheckCircleOutlined />} label="Com perfil aprovado" value={approvedProfiles} tone="success" />
-        <PeopleMetric icon={<ClockCircleOutlined />} label="Aguardando revisão" value={awaitingReview} tone="review" />
-        <PeopleMetric icon={<UploadOutlined />} label="Importações hoje" value={importedToday} tone="processing" />
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<TeamOutlined />} label="Pessoas ativas" value={activePeople.length} tone="neutral" />
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<CheckCircleOutlined />} label="Com perfil aprovado" value={approvedProfiles} tone="success" />
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<ClockCircleOutlined />} label="Aguardando revisão" value={awaitingReview} tone="review" />
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<UploadOutlined />} label="Importações hoje" value={importedToday} tone="processing" />
       </div>
 
       <PrismaCard className="prisma-people-toolbar prisma-m2b-toolbar">
         <Input
           allowClear
           aria-label="Buscar por nome, e-mail ou organização"
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) => { setSearch(event.target.value); resetPage(); }}
           placeholder="Buscar por nome, e-mail ou organização..."
           prefix={<SearchOutlined />}
           value={search}
@@ -158,7 +165,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         <div className="prisma-people-filters">
           <Select<OperationalFilter>
             aria-label="Filtrar situação da Pessoa"
-            onChange={setOperationalFilter}
+            onChange={(value) => { setOperationalFilter(value); resetPage(); }}
             options={[
               { value: "active", label: "Pessoas ativas" },
               { value: "archived", label: "Pessoas arquivadas" },
@@ -168,7 +175,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
           />
           <Select<ProfileFilter>
             aria-label="Filtrar perfil atual"
-            onChange={setProfileFilter}
+            onChange={(value) => { setProfileFilter(value); resetPage(); }}
             options={[
               { value: "all", label: "Todos os perfis" },
               { value: "approved", label: "Com perfil aprovado" },
@@ -178,7 +185,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
           />
           <Select<ImportFilter>
             aria-label="Filtrar importações"
-            onChange={setImportFilter}
+            onChange={(value) => { setImportFilter(value); resetPage(); }}
             options={[
               { value: "all", label: "Todas as importações" },
               { value: "requires_review", label: "Requer revisão" },
@@ -189,17 +196,17 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
             ]}
             value={importFilter}
           />
-          <Button disabled icon={<FilterOutlined />}>Mais filtros</Button>
+
         </div>
       </PrismaCard>
-      {error ? <Alert message={error} showIcon type="error" /> : null}
+      {error ? <PrismaState kind="error" description={error} action={{ label: "Tentar novamente", onClick: () => setRetry((value) => value + 1) }} /> : null}
       <PrismaCard className="prisma-people-table-card">
-        {loading ? <Skeleton active paragraph={{ rows: 7 }} /> : (
+        {loading ? <PrismaState kind="loading" /> : error ? null : (
           <Table
             columns={columns}
             dataSource={filteredPeople}
-            locale={{ emptyText: <Empty description="Nenhuma Pessoa corresponde aos filtros." image={Empty.PRESENTED_IMAGE_SIMPLE} /> }}
-            pagination={{ defaultPageSize: 10, showSizeChanger: true, showTotal: (total, range) => `${range[0]}-${range[1]} de ${total}` }}
+            locale={{ emptyText: <PrismaState compact kind={hasFilters ? "filtered" : "empty"} description={hasFilters ? "Ajuste os filtros para ampliar a busca." : canManagePeople ? "Cadastre uma pessoa ou importe um currículo para começar." : "As pessoas cadastradas e disponíveis nesta empresa aparecerão aqui."} {...(hasFilters ? { action: { label: "Limpar filtros", onClick: clearFilters } } : canManagePeople ? { action: { label: "Cadastrar pessoa", onClick: () => onNavigate("/profiles/new") } } : {})} /> }}
+            pagination={{ ...pagination, onChange: (current, pageSize) => setPagination({ current, pageSize }), showSizeChanger: true, showTotal: (total, range) => `${range[0]}-${range[1]} de ${total}` }}
             rowKey="id"
             scroll={{ x: 1070 }}
             size="middle"
@@ -215,8 +222,8 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   );
 }
 
-function PeopleMetric({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone: string }) {
-  return <PrismaCard className={`prisma-people-metric prisma-people-metric--${tone}`}><span className="prisma-people-metric-icon">{icon}</span><Statistic title={label} value={value} /></PrismaCard>;
+function PeopleMetric({ icon, label, value, tone, loading, unavailable }: { icon: React.ReactNode; label: string; value: number; tone: string; loading: boolean; unavailable: boolean }) {
+  return <PrismaCard className={`prisma-people-metric prisma-people-metric--${tone}`}><span className="prisma-people-metric-icon">{icon}</span><PrismaMetric title={label} value={unavailable ? null : value} loading={loading} /></PrismaCard>;
 }
 
 export function ProfileStateTag({ state }: { state: PersonWorkspaceSummary["profileState"] }) {

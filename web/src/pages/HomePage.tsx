@@ -112,8 +112,8 @@ function HomeMetrics({ summary }: { summary: HomeSummary }) {
         <Typography.Text type="secondary">Perfis aprovados e prontos para consulta.</Typography.Text>
       </PrismaCard>
       <PrismaCard className="prisma-status-card">
-        <Statistic prefix={<ApartmentOutlined />} title="Vagas abertas" value={summary.openVacanciesCount} />
-        <Typography.Text type="secondary">Vagas atualmente abertas na empresa.</Typography.Text>
+        <Statistic prefix={<ApartmentOutlined />} title="Posições abertas" value={summary.openVacanciesCount} />
+        <Typography.Text type="secondary">Posições atualmente abertas na empresa.</Typography.Text>
       </PrismaCard>
     </>
   );

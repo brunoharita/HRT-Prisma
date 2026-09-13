@@ -1,3 +1,4 @@
+import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useState } from "react";
 import {
   ArrowLeftOutlined, CheckCircleOutlined, CloudUploadOutlined, EyeOutlined, FilePdfOutlined,
@@ -44,6 +45,8 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   const [processingRecovery, setProcessingRecovery] = useState<OperationRecovery>("none");
   const [lastResolution, setLastResolution] = useState<ResolutionAttempt | null>(null);
   const [localRetry, setLocalRetry] = useState<ProcessedDocumentInput | null>(null);
+
+  useUnsavedChanges(fileList.length > 0 && phase !== "analysis");
 
   function restartImport() {
     setPhase("upload");

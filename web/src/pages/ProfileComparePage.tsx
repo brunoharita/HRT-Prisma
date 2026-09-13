@@ -1,3 +1,4 @@
+import { useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckOutlined, CloseOutlined, SwapOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Skeleton, Typography } from "antd";
@@ -12,6 +13,7 @@ import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 interface ProfileComparePageProps { activeMembership: OrganizationMembership; personIds: [string, string]; onNavigate: (path: string) => void; }
 
 export function ProfileComparePage({ activeMembership, personIds, onNavigate }: ProfileComparePageProps) {
+  const [, setSelectedIds] = useViewState<string[]>("selectedIds", [], "/profiles/search");
   const [candidates, setCandidates] = useState<PublishedProfileCandidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +29,7 @@ export function ProfileComparePage({ activeMembership, personIds, onNavigate }: 
 
   return <PrismaPage className="prisma-profile-compare-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/search")} type="text">Voltar aos resultados</Button>
-    <PrismaPageHeader title="Comparar perfis" description="Compare a mesma estrutura profissional lado a lado, sem notas, ranking ou decisão automática." actions={<Button icon={<CloseOutlined />} onClick={() => onNavigate("/profiles/search")}>Limpar comparação</Button>} />
+    <PrismaPageHeader title="Comparar perfis" description="Compare a mesma estrutura profissional lado a lado, sem notas, ranking ou decisão automática." actions={<Button icon={<CloseOutlined />} onClick={() => { setSelectedIds([]); onNavigate("/profiles/search"); }}>Limpar comparação</Button>} />
     {error ? <Alert showIcon title={error} type="error" /> : null}
     {loading ? <div className="prisma-profile-compare-grid"><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard></div> : null}
     {!loading && profiles.length !== 2 ? <PrismaCard><Empty description="Selecione exatamente dois Perfis publicados para comparar." /></PrismaCard> : null}

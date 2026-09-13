@@ -1,3 +1,4 @@
+import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeftOutlined,
@@ -14,6 +15,8 @@ import { Alert, Button, Checkbox, Empty, Input, InputNumber, Pagination, Segment
 import { activeFilterCount, emptyProfileSearchQuery, type ProfileSearchQuery, type ProfileSearchResult } from "../domain/profileDiscovery";
 import { profileDiscoveryService } from "../infrastructure/supabase/profileDiscoveryService";
 import type { OrganizationMembership } from "../shared/access";
+import { useViewState } from "../ui/PrismaNavigation";
+import { toggleComparisonSelection } from "../shared/uxFoundation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -23,18 +26,19 @@ const PAGE_SIZE = 8;
 const SEARCH_SESSION_KEY = "prisma.profile-search.1";
 
 export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearchPageProps) {
-  const restored = useMemo(readSearchSession, []);
-  const [query, setQuery] = useState<ProfileSearchQuery>(restored?.query ?? emptyProfileSearchQuery());
+  const [searched, setSearched] = useViewState("searched", false);
+  const [query, setQuery] = useViewState<ProfileSearchQuery>("query", emptyProfileSearchQuery());
   const [results, setResults] = useState<ProfileSearchResult[] | null>(null);
-  const [selectedIds, setSelectedIds] = useState<string[]>(restored?.selectedIds ?? []);
-  const [page, setPage] = useState(1);
+  const [selectedIds, setSelectedIds] = useViewState<string[]>("selectedIds", []);
+  const [page, setPage] = useViewState("page", 1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const canReadLocation = activeMembership.role !== "member";
   const pageResults = useMemo(() => (results ?? []).slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [page, results]);
 
   useEffect(() => {
-    if (!restored) return;
+    window.sessionStorage.removeItem(SEARCH_SESSION_KEY);
+    if (!searched) return;
     void executeSearch(true);
   }, []);
 
@@ -42,13 +46,14 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
     setQuery((current) => ({ ...current, [key]: value }));
   }
   async function executeSearch(preserveSelection = false) {
-    setLoading(true); setError(null); setPage(1); if (!preserveSelection) setSelectedIds([]);
+    setLoading(true); setError(null); setSearched(true); if (!preserveSelection) { setPage(1); setSelectedIds([]); }
     try { setResults(await profileDiscoveryService.search(activeMembership.organizationId, query, canReadLocation)); }
     catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível encontrar Perfis agora."); }
     finally { setLoading(false); }
   }
   function toggleSelection(personId: string) {
-    setSelectedIds((current) => current.includes(personId) ? current.filter((id) => id !== personId) : current.length < 2 ? [...current, personId] : [current[1]!, personId]);
+    if (!selectedIds.includes(personId) && selectedIds.length === 2) { setError("Você já selecionou duas pessoas. Remova uma antes de escolher outra."); return; }
+    setSelectedIds((current) => toggleComparisonSelection(current, personId));
   }
 
   return <PrismaPage className="prisma-profile-search-page">
@@ -59,6 +64,7 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
       extra={activeFilterCount(query) ? <Tag color="blue">{activeFilterCount(query)} filtros ativos</Tag> : <Typography.Text type="secondary">Comece pelos critérios essenciais</Typography.Text>}
       title={<span className="prisma-profile-search-workspace-title"><SearchOutlined /> Critérios de busca</span>}
     >
+      <PrismaDisclosure title={`Critérios de busca${activeFilterCount(query) ? ` · ${activeFilterCount(query)} filtros ativos` : ""}`} open={!searched}>
       <div className="prisma-profile-search-filter-grid" aria-label="Filtros de Perfil">
         <FilterSection icon={<BankOutlined />} title="Experiência">
           <Field label="Cargo"><Input allowClear onChange={(event) => update("role", event.target.value)} placeholder="Ex.: Gerente de Projetos" value={query.role} /></Field>
@@ -82,20 +88,21 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
           <Field label="Estado da Pessoa"><Select onChange={(value) => update("operationalStatus", value)} options={[{ label: "Ativas", value: "active" }, { label: "Arquivadas", value: "archived" }, { label: "Ativas e arquivadas", value: "" }]} value={query.operationalStatus} /></Field>
         </FilterSection>
       </div>
-      <div className="prisma-profile-search-actions"><Button onClick={() => { window.sessionStorage.removeItem(SEARCH_SESSION_KEY); setQuery(emptyProfileSearchQuery()); setResults(null); setSelectedIds([]); }}>Limpar filtros</Button><Button icon={<SearchOutlined />} loading={loading} onClick={() => void executeSearch()} type="primary">Buscar perfis</Button></div>
+      </PrismaDisclosure>
+      <div className="prisma-profile-search-actions"><Button onClick={() => { setSearched(false); setPage(1); setQuery(emptyProfileSearchQuery()); setResults(null); setSelectedIds([]); }}>Limpar filtros</Button><Button icon={<SearchOutlined />} loading={loading} onClick={() => void executeSearch()} type="primary">Buscar perfis</Button></div>
     </PrismaCard>
 
-    <main className="prisma-profile-search-results">
+    <section className="prisma-profile-search-results" aria-label="Resultados da busca">
       {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
       {loading ? <PrismaCard><Skeleton active avatar paragraph={{ rows: 12 }} /></PrismaCard> : null}
-      {!loading && results === null ? <SearchWelcome count={activeFilterCount(query)} /> : null}
+      {!loading && !error && results === null ? <SearchWelcome count={activeFilterCount(query)} /> : null}
       {!loading && results?.length === 0 ? <PrismaCard><Empty description="Nenhum Perfil corresponde aos critérios informados. Ajuste somente os filtros que forem essenciais." /></PrismaCard> : null}
       {!loading && results?.length ? <>
-        <div className="prisma-search-results-heading"><div><Typography.Title level={2}>{results.length} {results.length === 1 ? "Perfil encontrado" : "Perfis encontrados"}</Typography.Title><Typography.Text type="secondary">Ordenação determinística pela quantidade de critérios atendidos, sem nota ou decisão automática.</Typography.Text></div>{selectedIds.length ? <Button disabled={selectedIds.length !== 2} icon={<SwapOutlined />} onClick={() => { persistSearchSession(query, selectedIds); onNavigate(`/profiles/compare/${selectedIds.join("/")}`); }} type="primary">Comparar selecionados ({selectedIds.length}/2)</Button> : null}</div>
+        <div className="prisma-search-results-heading"><div><Typography.Title level={2}>{results.length} {results.length === 1 ? "Perfil encontrado" : "Perfis encontrados"}</Typography.Title><Typography.Text type="secondary">Ordenação determinística pela quantidade de critérios atendidos, sem nota ou decisão automática.</Typography.Text></div>{selectedIds.length ? <Button disabled={selectedIds.length !== 2} icon={<SwapOutlined />} onClick={() => { onNavigate(`/profiles/compare/${selectedIds.join("/")}`); }} type="primary">Comparar selecionados ({selectedIds.length}/2)</Button> : null}</div>
         <div className="prisma-search-result-list">{pageResults.map((result) => <SearchResultCard key={result.candidate.personId} onNavigate={onNavigate} onToggle={() => toggleSelection(result.candidate.personId)} result={result} selected={selectedIds.includes(result.candidate.personId)} />)}</div>
         <Pagination current={page} onChange={setPage} pageSize={PAGE_SIZE} showSizeChanger={false} total={results.length} />
       </> : null}
-    </main>
+    </section>
   </PrismaPage>;
 }
 
@@ -134,16 +141,3 @@ const educationLevels = [
 ];
 const languageLevels = [{ label: "Básico", value: "basico" }, { label: "Intermediário", value: "intermediario" }, { label: "Avançado", value: "avancado" }, { label: "Fluente ou nativo", value: "fluente" }];
 const lifecycleOptions = [{ label: "Candidato", value: "candidate" }, { label: "Colaborador", value: "employee" }, { label: "Ex-colaborador", value: "former_employee" }, { label: "Ex-candidato", value: "former_candidate" }, { label: "Banco de talentos", value: "talent_pool" }];
-
-function persistSearchSession(query: ProfileSearchQuery, selectedIds: string[]): void {
-  window.sessionStorage.setItem(SEARCH_SESSION_KEY, JSON.stringify({ query, selectedIds: selectedIds.slice(0, 2) }));
-}
-
-function readSearchSession(): { query: ProfileSearchQuery; selectedIds: string[] } | null {
-  try {
-    const raw = window.sessionStorage.getItem(SEARCH_SESSION_KEY);
-    if (!raw) return null;
-    const value = JSON.parse(raw) as { query?: ProfileSearchQuery; selectedIds?: string[] };
-    return value.query && Array.isArray(value.selectedIds) ? { query: value.query, selectedIds: value.selectedIds.slice(0, 2) } : null;
-  } catch { return null; }
-}

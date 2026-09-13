@@ -30,3 +30,7 @@
 | Implementado | Existe em código ou migration, sem implicar rollout |
 | Planejado | Decidido ou proposto, mas ainda não implementado |
 | Bloqueado | Não pode avançar sem decisão, autoridade, dado ou condição externa |
+
+## Vocabulário de interface
+
+A partir de `prisma-ux-foundation-1.0.0`, o módulo antes chamado Vagas aparece como **Posições**, para necessidades profissionais ocupadas ou não ocupadas. Esta decisão de apresentação não funde os conceitos de domínio acima nem renomeia tabelas, URLs, campos ou documentos históricos. A análise contextual aparece na posição; `/matching` mantém compatibilidade como **Necessidades de verificação**. Padrões de linguagem e jornadas: `docs/product/ux-foundation.md`.

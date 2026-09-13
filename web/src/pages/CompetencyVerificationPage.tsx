@@ -24,6 +24,9 @@ import {
 } from "../domain/competencyVerificationData";
 import { competencyVerificationService } from "../infrastructure/supabase/competencyVerificationService";
 import type { OrganizationMembership } from "../shared/access";
+import { PrismaState } from "../ui/PrismaState";
+import { PrismaDisclosure } from "../ui/PrismaDisclosure";
+import { interfaceText, resolveRequestedItem } from "../shared/uxFoundation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 import { PrismaStatusTag, type PrismaStatusTone } from "../ui/PrismaStatusTag";
@@ -58,7 +61,8 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
         setWorkspace(result);
         const firstNeed = resolveNeed(result, needId);
         setSelectedLevel(firstNeed?.targetLevel ?? "advanced");
-        setDefinitionId(result.definitions.find((definition) => definition.competencyKey === (firstNeed?.competencyKey ?? "sql"))?.id ?? null);
+        const compatible = result.definitions.filter((definition) => definition.competencyKey === firstNeed?.competencyKey && definition.targetLevel === firstNeed?.targetLevel);
+        setDefinitionId(compatible.length === 1 ? compatible[0]!.id : null);
       })
       .catch((caught: unknown) => {
         if (active) setError(caught instanceof Error ? caught.message : "Não foi possível carregar verificação de competências.");
@@ -74,13 +78,10 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
     const items = workspace?.definitions ?? [];
     const normalized = search.trim().toLowerCase();
     return items
-      .filter((definition) => definition.targetLevel === selectedLevel)
+      .filter((definition) => definition.competencyKey === selectedNeed?.competencyKey && definition.targetLevel === selectedLevel)
       .filter((definition) => !normalized || `${definition.name} ${definition.description}`.toLowerCase().includes(normalized));
-  }, [search, selectedLevel, workspace?.definitions]);
-  const selectedDefinition = definitions.find((definition) => definition.id === definitionId)
-    ?? workspace?.definitions.find((definition) => definition.id === definitionId)
-    ?? definitions[0]
-    ?? null;
+  }, [search, selectedLevel, selectedNeed?.competencyKey, workspace?.definitions]);
+  const selectedDefinition = definitions.find((definition) => definition.id === definitionId) ?? null;
   const selectedBlueprint = selectedDefinition ? workspace?.blueprints.find((blueprint) => blueprint.definitionId === selectedDefinition.id) ?? null : null;
   const selectedRubric = selectedDefinition ? workspace?.rubrics.find((rubric) => rubric.definitionId === selectedDefinition.id) ?? null : null;
   const itemBank = workspace?.itemBankSummary ?? [];
@@ -117,17 +118,19 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
   if (error && !workspace) {
     return (
       <PrismaPage className="prisma-m51a-page">
-        <PrismaPageHeader title="Matching" description="Verificação recomendada por evidência e política." />
-        <Alert message={error} showIcon type="error" />
+        <PrismaPageHeader title="Necessidades de verificação" description="Verificação recomendada por evidência e política." />
+        <PrismaState kind="error" description="Não foi possível consultar as necessidades desta empresa. Volte ao acompanhamento de verificações para continuar." action={{ label: "Voltar para verificações", onClick: () => onNavigate("/verifications") }} />
+        <PrismaDisclosure title="Detalhes do impedimento">{interfaceText(error)}</PrismaDisclosure>
       </PrismaPage>
     );
   }
 
+  if (mode === "matching" && workspace) return renderMatching(workspace.needs, onNavigate);
   if (!workspace || !selectedNeed) {
     return (
       <PrismaPage className="prisma-m51a-page">
-        <PrismaPageHeader title="Matching" description="Verificação recomendada por evidência e política." />
-        <PrismaCard><Empty description="Nenhuma necessidade de verificação disponível para a organização ativa." /></PrismaCard>
+        <PrismaPageHeader title="Necessidades de verificação" description="Verificação recomendada por evidência e política." />
+        <PrismaCard><PrismaState kind="unavailable" description="A necessidade solicitada não está disponível nesta empresa." action={{ label: "Ver necessidades disponíveis", onClick: () => onNavigate("/matching") }} /></PrismaCard>
       </PrismaPage>
     );
   }
@@ -172,6 +175,7 @@ function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string
   const overallLabel = needs.length === 0 ? "Sem requisitos para análise" : requiredCount > 0 ? "Requer verificação" : allDemonstrated ? "Evidência suficiente" : "Aderência parcial";
   const overallTone: PrismaStatusTone = needs.length === 0 ? "neutral" : requiredCount > 0 ? "danger" : allDemonstrated ? "success" : "warning";
   const columns: ColumnsType<VerificationNeedView> = [
+    { title: "Pessoa e posição", key: "context", width: 240, render: (_, need) => <Space direction="vertical" size={2}><Typography.Text strong>{need.personName}</Typography.Text><Typography.Text type="secondary">{need.vacancyTitle ?? "Sem posição vinculada"}</Typography.Text></Space> },
     {
       title: "Requisito",
       dataIndex: "competencyLabel",
@@ -184,7 +188,6 @@ function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string
       ),
     },
     { title: "Nível requerido", dataIndex: "targetLevel", width: 130, render: (level: VerificationLevel) => labelLevel(level), responsive: ["md"] },
-    { title: "Aderência atual", width: 130, render: () => <PrismaStatusTag compact label="Parcial" tone="warning" />, responsive: ["lg"] },
     {
       title: "Evidências encontradas",
       render: (_, need) => (
@@ -210,11 +213,11 @@ function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string
   ];
   return (
     <PrismaPage className="prisma-m51a-page">
-      <PrismaPageHeader title="Matching" description="Requisitos com suficiência de evidência e necessidade de verificação." />
+      <PrismaPageHeader title="Necessidades de verificação" description="Requisitos com suficiência de evidência e necessidade de verificação." />
       <PrismaCard className="prisma-m51a-profile-card">
         <div className="prisma-m51a-profile-context">
-          <Typography.Title level={3}>{needs[0]?.personName ?? "Pessoa"}</Typography.Title>
-          <Typography.Text type="secondary">{needs[0]?.vacancyTitle ?? "Vaga em avaliação"}</Typography.Text>
+          <Typography.Title level={3}>Necessidades da empresa</Typography.Title>
+          <Typography.Text type="secondary">Selecione um requisito para consultar as evidências e preparar a verificação.</Typography.Text>
           <div className="prisma-m51a-overall-state"><PrismaStatusTag label={overallLabel} tone={overallTone} /><Typography.Text type="secondary">Resultado baseado nas evidências atualmente disponíveis.</Typography.Text></div>
         </div>
         <div aria-label="Resumo das evidências" className="prisma-m51a-evidence-summary">
@@ -223,8 +226,8 @@ function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string
           <span><strong>{demonstratedCount}</strong><small>com evidência demonstrada</small></span>
         </div>
       </PrismaCard>
-      <PrismaCard title="Requisitos da Vaga">
-        <Table className="prisma-responsive-table prisma-matching-table" columns={columns} dataSource={needs} pagination={false} rowKey="id" tableLayout="fixed" />
+      <PrismaCard title="Requisitos a verificar">
+        <Table scroll={{ x: 1000 }} locale={{ emptyText: <PrismaState kind="empty" compact description="As necessidades disponíveis aparecerão aqui para preparação. Continue pela posição ou volte ao acompanhamento." action={{ label: "Voltar para verificações", onClick: () => onNavigate("/verifications") }} /> }} className="prisma-responsive-table prisma-matching-table" columns={columns} dataSource={needs} pagination={false} rowKey="id" tableLayout="fixed" />
         <div className="prisma-m51a-legend">
           <span><i className="is-green" />Suficiente</span>
           <span><i className="is-gold" />Verificação recomendada</span>
@@ -461,7 +464,7 @@ function VerificationSummary(props: Parameters<typeof PrepareFlow>[0]) {
 
 function resolveNeed(workspace: VerificationWorkspaceView | null, needId?: string): VerificationNeedView | null {
   if (!workspace) return null;
-  return workspace.needs.find((need) => need.id === needId) ?? workspace.needs[0] ?? null;
+  return resolveRequestedItem(workspace.needs, needId);
 }
 
 function sufficiencyTone(status: VerificationNeedView["sufficiencyStatus"]): PrismaStatusTone {
