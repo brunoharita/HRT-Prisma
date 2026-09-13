@@ -10,6 +10,7 @@ Data: 2026-09-13. Contrato: `docs/qa/agreement-ux-foundation.md` 1.0.0, execuç�
 - E-04: navegação Pessoas → cadastro/Central → retorno preservou filtro; Central → perfil → retorno preservou aba Documentos e versões. Formulário com texto de teste abriu diálogo; Continuar editando preservou texto; voltar pelo navegador foi cancelado e manteve URL/formulário; sair confirmado retornou à lista. Navegação limpa saiu sem pergunta. Nenhum cadastro de teste foi salvo.
 - E-05: diálogo de saída focaliza Continuar editando; menu móvel fecha com Escape e devolve foco a Abrir navegação; região da tabela respondeu a ArrowRight. Rótulos, roles de estado, skip links, foco visível e detalhes nativos inspecionados. Contrastes dos tokens de texto/ações sobre branco >= 4,5:1 e borda dos controles >= 3:1 em teste automatizado. Reflow em 320 CSS px cobre a largura equivalente à ampliação; não equivale a teste de todos os navegadores/leitores de tela.
 - E-06: revisão do diff e dos contratos: alterações limitadas à apresentação, continuidade, testes e documentação. Nenhuma migration, serviço de domínio, política RLS, parser ou arquivo de evidências geométricas alterado. Fotografias locais e TAP ficam em `tmp/ux-foundation/`, ignorado pelo Git; não são enviados ao repositório. Relato reproduzível abaixo integra a entrega.
+- E-07: após a observação do PO sobre a busca por “assistente de marketing”, o campo de referência passou a informar a origem da consulta, mostrar carregamento, quantidade de resultados, ausência de correspondência e erro com nova tentativa. Respostas fora de ordem são descartadas; o rascunho permanece preservado. A escolha de referência com conteúdo já preenchido usa diálogo Ant Design contextual, sem confirmação nativa.
 
 ## Matriz de Acordos
 
@@ -71,6 +72,8 @@ Data: 2026-09-13. Contrato: `docs/qa/agreement-ux-foundation.md` 1.0.0, execuç�
 
 **L-03 — desempenho de distribuição.** O build segue emitindo aviso do chunk Ant Design de aproximadamente 1,27 MB minificado. Não foi incluído projeto de divisão de bundle nesta fundação.
 
+**L-04 — consulta de referência.** O campo de referência pesquisa a Knowledge aprovada da empresa e a base global. Quando não há correspondência, o título da Posição aciona a resolução nas fontes oficiais catalogadas; isso não é uma pesquisa aberta na Web. Se o RPC de sugestão estiver indisponível, a tela informa o estado e oferece nova tentativa sem apagar o rascunho.
+
 ## Desvios do contrato
 
 Nenhum desvio dos critérios da base compartilhada. O PASS de D-3.2 se refere à preservação e integração da navegação, conforme CA-3.2; L-01 impede afirmar que o fluxo de domínio esteja operacional ponta a ponta. Funcionalidades futuras dos grupos específicos não são tratadas como entregues.
@@ -87,4 +90,4 @@ Branch de entrega: `codex/ux-shared-foundation`, origin existente `git@github.co
 
 ## Conclusão
 
-Padrões aprovados formalizados e base compartilhada implementada para orientar os próximos agrupadores. Critérios da fundação atendidos com os limites L-01 a L-03 explicitados.
+Padrões aprovados formalizados e base compartilhada implementada para orientar os próximos agrupadores. A busca de referências agora torna explícitas sua origem e evolução. Critérios da fundação atendidos com os limites L-01 a L-04 explicitados.

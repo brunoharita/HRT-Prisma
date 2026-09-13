@@ -40,6 +40,7 @@ import {
   Segmented,
   Select,
   Skeleton,
+  Spin,
   Space,
   Table,
   Tabs,
@@ -175,6 +176,10 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [occupationResolution, setOccupationResolution] = useState<OccupationResolution | null>(null);
   const [occupationLoading, setOccupationLoading] = useState(false);
   const [referencePreparing, setReferencePreparing] = useState(false);
+  const [referenceSearchLoading, setReferenceSearchLoading] = useState(false);
+  const [referenceSearchTerm, setReferenceSearchTerm] = useState("");
+  const [referenceSearchError, setReferenceSearchError] = useState<string | null>(null);
+  const referenceSearchRequest = useRef(0);
   const [referencePrepared, setReferencePrepared] = useState(false);
   const [occupationExplorerOpen, setOccupationExplorerOpen] = useState(false);
   const [restructureOpen, setRestructureOpen] = useState(false);
@@ -222,9 +227,29 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     setDraft((current) => ({ ...current, title: role.name, mission: role.mission, responsibilities: role.responsibilities, expectedOutcomes: role.expectedOutcomes, requirements: role.requirements, contextItems: role.contextItems, sourceKind: "organization_role", jobRoleId: role.id, referenceConceptId: role.referenceConceptId }));
   }
   async function searchReferences(value: string) {
-    try { setReferences(await vacancyService.suggestReferences(activeMembership.organizationId, value)); }
-    catch (caught) { setError(errorMessage(caught, "Não foi possível consultar as referências profissionais.")); }
+    const query = value.trim();
+    setReferenceSearchTerm(query);
+    setReferenceSearchError(null);
+    const request = ++referenceSearchRequest.current;
+    if (query.length < 2) {
+      setReferences([]);
+      setReferenceSearchLoading(false);
+      return;
+    }
+    setReferenceSearchLoading(true);
+    try {
+      const result = await vacancyService.suggestReferences(activeMembership.organizationId, query);
+      if (request === referenceSearchRequest.current) setReferences(result);
+    } catch (caught) {
+      if (request === referenceSearchRequest.current) {
+        setReferences([]);
+        setReferenceSearchError(errorMessage(caught, "A busca na Knowledge interna não respondeu agora."));
+      }
+    } finally {
+      if (request === referenceSearchRequest.current) setReferenceSearchLoading(false);
+    }
   }
+  const retryReferenceSearch = () => { if (referenceSearchTerm.length >= 2) void searchReferences(referenceSearchTerm); };
   async function useProfessionalReference(conceptId: string) {
     const reference = references.find((item) => item.conceptId === conceptId); if (!reference) return;
     if (draft.sourceKind === "assisted_description") {
@@ -232,7 +257,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
       setReferencePrepared(false); setValidationTarget(null); return;
     }
     const hasHumanContent = Boolean(draft.title || draft.mission || draft.responsibilities.length || draft.requirements.length);
-    if (hasHumanContent && draft.sourceKind !== "knowledge_reference" && !window.confirm("Esta referência prepara uma nova proposta e substituirá o conteúdo ainda não salvo. Deseja continuar?")) return;
+    if (hasHumanContent && draft.sourceKind !== "knowledge_reference" && !await confirmReferenceReplacement()) return;
     setReferencePreparing(true); setError(null);
     try {
       const proposal = await vacancyService.loadProfessionalReferenceProposal(activeMembership.organizationId, conceptId);
@@ -345,9 +370,18 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     <PrismaPageHeader title={vacancyId ? "Editar posição" : "Nova posição"} description="Explique a necessidade em blocos simples. O Prisma preserva a estrutura e a versão usadas nas avaliações." actions={<Space>{vacancyId && draft.structureSource ? <Button onClick={() => { setRestructureDescription(draft.structureSource?.originalDescription ?? ""); setRestructureOpen(true); }}>Editar descrição e reestruturar</Button> : null}{savedLocally ? <Tag icon={<CheckCircleOutlined />} color="success">Rascunho salvo neste navegador</Tag> : null}</Space>} />
     {error ? <Alert closable onClose={() => { setError(null); setValidationTarget(null); }} showIcon title={error} type="error" /> : null}
     {!vacancyId ? <PrismaCard className={`prisma-vacancy-start-card ${validationTarget === "occupation" ? "has-validation-error" : ""}`} title="Como você quer começar?">
+      <Typography.Paragraph className="prisma-reference-flow-intro">Você pode começar por uma função validada, reutilizar uma Posição ou escolher uma referência profissional. A busca abaixo consulta primeiro a <strong>Knowledge publicada interna</strong>, combinando a base da empresa e a base global do Prisma. Se não houver uma correspondência segura, o título da Posição será consultado nas referências oficiais catalogadas, como ESCO, CBO e O*NET. Não é uma pesquisa aberta na internet.</Typography.Paragraph>
       <div><label>Função da empresa<Select allowClear onChange={useRole} options={roles.map((item) => ({ label: item.name, value: item.id }))} placeholder="Usar uma função validada" /></label></div>
       <div><label>Posição anterior<Select allowClear onChange={(value) => void usePrevious(value)} options={previous.map((item) => ({ label: item.title, value: item.id }))} placeholder="Reutilizar somente a definição" /></label></div>
-      <div className={validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} ref={occupationReferenceRef}><label>Referência profissional<Select allowClear disabled={referencePreparing} filterOption={false} loading={referencePreparing} onSearch={(value) => void searchReferences(value)} onSelect={(value) => void useProfessionalReference(value)} options={references.map((item) => ({ label: `${item.label} · ${item.scope === "global" ? "Global" : "Empresa"}`, value: item.conceptId }))} placeholder="Buscar na Knowledge" showSearch /></label>{referencePreparing ? <Typography.Text type="secondary">Prisma está preparando a estrutura da Posição...</Typography.Text> : null}{referencePrepared ? <Typography.Text type="secondary">Estrutura preparada a partir da referência profissional selecionada. Revise e adapte para a necessidade da sua empresa.</Typography.Text> : null}{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}</div>
+      <div className={validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} ref={occupationReferenceRef}>
+        <label>Referência profissional<Select allowClear disabled={referencePreparing} filterOption={false} loading={referenceSearchLoading || referencePreparing} onChange={() => setReferenceSearchError(null)} onSearch={(value) => void searchReferences(value)} options={references.map((item) => ({ label: `${item.label} · ${item.scope === "global" ? "Global" : "Empresa"}`, value: item.conceptId }))} placeholder="Buscar na Knowledge interna" showSearch notFoundContent={referenceSearchLoading ? <span className="prisma-reference-search-status"><Spin size="small" /> Buscando na Knowledge interna…</span> : referenceSearchError ? <span className="prisma-reference-search-status is-error">A busca interna não respondeu.</span> : referenceSearchTerm.length < 2 ? "Digite pelo menos 2 caracteres para buscar" : "Nenhuma referência profissional encontrada na Knowledge interna"} onSelect={(value) => void useProfessionalReference(value)} /></label>
+        <Typography.Text className="prisma-reference-search-help" type="secondary">Digite pelo menos 2 caracteres. A consulta combina referências aprovadas da sua empresa e da base global.</Typography.Text>
+        {referenceSearchLoading ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback" role="status" type="secondary"><Spin size="small" /> Buscando referências na Knowledge interna…</Typography.Text> : null}
+        {!referenceSearchLoading && referenceSearchTerm.length >= 2 && references.length > 0 ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback is-success" role="status" type="secondary">{references.length} referência{references.length === 1 ? "" : "s"} encontrada{references.length === 1 ? "" : "s"} na Knowledge interna.</Typography.Text> : null}
+        {!referenceSearchLoading && !referenceSearchError && referenceSearchTerm.length >= 2 && references.length === 0 ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback" role="status" type="secondary">Nenhuma correspondência interna. Ao sair do título da Posição, o Prisma consulta referências oficiais catalogadas.</Typography.Text> : null}
+        {referenceSearchError ? <Alert className="prisma-reference-search-error" showIcon type="error" message="A busca na Knowledge interna não respondeu." description="O rascunho foi preservado. Tente novamente ou continue pelo título da Posição para consultar as referências oficiais catalogadas." action={<Button onClick={retryReferenceSearch} size="small">Tentar novamente</Button>} /> : null}
+        {referencePreparing ? <Typography.Text type="secondary">Preparando a estrutura da Posição a partir da referência escolhida…</Typography.Text> : null}{referencePrepared ? <Typography.Text type="secondary">Estrutura preparada a partir da referência profissional selecionada. Revise e adapte para a necessidade da sua empresa.</Typography.Text> : null}{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}
+      </div>
       <Button icon={<RobotOutlined />} onClick={() => onNavigate("/vacancies/assist")}>Começar com uma descrição</Button>
     </PrismaCard> : null}
     <Form layout="vertical" onFinish={() => void save()} onKeyDown={(event) => {
@@ -356,14 +390,14 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     }}>
       <PrismaCard className="prisma-vacancy-form-section" title="1. Informações básicas">
         <div className="prisma-vacancy-form-grid">
-          <Form.Item {...(validationTarget === "title" ? { help: "Informe o título da Posição.", validateStatus: "error" as const } : {})} label="Título da Posição" required><Input maxLength={240} onBlur={() => void resolveOccupation()} onChange={(event) => { update("title", event.target.value); setOccupationResolution(null); if (validationTarget === "title") setValidationTarget(null); }} placeholder="Ex.: Gerente Comercial Enterprise" value={draft.title} /></Form.Item>
+          <Form.Item {...(validationTarget === "title" ? { help: "Informe o título da Posição.", validateStatus: "error" as const } : {})} extra="Ao sair deste campo, se ainda não houver uma referência interna, o Prisma consulta as fontes oficiais catalogadas." label="Título da Posição" required><Input maxLength={240} onBlur={() => void resolveOccupation()} onChange={(event) => { update("title", event.target.value); setOccupationResolution(null); if (validationTarget === "title") setValidationTarget(null); }} placeholder="Ex.: Gerente Comercial Enterprise" value={draft.title} /></Form.Item>
           <Form.Item label="Área"><Input onChange={(event) => update("area", event.target.value)} placeholder="Ex.: Comercial" value={draft.area} /></Form.Item>
           <Form.Item label="Localidade"><Input onChange={(event) => update("location", event.target.value)} placeholder="Ex.: São Paulo, SP" value={draft.location} /></Form.Item>
           <Form.Item label="Regime de trabalho"><Select allowClear onChange={(value) => update("workArrangement", value ?? null)} options={workArrangementOptions} placeholder="Não informado" value={draft.workArrangement} /></Form.Item>
           <Form.Item label="Tipo de vínculo"><Input onChange={(event) => update("employmentType", event.target.value)} placeholder="Ex.: CLT" value={draft.employmentType} /></Form.Item>
           <Form.Item label="Situação de ocupação"><Segmented block onChange={(value) => setDraft((current) => ({ ...current, occupancy: value as VacancyDraft["occupancy"], occupantPersonId: value === "occupied" ? current.occupantPersonId : null }))} options={[{ label: "Não ocupada", value: "vacant" }, { label: "Ocupada", value: "occupied" }]} value={draft.occupancy} /></Form.Item>
         </div>
-        {occupationLoading ? <Typography.Text type="secondary">Consultando referências profissionais oficiais...</Typography.Text> : null}
+        {occupationLoading ? <Typography.Text className="prisma-reference-search-feedback" type="secondary"><Spin size="small" /> Consultando referências oficiais catalogadas para “{draft.title}”…</Typography.Text> : null}
         {occupationResolution ? <Alert showIcon type={occupationResolution.status === "resolved" ? "success" : "info"} message={occupationResolutionMessage(occupationResolution)} description={occupationResolution.status === "needs_human_review" ? <Button onClick={() => setOccupationExplorerOpen(true)} size="small" type="primary">Explorar ESCO e O*NET</Button> : occupationResolution.status === "manual_allowed" ? <Button onClick={() => void createManualOccupation()} size="small" type="primary">Cadastrar conceito interno da empresa</Button> : undefined} /> : null}
         {draft.occupancy === "occupied" ? <Form.Item {...(validationTarget === "occupant" ? { help: "Selecione a Pessoa que ocupa esta posição.", validateStatus: "error" as const } : {})} label="Pessoa que ocupa a posição" required><Select showSearch optionFilterProp="label" onChange={(value) => { update("occupantPersonId", value); if (validationTarget === "occupant") setValidationTarget(null); }} options={occupants} placeholder="Selecione uma Pessoa existente" value={draft.occupantPersonId} /></Form.Item> : null}
       </PrismaCard>
@@ -642,6 +676,17 @@ function historyLabel(value: string): string { return ({ created: "Posição cri
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); }
 function normalize(value: string): string { return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").trim(); }
 function errorMessage(value: unknown, fallback: string): string { return value instanceof Error ? value.message : fallback; }
+function confirmReferenceReplacement(): Promise<boolean> {
+  return new Promise((resolve) => Modal.confirm({
+    title: "Substituir conteúdo não salvo?",
+    content: "Esta referência vai preparar uma nova proposta e substituir o conteúdo preenchido até agora. O rascunho atual não será publicado.",
+    okText: "Substituir conteúdo",
+    cancelText: "Continuar editando",
+    autoFocusButton: "cancel",
+    onOk: () => resolve(true),
+    onCancel: () => resolve(false),
+  }));
+}
 function persistDraft(draft: VacancyDraft, scope: string): void { window.sessionStorage.setItem(`${DRAFT_KEY}:${scope}`, JSON.stringify(draft)); }
 function readDraft(scope: string): VacancyDraft { try { const raw = window.sessionStorage.getItem(`${DRAFT_KEY}:${scope}`); return raw ? { ...emptyVacancyDraft(), ...JSON.parse(raw) as VacancyDraft } : emptyVacancyDraft(); } catch { return emptyVacancyDraft(); } }
 function clearDraft(scope: string): void { window.sessionStorage.removeItem(`${DRAFT_KEY}:${scope}`); }

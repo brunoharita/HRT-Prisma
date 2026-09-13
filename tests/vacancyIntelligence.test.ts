@@ -449,6 +449,21 @@ test("resolução ocupacional explica segurança sem score e nunca deriva evidê
   assert.equal(matchVacancyCandidate(developer, withoutJava).requirements[0]?.status, "no_evidence");
 });
 
+test("busca de referência profissional comunica origem, progresso e recuperação", async () => {
+  const page = await readFile("web/src/pages/VacancyPages.tsx", "utf8");
+  const styles = await readFile("web/src/ui/foundation.css", "utf8");
+  assert.match(page, /Knowledge publicada interna/);
+  assert.match(page, /ESCO, CBO e O\*NET/);
+  assert.match(page, /Buscando na Knowledge interna/);
+  assert.match(page, /Nenhuma correspondência interna/);
+  assert.match(page, /A busca na Knowledge interna não respondeu/);
+  assert.match(page, /Tentar novamente/);
+  assert.match(page, /referenceSearchRequest/);
+  assert.doesNotMatch(page, /window\.confirm/);
+  assert.match(page, /confirmReferenceReplacement/);
+  assert.match(styles, /prisma-reference-search-feedback/);
+});
+
 test("validação de Vaga destaca o campo acionável que bloqueia o salvamento", async () => {
   const [page, styles, adr, contracts] = await Promise.all([
     readFile("web/src/pages/VacancyPages.tsx", "utf8"),
@@ -507,7 +522,7 @@ test("resolver ocupacional consulta snapshots seletivamente, é idempotente e ma
   assert.match(migration, /revoke all on function public\.resolve_occupation_on_demand/i);
   assert.doesNotMatch(migration, /person_id|professional_profiles/i);
   assert.match(service, /resolve_occupation_on_demand/);
-  assert.match(page, /Consultando referências profissionais oficiais/);
+  assert.match(page, /Consultando referências oficiais catalogadas/);
   assert.match(page, /onBlur=\{\(\) => void resolveOccupation\(\)\}/);
 });
 

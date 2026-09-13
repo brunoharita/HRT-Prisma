@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.10
+version: 2.29.11
 last_verified: 2026-09-13
 ---
 
@@ -10,7 +10,7 @@ last_verified: 2026-09-13
 
 ## Base compartilhada de UX — 2026-09-13
 
-Implementação local na branch `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.0.0`, ADR-050. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
+Implementação local na branch `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.0.0`, ADR-050. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
 Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT em `docs/qa/*ux-foundation.md`. Validação dirigida e limites no AoT. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. Versão pública permanece v1.5.11; o contrato de apresentação inicia 1.0.0, sem mudança semântica de contratos persistidos.
 

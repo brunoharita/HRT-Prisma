@@ -13,6 +13,12 @@ body { background: var(--prisma-canvas); }
 .prisma-main-content { container-type: inline-size; }
 .prisma-page { min-width: 0; }
 .prisma-table-scroll-hint { display: none; color: #53637d; font-size: 13px; margin: 0; }
+.prisma-reference-flow-intro { grid-column: 1 / -1; max-width: 92ch; margin: 0 0 4px; color: #53637d; line-height: 1.6; }
+.prisma-reference-search-help, .prisma-reference-search-feedback { display: flex; align-items: center; gap: 7px; margin-top: 6px; line-height: 1.45; }
+.prisma-reference-search-feedback.is-success { color: #166534; }
+.prisma-reference-search-status { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.prisma-reference-search-status.is-error { color: #b42318; }
+.prisma-reference-search-error { margin-top: 10px; }
 .prisma-page-header-row { align-items: flex-start; flex-wrap: wrap; gap: 20px; }
 .prisma-page-heading { flex: 1 1 320px; min-width: 0; }
 .prisma-page-heading h1 { font-size: clamp(26px, 2.2vw, 34px); line-height: 1.2; letter-spacing: -.025em; overflow-wrap: anywhere; }
