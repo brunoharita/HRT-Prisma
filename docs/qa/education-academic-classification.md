@@ -2,7 +2,7 @@
 
 ## Escopo
 
-Valida `education-academic-classification` 1.0.0 na extração determinística, revisão M5, publicação por Delta, Central da Pessoa e contexto de Documentos. Dados de teste são sintéticos; publicação conectada deve ocorrer em transação revertida.
+Valida `education-academic-classification` 1.1.0 na extração determinística, revisão M5, publicação por Delta, Central da Pessoa e contexto de Documentos. A alteração de 2026-09-12 e sua evidência local estão em `resume-date-education-rules.md`; as provas conectadas abaixo são históricas da versão 1.0.0. Dados de teste são sintéticos.
 
 ## Matriz funcional
 
@@ -11,10 +11,10 @@ Valida `education-academic-classification` 1.0.0 na extração determinística, 
 | Bacharelado, Licenciatura, Tecnólogo e Técnico | nível e qualificação distintos e compatíveis |
 | MBA, Especialização, Mestrado, Doutorado e Pós-doutorado | nível `postgraduate` e qualificação específica |
 | Pós-graduação genérica | nível explícito e qualificação `unknown` |
-| Período com ano final | status `unknown` |
+| Curso declarado sem indicação contrária | `completed` inferido, com motivo e snapshot |
 | `Atual` ou `Present` | `in_progress` inferido e revisável |
 | Conclusão explícita | `completed` explícito |
-| Texto ambíguo | valores `unknown`, sem invenção |
+| Nível ou qualificação ambíguos | dimensões `unknown`, sem inventar grau acadêmico |
 | Override humano | valor efetivo humano e snapshot original preservado |
 | Mudança de nível incompatível | qualificação limpa para `unknown` |
 | Ensino Fundamental/Médio | instituição, período e qualificação deixam de ser exibidos; curso e situação permanecem disponíveis |

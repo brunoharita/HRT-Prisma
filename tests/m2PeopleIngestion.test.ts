@@ -21,7 +21,7 @@ test("M2-B rejects insufficient manual text and preserves explicit missing field
   assert.ok(result.draft.notIdentified.includes("experiências estruturáveis"));
 });
 
-test("M2-B structures only explicit facts and keeps page provenance", () => {
+test("M2-B keeps page provenance and separates date assumptions from explicit facts", () => {
   const page: ExtractedPage = {
     pageNumber: 2,
     text: "Desenvolvedor Full Stack em Tech Solutions 2021 - Atual  Bacharel em Ciência da Computação - Universidade Prisma  React TypeScript SQL Inglês",
@@ -37,7 +37,9 @@ test("M2-B structures only explicit facts and keeps page provenance", () => {
   assert.ok(draft.competencies.includes("React"));
   assert.ok(draft.competencies.includes("TypeScript"));
   assert.ok(draft.languages.includes("Inglês"));
-  assert.equal(draft.uncertainties.length, 0);
+  assert.ok(draft.uncertainties.length > 0);
+  assert.ok(draft.uncertainties.every((item) => item.includes("dias ou meses ausentes foram assumidos")));
+  assert.equal(draft.experiences[0]?.period, "01/01/2021 - Atual");
 });
 
 test("M2-B native sufficiency is deterministic", () => {

@@ -1,5 +1,6 @@
 import type { ExtractionDraft } from "../domain/types.js";
 import { classifyEducationRecord } from "../domain/educationClassification.js";
+import { parseResumePeriod } from "../domain/resumeDates.js";
 import type { ExtractionProvider, ExtractionRequest, ExtractionResponse } from "./provider.js";
 
 interface TextBlock {
@@ -86,11 +87,12 @@ function parseExperience(block: TextBlock): ExtractionDraft["experiences"][numbe
   const [organization, role, period, ...descriptionParts] = parts;
   if (!organization || !role || !period) return null;
   const dates = period.split(/\s+(?:a|até|to)\s+/i).map((part) => part.trim());
+  const normalized = parseResumePeriod(period);
   return {
     organization,
     role,
-    startDate: dates[0] ?? null,
-    endDate: dates[1] ?? null,
+    startDate: normalized?.start?.value ?? dates[0] ?? null,
+    endDate: normalized?.current ? "Atual" : normalized?.end?.value ?? dates[1] ?? null,
     description: descriptionParts.join(" | ") || "Descrição não identificada.",
     sourceBlockId: block.id,
   };
@@ -118,7 +120,7 @@ function parseLanguage(block: TextBlock): ExtractionDraft["languages"][number] |
 
 export class DeterministicExtractionProvider implements ExtractionProvider {
   public readonly name = "local-rules";
-  public readonly model = "deterministic-local-1.0.0";
+  public readonly model = "deterministic-local-1.1.0";
 
   public async extract(request: ExtractionRequest): Promise<ExtractionResponse> {
     const blocks = toBlocks(request.sourceText);
@@ -171,6 +173,13 @@ export class DeterministicExtractionProvider implements ExtractionProvider {
     const uncertainties: string[] = [];
     if (!fullName) uncertainties.push("A identidade básica não foi identificada com segurança.");
     if (experiences.length === 0) uncertainties.push("Nenhuma experiência foi extraída no formato estruturado esperado.");
+    for (const block of blocks.filter((item) => item.section === "experience")) {
+      const period = cleanBullet(block.text).split("|")[2]?.trim();
+      const normalized = parseResumePeriod(period);
+      if (normalized && (normalized.start?.inferred.length || normalized.end?.inferred.length)) {
+        uncertainties.push(`Período “${period}” padronizado para “${normalized.value}”; dias ou meses ausentes foram assumidos pela regra de datas.`);
+      }
+    }
 
     const draft: ExtractionDraft = {
       fullName,

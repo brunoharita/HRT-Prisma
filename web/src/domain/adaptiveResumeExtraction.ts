@@ -1,5 +1,7 @@
 import type { ExtractedPage, StructuredDraft } from "./personIngestion.js";
 import { classifyEducationRecord } from "../../../src/domain/educationClassification.js";
+import { normalizeDraftPeriods } from "./resumeDates.js";
+import { RESUME_PERIOD_PATTERN } from "../../../src/domain/resumeDates.js";
 import { reviewEntityFieldPath, stableReviewEntityId } from "./reviewFieldLifecycle.js";
 import { extractResumeIdentity } from "../../../src/domain/resumeIdentity.js";
 import {
@@ -18,8 +20,8 @@ import {
   type RelativeRecordSignature,
 } from "./documentRecordPatterns.js";
 
-export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "7.1.0";
-export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v9";
+export const ADAPTIVE_EXTRACTION_CONTRACT_VERSION = "7.2.0";
+export const ADAPTIVE_STRUCTURING_VERSION = "prisma-layout-adaptive-v10";
 export const ADAPTIVE_REVIEW_METHOD_VERSION = "prisma-document-learning-v4";
 export const ADAPTIVE_SIBLING_ALGORITHM_VERSION = GENERIC_RECORD_PATTERN_VERSION;
 export const ADAPTIVE_SIBLING_SIGNATURE_VERSION = GENERIC_RECORD_SIGNATURE_VERSION;
@@ -250,7 +252,7 @@ export function buildAdaptiveExtraction(
   const allLines = candidateLines(pages);
   const educationBlocks = detectEducationBlocks(allLines);
   const education = educationBlocks.slice(0, 8).map((block) => {
-    const classification = classifyEducationRecord({ course: block.course, originalText: block.anchor.text, period: block.period });
+    const classification = classifyEducationRecord({ course: block.course, originalText: block.anchor.text, period: block.period, description: block.description });
     const educationItem = {
       id: stableReviewEntityId("education", `${block.anchor.pageNumber}:${block.anchor.sequence}:${block.course}:${block.institution}`),
       source: "extracted" as const,
@@ -267,7 +269,7 @@ export function buildAdaptiveExtraction(
     if (block.descriptionLines.length) fieldEvidence.push(toCombinedEvidence(reviewEntityFieldPath("education", educationItem, "description"), block.descriptionLines));
     if (classification.level !== "unknown") fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "level"), block.anchor, classification.level));
     if (classification.qualification !== "unknown") fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "qualification"), block.anchor, classification.qualification));
-    if (classification.status !== "unknown") fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "status"), block.anchor, classification.status));
+    if (classification.status !== "unknown") fieldEvidence.push(toEvidence(reviewEntityFieldPath("education", educationItem, "status"), block.anchor, block.anchor.text));
     return educationItem;
   });
   const competencyCatalog = ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL", "Power BI", "SAP", "Scrum", "Kanban", "Docker", "AWS", "Azure", "Supabase"];
@@ -301,7 +303,7 @@ export function buildAdaptiveExtraction(
     ],
   };
   return {
-    draft,
+    draft: normalizeDraftPeriods(draft),
     fieldEvidence,
     pattern: {
       experienceHeader: nextLineCompanyCount && sameLineCount ? "mixed" : nextLineCompanyCount ? "role-period-company-next-line" : sameLineCount ? "role-company-period-same-line" : "not-observed",
@@ -873,7 +875,7 @@ function educationCandidateId(block: ParsedEducationBlock): string {
 }
 
 function toSuggestedEducation(block: ParsedEducationBlock): StructuredDraft["education"][number] {
-  const classification = classifyEducationRecord({ course: block.course, originalText: block.anchor.text, period: block.period });
+  const classification = classifyEducationRecord({ course: block.course, originalText: block.anchor.text, period: block.period, description: block.description });
   return {
     ...classification,
     id: stableReviewEntityId("education", `sibling:${block.anchor.pageNumber}:${block.anchor.sequence}:${block.course}:${block.institution}:${block.period}`),
@@ -1460,7 +1462,7 @@ function sliceExperienceSection(lines: CandidateLine[]): CandidateLine[] {
 }
 
 function extractPeriod(value: string): string | null {
-  return (PERIOD_TOKEN.exec(value)?.[0] ?? OCR_DEGRADED_NUMERIC_PERIOD.exec(value)?.[0])?.replace(/\s+/g, " ").trim() ?? null;
+  return (RESUME_PERIOD_PATTERN.exec(value)?.[0] ?? PERIOD_TOKEN.exec(value)?.[0] ?? OCR_DEGRADED_NUMERIC_PERIOD.exec(value)?.[0])?.replace(/\s+/g, " ").trim() ?? null;
 }
 
 function cleanHeaderRole(value: string): string {

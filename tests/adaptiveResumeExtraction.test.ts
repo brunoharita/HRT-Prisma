@@ -522,7 +522,8 @@ test("Paddle-style parallel period and content columns preserve complete experie
   const extraction = buildAdaptiveExtraction([page]);
   assert.deepEqual(extraction.draft.experiences.map((item) => item.organization), ["Movile", "Vtex", "Catho"]);
   assert.deepEqual(extraction.draft.experiences.map((item) => item.role), ["Desenvolvedora de Software", "Engenheira de Software Front-End", "Programadora Web"]);
-  assert.deepEqual(extraction.draft.experiences.map((item) => item.period), ["06/2021-09/2023", "01/2019-05/2021", "01/2018-12/2018"]);
+  assert.deepEqual(extraction.draft.experiences.map((item) => item.period), ["01/06/2021 - 30/09/2023", "01/01/2019 - 31/05/2021", "01/01/2018 - 31/12/2018"]);
+  assert.ok(extraction.fieldEvidence.some((item) => item.text === "06/2021-09/2023"));
   const periodEvidence = extraction.fieldEvidence.find((item) => item.fieldPath.endsWith(".period"));
   assert.equal(periodEvidence?.x, 0.09);
 });

@@ -3,6 +3,7 @@ import type {
   StructuredEducation,
   StructuredExperience,
 } from "./personIngestion.js";
+import { normalizeDraftPeriods } from "./resumeDates.js";
 import {
   educationClassificationNeedsReview,
   isEducationLevelQualificationCompatible,
@@ -98,7 +99,7 @@ export function isEducationEmpty(item: StructuredEducation): boolean {
 }
 
 export function normalizeReviewDraft(draft: StructuredDraft): StructuredDraft {
-  return {
+  return normalizeDraftPeriods({
     ...draft,
     identity: { fullName: nullableText(draft.identity.fullName) },
     contact: {
@@ -145,7 +146,7 @@ export function normalizeReviewDraft(draft: StructuredDraft): StructuredDraft {
     }),
     uncertainties: normalizeTags(draft.uncertainties),
     notIdentified: normalizeTags(draft.notIdentified),
-  };
+  });
 }
 
 export function reviewDraftChangeState(

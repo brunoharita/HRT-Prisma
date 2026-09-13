@@ -3,6 +3,7 @@ import { normalizeLinkedinUrl, type FieldEvidenceDescriptor } from "./adaptiveRe
 import { classifyEducationRecord } from "../../../src/domain/educationClassification.js";
 import { stableReviewEntityId } from "./reviewFieldLifecycle.js";
 import { normalizeResumeEmail, normalizeResumePhone, type ResumeIdentity } from "../../../src/domain/resumeIdentity.js";
+import { normalizeDraftPeriods } from "./resumeDates.js";
 
 export const PARSER_IA_VERSION = "parser-ia-1.0.0";
 export const PARSER_IA_SOURCE_VERSION = "pdfjs-5.4.296/parser-ia-spans-v1";
@@ -175,7 +176,8 @@ export function structureParserIa(raw: unknown, pages: ExtractedPage[], binding:
   const duplicates = draft.education.filter((item, index, list) => list.findIndex((other) => other.course === item.course && other.institution === item.institution && other.period === item.period) !== index);
   if (duplicates.length) draft.uncertainties.push("Há formações possivelmente duplicadas; confirmar a consolidação na revisão.");
   for (const [name, present] of [["nome", draft.identity.fullName], ["e-mail", draft.contact.email], ["telefone", draft.contact.phone], ["experiências", draft.experiences.length], ["formação", draft.education.length], ["idiomas", draft.languages.length]] as const) if (!present) draft.notIdentified.push(name);
-  return { version: PARSER_IA_VERSION, sourceSha256: binding.sourceSha256, organizationId: binding.organizationId, status: payload.status === "partial" || draft.uncertainties.length > 0 ? "partial" : "structured_for_review", draft, fieldEvidence: evidence, acceptedFacts, rejected, provenance: binding.provenance };
+  const normalizedDraft = normalizeDraftPeriods(draft);
+  return { version: PARSER_IA_VERSION, sourceSha256: binding.sourceSha256, organizationId: binding.organizationId, status: payload.status === "partial" || normalizedDraft.uncertainties.length > 0 ? "partial" : "structured_for_review", draft: normalizedDraft, fieldEvidence: evidence, acceptedFacts, rejected, provenance: binding.provenance };
 }
 
 export function parserIaIdentity(result: ParserIaResult): ResumeIdentity {

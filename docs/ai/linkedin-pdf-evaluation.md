@@ -31,7 +31,7 @@ Fontes oficiais verificadas: [modelo](https://developers.openai.com/api/docs/mod
 
 PDF do PO é ajuste; quatro PDFs adicionais são avaliação. Relatórios privados precisam guardar fonte, propostas, páginas/trechos, versão e latência. Referência deve ser revisada por humano com a fonte, antes de calcular fidelidade ou esforço real. Métricas distinguem valor incorreto, omissão, associação incorreta, invenção e citação inválida. Comparar registros por identidade/evidência, nunca apenas posição no array. Sem referência aprovada: contagens são inventário, qualidade permanece NOT TESTED.
 
-Proveniência/links fornecem rastreabilidade, não autenticidade do perfil nem veracidade profissional. Idiomas conservam proficiência no string existente. Localização não mapeável permanece em evidência/pendência, sem inferir cidade/estado. Classificação acadêmica usa o classificador existente; status não é deduzido só de data final.
+Proveniência/links fornecem rastreabilidade, não autenticidade do perfil nem veracidade profissional. Idiomas conservam proficiência no string existente. Localização não mapeável permanece em evidência/pendência, sem inferir cidade/estado. Classificação acadêmica reutiliza o classificador compartilhado: a partir da regra aprovada em 2026-09-12, versão 1.1.0, curso declarado sem indicação contrária assume conclusão inferida. O snapshot identifica a versão e a origem; resultados anteriores não devem ser comparados sem considerar essa mudança. O protótipo offline preserva períodos textuais para avaliação da extração; a aplicação padroniza as datas ao construir/salvar o rascunho.
 
 ## Execução local reproduzível
 

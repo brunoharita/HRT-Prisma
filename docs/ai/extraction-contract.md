@@ -2,11 +2,11 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0. Consumidores: `processResume` e ingestão M2-B. Estado: ativo localmente e com persistência validada em QA. A ingestão web acrescenta `adaptive-resume-extraction` 7.1.0 e `education-academic-classification` 1.0.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, colunas paralelas e descoberta genérica de registros irmãos estão implementados.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0 (shape preservado). Consumidores: `processResume` e ingestão M2-B. A ingestão web acrescenta `adaptive-resume-extraction` 7.2.0 e `education-academic-classification` 1.1.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, colunas paralelas e descoberta genérica de registros irmãos. A regra local de 2026-09-12 normaliza datas e períodos por `resume-dates-1.0.0`, conforme `docs/qa/resume-date-education-rules.md`; não equivale a novo rollout do banco.
 
 ## Entrada
 
-Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR-049. Acrescenta interpretação via backend local antes do preenchimento, com propostas ancoradas aos spans originais, verificação e revisão humana. ExtractionDraft 8.1.0 e publicação permanecem existentes; a versão de estruturação da nova rota inclui contrato/modelo/hash do prompt. Não está ativa online nem substitui silenciosamente a extração padrão.
+Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR-049. Acrescenta interpretação via backend local antes do preenchimento, com propostas ancoradas aos spans originais, verificação e revisão humana. ExtractionDraft 8.2.0 registra a normalização de datas após validação das propostas; a versão de estruturação da rota inclui contrato/modelo/hash do prompt. O contrato do modelo e seu cache não mudam. Não está ativa online nem substitui silenciosamente a extração padrão.
 
 - `sourceText`: texto tratado como payload não confiável;
 - `filename`: nome sanitizável, sem autoridade;
@@ -20,7 +20,7 @@ Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR
 - blocos irmãos: uma experiência humana completa e com evidência espacial gera uma assinatura temporária do documento. Seção, cabeçalho, período, corpo, espaçamento e coluna são avaliados por critérios nomeados. Fontes sem geometria, colunas distintas, ambiguidades e duplicidades não geram novas experiências seguras.
 - áreas personalizadas: somente títulos previamente aprovados no mesmo tenant são candidatos; o título precisa coincidir após normalização e o conteúdo é relido no documento até o próximo cabeçalho reconhecido, com evidência por item.
 - resumo profissional: somente uma seção explicitamente intitulada é extraída. Variações PT/EN e conteúdo unido ao cabeçalho pelo PDF são aceitos; a próxima seção reconhecida encerra a captura, e a ausência permanece nula em vez de produzir uma síntese automática.
-- formação: curso, nível, qualificação e situação são dimensões independentes. Regras PT/EN ignoram caixa, acentos e variações de hífen. Período encerrado não prova conclusão; `Atual/Present` apenas sugere andamento; pós-graduação genérica não vira especialização; `Tecnologia em` é graduação tecnológica, nunca curso técnico.
+- formação: curso, nível, qualificação e situação são dimensões independentes. Regras PT/EN ignoram caixa, acentos e variações de hífen. Curso declarado sem indicação contrária assume conclusão inferida; status de não conclusão ou andamento explícito prevalece. `Atual/Present` sugere andamento; pós-graduação genérica não vira especialização; `Tecnologia em` é graduação tecnológica, nunca curso técnico. Evidência e confirmação humana continuam obrigatórias conforme o contrato de revisão.
 
 ## Saída de sucesso
 

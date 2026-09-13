@@ -700,6 +700,7 @@ function classificationReasonLabel(reason: string): string {
     explicit_undergraduate_level_marker: "Graduação informada no documento",
     explicit_secondary_level_marker: "Ensino médio informado no documento",
     explicit_completed_status: "Conclusão informada no documento",
+    completion_assumed_for_declared_education: "Conclusão assumida: formação declarada sem indicação contrária",
     explicit_in_progress_status: "Andamento informado no documento",
     explicit_interrupted_status: "Interrupção informada no documento",
     explicit_suspended_status: "Trancamento informado no documento",

@@ -1,5 +1,11 @@
 # Versionamento
 
+## Complemento local M5.7: formação, datas e duração (2026-09-12)
+
+`education-academic-classification` 1.1.0 assume conclusão inferida para curso declarado salvo indicação contrária. `resume-dates-1.0.0` normaliza componentes temporais e calcula diferença entre datas civis; `extraction-draft` 8.2.0 registra essa semântica no payload persistido existente. `adaptive-resume-extraction` 7.2.0 usa runtime `prisma-layout-adaptive-v10`; busca de perfis 1.1.0 substitui estimativa só por anos por duração em dias. Provider determinístico local passa a `deterministic-local-1.1.0`.
+
+O contrato de transporte/prompt/cache `parser-ia-1.0.0` mantém shape e fatos originais; o pós-processamento determinístico e snapshots acadêmicos usam as novas versões. SQL/RPCs, timestamps de auditoria e registros publicados não mudam. Produto permanece v1.5.11, pois esta melhoria complementa o M5.7 aceito. Rollback é reversão do código; históricos preservam snapshots e notas originais, sem backfill reverso. Acordo e AoT: `docs/qa/resume-date-education-rules.md`.
+
 ## Versão de produto exibida no Prisma
 
 O Prisma usa uma versão de produto própria, separada das versões semânticas dos contratos técnicos:

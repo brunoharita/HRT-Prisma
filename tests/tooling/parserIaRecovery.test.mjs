@@ -9,7 +9,7 @@ import * as pdfjs from 'pdfjs-dist';
 import { validateReviewDraftForSave } from '../../dist/web/src/domain/reviewFieldLifecycle.js';
 
 function sourcePdf(extra = '') {
-  const content = `BT /F1 12 Tf 50 740 Td (Synthetic Person) Tj 0 -20 Td (Senior Analyst) Tj 0 -20 Td (Example Company) Tj 0 -20 Td (synthetic@example.com) Tj 0 -20 Td (www.linkedin.com/in/synthetic-profile) Tj 0 -20 Td (Responsible for reporting, process analysis and documented improvements to the existing operating procedures. ${'Documented project delivery. '.repeat(10)}${extra}) Tj ET`;
+  const content = `BT /F1 12 Tf 50 740 Td (Synthetic Person) Tj 0 -20 Td (Senior Analyst) Tj 0 -20 Td (Example Company) Tj 0 -20 Td (synthetic@example.com) Tj 0 -20 Td (www.linkedin.com/in/synthetic-profile) Tj 0 -20 Td (Responsible for reporting, process analysis and documented improvements to the existing operating procedures. ${'Documented project delivery. '.repeat(10)}${extra}) Tj 0 -20 Td (2020 - Present) Tj 0 -20 Td (MBA in Management) Tj 0 -20 Td (2018 - 2019) Tj ET`;
   const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Count 1 /Kids [3 0 R] >>', '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1000 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>', `<< /Length ${content.length} >>\nstream\n${content}\nendstream`];
   let pdf = '%PDF-1.4\n'; const offsets = [0];
   objects.forEach((object, index) => { offsets.push(Buffer.byteLength(pdf)); pdf += `${index + 1} 0 obj\n${object}\nendobj\n`; });
@@ -31,6 +31,9 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
     { path: 'contact.linkedin', value: 'www.linkedin.com/in/synthetic-profile', sources: ['p1l5'] },
     { path: 'experiences.a.role', value: 'Senior Analyst', sources: ['p1l2'] },
     { path: 'experiences.a.organization', value: 'Example Company', sources: ['p1l3'] },
+    { path: 'experiences.a.period', value: '2020 - Present', sources: ['p1l7'] },
+    { path: 'education.a.course', value: 'MBA in Management', sources: ['p1l8'] },
+    { path: 'education.a.period', value: '2018 - 2019', sources: ['p1l9'] },
   ], uncertainties: [] }, pages, { organizationId: 'org', sourceSha256: checksum, provenance: { model: 'gpt-5.6-luna', promptSha256: 'b'.repeat(64), responseId: 'resp_fake', inputTokens: 0, outputTokens: 0, costUsd: 0, durationMs: 1 } });
   const pattern = new RegExp((await readFile('supabase/migrations/20260910104122_allow_ocr_spatial_field_evidence.sql', 'utf8')).match(/!~ '([^']+)'/)[1]);
   const vite = await createServer({ configFile: 'web/vite.config.ts', server: { middlewareMode: true, watch: null }, logLevel: 'silent' });
@@ -55,6 +58,12 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
       if (name === 'persist_person_extraction') {
         assert.equal(args.p_person_id, 'person'); assert.equal(args.p_document_id, 'doc'); assert.equal(args.p_idempotency_key, 'resume-intake-extraction:intake');
         assert.equal(args.p_draft.experiences.length, 1);
+        assert.equal(args.p_draft.experiences[0].period, '01/01/2020 - Atual');
+        assert.equal(args.p_draft.education[0].period, '01/01/2018 - 31/12/2019');
+        assert.equal(args.p_draft.education[0].status, 'completed');
+        assert.equal(args.p_draft.education[0].classificationSources.status, 'inferred');
+        assert.equal(args.p_draft_version, '8.2.0');
+        assert.ok(args.p_draft.uncertainties.some(value => value.includes('2020 - Present') && value.includes('assumidos')));
         assert.equal(args.p_draft.contact.linkedin, 'https://www.linkedin.com/in/synthetic-profile');
         assert.deepEqual(validateReviewDraftForSave(args.p_draft), []);
         for (const page of args.p_pages) for (const evidence of page.field_evidence) assert.ok(pattern.test(evidence.fieldPath), evidence.fieldPath);

@@ -1,5 +1,6 @@
 import type { Json } from "./database.types";
 import { supabase } from "./client";
+import { normalizeDraftPeriods } from "../../domain/resumeDates.js";
 import type { ResumeIdentity } from "../../../../src/domain/resumeIdentity.js";
 import {
   EXTRACTION_DRAFT_VERSION,
@@ -528,7 +529,7 @@ export const personIngestionService = {
       p_organization_id: organizationId,
       p_review_id: reviewId,
       p_expected_lock_version: expectedLockVersion,
-      p_reviewed_data: reviewedData as unknown as Json,
+      p_reviewed_data: normalizeDraftPeriods(reviewedData) as unknown as Json,
       p_reason: automaticReviewChangeReason(),
       p_idempotency_key: createOperationKey("save-review"),
     });
@@ -548,7 +549,7 @@ export const personIngestionService = {
       p_organization_id: organizationId,
       p_review_id: reviewId,
       p_expected_lock_version: expectedLockVersion,
-      p_reviewed_data: reviewedData as unknown as Json,
+      p_reviewed_data: normalizeDraftPeriods(reviewedData) as unknown as Json,
       p_reason: "Atualização técnica automática para o contrato vigente; conteúdo e proveniência preservados.",
       p_idempotency_key: createOperationKey("synchronize-review-contract"),
     });
@@ -597,7 +598,7 @@ export const personIngestionService = {
       p_organization_id: input.organizationId,
       p_review_id: input.reviewId,
       p_expected_lock_version: input.expectedLockVersion,
-      p_reviewed_data: input.reviewedData as unknown as Json,
+      p_reviewed_data: normalizeDraftPeriods(input.reviewedData) as unknown as Json,
       p_source_field_path: input.sourceFieldPath,
       p_pattern_key: input.patternKey,
       p_method_version: input.methodVersion,
@@ -677,7 +678,7 @@ export const personIngestionService = {
       p_selected_text: input.selectedText,
       p_refinement_decisions: input.refinementDecisions as unknown as Json,
       p_extraction_method: input.extractionMethod,
-      p_reviewed_data: input.reviewedData as unknown as Json | null,
+      p_reviewed_data: input.reviewedData ? normalizeDraftPeriods(input.reviewedData) as unknown as Json : null,
       p_reason: automaticEvidenceReason(input.action, input.pageNumber),
       p_replaces_link_id: input.replacesLinkId,
       p_idempotency_key: createOperationKey("record-review-evidence"),
@@ -1199,7 +1200,7 @@ async function persistExtraction(
     p_person_id: personId,
     p_document_id: documentId,
     p_pages: pagePayload,
-    p_draft: draft as unknown as Json,
+    p_draft: normalizeDraftPeriods(draft) as unknown as Json,
     p_pages_native: pagesNative,
     p_pages_ocr: pagesOcr,
     p_native_extraction_version: structuringVersion.startsWith(`${PARSER_IA_VERSION}/`) ? PARSER_IA_SOURCE_VERSION : NATIVE_EXTRACTION_VERSION,

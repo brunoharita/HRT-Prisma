@@ -39,13 +39,13 @@ test("LinkedIn prototype does not inherit a standalone company for an unassociat
   assert.ok(result.unassigned.some((item) => item.text === "Outro cargo sem empresa"));
 });
 
-test("LinkedIn prototype preserves institution/course across pages without inventing completion", () => {
+test("LinkedIn prototype preserves institution/course across pages and labels assumed completion as inference", () => {
   const result = evaluateLinkedInPdf([page(1, [...intro(), line("Formação acadêmica", 0.2, 15.75), line("Instituição Um", 0.9, 12)]), page(2, [line("MBA, Gestão de Negócios · (2019 - 2020)", 0.05), line("Instituição Dois", 0.12, 12), line("Curso sem classificação · (2015 - 2016)", 0.15)])]);
   assert.equal(result.draft.education.length, 2);
   assert.equal(result.draft.education[0]?.institution, "Instituição Um");
   assert.equal(result.draft.education[0]?.course, "MBA, Gestão de Negócios");
   assert.equal(result.draft.education[0]?.period, "2019 - 2020");
-  assert.ok(result.draft.education.every((item) => item.status === "unknown" && item.classificationReviewed === false));
+  assert.ok(result.draft.education.every((item) => item.status === "completed" && item.classificationSources?.status === "inferred" && item.classificationReviewed === false));
   const first = result.draft.education[0]!;
   assert.equal(result.fieldEvidence.find((item) => item.fieldPath === `education.${first.id}.course`)?.pageNumber, 2);
 });

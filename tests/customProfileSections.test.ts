@@ -73,7 +73,8 @@ test("an approved custom heading is recognized on first extraction with item-lev
   assert.deepEqual(result.draft.customSections[0]?.items.map((item) => item.value), ["Implantação do ERP corporativo", "Automação do centro logístico"]);
   assert.equal(result.fieldEvidence.filter((evidence) => evidence.fieldPath.startsWith(`customSections.${sectionKey}.items.`)).length, 2);
   assert.ok(result.fieldEvidence.every((evidence) => !evidence.text.includes("Reconhecimento que não pertence")));
-  assert.ok(result.fieldEvidence.every((evidence) => !evidence.text.includes("MBA em Gestão")));
+  assert.ok(result.fieldEvidence.filter((evidence) => evidence.fieldPath.startsWith("customSections.")).every((evidence) => !evidence.text.includes("MBA em Gestão")));
+  assert.ok(result.fieldEvidence.some((evidence) => evidence.fieldPath.startsWith("education.") && evidence.fieldPath.endsWith(".status") && evidence.text === "MBA em Gestão"));
 });
 
 test("custom area migration validates shape, isolates tenants and learns metadata without profile content", async () => {

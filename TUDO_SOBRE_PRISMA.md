@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: f1fd9ac21860da1e40d359385843da62c4663f4906eec57611a05fe85aff80c0
+source_manifest_sha256: 348d5fe18ac66350f2f1b1728c99ab5ea4dedc1346120d463b31a499f511a6ca
 -->
 
 # Tudo sobre o Prisma
@@ -402,11 +402,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.8
+version: 2.29.9
 last_verified: 2026-09-12
 ---
 
 # Estado atual do Prisma
+
+## Formação, datas e duração de experiência
+
+Regra autorizada por Bruno em 2026-09-12, complemento local do M5.7: curso declarado assume conclusão inferida salvo indicação contrária. Classificador 1.1.0 distingue conclusão prevista, andamento, trancamento e interrupção; preserva snapshot e confirmação humana. `resume-dates-1.0.0` padroniza datas/períodos do currículo em DD/MM/YYYY, completando dia/mês pelos limites aprovados. `Atual` permanece aberto e o cálculo usa a data civil do dia; busca 1.1.0 usa diferença em dias com precisão completa antes de filtrar. `extraction-draft` 8.2.0, extração adaptativa 7.2.0 e runtime v10 registram a evolução. Parser IA mantém contrato/prompt/cache 1.0.0, aplicando as regras locais depois de validar fatos.
+
+Originais e inferências permanecem separados nos fatos/evidências e nas notas persistidas do rascunho. Registros publicados não são reescritos; datas inválidas ou sem ano não geram duração. Gate local aprovado: 401 testes, 19 golden e 34 regressões após ajuste final de precedência. Replay offline do PDF de João: 11 períodos normalizados, nove durações calculáveis, duas formações concluídas por inferência e contrato/recarga válidos. Sem nova migração, mudança de Auth/RLS, chamada OpenAI ou publicação de pessoa real. Acordo e evidência em `docs/qa/resume-date-education-rules.md`. Produto permanece v1.5.11: melhoria dentro da entrega M5.7, sem novo incremento de entrega aceita.
 
 ## M5.7 Parser IA - etapa local aprovada
 

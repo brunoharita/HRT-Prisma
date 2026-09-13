@@ -4,6 +4,8 @@ Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.m
 
 ## Funcionamento
 
+Complemento aprovado em 2026-09-12: após validar as propostas contra a fonte, a aplicação normaliza períodos por `resume-dates-1.0.0` e classifica formação por 1.1.0. Curso declarado sem indicação contrária recebe conclusão inferida; datas usam DD/MM/YYYY e limites aprovados para componentes ausentes. “Atual” não ganha data final persistida. Originais continuam em `acceptedFacts`, evidências e notas de inferência do rascunho 8.2.0. O cache da resposta bruta continua reutilizável, sem nova chamada ao modelo por causa dessa regra. Contrato e testes: `../qa/resume-date-education-rules.md`.
+
 Backend Node local lê o PDF com PDF.js, mantendo spans e coordenadas independentes de coluna. OpenAI recebe PDF inline e spans com IDs, sem referência humana ou baseline como gabarito. Resposta estrita contém `status`, `facts[{path,value,sources}]` e `uncertainties`. O domínio verifica IDs, caminhos, duplicações, suporte textual, campos de contato e vínculo organização/hash. Fatos sem suporte ficam fora do rascunho e geram pendência; zero fatos é erro.
 
 As coordenadas de evidência são exclusivamente da fonte. Vários spans/páginas podem suportar um campo. Preservar palavra composta, separação explícita de listas, múltiplos cargos e períodos; títulos/cursos ausentes permanecem nulos. Duplicatas de formação são sinalizadas para decisão humana. O modelo não decide publicação, contratação, permissões ou mutação de dados aprovados.

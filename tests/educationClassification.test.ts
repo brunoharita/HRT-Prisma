@@ -55,10 +55,13 @@ test("keeps generic postgraduate qualification unknown and reviewable", () => {
   assert.equal(educationClassificationNeedsReview(result), true);
 });
 
-test("a closed period never proves completion", () => {
+test("declared education defaults to inferred completion without claiming explicit proof", () => {
   const result = classifyEducationRecord({ course: "MBA em Gestão", period: "2019 - 2020" });
-  assert.equal(result.status, "unknown");
-  assert.equal(result.classificationSources.status, "unknown");
+  assert.equal(result.status, "completed");
+  assert.equal(result.classificationSources.status, "inferred");
+  assert.ok(result.classificationReasons.includes("completion_assumed_for_declared_education"));
+  assert.equal(result.classifierSnapshot.status, "completed");
+  assert.equal(educationClassificationNeedsReview(result), true);
 });
 
 test("current period only infers in-progress and still requires review", () => {
@@ -80,8 +83,8 @@ test("ambiguous education stays unknown instead of inventing a degree", () => {
   const result = classifyEducationRecord({ course: "Programa Executivo de Liderança" });
   assert.equal(result.level, "unknown");
   assert.equal(result.qualification, "unknown");
-  assert.equal(result.status, "unknown");
-  assert.equal(result.classificationOrigin, "unknown");
+  assert.equal(result.status, "completed");
+  assert.equal(result.classificationOrigin, "inferred");
 });
 
 test("human override preserves the original classifier snapshot", () => {

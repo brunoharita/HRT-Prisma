@@ -13,7 +13,7 @@ Formação era persistida como curso, instituição e período. Textos como “T
 - O array canônico `education` é enriquecido; não existe tabela ou fluxo paralelo.
 - `education-academic-classification` 1.0.0 separa `level`, `qualification`, `status`, `classificationOrigin` e origem por dimensão.
 - A classificação inicial é determinística, local e versionada. Ela reconhece português e inglês com normalização de caixa, acentos e hífens, sem LLM.
-- Período encerrado não prova conclusão. `Atual/Present` gera somente `in_progress` inferido. Pós-graduação genérica mantém qualificação `unknown`. `Tecnologia em` é graduação tecnológica.
+- Revisão aprovada pelo PO em 2026-09-12, classificador 1.1.0: formação com curso declarado assume conclusão inferida na ausência de indicação contrária. Isso substitui a regra inicial de deixar situação desconhecida nesse caso; não transforma um período encerrado em prova explícita de conclusão. `Atual/Present` gera `in_progress` inferido; andamento previsto, trancamento e interrupção explícitos prevalecem. Pós-graduação genérica mantém qualificação `unknown`. `Tecnologia em` é graduação tecnológica.
 - `originalText`, motivos, versão e `classifierSnapshot` preservam o resultado inicial. Override humano altera a classificação efetiva e nunca apaga o snapshot.
 - Inferência ou insuficiência exige confirmação humana antes da publicação. Combinações incompatíveis falham no cliente e no banco.
 - Perfis históricos sem o contrato continuam legíveis com fallback `unknown`, sem backfill inventado.

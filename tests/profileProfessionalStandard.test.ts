@@ -77,6 +77,19 @@ test("all and any competency semantics are explicit and deterministic", () => {
   assert.equal(any.length, 1);
 });
 
+test("experience search uses exact date differences and excludes closed roles in a current-only duration filter", () => {
+  const profile = draft();
+  const exp = profile.experiences[0]!;
+  const short = candidate("short", draft({ experiences: [{ ...exp, period: "31/12/2020 - 01/01/2021" }] }));
+  assert.equal(searchPublishedProfiles([short], { ...emptyProfileSearchQuery(), minimumYears: 0.01 }).length, 0);
+  assert.equal(searchPublishedProfiles([short], { ...emptyProfileSearchQuery(), minimumYears: 0 }).length, 1);
+  const now = new Date();
+  const today = `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}/${now.getFullYear()}`;
+  const mixed = candidate("mixed", draft({ experiences: [{ ...exp, period: `${today} - Atual` }, { ...exp, id: "closed", period: "2000 - 2010" }] }));
+  assert.equal(searchPublishedProfiles([mixed], { ...emptyProfileSearchQuery(), currentExperienceOnly: true, minimumYears: 1 }).length, 0);
+  assert.equal(searchPublishedProfiles([mixed], { ...emptyProfileSearchQuery(), minimumYears: 1 }).length, 1);
+});
+
 test("pilot demonstration covers three synthetic Personas from Profile to discovery and comparison", () => {
   const complete = candidate("complete", draft({
     identity: { fullName: "Ana Operações" },

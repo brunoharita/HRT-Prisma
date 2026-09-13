@@ -1,4 +1,4 @@
-export const EDUCATION_CLASSIFIER_VERSION = "1.0.0";
+export const EDUCATION_CLASSIFIER_VERSION = "1.1.0";
 
 export const EDUCATION_LEVELS = ["secondary", "technical", "undergraduate", "postgraduate", "unknown"] as const;
 export const EDUCATION_QUALIFICATIONS = [
@@ -147,14 +147,16 @@ export function classifyEducationRecord(input: EducationClassificationInput): Ed
   let statusOrigin: EducationClassificationOrigin = "unknown";
   if (/\b(trancad[oa]|suspens[oa]|on hold|suspended)\b/.test(normalized)) {
     status = "suspended"; statusOrigin = "explicit"; reasons.push("explicit_suspended_status");
-  } else if (/\b(interrompid[oa]|incomplet[oa]|desistente|dropped out|interrupted|unfinished)\b/.test(normalized)) {
+  } else if (/\b(interrompid[oa]|incomplet[oa]|desistente|abandonad[oa]|cancelad[oa]|nao concluid[oa]|nao finalizad[oa]|sem conclusao|dropped out|interrupted|unfinished|incomplete|not completed|not graduated|discontinued|withdrawn)\b/.test(normalized)) {
     status = "interrupted"; statusOrigin = "explicit"; reasons.push("explicit_interrupted_status");
+  } else if (/\b(cursando|em andamento|em curso|conclusao prevista|previsao de conclusao|previsao de termino|a concluir|in progress|currently studying|ongoing|expected|anticipated|pursuing)\b/.test(normalized)) {
+    status = "in_progress"; statusOrigin = "explicit"; reasons.push("explicit_in_progress_status");
   } else if (/\b(concluid[oa]|conclusao|complet(?:ed|e)|graduated|finalizad[oa])\b/.test(normalized)) {
     status = "completed"; statusOrigin = "explicit"; reasons.push("explicit_completed_status");
-  } else if (/\b(cursando|em andamento|in progress|currently studying|ongoing)\b/.test(normalized)) {
-    status = "in_progress"; statusOrigin = "explicit"; reasons.push("explicit_in_progress_status");
   } else if (/\b(atual|presente|present|current)\b/.test(normalizeEducationText(input.period ?? ""))) {
     status = "in_progress"; statusOrigin = "inferred"; reasons.push("current_period_suggests_in_progress");
+  } else if (input.course?.trim()) {
+    status = "completed"; statusOrigin = "inferred"; reasons.push("completion_assumed_for_declared_education");
   }
 
   const classificationSources: EducationClassificationSources = {

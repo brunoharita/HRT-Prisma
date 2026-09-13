@@ -1,7 +1,8 @@
 import { buildPrismaProfileView, type CanonicalKnowledgeTerm, type PrismaProfileView } from "./canonicalProfile.js";
 import type { StructuredDraft } from "./personIngestion.js";
+import { parseResumePeriod, resumePeriodDurationDays } from "../../../src/domain/resumeDates.js";
 
-export const PROFILE_DISCOVERY_VERSION = "1.0.0";
+export const PROFILE_DISCOVERY_VERSION = "1.1.0";
 
 export type CompetencyMatchMode = "all" | "any";
 
@@ -81,7 +82,7 @@ export function searchPublishedProfiles(
         && (areaMatchesProfile || matchesText([item.role, item.organization, item.description, item.evidenceText].filter(Boolean).join(" "), query.area));
     });
     if ((query.role || query.area || query.organization || query.currentExperienceOnly) && relevantExperiences.length === 0) return [];
-    const years = estimateExperienceYears(query.role || query.area || query.organization ? relevantExperiences : experiences);
+    const years = estimateExperienceYears(query.role || query.area || query.organization || query.currentExperienceOnly ? relevantExperiences : experiences);
     if (query.minimumYears !== null && (years === null || years < query.minimumYears)) return [];
 
     const education = candidate.profileData.education;
@@ -159,23 +160,17 @@ function languageRank(value: string): number | null {
   return null;
 }
 
-function estimateExperienceYears(experiences: StructuredDraft["experiences"]): number | null {
-  const months = experiences.flatMap((item) => periodMonths(item.period)).reduce((total, value) => total + value, 0);
-  return months > 0 ? Math.round((months / 12) * 10) / 10 : null;
-}
-
-function periodMonths(period: string | null): number[] {
-  if (!period) return [];
-  const years = period.match(/\b(19|20)\d{2}\b/g)?.map(Number) ?? [];
-  if (!years.length) return [];
-  const start = years[0]!;
-  const end = /atual|presente|current/i.test(period) ? new Date().getFullYear() : years[1];
-  if (!end || end < start || end - start > 70) return [];
-  return [Math.max(1, (end - start) * 12)];
+export function estimateExperienceYears(experiences: StructuredDraft["experiences"], today = new Date()): number | null {
+  const durations = experiences.flatMap((item) => {
+    const days = resumePeriodDurationDays(item.period, today);
+    return days === null ? [] : [days];
+  });
+  // Keep full precision for filtering; rounding belongs only to presentation.
+  return durations.length ? durations.reduce((total, days) => total + days, 0) / 365.2425 : null;
 }
 
 function isCurrentPeriod(period: string | null): boolean {
-  return Boolean(period && /atual|presente|current/i.test(period));
+  return parseResumePeriod(period)?.current === true;
 }
 
 function matchesText(value: string | null | undefined, query: string): boolean {

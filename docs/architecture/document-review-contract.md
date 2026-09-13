@@ -20,7 +20,15 @@
 | `structured-resume-summary` | 1.1.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; o resumo termina na próxima seção e PII nunca é promovida ao perfil profissional |
 | `review-field-lifecycle` | 1.0.0 | vazios opcionais são normalizados; nome, contato e conteúdo profissional mínimo bloqueiam salvamento inválido; caminhos antigos continuam legíveis |
 
-## Estados
+## Datas e períodos de currículo
+
+Extensão local de 2026-09-12: `extraction-draft` 8.2.0 e `resume-dates-1.0.0`. Novas extrações e salvamentos de rascunhos usam `DD/MM/YYYY` e `DD/MM/YYYY - DD/MM/YYYY`. Dia/mês omitidos recebem primeiro dia/janeiro em data única e início, último dia/dezembro no fim. Ano ausente não é inventado. `Atual` permanece aberto e é resolvido para o dia civil da consulta somente ao calcular duração. A diferença entre datas é calculada em dias sem depender de horário de verão.
+
+O helper retorna componentes inferidos; a persistência reutiliza `uncertainties` para registrar texto original, valor normalizado e a explicação da inferência. Fatos, páginas e regiões originais não são reescritos. Não são adicionadas chaves ao JSON acadêmico/profissional aceito pelo SQL. Datas não interpretáveis permanecem como texto para revisão e duração indisponível; leitura de perfis aprovados não executa backfill. Timestamps operacionais preservam seu contrato técnico.
+
+Classificador acadêmico 1.1.0 assume `completed` inferido para curso declarado sem indicação contrária. A confirmação humana de classificação inferida permanece necessária. Acordo, execução e AoT em `docs/qa/resume-date-education-rules.md`.
+
+## Estados operacionais
 
 Documento: `pending`, `received`, `processing`, `processed`, `ready_for_review`, `in_review`, `approved`, `failed`, `extraction_failed`, `needs_manual_review`, `unsupported_format`.
 
