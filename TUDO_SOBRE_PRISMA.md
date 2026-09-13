@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 9c3dddfa190b6dfcc63cd60c5c05add3c9354c7f696e3b5815a0c1c94c5402d7
+source_manifest_sha256: 5cdc39dd0adb28e54cd869f11b884327a9c55b9267401edd34d5c2ef9236b855
 -->
 
 # Tudo sobre o Prisma
@@ -658,6 +658,8 @@ Em 2026-09-09, a branch `codex/m5-5-person-definitive-deletion` implementou a ex
 Em 2026-09-13, a migration forward-only `20260913132559_fix_person_deletion_trigger_execution` corrigiu no Prisma-QA a permissão do helper chamado pelos guards de exclusão. Antes, qualquer insert autenticado em uma tabela protegida podia falhar antes de avaliar o estado da Pessoa; o caso observado foi a decisão “Não considerar” em `match_evaluations`. A prova conectada com rollback gravou `dismissed` para uma Pessoa ativa e confirmou que uma sessão autenticada não consegue forjar o contexto autoritativo de exclusão. Contratos de matching, RLS, versões persistidas e produção não mudaram.
 
 Ainda em 2026-09-13, o contrato `vacancy-matching-explainable` avançou para 2.2.0 após um falso negativo confirmado na Posição `Analista de Marketing`. O Perfil publicado da Beatriz continha três cargos com o domínio Marketing, incluindo `Assistente de Marketing & Business Development`, mas a regra 2.1.0 exigia dois termos comuns e descartava a Pessoa após analisar o Perfil. O refinamento aceita um domínio ocupacional distintivo somente como relação possível para confirmação humana, ignora marcadores genéricos isolados e escolhe a evidência de cargo mais específica. O caso real reconstruído e o negativo `Analista Financeiro` passaram sem score, equivalência, inferência de competência ou alteração em Perfil e Knowledge.
+
+O esclarecimento do Product Owner no mesmo dia substituiu a aproximação 2.2.0 pelo contrato `vacancy-matching-explainable-2.3.0`: Beatriz deve aparecer porque possui experiência publicada na área de Marketing, não porque um termo isolado aproxima cargos diferentes. O domínio agora produz `areaRelation`, enquanto referência e proximidade de cargo continuam em `positionRelation`; requisitos permanecem independentes. A interface explica as três leituras sem score, e o caso reconstruído exige `experience_area` com `positionRelation: none`.
 
 Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
 

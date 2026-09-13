@@ -57,7 +57,7 @@ function vacancy(title: string, requirementLabels: string[]): VacancyDetail {
     versionId: `version-${title}`,
     version: 1,
     title,
-    area: "Comercial",
+    area: "",
     mission: "Estruturar a necessidade profissional específica.",
     requirements: requirementLabels.map((label) => ({ ...newVacancyRequirement(label, "competency"), importance: "required", importanceConfirmed: true })),
     jobRoleName: "Gerente Comercial",
@@ -146,8 +146,9 @@ test("descoberta ocupacional encontra títulos equivalentes por referência ou e
   assert.equal(matchVacancyCandidate(need, sameReference, { conceptId: "occupation-project-manager", canonicalLabel: need.title, aliases: [], relations: [] }).positionRelation.status, "same_reference");
 });
 
-test("domínio ocupacional distintivo recupera Beatriz sem transformar função diferente em equivalência", () => {
+test("experiência na área recupera Beatriz sem transformar função diferente em equivalência ocupacional", () => {
   const need = vacancy("Analista de Marketing", []);
+  need.area = "Marketing";
   need.referenceConceptId = "occupation-marketing-analyst";
   const beatriz = candidate("beatriz", "Beatriz Galazzini", profile({
     professionalTitle: null,
@@ -163,13 +164,46 @@ test("domínio ocupacional distintivo recupera Beatriz sem transformar função 
     aliases: ["Analista de marketing", "Analista de inteligência de mercado"],
     relations: [],
   });
-  assert.equal(match.positionRelation.status, "possible_title_relation");
-  assert.match(match.positionRelation.explanation, /Assistente de Marketing & Business Development/);
+  assert.equal(match.areaRelation.status, "experience_area");
+  assert.match(match.areaRelation.explanation, /Assistente de Marketing & Business Development/);
+  assert.equal(match.positionRelation.status, "none");
   assert.equal(isVacancyDiscoveryCandidate(match), true);
 
   const unrelated = matchVacancyCandidate(need, candidate("finance", "Analista sem domínio comum", profile({ professionalTitle: "Analista Financeiro" })));
+  assert.equal(unrelated.areaRelation.status, "none");
   assert.equal(unrelated.positionRelation.status, "none");
   assert.equal(isVacancyDiscoveryCandidate(unrelated), false);
+});
+
+test("área declarada no Perfil é sinal de entrada independente do cargo", () => {
+  const need = vacancy("Assistente de Marketing", []);
+  need.area = "Marketing";
+  const person = candidate("marketing-area", "Pessoa de Marketing", profile({
+    professionalTitle: "Executiva de Contas",
+    areasOfExpertise: ["Marketing Digital"],
+  }));
+  const match = matchVacancyCandidate(need, person);
+  assert.equal(match.areaRelation.status, "profile_area");
+  assert.equal(match.positionRelation.status, "none");
+  assert.equal(isVacancyDiscoveryCandidate(match), true);
+});
+
+test("descrição de experiência comprova área, enquanto resumo livre não cria o sinal", () => {
+  const need = vacancy("Analista de Marketing", []);
+  need.area = "Marketing";
+  const experience = matchVacancyCandidate(need, candidate("experience-area", "Pessoa com Experiência", profile({
+    areasOfExpertise: [],
+    experiences: [{ id: "exp", source: "human", role: "Executiva de Contas", organization: "Empresa", period: "2024", description: "Atuação integrada com Marketing e geração de demanda.", evidenceText: "", page: 1 }],
+  })));
+  assert.equal(experience.areaRelation.status, "experience_area");
+  assert.match(experience.areaRelation.evidence[0]?.fieldPath ?? "", /description/);
+
+  const summaryOnly = matchVacancyCandidate(need, candidate("summary-area", "Pessoa com Resumo", profile({
+    areasOfExpertise: [],
+    summary: "Profissional com interesse em Marketing.",
+  })));
+  assert.equal(summaryOnly.areaRelation.status, "none");
+  assert.equal(isVacancyDiscoveryCandidate(summaryOnly), false);
 });
 
 test("descoberta exclui Perfil sem qualquer sinal e preserva confirmação humana", () => {
@@ -228,7 +262,7 @@ test("descoberta pagina todos os Perfis e persiste confirmação ou descarte sem
   assert.match(page, /Confirmar relação/);
   assert.match(page, /Não considerar/);
   assert.match(page, /Perfis publicados analisados/);
-  assert.match(page, /Nenhum Perfil apresentou relação ocupacional ou evidência rastreável/);
+  assert.match(page, /Nenhum Perfil apresentou experiência na área, relação ocupacional ou outra evidência rastreável/);
 });
 
 test("estruturação livre confirma itens explícitos e deixa inferência derivada pendente", () => {

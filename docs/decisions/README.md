@@ -57,6 +57,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-048](ADR-048-scoped-agent-instructions.md) | accepted | Scoped instruction loading, explicit authority and reference-based agreement fidelity |
 
 | [ADR-050](ADR-050-shared-ux-foundation.md) | accepted | Base compartilhada de UX, Posições e continuidade isolada por contexto |
+| [ADR-051](ADR-051-area-first-vacancy-discovery.md) | accepted | Área profissional como sinal de entrada separado da proximidade do cargo |
 
 ## Rules
 

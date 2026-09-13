@@ -1,11 +1,21 @@
 # Evidência M5.4: Vagas
 
-## Falso negativo de domínio ocupacional — 2026-09-13
+## Falso negativo por ausência de relação explícita de área — 2026-09-13
 
 - O Prisma-QA confirmou que Beatriz Galazzini possui Perfil v1 publicado e ativo, com os cargos `Comercial, Marketing e Operações`, `Outbound Marketing` e `Assistente de Marketing & Business Development`. A Posição `Analista de Marketing` está vinculada à referência oficial publicada e ao alias aprovado `Analista de marketing`.
-- O contrato 2.1.0 exigia dois termos ocupacionais comuns. Como `Analista` e `Assistente` são marcadores diferentes e apenas `Marketing` coincidia, Beatriz era analisada, recebia zero sinal e era retirada pelo filtro final.
-- O contrato `vacancy-matching-explainable-2.2.0` aceita um domínio profissional distintivo compartilhado somente como relação possível e escolhe o cargo mais específico para explicar o resultado. Marcadores genéricos isolados continuam insuficientes.
-- A regressão reproduz os cargos publicados da Beatriz, confirma sua inclusão por `Assistente de Marketing & Business Development` e mantém `Analista Financeiro` fora da Posição. Não há score, equivalência automática, inferência de competência, alteração de Perfil, Knowledge, RLS ou migration.
+- O contrato 2.1.0 exigia dois termos ocupacionais comuns. O 2.2.0 tentou corrigir o caso tratando `Marketing` como domínio textual do cargo, mas o Product Owner esclareceu que a razão correta de entrada é atuação na área de Marketing; proximidade entre `Analista` e `Assistente` é um sinal posterior de ordenação e explicação.
+- O contrato `vacancy-matching-explainable-2.3.0` materializa `areaRelation` com evidência proveniente de área declarada ou experiência publicada. A relação de cargo volta a exigir igualdade, inclusão ou pelo menos dois termos ocupacionais comuns.
+- A regressão reproduz os cargos publicados da Beatriz, confirma sua inclusão por `experience_area` a partir de `Assistente de Marketing & Business Development`, mantém `positionRelation: none` e exclui `Analista Financeiro` sem experiência em Marketing. Também cobre área declarada no Perfil. Não há score, equivalência automática, inferência de competência, alteração de Perfil, Knowledge, RLS ou migration.
+
+### Agreement → Implementation → Test → Evidence
+
+| Contrato | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| D-AREA-001: experiência explícita na área da Posição deve incluir a Pessoa | `matchVacancyArea` e `isVacancyDiscoveryCandidate` | fixture da Beatriz com área `Marketing` e cargo publicado | PASS |
+| D-AREA-002: proximidade do cargo deve permanecer separada e apenas ordenar/explicar | `areaRelation` e `positionRelation` independentes; ordenação por classes | Beatriz entra com `experience_area` e `positionRelation: none` | PASS |
+| D-AREA-003: a interface deve explicar área, cargo e requisitos separadamente | cards, comparação e gaveta de evidências | typecheck e build da interface | PASS |
+| P-AREA-001: termo de área isolado não pode criar equivalência de cargo | limiar textual de cargo exige igualdade, inclusão ou dois termos | `Assistente de Marketing` não vira relação de cargo com `Analista de Marketing` | PASS |
+| P-AREA-002: não criar score, competência, senioridade ou mutação de Perfil/Knowledge | matching determinístico somente leitura | regressão e revisão de diff | PASS |
 
 ## Correção da decisão “Não considerar” — 2026-09-13
 

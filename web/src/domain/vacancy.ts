@@ -2,7 +2,7 @@ import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 import { groupCompetencies, parseLanguage } from "./canonicalProfile.js";
 
 export const VACANCY_DEFINITION_VERSION = "1.1.0";
-export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-2.2.0";
+export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-2.3.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
@@ -96,11 +96,12 @@ export interface VacancyMatchEvidence {
   source: string;
   sourceId?: string;
   fieldPath?: string;
-  dimension?: VacancyRequirementCategory | "professionalTitle";
+  dimension?: VacancyRequirementCategory | "professionalTitle" | "professionalArea";
   canonicalLabel?: string | null;
 }
 
 export type VacancyPositionRelationStatus = "same_reference" | "equivalent_reference" | "related_reference" | "possible_title_relation" | "none";
+export type VacancyAreaRelationStatus = "profile_area" | "experience_area" | "none";
 export type VacancyPositionRelationDecision = "confirmed" | "dismissed" | null;
 export type VacancyDetailedEvaluationStatus = "ready" | "pending_classification" | "no_requirements";
 
@@ -113,6 +114,12 @@ export interface VacancyOccupationReference {
 
 export interface VacancyPositionRelation {
   status: VacancyPositionRelationStatus;
+  explanation: string;
+  evidence: VacancyMatchEvidence[];
+}
+
+export interface VacancyAreaRelation {
+  status: VacancyAreaRelationStatus;
   explanation: string;
   evidence: VacancyMatchEvidence[];
 }
@@ -136,6 +143,7 @@ export interface VacancyRequirementMatch {
 
 export interface VacancyCandidateMatch {
   candidate: PublishedProfileCandidate;
+  areaRelation: VacancyAreaRelation;
   positionRelation: VacancyPositionRelation;
   positionDecision: VacancyPositionRelationDecision;
   detailedStatus: VacancyDetailedEvaluationStatus;
@@ -355,6 +363,7 @@ export function matchVacancyCandidate(
   candidate: PublishedProfileCandidate,
   occupationReference: VacancyOccupationReference | null = null,
 ): VacancyCandidateMatch {
+  const areaRelation = matchVacancyArea(vacancy, candidate);
   const positionRelation = matchVacancyPosition(vacancy, candidate, occupationReference);
   const requirements = vacancy.requirements.map((requirement): VacancyRequirementMatch => {
     const searchable = profileEvidenceForCategory(candidate, requirement.category);
@@ -432,12 +441,13 @@ export function matchVacancyCandidate(
     : unclassifiedRequirementCount
       ? "pending_classification"
       : "ready";
-  const evidenceAssessment = assessVacancyEvidence(positionRelation, requirements);
+  const evidenceAssessment = assessVacancyEvidence(areaRelation, positionRelation, requirements);
   const requirementReasons = requirements.filter((item) => item.status !== "no_evidence").map((item) => item.status === "related_signal"
     ? `${item.relatedSignal} é um sinal relacionado a ${item.requirement.label}`
     : item.status === "partially_met" ? `${item.requirement.label} possui evidência parcial para revisão` : `${item.requirement.label} possui evidência no Perfil`);
   return {
     candidate,
+    areaRelation,
     positionRelation,
     positionDecision: null,
     detailedStatus,
@@ -445,9 +455,10 @@ export function matchVacancyCandidate(
     evidenceAssessment,
     requirements,
     reasons: unique([
+      ...(areaRelation.status !== "none" ? [areaRelation.explanation] : []),
       ...(positionRelation.status !== "none" ? [positionRelation.explanation] : []),
       ...requirementReasons,
-      ...(positionRelation.status === "none" && !requirementReasons.length ? ["Perfil publicado disponível para análise manual"] : []),
+      ...(areaRelation.status === "none" && positionRelation.status === "none" && !requirementReasons.length ? ["Perfil publicado disponível para análise manual"] : []),
     ]),
     directCount,
     partialCount,
@@ -549,6 +560,7 @@ export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCan
     .sort((left, right) =>
       decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision)
       || positionRelationPriority(right.positionRelation.status) - positionRelationPriority(left.positionRelation.status)
+      || areaRelationPriority(right.areaRelation.status) - areaRelationPriority(left.areaRelation.status)
       || right.directCount - left.directCount
       || right.partialCount - left.partialCount
       || right.relatedCount - left.relatedCount
@@ -559,6 +571,7 @@ export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCan
 
 export function isVacancyDiscoveryCandidate(match: VacancyCandidateMatch): boolean {
   return match.positionDecision === "confirmed"
+    || match.areaRelation.status !== "none"
     || match.positionRelation.status !== "none"
     || match.directCount > 0
     || match.partialCount > 0
@@ -774,6 +787,63 @@ function knowledgeSupportsCategory(
   return categoryEvidence.some((candidate) => normalize(candidate.label) === normalize(item.originalTerm));
 }
 
+function matchVacancyArea(
+  vacancy: Pick<VacancyDetail, "title" | "area">,
+  candidate: PublishedProfileCandidate,
+): VacancyAreaRelation {
+  const area = vacancy.area.trim();
+  if (!area) return { status: "none", explanation: "A Posição não informa uma área profissional para comparação.", evidence: [] };
+
+  const publishedArea = candidate.profileData.areasOfExpertise
+    .map((label, index) => ({ label, index }))
+    .find((item) => phrasesOverlap(item.label, area));
+  if (publishedArea) return {
+    status: "profile_area",
+    explanation: `Atuação na área de ${area} identificada em “${publishedArea.label}” no Perfil publicado.`,
+    evidence: [evidence(publishedArea.label, "Área de atuação publicada", `areasOfExpertise:${publishedArea.index}`, `areasOfExpertise.${publishedArea.index}`, "professionalArea")],
+  };
+
+  const experienceEvidence = candidate.profileData.experiences.flatMap((item, experienceIndex) => {
+    const candidates = [
+      item.role ? { label: item.role, source: "Cargo em experiência profissional", fieldPath: `experiences.${item.id}.role`, order: 0 } : null,
+      item.description ? { label: item.description, source: "Descrição de experiência profissional", fieldPath: `experiences.${item.id}.description`, order: 1 } : null,
+      item.evidenceText ? { label: item.evidenceText, source: "Evidência de experiência profissional", fieldPath: `experiences.${item.id}.evidenceText`, order: 2 } : null,
+    ].filter((value): value is { label: string; source: string; fieldPath: string; order: number } => Boolean(value));
+    return candidates
+      .filter((value) => phrasesOverlap(value.label, area))
+      .map((value) => {
+        const displayLabel = value.order === 0 ? value.label : areaEvidenceExcerpt(value.label, area);
+        return {
+        ...value,
+        label: displayLabel,
+        experienceIndex,
+        titleCloseness: item.role ? occupationalTitleRelationStrength(vacancy.title, item.role) : 0,
+        evidence: evidence(displayLabel, value.source, `experience:${item.id}:${value.order}`, value.fieldPath, "professionalArea"),
+      };
+      });
+  }).sort((left, right) => right.titleCloseness - left.titleCloseness || left.order - right.order || left.experienceIndex - right.experienceIndex);
+  const selected = experienceEvidence[0];
+  if (selected) return {
+    status: "experience_area",
+    explanation: `Experiência na área de ${area} identificada em “${selected.label}”.`,
+    evidence: [selected.evidence],
+  };
+
+  return { status: "none", explanation: `Nenhuma experiência publicada na área de ${area} foi identificada automaticamente.`, evidence: [] };
+}
+
+function phrasesOverlap(left: string, right: string): boolean {
+  const normalizedLeft = normalize(left);
+  const normalizedRight = normalize(right);
+  if (!normalizedLeft || !normalizedRight) return false;
+  return ` ${normalizedLeft} `.includes(` ${normalizedRight} `) || ` ${normalizedRight} `.includes(` ${normalizedLeft} `);
+}
+
+function areaEvidenceExcerpt(value: string, area: string): string {
+  const segment = value.split(/(?<=[.!?;])\s+|\r?\n/).find((item) => phrasesOverlap(item, area))?.trim() ?? value.trim();
+  return segment.length <= 180 ? segment : `${segment.slice(0, 177).trimEnd()}…`;
+}
+
 function matchVacancyPosition(
   vacancy: Pick<VacancyDetail, "title" | "referenceConceptId">,
   candidate: PublishedProfileCandidate,
@@ -815,7 +885,7 @@ function matchVacancyPosition(
       index,
       strength: Math.max(...referenceLabels.map((label) => occupationalTitleRelationStrength(label, item.label))),
     }))
-    .filter((item) => item.strength > 0)
+    .filter((item) => item.strength >= 60)
     .sort((left, right) => right.strength - left.strength || left.index - right.index)[0]?.item;
   if (titleRelation) return {
     status: "possible_title_relation",
@@ -861,8 +931,8 @@ const OCCUPATIONAL_ROLE_MARKERS = new Set([
   "diretor", "executivo", "supervisor", "tecnico", "desenvolvedor", "designer", "vendedor", "operador",
 ]);
 
-function assessVacancyEvidence(position: VacancyPositionRelation, requirements: VacancyRequirementMatch[]): VacancyEvidenceAssessment {
-  const evidenceItems = uniqueEvidence([...position.evidence, ...requirements.flatMap((item) => item.evidence)]);
+function assessVacancyEvidence(area: VacancyAreaRelation, position: VacancyPositionRelation, requirements: VacancyRequirementMatch[]): VacancyEvidenceAssessment {
+  const evidenceItems = uniqueEvidence([...area.evidence, ...position.evidence, ...requirements.flatMap((item) => item.evidence)]);
   const independentSourceCount = new Set(evidenceItems.map((item) => item.sourceId ?? `${item.fieldPath}:${normalize(item.label)}`)).size;
   const professionalContextEvidenceCount = evidenceItems.filter((item) => item.fieldPath === "professionalTitle" || item.fieldPath?.startsWith("experiences.")).length;
   const level = independentSourceCount >= 2 && professionalContextEvidenceCount > 0
@@ -897,6 +967,10 @@ function uniqueEvidence(items: VacancyMatchEvidence[]): VacancyMatchEvidence[] {
 
 function positionRelationPriority(status: VacancyPositionRelationStatus): number {
   return ({ same_reference: 4, equivalent_reference: 3, related_reference: 2, possible_title_relation: 1, none: 0 } as const)[status];
+}
+
+function areaRelationPriority(status: VacancyAreaRelationStatus): number {
+  return ({ profile_area: 2, experience_area: 1, none: 0 } as const)[status];
 }
 
 function decisionPriority(decision: VacancyPositionRelationDecision): number {

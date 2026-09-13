@@ -86,3 +86,4 @@ Somente por critério igualmente rastreável, sem score oculto e com decisão hu
 
 - 2026-09-08: accepted; supersedes somente a regra do ADR-044 que mantinha Perfis sem sinal visíveis.
 - 2026-09-13: refined textual relation to recover a shared distinctive occupational domain without accepting generic role markers alone; matching contract advanced to 2.2.0.
+- 2026-09-13: ADR-051 superseded that textual-domain extension by separating area experience from occupational-title proximity; matching contract advanced to 2.3.0.
