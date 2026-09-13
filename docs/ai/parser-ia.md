@@ -1,6 +1,6 @@
 # M5.7 Parser IA
 
-Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.2. Decisão: ADR-049. Estado: ativado para uso direto local; avaliação de qualidade parcial.
+Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.2. Decisão: ADR-049. Estado: entrega local aprovada pelo PO, com importação/revisão verificadas e publicação humana confirmada; qualidade não generalizada.
 
 ## Funcionamento
 
@@ -46,7 +46,7 @@ Comparação mecânica final: 50 campos observados, 49 iguais à referência ap�
 
 Diego e Ivan não foram enviados: houve rejeição do auto-review e nenhum contorno. Depois disso, o PO dispensou os envios adicionais como condição para avançar. Não há benchmark pendente dessas amostras nesta etapa. Julia não foi avaliada por decisão do PO.
 
-Na avaliação inicial, não havia prova de persistência autenticada. A prova posterior descrita abaixo confirmou importação até a revisão no Supabase existente. Validação semântica/espacial humana integral da saída nova, publicação do Perfil e implantação Hostinger continuam não concluídas. Consulte o AoT para o estado por requisito.
+Na avaliação inicial, não havia prova de persistência autenticada. A prova posterior descrita abaixo confirmou importação até a revisão no Supabase existente. O PO posteriormente confirmou sucesso e publicou o Perfil do caso validado. Avaliação semântica/espacial ampliada e implantação Hostinger continuam fora da evidência disponível. Consulte o AoT para o estado por requisito.
 
 Correção de proveniência (2026-09-12): identificadores de modelo aceitam ponto, hífen e sublinhado, mantendo limites e rejeição de separadores de caminho/espaços. A validação de versão/org/hash/modelo/prompt ocorre também no cliente dentro do tratamento amigável de falha, antes de iniciar o intake. Compatível com parser-ia-1.0.0; modelo, prompt, cache, dados e contratos persistidos permanecem iguais.
 
@@ -57,3 +57,5 @@ Retomada de intake interrompido: na Central da Pessoa e no detalhe do documento,
 Normalização de LinkedIn (2026-09-12): a interpretação conserva o valor citado e suas coordenadas; somente contact.linkedin no rascunho ganha HTTPS e codificação URL de caracteres Unicode, reutilizando o normalizador nativo e URL padrão. Resultados antigos em memória são adaptados sem mutação. O caso real continha ausência de protocolo e acento; ambos violavam o contrato de resumo estruturado já instalado. Sem migração, relaxamento de validação, mudança de prompt ou nova inferência.
 
 Prova autenticada concluída na etapa de importação até revisão: seleção do PDF, interpretação com cache local, identificação pelo cadastro existente expressamente autorizado, persistência e abertura da revisão. Supabase confirmou quatro páginas, 4.710 caracteres, nove experiências, duas formações, três competências e 115 descritores de evidência; contratos de resumo e formação válidos. A revisão continuou acessível após recarregar. Comparação sinalizou confirmação humana da situação acadêmica ausente; não houve publicação ou confirmação automática. Ledger privado inalterado, sem nova chamada OpenAI nesta prova.
+
+Aceite local confirmado pelo PO após a publicação do Perfil. Consulta ao Supabase verificou documento/revisão approved e um Perfil publicado a partir da fonte validada. Modelo, prompt, contrato, orçamento e política de acesso permanecem iguais; nenhuma migração necessária. O histórico de pendências acima distingue os testes anteriores da aceitação final.

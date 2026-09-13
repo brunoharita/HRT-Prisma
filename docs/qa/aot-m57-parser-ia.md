@@ -1,17 +1,17 @@
 # AoT - M5.7 Parser IA
 
-Contrato: `agreement-m57-parser-ia.md` 1.1.0; execução 1.1.0. Data: 2026-09-12. Estado geral: PARTIAL.
+Contrato: `agreement-m57-parser-ia.md` 1.1.2; execução 1.1.2. Data: 2026-09-12. Estado: APROVADO PELO PO para a entrega local, após importação/revisão e publicação humana do caso validado. Não equivale a rollout online ou generalização de qualidade.
 
 | ID | Implementação e evidência | Status | Limite |
 | --- | --- | --- | --- |
-| D-01 | Backend/probe sem cliente Supabase; execução local e testes sintéticos | PASS | Nenhum deploy/mutação remota executado |
+| D-01 | Backend/probe sem banco; prova autenticada posterior e publicação expressamente autorizadas no Supabase existente | PASS | Sem alteração de schema ou implantação online |
 | D-02 | Schema estrito, spans PDF.js, suporte textual, validação e adaptação para StructuredDraft | PASS | Suporte textual não prova associação semântica |
 | D-03 | Testes de e-mail partido, cargos, múltiplas páginas, formação incompleta, listas e duplicata | PASS | Generalização e PDF somente imagem não demonstrados |
-| D-04 | Preparação antes da identidade nas telas existentes; rascunho reutilizado, org/hash e versão modelo/prompt | PARTIAL | Build e contratos locais passam; persistência e navegação ponta a ponta não executadas |
-| D-05 | Erros sanitizados, parcial explícito, ausência de fatos rejeitada e opção de leitura local após falha | PASS | Smoke interativo ainda não executado |
+| D-04 | Preparação antes da identidade, persistência real e revisão recarregada; publicação pelo PO confirmada no banco | PASS | Evidência do caso autorizado, não de todos os formatos de currículo |
+| D-05 | Erros sanitizados, parcial explícito, retomada e fluxo interativo validado até a revisão | PASS | Publicação depende de revisão humana; não há fallback silencioso |
 | D-06 | Testes negativos de segredo, origem/host, cache por organização, limite de resposta, timeout, concorrência e orçamento persistido | PASS | Serviço experimental não é backend online |
 | D-07 | Resposta real de evaluation-03, replay e testes negativos | PASS | PO dispensou novos envios de Diego/Ivan; regressão conhecida, sem generalização |
-| D-08 | ADR-049, contrato, prompt, documentação, estado atual e export regenerado/verificado | PASS | Estado geral permanece PARTIAL pelos itens anteriores |
+| D-08 | ADR-049, contratos, documentação, aceite, prova real e Context Pack atualizados | PASS | Limitações e histórico de falhas preservados |
 
 ## Proibições
 
@@ -20,7 +20,7 @@ Contrato: `agreement-m57-parser-ia.md` 1.1.0; execução 1.1.0. Data: 2026-09-12
 | P-01 | Testes de campos inexistentes, país como estado, fonte ausente, paths de autoridade/prototype e zero fatos; nenhuma publicação chamada pelo backend | PASS |
 | P-02 | Chave carregada somente no backend, origem/host local, resposta com limite, endpoint fixo, timeout sem retry e ledger; segredo não versionado | PASS |
 | P-03 | Prompt sem referência humana, cache guarda proposta original e validação; parcial/falha explícitos e fallback por ação humana | PASS |
-| P-04 | Nenhuma chamada ao Supabase/Hostinger, nenhuma mudança de Auth/RLS/migração | PASS |
+| P-04 | Sem Hostinger, Auth/RLS ou migração; escritas da prova autenticada somente após autorização específica do PO | PASS |
 
 ## Resultado real e limitações
 
@@ -96,4 +96,10 @@ Após autorização explícita de arquivo/destinos, Importar criou intake no Sup
 
 Fluxo observado: selecionar o PDF de João -> interpretar -> identificar pelo cadastro autorizado -> processar -> Análise do documento -> Iniciar revisão. Intake ready_for_review; documento v2 in_review. Consulta no mesmo tenant confirmou quatro páginas, 4.710 caracteres úteis, 115 descritores, nove experiências, duas formações e três competências; is_valid_structured_resume_summary e is_valid_education_classification retornaram true para o rascunho salvo. A interface mostrou e-mail completo, LinkedIn HTTPS codificado, nove experiências, duas formações, PDF original e evidências vinculadas. Recarga da revisão confirmou persistência e rascunho sincronizado.
 
-A passagem para comparação acionou corretamente a pendência de confirmar Situação não identificada na formação. Não se inventou conclusão acadêmica, não se marcou confirmação humana e não se publicou Perfil. Esse limite é diferente da falha técnica de importação corrigida. O movimento geral continua PARTIAL quanto à avaliação semântica/espacial humana e publicação. Ledger privado teve hash idêntico antes/depois, confirmando nenhum novo custo/chamada OpenAI; a resposta autorizada foi reutilizada do cache. Código validado no gate de 392 testes/19 golden anterior; esta continuação altera apenas documentação/evidência e revalida Context Pack.
+A passagem para comparação acionou corretamente a pendência de confirmar Situação não identificada na formação. Não se inventou conclusão acadêmica, não se marcou confirmação humana e não se publicou Perfil. Esse limite é diferente da falha técnica de importação corrigida. Naquela etapa, o movimento ainda estava PARTIAL quanto à avaliação semântica/espacial humana e publicação; o aceite posterior está registrado a seguir. Ledger privado teve hash idêntico antes/depois, confirmando nenhum novo custo/chamada OpenAI; a resposta autorizada foi reutilizada do cache. Código validado no gate de 392 testes/19 golden anterior; esta continuação altera apenas documentação/evidência e revalida Context Pack.
+
+## Aceite do PO e confirmação da publicação
+
+Bruno confirmou "deu certo, pode atualizar tudo". Consulta posterior somente de leitura confirmou o documento v2 approved, review_state approved e exatamente um Perfil publicado a partir dele; approved_at 2026-09-13 01:27:26 UTC. A tentativa v1 continua failed/not_ready no histórico, sem Perfil publicado. Não houve limpeza de histórico, nova importação ou alteração de dados pelo agente nesta atualização.
+
+Entrega M5.7 aprovada para uso local. O PARTIAL registrado nas etapas anteriores descreve os limites existentes naquele momento e não o estado atual desta entrega. O aceite do caso e a publicação humana não substituem avaliação cega/ampliada nem autorizam rollout Hostinger. Não há migração pendente desta correção; código e evidência são sincronizados na branch M5.7 e raiz oficial. Como esta atualização é documental, preserva o gate de 392 testes/19 golden do código e executa geração/verificação do Context Pack e revisão de diff.

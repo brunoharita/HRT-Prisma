@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: ca9932ae15feca94b0e2305431f03b9e5e2ab97e73a39f338f213705d9629524
+source_manifest_sha256: a3246441fab5ea9a811f2dd140c5e9c6214120a421c21fe2b6992f6e64b52aed
 -->
 
 # Tudo sobre o Prisma
@@ -402,31 +402,23 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.6
+version: 2.29.7
 last_verified: 2026-09-12
 ---
 
 # Estado atual do Prisma
 
-## M5.7 Parser IA - etapa local
+## M5.7 Parser IA - etapa local aprovada
 
-Em 2026-09-12, Bruno autorizou M5.7 Parser IA: interpretar o PDF via IA antes de preencher campos, preservando revisão e evidências. Implementação em `codex/m5-7-parser-ia`, contrato `parser-ia-1.0.0`, ADR-049 e acordo/execução `docs/qa/*m57-parser-ia.md`. Backend Node exclusivamente loopback, OpenAI Responses com PDF inline, validação de spans/campos, segredo server-side, orçamento US$2, cache e timeout. Integração DEV antes da identidade e nos uploads da Central da Pessoa; default distribuído desligado, ativado no .env.local da raiz oficial para uso direto autorizado. Sem migração ou rollout online.
+Bruno confirmou "deu certo, pode atualizar tudo" após importar, revisar e publicar o caso de João. Estado da entrega: APROVADA para o escopo local contratado. O agente verificou a importação autenticada até a revisão e sua recarga; consulta posterior ao único Supabase confirmou documento v2 approved, revisão approved e um Perfil publicado a partir desse documento, com approved_at em 2026-09-13 01:27:26 UTC. A aprovação/publicação foi realizada pelo operador, não pelo modelo. Aceite e histórico em `docs/qa/aot-m57-parser-ia.md`.
 
-Uma amostra real (evaluation-03) completou: 49/50 campos iguais à referência após normalização e uma diferença de grafia, com nove experiências; uma proposta de país como estado foi rejeitada. Custo superior estimado US$0,0086535 e 20,736 s. Replays locais sem reenvio. Comparação mecânica em regressão conhecida, não métrica geral nem aprovação semântica/espacial humana. Envios adicionais de Diego/Ivan dispensados pelo PO após o bloqueio do auto-review; Julia não avaliada por decisão do PO. Estado do movimento: PARTIAL; ver `docs/qa/aot-m57-parser-ia.md`.
+Implementação em `codex/m5-7-parser-ia`, contrato `parser-ia-1.0.0`, ADR-049 e acordo/execução 1.1.2. Backend Node exclusivamente loopback, OpenAI Responses com PDF inline, spans nativos verificados, segredo server-side, orçamento US$2, cache e timeout. Integração antes da identidade e nos uploads da Central da Pessoa; distribuição desligada por padrão, ativada localmente para o uso autorizado. `pnpm run dev:ia` inicia interface e parser. Reprocessamento histórico geral permanece na rota anterior; intake M5.7 interrompido pode retomar o PDF original privado com validação de vínculo/hash.
 
-Bruno esclareceu que existe apenas um ambiente Supabase: nomes históricos "QA" nos registros não provam isolamento em relação a outro projeto de produção. Esta etapa não escreveu nesse ambiente. Interface em localhost pode continuar conectada ao Supabase configurado; somente o probe/benchmark M5.7 usado aqui é independente do banco. Publicação Hostinger e atualização Supabase são posteriores à validação local e exigem backend online apropriado; não expor o servidor experimental.
+Correções integradas: proveniência aceita o ponto do modelo contratado; evidências de listas usam os caminhos raiz persistidos; LinkedIn ganha HTTPS e codificação Unicode no rascunho, preservando fatos/citações originais; cartões de documento mantêm ícone, nome e ação alinhados. Teste real confirmou quatro páginas, 4.710 caracteres, nove experiências, duas formações, três competências e 115 descritores persistidos, com contratos de resumo/formação válidos. E-mail completo e evidências visíveis na revisão. A pendência acadêmica exigiu decisão humana antes da publicação. Gate técnico aprovado: 392 testes, 19 golden, tipos, build, lint, foundation e Context Pack.
 
-Em 2026-09-12, o PO autorizou preparar o Prisma para uso direto local. Acordo/execução revisados para 1.1.0. `pnpm run dev:ia` inicia interface e parser em loopback num só processo; a tela sinaliza IA ativada e a preparação usa leitura nativa/OCR, sem aguardar o provedor Paddle anterior. Ativação confirmada na raiz oficial: interface localhost:5555 e parser 127.0.0.1:8787 em execução. Smoke pelo proxy retornou HTTP 200, cache de quatro páginas/50 fatos e orçamento inalterado; origem externa recebeu 403. Navegador abriu a versão atual na tela de login; importação autenticada com persistência não foi executada pelo agente. Evidências no AoT; nenhum schema ou contrato persistido foi alterado.
+Existe apenas um Supabase configurado; localhost não isola seu banco. O benchmark inicial era independente dele, enquanto o teste autenticado posterior e a publicação do operador usaram esse ambiente expressamente autorizado. As correções reutilizaram contratos/RPCs instalados: nenhuma migração, mudança de Auth/RLS ou implantação Hostinger foi necessária. Tentativa anterior falha permanece no histórico. Ledger inalterado na prova autenticada, com resposta do modelo reutilizada do cache.
 
-Correção compatível após a primeira tentativa do PO: `PARSER_PROVENANCE_INVALID` era causado pelo validador de modelo sem suporte a ponto, embora o modelo contratado fosse `gpt-5.6-luna`. O identificador agora aceita ponto e a proveniência é validada dentro da fronteira de erro amigável do cliente, antes do intake. Regressão cobre fornecedor, transporte, revalidação e gate de importação; replay do cache da tentativa real pelo cliente confirmou nove experiências e duas formações sem rede externa ou escrita Supabase. Publicação autenticada permanece não demonstrada pelo agente.
-
-Ajuste visual local dos cartões de documento na jornada e no Delta: ícone de PDF com largura fixa, nome flexível com quebra segura e ação Ver documento compacta. Seletores limitados aos filhos diretos impedem que regras de metadados alterem ícones e texto internos do botão. Sem alteração de parsing, contratos persistidos, navegação ou evidências.
-
-Correção da persistência de listas da IA: competências, idiomas, certificações e áreas de atuação usam o caminho raiz de evidência já aceito pela revisão/RPC, preservando itens, spans e coordenadas. A retomada adapta também propostas já presentes em memória, sem mutá-las ou chamar novamente a IA. A regra vigente do único Supabase foi consultada por leitura; nenhuma migração ou alteração remota foi aplicada.
-
-Retomada local de M5.7 interrompido disponível na Central da Pessoa e no detalhe: recupera PDF original privado com verificação de vínculo/hash e reutiliza intake/Pessoa/documento existentes. Consulta ao único Supabase confirmou a fonte preservada e zero páginas persistidas no caso relatado; reprocessamento anterior exigia páginas e não oferecia recuperação a partir da fonte. Teste do serviço real com resposta salva e persistência simulada validou nove experiências, duas formações e descritores aceitos pelo contrato; negativos sintéticos bloqueiam fonte/vínculo/versão divergentes antes de IA ou gravação. Persistência autenticada ainda não demonstrada pelo agente; nenhuma mutação remota nesta correção. Acordo/execução 1.1.1; contrato parser-ia-1.0.0 preservado.
-
-Correção de contato M5.7: LinkedIn agora recebe HTTPS e codificação Unicode no rascunho, conservando o valor original nos fatos/evidências. O currículo real violava o contrato de resumo estruturado por URL sem protocolo e caminho acentuado. Consulta ao validador vigente confirmou rejeição dos formatos originais e aceitação do formato canônico; replay privado passou de uma pendência contact.linkedin para zero, mantendo nove experiências e duas formações. Prova autenticada posterior confirmou a importação até a revisão: quatro páginas e 115 descritores persistidos, nove experiências, duas formações e três competências. Revisão aberta e recarregada com dados preservados; comparação exige confirmação humana da situação acadêmica ausente. Acordo/execução 1.1.2 registram autorização explícita de arquivo/destinos e cadastro existente. Nenhuma publicação, confirmação acadêmica automática ou nova chamada OpenAI nesta prova.
+O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, generalização ou benchmark cego. A comparação mecânica de evaluation-03 teve 49/50 campos normalizados e uma diferença de grafia; país como estado foi rejeitado. Envios adicionais de Diego/Ivan foram dispensados pelo PO; Julia ficou fora da avaliação. Backend multiusuário online, Hostinger, troca da chave antes de disponibilizar online e avaliação ampliada continuam fora desta entrega. Não expor o servidor experimental na Internet.
 
 ## Repositório
 

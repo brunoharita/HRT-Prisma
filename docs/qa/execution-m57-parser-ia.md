@@ -21,3 +21,5 @@ Delta de recuperação autorizado pelo relato "ainda com erro" em 2026-09-12: re
 PO solicitou analisar corretamente e executar o fluxo completo após nova importação com falha. Esta instrução autoriza testar a importação do PDF de João pela sessão do operador no Prisma e verificar a persistência real/revisão. Mantém revisão humana e não autoriza contratação ou publicação automática de conclusões. Corrigir o contrato da URL LinkedIn e executar regressão de rascunho completo; não tomar mocks como evidência de persistência autenticada.
 
 Autorizações específicas recebidas: PDF de João para OpenAI/Supabase e uso do cadastro existente criado na última tentativa. Executar a interface real até a revisão, consultar a persistência pelo escopo confirmado e verificar recarga. Não confirmar campos acadêmicos ausentes em nome do PO nem declarar publicação não executada.
+
+Encerramento autorizado pelo aceite do PO: registrar a publicação humana confirmada por leitura, atualizar disponibilidade/AoT/owner, regenerar Context Pack e sincronizar Git/raiz oficial. Nenhuma migração ou implantação online necessária para encerrar a entrega local.
