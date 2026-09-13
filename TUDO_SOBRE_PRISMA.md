@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 916a20086a02962b2fd9f86a4e40ce9e279d3907753cf412aa5489c4191cf849
+source_manifest_sha256: ece17bda72f0ad20e83751fe1dadc4db739b7e08c3d49666e7627e21ea6aaa59
 -->
 
 # Tudo sobre o Prisma
@@ -410,7 +410,7 @@ last_verified: 2026-09-13
 
 ## Sincronização de versão — 2026-09-13
 
-A linha acumulada de desenvolvimento está consolidada e sincronizada local/remotamente em `codex/ux-shared-foundation`, pronta para avançar `main` por fast-forward e sem reescrever histórico. A revisão automática exige autorização nominal do Product Owner antes desse push; até lá, `main` permanece no baseline M4. O frontend continua exclusivamente local em `http://127.0.0.1:5555`, conectado ao único backend remoto Prisma-QA. As dez Edge Functions presentes no repositório foram reimplantadas e confirmadas `ACTIVE` no projeto `ioldpnqqvobprjiontre`; nenhuma função remota ficou sem correspondente local.
+A linha acumulada de desenvolvimento está consolidada em `codex/ux-shared-foundation` e `main`, sincronizada local e remotamente por fast-forward, sem reescrever histórico. O Product Owner autorizou nominalmente a atualização de `main` em 2026-09-13. O frontend continua exclusivamente local em `http://127.0.0.1:5555`, conectado ao único backend remoto Prisma-QA. As dez Edge Functions presentes no repositório foram reimplantadas e confirmadas `ACTIVE` no projeto `ioldpnqqvobprjiontre`; nenhuma função remota ficou sem correspondente local.
 
 O schema necessário à versão atual já estava ativo no Prisma-QA e a correção de matching 2.3.0 não exige migration. O histórico remoto antigo possui timestamps distintos dos arquivos locais equivalentes; `supabase db push --dry-run` falha fechado antes de aplicar qualquer SQL. Esse metadado legado não foi reparado nem mascarado. A migration mais recente de ambos os lados é `20260913132559`. O gate completo passou com 415 testes, 19 casos golden, build web e demonstração executável; duas expectativas estáticas obsoletas foram alinhadas à linguagem e à navegação canônicas sem reduzir proteção. Evidência e limites em `docs/qa/release-sync-20260913.md`.
 
