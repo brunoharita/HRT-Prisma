@@ -1,6 +1,6 @@
 # Execução - M5.7 Parser IA
 
-Versão 1.1.1. Implementar integralmente `docs/qa/agreement-m57-parser-ia.md` versão 1.1.1, lido e aceito nesta tarefa. Este prompt incorpora todos os D/P/F/A/CA, sem substituí-los. Branch `codex/m5-7-parser-ia`, baseline `43c36e0`.
+Versão 1.1.2. Implementar integralmente `docs/qa/agreement-m57-parser-ia.md` versão 1.1.2, lido e aceito nesta tarefa. Este prompt incorpora todos os D/P/F/A/CA, sem substituí-los. Branch `codex/m5-7-parser-ia`, baseline `43c36e0`.
 
 1. Criar contrato de propostas com referências estáveis às linhas da fonte, verificação local e conversão para StructuredDraft existente. Não usar referência aprovada como entrada do modelo.
 2. Reutilizar PDF.js no backend local, OpenAI Responses sem ferramentas, segredo de .env.local e limites persistidos. Serviço exclusivamente loopback; não é endpoint de produção.
@@ -19,3 +19,5 @@ Correção do bloqueio ao preservar evidências: reutilizar os caminhos raiz de 
 Delta de recuperação autorizado pelo relato "ainda com erro" em 2026-09-12: retomar somente intake M5.7 já vinculado, com falha de estruturação e sem leitura persistida, a partir do PDF original privado. Reutilizar Pessoa, documento, intake e RPCs existentes, validar organização/vínculo/hash antes da IA e manter revisão humana. F-01 continua excluindo reprocessamento histórico geral. A validação do agente usa persistência simulada e consultas remotas somente de leitura.
 
 PO solicitou analisar corretamente e executar o fluxo completo após nova importação com falha. Esta instrução autoriza testar a importação do PDF de João pela sessão do operador no Prisma e verificar a persistência real/revisão. Mantém revisão humana e não autoriza contratação ou publicação automática de conclusões. Corrigir o contrato da URL LinkedIn e executar regressão de rascunho completo; não tomar mocks como evidência de persistência autenticada.
+
+Autorizações específicas recebidas: PDF de João para OpenAI/Supabase e uso do cadastro existente criado na última tentativa. Executar a interface real até a revisão, consultar a persistência pelo escopo confirmado e verificar recarga. Não confirmar campos acadêmicos ausentes em nome do PO nem declarar publicação não executada.

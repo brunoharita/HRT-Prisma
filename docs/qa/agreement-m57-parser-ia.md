@@ -1,6 +1,6 @@
 # Contrato de Acordos - M5.7 Parser IA
 
-Versão 1.1.1. Estado: agreed para implementação e validação locais. PO: Bruno, 2026-09-12, "Ok... pode começar... vamos chamar de movimento M5.7 Parser IA". Autorizou usar a credencial fornecida localmente, adiando sua troca até antes da publicação.
+Versão 1.1.2. Estado: agreed para implementação e validação locais. PO: Bruno, 2026-09-12, "Ok... pode começar... vamos chamar de movimento M5.7 Parser IA". Autorizou usar a credencial fornecida localmente, adiando sua troca até antes da publicação.
 
 Delta autorizado em 2026-09-12: "pode preparar o prisma para eu usar diretamente". Integrar na raiz oficial, ativar a flag local e iniciar os serviços para uso humano. A interface mantém o único Supabase já configurado; não há migração ou publicação online. O agente não cria registros reais para provar o smoke. O uso da importação pelo operador continua persistindo pelo fluxo existente. D-07 deixa de exigir novos envios.
 
@@ -57,3 +57,5 @@ Nenhuma decisão de produto pendente impede a implementação local. Acesso real
 - CA-D08: documentação/Context Pack regenerados; AoT distingue implementação, validação sintética, teste real e rollout.
 
 Delta de recuperação autorizado pelo relato "ainda com erro" em 2026-09-12: retomar somente intake M5.7 já vinculado, com falha de estruturação e sem leitura persistida, a partir do PDF original privado. Reutilizar Pessoa, documento, intake e RPCs existentes, validar organização/vínculo/hash antes da IA e manter revisão humana. F-01 continua excluindo reprocessamento histórico geral. A validação do agente usa persistência simulada e consultas remotas somente de leitura.
+
+Delta de validação autenticada: o PO autorizou explicitamente importar o PDF de João com processamento OpenAI e persistência no Supabase existente e, depois, selecionar o cadastro de João criado na tentativa anterior. Isso autoriza a prova de importação/identificação/persistência/revisão pela sessão do operador, sem ampliar autoridade para classificação acadêmica humana ou publicação automática. As restrições D-01/P-04 sobre os testes iniciais independentes do banco permanecem históricas; esta prova autorizada registra suas mutações reais.
