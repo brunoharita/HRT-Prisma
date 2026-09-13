@@ -450,8 +450,12 @@ test("resolução ocupacional explica segurança sem score e nunca deriva evidê
 });
 
 test("busca de referência profissional comunica origem, progresso e recuperação", async () => {
-  const page = await readFile("web/src/pages/VacancyPages.tsx", "utf8");
-  const styles = await readFile("web/src/ui/foundation.css", "utf8");
+  const [page, service, styles] = await Promise.all([
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+    readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("web/src/ui/foundation.css", "utf8"),
+  ]);
+  const referenceSearch = service.match(/async suggestReferences[\s\S]*?async loadProfessionalReferenceProposal/)?.[0] ?? "";
   assert.match(page, /Knowledge interna/);
   assert.match(page, /ESCO, CBO e O\*NET/);
   assert.match(page, /Buscando na Knowledge interna/);
@@ -459,6 +463,16 @@ test("busca de referência profissional comunica origem, progresso e recuperaç�
   assert.match(page, /A busca na Knowledge interna não respondeu/);
   assert.match(page, /Tentar novamente/);
   assert.match(page, /referenceSearchRequest/);
+  assert.match(page, /setTimeout\([\s\S]*?, 400\)/);
+  assert.match(page, /referenceSearchAbort\.current\?\.abort\(\)/);
+  assert.match(page, /referenceSearchCache\.current/);
+  assert.match(page, /controller\.abort\(\), 8000/);
+  assert.match(referenceSearch, /from\("knowledge_terms"\)/);
+  assert.match(referenceSearch, /\.eq\("ambiguous", false\)/);
+  assert.match(referenceSearch, /\.like\("normalized_term", `\$\{normalizedQuery\}%`\)/);
+  assert.match(referenceSearch, /from\("knowledge_concepts"\)/);
+  assert.match(referenceSearch, /\.eq\("concept_type", "occupation"\)/);
+  assert.doesNotMatch(referenceSearch, /suggest_knowledge_concepts/);
   assert.doesNotMatch(page, /window\.confirm/);
   assert.match(page, /confirmReferenceReplacement/);
   assert.match(styles, /prisma-reference-search-feedback/);

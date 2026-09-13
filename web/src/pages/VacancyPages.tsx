@@ -180,6 +180,9 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [referenceSearchTerm, setReferenceSearchTerm] = useState("");
   const [referenceSearchError, setReferenceSearchError] = useState<string | null>(null);
   const referenceSearchRequest = useRef(0);
+  const referenceSearchTimer = useRef<number | null>(null);
+  const referenceSearchAbort = useRef<AbortController | null>(null);
+  const referenceSearchCache = useRef(new Map<string, VacancyReferenceSuggestion[]>());
   const [referencePrepared, setReferencePrepared] = useState(false);
   const [occupationExplorerOpen, setOccupationExplorerOpen] = useState(false);
   const [restructureOpen, setRestructureOpen] = useState(false);
@@ -212,6 +215,11 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     return () => window.clearTimeout(timeout);
   }, [draft, loading, vacancyId]);
 
+  useEffect(() => () => {
+    if (referenceSearchTimer.current !== null) window.clearTimeout(referenceSearchTimer.current);
+    referenceSearchAbort.current?.abort();
+  }, []);
+
   const update = <K extends keyof VacancyDraft>(key: K, value: VacancyDraft[K]) => setDraft((current) => ({ ...current, [key]: value }));
   function focusValidationTarget(target: "occupation" | "title" | "occupant" | "requirement") {
     setValidationTarget(target);
@@ -226,30 +234,55 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     const role = roles.find((item) => item.id === id); if (!role) return;
     setDraft((current) => ({ ...current, title: role.name, mission: role.mission, responsibilities: role.responsibilities, expectedOutcomes: role.expectedOutcomes, requirements: role.requirements, contextItems: role.contextItems, sourceKind: "organization_role", jobRoleId: role.id, referenceConceptId: role.referenceConceptId }));
   }
-  async function searchReferences(value: string) {
+  function searchReferences(value: string) {
     const query = value.trim();
+    const cacheKey = query.toLocaleLowerCase("pt-BR").replace(/\s+/g, " ");
     setReferenceSearchTerm(query);
     setReferenceSearchError(null);
+    if (referenceSearchTimer.current !== null) window.clearTimeout(referenceSearchTimer.current);
+    referenceSearchAbort.current?.abort();
     const request = ++referenceSearchRequest.current;
     if (query.length < 2) {
       setReferences([]);
       setReferenceSearchLoading(false);
       return;
     }
+    const cached = referenceSearchCache.current.get(cacheKey);
+    if (cached) {
+      setReferences(cached);
+      setReferenceSearchLoading(false);
+      return;
+    }
     setReferenceSearchLoading(true);
+    referenceSearchTimer.current = window.setTimeout(() => {
+      referenceSearchTimer.current = null;
+      void runReferenceSearch(query, cacheKey, request);
+    }, 400);
+  }
+  async function runReferenceSearch(query: string, cacheKey: string, request: number) {
+    const controller = new AbortController();
+    referenceSearchAbort.current = controller;
+    const timeout = window.setTimeout(() => controller.abort(), 8000);
     try {
-      const result = await vacancyService.suggestReferences(activeMembership.organizationId, query);
-      if (request === referenceSearchRequest.current) setReferences(result);
+      const result = await vacancyService.suggestReferences(activeMembership.organizationId, query, controller.signal);
+      if (request === referenceSearchRequest.current) {
+        referenceSearchCache.current.set(cacheKey, result);
+        setReferences(result);
+      }
     } catch (caught) {
       if (request === referenceSearchRequest.current) {
         setReferences([]);
-        setReferenceSearchError(errorMessage(caught, "A busca na Knowledge interna não respondeu agora."));
+        setReferenceSearchError(controller.signal.aborted
+          ? "A consulta ultrapassou 8 segundos e foi interrompida."
+          : errorMessage(caught, "A busca na Knowledge interna não respondeu agora."));
       }
     } finally {
+      window.clearTimeout(timeout);
+      if (referenceSearchAbort.current === controller) referenceSearchAbort.current = null;
       if (request === referenceSearchRequest.current) setReferenceSearchLoading(false);
     }
   }
-  const retryReferenceSearch = () => { if (referenceSearchTerm.length >= 2) void searchReferences(referenceSearchTerm); };
+  const retryReferenceSearch = () => { if (referenceSearchTerm.length >= 2) searchReferences(referenceSearchTerm); };
   async function useProfessionalReference(conceptId: string) {
     const reference = references.find((item) => item.conceptId === conceptId); if (!reference) return;
     if (draft.sourceKind === "assisted_description") {
@@ -387,12 +420,12 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         <div className="prisma-start-choice"><div className="prisma-start-choice-heading"><span className="prisma-start-choice-number">2</span><span><strong>Posição anterior</strong><small>Reutiliza somente uma definição existente.</small></span></div><Select allowClear aria-label="Posição anterior" onChange={(value) => void usePrevious(value)} options={previous.map((item) => ({ label: item.title, value: item.id }))} placeholder="Reutilizar somente a definição" /></div>
         <div className={`${validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} prisma-start-choice`} ref={occupationReferenceRef}>
           <div className="prisma-start-choice-heading"><span className="prisma-start-choice-number">3</span><span><strong>Referência profissional</strong><small>Procura primeiro na Knowledge interna.</small></span></div>
-          <Select allowClear aria-label="Referência profissional" disabled={referencePreparing} filterOption={false} loading={referenceSearchLoading || referencePreparing} onChange={() => setReferenceSearchError(null)} onSearch={(value) => void searchReferences(value)} options={referenceOptions} placeholder="Buscar na Knowledge interna" showSearch suffixIcon={<SearchOutlined />} notFoundContent={referenceSearchLoading ? <span className="prisma-reference-search-status"><Spin size="small" /> Buscando na Knowledge interna…</span> : referenceSearchError ? <span className="prisma-reference-search-status is-error">A busca interna não respondeu.</span> : referenceSearchTerm.length < 2 ? "Digite pelo menos 2 caracteres para buscar" : "Nenhuma referência profissional encontrada na Knowledge interna"} onSelect={(value) => void useProfessionalReference(value)} />
+          <Select allowClear aria-label="Referência profissional" disabled={referencePreparing} filterOption={false} loading={referenceSearchLoading || referencePreparing} onChange={() => setReferenceSearchError(null)} onSearch={searchReferences} options={referenceOptions} placeholder="Buscar na Knowledge interna" showSearch suffixIcon={<SearchOutlined />} notFoundContent={referenceSearchLoading ? <span className="prisma-reference-search-status"><Spin size="small" /> Buscando na Knowledge interna…</span> : referenceSearchError ? <span className="prisma-reference-search-status is-error">A busca interna não respondeu.</span> : referenceSearchTerm.length < 2 ? "Digite pelo menos 2 caracteres para buscar" : "Nenhuma referência profissional encontrada na Knowledge interna"} onSelect={(value) => void useProfessionalReference(value)} />
           <Typography.Text className="prisma-reference-search-help" type="secondary">Digite pelo menos 2 caracteres. A consulta combina referências aprovadas da sua empresa e da base global.</Typography.Text>
         {referenceSearchLoading ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback" role="status" type="secondary"><Spin size="small" /> Buscando referências na Knowledge interna…</Typography.Text> : null}
         {!referenceSearchLoading && referenceSearchTerm.length >= 2 && references.length > 0 ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback is-success" role="status" type="secondary">{references.length} referência{references.length === 1 ? "" : "s"} encontrada{references.length === 1 ? "" : "s"} na Knowledge interna.</Typography.Text> : null}
         {!referenceSearchLoading && !referenceSearchError && referenceSearchTerm.length >= 2 && references.length === 0 ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback" role="status" type="secondary">Nenhuma correspondência interna. Ao sair do título da Posição, o Prisma consulta referências oficiais catalogadas.</Typography.Text> : null}
-        {referenceSearchError ? <Alert className="prisma-reference-search-error" showIcon type="error" message="A busca na Knowledge interna não respondeu." description="O rascunho foi preservado. Tente novamente ou continue pelo título da Posição para consultar as referências oficiais catalogadas." action={<Button onClick={retryReferenceSearch} size="small">Tentar novamente</Button>} /> : null}
+        {referenceSearchError ? <Alert className="prisma-reference-search-error" showIcon type="error" message="A busca na Knowledge interna não respondeu." description={`${referenceSearchError} O rascunho foi preservado. Tente novamente ou continue pelo título da Posição para consultar as referências oficiais catalogadas.`} action={<Button onClick={retryReferenceSearch} size="small">Tentar novamente</Button>} /> : null}
         {referencePreparing ? <Typography.Text type="secondary">Preparando a estrutura da Posição a partir da referência escolhida…</Typography.Text> : null}{referencePrepared ? <Typography.Text type="secondary">Estrutura preparada a partir da referência profissional selecionada. Revise e adapte para a necessidade da sua empresa.</Typography.Text> : null}{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}
         </div>
       </div>

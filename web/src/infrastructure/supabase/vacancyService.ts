@@ -16,7 +16,7 @@ import {
   type OccupationResolution,
   type VacancySummary,
 } from "../../domain/vacancy.js";
-import { supabaseFunctionOperationError } from "../../domain/reviewOperationErrors.js";
+import { supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors.js";
 import type { Json } from "./database.types.js";
 import { supabase } from "./client.js";
 import { loadPublishedProfileCandidateCollection, loadPublishedProfileCandidates } from "./profileDiscoveryService.js";
@@ -241,16 +241,37 @@ export const vacancyService = {
     return (result.data ?? []).map((item) => ({ value: item.id, label: item.full_name }));
   },
 
-  async suggestReferences(organizationId: string, query: string): Promise<VacancyReferenceSuggestion[]> {
+  async suggestReferences(organizationId: string, query: string, signal?: AbortSignal): Promise<VacancyReferenceSuggestion[]> {
     if (query.trim().length < 2) return [];
-    const result = await supabase.rpc("suggest_knowledge_concepts", { p_organization_id: organizationId, p_query: query.trim(), p_limit: 8 });
-    throwIfError(result.error, "Não foi possível consultar as referências profissionais agora.");
-    return (result.data ?? []).filter((item) => item.concept_type === "occupation").map((item) => ({
-      conceptId: item.concept_id,
-      label: item.canonical_label,
-      scope: item.concept_scope,
-      source: item.source_name,
-    }));
+    const normalizedQuery = normalizeReferenceQuery(query);
+    if (normalizedQuery.length < 2) return [];
+    const termsRequest = supabase.from("knowledge_terms")
+      .select("concept_id, normalized_term")
+      .eq("status", "approved")
+      .eq("ambiguous", false)
+      .or(`scope.eq.global,and(scope.eq.organization,organization_id.eq.${organizationId})`)
+      .like("normalized_term", `${normalizedQuery}%`)
+      .order("normalized_term")
+      .limit(32);
+    const terms = await (signal ? termsRequest.abortSignal(signal) : termsRequest);
+    if (terms.error) throw supabaseOperationError(terms.error, "Não foi possível consultar as referências profissionais agora.");
+    const conceptIds = [...new Set((terms.data ?? []).map((item) => item.concept_id))];
+    if (!conceptIds.length) return [];
+    const conceptsRequest = supabase.from("knowledge_concepts")
+      .select("id, canonical_label, scope, organization_id")
+      .in("id", conceptIds)
+      .eq("status", "approved")
+      .eq("concept_type", "occupation")
+      .or(`scope.eq.global,and(scope.eq.organization,organization_id.eq.${organizationId})`)
+      .limit(8);
+    const concepts = await (signal ? conceptsRequest.abortSignal(signal) : conceptsRequest);
+    if (concepts.error) throw supabaseOperationError(concepts.error, "Não foi possível consultar as referências profissionais agora.");
+    const termRank = new Map((terms.data ?? []).map((item) => [item.concept_id, item.normalized_term === normalizedQuery ? 0 : 1]));
+    return (concepts.data ?? [])
+      .sort((left, right) => (termRank.get(left.id) ?? 1) - (termRank.get(right.id) ?? 1)
+        || Number(right.scope === "organization") - Number(left.scope === "organization")
+        || left.canonical_label.localeCompare(right.canonical_label, "pt-BR"))
+      .map((item) => ({ conceptId: item.id, label: item.canonical_label, scope: item.scope, source: null }));
   },
 
   async loadProfessionalReferenceProposal(organizationId: string, conceptId: string): Promise<ProfessionalReferenceProposal> {
@@ -547,6 +568,9 @@ function readRequirements(value: Json): VacancyRequirementDraft[] {
 }
 
 function readStringArray(value: Json): string[] { return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && Boolean(item.trim())) : []; }
+function normalizeReferenceQuery(value: string): string {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9+#.]+/g, " ").trim();
+}
 function readStructureSource(value: unknown): VacancyDraft["structureSource"] { if (!value || typeof value !== "object" || Array.isArray(value)) return null; const row = value as Record<string, unknown>; if (typeof row.originalDescription !== "string" || typeof row.contractVersion !== "string" || typeof row.structuredAt !== "string" || !Array.isArray(row.items)) return null; return { originalDescription: row.originalDescription, contractVersion: row.contractVersion, structuredAt: row.structuredAt, items: row.items.flatMap((item) => item && typeof item === "object" && !Array.isArray(item) && typeof (item as any).suggestionId === "string" && typeof (item as any).category === "string" && typeof (item as any).start === "number" && typeof (item as any).end === "number" && ((item as any).method === "explicit" || (item as any).method === "faithful_synthesis") ? [{ suggestionId: (item as any).suggestionId, category: (item as any).category, start: (item as any).start, end: (item as any).end, method: (item as any).method }] : []) }; }
 function asRecord(value: Json | undefined): { [key: string]: Json | undefined } | null { return value !== null && typeof value === "object" && !Array.isArray(value) ? value : null; }
 function readString(value: Json | undefined): string | null { return typeof value === "string" && value.trim() ? value.trim() : null; }

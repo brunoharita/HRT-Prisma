@@ -12,6 +12,8 @@ O monitor `knowledge-source-monitor-1.0.1` verifica CBO, ESCO e O*NET no primeir
 
 `knowledge-normalization-2.0.0` usa o escopo do termo, não o escopo do conceito, para aplicar precedência Organization -> Global. Somente correspondência exata e inequívoca resolve. Sugestões por prefixo ou substring servem apenas à decisão humana na Inbox. Relações como `is_a` nunca viram equivalência nem evidência profissional.
 
+O seletor inicial de referência em Posições faz uma leitura estreita sobre termos aprovados, não ambíguos e iniciados pelo texto digitado, limitada a conceitos de ocupação visíveis pela RLS. A busca espera a pausa de digitação, cancela a solicitação anterior e mantém cache somente durante a sessão da página. Busca por substring continua restrita às superfícies de decisão humana da Knowledge; a resolução canônica pelo título permanece no fluxo `occupation-resolution-on-demand`.
+
 Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.
 
 Impactos usam observações relacionadas e perfis atuais. `dispatch_knowledge_reinterpretation` é idempotente; `prepare_knowledge_reinterpretation_review` cria um draft ligado ao perfil-base, documento e tentativa existentes. A aprovação continua em `approve_profile_review`, reutilizando M2-C. Trigger copia versões Knowledge para a nova versão do perfil.

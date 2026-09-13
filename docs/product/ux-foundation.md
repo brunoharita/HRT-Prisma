@@ -38,6 +38,8 @@ Nomear ações pelo efeito: salvar rascunho, publicar perfil, arquivar, excluir,
 
 Carregamento, vazio inicial, busca sem resultados, erro, sucesso e indisponibilidade têm apresentações distintas e acessíveis. Carregamento não apresenta zero provisório. Vazio inicial orienta a entrada permitida; resultado vazio oferece ajuste de filtros; erro oferece recuperação sem apagar informação vigente. URLs desconhecidas e entidades inexistentes não abrem outra entidade.
 
+Buscas remotas iniciadas durante digitação esperam uma pausa curta, cancelam solicitações superadas e podem reutilizar resultados somente na sessão corrente. Um limite de tempo interrompe esperas sem resposta e preserva o conteúdo preenchido; nova tentativa continua explícita.
+
 Navegação preserva filtros, seleção, paginação, aba e rolagem nos contextos integrados à base. Estado de navegação é temporário, separado por sessão autenticada, papel e empresa, sem persistir currículos, respostas, senhas ou tokens. Sair de edição com alterações não salvas exige confirmação; navegação sem alterações não exige confirmação. Retorno ao contexto de origem, menu, histórico do navegador, troca de empresa e saída da sessão usam o mesmo limite de proteção. Autorização permanece nos contratos existentes fora da UI.
 
 ## Acessibilidade e aceite
