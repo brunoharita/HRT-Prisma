@@ -10,7 +10,7 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 - `movimento`: movimento de produto em execução, atualmente `5`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão atual oficial é **Prisma v1.5.10**, correspondente à décima entrega oficial do Movimento 5. Ao iniciar o Movimento 6, o contador será reiniciado em `Prisma v1.6.1`. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão atual oficial é **Prisma v1.5.11**, correspondente à décima primeira entrega oficial do Movimento 5. Ao iniciar o Movimento 6, o contador será reiniciado em `Prisma v1.6.1`. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -26,14 +26,17 @@ A versão atual oficial é **Prisma v1.5.10**, correspondente à décima entrega
 | 8 | M5.4.2: pesquisa Web contextual | oficial |
 | 9 | M5.4.4: resolução ocupacional por IA | oficial |
 | 10 | M5.5: exclusão definitiva de Pessoa | oficial |
+| 11 | M5.7: Parser IA local | aceite do PO após importação, revisão e publicação humana |
 
 M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora do contador até terem fechamento e evidência oficial próprios.
 
 ### Relação entre versão e build Git
 
-A tela de login deve sempre consumir a fonte única `web/src/config/release.ts` para a versão do produto. O build Vite injeta automaticamente o commit Git (`VITE_PRISMA_GIT_COMMIT`) usado para gerar o bundle; quando o diretório possui alterações não commitadas, o identificador recebe o sufixo `-dirty`. A tela exibe esse identificador ao lado da versão, permitindo relacionar diretamente a versão apresentada ao código efetivamente compilado.
+O registro executável de entregas oficiais é `web/src/config/releaseRegistry.ts`, reexportado por `web/src/config/release.ts`. A versão é calculada a partir da geração, do último movimento registrado e da quantidade de entregas aceitas desse movimento. Registrar uma nova entrega atualiza automaticamente contador e texto da versão no próximo carregamento do módulo, sem editar version/displayVersion separadamente. O Vite acompanha esse módulo durante desenvolvimento.
 
-Em CI ou release reproduzível, `VITE_PRISMA_GIT_COMMIT` deve receber o SHA exato do commit de origem. O contador de entrega só deve ser alterado quando uma nova entrega oficial for aceita e registrada nesta documentação e no Context Pack.
+O rodapé público mostra somente Prisma, ano, versão do produto e HRT Solutions. Commit e sufixo dirty não são exibidos. O build Vite conserva o metadado técnico VITE_PRISMA_GIT_COMMIT para diagnóstico interno; ele é capturado no início do servidor/build e não equivale a uma versão de entrega.
+
+Em CI ou release reproduzível, `VITE_PRISMA_GIT_COMMIT` deve receber o SHA exato do commit de origem. Ao fechar uma entrega aceita, acrescentar seu marco ao registro executável e atualizar esta documentação e o Context Pack. Correções não acrescentam entrada, e não há incremento automático por commit ou abertura da tela. Um novo movimento recebe novo grupo e reinicia o contador pela quantidade de entregas nele registradas. Essa regra mantém o aceite humano como origem da versão e automatiza sua apresentação.
 
 ## Regra geral
 
@@ -153,3 +156,5 @@ A confiabilidade estrutural de 2026-09-11 avança `adaptive-resume-extraction` p
 O plano diretor M5.1 introduz somente o contrato documental `competency-verification-plan` 0.1.0. Ele registra decisões planejadas sobre Verification Need, evidência demonstrada, Evidence Sufficiency, Verification Policy, Verification Definition, Item Bank, blueprint, attempt, integridade, confiança e QA, sem criar versão executável, migration, runtime ou mudança no significado dos contratos persistidos atuais.
 
 O M5.1B avança o plano para 0.3.0 e introduz os contratos executáveis `assessment-invitation`, `assessment-attempt`, `assessment-event`, `assessment-integrity-analysis`, `demonstrated-evidence` e `participant-result-visibility`, todos em 1.0.0. Reprocessamento futuro de scoring, Rubrica, integridade, confiança ou matching cria nova avaliação; não reescreve a avaliação ou evidência histórica.
+
+Correção do login (2026-09-12): o registro inclui o M5.7 aceito; contador e displayVersion são derivados, e o build deixa de aparecer no rodapé. Regressão verifica incremento por entrega, reinício por movimento e rejeição de registros incompletos/duplicados. Gate local pnpm run validate aprovado: 394 testes técnicos e 19 golden, tipos, build, lint, foundation e Context Pack. Sem alteração de Auth, Supabase ou contratos persistidos.

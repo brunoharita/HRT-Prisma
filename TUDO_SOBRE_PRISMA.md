@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: a3246441fab5ea9a811f2dd140c5e9c6214120a421c21fe2b6992f6e64b52aed
+source_manifest_sha256: f1fd9ac21860da1e40d359385843da62c4663f4906eec57611a05fe85aff80c0
 -->
 
 # Tudo sobre o Prisma
@@ -402,7 +402,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.7
+version: 2.29.8
 last_verified: 2026-09-12
 ---
 
@@ -419,6 +419,10 @@ Correções integradas: proveniência aceita o ponto do modelo contratado; evid�
 Existe apenas um Supabase configurado; localhost não isola seu banco. O benchmark inicial era independente dele, enquanto o teste autenticado posterior e a publicação do operador usaram esse ambiente expressamente autorizado. As correções reutilizaram contratos/RPCs instalados: nenhuma migração, mudança de Auth/RLS ou implantação Hostinger foi necessária. Tentativa anterior falha permanece no histórico. Ledger inalterado na prova autenticada, com resposta do modelo reutilizada do cache.
 
 O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, generalização ou benchmark cego. A comparação mecânica de evaluation-03 teve 49/50 campos normalizados e uma diferença de grafia; país como estado foi rejeitado. Envios adicionais de Diego/Ivan foram dispensados pelo PO; Julia ficou fora da avaliação. Backend multiusuário online, Hostinger, troca da chave antes de disponibilizar online e avaliação ampliada continuam fora desta entrega. Não expor o servidor experimental na Internet.
+
+## Versão exibida no login
+
+Prisma v1.5.11 inclui o aceite do M5.7 como a décima primeira entrega oficial do Movimento 5. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 

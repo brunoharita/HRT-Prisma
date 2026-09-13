@@ -17,6 +17,7 @@
 - [ ] golden extraction/matching aprovados quando a alteração afetar extração ou matching;
 - [ ] checks de contrato, migration e segurança executados quando suas fronteiras forem afetadas, além do Context Pack quando a documentação canônica mudar;
 - [ ] versão classificada e catálogo atualizado;
+- [ ] se houver nova entrega aceita, marco acrescentado a `web/src/config/releaseRegistry.ts`, registro em `docs/architecture/versioning.md` atualizado e versão calculada conferida no login; correções não criam nova entrada;
 - [ ] nenhum mock acidental, TODO crítico ou fallback inseguro.
 
 ## Segurança e LGPD
