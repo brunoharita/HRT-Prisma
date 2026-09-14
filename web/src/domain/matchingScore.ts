@@ -4,7 +4,7 @@ import type {
   VacancyRequirementMatch,
 } from "./vacancy.js";
 
-export const MATCHING_SCORE_CONTRACT_VERSION = "matching-score-1.0.0";
+export const MATCHING_SCORE_CONTRACT_VERSION = "matching-score-1.1.0";
 
 export type EvidenceCoverageState = "evaluated_relation" | "evaluated_no_relation" | "insufficient_evidence" | "not_applicable";
 export type MatchingScoreStatus = "definitive" | "provisional" | "unavailable";

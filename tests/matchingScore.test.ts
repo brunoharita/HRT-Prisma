@@ -285,7 +285,7 @@ test("atributos proibidos, nome, volume e repetição não entram no cálculo", 
   assert.deepEqual(concise.dimensions.map((item) => [item.key, item.earnedPoints]), stuffed.dimensions.map((item) => [item.key, item.earnedPoints]));
 });
 
-test("ordenação preserva grupo, decisão humana e neutralidade de provisórios", () => {
+test("ordenação preserva grupos e usa Prisma Score decrescente inclusive para provisórios", () => {
   const main = matchVacancyCandidate(vacancy({ requirements: [requirement("CRM")] }), candidate("main", profile({ areasOfExpertise: ["Marketing"], competencies: [] }), { fullName: "Zelda" }));
   const related = matchVacancyCandidate(vacancy({ requirements: [requirement("CRM")] }), candidate("related", profile({ professionalTitle: "Analista de Marketing Digital", competencies: ["CRM"] }), { fullName: "Ana" }));
   assert.ok(related.score.score! > main.score.score!);
@@ -294,8 +294,9 @@ test("ordenação preserva grupo, decisão humana e neutralidade de provisórios
   const need = vacancy({ title: "", area: "", requirements: [requirement("SQL"), requirement("Git")] });
   const provisionalHigh = matchVacancyCandidate(need, candidate("provisional-high", profile({ competencies: ["SQL"] }), { fullName: "Zoe" }));
   const provisionalLow = matchVacancyCandidate(need, candidate("provisional-low", profile(), { fullName: "Ana" }));
-  assert.deepEqual(sortVacancyMatches([provisionalHigh, provisionalLow]).map((item) => item.candidate.personId), ["provisional-low", "provisional-high"]);
-  provisionalHigh.positionDecision = "confirmed";
+  assert.ok(provisionalHigh.score.score! > provisionalLow.score.score!);
+  assert.deepEqual(sortVacancyMatches([provisionalHigh, provisionalLow]).map((item) => item.candidate.personId), ["provisional-high", "provisional-low"]);
+  provisionalLow.positionDecision = "confirmed";
   assert.equal(sortVacancyMatches([provisionalLow, provisionalHigh])[0]?.candidate.personId, "provisional-high");
 
   const rankingNeed = vacancy({ title: "", requirements: [] });
@@ -304,20 +305,23 @@ test("ordenação preserva grupo, decisão humana e neutralidade de provisórios
   assert.equal(high.score.status, "definitive");
   assert.equal(low.score.status, "definitive");
   assert.deepEqual(sortVacancyMatches([low, high]).map((item) => item.candidate.personId), ["high", "low-score"]);
+  low.score.score = null;
+  low.score.status = "unavailable";
+  assert.equal(sortVacancyMatches([low, high])[1]?.candidate.personId, "low-score");
   const discoveryBefore = isVacancyDiscoveryCandidate(low);
   low.score.score = 0;
   assert.equal(isVacancyDiscoveryCandidate(low), discoveryBefore);
 });
 
-test("relatório sombra é reproduzível, não usa decisão humana como feature e evita PII textual", () => {
+test("relatório sombra ordena pelo score, registra decisão sem usá-la como feature e evita PII textual", () => {
   const need = vacancy({ requirements: [requirement("CRM")] });
   const first = matchVacancyCandidate(need, candidate("first", profile({ areasOfExpertise: ["Marketing"], competencies: ["CRM"] })));
   const second = matchVacancyCandidate(need, candidate("second", profile({ areasOfExpertise: ["Marketing"] })));
   second.positionDecision = "confirmed";
   const report = buildMatchingScoreShadowReport([first, second], ["first", "second"]);
-  assert.deepEqual(report.map((item) => item.personReference), ["second", "first"]);
-  assert.equal(report[0]?.humanDecision, "confirmed");
-  assert.equal(report[0]?.score, second.score.score);
+  assert.deepEqual(report.map((item) => item.personReference), ["first", "second"]);
+  assert.equal(report[1]?.humanDecision, "confirmed");
+  assert.equal(report[1]?.score, second.score.score);
   assert.equal("fullName" in report[0]!, false);
   assert.deepEqual(report, buildMatchingScoreShadowReport([first, second], ["first", "second"]));
 });
@@ -333,6 +337,9 @@ test("UI expõe score, cobertura, grupos, explicação, versões e proteção mo
   assert.match(page, /Ver como o score foi calculado/);
   assert.match(page, /Grupo A · experiência na área da Posição/);
   assert.match(page, /Grupo B · áreas ou sinais profissionais relacionados/);
+  assert.match(page, /maior para o menor score/);
+  assert.match(page, /valores provisórios continuam identificados/);
+  assert.doesNotMatch(page, /não participa da ordenação/);
   assert.match(page, /matchingContractVersion/);
   assert.match(styles, /prisma-score-dimensions \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);
   assert.match(styles, /prisma-match-reasons \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);

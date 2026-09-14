@@ -267,10 +267,11 @@ test("descoberta exclui Perfil sem qualquer sinal e preserva confirmação human
 
   manual.positionDecision = "confirmed";
   assert.equal(isVacancyDiscoveryCandidate(manual), true);
-  assert.deepEqual(sortVacancyMatches([related, manual]).map((item) => item.candidate.personId), ["manual", "related"]);
+  assert.ok(related.score.score! > manual.score.score!);
+  assert.deepEqual(sortVacancyMatches([related, manual]).map((item) => item.candidate.personId), ["related", "manual"]);
 });
 
-test("ordenação é determinística e explicável sem score exposto", () => {
+test("ordenação é determinística pelo Prisma Score e mantém explicações neutras", () => {
   const need = vacancy("Gerente Comercial", ["Negociação", "Salesforce"]);
   const one = candidate("one", "Ana", profile({ competencies: ["Negociação"] }));
   const two = candidate("two", "Bruno", profile({ competencies: ["Negociação", "Salesforce"] }));

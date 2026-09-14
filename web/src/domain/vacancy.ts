@@ -657,8 +657,8 @@ export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCan
   return [...matches]
     .sort((left, right) =>
       discoveryGroupPriority(right.discoveryGroup) - discoveryGroupPriority(left.discoveryGroup)
+      || prismaScoreComparison(left, right)
       || decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision)
-      || definitiveScoreComparison(left, right)
       || left.candidate.fullName.localeCompare(right.candidate.fullName, "pt-BR")
       || left.candidate.personId.localeCompare(right.candidate.personId),
     );
@@ -1231,9 +1231,16 @@ function discoveryGroupPriority(group: VacancyCandidateMatch["discoveryGroup"]):
   return group === "main_area" ? 1 : 0;
 }
 
-function definitiveScoreComparison(left: VacancyCandidateMatch, right: VacancyCandidateMatch): number {
-  if (left.score.status !== "definitive" || right.score.status !== "definitive") return 0;
-  return (right.score.score ?? 0) - (left.score.score ?? 0);
+function prismaScoreComparison(left: VacancyCandidateMatch, right: VacancyCandidateMatch): number {
+  if (left.score.score === null && right.score.score === null) return 0;
+  if (left.score.score === null) return 1;
+  if (right.score.score === null) return -1;
+  return right.score.score - left.score.score
+    || scoreStatusPriority(right.score.status) - scoreStatusPriority(left.score.status);
+}
+
+function scoreStatusPriority(status: VacancyCandidateMatch["score"]["status"]): number {
+  return status === "definitive" ? 2 : status === "provisional" ? 1 : 0;
 }
 
 function advisorInternalEvidence(question: string, draft: VacancyDraft, context: VacancyAdvisorContext): { answer: string; status: VacancyAdvisorAnswer["internalStatus"] } {

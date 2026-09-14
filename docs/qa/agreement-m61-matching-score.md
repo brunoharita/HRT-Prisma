@@ -1,6 +1,6 @@
 # Contrato de Acordos — M6.1 Pontuação de matching
 
-Versão 1.2.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-14. Fonte: prompt mestre M6.1, aprovação da fórmula, decisão superveniente de classificação e decisão de que grupos organizam, mas não bloqueiam evidência profissional explícita.
+Versão 1.3.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-14. Fonte: prompt mestre M6.1, aprovação da fórmula, decisões supervenientes de classificação, evidência profissional explícita e ordenação por Prisma Score.
 
 ## Objetivo e decisão superveniente
 
@@ -28,8 +28,8 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - D-012: Evidência Demonstrada M5.1 válida, versionada e inequivocamente vinculada fortalece apenas o requisito correspondente e nunca excede seu máximo.
 - D-013: cobertura é calculada separadamente como `100 × peso aplicável avaliado com evidência suficiente / pontos aplicáveis`; zero avaliado pode estar coberto.
 - D-014: cobertura abaixo de 60%, `unclassified` ou dependência material torna o score provisório.
-- D-015: `unclassified` não bloqueia descoberta, não entra nos pesos e impede score definitivo e ordenação por score.
-- D-016: ordenação respeita grupo de descoberta, decisão humana, score definitivo e desempate neutro; score provisório não reordena.
+- D-015: `unclassified` não bloqueia descoberta, não entra nos pesos e impede score definitivo; o valor calculável permanece provisório e participa da ordenação conforme D-016.
+- D-016: ordenação respeita primeiro o grupo de descoberta e, dentro dele, usa Prisma Score decrescente, inclusive quando provisório; score indisponível fica depois dos valores numéricos e empates usam confiabilidade, decisão humana, nome e ID.
 - D-017: localidade, regime, disponibilidade, remuneração, benefícios, viagens e condições operacionais ficam fora do score.
 - D-018: total, dimensões, requisitos, pontos, evidências, origem, cobertura, motivo e versões são decomponíveis.
 - D-019: resultado leva versões de Posição, Perfil, matching, score e fingerprint/versões de inputs; versão desconhecida retorna indisponível.
@@ -55,7 +55,7 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - P-003 a P-004: não há score opaco/probabilístico, LLM, Web Search, Knowledge Agent ou provider para cálculo.
 - P-005 a P-008: falta de evidência não vira ausência; atributos proibidos, condições objetivas e bônus genéricos não pontuam.
 - P-009 a P-010: cálculo não altera Perfil/evidência/Knowledge nem publica equivalências.
-- P-011 a P-014: `unclassified` não recebe importância inventada; provisório não ordena; não há cutoff; decisão humana não é substituída.
+- P-011 a P-014: `unclassified` não recebe importância inventada; provisório nunca perde seu rótulo ao ordenar; não há cutoff; decisão humana não é substituída nem altera o score.
 - P-015 a P-016: não há cache sem versão/tenant nem arquitetura paralela de matching.
 - P-017: o valor visual de importância nunca diverge do valor persistido.
 - P-018: nenhuma nova versão salva contém requisito `unclassified`.
@@ -74,7 +74,7 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 
 - A-001 a A-003: nomes internos, extensão derivada versionada e ausência de cache/persistência.
 - A-004 a A-006: componentes Ant Design existentes, nomes técnicos equivalentes e testes/fixtures/helpers.
-- A-007: preservar `matching-score-1.0.0` e avançar `vacancy-matching-explainable` de 3.0.0 para 4.0.0 conforme política vigente.
+- A-007: preservar a fórmula e os pesos, avançar `matching-score` para 1.1.0 pela nova ordenação e manter `vacancy-matching-explainable` 4.0.0.
 - A-008: refactors locais indispensáveis sem alterar regras adjacentes.
 
 ## Critérios de aceite
@@ -84,7 +84,7 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - CA-004/CA-005/CA-006: Tecnologia com menção isolada não vira Marketing; Beatriz e Gerente de Marketing permanecem no grupo principal com ajuste de função/senioridade.
 - CA-007: falta de evidência credita zero, reduz cobertura e não afirma incapacidade.
 - CA-008 v1.0.1: `score <= cobertura`; cobertura abaixo de 60% gera provisório. Substitui integralmente o exemplo incompatível da versão 1.0.0.
-- CA-009/CA-010: provisório não ordena e score não exclui.
+- CA-009/CA-010: scores numéricos ordenam de forma decrescente dentro do grupo, provisórios permanecem identificados, indisponíveis ficam por último e score não exclui.
 - CA-011/CA-012/CA-013: verificação sem bônus, atributos proibidos fora do input e keyword stuffing sem ganho.
 - CA-014/CA-015: versões/fingerprint impedem reaproveitamento obsoleto e falta total de critérios retorna indisponível.
 - CA-016/CA-017: nenhuma chamada adicional de IA ou Supabase ocorre dentro da função de score.

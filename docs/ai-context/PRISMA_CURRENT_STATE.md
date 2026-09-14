@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.14
+version: 2.29.15
 last_verified: 2026-09-14
 ---
 
 # Estado atual do Prisma
+
+## Ordenação por Prisma Score
+
+Por decisão do Product Owner em 2026-09-14, `matching-score-1.1.0` ordena as Pessoas encontradas dentro de cada grupo de descoberta, do maior para o menor valor. Scores provisórios participam da ordem sem perder o rótulo e scores indisponíveis ficam depois dos valores numéricos. Em empate, confiabilidade, decisão humana, nome e ID mantêm determinismo. Grupo A continua antes do Grupo B; fórmula, pesos, descoberta, inclusão, Perfil, Posição, Knowledge e autoridade humana não mudam. Prisma permanece v1.6.3 e não há alteração no Supabase.
 
 ## M6.2 — jornada contextual de verificação
 

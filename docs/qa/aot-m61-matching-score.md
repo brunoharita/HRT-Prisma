@@ -1,6 +1,6 @@
 # AoT — M6.1 Pontuação de matching
 
-Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.2.0 e `docs/qa/execution-m61-matching-score.md` 1.2.0. Evidência coletada em 2026-09-13 e atualizada em 2026-09-14.
+Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.3.0 e `docs/qa/execution-m61-matching-score.md` 1.3.0. Evidência coletada em 2026-09-13 e atualizada em 2026-09-14.
 
 ## Matriz de Acordos
 
@@ -20,8 +20,8 @@ Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.2.0 e `docs
 | D-012 | M5.1 fortalece somente requisito exato | consulta tenant-scoped e `findDemonstratedEvidence` versionado | unitário negativo e smoke | exato, nível inferior, versão desconhecida e leitura RLS em QA | PASS | local + Prisma-QA |
 | D-013 | Cobertura separada | `coveragePoints` e `coveragePercent` independentes do total | unitário e golden | zero avaliado coberto versus evidência insuficiente | PASS | local |
 | D-014 | Estado provisório | razões para cobertura menor que 60%, `unclassified` e dependência material | unitário | três causas cobertas | PASS | local |
-| D-015 | `unclassified` não bloqueia descoberta | requisito fica fora das dimensões e marca provisório | unitário | descoberta preservada e score não ordena | PASS | local |
-| D-016 | Ordenação autorizada | grupo, decisão humana, score definitivo e nome/id neutros | unitário | provisórios não usam valor numérico | PASS | local |
+| D-015 | `unclassified` não bloqueia descoberta | requisito fica fora das dimensões e marca provisório | unitário | descoberta preservada e valor provisório ordena conforme D-016 | PASS | local |
+| D-016 | Ordenação autorizada | grupo, score numérico decrescente, estado, decisão humana e nome/id | unitário | provisórios participam e indisponíveis ficam por último | PASS | local |
 | D-017 | Condições objetivas fora do score | input puro não contém localidade, regime ou remuneração | unitário negativo | nome/localidade alterados sem mudar resultado | PASS | local |
 | D-018 | Decomposição auditável | resultado e drawer expõem dimensões, itens, pontos, fontes e motivos | unitário e smoke autenticado | drawer mostrou 92/100, 46/50, área 30/30, função 16/20 e versões | PASS | frontend local + Prisma-QA |
 | D-019 | Versões e fingerprint | versões de Posição, Perfil, matching, score e Knowledge no resultado | unitário | versão desconhecida indisponível e fingerprint determinístico | PASS | local |
@@ -48,7 +48,7 @@ Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.2.0 e `docs
 | P-009 | Cálculo não altera Perfil/evidência | teste determinístico | entradas não são mutadas | PASS |
 | P-010 | Cálculo não publica Knowledge | inspeção do módulo | nenhuma escrita ou resolução no score | PASS |
 | P-011 | Sem importância inventada | teste `unclassified` | item não entra nos pesos | PASS |
-| P-012 | Provisório não ordena por score | teste de ordenação | desempate neutro entre provisórios | PASS |
+| P-012 | Provisório permanece explícito | teste de ordenação e contrato visual | valor ordena sem perder o rótulo provisório | PASS |
 | P-013 | Sem cutoff | inspeção de domínio e UI | nenhum limiar de exclusão | PASS |
 | P-014 | Decisão humana preservada | teste de ordenação e snapshot | decisão continua prioritária e auditada | PASS |
 | P-015 | Sem cache não versionado | diff | nenhum cache criado | PASS |
@@ -153,3 +153,30 @@ O contrato avança para `vacancy-matching-explainable-4.0.0`; `matching-score-1.
 ### Conclusão do adendo
 
 PASS. D-030 a D-034 e P-019 a P-021 possuem implementação e prova proporcional. Não há desvio ativo: a categoria perdeu poder de bloqueio, o termo explícito curto passou a conectar com segurança lexical e nível/duração/senioridade continuam sem inferência automática.
+
+## Adendo 1.3.0: ordenação por Prisma Score
+
+Em 2026-09-14, Bruno determinou que as Pessoas encontradas para uma Posição sejam ordenadas pelo Prisma Score. O agrupamento de descoberta permanece como primeira separação semântica; dentro de cada grupo, o score passa a ordenar do maior para o menor, inclusive quando provisório. Esta decisão substitui a ordem anterior de D-016, P-012 e CA-009, na qual a decisão humana precedia o score e o valor provisório era neutro.
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-016 / CA-009 | `sortVacancyMatches` preserva Grupo A antes do Grupo B e, dentro do grupo, usa score numérico decrescente | teste unitário cobre grupos, score definitivo, score provisório e decisão humana | PASS |
+| P-012 | score provisório participa da ordem e continua identificado na lista e no detalhe | teste estrutural da UI e unitário de ordenação | PASS |
+| CA-010 | score indisponível fica após os valores numéricos; empate usa definitivo, provisório, decisão humana, nome e ID | teste unitário determinístico | PASS |
+| P-003 / P-013 / P-014 | score não descobre, não exclui e não decide contratação; a decisão humana permanece registrada | regressão de descoberta e relatório sombra | PASS |
+
+### Evidência do adendo
+
+- `pnpm run build`: PASS.
+- `node --test dist/tests/matchingScore.test.js dist/tests/vacancyIntelligence.test.js dist/tests/productRelease.test.js`: PASS, 60/60.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm run build:web`: PASS; permanece apenas o aviso histórico de chunk acima de 900 kB.
+- `pnpm run test:golden`: PASS, 23/23, regressões 0.
+- `pnpm run lint`: PASS.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS, 5 fontes canônicas.
+- `git diff --check`: PASS.
+- Smoke visual autenticado em `Pessoas para Analista de Marketing`: PASS; Grupo A exibiu Beatriz 58/100 antes de João 38/100 e Grupo B exibiu Bruno 8/100, com o estado provisório preservado.
+
+### Versões, ambiente e limites
+
+O contrato avança para `matching-score-1.1.0`. Fórmula, pesos, descoberta, inclusão, dados pessoais e autoridade humana não mudam. `vacancy-matching-explainable-4.0.0`, `vacancy-definition-1.2.0` e o produto Prisma v1.6.3 permanecem. A alteração não cria migration nem modifica dados no Prisma-QA; produção permanece fora de escopo.

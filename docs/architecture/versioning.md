@@ -87,7 +87,9 @@ Versões anteriores permanecem identificáveis. Rollback reativa artefato anteri
 
 ## Versões atuais
 
-O M6.2 de 2026-09-14 introduz `m62-contextual-verification-journey-1.0.0`, `m62-evidence-sufficiency-1.0.0` e `m62-contextual-verification-policy-1.0.0`. A necessidade nasce de ação humana sobre uma avaliação `vacancy-matching-explainable-4.0.0` e requisito da mesma versão imutável da Posição. Loaders deixam de criar fixtures. O contexto e a linha do tempo percorrem preparação, convite manual, acompanhamento e resultado. `matching-score-1.0.0` permanece inalterado.
+O ajuste de ordenação de 2026-09-14 avança `matching-score` para 1.1.0. Grupo A permanece antes do Grupo B; dentro de cada grupo, valores numéricos ordenam de forma decrescente, inclusive provisórios devidamente identificados. Score indisponível fica depois dos valores numéricos. Fórmula, pesos, descoberta, inclusão e decisão humana permanecem inalterados. Como correção complementar da experiência vigente, o produto permanece Prisma v1.6.3.
+
+O M6.2 de 2026-09-14 introduz `m62-contextual-verification-journey-1.0.0`, `m62-evidence-sufficiency-1.0.0` e `m62-contextual-verification-policy-1.0.0`. A necessidade nasce de ação humana sobre uma avaliação `vacancy-matching-explainable-4.0.0` e requisito da mesma versão imutável da Posição. Loaders deixam de criar fixtures. O contexto e a linha do tempo percorrem preparação, convite manual, acompanhamento e resultado. Na data da entrega, `matching-score-1.0.0` permanecia inalterado.
 
 O M5.5 de 2026-09-09 introduz `person-definitive-deletion` 1.0.0 e `person-data-self-service` 1.0.0. A saga compartilha o mesmo núcleo para administração e titularidade, mas preserva authorities distintas; seu ledger mínimo independe da linha `people`, o lock `deleting` fecha novas mutações e `completed` exige zero resíduo SQL ou de Storage. Shapes históricos são removidos pelo grafo relacional, sem backfill ou reescrita. A mesma identidade pode ingressar futuramente como nova Pessoa. O contrato está ativo apenas no Prisma-QA.
 
