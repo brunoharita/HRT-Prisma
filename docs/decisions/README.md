@@ -63,6 +63,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-054](ADR-054-contextual-verification-journey.md) | accepted | Verificação nasce do requisito exato e preserva o contexto de ponta a ponta |
 | [ADR-055](ADR-055-prisma-score-ordering.md) | accepted | Prisma Score ordena Pessoas dentro de cada grupo de descoberta |
 | [ADR-056](ADR-056-dual-context-distribution.md) | accepted | Uma fonte compacta para prompts e uma exportação completa derivam do mesmo Context Pack |
+| [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 
 ## Rules
 

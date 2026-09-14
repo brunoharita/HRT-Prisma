@@ -2,7 +2,7 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 2.1.0
+version: 2.2.0
 last_verified: 2026-09-14
 ---
 
@@ -37,8 +37,8 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching do vertical slice base: `matching-explainable-1.0.0`;
-- matching de Posições: `vacancy-matching-explainable-4.0.0`;
-- Prisma Score: `matching-score-1.1.0`;
+- matching de Posições: `vacancy-matching-explainable-5.0.0`;
+- Prisma Score: `matching-score-1.2.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model local base: `deterministic-local-2.0.0`;
 - revisão adaptativa: `adaptive-resume-extraction-7.2.0` / `prisma-document-learning-v4` / `generic-record-pattern-v1` / `relative-record-signature-v1`;

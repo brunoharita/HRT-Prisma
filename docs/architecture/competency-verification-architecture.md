@@ -9,7 +9,7 @@ last_verified: 2026-09-01
 
 ## Integração contextual M6.2
 
-`create_m62_verification_need` é a fronteira de criação contextual. Ela recebe identificadores, não evidência livre do cliente: `match_evaluations.id`, `vacancy_requirements.id`, nível e criticidade. A função valida o revisor da organização, `vacancy-matching-explainable-4.0.0`, a versão imutável da Posição e a presença do requisito no snapshot do matching. O snapshot validado é copiado para `verification_needs`; criação ou reuso gera `verification_audit_events`. `load_m51a_verification_workspace` e `load_m51b_operator_workspace` apenas leem e projetam contexto/timeline. A restrição única passa a identificar requisito exato, preservando compatibilidade separada para registros legados sem `requirement_id`.
+`create_m62_verification_need` é a fronteira de criação contextual. Ela recebe identificadores, não evidência livre do cliente: `match_evaluations.id`, `vacancy_requirements.id`, nível e criticidade. A função valida o revisor da organização, snapshots históricos `vacancy-matching-explainable-4.0.0` ou atuais `vacancy-matching-explainable-5.0.0`, a versão imutável da Posição e a presença do requisito no snapshot do matching; versões desconhecidas falham fechadas. O snapshot validado é copiado para `verification_needs`; criação ou reuso gera `verification_audit_events`. `load_m51a_verification_workspace` e `load_m51b_operator_workspace` apenas leem e projetam contexto/timeline. A restrição única passa a identificar requisito exato, preservando compatibilidade separada para registros legados sem `requirement_id`.
 
 ## Estado
 

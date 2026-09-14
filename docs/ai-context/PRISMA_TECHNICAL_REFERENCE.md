@@ -2,19 +2,19 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.11.0
+version: 1.12.0
 last_verified: 2026-09-14
 ---
 
 # Referência técnica do Prisma
 
-## M6.1.1 Matching por evidência profissional explícita
+## M6.1.2 Matching por trajetória antes dos requisitos
 
-`vacancy-matching-explainable-4.0.0` consulta todo o conteúdo profissional publicado para cada requisito. Categoria e grupo permanecem como organização/proveniência, sem bloquear termo explícito. A correspondência exige limite lexical e exclui negação; termo genérico atende, enquanto nível exigido sem prova permanece parcial. O caso de regressão de Bruno encontra `SAP` na descrição da experiência sem depender de `toolsAndTechnologies`. `matching-score-1.1.0` preserva fórmula e pesos e ordena valores numéricos dentro de cada grupo, incluindo provisórios identificados; schema, RLS, RPCs e dados publicados não mudam.
+`vacancy-matching-explainable-5.0.0` avalia primeiro a trajetória profissional e depois usa os requisitos para refinar a aderência. Grupo A exige experiência direta na área ou função equivalente; Grupo B reúne trajetória adjacente/transferível e potencial de entrada; Grupo C preserva termos e ferramentas encontrados sem trajetória relacionada, fica recolhido e não recebe score comparável. Posições de entrada podem usar formação, projetos e conhecimentos para o Grupo B. `matching-score-1.2.0` preserva fórmula e pesos para A/B e registra indisponibilidade explícita no C. A conexão factual introduzida no 4.0.0 continua ativa: categoria organiza, mas não bloqueia termo explícito, limite lexical e negação permanecem.
 
 ## M6.2 Verificação contextual
 
-M6.2 reutiliza a avaliação persistida de Pessoa, Posição, versão e requisito para criar ou recuperar uma necessidade de verificação somente após ação humana. A RPC tenant-scoped valida matching 4.0.0, requisito da mesma versão e papel autorizado; loaders são somente leitura. Preparação, convite manual, acompanhamento e resultado preservam o contexto e a timeline. O Prisma-QA possui as migrations M6.2; produção, delivery automático e uso com Pessoas reais não foram autorizados.
+M6.2 reutiliza a avaliação persistida de Pessoa, Posição, versão e requisito para criar ou recuperar uma necessidade de verificação somente após ação humana. A RPC tenant-scoped valida snapshots matching 4.0.0 históricos ou 5.0.0 atuais, requisito da mesma versão e papel autorizado; loaders são somente leitura. Preparação, convite manual, acompanhamento e resultado preservam o contexto e a timeline. O Prisma-QA possui as migrations M6.2; produção, delivery automático e uso com Pessoas reais não foram autorizados.
 
 ## M5.4.6 Vagas
 
@@ -50,7 +50,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2 no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantada com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -66,7 +66,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md` e ADR-032. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029. UX compartilhada: ADR-050. Matching/score atuais: ADR-053 e ADR-055. Verificação contextual: ADR-054. Distribuição do Context Pack: ADR-056.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md` e ADR-032. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029. UX compartilhada: ADR-050. Matching/score atuais: ADR-053, ADR-055 e ADR-057. Verificação contextual: ADR-054. Distribuição do Context Pack: ADR-056.
 
 ## Operação
 

@@ -1,6 +1,6 @@
 # Contrato de Acordos — M6.1 Pontuação de matching
 
-Versão 1.3.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-14. Fonte: prompt mestre M6.1, aprovação da fórmula, decisões supervenientes de classificação, evidência profissional explícita e ordenação por Prisma Score.
+Versão 1.4.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-14. Fonte: prompt mestre M6.1, aprovação da fórmula e decisões supervenientes de classificação, evidência profissional explícita, ordenação por Prisma Score e descoberta orientada pela trajetória.
 
 ## Objetivo e decisão superveniente
 
@@ -11,6 +11,10 @@ A decisão superveniente corrige o antigo CA-008 incompatível com a fórmula: c
 A decisão superveniente de classificação limita `unclassified` a rascunhos assistidos e versões históricas. Inclusão manual apresentada como obrigatória deve gravar `required`; uma nova versão da Posição não pode ser salva com requisito pendente.
 
 A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` aparece explicitamente em qualquer conteúdo profissional publicado, a conexão deve ocorrer mesmo que Vaga e Perfil tenham classificado o termo em grupos distintos. Os grupos permanecem para organização e proveniência. Senioridade, proficiência e duração continuam separadas e não podem ser inventadas.
+
+A decisão superveniente 1.4.0 separa a conexão factual da elegibilidade competitiva. A trajetória profissional determina primeiro os Grupos A, B e C; somente A e B recebem Prisma Score comparável. Termo ou ferramenta isolada permanece recuperável no Grupo C, sem competir no ranking principal. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos como potencial para o Grupo B.
+
+Esta decisão substitui D-003, D-016 e D-023 somente na composição/apresentação dos grupos, P-013 somente quanto à separação semântica do Grupo C e CA-028 somente quanto à descoberta/agrupamento. Fórmula, pesos, ausência de decisão automática, autoridade humana, RLS, schema e Perfil publicado permanecem preservados.
 
 ## DEVE
 
@@ -48,6 +52,15 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - D-032: `SAP` conecta menções como `migração para SAP` e `SAP EWM`, mas não substring em outra palavra nem declaração negada.
 - D-033: requisito com nível explícito permanece parcial quando somente o termo é comprovado; nível pode ser atendido por declaração explícita ou Evidência Demonstrada válida.
 - D-034: equivalência Knowledge publicada pode atender independentemente do grupo, preservando termo original e proveniência.
+- D-035: a trajetória profissional é avaliada antes da elegibilidade para o Prisma Score; substitui D-003 somente quanto à composição dos grupos.
+- D-036: Grupo A exige experiência profissional direta na área ou função equivalente, sustentada por cargo/ocupação e histórico profissional publicado.
+- D-037: Grupo B exige trajetória profissional adjacente ou transferível, sem equivalência direta; área declarada ou relação ocupacional estruturada/textual sustenta a inclusão.
+- D-038: Grupo C reúne somente sinais contextuais, como requisitos, ferramentas, formação ou menções, sem trajetória profissional relacionada suficiente.
+- D-039: Grupo C permanece visível por progressive disclosure, não recebe Prisma Score comparável e nunca precede A ou B.
+- D-040: Posição explicitamente de entrada (`aprendiz`, `estágio/estagiário`, `trainee`, `auxiliar`, `assistente`, `júnior/junior` ou `jr`) pode promover sinais rastreáveis para o Grupo B como potencial de entrada.
+- D-041: fora da exceção de entrada, requisito explícito continua conectado conforme D-030 a D-034, mas não torna elegível para score uma trajetória classificada somente como contextual.
+- D-042: a explicação e o snapshot auditável registram grupo, relação de trajetória, evidências e aplicação da exceção de entrada.
+- D-043: A e B são ordenados pelo Prisma Score dentro do próprio grupo; C é separado e ordenado deterministicamente sem número comparável.
 
 ## PROIBIDO
 
@@ -62,6 +75,12 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - P-019: categoria divergente nunca transforma evidência profissional explícita em `no_evidence`.
 - P-020: substring bruta, negação ou repetição não comprovam requisito.
 - P-021: o matching não infere nível, duração ou senioridade a partir da simples presença do termo.
+- P-022: termo, ferramenta ou requisito isolado não promove Perfil ao Grupo A ou B em Posição acima da entrada.
+- P-023: Grupo C não exibe pontos obtidos, cobertura ou número que possa ser comparado aos Grupos A e B.
+- P-024: ausência de trajetória publicada não vira afirmação de incapacidade, rejeição ou decisão de contratação.
+- P-025: a exceção de entrada não promove Perfil ao Grupo A sem experiência direta.
+- P-026: a nova regra não usa LLM, embedding, atributo sensível, repetição textual ou nova fonte externa.
+- P-027: avaliações históricas 4.0.0 não são reescritas; a verificação aceita somente snapshots 4.0.0 e 5.0.0 e rejeita versões desconhecidas.
 
 ## FORA DE ESCOPO
 
@@ -69,6 +88,9 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - F-005 a F-010: previsão, cutoff, faixas definitivas, salário, geografia/logística no score ou mudança de contratação.
 - F-011 a F-012: reescrita de Perfil/Knowledge e provider novo.
 - F-013: remoção dos grupos, reclassificação histórica e modelagem de senioridade/proficiência por conhecimento.
+- F-014: classificação semântica de verbos como uso, venda, implantação ou administração de cada ferramenta.
+- F-015: promoção automática do Grupo C por IA ou aprendizado estatístico.
+- F-016: produção e reescrita de avaliações, Perfis ou Posições históricas.
 
 ## AUTONOMIA
 
@@ -76,6 +98,9 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - A-004 a A-006: componentes Ant Design existentes, nomes técnicos equivalentes e testes/fixtures/helpers.
 - A-007: preservar a fórmula e os pesos, avançar `matching-score` para 1.1.0 pela nova ordenação e manter `vacancy-matching-explainable` 4.0.0.
 - A-008: refactors locais indispensáveis sem alterar regras adjacentes.
+- A-009: nomes internos do terceiro grupo, helper determinístico de nível de entrada e apresentação recolhida do Grupo C.
+- A-010: avançar `vacancy-matching-explainable` para 5.0.0, `matching-score` para 1.2.0 e o produto para Prisma v1.6.4.
+- A-011: migration forward-only pode ampliar a lista fechada de versões aceitas pela M6.2 sem alterar RLS, grants ou autoridade.
 
 ## Critérios de aceite
 
@@ -99,6 +124,16 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - CA-026: `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` não geram atendimento.
 - CA-027: SAP explícito sem nível atende requisito genérico, mas fica parcial quando a Vaga exige nível avançado não comprovado.
 - CA-028: fórmula, pesos, descoberta, ordenação, RLS, schema e Perfil publicado permanecem inalterados.
+- CA-029: Gerente de Tecnologia com experiência direta na área fica no Grupo A.
+- CA-030: trajetória adjacente ou área declarada sem equivalência direta fica no Grupo B.
+- CA-031: carreira comercial que apenas menciona ou vende SAP para uma Posição de Gerente de Tecnologia fica no Grupo C, sem Prisma Score comparável.
+- CA-032: a mesma evidência `SAP` permanece rastreável como conexão factual no Grupo C, sem ser apresentada como compatibilidade competitiva.
+- CA-033: Assistente/Júnior de Tecnologia sem experiência, mas com SAP em formação, projeto ou conhecimento publicado, pode ficar no Grupo B; nunca no A por esse motivo isolado.
+- CA-034: Perfil sem trajetória e sem sinal continua fora da descoberta automática; confirmação humana permanece preservada.
+- CA-035: lista apresenta A, B e C nessa ordem; C inicia recolhido e usa linguagem de sinais, não de score.
+- CA-036: snapshot de `match_evaluations` inclui a avaliação da trajetória e a versão 5.0.0.
+- CA-037: `create_m62_verification_need` aceita snapshots 4.0.0 históricos e 5.0.0 atuais, rejeita versão desconhecida e mantém `anon` sem execução.
+- CA-038: testes direcionados, build web, Context Pack e smoke funcional não apresentam regressão material no fluxo de Vagas.
 
 ## Pendências
 

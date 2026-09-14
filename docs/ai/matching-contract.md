@@ -17,17 +17,23 @@ O resultado agrega requisitos atendidos, parcialmente atendidos, sinais relacion
 
 Termos explícitos usam limite lexical: `SAP` conecta `migração para SAP` e `SAP EWM`, mas não `sapatos`. Frases negadas como `sem experiência com SAP` ou `nunca utilizei SAP` não são evidência positiva. Se a Vaga exigir nível, duração ou senioridade, a presença do termo isolado prova a conexão, não o grau; o atendimento integral exige que esse qualificador também esteja explícito ou seja sustentado por Evidência Demonstrada válida.
 
-## Descoberta por área, cargo e requisitos
+## Descoberta orientada pela trajetória
 
-A descoberta separa três leituras: experiência na área profissional, proximidade do cargo e aderência detalhada por requisito. A área é um sinal de entrada quando o valor informado na Posição aparece explicitamente em `areasOfExpertise` ou em cargo, descrição ou evidência de uma experiência do Perfil publicado. O resumo livre não cria relação de área.
+A descoberta separa três leituras: trajetória profissional, proximidade do cargo e aderência detalhada por requisito. A área continua observável quando o valor informado na Posição aparece em `areasOfExpertise` ou em cargo, descrição ou evidência de uma experiência do Perfil publicado, mas a descrição isolada não basta para tornar a trajetória diretamente compatível. O resumo livre não cria relação de área.
 
 A proximidade do cargo usa, nesta ordem, a mesma referência oficial, referência equivalente publicada, relação ocupacional publicada e possível relação textual entre o título da Posição, o título profissional e cargos das experiências. A relação textual exige igualdade, inclusão ou dois ou mais termos ocupacionais comuns. Um termo de área isolado, como `marketing`, não transforma `Analista de Marketing` e `Assistente de Marketing` em cargos equivalentes. O operador pode confirmar ou descartar a relação; essa decisão fica auditada, funciona como desempate depois do score e nunca muda o Perfil, a Posição ou a Knowledge.
 
-Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. O resultado exibe quem possui ao menos experiência explícita na área, relação ocupacional, evidência direta, evidência parcial, sinal relacionado ou confirmação humana anterior. O score é calculado somente depois dessa descoberta e nunca remove um resultado. Zero sinal não é convertido em ausência profissional, mas também não gera resultado.
+Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. `vacancy-matching-explainable-5.0.0` classifica a descoberta antes do score:
+
+- Grupo A: experiência direta na área ou função equivalente, sustentada por cargo/ocupação e histórico profissional;
+- Grupo B: trajetória adjacente ou transferível; em Posição explicitamente de entrada, formação, projetos ou conhecimentos podem sustentar potencial de entrada;
+- Grupo C: somente termos, ferramentas ou outros sinais contextuais, sem trajetória relacionada suficiente.
+
+Somente A e B recebem Prisma Score comparável. C permanece visível e recolhido por padrão para não apagar conexões úteis, mas não concorre no ranking principal. Zero sinal não é convertido em ausência profissional e não gera resultado. A classificação não decide contratação e a confirmação humana permanece auditada.
 
 ## Score Prisma de matching
 
-`matching-score-1.1.0` é uma projeção determinística do matching resolvido. Os pesos nominais são área 30, função 20, obrigatórios 35 e desejáveis 15. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`.
+`matching-score-1.2.0` é uma projeção determinística do matching resolvido, disponível somente para os Grupos A e B. Os pesos nominais permanecem área 30, função 20, obrigatórios 35 e desejáveis 15. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`. No Grupo C, a conexão por requisito continua rastreável, mas o número agregado retorna indisponível por falta de elegibilidade competitiva da trajetória.
 
 Desde `vacancy-definition-1.2.0`, `unclassified` existe somente durante a preparação de um rascunho assistido. Um requisito incluído manualmente nasce de forma coerente como `required`; qualquer rascunho com requisito ainda não classificado deve exigir a decisão entre obrigatório e desejável antes de salvar. A RPC rejeita novas versões com `unclassified`. Versões históricas permanecem legíveis, e o matching continua explicando suas pendências sem inventar importância.
 
@@ -69,9 +75,9 @@ Competências transferíveis são declaradas na vaga. O mecanismo não inventa a
 
 Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM também deverá persistir `promptVersion` e `modelVersion`.
 
-A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avança o score para `matching-score-1.1.0` e o torna a chave de ordenação dentro de cada grupo, conforme ADR-055.
+A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avançou o score para `matching-score-1.1.0`, conforme ADR-055. O ADR-057 avança para `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`: trajetória define A/B/C e sinais sem trajetória deixam de produzir score comparável.
 
-O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
+O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. A fronteira aceita snapshots históricos 4.0.0 e atuais 5.0.0, rejeitando qualquer versão desconhecida. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
 
 ## Normalização conceitual M5.2
 

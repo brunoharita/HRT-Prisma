@@ -1,6 +1,6 @@
 # Prompt de execução — M6.1 Pontuação de matching
 
-Versão 1.3.0. Contrato normativo integral: `docs/qa/agreement-m61-matching-score.md` 1.3.0. Movimento e adendos de matching autorizados pelo Product Owner em 2026-09-14.
+Versão 1.4.0. Contrato normativo integral: `docs/qa/agreement-m61-matching-score.md` 1.4.0. Movimento e adendos de matching autorizados pelo Product Owner em 2026-09-14.
 
 Implementar D-001 a D-026 e provar P-001 a P-016 sem ampliar F-001 a F-012. A autonomia A-001 a A-008 cobre encaixe técnico, extensão compatível do resultado existente, função pura, componentes compartilhados, testes, relatório sombra e versionamento.
 
@@ -10,8 +10,10 @@ O adendo 1.2.0 implementa D-030 a D-034 e prova P-019 a P-021: procurar o termo 
 
 O adendo 1.3.0 substitui D-016, P-012 e CA-009: preservar Grupo A antes do Grupo B e ordenar cada grupo pelo Prisma Score numérico decrescente, inclusive provisório. Manter o rótulo provisório, colocar score indisponível depois dos numéricos e usar confiabilidade, decisão humana, nome e ID somente para desempate. Avançar `matching-score` para 1.1.0 sem mudar fórmula, pesos, descoberta, inclusão ou autoridade humana.
 
+O adendo 1.4.0 implementa D-035 a D-043 e prova P-022 a P-027: avaliar trajetória antes da elegibilidade competitiva; criar Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual; permitir potencial de entrada somente para títulos explicitamente de piso; manter conexões factuais cross-category, mas retirar score comparável do Grupo C; registrar a relação da trajetória e exibir C recolhido. Avançar matching para 5.0.0, score para 1.2.0 e Prisma para v1.6.4. Atualizar a fronteira M6.2 por migration forward-only para aceitar snapshots históricos 4.0.0 e atuais 5.0.0, preservando autorização e rejeição de versão desconhecida.
+
 Ordem de execução: diagnóstico do matching 2.3.0; domínio puro; integração posterior à descoberta; agrupamento e ordenação; UI com progressive disclosure; relatório sombra; validações proporcionais de risco D; documentação, Context Pack e AoT.
 
-Não criar persistência/cache de score, chamada de IA, round trip de banco dentro do cálculo, provider, cutoff, faixa semântica ou produção. O adendo 1.2.0 não autoriza migration, reclassificação de Perfil ou remoção dos grupos. Evidência Demonstrada é carregada na fronteira tenant-scoped e consumida somente por vínculo exato e versões reconhecidas. O cálculo não recebe PII.
+Não criar persistência/cache de score, chamada de IA, round trip de banco dentro do cálculo, provider, cutoff, faixa semântica ou produção. A migration do adendo 1.4.0 altera somente a compatibilidade de versão da fronteira M6.2; não autoriza schema, reclassificação de Perfil ou remoção de histórico. Evidência Demonstrada é carregada na fronteira tenant-scoped e consumida somente por vínculo exato e versões reconhecidas. O cálculo não recebe PII.
 
 Fechar em `docs/qa/aot-m61-matching-score.md`, distinguindo prova local, QA, smoke visual e produção.

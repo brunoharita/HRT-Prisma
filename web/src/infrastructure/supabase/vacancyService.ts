@@ -466,6 +466,7 @@ export const vacancyService = {
         areaRelation: match.areaRelation,
         positionRelation: match.positionRelation,
         positionDecision: match.positionDecision,
+        trajectoryAssessment: match.trajectoryAssessment,
         discoveryGroup: match.discoveryGroup,
         functionAssessment: match.functionAssessment,
         score: match.score,

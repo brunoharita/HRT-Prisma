@@ -8,7 +8,7 @@ import {
 } from "./matchingScore.js";
 
 export const VACANCY_DEFINITION_VERSION = "1.2.0";
-export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-4.0.0";
+export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-5.0.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
@@ -20,6 +20,7 @@ export type VacancyRequirementImportance = "required" | "desired" | "unclassifie
 export type VacancyRequirementOrigin = "description" | "human";
 export type VacancyRestructureDeltaKind = "maintained" | "new" | "changed" | "not_found";
 export type VacancyMatchStatus = "met" | "partially_met" | "related_signal" | "no_evidence";
+export type VacancyDiscoveryGroup = "main_area" | "related_area" | "contextual_signals";
 
 export interface VacancyRelatedSignal {
   label: string;
@@ -155,6 +156,13 @@ export interface VacancyEvidenceAssessment {
   reasons: string[];
 }
 
+export interface VacancyTrajectoryAssessment {
+  relation: "direct" | "related" | "entry_potential" | "contextual_only" | "none";
+  entryLevelVacancy: boolean;
+  evidence: VacancyMatchEvidence[];
+  explanation: string;
+}
+
 export interface VacancyRequirementMatch {
   requirement: VacancyRequirementDraft & { id?: string };
   status: VacancyMatchStatus;
@@ -168,7 +176,8 @@ export interface VacancyCandidateMatch {
   areaRelation: VacancyAreaRelation;
   positionRelation: VacancyPositionRelation;
   functionAssessment: VacancyFunctionAssessment;
-  discoveryGroup: "main_area" | "related_area";
+  trajectoryAssessment: VacancyTrajectoryAssessment;
+  discoveryGroup: VacancyDiscoveryGroup;
   positionDecision: VacancyPositionRelationDecision;
   detailedStatus: VacancyDetailedEvaluationStatus;
   unclassifiedRequirementCount: number;
@@ -493,6 +502,8 @@ export function matchVacancyCandidate(
       explanation: `O Prisma não possui evidência suficiente para ${requirement.label} no Perfil atual. Isso não significa que a Pessoa não possua essa experiência ou conhecimento.`,
     };
   });
+  const functionAssessment = assessVacancyFunction(vacancy, candidate, areaRelation, positionRelation);
+  const trajectoryAssessment = assessVacancyTrajectory(vacancy, candidate, areaRelation, positionRelation, functionAssessment, requirements);
   const directCount = requirements.filter((item) => item.status === "met").length;
   const partialCount = requirements.filter((item) => item.status === "partially_met").length;
   const relatedCount = requirements.filter((item) => item.status === "related_signal").length;
@@ -504,12 +515,13 @@ export function matchVacancyCandidate(
       ? "pending_classification"
       : "ready";
   const evidenceAssessment = assessVacancyEvidence(areaRelation, positionRelation, requirements);
-  const functionAssessment = assessVacancyFunction(vacancy, candidate, areaRelation, positionRelation);
-  const discoveryGroup = areaRelation.status !== "none" || positionRelation.status === "same_reference" || positionRelation.status === "equivalent_reference"
-    ? "main_area" as const
-    : "related_area" as const;
+  const discoveryGroup: VacancyDiscoveryGroup = trajectoryAssessment.relation === "direct"
+    ? "main_area"
+    : trajectoryAssessment.relation === "related" || trajectoryAssessment.relation === "entry_potential"
+      ? "related_area"
+      : "contextual_signals";
   const requirementReasons = requirements.filter((item) => item.status !== "no_evidence").map((item) => item.status === "related_signal"
-    ? `${item.relatedSignal} é um sinal relacionado a ${item.requirement.label}`
+    ? item.relatedSignal === item.requirement.label ? `${item.requirement.label} aparece somente como sinal contextual` : `${item.relatedSignal} é um sinal relacionado a ${item.requirement.label}`
     : item.status === "partially_met" ? `${item.requirement.label} possui evidência parcial para revisão` : `${item.requirement.label} possui evidência no Perfil`);
   const score = calculateMatchingScore({
     areaApplicable: Boolean(vacancy.area.trim()),
@@ -518,6 +530,7 @@ export function matchVacancyCandidate(
     functionAssessment,
     requirements,
     unclassifiedRequirementCount,
+    competitiveEligibility: discoveryGroup === "contextual_signals" ? "contextual_only" : "eligible",
     materialDependencies,
     positionVersion: vacancy.versionId,
     positionVersionNumber: vacancy.version,
@@ -531,6 +544,7 @@ export function matchVacancyCandidate(
     areaRelation,
     positionRelation,
     functionAssessment,
+    trajectoryAssessment,
     discoveryGroup,
     positionDecision: null,
     detailedStatus,
@@ -686,11 +700,7 @@ export function buildMatchingScoreShadowReport(matches: VacancyCandidateMatch[],
 
 export function isVacancyDiscoveryCandidate(match: VacancyCandidateMatch): boolean {
   return match.positionDecision === "confirmed"
-    || match.areaRelation.status !== "none"
-    || match.positionRelation.status !== "none"
-    || match.directCount > 0
-    || match.partialCount > 0
-    || match.relatedCount > 0;
+    || match.trajectoryAssessment.relation !== "none";
 }
 
 export const VACANCY_PROFILE_MATRIX = [
@@ -963,7 +973,9 @@ function matchVacancyArea(
   const selected = experienceEvidence[0];
   if (selected) return {
     status: "experience_area",
-    explanation: `Experiência na área de ${area} identificada em “${selected.label}”.`,
+    explanation: selected.order === 0
+      ? `Cargo na área de ${area} identificado em “${selected.label}”.`
+      : `Menção contextual à área de ${area} identificada em uma experiência profissional: “${selected.label}”.`,
     evidence: [selected.evidence],
     coverageState: "evaluated_relation",
   };
@@ -1173,6 +1185,69 @@ function assessVacancyFunction(
   };
 }
 
+function assessVacancyTrajectory(
+  vacancy: Pick<VacancyDetail, "title">,
+  candidate: PublishedProfileCandidate,
+  area: VacancyAreaRelation,
+  position: VacancyPositionRelation,
+  functionAssessment: VacancyFunctionAssessment,
+  requirements: VacancyRequirementMatch[],
+): VacancyTrajectoryAssessment {
+  const entryLevelVacancy = isEntryLevelVacancy(vacancy.title);
+  const professionalHistory = candidate.profileData.experiences.some((item) => Boolean(item.role?.trim() || item.description?.trim() || item.evidenceText?.trim()));
+  const directAreaEvidence = area.evidence.filter((item) => item.source === "Cargo em experiência profissional");
+  const directFunctionEvidence = professionalHistory && (functionAssessment.relation === "same_function" || functionAssessment.relation === "equivalent_function")
+    ? functionAssessment.evidence
+    : [];
+  const directEvidence = uniqueEvidence([...directAreaEvidence, ...directFunctionEvidence]);
+  if (directEvidence.length) return {
+    relation: "direct",
+    entryLevelVacancy,
+    evidence: directEvidence,
+    explanation: "A trajetória profissional possui experiência direta na área ou em função equivalente à Posição.",
+  };
+
+  const relatedEvidence = uniqueEvidence([
+    ...(area.status === "profile_area" ? area.evidence : []),
+    ...(["related_reference", "possible_title_relation"].includes(position.status) ? position.evidence : []),
+  ]);
+  if (relatedEvidence.length) return {
+    relation: "related",
+    entryLevelVacancy,
+    evidence: relatedEvidence,
+    explanation: "A trajetória profissional possui relação adjacente ou transferível com a Posição, sem equivalência direta comprovada.",
+  };
+
+  const contextualEvidence = uniqueEvidence([
+    ...(area.status !== "none" ? area.evidence : []),
+    ...(position.status !== "none" ? position.evidence : []),
+    ...requirements.filter((item) => item.status !== "no_evidence").flatMap((item) => item.evidence),
+  ]);
+  if (entryLevelVacancy && contextualEvidence.length) return {
+    relation: "entry_potential",
+    entryLevelVacancy,
+    evidence: contextualEvidence,
+    explanation: "A Posição é de entrada; formação, projetos ou conhecimentos publicados sustentam uma descoberta por potencial, mesmo sem experiência profissional relacionada.",
+  };
+  if (contextualEvidence.length) return {
+    relation: "contextual_only",
+    entryLevelVacancy,
+    evidence: contextualEvidence,
+    explanation: "Foram encontrados somente sinais contextuais ou requisitos isolados, sem trajetória profissional relacionada suficiente para um Prisma Score comparável.",
+  };
+  return {
+    relation: "none",
+    entryLevelVacancy,
+    evidence: [],
+    explanation: "Não foi encontrada trajetória profissional relacionada nem outro sinal rastreável para esta Posição.",
+  };
+}
+
+function isEntryLevelVacancy(title: string): boolean {
+  const normalized = normalize(title);
+  return /(?:^| )(?:aprendiz|estagiario|trainee|auxiliar|assistente|junior|jr)(?= |$)/.test(normalized);
+}
+
 function assessSeniority(targetTitle: string, observedTitle: string | undefined, basePoints: number): {
   adjustment: VacancyFunctionAssessment["seniorityAdjustment"];
   relation: VacancyFunctionAssessment["seniorityRelation"];
@@ -1228,7 +1303,7 @@ function decisionPriority(decision: VacancyPositionRelationDecision): number {
 }
 
 function discoveryGroupPriority(group: VacancyCandidateMatch["discoveryGroup"]): number {
-  return group === "main_area" ? 1 : 0;
+  return ({ main_area: 2, related_area: 1, contextual_signals: 0 } as const)[group];
 }
 
 function prismaScoreComparison(left: VacancyCandidateMatch, right: VacancyCandidateMatch): number {

@@ -110,9 +110,9 @@ if (await exists(promptSourcePath)) {
   const promptSource = await readFile(promptSourcePath, "utf8");
   if (promptSource.length > 60000) errors.push(`FONTE_GPT_PRISMA.md exceeds compact limit: ${promptSource.length} characters`);
   for (const requiredText of [
-    "matching-score-1.1.0",
-    "vacancy-matching-explainable-4.0.0",
-    "Prisma v1.6.3",
+    "matching-score-1.2.0",
+    "vacancy-matching-explainable-5.0.0",
+    "Prisma v1.6.4",
     "docs/qa/agreement-contract-template.md",
     "docs/qa/aot-template.md",
   ]) {

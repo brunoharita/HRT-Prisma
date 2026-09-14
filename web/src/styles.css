@@ -6129,6 +6129,11 @@ textarea {
 .prisma-vacancy-match-list { display: grid; gap: 14px; }
 .prisma-vacancy-match-group { display: grid; gap: 10px; min-width: 0; }
 .prisma-vacancy-match-group > header h2.ant-typography { margin: 12px 0 2px; font-size: 1.15rem; }
+.prisma-contextual-signals-group { padding: 12px; border: 1px solid #dfe5ec; border-radius: 12px; background: #fafbfc; }
+.prisma-contextual-signals-group > summary { display: grid; gap: 3px; cursor: pointer; }
+.prisma-contextual-signals-group > summary strong { color: var(--prisma-text); font-size: 1.05rem; }
+.prisma-contextual-signals-group > summary span { color: var(--prisma-text-muted); font-size: 0.9rem; line-height: 1.45; }
+.prisma-contextual-signals-group[open] > summary { margin-bottom: 12px; }
 .prisma-vacancy-match-card { transition: border-color 160ms ease, box-shadow 160ms ease; }
 .prisma-vacancy-match-card.is-selected { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.11); }
 .prisma-vacancy-match-card.is-dismissed { opacity: 0.72; background: #f8fafc; }

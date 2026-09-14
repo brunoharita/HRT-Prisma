@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 178
-source_manifest_sha256: 4091ec1b300f38657582cc02c69a76c90fd759f04824e4323222f3896dc6ed81
+documentation_source_count: 179
+source_manifest_sha256: 81a7ffaa88ae1f81144648bacf34a1b679ed2bee2e3ccaf02a1761b48e6f3c2c
 -->
 
 # Tudo sobre o Prisma
@@ -355,7 +355,7 @@ TUDO_SOBRE_PRISMA.md   generated complete portable context export
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 2.1.0
+version: 2.2.0
 last_verified: 2026-09-14
 ---
 
@@ -390,8 +390,8 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - inference: `inference-ontology-1.0.0`;
 - retrieval: `structured-lexical-1.0.0`;
 - matching do vertical slice base: `matching-explainable-1.0.0`;
-- matching de Posições: `vacancy-matching-explainable-4.0.0`;
-- Prisma Score: `matching-score-1.1.0`;
+- matching de Posições: `vacancy-matching-explainable-5.0.0`;
+- Prisma Score: `matching-score-1.2.0`;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model local base: `deterministic-local-2.0.0`;
 - revisão adaptativa: `adaptive-resume-extraction-7.2.0` / `prisma-document-learning-v4` / `generic-record-pattern-v1` / `relative-record-signature-v1`;
@@ -522,7 +522,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.30.0
+version: 2.31.0
 last_verified: 2026-09-14
 ---
 
@@ -530,25 +530,29 @@ last_verified: 2026-09-14
 
 ## Resumo operacional para prompts
 
-Prisma v1.6.3 é a versão pública corrente. O frontend funciona localmente e usa o único backend remoto Prisma-QA; não existe ambiente de produção separado nem frontend hospedado. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.6.4 é a versão pública corrente. O frontend funciona localmente e usa o único backend remoto Prisma-QA; não existe ambiente de produção separado nem frontend hospedado. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-4.0.0` e `matching-score-1.1.0`. Descoberta, relação de área, relação ocupacional, aderência por requisito e score permanecem leituras separadas. O score ordena dentro dos grupos, mas não exclui Pessoa nem decide contratação. A jornada M6.2 está ativa no Prisma-QA para criação contextual por ação humana, sem delivery automático ou uso autorizado com Pessoas reais.
+Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
+
+## M6.1.2 — descoberta por trajetória em três grupos
+
+O Product Owner aprovou em 2026-09-14 a regra simples de trajetória primeiro. Grupo A exige experiência direta na área ou função equivalente; Grupo B exige trajetória adjacente/transferível; Grupo C preserva termos, ferramentas e outros sinais sem trajetória relacionada, mas não gera Prisma Score comparável nem concorre com A/B. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B, nunca para o A sem experiência direta. A implementação é determinística e reutiliza evidência, área, ocupação e função existentes, sem LLM, embedding ou nova persistência. Contratos avançam para matching 5.0.0, score 1.2.0 e Prisma v1.6.4. A migration `20260914161427_m61_trajectory_matching_version` está ativa no Prisma-QA; ADR-057 e o adendo 1.4.0 do AoT M6.1 registram regra e prova.
 
 As cinco fontes em `docs/ai-context` continuam canônicas por responsabilidade. `FONTE_GPT_PRISMA.md` é a fonte compacta gerada para o GPT que prepara prompts; `TUDO_SOBRE_PRISMA.md` é a exportação completa e portátil. Ambos derivam das mesmas fontes, não substituem código, contratos, ADRs ou evidência de ambiente e não podem ser editados manualmente.
 
 ## Ordenação por Prisma Score
 
-Por decisão do Product Owner em 2026-09-14, `matching-score-1.1.0` ordena as Pessoas encontradas dentro de cada grupo de descoberta, do maior para o menor valor. Scores provisórios participam da ordem sem perder o rótulo e scores indisponíveis ficam depois dos valores numéricos. Em empate, confiabilidade, decisão humana, nome e ID mantêm determinismo. Grupo A continua antes do Grupo B; fórmula, pesos, descoberta, inclusão, Perfil, Posição, Knowledge e autoridade humana não mudam. Prisma permanece v1.6.3 e não há alteração no Supabase.
+Por decisão do Product Owner em 2026-09-14, `matching-score-1.2.0` ordena as Pessoas dos Grupos A e B, dentro do próprio grupo, do maior para o menor valor. Scores provisórios participam sem perder o rótulo. Grupo C fica depois de A/B, sem número comparável; empate dentro dele usa decisão humana, nome e ID. Fórmula, pesos, Perfil, Posição, Knowledge e autoridade humana não mudam.
 
 ## M6.2 — jornada contextual de verificação
 
-O Product Owner aprovou em 2026-09-14 a implementação integral do item 10 revisado. A verificação passa a nascer de ação explícita sobre Pessoa, Posição e requisito no drawer do score; a RPC valida organização, matching 4.0.0 e versão imutável da Posição, preserva evidências/fingerprint e audita criação ou reuso. Os loaders deixam de criar a fixture M5.1A ao ler. Detalhe, preparação, convite e monitor projetam o mesmo contexto, versões e timeline; controles sem escolha foram substituídos por leitura, as prévias agora respondem, compartilhamento continua manual e inconclusivo permanece separado de conclusão. Na entrega M6.2, o score ainda era 1.0.0; a decisão posterior de ordenação o avançou para `matching-score-1.1.0` sem alterar a jornada. Produto permanece Prisma v1.6.3; produção e Pessoas reais permanecem fora de escopo.
+O Product Owner aprovou em 2026-09-14 a implementação integral do item 10 revisado. A verificação nasce de ação explícita sobre Pessoa, Posição e requisito; a RPC valida organização, versão imutável da Posição e snapshots matching 4.0.0 históricos ou 5.0.0 atuais, preserva evidências/fingerprint e audita criação ou reuso. Os loaders não criam fixtures ao ler. Detalhe, preparação, convite e monitor projetam o mesmo contexto, versões e timeline; compartilhamento continua manual e inconclusivo permanece separado de conclusão. Produção e Pessoas reais permanecem fora de escopo.
 
 O Prisma-QA recebeu as migrations `20260914051751_m62_contextual_verification_journey`, `20260914051918_m62_demo_need_retirement` e `20260914053202_m62_requirement_parameter_hardening`. A prova SQL transacional confirmou criação exata, preservação do nível e da criticidade da Posição, bloqueio anônimo, acesso autenticado sujeito à autorização interna e aposentadoria da fixture legada, com rollback integral. O smoke autenticado confirmou Beatriz no grupo A da Posição de Marketing, a nova ação por requisito e leitura vazia da central sem criação implícita; nenhuma verificação ou convite real foi gerado.
 
 ## M6.1.1 — evidência profissional explícita sem barreira de categoria
 
-O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permaneçam para organização e proveniência, mas não controlem a conexão factual. `vacancy-matching-explainable-4.0.0` procura o termo do requisito em todo conteúdo profissional publicado, com limite lexical, exclusão de negação e preservação do campo/trecho de origem. Requisito genérico pode ser atendido pela menção explícita; nível exigido sem comprovação permanece parcial. O caso real reconstruído de Bruno encontra `SAP` na descrição da experiência mesmo sem `toolsAndTechnologies`; `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` são negativos. Não há reclassificação de Perfil, migration, LLM, alteração de pesos ou produção. Esta entrega levou o produto à v1.6.2; M6.2 posteriormente o levou à versão corrente v1.6.3.
+O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permaneçam para organização e proveniência, mas não controlem a conexão factual. Desde `vacancy-matching-explainable-4.0.0`, o termo do requisito é procurado em todo conteúdo profissional publicado, com limite lexical, exclusão de negação e preservação da origem. O 5.0.0 preserva essa conexão, mas impede que ela, isoladamente, torne uma trajetória elegível para score. Nível exigido sem comprovação permanece parcial; não há reclassificação de Perfil, LLM ou alteração de pesos.
 
 ## Sincronização de versão — 2026-09-13
 
@@ -582,7 +586,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.6.3 registra a terceira entrega aceita do Movimento 6: jornada contextual de verificação. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por trajetória em três grupos. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 
@@ -625,7 +629,7 @@ Prisma v1.6.3 registra a terceira entrega aceita do Movimento 6: jornada context
 - `decision-centered-interaction` 1.0.0 implementado localmente no descarte adaptativo e normativo para o produto: cliques e teclas obrigatórios representam julgamento, autoridade ou risco material; coordenação determinística, avisos sem proposta, auditoria factual e falhas de telemetria opcional não interrompem o operador. Relatórios sem assinatura registrável usam `Fechar aviso` sem RPC; sugestões válidas fecham imediatamente e registram descarte em segundo plano.
 - Ciclo de vida de Perfil e documentos 1.0.0 implementado localmente e ativo no Prisma-QA: `Atualizar Perfil` preserva omissões, `Substituir Perfil` usa a revisão como versão completa, decisões por bloco mantêm identidade e alvo explícitos, restauração cria uma nova versão vigente, reinício remove somente o vigente e exclusão física usa saga retomável com Storage API. Dependências exclusivas são removidas apenas dentro da operação `delete_document` autoritativa; Knowledge, Evidência Demonstrada, avaliações, Pessoa, demais documentos e histórico independente permanecem. A prova conectada com rollback validou composição, idempotência, recomposição, ausência de órfãos e negações de autoridade. O smoke autenticado aprovou as superfícies de comparação, versões e documento em 1920x1080, 1600x900, 1440x900, 1366x768 e 390x844; no mobile, diferenças são cartões rotulados sem rolagem horizontal global ou interna.
 - M5.3 Resiliência operacional 1.0.0 implementada localmente e ativa no Prisma-QA: a Central da Pessoa cria revisão diretamente do Perfil atual, de qualquer versão histórica ou de documento preservado; versões exibem o Perfil completo e continuam restauráveis sem a fonte original; documentos podem ser revistos, reabertos, movidos para a Pessoa correta ou excluídos com preflight humano. Pessoas duplicadas podem ser mescladas com decisões apenas para conflitos canônicos, histórico imutável e redirecionamento da absorvida. Vínculo, arquivamento e reativação são mutações independentes do Perfil. O backend reutiliza `profile_reviews`, `professional_profiles`, `document_operations`, RLS, locks e feedback operacional, sem pipeline ou fila paralela. A prova remota revertida validou revisão por snapshot e replay, exclusão sem reescrita de Perfil, restauração incremental, movimentação integral dos artefatos documentais, mesclagem idempotente e negações de grants; o lint remoto encerrou com zero erros. O smoke autenticado validou as confirmações destrutivas, o ciclo reversível arquivar/reativar, a comparação de mesclagem e a Central em cinco viewports sem overflow horizontal; formatos históricos estruturados de idioma, certificação e competência são normalizados na leitura.
-- M5.4 Vagas está ativa no Prisma-QA; o matching explicável 4.0.0 e o score 1.0.0 estão implementados localmente. A descoberta pagina e analisa todos os Perfis publicados acessíveis, mostra analisados/total e retorna somente Pessoas com relação ocupacional, evidência direta, parcial, sinal relacionado ou confirmação humana anterior. Relação ocupacional usa referência oficial, relações/aliases publicados, título e cargos de experiências; aproximações exigem decisão humana auditada. A aderência por requisito consulta todo o conteúdo profissional publicado, preserva a origem, exige limite lexical, exclui negação e não inventa nível. Categorias organizam, mas não bloqueiam evidência. Score continua posterior à descoberta, sem autoridade de contratação. O schema, RLS e `match_evaluations` existentes foram reutilizados. Produção não foi acionada.
+- M5.4 Vagas está ativa no Prisma-QA; matching explicável 5.0.0 e score 1.2.0 estão implementados localmente. A descoberta pagina e analisa todos os Perfis publicados acessíveis, classifica trajetória direta, relacionada ou somente contextual e retorna somente Pessoas com sinal rastreável ou confirmação humana anterior. Relação ocupacional usa referência oficial, relações/aliases publicados, título e cargos de experiências; aproximações exigem decisão humana auditada. A aderência por requisito consulta todo o conteúdo profissional publicado, preserva a origem, exige limite lexical, exclui negação e não inventa nível. Categorias organizam, mas não bloqueiam evidência. Somente A/B recebem score comparável. O schema, RLS e `match_evaluations` existentes foram reutilizados. Produção não foi acionada.
 - M5.4.2 Web Search contextual implementado localmente e publicado no Prisma-QA: o Assistente Prisma 1.2.0 identifica perguntas dependentes de atualidade, reutiliza o modo `vacancy_advisor` da Edge Function Knowledge Agent e apresenta síntese, recomendação, ressalvas e fontes clicáveis. O payload externo mínimo contém pergunta, título, área, idioma e data, sem Pessoas, Perfis, organização ou descrição interna. `vacancy_advisor_research_runs` registra versões, uso, resposta e fontes com RLS, sem persistir a pergunta; cache tenant-scoped de 24 horas e caps compartilhados controlam custo. Modelo econômico, flag, limites, credencial e opt-in da organização `Prisma` estão configurados em QA. O smoke vivo concluiu com três fontes pós-validadas e ledger `completed`. Produção não foi acionada.
 - M5.4.4 Resolução ocupacional por IA está ativa no Prisma-QA: o contrato `occupation-resolution-on-demand-2.0.0` preserva M5.4.3 e resolve na ordem empresa, Global, Knowledge Agent sobre snapshots internos ESCO/O*NET, explorador humano e, somente após declaração auditada de ausência, conceito manual da empresa. O Agent não usa Web Search nem recebe Pessoas, Perfis, currículos, habilidades ou relações ocupacionais; uma seleção precisa apontar `externalId` presente no snapshot. As tentativas, decisão, origem, candidatos e versão permanecem tenant-scoped em `occupation_resolution_attempts`; nenhum snapshot é publicado em massa e falha técnica preserva rascunho para nova tentativa. Produção não foi acionada.
 - O seletor inicial de referência de Posições foi corrigido localmente após falha e latência observadas: em vez da RPC genérica de sugestões por caractere, consulta somente termos Knowledge aprovados, não ambíguos e por prefixo, resolve apenas conceitos de ocupação permitidos pela RLS, aplica debounce de 400 ms, cancelamento, cache de sessão e timeout de 8 s. A RPC antiga existe no Prisma-QA e manteve negação anônima esperada; a correção não altera schema, publicação, resolução canônica ou produção. Smoke autenticado permanece pendente.
@@ -849,19 +853,19 @@ Em 2026-09-04, a entrada `Processamento e revisões` da Central da Pessoa passou
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.11.0
+version: 1.12.0
 last_verified: 2026-09-14
 ---
 
 # Referência técnica do Prisma
 
-## M6.1.1 Matching por evidência profissional explícita
+## M6.1.2 Matching por trajetória antes dos requisitos
 
-`vacancy-matching-explainable-4.0.0` consulta todo o conteúdo profissional publicado para cada requisito. Categoria e grupo permanecem como organização/proveniência, sem bloquear termo explícito. A correspondência exige limite lexical e exclui negação; termo genérico atende, enquanto nível exigido sem prova permanece parcial. O caso de regressão de Bruno encontra `SAP` na descrição da experiência sem depender de `toolsAndTechnologies`. `matching-score-1.1.0` preserva fórmula e pesos e ordena valores numéricos dentro de cada grupo, incluindo provisórios identificados; schema, RLS, RPCs e dados publicados não mudam.
+`vacancy-matching-explainable-5.0.0` avalia primeiro a trajetória profissional e depois usa os requisitos para refinar a aderência. Grupo A exige experiência direta na área ou função equivalente; Grupo B reúne trajetória adjacente/transferível e potencial de entrada; Grupo C preserva termos e ferramentas encontrados sem trajetória relacionada, fica recolhido e não recebe score comparável. Posições de entrada podem usar formação, projetos e conhecimentos para o Grupo B. `matching-score-1.2.0` preserva fórmula e pesos para A/B e registra indisponibilidade explícita no C. A conexão factual introduzida no 4.0.0 continua ativa: categoria organiza, mas não bloqueia termo explícito, limite lexical e negação permanecem.
 
 ## M6.2 Verificação contextual
 
-M6.2 reutiliza a avaliação persistida de Pessoa, Posição, versão e requisito para criar ou recuperar uma necessidade de verificação somente após ação humana. A RPC tenant-scoped valida matching 4.0.0, requisito da mesma versão e papel autorizado; loaders são somente leitura. Preparação, convite manual, acompanhamento e resultado preservam o contexto e a timeline. O Prisma-QA possui as migrations M6.2; produção, delivery automático e uso com Pessoas reais não foram autorizados.
+M6.2 reutiliza a avaliação persistida de Pessoa, Posição, versão e requisito para criar ou recuperar uma necessidade de verificação somente após ação humana. A RPC tenant-scoped valida snapshots matching 4.0.0 históricos ou 5.0.0 atuais, requisito da mesma versão e papel autorizado; loaders são somente leitura. Preparação, convite manual, acompanhamento e resultado preservam o contexto e a timeline. O Prisma-QA possui as migrations M6.2; produção, delivery automático e uso com Pessoas reais não foram autorizados.
 
 ## M5.4.6 Vagas
 
@@ -897,7 +901,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2 no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantada com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -913,7 +917,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md` e ADR-032. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029. UX compartilhada: ADR-050. Matching/score atuais: ADR-053 e ADR-055. Verificação contextual: ADR-054. Distribuição do Context Pack: ADR-056.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md` e ADR-032. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029. UX compartilhada: ADR-050. Matching/score atuais: ADR-053, ADR-055 e ADR-057. Verificação contextual: ADR-054. Distribuição do Context Pack: ADR-056.
 
 ## Operação
 
@@ -1634,17 +1638,23 @@ O resultado agrega requisitos atendidos, parcialmente atendidos, sinais relacion
 
 Termos explícitos usam limite lexical: `SAP` conecta `migração para SAP` e `SAP EWM`, mas não `sapatos`. Frases negadas como `sem experiência com SAP` ou `nunca utilizei SAP` não são evidência positiva. Se a Vaga exigir nível, duração ou senioridade, a presença do termo isolado prova a conexão, não o grau; o atendimento integral exige que esse qualificador também esteja explícito ou seja sustentado por Evidência Demonstrada válida.
 
-## Descoberta por área, cargo e requisitos
+## Descoberta orientada pela trajetória
 
-A descoberta separa três leituras: experiência na área profissional, proximidade do cargo e aderência detalhada por requisito. A área é um sinal de entrada quando o valor informado na Posição aparece explicitamente em `areasOfExpertise` ou em cargo, descrição ou evidência de uma experiência do Perfil publicado. O resumo livre não cria relação de área.
+A descoberta separa três leituras: trajetória profissional, proximidade do cargo e aderência detalhada por requisito. A área continua observável quando o valor informado na Posição aparece em `areasOfExpertise` ou em cargo, descrição ou evidência de uma experiência do Perfil publicado, mas a descrição isolada não basta para tornar a trajetória diretamente compatível. O resumo livre não cria relação de área.
 
 A proximidade do cargo usa, nesta ordem, a mesma referência oficial, referência equivalente publicada, relação ocupacional publicada e possível relação textual entre o título da Posição, o título profissional e cargos das experiências. A relação textual exige igualdade, inclusão ou dois ou mais termos ocupacionais comuns. Um termo de área isolado, como `marketing`, não transforma `Analista de Marketing` e `Assistente de Marketing` em cargos equivalentes. O operador pode confirmar ou descartar a relação; essa decisão fica auditada, funciona como desempate depois do score e nunca muda o Perfil, a Posição ou a Knowledge.
 
-Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. O resultado exibe quem possui ao menos experiência explícita na área, relação ocupacional, evidência direta, evidência parcial, sinal relacionado ou confirmação humana anterior. O score é calculado somente depois dessa descoberta e nunca remove um resultado. Zero sinal não é convertido em ausência profissional, mas também não gera resultado.
+Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. `vacancy-matching-explainable-5.0.0` classifica a descoberta antes do score:
+
+- Grupo A: experiência direta na área ou função equivalente, sustentada por cargo/ocupação e histórico profissional;
+- Grupo B: trajetória adjacente ou transferível; em Posição explicitamente de entrada, formação, projetos ou conhecimentos podem sustentar potencial de entrada;
+- Grupo C: somente termos, ferramentas ou outros sinais contextuais, sem trajetória relacionada suficiente.
+
+Somente A e B recebem Prisma Score comparável. C permanece visível e recolhido por padrão para não apagar conexões úteis, mas não concorre no ranking principal. Zero sinal não é convertido em ausência profissional e não gera resultado. A classificação não decide contratação e a confirmação humana permanece auditada.
 
 ## Score Prisma de matching
 
-`matching-score-1.1.0` é uma projeção determinística do matching resolvido. Os pesos nominais são área 30, função 20, obrigatórios 35 e desejáveis 15. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`.
+`matching-score-1.2.0` é uma projeção determinística do matching resolvido, disponível somente para os Grupos A e B. Os pesos nominais permanecem área 30, função 20, obrigatórios 35 e desejáveis 15. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`. No Grupo C, a conexão por requisito continua rastreável, mas o número agregado retorna indisponível por falta de elegibilidade competitiva da trajetória.
 
 Desde `vacancy-definition-1.2.0`, `unclassified` existe somente durante a preparação de um rascunho assistido. Um requisito incluído manualmente nasce de forma coerente como `required`; qualquer rascunho com requisito ainda não classificado deve exigir a decisão entre obrigatório e desejável antes de salvar. A RPC rejeita novas versões com `unclassified`. Versões históricas permanecem legíveis, e o matching continua explicando suas pendências sem inventar importância.
 
@@ -1686,9 +1696,9 @@ Competências transferíveis são declaradas na vaga. O mecanismo não inventa a
 
 Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM também deverá persistir `promptVersion` e `modelVersion`.
 
-A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avança o score para `matching-score-1.1.0` e o torna a chave de ordenação dentro de cada grupo, conforme ADR-055.
+A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avançou o score para `matching-score-1.1.0`, conforme ADR-055. O ADR-057 avança para `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`: trajetória define A/B/C e sinais sem trajetória deixam de produzir score comparável.
 
-O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
+O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. A fronteira aceita snapshots históricos 4.0.0 e atuais 5.0.0, rejeitando qualquer versão desconhecida. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
 
 ## Normalização conceitual M5.2
 
@@ -1736,7 +1746,7 @@ Usar o menor modelo disponível que cumpra segurança, qualidade, contexto, Stru
 | Inference | local | `inference-ontology-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Retrieval | local | `structured-lexical-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Matching do vertical slice base | local | `matching-explainable-1.0.0` | nenhum | 1.0.0 | ativo local |
-| Matching de Posições | local | `vacancy-matching-explainable-4.0.0` + `matching-score-1.1.0` | nenhum | 4.0.0 / 1.1.0 | ativo local/QA |
+| Matching de Posições | local | `vacancy-matching-explainable-5.0.0` + `matching-score-1.2.0` | nenhum | 5.0.0 / 1.2.0 | ativo local/QA |
 | Knowledge research | OpenAI | `gpt-5.6-luna` | nenhum | 1.0.0 | ativo e validado no Prisma-QA |
 | Assessment item generation | local | `fake-deterministic` | nenhum | 1.0.0 | ativo local/QA, sintético |
 | Assessment item generation external | não aprovado | nenhum | provider fake | 1.0.0 | desativado |
@@ -2051,7 +2061,7 @@ last_verified: 2026-09-01
 
 ## Integração contextual M6.2
 
-`create_m62_verification_need` é a fronteira de criação contextual. Ela recebe identificadores, não evidência livre do cliente: `match_evaluations.id`, `vacancy_requirements.id`, nível e criticidade. A função valida o revisor da organização, `vacancy-matching-explainable-4.0.0`, a versão imutável da Posição e a presença do requisito no snapshot do matching. O snapshot validado é copiado para `verification_needs`; criação ou reuso gera `verification_audit_events`. `load_m51a_verification_workspace` e `load_m51b_operator_workspace` apenas leem e projetam contexto/timeline. A restrição única passa a identificar requisito exato, preservando compatibilidade separada para registros legados sem `requirement_id`.
+`create_m62_verification_need` é a fronteira de criação contextual. Ela recebe identificadores, não evidência livre do cliente: `match_evaluations.id`, `vacancy_requirements.id`, nível e criticidade. A função valida o revisor da organização, snapshots históricos `vacancy-matching-explainable-4.0.0` ou atuais `vacancy-matching-explainable-5.0.0`, a versão imutável da Posição e a presença do requisito no snapshot do matching; versões desconhecidas falham fechadas. O snapshot validado é copiado para `verification_needs`; criação ou reuso gera `verification_audit_events`. `load_m51a_verification_workspace` e `load_m51b_operator_workspace` apenas leem e projetam contexto/timeline. A restrição única passa a identificar requisito exato, preservando compatibilidade separada para registros legados sem `requirement_id`.
 
 ## Estado
 
@@ -2846,7 +2856,7 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 - `movimento`: movimento de produto em execução, atualmente `6`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão atual oficial é **Prisma v1.6.3**, correspondente à terceira entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão atual oficial é **Prisma v1.6.4**, correspondente à quarta entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -2873,6 +2883,7 @@ M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora d
 | 1 | M6.1: pontuação determinística e explicável de matching | oficial |
 | 2 | M6.1.1: requisito conectado a evidência profissional explícita | aceite do PO para implementação e atualização da versão |
 | 3 | M6.2: jornada contextual de verificação | aceite do PO para implementação e atualização da versão |
+| 4 | M6.1.2: descoberta por trajetória em três grupos | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -2916,6 +2927,8 @@ Todo consumidor deve declarar versões aceitas. Versão ausente, desconhecida, f
 Versões anteriores permanecem identificáveis. Rollback reativa artefato anterior sem reescrever resultados históricos. Mudança de prompt ou modelo relevante cria nova versão mesmo quando o schema de saída não muda.
 
 ## Versões atuais
+
+O adendo M6.1.2 de 2026-09-14 avança `vacancy-matching-explainable` para 5.0.0 e `matching-score` para 1.2.0. A trajetória profissional define Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual antes do score. Somente A e B recebem número comparável; C permanece recolhido e rastreável. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B. A compatibilidade M6.2 passa a aceitar snapshots 4.0.0 históricos e 5.0.0 atuais por migration forward-only. Produto avança para Prisma v1.6.4.
 
 O ajuste de ordenação de 2026-09-14 avança `matching-score` para 1.1.0. Grupo A permanece antes do Grupo B; dentro de cada grupo, valores numéricos ordenam de forma decrescente, inclusive provisórios devidamente identificados. Score indisponível fica depois dos valores numéricos. Fórmula, pesos, descoberta, inclusão e decisão humana permanecem inalterados. Como correção complementar da experiência vigente, o produto permanece Prisma v1.6.3.
 
@@ -6238,6 +6251,106 @@ O Product Owner substitui somente um arquivo nas fontes permanentes do GPT e man
 
 ---
 
+## Source: `docs/decisions/ADR-057-trajectory-first-matching-groups.md`
+
+# ADR-057: Trajetória profissional precede requisitos na descoberta por Posição
+
+- Status: accepted
+- Date: 2026-09-14
+- Owners: product and domain engineering
+- Supersedes: composição binária dos grupos do ADR-051 e elegibilidade uniforme do ADR-052; preserva a conexão factual cross-category do ADR-053
+
+## Context
+
+O matching 4.0.0 recupera um requisito explícito em qualquer conteúdo profissional publicado. Isso corrige falsos negativos de categoria, mas permite que uma Pessoa sem trajetória na área apareça ao lado de trajetórias relacionadas apenas porque mencionou ou comercializou uma ferramenta exigida. O exemplo observado foi uma carreira comercial conectada a uma Posição gerencial de tecnologia por termos tecnológicos.
+
+## Problem
+
+Separar, de forma simples e explicável, experiência profissional direta, trajetória transferível e sinais contextuais sem transformar palavras isoladas em compatibilidade competitiva. Posições de entrada precisam preservar descoberta por potencial mesmo sem experiência anterior.
+
+## Decision
+
+O matching avalia primeiro a relação da trajetória e depois a elegibilidade para score:
+
+1. Grupo A contém experiência direta na área ou função equivalente sustentada por cargo/ocupação e histórico profissional publicado.
+2. Grupo B contém trajetória adjacente ou transferível. Em títulos explicitamente de entrada, sinais rastreáveis de formação, projetos ou conhecimentos também representam potencial de entrada.
+3. Grupo C contém somente sinais contextuais ou requisitos isolados, sem trajetória relacionada suficiente.
+
+Somente A e B recebem `matching-score` comparável e são ordenados numericamente dentro do grupo. C permanece recuperável, recolhido por padrão e sem número comparável. A conexão factual de um requisito continua preservada; o grupo controla elegibilidade competitiva, não apaga evidência.
+
+## Alternatives considered
+
+- Classificar semanticamente cada verbo de uso, venda, implantação ou gestão: adiado por complexidade desnecessária para a regra aprovada.
+- Excluir totalmente sinais sem trajetória: rejeitado porque elimina conexões úteis para análise humana.
+- Manter dois grupos e aplicar apenas penalidade: rejeitado porque um número ainda sugeriria comparabilidade entre trajetórias diferentes.
+
+## Reasons for the choice
+
+A solução reutiliza relações de área, ocupação, função, senioridade e evidências já existentes. O critério é compreensível para o operador: primeiro a história profissional precisa se relacionar ao trabalho; depois os requisitos refinam a compatibilidade. A exceção explícita conserva o propósito de vagas de entrada.
+
+## Positive consequences
+
+Termos isolados deixam de competir com trajetórias profissionais. A explicação mostra por que cada Pessoa está em A, B ou C. O matching permanece determinístico, rastreável e sem nova dependência.
+
+## Negative consequences
+
+Títulos profissionais muito incomuns podem ficar no Grupo C até uma relação ocupacional ou decisão humana estar disponível. O critério deliberadamente simples não distingue, por verbo, venda de uso técnico dentro da mesma trajetória.
+
+## Risks
+
+Descrições profissionais podem conter palavras de área sem que o cargo pertença à área. Uma lista extensa no Grupo C pode gerar ruído visual. Versões novas do matching poderiam deixar de ser aceitas pela jornada M6.2.
+
+## Mitigation
+
+Cargo/ocupação e área declarada sustentam A/B; descrição isolada permanece C. O Grupo C inicia recolhido. A fronteira M6.2 usa lista fechada de versões 4.0.0 e 5.0.0, com versão desconhecida rejeitada.
+
+## Technical impact
+
+`vacancy-matching-explainable` avança para 5.0.0 e inclui `trajectoryAssessment` e o terceiro grupo. `matching-score` avança para 1.2.0 para tornar o resultado indisponível quando a elegibilidade é apenas contextual. A UI apresenta A/B/C e a avaliação persistida registra trajetória. Uma migration substitui somente a função M6.2 para ampliar versões suportadas.
+
+## Data impact
+
+Não há tabela, coluna, backfill ou reescrita. Avaliações novas preservam a versão e o snapshot adicional. Avaliações históricas continuam legíveis.
+
+## Security and LGPD impact
+
+Não entram novos atributos nem PII no cálculo. A função `SECURITY DEFINER` conserva checagem tenant-scoped, `search_path` vazio, execução negada a `anon` e concedida somente a `authenticated`.
+
+## AI impact
+
+Nenhum prompt, modelo, embedding, chamada externa ou inferência probabilística é introduzido.
+
+## Compatibility
+
+Snapshots 4.0.0 permanecem válidos para necessidades de verificação já auditáveis; 5.0.0 passa a ser a versão corrente. Versões desconhecidas falham fechadas.
+
+## Validation strategy
+
+Fixtures cobrem tecnologia direta, trajetória adjacente, carreira comercial com SAP, exceção de entrada, ausência total de sinal, ordenação A/B/C, score indisponível no C e fronteira M6.2 positiva/negativa. Build, typecheck, golden, Context Pack, SQL transacional e smoke visual autenticado fecham a entrega.
+
+## Review criterion
+
+Reavaliar se análise real mostrar volume material de falsos A/B ou se a exceção de entrada ocultar candidatos pertinentes.
+
+## Replacement criterion
+
+Qualquer classificação semântica por atividade, aprendizado automático ou mudança de autoridade exige novo acordo e ADR substituto.
+
+## References
+
+- `docs/qa/agreement-m61-matching-score.md`
+- `docs/qa/execution-m61-matching-score.md`
+- `docs/ai/matching-contract.md`
+- `web/src/domain/vacancy.ts`
+- `web/src/domain/matchingScore.ts`
+- `supabase/migrations/20260914161427_m61_trajectory_matching_version.sql`
+
+## Change history
+
+- 2026-09-14: accepted by explicit Product Owner implementation request.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6305,6 +6418,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-054](ADR-054-contextual-verification-journey.md) | accepted | Verificação nasce do requisito exato e preserva o contexto de ponta a ponta |
 | [ADR-055](ADR-055-prisma-score-ordering.md) | accepted | Prisma Score ordena Pessoas dentro de cada grupo de descoberta |
 | [ADR-056](ADR-056-dual-context-distribution.md) | accepted | Uma fonte compacta para prompts e uma exportação completa derivam do mesmo Context Pack |
+| [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 
 ## Rules
 
@@ -7985,7 +8099,7 @@ Aceite da entrega local em 2026-09-12: Bruno confirmou "deu certo, pode atualiza
 
 # Contrato de Acordos — M6.1 Pontuação de matching
 
-Versão 1.3.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-14. Fonte: prompt mestre M6.1, aprovação da fórmula, decisões supervenientes de classificação, evidência profissional explícita e ordenação por Prisma Score.
+Versão 1.4.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-14. Fonte: prompt mestre M6.1, aprovação da fórmula e decisões supervenientes de classificação, evidência profissional explícita, ordenação por Prisma Score e descoberta orientada pela trajetória.
 
 ## Objetivo e decisão superveniente
 
@@ -7996,6 +8110,10 @@ A decisão superveniente corrige o antigo CA-008 incompatível com a fórmula: c
 A decisão superveniente de classificação limita `unclassified` a rascunhos assistidos e versões históricas. Inclusão manual apresentada como obrigatória deve gravar `required`; uma nova versão da Posição não pode ser salva com requisito pendente.
 
 A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` aparece explicitamente em qualquer conteúdo profissional publicado, a conexão deve ocorrer mesmo que Vaga e Perfil tenham classificado o termo em grupos distintos. Os grupos permanecem para organização e proveniência. Senioridade, proficiência e duração continuam separadas e não podem ser inventadas.
+
+A decisão superveniente 1.4.0 separa a conexão factual da elegibilidade competitiva. A trajetória profissional determina primeiro os Grupos A, B e C; somente A e B recebem Prisma Score comparável. Termo ou ferramenta isolada permanece recuperável no Grupo C, sem competir no ranking principal. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos como potencial para o Grupo B.
+
+Esta decisão substitui D-003, D-016 e D-023 somente na composição/apresentação dos grupos, P-013 somente quanto à separação semântica do Grupo C e CA-028 somente quanto à descoberta/agrupamento. Fórmula, pesos, ausência de decisão automática, autoridade humana, RLS, schema e Perfil publicado permanecem preservados.
 
 ## DEVE
 
@@ -8033,6 +8151,15 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - D-032: `SAP` conecta menções como `migração para SAP` e `SAP EWM`, mas não substring em outra palavra nem declaração negada.
 - D-033: requisito com nível explícito permanece parcial quando somente o termo é comprovado; nível pode ser atendido por declaração explícita ou Evidência Demonstrada válida.
 - D-034: equivalência Knowledge publicada pode atender independentemente do grupo, preservando termo original e proveniência.
+- D-035: a trajetória profissional é avaliada antes da elegibilidade para o Prisma Score; substitui D-003 somente quanto à composição dos grupos.
+- D-036: Grupo A exige experiência profissional direta na área ou função equivalente, sustentada por cargo/ocupação e histórico profissional publicado.
+- D-037: Grupo B exige trajetória profissional adjacente ou transferível, sem equivalência direta; área declarada ou relação ocupacional estruturada/textual sustenta a inclusão.
+- D-038: Grupo C reúne somente sinais contextuais, como requisitos, ferramentas, formação ou menções, sem trajetória profissional relacionada suficiente.
+- D-039: Grupo C permanece visível por progressive disclosure, não recebe Prisma Score comparável e nunca precede A ou B.
+- D-040: Posição explicitamente de entrada (`aprendiz`, `estágio/estagiário`, `trainee`, `auxiliar`, `assistente`, `júnior/junior` ou `jr`) pode promover sinais rastreáveis para o Grupo B como potencial de entrada.
+- D-041: fora da exceção de entrada, requisito explícito continua conectado conforme D-030 a D-034, mas não torna elegível para score uma trajetória classificada somente como contextual.
+- D-042: a explicação e o snapshot auditável registram grupo, relação de trajetória, evidências e aplicação da exceção de entrada.
+- D-043: A e B são ordenados pelo Prisma Score dentro do próprio grupo; C é separado e ordenado deterministicamente sem número comparável.
 
 ## PROIBIDO
 
@@ -8047,6 +8174,12 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - P-019: categoria divergente nunca transforma evidência profissional explícita em `no_evidence`.
 - P-020: substring bruta, negação ou repetição não comprovam requisito.
 - P-021: o matching não infere nível, duração ou senioridade a partir da simples presença do termo.
+- P-022: termo, ferramenta ou requisito isolado não promove Perfil ao Grupo A ou B em Posição acima da entrada.
+- P-023: Grupo C não exibe pontos obtidos, cobertura ou número que possa ser comparado aos Grupos A e B.
+- P-024: ausência de trajetória publicada não vira afirmação de incapacidade, rejeição ou decisão de contratação.
+- P-025: a exceção de entrada não promove Perfil ao Grupo A sem experiência direta.
+- P-026: a nova regra não usa LLM, embedding, atributo sensível, repetição textual ou nova fonte externa.
+- P-027: avaliações históricas 4.0.0 não são reescritas; a verificação aceita somente snapshots 4.0.0 e 5.0.0 e rejeita versões desconhecidas.
 
 ## FORA DE ESCOPO
 
@@ -8054,6 +8187,9 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - F-005 a F-010: previsão, cutoff, faixas definitivas, salário, geografia/logística no score ou mudança de contratação.
 - F-011 a F-012: reescrita de Perfil/Knowledge e provider novo.
 - F-013: remoção dos grupos, reclassificação histórica e modelagem de senioridade/proficiência por conhecimento.
+- F-014: classificação semântica de verbos como uso, venda, implantação ou administração de cada ferramenta.
+- F-015: promoção automática do Grupo C por IA ou aprendizado estatístico.
+- F-016: produção e reescrita de avaliações, Perfis ou Posições históricas.
 
 ## AUTONOMIA
 
@@ -8061,6 +8197,9 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - A-004 a A-006: componentes Ant Design existentes, nomes técnicos equivalentes e testes/fixtures/helpers.
 - A-007: preservar a fórmula e os pesos, avançar `matching-score` para 1.1.0 pela nova ordenação e manter `vacancy-matching-explainable` 4.0.0.
 - A-008: refactors locais indispensáveis sem alterar regras adjacentes.
+- A-009: nomes internos do terceiro grupo, helper determinístico de nível de entrada e apresentação recolhida do Grupo C.
+- A-010: avançar `vacancy-matching-explainable` para 5.0.0, `matching-score` para 1.2.0 e o produto para Prisma v1.6.4.
+- A-011: migration forward-only pode ampliar a lista fechada de versões aceitas pela M6.2 sem alterar RLS, grants ou autoridade.
 
 ## Critérios de aceite
 
@@ -8084,6 +8223,16 @@ A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` ap
 - CA-026: `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` não geram atendimento.
 - CA-027: SAP explícito sem nível atende requisito genérico, mas fica parcial quando a Vaga exige nível avançado não comprovado.
 - CA-028: fórmula, pesos, descoberta, ordenação, RLS, schema e Perfil publicado permanecem inalterados.
+- CA-029: Gerente de Tecnologia com experiência direta na área fica no Grupo A.
+- CA-030: trajetória adjacente ou área declarada sem equivalência direta fica no Grupo B.
+- CA-031: carreira comercial que apenas menciona ou vende SAP para uma Posição de Gerente de Tecnologia fica no Grupo C, sem Prisma Score comparável.
+- CA-032: a mesma evidência `SAP` permanece rastreável como conexão factual no Grupo C, sem ser apresentada como compatibilidade competitiva.
+- CA-033: Assistente/Júnior de Tecnologia sem experiência, mas com SAP em formação, projeto ou conhecimento publicado, pode ficar no Grupo B; nunca no A por esse motivo isolado.
+- CA-034: Perfil sem trajetória e sem sinal continua fora da descoberta automática; confirmação humana permanece preservada.
+- CA-035: lista apresenta A, B e C nessa ordem; C inicia recolhido e usa linguagem de sinais, não de score.
+- CA-036: snapshot de `match_evaluations` inclui a avaliação da trajetória e a versão 5.0.0.
+- CA-037: `create_m62_verification_need` aceita snapshots 4.0.0 históricos e 5.0.0 atuais, rejeita versão desconhecida e mantém `anon` sem execução.
+- CA-038: testes direcionados, build web, Context Pack e smoke funcional não apresentam regressão material no fluxo de Vagas.
 
 ## Pendências
 
@@ -8997,6 +9146,46 @@ Em 2026-09-14, Bruno determinou que as Pessoas encontradas para uma Posição se
 
 O contrato avança para `matching-score-1.1.0`. Fórmula, pesos, descoberta, inclusão, dados pessoais e autoridade humana não mudam. `vacancy-matching-explainable-4.0.0`, `vacancy-definition-1.2.0` e o produto Prisma v1.6.3 permanecem. A alteração não cria migration nem modifica dados no Prisma-QA; produção permanece fora de escopo.
 
+## Adendo 1.4.0: trajetória antes dos requisitos
+
+Em 2026-09-14, Bruno determinou que a história profissional seja o portão de elegibilidade competitiva. Grupo A contém experiência direta; Grupo B contém trajetória relacionada/transferível ou potencial para Posição de entrada; Grupo C preserva sinais sem trajetória relacionada, recolhido e sem Prisma Score comparável.
+
+| Acordo | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-035 a D-039 / CA-029 a CA-032 | `assessVacancyTrajectory` classifica A/B/C antes do score; `competitiveEligibility=contextual_only` torna o score indisponível no C sem apagar a evidência | fixtures de gerente de tecnologia direto, trajetória adjacente e carreira comercial com SAP; requisito SAP continua `met` e C continua sem número | PASS |
+| D-040 / P-025 / CA-033 | helper determinístico reconhece títulos explicitamente de entrada e promove sinais rastreáveis somente ao B | fixture `Assistente de Tecnologia Júnior` com SAP, sem experiência, resulta `entry_potential` no B e nunca A | PASS |
+| D-041 a D-043 / P-022 a P-024 / CA-034 a CA-036 | descoberta preserva sinal ou decisão humana; A/B ordenam por score; C fica separado, recolhido, auditável e com linguagem neutra | testes de descoberta/ordenação/UI e smoke autenticado com A, B e C | PASS |
+| P-026 | cálculo permanece local e determinístico, sem LLM, embedding, PII ou fonte externa | build, golden e inspeção do snapshot | PASS |
+| P-027 / CA-037 | RPC M6.2 aceita lista fechada 4.0.0/5.0.0 e preserva autorização tenant-scoped e grants | prova SQL transacional no Prisma-QA: 5.0.0 aceito, versão desconhecida rejeitada, `anon=false`, `authenticated=true` | PASS |
+| CA-038 | regressão proporcional de domínio, web, golden, documentação e ambiente | evidências abaixo | PASS |
+
+### Evidência local
+
+- `pnpm run build`: PASS.
+- `node --test dist/tests/matchingScore.test.js dist/tests/vacancyIntelligence.test.js dist/tests/productRelease.test.js`: PASS, 61/61.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm run build:web`: PASS; permanece apenas o aviso histórico de chunk acima de 900 kB.
+- `pnpm run test:golden`: PASS, 23/23, regressões 0.
+- `pnpm run lint`: PASS, 495 arquivos.
+- `pnpm run report:matching-score-shadow`: PASS; A ordenado por 100, 92 e 75, enquanto o sinal contextual permaneceu no C com `score=null`.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS, 5 fontes canônicas.
+- `git diff --check`: PASS.
+
+### Evidência Prisma-QA e visual
+
+- projeto confirmado: `Prisma-QA` (`ioldpnqqvobprjiontre`), ativo e saudável.
+- migration forward-only `20260914161427_m61_trajectory_matching_version` ativa no ledger remoto; não cria tabela, coluna, índice ou backfill.
+- prova SQL com rollback: `matching_5_need_supported=true`, `anonymous_denied=true` e `authenticated_allowed=true`; versão desconhecida retornou `M62_UNSUPPORTED_MATCHING_VERSION`.
+- inspeção pós-migration: matching 5.0.0 presente na função e `private.require_document_reviewer` preservado.
+- advisors não identificaram objeto estrutural novo desta entrega; os avisos gerais preexistentes de funções `SECURITY DEFINER`, tabelas internas sem policy de leitura direta, índices ainda não usados e policies permissivas múltiplas permanecem fora do escopo.
+- smoke autenticado em `Pessoas para Analista de Marketing`: PASS. A exibiu Beatriz com score; B exibiu Bruno com score; C iniciou recolhido e exibiu João como `Somente sinais`, com um sinal rastreável e sem número comparável. O drawer usou `Sinais Prisma`, mostrou matching 5.0.0/score 1.2.0 e não ofereceu verificação competitiva no Grupo C.
+
+### Versões, limites e conclusão
+
+`vacancy-matching-explainable` avança para 5.0.0, `matching-score` para 1.2.0 e o produto para Prisma v1.6.4. A fórmula e os pesos de A/B não mudaram. Não houve reclassificação de Perfil, Posição, Knowledge ou avaliação histórica; não há frontend hospedado nem ambiente de produção separado. A classificação deliberadamente simples não interpreta verbos de uso, venda ou implantação dentro da mesma trajetória; esse refinamento permanece fora de escopo.
+
+PASS. D-035 a D-043 e P-022 a P-027 possuem implementação, teste e evidência. Não há desvio ativo do acordo 1.4.0.
+
 ---
 
 ## Source: `docs/qa/aot-m62-verification-journey.md`
@@ -9647,7 +9836,7 @@ Encerramento autorizado pelo aceite do PO: registrar a publicação humana confi
 
 # Prompt de execução — M6.1 Pontuação de matching
 
-Versão 1.3.0. Contrato normativo integral: `docs/qa/agreement-m61-matching-score.md` 1.3.0. Movimento e adendos de matching autorizados pelo Product Owner em 2026-09-14.
+Versão 1.4.0. Contrato normativo integral: `docs/qa/agreement-m61-matching-score.md` 1.4.0. Movimento e adendos de matching autorizados pelo Product Owner em 2026-09-14.
 
 Implementar D-001 a D-026 e provar P-001 a P-016 sem ampliar F-001 a F-012. A autonomia A-001 a A-008 cobre encaixe técnico, extensão compatível do resultado existente, função pura, componentes compartilhados, testes, relatório sombra e versionamento.
 
@@ -9657,9 +9846,11 @@ O adendo 1.2.0 implementa D-030 a D-034 e prova P-019 a P-021: procurar o termo 
 
 O adendo 1.3.0 substitui D-016, P-012 e CA-009: preservar Grupo A antes do Grupo B e ordenar cada grupo pelo Prisma Score numérico decrescente, inclusive provisório. Manter o rótulo provisório, colocar score indisponível depois dos numéricos e usar confiabilidade, decisão humana, nome e ID somente para desempate. Avançar `matching-score` para 1.1.0 sem mudar fórmula, pesos, descoberta, inclusão ou autoridade humana.
 
+O adendo 1.4.0 implementa D-035 a D-043 e prova P-022 a P-027: avaliar trajetória antes da elegibilidade competitiva; criar Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual; permitir potencial de entrada somente para títulos explicitamente de piso; manter conexões factuais cross-category, mas retirar score comparável do Grupo C; registrar a relação da trajetória e exibir C recolhido. Avançar matching para 5.0.0, score para 1.2.0 e Prisma para v1.6.4. Atualizar a fronteira M6.2 por migration forward-only para aceitar snapshots históricos 4.0.0 e atuais 5.0.0, preservando autorização e rejeição de versão desconhecida.
+
 Ordem de execução: diagnóstico do matching 2.3.0; domínio puro; integração posterior à descoberta; agrupamento e ordenação; UI com progressive disclosure; relatório sombra; validações proporcionais de risco D; documentação, Context Pack e AoT.
 
-Não criar persistência/cache de score, chamada de IA, round trip de banco dentro do cálculo, provider, cutoff, faixa semântica ou produção. O adendo 1.2.0 não autoriza migration, reclassificação de Perfil ou remoção dos grupos. Evidência Demonstrada é carregada na fronteira tenant-scoped e consumida somente por vínculo exato e versões reconhecidas. O cálculo não recebe PII.
+Não criar persistência/cache de score, chamada de IA, round trip de banco dentro do cálculo, provider, cutoff, faixa semântica ou produção. A migration do adendo 1.4.0 altera somente a compatibilidade de versão da fronteira M6.2; não autoriza schema, reclassificação de Perfil ou remoção de histórico. Evidência Demonstrada é carregada na fronteira tenant-scoped e consumida somente por vínculo exato e versões reconhecidas. O cálculo não recebe PII.
 
 Fechar em `docs/qa/aot-m61-matching-score.md`, distinguindo prova local, QA, smoke visual e produção.
 

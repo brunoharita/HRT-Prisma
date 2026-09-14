@@ -4,7 +4,7 @@ import type {
   VacancyRequirementMatch,
 } from "./vacancy.js";
 
-export const MATCHING_SCORE_CONTRACT_VERSION = "matching-score-1.1.0";
+export const MATCHING_SCORE_CONTRACT_VERSION = "matching-score-1.2.0";
 
 export type EvidenceCoverageState = "evaluated_relation" | "evaluated_no_relation" | "insufficient_evidence" | "not_applicable";
 export type MatchingScoreStatus = "definitive" | "provisional" | "unavailable";
@@ -76,6 +76,7 @@ export interface MatchingScoreInput {
   functionAssessment: VacancyFunctionAssessment;
   requirements: VacancyRequirementMatch[];
   unclassifiedRequirementCount: number;
+  competitiveEligibility?: "eligible" | "contextual_only";
   materialDependencies?: string[];
   positionVersion: string;
   positionVersionNumber: number;
@@ -99,7 +100,10 @@ export function calculateMatchingScore(input: MatchingScoreInput): MatchingScore
   const coveragePoints = sum(dimensions.map((item) => item.coveragePoints));
   const coveragePercent = applicablePoints ? Math.round(100 * coveragePoints / applicablePoints) : 0;
   const versionFailure = validateVersions(input, scoreContractVersion);
-  const unavailableReason = versionFailure ?? (applicablePoints === 0 ? "A Posição não possui critérios aplicáveis suficientes para calcular o score." : null);
+  const eligibilityFailure = input.competitiveEligibility === "contextual_only"
+    ? "Foram encontrados sinais relacionados, mas não há trajetória profissional suficiente para calcular um Prisma Score comparável."
+    : null;
+  const unavailableReason = versionFailure ?? eligibilityFailure ?? (applicablePoints === 0 ? "A Posição não possui critérios aplicáveis suficientes para calcular o score." : null);
   const score = unavailableReason ? null : Math.round(100 * earnedPoints / applicablePoints);
   const provisionalReasons = unavailableReason ? [] : [
     ...(coveragePercent < 60 ? [`Cobertura das evidências abaixo de 60% (${coveragePercent}%).`] : []),
@@ -123,6 +127,7 @@ export function calculateMatchingScore(input: MatchingScoreInput): MatchingScore
       evidence: item.evidence.map(compactEvidence),
     })),
     unclassifiedRequirementCount: input.unclassifiedRequirementCount,
+    competitiveEligibility: input.competitiveEligibility ?? "eligible",
     materialDependencies: input.materialDependencies ?? [],
     positionVersion: input.positionVersion,
     positionVersionNumber: input.positionVersionNumber,
@@ -244,7 +249,7 @@ function compactRelation(relation: VacancyAreaRelation): object {
 function validateVersions(input: MatchingScoreInput, scoreContractVersion: string): string | null {
   if (!input.positionVersion.trim() || !Number.isSafeInteger(input.positionVersionNumber) || input.positionVersionNumber < 1) return "A versão da Posição é desconhecida; o score não foi calculado.";
   if (!input.profileVersion.trim() || !Number.isSafeInteger(input.profileVersionNumber) || input.profileVersionNumber < 1) return "A versão do Perfil é desconhecida; o score não foi calculado.";
-  if (input.matchingContractVersion !== "vacancy-matching-explainable-4.0.0") return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
+  if (input.matchingContractVersion !== "vacancy-matching-explainable-5.0.0") return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
   if (scoreContractVersion !== MATCHING_SCORE_CONTRACT_VERSION) return "A versão do contrato de score não é reconhecida; o score não foi calculado.";
   return null;
 }

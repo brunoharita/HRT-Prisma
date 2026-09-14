@@ -180,3 +180,43 @@ Em 2026-09-14, Bruno determinou que as Pessoas encontradas para uma Posição se
 ### Versões, ambiente e limites
 
 O contrato avança para `matching-score-1.1.0`. Fórmula, pesos, descoberta, inclusão, dados pessoais e autoridade humana não mudam. `vacancy-matching-explainable-4.0.0`, `vacancy-definition-1.2.0` e o produto Prisma v1.6.3 permanecem. A alteração não cria migration nem modifica dados no Prisma-QA; produção permanece fora de escopo.
+
+## Adendo 1.4.0: trajetória antes dos requisitos
+
+Em 2026-09-14, Bruno determinou que a história profissional seja o portão de elegibilidade competitiva. Grupo A contém experiência direta; Grupo B contém trajetória relacionada/transferível ou potencial para Posição de entrada; Grupo C preserva sinais sem trajetória relacionada, recolhido e sem Prisma Score comparável.
+
+| Acordo | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-035 a D-039 / CA-029 a CA-032 | `assessVacancyTrajectory` classifica A/B/C antes do score; `competitiveEligibility=contextual_only` torna o score indisponível no C sem apagar a evidência | fixtures de gerente de tecnologia direto, trajetória adjacente e carreira comercial com SAP; requisito SAP continua `met` e C continua sem número | PASS |
+| D-040 / P-025 / CA-033 | helper determinístico reconhece títulos explicitamente de entrada e promove sinais rastreáveis somente ao B | fixture `Assistente de Tecnologia Júnior` com SAP, sem experiência, resulta `entry_potential` no B e nunca A | PASS |
+| D-041 a D-043 / P-022 a P-024 / CA-034 a CA-036 | descoberta preserva sinal ou decisão humana; A/B ordenam por score; C fica separado, recolhido, auditável e com linguagem neutra | testes de descoberta/ordenação/UI e smoke autenticado com A, B e C | PASS |
+| P-026 | cálculo permanece local e determinístico, sem LLM, embedding, PII ou fonte externa | build, golden e inspeção do snapshot | PASS |
+| P-027 / CA-037 | RPC M6.2 aceita lista fechada 4.0.0/5.0.0 e preserva autorização tenant-scoped e grants | prova SQL transacional no Prisma-QA: 5.0.0 aceito, versão desconhecida rejeitada, `anon=false`, `authenticated=true` | PASS |
+| CA-038 | regressão proporcional de domínio, web, golden, documentação e ambiente | evidências abaixo | PASS |
+
+### Evidência local
+
+- `pnpm run build`: PASS.
+- `node --test dist/tests/matchingScore.test.js dist/tests/vacancyIntelligence.test.js dist/tests/productRelease.test.js`: PASS, 61/61.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm run build:web`: PASS; permanece apenas o aviso histórico de chunk acima de 900 kB.
+- `pnpm run test:golden`: PASS, 23/23, regressões 0.
+- `pnpm run lint`: PASS, 495 arquivos.
+- `pnpm run report:matching-score-shadow`: PASS; A ordenado por 100, 92 e 75, enquanto o sinal contextual permaneceu no C com `score=null`.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS, 5 fontes canônicas.
+- `git diff --check`: PASS.
+
+### Evidência Prisma-QA e visual
+
+- projeto confirmado: `Prisma-QA` (`ioldpnqqvobprjiontre`), ativo e saudável.
+- migration forward-only `20260914161427_m61_trajectory_matching_version` ativa no ledger remoto; não cria tabela, coluna, índice ou backfill.
+- prova SQL com rollback: `matching_5_need_supported=true`, `anonymous_denied=true` e `authenticated_allowed=true`; versão desconhecida retornou `M62_UNSUPPORTED_MATCHING_VERSION`.
+- inspeção pós-migration: matching 5.0.0 presente na função e `private.require_document_reviewer` preservado.
+- advisors não identificaram objeto estrutural novo desta entrega; os avisos gerais preexistentes de funções `SECURITY DEFINER`, tabelas internas sem policy de leitura direta, índices ainda não usados e policies permissivas múltiplas permanecem fora do escopo.
+- smoke autenticado em `Pessoas para Analista de Marketing`: PASS. A exibiu Beatriz com score; B exibiu Bruno com score; C iniciou recolhido e exibiu João como `Somente sinais`, com um sinal rastreável e sem número comparável. O drawer usou `Sinais Prisma`, mostrou matching 5.0.0/score 1.2.0 e não ofereceu verificação competitiva no Grupo C.
+
+### Versões, limites e conclusão
+
+`vacancy-matching-explainable` avança para 5.0.0, `matching-score` para 1.2.0 e o produto para Prisma v1.6.4. A fórmula e os pesos de A/B não mudaram. Não houve reclassificação de Perfil, Posição, Knowledge ou avaliação histórica; não há frontend hospedado nem ambiente de produção separado. A classificação deliberadamente simples não interpreta verbos de uso, venda ou implantação dentro da mesma trajetória; esse refinamento permanece fora de escopo.
+
+PASS. D-035 a D-043 e P-022 a P-027 possuem implementação, teste e evidência. Não há desvio ativo do acordo 1.4.0.

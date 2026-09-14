@@ -135,6 +135,7 @@ export async function buildPrismaPromptSource() {
     ["Índice e rotas de aprofundamento", compactExcerpt("docs/ai-context/PRISMA_CONTEXT_INDEX.md", index.replace(/^---[\s\S]*?---\s*/u, "").trim())],
     ["Estado vigente relevante para novos prompts", compactExcerpt("docs/ai-context/PRISMA_CURRENT_STATE.md", selectSections(currentState, [
       "Resumo operacional para prompts",
+      "M6.1.2 — descoberta por trajetória em três grupos",
       "Ordenação por Prisma Score",
       "M6.2 — jornada contextual de verificação",
       "M6.1.1 — evidência profissional explícita sem barreira de categoria",
@@ -150,7 +151,7 @@ export async function buildPrismaPromptSource() {
       "Escopo atual e futuro",
     ]))],
     ["Referência técnica essencial", compactExcerpt("docs/ai-context/PRISMA_TECHNICAL_REFERENCE.md", selectSections(technicalReference, [
-      "M6.1.1 Matching por evidência profissional explícita",
+      "M6.1.2 Matching por trajetória antes dos requisitos",
       "M5.4.6 Vagas",
       "Stack",
       "Arquitetura",

@@ -267,8 +267,9 @@ test("descoberta exclui Perfil sem qualquer sinal e preserva confirmação human
 
   manual.positionDecision = "confirmed";
   assert.equal(isVacancyDiscoveryCandidate(manual), true);
-  assert.ok(related.score.score! > manual.score.score!);
-  assert.deepEqual(sortVacancyMatches([related, manual]).map((item) => item.candidate.personId), ["related", "manual"]);
+  assert.equal(related.discoveryGroup, "contextual_signals");
+  assert.equal(related.score.score, null);
+  assert.deepEqual(sortVacancyMatches([related, manual]).map((item) => item.candidate.personId), ["manual", "related"]);
 });
 
 test("ordenação é determinística pelo Prisma Score e mantém explicações neutras", () => {

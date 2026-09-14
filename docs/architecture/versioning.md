@@ -16,7 +16,7 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 - `movimento`: movimento de produto em execução, atualmente `6`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão atual oficial é **Prisma v1.6.3**, correspondente à terceira entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão atual oficial é **Prisma v1.6.4**, correspondente à quarta entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -43,6 +43,7 @@ M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora d
 | 1 | M6.1: pontuação determinística e explicável de matching | oficial |
 | 2 | M6.1.1: requisito conectado a evidência profissional explícita | aceite do PO para implementação e atualização da versão |
 | 3 | M6.2: jornada contextual de verificação | aceite do PO para implementação e atualização da versão |
+| 4 | M6.1.2: descoberta por trajetória em três grupos | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -86,6 +87,8 @@ Todo consumidor deve declarar versões aceitas. Versão ausente, desconhecida, f
 Versões anteriores permanecem identificáveis. Rollback reativa artefato anterior sem reescrever resultados históricos. Mudança de prompt ou modelo relevante cria nova versão mesmo quando o schema de saída não muda.
 
 ## Versões atuais
+
+O adendo M6.1.2 de 2026-09-14 avança `vacancy-matching-explainable` para 5.0.0 e `matching-score` para 1.2.0. A trajetória profissional define Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual antes do score. Somente A e B recebem número comparável; C permanece recolhido e rastreável. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B. A compatibilidade M6.2 passa a aceitar snapshots 4.0.0 históricos e 5.0.0 atuais por migration forward-only. Produto avança para Prisma v1.6.4.
 
 O ajuste de ordenação de 2026-09-14 avança `matching-score` para 1.1.0. Grupo A permanece antes do Grupo B; dentro de cada grupo, valores numéricos ordenam de forma decrescente, inclusive provisórios devidamente identificados. Score indisponível fica depois dos valores numéricos. Fórmula, pesos, descoberta, inclusão e decisão humana permanecem inalterados. Como correção complementar da experiência vigente, o produto permanece Prisma v1.6.3.
 

@@ -3,10 +3,10 @@ import { CheckCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import type { ReactNode } from "react";
 import { interfaceText, observedMetric } from "../shared/uxFoundation";
 
-type StateKind = "loading" | "empty" | "filtered" | "error" | "unavailable" | "success";
+type StateKind = "loading" | "empty" | "filtered" | "error" | "unavailable" | "info" | "success";
 const titles: Record<StateKind, string> = {
   loading: "Carregando informações…", empty: "Nenhum registro ainda", filtered: "Nenhum resultado para estes filtros",
-  error: "Não foi possível carregar as informações", unavailable: "Este item não está disponível", success: "Alteração concluída",
+  error: "Não foi possível carregar as informações", unavailable: "Este item não está disponível", info: "Como interpretar", success: "Alteração concluída",
 };
 
 export function PrismaState({ kind, title, description, action, compact = false }: {
