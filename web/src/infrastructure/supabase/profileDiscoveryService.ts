@@ -109,7 +109,7 @@ async function materializePublishedProfileCandidates(
       ? supabase.from("person_private_data").select("person_id, city, country_code").eq("organization_id", organizationId).in("person_id", ids)
       : Promise.resolve({ data: [], error: null }),
     supabase.from("knowledge_observations")
-      .select("profile_id, original_term, resolution_state, concept_id, source_field_path")
+      .select("profile_id, original_term, resolution_state, concept_id, source_field_path, knowledge_global_version, knowledge_organization_version, resolution_source_version_id, resolution_method_version")
       .eq("organization_id", organizationId)
       .in("profile_id", profiles.map((profile) => profile.id)),
   ]);
@@ -147,6 +147,7 @@ async function materializePublishedProfileCandidates(
         conceptId: item.concept_id,
         conceptType: item.concept_id ? concepts.get(item.concept_id)?.concept_type ?? null : null,
         sourceFieldPath: item.source_field_path,
+        sourceVersion: `global:${item.knowledge_global_version}|organization:${item.knowledge_organization_version ?? "none"}|source:${item.resolution_source_version_id ?? "none"}|method:${item.resolution_method_version}`,
       })),
     }];
   });

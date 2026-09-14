@@ -200,6 +200,20 @@ export interface Database {
         created_at: string;
         completed_at: string | null;
       }>;
+      competency_demonstrated_evidence: Table<{
+        id: string;
+        organization_id: string;
+        person_id: string;
+        competency_key: string;
+        verification_definition_version: string;
+        evaluation_version: string;
+        integrity_rule_version: string;
+        demonstrated_level: "basic" | "intermediate" | "advanced" | "insufficient_evidence" | "inconclusive";
+        confidence_state: "high" | "adequate" | "reduced" | "inconclusive";
+        verified_at: string;
+        valid_until: string | null;
+        status: "active" | "superseded" | "invalidated";
+      }>;
       match_evaluations: Table<{
         id: string;
         organization_id: string;

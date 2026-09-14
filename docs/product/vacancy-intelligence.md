@@ -1,5 +1,13 @@
 # Vagas como necessidade profissional estruturada
 
+## M6.1 — Score Prisma
+
+A descoberta continua respondendo quem possui relação profissional com a Posição. Depois dela, o Score Prisma organiza a compatibilidade observada de 0 a 100 sem excluir Pessoas, escolher vencedor ou substituir julgamento humano.
+
+A lista separa experiência na área principal de áreas/sinais relacionados e mostra score, cobertura e estado provisório. O detalhe explica área, função/senioridade, requisitos obrigatórios/desejáveis, evidências, pontos aplicáveis e versões. Falta de evidência é apresentada como informação insuficiente, nunca como incapacidade. Condições de localidade, regime, disponibilidade ou remuneração permanecem separadas do score profissional.
+
+Não existem faixas baixa/média/alta, cutoff ou decisão automática no M6.1. O relatório sombra serve apenas à calibração futura e não retroalimenta o cálculo.
+
 ## Objetivo
 
 `Vaga` descreve uma necessidade profissional concreta da organização. Ela pode estar ocupada ou não ocupada e não representa campanha de recrutamento, anúncio público ou etapa de ATS.

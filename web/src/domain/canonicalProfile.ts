@@ -11,6 +11,7 @@ export interface CanonicalKnowledgeTerm {
   conceptId?: string | null;
   conceptType?: "occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification" | null;
   sourceFieldPath?: string | null;
+  sourceVersion?: string | null;
 }
 
 export interface PrismaProfileView {

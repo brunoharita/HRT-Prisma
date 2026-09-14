@@ -6125,7 +6125,10 @@ textarea {
 .prisma-restructure-delta { display: grid; gap: 8px; margin: 16px 0; }
 .prisma-restructure-delta > div { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 9px; border: 1px solid #e3eaf4; border-radius: 8px; }
 
+.prisma-vacancy-match-groups,
 .prisma-vacancy-match-list { display: grid; gap: 14px; }
+.prisma-vacancy-match-group { display: grid; gap: 10px; min-width: 0; }
+.prisma-vacancy-match-group > header h2.ant-typography { margin: 12px 0 2px; font-size: 1.15rem; }
 .prisma-vacancy-match-card { transition: border-color 160ms ease, box-shadow 160ms ease; }
 .prisma-vacancy-match-card.is-selected { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.11); }
 .prisma-vacancy-match-card.is-dismissed { opacity: 0.72; background: #f8fafc; }
@@ -6138,6 +6141,27 @@ textarea {
 .prisma-position-relation { display: grid; gap: 7px; margin-top: 14px; padding: 12px; border: 1px solid #cfe0ff; border-radius: 10px; background: #f6f9ff; }
 .prisma-position-relation .ant-typography { margin: 0; }
 .prisma-match-reasons { display: grid; gap: 8px; margin: 12px 0; }
+.prisma-match-reasons .ant-space,
+.prisma-match-reasons .ant-space-item { min-width: 0; max-width: 100%; }
+.prisma-match-reasons .ant-tag { max-width: 100%; margin-inline-end: 0; white-space: normal; overflow-wrap: anywhere; }
+.prisma-score-summary { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: baseline; margin: 14px 0; padding: 12px; border: 1px solid #d9ccff; border-radius: 10px; background: #f8f5ff; }
+.prisma-score-summary strong { grid-row: 1 / span 2; color: #4c1d95; font-size: 1.55rem; line-height: 1; }
+.prisma-score-summary span { font-weight: 700; }
+.prisma-score-summary small { color: var(--prisma-text-muted); }
+.prisma-score-summary.is-expanded strong { font-size: 2rem; }
+.prisma-score-dimensions { display: grid; gap: 12px; }
+.prisma-score-dimensions > section { min-width: 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; }
+.prisma-score-dimensions > section > header { display: flex; justify-content: space-between; gap: 12px; }
+.prisma-score-dimensions .ant-typography { margin: 6px 0; }
+.prisma-score-dimensions .ant-tag { max-width: 100%; margin-inline-end: 0; white-space: normal; overflow-wrap: anywhere; }
+.prisma-score-dimensions .ant-list-item-meta,
+.prisma-score-dimensions .ant-list-item-meta-content,
+.prisma-score-dimensions .ant-space,
+.prisma-score-dimensions .ant-space-item { min-width: 0; max-width: 100%; }
+.prisma-score-versions { display: grid; gap: 8px; margin: 0; }
+.prisma-score-versions > div { display: grid; grid-template-columns: minmax(90px, 0.25fr) minmax(0, 1fr); gap: 10px; }
+.prisma-score-versions dt { font-weight: 700; }
+.prisma-score-versions dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
 .prisma-match-evidence-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .prisma-match-bucket { display: grid; align-content: start; gap: 8px; min-height: 92px; padding: 11px; border: 1px solid; border-radius: 10px; }
 .prisma-match-bucket.is-success { border-color: #b7ebc6; background: #f2fff6; }
@@ -6186,8 +6210,8 @@ textarea {
   .prisma-vacancy-advisor-answer footer .ant-btn { width: 100%; }
   .prisma-vacancy-match-card article > header { grid-template-columns: auto auto 1fr; }
   .prisma-vacancy-match-card article > header > .ant-space { grid-column: 1 / -1; width: 100%; flex-direction: row; }
-  .prisma-vacancy-match-card article > header > .ant-space .ant-space-item { flex: 1; }
-  .prisma-vacancy-match-card article > header > .ant-space .ant-btn { width: 100%; }
+  .prisma-vacancy-match-card article > header > .ant-space .ant-space-item { min-width: 0; flex: 1; }
+  .prisma-vacancy-match-card article > header > .ant-space .ant-btn { width: 100%; min-height: 32px; height: auto; white-space: normal; }
   .prisma-vacancy-table-wrap { overflow-x: auto; }
   .prisma-vacancy-table-wrap .ant-table { min-width: 540px; }
   .prisma-vacancy-assist-actions { flex-direction: column-reverse; }
@@ -6203,6 +6227,10 @@ textarea {
   .prisma-vacancy-match-card article > header { grid-template-columns: auto 1fr; }
   .prisma-vacancy-match-card article > header > .ant-checkbox-wrapper { grid-row: 1; }
   .prisma-vacancy-match-card .prisma-vacancy-avatar { display: none; }
+  .prisma-score-summary { grid-template-columns: 1fr; }
+  .prisma-score-summary strong { grid-row: auto; }
+  .prisma-score-versions > div { grid-template-columns: 1fr; gap: 2px; }
+  .prisma-matching-score-drawer .ant-drawer-body { min-width: 0; }
 }
 
 .prisma-person-data-shell {

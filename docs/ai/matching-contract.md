@@ -21,7 +21,17 @@ A descoberta separa três leituras: experiência na área profissional, proximid
 
 A proximidade do cargo usa, nesta ordem, a mesma referência oficial, referência equivalente publicada, relação ocupacional publicada e possível relação textual entre o título da Posição, o título profissional e cargos das experiências. A relação textual exige igualdade, inclusão ou dois ou mais termos ocupacionais comuns. Um termo de área isolado, como `marketing`, não transforma `Analista de Marketing` e `Assistente de Marketing` em cargos equivalentes. O operador pode confirmar ou descartar a relação; essa decisão fica auditada, altera apenas a ordenação e nunca muda o Perfil, a Posição ou a Knowledge.
 
-Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. O resultado exibe quem possui ao menos experiência explícita na área, relação ocupacional, evidência direta, evidência parcial, sinal relacionado ou confirmação humana anterior. A ordenação usa classes determinísticas de evidência, sem score exposto. Zero sinal não é convertido em ausência profissional, mas também não gera resultado.
+Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. O resultado exibe quem possui ao menos experiência explícita na área, relação ocupacional, evidência direta, evidência parcial, sinal relacionado ou confirmação humana anterior. O score é calculado somente depois dessa descoberta e nunca remove um resultado. Zero sinal não é convertido em ausência profissional, mas também não gera resultado.
+
+## Score Prisma de matching
+
+`matching-score-1.0.0` é uma projeção determinística do matching resolvido. Os pesos nominais são área 30, função 20, obrigatórios 35 e desejáveis 15. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`.
+
+Área por experiência explícita vale 30; declaração de área sem experiência vinculada suficiente vale 24. Função vale 20/17/12/8/0 para mesma função, equivalente, relacionada, contexto profissional corroborado ou nenhuma relação, com ajuste explícito de senioridade 0/-1/-4. Senioridade desconhecida nunca é inventada.
+
+Cobertura usa o mesmo denominador, mas conta pontos avaliados com evidência suficiente independentemente do valor obtido. Falta de evidência não cobre e credita zero; relação avaliada como inexistente cobre e credita zero. Consequentemente, `score <= cobertura`. Cobertura abaixo de 60%, requisito `unclassified` ou dependência material torna o score provisório e impede ordenação por ele.
+
+O cálculo é puro, local, sem IA ou I/O. Condições operacionais e atributos pessoais/sensíveis não entram no input. Evidência Demonstrada vigente e de versão reconhecida pode fortalecer somente o requisito de vínculo exato, sem bônus. Breakdown, versões e fingerprint permitem reprodução.
 
 ## Suficiência
 
@@ -55,7 +65,7 @@ Competências transferíveis são declaradas na vaga. O mecanismo não inventa a
 
 Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM também deverá persistir `promptVersion` e `modelVersion`.
 
-A separação entre área profissional e proximidade do cargo está versionada como `vacancy-matching-explainable-2.3.0` e registrada no ADR-051.
+A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avança o contrato para `vacancy-matching-explainable-3.0.0` e adiciona `matching-score-1.0.0`, conforme ADR-052, preservando a descoberta anterior.
 
 ## Normalização conceitual M5.2
 

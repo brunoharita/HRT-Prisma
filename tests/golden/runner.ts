@@ -8,6 +8,8 @@ import { searchProfiles } from "../../src/ai/search.js";
 import { processResume } from "../../src/application/processResume.js";
 import type { RequirementAssessmentStatus, Vacancy, VacancyRequirement } from "../../src/domain/types.js";
 import { JsonTalentRepository } from "../../src/infrastructure/jsonRepository.js";
+import { calculateMatchingScore, MATCHING_SCORE_CONTRACT_VERSION, type EvidenceCoverageState, type VacancyFunctionAssessment } from "../../web/src/domain/matchingScore.js";
+import { VACANCY_MATCHING_VERSION, type VacancyAreaRelationStatus, type VacancyMatchStatus, type VacancyRequirementMatch } from "../../web/src/domain/vacancy.js";
 
 interface ExtractionCase {
   id: string;
@@ -33,6 +35,16 @@ interface RetrievalCase {
   fixtures: string[];
   query: string;
   expectedNames: string[];
+}
+
+interface MatchingScoreGoldenCase {
+  id: string;
+  area: { applicable: boolean; status: VacancyAreaRelationStatus; coverageState: EvidenceCoverageState };
+  position: { applicable: boolean; basePoints: 20 | 17 | 12 | 8 | 0; seniorityAdjustment: 0 | -1 | -4; coverageState: EvidenceCoverageState };
+  requirements: Array<{ importance: "required" | "desired" | "unclassified"; status: VacancyMatchStatus }>;
+  expectedScore: number | null;
+  expectedCoverage: number;
+  expectedStatus: "definitive" | "provisional" | "unavailable";
 }
 
 interface GoldenResult {
@@ -149,9 +161,61 @@ async function runRetrievalCases(tempDirectory: string): Promise<GoldenResult[]>
   return results;
 }
 
+async function runMatchingScoreCases(): Promise<GoldenResult[]> {
+  const cases = await loadJson<MatchingScoreGoldenCase[]>(join(sourceGoldenDirectory, "matching", "score-cases.json"));
+  return cases.map((item) => {
+    const differences: string[] = [];
+    const evidence = { label: "Evidência sintética", source: "Fixture golden", sourceId: `evidence-${item.id}`, fieldPath: "fixture", dimension: "competency" as const };
+    const requirements: VacancyRequirementMatch[] = item.requirements.map((requirement, index) => ({
+      requirement: {
+        stableId: `${item.id}-${index}`,
+        label: `Requisito ${index + 1}`,
+        category: "competency",
+        importance: requirement.importance,
+        observedTerm: null,
+        conceptId: null,
+        relationMode: "direct",
+        relatedSignals: [],
+      },
+      status: requirement.status,
+      evidence: requirement.status === "no_evidence" ? [] : [evidence],
+      explanation: requirement.status === "no_evidence" ? "Sem evidência suficiente nas informações publicadas." : "Evidência sintética avaliada.",
+      relatedSignal: requirement.status === "related_signal" ? "Sinal sintético" : null,
+    }));
+    const functionAssessment: VacancyFunctionAssessment = {
+      relation: item.position.basePoints === 20 ? "same_function" : item.position.basePoints === 17 ? "equivalent_function" : item.position.basePoints === 12 ? "related_function" : item.position.basePoints === 8 ? "contextual_relation" : "no_relation",
+      basePoints: item.position.basePoints,
+      seniorityAdjustment: item.position.seniorityAdjustment,
+      seniorityRelation: item.position.seniorityAdjustment === -4 ? "materially_above" : item.position.seniorityAdjustment === -1 ? "adjacent_below" : "aligned",
+      coverageState: item.position.coverageState,
+      evidence: item.position.coverageState === "evaluated_relation" ? [evidence] : [],
+      explanation: "Função avaliada pela fixture golden.",
+    };
+    const result = calculateMatchingScore({
+      areaApplicable: item.area.applicable,
+      functionApplicable: item.position.applicable,
+      areaRelation: { status: item.area.status, coverageState: item.area.coverageState, evidence: item.area.status === "none" ? [] : [evidence], explanation: "Área avaliada pela fixture golden." },
+      functionAssessment,
+      requirements,
+      unclassifiedRequirementCount: item.requirements.filter((requirement) => requirement.importance === "unclassified").length,
+      positionVersion: "golden-position-v1",
+      positionVersionNumber: 1,
+      profileVersion: "golden-profile-v1",
+      profileVersionNumber: 1,
+      matchingContractVersion: VACANCY_MATCHING_VERSION,
+      scoreContractVersion: MATCHING_SCORE_CONTRACT_VERSION,
+    });
+    if (result.score !== item.expectedScore) differences.push(`score expected=${item.expectedScore} actual=${result.score}`);
+    if (result.coveragePercent !== item.expectedCoverage) differences.push(`coverage expected=${item.expectedCoverage} actual=${result.coveragePercent}`);
+    if (result.status !== item.expectedStatus) differences.push(`status expected=${item.expectedStatus} actual=${result.status}`);
+    if (result.score !== null && result.score > result.coveragePercent) differences.push("score exceeded coverage");
+    return { suite: "matching", caseId: `score-${item.id}`, status: differences.length === 0 ? "passed" : "regression", differences };
+  });
+}
+
 const tempDirectory = await mkdtemp(join(tmpdir(), "prisma-golden-"));
 try {
-  const results = [...await runExtractionCases(tempDirectory), ...await runMatchingCases(tempDirectory), ...await runRetrievalCases(tempDirectory)];
+  const results = [...await runExtractionCases(tempDirectory), ...await runMatchingCases(tempDirectory), ...await runRetrievalCases(tempDirectory), ...await runMatchingScoreCases()];
   const failed = results.filter((result) => result.status !== "passed");
   process.stdout.write(`${JSON.stringify({ summary: { passed: results.length - failed.length, failed: failed.length, regression: failed.length }, cases: results }, null, 2)}\n`);
   if (failed.length > 0) process.exitCode = 1;

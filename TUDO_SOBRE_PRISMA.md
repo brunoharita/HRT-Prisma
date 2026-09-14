@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: ece17bda72f0ad20e83751fe1dadc4db739b7e08c3d49666e7627e21ea6aaa59
+source_manifest_sha256: 8600d0591a50a66516038514321432a3d73b4b782733a13140a6812e6b6a4f0b
 -->
 
 # Tudo sobre o Prisma
@@ -303,6 +303,7 @@ Local port convention:
 | `pnpm run test:person-flow` | Compile once and run the explicit Person-flow test selection |
 | `pnpm run test:tooling` | Test the validation runner, selection, failure handling and report metadata |
 | `pnpm run test:golden` | Run extraction and matching regression cases |
+| `pnpm run report:matching-score-shadow` | Generate the synthetic, metadata-only M6.1 shadow calibration report |
 | `pnpm run demo` | Reproduce the end-to-end proof |
 | `pnpm run generate:prisma-context` | Regenerate `TUDO_SOBRE_PRISMA.md` from canonical sources |
 | `pnpm run check:prisma-context` | Fail on missing, stale, conflicting, or divergent context |
@@ -666,6 +667,8 @@ Em 2026-09-13, a migration forward-only `20260913132559_fix_person_deletion_trig
 Ainda em 2026-09-13, o contrato `vacancy-matching-explainable` avançou para 2.2.0 após um falso negativo confirmado na Posição `Analista de Marketing`. O Perfil publicado da Beatriz continha três cargos com o domínio Marketing, incluindo `Assistente de Marketing & Business Development`, mas a regra 2.1.0 exigia dois termos comuns e descartava a Pessoa após analisar o Perfil. O refinamento aceita um domínio ocupacional distintivo somente como relação possível para confirmação humana, ignora marcadores genéricos isolados e escolhe a evidência de cargo mais específica. O caso real reconstruído e o negativo `Analista Financeiro` passaram sem score, equivalência, inferência de competência ou alteração em Perfil e Knowledge.
 
 O esclarecimento do Product Owner no mesmo dia substituiu a aproximação 2.2.0 pelo contrato `vacancy-matching-explainable-2.3.0`: Beatriz deve aparecer porque possui experiência publicada na área de Marketing, não porque um termo isolado aproxima cargos diferentes. O domínio agora produz `areaRelation`, enquanto referência e proximidade de cargo continuam em `positionRelation`; requisitos permanecem independentes. A interface explica as três leituras sem score, e o caso reconstruído exige `experience_area` com `positionRelation: none`.
+
+O M6.1, autorizado em 2026-09-13, evolui essa base para `vacancy-matching-explainable-3.0.0` e `matching-score-1.0.0`. A descoberta permanece anterior ao score e separa grupo principal de área e resultados relacionados. A função pura aplica 30/20/35/15 somente às dimensões definidas, divide requisitos igualmente, usa 100/50/25/0, calcula cobertura separada e impede score provisório de ordenar. O Product Owner aprovou a correção do aceite conflitante: pela fórmula vigente, `score <= cobertura`; scores altos ainda podem ser provisórios por `unclassified` ou dependência material. Evidência Demonstrada ativa fortalece apenas competência exata e versionada, sem bônus. Não há migration, cache persistido, LLM, provider ou produção. Evidência final local/QA e smoke ficam no AoT M6.1.
 
 Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
 

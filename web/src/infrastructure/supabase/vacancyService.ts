@@ -5,6 +5,7 @@ import {
   matchVacancyCandidate,
   sortVacancyMatches,
   type VacancyCandidateMatch,
+  type VacancyDemonstratedEvidence,
   type VacancyAdvisorMarketResearch,
   type VacancyDetail,
   type VacancyDraft,
@@ -397,8 +398,9 @@ export const vacancyService = {
       loadVacancyOccupationReference(organizationId, vacancy),
       loadPositionRelationDecisions(organizationId, vacancy.id!),
     ]);
+    const demonstratedEvidence = await loadDemonstratedEvidence(organizationId, collection.candidates.map((candidate) => candidate.personId));
     const matches = sortVacancyMatches(collection.candidates.map((candidate) => ({
-      ...matchVacancyCandidate(vacancy, candidate, occupationReference),
+      ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : []),
       positionDecision: decisions.get(candidate.personId) ?? null,
     })).filter(isVacancyDiscoveryCandidate));
     return {
@@ -416,9 +418,10 @@ export const vacancyService = {
       loadVacancyOccupationReference(organizationId, vacancy),
       loadPositionRelationDecisions(organizationId, vacancy.id!),
     ]);
+    const demonstratedEvidence = await loadDemonstratedEvidence(organizationId, candidates.map((candidate) => candidate.personId));
     return personIds.flatMap((id) => {
       const candidate = candidates.find((item) => item.personId === id);
-      return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
+      return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : []), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
     });
   },
 
@@ -461,6 +464,9 @@ export const vacancyService = {
         areaRelation: match.areaRelation,
         positionRelation: match.positionRelation,
         positionDecision: match.positionDecision,
+        discoveryGroup: match.discoveryGroup,
+        functionAssessment: match.functionAssessment,
+        score: match.score,
         detailedStatus: match.detailedStatus,
         evidenceAssessment: match.evidenceAssessment,
         sufficiency: match.detailedStatus !== "ready" ? "pending_classification" : match.missingRequiredCount ? "insufficient_evidence" : "sufficient_evidence",
@@ -516,6 +522,39 @@ async function loadVacancyOccupationReference(organizationId: string, vacancy: V
         : [];
     }),
   };
+}
+
+async function loadDemonstratedEvidence(organizationId: string, personIds: string[]): Promise<{ byPerson: Map<string, VacancyDemonstratedEvidence[]>; dependency: string | null }> {
+  const byPerson = new Map<string, VacancyDemonstratedEvidence[]>();
+  const ids = [...new Set(personIds.filter(Boolean))];
+  if (!ids.length) return { byPerson, dependency: null };
+  const result = await supabase.from("competency_demonstrated_evidence")
+    .select("id, person_id, competency_key, demonstrated_level, confidence_state, verification_definition_version, evaluation_version, integrity_rule_version, verified_at, valid_until, status")
+    .eq("organization_id", organizationId)
+    .in("person_id", ids)
+    .eq("status", "active")
+    .order("verified_at", { ascending: false });
+  if (result.error) return { byPerson, dependency: "As Evidências Demonstradas não estavam disponíveis; o score permanece provisório até nova avaliação." };
+  const now = Date.now();
+  for (const item of result.data ?? []) {
+    if ((item.valid_until && Date.parse(item.valid_until) <= now)
+      || item.demonstrated_level === "insufficient_evidence"
+      || item.demonstrated_level === "inconclusive"
+      || item.confidence_state === "inconclusive") continue;
+    const values = byPerson.get(item.person_id) ?? [];
+    values.push({
+      id: item.id,
+      competencyKey: item.competency_key,
+      demonstratedLevel: item.demonstrated_level,
+      confidenceState: item.confidence_state,
+      verificationDefinitionVersion: item.verification_definition_version,
+      evaluationVersion: item.evaluation_version,
+      integrityRuleVersion: item.integrity_rule_version,
+      verifiedAt: item.verified_at,
+    });
+    byPerson.set(item.person_id, values);
+  }
+  return { byPerson, dependency: null };
 }
 
 async function loadPositionRelationDecisions(organizationId: string, vacancyId: string): Promise<Map<string, Exclude<VacancyPositionRelationDecision, null>>> {

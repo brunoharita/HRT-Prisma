@@ -1,0 +1,49 @@
+[
+  {
+    "id": "all-dimensions-full",
+    "area": { "applicable": true, "status": "experience_area", "coverageState": "evaluated_relation" },
+    "position": { "applicable": true, "basePoints": 20, "seniorityAdjustment": 0, "coverageState": "evaluated_relation" },
+    "requirements": [
+      { "importance": "required", "status": "met" },
+      { "importance": "desired", "status": "met" }
+    ],
+    "expectedScore": 100,
+    "expectedCoverage": 100,
+    "expectedStatus": "definitive"
+  },
+  {
+    "id": "no-desired-normalized",
+    "area": { "applicable": true, "status": "experience_area", "coverageState": "evaluated_relation" },
+    "position": { "applicable": true, "basePoints": 17, "seniorityAdjustment": 0, "coverageState": "evaluated_relation" },
+    "requirements": [
+      { "importance": "required", "status": "met" },
+      { "importance": "required", "status": "partially_met" },
+      { "importance": "required", "status": "met" },
+      { "importance": "required", "status": "met" }
+    ],
+    "expectedScore": 91,
+    "expectedCoverage": 100,
+    "expectedStatus": "definitive"
+  },
+  {
+    "id": "low-coverage-provisional",
+    "area": { "applicable": false, "status": "none", "coverageState": "not_applicable" },
+    "position": { "applicable": false, "basePoints": 0, "seniorityAdjustment": 0, "coverageState": "not_applicable" },
+    "requirements": [
+      { "importance": "required", "status": "met" },
+      { "importance": "required", "status": "no_evidence" }
+    ],
+    "expectedScore": 50,
+    "expectedCoverage": 50,
+    "expectedStatus": "provisional"
+  },
+  {
+    "id": "zero-applicable-unavailable",
+    "area": { "applicable": false, "status": "none", "coverageState": "not_applicable" },
+    "position": { "applicable": false, "basePoints": 0, "seniorityAdjustment": 0, "coverageState": "not_applicable" },
+    "requirements": [],
+    "expectedScore": null,
+    "expectedCoverage": 0,
+    "expectedStatus": "unavailable"
+  }
+]

@@ -21,6 +21,12 @@ export const PRISMA_RELEASE_HISTORY = [{
     "M5.5: exclusão definitiva de Pessoa",
     "M5.7: Parser IA local",
   ],
+}, {
+  productGeneration: 1,
+  movement: 6,
+  deliveries: [
+    "M6.1: pontuação determinística e explicável de matching",
+  ],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {
