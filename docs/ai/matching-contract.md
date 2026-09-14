@@ -27,6 +27,8 @@ Todos os Perfis publicados acessíveis são analisados, inclusive quando não h�
 
 `matching-score-1.0.0` é uma projeção determinística do matching resolvido. Os pesos nominais são área 30, função 20, obrigatórios 35 e desejáveis 15. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`.
 
+O editor representa `unclassified` explicitamente como “A classificar”; nunca projeta visualmente esse estado como obrigatório ou desejável. Quando uma categoria ainda não possui item confirmado, mas existem requisitos pendentes, a explicação do score informa a pendência de classificação em vez de afirmar que a Posição não definiu requisitos daquela categoria.
+
 Área por experiência explícita vale 30; declaração de área sem experiência vinculada suficiente vale 24. Função vale 20/17/12/8/0 para mesma função, equivalente, relacionada, contexto profissional corroborado ou nenhuma relação, com ajuste explícito de senioridade 0/-1/-4. Senioridade desconhecida nunca é inventada.
 
 Cobertura usa o mesmo denominador, mas conta pontos avaliados com evidência suficiente independentemente do valor obtido. Falta de evidência não cobre e credita zero; relação avaliada como inexistente cobre e credita zero. Consequentemente, `score <= cobertura`. Cobertura abaixo de 60%, requisito `unclassified` ou dependência material torna o score provisório e impede ordenação por ele.

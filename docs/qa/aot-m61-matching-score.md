@@ -92,3 +92,12 @@ O commit funcional `c6b1f669c04bbe505a18c2826a83543974e17ae6` foi publicado em `
 ## Conclusão
 
 PASS. D-001 a D-026 e P-001 a P-016 possuem implementação e evidência proporcional. CA-018 passou na rota autenticada em desktop e 390×844 depois que o smoke revelou e a implementação corrigiu dois overflows internos de conteúdo. Não há requisito obrigatório pendente, desvio ativo ou autorização de produção.
+
+## Correção pós-fechamento: requisitos sem classificação
+
+Em 2026-09-13, Bruno reportou que três requisitos da Definição v2 de `Analista de Marketing` apareciam como obrigatórios no editor, enquanto o score informava `0/0`. A reprodução autenticada confirmou `RD Station`, `2 anos de experiência comprovada na área` e `Office` como `unclassified`; o controle visual projetava indevidamente a primeira opção, “Obrigatório”, quando recebia valor `undefined`.
+
+- D-015/P-011: o editor agora mostra o estado persistido “A classificar” e não inventa importância.
+- D-005/D-014: quando não há requisito confirmado na categoria, mas existem itens `unclassified`, o score informa quantos aguardam classificação e mantém os pontos fora do denominador.
+- Dados, pesos, ranking, versões persistidas, schema e Supabase não foram alterados; `matching-score-1.0.0` permanece por se tratar de correção de representação e explicação do contrato vigente.
+- Evidência: 53 testes direcionados de score/Vagas, typecheck web, build web, lint de 472 arquivos, geração e check do Context Pack e smoke autenticado da Definição v2. O editor exibiu “A classificar” somente nos três registros `unclassified`, manteve os dois desejáveis e não apresentou overflow nos controles em desktop. A explicação do drawer foi coberta deterministicamente sem gerar uma nova avaliação persistida durante o smoke.

@@ -178,12 +178,14 @@ test("cobertura é independente do zero avaliado, reduz com falta de evidência 
 });
 
 test("unclassified fica fora dos pesos, torna o score provisório e não bloqueia descoberta", () => {
-  const need = vacancy({ requirements: [requirement("CRM", "unclassified")] });
+  const need = vacancy({ requirements: [requirement("CRM", "unclassified"), requirement("RD Station", "unclassified"), requirement("Office", "unclassified")] });
   const match = matchVacancyCandidate(need, candidate("unclassified", profile({ experiences: [experience("Assistente de Marketing")] })));
   assert.equal(isVacancyDiscoveryCandidate(match), true);
   assert.equal(match.score.status, "provisional");
   assert.equal(match.score.applicablePoints, 50);
-  assert.match(match.score.provisionalReasons.join(" "), /aguarda classificação/i);
+  assert.match(match.score.provisionalReasons.join(" "), /aguard(?:a|am) classificação/i);
+  assert.match(match.score.dimensions.find((item) => item.key === "required")?.explanation ?? "", /nenhum requisito está confirmado como obrigatório; 3 requisitos aguardam classificação/i);
+  assert.doesNotMatch(match.score.dimensions.find((item) => item.key === "required")?.explanation ?? "", /não definiu requisitos obrigatórios/i);
 });
 
 test("versão desconhecida falha fechada sem fabricar 0", () => {

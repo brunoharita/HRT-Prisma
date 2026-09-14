@@ -91,8 +91,8 @@ export function calculateMatchingScore(input: MatchingScoreInput): MatchingScore
   const scoreContractVersion = input.scoreContractVersion ?? MATCHING_SCORE_CONTRACT_VERSION;
   const area = scoreArea(input.areaApplicable, input.areaRelation);
   const position = scoreFunction(input.functionApplicable, input.functionAssessment);
-  const required = scoreRequirements("required", input.requirements);
-  const desired = scoreRequirements("desired", input.requirements);
+  const required = scoreRequirements("required", input.requirements, input.unclassifiedRequirementCount);
+  const desired = scoreRequirements("desired", input.requirements, input.unclassifiedRequirementCount);
   const dimensions = [area, position, required, desired];
   const earnedPoints = sum(dimensions.map((item) => item.earnedPoints));
   const applicablePoints = sum(dimensions.map((item) => item.applicablePoints));
@@ -181,10 +181,16 @@ function scoreFunction(applicable: boolean, assessment: VacancyFunctionAssessmen
   };
 }
 
-function scoreRequirements(importance: "required" | "desired", requirements: VacancyRequirementMatch[]): MatchingScoreDimension {
+function scoreRequirements(importance: "required" | "desired", requirements: VacancyRequirementMatch[], unclassifiedRequirementCount: number): MatchingScoreDimension {
   const matches = requirements.filter((item) => item.requirement.importance === importance);
   const key = importance;
-  if (!matches.length) return emptyDimension(key, `A Posição não definiu requisitos ${importance === "required" ? "obrigatórios" : "desejáveis"}; os ${WEIGHTS[key]} pontos ficam fora do denominador.`);
+  if (!matches.length) {
+    const classification = importance === "required" ? "obrigatório" : "desejável";
+    const explanation = unclassifiedRequirementCount
+      ? `Nenhum requisito está confirmado como ${classification}; ${unclassifiedRequirementCount} requisito${unclassifiedRequirementCount === 1 ? " aguarda" : "s aguardam"} classificação. Os ${WEIGHTS[key]} pontos ficam fora do denominador.`
+      : `A Posição não definiu requisitos ${importance === "required" ? "obrigatórios" : "desejáveis"}; os ${WEIGHTS[key]} pontos ficam fora do denominador.`;
+    return emptyDimension(key, explanation);
+  }
   const itemWeight = WEIGHTS[key] / matches.length;
   const items = matches.map((match): MatchingScoreItem => {
     const status = scoreItemStatus(match.status);

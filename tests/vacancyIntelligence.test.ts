@@ -334,6 +334,9 @@ test("M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organ
   assert.match(page, /Todos obrigatórios/);
   assert.match(page, /Todos desejáveis/);
   assert.match(page, /Quero classificar/);
+  assert.match(page, /label: "A classificar", value: "unclassified"/);
+  assert.match(page, /value=\{item\.importance\}/);
+  assert.doesNotMatch(page, /item\.importance === "unclassified" \? undefined/);
   assert.match(page, /vacancyRequirementCategories/);
   assert.doesNotMatch(page.match(/export function VacancyDetailPage[\s\S]*?export function VacancyPeoplePage/)?.[0] ?? "", /Missão da vaga|O que procuramos|Contexto da vaga/);
   assert.match(migration, /unclassified/);
