@@ -8,7 +8,7 @@ import {
   type VacancyFunctionAssessment,
 } from "./matchingScore.js";
 
-export const VACANCY_DEFINITION_VERSION = "1.1.0";
+export const VACANCY_DEFINITION_VERSION = "1.2.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-3.0.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
@@ -314,6 +314,10 @@ export function newVacancyRequirement(label = "", category: VacancyRequirementCa
   };
 }
 
+export function newManualVacancyRequirement(label = "", category: VacancyRequirementCategory = inferRequirementCategory(label)): VacancyRequirementDraft {
+  return { ...newVacancyRequirement(label, category), importance: "required", importanceConfirmed: true };
+}
+
 export function materializeVacancyFromProfessionalReference(draft: VacancyDraft, reference: ProfessionalReferenceProposal): VacancyDraft {
   const requirements = reference.relations.flatMap((relation) => {
     const category = referenceRelationCategory(relation);
@@ -372,6 +376,7 @@ export function validateVacancyDraft(draft: VacancyDraft): string[] {
   if (!draft.title.trim()) errors.push("Informe o título da Vaga.");
   if (draft.occupancy === "occupied" && !draft.occupantPersonId) errors.push("Selecione a Pessoa que ocupa esta posição.");
   if (draft.requirements.some((item) => !item.label.trim())) errors.push("Preencha ou remova os requisitos vazios.");
+  if (draft.requirements.some((item) => item.label.trim() && item.importance === "unclassified")) errors.push("Classifique cada requisito como Obrigatório ou Desejável antes de salvar.");
   return errors;
 }
 

@@ -1,6 +1,6 @@
 # AoT — M6.1 Pontuação de matching
 
-Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.0.1 e `docs/qa/execution-m61-matching-score.md` 1.0.1. Evidência coletada em 2026-09-13.
+Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.1.0 e `docs/qa/execution-m61-matching-score.md` 1.1.0. Evidência coletada em 2026-09-13.
 
 ## Matriz de Acordos
 
@@ -93,11 +93,31 @@ O commit funcional `c6b1f669c04bbe505a18c2826a83543974e17ae6` foi publicado em `
 
 PASS. D-001 a D-026 e P-001 a P-016 possuem implementação e evidência proporcional. CA-018 passou na rota autenticada em desktop e 390×844 depois que o smoke revelou e a implementação corrigiu dois overflows internos de conteúdo. Não há requisito obrigatório pendente, desvio ativo ou autorização de produção.
 
-## Correção pós-fechamento: requisitos sem classificação
+## Adendo 1.1.0: classificação obrigatória de requisitos
 
-Em 2026-09-13, Bruno reportou que três requisitos da Definição v2 de `Analista de Marketing` apareciam como obrigatórios no editor, enquanto o score informava `0/0`. A reprodução autenticada confirmou `RD Station`, `2 anos de experiência comprovada na área` e `Office` como `unclassified`; o controle visual projetava indevidamente a primeira opção, “Obrigatório”, quando recebia valor `undefined`.
+Em 2026-09-13, Bruno esclareceu que todo requisito salvo precisa ser obrigatório ou desejável e autorizou a correção completa em AoT. A causa confirmada era uma divergência entre apresentação e valor: a inclusão manual criava `unclassified`, enquanto o controle sem valor projetava visualmente a primeira opção, “Obrigatório”. A correção anterior que expunha “A classificar” como terceira opção foi superada por esta decisão.
 
-- D-015/P-011: o editor agora mostra o estado persistido “A classificar” e não inventa importância.
-- D-005/D-014: quando não há requisito confirmado na categoria, mas existem itens `unclassified`, o score informa quantos aguardam classificação e mantém os pontos fora do denominador.
-- Dados, pesos, ranking, versões persistidas, schema e Supabase não foram alterados; `matching-score-1.0.0` permanece por se tratar de correção de representação e explicação do contrato vigente.
-- Evidência: 53 testes direcionados de score/Vagas, typecheck web, build web, lint de 472 arquivos, geração e check do Context Pack e smoke autenticado da Definição v2. O editor exibiu “A classificar” somente nos três registros `unclassified`, manteve os dois desejáveis e não apresentou overflow nos controles em desktop. A explicação do drawer foi coberta deterministicamente sem gerar uma nova avaliação persistida durante o smoke.
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-027 / CA-021 | `newManualVacancyRequirement` cria `required` e `importanceConfirmed`; o editor oferece somente Obrigatório e Desejável | teste de domínio e estrutural da página | PASS |
+| D-028 / CA-022 | validação local e RPC rejeitam `unclassified`; migration preserva autorização antes da validação | teste direcionado e prova SQL transacional com rollback | PASS |
+| D-029 / CA-023 | constraint histórica conserva `unclassified`; correção gera nova versão em vez de atualizar snapshot anterior | Definição v2 permaneceu intacta e Definição v3 foi criada | PASS |
+| P-017 | valor visual e valor persistido usam a mesma propriedade controlada | teste estrutural e helper de criação manual | PASS |
+| P-018 | nenhuma nova versão aceita requisito fora de `required`/`desired` | RPC retornou `VACANCY_REQUIREMENT_CLASSIFICATION_REQUIRED` no caso negativo | PASS |
+
+### Evidência local e Prisma-QA
+
+- `pnpm run build`: PASS.
+- `node --test dist/tests/vacancyIntelligence.test.js dist/tests/matchingScore.test.js`: PASS, 54/54.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm run build:web`: PASS; permanece apenas o aviso histórico de chunk acima de 900 kB.
+- `pnpm run lint`: PASS, 475 arquivos.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS, 5 fontes canônicas.
+- A migration forward-only `20260914015642_m61_requirement_classification_invariant.sql` usa o mesmo identificador no repositório e no ledger do Prisma-QA.
+- Inspeção pós-migration: `anon_execute = false`, `authenticated_execute = true`, wrapper `save_vacancy_definition_m546` sem execução para `authenticated`, guard de classificação e gravação de `vacancy-definition-1.2.0` presentes.
+- `supabase/qa/m61_requirement_classification_invariant_verification.sql`: PASS com rollback; criou uma versão temporária com 1 obrigatório e 1 desejável, confirmou o contrato 1.2.0 e provou a rejeição de `unclassified`.
+- `supabase/qa/m61_marketing_position_requirement_repair.sql`: PASS com guardas de identidade, versão e conjunto exato; a Posição `Analista de Marketing` avançou da Definição v2 para v3, com 3 obrigatórios, 2 desejáveis e zero `unclassified`. O snapshot v2 continua com os três valores históricos, sem reescrita.
+- Advisors de segurança e performance não apontaram objeto ou regressão nova específica da migration, que não cria tabela, índice ou chave estrangeira. O aviso genérico de RPC `SECURITY DEFINER` inclui a função intencionalmente exposta a `authenticated`; a função valida `auth.uid()` e papel tenant-scoped antes do payload, com `anon` negado.
+- Smoke visual autenticado do adendo: não executado porque a nova aba local não herdou a sessão do navegador já aberta; nenhuma credencial foi solicitada ou manipulada. O fluxo real de persistência foi provado pelo mesmo RPC do frontend e pela versão v3 conectada.
+
+`matching-score-1.0.0` e seus pesos não mudaram. A mudança material pertence a `vacancy-definition-1.2.0`; não cria cache, provider, LLM, ranking novo ou decisão automática. Produção permanece fora de escopo.

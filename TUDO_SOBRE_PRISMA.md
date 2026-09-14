@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: f82cf7de7a034d9a8b6d68559fa74b7ee4cc06635c7b45e051586a6b88fd6020
+source_manifest_sha256: 52f34e54afbc9afc2312dff0da6d8b27ce265cb18addd6cff4cc6b43e6bd2121
 -->
 
 # Tudo sobre o Prisma
@@ -403,7 +403,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.12
+version: 2.29.13
 last_verified: 2026-09-13
 ---
 
@@ -413,7 +413,7 @@ last_verified: 2026-09-13
 
 A linha acumulada de desenvolvimento está consolidada em `codex/ux-shared-foundation` e `main`, sincronizada local e remotamente por fast-forward, sem reescrever histórico. O Product Owner autorizou nominalmente a atualização de `main` em 2026-09-13. O frontend continua exclusivamente local em `http://127.0.0.1:5555`, conectado ao único backend remoto Prisma-QA. As dez Edge Functions presentes no repositório foram reimplantadas e confirmadas `ACTIVE` no projeto `ioldpnqqvobprjiontre`; nenhuma função remota ficou sem correspondente local.
 
-O schema necessário à versão atual já estava ativo no Prisma-QA e a correção de matching 2.3.0 não exige migration. O histórico remoto antigo possui timestamps distintos dos arquivos locais equivalentes; `supabase db push --dry-run` falha fechado antes de aplicar qualquer SQL. Esse metadado legado não foi reparado nem mascarado. A migration mais recente de ambos os lados é `20260913132559`. O gate completo passou com 415 testes, 19 casos golden, build web e demonstração executável; duas expectativas estáticas obsoletas foram alinhadas à linguagem e à navegação canônicas sem reduzir proteção. Evidência e limites em `docs/qa/release-sync-20260913.md`.
+O schema atual inclui a proteção `20260914015642_m61_requirement_classification_invariant.sql`, alinhada pelo mesmo identificador no repositório e no ledger do Prisma-QA. O histórico remoto antigo possui timestamps distintos dos arquivos locais equivalentes; `supabase db push --dry-run` falha fechado antes de aplicar qualquer SQL. Esse metadado legado não foi reparado nem mascarado. A semântica local/QA da migration M6.1 foi confirmada por definição da RPC, grants, prova transacional com rollback e correção versionada da Posição afetada. Evidência e limites ficam no AoT M6.1.
 
 ## Base compartilhada de UX — 2026-09-13
 
@@ -668,7 +668,7 @@ Ainda em 2026-09-13, o contrato `vacancy-matching-explainable` avançou para 2.2
 
 O esclarecimento do Product Owner no mesmo dia substituiu a aproximação 2.2.0 pelo contrato `vacancy-matching-explainable-2.3.0`: Beatriz deve aparecer porque possui experiência publicada na área de Marketing, não porque um termo isolado aproxima cargos diferentes. O domínio agora produz `areaRelation`, enquanto referência e proximidade de cargo continuam em `positionRelation`; requisitos permanecem independentes. A interface explica as três leituras sem score, e o caso reconstruído exige `experience_area` com `positionRelation: none`.
 
-O M6.1, autorizado em 2026-09-13, evolui essa base para `vacancy-matching-explainable-3.0.0` e `matching-score-1.0.0`. A descoberta permanece anterior ao score e separa grupo principal de área e resultados relacionados. A função pura aplica 30/20/35/15 somente às dimensões definidas, divide requisitos igualmente, usa 100/50/25/0, calcula cobertura separada e impede score provisório de ordenar. O Product Owner aprovou a correção do aceite conflitante: pela fórmula vigente, `score <= cobertura`; scores altos ainda podem ser provisórios por `unclassified` ou dependência material. Evidência Demonstrada ativa fortalece apenas competência exata e versionada, sem bônus. Uma correção posterior do mesmo contrato passou a representar `unclassified` explicitamente como “A classificar” no editor e a distinguir, na explicação do score, ausência de requisitos confirmados de pendência de classificação; nenhum dado existente recebe importância automática. Não há migration, cache persistido, LLM, provider ou produção. Evidência final local/QA e smoke ficam no AoT M6.1.
+O M6.1, autorizado em 2026-09-13, evolui essa base para `vacancy-matching-explainable-3.0.0` e `matching-score-1.0.0`. A descoberta permanece anterior ao score e separa grupo principal de área e resultados relacionados. A função pura aplica 30/20/35/15 somente às dimensões definidas, divide requisitos igualmente, usa 100/50/25/0, calcula cobertura separada e impede score provisório de ordenar. O Product Owner aprovou a correção do aceite conflitante: pela fórmula vigente, `score <= cobertura`; scores altos ainda podem ser provisórios por baixa cobertura, versão histórica com `unclassified` ou dependência material. Evidência Demonstrada ativa fortalece apenas competência exata e versionada, sem bônus. A decisão superveniente avançou `vacancy-definition` para 1.2.0: inclusão manual nasce efetivamente obrigatória, rascunho assistido precisa ser classificado como obrigatório ou desejável e frontend/RPC recusam nova versão com `unclassified`, enquanto snapshots históricos continuam legíveis. A Posição `Analista de Marketing` foi preservada historicamente e recebeu Definição v3 com `RD Station`, `2 anos de experiência comprovada na área` e `Office` obrigatórios, `Gestão de tempo` e `Chat GPT` desejáveis e zero pendência. Não há cache persistido, LLM, provider ou produção. Evidência final local/QA fica no AoT M6.1.
 
 Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
 
@@ -806,7 +806,7 @@ last_verified: 2026-09-03
 
 ## M5.4.6 Vagas
 
-`vacancy-definition-1.1.0` usa `vacancy_requirements.importance = required|desired|unclassified`, origem e confirmação de dimensão/importância. A RPC versiona toda escrita; `vacancy_requirement_dimension_feedback` registra correção humana tenant-scoped e alimenta o `knowledge_inbox` organizacional sem DML direto ou publicação automática. `VacancyPages.tsx` projeta somente seções preenchidas e `vacancyService.findPeople` falha fechado quando houver requisito não classificado.
+`vacancy-definition-1.2.0` mantém `vacancy_requirements.importance = required|desired|unclassified` para leitura histórica e rascunhos, mas novas versões aceitam somente `required|desired`. Inclusão manual nasce como `required`; sugestões assistidas pendentes exigem decisão antes de salvar. A RPC versiona toda escrita e rejeita `unclassified`; `vacancy_requirement_dimension_feedback` registra correção humana tenant-scoped e alimenta o `knowledge_inbox` organizacional sem DML direto ou publicação automática. `VacancyPages.tsx` projeta somente seções preenchidas e o matching conserva a leitura segura de snapshots históricos.
 
 ## Stack
 

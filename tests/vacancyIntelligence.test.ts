@@ -7,6 +7,7 @@ import {
   emptyVacancyDraft,
   isVacancyDiscoveryCandidate,
   matchVacancyCandidate,
+  newManualVacancyRequirement,
   newVacancyRequirement,
   shouldResearchVacancyMarket,
   sortVacancyMatches,
@@ -17,7 +18,9 @@ import {
   materializeVacancyFromProfessionalReference,
   sourceKindAfterOccupationReference,
   compareVacancyRequirements,
+  validateVacancyDraft,
   validateVacancyReady,
+  VACANCY_DEFINITION_VERSION,
   vacancyRequirementCategoryLabel,
   type VacancyDetail,
 } from "../web/src/domain/vacancy.js";
@@ -310,6 +313,32 @@ test("M5.4.6 exige decisão humana de importância e mantém dimensões canônic
   assert.equal(vacancyRequirementCategoryLabel("technology"), "Tecnologias e ferramentas");
 });
 
+test("vacancy-definition 1.2.0 sincroniza o padrão obrigatório e bloqueia pendência no frontend e na RPC", async () => {
+  const manual = newManualVacancyRequirement("RD Station", "technology");
+  assert.equal(VACANCY_DEFINITION_VERSION, "1.2.0");
+  assert.equal(manual.importance, "required");
+  assert.equal(manual.importanceConfirmed, true);
+
+  const pending = newVacancyRequirement("Office", "technology");
+  const draft = { ...emptyVacancyDraft(), title: "Analista de Marketing", requirements: [pending] };
+  assert.match(validateVacancyDraft(draft).join(" "), /Obrigatório ou Desejável antes de salvar/i);
+  pending.importance = "desired";
+  assert.doesNotMatch(validateVacancyDraft(draft).join(" "), /Obrigatório ou Desejável antes de salvar/i);
+
+  const [page, migration] = await Promise.all([
+    readFile("web/src/pages/VacancyPages.tsx", "utf8"),
+    readFile("supabase/migrations/20260914015642_m61_requirement_classification_invariant.sql", "utf8"),
+  ]);
+  assert.match(page, /newManualVacancyRequirement\(\)/);
+  assert.match(page, /Escolha Obrigatório ou Desejável antes de salvar/);
+  assert.doesNotMatch(page, /label: "A classificar", value: "unclassified"/);
+  assert.match(migration, /not in \('required', 'desired'\)/i);
+  assert.match(migration, /VACANCY_REQUIREMENT_CLASSIFICATION_REQUIRED/);
+  assert.match(migration, /contract_version = 'vacancy-definition-1\.2\.0'/);
+  assert.match(migration, /revoke all on function public\.save_vacancy_definition_m546[\s\S]*from public, anon, authenticated/i);
+  assert.ok(migration.indexOf("VACANCY_UNAUTHORIZED") < migration.indexOf("VACANCY_REQUIREMENT_CLASSIFICATION_REQUIRED"));
+});
+
 test("M5.4.6 não promove stack isolada a responsabilidade e preserva decisão humana no delta", () => {
   const suggestions = structureVacancyDescription("Desenvolver aplicações usando Node.js e Docker. Implementar APIs REST.");
   const responsibilities = suggestions.filter((item) => item.category === "responsibility").map((item) => item.label);
@@ -334,7 +363,6 @@ test("M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organ
   assert.match(page, /Todos obrigatórios/);
   assert.match(page, /Todos desejáveis/);
   assert.match(page, /Quero classificar/);
-  assert.match(page, /label: "A classificar", value: "unclassified"/);
   assert.match(page, /value=\{item\.importance\}/);
   assert.doesNotMatch(page, /item\.importance === "unclassified" \? undefined/);
   assert.match(page, /vacancyRequirementCategories/);
@@ -551,7 +579,8 @@ test("validação de Vaga destaca o campo acionável que bloqueia o salvamento",
   assert.match(page, /focusValidationTarget\("occupation"\)/);
   assert.match(page, /prisma-vacancy-reference-field has-validation-error/);
   assert.match(page, /validationTarget === "title" \? \{ help: "Informe o título da Posição\.", validateStatus: "error"/);
-  assert.match(page, /aria-invalid=\{invalid\}/);
+  assert.match(page, /aria-invalid=\{invalid && !item\.label\.trim\(\)\}/);
+  assert.match(page, /item\.importance === "unclassified"/);
   assert.match(styles, /prisma-vacancy-reference-field\.has-validation-error/);
   assert.match(styles, /prisma-requirement-editor\.has-validation-error/);
   assert.match(adr, /destacar visualmente o campo ou bloco exato/i);

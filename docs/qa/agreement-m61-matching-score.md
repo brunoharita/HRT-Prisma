@@ -1,12 +1,14 @@
 # Contrato de Acordos — M6.1 Pontuação de matching
 
-Versão 1.0.1. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-13. Fonte: prompt mestre M6.1 fornecido pelo Product Owner e decisão posterior “aprovo a recomendação”.
+Versão 1.1.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-13. Fonte: prompt mestre M6.1, aprovação da fórmula e decisão superveniente de que requisito salvo é obrigatório ou desejável.
 
 ## Objetivo e decisão superveniente
 
 Projetar numericamente o matching explicável já existente, de 0 a 100, sem usar o score para descoberta, exclusão ou decisão de contratação. A fórmula permanece `100 × pontos_obtidos / pontos_aplicáveis`, onde pontos aplicáveis são definidos pela Posição e falta de evidência credita zero.
 
 A decisão superveniente corrige o antigo CA-008 incompatível com a fórmula: como todo ponto obtido também é coberto, o score nunca pode superar a cobertura. Cobertura abaixo de 60% torna o score provisório; score alto ainda pode ser provisório por requisito `unclassified` ou dependência material.
+
+A decisão superveniente de classificação limita `unclassified` a rascunhos assistidos e versões históricas. Inclusão manual apresentada como obrigatória deve gravar `required`; uma nova versão da Posição não pode ser salva com requisito pendente.
 
 ## DEVE
 
@@ -36,6 +38,9 @@ A decisão superveniente corrige o antigo CA-008 incompatível com a fórmula: c
 - D-024: não existem faixas baixa/média/alta/excelente no M6.1.
 - D-025: relatório sombra reproduzível compara ordem, score, cobertura e decisão humana sem usar a decisão como feature.
 - D-026: área, função e requisitos do matching 2.3.0 permanecem separados; Beatriz entra por experiência em Marketing.
+- D-027: requisito incluído manualmente nasce como `required` e `importanceConfirmed`, coerente com a seleção visual padrão.
+- D-028: requisito assistido pode permanecer `unclassified` somente no rascunho; frontend e RPC exigem `required` ou `desired` antes de salvar uma nova versão.
+- D-029: snapshots históricos com `unclassified` permanecem legíveis e explicáveis; a correção não reescreve histórico silenciosamente.
 
 ## PROIBIDO
 
@@ -45,6 +50,8 @@ A decisão superveniente corrige o antigo CA-008 incompatível com a fórmula: c
 - P-009 a P-010: cálculo não altera Perfil/evidência/Knowledge nem publica equivalências.
 - P-011 a P-014: `unclassified` não recebe importância inventada; provisório não ordena; não há cutoff; decisão humana não é substituída.
 - P-015 a P-016: não há cache sem versão/tenant nem arquitetura paralela de matching.
+- P-017: o valor visual de importância nunca diverge do valor persistido.
+- P-018: nenhuma nova versão salva contém requisito `unclassified`.
 
 ## FORA DE ESCOPO
 
@@ -73,6 +80,9 @@ A decisão superveniente corrige o antigo CA-008 incompatível com a fórmula: c
 - CA-018: lista/detalhe responsivos em desktop e 390×844, sem overflow horizontal.
 - CA-019: `match_evaluations` e decisões humanas preservam significado e autoridade.
 - CA-020: AoT rastreia todos os D/P aplicáveis.
+- CA-021: adicionar requisito manual mostra e grava `required` sem depender de um segundo clique.
+- CA-022: frontend e RPC rejeitam tentativa de salvar requisito `unclassified`, com autorização tenant-scoped preservada.
+- CA-023: versões históricas continuam legíveis; a Posição `Analista de Marketing` recebe nova versão somente pela decisão explícita do Product Owner.
 
 ## Pendências
 
