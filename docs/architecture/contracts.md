@@ -32,7 +32,8 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `education-academic-classification` | AI/domain/application/data | 1.0.0 | extração, M5, Delta, Central da Pessoa, documentos | implementado localmente; migration preparada | nível, qualificação, status e origem com regra e snapshot preservados | local | exigir revisão humana |
 | `inference-ontology` | AI/domain | 1.0.0 | profile, search, matching | implementado | `inference-ontology-1.0.0` | local | bloquear inferência |
 | `structured-retrieval` | AI | 1.0.0 | search | implementado | `structured-lexical-1.0.0` | local | bloquear consulta |
-| `explainable-matching` | AI/domain | 1.0.0 | vacancy evaluation | implementado | `matching-explainable-1.0.0` | local | bloquear avaliação |
+| `explainable-matching` | AI/domain | 1.0.0 | avaliação do vertical slice base | implementado | `matching-explainable-1.0.0` | local | bloquear avaliação |
+| `vacancy-matching-explainable` | AI/domain | 4.0.0 / score 1.1.0 | Posições, descoberta e aderência | ativo local/QA | evidência profissional explícita sem barreira de categoria e Prisma Score determinístico posterior | local/QA | preservar descoberta e retornar indisponível para versão desconhecida |
 | `prompt-selection` | AI | 1.0.0 | extraction provider | implementado sem LLM | `no-llm-prompt-1.0.0` | local | bloquear processamento |
 | `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
@@ -58,9 +59,9 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `custom-profile-section` | AI/domain | 1.0.0 | extração, revisão, perfil | schema ativo em QA; web local | estrutura limitada e evidência por item | local/QA | bloquear promoção |
 | `organization-custom-section-definition` | AI/data | 1.0.0 | primeira extração de currículos futuros | ativo em QA; consumo web local | metadados de título/formato pós-aprovação, sem conteúdo pessoal | local/QA | ignorar versão desconhecida |
 | `ai-usage-event` | operations/AI | 1.0.0 | observability | implementado | `ProcessingEvent`, table | local/migration | não agregar métricas |
-| `prisma-context-pack` | governance | 1.0.0 | authorized AIs | implementado | checker/generator | repository | checker falha |
+| `prisma-context-pack` | governance | 2.0.0 | GPT de prompts e portabilidade entre IAs | implementado | cinco fontes canônicas, fonte GPT compacta e exportação completa com manifesto comum | repository | checker falha sem alterar fontes |
 | `knowledge-normalization` | domain/data | 2.0.0 | publicação de perfil, Inbox, busca, matching | ativo em Prisma-QA | termo exato Organization -> Global, `resolved/ambiguous/unresolved`, fonte e versão | local/QA | preservar observado e enviar à Inbox |
-| `knowledge-source-ingestion` | data/operations | 1.1.0 | CBO, ESCO, O*NET, Fontes | CBO ativa em QA; ESCO preparada e bloqueada no download oficial; O*NET 31.0 preparado localmente | manifesto 1.0.0, SHA-256, staging, diff, atributos de relação e publicação humana | local/QA | não publicar snapshot ausente ou inválido |
+| `knowledge-source-ingestion` | data/operations | 1.1.0 | CBO, ESCO, O*NET, Fontes | CBO, ESCO 1.2.1 e O*NET 31.0 publicados e correntes no QA | manifesto 1.0.0, SHA-256, staging, diff, atributos de relação e publicação humana | local/QA | não publicar snapshot ausente ou inválido |
 | `knowledge-source-monitor` | data/operations/security | 1.0.1 | CBO, ESCO, O*NET e Home | ativo no Prisma-QA | Cron por vencimento, Vault, ledger append-only, versão/data/fingerprint e retries 6h/24h/72h | local/QA | preservar versão ativa e marcar falha |
 | `knowledge-ui` | application/product | 2.1.0 | Conhecimento, Perfil, Pessoas | implementado localmente; smoke autenticado pendente | fonte/versão, aliases, relações ocupacionais e escalas de origem | local | não exibir versão não publicada como ativa |
 | `knowledge-research` | AI/security | 1.0.0 | Knowledge Agent | adapter e credencial ativos em QA; execução continua condicionada a flag, opt-in, allowlist e caps | `knowledge-research-1.0.0` | local/QA | não chamar provider |

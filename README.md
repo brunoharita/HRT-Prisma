@@ -8,7 +8,7 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace. M5 resolves native PDF characters and OCR symbols into normalized canonical page coordinates, so zoom and viewport size change only presentation, not selected text. Adaptive extraction preserves PDF layout, relearns complete experience blocks immediately after an evidence-backed correction, applies accepted suggestions atomically, and promotes metadata-only organization patterns only after full review approval. The local review evolution also supports evidence-backed custom profile sections under `Outros`; approved titles and formats can improve future first extraction without copying personal content.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation, M2-A, M2-B, M2-C, M5, M5.1A/M5.1B/M5.1C, M5.2 and the M5.3 operational-resilience contracts active for internal QA. M5.3 reuses existing Profile or document snapshots for new reviews, preserves full historical versions, supports safe document reassignment, duplicate-Person merge, lifecycle changes and reversible archive state without rewriting published history. M5.2 adds versioned official-source ingestion, deterministic Organization -> Global concept resolution, auditable Inbox decisions, Profile provenance and canonical People search. The official CBO snapshot `CBO 2002-2025-06-06` is published; ESCO v1.2.1 and O*NET 31.0 remain catalogued until their human-gated ingestion is completed. CBO, ESCO and O*NET are checked monthly at 01:00 `America/Sao_Paulo`, with version health visible on Home and no automatic publication. By current product decision there is no separate production project or frontend hosting. No live LLM, external AI cost or vector embeddings are configured; PDF.js and Tesseract.js run locally in the browser.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation through M6.2 active for the authorized internal scope. M5.2 publishes CBO `CBO 2002-2025-06-06`, ESCO v1.2.1 and O*NET 31.0 as current versioned snapshots; monitoring never publishes automatically. M6.1 uses explainable matching 4.0.0 and Prisma Score 1.1.0 after discovery, and M6.2 creates contextual verification only from an explicit human action. The frontend remains local and there is no separate production project or hosting. Knowledge research is active behind the QA server boundary, the M5.7 parser is experimental and loopback-only, external assessment-item generation remains disabled, and vector embeddings are not configured. PDF.js and Tesseract.js run locally in the browser.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -67,8 +67,8 @@ Local port convention:
 | `pnpm run test:golden` | Run extraction and matching regression cases |
 | `pnpm run report:matching-score-shadow` | Generate the synthetic, metadata-only M6.1 shadow calibration report |
 | `pnpm run demo` | Reproduce the end-to-end proof |
-| `pnpm run generate:prisma-context` | Regenerate `TUDO_SOBRE_PRISMA.md` from canonical sources |
-| `pnpm run check:prisma-context` | Fail on missing, stale, conflicting, or divergent context |
+| `pnpm run generate:prisma-context` | Regenerate the compact GPT source and complete portable export from canonical sources |
+| `pnpm run check:prisma-context` | Fail on missing, stale, oversized, conflicting, or divergent context artifacts |
 | `pnpm run knowledge:prepare` | Validate an official CBO/ESCO snapshot and generate auditable stage, diff and publication SQL |
 | `pnpm run audit:dependencies` | Query the package registry for high-severity production dependency advisories |
 | `pnpm run validate` | Run the complete local foundation gate when explicitly authorized for a broad-risk change |
@@ -88,6 +88,8 @@ docs/security/          privacy, authorization, threat model
 docs/operations/        environments, deployment, observability, incidents
 docs/qa/                test plan, matrix, personas, release gate
 docs/ai-context/        five canonical context sources for authorized AIs
+FONTE_GPT_PRISMA.md     generated compact source for the prompt-authoring GPT
+TUDO_SOBRE_PRISMA.md   generated complete portable context export
 ```
 
 ## Non-negotiable boundaries
@@ -101,4 +103,4 @@ docs/ai-context/        five canonical context sources for authorized AIs
 - A resume may originate a Person only after minimum identity and tenant-scoped duplicate resolution; ambiguity remains a human decision.
 - The web shell validates the session locally, but it is not the authorization authority.
 - Real client resume validation remains an explicit open risk.
-- `TUDO_SOBRE_PRISMA.md` is generated and must not be edited manually.
+- `FONTE_GPT_PRISMA.md` and `TUDO_SOBRE_PRISMA.md` are generated and must not be edited manually.

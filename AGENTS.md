@@ -55,7 +55,7 @@ This evidence order does not define product authority: a verified bug remains a 
 
 Documentation does not prove implementation. Code does not prove rollout. A migration does not prove activation. QA does not prove production. A published model does not prove approved behavior. An existing prompt does not prove validated quality.
 
-For factual availability, consult the relevant section of `docs/ai-context/PRISMA_CURRENT_STATE.md`; full-file reading is not a prerequisite for every task. Use the owner table to route other questions. Do not create competing MASTER, OVERVIEW, SNAPSHOT, KNOWLEDGE, WIKI, or CONTEXT files. `TUDO_SOBRE_PRISMA.md` is generated and must never be edited manually.
+For factual availability, consult the relevant section of `docs/ai-context/PRISMA_CURRENT_STATE.md`; full-file reading is not a prerequisite for every task. Use the owner table to route other questions. Do not create competing MASTER, OVERVIEW, SNAPSHOT, KNOWLEDGE, WIKI, or CONTEXT files. `TUDO_SOBRE_PRISMA.md` is the generated complete portable export and `FONTE_GPT_PRISMA.md` is the generated compact source for a prompt-authoring GPT; neither is canonical or manually editable.
 
 ## 4. Work mode
 

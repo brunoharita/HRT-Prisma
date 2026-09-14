@@ -2,11 +2,19 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.15
+version: 2.30.0
 last_verified: 2026-09-14
 ---
 
 # Estado atual do Prisma
+
+## Resumo operacional para prompts
+
+Prisma v1.6.3 é a versão pública corrente. O frontend funciona localmente e usa o único backend remoto Prisma-QA; não existe ambiente de produção separado nem frontend hospedado. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+
+Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-4.0.0` e `matching-score-1.1.0`. Descoberta, relação de área, relação ocupacional, aderência por requisito e score permanecem leituras separadas. O score ordena dentro dos grupos, mas não exclui Pessoa nem decide contratação. A jornada M6.2 está ativa no Prisma-QA para criação contextual por ação humana, sem delivery automático ou uso autorizado com Pessoas reais.
+
+As cinco fontes em `docs/ai-context` continuam canônicas por responsabilidade. `FONTE_GPT_PRISMA.md` é a fonte compacta gerada para o GPT que prepara prompts; `TUDO_SOBRE_PRISMA.md` é a exportação completa e portátil. Ambos derivam das mesmas fontes, não substituem código, contratos, ADRs ou evidência de ambiente e não podem ser editados manualmente.
 
 ## Ordenação por Prisma Score
 
@@ -14,13 +22,13 @@ Por decisão do Product Owner em 2026-09-14, `matching-score-1.1.0` ordena as Pe
 
 ## M6.2 — jornada contextual de verificação
 
-O Product Owner aprovou em 2026-09-14 a implementação integral do item 10 revisado. A verificação passa a nascer de ação explícita sobre Pessoa, Posição e requisito no drawer do score; a RPC valida organização, matching 4.0.0 e versão imutável da Posição, preserva evidências/fingerprint e audita criação ou reuso. Os loaders deixam de criar a fixture M5.1A ao ler. Detalhe, preparação, convite e monitor projetam o mesmo contexto, versões e timeline; controles sem escolha foram substituídos por leitura, as prévias agora respondem, compartilhamento continua manual e inconclusivo permanece separado de conclusão. O `matching-score-1.0.0` não muda. Produto avança para Prisma v1.6.3; produção e Pessoas reais permanecem fora de escopo.
+O Product Owner aprovou em 2026-09-14 a implementação integral do item 10 revisado. A verificação passa a nascer de ação explícita sobre Pessoa, Posição e requisito no drawer do score; a RPC valida organização, matching 4.0.0 e versão imutável da Posição, preserva evidências/fingerprint e audita criação ou reuso. Os loaders deixam de criar a fixture M5.1A ao ler. Detalhe, preparação, convite e monitor projetam o mesmo contexto, versões e timeline; controles sem escolha foram substituídos por leitura, as prévias agora respondem, compartilhamento continua manual e inconclusivo permanece separado de conclusão. Na entrega M6.2, o score ainda era 1.0.0; a decisão posterior de ordenação o avançou para `matching-score-1.1.0` sem alterar a jornada. Produto permanece Prisma v1.6.3; produção e Pessoas reais permanecem fora de escopo.
 
 O Prisma-QA recebeu as migrations `20260914051751_m62_contextual_verification_journey`, `20260914051918_m62_demo_need_retirement` e `20260914053202_m62_requirement_parameter_hardening`. A prova SQL transacional confirmou criação exata, preservação do nível e da criticidade da Posição, bloqueio anônimo, acesso autenticado sujeito à autorização interna e aposentadoria da fixture legada, com rollback integral. O smoke autenticado confirmou Beatriz no grupo A da Posição de Marketing, a nova ação por requisito e leitura vazia da central sem criação implícita; nenhuma verificação ou convite real foi gerado.
 
 ## M6.1.1 — evidência profissional explícita sem barreira de categoria
 
-O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permaneçam para organização e proveniência, mas não controlem a conexão factual. `vacancy-matching-explainable-4.0.0` procura o termo do requisito em todo conteúdo profissional publicado, com limite lexical, exclusão de negação e preservação do campo/trecho de origem. Requisito genérico pode ser atendido pela menção explícita; nível exigido sem comprovação permanece parcial. O caso real reconstruído de Bruno encontra `SAP` na descrição da experiência mesmo sem `toolsAndTechnologies`; `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` são negativos. Não há reclassificação de Perfil, migration, LLM, alteração de pesos ou produção. O produto avança para Prisma v1.6.2.
+O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permaneçam para organização e proveniência, mas não controlem a conexão factual. `vacancy-matching-explainable-4.0.0` procura o termo do requisito em todo conteúdo profissional publicado, com limite lexical, exclusão de negação e preservação do campo/trecho de origem. Requisito genérico pode ser atendido pela menção explícita; nível exigido sem comprovação permanece parcial. O caso real reconstruído de Bruno encontra `SAP` na descrição da experiência mesmo sem `toolsAndTechnologies`; `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` são negativos. Não há reclassificação de Perfil, migration, LLM, alteração de pesos ou produção. Esta entrega levou o produto à v1.6.2; M6.2 posteriormente o levou à versão corrente v1.6.3.
 
 ## Sincronização de versão — 2026-09-13
 
@@ -226,8 +234,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 
 - API HTTP/BFF.
 - Malware scan/quarentena.
-- Embeddings vetoriais e LLM externo.
-- Snapshot ESCO v1.2.1 e O*NET 31.0 efetivamente carregados. ESCO está publicado e corrente no Prisma-QA; O*NET aguarda ingestão humana; a CBO também está validada, diffada e publicada.
+- Embeddings vetoriais.
 - Auditoria de visualização/exportação além do domínio de usuários.
 - Rate limit prolongado e negação cross-tenant dedicada para o M5.1B. As superfícies pública e autenticada do operador já foram validadas em desktop e `390x844`; a fronteira conectada, o CORS, os grants negativos e o slice sintético também foram comprovados.
 - Ambiente de produção isolado, deployment e rollback automatizados.
@@ -235,14 +242,11 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Provider/modelo externo aprovado para M5.1C e qualquer chamada viva de geração.
 - Calibração real do Item Bank. O único snapshot M5.1C atual é `synthetic_qa`, não calibrado.
 - Evidência visual ampliada para os demais viewports do storyboard M5.1C além do desktop e do breakpoint móvel de 390 px já validados.
-- Retenção, exclusão e exportação de titular.
+- Política jurídica completa de retenção e exportação de titular; exclusão definitiva já possui fluxo próprio ativo no Prisma-QA.
 
 ## Validação factual
 
-- 13 fixtures sintéticas de extração, incluindo prompt injection documental.
-- 4 casos de avaliação pessoa-vaga.
-- 2 casos de retrieval: empate e ausência de resultado.
-- Total golden mais recente esperado: 19 aprovados.
+- A suite golden corrente possui 23 casos de extração e matching, incluindo prompt injection documental, score, empate e ausência de resultado.
 - Dados reais de cliente: não utilizados.
 
 ## Riscos e bloqueios
@@ -260,7 +264,7 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - O schema do refinamento espacial 1.2 está ativo em QA e o frontend permanece local. A cobertura determinística e as transações revertidas comprovam subtração, limites do contrato, autorização e ausência de resíduos; ainda falta smoke visual autenticado com sobreposição real no PDF.
 - O isolamento entre QA e produção foi adiado por decisão de produto enquanto apenas a equipe interna usa o Prisma; antes de receber clientes, será obrigatório provisionar ambientes separados, backup, rollback e hosting controlado.
 - O CI usa a política fail-closed do pnpm para scripts de instalação de dependências; o `postinstall` não funcional do `tesseract.js` foi revisado e explicitamente negado em `pnpm-workspace.yaml`. A geração do Context Pack normaliza finais de linha para manter hash e conteúdo determinísticos em Windows e Linux.
-- O snapshot oficial ESCO v1.2.1 ainda não foi recebido: o portal exige aceite, e-mail e link. O importer PT/EN cobre ocupações, skills e relações `essential/optional`, mas nenhum checksum ou status foi inventado. O pacote oficial O*NET 31.0 foi validado com SHA-256 do ZIP `6883548adf5fde64cf6f801b35d15519c9225f2732c3cab0e281c652d16b23a9`; o snapshot integral está em staging/diff no Prisma-QA com 9.968 conceitos, 40.921 relações e 9.100 relações com medidas, e ainda aguarda publicação humana. As medidas `IM` e `LV` permanecem rastreáveis e separadas, sem inferência sobre Pessoas.
+- CBO, ESCO e O*NET estão publicadas e correntes no Prisma-QA. Licenças, atributos originais e medidas permanecem rastreáveis e separados; publicação futura de nova versão continua humana e não cria inferência sobre Pessoas.
 - Licenças e atribuições CBO/ESCO/O*NET estão catalogadas, mas a redistribuição de pacotes adaptados, especialmente CBO CC BY-ND, exige revisão jurídica antes de qualquer exposição externa.
 - Base legal, retenção, storage, auditoria e subprocessadores não estão aprovados.
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.

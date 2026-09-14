@@ -21,7 +21,7 @@
     "knowledge:prepare": "pnpm run build && node scripts/prepare-knowledge-source.mjs",
     "test": "pnpm run build && node scripts/run-tests.mjs",
     "test:person-flow": "pnpm run build && node scripts/run-tests.mjs --suite person-flow",
-    "test:tooling": "node --test tests/tooling/validationRunner.test.mjs",
+    "test:tooling": "node --test tests/tooling/validationRunner.test.mjs tests/tooling/prismaContext.test.mjs",
     "validate:person-flow": "node scripts/validate-person-flow.mjs",
     "test:golden": "pnpm run build && node dist/tests/golden/runner.js",
     "benchmark:m56": "node scripts/benchmark-m56.mjs",

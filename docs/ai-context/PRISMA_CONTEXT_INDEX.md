@@ -2,8 +2,8 @@
 prisma_context_id: context-index
 owner: technical-governance
 status: current
-version: 1.1.0
-last_verified: 2026-09-11
+version: 2.0.0
+last_verified: 2026-09-14
 ---
 
 # Prisma Context Index
@@ -19,6 +19,29 @@ last_verified: 2026-09-11
 | `PRISMA_AI_REFERENCE.md` | AI/QA | extração, matching, prompts, modelos, avaliação, custo e guardrails |
 
 Esses são os únicos cinco arquivos canônicos em `docs/ai-context`. Eles consolidam, mas não substituem, fontes especializadas.
+
+## Artefatos de distribuição
+
+`FONTE_GPT_PRISMA.md` é a projeção compacta para o GPT que prepara prompts de desenvolvimento. Ela carrega somente contexto vigente, invariantes, linguagem de domínio e rotas de aprofundamento. `TUDO_SOBRE_PRISMA.md` reúne `AGENTS.md`, `README.md` e toda a documentação especializada em `docs/**/*.md` para transferir o contexto completo a outra IA. Ambos são gerados da mesma base, compartilham manifesto e nunca recebem edição manual.
+
+O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido deve mandar o Codex ler no repositório as fontes proprietárias e o código diretamente relacionado antes de implementar. A exportação completa serve para portabilidade, auditoria e recuperação, não como entrada padrão de toda tarefa.
+
+## Mapa para geração de prompts
+
+| Tema da mudança | Fontes que o prompt deve mandar o Codex consultar |
+| --- | --- |
+| Produto, linguagem, entidade ou fluxo | `docs/product`, `PRISMA_WIKI.md` e requisito/auditoria fornecido pelo Product Owner |
+| UX, tela, navegação ou estado | `docs/product/ux-foundation.md`, acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
+| Pessoa, currículo, revisão ou publicação | owners em `docs/product`, `docs/architecture` e `docs/ai`; serviços e testes do fluxo afetado |
+| Posição, matching ou Prisma Score | `docs/product/vacancy-intelligence.md`, `docs/architecture/vacancy-intelligence.md`, `docs/ai/matching-contract.md`, ADRs vigentes e testes de matching |
+| Verificação ou Item Bank | owners de competency verification, acordo/execução/AoT do movimento e fronteiras Supabase relacionadas |
+| Knowledge ou pesquisa externa | owners de professional concept, Knowledge, model/prompt policy, migrations e Edge Function aplicáveis |
+| Auth, RLS, PII ou Supabase | `docs/security`, contratos de arquitetura, migrations/RPCs e provas negativas do limite afetado |
+| Ambiente, release ou implantação | `docs/operations`, `docs/architecture/versioning.md`, release checklist e evidência do ambiente alvo |
+
+Quando um Agreement Contract específico existir, o prompt deve exigir sua leitura integral por caminho e versão. Um resumo ou uma lista de IDs não o substitui.
+
+Novos acordos e AoTs usam `docs/qa/agreement-contract-template.md` e `docs/qa/aot-template.md`. O arquivo compacto orienta a construção do prompt; o Codex registra o contrato e a evidência no owner de QA.
 
 ## Protocolo de leitura
 
@@ -46,4 +69,4 @@ pnpm run generate:prisma-context
 pnpm run check:prisma-context
 ```
 
-`TUDO_SOBRE_PRISMA.md` é exportação gerada em ordem fixa e nunca deve ser editada manualmente. Não criar MASTER, OVERVIEW, SNAPSHOT, KNOWLEDGE, WIKI alternativa ou contexto consolidado concorrente.
+`pnpm run generate:prisma-context` atualiza os dois artefatos na mesma execução. `pnpm run check:prisma-context` valida fontes, manifesto, papéis, limite de tamanho da fonte compacta e conteúdo sem depender de LF ou CRLF. Não criar MASTER, OVERVIEW, SNAPSHOT, KNOWLEDGE, WIKI alternativa ou contexto consolidado concorrente.

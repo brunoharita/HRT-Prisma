@@ -2,8 +2,8 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 1.9.0
-last_verified: 2026-09-03
+version: 2.0.0
+last_verified: 2026-09-14
 ---
 
 # Prisma Wiki
@@ -11,6 +11,12 @@ last_verified: 2026-09-03
 ## Vagas: revisão canônica M5.4.6
 
 A Vaga pronta separa narrativa de matching: Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados. O operador decide a importância de cada requisito; rascunho pode ter item não classificado, mas matching não. Correções e itens manuais são preservados quando uma descrição é reestruturada.
+
+## Posições, Prisma Score e verificação
+
+A descoberta de Pessoas considera primeiro experiência na área da Posição e mantém sinais relacionados em grupo separado. Relação de área, proximidade do cargo e aderência por requisito são explicadas separadamente. O Prisma Score usa somente evidências profissionais e ordena Pessoas dentro de cada grupo, inclusive quando provisório e identificado; não elimina resultados nem decide contratação.
+
+Uma verificação de competência nasce da ação humana sobre Pessoa, Posição, versão e requisito exatos. A central acompanha necessidades já criadas; leitura não cria fixture ou necessidade silenciosa. Preparação, convite manual, acompanhamento e resultado preservam contexto, evidências, versões e limites. Resultado inconclusivo não prova ausência de competência.
 
 ## Produto
 
@@ -54,7 +60,7 @@ Super Admin possui autoridade global da plataforma. Owner administra todas as em
 
 ## Escopo atual e futuro
 
-O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial e publicação Delta estão ativos em QA. O M5.2 estende a Knowledge canônica com ingestão oficial versionada, resolução exata Organization -> Global, Inbox humana, Perfil e busca por conceito. A CBO oficial está publicada no QA; ESCO e O*NET permanecem catalogadas até a ingestão humana. As três fontes são monitoradas mensalmente e a Home apresenta versão, data, estado e última checagem. O agente externo continua desativado.
+O slice local cobre texto, PDF, OCR seletivo, perfil, evidência, inferência limitada, retrieval, matching, score, verificação e um shell web conectado ao Supabase com rotas protegidas. A revisão espacial usa um mapa canônico por caractere ou símbolo em coordenadas normalizadas. M2-A/M2-B/M2-C, currículo-first, recuperação parcial, publicação Delta, M5.2, M6.1 e M6.2 estão ativos no Prisma-QA dentro de seus limites. CBO, ESCO e O*NET estão publicadas e correntes; as fontes são monitoradas mensalmente e a Home apresenta versão, data, estado e última checagem. Knowledge research está ativa sob a fronteira server-side do QA, enquanto geração externa de itens permanece desativada e o Parser IA segue experimental em loopback.
 
 O M5.1 - Verificação de Competências possui preparação M5.1A, execução M5.1B e governança M5.1C ativas no Prisma-QA. O M5.1C calcula gaps elegíveis, gera proposals sintéticas sem LLM, valida e deduplica, exige revisão humana, separa Banco Global e Organization, controla orçamento por ledger e produz analytics sintéticos sem declarar calibração real. A boundary externa está implantada, mas flag, provider, modelo, secret e budget permanecem desativados.
 

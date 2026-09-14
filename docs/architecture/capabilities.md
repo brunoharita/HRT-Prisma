@@ -12,7 +12,7 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 | `evidence_provenance` | ativo | ativo | não separado | Documento e página preservados |
 | `limited_inference` | ativo | ativo | não separado | Ontologia determinística |
 | `natural_language_retrieval` | ativo | não comprovado | não separado | Vocabulário controlado |
-| `explainable_matching` | ativo | não comprovado | não separado | Sem score absoluto |
+| `explainable_matching` | ativo | ativo | não separado | Matching 4.0.0 e Prisma Score 1.1.0 explicáveis; score não decide nem exclui |
 | `tenant_json_isolation` | ativo em teste | inexistente | inexistente | Não substitui RLS |
 | `postgres_rls_contract` | implementado | ativo | não separado | Foundation, M2-A, M2-B, M2-C e intake currículo-first aplicados |
 | `pdf_ocr_ingestion` | ativo | ativo | não separado | PDF.js nativo, Tesseract seletivo, Storage privado e RPC atômica |
@@ -27,7 +27,7 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 | `assessment_item_generation_external` | implementado/desativado | implantado/desativado | não separado | sem provider/modelo/secret/budget aprovados; flag false |
 | `assessment_item_analytics` | ativo | ativo com fixture sintética | não separado | P25, mediana, P75, acerto, omissão, mudanças e incidentes excluídos |
 | `assessment_item_real_calibration` | bloqueado | bloqueado | não separado | exige dados reais autorizados, metodologia e decisão jurídica |
-| `live_llm_extraction` | não implementado | não implementado | não implementado | Requer benchmark e ADR |
+| `live_llm_extraction` | experimental em loopback | não implantado como serviço | não implementado | Parser IA M5.7 sem cutover ou runtime multiusuário |
 | `vector_embeddings` | não implementado | não implementado | não implementado | Requer necessidade medida |
 
 Alteração de capability é material e exige teste, documentação, Context Pack e decisão de rollout.

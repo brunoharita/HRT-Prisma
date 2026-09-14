@@ -16,6 +16,8 @@ Define a small canonical context topology and prevent silent drift.
 
 Maintain exactly five canonical sources in `docs/ai-context`: index, current state, product wiki, technical reference, and AI reference. Generate `TUDO_SOBRE_PRISMA.md` from those sources plus `AGENTS.md` and `README.md`; never edit the export manually. A checker validates metadata, structure, conflicts, duplicate consolidated sources, and freshness.
 
+ADR-056 preserva essa topologia e substitui somente a distribuição de saída: o mesmo gerador passa a produzir também `FONTE_GPT_PRISMA.md`, uma projeção compacta para autoria de prompts, enquanto `TUDO_SOBRE_PRISMA.md` permanece a exportação completa e portátil.
+
 ## Alternatives considered
 
 One hand-edited master file, unrestricted summaries, or conversation memory. Rejected for drift, duplication, and unverifiable state.
@@ -74,7 +76,7 @@ Supersede only with deterministic migration, no competing sources, and equivalen
 
 ## References
 
-`PRISMA_CONTEXT_INDEX.md`, generator, checker, `TUDO_SOBRE_PRISMA.md`.
+`PRISMA_CONTEXT_INDEX.md`, generator, checker, `FONTE_GPT_PRISMA.md`, `TUDO_SOBRE_PRISMA.md` e ADR-056.
 
 ## Change history
 

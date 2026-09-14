@@ -1,6 +1,14 @@
 import { readFile, readdir } from "node:fs/promises";
 import { basename, join, relative, resolve } from "node:path";
-import { buildPrismaContext, canonicalSources, outputPath, repositoryRoot } from "./generate-prisma-context.mjs";
+import {
+  buildPrismaContext,
+  buildPrismaPromptSource,
+  canonicalSources,
+  normalizeLineEndings,
+  outputPath,
+  promptSourcePath,
+  repositoryRoot,
+} from "./generate-prisma-context.mjs";
 
 const requiredContextFiles = [
   "PRISMA_CONTEXT_INDEX.md",
@@ -26,6 +34,7 @@ const metadataKeys = ["prisma_context_id", "owner", "status", "version", "last_v
 const allowedConsolidated = new Set([
   ...requiredContextFiles,
   "TUDO_SOBRE_PRISMA.md",
+  "FONTE_GPT_PRISMA.md",
   "knowledge-sources-setup.md",
 ]);
 const errors = [];
@@ -80,17 +89,40 @@ for (const path of textFiles) {
   }
 }
 
-const expected = await buildPrismaContext();
-if (!await exists(outputPath)) errors.push("missing generated export: TUDO_SOBRE_PRISMA.md");
-else {
-  const actual = await readFile(outputPath, "utf8");
-  if (actual !== expected) errors.push("generated export is stale: run pnpm run generate:prisma-context");
-  if (!actual.startsWith("<!-- GENERATED FILE. DO NOT EDIT.")) errors.push("generated export warning is missing");
+const expectedOutputs = [
+  { path: outputPath, name: "TUDO_SOBRE_PRISMA.md", role: "portable-complete-context", content: await buildPrismaContext() },
+  { path: promptSourcePath, name: "FONTE_GPT_PRISMA.md", role: "gpt-prompt-authoring-source", content: await buildPrismaPromptSource() },
+];
+for (const output of expectedOutputs) {
+  if (!await exists(output.path)) {
+    errors.push(`missing generated export: ${output.name}`);
+    continue;
+  }
+  const actual = await readFile(output.path, "utf8");
+  if (normalizeLineEndings(actual) !== normalizeLineEndings(output.content)) {
+    errors.push(`generated export is stale: run pnpm run generate:prisma-context (${output.name})`);
+  }
+  if (!normalizeLineEndings(actual).startsWith("<!-- GENERATED FILE. DO NOT EDIT.")) errors.push(`${output.name}: generated export warning is missing`);
+  if (!actual.includes(`artifact_role: ${output.role}`)) errors.push(`${output.name}: artifact role is missing`);
+}
+
+if (await exists(promptSourcePath)) {
+  const promptSource = await readFile(promptSourcePath, "utf8");
+  if (promptSource.length > 60000) errors.push(`FONTE_GPT_PRISMA.md exceeds compact limit: ${promptSource.length} characters`);
+  for (const requiredText of [
+    "matching-score-1.1.0",
+    "vacancy-matching-explainable-4.0.0",
+    "Prisma v1.6.3",
+    "docs/qa/agreement-contract-template.md",
+    "docs/qa/aot-template.md",
+  ]) {
+    if (!promptSource.includes(requiredText)) errors.push(`FONTE_GPT_PRISMA.md missing required current reference: ${requiredText}`);
+  }
 }
 
 if (errors.length > 0) {
   process.stderr.write(`${errors.join("\n")}\n`);
   process.exitCode = 1;
 } else {
-  process.stdout.write(`prisma context check passed (${requiredContextFiles.length} canonical sources)\n`);
+  process.stdout.write(`prisma context check passed (${requiredContextFiles.length} canonical sources, 2 generated artifacts)\n`);
 }

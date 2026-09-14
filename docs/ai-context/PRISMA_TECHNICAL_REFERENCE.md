@@ -2,7 +2,7 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.10.0
+version: 1.11.0
 last_verified: 2026-09-14
 ---
 
@@ -10,7 +10,11 @@ last_verified: 2026-09-14
 
 ## M6.1.1 Matching por evidência profissional explícita
 
-`vacancy-matching-explainable-4.0.0` consulta todo o conteúdo profissional publicado para cada requisito. Categoria e grupo permanecem como organização/proveniência, sem bloquear termo explícito. A correspondência exige limite lexical e exclui negação; termo genérico atende, enquanto nível exigido sem prova permanece parcial. O caso de regressão de Bruno encontra `SAP` na descrição da experiência sem depender de `toolsAndTechnologies`. `matching-score-1.0.0`, schema, RLS, RPCs e dados publicados não mudam.
+`vacancy-matching-explainable-4.0.0` consulta todo o conteúdo profissional publicado para cada requisito. Categoria e grupo permanecem como organização/proveniência, sem bloquear termo explícito. A correspondência exige limite lexical e exclui negação; termo genérico atende, enquanto nível exigido sem prova permanece parcial. O caso de regressão de Bruno encontra `SAP` na descrição da experiência sem depender de `toolsAndTechnologies`. `matching-score-1.1.0` preserva fórmula e pesos e ordena valores numéricos dentro de cada grupo, incluindo provisórios identificados; schema, RLS, RPCs e dados publicados não mudam.
+
+## M6.2 Verificação contextual
+
+M6.2 reutiliza a avaliação persistida de Pessoa, Posição, versão e requisito para criar ou recuperar uma necessidade de verificação somente após ação humana. A RPC tenant-scoped valida matching 4.0.0, requisito da mesma versão e papel autorizado; loaders são somente leitura. Preparação, convite manual, acompanhamento e resultado preservam o contexto e a timeline. O Prisma-QA possui as migrations M6.2; produção, delivery automático e uso com Pessoas reais não foram autorizados.
 
 ## M5.4.6 Vagas
 
@@ -34,7 +38,7 @@ O aprendizado estrutural v3 preserva linhas PDF.js/Tesseract, aprende assinatura
 
 Foundation, M2-A, M2-B, M2-C, intake currículo-first e as migrations M4 estão ativos no Prisma-QA. Leituras usam RLS; mutações compostas sensíveis usam Edge Functions ou RPCs controladas, com DML direto revogado nas tabelas críticas M2-C/intake/Knowledge.
 
-O Movimento 4 adiciona a fundação Knowledge. O M5.2 a estende com source ingestion por CSV, SHA-256, manifestos, staging RLS, diff, publicação humana, source version corrente, observações ligadas ao Perfil/review/evidência, resolver 2.0.0, Inbox de aliases/propostas e busca de Pessoas por conceito. As migrations `20260903094700`, `20260903100340`, `20260903101644` e `20260903102721` estão ativas no QA; CBO está publicada e ESCO permanece bloqueada no download oficial.
+O Movimento 4 adiciona a fundação Knowledge. O M5.2 a estende com source ingestion por CSV, SHA-256, manifestos, staging RLS, diff, publicação humana, source version corrente, observações ligadas ao Perfil/review/evidência, resolver 2.0.0, Inbox de aliases/propostas e busca de Pessoas por conceito. As migrations `20260903094700`, `20260903100340`, `20260903101644` e `20260903102721` estão ativas no QA; CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes.
 
 As migrations `20260903161003` e `20260903163053` e a Edge Function `knowledge-source-monitor` adicionam monitoramento mensal CBO/ESCO/O*NET. Supabase Cron desperta um scanner de vencimento horário, `next_check_at` fixa a execução real no primeiro dia às 01:00 em `America/Sao_Paulo`, Vault protege a chamada e `knowledge_source_checks` mantém o ledger RLS. Falhas repetem em 6h, 24h e 72h. A Home lê versão, data, estado e última checagem por `PrismaDataRepository`; detecção nunca publica snapshot.
 
@@ -46,7 +50,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation, M2-A, M2-B, M2-C, intake currículo-first, M4, M5 e M5.1A/B/C. `knowledge-agent` e `assessment-item-generator` estão implantadas com JWT obrigatório e chamadas externas desativadas. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2 no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantada com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
 
 ## Comandos
 
@@ -62,7 +66,7 @@ pnpm run check:prisma-context
 
 ## Contratos e decisões
 
-Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md` e ADR-032. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029.
+Catálogo: `docs/architecture/contracts.md`. Knowledge: `professional-concept-architecture.md` e ADR-032. Jornada e Delta: ADR-025. M5.1: ADR-026 para Evidência Demonstrada, ADR-027 para a fronteira pública e ADR-028 para expansão governada, custo e calibração. Blocos irmãos: ADR-029. UX compartilhada: ADR-050. Matching/score atuais: ADR-053 e ADR-055. Verificação contextual: ADR-054. Distribuição do Context Pack: ADR-056.
 
 ## Operação
 
