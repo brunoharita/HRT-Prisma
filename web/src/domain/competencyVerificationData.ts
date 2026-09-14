@@ -29,6 +29,15 @@ export interface VerificationNeedView {
   evidenceSnapshot: Record<string, unknown>;
   contextSnapshot: Record<string, unknown>;
   createdAt: string;
+  events: VerificationTimelineEvent[];
+}
+
+export interface VerificationTimelineEvent {
+  id: string;
+  action: string;
+  result: "success" | "failure";
+  createdAt: string;
+  payload: Record<string, unknown>;
 }
 
 export interface VerificationDefinitionView {
@@ -117,6 +126,14 @@ export interface PreparedVerificationOption {
   targetLevel: VerificationLevel;
   criticality: VerificationCriticality;
   context: string | null;
+  vacancyId: string;
+  vacancyVersion: number | null;
+  requirementId: string | null;
+  requirementLabel: string | null;
+  policyRequirement: string;
+  definitionVersion: string | null;
+  blueprintVersion: string | null;
+  rubricVersion: string | null;
   itemCount: number;
   estimatedMinutes: number;
   createdAt: string;
@@ -128,6 +145,12 @@ export interface VerificationMonitoringRow {
   personId: string;
   personName: string;
   competency: string;
+  vacancyId: string;
+  vacancyTitle: string | null;
+  vacancyVersion: number | null;
+  requirementId: string | null;
+  requirementLabel: string | null;
+  policyRequirement: string;
   targetLevel: VerificationLevel;
   status: VerificationRuntimeStatus;
   expiresAt: string;
@@ -140,6 +163,14 @@ export interface VerificationMonitoringRow {
   issuedAt: string;
   completedAt: string | null;
   automaticDeliveryConfigured: false;
+  versions: Record<string, unknown>;
+  events: VerificationTimelineEvent[];
+}
+
+export interface CreateVerificationNeedResult {
+  needId: string;
+  created: boolean;
+  status: VerificationSufficiencyStatus;
 }
 
 export interface VerificationOperatorWorkspace {

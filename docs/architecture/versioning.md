@@ -16,7 +16,7 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 - `movimento`: movimento de produto em execução, atualmente `6`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão atual oficial é **Prisma v1.6.2**, correspondente à segunda entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão atual oficial é **Prisma v1.6.3**, correspondente à terceira entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -42,6 +42,7 @@ M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora d
 |---:|---|---|
 | 1 | M6.1: pontuação determinística e explicável de matching | oficial |
 | 2 | M6.1.1: requisito conectado a evidência profissional explícita | aceite do PO para implementação e atualização da versão |
+| 3 | M6.2: jornada contextual de verificação | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -85,6 +86,8 @@ Todo consumidor deve declarar versões aceitas. Versão ausente, desconhecida, f
 Versões anteriores permanecem identificáveis. Rollback reativa artefato anterior sem reescrever resultados históricos. Mudança de prompt ou modelo relevante cria nova versão mesmo quando o schema de saída não muda.
 
 ## Versões atuais
+
+O M6.2 de 2026-09-14 introduz `m62-contextual-verification-journey-1.0.0`, `m62-evidence-sufficiency-1.0.0` e `m62-contextual-verification-policy-1.0.0`. A necessidade nasce de ação humana sobre uma avaliação `vacancy-matching-explainable-4.0.0` e requisito da mesma versão imutável da Posição. Loaders deixam de criar fixtures. O contexto e a linha do tempo percorrem preparação, convite manual, acompanhamento e resultado. `matching-score-1.0.0` permanece inalterado.
 
 O M5.5 de 2026-09-09 introduz `person-definitive-deletion` 1.0.0 e `person-data-self-service` 1.0.0. A saga compartilha o mesmo núcleo para administração e titularidade, mas preserva authorities distintas; seu ledger mínimo independe da linha `people`, o lock `deleting` fecha novas mutações e `completed` exige zero resíduo SQL ou de Storage. Shapes históricos são removidos pelo grafo relacional, sem backfill ou reescrita. A mesma identidade pode ingressar futuramente como nova Pessoa. O contrato está ativo apenas no Prisma-QA.
 

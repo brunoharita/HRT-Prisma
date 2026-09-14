@@ -60,6 +60,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-051](ADR-051-area-first-vacancy-discovery.md) | accepted | Área profissional como sinal de entrada separado da proximidade do cargo |
 | [ADR-052](ADR-052-deterministic-observed-matching-score.md) | accepted | Score determinístico e explicável aplicado somente depois da descoberta |
 | [ADR-053](ADR-053-category-agnostic-explicit-requirement-evidence.md) | accepted | Evidência profissional explícita independe da categoria do requisito |
+| [ADR-054](ADR-054-contextual-verification-journey.md) | accepted | Verificação nasce do requisito exato e preserva o contexto de ponta a ponta |
 
 ## Rules
 

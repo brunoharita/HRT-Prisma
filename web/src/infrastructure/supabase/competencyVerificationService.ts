@@ -1,4 +1,5 @@
 import type {
+  CreateVerificationNeedResult,
   IssuedInvitation,
   ParticipantResultVisibility,
   ParticipantVerificationWorkspace,
@@ -10,6 +11,23 @@ import { supabaseFunctionOperationError, supabaseOperationError } from "../../do
 import { supabase } from "./client";
 
 export const competencyVerificationService = {
+  async createNeed(input: {
+    matchingEvaluationId: string;
+    requirementId: string;
+    targetLevel: "basic" | "intermediate" | "advanced";
+    criticality: "low" | "medium" | "high" | "critical";
+  }): Promise<CreateVerificationNeedResult> {
+    const { data, error } = await supabase.rpc("create_m62_verification_need" as never, {
+      p_matching_evaluation_id: input.matchingEvaluationId,
+      p_requirement_id: input.requirementId,
+      p_target_level: input.targetLevel,
+      p_criticality: input.criticality,
+    } as never);
+    if (error) throw supabaseOperationError(error, "Não foi possível criar a necessidade de verificação.");
+    const payload: unknown = data;
+    if (!isRecord(payload) || typeof payload.needId !== "string") throw new Error("Resposta inválida ao criar a necessidade de verificação.");
+    return payload as unknown as CreateVerificationNeedResult;
+  },
   async loadWorkspace(organizationId: string): Promise<VerificationWorkspaceView> {
     const { data, error } = await supabase.rpc(
       "load_m51a_verification_workspace" as never,

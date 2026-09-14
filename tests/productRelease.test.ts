@@ -10,8 +10,8 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe a segunda entrega aceita do Movimento 6", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v1.6.2");
+test("registro oficial expõe a terceira entrega aceita do Movimento 6", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v1.6.3");
 });
 
 test("an incomplete or duplicated release registry does not invent a product version", () => {

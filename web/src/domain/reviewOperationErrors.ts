@@ -309,6 +309,18 @@ function knownDomainOperationError(error: ReviewOperationError, technicalMessage
   if (/m51a_insufficient_item_bank_coverage/.test(technicalMessage)) {
     return asOperationError(error, "O banco de itens ainda não possui perguntas suficientes para esta competência e nível. Complete o banco de itens antes de preparar a verificação.", "validation", "none");
   }
+  if (/m62_matching_evaluation_not_found|m62_matching_evidence_not_found|m62_context_not_available/.test(technicalMessage)) {
+    return asOperationError(error, "A avaliação mudou ou não está mais disponível. Reabra o score desta Pessoa para usar o contexto atual.", "stale-state", "reload");
+  }
+  if (/m62_requirement_context_mismatch|m62_target_level_context_mismatch|m62_criticality_context_mismatch/.test(technicalMessage)) {
+    return asOperationError(error, "Este requisito não corresponde mais à versão avaliada da Posição. Recalcule o matching antes de preparar a verificação.", "conflict", "reload");
+  }
+  if (/m62_unsupported_matching_version/.test(technicalMessage)) {
+    return asOperationError(error, "Esta avaliação usa uma versão antiga do matching. Reabra a Posição e calcule o score novamente.", "stale-state", "reload");
+  }
+  if (/m62_invalid_target_level|m62_invalid_criticality/.test(technicalMessage)) {
+    return asOperationError(error, "Revise o nível e a criticidade deste requisito antes de preparar a verificação.", "validation", "review-fields");
+  }
 
   if (/m51b_invalid_delivery_channel/.test(technicalMessage)) {
     return asOperationError(error, "Escolha um canal de envio disponível para emitir o convite.", "validation", "review-fields");

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: a47e11076e3ef5b5508bf4d0cf37d3272be6b0a2712389a36e13877c3662679d
+source_manifest_sha256: 4becc0fe7751f6d21b123186b7cb05b3875d4e3d79b5f1a5ae9ac60438175529
 -->
 
 # Tudo sobre o Prisma
@@ -409,6 +409,12 @@ last_verified: 2026-09-14
 
 # Estado atual do Prisma
 
+## M6.2 — jornada contextual de verificação
+
+O Product Owner aprovou em 2026-09-14 a implementação integral do item 10 revisado. A verificação passa a nascer de ação explícita sobre Pessoa, Posição e requisito no drawer do score; a RPC valida organização, matching 4.0.0 e versão imutável da Posição, preserva evidências/fingerprint e audita criação ou reuso. Os loaders deixam de criar a fixture M5.1A ao ler. Detalhe, preparação, convite e monitor projetam o mesmo contexto, versões e timeline; controles sem escolha foram substituídos por leitura, as prévias agora respondem, compartilhamento continua manual e inconclusivo permanece separado de conclusão. O `matching-score-1.0.0` não muda. Produto avança para Prisma v1.6.3; produção e Pessoas reais permanecem fora de escopo.
+
+O Prisma-QA recebeu as migrations `20260914051751_m62_contextual_verification_journey`, `20260914051918_m62_demo_need_retirement` e `20260914053202_m62_requirement_parameter_hardening`. A prova SQL transacional confirmou criação exata, preservação do nível e da criticidade da Posição, bloqueio anônimo, acesso autenticado sujeito à autorização interna e aposentadoria da fixture legada, com rollback integral. O smoke autenticado confirmou Beatriz no grupo A da Posição de Marketing, a nova ação por requisito e leitura vazia da central sem criação implícita; nenhuma verificação ou convite real foi gerado.
+
 ## M6.1.1 — evidência profissional explícita sem barreira de categoria
 
 O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permaneçam para organização e proveniência, mas não controlem a conexão factual. `vacancy-matching-explainable-4.0.0` procura o termo do requisito em todo conteúdo profissional publicado, com limite lexical, exclusão de negação e preservação do campo/trecho de origem. Requisito genérico pode ser atendido pela menção explícita; nível exigido sem comprovação permanece parcial. O caso real reconstruído de Bruno encontra `SAP` na descrição da experiência mesmo sem `toolsAndTechnologies`; `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` são negativos. Não há reclassificação de Perfil, migration, LLM, alteração de pesos ou produção. O produto avança para Prisma v1.6.2.
@@ -445,7 +451,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.6.2 registra a segunda entrega aceita do Movimento 6: requisito conectado a evidência profissional explícita. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.6.3 registra a terceira entrega aceita do Movimento 6: jornada contextual de verificação. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 

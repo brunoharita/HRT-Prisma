@@ -142,6 +142,8 @@ export const vacancyService = {
       responsibilities: readStringArray(version.responsibilities),
       expectedOutcomes: readStringArray(version.expected_outcomes),
       requirements: requirements.map((item) => ({
+        id: item.id,
+        competencyId: item.competency_id,
         stableId: item.stable_id,
         label: item.label,
         category: item.category,
@@ -446,7 +448,7 @@ export const vacancyService = {
     throwIfError(result.error, "Não foi possível registrar sua decisão sobre esta relação. O resultado permanece disponível.");
   },
 
-  async recordEvaluation(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<void> {
+  async recordEvaluation(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<string> {
     const result = await supabase.from("match_evaluations").insert({
       organization_id: vacancy.organizationId,
       person_id: match.candidate.personId,
@@ -474,8 +476,10 @@ export const vacancyService = {
       matching_version: VACANCY_MATCHING_VERSION,
       prompt_version: "no-llm-prompt-1.0.0",
       model_version: "deterministic-local-3.0.0",
-    });
+    }).select("id").single();
     throwIfError(result.error, "A aderência foi calculada, mas o histórico não pôde ser registrado. Nenhuma conclusão foi perdida nesta tela.");
+    if (!result.data?.id) throw new Error("A avaliação foi calculada, mas seu identificador auditável não foi retornado.");
+    return result.data.id;
   },
 
   async history(organizationId: string, vacancyId: string): Promise<VacancyHistoryItem[]> {

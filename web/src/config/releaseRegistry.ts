@@ -27,6 +27,7 @@ export const PRISMA_RELEASE_HISTORY = [{
   deliveries: [
     "M6.1: pontuação determinística e explicável de matching",
     "M6.1.1: requisito conectado a evidência profissional explícita",
+    "M6.2: jornada contextual de verificação",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 

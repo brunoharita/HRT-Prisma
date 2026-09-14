@@ -7,10 +7,11 @@ import {
   SafetyCertificateOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Descriptions, Empty, Input, Radio, Select, Skeleton, Space, Steps, Table, Tabs, Tag, Typography } from "antd";
+import { Alert, Button, Descriptions, Drawer, Empty, Input, List, Radio, Skeleton, Space, Steps, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   labelCriticality,
+  labelAssessmentDimension,
   labelLevel,
   labelSufficiency,
   type AssessmentBlueprintView,
@@ -125,7 +126,7 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
     );
   }
 
-  if (mode === "matching" && workspace) return renderMatching(workspace.needs, onNavigate);
+  if (mode === "matching" && workspace) return renderMatching(workspace.needs, onNavigate, search, setSearch);
   if (!workspace || !selectedNeed) {
     return (
       <PrismaPage className="prisma-m51a-page">
@@ -164,10 +165,12 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
       />
     );
   }
-  return renderMatching(workspace.needs, onNavigate);
+  return renderMatching(workspace.needs, onNavigate, search, setSearch);
 }
 
-function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string) => void) {
+function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string) => void, search: string, onSearch: (value: string) => void) {
+  const normalized = normalizeText(search);
+  const visibleNeeds = needs.filter((need) => !normalized || `${need.personName} ${need.vacancyTitle} ${need.competencyLabel} ${need.contextSnapshot.requirement_label ?? ""} ${labelSufficiency(need.sufficiencyStatus)}`.toLocaleLowerCase("pt-BR").includes(normalized));
   const documentaryCount = needs.filter((need) => need.evidenceSnapshot.documentary_evidence === "available").length;
   const demonstratedCount = needs.filter(hasDemonstratedEvidence).length;
   const requiredCount = needs.filter((need) => need.sufficiencyStatus === "verification_required_by_policy").length;
@@ -227,7 +230,8 @@ function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string
         </div>
       </PrismaCard>
       <PrismaCard title="Requisitos a verificar">
-        <Table scroll={{ x: 1000 }} locale={{ emptyText: <PrismaState kind="empty" compact description="As necessidades disponíveis aparecerão aqui para preparação. Continue pela posição ou volte ao acompanhamento." action={{ label: "Voltar para verificações", onClick: () => onNavigate("/verifications") }} /> }} className="prisma-responsive-table prisma-matching-table" columns={columns} dataSource={needs} pagination={false} rowKey="id" tableLayout="fixed" />
+        <Input.Search allowClear onChange={(event) => onSearch(event.target.value)} placeholder="Buscar por Pessoa, Posição, requisito ou status" value={search} />
+        <Table scroll={{ x: 1000 }} locale={{ emptyText: <PrismaState kind={search ? "filtered" : "empty"} compact description={search ? "Nenhuma necessidade corresponde à busca." : "As necessidades aparecem aqui somente após uma ação explícita sobre um requisito do matching."} action={search ? { label: "Limpar busca", onClick: () => onSearch("") } : { label: "Voltar para verificações", onClick: () => onNavigate("/verifications") }} /> }} className="prisma-responsive-table prisma-matching-table" columns={columns} dataSource={visibleNeeds} pagination={false} rowKey="id" tableLayout="fixed" />
         <div className="prisma-m51a-legend">
           <span><i className="is-green" />Suficiente</span>
           <span><i className="is-gold" />Verificação recomendada</span>
@@ -251,44 +255,26 @@ function renderDetail(
         description="Detalhes da necessidade de verificação."
         actions={<Button icon={<FileProtectOutlined />} onClick={() => onNavigate(`/matching/verification-needs/${need.id}/prepare`)} type="primary">Preparar verificação</Button>}
       />
-      <Tabs
-        items={[
-          {
-            key: "overview",
-            label: "Visão geral",
-            children: (
-              <Space direction="vertical" size={16} className="prisma-m51a-full">
-                <PrismaCard
-                  title="Necessidade de Verificação"
-                  extra={<PrismaStatusTag label={labelSufficiency(need.sufficiencyStatus)} tone={sufficiencyTone(need.sufficiencyStatus)} />}
-                >
-                  <Typography.Paragraph>{need.explanation}</Typography.Paragraph>
-                  <Typography.Text strong>Motivos</Typography.Text>
-                  <ul className="prisma-m51a-reason-list">
-                    {need.reasonCodes.map((reason) => <li key={reason}><CheckCircleOutlined />{reasonLabel(reason)}</li>)}
-                  </ul>
-                </PrismaCard>
-                <PrismaCard title="Resumo da Necessidade">
-                  <Descriptions column={{ xs: 1, md: 2 }} size="small">
-                    <Descriptions.Item label="Competência">{need.competencyLabel}</Descriptions.Item>
-                    <Descriptions.Item label="Status"><PrismaStatusTag compact label={labelSufficiency(need.sufficiencyStatus)} tone={sufficiencyTone(need.sufficiencyStatus)} /></Descriptions.Item>
-                    <Descriptions.Item label="Nível requerido">{labelLevel(need.targetLevel)}</Descriptions.Item>
-                    <Descriptions.Item label="Última avaliação">{formatDate(need.createdAt)}</Descriptions.Item>
-                    <Descriptions.Item label="Criticidade">{labelCriticality(need.criticality)}</Descriptions.Item>
-                    <Descriptions.Item label="Origem da análise">Análise automatizada baseada em evidências</Descriptions.Item>
-                    <Descriptions.Item label="Contexto">{need.vacancyTitle}</Descriptions.Item>
-                    <Descriptions.Item label="Preparação">{prepared ? labelPrepared(prepared.status) : "Ainda não preparada"}</Descriptions.Item>
-                  </Descriptions>
-                </PrismaCard>
-                <Alert message="O Prisma não toma decisões de contratação. Esta verificação é uma recomendação para gerar nova evidência." showIcon type="info" />
-              </Space>
-            ),
-          },
-          { key: "evidence", label: "Evidências", children: <EvidencePanel need={need} /> },
-          { key: "verification", label: "Verificação", children: <PrismaCard><Typography.Text>{prepared ? "Instrumento preparado para execução futura." : "Nenhum instrumento preparado."}</Typography.Text></PrismaCard> },
-          { key: "history", label: "Histórico", children: <PrismaCard><Typography.Text>Criada em {formatDate(need.createdAt)}.</Typography.Text></PrismaCard> },
-        ]}
-      />
+      <Space direction="vertical" size={16} className="prisma-m51a-full">
+        <PrismaCard title="Contexto preservado" extra={<PrismaStatusTag label={labelSufficiency(need.sufficiencyStatus)} tone={sufficiencyTone(need.sufficiencyStatus)} />}>
+          <Descriptions column={{ xs: 1, md: 2 }} size="small">
+            <Descriptions.Item label="Pessoa"><Button onClick={() => onNavigate(`/profiles/${need.personId}/profile`)} type="link">{need.personName}</Button></Descriptions.Item>
+            <Descriptions.Item label="Posição"><Button onClick={() => onNavigate(`/vacancies/${need.vacancyId}`)} type="link">{need.vacancyTitle}</Button></Descriptions.Item>
+            <Descriptions.Item label="Requisito">{String(need.contextSnapshot.requirement_label ?? need.competencyLabel)}</Descriptions.Item>
+            <Descriptions.Item label="Importância">{need.contextSnapshot.requirement_importance === "required" ? "Obrigatório" : "Desejável"}</Descriptions.Item>
+            <Descriptions.Item label="Nível requerido">{labelLevel(need.targetLevel)}</Descriptions.Item>
+            <Descriptions.Item label="Criticidade">{labelCriticality(need.criticality)}</Descriptions.Item>
+            <Descriptions.Item label="Política aplicada">{policyLabel(need.sufficiencyRequirement)}</Descriptions.Item>
+            <Descriptions.Item label="Versão da Posição">{String(need.contextSnapshot.vacancy_version ?? "Histórica")}</Descriptions.Item>
+            <Descriptions.Item label="Preparação">{prepared ? labelPrepared(prepared.status) : "Ainda não preparada"}</Descriptions.Item>
+            <Descriptions.Item label="Criada em">{formatDate(need.createdAt)}</Descriptions.Item>
+          </Descriptions>
+        </PrismaCard>
+        <PrismaCard title="Por que verificar"><Typography.Paragraph>{need.explanation}</Typography.Paragraph><ul className="prisma-m51a-reason-list">{need.reasonCodes.map((reason) => <li key={reason}><CheckCircleOutlined />{reasonLabel(reason)}</li>)}</ul></PrismaCard>
+        <EvidencePanel need={need} />
+        <PrismaCard title="Linha do tempo"><List dataSource={need.events ?? []} locale={{ emptyText: "Nenhum evento posterior registrado." }} renderItem={(event) => <List.Item><List.Item.Meta title={timelineLabel(event.action)} description={`${formatDate(event.createdAt)} · ${event.result === "success" ? "Concluído" : "Falhou"}`} /></List.Item>} /></PrismaCard>
+        <Alert message="A verificação gera uma evidência nova e independente. Ela só pode fortalecer este requisito exato; não decide contratação nem apaga evidências anteriores." showIcon type="info" />
+      </Space>
     </PrismaPage>
   );
 }
@@ -347,18 +333,17 @@ function PrepareCompetency(props: Parameters<typeof PrepareFlow>[0]) {
   return (
     <PrismaCard title="Competência e nível">
       <Space direction="vertical" size={18} className="prisma-m51a-full">
-        <Radio checked>{props.need.competencyLabel}<br /><Typography.Text type="secondary">Banco de dados</Typography.Text></Radio>
-        <Radio.Group onChange={(event) => props.onLevelChange(event.target.value as VerificationLevel)} value={props.selectedLevel}>
-          <Space direction="vertical">
-            {(["basic", "intermediate", "advanced"] as const).map((level) => (
-              <Radio key={level} value={level}>{labelLevel(level)}</Radio>
-            ))}
-          </Space>
-        </Radio.Group>
-        <Space wrap>
-          <Select value={props.need.vacancyTitle} options={[{ value: props.need.vacancyTitle, label: props.need.vacancyTitle }]} />
-          <Select value={props.need.criticality} options={[{ value: props.need.criticality, label: labelCriticality(props.need.criticality) }]} />
-        </Space>
+        <Alert showIcon type="info" message="O contexto veio do requisito selecionado no matching e permanecerá ligado à mesma Pessoa e versão da Posição." />
+        <Descriptions bordered column={{ xs: 1, md: 2 }} size="small">
+          <Descriptions.Item label="Pessoa">{props.need.personName}</Descriptions.Item>
+          <Descriptions.Item label="Posição">{props.need.vacancyTitle}</Descriptions.Item>
+          <Descriptions.Item label="Requisito">{String(props.need.contextSnapshot.requirement_label ?? props.need.competencyLabel)}</Descriptions.Item>
+          <Descriptions.Item label="Competência">{props.need.competencyLabel}</Descriptions.Item>
+          <Descriptions.Item label="Nível">{labelLevel(props.need.targetLevel)}</Descriptions.Item>
+          <Descriptions.Item label="Criticidade">{labelCriticality(props.need.criticality)}</Descriptions.Item>
+          <Descriptions.Item label="Política">{policyLabel(props.need.sufficiencyRequirement)}</Descriptions.Item>
+          <Descriptions.Item label="Definição da Posição">v{String(props.need.contextSnapshot.vacancy_version ?? "histórica")}</Descriptions.Item>
+        </Descriptions>
         <Button onClick={() => props.onStepChange(1)} type="primary">Avançar</Button>
       </Space>
     </PrismaCard>
@@ -367,7 +352,7 @@ function PrepareCompetency(props: Parameters<typeof PrepareFlow>[0]) {
 
 function SelectDefinition(props: Parameters<typeof PrepareFlow>[0]) {
   const columns: ColumnsType<VerificationDefinitionView> = [
-    { title: "Definição", dataIndex: "name", render: (_, definition) => <Radio checked={props.selectedDefinition?.id === definition.id}>{definition.name}<br /><Typography.Text type="secondary">{definition.description}</Typography.Text></Radio>, width: 320 },
+    { title: "Definição", dataIndex: "name", render: (_, definition) => <Radio value={definition.id}>{definition.name}<br /><Typography.Text type="secondary">{definition.description}</Typography.Text></Radio>, width: 320 },
     { title: "Nível", dataIndex: "targetLevel", render: labelLevel, width: 110 },
     { title: "Área", dataIndex: "domain", render: labelProfessionalDomain, width: 150 },
     { title: "Versão", dataIndex: "version", width: 90 },
@@ -377,7 +362,7 @@ function SelectDefinition(props: Parameters<typeof PrepareFlow>[0]) {
     <PrismaCard title="Selecionar Definição de Verificação">
       <Space direction="vertical" className="prisma-m51a-full" size={14}>
         <Input prefix={<SearchOutlined />} onChange={(event) => props.onSearch(event.target.value)} placeholder="Buscar por nome ou descrição..." value={props.search} />
-        <Table
+        <Radio.Group className="prisma-m51a-full" onChange={(event) => props.onDefinitionChange(event.target.value as string)} value={props.selectedDefinition?.id ?? null}><Table
           columns={columns}
           dataSource={props.definitions}
           onRow={(record) => ({ onClick: () => props.onDefinitionChange(record.id) })}
@@ -385,7 +370,8 @@ function SelectDefinition(props: Parameters<typeof PrepareFlow>[0]) {
           rowKey="id"
           className="prisma-responsive-table"
           tableLayout="fixed"
-        />
+          locale={{ emptyText: <PrismaState compact kind={props.search ? "filtered" : "unavailable"} description={props.search ? "Nenhuma definição corresponde à busca." : `Não há instrumento ativo para ${props.need.competencyLabel} no nível ${labelLevel(props.need.targetLevel)}.`} {...(props.search ? { action: { label: "Limpar busca", onClick: () => props.onSearch("") } } : {})} /> }}
+        /></Radio.Group>
         <Space>
           <Button onClick={() => props.onStepChange(0)}>Voltar</Button>
           <Button disabled={!props.selectedDefinition} onClick={() => props.onStepChange(2)} type="primary">Avançar</Button>
@@ -396,6 +382,7 @@ function SelectDefinition(props: Parameters<typeof PrepareFlow>[0]) {
 }
 
 function InstrumentPreview(props: Parameters<typeof PrepareFlow>[0]) {
+  const [preview, setPreview] = useState<"blueprint" | "rubric" | "items" | null>(null);
   const bank = props.itemBank.find((item) => item.competencyKey === props.need.competencyKey && item.targetLevel === props.selectedLevel);
   return (
     <Space direction="vertical" size={16} className="prisma-m51a-full">
@@ -409,14 +396,15 @@ function InstrumentPreview(props: Parameters<typeof PrepareFlow>[0]) {
         </Descriptions>
       </PrismaCard>
       <div className="prisma-m51a-three-grid">
-        <PrismaCard title="Modelo de avaliação"><Typography.Title level={5}>{props.selectedBlueprint?.key}</Typography.Title><Typography.Text>Versão {props.selectedBlueprint?.version}</Typography.Text><br /><Button>Visualizar modelo</Button></PrismaCard>
-        <PrismaCard title="Critérios de correção"><Typography.Title level={5}>{props.selectedRubric?.key}</Typography.Title><Typography.Text>Versão {props.selectedRubric?.version}</Typography.Text><br /><Button>Visualizar critérios</Button></PrismaCard>
-        <PrismaCard title="Banco de itens"><Typography.Title level={5}>{bank?.source === "global" ? "Global Prisma" : "Privado da empresa"}</Typography.Title><Typography.Text>Itens disponíveis: {bank?.availableItems ?? 0}</Typography.Text><br /><Button>Ver itens disponíveis</Button></PrismaCard>
+        <PrismaCard title="Modelo de avaliação"><Typography.Title level={5}>{props.selectedBlueprint?.key}</Typography.Title><Typography.Text>Versão {props.selectedBlueprint?.version}</Typography.Text><br /><Button onClick={() => setPreview("blueprint")}>Visualizar modelo</Button></PrismaCard>
+        <PrismaCard title="Critérios de correção"><Typography.Title level={5}>{props.selectedRubric?.key}</Typography.Title><Typography.Text>Versão {props.selectedRubric?.version}</Typography.Text><br /><Button onClick={() => setPreview("rubric")}>Visualizar critérios</Button></PrismaCard>
+        <PrismaCard title="Banco de itens"><Typography.Title level={5}>{bank?.source === "global" ? "Global Prisma" : "Privado da empresa"}</Typography.Title><Typography.Text>Itens disponíveis: {bank?.availableItems ?? 0}</Typography.Text><br /><Button onClick={() => setPreview("items")}>Ver cobertura disponível</Button></PrismaCard>
       </div>
       <Space>
         <Button onClick={() => props.onStepChange(1)}>Voltar</Button>
         <Button disabled={!props.selectedBlueprint || !props.selectedRubric} onClick={() => props.onStepChange(3)} type="primary">Avançar</Button>
       </Space>
+      <Drawer onClose={() => setPreview(null)} open={Boolean(preview)} title={preview === "blueprint" ? "Modelo de avaliação" : preview === "rubric" ? "Critérios de correção" : "Cobertura do Banco de Itens"} size="large">{preview === "blueprint" ? <Descriptions column={1} bordered size="small" items={[{ key: "items", label: "Questões", children: props.selectedBlueprint?.itemCount }, { key: "time", label: "Tempo estimado", children: `${props.selectedBlueprint?.estimatedMinutes ?? 0} min` }, { key: "mode", label: "Formato", children: "Múltipla escolha" }, { key: "dimensions", label: "Dimensões", children: props.selectedBlueprint?.dimensionDistribution.map((item) => `${labelAssessmentDimension(item.dimension)} (${item.count})`).join(", ") }]} /> : preview === "rubric" ? <><Typography.Text strong>Dimensões de correção</Typography.Text><ul>{props.selectedRubric?.correctionDimensions.map((item) => <li key={item}>{labelAssessmentDimension(item)}</li>)}</ul><PrismaDisclosure title="Regras técnicas versionadas"><pre>{JSON.stringify(props.selectedRubric?.passingRules ?? {}, null, 2)}</pre></PrismaDisclosure></> : <><Alert showIcon type="info" message="Os enunciados permanecem protegidos. Esta prévia mostra somente cobertura e origem." /><Descriptions column={1} bordered size="small" items={[{ key: "source", label: "Origem", children: bank?.source === "global" ? "Global Prisma" : "Privado da empresa" }, { key: "available", label: "Itens ativos", children: bank?.availableItems ?? 0 }, { key: "required", label: "Itens necessários", children: props.selectedBlueprint?.itemCount ?? 0 }]} /></>}</Drawer>
     </Space>
   );
 }
@@ -429,6 +417,9 @@ function VerificationSummary(props: Parameters<typeof PrepareFlow>[0]) {
         <PrismaCard title="Verificação">
           <Descriptions column={1} size="small">
             <Descriptions.Item label="Competência">{props.need.competencyLabel}</Descriptions.Item>
+            <Descriptions.Item label="Pessoa">{props.need.personName}</Descriptions.Item>
+            <Descriptions.Item label="Posição">{props.need.vacancyTitle} · definição v{String(props.need.contextSnapshot.vacancy_version ?? "histórica")}</Descriptions.Item>
+            <Descriptions.Item label="Requisito">{String(props.need.contextSnapshot.requirement_label ?? props.need.competencyLabel)}</Descriptions.Item>
             <Descriptions.Item label="Nível">{labelLevel(props.selectedLevel)}</Descriptions.Item>
             <Descriptions.Item label="Definição">{props.selectedDefinition?.name} ({props.selectedDefinition?.version})</Descriptions.Item>
             <Descriptions.Item label="Modelo de avaliação">{props.selectedBlueprint?.key} ({props.selectedBlueprint?.version})</Descriptions.Item>
@@ -456,7 +447,7 @@ function VerificationSummary(props: Parameters<typeof PrepareFlow>[0]) {
       <Space>
         <Button onClick={() => props.onStepChange(2)}>Voltar</Button>
         <Button loading={props.saving === "draft"} onClick={() => void props.onPrepare("draft")}>Salvar como rascunho</Button>
-        <Button loading={props.saving === "prepared"} onClick={() => void props.onPrepare("prepared")} type="primary">Confirmar e avançar</Button>
+        <Button loading={props.saving === "prepared"} onClick={() => void props.onPrepare("prepared")} type="primary">Preparar e gerar link de convite</Button>
       </Space>
     </Space>
   );
@@ -501,6 +492,8 @@ function labelProfessionalDomain(domain: string | null | undefined): string {
 function EvidencePanel({ need }: { need: VerificationNeedView }) {
   const documentaryAvailable = need.evidenceSnapshot.documentary_evidence === "available";
   const demonstratedAvailable = hasDemonstratedEvidence(need);
+  const matchingRequirement = isRecord(need.evidenceSnapshot.matching_requirement) ? need.evidenceSnapshot.matching_requirement : {};
+  const matchingEvidence = Array.isArray(matchingRequirement.evidence) ? matchingRequirement.evidence.filter(isRecord) : [];
   return (
     <PrismaCard title="Evidências consideradas">
       <div className="prisma-m51a-evidence-panel">
@@ -508,6 +501,8 @@ function EvidencePanel({ need }: { need: VerificationNeedView }) {
         <div><span>Demonstração prática</span><PrismaStatusTag compact label={demonstratedAvailable ? "Disponível" : "Pendente"} tone={demonstratedAvailable ? "success" : "warning"} /></div>
         <div><span>Necessidade de confirmação</span><PrismaStatusTag compact label={labelSufficiency(need.sufficiencyStatus)} tone={sufficiencyTone(need.sufficiencyStatus)} /></div>
       </div>
+      <Typography.Title level={5}>Evidências do matching</Typography.Title>
+      <List dataSource={matchingEvidence} locale={{ emptyText: "Nenhuma evidência suficiente foi localizada para este requisito." }} renderItem={(item) => <List.Item><List.Item.Meta title={String(item.label ?? "Evidência profissional")} description={`${String(item.source ?? "Perfil publicado")}${item.fieldPath ? ` · ${String(item.fieldPath)}` : ""}`} /></List.Item>} />
       <details className="prisma-technical-details">
         <summary>Ver dados técnicos preservados</summary>
         <pre>{JSON.stringify(need.evidenceSnapshot, null, 2)}</pre>
@@ -515,6 +510,11 @@ function EvidencePanel({ need }: { need: VerificationNeedView }) {
     </PrismaCard>
   );
 }
+
+function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }
+function normalizeText(value: string): string { return value.trim().toLocaleLowerCase("pt-BR"); }
+function policyLabel(value: VerificationNeedView["sufficiencyRequirement"]): string { return ({ none: "Sem exigência", optional: "Opcional", recommended: "Recomendada", required_by_policy: "Exigida pela política" } as const)[value]; }
+function timelineLabel(action: string): string { return ({ m62_contextual_need_created: "Necessidade criada a partir do requisito", m62_contextual_need_reused: "Necessidade existente reaberta", m51a_assessment_draft_saved: "Rascunho do instrumento salvo", m51a_assessment_prepared: "Instrumento preparado", invitation_issued: "Link de convite gerado", invitation_cancelled: "Convite cancelado", invitation_revoked: "Convite revogado", m51b_assessment_evaluated: "Verificação avaliada" } as Record<string, string>)[action] ?? action.replaceAll("_", " "); }
 
 function hasDemonstratedEvidence(need: VerificationNeedView): boolean {
   return need.evidenceSnapshot.demonstrated_evidence === "available"

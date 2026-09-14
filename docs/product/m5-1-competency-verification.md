@@ -35,6 +35,10 @@ A geração externa está implementada como boundary, mas permanece desativada. 
 
 As 12 superfícies administrativas do storyboard foram integradas ao App Shell existente em Banco de Itens: gaps, geração, estado do pedido, propostas, comparação, publicação, Banco Global, analytics, calibração, versões, Banco da Organização e configurações/orçamento.
 
+## Evolução M6.2
+
+O M6.2 conecta as fatias existentes em uma jornada única. O operador parte do score de uma Pessoa para uma Posição, escolhe um requisito específico e cria a necessidade explicitamente. O Prisma valida o mesmo tenant, a mesma versão da Posição e a versão suportada do matching; preserva o snapshot de evidências; e mostra esse contexto na necessidade, preparação, convite e acompanhamento. A central de Verificações é uma caixa de trabalho e sua leitura não cria dados. Compartilhamento permanece manual, Pessoas reais continuam fora do piloto e Evidência Demonstrada só fortalece o requisito exato.
+
 Superfícies implementadas localmente:
 
 - Matching com verificação recomendada ou exigida por política.

@@ -7,6 +7,10 @@ last_verified: 2026-09-01
 
 # Arquitetura do M5.1 - Verificação de Competências
 
+## Integração contextual M6.2
+
+`create_m62_verification_need` é a fronteira de criação contextual. Ela recebe identificadores, não evidência livre do cliente: `match_evaluations.id`, `vacancy_requirements.id`, nível e criticidade. A função valida o revisor da organização, `vacancy-matching-explainable-4.0.0`, a versão imutável da Posição e a presença do requisito no snapshot do matching. O snapshot validado é copiado para `verification_needs`; criação ou reuso gera `verification_audit_events`. `load_m51a_verification_workspace` e `load_m51b_operator_workspace` apenas leem e projetam contexto/timeline. A restrição única passa a identificar requisito exato, preservando compatibilidade separada para registros legados sem `requirement_id`.
+
 ## Estado
 
 Este documento descreve a arquitetura do M5.1. O M5.1A prepara o instrumento; o M5.1B executa a verificação; o M5.1C governa expansão, custo, revisão, analytics e calibração progressiva do Banco de Itens. Produção separada, provider de delivery, uso com Pessoas reais e geração externa ativa não existem.

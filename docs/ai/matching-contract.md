@@ -71,6 +71,8 @@ Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM tamb
 
 A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avança o matching para `vacancy-matching-explainable-4.0.0`: categorias deixam de ser barreiras e permanecem como organização/proveniência, conforme ADR-053.
 
+O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
+
 ## Normalização conceitual M5.2
 
 Busca e matching podem consumir `concept_id` apenas de observações `resolved` ligadas ao Perfil vigente. O texto original e sua evidência continuam sendo o fato; o conceito é uma resolução versionada. `ambiguous` e `unresolved` não satisfazem equivalência canônica, mas o termo original explícito continua elegível como evidência textual. Correspondência parcial permanece `partially_met`; relações `is_a/related_to` permanecem `related_signal`. A ausência de resolução não é ausência da competência e não bloqueia o Perfil.

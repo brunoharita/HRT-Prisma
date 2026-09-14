@@ -28,6 +28,9 @@ export interface VacancyRelatedSignal {
 }
 
 export interface VacancyRequirementDraft {
+  /** Persisted identity of this requirement in the current immutable position version. */
+  id?: string;
+  competencyId?: string | null;
   stableId: string;
   label: string;
   category: VacancyRequirementCategory;
