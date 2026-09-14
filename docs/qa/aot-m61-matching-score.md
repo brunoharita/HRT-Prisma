@@ -85,7 +85,9 @@ Em 2026-09-13, Bruno aprovou a recomendação de corrigir o critério contradit�
 
 ## Git / QA / ambiente
 
-Implementação e provas determinísticas são locais. O smoke usou o frontend local em `http://127.0.0.1:5555` conectado ao Prisma-QA `ioldpnqqvobprjiontre`; seis Perfis publicados foram analisados sob a sessão autenticada e a leitura tenant-scoped de Evidência Demonstrada não falhou. A abertura do disclosure conserva o comportamento auditável existente de `recordEvaluation`; nenhuma decisão humana foi alterada. Nenhuma migration ou implantação foi executada. Produção permanece fora de escopo. Commit e push são registrados no fechamento.
+Implementação e provas determinísticas são locais. O smoke usou o frontend local em `http://127.0.0.1:5555` conectado ao Prisma-QA `ioldpnqqvobprjiontre`; seis Perfis publicados foram analisados sob a sessão autenticada e a leitura tenant-scoped de Evidência Demonstrada não falhou. A abertura do disclosure conserva o comportamento auditável existente de `recordEvaluation`; nenhuma decisão humana foi alterada.
+
+O commit funcional `c6b1f669c04bbe505a18c2826a83543974e17ae6` foi publicado em `origin/codex/m6-1-matching-score`. O diff contra `main` não contém migration, Edge Function ou outro artefato sob `supabase/`; portanto, o alinhamento do Prisma-QA é um no-op verificado, não uma implantação omitida. O comando de fechamento `AoT` autorizou o fast-forward da `main` local e remota pela revisão de encerramento desta entrega. Produção permanece fora de escopo.
 
 ## Conclusão
 
