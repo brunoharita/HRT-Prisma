@@ -1,5 +1,4 @@
 import type { PublishedProfileCandidate } from "./profileDiscovery.js";
-import { groupCompetencies, parseLanguage } from "./canonicalProfile.js";
 import {
   calculateMatchingScore,
   MATCHING_SCORE_CONTRACT_VERSION,
@@ -9,7 +8,7 @@ import {
 } from "./matchingScore.js";
 
 export const VACANCY_DEFINITION_VERSION = "1.2.0";
-export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-3.0.0";
+export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-4.0.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
@@ -395,17 +394,16 @@ export function matchVacancyCandidate(
 ): VacancyCandidateMatch {
   const areaRelation = matchVacancyArea(vacancy, candidate);
   const positionRelation = matchVacancyPosition(vacancy, candidate, occupationReference);
+  const professionalEvidence = allProfessionalProfileEvidence(candidate);
   const requirements = vacancy.requirements.map((requirement): VacancyRequirementMatch => {
-    const searchable = profileEvidenceForCategory(candidate, requirement.category);
     const directLabels = unique([requirement.label, requirement.observedTerm ?? "", requirement.conceptLabel ?? ""]);
-    const direct = findExactEvidence(searchable, directLabels);
+    const direct = findExplicitEvidence(professionalEvidence, directLabels);
     const canonical = candidate.knowledge.find((item) =>
       item.state === "resolved"
       && directLabels.some((label) => normalize(item.canonicalLabel ?? "") === normalize(label))
-      && knowledgeSupportsCategory(item, requirement.category, searchable),
+      && !isNegatedEvidence(item.originalTerm, directLabels),
     );
-    if (direct.length || canonical) {
-      const evidence = direct.length ? direct : [{
+    const explicitEvidence = direct.length ? direct : canonical ? [{
         label: canonical!.originalTerm,
         canonicalLabel: canonical!.canonicalLabel,
         source: "Knowledge publicada",
@@ -413,19 +411,7 @@ export function matchVacancyCandidate(
         fieldPath: canonical!.sourceFieldPath ?? "knowledge",
         dimension: requirement.category,
         ...(canonical!.sourceVersion ? { sourceVersion: canonical!.sourceVersion } : {}),
-      }];
-      const observed = evidence[0]!.label;
-      const sources = joinHumanList(unique(evidence.map((item) => item.source)));
-      return {
-        requirement,
-        status: "met",
-        evidence,
-        relatedSignal: null,
-        explanation: normalize(observed) === normalize(requirement.label)
-          ? `${requirement.label} possui evidência direta em ${sources}.`
-          : `${requirement.label} foi identificado em ${sources} a partir de “${observed}”, com equivalência canônica publicada.`,
-      };
-    }
+      }] : [];
 
     const demonstrated = findDemonstratedEvidence(requirement, demonstratedEvidence);
     if (demonstrated) {
@@ -449,7 +435,27 @@ export function matchVacancyCandidate(
       };
     }
 
-    const partial = findPartialEvidence(searchable, directLabels);
+    if (explicitEvidence.length) {
+      const observed = explicitEvidence[0]!.label;
+      const sources = joinHumanList(unique(explicitEvidence.map((item) => item.source)));
+      const canonicalOnly = direct.length === 0 && Boolean(canonical);
+      const targetLevelProven = !requirement.targetLevel || explicitEvidence.some((item) => evidenceProvesTargetLevel(item.label, directLabels, requirement.targetLevel!));
+      return {
+        requirement,
+        status: targetLevelProven ? "met" : "partially_met",
+        evidence: explicitEvidence,
+        relatedSignal: null,
+        explanation: !targetLevelProven
+          ? `${requirement.label} aparece explicitamente em ${sources}, mas o nível ${targetLevelLabels(requirement.targetLevel!)[0]} não está comprovado nessa evidência.`
+          : canonicalOnly
+            ? `${requirement.label} foi identificado em ${sources} a partir de “${observed}”, com equivalência canônica publicada.`
+          : normalize(observed) === normalize(requirement.label)
+            ? `${requirement.label} possui evidência profissional explícita em ${sources}.`
+            : `${requirement.label} foi identificado explicitamente em ${sources} a partir de “${observed}”.`,
+      };
+    }
+
+    const partial = findPartialEvidence(professionalEvidence, directLabels);
     if (partial.length) {
       const observed = partial[0]!.label;
       const sources = joinHumanList(unique(partial.map((item) => item.source)));
@@ -822,45 +828,42 @@ function isExplicitlyNegated(text: string, pattern: RegExp): boolean {
   return text.split(/(?<=[.!?])\s+/).some((sentence) => /\b(?:n[aã]o|sem|nunca)\s+(?:h[aá]|exige|requer|possui|tem)?/i.test(sentence) && new RegExp(pattern.source, pattern.flags.replace("g", "")).test(sentence));
 }
 
-function profileEvidenceForCategory(candidate: PublishedProfileCandidate, category: VacancyRequirementCategory): VacancyMatchEvidence[] {
+function allProfessionalProfileEvidence(candidate: PublishedProfileCandidate): VacancyMatchEvidence[] {
   const profile = candidate.profileData;
-  const capabilityGroups = groupCompetencies(profile.competencies, candidate.knowledge, profile.toolsAndTechnologies ?? []);
-  const capabilities = (key: "competencies" | "knowledge" | "tools", dimension: VacancyRequirementCategory, source: string) =>
-    capabilityGroups.find((group) => group.key === key)?.values.map((item, index) => ({
-      label: item.originalTerm ?? item.label,
-      canonicalLabel: item.label,
-      source,
-      sourceId: `${key}:${index}:${normalize(item.originalTerm ?? item.label)}`,
-      fieldPath: key === "tools" ? "toolsAndTechnologies" : "competencies",
-      dimension,
-    })) ?? [];
-
-  if (category === "experience") return profile.experiences.flatMap((item) => [
-    item.role ? evidence(item.role, "Experiência profissional", `experience:${item.id}:role`, `experiences.${item.id}.role`, category) : null,
-    item.description ? evidence(item.description, "Experiência profissional", `experience:${item.id}:description`, `experiences.${item.id}.description`, category) : null,
-    item.evidenceText ? evidence(item.evidenceText, "Experiência profissional", `experience:${item.id}:evidence`, `experiences.${item.id}.evidenceText`, category) : null,
-  ].filter((item): item is VacancyMatchEvidence => Boolean(item)));
-  if (category === "competency") return capabilities("competencies", category, "Competências");
-  if (category === "knowledge") return capabilities("knowledge", category, "Conhecimentos");
-  if (category === "technology") return capabilities("tools", category, "Tecnologias e ferramentas");
-  if (category === "education") return profile.education.flatMap((item) => [item.course, item.level, item.qualification, item.institution]
-    .filter((value): value is string => Boolean(value)).map((label, index) => evidence(label, "Formação", `education:${item.id}:${index}`, `education.${item.id}`, category)));
-  if (category === "certification") return profile.certifications.map((label, index) => evidence(label, "Certificações", `certification:${index}`, `certifications.${index}`, category));
-  if (category === "language") return profile.languages.flatMap((value, index) => parseLanguage(value).map((item) => evidence(
-    [item.language, item.level].filter(Boolean).join(" · "), "Idiomas", `language:${index}`, `languages.${index}`, category,
-  )));
-  return [];
+  return uniqueEvidence([
+    ...(profile.professionalTitle ? [evidence(profile.professionalTitle, "Título profissional", "professionalTitle", "professionalTitle", "professionalTitle")] : []),
+    ...profile.areasOfExpertise.map((label, index) => evidence(label, "Áreas de atuação", `area:${index}`, `areasOfExpertise.${index}`, "professionalArea")),
+    ...(profile.summary ? [evidence(profile.summary, "Resumo profissional", "summary", "summary", "context")] : []),
+    ...(profile.professionalObjective ? [evidence(profile.professionalObjective, "Objetivo profissional", "professionalObjective", "professionalObjective", "context")] : []),
+    ...profile.keyResults.map((item) => evidence(item.value, "Principais resultados", `keyResult:${item.id}`, `keyResults.${item.id}.value`, "context")),
+    ...profile.experiences.flatMap((item) => [
+      item.role ? evidence(item.role, "Cargo em experiência profissional", `experience:${item.id}:role`, `experiences.${item.id}.role`, "experience") : null,
+      item.description ? evidence(item.description, "Descrição de experiência profissional", `experience:${item.id}:description`, `experiences.${item.id}.description`, "experience") : null,
+      item.evidenceText ? evidence(item.evidenceText, "Evidência de experiência profissional", `experience:${item.id}:evidence`, `experiences.${item.id}.evidenceText`, "experience") : null,
+    ].filter((item): item is VacancyMatchEvidence => Boolean(item))),
+    ...profile.education.flatMap((item) => [item.course, item.level, item.qualification, item.institution, item.description, item.evidenceText]
+      .filter((value): value is string => Boolean(value)).map((label, index) => evidence(label, "Formação", `education:${item.id}:${index}`, `education.${item.id}`, "education"))),
+    ...profile.certifications.map((label, index) => evidence(label, "Certificações", `certification:${index}`, `certifications.${index}`, "certification")),
+    ...profile.languages.map((label, index) => evidence(label, "Idiomas", `language:${index}`, `languages.${index}`, "language")),
+    ...profile.competencies.map((label, index) => evidence(label, "Competências e conhecimentos", `competency:${index}`, `competencies.${index}`, "competency")),
+    ...(profile.toolsAndTechnologies ?? []).map((label, index) => evidence(label, "Tecnologias e ferramentas", `technology:${index}`, `toolsAndTechnologies.${index}`, "technology")),
+    ...(profile.professionalContexts ?? []).map((label, index) => evidence(label, "Contextos profissionais", `context:${index}`, `professionalContexts.${index}`, "context")),
+    ...profile.customSections.flatMap((section) => section.items.map((item) => evidence(
+      item.value, section.name, `custom:${section.id}:${item.id}`, `customSections.${section.id}.items.${item.id}.value`, "context",
+    ))),
+  ]);
 }
 
 function evidence(label: string, source: string, sourceId: string, fieldPath: string, dimension: NonNullable<VacancyMatchEvidence["dimension"]>): VacancyMatchEvidence {
   return { label, source, sourceId, fieldPath, dimension };
 }
 
-function findExactEvidence(evidenceItems: VacancyMatchEvidence[], labels: string[]): VacancyMatchEvidence[] {
-  return uniqueEvidence(evidenceItems.filter((item) => labels.some((label) => {
-    const normalizedLabel = normalize(label);
-    return Boolean(normalizedLabel) && [item.label, item.canonicalLabel ?? ""].some((value) => normalize(value) === normalizedLabel);
-  }))).slice(0, 3);
+function findExplicitEvidence(evidenceItems: VacancyMatchEvidence[], labels: string[]): VacancyMatchEvidence[] {
+  return uniqueEvidence(evidenceItems.flatMap((item) => {
+    const matchedLabel = labels.find((label) => containsBoundedPhrase(item.label, label) && !isNegatedEvidence(item.label, [label]));
+    if (!matchedLabel) return [];
+    return [{ ...item, label: explicitEvidenceExcerpt(item.label, matchedLabel) }];
+  })).slice(0, 3);
 }
 
 function findPartialEvidence(evidenceItems: VacancyMatchEvidence[], labels: string[]): VacancyMatchEvidence[] {
@@ -868,29 +871,64 @@ function findPartialEvidence(evidenceItems: VacancyMatchEvidence[], labels: stri
     const observed = normalize(item.canonicalLabel ?? item.label);
     const expected = normalize(label);
     if (observed.length < 4 || expected.length < 4 || observed === expected) return false;
-    return observed.includes(expected) || expected.includes(observed);
+    return !isNegatedEvidence(item.label, [label]) && (containsBoundedPhrase(observed, expected) || containsBoundedPhrase(expected, observed));
   }))).slice(0, 3);
 }
 
 function findRelatedSignalEvidence(candidate: PublishedProfileCandidate, label: string): VacancyMatchEvidence[] {
-  const normalizedLabel = normalize(label);
-  if (!normalizedLabel) return [];
-  return uniqueEvidence((["experience", "competency", "knowledge", "technology", "education", "certification", "language"] as VacancyRequirementCategory[])
-    .flatMap((category) => profileEvidenceForCategory(candidate, category))
-    .filter((item) => [item.label, item.canonicalLabel ?? ""].some((value) => normalize(value) === normalizedLabel || normalize(value).includes(normalizedLabel))))
-    .slice(0, 3);
+  return findExplicitEvidence(allProfessionalProfileEvidence(candidate), [label]);
 }
 
-function knowledgeSupportsCategory(
-  item: PublishedProfileCandidate["knowledge"][number],
-  category: VacancyRequirementCategory,
-  categoryEvidence: VacancyMatchEvidence[],
-): boolean {
-  const expectedTypes: Partial<Record<VacancyRequirementCategory, string[]>> = {
-    competency: ["skill"], knowledge: ["knowledge", "methodology"], technology: ["technology"], certification: ["certification"],
-  };
-  if (item.conceptType) return Boolean(expectedTypes[category]?.includes(item.conceptType));
-  return categoryEvidence.some((candidate) => normalize(candidate.label) === normalize(item.originalTerm));
+function containsBoundedPhrase(value: string, phrase: string): boolean {
+  const normalizedValue = normalize(value);
+  const normalizedPhrase = normalize(phrase);
+  if (!normalizedValue || !normalizedPhrase) return false;
+  return new RegExp(`(?:^| )${escapeRegExp(normalizedPhrase)}(?= |$)`).test(normalizedValue);
+}
+
+function isNegatedEvidence(value: string, labels: string[]): boolean {
+  const matchingClauses = value.split(/(?<=[.!?;])\s+|\s*[|•\n]\s*|\s+mas\s+/i)
+    .filter((clause) => labels.some((label) => containsBoundedPhrase(clause, label)));
+  return matchingClauses.length > 0 && matchingClauses.every((clause) => labels
+    .filter((label) => containsBoundedPhrase(clause, label))
+    .every((label) => isLabelNegatedInClause(clause, label)));
+}
+
+function isLabelNegatedInClause(clause: string, label: string): boolean {
+  const normalizedClause = normalize(clause);
+  const normalizedLabel = normalize(label);
+  const match = new RegExp(`(?:^| )${escapeRegExp(normalizedLabel)}(?= |$)`).exec(normalizedClause);
+  if (!match) return false;
+  const prefix = normalizedClause.slice(Math.max(0, match.index - 140), match.index).trimEnd();
+  return /(?:^| )sem(?: qualquer)?(?:(?: experiencia| conhecimento| vivencia| contato| uso| dominio| atuacao)(?: [a-z0-9+#.]+){0,3})?(?: em| com| de)?$/.test(prefix)
+    || /(?:^| )(?:nao|nunca) (?!apenas(?: |$))(?:tenho|possuo|conheco|utilizei|usei|trabalhei|atuei|domino|sei|tive|houve|ha)(?: [a-z0-9+#.]+){0,8}$/.test(prefix);
+}
+
+function explicitEvidenceExcerpt(value: string, label: string): string {
+  const clause = value.split(/(?<=[.!?;])\s+|\s*[|•\n]\s*/).find((item) => containsBoundedPhrase(item, label))?.trim() ?? value.trim();
+  if (clause.length <= 280) return clause;
+  const index = clause.toLocaleLowerCase("pt-BR").indexOf(label.toLocaleLowerCase("pt-BR"));
+  const start = Math.max(0, index < 0 ? 0 : index - 120);
+  const end = Math.min(clause.length, start + 280);
+  return `${start ? "…" : ""}${clause.slice(start, end).trim()}${end < clause.length ? "…" : ""}`;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function targetLevelLabels(level: NonNullable<VacancyRequirementDraft["targetLevel"]>): readonly string[] {
+  return ({ basic: ["básico", "basic"], intermediate: ["intermediário", "intermediate"], advanced: ["avançado", "advanced"] } as const)[level];
+}
+
+function evidenceProvesTargetLevel(value: string, requirementLabels: string[], level: NonNullable<VacancyRequirementDraft["targetLevel"]>): boolean {
+  const normalizedValue = normalize(value);
+  return requirementLabels.filter(Boolean).some((requirementLabel) => targetLevelLabels(level).some((levelLabel) => {
+    const requirement = escapeRegExp(normalize(requirementLabel));
+    const target = escapeRegExp(normalize(levelLabel));
+    if (!requirement || !target) return false;
+    return new RegExp(`(?:^| )${target}(?: [a-z0-9+#.]+){0,2} ${requirement}(?= |$)|(?:^| )${requirement}(?: [a-z0-9+#.]+){0,2} ${target}(?= |$)`).test(normalizedValue);
+  }));
 }
 
 function matchVacancyArea(

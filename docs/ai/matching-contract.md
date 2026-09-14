@@ -8,12 +8,14 @@ Uma avaliação compara uma pessoa com uma vaga específica. Ela não altera o p
 
 | Estado | Regra |
 | --- | --- |
-| `met` | Há igualdade textual ou canônica publicada na dimensão correspondente do Perfil |
-| `partially_met` | Há correspondência textual parcial na mesma dimensão ou competência transferível declarada; exige revisão humana |
+| `met` | O termo genérico aparece de forma explícita, delimitada e não negada em conteúdo profissional, ou há equivalência canônica publicada |
+| `partially_met` | Há correspondência textual parcial ou o termo aparece sem comprovar o nível exigido; exige revisão humana |
 | `related_signal` | Há uma relação específica e rastreável que orienta a análise, mas não comprova o requisito |
 | `no_evidence` | Nenhuma evidência foi identificada; não significa ausência |
 
-O resultado agrega requisitos atendidos, parcialmente atendidos, sinais relacionados, sem evidência, gaps obrigatórios, evidências e incertezas. Cada requisito consulta somente a dimensão canônica correspondente. Sobre a posição, responsabilidades e resultados são narrativos e não comprovam requisitos.
+O resultado agrega requisitos atendidos, parcialmente atendidos, sinais relacionados, sem evidência, gaps obrigatórios, evidências e incertezas. A categoria organiza a Vaga e preserva a proveniência, mas não limita a recuperação: o termo do requisito é procurado em todo o conteúdo profissional publicado. A descrição da Vaga continua fora da evidência da Pessoa.
+
+Termos explícitos usam limite lexical: `SAP` conecta `migração para SAP` e `SAP EWM`, mas não `sapatos`. Frases negadas como `sem experiência com SAP` ou `nunca utilizei SAP` não são evidência positiva. Se a Vaga exigir nível, duração ou senioridade, a presença do termo isolado prova a conexão, não o grau; o atendimento integral exige que esse qualificador também esteja explícito ou seja sustentado por Evidência Demonstrada válida.
 
 ## Descoberta por área, cargo e requisitos
 
@@ -67,8 +69,8 @@ Competências transferíveis são declaradas na vaga. O mecanismo não inventa a
 
 Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM também deverá persistir `promptVersion` e `modelVersion`.
 
-A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avança o contrato para `vacancy-matching-explainable-3.0.0` e adiciona `matching-score-1.0.0`, conforme ADR-052, preservando a descoberta anterior.
+A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avança o matching para `vacancy-matching-explainable-4.0.0`: categorias deixam de ser barreiras e permanecem como organização/proveniência, conforme ADR-053.
 
 ## Normalização conceitual M5.2
 
-Busca e matching podem consumir `concept_id` apenas de observações `resolved` ligadas ao Perfil vigente. O texto original e sua evidência continuam sendo o fato; o conceito é uma resolução versionada. `ambiguous` e `unresolved` não satisfazem requisitos. Prefixo e substring na dimensão correta podem gerar somente `partially_met`; relações `is_a/related_to` permanecem `related_signal`. A ausência de resolução não é ausência da competência e não bloqueia o Perfil.
+Busca e matching podem consumir `concept_id` apenas de observações `resolved` ligadas ao Perfil vigente. O texto original e sua evidência continuam sendo o fato; o conceito é uma resolução versionada. `ambiguous` e `unresolved` não satisfazem equivalência canônica, mas o termo original explícito continua elegível como evidência textual. Correspondência parcial permanece `partially_met`; relações `is_a/related_to` permanecem `related_signal`. A ausência de resolução não é ausência da competência e não bloqueia o Perfil.

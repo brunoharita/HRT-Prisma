@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { calculateProductRelease } from "../web/src/config/releaseRegistry.js";
+import { calculateProductRelease, PRISMA_RELEASE } from "../web/src/config/releaseRegistry.js";
 
 test("accepted deliveries determine the displayed version and a new movement resets the count", () => {
   const current = { productGeneration: 1, movement: 5, deliveries: ["First", "Second"] };
@@ -8,6 +8,10 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(calculateProductRelease([{ ...current, deliveries: [...current.deliveries, "Next accepted delivery"] }]).displayVersion, "v1.5.3");
   assert.equal(calculateProductRelease([current, { productGeneration: 1, movement: 6, deliveries: ["First accepted delivery"] }]).displayVersion, "v1.6.1");
   assert.equal(current.deliveries.length, 2);
+});
+
+test("registro oficial expõe a segunda entrega aceita do Movimento 6", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v1.6.2");
 });
 
 test("an incomplete or duplicated release registry does not invent a product version", () => {

@@ -13,10 +13,10 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 `Prisma v<geração>.<movimento>.<entrega>`
 
 - `geração`: geração principal do produto, atualmente `1`;
-- `movimento`: movimento de produto em execução, atualmente `5`;
+- `movimento`: movimento de produto em execução, atualmente `6`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão atual oficial é **Prisma v1.5.11**, correspondente à décima primeira entrega oficial do Movimento 5. Ao iniciar o Movimento 6, o contador será reiniciado em `Prisma v1.6.1`. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão atual oficial é **Prisma v1.6.2**, correspondente à segunda entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -35,6 +35,13 @@ A versão atual oficial é **Prisma v1.5.11**, correspondente à décima primeir
 | 11 | M5.7: Parser IA local | aceite do PO após importação, revisão e publicação humana |
 
 M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora do contador até terem fechamento e evidência oficial próprios.
+
+### Registro oficial do Movimento 6
+
+| Entrega | Marco | Situação considerada para o contador |
+|---:|---|---|
+| 1 | M6.1: pontuação determinística e explicável de matching | oficial |
+| 2 | M6.1.1: requisito conectado a evidência profissional explícita | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -98,6 +105,8 @@ O refinamento de descoberta de 2026-09-13 avança `vacancy-matching-explainable`
 O esclarecimento de produto do mesmo dia substitui essa aproximação e avança `vacancy-matching-explainable` para 2.3.0. Experiência na área da Posição torna-se sinal próprio de entrada, separado da proximidade do cargo e da aderência por requisito. Um termo de área isolado deixa de criar `possible_title_relation`; cargos próximos continuam ordenando e explicando por classes determinísticas, sem score exposto. Avaliações futuras registram `areaRelation`; não há migration, reescrita de Perfil ou alteração em Knowledge.
 
 O M6.1 de 2026-09-13 avança `vacancy-matching-explainable` para 3.0.0 e cria `matching-score-1.0.0`. A descoberta 2.3.0 permanece anterior ao score. A nova projeção aplica pesos 30/20/35/15, denominador apenas das dimensões definidas, escala de requisito 100/50/25/0, cobertura independente e estado provisório. O resultado inclui versões e fingerprint; não há migration, cache persistido, LLM ou fonte paralela. A decisão superveniente do PO corrige o aceite matematicamente incompatível: `score <= cobertura`.
+
+O adendo M6.1.1 de 2026-09-14 avança `vacancy-matching-explainable` para 4.0.0. Categoria e grupo permanecem para organização/proveniência, mas deixam de restringir a recuperação de evidência: termo explícito, delimitado e não negado em qualquer conteúdo profissional publicado atende requisito genérico. Nível não comprovado permanece parcial. `matching-score-1.0.0`, Perfil, Vaga, schema, migrations e pesos não mudam.
 
 O ajuste M5.2.1 de 2026-09-09 substitui a publicação row-by-row de `knowledge_source_versions` por operações set-based em lotes para conceitos, termos e relações. O contrato do RPC, a aprovação pelo Super Admin, o change set, a transação única e a compatibilidade das versões publicadas permanecem; a mudança reduz o tempo de publicação de pacotes grandes sem alterar a semântica dos registros.
 

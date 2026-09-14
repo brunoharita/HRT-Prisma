@@ -244,7 +244,7 @@ function compactRelation(relation: VacancyAreaRelation): object {
 function validateVersions(input: MatchingScoreInput, scoreContractVersion: string): string | null {
   if (!input.positionVersion.trim() || !Number.isSafeInteger(input.positionVersionNumber) || input.positionVersionNumber < 1) return "A versão da Posição é desconhecida; o score não foi calculado.";
   if (!input.profileVersion.trim() || !Number.isSafeInteger(input.profileVersionNumber) || input.profileVersionNumber < 1) return "A versão do Perfil é desconhecida; o score não foi calculado.";
-  if (input.matchingContractVersion !== "vacancy-matching-explainable-3.0.0") return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
+  if (input.matchingContractVersion !== "vacancy-matching-explainable-4.0.0") return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
   if (scoreContractVersion !== MATCHING_SCORE_CONTRACT_VERSION) return "A versão do contrato de score não é reconhecida; o score não foi calculado.";
   return null;
 }

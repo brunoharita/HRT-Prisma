@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 context_bundle_version: 1.0.0
-source_manifest_sha256: 52f34e54afbc9afc2312dff0da6d8b27ce265cb18addd6cff4cc6b43e6bd2121
+source_manifest_sha256: a47e11076e3ef5b5508bf4d0cf37d3272be6b0a2712389a36e13877c3662679d
 -->
 
 # Tudo sobre o Prisma
@@ -403,11 +403,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.29.13
-last_verified: 2026-09-13
+version: 2.29.14
+last_verified: 2026-09-14
 ---
 
 # Estado atual do Prisma
+
+## M6.1.1 — evidência profissional explícita sem barreira de categoria
+
+O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permaneçam para organização e proveniência, mas não controlem a conexão factual. `vacancy-matching-explainable-4.0.0` procura o termo do requisito em todo conteúdo profissional publicado, com limite lexical, exclusão de negação e preservação do campo/trecho de origem. Requisito genérico pode ser atendido pela menção explícita; nível exigido sem comprovação permanece parcial. O caso real reconstruído de Bruno encontra `SAP` na descrição da experiência mesmo sem `toolsAndTechnologies`; `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` são negativos. Não há reclassificação de Perfil, migration, LLM, alteração de pesos ou produção. O produto avança para Prisma v1.6.2.
 
 ## Sincronização de versão — 2026-09-13
 
@@ -441,7 +445,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.5.11 inclui o aceite do M5.7 como a décima primeira entrega oficial do Movimento 5. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.6.2 registra a segunda entrega aceita do Movimento 6: requisito conectado a evidência profissional explícita. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 
@@ -484,7 +488,7 @@ Prisma v1.5.11 inclui o aceite do M5.7 como a décima primeira entrega oficial d
 - `decision-centered-interaction` 1.0.0 implementado localmente no descarte adaptativo e normativo para o produto: cliques e teclas obrigatórios representam julgamento, autoridade ou risco material; coordenação determinística, avisos sem proposta, auditoria factual e falhas de telemetria opcional não interrompem o operador. Relatórios sem assinatura registrável usam `Fechar aviso` sem RPC; sugestões válidas fecham imediatamente e registram descarte em segundo plano.
 - Ciclo de vida de Perfil e documentos 1.0.0 implementado localmente e ativo no Prisma-QA: `Atualizar Perfil` preserva omissões, `Substituir Perfil` usa a revisão como versão completa, decisões por bloco mantêm identidade e alvo explícitos, restauração cria uma nova versão vigente, reinício remove somente o vigente e exclusão física usa saga retomável com Storage API. Dependências exclusivas são removidas apenas dentro da operação `delete_document` autoritativa; Knowledge, Evidência Demonstrada, avaliações, Pessoa, demais documentos e histórico independente permanecem. A prova conectada com rollback validou composição, idempotência, recomposição, ausência de órfãos e negações de autoridade. O smoke autenticado aprovou as superfícies de comparação, versões e documento em 1920x1080, 1600x900, 1440x900, 1366x768 e 390x844; no mobile, diferenças são cartões rotulados sem rolagem horizontal global ou interna.
 - M5.3 Resiliência operacional 1.0.0 implementada localmente e ativa no Prisma-QA: a Central da Pessoa cria revisão diretamente do Perfil atual, de qualquer versão histórica ou de documento preservado; versões exibem o Perfil completo e continuam restauráveis sem a fonte original; documentos podem ser revistos, reabertos, movidos para a Pessoa correta ou excluídos com preflight humano. Pessoas duplicadas podem ser mescladas com decisões apenas para conflitos canônicos, histórico imutável e redirecionamento da absorvida. Vínculo, arquivamento e reativação são mutações independentes do Perfil. O backend reutiliza `profile_reviews`, `professional_profiles`, `document_operations`, RLS, locks e feedback operacional, sem pipeline ou fila paralela. A prova remota revertida validou revisão por snapshot e replay, exclusão sem reescrita de Perfil, restauração incremental, movimentação integral dos artefatos documentais, mesclagem idempotente e negações de grants; o lint remoto encerrou com zero erros. O smoke autenticado validou as confirmações destrutivas, o ciclo reversível arquivar/reativar, a comparação de mesclagem e a Central em cinco viewports sem overflow horizontal; formatos históricos estruturados de idioma, certificação e competência são normalizados na leitura.
-- M5.4 Vagas 1.0.0 está ativa no Prisma-QA; o matching explicável 2.1.0 está implementado localmente. A descoberta pagina e analisa todos os Perfis publicados acessíveis, mostra analisados/total e retorna somente Pessoas com relação ocupacional, evidência direta, parcial, sinal relacionado ou confirmação humana anterior. Relação ocupacional usa referência oficial, relações/aliases publicados, título e cargos de experiências; aproximações exigem decisão humana auditada. A aderência por requisito consulta exclusivamente a dimensão correspondente, gera parcial real para substring, exclui narrativa como evidência e preserva pendências de classificação sem bloquear a análise. Não há score, vencedor, contratação automática ou reescrita de Perfil/Knowledge. O schema, RLS e `match_evaluations` existentes foram reutilizados. A consulta read-only confirmou a Vaga e o Perfil atual de Bruno no Prisma-QA; o smoke da nova UI permanece pendente porque o navegador local abriu sem sessão autenticada. Produção não foi acionada.
+- M5.4 Vagas está ativa no Prisma-QA; o matching explicável 4.0.0 e o score 1.0.0 estão implementados localmente. A descoberta pagina e analisa todos os Perfis publicados acessíveis, mostra analisados/total e retorna somente Pessoas com relação ocupacional, evidência direta, parcial, sinal relacionado ou confirmação humana anterior. Relação ocupacional usa referência oficial, relações/aliases publicados, título e cargos de experiências; aproximações exigem decisão humana auditada. A aderência por requisito consulta todo o conteúdo profissional publicado, preserva a origem, exige limite lexical, exclui negação e não inventa nível. Categorias organizam, mas não bloqueiam evidência. Score continua posterior à descoberta, sem autoridade de contratação. O schema, RLS e `match_evaluations` existentes foram reutilizados. Produção não foi acionada.
 - M5.4.2 Web Search contextual implementado localmente e publicado no Prisma-QA: o Assistente Prisma 1.2.0 identifica perguntas dependentes de atualidade, reutiliza o modo `vacancy_advisor` da Edge Function Knowledge Agent e apresenta síntese, recomendação, ressalvas e fontes clicáveis. O payload externo mínimo contém pergunta, título, área, idioma e data, sem Pessoas, Perfis, organização ou descrição interna. `vacancy_advisor_research_runs` registra versões, uso, resposta e fontes com RLS, sem persistir a pergunta; cache tenant-scoped de 24 horas e caps compartilhados controlam custo. Modelo econômico, flag, limites, credencial e opt-in da organização `Prisma` estão configurados em QA. O smoke vivo concluiu com três fontes pós-validadas e ledger `completed`. Produção não foi acionada.
 - M5.4.4 Resolução ocupacional por IA está ativa no Prisma-QA: o contrato `occupation-resolution-on-demand-2.0.0` preserva M5.4.3 e resolve na ordem empresa, Global, Knowledge Agent sobre snapshots internos ESCO/O*NET, explorador humano e, somente após declaração auditada de ausência, conceito manual da empresa. O Agent não usa Web Search nem recebe Pessoas, Perfis, currículos, habilidades ou relações ocupacionais; uma seleção precisa apontar `externalId` presente no snapshot. As tentativas, decisão, origem, candidatos e versão permanecem tenant-scoped em `occupation_resolution_attempts`; nenhum snapshot é publicado em massa e falha técnica preserva rascunho para nova tentativa. Produção não foi acionada.
 - O seletor inicial de referência de Posições foi corrigido localmente após falha e latência observadas: em vez da RPC genérica de sugestões por caractere, consulta somente termos Knowledge aprovados, não ambíguos e por prefixo, resolve apenas conceitos de ocupação permitidos pela RLS, aplica debounce de 400 ms, cancelamento, cache de sessão e timeout de 8 s. A RPC antiga existe no Prisma-QA e manteve negação anônima esperada; a correção não altera schema, publicação, resolução canônica ou produção. Smoke autenticado permanece pendente.
@@ -670,6 +674,8 @@ O esclarecimento do Product Owner no mesmo dia substituiu a aproximação 2.2.0 
 
 O M6.1, autorizado em 2026-09-13, evolui essa base para `vacancy-matching-explainable-3.0.0` e `matching-score-1.0.0`. A descoberta permanece anterior ao score e separa grupo principal de área e resultados relacionados. A função pura aplica 30/20/35/15 somente às dimensões definidas, divide requisitos igualmente, usa 100/50/25/0, calcula cobertura separada e impede score provisório de ordenar. O Product Owner aprovou a correção do aceite conflitante: pela fórmula vigente, `score <= cobertura`; scores altos ainda podem ser provisórios por baixa cobertura, versão histórica com `unclassified` ou dependência material. Evidência Demonstrada ativa fortalece apenas competência exata e versionada, sem bônus. A decisão superveniente avançou `vacancy-definition` para 1.2.0: inclusão manual nasce efetivamente obrigatória, rascunho assistido precisa ser classificado como obrigatório ou desejável e frontend/RPC recusam nova versão com `unclassified`, enquanto snapshots históricos continuam legíveis. A Posição `Analista de Marketing` foi preservada historicamente e recebeu Definição v3 com `RD Station`, `2 anos de experiência comprovada na área` e `Office` obrigatórios, `Gestão de tempo` e `Chat GPT` desejáveis e zero pendência. Não há cache persistido, LLM, provider ou produção. Evidência final local/QA fica no AoT M6.1.
 
+Em 2026-09-14, o adendo M6.1.1 avança `vacancy-matching-explainable` para 4.0.0 e substitui somente a barreira por dimensão do ADR-044. O termo de um requisito passa a ser procurado em todas as áreas profissionais do Perfil publicado; categorias permanecem como metadado. A busca é delimitada, descarta frases negadas e diferencia presença do termo de comprovação de nível. O teste de regressão reproduz o Perfil v5 de Bruno com `SAP` na descrição de experiência e sem lista explícita de ferramentas. O score e seus pesos permanecem 1.0.0; não há alteração de schema, RPC, RLS, dados ou produção. ADR-053 e o adendo 1.2.0 do AoT registram decisão e prova.
+
 Em 2026-08-31, a jornada de seis etapas, o estado canônico e a publicação Delta foram implementados localmente. As migrations até `20260901001000_profile_publication_removals_actor_index` estão ativas somente no Prisma-QA e as provas conectadas foram revertidas sem resíduo. `CI=true pnpm run validate` aprovou lint de 206 arquivos, fundação, Context Pack, dois typechecks, build web, 118 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke autenticado no navegador interno validou Importação, Revisão M5 e Delta em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, com zero overflow global, botão fora do viewport ou erro de console após as correções móveis. Nenhuma publicação foi acionada. O frontend continua local e não há hosting nem ambiente de produção separado.
 
 Em 2026-09-01, a fatia M5.1A foi implementada localmente na branch `codex/m5-1a-verification-intelligence`. `CI=true pnpm run validate` aprovou lint de 218 arquivos, foundation, Context Pack, dois typechecks, build web, 124 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. Após nova autenticação Supabase, a migration M5.1A e o hardening de grants foram aplicados ao Prisma-QA por query direta e registrados no histórico remoto. Smoke visual autenticado ainda precisa ser registrado.
@@ -798,11 +804,15 @@ M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista a
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.9.0
-last_verified: 2026-09-03
+version: 1.10.0
+last_verified: 2026-09-14
 ---
 
 # Referência técnica do Prisma
+
+## M6.1.1 Matching por evidência profissional explícita
+
+`vacancy-matching-explainable-4.0.0` consulta todo o conteúdo profissional publicado para cada requisito. Categoria e grupo permanecem como organização/proveniência, sem bloquear termo explícito. A correspondência exige limite lexical e exclui negação; termo genérico atende, enquanto nível exigido sem prova permanece parcial. O caso de regressão de Bruno encontra `SAP` na descrição da experiência sem depender de `toolsAndTechnologies`. `matching-score-1.0.0`, schema, RLS, RPCs e dados publicados não mudam.
 
 ## M5.4.6 Vagas
 

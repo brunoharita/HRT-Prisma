@@ -33,8 +33,8 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 
 ## Regras de aderência
 
-- `Atendido`: existe igualdade direta ou equivalência canônica publicada na dimensão correspondente.
-- `Parcial`: existe correspondência textual parcial na mesma dimensão ou transferência explicitamente configurada; exige revisão humana.
+- `Atendido`: o requisito genérico aparece explicitamente em qualquer conteúdo profissional publicado ou possui equivalência canônica publicada; a categoria não bloqueia a conexão.
+- `Parcial`: existe correspondência textual parcial, transferência explicitamente configurada ou o termo aparece sem comprovar o nível exigido; exige revisão humana.
 - `Sinal relacionado`: relação confirmada apenas para a versão da Vaga; não comprova o requisito.
 - `Sem evidência suficiente`: o Perfil atual não traz evidência suficiente; nunca significa que a Pessoa não possui a experiência ou o conhecimento.
 
@@ -44,7 +44,7 @@ A ordenação é determinística e operacional. Primeiro respeita a decisão hum
 
 ## Estrutura canônica da Vaga pronta
 
-`Sobre a posição` e `Resultados esperados` são opcionais. `Responsabilidades` descreve ações e entregas, nunca uma tecnologia isolada. Esses três campos são narrativos e nunca satisfazem requisitos. O matching detalhado consome requisitos classificados pelo humano em `Requisitos obrigatórios` ou `Requisitos desejáveis`, agrupados nas mesmas dimensões do Perfil Prisma. A dimensão pode ser sugerida automaticamente, mas a importância continua sendo decisão humana. A ausência de desejável ou de dimensão não exigida não é gap obrigatório. Requisitos manuais e correções humanas permanecem em reestruturações; uma alteração da descrição mostra delta e nunca remove item não encontrado automaticamente.
+`Sobre a posição` e `Resultados esperados` são opcionais. `Responsabilidades` descreve ações e entregas, nunca uma tecnologia isolada. Esses campos pertencem à definição da Vaga e não são evidência da Pessoa. O matching detalhado consome requisitos classificados pelo humano em `Requisitos obrigatórios` ou `Requisitos desejáveis`. Os grupos equivalentes às dimensões do Perfil organizam a leitura e a proveniência, mas uma menção profissional explícita pode atender ao requisito independentemente do grupo em que foi cadastrada. A importância continua sendo decisão humana. A ausência de desejável ou de dimensão não exigida não é gap obrigatório. Requisitos manuais e correções humanas permanecem em reestruturações; uma alteração da descrição mostra delta e nunca remove item não encontrado automaticamente.
 
 ## Limites do piloto
 

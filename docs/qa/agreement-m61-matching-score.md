@@ -1,6 +1,6 @@
 # Contrato de Acordos — M6.1 Pontuação de matching
 
-Versão 1.1.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-13. Fonte: prompt mestre M6.1, aprovação da fórmula e decisão superveniente de que requisito salvo é obrigatório ou desejável.
+Versão 1.2.0. Estado: agreed para implementação e validação local/QA. PO: Bruno, 2026-09-14. Fonte: prompt mestre M6.1, aprovação da fórmula, decisão superveniente de classificação e decisão de que grupos organizam, mas não bloqueiam evidência profissional explícita.
 
 ## Objetivo e decisão superveniente
 
@@ -9,6 +9,8 @@ Projetar numericamente o matching explicável já existente, de 0 a 100, sem usa
 A decisão superveniente corrige o antigo CA-008 incompatível com a fórmula: como todo ponto obtido também é coberto, o score nunca pode superar a cobertura. Cobertura abaixo de 60% torna o score provisório; score alto ainda pode ser provisório por requisito `unclassified` ou dependência material.
 
 A decisão superveniente de classificação limita `unclassified` a rascunhos assistidos e versões históricas. Inclusão manual apresentada como obrigatória deve gravar `required`; uma nova versão da Posição não pode ser salva com requisito pendente.
+
+A decisão de 2026-09-14 substitui a barreira por grupo: se o requisito `SAP` aparece explicitamente em qualquer conteúdo profissional publicado, a conexão deve ocorrer mesmo que Vaga e Perfil tenham classificado o termo em grupos distintos. Os grupos permanecem para organização e proveniência. Senioridade, proficiência e duração continuam separadas e não podem ser inventadas.
 
 ## DEVE
 
@@ -41,6 +43,11 @@ A decisão superveniente de classificação limita `unclassified` a rascunhos as
 - D-027: requisito incluído manualmente nasce como `required` e `importanceConfirmed`, coerente com a seleção visual padrão.
 - D-028: requisito assistido pode permanecer `unclassified` somente no rascunho; frontend e RPC exigem `required` ou `desired` antes de salvar uma nova versão.
 - D-029: snapshots históricos com `unclassified` permanecem legíveis e explicáveis; a correção não reescreve histórico silenciosamente.
+- D-030: a categoria do requisito e o grupo do Perfil são metadados de organização/proveniência e não bloqueiam uma evidência profissional explícita.
+- D-031: requisito genérico é atendido quando o termo aparece com limite lexical e sem negação em qualquer conteúdo profissional publicado, preservando campo e trecho de origem.
+- D-032: `SAP` conecta menções como `migração para SAP` e `SAP EWM`, mas não substring em outra palavra nem declaração negada.
+- D-033: requisito com nível explícito permanece parcial quando somente o termo é comprovado; nível pode ser atendido por declaração explícita ou Evidência Demonstrada válida.
+- D-034: equivalência Knowledge publicada pode atender independentemente do grupo, preservando termo original e proveniência.
 
 ## PROIBIDO
 
@@ -52,18 +59,22 @@ A decisão superveniente de classificação limita `unclassified` a rascunhos as
 - P-015 a P-016: não há cache sem versão/tenant nem arquitetura paralela de matching.
 - P-017: o valor visual de importância nunca diverge do valor persistido.
 - P-018: nenhuma nova versão salva contém requisito `unclassified`.
+- P-019: categoria divergente nunca transforma evidência profissional explícita em `no_evidence`.
+- P-020: substring bruta, negação ou repetição não comprovam requisito.
+- P-021: o matching não infere nível, duração ou senioridade a partir da simples presença do termo.
 
 ## FORA DE ESCOPO
 
 - F-001 a F-004: pesos por empresa/requisito, aprendizado automático e LLM.
 - F-005 a F-010: previsão, cutoff, faixas definitivas, salário, geografia/logística no score ou mudança de contratação.
 - F-011 a F-012: reescrita de Perfil/Knowledge e provider novo.
+- F-013: remoção dos grupos, reclassificação histórica e modelagem de senioridade/proficiência por conhecimento.
 
 ## AUTONOMIA
 
 - A-001 a A-003: nomes internos, extensão derivada versionada e ausência de cache/persistência.
 - A-004 a A-006: componentes Ant Design existentes, nomes técnicos equivalentes e testes/fixtures/helpers.
-- A-007: versionar `vacancy-matching-explainable-3.0.0` e `matching-score-1.0.0` conforme política vigente.
+- A-007: preservar `matching-score-1.0.0` e avançar `vacancy-matching-explainable` de 3.0.0 para 4.0.0 conforme política vigente.
 - A-008: refactors locais indispensáveis sem alterar regras adjacentes.
 
 ## Critérios de aceite
@@ -83,7 +94,12 @@ A decisão superveniente de classificação limita `unclassified` a rascunhos as
 - CA-021: adicionar requisito manual mostra e grava `required` sem depender de um segundo clique.
 - CA-022: frontend e RPC rejeitam tentativa de salvar requisito `unclassified`, com autorização tenant-scoped preservada.
 - CA-023: versões históricas continuam legíveis; a Posição `Analista de Marketing` recebe nova versão somente pela decisão explícita do Product Owner.
+- CA-024: o caso reconstruído de Bruno atende `SAP` pela descrição da experiência, sem `toolsAndTechnologies` e sem depender da categoria.
+- CA-025: categoria propositalmente divergente ainda encontra a mesma evidência e expõe o `fieldPath` da origem.
+- CA-026: `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` não geram atendimento.
+- CA-027: SAP explícito sem nível atende requisito genérico, mas fica parcial quando a Vaga exige nível avançado não comprovado.
+- CA-028: fórmula, pesos, descoberta, ordenação, RLS, schema e Perfil publicado permanecem inalterados.
 
 ## Pendências
 
-Nenhuma decisão funcional pendente. Produção, faixas semânticas e alteração de pesos permanecem sem autorização.
+Nenhuma decisão funcional pendente. Produção, faixas semânticas, alteração de pesos e modelagem futura de senioridade por conhecimento permanecem sem autorização.

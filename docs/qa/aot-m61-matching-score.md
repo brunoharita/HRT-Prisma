@@ -1,6 +1,6 @@
 # AoT — M6.1 Pontuação de matching
 
-Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.1.0 e `docs/qa/execution-m61-matching-score.md` 1.1.0. Evidência coletada em 2026-09-13.
+Contrato de referência: `docs/qa/agreement-m61-matching-score.md` 1.2.0 e `docs/qa/execution-m61-matching-score.md` 1.2.0. Evidência coletada em 2026-09-13 e atualizada em 2026-09-14.
 
 ## Matriz de Acordos
 
@@ -121,3 +121,35 @@ Em 2026-09-13, Bruno esclareceu que todo requisito salvo precisa ser obrigatóri
 - Smoke visual autenticado do adendo: não executado porque a nova aba local não herdou a sessão do navegador já aberta; nenhuma credencial foi solicitada ou manipulada. O fluxo real de persistência foi provado pelo mesmo RPC do frontend e pela versão v3 conectada.
 
 `matching-score-1.0.0` e seus pesos não mudaram. A mudança material pertence a `vacancy-definition-1.2.0`; não cria cache, provider, LLM, ranking novo ou decisão automática. Produção permanece fora de escopo.
+
+## Adendo 1.2.0: conexão explícita sem barreira de categoria
+
+Em 2026-09-14, Bruno decidiu que os grupos permanecem úteis para organização, mas não podem impedir a conexão entre um requisito e uma menção profissional explícita. A causa reproduzida no caso SAP era o filtro do matching 3.0.0 pela categoria do requisito: o Perfil v5 de Bruno trazia `SAP` na descrição de experiência e não trazia lista `toolsAndTechnologies`, portanto a avaliação retornava incorretamente `no_evidence`.
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-030 / P-019 / CA-025 | `allProfessionalProfileEvidence` reúne somente conteúdo profissional e o requisito deixa de filtrar pelo grupo | requisito classificado propositalmente como idioma encontra SAP na descrição da experiência e preserva `experiences.exp-sap.description` | PASS |
+| D-031 / CA-024 | `findExplicitEvidence` localiza termo delimitado e retorna trecho, fonte, `sourceId` e `fieldPath` | reconstrução de Bruno sem `toolsAndTechnologies` retorna `met` pela descrição da experiência | PASS |
+| D-032 / P-020 / CA-026 | limite lexical e negação local impedem substring e declaração negativa | `sapatos`, `sem experiência com SAP` e `nunca utilizei SAP` retornam `no_evidence`; `SAP sem perda de produtividade` permanece positivo | PASS |
+| D-033 / P-021 / CA-027 | nível precisa aparecer próximo ao termo ou vir de Evidência Demonstrada válida | SAP genérico retorna `met`; alvo avançado sem prova retorna `partially_met`; `Excel avançado` não promove `SAP básico` | PASS |
+| D-034 | equivalência canônica publicada deixa de exigir grupo coincidente | regressão `Business Process Management` → `Gestão de Processos` permanece `met` | PASS |
+| CA-028 | score, descoberta, dados e fronteiras permanecem | SAP obrigatório recebe 35/35; 23 golden sem regressão; nenhum arquivo de schema/RPC/RLS | PASS |
+
+### Validação do adendo
+
+- `pnpm run build`: PASS.
+- `node --test dist/tests/vacancyIntelligence.test.js dist/tests/matchingScore.test.js dist/tests/productRelease.test.js`: PASS, 60/60.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm run build:web`: PASS; permanece apenas o aviso histórico de chunk acima de 900 kB.
+- `pnpm run test:golden`: PASS, 23/23, regressões 0.
+- `pnpm run lint`: PASS, 476 arquivos.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS, 5 fontes canônicas.
+- `git diff --check`: PASS.
+
+### Versões, ambiente e limites
+
+O contrato avança para `vacancy-matching-explainable-4.0.0`; `matching-score-1.0.0` e `vacancy-definition-1.2.0` não mudam. O registro de entregas aceitas avança o produto para Prisma v1.6.2. A implementação não cria migration, não reclassifica Perfil ou Knowledge e não altera dados do Prisma-QA. A prova funcional usa fixture determinística fiel aos campos observados na Vaga e no Perfil publicados; smoke visual autenticado do novo resultado não foi executado. Produção permanece fora de escopo.
+
+### Conclusão do adendo
+
+PASS. D-030 a D-034 e P-019 a P-021 possuem implementação e prova proporcional. Não há desvio ativo: a categoria perdeu poder de bloqueio, o termo explícito curto passou a conectar com segurança lexical e nível/duração/senioridade continuam sem inferência automática.

@@ -2,11 +2,15 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.9.0
-last_verified: 2026-09-03
+version: 1.10.0
+last_verified: 2026-09-14
 ---
 
 # Referência técnica do Prisma
+
+## M6.1.1 Matching por evidência profissional explícita
+
+`vacancy-matching-explainable-4.0.0` consulta todo o conteúdo profissional publicado para cada requisito. Categoria e grupo permanecem como organização/proveniência, sem bloquear termo explícito. A correspondência exige limite lexical e exclui negação; termo genérico atende, enquanto nível exigido sem prova permanece parcial. O caso de regressão de Bruno encontra `SAP` na descrição da experiência sem depender de `toolsAndTechnologies`. `matching-score-1.0.0`, schema, RLS, RPCs e dados publicados não mudam.
 
 ## M5.4.6 Vagas
 

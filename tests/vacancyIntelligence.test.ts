@@ -111,26 +111,74 @@ test("ausência de idioma permanece sem evidência suficiente e nunca vira fato 
   assert.doesNotMatch(result.requirements[0]?.explanation ?? "", /não possui inglês|não sabe inglês/i);
 });
 
-test("requisito consulta somente a dimensão profissional correspondente", () => {
+test("categoria organiza o requisito, mas não bloqueia evidência profissional explícita", () => {
   const need = vacancy("Analista ERP", ["SAP"]);
   need.requirements[0]!.category = "language";
   const person = candidate("sap", "Pessoa SAP", profile({
     competencies: ["SAP"],
     experiences: [{ id: "exp-sap", source: "human", role: "Analista de Sistemas", organization: "Empresa", period: "2024", description: "Implantação do SAP", evidenceText: "Projeto SAP", page: 1 }],
   }));
-  assert.equal(matchVacancyCandidate(need, person).requirements[0]?.status, "no_evidence");
-  need.requirements[0]!.category = "technology";
-  const technology = matchVacancyCandidate(need, person);
-  assert.equal(technology.requirements[0]?.status, "met");
-  assert.deepEqual(new Set(technology.requirements[0]?.evidence.map((item) => item.source)), new Set(["Tecnologias e ferramentas"]));
+  const result = matchVacancyCandidate(need, person);
+  assert.equal(result.requirements[0]?.status, "met");
+  assert.equal(result.requirements[0]?.evidence[0]?.source, "Descrição de experiência profissional");
+  assert.match(result.requirements[0]?.evidence[0]?.fieldPath ?? "", /experiences\.exp-sap\.description/);
 });
 
-test("narrativa não comprova requisito e correspondência textual parcial exige revisão humana", () => {
+test("menção explícita em conteúdo profissional comprova requisito genérico", () => {
   const need = vacancy("Gerente de Projetos", ["Gestão de projetos"]);
   const narrativeOnly = candidate("narrative", "Pessoa Narrativa", profile({ summary: "Responsável por gestão de projetos", competencies: [] }));
-  assert.equal(matchVacancyCandidate(need, narrativeOnly).requirements[0]?.status, "no_evidence");
+  assert.equal(matchVacancyCandidate(need, narrativeOnly).requirements[0]?.status, "met");
   const partial = candidate("partial", "Pessoa Parcial", profile({ competencies: ["Gestão de projetos complexos"] }));
-  assert.equal(matchVacancyCandidate(need, partial).requirements[0]?.status, "partially_met");
+  assert.equal(matchVacancyCandidate(need, partial).requirements[0]?.status, "met");
+});
+
+test("regressão Bruno reconhece SAP explícito na experiência sem depender do grupo", () => {
+  const need = vacancy("Gerente de projetos de tecnologia da informação", ["SAP"]);
+  need.requirements[0]!.category = "technology";
+  const bruno = candidate("bruno-sap", "Bruno Harita Santos", profile({
+    competencies: ["Transformação digital | Liderança | SAP EWM | Automação logística"],
+    experiences: [{
+      id: "bruno-sap-experience",
+      source: "human",
+      role: "Executivo de Transformação & Tecnologia",
+      organization: "Empresa",
+      period: "2020 - 2024",
+      description: "Participação em transformação tecnológica de grande porte envolvendo migração de ERP para SAP, SAP EWM e automação logística KNAPP.",
+      evidenceText: "",
+      page: 1,
+    }],
+  }));
+  const result = matchVacancyCandidate(need, bruno);
+  assert.equal(result.requirements[0]?.status, "met");
+  assert.equal(result.requirements[0]?.evidence[0]?.source, "Descrição de experiência profissional");
+  assert.match(result.requirements[0]?.evidence[0]?.label ?? "", /SAP/);
+});
+
+test("matching explícito respeita limite lexical, negação e nível não comprovado", () => {
+  const need = vacancy("Analista ERP", ["SAP"]);
+  const substring = candidate("substring", "Pessoa Substring", profile({ summary: "Responsável por escolher sapatos adequados." }));
+  assert.equal(matchVacancyCandidate(need, substring).requirements[0]?.status, "no_evidence");
+
+  for (const [id, summary] of [["without", "Sem experiência com SAP."], ["never", "Nunca utilizei SAP."]] as const) {
+    const negated = candidate(id, "Pessoa Negação", profile({ summary }));
+    assert.equal(matchVacancyCandidate(need, negated).requirements[0]?.status, "no_evidence");
+  }
+
+  need.requirements[0]!.targetLevel = "advanced";
+  const unproven = candidate("level", "Pessoa com SAP", profile({ summary: "Atuação profissional com SAP em projetos de ERP." }));
+  const partial = matchVacancyCandidate(need, unproven).requirements[0];
+  assert.equal(partial?.status, "partially_met");
+  assert.match(partial?.explanation ?? "", /nível avançado não está comprovado/i);
+
+  const proven = candidate("advanced", "Pessoa SAP Avançado", profile({ summary: "Domínio avançado de SAP em projetos de ERP." }));
+  assert.equal(matchVacancyCandidate(need, proven).requirements[0]?.status, "met");
+
+  const unrelatedLevel = candidate("unrelated-level", "Pessoa com níveis diferentes", profile({ summary: "Excel avançado e atuação com SAP básico." }));
+  assert.equal(matchVacancyCandidate(need, unrelatedLevel).requirements[0]?.status, "partially_met");
+
+  need.requirements[0]!.targetLevel = null;
+  const nonNegatedUse = candidate("no-loss", "Pessoa SAP sem perda", profile({ summary: "Migração para SAP sem perda de produtividade." }));
+  assert.equal(matchVacancyCandidate(need, nonNegatedUse).requirements[0]?.status, "met");
 });
 
 test("descoberta ocupacional encontra títulos equivalentes por referência ou experiência sem declarar aderência", () => {

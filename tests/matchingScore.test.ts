@@ -123,13 +123,13 @@ test("Analista de Sistemas sem desejáveis usa 85 pontos aplicáveis e arredonda
     title: "Analista de Sistemas",
     area: "Sistemas",
     referenceConceptId: "occupation-systems-analyst",
-    requirements: [requirement("SQL", "required", "technology"), requirement("APIs REST", "required", "technology"), requirement("Git", "required", "technology"), requirement("Integrações de sistemas")],
+    requirements: [requirement("SQL", "required", "technology"), requirement("APIs REST seguras", "required", "technology"), requirement("Git", "required", "technology"), requirement("Integrações de sistemas")],
   });
   const person = candidate("systems", profile({
     professionalTitle: "Consultor de Sistemas",
     experiences: [experience("Consultor de Sistemas")],
     competencies: ["Integrações de sistemas"],
-    toolsAndTechnologies: ["SQL", "APIs REST seguras", "Git"],
+    toolsAndTechnologies: ["SQL", "APIs REST", "Git"],
   }), { knowledge: [{ originalTerm: "Consultor de Sistemas", canonicalLabel: "Consultor de Sistemas", state: "resolved", conceptId: "occupation-systems-consultant", conceptType: "occupation" }] });
   const match = matchVacancyCandidate(need, person, { conceptId: "occupation-systems-analyst", canonicalLabel: need.title, aliases: [], relations: [{ conceptId: "occupation-systems-consultant", label: "Consultor de Sistemas", relationType: "equivalent_to" }] });
   assert.equal(match.score.earnedPoints, 77.625);
@@ -151,17 +151,30 @@ test("categorias ausentes saem do denominador e ausência total retorna indispon
 
 test("requisitos dividem 35 e 15 igualmente e aplicam escala 100/50/25/0", () => {
   const need = vacancy({ title: "", area: "", requirements: [
-    requirement("Direto"), requirement("Parcial"), requirement("Relacionado"), requirement("Ausente"),
+    requirement("Direto"), requirement("Parcial avançado"), requirement("Relacionado"), requirement("Ausente"),
     requirement("Desejável direto", "desired"), requirement("Desejável ausente", "desired"),
   ] });
   need.requirements[2]!.relatedSignals = [{ label: "Sinal", conceptId: null, origin: "operator" }];
-  const match = matchVacancyCandidate(need, candidate("requirements", profile({ competencies: ["Direto", "Parcial avançado", "Sinal", "Desejável direto"] })));
+  const match = matchVacancyCandidate(need, candidate("requirements", profile({ competencies: ["Direto", "Parcial", "Sinal", "Desejável direto"] })));
   const required = match.score.dimensions.find((item) => item.key === "required")!;
   const desired = match.score.dimensions.find((item) => item.key === "desired")!;
   assert.deepEqual(required.items?.map((item) => item.applicablePoints), [8.75, 8.75, 8.75, 8.75]);
   assert.deepEqual(required.items?.map((item) => item.earnedPoints), [8.75, 4.375, 2.1875, 0]);
   assert.deepEqual(desired.items?.map((item) => item.applicablePoints), [7.5, 7.5]);
   assert.deepEqual(desired.items?.map((item) => item.earnedPoints), [7.5, 0]);
+});
+
+test("SAP explícito na experiência recebe os pontos do requisito independentemente do grupo", () => {
+  const need = vacancy({ title: "", area: "", requirements: [requirement("SAP", "required", "technology")] });
+  const person = candidate("bruno-sap-score", profile({ experiences: [experience(
+    "Executivo de Transformação & Tecnologia",
+    "Participação em transformação tecnológica de grande porte envolvendo migração de ERP para SAP, SAP EWM e automação logística KNAPP.",
+  )] }));
+  const match = matchVacancyCandidate(need, person);
+  assert.equal(match.requirements[0]?.status, "met");
+  assert.equal(match.score.applicablePoints, 35);
+  assert.equal(match.score.earnedPoints, 35);
+  assert.equal(match.score.score, 100);
 });
 
 test("cobertura é independente do zero avaliado, reduz com falta de evidência e limita o score", () => {
