@@ -2,7 +2,7 @@
 
 ## Estado
 
-O projeto Supabase Prisma-QA é o único backend remoto atual e recebe migrations e Edge Functions. O frontend roda somente localmente contra esse projeto. Por decisão explícita de produto, não será criado agora outro projeto Supabase nem hosting de frontend, pois o Prisma é usado apenas pela equipe interna e ainda não possui clientes.
+O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e recebe migrations e Edge Functions. Desde 2026-09-15, o frontend também possui rollout hospedado em VPS Hostinger e está disponível em `https://prisma.hrtsolutions.com.br`, usando o mesmo Prisma-QA. Não existe projeto Supabase separado de produção. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
 
 ## Pré-requisitos
 

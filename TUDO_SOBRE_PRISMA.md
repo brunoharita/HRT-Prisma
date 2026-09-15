@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 179
-source_manifest_sha256: 81a7ffaa88ae1f81144648bacf34a1b679ed2bee2e3ccaf02a1761b48e6f3c2c
+source_manifest_sha256: d573eb3010ac948479ea683cc11dd7137eb1f10d4614b8b6281648ee21920989
 -->
 
 # Tudo sobre o Prisma
@@ -522,17 +522,25 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.31.0
-last_verified: 2026-09-14
+version: 2.32.0
+last_verified: 2026-09-15
 ---
 
 # Estado atual do Prisma
 
 ## Resumo operacional para prompts
 
-Prisma v1.6.4 é a versão pública corrente. O frontend funciona localmente e usa o único backend remoto Prisma-QA; não existe ambiente de produção separado nem frontend hospedado. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
+
+## Frontend hospedado — 2026-09-15
+
+O primeiro rollout web público do Prisma foi validado em VPS Hostinger KVM 2 com Ubuntu 24.04, Docker, Traefik e Nginx. `prisma.hrtsolutions.com.br` resolve para a VPS, HTTPS usa certificado Let's Encrypt válido e o smoke autenticado confirmou HTTP 200, tela de login, autenticação e carregamento da Home.
+
+O build Vite usa somente a URL e a chave publicável do Prisma-QA. Secrets server-side não são incorporados ao frontend. O deploy reproduzível está definido por `Dockerfile`, `.dockerignore`, `deploy/nginx.conf`, `deploy/docker-compose.yml` e `deploy/README.md`. Um snapshot da VPS foi criado após o baseline funcional.
+
+Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora deste rollout e não devem ser considerados funcionalidades online.
 
 ## M6.1.2 — descoberta por trajetória em três grupos
 
@@ -6435,7 +6443,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-O projeto Supabase Prisma-QA é o único backend remoto atual e recebe migrations e Edge Functions. O frontend roda somente localmente contra esse projeto. Por decisão explícita de produto, não será criado agora outro projeto Supabase nem hosting de frontend, pois o Prisma é usado apenas pela equipe interna e ainda não possui clientes.
+O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e recebe migrations e Edge Functions. Desde 2026-09-15, o frontend também possui rollout hospedado em VPS Hostinger e está disponível em `https://prisma.hrtsolutions.com.br`, usando o mesmo Prisma-QA. Não existe projeto Supabase separado de produção. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
 
 ## Pré-requisitos
 
@@ -6478,7 +6486,7 @@ Branches de trabalho usam `codex/`. Commits são coerentes e não misturam mudan
 
 ## Estado atual
 
-Existe ambiente local e um único projeto Supabase remoto (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) usado para desenvolvimento conectado e validação interna. Bruno decidiu não criar outro projeto enquanto somente a equipe interna usa o Prisma e não há clientes. Produção isolada, domínio público, frontend hospedado, CI remoto e secret store ainda não estão configurados.
+Existe ambiente local, um único projeto Supabase remoto (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) e um frontend público hospedado em VPS Hostinger. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend remoto. Não existe projeto Supabase separado de produção. Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora do runtime hospedado.
 
 ## Local
 
