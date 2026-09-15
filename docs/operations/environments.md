@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-Existe ambiente local e um único projeto Supabase remoto (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) usado para desenvolvimento conectado e validação interna. Bruno decidiu não criar outro projeto enquanto somente a equipe interna usa o Prisma e não há clientes. Produção isolada, domínio público, frontend hospedado, CI remoto e secret store ainda não estão configurados.
+Existe ambiente local, um único projeto Supabase remoto (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) e um frontend público hospedado em VPS Hostinger. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend remoto. Não existe projeto Supabase separado de produção. Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora do runtime hospedado.
 
 ## Local
 

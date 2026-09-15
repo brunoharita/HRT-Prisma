@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.0.0
 context_bundle_version: 2.0.0
 product_version: 1.6.4
-current_state_version: 2.31.0
-current_state_last_verified: 2026-09-14
+current_state_version: 2.32.0
+current_state_last_verified: 2026-09-15
 documentation_source_count: 179
-source_manifest_sha256: 81a7ffaa88ae1f81144648bacf34a1b679ed2bee2e3ccaf02a1761b48e6f3c2c
+source_manifest_sha256: d573eb3010ac948479ea683cc11dd7137eb1f10d4614b8b6281648ee21920989
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -242,7 +242,7 @@ pnpm run check:prisma-context
 
 #### Resumo operacional para prompts
 
-Prisma v1.6.4 é a versão pública corrente. O frontend funciona localmente e usa o único backend remoto Prisma-QA; não existe ambiente de produção separado nem frontend hospedado. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
 

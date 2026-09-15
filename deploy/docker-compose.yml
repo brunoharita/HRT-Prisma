@@ -1,0 +1,21 @@
+services:
+  prisma-web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
+        VITE_DOCUMENT_INTELLIGENCE_MODE: ${VITE_DOCUMENT_INTELLIGENCE_MODE:-baseline}
+        VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS: ${VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS:-240000}
+        VITE_PARSER_IA_LOCAL: ${VITE_PARSER_IA_LOCAL:-false}
+    image: prisma-web:1.6.4
+    container_name: prisma-web
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prisma.rule=Host(`prisma.hrtsolutions.com.br`)"
+      - "traefik.http.routers.prisma.entrypoints=websecure"
+      - "traefik.http.routers.prisma.tls=true"
+      - "traefik.http.routers.prisma.tls.certresolver=letsencrypt"
+      - "traefik.http.services.prisma.loadbalancer.server.port=80"

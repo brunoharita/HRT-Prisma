@@ -1,0 +1,14 @@
+node_modules
+.pnpm-store
+dist
+web/dist
+.prisma-data
+supabase/.temp
+tmp
+coverage
+*.log
+.env
+.env.*
+services/paddle/.cache
+benchmarks/m5.6/private
+benchmarks/m5.6/output
