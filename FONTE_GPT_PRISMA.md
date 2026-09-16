@@ -5,8 +5,8 @@ context_bundle_version: 2.0.0
 product_version: 1.6.4
 current_state_version: 2.33.0
 current_state_last_verified: 2026-09-16
-documentation_source_count: 183
-source_manifest_sha256: af26da05a65e54da80abe3b36b8537c0d6aeca8246b69311737ce1a2202d4ead
+documentation_source_count: 187
+source_manifest_sha256: e4de0c41b3b1fa253097388ef2cce9f06516b481544d3f153facbb6c20a0ea6d
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -242,7 +242,7 @@ pnpm run check:prisma-context
 
 #### Resumo operacional para prompts
 
-Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
 

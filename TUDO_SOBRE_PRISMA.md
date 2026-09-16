@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 183
-source_manifest_sha256: af26da05a65e54da80abe3b36b8537c0d6aeca8246b69311737ce1a2202d4ead
+documentation_source_count: 187
+source_manifest_sha256: e4de0c41b3b1fa253097388ef2cce9f06516b481544d3f153facbb6c20a0ea6d
 -->
 
 # Tudo sobre o Prisma
@@ -530,7 +530,7 @@ last_verified: 2026-09-16
 
 ## Resumo operacional para prompts
 
-Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental e limitado a loopback; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
 
@@ -540,7 +540,7 @@ O primeiro rollout web público do Prisma foi validado em VPS Hostinger KVM 2 co
 
 O build Vite usa somente a URL e a chave publicável do Prisma-QA. Secrets server-side não são incorporados ao frontend. O deploy reproduzível está definido por `Dockerfile`, `.dockerignore`, `deploy/nginx.conf`, `deploy/docker-compose.yml` e `deploy/README.md`. Um snapshot da VPS foi criado após o baseline funcional.
 
-Parser IA M5.7 permanece fora deste rollout. Em 2026-09-16 o PO aprovou e autorizou a implantação pública da ponte temporária SSH reversa para o Paddle no PC local, com rotas protegidas por sessão/organização (ADR-058, `paddle-hosted-transport-1.0.0`). Runtime hospedado `55733a0`, modo enabled no piloto, listeners remotos somente loopback e health dos dois workers confirmados; rotas anônimas rejeitadas com 401. MIME do worker PDF.js corrigido no Nginx. A importação real do PDF autorizado chegou à revisão após correção humana da identidade e criação normal da Pessoa, sem publicar Perfil. Rota escolhida/efetiva native-fast, 5 páginas, 7.102 caracteres, sem fallback ou chamada Paddle. Rascunho apresentou qualidade insuficiente (zero experiências, resumo ausente e formação mal segmentada); telemetria opcional retornou 404/PGRST205 no endpoint document_intelligence_runs, sem bloquear revisão. Evidência e pendências em `docs/qa/aot-hosted-paddle-bridge.md`. Não representa conclusão do cutover geral M5.6, otimização GPU ou infraestrutura definitiva; operação depende do PC e túnel ativos.
+Em 2026-09-16 o PO autorizou corrigir a qualidade observada no PDF de Ivan e ativar no único ambiente remoto o fluxo serial PDF.js/estruturação determinística -> gate semântico -> Paddle condicional -> Parser IA -> revisão humana (ADR-059). `resume-semantic-quality-1.0.0` força a rota estrutural quando um currículo multipágina sai sem trajetória profissional; a tela não desativa mais o Paddle ao habilitar IA. `parser-ia-hosted-transport-1.0.0` reutiliza o gateway autenticado, valida sessão, operador, papel, organização, contrato, PDF e hash, remove credenciais e alcança o worker 8787 somente por túnel loopback. A chave OpenAI permanece no PC; `parser-ia-1.0.0`, modelo, prompt, budget e revisão humana foram preservados. A migration `20260916203000_production_resume_quality_observability` está aplicada com RLS e duas policies. Runtime construído de `ee90d43`, imagens `prisma-web:1.6.4` e gateway 1.1.0 ativas; site e workers passaram smoke sem PII, e recusas 401/403 foram confirmadas. A sessão disponível estava deslogada, portanto a nova importação autenticada real permanece pendente e o AoT está `PARTIAL`; não houve chamada OpenAI, reprocessamento ou publicação nesta execução. Operação continua dependente do PC e túnel ativos.
 
 Aditivo hospedado de 2026-09-16 implantado e validado: a correção explícita de identidade reutiliza formulário/RPC existentes antes da criação, recalcula correspondências no servidor e impede resolver enquanto a edição estiver aberta. Cancelamento e rejeição de contato ausente comprovados na UI; não muda extrator, regras de Pessoa, schema ou publicação e não reescreve a extração original no rascunho. Aceite operacional no AoT da ponte.
 
@@ -1787,7 +1787,7 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 
 # M5.7 Parser IA
 
-Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.2. Decisão: ADR-049. Estado: entrega local aprovada pelo PO, com importação/revisão verificadas e publicação humana confirmada; qualidade não generalizada.
+Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.0.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites do piloto.
 
 ## Funcionamento
 
@@ -1797,7 +1797,9 @@ Backend Node local lê o PDF com PDF.js, mantendo spans e coordenadas independen
 
 As coordenadas de evidência são exclusivamente da fonte. Vários spans/páginas podem suportar um campo. Preservar palavra composta, separação explícita de listas, múltiplos cargos e períodos; títulos/cursos ausentes permanecem nulos. Duplicatas de formação são sinalizadas para decisão humana. O modelo não decide publicação, contratação, permissões ou mutação de dados aprovados.
 
-O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa também recebe a preparação. Reprocessamento histórico mantém a rota anterior nesta etapa. A rota fica desligada por padrão, habilitável somente em DEV/loopback. Falha na importação oferece continuação explícita pela leitura local, sem vender fallback como sucesso da IA. Resultado parcial mostra aviso e pendências.
+O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa também recebe a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do túnel loopback. Falha na importação oferece continuação explícita pela leitura local, sem vender fallback como sucesso da IA. Resultado parcial mostra aviso e pendências.
+
+No fluxo corrente, o Parser IA não desativa a inteligência documental. A aplicação executa PDF.js e a estruturação determinística, avalia motivos semânticos, usa Paddle quando a leitura for visual, textual ou semanticamente insuficiente e só então chama o Parser IA com o PDF original e os spans verificáveis. O modelo usa a imagem do PDF para contexto; fatos persistidos continuam limitados às referências aceitas pelo validador.
 
 ## Executar localmente
 
@@ -1808,7 +1810,7 @@ Ativação autorizada para uso direto local em 2026-09-12. Na raiz oficial, `pnp
 3. Para desenvolvimento da integração web, `VITE_PARSER_IA_LOCAL=true` e reinício do Vite. Proxy local encaminha `/parser-ia-local/parse`. **A URL localhost da interface não isola o banco:** a persistência continua apontando para o Supabase configurado. Esta validação não usou esse fluxo para escrever no ambiente remoto.
 4. Benchmark independente, sem banco: `pnpm run build`, depois `node scripts/benchmark-parser-ia.mjs rodada --live evaluation-03`, somente com arquivos e envio externo autorizados. `--cached` revalida a resposta já recebida sem ler a chave nem acessar rede.
 
-Não abrir serviço em 0.0.0.0, não expor proxy pela Internet, não copiar `.env.local`, tmp, PDFs ou referências privadas para Git/Hostinger. Nunca publicar este backend experimental como backend multiusuário.
+Não abrir serviço em 0.0.0.0, não copiar `.env.local`, tmp, PDFs ou referências privadas para Git/Hostinger. O único acesso hospedado permitido é a rota fixa do gateway autenticado definida no ADR-059; nunca publicar diretamente o worker loopback.
 
 ## Limites
 
@@ -2295,7 +2297,7 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
-Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058), owner operations/security, cabeçalhos sessão/organização e gateway. Não altera `document-intelligence-provider` 1.0.0 nem `canonical-document` 1.0.0. Status de implementação, implantação e aceite separado em `docs/qa/aot-hosted-paddle-bridge.md`; rollback para imagem web baseline e interrupção do túnel.
+Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `parser-ia-hosted-transport-1.0.0` (ADR-059), owner operations/security, cabeçalhos sessão/organização e gateway. Não alteram `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0 nem `parser-ia` 1.0.0. Status do pipeline serial e rollout em `docs/qa/aot-production-resume-quality-pipeline.md`; rollback para imagem web anterior e interrupção do túnel.
 
 ## Política
 
@@ -6415,6 +6417,44 @@ Negativos de transporte/Auth/tenant com fixtures sintéticas, regressão do prov
 
 ---
 
+## Source: `docs/decisions/ADR-059-production-resume-quality-pipeline.md`
+
+# ADR-059 — Pipeline serial de qualidade para currículos em produção
+
+- Estado: aceito
+- Data: 2026-09-16
+- Contrato: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.0.0
+
+## Contexto
+
+A implantação única do Prisma aceitava PDFs com grande volume de texto como `native-fast`, mesmo quando a estruturação resultante não encontrava experiências ou competências. Além disso, a tela desativava a inteligência documental quando o Parser IA estava habilitado, e o Parser IA era restrito a `localhost`. O resultado observado foi uma importação com 7.102 caracteres e cinco páginas, mas sem trajetória profissional estruturada.
+
+## Decisão
+
+O fluxo passa a ser serial:
+
+`PDF.js + estruturação determinística -> verificação semântica -> Paddle quando necessário -> Parser IA -> validação e revisão humana`.
+
+A ponte temporária já autenticada do Paddle será estendida por uma rota fixa de Parser IA. O gateway público valida sessão, operador, papel e organização contra o Supabase, aplica contrato, origem, limites, serialização e timeout, e encaminha apenas o payload mínimo por túnel reverso loopback. Credenciais do Supabase não chegam à máquina local; a chave da OpenAI permanece somente nela.
+
+O Parser IA continua ligado ao hash do PDF, à organização, às linhas-fonte, ao prompt e ao modelo, com fatos aceitos somente quando suportados pelas referências. Sua saída é um rascunho para revisão, nunca publicação automática.
+
+## Alternativas consideradas
+
+- Manter apenas PDF.js: rejeitado porque o caso real demonstrou falso positivo de qualidade.
+- Usar Paddle ou Parser IA como alternativas: rejeitado porque remove a recuperação de estrutura justamente quando a IA está ativa.
+- Colocar a chave da OpenAI no navegador: rejeitado por segurança.
+- Implantar agora um backend permanente independente da máquina local: adequado como evolução, mas fora do escopo e desnecessário para restaurar o fluxo aprovado hoje.
+
+## Consequências
+
+- A qualidade deixa de depender somente de volume textual e passa a ter motivos semânticos verificáveis.
+- A importação normal depende da disponibilidade da máquina local, do túnel e do orçamento do Parser IA; a indisponibilidade é explícita e não produz sucesso falso.
+- PDFs são enviados à OpenAI somente após autorização do operador no fluxo acordado, com `store: false`, mínimo necessário, cache privado e revisão humana.
+- A ponte permanece temporária e operacionalmente limitada a uma inferência por vez.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6487,6 +6527,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Rules
 
 - [ADR-058: Ponte temporária Paddle hospedada](ADR-058-temporary-hosted-paddle-bridge.md) — accepted; SSH reverso, gateway autenticado e workers CPU locais; evidência no AoT.
+- [ADR-059: Pipeline serial de qualidade para currículos em produção](ADR-059-production-resume-quality-pipeline.md) — accepted; PDF.js, gate semântico, Paddle condicional e Parser IA antes da revisão humana.
 
 - Start from `ADR-000-template.md`.
 - Never edit an accepted decision to hide history. Amend the history or supersede it.
@@ -6502,6 +6543,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Estado
 
 O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambiente atual de produção. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel, mas não identifica outro ambiente. Desde 2026-09-15, o frontend está implantado na VPS Hostinger em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
+
+Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF.js, verificação semântica, Paddle condicional e Parser IA antes da revisão. O worker Parser e os dois workers Paddle permanecem no PC e escutam somente loopback; o gateway 1.1.0 valida sessão/tenant e usa túnel reverso ligado apenas ao loopback da VPS. O Supabase recebeu a migration aditiva de observabilidade com RLS. Imagens de rollback anteriores foram preservadas. Evidência e limitação do smoke autenticado ficam em `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 ## Pré-requisitos
 
@@ -6725,17 +6768,17 @@ Retenção de logs e auditoria ainda depende de política legal e operacional. L
 
 Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.
 
-`Browser -> HTTPS/Traefik -> Nginx -> socket Unix -> gateway -> VPS loopback 18080/18081 -> SSH reverso -> PC loopback 8080/8081`.
+`Browser -> HTTPS/Traefik -> Nginx -> socket Unix -> gateway -> VPS loopback 18080/18081/18787 -> SSH reverso -> PC loopback 8080/8081/8787`.
 
 Executar `scripts/start-paddle-tunnel.ps1` no PC. O processo permanece ativo durante o uso; Ctrl+C encerra a ponte. Em execução assistida, iniciar com janela oculta e registrar somente PID/caminho do script, sem credenciais. Não habilitar GatewayPorts nem alterar o bind local dos containers. PC desligado, suspenso, sem rede ou túnel encerrado torna o provider indisponível e preserva o fallback existente. Restart/reconexão do túnel é manual neste piloto.
 
-O gateway só escuta `/run/paddle-gateway/gateway.sock`, compartilhado por volume com Nginx, e usa network_mode host para alcançar o loopback da VPS. Não publica porta. `deploy/docker-compose.yml` recebe a URL e chave publicável QA já configuradas; não requer service key. Sessão Bearer, organização e versão do transporte vêm do browser e são verificadas antes de ler/encaminhar o documento. Chaves e sessão não chegam ao worker.
+O gateway só escuta `/run/paddle-gateway/gateway.sock`, compartilhado por volume com Nginx, e usa network_mode host para alcançar o loopback da VPS. Não publica porta. `deploy/docker-compose.yml` recebe a URL e chave publicável do Supabase já configuradas; não requer service key. Sessão Bearer, organização e versão do transporte vêm do browser e são verificadas antes de ler/encaminhar o documento. Chaves e sessão não chegam aos workers. A rota fixa `/parser-ia-hosted/parse` também valida organização, hash, assinatura e tamanho do PDF antes de remover credenciais e encaminhar ao worker 8787.
 
 Há limite de 21 MiB para JSON/base64 (PDF até 15 MiB), uma inferência simultânea, nenhum retry e deadline de 295 s no gateway, 300 s no Nginx. O cliente mantém 240 s, configurável entre 30 e 300 s como antes. Cancelamento de HTTP não garante cancelamento de inferência: falha de transporte conserva cooldown de 295 s, sem novas chamadas concorrentes. Logs do gateway contêm somente rota técnica, status e duração; Nginx não grava access log dessas rotas nem buffers de documento em disco.
 
-Para build do piloto: `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`, `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS=240000`, `VITE_PARSER_IA_LOCAL=false`. A autorização atual cobre o teste adaptativo hospedado, não a conclusão do benchmark/cutover geral M5.6. O Parser IA usa DEV/loopback e não é ativado pelo túnel.
+Para o rollout autorizado: `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`, `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS=240000`, `VITE_PARSER_IA_LOCAL=false`, `VITE_PARSER_IA_MODE=hosted`. O Parser IA continua escutando somente em loopback; a rota pública é protegida pelo gateway e não expõe o worker ou a chave OpenAI.
 
-Na implantação autorizada de 2026-09-16, exportar também `PRISMA_DEPLOY_COMMIT` com o SHA construído. Os overrides do piloto foram fornecidos no build, sem alterar `.env.production`; precisam ser repetidos em rebuild autorizado. Construir ambos os serviços e iniciar `paddle-gateway` antes de `prisma-web` para inicializar a propriedade do volume do socket. Runtime publicado `55733a0`; imagem baseline preservada como `prisma-web:rollback-f1cc983-paddle` e versão anterior à correção de identidade como `prisma-web:rollback-99b91c8-identity`. O Nginx serve `.mjs` como application/javascript, necessário ao worker PDF.js. Validar HTTP após estabilização do container, não apenas durante sua recriação.
+Na implantação autorizada de 2026-09-16, exportar também `PRISMA_DEPLOY_COMMIT` com o SHA construído. Os overrides do piloto foram fornecidos no build, sem alterar `.env.production`; precisam ser repetidos em rebuild autorizado. Construir ambos os serviços e iniciar `paddle-gateway` antes de `prisma-web` para inicializar a propriedade do volume do socket. Pipeline serial publicado a partir de `ee90d43`, configuração alinhada em `b36287d`; imagens ativas `prisma-web:1.6.4` e `prisma-paddle-gateway:1.1.0`. Rollback imediato preservado como `prisma-web:rollback-55733a0-resume-pipeline` e `prisma-paddle-gateway:rollback-55733a0`. O Nginx serve `.mjs` como application/javascript, necessário ao worker PDF.js. Validar HTTP após estabilização do container, não apenas durante sua recriação.
 
 Rollback: preservar/taguear imagem web anterior, voltar a ela (baseline), parar apenas gateway e processo SSH desta ponte. Não remover volumes de modelos, documentos, perfis ou containers experimentais alheios. O web antigo funciona sem gateway; o Nginx novo também continua servindo login/Home quando o worker falta.
 
@@ -6788,7 +6831,7 @@ O probe rejeita endpoint fora de loopback e imprime somente hash curto, tempo, p
 
 ## Falha e rollback
 
-Timeout, indisponibilidade, JSON inválido, página ausente ou texto insuficiente retornam ao pipeline existente. Defina `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e pare os containers para rollback. Não reprocese perfis históricos e não promova flag para produção.
+Timeout, indisponibilidade, JSON inválido, página ausente ou texto insuficiente ficam explícitos. O operador pode escolher conscientemente continuar somente com a leitura local; essa escolha não é registrada como sucesso da IA. Para rollback, use `VITE_PARSER_IA_MODE=disabled`, restaure a imagem anterior e interrompa o túnel. Não reprocessar perfis históricos em massa.
 
 ## Evidência desta execução
 
@@ -8547,6 +8590,81 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 ---
 
+## Source: `docs/qa/agreement-production-resume-quality-pipeline.md`
+
+# Contrato de Acordos — Qualidade da importação de currículos em produção
+
+## Objetivo
+
+- Versão do contrato: `1.0.0`
+- Fonte da decisão / tarefa: diagnóstico da importação de Ivan Raineri em 2026-09-16 e autorização explícita do Product Owner, nesta conversa, para restaurar em produção o fluxo já esperado localmente.
+- Contratos anteriores e delta: este contrato supersede, apenas para o fluxo de importação de currículos, as restrições de rollout local de `agreement-m57-parser-ia.md` 1.1.2 e a exclusão do Parser IA em `agreement-hosted-paddle-bridge.md` 1.1.0. Os guardrails de evidência, revisão humana, orçamento, autenticação e privacidade permanecem.
+
+## DEVE — Inegociável
+
+- D-01 — Toda importação de currículo PDF deve começar pela leitura PDF.js e pela estruturação determinística existente.
+- D-02 — A saída inicial deve passar por uma verificação semântica explicável; um currículo multipágina sem trajetória profissional identificada não pode ser considerado suficiente apenas por possuir muitos caracteres.
+- D-03 — Quando a leitura inicial for visualmente complexa, textualmente insuficiente ou semanticamente insuficiente, o fluxo deve acionar o Paddle pela ponte autenticada e usar sua saída canônica quando válida.
+- D-04 — Depois da etapa documental, toda importação normal deve passar pelo Parser IA, ligado ao PDF, à organização, às linhas-fonte e à versão de prompt/modelo, antes de persistir o rascunho para revisão.
+- D-05 — Paddle e Parser IA devem executar em sequência, nunca como alternativas mutuamente exclusivas; falha ou indisponibilidade de etapa obrigatória deve ser explícita e preservar a opção consciente de continuar somente com a leitura local.
+- D-06 — O transporte remoto deve validar sessão, operador, papel e organização no servidor, aceitar somente contratos e rotas fixos, remover credenciais antes da máquina de inferência e não registrar currículo, prompt integral, token ou dado pessoal.
+- D-07 — O resultado continua sendo rascunho rastreável para revisão humana. Nenhuma importação aprova, publica, rejeita ou decide contratação automaticamente.
+- D-08 — A operação em produção deve manter limite de arquivo, timeout, serialização, cache privado, orçamento fechado e ausência de repetição automática de inferência não idempotente.
+- D-09 — A telemetria documental deve poder ser persistida na base de produção sem bloquear a importação quando for apenas observabilidade opcional.
+
+## PROIBIDO
+
+- P-01 — Tratar quantidade de caracteres como prova suficiente de qualidade sem verificar o resultado estruturado.
+- P-02 — Desativar o Paddle pelo simples fato de o Parser IA estar habilitado.
+- P-03 — Expor `OPENAI_API_KEY`, chave de serviço do Supabase ou credencial do usuário no bundle, nos logs ou no worker Paddle.
+- P-04 — Aceitar organização informada pelo cliente sem validar sessão, operador, papel, RLS e vínculo ativo.
+- P-05 — Persistir fatos sem referência verificável ao documento ou transformar falha parcial em perfil completo.
+- P-06 — Publicar perfil ou conhecimento profissional sem decisão humana explícita.
+- P-07 — Repetir automaticamente uma chamada de IA cujo custo ou execução anterior seja incerto.
+
+## FORA DE ESCOPO
+
+- F-01 — Redesenho da tela de revisão ou das regras de publicação.
+- F-02 — Troca de Paddle, OpenAI, modelo ou taxonomia por novo fornecedor.
+- F-03 — Reprocessamento em massa de documentos já importados.
+- F-04 — Tornar a ponte temporária independente da máquina local.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01 — Definir a forma interna do verificador semântico, desde que os motivos sejam nomeados, determinísticos e testados.
+- A-02 — Estender a ponte hospedada existente com uma rota fixa para o Parser IA e ajustar seus timeouts, limites e cabeçalhos dentro dos guardrails deste contrato.
+- A-03 — Versionar contratos, prompt, proveniência, migração de observabilidade e mensagens operacionais sem alterar o comportamento acordado.
+- A-04 — Escolher testes direcionados, smoke tests e evidências proporcionais ao risco, sem executar validação integral do repositório sem autorização específica.
+
+## PENDÊNCIAS
+
+- Nenhuma pendência material aberta para esta execução.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01 — Dado um PDF válido, quando a importação iniciar, então PDF.js e a estruturação determinística executam antes das etapas externas; teste unitário e rastreio do fluxo.
+- CA-D02 — Dado um currículo de múltiplas páginas cuja estruturação não encontre experiências, quando a qualidade for avaliada, então o motivo semântico força a rota estrutural; teste negativo com fixture equivalente ao caso observado.
+- CA-D03 — Dada a rota estrutural forçada, quando o Paddle retornar documento canônico válido, então sua saída é adotada e a proveniência registra o fornecedor; teste de domínio e transporte.
+- CA-D04 — Dada uma importação normal com transporte disponível, quando a etapa documental terminar, então o Parser IA é chamado e o rascunho persistido usa seu contrato e evidências; teste de cliente, contrato e smoke autenticado.
+- CA-D05 — Dada indisponibilidade do Parser IA, quando a importação ocorrer, então a tentativa não apresenta sucesso falso e oferece continuação local consciente; teste de falha.
+- CA-D06 — Dada sessão ausente, origem incorreta, organização inválida, rota ou contrato desconhecido, quando a ponte receber a chamada, então rejeita antes de encaminhar dados; testes negativos do gateway.
+- CA-D07 — Dado resultado estruturado, quando persistido, então permanece aguardando revisão e não cria publicação automática; testes de persistência existentes afetados.
+- CA-D08 — Dadas chamadas simultâneas, payload excessivo, timeout ou orçamento esgotado, quando ocorrerem, então o serviço falha fechado, sem retry automático; testes de serviço e gateway.
+- CA-D09 — Dada a base de produção sem a tabela de observabilidade, quando a migração for aplicada, então a tabela, RLS e contratos ficam disponíveis; verificação de migração e advisors.
+
+## ESTADO
+
+- `agreed`
+
+## APROVAÇÃO
+
+- Product Owner: Bruno
+- Data: 2026-09-16
+- Evidência de aprovação: após receber o diagnóstico e a proposta explícita do fluxo PDF.js -> qualidade semântica -> Paddle quando necessário -> Parser IA -> revisão humana em produção, respondeu “faça isso”.
+- Referência imutável para o prompt: versão `1.0.0` deste contrato.
+
+---
+
 ## Source: `docs/qa/agreement-ux-foundation.md`
 
 # Contrato de Acordos — Base transversal de UX
@@ -9541,6 +9659,73 @@ PASS. D-001 a D-008 e P-001 a P-006 possuem implementação e prova proporcional
 
 ---
 
+## Source: `docs/qa/aot-production-resume-quality-pipeline.md`
+
+# AoT — Qualidade da importação de currículos em produção
+
+Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.0.0.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste | Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- | --- |
+| D-01 | PDF.js e estruturação inicial | `validateAndProcessPdf` mantém extração/estruturação antes do gate e das etapas externas | person-flow e `documentIntelligence.test.ts` | 229 testes do person-flow; build web aprovado | PASS | Determinístico, sem provider vivo |
+| D-02 | Verificação semântica explicável | `resumeSemanticQuality.ts` 1.0.0 e motivo no trace | `resumeSemanticQuality.test.ts` | Caso de cinco páginas sem experiências força rota estrutural | PASS | Não julga candidato nem inventa experiência |
+| D-03 | Paddle condicional | Gate visual/textual existente mais gate semântico; modo enabled não é mais desligado pelo Parser IA | domínio, provider e smoke dos workers | Paddle 8080/8081 respondeu 200; bundle publicado contém o fluxo | PASS | Importação real pós-fix aguardando repetição do operador |
+| D-04 | Parser IA após etapa documental | `VITE_PARSER_IA_MODE=hosted`, cliente autenticado e rota fixa do gateway | parser, cliente por build e transporte | worker 8787 respondeu 422 ao payload sintético inválido; rota pública sem sessão 401; bundle contém `/parser-ia-hosted/parse` | PARTIAL | Navegador disponível estava deslogado; nenhuma chamada OpenAI ou importação real foi fabricada |
+| D-05 | Sequência e falha explícita | Página não força mais baseline e mantém CTA consciente de leitura local | person-flow, recuperação M5.7 | 229 + 33 testes direcionados aprovados | PASS | Falha do worker ainda exige decisão explícita do operador |
+| D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
+| D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
+| D-08 | Limites, orçamento e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache, ledger US$2 e sem retry | `parserIaService.test.mjs` e gateway | budget, concorrência, timeout, corrupção, cache e resposta limitada aprovados | PASS | Ledger observado: 6 tentativas e US$0,64 contabilizados antes do rollout |
+| D-09 | Observabilidade aditiva | Migration `20260916203000_production_resume_quality_observability` | teste SQL e verificação conectada | migration aplicada; RLS ativo, 2 policies e 5 colunas estruturais presentes | PASS | Advisors não indicaram falha nova nesta tabela |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| P-01 a P-07 | Sem falso positivo por caracteres, exclusão mútua, segredo no bundle, organização confiada ao cliente, fato sem referência, publicação ou retry automático | gates negativos de domínio, gateway, parser e person-flow | 262 testes dirigidos aprovados; bundle sem segredo server-side; smoke 401/403 | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 a F-04 | Diff não redesenha revisão, não troca fornecedor/modelo, não reprocessa histórico e mantém dependência do PC/túnel | PASS |
+
+## Desvios do contrato
+
+Nenhum desvio de implementação. A prova autenticada de importação real permanece pendente e, por isso, D-04 está `PARTIAL`.
+
+## Mudanças autorizadas durante a execução
+
+Autorização original registrada no contrato 1.0.0. Durante a execução, nenhuma ampliação adicional foi feita. A tag da imagem web foi mantida em `1.6.4`, pois correções não criam uma entrega de produto no registry.
+
+## Validação final
+
+- `pnpm run lint`: PASS, 511 arquivos.
+- `pnpm run check:foundation`: PASS, 18 tabelas públicas e 6 versões de processamento.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm run build:web`: PASS, 3.240 módulos.
+- `pnpm run test:person-flow`: PASS, 229 testes.
+- Testes específicos finais: PASS, 33 testes.
+- `git diff --check`: PASS antes do commit inicial.
+- Validação integral `pnpm run validate`: não executada; não foi autorizada e a regressão dirigida cobre o risco alterado.
+
+## Git / QA / ambiente
+
+- Branch: `codex/production-resume-quality-pipeline`.
+- Implementação: `ee90d43e334901351a5dca948e32a06b5715e612`; alinhamento de tag: `b36287dc12f2e17c1827c18014fcd5a3dab1aa9d`.
+- Supabase único `ioldpnqqvobprjiontre`: migration aplicada com sucesso; RLS/policies verificados.
+- VPS: `prisma-web:1.6.4` e `prisma-paddle-gateway:1.1.0` ativos; imagem anterior preservada como `prisma-web:rollback-55733a0-resume-pipeline` e gateway anterior como `prisma-paddle-gateway:rollback-55733a0`.
+- PC: Paddle 8080/8081 e Parser IA 8787 em loopback; túnel reverso expõe somente VPS loopback 18080/18081/18787.
+- Smoke: site 200, Paddle 200/200, worker Parser alcançável, parser público 401 sem sessão e 403 com origem indevida.
+- Smoke autenticado completo: não executado porque a sessão disponível estava deslogada; nenhum login ou currículo real foi forçado.
+
+## Conclusão
+
+Pipeline implementado e ativo em produção, com segurança, observabilidade e regressão local aprovadas. Movimento permanece `PARTIAL` somente até uma nova importação autenticada confirmar Paddle condicional e Parser IA no fluxo real.
+
+---
+
 ## Source: `docs/qa/aot-template.md`
 
 # AoT — <Movimento>
@@ -10094,6 +10279,34 @@ Fechar com `docs/qa/aot-m62-verification-journey.md`, relacionando D-001 a D-014
 Contrato imutável: `docs/qa/agreement-prisma-context-pack-v2.md` 1.0.0.
 
 Implementar D-001 a D-008 e provar P-001 a P-006. Preservar exatamente cinco fontes canônicas em `docs/ai-context`; gerar uma fonte compacta para autoria de prompts e uma exportação completa a partir do mesmo manifesto; atualizar referências consolidadas divergentes; tornar o checker independente de LF/CRLF e validar tamanho, papel e conteúdo corrente. Não criar integração externa, alterar runtime do produto, banco, QA ou produção.
+
+---
+
+## Source: `docs/qa/execution-production-resume-quality-pipeline.md`
+
+# Prompt de Execução — Qualidade da importação de currículos em produção
+
+Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, versão `1.0.0`, sem reinterpretar os acordos.
+
+## Entendimento obrigatório
+
+- Implementar D-01 a D-09: PDF.js e estruturação inicial, verificação semântica, Paddle condicional, Parser IA obrigatório no caminho normal, falha explícita com continuação local consciente, transporte autenticado, revisão humana, limites operacionais e observabilidade.
+- Impedir P-01 a P-07: falso positivo por volume textual, exclusão mútua entre Paddle e IA, exposição de segredos, confiança na organização do cliente, fatos sem evidência, publicação automática e retry incerto.
+- Preservar F-01 a F-04: não redesenhar revisão, não trocar fornecedor/modelo, não reprocessar em massa e não converter a ponte temporária em infraestrutura independente do computador local.
+- Usar A-01 a A-04 somente para decisões de implementação que não alterem o comportamento aprovado.
+
+## Sequência de execução
+
+1. Registrar a decisão arquitetural e versionar os contratos afetados.
+2. Implementar e testar o verificador semântico determinístico.
+3. Garantir que o modo de inteligência documental permaneça ativo quando o Parser IA estiver habilitado.
+4. Estender a ponte autenticada com rota fixa e contrato específico para o Parser IA, removendo credenciais antes do encaminhamento.
+5. Habilitar o cliente de produção com sessão e organização válidas, preservando o modo local para desenvolvimento.
+6. Aplicar a migração aditiva de observabilidade na base única de produção.
+7. Executar testes direcionados, build, verificação de contexto, smoke operacional e revisão de segurança.
+8. Preencher `docs/qa/aot-production-resume-quality-pipeline.md`, revisar o diff, commitar e enviar a branch autorizada.
+
+Não declarar conclusão se qualquer D-* obrigatório não estiver `PASS`, se uma proibição for violada ou se não houver evidência tecnicamente disponível.
 
 ---
 
