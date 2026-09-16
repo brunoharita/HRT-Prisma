@@ -14,6 +14,8 @@ Há limite de 21 MiB para JSON/base64 (PDF até 15 MiB), uma inferência simult�
 
 Para build do piloto: `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`, `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS=240000`, `VITE_PARSER_IA_LOCAL=false`. A autorização atual cobre o teste adaptativo hospedado, não a conclusão do benchmark/cutover geral M5.6. O Parser IA usa DEV/loopback e não é ativado pelo túnel.
 
+Na implantação autorizada de 2026-09-16, exportar também `PRISMA_DEPLOY_COMMIT` com o SHA construído. Os overrides do piloto foram fornecidos no build, sem alterar `.env.production`; precisam ser repetidos em rebuild autorizado. Construir ambos os serviços e iniciar `paddle-gateway` antes de `prisma-web` para inicializar a propriedade do volume do socket. Runtime publicado `99b91c8`; imagem baseline preservada como `prisma-web:rollback-f1cc983-paddle`. O Nginx serve `.mjs` como application/javascript, necessário ao worker PDF.js. Validar HTTP após estabilização do container, não apenas durante sua recriação.
+
 Rollback: preservar/taguear imagem web anterior, voltar a ela (baseline), parar apenas gateway e processo SSH desta ponte. Não remover volumes de modelos, documentos, perfis ou containers experimentais alheios. O web antigo funciona sem gateway; o Nginx novo também continua servindo login/Home quando o worker falta.
 
 ## Versões e licença
