@@ -19,6 +19,8 @@ Pessoa != Documento != Tentativa != Revisão != Perfil publicado
 
 Uma importação incompleta ou uma falha técnica nunca invalida a Pessoa nem o Perfil vigente. Nova importação é uma proposta. Somente a publicação transacional de outra versão substitui o Perfil atual.
 
+Antes de criar uma Pessoa, a tela de identificação permite `Corrigir identificação`, mesmo quando o extrator já encontrou nome e contato. A correção reutiliza a identificação server-side e recalcula correspondências na organização; enquanto aberta, ações de criação/vínculo ficam ocultas. Cancelar preserva o valor confirmado anterior e falha de validação mantém o formulário. Nome e contato continuam necessários para criar, sem retirar o vínculo humano name-only já existente. A correção do intake não reescreve a extração original ou aprova o rascunho documental. Acordo e evidência: `docs/qa/agreement-hosted-paddle-bridge.md` 1.1.0 e respectivo AoT.
+
 ## Hierarquia
 
 - Cabeçalho: identidade e posicionamento profissional existentes, localização autorizada, atualização e quantidade de documentos.
