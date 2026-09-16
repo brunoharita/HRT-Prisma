@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 183
-source_manifest_sha256: 48fd37ec827e38a92109a78f4630ef20ae7d1f0548b3270d4475202d13c35cca
+source_manifest_sha256: ebe4b4fa73dc8835e96d64f10007f0b3a876c7d33ffa5e894971f0c238cf09dc
 -->
 
 # Tudo sobre o Prisma
@@ -541,6 +541,8 @@ O primeiro rollout web público do Prisma foi validado em VPS Hostinger KVM 2 co
 O build Vite usa somente a URL e a chave publicável do Prisma-QA. Secrets server-side não são incorporados ao frontend. O deploy reproduzível está definido por `Dockerfile`, `.dockerignore`, `deploy/nginx.conf`, `deploy/docker-compose.yml` e `deploy/README.md`. Um snapshot da VPS foi criado após o baseline funcional.
 
 Parser IA M5.7 permanece fora deste rollout. Em 2026-09-16 o PO aprovou e autorizou a implantação pública da ponte temporária SSH reversa para o Paddle no PC local, com rotas protegidas por sessão/organização (ADR-058, `paddle-hosted-transport-1.0.0`). Runtime hospedado `99b91c8`, modo enabled no piloto, listeners remotos somente loopback e health dos dois workers confirmados; rotas anônimas rejeitadas com 401. MIME do worker PDF.js corrigido no Nginx. A importação real alcançou a confirmação de identidade, mas extraiu ocupação como nome; a UI não permite corrigir essa identidade antes de criar Pessoa. Teste interrompido antes da criação, sem publicação e sem prova de inferência Paddle ou qualidade do Draft. Evidência e pendências em `docs/qa/aot-hosted-paddle-bridge.md`. Não representa conclusão do cutover geral M5.6, otimização GPU ou infraestrutura definitiva; operação depende do PC e túnel ativos.
+
+Aditivo hospedado de 2026-09-16 autorizado: a correção explícita de identidade reutiliza formulário/RPC existentes antes da criação, recalcula correspondências no servidor e impede resolver enquanto a edição estiver aberta. Implementação em validação; não muda extrator, regras de Pessoa, schema ou publicação. Aceite operacional no AoT da ponte.
 
 ## M6.1.2 — descoberta por trajetória em três grupos
 
@@ -2857,6 +2859,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Ponte Paddle hospedada — 2026-09-16
 
 `paddle-hosted-transport-1.0.0` versiona cabeçalhos HTTP de sessão/organização e guardas do gateway temporário (ADR-058). Não altera payload Paddle, `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0, adapter 1.1.0, contratos de extração/persistência/revisão ou versão pública v1.6.4. Trata-se de implantação e proteção de transporte, sem nova entrega de produto aceita.
+
+O aditivo 1.1.0 do acordo hospedado expõe a correção de identidade antes da criação usando o formulário e RPC já existentes. É uma correção de acessibilidade do fluxo humano aprovado, sem novo payload, semântica persistida, algoritmo de identificação ou regra de autorização; `resume-intake` permanece 1.0.0 e a versão pública permanece v1.6.4. A edição oculta ações de resolução até confirmação server-side ou cancelamento; correspondências são recalculadas pelo servidor.
 
 ## Complemento local M5.7: formação, datas e duração (2026-09-12)
 
@@ -7894,7 +7898,7 @@ O build mantém o aviso já conhecido de chunk Ant Design acima de 900 kB. Não 
 
 # Contrato de Acordos — Paddle hospedado com worker local
 
-Versão: 1.0.0. Estado: agreed. PO: Bruno. Aprovação: 2026-09-16, resposta "aprovo" à proposta de túnel SSH reverso temporário e proteção das rotas. Fonte funcional: anexo "Continuação da implantação do Prisma hospedado com PaddleOCR como worker local", seções 1–36. A aprovação autoriza a ponte e seus controles; não altera pipeline nem autoriza publicação automática de Perfil.
+Versão: 1.1.0. Estado: agreed. PO: Bruno. Aprovação inicial: 2026-09-16, resposta "aprovo" à proposta de túnel SSH reverso temporário e proteção das rotas. Aditivo aprovado na resposta "autorizo" à correção da tela de identidade e retomada do teste. Fonte funcional: anexo "Continuação da implantação do Prisma hospedado com PaddleOCR como worker local", seções 1–36. A aprovação autoriza a ponte e seus controles; não altera pipeline nem autoriza publicação automática de Perfil.
 
 ## DEVE
 
@@ -7903,12 +7907,13 @@ Versão: 1.0.0. Estado: agreed. PO: Bruno. Aprovação: 2026-09-16, resposta "ap
 - D-03: conectar VPS ao PC por SSH outbound reverso, com portas somente loopback; autorizar cada chamada por sessão, operador ativo e organização antes do worker (CA-06, CA-07).
 - D-04: executar o PDF Ivan autorizado na interface hospedada até Draft/revisão; provar chamada e retorno do worker quando a rota o exigir (CA-08, CA-11 a CA-13).
 - D-05: conferir qualidade/evidência/proveniência pela UI e registrar tempos/rotas/páginas/fallback, sem currículo integral, secrets ou PII desnecessária em logs (CA-14 a CA-17).
+- D-06: permitir corrigir nome/contato antes da criação pela UI existente, reutilizando a reidentificação server-side. Enquanto a correção estiver aberta, não criar nem vincular usando correspondências anteriores. Só concluir a correção após confirmação do servidor; erro preserva o formulário e cancelar preserva a identidade anterior. Retomar o PDF autorizado até revisão, sem publicar Perfil.
 
 ## PROIBIDO
 
 - P-01: novo pipeline, troca por llama.cpp, novo contrato de OCR ou Paddle obrigatório para todos os PDFs.
 - P-02: exposição pública de workers ou proxy sem autorização server-side, secrets no frontend e conteúdo pessoal nos logs.
-- P-03: alterar Pessoa, publicação, matching, Knowledge ou Supabase sem necessidade; publicar Perfil automaticamente.
+- P-03 (substituído pelo aditivo 1.1.0): não alterar regras de Pessoa, publicação, matching, Knowledge, schema ou autorização Supabase; não publicar Perfil automaticamente. É permitida a correção de identidade na UI via RPC existente e a criação normal da Pessoa do PDF autorizado após confirmação correta.
 - P-04: declarar sucesso por health/probe, bypassar a interface como aceite, otimizar GPU ou fazer benchmarking amplo.
 
 ## FORA DE ESCOPO
@@ -7930,6 +7935,7 @@ Sem escolha arquitetural pendente para a ponte aprovada. Sessão autenticada e j
 - CA-D03: ausência de listeners públicos; negativos para anônimo, outro tenant, papel insuficiente, origem/contrato desconhecidos; indisponibilidade falha fechada.
 - CA-D04: importação real do PDF autorizado pela UI, sem artefato intermediário manual, com revisão alcançada.
 - CA-D05: trace existente e logs mínimos de transporte, tempos medidos e inspeção visual da revisão contra documento.
+- CA-D06: teste dirigido da integração ao callback existente e, na interface, correção/cancelamento, bloqueio de criação durante edição, confirmação server-side e identidade correta antes de prosseguir. Nome sem contato continua insuficiente para criar; vínculo name-only já permitido não é removido.
 
 Ativação enabled é limitada ao teste/piloto hospedado solicitado; não declara concluído o benchmark/cutover geral M5.6. Publicação de Perfil permanece humana.
 
@@ -8610,7 +8616,7 @@ Nenhuma decisão de produto pendente no escopo autorizado. O item 3.3 anterior q
 
 # AoT — ponte Paddle hospedada
 
-Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.0.0; execução em `docs/qa/execution-hosted-paddle-bridge.md`. Data: 2026-09-16. Baseline: f1cc983, branch `codex/hosted-paddle-bridge`. Ambiente: frontend público Hostinger com backend Prisma-QA, worker CPU local provisório.
+Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.1.0; execução em `docs/qa/execution-hosted-paddle-bridge.md`. Data: 2026-09-16. Baseline: f1cc983, branch `codex/hosted-paddle-bridge`. Ambiente: frontend público Hostinger com backend Prisma-QA, worker CPU local provisório.
 
 ## Matriz de Acordos
 
@@ -8621,6 +8627,7 @@ Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.0.0; execução em `docs
 | D-03 | SSH reverso, gateway Auth/RLS, socket Unix privado | 11 testes gateway; listeners remotos somente loopback; health 200 dos dois workers; ambas as rotas públicas anônimas 401 | PASS | Retorno de inferência autenticada real ainda não comprovado |
 | D-04 | Mesma UI/intake/draft | PDF autorizado importado pela UI até confirmação de identidade | BLOCKED | Nome extraído incorretamente; UI não permite corrigir antes de criar Pessoa |
 | D-05 | Trace existente; logs somente rota/status/duração | Erro de identidade observado na UI; etapa alcançada em até 28 s após clique | PARTIAL | Draft/revisão, métricas persistidas e qualidade profissional não avaliados |
+| D-06 | Correção explícita reutiliza IdentityForm e identifyResumeIntake; resolução oculta durante edição, erro mantém formulário | Validação local e UI em andamento | PARTIAL | Publicação e reteste pendentes |
 
 ## Proibições verificadas
 
@@ -8660,6 +8667,8 @@ Na repetição, após recarga completa e seleção do PDF original, a UI alcanç
 A tela não oferece edição quando `hasMinimumResumeIdentity` é verdadeiro; `Criar nova` usaria diretamente a identidade incorreta. Nenhuma Pessoa foi criada e nenhum Perfil foi publicado nesta execução. O intake/arquivo recebido pelo fluxo normal permanece para continuidade; nenhuma exclusão foi feita. Não foi executada chamada manual de API, alteração de estado React ou correção direta no banco para contornar o gate humano. Corrigir a possibilidade de revisão da identidade antes da criação requer escopo adicional do PO.
 
 ## Conclusão
+
+Aditivo autorizado pelo PO: expor correção antes da criação e retomar o teste. Implementação reutiliza a RPC que verifica organização/papel, bloqueia intake resolvido e recalcula possíveis duplicados; sem migration ou alteração de segurança. Formulário em erro não encerra edição; cancelar não chama o backend. Criação exige mínimo nome/contato, vínculo name-only existente preservado. Contratos persistidos mantêm versões; acordo documental avança para 1.1.0.
 
 PARTIAL/BLOCKED. Ponte implantada com autorização específica e MIME PDF.js corrigido. Login/Home e leitura inicial do PDF comprovados; Draft/revisão e qualidade profissional não comprovados devido ao bloqueio de identidade. Runtime ativo `99b91c8`; túnel e workers dependem do PC ligado, sem retomada automática. Não há conclusão de cutover nem evidência de viabilidade CPU para este PDF.
 
@@ -9915,7 +9924,9 @@ Validar M5, Central da Pessoa e Documentos em `1920x1080`, `1600x900`, `1440x900
 
 # Execução — ponte Paddle hospedada
 
-Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.0.0, lido por completo, com D-01 a D-05, P-01 a P-04, F-01, A-01 e CA-D01 a CA-D05 sem reinterpretar. Acordo incorpora os CA-01 a CA-17 do anexo do PO.
+Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.1.0, lido por completo, com D-01 a D-06, P-01 a P-04 (P-03 atualizado pelo PO), F-01, A-01 e CA-D01 a CA-D06 sem reinterpretar. Acordo incorpora os CA-01 a CA-17 do anexo do PO.
+
+Aditivo: reutilizar IdentityForm e identifyResumeIntake para expor correção explícita antes da criação; revalidar correspondências, bloquear resolução durante a edição e preservar o formulário em erro. Não corrigir o algoritmo extrator neste escopo. Implantar o ajuste e repetir a jornada real autorizada sem publicar Perfil.
 
 Sequência: diagnóstico existente -> branch isolada do deploy f1cc983 -> gateway de transporte reutilizando Auth/RLS -> SSH reverso -> negativos/adapter/build -> implantação reversível -> jornada real hospedada -> AoT e contexto gerado. Gateway não contém parser, modelo nem regra de extração; usa Node já adotado pelo repositório e nenhuma biblioteca nova. Não executar validação integral sem autorização adicional. Não publicar Perfil nem ativar Parser IA M5.7. Se acesso autenticado/qualidade/tempo impedir prova, registrar PARTIAL/BLOCKED no AoT, sem declarar encerramento.
 

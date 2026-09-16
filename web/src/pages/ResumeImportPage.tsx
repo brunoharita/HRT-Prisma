@@ -95,19 +95,20 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     finally { setBusy(false); setProgress(null); }
   }
 
-  async function handleIdentityReview(value: IdentityFormValue) {
-    if (!intake) { setError("A identificação desta importação não está mais disponível. Volte ao envio e abra o fluxo novamente."); return; }
+  async function handleIdentityReview(value: IdentityFormValue): Promise<boolean> {
+    if (!intake) { setError("A identificação desta importação não está mais disponível. Volte ao envio e abra o fluxo novamente."); return false; }
     const nextIdentity: ResumeIdentity = {
       fullName: normalizeResumeName(value.fullName) || null,
       email: normalizeResumeEmail(value.email), phone: normalizeResumePhone(value.phone),
       namePage: identity?.namePage ?? null, emailPage: identity?.emailPage ?? null, phonePage: identity?.phonePage ?? null,
     };
-    if (!hasMinimumResumeIdentity(nextIdentity)) { setError("Informe o nome e pelo menos um e-mail ou telefone válido."); return; }
+    if (!hasMinimumResumeIdentity(nextIdentity)) { setError("Informe o nome e pelo menos um e-mail ou telefone válido."); return false; }
     setBusy(true); setError(null);
     try {
       const nextIntake = await personIngestionService.identifyResumeIntake(activeMembership.organizationId, intake.intakeId, intake.storagePath, nextIdentity);
       setIdentity(nextIdentity); setIntake(nextIntake);
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível verificar a identificação."); }
+      return true;
+    } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível verificar a identificação."); return false; }
     finally { setBusy(false); }
   }
 
@@ -198,28 +199,33 @@ function UploadScreen(props: { busy: boolean; error: string | null; fileList: Up
   </>;
 }
 
-function IdentityScreen(props: { busy: boolean; error: string | null; identity: ResumeIdentity | null; intake: ResumeIntakeIdentityResult; processed: ProcessedDocumentInput | null; onBack: () => void; onCreate: () => void; onIdentityReview: (value: IdentityFormValue) => void; onLink: (candidate: ResumeDuplicateCandidate) => void }) {
+function IdentityScreen(props: { busy: boolean; error: string | null; identity: ResumeIdentity | null; intake: ResumeIntakeIdentityResult; processed: ProcessedDocumentInput | null; onBack: () => void; onCreate: () => void; onIdentityReview: (value: IdentityFormValue) => Promise<boolean>; onLink: (candidate: ResumeDuplicateCandidate) => void }) {
   const state = deriveResumeProductState({ intakeStatus: props.intake.status });
   const fallbackIdentity: ResumeIdentity = { fullName: null, email: null, phone: null, namePage: null, emailPage: null, phonePage: null };
+  const [editingIdentity, setEditingIdentity] = useState(false);
+  const hasMinimumIdentity = hasMinimumResumeIdentity(props.identity ?? fallbackIdentity);
+  async function confirmIdentity(value: IdentityFormValue) {
+    if (await props.onIdentityReview(value)) setEditingIdentity(false);
+  }
   return <>
     <PrismaPageHeader title="Identificação da pessoa" description="Encontramos possíveis correspondências para este currículo." actions={<FileCard file={props.processed?.file ?? null} />} />
-    <Button icon={<ArrowLeftOutlined />} onClick={props.onBack} type="text">Voltar para importação</Button>
+    <Button disabled={props.busy} icon={<ArrowLeftOutlined />} onClick={props.onBack} type="text">Voltar para importação</Button>
     {props.error ? <Alert showIcon title={props.error} type="error" /> : null}
     <Alert description="Informações profissionais não são usadas para decidir identidade." showIcon title={state.message} type="info" />
     <PrismaCard className="prisma-journey-contact-card" title="Contato identificado no currículo">
-      {hasMinimumResumeIdentity(props.identity ?? fallbackIdentity) ? <Descriptions column={{ xs: 1, sm: 3 }} size="small"><Descriptions.Item label="Nome">{props.identity?.fullName}</Descriptions.Item><Descriptions.Item label="E-mail">{props.identity?.email ?? "Não identificado"}</Descriptions.Item><Descriptions.Item label="Celular">{props.identity?.phone ?? "Não identificado"}</Descriptions.Item></Descriptions> : <IdentityForm busy={props.busy} identity={props.identity} onSubmit={props.onIdentityReview} />}
+      {hasMinimumIdentity && !editingIdentity ? <><Descriptions column={{ xs: 1, sm: 3 }} size="small"><Descriptions.Item label="Nome">{props.identity?.fullName}</Descriptions.Item><Descriptions.Item label="E-mail">{props.identity?.email ?? "Não identificado"}</Descriptions.Item><Descriptions.Item label="Celular">{props.identity?.phone ?? "Não identificado"}</Descriptions.Item></Descriptions><Button disabled={props.busy} onClick={() => setEditingIdentity(true)} type="link">Corrigir identificação</Button></> : <IdentityForm busy={props.busy} identity={props.identity} onSubmit={confirmIdentity} onCancel={editingIdentity ? () => setEditingIdentity(false) : undefined} />}
     </PrismaCard>
-    <PrismaCard className="prisma-journey-matches" title="Possíveis correspondências">
+    {!editingIdentity ? <PrismaCard className="prisma-journey-matches" title="Possíveis correspondências">
       <Typography.Paragraph type="secondary">Selecione alguma Pessoa da sua organização com base no contato e no nome.</Typography.Paragraph>
-      {props.intake.candidates.map((candidate) => <article className="prisma-journey-match" key={candidate.personId}><span className="prisma-match-avatar">{initials(candidate.fullName)}</span><div><strong>{candidate.fullName}</strong><small>{candidate.email ?? candidate.phone ?? "Contato privado disponível"}</small></div><Tag color={candidate.strong ? "green" : "gold"}>{candidate.reasons.map(describeReason).join(" · ")}</Tag><Button loading={props.busy} onClick={() => props.onLink(candidate)} type="primary" ghost>Selecionar</Button></article>)}
-      <article className="prisma-journey-match prisma-journey-match--new"><span className="prisma-match-avatar"><UserAddOutlined /></span><div><strong>Criar nova pessoa</strong><small>Não encontramos a pessoa na nossa base</small></div><Button icon={<PlusOutlined />} loading={props.busy} onClick={props.onCreate}>Criar nova</Button></article>
-      {props.intake.candidates.length ? <Button icon={<UserAddOutlined />} onClick={props.onCreate} type="link">Nenhuma das opções acima é a pessoa</Button> : null}
-    </PrismaCard>
+      {props.intake.candidates.map((candidate) => <article className="prisma-journey-match" key={candidate.personId}><span className="prisma-match-avatar">{initials(candidate.fullName)}</span><div><strong>{candidate.fullName}</strong><small>{candidate.email ?? candidate.phone ?? "Contato privado disponível"}</small></div><Tag color={candidate.strong ? "green" : "gold"}>{candidate.reasons.map(describeReason).join(" · ")}</Tag><Button disabled={props.busy} loading={props.busy} onClick={() => props.onLink(candidate)} type="primary" ghost>Selecionar</Button></article>)}
+      <article className="prisma-journey-match prisma-journey-match--new"><span className="prisma-match-avatar"><UserAddOutlined /></span><div><strong>Criar nova pessoa</strong><small>Não encontramos a pessoa na nossa base</small></div><Button disabled={props.busy || !hasMinimumIdentity} icon={<PlusOutlined />} loading={props.busy} onClick={props.onCreate}>Criar nova</Button></article>
+      {props.intake.candidates.length ? <Button disabled={props.busy || !hasMinimumIdentity} icon={<UserAddOutlined />} onClick={props.onCreate} type="link">Nenhuma das opções acima é a pessoa</Button> : null}
+    </PrismaCard> : null}
   </>;
 }
 
-function IdentityForm({ busy, identity, onSubmit }: { busy: boolean; identity: ResumeIdentity | null; onSubmit: (value: IdentityFormValue) => void }) {
-  return <Form<IdentityFormValue> initialValues={{ fullName: identity?.fullName ?? "", email: identity?.email ?? "", phone: identity?.phone ?? "" }} layout="vertical" onFinish={onSubmit}><div className="prisma-identity-fields"><Form.Item label="Nome" name="fullName" rules={[{ required: true, message: "Informe o nome da Pessoa." }]}><Input autoComplete="name" /></Form.Item><Form.Item label="E-mail" name="email"><Input autoComplete="email" /></Form.Item><Form.Item label="Telefone" name="phone"><Input autoComplete="tel" /></Form.Item></div><Button htmlType="submit" loading={busy} type="primary">Confirmar identificação</Button></Form>;
+function IdentityForm({ busy, identity, onSubmit, onCancel }: { busy: boolean; identity: ResumeIdentity | null; onSubmit: (value: IdentityFormValue) => void; onCancel?: (() => void) | undefined }) {
+  return <Form<IdentityFormValue> disabled={busy} initialValues={{ fullName: identity?.fullName ?? "", email: identity?.email ?? "", phone: identity?.phone ?? "" }} layout="vertical" onFinish={onSubmit}><div className="prisma-identity-fields"><Form.Item label="Nome" name="fullName" rules={[{ required: true, whitespace: true, message: "Informe o nome da Pessoa." }]}><Input autoComplete="name" /></Form.Item><Form.Item label="E-mail" name="email"><Input autoComplete="email" /></Form.Item><Form.Item label="Telefone" name="phone"><Input autoComplete="tel" /></Form.Item></div><Button disabled={busy} htmlType="submit" loading={busy} type="primary">Confirmar identificação</Button>{onCancel ? <Button disabled={busy} onClick={onCancel}>Cancelar correção</Button> : null}</Form>;
 }
 
 function ProcessingScreen({ busy, error, onBack, onReplace, onRetry, processed, progress, recovery }: { busy: boolean; error: string | null; onBack: () => void; onReplace: () => void; onRetry: (() => void) | null; processed: ProcessedDocumentInput | null; progress: ResumeProcessingProgress | null; recovery: OperationRecovery }) {

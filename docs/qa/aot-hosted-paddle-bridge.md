@@ -1,6 +1,6 @@
 # AoT — ponte Paddle hospedada
 
-Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.0.0; execução em `docs/qa/execution-hosted-paddle-bridge.md`. Data: 2026-09-16. Baseline: f1cc983, branch `codex/hosted-paddle-bridge`. Ambiente: frontend público Hostinger com backend Prisma-QA, worker CPU local provisório.
+Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.1.0; execução em `docs/qa/execution-hosted-paddle-bridge.md`. Data: 2026-09-16. Baseline: f1cc983, branch `codex/hosted-paddle-bridge`. Ambiente: frontend público Hostinger com backend Prisma-QA, worker CPU local provisório.
 
 ## Matriz de Acordos
 
@@ -11,6 +11,7 @@ Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.0.0; execução em `docs
 | D-03 | SSH reverso, gateway Auth/RLS, socket Unix privado | 11 testes gateway; listeners remotos somente loopback; health 200 dos dois workers; ambas as rotas públicas anônimas 401 | PASS | Retorno de inferência autenticada real ainda não comprovado |
 | D-04 | Mesma UI/intake/draft | PDF autorizado importado pela UI até confirmação de identidade | BLOCKED | Nome extraído incorretamente; UI não permite corrigir antes de criar Pessoa |
 | D-05 | Trace existente; logs somente rota/status/duração | Erro de identidade observado na UI; etapa alcançada em até 28 s após clique | PARTIAL | Draft/revisão, métricas persistidas e qualidade profissional não avaliados |
+| D-06 | Correção explícita reutiliza IdentityForm e identifyResumeIntake; resolução oculta durante edição, erro mantém formulário | Validação local e UI em andamento | PARTIAL | Publicação e reteste pendentes |
 
 ## Proibições verificadas
 
@@ -50,5 +51,7 @@ Na repetição, após recarga completa e seleção do PDF original, a UI alcanç
 A tela não oferece edição quando `hasMinimumResumeIdentity` é verdadeiro; `Criar nova` usaria diretamente a identidade incorreta. Nenhuma Pessoa foi criada e nenhum Perfil foi publicado nesta execução. O intake/arquivo recebido pelo fluxo normal permanece para continuidade; nenhuma exclusão foi feita. Não foi executada chamada manual de API, alteração de estado React ou correção direta no banco para contornar o gate humano. Corrigir a possibilidade de revisão da identidade antes da criação requer escopo adicional do PO.
 
 ## Conclusão
+
+Aditivo autorizado pelo PO: expor correção antes da criação e retomar o teste. Implementação reutiliza a RPC que verifica organização/papel, bloqueia intake resolvido e recalcula possíveis duplicados; sem migration ou alteração de segurança. Formulário em erro não encerra edição; cancelar não chama o backend. Criação exige mínimo nome/contato, vínculo name-only existente preservado. Contratos persistidos mantêm versões; acordo documental avança para 1.1.0.
 
 PARTIAL/BLOCKED. Ponte implantada com autorização específica e MIME PDF.js corrigido. Login/Home e leitura inicial do PDF comprovados; Draft/revisão e qualidade profissional não comprovados devido ao bloqueio de identidade. Runtime ativo `99b91c8`; túnel e workers dependem do PC ligado, sem retomada automática. Não há conclusão de cutover nem evidência de viabilidade CPU para este PDF.
