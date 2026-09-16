@@ -21,6 +21,7 @@ interface PaddleProviderOptions {
   recoveryEndpoint: string;
   timeoutMs: number;
   fetchImplementation?: typeof fetch;
+  requestHeaders?: () => Promise<Record<string, string>>;
 }
 
 const DEFAULT_OPTIONS: PaddleProviderOptions = {
@@ -66,9 +67,11 @@ export class PaddleDocumentIntelligenceProvider implements DocumentIntelligenceP
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.options.timeoutMs);
     try {
+      const requestHeaders = await this.options.requestHeaders?.() ?? {};
+      controller.signal.throwIfAborted();
       const response = await (this.options.fetchImplementation ?? fetch)(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { ...requestHeaders, "Content-Type": "application/json" },
         signal: controller.signal,
         body: JSON.stringify({
           file: bytesToBase64(request.bytes),

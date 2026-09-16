@@ -34,6 +34,35 @@ function nativePage(pageNumber: number, textSufficient = true): NativePagePrefli
   };
 }
 
+test("Paddle transport adds caller headers without changing its JSON contract", async () => {
+  let capturedHeaders: Headers | undefined;
+  let capturedBody: Record<string, unknown> | undefined;
+  const provider = new PaddleDocumentIntelligenceProvider({
+    requestHeaders: async () => ({ Authorization: "Bearer synthetic", "X-Prisma-Organization-Id": "synthetic-organization" }),
+    fetchImplementation: async (_url, init) => {
+      capturedHeaders = new Headers(init?.headers);
+      capturedBody = JSON.parse(String(init?.body)) as Record<string, unknown>;
+      return new Response("{}", { status: 503 });
+    },
+  });
+  await assert.rejects(provider.analyze({ bytes: new Uint8Array([37, 80, 68, 70]), mimeType: "application/pdf", route: "structure" }));
+  assert.equal(capturedHeaders?.get("authorization"), "Bearer synthetic");
+  assert.equal(capturedHeaders?.get("content-type"), "application/json");
+  assert.equal(capturedBody?.fileType, 0);
+  assert.equal(capturedBody?.useDocUnwarping, false);
+  assert.equal(capturedBody?.organizationId, undefined);
+});
+
+test("Paddle does not send document bytes when transport session resolution fails", async () => {
+  let called = false;
+  const provider = new PaddleDocumentIntelligenceProvider({
+    requestHeaders: async () => { throw new Error("session unavailable"); },
+    fetchImplementation: async () => { called = true; return new Response("{}"); },
+  });
+  await assert.rejects(provider.analyze({ bytes: new Uint8Array([37, 80, 68, 70]), mimeType: "application/pdf", route: "structure" }), (error: unknown) => error instanceof PaddleProviderError && error.reasonCode === "network_failure");
+  assert.equal(called, false);
+});
+
 test("preflight keeps a simple native PDF on the lowest-cost route", () => {
   assert.deepEqual(preflightDocument([nativePage(1), nativePage(2)]), {
     route: "native-fast",

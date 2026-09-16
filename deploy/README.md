@@ -90,6 +90,6 @@ A VPS possui snapshot operacional criado após o primeiro deploy público valida
 
 ## Limitação atual
 
-O frontend está online, mas Parser IA M5.7 e serviços de Document Intelligence que ainda dependem de loopback/local não fazem parte deste rollout.
+O frontend está online. Parser IA M5.7 continua fora do rollout. A ponte temporária Paddle aprovada em 2026-09-16 usa gateway autenticado, socket Unix e SSH reverso; implementação e evidência de ativação/aceite são distintas. Consulte `docs/operations/paddle-document-intelligence.md` e `docs/qa/aot-hosted-paddle-bridge.md`.
 
-Eles devem ser hospedados e integrados em movimento específico antes de serem considerados funcionalidades online.
+Antes de rebuild, preserve a imagem web anterior para rollback. O compose inclui `paddle-gateway`; use `build` sem limitar ao serviço web para construir ambos, e confirme a chave publicável/URL do Prisma-QA fora do Git. A flag continua baseline por default; enabled só no piloto autorizado e depois de verificar a ponte.

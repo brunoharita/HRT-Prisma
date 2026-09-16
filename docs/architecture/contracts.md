@@ -1,5 +1,7 @@
 # Catálogo de contratos
 
+Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058), owner operations/security, cabeçalhos sessão/organização e gateway. Não altera `document-intelligence-provider` 1.0.0 nem `canonical-document` 1.0.0. Status de implementação, implantação e aceite separado em `docs/qa/aot-hosted-paddle-bridge.md`; rollback para imagem web baseline e interrupção do túnel.
+
 ## Política
 
 Cada contrato material possui nome, owner, versão, consumidores, status, compatibilidade, evidência de implementação, ambiente e política para versão desconhecida.

@@ -67,6 +67,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Rules
 
+- [ADR-058: Ponte temporária Paddle hospedada](ADR-058-temporary-hosted-paddle-bridge.md) — accepted; SSH reverso, gateway autenticado e workers CPU locais; evidência no AoT.
+
 - Start from `ADR-000-template.md`.
 - Never edit an accepted decision to hide history. Amend the history or supersede it.
 - Reference code, migrations, contracts, tests, and rollout evidence separately.

@@ -70,7 +70,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     try {
       const nativeProcessed = localRetry?.file === file ? localRetry : await validateAndProcessPdf(file, setProgress, {
         documentIntelligenceMode: parserIaEnabled() ? "baseline" : documentIntelligenceRuntime.mode,
-        documentIntelligenceProvider: documentIntelligenceRuntime.provider,
+        documentIntelligenceProvider: documentIntelligenceRuntime.providerForOrganization(activeMembership.organizationId),
       });
       let nextProcessed = nativeProcessed;
       if (!useLocalReading) {

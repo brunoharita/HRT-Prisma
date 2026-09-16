@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.0.0
 context_bundle_version: 2.0.0
 product_version: 1.6.4
-current_state_version: 2.32.0
-current_state_last_verified: 2026-09-15
-documentation_source_count: 179
-source_manifest_sha256: d573eb3010ac948479ea683cc11dd7137eb1f10d4614b8b6281648ee21920989
+current_state_version: 2.33.0
+current_state_last_verified: 2026-09-16
+documentation_source_count: 183
+source_manifest_sha256: 9351516f120bf9398ef3626d2b4c02ead280a531c3e6af47a2f0db0a77e3c6f0
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -366,7 +366,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 #### Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. O frontend está hospedado na Hostinger desde 2026-09-15; ambiente Supabase separado de produção permanece inexistente.
 
 #### Comandos
 

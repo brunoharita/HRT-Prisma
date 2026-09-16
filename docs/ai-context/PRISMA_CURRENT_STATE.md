@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.32.0
-last_verified: 2026-09-15
+version: 2.33.0
+last_verified: 2026-09-16
 ---
 
 # Estado atual do Prisma
@@ -20,7 +20,7 @@ O primeiro rollout web público do Prisma foi validado em VPS Hostinger KVM 2 co
 
 O build Vite usa somente a URL e a chave publicável do Prisma-QA. Secrets server-side não são incorporados ao frontend. O deploy reproduzível está definido por `Dockerfile`, `.dockerignore`, `deploy/nginx.conf`, `deploy/docker-compose.yml` e `deploy/README.md`. Um snapshot da VPS foi criado após o baseline funcional.
 
-Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora deste rollout e não devem ser considerados funcionalidades online.
+Parser IA M5.7 permanece fora deste rollout. Em 2026-09-16 o PO aprovou uma ponte temporária SSH reversa para o Paddle no PC local, com rotas protegidas por sessão/organização (ADR-058, `paddle-hosted-transport-1.0.0`). Implementação em validação; ativação e importação end-to-end somente conforme evidência no `docs/qa/aot-hosted-paddle-bridge.md`. Não representa conclusão do cutover geral M5.6, otimização GPU ou infraestrutura definitiva. O diagnóstico confirmou Nginx sem proxy, build baseline e workers locais somente em loopback; Git remoto do deploy f1cc983.
 
 ## M6.1.2 — descoberta por trajetória em três grupos
 

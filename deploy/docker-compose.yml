@@ -9,9 +9,12 @@ services:
         VITE_DOCUMENT_INTELLIGENCE_MODE: ${VITE_DOCUMENT_INTELLIGENCE_MODE:-baseline}
         VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS: ${VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS:-240000}
         VITE_PARSER_IA_LOCAL: ${VITE_PARSER_IA_LOCAL:-false}
+        VITE_PRISMA_GIT_COMMIT: ${PRISMA_DEPLOY_COMMIT:-unknown}
     image: prisma-web:1.6.4
     container_name: prisma-web
     restart: unless-stopped
+    volumes:
+      - paddle-gateway-socket:/run/paddle-gateway:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prisma.rule=Host(`prisma.hrtsolutions.com.br`)"
@@ -19,3 +22,27 @@ services:
       - "traefik.http.routers.prisma.tls=true"
       - "traefik.http.routers.prisma.tls.certresolver=letsencrypt"
       - "traefik.http.services.prisma.loadbalancer.server.port=80"
+
+  paddle-gateway:
+    build:
+      context: ..
+      dockerfile: services/paddle-gateway/Dockerfile
+    image: prisma-paddle-gateway:1.0.0
+    container_name: prisma-paddle-gateway
+    network_mode: host
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      SUPABASE_URL: ${VITE_SUPABASE_URL}
+      SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
+    volumes:
+      - paddle-gateway-socket:/run/paddle-gateway
+    labels:
+      - "traefik.enable=false"
+    mem_limit: 384m
+    cpus: 0.5
+
+volumes:
+  paddle-gateway-socket:

@@ -1,4 +1,8 @@
 node_modules
+.git
+.tmp.driveupload
+models
+services/paddle/Dockerfile.gpu
 .pnpm-store
 dist
 web/dist

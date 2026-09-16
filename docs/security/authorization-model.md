@@ -46,6 +46,8 @@ Em 2026-08-28, transações revertidas no Prisma-QA confirmaram negação sem JW
 
 ## Fail-closed
 
+A ponte temporária Paddle (`paddle-hosted-transport-1.0.0`, ADR-058) valida a sessão via Supabase Auth e consulta operador ativo, organização e membership via REST/RLS com o token do usuário. Só Super Admin/Owner/Admin/Recruiter no escopo podem encaminhar documentos. Origem/versão/tenant ausentes ou desconhecidos falham fechados; a flag de rollout não concede autoridade. Não há chave privilegiada, novo grant ou migration. O gateway escuta socket Unix privado e os workers/túneis ficam em loopback. O corpo não é registrado ou persistido pelo gateway.
+
 Usuário sem sessão, membership, tenant, papel conhecido ou versão de política compatível recebe negação. Falha de serviço de autorização ou de carregamento de memberships não concede acesso. Service/secret key nunca vai para frontend e não é fallback de usuário.
 
 ## Operações privilegiadas

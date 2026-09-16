@@ -1,5 +1,9 @@
 # Versionamento
 
+## Ponte Paddle hospedada — 2026-09-16
+
+`paddle-hosted-transport-1.0.0` versiona cabeçalhos HTTP de sessão/organização e guardas do gateway temporário (ADR-058). Não altera payload Paddle, `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0, adapter 1.1.0, contratos de extração/persistência/revisão ou versão pública v1.6.4. Trata-se de implantação e proteção de transporte, sem nova entrega de produto aceita.
+
 ## Complemento local M5.7: formação, datas e duração (2026-09-12)
 
 `education-academic-classification` 1.1.0 assume conclusão inferida para curso declarado salvo indicação contrária. `resume-dates-1.0.0` normaliza componentes temporais e calcula diferença entre datas civis; `extraction-draft` 8.2.0 registra essa semântica no payload persistido existente. `adaptive-resume-extraction` 7.2.0 usa runtime `prisma-layout-adaptive-v10`; busca de perfis 1.1.0 substitui estimativa só por anos por duração em dias. Provider determinístico local passa a `deterministic-local-1.1.0`.

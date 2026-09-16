@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 179
-source_manifest_sha256: d573eb3010ac948479ea683cc11dd7137eb1f10d4614b8b6281648ee21920989
+documentation_source_count: 183
+source_manifest_sha256: 9351516f120bf9398ef3626d2b4c02ead280a531c3e6af47a2f0db0a77e3c6f0
 -->
 
 # Tudo sobre o Prisma
@@ -522,8 +522,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.32.0
-last_verified: 2026-09-15
+version: 2.33.0
+last_verified: 2026-09-16
 ---
 
 # Estado atual do Prisma
@@ -540,7 +540,7 @@ O primeiro rollout web público do Prisma foi validado em VPS Hostinger KVM 2 co
 
 O build Vite usa somente a URL e a chave publicável do Prisma-QA. Secrets server-side não são incorporados ao frontend. O deploy reproduzível está definido por `Dockerfile`, `.dockerignore`, `deploy/nginx.conf`, `deploy/docker-compose.yml` e `deploy/README.md`. Um snapshot da VPS foi criado após o baseline funcional.
 
-Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora deste rollout e não devem ser considerados funcionalidades online.
+Parser IA M5.7 permanece fora deste rollout. Em 2026-09-16 o PO aprovou uma ponte temporária SSH reversa para o Paddle no PC local, com rotas protegidas por sessão/organização (ADR-058, `paddle-hosted-transport-1.0.0`). Implementação em validação; ativação e importação end-to-end somente conforme evidência no `docs/qa/aot-hosted-paddle-bridge.md`. Não representa conclusão do cutover geral M5.6, otimização GPU ou infraestrutura definitiva. O diagnóstico confirmou Nginx sem proxy, build baseline e workers locais somente em loopback; Git remoto do deploy f1cc983.
 
 ## M6.1.2 — descoberta por trajetória em três grupos
 
@@ -861,11 +861,15 @@ Em 2026-09-04, a entrada `Processamento e revisões` da Central da Pessoa passou
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.12.0
-last_verified: 2026-09-14
+version: 1.13.0
+last_verified: 2026-09-16
 ---
 
 # Referência técnica do Prisma
+
+## Transporte Paddle hospedado temporário
+
+ADR-058 / `paddle-hosted-transport-1.0.0`: Nginx encaminha as duas rotas existentes a um gateway Node por socket Unix compartilhado. Gateway valida Auth/RLS e escopo, mantém payload PaddleX e encaminha apenas a 127.0.0.1:18080/18081 da VPS; SSH reverso chega a 8080/8081 no PC. Nenhuma porta do worker/gateway é publicada. Não há migration, chave privilegiada nem parser novo. Status de rollout e aceite em `docs/qa/aot-hosted-paddle-bridge.md`.
 
 ## M6.1.2 Matching por trajetória antes dos requisitos
 
@@ -909,7 +913,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. O frontend está hospedado na Hostinger desde 2026-09-15; ambiente Supabase separado de produção permanece inexistente.
 
 ## Comandos
 
@@ -2287,6 +2291,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058), owner operations/security, cabeçalhos sessão/organização e gateway. Não altera `document-intelligence-provider` 1.0.0 nem `canonical-document` 1.0.0. Status de implementação, implantação e aceite separado em `docs/qa/aot-hosted-paddle-bridge.md`; rollback para imagem web baseline e interrupção do túnel.
+
 ## Política
 
 Cada contrato material possui nome, owner, versão, consumidores, status, compatibilidade, evidência de implementação, ambiente e política para versão desconhecida.
@@ -2847,6 +2853,10 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+## Ponte Paddle hospedada — 2026-09-16
+
+`paddle-hosted-transport-1.0.0` versiona cabeçalhos HTTP de sessão/organização e guardas do gateway temporário (ADR-058). Não altera payload Paddle, `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0, adapter 1.1.0, contratos de extração/persistência/revisão ou versão pública v1.6.4. Trata-se de implantação e proteção de transporte, sem nova entrega de produto aceita.
 
 ## Complemento local M5.7: formação, datas e duração (2026-09-12)
 
@@ -6359,6 +6369,46 @@ Qualquer classificação semântica por atividade, aprendizado automático ou mu
 
 ---
 
+## Source: `docs/decisions/ADR-058-temporary-hosted-paddle-bridge.md`
+
+# ADR-058: Ponte temporária do frontend hospedado ao Paddle local
+
+- Status: accepted
+- Date: 2026-09-16
+- Owners: engineering-operations, security
+
+## Contexto e decisão
+
+PO aprovou túnel SSH reverso temporário e proteção das rotas. Reutilizar OpenSSH, Docker, Nginx, Auth/RLS do Prisma-QA e o adapter Paddle. As rotas relativas atualmente chegam ao Nginx estático, com 405; o build baseline não chama o provider.
+
+PC inicia SSH com duas portas remotas explicitamente 127.0.0.1:18080/18081. Gateway Node em network_mode host acessa essas portas, porém escuta somente socket Unix em volume privado compartilhado com Nginx. Isso resolve a separação da bridge Docker sem abrir listener TCP do gateway, habilitar GatewayPorts ou alterar Traefik. Conta SSH root foi cadastrada pelo PO para esta operação; a sessão temporária usa a chave existente, sem copiar chave privada. Identidade restrita de serviço deverá preceder uma operação permanente.
+
+## Alternativas e limites
+
+Tailscale foi apresentado, mas requer nova conta/agentes/políticas. SSH foi escolhido pelo PO pela simplicidade e reversibilidade. Vite não é proxy de produção. Nginx sozinho não valida a autorização Prisma; gateway mínimo em Node usa APIs existentes, sem nova dependência, migration, chave privilegiada ou novo contrato Paddle. `paddle-hosted-transport-1.0.0` versiona somente cabeçalhos de sessão/organização/versão. Payloads e modelos permanecem iguais.
+
+## Segurança, dados e compatibilidade
+
+Auth /user valida token. REST com a mesma sessão e chave publicável confirma operador ativo, organização visível via RLS e membership owner/admin/recruiter, com tratamento super_admin existente. Não usar metadata editável nem cache de autorização. Validar origem exata, versão, tamanho, assinatura/base64, chaves/opções do payload e rota fixa. Nenhuma URL arbitrária, retry, credencial ao worker ou logging de conteúdo. Uma inferência por vez, excesso retorna 429 ao fallback existente. Falha/desconexão mantém cooldown conservador, pois cancelar HTTP não garante cancelar Paddle. Corpo só em memória; proxy buffering desligado.
+
+O browser obtém sua própria sessão no instante da chamada e acrescenta cabeçalhos. DEV loopback continua compatível. Gateway indisponível ou negação nunca alcança Paddle; o produto mantém seu fallback aprovado. Não altera persistência, interpretação, matching ou revisão. Gateway não substitui a autorização transacional no Supabase. PC precisa ficar ligado e conectado; túnel não tem inicialização automática ou reconexão invisível.
+
+## Validação e rollback
+
+Negativos de transporte/Auth/tenant com fixtures sintéticas, regressão do provider/preflight e build; depois prova operacional e UI real do piloto. Rollback: imagem web anterior baseline, parar gateway/túnel; nenhum histórico reescrito. Reavaliar para concorrência, infraestrutura permanente ou rollout do Parser IA. Produção geral e benchmark M5.6 permanecem decisões separadas.
+
+## Referências
+
+- `docs/qa/agreement-hosted-paddle-bridge.md` 1.0.0; `docs/operations/paddle-document-intelligence.md`.
+- OpenSSH: https://manpages.ubuntu.com/manpages/jammy/man1/ssh.1.html
+- Nginx: https://nginx.org/en/docs/http/ngx_http_proxy_module.html
+
+## Histórico
+
+- 2026-09-16: decisão temporária aprovada pelo PO; evidências de implantação separadas no AoT.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6429,6 +6479,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 
 ## Rules
+
+- [ADR-058: Ponte temporária Paddle hospedada](ADR-058-temporary-hosted-paddle-bridge.md) — accepted; SSH reverso, gateway autenticado e workers CPU locais; evidência no AoT.
 
 - Start from `ADR-000-template.md`.
 - Never edit an accepted decision to hide history. Amend the history or supersede it.
@@ -6662,6 +6714,22 @@ Retenção de logs e auditoria ainda depende de política legal e operacional. L
 ## Source: `docs/operations/paddle-document-intelligence.md`
 
 # Operação local do Paddle Document Intelligence
+
+## Ponte temporária do frontend hospedado — 2026-09-16
+
+Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.
+
+`Browser -> HTTPS/Traefik -> Nginx -> socket Unix -> gateway -> VPS loopback 18080/18081 -> SSH reverso -> PC loopback 8080/8081`.
+
+Executar `scripts/start-paddle-tunnel.ps1` no PC. O processo permanece ativo durante o uso; Ctrl+C encerra a ponte. Em execução assistida, iniciar com janela oculta e registrar somente PID/caminho do script, sem credenciais. Não habilitar GatewayPorts nem alterar o bind local dos containers. PC desligado, suspenso, sem rede ou túnel encerrado torna o provider indisponível e preserva o fallback existente. Restart/reconexão do túnel é manual neste piloto.
+
+O gateway só escuta `/run/paddle-gateway/gateway.sock`, compartilhado por volume com Nginx, e usa network_mode host para alcançar o loopback da VPS. Não publica porta. `deploy/docker-compose.yml` recebe a URL e chave publicável QA já configuradas; não requer service key. Sessão Bearer, organização e versão do transporte vêm do browser e são verificadas antes de ler/encaminhar o documento. Chaves e sessão não chegam ao worker.
+
+Há limite de 21 MiB para JSON/base64 (PDF até 15 MiB), uma inferência simultânea, nenhum retry e deadline de 295 s no gateway, 300 s no Nginx. O cliente mantém 240 s, configurável entre 30 e 300 s como antes. Cancelamento de HTTP não garante cancelamento de inferência: falha de transporte conserva cooldown de 295 s, sem novas chamadas concorrentes. Logs do gateway contêm somente rota técnica, status e duração; Nginx não grava access log dessas rotas nem buffers de documento em disco.
+
+Para build do piloto: `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`, `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS=240000`, `VITE_PARSER_IA_LOCAL=false`. A autorização atual cobre o teste adaptativo hospedado, não a conclusão do benchmark/cutover geral M5.6. O Parser IA usa DEV/loopback e não é ativado pelo túnel.
+
+Rollback: preservar/taguear imagem web anterior, voltar a ela (baseline), parar apenas gateway e processo SSH desta ponte. Não remover volumes de modelos, documentos, perfis ou containers experimentais alheios. O web antigo funciona sem gateway; o Nginx novo também continua servindo login/Home quando o worker falta.
 
 ## Versões e licença
 
@@ -7820,6 +7888,51 @@ O build mantém o aviso já conhecido de chunk Ant Design acima de 900 kB. Não 
 
 ---
 
+## Source: `docs/qa/agreement-hosted-paddle-bridge.md`
+
+# Contrato de Acordos — Paddle hospedado com worker local
+
+Versão: 1.0.0. Estado: agreed. PO: Bruno. Aprovação: 2026-09-16, resposta "aprovo" à proposta de túnel SSH reverso temporário e proteção das rotas. Fonte funcional: anexo "Continuação da implantação do Prisma hospedado com PaddleOCR como worker local", seções 1–36. A aprovação autoriza a ponte e seus controles; não altera pipeline nem autoriza publicação automática de Perfil.
+
+## DEVE
+
+- D-01: preservar HTTPS, login, Home e backend Prisma-QA (CA-01 a CA-03 do anexo).
+- D-02: conservar os dois endpoints, JSON PaddleX, PP-StructureV3 e PaddleOCR-VL, preflight PDF.js, roteamento adaptativo e fallback (CA-04, CA-05, CA-09, CA-10).
+- D-03: conectar VPS ao PC por SSH outbound reverso, com portas somente loopback; autorizar cada chamada por sessão, operador ativo e organização antes do worker (CA-06, CA-07).
+- D-04: executar o PDF Ivan autorizado na interface hospedada até Draft/revisão; provar chamada e retorno do worker quando a rota o exigir (CA-08, CA-11 a CA-13).
+- D-05: conferir qualidade/evidência/proveniência pela UI e registrar tempos/rotas/páginas/fallback, sem currículo integral, secrets ou PII desnecessária em logs (CA-14 a CA-17).
+
+## PROIBIDO
+
+- P-01: novo pipeline, troca por llama.cpp, novo contrato de OCR ou Paddle obrigatório para todos os PDFs.
+- P-02: exposição pública de workers ou proxy sem autorização server-side, secrets no frontend e conteúdo pessoal nos logs.
+- P-03: alterar Pessoa, publicação, matching, Knowledge ou Supabase sem necessidade; publicar Perfil automaticamente.
+- P-04: declarar sucesso por health/probe, bypassar a interface como aceite, otimizar GPU ou fazer benchmarking amplo.
+
+## FORA DE ESCOPO
+
+- F-01: infraestrutura permanente, GPU, autoscaling, migração de backend, rollout do Parser IA M5.7 e novo ambiente de produção.
+
+## AUTONOMIA
+
+- A-01: detalhes reversíveis de Docker/Nginx/SSH, controles de transporte, limites e diagnóstico sanitizado, testes dirigidos, documentação, commit/push da branch.
+
+## PENDÊNCIAS
+
+Sem escolha arquitetural pendente para a ponte aprovada. Sessão autenticada e julgamento de qualidade podem exigir participação do PO. Inviabilidade de CPU abre movimento separado.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01: smoke do site, login/Home e identidade QA, sem mudança de backend.
+- CA-D02: testes reais do adapter/roteamento e inspeção do diff comprovam contrato intacto.
+- CA-D03: ausência de listeners públicos; negativos para anônimo, outro tenant, papel insuficiente, origem/contrato desconhecidos; indisponibilidade falha fechada.
+- CA-D04: importação real do PDF autorizado pela UI, sem artefato intermediário manual, com revisão alcançada.
+- CA-D05: trace existente e logs mínimos de transporte, tempos medidos e inspeção visual da revisão contra documento.
+
+Ativação enabled é limitada ao teste/piloto hospedado solicitado; não declara concluído o benchmark/cutover geral M5.6. Publicação de Perfil permanece humana.
+
+---
+
 ## Source: `docs/qa/agreement-linkedin-pdf-evaluation.md`
 
 # Contrato de Acordos - Avaliação de PDF LinkedIn
@@ -8488,6 +8601,53 @@ Referência de produto: `docs/product/ux-foundation.md`, `prisma-ux-foundation-1
 ## PENDÊNCIAS
 
 Nenhuma decisão de produto pendente no escopo autorizado. O item 3.3 anterior que recomendava manter Vagas está expressamente supersedido por D-3.3: **Posições**.
+
+---
+
+## Source: `docs/qa/aot-hosted-paddle-bridge.md`
+
+# AoT — ponte Paddle hospedada
+
+Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.0.0; execução em `docs/qa/execution-hosted-paddle-bridge.md`. Data: 2026-09-16. Baseline: f1cc983, branch `codex/hosted-paddle-bridge`. Ambiente: frontend público Hostinger com backend Prisma-QA, worker CPU local provisório.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status | Limitação |
+| --- | --- | --- | --- | --- |
+| D-01 | Web/backend preservados; Nginx com rotas adicionais | Login baseline observado; smoke pós-deploy pendente | PARTIAL | Home autenticada não revalidada |
+| D-02 | Adapter só acrescenta cabeçalhos; domínio/roteamento/payload sem alteração | 12 testes de adapter/preflight aprovados | PASS | Não é prova de worker real |
+| D-03 | SSH reverso, gateway Auth/RLS, socket Unix privado | Testes sintéticos de auth/tenant/rotas; implantação pendente | PARTIAL | Conectividade operacional ainda não provada |
+| D-04 | Mesma UI/intake/draft | Importação real ainda não executada | NOT TESTED | Requer sessão autenticada no navegador |
+| D-05 | Trace existente; logs somente rota/status/duração | Contrato de logs testado; qualidade e tempos reais pendentes | PARTIAL | Sem comparação semântica por UI |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem novo pipeline/modelo/roteamento | Diff sem mudança de domínio | PASS |
+| P-02 | Sem exposição/credencial/PII | Negativos sintéticos; prova de listeners remotos pendente | PARTIAL |
+| P-03 | Sem regras de Pessoa/publicação/matching/Knowledge/Supabase | Nenhuma migration ou mutação desses owners | PASS |
+| P-04 | Sem falsa conclusão/probe/GPU | Critérios E2E mantidos pendentes | PASS |
+
+## Fora de escopo preservado
+
+F-01: Parser IA continua DEV/loopback; infraestrutura permanente/GPU/autoscaling/migração não alterados. PASS.
+
+## Desvios do contrato
+
+Nenhum desvio funcional identificado no diff. Aceite incompleto não é tratado como sucesso.
+
+## Validação final
+
+23 testes dirigidos aprovados (12 adapter/preflight + 11 gateway), incluindo tenant, status/papel, anonimato, origem/contrato, SSRF/payload, timeout, cancelamento, concorrência e sanitização. Typecheck web, compilação TypeScript e build web aprovados. Aviso preexistente de chunk Ant Design acima de 900 kB. Imagem do gateway construída e smoke descartável confirmou execução como node, filesystem read-only, socket Unix e 401 anônimo; container de teste removido. Sem execução de `pnpm run validate`.
+
+## Git / QA / ambiente
+
+Itens preexistentes `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `/opt/prisma/models/` preservados e fora da entrega. Container experimental remoto `paddle-vl-llama-test` observado unhealthy, sem intervenção; não é worker desta ponte. A chave SSH foi cadastrada pelo PO, conexão root confirmada. Nenhum merge de main ou operação de produção geral.
+
+## Conclusão
+
+PARTIAL. Transporte em preparação; importação/revisão e qualidade hospedadas ainda não comprovadas.
 
 ---
 
@@ -9734,6 +9894,16 @@ Validar M5, Central da Pessoa e Documentos em `1920x1080`, `1600x900`, `1440x900
 - Smoke autenticado: M5, Central da Pessoa e Documentos aprovados em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, sem overflow horizontal. O M5 apresentou três seletores em colunas no desktop e uma coluna no mobile; a seleção de `Nível acadêmico` atualizou o caminho ativo de evidência. Nenhum descarte, salvamento ou publicação foi acionado.
 - Casos deliberadamente não classificados: quatro formações do Perfil v1 e cinco registros da importação histórica de Bruno Harita permanecem `legacy-unclassified` até revisão humana, porque foram extraídos antes deste classificador. Nenhum backfill sem evidência foi executado.
 - Resíduo externo ao movimento: `supabase db lint` continua apontando o erro histórico de cast do enum `knowledge_inbox_status` em `public.enqueue_knowledge_observation`. Não foi alterado porque pertence ao domínio Knowledge.
+
+---
+
+## Source: `docs/qa/execution-hosted-paddle-bridge.md`
+
+# Execução — ponte Paddle hospedada
+
+Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.0.0, lido por completo, com D-01 a D-05, P-01 a P-04, F-01, A-01 e CA-D01 a CA-D05 sem reinterpretar. Acordo incorpora os CA-01 a CA-17 do anexo do PO.
+
+Sequência: diagnóstico existente -> branch isolada do deploy f1cc983 -> gateway de transporte reutilizando Auth/RLS -> SSH reverso -> negativos/adapter/build -> implantação reversível -> jornada real hospedada -> AoT e contexto gerado. Gateway não contém parser, modelo nem regra de extração; usa Node já adotado pelo repositório e nenhuma biblioteca nova. Não executar validação integral sem autorização adicional. Não publicar Perfil nem ativar Parser IA M5.7. Se acesso autenticado/qualidade/tempo impedir prova, registrar PARTIAL/BLOCKED no AoT, sem declarar encerramento.
 
 ---
 
@@ -11727,6 +11897,8 @@ Em 2026-08-27, uma transação revertida confirmou a mutação M5 para Admin. Co
 Em 2026-08-28, transações revertidas no Prisma-QA confirmaram negação sem JWT, aceite adaptativo atômico, replay idempotente, incremento de lock e promoção de padrão somente depois de `approve_profile_review`. Nenhum evento ou padrão de teste permaneceu no banco.
 
 ## Fail-closed
+
+A ponte temporária Paddle (`paddle-hosted-transport-1.0.0`, ADR-058) valida a sessão via Supabase Auth e consulta operador ativo, organização e membership via REST/RLS com o token do usuário. Só Super Admin/Owner/Admin/Recruiter no escopo podem encaminhar documentos. Origem/versão/tenant ausentes ou desconhecidos falham fechados; a flag de rollout não concede autoridade. Não há chave privilegiada, novo grant ou migration. O gateway escuta socket Unix privado e os workers/túneis ficam em loopback. O corpo não é registrado ou persistido pelo gateway.
 
 Usuário sem sessão, membership, tenant, papel conhecido ou versão de política compatível recebe negação. Falha de serviço de autorização ou de carregamento de memberships não concede acesso. Service/secret key nunca vai para frontend e não é fallback de usuário.
 

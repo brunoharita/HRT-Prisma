@@ -1,5 +1,21 @@
 # Operação local do Paddle Document Intelligence
 
+## Ponte temporária do frontend hospedado — 2026-09-16
+
+Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.
+
+`Browser -> HTTPS/Traefik -> Nginx -> socket Unix -> gateway -> VPS loopback 18080/18081 -> SSH reverso -> PC loopback 8080/8081`.
+
+Executar `scripts/start-paddle-tunnel.ps1` no PC. O processo permanece ativo durante o uso; Ctrl+C encerra a ponte. Em execução assistida, iniciar com janela oculta e registrar somente PID/caminho do script, sem credenciais. Não habilitar GatewayPorts nem alterar o bind local dos containers. PC desligado, suspenso, sem rede ou túnel encerrado torna o provider indisponível e preserva o fallback existente. Restart/reconexão do túnel é manual neste piloto.
+
+O gateway só escuta `/run/paddle-gateway/gateway.sock`, compartilhado por volume com Nginx, e usa network_mode host para alcançar o loopback da VPS. Não publica porta. `deploy/docker-compose.yml` recebe a URL e chave publicável QA já configuradas; não requer service key. Sessão Bearer, organização e versão do transporte vêm do browser e são verificadas antes de ler/encaminhar o documento. Chaves e sessão não chegam ao worker.
+
+Há limite de 21 MiB para JSON/base64 (PDF até 15 MiB), uma inferência simultânea, nenhum retry e deadline de 295 s no gateway, 300 s no Nginx. O cliente mantém 240 s, configurável entre 30 e 300 s como antes. Cancelamento de HTTP não garante cancelamento de inferência: falha de transporte conserva cooldown de 295 s, sem novas chamadas concorrentes. Logs do gateway contêm somente rota técnica, status e duração; Nginx não grava access log dessas rotas nem buffers de documento em disco.
+
+Para build do piloto: `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`, `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS=240000`, `VITE_PARSER_IA_LOCAL=false`. A autorização atual cobre o teste adaptativo hospedado, não a conclusão do benchmark/cutover geral M5.6. O Parser IA usa DEV/loopback e não é ativado pelo túnel.
+
+Rollback: preservar/taguear imagem web anterior, voltar a ela (baseline), parar apenas gateway e processo SSH desta ponte. Não remover volumes de modelos, documentos, perfis ou containers experimentais alheios. O web antigo funciona sem gateway; o Nginx novo também continua servindo login/Home quando o worker falta.
+
 ## Versões e licença
 
 - PaddleOCR: 3.7.0, Apache-2.0;

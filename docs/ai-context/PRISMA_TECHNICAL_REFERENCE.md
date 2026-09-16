@@ -2,11 +2,15 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.12.0
-last_verified: 2026-09-14
+version: 1.13.0
+last_verified: 2026-09-16
 ---
 
 # Referência técnica do Prisma
+
+## Transporte Paddle hospedado temporário
+
+ADR-058 / `paddle-hosted-transport-1.0.0`: Nginx encaminha as duas rotas existentes a um gateway Node por socket Unix compartilhado. Gateway valida Auth/RLS e escopo, mantém payload PaddleX e encaminha apenas a 127.0.0.1:18080/18081 da VPS; SSH reverso chega a 8080/8081 no PC. Nenhuma porta do worker/gateway é publicada. Não há migration, chave privilegiada nem parser novo. Status de rollout e aceite em `docs/qa/aot-hosted-paddle-bridge.md`.
 
 ## M6.1.2 Matching por trajetória antes dos requisitos
 
@@ -50,7 +54,7 @@ Autorização usa membership persistida e `platform_users`, não `user_metadata`
 
 ## Ambientes
 
-Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. Por decisão do produto, frontend hospedado e ambiente de produção separado foram adiados enquanto o uso permanece interno e sem clientes.
+Local existe para CLI e shell web. O projeto Supabase `Prisma-QA` (`ioldpnqqvobprjiontre`) é o único backend remoto atual e possui foundation até M6.2, incluindo a compatibilidade M6.1.2 de matching 5.0.0, no escopo autorizado. `knowledge-agent` está implantada com JWT e pesquisa externa ativa sob políticas/caps; `assessment-item-generator` permanece implantado com provider externo desativado. O frontend está hospedado na Hostinger desde 2026-09-15; ambiente Supabase separado de produção permanece inexistente.
 
 ## Comandos
 
