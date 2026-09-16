@@ -54,6 +54,7 @@ import { legacyReviewEntityIdFromValue, reviewDraftNeedsContractUpgrade } from "
 import { reviewOperationError, supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import { PARSER_IA_VERSION, PARSER_IA_SOURCE_VERSION, parserIaMethodVersion, preparedParserIa } from "../../domain/parserIa";
 import { parserIaEnabled, prepareParserIa } from "../parserIaClient";
+import { documentIntelligenceRuntime } from "../documentIntelligenceRuntime";
 
 const DOCUMENT_BUCKET = "person-documents";
 
@@ -481,7 +482,10 @@ export const personIngestionService = {
     throwIfError(downloadError, "Não foi possível recuperar o PDF original. O documento permanece preservado.");
     if (!source) throw new Error("O PDF original não está disponível para esta retomada.");
     const file = new File([source], document.filename, { type: "application/pdf" });
-    const native = await validateAndProcessPdf(file, undefined, { documentIntelligenceMode: "baseline" });
+    const native = await validateAndProcessPdf(file, undefined, {
+      documentIntelligenceMode: documentIntelligenceRuntime.mode,
+      documentIntelligenceProvider: documentIntelligenceRuntime.providerForOrganization(organizationId),
+    });
     if (native.sha256 !== document.checksum_sha256) throw new Error("O PDF recuperado não corresponde ao arquivo original. A retomada foi interrompida.");
     const input = await prepareParserIa(native, organizationId);
     await processResolvedIntake(organizationId, input, {
@@ -1651,7 +1655,6 @@ async function buildPreparedExtraction(organizationId: string, input: ProcessedD
 
 function assertParserIaScope(organizationId: string, input: ProcessedDocumentInput): void {
   if (!input.parserIa) return;
-  if (!import.meta.env.DEV) throw new Error("O Parser IA deste movimento está disponível somente no ambiente local.");
   preparedParserIa(input, organizationId);
 }
 

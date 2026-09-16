@@ -31,6 +31,7 @@ Devem existir fora do Git:
 - VITE_DOCUMENT_INTELLIGENCE_MODE
 - VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS
 - VITE_PARSER_IA_LOCAL
+- VITE_PARSER_IA_MODE (`hosted` no rollout autorizado; `disabled` no rollback)
 
 Nunca colocar service role, OpenAI API key ou outro secret server-side em variável VITE_*.
 
@@ -88,8 +89,8 @@ Em caso de falha, voltar para a imagem ou commit anteriormente validado e recria
 
 A VPS possui snapshot operacional criado após o primeiro deploy público validado em 2026-09-15.
 
-## Limitação atual
+## Pipeline temporário de importação
 
-O frontend está online. Parser IA M5.7 continua fora do rollout. A ponte temporária Paddle aprovada em 2026-09-16 usa gateway autenticado, socket Unix e SSH reverso; implementação e evidência de ativação/aceite são distintas. Consulte `docs/operations/paddle-document-intelligence.md` e `docs/qa/aot-hosted-paddle-bridge.md`.
+O frontend usa o fluxo PDF.js -> gate semântico -> Paddle quando necessário -> Parser IA -> revisão humana. Paddle e Parser IA passam pelo mesmo gateway autenticado, socket Unix e SSH reverso; a chave OpenAI permanece somente no worker loopback do PC. Consulte `docs/operations/paddle-document-intelligence.md` e `docs/qa/aot-production-resume-quality-pipeline.md`.
 
-Antes de rebuild, preserve a imagem web anterior para rollback. O compose inclui `paddle-gateway`; use `build` sem limitar ao serviço web para construir ambos, e confirme a chave publicável/URL do Prisma-QA fora do Git. A flag continua baseline por default; enabled só no piloto autorizado e depois de verificar a ponte.
+Antes de rebuild, preserve a imagem web anterior para rollback. O compose inclui `paddle-gateway`; use `build` sem limitar ao serviço web para construir ambos, e confirme a chave publicável/URL do Supabase único fora do Git. Ative `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled` e `VITE_PARSER_IA_MODE=hosted` somente no rollout autorizado e depois de verificar os três workers loopback. Os defaults continuam fechados.

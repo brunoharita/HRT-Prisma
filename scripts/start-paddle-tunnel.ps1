@@ -11,5 +11,6 @@ param(
     -o ExitOnForwardFailure=yes -o ConnectTimeout=10 `
     -o ServerAliveInterval=30 -o ServerAliveCountMax=3 `
     -R 127.0.0.1:18080:127.0.0.1:8080 `
-    -R 127.0.0.1:18081:127.0.0.1:8081 "$VpsUser@$VpsHost"
+    -R 127.0.0.1:18081:127.0.0.1:8081 `
+    -R 127.0.0.1:18787:127.0.0.1:8787 "$VpsUser@$VpsHost"
 exit $LASTEXITCODE

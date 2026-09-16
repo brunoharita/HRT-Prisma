@@ -12,6 +12,7 @@ import {
   type LayoutTextLine,
 } from "./adaptiveResumeExtraction.js";
 import { createLocalOcrWorker } from "./ocrWorker.js";
+import { assessResumeSemanticQuality } from "./resumeSemanticQuality.js";
 import {
   DOCUMENT_INTELLIGENCE_CONTRACT_VERSION,
   canonicalPageToLayoutLines,
@@ -478,7 +479,26 @@ export async function validateAndProcessPdf(
   }
 
   const preflightStartedAt = performance.now();
-  const preflight = preflightDocument(nativePages);
+  let preflight = preflightDocument(nativePages);
+  if (preflight.route === "native-fast") {
+    const deterministic = buildAdaptiveExtraction(pages).draft;
+    const semantic = assessResumeSemanticQuality({
+      pageCount: nativePages.length,
+      experienceCount: deterministic.experiences.length,
+      hasProfessionalTitle: Boolean(deterministic.professionalTitle),
+      hasSummary: Boolean(deterministic.summary),
+      competencyCount: deterministic.competencies.length,
+      areaCount: deterministic.areasOfExpertise.length,
+      keyResultCount: deterministic.keyResults.length,
+    });
+    if (!semantic.sufficient) {
+      preflight = {
+        ...preflight,
+        route: "structure",
+        reasons: semantic.reasons,
+      };
+    }
+  }
   const mode = options.documentIntelligenceMode ?? resolveDocumentIntelligenceMode(undefined);
   const trace: DocumentIntelligenceTrace = {
     contractVersion: DOCUMENT_INTELLIGENCE_CONTRACT_VERSION,
@@ -498,6 +518,7 @@ export async function validateAndProcessPdf(
       pageCount: nativePages.length,
       outcome: "success",
       diagnosticCategory: null,
+      reasonCode: preflight.reasons.join("+") || null,
     }, {
       stage: "native",
       route: preflight.route,

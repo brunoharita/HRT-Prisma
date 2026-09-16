@@ -68,6 +68,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Rules
 
 - [ADR-058: Ponte temporária Paddle hospedada](ADR-058-temporary-hosted-paddle-bridge.md) — accepted; SSH reverso, gateway autenticado e workers CPU locais; evidência no AoT.
+- [ADR-059: Pipeline serial de qualidade para currículos em produção](ADR-059-production-resume-quality-pipeline.md) — accepted; PDF.js, gate semântico, Paddle condicional e Parser IA antes da revisão humana.
 
 - Start from `ADR-000-template.md`.
 - Never edit an accepted decision to hide history. Amend the history or supersede it.

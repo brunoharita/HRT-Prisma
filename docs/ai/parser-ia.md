@@ -1,6 +1,6 @@
 # M5.7 Parser IA
 
-Contrato: `parser-ia-1.0.0`. Acordo/execução: `../qa/agreement-m57-parser-ia.md` e `../qa/execution-m57-parser-ia.md` 1.1.2. Decisão: ADR-049. Estado: entrega local aprovada pelo PO, com importação/revisão verificadas e publicação humana confirmada; qualidade não generalizada.
+Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.0.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites do piloto.
 
 ## Funcionamento
 
@@ -10,7 +10,9 @@ Backend Node local lê o PDF com PDF.js, mantendo spans e coordenadas independen
 
 As coordenadas de evidência são exclusivamente da fonte. Vários spans/páginas podem suportar um campo. Preservar palavra composta, separação explícita de listas, múltiplos cargos e períodos; títulos/cursos ausentes permanecem nulos. Duplicatas de formação são sinalizadas para decisão humana. O modelo não decide publicação, contratação, permissões ou mutação de dados aprovados.
 
-O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa também recebe a preparação. Reprocessamento histórico mantém a rota anterior nesta etapa. A rota fica desligada por padrão, habilitável somente em DEV/loopback. Falha na importação oferece continuação explícita pela leitura local, sem vender fallback como sucesso da IA. Resultado parcial mostra aviso e pendências.
+O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa também recebe a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do túnel loopback. Falha na importação oferece continuação explícita pela leitura local, sem vender fallback como sucesso da IA. Resultado parcial mostra aviso e pendências.
+
+No fluxo corrente, o Parser IA não desativa a inteligência documental. A aplicação executa PDF.js e a estruturação determinística, avalia motivos semânticos, usa Paddle quando a leitura for visual, textual ou semanticamente insuficiente e só então chama o Parser IA com o PDF original e os spans verificáveis. O modelo usa a imagem do PDF para contexto; fatos persistidos continuam limitados às referências aceitas pelo validador.
 
 ## Executar localmente
 
@@ -21,7 +23,7 @@ Ativação autorizada para uso direto local em 2026-09-12. Na raiz oficial, `pnp
 3. Para desenvolvimento da integração web, `VITE_PARSER_IA_LOCAL=true` e reinício do Vite. Proxy local encaminha `/parser-ia-local/parse`. **A URL localhost da interface não isola o banco:** a persistência continua apontando para o Supabase configurado. Esta validação não usou esse fluxo para escrever no ambiente remoto.
 4. Benchmark independente, sem banco: `pnpm run build`, depois `node scripts/benchmark-parser-ia.mjs rodada --live evaluation-03`, somente com arquivos e envio externo autorizados. `--cached` revalida a resposta já recebida sem ler a chave nem acessar rede.
 
-Não abrir serviço em 0.0.0.0, não expor proxy pela Internet, não copiar `.env.local`, tmp, PDFs ou referências privadas para Git/Hostinger. Nunca publicar este backend experimental como backend multiusuário.
+Não abrir serviço em 0.0.0.0, não copiar `.env.local`, tmp, PDFs ou referências privadas para Git/Hostinger. O único acesso hospedado permitido é a rota fixa do gateway autenticado definida no ADR-059; nunca publicar diretamente o worker loopback.
 
 ## Limites
 

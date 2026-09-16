@@ -1,4 +1,4 @@
-// Local-only M5.7 backend. Never import this module into a browser bundle.
+// Loopback-only inference worker. Never import this module into a browser bundle.
 import { readFile, writeFile, mkdir, open, unlink } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";

@@ -9,8 +9,9 @@ services:
         VITE_DOCUMENT_INTELLIGENCE_MODE: ${VITE_DOCUMENT_INTELLIGENCE_MODE:-baseline}
         VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS: ${VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS:-240000}
         VITE_PARSER_IA_LOCAL: ${VITE_PARSER_IA_LOCAL:-false}
+        VITE_PARSER_IA_MODE: ${VITE_PARSER_IA_MODE:-disabled}
         VITE_PRISMA_GIT_COMMIT: ${PRISMA_DEPLOY_COMMIT:-unknown}
-    image: prisma-web:1.6.4
+    image: prisma-web:1.7.0
     container_name: prisma-web
     restart: unless-stopped
     volumes:
@@ -27,7 +28,7 @@ services:
     build:
       context: ..
       dockerfile: services/paddle-gateway/Dockerfile
-    image: prisma-paddle-gateway:1.0.0
+    image: prisma-paddle-gateway:1.1.0
     container_name: prisma-paddle-gateway
     network_mode: host
     restart: unless-stopped

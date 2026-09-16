@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { once } from "node:events";
-import { createAuthorizer, createGateway, TRANSPORT_VERSION } from "../../services/paddle-gateway/gateway.mjs";
+import { createHash } from "node:crypto";
+import { createAuthorizer, createGateway, PARSER_TRANSPORT_VERSION, TRANSPORT_VERSION } from "../../services/paddle-gateway/gateway.mjs";
 
 const organizationId = "11111111-1111-4111-8111-111111111111";
 const userId = "22222222-2222-4222-8222-222222222222";
@@ -25,7 +26,7 @@ async function fixture(t, options = {}) {
   t.after(() => { server.closeAllConnections(); server.close(); });
   const base = `http://127.0.0.1:${server.address().port}`;
   const send = (changes = {}, path = "/document-intelligence/layout-parsing") => fetch(`${base}${path}`, { method: "POST", headers, body: JSON.stringify(payload), ...changes });
-  return { calls, logs, send };
+  return { base, calls, logs, send };
 }
 
 test("transport preserves payload and both routes but strips credentials before Paddle", async (t) => {
@@ -39,6 +40,54 @@ test("transport preserves payload and both routes but strips credentials before 
   for (const call of calls) { assert.deepEqual(JSON.parse(call.init.body), payload); assert.deepEqual(call.init.headers, { "Content-Type": "application/json" }); }
   assert.equal(logs.length, 2);
   assert.ok(logs.every((entry) => Object.keys(entry).sort().join() === "durationMs,event,route,status"));
+});
+
+test("parser route authenticates the binding and forwards only loopback worker headers", async (t) => {
+  const { base, calls } = await fixture(t);
+  const pdf = Buffer.from("%PDF-1.7\nsynthetic\n%%EOF");
+  const parserPayload = {
+    organizationId,
+    pdfBase64: pdf.toString("base64"),
+    sourceSha256: createHash("sha256").update(pdf).digest("hex"),
+  };
+  const response = await fetch(`${base}/parser-ia-hosted/parse`, {
+    method: "POST",
+    headers: {
+      Origin: headers.Origin,
+      Authorization: headers.Authorization,
+      "X-Prisma-Organization-Id": organizationId,
+      "X-Prisma-Parser-Contract": PARSER_TRANSPORT_VERSION,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(parserPayload),
+  });
+  assert.equal(response.status, 200);
+  assert.equal(calls[0].url, "http://127.0.0.1:18787/parse");
+  assert.deepEqual(JSON.parse(calls[0].init.body), parserPayload);
+  assert.deepEqual(calls[0].init.headers, {
+    "Content-Type": "application/json",
+    Host: "127.0.0.1:8787",
+    Origin: "http://127.0.0.1:5555",
+    "X-Prisma-Local-Parser": "1",
+  });
+  assert.equal(JSON.stringify(calls[0]).includes("Bearer"), false);
+});
+
+test("parser route rejects tenant mismatch, source mismatch and Paddle contract before forwarding", async (t) => {
+  const { base, calls } = await fixture(t);
+  const pdf = Buffer.from("%PDF-1.7\nsynthetic\n%%EOF");
+  const body = { organizationId, pdfBase64: pdf.toString("base64"), sourceSha256: "0".repeat(64) };
+  const parserHeaders = {
+    Origin: headers.Origin,
+    Authorization: headers.Authorization,
+    "X-Prisma-Organization-Id": organizationId,
+    "X-Prisma-Parser-Contract": PARSER_TRANSPORT_VERSION,
+    "Content-Type": "application/json",
+  };
+  assert.equal((await fetch(`${base}/parser-ia-hosted/parse`, { method: "POST", headers: parserHeaders, body: JSON.stringify(body) })).status, 400);
+  assert.equal((await fetch(`${base}/parser-ia-hosted/parse`, { method: "POST", headers: parserHeaders, body: JSON.stringify({ ...body, organizationId: "33333333-3333-4333-8333-333333333333" }) })).status, 400);
+  assert.equal((await fetch(`${base}/parser-ia-hosted/parse`, { method: "POST", headers: { ...parserHeaders, "X-Prisma-Parser-Contract": TRANSPORT_VERSION }, body: JSON.stringify(body) })).status, 400);
+  assert.equal(calls.length, 0);
 });
 
 test("rejects anonymous, cross-origin, missing tenant, unknown contract and unexpected routes before forwarding", async (t) => {

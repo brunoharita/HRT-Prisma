@@ -4,15 +4,15 @@
 
 Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.
 
-`Browser -> HTTPS/Traefik -> Nginx -> socket Unix -> gateway -> VPS loopback 18080/18081 -> SSH reverso -> PC loopback 8080/8081`.
+`Browser -> HTTPS/Traefik -> Nginx -> socket Unix -> gateway -> VPS loopback 18080/18081/18787 -> SSH reverso -> PC loopback 8080/8081/8787`.
 
 Executar `scripts/start-paddle-tunnel.ps1` no PC. O processo permanece ativo durante o uso; Ctrl+C encerra a ponte. Em execução assistida, iniciar com janela oculta e registrar somente PID/caminho do script, sem credenciais. Não habilitar GatewayPorts nem alterar o bind local dos containers. PC desligado, suspenso, sem rede ou túnel encerrado torna o provider indisponível e preserva o fallback existente. Restart/reconexão do túnel é manual neste piloto.
 
-O gateway só escuta `/run/paddle-gateway/gateway.sock`, compartilhado por volume com Nginx, e usa network_mode host para alcançar o loopback da VPS. Não publica porta. `deploy/docker-compose.yml` recebe a URL e chave publicável QA já configuradas; não requer service key. Sessão Bearer, organização e versão do transporte vêm do browser e são verificadas antes de ler/encaminhar o documento. Chaves e sessão não chegam ao worker.
+O gateway só escuta `/run/paddle-gateway/gateway.sock`, compartilhado por volume com Nginx, e usa network_mode host para alcançar o loopback da VPS. Não publica porta. `deploy/docker-compose.yml` recebe a URL e chave publicável do Supabase já configuradas; não requer service key. Sessão Bearer, organização e versão do transporte vêm do browser e são verificadas antes de ler/encaminhar o documento. Chaves e sessão não chegam aos workers. A rota fixa `/parser-ia-hosted/parse` também valida organização, hash, assinatura e tamanho do PDF antes de remover credenciais e encaminhar ao worker 8787.
 
 Há limite de 21 MiB para JSON/base64 (PDF até 15 MiB), uma inferência simultânea, nenhum retry e deadline de 295 s no gateway, 300 s no Nginx. O cliente mantém 240 s, configurável entre 30 e 300 s como antes. Cancelamento de HTTP não garante cancelamento de inferência: falha de transporte conserva cooldown de 295 s, sem novas chamadas concorrentes. Logs do gateway contêm somente rota técnica, status e duração; Nginx não grava access log dessas rotas nem buffers de documento em disco.
 
-Para build do piloto: `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`, `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS=240000`, `VITE_PARSER_IA_LOCAL=false`. A autorização atual cobre o teste adaptativo hospedado, não a conclusão do benchmark/cutover geral M5.6. O Parser IA usa DEV/loopback e não é ativado pelo túnel.
+Para o rollout autorizado: `VITE_DOCUMENT_INTELLIGENCE_MODE=enabled`, `VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS=240000`, `VITE_PARSER_IA_LOCAL=false`, `VITE_PARSER_IA_MODE=hosted`. O Parser IA continua escutando somente em loopback; a rota pública é protegida pelo gateway e não expõe o worker ou a chave OpenAI.
 
 Na implantação autorizada de 2026-09-16, exportar também `PRISMA_DEPLOY_COMMIT` com o SHA construído. Os overrides do piloto foram fornecidos no build, sem alterar `.env.production`; precisam ser repetidos em rebuild autorizado. Construir ambos os serviços e iniciar `paddle-gateway` antes de `prisma-web` para inicializar a propriedade do volume do socket. Runtime publicado `55733a0`; imagem baseline preservada como `prisma-web:rollback-f1cc983-paddle` e versão anterior à correção de identidade como `prisma-web:rollback-99b91c8-identity`. O Nginx serve `.mjs` como application/javascript, necessário ao worker PDF.js. Validar HTTP após estabilização do container, não apenas durante sua recriação.
 
@@ -67,7 +67,7 @@ O probe rejeita endpoint fora de loopback e imprime somente hash curto, tempo, p
 
 ## Falha e rollback
 
-Timeout, indisponibilidade, JSON inválido, página ausente ou texto insuficiente retornam ao pipeline existente. Defina `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e pare os containers para rollback. Não reprocese perfis históricos e não promova flag para produção.
+Timeout, indisponibilidade, JSON inválido, página ausente ou texto insuficiente ficam explícitos. O operador pode escolher conscientemente continuar somente com a leitura local; essa escolha não é registrada como sucesso da IA. Para rollback, use `VITE_PARSER_IA_MODE=disabled`, restaure a imagem anterior e interrompa o túnel. Não reprocessar perfis históricos em massa.
 
 ## Evidência desta execução
 

@@ -1,13 +1,16 @@
 import { createServer } from "node:http";
 import { chmod, unlink } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 
 export const TRANSPORT_VERSION = "paddle-hosted-transport-1.0.0";
+export const PARSER_TRANSPORT_VERSION = "parser-ia-hosted-transport-1.0.0";
 export const MAX_BODY_BYTES = 21 * 1024 * 1024;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ROUTES = new Map([
-  ["/document-intelligence/layout-parsing", "http://127.0.0.1:18080/layout-parsing"],
-  ["/document-intelligence-vl/layout-parsing", "http://127.0.0.1:18081/layout-parsing"],
+  ["/document-intelligence/layout-parsing", { target: "http://127.0.0.1:18080/layout-parsing", kind: "structure" }],
+  ["/document-intelligence-vl/layout-parsing", { target: "http://127.0.0.1:18081/layout-parsing", kind: "recovery" }],
+  ["/parser-ia-hosted/parse", { target: "http://127.0.0.1:18787/parse", kind: "parser" }],
 ]);
 
 class HttpFailure extends Error {
@@ -56,6 +59,19 @@ export function validatePayload(payload) {
   if (payload.fileType === 0 ? !pdf : !(png || jpeg)) throw new HttpFailure(400, "invalid_signature");
 }
 
+export function validateParserPayload(payload, organizationId) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)
+    || Object.keys(payload).sort().join() !== "organizationId,pdfBase64,sourceSha256"
+    || payload.organizationId !== organizationId
+    || typeof payload.pdfBase64 !== "string" || payload.pdfBase64.length === 0 || payload.pdfBase64.length % 4 !== 0
+    || !/^[A-Za-z0-9+/]+={0,2}$/.test(payload.pdfBase64)
+    || !/^[a-f0-9]{64}$/.test(payload.sourceSha256 ?? "")) throw new HttpFailure(400, "invalid_payload");
+  const bytes = Buffer.from(payload.pdfBase64, "base64");
+  if (bytes.length > 15 * 1024 * 1024) throw new HttpFailure(413, "file_too_large");
+  if (bytes.subarray(0, 5).toString("ascii") !== "%PDF-" || !bytes.subarray(-2048).includes(Buffer.from("%%EOF"))) throw new HttpFailure(400, "invalid_signature");
+  if (createHash("sha256").update(bytes).digest("hex") !== payload.sourceSha256) throw new HttpFailure(400, "source_mismatch");
+}
+
 async function readBody(request, maximum = MAX_BODY_BYTES) {
   if (Number(request.headers["content-length"]) > maximum) throw new HttpFailure(413, "body_too_large");
   const chunks = [];
@@ -93,7 +109,8 @@ export function createGateway({ authorize, fetchImpl = fetch, origin = "https://
       if (!route) throw new HttpFailure(404, "route_not_found");
       if (request.method !== "POST") throw new HttpFailure(405, "method_not_allowed");
       if (request.headers.origin !== origin) throw new HttpFailure(403, "origin_denied");
-      if (request.headers["x-prisma-document-contract"] !== TRANSPORT_VERSION) throw new HttpFailure(400, "contract_required");
+      const expectedContract = route.kind === "parser" ? request.headers["x-prisma-parser-contract"] : request.headers["x-prisma-document-contract"];
+      if (expectedContract !== (route.kind === "parser" ? PARSER_TRANSPORT_VERSION : TRANSPORT_VERSION)) throw new HttpFailure(400, "contract_required");
       if (!/^application\/json(?:\s*;.*)?$/i.test(request.headers["content-type"] ?? "") || request.headers["content-encoding"]) throw new HttpFailure(415, "content_type_denied");
       const authorization = request.headers.authorization;
       const organizationId = request.headers["x-prisma-organization-id"];
@@ -107,13 +124,17 @@ export function createGateway({ authorize, fetchImpl = fetch, origin = "https://
       const body = await readBody(request);
       let payload;
       try { payload = JSON.parse(body); } catch { throw new HttpFailure(400, "invalid_json"); }
-      validatePayload(payload);
+      if (route.kind === "parser") validateParserPayload(payload, organizationId);
+      else validatePayload(payload);
       if (controller.signal.aborted) throw new HttpFailure(499, "client_disconnected");
       timer = setTimeout(() => controller.abort(), timeoutMs);
       // Do not retry non-idempotent inference; credentials never reach Paddle.
       let upstream;
       try {
-        upstream = await fetchImpl(route, { method: "POST", headers: { "Content-Type": "application/json" }, body, signal: controller.signal, redirect: "error" });
+        const upstreamHeaders = route.kind === "parser"
+          ? { "Content-Type": "application/json", Host: "127.0.0.1:8787", Origin: "http://127.0.0.1:5555", "X-Prisma-Local-Parser": "1" }
+          : { "Content-Type": "application/json" };
+        upstream = await fetchImpl(route.target, { method: "POST", headers: upstreamHeaders, body, signal: controller.signal, redirect: "error" });
       } catch {
         holdWorker = true; // Disconnect cannot prove that Paddle cancelled its CPU work.
         throw new HttpFailure(controller.signal.aborted ? 504 : 502, "worker_unavailable");
@@ -140,7 +161,7 @@ export function createGateway({ authorize, fetchImpl = fetch, origin = "https://
       response.off("close", onClose);
       if (ownsWorker) busyUntil = holdWorker ? Date.now() + timeoutMs : 0;
       activeRequests -= 1;
-      log({ event: "document_transport", route: route?.includes(":18081/") ? "recovery" : route ? "structure" : "unknown", status, durationMs: Date.now() - started });
+      log({ event: "document_transport", route: route?.kind ?? "unknown", status, durationMs: Date.now() - started });
     }
   });
 }
