@@ -174,11 +174,16 @@ export function allowedLocalRequest(req, port) {
     && req.headers["content-type"] === "application/json";
 }
 
-export function createParserHttpServer(parse = createParserService(), port = 8787) {
+export function createParserHttpServer(parse = createParserService(), port = 8787, log = (entry) => console.log(JSON.stringify(entry))) {
   return createServer(async (req, res) => {
+    const started = performance.now();
+    const report = (status, code) => {
+      // Fixed codes only: no request data, headers, document content or provider errors.
+      try { log({ event: "parser_transport", status, code, durationMs: Math.round(performance.now() - started) }); } catch { /* Optional telemetry cannot block the operation. */ }
+    };
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
-    if (!allowedLocalRequest(req, port) || req.method !== "POST" || req.url !== "/parse") { res.writeHead(403); res.end('{"error":"PARSER_LOCAL_ONLY"}'); return; }
+    if (!allowedLocalRequest(req, port) || req.method !== "POST" || req.url !== "/parse") { res.writeHead(403); res.end('{"error":"PARSER_LOCAL_ONLY"}'); report(403, "PARSER_LOCAL_ONLY"); return; }
     try {
       let total = 0; const chunks = [];
       for await (const chunk of req) { total += chunk.length; if (total > 22 * 1024 * 1024) throw new Error("PARSER_INVALID_PDF"); chunks.push(chunk); }
@@ -186,7 +191,8 @@ export function createParserHttpServer(parse = createParserService(), port = 878
       if (typeof input.pdfBase64 !== "string" || !/^[A-Za-z0-9+/]+={0,2}$/.test(input.pdfBase64) || Object.keys(input).sort().join() !== "organizationId,pdfBase64,sourceSha256") throw new Error("PARSER_INVALID_PDF");
       const output = await parse({ bytes: Buffer.from(input.pdfBase64, "base64"), organizationId: input.organizationId, sourceSha256: input.sourceSha256 });
       res.writeHead(200, { "Content-Type": "application/json" }); res.end(JSON.stringify(output));
-    } catch (error) { res.writeHead(422, { "Content-Type": "application/json" }); res.end(JSON.stringify({ error: safeParserError(error) })); }
+      report(200, "PARSER_OK");
+    } catch (error) { const code = safeParserError(error); res.writeHead(422, { "Content-Type": "application/json" }); res.end(JSON.stringify({ error: code })); report(422, code); }
   });
 }
 

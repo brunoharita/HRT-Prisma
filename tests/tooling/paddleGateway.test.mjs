@@ -2,7 +2,27 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { once } from "node:events";
 import { createHash } from "node:crypto";
-import { createAuthorizer, createGateway, PARSER_TRANSPORT_VERSION, TRANSPORT_VERSION } from "../../services/paddle-gateway/gateway.mjs";
+import { createServer } from "node:http";
+import { createAuthorizer, createGateway, requestLoopbackWorker, PARSER_TRANSPORT_VERSION, TRANSPORT_VERSION } from "../../services/paddle-gateway/gateway.mjs";
+
+test("real loopback transport preserves Host, blocks redirects and aborts without retry", async (t) => {
+  let calls = 0;
+  const server = createServer((req, res) => {
+    calls++;
+    assert.equal(req.headers.host, "127.0.0.1:8787");
+    if (req.url === "/redirect") { res.writeHead(302, { Location: "/unexpected" }); res.end(); }
+    else if (req.url !== "/pending") { res.writeHead(200, { "Content-Type": "application/json" }); res.end('{"ok":true}'); }
+  });
+  server.listen(0, "127.0.0.1"); await once(server, "listening");
+  t.after(() => { server.closeAllConnections(); server.close(); });
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const options = { method: "POST", headers: { Host: "127.0.0.1:8787" }, body: "{}" };
+  assert.deepEqual(await (await requestLoopbackWorker(`${base}/parse`, options)).json(), { ok: true });
+  await assert.rejects(requestLoopbackWorker(`${base}/redirect`, options), /redirect_denied/);
+  await assert.rejects(requestLoopbackWorker(`${base}/pending`, { ...options, signal: AbortSignal.timeout(50) }), { name: "AbortError" });
+  await assert.rejects(requestLoopbackWorker("http://example.com/", options), /invalid_worker_target/);
+  assert.equal(calls, 3);
+});
 
 const organizationId = "11111111-1111-4111-8111-111111111111";
 const userId = "22222222-2222-4222-8222-222222222222";

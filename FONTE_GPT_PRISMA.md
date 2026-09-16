@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.0.0
 context_bundle_version: 2.0.0
 product_version: 1.6.4
-current_state_version: 2.33.1
+current_state_version: 2.33.2
 current_state_last_verified: 2026-09-16
 documentation_source_count: 187
-source_manifest_sha256: a547408bb11ab035ad07a17367eb1c8ceaad15e99907b2d9f664ecf18383108e
+source_manifest_sha256: 448dd7d2031dd9e804549bcb3a57681a9ab0abe73f9ab5e2af5bf48d5b244955
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -247,6 +247,8 @@ Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `htt
 Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
 
 #### M6.1.2 — descoberta por trajetória em três grupos
+
+Atualização operacional autorizada de 2026-09-16: isolamento de capacidade `7aa8c53` implantado no gateway e Parser IA reiniciado. O erro 502 foi rastreado a `403 PARSER_LOCAL_ONLY` no worker; teste HTTP real reproduziu que fetch não preservava o Host exigido. Correção usa HTTP nativo preservando Host no túnel, com loopback obrigatório, redirects recusados e cancelamento; 31 testes dirigidos aprovados. Telemetria nova registra somente códigos fixos/status/duração e não bloqueia operação se falhar. Nenhum contrato de payload, modelo, prompt, orçamento, permissão ou revisão humana alterado. Reteste após o segundo ajuste ainda pendente; fluxo completo não está aprovado.
 
 O Product Owner aprovou em 2026-09-14 a regra simples de trajetória primeiro. Grupo A exige experiência direta na área ou função equivalente; Grupo B exige trajetória adjacente/transferível; Grupo C preserva termos, ferramentas e outros sinais sem trajetória relacionada, mas não gera Prisma Score comparável nem concorre com A/B. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B, nunca para o A sem experiência direta. A implementação é determinística e reutiliza evidência, área, ocupação e função existentes, sem LLM, embedding ou nova persistência. Contratos avançam para matching 5.0.0, score 1.2.0 e Prisma v1.6.4. A migration `20260914161427_m61_trajectory_matching_version` está ativa no Prisma-QA; ADR-057 e o adendo 1.4.0 do AoT M6.1 registram regra e prova.
 

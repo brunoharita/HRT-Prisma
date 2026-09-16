@@ -71,4 +71,6 @@ Autorização original registrada no contrato 1.0.0. Durante a execução, nenhu
 
 ## Conclusão
 
+Atualização autorizada pelo PO: `7aa8c53` implantado no gateway e worker reiniciado com telemetria mínima. Reteste comprovou `403 PARSER_LOCAL_ONLY`, origem do 502; teste de integração HTTP revelou que o fetch não preservava Host. Correção por HTTP nativo preserva o contrato de loopback, redirects bloqueados e AbortSignal; 31 testes aprovados, incluindo sanitização dos logs. Não altera payload/modelo/prompt e não exige nova versão persistida. A pendência do timeout Paddle continua; resultado do próximo reteste será registrado após o rollout.
+
 Movimento incompleto: teste real em produção falhou em D-03 e D-04. A correção local de isolamento de capacidade não resolve o timeout Paddle nem a falha subsequente do Parser IA, e não foi implantada. Não declarar o fluxo completo corrigido.

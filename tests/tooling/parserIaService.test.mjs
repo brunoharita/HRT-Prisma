@@ -4,7 +4,9 @@ import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
-import { createParserService, readParserPdf, parserRequest, parseProviderResponse, safeParserError, allowedLocalRequest, readLimitedProviderBody, PARSER_MODEL } from "../../scripts/parser-ia-service.mjs";
+import { once } from "node:events";
+import { requestLoopbackWorker } from "../../services/paddle-gateway/gateway.mjs";
+import { createParserHttpServer, createParserService, readParserPdf, parserRequest, parseProviderResponse, safeParserError, allowedLocalRequest, readLimitedProviderBody, PARSER_MODEL } from "../../scripts/parser-ia-service.mjs";
 import { structureParserIa, preparedParserIa, parserIaMethodVersion } from "../../dist/web/src/domain/parserIa.js";
 
 function syntheticPdf() {
@@ -21,6 +23,22 @@ const input = { bytes, sourceSha256: createHash("sha256").update(bytes).digest("
 const payload = { status: "complete", facts: [{ path: "identity.fullName", value: "Synthetic Person", sources: ["p1l1"] }], uncertainties: [] };
 const provider = () => ({ status: "completed", model: PARSER_MODEL, id: "resp_synthetic", usage: { input_tokens: 1000, output_tokens: 100 }, output: [{ type: "message", role: "assistant", content: [{ type: "output_text", text: JSON.stringify(payload) }] }] });
 const directory = () => mkdtemp(join(tmpdir(), "prisma-m57-test-"));
+
+test("parser transport logs fixed diagnostic codes only and tolerates telemetry failure", async (t) => {
+  const logs = [];
+  const server = createParserHttpServer(async () => { throw new Error("private resume secret"); }, 8787, (entry) => { logs.push(entry); throw new Error("optional telemetry unavailable"); });
+  server.listen(0, "127.0.0.1"); await once(server, "listening");
+  t.after(() => { server.closeAllConnections(); server.close(); });
+  const url = `http://127.0.0.1:${server.address().port}/parse`;
+  const headers = { Host: "127.0.0.1:8787", Origin: "http://127.0.0.1:5555", "X-Prisma-Local-Parser": "1", "Content-Type": "application/json" };
+  const response = await requestLoopbackWorker(url, { method: "POST", headers, body: JSON.stringify({ organizationId: input.organizationId, sourceSha256: input.sourceSha256, pdfBase64: bytes.toString("base64") }) });
+  assert.equal(response.status, 422);
+  assert.deepEqual(await response.json(), { error: "PARSER_PROVIDER_FAILED" });
+  assert.equal((await fetch(url)).status, 403);
+  assert.deepEqual(logs.map(({ code }) => code), ["PARSER_PROVIDER_FAILED", "PARSER_LOCAL_ONLY"]);
+  assert.ok(logs.every((entry) => Object.keys(entry).sort().join() === "code,durationMs,event,status"));
+  assert.equal(JSON.stringify(logs).includes("private"), false);
+});
 
 test("M5.7 backend uses original PDF spans and constrained OpenAI request", async () => {
   const pages = await readParserPdf(bytes);

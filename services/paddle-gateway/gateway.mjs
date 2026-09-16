@@ -1,4 +1,5 @@
-import { createServer } from "node:http";
+import { createServer, request as httpRequest } from "node:http";
+import { Readable } from "node:stream";
 import { chmod, unlink } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
@@ -84,7 +85,28 @@ async function readBody(request, maximum = MAX_BODY_BYTES) {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-export function createGateway({ authorize, fetchImpl = fetch, origin = "https://prisma.hrtsolutions.com.br", timeoutMs = 295000, log = (entry) => console.log(JSON.stringify(entry)) }) {
+export function requestLoopbackWorker(target, { method, headers, body, signal }) {
+  const url = new URL(target);
+  if (url.protocol !== "http:" || url.hostname !== "127.0.0.1" || url.username || url.password) return Promise.reject(new Error("invalid_worker_target"));
+  // Native HTTP preserves the explicit loopback Host across the reverse tunnel.
+  // Node fetch can replace it with the tunnel port, which the worker must reject.
+  return new Promise((resolve, reject) => {
+    const request = httpRequest(url, { method, headers, signal, agent: false }, (response) => {
+      if (response.statusCode >= 300 && response.statusCode < 400) {
+        response.destroy(); reject(new Error("worker_redirect_denied")); return;
+      }
+      const responseHeaders = new Headers();
+      for (const [name, value] of Object.entries(response.headers)) {
+        if (value !== undefined) for (const item of Array.isArray(value) ? value : [value]) responseHeaders.append(name, item);
+      }
+      resolve(new Response([204, 304].includes(response.statusCode) ? null : Readable.toWeb(response), { status: response.statusCode, headers: responseHeaders }));
+    });
+    request.on("error", reject);
+    request.end(body);
+  });
+}
+
+export function createGateway({ authorize, fetchImpl = requestLoopbackWorker, origin = "https://prisma.hrtsolutions.com.br", timeoutMs = 295000, log = (entry) => console.log(JSON.stringify(entry)) }) {
   // Keep local Paddle inference serialized across both routes. Its uncertain
   // cancellation must not hold capacity for the separate Parser IA service.
   const busyUntilByWorker = new Map();

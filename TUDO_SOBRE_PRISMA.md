@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 187
-source_manifest_sha256: a547408bb11ab035ad07a17367eb1c8ceaad15e99907b2d9f664ecf18383108e
+source_manifest_sha256: 448dd7d2031dd9e804549bcb3a57681a9ab0abe73f9ab5e2af5bf48d5b244955
 -->
 
 # Tudo sobre o Prisma
@@ -522,7 +522,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.1
+version: 2.33.2
 last_verified: 2026-09-16
 ---
 
@@ -547,6 +547,8 @@ Aditivo hospedado de 2026-09-16 implantado e validado: a correção explícita d
 Reteste autenticado de 2026-09-16 supersede a pendência de sessão acima: o operador selecionou o PDF de Ivan e a importação falhou. Paddle executou, mas excedeu 240 s e sua resposta posterior 200 não foi aproveitada; gateway registrou 504 seguido de 429 do Parser IA por cooldown global. Depois de expirar o bloqueio, nova tentativa manual recebeu 502, sem incremento do ledger OpenAI (6 tentativas anteriores). D-03 e D-04 estão FAIL no AoT. Correção local separa capacidade/cooldown do Paddle e Parser IA e passa 15 testes, preservando serialização entre as duas rotas Paddle; ainda não implantada. Timeout, causa do 502 e prova de aproveitamento da saída Paddle pelo Parser IA continuam pendentes. Nenhum perfil foi publicado. Este é o único ambiente remoto de produção; a denominação histórica Prisma-QA não indica outro ambiente.
 
 ## M6.1.2 — descoberta por trajetória em três grupos
+
+Atualização operacional autorizada de 2026-09-16: isolamento de capacidade `7aa8c53` implantado no gateway e Parser IA reiniciado. O erro 502 foi rastreado a `403 PARSER_LOCAL_ONLY` no worker; teste HTTP real reproduziu que fetch não preservava o Host exigido. Correção usa HTTP nativo preservando Host no túnel, com loopback obrigatório, redirects recusados e cancelamento; 31 testes dirigidos aprovados. Telemetria nova registra somente códigos fixos/status/duração e não bloqueia operação se falhar. Nenhum contrato de payload, modelo, prompt, orçamento, permissão ou revisão humana alterado. Reteste após o segundo ajuste ainda pendente; fluxo completo não está aprovado.
 
 O Product Owner aprovou em 2026-09-14 a regra simples de trajetória primeiro. Grupo A exige experiência direta na área ou função equivalente; Grupo B exige trajetória adjacente/transferível; Grupo C preserva termos, ferramentas e outros sinais sem trajetória relacionada, mas não gera Prisma Score comparável nem concorre com A/B. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B, nunca para o A sem experiência direta. A implementação é determinística e reutiliza evidência, área, ocupação e função existentes, sem LLM, embedding ou nova persistência. Contratos avançam para matching 5.0.0, score 1.2.0 e Prisma v1.6.4. A migration `20260914161427_m61_trajectory_matching_version` está ativa no Prisma-QA; ADR-057 e o adendo 1.4.0 do AoT M6.1 registram regra e prova.
 
@@ -6579,6 +6581,10 @@ Não existe ambiente remoto separado de homologação. Toda alteração deve ser
 
 ## Git
 
+### Correção de transporte Parser IA — 2026-09-16
+
+Bruno autorizou explicitamente atualizar o gateway e reiniciar o Parser IA após o reteste de Ivan. O isolamento de capacidade `7aa8c53` foi implantado somente no gateway; rollback preservado como `prisma-paddle-gateway:rollback-before-7aa8c53`. O worker foi reiniciado em loopback, sem operação ativa, e recebeu telemetria opcional de código fixo/status/duração, sem payload, organização, hash, cabeçalhos ou segredo. O reteste mostrou `403 PARSER_LOCAL_ONLY` antes da OpenAI. Teste HTTP real reproduziu o descarte de Host pelo fetch; o transporte do gateway passa a usar `node:http.request`, preservando `Host: 127.0.0.1:8787` através do túnel 18787, sem afrouxar a validação do worker. Somente loopback HTTP é aceito, redirects são recusados, AbortSignal e limites permanecem; não há nova dependência ou mudança de contrato persistido. Referência: [HTTP do Node](https://nodejs.org/api/http.html#httprequesturl-options-callback). Regressão dirigida: 31 testes aprovados; rollout deste segundo ajuste e reteste autenticado ainda pendentes neste registro.
+
 Branches de trabalho usam `codex/`. Commits são coerentes e não misturam mudanças pessoais. Push e ref remota só podem ser confirmados quando remoto existir. Merge não substitui evidência de ambiente.
 
 ---
@@ -9735,6 +9741,8 @@ Autorização original registrada no contrato 1.0.0. Durante a execução, nenhu
 - Smoke autenticado: executado com o arquivo selecionado pelo operador; falhou conforme reteste acima.
 
 ## Conclusão
+
+Atualização autorizada pelo PO: `7aa8c53` implantado no gateway e worker reiniciado com telemetria mínima. Reteste comprovou `403 PARSER_LOCAL_ONLY`, origem do 502; teste de integração HTTP revelou que o fetch não preservava Host. Correção por HTTP nativo preserva o contrato de loopback, redirects bloqueados e AbortSignal; 31 testes aprovados, incluindo sanitização dos logs. Não altera payload/modelo/prompt e não exige nova versão persistida. A pendência do timeout Paddle continua; resultado do próximo reteste será registrado após o rollout.
 
 Movimento incompleto: teste real em produção falhou em D-03 e D-04. A correção local de isolamento de capacidade não resolve o timeout Paddle nem a falha subsequente do Parser IA, e não foi implantada. Não declarar o fluxo completo corrigido.
 
