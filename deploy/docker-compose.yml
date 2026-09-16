@@ -11,7 +11,7 @@ services:
         VITE_PARSER_IA_LOCAL: ${VITE_PARSER_IA_LOCAL:-false}
         VITE_PARSER_IA_MODE: ${VITE_PARSER_IA_MODE:-disabled}
         VITE_PRISMA_GIT_COMMIT: ${PRISMA_DEPLOY_COMMIT:-unknown}
-    image: prisma-web:1.7.0
+    image: prisma-web:1.6.4
     container_name: prisma-web
     restart: unless-stopped
     volumes:
