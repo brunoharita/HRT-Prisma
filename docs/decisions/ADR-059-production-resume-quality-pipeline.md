@@ -30,4 +30,4 @@ O Parser IA continua ligado ao hash do PDF, à organização, às linhas-fonte, 
 - A qualidade deixa de depender somente de volume textual e passa a ter motivos semânticos verificáveis.
 - A importação normal depende da disponibilidade da máquina local, do túnel e do orçamento do Parser IA; a indisponibilidade é explícita e não produz sucesso falso.
 - PDFs são enviados à OpenAI somente após autorização do operador no fluxo acordado, com `store: false`, mínimo necessário, cache privado e revisão humana.
-- A ponte permanece temporária e operacionalmente limitada a uma inferência por vez.
+- A ponte permanece temporária. As duas rotas Paddle compartilham uma única capacidade de inferência local; o serviço Parser IA tem capacidade separada, também unitária. A sequência de uma importação permanece serial. A correção local de 2026-09-16 impede que o cooldown de cancelamento incerto do Paddle bloqueie indevidamente o Parser IA, sem liberar outra inferência Paddle ou repetir chamadas automaticamente; ainda não implantada.

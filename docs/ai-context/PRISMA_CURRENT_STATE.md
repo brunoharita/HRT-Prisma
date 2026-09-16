@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.0
+version: 2.33.1
 last_verified: 2026-09-16
 ---
 
@@ -23,6 +23,8 @@ O build Vite usa somente a URL e a chave publicável do Prisma-QA. Secrets serve
 Em 2026-09-16 o PO autorizou corrigir a qualidade observada no PDF de Ivan e ativar no único ambiente remoto o fluxo serial PDF.js/estruturação determinística -> gate semântico -> Paddle condicional -> Parser IA -> revisão humana (ADR-059). `resume-semantic-quality-1.0.0` força a rota estrutural quando um currículo multipágina sai sem trajetória profissional; a tela não desativa mais o Paddle ao habilitar IA. `parser-ia-hosted-transport-1.0.0` reutiliza o gateway autenticado, valida sessão, operador, papel, organização, contrato, PDF e hash, remove credenciais e alcança o worker 8787 somente por túnel loopback. A chave OpenAI permanece no PC; `parser-ia-1.0.0`, modelo, prompt, budget e revisão humana foram preservados. A migration `20260916203000_production_resume_quality_observability` está aplicada com RLS e duas policies. Runtime construído de `ee90d43`, imagens `prisma-web:1.6.4` e gateway 1.1.0 ativas; site e workers passaram smoke sem PII, e recusas 401/403 foram confirmadas. A sessão disponível estava deslogada, portanto a nova importação autenticada real permanece pendente e o AoT está `PARTIAL`; não houve chamada OpenAI, reprocessamento ou publicação nesta execução. Operação continua dependente do PC e túnel ativos.
 
 Aditivo hospedado de 2026-09-16 implantado e validado: a correção explícita de identidade reutiliza formulário/RPC existentes antes da criação, recalcula correspondências no servidor e impede resolver enquanto a edição estiver aberta. Cancelamento e rejeição de contato ausente comprovados na UI; não muda extrator, regras de Pessoa, schema ou publicação e não reescreve a extração original no rascunho. Aceite operacional no AoT da ponte.
+
+Reteste autenticado de 2026-09-16 supersede a pendência de sessão acima: o operador selecionou o PDF de Ivan e a importação falhou. Paddle executou, mas excedeu 240 s e sua resposta posterior 200 não foi aproveitada; gateway registrou 504 seguido de 429 do Parser IA por cooldown global. Depois de expirar o bloqueio, nova tentativa manual recebeu 502, sem incremento do ledger OpenAI (6 tentativas anteriores). D-03 e D-04 estão FAIL no AoT. Correção local separa capacidade/cooldown do Paddle e Parser IA e passa 15 testes, preservando serialização entre as duas rotas Paddle; ainda não implantada. Timeout, causa do 502 e prova de aproveitamento da saída Paddle pelo Parser IA continuam pendentes. Nenhum perfil foi publicado. Este é o único ambiente remoto de produção; a denominação histórica Prisma-QA não indica outro ambiente.
 
 ## M6.1.2 — descoberta por trajetória em três grupos
 

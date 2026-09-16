@@ -85,7 +85,9 @@ async function readBody(request, maximum = MAX_BODY_BYTES) {
 }
 
 export function createGateway({ authorize, fetchImpl = fetch, origin = "https://prisma.hrtsolutions.com.br", timeoutMs = 295000, log = (entry) => console.log(JSON.stringify(entry)) }) {
-  let busyUntil = 0;
+  // Keep local Paddle inference serialized across both routes. Its uncertain
+  // cancellation must not hold capacity for the separate Parser IA service.
+  const busyUntilByWorker = new Map();
   let activeRequests = 0;
   return createServer({ requestTimeout: 30000, headersTimeout: 10000, maxHeaderSize: 16384 }, async (request, response) => {
     const started = Date.now();
@@ -93,6 +95,7 @@ export function createGateway({ authorize, fetchImpl = fetch, origin = "https://
     let ownsWorker = false;
     let holdWorker = false;
     const route = ROUTES.get(request.url);
+    const worker = route?.kind === "parser" ? "parser" : "paddle";
     const controller = new AbortController();
     let timer;
     const reply = (code, payload) => {
@@ -118,8 +121,8 @@ export function createGateway({ authorize, fetchImpl = fetch, origin = "https://
       if (typeof organizationId !== "string" || !UUID.test(organizationId)) throw new HttpFailure(403, "organization_required");
       await authorize(authorization, organizationId);
       if (controller.signal.aborted) throw new HttpFailure(499, "client_disconnected");
-      if (Date.now() < busyUntil) throw new HttpFailure(429, "worker_busy");
-      busyUntil = Number.POSITIVE_INFINITY;
+      if (Date.now() < (busyUntilByWorker.get(worker) ?? 0)) throw new HttpFailure(429, "worker_busy");
+      busyUntilByWorker.set(worker, Number.POSITIVE_INFINITY);
       ownsWorker = true;
       const body = await readBody(request);
       let payload;
@@ -159,7 +162,7 @@ export function createGateway({ authorize, fetchImpl = fetch, origin = "https://
     } finally {
       clearTimeout(timer);
       response.off("close", onClose);
-      if (ownsWorker) busyUntil = holdWorker ? Date.now() + timeoutMs : 0;
+      if (ownsWorker) busyUntilByWorker.set(worker, holdWorker ? Date.now() + timeoutMs : 0);
       activeRequests -= 1;
       log({ event: "document_transport", route: route?.kind ?? "unknown", status, durationMs: Date.now() - started });
     }

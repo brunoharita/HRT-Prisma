@@ -8,8 +8,8 @@ Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.m
 | --- | --- | --- | --- | --- | --- | --- |
 | D-01 | PDF.js e estruturação inicial | `validateAndProcessPdf` mantém extração/estruturação antes do gate e das etapas externas | person-flow e `documentIntelligence.test.ts` | 229 testes do person-flow; build web aprovado | PASS | Determinístico, sem provider vivo |
 | D-02 | Verificação semântica explicável | `resumeSemanticQuality.ts` 1.0.0 e motivo no trace | `resumeSemanticQuality.test.ts` | Caso de cinco páginas sem experiências força rota estrutural | PASS | Não julga candidato nem inventa experiência |
-| D-03 | Paddle condicional | Gate visual/textual existente mais gate semântico; modo enabled não é mais desligado pelo Parser IA | domínio, provider e smoke dos workers | Paddle 8080/8081 respondeu 200; bundle publicado contém o fluxo | PASS | Importação real pós-fix aguardando repetição do operador |
-| D-04 | Parser IA após etapa documental | `VITE_PARSER_IA_MODE=hosted`, cliente autenticado e rota fixa do gateway | parser, cliente por build e transporte | worker 8787 respondeu 422 ao payload sintético inválido; rota pública sem sessão 401; bundle contém `/parser-ia-hosted/parse` | PARTIAL | Navegador disponível estava deslogado; nenhuma chamada OpenAI ou importação real foi fabricada |
+| D-03 | Paddle condicional | Gate visual/textual existente mais gate semântico; modo enabled não é mais desligado pelo Parser IA | domínio, provider e teste autenticado de Ivan | Paddle executou em CPU, mas navegador cancelou após 240 s; gateway registrou 504; worker terminou posteriormente com HTTP 200 | FAIL | Saída Paddle não chegou à importação testada |
+| D-04 | Parser IA após etapa documental | `VITE_PARSER_IA_MODE=hosted`, cliente autenticado e rota fixa do gateway | parser, cliente por build, transporte e teste autenticado | Chamada seguinte recebeu 429; após expirar cooldown, recebeu 502; ledger permaneceu com 6 tentativas anteriores | FAIL | Nenhuma chamada OpenAI comprovada no teste; causa interna do 502 ainda não identificada |
 | D-05 | Sequência e falha explícita | Página não força mais baseline e mantém CTA consciente de leitura local | person-flow, recuperação M5.7 | 229 + 33 testes direcionados aprovados | PASS | Falha do worker ainda exige decisão explícita do operador |
 | D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
 | D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
@@ -30,7 +30,19 @@ Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.m
 
 ## Desvios do contrato
 
-Nenhum desvio de implementação. A prova autenticada de importação real permanece pendente e, por isso, D-04 está `PARTIAL`.
+O teste autenticado contradisse a expectativa de fluxo completo: timeout documental perdeu a saída Paddle e o bloqueio global impediu a IA. Após o cooldown, apareceu uma segunda falha 502. D-03 e D-04 estão `FAIL`; a declaração anterior de ausência de desvios não se sustenta. Os PASS das demais linhas são provas dirigidas locais e não significam sucesso ponta a ponta.
+
+## Reteste autenticado — 2026-09-16
+
+- Operador selecionou o PDF de Ivan no navegador interno; o agente acionou Importar currículo. Nenhum conteúdo do currículo, segredo ou identificador de sessão foi registrado neste relatório.
+- Gateway às 19:32:30 UTC: structure 504, 239.964 ms; às 19:32:31 UTC: parser 429, 620 ms.
+- Paddle local teve atividade de CPU e respondeu 200 depois do timeout do navegador. Isso prova execução, não aproveitamento da saída nem sua qualidade.
+- Repetição manual com leitura preservada às 19:36:27 UTC: parser 429, 827 ms. Após expirar o cooldown, às 19:37:59 UTC: parser 502, 538 ms.
+- Ledger permaneceu em 6 tentativas, última de 2026-09-13, aproximadamente US$0,6402342 contabilizados. A chave está configurada e o processo escuta em loopback 8787; isso não prova a execução remota nem explica o 502.
+- Correção local: capacidades separadas de Paddle e Parser IA, mantendo ambas as rotas Paddle serializadas, cooldown por serviço, autorização, orçamento e ausência de retry automático. Não há alteração de contrato persistido nem de payload; versões de transporte mantidas por ser correção interna.
+- Regressão: 15 testes do gateway aprovados, incluindo timeout sem bloqueio cruzado, serialização das duas rotas Paddle, cancelamento, tenant, sessão, origem e contrato. Correção ainda não implantada em produção.
+- Nenhum perfil publicado e nenhuma continuação pela opção de leitura local acionada. Tela e arquivo selecionado preservados.
+- Pendências: concluir diagnóstico do 502, ajustar tratamento/duração da etapa Paddle com evidência, implantar correção autorizada e repetir o fluxo completo. Não foi demonstrado que o Parser IA aproveita a saída canônica Paddle; o adaptador atual relê o PDF original para suas próprias linhas-fonte.
 
 ## Mudanças autorizadas durante a execução
 
@@ -55,8 +67,8 @@ Autorização original registrada no contrato 1.0.0. Durante a execução, nenhu
 - VPS: `prisma-web:1.6.4` e `prisma-paddle-gateway:1.1.0` ativos; imagem anterior preservada como `prisma-web:rollback-55733a0-resume-pipeline` e gateway anterior como `prisma-paddle-gateway:rollback-55733a0`.
 - PC: Paddle 8080/8081 e Parser IA 8787 em loopback; túnel reverso expõe somente VPS loopback 18080/18081/18787.
 - Smoke: site 200, Paddle 200/200, worker Parser alcançável, parser público 401 sem sessão e 403 com origem indevida.
-- Smoke autenticado completo: não executado porque a sessão disponível estava deslogada; nenhum login ou currículo real foi forçado.
+- Smoke autenticado: executado com o arquivo selecionado pelo operador; falhou conforme reteste acima.
 
 ## Conclusão
 
-Pipeline implementado e ativo em produção, com segurança, observabilidade e regressão local aprovadas. Movimento permanece `PARTIAL` somente até uma nova importação autenticada confirmar Paddle condicional e Parser IA no fluxo real.
+Movimento incompleto: teste real em produção falhou em D-03 e D-04. A correção local de isolamento de capacidade não resolve o timeout Paddle nem a falha subsequente do Parser IA, e não foi implantada. Não declarar o fluxo completo corrigido.

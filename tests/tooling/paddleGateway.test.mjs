@@ -166,6 +166,47 @@ test("invalid worker responses are sanitized", async (t) => {
   assert.equal(JSON.stringify(await response.json()).includes("sensitive"), false);
 });
 
+test("Paddle timeout retains its cooldown without blocking Parser IA", async (t) => {
+  const calls = [];
+  const { send } = await fixture(t, { timeoutMs: 500, fetchImpl: async (url, init) => {
+    calls.push(url);
+    if (url.includes(":18080/")) return new Promise((_resolve, reject) => {
+      init.signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true });
+    });
+    return Response.json({ synthetic: true });
+  } });
+  assert.equal((await send()).status, 504);
+  const pdf = Buffer.from(payload.file, "base64");
+  const parserRequest = {
+    headers: { ...headers, "X-Prisma-Parser-Contract": PARSER_TRANSPORT_VERSION },
+    body: JSON.stringify({ organizationId, pdfBase64: payload.file, sourceSha256: createHash("sha256").update(pdf).digest("hex") }),
+  };
+  assert.equal((await send(parserRequest, "/parser-ia-hosted/parse")).status, 200);
+  assert.equal((await send()).status, 429);
+  assert.deepEqual(calls, ["http://127.0.0.1:18080/layout-parsing", "http://127.0.0.1:18787/parse"]);
+});
+
+test("both Paddle routes share capacity while the separate Parser IA can proceed", async (t) => {
+  let release; let started;
+  const ready = new Promise((resolve) => { started = resolve; });
+  const pending = new Promise((resolve) => { release = resolve; });
+  const { send } = await fixture(t, { fetchImpl: async (url) => {
+    if (url.includes(":18080/")) { started(); await pending; }
+    return Response.json({ synthetic: true });
+  } });
+  const first = send(); await ready;
+  try {
+    assert.equal((await send({}, "/document-intelligence-vl/layout-parsing")).status, 429);
+    assert.equal((await send()).status, 429);
+    const pdf = Buffer.from(payload.file, "base64");
+    assert.equal((await send({
+      headers: { ...headers, "X-Prisma-Parser-Contract": PARSER_TRANSPORT_VERSION },
+      body: JSON.stringify({ organizationId, pdfBase64: payload.file, sourceSha256: createHash("sha256").update(pdf).digest("hex") }),
+    }, "/parser-ia-hosted/parse")).status, 200);
+  } finally { release(); }
+  assert.equal((await first).status, 200);
+});
+
 function authFixture({ role = "recruiter", status = "active", memberRole = "recruiter", orgs = [{ id: organizationId }], memberships, user = { id: userId } } = {}) {
   const calls = [];
   const authorize = createAuthorizer({ supabaseUrl: "https://ioldpnqqvobprjiontre.supabase.co", publishableKey: "synthetic-publishable", fetchImpl: async (url, init) => {
