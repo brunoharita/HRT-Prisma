@@ -8,7 +8,7 @@ Contrato: `docs/qa/agreement-hosted-paddle-bridge.md` 1.0.0; execução em `docs
 | --- | --- | --- | --- | --- |
 | D-01 | Web/backend preservados; Nginx com rotas adicionais | Login baseline observado; smoke pós-deploy pendente | PARTIAL | Home autenticada não revalidada |
 | D-02 | Adapter só acrescenta cabeçalhos; domínio/roteamento/payload sem alteração | 12 testes de adapter/preflight aprovados | PASS | Não é prova de worker real |
-| D-03 | SSH reverso, gateway Auth/RLS, socket Unix privado | Testes sintéticos de auth/tenant/rotas; implantação pendente | PARTIAL | Conectividade operacional ainda não provada |
+| D-03 | SSH reverso, gateway Auth/RLS, socket Unix privado | 11 testes gateway e smoke local de socket aprovados | BLOCKED | Revisão automática requer autorização explícita para modificar a VPS pública |
 | D-04 | Mesma UI/intake/draft | Importação real ainda não executada | NOT TESTED | Requer sessão autenticada no navegador |
 | D-05 | Trace existente; logs somente rota/status/duração | Contrato de logs testado; qualidade e tempos reais pendentes | PARTIAL | Sem comparação semântica por UI |
 
@@ -31,12 +31,14 @@ Nenhum desvio funcional identificado no diff. Aceite incompleto não é tratado 
 
 ## Validação final
 
-23 testes dirigidos aprovados (12 adapter/preflight + 11 gateway), incluindo tenant, status/papel, anonimato, origem/contrato, SSRF/payload, timeout, cancelamento, concorrência e sanitização. Typecheck web, compilação TypeScript e build web aprovados. Aviso preexistente de chunk Ant Design acima de 900 kB. Imagem do gateway construída e smoke descartável confirmou execução como node, filesystem read-only, socket Unix e 401 anônimo; container de teste removido. Sem execução de `pnpm run validate`.
+23 testes dirigidos aprovados (12 adapter/preflight + 11 gateway), incluindo tenant, status/papel, anonimato, origem/contrato, SSRF/payload, timeout, cancelamento, concorrência e sanitização. Typecheck web, compilação TypeScript, build web, lint, diff check e geração/check de contexto aprovados. Aviso preexistente de chunk Ant Design acima de 900 kB. Imagem do gateway construída e smoke descartável confirmou execução como node, filesystem read-only, socket Unix e 401 anônimo; container de teste removido. Nginx 1.27 Alpine confirmou sintaxe válida do proxy Unix em container local sem rede. Sem execução de `pnpm run validate`.
 
 ## Git / QA / ambiente
 
 Itens preexistentes `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `/opt/prisma/models/` preservados e fora da entrega. Container experimental remoto `paddle-vl-llama-test` observado unhealthy, sem intervenção; não é worker desta ponte. A chave SSH foi cadastrada pelo PO, conexão root confirmada. Nenhum merge de main ou operação de produção geral.
 
+Implementação `aba118a` enviada a `origin/codex/hosted-paddle-bridge`. A preparação remota (preservar tag baseline, fetch/switch e build) foi negada pela revisão automática antes de executar: aprovação da ponte não foi considerada autorização explícita para mutação da VPS pública. Não houve tentativa de contornar o bloqueio. Nenhuma alteração remota, túnel ou ativação enabled foi feita. PO informou login realizado para o teste; upload aguarda implantação.
+
 ## Conclusão
 
-PARTIAL. Transporte em preparação; importação/revisão e qualidade hospedadas ainda não comprovadas.
+PARTIAL/BLOCKED. Implementação local validada e versionada; implantação depende da autorização específica requerida pela revisão automática. Importação/revisão e qualidade hospedadas ainda não comprovadas.
