@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 187
-source_manifest_sha256: 448dd7d2031dd9e804549bcb3a57681a9ab0abe73f9ab5e2af5bf48d5b244955
+source_manifest_sha256: 5b5a697efd1e8715d9715932033e63175d0d42a52d91570f42e45dd9abb6f116
 -->
 
 # Tudo sobre o Prisma
@@ -522,7 +522,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.2
+version: 2.33.3
 last_verified: 2026-09-16
 ---
 
@@ -546,9 +546,9 @@ Aditivo hospedado de 2026-09-16 implantado e validado: a correção explícita d
 
 Reteste autenticado de 2026-09-16 supersede a pendência de sessão acima: o operador selecionou o PDF de Ivan e a importação falhou. Paddle executou, mas excedeu 240 s e sua resposta posterior 200 não foi aproveitada; gateway registrou 504 seguido de 429 do Parser IA por cooldown global. Depois de expirar o bloqueio, nova tentativa manual recebeu 502, sem incremento do ledger OpenAI (6 tentativas anteriores). D-03 e D-04 estão FAIL no AoT. Correção local separa capacidade/cooldown do Paddle e Parser IA e passa 15 testes, preservando serialização entre as duas rotas Paddle; ainda não implantada. Timeout, causa do 502 e prova de aproveitamento da saída Paddle pelo Parser IA continuam pendentes. Nenhum perfil foi publicado. Este é o único ambiente remoto de produção; a denominação histórica Prisma-QA não indica outro ambiente.
 
-## M6.1.2 — descoberta por trajetória em três grupos
+Atualização operacional autorizada de 2026-09-16 supersede a pendência de implantação e diagnóstico acima: isolamento de capacidade `7aa8c53` e transporte `9d4375b` implantados no gateway; Parser IA reiniciado. O erro 502 foi rastreado a `403 PARSER_LOCAL_ONLY` no worker; teste HTTP real reproduziu que fetch não preservava o Host exigido. Correção usa HTTP nativo preservando Host no túnel, com loopback obrigatório, redirects recusados e cancelamento; 31 testes dirigidos aprovados. Telemetria nova registra somente códigos fixos/status/duração e não bloqueia operação se falhar. Reteste de Ivan com leitura preservada respondeu 200 em cerca de 34 s: ledger incrementou de 6 para 7 tentativas, custo US$0,0120815, resultado partial com 56 fatos aceitos, 9 experiências e 2 formações. Navegador chegou à confirmação de identidade sem criar/publicar Pessoa. D-04 passa a PARTIAL; D-03 permanece FAIL pelo timeout Paddle, não repetido neste reteste. Não houve mudança de payload, modelo, prompt, orçamento ou permissões. Fluxo completo ainda não está aprovado.
 
-Atualização operacional autorizada de 2026-09-16: isolamento de capacidade `7aa8c53` implantado no gateway e Parser IA reiniciado. O erro 502 foi rastreado a `403 PARSER_LOCAL_ONLY` no worker; teste HTTP real reproduziu que fetch não preservava o Host exigido. Correção usa HTTP nativo preservando Host no túnel, com loopback obrigatório, redirects recusados e cancelamento; 31 testes dirigidos aprovados. Telemetria nova registra somente códigos fixos/status/duração e não bloqueia operação se falhar. Nenhum contrato de payload, modelo, prompt, orçamento, permissão ou revisão humana alterado. Reteste após o segundo ajuste ainda pendente; fluxo completo não está aprovado.
+## M6.1.2 — descoberta por trajetória em três grupos
 
 O Product Owner aprovou em 2026-09-14 a regra simples de trajetória primeiro. Grupo A exige experiência direta na área ou função equivalente; Grupo B exige trajetória adjacente/transferível; Grupo C preserva termos, ferramentas e outros sinais sem trajetória relacionada, mas não gera Prisma Score comparável nem concorre com A/B. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B, nunca para o A sem experiência direta. A implementação é determinística e reutiliza evidência, área, ocupação e função existentes, sem LLM, embedding ou nova persistência. Contratos avançam para matching 5.0.0, score 1.2.0 e Prisma v1.6.4. A migration `20260914161427_m61_trajectory_matching_version` está ativa no Prisma-QA; ADR-057 e o adendo 1.4.0 do AoT M6.1 registram regra e prova.
 
@@ -6579,11 +6579,13 @@ Evidência de 2026-09-13: o schema funcional acumulado e `20260914015642_m61_req
 
 Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente e só pode seguir para o projeto único após autorização explícita de produção. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
 
-## Git
-
 ### Correção de transporte Parser IA — 2026-09-16
 
 Bruno autorizou explicitamente atualizar o gateway e reiniciar o Parser IA após o reteste de Ivan. O isolamento de capacidade `7aa8c53` foi implantado somente no gateway; rollback preservado como `prisma-paddle-gateway:rollback-before-7aa8c53`. O worker foi reiniciado em loopback, sem operação ativa, e recebeu telemetria opcional de código fixo/status/duração, sem payload, organização, hash, cabeçalhos ou segredo. O reteste mostrou `403 PARSER_LOCAL_ONLY` antes da OpenAI. Teste HTTP real reproduziu o descarte de Host pelo fetch; o transporte do gateway passa a usar `node:http.request`, preservando `Host: 127.0.0.1:8787` através do túnel 18787, sem afrouxar a validação do worker. Somente loopback HTTP é aceito, redirects são recusados, AbortSignal e limites permanecem; não há nova dependência ou mudança de contrato persistido. Referência: [HTTP do Node](https://nodejs.org/api/http.html#httprequesturl-options-callback). Regressão dirigida: 31 testes aprovados; rollout deste segundo ajuste e reteste autenticado ainda pendentes neste registro.
+
+Fechamento do rollout: `9d4375b` está ativo no gateway (imagem `sha256:b93d2d3285bf263d6db4cfde4bd365e919a04739274de5d774b42fbe6bae9d46`), sem alteração de frontend ou banco. Smoke sem sessão retornou 401; reteste autenticado de Ivan retornou 200, `PARSER_OK`, em 34.053 ms no worker. Ledger confirmou nova chamada, US$0,0120815, resultado parcial com evidências. A tela chegou à identificação; não se decidiu criação/vínculo nem publicação. Rollback anterior continua preservado. O timeout do Paddle e a validação integral da sequência permanecem pendentes, não cobertos por esse reteste da leitura preservada.
+
+## Git
 
 Branches de trabalho usam `codex/`. Commits são coerentes e não misturam mudanças pessoais. Push e ref remota só podem ser confirmados quando remoto existir. Merge não substitui evidência de ambiente.
 
@@ -9680,7 +9682,7 @@ Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.m
 | D-01 | PDF.js e estruturação inicial | `validateAndProcessPdf` mantém extração/estruturação antes do gate e das etapas externas | person-flow e `documentIntelligence.test.ts` | 229 testes do person-flow; build web aprovado | PASS | Determinístico, sem provider vivo |
 | D-02 | Verificação semântica explicável | `resumeSemanticQuality.ts` 1.0.0 e motivo no trace | `resumeSemanticQuality.test.ts` | Caso de cinco páginas sem experiências força rota estrutural | PASS | Não julga candidato nem inventa experiência |
 | D-03 | Paddle condicional | Gate visual/textual existente mais gate semântico; modo enabled não é mais desligado pelo Parser IA | domínio, provider e teste autenticado de Ivan | Paddle executou em CPU, mas navegador cancelou após 240 s; gateway registrou 504; worker terminou posteriormente com HTTP 200 | FAIL | Saída Paddle não chegou à importação testada |
-| D-04 | Parser IA após etapa documental | `VITE_PARSER_IA_MODE=hosted`, cliente autenticado e rota fixa do gateway | parser, cliente por build, transporte e teste autenticado | Chamada seguinte recebeu 429; após expirar cooldown, recebeu 502; ledger permaneceu com 6 tentativas anteriores | FAIL | Nenhuma chamada OpenAI comprovada no teste; causa interna do 502 ainda não identificada |
+| D-04 | Parser IA após etapa documental | Cliente autenticado, capacidade isolada e HTTP nativo preservando Host | 31 testes de gateway/parser e reteste autenticado | Com `9d4375b`, worker retornou 200 em 34.053 ms; ledger confirmou tentativa 7 e resultado partial; tela chegou à identificação | PARTIAL | IA comprovada com leitura preservada; persistência do rascunho após confirmação de identidade e fluxo completo com Paddle ainda não comprovados |
 | D-05 | Sequência e falha explícita | Página não força mais baseline e mantém CTA consciente de leitura local | person-flow, recuperação M5.7 | 229 + 33 testes direcionados aprovados | PASS | Falha do worker ainda exige decisão explícita do operador |
 | D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
 | D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
@@ -9744,7 +9746,9 @@ Autorização original registrada no contrato 1.0.0. Durante a execução, nenhu
 
 Atualização autorizada pelo PO: `7aa8c53` implantado no gateway e worker reiniciado com telemetria mínima. Reteste comprovou `403 PARSER_LOCAL_ONLY`, origem do 502; teste de integração HTTP revelou que o fetch não preservava Host. Correção por HTTP nativo preserva o contrato de loopback, redirects bloqueados e AbortSignal; 31 testes aprovados, incluindo sanitização dos logs. Não altera payload/modelo/prompt e não exige nova versão persistida. A pendência do timeout Paddle continua; resultado do próximo reteste será registrado após o rollout.
 
-Movimento incompleto: teste real em produção falhou em D-03 e D-04. A correção local de isolamento de capacidade não resolve o timeout Paddle nem a falha subsequente do Parser IA, e não foi implantada. Não declarar o fluxo completo corrigido.
+Resultado final deste rollout: `9d4375b` implantado, serviço de IA reiniciado e reteste autenticado aprovado na etapa de interpretação. Worker 200/PARSER_OK, 34.053 ms; gateway 200, 35.013 ms. Ledger aumentou de 6 para 7 tentativas, custo US$0,0120815, resultado partial: 56 fatos aceitos, 9 experiências, 2 formações. A tela aguarda confirmação de identidade; nenhuma Pessoa criada ou Perfil publicado pelo agente. Smoke sem sessão 401, 31 testes dirigidos, lint e Context Pack aprovados. Imagem anterior preservada como `prisma-paddle-gateway:rollback-before-7aa8c53`; banco e frontend não alterados neste rollout.
+
+Movimento geral permanece incompleto: D-03 FAIL por timeout Paddle e D-04 PARTIAL pela ausência de prova ponta a ponta até rascunho persistido. O reteste usou leitura preservada após o timeout, não uma nova execução Paddle. A utilização da saída canônica Paddle pelo Parser IA ainda requer validação/correção. Não declarar o fluxo completo corrigido.
 
 ---
 

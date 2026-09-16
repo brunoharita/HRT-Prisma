@@ -35,10 +35,12 @@ Evidência de 2026-09-13: o schema funcional acumulado e `20260914015642_m61_req
 
 Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente e só pode seguir para o projeto único após autorização explícita de produção. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
 
-## Git
-
 ### Correção de transporte Parser IA — 2026-09-16
 
 Bruno autorizou explicitamente atualizar o gateway e reiniciar o Parser IA após o reteste de Ivan. O isolamento de capacidade `7aa8c53` foi implantado somente no gateway; rollback preservado como `prisma-paddle-gateway:rollback-before-7aa8c53`. O worker foi reiniciado em loopback, sem operação ativa, e recebeu telemetria opcional de código fixo/status/duração, sem payload, organização, hash, cabeçalhos ou segredo. O reteste mostrou `403 PARSER_LOCAL_ONLY` antes da OpenAI. Teste HTTP real reproduziu o descarte de Host pelo fetch; o transporte do gateway passa a usar `node:http.request`, preservando `Host: 127.0.0.1:8787` através do túnel 18787, sem afrouxar a validação do worker. Somente loopback HTTP é aceito, redirects são recusados, AbortSignal e limites permanecem; não há nova dependência ou mudança de contrato persistido. Referência: [HTTP do Node](https://nodejs.org/api/http.html#httprequesturl-options-callback). Regressão dirigida: 31 testes aprovados; rollout deste segundo ajuste e reteste autenticado ainda pendentes neste registro.
+
+Fechamento do rollout: `9d4375b` está ativo no gateway (imagem `sha256:b93d2d3285bf263d6db4cfde4bd365e919a04739274de5d774b42fbe6bae9d46`), sem alteração de frontend ou banco. Smoke sem sessão retornou 401; reteste autenticado de Ivan retornou 200, `PARSER_OK`, em 34.053 ms no worker. Ledger confirmou nova chamada, US$0,0120815, resultado parcial com evidências. A tela chegou à identificação; não se decidiu criação/vínculo nem publicação. Rollback anterior continua preservado. O timeout do Paddle e a validação integral da sequência permanecem pendentes, não cobertos por esse reteste da leitura preservada.
+
+## Git
 
 Branches de trabalho usam `codex/`. Commits são coerentes e não misturam mudanças pessoais. Push e ref remota só podem ser confirmados quando remoto existir. Merge não substitui evidência de ambiente.
