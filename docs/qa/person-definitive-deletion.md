@@ -2,7 +2,20 @@
 
 ## Escopo e ambiente
 
-Implementação local e no projeto `Prisma-QA` (`ioldpnqqvobprjiontre`). Produção, hosting, exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831`, `20260909184943`, `20260911153000` e `20260913132559` e a Edge Function `person-data-deletion` v1 estão ativas apenas em QA.
+Implementação local e no projeto Supabase único de produção (`ioldpnqqvobprjiontre`), consumido pelo frontend `https://prisma.hrtsolutions.com.br`. O nome `Prisma-QA` encontrado em evidências anteriores é um rótulo legado do mesmo projeto, não outro ambiente. Exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831`, `20260909184943`, `20260911153000` e `20260913132559` e a Edge Function `person-data-deletion` estão ativas nesse ambiente único.
+
+## Correção do CORS no frontend de produção — 2026-09-16
+
+A tentativa administrativa de excluir uma Pessoa no frontend implantado falhou antes de alcançar o preflight de domínio: o log remoto registrou `OPTIONS 403` em `person-data-deletion`. A função aceitava somente as origens locais por padrão e a origem `https://prisma.hrtsolutions.com.br` não estava na allowlist efetiva. Nenhuma operação de exclusão foi criada e o cadastro permaneceu preservado.
+
+A allowlist passou a incluir explicitamente a origem HTTPS de produção, mantendo origem arbitrária negada, `verify_jwt=false` no gateway e autenticação obrigatória dentro da função para as ações administrativas. A Edge Function v3 foi publicada em produção. O smoke não destrutivo retornou `200` no `OPTIONS` da origem oficial, `403` para origem arbitrária e `401` para preview sem sessão. A Pessoa real permaneceu existente e nenhuma operação de exclusão foi criada.
+
+| Agreement existente | Implementação | Teste/Evidência | Status |
+| --- | --- | --- | --- |
+| D-007 preflight invisível | origem pública exata na allowlist da Edge Function | regressão estática e `OPTIONS 200` remoto | PASS |
+| D-019 mesmo pipeline | requisição continua em `person-data-deletion` | catálogo remoto e código da função | PASS |
+| P-024 sem detalhe técnico na UI | boundary continua retornando mensagens sanitizadas | teste específico e inspeção do código | PASS |
+| P-013 sem travessia ou bypass de autoridade | CORS não concede autoridade; POST administrativo continua exigindo Bearer e RPC autorizada | origem arbitrária `403` e preview sem sessão `401` | PASS |
 
 A migration `20260911153000_person_deletion_learning_metadata_shape` permite que casos de aprendizado aprovados ou rejeitados sobrevivam como metadata-only quando a revisão da Pessoa é purgada. Isso evita que a restrição de forma do aprendizado impeça a conclusão da exclusão definitiva; casos candidatos continuam sendo removidos.
 

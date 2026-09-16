@@ -79,6 +79,8 @@ test("M5.5 SQL coordinates Storage and refuses completion with residues", async 
   assert.match(edge, /mark_person_deletion_storage_removed/);
   assert.match(edge, /fail_person_deletion_retryable/);
   assert.match(edge, /finalize_person_definitive_deletion/);
+  assert.match(edge, /DEFAULT_ORIGINS[\s\S]*https:\/\/prisma\.hrtsolutions\.com\.br/);
+  assert.doesNotMatch(edge, /Access-Control-Allow-Origin["']:\s*["']\*["']/);
   assert.match(config, /\[functions\.person-data-deletion\][\s\S]*verify_jwt = false/);
 });
 

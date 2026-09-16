@@ -3,7 +3,11 @@ import { createClient } from "npm:@supabase/supabase-js@2.112.3";
 const BOUNDARY_VERSION = "person-data-deletion-boundary-1.0.0";
 const REQUEST_VERSION = "person-data-deletion-request-1.0.0";
 const MAX_BODY_BYTES = 64 * 1024;
-const DEFAULT_ORIGINS = ["http://127.0.0.1:5555", "http://localhost:5555"];
+const DEFAULT_ORIGINS = [
+  "http://127.0.0.1:5555",
+  "http://localhost:5555",
+  "https://prisma.hrtsolutions.com.br",
+];
 const memoryRateWindow = new Map<string, number[]>();
 
 interface BoundaryRequest {

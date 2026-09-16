@@ -2,7 +2,7 @@
 
 ## Estado
 
-O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e recebe migrations e Edge Functions. Desde 2026-09-15, o frontend também possui rollout hospedado em VPS Hostinger e está disponível em `https://prisma.hrtsolutions.com.br`, usando o mesmo Prisma-QA. Não existe projeto Supabase separado de produção. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
+O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambiente atual de produção. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel, mas não identifica outro ambiente. Desde 2026-09-15, o frontend está implantado na VPS Hostinger em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
 
 ## Pré-requisitos
 
@@ -16,7 +16,7 @@ O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e rece
 - release checklist preenchido;
 - rollback e owner definidos.
 
-## QA
+## Validação antes da produção
 
 1. aplicar migrations em ordem;
 2. executar advisors e testes RLS;
@@ -27,11 +27,11 @@ O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e rece
 
 Para fontes Knowledge, executar `pnpm run knowledge:prepare -- <cbo|esco> <diretorio> <versao> <data> <saida>`. Aplicar os lotes `stage-NNNN.sql`, executar `finalize-and-diff.sql`, revisar o diff e somente então executar repetidamente a instrução de `publish.sql` com o Super Admin que aprovou até `done = true`. Cada chamada processa um lote confirmado em transação própria; replays com o mesmo hash são idempotentes, a retomada preserva o cursor e divergência ou tentativa de sobrescrever versão publicada falham fechadas.
 
-Evidência atual em 2026-09-13: o schema funcional acumulado e `20260914015642_m61_requirement_classification_invariant` estão alinhados no repositório e ativos no Prisma-QA. As dez Edge Functions presentes no repositório permanecem `ACTIVE` e não foram alteradas neste movimento. A prova M6.1 confirmou rejeição de requisito `unclassified`, contrato `vacancy-definition-1.2.0`, grant apenas para `authenticated` e wrapper legado sem execução; a Posição afetada foi corrigida por nova versão. O histórico remoto de migrations anterior a setembro contém timestamps diferentes dos arquivos locais equivalentes; a simulação oficial falha fechada sem executar SQL. Não reparar o ledger nem reaplicar migrations antigas sem um movimento específico de reconciliação com prova de equivalência. O frontend adaptativo permanece local porque não existe hosting remoto; o smoke visual autenticado depende de uma sessão reutilizável antes de rollout futuro.
+Evidência de 2026-09-13: o schema funcional acumulado e `20260914015642_m61_requirement_classification_invariant` estavam alinhados no repositório e ativos no projeto remoto. As dez Edge Functions presentes no repositório permaneciam `ACTIVE` e não foram alteradas naquele movimento. A prova M6.1 confirmou rejeição de requisito `unclassified`, contrato `vacancy-definition-1.2.0`, grant apenas para `authenticated` e wrapper legado sem execução; a Posição afetada foi corrigida por nova versão. O histórico remoto de migrations anterior a setembro contém timestamps diferentes dos arquivos locais equivalentes; a simulação oficial falha fechada sem executar SQL. Não reparar o ledger nem reaplicar migrations antigas sem um movimento específico de reconciliação com prova de equivalência. Essa evidência antecede o hosting do frontend iniciado em 2026-09-15.
 
-## Produção futura
+## Produção atual
 
-Não existe ambiente separado no estágio interno atual. Antes do primeiro cliente ou dado real, provisionar QA e produção isolados, definir hosting, backup, janela, compatibilidade, retenção, comunicação e rollback. Após o futuro deploy, executar smoke sem PII desnecessária, confirmar métricas e sincronizar o estado documental.
+Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente e só pode seguir para o projeto único após autorização explícita de produção. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
 
 ## Git
 

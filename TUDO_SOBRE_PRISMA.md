@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 183
-source_manifest_sha256: a51e023a6429f3b1aaf9400c6a750468a9a19a4f3992cbaaae22847a7ab2627c
+source_manifest_sha256: af26da05a65e54da80abe3b36b8537c0d6aeca8246b69311737ce1a2202d4ead
 -->
 
 # Tudo sobre o Prisma
@@ -723,7 +723,7 @@ Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por tr
 
 - M5.5 foi aplicado somente ao Prisma-QA pelas migrations remotas `20260909183606`, `20260909184825` e `20260909185007`; a Edge Function `person-data-deletion` v1 está `ACTIVE`. Provas sintéticas com rollback validaram Super Admin, Owner, Admin, negação de Recruiter/Member e cross-tenant, capability própria sem troca de alvo, assessment negado, replay negado, Storage pendente sem falso sucesso, lock contra mutação, purga integral, zero resíduos, auditoria mínima com nome, preservação de Knowledge/Item Bank/Usuários/Vaga e recadastro com novo UUID. Advisors não acrescentaram alerta de segurança ou performance específico da exclusão. A fixture visual foi removida após o smoke.
 
-- Projeto Supabase QA remoto ativo: `Prisma-QA` (`ioldpnqqvobprjiontre`).
+- Projeto Supabase remoto único em produção: `ioldpnqqvobprjiontre`. O rótulo `Prisma-QA` ainda pode aparecer historicamente no painel, mas não representa outro ambiente.
 - Migration inicial do Prisma aplicada em QA em 2026-08-23.
 - Migration `20260824021143_harden_rls_auto_enable_permissions` aplicada em QA; `anon` e `authenticated` não executam diretamente o event trigger de RLS.
 - Organization `Prisma` criada em QA com membership administrativa inicial para o shell web.
@@ -760,9 +760,9 @@ Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por tr
 - M5.1B foi aplicado ao Prisma-QA em 2026-09-01 e a Edge Function `assessment-access` foi publicada. Smoke sintético confirmou CORS local, workspace público sem answer key, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, confiança, Evidência Demonstrada, resolução da Need e uma reavaliação de matching. Privilégios negativos confirmaram `anon` sem SELECT de tentativa ou execução de `m51b_public_access`, `authenticated` sem INSERT de tentativa ou execução dessa RPC e `service_role` como único executor. O lint não aponta erro M5.1A/M5.1B; os dois warnings históricos de cast do currículo e o erro histórico de enum em Knowledge permanecem fora deste movimento.
 - M5.1C foi aplicado ao Prisma-QA em 2026-09-01 pelas migrations remotas `20260901145444`, `20260901150902`, `20260901152207`, `20260901152216`, `20260901152451` e `20260901153011`. A Edge Function `assessment-item-generator` v2 está `ACTIVE` com `verify_jwt=true`, mas geração externa, provider, modelo, secret e orçamento permanecem desativados. QA comprovou gap, geração fake, replay, review, publicação Global e Organization, dedup exata, rejeição preservada, isolamento cross-tenant, RLS/grants, preview analítico sintético e ledger reservation/release. Custo externo real: zero. Calibração real: inexistente.
 - A classificação acadêmica 1.0.0 foi aplicada ao Prisma-QA em 2026-09-02. A verificação transacional aceitou o contrato atual, rejeitou combinação nível/qualificação incompatível, manteve payload histórico somente legível, aceitou histórico explicitamente revisado sem criar snapshot retroativo, bloqueou publicação pendente e comprovou o Delta sem duplicação. `anon` e `authenticated` não executam os validadores privados, nenhuma tabela paralela existe e o rollback deixou zero dados de prova. O `db lint` mantém apenas o erro histórico de cast do enum Knowledge em `public.enqueue_knowledge_observation`.
-- Frontend desktop e mobile continuam somente locais, conectados ao único projeto Supabase remoto.
+- Frontend web hospedado em `https://prisma.hrtsolutions.com.br`, conectado ao projeto Supabase remoto único; desenvolvimento e validações também permanecem disponíveis localmente.
 
-Não existe ambiente de produção separado por decisão explícita atual; o projeto remoto é usado somente pela equipe interna, sem clientes.
+Não existe ambiente remoto separado de homologação. O frontend e o Supabase atuais compõem o único ambiente de produção; mudanças são validadas localmente antes de rollout explícito nesse ambiente.
 
 ## Não implementado
 
@@ -804,6 +804,8 @@ Não existe ambiente de produção separado por decisão explícita atual; o pro
 - Contrato de perfil não deve ser congelado antes da amostra real autorizada.
 
 ## Última evidência local
+
+Em 2026-09-16, uma tentativa administrativa de excluir Pessoa no frontend de produção foi bloqueada antes da lógica de domínio. O Logs Explorer registrou `OPTIONS 403` para `person-data-deletion`; a versão ativa permitia apenas origens locais por padrão. A Edge Function v3 adicionou `https://prisma.hrtsolutions.com.br` à allowlist exata. O smoke remoto retornou `200` para o preflight da origem oficial, `403` para origem arbitrária e `401` para preview sem sessão, preservando autenticação interna e autorização tenant-scoped. A Pessoa real permaneceu existente e o ledger continuou sem operação para ela. O rótulo histórico `Prisma-QA` foi reclassificado na documentação como nome legado do único projeto remoto de produção.
 
 Em 2026-09-11, o runtime Paddle CPU local completou os dois PDFs autorizados sem fallback. O probe sanitizado registrou Tainá com 40 blocos e 71 linhas em cerca de 83 segundos e Vagner com 27 blocos e 60 linhas em cerca de 66 segundos. O smoke autenticado no Prisma-QA mostrou loading explícito durante toda a espera, método `PP-StructureV3 local`, três experiências e duas formações para Tainá e sete sinais de experiência para Vagner. O teste revelou duas falhas adicionais: disputa de detectores que reduzia `Engenheira de Software Front-End` a um fragmento e impedimento backend para vincular uma fonte name-only a Pessoa existente. O runtime v9 passou a priorizar o detector paralelo e reconhecer a flexão feminina; duas migrations forward-only permitiram a decisão humana de vínculo em `needs_human_identity`, preservando nome obrigatório, tenant, papel, lock e o mínimo nome mais contato para criar uma nova Pessoa. A reexecução real direta confirmou Movile, Vtex e Catho com cargos e períodos próprios; erros de OCR no texto original permanecem visíveis para revisão. Após autorização explícita do Product Owner, `pnpm run validate` aprovou lint de 405 arquivos, foundation de 18 tabelas públicas e 6 versões de processamento, Context Pack, dois typechecks, build web, 319 testes técnicos, 19 casos golden sem falha ou regressão e demonstração vertical concluída. A operação de exclusão definitiva da Tainá revelou e corrigiu uma incompatibilidade entre a preservação de aprendizado aprovado/rejeitado como metadata-only e a restrição de forma da tabela; a migration `20260911153000_person_deletion_learning_metadata_shape` está aplicada no Prisma-QA e a prova transacional confirmou a retomada desse estado sem violar a restrição. Nenhum Perfil foi publicado. A meta de 90% e o cutover permanecem bloqueados pela amostra insuficiente.
 
@@ -6499,7 +6501,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e recebe migrations e Edge Functions. Desde 2026-09-15, o frontend também possui rollout hospedado em VPS Hostinger e está disponível em `https://prisma.hrtsolutions.com.br`, usando o mesmo Prisma-QA. Não existe projeto Supabase separado de produção. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
+O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambiente atual de produção. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel, mas não identifica outro ambiente. Desde 2026-09-15, o frontend está implantado na VPS Hostinger em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
 
 ## Pré-requisitos
 
@@ -6513,7 +6515,7 @@ O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e rece
 - release checklist preenchido;
 - rollback e owner definidos.
 
-## QA
+## Validação antes da produção
 
 1. aplicar migrations em ordem;
 2. executar advisors e testes RLS;
@@ -6524,11 +6526,11 @@ O projeto Supabase Prisma-QA continua sendo o único backend remoto atual e rece
 
 Para fontes Knowledge, executar `pnpm run knowledge:prepare -- <cbo|esco> <diretorio> <versao> <data> <saida>`. Aplicar os lotes `stage-NNNN.sql`, executar `finalize-and-diff.sql`, revisar o diff e somente então executar repetidamente a instrução de `publish.sql` com o Super Admin que aprovou até `done = true`. Cada chamada processa um lote confirmado em transação própria; replays com o mesmo hash são idempotentes, a retomada preserva o cursor e divergência ou tentativa de sobrescrever versão publicada falham fechadas.
 
-Evidência atual em 2026-09-13: o schema funcional acumulado e `20260914015642_m61_requirement_classification_invariant` estão alinhados no repositório e ativos no Prisma-QA. As dez Edge Functions presentes no repositório permanecem `ACTIVE` e não foram alteradas neste movimento. A prova M6.1 confirmou rejeição de requisito `unclassified`, contrato `vacancy-definition-1.2.0`, grant apenas para `authenticated` e wrapper legado sem execução; a Posição afetada foi corrigida por nova versão. O histórico remoto de migrations anterior a setembro contém timestamps diferentes dos arquivos locais equivalentes; a simulação oficial falha fechada sem executar SQL. Não reparar o ledger nem reaplicar migrations antigas sem um movimento específico de reconciliação com prova de equivalência. O frontend adaptativo permanece local porque não existe hosting remoto; o smoke visual autenticado depende de uma sessão reutilizável antes de rollout futuro.
+Evidência de 2026-09-13: o schema funcional acumulado e `20260914015642_m61_requirement_classification_invariant` estavam alinhados no repositório e ativos no projeto remoto. As dez Edge Functions presentes no repositório permaneciam `ACTIVE` e não foram alteradas naquele movimento. A prova M6.1 confirmou rejeição de requisito `unclassified`, contrato `vacancy-definition-1.2.0`, grant apenas para `authenticated` e wrapper legado sem execução; a Posição afetada foi corrigida por nova versão. O histórico remoto de migrations anterior a setembro contém timestamps diferentes dos arquivos locais equivalentes; a simulação oficial falha fechada sem executar SQL. Não reparar o ledger nem reaplicar migrations antigas sem um movimento específico de reconciliação com prova de equivalência. Essa evidência antecede o hosting do frontend iniciado em 2026-09-15.
 
-## Produção futura
+## Produção atual
 
-Não existe ambiente separado no estágio interno atual. Antes do primeiro cliente ou dado real, provisionar QA e produção isolados, definir hosting, backup, janela, compatibilidade, retenção, comunicação e rollback. Após o futuro deploy, executar smoke sem PII desnecessária, confirmar métricas e sincronizar o estado documental.
+Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente e só pode seguir para o projeto único após autorização explícita de produção. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
 
 ## Git
 
@@ -6542,19 +6544,19 @@ Branches de trabalho usam `codex/`. Commits são coerentes e não misturam mudan
 
 ## Estado atual
 
-Existe ambiente local, um único projeto Supabase remoto (`Prisma-QA`, ref `ioldpnqqvobprjiontre`) e um frontend público hospedado em VPS Hostinger. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend remoto. Não existe projeto Supabase separado de produção. Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora do runtime hospedado.
+Existe ambiente local de desenvolvimento e um único ambiente remoto de produção, formado pelo projeto Supabase `ioldpnqqvobprjiontre` e pelo frontend público hospedado em VPS Hostinger. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel do Supabase, mas não representa um segundo ambiente. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse backend único. Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora do runtime hospedado.
 
 ## Local
 
 Raiz oficial: `C:\Users\Bruno\Documents\Prisma`. Objetivo: desenvolvimento determinístico, testes, migrations, Context Pack e validação local do shell web. Dados permitidos: fixtures sintéticas. Secrets: o fluxo CLI não exige secrets; o shell web exige apenas `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` em `.env*`, fora do Git. O shell possui uma única origem local em `http://127.0.0.1:5555`; o ambiente conectado é definido pelas variáveis `VITE_SUPABASE_*`, sem criar uma segunda porta para QA.
 
-## QA
+## Produção atual
 
-Objetivo: validar Auth, RLS, storage, migrations, parser, provider, observabilidade e fluxos negativos. O projeto remoto atual é `Prisma-QA` (`ioldpnqqvobprjiontre`) e contém foundation, M2-A, M2-B, M2-C, intake currículo-first, M4, M5, M5.1A/B/C e M5.2. O M5.2 publicou a versão oficial CBO `CBO 2002-2025-06-06`; o snapshot ESCO v1.2.1 continua bloqueado pelo download oficial com etapa humana. O monitor mensal de CBO, ESCO e O*NET está ativo com Supabase Cron, Vault e Edge Function; a próxima checagem vence em 2026-10-01 às 01:00 em `America/Sao_Paulo`. O M5.1C mantém a Edge Function `assessment-item-generator` com JWT obrigatório e geração externa desativada. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
+Objetivo: operar o Prisma implantado e validar Auth, RLS, Storage, migrations, parser, provider, observabilidade e fluxos negativos com risco proporcional. O projeto remoto único é `ioldpnqqvobprjiontre` e contém foundation, M2-A, M2-B, M2-C, intake currículo-first, M4, M5, M5.1A/B/C e M5.2. O M5.2 publicou a versão oficial CBO `CBO 2002-2025-06-06`; o snapshot ESCO v1.2.1 continua bloqueado pelo download oficial com etapa humana. O monitor mensal de CBO, ESCO e O*NET está ativo com Supabase Cron, Vault e Edge Function; a próxima checagem vence em 2026-10-01 às 01:00 em `America/Sao_Paulo`. O M5.1C mantém a Edge Function `assessment-item-generator` com JWT obrigatório e geração externa desativada. Dados reais somente com finalidade, base legal, autorização, minimização, acesso e retenção documentados.
 
-## Produção planejada
+## Limite atual
 
-Objetivo: uso real aprovado quando houver cliente ou necessidade de exposição externa. Produção nunca será a primeira superfície de teste e exigirá projeto isolado, aprovação explícita, release checklist, backup, rollback, incident response, auditoria e smoke pós-deploy.
+Não existe hoje um ambiente remoto separado para homologação. Mudanças continuam sendo preparadas e testadas localmente, recebem validação proporcional e só então são implantadas no ambiente único de produção com aprovação explícita, rollback, observabilidade e smoke não destrutivo. Uma futura separação entre homologação e produção exige decisão e provisionamento próprios.
 
 ## Variáveis e secrets
 
@@ -6563,7 +6565,7 @@ O shell web local recebe somente URL pública e chave publicável adequada. Secr
 ## Promoção
 
 ```text
-local -> remoto interno -> evidência -> futura separação QA/produção -> smoke -> sincronização documental
+local -> validação proporcional -> aprovação de produção -> ambiente remoto único -> smoke -> sincronização documental
 ```
 
 Migration aplicada não prova aplicação publicada; aplicação publicada não prova capability ativa. Evidência por ambiente atualiza `PRISMA_CURRENT_STATE.md`.
@@ -10898,7 +10900,20 @@ Usar uma Pessoa sintética do Prisma-QA com Perfil publicado e importação parc
 
 ## Escopo e ambiente
 
-Implementação local e no projeto `Prisma-QA` (`ioldpnqqvobprjiontre`). Produção, hosting, exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831`, `20260909184943`, `20260911153000` e `20260913132559` e a Edge Function `person-data-deletion` v1 estão ativas apenas em QA.
+Implementação local e no projeto Supabase único de produção (`ioldpnqqvobprjiontre`), consumido pelo frontend `https://prisma.hrtsolutions.com.br`. O nome `Prisma-QA` encontrado em evidências anteriores é um rótulo legado do mesmo projeto, não outro ambiente. Exclusão em massa, portabilidade, retenção automática e portal completo permanecem fora de escopo. As migrations `20260909175124`, `20260909184831`, `20260909184943`, `20260911153000` e `20260913132559` e a Edge Function `person-data-deletion` estão ativas nesse ambiente único.
+
+## Correção do CORS no frontend de produção — 2026-09-16
+
+A tentativa administrativa de excluir uma Pessoa no frontend implantado falhou antes de alcançar o preflight de domínio: o log remoto registrou `OPTIONS 403` em `person-data-deletion`. A função aceitava somente as origens locais por padrão e a origem `https://prisma.hrtsolutions.com.br` não estava na allowlist efetiva. Nenhuma operação de exclusão foi criada e o cadastro permaneceu preservado.
+
+A allowlist passou a incluir explicitamente a origem HTTPS de produção, mantendo origem arbitrária negada, `verify_jwt=false` no gateway e autenticação obrigatória dentro da função para as ações administrativas. A Edge Function v3 foi publicada em produção. O smoke não destrutivo retornou `200` no `OPTIONS` da origem oficial, `403` para origem arbitrária e `401` para preview sem sessão. A Pessoa real permaneceu existente e nenhuma operação de exclusão foi criada.
+
+| Agreement existente | Implementação | Teste/Evidência | Status |
+| --- | --- | --- | --- |
+| D-007 preflight invisível | origem pública exata na allowlist da Edge Function | regressão estática e `OPTIONS 200` remoto | PASS |
+| D-019 mesmo pipeline | requisição continua em `person-data-deletion` | catálogo remoto e código da função | PASS |
+| P-024 sem detalhe técnico na UI | boundary continua retornando mensagens sanitizadas | teste específico e inspeção do código | PASS |
+| P-013 sem travessia ou bypass de autoridade | CORS não concede autoridade; POST administrativo continua exigindo Bearer e RPC autorizada | origem arbitrária `403` e preview sem sessão `401` | PASS |
 
 A migration `20260911153000_person_deletion_learning_metadata_shape` permite que casos de aprendizado aprovados ou rejeitados sobrevivam como metadata-only quando a revisão da Pessoa é purgada. Isso evita que a restrição de forma do aprendizado impeça a conclusão da exclusão definitiva; casos candidatos continuam sendo removidos.
 
