@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const migrationPath = "supabase/migrations/20260831204334_recover_partial_resume_review.sql";
+const educationEvidenceMigrationPath = "supabase/migrations/20260917143000_preserve_institution_only_education_evidence.sql";
 
 test("partial resume recovery keeps incomplete recognition reviewable and fail-closed", async () => {
   const sql = await readFile(migrationPath, "utf8");
@@ -38,6 +39,17 @@ test("partial resume recovery uses preserved pages instead of the latest empty a
   assert.match(detail, /Recuperar informações no currículo/);
   assert.match(workspace, /document\.reviewAttempt\.id/);
   assert.match(workspace, /Reabrir importação/);
+});
+
+test("education evidence remains source-grounded when the declared course is absent", async () => {
+  const sql = await readFile(educationEvidenceMigrationPath, "utf8");
+
+  assert.match(sql, /create or replace function private\.persist_person_extraction/i);
+  assert.match(sql, /select 'education'::text,[\s\S]*coalesce\(nullif\(btrim\(item ->> 'course'\), ''\), nullif\(btrim\(item ->> 'institution'\), ''\)\)/i);
+  assert.match(sql, /item ->> 'evidenceText'/i);
+  assert.doesNotMatch(sql, /coalesce\(\s*item ->> 'evidenceText'/i);
+  assert.match(sql, /revoke all on function private\.persist_person_extraction[\s\S]*from public, anon, authenticated/i);
+  assert.doesNotMatch(sql, /alter table public\.evidence[\s\S]*drop not null/i);
 });
 
 test("reused resume intake restores a missing private object before reuse", async () => {

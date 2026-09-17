@@ -134,3 +134,7 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Replay privado do mesmo resultado já autorizado: contrato do LinkedIn aceito e contagens curriculares preservadas, sem nova chamada à OpenAI e sem gravação no banco.
 - Regressão dirigida inicial: build TypeScript e 21 testes do Parser IA em `PASS`, incluindo rótulo de PDF, URL Unicode, retomada em memória e endereço incompatível levado à revisão.
 - Estado deste adendo antes do rollout: implementação local `PASS`; produção e reteste autenticado `NOT TESTED`.
+- Rollout frontend: `adb2416` ativo, HTTP 200, bundle `baseline` + `hosted`, container sem restart e rollback `prisma-web:rollback-before-linkedin-normalization-20260917` preservado.
+- Reteste em aba efetivamente nova: identificação alcançada em 22,6 s. A constraint de resumo não voltou a falhar; após vincular à Pessoa existente, o Postgres revelou `evidence.fact` nulo para uma formação com instituição declarada e curso ausente.
+- Segunda correção: migration `20260917143000_preserve_institution_only_education_evidence` mantém `evidence.fact NOT NULL` e usa curso ou instituição já declarada. Teste dirigido prova que texto citado não vira substituto e que a nulabilidade não é relaxada.
+- Estado atualizado deste adendo: normalização do LinkedIn em produção `PASS`; persistência acadêmica local `PASS`; migration e fluxo completo pós-migration `NOT TESTED`.
