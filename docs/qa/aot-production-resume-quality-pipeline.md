@@ -150,3 +150,24 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Evidência local: 27 testes dirigidos, lint de 515 arquivos e `validate:person-flow` `PASS` nas quatro fases; os auto testes SQL cobrem rótulo conhecido, endereço incompatível e tipo malformado.
 - Evidência remota: aplicação atômica, gatilho ativo, URL rotulada convertida para `https://www.linkedin.com/in/synthetic-profile`, URL de empresa convertida em `null`, e `anon`/`authenticated` sem execução. Histórico registra somente `20260917154500`.
 - Estado: proteção servidor `PASS`; reprocessamento real do documento falho `NOT TESTED` por exigir nova operação e possível chamada paga. O cadastro incompleto continua preservado até decisão explícita de exclusão.
+
+## Correção do salvamento de revisão acadêmica — 2026-09-17
+
+### Acordos deste delta
+
+- `D-SAVE-01`: uma revisão que já satisfaz o contrato deve continuar válida depois da normalização automática e poder atravessar o gatilho de salvamento.
+- `D-SAVE-02`: `classifierSnapshot.course` deve permanecer presente quando a fonte válida o declarou como JSON nulo.
+- `P-SAVE-01`: não relaxar o validador, inventar curso, alterar PDF/evidência, publicar Perfil ou descartar alterações locais do operador.
+- `A-SAVE-01`: engenharia pode escolher a correção forward-only e os testes sintéticos, desde que preserve contratos, permissões e rollback.
+- `CA-SAVE-01`: autoteste da migration, regressão local, validação do rascunho real e smoke transacional do gatilho devem passar.
+
+### AoT
+
+| Acordo | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| `D-SAVE-01` | migration `20260917164000_preserve_nullable_education_classifier_snapshot` recompõe apenas o normalizador privado | rascunho real: lifecycle e classificação válidos após normalização; atualização transacional concluiu e foi revertida | PASS |
+| `D-SAVE-02` | snapshot válido é anexado depois da remoção de nulos apenas nos metadados superiores | fixture com curso nulo preservou a chave; segundo item real retornou `nullable_course_key_preserved = true` | PASS |
+| `P-SAVE-01` | validadores e grants não mudaram; sem backfill ou publicação | `anon` e `authenticated` negados; smoke com rollback; aba antiga preservada | PASS |
+| `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
+
+A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.

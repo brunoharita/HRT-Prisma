@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 189
-source_manifest_sha256: 4e9f21d3ab8ab4a182bf5a34e3d3a7d0360e3cb26e9158b5675b5f08617571e6
+source_manifest_sha256: 2bf288ad3b80c02b9217e1bab583c6b783ff33a2087f9ab0144e3935e89bde20
 -->
 
 # Tudo sobre o Prisma
@@ -541,6 +541,8 @@ Nova decisão do Product Owner em 2026-09-17 remove o teto financeiro interno de
 Incidente e correção autorizada em 2026-09-17: a importação real de Julia concluiu PDF.js e Parser IA em 20,8 s, mas o Supabase recusou a persistência do rascunho porque o endereço extraído do LinkedIn continha o rótulo visual `(LinkedIn)` e violou `extraction_drafts_structured_summary_shape_check`. O PDF permaneceu preservado e nenhum Perfil foi publicado. A correção de domínio conserva fato e evidência originais, remove somente o rótulo conhecido na cópia canônica e, para qualquer URL ainda incompatível, grava `null` com pendência de revisão em vez de abortar o currículo inteiro. Replay privado preservou 37 fatos, 6 experiências, 2 formações, 3 competências e 1 certificação, sem nova chamada OpenAI. O frontend `adb2416` foi publicado com rollback preservado; reteste em aba nova alcançou a identificação em 22,6 s e passou pela constraint do resumo. A transação então revelou uma segunda falha antiga: formação válida com instituição e sem curso produzia `evidence.fact = null`. A migration `20260917143000_preserve_institution_only_education_evidence` usa curso ou instituição declarada como rótulo da evidência, sem inventar curso, descartar a formação ou relaxar `NOT NULL`. A migration foi aplicada atomicamente, sua função foi verificada e somente a versão nova foi registrada no histórico. O smoke pós-migration alcançou a identificação em 24,1 s e a revisão em 51,9 s observados, incluindo pausas de inspeção e a seleção humana. Foram preservadas 3 páginas, 2.527 caracteres úteis, 5 seções, 6 experiências, 2 formações e 3 competências. O banco confirmou documento v3 `in_review`, revisão `draft`, tentativa `structured`, 8 evidências, 3 páginas nativas, zero OCR e nenhuma falha. Nenhum Perfil foi publicado.
 
 Proteção complementar autorizada no mesmo dia: uma aba antiga ainda executava o bundle anterior à normalização e repetiu `extraction_drafts_structured_summary_shape_check` ao escolher criar nova Pessoa. O registro novo permaneceu incompleto, com documento v1 `failed/not_ready`, zero revisão e zero Perfil publicado; nenhuma exclusão foi autorizada. A migration `20260917154500_harden_linkedin_draft_persistence` aplica a normalização conservadora também antes da constraint do banco, somente sobre a cópia de revisão. Rótulo conhecido é removido; endereço ainda inválido vira `null` com pendência; tipo estrutural malformado continua rejeitado. Páginas e evidências não são reescritas. A migration e seus auto testes foram aplicados atomicamente e registrados isoladamente; produção confirmou gatilho ativo, função privada sem `security definer`, execução negada a `anon`/`authenticated` e casos sintéticos esperado/inválido corretos. Não houve currículo, chamada OpenAI ou publicação no rollout.
+
+Correção adicional de produção em 2026-09-17: o salvamento da revisão de Julia falhava porque a normalização removia recursivamente a chave `course` nula de um `classifierSnapshot` acadêmico válido; o validador permite o valor nulo, mas exige a presença da chave. A migration forward-only `20260917164000_preserve_nullable_education_classifier_snapshot` preserva o snapshot válido inteiro, sem relaxar validação, inventar curso, alterar evidência ou publicar Perfil. Autoteste atômico, validação do rascunho real e smoke transacional com rollback passaram; histórico remoto registra a versão e `anon`/`authenticated` continuam sem executar o normalizador privado. A interface reabriu a revisão como rascunho sincronizado. Produto e contratos persistidos permanecem nas versões vigentes.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
@@ -2897,6 +2899,8 @@ O aditivo 1.1.0 do acordo hospedado expõe a correção de identidade antes da c
 `education-academic-classification` 1.1.0 assume conclusão inferida para curso declarado salvo indicação contrária. `resume-dates-1.0.0` normaliza componentes temporais e calcula diferença entre datas civis; `extraction-draft` 8.2.0 registra essa semântica no payload persistido existente. `adaptive-resume-extraction` 7.2.0 usa runtime `prisma-layout-adaptive-v10`; busca de perfis 1.1.0 substitui estimativa só por anos por duração em dias. Provider determinístico local passa a `deterministic-local-1.1.0`.
 
 O contrato de transporte/prompt/cache `parser-ia-1.0.0` mantém shape e fatos originais; o pós-processamento determinístico e snapshots acadêmicos usam as novas versões. SQL/RPCs, timestamps de auditoria e registros publicados não mudam. Produto permanece v1.5.11, pois esta melhoria complementa o M5.7 aceito. Rollback é reversão do código; históricos preservam snapshots e notas originais, sem backfill reverso. Acordo e AoT: `docs/qa/resume-date-education-rules.md`.
+
+A correção forward-only `20260917164000_preserve_nullable_education_classifier_snapshot` restaura o contrato acadêmico vigente no salvamento de revisão: uma chave obrigatória do snapshot pode continuar presente com valor JSON nulo. Não altera enums, shape aceito, autoridade humana, versão de contrato ou versão pública; portanto não cria nova entrega de produto. O validador permanece fail-closed e nenhum dado histórico recebe backfill.
 
 ## Versão de produto exibida no Prisma
 
@@ -6582,6 +6586,8 @@ O frontend corrigido foi publicado a partir de `adb2416`, com rollback `prisma-w
 
 Uma aba aberta antes desse rollout ainda carregava o bundle antigo e repetiu a falha de forma do LinkedIn ao criar uma nova Pessoa. O documento v1 ficou `failed/not_ready`, sem revisão e sem Perfil publicado; o cadastro incompleto foi preservado e não foi excluído. A migration `20260917154500_harden_linkedin_draft_persistence` tornou a fronteira do banco compatível com clientes antigos sem relaxar a constraint: gatilho privado normaliza somente a cópia de revisão e mantém tipos malformados em falha fechada. A aplicação e seus auto testes foram atômicos; verificação remota confirmou gatilho ativo, casos válido/inválido corretos e execução negada a `anon` e `authenticated`. A versão foi registrada isoladamente no histórico. Não houve nova chamada OpenAI nem reprocessamento de currículo neste rollout.
 
+Ao salvar a revisão do Documento v2 de Julia, o rascunho já válido era recusado com `review_contract_sync_failed`. A causa era interna: `jsonb_strip_nulls` removia recursivamente `classifierSnapshot.course` quando o curso estava legitimamente nulo numa formação identificada apenas pela instituição, enquanto o validador exige que a chave exista e aceita seu valor nulo. A migration `20260917164000_preserve_nullable_education_classifier_snapshot` mantém o snapshot válido intacto, sem relaxar o validador, inventar curso ou reescrever Perfil, fonte ou evidência. Ela foi aplicada atomicamente e registrada no histórico do único Supabase de produção. Autoteste sintético, validação sobre o rascunho real e smoke transacional do gatilho passaram; o smoke foi revertido e não persistiu mudança. A revisão reabriu na interface como `Rascunho sincronizado`. A aba antiga com alterações locais foi preservada, sem descarte automático.
+
 Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF.js, verificação semântica, Paddle condicional e Parser IA antes da revisão. O worker Parser e os dois workers Paddle permanecem no PC e escutam somente loopback; o gateway 1.1.0 valida sessão/tenant e usa túnel reverso ligado apenas ao loopback da VPS. O Supabase recebeu a migration aditiva de observabilidade com RLS. Imagens de rollback anteriores foram preservadas. Evidência e limitação do smoke autenticado ficam em `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 ## Pré-requisitos
@@ -10140,6 +10146,27 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Evidência local: 27 testes dirigidos, lint de 515 arquivos e `validate:person-flow` `PASS` nas quatro fases; os auto testes SQL cobrem rótulo conhecido, endereço incompatível e tipo malformado.
 - Evidência remota: aplicação atômica, gatilho ativo, URL rotulada convertida para `https://www.linkedin.com/in/synthetic-profile`, URL de empresa convertida em `null`, e `anon`/`authenticated` sem execução. Histórico registra somente `20260917154500`.
 - Estado: proteção servidor `PASS`; reprocessamento real do documento falho `NOT TESTED` por exigir nova operação e possível chamada paga. O cadastro incompleto continua preservado até decisão explícita de exclusão.
+
+## Correção do salvamento de revisão acadêmica — 2026-09-17
+
+### Acordos deste delta
+
+- `D-SAVE-01`: uma revisão que já satisfaz o contrato deve continuar válida depois da normalização automática e poder atravessar o gatilho de salvamento.
+- `D-SAVE-02`: `classifierSnapshot.course` deve permanecer presente quando a fonte válida o declarou como JSON nulo.
+- `P-SAVE-01`: não relaxar o validador, inventar curso, alterar PDF/evidência, publicar Perfil ou descartar alterações locais do operador.
+- `A-SAVE-01`: engenharia pode escolher a correção forward-only e os testes sintéticos, desde que preserve contratos, permissões e rollback.
+- `CA-SAVE-01`: autoteste da migration, regressão local, validação do rascunho real e smoke transacional do gatilho devem passar.
+
+### AoT
+
+| Acordo | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| `D-SAVE-01` | migration `20260917164000_preserve_nullable_education_classifier_snapshot` recompõe apenas o normalizador privado | rascunho real: lifecycle e classificação válidos após normalização; atualização transacional concluiu e foi revertida | PASS |
+| `D-SAVE-02` | snapshot válido é anexado depois da remoção de nulos apenas nos metadados superiores | fixture com curso nulo preservou a chave; segundo item real retornou `nullable_course_key_preserved = true` | PASS |
+| `P-SAVE-01` | validadores e grants não mudaram; sem backfill ou publicação | `anon` e `authenticated` negados; smoke com rollback; aba antiga preservada | PASS |
+| `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
+
+A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
 
 ---
 

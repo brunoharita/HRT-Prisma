@@ -12,6 +12,8 @@ O aditivo 1.1.0 do acordo hospedado expõe a correção de identidade antes da c
 
 O contrato de transporte/prompt/cache `parser-ia-1.0.0` mantém shape e fatos originais; o pós-processamento determinístico e snapshots acadêmicos usam as novas versões. SQL/RPCs, timestamps de auditoria e registros publicados não mudam. Produto permanece v1.5.11, pois esta melhoria complementa o M5.7 aceito. Rollback é reversão do código; históricos preservam snapshots e notas originais, sem backfill reverso. Acordo e AoT: `docs/qa/resume-date-education-rules.md`.
 
+A correção forward-only `20260917164000_preserve_nullable_education_classifier_snapshot` restaura o contrato acadêmico vigente no salvamento de revisão: uma chave obrigatória do snapshot pode continuar presente com valor JSON nulo. Não altera enums, shape aceito, autoridade humana, versão de contrato ou versão pública; portanto não cria nova entrega de produto. O validador permanece fail-closed e nenhum dado histórico recebe backfill.
+
 ## Versão de produto exibida no Prisma
 
 O Prisma usa uma versão de produto própria, separada das versões semânticas dos contratos técnicos:
