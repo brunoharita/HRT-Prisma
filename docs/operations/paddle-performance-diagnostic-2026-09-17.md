@@ -1,5 +1,7 @@
 # Diagnóstico de desempenho do Paddle - 17/09/2026
 
+> Atualização ponta a ponta: o teste posterior no Prisma confirmou timeout do Paddle em 240,012 s, fallback para PDF.js nativo e boa qualidade final sem contribuição do Paddle. A comparação completa com o cenário sem Paddle está em `docs/operations/resume-import-e2e-comparison-2026-09-17.md` e prevalece para conclusões sobre o fluxo integrado.
+
 ## Resultado e recomendação
 
 Os testes isolados encontraram ganho real sem reinstalar o Docker: controlar as bibliotecas de cálculo reduziu uma página de **104,90 para 45,36 segundos**, mantendo o mesmo texto normalizado. Com CPU controlada, os modelos originais processaram as cinco páginas em **162,20 segundos**; a variante leve oficial, com reconhecimento de português, em **44,76 segundos**, aproximadamente **72,4% menos tempo** nessa comparação. Estes são tempos do Paddle local de diagnóstico, não da importação completa pelo site.
