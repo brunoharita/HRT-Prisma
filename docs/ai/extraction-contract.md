@@ -13,7 +13,7 @@ Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR
 - `mediaType`: deve pertencer à allowlist;
 - organização e documento são controlados pela aplicação, não pelo provider.
 - PDF: máximo de 15 MB, assinatura `%PDF-`, trailer `%%EOF` e parse válido;
-- páginas: extração nativa primeiro, preservando linhas visuais e coordenadas; OCR local somente quando a suficiência falha. O worker, o core WASM e os dados de idioma `por+eng` do Tesseract são carregados de assets locais do bundle web, em carregamento dinâmico browser-only;
+- páginas: extração nativa PDF.js primeiro, preservando todas as páginas, linhas visuais e coordenadas disponíveis. No teste operacional aprovado em 2026-09-17, a importação automática segue diretamente ao Parser IA e não carrega Paddle ou Tesseract, mesmo quando a suficiência nativa falha. O worker, o core WASM e os dados `por+eng` permanecem empacotados para reversão e para OCR manual por região na revisão;
 - evidência espacial persistida: coordenadas de página nativa exigem `pdfjs-layout-v1`; coordenadas de página OCR exigem `tesseract-layout-v1`; combinações cruzadas falham antes da persistência;
 - campos: cada fato estruturado pode apontar para uma região própria e para o método que a produziu;
 - adaptação: repetição no documento e sinais estruturais aprovados do próprio tenant orientam a interpretação, mas não autorizam copiar valores entre registros nem executar templates persistidos.
@@ -56,7 +56,7 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 - Não enviar atributos sensíveis ou documento integral a fornecedor externo sem fluxo aprovado.
 - Não logar currículo ou resposta integral.
 - Tipo, tamanho, assinatura, trailer e parser são validados antes da persistência. Malware scanning ainda não existe e não pode ser alegado.
-- PDF.js e Tesseract.js processam no navegador; nenhum currículo é enviado a OCR ou LLM externo.
+- PDF.js processa a leitura inicial no navegador. Na rota hospedada aprovada, o PDF é enviado ao Parser IA por gateway autenticado; Paddle e Tesseract não participam da importação automática enquanto o teste estiver ativo.
 - O ledger adaptativo recebe apenas caminhos de campo, página, método, versões, âncora, resumos estruturais e código de justificativa; valores e trechos não são duplicados. O texto aceito permanece exclusivamente no ledger espacial tenant-scoped.
 - O catálogo de áreas personalizadas recebe apenas chave, título normalizado, formato, versão e confirmação; um ledger metadata-only referencia cada revisão aprovada. Conteúdo do currículo e evidência permanecem no perfil/review tenant-scoped.
 
@@ -64,7 +64,7 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 
 Versão desconhecida ou resposta fora do schema é rejeitada. Mudança de campo opcional compatível é minor; mudança de semântica ou obrigatoriedade é major.
 
-O M5.6 acrescenta, atrás de `VITE_DOCUMENT_INTELLIGENCE_MODE`, `document-intelligence-provider` 1.0.0 e `canonical-document` 1.0.0. PDF.js permanece no caminho rápido; PP-StructureV3/PP-OCRv6 atendem estrutura e visão; PaddleOCR-VL 1.6 e Tesseract.js são recuperações por página. Todo JSON Paddle é convertido na infraestrutura para `normalized-page-v1`; `ExtractionDraft` e o parser profissional não conhecem tipos Paddle. Detalhes e limites comprovados estão em `docs/ai/document-intelligence.md`.
+O M5.6 acrescenta, atrás de `VITE_DOCUMENT_INTELLIGENCE_MODE`, `document-intelligence-provider` 1.0.0 e `canonical-document` 1.0.0. A capacidade instalada mantém PP-StructureV3/PP-OCRv6, PaddleOCR-VL 1.6 e Tesseract.js como opções reversíveis. Durante o teste aprovado em 2026-09-17, `nativeOnlyForParserIa` força `baseline`, não cria canvases de OCR e encaminha todas as páginas ao Parser IA; `ExtractionDraft` e o parser profissional continuam sem conhecer tipos Paddle. Detalhes e limites comprovados estão em `docs/ai/document-intelligence.md`.
 
 ## Testes
 

@@ -24,6 +24,8 @@ O adaptador preserva `parsing_res_list`, `overall_ocr_res`, dimensões, leitura,
 
 O caminho pesado nunca é aplicado ao PDF nativo simples. Recuperação visual recebe uma imagem de página, não reprocesa deliberadamente todo o documento. Tesseract.js permanece fallback e baseline comparável.
 
+Ativação temporária corrente, aprovada em 2026-09-17: as quatro rotas continuam implementadas, mas a importação automática força leitura nativa exclusiva para o Parser IA. Paddle e Tesseract não são chamados nessa jornada. Isso não remove a capacidade nem altera o OCR manual por região na revisão.
+
 ## Diagnóstico
 
 As categorias allowlisted distinguem falha documental/OCR, layout/reading order, estrutura, semântica, padrão desconhecido, ambiguidade, provider, timeout, resposta inválida, página incompleta, conteúdo insuficiente e fallback. O trace preserva provider, modelo e versões tentados também na falha e acrescenta somente status, código seguro e contagens estruturais. Nenhuma categoria transporta texto do currículo, mensagem livre do provider ou caminho local.

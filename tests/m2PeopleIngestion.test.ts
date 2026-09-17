@@ -61,6 +61,26 @@ test("M5.5 keeps OCR worker and WASM assets inside the application bundle", asyn
   assert.ok((await stat("web/public/tessdata/eng.traineddata.gz")).size > 1_000_000);
 });
 
+test("resume imports go from native PDF reading directly to Parser IA without local OCR", async () => {
+  const [ingestion, importPage, workspacePage, service, parserClient] = await Promise.all([
+    readFile("web/src/domain/personIngestion.ts", "utf8"),
+    readFile("web/src/pages/ResumeImportPage.tsx", "utf8"),
+    readFile("web/src/pages/PersonWorkspacePage.tsx", "utf8"),
+    readFile("web/src/infrastructure/supabase/personIngestionService.ts", "utf8"),
+    readFile("web/src/infrastructure/parserIaClient.ts", "utf8"),
+  ]);
+
+  assert.match(ingestion, /if \(textSufficient \|\| nativeOnlyForParserIa\)[\s\S]{0,300}continue;[\s\S]{0,300}document\.createElement\("canvas"\)/);
+  assert.match(ingestion, /const mode = nativeOnlyForParserIa \? "baseline"/);
+  assert.match(ingestion, /usefulCharacterCount < 120 && !nativeOnlyForParserIa/);
+  assert.match(importPage, /if \(!parserIaEnabled\(\)\)[\s\S]{0,200}A importação não foi iniciada/);
+  assert.match(importPage, /nativeOnlyForParserIa: true/);
+  assert.doesNotMatch(importPage, /Continuar com leitura local|localRetry/);
+  assert.match(workspacePage, /nativeOnlyForParserIa: true/);
+  assert.match(service, /resumeFailedAiIntake[\s\S]*nativeOnlyForParserIa: true/);
+  assert.doesNotMatch(parserClient, /leitura local disponível/);
+});
+
 test("M2-B rejects a file whose signature is not PDF before parsing or OCR", async () => {
   const file = new File(["not-a-pdf%%EOF"], "curriculo.pdf", { type: "application/pdf" });
   await assert.rejects(() => validateAndProcessPdf(file), /assinatura do arquivo não corresponde a um PDF/i);

@@ -18,7 +18,6 @@ import {
 import { deriveResumeProductState } from "../domain/resumeProductState";
 import { operationRecovery, type OperationRecovery } from "../domain/reviewOperationErrors";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
-import { documentIntelligenceRuntime } from "../infrastructure/documentIntelligenceRuntime";
 import { prepareParserIa, parserIaEnabled } from "../infrastructure/parserIaClient";
 import { parserIaIdentity } from "../domain/parserIa";
 import type { OrganizationMembership } from "../shared/access";
@@ -44,7 +43,6 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   const [error, setError] = useState<string | null>(null);
   const [processingRecovery, setProcessingRecovery] = useState<OperationRecovery>("none");
   const [lastResolution, setLastResolution] = useState<ResolutionAttempt | null>(null);
-  const [localRetry, setLocalRetry] = useState<ProcessedDocumentInput | null>(null);
 
   useUnsavedChanges(fileList.length > 0 && phase !== "analysis");
 
@@ -60,29 +58,22 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     setProcessingRecovery("none");
     setLastResolution(null);
     setError(null);
-    setLocalRetry(null);
   }
 
-  async function handleImport(useLocalReading = false) {
+  async function handleImport() {
     const file = fileList[0]?.originFileObj;
     if (!file) { setError("Selecione um currículo em PDF antes de iniciar."); return; }
+    if (!parserIaEnabled()) { setError("O Parser IA não está disponível. A importação não foi iniciada."); return; }
     setBusy(true); setError(null); setResult(null);
     try {
-      const nativeProcessed = localRetry?.file === file ? localRetry : await validateAndProcessPdf(file, setProgress, {
-        documentIntelligenceMode: documentIntelligenceRuntime.mode,
-        documentIntelligenceProvider: documentIntelligenceRuntime.providerForOrganization(activeMembership.organizationId),
+      const nativeProcessed = await validateAndProcessPdf(file, setProgress, {
+        nativeOnlyForParserIa: true,
       });
-      let nextProcessed = nativeProcessed;
-      if (!useLocalReading) {
-        try {
-          if (parserIaEnabled()) setProgress({ stage: "document_intelligence", message: "Interpretando os campos e conferindo as referências ao documento." });
-          nextProcessed = await prepareParserIa(nativeProcessed, activeMembership.organizationId);
-        } catch (caught) { setLocalRetry(nativeProcessed); throw caught; }
-      }
+      setProgress({ stage: "document_intelligence", message: "Interpretando os campos e conferindo as referências ao documento." });
+      const nextProcessed = await prepareParserIa(nativeProcessed, activeMembership.organizationId);
       const nextIdentity = nextProcessed.parserIa ? parserIaIdentity(nextProcessed.parserIa) : extractResumeIdentity(nextProcessed.pages);
       const nextIntake = await personIngestionService.beginResumeIntake(activeMembership.organizationId, nextProcessed, nextIdentity, intakeKey(activeMembership.organizationId, nextProcessed.sha256));
       setProcessed(nextProcessed); setIdentity(nextIdentity);
-      setLocalRetry(null);
       if (nextIntake.kind === "resolved") {
         setResult(nextIntake);
         setAnalysis(await personIngestionService.loadWorkspace(activeMembership.organizationId, nextIntake.personId, nextIntake.documentId));
@@ -164,8 +155,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   }
 
   return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase}`}>
-    {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={(files) => { setFileList(files); setLocalRetry(null); }} onImport={() => void handleImport()} progress={progress} /> : null}
-    {phase === "upload" && localRetry && !busy ? <Alert type="warning" message="A interpretação por IA não foi concluída." description="Você pode continuar com a leitura local e conferir os campos manualmente. Essa opção não utiliza o resultado da IA." action={<Button onClick={() => void handleImport(true)}>Continuar com leitura local</Button>} /> : null}
+    {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} /> : null}
     {phase !== "upload" && processed?.parserIa?.status === "partial" ? <Alert type="warning" showIcon message="Interpretação parcial: há informações que precisam de conferência na revisão." /> : null}
     {phase === "identity" && intake ? <IdentityScreen busy={busy} error={error} identity={identity} intake={intake} onBack={() => setPhase("upload")} onCreate={handleCreateDespiteMatch} onIdentityReview={handleIdentityReview} onLink={(candidate) => void resolveIntake("link_existing_person", candidate.personId)} processed={processed} /> : null}
     {phase === "processing" ? <ProcessingScreen busy={busy} error={error} onBack={() => onNavigate("/profiles")} onReplace={restartImport} onRetry={processingRecovery === "retry" && lastResolution ? () => void resolveIntake(lastResolution.action, lastResolution.personId) : null} processed={processed} progress={processingProgress} recovery={processingRecovery} /> : null}

@@ -205,15 +205,16 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
     setError(null);
     setSuccess(null);
     try {
-      const nativeProcessed = await validateAndProcessPdf(file, setProgress);
+      if (!parserIaEnabled()) throw new Error("O Parser IA não está disponível. A importação não foi iniciada.");
+      const nativeProcessed = await validateAndProcessPdf(file, setProgress, { nativeOnlyForParserIa: true });
       const processed = await prepareParserIa(nativeProcessed, activeMembership.organizationId);
       const documentId = await personIngestionService.processPdf(activeMembership.organizationId, personId, processed);
       setSelectedDocumentId(documentId);
       setFileList([]);
       await refresh(documentId);
-      setSuccess(processed.parserIa ? (processed.parserIa.status === "partial" ? "Interpretação por IA preservada com pendências para revisão." : "Interpretação por IA concluída; confira os campos na revisão.") : processed.ocrPageCount > 0
-        ? `PDF processado com OCR local em ${processed.ocrPageCount} página(s).`
-        : "PDF processado integralmente por extração nativa; OCR não necessário.");
+      setSuccess(processed.parserIa?.status === "partial"
+        ? "Interpretação por IA preservada com pendências para revisão."
+        : "Interpretação por IA concluída; confira os campos na revisão.");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "O PDF não pôde ser processado. Nenhum perfil foi gerado.");
     } finally {

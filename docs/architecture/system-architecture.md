@@ -32,7 +32,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | AI boundary | Extração, inferência, retrieval, confiança, matching | `src/ai` | provider determinístico |
 | Infrastructure | Persistência tenant-scoped | `JsonTalentRepository` | somente local/teste |
 | Web shell | React, Ant Design, App Shell, sessão Supabase, organization ativa, Usuários, Pessoas e route guards | `web/src` | local conectado ao remoto interno |
-| Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | ativo e comprovado |
+| Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | capacidade ativa; importação automática temporariamente usa PDF.js -> Parser IA sem Tesseract/Paddle |
 | Confiabilidade M2-C | central de documentos, retry, revisão humana, comparação e aprovação | `web/src/pages`, `personIngestionService`, RPCs | ativo e comprovado |
 | Evidência espacial M5 | representação visual normalizada, mapa canônico por caractere/símbolo, OCR local por região, vínculos e histórico | `DocumentEvidenceViewer`, `spatialEvidence`, `StructuredReviewPanel`, RPC M5 | PDF ativo e comprovado; adaptadores futuros ainda não ativados |
 | Aprendizado adaptativo v3 | releitura, assinatura temporária, descoberta de blocos ausentes, aceite governado e sinais aprovados | `adaptiveResumeExtraction`, `AdaptiveSuggestionPanel`, RPCs v3 | runtime local; persistência v3 ativa em QA |

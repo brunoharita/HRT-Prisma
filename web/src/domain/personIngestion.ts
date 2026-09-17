@@ -427,6 +427,7 @@ export async function validateAndProcessPdf(
   onProgress?: (progress: PdfProcessingProgress) => void,
   options: ResumeProcessingOptions = {},
 ): Promise<ProcessedDocumentInput> {
+  const nativeOnlyForParserIa = options.nativeOnlyForParserIa === true;
   onProgress?.({ stage: "validating", message: "Validando assinatura, tamanho e estrutura do PDF." });
   if (file.size === 0) throw new Error("O arquivo está vazio.");
   if (file.size > MAX_PDF_BYTES) throw new Error("O PDF excede o limite de 15 MB.");
@@ -464,7 +465,7 @@ export async function validateAndProcessPdf(
     const text = layoutLines.map((line) => line.text).join("\n").trim();
     const textSufficient = isNativeTextSufficient(text);
     nativePages.push({ pageNumber, text, layoutLines, textSufficient });
-    if (textSufficient) {
+    if (textSufficient || nativeOnlyForParserIa) {
       pages.push({ ...toExtractedPage(pageNumber, text, "native_pdf", "pdfjs", NATIVE_EXTRACTION_VERSION), layoutLines });
       continue;
     }
@@ -480,7 +481,7 @@ export async function validateAndProcessPdf(
 
   const preflightStartedAt = performance.now();
   let preflight = preflightDocument(nativePages);
-  if (preflight.route === "native-fast") {
+  if (preflight.route === "native-fast" && !nativeOnlyForParserIa) {
     const deterministic = buildAdaptiveExtraction(pages).draft;
     const semantic = assessResumeSemanticQuality({
       pageCount: nativePages.length,
@@ -499,7 +500,7 @@ export async function validateAndProcessPdf(
       };
     }
   }
-  const mode = options.documentIntelligenceMode ?? resolveDocumentIntelligenceMode(undefined);
+  const mode = nativeOnlyForParserIa ? "baseline" : options.documentIntelligenceMode ?? resolveDocumentIntelligenceMode(undefined);
   const trace: DocumentIntelligenceTrace = {
     contractVersion: DOCUMENT_INTELLIGENCE_CONTRACT_VERSION,
     mode,
@@ -665,8 +666,14 @@ export async function validateAndProcessPdf(
 
   pages.sort((left, right) => left.pageNumber - right.pageNumber);
   const usefulCharacterCount = pages.reduce((total, page) => total + page.usefulCharacterCount, 0);
-  if (usefulCharacterCount < 120) throw new Error("A extração resultou em conteúdo insuficiente para construir um perfil.");
-  onProgress?.({ stage: "completed", pageCount: pdfDocument.numPages, message: "Extração concluída e validada." });
+  if (usefulCharacterCount < 120 && !nativeOnlyForParserIa) throw new Error("A extração resultou em conteúdo insuficiente para construir um perfil.");
+  onProgress?.({
+    stage: "completed",
+    pageCount: pdfDocument.numPages,
+    message: nativeOnlyForParserIa
+      ? "Leitura nativa concluída; encaminhando o PDF ao Parser IA."
+      : "Extração concluída e validada.",
+  });
   return {
     file,
     sha256,
@@ -693,6 +700,7 @@ export function buildDeterministicDraft(pages: ExtractedPage[]): StructuredDraft
 export interface ResumeProcessingOptions {
   documentIntelligenceMode?: DocumentIntelligenceMode;
   documentIntelligenceProvider?: DocumentIntelligenceProvider;
+  nativeOnlyForParserIa?: boolean;
 }
 
 export interface DocumentDeletionPreview {

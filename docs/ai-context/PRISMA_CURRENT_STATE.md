@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.4
+version: 2.33.5
 last_verified: 2026-09-17
 ---
 
@@ -13,6 +13,8 @@ last_verified: 2026-09-17
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
 Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão desativadas no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O bundle público foi reconstruído do commit `9dfa4d4` com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; o próprio asset publicado expõe essas flags e o commit. Site e tela autenticada de importação responderam, enquanto gateway, código, containers, modelos e volumes Paddle permaneceram instalados para reversão futura. A imagem anterior foi preservada como `prisma-web:rollback-before-baseline-20260917`. Ainda falta o Product Owner executar a importação real pós-rollout para validar tempo e qualidade sem criar outro registro por iniciativa do agente.
+
+Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática deve pular também o Tesseract e seguir da leitura nativa PDF.js diretamente ao Parser IA. Nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Implementação e validação estão em andamento; este parágrafo não prova rollout no ambiente remoto.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 

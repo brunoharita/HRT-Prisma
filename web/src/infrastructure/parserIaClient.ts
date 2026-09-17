@@ -48,6 +48,6 @@ export async function prepareParserIa(input: ProcessedDocumentInput, organizatio
     preparedParserIa(prepared, organizationId);
     return prepared;
   } catch {
-    throw new Error("Não foi possível concluir a interpretação por IA. Nenhum campo foi preenchido por essa tentativa. Tente novamente ou utilize a leitura local disponível.");
+    throw new Error("Não foi possível concluir a interpretação por IA. Nenhum campo foi preenchido por essa tentativa. Tente novamente.");
   } finally { window.clearTimeout(timer); }
 }

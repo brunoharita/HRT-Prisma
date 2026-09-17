@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 189
-source_manifest_sha256: 6fad5cfc3f8090e6462739f3822dd487c31f16b8e9962d4c7d225b9765e47b6a
+source_manifest_sha256: d2240d5f6c9879eed1ca5e9bf89056a60a6045ed41dbf0bd4c9cd8704871442f
 -->
 
 # Tudo sobre o Prisma
@@ -522,7 +522,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.4
+version: 2.33.5
 last_verified: 2026-09-17
 ---
 
@@ -533,6 +533,8 @@ last_verified: 2026-09-17
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
 Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão desativadas no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O bundle público foi reconstruído do commit `9dfa4d4` com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; o próprio asset publicado expõe essas flags e o commit. Site e tela autenticada de importação responderam, enquanto gateway, código, containers, modelos e volumes Paddle permaneceram instalados para reversão futura. A imagem anterior foi preservada como `prisma-web:rollback-before-baseline-20260917`. Ainda falta o Product Owner executar a importação real pós-rollout para validar tempo e qualidade sem criar outro registro por iniciativa do agente.
+
+Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática deve pular também o Tesseract e seguir da leitura nativa PDF.js diretamente ao Parser IA. Nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Implementação e validação estão em andamento; este parágrafo não prova rollout no ambiente remoto.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
@@ -1351,6 +1353,8 @@ O adaptador preserva `parsing_res_list`, `overall_ocr_res`, dimensões, leitura,
 
 O caminho pesado nunca é aplicado ao PDF nativo simples. Recuperação visual recebe uma imagem de página, não reprocesa deliberadamente todo o documento. Tesseract.js permanece fallback e baseline comparável.
 
+Ativação temporária corrente, aprovada em 2026-09-17: as quatro rotas continuam implementadas, mas a importação automática força leitura nativa exclusiva para o Parser IA. Paddle e Tesseract não são chamados nessa jornada. Isso não remove a capacidade nem altera o OCR manual por região na revisão.
+
 ## Diagnóstico
 
 As categorias allowlisted distinguem falha documental/OCR, layout/reading order, estrutura, semântica, padrão desconhecido, ambiguidade, provider, timeout, resposta inválida, página incompleta, conteúdo insuficiente e fallback. O trace preserva provider, modelo e versões tentados também na falha e acrescenta somente status, código seguro e contagens estruturais. Nenhuma categoria transporta texto do currículo, mensagem livre do provider ou caminho local.
@@ -1455,7 +1459,7 @@ Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR
 - `mediaType`: deve pertencer à allowlist;
 - organização e documento são controlados pela aplicação, não pelo provider.
 - PDF: máximo de 15 MB, assinatura `%PDF-`, trailer `%%EOF` e parse válido;
-- páginas: extração nativa primeiro, preservando linhas visuais e coordenadas; OCR local somente quando a suficiência falha. O worker, o core WASM e os dados de idioma `por+eng` do Tesseract são carregados de assets locais do bundle web, em carregamento dinâmico browser-only;
+- páginas: extração nativa PDF.js primeiro, preservando todas as páginas, linhas visuais e coordenadas disponíveis. No teste operacional aprovado em 2026-09-17, a importação automática segue diretamente ao Parser IA e não carrega Paddle ou Tesseract, mesmo quando a suficiência nativa falha. O worker, o core WASM e os dados `por+eng` permanecem empacotados para reversão e para OCR manual por região na revisão;
 - evidência espacial persistida: coordenadas de página nativa exigem `pdfjs-layout-v1`; coordenadas de página OCR exigem `tesseract-layout-v1`; combinações cruzadas falham antes da persistência;
 - campos: cada fato estruturado pode apontar para uma região própria e para o método que a produziu;
 - adaptação: repetição no documento e sinais estruturais aprovados do próprio tenant orientam a interpretação, mas não autorizam copiar valores entre registros nem executar templates persistidos.
@@ -1498,7 +1502,7 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 - Não enviar atributos sensíveis ou documento integral a fornecedor externo sem fluxo aprovado.
 - Não logar currículo ou resposta integral.
 - Tipo, tamanho, assinatura, trailer e parser são validados antes da persistência. Malware scanning ainda não existe e não pode ser alegado.
-- PDF.js e Tesseract.js processam no navegador; nenhum currículo é enviado a OCR ou LLM externo.
+- PDF.js processa a leitura inicial no navegador. Na rota hospedada aprovada, o PDF é enviado ao Parser IA por gateway autenticado; Paddle e Tesseract não participam da importação automática enquanto o teste estiver ativo.
 - O ledger adaptativo recebe apenas caminhos de campo, página, método, versões, âncora, resumos estruturais e código de justificativa; valores e trechos não são duplicados. O texto aceito permanece exclusivamente no ledger espacial tenant-scoped.
 - O catálogo de áreas personalizadas recebe apenas chave, título normalizado, formato, versão e confirmação; um ledger metadata-only referencia cada revisão aprovada. Conteúdo do currículo e evidência permanecem no perfil/review tenant-scoped.
 
@@ -1506,7 +1510,7 @@ Falha registra reason code, motivo legível, mensagem técnica sanitizável, tim
 
 Versão desconhecida ou resposta fora do schema é rejeitada. Mudança de campo opcional compatível é minor; mudança de semântica ou obrigatoriedade é major.
 
-O M5.6 acrescenta, atrás de `VITE_DOCUMENT_INTELLIGENCE_MODE`, `document-intelligence-provider` 1.0.0 e `canonical-document` 1.0.0. PDF.js permanece no caminho rápido; PP-StructureV3/PP-OCRv6 atendem estrutura e visão; PaddleOCR-VL 1.6 e Tesseract.js são recuperações por página. Todo JSON Paddle é convertido na infraestrutura para `normalized-page-v1`; `ExtractionDraft` e o parser profissional não conhecem tipos Paddle. Detalhes e limites comprovados estão em `docs/ai/document-intelligence.md`.
+O M5.6 acrescenta, atrás de `VITE_DOCUMENT_INTELLIGENCE_MODE`, `document-intelligence-provider` 1.0.0 e `canonical-document` 1.0.0. A capacidade instalada mantém PP-StructureV3/PP-OCRv6, PaddleOCR-VL 1.6 e Tesseract.js como opções reversíveis. Durante o teste aprovado em 2026-09-17, `nativeOnlyForParserIa` força `baseline`, não cria canvases de OCR e encaminha todas as páginas ao Parser IA; `ExtractionDraft` e o parser profissional continuam sem conhecer tipos Paddle. Detalhes e limites comprovados estão em `docs/ai/document-intelligence.md`.
 
 ## Testes
 
@@ -1807,9 +1811,9 @@ Backend Node local lê o PDF com PDF.js, mantendo spans e coordenadas independen
 
 As coordenadas de evidência são exclusivamente da fonte. Vários spans/páginas podem suportar um campo. Preservar palavra composta, separação explícita de listas, múltiplos cargos e períodos; títulos/cursos ausentes permanecem nulos. Duplicatas de formação são sinalizadas para decisão humana. O modelo não decide publicação, contratação, permissões ou mutação de dados aprovados.
 
-O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa também recebe a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do túnel loopback. Falha na importação oferece continuação explícita pela leitura local, sem vender fallback como sucesso da IA. Resultado parcial mostra aviso e pendências.
+O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa e retomada de intake interrompido também recebem a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do túnel loopback. Falha na importação é explícita e oferece somente nova tentativa; não existe continuação automática pela leitura local. Resultado parcial mostra aviso e pendências.
 
-No fluxo corrente, o Parser IA não desativa a inteligência documental. A aplicação executa PDF.js e a estruturação determinística, avalia motivos semânticos, usa Paddle quando a leitura for visual, textual ou semanticamente insuficiente e só então chama o Parser IA com o PDF original e os spans verificáveis. O modelo usa a imagem do PDF para contexto; fatos persistidos continuam limitados às referências aceitas pelo validador.
+Decisão temporária de 2026-09-17: o fluxo automático valida o PDF, executa somente a leitura nativa PDF.js e chama diretamente o Parser IA com o PDF original e os spans disponíveis. Paddle e Tesseract ficam desativados nessa rota, inclusive quando uma página possui pouco ou nenhum texto nativo. O modelo usa a imagem do PDF para contexto; fatos persistidos continuam limitados às referências aceitas pelo validador. Resultado ausente, inválido ou sem suporte falha explicitamente e nunca vira perfil completo.
 
 ## Executar localmente
 
@@ -1825,7 +1829,7 @@ Não abrir serviço em 0.0.0.0, não copiar `.env.local`, tmp, PDFs ou referênc
 ## Limites
 
 - PDF 15 MB, 30 páginas; 12.000 spans e 250.000 caracteres; leitura PDF com prazo de 15 s, chamada API 120 s, cliente 135 s, sem retries ou redirects externos.
-- Esta primeira rota exige spans textuais nativos verificáveis. PDF exclusivamente imagem não ganha evidência inventada: a rota de IA falha explicitamente e a leitura local/OCR existente permanece alternativa. OCR remoto, calibração de imagens e cutover geral não foram demonstrados.
+- PDF exclusivamente imagem não ganha evidência inventada. Durante o teste sem OCR automático, o Parser IA recebe o PDF completo; se não devolver fatos com referências aceitas, a rota falha explicitamente. Paddle e Tesseract permanecem instalados, mas não são alternativas automáticas nesse percurso.
 - JSON de entrada HTTP 22 MB e saída do fornecedor limitada durante a leitura a 4 MB. Serviço valida método, path, Host, Origin e header; apenas loopback, uma operação por vez e lock de diretório.
 - Ledger privado `tmp/m57-parser-ia/budget.json`: teto US$ 2, máximo 10 chamadas, reserva US$ 0,60 antes da rede. Reserva incerta permanece; corrupção e lock existente bloqueiam em vez de reiniciar o orçamento. Cache segrega organização, hash da fonte, contrato, modelo e prompt; replay revalida a fonte com o código atual.
 - Estimativa contábil superior inclui tarifa de entrada sem desconto de cache, margem documentada para escrita de cache e tarifa de contexto longo quando aplicável. Não é fatura do fornecedor. Reserva cobre o máximo teórico de contexto e saída do candidato observado.
@@ -2057,7 +2061,7 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 | `explainable_matching` | ativo | ativo | não separado | Matching 4.0.0 e Prisma Score 1.1.0 explicáveis; score não decide nem exclui |
 | `tenant_json_isolation` | ativo em teste | inexistente | inexistente | Não substitui RLS |
 | `postgres_rls_contract` | implementado | ativo | não separado | Foundation, M2-A, M2-B, M2-C e intake currículo-first aplicados |
-| `pdf_ocr_ingestion` | ativo | ativo | não separado | PDF.js nativo, Tesseract seletivo, Storage privado e RPC atômica |
+| `pdf_ocr_ingestion` | ativo com OCR automático temporariamente desativado | ativo | não separado | Importação corrente: PDF.js nativo -> Parser IA; Paddle/Tesseract preservados para reversão; Storage privado e RPC atômica |
 | `curriculum_first_intake` | ativo | ativo | não separado | Intake pré-Pessoa, identidade mínima, deduplicação tenant-scoped e resolução transacional |
 | `spatial_cv_evidence_review` | ativo | ativo | não separado | PDF-first, regiões normalizadas, OCR local por seleção e histórico imutável |
 | `intra_document_sibling_learning` | ativo | ativo | não separado | assinatura temporária, candidatos explicáveis, aceite humano e evidência própria por campo |
@@ -2757,7 +2761,7 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 | AI boundary | Extração, inferência, retrieval, confiança, matching | `src/ai` | provider determinístico |
 | Infrastructure | Persistência tenant-scoped | `JsonTalentRepository` | somente local/teste |
 | Web shell | React, Ant Design, App Shell, sessão Supabase, organization ativa, Usuários, Pessoas e route guards | `web/src` | local conectado ao remoto interno |
-| Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | ativo e comprovado |
+| Ingestão M2-B | PDF.js, Tesseract.js, draft, evidência, timeline e perfil versionado | `web/src/domain` e `web/src/infrastructure` | capacidade ativa; importação automática temporariamente usa PDF.js -> Parser IA sem Tesseract/Paddle |
 | Confiabilidade M2-C | central de documentos, retry, revisão humana, comparação e aprovação | `web/src/pages`, `personIngestionService`, RPCs | ativo e comprovado |
 | Evidência espacial M5 | representação visual normalizada, mapa canônico por caractere/símbolo, OCR local por região, vínculos e histórico | `DocumentEvidenceViewer`, `spatialEvidence`, `StructuredReviewPanel`, RPC M5 | PDF ativo e comprovado; adaptadores futuros ainda não ativados |
 | Aprendizado adaptativo v3 | releitura, assinatura temporária, descoberta de blocos ausentes, aceite governado e sinais aprovados | `adaptiveResumeExtraction`, `AdaptiveSuggestionPanel`, RPCs v3 | runtime local; persistência v3 ativa em QA |
@@ -6788,9 +6792,9 @@ Retenção de logs e auditoria ainda depende de política legal e operacional. L
 
 Testes autônomos autorizados, isolados e sem IA ou banco encontraram configurações candidatas mais rápidas. Com limites completos das bibliotecas de CPU, os modelos originais concluíram cinco páginas em 162,20 s; a troca apenas do reconhecedor latino concluiu em 110,05 s; modelos leves oficiais concluíram em 44,76 s. Estes tempos são de diagnóstico página a página, não da importação hospedada. Configuração de produção não foi alterada; equivalência estrutural e integração ainda precisam de validação. Evidências, opções e limites: [diagnóstico de desempenho](paddle-performance-diagnostic-2026-09-17.md).
 
-## Desativação temporária na importação — 2026-09-17
+## Desativação temporária de OCR na importação — 2026-09-17
 
-O Product Owner determinou que a importação seja testada sem PaddleOCR. O frontend deve ser construído com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e manter `VITE_PARSER_IA_MODE=hosted`. O efeito é limitado ao roteamento da importação: PDF.js continua, o Parser IA continua e nenhuma rota Paddle deve ser chamada. Containers, modelos, volumes, gateway e código permanecem disponíveis para uma reativação futura autorizada.
+O Product Owner determinou primeiro que a importação fosse testada sem PaddleOCR e, após observar travamento do Tesseract antes da IA, ampliou a decisão para retirar todo OCR automático. O frontend deve ser construído com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e manter `VITE_PARSER_IA_MODE=hosted`. A importação valida o PDF, preserva a leitura nativa PDF.js e segue diretamente ao Parser IA. Nenhuma rota Paddle é chamada e o worker Tesseract não é carregado. Containers, modelos, volumes, gateway, dependências e código permanecem disponíveis para reativação futura autorizada; o OCR manual por região na revisão não muda.
 
 Rollback desta decisão: nova autorização explícita, rebuild do frontend com o modo aprovado e smoke autenticado. Não basta religar containers, pois a flag é incorporada ao bundle no build.
 
@@ -8892,17 +8896,17 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 ## Objetivo
 
-- Versão do contrato: `1.1.0`
-- Fonte da decisão / tarefa: decisão explícita do Product Owner em 2026-09-17 para desativar temporariamente o PaddleOCR no fluxo de importação e testar o percurso real PDF.js -> Parser IA -> revisão.
-- Contratos anteriores e delta: esta versão supersede D-03, D-05, P-02 e os critérios correspondentes da versão 1.0.0. A integração Paddle permanece instalada e reversível, mas não pode ser chamada durante este teste. Os guardrails de evidência, revisão humana, orçamento, autenticação e privacidade permanecem.
+- Versão do contrato: `1.2.0`
+- Fonte da decisão / tarefa: decisões explícitas do Product Owner em 2026-09-17 para desativar primeiro o PaddleOCR e, após observar o travamento do Tesseract antes da IA, retirar todo OCR do fluxo automático. O percurso aprovado é PDF.js nativo -> Parser IA -> revisão.
+- Contratos anteriores e delta: esta versão supersede D-01, D-02, D-03, D-05, P-02 e os critérios correspondentes da versão 1.1.0. Paddle e Tesseract permanecem instalados e reversíveis, mas não podem ser chamados pela importação automática durante este teste. O OCR manual por região na revisão não faz parte desta mudança. Os guardrails de evidência, revisão humana, orçamento, autenticação e privacidade permanecem.
 
 ## DEVE — Inegociável
 
-- D-01 — Toda importação de currículo PDF deve começar pela leitura PDF.js e pela estruturação determinística existente.
-- D-02 — A saída inicial deve passar por uma verificação semântica explicável; um currículo multipágina sem trajetória profissional identificada não pode ser considerado suficiente apenas por possuir muitos caracteres.
-- D-03 — Enquanto este teste estiver ativo, toda importação deve permanecer no modo `baseline`: PDF.js e a estruturação determinística executam, mas nenhum endpoint Paddle pode ser chamado.
+- D-01 — Toda importação de currículo PDF deve validar o arquivo e executar somente a leitura nativa PDF.js antes do Parser IA, preservando todas as páginas, linhas e coordenadas disponíveis.
+- D-02 — Texto nativo ausente ou insuficiente não autoriza perfil vazio nem aciona OCR local; o PDF completo segue ao Parser IA, que deve produzir resultado validado ou falha explícita.
+- D-03 — Enquanto este teste estiver ativo, nenhuma importação automática pode chamar PaddleOCR, PP-Structure, recuperação visual Paddle ou Tesseract.
 - D-04 — Depois da etapa documental, toda importação normal deve passar pelo Parser IA, ligado ao PDF, à organização, às linhas-fonte e à versão de prompt/modelo, antes de persistir o rascunho para revisão.
-- D-05 — A importação normal deve executar PDF.js e depois Parser IA. Falha ou indisponibilidade da IA deve ser explícita e preservar a opção consciente de continuar somente com a leitura local.
+- D-05 — A importação normal deve executar PDF.js e depois Parser IA. Falha ou indisponibilidade da IA deve ser explícita, não pode apresentar sucesso falso e não oferece continuação pela leitura local.
 - D-06 — O transporte remoto deve validar sessão, operador, papel e organização no servidor, aceitar somente contratos e rotas fixos, remover credenciais antes da máquina de inferência e não registrar currículo, prompt integral, token ou dado pessoal.
 - D-07 — O resultado continua sendo rascunho rastreável para revisão humana. Nenhuma importação aprova, publica, rejeita ou decide contratação automaticamente.
 - D-08 — A operação em produção deve manter limite de arquivo, timeout, serialização, cache privado, orçamento fechado e ausência de repetição automática de inferência não idempotente.
@@ -8910,8 +8914,8 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 ## PROIBIDO
 
-- P-01 — Tratar quantidade de caracteres como prova suficiente de qualidade sem verificar o resultado estruturado.
-- P-02 — Chamar PaddleOCR, PP-Structure ou a recuperação visual Paddle a partir da importação enquanto o teste temporário estiver ativo.
+- P-01 — Tratar a leitura nativa ou a quantidade de caracteres como perfil estruturado ou prova suficiente de qualidade sem o resultado validado do Parser IA.
+- P-02 — Chamar PaddleOCR, PP-Structure, recuperação visual Paddle ou Tesseract a partir da importação automática enquanto o teste temporário estiver ativo.
 - P-03 — Expor `OPENAI_API_KEY`, chave de serviço do Supabase ou credencial do usuário no bundle, nos logs ou no worker Paddle.
 - P-04 — Aceitar organização informada pelo cliente sem validar sessão, operador, papel, RLS e vínculo ativo.
 - P-05 — Persistir fatos sem referência verificável ao documento ou transformar falha parcial em perfil completo.
@@ -8924,7 +8928,7 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - F-02 — Troca de Paddle, OpenAI, modelo ou taxonomia por novo fornecedor.
 - F-03 — Reprocessamento em massa de documentos já importados.
 - F-04 — Tornar a ponte temporária independente da máquina local.
-- F-05 — Remover código, containers, modelos, volumes ou contratos Paddle; a mudança é somente de ativação reversível.
+- F-05 — Remover código, dependências, containers, modelos, volumes ou contratos de Paddle/Tesseract, ou alterar o OCR manual por região na revisão; a mudança é somente do roteamento automático e permanece reversível.
 
 ## AUTONOMIA DE ENGENHARIA
 
@@ -8940,11 +8944,11 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 ## CRITÉRIOS DE ACEITE
 
-- CA-D01 — Dado um PDF válido, quando a importação iniciar, então PDF.js e a estruturação determinística executam antes das etapas externas; teste unitário e rastreio do fluxo.
-- CA-D02 — Dado um currículo de múltiplas páginas cuja estruturação não encontre experiências, quando a qualidade for avaliada, então o motivo semântico força a rota estrutural; teste negativo com fixture equivalente ao caso observado.
-- CA-D03 — Dado um currículo que antes escolheria rota estrutural, quando importado com o teste ativo, então nenhuma requisição Paddle ocorre, a telemetria registra modo `baseline` e o fluxo segue para Parser IA; inspeção de rede e importação autenticada.
+- CA-D01 — Dado um PDF válido, quando a importação iniciar, então PDF.js preserva todas as páginas e segue diretamente ao Parser IA sem estruturação determinística intermediária; teste dirigido e rastreio do fluxo.
+- CA-D02 — Dado um PDF com página sem texto nativo suficiente, quando importado, então essa página permanece vinculada ao PDF enviado à IA, sem perfil vazio e sem OCR local; teste negativo.
+- CA-D03 — Dado um currículo que antes acionaria Paddle ou Tesseract, quando importado com o teste ativo, então nenhuma dessas ferramentas é carregada ou chamada e o fluxo segue para Parser IA; inspeção de rede e importação autenticada.
 - CA-D04 — Dada uma importação normal com transporte disponível, quando a etapa documental terminar, então o Parser IA é chamado e o rascunho persistido usa seu contrato e evidências; teste de cliente, contrato e smoke autenticado.
-- CA-D05 — Dada indisponibilidade do Parser IA, quando a importação ocorrer, então a tentativa não apresenta sucesso falso e oferece continuação local consciente, sem recorrer ao Paddle; teste de falha.
+- CA-D05 — Dada indisponibilidade do Parser IA, quando a importação ocorrer, então a tentativa falha explicitamente, não persiste perfil incompleto e oferece somente nova tentativa; teste de falha.
 - CA-D06 — Dada sessão ausente, origem incorreta, organização inválida, rota ou contrato desconhecido, quando a ponte receber a chamada, então rejeita antes de encaminhar dados; testes negativos do gateway.
 - CA-D07 — Dado resultado estruturado, quando persistido, então permanece aguardando revisão e não cria publicação automática; testes de persistência existentes afetados.
 - CA-D08 — Dadas chamadas simultâneas, payload excessivo, timeout ou orçamento esgotado, quando ocorrerem, então o serviço falha fechado, sem retry automático; testes de serviço e gateway.
@@ -8959,7 +8963,8 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - Product Owner: Bruno
 - Data: 2026-09-17
 - Evidência de aprovação: após receber a comparação real com timeout de 240 segundos e resultado equivalente sem Paddle, determinou: “desative a ida para o PaddleOCR do fluxo de importação de currículo” para testar sem essa etapa.
-- Referência imutável para o prompt: versão `1.1.0` deste contrato.
+- Evidência de aprovação do delta 1.2.0: “vamos fazer pular toda a parte que é local [...] desativar o Tesseract [...] direto da extração mais simples do PDF direto pro Parser IA”.
+- Referência imutável para o prompt: versão `1.2.0` deste contrato.
 
 ---
 
@@ -9961,17 +9966,17 @@ PASS. D-001 a D-008 e P-001 a P-006 possuem implementação e prova proporcional
 
 # AoT — Qualidade da importação de currículos em produção
 
-Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.1.0.
+Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.2.0.
 
 ## Matriz de Acordos
 
 | ID | Acordo | Implementação | Teste | Evidência | Status | Ambiente / limitação |
 | --- | --- | --- | --- | --- | --- | --- |
-| D-01 | PDF.js e estruturação inicial | `validateAndProcessPdf` mantém extração/estruturação antes do gate e das etapas externas | person-flow e `documentIntelligence.test.ts` | 229 testes do person-flow; build web aprovado | PASS | Determinístico, sem provider vivo |
-| D-02 | Verificação semântica explicável | `resumeSemanticQuality.ts` 1.0.0 e motivo no trace | `resumeSemanticQuality.test.ts` | Caso de cinco páginas sem experiências força rota estrutural | PASS | Não julga candidato nem inventa experiência |
-| D-03 | Paddle desativado durante o teste temporário | Frontend construído com modo `baseline`; provider não é chamado nesse modo | teste de domínio, inspeção do bundle público e tela autenticada | Asset `index-DBBU_HLn.js` registra `baseline`, Parser IA `hosted` e commit `9dfa4d4`; 12 testes dirigidos aprovados | PARTIAL | Configuração está ativa; importação real pós-rollout ficou para o Product Owner testar |
+| D-01 | Validação e PDF.js nativo antes da IA | `nativeOnlyForParserIa` preserva todas as páginas e evita estruturação/OCR intermediário | teste dirigido de código, typecheck e build | 17 testes dirigidos aprovados localmente | PASS | Rollout remoto desta revisão ainda não executado |
+| D-02 | Página nativa insuficiente segue no PDF completo para a IA | modo nativo preserva a página mesmo abaixo do limiar local e delega a validação final ao Parser IA | teste negativo de roteamento | Branch local aprovada; Parser IA continua validando fatos e referências | PASS | PDF image-only real ainda precisa de teste de qualidade após rollout |
+| D-03 | Paddle e Tesseract desativados na importação automática | três entradas usam `nativeOnlyForParserIa`; modo força `baseline` antes de qualquer canvas/worker | teste dirigido, build e futura inspeção de rede | Código local não cria canvas nem carrega worker nessa rota | PARTIAL | Falta deploy e importação autenticada observando a rede |
 | D-04 | Parser IA após etapa documental | Cliente autenticado, capacidade isolada e HTTP nativo preservando Host | 31 testes de gateway/parser e comparação ponta a ponta | Inferência nova anterior: 34.053 ms; retestes de 17/09 persistiram Documentos v2/v3 e abriram revisão com resultado de IA em cache | PARTIAL | Persistência e qualidade comprovadas; falta uma execução pós-rollout com inferência nova |
-| D-05 | Sequência e falha explícita | Modo `baseline` intencional seguido de Parser IA; CTA consciente de leitura local permanece | person-flow, recuperação M5.7 | 229 + 33 testes direcionados aprovados | PASS | Falha do worker ainda exige decisão explícita do operador e não aciona Paddle |
+| D-05 | Sequência e falha explícita sem continuação local | Parser IA é pré-condição; CTA e estado `localRetry` foram removidos | teste dirigido de UI e mensagem de falha | 17 testes dirigidos aprovados localmente | PASS | Falha oferece nova tentativa, sem persistir perfil incompleto |
 | D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
 | D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
 | D-08 | Limites, orçamento e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache, ledger US$2 e sem retry | `parserIaService.test.mjs` e gateway | budget, concorrência, timeout, corrupção, cache e resposta limitada aprovados | PASS | Ledger observado: 6 tentativas e US$0,64 contabilizados antes do rollout |
@@ -10061,6 +10066,16 @@ Atualização do estado: D-04 continua `PARTIAL`, mas a limitação mudou. A per
 - Nenhum currículo foi enviado após o rollout pelo agente, nenhum registro foi criado e nenhum Perfil foi publicado. A tela ficou aberta para o Product Owner executar o teste real solicitado.
 
 Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` permanece `PARTIAL` somente porque o aceite exige observar uma importação real pós-rollout sem chamada Paddle.
+
+## Desativação temporária de todo OCR automático — 2026-09-17
+
+- Decisão do PO incorporada no contrato 1.2.0: a importação passa da leitura nativa PDF.js diretamente ao Parser IA, sem Paddle e sem Tesseract.
+- Nova importação, upload dentro da Pessoa e retomada de intake interrompido usam `nativeOnlyForParserIa`.
+- Páginas com pouco ou nenhum texto nativo permanecem no conjunto enviado ao Parser IA; a validação local de 120 caracteres não impede essa chamada. Resultado inválido ou sem fatos suportados continua falhando fechado no Parser IA.
+- A importação exige Parser IA ativo. A continuação pela leitura local, o estado `localRetry` e a mensagem que sugeria essa alternativa foram removidos.
+- O modo nativo força `baseline` antes de qualquer provider, canvas ou worker OCR. O Tesseract continua instalado para reversão e para seleção manual de região durante a revisão, que ficou fora do escopo.
+- Validação local: lint PASS em 513 arquivos; TypeScript raiz e web PASS; build web PASS com 3.238 módulos; 17 testes dirigidos e 230 testes do person-flow PASS; Context Pack gerado e verificado com 5 fontes canônicas e 2 artefatos.
+- Rollout, inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.
 
 ---
 
@@ -10624,12 +10639,12 @@ Implementar D-001 a D-008 e provar P-001 a P-006. Preservar exatamente cinco fon
 
 # Prompt de Execução — Qualidade da importação de currículos em produção
 
-Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, versão `1.1.0`, sem reinterpretar os acordos.
+Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, versão `1.2.0`, sem reinterpretar os acordos.
 
 ## Entendimento obrigatório
 
-- Implementar D-01 a D-09 na versão 1.1.0: PDF.js e estruturação inicial, nenhum tráfego Paddle, Parser IA obrigatório no caminho normal, falha explícita com continuação local consciente, transporte autenticado, revisão humana, limites operacionais e observabilidade.
-- Impedir P-01 a P-07: falso positivo por volume textual, chamada Paddle durante o teste, exposição de segredos, confiança na organização do cliente, fatos sem evidência, publicação automática e retry incerto.
+- Implementar D-01 a D-09 na versão 1.2.0: validação e leitura nativa PDF.js, nenhum tráfego ou carregamento Paddle/Tesseract na importação automática, Parser IA obrigatório, falha explícita sem continuação local, transporte autenticado, revisão humana, limites operacionais e observabilidade.
+- Impedir P-01 a P-07: falso positivo pela leitura nativa, chamada Paddle/Tesseract durante o teste, exposição de segredos, confiança na organização do cliente, fatos sem evidência, publicação automática e retry incerto.
 - Preservar F-01 a F-05: não redesenhar revisão, não trocar fornecedor/modelo, não reprocessar em massa, não converter a ponte e não remover a instalação Paddle.
 - Usar A-01 a A-05 somente para decisões de implementação que não alterem o comportamento aprovado.
 
@@ -10637,11 +10652,11 @@ Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, ve
 
 1. Registrar a decisão arquitetural e versionar os contratos afetados.
 2. Preservar a imagem web ativa como rollback verificável.
-3. Construir somente o frontend com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`, preservando a IA e desativando somente as chamadas Paddle.
+3. Construir somente o frontend com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`, preservando a IA e fazendo todas as entradas de importação usarem o modo nativo exclusivo para Parser IA, sem Paddle ou Tesseract.
 4. Publicar o frontend no único ambiente remoto sem alterar Supabase, gateway, workers, modelos ou volumes.
 5. Confirmar HTTP, versão construída, Parser IA e ausência de exposição pública dos workers.
 6. Executar testes direcionados, build, verificação de contexto e revisão de segurança.
-7. Confirmar por rede e telemetria que uma importação real não chamou Paddle e continuou usando o Parser IA.
+7. Confirmar por rede e telemetria que uma importação real não carregou Tesseract, não chamou Paddle e continuou usando o Parser IA.
 8. Preencher `docs/qa/aot-production-resume-quality-pipeline.md`, revisar o diff, commitar e enviar a branch autorizada.
 
 Não declarar conclusão se qualquer D-* obrigatório não estiver `PASS`, se uma proibição for violada ou se não houver evidência tecnicamente disponível.

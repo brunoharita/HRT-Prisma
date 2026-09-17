@@ -91,7 +91,7 @@ A VPS possui snapshot operacional criado após o primeiro deploy público valida
 
 ## Pipeline temporário de importação
 
-Desde a decisão temporária de 2026-09-17, o frontend usa o fluxo PDF.js -> Parser IA -> revisão humana. A importação deve ser construída com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`; isso impede chamadas Paddle sem remover a integração. O Parser IA continua passando pelo gateway autenticado, socket Unix e SSH reverso; a chave OpenAI permanece somente no worker loopback do PC. Consulte `docs/operations/paddle-document-intelligence.md` e `docs/qa/aot-production-resume-quality-pipeline.md`.
+Desde a decisão temporária de 2026-09-17, o frontend usa o fluxo PDF.js nativo -> Parser IA -> revisão humana. A importação deve ser construída com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e o código ativa `nativeOnlyForParserIa`; isso impede chamadas Paddle e o carregamento do Tesseract na importação automática sem remover as integrações. O Parser IA continua passando pelo gateway autenticado, socket Unix e SSH reverso; a chave OpenAI permanece somente no worker loopback do PC. Consulte `docs/operations/paddle-document-intelligence.md` e `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 Antes de rebuild, preserve a imagem web anterior para rollback e confirme a chave publicável/URL do Supabase único fora do Git. Durante o teste atual, use `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`. Não use `enabled` ou `shadow` até nova decisão explícita do Product Owner. Os serviços Paddle podem permanecer instalados e o gateway continua necessário para o Parser IA.
 

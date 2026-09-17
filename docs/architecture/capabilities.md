@@ -15,7 +15,7 @@ Este catálogo impede que documentação trate capacidade planejada como dispon�
 | `explainable_matching` | ativo | ativo | não separado | Matching 4.0.0 e Prisma Score 1.1.0 explicáveis; score não decide nem exclui |
 | `tenant_json_isolation` | ativo em teste | inexistente | inexistente | Não substitui RLS |
 | `postgres_rls_contract` | implementado | ativo | não separado | Foundation, M2-A, M2-B, M2-C e intake currículo-first aplicados |
-| `pdf_ocr_ingestion` | ativo | ativo | não separado | PDF.js nativo, Tesseract seletivo, Storage privado e RPC atômica |
+| `pdf_ocr_ingestion` | ativo com OCR automático temporariamente desativado | ativo | não separado | Importação corrente: PDF.js nativo -> Parser IA; Paddle/Tesseract preservados para reversão; Storage privado e RPC atômica |
 | `curriculum_first_intake` | ativo | ativo | não separado | Intake pré-Pessoa, identidade mínima, deduplicação tenant-scoped e resolução transacional |
 | `spatial_cv_evidence_review` | ativo | ativo | não separado | PDF-first, regiões normalizadas, OCR local por seleção e histórico imutável |
 | `intra_document_sibling_learning` | ativo | ativo | não separado | assinatura temporária, candidatos explicáveis, aceite humano e evidência própria por campo |

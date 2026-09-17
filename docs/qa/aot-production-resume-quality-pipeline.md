@@ -1,16 +1,16 @@
 # AoT — Qualidade da importação de currículos em produção
 
-Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.1.0.
+Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.2.0.
 
 ## Matriz de Acordos
 
 | ID | Acordo | Implementação | Teste | Evidência | Status | Ambiente / limitação |
 | --- | --- | --- | --- | --- | --- | --- |
-| D-01 | PDF.js e estruturação inicial | `validateAndProcessPdf` mantém extração/estruturação antes do gate e das etapas externas | person-flow e `documentIntelligence.test.ts` | 229 testes do person-flow; build web aprovado | PASS | Determinístico, sem provider vivo |
-| D-02 | Verificação semântica explicável | `resumeSemanticQuality.ts` 1.0.0 e motivo no trace | `resumeSemanticQuality.test.ts` | Caso de cinco páginas sem experiências força rota estrutural | PASS | Não julga candidato nem inventa experiência |
-| D-03 | Paddle desativado durante o teste temporário | Frontend construído com modo `baseline`; provider não é chamado nesse modo | teste de domínio, inspeção do bundle público e tela autenticada | Asset `index-DBBU_HLn.js` registra `baseline`, Parser IA `hosted` e commit `9dfa4d4`; 12 testes dirigidos aprovados | PARTIAL | Configuração está ativa; importação real pós-rollout ficou para o Product Owner testar |
+| D-01 | Validação e PDF.js nativo antes da IA | `nativeOnlyForParserIa` preserva todas as páginas e evita estruturação/OCR intermediário | teste dirigido de código, typecheck e build | 17 testes dirigidos aprovados localmente | PASS | Rollout remoto desta revisão ainda não executado |
+| D-02 | Página nativa insuficiente segue no PDF completo para a IA | modo nativo preserva a página mesmo abaixo do limiar local e delega a validação final ao Parser IA | teste negativo de roteamento | Branch local aprovada; Parser IA continua validando fatos e referências | PASS | PDF image-only real ainda precisa de teste de qualidade após rollout |
+| D-03 | Paddle e Tesseract desativados na importação automática | três entradas usam `nativeOnlyForParserIa`; modo força `baseline` antes de qualquer canvas/worker | teste dirigido, build e futura inspeção de rede | Código local não cria canvas nem carrega worker nessa rota | PARTIAL | Falta deploy e importação autenticada observando a rede |
 | D-04 | Parser IA após etapa documental | Cliente autenticado, capacidade isolada e HTTP nativo preservando Host | 31 testes de gateway/parser e comparação ponta a ponta | Inferência nova anterior: 34.053 ms; retestes de 17/09 persistiram Documentos v2/v3 e abriram revisão com resultado de IA em cache | PARTIAL | Persistência e qualidade comprovadas; falta uma execução pós-rollout com inferência nova |
-| D-05 | Sequência e falha explícita | Modo `baseline` intencional seguido de Parser IA; CTA consciente de leitura local permanece | person-flow, recuperação M5.7 | 229 + 33 testes direcionados aprovados | PASS | Falha do worker ainda exige decisão explícita do operador e não aciona Paddle |
+| D-05 | Sequência e falha explícita sem continuação local | Parser IA é pré-condição; CTA e estado `localRetry` foram removidos | teste dirigido de UI e mensagem de falha | 17 testes dirigidos aprovados localmente | PASS | Falha oferece nova tentativa, sem persistir perfil incompleto |
 | D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
 | D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
 | D-08 | Limites, orçamento e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache, ledger US$2 e sem retry | `parserIaService.test.mjs` e gateway | budget, concorrência, timeout, corrupção, cache e resposta limitada aprovados | PASS | Ledger observado: 6 tentativas e US$0,64 contabilizados antes do rollout |
@@ -100,3 +100,13 @@ Atualização do estado: D-04 continua `PARTIAL`, mas a limitação mudou. A per
 - Nenhum currículo foi enviado após o rollout pelo agente, nenhum registro foi criado e nenhum Perfil foi publicado. A tela ficou aberta para o Product Owner executar o teste real solicitado.
 
 Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` permanece `PARTIAL` somente porque o aceite exige observar uma importação real pós-rollout sem chamada Paddle.
+
+## Desativação temporária de todo OCR automático — 2026-09-17
+
+- Decisão do PO incorporada no contrato 1.2.0: a importação passa da leitura nativa PDF.js diretamente ao Parser IA, sem Paddle e sem Tesseract.
+- Nova importação, upload dentro da Pessoa e retomada de intake interrompido usam `nativeOnlyForParserIa`.
+- Páginas com pouco ou nenhum texto nativo permanecem no conjunto enviado ao Parser IA; a validação local de 120 caracteres não impede essa chamada. Resultado inválido ou sem fatos suportados continua falhando fechado no Parser IA.
+- A importação exige Parser IA ativo. A continuação pela leitura local, o estado `localRetry` e a mensagem que sugeria essa alternativa foram removidos.
+- O modo nativo força `baseline` antes de qualquer provider, canvas ou worker OCR. O Tesseract continua instalado para reversão e para seleção manual de região durante a revisão, que ficou fora do escopo.
+- Validação local: lint PASS em 513 arquivos; TypeScript raiz e web PASS; build web PASS com 3.238 módulos; 17 testes dirigidos e 230 testes do person-flow PASS; Context Pack gerado e verificado com 5 fontes canônicas e 2 artefatos.
+- Rollout, inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.

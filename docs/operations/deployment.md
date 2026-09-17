@@ -6,6 +6,8 @@ O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambient
 
 Em 2026-09-17, por decisão explícita do Product Owner, somente o frontend foi reconstruído para desativar temporariamente chamadas Paddle na importação: `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`, preservando `VITE_PARSER_IA_MODE=hosted`. Commit implantado `9dfa4d4`; imagem anterior preservada como `prisma-web:rollback-before-baseline-20260917`. Supabase, gateway, workers, modelos e volumes não mudaram. O bundle publicado e a tela autenticada confirmaram a configuração; a importação real pós-rollout ficou para teste do Product Owner.
 
+Decisão posterior do mesmo dia determina retirar também o Tesseract da importação automática. A revisão em preparação usa `nativeOnlyForParserIa` nas três entradas do fluxo, preserva todas as páginas PDF.js e segue diretamente ao Parser IA; falha da IA não oferece continuação local. O OCR manual por região continua disponível na revisão. Este registro só deve ser atualizado como implantado depois do rebuild, smoke e inspeção de rede no ambiente remoto.
+
 Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF.js, verificação semântica, Paddle condicional e Parser IA antes da revisão. O worker Parser e os dois workers Paddle permanecem no PC e escutam somente loopback; o gateway 1.1.0 valida sessão/tenant e usa túnel reverso ligado apenas ao loopback da VPS. O Supabase recebeu a migration aditiva de observabilidade com RLS. Imagens de rollback anteriores foram preservadas. Evidência e limitação do smoke autenticado ficam em `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 ## Pré-requisitos
