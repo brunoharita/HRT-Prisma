@@ -74,3 +74,16 @@ test("legacy profile entities are upgraded at publication and operator gates ide
   assert.match(errors, /fieldPath/);
   assert.match(errors, /Nenhum campo precisa ser corrigido manualmente/);
 });
+
+test("review normalization preserves a required nullable course inside classifier snapshots", async () => {
+  const [fix, verification] = await Promise.all([
+    readFile("supabase/migrations/20260917164000_preserve_nullable_education_classifier_snapshot.sql", "utf8"),
+    readFile("supabase/qa/actionable_review_errors_and_legacy_publication_verification.sql", "utf8"),
+  ]);
+
+  assert.match(fix, /create or replace function private\.normalize_profile_review_entity/i);
+  assert.match(fix, /when p_item \? 'classifierSnapshot'[\s\S]*jsonb_build_object\('classifierSnapshot', p_item -> 'classifierSnapshot'\)/i);
+  assert.doesNotMatch(fix, /'classificationReviewed', p_item -> 'classificationReviewed',\s*'classifierSnapshot'/i);
+  assert.match(fix, /classifier snapshot nullable course was not preserved/i);
+  assert.match(verification, /nullable classifier snapshot course was not preserved as a valid contract field/i);
+});

@@ -7,6 +7,8 @@ declare
   merged jsonb;
   normalized jsonb;
   proposal_legacy jsonb;
+  nullable_course_item jsonb := '{"id":"education_12345678","source":"extracted","course":null,"institution":"Instituição sintética","period":"2026 - 2027","description":null,"evidenceText":"Instituição sintética","page":2,"originalText":"Instituição sintética","level":"unknown","qualification":"unknown","status":"in_progress","classificationOrigin":"human","classificationSources":{"level":"human","qualification":"human","status":"human"},"classificationReasons":["synthetic_nullable_course_regression"],"classificationMethodVersion":"education-classification-1.0.0","classificationReviewed":true,"classifierSnapshot":{"course":null,"level":"unknown","qualification":"unknown","status":"in_progress","classificationOrigin":"human","classificationSources":{"level":"human","qualification":"human","status":"human"},"classificationReasons":["synthetic_nullable_course_regression"],"classificationMethodVersion":"education-classification-1.0.0"}}'::jsonb;
+  nullable_course_normalized jsonb;
   feedback_detail text;
 begin
   merged := private.merge_profile_publication_delta(legacy_base, current_proposal - 'identity' - 'contact', '[]'::jsonb);
@@ -31,6 +33,13 @@ begin
   if normalized #> '{education,0,classificationReviewed}' <> 'false'::jsonb
     or normalized #>> '{education,0,classificationReasons,0}' <> 'historical_review_requires_academic_confirmation'
   then raise exception 'a proposal-only legacy education bypassed human confirmation'; end if;
+
+  nullable_course_normalized := private.normalize_profile_review_entity('education', nullable_course_item, 1, false);
+  if not (nullable_course_normalized -> 'classifierSnapshot' ? 'course')
+    or nullable_course_normalized #> '{classifierSnapshot,course}' is distinct from 'null'::jsonb
+    or not private.is_valid_review_field_lifecycle(jsonb_build_object('education', jsonb_build_array(nullable_course_normalized)), true)
+    or not private.is_valid_education_classification(jsonb_build_object('education', jsonb_build_array(nullable_course_normalized)), true)
+  then raise exception 'nullable classifier snapshot course was not preserved as a valid contract field'; end if;
 
   begin
     perform private.raise_review_action_required('education_classification_required', 'education.education_12345678.classificationOrigin', 2);
