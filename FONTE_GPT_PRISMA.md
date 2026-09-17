@@ -6,7 +6,7 @@ product_version: 1.6.4
 current_state_version: 2.33.6
 current_state_last_verified: 2026-09-17
 documentation_source_count: 189
-source_manifest_sha256: 5c64e2fd40340c6ebd2db6edf20ff04d64ad23e7c444b77fd1ed4227f7815603
+source_manifest_sha256: 2b9a9c4bd1d00163b63032ba664112ed0da6833210182c556c90ff0643bf970c
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -249,6 +249,8 @@ Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão
 Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática pula também o Tesseract e segue da leitura nativa PDF.js diretamente ao Parser IA. A revisão `ae9d46c` foi implantada no único ambiente remoto: nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Somente o frontend foi reconstruído; site respondeu HTTP 200, container ficou estável sem restart e a tela autenticada de Pessoas carregou. A imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. Ainda falta uma importação real pós-rollout para validar rede, tempo e qualidade.
 
 Nova decisão do Product Owner em 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. A revisão `42510b1` está ativa no único ambiente remoto e no worker loopback: `budget.json` não é lido nem gravado para autorizar chamadas, permanece apenas como histórico, e tamanho, timeout, serialização, cache e ausência de retry continuam ativos. A conta OpenAI é a única autoridade financeira; serviço, gateway e interface distinguem por códigos fixos e sanitizados saldo esgotado, limite de gastos, rate limit e falha técnica. Frontend e gateway estão ativos sem restart, site respondeu 200, bundle confirmou commit/mensagem nova, worker recusou acesso fora do contrato local e o gateway recusou sessão sintética antes de ler documento. Nenhum currículo ou chamada paga foi usado no smoke. Rollback preservado para as duas imagens anteriores.
+
+Incidente e correção autorizada em 2026-09-17: a importação real de Julia concluiu PDF.js e Parser IA em 20,8 s, mas o Supabase recusou a persistência do rascunho porque o endereço extraído do LinkedIn continha o rótulo visual `(LinkedIn)` e violou `extraction_drafts_structured_summary_shape_check`. O PDF permaneceu preservado e nenhum Perfil foi publicado. A correção de domínio conserva fato e evidência originais, remove somente o rótulo conhecido na cópia canônica e, para qualquer URL ainda incompatível, grava `null` com pendência de revisão em vez de abortar o currículo inteiro. Replay privado do resultado já autorizado preservou 37 fatos, 6 experiências, 2 formações, 3 competências e 1 certificação, sem nova chamada OpenAI. Não há migração, mudança de prompt/modelo ou relaxamento da constraint; rollout e reteste autenticado ainda pendentes neste registro.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 

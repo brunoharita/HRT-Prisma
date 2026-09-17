@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 189
-source_manifest_sha256: 5c64e2fd40340c6ebd2db6edf20ff04d64ad23e7c444b77fd1ed4227f7815603
+source_manifest_sha256: 2b9a9c4bd1d00163b63032ba664112ed0da6833210182c556c90ff0643bf970c
 -->
 
 # Tudo sobre o Prisma
@@ -537,6 +537,8 @@ Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão
 Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática pula também o Tesseract e segue da leitura nativa PDF.js diretamente ao Parser IA. A revisão `ae9d46c` foi implantada no único ambiente remoto: nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Somente o frontend foi reconstruído; site respondeu HTTP 200, container ficou estável sem restart e a tela autenticada de Pessoas carregou. A imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. Ainda falta uma importação real pós-rollout para validar rede, tempo e qualidade.
 
 Nova decisão do Product Owner em 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. A revisão `42510b1` está ativa no único ambiente remoto e no worker loopback: `budget.json` não é lido nem gravado para autorizar chamadas, permanece apenas como histórico, e tamanho, timeout, serialização, cache e ausência de retry continuam ativos. A conta OpenAI é a única autoridade financeira; serviço, gateway e interface distinguem por códigos fixos e sanitizados saldo esgotado, limite de gastos, rate limit e falha técnica. Frontend e gateway estão ativos sem restart, site respondeu 200, bundle confirmou commit/mensagem nova, worker recusou acesso fora do contrato local e o gateway recusou sessão sintética antes de ler documento. Nenhum currículo ou chamada paga foi usado no smoke. Rollback preservado para as duas imagens anteriores.
+
+Incidente e correção autorizada em 2026-09-17: a importação real de Julia concluiu PDF.js e Parser IA em 20,8 s, mas o Supabase recusou a persistência do rascunho porque o endereço extraído do LinkedIn continha o rótulo visual `(LinkedIn)` e violou `extraction_drafts_structured_summary_shape_check`. O PDF permaneceu preservado e nenhum Perfil foi publicado. A correção de domínio conserva fato e evidência originais, remove somente o rótulo conhecido na cópia canônica e, para qualquer URL ainda incompatível, grava `null` com pendência de revisão em vez de abortar o currículo inteiro. Replay privado do resultado já autorizado preservou 37 fatos, 6 experiências, 2 formações, 3 competências e 1 certificação, sem nova chamada OpenAI. Não há migração, mudança de prompt/modelo ou relaxamento da constraint; rollout e reteste autenticado ainda pendentes neste registro.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
@@ -1861,7 +1863,7 @@ Compatibilidade de evidência de listas: a proposta do modelo mantém índices p
 
 Retomada de intake interrompido: na Central da Pessoa e no detalhe do documento, a ação Retomar importação com IA fica disponível em DEV para documento M5.7 failed/not_ready, tentativa resume_intake_processing_failed, zero caracteres persistidos e nenhuma tentativa revisável. A sessão autorizada recupera o PDF privado; organização, Pessoa, intake, documento, caminho e SHA-256 precisam corresponder antes da IA. O cache existente é reutilizado quando elegível; sem cache aplicam-se os limites e orçamento normais. Persistência e conclusão reutilizam os RPCs/idempotência existentes. Nenhuma nova Pessoa é criada, nem Perfil publicado. Compatível com parser-ia-1.0.0, sem mudança de prompt, modelo ou schema.
 
-Normalização de LinkedIn (2026-09-12): a interpretação conserva o valor citado e suas coordenadas; somente contact.linkedin no rascunho ganha HTTPS e codificação URL de caracteres Unicode, reutilizando o normalizador nativo e URL padrão. Resultados antigos em memória são adaptados sem mutação. O caso real continha ausência de protocolo e acento; ambos violavam o contrato de resumo estruturado já instalado. Sem migração, relaxamento de validação, mudança de prompt ou nova inferência.
+Normalização de LinkedIn (2026-09-12, correção complementar em 2026-09-17): a interpretação conserva o valor citado e suas coordenadas; somente `contact.linkedin` no rascunho ganha HTTPS e codificação URL de caracteres Unicode. O rótulo visual `(LinkedIn)` que o PDF pode anexar ao endereço é removido antes da validação, e parâmetros ou fragmentos não integram a URL canônica. Se o valor ainda não representar um perfil `/in/` aceito pelo contrato, o campo fica nulo e gera pendência para revisão humana, sem invalidar o restante do currículo. Resultados antigos em memória são adaptados sem mutação e sem nova chamada ao modelo. Sem migração, relaxamento de validação, mudança de prompt ou inferência de endereço.
 
 Prova autenticada concluída na etapa de importação até revisão: seleção do PDF, interpretação com cache local, identificação pelo cadastro existente expressamente autorizado, persistência e abertura da revisão. Supabase confirmou quatro páginas, 4.710 caracteres, nove experiências, duas formações, três competências e 115 descritores de evidência; contratos de resumo e formação válidos. A revisão continuou acessível após recarregar. Comparação sinalizou confirmação humana da situação acadêmica ausente; não houve publicação ou confirmação automática. Ledger privado inalterado, sem nova chamada OpenAI nesta prova.
 
@@ -6568,6 +6570,8 @@ Decisão posterior do mesmo dia determina retirar também o Tesseract da importa
 
 Decisão seguinte de 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. A revisão `42510b1` foi publicada no frontend e gateway e o worker local foi reiniciado. O ledger existente permanece como histórico, sem consulta ou reserva; saldo e limites da conta OpenAI são a autoridade financeira. Tamanho, timeout, serialização, cache, vínculo de organização e ausência de retry permanecem. Site 200; containers sem restart; bundle com commit e mensagens novas; worker loopback, túnel e credencial verificados sem documento nem chamada paga. Imagens anteriores: `prisma-web:rollback-before-parser-billing-20260917` (`sha256:f99c253d...`) e `prisma-paddle-gateway:rollback-before-parser-billing-20260917` (`sha256:b93d2d32...`).
 
+Na importação autenticada posterior do currículo de Julia, PDF.js e Parser IA concluíram em 20,8 s, sem Paddle ou Tesseract, mas a persistência atômica rejeitou o rascunho pela constraint `extraction_drafts_structured_summary_shape_check`. O log mostrou um rótulo visual `(LinkedIn)` incorporado à URL do perfil; o normalizador anterior preservava esses caracteres e tornava o campo incompatível com o contrato já vigente. A correção remove somente esse rótulo antes da validação e transforma qualquer endereço ainda inválido em campo nulo com pendência humana, preservando fatos e evidências originais. Não altera banco, prompt, modelo, transporte ou política de revisão.
+
 Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF.js, verificação semântica, Paddle condicional e Parser IA antes da revisão. O worker Parser e os dois workers Paddle permanecem no PC e escutam somente loopback; o gateway 1.1.0 valida sessão/tenant e usa túnel reverso ligado apenas ao loopback da VPS. O Supabase recebeu a migration aditiva de observabilidade com RLS. Imagens de rollback anteriores foram preservadas. Evidência e limitação do smoke autenticado ficam em `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 ## Pré-requisitos
@@ -10101,6 +10105,15 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Imagens ativas: web `sha256:d3fc7d56...` e gateway `sha256:a8fceee9...`, ambos `running` e zero restart. Rollbacks: web `sha256:f99c253d...` e gateway `sha256:b93d2d32...`.
 - Smoke sem custo: site 200; bundle contém `42510b17de` e a nova mensagem de saldo; sessão sintética foi recusada 403 antes do documento; worker local recusou chamada fora do contrato com 403; túnel permaneceu estabelecido e a credencial foi validada sem exibição. Logs contêm somente rota, status e duração.
 - Nenhuma chamada real à OpenAI foi feita no smoke. A classificação dos erros financeiros foi provada com respostas sintéticas nos testes; o saldo efetivo continuará sendo decidido exclusivamente pela OpenAI em uma importação real.
+
+## Correção da persistência do LinkedIn — 2026-09-17
+
+- Teste autenticado real de Julia: 20,8 s do clique à resposta do Parser IA, sendo 15,954 s no gateway; nenhuma chamada Paddle/Tesseract. O resultado foi `partial`, com 37 fatos aceitos, 6 experiências, 2 formações, 3 competências e 1 certificação.
+- A persistência falhou atomicamente em `extraction_drafts_structured_summary_shape_check`. O rótulo visual `(LinkedIn)` foi incorporado ao endereço do perfil; não houve insuficiência curricular, falha OpenAI ou publicação de Perfil.
+- Correção autorizada: conservar fato/evidência originais, remover somente o rótulo conhecido na URL canônica e converter endereço ainda incompatível em `null` com pendência humana. É proibido inventar URL, relaxar a constraint ou descartar outros campos do currículo.
+- Replay privado do mesmo resultado já autorizado: contrato do LinkedIn aceito e contagens curriculares preservadas, sem nova chamada à OpenAI e sem gravação no banco.
+- Regressão dirigida inicial: build TypeScript e 21 testes do Parser IA em `PASS`, incluindo rótulo de PDF, URL Unicode, retomada em memória e endereço incompatível levado à revisão.
+- Estado deste adendo antes do rollout: implementação local `PASS`; produção e reteste autenticado `NOT TESTED`.
 
 ---
 

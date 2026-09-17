@@ -8,9 +8,21 @@ import { normalizeDraftPeriods } from "./resumeDates.js";
 export const PARSER_IA_VERSION = "parser-ia-1.0.0";
 export const PARSER_IA_SOURCE_VERSION = "pdfjs-5.4.296/parser-ia-spans-v1";
 export const PARSER_IA_MAX_PAGES = 30;
-function canonicalLinkedinUrl(value: string): string {
-  const normalized = normalizeLinkedinUrl(value).replace(/^http:\/\//i, "https://");
-  try { return new URL(normalized).href; } catch { return normalized; }
+const LINKEDIN_PROFILE_URL = /^https:\/\/(?:[a-z0-9-]+\.)?linkedin\.com\/in\/[a-z0-9%_.-]+\/?$/i;
+const LINKEDIN_REVIEW_UNCERTAINTY = "O endereço do LinkedIn identificado precisa de conferência.";
+function canonicalLinkedinUrl(value: string): string | null {
+  const withoutPdfLabel = value.trim().replace(/\s*\(linkedin\)\s*$/i, "").trim();
+  const normalized = normalizeLinkedinUrl(withoutPdfLabel).replace(/^http:\/\//i, "https://");
+  try {
+    const url = new URL(normalized);
+    url.protocol = "https:";
+    url.search = "";
+    url.hash = "";
+    const canonical = url.href.replace(/\/$/, "");
+    return LINKEDIN_PROFILE_URL.test(canonical) ? canonical : null;
+  } catch {
+    return null;
+  }
 }
 export function canResumeFailedAiIntake(document: PersonDocumentTimelineItem | null | undefined): boolean {
   return Boolean(document && document.sourceType === "resume_pdf" && !document.isLegacyUnstored
@@ -123,7 +135,10 @@ export function structureParserIa(raw: unknown, pages: ExtractedPage[], binding:
     const value = values.get(path);
     if (!value) continue;
     if (path === "identity.fullName") draft.identity.fullName = value;
-    else if (path.startsWith("contact.")) draft.contact[path.slice(8) as keyof StructuredDraft["contact"]] = path === "contact.linkedin" ? canonicalLinkedinUrl(value) : value;
+    else if (path.startsWith("contact.")) {
+      draft.contact[path.slice(8) as keyof StructuredDraft["contact"]] = path === "contact.linkedin" ? canonicalLinkedinUrl(value) : value;
+      if (path === "contact.linkedin" && !draft.contact.linkedin) draft.uncertainties.push(LINKEDIN_REVIEW_UNCERTAINTY);
+    }
     else draft[path as "summary" | "professionalTitle" | "professionalObjective"] = value;
     paths.set(path, path);
   }
@@ -196,9 +211,15 @@ export function preparedParserIa(input: Pick<ProcessedDocumentInput, "sha256" | 
   if (result.version !== PARSER_IA_VERSION || result.organizationId !== organizationId || result.sourceSha256 !== input.sha256) throw new Error("PARSER_BINDING_INVALID");
   parserIaMethodVersion(result);
   const linkedin = result.draft.contact.linkedin ? canonicalLinkedinUrl(result.draft.contact.linkedin) : null;
+  const uncertainties = result.draft.contact.linkedin && !linkedin && !result.draft.uncertainties.includes(LINKEDIN_REVIEW_UNCERTAINTY)
+    ? [...result.draft.uncertainties, LINKEDIN_REVIEW_UNCERTAINTY]
+    : result.draft.uncertainties;
   // A retry may still hold the previously prepared result in the open page.
-  if (linkedin !== result.draft.contact.linkedin || result.fieldEvidence.some((item) => reviewListFieldPath(item.fieldPath) !== item.fieldPath)) {
-    return { ...result, draft: linkedin === result.draft.contact.linkedin ? result.draft : { ...result.draft, contact: { ...result.draft.contact, linkedin } }, fieldEvidence: result.fieldEvidence.map((item) => ({ ...item, fieldPath: reviewListFieldPath(item.fieldPath) })) };
+  if (linkedin !== result.draft.contact.linkedin || uncertainties !== result.draft.uncertainties || result.fieldEvidence.some((item) => reviewListFieldPath(item.fieldPath) !== item.fieldPath)) {
+    const draft = linkedin === result.draft.contact.linkedin && uncertainties === result.draft.uncertainties
+      ? result.draft
+      : { ...result.draft, contact: { ...result.draft.contact, linkedin }, uncertainties };
+    return { ...result, draft, status: uncertainties === result.draft.uncertainties ? result.status : "partial", fieldEvidence: result.fieldEvidence.map((item) => ({ ...item, fieldPath: reviewListFieldPath(item.fieldPath) })) };
   }
   return result;
 }

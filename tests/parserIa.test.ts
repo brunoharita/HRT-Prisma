@@ -54,6 +54,38 @@ test("M5.7 encodes accented LinkedIn paths without double encoding or changing e
   }
 });
 
+test("M5.7 removes the LinkedIn PDF label without changing the cited fact or evidence", () => {
+  const sourceValue = "www.linkedin.com/in/synthetic-profile (LinkedIn)";
+  const result = run([page(1, [sourceValue])], [fact("contact.linkedin", sourceValue, "p1l1")]);
+  assert.equal(result.draft.contact.linkedin, "https://www.linkedin.com/in/synthetic-profile");
+  assert.equal(result.acceptedFacts[0]!.value, sourceValue);
+  assert.equal(result.fieldEvidence[0]!.text, sourceValue);
+
+  const old = { ...result, draft: { ...result.draft, contact: { ...result.draft.contact, linkedin: sourceValue } } };
+  const retry = preparedParserIa({ sha256: binding.sourceSha256, parserIa: old }, binding.organizationId)!;
+  assert.equal(retry.draft.contact.linkedin, result.draft.contact.linkedin);
+  assert.equal(retry.acceptedFacts, old.acceptedFacts);
+});
+
+test("M5.7 keeps an unsupported LinkedIn address for human review without blocking the draft", () => {
+  const sourceValue = "https://www.linkedin.com/company/synthetic-company";
+  const result = run([page(1, [sourceValue, "Pessoa Exemplo"])], [
+    fact("contact.linkedin", sourceValue, "p1l1"),
+    fact("identity.fullName", "Pessoa Exemplo", "p1l2"),
+  ]);
+  assert.equal(result.draft.contact.linkedin, null);
+  assert.equal(result.status, "partial");
+  assert.ok(result.draft.uncertainties.some((item) => item.includes("LinkedIn")));
+  assert.equal(result.acceptedFacts[0]!.value, sourceValue);
+  assert.equal(result.fieldEvidence[0]!.text, sourceValue);
+
+  const old = { ...result, status: "structured_for_review" as const, draft: { ...result.draft, contact: { ...result.draft.contact, linkedin: sourceValue }, uncertainties: [] } };
+  const retry = preparedParserIa({ sha256: binding.sourceSha256, parserIa: old }, binding.organizationId)!;
+  assert.equal(retry.draft.contact.linkedin, null);
+  assert.equal(retry.status, "partial");
+  assert.ok(retry.draft.uncertainties.some((item) => item.includes("LinkedIn")));
+});
+
 test("M5.7 joins wrapped email with both source spans and retains original geometry", () => {
   const pages = [page(1, ["Pessoa Exemplo", "pessoa@example.co", "m"])];
   const original = JSON.stringify(pages);

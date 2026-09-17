@@ -125,3 +125,12 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Imagens ativas: web `sha256:d3fc7d56...` e gateway `sha256:a8fceee9...`, ambos `running` e zero restart. Rollbacks: web `sha256:f99c253d...` e gateway `sha256:b93d2d32...`.
 - Smoke sem custo: site 200; bundle contém `42510b17de` e a nova mensagem de saldo; sessão sintética foi recusada 403 antes do documento; worker local recusou chamada fora do contrato com 403; túnel permaneceu estabelecido e a credencial foi validada sem exibição. Logs contêm somente rota, status e duração.
 - Nenhuma chamada real à OpenAI foi feita no smoke. A classificação dos erros financeiros foi provada com respostas sintéticas nos testes; o saldo efetivo continuará sendo decidido exclusivamente pela OpenAI em uma importação real.
+
+## Correção da persistência do LinkedIn — 2026-09-17
+
+- Teste autenticado real de Julia: 20,8 s do clique à resposta do Parser IA, sendo 15,954 s no gateway; nenhuma chamada Paddle/Tesseract. O resultado foi `partial`, com 37 fatos aceitos, 6 experiências, 2 formações, 3 competências e 1 certificação.
+- A persistência falhou atomicamente em `extraction_drafts_structured_summary_shape_check`. O rótulo visual `(LinkedIn)` foi incorporado ao endereço do perfil; não houve insuficiência curricular, falha OpenAI ou publicação de Perfil.
+- Correção autorizada: conservar fato/evidência originais, remover somente o rótulo conhecido na URL canônica e converter endereço ainda incompatível em `null` com pendência humana. É proibido inventar URL, relaxar a constraint ou descartar outros campos do currículo.
+- Replay privado do mesmo resultado já autorizado: contrato do LinkedIn aceito e contagens curriculares preservadas, sem nova chamada à OpenAI e sem gravação no banco.
+- Regressão dirigida inicial: build TypeScript e 21 testes do Parser IA em `PASS`, incluindo rótulo de PDF, URL Unicode, retomada em memória e endereço incompatível levado à revisão.
+- Estado deste adendo antes do rollout: implementação local `PASS`; produção e reteste autenticado `NOT TESTED`.
