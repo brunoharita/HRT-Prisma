@@ -2,8 +2,8 @@
 prisma_context_id: context-index
 owner: technical-governance
 status: current
-version: 2.0.0
-last_verified: 2026-09-14
+version: 2.0.1
+last_verified: 2026-09-17
 ---
 
 # Prisma Context Index
@@ -34,6 +34,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | UX, tela, navegação ou estado | `docs/product/ux-foundation.md`, acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
 | Pessoa, currículo, revisão ou publicação | owners em `docs/product`, `docs/architecture` e `docs/ai`; serviços e testes do fluxo afetado |
 | Posição, matching ou Prisma Score | `docs/product/vacancy-intelligence.md`, `docs/architecture/vacancy-intelligence.md`, `docs/ai/matching-contract.md`, ADRs vigentes e testes de matching |
+| Lominger, competências ou visualização do Perfil | `docs/product/lominger-profile-visualization.md`, o PDF-base local em `.prisma-data/knowledge-sources/lominger/` e `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`; não tratar a referência como contrato ou metodologia ativada |
 | Verificação ou Item Bank | owners de competency verification, acordo/execução/AoT do movimento e fronteiras Supabase relacionadas |
 | Knowledge ou pesquisa externa | owners de professional concept, Knowledge, model/prompt policy, migrations e Edge Function aplicáveis |
 | Auth, RLS, PII ou Supabase | `docs/security`, contratos de arquitetura, migrations/RPCs e provas negativas do limite afetado |

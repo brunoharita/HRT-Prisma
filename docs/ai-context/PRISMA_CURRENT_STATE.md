@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.6
+version: 2.33.7
 last_verified: 2026-09-17
 ---
 
@@ -109,6 +109,8 @@ Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por tr
 ## Disponível localmente
 
 - Avaliação experimental de PDF LinkedIn `linkedin-pdf-evaluation-1.0.2`, isolada da aplicação, com runner `benchmark:linkedin`: reutiliza PDF.js, StructuredDraft, IDs, evidências e classificador; preserva linhas/links/páginas e compara baseline nativo com protótipo local. Cinco fontes autorizadas (21 páginas) foram lidas sem alteração dos originais, com resultados pessoais apenas em `tmp/` ignorado. A primeira rodada usou quatro amostras independentes; após detectar e corrigir e-mail quebrado, curso ausente e título decorativo, reexecuções foram registradas como regressão conhecida. 69 testes direcionados passaram, incluindo 21 novos. Pacotes GPT são somente preparação offline, sem chamadas, credenciais ou ativação. Referência humana, métricas semânticas, tempo de correção e comparação externa permanecem pendentes; movimento completo PARTIAL, sem superioridade geral, QA, implantação ou produção. Contrato/instruções parciais/AoT em `docs/qa/*linkedin-pdf-evaluation.md`; owner em `docs/ai/linkedin-pdf-evaluation.md`.
+
+- Referência Lominger disponível localmente para brainstorming: `docs/product/lominger-profile-visualization.md` registra o PDF `.prisma-data/knowledge-sources/lominger/lominger_career_architect_development_planner.pdf`, título `The CAREER ARCHITECT® Development Planner 4th Edition` e 868 páginas, confirmados em 2026-09-17. O arquivo é uma base documental de exploração de uma camada visual no Perfil profissional; não está declarado como fonte Knowledge publicada, não está ativado no runtime e não representa implementação, licença validada ou conformidade oficial. O prompt de exploração está em `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`.
 
 - Validação reproduzível local `person-flow-validation-1.0.0`: `pnpm run validate:person-flow` compila a base/testes uma vez, verifica tipos e build web e executa seleção explícita de 30 arquivos do fluxo importar → revisar → publicar → consultar Perfil. Medição de 2026-09-11: 226 testes aprovados, 29,179 s totais; os seis cenários sintéticos usam funções reais e snapshots de entrada, sem simular publicação SQL. Relatórios por fase ficam em `tmp/validation/person-flow/`; seleção ausente, erro, sinal ou timeout não produzem sucesso. `pnpm test` mantém seleção integral de fontes (44 arquivos no momento). Runbook e limites em `docs/qa/person-flow-validation.md`, aceite/evidência em `docs/qa/aot-person-flow-validation.md`. Nenhum código runtime, schema, QA, produção ou dado real foi alterado. Não comprova RLS ativa, smoke visual, provider real ou economia entre entregas/modelos.
 

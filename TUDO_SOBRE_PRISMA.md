@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 189
-source_manifest_sha256: 2bf288ad3b80c02b9217e1bab583c6b783ff33a2087f9ab0144e3935e89bde20
+documentation_source_count: 190
+source_manifest_sha256: 24099b2b111f7561d5a8b802dd1e98f2670c051488230725bf3f6ab0434ae88f
 -->
 
 # Tudo sobre o Prisma
@@ -445,8 +445,8 @@ M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista a
 prisma_context_id: context-index
 owner: technical-governance
 status: current
-version: 2.0.0
-last_verified: 2026-09-14
+version: 2.0.1
+last_verified: 2026-09-17
 ---
 
 # Prisma Context Index
@@ -477,6 +477,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | UX, tela, navegação ou estado | `docs/product/ux-foundation.md`, acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
 | Pessoa, currículo, revisão ou publicação | owners em `docs/product`, `docs/architecture` e `docs/ai`; serviços e testes do fluxo afetado |
 | Posição, matching ou Prisma Score | `docs/product/vacancy-intelligence.md`, `docs/architecture/vacancy-intelligence.md`, `docs/ai/matching-contract.md`, ADRs vigentes e testes de matching |
+| Lominger, competências ou visualização do Perfil | `docs/product/lominger-profile-visualization.md`, o PDF-base local em `.prisma-data/knowledge-sources/lominger/` e `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`; não tratar a referência como contrato ou metodologia ativada |
 | Verificação ou Item Bank | owners de competency verification, acordo/execução/AoT do movimento e fronteiras Supabase relacionadas |
 | Knowledge ou pesquisa externa | owners de professional concept, Knowledge, model/prompt policy, migrations e Edge Function aplicáveis |
 | Auth, RLS, PII ou Supabase | `docs/security`, contratos de arquitetura, migrations/RPCs e provas negativas do limite afetado |
@@ -522,7 +523,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.6
+version: 2.33.7
 last_verified: 2026-09-17
 ---
 
@@ -629,6 +630,8 @@ Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por tr
 ## Disponível localmente
 
 - Avaliação experimental de PDF LinkedIn `linkedin-pdf-evaluation-1.0.2`, isolada da aplicação, com runner `benchmark:linkedin`: reutiliza PDF.js, StructuredDraft, IDs, evidências e classificador; preserva linhas/links/páginas e compara baseline nativo com protótipo local. Cinco fontes autorizadas (21 páginas) foram lidas sem alteração dos originais, com resultados pessoais apenas em `tmp/` ignorado. A primeira rodada usou quatro amostras independentes; após detectar e corrigir e-mail quebrado, curso ausente e título decorativo, reexecuções foram registradas como regressão conhecida. 69 testes direcionados passaram, incluindo 21 novos. Pacotes GPT são somente preparação offline, sem chamadas, credenciais ou ativação. Referência humana, métricas semânticas, tempo de correção e comparação externa permanecem pendentes; movimento completo PARTIAL, sem superioridade geral, QA, implantação ou produção. Contrato/instruções parciais/AoT em `docs/qa/*linkedin-pdf-evaluation.md`; owner em `docs/ai/linkedin-pdf-evaluation.md`.
+
+- Referência Lominger disponível localmente para brainstorming: `docs/product/lominger-profile-visualization.md` registra o PDF `.prisma-data/knowledge-sources/lominger/lominger_career_architect_development_planner.pdf`, título `The CAREER ARCHITECT® Development Planner 4th Edition` e 868 páginas, confirmados em 2026-09-17. O arquivo é uma base documental de exploração de uma camada visual no Perfil profissional; não está declarado como fonte Knowledge publicada, não está ativado no runtime e não representa implementação, licença validada ou conformidade oficial. O prompt de exploração está em `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`.
 
 - Validação reproduzível local `person-flow-validation-1.0.0`: `pnpm run validate:person-flow` compila a base/testes uma vez, verifica tipos e build web e executa seleção explícita de 30 arquivos do fluxo importar → revisar → publicar → consultar Perfil. Medição de 2026-09-11: 226 testes aprovados, 29,179 s totais; os seis cenários sintéticos usam funções reais e snapshots de entrada, sem simular publicação SQL. Relatórios por fase ficam em `tmp/validation/person-flow/`; seleção ausente, erro, sinal ou timeout não produzem sucesso. `pnpm test` mantém seleção integral de fontes (44 arquivos no momento). Runbook e limites em `docs/qa/person-flow-validation.md`, aceite/evidência em `docs/qa/aot-person-flow-validation.md`. Nenhum código runtime, schema, QA, produção ou dado real foi alterado. Não comprova RLS ativa, smoke visual, provider real ou economia entre entregas/modelos.
 
@@ -7292,6 +7295,50 @@ Esse pipeline está planejado e não existe no runtime atual.
 ## Vocabulário de interface
 
 A partir de `prisma-ux-foundation-1.0.0`, o módulo antes chamado Vagas aparece como **Posições**, para necessidades profissionais ocupadas ou não ocupadas. Esta decisão de apresentação não funde os conceitos de domínio acima nem renomeia tabelas, URLs, campos ou documentos históricos. A análise contextual aparece na posição; `/matching` mantém compatibilidade como **Necessidades de verificação**. Padrões de linguagem e jornadas: `docs/product/ux-foundation.md`.
+
+---
+
+## Source: `docs/product/lominger-profile-visualization.md`
+
+# Referência Lominger para visualização do perfil profissional
+
+## Estado da referência
+
+Esta é uma referência documental para exploração de produto. Ela não é um contrato aprovado, não altera o schema, não ativa uma metodologia no runtime e não comprova conformidade oficial do Prisma com a Lominger.
+
+O documento-base disponível localmente é:
+
+`C:\Users\Bruno\Documents\Prisma\.prisma-data\knowledge-sources\lominger\lominger_career_architect_development_planner.pdf`
+
+Metadados confirmados em 2026-09-17:
+
+- título: `The CAREER ARCHITECT® Development Planner 4th Edition`;
+- 868 páginas;
+- arquivo PDF de 4.355.978 bytes.
+
+Essa confirmação prova a presença e os metadados do arquivo. A leitura completa, o mapeamento dos conceitos para o Prisma, a verificação de licença e a aprovação de qualquer adaptação ainda estão pendentes.
+
+## Intenção de produto em exploração
+
+Depois que um currículo for importado, revisado e usado para criar ou atualizar um Perfil profissional, o Prisma poderá oferecer uma camada visual dentro do perfil para organizar conhecimentos, habilidades, atitudes e outras dimensões de competência em grupos de leitura rápida.
+
+A intenção é dar ao usuário uma visão global e progressiva do candidato, com gadgets visuais, agrupamentos e classificações compreensíveis, mantendo a possibilidade de abrir cada item e consultar sua evidência de origem. A Lominger é, neste momento, a base metodológica de referência para o brainstorming; não é ainda uma regra de classificação, score ou matching do Prisma.
+
+## Limites obrigatórios para a exploração
+
+- Fatos extraídos, inferências, recomendações e decisões humanas permanecem separados.
+- Cada classificação ou agrupamento precisa indicar sua origem, método e versão quando deixar de ser somente uma hipótese de design.
+- Ausência de evidência não pode aparecer como deficiência ou característica negativa.
+- A camada visual apoia a análise humana e não decide contratação, rejeição, senioridade ou acesso.
+- Nenhum score, ranking, nível de confiança ou aderência pode ser introduzido sem explicação, contrato e evidência aprovados.
+- O Perfil vigente continua sendo derivado do conhecimento profissional publicado; a visualização não cria uma fonte de verdade paralela.
+- O uso de nomes, instrumentos, escalas ou conteúdo proprietário da Lominger deve ser avaliado antes de qualquer reprodução no produto.
+
+## Rota para GPT e próximo passo
+
+Para entender a intenção sem iniciar desenvolvimento, usar `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`. O prompt orienta uma conversa de brainstorming com o PDF anexado, exige separação entre fonte, hipótese e recomendação e pede que as pendências de produto sejam apresentadas antes de qualquer execução.
+
+Uma futura implementação deverá começar somente depois de uma decisão explícita sobre o modelo visual, o grau de fidelidade à metodologia, a licença aplicável, os campos do Perfil envolvidos e os critérios de aceite.
 
 ---
 

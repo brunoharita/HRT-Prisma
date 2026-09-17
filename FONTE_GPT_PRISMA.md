@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.0.0
 context_bundle_version: 2.0.0
 product_version: 1.6.4
-current_state_version: 2.33.6
+current_state_version: 2.33.7
 current_state_last_verified: 2026-09-17
-documentation_source_count: 189
-source_manifest_sha256: 2bf288ad3b80c02b9217e1bab583c6b783ff33a2087f9ab0144e3935e89bde20
+documentation_source_count: 190
+source_manifest_sha256: 24099b2b111f7561d5a8b802dd1e98f2670c051488230725bf3f6ab0434ae88f
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -197,6 +197,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | UX, tela, navegação ou estado | `docs/product/ux-foundation.md`, acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
 | Pessoa, currículo, revisão ou publicação | owners em `docs/product`, `docs/architecture` e `docs/ai`; serviços e testes do fluxo afetado |
 | Posição, matching ou Prisma Score | `docs/product/vacancy-intelligence.md`, `docs/architecture/vacancy-intelligence.md`, `docs/ai/matching-contract.md`, ADRs vigentes e testes de matching |
+| Lominger, competências ou visualização do Perfil | `docs/product/lominger-profile-visualization.md`, o PDF-base local em `.prisma-data/knowledge-sources/lominger/` e `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`; não tratar a referência como contrato ou metodologia ativada |
 | Verificação ou Item Bank | owners de competency verification, acordo/execução/AoT do movimento e fronteiras Supabase relacionadas |
 | Knowledge ou pesquisa externa | owners de professional concept, Knowledge, model/prompt policy, migrations e Edge Function aplicáveis |
 | Auth, RLS, PII ou Supabase | `docs/security`, contratos de arquitetura, migrations/RPCs e provas negativas do limite afetado |
