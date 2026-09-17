@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 189
-source_manifest_sha256: 7856d4515a1cf786a41455550c16eb9ffa9b2a47a97f06693ca3e9594a7dd38d
+source_manifest_sha256: a98a445972d5b3951b1f155a93fa9042f002e6bb27e820955bc211af30e2cd40
 -->
 
 # Tudo sobre o Prisma
@@ -522,7 +522,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.5
+version: 2.33.6
 last_verified: 2026-09-17
 ---
 
@@ -535,6 +535,8 @@ Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolv
 Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão desativadas no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O bundle público foi reconstruído do commit `9dfa4d4` com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; o próprio asset publicado expõe essas flags e o commit. Site e tela autenticada de importação responderam, enquanto gateway, código, containers, modelos e volumes Paddle permaneceram instalados para reversão futura. A imagem anterior foi preservada como `prisma-web:rollback-before-baseline-20260917`. Ainda falta o Product Owner executar a importação real pós-rollout para validar tempo e qualidade sem criar outro registro por iniciativa do agente.
 
 Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática pula também o Tesseract e segue da leitura nativa PDF.js diretamente ao Parser IA. A revisão `ae9d46c` foi implantada no único ambiente remoto: nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Somente o frontend foi reconstruído; site respondeu HTTP 200, container ficou estável sem restart e a tela autenticada de Pessoas carregou. A imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. Ainda falta uma importação real pós-rollout para validar rede, tempo e qualidade.
+
+Nova decisão do Product Owner em 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. A implementação local deixa de ler ou gravar `tmp/m57-parser-ia/budget.json` para autorizar chamadas, preserva o arquivo existente apenas como histórico e mantém tamanho, timeout, serialização, cache e ausência de retry. A conta OpenAI passa a ser a única autoridade financeira; o serviço e o gateway propagam apenas códigos fixos e sanitizados para distinguir saldo esgotado, limite de gastos, rate limit e falha técnica. Esta revisão ainda não foi implantada: o runtime remoto continua sujeito ao bloqueio antigo até rollout e reinício explícitos.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
@@ -1801,7 +1803,7 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 
 # M5.7 Parser IA
 
-Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.0.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites do piloto.
+Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.3.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites operacionais.
 
 ## Funcionamento
 
@@ -1817,7 +1819,7 @@ Decisão temporária de 2026-09-17: o fluxo automático valida o PDF, executa so
 
 ## Executar localmente
 
-Ativação autorizada para uso direto local em 2026-09-12. Na raiz oficial, `pnpm run dev:ia` inicia a interface e o parser no mesmo processo, ativa IA somente em DEV e encerra ambos com Ctrl+C. O comando preserva o ledger existente e falha se a chave estiver ausente ou as portas ocupadas. Alternativa com processos separados:
+Ativação autorizada para uso direto local em 2026-09-12. Na raiz oficial, `pnpm run dev:ia` inicia a interface e o parser no mesmo processo, ativa IA somente em DEV e encerra ambos com Ctrl+C. O comando preserva qualquer ledger histórico, mas não o consulta para autorizar chamadas; falha se a chave estiver ausente ou as portas ocupadas. Alternativa com processos separados:
 
 1. `OPENAI_API_KEY` em `.env.local` do backend, sem prefixo VITE, ignorado pelo Git.
 2. `pnpm run parser:ia:local` inicia somente `127.0.0.1:8787`; o segredo não é enviado ao cliente.
@@ -1831,8 +1833,8 @@ Não abrir serviço em 0.0.0.0, não copiar `.env.local`, tmp, PDFs ou referênc
 - PDF 15 MB, 30 páginas; 12.000 spans e 250.000 caracteres; leitura PDF com prazo de 15 s, chamada API 120 s, cliente 135 s, sem retries ou redirects externos.
 - PDF exclusivamente imagem não ganha evidência inventada. Durante o teste sem OCR automático, o Parser IA recebe o PDF completo; se não devolver fatos com referências aceitas, a rota falha explicitamente. Paddle e Tesseract permanecem instalados, mas não são alternativas automáticas nesse percurso.
 - JSON de entrada HTTP 22 MB e saída do fornecedor limitada durante a leitura a 4 MB. Serviço valida método, path, Host, Origin e header; apenas loopback, uma operação por vez e lock de diretório.
-- Ledger privado `tmp/m57-parser-ia/budget.json`: teto US$ 2, máximo 10 chamadas, reserva US$ 0,60 antes da rede. Reserva incerta permanece; corrupção e lock existente bloqueiam em vez de reiniciar o orçamento. Cache segrega organização, hash da fonte, contrato, modelo e prompt; replay revalida a fonte com o código atual.
-- Estimativa contábil superior inclui tarifa de entrada sem desconto de cache, margem documentada para escrita de cache e tarifa de contexto longo quando aplicável. Não é fatura do fornecedor. Reserva cobre o máximo teórico de contexto e saída do candidato observado.
+- Não existe teto financeiro, contador de tentativas ou reserva monetária paralela no Prisma. Saldo e limites reais da conta, organização e projeto OpenAI são a autoridade financeira. Respostas do fornecedor distinguem saldo esgotado, limite de gastos e rate limit; detalhes livres do fornecedor não chegam ao cliente nem aos logs.
+- O ledger histórico `tmp/m57-parser-ia/budget.json` não é apagado nem alterado, mas deixou de participar da autorização. A estimativa contábil por resposta continua na proveniência para observação; não é fatura nem bloqueio. Cache segrega organização, hash da fonte, contrato, modelo e prompt; replay revalida a fonte com o código atual.
 - Dados completos e respostas originais somente em tmp ignorado. Proveniência local guarda modelo, hash do prompt, resposta, consumo e tempo. Versão de estruturação preparada para persistência inclui contrato/modelo/hash; evidência mantém método PDF.js separado da interpretação.
 
 ## Modelo e tratamento dos dados
@@ -6564,6 +6566,8 @@ Em 2026-09-17, por decisão explícita do Product Owner, somente o frontend foi 
 
 Decisão posterior do mesmo dia determina retirar também o Tesseract da importação automática. A revisão `ae9d46c` usa `nativeOnlyForParserIa` nas três entradas do fluxo, preserva todas as páginas PDF.js e segue diretamente ao Parser IA; falha da IA não oferece continuação local. O OCR manual por região continua disponível na revisão. Somente `prisma-web` foi reconstruído e recriado; site HTTP 200, container ativo sem restart e tela autenticada de Pessoas carregada. Supabase, gateway e workers não mudaram. Rollback preservado como `prisma-web:rollback-before-native-only-20260917`. A importação real pós-rollout permanece pendente para provar ausência de chamadas OCR e qualidade final.
 
+Decisão seguinte de 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. O código preparado preserva o ledger existente como histórico, mas não o consulta nem grava reservas; saldo e limites da conta OpenAI são a autoridade financeira. Tamanho, timeout, serialização, cache, vínculo de organização e ausência de retry permanecem. Frontend, gateway e worker precisam ser publicados/reiniciados juntos para que a produção propague mensagens sanitizadas de saldo, limite de gastos e rate limit. Enquanto esse rollout não ocorrer, o worker remoto ainda executa a regra anterior.
+
 Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF.js, verificação semântica, Paddle condicional e Parser IA antes da revisão. O worker Parser e os dois workers Paddle permanecem no PC e escutam somente loopback; o gateway 1.1.0 valida sessão/tenant e usa túnel reverso ligado apenas ao loopback da VPS. O Supabase recebeu a migration aditiva de observabilidade com RLS. Imagens de rollback anteriores foram preservadas. Evidência e limitação do smoke autenticado ficam em `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 ## Pré-requisitos
@@ -8900,9 +8904,9 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 ## Objetivo
 
-- Versão do contrato: `1.2.0`
-- Fonte da decisão / tarefa: decisões explícitas do Product Owner em 2026-09-17 para desativar primeiro o PaddleOCR e, após observar o travamento do Tesseract antes da IA, retirar todo OCR do fluxo automático. O percurso aprovado é PDF.js nativo -> Parser IA -> revisão.
-- Contratos anteriores e delta: esta versão supersede D-01, D-02, D-03, D-05, P-02 e os critérios correspondentes da versão 1.1.0. Paddle e Tesseract permanecem instalados e reversíveis, mas não podem ser chamados pela importação automática durante este teste. O OCR manual por região na revisão não faz parte desta mudança. Os guardrails de evidência, revisão humana, orçamento, autenticação e privacidade permanecem.
+- Versão do contrato: `1.3.0`
+- Fonte da decisão / tarefa: decisões explícitas do Product Owner em 2026-09-17 para desativar todo OCR do fluxo automático e, posteriormente, remover o teto financeiro interno do Parser IA. O percurso aprovado é PDF.js nativo -> Parser IA -> revisão; a autoridade financeira passa a ser exclusivamente a conta OpenAI.
+- Contratos anteriores e delta: esta versão mantém D-01 a D-07 e D-09 da versão 1.2.0, substitui D-08 e seu critério e acrescenta P-08. Paddle e Tesseract permanecem instalados e reversíveis. O ledger financeiro local permanece apenas como histórico e não pode bloquear, reservar ou autorizar chamadas. Os guardrails de tamanho, timeout, serialização, cache, ausência de retry, evidência, revisão humana, autenticação e privacidade permanecem.
 
 ## DEVE — Inegociável
 
@@ -8913,7 +8917,7 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - D-05 — A importação normal deve executar PDF.js e depois Parser IA. Falha ou indisponibilidade da IA deve ser explícita, não pode apresentar sucesso falso e não oferece continuação pela leitura local.
 - D-06 — O transporte remoto deve validar sessão, operador, papel e organização no servidor, aceitar somente contratos e rotas fixos, remover credenciais antes da máquina de inferência e não registrar currículo, prompt integral, token ou dado pessoal.
 - D-07 — O resultado continua sendo rascunho rastreável para revisão humana. Nenhuma importação aprova, publica, rejeita ou decide contratação automaticamente.
-- D-08 — A operação em produção deve manter limite de arquivo, timeout, serialização, cache privado, orçamento fechado e ausência de repetição automática de inferência não idempotente.
+- D-08 — A operação em produção deve manter limite de arquivo, timeout, serialização, cache privado e ausência de repetição automática de inferência não idempotente. O Prisma não pode impor teto financeiro, contador de tentativas ou reserva monetária próprios; saldo e limites reais informados pela OpenAI são a única autoridade financeira.
 - D-09 — A telemetria documental deve poder ser persistida na base de produção sem bloquear a importação quando for apenas observabilidade opcional.
 
 ## PROIBIDO
@@ -8925,6 +8929,7 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - P-05 — Persistir fatos sem referência verificável ao documento ou transformar falha parcial em perfil completo.
 - P-06 — Publicar perfil ou conhecimento profissional sem decisão humana explícita.
 - P-07 — Repetir automaticamente uma chamada de IA cujo custo ou execução anterior seja incerto.
+- P-08 — Bloquear uma chamada por saldo estimado, ledger local, número de tentativas ou teto financeiro definido no Prisma.
 
 ## FORA DE ESCOPO
 
@@ -8955,7 +8960,7 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - CA-D05 — Dada indisponibilidade do Parser IA, quando a importação ocorrer, então a tentativa falha explicitamente, não persiste perfil incompleto e oferece somente nova tentativa; teste de falha.
 - CA-D06 — Dada sessão ausente, origem incorreta, organização inválida, rota ou contrato desconhecido, quando a ponte receber a chamada, então rejeita antes de encaminhar dados; testes negativos do gateway.
 - CA-D07 — Dado resultado estruturado, quando persistido, então permanece aguardando revisão e não cria publicação automática; testes de persistência existentes afetados.
-- CA-D08 — Dadas chamadas simultâneas, payload excessivo, timeout ou orçamento esgotado, quando ocorrerem, então o serviço falha fechado, sem retry automático; testes de serviço e gateway.
+- CA-D08 — Dadas chamadas simultâneas, payload excessivo ou timeout, o serviço falha fechado e não repete automaticamente. Dado um ledger local ausente, corrompido ou anteriormente esgotado, a chamada elegível segue uma única vez para a OpenAI sem alterar esse histórico. Dada recusa real do fornecedor, o Prisma distingue saldo esgotado, limite de gastos, rate limit e falha técnica por códigos fixos e sanitizados; testes de serviço, gateway e cliente.
 - CA-D09 — Dada a base de produção sem a tabela de observabilidade, quando a migração for aplicada, então a tabela, RLS e contratos ficam disponíveis; verificação de migração e advisors.
 
 ## ESTADO
@@ -8968,7 +8973,8 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - Data: 2026-09-17
 - Evidência de aprovação: após receber a comparação real com timeout de 240 segundos e resultado equivalente sem Paddle, determinou: “desative a ida para o PaddleOCR do fluxo de importação de currículo” para testar sem essa etapa.
 - Evidência de aprovação do delta 1.2.0: “vamos fazer pular toda a parte que é local [...] desativar o Tesseract [...] direto da extração mais simples do PDF direto pro Parser IA”.
-- Referência imutável para o prompt: versão `1.2.0` deste contrato.
+- Evidência de aprovação do delta 1.3.0: “remova esse bloqueio do prisma. O unico bloqueio deve ser o saldo real disponível na tela de billing”.
+- Referência imutável para o prompt: versão `1.3.0` deste contrato.
 
 ---
 
@@ -9970,7 +9976,7 @@ PASS. D-001 a D-008 e P-001 a P-006 possuem implementação e prova proporcional
 
 # AoT — Qualidade da importação de currículos em produção
 
-Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.2.0.
+Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.3.0.
 
 ## Matriz de Acordos
 
@@ -9983,14 +9989,14 @@ Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.m
 | D-05 | Sequência e falha explícita sem continuação local | Parser IA é pré-condição; CTA e estado `localRetry` foram removidos | teste dirigido de UI e mensagem de falha | 17 testes dirigidos aprovados localmente | PASS | Falha oferece nova tentativa, sem persistir perfil incompleto |
 | D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
 | D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
-| D-08 | Limites, orçamento e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache, ledger US$2 e sem retry | `parserIaService.test.mjs` e gateway | budget, concorrência, timeout, corrupção, cache e resposta limitada aprovados | PASS | Ledger observado: 6 tentativas e US$0,64 contabilizados antes do rollout |
+| D-08 | Limites operacionais sem teto financeiro do Prisma e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache e uma única chamada; não lê nem grava o ledger histórico para autorizar uso | `parserIaService.test.mjs`, gateway e cliente | ledger esgotado preservado e ignorado; códigos financeiros reais sanitizados; concorrência, timeout, cache e resposta limitada aprovados | PARTIAL | Código local aprovado; rollout ainda não executado, portanto produção conserva a regra anterior |
 | D-09 | Observabilidade aditiva | Migration `20260916203000_production_resume_quality_observability` | teste SQL e verificação conectada | migration aplicada; RLS ativo, 2 policies e 5 colunas estruturais presentes | PASS | Advisors não indicaram falha nova nesta tabela |
 
 ## Proibições verificadas
 
 | ID | Guardrail | Teste negativo | Evidência | Status |
 | --- | --- | --- | --- | --- |
-| P-01 a P-07 | Sem falso positivo por caracteres, chamada Paddle durante o teste, segredo server-side no bundle, organização confiada ao cliente, fato sem referência, publicação ou retry automático | gates negativos de domínio, gateway, parser e person-flow | 12 testes de roteamento aprovados; bundle em `baseline`; endpoints recusaram requisição sem contexto autorizado | PASS |
+| P-01 a P-08 | Sem falso positivo por caracteres, chamada Paddle/Tesseract, segredo server-side no bundle, organização confiada ao cliente, fato sem referência, publicação, retry automático ou bloqueio financeiro local | gates negativos de domínio, gateway, parser e person-flow | ledger histórico esgotado não bloqueia nem é alterado; transporte só encaminha códigos fixos allowlisted | PARTIAL |
 
 ## Fora de escopo preservado
 
@@ -10082,6 +10088,15 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Rollout concluído no único ambiente remoto a partir de `ae9d46c`: checkout avançou por fast-forward e somente `prisma-web` foi reconstruído/recriado com `baseline`, Parser IA `hosted` e identificação da revisão. Supabase, gateway e workers não mudaram.
 - Smoke pós-rollout: site HTTP 200; container `running`, zero restart; tela autenticada de Pessoas carregada. Imagem anterior preservada como `prisma-web:rollback-before-native-only-20260917`.
 - Inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.
+
+## Remoção do teto financeiro interno — 2026-09-17
+
+- Decisão do PO incorporada no contrato 1.3.0: nenhuma chamada pode ser barrada por `budget.json`, teto de US$ 2, número local de tentativas ou reserva estimada. A conta OpenAI é a autoridade financeira.
+- O Parser IA não lê nem grava o ledger histórico. Um teste cria um ledger já esgotado, confirma uma única chamada ao fornecedor e comprova que o arquivo permanece idêntico. Ausência de ledger também não cria reserva.
+- Tamanho, timeout, lock, serialização, cache, vínculo organização/hash e ausência de retry permanecem. A estimativa de custo continua apenas na proveniência da resposta concluída.
+- Erros reais são reduzidos a códigos fixos: saldo/crédito, limite de gastos, rate limit, credencial ou falha técnica. O gateway encaminha somente a allowlist; conteúdo livre do fornecedor é descartado. A interface apresenta orientação específica sem detalhes técnicos ou dados do currículo.
+- Validação local: build TypeScript raiz PASS; typecheck web PASS; lint PASS em 513 arquivos; build web PASS com 3.238 módulos; 33 testes dirigidos de Parser/gateway PASS; 230 testes do person-flow PASS. Nenhuma chamada real à OpenAI foi feita nessa validação.
+- Rollout ainda não executado. Até frontend, gateway e worker serem atualizados/reiniciados, produção conserva o bloqueio de US$ 2. D-08 e P-08 estão `PASS` no código local e `NOT TESTED` em produção; o status consolidado permanece `PARTIAL`.
 
 ---
 
@@ -10645,12 +10660,12 @@ Implementar D-001 a D-008 e provar P-001 a P-006. Preservar exatamente cinco fon
 
 # Prompt de Execução — Qualidade da importação de currículos em produção
 
-Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, versão `1.2.0`, sem reinterpretar os acordos.
+Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, versão `1.3.0`, sem reinterpretar os acordos.
 
 ## Entendimento obrigatório
 
-- Implementar D-01 a D-09 na versão 1.2.0: validação e leitura nativa PDF.js, nenhum tráfego ou carregamento Paddle/Tesseract na importação automática, Parser IA obrigatório, falha explícita sem continuação local, transporte autenticado, revisão humana, limites operacionais e observabilidade.
-- Impedir P-01 a P-07: falso positivo pela leitura nativa, chamada Paddle/Tesseract durante o teste, exposição de segredos, confiança na organização do cliente, fatos sem evidência, publicação automática e retry incerto.
+- Implementar D-01 a D-09 na versão 1.3.0: validação e leitura nativa PDF.js, nenhum tráfego ou carregamento Paddle/Tesseract na importação automática, Parser IA obrigatório, falha explícita sem continuação local, transporte autenticado, revisão humana, limites operacionais sem teto financeiro interno e observabilidade.
+- Impedir P-01 a P-08: falso positivo pela leitura nativa, chamada Paddle/Tesseract durante o teste, exposição de segredos, confiança na organização do cliente, fatos sem evidência, publicação automática, retry incerto e bloqueio financeiro por ledger/teto do Prisma.
 - Preservar F-01 a F-05: não redesenhar revisão, não trocar fornecedor/modelo, não reprocessar em massa, não converter a ponte e não remover a instalação Paddle.
 - Usar A-01 a A-05 somente para decisões de implementação que não alterem o comportamento aprovado.
 
@@ -10659,11 +10674,12 @@ Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, ve
 1. Registrar a decisão arquitetural e versionar os contratos afetados.
 2. Preservar a imagem web ativa como rollback verificável.
 3. Construir somente o frontend com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`, preservando a IA e fazendo todas as entradas de importação usarem o modo nativo exclusivo para Parser IA, sem Paddle ou Tesseract.
-4. Publicar o frontend no único ambiente remoto sem alterar Supabase, gateway, workers, modelos ou volumes.
-5. Confirmar HTTP, versão construída, Parser IA e ausência de exposição pública dos workers.
-6. Executar testes direcionados, build, verificação de contexto e revisão de segurança.
-7. Confirmar por rede e telemetria que uma importação real não carregou Tesseract, não chamou Paddle e continuou usando o Parser IA.
-8. Preencher `docs/qa/aot-production-resume-quality-pipeline.md`, revisar o diff, commitar e enviar a branch autorizada.
+4. Remover a consulta e a reserva do ledger financeiro local, preservar o arquivo histórico sem alteração e propagar somente códigos fixos de saldo, limite de gastos, rate limit e falha técnica da OpenAI.
+5. Publicar frontend, gateway e Parser IA no único ambiente remoto sem alterar Supabase, modelos Paddle ou volumes.
+6. Confirmar HTTP, versão construída, Parser IA e ausência de exposição pública dos workers.
+7. Executar testes direcionados, build, verificação de contexto e revisão de segurança.
+8. Confirmar por rede e telemetria que uma importação real não carregou Tesseract, não chamou Paddle, chegou ao Parser IA e não foi barrada pelo ledger histórico.
+9. Preencher `docs/qa/aot-production-resume-quality-pipeline.md`, revisar o diff, commitar e enviar a branch autorizada.
 
 Não declarar conclusão se qualquer D-* obrigatório não estiver `PASS`, se uma proibição for violada ou se não houver evidência tecnicamente disponível.
 

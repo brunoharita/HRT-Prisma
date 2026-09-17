@@ -15,6 +15,22 @@ export function parserIaEnabled(): boolean {
   return parserIaMode() !== "disabled";
 }
 
+const parserIaMessages: Record<string, string> = {
+  PARSER_CREDIT_BALANCE_EXHAUSTED: "O saldo de créditos da OpenAI terminou. Adicione créditos na tela Billing e tente novamente.",
+  PARSER_SPEND_LIMIT_EXCEEDED: "A OpenAI recusou a chamada porque o limite de gastos do projeto ou da organização foi atingido. Ajuste esse limite na OpenAI e tente novamente.",
+  PARSER_RATE_LIMIT: "A OpenAI atingiu um limite temporário de chamadas. Aguarde alguns instantes e tente novamente.",
+  PARSER_KEY_MISSING: "A credencial da OpenAI não está configurada no Parser IA.",
+  PARSER_KEY_REJECTED: "A OpenAI recusou a credencial configurada no Parser IA.",
+  PARSER_BUSY: "Já existe um currículo sendo interpretado pela IA. Aguarde a conclusão e tente novamente.",
+  worker_busy: "Já existe um currículo sendo processado. Aguarde a conclusão e tente novamente.",
+};
+
+export function parserIaErrorMessage(code?: string): string {
+  return code && parserIaMessages[code]
+    ? parserIaMessages[code]
+    : "Não foi possível concluir a interpretação por IA. Nenhum campo foi preenchido por essa tentativa. Tente novamente.";
+}
+
 export async function prepareParserIa(input: ProcessedDocumentInput, organizationId: string): Promise<ProcessedDocumentInput> {
   if (!parserIaEnabled()) return input;
   const controller = new AbortController();
@@ -39,7 +55,11 @@ export async function prepareParserIa(input: ProcessedDocumentInput, organizatio
       method: "POST", headers,
       body: JSON.stringify({ organizationId, sourceSha256: input.sha256, pdfBase64: btoa(binary) }), signal: controller.signal,
     });
-    if (!response.ok) throw new Error("PARSER_UNAVAILABLE");
+    if (!response.ok) {
+      const failure = await response.json().catch(() => null) as { error?: unknown } | null;
+      const code = typeof failure?.error === "string" ? failure.error : undefined;
+      throw new Error(`PARSER_USER_ERROR:${parserIaErrorMessage(code)}`);
+    }
     const output = await response.json() as { pages: ProcessedDocumentInput["pages"]; result: NonNullable<ProcessedDocumentInput["parserIa"]> };
     const received = output.result;
     if (received?.version !== PARSER_IA_VERSION || received.organizationId !== organizationId || received.sourceSha256 !== input.sha256 || !Array.isArray(output.pages) || output.pages.length !== input.pages.length) throw new Error("PARSER_BINDING_INVALID");
@@ -47,7 +67,10 @@ export async function prepareParserIa(input: ProcessedDocumentInput, organizatio
     const prepared = { ...input, pages: output.pages, nativePageCount: output.pages.length, ocrPageCount: 0, parserIa: parsed };
     preparedParserIa(prepared, organizationId);
     return prepared;
-  } catch {
-    throw new Error("Não foi possível concluir a interpretação por IA. Nenhum campo foi preenchido por essa tentativa. Tente novamente.");
+  } catch (error) {
+    const message = error instanceof Error && error.message.startsWith("PARSER_USER_ERROR:")
+      ? error.message.slice("PARSER_USER_ERROR:".length)
+      : parserIaErrorMessage();
+    throw new Error(message);
   } finally { window.clearTimeout(timer); }
 }

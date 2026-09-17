@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.5
+version: 2.33.6
 last_verified: 2026-09-17
 ---
 
@@ -15,6 +15,8 @@ Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolv
 Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão desativadas no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O bundle público foi reconstruído do commit `9dfa4d4` com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; o próprio asset publicado expõe essas flags e o commit. Site e tela autenticada de importação responderam, enquanto gateway, código, containers, modelos e volumes Paddle permaneceram instalados para reversão futura. A imagem anterior foi preservada como `prisma-web:rollback-before-baseline-20260917`. Ainda falta o Product Owner executar a importação real pós-rollout para validar tempo e qualidade sem criar outro registro por iniciativa do agente.
 
 Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática pula também o Tesseract e segue da leitura nativa PDF.js diretamente ao Parser IA. A revisão `ae9d46c` foi implantada no único ambiente remoto: nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Somente o frontend foi reconstruído; site respondeu HTTP 200, container ficou estável sem restart e a tela autenticada de Pessoas carregou. A imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. Ainda falta uma importação real pós-rollout para validar rede, tempo e qualidade.
+
+Nova decisão do Product Owner em 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. A implementação local deixa de ler ou gravar `tmp/m57-parser-ia/budget.json` para autorizar chamadas, preserva o arquivo existente apenas como histórico e mantém tamanho, timeout, serialização, cache e ausência de retry. A conta OpenAI passa a ser a única autoridade financeira; o serviço e o gateway propagam apenas códigos fixos e sanitizados para distinguir saldo esgotado, limite de gastos, rate limit e falha técnica. Esta revisão ainda não foi implantada: o runtime remoto continua sujeito ao bloqueio antigo até rollout e reinício explícitos.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 

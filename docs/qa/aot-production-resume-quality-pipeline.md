@@ -1,6 +1,6 @@
 # AoT — Qualidade da importação de currículos em produção
 
-Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.2.0.
+Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.3.0.
 
 ## Matriz de Acordos
 
@@ -13,14 +13,14 @@ Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.m
 | D-05 | Sequência e falha explícita sem continuação local | Parser IA é pré-condição; CTA e estado `localRetry` foram removidos | teste dirigido de UI e mensagem de falha | 17 testes dirigidos aprovados localmente | PASS | Falha oferece nova tentativa, sem persistir perfil incompleto |
 | D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
 | D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
-| D-08 | Limites, orçamento e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache, ledger US$2 e sem retry | `parserIaService.test.mjs` e gateway | budget, concorrência, timeout, corrupção, cache e resposta limitada aprovados | PASS | Ledger observado: 6 tentativas e US$0,64 contabilizados antes do rollout |
+| D-08 | Limites operacionais sem teto financeiro do Prisma e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache e uma única chamada; não lê nem grava o ledger histórico para autorizar uso | `parserIaService.test.mjs`, gateway e cliente | ledger esgotado preservado e ignorado; códigos financeiros reais sanitizados; concorrência, timeout, cache e resposta limitada aprovados | PARTIAL | Código local aprovado; rollout ainda não executado, portanto produção conserva a regra anterior |
 | D-09 | Observabilidade aditiva | Migration `20260916203000_production_resume_quality_observability` | teste SQL e verificação conectada | migration aplicada; RLS ativo, 2 policies e 5 colunas estruturais presentes | PASS | Advisors não indicaram falha nova nesta tabela |
 
 ## Proibições verificadas
 
 | ID | Guardrail | Teste negativo | Evidência | Status |
 | --- | --- | --- | --- | --- |
-| P-01 a P-07 | Sem falso positivo por caracteres, chamada Paddle durante o teste, segredo server-side no bundle, organização confiada ao cliente, fato sem referência, publicação ou retry automático | gates negativos de domínio, gateway, parser e person-flow | 12 testes de roteamento aprovados; bundle em `baseline`; endpoints recusaram requisição sem contexto autorizado | PASS |
+| P-01 a P-08 | Sem falso positivo por caracteres, chamada Paddle/Tesseract, segredo server-side no bundle, organização confiada ao cliente, fato sem referência, publicação, retry automático ou bloqueio financeiro local | gates negativos de domínio, gateway, parser e person-flow | ledger histórico esgotado não bloqueia nem é alterado; transporte só encaminha códigos fixos allowlisted | PARTIAL |
 
 ## Fora de escopo preservado
 
@@ -112,3 +112,12 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Rollout concluído no único ambiente remoto a partir de `ae9d46c`: checkout avançou por fast-forward e somente `prisma-web` foi reconstruído/recriado com `baseline`, Parser IA `hosted` e identificação da revisão. Supabase, gateway e workers não mudaram.
 - Smoke pós-rollout: site HTTP 200; container `running`, zero restart; tela autenticada de Pessoas carregada. Imagem anterior preservada como `prisma-web:rollback-before-native-only-20260917`.
 - Inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.
+
+## Remoção do teto financeiro interno — 2026-09-17
+
+- Decisão do PO incorporada no contrato 1.3.0: nenhuma chamada pode ser barrada por `budget.json`, teto de US$ 2, número local de tentativas ou reserva estimada. A conta OpenAI é a autoridade financeira.
+- O Parser IA não lê nem grava o ledger histórico. Um teste cria um ledger já esgotado, confirma uma única chamada ao fornecedor e comprova que o arquivo permanece idêntico. Ausência de ledger também não cria reserva.
+- Tamanho, timeout, lock, serialização, cache, vínculo organização/hash e ausência de retry permanecem. A estimativa de custo continua apenas na proveniência da resposta concluída.
+- Erros reais são reduzidos a códigos fixos: saldo/crédito, limite de gastos, rate limit, credencial ou falha técnica. O gateway encaminha somente a allowlist; conteúdo livre do fornecedor é descartado. A interface apresenta orientação específica sem detalhes técnicos ou dados do currículo.
+- Validação local: build TypeScript raiz PASS; typecheck web PASS; lint PASS em 513 arquivos; build web PASS com 3.238 módulos; 33 testes dirigidos de Parser/gateway PASS; 230 testes do person-flow PASS. Nenhuma chamada real à OpenAI foi feita nessa validação.
+- Rollout ainda não executado. Até frontend, gateway e worker serem atualizados/reiniciados, produção conserva o bloqueio de US$ 2. D-08 e P-08 estão `PASS` no código local e `NOT TESTED` em produção; o status consolidado permanece `PARTIAL`.

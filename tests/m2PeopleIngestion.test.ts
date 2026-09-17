@@ -79,6 +79,9 @@ test("resume imports go from native PDF reading directly to Parser IA without lo
   assert.match(workspacePage, /nativeOnlyForParserIa: true/);
   assert.match(service, /resumeFailedAiIntake[\s\S]*nativeOnlyForParserIa: true/);
   assert.doesNotMatch(parserClient, /leitura local disponível/);
+  assert.match(parserClient, /PARSER_CREDIT_BALANCE_EXHAUSTED/);
+  assert.match(parserClient, /PARSER_SPEND_LIMIT_EXCEEDED/);
+  assert.match(parserClient, /PARSER_RATE_LIMIT/);
 });
 
 test("M2-B rejects a file whose signature is not PDF before parsing or OCR", async () => {

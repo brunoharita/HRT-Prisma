@@ -1,6 +1,6 @@
 # M5.7 Parser IA
 
-Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.0.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites do piloto.
+Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.3.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites operacionais.
 
 ## Funcionamento
 
@@ -16,7 +16,7 @@ Decisão temporária de 2026-09-17: o fluxo automático valida o PDF, executa so
 
 ## Executar localmente
 
-Ativação autorizada para uso direto local em 2026-09-12. Na raiz oficial, `pnpm run dev:ia` inicia a interface e o parser no mesmo processo, ativa IA somente em DEV e encerra ambos com Ctrl+C. O comando preserva o ledger existente e falha se a chave estiver ausente ou as portas ocupadas. Alternativa com processos separados:
+Ativação autorizada para uso direto local em 2026-09-12. Na raiz oficial, `pnpm run dev:ia` inicia a interface e o parser no mesmo processo, ativa IA somente em DEV e encerra ambos com Ctrl+C. O comando preserva qualquer ledger histórico, mas não o consulta para autorizar chamadas; falha se a chave estiver ausente ou as portas ocupadas. Alternativa com processos separados:
 
 1. `OPENAI_API_KEY` em `.env.local` do backend, sem prefixo VITE, ignorado pelo Git.
 2. `pnpm run parser:ia:local` inicia somente `127.0.0.1:8787`; o segredo não é enviado ao cliente.
@@ -30,8 +30,8 @@ Não abrir serviço em 0.0.0.0, não copiar `.env.local`, tmp, PDFs ou referênc
 - PDF 15 MB, 30 páginas; 12.000 spans e 250.000 caracteres; leitura PDF com prazo de 15 s, chamada API 120 s, cliente 135 s, sem retries ou redirects externos.
 - PDF exclusivamente imagem não ganha evidência inventada. Durante o teste sem OCR automático, o Parser IA recebe o PDF completo; se não devolver fatos com referências aceitas, a rota falha explicitamente. Paddle e Tesseract permanecem instalados, mas não são alternativas automáticas nesse percurso.
 - JSON de entrada HTTP 22 MB e saída do fornecedor limitada durante a leitura a 4 MB. Serviço valida método, path, Host, Origin e header; apenas loopback, uma operação por vez e lock de diretório.
-- Ledger privado `tmp/m57-parser-ia/budget.json`: teto US$ 2, máximo 10 chamadas, reserva US$ 0,60 antes da rede. Reserva incerta permanece; corrupção e lock existente bloqueiam em vez de reiniciar o orçamento. Cache segrega organização, hash da fonte, contrato, modelo e prompt; replay revalida a fonte com o código atual.
-- Estimativa contábil superior inclui tarifa de entrada sem desconto de cache, margem documentada para escrita de cache e tarifa de contexto longo quando aplicável. Não é fatura do fornecedor. Reserva cobre o máximo teórico de contexto e saída do candidato observado.
+- Não existe teto financeiro, contador de tentativas ou reserva monetária paralela no Prisma. Saldo e limites reais da conta, organização e projeto OpenAI são a autoridade financeira. Respostas do fornecedor distinguem saldo esgotado, limite de gastos e rate limit; detalhes livres do fornecedor não chegam ao cliente nem aos logs.
+- O ledger histórico `tmp/m57-parser-ia/budget.json` não é apagado nem alterado, mas deixou de participar da autorização. A estimativa contábil por resposta continua na proveniência para observação; não é fatura nem bloqueio. Cache segrega organização, hash da fonte, contrato, modelo e prompt; replay revalida a fonte com o código atual.
 - Dados completos e respostas originais somente em tmp ignorado. Proveniência local guarda modelo, hash do prompt, resposta, consumo e tempo. Versão de estruturação preparada para persistência inclui contrato/modelo/hash; evidência mantém método PDF.js separado da interpretação.
 
 ## Modelo e tratamento dos dados

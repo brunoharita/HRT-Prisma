@@ -25,7 +25,7 @@ try {
   web = await createServer({ configFile: resolve(root, "web/vite.config.ts"), server: { host: "localhost", port: 5555, strictPort: true } });
   await web.listen();
   console.log("Prisma com IA: http://localhost:5555/profiles/import");
-  console.log("Uso local; banco Supabase configurado; limite de IA US$2 por ledger existente.");
+  console.log("Uso local; banco Supabase configurado; saldo e limites são controlados pela conta OpenAI.");
   for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => { void close().then(() => process.exit(0)); });
 } catch {
   console.error("Não foi possível iniciar o Prisma com IA. Confira a chave local e se as portas 5555/8787 estão livres.");

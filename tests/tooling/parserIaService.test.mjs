@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { once } from "node:events";
 import { requestLoopbackWorker } from "../../services/paddle-gateway/gateway.mjs";
-import { createParserHttpServer, createParserService, readParserPdf, parserRequest, parseProviderResponse, safeParserError, allowedLocalRequest, readLimitedProviderBody, PARSER_MODEL } from "../../scripts/parser-ia-service.mjs";
+import { createParserHttpServer, createParserService, readParserPdf, parserRequest, parseProviderResponse, providerFailureCode, safeParserError, allowedLocalRequest, readLimitedProviderBody, PARSER_MODEL } from "../../scripts/parser-ia-service.mjs";
 import { structureParserIa, preparedParserIa, parserIaMethodVersion } from "../../dist/web/src/domain/parserIa.js";
 
 function syntheticPdf() {
@@ -63,26 +63,31 @@ test("M5.7 same source is cached only within its organization and prompt", async
   const first = await parse(input); const second = await parse(input);
   assert.equal(first.cached, false); assert.equal(second.cached, true); assert.equal(calls, 1);
   await parse({ ...input, organizationId: "different-org" }); assert.equal(calls, 2);
-  const ledger = await readFile(join(dir, "budget.json"), "utf8");
-  assert.equal(ledger.includes("Synthetic Person"), false); assert.equal(ledger.includes("synthetic-secret"), false);
+  await assert.rejects(readFile(join(dir, "budget.json"), "utf8"), { code: "ENOENT" });
 });
-test("M5.7 provider errors are sanitized, not retried, and retain reservation", async () => {
+test("M5.7 provider errors are sanitized, not retried, and create no local budget reservation", async () => {
   const dir = await directory(); let calls = 0;
   const parse = createParserService({ directory: dir, keyProvider: async () => "synthetic-secret", fetchImpl: async () => { calls++; throw new Error("private resume and secret"); } });
   await assert.rejects(parse(input), /^Error: PARSER_PROVIDER_FAILED$/); assert.equal(calls, 1);
-  const ledger = JSON.parse(await readFile(join(dir, "budget.json"), "utf8")); assert.equal(ledger.attempts[0].accountedUsd, 0.6);
+  await assert.rejects(readFile(join(dir, "budget.json"), "utf8"), { code: "ENOENT" });
   assert.equal(safeParserError(new Error("secret")), "PARSER_PROVIDER_FAILED");
 });
-test("M5.7 persistent budget prevents further requests after uncertain spending", async () => {
+test("M5.7 legacy exhausted budget is preserved but no longer blocks the provider", async () => {
   const dir = await directory(); let calls = 0;
-  await writeFile(join(dir, "budget.json"), JSON.stringify({ version: 1, budgetUsd: 2, attempts: [1, 2, 3].map(() => ({ accountedUsd: 0.6 })) }));
-  const parse = createParserService({ directory: dir, keyProvider: async () => "synthetic-secret", fetchImpl: async () => { calls++; } });
-  await assert.rejects(parse(input), /BUDGET_EXHAUSTED/); assert.equal(calls, 0);
+  const legacy = JSON.stringify({ version: 1, budgetUsd: 2, attempts: [1, 2, 3].map(() => ({ accountedUsd: 0.6 })) });
+  await writeFile(join(dir, "budget.json"), legacy);
+  const parse = createParserService({ directory: dir, keyProvider: async () => "synthetic-secret", fetchImpl: async () => { calls++; return new Response(JSON.stringify(provider())); } });
+  await parse(input); assert.equal(calls, 1);
+  assert.equal(await readFile(join(dir, "budget.json"), "utf8"), legacy);
 });
-test("M5.7 corrupted ledger cannot reset the budget", async () => {
-  const dir = await directory(); await writeFile(join(dir, "budget.json"), "{}");
-  const parse = createParserService({ directory: dir, keyProvider: async () => "synthetic-secret", fetchImpl: async () => { throw new Error("unexpected call"); } });
-  await assert.rejects(parse(input), /LEDGER_INVALID/);
+test("M5.7 provider billing and rate errors are classified without exposing response details", async () => {
+  assert.equal(providerFailureCode(429, JSON.stringify({ error: { code: "credit_balance_exhausted", message: "private" } })), "PARSER_CREDIT_BALANCE_EXHAUSTED");
+  assert.equal(providerFailureCode(429, JSON.stringify({ error: { code: "insufficient_quota", message: "private" } })), "PARSER_CREDIT_BALANCE_EXHAUSTED");
+  assert.equal(providerFailureCode(429, JSON.stringify({ error: { code: "billing_hard_limit_reached", message: "private" } })), "PARSER_SPEND_LIMIT_EXCEEDED");
+  assert.equal(providerFailureCode(429, JSON.stringify({ error: { code: "project_spend_limit_exceeded", message: "private" } })), "PARSER_SPEND_LIMIT_EXCEEDED");
+  assert.equal(providerFailureCode(429, JSON.stringify({ error: { code: "rate_limit_exceeded", message: "private" } })), "PARSER_RATE_LIMIT");
+  assert.equal(providerFailureCode(401, "private"), "PARSER_KEY_REJECTED");
+  assert.equal(providerFailureCode(500, "private"), "PARSER_PROVIDER_FAILED");
 });
 test("M5.7 timeout aborts provider without exposing its error", async () => {
   const parse = createParserService({ directory: await directory(), timeoutMs: 10, keyProvider: async () => "synthetic-secret", fetchImpl: async (_url, { signal }) => new Promise((_resolve, reject) => signal.addEventListener("abort", () => reject(new Error("secret timeout")))) });

@@ -13,6 +13,11 @@ const ROUTES = new Map([
   ["/document-intelligence-vl/layout-parsing", { target: "http://127.0.0.1:18081/layout-parsing", kind: "recovery" }],
   ["/parser-ia-hosted/parse", { target: "http://127.0.0.1:18787/parse", kind: "parser" }],
 ]);
+const FORWARDED_PARSER_ERRORS = new Set([
+  "PARSER_BUSY", "PARSER_KEY_MISSING", "PARSER_KEY_REJECTED", "PARSER_CREDIT_BALANCE_EXHAUSTED",
+  "PARSER_SPEND_LIMIT_EXCEEDED", "PARSER_RATE_LIMIT", "PARSER_PROVIDER_FAILED", "PARSER_INCOMPLETE_RESPONSE",
+  "PARSER_REFUSED", "PARSER_RESPONSE_INVALID", "PARSER_RESPONSE_LIMIT", "PARSER_USAGE_INVALID", "PARSER_TIMEOUT",
+]);
 
 class HttpFailure extends Error {
   constructor(status, code) { super(code); this.status = status; }
@@ -80,6 +85,17 @@ async function readBody(request, maximum = MAX_BODY_BYTES) {
   for await (const chunk of request) {
     length += chunk.length;
     if (length > maximum) throw new HttpFailure(413, "body_too_large");
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+async function readWorkerBody(response, maximum) {
+  const chunks = [];
+  let length = 0;
+  for await (const chunk of response.body) {
+    length += chunk.length;
+    if (length > maximum) throw new HttpFailure(502, "worker_response_too_large");
     chunks.push(chunk);
   }
   return Buffer.concat(chunks).toString("utf8");
@@ -164,16 +180,17 @@ export function createGateway({ authorize, fetchImpl = requestLoopbackWorker, or
         holdWorker = true; // Disconnect cannot prove that Paddle cancelled its CPU work.
         throw new HttpFailure(controller.signal.aborted ? 504 : 502, "worker_unavailable");
       }
-      if (!upstream.ok) throw new HttpFailure(502, "worker_failed");
-      if (!upstream.headers.get("content-type")?.includes("application/json")) throw new HttpFailure(502, "worker_invalid_response");
-      const chunks = [];
-      let length = 0;
-      for await (const chunk of upstream.body) {
-        length += chunk.length;
-        if (length > 64 * 1024 * 1024) { controller.abort(); throw new HttpFailure(502, "worker_response_too_large"); }
-        chunks.push(chunk);
+      if (!upstream.ok) {
+        if (route.kind === "parser" && upstream.status === 422 && upstream.headers.get("content-type")?.includes("application/json")) {
+          const rawError = await readWorkerBody(upstream, 4096);
+          let parserError;
+          try { parserError = JSON.parse(rawError)?.error; } catch { /* Sanitized below. */ }
+          if (FORWARDED_PARSER_ERRORS.has(parserError)) { reply(422, { error: parserError }); return; }
+        }
+        throw new HttpFailure(502, "worker_failed");
       }
-      const result = Buffer.concat(chunks).toString("utf8");
+      if (!upstream.headers.get("content-type")?.includes("application/json")) throw new HttpFailure(502, "worker_invalid_response");
+      const result = await readWorkerBody(upstream, 64 * 1024 * 1024).catch((error) => { controller.abort(); throw error; });
       try { JSON.parse(result); } catch { throw new HttpFailure(502, "worker_invalid_json"); }
       status = 200;
       response.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" });

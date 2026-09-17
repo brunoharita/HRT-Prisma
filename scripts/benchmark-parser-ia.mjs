@@ -84,7 +84,7 @@ export async function main(args) {
       console.log(JSON.stringify(reports.at(-1)));
     } catch (error) {
       reports.push({ id: item.id, status: "BLOCKED", reason: safeParserError(error) }); console.log(JSON.stringify(reports.at(-1)));
-      if (["PARSER_KEY_REJECTED", "PARSER_RATE_LIMIT", "PARSER_BUDGET_EXHAUSTED", "PARSER_PROVIDER_FAILED"].includes(safeParserError(error))) break;
+      if (["PARSER_KEY_REJECTED", "PARSER_CREDIT_BALANCE_EXHAUSTED", "PARSER_SPEND_LIMIT_EXCEEDED", "PARSER_RATE_LIMIT", "PARSER_PROVIDER_FAILED"].includes(safeParserError(error))) break;
     }
   }
   await writeFile(resolve(output, "report.json"), JSON.stringify({ movement: "M5.7 Parser IA", reports, limitations: ["known_regression_cases_not_blind", "mechanical_comparison_not_human_semantic_approval", "not_supabase_or_hostinger_rollout"] }, null, 2));

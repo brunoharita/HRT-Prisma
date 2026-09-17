@@ -2,9 +2,9 @@
 
 ## Objetivo
 
-- Versão do contrato: `1.2.0`
-- Fonte da decisão / tarefa: decisões explícitas do Product Owner em 2026-09-17 para desativar primeiro o PaddleOCR e, após observar o travamento do Tesseract antes da IA, retirar todo OCR do fluxo automático. O percurso aprovado é PDF.js nativo -> Parser IA -> revisão.
-- Contratos anteriores e delta: esta versão supersede D-01, D-02, D-03, D-05, P-02 e os critérios correspondentes da versão 1.1.0. Paddle e Tesseract permanecem instalados e reversíveis, mas não podem ser chamados pela importação automática durante este teste. O OCR manual por região na revisão não faz parte desta mudança. Os guardrails de evidência, revisão humana, orçamento, autenticação e privacidade permanecem.
+- Versão do contrato: `1.3.0`
+- Fonte da decisão / tarefa: decisões explícitas do Product Owner em 2026-09-17 para desativar todo OCR do fluxo automático e, posteriormente, remover o teto financeiro interno do Parser IA. O percurso aprovado é PDF.js nativo -> Parser IA -> revisão; a autoridade financeira passa a ser exclusivamente a conta OpenAI.
+- Contratos anteriores e delta: esta versão mantém D-01 a D-07 e D-09 da versão 1.2.0, substitui D-08 e seu critério e acrescenta P-08. Paddle e Tesseract permanecem instalados e reversíveis. O ledger financeiro local permanece apenas como histórico e não pode bloquear, reservar ou autorizar chamadas. Os guardrails de tamanho, timeout, serialização, cache, ausência de retry, evidência, revisão humana, autenticação e privacidade permanecem.
 
 ## DEVE — Inegociável
 
@@ -15,7 +15,7 @@
 - D-05 — A importação normal deve executar PDF.js e depois Parser IA. Falha ou indisponibilidade da IA deve ser explícita, não pode apresentar sucesso falso e não oferece continuação pela leitura local.
 - D-06 — O transporte remoto deve validar sessão, operador, papel e organização no servidor, aceitar somente contratos e rotas fixos, remover credenciais antes da máquina de inferência e não registrar currículo, prompt integral, token ou dado pessoal.
 - D-07 — O resultado continua sendo rascunho rastreável para revisão humana. Nenhuma importação aprova, publica, rejeita ou decide contratação automaticamente.
-- D-08 — A operação em produção deve manter limite de arquivo, timeout, serialização, cache privado, orçamento fechado e ausência de repetição automática de inferência não idempotente.
+- D-08 — A operação em produção deve manter limite de arquivo, timeout, serialização, cache privado e ausência de repetição automática de inferência não idempotente. O Prisma não pode impor teto financeiro, contador de tentativas ou reserva monetária próprios; saldo e limites reais informados pela OpenAI são a única autoridade financeira.
 - D-09 — A telemetria documental deve poder ser persistida na base de produção sem bloquear a importação quando for apenas observabilidade opcional.
 
 ## PROIBIDO
@@ -27,6 +27,7 @@
 - P-05 — Persistir fatos sem referência verificável ao documento ou transformar falha parcial em perfil completo.
 - P-06 — Publicar perfil ou conhecimento profissional sem decisão humana explícita.
 - P-07 — Repetir automaticamente uma chamada de IA cujo custo ou execução anterior seja incerto.
+- P-08 — Bloquear uma chamada por saldo estimado, ledger local, número de tentativas ou teto financeiro definido no Prisma.
 
 ## FORA DE ESCOPO
 
@@ -57,7 +58,7 @@
 - CA-D05 — Dada indisponibilidade do Parser IA, quando a importação ocorrer, então a tentativa falha explicitamente, não persiste perfil incompleto e oferece somente nova tentativa; teste de falha.
 - CA-D06 — Dada sessão ausente, origem incorreta, organização inválida, rota ou contrato desconhecido, quando a ponte receber a chamada, então rejeita antes de encaminhar dados; testes negativos do gateway.
 - CA-D07 — Dado resultado estruturado, quando persistido, então permanece aguardando revisão e não cria publicação automática; testes de persistência existentes afetados.
-- CA-D08 — Dadas chamadas simultâneas, payload excessivo, timeout ou orçamento esgotado, quando ocorrerem, então o serviço falha fechado, sem retry automático; testes de serviço e gateway.
+- CA-D08 — Dadas chamadas simultâneas, payload excessivo ou timeout, o serviço falha fechado e não repete automaticamente. Dado um ledger local ausente, corrompido ou anteriormente esgotado, a chamada elegível segue uma única vez para a OpenAI sem alterar esse histórico. Dada recusa real do fornecedor, o Prisma distingue saldo esgotado, limite de gastos, rate limit e falha técnica por códigos fixos e sanitizados; testes de serviço, gateway e cliente.
 - CA-D09 — Dada a base de produção sem a tabela de observabilidade, quando a migração for aplicada, então a tabela, RLS e contratos ficam disponíveis; verificação de migração e advisors.
 
 ## ESTADO
@@ -70,4 +71,5 @@
 - Data: 2026-09-17
 - Evidência de aprovação: após receber a comparação real com timeout de 240 segundos e resultado equivalente sem Paddle, determinou: “desative a ida para o PaddleOCR do fluxo de importação de currículo” para testar sem essa etapa.
 - Evidência de aprovação do delta 1.2.0: “vamos fazer pular toda a parte que é local [...] desativar o Tesseract [...] direto da extração mais simples do PDF direto pro Parser IA”.
-- Referência imutável para o prompt: versão `1.2.0` deste contrato.
+- Evidência de aprovação do delta 1.3.0: “remova esse bloqueio do prisma. O unico bloqueio deve ser o saldo real disponível na tela de billing”.
+- Referência imutável para o prompt: versão `1.3.0` deste contrato.
