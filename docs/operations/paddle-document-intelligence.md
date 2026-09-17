@@ -1,5 +1,9 @@
 # Operação local do Paddle Document Intelligence
 
+## Diagnóstico de desempenho - 2026-09-17
+
+Testes autônomos autorizados, isolados e sem IA ou banco encontraram configurações candidatas mais rápidas. Com limites completos das bibliotecas de CPU, os modelos originais concluíram cinco páginas em 162,20 s; a troca apenas do reconhecedor latino concluiu em 110,05 s; modelos leves oficiais concluíram em 44,76 s. Estes tempos são de diagnóstico página a página, não da importação hospedada. Configuração de produção não foi alterada; equivalência estrutural e integração ainda precisam de validação. Evidências, opções e limites: [diagnóstico de desempenho](paddle-performance-diagnostic-2026-09-17.md).
+
 ## Ponte temporária do frontend hospedado — 2026-09-16
 
 Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.
@@ -23,7 +27,7 @@ Rollback: preservar/taguear imagem web anterior, voltar a ela (baseline), parar 
 - PaddleOCR: 3.7.0, Apache-2.0;
 - PaddlePaddle CPU: 3.2.0;
 - Python no container: 3.12;
-- pipeline estrutural: PP-StructureV3 com OCR da linha PP-OCRv6 do pacote corrente;
+- pipeline estrutural: PP-StructureV3; a configuração original inspecionada em 2026-09-17 usa PP-OCRv5_server_det e PP-OCRv5_server_rec, não PP-OCRv6;
 - recuperação visual: PaddleOCR-VL 1.6 pela pipeline `PaddleOCR-VL` do pacote fixado;
 - empacotamento: `services/paddle/Dockerfile.cpu` e `services/paddle/compose.yaml`.
 

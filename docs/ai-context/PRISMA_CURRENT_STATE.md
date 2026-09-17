@@ -2,13 +2,17 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.3
-last_verified: 2026-09-16
+version: 2.33.4
+last_verified: 2026-09-17
 ---
 
 # Estado atual do Prisma
 
 ## Resumo operacional para prompts
+
+Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
+
+Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
 Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
