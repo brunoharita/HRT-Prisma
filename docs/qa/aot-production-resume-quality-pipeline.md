@@ -109,4 +109,6 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - A importação exige Parser IA ativo. A continuação pela leitura local, o estado `localRetry` e a mensagem que sugeria essa alternativa foram removidos.
 - O modo nativo força `baseline` antes de qualquer provider, canvas ou worker OCR. O Tesseract continua instalado para reversão e para seleção manual de região durante a revisão, que ficou fora do escopo.
 - Validação local: lint PASS em 513 arquivos; TypeScript raiz e web PASS; build web PASS com 3.238 módulos; 17 testes dirigidos e 230 testes do person-flow PASS; Context Pack gerado e verificado com 5 fontes canônicas e 2 artefatos.
-- Rollout, inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.
+- Rollout concluído no único ambiente remoto a partir de `ae9d46c`: checkout avançou por fast-forward e somente `prisma-web` foi reconstruído/recriado com `baseline`, Parser IA `hosted` e identificação da revisão. Supabase, gateway e workers não mudaram.
+- Smoke pós-rollout: site HTTP 200; container `running`, zero restart; tela autenticada de Pessoas carregada. Imagem anterior preservada como `prisma-web:rollback-before-native-only-20260917`.
+- Inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.

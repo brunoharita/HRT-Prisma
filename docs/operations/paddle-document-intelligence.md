@@ -12,6 +12,8 @@ Rollback desta decisão: nova autorização explícita, rebuild do frontend com 
 
 Ativação confirmada no único ambiente remoto: commit `9dfa4d4`, bundle com modo `baseline` e Parser IA `hosted`, site HTTP 200. A imagem web anterior permanece tagueada como `prisma-web:rollback-before-baseline-20260917`. Gateway e workers não foram reconstruídos, removidos ou reconfigurados.
 
+Ampliação sem Tesseract implantada pela revisão `ae9d46c`: `nativeOnlyForParserIa` impede canvas/worker OCR nas três entradas automáticas, mesmo com texto nativo insuficiente. Somente o frontend foi reconstruído; site e tela autenticada responderam, container permaneceu sem restart e a imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. A presença dos chunks Tesseract no bundle atende ao OCR manual por região e à reversibilidade; não prova carregamento na importação. Falta observar uma importação real pós-rollout na rede.
+
 ## Ponte temporária do frontend hospedado — 2026-09-16
 
 Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.

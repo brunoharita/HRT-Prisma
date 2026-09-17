@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 189
-source_manifest_sha256: d2240d5f6c9879eed1ca5e9bf89056a60a6045ed41dbf0bd4c9cd8704871442f
+source_manifest_sha256: 7856d4515a1cf786a41455550c16eb9ffa9b2a47a97f06693ca3e9594a7dd38d
 -->
 
 # Tudo sobre o Prisma
@@ -534,7 +534,7 @@ Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolv
 
 Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão desativadas no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O bundle público foi reconstruído do commit `9dfa4d4` com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; o próprio asset publicado expõe essas flags e o commit. Site e tela autenticada de importação responderam, enquanto gateway, código, containers, modelos e volumes Paddle permaneceram instalados para reversão futura. A imagem anterior foi preservada como `prisma-web:rollback-before-baseline-20260917`. Ainda falta o Product Owner executar a importação real pós-rollout para validar tempo e qualidade sem criar outro registro por iniciativa do agente.
 
-Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática deve pular também o Tesseract e seguir da leitura nativa PDF.js diretamente ao Parser IA. Nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Implementação e validação estão em andamento; este parágrafo não prova rollout no ambiente remoto.
+Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática pula também o Tesseract e segue da leitura nativa PDF.js diretamente ao Parser IA. A revisão `ae9d46c` foi implantada no único ambiente remoto: nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Somente o frontend foi reconstruído; site respondeu HTTP 200, container ficou estável sem restart e a tela autenticada de Pessoas carregou. A imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. Ainda falta uma importação real pós-rollout para validar rede, tempo e qualidade.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
@@ -6562,6 +6562,8 @@ O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambient
 
 Em 2026-09-17, por decisão explícita do Product Owner, somente o frontend foi reconstruído para desativar temporariamente chamadas Paddle na importação: `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`, preservando `VITE_PARSER_IA_MODE=hosted`. Commit implantado `9dfa4d4`; imagem anterior preservada como `prisma-web:rollback-before-baseline-20260917`. Supabase, gateway, workers, modelos e volumes não mudaram. O bundle publicado e a tela autenticada confirmaram a configuração; a importação real pós-rollout ficou para teste do Product Owner.
 
+Decisão posterior do mesmo dia determina retirar também o Tesseract da importação automática. A revisão `ae9d46c` usa `nativeOnlyForParserIa` nas três entradas do fluxo, preserva todas as páginas PDF.js e segue diretamente ao Parser IA; falha da IA não oferece continuação local. O OCR manual por região continua disponível na revisão. Somente `prisma-web` foi reconstruído e recriado; site HTTP 200, container ativo sem restart e tela autenticada de Pessoas carregada. Supabase, gateway e workers não mudaram. Rollback preservado como `prisma-web:rollback-before-native-only-20260917`. A importação real pós-rollout permanece pendente para provar ausência de chamadas OCR e qualidade final.
+
 Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF.js, verificação semântica, Paddle condicional e Parser IA antes da revisão. O worker Parser e os dois workers Paddle permanecem no PC e escutam somente loopback; o gateway 1.1.0 valida sessão/tenant e usa túnel reverso ligado apenas ao loopback da VPS. O Supabase recebeu a migration aditiva de observabilidade com RLS. Imagens de rollback anteriores foram preservadas. Evidência e limitação do smoke autenticado ficam em `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 ## Pré-requisitos
@@ -6799,6 +6801,8 @@ O Product Owner determinou primeiro que a importação fosse testada sem PaddleO
 Rollback desta decisão: nova autorização explícita, rebuild do frontend com o modo aprovado e smoke autenticado. Não basta religar containers, pois a flag é incorporada ao bundle no build.
 
 Ativação confirmada no único ambiente remoto: commit `9dfa4d4`, bundle com modo `baseline` e Parser IA `hosted`, site HTTP 200. A imagem web anterior permanece tagueada como `prisma-web:rollback-before-baseline-20260917`. Gateway e workers não foram reconstruídos, removidos ou reconfigurados.
+
+Ampliação sem Tesseract implantada pela revisão `ae9d46c`: `nativeOnlyForParserIa` impede canvas/worker OCR nas três entradas automáticas, mesmo com texto nativo insuficiente. Somente o frontend foi reconstruído; site e tela autenticada responderam, container permaneceu sem restart e a imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. A presença dos chunks Tesseract no bundle atende ao OCR manual por região e à reversibilidade; não prova carregamento na importação. Falta observar uma importação real pós-rollout na rede.
 
 ## Ponte temporária do frontend hospedado — 2026-09-16
 
@@ -10075,7 +10079,9 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - A importação exige Parser IA ativo. A continuação pela leitura local, o estado `localRetry` e a mensagem que sugeria essa alternativa foram removidos.
 - O modo nativo força `baseline` antes de qualquer provider, canvas ou worker OCR. O Tesseract continua instalado para reversão e para seleção manual de região durante a revisão, que ficou fora do escopo.
 - Validação local: lint PASS em 513 arquivos; TypeScript raiz e web PASS; build web PASS com 3.238 módulos; 17 testes dirigidos e 230 testes do person-flow PASS; Context Pack gerado e verificado com 5 fontes canônicas e 2 artefatos.
-- Rollout, inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.
+- Rollout concluído no único ambiente remoto a partir de `ae9d46c`: checkout avançou por fast-forward e somente `prisma-web` foi reconstruído/recriado com `baseline`, Parser IA `hosted` e identificação da revisão. Supabase, gateway e workers não mudaram.
+- Smoke pós-rollout: site HTTP 200; container `running`, zero restart; tela autenticada de Pessoas carregada. Imagem anterior preservada como `prisma-web:rollback-before-native-only-20260917`.
+- Inspeção de rede e teste autenticado com currículo real ainda não foram executados neste adendo. Portanto D-03 permanece `PARTIAL` e a qualidade ponta a ponta permanece `NOT TESTED` para esta revisão.
 
 ---
 
