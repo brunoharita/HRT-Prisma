@@ -6,7 +6,7 @@ product_version: 1.6.4
 current_state_version: 2.33.6
 current_state_last_verified: 2026-09-17
 documentation_source_count: 189
-source_manifest_sha256: a98a445972d5b3951b1f155a93fa9042f002e6bb27e820955bc211af30e2cd40
+source_manifest_sha256: 5c64e2fd40340c6ebd2db6edf20ff04d64ad23e7c444b77fd1ed4227f7815603
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -248,7 +248,7 @@ Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão
 
 Decisão posterior do Product Owner no mesmo dia amplia o teste: a importação automática pula também o Tesseract e segue da leitura nativa PDF.js diretamente ao Parser IA. A revisão `ae9d46c` foi implantada no único ambiente remoto: nova importação, importação dentro da Pessoa e retomada de intake usam a rota nativa exclusiva; falha da IA é explícita e não oferece continuação local. Código e assets de Paddle/Tesseract permanecem instalados para reversão, e o OCR manual por região na revisão não muda. Somente o frontend foi reconstruído; site respondeu HTTP 200, container ficou estável sem restart e a tela autenticada de Pessoas carregou. A imagem anterior foi preservada como `prisma-web:rollback-before-native-only-20260917`. Ainda falta uma importação real pós-rollout para validar rede, tempo e qualidade.
 
-Nova decisão do Product Owner em 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. A implementação local deixa de ler ou gravar `tmp/m57-parser-ia/budget.json` para autorizar chamadas, preserva o arquivo existente apenas como histórico e mantém tamanho, timeout, serialização, cache e ausência de retry. A conta OpenAI passa a ser a única autoridade financeira; o serviço e o gateway propagam apenas códigos fixos e sanitizados para distinguir saldo esgotado, limite de gastos, rate limit e falha técnica. Esta revisão ainda não foi implantada: o runtime remoto continua sujeito ao bloqueio antigo até rollout e reinício explícitos.
+Nova decisão do Product Owner em 2026-09-17 remove o teto financeiro interno de US$ 2 do Parser IA. A revisão `42510b1` está ativa no único ambiente remoto e no worker loopback: `budget.json` não é lido nem gravado para autorizar chamadas, permanece apenas como histórico, e tamanho, timeout, serialização, cache e ausência de retry continuam ativos. A conta OpenAI é a única autoridade financeira; serviço, gateway e interface distinguem por códigos fixos e sanitizados saldo esgotado, limite de gastos, rate limit e falha técnica. Frontend e gateway estão ativos sem restart, site respondeu 200, bundle confirmou commit/mensagem nova, worker recusou acesso fora do contrato local e o gateway recusou sessão sintética antes de ler documento. Nenhum currículo ou chamada paga foi usado no smoke. Rollback preservado para as duas imagens anteriores.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
