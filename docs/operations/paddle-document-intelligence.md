@@ -10,6 +10,8 @@ O Product Owner determinou que a importação seja testada sem PaddleOCR. O fron
 
 Rollback desta decisão: nova autorização explícita, rebuild do frontend com o modo aprovado e smoke autenticado. Não basta religar containers, pois a flag é incorporada ao bundle no build.
 
+Ativação confirmada no único ambiente remoto: commit `9dfa4d4`, bundle com modo `baseline` e Parser IA `hosted`, site HTTP 200. A imagem web anterior permanece tagueada como `prisma-web:rollback-before-baseline-20260917`. Gateway e workers não foram reconstruídos, removidos ou reconfigurados.
+
 ## Ponte temporária do frontend hospedado — 2026-09-16
 
 Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.

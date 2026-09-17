@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 189
-source_manifest_sha256: 1e5e5cf99e5cd6286714fcd03d30ad8ef194d450614ded3665dc0bede341e557
+source_manifest_sha256: 6fad5cfc3f8090e6462739f3822dd487c31f16b8e9962d4c7d225b9765e47b6a
 -->
 
 # Tudo sobre o Prisma
@@ -532,7 +532,7 @@ last_verified: 2026-09-17
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
-Decisão temporária aprovada em 2026-09-17: desativar chamadas PaddleOCR no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O mecanismo é a flag existente `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`; código, containers, modelos e gateway Paddle permanecem instalados para reversão futura. O Parser IA deve continuar em modo `hosted`. Esta nota registra a decisão; a ativação remota e o smoke autenticado precisam de evidência no AoT antes de serem declarados concluídos.
+Decisão temporária aprovada e ativada em 2026-09-17: chamadas PaddleOCR estão desativadas no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O bundle público foi reconstruído do commit `9dfa4d4` com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; o próprio asset publicado expõe essas flags e o commit. Site e tela autenticada de importação responderam, enquanto gateway, código, containers, modelos e volumes Paddle permaneceram instalados para reversão futura. A imagem anterior foi preservada como `prisma-web:rollback-before-baseline-20260917`. Ainda falta o Product Owner executar a importação real pós-rollout para validar tempo e qualidade sem criar outro registro por iniciativa do agente.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
@@ -6556,6 +6556,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambiente atual de produção. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel, mas não identifica outro ambiente. Desde 2026-09-15, o frontend está implantado na VPS Hostinger em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
 
+Em 2026-09-17, por decisão explícita do Product Owner, somente o frontend foi reconstruído para desativar temporariamente chamadas Paddle na importação: `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`, preservando `VITE_PARSER_IA_MODE=hosted`. Commit implantado `9dfa4d4`; imagem anterior preservada como `prisma-web:rollback-before-baseline-20260917`. Supabase, gateway, workers, modelos e volumes não mudaram. O bundle publicado e a tela autenticada confirmaram a configuração; a importação real pós-rollout ficou para teste do Product Owner.
+
 Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF.js, verificação semântica, Paddle condicional e Parser IA antes da revisão. O worker Parser e os dois workers Paddle permanecem no PC e escutam somente loopback; o gateway 1.1.0 valida sessão/tenant e usa túnel reverso ligado apenas ao loopback da VPS. O Supabase recebeu a migration aditiva de observabilidade com RLS. Imagens de rollback anteriores foram preservadas. Evidência e limitação do smoke autenticado ficam em `docs/qa/aot-production-resume-quality-pipeline.md`.
 
 ## Pré-requisitos
@@ -6791,6 +6793,8 @@ Testes autônomos autorizados, isolados e sem IA ou banco encontraram configura�
 O Product Owner determinou que a importação seja testada sem PaddleOCR. O frontend deve ser construído com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e manter `VITE_PARSER_IA_MODE=hosted`. O efeito é limitado ao roteamento da importação: PDF.js continua, o Parser IA continua e nenhuma rota Paddle deve ser chamada. Containers, modelos, volumes, gateway e código permanecem disponíveis para uma reativação futura autorizada.
 
 Rollback desta decisão: nova autorização explícita, rebuild do frontend com o modo aprovado e smoke autenticado. Não basta religar containers, pois a flag é incorporada ao bundle no build.
+
+Ativação confirmada no único ambiente remoto: commit `9dfa4d4`, bundle com modo `baseline` e Parser IA `hosted`, site HTTP 200. A imagem web anterior permanece tagueada como `prisma-web:rollback-before-baseline-20260917`. Gateway e workers não foram reconstruídos, removidos ou reconfigurados.
 
 ## Ponte temporária do frontend hospedado — 2026-09-16
 
@@ -9957,7 +9961,7 @@ PASS. D-001 a D-008 e P-001 a P-006 possuem implementação e prova proporcional
 
 # AoT — Qualidade da importação de currículos em produção
 
-Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.0.0.
+Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.1.0.
 
 ## Matriz de Acordos
 
@@ -9965,9 +9969,9 @@ Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.m
 | --- | --- | --- | --- | --- | --- | --- |
 | D-01 | PDF.js e estruturação inicial | `validateAndProcessPdf` mantém extração/estruturação antes do gate e das etapas externas | person-flow e `documentIntelligence.test.ts` | 229 testes do person-flow; build web aprovado | PASS | Determinístico, sem provider vivo |
 | D-02 | Verificação semântica explicável | `resumeSemanticQuality.ts` 1.0.0 e motivo no trace | `resumeSemanticQuality.test.ts` | Caso de cinco páginas sem experiências força rota estrutural | PASS | Não julga candidato nem inventa experiência |
-| D-03 | Paddle condicional | Gate visual/textual existente mais gate semântico; modo enabled não é mais desligado pelo Parser IA | domínio, provider e teste autenticado de Ivan | Reteste de 17/09: 240.012,3 ms, `provider_timeout`, fallback para `native-fast`; Documento v2 foi persistido pela rota nativa | FAIL | Saída Paddle não chegou à importação e não contribuiu para a revisão |
-| D-04 | Parser IA após etapa documental | Cliente autenticado, capacidade isolada e HTTP nativo preservando Host | 31 testes de gateway/parser e comparação ponta a ponta | Inferência nova anterior: 34.053 ms; retestes de 17/09 persistiram Documentos v2/v3 e abriram revisão com resultado de IA em cache | PARTIAL | Persistência e qualidade comprovadas; ainda falta uma execução única ponta a ponta com inferência nova e, quando aplicável, saída Paddle consumida |
-| D-05 | Sequência e falha explícita | Página não força mais baseline e mantém CTA consciente de leitura local | person-flow, recuperação M5.7 | 229 + 33 testes direcionados aprovados | PASS | Falha do worker ainda exige decisão explícita do operador |
+| D-03 | Paddle desativado durante o teste temporário | Frontend construído com modo `baseline`; provider não é chamado nesse modo | teste de domínio, inspeção do bundle público e tela autenticada | Asset `index-DBBU_HLn.js` registra `baseline`, Parser IA `hosted` e commit `9dfa4d4`; 12 testes dirigidos aprovados | PARTIAL | Configuração está ativa; importação real pós-rollout ficou para o Product Owner testar |
+| D-04 | Parser IA após etapa documental | Cliente autenticado, capacidade isolada e HTTP nativo preservando Host | 31 testes de gateway/parser e comparação ponta a ponta | Inferência nova anterior: 34.053 ms; retestes de 17/09 persistiram Documentos v2/v3 e abriram revisão com resultado de IA em cache | PARTIAL | Persistência e qualidade comprovadas; falta uma execução pós-rollout com inferência nova |
+| D-05 | Sequência e falha explícita | Modo `baseline` intencional seguido de Parser IA; CTA consciente de leitura local permanece | person-flow, recuperação M5.7 | 229 + 33 testes direcionados aprovados | PASS | Falha do worker ainda exige decisão explícita do operador e não aciona Paddle |
 | D-06 | Transporte autenticado e mínimo | Gateway 1.1.0 valida origem, sessão, operador, papel, organização, contrato, PDF e hash; remove credenciais | `paddleGateway.test.mjs` e smoke público | 13 testes do gateway; origem indevida 403; sem sessão 401; portas VPS somente 127.0.0.1 | PASS | Sem conteúdo pessoal no smoke/logs |
 | D-07 | Revisão humana preservada | Persistência continua usando o draft/evidência e fluxo de revisão existente | person-flow | publicação/revisão e proibições cobertas na suíte dirigida | PASS | Nenhum Perfil publicado nesta execução |
 | D-08 | Limites, orçamento e sem retry | Worker loopback mantém 15 MB, 30 páginas, timeout, lock, cache, ledger US$2 e sem retry | `parserIaService.test.mjs` e gateway | budget, concorrência, timeout, corrupção, cache e resposta limitada aprovados | PASS | Ledger observado: 6 tentativas e US$0,64 contabilizados antes do rollout |
@@ -9977,7 +9981,7 @@ Contrato de referência: `docs/qa/agreement-production-resume-quality-pipeline.m
 
 | ID | Guardrail | Teste negativo | Evidência | Status |
 | --- | --- | --- | --- | --- |
-| P-01 a P-07 | Sem falso positivo por caracteres, exclusão mútua, segredo no bundle, organização confiada ao cliente, fato sem referência, publicação ou retry automático | gates negativos de domínio, gateway, parser e person-flow | 262 testes dirigidos aprovados; bundle sem segredo server-side; smoke 401/403 | PASS |
+| P-01 a P-07 | Sem falso positivo por caracteres, chamada Paddle durante o teste, segredo server-side no bundle, organização confiada ao cliente, fato sem referência, publicação ou retry automático | gates negativos de domínio, gateway, parser e person-flow | 12 testes de roteamento aprovados; bundle em `baseline`; endpoints recusaram requisição sem contexto autorizado | PASS |
 
 ## Fora de escopo preservado
 
@@ -10045,6 +10049,18 @@ Movimento geral permanece incompleto: D-03 FAIL por timeout Paddle e D-04 PARTIA
 - Relatório não técnico e tabela completa: `docs/operations/resume-import-e2e-comparison-2026-09-17.md`.
 
 Atualização do estado: D-04 continua `PARTIAL`, mas a limitação mudou. A persistência do rascunho e a revisão agora estão comprovadas; falta uma única execução sem cache e falta provar que a saída Paddle, quando necessária, é realmente consumida. Nenhum Perfil foi publicado.
+
+## Desativação temporária do Paddle — 2026-09-17
+
+- Decisão do PO incorporada no contrato 1.1.0: durante o teste, PDF.js segue diretamente ao Parser IA e nenhuma rota Paddle pode ser chamada.
+- Rollout de produção: checkout `9dfa4d4f5a26d04a81a4d9483fa8c1f1514b8d5a`; somente `prisma-web` foi reconstruído e recriado.
+- Bundle público `index-DBBU_HLn.js`: `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`, `VITE_PARSER_IA_MODE=hosted` e `VITE_PRISMA_GIT_COMMIT=9dfa4d43a0` confirmados no asset efetivamente carregado pelo navegador.
+- Smoke: site HTTP 200 e tela autenticada de importação carregada. Gateway 1.1.0 permaneceu ativo; requisições sem contexto autorizado aos endpoints Parser e Paddle foram recusadas antes de qualquer documento.
+- Rollback: imagem anterior preservada como `prisma-web:rollback-before-baseline-20260917`, ID `sha256:93421b4a57d...`; imagem ativa ID `sha256:f167b7327089...`.
+- Validação dirigida: `pnpm run build` e 12 testes de `documentIntelligence.test.js` aprovados, incluindo default/valor desconhecido fail-closed para `baseline`.
+- Nenhum currículo foi enviado após o rollout pelo agente, nenhum registro foi criado e nenhum Perfil foi publicado. A tela ficou aberta para o Product Owner executar o teste real solicitado.
+
+Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` permanece `PARTIAL` somente porque o aceite exige observar uma importação real pós-rollout sem chamada Paddle.
 
 ---
 
