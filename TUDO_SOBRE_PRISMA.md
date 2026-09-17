@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 189
-source_manifest_sha256: 2183073e6772a8e895c1fb30ae72ecf6648662149fda3ec92a0f6db88cc7c1be
+source_manifest_sha256: 1e5e5cf99e5cd6286714fcd03d30ad8ef194d450614ded3665dc0bede341e557
 -->
 
 # Tudo sobre o Prisma
@@ -531,6 +531,8 @@ last_verified: 2026-09-17
 ## Resumo operacional para prompts
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
+
+Decisão temporária aprovada em 2026-09-17: desativar chamadas PaddleOCR no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O mecanismo é a flag existente `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`; código, containers, modelos e gateway Paddle permanecem instalados para reversão futura. O Parser IA deve continuar em modo `hosted`. Esta nota registra a decisão; a ativação remota e o smoke autenticado precisam de evidência no AoT antes de serem declarados concluídos.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
@@ -2612,7 +2614,9 @@ O Knowledge Agent introduz a primeira ativação sensível server-side. `KNOWLED
 
 O M5.1C adiciona `M51C_AI_ITEM_GENERATION_ENABLED`. Ela é server-side, tem default `false` e somente libera a boundary depois de JWT, policy tenant-scoped, provider, modelo, secret, estimativa, teto por pedido, limite diário, cooldown e orçamento. Valor ausente ou diferente de `true` bloqueia a chamada externa sem afetar o uso do Item Bank existente. Owner: AI/operations/security. Audience: operadores autorizados. Rollback: definir `false`; requisições existentes e ledger são preservados.
 
-O M5.6 adiciona `VITE_DOCUMENT_INTELLIGENCE_MODE` como controle de rollout técnico, nunca de autorização. Valores: `baseline`, `shadow` e `enabled`; default, ausência e valor desconhecido resolvem para `baseline`. Em `shadow`, o provider self-hosted é chamado apenas nas rotas elegíveis, mas a saída baseline permanece soberana. `enabled` só pode ser configurado depois do benchmark real e do cutover aprovado. Owner: AI/operations. Audience: runtime técnico, invisível ao operador. Ambientes: local e QA após migration e serviço disponíveis; produção proibida neste movimento. Expiração: remover ou converter em configuração permanente após decisão de cutover. Rollback: definir `baseline` e interromper os serviços Paddle; documentos, revisões e perfis históricos não são alterados.
+O M5.6 adiciona `VITE_DOCUMENT_INTELLIGENCE_MODE` como controle de rollout técnico, nunca de autorização. Valores: `baseline`, `shadow` e `enabled`; default, ausência e valor desconhecido resolvem para `baseline`. Em `shadow`, o provider self-hosted é chamado apenas nas rotas elegíveis, mas a saída baseline permanece soberana. `enabled` só pode ser configurado depois do benchmark real e do cutover aprovado. Owner: AI/operations. Audience: runtime técnico, invisível ao operador. Rollback: definir `baseline`; documentos, revisões e perfis históricos não são alterados.
+
+Estado operacional temporário desde 2026-09-17: `baseline` no único ambiente remoto. Decisão do Product Owner desativa chamadas Paddle na importação para comparação real, sem remover a integração. `shadow` e `enabled` exigem nova autorização explícita.
 
 ## Regra para adoção futura
 
@@ -6782,6 +6786,12 @@ Retenção de logs e auditoria ainda depende de política legal e operacional. L
 
 Testes autônomos autorizados, isolados e sem IA ou banco encontraram configurações candidatas mais rápidas. Com limites completos das bibliotecas de CPU, os modelos originais concluíram cinco páginas em 162,20 s; a troca apenas do reconhecedor latino concluiu em 110,05 s; modelos leves oficiais concluíram em 44,76 s. Estes tempos são de diagnóstico página a página, não da importação hospedada. Configuração de produção não foi alterada; equivalência estrutural e integração ainda precisam de validação. Evidências, opções e limites: [diagnóstico de desempenho](paddle-performance-diagnostic-2026-09-17.md).
 
+## Desativação temporária na importação — 2026-09-17
+
+O Product Owner determinou que a importação seja testada sem PaddleOCR. O frontend deve ser construído com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e manter `VITE_PARSER_IA_MODE=hosted`. O efeito é limitado ao roteamento da importação: PDF.js continua, o Parser IA continua e nenhuma rota Paddle deve ser chamada. Containers, modelos, volumes, gateway e código permanecem disponíveis para uma reativação futura autorizada.
+
+Rollback desta decisão: nova autorização explícita, rebuild do frontend com o modo aprovado e smoke autenticado. Não basta religar containers, pois a flag é incorporada ao bundle no build.
+
 ## Ponte temporária do frontend hospedado — 2026-09-16
 
 Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.
@@ -8878,17 +8888,17 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 ## Objetivo
 
-- Versão do contrato: `1.0.0`
-- Fonte da decisão / tarefa: diagnóstico da importação de Ivan Raineri em 2026-09-16 e autorização explícita do Product Owner, nesta conversa, para restaurar em produção o fluxo já esperado localmente.
-- Contratos anteriores e delta: este contrato supersede, apenas para o fluxo de importação de currículos, as restrições de rollout local de `agreement-m57-parser-ia.md` 1.1.2 e a exclusão do Parser IA em `agreement-hosted-paddle-bridge.md` 1.1.0. Os guardrails de evidência, revisão humana, orçamento, autenticação e privacidade permanecem.
+- Versão do contrato: `1.1.0`
+- Fonte da decisão / tarefa: decisão explícita do Product Owner em 2026-09-17 para desativar temporariamente o PaddleOCR no fluxo de importação e testar o percurso real PDF.js -> Parser IA -> revisão.
+- Contratos anteriores e delta: esta versão supersede D-03, D-05, P-02 e os critérios correspondentes da versão 1.0.0. A integração Paddle permanece instalada e reversível, mas não pode ser chamada durante este teste. Os guardrails de evidência, revisão humana, orçamento, autenticação e privacidade permanecem.
 
 ## DEVE — Inegociável
 
 - D-01 — Toda importação de currículo PDF deve começar pela leitura PDF.js e pela estruturação determinística existente.
 - D-02 — A saída inicial deve passar por uma verificação semântica explicável; um currículo multipágina sem trajetória profissional identificada não pode ser considerado suficiente apenas por possuir muitos caracteres.
-- D-03 — Quando a leitura inicial for visualmente complexa, textualmente insuficiente ou semanticamente insuficiente, o fluxo deve acionar o Paddle pela ponte autenticada e usar sua saída canônica quando válida.
+- D-03 — Enquanto este teste estiver ativo, toda importação deve permanecer no modo `baseline`: PDF.js e a estruturação determinística executam, mas nenhum endpoint Paddle pode ser chamado.
 - D-04 — Depois da etapa documental, toda importação normal deve passar pelo Parser IA, ligado ao PDF, à organização, às linhas-fonte e à versão de prompt/modelo, antes de persistir o rascunho para revisão.
-- D-05 — Paddle e Parser IA devem executar em sequência, nunca como alternativas mutuamente exclusivas; falha ou indisponibilidade de etapa obrigatória deve ser explícita e preservar a opção consciente de continuar somente com a leitura local.
+- D-05 — A importação normal deve executar PDF.js e depois Parser IA. Falha ou indisponibilidade da IA deve ser explícita e preservar a opção consciente de continuar somente com a leitura local.
 - D-06 — O transporte remoto deve validar sessão, operador, papel e organização no servidor, aceitar somente contratos e rotas fixos, remover credenciais antes da máquina de inferência e não registrar currículo, prompt integral, token ou dado pessoal.
 - D-07 — O resultado continua sendo rascunho rastreável para revisão humana. Nenhuma importação aprova, publica, rejeita ou decide contratação automaticamente.
 - D-08 — A operação em produção deve manter limite de arquivo, timeout, serialização, cache privado, orçamento fechado e ausência de repetição automática de inferência não idempotente.
@@ -8897,7 +8907,7 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 ## PROIBIDO
 
 - P-01 — Tratar quantidade de caracteres como prova suficiente de qualidade sem verificar o resultado estruturado.
-- P-02 — Desativar o Paddle pelo simples fato de o Parser IA estar habilitado.
+- P-02 — Chamar PaddleOCR, PP-Structure ou a recuperação visual Paddle a partir da importação enquanto o teste temporário estiver ativo.
 - P-03 — Expor `OPENAI_API_KEY`, chave de serviço do Supabase ou credencial do usuário no bundle, nos logs ou no worker Paddle.
 - P-04 — Aceitar organização informada pelo cliente sem validar sessão, operador, papel, RLS e vínculo ativo.
 - P-05 — Persistir fatos sem referência verificável ao documento ou transformar falha parcial em perfil completo.
@@ -8910,6 +8920,7 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - F-02 — Troca de Paddle, OpenAI, modelo ou taxonomia por novo fornecedor.
 - F-03 — Reprocessamento em massa de documentos já importados.
 - F-04 — Tornar a ponte temporária independente da máquina local.
+- F-05 — Remover código, containers, modelos, volumes ou contratos Paddle; a mudança é somente de ativação reversível.
 
 ## AUTONOMIA DE ENGENHARIA
 
@@ -8917,6 +8928,7 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - A-02 — Estender a ponte hospedada existente com uma rota fixa para o Parser IA e ajustar seus timeouts, limites e cabeçalhos dentro dos guardrails deste contrato.
 - A-03 — Versionar contratos, prompt, proveniência, migração de observabilidade e mensagens operacionais sem alterar o comportamento acordado.
 - A-04 — Escolher testes direcionados, smoke tests e evidências proporcionais ao risco, sem executar validação integral do repositório sem autorização específica.
+- A-05 — Usar a flag existente `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e manter o gateway/containers disponíveis para rollback, sem tráfego de importação para Paddle.
 
 ## PENDÊNCIAS
 
@@ -8926,9 +8938,9 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 - CA-D01 — Dado um PDF válido, quando a importação iniciar, então PDF.js e a estruturação determinística executam antes das etapas externas; teste unitário e rastreio do fluxo.
 - CA-D02 — Dado um currículo de múltiplas páginas cuja estruturação não encontre experiências, quando a qualidade for avaliada, então o motivo semântico força a rota estrutural; teste negativo com fixture equivalente ao caso observado.
-- CA-D03 — Dada a rota estrutural forçada, quando o Paddle retornar documento canônico válido, então sua saída é adotada e a proveniência registra o fornecedor; teste de domínio e transporte.
+- CA-D03 — Dado um currículo que antes escolheria rota estrutural, quando importado com o teste ativo, então nenhuma requisição Paddle ocorre, a telemetria registra modo `baseline` e o fluxo segue para Parser IA; inspeção de rede e importação autenticada.
 - CA-D04 — Dada uma importação normal com transporte disponível, quando a etapa documental terminar, então o Parser IA é chamado e o rascunho persistido usa seu contrato e evidências; teste de cliente, contrato e smoke autenticado.
-- CA-D05 — Dada indisponibilidade do Parser IA, quando a importação ocorrer, então a tentativa não apresenta sucesso falso e oferece continuação local consciente; teste de falha.
+- CA-D05 — Dada indisponibilidade do Parser IA, quando a importação ocorrer, então a tentativa não apresenta sucesso falso e oferece continuação local consciente, sem recorrer ao Paddle; teste de falha.
 - CA-D06 — Dada sessão ausente, origem incorreta, organização inválida, rota ou contrato desconhecido, quando a ponte receber a chamada, então rejeita antes de encaminhar dados; testes negativos do gateway.
 - CA-D07 — Dado resultado estruturado, quando persistido, então permanece aguardando revisão e não cria publicação automática; testes de persistência existentes afetados.
 - CA-D08 — Dadas chamadas simultâneas, payload excessivo, timeout ou orçamento esgotado, quando ocorrerem, então o serviço falha fechado, sem retry automático; testes de serviço e gateway.
@@ -8941,9 +8953,9 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 ## APROVAÇÃO
 
 - Product Owner: Bruno
-- Data: 2026-09-16
-- Evidência de aprovação: após receber o diagnóstico e a proposta explícita do fluxo PDF.js -> qualidade semântica -> Paddle quando necessário -> Parser IA -> revisão humana em produção, respondeu “faça isso”.
-- Referência imutável para o prompt: versão `1.0.0` deste contrato.
+- Data: 2026-09-17
+- Evidência de aprovação: após receber a comparação real com timeout de 240 segundos e resultado equivalente sem Paddle, determinou: “desative a ida para o PaddleOCR do fluxo de importação de currículo” para testar sem essa etapa.
+- Referência imutável para o prompt: versão `1.1.0` deste contrato.
 
 ---
 
@@ -10596,24 +10608,24 @@ Implementar D-001 a D-008 e provar P-001 a P-006. Preservar exatamente cinco fon
 
 # Prompt de Execução — Qualidade da importação de currículos em produção
 
-Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, versão `1.0.0`, sem reinterpretar os acordos.
+Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, versão `1.1.0`, sem reinterpretar os acordos.
 
 ## Entendimento obrigatório
 
-- Implementar D-01 a D-09: PDF.js e estruturação inicial, verificação semântica, Paddle condicional, Parser IA obrigatório no caminho normal, falha explícita com continuação local consciente, transporte autenticado, revisão humana, limites operacionais e observabilidade.
-- Impedir P-01 a P-07: falso positivo por volume textual, exclusão mútua entre Paddle e IA, exposição de segredos, confiança na organização do cliente, fatos sem evidência, publicação automática e retry incerto.
-- Preservar F-01 a F-04: não redesenhar revisão, não trocar fornecedor/modelo, não reprocessar em massa e não converter a ponte temporária em infraestrutura independente do computador local.
-- Usar A-01 a A-04 somente para decisões de implementação que não alterem o comportamento aprovado.
+- Implementar D-01 a D-09 na versão 1.1.0: PDF.js e estruturação inicial, nenhum tráfego Paddle, Parser IA obrigatório no caminho normal, falha explícita com continuação local consciente, transporte autenticado, revisão humana, limites operacionais e observabilidade.
+- Impedir P-01 a P-07: falso positivo por volume textual, chamada Paddle durante o teste, exposição de segredos, confiança na organização do cliente, fatos sem evidência, publicação automática e retry incerto.
+- Preservar F-01 a F-05: não redesenhar revisão, não trocar fornecedor/modelo, não reprocessar em massa, não converter a ponte e não remover a instalação Paddle.
+- Usar A-01 a A-05 somente para decisões de implementação que não alterem o comportamento aprovado.
 
 ## Sequência de execução
 
 1. Registrar a decisão arquitetural e versionar os contratos afetados.
-2. Implementar e testar o verificador semântico determinístico.
-3. Garantir que o modo de inteligência documental permaneça ativo quando o Parser IA estiver habilitado.
-4. Estender a ponte autenticada com rota fixa e contrato específico para o Parser IA, removendo credenciais antes do encaminhamento.
-5. Habilitar o cliente de produção com sessão e organização válidas, preservando o modo local para desenvolvimento.
-6. Aplicar a migração aditiva de observabilidade na base única de produção.
-7. Executar testes direcionados, build, verificação de contexto, smoke operacional e revisão de segurança.
+2. Preservar a imagem web ativa como rollback verificável.
+3. Construir somente o frontend com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`, preservando a IA e desativando somente as chamadas Paddle.
+4. Publicar o frontend no único ambiente remoto sem alterar Supabase, gateway, workers, modelos ou volumes.
+5. Confirmar HTTP, versão construída, Parser IA e ausência de exposição pública dos workers.
+6. Executar testes direcionados, build, verificação de contexto e revisão de segurança.
+7. Confirmar por rede e telemetria que uma importação real não chamou Paddle e continuou usando o Parser IA.
 8. Preencher `docs/qa/aot-production-resume-quality-pipeline.md`, revisar o diff, commitar e enviar a branch autorizada.
 
 Não declarar conclusão se qualquer D-* obrigatório não estiver `PASS`, se uma proibição for violada ou se não houver evidência tecnicamente disponível.

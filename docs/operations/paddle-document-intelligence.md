@@ -4,6 +4,12 @@
 
 Testes autônomos autorizados, isolados e sem IA ou banco encontraram configurações candidatas mais rápidas. Com limites completos das bibliotecas de CPU, os modelos originais concluíram cinco páginas em 162,20 s; a troca apenas do reconhecedor latino concluiu em 110,05 s; modelos leves oficiais concluíram em 44,76 s. Estes tempos são de diagnóstico página a página, não da importação hospedada. Configuração de produção não foi alterada; equivalência estrutural e integração ainda precisam de validação. Evidências, opções e limites: [diagnóstico de desempenho](paddle-performance-diagnostic-2026-09-17.md).
 
+## Desativação temporária na importação — 2026-09-17
+
+O Product Owner determinou que a importação seja testada sem PaddleOCR. O frontend deve ser construído com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e manter `VITE_PARSER_IA_MODE=hosted`. O efeito é limitado ao roteamento da importação: PDF.js continua, o Parser IA continua e nenhuma rota Paddle deve ser chamada. Containers, modelos, volumes, gateway e código permanecem disponíveis para uma reativação futura autorizada.
+
+Rollback desta decisão: nova autorização explícita, rebuild do frontend com o modo aprovado e smoke autenticado. Não basta religar containers, pois a flag é incorporada ao bundle no build.
+
 ## Ponte temporária do frontend hospedado — 2026-09-16
 
 Decisão aprovada: ADR-058; contrato `paddle-hosted-transport-1.0.0`. Status operacional e aceite ficam em `docs/qa/aot-hosted-paddle-bridge.md`. Nenhuma prova de health substitui a importação na interface.

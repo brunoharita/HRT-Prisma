@@ -6,7 +6,7 @@ product_version: 1.6.4
 current_state_version: 2.33.4
 current_state_last_verified: 2026-09-17
 documentation_source_count: 189
-source_manifest_sha256: 2183073e6772a8e895c1fb30ae72ecf6648662149fda3ec92a0f6db88cc7c1be
+source_manifest_sha256: 1e5e5cf99e5cd6286714fcd03d30ad8ef194d450614ded3665dc0bede341e557
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -243,6 +243,8 @@ pnpm run check:prisma-context
 #### Resumo operacional para prompts
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
+
+Decisão temporária aprovada em 2026-09-17: desativar chamadas PaddleOCR no fluxo de importação para testar o percurso real PDF.js -> Parser IA -> revisão. O mecanismo é a flag existente `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`; código, containers, modelos e gateway Paddle permanecem instalados para reversão futura. O Parser IA deve continuar em modo `hosted`. Esta nota registra a decisão; a ativação remota e o smoke autenticado precisam de evidência no AoT antes de serem declarados concluídos.
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
