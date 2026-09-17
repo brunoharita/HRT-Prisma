@@ -4,6 +4,7 @@ import test from "node:test";
 
 const migrationPath = "supabase/migrations/20260831204334_recover_partial_resume_review.sql";
 const educationEvidenceMigrationPath = "supabase/migrations/20260917143000_preserve_institution_only_education_evidence.sql";
+const linkedinPersistenceMigrationPath = "supabase/migrations/20260917154500_harden_linkedin_draft_persistence.sql";
 
 test("partial resume recovery keeps incomplete recognition reviewable and fail-closed", async () => {
   const sql = await readFile(migrationPath, "utf8");
@@ -50,6 +51,26 @@ test("education evidence remains source-grounded when the declared course is abs
   assert.doesNotMatch(sql, /coalesce\(\s*item ->> 'evidenceText'/i);
   assert.match(sql, /revoke all on function private\.persist_person_extraction[\s\S]*from public, anon, authenticated/i);
   assert.doesNotMatch(sql, /alter table public\.evidence[\s\S]*drop not null/i);
+});
+
+test("draft persistence canonicalizes stale LinkedIn labels without relaxing the review contract", async () => {
+  const sql = await readFile(linkedinPersistenceMigrationPath, "utf8");
+
+  assert.match(sql, /create or replace function private\.normalize_resume_linkedin_for_review\(payload jsonb\)/i);
+  assert.match(sql, /regexp_replace\([\s\S]*'\\s\*\\\(linkedin\\\)\\s\*\$'[\s\S]*'i'/i);
+  assert.match(sql, /regexp_replace\(canonical_linkedin, '\^http:\/\/', 'https:\/\/', 'i'\)/i);
+  assert.match(sql, /regexp_replace\(canonical_linkedin, '\[\?#\]\.\*\$', ''\)/i);
+  assert.match(sql, /canonical_linkedin ~\* '\^https:\/\/[\s\S]*linkedin\\\.com\/in\//i);
+  assert.match(sql, /jsonb_set\([\s\S]*'\{contact,linkedin\}'[\s\S]*'null'::jsonb/i);
+  assert.match(sql, /O endereço do LinkedIn identificado precisa de conferência\./i);
+  assert.match(sql, /before insert or update of identified_fields on public\.extraction_drafts/i);
+  assert.match(sql, /new\.identified_fields := private\.normalize_resume_linkedin_for_review\(new\.identified_fields\)/i);
+  assert.match(sql, /linkedin labeled draft normalization failed/i);
+  assert.match(sql, /linkedin invalid draft review fallback failed/i);
+  assert.match(sql, /linkedin malformed structure was silently coerced/i);
+  assert.match(sql, /revoke all on function private\.normalize_resume_linkedin_for_review\(jsonb\)[\s\S]*from public, anon, authenticated/i);
+  assert.match(sql, /set search_path = ''/i);
+  assert.doesNotMatch(sql, /drop constraint|alter table public\.extraction_drafts[\s\S]*disable trigger/i);
 });
 
 test("reused resume intake restores a missing private object before reuse", async () => {
