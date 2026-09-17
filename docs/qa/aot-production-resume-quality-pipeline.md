@@ -141,3 +141,12 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 - Smoke autenticado pós-migration: 24,1 s do clique até a identificação, 11,2 s da seleção da Pessoa até o resumo da análise e menos de 1 s do comando de abertura até a rota de revisão. O tempo observado de ponta a ponta foi 51,9 s, incluindo as pausas deliberadas de observação e a seleção humana.
 - Resultado preservado: 3 páginas nativas, 2.527 caracteres úteis, 5 seções, 6 experiências, 2 formações e 3 competências. O banco confirmou documento v3 `in_review`, revisão `draft`, tentativa `structured`, 8 evidências, `pages_native = 3`, `pages_ocr = 0` e ausência de código de falha.
 - Estado atualizado deste adendo: normalização do LinkedIn em produção `PASS`; persistência acadêmica em produção `PASS`; fluxo PDF.js → Parser IA → revisão `PASS`. Nenhum Perfil foi publicado.
+
+## Proteção de persistência para abas antigas — 2026-09-17
+
+- Ocorrência: uma aba ainda carregava `index-B_XLiCcR.js`, enquanto o servidor já entregava `index-DscR-FoQ.js`. A tentativa criou nova Pessoa e repetiu `extraction_drafts_structured_summary_shape_check`; documento v1 `failed/not_ready`, sem revisão e sem Perfil publicado.
+- Implementação: migration `20260917154500_harden_linkedin_draft_persistence` com normalizador privado, idempotente e gatilho anterior à constraint. A cópia de revisão recebe a mesma canonicalização do frontend; páginas e texto de origem não mudam. Tipo não textual continua sob a constraint existente.
+- Proibições preservadas: nenhuma constraint relaxada, nenhuma URL inventada, nenhum grant novo, nenhuma publicação, nenhuma chamada OpenAI e nenhuma exclusão do cadastro incompleto.
+- Evidência local: 27 testes dirigidos, lint de 515 arquivos e `validate:person-flow` `PASS` nas quatro fases; os auto testes SQL cobrem rótulo conhecido, endereço incompatível e tipo malformado.
+- Evidência remota: aplicação atômica, gatilho ativo, URL rotulada convertida para `https://www.linkedin.com/in/synthetic-profile`, URL de empresa convertida em `null`, e `anon`/`authenticated` sem execução. Histórico registra somente `20260917154500`.
+- Estado: proteção servidor `PASS`; reprocessamento real do documento falho `NOT TESTED` por exigir nova operação e possível chamada paga. O cadastro incompleto continua preservado até decisão explícita de exclusão.
