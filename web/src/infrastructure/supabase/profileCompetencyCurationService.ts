@@ -31,9 +31,10 @@ export function profileCompetencyCurationService(organizationId: string, personI
         p_proposal_label: decision.proposalLabel, p_proposal_type: decision.proposalType,
       } as never);
       if (error) {
+        const proposalAlreadyPending = error.code === "23505" && error.message.includes("PROPOSAL_ALREADY_PENDING");
         if (error.code === "40001") throw new Error("Este item ou Perfil foi atualizado por outra operação. Cancele e atualize as pendências antes de tentar novamente.");
         if (error.code === "42501" || error.code === "28000") throw new Error("Você não possui permissão de curadoria para este alcance. A edição foi preservada.");
-        if (error.code === "23505") throw new Error(error.message.includes("PROPOSAL_ALREADY_PENDING") ? "Já existe uma proposta pendente para este termo e alcance. Nenhuma proposta duplicada foi criada." : "Este termo já possui outra decisão humana. A decisão não foi substituída.");
+        if (error.code === "23505") throw new Error(proposalAlreadyPending ? "Já existe uma proposta pendente para este termo e alcance. Nenhuma proposta duplicada foi criada." : "Este termo já possui outra decisão humana. A decisão não foi substituída.");
         throw new Error("Não foi possível confirmar a gravação. A edição foi preservada; confira as pendências antes de tentar novamente.");
       }
       const result = data as unknown as { workflowVersion: string; projection: unknown; outcome: "alias" | "proposal" };
