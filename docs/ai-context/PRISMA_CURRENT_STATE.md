@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.39.0
+version: 2.40.0
 last_verified: 2026-09-18
 ---
 
@@ -10,7 +10,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.4 local, **Prisma v1.7.4**: curadoria em painel no Perfil, retorno à página/filtros/registro, gravação e avanço, aliases/propostas da Knowledge com escopo e auditoria. RPC V3 aplica decisões humanas sem IA ou alteração de snapshots; V1/V2 preservadas. Produção não alterada. Acordo, testes e limites em `docs/qa/aot-m74-contextual-curation.md` e ADR-064.
+M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
 M7.3 publicado em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação e aliases Global/empresa. Sete Perfis reprocessados, com snapshots, decisões e JWT/segredo preservados. Sem mudança de modelo, taxonomia ou matching. `person-professional-evidence-2.0.0` separa contagens. Smoke, dados e limites: `docs/qa/aot-m73-competency-normalization.md`, ADR-063.
 

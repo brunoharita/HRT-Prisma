@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 213
-source_manifest_sha256: 7e567d72ca452431637154faa2d00d288d3377d044a9f135e2673bb967a08e01
+source_manifest_sha256: e1a8df3ec51eeb509996ba69812707a753f965af547625cd8a15cd031fc46be6
 -->
 
 # Tudo sobre o Prisma
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.39.0
+version: 2.40.0
 last_verified: 2026-09-18
 ---
 
@@ -543,7 +543,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.4 local, **Prisma v1.7.4**: curadoria em painel no Perfil, retorno à página/filtros/registro, gravação e avanço, aliases/propostas da Knowledge com escopo e auditoria. RPC V3 aplica decisões humanas sem IA ou alteração de snapshots; V1/V2 preservadas. Produção não alterada. Acordo, testes e limites em `docs/qa/aot-m74-contextual-curation.md` e ADR-064.
+M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
 M7.3 publicado em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação e aliases Global/empresa. Sete Perfis reprocessados, com snapshots, decisões e JWT/segredo preservados. Sem mudança de modelo, taxonomia ou matching. `person-professional-evidence-2.0.0` separa contagens. Smoke, dados e limites: `docs/qa/aot-m73-competency-normalization.md`, ADR-063.
 
@@ -2358,7 +2358,7 @@ Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `pars
 
 ## Política
 
-M7.4 acrescenta `profile-competency-curation-1.0.0` (owner product/Knowledge/security/UI), aceito para implementação: RPC transacional `curate_profile_competency`, consumidores Perfil e adapter Supabase. A leitura `load_person_professional_evidence_map_v3` mantém o formato `person-professional-evidence-2.0.0`, mas explicita o método humano nas associações atualizadas. V1/V2 inalteradas. Resposta de workflow desconhecida falha sem simular sucesso. Migração aditiva antes do frontend; evidências locais/limites no AoT M7.4 e ADR-064; produção ainda não autorizada.
+M7.4 acrescenta `profile-competency-curation-1.0.0` (owner product/Knowledge/security/UI), ativo em produção em 2026-09-18: RPC transacional `curate_profile_competency`, consumidores Perfil e adapter Supabase. A leitura `load_person_professional_evidence_map_v3` mantém o formato `person-professional-evidence-2.0.0`, mas explicita o método humano nas associações atualizadas. V1/V2 inalteradas. Resposta de workflow desconhecida falha sem simular sucesso. Migração aditiva aplicada antes do frontend; evidências e limites no AoT M7.4 e ADR-064.
 
 M7.3 acrescenta `declared-competency-normalization-1.0.0` (owner Knowledge/AI/data; fila e interpretação derivada de declarações, snapshots originais preservados) e `person-professional-evidence-2.0.0` (owner product/Knowledge/UI/security; RPC `load_person_professional_evidence_map_v2`, estados e contagens independentes). A RPC V1 da tabela abaixo permanece compatível para clientes antigos. Versões desconhecidas são rejeitadas; produção e validação estão no AoT M7.3. ADR-063 registra segurança, privacidade, curadoria e rollback.
 
@@ -2937,7 +2937,7 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 # Versionamento
 
-M7.4 (2026-09-18) registra a quarta entrega aceita do Movimento 7: **Prisma v1.7.4**. `profile-competency-curation-1.0.0` versiona a decisão contextual, reutilizando a Knowledge. A RPC de leitura `_v3` aplica aliases humanos à projeção `person-professional-evidence-2.0.0`, sem mudar seu formato nem snapshots; V1/V2 continuam disponíveis. Login e menu usam o registro central. Implementação local e evidências no AoT M7.4; produção depende de autorização específica.
+M7.4 (2026-09-18) registra a quarta entrega aceita do Movimento 7: **Prisma v1.7.4**, publicada em produção. `profile-competency-curation-1.0.0` versiona a decisão contextual, reutilizando a Knowledge. A RPC de leitura `_v3` aplica aliases humanos à projeção `person-professional-evidence-2.0.0`, sem mudar seu formato nem snapshots; V1/V2 continuam disponíveis. Login e menu usam o registro central. Implementação, rollout e limites de validação no AoT M7.4.
 
 M7.3 registra a entrega anterior **Prisma v1.7.3**. `declared-competency-normalization-1.0.0` versiona a interpretação derivada pós-publicação e `person-professional-evidence-2.0.0` explicita declarações, associações, pendências e processamento. Perfis históricos não são reescritos. Rollout e ativação real estão no AoT M7.3, não são presumidos pelo número da versão.
 
@@ -6743,7 +6743,7 @@ Rollback: desativar somente o job `prisma-profile-competency-normalization` e re
 
 # ADR-064 — Curadoria contextual de competências
 
-Status: accepted. Data: 2026-09-18. Acordo `docs/qa/agreement-m74-contextual-curation.md` v1.0.0.
+Status: accepted. Data: 2026-09-18. Acordo `docs/qa/agreement-m74-contextual-curation.md` v1.1.0.
 
 ## Decisão e reutilização
 
@@ -6759,7 +6759,7 @@ Estado de navegação usa chave composta por índice original, declaração, tre
 
 Workflow novo, formato de projeção 2.0.0 preservado. V1/V2 intactas. Aplicar migration `20260918190000` antes de publicar frontend v1.7.4; validar RPC com sessão tenant-scoped. Rollback restaura frontend v1.7.3, conservando funções e decisões auditadas, sem apagar aliases/propostas. Não executar rollback destrutivo de dados.
 
-A validação local combina PostgreSQL real com roles e transações revertidas e UI com adapter sintético; não equivale a E2E Supabase hospedado. Não existe QA remoto separado disponível nesta entrega. Produção exige autorização específica e smoke autenticado após rollout. Não reprocessar perfis nem chamar modelos para aplicar a curadoria. Termos sem equivalente podem permanecer pendentes legitimamente; conflitos não são resolvidos silenciosamente.
+A validação local combina PostgreSQL real com roles e transações revertidas e UI com adapter sintético; não equivale a gravação E2E Supabase hospedada. Não existe QA remoto separado disponível nesta entrega. Rollout autorizado em 2026-09-18 e smoke autenticado de leitura/painel/cancelamento PASS, sem gravar decisões fictícias. Evidências no AoT M7.4. Não reprocessar perfis nem chamar modelos para aplicar a curadoria. Termos sem equivalente podem permanecer pendentes legitimamente; conflitos não são resolvidos silenciosamente.
 
 ---
 
@@ -6854,6 +6854,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+M7.4 em produção em 2026-09-18: **v1.7.4**, runtime `98bdf9c`, migration `20260918134315_m74_contextual_competency_curation` aplicada antes do frontend. Somente web recriada com baseline + Parser IA hosted; imagem `sha256:0f853b35248ee1a9911b1935a2178acc776fc6dc91a6278eb3da6beb0d637489`, rollback `prisma-web:rollback-before-m74-20260918`. HTTP 200 e smoke autenticado de painel/cancelamento preservando página e foco PASS; sem curadoria fictícia em produção. Main/GitHub/VPS sincronizados. Evidências, advisors e limites em `docs/qa/aot-m74-contextual-curation.md`.
+
 M7.3 em produção em 2026-09-18 por autorização explícita de Bruno: web **v1.7.3**, bundle `59b8b49`, imagem `sha256:8bbcce5ad320e3e453eb363a63d2e63f769c674177d99f44b505fb334a90e2ff`; somente `prisma-web` foi recriado. Rollback `prisma-web:rollback-before-m73-20260918`. Migrations derivadas/scheduler/JWT e Knowledge Agent v14 estão ativos, com JWT e segredo do monitor preservados. O job processa um Perfil por minuto, respeitando limites existentes e opt-in. O reprocessamento não altera snapshots humanos; status final, contagens, hashes de preservação e smoke autenticado constam em `docs/qa/aot-m73-competency-normalization.md`. Gateway, parser, workers, fontes Knowledge e matching não foram modificados.
 
 Em 2026-09-18, após autorização explícita para publicar a correção visual da sidebar, `main` e a Hostinger foram sincronizados no commit `862b22e`. O frontend foi reconstruído com as flags vigentes e somente `prisma-web` foi recriado. A imagem ativa é `sha256:8a299d747d23bd643cf81b0c5f38635ef2a8ecd3b87e22725ac2d41a9b683cd4`; a imagem anterior foi preservada como `prisma-web:rollback-before-sidebar-footer-20260918` (`sha256:422e3d50b9ef4a28f33666616b22bc5c2db8bb7ebbb9c72733b3bfbb94a05beb`). HTTPS retornou 200 e o smoke autenticado confirmou o rodapé com logo HRT completo, tipografia/cor harmonizadas e Prisma v1.7.2. Gateway, workers e Traefik permaneceram ativos sem recriação.
@@ -6907,7 +6909,7 @@ Evidência de 2026-09-13: o schema funcional acumulado e `20260914015642_m61_req
 
 ## Produção atual
 
-Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente e só pode seguir para o projeto único após autorização explícita de produção. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
+Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente. A autorização permanente de Bruno de 2026-09-18, registrada no AGENTS.md, inclui main e produção para melhorias autorizadas, salvo veto explícito; não dispensa limites de segurança ou autoriza mudanças fora do escopo. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
 
 ### Correção de transporte Parser IA — 2026-09-16
 
@@ -10916,7 +10918,7 @@ Nenhum desvio funcional pendente do acordo. O defeito de sobreposição foi corr
 
 # AoT — M7.4 Curadoria contextual de competências
 
-2026-09-18. Acordo `agreement-m74-contextual-curation.md` v1.0.0; execução `execution-m74-contextual-curation.md`. Baseline `a26472c`. Implementação local na branch `codex/m74-contextual-curation`, release central **Prisma v1.7.4**. Produção fora deste aceite, sem autorização específica nesta etapa.
+2026-09-18. Acordo `agreement-m74-contextual-curation.md` v1.1.0; execução `execution-m74-contextual-curation.md`. Baseline `a26472c`. Implementação `d762b1d`, autorização e runtime `98bdf9c`, release central **Prisma v1.7.4**. Após aceite local, Bruno autorizou main e produção e estabeleceu entrega completa como padrão, salvo veto explícito. Regra registrada no AGENTS.md v1.3.0.
 
 ## Matriz de Acordos
 
@@ -10929,7 +10931,8 @@ Nenhum desvio funcional pendente do acordo. O defeito de sobreposição foi corr
 | D-05 | RPC transacional, leitura V3, aliases auditados, snapshots intactos | SQL: conflito humano, Perfil antigo, trecho forjado, ocupação/empresa alheia negados; resposta com método/justificativa; replay 40001; snapshots e número de calls preservados | PASS | Sem IA ou mutação remota |
 | D-UX-01 | lista esquerda, seleção azul, painel direito não modal, ações fixas | Captura desktop 1586×992, página 2/item 14/BPMN, comparada ao mockup aprovado; lista utilizável sem máscara | PASS | Shell real preservado |
 | D-UX-02 | tela inteira até 1200px, foco/ciclo teclado, confirmação e guard de navegação | Captura 390×844; Shift+Tab → Cancelar, Tab → Fechar, Escape → Operating model/página 2; sem overflow horizontal; descarte confirmado e continuar editando | PASS | CUA + guard existente |
-| D-06 | workflow versionado, registro central, owners/ADR/contexto | Builds, testes, contexto e revisão de diff abaixo | PASS | Entrega local, não rollout |
+| D-06 | workflow versionado, registro central, owners/ADR/contexto | Builds, testes, contexto e revisão de diff abaixo | PASS | Local e fechamento operacional |
+| D-07 | main, migration e frontend publicados; autorização permanente registrada | CA-04: grants remotos, imagem/rollback, HTTP 200, UI autenticada e cancelamento na página 2 | PASS | Produção; nenhuma curadoria real gravada no smoke |
 
 ## Proibições verificadas
 
@@ -10937,11 +10940,11 @@ Nenhum desvio funcional pendente do acordo. O defeito de sobreposição foi corr
 | --- | --- | --- |
 | P-01 | URL local permaneceu no Perfil; gravação/erro/cancelamento/continuação exercitados. Link externo removido. | PASS |
 | P-02 | Proposta sem conceito publicado; papéis/escopo server-side; ocupação negada; curadoria somente declarada. | PASS |
-| P-03 | Snapshots inalterados por assert SQL; diff sem modelos/parser/matching; nenhuma ferramenta de escrita em produção. | PASS |
+| P-03 | Snapshots inalterados por assert SQL; diff sem modelos/parser/matching; rollout limitado à migration aditiva e frontend autorizados, sem inventar curadoria humana. | PASS |
 
 ## Fora de escopo e autonomia
 
-F-01 preservado: sem produção, merge main, IA nova, reprocessamento pago ou perfis reais. A-01/A-UX-01 usados para adapter, RPC aditiva, chave estável, componentes e breakpoint; sem dependências novas. Descoberta priorizou a Knowledge e o guard de navegação já existentes. Skills supabase e supabase-postgres-best-practices orientaram grants, transação curta e testes negativos; computer-use guiou o smoke real de interface local.
+F-01 revisado pelo Product Owner: main e produção incluídos em D-07; continuam excluídos IA nova, reprocessamento pago e decisões de curadoria reais para teste. A-01/A-UX-01 usados para adapter, RPC aditiva, chave estável, componentes e breakpoint; sem dependências novas. Descoberta priorizou a Knowledge e o guard de navegação existentes. Skills supabase e supabase-postgres-best-practices orientaram grants, transação curta e testes negativos; computer-use guiou os smokes local e hospedado.
 
 ## Fidelidade visual
 
@@ -10968,15 +10971,23 @@ Nenhum desvio funcional do acordo. Foram corrigidos durante o smoke: fonte/defin
 
 ## Git / QA / ambiente
 
-Sem QA remoto separado disponível. PostgreSQL 17 descartável em loopback, database `m72_m73_baseline`; runner aplica migrations/fixtures em transação e termina em ROLLBACK. UI local usa adapter sintético; testes de persistência usam funções reais com roles/JWT sintéticos. Isso não substitui E2E hospedado navegador→PostgREST→banco, que permanece NOT TESTED. Produção não acessada nem modificada nesta melhoria. Arquivos preexistentes `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados fora do commit.
+Sem QA remoto separado disponível. PostgreSQL 17 descartável em loopback, database `m72_m73_baseline`; runner aplica migrations/fixtures em transação e termina em ROLLBACK. UI local usa adapter sintético; testes de persistência usam funções reais com roles/JWT sintéticos. E2E hospedado de leitura e cancelamento PASS; gravação real pelo navegador permanece NOT TESTED por F-01, não sendo substituída silenciosamente pela prova local. Arquivos preexistentes `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `models/` na VPS preservados.
 
-## Rollout posterior
+## Rollout autorizado e smoke de produção
 
-Após aprovação: migration aditiva M74 antes do novo frontend, build com configuração hosted já vigente, smoke autenticado tenant-scoped e verificação de v1.7.4 no login/menu. Não assumir credenciais ausentes: inspecionar o formulário de login antes de solicitar sessão. Rollback: imagem web anterior, mantendo aliases/propostas auditados e RPCs compatíveis; não apagar decisões. Integração em main também depende de aprovação específica.
+- main local/GitHub e checkout `/opt/prisma` da VPS integrados por fast-forward em `98bdf9c`; fechamento documental posterior não altera o runtime. Destino GitHub conferido, sem force-push.
+- Supabase único `ioldpnqqvobprjiontre`: migration local `20260918190000_m74_contextual_competency_curation.sql` aplicada antes da UI e registrada como `20260918134315_m74_contextual_competency_curation`.
+- Funções de curadoria e leitura V3: SECURITY DEFINER, search_path vazio, anon sem EXECUTE e authenticated autorizado; guards negativos já provados no PostgreSQL local.
+- Web construída com `PRISMA_DEPLOY_COMMIT=98bdf9c`, `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`. Somente `prisma-web` recriado via `up -d --no-deps prisma-web`, início 2026-09-18T13:44:27Z. Imagem `sha256:0f853b35248ee1a9911b1935a2178acc776fc6dc91a6278eb3da6beb0d637489`; HTTPS 200. Tag legada de imagem no Compose não define a versão do produto.
+- Rollback conservado: `prisma-web:rollback-before-m74-20260918`, imagem `sha256:8bbcce5ad320e3e453eb363a63d2e63f769c674177d99f44b505fb334a90e2ff`. Restaurar web anterior mantendo RPCs compatíveis e decisões auditadas, nunca apagar aliases/propostas. Gateway permaneceu na imagem `sha256:a8fceee917710b3860d597ed5f8bd6849dad93aabebeaa668c5bdff2401ee2b7`, sem recriação; workers/Traefik não alterados.
+- `/sign-in` reutilizou a sessão e abriu a Home. Menu mostrou v1.7.4. O formulário de login não foi exibido, portanto preenchimento e aparência não foram observados; código do login e menu usa o mesmo `PRISMA_RELEASE.displayVersion`.
+- Perfil vigente real: Competências → página 2 (11–20 de 60) → item 14 → painel com declaração, candidatos/fonte, alcance empresa padrão, justificativa e ações fixas. Captura CUA “Conferir o painel de produção renderizado” comprovou lista e painel lado a lado, sem navegação à Knowledge. Cancelar fechou o painel e restaurou foco no item 14, página 2 e contagens intactas. Nenhuma decisão foi gravada.
+- Limite observado da busca Knowledge reutilizada: o termo Priorização trouxe candidatos C/R não equivalentes. Não foram selecionados nem aprovados. Este smoke comprova transporte e contexto, não qualidade semântica dessas sugestões; não houve mudança do mecanismo de busca neste movimento.
+- Advisors: 7 INFO de RLS sem policy em tabelas existentes/service-only, 72 WARN de funções SECURITY DEFINER executáveis por authenticated (incluindo as duas RPCs M74 intencionalmente protegidas por guards), 1 WARN de proteção contra senha vazada desativada. Não são zero alertas; configuração Auth e funções alheias não foram alteradas. Container experimental Paddle já unhealthy permaneceu fora do escopo.
 
 ## Conclusão
 
-Implementação local concluída, D-* e P-* PASS no escopo acordado. Branch de entrega `codex/m74-contextual-curation`, destino verificado `git@github.com:brunoharita/HRT-Prisma.git`; commit/push identificados no fechamento da tarefa. Sem merge main ou produção. Aplicação hospedada e E2E remoto permanecem fora deste aceite e dependem da autorização de rollout.
+Entrega M7.4 e rollout concluídos, D-* e P-* PASS no acordo revisado. Prisma v1.7.4 ativo; main local/GitHub/VPS sincronizados com a entrega e fechamento documental. Escrita real em produção não exercitada para evitar fabricar decisões humanas. Qualidade das sugestões e alertas preexistentes permanecem limites explícitos, sem serem apresentados como validação semântica ou ausência de riscos.
 
 ---
 

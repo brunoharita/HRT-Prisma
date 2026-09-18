@@ -1,6 +1,6 @@
 # Versionamento
 
-M7.4 (2026-09-18) registra a quarta entrega aceita do Movimento 7: **Prisma v1.7.4**. `profile-competency-curation-1.0.0` versiona a decisão contextual, reutilizando a Knowledge. A RPC de leitura `_v3` aplica aliases humanos à projeção `person-professional-evidence-2.0.0`, sem mudar seu formato nem snapshots; V1/V2 continuam disponíveis. Login e menu usam o registro central. Implementação local e evidências no AoT M7.4; produção depende de autorização específica.
+M7.4 (2026-09-18) registra a quarta entrega aceita do Movimento 7: **Prisma v1.7.4**, publicada em produção. `profile-competency-curation-1.0.0` versiona a decisão contextual, reutilizando a Knowledge. A RPC de leitura `_v3` aplica aliases humanos à projeção `person-professional-evidence-2.0.0`, sem mudar seu formato nem snapshots; V1/V2 continuam disponíveis. Login e menu usam o registro central. Implementação, rollout e limites de validação no AoT M7.4.
 
 M7.3 registra a entrega anterior **Prisma v1.7.3**. `declared-competency-normalization-1.0.0` versiona a interpretação derivada pós-publicação e `person-professional-evidence-2.0.0` explicita declarações, associações, pendências e processamento. Perfis históricos não são reescritos. Rollout e ativação real estão no AoT M7.3, não são presumidos pelo número da versão.
 

@@ -2,6 +2,8 @@
 
 ## Estado
 
+M7.4 em produção em 2026-09-18: **v1.7.4**, runtime `98bdf9c`, migration `20260918134315_m74_contextual_competency_curation` aplicada antes do frontend. Somente web recriada com baseline + Parser IA hosted; imagem `sha256:0f853b35248ee1a9911b1935a2178acc776fc6dc91a6278eb3da6beb0d637489`, rollback `prisma-web:rollback-before-m74-20260918`. HTTP 200 e smoke autenticado de painel/cancelamento preservando página e foco PASS; sem curadoria fictícia em produção. Main/GitHub/VPS sincronizados. Evidências, advisors e limites em `docs/qa/aot-m74-contextual-curation.md`.
+
 M7.3 em produção em 2026-09-18 por autorização explícita de Bruno: web **v1.7.3**, bundle `59b8b49`, imagem `sha256:8bbcce5ad320e3e453eb363a63d2e63f769c674177d99f44b505fb334a90e2ff`; somente `prisma-web` foi recriado. Rollback `prisma-web:rollback-before-m73-20260918`. Migrations derivadas/scheduler/JWT e Knowledge Agent v14 estão ativos, com JWT e segredo do monitor preservados. O job processa um Perfil por minuto, respeitando limites existentes e opt-in. O reprocessamento não altera snapshots humanos; status final, contagens, hashes de preservação e smoke autenticado constam em `docs/qa/aot-m73-competency-normalization.md`. Gateway, parser, workers, fontes Knowledge e matching não foram modificados.
 
 Em 2026-09-18, após autorização explícita para publicar a correção visual da sidebar, `main` e a Hostinger foram sincronizados no commit `862b22e`. O frontend foi reconstruído com as flags vigentes e somente `prisma-web` foi recriado. A imagem ativa é `sha256:8a299d747d23bd643cf81b0c5f38635ef2a8ecd3b87e22725ac2d41a9b683cd4`; a imagem anterior foi preservada como `prisma-web:rollback-before-sidebar-footer-20260918` (`sha256:422e3d50b9ef4a28f33666616b22bc5c2db8bb7ebbb9c72733b3bfbb94a05beb`). HTTPS retornou 200 e o smoke autenticado confirmou o rodapé com logo HRT completo, tipografia/cor harmonizadas e Prisma v1.7.2. Gateway, workers e Traefik permaneceram ativos sem recriação.
@@ -55,7 +57,7 @@ Evidência de 2026-09-13: o schema funcional acumulado e `20260914015642_m61_req
 
 ## Produção atual
 
-Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente e só pode seguir para o projeto único após autorização explícita de produção. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
+Não existe ambiente remoto separado de homologação. Toda alteração deve ser validada localmente. A autorização permanente de Bruno de 2026-09-18, registrada no AGENTS.md, inclui main e produção para melhorias autorizadas, salvo veto explícito; não dispensa limites de segurança ou autoriza mudanças fora do escopo. O rollout exige confirmar backup ou recuperação aplicável, compatibilidade, janela, retenção, comunicação, rollback e smoke sem PII desnecessária. Uma futura separação entre homologação e produção permanece uma decisão de infraestrutura ainda não executada.
 
 ### Correção de transporte Parser IA — 2026-09-16
 

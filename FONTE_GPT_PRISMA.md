@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.1.0
 context_bundle_version: 2.0.0
 product_version: 1.7.2
-current_state_version: 2.39.0
+current_state_version: 2.40.0
 current_state_last_verified: 2026-09-18
 documentation_source_count: 213
-source_manifest_sha256: 7e567d72ca452431637154faa2d00d288d3377d044a9f135e2673bb967a08e01
+source_manifest_sha256: e1a8df3ec51eeb509996ba69812707a753f965af547625cd8a15cd031fc46be6
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -265,7 +265,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M7.4 local, **Prisma v1.7.4**: curadoria em painel no Perfil, retorno à página/filtros/registro, gravação e avanço, aliases/propostas da Knowledge com escopo e auditoria. RPC V3 aplica decisões humanas sem IA ou alteração de snapshots; V1/V2 preservadas. Produção não alterada. Acordo, testes e limites em `docs/qa/aot-m74-contextual-curation.md` e ADR-064.
+M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
 M7.3 publicado em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação e aliases Global/empresa. Sete Perfis reprocessados, com snapshots, decisões e JWT/segredo preservados. Sem mudança de modelo, taxonomia ou matching. `person-professional-evidence-2.0.0` separa contagens. Smoke, dados e limites: `docs/qa/aot-m73-competency-normalization.md`, ADR-063.
 

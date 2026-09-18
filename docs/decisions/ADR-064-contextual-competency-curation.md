@@ -1,6 +1,6 @@
 # ADR-064 — Curadoria contextual de competências
 
-Status: accepted. Data: 2026-09-18. Acordo `docs/qa/agreement-m74-contextual-curation.md` v1.0.0.
+Status: accepted. Data: 2026-09-18. Acordo `docs/qa/agreement-m74-contextual-curation.md` v1.1.0.
 
 ## Decisão e reutilização
 
@@ -16,4 +16,4 @@ Estado de navegação usa chave composta por índice original, declaração, tre
 
 Workflow novo, formato de projeção 2.0.0 preservado. V1/V2 intactas. Aplicar migration `20260918190000` antes de publicar frontend v1.7.4; validar RPC com sessão tenant-scoped. Rollback restaura frontend v1.7.3, conservando funções e decisões auditadas, sem apagar aliases/propostas. Não executar rollback destrutivo de dados.
 
-A validação local combina PostgreSQL real com roles e transações revertidas e UI com adapter sintético; não equivale a E2E Supabase hospedado. Não existe QA remoto separado disponível nesta entrega. Produção exige autorização específica e smoke autenticado após rollout. Não reprocessar perfis nem chamar modelos para aplicar a curadoria. Termos sem equivalente podem permanecer pendentes legitimamente; conflitos não são resolvidos silenciosamente.
+A validação local combina PostgreSQL real com roles e transações revertidas e UI com adapter sintético; não equivale a gravação E2E Supabase hospedada. Não existe QA remoto separado disponível nesta entrega. Rollout autorizado em 2026-09-18 e smoke autenticado de leitura/painel/cancelamento PASS, sem gravar decisões fictícias. Evidências no AoT M7.4. Não reprocessar perfis nem chamar modelos para aplicar a curadoria. Termos sem equivalente podem permanecer pendentes legitimamente; conflitos não são resolvidos silenciosamente.
