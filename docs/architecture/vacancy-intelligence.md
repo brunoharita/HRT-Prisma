@@ -1,6 +1,6 @@
 # Arquitetura de Vagas M5.4
 
-## Extensão local M7.1
+## Extensão M7.1
 
 O fluxo novo usa `save_position_taxonomy`, que envolve `save_vacancy_definition` e `record_vacancy_structure_source` na mesma transação. A fronteira de autorização legada continua ativa. `taxonomy_snapshot` na versão imutável registra `position-taxonomy-1.0.0`; a nova definição recebe `vacancy-definition-1.3.0`. `taxonomy_origin` no requisito conserva os vínculos da seleção explícita. Não existe nova entidade de Posição ou obrigação paralela.
 
@@ -8,7 +8,7 @@ Ao copiar Posição anterior, `sourceVacancyId` conserva a linhagem e a definiç
 
 `preview_position_taxonomy` consulta somente Knowledge aprovada/escopada e fontes oficiais correntes; é read-only. `search_position_taxonomy` pagina opções (25) para decisão humana, nunca normaliza por substring. `create_position_knowledge_complement` reutiliza o overlay e a governança Inbox/proposta/aprovação, sem argumento de escopo Global. Funções privadas não são executáveis pelo cliente. `expectedVersionId` é obrigatório ao editar e rejeita conflito; a prévia enviada pelo browser não é autoridade. O ledger ocupacional registra cada versão e o histórico da UI pagina snapshots em lotes de 20.
 
-Aliases/identidades aprovadas e fontes/métricas/versões ficam no snapshot. Título e requisitos humanos não são substituídos pela referência. Correção alimenta Inbox da empresa quando aplicável, sem publicar alias automaticamente. Decisão humana mantida conserva ator/instante próprios, separados do autor da nova versão. NULL continua histórico sem M7.1; desconhecido/inválido falha fechado. Rollback e ordem de ativação no ADR-060. Migration aplicada somente em PostgreSQL local descartável nesta entrega.
+Aliases/identidades aprovadas e fontes/métricas/versões ficam no snapshot. Título e requisitos humanos não são substituídos pela referência. Correção alimenta Inbox da empresa quando aplicável, sem publicar alias automaticamente. Decisão humana mantida conserva ator/instante próprios, separados do autor da nova versão. NULL continua histórico sem M7.1; desconhecido/inválido falha fechado. Rollback e ordem de ativação no ADR-060. Após prova PostgreSQL local, migration e frontend ativados no ambiente único de produção por autorização de 2026-09-18; evidências no AoT M7.1.
 
 ## Reuso
 

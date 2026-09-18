@@ -1,6 +1,17 @@
 # AoT — M7.1 Taxonomia Profissional e Inteligência de Posições
 
-Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 + texto integral em `docs/qa/execution-m71-position-taxonomy.md`. Data: 2026-09-18. Status: implementação/prova local. Não significa rollout remoto.
+Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 + texto integral em `docs/qa/execution-m71-position-taxonomy.md`. Data: 2026-09-18. Status: implementação/prova local e ativação remota posteriormente autorizada. A matriz abaixo preserva o ambiente de cada prova; o smoke remoto não substitui a suíte local.
+
+## Ativação e sincronização autorizadas — 2026-09-18
+
+- Pedido posterior do PO autorizou main local/GitHub, Supabase e hosting. Integração fast-forward, sem reescrever histórico, da entrega `bc782fe6044661a14f91fba7eaf8cd7401ceb42f`; CI dos dois commits M7.1 passou. O checkout `/opt/prisma` da Hostinger também passou para main.
+- Migration local `20260918010000_m71_position_taxonomy.sql` aplicada atomicamente pelo conector no projeto único de produção `ioldpnqqvobprjiontre`; o conector registrou `20260918044935_m71_position_taxonomy`. O SQL é o mesmo, com limites transacionais de lock 5 s e execução 60 s. Não se reparou nem reaplicou o ledger histórico divergente.
+- Verificação remota: oito funções presentes com search_path vazio; quatro helpers privados sem execução por anon/authenticated; quatro RPCs públicas somente authenticated. RLS das duas tabelas permanece ativa. Chamada read-only sem identidade foi rejeitada com `42501 POSITION_TAXONOMY_UNAUTHORIZED`. As 17 versões históricas continuaram com snapshot NULL: nenhum backfill.
+- Frontend reconstruído do commit acima com `baseline` e Parser IA `hosted`; somente prisma-web foi recriado. Imagem ativa `sha256:4e18858eaa7e81b5a2e581f9d042c3c39a33ed046d87d27ad2cd4c8e2770c8b6`, zero restart e HTTPS 200. Bundle confirma commit e nova RPC. Gateway mantém início em 2026-09-17; workers, modelos, Edge Functions e dados de Pessoas não foram alterados.
+- Recuperação: imagem anterior `sha256:b185d7ad8f0f78708097d25efe6ac03848892b4d956fbc9669dc6ed893bc46e2` preservada como `prisma-web:rollback-before-m71-20260918`. Banco aditivo, sem alteração de função antiga ou dado histórico: em rollback, retornar frontend anterior e revogar novas RPCs por migration controlada, mantendo colunas e futuros snapshots. Não foi necessário restaurar backup.
+- Smoke autenticado real no site: Home e formulário Posições carregaram; título genérico Software Developers resolveu automaticamente pela O*NET 31.0 / 15-1252.00; 10 habilidades e 430 tecnologias paginadas, nenhum requisito automático. Origem mostrou IM 3.50 e LV 3.62 de Active Learning. Drawer mostrou regra, fonte e estado prévia não salva, sem atribuir decisão humana fictícia. Nenhuma Posição/complemento foi persistido para teste; criação/edição transacional permanece provada pela suíte SQL local, não alegada como jornada de escrita em produção.
+- Advisors: os seis avisos informativos de tabelas protegidas sem policy e o aviso pré-existente de proteção contra senhas vazadas desabilitada permanecem. Funções SECURITY DEFINER públicas autenticadas passaram de 63 para 67 pelas quatro RPCs deliberadamente autorizadas; guardas e grants foram conferidos. Não houve relaxamento para eliminar avisos.
+- Resíduos preservados: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` localmente e `models/` não versionado na VPS. Versão pública v1.6.4 mantida: sincronização operacional não acrescenta uma entrega ao registro de produto por inferência.
 
 ## Evidências
 
@@ -83,11 +94,11 @@ Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 + texto integral em
 | --- | --- | --- |
 | F-01 | Sem alterações em Pessoa/M7.2/parser/OCR/verificação/fórmula/carreira | PASS |
 | F-02 | Sem provider externo/research/nova arquitetura de Knowledge | PASS |
-| F-03 | Sem migration, merge, deploy ou dados reais escritos remotamente; somente commit/push de código autorizados | PASS |
+| F-03 | Rollout inicial excluído; autorização específica posterior atendida conforme seção de ativação, sem alterar dados reais de negócio | PASS |
 
 ## Desvios e decisões de execução
 
-Nenhum desvio funcional do acordo. A mudança de UX substitui o gate de referência obrigatório e a etapa IA anteriores por determinação/seleção explicitamente autorizadas; RPCs legadas preservadas. Grupos visuais são tipos reais, não grupos de software dos mocks. A versão pública permanece v1.6.4 conforme a política: código local validado não inventa aceite/ativação de nova entrega pública. Não houve nova decisão material nem expansão de fonte/provider.
+Nenhum desvio funcional do acordo. A mudança de UX substitui o gate de referência obrigatório e a etapa IA anteriores por determinação/seleção explicitamente autorizadas; RPCs legadas preservadas. Grupos visuais são tipos reais, não grupos de software dos mocks. A versão pública permanece v1.6.4: a autorização operacional posterior ativou o código, sem acrescentar por inferência uma entrega ao release registry. Não houve nova decisão funcional nem expansão de fonte/provider.
 
 O teste local foi preparado com schemas mínimos auth/storage, min(uuid) de compatibilidade e remoção do helper antigo antes de M2 recriar suas políticas no banco vazio. Duas correções textuais históricas de currículo que não reaplicam sobre a migration atual e o monitor remoto Vault/Cron/net foram excluídos do bootstrap. Nenhuma migration canônica antiga foi editada; todos os owners atuais de Posições, Knowledge e RLS foram aplicados. É prova dirigida do M7.1, não certificação do replay histórico integral ou equivalência da plataforma Supabase completa.
 
@@ -99,12 +110,12 @@ Revisão final adicional: `saveAsRole` agora descarta `taxonomyOrigin` arbitrár
 2. Build/88 testes/typecheck/build web conforme E2/E4.
 3. UI: `node node_modules/vite/bin/vite.js --config tests/ui/m71.vite.config.mts`; abrir `http://127.0.0.1:5571/m71.html`. Harness fora da entrada/build de produção, URL/key sintéticas loopback, mocks explícitos de todas as quatro operações.
 4. `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`; higiene e revisão somente dos arquivos do movimento. Não executar validate completo.
-5. Rollout futuro exige autorização: migration antes do frontend, smoke autenticado e sem PII, sem confundir ambiente único remoto com sandbox local. Nenhuma prova UI contra backend remoto novo é alegada.
+5. Rollout posterior autorizado: migration antes do frontend e smoke autenticado read-only descritos na seção de ativação. O ambiente único remoto não foi tratado como sandbox para fixtures.
 
 ## Git / ambiente / resíduos
 
-Baseline 1215c6e1cdd603a741e14def6724525b4fded2cb; branch codex/m71-position-taxonomy. Entrega em commit coerente e push ao origin existente conforme autorização permanente; SHA final e igualdade da ref são informados no relatório de fechamento. Sem merge/deploy. Material alheio preservado: .tmp.driveupload/ e services/paddle/Dockerfile.gpu. Bases/logs descartáveis da verificação ficam em tmp/ ignorado; processos auxiliares desta tarefa são encerrados no fechamento.
+Baseline 1215c6e1cdd603a741e14def6724525b4fded2cb; implementação na branch codex/m71-position-taxonomy, posteriormente integrada em main local/GitHub/Hostinger por autorização explícita. Commit funcional implantado bc782fe; fechamento documental posterior não altera runtime. Material alheio preservado: .tmp.driveupload/ e services/paddle/Dockerfile.gpu. Bases/logs descartáveis da verificação ficam em tmp/ ignorado; PostgreSQL auxiliar foi encerrado.
 
 ## Conclusão
 
-D-01–D-32 e P-01–P-24 PASS no escopo local acima. Implementação local concluída com validação proporcional. M7.1 **não está ativado no backend/frontend hospedados**; isso depende de autorização de rollout. Ausência de reconciliações aprovadas limita consolidação real entre fontes por governança, não por equivalência inventada.
+D-01–D-32 e P-01–P-24 PASS no escopo local acima. M7.1 ativado no backend/frontend hospedados após autorização explícita e smoke autenticado read-only. Ausência de reconciliações aprovadas limita consolidação real entre fontes por governança, não por equivalência inventada.

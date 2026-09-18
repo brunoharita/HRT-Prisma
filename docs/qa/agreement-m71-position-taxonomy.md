@@ -78,6 +78,8 @@ Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: pedido explí
 
 ## PENDÊNCIAS
 
+Autorização operacional posterior, 2026-09-18: Bruno solicitou "atualizar tudo. Deixar tudo em main, atualizado, localment, no git, no supabase e onde mais precisar". Isso satisfaz a autorização específica prevista em F-03 para integrar main, aplicar a migration e publicar o frontend no ambiente único existente. Não altera D-*, P-*, contratos funcionais, fontes, dados históricos ou autoriza limpeza de material alheio. Evidências de ativação estão no AoT.
+
 Nenhuma decisão funcional pendente identificada. Limites operacionais de validação são registrados no AoT, sem autorização implícita de rollout.
 
 ## CRITÉRIOS DE ACEITE

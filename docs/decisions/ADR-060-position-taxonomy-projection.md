@@ -1,6 +1,6 @@
 # ADR-060: Taxonomia de Posições como projeção versionada da Knowledge existente
 
-- Status: accepted (escopo autorizado pelo acordo M7.1; implementação e prova locais)
+- Status: accepted (acordo M7.1; implementação/prova locais e rollout posteriormente autorizado)
 - Date: 2026-09-18
 - Owners: product, engineering, security
 - Agreement: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 e execução integral referenciada.
@@ -46,7 +46,7 @@ NULL identifica versão histórica sem M7.1, não insuficiência profissional. C
 
 ## Validation / Review / Replacement
 
-AoT `docs/qa/aot-m71-position-taxonomy.md`: PostgreSQL 17 descartável com RLS real das migrations, fixtures sintéticas e identificadores oficiais versionados; unitários, regressão e componente real no navegador. Nenhuma migration/deploy remoto nesta entrega. Revisar se volume real mostrar gargalo, novos mappings exigirem semântica não representada ou PO autorizar fonte/provider novo. Mudança de semântica requer novo acordo e versão, não extensão silenciosa.
+AoT `docs/qa/aot-m71-position-taxonomy.md`: PostgreSQL 17 descartável com RLS real das migrations, fixtures sintéticas e identificadores oficiais versionados; unitários, regressão e componente real no navegador. Rollout posterior autorizado em 2026-09-18 aplicou migration antes do frontend e confirmou smoke autenticado read-only. Revisar se volume real mostrar gargalo, novos mappings exigirem semântica não representada ou PO autorizar fonte/provider novo. Mudança de semântica requer novo acordo e versão, não extensão silenciosa.
 
 ## References / Change history
 

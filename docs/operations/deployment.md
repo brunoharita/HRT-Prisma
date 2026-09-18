@@ -2,6 +2,8 @@
 
 ## Estado
 
+Em 2026-09-18, Bruno autorizou sincronizar main local/GitHub, Supabase e hosting para M7.1. A migration aditiva `20260918010000_m71_position_taxonomy.sql` foi aplicada no projeto único, registrada pelo conector como `20260918044935_m71_position_taxonomy`; nenhuma migration antiga foi reaplicada. O frontend `bc782fe` foi construído e ativado a partir de main com `baseline` e Parser IA `hosted`, sem recriar gateway/workers. Rollback: `prisma-web:rollback-before-m71-20260918`. HTTPS 200, bundle/commit conferidos, funções/grants/RLS e smoke autenticado de associação, origem e explicação passaram. Não se gravou Posição de teste em produção. Evidência, avisos preexistentes e limites: `docs/qa/aot-m71-position-taxonomy.md`.
+
 O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambiente atual de produção. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel, mas não identifica outro ambiente. Desde 2026-09-15, o frontend está implantado na VPS Hostinger em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
 
 Em 2026-09-17, por decisão explícita do Product Owner, somente o frontend foi reconstruído para desativar temporariamente chamadas Paddle na importação: `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline`, preservando `VITE_PARSER_IA_MODE=hosted`. Commit implantado `9dfa4d4`; imagem anterior preservada como `prisma-web:rollback-before-baseline-20260917`. Supabase, gateway, workers, modelos e volumes não mudaram. O bundle publicado e a tela autenticada confirmaram a configuração; a importação real pós-rollout ficou para teste do Product Owner.

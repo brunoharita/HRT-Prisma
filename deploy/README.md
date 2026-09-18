@@ -8,7 +8,9 @@ Endpoint público:
 
 https://prisma.hrtsolutions.com.br
 
-O frontend utiliza o único backend Supabase remoto atual, Prisma-QA. Não existe ainda projeto Supabase separado de produção.
+O frontend utiliza o único backend Supabase remoto atual, projeto `ioldpnqqvobprjiontre` (nome atual Prisma; Prisma-QA é rótulo histórico). Esse é o ambiente de produção, não uma homologação separada.
+
+Rollout M7.1 de 2026-09-18: checkout da VPS em main, frontend construído de `bc782fe`, migration aplicada antes da UI, smoke autenticado read-only aprovado. Recuperação web: `prisma-web:rollback-before-m71-20260918`. Preserve `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted` em rebuild; não reinicie gateway/workers para uma alteração exclusivamente web. Evidências no AoT M7.1.
 
 ## Arquitetura
 

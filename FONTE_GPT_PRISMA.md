@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.0.0
 context_bundle_version: 2.0.0
 product_version: 1.6.4
-current_state_version: 2.34.0
+current_state_version: 2.34.1
 current_state_last_verified: 2026-09-18
 documentation_source_count: 194
-source_manifest_sha256: 89041ed7ce1a0971f73f2ca09b904a44dd5f61db5953ba418b01ba982f96d129
+source_manifest_sha256: 3b401906540a8dcb2827ffc38bed48442777a0182b1516a474632763529a757d
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -243,7 +243,7 @@ pnpm run check:prisma-context
 
 #### Resumo operacional para prompts
 
-M7.1 implementado e validado localmente na branch `codex/m71-position-taxonomy`, sem migration, merge ou deploy remoto: `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção, insuficiência permite salvar manualmente/Inbox. Todas as referências sustentadas e métricas originais ficam explicáveis; sugestões/complementos não viram requisitos automaticamente. Overlay da empresa, correção auditável, histórico e origem por item reutilizam a fundação. Testes PostgreSQL com RLS real e fixtures, regressão e componente real no navegador constam no `docs/qa/aot-m71-position-taxonomy.md`. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. Produto permanece v1.6.4; M7.2, matching/score e IA não foram alterados. O remoto descrito abaixo ainda não recebeu M7.1.
+M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. Produto permanece v1.6.4; M7.2, matching/score e IA não foram alterados.
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
@@ -261,9 +261,9 @@ Correção adicional de produção em 2026-09-17: o salvamento da revisão de Ju
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
-Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
 
 #### M6.1.2 — descoberta por trajetória em três grupos
 

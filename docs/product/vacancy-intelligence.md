@@ -2,7 +2,7 @@
 
 ## M7.1 — Taxonomia Profissional e Inteligência de Posições
 
-Implementação local, sem ativação remota: o nome da empresa permanece separado do conceito profissional Prisma e das referências CBO/ESCO/O*NET sustentadas. Correspondência aprovada inequívoca é automática, visível e corrigível; ambiguidade exige escolha e insuficiência preserva o preenchimento manual, sem inventar referência.
+Ativo no frontend/backend único desde o rollout autorizado de 2026-09-18: o nome da empresa permanece separado do conceito profissional Prisma e das referências CBO/ESCO/O*NET sustentadas. Correspondência aprovada inequívoca é automática, visível e corrigível; ambiguidade exige escolha e insuficiência preserva o preenchimento manual, sem inventar referência.
 
 Conhecimentos e habilidades relacionados são sugestões agrupadas pelos tipos efetivamente publicados, não uma lista automática de exigências. Cada inclusão pede obrigatório ou desejável no contrato existente. Knowledge complementar pertence à empresa, é reutilizável e só vira requisito após seleção explícita. Não usa estados de evidência da Pessoa, não presume proficiência e não altera o matching. “Por que o Prisma associou assim?” expõe fontes, versões, regra, decisão humana, histórico e correção; a origem também está disponível por item. Histórico sem interpretação M7.1 continua identificado como tal, sem reprocessamento retroativo.
 

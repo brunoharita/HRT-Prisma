@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 194
-source_manifest_sha256: 89041ed7ce1a0971f73f2ca09b904a44dd5f61db5953ba418b01ba982f96d129
+source_manifest_sha256: 3b401906540a8dcb2827ffc38bed48442777a0182b1516a474632763529a757d
 -->
 
 # Tudo sobre o Prisma
@@ -250,7 +250,7 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace. M5 resolves native PDF characters and OCR symbols into normalized canonical page coordinates, so zoom and viewport size change only presentation, not selected text. Adaptive extraction preserves PDF layout, relearns complete experience blocks immediately after an evidence-backed correction, applies accepted suggestions atomically, and promotes metadata-only organization patterns only after full review approval. The local review evolution also supports evidence-backed custom profile sections under `Outros`; approved titles and formats can improve future first extraction without copying personal content.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The current single remote project, Prisma-QA, has foundation through M6.2 active for the authorized internal scope. M5.2 publishes CBO `CBO 2002-2025-06-06`, ESCO v1.2.1 and O*NET 31.0 as current versioned snapshots; monitoring never publishes automatically. M6.1 uses explainable matching 4.0.0 and Prisma Score 1.1.0 after discovery, and M6.2 creates contextual verification only from an explicit human action. The frontend remains local and there is no separate production project or hosting. Knowledge research is active behind the QA server boundary, the M5.7 parser is experimental and loopback-only, external assessment-item generation remains disabled, and vector embeddings are not configured. PDF.js and Tesseract.js run locally in the browser.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The single remote project, Prisma (`ioldpnqqvobprjiontre`, formerly labelled Prisma-QA), is production; the frontend is hosted at https://prisma.hrtsolutions.com.br on Hostinger. M7.1 position taxonomy is active after the authorized 2026-09-18 rollout, with versioned provenance and explicit human requirement selection; historical definitions are preserved. CBO `CBO 2002-2025-06-06`, ESCO v1.2.1 and O*NET 31.0 are published/current; monitoring never publishes automatically. Matching 5.0.0 classifies trajectory A/B/C before Prisma Score 1.2.0, and M6.2 creates contextual verification only from an explicit human action. The experimental Parser IA still depends on the authenticated hosted bridge to a loopback worker. Automatic import uses native PDF.js followed by Parser IA; Paddle and automatic Tesseract remain temporarily bypassed. External assessment-item generation and vector embeddings remain disabled. See deployment operations and the M7.1 AoT for activation evidence and limits.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -523,7 +523,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.34.0
+version: 2.34.1
 last_verified: 2026-09-18
 ---
 
@@ -531,7 +531,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.1 implementado e validado localmente na branch `codex/m71-position-taxonomy`, sem migration, merge ou deploy remoto: `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção, insuficiência permite salvar manualmente/Inbox. Todas as referências sustentadas e métricas originais ficam explicáveis; sugestões/complementos não viram requisitos automaticamente. Overlay da empresa, correção auditável, histórico e origem por item reutilizam a fundação. Testes PostgreSQL com RLS real e fixtures, regressão e componente real no navegador constam no `docs/qa/aot-m71-position-taxonomy.md`. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. Produto permanece v1.6.4; M7.2, matching/score e IA não foram alterados. O remoto descrito abaixo ainda não recebeu M7.1.
+M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. Produto permanece v1.6.4; M7.2, matching/score e IA não foram alterados.
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
@@ -549,9 +549,9 @@ Correção adicional de produção em 2026-09-17: o salvamento da revisão de Ju
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
-Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto Prisma-QA; não existe projeto Supabase separado de produção. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes no QA, com monitoramento separado da publicação. Knowledge research está ativa e validada pela fronteira server-side do QA; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.2.0`, `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais no Prisma-QA, sem delivery automático ou uso autorizado com Pessoas reais.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
 
 ## Frontend hospedado — 2026-09-15
 
@@ -972,7 +972,7 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 2.1.0
+version: 2.1.1
 last_verified: 2026-09-18
 ---
 
@@ -980,7 +980,7 @@ last_verified: 2026-09-18
 
 ## M7.1 — Taxonomia explicável de Posições
 
-Implementação local: nome da empresa, conceito Prisma e referências oficiais são leituras distintas. Knowledge aprovada permite associação exata segura ou seleção humana; insuficiência preserva fluxo manual. Sugestões mantêm fonte e métricas, sem obrigatoriedade automática. Complementos pertencem à empresa e requisitos continuam required/desired por decisão explícita. Explicação, correção, origem e histórico são acessíveis na própria Posição. Não cria evidência de Pessoa, não implementa M7.2, não muda matching/score nem promove Global. Ver ADR-060 e AoT M7.1; rollout remoto ainda não realizado.
+Ativo após rollout autorizado de 2026-09-18: nome da empresa, conceito Prisma e referências oficiais são leituras distintas. Knowledge aprovada permite associação exata segura ou seleção humana; insuficiência preserva fluxo manual. Sugestões mantêm fonte e métricas, sem obrigatoriedade automática. Complementos pertencem à empresa e requisitos continuam required/desired por decisão explícita. Explicação, correção, origem e histórico são acessíveis na própria Posição. Não cria evidência de Pessoa, não implementa M7.2, não muda matching/score nem promove Global. Main local/GitHub/Hostinger sincronizadas e migration no backend único; ver ADR-060 e AoT M7.1 para prova e limites do smoke remoto.
 
 ## Vagas: revisão canônica M5.4.6
 
@@ -2350,8 +2350,8 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `person-action-center` | product/application/UI | 1.0.0 | Central da Pessoa, documentos, M5 | implementado localmente | view model tipado e pendências derivadas com alvo documental explícito | local | não exibir ação sem destino disponível |
 | `prisma-profile-view` | product/application/UI | 1.0.0 | Central da Pessoa, Perfil, versões e comparação | implementado localmente | projeção canônica derivada do `professional-profile`, ordem estável e compatibilidade histórica | local | omitir seção inválida sem fabricar conteúdo |
 | `profile-discovery` | product/application/domain | 1.0.0 | busca de Pessoas, resultados e comparação | implementado localmente | filtros determinísticos, equivalência Knowledge explicada, todos/qualquer e tenant scope | local | não retornar resultado sem evidência do critério |
-| `vacancy-definition` | product/application/data | 1.3.0 local / 1.2.0 remoto | Vagas, posições, funções, histórico e matching | M7.1 validado localmente, não ativado remotamente | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local | preservar históricos; rejeitar metadado futuro/inválido e conflito |
-| `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 local | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local | falhar fechado sem inventar interpretação; NULL histórico é permitido |
+| `vacancy-definition` | product/application/data | 1.3.0 no fluxo M7.1; históricos preservados | Vagas, posições, funções, histórico e matching | ativo após rollout autorizado de 2026-09-18 | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local/produção única | preservar históricos; rejeitar metadado futuro/inválido e conflito |
+| `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 ativo | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local/produção única | falhar fechado sem inventar interpretação; NULL histórico é permitido |
 | `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
@@ -2675,7 +2675,7 @@ O monitor `knowledge-source-monitor-1.0.1` verifica CBO, ESCO e O*NET no primeir
 
 `knowledge-normalization-2.0.0` usa o escopo do termo, não o escopo do conceito, para aplicar precedência Organization -> Global. Somente correspondência exata e inequívoca resolve. Sugestões por prefixo ou substring servem apenas à decisão humana na Inbox. Relações como `is_a` nunca viram equivalência nem evidência profissional.
 
-Na implementação local M7.1, os seletores de Posições usam busca paginada por termos aprovados para escolha humana, sem transformar substring em correspondência automática. Preview resolve por alias exato inequívoco e escopo do termo, usa somente fonte oficial publicada/corrente para ocupações globais e conserva aliases/versões no snapshot. Reconciliações aprovadas e identidades estáveis permitem múltiplas fontes, com todas as origens. Os seis tipos já existentes organizam a apresentação; não há categoria nova ou ontologia paralela. Mappings, relações, overlays, Inbox e publicação permanecem os owners. RPCs históricas de resolução continuam preservadas, mas a nova tela não aciona o agente de resolução. Detalhes no ADR-060; não houve ativação remota do M7.1.
+No M7.1, os seletores de Posições usam busca paginada por termos aprovados para escolha humana, sem transformar substring em correspondência automática. Preview resolve por alias exato inequívoco e escopo do termo, usa somente fonte oficial publicada/corrente para ocupações globais e conserva aliases/versões no snapshot. Reconciliações aprovadas e identidades estáveis permitem múltiplas fontes, com todas as origens. Os seis tipos já existentes organizam a apresentação; não há categoria nova ou ontologia paralela. Mappings, relações, overlays, Inbox e publicação permanecem os owners. RPCs históricas de resolução continuam preservadas, mas a nova tela não aciona o agente de resolução. Detalhes no ADR-060; ativação remota autorizada de 2026-09-18 comprovada no AoT M7.1.
 
 Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.
 
@@ -2828,7 +2828,7 @@ API HTTP/BFF dedicada, fila assíncrona, embeddings vetoriais, LLM produtivo, ma
 
 # Arquitetura de Vagas M5.4
 
-## Extensão local M7.1
+## Extensão M7.1
 
 O fluxo novo usa `save_position_taxonomy`, que envolve `save_vacancy_definition` e `record_vacancy_structure_source` na mesma transação. A fronteira de autorização legada continua ativa. `taxonomy_snapshot` na versão imutável registra `position-taxonomy-1.0.0`; a nova definição recebe `vacancy-definition-1.3.0`. `taxonomy_origin` no requisito conserva os vínculos da seleção explícita. Não existe nova entidade de Posição ou obrigação paralela.
 
@@ -2836,7 +2836,7 @@ Ao copiar Posição anterior, `sourceVacancyId` conserva a linhagem e a definiç
 
 `preview_position_taxonomy` consulta somente Knowledge aprovada/escopada e fontes oficiais correntes; é read-only. `search_position_taxonomy` pagina opções (25) para decisão humana, nunca normaliza por substring. `create_position_knowledge_complement` reutiliza o overlay e a governança Inbox/proposta/aprovação, sem argumento de escopo Global. Funções privadas não são executáveis pelo cliente. `expectedVersionId` é obrigatório ao editar e rejeita conflito; a prévia enviada pelo browser não é autoridade. O ledger ocupacional registra cada versão e o histórico da UI pagina snapshots em lotes de 20.
 
-Aliases/identidades aprovadas e fontes/métricas/versões ficam no snapshot. Título e requisitos humanos não são substituídos pela referência. Correção alimenta Inbox da empresa quando aplicável, sem publicar alias automaticamente. Decisão humana mantida conserva ator/instante próprios, separados do autor da nova versão. NULL continua histórico sem M7.1; desconhecido/inválido falha fechado. Rollback e ordem de ativação no ADR-060. Migration aplicada somente em PostgreSQL local descartável nesta entrega.
+Aliases/identidades aprovadas e fontes/métricas/versões ficam no snapshot. Título e requisitos humanos não são substituídos pela referência. Correção alimenta Inbox da empresa quando aplicável, sem publicar alias automaticamente. Decisão humana mantida conserva ator/instante próprios, separados do autor da nova versão. NULL continua histórico sem M7.1; desconhecido/inválido falha fechado. Rollback e ordem de ativação no ADR-060. Após prova PostgreSQL local, migration e frontend ativados no ambiente único de produção por autorização de 2026-09-18; evidências no AoT M7.1.
 
 ## Reuso
 
@@ -2908,11 +2908,11 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 # Versionamento
 
-## M7.1 local — 2026-09-18
+## M7.1 — 2026-09-18
 
 `position-taxonomy-1.0.0` é um novo contrato aditivo de interpretação/proveniência. `vacancy-definition` passa de 1.2.0 a 1.3.0 no novo salvamento atômico, sem alterar required/desired, fórmulas ou consumidores históricos. Versões antigas, inclusive estrutura assistida 2.0.0 histórica, não são reescritas; NULL no novo metadado significa sem interpretação M7.1 registrada. `vacancy-matching-explainable-5.0.0`, `matching-score-1.2.0` e snapshots aceitos pelo M6.2 permanecem.
 
-A versão pública continua v1.6.4 e o release registry não recebe entrada somente por esta implementação local. O pedido autoriza implementar M7.1 e aplicar a política, não declara uma nova entrega pública já aceita/ativada. O próximo registro oficial depende do fechamento/aceite de produto, sem inferir v1.7.1 a partir do nome do movimento. Nenhum deploy/merge remoto foi autorizado nesta execução. Prova local e limites constam no AoT M7.1.
+A versão pública continua v1.6.4. A autorização posterior do PO sincronizou main, Supabase e hosting; ativação não acrescenta automaticamente uma entrega ao release registry nem infere v1.7.1 do nome do movimento. Contratos M7.1 estão ativos no remoto, com versões históricas preservadas. Provas locais e smoke remoto com seus limites constam no AoT M7.1.
 
 ## Ponte Paddle hospedada — 2026-09-16
 
@@ -6515,7 +6515,7 @@ O Parser IA continua ligado ao hash do PDF, à organização, às linhas-fonte, 
 
 # ADR-060: Taxonomia de Posições como projeção versionada da Knowledge existente
 
-- Status: accepted (escopo autorizado pelo acordo M7.1; implementação e prova locais)
+- Status: accepted (acordo M7.1; implementação/prova locais e rollout posteriormente autorizado)
 - Date: 2026-09-18
 - Owners: product, engineering, security
 - Agreement: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 e execução integral referenciada.
@@ -6561,7 +6561,7 @@ NULL identifica versão histórica sem M7.1, não insuficiência profissional. C
 
 ## Validation / Review / Replacement
 
-AoT `docs/qa/aot-m71-position-taxonomy.md`: PostgreSQL 17 descartável com RLS real das migrations, fixtures sintéticas e identificadores oficiais versionados; unitários, regressão e componente real no navegador. Nenhuma migration/deploy remoto nesta entrega. Revisar se volume real mostrar gargalo, novos mappings exigirem semântica não representada ou PO autorizar fonte/provider novo. Mudança de semântica requer novo acordo e versão, não extensão silenciosa.
+AoT `docs/qa/aot-m71-position-taxonomy.md`: PostgreSQL 17 descartável com RLS real das migrations, fixtures sintéticas e identificadores oficiais versionados; unitários, regressão e componente real no navegador. Rollout posterior autorizado em 2026-09-18 aplicou migration antes do frontend e confirmou smoke autenticado read-only. Revisar se volume real mostrar gargalo, novos mappings exigirem semântica não representada ou PO autorizar fonte/provider novo. Mudança de semântica requer novo acordo e versão, não extensão silenciosa.
 
 ## References / Change history
 
@@ -6657,6 +6657,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 # Deployment
 
 ## Estado
+
+Em 2026-09-18, Bruno autorizou sincronizar main local/GitHub, Supabase e hosting para M7.1. A migration aditiva `20260918010000_m71_position_taxonomy.sql` foi aplicada no projeto único, registrada pelo conector como `20260918044935_m71_position_taxonomy`; nenhuma migration antiga foi reaplicada. O frontend `bc782fe` foi construído e ativado a partir de main com `baseline` e Parser IA `hosted`, sem recriar gateway/workers. Rollback: `prisma-web:rollback-before-m71-20260918`. HTTPS 200, bundle/commit conferidos, funções/grants/RLS e smoke autenticado de associação, origem e explicação passaram. Não se gravou Posição de teste em produção. Evidência, avisos preexistentes e limites: `docs/qa/aot-m71-position-taxonomy.md`.
 
 O projeto Supabase `ioldpnqqvobprjiontre` é o único backend remoto e o ambiente atual de produção. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel, mas não identifica outro ambiente. Desde 2026-09-15, o frontend está implantado na VPS Hostinger em `https://prisma.hrtsolutions.com.br` e usa esse mesmo backend. O deploy web usa Docker, Nginx e Traefik com HTTPS via Let's Encrypt; o runbook reproduzível está em `deploy/README.md`.
 
@@ -8236,7 +8238,7 @@ Engenharia escolhe medidas, espaçamento, tipografia, distribuição dos compone
 
 ## M7.1 — Taxonomia Profissional e Inteligência de Posições
 
-Implementação local, sem ativação remota: o nome da empresa permanece separado do conceito profissional Prisma e das referências CBO/ESCO/O*NET sustentadas. Correspondência aprovada inequívoca é automática, visível e corrigível; ambiguidade exige escolha e insuficiência preserva o preenchimento manual, sem inventar referência.
+Ativo no frontend/backend único desde o rollout autorizado de 2026-09-18: o nome da empresa permanece separado do conceito profissional Prisma e das referências CBO/ESCO/O*NET sustentadas. Correspondência aprovada inequívoca é automática, visível e corrigível; ambiguidade exige escolha e insuficiência preserva o preenchimento manual, sem inventar referência.
 
 Conhecimentos e habilidades relacionados são sugestões agrupadas pelos tipos efetivamente publicados, não uma lista automática de exigências. Cada inclusão pede obrigatório ou desejável no contrato existente. Knowledge complementar pertence à empresa, é reutilizável e só vira requisito após seleção explícita. Não usa estados de evidência da Pessoa, não presume proficiência e não altera o matching. “Por que o Prisma associou assim?” expõe fontes, versões, regra, decisão humana, histórico e correção; a origem também está disponível por item. Histórico sem interpretação M7.1 continua identificado como tal, sem reprocessamento retroativo.
 
@@ -9031,6 +9033,8 @@ Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: pedido explí
 - A-03 — Algoritmos determinísticos, índices/funções e refatoração mecânica necessária; sem nova semântica de negócio.
 
 ## PENDÊNCIAS
+
+Autorização operacional posterior, 2026-09-18: Bruno solicitou "atualizar tudo. Deixar tudo em main, atualizado, localment, no git, no supabase e onde mais precisar". Isso satisfaz a autorização específica prevista em F-03 para integrar main, aplicar a migration e publicar o frontend no ambiente único existente. Não altera D-*, P-*, contratos funcionais, fontes, dados históricos ou autoriza limpeza de material alheio. Evidências de ativação estão no AoT.
 
 Nenhuma decisão funcional pendente identificada. Limites operacionais de validação são registrados no AoT, sem autorização implícita de rollout.
 
@@ -10131,7 +10135,18 @@ Não foi acionada uma verificação para Beatriz, porque ela é uma Pessoa real 
 
 # AoT — M7.1 Taxonomia Profissional e Inteligência de Posições
 
-Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 + texto integral em `docs/qa/execution-m71-position-taxonomy.md`. Data: 2026-09-18. Status: implementação/prova local. Não significa rollout remoto.
+Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 + texto integral em `docs/qa/execution-m71-position-taxonomy.md`. Data: 2026-09-18. Status: implementação/prova local e ativação remota posteriormente autorizada. A matriz abaixo preserva o ambiente de cada prova; o smoke remoto não substitui a suíte local.
+
+## Ativação e sincronização autorizadas — 2026-09-18
+
+- Pedido posterior do PO autorizou main local/GitHub, Supabase e hosting. Integração fast-forward, sem reescrever histórico, da entrega `bc782fe6044661a14f91fba7eaf8cd7401ceb42f`; CI dos dois commits M7.1 passou. O checkout `/opt/prisma` da Hostinger também passou para main.
+- Migration local `20260918010000_m71_position_taxonomy.sql` aplicada atomicamente pelo conector no projeto único de produção `ioldpnqqvobprjiontre`; o conector registrou `20260918044935_m71_position_taxonomy`. O SQL é o mesmo, com limites transacionais de lock 5 s e execução 60 s. Não se reparou nem reaplicou o ledger histórico divergente.
+- Verificação remota: oito funções presentes com search_path vazio; quatro helpers privados sem execução por anon/authenticated; quatro RPCs públicas somente authenticated. RLS das duas tabelas permanece ativa. Chamada read-only sem identidade foi rejeitada com `42501 POSITION_TAXONOMY_UNAUTHORIZED`. As 17 versões históricas continuaram com snapshot NULL: nenhum backfill.
+- Frontend reconstruído do commit acima com `baseline` e Parser IA `hosted`; somente prisma-web foi recriado. Imagem ativa `sha256:4e18858eaa7e81b5a2e581f9d042c3c39a33ed046d87d27ad2cd4c8e2770c8b6`, zero restart e HTTPS 200. Bundle confirma commit e nova RPC. Gateway mantém início em 2026-09-17; workers, modelos, Edge Functions e dados de Pessoas não foram alterados.
+- Recuperação: imagem anterior `sha256:b185d7ad8f0f78708097d25efe6ac03848892b4d956fbc9669dc6ed893bc46e2` preservada como `prisma-web:rollback-before-m71-20260918`. Banco aditivo, sem alteração de função antiga ou dado histórico: em rollback, retornar frontend anterior e revogar novas RPCs por migration controlada, mantendo colunas e futuros snapshots. Não foi necessário restaurar backup.
+- Smoke autenticado real no site: Home e formulário Posições carregaram; título genérico Software Developers resolveu automaticamente pela O*NET 31.0 / 15-1252.00; 10 habilidades e 430 tecnologias paginadas, nenhum requisito automático. Origem mostrou IM 3.50 e LV 3.62 de Active Learning. Drawer mostrou regra, fonte e estado prévia não salva, sem atribuir decisão humana fictícia. Nenhuma Posição/complemento foi persistido para teste; criação/edição transacional permanece provada pela suíte SQL local, não alegada como jornada de escrita em produção.
+- Advisors: os seis avisos informativos de tabelas protegidas sem policy e o aviso pré-existente de proteção contra senhas vazadas desabilitada permanecem. Funções SECURITY DEFINER públicas autenticadas passaram de 63 para 67 pelas quatro RPCs deliberadamente autorizadas; guardas e grants foram conferidos. Não houve relaxamento para eliminar avisos.
+- Resíduos preservados: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` localmente e `models/` não versionado na VPS. Versão pública v1.6.4 mantida: sincronização operacional não acrescenta uma entrega ao registro de produto por inferência.
 
 ## Evidências
 
@@ -10214,11 +10229,11 @@ Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 + texto integral em
 | --- | --- | --- |
 | F-01 | Sem alterações em Pessoa/M7.2/parser/OCR/verificação/fórmula/carreira | PASS |
 | F-02 | Sem provider externo/research/nova arquitetura de Knowledge | PASS |
-| F-03 | Sem migration, merge, deploy ou dados reais escritos remotamente; somente commit/push de código autorizados | PASS |
+| F-03 | Rollout inicial excluído; autorização específica posterior atendida conforme seção de ativação, sem alterar dados reais de negócio | PASS |
 
 ## Desvios e decisões de execução
 
-Nenhum desvio funcional do acordo. A mudança de UX substitui o gate de referência obrigatório e a etapa IA anteriores por determinação/seleção explicitamente autorizadas; RPCs legadas preservadas. Grupos visuais são tipos reais, não grupos de software dos mocks. A versão pública permanece v1.6.4 conforme a política: código local validado não inventa aceite/ativação de nova entrega pública. Não houve nova decisão material nem expansão de fonte/provider.
+Nenhum desvio funcional do acordo. A mudança de UX substitui o gate de referência obrigatório e a etapa IA anteriores por determinação/seleção explicitamente autorizadas; RPCs legadas preservadas. Grupos visuais são tipos reais, não grupos de software dos mocks. A versão pública permanece v1.6.4: a autorização operacional posterior ativou o código, sem acrescentar por inferência uma entrega ao release registry. Não houve nova decisão funcional nem expansão de fonte/provider.
 
 O teste local foi preparado com schemas mínimos auth/storage, min(uuid) de compatibilidade e remoção do helper antigo antes de M2 recriar suas políticas no banco vazio. Duas correções textuais históricas de currículo que não reaplicam sobre a migration atual e o monitor remoto Vault/Cron/net foram excluídos do bootstrap. Nenhuma migration canônica antiga foi editada; todos os owners atuais de Posições, Knowledge e RLS foram aplicados. É prova dirigida do M7.1, não certificação do replay histórico integral ou equivalência da plataforma Supabase completa.
 
@@ -10230,15 +10245,15 @@ Revisão final adicional: `saveAsRole` agora descarta `taxonomyOrigin` arbitrár
 2. Build/88 testes/typecheck/build web conforme E2/E4.
 3. UI: `node node_modules/vite/bin/vite.js --config tests/ui/m71.vite.config.mts`; abrir `http://127.0.0.1:5571/m71.html`. Harness fora da entrada/build de produção, URL/key sintéticas loopback, mocks explícitos de todas as quatro operações.
 4. `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`; higiene e revisão somente dos arquivos do movimento. Não executar validate completo.
-5. Rollout futuro exige autorização: migration antes do frontend, smoke autenticado e sem PII, sem confundir ambiente único remoto com sandbox local. Nenhuma prova UI contra backend remoto novo é alegada.
+5. Rollout posterior autorizado: migration antes do frontend e smoke autenticado read-only descritos na seção de ativação. O ambiente único remoto não foi tratado como sandbox para fixtures.
 
 ## Git / ambiente / resíduos
 
-Baseline 1215c6e1cdd603a741e14def6724525b4fded2cb; branch codex/m71-position-taxonomy. Entrega em commit coerente e push ao origin existente conforme autorização permanente; SHA final e igualdade da ref são informados no relatório de fechamento. Sem merge/deploy. Material alheio preservado: .tmp.driveupload/ e services/paddle/Dockerfile.gpu. Bases/logs descartáveis da verificação ficam em tmp/ ignorado; processos auxiliares desta tarefa são encerrados no fechamento.
+Baseline 1215c6e1cdd603a741e14def6724525b4fded2cb; implementação na branch codex/m71-position-taxonomy, posteriormente integrada em main local/GitHub/Hostinger por autorização explícita. Commit funcional implantado bc782fe; fechamento documental posterior não altera runtime. Material alheio preservado: .tmp.driveupload/ e services/paddle/Dockerfile.gpu. Bases/logs descartáveis da verificação ficam em tmp/ ignorado; PostgreSQL auxiliar foi encerrado.
 
 ## Conclusão
 
-D-01–D-32 e P-01–P-24 PASS no escopo local acima. Implementação local concluída com validação proporcional. M7.1 **não está ativado no backend/frontend hospedados**; isso depende de autorização de rollout. Ausência de reconciliações aprovadas limita consolidação real entre fontes por governança, não por equivalência inventada.
+D-01–D-32 e P-01–P-24 PASS no escopo local acima. M7.1 ativado no backend/frontend hospedados após autorização explícita e smoke autenticado read-only. Ausência de reconciliações aprovadas limita consolidação real entre fontes por governança, não por equivalência inventada.
 
 ---
 
