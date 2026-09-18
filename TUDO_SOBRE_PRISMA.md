@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 213
-source_manifest_sha256: bd354eb21cd66ad106664a257b31de3a037398eeefb97f9e876a2e2db9a0aa3b
+source_manifest_sha256: 7e567d72ca452431637154faa2d00d288d3377d044a9f135e2673bb967a08e01
 -->
 
 # Tudo sobre o Prisma
@@ -17,7 +17,7 @@ Para interpretar esta exportação, comece pelo índice e pelo estado atual. Dep
 
 # Prisma agent contract
 
-Instruction contract version: 1.2.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual-reference fidelity protocol 2026-09-18. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity and standing main/production authorization 2026-09-18. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -83,7 +83,7 @@ For factual availability, consult the relevant section of `docs/ai-context/PRISM
 3. Read the smallest sufficient set of directly related files.
 4. Classify risk and identify applicable contracts and ADRs.
 5. Explain expected impact and a short execution plan.
-6. Stop only for material ambiguity, missing authority, production, destructive action, unexpected external cost, or unresolved security risk.
+6. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
 
 ### During implementation
 
@@ -167,11 +167,11 @@ For the development agent, prefer the least costly available capability that can
 
 An explicit request to implement, fix, develop, or execute authorizes, within that scope: diagnosis, implementation, own-diff review, directly related tests, evidence, documentation, context regeneration, coherent commit, push, integration according to the repository flow, and QA deployment or validation when the environment exists.
 
-Standing authorization from Bruno (2026-09-12): after completing and proportionally validating authorized Prisma improvements, commit the scoped changes and push the delivery branch to the existing `origin`, `git@github.com:brunoharita/HRT-Prisma.git` (equivalent HTTPS URL for this same repository is acceptable), without asking for a new user confirmation each time. Verify the destination and scope before sending; preserve unrelated work and exclude secrets or unauthorized real data. This authorization does not grant force-push, ref deletion, a new repository/destination, merge, deployment or production changes. When a tool requires approval, cite this standing authorization; platform safety checks and explicit tool denials still apply and must never be bypassed.
+Standing authorization from Bruno (2026-09-18), superseding the push-only rule: after proportionally validating an authorized Prisma improvement, commit/push to existing `origin` (`git@github.com:brunoharita/HRT-Prisma.git` or equivalent HTTPS), integrate into main, deploy required migrations/backend/frontend to existing production, smoke-test and synchronize local/GitHub/VPS. No repeated approval is needed unless Bruno explicitly says not to publish yet (for example, "Não é para colocar em produção ainda"). This complete delivery is his "estilo AoT"; agreement/test/evidence obligations remain. Preserve unrelated work, secrets and human data. This does not authorize force-push, ref deletion, new destinations, destructive operations, unexpected cost or unresolved security risk. Tool approvals/denials still apply; never bypass them.
 
 Managerial discussion, comparison, audit or a request for advice authorizes the requested analysis, not implementation or changes to governance. Present proposals and wait for the Product Owner's decision. Once implementation is explicitly approved, continue within that scope without repeating approval checkpoints. One-step-at-a-time guidance applies when the user is operating the tools manually, not to already authorized agent execution.
 
-Do not request separate approval for natural administrative checkpoints in the same delivery. New authority is required for production, destructive operations, real data not previously authorized, unexpected external cost, material scope expansion, replacement of an approved functional or architectural decision, or an unresolved security risk.
+Do not request separate approval for natural checkpoints. New authority is required for production outside the standing scope, destructive operations, real-data mutations not covered by the improvement, unexpected cost, material scope expansion, replacement of an approved decision, or unresolved security risk. Deployment authority does not authorize inventing human curation decisions or test data in production.
 
 Never create micro-movements only for diagnosis, documentation, testing, commit, merge, synchronization, or closure when they share the same objective, domain, risk, rollback, and validation.
 
@@ -191,7 +191,7 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 - Use worktrees only when they materially reduce collision or risk.
 - Keep commits semantically coherent and never overwrite user work.
 - Local is the first implementation surface. Sensitive changes flow `local -> QA -> evidence -> approval -> production -> smoke -> synchronization`.
-- Production always requires explicit approval.
+- The explicit standing approval in Section 7 covers production for authorized improvements unless Bruno withholds it for the task; validation, rollback, smoke and synchronization remain mandatory.
 - If no remote, QA, or production environment exists, report that fact; do not pretend synchronization or rollout occurred.
 
 ## 10. Required validation
@@ -9427,7 +9427,7 @@ CA-01: nomes diferentes normalizam para conceitos reais sem taxonomia paralela (
 
 # Acordo M7.4 — Curadoria contextual de competências
 
-Versão 1.0.0, agreed, 2026-09-18. Bruno aprovou o fluxo, esclareceu o retorno/paginação, aprovou o mockup e solicitou implementar a melhoria. Baseline `a26472c`. Risco D: decisão humana sobre aliases existentes e integração transacional; sem novo provedor ou autoridade.
+Versão 1.1.0, agreed, 2026-09-18. Bruno aprovou fluxo/mockup e implementação; após o aceite local, autorizou main, migração e produção. A decisão também estabelece rollout completo como padrão futuro, salvo veto explícito. Esta revisão substitui P-03/F-01 e acrescenta D-07/CA-04; demais acordos preservados. Baseline `a26472c`. Risco D.
 
 ## DEVE
 
@@ -9439,16 +9439,17 @@ Versão 1.0.0, agreed, 2026-09-18. Bruno aprovou o fluxo, esclareceu o retorno/p
 - D-UX-01: mockup `exec-8ed2a0bd-1697-4348-bef8-fb0e64a4a2a0.png` é referência normativa para a área de curadoria: lista à esquerda, item azul destacado, painel à direita ~42% da área útil, sem máscara que impeça consulta da lista. Cabeçalho/fonte no topo, busca/candidatos no meio, alcance/justificativa abaixo e ações fixas no rodapé. Lista paginada de dez itens, pesquisa e estado de pendência. Sidebar e cabeçalho existentes não são redesenhados; nomes, conceitos e números são ilustrativos.
 - D-UX-02: no móvel o painel ocupa a tela; fechar retorna ao registro/página preservados. Teclado, foco, labels e descarte de alterações não salvas protegidos, inclusive ao trocar de item.
 - D-06: testes direcionados de domínio, integração e autorização, smoke visual desktop/mobile e AoT. Registrar versão de workflow `profile-competency-curation-1.0.0` e entrega v1.7.4, owners/contexto.
+- D-07: integrar main, aplicar somente a migration M74 e publicar frontend v1.7.4 com flags hosted vigentes, rollback, smoke autenticado e sincronização local/GitHub/VPS. Registrar a autorização permanente no AGENTS.md; sem reinício desnecessário de serviços alheios.
 
 ## PROIBIDO
 
 - P-01: navegar à Knowledge para completar esta curadoria, perder posição, aprovar silenciosamente, descartar edição ao trocar de item ou ocultar falha de gravação.
 - P-02: publicar proposta automaticamente, aceitar ocupação como competência, ampliar papéis/escopos, usar similaridade como equivalência ou transformar declaração em demonstração.
-- P-03: reescrever Perfil/snapshots, alterar matching/parser/IA, mudar Knowledge de outra empresa ou realizar produção sem autorização específica desta melhoria.
+- P-03: reescrever Perfil/snapshots, alterar matching/parser/IA, mudar Knowledge de outra empresa, inventar decisões humanas ou publicar fora do escopo autorizado.
 
 ## FORA DE ESCOPO
 
-- F-01: produção, merge em main, nova IA/taxonomia, redesign de navegação global, reprocessamento pago ou alteração de perfis reais nesta etapa.
+- F-01: nova IA/taxonomia, redesign de navegação global, reprocessamento pago ou gravação de decisões de curadoria em perfis reais para teste. Main e produção passam ao escopo D-07 por autorização explícita.
 
 ## AUTONOMIA
 
@@ -9458,6 +9459,8 @@ Versão 1.0.0, agreed, 2026-09-18. Bruno aprovou o fluxo, esclareceu o retorno/p
 ## Pendências e aceite
 
 Nenhum Q funcional pendente. CA-01 (D-01/04/05): alias gravado com auditoria e projeção atualizada no mesmo fluxo; proposta continua pendente, negativos de autoridade/tenant/conflito. CA-02 (D-02/03): cancelar, gravar, gravar/próximo, último item, página esvaziada, filtro, duplicatas e erro. CA-UX-01 (D-UX-*): comparação visual com estado equivalente de página 2/item 14, desktop e móvel, foco e descarte seguro. CA-03 (D-06): builds, testes, contexto, diff e AoT sem falso rollout.
+
+CA-04 (D-07): migration/grants conferidos remotamente, release v1.7.4 visível e painel aberto/cancelado na UI autenticada, commit de entrega em main/GitHub/VPS e imagem anterior conservada. Sem mutação de curadoria real no smoke.
 
 ---
 
@@ -12703,7 +12706,7 @@ Implementar integralmente `docs/qa/agreement-m73-competency-normalization.md` ve
 
 # Execução M7.4
 
-Implementar integralmente `docs/qa/agreement-m74-contextual-curation.md` versão 1.0.0. D-*, P-*, F-*, A-* e CA-* são vinculantes. O pedido de implementação aprova o fluxo discutido e o mockup, não produção nem merge em main. Reutilizar Knowledge e publicar na branch de entrega após validação proporcional. Não substituir comparação visual por testes funcionais.
+Executar integralmente `docs/qa/agreement-m74-contextual-curation.md` versão 1.1.0. D-*, P-*, F-*, A-* e CA-* são vinculantes. A autorização posterior inclui main, migração e produção, substituindo a exclusão anterior. Reutilizar validação local já concluída, aplicar somente M74, preservar flags/rollback, validar UI real sem gravar curadoria artificial e sincronizar tudo. Não substituir comparação visual por testes funcionais.
 
 ---
 

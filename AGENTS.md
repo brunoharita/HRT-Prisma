@@ -1,6 +1,6 @@
 # Prisma agent contract
 
-Instruction contract version: 1.2.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual-reference fidelity protocol 2026-09-18. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity and standing main/production authorization 2026-09-18. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -66,7 +66,7 @@ For factual availability, consult the relevant section of `docs/ai-context/PRISM
 3. Read the smallest sufficient set of directly related files.
 4. Classify risk and identify applicable contracts and ADRs.
 5. Explain expected impact and a short execution plan.
-6. Stop only for material ambiguity, missing authority, production, destructive action, unexpected external cost, or unresolved security risk.
+6. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
 
 ### During implementation
 
@@ -150,11 +150,11 @@ For the development agent, prefer the least costly available capability that can
 
 An explicit request to implement, fix, develop, or execute authorizes, within that scope: diagnosis, implementation, own-diff review, directly related tests, evidence, documentation, context regeneration, coherent commit, push, integration according to the repository flow, and QA deployment or validation when the environment exists.
 
-Standing authorization from Bruno (2026-09-12): after completing and proportionally validating authorized Prisma improvements, commit the scoped changes and push the delivery branch to the existing `origin`, `git@github.com:brunoharita/HRT-Prisma.git` (equivalent HTTPS URL for this same repository is acceptable), without asking for a new user confirmation each time. Verify the destination and scope before sending; preserve unrelated work and exclude secrets or unauthorized real data. This authorization does not grant force-push, ref deletion, a new repository/destination, merge, deployment or production changes. When a tool requires approval, cite this standing authorization; platform safety checks and explicit tool denials still apply and must never be bypassed.
+Standing authorization from Bruno (2026-09-18), superseding the push-only rule: after proportionally validating an authorized Prisma improvement, commit/push to existing `origin` (`git@github.com:brunoharita/HRT-Prisma.git` or equivalent HTTPS), integrate into main, deploy required migrations/backend/frontend to existing production, smoke-test and synchronize local/GitHub/VPS. No repeated approval is needed unless Bruno explicitly says not to publish yet (for example, "Não é para colocar em produção ainda"). This complete delivery is his "estilo AoT"; agreement/test/evidence obligations remain. Preserve unrelated work, secrets and human data. This does not authorize force-push, ref deletion, new destinations, destructive operations, unexpected cost or unresolved security risk. Tool approvals/denials still apply; never bypass them.
 
 Managerial discussion, comparison, audit or a request for advice authorizes the requested analysis, not implementation or changes to governance. Present proposals and wait for the Product Owner's decision. Once implementation is explicitly approved, continue within that scope without repeating approval checkpoints. One-step-at-a-time guidance applies when the user is operating the tools manually, not to already authorized agent execution.
 
-Do not request separate approval for natural administrative checkpoints in the same delivery. New authority is required for production, destructive operations, real data not previously authorized, unexpected external cost, material scope expansion, replacement of an approved functional or architectural decision, or an unresolved security risk.
+Do not request separate approval for natural checkpoints. New authority is required for production outside the standing scope, destructive operations, real-data mutations not covered by the improvement, unexpected cost, material scope expansion, replacement of an approved decision, or unresolved security risk. Deployment authority does not authorize inventing human curation decisions or test data in production.
 
 Never create micro-movements only for diagnosis, documentation, testing, commit, merge, synchronization, or closure when they share the same objective, domain, risk, rollback, and validation.
 
@@ -174,7 +174,7 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 - Use worktrees only when they materially reduce collision or risk.
 - Keep commits semantically coherent and never overwrite user work.
 - Local is the first implementation surface. Sensitive changes flow `local -> QA -> evidence -> approval -> production -> smoke -> synchronization`.
-- Production always requires explicit approval.
+- The explicit standing approval in Section 7 covers production for authorized improvements unless Bruno withholds it for the task; validation, rollback, smoke and synchronization remain mandatory.
 - If no remote, QA, or production environment exists, report that fact; do not pretend synchronization or rollout occurred.
 
 ## 10. Required validation
