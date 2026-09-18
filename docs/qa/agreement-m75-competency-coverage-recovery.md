@@ -1,6 +1,6 @@
 # Contrato de Acordos — M7.5 Recuperação de cobertura de competências
 
-Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, “pode fazer, estilo AoT”, após diagnóstico de 3 conceitos e 54 pendências no Perfil real. Baseline: `080a4067d14e7e71d3147ad10962bd195d74d874`.
+Versão: 1.1.0. Estado: agreed. Product Owner: Bruno. Aprovação inicial: 2026-09-18, “pode fazer, estilo AoT”, após diagnóstico de 3 conceitos e 54 pendências no Perfil real. Adendo de busca aprovado em 2026-09-18 por “pode fazer essa melhoria estilo AoT”. Baseline: `080a4067d14e7e71d3147ad10962bd195d74d874`.
 
 ## DEVE
 
@@ -14,6 +14,7 @@ Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, �
 - D-08 — Ausência de conceito deve continuar permitindo proposta; proposta não publica conceito nem encerra pendência sem o fluxo humano vigente.
 - D-09 — Reprocessar Perfis aprovados vigentes após o rollout e registrar cobertura antes/depois, falhas, custos técnicos disponíveis e limites reais.
 - D-10 — Atualizar contratos, ADR, versão pública, Context Pack, testes, rollout, smoke e AoT no mesmo movimento.
+- D-11 — No campo de busca da curadoria, iniciar a pesquisa automaticamente após 400 ms sem digitação; clique em Buscar e Enter continuam disparos imediatos. Cancelar timers e invalidar respostas antigas; nenhum resultado é selecionado automaticamente.
 
 ## PROIBIDO
 
@@ -24,6 +25,7 @@ Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, �
 - P-05 — Não aumentar orçamento de forma ilimitada; zero, ausência, esgotamento ou configuração inválida falham fechado e preservam o resultado anterior.
 - P-06 — Não criar taxonomia paralela, nova fonte, Web Search, embeddings, novo provider/modelo ou dependência para este movimento.
 - P-07 — Não transformar proposta pendente em conceito publicado nem decisão de empresa em alias Global.
+- P-08 — Não executar uma RPC a cada tecla, exibir resultado de consulta obsoleta ou converter o debounce em seleção automática.
 
 ## FORA DE ESCOPO
 
@@ -38,6 +40,7 @@ Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, �
 - A-02 — Limites dedicados iniciais conservadores, desde que positivos, server-side, documentados e sem remover o teto anterior das demais operações.
 - A-03 — Agrupamento, microcopy, ordenação de candidatos, loading e responsividade dentro da composição aprovada.
 - A-04 — Estratégia idempotente de reprocessamento, rollback e smoke read-only; decisões humanas reais continuam fora da automação.
+- A-05 — Usar debounce local de 400 ms, limite mínimo de dois caracteres, controle de concorrência e botão/Enter como fallback imediato, preservando a composição visual aprovada.
 
 ## PENDÊNCIAS
 
@@ -52,6 +55,7 @@ Nenhuma pendência material. A aprovação humana do lote é etapa operacional p
 - CA-05 — Reprocessamento real não reduz cobertura anterior, não altera o Perfil e produz relatório antes/depois.
 - CA-06 — Testes negativos cobrem tenant, role, contrato futuro, candidato parcial, orçamento, corrida e tentativa falha.
 - CA-07 — Typecheck, build, testes dirigidos, PostgreSQL descartável, Context Pack, comparação visual desktop/mobile, produção e smoke passam; limites constam no AoT.
+- CA-08 — Após digitação em curadoria, a busca remota ocorre sem clique depois de 400 ms; nova digitação invalida a anterior, botão/Enter continuam funcionando e nenhum candidato fica pré-selecionado.
 
 ## FIDELIDADE VISUAL
 
