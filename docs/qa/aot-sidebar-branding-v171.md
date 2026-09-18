@@ -60,3 +60,14 @@ Branch `codex/sidebar-branding-v171`. Entrega destinada ao `origin` existente ap
 ## Conclusão
 
 PASS. Todos os `D-*` e `P-*` aplicáveis possuem implementação e evidência local; não há requisito obrigatório parcial ou sem prova.
+
+## Correção delimitada — harmonia do rodapé (2026-09-18)
+
+Esta correção referencia o contrato congelado `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0, especialmente `D-UX-02`, `D-UX-04` e `A-02`. A imagem fornecida pelo Product Owner foi tratada como alvo normativo do rodapé expandido: marca HRT inteira, textos com a mesma linguagem tipográfica e alinhamento vertical comum.
+
+- Implementação: `web/src/styles.css` ajusta a janela de recorte do PNG oficial para o bounding box completo da marca, dá respiro adicional ao footer e harmoniza cor, tamanho, peso, tracking e linha de base de `Powered by` e `v1.7.2`.
+- Evidência visual: `tests/ui/m72.html` renderizado localmente em navegador, com `PrismaAppShell` real; a captura confirmou os dois cantos do logo, ausência de corte, alinhamento central e contraste consistente.
+- Validação: `pnpm run typecheck:web`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint` e `node --test dist/tests/uxFoundation.test.js` passaram; 10/10 testes direcionados.
+- Limite: nenhuma migration, backend, Supabase, permissão ou produção foi alterada. A publicação permanece fora do escopo até autorização explícita posterior, conforme `F-03`.
+
+Status da correção: `PASS` local; `NOT TESTED` em produção.

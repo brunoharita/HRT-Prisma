@@ -419,10 +419,10 @@ textarea {
 }
 
 .prisma-sidebar-footer {
-  flex: 0 0 62px;
+  flex: 0 0 64px;
   display: grid;
   place-items: center;
-  padding: 10px 18px;
+  padding: 10px 16px;
   color: rgba(220, 231, 247, 0.72);
   background: rgba(1, 8, 22, 0.92);
   border-top: 1px solid rgba(155, 190, 243, 0.12);
@@ -434,8 +434,10 @@ textarea {
 }
 
 .prisma-sidebar-footer small {
-  color: rgba(238, 245, 255, 0.88);
-  font-size: 0.78rem;
+  color: rgba(220, 231, 247, 0.72);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   line-height: 1;
   white-space: nowrap;
 }
@@ -445,30 +447,34 @@ textarea {
   width: 100%;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   white-space: nowrap;
 }
 
 .prisma-sidebar-signature > span:first-child {
-  font-size: 0.72rem;
+  color: rgba(220, 231, 247, 0.72);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1;
 }
 
 .prisma-sidebar-hrt-frame {
   position: relative;
   display: block;
-  flex: 0 0 70px;
-  width: 70px;
-  height: 28px;
+  flex: 0 0 72px;
+  width: 72px;
+  height: 33px;
   overflow: hidden;
 }
 
 .prisma-sidebar-hrt-frame img {
   position: absolute;
-  top: -15px;
+  top: -19.8px;
   left: 0;
-  width: 70px;
+  width: 72px;
   max-width: none;
-  height: 70px;
+  height: 72px;
 }
 
 .prisma-page {
