@@ -42,6 +42,16 @@ test("M73 rejects malformed output and PII before provider dispatch", () => {
   for (const term of ["pessoa@example.com", "https://example.com", "111.222.333-44", "+55 11 99999-8888"]) assert.equal(canSendCompetencyTerm(term), false);
   assert.equal(canSendCompetencyTerm("SQL"), true);
 });
+test("M73 validates actual source positions for acronym prefixes without accepting overlapping evidence", () => {
+  const item = (sourceText: string) => ({ inputIndex: 0, sourceText, normalizedTerm: sourceText, searchTerms: [sourceText], ambiguous: false });
+  const inputs = prepareCompetencyInputs(["BPM/BPMN"]);
+  for (const terms of [["BPM", "BPMN"], ["BPMN", "BPM"]]) {
+    assert.equal(readNormalizedCompetencies({ items: terms.map(item) }, inputs).length, 2);
+  }
+  assert.throws(() => readNormalizedCompetencies({ items: [item("BPM"), item("BPMN")] }, prepareCompetencyInputs(["BPMN"])), /OVERLAPPING/);
+  assert.throws(() => readNormalizedCompetencies({ items: [item("BPMN"), item("BPMN")] }, inputs), /OVERLAPPING/);
+  assert.throws(() => readNormalizedCompetencies({ items: [item("BPM")] }, inputs), /INCOMPLETE/);
+});
 test("M73 counts declarations independently of associations and fails closed on unknown normalization", () => {
   const projection = m72Fixture({ associations: [], normalization: { ...m72Fixture().normalization, declaredCount: 43 } });
   assert.equal(summarizeProfessionalEvidence(projection).declaredCount, 43);

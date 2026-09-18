@@ -15,6 +15,7 @@ export async function processCompetencyNormalization(client: Client) {
   const inputs = validTerms ? prepareCompetencyInputs(terms) : [];
   let items = deterministicCompetencies(inputs);
   let errorCode: string | null = null;
+  let diagnosticCode: string | null = null;
   let model: string | null = null;
   let usage: { input_tokens?: number; output_tokens?: number } = {};
   try {
@@ -53,7 +54,12 @@ export async function processCompetencyNormalization(client: Client) {
               const normalized = readNormalizedCompetencies(JSON.parse(text), aiInputs);
               const selected = new Set(aiInputs.map((input) => `${input.originalIndex}:${input.sourceText}`));
               items = [...items.filter((item) => !selected.has(`${item.originalIndex}:${item.sourceText}`)), ...normalized];
-            } catch { errorCode = "RESPONSE_INVALID"; }
+            } catch (error) {
+              errorCode = "RESPONSE_INVALID";
+              const code = error instanceof Error && /^COMPETENCY_RESPONSE_[A-Z_0-9]+$/.test(error.message) ? error.message : "FORMAT_INVALID";
+              diagnosticCode = code;
+              console.warn(JSON.stringify({ event: "competency_normalization_rejected", code }));
+            }
           }
         }
       }
@@ -65,5 +71,5 @@ export async function processCompetencyNormalization(client: Client) {
   });
   if (completionError) throw new Error("COMPETENCY_COMPLETION_FAILED");
   // No terms, identifiers, provider body or personal information in response/logs.
-  return { processed: 1, status: errorCode ? "failed" : "complete", errorCode };
+  return { processed: 1, status: errorCode ? "failed" : "complete", errorCode, diagnosticCode };
 }

@@ -74,10 +74,7 @@ export function readNormalizedCompetencies(value: unknown, inputs: CompetencyInp
       || !item.normalizedTerm.trim() || item.normalizedTerm.length > 240
       || !Array.isArray(item.searchTerms) || item.searchTerms.length > 4 || typeof item.ambiguous !== "boolean"
       || !item.searchTerms.every((term) => typeof term === "string" && term.trim().length > 0 && term.length <= 240)) {
-      throw new Error("COMPETENCY_RESPONSE_UNGROUNDED");
-    }
-    if ((spans.get(item.inputIndex as number) ?? []).some((span) => span.includes(item.sourceText as string) || (item.sourceText as string).includes(span))) {
-      throw new Error("COMPETENCY_RESPONSE_OVERLAPPING");
+      throw new Error(`COMPETENCY_RESPONSE_UNGROUNDED_INDEX_${Number.isSafeInteger(item?.inputIndex) ? item.inputIndex : "INVALID"}`);
     }
     if (/^(?:pacote\s+)?(?:microsoft\s+)?office$/i.test(input.sourceText.trim())
       && [item.normalizedTerm, ...item.searchTerms as string[]].some((term) => /\b(excel|word|powerpoint|outlook)\b/i.test(term))) {
@@ -90,10 +87,20 @@ export function readNormalizedCompetencies(value: unknown, inputs: CompetencyInp
   }
   inputs.forEach((input, index) => {
     const covered = spans.get(index);
-    if (!covered?.length) throw new Error("COMPETENCY_RESPONSE_INCOMPLETE");
-    let remainder = input.sourceText;
-    for (const span of covered) remainder = remainder.replace(span, " ");
-    if (remainder.replace(/\b(e|and)\b/gi, "").replace(/[\s,;/|&.()+-]/g, "")) throw new Error("COMPETENCY_RESPONSE_INCOMPLETE");
+    if (!covered?.length) throw new Error(`COMPETENCY_RESPONSE_INCOMPLETE_INDEX_${index}`);
+    // Compare source positions, not substring names: BPM and BPMN are distinct in BPM/BPMN.
+    // Allocate longest spans first so a short name cannot consume part of a longer one.
+    const occupied = new Set<number>();
+    for (const span of [...covered].sort((a, b) => b.length - a.length)) {
+      let start = input.sourceText.indexOf(span);
+      while (start >= 0 && Array.from({ length: span.length }, (_, offset) => start + offset).some((position) => occupied.has(position))) {
+        start = input.sourceText.indexOf(span, start + 1);
+      }
+      if (start < 0) throw new Error(`COMPETENCY_RESPONSE_OVERLAPPING_INDEX_${index}`);
+      for (let position = start; position < start + span.length; position++) occupied.add(position);
+    }
+    const remainder = input.sourceText.split("").map((character, position) => occupied.has(position) ? " " : character).join("");
+    if (remainder.replace(/\b(e|and)\b/gi, "").replace(/[\s,;/|&.()+-]/g, "")) throw new Error(`COMPETENCY_RESPONSE_INCOMPLETE_INDEX_${index}`);
   });
   return output;
 }
