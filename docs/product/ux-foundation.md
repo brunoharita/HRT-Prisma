@@ -1,6 +1,6 @@
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.0.0`. Acordo aprovado: `docs/qa/agreement-ux-foundation.md` 1.0.0. Fonte: decisão de Bruno nesta tarefa em 2026-09-13, incluindo a substituição de Vagas por **Posições** e autonomia para implementação sequencial sem novos checkpoints de produto.
+Contrato de apresentação: `prisma-ux-foundation-1.1.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0 e `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.1.0 preserva a base anterior e restringe a autonomia visual quando existe uma referência normativa.
 
 ## Organização e jornadas
 
@@ -26,7 +26,23 @@ Preservar marca/ativos, azul e navegação lateral da ADR-007. Reduzir brilho, s
 
 Azul significa ação/seleção; verde conclusão confirmada; amarelo atenção; vermelho falha ou destruição; neutro informação ausente. Texto/ícone complementam a cor. Arquivar e excluir têm significados distintos. Usar componentes compartilhados para página, cabeçalho, cartão, estado, painel e área pública.
 
-Tabelas priorizam objeto, situação e próxima ação. Rolagem interna cabe a informação realmente bidimensional. Telas pequenas priorizam uma coluna, filtros progressivos, comparação por requisito e alternância fonte/campo quando a implementação específica requer. Controles, títulos e ações não podem se sobrepor com conteúdo longo. A amostra visual de lista, detalhe e formulário será implementada e conferida nesta entrega; o PO delegou a seleção dos detalhes visuais sem nova aprovação intermediária.
+Tabelas priorizam objeto, situação e próxima ação. Rolagem interna cabe a informação realmente bidimensional. Telas pequenas priorizam uma coluna, filtros progressivos, comparação por requisito e alternância fonte/campo quando a implementação específica requer. Controles, títulos e ações não podem se sobrepor com conteúdo longo.
+
+## Fidelidade a referências visuais
+
+Uma imagem fornecida como orientação do resultado planejado é normativa para a arquitetura visual, salvo classificação diferente do Product Owner. Devem ser preservados de forma reconhecível: topologia da página, hierarquia, proporções relativas, agrupamentos, densidade, alinhamentos, ordem da informação, posição relativa das ações e relação entre área principal, painéis e navegação. Textos de exemplo, nomes, contagens, avatares e dados ilustrativos não são requisitos de produto.
+
+“Não copiar literalmente” significa adaptar o conteúdo real, os componentes acessíveis existentes, os tokens Prisma, a implementação e o acabamento fino. Não significa trocar uma composição em duas colunas por uma página linear, mover ações primárias para outra região, alterar substancialmente a densidade ou reorganizar os blocos sem autorização. Restrições reais de domínio, segurança, acessibilidade e dados prevalecem, mas o conflito deve ser declarado e decidido; não pode virar um redesenho silencioso.
+
+Todo prompt de criação ou alteração visual com referência deve:
+
+- classificar a referência como alvo normativo, inspiração, contraexemplo ou exemplo de conteúdo;
+- decompor a imagem em topologia, hierarquia, proporções, agrupamentos, densidade, alinhamento, ações, estados e comportamento responsivo;
+- registrar requisitos e proibições `D-UX-*` e `P-UX-*`, autonomia `A-UX-*`, dúvidas materiais `Q-UX-*` e aceites `CA-UX-*`;
+- exigir comparação visual com o mesmo estado, dados equivalentes e viewport da referência, além das larguras responsivas aplicáveis;
+- registrar no AoT a evidência renderizada e toda divergência material, com sua autorização ou limitação.
+
+Teste funcional, typecheck, presença dos componentes ou descrição textual não comprovam fidelidade visual. Pixel perfect só é exigido quando explicitamente acordado; o padrão é fidelidade estrutural reconhecível dentro do design system e das restrições reais do Prisma.
 
 ## Linguagem
 
@@ -50,4 +66,4 @@ Conferir leitura, contraste e ampliação nas superfícies alteradas, com refer�
 
 ## Autonomia e evolução
 
-Engenharia escolhe medidas, espaçamento, tipografia, distribuição dos componentes e redação coerente com este contrato. Esta aprovação não muda autorização, isolamento, obrigatoriedade de dados de domínio, matching, parser, fontes externas, custo ou produção. Os grupos específicos 4–14 ainda serão trabalhados nos próprios escopos; a base transversal vale imediatamente para novas alterações. Critérios de aceite e limitações ficam no AoT desta entrega.
+Sem referência normativa, engenharia escolhe medidas, espaçamento, tipografia, distribuição dos componentes e redação coerente com este contrato. Com referência normativa, a autonomia cobre acabamento e implementação dentro da arquitetura visual acordada; mudança estrutural exige decisão explícita. Esta aprovação não muda autorização, isolamento, obrigatoriedade de dados de domínio, matching, parser, fontes externas, custo ou produção. Os grupos específicos 4–14 ainda serão trabalhados nos próprios escopos; a base transversal vale imediatamente para novas alterações. Critérios de aceite e limitações ficam no AoT da entrega aplicável.

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 194
-source_manifest_sha256: 3b401906540a8dcb2827ffc38bed48442777a0182b1516a474632763529a757d
+documentation_source_count: 198
+source_manifest_sha256: 4169ebc493e6cb5c821751079efc897f3b5152ce47caf0257de78e174cc0d3d7
 -->
 
 # Tudo sobre o Prisma
@@ -17,7 +17,7 @@ Para interpretar esta exportação, comece pelo índice e pelo estado atual. Dep
 
 # Prisma agent contract
 
-Instruction contract version: 1.1.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.2.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual-reference fidelity protocol 2026-09-18. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -235,6 +235,18 @@ Once the Product Owner approves the Agreement Contract, it is frozen. The Execut
 Before material implementation under a frozen prompt, declare concisely: what `D-*` will be implemented, which `P-*` cannot occur, what is `F-*`, and where `A-*` applies. This is an understanding check, not a new approval. A subsequent Product Owner change must supersede the affected ID explicitly, update the Agreement/Prompt, tests, and AoT; never leave conflicting rules active.
 
 Close every such movement with an **AoT** (Agreements -> Implementation -> Test -> Evidence) using the repository template. It records operational traceability, never private chain-of-thought. Each `D-*` and applicable `P-*` needs implementation, test/evidence, and status. Permitted statuses are `PASS`, `FAIL`, `PARTIAL`, `BLOCKED`, and `NOT TESTED`. Do not declare completion if any required `D-*` is not `PASS`, if a `P-*` is violated, or if evidence is missing where technically provable. State contract deviations explicitly; “none” is valid only when true.
+
+## 14. Visual-reference fidelity for prompts
+
+Whenever a request creates or changes a screen, component, email, report, chart, PDF or other visual surface and includes a screenshot, mockup, prototype or comparable reference, the agent that prepares the execution prompt must apply the following protocol before delegating implementation:
+
+1. Classify each reference as normative target, inspiration, counterexample or content/data example. Unless the Product Owner says otherwise, a target reference supplied as the planned result is normative for visual architecture and illustrative for its sample text, people, counts and records.
+2. Describe the reference as an implementable visual model: topology, hierarchy, proportions, grouping, density, alignment, action placement, information order, persistent/transient regions and responsive transformation. Do not reduce a visual reference to a feature list.
+3. Translate that model into `D-UX-*`, `P-UX-*`, `A-UX-*`, `Q-UX-*` and `CA-UX-*`. Material ambiguity about structure, interaction or responsive behavior is a `Q-UX-*` and blocks the final prompt; minor decoration may remain autonomous.
+4. Interpret “não copiar literalmente” narrowly. It permits adapting illustrative content, real data, existing accessible components, tokens and implementation details. It does not permit replacing the approved topology, hierarchy, relative proportions, grouping, density, information order or action placement with a materially different composition.
+5. Require same-state, same-data and same-viewport visual comparison against the normative reference. The AoT must attach or identify the rendered evidence, record material deviations and state whether each was approved, technically necessary or unresolved. Functional tests and a textual assertion that the screen exists do not prove visual fidelity.
+
+Pixel identity is not the default requirement. The objective is recognizable structural fidelity within Prisma's design system, accessibility, real data constraints and responsive behavior. If an existing product contract or technical constraint conflicts with the reference, preserve the constraint, expose the conflict and obtain a Product Owner decision instead of silently redesigning the target.
 
 ---
 
@@ -474,7 +486,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | Tema da mudança | Fontes que o prompt deve mandar o Codex consultar |
 | --- | --- |
 | Produto, linguagem, entidade ou fluxo | `docs/product`, `PRISMA_WIKI.md` e requisito/auditoria fornecido pelo Product Owner |
-| UX, tela, navegação ou estado | `docs/product/ux-foundation.md`, acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
+| UX, tela, navegação, estado ou referência visual | `docs/product/ux-foundation.md` (incluindo “Fidelidade a referências visuais”), acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
 | Pessoa, currículo, revisão ou publicação | owners em `docs/product`, `docs/architecture` e `docs/ai`; serviços e testes do fluxo afetado |
 | Posição, matching ou Prisma Score | `docs/product/vacancy-intelligence.md`, `docs/architecture/vacancy-intelligence.md`, `docs/ai/matching-contract.md`, ADRs vigentes e testes de matching |
 | Lominger, competências ou visualização do Perfil | `docs/product/lominger-profile-visualization.md`, o PDF-base local em `.prisma-data/knowledge-sources/lominger/` e `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`; não tratar a referência como contrato ou metodologia ativada |
@@ -523,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.34.1
+version: 2.35.0
 last_verified: 2026-09-18
 ---
 
@@ -595,9 +607,9 @@ O schema atual inclui a proteção `20260914015642_m61_requirement_classificatio
 
 ## Base compartilhada de UX — 2026-09-13
 
-Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.0.0`, ADR-050. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
+Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.1.0`, ADR-050 e ADR-061. A versão 1.1.0 preserva a base entregue em 1.0.0 e adiciona governança para referências visuais futuras; não prova correção retroativa de telas existentes. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
-Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT em `docs/qa/*ux-foundation.md`. Validação dirigida e limites no AoT. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. Versão pública permanece v1.5.11; o contrato de apresentação inicia 1.0.0, sem mudança semântica de contratos persistidos.
+Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md` e da fidelidade visual em `docs/qa/*visual-reference-fidelity.md`. Validação dirigida e limites nos AoTs. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. Versão pública permanece v1.6.4; o contrato de apresentação está em 1.1.0, sem mudança semântica de contratos persistidos.
 
 ## Formação, datas e duração de experiência
 
@@ -646,7 +658,7 @@ Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por tr
 
 - M5.4.6 Vagas tem schema ativo no Prisma-QA e interface implementada localmente: a Vaga pronta usa Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados, ocultando vazios. O estruturador propõe a dimensão, mas a importância é humana; `unclassified` é permitido em rascunho e mantém a aderência detalhada pendente sem bloquear a descoberta de Pessoas. Reestruturação produz delta, preserva itens humanos e nunca remove item não encontrado automaticamente. Correção de dimensão é auditável e encaminhada somente ao Inbox da Knowledge organizacional, sem alterar Global. A prova SQL revertida confirmou RLS/grants e persistência; o smoke autenticado responsivo desta entrega ainda está bloqueado por indisponibilidade de sessão. Produção não foi acionada.
 
-- Protocolo permanente de fidelidade de acordos ativo: mudança material referencia Contrato de Acordos, Prompt de Execução e AoT; correção que restaura acordo existente pode registrar apenas seu delta. `AGENTS.md` exige preservar DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e aceites, inclusive quando incorporados por caminho e versão/revisão imutável. Pendência material exige pergunta, acordo congelado não pode ser reinterpretado, e requisito sem prova não permite conclusão. Templates e protocolo de QA ficam em `docs/qa`; `check-foundation` valida sua presença. Não altera produto, schema, permissões ou produção.
+- Protocolos permanentes de fidelidade de acordos e referências visuais ativos: mudança material referencia Contrato de Acordos, Prompt de Execução e AoT. Demandas de criação ou alteração visual com imagem-alvo classificam a referência, decompõem sua arquitetura em D/P/A/Q/CA-UX e exigem comparação no mesmo estado, com dados equivalentes e no mesmo viewport. “Não copiar literalmente” não autoriza reestruturar topologia, hierarquia, proporções, agrupamentos, densidade, ordem ou ações. `AGENTS.md`, `prisma-ux-foundation-1.1.0`, templates e `check-foundation` protegem a regra; `FONTE_GPT_PRISMA.md` 1.1.0 recebe diretamente a seção canônica pelo gerador. Isso não altera telas existentes, produto, schema, permissões, runtime de IA ou produção.
 
 - Padrão Prisma de Perfil Profissional 1.0 implementado localmente: `prisma-profile-view` deriva do Perfil vigente uma apresentação única para Central, Perfil completo, versões e comparação; `profile-discovery` pesquisa Perfis atuais do tenant por experiência, formação, competências, credenciais e contexto, reutiliza equivalências publicadas no Knowledge e explica por que cada Pessoa apareceu. A comparação aceita exatamente duas Pessoas e não declara vencedor, score ou decisão automática. Nenhum schema, migration, RLS, contrato persistido ou fonte de verdade foi criado. O smoke autenticado aprovou Central, Perfil, busca, resultados, comparação e histórico em `1440x900`, `1280x720`, `768x1024`, `390x844` e `360x800`, sem overflow horizontal, controle fora do viewport ou erro de console; nenhuma mutação foi acionada. O gate completo aprovou lint de 310 arquivos, 240 testes de regressão, 19 casos golden, build web e demonstração vertical `VERTICAL_SLICE_OK`.
 - CLI de vertical slice.
@@ -6569,6 +6581,61 @@ ADRs 013, 032, 036–040, 043, 050 e 057; owners de Knowledge/Posições/seguran
 
 ---
 
+## Source: `docs/decisions/ADR-061-visual-reference-fidelity-for-prompts.md`
+
+# ADR-061: Fidelidade estrutural de referências visuais em prompts
+
+- Status: accepted
+- Date: 2026-09-18
+- Owners: Product Owner and engineering
+- Authority: aprovação explícita de Bruno em 2026-09-18 para internalizar a regra no agente e na fonte do GPT do Prisma.
+
+## Context
+
+Referências visuais vinham sendo tratadas como orientação funcional ampla. A expressão “não copiar literalmente” permitia que a implementação preservasse funções, mas alterasse composição, hierarquia e densidade a ponto de o resultado ficar visualmente distante do planejado.
+
+## Decision
+
+Quando uma demanda visual inclui referência tratada como resultado planejado, sua arquitetura visual é normativa por padrão e seus dados de exemplo são ilustrativos. O prompt deve decompor e contratar topologia, hierarquia, proporções, agrupamentos, densidade, alinhamentos, ordem, posição das ações, estados e responsividade usando IDs UX. A entrega exige comparação no mesmo estado, com dados equivalentes e no mesmo viewport, registrando divergências no AoT.
+
+“Não copiar literalmente” autoriza adaptar conteúdo real, componentes acessíveis, tokens, implementação e acabamento. Não autoriza uma composição materialmente diferente. Pixel identity permanece opcional e só se torna requisito por decisão explícita.
+
+A regra canônica vive em `docs/product/ux-foundation.md`, governa agentes por `AGENTS.md` e é projetada pelo gerador em `FONTE_GPT_PRISMA.md`. Os artefatos gerados não se tornam fontes independentes.
+
+## Alternatives considered
+
+- Manter instruções livres: rejeitado porque não cria critérios verificáveis.
+- Exigir cópia pixel a pixel: rejeitado porque conflita com dados reais, responsividade, acessibilidade e design system.
+- Depender somente de revisão humana informal: rejeitado porque não preserva rastreabilidade entre acordo, prompt e evidência.
+
+## Consequences and risks
+
+Prompts visuais ficam mais objetivos e aceites mais fortes, com pequeno custo adicional de decomposição e comparação. Uma referência ambígua pode bloquear o prompt até decisão do PO. O protocolo não mede automaticamente semelhança perceptiva e não elimina julgamento humano; reduz o risco de redesenho silencioso.
+
+## Technical, data, security and AI impact
+
+Mudança documental e de geração do Context Pack. Não altera produto, schema, dados, autorização, Supabase, modelo ou prompt de runtime. Altera a fonte de conhecimento do GPT autor de prompts e o contrato comportamental dos agentes de desenvolvimento.
+
+## Validation strategy
+
+Checker de fundação protege os elementos obrigatórios. Teste do Context Pack comprova a projeção da seção canônica e o manifesto comum. Geração e comparação verificam que os artefatos derivados estão sincronizados.
+
+## Review and replacement criteria
+
+Reavaliar se testes reais mostrarem excesso de bloqueio, se houver ferramenta confiável de comparação visual ou se o fluxo de design mudar. Superseder por nova decisão e atualizar contrato, templates, gerador, testes e AoT em conjunto.
+
+## References
+
+- `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0
+- `docs/product/ux-foundation.md` `prisma-ux-foundation-1.1.0`
+- ADR-048 e ADR-056
+
+## Change history
+
+- 2026-09-18: accepted and implemented as prompt-governance policy.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6637,6 +6704,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-055](ADR-055-prisma-score-ordering.md) | accepted | Prisma Score ordena Pessoas dentro de cada grupo de descoberta |
 | [ADR-056](ADR-056-dual-context-distribution.md) | accepted | Uma fonte compacta para prompts e uma exportação completa derivam do mesmo Context Pack |
 | [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
+| [ADR-061](ADR-061-visual-reference-fidelity-for-prompts.md) | accepted | Referências visuais normativas viram requisitos estruturais e evidência comparável nos prompts |
 
 ## Rules
 
@@ -8178,7 +8246,7 @@ Depois da confirmação, a Pessoa entra em `deleting`, novas mutações incompat
 
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.0.0`. Acordo aprovado: `docs/qa/agreement-ux-foundation.md` 1.0.0. Fonte: decisão de Bruno nesta tarefa em 2026-09-13, incluindo a substituição de Vagas por **Posições** e autonomia para implementação sequencial sem novos checkpoints de produto.
+Contrato de apresentação: `prisma-ux-foundation-1.1.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0 e `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.1.0 preserva a base anterior e restringe a autonomia visual quando existe uma referência normativa.
 
 ## Organização e jornadas
 
@@ -8204,7 +8272,23 @@ Preservar marca/ativos, azul e navegação lateral da ADR-007. Reduzir brilho, s
 
 Azul significa ação/seleção; verde conclusão confirmada; amarelo atenção; vermelho falha ou destruição; neutro informação ausente. Texto/ícone complementam a cor. Arquivar e excluir têm significados distintos. Usar componentes compartilhados para página, cabeçalho, cartão, estado, painel e área pública.
 
-Tabelas priorizam objeto, situação e próxima ação. Rolagem interna cabe a informação realmente bidimensional. Telas pequenas priorizam uma coluna, filtros progressivos, comparação por requisito e alternância fonte/campo quando a implementação específica requer. Controles, títulos e ações não podem se sobrepor com conteúdo longo. A amostra visual de lista, detalhe e formulário será implementada e conferida nesta entrega; o PO delegou a seleção dos detalhes visuais sem nova aprovação intermediária.
+Tabelas priorizam objeto, situação e próxima ação. Rolagem interna cabe a informação realmente bidimensional. Telas pequenas priorizam uma coluna, filtros progressivos, comparação por requisito e alternância fonte/campo quando a implementação específica requer. Controles, títulos e ações não podem se sobrepor com conteúdo longo.
+
+## Fidelidade a referências visuais
+
+Uma imagem fornecida como orientação do resultado planejado é normativa para a arquitetura visual, salvo classificação diferente do Product Owner. Devem ser preservados de forma reconhecível: topologia da página, hierarquia, proporções relativas, agrupamentos, densidade, alinhamentos, ordem da informação, posição relativa das ações e relação entre área principal, painéis e navegação. Textos de exemplo, nomes, contagens, avatares e dados ilustrativos não são requisitos de produto.
+
+“Não copiar literalmente” significa adaptar o conteúdo real, os componentes acessíveis existentes, os tokens Prisma, a implementação e o acabamento fino. Não significa trocar uma composição em duas colunas por uma página linear, mover ações primárias para outra região, alterar substancialmente a densidade ou reorganizar os blocos sem autorização. Restrições reais de domínio, segurança, acessibilidade e dados prevalecem, mas o conflito deve ser declarado e decidido; não pode virar um redesenho silencioso.
+
+Todo prompt de criação ou alteração visual com referência deve:
+
+- classificar a referência como alvo normativo, inspiração, contraexemplo ou exemplo de conteúdo;
+- decompor a imagem em topologia, hierarquia, proporções, agrupamentos, densidade, alinhamento, ações, estados e comportamento responsivo;
+- registrar requisitos e proibições `D-UX-*` e `P-UX-*`, autonomia `A-UX-*`, dúvidas materiais `Q-UX-*` e aceites `CA-UX-*`;
+- exigir comparação visual com o mesmo estado, dados equivalentes e viewport da referência, além das larguras responsivas aplicáveis;
+- registrar no AoT a evidência renderizada e toda divergência material, com sua autorização ou limitação.
+
+Teste funcional, typecheck, presença dos componentes ou descrição textual não comprovam fidelidade visual. Pixel perfect só é exigido quando explicitamente acordado; o padrão é fidelidade estrutural reconhecível dentro do design system e das restrições reais do Prisma.
 
 ## Linguagem
 
@@ -8228,7 +8312,7 @@ Conferir leitura, contraste e ampliação nas superfícies alteradas, com refer�
 
 ## Autonomia e evolução
 
-Engenharia escolhe medidas, espaçamento, tipografia, distribuição dos componentes e redação coerente com este contrato. Esta aprovação não muda autorização, isolamento, obrigatoriedade de dados de domínio, matching, parser, fontes externas, custo ou produção. Os grupos específicos 4–14 ainda serão trabalhados nos próprios escopos; a base transversal vale imediatamente para novas alterações. Critérios de aceite e limitações ficam no AoT desta entrega.
+Sem referência normativa, engenharia escolhe medidas, espaçamento, tipografia, distribuição dos componentes e redação coerente com este contrato. Com referência normativa, a autonomia cobre acabamento e implementação dentro da arquitetura visual acordada; mudança estrutural exige decisão explícita. Esta aprovação não muda autorização, isolamento, obrigatoriedade de dados de domínio, matching, parser, fontes externas, custo ou produção. Os grupos específicos 4–14 ainda serão trabalhados nos próprios escopos; a base transversal vale imediatamente para novas alterações. Critérios de aceite e limitações ficam no AoT da entrega aplicável.
 
 ---
 
@@ -8395,6 +8479,15 @@ O build mantém o aviso já conhecido de chunk Ant Design acima de 900 kB. Não 
 ## CRITÉRIOS DE ACEITE
 
 - CA-D01 — Dado, quando, então; teste e evidência esperados.
+
+## FIDELIDADE VISUAL — obrigatório quando houver referência
+
+- Classificação de cada referência: alvo normativo | inspiração | contraexemplo | exemplo de conteúdo.
+- D-UX-01 — Topologia, hierarquia, proporções, agrupamentos, densidade, alinhamentos, ordem e posição relativa das ações que devem permanecer reconhecíveis.
+- P-UX-01 — Divergências estruturais proibidas, inclusive o que “não copiar literalmente” não autoriza mudar.
+- A-UX-01 — Conteúdo ilustrativo, tokens, componentes acessíveis e detalhes de acabamento delegados à engenharia.
+- Q-UX-01 — Ambiguidade material de estrutura, interação ou responsividade; remover ou resolver antes do prompt final.
+- CA-UX-01 — Comparação no mesmo estado, com dados equivalentes e no mesmo viewport, mais viewports responsivos aplicáveis; evidência renderizada e divergências registradas no AoT.
 
 ## ESTADO
 
@@ -9304,6 +9397,60 @@ Referência de produto: `docs/product/ux-foundation.md`, `prisma-ux-foundation-1
 ## PENDÊNCIAS
 
 Nenhuma decisão de produto pendente no escopo autorizado. O item 3.3 anterior que recomendava manter Vagas está expressamente supersedido por D-3.3: **Posições**.
+
+---
+
+## Source: `docs/qa/agreement-visual-reference-fidelity.md`
+
+# Contrato de Acordos — Fidelidade a referências visuais em prompts
+
+Versão: 1.0.0. Estado: **agreed**. Product Owner: Bruno. Aprovação: solicitação explícita de 2026-09-18 para tornar a regra uma diretriz do agente e da fonte de conhecimento usada pelo GPT do Prisma, aplicável à criação ou alteração de telas e elementos visuais.
+
+Owner de produto: `docs/product/ux-foundation.md`, contrato `prisma-ux-foundation-1.1.0`. Decisão arquitetural: ADR-061. Esta regra é transversal e complementa, sem reabrir, `docs/qa/agreement-ux-foundation.md` 1.0.0.
+
+Supersessão explícita: quando houver referência visual normativa, D-UX-04 e A-UX-02 deste contrato limitam A-01 e A-02 do acordo `agreement-ux-foundation` 1.0.0. A autonomia anterior sobre distribuição e detalhes visuais continua válida apenas sem referência normativa ou dentro da arquitetura visual acordada. Nenhum outro requisito do acordo anterior é alterado.
+
+## DEVE — Inegociável e critérios de aceite
+
+| ID | Decisão aprovada | Critério de aceite |
+| --- | --- | --- |
+| D-UX-01 | Toda referência visual usada como orientação deve ser classificada como alvo normativo, inspiração, contraexemplo ou exemplo de conteúdo. | CA-UX-01: o contrato/prompt declara a classificação; na ausência de indicação contrária do PO, a imagem do resultado planejado é normativa para arquitetura visual e ilustrativa para dados. |
+| D-UX-02 | O prompt deve decompor o alvo em topologia, hierarquia, proporções, agrupamentos, densidade, alinhamentos, ordem, ações, estados e transformação responsiva. | CA-UX-02: o prompt contém requisitos visuais verificáveis e não apenas uma lista funcional. |
+| D-UX-03 | A arquitetura visual normativa deve virar requisitos `D-UX-*`, proibições `P-UX-*`, autonomia `A-UX-*`, pendências `Q-UX-*` e aceites `CA-UX-*`. | CA-UX-03: os templates e a orientação do agente exigem a classificação; dúvida material bloqueia o prompt final. |
+| D-UX-04 | “Não copiar literalmente” permite adaptar conteúdo ilustrativo, dados reais, componentes acessíveis, tokens e acabamento, sem autorizar uma composição materialmente diferente. | CA-UX-04: a diretriz preserva topologia, hierarquia, proporções relativas, agrupamentos, densidade, ordem e posição relativa das ações. |
+| D-UX-05 | A implementação visual deve ser comparada com a referência no mesmo estado, com dados equivalentes e no mesmo viewport, além dos viewports responsivos aplicáveis. | CA-UX-05: o AoT identifica referência e render, compara a estrutura e registra divergências e autorização; teste funcional isolado não conta como prova visual. |
+| D-UX-06 | A regra deve existir no contrato do agente, no owner de UX e na fonte compacta gerada usada pelo GPT, sem criar fonte manual concorrente. | CA-UX-06: `AGENTS.md`, `ux-foundation.md`, templates, gerador, checker e teste de Context Pack preservam a regra; `FONTE_GPT_PRISMA.md` e `TUDO_SOBRE_PRISMA.md` são regenerados. |
+
+## PROIBIDO
+
+- P-UX-01: interpretar “não copiar literalmente” como liberdade para trocar layout, hierarquia, proporções, agrupamentos, densidade, ordem ou posição das ações.
+- P-UX-02: transformar textos, nomes, avatares, números ou registros ilustrativos da imagem em requisitos de produto sem decisão explícita.
+- P-UX-03: declarar fidelidade visual apenas com typecheck, teste funcional, presença de componentes ou descrição textual.
+- P-UX-04: editar manualmente os artefatos gerados `FONTE_GPT_PRISMA.md` ou `TUDO_SOBRE_PRISMA.md`.
+- P-UX-05: esconder conflito com domínio, segurança, acessibilidade, dados reais ou componente obrigatório; o conflito deve ser exposto para decisão.
+
+## FORA DE ESCOPO
+
+- F-UX-01: redesenhar ou corrigir retroativamente telas existentes, inclusive o Movimento 7.1.
+- F-UX-02: alterar schema, Supabase, runtime de IA, modelo, aplicação web, QA ou produção.
+- F-UX-03: tornar pixel perfect obrigatório por padrão ou exigir certificação visual automatizada.
+
+## AUTONOMIA
+
+- A-UX-01: redação, organização documental e implementação do checker, desde que todos os D-UX/P-UX sejam preservados.
+- A-UX-02: detalhes de acabamento, tokens e componentes acessíveis permanecem delegados quando não alteram a arquitetura visual normativa.
+- A-UX-03: versionar o contrato do agente, a fundação UX e a fonte compacta; regenerar os artefatos e executar somente os checks afetados.
+
+## PENDÊNCIAS
+
+Nenhuma pendência material no escopo autorizado.
+
+## APROVAÇÃO
+
+- Product Owner: Bruno.
+- Data: 2026-09-18.
+- Evidência de aprovação: mensagem “faça isso para garantir que o gpt internalize a regra ao criar prompts que demandem criação ou alteração de telas ou elementos visuais”.
+- Referência para o prompt: este contrato versão 1.0.0 e ADR-061.
 
 ---
 
@@ -10560,6 +10707,14 @@ Contrato de referência: caminho + versão/revisão imutável. Preencher conclus
 | --- | --- | --- |
 | F-01 |  | NOT TESTED |
 
+## Evidência de fidelidade visual — preencher quando houver referência
+
+| Referência / viewport | Estado e dados equivalentes | Render entregue | Comparação estrutural | Divergências e autorização | Status |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  | topologia, hierarquia, proporções, agrupamentos, densidade, alinhamento, ordem e ações |  | NOT TESTED |
+
+Teste funcional, presença de componentes ou descrição textual não substituem a comparação visual. Se não houver referência normativa, registrar “não aplicável” e a razão.
+
 ## Desvios do contrato
 
 A verificar. Registrar "Nenhum desvio" somente depois de comparar a entrega com o contrato.
@@ -10673,6 +10828,67 @@ Branch de entrega: `codex/ux-shared-foundation`, origin existente `git@github.co
 ## Conclusão
 
 Padrões aprovados formalizados e base compartilhada implementada para orientar os próximos agrupadores. A busca de referências agora torna explícitas sua origem e evolução. Critérios da fundação atendidos com os limites L-01 a L-04 explicitados.
+
+---
+
+## Source: `docs/qa/aot-visual-reference-fidelity.md`
+
+# AoT — Fidelidade a referências visuais em prompts
+
+Data: 2026-09-18. Contrato: `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0. Execução: `docs/qa/execution-visual-reference-fidelity.md` 1.0.0. Owner: `prisma-ux-foundation-1.1.0`. Decisão: ADR-061.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- |
+| D-UX-01 | `AGENTS.md`, owner e template classificam cada referência. | `check:foundation` e revisão do diff. | PASS | local |
+| D-UX-02 | Owner e contrato do agente exigem decomposição visual implementável. | `check:foundation` e teste da fonte compacta. | PASS | local |
+| D-UX-03 | Convenções D/P/A/Q/CA-UX incorporadas ao agente e templates. | `check:foundation`. | PASS | local |
+| D-UX-04 | Limite de “não copiar literalmente” definido no agente e owner. | Checker e teste da fonte compacta. | PASS | local |
+| D-UX-05 | Template AoT exige evidência no mesmo estado/dados/viewport e registro de divergências. | `check:foundation` e revisão do template. | PASS | regra validada; aplicação começa nas próximas entregas visuais |
+| D-UX-06 | Gerador projeta a seção canônica na fonte GPT e gera ambos os artefatos. | 3 testes de tooling, geração e `check:prisma-context`. | PASS | local |
+
+## Proibições verificadas
+
+| ID | Guardrail / teste negativo | Evidência | Status |
+| --- | --- | --- | --- |
+| P-UX-01 | Checker exige limites estruturais e a fonte compacta os contém. | Checker aprovado; teste confirma os termos na projeção. | PASS |
+| P-UX-02 | Owner separa arquitetura normativa de dados ilustrativos. | Revisão do owner e contrato. | PASS |
+| P-UX-03 | AoT declara que teste funcional não prova fidelidade visual. | Checker aprovado. | PASS |
+| P-UX-04 | Artefatos derivados são produzidos somente pelo gerador. | Diff e geração reproduzível. | PASS |
+| P-UX-05 | Conflitos materiais devem ser expostos ao PO. | Regra explícita no agente e owner. | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-UX-01 | Nenhuma tela ou componente web alterado. | PASS |
+| F-UX-02 | Nenhum schema, Supabase, runtime IA ou ambiente remoto alterado. | PASS |
+| F-UX-03 | Pixel perfect permanece opt-in explícito. | PASS |
+
+## Evidência de fidelidade visual
+
+Não aplicável a esta entrega documental: ela define a regra e não cria nem altera uma superfície visual do produto.
+
+## Desvios do contrato
+
+Nenhum desvio.
+
+## Validação final
+
+- `pnpm run check:foundation`: PASS, 18 tabelas públicas e 6 versões de processamento preservadas.
+- `node --test tests/tooling/prismaContext.test.mjs`: PASS, 3/3 testes.
+- `pnpm run generate:prisma-context`: PASS, dois artefatos regenerados.
+- `pnpm run check:prisma-context`: PASS, manifesto e conteúdo sincronizados.
+- `git diff --check`: PASS.
+
+## Git / QA / ambiente
+
+Branch `codex/visual-fidelity-governance`. Entrega local e documental. QA, Supabase e produção não foram alterados.
+
+## Conclusão
+
+PASS local. A regra está ativa nas fontes e nos artefatos gerados; sua eficácia visual será comprovada em cada futura entrega que use referência normativa.
 
 ---
 
@@ -11850,6 +12066,18 @@ Preservar `.tmp.driveupload/` e qualquer material não relacionado. Não modific
 
 ---
 
+## Source: `docs/qa/execution-visual-reference-fidelity.md`
+
+# Execução — Fidelidade a referências visuais em prompts
+
+Versão 1.0.0. Autorizada por Bruno em 2026-09-18. Ler integralmente `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0 e `docs/product/ux-foundation.md` contrato `prisma-ux-foundation-1.1.0`. Não reinterpretar D-UX-*, P-UX-*, F-UX-*, A-UX-* ou CA-UX-*.
+
+Implementar a regra no contrato do agente, owner de UX, templates de acordo/AoT, protocolo de rastreabilidade, ADR e roteamento do Context Pack. Projetar a seção canônica de fidelidade visual diretamente na fonte compacta do GPT, protegê-la com checker e teste e regenerar os dois artefatos derivados. Não editar artefatos gerados manualmente.
+
+Validar `check:foundation`, o teste de tooling do Context Pack, geração e verificação dos artefatos. Revisar diff e manifesto. Este movimento não altera telas, código de produto, banco, Supabase, IA de runtime, QA ou produção.
+
+---
+
 ## Source: `docs/qa/instruction-audit-20260911.md`
 
 # AoT: auditoria e revisão das instruções
@@ -13000,6 +13228,8 @@ O prompt pode incorporar o contrato integralmente por referência a caminho e ve
 ## Evidência aceitável
 
 Conforme o risco: teste automatizado, teste negativo, smoke autenticado, SQL/RLS, log metadata-only, captura visual, contrato, revisão de diff ou evidência de ambiente. O AoT não contém cadeia de raciocínio privada, PII, segredos ou prompts integrais.
+
+Quando houver referência visual normativa, a captura isolada não basta: a evidência compara referência e implementação no mesmo estado, com dados equivalentes e no mesmo viewport. A matriz registra topologia, hierarquia, proporções, agrupamentos, densidade, alinhamento, ordem da informação e posição relativa das ações, além de toda divergência material e sua autorização. Teste funcional não prova fidelidade visual.
 
 ## Mudança de acordo
 

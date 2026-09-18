@@ -47,11 +47,13 @@ const governanceAgent = await requireFile("AGENTS.md");
 const agreementTemplate = await requireFile("docs/qa/agreement-contract-template.md");
 const aotTemplate = await requireFile("docs/qa/aot-template.md");
 const traceabilityProtocol = await requireFile("docs/qa/product-agreement-traceability.md");
+const uxFoundation = await requireFile("docs/product/ux-foundation.md");
 for (const [name, content, required] of [
-  ["AGENTS.md governance protocol", governanceAgent, ["Product Agreement and Prompt Fidelity Protocol", "DEVE (`D-*`)", "PROIBIDO (`P-*`)", "FORA DE ESCOPO (`F-*`)", "AUTONOMIA (`A-*`)", "PENDENTE (`Q-*`)", "AoT"]],
-  ["agreement contract template", agreementTemplate, ["DEVE — Inegociável", "PROIBIDO", "FORA DE ESCOPO", "AUTONOMIA DE ENGENHARIA", "PENDÊNCIAS", "CRITÉRIOS DE ACEITE", "draft", "agreed", "superseded"]],
-  ["AoT template", aotTemplate, ["Matriz de Acordos", "Implementação", "Teste", "Evidência", "Status", "Proibições verificadas", "Desvios do contrato"]],
-  ["QA traceability protocol", traceabilityProtocol, ["teste negativo", "PASS", "PARTIAL", "NOT TESTED", "não está concluído"]],
+  ["AGENTS.md governance protocol", governanceAgent, ["Product Agreement and Prompt Fidelity Protocol", "DEVE (`D-*`)", "PROIBIDO (`P-*`)", "FORA DE ESCOPO (`F-*`)", "AUTONOMIA (`A-*`)", "PENDENTE (`Q-*`)", "AoT", "14. Visual-reference fidelity for prompts", "D-UX-*", "same-state, same-data and same-viewport"]],
+  ["agreement contract template", agreementTemplate, ["DEVE — Inegociável", "PROIBIDO", "FORA DE ESCOPO", "AUTONOMIA DE ENGENHARIA", "PENDÊNCIAS", "CRITÉRIOS DE ACEITE", "FIDELIDADE VISUAL", "D-UX-01", "CA-UX-01", "draft", "agreed", "superseded"]],
+  ["AoT template", aotTemplate, ["Matriz de Acordos", "Implementação", "Teste", "Evidência", "Status", "Proibições verificadas", "Desvios do contrato", "Evidência de fidelidade visual", "Comparação estrutural"]],
+  ["QA traceability protocol", traceabilityProtocol, ["teste negativo", "PASS", "PARTIAL", "NOT TESTED", "não está concluído", "mesmo estado", "Teste funcional não prova fidelidade visual"]],
+  ["UX visual-reference protocol", uxFoundation, ["Fidelidade a referências visuais", "normativa para a arquitetura visual", "Não significa trocar uma composição", "D-UX-*", "Pixel perfect"]],
 ]) {
   for (const item of required) if (!content.includes(item)) errors.push(`${name}: required governance element is missing: ${item}`);
 }

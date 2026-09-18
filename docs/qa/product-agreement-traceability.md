@@ -20,6 +20,8 @@ O prompt pode incorporar o contrato integralmente por referência a caminho e ve
 
 Conforme o risco: teste automatizado, teste negativo, smoke autenticado, SQL/RLS, log metadata-only, captura visual, contrato, revisão de diff ou evidência de ambiente. O AoT não contém cadeia de raciocínio privada, PII, segredos ou prompts integrais.
 
+Quando houver referência visual normativa, a captura isolada não basta: a evidência compara referência e implementação no mesmo estado, com dados equivalentes e no mesmo viewport. A matriz registra topologia, hierarquia, proporções, agrupamentos, densidade, alinhamento, ordem da informação e posição relativa das ações, além de toda divergência material e sua autorização. Teste funcional não prova fidelidade visual.
+
 ## Mudança de acordo
 
 Uma decisão posterior do Product Owner supersede o ID afetado (`D-03 v1` -> `D-03 v2`), atualiza contrato/prompt/testes/AoT e explica a autorização. Regras conflitantes não podem permanecer ativas.

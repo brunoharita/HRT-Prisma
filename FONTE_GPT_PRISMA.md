@@ -1,12 +1,12 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: gpt-prompt-authoring-source
-prompt_source_version: 1.0.0
+prompt_source_version: 1.1.0
 context_bundle_version: 2.0.0
 product_version: 1.6.4
-current_state_version: 2.34.1
+current_state_version: 2.35.0
 current_state_last_verified: 2026-09-18
-documentation_source_count: 194
-source_manifest_sha256: 3b401906540a8dcb2827ffc38bed48442777a0182b1516a474632763529a757d
+documentation_source_count: 198
+source_manifest_sha256: 4169ebc493e6cb5c821751079efc897f3b5152ce47caf0257de78e174cc0d3d7
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -194,7 +194,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | Tema da mudança | Fontes que o prompt deve mandar o Codex consultar |
 | --- | --- |
 | Produto, linguagem, entidade ou fluxo | `docs/product`, `PRISMA_WIKI.md` e requisito/auditoria fornecido pelo Product Owner |
-| UX, tela, navegação ou estado | `docs/product/ux-foundation.md`, acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
+| UX, tela, navegação, estado ou referência visual | `docs/product/ux-foundation.md` (incluindo “Fidelidade a referências visuais”), acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
 | Pessoa, currículo, revisão ou publicação | owners em `docs/product`, `docs/architecture` e `docs/ai`; serviços e testes do fluxo afetado |
 | Posição, matching ou Prisma Score | `docs/product/vacancy-intelligence.md`, `docs/architecture/vacancy-intelligence.md`, `docs/ai/matching-contract.md`, ADRs vigentes e testes de matching |
 | Lominger, competências ou visualização do Perfil | `docs/product/lominger-profile-visualization.md`, o PDF-base local em `.prisma-data/knowledge-sources/lominger/` e `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`; não tratar a referência como contrato ou metodologia ativada |
@@ -234,6 +234,28 @@ pnpm run check:prisma-context
 ```
 
 `pnpm run generate:prisma-context` atualiza os dois artefatos na mesma execução. `pnpm run check:prisma-context` valida fontes, manifesto, papéis, limite de tamanho da fonte compacta e conteúdo sem depender de LF ou CRLF. Não criar MASTER, OVERVIEW, SNAPSHOT, KNOWLEDGE, WIKI alternativa ou contexto consolidado concorrente.
+
+---
+
+## Fidelidade a referências visuais
+
+### Fonte: `docs/product/ux-foundation.md`
+
+#### Fidelidade a referências visuais
+
+Uma imagem fornecida como orientação do resultado planejado é normativa para a arquitetura visual, salvo classificação diferente do Product Owner. Devem ser preservados de forma reconhecível: topologia da página, hierarquia, proporções relativas, agrupamentos, densidade, alinhamentos, ordem da informação, posição relativa das ações e relação entre área principal, painéis e navegação. Textos de exemplo, nomes, contagens, avatares e dados ilustrativos não são requisitos de produto.
+
+“Não copiar literalmente” significa adaptar o conteúdo real, os componentes acessíveis existentes, os tokens Prisma, a implementação e o acabamento fino. Não significa trocar uma composição em duas colunas por uma página linear, mover ações primárias para outra região, alterar substancialmente a densidade ou reorganizar os blocos sem autorização. Restrições reais de domínio, segurança, acessibilidade e dados prevalecem, mas o conflito deve ser declarado e decidido; não pode virar um redesenho silencioso.
+
+Todo prompt de criação ou alteração visual com referência deve:
+
+- classificar a referência como alvo normativo, inspiração, contraexemplo ou exemplo de conteúdo;
+- decompor a imagem em topologia, hierarquia, proporções, agrupamentos, densidade, alinhamento, ações, estados e comportamento responsivo;
+- registrar requisitos e proibições `D-UX-*` e `P-UX-*`, autonomia `A-UX-*`, dúvidas materiais `Q-UX-*` e aceites `CA-UX-*`;
+- exigir comparação visual com o mesmo estado, dados equivalentes e viewport da referência, além das larguras responsivas aplicáveis;
+- registrar no AoT a evidência renderizada e toda divergência material, com sua autorização ou limitação.
+
+Teste funcional, typecheck, presença dos componentes ou descrição textual não comprovam fidelidade visual. Pixel perfect só é exigido quando explicitamente acordado; o padrão é fidelidade estrutural reconhecível dentro do design system e das restrições reais do Prisma.
 
 ---
 
@@ -287,9 +309,9 @@ O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permane�
 
 #### Base compartilhada de UX — 2026-09-13
 
-Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.0.0`, ADR-050. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
+Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.1.0`, ADR-050 e ADR-061. A versão 1.1.0 preserva a base entregue em 1.0.0 e adiciona governança para referências visuais futuras; não prova correção retroativa de telas existentes. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
-Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT em `docs/qa/*ux-foundation.md`. Validação dirigida e limites no AoT. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. Versão pública permanece v1.5.11; o contrato de apresentação inicia 1.0.0, sem mudança semântica de contratos persistidos.
+Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md` e da fidelidade visual em `docs/qa/*visual-reference-fidelity.md`. Validação dirigida e limites nos AoTs. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. Versão pública permanece v1.6.4; o contrato de apresentação está em 1.1.0, sem mudança semântica de contratos persistidos.
 
 #### Versão exibida no login
 

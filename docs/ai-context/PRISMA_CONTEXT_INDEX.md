@@ -31,7 +31,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | Tema da mudança | Fontes que o prompt deve mandar o Codex consultar |
 | --- | --- |
 | Produto, linguagem, entidade ou fluxo | `docs/product`, `PRISMA_WIKI.md` e requisito/auditoria fornecido pelo Product Owner |
-| UX, tela, navegação ou estado | `docs/product/ux-foundation.md`, acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
+| UX, tela, navegação, estado ou referência visual | `docs/product/ux-foundation.md` (incluindo “Fidelidade a referências visuais”), acordo/execução/AoT aplicáveis, `web/src/pages`, `web/src/components` e `web/src/styles.css` |
 | Pessoa, currículo, revisão ou publicação | owners em `docs/product`, `docs/architecture` e `docs/ai`; serviços e testes do fluxo afetado |
 | Posição, matching ou Prisma Score | `docs/product/vacancy-intelligence.md`, `docs/architecture/vacancy-intelligence.md`, `docs/ai/matching-contract.md`, ADRs vigentes e testes de matching |
 | Lominger, competências ou visualização do Perfil | `docs/product/lominger-profile-visualization.md`, o PDF-base local em `.prisma-data/knowledge-sources/lominger/` e `PROMPT_BRAINSTORM_LOMINGER_PERFIL_CANDIDATO.md`; não tratar a referência como contrato ou metodologia ativada |

@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const scriptPath = fileURLToPath(import.meta.url);
 export const repositoryRoot = resolve(dirname(scriptPath), "..");
 export const CONTEXT_BUNDLE_VERSION = "2.0.0";
-export const PROMPT_SOURCE_VERSION = "1.0.0";
+export const PROMPT_SOURCE_VERSION = "1.1.0";
 export const canonicalSources = [
   "AGENTS.md",
   "README.md",
@@ -15,6 +15,7 @@ export const canonicalSources = [
   "docs/ai-context/PRISMA_AI_REFERENCE.md",
   "docs/ai-context/PRISMA_TECHNICAL_REFERENCE.md",
   "docs/ai-context/PRISMA_WIKI.md",
+  "docs/product/ux-foundation.md",
 ];
 export const outputPath = resolve(repositoryRoot, "TUDO_SOBRE_PRISMA.md");
 export const promptSourcePath = resolve(repositoryRoot, "FONTE_GPT_PRISMA.md");
@@ -120,6 +121,7 @@ export async function buildPrismaPromptSource() {
   const aiReference = sourceByPath(sources, "docs/ai-context/PRISMA_AI_REFERENCE.md");
   const technicalReference = sourceByPath(sources, "docs/ai-context/PRISMA_TECHNICAL_REFERENCE.md");
   const wiki = sourceByPath(sources, "docs/ai-context/PRISMA_WIKI.md");
+  const uxFoundation = sourceByPath(sources, "docs/product/ux-foundation.md");
 
   const compactSections = [
     ["Governança indispensável", compactExcerpt("AGENTS.md", selectSections(agents, [
@@ -133,6 +135,9 @@ export async function buildPrismaPromptSource() {
       "13. Product Agreement and Prompt Fidelity Protocol",
     ]))],
     ["Índice e rotas de aprofundamento", compactExcerpt("docs/ai-context/PRISMA_CONTEXT_INDEX.md", index.replace(/^---[\s\S]*?---\s*/u, "").trim())],
+    ["Fidelidade a referências visuais", compactExcerpt("docs/product/ux-foundation.md", selectSections(uxFoundation, [
+      "Fidelidade a referências visuais",
+    ]))],
     ["Estado vigente relevante para novos prompts", compactExcerpt("docs/ai-context/PRISMA_CURRENT_STATE.md", selectSections(currentState, [
       "Resumo operacional para prompts",
       "M6.1.2 — descoberta por trajetória em três grupos",

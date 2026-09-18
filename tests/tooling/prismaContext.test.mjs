@@ -39,6 +39,10 @@ test("fonte compacta contém contexto vigente e encaminha aprofundamento ao Code
     "docs/qa/agreement-contract-template.md",
     "docs/qa/aot-template.md",
     "mandar o Codex confirmar código, contratos, ADRs e ambiente",
+    "Fidelidade a referências visuais",
+    "Não significa trocar uma composição",
+    "D-UX-*",
+    "mesmo estado, dados equivalentes e viewport",
   ]) assert.ok(compact.includes(expected), `missing compact reference: ${expected}`);
 
   assert.doesNotMatch(compact, /ESCO e O\*NET permanecem catalogadas até a ingestão humana/);

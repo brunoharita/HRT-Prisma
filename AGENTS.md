@@ -1,6 +1,6 @@
 # Prisma agent contract
 
-Instruction contract version: 1.1.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.2.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual-reference fidelity protocol 2026-09-18. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -218,3 +218,15 @@ Once the Product Owner approves the Agreement Contract, it is frozen. The Execut
 Before material implementation under a frozen prompt, declare concisely: what `D-*` will be implemented, which `P-*` cannot occur, what is `F-*`, and where `A-*` applies. This is an understanding check, not a new approval. A subsequent Product Owner change must supersede the affected ID explicitly, update the Agreement/Prompt, tests, and AoT; never leave conflicting rules active.
 
 Close every such movement with an **AoT** (Agreements -> Implementation -> Test -> Evidence) using the repository template. It records operational traceability, never private chain-of-thought. Each `D-*` and applicable `P-*` needs implementation, test/evidence, and status. Permitted statuses are `PASS`, `FAIL`, `PARTIAL`, `BLOCKED`, and `NOT TESTED`. Do not declare completion if any required `D-*` is not `PASS`, if a `P-*` is violated, or if evidence is missing where technically provable. State contract deviations explicitly; “none” is valid only when true.
+
+## 14. Visual-reference fidelity for prompts
+
+Whenever a request creates or changes a screen, component, email, report, chart, PDF or other visual surface and includes a screenshot, mockup, prototype or comparable reference, the agent that prepares the execution prompt must apply the following protocol before delegating implementation:
+
+1. Classify each reference as normative target, inspiration, counterexample or content/data example. Unless the Product Owner says otherwise, a target reference supplied as the planned result is normative for visual architecture and illustrative for its sample text, people, counts and records.
+2. Describe the reference as an implementable visual model: topology, hierarchy, proportions, grouping, density, alignment, action placement, information order, persistent/transient regions and responsive transformation. Do not reduce a visual reference to a feature list.
+3. Translate that model into `D-UX-*`, `P-UX-*`, `A-UX-*`, `Q-UX-*` and `CA-UX-*`. Material ambiguity about structure, interaction or responsive behavior is a `Q-UX-*` and blocks the final prompt; minor decoration may remain autonomous.
+4. Interpret “não copiar literalmente” narrowly. It permits adapting illustrative content, real data, existing accessible components, tokens and implementation details. It does not permit replacing the approved topology, hierarchy, relative proportions, grouping, density, information order or action placement with a materially different composition.
+5. Require same-state, same-data and same-viewport visual comparison against the normative reference. The AoT must attach or identify the rendered evidence, record material deviations and state whether each was approved, technically necessary or unresolved. Functional tests and a textual assertion that the screen exists do not prove visual fidelity.
+
+Pixel identity is not the default requirement. The objective is recognizable structural fidelity within Prisma's design system, accessibility, real data constraints and responsive behavior. If an existing product contract or technical constraint conflicts with the reference, preserve the constraint, expose the conflict and obtain a Product Owner decision instead of silently redesigning the target.

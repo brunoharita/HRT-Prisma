@@ -20,6 +20,14 @@ Contrato de referência: caminho + versão/revisão imutável. Preencher conclus
 | --- | --- | --- |
 | F-01 |  | NOT TESTED |
 
+## Evidência de fidelidade visual — preencher quando houver referência
+
+| Referência / viewport | Estado e dados equivalentes | Render entregue | Comparação estrutural | Divergências e autorização | Status |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  | topologia, hierarquia, proporções, agrupamentos, densidade, alinhamento, ordem e ações |  | NOT TESTED |
+
+Teste funcional, presença de componentes ou descrição textual não substituem a comparação visual. Se não houver referência normativa, registrar “não aplicável” e a razão.
+
 ## Desvios do contrato
 
 A verificar. Registrar "Nenhum desvio" somente depois de comparar a entrega com o contrato.
