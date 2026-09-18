@@ -6,7 +6,7 @@ product_version: 1.7.6
 current_state_version: 2.42.0
 current_state_last_verified: 2026-09-18
 documentation_source_count: 221
-source_manifest_sha256: f6745e765cf3a19fd0ffc8252aee57c0101f260e0d980e7a504ed5ca3cecfe3a
+source_manifest_sha256: 1520c9294159b30fb554cea05cb06dc8b209b54289c3d08a31ae53f737de6e77
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -265,7 +265,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Prisma v1.7.6 registra M7.5 em produção, runtime `9b747a9`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16 e smoke PASS. Evidência: AoT M7.5 e ADR-066.
+Prisma v1.7.6 registra M7.5 em produção, runtime `e547d85`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16, CI e smoke PASS. Evidência: AoT M7.5 e ADR-066.
 
 M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. Taxonomias ocupacional e de competências permanecem domínios separados; o bootstrap publicou 22.885 competências. Evidência 3.0 atende Perfis sem reimportação e não transforma ocupação em fato pessoal. Matching e score não mudaram; parcial/ambiguidade não resolvem automaticamente. Migrations e smoke PASS. Evidência: AoT M7.2 v2 e ADR-065.
 

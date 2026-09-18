@@ -10,7 +10,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-Prisma v1.7.6 registra M7.5 em produção, runtime `9b747a9`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16 e smoke PASS. Evidência: AoT M7.5 e ADR-066.
+Prisma v1.7.6 registra M7.5 em produção, runtime `e547d85`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16, CI e smoke PASS. Evidência: AoT M7.5 e ADR-066.
 
 M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. Taxonomias ocupacional e de competências permanecem domínios separados; o bootstrap publicou 22.885 competências. Evidência 3.0 atende Perfis sem reimportação e não transforma ocupação em fato pessoal. Matching e score não mudaram; parcial/ambiguidade não resolvem automaticamente. Migrations e smoke PASS. Evidência: AoT M7.2 v2 e ADR-065.
 

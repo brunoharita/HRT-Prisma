@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 221
-source_manifest_sha256: f6745e765cf3a19fd0ffc8252aee57c0101f260e0d980e7a504ed5ca3cecfe3a
+source_manifest_sha256: 1520c9294159b30fb554cea05cb06dc8b209b54289c3d08a31ae53f737de6e77
 -->
 
 # Tudo sobre o Prisma
@@ -543,7 +543,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-Prisma v1.7.6 registra M7.5 em produção, runtime `9b747a9`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16 e smoke PASS. Evidência: AoT M7.5 e ADR-066.
+Prisma v1.7.6 registra M7.5 em produção, runtime `e547d85`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16, CI e smoke PASS. Evidência: AoT M7.5 e ADR-066.
 
 M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. Taxonomias ocupacional e de competências permanecem domínios separados; o bootstrap publicou 22.885 competências. Evidência 3.0 atende Perfis sem reimportação e não transforma ocupação em fato pessoal. Matching e score não mudaram; parcial/ambiguidade não resolvem automaticamente. Migrations e smoke PASS. Evidência: AoT M7.2 v2 e ADR-065.
 
@@ -6953,7 +6953,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-M7.5 em produção em 2026-09-18: **v1.7.6**, runtime `9b747a9`, migration remota `20260918193317_m75_competency_coverage_recovery` e Knowledge Agent v16. A normalização ganhou orçamento dedicado de 20 chamadas/dia e 200/mês; o lote service-only concluiu 7/7 Perfis aprovados, preservou os hashes dos snapshots e recuperou o Perfil investigado de 3 para 5 conceitos visíveis. As associações automáticas totais permaneceram 14 antes/depois; o restante exige curadoria humana por alias ou proposta de conceito. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem ativa `sha256:a033d20389aba9b687dd8d7e9903603593d9e2889508783b5480dcb73efc042b`, rollback `prisma-web:rollback-before-m75-20260918`. HTTPS 200 e smoke autenticado confirmaram v1.7.6, 59 ocorrências/57 termos pendentes, nenhuma seleção automática e cancelamento sem escrita. Main/GitHub/VPS sincronizados; evidências, advisors e limites no AoT M7.5.
+M7.5 em produção em 2026-09-18: **v1.7.6**, runtime final `e547d85`, migration remota `20260918193317_m75_competency_coverage_recovery` e Knowledge Agent v16. A normalização ganhou orçamento dedicado de 20 chamadas/dia e 200/mês; o lote service-only concluiu 7/7 Perfis aprovados, preservou os hashes dos snapshots e recuperou o Perfil investigado de 3 para 5 conceitos visíveis. As associações automáticas totais permaneceram 14 antes/depois; o restante exige curadoria humana por alias ou proposta de conceito. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem ativa `sha256:de085d16dcb74f96c00cd540492b308d2a804ac7809c8df0ca0a13111a6c82f3`, rollback imediato `prisma-web:rollback-before-m75-ci-fix-20260918` e rollback pré-M7.5 `prisma-web:rollback-before-m75-20260918`. HTTPS 200; bundle confirmou runtime/contrato; smoke autenticado confirmou 59 ocorrências/57 termos pendentes, nenhuma seleção automática e cancelamento sem escrita. CI completo passou em branch e main. GitHub/VPS sincronizados; evidências, advisors e limites no AoT M7.5.
 
 M7.2 v2 em produção em 2026-09-18: **v1.7.5**, runtime `a6a0bc5`, migrations remotas `20260918163719_m72_competency_concept_type`, `20260918163736_m72_competency_taxonomy_v2` e `20260918164009_m72_competency_taxonomy_indexes`. O Supabase publicou releases independentes para ocupações e competências, com 22.885 conceitos de competência aprovados no bootstrap. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`, rollback `prisma-web:rollback-before-m72v2-20260918`. HTTPS 200 e smoke autenticado read-only em Resumo, Competências, busca canônica e Evidências passaram sem curadoria, requisito, importação ou publicação. Main/GitHub/VPS sincronizados; evidências, advisors e limite da fixture histórica no AoT M7.2 v2.
 
@@ -11456,7 +11456,7 @@ Contrato: `agreement-m75-competency-coverage-recovery.md` 1.0.0. Prompt: `execut
 | D-03 | reserva V2 conta somente normalização; variáveis dedicadas 20/dia e 200/mês | Deno 3/3; SQL prova zero/esgotamento/race; Edge Function v16 ativa | PASS |
 | D-05, D-06, D-07, D-08 | agrupamento por termo, `searchTerms` deduplicados, nenhuma seleção automática; alias/proposta reutilizam fluxo transacional vigente | testes de domínio 16/16 no recorte; fixture desktop/mobile; QA SQL de alias, proposta e autorização | PASS |
 | D-09 | lote service-only idempotente para todos os Perfis aprovados vigentes | 7/7 concluídos; hashes dos 7 snapshots inalterados; 6 chamadas, 3.002 tokens de entrada e 4.992 de saída | PASS |
-| D-10 | contratos, ADR, versão v1.7.6, owner docs e Context Pack atualizados | runtime `9b747a9` integrado em main/GitHub/VPS; frontend e smoke autenticado confirmados | PASS |
+| D-10 | contratos, ADR, versão v1.7.6, owner docs e Context Pack atualizados | implementação `9b747a9`, fechamento `e547d85`, main/GitHub/VPS, CI e smoke confirmados | PASS |
 
 ## Proibições
 
@@ -11480,9 +11480,11 @@ Após migration remota `20260918193317`, Edge Function `knowledge-agent` v16 e r
 
 No lote completo, 7/7 Perfis terminaram `complete`; 6 usaram o provider e um Perfil vazio não chamou IA. Totais observados: 3.002 tokens de entrada e 4.992 de saída. As associações automáticas permaneceram 14 antes/depois; nenhum snapshot mudou. Advisors pós-DDL mantiveram achados preexistentes/esperados: tabela de runs sem policy pública por ser service-only e RPCs `SECURITY DEFINER` intencionais com guardas internas; nenhuma nova exposição foi aceita.
 
-O frontend v1.7.6 foi construído do runtime `9b747a9` com `baseline` e Parser IA `hosted`; somente `prisma-web` foi recriado. A imagem ativa é `sha256:a033d20389aba9b687dd8d7e9903603593d9e2889508783b5480dcb73efc042b`, com rollback `prisma-web:rollback-before-m75-20260918` apontando para `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`. HTTPS respondeu 200 e o container permaneceu estável, sem reinício.
+O frontend v1.7.6 foi construído do fechamento `e547d85` com `baseline` e Parser IA `hosted`; somente `prisma-web` foi recriado. A imagem ativa é `sha256:de085d16dcb74f96c00cd540492b308d2a804ac7809c8df0ca0a13111a6c82f3`. O runtime M7.5 anterior foi preservado como `prisma-web:rollback-before-m75-ci-fix-20260918` (`sha256:a033d20389aba9b687dd8d7e9903603593d9e2889508783b5480dcb73efc042b`) e o rollback pré-M7.5 continua em `prisma-web:rollback-before-m75-20260918`. HTTPS respondeu 200 e o container permaneceu estável, sem reinício.
 
 No smoke autenticado de produção, o Perfil investigado exibiu v1.7.6, 5 conceitos em 3 agrupamentos e 59 ocorrências pendentes agrupadas em 57 termos únicos. A abertura da curadoria informou explicitamente que nenhuma opção é selecionada automaticamente; não havia candidato marcado e os botões de gravação permaneceram desabilitados. O painel foi cancelado sem escrita. Main local, GitHub e VPS foram sincronizados no fechamento; resíduos locais e remotos alheios ao movimento foram preservados.
+
+O primeiro CI de fechamento expôs duas regressões de gate: expectativa histórica v1.7.4 e detecção estática de leitura de mensagem técnica. `e547d85` alinhou o teste à sexta entrega e manteve a mensagem ao operador sanitizada. Os 14 testes diretamente afetados, dois typechecks e lint passaram localmente; os workflows completos de `main` e do branch passaram, incluindo auditoria de dependências. O bundle final expõe `e547d85` e `person-professional-evidence-3.1.0`.
 
 ---
 
