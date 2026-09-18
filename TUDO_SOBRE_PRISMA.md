@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 217
-source_manifest_sha256: 79656a551051dcace397f2f51d543fb651fa8d96a633c7ae62d3dc44aefd92cb
+documentation_source_count: 221
+source_manifest_sha256: f6745e765cf3a19fd0ffc8252aee57c0101f260e0d980e7a504ed5ca3cecfe3a
 -->
 
 # Tudo sobre o Prisma
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.41.0
+version: 2.42.0
 last_verified: 2026-09-18
 ---
 
@@ -543,7 +543,9 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado, com 22.885 conceitos aprovados no bootstrap. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. Migrations remotas `20260918163719`, `20260918163736` e `20260918164009`; main/GitHub/VPS sincronizados, HTTPS e smoke autenticado read-only PASS. Evidência: AoT M7.2 v2 e ADR-065.
+Prisma v1.7.6 registra M7.5 em produção, runtime `9b747a9`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16 e smoke PASS. Evidência: AoT M7.5 e ADR-066.
+
+M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. Taxonomias ocupacional e de competências permanecem domínios separados; o bootstrap publicou 22.885 competências. Evidência 3.0 atende Perfis sem reimportação e não transforma ocupação em fato pessoal. Matching e score não mudaram; parcial/ambiguidade não resolvem automaticamente. Migrations e smoke PASS. Evidência: AoT M7.2 v2 e ADR-065.
 
 M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
@@ -571,7 +573,7 @@ Correção adicional de produção em 2026-09-17: o salvamento da revisão de Ju
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
-Prisma v1.7.2 é a versão de produto aceita e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.7.6 é a versão de produto aceita e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
 
@@ -1826,6 +1828,8 @@ Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no 
 
 M7.3 reutiliza o modelo configurado do Knowledge Agent para normalização de competências declaradas (`declared-competency-normalization-1.0.0`). Recebe apenas termos minimizados, sem Perfil/currículo integral ou identificadores; sem ferramentas/pesquisa, `store:false`, Structured Outputs e cobertura integral validada. Uma chamada por tentativa, com reserva auditada dentro dos limites existentes, timeout 90 s, opt-in organizacional e fallback determinístico explicitamente parcial quando a chamada falha. Nomes produzidos são buscas a reconciliar com aliases aprovados, nunca criação de conceito. Evidência: ADR-063 e AoT M7.3. Este movimento não troca o modelo nem altera a política financeira do Parser IA.
 
+M7.5 mantém provider, modelo, prompt, schema e política de minimização do M7.3, mas separa o teto de normalização dos tetos de pesquisa do Knowledge Agent. Os limites iniciais são 20 chamadas/dia e 200/mês, configurados server-side; ausência, zero, valor inválido ou esgotamento falham fechado. A tentativa falha permanece auditada e o último resultado completo continua como base. Evidência: ADR-066 e AoT M7.5.
+
 Troca é material. Exige nova versão, golden tests, prompt injection tests, comparação de omissões/alucinações, custo, média e p95, compatibilidade de schema, privacidade/subprocessador, fallback, QA e aprovação. Alias mutável não é suficiente para reprodução; quando disponível, registrar snapshot técnico.
 
 ## Dados e segurança
@@ -2360,6 +2364,8 @@ Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `pars
 
 ## Política
 
+M7.5 acrescenta `person-professional-evidence-3.1.0` e `profile-competency-curation-3.0.0`. A RPC V5 escolhe o processamento completo compatível mais recente como base e expõe a tentativa mais recente separadamente, com contagens de cobertura e `searchTerms`; falha ou limite operacional não apaga associações anteriores. A curadoria agrupa termos equivalentes e busca candidatos pelas expressões versionadas sem pré-seleção. O orçamento de normalização é reservado por `reserve_competency_normalization_call_v2`, independente das demais operações do Knowledge Agent. V1–V4 e workflows anteriores permanecem disponíveis. ADR-066 e AoT M7.5 registram decisão, segurança e rollout.
+
 M7.2 v2 acrescenta `competency-taxonomy-1.0.0`, `competency-taxonomy-search-1.0.0`, `person-professional-evidence-3.0.0` e `profile-competency-curation-2.0.0`. Knowledge permanece a infraestrutura comum; `position-taxonomy-1.0.0` continua sendo exclusivamente ocupacional. RPCs V4/V2 são aditivas e V1/V2/V3/workflow 1.0.0 permanecem compatíveis. A busca exclui ocupações no servidor, classes parciais não resolvem e requisitos novos registram a versão de competência. Evidências e rollout pertencem ao AoT M7.2 v2 e ADR-065.
 
 M7.4 acrescentou `profile-competency-curation-1.0.0` (owner product/Knowledge/security/UI), ativo em produção em 2026-09-18: RPC transacional `curate_profile_competency`, consumidores Perfil e adapter Supabase. A leitura `load_person_professional_evidence_map_v3` mantém o formato `person-professional-evidence-2.0.0`, mas explicita o método humano nas associações atualizadas. V1/V2 inalteradas. Resposta de workflow desconhecida falha sem simular sucesso. Migração aditiva aplicada antes do frontend; evidências e limites no AoT M7.4 e ADR-064.
@@ -2383,7 +2389,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `vacancy-definition` | product/application/data | 1.3.0 no fluxo M7.1; históricos preservados | Vagas, posições, funções, histórico e matching | ativo após rollout autorizado de 2026-09-18 | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local/produção única | preservar históricos; rejeitar metadado futuro/inválido e conflito |
 | `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 ativo | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local/produção única | falhar fechado sem inventar interpretação; NULL histórico é permitido |
 | `competency-taxonomy` | product/Knowledge/data/security | 1.0.0 | Perfil, requisitos de Posição e curadoria | ativo em produção desde 2026-09-18 | release independente sobre Knowledge publicada; busca server-side tipada; ADR-065 e AoT M7.2 v2 | local/produção única | falhar fechado sem versão, publicação, autoridade ou identidade compatível |
-| `person-professional-evidence` | product/Knowledge/data/UI/security | 3.0.0; V1/V2 preservadas | Perfil de Pessoa, mapa de competências, explorador de evidências | V3 ativo em produção; versões anteriores preservadas | Perfil publicado vigente + Taxonomia de Competências publicada + Evidência Demonstrada; ocupações rejeitadas; ADR-062/065 | local/produção única | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
+| `person-professional-evidence` | product/Knowledge/data/UI/security | 3.1.0; versões anteriores preservadas | Perfil de Pessoa, mapa de competências, explorador de evidências | V3.1 ativo em produção; versões anteriores preservadas | Perfil vigente + taxonomia publicada + Evidência Demonstrada; último resultado completo protegido e tentativa recente separada; ADR-062/065/066 | local/produção única | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
 | `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
@@ -2540,6 +2546,8 @@ Identidade, autorização e relações permanecem normalizadas. Partes evolutiva
 `knowledge_source_versions.is_current` identifica a única versão publicada ativa de cada fonte; manifestos registram arquivo, tamanho, encoding, contagem e checksum. Termos e relações apontam à versão de origem. `knowledge_observations` pode referenciar evidência M2 ou review M5, preserva texto literal, perfil, método e versão resolutora. `resolved` exige conceito; `ambiguous` e `unresolved` proíbem conceito. `knowledge_inbox.observation_ids` liga a decisão humana às ocorrências sem copiar currículo integral.
 
 `professional_taxonomy_releases` registra releases publicados por domínio. `position-taxonomy-1.0.0` permanece ocupacional; `competency-taxonomy-1.0.0` reutiliza os conceitos não ocupacionais já aprovados no Knowledge. Fonte, versão e proveniência continuam nos mappings e relações existentes. A projeção `person-professional-evidence-3.0.0` exclui ocupações e declara as duas versões, enquanto `load_occupation_competency_relations` expõe relações cross-domain com `createsPersonalEvidence=false`.
+
+M7.5 não cria nova tabela nem reescreve snapshots. `profile_competency_normalization_runs` continua sendo histórico append-only por revisão: a projeção V5 seleciona a execução completa mais recente como base e consulta a maior sequência apenas como `latestAttempt`. O lote service-only cria nova revisão após resultado completo ou recoloca uma falha em fila, de forma idempotente enquanto houver execução pendente. `coverage` é calculado na leitura e não persiste score ou proficiência.
 
 `knowledge_sources` também registra o estado resumido da checagem oficial, sem confundi-lo com publicação. `knowledge_source_checks` é append-only, possui RLS e expõe leitura apenas a Super Admin. A Edge Function escreve por uma RPC `service_role` idempotente; um resultado detectado pode catalogar uma source version, mas não altera `is_current`.
 
@@ -2715,6 +2723,8 @@ O monitor `knowledge-source-monitor-1.0.1` verifica CBO, ESCO e O*NET no primeir
 No M7.1, os seletores de Posições usam busca paginada por termos aprovados para escolha humana, sem transformar substring em correspondência automática. Preview resolve por alias exato inequívoco e escopo do termo, usa somente fonte oficial publicada/corrente para ocupações globais e conserva aliases/versões no snapshot. Reconciliações aprovadas e identidades estáveis permitem múltiplas fontes, com todas as origens. Os seis tipos já existentes organizam a apresentação; não há categoria nova ou ontologia paralela. Mappings, relações, overlays, Inbox e publicação permanecem os owners. RPCs históricas de resolução continuam preservadas, mas a nova tela não aciona o agente de resolução. Detalhes no ADR-060; ativação remota autorizada de 2026-09-18 comprovada no AoT M7.1.
 
 No M7.2 revisado, Knowledge é a infraestrutura comum e `professional_taxonomy_releases` versiona duas projeções sem duplicar conceitos: ocupacional `position-taxonomy-1.0.0` e competências `competency-taxonomy-1.0.0`. `person-professional-evidence-3.0.0` projeta on-read Perfis publicados existentes, exclui identidades ocupacionais do mapa de competências e expõe as duas versões separadamente. Observação explícita permanece declaração; inferência publicada permanece contextual; somente resultado direto M5.1 ativo, vigente e suficiente qualifica como Evidência Demonstrada verificada. Naturezas e origens coexistem sem sobrescrita. Ambiguidade, versão incompatível e fonte indisponível ficam explícitas e não criam conceito. Relação ocupação→competência e requisitos de Posição não entram como evidência pessoal. V1/V2/V3 permanecem compatíveis. Detalhes no ADR-065 e AoT M7.2 v2.
+
+M7.5 adiciona a projeção `person-professional-evidence-3.1.0`: resultado completo e tentativa operacional deixam de ser a mesma escolha. A curadoria 3.0.0 agrupa vocabulário equivalente e amplia somente a descoberta de candidatos por expressões versionadas; publicação, equivalência e alcance continuam decisões humanas. Nenhuma relação ocupacional, candidato parcial ou sugestão do modelo vira evidência pessoal. Detalhes no ADR-066 e AoT M7.5.
 
 `search_competency_taxonomy` consulta apenas conceitos não ocupacionais antes do limite, distingue canônico, alias oficial, alias humano, parcial e ambiguidade, e impede substring curta. `relevant_partial` nunca resolve associação. Requisitos de Posição continuam referenciando a mesma identidade `knowledge_concepts.id`; novas associações registram a versão da Taxonomia de Competências, sem criar requisito nem alterar matching.
 
@@ -2948,6 +2958,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M7.5 (2026-09-18) registra a sexta entrega aceita do Movimento 7: **Prisma v1.7.6**. `person-professional-evidence-3.1.0` protege o último resultado completo e expõe tentativa/cobertura; `profile-competency-curation-3.0.0` agrupa pendências e usa `searchTerms` sem decisão automática. Taxonomias 1.0.0, normalização 1.0.0 e contratos anteriores são preservados. Implementação, medição e rollout no AoT M7.5 e ADR-066.
 
 M7.2 v2 (2026-09-18) registra a quinta entrega aceita do Movimento 7: **Prisma v1.7.5**. A infraestrutura Knowledge comum passa a expor Taxonomia Ocupacional `position-taxonomy-1.0.0` e Taxonomia de Competências `competency-taxonomy-1.0.0` como domínios separados. `person-professional-evidence-3.0.0`, busca 1.0.0 e curadoria 2.0.0 são aditivos; contratos históricos permanecem. Implementação, rollout e limites de validação no AoT M7.2 v2.
 
@@ -6815,6 +6827,38 @@ RPCs usam autorização server-side, `SECURITY DEFINER` com `search_path` vazio,
 
 ---
 
+## Source: `docs/decisions/ADR-066-preserve-competency-coverage-and-assisted-curation.md`
+
+# ADR-066 — Preservar cobertura e acelerar curadoria de competências
+
+Status: accepted — 2026-09-18.
+
+## Contexto
+
+Uma nova tentativa `BUDGET_LIMITED` passou a ser usada como base da projeção e reduziu a leitura real de cinco para três conceitos. Mesmo a última execução completa associou apenas sete de 67 itens atômicos: a Knowledge publicada tem boa amplitude, mas poucos aliases para o vocabulário empresarial e tecnológico observado.
+
+## Decisão
+
+Separar o **resultado-base** da **última tentativa**. A projeção usa o processamento completo compatível mais recente; se não existir, usa a tentativa mais recente. Falhas continuam explícitas, mas não apagam associações derivadas anteriores.
+
+A normalização recebe orçamento dedicado e limitado. A curadoria agrupa termos equivalentes e reutiliza todas as expressões de busca versionadas, apresentando candidatos deduplicados sem pré-seleção. Somente alias humano aprovado resolve candidato parcial; conceito ausente permanece proposta.
+
+## Consequências
+
+- Repetir processamento deixa de causar regressão visual ou semântica.
+- Orçamento de pesquisa de mercado não bloqueia normalização de Perfil e vice-versa.
+- Uma decisão humana pode beneficiar várias ocorrências e futuros Perfis da empresa.
+- Cobertura melhora por aprendizado governado; não há garantia artificial de 100%.
+- RPCs antigas permanecem disponíveis; o frontend novo exige a versão aditiva da projeção.
+
+## Alternativas rejeitadas
+
+- Promover candidatos parciais automaticamente: aumenta números ao custo de equivalências falsas.
+- Criar embeddings, nova taxonomia ou fonte: adiciona arquitetura antes de explorar aliases e conceitos da empresa já previstos.
+- Exibir somente a tentativa mais recente: confunde falha operacional com perda de conhecimento.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6908,6 +6952,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 # Deployment
 
 ## Estado
+
+M7.5 em produção em 2026-09-18: **v1.7.6**, runtime `9b747a9`, migration remota `20260918193317_m75_competency_coverage_recovery` e Knowledge Agent v16. A normalização ganhou orçamento dedicado de 20 chamadas/dia e 200/mês; o lote service-only concluiu 7/7 Perfis aprovados, preservou os hashes dos snapshots e recuperou o Perfil investigado de 3 para 5 conceitos visíveis. As associações automáticas totais permaneceram 14 antes/depois; o restante exige curadoria humana por alias ou proposta de conceito. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem ativa `sha256:a033d20389aba9b687dd8d7e9903603593d9e2889508783b5480dcb73efc042b`, rollback `prisma-web:rollback-before-m75-20260918`. HTTPS 200 e smoke autenticado confirmaram v1.7.6, 59 ocorrências/57 termos pendentes, nenhuma seleção automática e cancelamento sem escrita. Main/GitHub/VPS sincronizados; evidências, advisors e limites no AoT M7.5.
 
 M7.2 v2 em produção em 2026-09-18: **v1.7.5**, runtime `a6a0bc5`, migrations remotas `20260918163719_m72_competency_concept_type`, `20260918163736_m72_competency_taxonomy_v2` e `20260918164009_m72_competency_taxonomy_indexes`. O Supabase publicou releases independentes para ocupações e competências, com 22.885 conceitos de competência aprovados no bootstrap. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`, rollback `prisma-web:rollback-before-m72v2-20260918`. HTTPS 200 e smoke autenticado read-only em Resumo, Competências, busca canônica e Evidências passaram sem curadoria, requisito, importação ou publicação. Main/GitHub/VPS sincronizados; evidências, advisors e limite da fixture histórica no AoT M7.2 v2.
 
@@ -8386,6 +8432,12 @@ Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, fil
 
 Snapshots e natureza declarada permanecem intactos. Aprovação de alias é decisão humana auditada, não evidência de desempenho. O retorno da transação já traz a projeção atualizada, sem chamar IA nem reprocessar todo o Perfil.
 
+## Recuperação de cobertura M7.5
+
+O Perfil usa o último processamento completo compatível como base. Uma tentativa posterior em fila, em processamento ou com falha aparece separadamente e nunca reduz as associações completas já disponíveis. A leitura distingue declarações, itens atômicos, itens associados, conceitos únicos, pendências e termos únicos pendentes; pendência não significa ausência de competência.
+
+Na curadoria, termos normalizados equivalentes formam um grupo com contagem de ocorrências, preservando cada origem. As expressões `searchTerms` versionadas alimentam uma busca deduplicada; exato, alias oficial, alias humano, parcial e ambíguo continuam classes visíveis, e nenhuma opção é pré-selecionada. Alias de empresa aprovado por humano pode resolver ocorrências compatíveis e beneficiar Perfis futuros da empresa. Proposta de conceito continua pendente até o fluxo de publicação humano.
+
 ## Comparação
 
 A comparação aceita exatamente duas Pessoas selecionadas na busca e reapresenta seus Perfis canônicos em colunas equivalentes. Destaques são contagens ou fatos publicados, nunca uma avaliação relativa. Ao voltar, consulta, filtros e seleção permanecem preservados na sessão do navegador.
@@ -9729,6 +9781,69 @@ Versão 1.1.0, agreed, 2026-09-18. Bruno aprovou fluxo/mockup e implementação;
 Nenhum Q funcional pendente. CA-01 (D-01/04/05): alias gravado com auditoria e projeção atualizada no mesmo fluxo; proposta continua pendente, negativos de autoridade/tenant/conflito. CA-02 (D-02/03): cancelar, gravar, gravar/próximo, último item, página esvaziada, filtro, duplicatas e erro. CA-UX-01 (D-UX-*): comparação visual com estado equivalente de página 2/item 14, desktop e móvel, foco e descarte seguro. CA-03 (D-06): builds, testes, contexto, diff e AoT sem falso rollout.
 
 CA-04 (D-07): migration/grants conferidos remotamente, release v1.7.4 visível e painel aberto/cancelado na UI autenticada, commit de entrega em main/GitHub/VPS e imagem anterior conservada. Sem mutação de curadoria real no smoke.
+
+---
+
+## Source: `docs/qa/agreement-m75-competency-coverage-recovery.md`
+
+# Contrato de Acordos — M7.5 Recuperação de cobertura de competências
+
+Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, “pode fazer, estilo AoT”, após diagnóstico de 3 conceitos e 54 pendências no Perfil real. Baseline: `080a4067d14e7e71d3147ad10962bd195d74d874`.
+
+## DEVE
+
+- D-01 — Uma tentativa de normalização falha, limitada ou parcial nunca reduz as associações do último processamento completo compatível. A tentativa mais recente permanece visível separadamente.
+- D-02 — Expor contagens de declarações, itens atômicos, itens associados, conceitos únicos, pendências e termos únicos pendentes, sem chamar ausência de associação de ausência de competência.
+- D-03 — Isolar o orçamento de chamadas da normalização de Perfis do orçamento das demais operações do Knowledge Agent, com limites server-side positivos, auditáveis e fail-closed.
+- D-04 — Permitir nova tentativa autorizada sem alterar Perfil, publicação, evidência, decisão humana ou resultado completo anterior.
+- D-05 — Agrupar pendências equivalentes na curadoria, informar quantas ocorrências serão beneficiadas e preservar cada origem individual.
+- D-06 — Reutilizar `searchTerms` versionados do processamento para apresentar candidatos de busca deduplicados; nenhum candidato é selecionado ou gravado automaticamente.
+- D-07 — Alias aprovado por humano deve beneficiar todas as ocorrências compatíveis e futuros Perfis da empresa pelo mecanismo Knowledge existente.
+- D-08 — Ausência de conceito deve continuar permitindo proposta; proposta não publica conceito nem encerra pendência sem o fluxo humano vigente.
+- D-09 — Reprocessar Perfis aprovados vigentes após o rollout e registrar cobertura antes/depois, falhas, custos técnicos disponíveis e limites reais.
+- D-10 — Atualizar contratos, ADR, versão pública, Context Pack, testes, rollout, smoke e AoT no mesmo movimento.
+
+## PROIBIDO
+
+- P-01 — Não promover correspondência parcial, similaridade, ambiguidade, relação ocupacional ou sugestão do modelo a equivalência automática.
+- P-02 — Não criar alias, conceito, proficiência, senioridade, score, evidência demonstrada ou decisão humana sem ação humana autorizada.
+- P-03 — Não reescrever Perfil publicado, declaração original, snapshots, evidências, matching, M5.1 ou histórico de processamentos.
+- P-04 — Não misturar tenants, expor service role/segredos/PII integral nem confiar em autorização do frontend.
+- P-05 — Não aumentar orçamento de forma ilimitada; zero, ausência, esgotamento ou configuração inválida falham fechado e preservam o resultado anterior.
+- P-06 — Não criar taxonomia paralela, nova fonte, Web Search, embeddings, novo provider/modelo ou dependência para este movimento.
+- P-07 — Não transformar proposta pendente em conceito publicado nem decisão de empresa em alias Global.
+
+## FORA DE ESCOPO
+
+- F-01 — Aprovar as equivalências do lote em nome do Product Owner.
+- F-02 — Garantir percentual universal de cobertura ou mapear todo termo por força.
+- F-03 — Alterar taxonomias ocupacionais, relações ocupação↔competência ou requisitos de Posição.
+- F-04 — Redesenhar a topologia das telas M7.2/M7.4.
+
+## AUTONOMIA
+
+- A-01 — Versões aditivas, helpers, índices, forma do DTO, ordenação e compatibilidade de RPCs.
+- A-02 — Limites dedicados iniciais conservadores, desde que positivos, server-side, documentados e sem remover o teto anterior das demais operações.
+- A-03 — Agrupamento, microcopy, ordenação de candidatos, loading e responsividade dentro da composição aprovada.
+- A-04 — Estratégia idempotente de reprocessamento, rollback e smoke read-only; decisões humanas reais continuam fora da automação.
+
+## PENDÊNCIAS
+
+Nenhuma pendência material. A aprovação humana do lote é etapa operacional posterior e não pode ser simulada pela implementação.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — Dada uma execução completa seguida de uma falha, a projeção mantém itens/associações completas e expõe a falha como tentativa mais recente não usada como base.
+- CA-02 — Orçamento de Vagas/pesquisa não consome o teto dedicado de normalização; limites inválidos ou esgotados retornam falha segura sem chamada externa.
+- CA-03 — Pendências iguais aparecem em um grupo com contagem; aliases continuam transacionais, tenant-scoped e humanos.
+- CA-04 — As expressões de busca geram candidatos deduplicados, classificados e não pré-selecionados; parcial/ambíguo exige decisão.
+- CA-05 — Reprocessamento real não reduz cobertura anterior, não altera o Perfil e produz relatório antes/depois.
+- CA-06 — Testes negativos cobrem tenant, role, contrato futuro, candidato parcial, orçamento, corrida e tentativa falha.
+- CA-07 — Typecheck, build, testes dirigidos, PostgreSQL descartável, Context Pack, comparação visual desktop/mobile, produção e smoke passam; limites constam no AoT.
+
+## FIDELIDADE VISUAL
+
+As imagens M7.2/M7.4 já aprovadas permanecem alvo normativo. Este movimento pode acrescentar contagens, agrupamento e estado da última tentativa, mas não mudar abas, hierarquia, painel lateral, ordem de decisão, filtros, ações ou transformação responsiva. Comparação same-state/same-data em desktop e 390×844 é obrigatória.
 
 ---
 
@@ -11324,6 +11439,50 @@ Sem QA remoto separado disponível. PostgreSQL 17 descartável em loopback, data
 ## Conclusão
 
 Entrega M7.4 e rollout concluídos, D-* e P-* PASS no acordo revisado. Prisma v1.7.4 ativo; main local/GitHub/VPS sincronizados com a entrega e fechamento documental. Escrita real em produção não exercitada para evitar fabricar decisões humanas. Qualidade das sugestões e alertas preexistentes permanecem limites explícitos, sem serem apresentados como validação semântica ou ausência de riscos.
+
+---
+
+## Source: `docs/qa/aot-m75-competency-coverage-recovery.md`
+
+# AoT — M7.5 Recuperação de cobertura de competências
+
+Contrato: `agreement-m75-competency-coverage-recovery.md` 1.0.0. Prompt: `execution-m75-competency-coverage-recovery.md`. Baseline: `080a4067d14e7e71d3147ad10962bd195d74d874`.
+
+## Matriz
+
+| IDs | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01, D-02, D-04 | RPC V5 usa último `complete`; `latestAttempt` e `coverage` são separados; retry não sobrescreve resultado | PostgreSQL descartável: execução completa + falha `BUDGET_LIMITED`; V5 preserva associações e expõe falha | PASS |
+| D-03 | reserva V2 conta somente normalização; variáveis dedicadas 20/dia e 200/mês | Deno 3/3; SQL prova zero/esgotamento/race; Edge Function v16 ativa | PASS |
+| D-05, D-06, D-07, D-08 | agrupamento por termo, `searchTerms` deduplicados, nenhuma seleção automática; alias/proposta reutilizam fluxo transacional vigente | testes de domínio 16/16 no recorte; fixture desktop/mobile; QA SQL de alias, proposta e autorização | PASS |
+| D-09 | lote service-only idempotente para todos os Perfis aprovados vigentes | 7/7 concluídos; hashes dos 7 snapshots inalterados; 6 chamadas, 3.002 tokens de entrada e 4.992 de saída | PASS |
+| D-10 | contratos, ADR, versão v1.7.6, owner docs e Context Pack atualizados | runtime `9b747a9` integrado em main/GitHub/VPS; frontend e smoke autenticado confirmados | PASS |
+
+## Proibições
+
+| IDs | Prova negativa | Status |
+| --- | --- | --- |
+| P-01, P-02, P-07 | parcial/ambíguo não é pré-selecionado; somente alias humano resolve; proposta permanece pendente | PASS |
+| P-03 | hashes de `profile_data` idênticos antes/depois nos 7 Perfis; histórico completo preservado | PASS |
+| P-04 | RPCs cliente guardadas; orçamento/lote service-only; outsider e anon rejeitados no PostgreSQL real | PASS |
+| P-05 | limites positivos server-side; zero/esgotamento fail-closed | PASS |
+| P-06 | nenhuma dependência, fonte, embedding, provider ou modelo novo | PASS |
+
+## Fidelidade visual
+
+Referências normativas M7.2/M7.4. Fixture sintética `tests/ui/m74.html`, mesmo estado/dados: desktop preservou mapa, lista e painel lateral; 390×844 transformou o painel em superfície integral com ações fixas. O grupo BPMN mostrou 2 ocorrências, candidato oficial não selecionado e aviso de reutilização. Sem desvio material observado.
+
+## Rollout, métricas e limites
+
+Antes do rollout, o Perfil investigado exibia 3 conceitos porque a revisão 3 falha (`BUDGET_LIMITED`) havia substituído visualmente a revisão 2 completa. A base completa possuía 67 itens, 7 associações, 5 conceitos e 60 pendências.
+
+Após migration remota `20260918193317`, Edge Function `knowledge-agent` v16 e reprocessamento, o mesmo Perfil ficou `complete`: 43 declarações, 66 itens, 7 associações, 5 conceitos, 59 pendências e 57 termos únicos pendentes. Portanto, a recuperação visível imediata é de 3 para 5 conceitos, sem aumento líquido de conceitos automaticamente associados em relação ao último resultado completo. Isso é limite real, não sucesso omitido: o ganho adicional depende de decisões humanas de alias/conceito, agora agrupadas e reutilizáveis.
+
+No lote completo, 7/7 Perfis terminaram `complete`; 6 usaram o provider e um Perfil vazio não chamou IA. Totais observados: 3.002 tokens de entrada e 4.992 de saída. As associações automáticas permaneceram 14 antes/depois; nenhum snapshot mudou. Advisors pós-DDL mantiveram achados preexistentes/esperados: tabela de runs sem policy pública por ser service-only e RPCs `SECURITY DEFINER` intencionais com guardas internas; nenhuma nova exposição foi aceita.
+
+O frontend v1.7.6 foi construído do runtime `9b747a9` com `baseline` e Parser IA `hosted`; somente `prisma-web` foi recriado. A imagem ativa é `sha256:a033d20389aba9b687dd8d7e9903603593d9e2889508783b5480dcb73efc042b`, com rollback `prisma-web:rollback-before-m75-20260918` apontando para `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`. HTTPS respondeu 200 e o container permaneceu estável, sem reinício.
+
+No smoke autenticado de produção, o Perfil investigado exibiu v1.7.6, 5 conceitos em 3 agrupamentos e 59 ocorrências pendentes agrupadas em 57 termos únicos. A abertura da curadoria informou explicitamente que nenhuma opção é selecionada automaticamente; não havia candidato marcado e os botões de gravação permaneceram desabilitados. O painel foi cancelado sem escrita. Main local, GitHub e VPS foram sincronizados no fechamento; resíduos locais e remotos alheios ao movimento foram preservados.
 
 ---
 
@@ -13083,6 +13242,35 @@ Implementar integralmente `docs/qa/agreement-m73-competency-normalization.md` ve
 # Execução M7.4
 
 Executar integralmente `docs/qa/agreement-m74-contextual-curation.md` versão 1.1.0. D-*, P-*, F-*, A-* e CA-* são vinculantes. A autorização posterior inclui main, migração e produção, substituindo a exclusão anterior. Reutilizar validação local já concluída, aplicar somente M74, preservar flags/rollback, validar UI real sem gravar curadoria artificial e sincronizar tudo. Não substituir comparação visual por testes funcionais.
+
+---
+
+## Source: `docs/qa/execution-m75-competency-coverage-recovery.md`
+
+# Prompt de Execução — M7.5 Recuperação de cobertura de competências
+
+Implemente integralmente o contrato `docs/qa/agreement-m75-competency-coverage-recovery.md` versão 1.0.0, aprovado sobre o baseline `080a4067d14e7e71d3147ad10962bd195d74d874`.
+
+## Entendimento obrigatório
+
+- Implementar D-01 a D-10 e provar CA-01 a CA-07.
+- Impedir P-01 a P-07 com testes negativos.
+- Preservar F-01 a F-04.
+- Usar A-01 a A-04 somente para o como; nenhuma autonomia cria equivalência ou aprovação humana.
+
+## Sequência
+
+1. Versionar a projeção aditiva e preservar RPCs anteriores.
+2. Separar resultado-base da tentativa mais recente e calcular métricas de cobertura.
+3. Isolar o orçamento de normalização no backend e manter configuração fail-closed.
+4. Agrupar pendências e pesquisar as expressões versionadas sem seleção automática.
+5. Validar localmente, comparar visualmente e revisar diff/segurança.
+6. Aplicar migration/Edge/frontend na ordem segura, reprocessar, medir e executar smoke.
+7. Atualizar owners, ADR, Context Pack e AoT; sincronizar branch, main, origin e VPS.
+
+## Fechamento
+
+Não declarar conclusão se uma execução falha reduzir cobertura, se parcial for promovido automaticamente, se decisão humana for fabricada ou se cobertura/rollout não tiver evidência. Relatar separadamente implementação pronta, decisões humanas ainda pendentes e cobertura efetivamente observada.
 
 ---
 

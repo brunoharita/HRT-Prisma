@@ -2,11 +2,11 @@
 artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.1.0
 context_bundle_version: 2.0.0
-product_version: 1.7.5
-current_state_version: 2.41.0
+product_version: 1.7.6
+current_state_version: 2.42.0
 current_state_last_verified: 2026-09-18
-documentation_source_count: 217
-source_manifest_sha256: 79656a551051dcace397f2f51d543fb651fa8d96a633c7ae62d3dc44aefd92cb
+documentation_source_count: 221
+source_manifest_sha256: f6745e765cf3a19fd0ffc8252aee57c0101f260e0d980e7a504ed5ca3cecfe3a
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -265,7 +265,9 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado, com 22.885 conceitos aprovados no bootstrap. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. Migrations remotas `20260918163719`, `20260918163736` e `20260918164009`; main/GitHub/VPS sincronizados, HTTPS e smoke autenticado read-only PASS. Evidência: AoT M7.2 v2 e ADR-065.
+Prisma v1.7.6 registra M7.5 em produção, runtime `9b747a9`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa sem pré-seleção. Orçamento: 20/dia e 200/mês. O lote 7/7 não alterou snapshots. O Perfil voltou de 3 para 5 conceitos, mas o total automático permaneceu 14; o restante é decisão humana. Migration `20260918193317`, Agent v16 e smoke PASS. Evidência: AoT M7.5 e ADR-066.
+
+M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. Taxonomias ocupacional e de competências permanecem domínios separados; o bootstrap publicou 22.885 competências. Evidência 3.0 atende Perfis sem reimportação e não transforma ocupação em fato pessoal. Matching e score não mudaram; parcial/ambiguidade não resolvem automaticamente. Migrations e smoke PASS. Evidência: AoT M7.2 v2 e ADR-065.
 
 M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
@@ -293,7 +295,7 @@ Correção adicional de produção em 2026-09-17: o salvamento da revisão de Ju
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
-Prisma v1.7.2 é a versão de produto aceita e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.7.6 é a versão de produto aceita e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
 

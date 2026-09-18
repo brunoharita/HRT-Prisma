@@ -10,7 +10,7 @@ Contrato: `agreement-m75-competency-coverage-recovery.md` 1.0.0. Prompt: `execut
 | D-03 | reserva V2 conta somente normalização; variáveis dedicadas 20/dia e 200/mês | Deno 3/3; SQL prova zero/esgotamento/race; Edge Function v16 ativa | PASS |
 | D-05, D-06, D-07, D-08 | agrupamento por termo, `searchTerms` deduplicados, nenhuma seleção automática; alias/proposta reutilizam fluxo transacional vigente | testes de domínio 16/16 no recorte; fixture desktop/mobile; QA SQL de alias, proposta e autorização | PASS |
 | D-09 | lote service-only idempotente para todos os Perfis aprovados vigentes | 7/7 concluídos; hashes dos 7 snapshots inalterados; 6 chamadas, 3.002 tokens de entrada e 4.992 de saída | PASS |
-| D-10 | contratos, ADR, versão v1.7.6 e owner docs atualizados | Context Pack, Git, frontend/VPS e smoke ainda pendentes neste ponto | PARTIAL |
+| D-10 | contratos, ADR, versão v1.7.6, owner docs e Context Pack atualizados | runtime `9b747a9` integrado em main/GitHub/VPS; frontend e smoke autenticado confirmados | PASS |
 
 ## Proibições
 
@@ -33,3 +33,7 @@ Antes do rollout, o Perfil investigado exibia 3 conceitos porque a revisão 3 fa
 Após migration remota `20260918193317`, Edge Function `knowledge-agent` v16 e reprocessamento, o mesmo Perfil ficou `complete`: 43 declarações, 66 itens, 7 associações, 5 conceitos, 59 pendências e 57 termos únicos pendentes. Portanto, a recuperação visível imediata é de 3 para 5 conceitos, sem aumento líquido de conceitos automaticamente associados em relação ao último resultado completo. Isso é limite real, não sucesso omitido: o ganho adicional depende de decisões humanas de alias/conceito, agora agrupadas e reutilizáveis.
 
 No lote completo, 7/7 Perfis terminaram `complete`; 6 usaram o provider e um Perfil vazio não chamou IA. Totais observados: 3.002 tokens de entrada e 4.992 de saída. As associações automáticas permaneceram 14 antes/depois; nenhum snapshot mudou. Advisors pós-DDL mantiveram achados preexistentes/esperados: tabela de runs sem policy pública por ser service-only e RPCs `SECURITY DEFINER` intencionais com guardas internas; nenhuma nova exposição foi aceita.
+
+O frontend v1.7.6 foi construído do runtime `9b747a9` com `baseline` e Parser IA `hosted`; somente `prisma-web` foi recriado. A imagem ativa é `sha256:a033d20389aba9b687dd8d7e9903603593d9e2889508783b5480dcb73efc042b`, com rollback `prisma-web:rollback-before-m75-20260918` apontando para `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`. HTTPS respondeu 200 e o container permaneceu estável, sem reinício.
+
+No smoke autenticado de produção, o Perfil investigado exibiu v1.7.6, 5 conceitos em 3 agrupamentos e 59 ocorrências pendentes agrupadas em 57 termos únicos. A abertura da curadoria informou explicitamente que nenhuma opção é selecionada automaticamente; não havia candidato marcado e os botões de gravação permaneceram desabilitados. O painel foi cancelado sem escrita. Main local, GitHub e VPS foram sincronizados no fechamento; resíduos locais e remotos alheios ao movimento foram preservados.
