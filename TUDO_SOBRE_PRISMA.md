@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 205
-source_manifest_sha256: 9556d40baa36f1895055b515af1bd4858a94e991af14f0bd046fa95be31494ab
+source_manifest_sha256: 0c2c56fcef25cb2f5618689389535588a330dc252492a68418fbaba0b644a384
 -->
 
 # Tudo sobre o Prisma
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.37.3
+version: 2.37.4
 last_verified: 2026-09-18
 ---
 
@@ -547,7 +547,7 @@ M7.2 implementado, validado e ativado no ambiente único após autorizações ex
 
 M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registrou M7.1 como primeira entrega oficial; M7.2 é a segunda entrega aceita e publicada.
 
-Sidebar institucional implementada e publicada como parte da linha acumulada até Prisma v1.7.2: identidade Prisma, navegação, empresa, usuário e assinatura HRT seguem a referência normativa nos estados expandido, recolhido e móvel. A versão vem do registro executável compartilhado com o login. Em 2026-09-18, uma correção local delimitada ajustou o recorte do logo HRT no rodapé expandido e harmonizou tipografia, cor e alinhamento de `Powered by` e `v1.7.2`; o harness visual e os checks direcionados passaram. A correção ainda não foi publicada em produção.
+Sidebar institucional implementada e publicada como parte da linha acumulada até Prisma v1.7.2: identidade Prisma, navegação, empresa, usuário e assinatura HRT seguem a referência normativa nos estados expandido, recolhido e móvel. A versão vem do registro executável compartilhado com o login. Em 2026-09-18, uma correção delimitada ajustou o recorte do logo HRT no rodapé expandido e harmonizou tipografia, cor e alinhamento de `Powered by` e `v1.7.2`; o harness visual e os checks direcionados passaram. Após autorização explícita, a correção foi publicada no commit `862b22e`; o smoke autenticado confirmou o resultado em produção, sem alterar backend, Supabase ou permissões.
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
@@ -6782,6 +6782,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Em 2026-09-18, após autorização explícita para publicar a correção visual da sidebar, `main` e a Hostinger foram sincronizados no commit `862b22e`. O frontend foi reconstruído com as flags vigentes e somente `prisma-web` foi recriado. A imagem ativa é `sha256:8a299d747d23bd643cf81b0c5f38635ef2a8ecd3b87e22725ac2d41a9b683cd4`; a imagem anterior foi preservada como `prisma-web:rollback-before-sidebar-footer-20260918` (`sha256:422e3d50b9ef4a28f33666616b22bc5c2db8bb7ebbb9c72733b3bfbb94a05beb`). HTTPS retornou 200 e o smoke autenticado confirmou o rodapé com logo HRT completo, tipografia/cor harmonizadas e Prisma v1.7.2. Gateway, workers e Traefik permaneceram ativos sem recriação.
+
 Em 2026-09-18, após autorização explícita para migration, integração em main/GitHub e Hostinger, o M7.2 foi promovido ao ambiente único. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada remotamente como `20260918081743_m72_person_professional_evidence`. Definição e grants confirmaram helper privado sem execução pública, RPC pública `stable`/`SECURITY DEFINER` com `search_path` vazio, `anon`/`public` revogados e `authenticated` autorizado sob guarda tenant/role. O frontend `8f7473a` foi construído com `baseline` e Parser IA `hosted`, e somente `prisma-web` foi recriado; gateway/workers permaneceram estáveis. Imagem anterior preservada como `prisma-web:rollback-before-m72-20260918`. HTTPS 200, bundle/commit/contrato e login v1.7.2 passaram; smoke read-only tenant-scoped sobre Perfil real retornou o contrato esperado sem expor PII. Uma revisão posterior corrigiu a conclusão inicial sobre autenticação: `/sign-in` reutilizou a sessão disponível e redirecionou para a Home sem digitação de credenciais. O smoke visual autenticado abriu Resumo, Competências e Evidências de um Perfil aprovado, confirmou estados vazios/parciais e Prisma v1.7.2, sem escrita. O redirecionamento impediu observar visualmente se os campos do formulário estavam preenchidos. Evidência completa em `docs/qa/aot-m72-person-professional-evidence.md`.
 
 Em 2026-09-18, Bruno autorizou sincronizar main local/GitHub, Supabase e hosting para M7.1. A migration aditiva `20260918010000_m71_position_taxonomy.sql` foi aplicada no projeto único, registrada pelo conector como `20260918044935_m71_position_taxonomy`; nenhuma migration antiga foi reaplicada. O frontend `bc782fe` foi construído e ativado a partir de main com `baseline` e Parser IA `hosted`, sem recriar gateway/workers. Rollback: `prisma-web:rollback-before-m71-20260918`. HTTPS 200, bundle/commit conferidos, funções/grants/RLS e smoke autenticado de associação, origem e explicação passaram. Não se gravou Posição de teste em produção. Evidência, avisos preexistentes e limites: `docs/qa/aot-m71-position-taxonomy.md`.
@@ -11025,9 +11027,10 @@ Esta correção referencia o contrato congelado `docs/qa/agreement-sidebar-brand
 - Implementação: `web/src/styles.css` ajusta a janela de recorte do PNG oficial para o bounding box completo da marca, dá respiro adicional ao footer e harmoniza cor, tamanho, peso, tracking e linha de base de `Powered by` e `v1.7.2`.
 - Evidência visual: `tests/ui/m72.html` renderizado localmente em navegador, com `PrismaAppShell` real; a captura confirmou os dois cantos do logo, ausência de corte, alinhamento central e contraste consistente.
 - Validação: `pnpm run typecheck:web`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint` e `node --test dist/tests/uxFoundation.test.js` passaram; 10/10 testes direcionados.
-- Limite: nenhuma migration, backend, Supabase, permissão ou produção foi alterada. A publicação permanece fora do escopo até autorização explícita posterior, conforme `F-03`.
+- Evidência de produção: após autorização explícita, `main` e o checkout da Hostinger foram sincronizados no commit `862b22e`; somente `prisma-web` foi reconstruído e recriado. A imagem ativa é `sha256:8a299d747d23bd643cf81b0c5f38635ef2a8ecd3b87e22725ac2d41a9b683cd4`, a imagem anterior foi preservada como `prisma-web:rollback-before-sidebar-footer-20260918` (`sha256:422e3d50b9ef4a28f33666616b22bc5c2db8bb7ebbb9c72733b3bfbb94a05beb`) e HTTPS retornou 200.
+- Smoke autenticado read-only pós-rollout confirmou na Home o logo HRT completo, `Powered by`, `v1.7.2`, alinhamento e intensidade harmonizados. Gateway, workers e Traefik permaneceram ativos; nenhuma migration, backend, Supabase, permissão ou dado foi alterado.
 
-Status da correção: `PASS` local; `NOT TESTED` em produção.
+Status da correção: `PASS` local e produção.
 
 ---
 

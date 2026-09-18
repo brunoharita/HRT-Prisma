@@ -68,6 +68,7 @@ Esta correção referencia o contrato congelado `docs/qa/agreement-sidebar-brand
 - Implementação: `web/src/styles.css` ajusta a janela de recorte do PNG oficial para o bounding box completo da marca, dá respiro adicional ao footer e harmoniza cor, tamanho, peso, tracking e linha de base de `Powered by` e `v1.7.2`.
 - Evidência visual: `tests/ui/m72.html` renderizado localmente em navegador, com `PrismaAppShell` real; a captura confirmou os dois cantos do logo, ausência de corte, alinhamento central e contraste consistente.
 - Validação: `pnpm run typecheck:web`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint` e `node --test dist/tests/uxFoundation.test.js` passaram; 10/10 testes direcionados.
-- Limite: nenhuma migration, backend, Supabase, permissão ou produção foi alterada. A publicação permanece fora do escopo até autorização explícita posterior, conforme `F-03`.
+- Evidência de produção: após autorização explícita, `main` e o checkout da Hostinger foram sincronizados no commit `862b22e`; somente `prisma-web` foi reconstruído e recriado. A imagem ativa é `sha256:8a299d747d23bd643cf81b0c5f38635ef2a8ecd3b87e22725ac2d41a9b683cd4`, a imagem anterior foi preservada como `prisma-web:rollback-before-sidebar-footer-20260918` (`sha256:422e3d50b9ef4a28f33666616b22bc5c2db8bb7ebbb9c72733b3bfbb94a05beb`) e HTTPS retornou 200.
+- Smoke autenticado read-only pós-rollout confirmou na Home o logo HRT completo, `Powered by`, `v1.7.2`, alinhamento e intensidade harmonizados. Gateway, workers e Traefik permaneceram ativos; nenhuma migration, backend, Supabase, permissão ou dado foi alterado.
 
-Status da correção: `PASS` local; `NOT TESTED` em produção.
+Status da correção: `PASS` local e produção.
