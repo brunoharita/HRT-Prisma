@@ -3,6 +3,7 @@ import {
   type ProfessionalEvidenceAssociation,
   type ProfessionalEvidenceProjection,
 } from "../../web/src/domain/personProfessionalEvidence.js";
+import { COMPETENCY_TAXONOMY_CONTRACT } from "../../web/src/domain/competencyTaxonomy.js";
 import { POSITION_TAXONOMY_CONTRACT } from "../../web/src/domain/positionTaxonomy.js";
 
 export const m72DeclaredEvidence: ProfessionalEvidenceAssociation = {
@@ -31,7 +32,7 @@ export const m72DeclaredEvidence: ProfessionalEvidenceAssociation = {
   explanation: {
     method: "Termo explícito associado por alias aprovado.",
     methodVersion: "knowledge-normalization-2.0.0",
-    taxonomyVersion: POSITION_TAXONOMY_CONTRACT,
+    taxonomyVersion: COMPETENCY_TAXONOMY_CONTRACT,
     knowledgeGlobalVersion: 4,
     knowledgeOrganizationVersion: null,
     sourceName: "O*NET",
@@ -76,7 +77,7 @@ export function m72Fixture(overrides: Partial<ProfessionalEvidenceProjection> = 
   return {
     contractVersion: PERSON_PROFESSIONAL_EVIDENCE_CONTRACT,
     normalization: { status: "complete", declaredCount: 1, methodVersion: "declared-competency-normalization-1.0.0", errorCode: null, items: [] },
-    taxonomyContractVersion: POSITION_TAXONOMY_CONTRACT,
+    taxonomyVersions: { occupation: POSITION_TAXONOMY_CONTRACT, competency: COMPETENCY_TAXONOMY_CONTRACT },
     organizationId: "org-fixture",
     personId: "person-fixture",
     profile: { id: "profile-fixture", version: 3, publishedAt: "2026-09-18T12:00:00Z", inferenceVersion: "professional-profile-inference-1.0.0" },

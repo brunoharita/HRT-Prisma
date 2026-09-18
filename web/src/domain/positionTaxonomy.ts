@@ -2,7 +2,7 @@ import { newVacancyRequirement, type VacancyDraft, type VacancyRequirementCatego
 
 export const POSITION_TAXONOMY_CONTRACT = "position-taxonomy-1.0.0";
 export type TaxonomyDecision = "automatic" | "human" | "cleared";
-export type ProfessionalConceptType = "occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification";
+export type ProfessionalConceptType = "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification";
 export interface TaxonomyReference {
   mappingId: string; conceptId: string; sourceId: string; source: "CBO" | "ESCO" | "O*NET";
   snapshotId: string; sourceVersion: string; externalId: string; externalUri: string | null;
@@ -29,7 +29,7 @@ export interface PositionTaxonomy {
   decisionRecordedAt?: string;
 }
 export const taxonomyGroups: Record<ProfessionalConceptType, string> = {
-  occupation: "Famílias e ocupações relacionadas", skill: "Habilidades", knowledge: "Conhecimentos",
+  occupation: "Famílias e ocupações relacionadas", skill: "Habilidades", competency: "Competências", knowledge: "Conhecimentos",
   technology: "Tecnologias e ferramentas", methodology: "Métodos e práticas", certification: "Certificações",
 };
 export const taxonomyStateLabels: Record<PositionTaxonomy["state"], string> = {
@@ -49,7 +49,7 @@ export function groupTaxonomyItems(items: readonly TaxonomyItem[]): Array<{ type
 }
 export function taxonomyRequirementCategory(item: TaxonomyItem): VacancyRequirementCategory | null {
   if (item.conceptType === "occupation") return null;
-  return ({ skill: "competency", knowledge: "knowledge", technology: "technology", methodology: "knowledge", certification: "certification" } as const)[item.conceptType];
+  return ({ skill: "competency", competency: "competency", knowledge: "knowledge", technology: "technology", methodology: "knowledge", certification: "certification" } as const)[item.conceptType];
 }
 export function selectTaxonomyRequirement(draft: VacancyDraft, item: TaxonomyItem, importance: "required" | "desired"): VacancyDraft {
   const category = taxonomyRequirementCategory(item);

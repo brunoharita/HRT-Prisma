@@ -43,3 +43,7 @@ Normalização documental em 2026-09-11 dos resultados já registrados, sem novo
 ## M7.2 — matriz de rastreabilidade
 
 O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. O rollout posterior, especificamente autorizado, sincronizou migration, main/GitHub e frontend Hostinger; o AoT separa a evidência local da evidência remota e registra o limite do smoke visual autenticado.
+
+## M7.2 v2 — Taxonomia de Competências e Perfil de Evidências
+
+O prompt mestre revisado é congelado em `agreement-m72-competency-taxonomy-evidence-v2.md` e substitui integralmente a semântica futura do prompt anterior, sem reescrever o contrato, snapshot ou AoT histórico. `execution-m72-competency-taxonomy-evidence-v2.md` referencia a versão 2.0.0 integral; o AoT próprio mapeia cada `D-*` e `P-*`. A prova combina PostgreSQL descartável com rollback, testes negativos de tenant/autoridade/domínio, domínio e adapters tipados, build/lint/foundation e comparação visual das três superfícies em desktop e 390x844. O rollout e seus limites são registrados separadamente no mesmo AoT.

@@ -38,6 +38,7 @@ export const PRISMA_RELEASE_HISTORY = [{
     "M7.2: perfil de competências e evidências",
     "M7.3: normalização de competências declaradas",
     "M7.4: curadoria contextual de competências",
+    "M7.2 v2: taxonomia de competências e perfil de evidências",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 

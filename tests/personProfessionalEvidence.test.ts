@@ -39,6 +39,19 @@ test("M7.2 mantém ambiguidade explícita sem fabricar conceito", () => {
   assert.equal(fixture.issues[0]?.code, "ambiguous");
 });
 
+test("M7.2 rejeita ocupação como evidência pessoal de competência", () => {
+  const invalid = m72Fixture({
+    associations: [{
+      ...m72DeclaredEvidence,
+      concept: { ...m72DeclaredEvidence.concept, type: "occupation" },
+    }],
+  });
+  assert.throws(
+    () => readProfessionalEvidenceProjection(invalid, "org-fixture", "person-fixture"),
+    /incompatível/,
+  );
+});
+
 test("M7.2 SQL é uma projeção somente leitura, tenant-scoped e sem requisitos de Posição", async () => {
   const sql = await readFile("supabase/migrations/20260918160000_m72_person_professional_evidence.sql", "utf8");
   assert.match(sql, /private\.m72_require_profile_reader/);

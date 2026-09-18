@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 213
-source_manifest_sha256: e1a8df3ec51eeb509996ba69812707a753f965af547625cd8a15cd031fc46be6
+documentation_source_count: 217
+source_manifest_sha256: 5b38481d23ea8a5f803ac7828f8f1823944ab660fa43eddc70e8a3e0585af04c
 -->
 
 # Tudo sobre o Prisma
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.40.0
+version: 2.41.0
 last_verified: 2026-09-18
 ---
 
@@ -543,11 +543,13 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
+M7.2 v2 está validado localmente, com rollout remoto pendente neste snapshot. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. PostgreSQL descartável, 61 testes, tipos, build, lint, foundation e visual desktop/mobile passaram. Evidência: AoT M7.2 v2 e ADR-065.
+
 M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
 M7.3 publicado em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação e aliases Global/empresa. Sete Perfis reprocessados, com snapshots, decisões e JWT/segredo preservados. Sem mudança de modelo, taxonomia ou matching. `person-professional-evidence-2.0.0` separa contagens. Smoke, dados e limites: `docs/qa/aot-m73-competency-normalization.md`, ADR-063.
 
-M7.2 implementado, validado e ativado no ambiente único após autorizações explícitas de 2026-09-18. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada no Supabase como `20260918081743_m72_person_professional_evidence`; main/GitHub/Hostinger apontam ao runtime `8f7473a`. Prisma v1.7.2 está visível no login e na barra lateral; o build preservou baseline + Parser IA hosted, recriou somente `prisma-web` e manteve rollback `prisma-web:rollback-before-m72-20260918`. RPC/grants/advisors e smoke read-only tenant-scoped passaram sem escrita nem exposição de PII. A revisão visual autenticada abriu Resumo, Competências e Evidências de um Perfil aprovado e confirmou estados vazios/parciais sem mutação. `/sign-in` reutilizou a sessão disponível e redirecionou antes de exibir o formulário; isso prova o acesso autenticado, mas não o preenchimento visual dos campos.
+M7.2 histórico foi publicado em 2026-09-18 como Prisma v1.7.2/runtime `8f7473a`. `person-professional-evidence-1.0.0` projetava Perfil vigente, Knowledge publicada e Evidência Demonstrada M5.1, separando declaração, contexto e demonstração. A migration remota foi `20260918081743_m72_person_professional_evidence`. RPC/grants, smoke tenant-scoped e as três superfícies passaram sem escrita nem PII; a sessão reutilizada não comprovou o preenchimento visual do login. Esse contrato e AoT permanecem históricos e não definem a semântica futura supersedida pelo M7.2 v2.
 
 M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registrou M7.1 como primeira entrega oficial; M7.2 é a segunda entrega aceita e publicada.
 
@@ -2358,7 +2360,9 @@ Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `pars
 
 ## Política
 
-M7.4 acrescenta `profile-competency-curation-1.0.0` (owner product/Knowledge/security/UI), ativo em produção em 2026-09-18: RPC transacional `curate_profile_competency`, consumidores Perfil e adapter Supabase. A leitura `load_person_professional_evidence_map_v3` mantém o formato `person-professional-evidence-2.0.0`, mas explicita o método humano nas associações atualizadas. V1/V2 inalteradas. Resposta de workflow desconhecida falha sem simular sucesso. Migração aditiva aplicada antes do frontend; evidências e limites no AoT M7.4 e ADR-064.
+M7.2 v2 acrescenta `competency-taxonomy-1.0.0`, `competency-taxonomy-search-1.0.0`, `person-professional-evidence-3.0.0` e `profile-competency-curation-2.0.0`. Knowledge permanece a infraestrutura comum; `position-taxonomy-1.0.0` continua sendo exclusivamente ocupacional. RPCs V4/V2 são aditivas e V1/V2/V3/workflow 1.0.0 permanecem compatíveis. A busca exclui ocupações no servidor, classes parciais não resolvem e requisitos novos registram a versão de competência. Evidências e rollout pertencem ao AoT M7.2 v2 e ADR-065.
+
+M7.4 acrescentou `profile-competency-curation-1.0.0` (owner product/Knowledge/security/UI), ativo em produção em 2026-09-18: RPC transacional `curate_profile_competency`, consumidores Perfil e adapter Supabase. A leitura `load_person_professional_evidence_map_v3` mantém o formato `person-professional-evidence-2.0.0`, mas explicita o método humano nas associações atualizadas. V1/V2 inalteradas. Resposta de workflow desconhecida falha sem simular sucesso. Migração aditiva aplicada antes do frontend; evidências e limites no AoT M7.4 e ADR-064.
 
 M7.3 acrescenta `declared-competency-normalization-1.0.0` (owner Knowledge/AI/data; fila e interpretação derivada de declarações, snapshots originais preservados) e `person-professional-evidence-2.0.0` (owner product/Knowledge/UI/security; RPC `load_person_professional_evidence_map_v2`, estados e contagens independentes). A RPC V1 da tabela abaixo permanece compatível para clientes antigos. Versões desconhecidas são rejeitadas; produção e validação estão no AoT M7.3. ADR-063 registra segurança, privacidade, curadoria e rollback.
 
@@ -2378,7 +2382,8 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `profile-discovery` | product/application/domain | 1.0.0 | busca de Pessoas, resultados e comparação | implementado localmente | filtros determinísticos, equivalência Knowledge explicada, todos/qualquer e tenant scope | local | não retornar resultado sem evidência do critério |
 | `vacancy-definition` | product/application/data | 1.3.0 no fluxo M7.1; históricos preservados | Vagas, posições, funções, histórico e matching | ativo após rollout autorizado de 2026-09-18 | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local/produção única | preservar históricos; rejeitar metadado futuro/inválido e conflito |
 | `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 ativo | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local/produção única | falhar fechado sem inventar interpretação; NULL histórico é permitido |
-| `person-professional-evidence` | product/Knowledge/data/UI/security | 1.0.0 | Perfil de Pessoa, mapa de competências, explorador de evidências | ativo no Supabase e frontend de produção desde 2026-09-18 | Perfil publicado vigente + Knowledge publicada + Evidência Demonstrada existente; projeção somente leitura; ADR-062 | produção | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
+| `competency-taxonomy` | product/Knowledge/data/security | 1.0.0 | Perfil, requisitos de Posição e curadoria | implementado localmente; rollout no AoT M7.2 v2 | release independente sobre Knowledge publicada; busca server-side tipada; ADR-065 | local | falhar fechado sem versão, publicação, autoridade ou identidade compatível |
+| `person-professional-evidence` | product/Knowledge/data/UI/security | 3.0.0; V1/V2 preservadas | Perfil de Pessoa, mapa de competências, explorador de evidências | V3 implementado localmente; versões anteriores ativas em produção | Perfil publicado vigente + Taxonomia de Competências publicada + Evidência Demonstrada; ocupações rejeitadas; ADR-062/065 | local/produção | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
 | `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
@@ -2477,7 +2482,8 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Evento adaptativo | `profile_review_adaptation_events` | ledger append-only do padrão confirmado e dos campos aceitos, sem duplicar valores ou texto integral |
 | Padrão organizacional | `organization_extraction_patterns` | sinal estrutural versionado promovido somente após aprovação integral da revisão |
 | Conhecimento | `professional_profiles`, `evidence`, `inferences`, `inference_evidence` | Fato e inferência não se confundem |
-| Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
+| Taxonomia Profissional | `knowledge_concepts`, `knowledge_terms`, `knowledge_relations`, `knowledge_external_mappings`, `professional_taxonomy_releases` | Infraestrutura comum com releases independentes para os domínios ocupacional e de competências; relação cross-domain não é evidência pessoal |
+| Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido; requisito novo referencia somente conceito de competência publicado e registra a versão taxonômica |
 | Avaliação | `match_evaluations` | Contextual e versionada |
 | M5.1 Verificação de Competências | `verification_*`, `assessment_*`, `competency_demonstrated_evidence` | preparação, execução, ledger factual, avaliação versionada e evidência independente |
 | Normalização Knowledge M5.2 | `knowledge_source_versions`, `knowledge_source_stage_records`, `knowledge_concepts`, `knowledge_terms`, `knowledge_relations`, `knowledge_external_mappings`, `knowledge_observations`, `knowledge_inbox` | snapshot oficial imutável, staging/diff, termo literal, conceito resolvido, ambiguidade e decisão humana |
@@ -2496,6 +2502,8 @@ RLS está habilitado em toda tabela pública. Políticas usam `TO authenticated`
 ## Vagas
 
 `vacancies` mantém a identidade da necessidade profissional e aponta para seu snapshot atual em `vacancy_versions`. Cada mudança material acrescenta uma versão; `vacancy_requirements.stable_id` preserva a identidade conceitual do requisito entre snapshots. `vacancy_requirement_relations` registra sinais relacionados confirmados somente para aquela versão, sem promover aliases ou relações no Knowledge. `positions.occupant_person_id` só pode existir quando a posição está `occupied`, e `match_evaluations.vacancy_version_id` preserva a definição usada na avaliação. A escrita transacional ocorre por `save_vacancy_definition`; DML direto das tabelas versionadas permanece revogado.
+
+No M7.2 v2, requisitos novos ou que trocam de `concept_id` passam por validação server-side: o conceito deve estar publicado, ser Global ou da mesma organização e não pode ser ocupação. A coluna `competency_taxonomy_version` registra `competency-taxonomy-1.0.0`; linhas históricas permanecem legíveis com `NULL` e não sofrem backfill destrutivo. Isso permite que Pessoa e Posição referenciem a mesma identidade canônica sem compartilhar evidência nem criar requisito automaticamente.
 
 `vacancy_advisor_research_runs` é um ledger tenant-scoped de execução externa. Guarda fingerprint, assunto mínimo, output estruturado, fontes, versões, tokens, duração e falha sanitizada. A pergunta e dados de Pessoas não são persistidos. RLS permite leitura somente a Super Admin, Owner, Admin e Recruiter; DML direto permanece revogado.
 
@@ -2530,6 +2538,8 @@ O PDF original fica no bucket privado `person-documents`, limitado a 15 MB e MIM
 Identidade, autorização e relações permanecem normalizadas. Partes evolutivas de perfil e avaliação usam JSONB junto com tabelas relacionais de evidência, inferência e competência. JSONB não pode esconder authority, tenant, versão ou proveniência material.
 
 `knowledge_source_versions.is_current` identifica a única versão publicada ativa de cada fonte; manifestos registram arquivo, tamanho, encoding, contagem e checksum. Termos e relações apontam à versão de origem. `knowledge_observations` pode referenciar evidência M2 ou review M5, preserva texto literal, perfil, método e versão resolutora. `resolved` exige conceito; `ambiguous` e `unresolved` proíbem conceito. `knowledge_inbox.observation_ids` liga a decisão humana às ocorrências sem copiar currículo integral.
+
+`professional_taxonomy_releases` registra releases publicados por domínio. `position-taxonomy-1.0.0` permanece ocupacional; `competency-taxonomy-1.0.0` reutiliza os conceitos não ocupacionais já aprovados no Knowledge. Fonte, versão e proveniência continuam nos mappings e relações existentes. A projeção `person-professional-evidence-3.0.0` exclui ocupações e declara as duas versões, enquanto `load_occupation_competency_relations` expõe relações cross-domain com `createsPersonalEvidence=false`.
 
 `knowledge_sources` também registra o estado resumido da checagem oficial, sem confundi-lo com publicação. `knowledge_source_checks` é append-only, possui RLS e expõe leitura apenas a Super Admin. A Edge Function escreve por uma RPC `service_role` idempotente; um resultado detectado pode catalogar uma source version, mas não altera `is_current`.
 
@@ -2704,7 +2714,9 @@ O monitor `knowledge-source-monitor-1.0.1` verifica CBO, ESCO e O*NET no primeir
 
 No M7.1, os seletores de Posições usam busca paginada por termos aprovados para escolha humana, sem transformar substring em correspondência automática. Preview resolve por alias exato inequívoco e escopo do termo, usa somente fonte oficial publicada/corrente para ocupações globais e conserva aliases/versões no snapshot. Reconciliações aprovadas e identidades estáveis permitem múltiplas fontes, com todas as origens. Os seis tipos já existentes organizam a apresentação; não há categoria nova ou ontologia paralela. Mappings, relações, overlays, Inbox e publicação permanecem os owners. RPCs históricas de resolução continuam preservadas, mas a nova tela não aciona o agente de resolução. Detalhes no ADR-060; ativação remota autorizada de 2026-09-18 comprovada no AoT M7.1.
 
-No M7.2, `person-professional-evidence-1.0.0` reutiliza as mesmas identidades e os seis tipos publicados para projetar o Perfil vigente da Pessoa. Observação explícita vira declaração; inferência publicada permanece contextual; somente resultado direto M5.1 ativo, vigente e suficiente qualifica como Evidência Demonstrada verificada. Naturezas e origens coexistem sem sobrescrita. Ambiguidade, versão incompatível e fonte indisponível ficam explícitas e não criam conceito. Requisitos de Posição não entram na projeção. Detalhes no ADR-062 e AoT M7.2.
+No M7.2 revisado, Knowledge é a infraestrutura comum e `professional_taxonomy_releases` versiona duas projeções sem duplicar conceitos: ocupacional `position-taxonomy-1.0.0` e competências `competency-taxonomy-1.0.0`. `person-professional-evidence-3.0.0` projeta on-read Perfis publicados existentes, exclui identidades ocupacionais do mapa de competências e expõe as duas versões separadamente. Observação explícita permanece declaração; inferência publicada permanece contextual; somente resultado direto M5.1 ativo, vigente e suficiente qualifica como Evidência Demonstrada verificada. Naturezas e origens coexistem sem sobrescrita. Ambiguidade, versão incompatível e fonte indisponível ficam explícitas e não criam conceito. Relação ocupação→competência e requisitos de Posição não entram como evidência pessoal. V1/V2/V3 permanecem compatíveis. Detalhes no ADR-065 e AoT M7.2 v2.
+
+`search_competency_taxonomy` consulta apenas conceitos não ocupacionais antes do limite, distingue canônico, alias oficial, alias humano, parcial e ambiguidade, e impede substring curta. `relevant_partial` nunca resolve associação. Requisitos de Posição continuam referenciando a mesma identidade `knowledge_concepts.id`; novas associações registram a versão da Taxonomia de Competências, sem criar requisito nem alterar matching.
 
 Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.
 
@@ -2936,6 +2948,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M7.2 v2 (2026-09-18) registra a quinta entrega aceita do Movimento 7: **Prisma v1.7.5**. A infraestrutura Knowledge comum passa a expor Taxonomia Ocupacional `position-taxonomy-1.0.0` e Taxonomia de Competências `competency-taxonomy-1.0.0` como domínios separados. `person-professional-evidence-3.0.0`, busca 1.0.0 e curadoria 2.0.0 são aditivos; contratos históricos permanecem. Implementação, rollout e limites de validação no AoT M7.2 v2.
 
 M7.4 (2026-09-18) registra a quarta entrega aceita do Movimento 7: **Prisma v1.7.4**, publicada em produção. `profile-competency-curation-1.0.0` versiona a decisão contextual, reutilizando a Knowledge. A RPC de leitura `_v3` aplica aliases humanos à projeção `person-professional-evidence-2.0.0`, sem mudar seu formato nem snapshots; V1/V2 continuam disponíveis. Login e menu usam o registro central. Implementação, rollout e limites de validação no AoT M7.4.
 
@@ -6763,6 +6777,44 @@ A validação local combina PostgreSQL real com roles e transações revertidas 
 
 ---
 
+## Source: `docs/decisions/ADR-065-common-professional-taxonomy-domains.md`
+
+# ADR-065 — Infraestrutura taxonômica profissional comum com domínios separados
+
+Status: accepted. Data: 2026-09-18. Acordo: `docs/qa/agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0.
+
+## Contexto
+
+M7.1 criou uma Taxonomia Ocupacional segura sobre Knowledge. O primeiro M7.2 reutilizou as identidades, mas chamou `position-taxonomy-1.0.0` de versão taxonômica em associações de competências. Isso confundia o domínio sem quebrar a separação física dos fatos. M7.3/M7.4 adicionaram normalização e curadoria, enquanto `suggest_knowledge_concepts` ainda filtrava ocupações no cliente e aceitava substring curta.
+
+## Decisão
+
+Knowledge continua sendo a única infraestrutura conceitual. `knowledge_concepts`, termos, mappings, relações, fontes, versões, Inbox e change sets não são duplicados. `professional_taxonomy_releases` registra somente versões independentes de projeções de domínio:
+
+- Taxonomia Ocupacional: `position-taxonomy-1.0.0`, preservada;
+- Taxonomia de Competências: `competency-taxonomy-1.0.0`, composta por conceitos publicados não ocupacionais.
+
+A identidade Prisma é `knowledge_concepts.id`, tipada. Mappings conservam a identidade nativa da fonte. Igualdade de rótulo não reconcilia fontes. Relações ocupação→competência continuam em `knowledge_relations`, com fonte/versão/atributos, e a API declara que não criam evidência pessoal.
+
+`person-professional-evidence-3.0.0` é uma projeção on-read V4: usa o Perfil publicado vigente e evidências já aprovadas, remove ocupações do mapa de competências, expõe as duas versões de domínio e preserva V1/V2/V3. Assim Perfis existentes recebem a organização nova sem reimportação, backfill ou reescrita.
+
+Requisitos de Posição continuam usando `vacancy_requirements.concept_id`; uma associação nova/alterada aceita somente conceito publicado não ocupacional visível ao tenant e registra `competency-taxonomy-1.0.0`. Relações não inserem requisitos e matching permanece inalterado.
+
+`search_competency_taxonomy` filtra domínio e tenant antes do limite, permite sigla curta somente por igualdade exata, usa prefixo de token a partir de três caracteres e expõe classe/autoridade/referências. Parcial e ambiguidade são candidatos humanos, nunca fatos. `profile-competency-curation-2.0.0` envolve o workflow anterior e retorna a projeção V4 na mesma transação.
+
+## Segurança, compatibilidade e rollback
+
+RPCs usam autorização server-side, `SECURITY DEFINER` com `search_path` vazio, grants autenticados e nenhuma escrita de PII na Knowledge Global. V1/V2/V3 e workflow 1.0.0 permanecem para rollback. O frontend pode voltar aos consumidores antigos sem apagar releases, aliases, propostas ou histórico. Correções posteriores são forward-only.
+
+## Alternativas rejeitadas
+
+- Nova base de competências: duplicaria Knowledge e criaria identidades concorrentes.
+- Renomear M7.1: quebraria histórico e snapshots.
+- Reconciliar por rótulo/similaridade: fabricaria equivalência.
+- Backfill destrutivo de Perfis/Posições: reescreveria fatos e não é necessário para a projeção on-read.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6833,6 +6885,9 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 | [ADR-061](ADR-061-visual-reference-fidelity-for-prompts.md) | accepted | Referências visuais normativas viram requisitos estruturais e evidência comparável nos prompts |
 | [ADR-062](ADR-062-person-professional-evidence-projection.md) | accepted | Perfil profissional usa projeção versionada somente leitura sobre Perfil, Knowledge e Evidência Demonstrada existentes |
+| [ADR-063](ADR-063-declared-competency-normalization.md) | accepted | Normalização derivada preserva declarações e exige associação Knowledge segura |
+| [ADR-064](ADR-064-contextual-competency-curation.md) | accepted | Curadoria contextual reutiliza Knowledge e grava decisões auditadas no Perfil |
+| [ADR-065](ADR-065-common-professional-taxonomy-domains.md) | accepted | Knowledge comum sustenta domínios ocupacional e de competências separados e versionados |
 
 ## Rules
 
@@ -8280,7 +8335,7 @@ O Prisma preserva três camadas distintas: o termo observado no documento, a nor
 - Organization Knowledge é tenant-owned e especializa a base global. Dentro da organização, um termo aprovado na camada da empresa precede o equivalente global, sem editar ou apagar a base Prisma.
 - Termos sem resolução segura permanecem observados e entram na Knowledge Inbox. Alias ambíguo não normaliza automaticamente.
 
-O MVP distingue `occupation`, `skill`, `knowledge`, `technology`, `methodology` e `certification`. Relações e mappings são tipados, versionados e atribuídos. Internet enriquece a Knowledge Base, nunca uma Pessoa. A IA pesquisa e propõe; um humano autorizado publica.
+O modelo distingue `occupation`, `skill`, `competency`, `knowledge`, `technology`, `methodology` e `certification`. Relações e mappings são tipados, versionados e atribuídos. A Taxonomia Profissional Prisma reutiliza esta infraestrutura em dois domínios separados: Taxonomia Ocupacional `position-taxonomy-1.0.0` e Taxonomia de Competências `competency-taxonomy-1.0.0`. Internet enriquece a Knowledge Base, nunca uma Pessoa. A IA pesquisa e propõe; um humano autorizado publica.
 
 Mudanças publicadas criam change set e impactos somente para perfis com observações relacionadas. Reinterpretação reaplica Knowledge à mesma evidência, gera draft para o contrato M2-C e não sobrescreve perfil aprovado. A política organizacional começa em `off`.
 
@@ -8313,9 +8368,11 @@ A busca opera somente sobre Perfis vigentes da organização ativa. Os filtros d
 
 ## M7.2 — competências e evidências
 
-O Perfil vigente apresenta Resumo, mapa de Competências e explorador de Evidências sobre `person-professional-evidence-1.0.0`. Declaração, relação contextual e Evidência Demonstrada são naturezas diferentes e podem coexistir no mesmo conceito. Somente resultado direto M5.1 ativo, vigente e suficiente recebe estado verificado. Documento, certificação, aprovação humana e inferência preservam sua natureza e não viram verificação por associação.
+O Perfil vigente apresenta Resumo, mapa de Competências e explorador de Evidências sobre `person-professional-evidence-3.0.0`. A projeção declara separadamente `position-taxonomy-1.0.0` e `competency-taxonomy-1.0.0`: a primeira continua ocupacional e não aparece como competência pessoal; a segunda fornece a identidade canônica comum que também pode ser referenciada por requisitos de Posição. Perfis publicados existentes recebem a projeção on-read, sem reimportação nem reescrita dos fatos.
 
-Cada item explica termo observado, conceito, regra, versões, fonte e decisão humana disponível. A origem documental abre a revisão e a região quando essa geometria existe. Ausência, ambiguidade, insuficiência, expiração e indisponibilidade usam linguagem neutra; não produzem score, proficiência, senioridade ou recomendação. Requisitos de Posição permanecem fora do Perfil até matching explícito.
+Declaração, relação contextual e Evidência Demonstrada são naturezas diferentes e podem coexistir no mesmo conceito. Relações entre ocupações e competências organizam a taxonomia, mas nunca criam evidência pessoal. Somente resultado direto M5.1 ativo, vigente e suficiente recebe estado verificado. Documento, certificação, aprovação humana e inferência preservam sua natureza e não viram verificação por associação.
+
+Cada item explica termo observado, conceito, regra, versões, fonte e decisão humana disponível. A origem documental abre a revisão e a região quando essa geometria existe. Ausência, ambiguidade, insuficiência, expiração e indisponibilidade usam linguagem neutra; não produzem score, proficiência, senioridade ou recomendação. Requisitos de Posição permanecem fora do Perfil até matching explícito. Requisitos novos podem apontar para a mesma identidade canônica de competência, sempre por decisão humana e com versão própria; isso não altera matching, Prisma Score, A/B/C ou evidência da Pessoa.
 
 Os resultados são ordenados por quantidade de critérios objetivos atendidos e, em caso de empate, por nome. Essa ordenação não constitui aderência, senioridade, ranking profissional ou decisão de contratação.
 
@@ -9298,6 +9355,213 @@ Baseline `1215c6e1cdd603a741e14def6724525b4fded2cb`; branch `codex/m71-position-
 Consulta somente leitura ao backend `ioldpnqqvobprjiontre` confirmou CBO `CBO 2002-2025-06-06`, ESCO `1.2.1`, O*NET `31.0` publicados/correntes. A lista de projetos retorna nome atual `Prisma`, embora documentos o chamem Prisma-QA. Zero reconciliações ocupacionais aprovadas. CBO publicada tem `is_a` ocupação-família; ESCO tem `requires` com relevance essential/optional e conceitos classificados como knowledge no snapshot; O*NET tem requires/skill e uses/technology, com medidas originais. Não inventar relações ausentes ou reclassificar fontes.
 
 Owners antigos contradizem publicação corrente e versões de matching; estado verificado e contratos vigentes prevalecem. M7.1 usa resolução determinística publicada no fluxo novo e preserva RPCs históricas. O gate de referência da UI M5.4.4 será substituído pelo estado explícito permitido pelo contrato M7.1; a RPC vigente já aceita referência nula. Nenhuma alteração de fórmula/matching.
+
+---
+
+## Source: `docs/qa/agreement-m72-competency-taxonomy-evidence-v2.md`
+
+# Contrato de Acordos — M7.2 v2 Taxonomia de Competências e Perfil de Evidências
+
+Versão: `2.0.0`. Estado: `agreed`. Product Owner: Bruno. Aprovação: prompt mestre revisado fornecido integralmente em 2026-09-18 e solicitação explícita de execução. Baseline: `ccef68c05e10f3c35cf616f92f9a0d55c552a275`.
+
+Este contrato substitui a semântica futura do prompt anterior do M7.2 sem reescrever o acordo 1.0.0, seus snapshots ou seu AoT. A evolução é forward-only. M7.1 e `position-taxonomy-1.0.0` permanecem a Taxonomia Ocupacional. A infraestrutura profissional é comum; os domínios ocupacional e de competências são separados e possuem versões próprias.
+
+As três referências abaixo são alvos normativos de arquitetura visual e ilustrativas para pessoas, textos, números e integrações:
+
+- `C:\Users\Bruno\AppData\Local\Temp\codex-clipboard-dda06256-8341-456f-9059-710c053d1cad.png` — visão geral;
+- `C:\Users\Bruno\AppData\Local\Temp\codex-clipboard-38ea1181-14f1-43d1-a562-fd110c1af8ef.png` — Competências;
+- `C:\Users\Bruno\AppData\Local\Temp\codex-clipboard-76c1b458-ac50-4ba9-9a30-f9f895941796.png` — Evidências.
+
+## DEVE — Infraestrutura taxonômica
+
+- D-TAX-01 — Uma infraestrutura/metamodelo comum forma a Taxonomia Profissional Prisma, com taxonomias de domínio separadas.
+- D-TAX-02 — Preservar integralmente M7.1 e `position-taxonomy-1.0.0`, inclusive compatibilidade histórica.
+- D-TAX-03 — Criar Taxonomia de Competências própria, com conhecimento, habilidade, competência e tecnologia/ferramenta quando sustentados; não inventar tipo.
+- D-TAX-04 — Reutilizar Knowledge/Professional Concept para conceito, alias, origem, versão, relação, publicação, escopo, normalização e auditoria; estender apenas a lacuna comprovada.
+- D-TAX-05 — Não manter identidades canônicas concorrentes sem relação explícita.
+- D-TAX-06 — Identidade tipada distingue ocupação, conhecimento, habilidade, competência e tecnologia mesmo sob rótulo igual.
+- D-TAX-07 — Relações ocupação↔competência são explícitas, versionadas, provenientes e explicáveis.
+- D-TAX-08 — Relação cross-domain nunca constitui evidência pessoal.
+- D-TAX-09 — Preservar Global e overlay Organization-owned, precedência local e isolamento.
+- D-TAX-10 — Taxonomias ocupacional e de competências têm versões independentes.
+- D-TAX-11 — Mudanças futuras não reescrevem fatos, associações ou explicações históricas.
+- D-TAX-12 — Hierarquia só nasce de capacidade aprovada, fonte publicada, regra documentada ou decisão humana autorizada.
+
+## DEVE — Conteúdo e bootstrap
+
+- D-DATA-01 — A entrega é operacional e não vazia, reutilizando conceitos profissionais aprovados já existentes.
+- D-DATA-02 — Ordem de bootstrap: Knowledge canônica, Perfis publicados sem duplicar fatos, ESCO/O*NET já publicados, demais estruturas aprovadas; CBO só quando o conteúdo real sustentar.
+- D-DATA-03 — Lacuna não autoriza nova fonte, download, API, Web Search, licença ou provider.
+- D-DATA-04 — Conceitos e relações catalogados preservam fonte, versão e proveniência.
+- D-DATA-05 — Reconciliação só ocorre por identidade inequívoca ou aprovação existente; ambiguidade permanece explícita.
+- D-DATA-06 — Relação taxonômica não produz proficiência, senioridade, score, domínio ou intensidade pessoal.
+
+## DEVE — Pessoa e Perfil
+
+- D-PER-01 — O Perfil representa somente fatos sustentados; taxonomia organiza, não cria.
+- D-PER-02 — A projeção usa Perfil publicado vigente e evidências aprovadas; draft/intake/falha parcial não aparecem como publicado.
+- D-PER-03 — Nova importação em revisão não altera o mapa até publicação válida.
+- D-PER-04 — Perfis existentes recebem a taxonomia sem reimportação e sem reescrita dos fatos.
+- D-PER-05 — Evidência explícita permanece declarada.
+- D-PER-06 — Inferência/contexto permanece separado, com regra, método e versão.
+- D-PER-07 — Verificado exige resultado direto vigente M5.1/Evidência Demonstrada; currículo, certificação, revisão, normalização e relações isoladas não bastam.
+- D-PER-08 — Declaração, contexto, demonstração e decisão humana coexistem sem sobrescrita.
+- D-PER-09 — Ausência é neutra e nunca deficiência.
+- D-PER-10 — Gap existe somente no contexto de uma Posição.
+- D-PER-11 — Sem score, ranking, estrelas, percentual ou nível pessoal.
+- D-PER-12 — Conceito → associação → evidência → origem → método → versão → decisão/demonstração é reconstituível.
+
+## DEVE — Posição
+
+- D-POS-01 — Requisitos podem apontar para a mesma identidade canônica de competência usada pela Pessoa, sem compartilhar evidência.
+- D-POS-02 — Taxonomia organiza; não cria requisito sem decisão humana.
+- D-POS-03 — Legado e snapshots permanecem legíveis, sem migração destrutiva.
+- D-POS-04 — Elegibilidade, A/B/C, Prisma Score, pesos, ordem, negação, trajetória e matching permanecem semanticamente inalterados.
+- D-POS-05 — Relação ocupação→competência nunca insere requisito automaticamente.
+
+## DEVE — UX
+
+- D-UX-01 — As três imagens são normativas para topologia, hierarquia, proporções, agrupamento, densidade, ordem, ações, disclosure, relação mapa/evidência, detalhe e navegação desktop.
+- D-UX-02 — Visão geral resume agrupamentos/conceitos evidenciados sem ranking.
+- D-UX-03 — Competências mantém busca, filtros, tipos, grupos, naturezas, contagem não avaliativa, detalhe e porquê.
+- D-UX-04 — Sem radar, barras, estrelas, gauges ou domínio quantitativo.
+- D-UX-05 — Evidências permite buscar, filtrar, agrupar, selecionar, detalhar, ver conceitos e abrir origem.
+- D-UX-06 — O porquê expõe evidência, origem, observado/canônico, tipo, regra, método, versão, decisão e demonstração aplicáveis, sem chain-of-thought.
+- D-UX-07 — Reutilizar navegação espacial existente quando houver mapa compatível.
+- D-UX-08 — Sem coordenada, degradar para documento, trecho/seção/fato/página/método disponíveis.
+- D-UX-09 — Cobrir loading, dados, vazio, parcial, erro recuperável, incompatibilidade, fonte indisponível, ausência espacial e ausência de demonstração.
+- D-UX-10 — Empty state é neutro.
+- D-UX-11 — Mobile empilha cards, mantém ações/porquê e não depende de hover.
+- D-UX-12 — Preservar teclado, foco, headings, labels, contraste, leitor de tela, touch targets e redução de movimento aplicável.
+- D-UX-13 — Leitura principal é executiva; auditoria técnica usa disclosure progressivo.
+
+## DEVE — Segurança
+
+- D-SEC-01 — Todo dado tenant-owned conserva `organizationId`/`organization_id`.
+- D-SEC-02 — RLS/autorização permanece server-side e não amplia papéis.
+- D-SEC-03 — Conceitos, aliases, evidências, decisões, relações privadas e caches não vazam entre tenants.
+- D-SEC-04 — Uso no Perfil não publica PII na Knowledge Global.
+- D-SEC-05 — Logging não recebe currículo integral, trecho/PII desnecessários, prompt com PII ou URL privada desnecessária.
+- D-SEC-06 — Não inferir dados sensíveis.
+- D-SEC-07 — Versão, relação ou autoridade desconhecida falha explicitamente.
+
+## DEVE — Curadoria e resolução segura já solicitadas para o M7.4
+
+- D-CUR-01 — Busca server-side exclui ocupações antes do limite e classifica canônico exato, alias oficial, alias humano, parcial relevante, ambiguidade e ausência.
+- D-CUR-02 — Parcial relevante é apenas candidato humano; nunca resolve associação automaticamente.
+- D-CUR-03 — Consulta curta só encontra sigla exata; uma ou duas letras não funcionam como substring interna.
+- D-CUR-04 — Candidato expõe definição, tipo Prisma, termo sustentador, autoridade do alias e referências oficiais versionadas.
+- D-CUR-05 — O painel M7.4 mantém página, filtros, seleção, cancelamento, gravar/próximo e proteção de edição.
+
+## PROIBIDO
+
+- P-01 — Não transformar a taxonomia ocupacional do M7.1 em taxonomia de competências.
+- P-02 — Não criar taxonomia plana misturando ocupações e competências.
+- P-03 — Não criar catálogo paralelo a Knowledge/Professional Concept sem lacuna comprovada e decisão registrada.
+- P-04 — Não usar Posição, ocupação ou relação ocupacional como evidência de competência da Pessoa.
+- P-05 — Não tratar CBO, ESCO ou O*NET como evidência da Pessoa.
+- P-06 — Não criar requisito de Posição automaticamente a partir da taxonomia.
+- P-07 — Não criar score, ranking, proficiência, senioridade ou percentual de domínio.
+- P-08 — Não interpretar ausência como deficiência.
+- P-09 — Não criar gap fora de Posição.
+- P-10 — Não chamar currículo, certificação, revisão humana, normalização ou inferência de verificação direta.
+- P-11 — Não tratar inferência como fato declarado.
+- P-12 — Não sobrescrever proveniências anteriores.
+- P-13 — Não reimportar currículo para habilitar o novo mapa.
+- P-14 — Não alterar M5.1 além da leitura/projeção necessária.
+- P-15 — Não alterar matching, Prisma Score, A/B/C ou ordenação.
+- P-16 — Não implementar Lominger.
+- P-17 — Não introduzir LinkedIn, GitHub, Web Search, nova API, nova base ou fonte externa por causa dos mockups.
+- P-18 — Não alterar parser/OCR.
+- P-19 — Não criar IA, provider ou modelo novo para classificar competências.
+- P-20 — Não inventar dados sintéticos em runtime.
+- P-21 — Não mostrar draft como Perfil publicado.
+- P-22 — Não relaxar RLS/autorização.
+- P-23 — Não expor chain-of-thought.
+- P-24 — Não criar persistência redundante quando projeção segura puder reutilizar contratos existentes.
+- P-25 — Não executar ação externa sem autorização aplicável. A autorização permanente do `AGENTS.md` 1.3.0 cobre commit, merge, deploy e produção desta melhoria; não cobre destruição, force push, uso indevido de dados reais ou custo externo novo.
+
+## FORA DE ESCOPO
+
+- F-01 — Mudança funcional do M7.1 além das extensões compatíveis necessárias para compartilhar infraestrutura.
+- F-02 — Mudança semântica de `position-taxonomy-1.0.0`.
+- F-03 — Nova fórmula de matching.
+- F-04 — Nova fórmula de Prisma Score.
+- F-05 — Alteração dos grupos A/B/C.
+- F-06 — Senioridade ou proficiência automática.
+- F-07 — Sucessão.
+- F-08 — Mobilidade ou plano de carreira.
+- F-09 — Workforce planning.
+- F-10 — Feedback 360.
+- F-11 — Nova avaliação ou teste.
+- F-12 — Nova fonte externa de Pessoa.
+- F-13 — Lominger.
+- F-14 — OCR/parser.
+- F-15 — Redesign global do App Shell.
+- F-16 — Produção/deploy remoto sem autorização aplicável. Nesta execução, a autorização permanente do `AGENTS.md` 1.3.0 é aplicável e não houve veto do Product Owner.
+
+## AUTONOMIA
+
+- A-01 — Definir composição interna React/TypeScript usando componentes existentes.
+- A-02 — Escolher projeção on-read, materialização ou híbrido após avaliar consistência, versão e performance.
+- A-03 — Criar ou adaptar índices e queries.
+- A-04 — Refatorar infraestrutura taxonômica para reúso preservando compatibilidade histórica.
+- A-05 — Definir microcopy pt-BR.
+- A-06 — Definir representação visual de múltiplas proveniências.
+- A-07 — Definir filtros conforme dados reais.
+- A-08 — Escolher drawer, painel ou modal preservando a arquitetura normativa.
+- A-09 — Aplicar paginação, lazy loading ou memoização quando necessário.
+- A-10 — Escolher nomes físicos de tabelas, campos e contratos após inspeção.
+- A-11 — Escolher estratégia reversível, auditável e não destrutiva para Perfis existentes.
+- A-12 — Escolher referência canônica de conceitos nos requisitos sem mudar a semântica de matching.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-TAX-01 — Infraestrutura comum mantém os domínios separados e tipados.
+- CA-TAX-02 — M7.1 e `position-taxonomy-1.0.0` permanecem semanticamente preservados.
+- CA-TAX-03 — Reúso de Knowledge/Professional Concept é demonstrável.
+- CA-TAX-04 — Relação cross-domain é versionada, proveniente e explicável.
+- CA-TAX-05 — Relação cross-domain não contamina a evidência pessoal.
+- CA-TAX-06 — Overlay organizacional permanece isolado.
+- CA-TAX-07 — As versões ocupacional e de competências evoluem de modo independente.
+- CA-DATA-01 — A Taxonomia de Competências nasce publicada e não vazia.
+- CA-DATA-02 — Fonte, versão e proveniência de conceito e relação são recuperáveis.
+- CA-DATA-03 — Ambiguidade permanece explícita e sem associação automática.
+- CA-DATA-04 — Nenhuma fonte nova é introduzida.
+- CA-PER-01 — Perfil existente obtém o mapa sem reimportação nem reescrita.
+- CA-PER-02 — Draft/revisão não altera o Perfil publicado.
+- CA-PER-03 — Evidência explícita permanece explícita.
+- CA-PER-04 — Inferência permanece contextual, versionada e separada.
+- CA-PER-05 — Verificado exige Evidência Demonstrada direta e vigente.
+- CA-PER-06 — Proveniências coexistem sem sobrescrita.
+- CA-PER-07 — Ausência é neutra.
+- CA-PER-08 — Não existe score, nível ou ranking pessoal.
+- CA-POS-01 — Pessoa e requisito podem apontar para a mesma identidade canônica de competência.
+- CA-POS-02 — Taxonomia não cria requisito automaticamente.
+- CA-POS-03 — Legado e snapshots continuam legíveis.
+- CA-POS-04 — Matching, Prisma Score, A/B/C e ordenação não sofrem regressão semântica.
+- CA-UX-01 — Comparação visual same-state, same-data e same-viewport demonstra fidelidade estrutural às três referências.
+- CA-UX-02 — Competências entrega busca, filtros, grupos, naturezas, contagem não avaliativa, detalhe e porquê.
+- CA-UX-03 — Evidências entrega busca, filtro, seleção, detalhe, conceito e abertura de origem.
+- CA-UX-04 — Evidência espacial navega; sem coordenada, o fallback disponível é explícito.
+- CA-UX-05 — Mobile empilha conteúdo e preserva ações essenciais sem hover.
+- CA-UX-06 — Teclado, foco, headings, labels, contraste, leitor de tela e touch targets aplicáveis são preservados.
+- CA-UX-07 — Estado vazio é neutro.
+- CA-SEC-01 — Teste negativo bloqueia leitura e mutação cross-tenant.
+- CA-SEC-02 — Autorização e RLS server-side permanecem.
+- CA-SEC-03 — PII e logging permanecem mínimos.
+- CA-SEC-04 — Contrato, versão ou autoridade desconhecidos falham explicitamente.
+- CA-REG-01 — Regressão dirigida cobre currículo, revisão e publicação afetados.
+- CA-REG-02 — Regressão dirigida cobre leitura M5.1 afetada.
+- CA-REG-03 — Build e typecheck das superfícies tocadas passam.
+- CA-DOC-01 — Owners, ADR, QA e Current State atualizados; Context Pack gerado e verificado.
+- CA-AOT-01 — AoT mapeia todos os D/P aplicáveis; conclusão exige D aplicável em PASS, nenhum P violado e evidência tecnicamente disponível.
+- CA-CUR-01 — `a` não faz busca parcial; `C`/`R` só exatos; `BI`/`C#` exatos funcionam; `Active Listening` prioriza exato; ocupação não consome limite.
+- CA-CUR-02 — UI expõe classe/autoridade/referências e parcial/ambiguidade não simulam sucesso.
+
+## Pendências
+
+Não existe `Q-*` material conhecido. Nova decisão material bloqueia somente a parte afetada.
 
 ---
 
@@ -10771,6 +11035,73 @@ Baseline 1215c6e1cdd603a741e14def6724525b4fded2cb; implementação na branch cod
 ## Conclusão
 
 D-01–D-32 e P-01–P-24 PASS no escopo local acima. M7.1 ativado no backend/frontend hospedados após autorização explícita e smoke autenticado read-only. Ausência de reconciliações aprovadas limita consolidação real entre fontes por governança, não por equivalência inventada.
+
+---
+
+## Source: `docs/qa/aot-m72-competency-taxonomy-evidence-v2.md`
+
+# AoT — M7.2 v2 Taxonomia de Competências e Perfil de Evidências
+
+Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `execution-m72-competency-taxonomy-evidence-v2.md`. Baseline: `ccef68c05e10f3c35cf616f92f9a0d55c552a275`. Estado: `PARTIAL` enquanto o rollout remoto e seu smoke permanecem `NOT TESTED`.
+
+## Agreements -> Implementation -> Test -> Evidence
+
+| IDs | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| D-TAX-01, D-TAX-04, D-TAX-09 | `professional_taxonomy_releases` e Knowledge/Professional Concept compartilhados, com overlay existente preservado | QA SQL confirma releases e isolamento; ADR-065 e diff de schema | PASS |
+| D-TAX-02, D-TAX-10, D-TAX-11 | release ocupacional `position-taxonomy-1.0.0` preservado, release de competência independente e RPCs V1/V2/V3 mantidas | `competencyTaxonomy.test.ts`; QA SQL; testes M7.1/M7.4 | PASS |
+| D-TAX-03, D-TAX-05, D-TAX-06, D-TAX-12 | `knowledge_concept_type` ganha `competency`; tipos publicados e identidade tipada são reutilizados sem hierarquia ou catálogo paralelo | migration + teste de decoder e busca | PASS |
+| D-TAX-07, D-TAX-08 | loader cross-domain expõe relação, fonte, versão, atributos e `createsPersonalEvidence=false`; V4 rejeita ocupação | QA SQL e teste negativo `M7.2 rejeita ocupação` | PASS |
+| D-DATA-01, D-DATA-02, D-DATA-04 | release nasce apenas quando já existem conceitos aprovados e reutiliza ESCO/O*NET/Knowledge publicados com proveniência existente | gate `COMPETENCY_TAXONOMY_EMPTY`; QA SQL e consulta de bootstrap | PASS |
+| D-DATA-03, D-DATA-05, D-DATA-06 | nenhuma fonte/provider/IA nova; busca mantém ambiguidade e não deriva nível | diff de dependências/fontes; QA de ambiguidade e busca | PASS |
+| D-PER-01, D-PER-02, D-PER-03, D-PER-04 | V4 deriva on-read do Perfil vigente e V3, sem reimportar, reescrever ou ler draft | QA SQL verifica V4 e JSON original inalterado; regressão dirigida | PASS |
+| D-PER-05, D-PER-06, D-PER-07, D-PER-08 | associação conserva natureza, método, versão, decisão e demonstração; somente M5.1 vigente qualifica | testes de domínio e UI; V3 preservada | PASS |
+| D-PER-09, D-PER-10, D-PER-11, D-PER-12 | ausência/issue neutro; sem gap isolado ou score; cadeia de proveniência permanece reconstituível | decoder, UI e busca estática negativa por score/proficiência | PASS |
+| D-POS-01, D-POS-02, D-POS-03 | trigger valida conceito não ocupacional em requisito novo e registra a versão; histórico permanece `NULL`; nenhuma inserção automática | QA SQL com insert, bloqueio de ocupação e legado | PASS |
+| D-POS-04, D-POS-05 | matching 5.0.0, score 1.2.0, A/B/C e ordenação não foram alterados; loader cross-domain é somente leitura | 40 testes dirigidos de `vacancyIntelligence` e diff | PASS |
+| D-UX-01, D-UX-02, D-UX-03, D-UX-05, D-UX-13 | Resumo, Competências e Evidências preservam topologia, hierarquia, densidade, filtros, seleção, detalhe e disclosure das referências | inspeção CUA same-state/same-data no fixture local em desktop | PASS |
+| D-UX-04, D-UX-06, D-UX-07, D-UX-08 | sem visual quantitativo; explicação mostra observado/canônico, origem, regra e versões; abertura espacial e fallback explícito | teste UI + inspeção visual | PASS |
+| D-UX-09, D-UX-10 | estados existentes permanecem tipados e empty state neutro | testes UI/domínio e revisão de componentes | PASS |
+| D-UX-11, D-UX-12 | cards/filtros/detalhe empilham em 390x844, ações persistem, headings/labels/controles são acessíveis sem hover | inspeção CUA 390x844 nas três abas e AX tree | PASS |
+| D-SEC-01, D-SEC-02, D-SEC-03 | guards server-side, RLS e filtros Global/organização preservam tenant e papéis | QA SQL bloqueia outro tenant e autoridade; grants revisados | PASS |
+| D-SEC-04, D-SEC-05, D-SEC-06 | Knowledge Global não recebe dados de Pessoa; migration e logs não copiam currículo/PII nem inferem sensíveis | diff de schema/runtime e QA SQL | PASS |
+| D-SEC-07 | versão, contrato, tenant e domínio incompatíveis falham explicitamente | testes de decoder e SQL negativos | PASS |
+| D-CUR-01, D-CUR-02, D-CUR-03 | busca filtra ocupação antes do limite, classifica resultados e não resolve parcial; query curta só aceita exato | QA SQL com `a`, prefixo, ambiguidade e ocupação; teste de domínio | PASS |
+| D-CUR-04, D-CUR-05 | candidato traz tipo, termo, autoridade, aliases e referências; painel M7.4 preserva interação existente | testes `competencyTaxonomy` e `profileCompetencyCuration` | PASS |
+
+## Proibições
+
+| IDs | Prova negativa | Status |
+| --- | --- | --- |
+| P-01, P-02, P-03, P-04, P-05 | domínios/releases distintos; decoder e V4 rejeitam ocupação; relação não gera associação pessoal; sem catálogo paralelo | PASS |
+| P-06, P-07, P-08, P-09, P-10 | trigger não cria requisito; UI/domínio sem score, nível ou gap isolado; verificado depende de M5.1 | PASS |
+| P-11, P-12, P-13, P-14, P-15 | projeção aditiva preserva snapshots/proveniências, sem reimportação ou alteração de M5.1/matching | PASS |
+| P-16, P-17, P-18, P-19, P-20 | nenhum Lominger, fonte/API/Web, parser/OCR, IA/provider ou dado sintético em runtime | PASS |
+| P-21, P-22, P-23, P-24 | somente Perfil publicado; autorização negativa; explicação sem chain-of-thought; infraestrutura reutilizada | PASS |
+| P-25 | local sem destruição, force push, custo ou mutação de Pessoa; rollout remoto ainda não executado neste snapshot | PASS |
+
+## Critérios de aceite e regressão
+
+- CA-TAX-01 a CA-TAX-07, CA-DATA-01 a CA-DATA-04, CA-PER-01 a CA-PER-08, CA-POS-01 a CA-POS-04, CA-SEC-01 a CA-SEC-04 e CA-CUR-01 a CA-CUR-02: `scripts/test-m72v2-postgres.ps1` terminou em `ROLLBACK` com todos os asserts `PASS`; 61 testes dirigidos passaram.
+- CA-UX-01 a CA-UX-07: as três referências normativas foram comparadas com o fixture sintético na mesma composição de dados em desktop e 390x844. Desvio encontrado e corrigido: `Liderança técnica` estava tipada como ocupação no fixture; passou a `competency`, e o decoder agora bloqueia ocupações.
+- CA-REG-01 a CA-REG-03: TypeScript raiz e web sem erro; build Vite passou com apenas os avisos preexistentes de chunks/import dinâmico; lint 568 arquivos e foundation 18 tabelas/6 versões passaram.
+- CA-DOC-01: owner docs, ADR-065, contratos, Current State e Context Pack fazem parte do mesmo movimento; checker é requisito de fechamento.
+- CA-AOT-01: todos os `D-*` e `P-*` aplicáveis estão acima. O movimento só muda para `PASS` após rollout, smoke e sincronização final.
+
+## Evidência local executada
+
+- `scripts/test-m72v2-postgres.ps1`: migrations M7.3/M7.4/M7.2 v2 e QA em PostgreSQL descartável; commit intermediário necessário para o enum; rollback integral ao fim.
+- `node node_modules/typescript/bin/tsc -p tsconfig.json` e `-p web/tsconfig.json --noEmit`: PASS.
+- `node --test` nos cinco artefatos compilados selecionados: 61/61 PASS.
+- build web, lint, foundation e `git diff --check`: PASS; apenas aviso de conversão LF/CRLF do checkout.
+- O loader opcional `tsx` não existe nas dependências e uma tentativa não executou testes; o fluxo oficial compilado foi usado e passou.
+
+## Rollout e limites
+
+- Migration Supabase: `NOT TESTED` remoto.
+- Commit, `origin`, `main`, VPS e frontend: `NOT TESTED`.
+- Smoke autenticado/read-only: `NOT TESTED`.
+- Nenhuma curadoria humana, requisito real, importação ou publicação de Pessoa é criada automaticamente por este movimento.
 
 ---
 
@@ -12679,6 +13010,35 @@ O M7.1 não compara Pessoa e Posição. Essa junção continua pertencendo ao ma
 
 ---
 
+## Source: `docs/qa/execution-m72-competency-taxonomy-evidence-v2.md`
+
+# Prompt de Execução — M7.2 v2 Taxonomia de Competências e Perfil de Evidências
+
+Contrato congelado: `docs/qa/agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Baseline imutável: `ccef68c05e10f3c35cf616f92f9a0d55c552a275`. Data: 2026-09-18.
+
+## Entendimento obrigatório
+
+Implementar D-TAX, D-DATA, D-PER, D-POS, D-UX, D-SEC e D-CUR. P-01 a P-25 não podem ocorrer. F-01 a F-16 permanecem fora do movimento, salvo o rollout já coberto pela autorização permanente do repositório. A-01 a A-12 delegam somente o como.
+
+## Execução
+
+1. Reutilizar `knowledge_concepts`, `knowledge_terms`, `knowledge_relations`, mappings, fontes, versões, Inbox, change sets e RLS. Não criar catálogo de conceitos paralelo.
+2. Registrar releases independentes dos domínios ocupacional e de competências. Manter `position-taxonomy-1.0.0`; criar `competency-taxonomy-1.0.0` sobre conteúdo Knowledge aprovado e não ocupacional já publicado.
+3. Corrigir o contrato de projeção de Pessoa por RPC aditiva. V1/V2/V3 continuam disponíveis; V4 expõe versões ocupacional/competência separadas, omite ocupações do mapa de competências e não reescreve Perfil/runs/snapshots.
+4. Disponibilizar busca de competência server-side, token-aware e tenant-scoped. Somente exatos aprovados podem sustentar resolução; parcial é candidato humano. Expor autoridade e referências oficiais.
+5. Integrar a busca e a nova projeção ao painel contextual existente sem mudar sua topologia normativa.
+6. Requisitos novos/alterados com `concept_id` devem apontar a conceito publicado não ocupacional visível e registrar a versão de competência. Legado nulo permanece legível. Nenhuma relação cria requisito.
+7. Expor relações ocupação→competência publicadas com fonte/versão/proveniência e marcador explícito de que não criam evidência pessoal.
+8. Preservar matching, M5.1, parser, fontes e providers.
+9. Validar domínio, SQL/RLS/autorização, projeção, curadoria, requisitos, regressões de matching, UI desktop/mobile e fidelidade visual. Fixtures são sintéticas ou transacionais com rollback.
+10. Atualizar owners, ADR, Current State, versão/release, Context Pack e AoT. Depois dos gates proporcionais, executar commit, push, integração, migration/frontend em produção, smoke e sincronização conforme `AGENTS.md` 1.3.0.
+
+## Rollback
+
+Frontend pode voltar a V3/V1 do workflow sem perda. A migration é aditiva; RPCs antigas permanecem. Releases e coluna nova não reescrevem histórico. Em incidente, retirar consumidores V4/V2 e manter o schema até correção forward-only.
+
+---
+
 ## Source: `docs/qa/execution-m72-person-professional-evidence.md`
 
 # Prompt de Execução — M7.2 Perfil de Competências e Evidências
@@ -13971,6 +14331,10 @@ Normalização documental em 2026-09-11 dos resultados já registrados, sem novo
 
 O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. O rollout posterior, especificamente autorizado, sincronizou migration, main/GitHub e frontend Hostinger; o AoT separa a evidência local da evidência remota e registra o limite do smoke visual autenticado.
 
+## M7.2 v2 — Taxonomia de Competências e Perfil de Evidências
+
+O prompt mestre revisado é congelado em `agreement-m72-competency-taxonomy-evidence-v2.md` e substitui integralmente a semântica futura do prompt anterior, sem reescrever o contrato, snapshot ou AoT histórico. `execution-m72-competency-taxonomy-evidence-v2.md` referencia a versão 2.0.0 integral; o AoT próprio mapeia cada `D-*` e `P-*`. A prova combina PostgreSQL descartável com rollback, testes negativos de tenant/autoridade/domínio, domínio e adapters tipados, build/lint/foundation e comparação visual das três superfícies em desktop e 390x844. O rollout e seus limites são registrados separadamente no mesmo AoT.
+
 ---
 
 ## Source: `docs/qa/professional-concept-matrix.md`
@@ -14883,6 +15247,8 @@ As quatro RPCs M7.1 validam organização existente, usuário ativo e papel pers
 ## M7.2 — leitura do Perfil profissional
 
 `load_person_professional_evidence_map` é SECURITY DEFINER com `search_path` vazio e guarda privada server-side. Owner, Admin, Recruiter, Member e Super Admin ativos podem ler somente a organização informada; `anon`, usuário inativo e outro tenant são negados. O helper privado não possui execução pública e a RPC pública é concedida apenas a `authenticated`. A função não escreve estado, não consulta requisitos de Posição e retorna somente Perfil aprovado vigente, conceitos publicados do escopo e metadados mínimos de proveniência. PII integral não entra em logs nem em fixtures visuais.
+
+M7.2 v2 preserva essa fronteira em `load_person_professional_evidence_map_v4` e `search_competency_taxonomy`. A busca exclui ocupações e outro tenant no servidor antes de limitar resultados. Release metadata global não contém PII; overlay organizacional continua sujeito à RLS. `curate_profile_competency_v2` delega a mutação auditada anterior e só conclui após reconstruir a projeção V4 na mesma transação. O trigger de requisitos recusa ocupação, conceito não publicado ou conceito Organization-owned de outro tenant. Relações ocupação→competência são leitura contextual e retornam `createsPersonalEvidence=false`.
 
 - Toda tabela organizacional carrega `organization_id`, FK, índice e RLS.
 - Global Knowledge é publicada somente por Super Admin; Organization Knowledge, por Owner/Admin do escopo. Recruiter consulta e observa; Member não administra.

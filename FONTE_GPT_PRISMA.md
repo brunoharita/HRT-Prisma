@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.1.0
 context_bundle_version: 2.0.0
 product_version: 1.7.2
-current_state_version: 2.40.0
+current_state_version: 2.41.0
 current_state_last_verified: 2026-09-18
-documentation_source_count: 213
-source_manifest_sha256: e1a8df3ec51eeb509996ba69812707a753f965af547625cd8a15cd031fc46be6
+documentation_source_count: 217
+source_manifest_sha256: 5b38481d23ea8a5f803ac7828f8f1823944ab660fa43eddc70e8a3e0585af04c
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -265,11 +265,13 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
+M7.2 v2 está validado localmente, com rollout remoto pendente neste snapshot. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. PostgreSQL descartável, 61 testes, tipos, build, lint, foundation e visual desktop/mobile passaram. Evidência: AoT M7.2 v2 e ADR-065.
+
 M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
 M7.3 publicado em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação e aliases Global/empresa. Sete Perfis reprocessados, com snapshots, decisões e JWT/segredo preservados. Sem mudança de modelo, taxonomia ou matching. `person-professional-evidence-2.0.0` separa contagens. Smoke, dados e limites: `docs/qa/aot-m73-competency-normalization.md`, ADR-063.
 
-M7.2 implementado, validado e ativado no ambiente único após autorizações explícitas de 2026-09-18. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada no Supabase como `20260918081743_m72_person_professional_evidence`; main/GitHub/Hostinger apontam ao runtime `8f7473a`. Prisma v1.7.2 está visível no login e na barra lateral; o build preservou baseline + Parser IA hosted, recriou somente `prisma-web` e manteve rollback `prisma-web:rollback-before-m72-20260918`. RPC/grants/advisors e smoke read-only tenant-scoped passaram sem escrita nem exposição de PII. A revisão visual autenticada abriu Resumo, Competências e Evidências de um Perfil aprovado e confirmou estados vazios/parciais sem mutação. `/sign-in` reutilizou a sessão disponível e redirecionou antes de exibir o formulário; isso prova o acesso autenticado, mas não o preenchimento visual dos campos.
+M7.2 histórico foi publicado em 2026-09-18 como Prisma v1.7.2/runtime `8f7473a`. `person-professional-evidence-1.0.0` projetava Perfil vigente, Knowledge publicada e Evidência Demonstrada M5.1, separando declaração, contexto e demonstração. A migration remota foi `20260918081743_m72_person_professional_evidence`. RPC/grants, smoke tenant-scoped e as três superfícies passaram sem escrita nem PII; a sessão reutilizada não comprovou o preenchimento visual do login. Esse contrato e AoT permanecem históricos e não definem a semântica futura supersedida pelo M7.2 v2.
 
 M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registrou M7.1 como primeira entrega oficial; M7.2 é a segunda entrega aceita e publicada.
 

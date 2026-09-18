@@ -1,8 +1,9 @@
 import type { ProfessionalEvidenceProjection } from "./personProfessionalEvidence.js";
 import type { KnowledgeConceptSuggestion } from "./knowledgeData.js";
+import type { CompetencyMatchClass, CompetencyTaxonomyReference } from "./competencyTaxonomy.js";
 
 export type PendingCompetency = ProfessionalEvidenceProjection["normalization"]["items"][number] & { occurrence?: number };
-export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-1.0.0";
+export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-2.0.0";
 export const CURATION_PAGE_SIZE = 10;
 export function competencyKey(item: PendingCompetency): string {
   return JSON.stringify([item.originalIndex, item.originalTerm, item.sourceText, item.normalizedTerm, item.occurrence ?? 0]);
@@ -26,10 +27,16 @@ export function curationPage(items: PendingCompetency[], key: string | null, cur
   const index = items.findIndex((item) => competencyKey(item) === key);
   return index >= 0 ? Math.floor(index / CURATION_PAGE_SIZE) + 1 : Math.max(1, Math.min(currentPage, Math.ceil(items.length / CURATION_PAGE_SIZE)));
 }
-export interface CurationCandidate extends KnowledgeConceptSuggestion { description: string; }
+export interface CurationCandidate extends KnowledgeConceptSuggestion {
+  description: string;
+  matchedTerm: string;
+  matchClass: CompetencyMatchClass;
+  aliasAuthority: string;
+  references: CompetencyTaxonomyReference[];
+}
 export interface CurationDecision {
   item: PendingCompetency; profileId: string; scope: "organization" | "global"; reason: string;
-  action: "alias" | "proposal"; conceptId: string | null; proposalLabel: string; proposalType: "skill" | "knowledge" | "technology" | "methodology" | "certification";
+  action: "alias" | "proposal"; conceptId: string | null; proposalLabel: string; proposalType: "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification";
 }
 export interface CompetencyCurationAdapter {
   canUseGlobal: boolean;

@@ -1,6 +1,9 @@
+import { COMPETENCY_TAXONOMY_CONTRACT } from "./competencyTaxonomy.js";
 import { POSITION_TAXONOMY_CONTRACT, taxonomyGroups, type ProfessionalConceptType } from "./positionTaxonomy.js";
 
-export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-2.0.0";
+export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-3.0.0";
+const competencyConceptTypes = (Object.keys(taxonomyGroups) as ProfessionalConceptType[])
+  .filter((type) => type !== "occupation");
 
 export type ProfessionalEvidenceNature = "declared" | "contextual" | "demonstrated";
 
@@ -38,7 +41,7 @@ export interface ProfessionalEvidenceAssociation {
   explanation: {
     method: string;
     methodVersion: string;
-    taxonomyVersion: typeof POSITION_TAXONOMY_CONTRACT;
+    taxonomyVersion: typeof COMPETENCY_TAXONOMY_CONTRACT;
     knowledgeGlobalVersion: number | null;
     knowledgeOrganizationVersion: number | null;
     sourceName: string | null;
@@ -57,7 +60,10 @@ export interface ProfessionalEvidenceAssociation {
 
 export interface ProfessionalEvidenceProjection {
   contractVersion: typeof PERSON_PROFESSIONAL_EVIDENCE_CONTRACT;
-  taxonomyContractVersion: typeof POSITION_TAXONOMY_CONTRACT;
+  taxonomyVersions: {
+    occupation: typeof POSITION_TAXONOMY_CONTRACT;
+    competency: typeof COMPETENCY_TAXONOMY_CONTRACT;
+  };
   organizationId: string;
   personId: string;
   profile: {
@@ -106,7 +112,9 @@ export function readProfessionalEvidenceProjection(
 ): ProfessionalEvidenceProjection {
   if (!isRecord(value)
     || value.contractVersion !== PERSON_PROFESSIONAL_EVIDENCE_CONTRACT
-    || value.taxonomyContractVersion !== POSITION_TAXONOMY_CONTRACT
+    || !isRecord(value.taxonomyVersions)
+    || value.taxonomyVersions.occupation !== POSITION_TAXONOMY_CONTRACT
+    || value.taxonomyVersions.competency !== COMPETENCY_TAXONOMY_CONTRACT
     || value.organizationId !== organizationId
     || value.personId !== personId
     || !isRecord(value.profile)
@@ -149,7 +157,7 @@ export function groupProfessionalEvidence(
         && Boolean(association.verification?.qualifiesAsVerified),
     });
   }
-  return (Object.keys(taxonomyGroups) as ProfessionalConceptType[]).flatMap((key) => {
+  return competencyConceptTypes.flatMap((key) => {
     const grouped = [...concepts.values()]
       .filter((concept) => concept.type === key)
       .sort((left, right) => left.label.localeCompare(right.label, "pt-BR"));
@@ -181,6 +189,7 @@ function validAssociation(value: unknown): boolean {
     || !["declared", "contextual", "demonstrated"].includes(String(value.nature))
     || !isRecord(value.concept) || typeof value.concept.id !== "string" || typeof value.concept.label !== "string"
     || !Object.hasOwn(taxonomyGroups, String(value.concept.type))
+    || value.concept.type === "occupation"
     || !["global", "organization"].includes(String(value.concept.scope))
     || !Number.isSafeInteger(value.concept.version)
     || typeof value.observedTerm !== "string"
@@ -190,7 +199,7 @@ function validAssociation(value: unknown): boolean {
     || !validSource(value.evidence.source)
     || !isRecord(value.explanation) || typeof value.explanation.method !== "string"
     || typeof value.explanation.methodVersion !== "string"
-    || value.explanation.taxonomyVersion !== POSITION_TAXONOMY_CONTRACT
+    || value.explanation.taxonomyVersion !== COMPETENCY_TAXONOMY_CONTRACT
     || !nullableNumber(value.explanation.knowledgeGlobalVersion)
     || !nullableNumber(value.explanation.knowledgeOrganizationVersion)
     || !nullableString(value.explanation.sourceName) || !nullableString(value.explanation.sourceVersion)

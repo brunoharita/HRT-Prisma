@@ -20,7 +20,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   const [suggestions, setSuggestions] = useState<KnowledgeConceptSuggestion[]>([]);
   const [decisionReason, setDecisionReason] = useState("");
   const [proposalLabel, setProposalLabel] = useState("");
-  const [proposalType, setProposalType] = useState<"occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification">("skill");
+  const [proposalType, setProposalType] = useState<"occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification">("skill");
   const [decisionLoading, setDecisionLoading] = useState(false);
   const [conceptSearch, setConceptSearch] = useViewState("conceptSearch", "");
   const [conceptTypeFilter, setConceptTypeFilter] = useViewState("conceptTypeFilter", "all");
@@ -105,7 +105,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
         <Input.TextArea value={decisionReason} onChange={(event) => setDecisionReason(event.target.value)} placeholder="Motivo auditável da decisão humana" autoSize={{ minRows: 2, maxRows: 4 }} />
         <Typography.Title level={5}>Nenhum conceito existente é adequado</Typography.Title>
         <Input value={proposalLabel} onChange={(event) => setProposalLabel(event.target.value)} placeholder="Nome canônico proposto" />
-        <Select value={proposalType} onChange={setProposalType} options={["occupation", "skill", "knowledge", "technology", "methodology", "certification"].map((value) => ({ value, label: describeType(value) }))} />
+        <Select value={proposalType} onChange={setProposalType} options={["occupation", "skill", "competency", "knowledge", "technology", "methodology", "certification"].map((value) => ({ value, label: describeType(value) }))} />
         <Button loading={decisionLoading} disabled={!proposalLabel.trim() || decisionReason.trim().length < 5} onClick={async () => { setDecisionLoading(true); try { await knowledgeService.proposeConcept({ inboxId: selectedInbox.id, scope: isGlobal ? "global" : "organization", canonicalLabel: proposalLabel, conceptType: proposalType, description: "", reason: decisionReason }); message.success("Proposta criada para revisão humana e pesquisa de fontes."); setSelectedInbox(null); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha ao criar proposta."); } finally { setDecisionLoading(false); } }}>Criar proposta, sem publicar</Button>
       </Space> : null}
     </Drawer>
@@ -130,7 +130,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
     const rows = (dashboard?.concepts ?? []).filter((concept) => (!scope || concept.scope === scope)
       && (conceptTypeFilter === "all" || concept.conceptType === conceptTypeFilter)
       && (!query || [concept.canonicalLabel, ...concept.aliases].some((value) => value.toLocaleLowerCase("pt-BR").includes(query))));
-    return <><Space wrap style={{ marginBottom: 16 }}><Input.Search allowClear placeholder="Buscar conceito ou alias" value={conceptSearch} onChange={(event) => setConceptSearch(event.target.value)} /><Select value={conceptTypeFilter} onChange={setConceptTypeFilter} options={[{ value: "all", label: "Todos os tipos" }, ...["occupation", "skill", "knowledge", "technology", "methodology", "certification"].map((value) => ({ value, label: describeType(value) }))]} /></Space>
+    return <><Space wrap style={{ marginBottom: 16 }}><Input.Search allowClear placeholder="Buscar conceito ou alias" value={conceptSearch} onChange={(event) => setConceptSearch(event.target.value)} /><Select value={conceptTypeFilter} onChange={setConceptTypeFilter} options={[{ value: "all", label: "Todos os tipos" }, ...["occupation", "skill", "competency", "knowledge", "technology", "methodology", "certification"].map((value) => ({ value, label: describeType(value) }))]} /></Space>
       <Table rowKey="id" loading={loading} dataSource={rows} columns={conceptColumns} locale={{ emptyText: <Empty description="Nenhum conceito publicado nesta camada." /> }} pagination={{ pageSize: 10 }} scroll={{ x: 760 }} /></>;
   }
   function sourcesPanel() {
@@ -185,7 +185,7 @@ function statusTag(value: string) {
   const color = ["approved", "published", "completed", "resolved", "active"].includes(value) ? "green" : ["failed", "rejected", "budget_limited"].includes(value) ? "red" : ["pending", "in_review", "proposal_ready", "unresolved", "ambiguous", "action_required"].includes(value) ? "gold" : "default";
   return <Tag color={color} title={labels[value] ? undefined : `Código do estado: ${value}`}>{labels[value] ?? "Estado não identificado"}</Tag>;
 }
-function describeType(value: string) { return ({ occupation: "Ocupação", skill: "Habilidade", knowledge: "Conhecimento", technology: "Tecnologia", methodology: "Metodologia", certification: "Certificação" } as Record<string, string>)[value] ?? value; }
+function describeType(value: string) { return ({ occupation: "Ocupação", skill: "Habilidade", competency: "Competência", knowledge: "Conhecimento", technology: "Tecnologia", methodology: "Metodologia", certification: "Certificação" } as Record<string, string>)[value] ?? value; }
 function describeRelation(attributes: unknown, fallback: string) { const value = isRecord(attributes) ? attributes.relevance : null; return value === "essential" ? "Essencial" : value === "optional" ? "Opcional" : fallback.replaceAll("_", " "); }
 function describeMeasures(attributes: unknown) { if (!isRecord(attributes) || !Array.isArray(attributes.measurements)) return "—"; const values = attributes.measurements.flatMap((measure) => isRecord(measure) && typeof measure.scaleId === "string" && typeof measure.rawValue === "string" ? [`${describeScale(measure.scaleId)} ${measure.rawValue}`] : []); return values.length ? values.join(" · ") : "—"; }
 function describeScale(scale: string) { return ({ IM: "Importância", LV: "Nível" } as Record<string, string>)[scale] ?? scale; }

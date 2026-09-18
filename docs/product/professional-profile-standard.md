@@ -23,9 +23,11 @@ A busca opera somente sobre Perfis vigentes da organização ativa. Os filtros d
 
 ## M7.2 — competências e evidências
 
-O Perfil vigente apresenta Resumo, mapa de Competências e explorador de Evidências sobre `person-professional-evidence-1.0.0`. Declaração, relação contextual e Evidência Demonstrada são naturezas diferentes e podem coexistir no mesmo conceito. Somente resultado direto M5.1 ativo, vigente e suficiente recebe estado verificado. Documento, certificação, aprovação humana e inferência preservam sua natureza e não viram verificação por associação.
+O Perfil vigente apresenta Resumo, mapa de Competências e explorador de Evidências sobre `person-professional-evidence-3.0.0`. A projeção declara separadamente `position-taxonomy-1.0.0` e `competency-taxonomy-1.0.0`: a primeira continua ocupacional e não aparece como competência pessoal; a segunda fornece a identidade canônica comum que também pode ser referenciada por requisitos de Posição. Perfis publicados existentes recebem a projeção on-read, sem reimportação nem reescrita dos fatos.
 
-Cada item explica termo observado, conceito, regra, versões, fonte e decisão humana disponível. A origem documental abre a revisão e a região quando essa geometria existe. Ausência, ambiguidade, insuficiência, expiração e indisponibilidade usam linguagem neutra; não produzem score, proficiência, senioridade ou recomendação. Requisitos de Posição permanecem fora do Perfil até matching explícito.
+Declaração, relação contextual e Evidência Demonstrada são naturezas diferentes e podem coexistir no mesmo conceito. Relações entre ocupações e competências organizam a taxonomia, mas nunca criam evidência pessoal. Somente resultado direto M5.1 ativo, vigente e suficiente recebe estado verificado. Documento, certificação, aprovação humana e inferência preservam sua natureza e não viram verificação por associação.
+
+Cada item explica termo observado, conceito, regra, versões, fonte e decisão humana disponível. A origem documental abre a revisão e a região quando essa geometria existe. Ausência, ambiguidade, insuficiência, expiração e indisponibilidade usam linguagem neutra; não produzem score, proficiência, senioridade ou recomendação. Requisitos de Posição permanecem fora do Perfil até matching explícito. Requisitos novos podem apontar para a mesma identidade canônica de competência, sempre por decisão humana e com versão própria; isso não altera matching, Prisma Score, A/B/C ou evidência da Pessoa.
 
 Os resultados são ordenados por quantidade de critérios objetivos atendidos e, em caso de empate, por nome. Essa ordenação não constitui aderência, senioridade, ranking profissional ou decisão de contratação.
 

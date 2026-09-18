@@ -60,7 +60,7 @@ export class EscoKnowledgeSourceAdapter implements KnowledgeSourceAdapter {
         externalId: uri, externalUri: uri,
         canonicalLabel: required(row, ["preferredlabel", "preferred_label", "label"]),
         description: optional(row, ["description", "definition"]),
-        conceptType: rawType.includes("occupation") ? "occupation" as const : "skill" as const,
+        conceptType: rawType.includes("occupation") ? "occupation" as const : rawType.includes("knowledge") ? "knowledge" as const : rawType.includes("competence") ? "competency" as const : "skill" as const,
         language: optional(row, ["language", "lang"]) || "en",
         aliases: splitAliases(optional(row, ["altlabels", "alt_labels", "alternativelabel"])),
         provenance: { source: this.sourceName, externalVersion: snapshot.externalVersion, sourceFile: file.name },

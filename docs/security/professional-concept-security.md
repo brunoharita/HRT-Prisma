@@ -10,6 +10,8 @@ As quatro RPCs M7.1 validam organização existente, usuário ativo e papel pers
 
 `load_person_professional_evidence_map` é SECURITY DEFINER com `search_path` vazio e guarda privada server-side. Owner, Admin, Recruiter, Member e Super Admin ativos podem ler somente a organização informada; `anon`, usuário inativo e outro tenant são negados. O helper privado não possui execução pública e a RPC pública é concedida apenas a `authenticated`. A função não escreve estado, não consulta requisitos de Posição e retorna somente Perfil aprovado vigente, conceitos publicados do escopo e metadados mínimos de proveniência. PII integral não entra em logs nem em fixtures visuais.
 
+M7.2 v2 preserva essa fronteira em `load_person_professional_evidence_map_v4` e `search_competency_taxonomy`. A busca exclui ocupações e outro tenant no servidor antes de limitar resultados. Release metadata global não contém PII; overlay organizacional continua sujeito à RLS. `curate_profile_competency_v2` delega a mutação auditada anterior e só conclui após reconstruir a projeção V4 na mesma transação. O trigger de requisitos recusa ocupação, conceito não publicado ou conceito Organization-owned de outro tenant. Relações ocupação→competência são leitura contextual e retornam `createsPersonalEvidence=false`.
+
 - Toda tabela organizacional carrega `organization_id`, FK, índice e RLS.
 - Global Knowledge é publicada somente por Super Admin; Organization Knowledge, por Owner/Admin do escopo. Recruiter consulta e observa; Member não administra.
 - DML composto usa RPCs com `search_path` vazio e autorização persistida. Tabelas críticas concedem somente leitura direta.

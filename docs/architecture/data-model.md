@@ -19,7 +19,8 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 | Evento adaptativo | `profile_review_adaptation_events` | ledger append-only do padrão confirmado e dos campos aceitos, sem duplicar valores ou texto integral |
 | Padrão organizacional | `organization_extraction_patterns` | sinal estrutural versionado promovido somente após aprovação integral da revisão |
 | Conhecimento | `professional_profiles`, `evidence`, `inferences`, `inference_evidence` | Fato e inferência não se confundem |
-| Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido |
+| Taxonomia Profissional | `knowledge_concepts`, `knowledge_terms`, `knowledge_relations`, `knowledge_external_mappings`, `professional_taxonomy_releases` | Infraestrutura comum com releases independentes para os domínios ocupacional e de competências; relação cross-domain não é evidência pessoal |
+| Competências | `competencies`, `profile_competencies`, `vacancy_requirements` | Sinal explícito ou inferido; requisito novo referencia somente conceito de competência publicado e registra a versão taxonômica |
 | Avaliação | `match_evaluations` | Contextual e versionada |
 | M5.1 Verificação de Competências | `verification_*`, `assessment_*`, `competency_demonstrated_evidence` | preparação, execução, ledger factual, avaliação versionada e evidência independente |
 | Normalização Knowledge M5.2 | `knowledge_source_versions`, `knowledge_source_stage_records`, `knowledge_concepts`, `knowledge_terms`, `knowledge_relations`, `knowledge_external_mappings`, `knowledge_observations`, `knowledge_inbox` | snapshot oficial imutável, staging/diff, termo literal, conceito resolvido, ambiguidade e decisão humana |
@@ -38,6 +39,8 @@ RLS está habilitado em toda tabela pública. Políticas usam `TO authenticated`
 ## Vagas
 
 `vacancies` mantém a identidade da necessidade profissional e aponta para seu snapshot atual em `vacancy_versions`. Cada mudança material acrescenta uma versão; `vacancy_requirements.stable_id` preserva a identidade conceitual do requisito entre snapshots. `vacancy_requirement_relations` registra sinais relacionados confirmados somente para aquela versão, sem promover aliases ou relações no Knowledge. `positions.occupant_person_id` só pode existir quando a posição está `occupied`, e `match_evaluations.vacancy_version_id` preserva a definição usada na avaliação. A escrita transacional ocorre por `save_vacancy_definition`; DML direto das tabelas versionadas permanece revogado.
+
+No M7.2 v2, requisitos novos ou que trocam de `concept_id` passam por validação server-side: o conceito deve estar publicado, ser Global ou da mesma organização e não pode ser ocupação. A coluna `competency_taxonomy_version` registra `competency-taxonomy-1.0.0`; linhas históricas permanecem legíveis com `NULL` e não sofrem backfill destrutivo. Isso permite que Pessoa e Posição referenciem a mesma identidade canônica sem compartilhar evidência nem criar requisito automaticamente.
 
 `vacancy_advisor_research_runs` é um ledger tenant-scoped de execução externa. Guarda fingerprint, assunto mínimo, output estruturado, fontes, versões, tokens, duração e falha sanitizada. A pergunta e dados de Pessoas não são persistidos. RLS permite leitura somente a Super Admin, Owner, Admin e Recruiter; DML direto permanece revogado.
 
@@ -72,6 +75,8 @@ O PDF original fica no bucket privado `person-documents`, limitado a 15 MB e MIM
 Identidade, autorização e relações permanecem normalizadas. Partes evolutivas de perfil e avaliação usam JSONB junto com tabelas relacionais de evidência, inferência e competência. JSONB não pode esconder authority, tenant, versão ou proveniência material.
 
 `knowledge_source_versions.is_current` identifica a única versão publicada ativa de cada fonte; manifestos registram arquivo, tamanho, encoding, contagem e checksum. Termos e relações apontam à versão de origem. `knowledge_observations` pode referenciar evidência M2 ou review M5, preserva texto literal, perfil, método e versão resolutora. `resolved` exige conceito; `ambiguous` e `unresolved` proíbem conceito. `knowledge_inbox.observation_ids` liga a decisão humana às ocorrências sem copiar currículo integral.
+
+`professional_taxonomy_releases` registra releases publicados por domínio. `position-taxonomy-1.0.0` permanece ocupacional; `competency-taxonomy-1.0.0` reutiliza os conceitos não ocupacionais já aprovados no Knowledge. Fonte, versão e proveniência continuam nos mappings e relações existentes. A projeção `person-professional-evidence-3.0.0` exclui ocupações e declara as duas versões, enquanto `load_occupation_competency_relations` expõe relações cross-domain com `createsPersonalEvidence=false`.
 
 `knowledge_sources` também registra o estado resumido da checagem oficial, sem confundi-lo com publicação. `knowledge_source_checks` é append-only, possui RLS e expõe leitura apenas a Super Admin. A Edge Function escreve por uma RPC `service_role` idempotente; um resultado detectado pode catalogar uma source version, mas não altera `is_current`.
 

@@ -3,6 +3,7 @@ import type { KnowledgeConceptSuggestion, KnowledgeDashboard, KnowledgeProposalV
 import { supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import type { Json } from "./database.types";
 import { supabase } from "./client";
+import { readCompetencyTaxonomySearch } from "../../domain/competencyTaxonomy";
 
 export const knowledgeService = {
   async loadDashboard(profile: PlatformAccessProfile, organizationId: string | null): Promise<KnowledgeDashboard> {
@@ -50,12 +51,19 @@ export const knowledgeService = {
       scope: row.concept_scope, aliases: row.aliases, sourceName: row.source_name, sourceVersion: row.source_version,
       externalId: row.external_id, externalUri: row.external_uri, method: row.suggestion_method }));
   },
+  async searchCompetencyTaxonomy(organizationId: string, query: string) {
+    const { data, error } = await supabase.rpc("search_competency_taxonomy" as never, {
+      p_organization_id: organizationId, p_query: query, p_limit: 8,
+    } as never);
+    if (error) throw supabaseOperationError(error, "Não foi possível buscar na Taxonomia de Competências.");
+    return readCompetencyTaxonomySearch(data);
+  },
   async resolveInboxAlias(input: { inboxId: string; conceptId: string; scope: "global" | "organization"; reason: string }) {
     const { data, error } = await supabase.rpc("resolve_knowledge_inbox_alias", { p_inbox_id: input.inboxId, p_concept_id: input.conceptId, p_scope: input.scope, p_reason: input.reason });
     if (error) throw supabaseOperationError(error, "Não foi possível aprovar o alias.");
     return data[0];
   },
-  async proposeConcept(input: { inboxId: string; scope: "global" | "organization"; canonicalLabel: string; conceptType: "occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification"; description: string; reason: string }) {
+  async proposeConcept(input: { inboxId: string; scope: "global" | "organization"; canonicalLabel: string; conceptType: "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification"; description: string; reason: string }) {
     const { data, error } = await supabase.rpc("propose_knowledge_concept_from_inbox", { p_inbox_id: input.inboxId, p_scope: input.scope, p_canonical_label: input.canonicalLabel, p_concept_type: input.conceptType, p_description: input.description, p_reason: input.reason });
     if (error) throw supabaseOperationError(error, "Não foi possível criar a proposta.");
     return data;

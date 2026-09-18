@@ -84,8 +84,8 @@ function SummarySurface({ groups, profile, projection, onEvidence, onOpenCompete
         {profile.about.summary ? <Typography.Paragraph>{profile.about.summary}</Typography.Paragraph> : <Typography.Text type="secondary">O Perfil publicado não possui resumo narrativo.</Typography.Text>}
         {profile.about.areasOfExpertise.length ? <Space wrap>{profile.about.areasOfExpertise.map((item) => <Tag color="blue" key={item}>{item}</Tag>)}</Space> : null}
       </PrismaCard> : null}
-      <PrismaCard className="prisma-m72-taxonomy-card" title="Taxonomia profissional Prisma" extra={<Button onClick={onOpenCompetencies} type="link">Explorar na taxonomia</Button>}>
-        <Typography.Paragraph>Este Perfil usa os mesmos conceitos profissionais e agrupadores versionados do Prisma. A taxonomia organiza as evidências; ela não cria fatos sobre a Pessoa.</Typography.Paragraph>
+      <PrismaCard className="prisma-m72-taxonomy-card" title="Taxonomia de Competências Prisma" extra={<Button onClick={onOpenCompetencies} type="link">Explorar na taxonomia</Button>}>
+        <Typography.Paragraph>Este Perfil e os requisitos de Posição podem usar a mesma identidade canônica de competência. A Taxonomia Ocupacional permanece um domínio separado, e relações entre ocupações e competências nunca criam fatos sobre a Pessoa.</Typography.Paragraph>
       </PrismaCard>
       <PrismaCard className="prisma-m72-group-summary" title="Conhecimentos e habilidades por agrupamento" extra={<WhyButton onClick={onOpenCompetencies} />}>
         {groups.length ? <div className="prisma-m72-group-grid">{groups.map((group) => <article key={group.key}>

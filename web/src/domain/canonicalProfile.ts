@@ -9,7 +9,7 @@ export interface CanonicalKnowledgeTerm {
   canonicalLabel: string | null;
   state: "resolved" | "ambiguous" | "unresolved";
   conceptId?: string | null;
-  conceptType?: "occupation" | "skill" | "knowledge" | "technology" | "methodology" | "certification" | null;
+  conceptType?: "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification" | null;
   sourceFieldPath?: string | null;
   sourceVersion?: string | null;
 }

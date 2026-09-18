@@ -7,6 +7,14 @@ import { competencyKey, curationPage, curationReturnTarget, CURATION_PAGE_SIZE, 
 import { PrismaCard } from "../../ui/PrismaCard";
 import { useUnsavedChanges } from "../../ui/PrismaNavigation";
 
+const matchLabels = {
+  exact: "Canônico exato",
+  official_alias: "Alias oficial exato",
+  human_alias: "Alias humano auditado",
+  relevant_partial: "Candidato parcial",
+  ambiguous: "Correspondência ambígua",
+} as const;
+
 export function CompetencyCuration({ projection, adapter, onProjection, onOpenChange }: {
   projection: ProfessionalEvidenceProjection; adapter: CompetencyCurationAdapter | undefined;
   onProjection: (value: ProfessionalEvidenceProjection) => void; onOpenChange: (open: boolean) => void;
@@ -182,12 +190,14 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
         {!searching && !candidates.length ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Nenhum conceito encontrado. Ajuste a busca ou proponha um conceito." /> : null}
         <Radio.Group aria-label="Conceito para associação" value={conceptId} disabled={saving} onChange={(event) => { setConceptId(event.target.value); onDirty(true); }} className="prisma-m74-candidates">
           {candidates.map((candidate) => <div key={candidate.id} className={conceptId === candidate.id ? "is-selected" : ""}><Radio value={candidate.id}>{candidate.canonicalLabel}</Radio>
-            <Space wrap><Tag>{taxonomyGroups[candidate.conceptType as keyof typeof taxonomyGroups] ?? candidate.conceptType}</Tag><Tag>{candidate.scope === "global" ? "Global" : "Empresa"}</Tag></Space>
+            <Space wrap><Tag>{taxonomyGroups[candidate.conceptType as keyof typeof taxonomyGroups] ?? candidate.conceptType}</Tag><Tag>{candidate.scope === "global" ? "Global" : "Empresa"}</Tag><Tag color={candidate.matchClass === "relevant_partial" || candidate.matchClass === "ambiguous" ? "orange" : "blue"}>{matchLabels[candidate.matchClass]}</Tag></Space>
             <p>{candidate.description || "Sem definição publicada."}</p><small>{candidate.sourceName ? `${candidate.sourceName} · ${candidate.sourceVersion ?? "Versão não informada"}` : "Conceito interno aprovado"}</small>
+            {candidate.matchedTerm !== candidate.canonicalLabel ? <small>Correspondência sustentada por: {candidate.matchedTerm}</small> : null}
+            {candidate.references.length > 1 ? <small>{candidate.references.length} referências oficiais versionadas</small> : null}
           </div>)}
         </Radio.Group></> : <><Typography.Title level={5}>Propor novo conceito</Typography.Title><Alert type="info" title="A proposta não publica um conceito e não encerra esta pendência." />
         <label>Nome canônico proposto<Input aria-label="Nome canônico proposto" value={label} disabled={saving} onChange={(event) => { setLabel(event.target.value); onDirty(true); }} /></label>
-        <label>Tipo de conceito<Select aria-label="Tipo de conceito proposto" value={type} disabled={saving} onChange={(value) => { setType(value); onDirty(true); }} options={(["skill", "knowledge", "technology", "methodology", "certification"] as const).map((value) => ({ value, label: taxonomyGroups[value] }))} /></label></>}
+        <label>Tipo de conceito<Select aria-label="Tipo de conceito proposto" value={type} disabled={saving} onChange={(value) => { setType(value); onDirty(true); }} options={(["skill", "competency", "knowledge", "technology", "methodology", "certification"] as const).map((value) => ({ value, label: taxonomyGroups[value] }))} /></label></>}
       <label>Alcance da decisão<Select aria-label="Alcance da decisão" value={scope} disabled={saving} onChange={(value) => { setScope(value); onDirty(true); }} options={[{ value: "organization", label: "Knowledge da empresa" }, ...(adapter.canUseGlobal ? [{ value: "global", label: "Knowledge Global" }] : [])]} /></label>
       <Typography.Text type="secondary">{scope === "global" ? "Decisão Global: pode ser reutilizada por outras empresas e perfis." : "Pode ser reutilizada em outros perfis desta empresa."}</Typography.Text>
       <label>Justificativa da associação<Input.TextArea aria-label="Justificativa da associação" placeholder="Explique por que os termos são equivalentes..." value={reason} disabled={saving} rows={3} onChange={(event) => { setReason(event.target.value); onDirty(true); }} /></label>

@@ -66,6 +66,9 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 | [ADR-061](ADR-061-visual-reference-fidelity-for-prompts.md) | accepted | Referências visuais normativas viram requisitos estruturais e evidência comparável nos prompts |
 | [ADR-062](ADR-062-person-professional-evidence-projection.md) | accepted | Perfil profissional usa projeção versionada somente leitura sobre Perfil, Knowledge e Evidência Demonstrada existentes |
+| [ADR-063](ADR-063-declared-competency-normalization.md) | accepted | Normalização derivada preserva declarações e exige associação Knowledge segura |
+| [ADR-064](ADR-064-contextual-competency-curation.md) | accepted | Curadoria contextual reutiliza Knowledge e grava decisões auditadas no Perfil |
+| [ADR-065](ADR-065-common-professional-taxonomy-domains.md) | accepted | Knowledge comum sustenta domínios ocupacional e de competências separados e versionados |
 
 ## Rules
 

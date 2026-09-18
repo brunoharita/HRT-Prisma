@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 
 export const KNOWLEDGE_CONCEPT_TYPES = [
-  "occupation", "skill", "knowledge", "technology", "methodology", "certification",
+  "occupation", "skill", "competency", "knowledge", "technology", "methodology", "certification",
 ] as const;
 
 export const KNOWLEDGE_RELATION_TYPES = [

@@ -9,19 +9,22 @@ export function profileCompetencyCurationService(organizationId: string, personI
   return {
     canUseGlobal: role === "super_admin",
     async search(query) {
-      const suggestions = (await knowledgeService.suggestConcepts(organizationId, query)).filter((item) => item.conceptType !== "occupation");
-      if (!suggestions.length) return [];
-      const { data, error } = await supabase.from("knowledge_concepts").select("id,description").in("id", suggestions.map((item) => item.id));
-      if (error) throw new Error("Não foi possível consultar a definição dos conceitos.");
-      return suggestions.map((item) => ({ ...item, description: data?.find((row) => row.id === item.id)?.description ?? "" }));
+      const result = await knowledgeService.searchCompetencyTaxonomy(organizationId, query);
+      return result.items.map((item) => ({
+        id: item.conceptId, canonicalLabel: item.canonicalLabel, conceptType: item.conceptType, scope: item.scope,
+        description: item.description, aliases: item.aliases, sourceName: item.references[0]?.source ?? null,
+        sourceVersion: item.references[0]?.sourceVersion ?? null, externalId: item.references[0]?.externalId ?? null,
+        externalUri: item.references[0]?.externalUri ?? null, method: item.matchClass, matchedTerm: item.matchedTerm,
+        matchClass: item.matchClass, aliasAuthority: item.aliasAuthority, references: item.references,
+      }));
     },
     async refresh() {
-      const { data, error } = await supabase.rpc("load_person_professional_evidence_map_v3" as never, { p_organization_id: organizationId, p_person_id: personId } as never);
+      const { data, error } = await supabase.rpc("load_person_professional_evidence_map_v4" as never, { p_organization_id: organizationId, p_person_id: personId } as never);
       if (error) throw new Error("Não foi possível atualizar a lista. Tente novamente.");
       return readProfessionalEvidenceProjection(data, organizationId, personId);
     },
     async save(decision) {
-      const { data, error } = await supabase.rpc("curate_profile_competency" as never, {
+      const { data, error } = await supabase.rpc("curate_profile_competency_v2" as never, {
         p_organization_id: organizationId, p_person_id: personId, p_profile_id: decision.profileId,
         p_original_index: decision.item.originalIndex, p_source_text: decision.item.sourceText, p_normalized_term: decision.item.normalizedTerm,
         p_scope: decision.scope, p_action: decision.action, p_concept_id: decision.conceptId, p_reason: decision.reason,
