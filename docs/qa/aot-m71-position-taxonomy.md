@@ -93,6 +93,8 @@ O teste local foi preparado com schemas mínimos auth/storage, min(uuid) de comp
 
 ## Validação final / reprodução
 
+Revisão final adicional: `saveAsRole` agora descarta `taxonomyOrigin` arbitrário do cliente antes da cópia para `job_roles.requirements_template`. A versão da Posição recebe somente origem recomposta no servidor. Caso negativo com origem forjada/cross-tenant passou na verificação SQL e o caminho é coberto também pelo teste de contrato. Não houve rollout da versão anterior nem mudança de contrato; correção integra o mesmo M7.1.
+
 1. PostgreSQL local descartável, usuário m71_test, loopback, porta 55471: `pwsh -NoProfile -File scripts/test-m71-postgres.ps1 -Database m71_contract_tests_4 -VerifyOnly -RefreshFunctions`. Para base nova, omitir VerifyOnly/RefreshFunctions e escolher nome m71_* inexistente. O runner nunca reseta base existente.
 2. Build/88 testes/typecheck/build web conforme E2/E4.
 3. UI: `node node_modules/vite/bin/vite.js --config tests/ui/m71.vite.config.mts`; abrir `http://127.0.0.1:5571/m71.html`. Harness fora da entrada/build de produção, URL/key sintéticas loopback, mocks explícitos de todas as quatro operações.

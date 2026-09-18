@@ -227,7 +227,7 @@ create function public.save_position_taxonomy(p_organization_id uuid,p_draft jso
 returns table(vacancy_id uuid,vacancy_version_id uuid,version integer,created boolean)
 language plpgsql security definer set search_path = '' as $$
 declare v_actor uuid; v_id uuid; v_current public.vacancies; v_saved record; v_snapshot jsonb; v_concept uuid;
-  v_complements uuid[]; v_item jsonb; v_req jsonb; v_origin jsonb; v_attempt uuid; v_decision text; v_previous jsonb;
+  v_complements uuid[]; v_requirements jsonb; v_req jsonb; v_origin jsonb; v_attempt uuid; v_decision text; v_previous jsonb;
 begin
   v_actor:=private.m71_require_editor(p_organization_id);
   if p_draft is null or jsonb_typeof(p_draft)<>'object' or p_draft->>'taxonomyContract' is distinct from 'position-taxonomy-1.0.0' then
@@ -246,8 +246,12 @@ begin
   v_snapshot:=public.preview_position_taxonomy(p_organization_id,p_draft->>'title',
     nullif(p_draft->>'referenceConceptId','')::uuid,v_decision,v_complements);
   v_concept:=(v_snapshot#>>'{concept,id}')::uuid;
+  -- The legacy saver can copy requirements into a reusable job-role template.
+  -- Never let a client-supplied taxonomy origin survive through that side path.
+  select coalesce(jsonb_agg(value-'taxonomyOrigin'),'[]'::jsonb) into v_requirements
+    from jsonb_array_elements(coalesce(p_draft->'requirements','[]'::jsonb));
   -- Every selected requirement concept must be visible. Taxonomy suggestions never generate requirements here.
-  for v_req in select value from jsonb_array_elements(coalesce(p_draft->'requirements','[]'::jsonb)) loop
+  for v_req in select value from jsonb_array_elements(v_requirements) loop
     if nullif(v_req->>'conceptId','') is not null and not exists(select 1 from public.knowledge_concepts c
       where c.id=(v_req->>'conceptId')::uuid and c.status='approved' and (c.scope='global' or c.organization_id=p_organization_id)) then
       raise exception using errcode='42501',message='POSITION_REQUIREMENT_SCOPE_INVALID'; end if;
@@ -255,7 +259,7 @@ begin
   select * into v_saved from public.save_vacancy_definition(p_organization_id,v_id,p_draft->>'title',
     p_draft->>'area',p_draft->>'location',p_draft->>'workArrangement',p_draft->>'employmentType',
     (p_draft->>'occupancy')::public.position_status,nullif(p_draft->>'occupantPersonId','')::uuid,p_draft->>'mission',
-    p_draft->'responsibilities',p_draft->'expectedOutcomes',p_draft->'requirements',p_draft->'contextItems',
+    p_draft->'responsibilities',p_draft->'expectedOutcomes',v_requirements,p_draft->'contextItems',
     p_draft->>'sourceKind',nullif(p_draft->>'sourceVacancyId','')::uuid,nullif(p_draft->>'jobRoleId','')::uuid,
     v_concept,coalesce((p_draft->>'saveAsRole')::boolean,false),coalesce(p_draft->>'changeKind','material'));
   v_snapshot:=v_snapshot||jsonb_build_object('positionVersionId',v_saved.vacancy_version_id,'positionVersion',v_saved.version,
@@ -278,7 +282,7 @@ begin
   -- The compatibility RPC writes its historical version. This atomic owner is newer.
   update public.vacancy_versions set contract_version='vacancy-definition-1.3.0'
     where id=v_saved.vacancy_version_id and organization_id=p_organization_id;
-  for v_req in select value from jsonb_array_elements(coalesce(p_draft->'requirements','[]'::jsonb)) loop
+  for v_req in select value from jsonb_array_elements(v_requirements) loop
     select value into v_origin from jsonb_array_elements((v_snapshot->'items')||(v_snapshot->'complements'))
       where value->>'conceptId'=v_req->>'conceptId';
     -- A previously selected requirement keeps its original source snapshot after a correction.

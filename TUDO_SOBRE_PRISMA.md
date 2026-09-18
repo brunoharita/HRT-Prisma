@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 194
-source_manifest_sha256: 19b4ea9f3f1d8677eb1e9bd9a73435d850968bb302446cfd57c3a6aa33f41a8b
+source_manifest_sha256: 89041ed7ce1a0971f73f2ca09b904a44dd5f61db5953ba418b01ba982f96d129
 -->
 
 # Tudo sobre o Prisma
@@ -10224,6 +10224,8 @@ O teste local foi preparado com schemas mínimos auth/storage, min(uuid) de comp
 
 ## Validação final / reprodução
 
+Revisão final adicional: `saveAsRole` agora descarta `taxonomyOrigin` arbitrário do cliente antes da cópia para `job_roles.requirements_template`. A versão da Posição recebe somente origem recomposta no servidor. Caso negativo com origem forjada/cross-tenant passou na verificação SQL e o caminho é coberto também pelo teste de contrato. Não houve rollout da versão anterior nem mudança de contrato; correção integra o mesmo M7.1.
+
 1. PostgreSQL local descartável, usuário m71_test, loopback, porta 55471: `pwsh -NoProfile -File scripts/test-m71-postgres.ps1 -Database m71_contract_tests_4 -VerifyOnly -RefreshFunctions`. Para base nova, omitir VerifyOnly/RefreshFunctions e escolher nome m71_* inexistente. O runner nunca reseta base existente.
 2. Build/88 testes/typecheck/build web conforme E2/E4.
 3. UI: `node node_modules/vite/bin/vite.js --config tests/ui/m71.vite.config.mts`; abrir `http://127.0.0.1:5571/m71.html`. Harness fora da entrada/build de produção, URL/key sintéticas loopback, mocks explícitos de todas as quatro operações.
@@ -13906,6 +13908,8 @@ Deduplicação é tenant-scoped e conservadora. E-mail ou telefone válidos são
 # Segurança da Knowledge
 
 ## M7.1 — fronteira de Posições
+
+Metadados `taxonomyOrigin` enviados pelo cliente são removidos antes de chamar o salvamento legado, inclusive quando este cria/atualiza um modelo de função (`saveAsRole`). Assim, a cópia JSON do modelo não constitui caminho lateral de proveniência forjada. A origem da versão da Posição é recomposta pelo servidor; a verificação SQL inclui origem falsa de outro tenant enviada pelo próprio editor.
 
 As quatro RPCs M7.1 validam organização existente, usuário ativo e papel persistido antes da leitura/mutação; `anon` não executa. Preview/save/search exigem Owner/Admin/Recruiter ou Super Admin. Criar complemento também exige `require_knowledge_admin`; não existe parâmetro para promoção Global. Helpers são privados/revogados, com search path vazio. Novas colunas herdam RLS de versões/requisitos; o servidor recompõe proveniência e rejeita IDs de outro tenant, versão desconhecida e edição concorrente. A transação inclui definição, estrutura, origem, ledger e Inbox. Falha obrigatória não vira sucesso parcial. Os testes SQL locais exercitam credenciais sintéticas com `SET ROLE authenticated/anon`, não somente superusuário (AoT M7.1).
 

@@ -6,7 +6,7 @@ product_version: 1.6.4
 current_state_version: 2.34.0
 current_state_last_verified: 2026-09-18
 documentation_source_count: 194
-source_manifest_sha256: 19b4ea9f3f1d8677eb1e9bd9a73435d850968bb302446cfd57c3a6aa33f41a8b
+source_manifest_sha256: 89041ed7ce1a0971f73f2ca09b904a44dd5f61db5953ba418b01ba982f96d129
 -->
 
 # Fonte do GPT para prompts do Prisma

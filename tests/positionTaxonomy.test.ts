@@ -56,6 +56,7 @@ test("M7.1 SQL is additive, recomputes provenance and preserves authorization ow
   assert.match(sql, /private\.has_org_role/); assert.match(sql, /private\.require_knowledge_admin/);
   assert.match(sql, /public\.save_vacancy_definition/); assert.match(sql, /POSITION_VERSION_CONFLICT/);
   assert.match(sql, /v_snapshot:=public\.preview_position_taxonomy/);
+  assert.match(sql, /jsonb_agg\(value-'taxonomyOrigin'\)/);
   assert.match(sql, /v\.import_status='published' and v\.is_current/);
   assert.doesNotMatch(sql, /create table|disable row level|grant .* to anon|insert into public\.people|update public\.professional_profiles/i);
   assert.doesNotMatch(sql, /target_level\s*=|criticality\s*=/);

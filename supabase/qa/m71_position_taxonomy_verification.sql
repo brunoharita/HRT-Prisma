@@ -92,10 +92,13 @@ begin
   pid:=saved.vacancy_id; v1:=saved.vacancy_version_id;
   perform m71_assert((select count(*)=0 from public.vacancy_requirements where vacancy_version_id=v1),'official suggestions never become automatic requirements');
   perform m71_assert((select title=d->>'title' from public.vacancies where id=pid),'stored business title unchanged');
-  d:=d||jsonb_build_object('id',pid,'requirements',jsonb_build_array(jsonb_build_object('stableId',m71_id('req'),'label','Conhecimento sintético compartilhado',
-    'category','knowledge','importance','desired','importanceConfirmed',true,'categoryConfirmed',true,'origin','human','conceptId',m71_id('shared-item'))));
+  d:=d||jsonb_build_object('id',pid,'saveAsRole',true,'requirements',jsonb_build_array(jsonb_build_object('stableId',m71_id('req'),'label','Conhecimento sintético compartilhado',
+    'category','knowledge','importance','desired','importanceConfirmed',true,'categoryConfirmed',true,'origin','human','conceptId',m71_id('shared-item'),
+    'taxonomyOrigin',jsonb_build_object('forged',true,'organizationId',m71_id('org-b')))));
   select * into saved from public.save_position_taxonomy(m71_id('org-a'),d,v1); v2:=saved.vacancy_version_id;
   perform m71_assert((select importance='desired' and taxonomy_origin#>>'{origins,0,reference,sourceVersion}'='31.0' from public.vacancy_requirements where vacancy_version_id=v2),'explicit desired requirement retains source version');
+  perform m71_assert((select requirements_template#>'{0,taxonomyOrigin}' is null from public.job_roles where id=(select job_role_id from public.vacancies where id=pid)),
+    'forged client taxonomy is not copied into reusable role templates');
   perform m71_assert((select taxonomy_origin#>'{origins,0,attributes,measurements}'='[{"scaleId":"IM","rawValue":4.5},{"scaleId":"LV","rawValue":5.1}]'::jsonb from public.vacancy_requirements where vacancy_version_id=v2),'source metrics preserved, not converted');
   perform m71_reject(format('select * from public.save_position_taxonomy(%L,%L::jsonb,%L)',m71_id('org-a'),d,v1),'40001');
   d:=d||'{"taxonomyDecision":"cleared"}'::jsonb;
