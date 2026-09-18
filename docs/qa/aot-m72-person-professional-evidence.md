@@ -1,6 +1,6 @@
 # AoT — M7.2 Perfil de Competências e Evidências
 
-Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execução: `docs/qa/execution-m72-person-professional-evidence.md`. Data: 2026-09-18. Ambiente: local e produção única (`ioldpnqqvobprjiontre` + Hostinger). Status: implementação, integração e rollout concluídos; inspeção visual autenticada pós-login permanece `NOT TESTED` por ausência de sessão salva.
+Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execução: `docs/qa/execution-m72-person-professional-evidence.md`. Data: 2026-09-18. Ambiente: local e produção única (`ioldpnqqvobprjiontre` + Hostinger). Status: implementação, integração, rollout e inspeção visual autenticada pós-login concluídos.
 
 ## Evidências
 
@@ -14,6 +14,7 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 - E8 — rollout Supabase autorizado: migration registrada como `20260918081743_m72_person_professional_evidence`. Inspeção remota confirmou helper privado sem execução para `public`/`anon`/`authenticated`; RPC pública `stable`, `SECURITY DEFINER`, `search_path` vazio, sem execução para `public`/`anon` e com execução somente para `authenticated`. Advisors mantiveram o baseline de tabelas, FKs, índices e policies; surgiu apenas o aviso esperado da RPC autenticada protegida internamente.
 - E9 — smoke remoto read-only, tenant-scoped e sem PII sobre um Perfil real retornou `person-professional-evidence-1.0.0` e `position-taxonomy-1.0.0`, preservando ausência de associação como issues explícitas. Nenhum fixture, escrita, perfil, evidência ou decisão foi criado em produção; o fixture sintético remoto foi deliberadamente recusado e permaneceu somente na prova PostgreSQL local descartável.
 - E10 — integração fast-forward em `main`, push GitHub e CI `35324103297` aprovados no commit `8f7473a791c5229b1804df34f5809b6f911e8f6e`. Hostinger construiu o mesmo commit com `baseline` + Parser IA `hosted`, preservou `prisma-web:rollback-before-m72-20260918` e recriou somente `prisma-web`. HTTPS 200, container sem restart, bundle com commit/contrato e login público exibindo v1.7.2 passaram; gateway/workers permaneceram ativos e não foram recriados.
+- E11 — smoke visual autenticado read-only em produção: abrir `/sign-in` reutilizou a sessão disponível e redirecionou para a Home sem digitação de credenciais. A Central da Pessoa confirmou Perfil v1 publicado/vigente e a tela M7.2 abriu Resumo, Competências e Evidências para esse Perfil aprovado. Estados vazios/parciais foram explícitos, a navegação permaneceu íntegra e a barra lateral exibiu Prisma v1.7.2. Nenhuma escrita, revisão ou publicação foi acionada. Como o redirecionamento ocorreu antes de a tela de login ser exibida, o teste prova a sessão reutilizável, não a aparência visual dos campos preenchidos.
 
 ## Matriz de Acordos
 
@@ -27,18 +28,18 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 | D-06 | issues/avisos neutros, sem penalização | E1, E2, E5 | PASS | ausência não é deficiência |
 | D-07 | lista conserva múltiplas associações do conceito | E1, E2 | PASS | sem sobrescrita |
 | D-08 | grouping por ID e seis tipos publicados | E2, E5 | PASS | ordem estável |
-| D-09 | Resumo, taxonomia, cards e recentes | E5 | PASS | fixture sintética |
-| D-10 | busca, filtros e disclosure no mapa | E2, E5 | PASS | sem score |
-| D-11 | filtros, métricas, lista e detalhe de evidências | E2, E5 | PASS | métricas descritivas |
+| D-09 | Resumo, taxonomia, cards e recentes | E5, E11 | PASS | dados completos na fixture; vazio real em produção |
+| D-10 | busca, filtros e disclosure no mapa | E2, E5, E11 | PASS | sem score |
+| D-11 | filtros, métricas, lista e detalhe de evidências | E2, E5, E11 | PASS | métricas descritivas |
 | D-12 | termo, método, versões, fonte e decisão humana | E2, E5 | PASS | sem cadeia privada |
 | D-13 | documento/review/região ou Verificações | E6 | PASS | depende da origem existir |
-| D-14 | loading, vazio, parcial, erro/retry e incompatível explícitos | E2, revisão de UI | PASS | falha mantém Perfil publicado |
+| D-14 | loading, vazio, parcial, erro/retry e incompatível explícitos | E2, E11, revisão de UI | PASS | falha mantém Perfil publicado |
 | D-15 | guarda server-side + authenticated; membro permitido; negativos | E1, E8, E9 | PASS | ativa em produção |
 | D-16 | fixture sintética local, smoke remoto read-only e sem logging de payload | E1, E5, E7, E9 | PASS | nenhuma escrita ou PII retornada no smoke remoto |
 | D-17 | versões matching/score e arquivos fora do diff | E2, E7 | PASS | regressão dirigida |
 | D-18 | decoder/RPC `person-professional-evidence-1.0.0` | E1, E2 | PASS | futuro falha fechado |
 | D-19 | owners, ADR, AoT e Context Pack | E7, E10 | PASS | sincronizados após rollout |
-| D-20 | registro M7 entrega 2; login/sidebar centralizados | E2, E3, E10 | PASS | v1.7.2 publicada |
+| D-20 | registro M7 entrega 2; login/sidebar centralizados | E2, E3, E10, E11 | PASS | v1.7.2 publicada |
 | D-UX-01 | cabeçalho, abas, conteúdo principal e coluna lateral/detalhe | E5 | PASS | mesmas três superfícies |
 | D-UX-02 | hierarquia, densidade, ordem e ações preservadas | E5 | PASS | conteúdo ilustrativo adaptado |
 | D-UX-03 | grids empilham; filtros/detalhe/origem permanecem | E5 | PASS | 390 × 844 |
@@ -66,5 +67,5 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 
 - A migration `20260918160000_m72_person_professional_evidence.sql` está ativa no Supabase como `20260918081743_m72_person_professional_evidence`; não houve reaplicação de migrations históricas nem backfill.
 - Prisma v1.7.2 está ativo no frontend hospedado a partir do commit funcional `8f7473a`; main local, GitHub e checkout da Hostinger foram sincronizados por fast-forward.
-- O smoke remoto consultou um Perfil real apenas por contrato/contagens, sem retornar PII e sem escrita. A prova visual completa continua baseada no componente real com fixture sintética. A inspeção visual pós-login em produção ficou `NOT TESTED` porque o navegador disponível não tinha sessão autenticada; nenhuma credencial foi inserida ou contornada.
+- O smoke remoto consultou um Perfil real apenas por contrato/contagens, sem retornar PII e sem escrita. O smoke visual autenticado abriu em produção Resumo, Competências e Evidências de um Perfil aprovado, confirmou os estados vazios/parciais e Prisma v1.7.2, sem mutação. A prova visual com associações e detalhes preenchidos continua baseada no componente real com fixture sintética, pois o Perfil aprovado inspecionado não possuía evidências publicadas. `/sign-in` reutilizou a sessão e redirecionou antes de exibir o formulário; nenhuma credencial foi digitada ou contornada, e o preenchimento visual dos campos não foi observado.
 - Rollback web preservado: `prisma-web:rollback-before-m72-20260918`, imagem `sha256:4e18858eaa7e81b5a2e581f9d042c3c39a33ed046d87d27ad2cd4c8e2770c8b6`. Em reversão de banco, usar migration forward para revogar/remover a RPC; não reescrever Perfis, Knowledge ou M5.1.
