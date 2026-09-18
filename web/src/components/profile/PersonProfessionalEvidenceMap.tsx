@@ -24,12 +24,15 @@ import {
 import { taxonomyGroups, type ProfessionalConceptType } from "../../domain/positionTaxonomy";
 import { PrismaCard } from "../../ui/PrismaCard";
 import { CanonicalProfileView } from "./CanonicalProfileView";
+import { CompetencyCuration } from "./CompetencyCuration";
+import type { CompetencyCurationAdapter } from "../../domain/profileCompetencyCuration";
 
 interface PersonProfessionalEvidenceMapProps {
   profile: PrismaProfileView;
   projection: ProfessionalEvidenceProjection | null;
   projectionError: string | null;
   onOpenSource: (evidence: ProfessionalEvidenceAssociation) => void;
+  curation?: CompetencyCurationAdapter | undefined;
 }
 
 type Surface = "summary" | "competencies" | "evidence" | "profile";
@@ -40,23 +43,26 @@ const natureColors: Record<ProfessionalEvidenceNature, string> = {
   demonstrated: "green",
 };
 
-export function PersonProfessionalEvidenceMap({ profile, projection, projectionError, onOpenSource }: PersonProfessionalEvidenceMapProps) {
+export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation }: PersonProfessionalEvidenceMapProps) {
+  const [projection, setProjection] = useState(incomingProjection);
+  const [curationOpen, setCurationOpen] = useState(false);
+  useEffect(() => { setProjection(incomingProjection); }, [incomingProjection]);
   const [surface, setSurface] = useState<Surface>("summary");
   const [selectedEvidence, setSelectedEvidence] = useState<ProfessionalEvidenceAssociation | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<ProfessionalConceptEvidenceView | null>(null);
   const groups = useMemo(() => projection ? groupProfessionalEvidence(projection) : [], [projection]);
 
-  return <div className="prisma-m72-profile">
+  return <div className={`prisma-m72-profile${curationOpen ? " prisma-m74-open" : ""}`}>
     <nav aria-label="Áreas do Perfil profissional" className="prisma-m72-tabs">
       {([
         ["summary", "Resumo"], ["competencies", "Competências"], ["evidence", "Evidências"], ["profile", "Perfil completo"],
-      ] as const).map(([key, label]) => <button aria-current={surface === key ? "page" : undefined} key={key} onClick={() => setSurface(key)} type="button">{label}</button>)}
+      ] as const).map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => setSurface(key)} type="button">{label}</button>)}
     </nav>
-    {projection ? <NormalizationStatus projection={projection} /> : null}
+    {projection ? <NormalizationStatus projection={projection} disabled={curationOpen} /> : null}
     {projectionError ? <Alert action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>} description="O Perfil publicado continua disponível abaixo." title={projectionError} showIcon type="warning" /> : null}
     {!projection && !projectionError ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
     {surface === "summary" ? <SummarySurface groups={groups} profile={profile} projection={projection} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} /> : null}
-    {surface === "competencies" ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} /> : null}
+    {surface === "competencies" ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} curation={curation} onProjection={setProjection} onCurationOpen={setCurationOpen} /> : null}
     {surface === "evidence" ? <EvidenceSurface groups={groups} projection={projection} onExplain={setSelectedEvidence} onOpenSource={onOpenSource} /> : null}
     {surface === "profile" ? <CanonicalProfileView profile={profile} showCompetencies={false} showHeader={false} /> : null}
     <ExplanationDrawer concept={selectedConcept} evidence={selectedEvidence} onClose={() => { setSelectedConcept(null); setSelectedEvidence(null); }} onOpenSource={onOpenSource} />
@@ -98,11 +104,14 @@ function SummarySurface({ groups, profile, projection, onEvidence, onOpenCompete
   </div>;
 }
 
-function CompetencySurface({ groups, projection, onConcept, onEvidence }: {
+function CompetencySurface({ groups, projection, onConcept, onEvidence, curation, onProjection, onCurationOpen }: {
   groups: ReturnType<typeof groupProfessionalEvidence>;
   projection: ProfessionalEvidenceProjection | null;
   onConcept: (value: ProfessionalConceptEvidenceView) => void;
   onEvidence: (value: ProfessionalEvidenceAssociation) => void;
+  curation: CompetencyCurationAdapter | undefined;
+  onProjection: (value: ProfessionalEvidenceProjection) => void;
+  onCurationOpen: (value: boolean) => void;
 }) {
   const [query, setQuery] = useState("");
   const [nature, setNature] = useState<ProfessionalEvidenceNature | "all">("all");
@@ -132,7 +141,7 @@ function CompetencySurface({ groups, projection, onConcept, onEvidence }: {
           </article>)}</div>,
         }))} /> : <Empty description="Nenhum conceito evidenciado corresponde aos filtros." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </PrismaCard>
-      <PendingDeclarations projection={projection} query={query} />
+      {projection ? <CompetencyCuration projection={projection} adapter={curation} onProjection={onProjection} onOpenChange={onCurationOpen} /> : null}
     </main>
     <aside>
       <PrismaCard title="Leitura do perfil">
@@ -210,20 +219,7 @@ function EvidenceIcon({ nature }: { nature: ProfessionalEvidenceNature }) { retu
 function Metric({ icon, label, value }: { icon: ReactNode; label: string; value: number }) { return <div className="prisma-m72-reading-metric"><span>{icon}</span><div><strong>{label}</strong><small>{label === "Declaradas" ? "Informadas no Perfil publicado" : label === "Contextuais" ? "Relações identificadas pelo Prisma" : "Resultado direto vigente"}</small></div><b>{value}</b></div>; }
 function MetricCard({ label, value }: { label: string; value: number }) { return <article><strong>{value}</strong><span>{label}</span></article>; }
 
-function PendingDeclarations({ projection, query }: { projection: ProfessionalEvidenceProjection | null; query: string }) {
-  const pending = projection?.normalization.items.filter((item) => !["resolved", "human_preserved"].includes(item.state)) ?? [];
-  const shown = pending.filter((item) => `${item.originalTerm} ${item.normalizedTerm}`.toLocaleLowerCase("pt-BR").includes(query.trim().toLocaleLowerCase("pt-BR")));
-  if (!pending.length && !projection?.issues.length) return null;
-  return <PrismaCard title={`Declarações aguardando associação (${pending.length || projection?.issues.length || 0})`}>
-    <Typography.Paragraph type="secondary">As declarações continuam fazendo parte do Perfil. Apenas o vínculo à taxonomia está pendente. A curadoria de termos e aliases é feita na Knowledge.</Typography.Paragraph>
-    <Button href="/knowledge" type="link">Abrir Knowledge para curadoria</Button>
-    <Collapse items={(pending.length ? shown.map((item, index) => ({ key: String(index), label: item.normalizedTerm,
-      children: <><Typography.Paragraph>{item.reason}</Typography.Paragraph><Typography.Text type="secondary">Declaração original: {item.originalTerm}</Typography.Text></> }))
-      : (projection?.issues ?? []).filter((item) => item.observedTerm.toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"))).map((item, index) => ({ key: String(index), label: item.observedTerm, children: item.explanation })))} />
-  </PrismaCard>;
-}
-
-function NormalizationStatus({ projection }: { projection: ProfessionalEvidenceProjection }) {
+function NormalizationStatus({ projection, disabled }: { projection: ProfessionalEvidenceProjection; disabled: boolean }) {
   const [requesting, setRequesting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const status = projection.normalization.status;
@@ -240,8 +236,8 @@ function NormalizationStatus({ projection }: { projection: ProfessionalEvidenceP
     } catch { setMessage("Não foi possível conectar. O Perfil foi preservado; tente novamente."); }
     finally { setRequesting(false); }
   };
-  if (status === "complete") return <div className="prisma-m73-normalization-actions"><Typography.Text type="secondary">{message ?? "Associações processadas. A declaração revisada foi preservada."}</Typography.Text><Button loading={requesting} onClick={() => void retry()} type="link">Atualizar associações</Button></div>;
+  if (status === "complete") return <div className="prisma-m73-normalization-actions"><Typography.Text type="secondary">{message ?? "Associações processadas. A declaração revisada foi preservada."}</Typography.Text><Button disabled={disabled} loading={requesting} onClick={() => void retry()} type="link">Atualizar associações</Button></div>;
   return <Alert showIcon type={status === "failed" ? "warning" : "info"} title={status === "failed" ? "Normalização parcialmente disponível" : "Organizando competências declaradas"}
     description={message ?? (status === "failed" ? "A declaração original foi preservada. O processamento não foi concluído; os vínculos seguros já disponíveis continuam visíveis." : "O Perfil já está publicado. A associação com a Knowledge é processada em segundo plano; reabra esta tela em instantes.")}
-    action={status === "failed" || status === "not_processed" ? <Button loading={requesting} onClick={() => void retry()}>Reprocessar</Button> : undefined} />;
+    action={status === "failed" || status === "not_processed" ? <Button disabled={disabled} loading={requesting} onClick={() => void retry()}>Reprocessar</Button> : undefined} />;
 }

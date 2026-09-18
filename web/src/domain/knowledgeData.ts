@@ -1,4 +1,4 @@
-import type { Json } from "../infrastructure/supabase/database.types";
+import type { Json } from "../infrastructure/supabase/database.types.js";
 
 export interface KnowledgeSourceView {
   id: string; name: string; domain: string; sourceClass: string; method: string; license: string | null;

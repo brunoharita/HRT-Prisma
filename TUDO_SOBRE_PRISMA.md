@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 209
-source_manifest_sha256: 0e9e906045a059c053d87a6ce99c6e0ba80f5fe71a2ea07d192404cc4c7bec90
+documentation_source_count: 213
+source_manifest_sha256: bd354eb21cd66ad106664a257b31de3a037398eeefb97f9e876a2e2db9a0aa3b
 -->
 
 # Tudo sobre o Prisma
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.38.0
+version: 2.39.0
 last_verified: 2026-09-18
 ---
 
@@ -543,7 +543,9 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.3 em produção em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação pelo Knowledge Agent, listas separadas e aliases Global/empresa. Sete Perfis reprocessados; snapshots e decisões intactos. Bruno: 43 declarações, cinco conceitos em três agrupamentos e 59 itens pendentes explícitos. `person-professional-evidence-2.0.0` separa essas contagens. JWT e segredo do monitor preservados; sem novo modelo, taxonomia ou matching. Evidência/limites: `docs/qa/aot-m73-competency-normalization.md` e ADR-063.
+M7.4 local, **Prisma v1.7.4**: curadoria em painel no Perfil, retorno à página/filtros/registro, gravação e avanço, aliases/propostas da Knowledge com escopo e auditoria. RPC V3 aplica decisões humanas sem IA ou alteração de snapshots; V1/V2 preservadas. Produção não alterada. Acordo, testes e limites em `docs/qa/aot-m74-contextual-curation.md` e ADR-064.
+
+M7.3 publicado em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação e aliases Global/empresa. Sete Perfis reprocessados, com snapshots, decisões e JWT/segredo preservados. Sem mudança de modelo, taxonomia ou matching. `person-professional-evidence-2.0.0` separa contagens. Smoke, dados e limites: `docs/qa/aot-m73-competency-normalization.md`, ADR-063.
 
 M7.2 implementado, validado e ativado no ambiente único após autorizações explícitas de 2026-09-18. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada no Supabase como `20260918081743_m72_person_professional_evidence`; main/GitHub/Hostinger apontam ao runtime `8f7473a`. Prisma v1.7.2 está visível no login e na barra lateral; o build preservou baseline + Parser IA hosted, recriou somente `prisma-web` e manteve rollback `prisma-web:rollback-before-m72-20260918`. RPC/grants/advisors e smoke read-only tenant-scoped passaram sem escrita nem exposição de PII. A revisão visual autenticada abriu Resumo, Competências e Evidências de um Perfil aprovado e confirmou estados vazios/parciais sem mutação. `/sign-in` reutilizou a sessão disponível e redirecionou antes de exibir o formulário; isso prova o acesso autenticado, mas não o preenchimento visual dos campos.
 
@@ -2356,6 +2358,8 @@ Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `pars
 
 ## Política
 
+M7.4 acrescenta `profile-competency-curation-1.0.0` (owner product/Knowledge/security/UI), aceito para implementação: RPC transacional `curate_profile_competency`, consumidores Perfil e adapter Supabase. A leitura `load_person_professional_evidence_map_v3` mantém o formato `person-professional-evidence-2.0.0`, mas explicita o método humano nas associações atualizadas. V1/V2 inalteradas. Resposta de workflow desconhecida falha sem simular sucesso. Migração aditiva antes do frontend; evidências locais/limites no AoT M7.4 e ADR-064; produção ainda não autorizada.
+
 M7.3 acrescenta `declared-competency-normalization-1.0.0` (owner Knowledge/AI/data; fila e interpretação derivada de declarações, snapshots originais preservados) e `person-professional-evidence-2.0.0` (owner product/Knowledge/UI/security; RPC `load_person_professional_evidence_map_v2`, estados e contagens independentes). A RPC V1 da tabela abaixo permanece compatível para clientes antigos. Versões desconhecidas são rejeitadas; produção e validação estão no AoT M7.3. ADR-063 registra segurança, privacidade, curadoria e rollback.
 
 Cada contrato material possui nome, owner, versão, consumidores, status, compatibilidade, evidência de implementação, ambiente e política para versão desconhecida.
@@ -2933,7 +2937,9 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 # Versionamento
 
-M7.3 (2026-09-18) registra a terceira entrega aceita do Movimento 7: **Prisma v1.7.3**. `declared-competency-normalization-1.0.0` versiona a interpretação derivada pós-publicação e `person-professional-evidence-2.0.0` explicita declarações, associações, pendências e processamento. Perfis/Knowledge históricos não são reescritos. A RPC V1 permanece inalterada para frontends antigos; a nova usa o sufixo `_v2` e rejeita versões desconhecidas. Rollout e ativação real são registrados no AoT M7.3, não presumidos pelo número da versão.
+M7.4 (2026-09-18) registra a quarta entrega aceita do Movimento 7: **Prisma v1.7.4**. `profile-competency-curation-1.0.0` versiona a decisão contextual, reutilizando a Knowledge. A RPC de leitura `_v3` aplica aliases humanos à projeção `person-professional-evidence-2.0.0`, sem mudar seu formato nem snapshots; V1/V2 continuam disponíveis. Login e menu usam o registro central. Implementação local e evidências no AoT M7.4; produção depende de autorização específica.
+
+M7.3 registra a entrega anterior **Prisma v1.7.3**. `declared-competency-normalization-1.0.0` versiona a interpretação derivada pós-publicação e `person-professional-evidence-2.0.0` explicita declarações, associações, pendências e processamento. Perfis históricos não são reescritos. Rollout e ativação real estão no AoT M7.3, não são presumidos pelo número da versão.
 
 ## M7.2 — 2026-09-18
 
@@ -6733,6 +6739,30 @@ Rollback: desativar somente o job `prisma-profile-competency-normalization` e re
 
 ---
 
+## Source: `docs/decisions/ADR-064-contextual-competency-curation.md`
+
+# ADR-064 — Curadoria contextual de competências
+
+Status: accepted. Data: 2026-09-18. Acordo `docs/qa/agreement-m74-contextual-curation.md` v1.0.0.
+
+## Decisão e reutilização
+
+Reutilizar `suggest_knowledge_concepts`, `resolve_knowledge_inbox_alias`, `propose_knowledge_concept_from_inbox`, componentes Ant Design e proteção de navegação existente. Um painel lateral apresenta a decisão dentro do Perfil; nenhuma Knowledge paralela, dependência, fornecedor, taxonomia ou chamada de IA é introduzida. Navegar à Knowledge perde o contexto; embutir a página inteira duplicaria navegação e não garantiria retorno transacional à pendência. O adapter delimitado e a RPC aditiva atendem à decisão aprovada.
+
+`curate_profile_competency` valida Perfil vigente, organização, átomo original e pendência atual; exige `require_knowledge_admin`, com autorização Global adicional. Serializa Perfil/Inbox/escopo, recusa conflito humano, delega alias/proposta às operações auditadas existentes e retorna a leitura atualizada na mesma transação. Se o alias não resolver com segurança, a transação inteira falha. Propostas repetidas pendentes não são duplicadas. Não há grants anônimos, tabelas novas nem alteração de snapshots, runs ou RLS. Funções SECURITY DEFINER usam search_path vazio; a leitura reutiliza a autorização ativa de V2 antes de consultar derivação.
+
+`load_person_professional_evidence_map_v3` projeta aliases humanos aprovados sobre os átomos existentes, respeitando resolução única e prioridade empresa/Global. Decisões sobre a declaração bruta (`human_preserved`) prevalecem. Apenas a associação automática daquele átomo é substituída; contextos, verificações e original permanecem. A explicação expõe método `profile-competency-curation-1.0.0`, justificativa, escopo e versões. Aprovação nunca transforma declaração em demonstração.
+
+Estado de navegação usa chave composta por índice original, declaração, trecho e termo, não índice de página. Ao resolver, busca próximo sobrevivente ou anterior; ao cancelar, o mesmo. Erros mantêm formulário e instruem atualizar a lista em caso de concorrência. Modal de descarte protege troca de item; guard existente protege navegação SPA e saída do navegador. Painel não modal no desktop; no móvel, tela inteira com ciclo de foco. Busca/lista continuam independentes da seleção.
+
+## Compatibilidade, operação e limites
+
+Workflow novo, formato de projeção 2.0.0 preservado. V1/V2 intactas. Aplicar migration `20260918190000` antes de publicar frontend v1.7.4; validar RPC com sessão tenant-scoped. Rollback restaura frontend v1.7.3, conservando funções e decisões auditadas, sem apagar aliases/propostas. Não executar rollback destrutivo de dados.
+
+A validação local combina PostgreSQL real com roles e transações revertidas e UI com adapter sintético; não equivale a E2E Supabase hospedado. Não existe QA remoto separado disponível nesta entrega. Produção exige autorização específica e smoke autenticado após rollout. Não reprocessar perfis nem chamar modelos para aplicar a curadoria. Termos sem equivalente podem permanecer pendentes legitimamente; conflitos não são resolvidos silenciosamente.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -8287,6 +8317,14 @@ Cada item explica termo observado, conceito, regra, versões, fonte e decisão h
 
 Os resultados são ordenados por quantidade de critérios objetivos atendidos e, em caso de empate, por nome. Essa ordenação não constitui aderência, senioridade, ranking profissional ou decisão de contratação.
 
+## Curadoria contextual M7.4
+
+Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição, alcance e justificativa. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência.
+
+Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, filtro e posição permanecem. Se o item resolvido desaparecer, o foco passa ao próximo sobrevivente, ou ao anterior se era o último; página vazia recua à última válida. Gravar e próximo mantém a revisão aberta no próximo pendente. Alterações não salvas pedem confirmação de descarte, e falhas preservam a edição. No celular, o painel ocupa a tela e retorna à lista na mesma posição. Perfis antigos sem itens normalizados mantêm pendências explícitas e exigem normalização antes da curadoria contextual.
+
+Snapshots e natureza declarada permanecem intactos. Aprovação de alias é decisão humana auditada, não evidência de desempenho. O retorno da transação já traz a projeção atualizada, sem chamar IA nem reprocessar todo o Perfil.
+
 ## Comparação
 
 A comparação aceita exatamente duas Pessoas selecionadas na busca e reapresenta seus Perfis canônicos em colunas equivalentes. Destaques são contagens ou fatos publicados, nunca uma avaliação relativa. Ao voltar, consulta, filtros e seleção permanecem preservados na sessão do navegador.
@@ -9382,6 +9420,44 @@ Nenhuma decisão funcional pendente. Falha de configuração, limite de provedor
 ## Critérios de aceite
 
 CA-01: nomes diferentes normalizam para conceitos reais sem taxonomia paralela (D-01/D-04). CA-02: publicação enfileira, repetição não duplica e falha não remove o Perfil (D-02). CA-03: testes de Excel/Word, termo composto e listas legadas, preservando origem (D-03). CA-04: lista de pendências, métricas e estados legíveis em desktop/mobile (D-05/D-07). CA-05: reprocessamento idempotente com origem/histórico/decisões intactos (D-06/D-08). CA-06: testes negativos de tenant, autoridade, versão, invenção, resposta incompleta e revisão humana (P-*). CA-07: build, testes direcionados, banco descartável, rollout e smoke real com evidência no AoT (D-09). Referência visual é a composição M7.2 existente; screenshot vazio enviado pelo usuário é contraexemplo funcional, não alvo.
+
+---
+
+## Source: `docs/qa/agreement-m74-contextual-curation.md`
+
+# Acordo M7.4 — Curadoria contextual de competências
+
+Versão 1.0.0, agreed, 2026-09-18. Bruno aprovou o fluxo, esclareceu o retorno/paginação, aprovou o mockup e solicitou implementar a melhoria. Baseline `a26472c`. Risco D: decisão humana sobre aliases existentes e integração transacional; sem novo provedor ou autoridade.
+
+## DEVE
+
+- D-01: revisar pendências dentro do Perfil, reutilizando busca, aprovação de alias e proposta da Knowledge. Declaração original, termo interpretado, motivo, candidatos, origem/tipo/agrupamento, alcance e justificativa permanecem explícitos.
+- D-02: Gravar confirma a decisão, atualiza projeção/contagens e fecha o painel. Cancelar não grava e retorna ao mesmo registro. Gravar e próximo mantém o painel no próximo pendente; sem próximo usa anterior; sem pendências fecha.
+- D-03: preservar filtros, ordenação, página e posição. Seleção por chave estável, nunca índice isolado. Ao remover o item, focar próximo sobrevivente ou anterior. Página vazia recua para a última válida. Falha mantém formulário e não simula sucesso.
+- D-04: alcance empresa como padrão; Global somente para Super Admin. Informar reutilização em outros perfis. Respeitar autoridade server-side existente. Proposta não publica conceito nem resolve a pendência por si só.
+- D-05: preservar snapshots, decisões humanas, natureza declarada, tenant e proveniência. Atualização local sem recarregar página inteira nem consumir IA. Decisão concorrente/perfil obsoleto falha com instrução recuperável.
+- D-UX-01: mockup `exec-8ed2a0bd-1697-4348-bef8-fb0e64a4a2a0.png` é referência normativa para a área de curadoria: lista à esquerda, item azul destacado, painel à direita ~42% da área útil, sem máscara que impeça consulta da lista. Cabeçalho/fonte no topo, busca/candidatos no meio, alcance/justificativa abaixo e ações fixas no rodapé. Lista paginada de dez itens, pesquisa e estado de pendência. Sidebar e cabeçalho existentes não são redesenhados; nomes, conceitos e números são ilustrativos.
+- D-UX-02: no móvel o painel ocupa a tela; fechar retorna ao registro/página preservados. Teclado, foco, labels e descarte de alterações não salvas protegidos, inclusive ao trocar de item.
+- D-06: testes direcionados de domínio, integração e autorização, smoke visual desktop/mobile e AoT. Registrar versão de workflow `profile-competency-curation-1.0.0` e entrega v1.7.4, owners/contexto.
+
+## PROIBIDO
+
+- P-01: navegar à Knowledge para completar esta curadoria, perder posição, aprovar silenciosamente, descartar edição ao trocar de item ou ocultar falha de gravação.
+- P-02: publicar proposta automaticamente, aceitar ocupação como competência, ampliar papéis/escopos, usar similaridade como equivalência ou transformar declaração em demonstração.
+- P-03: reescrever Perfil/snapshots, alterar matching/parser/IA, mudar Knowledge de outra empresa ou realizar produção sem autorização específica desta melhoria.
+
+## FORA DE ESCOPO
+
+- F-01: produção, merge em main, nova IA/taxonomia, redesign de navegação global, reprocessamento pago ou alteração de perfis reais nesta etapa.
+
+## AUTONOMIA
+
+- A-01: componentes, endpoints transacionais/aditivos, testes, estados técnicos e índices necessários, mantendo regras Knowledge existentes e sem dependências novas.
+- A-UX-01: tokens/acessibilidade e adaptação ao shell real; dimensões finas e decoração sem mudar a topologia aprovada.
+
+## Pendências e aceite
+
+Nenhum Q funcional pendente. CA-01 (D-01/04/05): alias gravado com auditoria e projeção atualizada no mesmo fluxo; proposta continua pendente, negativos de autoridade/tenant/conflito. CA-02 (D-02/03): cancelar, gravar, gravar/próximo, último item, página esvaziada, filtro, duplicatas e erro. CA-UX-01 (D-UX-*): comparação visual com estado equivalente de página 2/item 14, desktop e móvel, foco e descarte seguro. CA-03 (D-06): builds, testes, contexto, diff e AoT sem falso rollout.
 
 ---
 
@@ -10830,6 +10906,74 @@ Não há homologação remota separada: PostgreSQL descartável/sintético antec
 ## Desvios e conclusão
 
 Nenhum desvio funcional pendente do acordo. O defeito de sobreposição foi corrigido e retestado antes do aceite. A cobertura limitada da Knowledge continua explícita: normalizar não autoriza inventar equivalências ou publicar novos aliases sem curadoria. Nenhum limite de chamadas foi elevado. Material alheio preservado: `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu`.
+
+---
+
+## Source: `docs/qa/aot-m74-contextual-curation.md`
+
+# AoT — M7.4 Curadoria contextual de competências
+
+2026-09-18. Acordo `agreement-m74-contextual-curation.md` v1.0.0; execução `execution-m74-contextual-curation.md`. Baseline `a26472c`. Implementação local na branch `codex/m74-contextual-curation`, release central **Prisma v1.7.4**. Produção fora deste aceite, sem autorização específica nesta etapa.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste e evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- |
+| D-01 | `CompetencyCuration`, adapter Supabase e reutilização Knowledge | Painel/candidatos/fonte/escopo/justificativa inspecionados; alias e proposta nas verificações SQL | PASS | UI sintética + PostgreSQL local |
+| D-02 | retorno/avanço e projeção na resposta transacional | Cancelar no item 14/página 2; gravar 59→58, foco As-Is/To-Be; gravar/próximo 58→57, Operating model aberto; proposta mantém 57 | PASS | Navegador CUA, fixture M74 |
+| D-03 | chave composta com ocorrência, próximo/anterior, clamp e filtros | Testes de domínio: último item, página vazia, duplicatas, filtro e lista vazia. UI: erro preserva formulário; busca Operating preservada ao descartar; foco restaurado após modal | PASS | Domínio + browser |
+| D-04 | `require_knowledge_admin`, empresa padrão, Global adicional | PostgreSQL: owner/admin empresa, super_admin Global, recusas anon/member/inativo/outsider/Global indevido; proposta não publica e não duplica | PASS | Dados inteiramente sintéticos, rollback |
+| D-05 | RPC transacional, leitura V3, aliases auditados, snapshots intactos | SQL: conflito humano, Perfil antigo, trecho forjado, ocupação/empresa alheia negados; resposta com método/justificativa; replay 40001; snapshots e número de calls preservados | PASS | Sem IA ou mutação remota |
+| D-UX-01 | lista esquerda, seleção azul, painel direito não modal, ações fixas | Captura desktop 1586×992, página 2/item 14/BPMN, comparada ao mockup aprovado; lista utilizável sem máscara | PASS | Shell real preservado |
+| D-UX-02 | tela inteira até 1200px, foco/ciclo teclado, confirmação e guard de navegação | Captura 390×844; Shift+Tab → Cancelar, Tab → Fechar, Escape → Operating model/página 2; sem overflow horizontal; descarte confirmado e continuar editando | PASS | CUA + guard existente |
+| D-06 | workflow versionado, registro central, owners/ADR/contexto | Builds, testes, contexto e revisão de diff abaixo | PASS | Entrega local, não rollout |
+
+## Proibições verificadas
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | URL local permaneceu no Perfil; gravação/erro/cancelamento/continuação exercitados. Link externo removido. | PASS |
+| P-02 | Proposta sem conceito publicado; papéis/escopo server-side; ocupação negada; curadoria somente declarada. | PASS |
+| P-03 | Snapshots inalterados por assert SQL; diff sem modelos/parser/matching; nenhuma ferramenta de escrita em produção. | PASS |
+
+## Fora de escopo e autonomia
+
+F-01 preservado: sem produção, merge main, IA nova, reprocessamento pago ou perfis reais. A-01/A-UX-01 usados para adapter, RPC aditiva, chave estável, componentes e breakpoint; sem dependências novas. Descoberta priorizou a Knowledge e o guard de navegação já existentes. Skills supabase e supabase-postgres-best-practices orientaram grants, transação curta e testes negativos; computer-use guiou o smoke real de interface local.
+
+## Fidelidade visual
+
+Referência normativa: imagem aprovada `C:/Users/Bruno/.codex/generated_images/01a0b361-bb0c-79e3-acf8-d4abb0d51be0/exec-8ed2a0bd-1697-4348-bef8-fb0e64a4a2a0.png`.
+
+Render reproduzível: `tests/ui/m74.html` + `tests/ui/m74/main.tsx`, com o Vite config de M72. Capturas efetivamente renderizadas nesta tarefa pelos passos CUA “Registrar comparação visual desktop, página 2 e item 14” e “Abrir revisão móvel após estabilização do layout”. Estado desktop equivalente: 59 pendências, dez itens/página, item 14 BPMN selecionado na página 2, declaração BPM/BPMN; candidatos e pessoa sintéticos. Captura móvel posterior: Operating model, página 2, após os testes de gravação. Não são capturas de produção.
+
+Topologia, hierarquia e ordem mantidas: lista pesquisável à esquerda, painel à direita, declaração/termo, busca/definição/fonte, alcance/justificativa, ações fixas. Ajustes sob A-UX-01: sidebar/cabeçalho reais em vez do shell ilustrativo; largura limitada a 620px/40vw, título de lista pode quebrar linha; fonte do candidato identificada como sintética. Móvel vira tela inteira. Nenhuma substituição de topologia ou campo material. Teste não afirma identidade de pixels.
+
+## Desvios e decisões durante a execução
+
+Nenhum desvio funcional do acordo. Foram corrigidos durante o smoke: fonte/definição herdando font-size zero do Radio.Group, título estreito e foco perdido durante busy/desmontagem do modal. Fixtures de papéis ajustadas às constraints/triggers reais antes do resultado SQL final. Nenhuma nova decisão material ou ampliação de autoridade.
+
+## Validação final
+
+- `pnpm run lint`: PASS, 566 arquivos.
+- `pnpm run build` e `pnpm run typecheck:web`: PASS.
+- `pnpm run build:web`: PASS; avisos de chunk grande e import dinâmico já coexistente, sem erro.
+- Node: `profileCompetencyCuration`, `competencyNormalization`, `personProfessionalEvidence`, `productRelease`: 19/19 PASS; `uxFoundation`: 10/10 PASS.
+- `scripts/test-m74-postgres.ps1`: PASS, integração M73/M74 e negativos com ROLLBACK final. Casos Global/admin, conflito humano e proposta repetida incluídos.
+- `generate:prisma-context`, `check:prisma-context` e testes `prismaContext`: PASS, 3/3. O resumo M73 foi compactado com referência ao AoT original para respeitar 60 mil caracteres, sem editar exports manualmente.
+- `git diff --check`: PASS. Diff revisado nas superfícies, adapter, identidade/retorno, autorização e migration. Não executado `pnpm run validate` integral.
+- Smoke final: v1.7.4 visível no shell; no móvel painel 390px, scroll de fundo bloqueado apenas enquanto aberto, Cancelar restaurou overflow original e foco BPMN/página 2. Viewport restaurado, aba de fixture fechada e Vite temporário encerrado. Avisos de Fast Refresh/createRoot durante edição da fixture não ocorreram como falha funcional do build entregue.
+
+## Git / QA / ambiente
+
+Sem QA remoto separado disponível. PostgreSQL 17 descartável em loopback, database `m72_m73_baseline`; runner aplica migrations/fixtures em transação e termina em ROLLBACK. UI local usa adapter sintético; testes de persistência usam funções reais com roles/JWT sintéticos. Isso não substitui E2E hospedado navegador→PostgREST→banco, que permanece NOT TESTED. Produção não acessada nem modificada nesta melhoria. Arquivos preexistentes `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados fora do commit.
+
+## Rollout posterior
+
+Após aprovação: migration aditiva M74 antes do novo frontend, build com configuração hosted já vigente, smoke autenticado tenant-scoped e verificação de v1.7.4 no login/menu. Não assumir credenciais ausentes: inspecionar o formulário de login antes de solicitar sessão. Rollback: imagem web anterior, mantendo aliases/propostas auditados e RPCs compatíveis; não apagar decisões. Integração em main também depende de aprovação específica.
+
+## Conclusão
+
+Implementação local concluída, D-* e P-* PASS no escopo acordado. Branch de entrega `codex/m74-contextual-curation`, destino verificado `git@github.com:brunoharita/HRT-Prisma.git`; commit/push identificados no fechamento da tarefa. Sem merge main ou produção. Aplicação hospedada e E2E remoto permanecem fora deste aceite e dependem da autorização de rollout.
 
 ---
 
@@ -12552,6 +12696,14 @@ A UI implementa Resumo, Competências, Evidências, explicação e abertura da o
 # Execução M7.3
 
 Implementar integralmente `docs/qa/agreement-m73-competency-normalization.md` versão 1.0.0, aprovado por Bruno em 2026-09-18. Todos os D-*, P-*, F-*, A-* e CA-* desse contrato são obrigatórios. Não há delegação para reinterpretar comportamento. Registrar cada requisito no AoT, preservar material alheio e comprovar funcionamento em produção autorizada. Reutilizar fila PostgreSQL, Knowledge Agent e mecanismo agendado já existentes antes de construir outro serviço. Falhas e limites devem preservar publicação e declarações, sem declarar enriquecimento concluído.
+
+---
+
+## Source: `docs/qa/execution-m74-contextual-curation.md`
+
+# Execução M7.4
+
+Implementar integralmente `docs/qa/agreement-m74-contextual-curation.md` versão 1.0.0. D-*, P-*, F-*, A-* e CA-* são vinculantes. O pedido de implementação aprova o fluxo discutido e o mockup, não produção nem merge em main. Reutilizar Knowledge e publicar na branch de entrega após validação proporcional. Não substituir comparação visual por testes funcionais.
 
 ---
 

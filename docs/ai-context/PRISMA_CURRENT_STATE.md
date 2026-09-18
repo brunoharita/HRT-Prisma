@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.38.0
+version: 2.39.0
 last_verified: 2026-09-18
 ---
 
@@ -10,7 +10,9 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.3 em produção em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação pelo Knowledge Agent, listas separadas e aliases Global/empresa. Sete Perfis reprocessados; snapshots e decisões intactos. Bruno: 43 declarações, cinco conceitos em três agrupamentos e 59 itens pendentes explícitos. `person-professional-evidence-2.0.0` separa essas contagens. JWT e segredo do monitor preservados; sem novo modelo, taxonomia ou matching. Evidência/limites: `docs/qa/aot-m73-competency-normalization.md` e ADR-063.
+M7.4 local, **Prisma v1.7.4**: curadoria em painel no Perfil, retorno à página/filtros/registro, gravação e avanço, aliases/propostas da Knowledge com escopo e auditoria. RPC V3 aplica decisões humanas sem IA ou alteração de snapshots; V1/V2 preservadas. Produção não alterada. Acordo, testes e limites em `docs/qa/aot-m74-contextual-curation.md` e ADR-064.
+
+M7.3 publicado em 2026-09-18: **Prisma v1.7.3**, normalização pós-publicação e aliases Global/empresa. Sete Perfis reprocessados, com snapshots, decisões e JWT/segredo preservados. Sem mudança de modelo, taxonomia ou matching. `person-professional-evidence-2.0.0` separa contagens. Smoke, dados e limites: `docs/qa/aot-m73-competency-normalization.md`, ADR-063.
 
 M7.2 implementado, validado e ativado no ambiente único após autorizações explícitas de 2026-09-18. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada no Supabase como `20260918081743_m72_person_professional_evidence`; main/GitHub/Hostinger apontam ao runtime `8f7473a`. Prisma v1.7.2 está visível no login e na barra lateral; o build preservou baseline + Parser IA hosted, recriou somente `prisma-web` e manteve rollback `prisma-web:rollback-before-m72-20260918`. RPC/grants/advisors e smoke read-only tenant-scoped passaram sem escrita nem exposição de PII. A revisão visual autenticada abriu Resumo, Competências e Evidências de um Perfil aprovado e confirmou estados vazios/parciais sem mutação. `/sign-in` reutilizou a sessão disponível e redirecionou antes de exibir o formulário; isso prova o acesso autenticado, mas não o preenchimento visual dos campos.
 
