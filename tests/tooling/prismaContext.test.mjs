@@ -31,7 +31,7 @@ test("fonte compacta contém contexto vigente e encaminha aprofundamento ao Code
   const compact = await buildPrismaPromptSource();
 
   for (const expected of [
-    "Prisma v1.6.4",
+    "Prisma v1.7.1",
     "vacancy-matching-explainable-5.0.0",
     "matching-score-1.2.0",
     "FONTE_GPT_PRISMA.md",

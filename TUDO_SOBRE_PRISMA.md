@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 198
-source_manifest_sha256: 4169ebc493e6cb5c821751079efc897f3b5152ce47caf0257de78e174cc0d3d7
+documentation_source_count: 201
+source_manifest_sha256: 41245fb2478d73a124d3358a874eca45b3e106a4f44ca5b18d36b00f7746273b
 -->
 
 # Tudo sobre o Prisma
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.35.0
+version: 2.36.0
 last_verified: 2026-09-18
 ---
 
@@ -543,7 +543,9 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. Produto permanece v1.6.4; M7.2, matching/score e IA não foram alterados.
+M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registra M7.1 como primeira entrega oficial e leva o código local a v1.7.1; M7.2, matching/score e IA não foram alterados.
+
+Sidebar institucional v1.7.1 implementada e validada localmente na branch `codex/sidebar-branding-v171`: identidade Prisma, navegação, empresa, usuário e assinatura HRT seguem a referência normativa nos estados expandido, recolhido e móvel. A versão vem do registro executável compartilhado com o login. Não houve alteração de backend, Supabase, schema, RLS, permissões ou produção; o site hospedado continua em v1.6.4 até rollout autorizado.
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
@@ -561,7 +563,7 @@ Correção adicional de produção em 2026-09-17: o salvamento da revisão de Ju
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
-Prisma v1.6.4 é a versão pública corrente. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.7.1 é a versão de produto aceita no código local; Prisma v1.6.4 continua sendo a versão pública hospedada até promoção autorizada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
 
@@ -607,9 +609,9 @@ O schema atual inclui a proteção `20260914015642_m61_requirement_classificatio
 
 ## Base compartilhada de UX — 2026-09-13
 
-Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.1.0`, ADR-050 e ADR-061. A versão 1.1.0 preserva a base entregue em 1.0.0 e adiciona governança para referências visuais futuras; não prova correção retroativa de telas existentes. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
+Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.2.0`, ADR-050 e ADR-061. A versão 1.1.0 preservou a base entregue em 1.0.0 e adicionou governança para referências visuais futuras; a 1.2.0 consolida a arquitetura institucional da sidebar sem mudar contratos de domínio. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
-Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md` e da fidelidade visual em `docs/qa/*visual-reference-fidelity.md`. Validação dirigida e limites nos AoTs. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. Versão pública permanece v1.6.4; o contrato de apresentação está em 1.1.0, sem mudança semântica de contratos persistidos.
+Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md`, da fidelidade visual em `docs/qa/*visual-reference-fidelity.md` e da sidebar em `docs/qa/*sidebar-branding-v171.md`. Validação dirigida e limites nos AoTs. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. O código local está em v1.7.1, a implantação hospedada permanece em v1.6.4 e o contrato de apresentação está em 1.2.0, sem mudança semântica de contratos persistidos.
 
 ## Formação, datas e duração de experiência
 
@@ -631,7 +633,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por trajetória em três grupos. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. O rodapé do login mostra somente produto, ano, versão e HRT Solutions, sem commit/build/dirty. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.7.1 registra a primeira entrega aceita do Movimento 7: M7.1, taxonomia profissional e inteligência de posições. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. Login e sidebar consomem a mesma fonte; a sidebar expandida acrescenta a assinatura institucional HRT e a recolhida mostra somente a versão. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A implantação hospedada permanece em v1.6.4 até rollout autorizado. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 
@@ -658,7 +660,7 @@ Prisma v1.6.4 registra a quarta entrega aceita do Movimento 6: descoberta por tr
 
 - M5.4.6 Vagas tem schema ativo no Prisma-QA e interface implementada localmente: a Vaga pronta usa Sobre a posição, Responsabilidades, Requisitos obrigatórios/desejáveis por dimensão e Resultados esperados, ocultando vazios. O estruturador propõe a dimensão, mas a importância é humana; `unclassified` é permitido em rascunho e mantém a aderência detalhada pendente sem bloquear a descoberta de Pessoas. Reestruturação produz delta, preserva itens humanos e nunca remove item não encontrado automaticamente. Correção de dimensão é auditável e encaminhada somente ao Inbox da Knowledge organizacional, sem alterar Global. A prova SQL revertida confirmou RLS/grants e persistência; o smoke autenticado responsivo desta entrega ainda está bloqueado por indisponibilidade de sessão. Produção não foi acionada.
 
-- Protocolos permanentes de fidelidade de acordos e referências visuais ativos: mudança material referencia Contrato de Acordos, Prompt de Execução e AoT. Demandas de criação ou alteração visual com imagem-alvo classificam a referência, decompõem sua arquitetura em D/P/A/Q/CA-UX e exigem comparação no mesmo estado, com dados equivalentes e no mesmo viewport. “Não copiar literalmente” não autoriza reestruturar topologia, hierarquia, proporções, agrupamentos, densidade, ordem ou ações. `AGENTS.md`, `prisma-ux-foundation-1.1.0`, templates e `check-foundation` protegem a regra; `FONTE_GPT_PRISMA.md` 1.1.0 recebe diretamente a seção canônica pelo gerador. Isso não altera telas existentes, produto, schema, permissões, runtime de IA ou produção.
+- Protocolos permanentes de fidelidade de acordos e referências visuais ativos: mudança material referencia Contrato de Acordos, Prompt de Execução e AoT. Demandas de criação ou alteração visual com imagem-alvo classificam a referência, decompõem sua arquitetura em D/P/A/Q/CA-UX e exigem comparação no mesmo estado, com dados equivalentes e no mesmo viewport. “Não copiar literalmente” não autoriza reestruturar topologia, hierarquia, proporções, agrupamentos, densidade, ordem ou ações. `AGENTS.md`, `prisma-ux-foundation-1.2.0`, templates e `check-foundation` protegem a regra; `FONTE_GPT_PRISMA.md` recebe diretamente a seção canônica pelo gerador. Isso não altera schema, permissões, runtime de IA ou produção.
 
 - Padrão Prisma de Perfil Profissional 1.0 implementado localmente: `prisma-profile-view` deriva do Perfil vigente uma apresentação única para Central, Perfil completo, versões e comparação; `profile-discovery` pesquisa Perfis atuais do tenant por experiência, formação, competências, credenciais e contexto, reutiliza equivalências publicadas no Knowledge e explica por que cada Pessoa apareceu. A comparação aceita exatamente duas Pessoas e não declara vencedor, score ou decisão automática. Nenhum schema, migration, RLS, contrato persistido ou fonte de verdade foi criado. O smoke autenticado aprovou Central, Perfil, busca, resultados, comparação e histórico em `1440x900`, `1280x720`, `768x1024`, `390x844` e `360x800`, sem overflow horizontal, controle fora do viewport ou erro de console; nenhuma mutação foi acionada. O gate completo aprovou lint de 310 arquivos, 240 testes de regressão, 19 casos golden, build web e demonstração vertical `VERTICAL_SLICE_OK`.
 - CLI de vertical slice.
@@ -2924,7 +2926,7 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 `position-taxonomy-1.0.0` é um novo contrato aditivo de interpretação/proveniência. `vacancy-definition` passa de 1.2.0 a 1.3.0 no novo salvamento atômico, sem alterar required/desired, fórmulas ou consumidores históricos. Versões antigas, inclusive estrutura assistida 2.0.0 histórica, não são reescritas; NULL no novo metadado significa sem interpretação M7.1 registrada. `vacancy-matching-explainable-5.0.0`, `matching-score-1.2.0` e snapshots aceitos pelo M6.2 permanecem.
 
-A versão pública continua v1.6.4. A autorização posterior do PO sincronizou main, Supabase e hosting; ativação não acrescenta automaticamente uma entrega ao release registry nem infere v1.7.1 do nome do movimento. Contratos M7.1 estão ativos no remoto, com versões históricas preservadas. Provas locais e smoke remoto com seus limites constam no AoT M7.1.
+Na autorização de 2026-09-18 para a evolução institucional da sidebar, o Product Owner aceitou M7.1 como a primeira entrega oficial do Movimento 7. O registro executável passa a calcular Prisma v1.7.1 e as superfícies locais consumidoras usam essa fonte central. Essa decisão explícita supersede a orientação anterior de não inferir a versão apenas pelo nome do movimento. O rollout desta alteração visual não integra o movimento: a implantação hospedada continua em v1.6.4 até autorização posterior, sem nova mudança de Supabase, contratos persistidos ou histórico.
 
 ## Ponte Paddle hospedada — 2026-09-16
 
@@ -2947,10 +2949,10 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 `Prisma v<geração>.<movimento>.<entrega>`
 
 - `geração`: geração principal do produto, atualmente `1`;
-- `movimento`: movimento de produto em execução, atualmente `6`;
+- `movimento`: movimento de produto em execução, atualmente `7`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão atual oficial é **Prisma v1.6.4**, correspondente à quarta entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão de produto aceita no registro executável é **Prisma v1.7.1**, correspondente à primeira entrega oficial do Movimento 7. A implantação hospedada permanece em v1.6.4 até um rollout autorizado. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -2978,6 +2980,12 @@ M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora d
 | 2 | M6.1.1: requisito conectado a evidência profissional explícita | aceite do PO para implementação e atualização da versão |
 | 3 | M6.2: jornada contextual de verificação | aceite do PO para implementação e atualização da versão |
 | 4 | M6.1.2: descoberta por trajetória em três grupos | aceite do PO para implementação e atualização da versão |
+
+### Registro oficial do Movimento 7
+
+| Entrega | Marco | Situação considerada para o contador |
+|---:|---|---|
+| 1 | M7.1: taxonomia profissional e inteligência de posições | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -3021,6 +3029,8 @@ Todo consumidor deve declarar versões aceitas. Versão ausente, desconhecida, f
 Versões anteriores permanecem identificáveis. Rollback reativa artefato anterior sem reescrever resultados históricos. Mudança de prompt ou modelo relevante cria nova versão mesmo quando o schema de saída não muda.
 
 ## Versões atuais
+
+O fechamento visual da sidebar de 2026-09-18 registra M7.1 como primeira entrega aceita do Movimento 7 e avança o produto para Prisma v1.7.1. A sidebar e o login consomem a mesma fonte executável de release. O ajuste não altera schemas, payloads, contratos técnicos, Supabase ou a implantação hospedada, que permanece na versão anterior até promoção autorizada.
 
 O adendo M6.1.2 de 2026-09-14 avança `vacancy-matching-explainable` para 5.0.0 e `matching-score` para 1.2.0. A trajetória profissional define Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual antes do score. Somente A e B recebem número comparável; C permanece recolhido e rastreável. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B. A compatibilidade M6.2 passa a aceitar snapshots 4.0.0 históricos e 5.0.0 atuais por migration forward-only. Produto avança para Prisma v1.6.4.
 
@@ -8246,7 +8256,7 @@ Depois da confirmação, a Pessoa entra em `deleting`, novas mutações incompat
 
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.1.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0 e `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.1.0 preserva a base anterior e restringe a autonomia visual quando existe uma referência normativa.
+Contrato de apresentação: `prisma-ux-foundation-1.2.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0 e `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.2.0 preserva a base anterior, restringe a autonomia visual quando existe uma referência normativa e consolida a arquitetura institucional da sidebar.
 
 ## Organização e jornadas
 
@@ -8273,6 +8283,10 @@ Preservar marca/ativos, azul e navegação lateral da ADR-007. Reduzir brilho, s
 Azul significa ação/seleção; verde conclusão confirmada; amarelo atenção; vermelho falha ou destruição; neutro informação ausente. Texto/ícone complementam a cor. Arquivar e excluir têm significados distintos. Usar componentes compartilhados para página, cabeçalho, cartão, estado, painel e área pública.
 
 Tabelas priorizam objeto, situação e próxima ação. Rolagem interna cabe a informação realmente bidimensional. Telas pequenas priorizam uma coluna, filtros progressivos, comparação por requisito e alternância fonte/campo quando a implementação específica requer. Controles, títulos e ações não podem se sobrepor com conteúdo longo.
+
+### Sidebar institucional
+
+No desktop expandido, a sidebar mantém identidade Prisma, navegação agrupada, empresa ativa, usuário ativo e rodapé institucional, nessa ordem. O rodapé usa `Powered by`, o asset HRT oficial já utilizado no login e a versão calculada pelo registro executável. No desktop recolhido, permanecem o símbolo Prisma completo, um único controle contextual de expansão, navegação por ícones, empresa e usuário operáveis e somente a versão no rodapé. O drawer móvel preserva a composição expandida e suas funções. Marca, controle e conteúdo não podem se sobrepor; a versão não pode ser duplicada como string local.
 
 ## Fidelidade a referências visuais
 
@@ -9328,6 +9342,55 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 - Evidência de aprovação do delta 1.2.0: “vamos fazer pular toda a parte que é local [...] desativar o Tesseract [...] direto da extração mais simples do PDF direto pro Parser IA”.
 - Evidência de aprovação do delta 1.3.0: “remova esse bloqueio do prisma. O unico bloqueio deve ser o saldo real disponível na tela de billing”.
 - Referência imutável para o prompt: versão `1.3.0` deste contrato.
+
+---
+
+## Source: `docs/qa/agreement-sidebar-branding-v171.md`
+
+# Contrato de Acordos — Sidebar institucional e Prisma v1.7.1
+
+Versão 1.0.0. Estado: **agreed**. Product Owner: Bruno. Aprovação: pedido explícito de 2026-09-18 para executar o briefing da sidebar e incorporar o protocolo de fidelidade visual. Referência normativa: imagem anexada nesta tarefa; balões, linhas e checklist são anotações, não interface. Textos, nomes e empresa da imagem são ilustrativos.
+
+## DEVE — Inegociável e critérios de aceite
+
+| ID | Decisão aprovada | Critério de aceite |
+| --- | --- | --- |
+| D-UX-01 | A sidebar expandida mantém, nesta ordem, identidade Prisma, navegação, empresa ativa, usuário ativo e rodapé institucional. | CA-UX-01: captura desktop expandida comprova agrupamento, ordem, hierarquia e ausência de sobreposição. |
+| D-UX-02 | O rodapé expandido mostra `Powered by`, o asset HRT oficial já usado no login e a versão central do Prisma. | CA-UX-02: usa `/assets/login/hrt-logo-light.png`, preserva a marca completa e apresenta `v1.7.1` sem string de versão local. |
+| D-UX-03 | A sidebar colapsada mantém símbolo Prisma completo, um único botão de expansão em região própria, navegação por ícones, empresa e usuário funcionais e somente a versão no rodapé. | CA-UX-03: captura colapsada comprova estrutura e respiro; interação de empresa, usuário e toggle permanece acessível. |
+| D-UX-04 | A composição visual segue a referência em topologia, ordem, agrupamentos, densidade e posição relativa, adaptada aos tokens e componentes Prisma. | CA-UX-04: comparação no mesmo estado e viewport registra divergências materiais no AoT. |
+| D-01 | A versão pública passa a `v1.7.1` pela fonte executável única de releases. | CA-D01: `PRISMA_RELEASE.displayVersion` e todas as superfícies consumidoras exibem `v1.7.1`; teste do registro aprovado. |
+| D-02 | O drawer móvel preserva navegação, empresa, usuário e rodapé expandido sem sobreposição. | CA-D02: inspeção em viewport móvel e operação por teclado. |
+
+## PROIBIDO
+
+- P-01: recriar, simplificar ou duplicar o logo HRT; hardcodar `v1.7.1` na sidebar.
+- P-02: exibir `Powered by HRT` no modo colapsado.
+- P-03: remover ou degradar seleção de empresa, menu do usuário, navegação, toggle ou acessibilidade.
+- P-04: adicionar segundo botão de expansão/recolhimento ou sobrepor o controle ao logo.
+- P-05: alterar backend, Supabase, schema, RLS, permissões ou produção neste movimento.
+
+## FORA DE ESCOPO
+
+- F-01: redesenho de páginas de conteúdo ou navegação móvel fora do drawer existente.
+- F-02: novos assets, bibliotecas, endpoints, persistência ou migrações.
+- F-03: implantação em QA ou produção sem autorização posterior.
+
+## AUTONOMIA
+
+- A-01: engenharia pode reorganizar internamente header, navegação, utilidades e footer, sem alterar a arquitetura visual acordada.
+- A-02: medidas finas, tokens, CSS e comportamento responsivo podem ser ajustados para evitar corte, overflow e sobreposição.
+- A-03: testes dirigidos, documentação, Context Pack, commit e push da branch estão autorizados; merge e produção não.
+
+## PENDÊNCIAS
+
+Nenhuma. O estado expandido e colapsado usa um único toggle contextual; o modo colapsado usa o símbolo triangular Prisma completo; o asset HRT é o mesmo da tela de login; a solicitação atual aprova `v1.7.1` como primeira entrega oficial do Movimento 7.
+
+## APROVAÇÃO
+
+- Product Owner: Bruno.
+- Data: 2026-09-18.
+- Evidência: pedido atual e briefing anexado.
 
 ---
 
@@ -10680,6 +10743,73 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 | `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
 
 A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
+
+---
+
+## Source: `docs/qa/aot-sidebar-branding-v171.md`
+
+# AoT — Sidebar institucional e Prisma v1.7.1
+
+Data: 2026-09-18. Contrato: `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0. Execução: `docs/qa/execution-sidebar-branding-v171.md` 1.0.0. Baseline: `19e0a7c66bbe08d0d5a406cbe638c05f17410762`.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- |
+| D-UX-01 | `PrismaAppShell` mantém marca, navegação, utilidades e footer em regiões próprias; CSS preserva ordem e respiro. | Render autenticado local expandido em 1766 × 1272, com logo, navegação, empresa, usuário e rodapé sem sobreposição. | PASS | local |
+| D-UX-02 | Footer expandido reutiliza `/assets/login/hrt-logo-light.png` e `PRISMA_RELEASE.displayVersion`. | Inspeção visual confirmou a marca HRT completa; teste-fonte impede versão local e exige o asset oficial. | PASS | local |
+| D-UX-03 | Estado recolhido mostra símbolo Prisma, toggle único, ícones, empresa, usuário e somente a versão. | Render autenticado recolhido; seletor de empresa e menu do usuário foram abertos; árvore acessível expôs nomes e `v1.7.1`. | PASS | local |
+| D-UX-04 | Medidas finas e recortes usam componentes/tokens existentes sem alterar a topologia normativa. | Comparação visual dos estados equivalentes registrada abaixo. | PASS | fidelidade estrutural, não pixel perfect |
+| D-01 | Registro executável acrescenta M7.1 como primeira entrega do Movimento 7; login e sidebar consomem a mesma fonte. | `productRelease.test` e inspeção autenticada do login/sidebar confirmaram `v1.7.1`. | PASS | rollout hospedado fora do escopo |
+| D-02 | Drawer móvel reutiliza `SidebarContent` expandido com marca, navegação, empresa, usuário e footer. | Viewport 390 × 844; abertura por `Enter`, fechamento por `Escape` e inspeção visual/AX concluídas. | PASS | local |
+
+## Proibições verificadas
+
+| ID | Teste negativo / evidência | Status |
+| --- | --- | --- |
+| P-01 | O diff não cria assets; usa o PNG oficial. Teste rejeita `v1.7.1` hardcoded no shell. | PASS |
+| P-02 | Branch condicional renderiza apenas `PRISMA_RELEASE.displayVersion` quando recolhida; captura confirma ausência de `Powered by`. | PASS |
+| P-03 | Navegação, empresa e usuário permaneceram operáveis; nomes acessíveis foram verificados na árvore AX. | PASS |
+| P-04 | Teste-fonte exige uma única ocorrência do controle de recolhimento; captura confirma região própria sem sobreposição. | PASS |
+| P-05 | Diff limitado a frontend, release registry, testes e documentação; nenhum arquivo de backend, Supabase, schema, RLS, permissão ou produção foi alterado. | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 | Nenhuma página de conteúdo ou jornada móvel externa ao drawer foi redesenhada. | PASS |
+| F-02 | Nenhum asset, biblioteca, endpoint, persistência ou migration foi criado. | PASS |
+| F-03 | Não houve merge, implantação em QA, Supabase ou produção. | PASS |
+
+## Evidência de fidelidade visual
+
+| Referência / viewport | Estado equivalente | Render entregue | Divergências | Status |
+| --- | --- | --- | --- | --- |
+| imagem normativa / desktop 1766 × 1272 | expandido | Captura autenticada local em `http://127.0.0.1:5555/`: logo e toggle em regiões próprias; grupos de navegação; empresa; usuário; assinatura HRT e versão. | Largura usa o token real de 288 px e dados/autorização reais do produto; nenhuma divergência topológica material. | PASS |
+| imagem normativa / desktop 1766 × 1272 | recolhido | Captura autenticada local: símbolo completo, toggle abaixo da marca, ícones, empresa, avatar e `v1.7.1`. | Largura usa o token real de 88 px; o nome curto da empresa permanece visível sob o ícone conforme a implementação acessível existente. | PASS |
+| fundação responsiva / 390 × 844 | drawer expandido | Captura autenticada local: logo, menu agrupado rolável, empresa, usuário e assinatura HRT dentro do drawer. | Drawer usa o componente Ant Design e a largura tokenizada, não a proporção ilustrativa da prancha. | PASS |
+
+## Desvios do contrato
+
+Nenhum desvio material. A referência foi tratada como alvo normativo de arquitetura visual; dimensões finas, conteúdo real e comportamento acessível foram adaptados conforme A-01/A-02.
+
+## Validação final
+
+- `pnpm run typecheck:web`: PASS.
+- `pnpm run build`: PASS.
+- `pnpm run build:web`: PASS; aviso existente de chunk Vite acima de 900 kB, sem erro de build.
+- `node --test dist/tests/productRelease.test.js dist/tests/uxFoundation.test.js tests/tooling/prismaContext.test.mjs`: PASS, 16/16.
+- `pnpm run generate:prisma-context`: PASS; `TUDO_SOBRE_PRISMA.md` e `FONTE_GPT_PRISMA.md` regenerados.
+- `pnpm run check:prisma-context`: PASS.
+- Browser local autenticado: estados expandido, recolhido e móvel, menus de empresa/usuário e teclado verificados. O console manteve dois avisos preexistentes de depreciação Ant Design (`Alert.message` e `Drawer.width`) em conteúdo já existente; nenhum erro novo foi associado à sidebar.
+
+## Git / QA / ambiente
+
+Branch `codex/sidebar-branding-v171`. Entrega destinada ao `origin` existente após revisão do diff. QA, Supabase, merge em `main` e produção permaneceram fora do escopo.
+
+## Conclusão
+
+PASS. Todos os `D-*` e `P-*` aplicáveis possuem implementação e evidência local; não há requisito obrigatório parcial ou sem prova.
 
 ---
 
@@ -12049,6 +12179,16 @@ Execute o contrato `docs/qa/agreement-production-resume-quality-pipeline.md`, ve
 9. Preencher `docs/qa/aot-production-resume-quality-pipeline.md`, revisar o diff, commitar e enviar a branch autorizada.
 
 Não declarar conclusão se qualquer D-* obrigatório não estiver `PASS`, se uma proibição for violada ou se não houver evidência tecnicamente disponível.
+
+---
+
+## Source: `docs/qa/execution-sidebar-branding-v171.md`
+
+# Execução — Sidebar institucional e Prisma v1.7.1
+
+Versão 1.0.0. Ler integralmente `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0, `docs/product/ux-foundation.md` 1.2.0 e `docs/architecture/versioning.md`. Preservar todos os D/P/F/A/CA.
+
+Diagnosticar a shell atual, reutilizar os assets oficiais de login e a fonte executável de release, implementar os dois estados e validar estrutura, funcionalidade, acessibilidade e responsividade. Produzir comparação visual no mesmo estado e viewport; registrar no AoT toda divergência. Não alterar backend, Supabase ou produção.
 
 ---
 

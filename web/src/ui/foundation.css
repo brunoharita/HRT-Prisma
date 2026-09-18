@@ -108,8 +108,8 @@ body { background: var(--prisma-canvas); }
 
 .prisma-navigation .ant-menu-item-selected { background: #155eef; border-color: transparent; box-shadow: none; }
 .prisma-user-avatar.ant-avatar { background: #155eef; box-shadow: none; }
-.prisma-brand:not(.is-collapsed) a { width: 180px; height: 44px; top: 40px; }
-.prisma-brand:not(.is-collapsed) .prisma-sidebar-collapse.ant-btn { right: 12px; width: 36px; height: 36px; border-radius: 8px; box-shadow: none; }
+.prisma-brand:not(.is-collapsed) a { width: 180px; height: 44px; top: 34px; }
+.prisma-brand:not(.is-collapsed) .prisma-sidebar-collapse.ant-btn { top: 38px; right: 12px; width: 36px; height: 36px; border-radius: 8px; box-shadow: none; }
 .prisma-metric .ant-statistic-title { color: #53637d; font-size: 13px; }
 
 .prisma-navigation .ant-menu-item-selected { background: #155eef !important; }

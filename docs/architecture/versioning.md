@@ -4,7 +4,7 @@
 
 `position-taxonomy-1.0.0` é um novo contrato aditivo de interpretação/proveniência. `vacancy-definition` passa de 1.2.0 a 1.3.0 no novo salvamento atômico, sem alterar required/desired, fórmulas ou consumidores históricos. Versões antigas, inclusive estrutura assistida 2.0.0 histórica, não são reescritas; NULL no novo metadado significa sem interpretação M7.1 registrada. `vacancy-matching-explainable-5.0.0`, `matching-score-1.2.0` e snapshots aceitos pelo M6.2 permanecem.
 
-A versão pública continua v1.6.4. A autorização posterior do PO sincronizou main, Supabase e hosting; ativação não acrescenta automaticamente uma entrega ao release registry nem infere v1.7.1 do nome do movimento. Contratos M7.1 estão ativos no remoto, com versões históricas preservadas. Provas locais e smoke remoto com seus limites constam no AoT M7.1.
+Na autorização de 2026-09-18 para a evolução institucional da sidebar, o Product Owner aceitou M7.1 como a primeira entrega oficial do Movimento 7. O registro executável passa a calcular Prisma v1.7.1 e as superfícies locais consumidoras usam essa fonte central. Essa decisão explícita supersede a orientação anterior de não inferir a versão apenas pelo nome do movimento. O rollout desta alteração visual não integra o movimento: a implantação hospedada continua em v1.6.4 até autorização posterior, sem nova mudança de Supabase, contratos persistidos ou histórico.
 
 ## Ponte Paddle hospedada — 2026-09-16
 
@@ -27,10 +27,10 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 `Prisma v<geração>.<movimento>.<entrega>`
 
 - `geração`: geração principal do produto, atualmente `1`;
-- `movimento`: movimento de produto em execução, atualmente `6`;
+- `movimento`: movimento de produto em execução, atualmente `7`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão atual oficial é **Prisma v1.6.4**, correspondente à quarta entrega oficial do Movimento 6. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão de produto aceita no registro executável é **Prisma v1.7.1**, correspondente à primeira entrega oficial do Movimento 7. A implantação hospedada permanece em v1.6.4 até um rollout autorizado. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -58,6 +58,12 @@ M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora d
 | 2 | M6.1.1: requisito conectado a evidência profissional explícita | aceite do PO para implementação e atualização da versão |
 | 3 | M6.2: jornada contextual de verificação | aceite do PO para implementação e atualização da versão |
 | 4 | M6.1.2: descoberta por trajetória em três grupos | aceite do PO para implementação e atualização da versão |
+
+### Registro oficial do Movimento 7
+
+| Entrega | Marco | Situação considerada para o contador |
+|---:|---|---|
+| 1 | M7.1: taxonomia profissional e inteligência de posições | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -101,6 +107,8 @@ Todo consumidor deve declarar versões aceitas. Versão ausente, desconhecida, f
 Versões anteriores permanecem identificáveis. Rollback reativa artefato anterior sem reescrever resultados históricos. Mudança de prompt ou modelo relevante cria nova versão mesmo quando o schema de saída não muda.
 
 ## Versões atuais
+
+O fechamento visual da sidebar de 2026-09-18 registra M7.1 como primeira entrega aceita do Movimento 7 e avança o produto para Prisma v1.7.1. A sidebar e o login consomem a mesma fonte executável de release. O ajuste não altera schemas, payloads, contratos técnicos, Supabase ou a implantação hospedada, que permanece na versão anterior até promoção autorizada.
 
 O adendo M6.1.2 de 2026-09-14 avança `vacancy-matching-explainable` para 5.0.0 e `matching-score` para 1.2.0. A trajetória profissional define Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual antes do score. Somente A e B recebem número comparável; C permanece recolhido e rastreável. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B. A compatibilidade M6.2 passa a aceitar snapshots 4.0.0 históricos e 5.0.0 atuais por migration forward-only. Produto avança para Prisma v1.6.4.
 

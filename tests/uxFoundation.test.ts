@@ -114,3 +114,15 @@ test("integration retains legacy routes, explicit missing states and scoped stor
   assert.doesNotMatch(verification, /\?\? definitions\[0\]/);
   assert.match(verification, /compatible\.length === 1/);
 });
+
+test("sidebar preserves branding, utilities and centralized release in both states", () => {
+  const shell = readFileSync("web/src/ui/PrismaAppShell.tsx", "utf8");
+  assert.match(shell, /PRISMA_RELEASE\.displayVersion/);
+  assert.match(shell, /\/assets\/login\/hrt-logo-light\.png/);
+  assert.match(shell, /prisma-sidebar-signature/);
+  assert.match(shell, /collapsed \? \(/);
+  assert.match(shell, /Empresa ativa:/);
+  assert.match(shell, /Menu de \$\{profileName\}/);
+  assert.equal((shell.match(/className="prisma-sidebar-collapse"/g) ?? []).length, 1);
+  assert.doesNotMatch(shell, />v1\.7\.1</);
+});

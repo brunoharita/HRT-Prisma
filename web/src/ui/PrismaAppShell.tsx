@@ -11,6 +11,7 @@ import { Avatar, Button, Drawer, Dropdown, Layout, Menu, Select, Tooltip } from 
 import type { MenuProps } from "antd";
 import type { OrganizationMembership } from "../shared/access";
 import { navigationGroup, navigationGroups } from "../shared/uxFoundation";
+import { PRISMA_RELEASE } from "../config/release";
 import { prismaTokens } from "./theme";
 
 export interface PrismaNavigationItem {
@@ -203,6 +204,20 @@ function SidebarContent({
           </button>
         </Dropdown>
       </div>
+
+      <footer className={["prisma-sidebar-footer", collapsed ? "is-collapsed" : ""].join(" ")}>
+        {collapsed ? (
+          <small>{PRISMA_RELEASE.displayVersion}</small>
+        ) : (
+          <div className="prisma-sidebar-signature" aria-label={`Powered by HRT, Prisma ${PRISMA_RELEASE.displayVersion}`}>
+            <span>Powered by</span>
+            <span className="prisma-sidebar-hrt-frame" aria-hidden="true">
+              <img src="/assets/login/hrt-logo-light.png" alt="" />
+            </span>
+            <small>{PRISMA_RELEASE.displayVersion}</small>
+          </div>
+        )}
+      </footer>
     </div>
   );
 }

@@ -134,8 +134,8 @@ textarea {
 
 .prisma-brand {
   position: relative;
-  flex: 0 0 124px;
-  height: 124px;
+  flex: 0 0 112px;
+  height: 112px;
   overflow: hidden;
   border-bottom: 1px solid rgba(155, 190, 243, 0.1);
 }
@@ -160,16 +160,16 @@ textarea {
 }
 
 .prisma-brand.is-collapsed a {
-  top: 30px;
+  top: 20px;
   left: 17px;
   width: 54px;
-  height: 58px;
+  height: 52px;
 }
 
 .prisma-brand.is-collapsed img {
-  top: -106%;
-  left: -105%;
-  width: 633%;
+  top: -38px;
+  left: -34px;
+  width: 230px;
 }
 
 .prisma-sidebar-collapse.ant-btn {
@@ -194,10 +194,10 @@ textarea {
 }
 
 .prisma-brand.is-collapsed .prisma-sidebar-collapse.ant-btn {
-  top: 82px;
-  right: 21px;
+  top: 78px;
+  right: 22px;
   width: 44px;
-  height: 38px;
+  height: 40px;
 }
 
 .prisma-navigation {
@@ -278,7 +278,7 @@ textarea {
 
 .prisma-sidebar-utilities {
   flex: 0 0 auto;
-  padding: 18px 20px 20px;
+  padding: 16px 20px;
   background: linear-gradient(180deg, rgba(2, 11, 29, 0.16), rgba(2, 11, 29, 0.74));
   border-top: 1px solid rgba(155, 190, 243, 0.1);
 }
@@ -416,6 +416,59 @@ textarea {
   margin-right: 2px;
   color: rgba(220, 234, 255, 0.77);
   font-size: 0.78rem;
+}
+
+.prisma-sidebar-footer {
+  flex: 0 0 62px;
+  display: grid;
+  place-items: center;
+  padding: 10px 18px;
+  color: rgba(220, 231, 247, 0.72);
+  background: rgba(1, 8, 22, 0.92);
+  border-top: 1px solid rgba(155, 190, 243, 0.12);
+}
+
+.prisma-sidebar-footer.is-collapsed {
+  flex-basis: 48px;
+  padding-inline: 8px;
+}
+
+.prisma-sidebar-footer small {
+  color: rgba(238, 245, 255, 0.88);
+  font-size: 0.78rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.prisma-sidebar-signature {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.prisma-sidebar-signature > span:first-child {
+  font-size: 0.72rem;
+}
+
+.prisma-sidebar-hrt-frame {
+  position: relative;
+  display: block;
+  flex: 0 0 70px;
+  width: 70px;
+  height: 28px;
+  overflow: hidden;
+}
+
+.prisma-sidebar-hrt-frame img {
+  position: absolute;
+  top: -15px;
+  left: 0;
+  width: 70px;
+  max-width: none;
+  height: 70px;
 }
 
 .prisma-page {

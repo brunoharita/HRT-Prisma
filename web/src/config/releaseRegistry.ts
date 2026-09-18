@@ -30,6 +30,12 @@ export const PRISMA_RELEASE_HISTORY = [{
     "M6.2: jornada contextual de verificação",
     "M6.1.2: descoberta por trajetória em três grupos",
   ],
+}, {
+  productGeneration: 1,
+  movement: 7,
+  deliveries: [
+    "M7.1: taxonomia profissional e inteligência de posições",
+  ],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {

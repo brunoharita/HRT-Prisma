@@ -1,6 +1,6 @@
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.1.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0 e `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.1.0 preserva a base anterior e restringe a autonomia visual quando existe uma referência normativa.
+Contrato de apresentação: `prisma-ux-foundation-1.2.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0 e `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.2.0 preserva a base anterior, restringe a autonomia visual quando existe uma referência normativa e consolida a arquitetura institucional da sidebar.
 
 ## Organização e jornadas
 
@@ -27,6 +27,10 @@ Preservar marca/ativos, azul e navegação lateral da ADR-007. Reduzir brilho, s
 Azul significa ação/seleção; verde conclusão confirmada; amarelo atenção; vermelho falha ou destruição; neutro informação ausente. Texto/ícone complementam a cor. Arquivar e excluir têm significados distintos. Usar componentes compartilhados para página, cabeçalho, cartão, estado, painel e área pública.
 
 Tabelas priorizam objeto, situação e próxima ação. Rolagem interna cabe a informação realmente bidimensional. Telas pequenas priorizam uma coluna, filtros progressivos, comparação por requisito e alternância fonte/campo quando a implementação específica requer. Controles, títulos e ações não podem se sobrepor com conteúdo longo.
+
+### Sidebar institucional
+
+No desktop expandido, a sidebar mantém identidade Prisma, navegação agrupada, empresa ativa, usuário ativo e rodapé institucional, nessa ordem. O rodapé usa `Powered by`, o asset HRT oficial já utilizado no login e a versão calculada pelo registro executável. No desktop recolhido, permanecem o símbolo Prisma completo, um único controle contextual de expansão, navegação por ícones, empresa e usuário operáveis e somente a versão no rodapé. O drawer móvel preserva a composição expandida e suas funções. Marca, controle e conteúdo não podem se sobrepor; a versão não pode ser duplicada como string local.
 
 ## Fidelidade a referências visuais
 
