@@ -27,10 +27,10 @@ export async function processCompetencyNormalization(client: Client) {
       const key = Deno.env.get("OPENAI_API_KEY");
       if (Deno.env.get("KNOWLEDGE_AGENT_ENABLED") !== "true" || !model || !key) errorCode = "AI_DISABLED";
       else {
-        const { data: reserved, error: budgetError } = await client.rpc("reserve_competency_normalization_call", {
+        const { data: reserved, error: budgetError } = await client.rpc("reserve_competency_normalization_call_v2", {
           p_run_id: job.id, p_lease: job.lease,
-          p_daily_cap: Number(Deno.env.get("KNOWLEDGE_RESEARCH_DAILY_CAP") ?? 0),
-          p_monthly_cap: Number(Deno.env.get("KNOWLEDGE_RESEARCH_MONTHLY_CAP") ?? 0),
+          p_daily_cap: Number(Deno.env.get("COMPETENCY_NORMALIZATION_DAILY_CAP") ?? Deno.env.get("KNOWLEDGE_RESEARCH_DAILY_CAP") ?? 0),
+          p_monthly_cap: Number(Deno.env.get("COMPETENCY_NORMALIZATION_MONTHLY_CAP") ?? Deno.env.get("KNOWLEDGE_RESEARCH_MONTHLY_CAP") ?? 0),
         });
         if (budgetError) throw new Error("BUDGET_UNAVAILABLE");
         if (!reserved) errorCode = "BUDGET_LIMITED";

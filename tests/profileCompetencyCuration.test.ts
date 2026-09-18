@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { competencyKey, curationPage, curationReturnTarget, pendingCompetencies, type PendingCompetency } from "../web/src/domain/profileCompetencyCuration.js";
+import { competencyKey, curationPage, curationReturnTarget, groupPendingCompetencies, pendingCompetencies, type PendingCompetency } from "../web/src/domain/profileCompetencyCuration.js";
 import { m72Fixture } from "./fixtures/m72PersonEvidence.js";
-const items = Array.from({ length: 21 }, (_, originalIndex): PendingCompetency => ({ originalIndex, originalTerm: `Original ${originalIndex}`, sourceText: `Original ${originalIndex}`, normalizedTerm: `Conceito ${originalIndex}`, state: "unresolved", reason: "Pendente" }));
+const items = Array.from({ length: 21 }, (_, originalIndex): PendingCompetency => ({ originalIndex, originalTerm: `Original ${originalIndex}`, sourceText: `Original ${originalIndex}`, normalizedTerm: `Conceito ${originalIndex}`, searchTerms: [`Conceito ${originalIndex}`], state: "unresolved", reason: "Pendente" }));
 
 test("M74 cancellation preserves identity/page and duplicates never share a key", () => {
   assert.equal(curationReturnTarget(items, items, competencyKey(items[13]!), false), competencyKey(items[13]!));
@@ -38,4 +38,15 @@ test("M74 repeated atoms in the same declaration retain distinct stable identiti
   assert.notEqual(competencyKey(before[0]!), competencyKey(before[1]!));
   projection.normalization.items[0] = { ...items[0]!, state: "resolved" };
   assert.equal(competencyKey(pendingCompetencies(projection)[0]!), competencyKey(before[1]!));
+});
+
+test("M75 groups equivalent pending terms and preserves all versioned search expressions", () => {
+  const grouped = groupPendingCompetencies([
+    items[0]!,
+    { ...items[1]!, normalizedTerm: "conceito 0", searchTerms: ["Alias oficial"] },
+    items[2]!,
+  ]);
+  assert.equal(grouped.length, 2);
+  assert.equal(grouped[0]?.groupCount, 2);
+  assert.deepEqual(grouped[0]?.searchTerms, ["Conceito 0", "Original 0", "conceito 0", "Alias oficial", "Original 1"]);
 });

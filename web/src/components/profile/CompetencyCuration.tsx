@@ -3,7 +3,7 @@ import { Alert, Button, Empty, Input, Modal, Pagination, Radio, Select, Space, T
 import { CloseOutlined, LeftOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
 import type { ProfessionalEvidenceProjection } from "../../domain/personProfessionalEvidence";
 import { taxonomyGroups } from "../../domain/positionTaxonomy";
-import { competencyKey, curationPage, curationReturnTarget, CURATION_PAGE_SIZE, pendingCompetencies, type CompetencyCurationAdapter, type CurationCandidate, type CurationDecision, type PendingCompetency } from "../../domain/profileCompetencyCuration";
+import { competencyKey, curationPage, curationReturnTarget, CURATION_PAGE_SIZE, groupPendingCompetencies, pendingCompetencies, type CompetencyCurationAdapter, type CurationCandidate, type CurationDecision, type PendingCompetency } from "../../domain/profileCompetencyCuration";
 import { PrismaCard } from "../../ui/PrismaCard";
 import { useUnsavedChanges } from "../../ui/PrismaNavigation";
 
@@ -35,7 +35,8 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
   const rowRefs = useRef(new Map<string, HTMLButtonElement>());
   const headingRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
-  const pending = pendingCompetencies(projection);
+  const pendingItems = pendingCompetencies(projection);
+  const pending = groupPendingCompetencies(pendingItems);
   const legacyIssues = projection.normalization.items.length ? [] : projection.issues;
   const filterItems = (items: PendingCompetency[]) => items.filter((item) => (filter === "all" || item.state === filter)
     && `${item.originalTerm} ${item.normalizedTerm}`.toLocaleLowerCase("pt-BR").includes(query.trim().toLocaleLowerCase("pt-BR")));
@@ -91,7 +92,7 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
   async function saved(decision: CurationDecision, advance: boolean) {
     if (!adapter || !selected) return;
     const result = await adapter.save(decision);
-    const after = filterItems(pendingCompetencies(result.projection));
+    const after = filterItems(groupPendingCompetencies(pendingCompetencies(result.projection)));
     const target = curationReturnTarget(shown, after, competencyKey(selected), advance);
     markDirty(false);
     onProjection(result.projection);
@@ -102,10 +103,10 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
     if (!next) setFocusKey(target ?? "empty");
   }
   return <>
-    <PrismaCard className="prisma-m74-pending" title={<div ref={headingRef} tabIndex={-1}>Declarações aguardando associação ({pending.length || legacyIssues.length})</div>}
+    <PrismaCard className="prisma-m74-pending" title={<div ref={headingRef} tabIndex={-1}>Declarações aguardando associação ({pendingItems.length || legacyIssues.length} itens{pendingItems.length ? ` · ${pending.length} termos únicos` : ""})</div>}
       extra={adapter ? <Space wrap><Button disabled={busy || Boolean(selected)} type="text" onClick={async () => {
         setBusy(true); setRefreshError(null);
-        try { const next = await adapter.refresh(); onProjection(next); setPage(curationPage(filterItems(pendingCompetencies(next)), null, page)); }
+        try { const next = await adapter.refresh(); onProjection(next); setPage(curationPage(filterItems(groupPendingCompetencies(pendingCompetencies(next))), null, page)); }
         catch { setRefreshError("Não foi possível atualizar as pendências. Tente novamente."); }
         finally { setBusy(false); }
       }}>Atualizar lista</Button><Button disabled={!shown.length || busy} onClick={() => shown[(actualPage - 1) * CURATION_PAGE_SIZE] && open(shown[(actualPage - 1) * CURATION_PAGE_SIZE]!)} type="link">Revisar pendências</Button></Space> : undefined}>
@@ -121,7 +122,7 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
       <div className="prisma-m74-pending-list">{shown.slice((actualPage - 1) * CURATION_PAGE_SIZE, actualPage * CURATION_PAGE_SIZE).map((item, index) => {
         const key = competencyKey(item);
         return <button key={key} ref={(node) => { if (node) rowRefs.current.set(key, node); else rowRefs.current.delete(key); }} type="button" disabled={!adapter || busy} aria-label={`Revisar associação de ${item.normalizedTerm}`} aria-pressed={selected ? competencyKey(selected) === key : false} onClick={() => open(item)}>
-          <span>{(actualPage - 1) * CURATION_PAGE_SIZE + index + 1}</span><span>{item.normalizedTerm}</span>{selected && competencyKey(selected) === key ? <Tag color="blue">Em revisão</Tag> : null}<RightOutlined />
+          <span>{(actualPage - 1) * CURATION_PAGE_SIZE + index + 1}</span><span>{item.normalizedTerm}</span>{(item.groupCount ?? 1) > 1 ? <Tag>{item.groupCount} ocorrências</Tag> : null}{selected && competencyKey(selected) === key ? <Tag color="blue">Em revisão</Tag> : null}<RightOutlined />
         </button>;
       })}</div>
       {!shown.length && !legacyIssues.length ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={pending.length ? "Nenhuma pendência corresponde aos filtros." : "Nenhuma declaração aguardando associação."} /> : null}
@@ -161,7 +162,25 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   const [error, setError] = useState<string | null>(null);
   const request = useRef(0);
   const savingLock = useRef(false);
-  useEffect(() => { void search(item.normalizedTerm); return () => { request.current++; }; }, []);
+  useEffect(() => { void searchSuggested(item.searchTerms); return () => { request.current++; }; }, []);
+  async function searchSuggested(terms: string[]) {
+    const id = ++request.current;
+    setSearching(true); setError(null);
+    const queries = [...new Set([item.normalizedTerm, ...terms, item.sourceText].map((term) => term.trim()).filter(Boolean))].slice(0, 4);
+    try {
+      const results = await Promise.allSettled(queries.map((term) => adapter.search(term)));
+      if (id !== request.current) return;
+      const merged = new Map<string, CurationCandidate>();
+      for (const result of results) if (result.status === "fulfilled") for (const candidate of result.value) {
+        if (candidate.conceptType === "occupation") continue;
+        const current = merged.get(candidate.id);
+        if (!current || candidatePriority(candidate) < candidatePriority(current)) merged.set(candidate.id, candidate);
+      }
+      setCandidates([...merged.values()].sort((left, right) => candidatePriority(left) - candidatePriority(right)
+        || left.canonicalLabel.localeCompare(right.canonicalLabel, "pt-BR")));
+      if (results.every((result) => result.status === "rejected")) setError("Não foi possível buscar conceitos. Tente novamente; sua edição foi preservada.");
+    } finally { if (id === request.current) setSearching(false); }
+  }
   async function search(term: string) {
     const id = ++request.current;
     setSearching(true); setError(null);
@@ -183,10 +202,12 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
     <div className="prisma-m74-curation-body">
       <div className="prisma-m74-source"><small>Declaração original</small><strong>{item.originalTerm}</strong></div>
       <div className="prisma-m74-source"><small>Termo em revisão</small><strong>{item.normalizedTerm}</strong>{item.sourceText !== item.originalTerm ? <small>Trecho: {item.sourceText}</small> : null}</div>
+      {(item.groupCount ?? 1) > 1 ? <Alert showIcon type="info" title={`${item.groupCount} ocorrências compartilham este termo`} description="Uma associação aprovada será reutilizada nas ocorrências compatíveis, preservando cada origem." /> : null}
       <Alert showIcon type="warning" title={item.reason} />
       {error ? <Alert role="alert" type="error" showIcon title={error} /> : null}
       {!proposal ? <><Typography.Title level={5}>Associar a um conceito existente</Typography.Title>
         <Input.Search aria-label="Buscar conceitos para associação" value={query} disabled={saving} onChange={(event) => setQuery(event.target.value)} onSearch={(value) => void search(value)} loading={searching} enterButton="Buscar" />
+        <Typography.Text type="secondary">Sugestões iniciais combinam as expressões versionadas do processamento. Nenhuma opção é selecionada automaticamente.</Typography.Text>
         {!searching && !candidates.length ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Nenhum conceito encontrado. Ajuste a busca ou proponha um conceito." /> : null}
         <Radio.Group aria-label="Conceito para associação" value={conceptId} disabled={saving} onChange={(event) => { setConceptId(event.target.value); onDirty(true); }} className="prisma-m74-candidates">
           {candidates.map((candidate) => <div key={candidate.id} className={conceptId === candidate.id ? "is-selected" : ""}><Radio value={candidate.id}>{candidate.canonicalLabel}</Radio>
@@ -205,4 +226,8 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
     </div>
     <footer><Space wrap><Button onClick={onCancel} disabled={saving}>Cancelar</Button><Button disabled={!valid} loading={saving} onClick={() => void save(false)}>Gravar</Button><Button type="primary" disabled={!valid} loading={saving} onClick={() => void save(true)}>Gravar e próximo</Button></Space><small>Gravar retorna à lista; Gravar e próximo continua a revisão.</small></footer>
   </>;
+}
+
+function candidatePriority(candidate: CurationCandidate): number {
+  return ({ exact: 0, official_alias: 1, human_alias: 2, relevant_partial: 3, ambiguous: 4 } as const)[candidate.matchClass];
 }

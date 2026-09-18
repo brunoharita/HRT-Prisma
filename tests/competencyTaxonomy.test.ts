@@ -41,7 +41,22 @@ test("M7.2 v2 preserva clientes históricos e usa RPCs aditivas", async () => {
     readFile("web/src/infrastructure/supabase/profileCompetencyCurationService.ts", "utf8"),
   ]);
   assert.doesNotMatch(migration, /drop function public\.load_person_professional_evidence_map/);
-  assert.match(repository, /load_person_professional_evidence_map_v4/);
+  assert.match(repository, /load_person_professional_evidence_map_v5/);
   assert.match(curation, /searchCompetencyTaxonomy/);
-  assert.match(curation, /curate_profile_competency_v2/);
+  assert.match(curation, /curate_profile_competency_v3/);
+});
+
+test("M7.5 preserva o último resultado completo e isola orçamento e reprocessamento", async () => {
+  const [migration, worker] = await Promise.all([
+    readFile("supabase/migrations/20260918203000_m75_competency_coverage_recovery.sql", "utf8"),
+    readFile("supabase/functions/knowledge-agent/competencyNormalization.ts", "utf8"),
+  ]);
+  assert.match(migration, /order by case when status='complete' then 0 else 1 end,sequence desc limit 1/);
+  assert.match(migration, /person-professional-evidence-3\.1\.0/);
+  assert.match(migration, /request_current_profile_competency_normalizations/);
+  assert.match(migration, /revoke all on function public\.request_current_profile_competency_normalizations\(\) from public,anon,authenticated/);
+  assert.match(worker, /reserve_competency_normalization_call_v2/);
+  assert.match(worker, /COMPETENCY_NORMALIZATION_DAILY_CAP/);
+  assert.match(worker, /COMPETENCY_NORMALIZATION_MONTHLY_CAP/);
+  assert.doesNotMatch(worker, /reserve_competency_normalization_call",/);
 });

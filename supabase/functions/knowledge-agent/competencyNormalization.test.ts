@@ -4,13 +4,13 @@ function assert(value: unknown, message: string) { if (!value) throw new Error(m
 const originalFetch = globalThis.fetch;
 Deno.test("M73 worker: scoped input, grounded result, no CV, exactly one call and usage metadata", async () => {
   Deno.env.set("KNOWLEDGE_AGENT_ENABLED", "true"); Deno.env.set("KNOWLEDGE_RESEARCH_MODEL", "fixture-model");
-  Deno.env.set("OPENAI_API_KEY", "fixture-not-a-secret"); Deno.env.set("KNOWLEDGE_RESEARCH_DAILY_CAP", "10"); Deno.env.set("KNOWLEDGE_RESEARCH_MONTHLY_CAP", "100");
+  Deno.env.set("OPENAI_API_KEY", "fixture-not-a-secret"); Deno.env.set("COMPETENCY_NORMALIZATION_DAILY_CAP", "20"); Deno.env.set("COMPETENCY_NORMALIZATION_MONTHLY_CAP", "200");
   const calls: Array<{ name: string; args: any }> = [];
   const client = { rpc(name: string, args: any) {
     calls.push({ name, args });
     return Promise.resolve({ error: null, data: name === "claim_profile_competency_normalization"
       ? { id: "run", lease: "lease", organizationId: "org", terms: ["Excel e Word", "negociação", "person@example.com"], humanTerms: [], externalEnabled: true }
-      : name === "reserve_competency_normalization_call" ? true : null });
+      : name === "reserve_competency_normalization_call_v2" ? true : null });
   } };
   let requests = 0;
   globalThis.fetch = async (_url, init) => {

@@ -47,6 +47,8 @@ Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no 
 
 M7.3 reutiliza o modelo configurado do Knowledge Agent para normalização de competências declaradas (`declared-competency-normalization-1.0.0`). Recebe apenas termos minimizados, sem Perfil/currículo integral ou identificadores; sem ferramentas/pesquisa, `store:false`, Structured Outputs e cobertura integral validada. Uma chamada por tentativa, com reserva auditada dentro dos limites existentes, timeout 90 s, opt-in organizacional e fallback determinístico explicitamente parcial quando a chamada falha. Nomes produzidos são buscas a reconciliar com aliases aprovados, nunca criação de conceito. Evidência: ADR-063 e AoT M7.3. Este movimento não troca o modelo nem altera a política financeira do Parser IA.
 
+M7.5 mantém provider, modelo, prompt, schema e política de minimização do M7.3, mas separa o teto de normalização dos tetos de pesquisa do Knowledge Agent. Os limites iniciais são 20 chamadas/dia e 200/mês, configurados server-side; ausência, zero, valor inválido ou esgotamento falham fechado. A tentativa falha permanece auditada e o último resultado completo continua como base. Evidência: ADR-066 e AoT M7.5.
+
 Troca é material. Exige nova versão, golden tests, prompt injection tests, comparação de omissões/alucinações, custo, média e p95, compatibilidade de schema, privacidade/subprocessador, fallback, QA e aprovação. Alias mutável não é suficiente para reprodução; quando disponível, registrar snapshot técnico.
 
 ## Dados e segurança

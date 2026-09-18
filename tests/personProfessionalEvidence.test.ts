@@ -13,6 +13,7 @@ test("M7.2 lê apenas o contrato e o tenant esperados", () => {
   assert.throws(() => readProfessionalEvidenceProjection(m72Fixture({ contractVersion: "future" as never }), "org-fixture", "person-fixture"), /incompatível/);
   assert.throws(() => readProfessionalEvidenceProjection(m72Fixture(), "foreign-org", "person-fixture"), /incompatível/);
   assert.throws(() => readProfessionalEvidenceProjection(m72Fixture(), "org-fixture", "foreign-person"), /incompatível/);
+  assert.throws(() => readProfessionalEvidenceProjection(m72Fixture({ normalization: { ...m72Fixture().normalization, coverage: undefined as never } }), "org-fixture", "person-fixture"), /incompatível/);
 });
 
 test("M7.2 preserva múltiplas naturezas e só conta demonstração válida", () => {

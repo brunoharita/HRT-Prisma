@@ -39,6 +39,12 @@ Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, fil
 
 Snapshots e natureza declarada permanecem intactos. Aprovação de alias é decisão humana auditada, não evidência de desempenho. O retorno da transação já traz a projeção atualizada, sem chamar IA nem reprocessar todo o Perfil.
 
+## Recuperação de cobertura M7.5
+
+O Perfil usa o último processamento completo compatível como base. Uma tentativa posterior em fila, em processamento ou com falha aparece separadamente e nunca reduz as associações completas já disponíveis. A leitura distingue declarações, itens atômicos, itens associados, conceitos únicos, pendências e termos únicos pendentes; pendência não significa ausência de competência.
+
+Na curadoria, termos normalizados equivalentes formam um grupo com contagem de ocorrências, preservando cada origem. As expressões `searchTerms` versionadas alimentam uma busca deduplicada; exato, alias oficial, alias humano, parcial e ambíguo continuam classes visíveis, e nenhuma opção é pré-selecionada. Alias de empresa aprovado por humano pode resolver ocorrências compatíveis e beneficiar Perfis futuros da empresa. Proposta de conceito continua pendente até o fluxo de publicação humano.
+
 ## Comparação
 
 A comparação aceita exatamente duas Pessoas selecionadas na busca e reapresenta seus Perfis canônicos em colunas equivalentes. Destaques são contagens ou fatos publicados, nunca uma avaliação relativa. Ao voltar, consulta, filtros e seleção permanecem preservados na sessão do navegador.

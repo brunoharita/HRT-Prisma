@@ -147,7 +147,7 @@ function CompetencySurface({ groups, projection, onConcept, onEvidence, curation
       <PrismaCard title="Leitura do perfil">
         {summary ? <><Metric icon={<FileTextOutlined />} label="Declaradas" value={summary.declaredCount} /><Metric icon={<BulbOutlined />} label="Contextuais" value={summary.contextualCount} /><Metric icon={<CheckCircleOutlined />} label="Com evidência demonstrada válida" value={summary.demonstratedCount} /><div className="prisma-m72-total"><strong>{summary.conceptCount}</strong><span>conceitos evidenciados em {summary.groupCount} agrupamentos</span></div></> : <Empty description="Sem projeção disponível." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </PrismaCard>
-      {projection?.issues.length ? <Alert description={`${projection.issues.length} item(ns) declarado(s) aguardam associação segura. Consulte a lista de pendências; isso não significa ausência de competência.`} title="Associações pendentes" showIcon type="warning" /> : null}
+      {projection?.normalization.coverage.pendingItemCount ? <Alert description={`${projection.normalization.coverage.pendingItemCount} item(ns), agrupados em ${projection.normalization.coverage.uniquePendingTermCount} termo(s) único(s), aguardam associação segura. Consulte a lista de pendências; isso não significa ausência de competência.`} title="Associações pendentes" showIcon type="warning" /> : null}
       <Alert description="Declarada, contextual e demonstrada indicam a natureza da evidência. Não representam nível de proficiência, senioridade ou score." title="Como ler os estados" showIcon type="info" />
     </aside>
   </div>;
@@ -223,6 +223,7 @@ function NormalizationStatus({ projection, disabled }: { projection: Professiona
   const [requesting, setRequesting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const status = projection.normalization.status;
+  const latestAttempt = projection.normalization.latestAttempt;
   // Queue processing is server-side and survives navigation. Do not reload unsaved browser state.
   useEffect(() => { setMessage(null); }, [projection.profile.id, status]);
   const retry = async () => {
@@ -236,6 +237,9 @@ function NormalizationStatus({ projection, disabled }: { projection: Professiona
     } catch { setMessage("Não foi possível conectar. O Perfil foi preservado; tente novamente."); }
     finally { setRequesting(false); }
   };
+  if (status === "complete" && latestAttempt?.status === "failed" && !latestAttempt.usedAsBasis) return <Alert showIcon type="warning" title="Última atualização não foi concluída"
+    description={message ?? "O último resultado completo continua ativo; nenhuma associação anterior foi perdida. Você pode tentar atualizar novamente."}
+    action={<Button disabled={disabled} loading={requesting} onClick={() => void retry()}>Tentar novamente</Button>} />;
   if (status === "complete") return <div className="prisma-m73-normalization-actions"><Typography.Text type="secondary">{message ?? "Associações processadas. A declaração revisada foi preservada."}</Typography.Text><Button disabled={disabled} loading={requesting} onClick={() => void retry()} type="link">Atualizar associações</Button></div>;
   return <Alert showIcon type={status === "failed" ? "warning" : "info"} title={status === "failed" ? "Normalização parcialmente disponível" : "Organizando competências declaradas"}
     description={message ?? (status === "failed" ? "A declaração original foi preservada. O processamento não foi concluído; os vínculos seguros já disponíveis continuam visíveis." : "O Perfil já está publicado. A associação com a Knowledge é processada em segundo plano; reabra esta tela em instantes.")}

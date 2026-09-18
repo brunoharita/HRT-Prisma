@@ -76,7 +76,11 @@ export const m72DemonstratedEvidence: ProfessionalEvidenceAssociation = {
 export function m72Fixture(overrides: Partial<ProfessionalEvidenceProjection> = {}): ProfessionalEvidenceProjection {
   return {
     contractVersion: PERSON_PROFESSIONAL_EVIDENCE_CONTRACT,
-    normalization: { status: "complete", declaredCount: 1, methodVersion: "declared-competency-normalization-1.0.0", errorCode: null, items: [] },
+    normalization: {
+      status: "complete", declaredCount: 1, methodVersion: "declared-competency-normalization-1.0.0", errorCode: null, items: [],
+      latestAttempt: { runId: "run-fixture", status: "complete", errorCode: null, completedAt: "2026-09-18T12:00:00Z", usedAsBasis: true },
+      coverage: { totalItemCount: 0, associatedItemCount: 0, uniqueConceptCount: 0, pendingItemCount: 0, uniquePendingTermCount: 0 },
+    },
     taxonomyVersions: { occupation: POSITION_TAXONOMY_CONTRACT, competency: COMPETENCY_TAXONOMY_CONTRACT },
     organizationId: "org-fixture",
     personId: "person-fixture",

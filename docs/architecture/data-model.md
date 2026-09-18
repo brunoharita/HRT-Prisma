@@ -78,6 +78,8 @@ Identidade, autorização e relações permanecem normalizadas. Partes evolutiva
 
 `professional_taxonomy_releases` registra releases publicados por domínio. `position-taxonomy-1.0.0` permanece ocupacional; `competency-taxonomy-1.0.0` reutiliza os conceitos não ocupacionais já aprovados no Knowledge. Fonte, versão e proveniência continuam nos mappings e relações existentes. A projeção `person-professional-evidence-3.0.0` exclui ocupações e declara as duas versões, enquanto `load_occupation_competency_relations` expõe relações cross-domain com `createsPersonalEvidence=false`.
 
+M7.5 não cria nova tabela nem reescreve snapshots. `profile_competency_normalization_runs` continua sendo histórico append-only por revisão: a projeção V5 seleciona a execução completa mais recente como base e consulta a maior sequência apenas como `latestAttempt`. O lote service-only cria nova revisão após resultado completo ou recoloca uma falha em fila, de forma idempotente enquanto houver execução pendente. `coverage` é calculado na leitura e não persiste score ou proficiência.
+
 `knowledge_sources` também registra o estado resumido da checagem oficial, sem confundi-lo com publicação. `knowledge_source_checks` é append-only, possui RLS e expõe leitura apenas a Super Admin. A Edge Function escreve por uma RPC `service_role` idempotente; um resultado detectado pode catalogar uma source version, mas não altera `is_current`.
 
 ## M5.1 implementado localmente

@@ -19,12 +19,12 @@ export function profileCompetencyCurationService(organizationId: string, personI
       }));
     },
     async refresh() {
-      const { data, error } = await supabase.rpc("load_person_professional_evidence_map_v4" as never, { p_organization_id: organizationId, p_person_id: personId } as never);
+      const { data, error } = await supabase.rpc("load_person_professional_evidence_map_v5" as never, { p_organization_id: organizationId, p_person_id: personId } as never);
       if (error) throw new Error("Não foi possível atualizar a lista. Tente novamente.");
       return readProfessionalEvidenceProjection(data, organizationId, personId);
     },
     async save(decision) {
-      const { data, error } = await supabase.rpc("curate_profile_competency_v2" as never, {
+      const { data, error } = await supabase.rpc("curate_profile_competency_v3" as never, {
         p_organization_id: organizationId, p_person_id: personId, p_profile_id: decision.profileId,
         p_original_index: decision.item.originalIndex, p_source_text: decision.item.sourceText, p_normalized_term: decision.item.normalizedTerm,
         p_scope: decision.scope, p_action: decision.action, p_concept_id: decision.conceptId, p_reason: decision.reason,

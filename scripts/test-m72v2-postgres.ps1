@@ -1,6 +1,6 @@
 param([string]$Database='m72_m73_baseline',[int]$Port=55471)
 $ErrorActionPreference='Stop'
-if ($Database -notmatch '^m72_m73_[a-z0-9_]+$') { throw 'Only the task-scoped disposable baseline is allowed' }
+if ($Database -notmatch '^m72_m7[3-5]_[a-z0-9_]+$') { throw 'Only a task-scoped disposable M7.3-M7.5 baseline is allowed' }
 $enumSql = Get-Content -Raw supabase/migrations/20260918195000_m72_competency_concept_type.sql
 $enumSql | & 'C:/Program Files/PostgreSQL/17/bin/psql.exe' -X -h 127.0.0.1 -p $Port -U m71_test -d $Database -v ON_ERROR_STOP=1
 if ($LASTEXITCODE -ne 0) { throw 'M72 v2 enum migration failed' }
@@ -11,6 +11,8 @@ $sql = "begin;`n" +
   (Get-Content -Raw supabase/qa/m74_contextual_curation_verification.sql) + "`n" +
   (Get-Content -Raw supabase/migrations/20260918200000_m72_competency_taxonomy_v2.sql) + "`n" +
   (Get-Content -Raw supabase/migrations/20260918201000_m72_competency_taxonomy_indexes.sql) + "`n" +
-  (Get-Content -Raw supabase/qa/m72_competency_taxonomy_v2_verification.sql) + "`nrollback;"
+  (Get-Content -Raw supabase/qa/m72_competency_taxonomy_v2_verification.sql) + "`n" +
+  (Get-Content -Raw supabase/migrations/20260918203000_m75_competency_coverage_recovery.sql) + "`n" +
+  (Get-Content -Raw supabase/qa/m75_competency_coverage_recovery_verification.sql) + "`nrollback;"
 $sql | & 'C:/Program Files/PostgreSQL/17/bin/psql.exe' -X -h 127.0.0.1 -p $Port -U m71_test -d $Database -v ON_ERROR_STOP=1
-if ($LASTEXITCODE -ne 0) { throw 'M72 v2 verification failed; transaction rolled back' }
+if ($LASTEXITCODE -ne 0) { throw 'M72 v2 through M75 verification failed; transaction rolled back' }

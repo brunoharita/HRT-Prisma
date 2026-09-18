@@ -2,8 +2,8 @@ import type { ProfessionalEvidenceProjection } from "./personProfessionalEvidenc
 import type { KnowledgeConceptSuggestion } from "./knowledgeData.js";
 import type { CompetencyMatchClass, CompetencyTaxonomyReference } from "./competencyTaxonomy.js";
 
-export type PendingCompetency = ProfessionalEvidenceProjection["normalization"]["items"][number] & { occurrence?: number };
-export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-2.0.0";
+export type PendingCompetency = ProfessionalEvidenceProjection["normalization"]["items"][number] & { occurrence?: number; groupCount?: number };
+export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-3.0.0";
 export const CURATION_PAGE_SIZE = 10;
 export function competencyKey(item: PendingCompetency): string {
   return JSON.stringify([item.originalIndex, item.originalTerm, item.sourceText, item.normalizedTerm, item.occurrence ?? 0]);
@@ -33,6 +33,18 @@ export interface CurationCandidate extends KnowledgeConceptSuggestion {
   matchClass: CompetencyMatchClass;
   aliasAuthority: string;
   references: CompetencyTaxonomyReference[];
+}
+export function groupPendingCompetencies(items: PendingCompetency[]): PendingCompetency[] {
+  const groups = new Map<string, PendingCompetency[]>();
+  for (const item of items) {
+    const key = item.normalizedTerm.normalize("NFD").replace(/\p{M}/gu, "").trim().toLocaleLowerCase("pt-BR");
+    groups.set(key, [...(groups.get(key) ?? []), item]);
+  }
+  return [...groups.values()].map((group) => ({
+    ...group[0]!,
+    groupCount: group.length,
+    searchTerms: [...new Set(group.flatMap((item) => [item.normalizedTerm, ...item.searchTerms, item.sourceText]).filter(Boolean))].slice(0, 8),
+  }));
 }
 export interface CurationDecision {
   item: PendingCompetency; profileId: string; scope: "organization" | "global"; reason: string;

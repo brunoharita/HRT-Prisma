@@ -1,7 +1,7 @@
 import { COMPETENCY_TAXONOMY_CONTRACT } from "./competencyTaxonomy.js";
 import { POSITION_TAXONOMY_CONTRACT, taxonomyGroups, type ProfessionalConceptType } from "./positionTaxonomy.js";
 
-export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-3.0.0";
+export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-3.1.0";
 const competencyConceptTypes = (Object.keys(taxonomyGroups) as ProfessionalConceptType[])
   .filter((type) => type !== "occupation");
 
@@ -79,7 +79,21 @@ export interface ProfessionalEvidenceProjection {
     methodVersion: "declared-competency-normalization-1.0.0";
     errorCode: string | null;
     items: Array<{ originalIndex: number; originalTerm: string; sourceText: string; normalizedTerm: string;
-      state: "resolved" | "human_preserved" | "ambiguous" | "unresolved" | "source_unavailable"; reason: string }>;
+      searchTerms: string[]; state: "resolved" | "human_preserved" | "ambiguous" | "unresolved" | "source_unavailable"; reason: string }>;
+    latestAttempt: {
+      runId: string;
+      status: "queued" | "processing" | "complete" | "failed";
+      errorCode: string | null;
+      completedAt: string | null;
+      usedAsBasis: boolean;
+    } | null;
+    coverage: {
+      totalItemCount: number;
+      associatedItemCount: number;
+      uniqueConceptCount: number;
+      pendingItemCount: number;
+      uniquePendingTermCount: number;
+    };
   };
   issues: Array<{
     code: "ambiguous" | "unresolved" | "incompatible" | "source_unavailable";
@@ -234,10 +248,23 @@ function validNormalization(value: unknown): boolean {
   return isRecord(value) && ["not_processed", "queued", "processing", "complete", "failed"].includes(String(value.status))
     && value.methodVersion === "declared-competency-normalization-1.0.0"
     && Number.isSafeInteger(value.declaredCount) && Number(value.declaredCount) >= 0 && nullableString(value.errorCode)
+    && validLatestAttempt(value.latestAttempt) && validCoverage(value.coverage)
     && Array.isArray(value.items) && value.items.every((item) => isRecord(item) && Number.isSafeInteger(item.originalIndex)
       && Number(item.originalIndex) >= 0 && typeof item.originalTerm === "string" && typeof item.sourceText === "string"
       && typeof item.normalizedTerm === "string" && typeof item.reason === "string"
+      && Array.isArray(item.searchTerms) && item.searchTerms.every((term) => typeof term === "string")
       && ["resolved", "human_preserved", "ambiguous", "unresolved", "source_unavailable"].includes(String(item.state)));
+}
+
+function validLatestAttempt(value: unknown): boolean {
+  return value === null || (isRecord(value) && typeof value.runId === "string"
+    && ["queued", "processing", "complete", "failed"].includes(String(value.status))
+    && nullableString(value.errorCode) && nullableString(value.completedAt) && typeof value.usedAsBasis === "boolean");
+}
+
+function validCoverage(value: unknown): boolean {
+  return isRecord(value) && ["totalItemCount", "associatedItemCount", "uniqueConceptCount", "pendingItemCount", "uniquePendingTermCount"]
+    .every((key) => Number.isSafeInteger(value[key]) && Number(value[key]) >= 0);
 }
 
 function nullableString(value: unknown): boolean { return value === null || typeof value === "string"; }

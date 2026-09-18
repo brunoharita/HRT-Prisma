@@ -16,7 +16,14 @@ import "../../../web/src/ui/foundation.css";
 const labels = ["Transformação operacional", "Excelência operacional", "Business Process Management (BPM)", "Business Process Model and Notation (BPMN)", "As-Is/To-Be", "Operating model", "Melhoria contínua", "Plan-Do-Check-Act (PDCA)", "Governança", "Project Management Office (PMO)"];
 const initial = m72Fixture();
 initial.normalization.declaredCount = 43;
-initial.normalization.items = Array.from({ length: 59 }, (_, index) => ({ originalIndex: index, originalTerm: index === 13 ? "BPM/BPMN" : labels[index - 10] ?? `Competência sintética ${index + 1}`, sourceText: index === 13 ? "BPMN" : labels[index - 10] ?? `Competência sintética ${index + 1}`, normalizedTerm: labels[index - 10] ?? `Competência sintética ${index + 1}`, state: "unresolved" as const, reason: "Ainda sem associação segura na Knowledge." }));
+initial.normalization.items = Array.from({ length: 59 }, (_, index) => {
+  const normalizedTerm = index === 14 ? labels[3]! : labels[index - 10] ?? `Competência sintética ${index + 1}`;
+  return { originalIndex: index, originalTerm: index === 13 ? "BPM/BPMN" : index === 14 ? "BPMN" : normalizedTerm,
+    sourceText: index === 13 || index === 14 ? "BPMN" : normalizedTerm, normalizedTerm,
+    searchTerms: [normalizedTerm, ...(index === 13 || index === 14 ? ["BPMN"] : [])], state: "unresolved" as const,
+    reason: "Ainda sem associação segura na Knowledge." };
+});
+initial.normalization.coverage = { totalItemCount: 59, associatedItemCount: 0, uniqueConceptCount: 0, pendingItemCount: 59, uniquePendingTermCount: 58 };
 initial.issues = initial.normalization.items.map((item) => ({ code: "unresolved", observedTerm: item.normalizedTerm, explanation: item.reason }));
 const profile: PrismaProfileView = {
   identity: { fullName: "Ana Carolina Ribeiro", professionalTitle: "Especialista em processos", location: "São Paulo, SP", lifecycleLabel: "Perfil vigente", operationalStatusLabel: "Ativo" },
@@ -30,7 +37,7 @@ function Harness() {
   const failRef = useRef(false); failRef.current = fail;
   const adapter = useMemo<CompetencyCurationAdapter>(() => ({ canUseGlobal: false,
     async refresh() { return structuredClone(current.current); },
-    async search() { return [{ id: "concept-bpmn", canonicalLabel: "Business Process Model and Notation", conceptType: "methodology", scope: "global", aliases: ["BPMN"], description: "Notação para representar processos de negócio.", sourceName: "Fonte sintética", sourceVersion: "1.0", externalId: null, externalUri: null, method: "alias" }]; },
+    async search() { return [{ id: "concept-bpmn", canonicalLabel: "Business Process Model and Notation", conceptType: "methodology", scope: "global", aliases: ["BPMN"], description: "Notação para representar processos de negócio.", sourceName: "Fonte sintética", sourceVersion: "1.0", externalId: null, externalUri: null, method: "alias", matchedTerm: "BPMN", matchClass: "official_alias", aliasAuthority: "official_source", references: [{ source: "Fonte sintética", sourceVersion: "1.0", externalId: null, externalUri: null, mappingType: "exact", nativeType: "methodology", provenance: {} }] }]; },
     async save(decision) {
       if (failRef.current) throw new Error("Falha sintética de gravação. Sua edição foi preservada.");
       const next = structuredClone(current.current);
