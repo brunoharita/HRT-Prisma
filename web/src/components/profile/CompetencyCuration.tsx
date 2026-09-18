@@ -7,6 +7,9 @@ import { competencyKey, curationPage, curationReturnTarget, CURATION_PAGE_SIZE, 
 import { PrismaCard } from "../../ui/PrismaCard";
 import { useUnsavedChanges } from "../../ui/PrismaNavigation";
 
+const CURATION_SEARCH_DEBOUNCE_MS = 400;
+const MIN_CURATION_SEARCH_LENGTH = 2;
+
 const matchLabels = {
   exact: "Canônico exato",
   official_alias: "Alias oficial exato",
@@ -161,8 +164,12 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const request = useRef(0);
+  const searchTimer = useRef<number | null>(null);
   const savingLock = useRef(false);
-  useEffect(() => { void searchSuggested(item.searchTerms); return () => { request.current++; }; }, []);
+  function clearSearchTimer() {
+    if (searchTimer.current !== null) { window.clearTimeout(searchTimer.current); searchTimer.current = null; }
+  }
+  useEffect(() => { void searchSuggested(item.searchTerms); return () => { request.current++; clearSearchTimer(); }; }, []);
   async function searchSuggested(terms: string[]) {
     const id = ++request.current;
     setSearching(true); setError(null);
@@ -182,11 +189,29 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
     } finally { if (id === request.current) setSearching(false); }
   }
   async function search(term: string) {
+    const normalizedTerm = term.trim();
     const id = ++request.current;
+    clearSearchTimer();
+    if (normalizedTerm.length < MIN_CURATION_SEARCH_LENGTH) {
+      setCandidates([]); setSearching(false); setError(null);
+      return;
+    }
     setSearching(true); setError(null);
-    try { const result = await adapter.search(term); if (id === request.current) setCandidates(result.filter((candidate) => candidate.conceptType !== "occupation")); }
+    try { const result = await adapter.search(normalizedTerm); if (id === request.current) setCandidates(result.filter((candidate) => candidate.conceptType !== "occupation")); }
     catch { if (id === request.current) setError("Não foi possível buscar conceitos. Tente novamente; sua edição foi preservada."); }
     finally { if (id === request.current) setSearching(false); }
+  }
+  function scheduleSearch(term: string) {
+    clearSearchTimer();
+    const normalizedTerm = term.trim();
+    request.current++;
+    setError(null);
+    if (normalizedTerm.length < MIN_CURATION_SEARCH_LENGTH) {
+      setCandidates([]); setSearching(false);
+      return;
+    }
+    setSearching(true);
+    searchTimer.current = window.setTimeout(() => { searchTimer.current = null; void search(normalizedTerm); }, CURATION_SEARCH_DEBOUNCE_MS);
   }
   const chosen = candidates.find((candidate) => candidate.id === conceptId);
   const valid = reason.trim().length >= 5 && (proposal ? label.trim().length > 0 : Boolean(chosen && (scope === "organization" || chosen.scope === "global")));
@@ -206,8 +231,8 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
       <Alert showIcon type="warning" title={item.reason} />
       {error ? <Alert role="alert" type="error" showIcon title={error} /> : null}
       {!proposal ? <><Typography.Title level={5}>Associar a um conceito existente</Typography.Title>
-        <Input.Search aria-label="Buscar conceitos para associação" value={query} disabled={saving} onChange={(event) => setQuery(event.target.value)} onSearch={(value) => void search(value)} loading={searching} enterButton="Buscar" />
-        <Typography.Text type="secondary">Sugestões iniciais combinam as expressões versionadas do processamento. Nenhuma opção é selecionada automaticamente.</Typography.Text>
+        <Input.Search aria-label="Buscar conceitos para associação" value={query} disabled={saving} onChange={(event) => { setQuery(event.target.value); scheduleSearch(event.target.value); }} onSearch={(value) => void search(value)} loading={searching} enterButton="Buscar" />
+        <Typography.Text type="secondary">A busca é atualizada automaticamente após 400 ms sem digitação. Sugestões iniciais combinam as expressões versionadas do processamento; nenhuma opção é selecionada automaticamente.</Typography.Text>
         {!searching && !candidates.length ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Nenhum conceito encontrado. Ajuste a busca ou proponha um conceito." /> : null}
         <Radio.Group aria-label="Conceito para associação" value={conceptId} disabled={saving} onChange={(event) => { setConceptId(event.target.value); onDirty(true); }} className="prisma-m74-candidates">
           {candidates.map((candidate) => <div key={candidate.id} className={conceptId === candidate.id ? "is-selected" : ""}><Radio value={candidate.id}>{candidate.canonicalLabel}</Radio>
