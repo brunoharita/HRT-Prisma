@@ -6275,3 +6275,31 @@ textarea {
   .prisma-person-delete-impact__grid { grid-template-columns: 1fr; }
   .prisma-person-data-card .ant-btn { width: 100%; white-space: normal; height: auto; min-height: 44px; }
 }
+/* M7.1 composes the shared Prisma/Ant Design surfaces, including mobile disclosure. */
+.prisma-position-taxonomy { display: grid; gap: 16px; margin-block: 20px; }
+.prisma-taxonomy-identity { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 20px; padding: 16px; margin-bottom: 16px; background: var(--prisma-surface-soft, #f5f8fd); border-radius: 10px; }
+.prisma-taxonomy-identity > div { min-width: 0; }
+.prisma-taxonomy-identity strong { display: block; margin: 6px 0; overflow-wrap: anywhere; }
+.prisma-taxonomy-references .ant-list-item { border: 1px solid #e4eaf3; border-radius: 8px; padding: 12px; margin-block: 8px; }
+.prisma-taxonomy-references .ant-list-item > div { min-width: 0; width: 100%; overflow-wrap: anywhere; }
+.prisma-taxonomy-references p { margin-block: 6px; font-size: 12px; color: #52637d; }
+.prisma-taxonomy-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.prisma-taxonomy-group { min-width: 0; border: 1px solid #e4eaf3; border-radius: 10px; padding: 14px; }
+.prisma-taxonomy-group h3 { font-size: 16px; margin: 0 0 12px; }
+.prisma-taxonomy-item > div { width: 100%; min-width: 0; overflow-wrap: anywhere; }
+.prisma-taxonomy-item strong { display: block; margin-bottom: 8px; }
+.prisma-taxonomy-item-actions { margin-top: 12px; margin-bottom: 12px; }
+.prisma-taxonomy-provenance { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; max-height: 360px; overflow: auto; }
+.prisma-taxonomy-history { width: 100%; }
+.prisma-taxonomy-drawer .ant-drawer-body { overflow-wrap: anywhere; }
+@media (max-width: 768px) {
+  .prisma-taxonomy-identity { grid-template-columns: 1fr; gap: 12px; }
+  .prisma-position-taxonomy .ant-card-head { display: block; padding-block: 12px; }
+  .prisma-position-taxonomy .ant-card-head-wrapper { display: block; }
+  .prisma-position-taxonomy .ant-card-head-title { white-space: normal; }
+  .prisma-position-taxonomy .ant-card-extra { margin-top: 8px; }
+  .prisma-position-taxonomy .ant-card-extra .ant-btn { height: auto; white-space: normal; text-align: left; }
+  .prisma-taxonomy-item-actions .ant-btn { height: auto; white-space: normal; }
+  .prisma-taxonomy-drawer .ant-list-item { display: block; }
+  .prisma-taxonomy-drawer .ant-list-item-action { margin: 8px 0; }
+}

@@ -2,13 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.7
-last_verified: 2026-09-17
+version: 2.34.0
+last_verified: 2026-09-18
 ---
 
 # Estado atual do Prisma
 
 ## Resumo operacional para prompts
+
+M7.1 implementado e validado localmente na branch `codex/m71-position-taxonomy`, sem migration, merge ou deploy remoto: `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção, insuficiência permite salvar manualmente/Inbox. Todas as referências sustentadas e métricas originais ficam explicáveis; sugestões/complementos não viram requisitos automaticamente. Overlay da empresa, correção auditável, histórico e origem por item reutilizam a fundação. Testes PostgreSQL com RLS real e fixtures, regressão e componente real no navegador constam no `docs/qa/aot-m71-position-taxonomy.md`. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. Produto permanece v1.6.4; M7.2, matching/score e IA não foram alterados. O remoto descrito abaixo ainda não recebeu M7.1.
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 

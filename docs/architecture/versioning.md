@@ -1,5 +1,11 @@
 # Versionamento
 
+## M7.1 local — 2026-09-18
+
+`position-taxonomy-1.0.0` é um novo contrato aditivo de interpretação/proveniência. `vacancy-definition` passa de 1.2.0 a 1.3.0 no novo salvamento atômico, sem alterar required/desired, fórmulas ou consumidores históricos. Versões antigas, inclusive estrutura assistida 2.0.0 histórica, não são reescritas; NULL no novo metadado significa sem interpretação M7.1 registrada. `vacancy-matching-explainable-5.0.0`, `matching-score-1.2.0` e snapshots aceitos pelo M6.2 permanecem.
+
+A versão pública continua v1.6.4 e o release registry não recebe entrada somente por esta implementação local. O pedido autoriza implementar M7.1 e aplicar a política, não declara uma nova entrega pública já aceita/ativada. O próximo registro oficial depende do fechamento/aceite de produto, sem inferir v1.7.1 a partir do nome do movimento. Nenhum deploy/merge remoto foi autorizado nesta execução. Prova local e limites constam no AoT M7.1.
+
 ## Ponte Paddle hospedada — 2026-09-16
 
 `paddle-hosted-transport-1.0.0` versiona cabeçalhos HTTP de sessão/organização e guardas do gateway temporário (ADR-058). Não altera payload Paddle, `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0, adapter 1.1.0, contratos de extração/persistência/revisão ou versão pública v1.6.4. Trata-se de implantação e proteção de transporte, sem nova entrega de produto aceita.

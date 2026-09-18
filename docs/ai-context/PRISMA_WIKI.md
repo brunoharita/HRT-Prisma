@@ -2,11 +2,15 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 2.0.0
-last_verified: 2026-09-14
+version: 2.1.0
+last_verified: 2026-09-18
 ---
 
 # Prisma Wiki
+
+## M7.1 — Taxonomia explicável de Posições
+
+Implementação local: nome da empresa, conceito Prisma e referências oficiais são leituras distintas. Knowledge aprovada permite associação exata segura ou seleção humana; insuficiência preserva fluxo manual. Sugestões mantêm fonte e métricas, sem obrigatoriedade automática. Complementos pertencem à empresa e requisitos continuam required/desired por decisão explícita. Explicação, correção, origem e histórico são acessíveis na própria Posição. Não cria evidência de Pessoa, não implementa M7.2, não muda matching/score nem promove Global. Ver ADR-060 e AoT M7.1; rollout remoto ainda não realizado.
 
 ## Vagas: revisão canônica M5.4.6
 

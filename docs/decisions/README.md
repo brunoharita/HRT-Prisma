@@ -67,6 +67,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Rules
 
+- [ADR-060: Taxonomia de Posições](ADR-060-position-taxonomy-projection.md) — accepted; projeção sob demanda da Knowledge existente, proveniência por versão, seleção humana de requisitos; prova local, sem rollout remoto.
+
 - [ADR-058: Ponte temporária Paddle hospedada](ADR-058-temporary-hosted-paddle-bridge.md) — accepted; SSH reverso, gateway autenticado e workers CPU locais; evidência no AoT.
 - [ADR-059: Pipeline serial de qualidade para currículos em produção](ADR-059-production-resume-quality-pipeline.md) — accepted; PDF.js, gate semântico, Paddle condicional e Parser IA antes da revisão humana.
 

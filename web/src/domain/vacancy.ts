@@ -1,4 +1,5 @@
 import type { PublishedProfileCandidate } from "./profileDiscovery.js";
+import type { PositionTaxonomy, TaxonomyDecision, TaxonomyItem } from "./positionTaxonomy.js";
 import {
   calculateMatchingScore,
   MATCHING_SCORE_CONTRACT_VERSION,
@@ -7,7 +8,7 @@ import {
   type VacancyFunctionAssessment,
 } from "./matchingScore.js";
 
-export const VACANCY_DEFINITION_VERSION = "1.2.0";
+export const VACANCY_DEFINITION_VERSION = "1.3.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-5.0.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
@@ -41,6 +42,7 @@ export interface VacancyRequirementDraft {
   categoryConfirmed?: boolean;
   importanceConfirmed?: boolean;
   sourceSuggestionId?: string | null;
+  taxonomyOrigin?: TaxonomyItem | null;
   observedTerm: string | null;
   conceptId: string | null;
   conceptLabel?: string | null;
@@ -72,6 +74,10 @@ export interface VacancyDraft {
   saveAsRole: boolean;
   changeKind: "material" | "editorial";
   structureSource: VacancyStructureSource | null;
+  taxonomy?: PositionTaxonomy | null;
+  taxonomyDecision?: TaxonomyDecision;
+  taxonomyComplementIds?: string[];
+  expectedVersionId?: string | null;
 }
 
 export interface ProfessionalReferenceRelation { id: string; targetConceptId: string; label: string; conceptType: string; relationType: string; source: string | null; sourceVersion: string | null; externalId: string | null; externalUri: string | null; }

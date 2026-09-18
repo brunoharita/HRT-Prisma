@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 190
-source_manifest_sha256: 24099b2b111f7561d5a8b802dd1e98f2670c051488230725bf3f6ab0434ae88f
+documentation_source_count: 194
+source_manifest_sha256: 19b4ea9f3f1d8677eb1e9bd9a73435d850968bb302446cfd57c3a6aa33f41a8b
 -->
 
 # Tudo sobre o Prisma
@@ -523,13 +523,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.33.7
-last_verified: 2026-09-17
+version: 2.34.0
+last_verified: 2026-09-18
 ---
 
 # Estado atual do Prisma
 
 ## Resumo operacional para prompts
+
+M7.1 implementado e validado localmente na branch `codex/m71-position-taxonomy`, sem migration, merge ou deploy remoto: `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção, insuficiência permite salvar manualmente/Inbox. Todas as referências sustentadas e métricas originais ficam explicáveis; sugestões/complementos não viram requisitos automaticamente. Overlay da empresa, correção auditável, histórico e origem por item reutilizam a fundação. Testes PostgreSQL com RLS real e fixtures, regressão e componente real no navegador constam no `docs/qa/aot-m71-position-taxonomy.md`. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. Produto permanece v1.6.4; M7.2, matching/score e IA não foram alterados. O remoto descrito abaixo ainda não recebeu M7.1.
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
@@ -970,11 +972,15 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 2.0.0
-last_verified: 2026-09-14
+version: 2.1.0
+last_verified: 2026-09-18
 ---
 
 # Prisma Wiki
+
+## M7.1 — Taxonomia explicável de Posições
+
+Implementação local: nome da empresa, conceito Prisma e referências oficiais são leituras distintas. Knowledge aprovada permite associação exata segura ou seleção humana; insuficiência preserva fluxo manual. Sugestões mantêm fonte e métricas, sem obrigatoriedade automática. Complementos pertencem à empresa e requisitos continuam required/desired por decisão explícita. Explicação, correção, origem e histórico são acessíveis na própria Posição. Não cria evidência de Pessoa, não implementa M7.2, não muda matching/score nem promove Global. Ver ADR-060 e AoT M7.1; rollout remoto ainda não realizado.
 
 ## Vagas: revisão canônica M5.4.6
 
@@ -2344,8 +2350,9 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `person-action-center` | product/application/UI | 1.0.0 | Central da Pessoa, documentos, M5 | implementado localmente | view model tipado e pendências derivadas com alvo documental explícito | local | não exibir ação sem destino disponível |
 | `prisma-profile-view` | product/application/UI | 1.0.0 | Central da Pessoa, Perfil, versões e comparação | implementado localmente | projeção canônica derivada do `professional-profile`, ordem estável e compatibilidade histórica | local | omitir seção inválida sem fabricar conteúdo |
 | `profile-discovery` | product/application/domain | 1.0.0 | busca de Pessoas, resultados e comparação | implementado localmente | filtros determinísticos, equivalência Knowledge explicada, todos/qualquer e tenant scope | local | não retornar resultado sem evidência do critério |
-| `vacancy-definition` | product/application/data | 1.2.0 | Vagas, posições, funções, histórico e matching | ativo no Prisma-QA | snapshots imutáveis, requisito estável, importância obrigatória antes de salvar e escrita tenant-scoped | local/QA | rejeitar nova versão com requisito sem classificação; preservar leitura histórica |
-| `vacancy-matching-explainable` | product/application/domain | 4.0.0 | descoberta e comparação M5.4/M6.1 | implementação local sobre schema ativo no Prisma-QA | experiência explícita na área, relação ocupacional e requisito permanecem leituras separadas; requisito genérico encontra termo profissional delimitado e não negado em qualquer grupo; score determinístico posterior | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
+| `vacancy-definition` | product/application/data | 1.3.0 local / 1.2.0 remoto | Vagas, posições, funções, histórico e matching | M7.1 validado localmente, não ativado remotamente | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local | preservar históricos; rejeitar metadado futuro/inválido e conflito |
+| `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 local | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local | falhar fechado sem inventar interpretação; NULL histórico é permitido |
+| `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
 | `profile-publication-delta` | product/application/data | 2.0.0 | revisão, publicação, Central da Pessoa | ativo no Prisma-QA | merge/replace, decisões por bloco, resolvedor determinístico e auditoria automática | local/QA | bloquear publicação com campo acionável |
@@ -2361,7 +2368,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `inference-ontology` | AI/domain | 1.0.0 | profile, search, matching | implementado | `inference-ontology-1.0.0` | local | bloquear inferência |
 | `structured-retrieval` | AI | 1.0.0 | search | implementado | `structured-lexical-1.0.0` | local | bloquear consulta |
 | `explainable-matching` | AI/domain | 1.0.0 | avaliação do vertical slice base | implementado | `matching-explainable-1.0.0` | local | bloquear avaliação |
-| `vacancy-matching-explainable` | AI/domain | 4.0.0 / score 1.1.0 | Posições, descoberta e aderência | ativo local/QA | evidência profissional explícita sem barreira de categoria e Prisma Score determinístico posterior | local/QA | preservar descoberta e retornar indisponível para versão desconhecida |
+| `vacancy-matching-explainable` | AI/domain | 5.0.0 / score 1.2.0 | Posições, descoberta e aderência | ativo local/QA | evidência profissional explícita sem barreira de categoria; trajetória antes do score; grupo C sem score comparável | local/QA | preservar descoberta e retornar indisponível para versão desconhecida |
 | `prompt-selection` | AI | 1.0.0 | extraction provider | implementado sem LLM | `no-llm-prompt-1.0.0` | local | bloquear processamento |
 | `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
@@ -2662,13 +2669,13 @@ O pipeline passa a ser `documento -> evidência -> termo observado -> normaliza�
 
 Fontes seguem `catalogue -> source version -> upload/fetch -> validate -> stage -> diff -> publish`. O catálogo não prova que um snapshot foi importado. No M5.2, `sourceIngestion` valida CSVs reais com manifesto e SHA-256, gera lotes idempotentes, e `knowledge_source_stage_records` mantém staging separado da Knowledge ativa. `publish_knowledge_source_version` exige um Super Admin ativo explícito e cria change set antes de marcar uma única versão corrente.
 
-A CBO `CBO 2002-2025-06-06` está publicada no Prisma-QA com 3.320 registros conceituais, 11.097 termos e 2.694 relações ocupação-família. Ocupação, Sinônimo e Família foram importados; Perfil Ocupacional ficou fora por não agregar valor lexical imediato. A ESCO v1.2.1 possui importer PT/EN de ocupações, skills e relações ocupação-skill com `essential/optional`, mas o snapshot oficial não foi obtido porque o portal exige aceite, e-mail e entrega do link; ela permanece somente catalogada. O*NET 31.0 possui importer validado localmente para Occupation Data, Essential Skills, Knowledge e Software Skills; `Importance` e `Level` ficam separados em `relation_attributes` com valor bruto, escala, arquivo e linha. Nenhum dos dois snapshots foi publicado ainda.
+Inspeção read-only de 2026-09-18 confirmou CBO `CBO 2002-2025-06-06`, ESCO `1.2.1` e O*NET `31.0` publicadas/correntes no backend existente, atualmente nomeado Prisma. CBO: 3.320 conceitos, 11.097 termos e 2.694 relações ocupação-família; ESCO: 16.941 conceitos, 29.502 termos e 126.040 relações requires, com relevance essential/optional; O*NET: 9.968 conceitos/termos e 40.921 relações (9.100 requires/skill e 31.821 uses/technology), com Importance e Level originais em relation_attributes. O snapshot ESCO classifica seus alvos como knowledge; M7.1 não reclassifica a fonte. Zero reconciliações ocupacionais aprovadas foram observadas: nenhuma equivalência entre bases é fabricada.
 
 O monitor `knowledge-source-monitor-1.0.1` verifica CBO, ESCO e O*NET no primeiro dia de cada mês às 01:00 em `America/Sao_Paulo`. `knowledge_source_checks` preserva cada resultado e `knowledge_sources` mantém o resumo consultado pela Home. O cron horário apenas encontra fontes com `next_check_at` vencido e suporta retentativas em 6h, 24h e 72h. CBO compara hashes dos três CSVs oficiais com o manifesto publicado; ESCO e O*NET comparam versão e data nas páginas oficiais. Detecção pode catalogar uma versão, mas nunca executa `publish_knowledge_source_version`.
 
 `knowledge-normalization-2.0.0` usa o escopo do termo, não o escopo do conceito, para aplicar precedência Organization -> Global. Somente correspondência exata e inequívoca resolve. Sugestões por prefixo ou substring servem apenas à decisão humana na Inbox. Relações como `is_a` nunca viram equivalência nem evidência profissional.
 
-O seletor inicial de referência em Posições faz uma leitura estreita sobre termos aprovados, não ambíguos e iniciados pelo texto digitado, limitada a conceitos de ocupação visíveis pela RLS. A busca espera a pausa de digitação, cancela a solicitação anterior e mantém cache somente durante a sessão da página. Busca por substring continua restrita às superfícies de decisão humana da Knowledge; a resolução canônica pelo título permanece no fluxo `occupation-resolution-on-demand`.
+Na implementação local M7.1, os seletores de Posições usam busca paginada por termos aprovados para escolha humana, sem transformar substring em correspondência automática. Preview resolve por alias exato inequívoco e escopo do termo, usa somente fonte oficial publicada/corrente para ocupações globais e conserva aliases/versões no snapshot. Reconciliações aprovadas e identidades estáveis permitem múltiplas fontes, com todas as origens. Os seis tipos já existentes organizam a apresentação; não há categoria nova ou ontologia paralela. Mappings, relações, overlays, Inbox e publicação permanecem os owners. RPCs históricas de resolução continuam preservadas, mas a nova tela não aciona o agente de resolução. Detalhes no ADR-060; não houve ativação remota do M7.1.
 
 Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.
 
@@ -2821,6 +2828,16 @@ API HTTP/BFF dedicada, fila assíncrona, embeddings vetoriais, LLM produtivo, ma
 
 # Arquitetura de Vagas M5.4
 
+## Extensão local M7.1
+
+O fluxo novo usa `save_position_taxonomy`, que envolve `save_vacancy_definition` e `record_vacancy_structure_source` na mesma transação. A fronteira de autorização legada continua ativa. `taxonomy_snapshot` na versão imutável registra `position-taxonomy-1.0.0`; a nova definição recebe `vacancy-definition-1.3.0`. `taxonomy_origin` no requisito conserva os vínculos da seleção explícita. Não existe nova entidade de Posição ou obrigação paralela.
+
+Ao copiar Posição anterior, `sourceVacancyId` conserva a linhagem e a definição original mantém a descrição assistida; a cópia não se declara uma nova extração assistida. Selecionar função também não carrega a descrição assistida do rascunho substituído. Isso preserva o contrato da RPC de proveniência na transação nova. Falha de proveniência causa rollback integral, coberto pela verificação SQL.
+
+`preview_position_taxonomy` consulta somente Knowledge aprovada/escopada e fontes oficiais correntes; é read-only. `search_position_taxonomy` pagina opções (25) para decisão humana, nunca normaliza por substring. `create_position_knowledge_complement` reutiliza o overlay e a governança Inbox/proposta/aprovação, sem argumento de escopo Global. Funções privadas não são executáveis pelo cliente. `expectedVersionId` é obrigatório ao editar e rejeita conflito; a prévia enviada pelo browser não é autoridade. O ledger ocupacional registra cada versão e o histórico da UI pagina snapshots em lotes de 20.
+
+Aliases/identidades aprovadas e fontes/métricas/versões ficam no snapshot. Título e requisitos humanos não são substituídos pela referência. Correção alimenta Inbox da empresa quando aplicável, sem publicar alias automaticamente. Decisão humana mantida conserva ator/instante próprios, separados do autor da nova versão. NULL continua histórico sem M7.1; desconhecido/inválido falha fechado. Rollback e ordem de ativação no ADR-060. Migration aplicada somente em PostgreSQL local descartável nesta entrega.
+
 ## Reuso
 
 A implementação reutiliza `job_roles`, `positions`, `vacancies`, `vacancy_requirements`, `professional_profiles`, profile-discovery, Knowledge, eventos e RLS. Não existe cadastro paralelo de Pessoa, Perfil, competência ou ocupação.
@@ -2843,9 +2860,9 @@ A implementação reutiliza `job_roles`, `positions`, `vacancies`, `vacancy_requ
 
 O cliente pagina todos os Perfis publicados do tenant por meio da fundação de profile-discovery, em ordem estável, e informa quantos foram analisados do total acessível. Não existe teto silencioso. A descoberta ocupacional é separada da aderência detalhada: referência oficial, alias/relação Knowledge aprovada, título profissional e cargos de experiências podem explicar por que uma Pessoa apareceu. Aproximação textual permanece possível relação até confirmação humana, auditada no `match_evaluations` existente.
 
-No matching 4.0.0, cada requisito consulta todo o conteúdo profissional publicado. A categoria permanece no resultado para organização e proveniência, sem limitar a recuperação. Termo explícito, lexicalmente delimitado e não negado, ou equivalência canônica publicada pode atender a requisito genérico; correspondência parcial ou nível não comprovado exige revisão; relação confirmada permanece `related_signal`. A descrição da Vaga não participa como evidência da Pessoa. Requisito `unclassified` continua permitido apenas no rascunho, mas não bloqueia a descoberta: a UI mostra a pendência e mantém a aderência detalhada incompleta. Todo Perfil publicado elegível é analisado, porém Perfis sem relação ocupacional, evidência direta, parcial, sinal relacionado ou confirmação humana não são retornados.
+No matching 5.0.0, a trajetória define A (direta), B (relacionada/transferível) e C (sinais contextuais) antes dos requisitos (ADR-057). Cada requisito continua consultando conteúdo profissional publicado, independentemente da categoria: termo explícito, delimitado e não negado ou equivalência aprovada pode sustentar requisito genérico. Correspondência parcial/nível não comprovado exige revisão; relação confirmada permanece sinal relacionado. Descrição e taxonomia da Posição nunca são evidência da Pessoa. Item unclassified histórico não bloqueia descoberta, mas mantém a leitura incompleta; novos salvamentos exigem classificação conforme M6.1.
 
-Desde o matching 3.0.0, o Score Prisma é derivado em memória após essa seleção; o matching 4.0.0 preserva fórmula e pesos. O domínio puro recebe Perfil publicado, relações/evidências, versões e requisitos; não busca dados, não chama IA e não muta fontes. A lista separa `main_area` de `related_area`, aplica decisões humanas dentro de cada grupo e usa score somente quando definitivo. Score provisório ou indisponível usa desempate neutro por nome/ID.
+O score 1.2.0 é derivado em memória somente para A/B; C conserva score null e não é compatibilidade competitiva. A ordenação respeita grupo, score decrescente (inclusive provisório identificado), decisão humana e desempate por nome/ID. O domínio puro não busca dados, chama IA ou muta fontes. M7.1 preserva fórmula, pesos e entrada de Pessoas; seus metadados são proveniência, não features adicionais de score.
 
 Evidência Demonstrada M5.1 ativa é carregada em lote na fronteira Supabase já autorizada e mapeada por competência exata e versões reconhecidas. Esse carregamento não faz parte da função de score, respeita RLS existente e não concede bônus. O resultado derivado pode ser persistido como snapshot dentro de `match_evaluations` quando o operador abre a explicação; não existe tabela, migration ou cache de score.
 
@@ -2890,6 +2907,12 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+## M7.1 local — 2026-09-18
+
+`position-taxonomy-1.0.0` é um novo contrato aditivo de interpretação/proveniência. `vacancy-definition` passa de 1.2.0 a 1.3.0 no novo salvamento atômico, sem alterar required/desired, fórmulas ou consumidores históricos. Versões antigas, inclusive estrutura assistida 2.0.0 histórica, não são reescritas; NULL no novo metadado significa sem interpretação M7.1 registrada. `vacancy-matching-explainable-5.0.0`, `matching-score-1.2.0` e snapshots aceitos pelo M6.2 permanecem.
+
+A versão pública continua v1.6.4 e o release registry não recebe entrada somente por esta implementação local. O pedido autoriza implementar M7.1 e aplicar a política, não declara uma nova entrega pública já aceita/ativada. O próximo registro oficial depende do fechamento/aceite de produto, sem inferir v1.7.1 a partir do nome do movimento. Nenhum deploy/merge remoto foi autorizado nesta execução. Prova local e limites constam no AoT M7.1.
 
 ## Ponte Paddle hospedada — 2026-09-16
 
@@ -6488,6 +6511,64 @@ O Parser IA continua ligado ao hash do PDF, à organização, às linhas-fonte, 
 
 ---
 
+## Source: `docs/decisions/ADR-060-position-taxonomy-projection.md`
+
+# ADR-060: Taxonomia de Posições como projeção versionada da Knowledge existente
+
+- Status: accepted (escopo autorizado pelo acordo M7.1; implementação e prova locais)
+- Date: 2026-09-18
+- Owners: product, engineering, security
+- Agreement: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 e execução integral referenciada.
+
+## Context / Problem
+
+A UI de Posições usa `vacancies` e `vacancy_versions`, não um novo cadastro. Já existem conceitos, termos, relações, mappings, reconciliação aprovada, overlay Organization e Inbox. A inspeção read-only confirmou CBO, ESCO e O*NET correntes/publicados, mas nenhuma reconciliação ocupacional aprovada no remoto. Os mocks não provam equivalência. O gate anterior de referência obrigatória e sua etapa de IA divergem do fluxo explicitamente autorizado no M7.1.
+
+## Decision
+
+Projetar a Knowledge aprovada sob demanda, sem nova ontologia/tabela: correspondência exata inequívoca de termos, precedência pelo escopo do termo Organization > Global e vínculo oficial publicado/corrente para conceitos globais. Substring serve apenas à seleção humana. Alias ambíguo não resolve automaticamente. Reconciliações aprovadas conectam identidades; rótulos parecidos não. Todas as fontes sustentadas permanecem, com métricas originais.
+
+`position-taxonomy-1.0.0` é salvo atomicamente em `vacancy_versions.taxonomy_snapshot` por `save_position_taxonomy`, que reutiliza a RPC vigente de definição e de estrutura. `vacancy-definition-1.3.0` é aditivo: metadados não entram no score. O servidor recompõe proveniência; não confia na prévia do navegador. Comparação de versão esperada evita sobrescrever edição concorrente.
+
+Estados: resolved, ambiguous, unresolved. Título é preservado literalmente. Uma escolha/remoção humana persiste ao editar o título até ação explícita de reavaliar/corrigir; novas decisões são versionadas. Sem associação, o operador pode salvar manualmente e alimentar a Inbox do tenant. Não há confirmação extra para associação automática segura.
+
+Sugestões não geram requisitos. Botões obrigatório/desejável usam o requisito existente. `taxonomy_origin` guarda a origem, inclusive após desassociar a ocupação. Complementos são conceitos Organization existentes ou criação explícita por administrador por Inbox/proposta/aprovação. Associação de complemento e seleção de requisito são ações distintas. A proposta original é preservada; o payload decidido omite somente o alias duplicado do próprio canônico, com auditoria. Nenhuma correção promove Global.
+
+## Alternatives considered / Reasons
+
+- Reuso de Knowledge + RPCs existentes: escolhido; já cobre identidade, curadoria, tenant e histórico.
+- Resolver M5.4.4 com IA/web: preservado como legado, não acionado pelo novo fluxo; ampliar IA/fontes é proibido pelo acordo.
+- Nova ontologia/tabela/importação em massa: rejeitada por duplicar fundação e publicação.
+- Grupos de software hardcoded e equivalência textual entre fontes: rejeitados; agrupamento deriva dos tipos reais publicados.
+
+Não foi necessária pesquisa externa, biblioteca, provider ou tecnologia nova. A autonomia A-* cobre a extensão aditiva, sem nova decisão de produto.
+
+## Consequences / Risks / Mitigation
+
+Limitação consciente: sem alias inequívoco ou reconciliação aprovada não há consolidação automática, mesmo que títulos pareçam próximos. CBO publicada fornece família ocupacional; não inventamos skills. A classificação ESCO publicada permanece knowledge, sem reclassificar silenciosamente a fonte. Payloads versionados crescem conforme as relações da ocupação; consultas são por ocupação, busca paginada e histórico carregado sob demanda. Operador mantém preenchimento em erros, pode tentar novamente e corrigir/desfazer. Falha de auditoria transacional bloqueia o salvamento, nunca finge sucesso.
+
+## Technical / Data impact
+
+Migration `20260918010000_m71_position_taxonomy.sql`: duas colunas opcionais, checks, helpers privados e quatro RPCs públicas. Não há backfill, tabela paralela, publicação massiva nem alteração destrutiva. Componentes Prisma/Ant Design e RPCs Supabase existentes. Preview sem mutação; save recompõe fontes correntes e grava ledger por versão. Instante/ator da decisão humana anterior é distinto do autor do salvamento se a decisão foi mantida.
+
+## Security and LGPD / AI impact
+
+Owner/Admin/Recruiter no tenant podem editar Posições; Super Admin mantém seu acesso prévio; tenant deve existir. Só Owner/Admin/Super Admin criam Knowledge. Membros/anon/inativos/outro tenant não ganham autoridade. Helpers sem grant público, `security definer` com `search_path=''`, snapshot atrás da RLS vigente, referências/itens de outro tenant rejeitados. Sem PII de currículo, segredo, LLM, embeddings ou Web no M7.1. O Assistente de mercado já existente não foi modificado nem incorporado à taxonomia.
+
+## Compatibility / Rollback
+
+NULL identifica versão histórica sem M7.1, não insuficiência profissional. Contrato futuro/inválido falha fechado; matching 5.0.0, score 1.2.0 e M6.2 permanecem. Rollback de ativação: frontend anterior e revogar as quatro RPCs novas por migration controlada; conservar colunas/snapshots para leitura e auditoria. Não apagar versões nem rebaixar dados. Aplicar migration antes de disponibilizar o frontend novo; não fazer deploy parcial.
+
+## Validation / Review / Replacement
+
+AoT `docs/qa/aot-m71-position-taxonomy.md`: PostgreSQL 17 descartável com RLS real das migrations, fixtures sintéticas e identificadores oficiais versionados; unitários, regressão e componente real no navegador. Nenhuma migration/deploy remoto nesta entrega. Revisar se volume real mostrar gargalo, novos mappings exigirem semântica não representada ou PO autorizar fonte/provider novo. Mudança de semântica requer novo acordo e versão, não extensão silenciosa.
+
+## References / Change history
+
+ADRs 013, 032, 036–040, 043, 050 e 057; owners de Knowledge/Posições/segurança. 2026-09-18: decisão derivada do acordo executada localmente.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6558,6 +6639,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 
 ## Rules
+
+- [ADR-060: Taxonomia de Posições](ADR-060-position-taxonomy-projection.md) — accepted; projeção sob demanda da Knowledge existente, proveniência por versão, seleção humana de requisitos; prova local, sem rollout remoto.
 
 - [ADR-058: Ponte temporária Paddle hospedada](ADR-058-temporary-hosted-paddle-bridge.md) — accepted; SSH reverso, gateway autenticado e workers CPU locais; evidência no AoT.
 - [ADR-059: Pipeline serial de qualidade para currículos em produção](ADR-059-production-resume-quality-pipeline.md) — accepted; PDF.js, gate semântico, Paddle condicional e Parser IA antes da revisão humana.
@@ -8151,11 +8234,19 @@ Engenharia escolhe medidas, espaçamento, tipografia, distribuição dos compone
 
 # Vagas como necessidade profissional estruturada
 
+## M7.1 — Taxonomia Profissional e Inteligência de Posições
+
+Implementação local, sem ativação remota: o nome da empresa permanece separado do conceito profissional Prisma e das referências CBO/ESCO/O*NET sustentadas. Correspondência aprovada inequívoca é automática, visível e corrigível; ambiguidade exige escolha e insuficiência preserva o preenchimento manual, sem inventar referência.
+
+Conhecimentos e habilidades relacionados são sugestões agrupadas pelos tipos efetivamente publicados, não uma lista automática de exigências. Cada inclusão pede obrigatório ou desejável no contrato existente. Knowledge complementar pertence à empresa, é reutilizável e só vira requisito após seleção explícita. Não usa estados de evidência da Pessoa, não presume proficiência e não altera o matching. “Por que o Prisma associou assim?” expõe fontes, versões, regra, decisão humana, histórico e correção; a origem também está disponível por item. Histórico sem interpretação M7.1 continua identificado como tal, sem reprocessamento retroativo.
+
+Detalhes e limites: ADR-060 e AoT M7.1. Nenhuma referência/equivalência dos mocks é dado de produto. Uma, duas ou três fontes são possíveis somente se sustentadas; não é obrigatório preencher as três.
+
 ## M6.1 — Score Prisma
 
 A descoberta continua respondendo quem possui relação profissional com a Posição. Depois dela, o Score Prisma organiza a compatibilidade observada de 0 a 100 sem excluir Pessoas, escolher vencedor ou substituir julgamento humano.
 
-A lista separa experiência na área principal de áreas/sinais relacionados e mostra score, cobertura e estado provisório. O detalhe explica área, função/senioridade, requisitos obrigatórios/desejáveis, evidências, pontos aplicáveis e versões. Falta de evidência é apresentada como informação insuficiente, nunca como incapacidade. Condições de localidade, regime, disponibilidade ou remuneração permanecem separadas do score profissional.
+A trajetória separa A (direta), B (relacionada/transferível) e C (somente contextual). A/B mostram score, cobertura e estado provisório; C permanece visível/recolhido e sem score comparável. O detalhe explica área, função/senioridade, requisitos, evidências, pontos aplicáveis e versões. Falta de evidência é informação insuficiente, nunca incapacidade. Localidade, regime, disponibilidade e remuneração ficam fora do score profissional.
 
 Não existem faixas baixa/média/alta, cutoff ou decisão automática no M6.1. O relatório sombra serve apenas à calibração futura e não retroalimenta o cálculo.
 
@@ -8179,7 +8270,7 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 3. revisar sugestões determinísticas, corrigir a dimensão e decidir obrigatório/desejável; pendências não escondem Pessoas, mas mantêm a aderência detalhada incompleta;
 4. consultar o detalhe editorial e o histórico;
 5. encontrar Pessoas pelos Perfis publicados do tenant;
-6. comparar exatamente duas Pessoas por requisito, sem score, ranking ou vencedor.
+6. comparar exatamente duas Pessoas por requisito e evidência; o score vigente não escolhe vencedor nem decide contratação.
 7. consultar o Assistente Prisma. Em `Na sua empresa`, a resposta usa somente a Vaga atual, Vagas e funções acessíveis e Knowledge publicada autorizada, incluindo relações publicadas quando disponíveis. Ela informa se a evidência interna é suficiente, parcial ou insuficiente; contagens são apenas metadados. Toda pergunta preenchida consulta a Web por padrão, separadamente da leitura interna, e mostra as fontes usadas. O operador pode escolher explicitamente `Somente fontes internas`; não há classificação oculta por palavras-chave. Nenhuma resposta substitui a leitura interna ou altera a Vaga automaticamente.
 
 ## Regras de aderência
@@ -8191,7 +8282,7 @@ Vagas com o mesmo título podem ter requisitos diferentes. O título nunca subst
 
 A relação com a posição aparece separada da aderência por requisitos: mesma referência, referência equivalente, referência relacionada, possível relação por título/experiência ou nenhuma relação automática. O usuário pode confirmar ou descartar a relação; sua decisão prevalece na ordenação, sem alterar Perfil, Vaga ou Knowledge.
 
-A ordenação é determinística e operacional. Primeiro respeita a decisão humana, depois a força da relação ocupacional, evidência direta, parcial, sinal relacionado e menor quantidade de requisitos obrigatórios sem evidência, usando nome apenas como desempate. Todos os Perfis publicados acessíveis são analisados, mas somente Perfis com algum sinal rastreável ou confirmação humana aparecem; a tela informa quantos foram analisados do total. Essa ordem não é score nem recomendação de contratação.
+A ordenação vigente é determinística: grupo de trajetória, Prisma Score decrescente em A/B (inclusive provisório identificado), decisão humana e nome/ID como desempate. C não recebe score competitivo. Todos os Perfis publicados acessíveis são analisados; a interface informa o universo analisado e a origem dos sinais. Não é recomendação automática de contratação. Essa regra antecede M7.1 e não foi alterada pela taxonomia.
 
 ## Estrutura canônica da Vaga pronta
 
@@ -8856,6 +8947,104 @@ approved_at: 2026-09-14
 ## Pendências
 
 Nenhuma decisão funcional pendente. Produção e uso com Pessoas reais exigem autorização própria.
+
+---
+
+## Source: `docs/qa/agreement-m71-position-taxonomy.md`
+
+# Contrato de Acordos — M7.1 Taxonomia Profissional e Inteligência de Posições
+
+Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: pedido explícito de implementação e texto integral em `execution-m71-position-taxonomy.md`, nesta tarefa, 2026-09-18. As imagens de Posições enviadas na retomada substituem as imagens iniciais. Este índice classifica o contrato aprovado; o texto integral integra cada requisito e prevalece sobre qualquer resumo.
+
+## DEVE — Inegociável
+
+- D-01 — Estender Knowledge/Professional Concept existentes, sem arquitetura paralela.
+- D-02 — Usar somente CBO, ESCO e O*NET publicados para normalização/relações oficiais.
+- D-03 — Construir/reutilizar sob demanda, sem ontologia massiva nova.
+- D-04 — Preservar o nome informado pela empresa.
+- D-05 — Associar conceito Prisma com uma ou mais referências sustentadas; suportar resolvido, ambíguo e insuficiente.
+- D-06 — Associação automática determinística, visível, explicável e corrigível, sem confirmação redundante.
+- D-07 — Ambiguidade material exige seleção humana; nunca escolha silenciosa.
+- D-08 — Insuficiência preserva título, fluxo manual e Inbox aplicáveis; não inventa referência.
+- D-09 — Cada ligação conserva fonte, identificador, rótulo, snapshot, método e instante/versão.
+- D-10 — Agrupar somente semânticas sustentadas, sem falsa ontologia comum nem equivalência superficial.
+- D-11 — Exibir conhecimentos/habilidades/atributos como sugestões, sem exigir tudo.
+- D-12 — Inclusão explícita no modelo atual de requisitos required/desired.
+- D-13 — Preservar medidas de fonte sem convertê-las em nível, senioridade, score ou peso.
+- D-14 — Complemento tenant-owned, reutilizável e distinguível, sem editar Global/fontes.
+- D-15 — Criar Knowledge não basta para tornar item requisito; seleção/classificação são separadas.
+- D-16 — Corrigir, substituir, resolver ou desfazer associação com auditoria.
+- D-17 — Correção local não promove Global; feedback reutilizável segue governança vigente.
+- D-18 — Reuso respeita tenant, escopo, publicação, versão, proveniência e ambiguidade.
+- D-19 — Acesso explícito ao porquê de toda interpretação material.
+- D-20 — Explicar nome, conceito, referências/versões, método, suporte, decisão humana/automática, histórico e correção; sem raciocínio privado.
+- D-21 — Origem recuperável por sugestão, usando divulgação progressiva.
+- D-22 — UX compartilhada, pt-BR, desktop/mobile, teclado/foco e estados recuperáveis.
+- D-23 — Referências da Posição nunca são competência/evidência da Pessoa.
+- D-24 — Preparar comparação posterior sem fundir Pessoa e Posição.
+- D-25 — Preservar matching A/B/C, fórmula, pesos e compatibilidade de snapshots históricos.
+- D-26 — Evoluir owner real da tela sem fundir Posição, Vaga e papel.
+- D-27 — Associações materiais reconstituíveis por versão, escopo, decisão e auditoria.
+- D-28 — Tenant em associações/feedback/complementos, RLS e autorização server-side sem novos privilégios.
+- D-29 — Linguagem neutra para ausência/insuficiência.
+- D-30 — Mudanças de interpretação rastreáveis, sem apagar histórico.
+- D-31 — Dados reais publicados, sem códigos/equivalências hardcoded dos exemplos.
+- D-32 — Conceitos/agrupadores reutilizáveis pelo futuro M7.2; não implementar Pessoa agora.
+
+## PROIBIDO
+
+- P-01 — Lominger.
+- P-02 — Web research para completar taxonomia.
+- P-03 — Nova fonte ocupacional externa.
+- P-04 — Nova LLM/provider/embedding/dependência externa de IA.
+- P-05 — Pré-publicação massiva de ontologia.
+- P-06 — Substituir título da empresa pelo oficial.
+- P-07 — Tratar uma fonte como exclusiva quando há múltiplos vínculos sustentados.
+- P-08 — Apagar proveniência na consolidação.
+- P-09 — Inferir exigência de todos os itens oficiais.
+- P-10 — Classificar requisitos automaticamente.
+- P-11 — Novo score/ranking/proficiência/senioridade/confiança probabilística.
+- P-12 — Alterar fórmula/pesos/ordenação do matching/Prisma Score.
+- P-13 — Converter taxonomia em evidência de Pessoa.
+- P-14 — Implementar M7.2.
+- P-15 — Sucessão/mobilidade/workforce planning/carreira.
+- P-16 — 360, novas avaliações/testes/feedback de Pessoa.
+- P-17 — Promoção Global automática de correção de cliente.
+- P-18 — Modificar snapshot oficial por necessidade da empresa.
+- P-19 — Duplicar required/desired.
+- P-20 — Ocultar normalização relevante.
+- P-21 — Bloquear silenciosamente Posição por falha de normalização.
+- P-22 — Relaxar RLS/autorização.
+- P-23 — Inventar categorias comuns não sustentadas.
+- P-24 — Usar códigos/textos ilustrativos como verdade.
+
+## FORA DE ESCOPO
+
+- F-01 — Pessoa/M7.2, parser/OCR/publicação de Perfil, verificação nova, sucessão/mobilidade/carreira, metodologia comportamental, nova fórmula ou proficiência.
+- F-02 — Pesquisa externa e reestruturação ampla de Knowledge.
+- F-03 — Deploy, merge ou alteração remota sem autorização específica; commit/push seguem AGENTS.md.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01 — Nomes internos, extensão ou contrato versionado aditivo, sem arquitetura paralela.
+- A-02 — Layout, microcopy, agrupadores após inspeção real, reuso de componentes/RPCs.
+- A-03 — Algoritmos determinísticos, índices/funções e refatoração mecânica necessária; sem nova semântica de negócio.
+
+## PENDÊNCIAS
+
+Nenhuma decisão funcional pendente identificada. Limites operacionais de validação são registrados no AoT, sem autorização implícita de rollout.
+
+## CRITÉRIOS DE ACEITE
+
+CA-D01 a CA-D32: aplicar a cada D-* as provas detalhadas no texto integral de execução (cenários positivos, negativos, UI e regressão). Testes devem cobrir título preservado, alias, uma/múltiplas fontes, ausência de fonte, ambiguidade, insuficiência, deduplicação/proveniência, correção/nova versão, requisito explícito, complemento isolado, ausência de Global automático, autorização, compatibilidade de matching/M6.2, desktop/mobile/foco e Context Pack. Cada D-* e P-* recebe linha própria no AoT e permanece NOT TESTED até prova efetiva.
+
+## Inspeção factual inicial
+
+Baseline `1215c6e1cdd603a741e14def6724525b4fded2cb`; branch `codex/m71-position-taxonomy`. Material alheio preservado: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu`.
+
+Consulta somente leitura ao backend `ioldpnqqvobprjiontre` confirmou CBO `CBO 2002-2025-06-06`, ESCO `1.2.1`, O*NET `31.0` publicados/correntes. A lista de projetos retorna nome atual `Prisma`, embora documentos o chamem Prisma-QA. Zero reconciliações ocupacionais aprovadas. CBO publicada tem `is_a` ocupação-família; ESCO tem `requires` com relevance essential/optional e conceitos classificados como knowledge no snapshot; O*NET tem requires/skill e uses/technology, com medidas originais. Não inventar relações ausentes ou reclassificar fontes.
+
+Owners antigos contradizem publicação corrente e versões de matching; estado verificado e contratos vigentes prevalecem. M7.1 usa resolução determinística publicada no fluxo novo e preserva RPCs históricas. O gate de referência da UI M5.4.4 será substituído pelo estado explícito permitido pelo contrato M7.1; a RPC vigente já aceita referência nula. Nenhuma alteração de fórmula/matching.
 
 ---
 
@@ -9938,6 +10127,119 @@ Não foi acionada uma verificação para Beatriz, porque ela é uma Pessoa real 
 
 ---
 
+## Source: `docs/qa/aot-m71-position-taxonomy.md`
+
+# AoT — M7.1 Taxonomia Profissional e Inteligência de Posições
+
+Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0 + texto integral em `docs/qa/execution-m71-position-taxonomy.md`. Data: 2026-09-18. Status: implementação/prova local. Não significa rollout remoto.
+
+## Evidências
+
+- E1 — `supabase/qa/m71_position_taxonomy_verification.sql`, executado com sucesso no PostgreSQL 17 local (loopback 55471, base descartável m71_contract_tests_4). RPCs atuais, autorização/RLS reais das migrations, usuários/empresas sintéticos, SET ROLE authenticated/anon, rollback das fixtures. Confirma alias/prioridade, ambiguidade, single/multisource aprovado, métricas, versões, correção, ausência de promoção e negativos de autorização. Versão final das funções reaplicada pelo runner local e verificada.
+- E2 — `pnpm run build` + Node test dirigido: positionTaxonomy, vacancyIntelligence, matchingScore, m62VerificationJourney, knowledgeFoundation, knowledgeNormalization e productRelease: **88/88 PASS**. Sem suite completa nem LLM.
+- E3 — navegador local, componente real `PositionTaxonomyPanel` montado por `tests/ui/m71.html`; serviços/atores sintéticos, sem escrita remota. Desktop 1764 px e viewport mobile 390 × 844. Resolução visível, fonte O*NET 31.0; inclusão desejável aumenta requisitos de 0 para 1; desfazer referência preserva título e requisito; criar/associar complemento mantém 1 e inclusão obrigatória explícita passa a 2. Ambiguidade mantém conceito vazio até escolha; seleção humana altera conceito e mantém nome da empresa. Drawer mostra histórico e operador; Escape fecha e foco retorna ao botão de origem. Modal e drawer mobile legíveis; largura útil 375 e scrollWidth 375, sem overflow horizontal. Erro simulado oferece retry, mantém 2 requisitos e texto; carregamento observado. Aviso de depreciação List da versão Ant Design existente, sem exceção funcional observada.
+- E4 — `pnpm run typecheck:web` e `pnpm run build:web`: PASS. Build conserva aviso de chunk Ant Design >900 kB, não introduziu dependência nova.
+- E5 — inspeção read-only do backend `ioldpnqqvobprjiontre`: CBO CBO 2002-2025-06-06, ESCO 1.2.1 e O*NET 31.0 publicadas/correntes; zero reconciliações aprovadas. Identificadores O*NET/ESCO da fixture vêm de linhas/snapshots observados; relações/crosswalk de teste são explicitamente sintéticos, nunca alegados como publicação real.
+- E6 — revisão do diff, owners/ADR-060, Context Pack gerado/checker e higiene do diff no fechamento. Nenhum arquivo de matching-score, M6.2, parser, perfil ou provider alterado. Fórmula, pesos, versão de matching 5.0.0 e score 1.2.0 mantidos.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste / evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- |
+| D-01 | Reusar fundação | Conceitos/termos/relações/mappings/RPCs existentes | E1, E2, ADR-060 | PASS | local; sem tabela paralela |
+| D-02 | Fontes oficiais publicadas | m71_official_links, filtro fonte/status/current | E1, E5 | PASS | sem fetch externo |
+| D-03 | Sob demanda | preview por título/ocupação; sem backfill | E1, E2, E6 | PASS | nenhum lote massivo |
+| D-04 | Preservar título | save restaura título literal; changeTaxonomyTitle | E1, E2, E3 | PASS | texto humano intacto |
+| D-05 | Conceito/estados/multisource | preview + reconciliações aprovadas | E1, E3 | PASS | crosswalk multisource sintético |
+| D-06 | Automático seguro e visível | alias exato, método e card | E1, E3 | PASS | não aproxima por substring |
+| D-07 | Ambiguidade humana | ambiguous sem seleção; picker | E1, E3 | PASS | alias ambíguo também bloqueia auto |
+| D-08 | Insuficiência/manual/Inbox | unresolved, clear, save sem referência | E1, E3 | PASS | falha transacional não vira sucesso |
+| D-09 | Proveniência por ligação | mapping/source/snapshot/método/data | E1, E2, E3 | PASS | fonte histórica preservada |
+| D-10 | Agrupamento sustentado | tipos publicados; dedup por ID | E1, E2 | PASS | não funde rótulos iguais |
+| D-11 | Sugestões não requisitos | items separados da definição | E1, E3 | PASS | listas vazias neutras |
+| D-12 | Seleção explícita | selectTaxonomyRequirement required/desired | E1, E2, E3 | PASS | modelo existente |
+| D-13 | Métricas originais | relation_attributes e detalhe progressivo | E1, E2 | PASS | não cria proficiência/peso |
+| D-14 | Complemento tenant-owned | create/reuse Organization | E1, E3 | PASS | autoridade admin existente |
+| D-15 | Criar/associar ≠ exigir | complement IDs separados dos requisitos | E1, E3 | PASS | três ações distinguíveis |
+| D-16 | Corrigir/desfazer | seleção, cleared, nova versão | E1, E3 | PASS | requisitos anteriores preservados |
+| D-17 | Feedback sem Global | Inbox da empresa, curadoria vigente | E1 | PASS | nenhum alias Global automático |
+| D-18 | Reuso escopado/versionado | publicação corrente; aliases aprovados | E1, E2, E6 | PASS | remount por viewScope já existente |
+| D-19 | Acesso ao porquê | card e drawer de explicação | E3 | PASS | também histórico sem contrato |
+| D-20 | Explicação completa | título, termos, conceito, fontes, regra, ator, versão/histórico | E1, E3, E4 | PASS | fatos/regras, não raciocínio privado |
+| D-21 | Origem por item | TaxonomyOriginDetails + origem no requisito | E1, E2, E3 | PASS | detalhes técnicos progressivos |
+| D-22 | UX responsiva/a11y/recuperação | PrismaCard, Ant Design, cancelamento/timeouts | E3, E4 | PASS | componente real, adaptador sintético |
+| D-23 | Separar Pessoa | nenhum estado de evidência de Pessoa na taxonomia | E1, E2, E6 | PASS | zero Pessoa criada |
+| D-24 | Comparação posterior separada | metadados não entram como evidência | E2, E6 | PASS | matching preservado |
+| D-25 | Matching compatível | funções/fórmula/pesos intactos | E2 | PASS | A/B/C e M6.2 |
+| D-26 | Owner real da tela | vacancy_versions sob UI Posições | E1, E6 | PASS | entidades não fundidas |
+| D-27 | Reconstituição | snapshot + ledger + origem + versão esperada | E1, E3 | PASS | sem sobrescrever histórico |
+| D-28 | Autorização/RLS | guard server-side e RLS herdada | E1 | PASS | negativos como authenticated/anon |
+| D-29 | Ausência neutra | unresolved/sem relações não é deficiência | E2, E3 | PASS | nenhuma penalização inventada |
+| D-30 | Mudanças auditáveis | ator/decisão/savedBy/previousVersion separados | E1 | PASS | decisão mantida preserva autor original |
+| D-31 | Fontes reais, mocks não são dados | consultas E5; códigos versionados na fixture | E1, E5 | PASS | sem PII real |
+| D-32 | Reuso futuro sem M7.2 | DTO/grupos sobre conceitos existentes | E2, E6 | PASS | nenhuma tela de Pessoa alterada |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo / evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem Lominger | Filtro explícito de 3 fontes; E1/E2 | PASS |
+| P-02 | Sem web research da taxonomia | E2/E6; novo fluxo não chama Agent/fetch | PASS |
+| P-03 | Sem fonte nova | E1 rejeita fonte fora da lista | PASS |
+| P-04 | Sem IA/provider/embedding novo | E2/E6; package/lock intactos | PASS |
+| P-05 | Sem ontologia massiva | E1/E6; zero tabela nova/backfill | PASS |
+| P-06 | Não substituir título | E1/E2/E3 | PASS |
+| P-07 | Não restringir fonte única | E1 multisource aprovado | PASS |
+| P-08 | Não perder proveniência | E1 dedup mantém duas origens | PASS |
+| P-09 | Não exigir todas as sugestões | E1 zero requisitos após preview/save | PASS |
+| P-10 | Não classificar automaticamente | E2/E3 required/desired só por clique | PASS |
+| P-11 | Sem score/proficiência novo | E1 métricas brutas; E2/E6 | PASS |
+| P-12 | Não mudar matching | E2, 62 testes de matching/Posições/M6.2 | PASS |
+| P-13 | Não criar evidência de Pessoa | E1 zero Pessoas; E2/E6 separação | PASS |
+| P-14 | Sem M7.2 | E6 escopo do diff | PASS |
+| P-15 | Sem carreira/sucessão/mobilidade | E6 escopo do diff | PASS |
+| P-16 | Sem avaliação/360 novo | E2/E6 | PASS |
+| P-17 | Sem promoção Global automática | E1 DML Global bloqueado; contagem Global inalterada | PASS |
+| P-18 | Sem editar fonte por necessidade da empresa | E1/E6 mutações limitadas ao overlay/versão | PASS |
+| P-19 | Sem obrigatoriedade paralela | E1/E2 contrato required/desired existente | PASS |
+| P-20 | Não ocultar normalização | E3 card, explicação, correção | PASS |
+| P-21 | Não bloquear silenciosamente | E1 unresolved salvo; E3 erro/retry preserva edição | PASS |
+| P-22 | Não relaxar autorização | E1 anon, member, inativo, outro tenant, helpers, DML | PASS |
+| P-23 | Não inventar ontologia comum | E1/E2 tipos/IDs reais; CBO família não vira skill | PASS |
+| P-24 | Não copiar dados ilustrativos | E5 e fixture com arquivo/linha/versão observados | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 | Sem alterações em Pessoa/M7.2/parser/OCR/verificação/fórmula/carreira | PASS |
+| F-02 | Sem provider externo/research/nova arquitetura de Knowledge | PASS |
+| F-03 | Sem migration, merge, deploy ou dados reais escritos remotamente; somente commit/push de código autorizados | PASS |
+
+## Desvios e decisões de execução
+
+Nenhum desvio funcional do acordo. A mudança de UX substitui o gate de referência obrigatório e a etapa IA anteriores por determinação/seleção explicitamente autorizadas; RPCs legadas preservadas. Grupos visuais são tipos reais, não grupos de software dos mocks. A versão pública permanece v1.6.4 conforme a política: código local validado não inventa aceite/ativação de nova entrega pública. Não houve nova decisão material nem expansão de fonte/provider.
+
+O teste local foi preparado com schemas mínimos auth/storage, min(uuid) de compatibilidade e remoção do helper antigo antes de M2 recriar suas políticas no banco vazio. Duas correções textuais históricas de currículo que não reaplicam sobre a migration atual e o monitor remoto Vault/Cron/net foram excluídos do bootstrap. Nenhuma migration canônica antiga foi editada; todos os owners atuais de Posições, Knowledge e RLS foram aplicados. É prova dirigida do M7.1, não certificação do replay histórico integral ou equivalência da plataforma Supabase completa.
+
+## Validação final / reprodução
+
+1. PostgreSQL local descartável, usuário m71_test, loopback, porta 55471: `pwsh -NoProfile -File scripts/test-m71-postgres.ps1 -Database m71_contract_tests_4 -VerifyOnly -RefreshFunctions`. Para base nova, omitir VerifyOnly/RefreshFunctions e escolher nome m71_* inexistente. O runner nunca reseta base existente.
+2. Build/88 testes/typecheck/build web conforme E2/E4.
+3. UI: `node node_modules/vite/bin/vite.js --config tests/ui/m71.vite.config.mts`; abrir `http://127.0.0.1:5571/m71.html`. Harness fora da entrada/build de produção, URL/key sintéticas loopback, mocks explícitos de todas as quatro operações.
+4. `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`; higiene e revisão somente dos arquivos do movimento. Não executar validate completo.
+5. Rollout futuro exige autorização: migration antes do frontend, smoke autenticado e sem PII, sem confundir ambiente único remoto com sandbox local. Nenhuma prova UI contra backend remoto novo é alegada.
+
+## Git / ambiente / resíduos
+
+Baseline 1215c6e1cdd603a741e14def6724525b4fded2cb; branch codex/m71-position-taxonomy. Entrega em commit coerente e push ao origin existente conforme autorização permanente; SHA final e igualdade da ref são informados no relatório de fechamento. Sem merge/deploy. Material alheio preservado: .tmp.driveupload/ e services/paddle/Dockerfile.gpu. Bases/logs descartáveis da verificação ficam em tmp/ ignorado; processos auxiliares desta tarefa são encerrados no fechamento.
+
+## Conclusão
+
+D-01–D-32 e P-01–P-24 PASS no escopo local acima. Implementação local concluída com validação proporcional. M7.1 **não está ativado no backend/frontend hospedados**; isso depende de autorização de rollout. Ausência de reconciliações aprovadas limita consolidação real entre fontes por governança, não por equivalência inventada.
+
+---
+
 ## Source: `docs/qa/aot-person-flow-validation.md`
 
 # AoT: validação reproduzível do fluxo da Pessoa
@@ -10760,6 +11062,721 @@ Implementar integralmente o contrato congelado `docs/qa/agreement-m62-verificati
 Preservar M6.1.1, `vacancy-matching-explainable-4.0.0`, `matching-score-1.0.0`, decisões humanas, RLS, isolamento multi-tenant e todo histórico. Criar a necessidade somente por RPC autorizada a partir do `match_evaluations.id` e do requisito pertencente à mesma versão imutável da Posição. Fazer loaders apenas de leitura. Usar prévias seguras e estados explícitos; não expor itens nem simular delivery. Validar localmente, aplicar somente a migration revisada no Prisma-QA, executar prova SQL negativa e smoke autenticado. Não tocar produção.
 
 Fechar com `docs/qa/aot-m62-verification-journey.md`, relacionando D-001 a D-014 e P-001 a P-006 a implementação, teste e evidência.
+
+---
+
+## Source: `docs/qa/execution-m71-position-taxonomy.md`
+
+# Execução M7.1 — Taxonomia Profissional e Inteligência de Posições
+
+Contrato: `docs/qa/agreement-m71-position-taxonomy.md` 1.0.0, aprovado pelo pedido explícito do Product Owner nesta tarefa. Texto original integral abaixo. As três imagens corretas fornecidas posteriormente substituem as referências visuais de Pessoa; dados ilustrativos não são autoridade.
+
+Implementar o Movimento 7.1 do Prisma: Taxonomia Profissional e Inteligência de Posições.
+Este movimento evolui capacidades já existentes de Knowledge, Professional Concept e Posições. Ele não cria uma segunda arquitetura paralela.
+O objetivo é permitir que uma Posição informada pela empresa seja normalizada de forma explicável contra as fontes oficiais já publicadas no Prisma — CBO, ESCO e O*NET —, preservando o nome escolhido pela empresa, consolidando referências equivalentes em uma camada própria do Prisma, apresentando conhecimentos/habilidades relacionados e permitindo complementação pela Knowledge da organização.
+A mesma taxonomia será reutilizada posteriormente pelo M7.2 para representar evidências da Pessoa, mas Pessoa não faz parte deste movimento.
+As imagens anexadas a este prompt são referências de direção de UX:
+- dashboard_prisma_de_posição_profissional.png
+- tela_prisma_interpretação_da_posição.png
+- modal_de_knowledge_complementar.png
+Elas não são contratos de dados nem devem ser copiadas literalmente. Nomes, códigos, versões, textos, números, status e exemplos nelas são ilustrativos. Em caso de conflito, este contrato, as decisões vigentes do Product Owner e as fontes canônicas do repositório prevalecem.
+Antes de modificar código, schema, contrato, documentação ou UX:
+1. Leia AGENTS.md integralmente.
+2. Consulte a seção pertinente de docs/ai-context/PRISMA_CURRENT_STATE.md.
+3. Leia as referências canônicas relevantes:
+   - docs/ai-context/PRISMA_WIKI.md
+   - docs/ai-context/PRISMA_TECHNICAL_REFERENCE.md
+   - docs/ai-context/PRISMA_AI_REFERENCE.md
+4. Leia os owners de Posição, Knowledge e Professional Concept, incluindo, quando existentes/aplicáveis:
+   - docs/product/vacancy-intelligence.md
+   - docs/architecture/vacancy-intelligence.md
+   - docs/architecture/professional-concept-architecture.md
+   - docs/architecture/contracts.md
+   - docs/ai/matching-contract.md
+   - docs/product/ux-foundation.md
+   - documentação de Knowledge em docs/product, docs/architecture e docs/ai
+   - ADRs vigentes relacionados a Knowledge, Professional Concept, Posições, matching, UX compartilhada e versionamento
+   - docs/security
+   - docs/qa/agreement-contract-template.md
+   - docs/qa/aot-template.md
+   - docs/architecture/versioning.md
+   - docs/qa/release-checklist.md
+5. Confirme no código, migrations, contratos e testes o estado real das capacidades existentes antes de desenhar qualquer solução.
+6. Inspecione especialmente:
+   - web/src/pages
+   - web/src/components
+   - web/src/styles.css
+   - serviços/domínio de Knowledge e Professional Concept
+   - serviços/domínio de Posições
+   - schemas/RPCs/migrations Supabase pertinentes
+   - ingestão publicada de CBO, ESCO e O*NET
+   - testes atuais de Posições, Knowledge, matching, RLS e isolamento por organização.
+7. Inspecione os schemas reais dos snapshots publicados de CBO, ESCO e O*NET. Não suponha que as três fontes usem as mesmas categorias, relações ou níveis.
+8. Reutilize capacidades existentes antes de criar qualquer novo componente, tabela, serviço, RPC, taxonomia ou contrato.
+Se houver divergência entre documentação e comportamento verificado, registre-a. Não use o comportamento existente para substituir uma decisão vigente do Product Owner.
+Considere como premissas, mas confirme no repositório:
+- CBO, ESCO e O*NET já estão publicadas no Prisma-QA e possuem snapshots/versionamento próprios.
+- A Knowledge já separa termo observado, conceito normalizado e inferência.
+- Existe Knowledge Global Prisma e Knowledge da empresa como overlay tenant-owned.
+- Termos desconhecidos podem ser preservados e tratados pela Knowledge Inbox.
+- Correções e propostas não podem virar verdade global silenciosamente.
+- Posição, vaga e papel são conceitos distintos e não devem ser fundidos.
+- Posições já possuem definição e requisitos versionados.
+- Requisitos novos aceitos usam required ou desired; não crie um segundo sistema de obrigatoriedade.
+- Matching, grupos A/B/C e Prisma Score possuem contratos vigentes e não fazem parte da reformulação semântica deste movimento.
+- Relações de CBO/ESCO/O*NET nunca se tornam evidência de competência de uma Pessoa.
+- Todo resultado material precisa manter proveniência, método e versão.
+- Ausência de informação não é deficiência.
+- A autorização deve continuar fora do frontend e falhar fechada.
+- A Knowledge da organização não altera automaticamente a Knowledge Global.
+A arquitetura deve tornar explícitos três níveis diferentes:
+```
+Nome informado pela empresa
+        ↓
+Conceito profissional Prisma
+        ↓
+Referências e relações das fontes oficiais
+CBO + ESCO + O*NET
+```
+Exemplo conceitual, sem assumir nomes/códigos reais:
+```
+Nome informado:
+"Desenvolvedor Backend"
+
+Conceito profissional Prisma:
+"Desenvolvimento de software / backend"
+
+Referências:
+CBO  → ocupação equivalente/relacionada
+ESCO → ocupação equivalente/relacionada
+O*NET → ocupação equivalente/relacionada
+```
+O nome fornecido pela empresa não deve ser substituído pela nomenclatura de CBO, ESCO ou O*NET.
+A taxonomia Prisma funciona como camada canônica de ligação e interpretação. As fontes oficiais continuam independentes e versionadas.
+Este contrato representa as decisões aprovadas pelo Product Owner para este movimento.
+Não reinterprete requisito numerado. Se houver conflito técnico real, interrompa somente a parte afetada, descreva o conflito e apresente alternativas para nova decisão.
+O M7.1 deve evoluir a arquitetura existente de Knowledge/Professional Concept.
+É proibido criar uma segunda base de conhecimento paralela para Posições.
+A normalização ocupacional e a obtenção de relações profissionais deste movimento devem usar apenas:
+- CBO publicada no Prisma;
+- ESCO publicada no Prisma;
+- O*NET publicada no Prisma.
+Não usar Lominger nem outra metodologia ou fonte externa neste movimento.
+A camada taxonômica Prisma deve crescer conforme Posições são utilizadas.
+Não pré-calcular nem publicar massivamente uma nova ontologia de todas as ocupações e relações existentes nas três bases.
+Quando uma Posição precisar de um conceito/relação:
+1. procurar capacidade/conceito Prisma já existente;
+2. reutilizar relação já consolidada quando aplicável;
+3. consultar os snapshots oficiais locais publicados;
+4. construir ou propor somente o conhecimento necessário para aquele uso;
+5. persistir proveniência e versão conforme contratos existentes.
+O título/nome de uma Posição é informação da organização.
+Exemplo:
+```
+Nome da posição:
+Desenvolvedor de software
+```
+A normalização não renomeia a Posição.
+O conceito profissional Prisma e as referências oficiais aparecem como informação associada.
+A Posição pode ser associada a um conceito profissional Prisma normalizado.
+Esse conceito deve poder possuir uma ou mais referências a CBO, ESCO e O*NET quando houver correspondência sustentada.
+Não exigir que as três fontes tenham sempre uma referência.
+Estados válidos precisam contemplar pelo menos:
+- associação resolvida;
+- associação ambígua;
+- associação ainda não resolvida/insuficiente.
+Os nomes técnicos exatos desses estados ficam a cargo da implementação, respeitando a linguagem de produto existente.
+Quando a resolução for suficientemente determinística segundo regras explicáveis e vigentes, o Prisma pode associar automaticamente a Posição ao conceito profissional correspondente.
+O usuário não deve ser obrigado a confirmar toda associação correta.
+A associação automática deve permanecer visível, explicável e corrigível.
+Se duas ou mais interpretações puderem alterar materialmente o conceito profissional, os conhecimentos relacionados ou o comportamento da Posição, não escolher silenciosamente.
+Apresentar opções compreensíveis ao usuário autorizado e exigir seleção explícita.
+Quando não houver base suficiente para normalizar:
+- preservar integralmente o nome informado;
+- não inventar ocupação equivalente;
+- não selecionar a opção “mais próxima” silenciosamente;
+- comunicar que a referência ainda não foi resolvida;
+- permitir os caminhos já aprovados de busca/seleção manual e Knowledge Inbox quando aplicáveis.
+A Posição não deve desaparecer nem ser tratada como inválida apenas porque a normalização não foi concluída, salvo contrato vigente que exija algo diferente.
+A taxonomia Prisma pode consolidar relações equivalentes entre CBO, ESCO e O*NET, mas deve manter cada ligação de origem.
+Para qualquer associação material, deve ser possível recuperar:
+- fonte;
+- identificador oficial;
+- rótulo/título na fonte;
+- versão/snapshot publicado;
+- método/regra de associação;
+- timestamp/versionamento aplicável.
+Não force as três fontes a uma estrutura falsa comum.
+Ao organizar conhecimentos, habilidades, competências, atividades ou outros atributos:
+- mapear somente o que os schemas reais sustentam;
+- preservar o tipo/origem da fonte;
+- consolidar conceitos equivalentes quando houver justificativa;
+- manter itens distintos quando a equivalência não for segura.
+A UX pode usar agrupadores Prisma compreensíveis, mas o modelo não pode esconder divergências relevantes das fontes.
+Depois da normalização, a Posição deve poder exibir os conhecimentos, habilidades, competências ou atributos profissionais relacionados ao conceito segundo CBO, ESCO e O*NET.
+Esses itens são referências/sugestões da taxonomia.
+Eles não se tornam automaticamente requisitos obrigatórios ou desejáveis da Posição.
+O usuário autorizado decide quais itens relacionados realmente fazem parte dos requisitos da Posição.
+Ao selecionar um item como requisito, reutilizar o contrato de requisitos vigente, inclusive required/desired.
+Não criar um segundo sistema paralelo de requisitos, criticidade ou obrigatoriedade.
+Se uma fonte possuir métricas próprias de importância, nível, frequência ou relevância, elas podem ser preservadas como dados da fonte quando permitido pelo contrato.
+Não converter automaticamente esses valores em:
+- senioridade Prisma;
+- nível de proficiência da Posição;
+- score novo;
+- peso de matching novo;
+- exigência obrigatória/desejável.
+Qualquer futura conversão exige decisão específica do Product Owner.
+A organização deve poder adicionar conhecimento profissional que não esteja adequadamente representado nas bases oficiais.
+Exemplos conceituais:
+- ISO 27001;
+- tecnologia proprietária;
+- política interna;
+- prática específica da organização.
+Esse conhecimento deve utilizar a Knowledge da empresa/overlay existente sempre que possível.
+Ele deve:
+- ser tenant-owned;
+- ficar visualmente distinguível de CBO/ESCO/O*NET;
+- poder ser reutilizado em outras Posições da mesma organização quando o domínio atual permitir;
+- nunca alterar automaticamente a Knowledge Global;
+- nunca editar os snapshots das fontes oficiais.
+Criar/usar um item na Knowledge da empresa não deve, sozinho, torná-lo requisito da Posição.
+A associação à Posição e a classificação required/desired devem seguir o fluxo de requisitos vigente.
+A interface da Posição deve fornecer uma ação clara equivalente a:
+Corrigir associação
+O usuário autorizado deve poder:
+- substituir a interpretação atual;
+- selecionar outra referência/conceito aplicável;
+- resolver uma ambiguidade;
+- desfazer uma associação incorreta conforme contrato.
+A correção precisa ser auditável.
+Uma correção feita em uma Posição deve alterar corretamente aquela Posição e, quando o desenho atual suportar, produzir feedback/proposta reutilizável no escopo da organização.
+Ela não pode alterar automaticamente a Knowledge Global Prisma.
+Promoção global continua sujeita à governança/publicação vigente.
+O uso deve permitir que o Prisma reutilize associações já conhecidas.
+Exemplo conceitual:
+```
+Primeira ocorrência:
+"Desenvolvedor Backend"
+→ conceito Prisma validado
+
+Ocorrência futura:
+"Backend Developer"
+→ pode reutilizar alias/relação já conhecida se a regra vigente sustentar
+```
+O reaproveitamento precisa respeitar:
+- organização;
+- escopo Global vs Organization;
+- versão;
+- proveniência;
+- ambiguidade;
+- publicação/autorização.
+Toda atuação de normalização, taxonomia ou Knowledge que influencie a Posição deve possuir acesso explícito na interface para explicar por que aquilo está acontecendo.
+A tela principal não precisa exibir todos os detalhes continuamente, mas deve existir acesso claro, por exemplo:
+- Por que o Prisma associou assim?
+- Como esta posição foi interpretada?
+- ícone de informação equivalente.
+A explicação deve apresentar, quando aplicável:
+1. nome original informado;
+2. conceito profissional Prisma associado;
+3. referências CBO/ESCO/O*NET utilizadas;
+4. identificadores e versões das fontes;
+5. regras/método aplicados;
+6. informações que sustentaram a interpretação;
+7. se a associação foi automática ou teve decisão humana;
+8. histórico/auditoria relevante;
+9. ação para corrigir a associação.
+Não expor cadeia privada de raciocínio de IA.
+Explicar por meio de fatos, regras, evidências, proveniência e decisão registrada.
+Ao visualizar um conhecimento/habilidade sugerido pela taxonomia, deve ser possível compreender sua origem.
+Exemplos:
+- presente na ESCO para a referência X;
+- relacionado no O*NET à ocupação Y;
+- proveniente da Knowledge da organização;
+- consolidado pelo conceito Prisma Z.
+Evitar transformar a tela principal em uma lista técnica excessiva. Usar progressive disclosure.
+Reutilizar componentes, padrões de disclosure, estados, locale, acessibilidade, foco, teclado e responsividade da UX compartilhada vigente.
+Desktop deve permitir leitura ampla da taxonomia.
+Mobile deve preservar:
+- compreensão;
+- acesso ao “por quê”;
+- correção da associação;
+- seleção de requisitos;
+- origem dos itens.
+M7.1 trabalha com aquilo que a Posição espera e com referências profissionais relacionadas.
+Não apresentar conhecimentos da taxonomia como se fossem características de uma Pessoa.
+Exemplo correto:
+“Conhecimentos e habilidades relacionados a esta ocupação.”
+Exemplo proibido:
+“Pessoas desta ocupação possuem estas habilidades.”
+O M7.1 deve deixar a Posição preparada para ser comparada ao Perfil da Pessoa, mas não deve fundir os dois modelos.
+Conceitualmente:
+```
+Posição
+o que é esperado
+        ↓
+     Matching
+        ↑
+Pessoa
+o que está evidenciado
+```
+Este movimento não altera a fórmula, pesos, grupos A/B/C ou regras vigentes do Prisma Score.
+Se novas relações normalizadas forem consumidas por capacidades já existentes, isso deve ser feito de modo versionado, explicável e backward-compatible.
+Nenhum snapshot histórico pode mudar de significado silenciosamente.
+Não use este movimento para fundir ou renomear agregados de domínio.
+Confirme no código qual entidade sustenta a tela Posições atualmente e evolua o owner correto.
+Nomenclatura histórica de contratos como vacancy-* não autoriza alterar o significado de Posição/Vaga sem decisão do Product Owner.
+Toda associação material criada por este movimento precisa ser reconstituível posteriormente.
+A persistência deve suportar, conforme aplicável:
+- conceito Prisma;
+- fonte oficial;
+- snapshot/versão;
+- método;
+- decisão humana;
+- escopo Global/Organization;
+- versão da Posição;
+- timestamps/auditoria.
+Todo conhecimento da empresa, feedback, correção ou associação organization-owned deve carregar o tenant e obedecer RLS/autorização.
+Não criar cache ou relação cross-tenant indevida.
+Use linguagem neutra para insuficiência ou ausência.
+Preferir conceitos como:
+- não resolvido;
+- sem referência encontrada;
+- ainda não classificado;
+- requer seleção.
+Não usar ausência de referência como deficiência da Posição.
+Mudanças relevantes na normalização da Posição devem ficar auditáveis.
+O usuário deve poder identificar que a interpretação mudou, por quem/quando quando houver decisão humana e quais referências/versionamentos foram afetados.
+Não hardcode listas, nomes, códigos ou equivalências apenas para satisfazer o exemplo “Desenvolvedor de software”.
+Testes podem usar fixtures controladas, mas a funcionalidade deve operar sobre os dados/versionamentos reais das fontes publicadas.
+A arquitetura criada deve permitir consumo posterior pelo Perfil da Pessoa sem duplicar conceitos.
+Isso significa que o M7.2 deverá poder referenciar os mesmos conceitos Prisma e agrupadores, adicionando evidências da Pessoa separadamente.
+Não implementar Pessoa agora.
+Não incluir Lominger neste movimento.
+Não usar internet/web research para completar a taxonomia da Posição.
+Não introduzir nova fonte externa de ocupações, skills ou competências.
+Não criar nova LLM, provider, embedding ou dependência de IA externa para resolver M7.1.
+Se alguma capacidade aprovada existente puder ser reutilizada sem ampliar escopo/fonte, confirme seus contratos antes; não expanda provider/modelo silenciosamente.
+Não pré-publicar toda CBO/ESCO/O*NET em uma nova tabela/ontologia Prisma apenas “para deixar pronto”.
+Não substituir o título dado pela organização pelo título oficial de uma fonte.
+Não tratar uma única fonte como autoridade exclusiva quando o conceito estiver relacionado a múltiplas fontes.
+Não apagar proveniência ao consolidar conceitos equivalentes.
+Não inferir que a Posição exige tudo que aparece em CBO, ESCO ou O*NET.
+Não marcar automaticamente item como obrigatório ou desejável.
+Não criar score, ranking, nível de proficiência, senioridade automática ou nova confiança probabilística.
+Não alterar fórmula/pesos/ordenação do matching ou Prisma Score.
+Não usar taxonomia da Posição como evidência de competência de Pessoa.
+Não implementar tela/Perfil de Pessoa do M7.2.
+Não implementar sucessão, mobilidade interna, workforce planning ou plano de carreira.
+Não implementar 360, novos testes, novas avaliações ou feedback de Pessoa.
+Não promover correção de cliente para Knowledge Global automaticamente.
+Não modificar os snapshots oficiais para acomodar necessidade da empresa.
+Não duplicar o mecanismo required|desired.
+Não esconder normalização relevante da interface.
+Não bloquear silenciosamente a Posição porque a normalização falhou.
+Não relaxar autorização/RLS para facilitar UX.
+Não inventar categorias comuns entre CBO/ESCO/O*NET que os dados não sustentem.
+Não usar os códigos/textos das imagens anexadas como fonte de verdade.
+Perfil de Competências e Evidências da Pessoa.
+Qualquer alteração de parser de currículo, OCR ou publicação de Perfil.
+Novos mecanismos de verificação de competências.
+Sucessão e mobilidade interna.
+Lominger ou qualquer metodologia comportamental adicional.
+Nova fórmula de matching ou Prisma Score.
+Proctoring, senioridade calculada ou proficiência calculada.
+Pesquisa externa de mercado para enriquecer a Posição.
+Reestruturação ampla do módulo Knowledge sem necessidade direta para este movimento.
+Deploy, merge ou alteração de ambiente remoto sem autorização específica vigente para isso.
+Commit/push devem seguir a autorização e as regras já registradas em AGENTS.md.
+Escolher nomes internos de tipos, componentes, serviços e tabelas, desde que respeitem a linguagem canônica e não criem arquitetura paralela.
+Escolher entre extensão de contratos existentes ou novo contrato versionado quando tecnicamente necessário.
+Definir o melhor layout responsivo a partir da UX compartilhada e das imagens de referência.
+Definir a estrutura interna de agrupadores/facets da taxonomia Prisma depois de inspecionar os schemas reais das três fontes.
+Definir algoritmos determinísticos de resolução, alias e deduplicação compatíveis com os dados atuais.
+Reutilizar componentes e RPCs existentes e refatorar mecanicamente quando isso reduzir duplicação sem alterar comportamento fora do contrato.
+Criar índices, views, funções ou materializações necessárias para desempenho, desde que não mudem autoridade ou semântica e possuam rollback/validação apropriados.
+Definir microcopy final consistente com o locale pt-BR, preservando os significados deste contrato.
+Não há pendência funcional conhecida que autorize reinterpretar o movimento.
+Se durante a inspeção surgir uma pendência que possa alterar comportamento, autoridade, dados, UX, custo, arquitetura, fonte externa, matching ou segurança, registre-a como Q-* e pare a parte afetada antes de implementar essa decisão.
+Questões puramente mecânicas permanecem sob autonomia de engenharia.
+Usuário informa, por exemplo:
+```
+Desenvolvedor de software
+```
+O Prisma preserva esse nome.
+Em seguida, a capacidade de normalização tenta localizar:
+1. conceito Prisma já conhecido;
+2. aliases/relações aprovados;
+3. referências compatíveis em CBO;
+4. referências compatíveis em ESCO;
+5. referências compatíveis em O*NET.
+Essa ordem é conceitual. Reutilize o fluxo vigente de resolução/Knowledge se ele já resolver parte ou toda a sequência de modo equivalente.
+Se houver associação não ambígua:
+```
+Nome informado
+Desenvolvedor de software
+
+Conceito Prisma
+<conceito profissional normalizado>
+
+Referências
+CBO  → <referência real>
+ESCO → <referência real>
+O*NET → <referência real>
+```
+A Posição recebe essa associação versionada sem alterar seu nome.
+Mostrar ao usuário as interpretações materiais possíveis, com contexto suficiente para escolher.
+Não usar códigos técnicos isolados como única explicação.
+Mostrar estado explícito.
+Permitir busca/seleção manual em bases publicadas conforme capacidades existentes.
+Preservar o termo para tratamento posterior.
+Após resolução, apresentar itens ligados às referências oficiais.
+Organizar em agrupadores Prisma compreensíveis.
+Exemplo puramente ilustrativo:
+```
+Desenvolvimento de software
+- programação
+- APIs
+- testes
+
+Arquitetura e integração
+- integração de sistemas
+- arquitetura de software
+
+Dados
+- bancos de dados
+- modelagem
+```
+Não hardcode esses grupos nem esses conteúdos. Eles devem derivar do modelo real e dos mappings aprovados.
+Cada item deve manter origem.
+Um item sugerido pode ser selecionado explicitamente pelo usuário.
+Ao selecioná-lo:
+- reutilizar requisito da Posição;
+- usuário define required ou desired conforme UX atual;
+- registrar origem daquele requisito quando possível.
+A taxonomia ajuda a definir a Posição, mas não decide a Posição.
+O usuário pode adicionar um conceito da Knowledge da organização.
+Exemplo:
+```
+ISO 27001
+```
+Esse item:
+- é criado/reutilizado no overlay da organização;
+- possui proveniência Organization;
+- não altera CBO/ESCO/O*NET;
+- não vira Global automaticamente;
+- pode ser associado à Posição;
+- se for requisito, usa o mesmo contrato required|desired.
+A implementação deve buscar a direção das imagens anexadas sem exigir reprodução pixel-perfect.
+Na visão principal da Posição, incluir uma leitura simples:
+```
+Referência ocupacional Prisma
+
+Nome informado pela empresa
+Desenvolvedor de software
+
+Conceito profissional Prisma
+<conceito normalizado>
+
+Referências oficiais
+CBO    <nome/código>
+ESCO   <nome/código>
+O*NET  <nome/código>
+
+[Por que o Prisma associou assim?]
+[Corrigir associação]
+```
+Se uma fonte não tiver referência aplicável, não simular uma.
+Apresentar agrupados, com progressive disclosure.
+O usuário deve distinguir visualmente:
+- item vindo de fonte oficial;
+- item consolidado Prisma com múltiplas fontes;
+- item da Knowledge da empresa.
+O padrão “Por que o Prisma associou assim?” deve abrir explicação similar ao mockup tela_prisma_interpretação_da_posição.png.
+Deve mostrar fatos e regras, não chain-of-thought.
+A direção visual do mockup modal_de_knowledge_complementar.png pode ser usada para:
+- selecionar/reutilizar conceito organization-owned;
+- criar conceito complementar quando permitido;
+- associar à Posição;
+- informar origem;
+- justificar contexto quando isso já fizer parte do contrato atual.
+Não crie campos obrigatórios sem necessidade de domínio.
+Preferir:
+- Referência ocupacional Prisma
+- Conceito profissional Prisma
+- Referências oficiais associadas
+- Conhecimentos e habilidades relacionados
+- Knowledge da empresa
+- Por que o Prisma associou assim?
+- Corrigir associação
+Evitar termos que indiquem verdade absoluta quando houver apenas relação de fonte.
+Um conceito Prisma pode reconhecer múltiplas formas observadas para a mesma ideia profissional.
+O alias não apaga a forma observada.
+Exemplo:
+```
+"Developer"
+"Desenvolvedor de software"
+"Software developer"
+```
+podem eventualmente convergir para o mesmo conceito quando as evidências/regras sustentarem.
+Não faça equivalência apenas por similaridade textual superficial.
+Uma equivalência entre ocupação CBO e ocupação ESCO/O*NET é uma relação do Prisma.
+Ela deve ser versionada e explicável.
+Se a equivalência for somente aproximada/relacionada, não apresente como igualdade perfeita.
+Modele graus/tipos relacionais determinísticos somente se já houver base conceitual e necessidade. Não crie score probabilístico.
+O Prisma precisa oferecer grupos de leitura para conhecimentos/habilidades, mas esses grupos devem nascer do que as fontes realmente fornecem e da camada canônica existente.
+Não declarar que CBO, ESCO e O*NET compartilham formalmente uma mesma ontologia CHA se isso não estiver demonstrado pelos dados.
+Uma solução aceitável pode diferenciar, por exemplo:
+- conhecimentos;
+- habilidades/skills;
+- competências;
+- atividades;
+- tecnologias/ferramentas;
+- atributos profissionais;
+mas o conjunto final deve ser definido após inspeção dos schemas e reutilizando conceitos existentes.
+A UX pode consolidar grupos próximos, desde que o detalhe preserve a origem semântica.
+M7.1 não redesenha matching.
+A implementação deve rodar a regressão do matching vigente e provar que:
+- grupos A/B/C continuam com o mesmo significado;
+- fórmula e pesos do Prisma Score não mudaram;
+- requisitos históricos continuam legíveis;
+- snapshots históricos continuam aceitos conforme contratos vigentes;
+- novos metadados taxonômicos não fazem Pessoa entrar em matching sem a evidência exigida pelas regras atuais.
+Se for necessário versionar algum snapshot de Posição somente para carregar a nova proveniência, documente compatibilidade e migração de leitura. Não mude significado histórico.
+Toda mutação deve respeitar os papéis e permissões atuais.
+Não conceda capacidade nova a member, recruiter, admin, owner ou super apenas por conveniência.
+Confirme no domínio quem atualmente pode:
+- criar/editar Posição;
+- editar requisitos;
+- publicar Knowledge da empresa;
+- corrigir associação;
+- promover proposta global.
+Use RLS/RPC/server boundary conforme owner vigente.
+Inclua testes negativos para:
+- anon;
+- usuário autenticado fora da organização;
+- papel sem permissão;
+- acesso cross-tenant;
+- tentativa de alterar Knowledge Global via endpoint organization-owned.
+Se a solução exigir mudança persistida:
+1. preferir extensão do modelo atual;
+2. manter contratos históricos legíveis;
+3. versionar mudanças semânticas;
+4. migrations forward-only e idempotência/segurança conforme padrão do repositório;
+5. não reescrever silenciosamente Posições históricas;
+6. não materializar equivalências globais sem governança;
+7. registrar source snapshot/version nos vínculos;
+8. preservar tenant ownership onde aplicável.
+Qualquer migração que toque RLS, PII, contratos ou matching é trabalho sensível e exige testes negativos.
+A implementação pode ser feita em etapas internas dentro deste único movimento:
+- mapear capacidades atuais;
+- identificar o que já existe de Professional Concept;
+- mapear campos reais de CBO/ESCO/O*NET;
+- confirmar fluxo atual de resolução de Posição;
+- identificar lacunas reais.
+- estender o conceito Prisma necessário;
+- preservar source links/versionamento;
+- garantir alias/proveniência;
+- suportar status resolvido/ambíguo/insuficiente.
+- integrar criação/edição;
+- auto-associação explicável quando segura;
+- intervenção humana quando ambígua;
+- correção auditável.
+- ler relações das fontes;
+- consolidar sem perder origem;
+- projetar agrupadores;
+- disponibilizar seleção para requisitos.
+- reutilizar overlay;
+- associar item complementar;
+- preservar origem;
+- impedir publicação global automática.
+- bloco de referência ocupacional;
+- agrupamentos;
+- drawer “por que”;
+- correção;
+- responsividade/acessibilidade.
+- testes;
+- segurança;
+- matching;
+- documentação;
+- Context Pack;
+- versão;
+- AoT.
+Essa sequência é orientação de execução, não autorização para reinterpretar os requisitos.
+Existe evidência em código/documentação de que a solução estendeu Knowledge/Professional Concept vigente, sem uma segunda arquitetura paralela.
+Relaciona-se a D-01.
+Criar/editar uma Posição com um título válido mantém exatamente o nome informado para exibição de negócio, mesmo após normalização.
+Relaciona-se a D-04.
+Com fixture/registro derivado dos snapshots publicados, uma Posição não ambígua consegue associar um conceito Prisma e as referências oficiais realmente existentes.
+Não exigir referência nas três fontes se os dados não sustentarem.
+Relaciona-se a D-05, D-09 e D-31.
+Uma associação automática segura:
+- aparece na tela;
+- informa que foi normalizada;
+- possui “por quê”;
+- possui ação de correção;
+- registra método/versão.
+Relaciona-se a D-06, D-16, D-19 e D-20.
+Teste controlado com termo ambíguo deve terminar em estado que exige decisão humana e não persistir escolha arbitrária como definitiva.
+Relaciona-se a D-07.
+Termo sem correspondência suficiente permanece preservado e entra no fluxo de resolução/manual/Inbox aplicável, sem ocupação fabricada.
+Relaciona-se a D-08.
+Para item consolidado, a interface/detalhe e a persistência permitem identificar cada fonte real que o sustenta e sua versão.
+Relaciona-se a D-09, D-10 e D-21.
+A normalização pode trazer conhecimentos/habilidades, mas nenhum deles é persistido como required/desired sem ação explícita do usuário.
+Relaciona-se a D-11 e D-12.
+Ao selecionar item sugerido, ele entra no mesmo modelo/versionamento de requisitos já utilizado pela Posição.
+Relaciona-se a D-12 e D-15.
+Nenhum novo score, nível, senioridade ou proficiência é derivado automaticamente.
+Relaciona-se a D-13 e P-11.
+Criar/reutilizar um item organization-owned:
+- aparece como origem da empresa;
+- funciona apenas no tenant autorizado;
+- não altera snapshot oficial;
+- não altera Knowledge Global automaticamente.
+Relaciona-se a D-14, D-17 e D-28.
+Corrigir a associação de uma Posição registra a mudança de modo rastreável e altera a projeção atual sem apagar o histórico necessário.
+Relaciona-se a D-16 e D-30.
+Teste/prova demonstra que feedback/correção organization-owned não publica mudança Global automaticamente.
+Relaciona-se a D-17.
+A ação “Por que o Prisma associou assim?” mostra o conjunto aplicável definido em D-20, sem expor raciocínio privado.
+Fluxos principais funcionam em desktop e mobile, com teclado/foco e padrões da UX compartilhada.
+Relaciona-se a D-22.
+Nenhum dado ou relação criada por M7.1 é gravado como competência/evidência de Pessoa.
+Relaciona-se a D-23 e P-13.
+Suites relevantes confirmam os contratos vigentes de matching/score e leitura de snapshots históricos.
+Relaciona-se a D-25.
+Testes negativos cobrem acesso cross-tenant e mutações indevidas de Knowledge.
+Relaciona-se a D-28.
+Código, configuração e testes comprovam que M7.1 não introduziu Lominger, web research, fonte ocupacional externa, embedding ou novo provider.
+Relaciona-se a D-02 e P-01 a P-04.
+Prova de arquitetura/execução demonstra que o movimento não pré-populou uma nova ontologia completa. Conceitos/relações Prisma são criados/reutilizados conforme necessidade e governança.
+Relaciona-se a D-03 e P-05.
+Documentação proprietária, estado factual aplicável e artefatos gerados são atualizados conforme a regra de mudança material.
+Executar:
+```
+pnpm run generate:prisma-context
+pnpm run check:prisma-context
+```
+Cada D-* e P-* aplicável deve aparecer no AoT com:
+- implementação;
+- teste;
+- evidência;
+- status.
+Nenhum D-* tecnicamente verificável pode ser declarado PASS sem evidência.
+Não limitar-se a estes se o impacto real exigir mais.
+- resolução de alias conhecido;
+- associação com uma única fonte;
+- associação com múltiplas fontes;
+- ausência em uma das três fontes;
+- ambiguidade;
+- não encontrado;
+- deduplicação;
+- preservação de proveniência;
+- versionamento de source link;
+- Knowledge Organization vs Global.
+- criação;
+- edição;
+- normalização;
+- correção;
+- nova versão;
+- requisitos required/desired;
+- remoção/substituição de associação conforme contrato.
+- estado carregando;
+- resolvido;
+- ambíguo;
+- insuficiente;
+- erro recuperável;
+- “por que”;
+- corrigir associação;
+- adicionar complemento;
+- selecionar requisito;
+- mobile;
+- teclado/foco.
+- anon bloqueado;
+- usuário sem membership;
+- cross-tenant;
+- papel sem autoridade;
+- tentativa de alteração Global via operação Organization.
+- Posições existentes;
+- requisitos históricos;
+- matching A/B/C;
+- Prisma Score;
+- M6.2, quando depender do snapshot de Posição;
+- Knowledge Inbox;
+- Knowledge Global/Organization;
+- release registry.
+Não utilizar PII real.
+Não usar currículo real.
+Criar fixtures sintéticas quando necessário.
+Pode usar nomes de cargo genéricos como:
+- Desenvolvedor de software;
+- Analista financeiro;
+- Coordenador de logística.
+Entretanto, códigos CBO/ESCO/O*NET usados como assertiva em teste devem vir das fontes publicadas atuais ou de fixture explicitamente versionada derivada delas.
+Nunca copiar códigos ilustrativos das imagens.
+Como a mudança é material, atualizar os owners correspondentes.
+No mínimo, avaliar necessidade de atualização em:
+- produto/linguagem de Posições;
+- arquitetura de Professional Concept;
+- arquitetura de Posições;
+- contratos;
+- Knowledge;
+- AI/retrieval, somente se realmente afetado;
+- segurança;
+- QA;
+- current state após prova real;
+- versionamento/release.
+Não editar manualmente:
+- FONTE_GPT_PRISMA.md;
+- TUDO_SOBRE_PRISMA.md.
+Gerá-los pelos comandos oficiais.
+Criar/atualizar Agreement Contract e AoT nos caminhos de QA seguindo os templates vigentes.
+O nome do movimento é:
+M7.1 — Taxonomia Profissional e Inteligência de Posições
+O número do movimento não determina automaticamente a versão pública do produto.
+Aplicar docs/architecture/versioning.md e o release registry vigente para decidir a versão.
+Não incrementar por commit, correção mecânica ou mera documentação.
+Ao finalizar, entregar um resumo objetivo contendo:
+1. comportamento implementado;
+2. contratos/versões alterados;
+3. migrations criadas/aplicadas localmente ou em QA autorizado;
+4. principais arquivos modificados;
+5. testes executados e resultados;
+6. provas negativas de segurança;
+7. regressão de matching;
+8. documentação atualizada;
+9. status de cada requisito no AoT;
+10. desvios do contrato, se houver;
+11. pendências/bloqueios reais;
+12. commit e push conforme autorização vigente.
+Não declarar conclusão se houver D-* obrigatório em FAIL, PARTIAL, BLOCKED ou NOT TESTED quando a prova for tecnicamente possível.
+Antes da primeira alteração material, responda no terminal/registro de execução com uma síntese curta contendo:
+- quais D-* serão implementados;
+- quais P-* não podem ocorrer;
+- o que está fora de escopo;
+- onde existe autonomia de engenharia;
+- qualquer conflito factual encontrado no código/documentação.
+Essa declaração não pede nova aprovação se não existir Q-* material.
+Se não houver conflito, prossiga até a entrega completa do M7.1 dentro das autorizações vigentes.
+Ao concluir o M7.1, a Posição deixa de ser apenas um conjunto de textos e requisitos isolados.
+Ela passa a possuir uma referência profissional explicável:
+```
+Posição da empresa
+        ↓
+Conceito profissional Prisma
+        ↓
+CBO + ESCO + O*NET
+        ↓
+conhecimentos/habilidades relacionados
+        ↓
+seleção humana dos requisitos reais
+        +
+Knowledge complementar da organização
+```
+O Prisma passa a ter uma linguagem profissional comum, progressiva e rastreável para Posições.
+Essa linguagem será a base consumida posteriormente pelo M7.2 para representar aquilo que está evidenciado na Pessoa.
+O M7.1 não compara Pessoa e Posição. Essa junção continua pertencendo ao matching.
 
 ---
 
@@ -12887,6 +13904,10 @@ Deduplicação é tenant-scoped e conservadora. E-mail ou telefone válidos são
 ## Source: `docs/security/professional-concept-security.md`
 
 # Segurança da Knowledge
+
+## M7.1 — fronteira de Posições
+
+As quatro RPCs M7.1 validam organização existente, usuário ativo e papel persistido antes da leitura/mutação; `anon` não executa. Preview/save/search exigem Owner/Admin/Recruiter ou Super Admin. Criar complemento também exige `require_knowledge_admin`; não existe parâmetro para promoção Global. Helpers são privados/revogados, com search path vazio. Novas colunas herdam RLS de versões/requisitos; o servidor recompõe proveniência e rejeita IDs de outro tenant, versão desconhecida e edição concorrente. A transação inclui definição, estrutura, origem, ledger e Inbox. Falha obrigatória não vira sucesso parcial. Os testes SQL locais exercitam credenciais sintéticas com `SET ROLE authenticated/anon`, não somente superusuário (AoT M7.1).
 
 - Toda tabela organizacional carrega `organization_id`, FK, índice e RLS.
 - Global Knowledge é publicada somente por Super Admin; Organization Knowledge, por Owner/Admin do escopo. Recruiter consulta e observa; Member não administra.

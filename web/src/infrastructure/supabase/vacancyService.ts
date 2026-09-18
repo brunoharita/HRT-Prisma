@@ -20,6 +20,8 @@ import {
 import { supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors.js";
 import type { Json } from "./database.types.js";
 import { supabase } from "./client.js";
+import { readPositionTaxonomy, readTaxonomyItem } from "../../domain/positionTaxonomy.js";
+import { positionTaxonomyService } from "./positionTaxonomyService.js";
 import { loadPublishedProfileCandidateCollection, loadPublishedProfileCandidates } from "./profileDiscoveryService.js";
 
 export interface OrganizationRoleTemplate {
@@ -125,11 +127,16 @@ export const vacancyService = {
     throwIfError(relationResult.error, "Não foi possível carregar os sinais relacionados confirmados.");
     throwIfError(occupantResult.error, "Não foi possível carregar a Pessoa ocupante.");
     const relations = relationResult.data ?? [];
+    const taxonomy = readPositionTaxonomy((version as unknown as { taxonomy_snapshot?: unknown }).taxonomy_snapshot, organizationId);
     return {
       id: vacancy.id,
       organizationId,
       versionId: version.id,
       version: version.version,
+      taxonomy,
+      taxonomyDecision: taxonomy?.decision ?? (version.reference_concept_id ? "human" : "automatic"),
+      taxonomyComplementIds: taxonomy?.complements.map((item) => item.conceptId) ?? [],
+      expectedVersionId: version.id,
       title: version.title,
       area: version.area ?? "",
       location: version.location ?? "",
@@ -155,6 +162,7 @@ export const vacancyService = {
         sourceSuggestionId: item.source_suggestion_id,
         observedTerm: item.observed_term,
         conceptId: item.concept_id,
+        taxonomyOrigin: readTaxonomyItem((item as unknown as { taxonomy_origin?: unknown }).taxonomy_origin, organizationId),
         conceptLabel: item.concept_id ? conceptResult.get(item.concept_id) ?? null : null,
         relationMode: item.relation_mode,
         relatedSignals: relations.filter((relation) => relation.requirement_id === item.id).map((relation) => ({
@@ -181,6 +189,10 @@ export const vacancyService = {
   },
 
   async save(organizationId: string, draft: VacancyDraft): Promise<{ id: string; version: number }> {
+    return positionTaxonomyService.save(organizationId, draft);
+  },
+
+  async saveLegacy(organizationId: string, draft: VacancyDraft): Promise<{ id: string; version: number }> {
     const result = await supabase.rpc("save_vacancy_definition", {
       p_organization_id: organizationId,
       p_vacancy_id: draft.id,

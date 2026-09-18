@@ -1,3 +1,6 @@
+import { PositionTaxonomyPanel, TaxonomyOriginDetails } from "../components/PositionTaxonomyPanel";
+import { positionTaxonomyService } from "../infrastructure/supabase/positionTaxonomyService";
+import { changeTaxonomyTitle } from "../domain/positionTaxonomy";
 import { toggleComparisonSelection } from "../shared/uxFoundation";
 import { usePrismaScope, useUnsavedChanges, useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
@@ -59,10 +62,8 @@ import {
   answerVacancyQuestion,
   emptyVacancyDraft,
   inferRequirementCategory,
-  materializeVacancyFromProfessionalReference,
   newManualVacancyRequirement,
   newVacancyRequirement,
-  occupationResolutionMessage,
   sortVacancyMatches,
   structureVacancyDescription,
   sourceKindAfterOccupationReference,
@@ -82,7 +83,6 @@ import {
   type VacancyRequirementDraft,
   type VacancyStructureSuggestion,
   type VacancySummary,
-  type OccupationResolution,
 } from "../domain/vacancy.js";
 import {
   vacancyService,
@@ -178,9 +178,6 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [advisorLoading, setAdvisorLoading] = useState(false);
   const [advisorScope, setAdvisorScope] = useState<"market" | "internal">("market");
   const [advisorHelpOpen, setAdvisorHelpOpen] = useState(false);
-  const [occupationResolution, setOccupationResolution] = useState<OccupationResolution | null>(null);
-  const [occupationLoading, setOccupationLoading] = useState(false);
-  const [referencePreparing, setReferencePreparing] = useState(false);
   const [referenceSearchLoading, setReferenceSearchLoading] = useState(false);
   const [referenceSearchTerm, setReferenceSearchTerm] = useState("");
   const [referenceSearchError, setReferenceSearchError] = useState<string | null>(null);
@@ -188,8 +185,6 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const referenceSearchTimer = useRef<number | null>(null);
   const referenceSearchAbort = useRef<AbortController | null>(null);
   const referenceSearchCache = useRef(new Map<string, VacancyReferenceSuggestion[]>());
-  const [referencePrepared, setReferencePrepared] = useState(false);
-  const [occupationExplorerOpen, setOccupationExplorerOpen] = useState(false);
   const [restructureOpen, setRestructureOpen] = useState(false);
   const [restructureDescription, setRestructureDescription] = useState("");
   const [restructureDelta, setRestructureDelta] = useState<ReturnType<typeof compareVacancyRequirements>>([]);
@@ -233,11 +228,13 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   async function usePrevious(id: string) {
     const detail = await vacancyService.load(activeMembership.organizationId, id);
     if (!detail) return;
-    setDraft({ ...detail, id: null, sourceKind: "previous_vacancy", sourceVacancyId: id, occupantPersonId: null, occupancy: "vacant", saveAsRole: false });
+    // The source definition keeps its assisted-description trace; this copy is
+    // derived from that position, not a new assisted-description extraction.
+    setDraft({ ...detail, id: null, expectedVersionId: null, taxonomy: null, structureSource: null, sourceKind: "previous_vacancy", sourceVacancyId: id, occupantPersonId: null, occupancy: "vacant", saveAsRole: false });
   }
   function useRole(id: string) {
     const role = roles.find((item) => item.id === id); if (!role) return;
-    setDraft((current) => ({ ...current, title: role.name, mission: role.mission, responsibilities: role.responsibilities, expectedOutcomes: role.expectedOutcomes, requirements: role.requirements, contextItems: role.contextItems, sourceKind: "organization_role", jobRoleId: role.id, referenceConceptId: role.referenceConceptId }));
+    setDraft((current) => ({ ...current, title: role.name, mission: role.mission, responsibilities: role.responsibilities, expectedOutcomes: role.expectedOutcomes, requirements: role.requirements, contextItems: role.contextItems, sourceKind: "organization_role", jobRoleId: role.id, structureSource: null, referenceConceptId: role.referenceConceptId, taxonomy: null, taxonomyDecision: role.referenceConceptId ? "human" : "automatic", taxonomyComplementIds: [] }));
   }
   function searchReferences(value: string) {
     const query = value.trim();
@@ -269,7 +266,8 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     referenceSearchAbort.current = controller;
     const timeout = window.setTimeout(() => controller.abort(), 8000);
     try {
-      const result = await vacancyService.suggestReferences(activeMembership.organizationId, query, controller.signal);
+      const page = await positionTaxonomyService.search(activeMembership.organizationId, query, "occupation", 0, controller.signal);
+      const result = page.items.map((item) => ({ conceptId: item.id, label: item.label, scope: item.scope, source: null }));
       if (request === referenceSearchRequest.current) {
         referenceSearchCache.current.set(cacheKey, result);
         setReferences(result);
@@ -289,47 +287,8 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   }
   const retryReferenceSearch = () => { if (referenceSearchTerm.length >= 2) searchReferences(referenceSearchTerm); };
   async function useProfessionalReference(conceptId: string) {
-    const reference = references.find((item) => item.conceptId === conceptId); if (!reference) return;
-    if (draft.sourceKind === "assisted_description") {
-      setDraft((current) => ({ ...current, referenceConceptId: conceptId, title: current.title || reference.label }));
-      setReferencePrepared(false); setValidationTarget(null); return;
-    }
-    const hasHumanContent = Boolean(draft.title || draft.mission || draft.responsibilities.length || draft.requirements.length);
-    if (hasHumanContent && draft.sourceKind !== "knowledge_reference" && !await confirmReferenceReplacement()) return;
-    setReferencePreparing(true); setError(null);
-    try {
-      const proposal = await vacancyService.loadProfessionalReferenceProposal(activeMembership.organizationId, conceptId);
-      setDraft((current) => materializeVacancyFromProfessionalReference(current, proposal));
-      setReferencePrepared(true); setValidationTarget(null);
-    } catch (caught) { setError(errorMessage(caught, "Não foi possível preparar a estrutura a partir da referência profissional.")); }
-    finally { setReferencePreparing(false); }
-  }
-  async function resolveOccupation() {
-    if (draft.title.trim().length < 2) return;
-    setOccupationLoading(true);
-    try {
-      const resolution = await vacancyService.resolveOccupationV2(activeMembership.organizationId, draft.title, vacancyId ?? null);
-      setOccupationResolution(resolution);
-      if (resolution.status === "resolved" && resolution.canonicalConceptId) {
-        setDraft((current) => ({ ...current, referenceConceptId: resolution.canonicalConceptId, sourceKind: current.sourceKind === "manual" ? "knowledge_reference" : current.sourceKind })); setValidationTarget(null);
-      }
-    } catch (caught) { setOccupationResolution(null); setError(errorMessage(caught, "A referência profissional não está disponível agora. O rascunho foi preservado para nova tentativa.")); }
-    finally { setOccupationLoading(false); }
-  }
-  async function selectOfficialOccupation(externalId: string) {
-    if (!occupationResolution) return;
-    try { const conceptId = await vacancyService.selectOfficialOccupation(activeMembership.organizationId, occupationResolution.attemptId, externalId); const candidate = occupationResolution.candidates.find((item) => item.externalId === externalId); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: sourceKindAfterOccupationReference(current), title: current.title || candidate?.label || current.title })); setValidationTarget(null); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "human_reconciliation", canonicalConceptId: conceptId, canonicalLabel: candidate?.label ?? draft.title }); setOccupationExplorerOpen(false); }
-    catch (caught) { setError(errorMessage(caught, "Não foi possível registrar a referência oficial.")); }
-  }
-  async function enableManualOccupation() {
-    if (!occupationResolution) return;
-    try { await vacancyService.declareNoOfficialOccupation(activeMembership.organizationId, occupationResolution.attemptId); setOccupationResolution({ ...occupationResolution, status: "manual_allowed", decisionOrigin: "no_official_reference" }); }
-    catch (caught) { setError(errorMessage(caught, "Não foi possível registrar a ausência de referência oficial.")); }
-  }
-  async function createManualOccupation() {
-    if (!occupationResolution) return;
-    try { const conceptId = await vacancyService.createManualOccupation(activeMembership.organizationId, occupationResolution.attemptId, draft.title); setDraft((current) => ({ ...current, referenceConceptId: conceptId, sourceKind: sourceKindAfterOccupationReference(current) })); setValidationTarget(null); setOccupationResolution({ ...occupationResolution, status: "resolved", decisionOrigin: "manual_organization_concept", canonicalConceptId: conceptId, canonicalLabel: draft.title }); setOccupationExplorerOpen(false); }
-    catch (caught) { setError(errorMessage(caught, "Não foi possível criar o conceito ocupacional interno.")); }
+    setDraft((current) => ({ ...current, referenceConceptId: conceptId, taxonomyDecision: "human", taxonomy: null }));
+    setValidationTarget(null);
   }
   async function save() {
     const errors = validateVacancyDraft(draft);
@@ -337,7 +296,6 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
       const target = errors.some((item) => /título/i.test(item)) ? "title" : errors.some((item) => /Pessoa que ocupa/i.test(item)) ? "occupant" : "requirement";
       focusValidationTarget(target); setError(errors.join(" ")); return;
     }
-    if (!draft.referenceConceptId) { focusValidationTarget("occupation"); setError("Conclua a resolução ocupacional pela referência oficial ou, após o explorador, pelo conceito interno da empresa antes de salvar a Posição."); return; }
     setSaving(true); setError(null);
     try {
       const result = await vacancyService.save(activeMembership.organizationId, draft);
@@ -425,13 +383,12 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
         <div className="prisma-start-choice"><div className="prisma-start-choice-heading"><span className="prisma-start-choice-number">2</span><span><strong>Posição anterior</strong><small>Reutiliza somente uma definição existente.</small></span></div><Select allowClear aria-label="Posição anterior" onChange={(value) => void usePrevious(value)} options={previous.map((item) => ({ label: item.title, value: item.id }))} placeholder="Reutilizar somente a definição" /></div>
         <div className={`${validationTarget === "occupation" ? "prisma-vacancy-reference-field has-validation-error" : "prisma-vacancy-reference-field"} prisma-start-choice`} ref={occupationReferenceRef}>
           <div className="prisma-start-choice-heading"><span className="prisma-start-choice-number">3</span><span><strong>Referência profissional</strong><small>Procura primeiro na Knowledge interna.</small></span></div>
-          <Select allowClear aria-label="Referência profissional" disabled={referencePreparing} filterOption={false} loading={referenceSearchLoading || referencePreparing} onChange={() => setReferenceSearchError(null)} onSearch={searchReferences} options={referenceOptions} placeholder="Buscar na Knowledge interna" showSearch suffixIcon={<SearchOutlined />} notFoundContent={referenceSearchLoading ? <span className="prisma-reference-search-status"><Spin size="small" /> Buscando na Knowledge interna…</span> : referenceSearchError ? <span className="prisma-reference-search-status is-error">A busca interna não respondeu.</span> : referenceSearchTerm.length < 2 ? "Digite pelo menos 2 caracteres para buscar" : "Nenhuma referência profissional encontrada na Knowledge interna"} onSelect={(value) => void useProfessionalReference(value)} />
+          <Select allowClear aria-label="Referência profissional" filterOption={false} loading={referenceSearchLoading} onChange={() => setReferenceSearchError(null)} onClear={() => setDraft((current) => ({ ...current, referenceConceptId: null, taxonomy: null, taxonomyDecision: "cleared" }))} onSearch={searchReferences} options={referenceOptions} placeholder="Buscar na Knowledge interna" showSearch suffixIcon={<SearchOutlined />} notFoundContent={referenceSearchLoading ? <span className="prisma-reference-search-status"><Spin size="small" /> Buscando na Knowledge interna…</span> : referenceSearchError ? <span className="prisma-reference-search-status is-error">A busca interna não respondeu.</span> : referenceSearchTerm.length < 2 ? "Digite pelo menos 2 caracteres para buscar" : "Nenhuma referência profissional encontrada na Knowledge interna"} onSelect={(value) => void useProfessionalReference(value)} />
           <Typography.Text className="prisma-reference-search-help" type="secondary">Digite pelo menos 2 caracteres. A consulta combina referências aprovadas da sua empresa e da base global.</Typography.Text>
         {referenceSearchLoading ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback" role="status" type="secondary"><Spin size="small" /> Buscando referências na Knowledge interna…</Typography.Text> : null}
         {!referenceSearchLoading && referenceSearchTerm.length >= 2 && references.length > 0 ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback is-success" role="status" type="secondary">{references.length} referência{references.length === 1 ? "" : "s"} encontrada{references.length === 1 ? "" : "s"} na Knowledge interna.</Typography.Text> : null}
-        {!referenceSearchLoading && !referenceSearchError && referenceSearchTerm.length >= 2 && references.length === 0 ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback" role="status" type="secondary">Nenhuma correspondência interna. Ao sair do título da Posição, o Prisma consulta referências oficiais catalogadas.</Typography.Text> : null}
+        {!referenceSearchLoading && !referenceSearchError && referenceSearchTerm.length >= 2 && references.length === 0 ? <Typography.Text aria-live="polite" className="prisma-reference-search-feedback" role="status" type="secondary">Nenhuma correspondência interna. A taxonomia permite buscar e selecionar uma referência publicada.</Typography.Text> : null}
         {referenceSearchError ? <Alert className="prisma-reference-search-error" showIcon type="error" message="A busca na Knowledge interna não respondeu." description={`${referenceSearchError} O rascunho foi preservado. Tente novamente ou continue pelo título da Posição para consultar as referências oficiais catalogadas.`} action={<Button onClick={retryReferenceSearch} size="small">Tentar novamente</Button>} /> : null}
-        {referencePreparing ? <Typography.Text type="secondary">Preparando a estrutura da Posição a partir da referência escolhida…</Typography.Text> : null}{referencePrepared ? <Typography.Text type="secondary">Estrutura preparada a partir da referência profissional selecionada. Revise e adapte para a necessidade da sua empresa.</Typography.Text> : null}{validationTarget === "occupation" ? <Typography.Text className="prisma-field-validation-message" role="alert" type="danger">Selecione a referência profissional ou conclua a decisão no Explorador de Referências Oficiais.</Typography.Text> : null}
         </div>
       </div>
       <div className="prisma-start-assist-choice"><div><strong>Começar pela descrição</strong><span>Descreva a necessidade com suas palavras. O Prisma estrutura uma sugestão para você revisar.</span></div><Button icon={<RobotOutlined />} onClick={() => onNavigate("/vacancies/assist")}>Começar com uma descrição</Button></div>
@@ -442,22 +399,16 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     }}>
       <PrismaCard className="prisma-vacancy-form-section" title="1. Informações básicas">
         <div className="prisma-vacancy-form-grid">
-          <Form.Item {...(validationTarget === "title" ? { help: "Informe o título da Posição.", validateStatus: "error" as const } : {})} extra="Se a Knowledge interna não encontrar uma referência segura, ao sair deste campo o Prisma consulta as fontes oficiais catalogadas." label="Título da Posição" required><Input maxLength={240} onBlur={() => void resolveOccupation()} onChange={(event) => { update("title", event.target.value); setOccupationResolution(null); if (validationTarget === "title") setValidationTarget(null); }} placeholder="Ex.: Gerente Comercial Enterprise" value={draft.title} /></Form.Item>
+          <Form.Item {...(validationTarget === "title" ? { help: "Informe o título da Posição.", validateStatus: "error" as const } : {})} extra="A associação automática usa somente Knowledge aprovada e fontes publicadas. Uma escolha humana permanece até ser corrigida ou reavaliada." label="Título da Posição" required><Input maxLength={240} onChange={(event) => { setDraft((current) => changeTaxonomyTitle(current, event.target.value)); if (validationTarget === "title") setValidationTarget(null); }} placeholder="Ex.: Gerente Comercial Enterprise" value={draft.title} /></Form.Item>
           <Form.Item label="Área"><Input onChange={(event) => update("area", event.target.value)} placeholder="Ex.: Comercial" value={draft.area} /></Form.Item>
           <Form.Item label="Localidade"><Input onChange={(event) => update("location", event.target.value)} placeholder="Ex.: São Paulo, SP" value={draft.location} /></Form.Item>
           <Form.Item label="Regime de trabalho"><Select allowClear onChange={(value) => update("workArrangement", value ?? null)} options={workArrangementOptions} placeholder="Não informado" value={draft.workArrangement} /></Form.Item>
           <Form.Item label="Tipo de vínculo"><Input onChange={(event) => update("employmentType", event.target.value)} placeholder="Ex.: CLT" value={draft.employmentType} /></Form.Item>
           <Form.Item label="Situação de ocupação"><Segmented block onChange={(value) => setDraft((current) => ({ ...current, occupancy: value as VacancyDraft["occupancy"], occupantPersonId: value === "occupied" ? current.occupantPersonId : null }))} options={[{ label: "Não ocupada", value: "vacant" }, { label: "Ocupada", value: "occupied" }]} value={draft.occupancy} /></Form.Item>
         </div>
-        {occupationLoading ? <Typography.Text className="prisma-reference-search-feedback" type="secondary"><Spin size="small" /> Consultando referências oficiais catalogadas para “{draft.title}”…</Typography.Text> : null}
-        {occupationResolution ? <Alert showIcon type={occupationResolution.status === "resolved" ? "success" : "info"} message={occupationResolutionMessage(occupationResolution)} description={occupationResolution.status === "needs_human_review" ? <Button onClick={() => setOccupationExplorerOpen(true)} size="small" type="primary">Explorar ESCO e O*NET</Button> : occupationResolution.status === "manual_allowed" ? <Button onClick={() => void createManualOccupation()} size="small" type="primary">Cadastrar conceito interno da empresa</Button> : undefined} /> : null}
         {draft.occupancy === "occupied" ? <Form.Item {...(validationTarget === "occupant" ? { help: "Selecione a Pessoa que ocupa esta posição.", validateStatus: "error" as const } : {})} label="Pessoa que ocupa a posição" required><Select showSearch optionFilterProp="label" onChange={(value) => { update("occupantPersonId", value); if (validationTarget === "occupant") setValidationTarget(null); }} options={occupants} placeholder="Selecione uma Pessoa existente" value={draft.occupantPersonId} /></Form.Item> : null}
       </PrismaCard>
-      <Drawer destroyOnClose onClose={() => setOccupationExplorerOpen(false)} open={occupationExplorerOpen} title="Explorador de Referências Oficiais" width={560}>
-        <Typography.Paragraph>Escolha uma referência ESCO ou O*NET somente se ela representar a Posição. Esta escolha cria uma reconciliação reutilizável apenas para a empresa.</Typography.Paragraph>
-        <List dataSource={occupationResolution?.candidates ?? []} locale={{ emptyText: "Nenhuma referência oficial foi encontrada no snapshot consultado." }} renderItem={(candidate) => <List.Item actions={[<Button key="select" onClick={() => void selectOfficialOccupation(candidate.externalId)} type="primary">Usar referência</Button>]}><List.Item.Meta title={`${candidate.label} · ${candidate.sourceName}`} description={`${candidate.externalId}${candidate.description ? ` · ${candidate.description}` : ""}`} /></List.Item>} />
-        <Button danger onClick={() => void enableManualOccupation()}>Não existe referência oficial aplicável</Button>
-      </Drawer>
+      <PositionTaxonomyPanel draft={draft} membership={activeMembership} onChange={setDraft} />
       <Drawer destroyOnClose onClose={() => setRestructureOpen(false)} open={restructureOpen} title="Editar descrição e reestruturar" width={680}>
         <Typography.Paragraph>O Prisma comparará a nova descrição com a estrutura atual. Decisões humanas e requisitos manuais permanecem; itens não encontrados nunca são removidos automaticamente.</Typography.Paragraph>
         <Input.TextArea maxLength={5000} onChange={(event) => setRestructureDescription(event.target.value)} rows={10} value={restructureDescription} />
@@ -574,6 +525,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/vacancies")} type="text">Voltar para Posições</Button>
     <div className="prisma-vacancy-detail-header"><div><Space wrap><Typography.Title level={1}>{detail.title}</Typography.Title><OccupancyTag occupancy={detail.occupancy} /></Space><div className="prisma-vacancy-meta"><span><ApartmentOutlined /> {detail.area || "Área não informada"}</span><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span>{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}<span>Definição v{detail.version}</span></div></div><Space wrap><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar posição</Button><Popconfirm cancelText="Cancelar" description="Esta necessidade sairá da lista. O histórico de definições e avaliações será preservado." okButtonProps={{ danger: true, loading: deleting }} okText="Excluir posição" onConfirm={() => void removeVacancy()} title="Excluir esta Posição?"><Button danger icon={<DeleteOutlined />} loading={deleting}>Excluir</Button></Popconfirm><Button icon={<TeamOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button></Space></div>
     {error ? <Alert showIcon title={error} type="error" /> : null}
+    <PositionTaxonomyPanel draft={detail} membership={activeMembership} onEdit={() => onNavigate(`/vacancies/${detail.id}/edit`)} />
     <Tabs items={[
       { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack">{[detail.mission, ...detail.contextItems].some((item) => item.trim()) ? <DetailSection icon={<AimOutlined />} title="Sobre a posição"><Typography.Paragraph>{[detail.mission, ...detail.contextItems].filter(Boolean).join(" ")}</Typography.Paragraph></DetailSection> : null}{detail.responsibilities.length ? <DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /> : null}{pending.length ? <RequirementDimensionGroups icon={<ClockCircleOutlined />} items={pending} title="Requisitos para classificar" /> : null}{required.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={required} title="Requisitos obrigatórios" /> : null}{desired.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={desired} title="Requisitos desejáveis" /> : null}{detail.expectedOutcomes.length ? <DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /> : null}</div> },
       { key: "people", label: "Pessoas encontradas", children: <Empty description="A descoberta é calculada sob demanda para não carregar todos os Perfis na abertura."><Button onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">Encontrar pessoas</Button></Empty> },
@@ -684,7 +636,7 @@ function RequirementEditor({ invalid, item, onChange, onRemove }: { invalid: boo
 
 function RequirementDimensionGroups({ icon, items, title }: { icon: ReactNode; items: VacancyRequirementDraft[]; title: string }) {
   const groups = vacancyRequirementCategories.map((category) => ({ ...category, items: items.filter((item) => item.category === category.value) })).filter((group) => group.items.length);
-  return <PrismaCard title={<span>{icon} {title}</span>}><div className="prisma-vacancy-dimension-groups">{groups.map((group) => <section key={group.value}><strong>{group.label}</strong><ul>{group.items.map((item) => <li key={item.stableId}>{item.label}</li>)}</ul></section>)}</div></PrismaCard>;
+  return <PrismaCard title={<span>{icon} {title}</span>}><div className="prisma-vacancy-dimension-groups">{groups.map((group) => <section key={group.value}><strong>{group.label}</strong><ul>{group.items.map((item) => <li key={item.stableId}>{item.label}{item.taxonomyOrigin ? <TaxonomyOriginDetails item={item.taxonomyOrigin} /> : null}</li>)}</ul></section>)}</div></PrismaCard>;
 }
 
 function StringListEditor({ label, onChange, placeholder, values }: { label: string; onChange: (values: string[]) => void; placeholder: string; values: string[] }) {
@@ -801,17 +753,6 @@ function historyLabel(value: string): string { return ({ created: "Posição cri
 function formatDate(value: string): string { return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); }
 function normalize(value: string): string { return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").trim(); }
 function errorMessage(value: unknown, fallback: string): string { return value instanceof Error ? value.message : fallback; }
-function confirmReferenceReplacement(): Promise<boolean> {
-  return new Promise((resolve) => Modal.confirm({
-    title: "Substituir conteúdo não salvo?",
-    content: "Esta referência vai preparar uma nova proposta e substituir o conteúdo preenchido até agora. O rascunho atual não será publicado.",
-    okText: "Substituir conteúdo",
-    cancelText: "Continuar editando",
-    autoFocusButton: "cancel",
-    onOk: () => resolve(true),
-    onCancel: () => resolve(false),
-  }));
-}
 function persistDraft(draft: VacancyDraft, scope: string): void { window.sessionStorage.setItem(`${DRAFT_KEY}:${scope}`, JSON.stringify(draft)); }
 function readDraft(scope: string): VacancyDraft { try { const raw = window.sessionStorage.getItem(`${DRAFT_KEY}:${scope}`); return raw ? { ...emptyVacancyDraft(), ...JSON.parse(raw) as VacancyDraft } : emptyVacancyDraft(); } catch { return emptyVacancyDraft(); } }
 function clearDraft(scope: string): void { window.sessionStorage.removeItem(`${DRAFT_KEY}:${scope}`); }

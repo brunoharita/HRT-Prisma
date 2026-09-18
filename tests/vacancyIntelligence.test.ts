@@ -365,7 +365,7 @@ test("M5.4.6 exige decisão humana de importância e mantém dimensões canônic
 
 test("vacancy-definition 1.2.0 sincroniza o padrão obrigatório e bloqueia pendência no frontend e na RPC", async () => {
   const manual = newManualVacancyRequirement("RD Station", "technology");
-  assert.equal(VACANCY_DEFINITION_VERSION, "1.2.0");
+  assert.equal(VACANCY_DEFINITION_VERSION, "1.3.0");
   assert.equal(manual.importance, "required");
   assert.equal(manual.importanceConfirmed, true);
 
@@ -615,7 +615,7 @@ test("busca de referência profissional comunica origem, progresso e recuperaç�
   assert.match(referenceSearch, /\.eq\("concept_type", "occupation"\)/);
   assert.doesNotMatch(referenceSearch, /suggest_knowledge_concepts/);
   assert.doesNotMatch(page, /window\.confirm/);
-  assert.match(page, /confirmReferenceReplacement/);
+  assert.doesNotMatch(page, /confirmReferenceReplacement/); // M7.1 changes association, never the written structure.
   assert.match(styles, /prisma-reference-search-feedback/);
 });
 
@@ -626,7 +626,7 @@ test("validação de Vaga destaca o campo acionável que bloqueia o salvamento",
     readFile("docs/decisions/ADR-042-actionable-field-validation-feedback.md", "utf8"),
     readFile("docs/architecture/contracts.md", "utf8"),
   ]);
-  assert.match(page, /focusValidationTarget\("occupation"\)/);
+  assert.doesNotMatch(page, /focusValidationTarget\("occupation"\)/); // M7.1 allows explicit unresolved state.
   assert.match(page, /prisma-vacancy-reference-field has-validation-error/);
   assert.match(page, /validationTarget === "title" \? \{ help: "Informe o título da Posição\.", validateStatus: "error"/);
   assert.match(page, /aria-invalid=\{invalid && !item\.label\.trim\(\)\}/);
@@ -658,8 +658,8 @@ test("M5.4.4 ordena empresa, Global, Agent, explorador e manual sem contaminar P
   assert.match(agent, /Software Engineer versus Software Developer/);
   assert.match(agent, /complete_occupation_resolution_agent/);
   assert.match(service, /resolveOccupationV2/);
-  assert.match(page, /Explorador de Referências Oficiais/);
-  assert.match(page, /Não existe referência oficial/);
+  assert.match(page, /PositionTaxonomyPanel/);
+  assert.doesNotMatch(page, /resolveOccupationV2\(/);
 });
 
 test("resolver ocupacional consulta snapshots seletivamente, é idempotente e mantém RLS", async () => {
@@ -678,8 +678,8 @@ test("resolver ocupacional consulta snapshots seletivamente, é idempotente e ma
   assert.match(migration, /revoke all on function public\.resolve_occupation_on_demand/i);
   assert.doesNotMatch(migration, /person_id|professional_profiles/i);
   assert.match(service, /resolve_occupation_on_demand/);
-  assert.match(page, /Consultando referências oficiais catalogadas/);
-  assert.match(page, /onBlur=\{\(\) => void resolveOccupation\(\)\}/);
+  assert.match(page, /PositionTaxonomyPanel/);
+  assert.doesNotMatch(page, /onBlur=\{\(\) => void resolveOccupation\(\)\}/);
 });
 
 test("migration M5.4 mantém tenant, versões e escrita autorizada fail-closed", async () => {
