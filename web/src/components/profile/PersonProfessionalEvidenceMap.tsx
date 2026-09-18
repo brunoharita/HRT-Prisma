@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   ApartmentOutlined,
   BulbOutlined,
@@ -52,6 +52,7 @@ export function PersonProfessionalEvidenceMap({ profile, projection, projectionE
         ["summary", "Resumo"], ["competencies", "Competências"], ["evidence", "Evidências"], ["profile", "Perfil completo"],
       ] as const).map(([key, label]) => <button aria-current={surface === key ? "page" : undefined} key={key} onClick={() => setSurface(key)} type="button">{label}</button>)}
     </nav>
+    {projection ? <NormalizationStatus projection={projection} /> : null}
     {projectionError ? <Alert action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>} description="O Perfil publicado continua disponível abaixo." title={projectionError} showIcon type="warning" /> : null}
     {!projection && !projectionError ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
     {surface === "summary" ? <SummarySurface groups={groups} profile={profile} projection={projection} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} /> : null}
@@ -131,12 +132,13 @@ function CompetencySurface({ groups, projection, onConcept, onEvidence }: {
           </article>)}</div>,
         }))} /> : <Empty description="Nenhum conceito evidenciado corresponde aos filtros." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </PrismaCard>
+      <PendingDeclarations projection={projection} query={query} />
     </main>
     <aside>
       <PrismaCard title="Leitura do perfil">
         {summary ? <><Metric icon={<FileTextOutlined />} label="Declaradas" value={summary.declaredCount} /><Metric icon={<BulbOutlined />} label="Contextuais" value={summary.contextualCount} /><Metric icon={<CheckCircleOutlined />} label="Com evidência demonstrada válida" value={summary.demonstratedCount} /><div className="prisma-m72-total"><strong>{summary.conceptCount}</strong><span>conceitos evidenciados em {summary.groupCount} agrupamentos</span></div></> : <Empty description="Sem projeção disponível." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </PrismaCard>
-      {projection?.issues.length ? <Alert description={`${projection.issues.length} associação(ões) permanecem sem agrupamento seguro e não foram convertidas silenciosamente em conceito.`} title="Evidência parcial" showIcon type="warning" /> : null}
+      {projection?.issues.length ? <Alert description={`${projection.issues.length} item(ns) declarado(s) aguardam associação segura. Consulte a lista de pendências; isso não significa ausência de competência.`} title="Associações pendentes" showIcon type="warning" /> : null}
       <Alert description="Declarada, contextual e demonstrada indicam a natureza da evidência. Não representam nível de proficiência, senioridade ou score." title="Como ler os estados" showIcon type="info" />
     </aside>
   </div>;
@@ -207,3 +209,39 @@ function GroupIcon({ type }: { type: ProfessionalConceptType }) { return <span c
 function EvidenceIcon({ nature }: { nature: ProfessionalEvidenceNature }) { return nature === "demonstrated" ? <CheckCircleOutlined /> : nature === "contextual" ? <BulbOutlined /> : <FileTextOutlined />; }
 function Metric({ icon, label, value }: { icon: ReactNode; label: string; value: number }) { return <div className="prisma-m72-reading-metric"><span>{icon}</span><div><strong>{label}</strong><small>{label === "Declaradas" ? "Informadas no Perfil publicado" : label === "Contextuais" ? "Relações identificadas pelo Prisma" : "Resultado direto vigente"}</small></div><b>{value}</b></div>; }
 function MetricCard({ label, value }: { label: string; value: number }) { return <article><strong>{value}</strong><span>{label}</span></article>; }
+
+function PendingDeclarations({ projection, query }: { projection: ProfessionalEvidenceProjection | null; query: string }) {
+  const pending = projection?.normalization.items.filter((item) => !["resolved", "human_preserved"].includes(item.state)) ?? [];
+  const shown = pending.filter((item) => `${item.originalTerm} ${item.normalizedTerm}`.toLocaleLowerCase("pt-BR").includes(query.trim().toLocaleLowerCase("pt-BR")));
+  if (!pending.length && !projection?.issues.length) return null;
+  return <PrismaCard title={`Declarações aguardando associação (${pending.length || projection?.issues.length || 0})`}>
+    <Typography.Paragraph type="secondary">As declarações continuam fazendo parte do Perfil. Apenas o vínculo à taxonomia está pendente. A curadoria de termos e aliases é feita na Knowledge.</Typography.Paragraph>
+    <Button href="/knowledge" type="link">Abrir Knowledge para curadoria</Button>
+    <Collapse items={(pending.length ? shown.map((item, index) => ({ key: String(index), label: item.normalizedTerm,
+      children: <><Typography.Paragraph>{item.reason}</Typography.Paragraph><Typography.Text type="secondary">Declaração original: {item.originalTerm}</Typography.Text></> }))
+      : (projection?.issues ?? []).filter((item) => item.observedTerm.toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"))).map((item, index) => ({ key: String(index), label: item.observedTerm, children: item.explanation })))} />
+  </PrismaCard>;
+}
+
+function NormalizationStatus({ projection }: { projection: ProfessionalEvidenceProjection }) {
+  const [requesting, setRequesting] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const status = projection.normalization.status;
+  // Queue processing is server-side and survives navigation. Do not reload unsaved browser state.
+  useEffect(() => { setMessage(null); }, [projection.profile.id, status]);
+  const retry = async () => {
+    setRequesting(true);
+    try {
+      const { supabase } = await import("../../infrastructure/supabase/client");
+      const { error } = await supabase.rpc("request_profile_competency_normalization" as never, {
+        p_organization_id: projection.organizationId, p_person_id: projection.personId,
+      } as never);
+      setMessage(error ? "Não foi possível solicitar o processamento. É necessária permissão de revisão nesta empresa." : "Processamento solicitado. Reabra o Perfil em instantes para consultar o resultado.");
+    } catch { setMessage("Não foi possível conectar. O Perfil foi preservado; tente novamente."); }
+    finally { setRequesting(false); }
+  };
+  if (status === "complete") return <div className="prisma-m73-normalization-actions"><Typography.Text type="secondary">{message ?? "Associações processadas. A declaração revisada foi preservada."}</Typography.Text><Button loading={requesting} onClick={() => void retry()} type="link">Atualizar associações</Button></div>;
+  return <Alert showIcon type={status === "failed" ? "warning" : "info"} title={status === "failed" ? "Normalização parcialmente disponível" : "Organizando competências declaradas"}
+    description={message ?? (status === "failed" ? "A declaração original foi preservada. O processamento não foi concluído; os vínculos seguros já disponíveis continuam visíveis." : "O Perfil já está publicado. A associação com a Knowledge é processada em segundo plano; reabra esta tela em instantes.")}
+    action={status === "failed" || status === "not_processed" ? <Button loading={requesting} onClick={() => void retry()}>Reprocessar</Button> : undefined} />;
+}

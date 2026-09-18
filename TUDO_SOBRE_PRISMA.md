@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 205
-source_manifest_sha256: 0c2c56fcef25cb2f5618689389535588a330dc252492a68418fbaba0b644a384
+documentation_source_count: 209
+source_manifest_sha256: 83eeae54b01a7c19d86266a2717dd981ed5aa439679dbaf9476ad24a7f94e796
 -->
 
 # Tudo sobre o Prisma
@@ -535,13 +535,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.37.4
+version: 2.38.0
 last_verified: 2026-09-18
 ---
 
 # Estado atual do Prisma
 
 ## Resumo operacional para prompts
+
+M7.3 aprovado para produção em 2026-09-18: normalização pós-publicação com o Knowledge Agent existente, listas separadas, aliases Global/empresa e fila versionada. `person-professional-evidence-2.0.0` distingue declarações, conceitos e pendências, preservando fonte e decisão humana. **Prisma v1.7.3** aceita; rollout e reprocessamento de sete Perfis ainda pendentes de comprovação. Contrato, testes e estado operacional: `docs/qa/aot-m73-competency-normalization.md` e ADR-063. Sem novo modelo, taxonomia, matching ou inferência de trajetória.
 
 M7.2 implementado, validado e ativado no ambiente único após autorizações explícitas de 2026-09-18. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada no Supabase como `20260918081743_m72_person_professional_evidence`; main/GitHub/Hostinger apontam ao runtime `8f7473a`. Prisma v1.7.2 está visível no login e na barra lateral; o build preservou baseline + Parser IA hosted, recriou somente `prisma-web` e manteve rollback `prisma-web:rollback-before-m72-20260918`. RPC/grants/advisors e smoke read-only tenant-scoped passaram sem escrita nem exposição de PII. A revisão visual autenticada abriu Resumo, Competências e Evidências de um Perfil aprovado e confirmou estados vazios/parciais sem mutação. `/sign-in` reutilizou a sessão disponível e redirecionou antes de exibir o formulário; isso prova o acesso autenticado, mas não o preenchimento visual dos campos.
 
@@ -1818,6 +1820,8 @@ Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no 
 
 ## Troca de modelo
 
+M7.3 reutiliza o modelo configurado do Knowledge Agent para normalização de competências declaradas (`declared-competency-normalization-1.0.0`). Recebe apenas termos minimizados, sem Perfil/currículo integral ou identificadores; sem ferramentas/pesquisa, `store:false`, Structured Outputs e cobertura integral validada. Uma chamada por tentativa, com reserva auditada dentro dos limites existentes, timeout 90 s, opt-in organizacional e fallback determinístico explicitamente parcial quando a chamada falha. Nomes produzidos são buscas a reconciliar com aliases aprovados, nunca criação de conceito. Evidência: ADR-063 e AoT M7.3. Este movimento não troca o modelo nem altera a política financeira do Parser IA.
+
 Troca é material. Exige nova versão, golden tests, prompt injection tests, comparação de omissões/alucinações, custo, média e p95, compatibilidade de schema, privacidade/subprocessador, fallback, QA e aprovação. Alias mutável não é suficiente para reprodução; quando disponível, registrar snapshot técnico.
 
 ## Dados e segurança
@@ -2351,6 +2355,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `parser-ia-hosted-transport-1.0.0` (ADR-059), owner operations/security, cabeçalhos sessão/organização e gateway. Não alteram `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0 nem `parser-ia` 1.0.0. Status do pipeline serial e rollout em `docs/qa/aot-production-resume-quality-pipeline.md`; rollback para imagem web anterior e interrupção do túnel.
 
 ## Política
+
+M7.3 acrescenta `declared-competency-normalization-1.0.0` (owner Knowledge/AI/data; fila e interpretação derivada de declarações, snapshots originais preservados) e `person-professional-evidence-2.0.0` (owner product/Knowledge/UI/security; RPC `load_person_professional_evidence_map_v2`, estados e contagens independentes). A RPC V1 da tabela abaixo permanece compatível para clientes antigos. Versões desconhecidas são rejeitadas; produção e validação estão no AoT M7.3. ADR-063 registra segurança, privacidade, curadoria e rollback.
 
 Cada contrato material possui nome, owner, versão, consumidores, status, compatibilidade, evidência de implementação, ambiente e política para versão desconhecida.
 
@@ -2926,6 +2932,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M7.3 (2026-09-18) registra a terceira entrega aceita do Movimento 7: **Prisma v1.7.3**. `declared-competency-normalization-1.0.0` versiona a interpretação derivada pós-publicação e `person-professional-evidence-2.0.0` explicita declarações, associações, pendências e processamento. Perfis/Knowledge históricos não são reescritos. A RPC V1 permanece inalterada para frontends antigos; a nova usa o sufixo `_v2` e rejeita versões desconhecidas. Rollout e ativação real são registrados no AoT M7.3, não presumidos pelo número da versão.
 
 ## M7.2 — 2026-09-18
 
@@ -6691,6 +6699,40 @@ Ambiguidade, ausência de conceito, fonte indisponível ou versão incompatível
 
 ---
 
+## Source: `docs/decisions/ADR-063-declared-competency-normalization.md`
+
+# ADR-063 — Normalização derivada das competências declaradas
+
+Status: accepted. Data: 2026-09-18. Contrato: `docs/qa/agreement-m73-competency-normalization.md` 1.0.0.
+
+## Decisão e reutilização
+
+Estender Knowledge e seu Agent, o agendamento pg_cron/pg_net autenticado por Vault, a publicação humana e a projeção M7.2. Não introduzir ontologia, biblioteca, fornecedor, embeddings ou pesquisa Web. Correspondência literal do texto bruto é insuficiente para listas, nomes comerciais e tradução; alterar os snapshots revisados apagaria a decisão humana. Por isso a interpretação é derivada, persistida por Perfil/organização/versões da Knowledge/revisão, separada da fonte imutável.
+
+A publicação enfileira em transação; uma chamada agendada processa um Perfil por vez. Claim usa lease, SKIP LOCKED, expiração de cinco minutos e até três tentativas, com intervalo de quinze minutos. Reprocessamento explícito exige autoridade de revisão e gera nova revisão quando o anterior terminou. Os sete Perfis vigentes existentes são elegíveis para o backfill autorizado; históricos não são alterados. Exclusão de Perfil remove a derivação por FK, sem órfãos de PII.
+
+O domínio preserva origem/índice, separa delimitadores explícitos e nomes de ferramentas inequívocos. O Agent recebe apenas trechos de competências sem identificadores de Pessoa/empresa; utiliza o modelo já configurado em `KNOWLEDGE_RESEARCH_MODEL`, Structured Outputs, `store:false`, sem tools/Web Search, timeout de 90 segundos e uma chamada por tentativa. A organização precisa ter enriquecimento externo habilitado. Validação exige cobertura de todas as entradas, trechos literais, ausência de sobreposição, limites e proíbe expandir Office em ferramentas não declaradas. Resposta inválida mantém a saída determinística e um estado de falha, nunca sucesso vazio.
+
+Os nomes canônicos/equivalentes gerados são **expressões de busca**, não novos conceitos. O servidor os reconcilia exclusivamente com aliases aprovados e fontes publicadas correntes, priorizando empresa sobre Global, excluindo ocupações. Correspondência ambígua permanece pendente, mesmo que a IA proponha um candidato. Decisão humana existente prevalece também se posterior ao processamento. Nenhum perfil vira verificado por normalização.
+
+## Fronteiras e operação
+
+- `declared-competency-normalization-1.0.0` versiona entrada derivada, método/prompt e validação. `person-professional-evidence-2.0.0` adiciona status, quantidade original e itens normalizados/pedentes à leitura, mantendo `position-taxonomy-1.0.0` e a demonstração M5.1.
+- A tabela tem RLS e nenhum grant para leitores/operadores; somente RPCs autorizadas expõem a leitura. Workers e completion são service-only. Escrita interempresa, lease antigo e cobertura incompleta são rejeitados.
+- Gateway JWT do Agent fica desabilitado para a invocação de cron, como no monitor existente; o handler **sempre** valida segredo server-side pelo Vault para este modo, ou `auth.getUser()` e autoridade existente para os outros. Não há modo público sem autenticação.
+- Reutiliza limites diários/mensais do Knowledge, sem mudar seus valores. Reserva e uso da nova capacidade são auditados no banco; indisponibilidade de limite/provedor nunca bloqueia publicação.
+- Pendências entram na Inbox existente sem ligar uma observação composta a um único átomo; curadoria aprova aliases pelo fluxo humano e o operador pode atualizar as associações do Perfil. Não há publicação automática Global.
+- Falta de equivalente continua legítima. Traduções/sinônimos fornecidos pelo modelo não garantem cobertura total; somente conceitos efetivamente encontrados são associados. Não há score nem promessa de mapear 100% dos termos.
+- A UI mantém a topologia M7.2 e acrescenta lista consultável de pendências, status e atualização. Filtros se acomodam à largura disponível, evitando sobreposição entre colunas.
+
+## Alternativas
+
+Reprocessar apenas o resolver exato continuaria sem tratar compostos/nomes. Construir nova taxonomia/serviço vetorial adicionaria governança e dependências sem necessidade comprovada. Reaproveitar o Agent e reconciliar seus nomes de busca na Knowledge atende ao escopo com backend e curadoria existentes. Risco residual de interpretação semântica é explicitado por método, proveniência, preservação integral da fonte e curadoria; não se confunde com evidência de desempenho.
+
+Rollback: desativar somente o job `prisma-profile-competency-normalization` e restaurar a imagem web anterior, que continua usando a RPC V1 inalterada. A nova leitura usa `_v2`, sem interrupção do contrato antigo durante o rollout. Conservar runs para auditoria. Não apagar nem reescrever histórico.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -9292,6 +9334,55 @@ Baseline `f02ac17`; branch `codex/m72-person-competency-evidence`. Material alhe
 
 ---
 
+## Source: `docs/qa/agreement-m73-competency-normalization.md`
+
+# Contrato de Acordos — M7.3 Normalização de competências declaradas
+
+Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, pedido explícito para implementar os apontamentos discutidos funcionalmente em produção, incluindo registros antigos. Baseline: `9b002831a51a046d87cd22880688ed751e515516`.
+
+## DEVE
+
+- D-01 — Reutilizar Knowledge Global/empresa, conceitos publicados e taxonomia M7.1; interpretar declarações sem exigir que a redação original seja idêntica ao nome canônico.
+- D-02 — Executar após publicação humana, automaticamente e com processamento versionado/idempotente. Preservar publicação mesmo quando o enriquecimento estiver pendente ou falhar.
+- D-03 — Separar listas/competências compostas quando sustentadas pelo texto: `Excel e Word` gera Microsoft Excel e Microsoft Word, ambos declarados. Preservar termos compostos verdadeiros e registrar a declaração original.
+- D-04 — Normalizar nomes, abreviações e equivalências com regras e, quando necessário, assistência do Knowledge Agent existente. IA recebe somente termos, nunca o currículo integral; associações dependem de conceitos aprovados acessíveis à empresa.
+- D-05 — Expor ambiguidade, ausência de correspondência, processamento e erro. Declarações não associadas continuam visíveis e podem ser encaminhadas à curadoria existente da Knowledge.
+- D-06 — Reprocessar todos os Perfis aprovados vigentes existentes contra a Knowledge atual; não modificar snapshots históricos, declaração revisada nem decisão humana anterior.
+- D-07 — Distinguir na interface quantidade de declarações, conceitos associados e pendências; nunca representar falta de associação como ausência de competência.
+- D-08 — Preservar proveniência, organização, Perfil, versão da Knowledge, método, modelo e decisão humana; manter declaração/contexto/demonstração separados.
+- D-09 — Validar localmente, publicar em produção autorizada, verificar processamento dos Perfis existentes e fluxo real; atualizar owners, Context Pack, AoT e release central (v1.7.3).
+
+## PROIBIDO
+
+- P-01 — Inventar competência, proficiência, domínio do pacote Office completo ou Evidência Demonstrada; importar requisitos de Posição ou inferir habilidades de trajetória neste movimento.
+- P-02 — Substituir silenciosamente revisão/decisão humana, editar Perfil original, Knowledge Global, matching, score, parser/OCR ou fontes externas.
+- P-03 — Promover similaridade, candidato ambíguo ou ocupação a competência; expor segredos/PII integral ou permitir leitura/escrita entre empresas sem autoridade.
+- P-04 — Perder declaração por falha, truncamento, resposta malformada, chamada duplicada ou limite operacional. Dados de entrada nunca são instruções para o agente.
+
+## FORA DE ESCOPO
+
+- F-01 — Inferência nova por trajetória, avaliação direta, matching/ranking, nova ontologia, embeddings, pesquisa Web, novo provedor/modelo ou biblioteca.
+- F-02 — Alteração da composição visual M7.2 além dos estados, contagens e lista de declarações pendentes necessários ao acordo.
+
+## AUTONOMIA
+
+- A-01 — Estrutura da camada derivada, fila/retries, regras conservadoras, contratos internos, testes, índices e implementação com serviços existentes.
+- A-02 — Microcopy e apresentação acessível dentro da topologia atual; migração forward-only, rollback e operação monitorada do reprocessamento autorizado.
+
+## Supersessão explícita
+
+Neste movimento D-02/D-04/D-06/D-09 substituem apenas as restrições M7.2 D-17 (gancho pós-publicação), D-18 (nova projeção), D-20 (nova entrega), P-03 (uso do Agent existente), P-07 (gancho pós-publicação), P-08 (reprocessamento autorizado), F-02 (normalização assistida e gancho), F-03 (produção autorizada). As demais proteções continuam válidas. O contrato M7.2 permanece histórico, não é reescrito.
+
+## Pendências
+
+Nenhuma decisão funcional pendente. Falha de configuração, limite de provedor ou ausência de conceito deve ser estado explícito, nunca aprovação inventada.
+
+## Critérios de aceite
+
+CA-01: nomes diferentes normalizam para conceitos reais sem taxonomia paralela (D-01/D-04). CA-02: publicação enfileira, repetição não duplica e falha não remove o Perfil (D-02). CA-03: testes de Excel/Word, termo composto e listas legadas, preservando origem (D-03). CA-04: lista de pendências, métricas e estados legíveis em desktop/mobile (D-05/D-07). CA-05: reprocessamento idempotente com origem/histórico/decisões intactos (D-06/D-08). CA-06: testes negativos de tenant, autoridade, versão, invenção, resposta incompleta e revisão humana (P-*). CA-07: build, testes direcionados, banco descartável, rollout e smoke real com evidência no AoT (D-09). Referência visual é a composição M7.2 existente; screenshot vazio enviado pelo usuário é contraexemplo funcional, não alvo.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -10673,6 +10764,61 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 - Prisma v1.7.2 está ativo no frontend hospedado a partir do commit funcional `8f7473a`; main local, GitHub e checkout da Hostinger foram sincronizados por fast-forward.
 - O smoke remoto consultou um Perfil real apenas por contrato/contagens, sem retornar PII e sem escrita. O smoke visual autenticado abriu em produção Resumo, Competências e Evidências de um Perfil aprovado, confirmou os estados vazios/parciais e Prisma v1.7.2, sem mutação. A prova visual com associações e detalhes preenchidos continua baseada no componente real com fixture sintética, pois o Perfil aprovado inspecionado não possuía evidências publicadas. `/sign-in` reutilizou a sessão e redirecionou antes de exibir o formulário; nenhuma credencial foi digitada ou contornada, e o preenchimento visual dos campos não foi observado.
 - Rollback web preservado: `prisma-web:rollback-before-m72-20260918`, imagem `sha256:4e18858eaa7e81b5a2e581f9d042c3c39a33ed046d87d27ad2cd4c8e2770c8b6`. Em reversão de banco, usar migration forward para revogar/remover a RPC; não reescrever Perfis, Knowledge ou M5.1.
+
+---
+
+## Source: `docs/qa/aot-m73-competency-normalization.md`
+
+# AoT — M7.3 Normalização de competências declaradas
+
+Contrato: `docs/qa/agreement-m73-competency-normalization.md` 1.0.0. Execução: `docs/qa/execution-m73-competency-normalization.md`. Autorização de produção e reprocessamento recebida de Bruno em 2026-09-18.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Resolver server-side usa Knowledge publicada e tipos M7.1 | QA SQL: alias real, tradução, empresa estrangeira e ocupação | PASS |
+| D-02 | Trigger transacional, fila e claim com lease | QA SQL: enqueue idempotente, claim duplicado negado, falha preserva declaração | PASS local; produção NOT TESTED |
+| D-03 | `src/knowledge/competencyNormalization.ts` | Golden: Excel/Word, composto, heading/lista legada; QA SQL: dois conceitos distintos | PASS |
+| D-04 | Modo novo no Knowledge Agent, sem novo provedor/modelo | Deno worker com provider simulado; schema, cobertura, PII, timeout | PASS local; produção NOT TESTED |
+| D-05 | Estados e pendências expansíveis; Inbox de curadoria existente | Browser sintético desktop/mobile; SQL falha/ambiguidade | PASS |
+| D-06 | Enqueue autorizado de todos os aprovados vigentes, snapshots preservados | QA SQL: atual/histórico intactos; revisão aditiva | PASS local; produção NOT TESTED |
+| D-07 | Contagem de entradas originais separada de conceitos e pendências | Teste 43 declarações/zero conceitos; browser 8 declarações, 15 conceitos e uma pendência | PASS |
+| D-08 | Scope, perfil, versões, modelo/usage, origem e decisão | QA SQL: decisão humana posterior prevalece; nenhuma natureza demonstrada criada | PASS |
+| D-09 | ADR, owners, Context Pack, release central v1.7.3 e rollout | Fechamento operacional abaixo | PARTIAL |
+
+## Proibições
+
+| ID | Evidência | Status |
+| --- | --- | --- |
+| P-01 | Testes Office, ocupação, natureza declarada; matching/score/avaliação não editados | PASS |
+| P-02 | Perfis/decisões humanos preservados; QA SQL e revisão de diff | PASS |
+| P-03 | Negativos anon/membro/inativo/outsider, FK org/Perfil, decisão ambígua e lease | PASS |
+| P-04 | Coverage/source spans, malformed provider, fallback e falha visível | PASS |
+
+F-01/F-02 preservados: nenhuma ontologia, inferência por trajetória, ranking, parser/OCR ou remodelagem visual ampla.
+
+## Fidelidade visual
+
+Referência: composição atual M7.2; screenshot vazio do usuário é contraexemplo funcional. Harness `tests/ui/m72.html`, dados sintéticos equivalentes antes/depois. Browser in-app, 2026-09-18: viewport padrão 1266×714 e móvel 390×844, aba Competências. Mantidos cabeçalho, abas, mapa principal, coluna de leitura e empilhamento móvel. Pendência Arquitetura expandida mostra justificativa e declaração original. Capturas desta execução comprovam leitura das métricas, lista acessível e footer v1.7.3. Foi corrigido overflow dos filtros que invadia a coluna lateral em largura intermediária; ajuste responsivo dentro de A-02. Nenhuma divergência material não autorizada.
+
+## Validação local
+
+- Baseline M7.2 replayada em PostgreSQL 17 descartável, loopback 55471, `m72_m73_baseline`; todos os testes anteriores passaram.
+- `scripts/test-m73-postgres.ps1`: migration + fixtures sintéticas em transação integralmente revertida; positivos/negativos passaram.
+- `deno check supabase/functions/knowledge-agent/index.ts`: PASS.
+- `deno test --allow-env supabase/functions/knowledge-agent/competencyNormalization.test.ts`: 3/3, nenhum modelo real.
+- `pnpm run typecheck:web`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint`: PASS. Aviso de chunk grande preexistente no build.
+- Testes Node de normalização, mapa M7.2, release e Knowledge: 20/20.
+- Não foi executada validação global não autorizada.
+
+## Rollout / evidência remota
+
+NOT TESTED. Preencher com estado efetivamente observado. Não há homologação remota separada: PostgreSQL descartável/sintético antecede a produção única `ioldpnqqvobprjiontre` e Hostinger.
+
+## Desvios e conclusão
+
+Nenhum desvio funcional identificado na revisão local. Entrega ainda não concluída: falta comprovação do rollout e reprocessamento real. Material alheio preservado: `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu`.
 
 ---
 
@@ -12387,6 +12533,14 @@ A UI implementa Resumo, Competências, Evidências, explicação e abertura da o
 - UI: três superfícies em desktop, empilhamento móvel, filtros, detalhes, origem, explicação, foco e estados recuperáveis.
 - Regressão: versões de matching e score inalteradas; nenhum requisito de Posição na projeção; nenhuma dependência nova.
 - Fechamento: owners, ADR, AoT, Context Pack, Prisma v1.7.2, commit e push do branch, sem deploy/merge/produção.
+
+---
+
+## Source: `docs/qa/execution-m73-competency-normalization.md`
+
+# Execução M7.3
+
+Implementar integralmente `docs/qa/agreement-m73-competency-normalization.md` versão 1.0.0, aprovado por Bruno em 2026-09-18. Todos os D-*, P-*, F-*, A-* e CA-* desse contrato são obrigatórios. Não há delegação para reinterpretar comportamento. Registrar cada requisito no AoT, preservar material alheio e comprovar funcionamento em produção autorizada. Reutilizar fila PostgreSQL, Knowledge Agent e mecanismo agendado já existentes antes de construir outro serviço. Falhas e limites devem preservar publicação e declarações, sem declarar enriquecimento concluído.
 
 ---
 

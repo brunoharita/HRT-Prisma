@@ -11,6 +11,7 @@ import { POSITION_TAXONOMY_CONTRACT, type ProfessionalConceptType } from "../../
 import { PrismaAppShell } from "../../../web/src/ui/PrismaAppShell";
 import { prismaTheme } from "../../../web/src/ui/theme";
 import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
 
 const profile: PrismaProfileView = {
   identity: { fullName: "Ana Carolina Ribeiro", professionalTitle: "Desenvolvedora de Software Sênior", location: "São Paulo, SP · Remoto", lifecycleLabel: "Perfil profissional", operationalStatusLabel: "Ativo" },
@@ -43,7 +44,7 @@ const associations: ProfessionalEvidenceAssociation[] = concepts.map(([id, label
   verification: nature === "demonstrated" ? { status: "active", qualifiesAsVerified: true, demonstratedLevel: "intermediate", validUntil: "2027-09-18T12:00:00Z", evaluationVersion: "m51b-assessment-evaluation-1.0.0", integrityRuleVersion: "m51b-integrity-ruleset-1.0.0" } : null,
 }));
 
-const projection: ProfessionalEvidenceProjection = { contractVersion: "person-professional-evidence-1.0.0", taxonomyContractVersion: POSITION_TAXONOMY_CONTRACT, organizationId: "org-fixture", personId: "person-fixture", profile: { id: "profile-fixture", version: 3, publishedAt: "2026-09-18T12:00:00Z", inferenceVersion: "professional-profile-inference-1.0.0" }, associations, issues: [{ code: "ambiguous", observedTerm: "Arquitetura", explanation: "Seleção humana necessária." }] };
+const projection: ProfessionalEvidenceProjection = { contractVersion: "person-professional-evidence-2.0.0", taxonomyContractVersion: POSITION_TAXONOMY_CONTRACT, organizationId: "org-fixture", personId: "person-fixture", profile: { id: "profile-fixture", version: 3, publishedAt: "2026-09-18T12:00:00Z", inferenceVersion: "professional-profile-inference-1.0.0" }, normalization: { status: "complete", declaredCount: 8, methodVersion: "declared-competency-normalization-1.0.0", errorCode: null, items: [{ originalIndex: 7, originalTerm: "Arquitetura", sourceText: "Arquitetura", normalizedTerm: "Arquitetura", state: "ambiguous", reason: "Mais de um conceito publicado pode corresponder ao termo." }] }, associations, issues: [{ code: "ambiguous", observedTerm: "Arquitetura", explanation: "Seleção humana necessária." }] };
 const membership = { organizationId: "org-fixture", organizationName: "HRT Tecnologia", groupId: null, groupName: null, role: "owner" as const };
 const navigationItems = [{ path: "/", label: "Home", icon: <HomeOutlined /> }, { path: "/profiles", label: "Pessoas", icon: <TeamOutlined /> }, { path: "/positions", label: "Posições", icon: <BankOutlined /> }, { path: "/verifications", label: "Verificações", icon: <CheckSquareOutlined /> }, { path: "/knowledge", label: "Knowledge", icon: <ReadOutlined /> }, { path: "/settings", label: "Configurações", icon: <SettingOutlined /> }];
 

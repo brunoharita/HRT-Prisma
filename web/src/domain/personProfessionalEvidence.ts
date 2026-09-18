@@ -1,6 +1,6 @@
 import { POSITION_TAXONOMY_CONTRACT, taxonomyGroups, type ProfessionalConceptType } from "./positionTaxonomy.js";
 
-export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-1.0.0";
+export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-2.0.0";
 
 export type ProfessionalEvidenceNature = "declared" | "contextual" | "demonstrated";
 
@@ -67,6 +67,14 @@ export interface ProfessionalEvidenceProjection {
     inferenceVersion: string;
   };
   associations: ProfessionalEvidenceAssociation[];
+  normalization: {
+    status: "not_processed" | "queued" | "processing" | "complete" | "failed";
+    declaredCount: number;
+    methodVersion: "declared-competency-normalization-1.0.0";
+    errorCode: string | null;
+    items: Array<{ originalIndex: number; originalTerm: string; sourceText: string; normalizedTerm: string;
+      state: "resolved" | "human_preserved" | "ambiguous" | "unresolved" | "source_unavailable"; reason: string }>;
+  };
   issues: Array<{
     code: "ambiguous" | "unresolved" | "incompatible" | "source_unavailable";
     observedTerm: string;
@@ -106,6 +114,7 @@ export function readProfessionalEvidenceProjection(
     || !Number.isSafeInteger(value.profile.version)
     || typeof value.profile.publishedAt !== "string"
     || typeof value.profile.inferenceVersion !== "string"
+    || !validNormalization(value.normalization)
     || !Array.isArray(value.associations)
     || !value.associations.every(validAssociation)
     || !Array.isArray(value.issues)
@@ -154,7 +163,7 @@ export function summarizeProfessionalEvidence(projection: ProfessionalEvidencePr
   return {
     groupCount: groups.length,
     conceptCount: concepts.length,
-    declaredCount: concepts.filter((concept) => concept.natures.includes("declared")).length,
+    declaredCount: projection.normalization.declaredCount,
     contextualCount: concepts.filter((concept) => concept.natures.includes("contextual")).length,
     demonstratedCount: concepts.filter((concept) => concept.hasCurrentDemonstratedEvidence).length,
     evidenceCount: projection.associations.length,
@@ -210,6 +219,16 @@ function validIssue(value: unknown): boolean {
   return isRecord(value)
     && ["ambiguous", "unresolved", "incompatible", "source_unavailable"].includes(String(value.code))
     && typeof value.observedTerm === "string" && typeof value.explanation === "string";
+}
+
+function validNormalization(value: unknown): boolean {
+  return isRecord(value) && ["not_processed", "queued", "processing", "complete", "failed"].includes(String(value.status))
+    && value.methodVersion === "declared-competency-normalization-1.0.0"
+    && Number.isSafeInteger(value.declaredCount) && Number(value.declaredCount) >= 0 && nullableString(value.errorCode)
+    && Array.isArray(value.items) && value.items.every((item) => isRecord(item) && Number.isSafeInteger(item.originalIndex)
+      && Number(item.originalIndex) >= 0 && typeof item.originalTerm === "string" && typeof item.sourceText === "string"
+      && typeof item.normalizedTerm === "string" && typeof item.reason === "string"
+      && ["resolved", "human_preserved", "ambiguous", "unresolved", "source_unavailable"].includes(String(item.state)));
 }
 
 function nullableString(value: unknown): boolean { return value === null || typeof value === "string"; }

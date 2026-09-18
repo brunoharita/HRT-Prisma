@@ -1,5 +1,7 @@
 # Versionamento
 
+M7.3 (2026-09-18) registra a terceira entrega aceita do Movimento 7: **Prisma v1.7.3**. `declared-competency-normalization-1.0.0` versiona a interpretação derivada pós-publicação e `person-professional-evidence-2.0.0` explicita declarações, associações, pendências e processamento. Perfis/Knowledge históricos não são reescritos. A RPC V1 permanece inalterada para frontends antigos; a nova usa o sufixo `_v2` e rejeita versões desconhecidas. Rollout e ativação real são registrados no AoT M7.3, não presumidos pelo número da versão.
+
 ## M7.2 — 2026-09-18
 
 `person-professional-evidence-1.0.0` é um contrato aditivo de projeção somente leitura sobre Perfil publicado, Knowledge normalizada e Evidência Demonstrada existente. Reutiliza `position-taxonomy-1.0.0`; não altera `professional-profile` 6.0.0, `knowledge-normalization` 2.0.0, `demonstrated-evidence` 1.0.0, `vacancy-matching-explainable` 5.0.0 nem `matching-score` 1.2.0. Versão desconhecida falha fechada e nenhum Perfil histórico recebe backfill.

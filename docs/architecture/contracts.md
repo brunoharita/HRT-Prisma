@@ -4,6 +4,8 @@ Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `pars
 
 ## Política
 
+M7.3 acrescenta `declared-competency-normalization-1.0.0` (owner Knowledge/AI/data; fila e interpretação derivada de declarações, snapshots originais preservados) e `person-professional-evidence-2.0.0` (owner product/Knowledge/UI/security; RPC `load_person_professional_evidence_map_v2`, estados e contagens independentes). A RPC V1 da tabela abaixo permanece compatível para clientes antigos. Versões desconhecidas são rejeitadas; produção e validação estão no AoT M7.3. ADR-063 registra segurança, privacidade, curadoria e rollback.
+
 Cada contrato material possui nome, owner, versão, consumidores, status, compatibilidade, evidência de implementação, ambiente e política para versão desconhecida.
 
 | Contrato | Owner | Versão | Consumidores | Status | Evidência | Ambiente | Versão desconhecida |

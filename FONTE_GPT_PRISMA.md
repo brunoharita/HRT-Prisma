@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.1.0
 context_bundle_version: 2.0.0
 product_version: 1.7.2
-current_state_version: 2.37.4
+current_state_version: 2.38.0
 current_state_last_verified: 2026-09-18
-documentation_source_count: 205
-source_manifest_sha256: 0c2c56fcef25cb2f5618689389535588a330dc252492a68418fbaba0b644a384
+documentation_source_count: 209
+source_manifest_sha256: 83eeae54b01a7c19d86266a2717dd981ed5aa439679dbaf9476ad24a7f94e796
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -264,6 +264,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 ### Fonte: `docs/ai-context/PRISMA_CURRENT_STATE.md`
 
 #### Resumo operacional para prompts
+
+M7.3 aprovado para produção em 2026-09-18: normalização pós-publicação com o Knowledge Agent existente, listas separadas, aliases Global/empresa e fila versionada. `person-professional-evidence-2.0.0` distingue declarações, conceitos e pendências, preservando fonte e decisão humana. **Prisma v1.7.3** aceita; rollout e reprocessamento de sete Perfis ainda pendentes de comprovação. Contrato, testes e estado operacional: `docs/qa/aot-m73-competency-normalization.md` e ADR-063. Sem novo modelo, taxonomia, matching ou inferência de trajetória.
 
 M7.2 implementado, validado e ativado no ambiente único após autorizações explícitas de 2026-09-18. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada no Supabase como `20260918081743_m72_person_professional_evidence`; main/GitHub/Hostinger apontam ao runtime `8f7473a`. Prisma v1.7.2 está visível no login e na barra lateral; o build preservou baseline + Parser IA hosted, recriou somente `prisma-web` e manteve rollback `prisma-web:rollback-before-m72-20260918`. RPC/grants/advisors e smoke read-only tenant-scoped passaram sem escrita nem exposição de PII. A revisão visual autenticada abriu Resumo, Competências e Evidências de um Perfil aprovado e confirmou estados vazios/parciais sem mutação. `/sign-in` reutilizou a sessão disponível e redirecionou antes de exibir o formulário; isso prova o acesso autenticado, mas não o preenchimento visual dos campos.
 

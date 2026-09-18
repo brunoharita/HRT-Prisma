@@ -6383,7 +6383,7 @@ textarea {
 .prisma-m72-summary-layout > main,
 .prisma-m72-summary-layout > aside,
 .prisma-m72-competency-layout > main,
-.prisma-m72-competency-layout > aside { display: grid; min-width: 0; gap: 14px; }
+.prisma-m72-competency-layout > aside { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 14px; }
 .prisma-m72-summary-card .ant-typography,
 .prisma-m72-taxonomy-card .ant-typography { color: #354664; line-height: 1.6; }
 .prisma-m72-group-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -6411,7 +6411,8 @@ textarea {
 .prisma-m72-recent-evidence button > div { display: grid; gap: 4px; min-width: 0; }
 .prisma-m72-recent-evidence small { overflow: hidden; color: #677793; text-overflow: ellipsis; white-space: nowrap; }
 .prisma-m72-recent-evidence .ant-tag { width: max-content; margin: 0; }
-.prisma-m72-filters { display: grid; grid-template-columns: minmax(150px, .8fr) minmax(180px, 1fr) minmax(220px, 1.35fr) auto; align-items: center; gap: 10px; padding: 14px; border: 1px solid #e1e8f4; border-radius: 12px; background: #fff; }
+.prisma-m72-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); align-items: center; gap: 10px; padding: 14px; border: 1px solid #e1e8f4; border-radius: 12px; background: #fff; }
+.prisma-m73-normalization-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
 .prisma-m72-filters > label { display: flex; align-items: center; gap: 8px; color: #536584; font-size: 12px; font-weight: 600; white-space: nowrap; }
 .prisma-m72-concept-collapse { border: 0; background: transparent; }
 .prisma-m72-concept-collapse .ant-collapse-item { margin-bottom: 10px; overflow: hidden; border: 1px solid #e0e8f4; border-radius: 12px !important; background: #fbfcff; }

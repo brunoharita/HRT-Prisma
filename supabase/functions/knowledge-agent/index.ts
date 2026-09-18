@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
+import { processCompetencyNormalization } from "./competencyNormalization.ts";
 
 type Scope = "global" | "organization";
 type SourceClass = "official_occupational_taxonomy" | "official_vendor_documentation"
@@ -67,10 +68,19 @@ Deno.serve(async (request) => {
   let runId: string | null = null;
   const startedAt = Date.now();
   try {
+    if (request.method !== "POST") return jsonResponse(405, { error: "METHOD_NOT_ALLOWED" });
+    const payload = await request.json();
+    if (payload?.mode === "competency_normalization") {
+      const serviceClient = createServiceClient();
+      const { data: authorized, error } = await serviceClient.rpc("authorize_knowledge_source_monitor", {
+        p_secret: request.headers.get("x-prisma-monitor-secret") ?? "",
+      });
+      if (error || authorized !== true) return jsonResponse(401, { error: "UNAUTHORIZED_NORMALIZATION_INVOCATION" });
+      return jsonResponse(200, await processCompetencyNormalization(serviceClient));
+    }
     requireEnabledConfiguration();
     const serviceClient = createServiceClient();
     const authUser = await requireAuthUser(createUserClient(request));
-    const payload = await request.json();
     if (payload?.mode === "vacancy_advisor") {
       return await handleVacancyAdvisor(serviceClient, authUser.id, payload, startedAt);
     }
@@ -498,14 +508,17 @@ async function enforceBudgets(serviceClient: ReturnType<typeof createServiceClie
   const now = new Date();
   const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
   const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
-  const [dailyKnowledge, monthlyKnowledge, dailyVacancy, monthlyVacancy] = await Promise.all([
+  const [dailyKnowledge, monthlyKnowledge, dailyVacancy, monthlyVacancy, competencyRuns] = await Promise.all([
     serviceClient.from("knowledge_research_runs").select("id", { count: "exact", head: true }).gte("created_at", startOfDay).gt("request_count", 0),
     serviceClient.from("knowledge_research_runs").select("id", { count: "exact", head: true }).gte("created_at", startOfMonth).gt("request_count", 0),
     serviceClient.from("vacancy_advisor_research_runs").select("id", { count: "exact", head: true }).gte("created_at", startOfDay).gt("request_count", 0),
     serviceClient.from("vacancy_advisor_research_runs").select("id", { count: "exact", head: true }).gte("created_at", startOfMonth).gt("request_count", 0),
+    serviceClient.from("profile_competency_normalization_runs").select("request_count,started_at").gte("started_at", startOfMonth).gt("request_count", 0),
   ]);
-  const dailyCount = (dailyKnowledge.count ?? 0) + (dailyVacancy.count ?? 0);
-  const monthlyCount = (monthlyKnowledge.count ?? 0) + (monthlyVacancy.count ?? 0);
+  if ([dailyKnowledge, monthlyKnowledge, dailyVacancy, monthlyVacancy, competencyRuns].some((result) => result.error)) throw new HttpError(503, "Orçamento do Knowledge Agent indisponível.");
+  const normalizationCalls = competencyRuns.data ?? [];
+  const dailyCount = (dailyKnowledge.count ?? 0) + (dailyVacancy.count ?? 0) + normalizationCalls.filter((run) => run.started_at >= startOfDay).reduce((total, run) => total + run.request_count, 0);
+  const monthlyCount = (monthlyKnowledge.count ?? 0) + (monthlyVacancy.count ?? 0) + normalizationCalls.reduce((total, run) => total + run.request_count, 0);
   if (dailyCount >= dailyCap || monthlyCount >= monthlyCap) throw new HttpError(429, "Knowledge Agent atingiu o limite configurado.");
 }
 

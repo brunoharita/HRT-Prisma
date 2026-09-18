@@ -400,6 +400,9 @@ verify_jwt = true
 [functions.knowledge-source-monitor]
 verify_jwt = false
 
+[functions.knowledge-agent]
+verify_jwt = false # Handler validates auth.getUser() or the server-only Vault monitor secret.
+
 [functions.knowledge-source-publish]
 verify_jwt = true
 
