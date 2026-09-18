@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 209
-source_manifest_sha256: 83eeae54b01a7c19d86266a2717dd981ed5aa439679dbaf9476ad24a7f94e796
+source_manifest_sha256: 18f408e036c6acd99515dcb5312a8f53eb074b9702165e8807525a2040ec838f
 -->
 
 # Tudo sobre o Prisma
@@ -6719,7 +6719,7 @@ Os nomes canônicos/equivalentes gerados são **expressões de busca**, não nov
 
 - `declared-competency-normalization-1.0.0` versiona entrada derivada, método/prompt e validação. `person-professional-evidence-2.0.0` adiciona status, quantidade original e itens normalizados/pedentes à leitura, mantendo `position-taxonomy-1.0.0` e a demonstração M5.1.
 - A tabela tem RLS e nenhum grant para leitores/operadores; somente RPCs autorizadas expõem a leitura. Workers e completion são service-only. Escrita interempresa, lease antigo e cobertura incompleta são rejeitados.
-- Gateway JWT do Agent fica desabilitado para a invocação de cron, como no monitor existente; o handler **sempre** valida segredo server-side pelo Vault para este modo, ou `auth.getUser()` e autoridade existente para os outros. Não há modo público sem autenticação.
+- Gateway JWT do Agent permanece **habilitado**. O cron usa o JWT público anon já existente, guardado no Vault, e o handler exige adicionalmente o segredo server-side do monitor para este modo; os outros modos mantêm `auth.getUser()` e autoridade. A tentativa inicial de desabilitar o gateway foi bloqueada pela proteção de publicação e não foi ativada. A correção forward-only usa duas camadas, sem ampliar acesso.
 - Reutiliza limites diários/mensais do Knowledge, sem mudar seus valores. Reserva e uso da nova capacidade são auditados no banco; indisponibilidade de limite/provedor nunca bloqueia publicação.
 - Pendências entram na Inbox existente sem ligar uma observação composta a um único átomo; curadoria aprova aliases pelo fluxo humano e o operador pode atualizar as associações do Perfil. Não há publicação automática Global.
 - Falta de equivalente continua legítima. Traduções/sinônimos fornecidos pelo modelo não garantem cobertura total; somente conceitos efetivamente encontrados são associados. Não há score nem promessa de mapear 100% dos termos.

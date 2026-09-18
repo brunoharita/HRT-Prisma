@@ -401,7 +401,7 @@ verify_jwt = true
 verify_jwt = false
 
 [functions.knowledge-agent]
-verify_jwt = false # Handler validates auth.getUser() or the server-only Vault monitor secret.
+verify_jwt = true # Scheduler also supplies the existing anon JWT; handler requires the Vault secret.
 
 [functions.knowledge-source-publish]
 verify_jwt = true
