@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 205
-source_manifest_sha256: 2d02276b69a1554536d1fc4aeed4d2cb8a2ea56723b6b74ed88e826b78907bac
+source_manifest_sha256: 41467e380ddb2151ec1d6527cc591455af410992c98f0b4bc08f09b84ea581bb
 -->
 
 # Tudo sobre o Prisma
@@ -262,7 +262,7 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace. M5 resolves native PDF characters and OCR symbols into normalized canonical page coordinates, so zoom and viewport size change only presentation, not selected text. Adaptive extraction preserves PDF layout, relearns complete experience blocks immediately after an evidence-backed correction, applies accepted suggestions atomically, and promotes metadata-only organization patterns only after full review approval. The local review evolution also supports evidence-backed custom profile sections under `Outros`; approved titles and formats can improve future first extraction without copying personal content.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The single remote project, Prisma (`ioldpnqqvobprjiontre`, formerly labelled Prisma-QA), is production; the frontend is hosted at https://prisma.hrtsolutions.com.br on Hostinger. M7.1 position taxonomy is active after the authorized 2026-09-18 rollout, with versioned provenance and explicit human requirement selection; historical definitions are preserved. M7.2 is implemented locally as a read-only Person evidence projection over the published Profile, Knowledge and existing M5.1 evidence; its migration and web changes are not remotely active without a separate rollout. CBO `CBO 2002-2025-06-06`, ESCO v1.2.1 and O*NET 31.0 are published/current; monitoring never publishes automatically. Matching 5.0.0 classifies trajectory A/B/C before Prisma Score 1.2.0, and M6.2 creates contextual verification only from an explicit human action. The experimental Parser IA still depends on the authenticated hosted bridge to a loopback worker. Automatic import uses native PDF.js followed by Parser IA; Paddle and automatic Tesseract remain temporarily bypassed. External assessment-item generation and vector embeddings remain disabled. See deployment operations and the M7.1/M7.2 AoTs for evidence and limits.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The single remote project, Prisma (`ioldpnqqvobprjiontre`, formerly labelled Prisma-QA), is production; the frontend is hosted at https://prisma.hrtsolutions.com.br on Hostinger. M7.1 position taxonomy and M7.2 Person competency/evidence projection are active after their authorized 2026-09-18 rollouts. M7.2 remains read-only over the current approved Profile, published Knowledge and existing M5.1 evidence; historical profiles are preserved and Position requirements are not imported. CBO `CBO 2002-2025-06-06`, ESCO v1.2.1 and O*NET 31.0 are published/current; monitoring never publishes automatically. Matching 5.0.0 classifies trajectory A/B/C before Prisma Score 1.2.0, and M6.2 creates contextual verification only from an explicit human action. The experimental Parser IA still depends on the authenticated hosted bridge to a loopback worker. Automatic import uses native PDF.js followed by Parser IA; Paddle and automatic Tesseract remain temporarily bypassed. External assessment-item generation and vector embeddings remain disabled. See deployment operations and the M7.1/M7.2 AoTs for evidence and limits.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.37.0
+version: 2.37.1
 last_verified: 2026-09-18
 ---
 
@@ -543,11 +543,11 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.2 implementado e validado localmente na branch `codex/m72-person-competency-evidence`, sem rollout remoto. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. Resumo, mapa de Competências, explorador de Evidências, explicação e abertura de origem usam dados reais em runtime e fixture sintética na prova. A migration está somente preparada; Supabase e hosting não foram alterados. O registro local passa a Prisma v1.7.2 no login e sidebar; o site hospedado permanece em v1.6.4 até autorização.
+M7.2 implementado, validado e ativado no ambiente único após autorizações explícitas de 2026-09-18. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada no Supabase como `20260918081743_m72_person_professional_evidence`; main/GitHub/Hostinger apontam ao runtime `8f7473a`. Prisma v1.7.2 está visível no login; o build preservou baseline + Parser IA hosted, recriou somente `prisma-web` e manteve rollback `prisma-web:rollback-before-m72-20260918`. RPC/grants/advisors e smoke read-only tenant-scoped passaram sem escrita nem exposição de PII; a inspeção visual autenticada pós-login não foi executada porque não havia sessão salva.
 
-M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registrou M7.1 como primeira entrega oficial; M7.2 é a segunda entrega aceita no código local.
+M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registrou M7.1 como primeira entrega oficial; M7.2 é a segunda entrega aceita e publicada.
 
-Sidebar institucional v1.7.1 implementada e validada localmente na branch `codex/sidebar-branding-v171`: identidade Prisma, navegação, empresa, usuário e assinatura HRT seguem a referência normativa nos estados expandido, recolhido e móvel. A versão vem do registro executável compartilhado com o login. Não houve alteração de backend, Supabase, schema, RLS, permissões ou produção; o site hospedado continua em v1.6.4 até rollout autorizado.
+Sidebar institucional implementada e publicada como parte da linha acumulada até Prisma v1.7.2: identidade Prisma, navegação, empresa, usuário e assinatura HRT seguem a referência normativa nos estados expandido, recolhido e móvel. A versão vem do registro executável compartilhado com o login. A alteração visual não mudou backend, Supabase, schema, RLS ou permissões.
 
 Diagnóstico local autorizado de 2026-09-17: a recriação do Paddle não resolveu o timeout. Testes isolados posteriores separaram carga dos modelos, layout, regiões, detecção, reconhecimento e tabelas. Limites completos de CPU reduziram uma página de 104,90 para 45,36 s com texto normalizado idêntico; cinco páginas com modelos originais e CPU controlada levaram 162,20 s. Uma variante leve oficial com reconhecimento latino concluiu as cinco páginas em 44,76 s, com cobertura textual nativa de 98,80% a 99,50% por página. Isso não prova estrutura semântica, meta de qualidade M5.6 ou importação ponta a ponta. Nenhum modelo/configuração foi promovido à produção, nem houve IA, banco ou publicação. Relatório e reprodução: `docs/operations/paddle-performance-diagnostic-2026-09-17.md`. Ferramentas diagnósticas encerram o processo pesado no prazo e não persistem texto extraído; o cancelamento do worker de produção continua pendente.
 
@@ -565,7 +565,7 @@ Correção adicional de produção em 2026-09-17: o salvamento da revisão de Ju
 
 Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor para `latin_PP-OCRv5_mobile_rec`, mantendo layout/detecção e limites completos de CPU, concluiu em 110,05 s e preservou os hashes das posições das linhas nas cinco páginas. A cobertura textual ficou entre 97,52% e 99,40%. Não foi promovida ao worker do Prisma; esses indicadores não substituem validação estrutural/semântica.
 
-Prisma v1.7.1 é a versão de produto aceita no código local; Prisma v1.6.4 continua sendo a versão pública hospedada até promoção autorizada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
+Prisma v1.7.2 é a versão de produto aceita e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
 Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
 
@@ -613,7 +613,7 @@ O schema atual inclui a proteção `20260914015642_m61_requirement_classificatio
 
 Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.2.0`, ADR-050 e ADR-061. A versão 1.1.0 preservou a base entregue em 1.0.0 e adicionou governança para referências visuais futuras; a 1.2.0 consolida a arquitetura institucional da sidebar sem mudar contratos de domínio. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
-Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md`, da fidelidade visual em `docs/qa/*visual-reference-fidelity.md` e da sidebar em `docs/qa/*sidebar-branding-v171.md`. Validação dirigida e limites nos AoTs. Não representa implantação hospedada ou produção. O código local está em v1.7.2, a implantação hospedada permanece em v1.6.4 e o contrato de apresentação está em 1.2.0.
+Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md`, da fidelidade visual em `docs/qa/*visual-reference-fidelity.md` e da sidebar em `docs/qa/*sidebar-branding-v171.md`. Validação dirigida e limites nos AoTs. A linha acumulada está publicada como Prisma v1.7.2 e o contrato de apresentação permanece em 1.2.0.
 
 ## Formação, datas e duração de experiência
 
@@ -635,7 +635,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.7.2 registra a segunda entrega aceita do Movimento 7: M7.2, Perfil de Competências e Evidências. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A implantação hospedada permanece em v1.6.4 até rollout autorizado. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.7.2 registra a segunda entrega aceita do Movimento 7: M7.2, Perfil de Competências e Evidências. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A versão está publicada desde o rollout autorizado de 2026-09-18. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 
@@ -2368,7 +2368,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `profile-discovery` | product/application/domain | 1.0.0 | busca de Pessoas, resultados e comparação | implementado localmente | filtros determinísticos, equivalência Knowledge explicada, todos/qualquer e tenant scope | local | não retornar resultado sem evidência do critério |
 | `vacancy-definition` | product/application/data | 1.3.0 no fluxo M7.1; históricos preservados | Vagas, posições, funções, histórico e matching | ativo após rollout autorizado de 2026-09-18 | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local/produção única | preservar históricos; rejeitar metadado futuro/inválido e conflito |
 | `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 ativo | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local/produção única | falhar fechado sem inventar interpretação; NULL histórico é permitido |
-| `person-professional-evidence` | product/Knowledge/data/UI/security | 1.0.0 | Perfil de Pessoa, mapa de competências, explorador de evidências | M7.2 implementado localmente; migration preparada | Perfil publicado vigente + Knowledge publicada + Evidência Demonstrada existente; projeção somente leitura; ADR-062 | local | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
+| `person-professional-evidence` | product/Knowledge/data/UI/security | 1.0.0 | Perfil de Pessoa, mapa de competências, explorador de evidências | ativo no Supabase e frontend de produção desde 2026-09-18 | Perfil publicado vigente + Knowledge publicada + Evidência Demonstrada existente; projeção somente leitura; ADR-062 | produção | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
 | `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
@@ -2931,7 +2931,7 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 `person-professional-evidence-1.0.0` é um contrato aditivo de projeção somente leitura sobre Perfil publicado, Knowledge normalizada e Evidência Demonstrada existente. Reutiliza `position-taxonomy-1.0.0`; não altera `professional-profile` 6.0.0, `knowledge-normalization` 2.0.0, `demonstrated-evidence` 1.0.0, `vacancy-matching-explainable` 5.0.0 nem `matching-score` 1.2.0. Versão desconhecida falha fechada e nenhum Perfil histórico recebe backfill.
 
-O pedido explícito de implementação e atualização completa da versão registra M7.2 como segunda entrega do Movimento 7. O registro executável calcula **Prisma v1.7.2**, consumida pelo login e pela barra lateral. A implantação hospedada permanece em v1.6.4 até rollout autorizado; código local, migration preparada e versão de produto não provam ativação remota.
+O pedido explícito de implementação e atualização completa da versão registra M7.2 como segunda entrega do Movimento 7. O registro executável calcula **Prisma v1.7.2**, consumida pelo login e pela barra lateral. Após autorização específica, a migration e o frontend foram promovidos ao ambiente único de produção em 2026-09-18; ativação remota é comprovada pelo AoT, não apenas pelo código ou número de versão.
 
 ## M7.1 — 2026-09-18
 
@@ -2963,7 +2963,7 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 - `movimento`: movimento de produto em execução, atualmente `7`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão de produto aceita no registro executável é **Prisma v1.7.2**, correspondente à segunda entrega oficial do Movimento 7. A implantação hospedada permanece em v1.6.4 até um rollout autorizado. Correções, commits e builds não incrementam o contador.
+A versão de produto aceita e publicada é **Prisma v1.7.2**, correspondente à segunda entrega oficial do Movimento 7. Correções, commits e builds não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -3042,7 +3042,7 @@ Versões anteriores permanecem identificáveis. Rollback reativa artefato anteri
 
 ## Versões atuais
 
-O fechamento do M7.2 de 2026-09-18 registra a segunda entrega aceita do Movimento 7 e avança o produto local para Prisma v1.7.2. A sidebar e o login consomem a mesma fonte executável de release. A implantação hospedada permanece na versão anterior até promoção autorizada.
+O fechamento do M7.2 de 2026-09-18 registra a segunda entrega aceita do Movimento 7 e publica Prisma v1.7.2. A sidebar e o login consomem a mesma fonte executável de release; migration, main/GitHub e Hostinger foram sincronizados no rollout autorizado.
 
 O adendo M6.1.2 de 2026-09-14 avança `vacancy-matching-explainable` para 5.0.0 e `matching-score` para 1.2.0. A trajetória profissional define Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual antes do score. Somente A e B recebem número comparável; C permanece recolhido e rastreável. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B. A compatibilidade M6.2 passa a aceitar snapshots 4.0.0 históricos e 5.0.0 atuais por migration forward-only. Produto avança para Prisma v1.6.4.
 
@@ -6781,6 +6781,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 # Deployment
 
 ## Estado
+
+Em 2026-09-18, após autorização explícita para migration, integração em main/GitHub e Hostinger, o M7.2 foi promovido ao ambiente único. A migration local `20260918160000_m72_person_professional_evidence.sql` foi registrada remotamente como `20260918081743_m72_person_professional_evidence`. Definição e grants confirmaram helper privado sem execução pública, RPC pública `stable`/`SECURITY DEFINER` com `search_path` vazio, `anon`/`public` revogados e `authenticated` autorizado sob guarda tenant/role. O frontend `8f7473a` foi construído com `baseline` e Parser IA `hosted`, e somente `prisma-web` foi recriado; gateway/workers permaneceram estáveis. Imagem anterior preservada como `prisma-web:rollback-before-m72-20260918`. HTTPS 200, bundle/commit/contrato e login v1.7.2 passaram; smoke read-only tenant-scoped sobre Perfil real retornou o contrato esperado sem expor PII. Não havia sessão autenticada salva no navegador, portanto a inspeção visual pós-login ficou explicitamente não testada. Evidência completa em `docs/qa/aot-m72-person-professional-evidence.md`.
 
 Em 2026-09-18, Bruno autorizou sincronizar main local/GitHub, Supabase e hosting para M7.1. A migration aditiva `20260918010000_m71_position_taxonomy.sql` foi aplicada no projeto único, registrada pelo conector como `20260918044935_m71_position_taxonomy`; nenhuma migration antiga foi reaplicada. O frontend `bc782fe` foi construído e ativado a partir de main com `baseline` e Parser IA `hosted`, sem recriar gateway/workers. Rollback: `prisma-web:rollback-before-m71-20260918`. HTTPS 200, bundle/commit conferidos, funções/grants/RLS e smoke autenticado de associação, origem e explicação passaram. Não se gravou Posição de teste em produção. Evidência, avisos preexistentes e limites: `docs/qa/aot-m71-position-taxonomy.md`.
 
@@ -10600,7 +10602,7 @@ D-01–D-32 e P-01–P-24 PASS no escopo local acima. M7.1 ativado no backend/fr
 
 # AoT — M7.2 Perfil de Competências e Evidências
 
-Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execução: `docs/qa/execution-m72-person-professional-evidence.md`. Data: 2026-09-18. Ambiente: local. Status: implementação e prova local; sem migration remota, deploy, merge ou produção.
+Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execução: `docs/qa/execution-m72-person-professional-evidence.md`. Data: 2026-09-18. Ambiente: local e produção única (`ioldpnqqvobprjiontre` + Hostinger). Status: implementação, integração e rollout concluídos; inspeção visual autenticada pós-login permanece `NOT TESTED` por ausência de sessão salva.
 
 ## Evidências
 
@@ -10611,6 +10613,9 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 - E5 — comparação visual local por `tests/ui/m72.html`, componente real, dados sintéticos e nenhuma escrita remota. Resumo, Competências e Evidências foram inspecionados no desktop; mobile 390 × 844 confirmou empilhamento, origem/detalhe e `scrollWidth` 375 para largura interna 390. Topologia, hierarquia, agrupamentos, ordem e ações correspondem às três referências; avatar usa iniciais porque foto não pertence ao contrato disponível. Sem divergência estrutural material observada.
 - E6 — navegação de origem: `PersonProfilePage` preserva documento/review/campo/página/região/link em sessão; `ProfileReviewPage` seleciona o campo, abre o painel documental e navega para a região quando disponível. Sem região, a UI declara a limitação.
 - E7 — revisão de diff/owners/ADR-062/Context Pack. Nenhum arquivo de fórmula de matching, parser/OCR, fonte externa ou dependência alterado. Material alheio `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservado.
+- E8 — rollout Supabase autorizado: migration registrada como `20260918081743_m72_person_professional_evidence`. Inspeção remota confirmou helper privado sem execução para `public`/`anon`/`authenticated`; RPC pública `stable`, `SECURITY DEFINER`, `search_path` vazio, sem execução para `public`/`anon` e com execução somente para `authenticated`. Advisors mantiveram o baseline de tabelas, FKs, índices e policies; surgiu apenas o aviso esperado da RPC autenticada protegida internamente.
+- E9 — smoke remoto read-only, tenant-scoped e sem PII sobre um Perfil real retornou `person-professional-evidence-1.0.0` e `position-taxonomy-1.0.0`, preservando ausência de associação como issues explícitas. Nenhum fixture, escrita, perfil, evidência ou decisão foi criado em produção; o fixture sintético remoto foi deliberadamente recusado e permaneceu somente na prova PostgreSQL local descartável.
+- E10 — integração fast-forward em `main`, push GitHub e CI `35324103297` aprovados no commit `8f7473a791c5229b1804df34f5809b6f911e8f6e`. Hostinger construiu o mesmo commit com `baseline` + Parser IA `hosted`, preservou `prisma-web:rollback-before-m72-20260918` e recriou somente `prisma-web`. HTTPS 200, container sem restart, bundle com commit/contrato e login público exibindo v1.7.2 passaram; gateway/workers permaneceram ativos e não foram recriados.
 
 ## Matriz de Acordos
 
@@ -10630,12 +10635,12 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 | D-12 | termo, método, versões, fonte e decisão humana | E2, E5 | PASS | sem cadeia privada |
 | D-13 | documento/review/região ou Verificações | E6 | PASS | depende da origem existir |
 | D-14 | loading, vazio, parcial, erro/retry e incompatível explícitos | E2, revisão de UI | PASS | falha mantém Perfil publicado |
-| D-15 | guarda server-side + authenticated; membro permitido; negativos | E1 | PASS | migration apenas local |
-| D-16 | fixture sintética e sem logging de payload | E1, E5, E7 | PASS | nenhum dado real usado |
+| D-15 | guarda server-side + authenticated; membro permitido; negativos | E1, E8, E9 | PASS | ativa em produção |
+| D-16 | fixture sintética local, smoke remoto read-only e sem logging de payload | E1, E5, E7, E9 | PASS | nenhuma escrita ou PII retornada no smoke remoto |
 | D-17 | versões matching/score e arquivos fora do diff | E2, E7 | PASS | regressão dirigida |
 | D-18 | decoder/RPC `person-professional-evidence-1.0.0` | E1, E2 | PASS | futuro falha fechado |
-| D-19 | owners, ADR, AoT e Context Pack | E7 | PASS | local |
-| D-20 | registro M7 entrega 2; login/sidebar centralizados | E2, E3 | PASS | hospedado segue v1.6.4 |
+| D-19 | owners, ADR, AoT e Context Pack | E7, E10 | PASS | sincronizados após rollout |
+| D-20 | registro M7 entrega 2; login/sidebar centralizados | E2, E3, E10 | PASS | v1.7.2 publicada |
 | D-UX-01 | cabeçalho, abas, conteúdo principal e coluna lateral/detalhe | E5 | PASS | mesmas três superfícies |
 | D-UX-02 | hierarquia, densidade, ordem e ações preservadas | E5 | PASS | conteúdo ilustrativo adaptado |
 | D-UX-03 | grids empilham; filtros/detalhe/origem permanecem | E5 | PASS | 390 × 844 |
@@ -10661,10 +10666,10 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 
 ## Fechamento e limites reais
 
-- A migration `20260918160000_m72_person_professional_evidence.sql` está preparada no repositório, não aplicada ao Supabase.
-- O código hospedado continua v1.6.4; Prisma v1.7.2 é o estado aceito no código local e no branch de entrega.
-- Não houve smoke com Pessoa real nem escrita remota. A prova visual usa dados sintéticos e a prova SQL usa base descartável.
-- Rollback local: reverter o commit da entrega. Em eventual rollout futuro, publicar migration aditiva antes do web; rollback web pode retornar ao bundle anterior e revogar/remover a RPC por migration forward, sem reescrever Perfis, Knowledge ou M5.1.
+- A migration `20260918160000_m72_person_professional_evidence.sql` está ativa no Supabase como `20260918081743_m72_person_professional_evidence`; não houve reaplicação de migrations históricas nem backfill.
+- Prisma v1.7.2 está ativo no frontend hospedado a partir do commit funcional `8f7473a`; main local, GitHub e checkout da Hostinger foram sincronizados por fast-forward.
+- O smoke remoto consultou um Perfil real apenas por contrato/contagens, sem retornar PII e sem escrita. A prova visual completa continua baseada no componente real com fixture sintética. A inspeção visual pós-login em produção ficou `NOT TESTED` porque o navegador disponível não tinha sessão autenticada; nenhuma credencial foi inserida ou contornada.
+- Rollback web preservado: `prisma-web:rollback-before-m72-20260918`, imagem `sha256:4e18858eaa7e81b5a2e581f9d042c3c39a33ed046d87d27ad2cd4c8e2770c8b6`. Em reversão de banco, usar migration forward para revogar/remover a RPC; não reescrever Perfis, Knowledge ou M5.1.
 
 ---
 
@@ -13618,7 +13623,7 @@ Normalização documental em 2026-09-11 dos resultados já registrados, sem novo
 
 ## M7.2 — matriz de rastreabilidade
 
-O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. Migration preparada, commit e push não equivalem a rollout; Supabase e hosting permanecem inalterados sem autorização específica.
+O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. O rollout posterior, especificamente autorizado, sincronizou migration, main/GitHub e frontend Hostinger; o AoT separa a evidência local da evidência remota e registra o limite do smoke visual autenticado.
 
 ---
 

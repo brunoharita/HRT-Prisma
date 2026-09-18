@@ -1,6 +1,6 @@
 # AoT — M7.2 Perfil de Competências e Evidências
 
-Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execução: `docs/qa/execution-m72-person-professional-evidence.md`. Data: 2026-09-18. Ambiente: local. Status: implementação e prova local; sem migration remota, deploy, merge ou produção.
+Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execução: `docs/qa/execution-m72-person-professional-evidence.md`. Data: 2026-09-18. Ambiente: local e produção única (`ioldpnqqvobprjiontre` + Hostinger). Status: implementação, integração e rollout concluídos; inspeção visual autenticada pós-login permanece `NOT TESTED` por ausência de sessão salva.
 
 ## Evidências
 
@@ -11,6 +11,9 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 - E5 — comparação visual local por `tests/ui/m72.html`, componente real, dados sintéticos e nenhuma escrita remota. Resumo, Competências e Evidências foram inspecionados no desktop; mobile 390 × 844 confirmou empilhamento, origem/detalhe e `scrollWidth` 375 para largura interna 390. Topologia, hierarquia, agrupamentos, ordem e ações correspondem às três referências; avatar usa iniciais porque foto não pertence ao contrato disponível. Sem divergência estrutural material observada.
 - E6 — navegação de origem: `PersonProfilePage` preserva documento/review/campo/página/região/link em sessão; `ProfileReviewPage` seleciona o campo, abre o painel documental e navega para a região quando disponível. Sem região, a UI declara a limitação.
 - E7 — revisão de diff/owners/ADR-062/Context Pack. Nenhum arquivo de fórmula de matching, parser/OCR, fonte externa ou dependência alterado. Material alheio `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservado.
+- E8 — rollout Supabase autorizado: migration registrada como `20260918081743_m72_person_professional_evidence`. Inspeção remota confirmou helper privado sem execução para `public`/`anon`/`authenticated`; RPC pública `stable`, `SECURITY DEFINER`, `search_path` vazio, sem execução para `public`/`anon` e com execução somente para `authenticated`. Advisors mantiveram o baseline de tabelas, FKs, índices e policies; surgiu apenas o aviso esperado da RPC autenticada protegida internamente.
+- E9 — smoke remoto read-only, tenant-scoped e sem PII sobre um Perfil real retornou `person-professional-evidence-1.0.0` e `position-taxonomy-1.0.0`, preservando ausência de associação como issues explícitas. Nenhum fixture, escrita, perfil, evidência ou decisão foi criado em produção; o fixture sintético remoto foi deliberadamente recusado e permaneceu somente na prova PostgreSQL local descartável.
+- E10 — integração fast-forward em `main`, push GitHub e CI `35324103297` aprovados no commit `8f7473a791c5229b1804df34f5809b6f911e8f6e`. Hostinger construiu o mesmo commit com `baseline` + Parser IA `hosted`, preservou `prisma-web:rollback-before-m72-20260918` e recriou somente `prisma-web`. HTTPS 200, container sem restart, bundle com commit/contrato e login público exibindo v1.7.2 passaram; gateway/workers permaneceram ativos e não foram recriados.
 
 ## Matriz de Acordos
 
@@ -30,12 +33,12 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 | D-12 | termo, método, versões, fonte e decisão humana | E2, E5 | PASS | sem cadeia privada |
 | D-13 | documento/review/região ou Verificações | E6 | PASS | depende da origem existir |
 | D-14 | loading, vazio, parcial, erro/retry e incompatível explícitos | E2, revisão de UI | PASS | falha mantém Perfil publicado |
-| D-15 | guarda server-side + authenticated; membro permitido; negativos | E1 | PASS | migration apenas local |
-| D-16 | fixture sintética e sem logging de payload | E1, E5, E7 | PASS | nenhum dado real usado |
+| D-15 | guarda server-side + authenticated; membro permitido; negativos | E1, E8, E9 | PASS | ativa em produção |
+| D-16 | fixture sintética local, smoke remoto read-only e sem logging de payload | E1, E5, E7, E9 | PASS | nenhuma escrita ou PII retornada no smoke remoto |
 | D-17 | versões matching/score e arquivos fora do diff | E2, E7 | PASS | regressão dirigida |
 | D-18 | decoder/RPC `person-professional-evidence-1.0.0` | E1, E2 | PASS | futuro falha fechado |
-| D-19 | owners, ADR, AoT e Context Pack | E7 | PASS | local |
-| D-20 | registro M7 entrega 2; login/sidebar centralizados | E2, E3 | PASS | hospedado segue v1.6.4 |
+| D-19 | owners, ADR, AoT e Context Pack | E7, E10 | PASS | sincronizados após rollout |
+| D-20 | registro M7 entrega 2; login/sidebar centralizados | E2, E3, E10 | PASS | v1.7.2 publicada |
 | D-UX-01 | cabeçalho, abas, conteúdo principal e coluna lateral/detalhe | E5 | PASS | mesmas três superfícies |
 | D-UX-02 | hierarquia, densidade, ordem e ações preservadas | E5 | PASS | conteúdo ilustrativo adaptado |
 | D-UX-03 | grids empilham; filtros/detalhe/origem permanecem | E5 | PASS | 390 × 844 |
@@ -61,7 +64,7 @@ Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execuç
 
 ## Fechamento e limites reais
 
-- A migration `20260918160000_m72_person_professional_evidence.sql` está preparada no repositório, não aplicada ao Supabase.
-- O código hospedado continua v1.6.4; Prisma v1.7.2 é o estado aceito no código local e no branch de entrega.
-- Não houve smoke com Pessoa real nem escrita remota. A prova visual usa dados sintéticos e a prova SQL usa base descartável.
-- Rollback local: reverter o commit da entrega. Em eventual rollout futuro, publicar migration aditiva antes do web; rollback web pode retornar ao bundle anterior e revogar/remover a RPC por migration forward, sem reescrever Perfis, Knowledge ou M5.1.
+- A migration `20260918160000_m72_person_professional_evidence.sql` está ativa no Supabase como `20260918081743_m72_person_professional_evidence`; não houve reaplicação de migrations históricas nem backfill.
+- Prisma v1.7.2 está ativo no frontend hospedado a partir do commit funcional `8f7473a`; main local, GitHub e checkout da Hostinger foram sincronizados por fast-forward.
+- O smoke remoto consultou um Perfil real apenas por contrato/contagens, sem retornar PII e sem escrita. A prova visual completa continua baseada no componente real com fixture sintética. A inspeção visual pós-login em produção ficou `NOT TESTED` porque o navegador disponível não tinha sessão autenticada; nenhuma credencial foi inserida ou contornada.
+- Rollback web preservado: `prisma-web:rollback-before-m72-20260918`, imagem `sha256:4e18858eaa7e81b5a2e581f9d042c3c39a33ed046d87d27ad2cd4c8e2770c8b6`. Em reversão de banco, usar migration forward para revogar/remover a RPC; não reescrever Perfis, Knowledge ou M5.1.

@@ -42,4 +42,4 @@ Normalização documental em 2026-09-11 dos resultados já registrados, sem novo
 
 ## M7.2 — matriz de rastreabilidade
 
-O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. Migration preparada, commit e push não equivalem a rollout; Supabase e hosting permanecem inalterados sem autorização específica.
+O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. O rollout posterior, especificamente autorizado, sincronizou migration, main/GitHub e frontend Hostinger; o AoT separa a evidência local da evidência remota e registra o limite do smoke visual autenticado.
