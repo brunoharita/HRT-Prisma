@@ -71,4 +71,6 @@ A Central operacional continua restrita aos papéis já autorizados. Member perm
 
 A Central resume o Perfil vigente sem duplicá-lo: resumo profissional, no máximo duas experiências recentes e até seis competências principais conduzem à apresentação completa. O Perfil completo, versões históricas, busca e comparação compartilham o contrato `prisma-profile-view` 1.0.0 descrito em `professional-profile-standard.md`.
 
+O M7.2 organiza a apresentação completa em Resumo, Competências, Evidências e Perfil completo. Os três primeiros consomem a projeção versionada somente leitura e preservam múltiplas origens; o Perfil completo não reapresenta o agrupamento heurístico antigo de competências. O detalhe pode levar à fonte documental/região ou à área de Verificações, conforme a origem existente, sem fabricar destino.
+
 A busca avançada usa somente Perfis vigentes do tenant e o Knowledge já publicado. Os resultados explicam os critérios atendidos e a comparação reapresenta exatamente dois Perfis sem score, vencedor ou inferência de adequação.

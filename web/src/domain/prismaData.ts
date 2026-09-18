@@ -1,6 +1,7 @@
 import type { MembershipRole, OrganizationMembership } from "../shared/access";
 import type { PlatformOperator } from "./platformUsersData";
 import type { StructuredDraft } from "./personIngestion";
+import type { ProfessionalEvidenceProjection } from "./personProfessionalEvidence";
 
 export const PERSON_LIFECYCLES = [
   "candidate",
@@ -115,6 +116,8 @@ export interface PersonProfileView {
   inferences: ProfileInference[];
   competencies: ProfileCompetency[];
   normalizedKnowledge: ProfileKnowledgeResolution[];
+  professionalEvidence: ProfessionalEvidenceProjection | null;
+  professionalEvidenceError: string | null;
   privateContact: PrivateContact | null;
 }
 

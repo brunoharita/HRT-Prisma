@@ -21,6 +21,12 @@ Versões históricas usam a mesma composição visual do Perfil atual. Se uma se
 
 A busca opera somente sobre Perfis vigentes da organização ativa. Os filtros de competência declaram explicitamente se exigem todos os termos ou qualquer termo. Equivalências publicadas no Knowledge podem satisfazer a consulta, mas o resultado preserva o termo observado no Perfil e explica a relação usada.
 
+## M7.2 — competências e evidências
+
+O Perfil vigente apresenta Resumo, mapa de Competências e explorador de Evidências sobre `person-professional-evidence-1.0.0`. Declaração, relação contextual e Evidência Demonstrada são naturezas diferentes e podem coexistir no mesmo conceito. Somente resultado direto M5.1 ativo, vigente e suficiente recebe estado verificado. Documento, certificação, aprovação humana e inferência preservam sua natureza e não viram verificação por associação.
+
+Cada item explica termo observado, conceito, regra, versões, fonte e decisão humana disponível. A origem documental abre a revisão e a região quando essa geometria existe. Ausência, ambiguidade, insuficiência, expiração e indisponibilidade usam linguagem neutra; não produzem score, proficiência, senioridade ou recomendação. Requisitos de Posição permanecem fora do Perfil até matching explícito.
+
 Os resultados são ordenados por quantidade de critérios objetivos atendidos e, em caso de empate, por nome. Essa ordenação não constitui aderência, senioridade, ranking profissional ou decisão de contratação.
 
 ## Comparação

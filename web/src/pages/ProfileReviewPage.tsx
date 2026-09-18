@@ -126,12 +126,19 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         setDraft(cloneDraft(result.reviewedData));
         const requestedFieldPath = window.sessionStorage.getItem(reviewFocusStorageKey(reviewId));
         if (requestedFieldPath) window.sessionStorage.removeItem(reviewFocusStorageKey(reviewId));
-        const initialFieldPath = requestedFieldPath && reviewFieldPathExists(result.reviewedData, requestedFieldPath)
+        const evidenceTarget = readStoredEvidenceTarget(reviewId);
+        const evidenceFieldPath = evidenceTarget?.fieldPath && reviewFieldPathExists(result.reviewedData, evidenceTarget.fieldPath) ? evidenceTarget.fieldPath : null;
+        const initialFieldPath = evidenceFieldPath ?? (requestedFieldPath && reviewFieldPathExists(result.reviewedData, requestedFieldPath)
           ? requestedFieldPath
           : result.reviewedData.experiences[0]
             ? reviewEntityFieldPath("experience", result.reviewedData.experiences[0], "role")
-            : "identity.fullName";
+            : "identity.fullName");
         setSelectedFieldPath(initialFieldPath);
+        if (evidenceTarget?.pageNumber) {
+          setActiveLinkId(evidenceTarget.linkId);
+          setNavigationTarget({ pageNumber: evidenceTarget.pageNumber, regionId: evidenceTarget.regionId, linkId: evidenceTarget.linkId, nonce: Date.now() });
+          setMobilePane("document");
+        }
         if (requestedFieldPath) {
           const issues = [
             ...validateReviewDraftForSave(result.reviewedData, {
@@ -1092,6 +1099,26 @@ function validateCustomSections(draft: StructuredDraft): string | null {
 }
 
 function reviewFocusStorageKey(reviewId: string): string { return `prisma.review-focus.${reviewId}`; }
+
+function readStoredEvidenceTarget(reviewId: string): { fieldPath: string | null; pageNumber: number | null; regionId: string | null; linkId: string | null } | null {
+  const key = `prisma.review-evidence.${reviewId}`;
+  const raw = window.sessionStorage.getItem(key);
+  if (!raw) return null;
+  window.sessionStorage.removeItem(key);
+  try {
+    const value: unknown = JSON.parse(raw);
+    if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+    const candidate = value as Record<string, unknown>;
+    return {
+      fieldPath: typeof candidate.fieldPath === "string" ? candidate.fieldPath : null,
+      pageNumber: typeof candidate.pageNumber === "number" && Number.isSafeInteger(candidate.pageNumber) && candidate.pageNumber > 0 ? candidate.pageNumber : null,
+      regionId: typeof candidate.regionId === "string" ? candidate.regionId : null,
+      linkId: typeof candidate.linkId === "string" ? candidate.linkId : null,
+    };
+  } catch {
+    return null;
+  }
+}
 function focusReviewField(fieldPath: string): void {
   const field = document.querySelector(`[data-review-field-path="${fieldPath}"]`);
   field?.scrollIntoView({ behavior: "smooth", block: "center" });

@@ -1,5 +1,11 @@
 # Versionamento
 
+## M7.2 — 2026-09-18
+
+`person-professional-evidence-1.0.0` é um contrato aditivo de projeção somente leitura sobre Perfil publicado, Knowledge normalizada e Evidência Demonstrada existente. Reutiliza `position-taxonomy-1.0.0`; não altera `professional-profile` 6.0.0, `knowledge-normalization` 2.0.0, `demonstrated-evidence` 1.0.0, `vacancy-matching-explainable` 5.0.0 nem `matching-score` 1.2.0. Versão desconhecida falha fechada e nenhum Perfil histórico recebe backfill.
+
+O pedido explícito de implementação e atualização completa da versão registra M7.2 como segunda entrega do Movimento 7. O registro executável calcula **Prisma v1.7.2**, consumida pelo login e pela barra lateral. A implantação hospedada permanece em v1.6.4 até rollout autorizado; código local, migration preparada e versão de produto não provam ativação remota.
+
 ## M7.1 — 2026-09-18
 
 `position-taxonomy-1.0.0` é um novo contrato aditivo de interpretação/proveniência. `vacancy-definition` passa de 1.2.0 a 1.3.0 no novo salvamento atômico, sem alterar required/desired, fórmulas ou consumidores históricos. Versões antigas, inclusive estrutura assistida 2.0.0 histórica, não são reescritas; NULL no novo metadado significa sem interpretação M7.1 registrada. `vacancy-matching-explainable-5.0.0`, `matching-score-1.2.0` e snapshots aceitos pelo M6.2 permanecem.
@@ -30,7 +36,7 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 - `movimento`: movimento de produto em execução, atualmente `7`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão de produto aceita no registro executável é **Prisma v1.7.1**, correspondente à primeira entrega oficial do Movimento 7. A implantação hospedada permanece em v1.6.4 até um rollout autorizado. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão de produto aceita no registro executável é **Prisma v1.7.2**, correspondente à segunda entrega oficial do Movimento 7. A implantação hospedada permanece em v1.6.4 até um rollout autorizado. Correções, commits e builds não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -64,6 +70,7 @@ M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora d
 | Entrega | Marco | Situação considerada para o contador |
 |---:|---|---|
 | 1 | M7.1: taxonomia profissional e inteligência de posições | aceite do PO para implementação e atualização da versão |
+| 2 | M7.2: perfil de competências e evidências | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -108,7 +115,7 @@ Versões anteriores permanecem identificáveis. Rollback reativa artefato anteri
 
 ## Versões atuais
 
-O fechamento visual da sidebar de 2026-09-18 registra M7.1 como primeira entrega aceita do Movimento 7 e avança o produto para Prisma v1.7.1. A sidebar e o login consomem a mesma fonte executável de release. O ajuste não altera schemas, payloads, contratos técnicos, Supabase ou a implantação hospedada, que permanece na versão anterior até promoção autorizada.
+O fechamento do M7.2 de 2026-09-18 registra a segunda entrega aceita do Movimento 7 e avança o produto local para Prisma v1.7.2. A sidebar e o login consomem a mesma fonte executável de release. A implantação hospedada permanece na versão anterior até promoção autorizada.
 
 O adendo M6.1.2 de 2026-09-14 avança `vacancy-matching-explainable` para 5.0.0 e `matching-score` para 1.2.0. A trajetória profissional define Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual antes do score. Somente A e B recebem número comparável; C permanece recolhido e rastreável. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B. A compatibilidade M6.2 passa a aceitar snapshots 4.0.0 históricos e 5.0.0 atuais por migration forward-only. Produto avança para Prisma v1.6.4.
 

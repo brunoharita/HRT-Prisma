@@ -2,11 +2,11 @@
 artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.1.0
 context_bundle_version: 2.0.0
-product_version: 1.7.1
-current_state_version: 2.36.0
+product_version: 1.7.2
+current_state_version: 2.37.0
 current_state_last_verified: 2026-09-18
-documentation_source_count: 201
-source_manifest_sha256: 41245fb2478d73a124d3358a874eca45b3e106a4f44ca5b18d36b00f7746273b
+documentation_source_count: 205
+source_manifest_sha256: 2d02276b69a1554536d1fc4aeed4d2cb8a2ea56723b6b74ed88e826b78907bac
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -265,7 +265,9 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registra M7.1 como primeira entrega oficial e leva o código local a v1.7.1; M7.2, matching/score e IA não foram alterados.
+M7.2 implementado e validado localmente na branch `codex/m72-person-competency-evidence`, sem rollout remoto. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. Resumo, mapa de Competências, explorador de Evidências, explicação e abertura de origem usam dados reais em runtime e fixture sintética na prova. A migration está somente preparada; Supabase e hosting não foram alterados. O registro local passa a Prisma v1.7.2 no login e sidebar; o site hospedado permanece em v1.6.4 até autorização.
+
+M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registrou M7.1 como primeira entrega oficial; M7.2 é a segunda entrega aceita no código local.
 
 Sidebar institucional v1.7.1 implementada e validada localmente na branch `codex/sidebar-branding-v171`: identidade Prisma, navegação, empresa, usuário e assinatura HRT seguem a referência normativa nos estados expandido, recolhido e móvel. A versão vem do registro executável compartilhado com o login. Não houve alteração de backend, Supabase, schema, RLS, permissões ou produção; o site hospedado continua em v1.6.4 até rollout autorizado.
 
@@ -313,11 +315,11 @@ O Product Owner aprovou em 2026-09-14 que os grupos de requisito/Perfil permane�
 
 Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.2.0`, ADR-050 e ADR-061. A versão 1.1.0 preservou a base entregue em 1.0.0 e adicionou governança para referências visuais futuras; a 1.2.0 consolida a arquitetura institucional da sidebar sem mudar contratos de domínio. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
-Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md`, da fidelidade visual em `docs/qa/*visual-reference-fidelity.md` e da sidebar em `docs/qa/*sidebar-branding-v171.md`. Validação dirigida e limites nos AoTs. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. O código local está em v1.7.1, a implantação hospedada permanece em v1.6.4 e o contrato de apresentação está em 1.2.0, sem mudança semântica de contratos persistidos.
+Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md`, da fidelidade visual em `docs/qa/*visual-reference-fidelity.md` e da sidebar em `docs/qa/*sidebar-branding-v171.md`. Validação dirigida e limites nos AoTs. Não representa implantação hospedada ou produção. O código local está em v1.7.2, a implantação hospedada permanece em v1.6.4 e o contrato de apresentação está em 1.2.0.
 
 #### Versão exibida no login
 
-Prisma v1.7.1 registra a primeira entrega aceita do Movimento 7: M7.1, taxonomia profissional e inteligência de posições. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. Login e sidebar consomem a mesma fonte; a sidebar expandida acrescenta a assinatura institucional HRT e a recolhida mostra somente a versão. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A implantação hospedada permanece em v1.6.4 até rollout autorizado. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.7.2 registra a segunda entrega aceita do Movimento 7: M7.2, Perfil de Competências e Evidências. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A implantação hospedada permanece em v1.6.4 até rollout autorizado. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 #### Repositório
 

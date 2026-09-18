@@ -65,6 +65,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-056](ADR-056-dual-context-distribution.md) | accepted | Uma fonte compacta para prompts e uma exportação completa derivam do mesmo Context Pack |
 | [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 | [ADR-061](ADR-061-visual-reference-fidelity-for-prompts.md) | accepted | Referências visuais normativas viram requisitos estruturais e evidência comparável nos prompts |
+| [ADR-062](ADR-062-person-professional-evidence-projection.md) | accepted | Perfil profissional usa projeção versionada somente leitura sobre Perfil, Knowledge e Evidência Demonstrada existentes |
 
 ## Rules
 

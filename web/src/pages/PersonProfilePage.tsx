@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, EditOutlined, FileSearchOutlined, HistoryOutlined } from "@ant-design/icons";
-import { Alert, Button, Drawer, Empty, Skeleton, Space, Tag, Typography } from "antd";
-import { CanonicalProfileView } from "../components/profile/CanonicalProfileView";
+import { ArrowLeftOutlined, EditOutlined, HistoryOutlined } from "@ant-design/icons";
+import { Alert, Button, Empty, Skeleton, Space } from "antd";
+import { CanonicalProfileHeader } from "../components/profile/CanonicalProfileView";
+import { PersonProfessionalEvidenceMap } from "../components/profile/PersonProfessionalEvidenceMap";
 import { buildPrismaProfileView } from "../domain/canonicalProfile";
+import type { ProfessionalEvidenceAssociation } from "../domain/personProfessionalEvidence";
 import type { PersonProfileView, PrismaDataRepository } from "../domain/prismaData";
 import { describeLifecycle } from "../domain/prismaData";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
-import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
+import { PrismaPage } from "../ui/PrismaPage";
 
 interface PersonProfilePageProps {
   activeMembership: OrganizationMembership;
@@ -16,11 +18,8 @@ interface PersonProfilePageProps {
   onNavigate: (path: string) => void;
 }
 
-type EvidenceSection = "about" | "experience" | "education" | "competencies" | "credentials" | "other";
-
 export function PersonProfilePage({ activeMembership, personId, repository, onNavigate }: PersonProfilePageProps) {
   const [view, setView] = useState<PersonProfileView | null>(null);
-  const [evidenceSection, setEvidenceSection] = useState<EvidenceSection | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,38 +49,38 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
   }) : null, [view]);
   const canReview = activeMembership.role !== "member";
 
+  function openEvidenceSource(evidence: ProfessionalEvidenceAssociation) {
+    const source = evidence.evidence.source;
+    if (source.documentId && source.reviewId) {
+      window.sessionStorage.setItem(`prisma.review-evidence.${source.reviewId}`, JSON.stringify({
+        fieldPath: source.fieldPath,
+        pageNumber: source.pageNumber,
+        regionId: source.spatialRegionId,
+        linkId: source.evidenceLinkId,
+      }));
+      onNavigate(`/profiles/${personId}/documents/${source.documentId}/verification/${source.reviewId}`);
+      return;
+    }
+    if (source.documentId) {
+      onNavigate(`/profiles/${personId}/documents/${source.documentId}`);
+      return;
+    }
+    if (evidence.nature === "demonstrated") onNavigate("/verifications");
+  }
+
   return (
     <PrismaPage className="prisma-profile-page">
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(canReview ? `/profiles/${personId}` : "/profiles")} type="text">{canReview ? "Voltar para a Central da Pessoa" : "Voltar para Pessoas"}</Button>
-      <PrismaPageHeader
-        title="Perfil"
-        description="Representação profissional estruturada, comparável e rastreável do Prisma."
-        actions={<Space wrap>{canReview ? <Button icon={<HistoryOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Versões do perfil</Button> : null}{canReview ? <Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)} type="primary">Criar nova revisão</Button> : null}</Space>}
-      />
       {loading ? <ProfileSkeleton /> : null}
       {error ? <Alert message={error} showIcon type="error" /> : null}
       {!loading && !error && !view ? <PrismaCard><Empty description="Pessoa inexistente ou indisponível para esta empresa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
       {view && !canonical ? <PrismaCard><Empty description="Ainda não existe um Perfil publicado para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
-      {canonical ? <CanonicalProfileView onShowEvidence={setEvidenceSection} profile={canonical} /> : null}
-      <EvidenceDrawer evidence={view?.evidence ?? []} onClose={() => setEvidenceSection(null)} open={evidenceSection !== null} section={evidenceSection} />
+      {canonical ? <CanonicalProfileHeader actions={canReview ? <Space wrap><Button icon={<HistoryOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Versões do perfil</Button><Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)} type="primary">Criar nova revisão</Button></Space> : undefined} profile={canonical} /> : null}
+      {canonical ? <PersonProfessionalEvidenceMap onOpenSource={openEvidenceSource} profile={canonical} projection={view?.professionalEvidence ?? null} projectionError={view?.professionalEvidenceError ?? null} /> : null}
     </PrismaPage>
   );
 }
 
 function ProfileSkeleton() {
   return <div className="prisma-profile-skeleton"><PrismaCard><Skeleton active avatar paragraph={{ rows: 3 }} /></PrismaCard><PrismaCard><Skeleton active paragraph={{ rows: 8 }} /></PrismaCard></div>;
-}
-
-function EvidenceDrawer({ evidence, onClose, open, section }: { evidence: PersonProfileView["evidence"]; onClose: () => void; open: boolean; section: EvidenceSection | null }) {
-  const sectionLabel = section ? ({ about: "Sobre", experience: "Experiência profissional", education: "Formação", competencies: "Competências", credentials: "Credenciais", other: "Outros" } as const)[section] : "Perfil";
-  return <Drawer className="prisma-evidence-drawer" destroyOnHidden onClose={onClose} open={open} title="Evidências disponíveis no Perfil" width="min(540px, 96vw)">
-    <Typography.Paragraph type="secondary">Consulta aberta a partir de {sectionLabel}. As evidências abaixo pertencem ao Perfil publicado e mantêm sua origem documental.</Typography.Paragraph>
-    {evidence.length ? <div className="prisma-canonical-evidence-list">{evidence.map((item) => <article key={item.id}><div><Tag color="blue">{item.sourcePage ? `Página ${item.sourcePage}` : "Fonte documental"}</Tag><span>{humanEvidenceKind(item.kind)}</span></div><strong>{item.fact}</strong><blockquote>{item.quotedText}</blockquote></article>)}</div> : <Empty description="Não há evidência documental disponível para este Perfil." image={<FileSearchOutlined />} />}
-  </Drawer>;
-}
-
-function humanEvidenceKind(kind: string): string {
-  if (/demonstrated/i.test(kind)) return "Verificação concluída";
-  if (/human|review/i.test(kind)) return "Confirmada na revisão";
-  return "Identificada no documento";
 }

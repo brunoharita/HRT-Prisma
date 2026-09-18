@@ -39,3 +39,7 @@ Normalização documental em 2026-09-11 dos resultados já registrados, sem novo
 | TI-01 a TI-07 e smoke 1280x720/390x844 | fluxo autenticado completo | sessão de navegador não disponível neste ambiente | BLOCKED | smoke pendente no registro original |
 | P-01 a P-18, P-21 a P-25 | revisão de projeção, testes negativos e migration/RLS | testes e prova SQL | PARTIAL | dependente do smoke |
 | P-19 a P-20 | sem chamada nova de Web Search/IA neste movimento | diff e testes locais | PASS | local |
+
+## M7.2 — matriz de rastreabilidade
+
+O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. Migration preparada, commit e push não equivalem a rollout; Supabase e hosting permanecem inalterados sem autorização específica.

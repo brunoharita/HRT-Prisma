@@ -28,6 +28,7 @@ import type { PlatformOperator } from "../../domain/platformUsersData";
 import { normalizeMembershipRole, type MembershipRole, type OrganizationMembership } from "../../shared/access";
 import { supabase } from "./client";
 import type { Json } from "./database.types";
+import { readProfessionalEvidenceProjection } from "../../domain/personProfessionalEvidence";
 
 type ProfileRow = Awaited<ReturnType<typeof loadCurrentProfileRow>>;
 
@@ -241,7 +242,7 @@ export const prismaRepository: PrismaDataRepository = {
 
     const profileRow = await loadCurrentProfileRow(organizationId, personId);
     const profile = profileRow ? decodeProfile(profileRow, person.full_name) : null;
-    const [evidenceResult, inferenceResult, competencyResult, knowledgeResult, contactResult] = await Promise.all([
+    const [evidenceResult, inferenceResult, competencyResult, knowledgeResult, professionalEvidenceResult, contactResult] = await Promise.all([
       supabase
         .from("evidence")
         .select("id, kind, fact, quoted_text, source_page, source_block, extraction_version")
@@ -256,6 +257,7 @@ export const prismaRepository: PrismaDataRepository = {
         .order("created_at", { ascending: true }),
       profileRow ? loadCompetencies(organizationId, profileRow.id) : Promise.resolve([]),
       profileRow ? loadKnowledgeResolutions(organizationId, profileRow.id) : Promise.resolve([]),
+      profileRow ? loadPersonProfessionalEvidence(organizationId, personId) : Promise.resolve({ projection: null, error: null }),
       canReadPrivateContact(role) ? loadPrivateContact(organizationId, personId) : Promise.resolve(null),
     ]);
     throwIfError(evidenceResult.error, "Não foi possível carregar as evidências do perfil.");
@@ -282,6 +284,8 @@ export const prismaRepository: PrismaDataRepository = {
       })),
       competencies: competencyResult,
       normalizedKnowledge: knowledgeResult,
+      professionalEvidence: professionalEvidenceResult.projection,
+      professionalEvidenceError: professionalEvidenceResult.error,
       privateContact: contactResult,
     } satisfies PersonProfileView;
   },
@@ -290,6 +294,27 @@ export const prismaRepository: PrismaDataRepository = {
 function requireCentralSourceName(value: string): "CBO" | "ESCO" | "O*NET" {
   if (value === "CBO" || value === "ESCO" || value === "O*NET") return value;
   throw new DataAccessFailure("invalid_data", "A base central retornada não pertence ao contrato conhecido.");
+}
+
+async function loadPersonProfessionalEvidence(organizationId: string, personId: string) {
+  const { data, error } = await supabase.rpc("load_person_professional_evidence_map" as never, {
+    p_organization_id: organizationId,
+    p_person_id: personId,
+  } as never);
+  if (error) {
+    return {
+      projection: null,
+      error: "O mapa profissional não pôde ser carregado. O Perfil publicado foi preservado; tente novamente.",
+    };
+  }
+  try {
+    return { projection: readProfessionalEvidenceProjection(data, organizationId, personId), error: null };
+  } catch {
+    return {
+      projection: null,
+      error: "A versão da projeção profissional é desconhecida ou incompatível. Nenhuma associação foi exibida por fallback.",
+    };
+  }
 }
 
 function requireMonitorStatus(value: string): KnowledgeSourceMonitorStatus {

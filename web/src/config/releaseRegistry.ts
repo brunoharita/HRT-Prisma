@@ -35,6 +35,7 @@ export const PRISMA_RELEASE_HISTORY = [{
   movement: 7,
   deliveries: [
     "M7.1: taxonomia profissional e inteligência de posições",
+    "M7.2: perfil de competências e evidências",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 

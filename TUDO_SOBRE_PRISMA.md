@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 201
-source_manifest_sha256: 41245fb2478d73a124d3358a874eca45b3e106a4f44ca5b18d36b00f7746273b
+documentation_source_count: 205
+source_manifest_sha256: 2d02276b69a1554536d1fc4aeed4d2cb8a2ea56723b6b74ed88e826b78907bac
 -->
 
 # Tudo sobre o Prisma
@@ -262,7 +262,7 @@ Official local project root: `C:\Users\Bruno\Documents\Prisma`.
 
 The repository currently provides a TypeScript CLI vertical slice and a React/Ant Design web application. The web app includes M2-A platform users, username-first sign-in, the formal split between `Usuário` and `Pessoa`, M2-B person ingestion, M2-C document reliability, curriculum-first intake, and the M5 PDF-first review workspace. M5 resolves native PDF characters and OCR symbols into normalized canonical page coordinates, so zoom and viewport size change only presentation, not selected text. Adaptive extraction preserves PDF layout, relearns complete experience blocks immediately after an evidence-backed correction, applies accepted suggestions atomically, and promotes metadata-only organization patterns only after full review approval. The local review evolution also supports evidence-backed custom profile sections under `Outros`; approved titles and formats can improve future first extraction without copying personal content.
 
-PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The single remote project, Prisma (`ioldpnqqvobprjiontre`, formerly labelled Prisma-QA), is production; the frontend is hosted at https://prisma.hrtsolutions.com.br on Hostinger. M7.1 position taxonomy is active after the authorized 2026-09-18 rollout, with versioned provenance and explicit human requirement selection; historical definitions are preserved. CBO `CBO 2002-2025-06-06`, ESCO v1.2.1 and O*NET 31.0 are published/current; monitoring never publishes automatically. Matching 5.0.0 classifies trajectory A/B/C before Prisma Score 1.2.0, and M6.2 creates contextual verification only from an explicit human action. The experimental Parser IA still depends on the authenticated hosted bridge to a loopback worker. Automatic import uses native PDF.js followed by Parser IA; Paddle and automatic Tesseract remain temporarily bypassed. External assessment-item generation and vector embeddings remain disabled. See deployment operations and the M7.1 AoT for activation evidence and limits.
+PostgreSQL/Supabase with Row-Level Security is the accepted persistence architecture. The single remote project, Prisma (`ioldpnqqvobprjiontre`, formerly labelled Prisma-QA), is production; the frontend is hosted at https://prisma.hrtsolutions.com.br on Hostinger. M7.1 position taxonomy is active after the authorized 2026-09-18 rollout, with versioned provenance and explicit human requirement selection; historical definitions are preserved. M7.2 is implemented locally as a read-only Person evidence projection over the published Profile, Knowledge and existing M5.1 evidence; its migration and web changes are not remotely active without a separate rollout. CBO `CBO 2002-2025-06-06`, ESCO v1.2.1 and O*NET 31.0 are published/current; monitoring never publishes automatically. Matching 5.0.0 classifies trajectory A/B/C before Prisma Score 1.2.0, and M6.2 creates contextual verification only from an explicit human action. The experimental Parser IA still depends on the authenticated hosted bridge to a loopback worker. Automatic import uses native PDF.js followed by Parser IA; Paddle and automatic Tesseract remain temporarily bypassed. External assessment-item generation and vector embeddings remain disabled. See deployment operations and the M7.1/M7.2 AoTs for evidence and limits.
 
 For factual availability, read [PRISMA_CURRENT_STATE.md](docs/ai-context/PRISMA_CURRENT_STATE.md). For product meaning, read [product-vision.md](docs/product/product-vision.md). For agent rules, read [AGENTS.md](AGENTS.md).
 
@@ -535,7 +535,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.36.0
+version: 2.37.0
 last_verified: 2026-09-18
 ---
 
@@ -543,7 +543,9 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registra M7.1 como primeira entrega oficial e leva o código local a v1.7.1; M7.2, matching/score e IA não foram alterados.
+M7.2 implementado e validado localmente na branch `codex/m72-person-competency-evidence`, sem rollout remoto. `person-professional-evidence-1.0.0` projeta somente o Perfil aprovado vigente sobre a Knowledge publicada do M7.1 e a Evidência Demonstrada M5.1 já existente. Declaração, contexto e demonstração permanecem distintos; apenas demonstração ativa, vigente e suficiente qualifica como verificada. Ambiguidade e incompatibilidade ficam explícitas. Requisitos de Posição, matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas não mudaram. Resumo, mapa de Competências, explorador de Evidências, explicação e abertura de origem usam dados reais em runtime e fixture sintética na prova. A migration está somente preparada; Supabase e hosting não foram alterados. O registro local passa a Prisma v1.7.2 no login e sidebar; o site hospedado permanece em v1.6.4 até autorização.
+
+M7.1 implementado, validado e integrado em main local/GitHub/Hostinger após autorização explícita de 2026-09-18. `position-taxonomy-1.0.0` projeta Knowledge publicada e `vacancy-definition-1.3.0` adiciona snapshot/proveniência. Migration aplicada no Supabase único de produção, registrada pelo conector como `20260918044935_m71_position_taxonomy` (arquivo local `20260918010000_m71_position_taxonomy.sql`); frontend `bc782fe` ativo, baseline + Parser IA hosted preservados. Título humano preservado; alias exato inequívoco resolve, ambiguidade pede seleção e insuficiência permite fluxo manual/Inbox. Sugestões/complementos não viram requisitos automaticamente. Provas locais e smoke autenticado read-only de associação O*NET 31.0, origem e explicação constam no `docs/qa/aot-m71-position-taxonomy.md`. As 17 versões históricas não receberam backfill. Rollback web `prisma-web:rollback-before-m71-20260918`; gateway/workers inalterados. Zero reconciliações ocupacionais aprovadas observadas remotamente; multisource só com vínculo aprovado, nunca a partir dos mocks. O aceite posterior da sidebar registrou M7.1 como primeira entrega oficial; M7.2 é a segunda entrega aceita no código local.
 
 Sidebar institucional v1.7.1 implementada e validada localmente na branch `codex/sidebar-branding-v171`: identidade Prisma, navegação, empresa, usuário e assinatura HRT seguem a referência normativa nos estados expandido, recolhido e móvel. A versão vem do registro executável compartilhado com o login. Não houve alteração de backend, Supabase, schema, RLS, permissões ou produção; o site hospedado continua em v1.6.4 até rollout autorizado.
 
@@ -611,7 +613,7 @@ O schema atual inclui a proteção `20260914015642_m61_requirement_classificatio
 
 Implementação consolidada na linha de entrega `codex/ux-shared-foundation`, contrato de apresentação `prisma-ux-foundation-1.2.0`, ADR-050 e ADR-061. A versão 1.1.0 preservou a base entregue em 1.0.0 e adicionou governança para referências visuais futuras; a 1.2.0 consolida a arquitetura institucional da sidebar sem mudar contratos de domínio. Aprovação explícita dos grupos 3, 16, 17 e 18, integração dos estados do grupo 15 e escolha do PO por **Posições**. Menu agrupado, placeholders fora da navegação, necessidades de verificação acessíveis por Verificações e URLs antigas preservadas. Componentes de estado/métrica/disclosure/área pública, locale pt-BR, foco/teclado e composição responsiva reutilizam Ant Design. Navegação guarda contexto temporário por sessão/papel/empresa e protege alterações não salvas. A busca de referência profissional comunica Knowledge interna, fontes oficiais catalogadas, carregamento, ausência e nova tentativa; respostas fora de ordem não substituem resultados recentes. Identificador inexistente não seleciona outra entidade; a terceira seleção de comparação não substitui escolha anterior.
 
-Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md`, da fidelidade visual em `docs/qa/*visual-reference-fidelity.md` e da sidebar em `docs/qa/*sidebar-branding-v171.md`. Validação dirigida e limites nos AoTs. Não representa execução integral dos grupos específicos 4–14, migração, novo provider, implantação hospedada ou produção. O código local está em v1.7.1, a implantação hospedada permanece em v1.6.4 e o contrato de apresentação está em 1.2.0, sem mudança semântica de contratos persistidos.
+Owner: `docs/product/ux-foundation.md`; acordo/execução/AoT da base em `docs/qa/*ux-foundation.md`, da fidelidade visual em `docs/qa/*visual-reference-fidelity.md` e da sidebar em `docs/qa/*sidebar-branding-v171.md`. Validação dirigida e limites nos AoTs. Não representa implantação hospedada ou produção. O código local está em v1.7.2, a implantação hospedada permanece em v1.6.4 e o contrato de apresentação está em 1.2.0.
 
 ## Formação, datas e duração de experiência
 
@@ -633,7 +635,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.7.1 registra a primeira entrega aceita do Movimento 7: M7.1, taxonomia profissional e inteligência de posições. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`; novas entregas aceitas entram nesse registro, sem números de versão duplicados. Atualizações do módulo são acompanhadas pelo Vite. Login e sidebar consomem a mesma fonte; a sidebar expandida acrescenta a assinatura institucional HRT e a recolhida mostra somente a versão. Metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A implantação hospedada permanece em v1.6.4 até rollout autorizado. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.7.2 registra a segunda entrega aceita do Movimento 7: M7.2, Perfil de Competências e Evidências. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A implantação hospedada permanece em v1.6.4 até rollout autorizado. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 
@@ -2366,6 +2368,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `profile-discovery` | product/application/domain | 1.0.0 | busca de Pessoas, resultados e comparação | implementado localmente | filtros determinísticos, equivalência Knowledge explicada, todos/qualquer e tenant scope | local | não retornar resultado sem evidência do critério |
 | `vacancy-definition` | product/application/data | 1.3.0 no fluxo M7.1; históricos preservados | Vagas, posições, funções, histórico e matching | ativo após rollout autorizado de 2026-09-18 | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local/produção única | preservar históricos; rejeitar metadado futuro/inválido e conflito |
 | `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 ativo | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local/produção única | falhar fechado sem inventar interpretação; NULL histórico é permitido |
+| `person-professional-evidence` | product/Knowledge/data/UI/security | 1.0.0 | Perfil de Pessoa, mapa de competências, explorador de evidências | M7.2 implementado localmente; migration preparada | Perfil publicado vigente + Knowledge publicada + Evidência Demonstrada existente; projeção somente leitura; ADR-062 | local | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
 | `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
@@ -2691,6 +2694,8 @@ O monitor `knowledge-source-monitor-1.0.1` verifica CBO, ESCO e O*NET no primeir
 
 No M7.1, os seletores de Posições usam busca paginada por termos aprovados para escolha humana, sem transformar substring em correspondência automática. Preview resolve por alias exato inequívoco e escopo do termo, usa somente fonte oficial publicada/corrente para ocupações globais e conserva aliases/versões no snapshot. Reconciliações aprovadas e identidades estáveis permitem múltiplas fontes, com todas as origens. Os seis tipos já existentes organizam a apresentação; não há categoria nova ou ontologia paralela. Mappings, relações, overlays, Inbox e publicação permanecem os owners. RPCs históricas de resolução continuam preservadas, mas a nova tela não aciona o agente de resolução. Detalhes no ADR-060; ativação remota autorizada de 2026-09-18 comprovada no AoT M7.1.
 
+No M7.2, `person-professional-evidence-1.0.0` reutiliza as mesmas identidades e os seis tipos publicados para projetar o Perfil vigente da Pessoa. Observação explícita vira declaração; inferência publicada permanece contextual; somente resultado direto M5.1 ativo, vigente e suficiente qualifica como Evidência Demonstrada verificada. Naturezas e origens coexistem sem sobrescrita. Ambiguidade, versão incompatível e fonte indisponível ficam explícitas e não criam conceito. Requisitos de Posição não entram na projeção. Detalhes no ADR-062 e AoT M7.2.
+
 Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.
 
 Impactos usam observações relacionadas e perfis atuais. `dispatch_knowledge_reinterpretation` é idempotente; `prepare_knowledge_reinterpretation_review` cria um draft ligado ao perfil-base, documento e tentativa existentes. A aprovação continua em `approve_profile_review`, reutilizando M2-C. Trigger copia versões Knowledge para a nova versão do perfil.
@@ -2922,6 +2927,12 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 # Versionamento
 
+## M7.2 — 2026-09-18
+
+`person-professional-evidence-1.0.0` é um contrato aditivo de projeção somente leitura sobre Perfil publicado, Knowledge normalizada e Evidência Demonstrada existente. Reutiliza `position-taxonomy-1.0.0`; não altera `professional-profile` 6.0.0, `knowledge-normalization` 2.0.0, `demonstrated-evidence` 1.0.0, `vacancy-matching-explainable` 5.0.0 nem `matching-score` 1.2.0. Versão desconhecida falha fechada e nenhum Perfil histórico recebe backfill.
+
+O pedido explícito de implementação e atualização completa da versão registra M7.2 como segunda entrega do Movimento 7. O registro executável calcula **Prisma v1.7.2**, consumida pelo login e pela barra lateral. A implantação hospedada permanece em v1.6.4 até rollout autorizado; código local, migration preparada e versão de produto não provam ativação remota.
+
 ## M7.1 — 2026-09-18
 
 `position-taxonomy-1.0.0` é um novo contrato aditivo de interpretação/proveniência. `vacancy-definition` passa de 1.2.0 a 1.3.0 no novo salvamento atômico, sem alterar required/desired, fórmulas ou consumidores históricos. Versões antigas, inclusive estrutura assistida 2.0.0 histórica, não são reescritas; NULL no novo metadado significa sem interpretação M7.1 registrada. `vacancy-matching-explainable-5.0.0`, `matching-score-1.2.0` e snapshots aceitos pelo M6.2 permanecem.
@@ -2952,7 +2963,7 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 - `movimento`: movimento de produto em execução, atualmente `7`;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão de produto aceita no registro executável é **Prisma v1.7.1**, correspondente à primeira entrega oficial do Movimento 7. A implantação hospedada permanece em v1.6.4 até um rollout autorizado. Correções, commits, builds locais e alterações ainda não fechadas não incrementam o contador.
+A versão de produto aceita no registro executável é **Prisma v1.7.2**, correspondente à segunda entrega oficial do Movimento 7. A implantação hospedada permanece em v1.6.4 até um rollout autorizado. Correções, commits e builds não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
@@ -2986,6 +2997,7 @@ M5.4.6, M5.4.7, a importação de PDF baseado em imagem e M5.6 permanecem fora d
 | Entrega | Marco | Situação considerada para o contador |
 |---:|---|---|
 | 1 | M7.1: taxonomia profissional e inteligência de posições | aceite do PO para implementação e atualização da versão |
+| 2 | M7.2: perfil de competências e evidências | aceite do PO para implementação e atualização da versão |
 
 ### Relação entre versão e build Git
 
@@ -3030,7 +3042,7 @@ Versões anteriores permanecem identificáveis. Rollback reativa artefato anteri
 
 ## Versões atuais
 
-O fechamento visual da sidebar de 2026-09-18 registra M7.1 como primeira entrega aceita do Movimento 7 e avança o produto para Prisma v1.7.1. A sidebar e o login consomem a mesma fonte executável de release. O ajuste não altera schemas, payloads, contratos técnicos, Supabase ou a implantação hospedada, que permanece na versão anterior até promoção autorizada.
+O fechamento do M7.2 de 2026-09-18 registra a segunda entrega aceita do Movimento 7 e avança o produto local para Prisma v1.7.2. A sidebar e o login consomem a mesma fonte executável de release. A implantação hospedada permanece na versão anterior até promoção autorizada.
 
 O adendo M6.1.2 de 2026-09-14 avança `vacancy-matching-explainable` para 5.0.0 e `matching-score` para 1.2.0. A trajetória profissional define Grupo A direto, Grupo B relacionado/transferível e Grupo C contextual antes do score. Somente A e B recebem número comparável; C permanece recolhido e rastreável. Posições explicitamente de entrada podem usar formação, projetos ou conhecimentos para o Grupo B. A compatibilidade M6.2 passa a aceitar snapshots 4.0.0 históricos e 5.0.0 atuais por migration forward-only. Produto avança para Prisma v1.6.4.
 
@@ -6646,6 +6658,39 @@ Reavaliar se testes reais mostrarem excesso de bloqueio, se houver ferramenta co
 
 ---
 
+## Source: `docs/decisions/ADR-062-person-professional-evidence-projection.md`
+
+# ADR-062 — Projeção versionada de competências e evidências da Pessoa
+
+Status: accepted. Data: 2026-09-18. Movimento: M7.2.
+
+## Contexto
+
+O Prisma já possui Perfil publicado, observações normalizadas pela Knowledge, conceitos profissionais do M7.1 e Evidência Demonstrada do M5.1. A tela de Pessoa precisava reuni-los sem duplicar taxonomia, gravar inferências derivadas, importar requisitos de Posição ou transformar revisão documental em verificação.
+
+## Decisão
+
+Adotar `person-professional-evidence-1.0.0`, projeção JSON somente leitura produzida no servidor para a organização e Pessoa autorizadas. Ela usa apenas o Perfil aprovado vigente, conceitos publicados compatíveis com `knowledge-normalization-2.0.0` e resultados M5.1 existentes. Declaração, contexto e demonstração são associações independentes com origem, método e versões. Apenas demonstração `active`, não expirada e com nível `basic`, `intermediate` ou `advanced` qualifica como verificada.
+
+Ambiguidade, ausência de conceito, fonte indisponível ou versão incompatível viram issues explícitas e não associação inventada. Requisitos de Posição não participam da projeção. A UI agrupa por identidade/tipo do conceito publicado e falha fechado para contrato desconhecido.
+
+## Consequências
+
+- Não surge nova tabela canônica nem backfill; o estado continua nos owners existentes.
+- O mesmo conceito pode conservar várias evidências e naturezas simultâneas.
+- Certificado, documento, aprovação humana e inferência continuam evidência declarada/contextual, nunca verificação direta por si.
+- A consulta SECURITY DEFINER mantém `search_path` vazio, guarda server-side e grant somente a authenticated; RLS dos owners permanece ativa.
+- Mudança futura de semântica exige nova versão do contrato, compatibilidade explícita e nova decisão.
+
+## Alternativas rejeitadas
+
+- Persistir um segundo mapa de competências: duplicaria estado e poderia divergir do Perfil/Knowledge.
+- Reaproveitar requisitos de Posição: violaria a separação Pessoa × Posição.
+- Considerar qualquer documento revisado como verificado: apagaria a fronteira do M5.1.
+- Classificar por regex da UI: criaria taxonomia paralela sem proveniência.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6715,6 +6760,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-056](ADR-056-dual-context-distribution.md) | accepted | Uma fonte compacta para prompts e uma exportação completa derivam do mesmo Context Pack |
 | [ADR-057](ADR-057-trajectory-first-matching-groups.md) | accepted | Trajetória profissional separa matching competitivo de sinais contextuais em A/B/C |
 | [ADR-061](ADR-061-visual-reference-fidelity-for-prompts.md) | accepted | Referências visuais normativas viram requisitos estruturais e evidência comparável nos prompts |
+| [ADR-062](ADR-062-person-professional-evidence-projection.md) | accepted | Perfil profissional usa projeção versionada somente leitura sobre Perfil, Knowledge e Evidência Demonstrada existentes |
 
 ## Rules
 
@@ -8002,6 +8048,8 @@ A Central operacional continua restrita aos papéis já autorizados. Member perm
 
 A Central resume o Perfil vigente sem duplicá-lo: resumo profissional, no máximo duas experiências recentes e até seis competências principais conduzem à apresentação completa. O Perfil completo, versões históricas, busca e comparação compartilham o contrato `prisma-profile-view` 1.0.0 descrito em `professional-profile-standard.md`.
 
+O M7.2 organiza a apresentação completa em Resumo, Competências, Evidências e Perfil completo. Os três primeiros consomem a projeção versionada somente leitura e preservam múltiplas origens; o Perfil completo não reapresenta o agrupamento heurístico antigo de competências. O detalhe pode levar à fonte documental/região ou à área de Verificações, conforme a origem existente, sem fabricar destino.
+
 A busca avançada usa somente Perfis vigentes do tenant e o Knowledge já publicado. Os resultados explicam os critérios atendidos e a comparação reapresenta exatamente dois Perfis sem score, vencedor ou inferência de adequação.
 
 ---
@@ -8182,6 +8230,12 @@ Versões históricas usam a mesma composição visual do Perfil atual. Se uma se
 ## Busca explicável
 
 A busca opera somente sobre Perfis vigentes da organização ativa. Os filtros de competência declaram explicitamente se exigem todos os termos ou qualquer termo. Equivalências publicadas no Knowledge podem satisfazer a consulta, mas o resultado preserva o termo observado no Perfil e explica a relação usada.
+
+## M7.2 — competências e evidências
+
+O Perfil vigente apresenta Resumo, mapa de Competências e explorador de Evidências sobre `person-professional-evidence-1.0.0`. Declaração, relação contextual e Evidência Demonstrada são naturezas diferentes e podem coexistir no mesmo conceito. Somente resultado direto M5.1 ativo, vigente e suficiente recebe estado verificado. Documento, certificação, aprovação humana e inferência preservam sua natureza e não viram verificação por associação.
+
+Cada item explica termo observado, conceito, regra, versões, fonte e decisão humana disponível. A origem documental abre a revisão e a região quando essa geometria existe. Ausência, ambiguidade, insuficiência, expiração e indisponibilidade usam linguagem neutra; não produzem score, proficiência, senioridade ou recomendação. Requisitos de Posição permanecem fora do Perfil até matching explícito.
 
 Os resultados são ordenados por quantidade de critérios objetivos atendidos e, em caso de empate, por nome. Essa ordenação não constitui aderência, senioridade, ranking profissional ou decisão de contratação.
 
@@ -9156,6 +9210,81 @@ Baseline `1215c6e1cdd603a741e14def6724525b4fded2cb`; branch `codex/m71-position-
 Consulta somente leitura ao backend `ioldpnqqvobprjiontre` confirmou CBO `CBO 2002-2025-06-06`, ESCO `1.2.1`, O*NET `31.0` publicados/correntes. A lista de projetos retorna nome atual `Prisma`, embora documentos o chamem Prisma-QA. Zero reconciliações ocupacionais aprovadas. CBO publicada tem `is_a` ocupação-família; ESCO tem `requires` com relevance essential/optional e conceitos classificados como knowledge no snapshot; O*NET tem requires/skill e uses/technology, com medidas originais. Não inventar relações ausentes ou reclassificar fontes.
 
 Owners antigos contradizem publicação corrente e versões de matching; estado verificado e contratos vigentes prevalecem. M7.1 usa resolução determinística publicada no fluxo novo e preserva RPCs históricas. O gate de referência da UI M5.4.4 será substituído pelo estado explícito permitido pelo contrato M7.1; a RPC vigente já aceita referência nula. Nenhuma alteração de fórmula/matching.
+
+---
+
+## Source: `docs/qa/agreement-m72-person-professional-evidence.md`
+
+# Contrato de Acordos — M7.2 Perfil de Competências e Evidências
+
+Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: solicitação explícita de implementação acompanhada do texto integral e de três referências visuais normativas, em 2026-09-18. As referências são normativas para arquitetura visual e ilustrativas para pessoas, textos, contagens e registros. Este índice classifica o acordo; `execution-m72-person-professional-evidence.md` preserva a fronteira de execução.
+
+## DEVE — Inegociável
+
+- D-01 — Reutilizar Knowledge e `position-taxonomy-1.0.0` do M7.1, sem taxonomia paralela.
+- D-02 — Manter conceitos de Pessoa e requisitos de Posição separados até matching explícito.
+- D-03 — Projetar somente o Perfil publicado vigente; rascunho e histórico não alteram a leitura atual.
+- D-04 — Preservar declaração explícita, relação contextual e Evidência Demonstrada como naturezas distintas e cumulativas.
+- D-05 — Considerar estado verificado somente a Evidência Demonstrada M5.1 ativa, vigente e com resultado suficiente.
+- D-06 — Não interpretar ausência, insuficiência, ambiguidade, expiração ou indisponibilidade como deficiência.
+- D-07 — Conservar múltiplas evidências do mesmo conceito sem sobrescrever origem ou natureza.
+- D-08 — Agrupar por tipos publicados da taxonomia Prisma e identidade estável do conceito.
+- D-09 — Exibir Resumo com síntese do Perfil, explicação da taxonomia, agrupamentos e evidências recentes.
+- D-10 — Exibir mapa de Competências pesquisável e filtrável por natureza e agrupamento.
+- D-11 — Exibir explorador de Evidências com filtros, métricas descritivas, lista e detalhe.
+- D-12 — Explicar por que cada item aparece com termo observado, regra, versões, fonte e decisão humana disponível, sem raciocínio privado.
+- D-13 — Permitir abrir origem documental e, quando houver geometria, a página/região correspondente.
+- D-14 — Expor estados loading, vazio, parcial, erro recuperável e versão incompatível sem inventar fallback.
+- D-15 — Respeitar tenant, Perfil, Pessoa, papel e proveniência no servidor; membro autorizado pode ler sem ganhar escrita.
+- D-16 — Manter PII integral fora de logs e usar dados sintéticos em QA visual/contratual.
+- D-17 — Manter matching 5.0.0, score 1.2.0, parser/OCR, publicação e fontes externas inalterados.
+- D-18 — Versionar a projeção como `person-professional-evidence-1.0.0` e falhar fechado para versão desconhecida.
+- D-19 — Atualizar owners, ADR, Context Pack, AoT e versão de produto central.
+- D-20 — Registrar M7.2 como segunda entrega do Movimento 7 e apresentar Prisma v1.7.2 no login e na barra lateral.
+- D-UX-01 — Preservar topologia das referências: cabeçalho da Pessoa, abas de leitura, conteúdo principal e coluna explicativa/detalhe.
+- D-UX-02 — Preservar hierarquia, agrupamento, densidade, ordem informacional e posição relativa das ações nas três superfícies.
+- D-UX-03 — Em viewport estreito, empilhar conteúdo sem ocultar filtros, explicações, origem ou estados.
+- D-UX-04 — Usar componentes/tokens Prisma e manter teclado, foco visível, rótulos e contraste.
+- D-UX-05 — Comparar visualmente o mesmo estado, dados equivalentes e viewport com as referências normativas.
+
+## PROIBIDO
+
+- P-01 — Importar requisitos ou sugestões de Posição como competências/evidências da Pessoa.
+- P-02 — Criar score, ranking, proficiência, senioridade, confiança probabilística ou decisão automática.
+- P-03 — Chamar Lominger, fonte externa, LLM, embedding, pesquisa Web ou dependência nova.
+- P-04 — Tratar certificado, documento, revisão humana ou inferência como verificação direta.
+- P-05 — Converter ambiguidade ou ausência em fato; escolher conceito silenciosamente.
+- P-06 — Reescrever Perfil histórico, Knowledge Global, Evidência Demonstrada ou origem.
+- P-07 — Alterar parser, OCR, publicação, matching, fórmula, pesos ou ordem A/B/C.
+- P-08 — Fazer backfill massivo, preencher dados ilustrativos em runtime ou usar PII real na prova.
+- P-09 — Expor payload técnico bruto ou cadeia privada de raciocínio como explicação.
+- P-10 — Relaxar RLS, grants, tenant ou autorização frontend-only.
+- P-UX-01 — Trocar a composição normativa por tela materialmente diferente sob pretexto de adaptação.
+- P-UX-02 — Provar fidelidade somente com teste funcional ou afirmação textual.
+
+## FORA DE ESCOPO
+
+- F-01 — Matching Pessoa × Posição, nova fórmula, sucessão, mobilidade, carreira, workforce planning ou remuneração.
+- F-02 — Nova avaliação, 360, certificação, parser/OCR, publicação de Perfil, fonte externa, IA ou remodelagem ampla de Knowledge.
+- F-03 — Deploy, migration remota, merge ou produção. Commit e push do branch seguem a autorização permanente do repositório.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01 — DTO, RPC somente leitura, composição interna e nomes de componentes compatíveis com os contratos.
+- A-02 — Microcopy, ícones, breakpoints e detalhes decorativos sem alterar topologia ou semântica.
+- A-03 — Testes, fixtures sintéticas, índices e refatorações mecânicas necessárias dentro da fronteira acordada.
+
+## PENDÊNCIAS
+
+Nenhuma decisão funcional pendente. A publicação remota continua fora do escopo e exige autorização específica.
+
+## CRITÉRIOS DE ACEITE
+
+Cada D-* e P-* recebe linha própria no AoT. A prova mínima combina testes de domínio/contrato, PostgreSQL descartável com positivos e negativos de autorização, build/typecheck, revisão do diff, Context Pack e comparação visual desktop/mobile. Nenhum item obrigatório é concluído por inferência de código ou por screenshot isolado.
+
+## Baseline e material preservado
+
+Baseline `f02ac17`; branch `codex/m72-person-competency-evidence`. Material alheio preservado e excluído: `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu`.
 
 ---
 
@@ -10464,6 +10593,78 @@ Baseline 1215c6e1cdd603a741e14def6724525b4fded2cb; implementação na branch cod
 ## Conclusão
 
 D-01–D-32 e P-01–P-24 PASS no escopo local acima. M7.1 ativado no backend/frontend hospedados após autorização explícita e smoke autenticado read-only. Ausência de reconciliações aprovadas limita consolidação real entre fontes por governança, não por equivalência inventada.
+
+---
+
+## Source: `docs/qa/aot-m72-person-professional-evidence.md`
+
+# AoT — M7.2 Perfil de Competências e Evidências
+
+Contrato: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Execução: `docs/qa/execution-m72-person-professional-evidence.md`. Data: 2026-09-18. Ambiente: local. Status: implementação e prova local; sem migration remota, deploy, merge ou produção.
+
+## Evidências
+
+- E1 — `supabase/qa/m72_person_professional_evidence_verification.sql` em PostgreSQL 17 local descartável `m72_contract_tests_1`, com migrations reais até M7.2 e rollback das fixtures. PASS para Perfil vigente, Knowledge publicada, declaração, M5.1 ativa/suficiente, M5.1 invalidada/insuficiente, ambiguidade, versão incompatível, membro autorizado, outro tenant, inativo e anon.
+- E2 — `tests/personProfessionalEvidence.test.ts`: decoder fail-closed, agrupamento por identidade/tipo, múltiplas naturezas, contagens, demonstração inválida, ambiguidade, guardrails SQL/UI e release.
+- E3 — `tests/productRelease.test.ts` e fonte central consumida por login/sidebar: Prisma v1.7.2; harness real exibiu v1.7.2 na barra lateral.
+- E4 — `pnpm run lint`, `pnpm run check:foundation`, typecheck de domínio/web e build web: PASS. Teste dirigido de M7.2, release, perfil canônico, M7.1, matching e M6.2: 37/37 PASS. Tooling/Context Pack: 12/12 PASS. Build manteve apenas o aviso preexistente de chunk Ant Design acima de 900 kB.
+- E5 — comparação visual local por `tests/ui/m72.html`, componente real, dados sintéticos e nenhuma escrita remota. Resumo, Competências e Evidências foram inspecionados no desktop; mobile 390 × 844 confirmou empilhamento, origem/detalhe e `scrollWidth` 375 para largura interna 390. Topologia, hierarquia, agrupamentos, ordem e ações correspondem às três referências; avatar usa iniciais porque foto não pertence ao contrato disponível. Sem divergência estrutural material observada.
+- E6 — navegação de origem: `PersonProfilePage` preserva documento/review/campo/página/região/link em sessão; `ProfileReviewPage` seleciona o campo, abre o painel documental e navega para a região quando disponível. Sem região, a UI declara a limitação.
+- E7 — revisão de diff/owners/ADR-062/Context Pack. Nenhum arquivo de fórmula de matching, parser/OCR, fonte externa ou dependência alterado. Material alheio `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservado.
+
+## Matriz de Acordos
+
+| ID | Implementação | Evidência | Status | Limite |
+| --- | --- | --- | --- | --- |
+| D-01 | tipos/agrupadores importados de `positionTaxonomy`; Knowledge existente | E1, E2, ADR-062 | PASS | sem taxonomia paralela |
+| D-02 | RPC não consulta Vagas/requisitos; conceito de Pessoa separado | E1, E2, E7 | PASS | matching permanece consumidor futuro |
+| D-03 | `superseded_at is null` + `review_status='approved'` | E1 | PASS | sem backfill |
+| D-04 | associações declared/contextual/demonstrated independentes | E1, E2, E5 | PASS | podem coexistir |
+| D-05 | `qualifiesAsVerified` exige active, vigência e nível suficiente | E1, E2 | PASS | M5.1 já existente |
+| D-06 | issues/avisos neutros, sem penalização | E1, E2, E5 | PASS | ausência não é deficiência |
+| D-07 | lista conserva múltiplas associações do conceito | E1, E2 | PASS | sem sobrescrita |
+| D-08 | grouping por ID e seis tipos publicados | E2, E5 | PASS | ordem estável |
+| D-09 | Resumo, taxonomia, cards e recentes | E5 | PASS | fixture sintética |
+| D-10 | busca, filtros e disclosure no mapa | E2, E5 | PASS | sem score |
+| D-11 | filtros, métricas, lista e detalhe de evidências | E2, E5 | PASS | métricas descritivas |
+| D-12 | termo, método, versões, fonte e decisão humana | E2, E5 | PASS | sem cadeia privada |
+| D-13 | documento/review/região ou Verificações | E6 | PASS | depende da origem existir |
+| D-14 | loading, vazio, parcial, erro/retry e incompatível explícitos | E2, revisão de UI | PASS | falha mantém Perfil publicado |
+| D-15 | guarda server-side + authenticated; membro permitido; negativos | E1 | PASS | migration apenas local |
+| D-16 | fixture sintética e sem logging de payload | E1, E5, E7 | PASS | nenhum dado real usado |
+| D-17 | versões matching/score e arquivos fora do diff | E2, E7 | PASS | regressão dirigida |
+| D-18 | decoder/RPC `person-professional-evidence-1.0.0` | E1, E2 | PASS | futuro falha fechado |
+| D-19 | owners, ADR, AoT e Context Pack | E7 | PASS | local |
+| D-20 | registro M7 entrega 2; login/sidebar centralizados | E2, E3 | PASS | hospedado segue v1.6.4 |
+| D-UX-01 | cabeçalho, abas, conteúdo principal e coluna lateral/detalhe | E5 | PASS | mesmas três superfícies |
+| D-UX-02 | hierarquia, densidade, ordem e ações preservadas | E5 | PASS | conteúdo ilustrativo adaptado |
+| D-UX-03 | grids empilham; filtros/detalhe/origem permanecem | E5 | PASS | 390 × 844 |
+| D-UX-04 | Ant Design/Prisma, labels, foco e outline | E2, E5 | PASS | teclado apoiado por elementos nativos |
+| D-UX-05 | comparação por estado e viewport equivalente | E5 | PASS | evidência identificada pelo harness/sessão local |
+
+## Proibições verificadas
+
+| ID | Prova negativa | Status |
+| --- | --- | --- |
+| P-01 | SQL não contém tabela de requisitos/Vagas; teste estático | PASS |
+| P-02 | DTO sem score/proficiência/senioridade e aviso explícito | PASS |
+| P-03 | package/lock e providers intactos; sem fetch/IA/Lominger | PASS |
+| P-04 | somente M5.1 direta produz `qualifiesAsVerified` | PASS |
+| P-05 | ambiguous/unresolved em issues, não em concepts | PASS |
+| P-06 | projeção somente leitura; teste sem DML | PASS |
+| P-07 | diff sem parser/OCR/publicação/matching | PASS |
+| P-08 | migration sem backfill; fixtures sintéticas com rollback | PASS |
+| P-09 | explicação limitada a fatos/regras/versões/proveniência | PASS |
+| P-10 | anon/inativo/outro tenant negados; helper privado | PASS |
+| P-UX-01 | três composições mantêm modelo visual reconhecível | PASS |
+| P-UX-02 | browser real + métricas responsivas além dos testes funcionais | PASS |
+
+## Fechamento e limites reais
+
+- A migration `20260918160000_m72_person_professional_evidence.sql` está preparada no repositório, não aplicada ao Supabase.
+- O código hospedado continua v1.6.4; Prisma v1.7.2 é o estado aceito no código local e no branch de entrega.
+- Não houve smoke com Pessoa real nem escrita remota. A prova visual usa dados sintéticos e a prova SQL usa base descartável.
+- Rollback local: reverter o commit da entrega. Em eventual rollout futuro, publicar migration aditiva antes do web; rollback web pode retornar ao bundle anterior e revogar/remover a RPC por migration forward, sem reescrever Perfis, Knowledge ou M5.1.
 
 ---
 
@@ -12143,6 +12344,32 @@ O M7.1 não compara Pessoa e Posição. Essa junção continua pertencendo ao ma
 
 ---
 
+## Source: `docs/qa/execution-m72-person-professional-evidence.md`
+
+# Prompt de Execução — M7.2 Perfil de Competências e Evidências
+
+Contrato congelado: `docs/qa/agreement-m72-person-professional-evidence.md` 1.0.0. Baseline: `f02ac17`. Data: 2026-09-18.
+
+## Entendimento obrigatório antes da execução
+
+Implementar D-01 a D-20 e D-UX-01 a D-UX-05. P-01 a P-10 e P-UX-01/P-UX-02 não podem ocorrer. F-01 a F-03 permanecem fora de escopo. A-01 a A-03 delegam somente o modo de implementação.
+
+## Fronteira
+
+O movimento projeta o Perfil publicado vigente e resultados M5.1 já existentes sobre os conceitos e agrupadores publicados usados pelo M7.1. A projeção é somente leitura, tenant-scoped e versionada. Declaração, contexto e demonstração coexistem; apenas demonstração direta ativa, vigente e suficiente produz estado verificado.
+
+A UI implementa Resumo, Competências, Evidências, explicação e abertura da origem. Os três arquivos de imagem fornecidos na solicitação são alvos normativos de arquitetura visual; seus nomes, pessoas, textos, datas e números são exemplos, não dados do produto. A comparação deve usar componente real, fixture sintética, mesmo estado e viewport equivalentes.
+
+## Provas exigidas
+
+- Domínio: contrato conhecido, tenant/Pessoa corretos, múltiplas naturezas, demonstração válida e inválida, ambiguidade neutra.
+- Banco: Perfil vigente publicado, Knowledge publicada, M5.1 válida/inválida, outro tenant, membro, inativo e anônimo, todos em base local descartável com rollback.
+- UI: três superfícies em desktop, empilhamento móvel, filtros, detalhes, origem, explicação, foco e estados recuperáveis.
+- Regressão: versões de matching e score inalteradas; nenhum requisito de Posição na projeção; nenhuma dependência nova.
+- Fechamento: owners, ADR, AoT, Context Pack, Prisma v1.7.2, commit e push do branch, sem deploy/merge/produção.
+
+---
+
 ## Source: `docs/qa/execution-prisma-context-pack-v2.md`
 
 # Prompt de Execução — Context Pack Prisma 2.0
@@ -13389,6 +13616,10 @@ Normalização documental em 2026-09-11 dos resultados já registrados, sem novo
 | P-01 a P-18, P-21 a P-25 | revisão de projeção, testes negativos e migration/RLS | testes e prova SQL | PARTIAL | dependente do smoke |
 | P-19 a P-20 | sem chamada nova de Web Search/IA neste movimento | diff e testes locais | PASS | local |
 
+## M7.2 — matriz de rastreabilidade
+
+O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o AoT detalha cada D/P. A prova local combina domínio, migration/RPC em PostgreSQL descartável, UI real com fixture sintética e comparação visual desktop/mobile. Migration preparada, commit e push não equivalem a rollout; Supabase e hosting permanecem inalterados sem autorização específica.
+
 ---
 
 ## Source: `docs/qa/professional-concept-matrix.md`
@@ -14297,6 +14528,10 @@ Deduplicação é tenant-scoped e conservadora. E-mail ou telefone válidos são
 Metadados `taxonomyOrigin` enviados pelo cliente são removidos antes de chamar o salvamento legado, inclusive quando este cria/atualiza um modelo de função (`saveAsRole`). Assim, a cópia JSON do modelo não constitui caminho lateral de proveniência forjada. A origem da versão da Posição é recomposta pelo servidor; a verificação SQL inclui origem falsa de outro tenant enviada pelo próprio editor.
 
 As quatro RPCs M7.1 validam organização existente, usuário ativo e papel persistido antes da leitura/mutação; `anon` não executa. Preview/save/search exigem Owner/Admin/Recruiter ou Super Admin. Criar complemento também exige `require_knowledge_admin`; não existe parâmetro para promoção Global. Helpers são privados/revogados, com search path vazio. Novas colunas herdam RLS de versões/requisitos; o servidor recompõe proveniência e rejeita IDs de outro tenant, versão desconhecida e edição concorrente. A transação inclui definição, estrutura, origem, ledger e Inbox. Falha obrigatória não vira sucesso parcial. Os testes SQL locais exercitam credenciais sintéticas com `SET ROLE authenticated/anon`, não somente superusuário (AoT M7.1).
+
+## M7.2 — leitura do Perfil profissional
+
+`load_person_professional_evidence_map` é SECURITY DEFINER com `search_path` vazio e guarda privada server-side. Owner, Admin, Recruiter, Member e Super Admin ativos podem ler somente a organização informada; `anon`, usuário inativo e outro tenant são negados. O helper privado não possui execução pública e a RPC pública é concedida apenas a `authenticated`. A função não escreve estado, não consulta requisitos de Posição e retorna somente Perfil aprovado vigente, conceitos publicados do escopo e metadados mínimos de proveniência. PII integral não entra em logs nem em fixtures visuais.
 
 - Toda tabela organizacional carrega `organization_id`, FK, índice e RLS.
 - Global Knowledge é publicada somente por Super Admin; Organization Knowledge, por Owner/Admin do escopo. Recruiter consulta e observa; Member não administra.
