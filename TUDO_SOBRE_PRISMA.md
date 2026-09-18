@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 217
-source_manifest_sha256: 5b38481d23ea8a5f803ac7828f8f1823944ab660fa43eddc70e8a3e0585af04c
+source_manifest_sha256: 8255ea0401ae3f835d41389c1fbef8cb15a778535335d076f3a8f15cb07514df
 -->
 
 # Tudo sobre o Prisma
@@ -11095,6 +11095,7 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 - `node --test` nos cinco artefatos compilados selecionados: 61/61 PASS.
 - build web, lint, foundation e `git diff --check`: PASS; apenas aviso de conversão LF/CRLF do checkout.
 - O loader opcional `tsx` não existe nas dependências e uma tentativa não executou testes; o fluxo oficial compilado foi usado e passou.
+- O advisor remoto confirmou RLS/policy na tabela nova. Quatro avisos de `SECURITY DEFINER` correspondem às fronteiras públicas intencionais e guardadas. Duas FKs sem índice foram corrigidas por migration aditiva antes do frontend.
 
 ## Rollout e limites
 

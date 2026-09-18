@@ -53,6 +53,7 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 - `node --test` nos cinco artefatos compilados selecionados: 61/61 PASS.
 - build web, lint, foundation e `git diff --check`: PASS; apenas aviso de conversão LF/CRLF do checkout.
 - O loader opcional `tsx` não existe nas dependências e uma tentativa não executou testes; o fluxo oficial compilado foi usado e passou.
+- O advisor remoto confirmou RLS/policy na tabela nova. Quatro avisos de `SECURITY DEFINER` correspondem às fronteiras públicas intencionais e guardadas. Duas FKs sem índice foram corrigidas por migration aditiva antes do frontend.
 
 ## Rollout e limites
 
