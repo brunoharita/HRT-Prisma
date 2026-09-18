@@ -10,7 +10,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.2 v2 está validado localmente, com rollout remoto pendente neste snapshot. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. PostgreSQL descartável, 61 testes, tipos, build, lint, foundation e visual desktop/mobile passaram. Evidência: AoT M7.2 v2 e ADR-065.
+M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado, com 22.885 conceitos aprovados no bootstrap. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. Migrations remotas `20260918163719`, `20260918163736` e `20260918164009`; main/GitHub/VPS sincronizados, HTTPS e smoke autenticado read-only PASS. Evidência: AoT M7.2 v2 e ADR-065.
 
 M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
@@ -108,7 +108,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.7.2 registra a segunda entrega aceita do Movimento 7: M7.2, Perfil de Competências e Evidências. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A versão está publicada desde o rollout autorizado de 2026-09-18. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.7.5 registra o M7.2 v2 como quinta entrega aceita do Movimento 7. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A versão está publicada desde o rollout autorizado de 2026-09-18. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 

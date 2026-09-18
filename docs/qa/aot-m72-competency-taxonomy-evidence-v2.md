@@ -1,6 +1,6 @@
 # AoT — M7.2 v2 Taxonomia de Competências e Perfil de Evidências
 
-Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `execution-m72-competency-taxonomy-evidence-v2.md`. Baseline: `ccef68c05e10f3c35cf616f92f9a0d55c552a275`. Estado: `PARTIAL` enquanto o rollout remoto e seu smoke permanecem `NOT TESTED`.
+Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `execution-m72-competency-taxonomy-evidence-v2.md`. Baseline: `ccef68c05e10f3c35cf616f92f9a0d55c552a275`. Estado: `PASS`.
 
 ## Agreements -> Implementation -> Test -> Evidence
 
@@ -36,7 +36,7 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 | P-11, P-12, P-13, P-14, P-15 | projeção aditiva preserva snapshots/proveniências, sem reimportação ou alteração de M5.1/matching | PASS |
 | P-16, P-17, P-18, P-19, P-20 | nenhum Lominger, fonte/API/Web, parser/OCR, IA/provider ou dado sintético em runtime | PASS |
 | P-21, P-22, P-23, P-24 | somente Perfil publicado; autorização negativa; explicação sem chain-of-thought; infraestrutura reutilizada | PASS |
-| P-25 | local sem destruição, force push, custo ou mutação de Pessoa; rollout remoto ainda não executado neste snapshot | PASS |
+| P-25 | rollout sem destruição, force push, custo inesperado ou mutação de Pessoa; somente migrations aditivas e web foram promovidas | PASS |
 
 ## Critérios de aceite e regressão
 
@@ -44,7 +44,7 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 - CA-UX-01 a CA-UX-07: as três referências normativas foram comparadas com o fixture sintético na mesma composição de dados em desktop e 390x844. Desvio encontrado e corrigido: `Liderança técnica` estava tipada como ocupação no fixture; passou a `competency`, e o decoder agora bloqueia ocupações.
 - CA-REG-01 a CA-REG-03: TypeScript raiz e web sem erro; build Vite passou com apenas os avisos preexistentes de chunks/import dinâmico; lint 568 arquivos e foundation 18 tabelas/6 versões passaram.
 - CA-DOC-01: owner docs, ADR-065, contratos, Current State e Context Pack fazem parte do mesmo movimento; checker é requisito de fechamento.
-- CA-AOT-01: todos os `D-*` e `P-*` aplicáveis estão acima. O movimento só muda para `PASS` após rollout, smoke e sincronização final.
+- CA-AOT-01: todos os `D-*` e `P-*` aplicáveis estão acima; rollout, smoke e sincronização final concluídos com estado `PASS`.
 
 ## Evidência local executada
 
@@ -57,7 +57,9 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 
 ## Rollout e limites
 
-- Migration Supabase: `NOT TESTED` remoto.
-- Commit, `origin`, `main`, VPS e frontend: `NOT TESTED`.
-- Smoke autenticado/read-only: `NOT TESTED`.
-- Nenhuma curadoria humana, requisito real, importação ou publicação de Pessoa é criada automaticamente por este movimento.
+- Supabase: migrations remotas `20260918163719`, `20260918163736` e `20260918164009` aplicadas em ordem. O release ocupacional preserva `position-taxonomy-1.0.0` com três versões-fonte; o release `competency-taxonomy-1.0.0` usa duas versões-fonte e 22.885 conceitos aprovados. `anon` não executa a busca; `authenticated` passa pelas guardas server-side.
+- Git e VPS: commits funcionais `517ae44` e `a6a0bc5` publicados na branch e integrados por fast-forward em `main`, `origin` e checkout `/opt/prisma`. Os resíduos preexistentes `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `models/` foram preservados.
+- Frontend: runtime `a6a0bc5`, Prisma v1.7.5 e imagem `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`. Somente `prisma-web` foi recriado com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; rollback `prisma-web:rollback-before-m72v2-20260918`.
+- Smoke: HTTPS 200 e bundle/commit confirmados. Em Perfil vigente aprovado, Resumo, Competências e Evidências carregaram; busca `a` permaneceu vazia e `Active Listening` retornou o canônico exato O*NET 31.0. O painel foi cancelado sem gravação.
+- Limite observado: a fixture histórica `[QA] Marina Dados` aparece publicada na UI, mas o Perfil atual está `generated`/sem aprovação no banco. A V4 recusou corretamente com `PERSON_PUBLISHED_PROFILE_NOT_FOUND`, mantendo o dado factual visível. A inconsistência preexistente não foi corrigida nem usada para relaxar a guarda.
+- Nenhuma curadoria humana, requisito real, importação ou publicação de Pessoa foi criada. Os quatro avisos de `SECURITY DEFINER` correspondem às fronteiras públicas intencionais e guardadas; após indexar as duas FKs novas, restaram apenas avisos informativos de índice ainda não utilizado.

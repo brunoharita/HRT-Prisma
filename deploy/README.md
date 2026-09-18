@@ -2,6 +2,8 @@
 
 ## Estado atual
 
+M7.2 v2 publicado em 2026-09-18: Prisma v1.7.5, runtime `a6a0bc5`, migrations remotas `20260918163719`, `20260918163736` e `20260918164009`. Main/GitHub/VPS sincronizados; somente `prisma-web` foi reconstruído com baseline + Parser IA hosted. Imagem ativa `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`; rollback `prisma-web:rollback-before-m72v2-20260918`. HTTPS e smoke autenticado read-only nas três superfícies PASS; detalhes e limites no AoT M7.2 v2.
+
 M7.4 publicado em 2026-09-18: Prisma v1.7.4, runtime `98bdf9c`, migration remota `20260918134315_m74_contextual_competency_curation`. Main/GitHub/VPS sincronizados; baseline + Parser IA hosted preservados; ativação restrita a `up -d --no-deps prisma-web`. Rollback `prisma-web:rollback-before-m74-20260918`. HTTP e smoke autenticado de painel/cancelamento PASS; detalhes e limites no AoT M7.4.
 
 O frontend público do Prisma está hospedado em VPS Hostinger KVM 2, com Ubuntu 24.04, Docker, Traefik e Nginx.

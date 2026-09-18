@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 217
-source_manifest_sha256: 8255ea0401ae3f835d41389c1fbef8cb15a778535335d076f3a8f15cb07514df
+source_manifest_sha256: 79656a551051dcace397f2f51d543fb651fa8d96a633c7ae62d3dc44aefd92cb
 -->
 
 # Tudo sobre o Prisma
@@ -543,7 +543,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.2 v2 está validado localmente, com rollout remoto pendente neste snapshot. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. PostgreSQL descartável, 61 testes, tipos, build, lint, foundation e visual desktop/mobile passaram. Evidência: AoT M7.2 v2 e ADR-065.
+M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. `position-taxonomy-1.0.0` permanece ocupacional e `competency-taxonomy-1.0.0` reutiliza a mesma Knowledge como domínio separado, com 22.885 conceitos aprovados no bootstrap. `person-professional-evidence-3.0.0` atende Perfis existentes sem reimportação e rejeita ocupações como evidência pessoal. Requisitos humanos podem compartilhar a identidade canônica; legado, M5.1, matching, score e A/B/C não mudam. Busca filtra ocupações no servidor e não resolve parcial/ambiguidade. Migrations remotas `20260918163719`, `20260918163736` e `20260918164009`; main/GitHub/VPS sincronizados, HTTPS e smoke autenticado read-only PASS. Evidência: AoT M7.2 v2 e ADR-065.
 
 M7.4 em produção, **Prisma v1.7.4**, runtime `98bdf9c`: curadoria no Perfil preserva página/filtros/registro. RPC V3 e aliases/propostas auditados, sem IA nem alteração de snapshots; V1/V2 preservadas. Main/GitHub/VPS sincronizados. Painel/cancelamento autenticado PASS; escrita real não testada. Evidências/limites: `docs/qa/aot-m74-contextual-curation.md`, ADR-064.
 
@@ -641,7 +641,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.7.2 registra a segunda entrega aceita do Movimento 7: M7.2, Perfil de Competências e Evidências. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A versão está publicada desde o rollout autorizado de 2026-09-18. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v1.7.5 registra o M7.2 v2 como quinta entrega aceita do Movimento 7. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A versão está publicada desde o rollout autorizado de 2026-09-18. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 
@@ -2382,8 +2382,8 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `profile-discovery` | product/application/domain | 1.0.0 | busca de Pessoas, resultados e comparação | implementado localmente | filtros determinísticos, equivalência Knowledge explicada, todos/qualquer e tenant scope | local | não retornar resultado sem evidência do critério |
 | `vacancy-definition` | product/application/data | 1.3.0 no fluxo M7.1; históricos preservados | Vagas, posições, funções, histórico e matching | ativo após rollout autorizado de 2026-09-18 | metadados taxonômicos aditivos, requisitos humanos, snapshot imutável e controle de versão esperada; AoT M7.1 | local/produção única | preservar históricos; rejeitar metadado futuro/inválido e conflito |
 | `position-taxonomy` | product/Knowledge/data/UI | 1.0.0 | interpretação de Posições e origem dos requisitos | M7.1 ativo | fonte, mapping, alias, relação, versão, regra, escopo e decisão; recomposição server-side; ADR-060 | local/produção única | falhar fechado sem inventar interpretação; NULL histórico é permitido |
-| `competency-taxonomy` | product/Knowledge/data/security | 1.0.0 | Perfil, requisitos de Posição e curadoria | implementado localmente; rollout no AoT M7.2 v2 | release independente sobre Knowledge publicada; busca server-side tipada; ADR-065 | local | falhar fechado sem versão, publicação, autoridade ou identidade compatível |
-| `person-professional-evidence` | product/Knowledge/data/UI/security | 3.0.0; V1/V2 preservadas | Perfil de Pessoa, mapa de competências, explorador de evidências | V3 implementado localmente; versões anteriores ativas em produção | Perfil publicado vigente + Taxonomia de Competências publicada + Evidência Demonstrada; ocupações rejeitadas; ADR-062/065 | local/produção | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
+| `competency-taxonomy` | product/Knowledge/data/security | 1.0.0 | Perfil, requisitos de Posição e curadoria | ativo em produção desde 2026-09-18 | release independente sobre Knowledge publicada; busca server-side tipada; ADR-065 e AoT M7.2 v2 | local/produção única | falhar fechado sem versão, publicação, autoridade ou identidade compatível |
+| `person-professional-evidence` | product/Knowledge/data/UI/security | 3.0.0; V1/V2 preservadas | Perfil de Pessoa, mapa de competências, explorador de evidências | V3 ativo em produção; versões anteriores preservadas | Perfil publicado vigente + Taxonomia de Competências publicada + Evidência Demonstrada; ocupações rejeitadas; ADR-062/065 | local/produção única | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
 | `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
@@ -6909,6 +6909,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+M7.2 v2 em produção em 2026-09-18: **v1.7.5**, runtime `a6a0bc5`, migrations remotas `20260918163719_m72_competency_concept_type`, `20260918163736_m72_competency_taxonomy_v2` e `20260918164009_m72_competency_taxonomy_indexes`. O Supabase publicou releases independentes para ocupações e competências, com 22.885 conceitos de competência aprovados no bootstrap. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`, rollback `prisma-web:rollback-before-m72v2-20260918`. HTTPS 200 e smoke autenticado read-only em Resumo, Competências, busca canônica e Evidências passaram sem curadoria, requisito, importação ou publicação. Main/GitHub/VPS sincronizados; evidências, advisors e limite da fixture histórica no AoT M7.2 v2.
+
 M7.4 em produção em 2026-09-18: **v1.7.4**, runtime `98bdf9c`, migration `20260918134315_m74_contextual_competency_curation` aplicada antes do frontend. Somente web recriada com baseline + Parser IA hosted; imagem `sha256:0f853b35248ee1a9911b1935a2178acc776fc6dc91a6278eb3da6beb0d637489`, rollback `prisma-web:rollback-before-m74-20260918`. HTTP 200 e smoke autenticado de painel/cancelamento preservando página e foco PASS; sem curadoria fictícia em produção. Main/GitHub/VPS sincronizados. Evidências, advisors e limites em `docs/qa/aot-m74-contextual-curation.md`.
 
 M7.3 em produção em 2026-09-18 por autorização explícita de Bruno: web **v1.7.3**, bundle `59b8b49`, imagem `sha256:8bbcce5ad320e3e453eb363a63d2e63f769c674177d99f44b505fb334a90e2ff`; somente `prisma-web` foi recriado. Rollback `prisma-web:rollback-before-m73-20260918`. Migrations derivadas/scheduler/JWT e Knowledge Agent v14 estão ativos, com JWT e segredo do monitor preservados. O job processa um Perfil por minuto, respeitando limites existentes e opt-in. O reprocessamento não altera snapshots humanos; status final, contagens, hashes de preservação e smoke autenticado constam em `docs/qa/aot-m73-competency-normalization.md`. Gateway, parser, workers, fontes Knowledge e matching não foram modificados.
@@ -11042,7 +11044,7 @@ D-01–D-32 e P-01–P-24 PASS no escopo local acima. M7.1 ativado no backend/fr
 
 # AoT — M7.2 v2 Taxonomia de Competências e Perfil de Evidências
 
-Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `execution-m72-competency-taxonomy-evidence-v2.md`. Baseline: `ccef68c05e10f3c35cf616f92f9a0d55c552a275`. Estado: `PARTIAL` enquanto o rollout remoto e seu smoke permanecem `NOT TESTED`.
+Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `execution-m72-competency-taxonomy-evidence-v2.md`. Baseline: `ccef68c05e10f3c35cf616f92f9a0d55c552a275`. Estado: `PASS`.
 
 ## Agreements -> Implementation -> Test -> Evidence
 
@@ -11078,7 +11080,7 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 | P-11, P-12, P-13, P-14, P-15 | projeção aditiva preserva snapshots/proveniências, sem reimportação ou alteração de M5.1/matching | PASS |
 | P-16, P-17, P-18, P-19, P-20 | nenhum Lominger, fonte/API/Web, parser/OCR, IA/provider ou dado sintético em runtime | PASS |
 | P-21, P-22, P-23, P-24 | somente Perfil publicado; autorização negativa; explicação sem chain-of-thought; infraestrutura reutilizada | PASS |
-| P-25 | local sem destruição, force push, custo ou mutação de Pessoa; rollout remoto ainda não executado neste snapshot | PASS |
+| P-25 | rollout sem destruição, force push, custo inesperado ou mutação de Pessoa; somente migrations aditivas e web foram promovidas | PASS |
 
 ## Critérios de aceite e regressão
 
@@ -11086,7 +11088,7 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 - CA-UX-01 a CA-UX-07: as três referências normativas foram comparadas com o fixture sintético na mesma composição de dados em desktop e 390x844. Desvio encontrado e corrigido: `Liderança técnica` estava tipada como ocupação no fixture; passou a `competency`, e o decoder agora bloqueia ocupações.
 - CA-REG-01 a CA-REG-03: TypeScript raiz e web sem erro; build Vite passou com apenas os avisos preexistentes de chunks/import dinâmico; lint 568 arquivos e foundation 18 tabelas/6 versões passaram.
 - CA-DOC-01: owner docs, ADR-065, contratos, Current State e Context Pack fazem parte do mesmo movimento; checker é requisito de fechamento.
-- CA-AOT-01: todos os `D-*` e `P-*` aplicáveis estão acima. O movimento só muda para `PASS` após rollout, smoke e sincronização final.
+- CA-AOT-01: todos os `D-*` e `P-*` aplicáveis estão acima; rollout, smoke e sincronização final concluídos com estado `PASS`.
 
 ## Evidência local executada
 
@@ -11099,10 +11101,12 @@ Contrato: `agreement-m72-competency-taxonomy-evidence-v2.md` 2.0.0. Prompt: `exe
 
 ## Rollout e limites
 
-- Migration Supabase: `NOT TESTED` remoto.
-- Commit, `origin`, `main`, VPS e frontend: `NOT TESTED`.
-- Smoke autenticado/read-only: `NOT TESTED`.
-- Nenhuma curadoria humana, requisito real, importação ou publicação de Pessoa é criada automaticamente por este movimento.
+- Supabase: migrations remotas `20260918163719`, `20260918163736` e `20260918164009` aplicadas em ordem. O release ocupacional preserva `position-taxonomy-1.0.0` com três versões-fonte; o release `competency-taxonomy-1.0.0` usa duas versões-fonte e 22.885 conceitos aprovados. `anon` não executa a busca; `authenticated` passa pelas guardas server-side.
+- Git e VPS: commits funcionais `517ae44` e `a6a0bc5` publicados na branch e integrados por fast-forward em `main`, `origin` e checkout `/opt/prisma`. Os resíduos preexistentes `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `models/` foram preservados.
+- Frontend: runtime `a6a0bc5`, Prisma v1.7.5 e imagem `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`. Somente `prisma-web` foi recriado com `VITE_DOCUMENT_INTELLIGENCE_MODE=baseline` e `VITE_PARSER_IA_MODE=hosted`; rollback `prisma-web:rollback-before-m72v2-20260918`.
+- Smoke: HTTPS 200 e bundle/commit confirmados. Em Perfil vigente aprovado, Resumo, Competências e Evidências carregaram; busca `a` permaneceu vazia e `Active Listening` retornou o canônico exato O*NET 31.0. O painel foi cancelado sem gravação.
+- Limite observado: a fixture histórica `[QA] Marina Dados` aparece publicada na UI, mas o Perfil atual está `generated`/sem aprovação no banco. A V4 recusou corretamente com `PERSON_PUBLISHED_PROFILE_NOT_FOUND`, mantendo o dado factual visível. A inconsistência preexistente não foi corrigida nem usada para relaxar a guarda.
+- Nenhuma curadoria humana, requisito real, importação ou publicação de Pessoa foi criada. Os quatro avisos de `SECURITY DEFINER` correspondem às fronteiras públicas intencionais e guardadas; após indexar as duas FKs novas, restaram apenas avisos informativos de índice ainda não utilizado.
 
 ---
 
