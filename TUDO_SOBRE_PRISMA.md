@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 237
-source_manifest_sha256: 37fe9e3a21bf8b7a0e309077c8cdd689c60022e7dcc44f275563c305eb65f4ce
+source_manifest_sha256: 8c9ecbcc2247840f4b9855945cf3f3dddc7074d393e765a2b9fcc1219d251814
 -->
 
 # Tudo sobre o Prisma
@@ -561,7 +561,7 @@ Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledg
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
-M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. O smoke autenticado da tela Knowledge permanece pendente. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
+M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. Smoke autenticado PASS: `bruno.harita`/Super Admin abriu `Conhecimento > Propostas`; fila vazia, sem escrita de teste. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
 
 Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
@@ -12025,7 +12025,7 @@ Contrato de referência: `docs/qa/agreement-m77-knowledge-company-global-governa
 | D-02 | Contribuição global sanitizada e rastreável | origem de empresa/conceito, idempotência e payload sanitizado | suíte M7.7; inspeção remota das funções | migrations `20260919040000` e `20260919041500` aplicadas | PASS | Sem criação de dados de teste em produção |
 | D-03 | Empresa prevalece sobre Global | reuso do resolvedor M5.2, sem nova regra paralela | regressão `organization Knowledge overlays Global without mutating it` | suíte completa PASS | PASS | Não reprocessa históricos |
 | D-04 | Candidatos globais apenas informativos | snapshot de candidatos exato/prefixo no payload e cards de revisão | suíte M7.7 | migration `20260919041500`; build web PASS | PASS | Não usa substring curto, score opaco ou associação automática |
-| D-05 | Super Admin decide a fila global | fila somente Super, pesquisa, aprovar, manter local ou rejeitar com motivo | visibilidade e M7.7; build web | políticas RLS e RPC aplicada | PASS | Inspeção visual autenticada permanece pendente |
+| D-05 | Super Admin decide a fila global | fila somente Super, pesquisa, aprovar, manter local ou rejeitar com motivo | visibilidade e M7.7; build web; smoke autenticado | políticas RLS e RPC aplicada; `bruno.harita`/Super Admin abriu `Conhecimento > Propostas` | PASS | Fila vazia; nenhuma ação de escrita foi necessária |
 | D-06 | IA externa sob demanda e auditável | `knowledge-agent` recebe contribuição autorizada, mantém sanitização/orçamento/fontes e reusa pesquisa pronta | contrato M7.7; deploy da Function ACTIVE v18 | Function `knowledge-agent` ACTIVE; nenhuma chamada paga de teste | PASS | Não foi disparada pesquisa externa com dado real/sintético |
 | D-07 | Decisão global preserva origem local | RPC de adiar/rejeitar só altera a contribuição Global e registra `local_origin_preserved` | teste estático M7.7 e revisão SQL | migration `20260919041500` aplicada | PASS | Sem decisão humana artificial em produção |
 | D-08 | Autor, escopo, origem, versão e decisão auditáveis | colunas de origem, change sets e `knowledge_approvals`; grants mínimos | inspeção de migration, ledger e suíte completa | ledger 136 mapeadas, sem migration local pendente | PASS | RLS efetiva depende da sessão autenticada para a prova de interface |
@@ -12071,11 +12071,11 @@ O Product Owner autorizou o contrato e a implementação M7.7. A complementaçã
 
 ## Git / QA / ambiente
 
-O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `705f306a62a8864cbb60a9930da2843d1a803ef5` foi validado pelo dispatcher e promovido por fast-forward para `main`/GitHub. Após a configuração explícita do alias SSH `prisma-vps`, o deploy controlado atualizou a VPS `/opt/prisma` para `040400d6cec14c8d00a3c467c26394bc8991e5c3`, recriou somente `prisma-web` e preservou a imagem anterior. Verificação independente: container `running`, zero reinícios e HTTPS `200`. O smoke autenticado da tela Knowledge continua pendente; nenhuma contribuição ou decisão de teste foi criada.
+O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `705f306a62a8864cbb60a9930da2843d1a803ef5` foi validado pelo dispatcher e promovido por fast-forward para `main`/GitHub. Após a configuração explícita do alias SSH `prisma-vps`, o deploy controlado atualizou a VPS `/opt/prisma` para `040400d6cec14c8d00a3c467c26394bc8991e5c3`, recriou somente `prisma-web` e preservou a imagem anterior. Verificação independente: container `running`, zero reinícios e HTTPS `200`. O smoke autenticado em 2026-09-19 reconheceu `bruno.harita` como Super Admin e abriu `Conhecimento > Propostas`, com fila vazia. Nenhuma contribuição ou decisão de teste foi criada.
 
 ## Conclusão
 
-Implementação, publicação e smoke técnico: PASS. Aceite visual autenticado: pendente de operador com sessão Super Admin; não é substituído por esta documentação.
+Implementação, publicação, smoke técnico e inspeção visual autenticada: PASS. A fila estava vazia; a jornada de decisão com dado real permanece para o próximo caso legítimo, sem fabricar uma contribuição de teste.
 
 ---
 

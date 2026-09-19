@@ -6,7 +6,7 @@ product_version: 1.7.6
 current_state_version: 2.43.0
 current_state_last_verified: 2026-09-19
 documentation_source_count: 237
-source_manifest_sha256: 37fe9e3a21bf8b7a0e309077c8cdd689c60022e7dcc44f275563c305eb65f4ce
+source_manifest_sha256: 8c9ecbcc2247840f4b9855945cf3f3dddc7074d393e765a2b9fcc1219d251814
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -271,7 +271,7 @@ Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledg
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
-M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. O smoke autenticado da tela Knowledge permanece pendente. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
+M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. Smoke autenticado PASS: `bruno.harita`/Super Admin abriu `Conhecimento > Propostas`; fila vazia, sem escrita de teste. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
 
 Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
