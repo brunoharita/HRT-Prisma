@@ -6,7 +6,7 @@ product_version: 1.7.6
 current_state_version: 2.44.2
 current_state_last_verified: 2026-09-19
 documentation_source_count: 243
-source_manifest_sha256: 4aaf8dc5448d4eede9245879f53832ed81e85180b159fe0cb6fd02ee914dc8f0
+source_manifest_sha256: c3cf447f3555306f8f05d55fc1993af0048243b77207c00b3707ccf33289c61f
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,7 +267,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6 e está implementada para execução explícita por Super Admin autenticado: aprova a proposta original na empresa e enfileira uma contribuição Global separada, pendente, em transação única. A publicação de termos ignora aliases equivalentes ao canônico ou repetidos sem alterar o payload original; a interface mostra somente as propostas legadas pendentes da empresa ativa ao Super Admin. A migration `20260919164100_m77_legacy_company_proposal_transition` não altera registros ao ser aplicada; a execução e verificação da proposta real “Transformação operacional” devem constar do AoT específico, não são presumidas por este código.
+A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6 e está implementada para execução explícita por Super Admin autenticado: aprova a proposta original na empresa e enfileira uma contribuição Global separada, pendente, em transação única. A publicação de termos ignora aliases equivalentes ao canônico ou repetidos sem alterar o payload original; a interface mostra somente as propostas legadas pendentes da empresa ativa ao Super Admin. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada no projeto de produção sob a versão remota `20260919170313`, sem alterar registros. A execução e verificação da proposta real “Transformação operacional” devem constar do AoT específico, não são presumidas pela aplicação da migration.
 
 Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
 
