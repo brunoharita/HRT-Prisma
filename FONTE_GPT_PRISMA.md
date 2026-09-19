@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.7.6
-current_state_version: 2.44.1
+current_state_version: 2.44.2
 current_state_last_verified: 2026-09-19
-documentation_source_count: 240
-source_manifest_sha256: 1d17d316999135b50e7edd0962b324197db3f693eb309823a41a3bbcf43515d4
+documentation_source_count: 243
+source_manifest_sha256: 2cfe6ab149e938559ab19176b87ad8367c25b1d76e2939dda985998410941a38
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,6 +267,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
+A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual está implementada para execução explícita por Super Admin autenticado: aprova a proposta original na empresa e enfileira uma contribuição Global separada, pendente, em transação única. A publicação de termos ignora aliases equivalentes ao canônico ou repetidos sem alterar o payload original; a interface mostra somente as propostas legadas pendentes da empresa ativa ao Super Admin. A migration `20260919164100_m77_legacy_company_proposal_transition` não altera registros ao ser aplicada; a execução e verificação da proposta real “Transformação operacional” devem constar do AoT específico, não são presumidas por este código.
+
 Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
 
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
@@ -276,8 +278,6 @@ M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Globa
 M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. Smoke autenticado PASS: `bruno.harita`/Super Admin abriu `Conhecimento > Propostas`; fila vazia, sem escrita de teste. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
 
 Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
-
-Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 
 ---
 

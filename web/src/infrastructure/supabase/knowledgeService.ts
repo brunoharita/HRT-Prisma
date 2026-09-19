@@ -25,7 +25,7 @@ export const knowledgeService = {
     }
     const concepts = (conceptsResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.scope === "global" || row.organization_id === organizationId);
     const inbox = (inboxResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.organization_id === organizationId);
-    const proposals = (proposalsResult.data ?? []).filter((row) => isKnowledgeProposalVisible({ scope: row.scope, organizationId: row.organization_id }, profile, organizationId));
+    const proposals = (proposalsResult.data ?? []).filter((row) => isKnowledgeProposalVisible({ scope: row.scope, organizationId: row.organization_id, status: row.status }, profile, organizationId));
     const conceptsById = new Map(concepts.map((row) => [row.id, row]));
     const sourcesById = new Map((sourcesResult.data ?? []).map((row) => [row.id, row]));
     const versionsById = new Map((versionsResult.data ?? []).map((row) => [row.id, row]));
@@ -93,6 +93,13 @@ export const knowledgeService = {
     if (error) throw supabaseOperationError(error, "Não foi possível aprovar esta proposta.");
     return data[0];
   },
+  async transitionLegacyProposal(proposalId: string, organizationId: string, reason: string) {
+    const { data, error } = await supabase.rpc("transition_legacy_knowledge_proposal" as never, {
+      p_proposal_id: proposalId, p_organization_id: organizationId, p_reason: reason,
+    } as never);
+    if (error) throw supabaseOperationError(error, "Não foi possível regularizar a proposta legada.");
+    return data;
+  },
   async decideGlobalContribution(proposalId: string, decision: "rejected" | "deferred", reason: string) {
     const { data, error } = await supabase.rpc("decide_knowledge_global_contribution", {
       p_proposal_id: proposalId, p_decision: decision, p_reason: reason,
@@ -118,10 +125,10 @@ export const knowledgeService = {
   },
 };
 
-function mapProposal(row: { id: string; inbox_id: string; scope: "global" | "organization"; status: string; origin_organization_id: string | null; original_proposal: Json }): KnowledgeProposalView {
+function mapProposal(row: { id: string; inbox_id: string; scope: "global" | "organization"; status: string; organization_id: string | null; origin_organization_id: string | null; original_proposal: Json }): KnowledgeProposalView {
   const payload = isObject(row.original_proposal) ? row.original_proposal : {};
   return {
-    id: row.id, inboxId: row.inbox_id, scope: row.scope, status: row.status, originalProposal: row.original_proposal,
+    id: row.id, inboxId: row.inbox_id, scope: row.scope, organizationId: row.organization_id, status: row.status, originalProposal: row.original_proposal,
     observedTerm: typeof payload.observed_term === "string" ? payload.observed_term : "Termo não informado",
     proposedConcept: isObject(payload.proposed_concept) ? payload.proposed_concept : {},
     sources: Array.isArray(payload.sources) ? payload.sources.filter(isObject) : [],

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 240
-source_manifest_sha256: 1d17d316999135b50e7edd0962b324197db3f693eb309823a41a3bbcf43515d4
+documentation_source_count: 243
+source_manifest_sha256: 2cfe6ab149e938559ab19176b87ad8367c25b1d76e2939dda985998410941a38
 -->
 
 # Tudo sobre o Prisma
@@ -549,13 +549,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.44.1
+version: 2.44.2
 last_verified: 2026-09-19
 ---
 
 # Estado atual do Prisma
 
 ## Resumo operacional para prompts
+
+A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual está implementada para execução explícita por Super Admin autenticado: aprova a proposta original na empresa e enfileira uma contribuição Global separada, pendente, em transação única. A publicação de termos ignora aliases equivalentes ao canônico ou repetidos sem alterar o payload original; a interface mostra somente as propostas legadas pendentes da empresa ativa ao Super Admin. A migration `20260919164100_m77_legacy_company_proposal_transition` não altera registros ao ser aplicada; a execução e verificação da proposta real “Transformação operacional” devem constar do AoT específico, não são presumidas por este código.
 
 Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
 
@@ -2984,6 +2986,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Regularização de proposta legada M7.7 (2026-09-19): a transição autenticada `transition_legacy_knowledge_proposal` reaproveita a aprovação local e o enfileiramento Global já aprovados, com motivo humano e operação atômica. A publicação de termos ignora aliases redundantes com o canônico, mantendo o payload e a auditoria originais. É uma correção de compatibilidade para propostas anteriores ao M7.7, sem nova entrega numerada; Prisma permanece v1.7.6. A execução real e seus limites são registrados em `docs/qa/aot-m77-legacy-company-proposal-transition.md`.
 
 Resumo operacional M7 da Pessoa (2026-09-19): evolução visual da aba Resumo sem novo contrato persistido, schema, IA ou entrega numerada aceita para o registro público. `PRISMA_RELEASE_HISTORY` permanece em v1.7.6; a decisão de não incrementar não antecipa eventual aceite de uma nova entrega numerada. A prova local e os limites estão em `docs/qa/aot-m7-person-summary-ux.md`.
 
@@ -10268,6 +10272,51 @@ Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, �
 
 ---
 
+## Source: `docs/qa/agreement-m77-legacy-company-proposal-transition.md`
+
+# Acordo M7.7 — transição de proposta legada da empresa
+
+Versão 1.0.0. Decisão do Product Owner em 2026-09-19: processar a proposta existente de “Transformação operacional” da organização Prisma para que o conceito fique aprovado na Knowledge da empresa e uma contribuição separada permaneça pendente de decisão na Knowledge Global. Este acordo complementa, sem substituir, `agreement-m77-knowledge-company-global-governance.md` 1.0.0 e ADR-069.
+
+## DEVE
+
+- D-01 — Selecionar a proposta legada por identidade e empresa ativa, exigir sessão autenticada de Super Admin, estado `awaiting_human_review`, escopo `organization`, tipo `create` e payload original íntegro. A ação exige motivo humano explícito.
+- D-02 — Em uma transação, aprovar a proposta original na organização Prisma com o texto, tipo e descrição já propostos, preservando o payload, ator, versão e auditoria. Publicar aliases distintos sem repetir o termo canônico como alias. Tornar o conceito local utilizável e atualizar somente a Inbox/observações vinculadas da mesma organização pelo fluxo M7.7 existente.
+- D-03 — Na mesma transação, enfileirar contribuição Global sanitizada, vinculada ao conceito e à organização de origem, ainda `awaiting_human_review`. Repetição da mesma ação não cria segundo conceito nem contribuição.
+- D-04 — Oferecer somente ao Super Admin uma ação explícita para propostas legadas pendentes da empresa ativa. Depois da transição, a proposta local aprovada sai da fila de recuperação e a contribuição Global aparece na fila de revisão existente.
+- D-05 — Comprovar no registro específico o estado local aprovado, a contribuição Global pendente e os vínculos/auditorias, sem executar decisão Global.
+
+## PROIBIDO
+
+- P-01 — Não aprovar automaticamente na Global, inferir equivalência, executar IA externa ou fabricar decisão humana.
+- P-02 — Não usar SQL privilegiado para simular `auth.uid()` ou contornar a autorização server-side; a transição deve partir da sessão real do operador.
+- P-03 — Não alterar outra proposta, organização, Perfil ou histórico, nem criar conceito duplicado por retry.
+- P-04 — Não expor a fila legada a `owner`, `admin` ou outra empresa; a autorização não depende apenas do frontend.
+
+## FORA DE ESCOPO
+
+- F-01 — Conversão em massa de propostas históricas e reinterpretação retroativa de Perfis.
+- F-02 — Redesenho da taxonomia, matching, mecanismo de propostas Globais ou curadoria de competências.
+- F-03 — Aprovação, rejeição ou adiamento da contribuição Global.
+
+## AUTONOMIA
+
+- A-01 — Reutilizar `approve_knowledge_proposal`, `m77_enqueue_global_contribution`, políticas e componentes existentes; acrescentar somente a transição e a apresentação necessárias para o registro legado.
+- A-02 — Definir o texto da ação, validações de payload e testes negativos sem mudar a semântica acordada.
+
+## PENDENTE
+
+Nenhuma decisão material adicional. O motivo da ação deve registrar a decisão expressa nesta tarefa, sem reinterpretar a descrição proposta.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 (D-01/P-02/P-04) — Super Admin autenticado e empresa coincidente conseguem agir; ausência de sessão, papel inadequado, empresa divergente, status/tipo inválido ou motivo insuficiente falham sem escrita.
+- CA-02 (D-02/D-03/P-01/P-03) — A proposta original e a Inbox ficam aprovadas; há um conceito local e uma contribuição Global pendente com origem correta. Não há conceito Global publicado nem duplicata após retry.
+- CA-03 (D-04) — A tela mostra apenas pendências legadas da empresa ativa para Super Admin; a ação é distinta de “Aprovar” Global e a lista se atualiza após a transição.
+- CA-04 (D-05) — Testes dirigidos, CI, inspeção do diff, aplicação versionada, smoke autenticado e consulta read-only posterior registram o estado e os limites no AoT.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -12226,6 +12275,44 @@ O CI da `main` no baseline `a792c69` falhou porque `m77KnowledgeCompanyGlobalGov
 
 ---
 
+## Source: `docs/qa/aot-m77-legacy-company-proposal-transition.md`
+
+# AoT — M7.7, proposta legada “Transformação operacional”
+
+Contrato: `agreement-m77-legacy-company-proposal-transition.md` 1.0.0. Alvo operacional: proposta `8415c9fa-3986-419c-be32-b2e47209637f`, organização Prisma `5dcad29a-1dd2-4c12-9adb-8015a79bea4e`.
+
+## Acordos → implementação → teste → evidência
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | RPC exige Super Admin autenticado, empresa, estado, tipo, payload original e motivo | Teste dirigido e revisão da migration; execução real pendente | PARTIAL |
+| D-02 | RPC reutiliza `approve_knowledge_proposal`, que ignora alias canônico redundante, e atualiza Inbox/observações vinculadas | Teste dirigido e revisão de schema; estado real pendente | PARTIAL |
+| D-03 | Mesmo bloco transacional chama `m77_enqueue_global_contribution`; retry lê IDs existentes | Teste dirigido; confirmação real e retry sem escrita de teste pendentes | PARTIAL |
+| D-04 | UI distingue ação local legada da fila Global e filtra empresa ativa | Testes de visibilidade, typecheck e build web PASS; smoke pendente | PARTIAL |
+| D-05 | Consulta posterior deve provar local aprovado, Global pendente e auditorias | Pendente de execução autenticada | NOT TESTED |
+
+| ID | Guarda / fora de escopo | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem decisão/IA Global automática | RPC chama só enfileiramento; revisão de diff | PASS |
+| P-02 | Sem simular JWT por SQL | RPC usa `auth.uid()` via `require_knowledge_admin`; ação prevista por sessão real | PASS |
+| P-03 | Sem outras propostas/empresas/Perfis ou duplicata | Filtros de identidade, empresa e status; prova real pendente | PARTIAL |
+| P-04 | Sem acesso owner/admin | Autorização Super Admin na RPC e filtro UI; negativo transacional pendente | PARTIAL |
+| F-01–F-03 | Sem conversão em massa, taxonomia nova ou decisão Global | Diff e escopo da migration | PASS |
+
+## Validação e rollout
+
+- `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run build`: PASS.
+- Nove testes dirigidos de M7.7/visibilidade/transição: PASS.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
+- Não há QA remota separada; produção não foi alterada até este ponto. Aplicação versionada, CI, smoke autenticado e verificação read-only do alvo são pendentes.
+- Sem referência visual normativa para esta ação; foram reutilizados os componentes de `Conhecimento > Propostas`.
+
+## Desvios e limite
+
+Nenhum desvio conhecido do acordo. Não declarar o resultado solicitado como concluído antes de confirmar a mutação real e a contribuição Global pendente.
+
+---
+
 ## Source: `docs/qa/aot-person-flow-validation.md`
 
 # AoT: validação reproduzível do fluxo da Pessoa
@@ -14158,6 +14245,16 @@ M7.7 não cria uma segunda Knowledge nem transforma semelhança em equivalência
 ## Evidência de encerramento
 
 AoT com matriz D/P, migration aplicada e validada no ambiente autorizado, evidência de autorização negativa, testes focados, Context Pack e estado de release. Registrar separadamente CI, Supabase, Function, VPS e smoke visual autenticado; nenhum documento substitui essas provas.
+
+---
+
+## Source: `docs/qa/execution-m77-legacy-company-proposal-transition.md`
+
+# Execução M7.7 — transição de proposta legada da empresa
+
+Contrato congelado: `docs/qa/agreement-m77-legacy-company-proposal-transition.md` 1.0.0. Ler o acordo integralmente. Implementar D-01 a D-05 e CA-01 a CA-04; impedir P-01 a P-04; preservar F-01 a F-03; aplicar A-01 e A-02.
+
+O único registro identificado na inspeção read-only de produção é a proposta `8415c9fa-3986-419c-be32-b2e47209637f`, da organização Prisma, com termo e label “Transformação operacional”, `scope=organization`, `status=awaiting_human_review` e nenhum conceito/alias exato publicado. O ID identifica o alvo operacional, não deve virar regra hard-coded de produto. Antes da ação, reconfirmar seu estado. Processar a decisão do PO por sessão autenticada, nunca por SQL privilegiado com ator simulado. Reutilizar aprovação e enfileiramento existentes em uma transação; revisar negativos, rollback, diff, CI, release plan e resultado real. Nenhuma decisão Global é delegada ao agente.
 
 ---
 
