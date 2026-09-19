@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   ApartmentOutlined,
+  ArrowRightOutlined,
   BulbOutlined,
+  CalendarOutlined,
   CheckCircleOutlined,
+  ClockCircleOutlined,
   DatabaseOutlined,
+  ExclamationCircleOutlined,
   FileSearchOutlined,
   FileTextOutlined,
   InfoCircleOutlined,
@@ -22,6 +26,7 @@ import {
   type ProfessionalEvidenceProjection,
 } from "../../domain/personProfessionalEvidence";
 import { taxonomyGroups, type ProfessionalConceptType } from "../../domain/positionTaxonomy";
+import { personProfileSummary } from "../../domain/personProfileSummary";
 import { PrismaCard } from "../../ui/PrismaCard";
 import { CanonicalProfileView } from "./CanonicalProfileView";
 import { CompetencyCuration } from "./CompetencyCuration";
@@ -33,6 +38,7 @@ interface PersonProfessionalEvidenceMapProps {
   projectionError: string | null;
   onOpenSource: (evidence: ProfessionalEvidenceAssociation) => void;
   curation?: CompetencyCurationAdapter | undefined;
+  onOpenVersions?: (() => void) | undefined;
 }
 
 type Surface = "summary" | "competencies" | "evidence" | "profile";
@@ -43,14 +49,24 @@ const natureColors: Record<ProfessionalEvidenceNature, string> = {
   demonstrated: "green",
 };
 
-export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation }: PersonProfessionalEvidenceMapProps) {
+export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation, onOpenVersions }: PersonProfessionalEvidenceMapProps) {
   const [projection, setProjection] = useState(incomingProjection);
   const [curationOpen, setCurationOpen] = useState(false);
   useEffect(() => { setProjection(incomingProjection); }, [incomingProjection]);
   const [surface, setSurface] = useState<Surface>("summary");
   const [selectedEvidence, setSelectedEvidence] = useState<ProfessionalEvidenceAssociation | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<ProfessionalConceptEvidenceView | null>(null);
+  const [focusPending, setFocusPending] = useState(false);
   const groups = useMemo(() => projection ? groupProfessionalEvidence(projection) : [], [projection]);
+  const summary = useMemo(() => personProfileSummary(projection), [projection]);
+  useEffect(() => {
+    if (surface !== "competencies" || !focusPending) return;
+    const heading = document.getElementById("prisma-profile-pending");
+    heading?.focus({ preventScroll: true });
+    heading?.scrollIntoView({ block: "start" });
+    setFocusPending(false);
+  }, [surface, focusPending]);
+  const openReview = () => { setFocusPending(true); setSurface("competencies"); };
 
   return <div className={`prisma-m72-profile${curationOpen ? " prisma-m74-open" : ""}`}>
     <nav aria-label="Áreas do Perfil profissional" className="prisma-m72-tabs">
@@ -58,10 +74,10 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
         ["summary", "Resumo"], ["competencies", "Competências"], ["evidence", "Evidências"], ["profile", "Perfil completo"],
       ] as const).map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => setSurface(key)} type="button">{label}</button>)}
     </nav>
-    {projection ? <NormalizationStatus projection={projection} disabled={curationOpen} /> : null}
+    {projection && surface !== "summary" ? <NormalizationStatus projection={projection} disabled={curationOpen} /> : null}
     {projectionError ? <Alert action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>} description="O Perfil publicado continua disponível abaixo." title={projectionError} showIcon type="warning" /> : null}
     {!projection && !projectionError ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
-    {surface === "summary" ? <SummarySurface groups={groups} profile={profile} projection={projection} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} /> : null}
+    {surface === "summary" ? <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} /> : null}
     {surface === "competencies" ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} curation={curation} onProjection={setProjection} onCurationOpen={setCurationOpen} /> : null}
     {surface === "evidence" ? <EvidenceSurface groups={groups} projection={projection} onExplain={setSelectedEvidence} onOpenSource={onOpenSource} /> : null}
     {surface === "profile" ? <CanonicalProfileView profile={profile} showCompetencies={false} showHeader={false} /> : null}
@@ -69,39 +85,85 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
   </div>;
 }
 
-function SummarySurface({ groups, profile, projection, onEvidence, onOpenCompetencies, onOpenEvidence }: {
-  groups: ReturnType<typeof groupProfessionalEvidence>;
+function SummarySurface({ facts, profile, projection, canReview, onReview, onEvidence, onOpenCompetencies, onOpenEvidence, onOpenProfile, onOpenVersions }: {
+  facts: ReturnType<typeof personProfileSummary>;
   profile: PrismaProfileView;
   projection: ProfessionalEvidenceProjection | null;
+  canReview: boolean;
+  onReview: () => void;
   onEvidence: (value: ProfessionalEvidenceAssociation) => void;
   onOpenCompetencies: () => void;
   onOpenEvidence: () => void;
+  onOpenProfile: () => void;
+  onOpenVersions: (() => void) | undefined;
 }) {
-  const recent = [...(projection?.associations ?? [])].sort((left, right) => right.evidence.recordedAt.localeCompare(left.evidence.recordedAt)).slice(0, 5);
-  return <div className="prisma-m72-summary-layout">
+  const [expandedSummary, setExpandedSummary] = useState(false);
+  const [summaryOverflow, setSummaryOverflow] = useState(false);
+  const summaryRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    const node = summaryRef.current;
+    if (!node || expandedSummary) return;
+    const update = () => setSummaryOverflow(node.scrollHeight > node.clientHeight + 1);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [profile.about?.summary, expandedSummary]);
+  const publishedAt = profile.version?.publishedAt ? formatSummaryDate(profile.version.publishedAt) : null;
+  const hasPending = facts?.pendingCount !== null && facts?.pendingCount !== undefined && facts.pendingCount > 0;
+  return <>
+    {hasPending ? <section aria-label="Competências pendentes de revisão" className="prisma-m72-pending-banner">
+      <span className="prisma-m72-pending-banner__icon" aria-hidden="true"><ExclamationCircleOutlined /></span>
+      <div><strong>{facts.pendingCount} {facts.pendingCount === 1 ? "competência pendente" : "competências pendentes"} de revisão</strong><p>Declarações do Perfil aguardam associação segura. Isso não indica falta de competência.</p></div>
+      {canReview ? <Button icon={<ArrowRightOutlined />} iconPlacement="end" onClick={onReview} type="primary">Revisar competências</Button> : <span className="prisma-m72-pending-banner__restricted">Revisão disponível para administradores autorizados.</span>}
+    </section> : null}
+    <div className="prisma-m72-summary-layout">
     <main>
-      {profile.about ? <PrismaCard className="prisma-m72-summary-card" title="Resumo do Perfil" extra={<WhyButton onClick={() => onEvidence(recent[0]!)} disabled={!recent.length} />}>
-        {profile.about.summary ? <Typography.Paragraph>{profile.about.summary}</Typography.Paragraph> : <Typography.Text type="secondary">O Perfil publicado não possui resumo narrativo.</Typography.Text>}
-        {profile.about.areasOfExpertise.length ? <Space wrap>{profile.about.areasOfExpertise.map((item) => <Tag color="blue" key={item}>{item}</Tag>)}</Space> : null}
+      <PrismaCard className="prisma-m72-summary-card" title="Resumo do perfil" extra={<Button onClick={onOpenProfile} type="link">Ver perfil completo <ArrowRightOutlined /></Button>}>
+        {profile.about?.summary ? <><Typography.Paragraph id="prisma-summary-professional-text" ref={summaryRef} className={expandedSummary ? "is-expanded" : "is-collapsed"}>{profile.about.summary}</Typography.Paragraph>{summaryOverflow ? <Button aria-controls="prisma-summary-professional-text" aria-expanded={expandedSummary} onClick={() => setExpandedSummary(!expandedSummary)} type="link">{expandedSummary ? "Recolher resumo" : "Ler resumo completo"}</Button> : null}</> : <Typography.Text type="secondary">O Perfil publicado não possui resumo narrativo.</Typography.Text>}
+        {profile.about?.areasOfExpertise.length ? <Space className="prisma-m72-summary-tags" wrap>{profile.about.areasOfExpertise.map((item) => <Tag color="blue" key={item}>{item}</Tag>)}</Space> : null}
+      </PrismaCard>
+      {facts ? <PrismaCard className="prisma-m72-quick-view" title="Visão rápida">
+        <div className="prisma-m72-quick-grid">
+          <SummaryMetric icon={<BulbOutlined />} value={facts.conceptCount} label="Conceitos com evidência" />
+          {facts.pendingCount !== null ? <SummaryMetric icon={<ClockCircleOutlined />} value={facts.pendingCount} label="Itens pendentes de revisão" warning={facts.pendingCount > 0} /> : null}
+          <SummaryMetric icon={<FileTextOutlined />} value={facts.evidenceCount} label="Evidências vinculadas" />
+          {publishedAt ? <SummaryMetric icon={<CalendarOutlined />} value={publishedAt} label="Publicação do Perfil" /> : null}
+        </div>
       </PrismaCard> : null}
-      <PrismaCard className="prisma-m72-taxonomy-card" title="Taxonomia de Competências Prisma" extra={<Button onClick={onOpenCompetencies} type="link">Explorar na taxonomia</Button>}>
-        <Typography.Paragraph>Este Perfil e os requisitos de Posição podem usar a mesma identidade canônica de competência. A Taxonomia Ocupacional permanece um domínio separado, e relações entre ocupações e competências nunca criam fatos sobre a Pessoa.</Typography.Paragraph>
-      </PrismaCard>
-      <PrismaCard className="prisma-m72-group-summary" title="Conhecimentos e habilidades por agrupamento" extra={<WhyButton onClick={onOpenCompetencies} />}>
-        {groups.length ? <div className="prisma-m72-group-grid">{groups.map((group) => <article key={group.key}>
+      <PrismaCard className="prisma-m72-group-summary" title="Competências por agrupamento" extra={<Button onClick={onOpenCompetencies} type="link">Ver todas <ArrowRightOutlined /></Button>}>
+        {facts?.groups.length ? <div className="prisma-m72-group-grid">{facts.groups.map((group) => <article key={group.key}>
           <header><GroupIcon type={group.key} /><div><strong>{group.label}</strong><span>{group.concepts.length} {group.concepts.length === 1 ? "conceito" : "conceitos"}</span></div></header>
-          <ul>{group.concepts.slice(0, 3).map((concept) => <li key={concept.id}><span>{concept.label}</span><NatureTags compact concept={concept} /></li>)}</ul>
-          <Button onClick={onOpenCompetencies} type="link">Ver todos os itens ({group.concepts.length})</Button>
-        </article>)}</div> : <Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+          <ul>{group.concepts.slice(0, 5).map((concept) => <li key={concept.id}>{concept.label}</li>)}</ul>
+          <Button onClick={onOpenCompetencies} type="link">Ver todos ({group.concepts.length}) <ArrowRightOutlined /></Button>
+        </article>)}</div> : <Empty description={projection ? "Ainda não há conceitos associados para organizar nesta visão." : "Agrupamentos indisponíveis nesta visão."} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </PrismaCard>
+      {hasPending ? <PrismaCard className="prisma-m72-pending-preview" title="Itens que pedem revisão" extra={<Button onClick={onReview} disabled={!canReview} type="link">Ver todos ({facts.pendingCount}) <ArrowRightOutlined /></Button>}>
+        <div className="prisma-m72-pending-preview__list">{facts.pendingPreview.map((item) => <button disabled={!canReview} key={`${item.originalIndex}:${item.normalizedTerm}`} onClick={onReview} type="button"><FileTextOutlined /><span><strong>{item.normalizedTerm}</strong><small>Aguardando associação{(item.groupCount ?? 1) > 1 ? ` · ${item.groupCount} ocorrências` : ""}</small></span></button>)}</div>
+      </PrismaCard> : null}
     </main>
     <aside>
+      {facts ? <PrismaCard className="prisma-m72-pending-side" title="Pendências">
+        {hasPending ? <><p><strong>{facts.pendingCount}</strong> {facts.pendingCount === 1 ? "item aguarda" : "itens aguardam"} revisão</p><Typography.Text type="secondary">A declaração original permanece preservada.</Typography.Text>{canReview ? <Button block onClick={onReview} type="primary">Revisar competências <ArrowRightOutlined /></Button> : <Typography.Text type="secondary">A revisão exige autorização administrativa.</Typography.Text>}</> : facts.pendingCount === 0 ? <Typography.Text>Não há competências pendentes de associação nesta projeção.</Typography.Text> : <Typography.Text type="secondary">A contagem ainda não está disponível. Consulte o processamento na aba Competências.</Typography.Text>}
+      </PrismaCard> : null}
       <PrismaCard title="Evidências recentes" extra={<Button onClick={onOpenEvidence} type="link">Ver todas</Button>}>
-        {recent.length ? <div className="prisma-m72-recent-evidence">{recent.map((item) => <button key={item.id} onClick={() => onEvidence(item)} type="button"><span className={`is-${item.nature}`}><EvidenceIcon nature={item.nature} /></span><div><strong>{item.evidence.title}</strong><small>{item.concept.label}</small><Tag color={natureColors[item.nature]}>{evidenceNatureLabel(item.nature)}</Tag></div></button>)}</div> : <Empty description="Sem evidências publicadas nesta versão." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+        {facts?.recentEvidence.length ? <div className="prisma-m72-recent-evidence">{facts.recentEvidence.map((item) => <button key={item.id} onClick={() => onEvidence(item)} type="button"><span className={`is-${item.nature}`}><EvidenceIcon nature={item.nature} /></span><div><strong>{item.evidence.title}</strong><small>{item.concept.label}</small></div>{formatSummaryDate(item.evidence.recordedAt) ? <time dateTime={item.evidence.recordedAt}>{formatSummaryDate(item.evidence.recordedAt)}</time> : null}</button>)}</div> : <Empty description={projection ? "Sem evidências publicadas nesta versão." : "Evidências indisponíveis nesta visão."} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </PrismaCard>
-      <Alert description="Os conceitos exibidos partem do Perfil vigente, de inferências versionadas ou de Evidência Demonstrada aprovada. Ausência de evidência não é deficiência." title="Leitura baseada em evidências" showIcon type="info" />
+      <PrismaCard className="prisma-m72-quick-actions" title="Ações rápidas">
+        <div>{canReview && hasPending ? <Button onClick={onReview}>Revisar competências <ArrowRightOutlined /></Button> : null}{onOpenVersions ? <Button onClick={onOpenVersions}>Criar nova revisão <ArrowRightOutlined /></Button> : null}<Button onClick={onOpenEvidence}>Ver evidências <ArrowRightOutlined /></Button><Button onClick={onOpenProfile}>Abrir perfil completo <ArrowRightOutlined /></Button></div>
+      </PrismaCard>
     </aside>
-  </div>;
+    </div>
+  </>;
+}
+
+function SummaryMetric({ icon, value, label, warning = false }: { icon: ReactNode; value: number | string; label: string; warning?: boolean }) {
+  return <article className={warning ? "is-warning" : ""}><span aria-hidden="true">{icon}</span><div><strong>{value}</strong><small>{label}</small></div></article>;
+}
+
+function formatSummaryDate(value: string): string | null {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
 }
 
 function CompetencySurface({ groups, projection, onConcept, onEvidence, curation, onProjection, onCurationOpen }: {

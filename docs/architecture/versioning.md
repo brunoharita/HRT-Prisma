@@ -1,5 +1,7 @@
 # Versionamento
 
+Resumo operacional M7 da Pessoa (2026-09-19): evolução visual da aba Resumo sem novo contrato persistido, schema, IA ou entrega numerada aceita para o registro público. `PRISMA_RELEASE_HISTORY` permanece em v1.7.6; a decisão de não incrementar não antecipa eventual aceite de uma nova entrega numerada. A prova local e os limites estão em `docs/qa/aot-m7-person-summary-ux.md`.
+
 M7.7 (2026-09-19): Knowledge da empresa é aprovada imediatamente para `owner`/`admin`; cada criação gera contribuição Global sanitizada para decisão exclusiva do Super Admin. Resolução preserva Empresa → Global e a pesquisa externa por IA é explícita e auditável. ADR-069.
 
 M7.6 (2026-09-18): curadoria 4.0.0, descrição opcional, sem justificativa e Global só Super Admin. ADR-067.

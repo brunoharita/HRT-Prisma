@@ -73,4 +73,6 @@ A Central resume o Perfil vigente sem duplicá-lo: resumo profissional, no máxi
 
 O M7.2 organiza a apresentação completa em Resumo, Competências, Evidências e Perfil completo. Os três primeiros consomem a projeção versionada somente leitura e preservam múltiplas origens; o Perfil completo não reapresenta o agrupamento heurístico antigo de competências. O detalhe pode levar à fonte documental/região ou à área de Verificações, conforme a origem existente, sem fabricar destino.
 
+O Resumo dessa leitura ganha composição operacional no M7: pendências reais da curadoria ficam imediatamente visíveis após as abas, com CTA condicionado ao papel; métricas factuais, agrupamentos canônicos, evidências recentes e ações existentes são apresentados sem ranking ou novo estado. Esta mudança não altera a perspectiva documental `Visão geral` da Central nem os fluxos completos das demais abas.
+
 A busca avançada usa somente Perfis vigentes do tenant e o Knowledge já publicado. Os resultados explicam os critérios atendidos e a comparação reapresenta exatamente dois Perfis sem score, vencedor ou inferência de adequação.

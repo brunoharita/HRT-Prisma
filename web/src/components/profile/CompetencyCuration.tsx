@@ -106,7 +106,7 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
     if (!next) setFocusKey(target ?? "empty");
   }
   return <>
-    <PrismaCard className="prisma-m74-pending" title={<div ref={headingRef} tabIndex={-1}>Declarações aguardando associação ({pendingItems.length || legacyIssues.length} itens{pendingItems.length ? ` · ${pending.length} termos únicos` : ""})</div>}
+    <PrismaCard className="prisma-m74-pending" title={<div id="prisma-profile-pending" ref={headingRef} tabIndex={-1}>Declarações aguardando associação ({pendingItems.length || legacyIssues.length} itens{pendingItems.length ? ` · ${pending.length} termos únicos` : ""})</div>}
       extra={adapter ? <Space wrap><Button disabled={busy || Boolean(selected)} type="text" onClick={async () => {
         setBusy(true); setRefreshError(null);
         try { const next = await adapter.refresh(); onProjection(next); setPage(curationPage(filterItems(groupPendingCompetencies(pendingCompetencies(next))), null, page)); }

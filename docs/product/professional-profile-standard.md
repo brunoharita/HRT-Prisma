@@ -39,6 +39,14 @@ Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, fil
 
 Snapshots e natureza declarada permanecem intactos. Aprovação de alias é decisão humana auditada, não evidência de desempenho. O retorno da transação já traz a projeção atualizada, sem chamar IA nem reprocessar todo o Perfil.
 
+## Resumo operacional M7
+
+A aba Resumo do Perfil dá prioridade a itens de competência aguardando associação humana, usando exatamente a lista `pendingCompetencies` da curadoria vigente. O banner é exibido apenas para contagem positiva; zero confirmado é neutro e processamento/erro sem contagem não vira zero. A entrada de revisão leva à lista contextual M7.4 e só é acionável para papel autorizado. O Perfil completo continua a preservar integralmente o texto e os fatos aprovados.
+
+Os cartões compactos mostram conceitos canônicos com evidência, itens pendentes, evidências distintas vinculadas e data de publicação quando válida. Esses números descrevem a projeção atual; não são score, cobertura profissional, proficiência ou avaliação. Agrupamentos são os tipos canônicos da taxonomia de competências, ordenados pelo contrato da projeção e alfabeticamente dentro do tipo. A prévia de pendências segue a ordem das declarações na curadoria, sem hierarquia de importância. Evidências recentes seguem `recordedAt` decrescente e são deduplicadas por identidade da evidência no Resumo; a aba Evidências mantém todas as associações e origens. Ausência e falha continuam explícitas e neutras.
+
+A composição desktop mantém resumo, indicadores, agrupamentos e prévia de pendências na área principal; pendências, evidências recentes e navegação existente ficam na lateral. A lateral empilha após a área principal em viewport estreito. Explicações técnicas permanecem disponíveis nas abas de Competências/Evidências e nos detalhes de proveniência, sem disputar o espaço inicial das ações. A referência visual e a prova da entrega estão em `docs/qa/agreement-m7-person-summary-ux.md` e `docs/qa/aot-m7-person-summary-ux.md`.
+
 ## Recuperação de cobertura M7.5
 
 O Perfil usa o último processamento completo compatível como base. Uma tentativa posterior em fila, em processamento ou com falha aparece separadamente e nunca reduz as associações completas já disponíveis. A leitura distingue declarações, itens atômicos, itens associados, conceitos únicos, pendências e termos únicos pendentes; pendência não significa ausência de competência.

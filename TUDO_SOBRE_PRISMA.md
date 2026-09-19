@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 237
-source_manifest_sha256: 8c9ecbcc2247840f4b9855945cf3f3dddc7074d393e765a2b9fcc1219d251814
+documentation_source_count: 240
+source_manifest_sha256: 0f89e18f52d0d62e5672ab49eb1097c3ac4f96d329f313222d3ceee3a9a1a6dd
 -->
 
 # Tudo sobre o Prisma
@@ -549,13 +549,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.43.0
+version: 2.44.0
 last_verified: 2026-09-19
 ---
 
 # Estado atual do Prisma
 
 ## Resumo operacional para prompts
+
+Em desenvolvimento local na branch `codex/m7-summary-ux`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. Validação e limites constam no AoT M7 Resumo operacional; não presumir QA ou produção a partir do código local.
 
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
@@ -2982,6 +2984,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Resumo operacional M7 da Pessoa (2026-09-19): evolução visual da aba Resumo sem novo contrato persistido, schema, IA ou entrega numerada aceita para o registro público. `PRISMA_RELEASE_HISTORY` permanece em v1.7.6; a decisão de não incrementar não antecipa eventual aceite de uma nova entrega numerada. A prova local e os limites estão em `docs/qa/aot-m7-person-summary-ux.md`.
 
 M7.7 (2026-09-19): Knowledge da empresa é aprovada imediatamente para `owner`/`admin`; cada criação gera contribuição Global sanitizada para decisão exclusiva do Super Admin. Resolução preserva Empresa → Global e a pesquisa externa por IA é explícita e auditável. ADR-069.
 
@@ -8414,6 +8418,8 @@ A Central resume o Perfil vigente sem duplicá-lo: resumo profissional, no máxi
 
 O M7.2 organiza a apresentação completa em Resumo, Competências, Evidências e Perfil completo. Os três primeiros consomem a projeção versionada somente leitura e preservam múltiplas origens; o Perfil completo não reapresenta o agrupamento heurístico antigo de competências. O detalhe pode levar à fonte documental/região ou à área de Verificações, conforme a origem existente, sem fabricar destino.
 
+O Resumo dessa leitura ganha composição operacional no M7: pendências reais da curadoria ficam imediatamente visíveis após as abas, com CTA condicionado ao papel; métricas factuais, agrupamentos canônicos, evidências recentes e ações existentes são apresentados sem ranking ou novo estado. Esta mudança não altera a perspectiva documental `Visão geral` da Central nem os fluxos completos das demais abas.
+
 A busca avançada usa somente Perfis vigentes do tenant e o Knowledge já publicado. Os resultados explicam os critérios atendidos e a comparação reapresenta exatamente dois Perfis sem score, vencedor ou inferência de adequação.
 
 ---
@@ -8612,6 +8618,14 @@ Na aba Competências, administradores autorizados revisam declarações pendente
 Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, filtro e posição permanecem. Se o item resolvido desaparecer, o foco passa ao próximo sobrevivente, ou ao anterior se era o último; página vazia recua à última válida. Gravar e próximo mantém a revisão aberta no próximo pendente. Alterações não salvas pedem confirmação de descarte, e falhas preservam a edição. No celular, o painel ocupa a tela e retorna à lista na mesma posição. Perfis antigos sem itens normalizados mantêm pendências explícitas e exigem normalização antes da curadoria contextual.
 
 Snapshots e natureza declarada permanecem intactos. Aprovação de alias é decisão humana auditada, não evidência de desempenho. O retorno da transação já traz a projeção atualizada, sem chamar IA nem reprocessar todo o Perfil.
+
+## Resumo operacional M7
+
+A aba Resumo do Perfil dá prioridade a itens de competência aguardando associação humana, usando exatamente a lista `pendingCompetencies` da curadoria vigente. O banner é exibido apenas para contagem positiva; zero confirmado é neutro e processamento/erro sem contagem não vira zero. A entrada de revisão leva à lista contextual M7.4 e só é acionável para papel autorizado. O Perfil completo continua a preservar integralmente o texto e os fatos aprovados.
+
+Os cartões compactos mostram conceitos canônicos com evidência, itens pendentes, evidências distintas vinculadas e data de publicação quando válida. Esses números descrevem a projeção atual; não são score, cobertura profissional, proficiência ou avaliação. Agrupamentos são os tipos canônicos da taxonomia de competências, ordenados pelo contrato da projeção e alfabeticamente dentro do tipo. A prévia de pendências segue a ordem das declarações na curadoria, sem hierarquia de importância. Evidências recentes seguem `recordedAt` decrescente e são deduplicadas por identidade da evidência no Resumo; a aba Evidências mantém todas as associações e origens. Ausência e falha continuam explícitas e neutras.
+
+A composição desktop mantém resumo, indicadores, agrupamentos e prévia de pendências na área principal; pendências, evidências recentes e navegação existente ficam na lateral. A lateral empilha após a área principal em viewport estreito. Explicações técnicas permanecem disponíveis nas abas de Competências/Evidências e nos detalhes de proveniência, sem disputar o espaço inicial das ações. A referência visual e a prova da entrega estão em `docs/qa/agreement-m7-person-summary-ux.md` e `docs/qa/aot-m7-person-summary-ux.md`.
 
 ## Recuperação de cobertura M7.5
 
@@ -9544,6 +9558,63 @@ approved_at: 2026-09-14
 ## Pendências
 
 Nenhuma decisão funcional pendente. Produção e uso com Pessoas reais exigem autorização própria.
+
+---
+
+## Source: `docs/qa/agreement-m7-person-summary-ux.md`
+
+# Acordo M7 — Resumo operacional do Perfil da Pessoa
+
+Versão 1.0.0. Product Owner: Bruno. Fonte de autoridade: pedido de implementação anexado nesta tarefa em 2026-09-19 e imagem `codex-clipboard-914c184a-4ffc-4678-bb75-cf4a5f8cb92a.png`. A imagem é alvo normativo de arquitetura visual e ilustrativa quanto a Pessoa, textos, datas, contagens e capacidades não contratadas. Este acordo codifica o pedido; não aprova semântica nova.
+
+## DEVE
+
+- D-UX-01 — Preservar cabeçalho, abas e composição desktop em área principal ampla com coluna lateral, mantendo topologia, hierarquia, densidade, agrupamentos, ordem relativa e posição dos CTAs da referência. Em 768/390/320 px, empilhar a lateral após o principal, preservar cabeçalho e pendência primeiro e impedir overflow global.
+- D-UX-02 — Para itens reais aguardando associação humana, exibir banner imediatamente após as abas com contagem da mesma fonte da curadoria e CTA para a lista M7.4 quando o papel pode agir. Zero não produz alerta; dado indisponível não vira zero. Papel sem autoridade não recebe ação habilitada.
+- D-UX-03 — Mostrar resumo profissional publicado de forma escaneável, sem alterar seu texto, e somente etiquetas presentes no Perfil aprovado. O Perfil completo preserva todos os fatos e continua acessível.
+- D-UX-04 — Exibir indicadores compactos apenas de fontes atuais e com rótulo fiel: conceitos com evidência, itens pendentes, evidências distintas vinculadas e data de publicação quando válida. Zero, vazio e indisponível são distintos.
+- D-UX-05 — Na lateral, apresentar pendências, evidências recentes autorizadas e ações existentes. Recência ordena por `recordedAt`, sem ranking; evidência repetida por múltiplas associações aparece uma vez no resumo. A aba Evidências e a origem permanecem acessíveis.
+- D-UX-06 — Agrupar conceitos pelo tipo canônico da projeção vigente, com contagens reais e acesso ao conjunto completo; nenhuma reclassificação local. Lista compacta de itens pendentes segue a ordem de declaração da curadoria, sem prioridade valorativa, e leva à lista em uma ação.
+- D-UX-07 — Reutilizar somente ações e permissões existentes: curadoria autorizada, versões/revisão do Perfil para papéis elegíveis, Evidências e Perfil completo. Nenhuma ação nova de mutação nasce da composição.
+- D-UX-08 — Retirar explicações extensas de taxonomia e evidência da visão principal, preservando transparência nas abas/detalhes existentes. Manter loading, vazio, erro, indisponibilidade, foco, teclado, nomes acessíveis e sinalização que não dependa só de cor.
+- D-UX-09 — Comparar antes e depois no mesmo estado sintético e viewport da referência, além de 768/390/320 px, inspecionando topologia, densidade, proporções, ordem, CTAs, corte e overflow.
+- D-UX-10 — Executar testes dirigidos, atualizar owner e Context Pack, decidir versão pelo registro vigente e fechar AoT com desvios e limites explícitos.
+
+## PROIBIDO
+
+- P-UX-01 — Criar proficiência, senioridade, nível, barra, score ou completude não contratados.
+- P-UX-02 — Criar “top/principais/em destaque” ou ordenar conceitos/pendências por importância não contratada.
+- P-UX-03 — Interpretar ausência de evidência, não revisão ou falha como deficiência, reprovação ou inexistência de competência.
+- P-UX-04 — Converter conteúdo ilustrativo de “decisões sugeridas” em recomendação ou autoridade automática.
+- P-UX-05 — Introduzir IA, provider, fonte externa, tabela, coluna, migration, persistência, permissão ou RLS para preencher o resumo.
+- P-UX-06 — Redesenhar as abas e fluxos completos de Competências, Evidências ou Perfil completo; alterar matching, verificações, Parser, Knowledge ou taxonomias.
+
+## FORA DE ESCOPO
+
+- F-UX-01 — Nova metodologia de avaliação de competências.
+- F-UX-02 — Senioridade ou proficiência.
+- F-UX-03 — Score de completude do Perfil.
+- F-UX-04 — Ranking de competências.
+- F-UX-05 — Motor de recomendação de carreira, desenvolvimento ou contratação.
+- F-UX-06 — Mudança de papéis/RLS, exceto correção de regressão demonstrada causada pela entrega.
+- F-UX-07 — Produção, merge, operação destrutiva, dados reais e mudança de ambiente fora de autorização operacional explicitamente aplicável.
+
+## AUTONOMIA
+
+- A-UX-01 — Reutilizar e adaptar componentes, helpers de apresentação, CSS, tokens, ícones, spacing, breakpoints existentes, foco, skeletons e testes sem alterar semântica de produto ou autoridade.
+- A-UX-02 — Substituir exemplos da imagem por fatos equivalentes disponíveis; registrar substituições no AoT.
+
+## PENDENTE
+
+Nenhum `Q-*` material está aberto no pedido. Um conflito novo de domínio, autorização, capacidade ou fidelidade visual interrompe a parte afetada antes de decisão de produto.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-UX-01 (D-UX-01/09) — Comparação visual no mesmo estado/dados/viewport mostra estrutura reconhecível; 768/390/320 px sem sobreposição, corte de ação ou overflow global.
+- CA-UX-02 (D-UX-02/06/07) — Contagem coincide com `pendingCompetencies`; banner positivo, zero e indisponível; CTA alcança a lista e foca seu título; papel não autorizado não recebe ação habilitada.
+- CA-UX-03 (D-UX-03/04/05) — Indicadores têm fonte identificada, resumo preserva texto publicado, evidências recentes distintas e agrupamentos canônicos ficam acessíveis; vazio/erro não fabricam fatos.
+- CA-UX-04 (D-UX-08) — Teclado, foco visível, nomes acessíveis e estados de carregamento/vazio/erro são inspecionados; transparência permanece nas superfícies secundárias.
+- CA-UX-05 (D-UX-10/P-UX-*) — Testes negativos, typecheck/build, diff, owner, Context Pack e AoT registram resultados e limites sem falso rollout.
 
 ---
 
@@ -11502,6 +11573,75 @@ Não foi acionada uma verificação para Beatriz, porque ela é uma Pessoa real 
 
 ---
 
+## Source: `docs/qa/aot-m7-person-summary-ux.md`
+
+# AoT — M7 Resumo operacional do Perfil da Pessoa
+
+Contrato: `docs/qa/agreement-m7-person-summary-ux.md` 1.0.0; execução: `docs/qa/execution-m7-person-summary-ux.md`. Pedido e imagem anexados pelo Product Owner à tarefa de 2026-09-19. Baseline Git: `a792c69e333a4061c10fa9db606da4ec498939d0`, branch `codex/m7-summary-ux`. O estado abaixo distingue prova local, QA e produção.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste / evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- |
+| D-UX-01 | Topologia e responsividade da referência | `PersonProfessionalEvidenceMap.tsx`, `styles.css` | Capturas sintéticas antes/depois em 1672×941 e nova tela em 768×1024, 390×844, 320×800; DOM sem overflow global | PASS | Navegador local; capturas inline no histórico da tarefa, não persistidas como arquivo |
+| D-UX-02 | Banner real, zero/indisponível e CTA autorizado | `personProfileSummary.ts`, `PersonProfessionalEvidenceMap.tsx`, foco em `CompetencyCuration.tsx` | Fixture 53 itens; 17 testes dirigidos iniciais; DOM zero, processamento, erro e membro; Enter focou `prisma-profile-pending` | PASS | Projeção sintética; nenhuma decisão de curadoria gravada |
+| D-UX-03 | Resumo publicado legível e íntegro | Resumo original com expansão apenas quando houver corte; etiquetas `areasOfExpertise`; Perfil completo preservado | Comparação visual mesmo `PrismaProfileView`; aba canônica existente intacta | PASS | Nenhum fato transformado ou sintetizado |
+| D-UX-04 | Indicadores factuais | Helper de apresentação deriva conceitos, itens, evidências distintas e `publishedAt` válido | `personProfileSummary.test.ts`: contagens, zero, nulo, duplicata; DOM nos estados | PASS | “15”/“53” da prévia são fixture, não contagem de Pessoa real |
+| D-UX-05 | Lateral operacional e evidências | Pendências, últimas três evidências distintas e ações existentes | Capturas desktop; vazio de evidência no DOM; aba Evidências preservada | PASS | Recência por `recordedAt` decrescente, empate por ID; nenhuma importância implícita |
+| D-UX-06 | Grupos canônicos e prévia de itens | `groupProfessionalEvidence` e `groupPendingCompetencies` reutilizados | Teste de 3 itens/2 termos; 3 cartões de grupo e prévia no render; CTA alcança lista | PASS | Tipo por taxonomia vigente; conceitos alfabeticamente dentro do tipo; prévia na ordem de declaração |
+| D-UX-07 | Ações e papéis vigentes | Curadoria via adapter; versões via rota existente; Evidências e Perfil completo via abas | CTA por clique e Enter; cenário `member` com zero CTAs de revisão habilitados | PASS | Sem nova mutação; autorização continua no serviço/RPC |
+| D-UX-08 | Transparência secundária e estados acessíveis | Texto técnico removido do Resumo; abas/drawer mantidos; erro/vazio sem falso fato; foco visível | AX de botões/nomes, foco por teclado; DOM zero/erro/indisponível; skeleton da página inalterado | PASS | Inspeção dirigida não é certificação WCAG global |
+| D-UX-09 | Comparação visual | Prévia temporária renderizou componente original do HEAD e componente novo com a mesma projeção sintética | Capturas inline antes/depois 1672×941; verificações em 768/390/320; CTA após tabs, proporção principal/lateral, densidade, agrupamentos e ações comparados | PASS | Capturas não foram persistidas; prévia temporária foi removida após inspeção |
+| D-UX-10 | Testes, owners, contexto, versão e AoT | Testes dirigidos e docs de produto/QA; versão pública não incrementada | 26 testes dirigidos, lint, dois typechecks/builds, Context Pack e diff sem erro; release plan do SHA é etapa de publicação separada | PASS | Local; rollout ainda não comprovado |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo / evidência | Status |
+| --- | --- | --- | --- |
+| P-UX-01 | Sem nível, senioridade, proficiência ou score novos | Teste estático do Resumo e diff de código; nenhum campo/visual criado | PASS |
+| P-UX-02 | Sem ranking/ordenação valorativa | Ordenação alfabética canônica, ordem da declaração e recência factual; helper testado | PASS |
+| P-UX-03 | Ausência/erro não é deficiência | Casos sem evidência e indisponível; linguagem neutra no DOM | PASS |
+| P-UX-04 | Sem recomendação automática | Ações rápidas são rotas/abas existentes; nenhum bloco de decisão sugerida | PASS |
+| P-UX-05 | Sem IA, persistência ou ampliação de autorização | Diff limitado a UI/helper/testes/docs; nenhum schema, migration, RPC ou serviço novo | PASS |
+| P-UX-06 | Sem redesign das outras abas/fluxos | Competências, Evidências e Perfil completo preservados; única mudança na curadoria é âncora de foco | PASS |
+
+## Fora de escopo preservado
+
+`F-UX-01` a `F-UX-06`: metodologia, senioridade, completude, ranking, recomendações, papéis e RLS não foram alterados. `F-UX-07`: nenhuma operação de produção, dados reais ou destrutiva integra a prova local; eventual publicação depende da autorização operacional aplicável e do release plan do SHA validado. Status: PASS local.
+
+## Evidência de fidelidade visual
+
+| Referência / viewport | Estado e dados equivalentes | Comparação estrutural | Divergência / adaptação | Status |
+| --- | --- | --- | --- | --- |
+| Imagem do PO / 1672×941 | Antes (código HEAD) e depois com mesma Pessoa sintética, 53 itens, 15 conceitos e 15 evidências | Banner logo após abas; área principal ~70% e lateral ~30%; resumo, quatro indicadores, grupos, itens, evidências e ações preservam ordem e posição | Métricas mostram conceitos evidenciados e publicação real em lugar de total genérico e “última revisão”; sem edição direta do resumo, que não existe | PASS |
+| 768×1024 | Mesma fixture depois | Colunas empilhadas, banner e resumo primeiro; quatro indicadores em 2×2; sem overflow | Lateral segue a área principal, como no contrato | PASS |
+| 390×844 | Mesma fixture depois | Cabeçalho, abas roláveis, banner e resumo visíveis; sem overflow global | Indicadores e lateral seguem abaixo da primeira dobra | PASS |
+| 320×800 | Mesma fixture depois | Ações do cabeçalho empilhadas, título do cartão não cortado, sem overflow global | Abas têm rolagem horizontal interna existente | PASS |
+
+Os screenshots antes/depois e responsivos foram emitidos inline pelo navegador integrado durante esta tarefa, mas não receberam arquivo permanente. O comparativo é reproduzível com a fixture sintética descrita acima e o componente anterior em `a792c69`.
+
+## Desvios do contrato
+
+Nenhum desvio material observado. Adaptações de conteúdo da imagem: “Editar resumo” não foi exibido porque não há edição direta existente; data é publicação do Perfil, não uma “última revisão” inferida; contagem de evidências é por identidade distinta e não por associações; números e Pessoa são sintéticos. A região de recomendações ilustrativas foi preenchida com ações reais. A referência usa três agrupamentos ilustrativos; o runtime mostra os tipos canônicos que a projeção da Pessoa efetivamente trouxer.
+
+## Mudanças autorizadas durante a execução
+
+Nenhuma decisão nova. A correção de reflow de 320 px e o foco no título da lista são detalhes de implementação da UX solicitada.
+
+## Validação final
+
+`pnpm run lint` PASS (616 arquivos); `pnpm run build` PASS; `pnpm run typecheck:web` PASS; `pnpm run build:web` PASS; 26 testes dirigidos de Resumo, projeção, curadoria e Perfil canônico PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` sem erro. O build web emitiu avisos já existentes de import dinâmico inefetivo e tamanho de chunk, sem falha. `pnpm run release:plan` sobre diff ainda não commitado mostrou zero superfícies, portanto não foi tratado como decisão de publicação; repetir após commit para derivar destinos reais.
+
+## Git / QA / ambiente
+
+Início: `main` em `a792c69`, remoto `origin` existente. Itens preexistentes não relacionados `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Branch isolada `codex/m7-summary-ux`. Não há QA remota separada; produção não foi tocada nesta prova local. Estado final, SHA e sincronização: a preencher após decidir/publicar o release.
+
+## Conclusão
+
+Implementação e aceite técnico local: PASS para todos os `D-UX-*` e `P-UX-*` deste acordo. A prova visual usa fixture sintética e as capturas inline deste histórico; não é prova de implantação ou de dados reais. Publicação, CI e smoke remoto permanecem a registrar após o plano do SHA validado.
+
+---
+
 ## Source: `docs/qa/aot-m71-position-taxonomy.md`
 
 # AoT — M7.1 Taxonomia Profissional e Inteligência de Posições
@@ -13122,6 +13262,16 @@ Implementar integralmente o contrato congelado `docs/qa/agreement-m62-verificati
 Preservar M6.1.1, `vacancy-matching-explainable-4.0.0`, `matching-score-1.0.0`, decisões humanas, RLS, isolamento multi-tenant e todo histórico. Criar a necessidade somente por RPC autorizada a partir do `match_evaluations.id` e do requisito pertencente à mesma versão imutável da Posição. Fazer loaders apenas de leitura. Usar prévias seguras e estados explícitos; não expor itens nem simular delivery. Validar localmente, aplicar somente a migration revisada no Prisma-QA, executar prova SQL negativa e smoke autenticado. Não tocar produção.
 
 Fechar com `docs/qa/aot-m62-verification-journey.md`, relacionando D-001 a D-014 e P-001 a P-006 a implementação, teste e evidência.
+
+---
+
+## Source: `docs/qa/execution-m7-person-summary-ux.md`
+
+# Execução M7 — Resumo operacional do Perfil da Pessoa
+
+Fonte integral do comportamento: `docs/qa/agreement-m7-person-summary-ux.md` 1.0.0, codificação do pedido do Product Owner e da imagem anexados à tarefa de 2026-09-19. Ler o acordo completo antes de executar; seus `D-UX-*`, `P-UX-*`, `F-UX-*`, `A-UX-*` e `CA-UX-*` não são substituídos por este resumo.
+
+Evoluir apenas a aba Resumo da leitura do Perfil da Pessoa. Reutilizar a projeção tenant-scoped, `pendingCompetencies`, agrupamento canônico, curadoria M7.4 e navegação atual. Preservar cabeçalho, abas, estados, autoridade e origem. Comparar visualmente com a referência normativa no mesmo estado sintético antes/depois e viewports aplicáveis. Testar zero, indisponível, ausência de evidência, papel sem curadoria e CTA por teclado. Não criar IA, ranking, proficiência, score, persistência ou novas decisões de domínio. Registrar evidência, adaptação e limitações no AoT.
 
 ---
 

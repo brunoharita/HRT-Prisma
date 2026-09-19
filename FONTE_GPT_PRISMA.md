@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.7.6
-current_state_version: 2.43.0
+current_state_version: 2.44.0
 current_state_last_verified: 2026-09-19
-documentation_source_count: 237
-source_manifest_sha256: 8c9ecbcc2247840f4b9855945cf3f3dddc7074d393e765a2b9fcc1219d251814
+documentation_source_count: 240
+source_manifest_sha256: 0f89e18f52d0d62e5672ab49eb1097c3ac4f96d329f313222d3ceee3a9a1a6dd
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,6 +267,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
+Em desenvolvimento local na branch `codex/m7-summary-ux`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. Validação e limites constam no AoT M7 Resumo operacional; não presumir QA ou produção a partir do código local.
+
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
@@ -276,8 +278,6 @@ M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imedia
 Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
-
-M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. Taxonomias ocupacional e de competências permanecem domínios separados; o bootstrap publicou 22.885 competências. Evidência 3.0 atende Perfis sem reimportação e não transforma ocupação em fato pessoal. Matching e score não mudaram; parcial/ambiguidade não resolvem automaticamente. Migrations e smoke PASS. Evidência: AoT M7.2 v2 e ADR-065.
 
 ---
 

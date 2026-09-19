@@ -78,7 +78,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
       {!loading && !error && !view ? <PrismaCard><Empty description="Pessoa inexistente ou indisponível para esta empresa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
       {view && !canonical ? <PrismaCard><Empty description="Ainda não existe um Perfil publicado para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
       {canonical ? <CanonicalProfileHeader actions={canReview ? <Space wrap><Button icon={<HistoryOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Versões do perfil</Button><Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)} type="primary">Criar nova revisão</Button></Space> : undefined} profile={canonical} /> : null}
-      {canonical ? <PersonProfessionalEvidenceMap key={`${activeMembership.organizationId}:${personId}`} curation={curation} onOpenSource={openEvidenceSource} profile={canonical} projection={view?.professionalEvidence ?? null} projectionError={view?.professionalEvidenceError ?? null} /> : null}
+      {canonical ? <PersonProfessionalEvidenceMap key={`${activeMembership.organizationId}:${personId}`} curation={curation} onOpenSource={openEvidenceSource} onOpenVersions={canReview ? () => onNavigate(`/profiles/${personId}/versions`) : undefined} profile={canonical} projection={view?.professionalEvidence ?? null} projectionError={view?.professionalEvidenceError ?? null} /> : null}
     </PrismaPage>
   );
 }
