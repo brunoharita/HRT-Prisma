@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 243
-source_manifest_sha256: 2cfe6ab149e938559ab19176b87ad8367c25b1d76e2939dda985998410941a38
+source_manifest_sha256: 4aaf8dc5448d4eede9245879f53832ed81e85180b159fe0cb6fd02ee914dc8f0
 -->
 
 # Tudo sobre o Prisma
@@ -557,7 +557,7 @@ last_verified: 2026-09-19
 
 ## Resumo operacional para prompts
 
-A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual está implementada para execução explícita por Super Admin autenticado: aprova a proposta original na empresa e enfileira uma contribuição Global separada, pendente, em transação única. A publicação de termos ignora aliases equivalentes ao canônico ou repetidos sem alterar o payload original; a interface mostra somente as propostas legadas pendentes da empresa ativa ao Super Admin. A migration `20260919164100_m77_legacy_company_proposal_transition` não altera registros ao ser aplicada; a execução e verificação da proposta real “Transformação operacional” devem constar do AoT específico, não são presumidas por este código.
+A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6 e está implementada para execução explícita por Super Admin autenticado: aprova a proposta original na empresa e enfileira uma contribuição Global separada, pendente, em transação única. A publicação de termos ignora aliases equivalentes ao canônico ou repetidos sem alterar o payload original; a interface mostra somente as propostas legadas pendentes da empresa ativa ao Super Admin. A migration `20260919164100_m77_legacy_company_proposal_transition` não altera registros ao ser aplicada; a execução e verificação da proposta real “Transformação operacional” devem constar do AoT específico, não são presumidas por este código.
 
 Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
 
@@ -12304,6 +12304,7 @@ Contrato: `agreement-m77-legacy-company-proposal-transition.md` 1.0.0. Alvo oper
 - `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run build`: PASS.
 - Nove testes dirigidos de M7.7/visibilidade/transição: PASS.
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
+- CI da primeira revisão (`35456611464`) falhou em um teste do Context Pack compacto por perda da referência textual `Prisma v1.7.6` no recorte; a fonte canônica foi ajustada, os artefatos regenerados e `tests/tooling/prismaContext.test.mjs` passou. A nova execução de CI ainda é necessária.
 - Não há QA remota separada; produção não foi alterada até este ponto. Aplicação versionada, CI, smoke autenticado e verificação read-only do alvo são pendentes.
 - Sem referência visual normativa para esta ação; foram reutilizados os componentes de `Conhecimento > Propostas`.
 

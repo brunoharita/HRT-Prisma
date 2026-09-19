@@ -25,6 +25,7 @@ Contrato: `agreement-m77-legacy-company-proposal-transition.md` 1.0.0. Alvo oper
 - `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run build`: PASS.
 - Nove testes dirigidos de M7.7/visibilidade/transição: PASS.
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
+- CI da primeira revisão (`35456611464`) falhou em um teste do Context Pack compacto por perda da referência textual `Prisma v1.7.6` no recorte; a fonte canônica foi ajustada, os artefatos regenerados e `tests/tooling/prismaContext.test.mjs` passou. A nova execução de CI ainda é necessária.
 - Não há QA remota separada; produção não foi alterada até este ponto. Aplicação versionada, CI, smoke autenticado e verificação read-only do alvo são pendentes.
 - Sem referência visual normativa para esta ação; foram reutilizados os componentes de `Conhecimento > Propostas`.
 
