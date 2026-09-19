@@ -53,12 +53,14 @@ Nenhuma decisão nova. A correção de reflow de 320 px e o foco no título da l
 
 ## Validação final
 
-`pnpm run lint` PASS (616 arquivos); `pnpm run build` PASS; `pnpm run typecheck:web` PASS; `pnpm run build:web` PASS; 26 testes dirigidos de Resumo, projeção, curadoria e Perfil canônico PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` sem erro. O build web emitiu avisos já existentes de import dinâmico inefetivo e tamanho de chunk, sem falha. `pnpm run release:plan` sobre diff ainda não commitado mostrou zero superfícies, portanto não foi tratado como decisão de publicação; repetir após commit para derivar destinos reais.
+`pnpm run lint` PASS (616 arquivos); `pnpm run build` PASS; `pnpm run typecheck:web` PASS; `pnpm run build:web` PASS; 26 testes dirigidos de Resumo, projeção, curadoria e Perfil canônico PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` sem erro. O build web emitiu avisos já existentes de import dinâmico inefetivo e tamanho de chunk, sem falha. `pnpm run release:plan -- --base=origin/main --head=HEAD` no commit `e309a2f` apontou apenas `prisma-web` como destino de runtime; migrations e Edge Functions não se aplicam. O dry-run de `release:publish` para esse SHA passou.
+
+O CI da branch (`35451423869`) executou 532 testes: 531 passaram e 1 falhou em `m77KnowledgeCompanyGlobalGovernance.test.ts`, que espera ausência de uma aba de propostas no painel global. O mesmo teste falhou no CI da `main` (`35448554913`) no baseline `a792c69`, antes desta alteração; nem o teste nem `KnowledgePage.tsx` foram modificados pela branch. A correção de M7.7 é fora deste acordo e não será presumida. Gate de CI e publicação: BLOCKED por falha preexistente, não por teste do Resumo.
 
 ## Git / QA / ambiente
 
-Início: `main` em `a792c69`, remoto `origin` existente. Itens preexistentes não relacionados `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Branch isolada `codex/m7-summary-ux`. Não há QA remota separada; produção não foi tocada nesta prova local. Estado final, SHA e sincronização: a preencher após decidir/publicar o release.
+Início: `main` em `a792c69`, remoto `origin` existente. Itens preexistentes não relacionados `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Branch isolada `codex/m7-summary-ux`, commit de implementação `e309a2f` enviado a `origin`, seguido deste registro de bloqueio. Não há QA remota separada. Sem integração na `main`, implantação, smoke de produção ou sincronização local/GitHub/VPS, pois o gate de CI permanece vermelho.
 
 ## Conclusão
 
-Implementação e aceite técnico local: PASS para todos os `D-UX-*` e `P-UX-*` deste acordo. A prova visual usa fixture sintética e as capturas inline deste histórico; não é prova de implantação ou de dados reais. Publicação, CI e smoke remoto permanecem a registrar após o plano do SHA validado.
+Implementação e aceite técnico local: PASS para todos os `D-UX-*` e `P-UX-*` deste acordo. A prova visual usa fixture sintética e as capturas inline deste histórico; não é prova de implantação ou de dados reais. CI, integração e produção: BLOCKED por teste M7.7 preexistente no baseline. A entrega não está concluída operacionalmente.
