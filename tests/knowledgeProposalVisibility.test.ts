@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { isKnowledgeProposalVisible } from "../web/src/shared/knowledgeProposalVisibility.js";
 
@@ -17,4 +18,11 @@ test("administradores da empresa não veem propostas globais nem de outra empres
   assert.equal(isKnowledgeProposalVisible(activeOrganizationProposal, "owner", "org-a"), true);
   assert.equal(isKnowledgeProposalVisible(otherOrganizationProposal, "owner", "org-a"), false);
   assert.equal(isKnowledgeProposalVisible(activeOrganizationProposal, "admin", null), false);
+});
+
+test("card de proposta informa o alcance que está sendo revisado", async () => {
+  const page = await readFile("web/src/pages/KnowledgePage.tsx", "utf8");
+  assert.match(page, /Global Prisma/);
+  assert.match(page, /Empresa ativa/);
+  assert.match(page, /proposal\.scope === "global"/);
 });

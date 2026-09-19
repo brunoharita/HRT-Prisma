@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.2.0
 context_bundle_version: 2.0.0
 product_version: 1.7.6
-current_state_version: 2.42.0
-current_state_last_verified: 2026-09-18
-documentation_source_count: 232
-source_manifest_sha256: 01f1bb27ea5e139e276570644416c01917105447f2e1580d42f38707fd80d329
+current_state_version: 2.42.1
+current_state_last_verified: 2026-09-19
+documentation_source_count: 233
+source_manifest_sha256: 898e1bfafdaa49fef722edae7e8523c92c9067caca53e903a818b81c71e377f1
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -270,6 +270,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
+
+Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 

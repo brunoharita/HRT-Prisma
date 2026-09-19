@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.42.0
-last_verified: 2026-09-18
+version: 2.42.1
+last_verified: 2026-09-19
 ---
 
 # Estado atual do Prisma
@@ -13,6 +13,8 @@ last_verified: 2026-09-18
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
+
+Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 

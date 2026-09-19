@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 232
-source_manifest_sha256: 01f1bb27ea5e139e276570644416c01917105447f2e1580d42f38707fd80d329
+documentation_source_count: 233
+source_manifest_sha256: 898e1bfafdaa49fef722edae7e8523c92c9067caca53e903a818b81c71e377f1
 -->
 
 # Tudo sobre o Prisma
@@ -549,8 +549,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.42.0
-last_verified: 2026-09-18
+version: 2.42.1
+last_verified: 2026-09-19
 ---
 
 # Estado atual do Prisma
@@ -560,6 +560,8 @@ last_verified: 2026-09-18
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
+
+Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 
@@ -2980,6 +2982,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 # Versionamento
 
 M7.6 (2026-09-18): curadoria 4.0.0, descrição opcional, sem justificativa e Global só Super Admin. ADR-067.
+
+Correção de 2026-09-19: a governança de Conhecimento voltou a exibir ao Super Admin as propostas da empresa ativa, além das Globais, sem exibir outra empresa. Não altera contrato persistido, workflow, RLS ou versão pública; Prisma permanece v1.7.6. AoT: `aot-knowledge-proposal-visibility.md`.
 
 M7.5 (2026-09-18) registra a sexta entrega aceita do Movimento 7: **Prisma v1.7.6**. `person-professional-evidence-3.1.0` protege o último resultado completo e expõe tentativa/cobertura; `profile-competency-curation-3.0.0` agrupa pendências e usa `searchTerms` sem decisão automática. Taxonomias 1.0.0, normalização 1.0.0 e contratos anteriores são preservados. Implementação, medição e rollout no AoT M7.5 e ADR-066.
 
@@ -7030,6 +7034,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Correção de visibilidade de propostas em 2026-09-19: o runtime web da VPS foi sincronizado no commit `2230d15`. Somente `prisma-web` foi reconstruído e recriado; Supabase, Edge Functions, gateway, workers e Traefik permaneceram intactos. O checkout remoto foi atualizado por fast-forward a partir de `8259d0f`; o primeiro smoke após a recriação retornou 502 transitório e a leitura posterior confirmou HTTPS 200, container em execução e zero reinícios. Fechamentos posteriores apenas documentais não alteram esse frontend ativo. Evidência: `docs/qa/aot-knowledge-proposal-visibility.md`.
+
 M7.6 em produção em 2026-09-18: workflow de curadoria `profile-competency-curation-4.0.0`, descrição opcional de conceito, justificativa textual removida da curadoria e Global restrito a Super Admin. A migration `20260918220000_m76_curation_description_scope` foi aplicada atomicamente no único Supabase e registrada no ledger remoto. O runtime funcional foi construído de `cc2e596`; o fechamento/teste final `13a0164` está sincronizado em main/GitHub/VPS. Somente `prisma-web` foi recriado com baseline + Parser IA hosted. Imagem ativa `sha256:e96c30ed09ac6e4e0423564bb21566286f3e01ba8458adb1e53dfd6ccef339f1`; rollback `prisma-web:rollback-before-m76-curation-description-20260918`; gateway e Traefik permaneceram ativos. HTTPS 200; bundle e smoke autenticado read-only confirmaram o campo de descrição, a ausência da justificativa na curadoria e o escopo da empresa. Evidências e limites em `docs/qa/aot-m76-curation-description-scope.md`.
 
 M7.5 em produção em 2026-09-18: **v1.7.6**, runtime final `b9360e0`, migration remota `20260918193317_m75_competency_coverage_recovery` e Knowledge Agent v16. A normalização ganhou orçamento dedicado de 20 chamadas/dia e 200/mês; o lote service-only concluiu 7/7 Perfis aprovados, preservou os hashes dos snapshots e recuperou o Perfil investigado de 3 para 5 conceitos visíveis. As associações automáticas totais permaneceram 14 antes/depois; o restante exige curadoria humana por alias ou proposta de conceito. A busca manual da curadoria usa debounce de 400 ms, com Buscar/Enter imediatos e sem pré-seleção. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem ativa `sha256:a16f82d17a246e9aa5e2c6ddc528761c09a1616182af8dc1159ffabf955135b9`, rollback `prisma-web:rollback-before-m76-search-debounce-20260918`. HTTPS 200; bundle/CI e smoke autenticado confirmaram a melhoria. GitHub/VPS sincronizados; evidências, advisors e limites no AoT M7.5.
@@ -10594,6 +10600,64 @@ Qualidade: inspeção visual do PDF original na revisão confirmou nome, título
 ## Conclusão
 
 PARTIAL. Correção de identidade entregue e validada; jornada hospedada chegou à revisão sem publicar Perfil. Runtime ativo `55733a0`; túnel e workers dependem do PC ligado, sem retomada automática. Qualidade do rascunho insuficiente, telemetria não persistida e inferência Paddle não exercitada pela rota nativa escolhida. Não há conclusão de cutover nem evidência de viabilidade CPU para este PDF. Parser/roteamento e disponibilização da telemetria exigem movimento separado autorizado.
+
+---
+
+## Source: `docs/qa/aot-knowledge-proposal-visibility.md`
+
+# AoT — Visibilidade de propostas da Knowledge
+
+Contrato: `docs/qa/agreement-knowledge-proposal-visibility.md` 1.0.0. Execução: `docs/qa/execution-knowledge-proposal-visibility.md`. Data: 2026-09-19.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste / evidência | Status | Limitação |
+| --- | --- | --- | --- | --- | --- |
+| D-01 | Super Admin vê Global e empresa ativa | `isKnowledgeProposalVisible` filtra por `organizationId` ativo | testes positivo e negativo; CI/main | PASS | depende da empresa ativa já autorizada pela sessão/RLS |
+| D-02 | Alcance explícito no card | `KnowledgePage` mostra `Global Prisma` ou `Empresa ativa` | teste de fonte, typecheck e build web | PASS | inspeção visual autenticada posterior permanece manual |
+| D-03 | Aprovação server-side preservada | somente leitura cliente mudou | revisão do diff: nenhuma migration/RPC/RLS; `require_knowledge_admin` inalterado | PASS | nenhuma |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Outra empresa não aparece | teste com `org-b` e empresa ativa `org-a` | PASS |
+| P-02 | Nenhum conceito foi criado, aprovado ou associado | diff e Supabase sem mutação | PASS |
+| P-03 | Sem alteração de RLS, schema, RPC ou histórico | diff contém somente web, teste e documentação | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência | Status |
+| --- | --- | --- |
+| F-01 | Nenhuma mudança em reinterpretação, taxonomia, normalização ou pesquisa | diff revisado | PASS |
+| F-02 | A proposta `Transformação operacional` permaneceu em revisão | nenhuma escrita de curadoria foi executada | PASS |
+
+## Evidência visual
+
+| Referência / viewport | Evidência | Status |
+| --- | --- | --- |
+| Captura do Perfil fornecida pelo PO | a topologia não foi alterada; o card em `Conhecimento > Propostas` ganha somente a etiqueta de alcance | implementação PASS por build/teste; smoke autenticado manual pendente |
+
+## Desvios do contrato
+
+Nenhum. O deploy inicial encontrou o checkout da VPS atrasado; ele foi sincronizado por fast-forward antes da reconstrução. O primeiro smoke recebeu 502 transitório na partida do container; leitura posterior confirmou `prisma-web` em execução, zero reinícios e HTTPS 200.
+
+## Validação final
+
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
+- `pnpm run typecheck:web` e `pnpm run build:web`: PASS.
+- `pnpm run test`: 523/523 PASS no fechamento do AoT.
+- CI da branch: `35417835714` PASS; CI da main: `35417962769` PASS.
+
+## Git / ambiente
+
+- Implementação funcional: `2230d152597a465e8c821beb03a0f9215d0bb85c`, integrada por fast-forward em `main` e GitHub.
+- VPS `/opt/prisma`: mesmo SHA; somente `prisma-web` foi recriado. Supabase, Edge Functions, gateway, workers e Traefik não foram alterados.
+- Smoke posterior: HTTPS 200; container `running`, `RestartCount=0`. Itens preexistentes `models/`, `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados.
+
+## Conclusão
+
+A proposta da empresa ativa volta a aparecer para Super Admin em `Conhecimento > Propostas`, com etiqueta de alcance e o botão existente de aprovação. A decisão de aprovar `Transformação operacional` continua humana, explícita e fora desta correção.
 
 ---
 
