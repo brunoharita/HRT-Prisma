@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.7.6
-current_state_version: 2.44.0
+current_state_version: 2.44.1
 current_state_last_verified: 2026-09-19
 documentation_source_count: 240
-source_manifest_sha256: 37379e923e122da6fa5bd066231a9fe8e6edda7fee32f155d64e90541ba19c39
+source_manifest_sha256: 1d17d316999135b50e7edd0962b324197db3f693eb309823a41a3bbcf43515d4
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,7 +267,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Em desenvolvimento local na branch `codex/m7-summary-ux`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. Validação e limites constam no AoT M7 Resumo operacional; não presumir QA ou produção a partir do código local.
+Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
 
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 

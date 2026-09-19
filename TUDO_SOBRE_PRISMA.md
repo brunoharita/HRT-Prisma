@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 240
-source_manifest_sha256: 37379e923e122da6fa5bd066231a9fe8e6edda7fee32f155d64e90541ba19c39
+source_manifest_sha256: 1d17d316999135b50e7edd0962b324197db3f693eb309823a41a3bbcf43515d4
 -->
 
 # Tudo sobre o Prisma
@@ -549,7 +549,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.44.0
+version: 2.44.1
 last_verified: 2026-09-19
 ---
 
@@ -557,7 +557,7 @@ last_verified: 2026-09-19
 
 ## Resumo operacional para prompts
 
-Em desenvolvimento local na branch `codex/m7-summary-ux`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. Validação e limites constam no AoT M7 Resumo operacional; não presumir QA ou produção a partir do código local.
+Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
 
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
@@ -11617,6 +11617,7 @@ Contrato: `docs/qa/agreement-m7-person-summary-ux.md` 1.0.0; execução: `docs/q
 | 768×1024 | Mesma fixture depois | Colunas empilhadas, banner e resumo primeiro; quatro indicadores em 2×2; sem overflow | Lateral segue a área principal, como no contrato | PASS |
 | 390×844 | Mesma fixture depois | Cabeçalho, abas roláveis, banner e resumo visíveis; sem overflow global | Indicadores e lateral seguem abaixo da primeira dobra | PASS |
 | 320×800 | Mesma fixture depois | Ações do cabeçalho empilhadas, título do cartão não cortado, sem overflow global | Abas têm rolagem horizontal interna existente | PASS |
+| Produção / 1265×709 | Perfil vigente da Pessoa do PO, projeção real | Banner com 59 itens, quatro indicadores, agrupamentos, prévia e lateral em composição principal/lateral; CTA abriu Competências e focou a lista de 59 itens | A sidebar institucional reduz a largura útil; sem edição ou decisão de curadoria | PASS |
 
 Os screenshots antes/depois e responsivos foram emitidos inline pelo navegador integrado durante esta tarefa, mas não receberam arquivo permanente. O comparativo é reproduzível com a fixture sintética descrita acima e o componente anterior em `a792c69`.
 
@@ -11632,15 +11633,15 @@ Nenhuma decisão nova. A correção de reflow de 320 px e o foco no título da l
 
 `pnpm run lint` PASS (616 arquivos); `pnpm run build` PASS; `pnpm run typecheck:web` PASS; `pnpm run build:web` PASS; 26 testes dirigidos de Resumo, projeção, curadoria e Perfil canônico PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` sem erro. O build web emitiu avisos já existentes de import dinâmico inefetivo e tamanho de chunk, sem falha. `pnpm run release:plan -- --base=origin/main --head=HEAD` no commit `e309a2f` apontou apenas `prisma-web` como destino de runtime; migrations e Edge Functions não se aplicam. O dry-run de `release:publish` para esse SHA passou.
 
-O CI da branch (`35451423869`) executou 532 testes: 531 passaram e 1 falhou em `m77KnowledgeCompanyGlobalGovernance.test.ts`, que espera ausência de uma aba de propostas no painel global. O mesmo teste falhou no CI da `main` (`35448554913`) no baseline `a792c69`, antes desta alteração; nem o teste nem `KnowledgePage.tsx` foram modificados pela branch. A correção de M7.7 é fora deste acordo e não será presumida. Gate de CI e publicação: BLOCKED por falha preexistente, não por teste do Resumo.
+O CI inicial da branch (`35451423869`) executou 532 testes: 531 passaram e 1 falhou em `m77KnowledgeCompanyGlobalGovernance.test.ts`, que proibia a aba de propostas no ramo do Super Admin. O mesmo teste falhou no CI da `main` (`35448554913`) no baseline `a792c69`, antes desta alteração; nem o teste nem `KnowledgePage.tsx` haviam sido modificados pela branch. Após autorização específica do PO, o teste M7.7 foi corrigido em commit separado `0815b94` para exigir a aba apenas no ramo Super Admin, sem alteração de runtime. Seis testes dirigidos de M7.7/visibilidade, build e lint locais passaram; CI da branch `35452735434` e CI da `main` `35452848899` passaram.
 
 ## Git / QA / ambiente
 
-Início: `main` em `a792c69`, remoto `origin` existente. Itens preexistentes não relacionados `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Branch isolada `codex/m7-summary-ux`, commit de implementação `e309a2f` enviado a `origin`, seguido deste registro de bloqueio. Não há QA remota separada. Sem integração na `main`, implantação, smoke de produção ou sincronização local/GitHub/VPS, pois o gate de CI permanece vermelho.
+Início: `main` em `a792c69`, remoto `origin` existente. Itens preexistentes não relacionados `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Branch isolada `codex/m7-summary-ux`, implementação `e309a2f`, registro intermediário `a92b27d` e correção isolada do teste M7.7 `0815b94`. Não há QA remota separada. O dispatcher promoveu `0815b94` por fast-forward para `main`/GitHub e recriou somente `prisma-web` na VPS; banco e Edge Functions foram skip. O primeiro HEAD HTTPS imediatamente após a recriação retornou 502 e fez o comando encerrar com erro; inspeção posterior comprovou container `running`, zero reinícios, HTTPS 200, e `release:verify` confirmou SHA local/GitHub e site 200. O smoke autenticado abriu o Resumo da Pessoa do PO, confirmou 59 pendências, 5 conceitos com evidência, 7 evidências vinculadas distintas e publicação em 04/09/2026; o CTA alcançou e focou a lista correspondente de 59 itens. Nenhuma decisão humana ou gravação foi efetuada. A imagem de produção foi inspecionada inline, não persistida como arquivo.
 
 ## Conclusão
 
-Implementação e aceite técnico local: PASS para todos os `D-UX-*` e `P-UX-*` deste acordo. A prova visual usa fixture sintética e as capturas inline deste histórico; não é prova de implantação ou de dados reais. CI, integração e produção: BLOCKED por teste M7.7 preexistente no baseline. A entrega não está concluída operacionalmente.
+Implementação, CI, integração e produção: PASS para todos os `D-UX-*` e `P-UX-*` deste acordo, com visual local sintético e smoke autenticado read-only de dados reais. O teste M7.7 preexistente foi corrigido em movimento separado autorizado, sem mudar o comportamento do produto. O primeiro 502 foi transitório; não houve rollback. Capturas permanecem inline no histórico, sem arquivo permanente.
 
 ---
 
@@ -12218,6 +12219,10 @@ O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `
 ## Conclusão
 
 Implementação, publicação, smoke técnico e inspeção visual autenticada: PASS. A fila estava vazia; a jornada de decisão com dado real permanece para o próximo caso legítimo, sem fabricar uma contribuição de teste.
+
+## Correção posterior do teste de visibilidade (2026-09-19)
+
+O CI da `main` no baseline `a792c69` falhou porque `m77KnowledgeCompanyGlobalGovernance.test.ts` proibia a aba `Propostas` no ramo reservado ao Super Admin, contrariando D-05/CA-D05 e a interface já entregue. Com autorização específica do PO, o commit `0815b94` substituiu essa expectativa por verificações de presença da aba para `profile === "super_admin"` e ausência no ramo da empresa. Nenhum runtime, RLS, RPC, dado ou decisão de curadoria foi alterado. Build, lint e seis testes dirigidos de M7.7/visibilidade passaram localmente; CI da branch `35452735434` e da `main` `35452848899` passaram. A prova de autorização server-side original permanece nas migrations e no serviço; esta correção cobre somente a expectativa de navegação.
 
 ---
 

@@ -61,3 +61,7 @@ O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `
 ## Conclusão
 
 Implementação, publicação, smoke técnico e inspeção visual autenticada: PASS. A fila estava vazia; a jornada de decisão com dado real permanece para o próximo caso legítimo, sem fabricar uma contribuição de teste.
+
+## Correção posterior do teste de visibilidade (2026-09-19)
+
+O CI da `main` no baseline `a792c69` falhou porque `m77KnowledgeCompanyGlobalGovernance.test.ts` proibia a aba `Propostas` no ramo reservado ao Super Admin, contrariando D-05/CA-D05 e a interface já entregue. Com autorização específica do PO, o commit `0815b94` substituiu essa expectativa por verificações de presença da aba para `profile === "super_admin"` e ausência no ramo da empresa. Nenhum runtime, RLS, RPC, dado ou decisão de curadoria foi alterado. Build, lint e seis testes dirigidos de M7.7/visibilidade passaram localmente; CI da branch `35452735434` e da `main` `35452848899` passaram. A prova de autorização server-side original permanece nas migrations e no serviço; esta correção cobre somente a expectativa de navegação.
