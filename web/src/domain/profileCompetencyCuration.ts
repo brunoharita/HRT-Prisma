@@ -3,7 +3,7 @@ import type { KnowledgeConceptSuggestion } from "./knowledgeData.js";
 import type { CompetencyMatchClass, CompetencyTaxonomyReference } from "./competencyTaxonomy.js";
 
 export type PendingCompetency = ProfessionalEvidenceProjection["normalization"]["items"][number] & { occurrence?: number; groupCount?: number };
-export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-3.0.0";
+export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-4.0.0";
 export const CURATION_PAGE_SIZE = 10;
 export function competencyKey(item: PendingCompetency): string {
   return JSON.stringify([item.originalIndex, item.originalTerm, item.sourceText, item.normalizedTerm, item.occurrence ?? 0]);
@@ -47,8 +47,9 @@ export function groupPendingCompetencies(items: PendingCompetency[]): PendingCom
   }));
 }
 export interface CurationDecision {
-  item: PendingCompetency; profileId: string; scope: "organization" | "global"; reason: string;
-  action: "alias" | "proposal"; conceptId: string | null; proposalLabel: string; proposalType: "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification";
+  item: PendingCompetency; profileId: string; scope: "organization" | "global";
+  action: "alias" | "proposal"; conceptId: string | null; proposalLabel: string; proposalDescription: string;
+  proposalType: "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification";
 }
 export interface CompetencyCurationAdapter {
   canUseGlobal: boolean;

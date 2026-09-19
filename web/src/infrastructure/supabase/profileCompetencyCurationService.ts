@@ -24,11 +24,11 @@ export function profileCompetencyCurationService(organizationId: string, personI
       return readProfessionalEvidenceProjection(data, organizationId, personId);
     },
     async save(decision) {
-      const { data, error } = await supabase.rpc("curate_profile_competency_v3" as never, {
+      const { data, error } = await supabase.rpc("curate_profile_competency_v4" as never, {
         p_organization_id: organizationId, p_person_id: personId, p_profile_id: decision.profileId,
         p_original_index: decision.item.originalIndex, p_source_text: decision.item.sourceText, p_normalized_term: decision.item.normalizedTerm,
-        p_scope: decision.scope, p_action: decision.action, p_concept_id: decision.conceptId, p_reason: decision.reason,
-        p_proposal_label: decision.proposalLabel, p_proposal_type: decision.proposalType,
+        p_scope: decision.scope, p_action: decision.action, p_concept_id: decision.conceptId,
+        p_proposal_label: decision.proposalLabel, p_proposal_description: decision.proposalDescription, p_proposal_type: decision.proposalType,
       } as never);
       if (error) {
         const proposalAlreadyPending = error.code === "23505" && error.message.includes("PROPOSAL_ALREADY_PENDING");

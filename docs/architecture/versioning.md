@@ -1,5 +1,7 @@
 # Versionamento
 
+M7.6 (2026-09-18): curadoria 4.0.0, descrição opcional, sem justificativa e Global só Super Admin. ADR-067.
+
 M7.5 (2026-09-18) registra a sexta entrega aceita do Movimento 7: **Prisma v1.7.6**. `person-professional-evidence-3.1.0` protege o último resultado completo e expõe tentativa/cobertura; `profile-competency-curation-3.0.0` agrupa pendências e usa `searchTerms` sem decisão automática. Taxonomias 1.0.0, normalização 1.0.0 e contratos anteriores são preservados. Implementação, medição e rollout no AoT M7.5 e ADR-066.
 
 M7.2 v2 (2026-09-18) registra a quinta entrega aceita do Movimento 7: **Prisma v1.7.5**. A infraestrutura Knowledge comum passa a expor Taxonomia Ocupacional `position-taxonomy-1.0.0` e Taxonomia de Competências `competency-taxonomy-1.0.0` como domínios separados. `person-professional-evidence-3.0.0`, busca 1.0.0 e curadoria 2.0.0 são aditivos; contratos históricos permanecem. Implementação, rollout e limites de validação no AoT M7.2 v2.

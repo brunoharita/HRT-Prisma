@@ -33,7 +33,7 @@ Os resultados são ordenados por quantidade de critérios objetivos atendidos e,
 
 ## Curadoria contextual M7.4
 
-Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição, alcance e justificativa. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência.
+Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição e alcance. Ao propor conceito, a descrição é opcional; a justificativa textual da associação não é coletada. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência.
 
 Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, filtro e posição permanecem. Se o item resolvido desaparecer, o foco passa ao próximo sobrevivente, ou ao anterior se era o último; página vazia recua à última válida. Gravar e próximo mantém a revisão aberta no próximo pendente. Alterações não salvas pedem confirmação de descarte, e falhas preservam a edição. No celular, o painel ocupa a tela e retorna à lista na mesma posição. Perfis antigos sem itens normalizados mantêm pendências explícitas e exigem normalização antes da curadoria contextual.
 

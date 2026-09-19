@@ -156,9 +156,9 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   const [candidates, setCandidates] = useState<CurationCandidate[]>([]);
   const [conceptId, setConceptId] = useState<string | null>(null);
   const [scope, setScope] = useState<"organization" | "global">("organization");
-  const [reason, setReason] = useState("");
   const [proposal, setProposal] = useState(false);
   const [label, setLabel] = useState(item.normalizedTerm);
+  const [description, setDescription] = useState("");
   const [type, setType] = useState<CurationDecision["proposalType"]>("skill");
   const [searching, setSearching] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -214,12 +214,13 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
     searchTimer.current = window.setTimeout(() => { searchTimer.current = null; void search(normalizedTerm); }, CURATION_SEARCH_DEBOUNCE_MS);
   }
   const chosen = candidates.find((candidate) => candidate.id === conceptId);
-  const valid = reason.trim().length >= 5 && (proposal ? label.trim().length > 0 : Boolean(chosen && (scope === "organization" || chosen.scope === "global")));
+  const validScope = scope === "organization" || adapter.canUseGlobal;
+  const valid = validScope && (proposal ? label.trim().length > 0 && description.trim().length <= 2000 : Boolean(chosen && (scope === "organization" || chosen.scope === "global")));
   async function save(advance: boolean) {
     if (!valid || savingLock.current) return;
     savingLock.current = true;
     setSaving(true); onBusy(true); setError(null);
-    try { await onSave({ item, profileId, scope, reason, action: proposal ? "proposal" : "alias", conceptId: proposal ? null : conceptId, proposalLabel: label, proposalType: type }, advance); }
+    try { await onSave({ item, profileId, scope, action: proposal ? "proposal" : "alias", conceptId: proposal ? null : conceptId, proposalLabel: label, proposalDescription: description, proposalType: type }, advance); }
     catch (failure) { setError(failure instanceof Error ? failure.message : "Falha ao gravar. A edição foi preservada."); }
     finally { savingLock.current = false; setSaving(false); onBusy(false); }
   }
@@ -244,9 +245,9 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
         </Radio.Group></> : <><Typography.Title level={5}>Propor novo conceito</Typography.Title><Alert type="info" title="A proposta não publica um conceito e não encerra esta pendência." />
         <label>Nome canônico proposto<Input aria-label="Nome canônico proposto" value={label} disabled={saving} onChange={(event) => { setLabel(event.target.value); onDirty(true); }} /></label>
         <label>Tipo de conceito<Select aria-label="Tipo de conceito proposto" value={type} disabled={saving} onChange={(value) => { setType(value); onDirty(true); }} options={(["skill", "competency", "knowledge", "technology", "methodology", "certification"] as const).map((value) => ({ value, label: taxonomyGroups[value] }))} /></label></>}
+      {proposal ? <label>Descrição do conceito<Input.TextArea aria-label="Descrição do conceito" placeholder="Descrição opcional do conceito..." value={description} disabled={saving} rows={3} maxLength={2000} showCount onChange={(event) => { setDescription(event.target.value); onDirty(true); }} /></label> : null}
       <label>Alcance da decisão<Select aria-label="Alcance da decisão" value={scope} disabled={saving} onChange={(value) => { setScope(value); onDirty(true); }} options={[{ value: "organization", label: "Knowledge da empresa" }, ...(adapter.canUseGlobal ? [{ value: "global", label: "Knowledge Global" }] : [])]} /></label>
       <Typography.Text type="secondary">{scope === "global" ? "Decisão Global: pode ser reutilizada por outras empresas e perfis." : "Pode ser reutilizada em outros perfis desta empresa."}</Typography.Text>
-      <label>Justificativa da associação<Input.TextArea aria-label="Justificativa da associação" placeholder="Explique por que os termos são equivalentes..." value={reason} disabled={saving} rows={3} onChange={(event) => { setReason(event.target.value); onDirty(true); }} /></label>
       <Button type="link" disabled={saving} onClick={() => { setProposal(!proposal); onDirty(true); }}>{proposal ? "Voltar à associação de conceito existente" : "Não encontrou? Propor novo conceito"}</Button>
     </div>
     <footer><Space wrap><Button onClick={onCancel} disabled={saving}>Cancelar</Button><Button disabled={!valid} loading={saving} onClick={() => void save(false)}>Gravar</Button><Button type="primary" disabled={!valid} loading={saving} onClick={() => void save(true)}>Gravar e próximo</Button></Space><small>Gravar retorna à lista; Gravar e próximo continua a revisão.</small></footer>

@@ -4,6 +4,8 @@ Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `pars
 
 ## Política
 
+M7.6 acrescenta `profile-competency-curation-4.0.0`: descrição opcional, sem justificativa e Global só `super_admin` server-side. Proposta pendente, tenant e natureza declarada permanecem; outros motivos Knowledge ficam fora. ADR-067.
+
 M7.5 acrescenta `person-professional-evidence-3.1.0` e `profile-competency-curation-3.0.0`. A RPC V5 escolhe o processamento completo compatível mais recente como base e expõe a tentativa mais recente separadamente, com contagens de cobertura e `searchTerms`; falha ou limite operacional não apaga associações anteriores. A curadoria agrupa termos equivalentes e busca candidatos pelas expressões versionadas sem pré-seleção. O orçamento de normalização é reservado por `reserve_competency_normalization_call_v2`, independente das demais operações do Knowledge Agent. V1–V4 e workflows anteriores permanecem disponíveis. ADR-066 e AoT M7.5 registram decisão, segurança e rollout.
 
 M7.2 v2 acrescenta `competency-taxonomy-1.0.0`, `competency-taxonomy-search-1.0.0`, `person-professional-evidence-3.0.0` e `profile-competency-curation-2.0.0`. Knowledge permanece a infraestrutura comum; `position-taxonomy-1.0.0` continua sendo exclusivamente ocupacional. RPCs V4/V2 são aditivas e V1/V2/V3/workflow 1.0.0 permanecem compatíveis. A busca exclui ocupações no servidor, classes parciais não resolvem e requisitos novos registram a versão de competência. Evidências e rollout pertencem ao AoT M7.2 v2 e ADR-065.

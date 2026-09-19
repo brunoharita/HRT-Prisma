@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 221
-source_manifest_sha256: 2c64e5484b55dd3186c4b13a3ed9b371e85fe1c0f02648521e2da59f62d2676e
+documentation_source_count: 224
+source_manifest_sha256: 96aa00e72142ef285295f06824cd3f014314d79e4d973748b9dd160f213f9c20
 -->
 
 # Tudo sobre o Prisma
@@ -543,7 +543,9 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`. Evidência 3.1 preserva o último resultado completo; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto: 20/dia, 200/mês. Lote 7/7 não alterou snapshots. Perfil: 3→5 conceitos; automáticos seguem 14; restante é decisão humana. Migration `20260918193317`, Agent v16, CI e smoke PASS. Evidência: AoT M7.5 e ADR-066.
+M7.6 local: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin.
+
+Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 
 M7.2 v2 está em produção como **Prisma v1.7.5**, runtime `a6a0bc5`. Taxonomias ocupacional e de competências permanecem domínios separados; o bootstrap publicou 22.885 competências. Evidência 3.0 atende Perfis sem reimportação e não transforma ocupação em fato pessoal. Matching e score não mudaram; parcial/ambiguidade não resolvem automaticamente. Migrations e smoke PASS. Evidência: AoT M7.2 v2 e ADR-065.
 
@@ -2364,6 +2366,8 @@ Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `pars
 
 ## Política
 
+M7.6 acrescenta `profile-competency-curation-4.0.0`: descrição opcional, sem justificativa e Global só `super_admin` server-side. Proposta pendente, tenant e natureza declarada permanecem; outros motivos Knowledge ficam fora. ADR-067.
+
 M7.5 acrescenta `person-professional-evidence-3.1.0` e `profile-competency-curation-3.0.0`. A RPC V5 escolhe o processamento completo compatível mais recente como base e expõe a tentativa mais recente separadamente, com contagens de cobertura e `searchTerms`; falha ou limite operacional não apaga associações anteriores. A curadoria agrupa termos equivalentes e busca candidatos pelas expressões versionadas sem pré-seleção. O orçamento de normalização é reservado por `reserve_competency_normalization_call_v2`, independente das demais operações do Knowledge Agent. V1–V4 e workflows anteriores permanecem disponíveis. ADR-066 e AoT M7.5 registram decisão, segurança e rollout.
 
 M7.2 v2 acrescenta `competency-taxonomy-1.0.0`, `competency-taxonomy-search-1.0.0`, `person-professional-evidence-3.0.0` e `profile-competency-curation-2.0.0`. Knowledge permanece a infraestrutura comum; `position-taxonomy-1.0.0` continua sendo exclusivamente ocupacional. RPCs V4/V2 são aditivas e V1/V2/V3/workflow 1.0.0 permanecem compatíveis. A busca exclui ocupações no servidor, classes parciais não resolvem e requisitos novos registram a versão de competência. Evidências e rollout pertencem ao AoT M7.2 v2 e ADR-065.
@@ -2958,6 +2962,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M7.6 (2026-09-18): curadoria 4.0.0, descrição opcional, sem justificativa e Global só Super Admin. ADR-067.
 
 M7.5 (2026-09-18) registra a sexta entrega aceita do Movimento 7: **Prisma v1.7.6**. `person-professional-evidence-3.1.0` protege o último resultado completo e expõe tentativa/cobertura; `profile-competency-curation-3.0.0` agrupa pendências e usa `searchTerms` sem decisão automática. Taxonomias 1.0.0, normalização 1.0.0 e contratos anteriores são preservados. Implementação, medição e rollout no AoT M7.5 e ADR-066.
 
@@ -6777,13 +6783,13 @@ Reutilizar `suggest_knowledge_concepts`, `resolve_knowledge_inbox_alias`, `propo
 
 `curate_profile_competency` valida Perfil vigente, organização, átomo original e pendência atual; exige `require_knowledge_admin`, com autorização Global adicional. Serializa Perfil/Inbox/escopo, recusa conflito humano, delega alias/proposta às operações auditadas existentes e retorna a leitura atualizada na mesma transação. Se o alias não resolver com segurança, a transação inteira falha. Propostas repetidas pendentes não são duplicadas. Não há grants anônimos, tabelas novas nem alteração de snapshots, runs ou RLS. Funções SECURITY DEFINER usam search_path vazio; a leitura reutiliza a autorização ativa de V2 antes de consultar derivação.
 
-`load_person_professional_evidence_map_v3` projeta aliases humanos aprovados sobre os átomos existentes, respeitando resolução única e prioridade empresa/Global. Decisões sobre a declaração bruta (`human_preserved`) prevalecem. Apenas a associação automática daquele átomo é substituída; contextos, verificações e original permanecem. A explicação expõe método `profile-competency-curation-1.0.0`, justificativa, escopo e versões. Aprovação nunca transforma declaração em demonstração.
+`load_person_professional_evidence_map_v3` projeta aliases humanos aprovados sobre os átomos existentes, respeitando resolução única e prioridade empresa/Global. Decisões sobre a declaração bruta (`human_preserved`) prevalecem. Apenas a associação automática daquele átomo é substituída; contextos, verificações e original permanecem. A explicação expõe método, escopo e versões; a justificativa textual da curadoria foi aposentada no M7.6 (`ADR-067`). Aprovação nunca transforma declaração em demonstração.
 
 Estado de navegação usa chave composta por índice original, declaração, trecho e termo, não índice de página. Ao resolver, busca próximo sobrevivente ou anterior; ao cancelar, o mesmo. Erros mantêm formulário e instruem atualizar a lista em caso de concorrência. Modal de descarte protege troca de item; guard existente protege navegação SPA e saída do navegador. Painel não modal no desktop; no móvel, tela inteira com ciclo de foco. Busca/lista continuam independentes da seleção.
 
 ## Compatibilidade, operação e limites
 
-Workflow novo, formato de projeção 2.0.0 preservado. V1/V2 intactas. Aplicar migration `20260918190000` antes de publicar frontend v1.7.4; validar RPC com sessão tenant-scoped. Rollback restaura frontend v1.7.3, conservando funções e decisões auditadas, sem apagar aliases/propostas. Não executar rollback destrutivo de dados.
+Workflow novo, formato de projeção 2.0.0 preservado. V1/V2 intactas. A evolução M7.6 (`ADR-067`) usa migration `20260918220000` e workflow 4.0.0: descrição opcional de proposta, sem justificativa textual de curadoria e Global somente Super Admin. Rollback restaura frontend anterior sem reintroduzir captura de justificativa; decisões e aliases permanecem auditáveis. Não executar rollback destrutivo de dados.
 
 A validação local combina PostgreSQL real com roles e transações revertidas e UI com adapter sintético; não equivale a gravação E2E Supabase hospedada. Não existe QA remoto separado disponível nesta entrega. Rollout autorizado em 2026-09-18 e smoke autenticado de leitura/painel/cancelamento PASS, sem gravar decisões fictícias. Evidências no AoT M7.4. Não reprocessar perfis nem chamar modelos para aplicar a curadoria. Termos sem equivalente podem permanecer pendentes legitimamente; conflitos não são resolvidos silenciosamente.
 
@@ -6856,6 +6862,26 @@ A normalização recebe orçamento dedicado e limitado. A curadoria agrupa termo
 - Promover candidatos parciais automaticamente: aumenta números ao custo de equivalências falsas.
 - Criar embeddings, nova taxonomia ou fonte: adiciona arquitetura antes de explorar aliases e conceitos da empresa já previstos.
 - Exibir somente a tentativa mais recente: confunde falha operacional com perda de conhecimento.
+
+---
+
+## Source: `docs/decisions/ADR-067-curation-description-and-global-scope.md`
+
+# ADR-067 — Descrição opcional e alcance seguro na curadoria
+
+Status: accepted. Data: 2026-09-18. Acordo `docs/qa/agreement-m76-curation-description-scope.md` v1.0.0.
+
+## Decisão
+
+A curadoria contextual do Perfil passa a usar `profile-competency-curation-4.0.0`. Propostas podem carregar uma descrição opcional do conceito em `original_proposal.proposed_concept.description`. A justificativa textual da associação deixa de existir no painel, no payload e na persistência específica da curadoria; dados históricos ligados a observações de Perfil são limpos pela migration M7.6.
+
+O escopo `organization` continua sendo o padrão. A UI só apresenta `Knowledge Global` para `super_admin`, e a RPC exige a mesma autoridade server-side. A proposta permanece pendente, sem publicação ou evidência pessoal automática.
+
+## Compatibilidade e limites
+
+A RPC `curate_profile_competency_v4` é a fronteira corrente. Assinaturas legadas permanecem disponíveis para rollback controlado, mas ignoram o argumento antigo de justificativa e delegam à implementação sem captura. Fluxos administrativos independentes da página Knowledge, que possuem seu próprio motivo de aprovação, não são alterados por este ADR.
+
+Migration `20260918220000_m76_curation_description_scope` remove apenas `reason`/`rationale` associados a observações com `profile_id`, sem apagar auditoria não relacionada. Não há mudança de snapshots, normalização, matching, taxonomias ou IA.
 
 ---
 
@@ -6952,6 +6978,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 # Deployment
 
 ## Estado
+
+M7.6 está em implementação local em 2026-09-18: workflow de curadoria `profile-competency-curation-4.0.0`, descrição opcional de conceito, justificativa textual removida da curadoria e Global restrito a Super Admin. Migration local `20260918220000_m76_curation_description_scope`; PostgreSQL descartável PASS. Produção ainda não recebeu esta migration/frontend.
 
 M7.5 em produção em 2026-09-18: **v1.7.6**, runtime final `b9360e0`, migration remota `20260918193317_m75_competency_coverage_recovery` e Knowledge Agent v16. A normalização ganhou orçamento dedicado de 20 chamadas/dia e 200/mês; o lote service-only concluiu 7/7 Perfis aprovados, preservou os hashes dos snapshots e recuperou o Perfil investigado de 3 para 5 conceitos visíveis. As associações automáticas totais permaneceram 14 antes/depois; o restante exige curadoria humana por alias ou proposta de conceito. A busca manual da curadoria usa debounce de 400 ms, com Buscar/Enter imediatos e sem pré-seleção. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem ativa `sha256:a16f82d17a246e9aa5e2c6ddc528761c09a1616182af8dc1159ffabf955135b9`, rollback `prisma-web:rollback-before-m76-search-debounce-20260918`. HTTPS 200; bundle/CI e smoke autenticado confirmaram a melhoria. GitHub/VPS sincronizados; evidências, advisors e limites no AoT M7.5.
 
@@ -8426,7 +8454,7 @@ Os resultados são ordenados por quantidade de critérios objetivos atendidos e,
 
 ## Curadoria contextual M7.4
 
-Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição, alcance e justificativa. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência.
+Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição e alcance. Ao propor conceito, a descrição é opcional; a justificativa textual da associação não é coletada. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência.
 
 Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, filtro e posição permanecem. Se o item resolvido desaparecer, o foco passa ao próximo sobrevivente, ou ao anterior se era o último; página vazia recua à última válida. Gravar e próximo mantém a revisão aberta no próximo pendente. Alterações não salvas pedem confirmação de descarte, e falhas preservam a edição. No celular, o painel ocupa a tela e retorna à lista na mesma posição. Perfis antigos sem itens normalizados mantêm pendências explícitas e exigem normalização antes da curadoria contextual.
 
@@ -9747,16 +9775,16 @@ CA-01: nomes diferentes normalizam para conceitos reais sem taxonomia paralela (
 
 # Acordo M7.4 — Curadoria contextual de competências
 
-Versão 1.1.0, agreed, 2026-09-18. Bruno aprovou fluxo/mockup e implementação; após o aceite local, autorizou main, migração e produção. A decisão também estabelece rollout completo como padrão futuro, salvo veto explícito. Esta revisão substitui P-03/F-01 e acrescenta D-07/CA-04; demais acordos preservados. Baseline `a26472c`. Risco D.
+Versão 1.2.0, agreed, 2026-09-18. Bruno aprovou fluxo/mockup e implementação; após o aceite local, autorizou main, migração e produção. A decisão também estabelece rollout completo como padrão futuro, salvo veto explícito. M7.6 supersede a exigência de justificativa textual desta curadoria; descrição opcional e escopo seguro estão em `agreement-m76-curation-description-scope.md`. Baseline `a26472c`. Risco D.
 
 ## DEVE
 
-- D-01: revisar pendências dentro do Perfil, reutilizando busca, aprovação de alias e proposta da Knowledge. Declaração original, termo interpretado, motivo, candidatos, origem/tipo/agrupamento, alcance e justificativa permanecem explícitos.
+- D-01: revisar pendências dentro do Perfil, reutilizando busca, aprovação de alias e proposta da Knowledge. Declaração original, termo interpretado, candidatos, origem/tipo/agrupamento e alcance permanecem explícitos; justificativa textual foi aposentada pelo M7.6.
 - D-02: Gravar confirma a decisão, atualiza projeção/contagens e fecha o painel. Cancelar não grava e retorna ao mesmo registro. Gravar e próximo mantém o painel no próximo pendente; sem próximo usa anterior; sem pendências fecha.
 - D-03: preservar filtros, ordenação, página e posição. Seleção por chave estável, nunca índice isolado. Ao remover o item, focar próximo sobrevivente ou anterior. Página vazia recua para a última válida. Falha mantém formulário e não simula sucesso.
 - D-04: alcance empresa como padrão; Global somente para Super Admin. Informar reutilização em outros perfis. Respeitar autoridade server-side existente. Proposta não publica conceito nem resolve a pendência por si só.
 - D-05: preservar snapshots, decisões humanas, natureza declarada, tenant e proveniência. Atualização local sem recarregar página inteira nem consumir IA. Decisão concorrente/perfil obsoleto falha com instrução recuperável.
-- D-UX-01: mockup `exec-8ed2a0bd-1697-4348-bef8-fb0e64a4a2a0.png` é referência normativa para a área de curadoria: lista à esquerda, item azul destacado, painel à direita ~42% da área útil, sem máscara que impeça consulta da lista. Cabeçalho/fonte no topo, busca/candidatos no meio, alcance/justificativa abaixo e ações fixas no rodapé. Lista paginada de dez itens, pesquisa e estado de pendência. Sidebar e cabeçalho existentes não são redesenhados; nomes, conceitos e números são ilustrativos.
+- D-UX-01: mockup `exec-8ed2a0bd-1697-4348-bef8-fb0e64a4a2a0.png` é referência normativa para a área de curadoria: lista à esquerda, item azul destacado, painel à direita ~42% da área útil, sem máscara que impeça consulta da lista. Cabeçalho/fonte no topo, busca/candidatos no meio, alcance abaixo e ações fixas no rodapé. M7.6 acrescenta descrição opcional somente na proposta e remove o bloco de justificativa. Lista paginada de dez itens, pesquisa e estado de pendência. Sidebar e cabeçalho existentes não são redesenhados; nomes, conceitos e números são ilustrativos.
 - D-UX-02: no móvel o painel ocupa a tela; fechar retorna ao registro/página preservados. Teclado, foco, labels e descarte de alterações não salvas protegidos, inclusive ao trocar de item.
 - D-06: testes direcionados de domínio, integração e autorização, smoke visual desktop/mobile e AoT. Registrar versão de workflow `profile-competency-curation-1.0.0` e entrega v1.7.4, owners/contexto.
 - D-07: integrar main, aplicar somente a migration M74 e publicar frontend v1.7.4 com flags hosted vigentes, rollback, smoke autenticado e sincronização local/GitHub/VPS. Registrar a autorização permanente no AGENTS.md; sem reinício desnecessário de serviços alheios.
@@ -9848,6 +9876,49 @@ Nenhuma pendência material. A aprovação humana do lote é etapa operacional p
 ## FIDELIDADE VISUAL
 
 As imagens M7.2/M7.4 já aprovadas permanecem alvo normativo. Este movimento pode acrescentar contagens, agrupamento e estado da última tentativa, mas não mudar abas, hierarquia, painel lateral, ordem de decisão, filtros, ações ou transformação responsiva. Comparação same-state/same-data em desktop e 390×844 é obrigatória.
+
+---
+
+## Source: `docs/qa/agreement-m76-curation-description-scope.md`
+
+# Acordo M7.6 — Descrição de conceito e alcance seguro na curadoria
+
+Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, “não precisa preservar esse histórico de justificativa... fazer estilo AoT”. Baseline: `15a82a463ee713487f5af38265130a63b566cbfb`.
+
+## DEVE
+
+- D-01 — No fluxo “Propor novo conceito”, exibir e persistir `Descrição do conceito` como campo opcional. O valor pertence ao conceito proposto e não é evidência pessoal.
+- D-02 — Remover “Justificativa da associação” da interface, do payload da curadoria e da persistência específica de associações/propostas iniciadas pelo Perfil. Novas decisões não podem capturar esse campo.
+- D-03 — O alcance padrão continua sendo `Knowledge da empresa`; somente `super_admin` pode escolher `Knowledge Global`. A regra deve ser aplicada na UI e no backend.
+- D-04 — Associação existente continua resolvendo alias sem descrição; proposta continua pendente e não publica conceito nem encerra a declaração automaticamente.
+- D-05 — Preservar tenant, autoridade humana, natureza declarada, snapshots, concorrência, proveniência e o fluxo de busca/debounce já entregue.
+- D-06 — Atualizar contrato, ADR, migration, tipos/adapters, testes negativos, Context Pack, rollout, smoke e AoT no mesmo movimento.
+
+## PROIBIDO
+
+- P-01 — Não aceitar ou persistir justificativa de curadoria pelo novo RPC, inclusive por chamada manual ou payload adulterado.
+- P-02 — Não permitir `global` para papel diferente de `super_admin`, mesmo que a opção seja enviada diretamente ao backend.
+- P-03 — Não tornar descrição obrigatória, publicar proposta automaticamente, transformar associação em evidência demonstrada ou alterar Perfil/snapshot.
+- P-04 — Não remover justificativas de fluxos administrativos distintos do Knowledge sem contrato próprio.
+
+## FORA DE ESCOPO
+
+- F-01 — Não alterar aprovação administrativa de propostas na página Knowledge nem outros campos de auditoria não pertencentes à curadoria do Perfil.
+- F-02 — Não criar IA, fonte, taxonomia, dependência ou reprocessamento.
+
+## AUTONOMIA
+
+- A-01 — Versionar uma RPC de curadoria sem justificativa, mantendo compatibilidade controlada para clientes antigos sem voltar a gravar o campo.
+- A-02 — Usar migration aditiva e limpeza delimitada dos dados de justificativa produzidos especificamente pela curadoria, sem apagar auditoria não relacionada.
+- A-03 — Definir limite seguro para descrição opcional, tratamento de vazio, loading, mensagens e acessibilidade dentro da composição visual existente.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — Proposta pode ser gravada com nome, tipo e descrição vazia ou preenchida; a descrição aparece em `original_proposal.proposed_concept.description` e a pendência permanece aberta.
+- CA-02 — O painel não renderiza nem envia justificativa; a migration/RPC não persiste `rationale` ou `reason` originado pela curadoria.
+- CA-03 — `super_admin` pode escolher Global; owner/admin/member/anon e outro tenant são rejeitados server-side com falha fechada.
+- CA-04 — Alias de empresa continua funcionando sem justificativa e sem alteração de snapshots; associação Global continua exigindo Super Admin.
+- CA-05 — Typecheck, lint, testes de domínio, PostgreSQL descartável com negativos, Context Pack, build/CI, smoke autenticado e rollback passam; limitações ficam no AoT.
 
 ---
 
@@ -13279,6 +13350,34 @@ Implemente integralmente o contrato `docs/qa/agreement-m75-competency-coverage-r
 ## Fechamento
 
 Não declarar conclusão se uma execução falha reduzir cobertura, se parcial for promovido automaticamente, se decisão humana for fabricada ou se cobertura/rollout não tiver evidência. Relatar separadamente implementação pronta, decisões humanas ainda pendentes e cobertura efetivamente observada.
+
+---
+
+## Source: `docs/qa/execution-m76-curation-description-scope.md`
+
+# Prompt de Execução — M7.6 Descrição de conceito e alcance seguro na curadoria
+
+Implemente integralmente `docs/qa/agreement-m76-curation-description-scope.md` versão 1.0.0, aprovado sobre o baseline `15a82a463ee713487f5af38265130a63b566cbfb`.
+
+## Entendimento obrigatório
+
+- Implementar D-01 a D-06 e provar CA-01 a CA-05.
+- Impedir P-01 a P-04 com testes negativos.
+- Preservar F-01 e F-02.
+- Aplicar A-01 a A-03 apenas ao como; nenhuma autonomia altera a autoridade ou o escopo.
+
+## Sequência
+
+1. Localizar o contrato atual M7.4/M7.5, os adapters, a RPC e os campos de proposta/alias.
+2. Adicionar migration versionada com RPC de curadoria sem justificativa, descrição opcional, guarda server-side de Super Admin e remoção delimitada de dados de justificativa da curadoria.
+3. Atualizar UI, domínio, adapter, tipos e testes sem mudar a topologia normativa do painel.
+4. Validar PostgreSQL descartável, negativos de tenant/papel/payload, typecheck, lint, Context Pack e build afetado.
+5. Publicar migration/frontend conforme fluxo autorizado, executar smoke read-only e registrar imagem/rollback.
+6. Atualizar ADR, owners, Context Pack, deployment e AoT; sincronizar branch, main, GitHub e VPS.
+
+## Fidelidade visual
+
+A imagem fornecida continua normativa para a topologia: painel lateral, fonte/termo no topo, proposta no meio e ações fixas no rodapé. O novo campo opcional entra abaixo do tipo de conceito. O alcance permanece abaixo da proposta; a justificativa desaparece sem deslocar a ação para outra superfície. Desktop e móvel devem manter a mesma ordem e acessibilidade.
 
 ---
 
