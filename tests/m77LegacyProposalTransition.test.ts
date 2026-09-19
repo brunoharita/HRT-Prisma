@@ -34,4 +34,5 @@ test("a interface distingue recuperação local de decisão Global", () => {
   assert.match(page, /Motivo da transição da proposta legada/);
   assert.match(page, /Aprovar na empresa e enviar à revisão Global/);
   assert.match(page, /proposal\.organizationId !== organizationId/);
+  assert.match(page, /awaiting_human_review: "Pendente de revisão"/);
 });
