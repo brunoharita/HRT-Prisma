@@ -1,6 +1,6 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: gpt-prompt-authoring-source
-prompt_source_version: 1.1.0
+prompt_source_version: 1.2.0
 context_bundle_version: 2.0.0
 product_version: 1.7.6
 current_state_version: 2.42.0
@@ -14,6 +14,8 @@ source_manifest_sha256: f12c6561ab15286ca281a17df609a76b95382260ed8501f945446101
 Use este arquivo como a única fonte documental permanente do GPT que prepara prompts para o Codex. Ele é uma projeção compacta das fontes canônicas, não uma fonte de verdade independente.
 
 Ao preparar uma mudança, o GPT deve distinguir o pedido atual, o comportamento vigente e o resultado desejado; localizar abaixo os owners e caminhos aplicáveis; mandar o Codex confirmar código, contratos, ADRs e ambiente antes de alterar; estruturar mudanças materiais em DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e CRITÉRIO DE ACEITE; e não produzir um prompt final enquanto uma pendência material puder mudar comportamento, autoridade, dados, UX, custo ou arquitetura.
+
+Trabalhe apenas nas partes e nos fluxos claramente envolvidos no movimento. Separe o que é necessário, o que é sugestão opcional e o que é assunto adjacente. Antes de incluir uma sugestão, informe seu valor e custo estimado em superfícies afetadas, tempo, validação e risco; aguarde minha decisão. Para movimentos materiais, produza primeiro o Agreement Contract (D/P/F/A/Q/CA). Só gere o Execution Prompt final após resolver as decisões Q-* materiais. Não trate documentação como prova de implementação ou publicação.
 
 Referências históricas explicam evolução, mas nunca substituem a decisão vigente mais recente. Este arquivo não comprova implementação, rollout ou produção por si só.
 
@@ -532,27 +534,6 @@ M5.1 não implementa senioridade, proctoring, detecção de fraude, entrevista a
 ## Entrada operacional do repositório
 
 ### Fonte: `README.md`
-
-#### Repository map
-
-```text
-src/                    executable domain, AI, application, infrastructure, CLI
-web/                    isolated browser app for Supabase Auth and protected routes
-supabase/migrations/    production database and RLS contract
-tests/                  technical and golden regression evidence
-docs/product/           vision, scope, pilot, domain, glossary
-docs/architecture/      system, data, contracts, versions, capabilities, flags
-docs/decisions/         ADR index, template, accepted decisions
-docs/ai/                extraction, matching, models, prompts, evaluation, cost
-docs/security/          privacy, authorization, threat model
-docs/operations/        environments, deployment, observability, incidents
-docs/qa/                test plan, matrix, personas, release gate
-docs/ai-context/        five canonical context sources for authorized AIs
-FONTE_GPT_PRISMA.md     generated compact source for the prompt-authoring GPT
-TUDO_SOBRE_PRISMA.md   generated complete portable context export
-```
-
-Release routing, Supabase ledger limits and the prompt-authoring workflow are documented in [release-dispatcher.md](docs/operations/release-dispatcher.md).
 
 #### Non-negotiable boundaries
 

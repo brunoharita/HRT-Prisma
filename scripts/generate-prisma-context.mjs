@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const scriptPath = fileURLToPath(import.meta.url);
 export const repositoryRoot = resolve(dirname(scriptPath), "..");
 export const CONTEXT_BUNDLE_VERSION = "2.0.0";
-export const PROMPT_SOURCE_VERSION = "1.1.0";
+export const PROMPT_SOURCE_VERSION = "1.2.0";
 export const canonicalSources = [
   "AGENTS.md",
   "README.md",
@@ -177,13 +177,13 @@ export async function buildPrismaPromptSource() {
       "Guardrails",
       "Limitações",
     ]))],
-    ["Entrada operacional do repositório", compactExcerpt("README.md", selectSections(readme, ["Repository map", "Non-negotiable boundaries"]))],
+    ["Entrada operacional do repositório", compactExcerpt("README.md", selectSections(readme, ["Non-negotiable boundaries"]))],
   ];
   const body = compactSections.map(([title, content]) => `## ${title}\n\n${content}`).join("\n\n---\n\n");
   const currentStateVersion = frontmatterValue(currentState, "version");
   const currentStateVerified = frontmatterValue(currentState, "last_verified");
 
-  return `<!-- GENERATED FILE. DO NOT EDIT.\nartifact_role: gpt-prompt-authoring-source\nprompt_source_version: ${PROMPT_SOURCE_VERSION}\ncontext_bundle_version: ${CONTEXT_BUNDLE_VERSION}\nproduct_version: ${productVersion(currentState)}\ncurrent_state_version: ${currentStateVersion}\ncurrent_state_last_verified: ${currentStateVerified}\ndocumentation_source_count: ${portableSources.length}\nsource_manifest_sha256: ${manifestHash}\n-->\n\n# Fonte do GPT para prompts do Prisma\n\nUse este arquivo como a única fonte documental permanente do GPT que prepara prompts para o Codex. Ele é uma projeção compacta das fontes canônicas, não uma fonte de verdade independente.\n\nAo preparar uma mudança, o GPT deve distinguir o pedido atual, o comportamento vigente e o resultado desejado; localizar abaixo os owners e caminhos aplicáveis; mandar o Codex confirmar código, contratos, ADRs e ambiente antes de alterar; estruturar mudanças materiais em DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e CRITÉRIO DE ACEITE; e não produzir um prompt final enquanto uma pendência material puder mudar comportamento, autoridade, dados, UX, custo ou arquitetura.\n\nReferências históricas explicam evolução, mas nunca substituem a decisão vigente mais recente. Este arquivo não comprova implementação, rollout ou produção por si só.\n\n${body}\n`;
+  return `<!-- GENERATED FILE. DO NOT EDIT.\nartifact_role: gpt-prompt-authoring-source\nprompt_source_version: ${PROMPT_SOURCE_VERSION}\ncontext_bundle_version: ${CONTEXT_BUNDLE_VERSION}\nproduct_version: ${productVersion(currentState)}\ncurrent_state_version: ${currentStateVersion}\ncurrent_state_last_verified: ${currentStateVerified}\ndocumentation_source_count: ${portableSources.length}\nsource_manifest_sha256: ${manifestHash}\n-->\n\n# Fonte do GPT para prompts do Prisma\n\nUse este arquivo como a única fonte documental permanente do GPT que prepara prompts para o Codex. Ele é uma projeção compacta das fontes canônicas, não uma fonte de verdade independente.\n\nAo preparar uma mudança, o GPT deve distinguir o pedido atual, o comportamento vigente e o resultado desejado; localizar abaixo os owners e caminhos aplicáveis; mandar o Codex confirmar código, contratos, ADRs e ambiente antes de alterar; estruturar mudanças materiais em DEVE, PROIBIDO, FORA DE ESCOPO, AUTONOMIA, PENDENTE e CRITÉRIO DE ACEITE; e não produzir um prompt final enquanto uma pendência material puder mudar comportamento, autoridade, dados, UX, custo ou arquitetura.\n\nTrabalhe apenas nas partes e nos fluxos claramente envolvidos no movimento. Separe o que é necessário, o que é sugestão opcional e o que é assunto adjacente. Antes de incluir uma sugestão, informe seu valor e custo estimado em superfícies afetadas, tempo, validação e risco; aguarde minha decisão. Para movimentos materiais, produza primeiro o Agreement Contract (D/P/F/A/Q/CA). Só gere o Execution Prompt final após resolver as decisões Q-* materiais. Não trate documentação como prova de implementação ou publicação.\n\nReferências históricas explicam evolução, mas nunca substituem a decisão vigente mais recente. Este arquivo não comprova implementação, rollout ou produção por si só.\n\n${body}\n`;
 }
 
 async function main() {

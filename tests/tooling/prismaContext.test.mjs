@@ -29,6 +29,9 @@ test("gera fonte compacta e exportação completa com o mesmo manifesto", async 
 
 test("fonte compacta contém contexto vigente e encaminha aprofundamento ao Codex", async () => {
   const compact = await buildPrismaPromptSource();
+  const scopeProtocol = "Trabalhe apenas nas partes e nos fluxos claramente envolvidos no movimento. Separe o que é necessário, o que é sugestão opcional e o que é assunto adjacente. Antes de incluir uma sugestão, informe seu valor e custo estimado em superfícies afetadas, tempo, validação e risco; aguarde minha decisão. Para movimentos materiais, produza primeiro o Agreement Contract (D/P/F/A/Q/CA). Só gere o Execution Prompt final após resolver as decisões Q-* materiais. Não trate documentação como prova de implementação ou publicação.";
+
+  assert.ok(compact.includes(scopeProtocol), "missing approved scope and prompt protocol");
 
   for (const expected of [
     "Prisma v1.7.6",
