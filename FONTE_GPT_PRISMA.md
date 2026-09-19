@@ -5,8 +5,8 @@ context_bundle_version: 2.0.0
 product_version: 1.7.6
 current_state_version: 2.42.0
 current_state_last_verified: 2026-09-18
-documentation_source_count: 224
-source_manifest_sha256: 96aa00e72142ef285295f06824cd3f014314d79e4d973748b9dd160f213f9c20
+documentation_source_count: 225
+source_manifest_sha256: 7998af797f9a677694c94f34f9296e5878a495e4d29308bbb46d8ad8cb7aa7ed
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -265,7 +265,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M7.6 local: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin.
+M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 

@@ -10,7 +10,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.6 local: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin.
+M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 

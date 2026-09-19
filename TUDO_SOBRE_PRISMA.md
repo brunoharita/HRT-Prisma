@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 224
-source_manifest_sha256: 96aa00e72142ef285295f06824cd3f014314d79e4d973748b9dd160f213f9c20
+documentation_source_count: 225
+source_manifest_sha256: 7998af797f9a677694c94f34f9296e5878a495e4d29308bbb46d8ad8cb7aa7ed
 -->
 
 # Tudo sobre o Prisma
@@ -543,7 +543,7 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
-M7.6 local: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin.
+M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
 
@@ -6979,7 +6979,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-M7.6 está em implementação local em 2026-09-18: workflow de curadoria `profile-competency-curation-4.0.0`, descrição opcional de conceito, justificativa textual removida da curadoria e Global restrito a Super Admin. Migration local `20260918220000_m76_curation_description_scope`; PostgreSQL descartável PASS. Produção ainda não recebeu esta migration/frontend.
+M7.6 em produção em 2026-09-18: workflow de curadoria `profile-competency-curation-4.0.0`, descrição opcional de conceito, justificativa textual removida da curadoria e Global restrito a Super Admin. A migration `20260918220000_m76_curation_description_scope` foi aplicada atomicamente no único Supabase e registrada no ledger remoto. Main/GitHub/VPS estão em `cc2e596`; somente `prisma-web` foi recriado com baseline + Parser IA hosted. Imagem ativa `sha256:e96c30ed09ac6e4e0423564bb21566286f3e01ba8458adb1e53dfd6ccef339f1`; rollback `prisma-web:rollback-before-m76-curation-description-20260918`; gateway e Traefik permaneceram ativos. HTTPS 200; bundle e smoke autenticado read-only confirmaram o campo de descrição, a ausência da justificativa na curadoria e o escopo da empresa. Evidências e limites em `docs/qa/aot-m76-curation-description-scope.md`.
 
 M7.5 em produção em 2026-09-18: **v1.7.6**, runtime final `b9360e0`, migration remota `20260918193317_m75_competency_coverage_recovery` e Knowledge Agent v16. A normalização ganhou orçamento dedicado de 20 chamadas/dia e 200/mês; o lote service-only concluiu 7/7 Perfis aprovados, preservou os hashes dos snapshots e recuperou o Perfil investigado de 3 para 5 conceitos visíveis. As associações automáticas totais permaneceram 14 antes/depois; o restante exige curadoria humana por alias ou proposta de conceito. A busca manual da curadoria usa debounce de 400 ms, com Buscar/Enter imediatos e sem pré-seleção. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem ativa `sha256:a16f82d17a246e9aa5e2c6ddc528761c09a1616182af8dc1159ffabf955135b9`, rollback `prisma-web:rollback-before-m76-search-debounce-20260918`. HTTPS 200; bundle/CI e smoke autenticado confirmaram a melhoria. GitHub/VPS sincronizados; evidências, advisors e limites no AoT M7.5.
 
@@ -11562,6 +11562,52 @@ O frontend v1.7.6 foi construído do fechamento `b9360e0` com `baseline` e Parse
 No smoke autenticado de produção, o Perfil investigado exibiu v1.7.6, 5 conceitos em 3 agrupamentos e 59 ocorrências pendentes agrupadas em 57 termos únicos. A abertura da curadoria informou explicitamente que nenhuma opção é selecionada automaticamente; não havia candidato marcado e os botões de gravação permaneceram desabilitados. O painel foi cancelado sem escrita. Main local, GitHub e VPS foram sincronizados no fechamento; resíduos locais e remotos alheios ao movimento foram preservados.
 
 O primeiro CI de fechamento expôs duas regressões de gate: expectativa histórica v1.7.4 e detecção estática de leitura de mensagem técnica. `e547d85` alinhou o teste à sexta entrega e manteve a mensagem ao operador sanitizada. A melhoria de busca em `b9360e0` passou pelos workflows completos de `main` e do branch, incluindo auditoria de dependências. O bundle final expõe `b9360e0`, `person-professional-evidence-3.1.0` e o microcopy do debounce. No smoke autenticado, `SQL` foi digitado no campo e os candidatos apareceram sem clicar em Buscar; a curadoria foi encerrada sem gravação.
+
+---
+
+## Source: `docs/qa/aot-m76-curation-description-scope.md`
+
+# AoT M7.6 — descrição de conceito e escopo da curadoria
+
+Data: 2026-09-18
+Contrato: `docs/qa/agreement-m76-curation-description-scope.md` 1.0.0
+Execução: `docs/qa/execution-m76-curation-description-scope.md` 1.0.0
+Baseline: `15a82a4`
+Entrega: `cc2e5966f25232e5880d1ceabd1e596c214cdf56`
+Migration: `20260918220000_m76_curation_description_scope`
+
+## Acordo -> implementação -> teste -> evidência
+
+| ID | Implementação e prova | Status |
+|---|---|---|
+| D-01 | `CompetencyCuration.tsx` apresenta descrição opcional, limite 2.000 caracteres e payload `p_proposal_description`; RPC v4 persiste somente em `proposed_concept.description`. SQL M7.6 e smoke visual confirmam. | PASS |
+| D-02 | Justificativa removida do painel, domínio, serviço v4 e persistência específica da curadoria de Perfil. Limpeza histórica profile-linked é idempotente; contagem prévia remota: 0/0. Fluxos de aprovação administrativa Knowledge permanecem fora do escopo. | PASS |
+| D-03 | UI limita Global por `super_admin`; RPC v4 exige `private.require_knowledge_admin(null)` para Global. Grants remotos: `anon=false`, `authenticated=true`; QA PostgreSQL prova rejeição de Global para administrador comum. | PASS |
+| D-04 | Proposta continua pendente, sem publicação automática nem evidência. Mensagem e estado foram confirmados no smoke e no teste SQL. | PASS |
+| D-05 | RPC v4 preserva tenant, autoridade, snapshot, concorrência, declaração original e versão do workflow; wrappers legados ignoram o campo aposentado sem reintroduzir captura. | PASS |
+| D-06 | Contrato, execução, ADR-067, migration, testes, Context Pack e rollout foram atualizados. | PASS |
+| P-01 | Nenhuma captura/persistência nova de justificativa de curadoria; teste estático e SQL não encontram `p_reason` no fluxo v4. | PASS |
+| P-02 | Global não é aceito para não-super; guarda server-side e teste negativo local cobrem o limite. | PASS |
+| P-03 | Descrição é opcional e não cria evidência/publicação. | PASS |
+| P-04 | Razões do fluxo administrativo Knowledge não foram removidas nem alteradas. | PASS |
+
+## Validação
+
+- TypeScript raiz e web: PASS (`tsc --noEmit`); build raiz: PASS.
+- Lint: PASS (`582 files`); `git diff --check`: PASS.
+- Testes direcionados: PASS, 16/16 (`profileCompetencyCuration`, `knowledgeFoundation`, `m76CurationDescriptionScope`).
+- PostgreSQL descartável M7.6: PASS, incluindo proposta com descrição, descrição vazia, Global negado e grants.
+- Context Pack: PASS (`generate-prisma-context` e `check:prisma-context`).
+- Migration remota: PASS no único Supabase de produção; ledger registrado como `20260918220000`.
+- Produção web: `main`/GitHub/VPS em `cc2e596`; imagem ativa `sha256:e96c30ed09ac6e4e0423564bb21566286f3e01ba8458adb1e53dfd6ccef339f1`; rollback preservado em `prisma-web:rollback-before-m76-curation-description-20260918`; somente `prisma-web` recriado; gateway e Traefik permaneceram ativos.
+- HTTPS: `200`.
+- Smoke autenticado read-only: Perfil Bruno Harita Santos → Competências → pendência → “Propor novo conceito”. Campo “Descrição do conceito” visível, justificativa ausente, escopo “Knowledge da empresa” visível; painel cancelado e alterações descartadas sem gravação.
+
+## Limites
+
+- O smoke não submeteu proposta nem testou a sessão de um usuário não-super na UI; a proibição de Global para não-super foi provada no PostgreSQL/RPC server-side.
+- A ocorrência genérica “Justificativa da correção antes de salvar” permanece em mensagens do fluxo de revisão documental, que é distinto e fora do escopo desta curadoria.
+- O ambiente remoto é único; não há homologação Supabase separada.
 
 ---
 
