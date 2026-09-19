@@ -30,6 +30,11 @@ test("release tooling does not redeploy the application", () => {
   assert.ok(plan.validationCommands.includes("pnpm run test:release-tooling"));
 });
 
+test("dispatcher resolves pnpm through the Windows command shim", async () => {
+  const dispatcher = await readFile(new URL("../../scripts/release-dispatcher.mjs", import.meta.url), "utf8");
+  assert.match(dispatcher, /process\.platform === "win32" && command === "pnpm" \? "pnpm\.cmd" : command/);
+});
+
 test("routes web changes only to web and hosting", () => {
   const impact = classifyChanges([change("M", "web/src/app/App.tsx")]);
   assert.ok(impact.surfaces.includes("web"));

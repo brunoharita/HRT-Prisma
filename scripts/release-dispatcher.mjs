@@ -104,7 +104,7 @@ function runCaptureCi(sha) {
 }
 
 function runCommand(command, args) {
-  run(command, args);
+  run(process.platform === "win32" && command === "pnpm" ? "pnpm.cmd" : command, args);
 }
 
 async function validate(plan, options) {
