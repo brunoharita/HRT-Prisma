@@ -26,9 +26,9 @@ Contrato: `agreement-m77-legacy-company-proposal-transition.md` 1.0.0. Alvo oper
 - Nove testes dirigidos de M7.7/visibilidade/transição: PASS; o rótulo pendente recebeu asserção adicional.
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
 - CI da primeira revisão (`35456611464`) falhou em um teste do Context Pack compacto por perda da referência textual `Prisma v1.7.6`; a fonte canônica foi ajustada, os artefatos regenerados e o CI seguinte `35456787469` PASS.
-- CI do SHA `e8aca96` passou foundation, ledger e deploy script, mas o audit de dependências falhou duas vezes exclusivamente por `503` de manutenção do registry npm; não houve mudança de dependências desde o SHA com audit aprovado. A falha externa não foi registrada como PASS.
+- CI do SHA `e8aca96` passou foundation, ledger e deploy script, mas o audit de dependências falhou duas vezes exclusivamente por `503` de manutenção do registry npm. O CI do ajuste final `10866ff` repetiu o mesmo resultado: checks internos PASS e audit externo `503`. Não houve mudança de dependências desde `cb9f390`, cujo audit passou. A falha externa não foi registrada como PASS.
 - Não há QA remota separada. A migration local `20260919164100` foi aplicada no projeto de produção sob a versão remota `20260919170313`; `anon` não executa a RPC, `authenticated` recebe apenas a entrada que verifica Super Admin.
-- `main`/GitHub e a VPS avançaram a `e8aca96`. O smoke imediato do publicador recebeu `502` na janela de recriação; inspeção posterior confirmou `prisma-web` em execução e HTTPS `200`. O smoke autenticado executou o único caso real.
+- `main`/GitHub e o checkout da VPS avançaram a `10866ff`. Os smokes imediatos do publicador receberam `502` e, no deploy final, `404` na janela de recriação; inspeções posteriores confirmaram `prisma-web` em execução, zero reinícios e HTTPS `200`. `release:verify` confirmou Git local/GitHub alinhados e site `200`. O smoke autenticado executou o único caso real e, após o deploy final, mostrou `Contribuição de empresa · Pendente de revisão`.
 - Sem referência visual normativa para esta ação; foram reutilizados os componentes de `Conhecimento > Propostas`.
 
 ## Desvios e limite
