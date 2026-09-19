@@ -20,7 +20,12 @@ test("M7.7 salva a empresa, cria contribuição global e preserva precedência",
 });
 
 test("M7.7 deixa a revisão global somente para Super Admin", () => {
-  assert.doesNotMatch(page, /\{ key: "proposals", label: "Propostas", children: proposalsPanel\(\) \},\n    \{ key: "impacts"/);
+  assert.match(page, /const isGlobal = profile === "super_admin";/);
+  const tabBranches = page.match(/const tabs = isGlobal \? \[([\s\S]*?)\] : \[([\s\S]*?)\];/);
+  assert.ok(tabBranches, "A navegação deve separar as abas do Super Admin e da empresa");
+  const [, globalTabs = "", organizationTabs = ""] = tabBranches;
+  assert.match(globalTabs, /key: "proposals", label: "Propostas", children: proposalsPanel\(\)/);
+  assert.doesNotMatch(organizationTabs, /key: "proposals"/);
   assert.match(page, /Salvar na Knowledge da empresa/);
   assert.match(page, /Criar proposta, sem publicar/);
 });
