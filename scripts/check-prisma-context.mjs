@@ -112,7 +112,6 @@ if (await exists(promptSourcePath)) {
   for (const requiredText of [
     "matching-score-1.2.0",
     "vacancy-matching-explainable-5.0.0",
-    "Prisma v1.6.4",
     "docs/qa/agreement-contract-template.md",
     "docs/qa/aot-template.md",
   ]) {

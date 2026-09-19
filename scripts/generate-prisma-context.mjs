@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const scriptPath = fileURLToPath(import.meta.url);
 export const repositoryRoot = resolve(dirname(scriptPath), "..");
 export const CONTEXT_BUNDLE_VERSION = "2.0.0";
-export const PROMPT_SOURCE_VERSION = "1.2.0";
+export const PROMPT_SOURCE_VERSION = "1.3.0";
 export const canonicalSources = [
   "AGENTS.md",
   "README.md",
@@ -83,6 +83,10 @@ function selectSections(source, titles) {
   return titles.map((title) => extractSection(source, title)).join("\n\n");
 }
 
+function firstParagraphs(content, count) {
+  return content.split(/\n\s*\n/u).slice(0, count).join("\n\n").trim();
+}
+
 function compactExcerpt(path, content) {
   const nestedHeadings = content.replace(/^(#{1,4})\s+/gm, (_, hashes) => `${"#".repeat(hashes.length + 2)} `);
   return `### Fonte: \`${path}\`\n\n${nestedHeadings}`;
@@ -138,16 +142,7 @@ export async function buildPrismaPromptSource() {
     ["Fidelidade a referências visuais", compactExcerpt("docs/product/ux-foundation.md", selectSections(uxFoundation, [
       "Fidelidade a referências visuais",
     ]))],
-    ["Estado vigente relevante para novos prompts", compactExcerpt("docs/ai-context/PRISMA_CURRENT_STATE.md", selectSections(currentState, [
-      "Resumo operacional para prompts",
-      "M6.1.2 — descoberta por trajetória em três grupos",
-      "Ordenação por Prisma Score",
-      "M6.2 — jornada contextual de verificação",
-      "M6.1.1 — evidência profissional explícita sem barreira de categoria",
-      "Base compartilhada de UX — 2026-09-13",
-      "Versão exibida no login",
-      "Repositório",
-    ]))],
+    ["Estado vigente relevante para novos prompts", compactExcerpt("docs/ai-context/PRISMA_CURRENT_STATE.md", firstParagraphs(extractSection(currentState, "Resumo operacional para prompts"), 7))],
     ["Produto e linguagem de domínio", compactExcerpt("docs/ai-context/PRISMA_WIKI.md", selectSections(wiki, [
       "Produto",
       "Hipótese inicial",

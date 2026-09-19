@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 233
-source_manifest_sha256: 898e1bfafdaa49fef722edae7e8523c92c9067caca53e903a818b81c71e377f1
+documentation_source_count: 237
+source_manifest_sha256: 6c3e027c8c88ae1f9020e744f7b906af6cc3140b7ecbbda43622ab361a242d8e
 -->
 
 # Tudo sobre o Prisma
@@ -549,7 +549,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.42.1
+version: 2.43.0
 last_verified: 2026-09-19
 ---
 
@@ -560,6 +560,8 @@ last_verified: 2026-09-19
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
+
+M7.7 entregue tecnicamente em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; publicação web e smoke autenticado são registrados no AoT. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
 
 Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
@@ -2980,6 +2982,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M7.7 (2026-09-19): Knowledge da empresa é aprovada imediatamente para `owner`/`admin`; cada criação gera contribuição Global sanitizada para decisão exclusiva do Super Admin. Resolução preserva Empresa → Global e a pesquisa externa por IA é explícita e auditável. ADR-069.
 
 M7.6 (2026-09-18): curadoria 4.0.0, descrição opcional, sem justificativa e Global só Super Admin. ADR-067.
 
@@ -6939,6 +6943,24 @@ O ledger terá um mapa factual por nome, versão local, versão remota e fingerp
 
 ---
 
+## Source: `docs/decisions/ADR-069-m77-company-global-knowledge-governance.md`
+
+# ADR-069 — Governança Company → Global da Knowledge
+
+Status: accepted. Data: 2026-09-19. Acordo `docs/qa/agreement-m77-knowledge-company-global-governance.md` v1.0.0.
+
+## Decisão
+
+`owner` e `admin` gravam Knowledge aprovada no escopo da própria organização, com resolução imediata das observações correspondentes. Cada criação local produz uma contribuição Global separada, sanitizada e rastreável. A resolução mantém a precedência Organization → Global; mesma label não une nem modifica conceitos distintos.
+
+Somente Super Admin lê e decide a fila de propostas. Pode usar o `knowledge-agent` existente para pesquisa externa sob demanda; a IA usa termo sanitizado, fontes permitidas, orçamento e auditoria, e jamais publica automaticamente. A decisão Global cria ou altera apenas a camada Global e preserva o conceito local de origem.
+
+## Consequências
+
+Não há nova Knowledge, provider, embedding ou pesquisa automática. A extensão acrescenta a origem estruturada da contribuição à proposta e restringe a fila global por RLS. Histórico e decisões continuam auditáveis; reinterpretação permanece manual e baseada em impacto.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -7013,6 +7035,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-064](ADR-064-contextual-competency-curation.md) | accepted | Curadoria contextual reutiliza Knowledge e grava decisões auditadas no Perfil |
 | [ADR-065](ADR-065-common-professional-taxonomy-domains.md) | accepted | Knowledge comum sustenta domínios ocupacional e de competências separados e versionados |
 | [ADR-068](ADR-068-impact-scoped-release-dispatcher.md) | accepted | Release limitado ao impacto, SHA validado e publicação seletiva por superfície |
+| [ADR-069](ADR-069-m77-company-global-knowledge-governance.md) | accepted | Knowledge local imediata, contribuição global central e IA assistiva auditável |
 
 ## Rules
 
@@ -7565,7 +7588,7 @@ pnpm run release:plan -- --receipt=tmp/release/plan.json
 
 ## Ledger Supabase
 
-`supabase/migration-ledger-map.json` registra o estado observado no projeto `ioldpnqqvobprjiontre`. A auditoria de 2026-09-18 encontrou 136 migrations locais, 140 remotas, 134 nomes mapeados, 73 aliases de versão, seis registros somente remotos, dois arquivos somente locais e 57 fingerprints canônicas diferentes.
+`supabase/migration-ledger-map.json` registra o estado observado no projeto `ioldpnqqvobprjiontre`. A verificação de 2026-09-19 encontrou 138 migrations locais, 142 remotas, 136 nomes mapeados, 73 aliases de versão, seis registros somente remotos, dois arquivos somente locais e 57 fingerprints canônicas diferentes.
 
 Isso não prova schema incorreto, mas impede afirmar equivalência histórica. Portanto:
 
@@ -8584,7 +8607,7 @@ Os resultados são ordenados por quantidade de critérios objetivos atendidos e,
 
 ## Curadoria contextual M7.4
 
-Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição e alcance. Ao propor conceito, a descrição é opcional; a justificativa textual da associação não é coletada. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência. Na governança de Conhecimento, o Super Admin vê propostas Globais e da empresa ativa, identificadas pelo alcance; propostas de outra empresa não aparecem.
+Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição e alcance. Ao criar conceito no alcance Empresa, `owner` e `admin` o salvam imediatamente na Knowledge da empresa e geram uma contribuição Global sanitizada para revisão central. Empresa prevalece sobre Global apenas na própria organização; labels iguais não são equivalência automática. Global exige Super Admin. Somente Super Admin vê propostas e pode pesquisar fontes externas por IA sob demanda; a IA recomenda, não publica nem altera o registro local.
 
 Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, filtro e posição permanecem. Se o item resolvido desaparecer, o foco passa ao próximo sobrevivente, ou ao anterior se era o último; página vazia recua à última válida. Gravar e próximo mantém a revisão aberta no próximo pendente. Alterações não salvas pedem confirmação de descarte, e falhas preservam a edição. No celular, o painel ocupa a tela e retorna à lista na mesma posição. Perfis antigos sem itens normalizados mantêm pendências explícitas e exigem normalização antes da curadoria contextual.
 
@@ -10103,6 +10126,74 @@ Versão: 1.0.0. Estado: agreed. Product Owner: Bruno. Aprovação: 2026-09-18, �
 - CA-03 — `super_admin` pode escolher Global; owner/admin/member/anon e outro tenant são rejeitados server-side com falha fechada.
 - CA-04 — Alias de empresa continua funcionando sem justificativa e sem alteração de snapshots; associação Global continua exigindo Super Admin.
 - CA-05 — Typecheck, lint, testes de domínio, PostgreSQL descartável com negativos, Context Pack, build/CI, smoke autenticado e rollback passam; limitações ficam no AoT.
+
+---
+
+## Source: `docs/qa/agreement-m77-knowledge-company-global-governance.md`
+
+# Contrato de Acordos — M7.7 Governança Empresa → Global da Knowledge
+
+## Objetivo
+
+- Versão do contrato: 1.0.0.
+- Fonte da decisão: conversa do Product Owner em 2026-09-19.
+- Delta: M7.6 mantinha proposta de empresa pendente. M7.7 torna a gravação autorizada da empresa imediatamente utilizável e a converte, em paralelo, em contribuição revisável para a Base Global.
+
+## DEVE — Inegociável
+
+- D-01 — `owner` e `admin` podem criar ou associar Knowledge no escopo da própria empresa por transação server-side; a alteração fica aprovada e utilizável imediatamente na empresa.
+- D-02 — Toda criação local de conceito/termo/associação gera uma contribuição global sanitizada e auditável, sem tornar a publicação global automática.
+- D-03 — A resolução de termo na empresa prioriza a camada `organization` sobre a Global. Labels iguais não implicam equivalência: registros de empresa e Global continuam entidades distintas.
+- D-04 — O Prisma compara a contribuição com conceitos e aliases globais e apresenta os candidatos como subsídio para o Super Admin; similaridade não cria associação, promoção ou alteração automática.
+- D-05 — Somente o Super Admin revisa contribuições globais e pode, dentro deste fluxo, visualizar, pesquisar externamente por IA, editar a decisão, aprovar na Global, rejeitar, adiar ou manter a contribuição somente local.
+- D-06 — A IA de Super Admin pode usar pesquisa externa sob demanda, com termo sanitizado, fontes permitidas, orçamento e trilha de auditoria. A resposta é recomendação, não autoridade de publicação.
+- D-07 — Aprovar, rejeitar ou adiar a contribuição global não altera, apaga ou desativa o conhecimento local que a originou.
+- D-08 — Toda mutação preserva ator, escopo, origem, versão e decisão auditáveis; Super Admin tem autoridade sobre as ações entregues neste fluxo entre empresas.
+
+## PROIBIDO
+
+- P-01 — Não publicar, associar, reprocessar Perfil ou alterar Knowledge local/global automaticamente por similaridade ou IA.
+- P-02 — Não enviar PII, texto de currículo, identificadores de Pessoa, dados confidenciais ou segredos à pesquisa externa.
+- P-03 — Não permitir que `owner` ou `admin` de uma empresa leiam ou modifiquem Knowledge de outra empresa, nem publiquem diretamente na Global.
+- P-04 — Não apagar trilha de auditoria ou histórico para efetivar uma correção administrativa.
+
+## FORA DE ESCOPO
+
+- F-01 — Não criar CRUD genérico, migração em massa ou reinterpretação retroativa de Knowledge histórico fora das ações deste fluxo.
+- F-02 — Não criar um novo provedor de IA, embeddings, pontuação opaca ou pesquisa automática por contribuição.
+- F-03 — Não alterar taxonomias M7.1/M7.2, Matching, extração ou contratos de Perfil além da curadoria diretamente afetada.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01 — Reutilizar `knowledge-agent`, orçamento, fontes permitidas e o modelo de proposta/auditoria existentes; adaptar o contrato persistido somente onde a origem organizacional da contribuição exigir rastreabilidade explícita.
+- A-02 — Usar funções `SECURITY DEFINER` apenas com autorização interna explícita, `search_path` fixo, revogação de `PUBLIC` e grants mínimos.
+- A-03 — Definir os textos e a composição da interface com os componentes Prisma existentes, preservando a navegação e o painel lateral de curadoria.
+
+## PENDÊNCIAS
+
+- Nenhuma.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01 — Dado um `owner` ou `admin` da empresa, quando cria conceito local pela curadoria, então o conceito/termo fica aprovado e resolve somente observações da própria empresa na mesma transação.
+- CA-D02 — Dado esse salvamento, então existe uma contribuição global sanitizada, vinculada à origem e visível somente ao Super Admin.
+- CA-D03 — Dado termo normalizado idêntico nas duas camadas, quando a resolução ocorre para a empresa, então o conceito da empresa vence; outra empresa continua usando o Global.
+- CA-D04 — Dado candidato semelhante, então ele é apresentado sem pré-seleção e nenhuma escrita ocorre até decisão humana.
+- CA-D05 — Dado um Super Admin, quando revisa a contribuição, então pode pesquisar com IA, decidir a Global e registrar a decisão; admin/owner não acessam essa fila nem a ação global.
+- CA-D06 — Dado pesquisa por IA, então só termo sanitizado e fontes permitidas saem da plataforma; falha, orçamento ou indisponibilidade não bloqueiam o conhecimento local.
+- CA-D07 — Dado aprovação/rejeição/adiamento global, então o conceito local, sua versão e suas observações permanecem preservados.
+- CA-D08 — Testes negativos negam escrita interempresa, publicação Global por `owner`/`admin`, promoção automática e chamada externa com dados proibidos.
+
+## ESTADO
+
+- agreed
+
+## APROVAÇÃO
+
+- Product Owner: Bruno Harita.
+- Data: 2026-09-19.
+- Evidência: decisões explícitas na conversa: gravação local imediata; contribuição global revisável; Empresa → Global; IA externa disponível para Super Admin; autoridade total do Super Admin dentro do fluxo.
+- Referência imutável para o prompt: este contrato 1.0.0.
 
 ---
 
@@ -11917,6 +12008,74 @@ Migration: `20260918220000_m76_curation_description_scope`
 - O smoke não submeteu proposta nem testou a sessão de um usuário não-super na UI; a proibição de Global para não-super foi provada no PostgreSQL/RPC server-side.
 - A ocorrência genérica “Justificativa da correção antes de salvar” permanece em mensagens do fluxo de revisão documental, que é distinto e fora do escopo desta curadoria.
 - O ambiente remoto é único; não há homologação Supabase separada.
+
+---
+
+## Source: `docs/qa/aot-m77-knowledge-company-global-governance.md`
+
+# AoT — M7.7 Governança Empresa → Global da Knowledge
+
+Contrato de referência: `docs/qa/agreement-m77-knowledge-company-global-governance.md` 1.0.0.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste | Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- | --- |
+| D-01 | Criação local imediata por `owner`/`admin` | `propose_knowledge_concept_from_inbox` aprova a proposta de empresa na mesma transação | suíte M7.7; typecheck e suíte completa | migration `20260919040000`; 526 testes locais PASS | PASS | Produção recebeu a migration; jornada autenticada ainda não foi executada nesta entrega |
+| D-02 | Contribuição global sanitizada e rastreável | origem de empresa/conceito, idempotência e payload sanitizado | suíte M7.7; inspeção remota das funções | migrations `20260919040000` e `20260919041500` aplicadas | PASS | Sem criação de dados de teste em produção |
+| D-03 | Empresa prevalece sobre Global | reuso do resolvedor M5.2, sem nova regra paralela | regressão `organization Knowledge overlays Global without mutating it` | suíte completa PASS | PASS | Não reprocessa históricos |
+| D-04 | Candidatos globais apenas informativos | snapshot de candidatos exato/prefixo no payload e cards de revisão | suíte M7.7 | migration `20260919041500`; build web PASS | PASS | Não usa substring curto, score opaco ou associação automática |
+| D-05 | Super Admin decide a fila global | fila somente Super, pesquisa, aprovar, manter local ou rejeitar com motivo | visibilidade e M7.7; build web | políticas RLS e RPC aplicada | PASS | Inspeção visual autenticada permanece pendente |
+| D-06 | IA externa sob demanda e auditável | `knowledge-agent` recebe contribuição autorizada, mantém sanitização/orçamento/fontes e reusa pesquisa pronta | contrato M7.7; deploy da Function ACTIVE v18 | Function `knowledge-agent` ACTIVE; nenhuma chamada paga de teste | PASS | Não foi disparada pesquisa externa com dado real/sintético |
+| D-07 | Decisão global preserva origem local | RPC de adiar/rejeitar só altera a contribuição Global e registra `local_origin_preserved` | teste estático M7.7 e revisão SQL | migration `20260919041500` aplicada | PASS | Sem decisão humana artificial em produção |
+| D-08 | Autor, escopo, origem, versão e decisão auditáveis | colunas de origem, change sets e `knowledge_approvals`; grants mínimos | inspeção de migration, ledger e suíte completa | ledger 136 mapeadas, sem migration local pendente | PASS | RLS efetiva depende da sessão autenticada para a prova de interface |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| P-01 | Similaridade/IA não publica nem reprocessa automaticamente | candidatos são informativos; IA é botão explícito | migrations e UI revisadas | PASS |
+| P-02 | Pesquisa externa não recebe PII/segredos | contrato sanitizado existente do `knowledge-agent` | teste `research payload contains only a sanitized concept and blocks PII` PASS | PASS |
+| P-03 | Empresa não acessa fila/Global de outra empresa | RLS de propostas/approvals só Super; visibilidade local retorna falso | testes `knowledgeProposalVisibility` PASS | PASS |
+| P-04 | Auditoria não é apagada | decisões inserem `knowledge_approvals`; origem é FK restritiva | migrations aplicadas | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 | Sem CRUD genérico, massa ou reinterpretação retroativa | PASS |
+| F-02 | Reuso de `knowledge-agent`; sem provider, embedding ou pesquisa automática | PASS |
+| F-03 | Nenhuma alteração de Matching, extração ou taxonomias M7.1/M7.2 | PASS |
+
+## Evidência de fidelidade visual
+
+Não aplicável: não houve referência visual normativa. Foram reutilizados `Tabs`, `PrismaCard`, `Alert`, `Input` e `Button` existentes; `pnpm run build:web` PASS.
+
+## Desvios do contrato
+
+Nenhum desvio. A pesquisa externa não foi executada para fabricar uma decisão ou gerar custo: a Function publicada e a ação explícita são a evidência técnica disponível.
+
+## Mudanças autorizadas durante a execução
+
+O Product Owner autorizou o contrato e a implementação M7.7. A complementação de candidatos informativos e de decisões “manter somente local”/“rejeitar” foi necessária para satisfazer D-04 e D-05, sem ampliar o domínio.
+
+## Validação final
+
+- `pnpm run typecheck:web` — PASS.
+- `pnpm run build:web` — PASS; avisos preexistentes de chunk/dynamic import, sem falha.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` — PASS.
+- `pnpm run check:supabase-ledger` — PASS; 136 mapeadas, zero migration local pendente; `db push` geral continua bloqueado.
+- `pnpm run test` — PASS, 526 testes.
+- Supabase: migrations `20260919040000` e `20260919041500` aplicadas e registradas; funções M7.7 confirmadas. `knowledge-agent` ACTIVE, versão 18.
+- `supabase db lint --linked` executou e reportou erros/warnings históricos em rotinas anteriores, sem apontar a migration M7.7; não foram corrigidos por estarem fora do escopo.
+
+## Git / QA / ambiente
+
+O banco e a Function já foram publicados no projeto `ioldpnqqvobprjiontre`. A publicação web, SHA e smoke HTTP serão registrados depois do dispatcher; o smoke autenticado da tela Knowledge continua pendente, sem criar contribuição ou decisão de teste.
+
+## Conclusão
+
+Implementação e validações técnicas locais/servidor: PASS. Aceite visual autenticado: pendente de operador com sessão Super Admin; não é substituído por esta documentação.
 
 ---
 
@@ -13806,6 +13965,42 @@ Implemente integralmente `docs/qa/agreement-m76-curation-description-scope.md` v
 ## Fidelidade visual
 
 A imagem fornecida continua normativa para a topologia: painel lateral, fonte/termo no topo, proposta no meio e ações fixas no rodapé. O novo campo opcional entra abaixo do tipo de conceito. O alcance permanece abaixo da proposta; a justificativa desaparece sem deslocar a ação para outra superfície. Desktop e móvel devem manter a mesma ordem e acessibilidade.
+
+---
+
+## Source: `docs/qa/execution-m77-knowledge-company-global-governance.md`
+
+# Execution Prompt — M7.7 Governança Empresa → Global da Knowledge
+
+Contrato congelado: `docs/qa/agreement-m77-knowledge-company-global-governance.md` 1.0.0.
+
+## Entendimento obrigatório
+
+Implementar D-01 a D-08. Impedir P-01 a P-04. Preservar F-01 a F-03. Aplicar A-01 a A-03.
+
+M7.7 não cria uma segunda Knowledge nem transforma semelhança em equivalência. O registro da empresa é uma sobreposição autorizada, com precedência sobre a Global apenas dentro daquela empresa. A contribuição global é uma cópia sanitizada para governança central; a decisão sobre ela nunca reescreve a origem local.
+
+## Ordem econômica de execução
+
+1. Reusar as tabelas, change sets, propostas, auditoria e `knowledge-agent` existentes; identificar a menor extensão necessária para vincular uma contribuição global ao conceito e à organização de origem.
+2. Implementar a transação server-side de criação/associação local e contribuição global, com idempotência, autoridade `owner`/`admin` e validações negativas de escopo.
+3. Atualizar a resolução Empresa → Global apenas se a prova mostrar lacuna; não reimplementar a precedência já existente.
+4. Ajustar a curadoria de Perfil e a tela Knowledge: empresa grava diretamente; somente Super Admin vê/revisa a fila global; candidatos são informativos; pesquisa externa por IA é ação explícita do Super Admin.
+5. Reutilizar `knowledge-agent` para pesquisa externa com seu contrato de sanitização, fontes permitidas, orçamento, auditoria e falha não bloqueante. Não criar provider, segredo, modelo ou pesquisa automática.
+6. Cobrir os critérios CA-D01 a CA-D08 com testes de transação, RLS/autorização negativa, precedência e interface. Não usar dados reais para testar decisões humanas.
+7. Criar ADR da governança, atualizar owner docs/estado, regenerar Context Pack, revisar o diff e encerrar AoT.
+8. Publicar conforme o dispatcher de release: migration/Function/web apenas se o diff exigir; confirmar local, GitHub, Supabase e VPS com evidência própria.
+
+## Limites de entrega
+
+- Não assumir que o Super Admin pode apagar histórico: correções administrativas permanecem auditáveis.
+- Não expor origem organizacional a administradores de outras empresas.
+- Não executar pesquisa externa por padrão, em lote ou para termos sem ação explícita do Super Admin.
+- Não declarar a IA como evidência suficiente ou aprovação.
+
+## Evidência de encerramento
+
+AoT com matriz D/P, migration aplicada e validada no ambiente autorizado, evidência de autorização negativa, testes focados, Context Pack e estado de release. Registrar separadamente CI, Supabase, Function, VPS e smoke visual autenticado; nenhum documento substitui essas provas.
 
 ---
 

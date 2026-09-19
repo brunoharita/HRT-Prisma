@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.42.1
+version: 2.43.0
 last_verified: 2026-09-19
 ---
 
@@ -13,6 +13,8 @@ last_verified: 2026-09-19
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
+
+M7.7 entregue tecnicamente em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; publicação web e smoke autenticado são registrados no AoT. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
 
 Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 

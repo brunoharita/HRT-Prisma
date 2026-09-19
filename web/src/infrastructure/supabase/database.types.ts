@@ -755,7 +755,7 @@ export interface Database {
       }>;
       knowledge_proposals: Table<{
         id: string; inbox_id: string; research_run_id: string | null; scope: Database["public"]["Enums"]["knowledge_scope"];
-        organization_id: string | null; proposal_type: string; target_concept_id: string | null;
+        organization_id: string | null; origin_organization_id: string | null; origin_concept_id: string | null; proposal_type: string; target_concept_id: string | null;
         original_proposal: Json; human_edited_proposal: Json | null; status: string; provider: string | null;
         model: string | null; prompt_version: string | null; output_schema_version: string | null;
         source_policy_version: string | null; created_at: string; decided_at: string | null;
@@ -1618,6 +1618,10 @@ export interface Database {
       approve_knowledge_proposal: {
         Args: { p_proposal_id: string; p_human_edited_proposal?: Json | null; p_decision_reason?: string | null };
         Returns: Array<{ proposal_id: string; concept_id: string; knowledge_version: number; reused: boolean }>;
+      };
+      decide_knowledge_global_contribution: {
+        Args: { p_proposal_id: string; p_decision: string; p_reason: string };
+        Returns: Array<{ proposal_id: string; status: string }>;
       };
       dispatch_knowledge_reinterpretation: {
         Args: { p_organization_id: string; p_impact_id: string; p_idempotency_key: string };

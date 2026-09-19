@@ -100,7 +100,7 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
     markDirty(false);
     onProjection(result.projection);
     setPage(curationPage(after, target, page));
-    setNotice(result.outcome === "proposal" ? "Proposta registrada, sem publicação. O item continua pendente de aprovação." : "Associação gravada. Lista e contagens atualizadas.");
+    setNotice(result.outcome === "proposal" ? (decision.scope === "organization" ? "Knowledge salva na empresa; contribuição global enviada para revisão." : "Proposta global registrada, sem publicação.") : "Associação gravada. Lista e contagens atualizadas.");
     const next = advance && target ? after.find((item) => competencyKey(item) === target) ?? null : null;
     setSelected(next);
     if (!next) setFocusKey(target ?? "empty");
@@ -242,7 +242,7 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
             {candidate.matchedTerm !== candidate.canonicalLabel ? <small>Correspondência sustentada por: {candidate.matchedTerm}</small> : null}
             {candidate.references.length > 1 ? <small>{candidate.references.length} referências oficiais versionadas</small> : null}
           </div>)}
-        </Radio.Group></> : <><Typography.Title level={5}>Propor novo conceito</Typography.Title><Alert type="info" title="A proposta não publica um conceito e não encerra esta pendência." />
+        </Radio.Group></> : <><Typography.Title level={5}>{scope === "organization" ? "Criar conhecimento da empresa" : "Propor novo conceito global"}</Typography.Title><Alert type="info" title={scope === "organization" ? "O conhecimento será salvo nesta empresa e enviado como contribuição para revisão global." : "A proposta não publica um conceito e não encerra esta pendência."} />
         <label>Nome canônico proposto<Input aria-label="Nome canônico proposto" value={label} disabled={saving} onChange={(event) => { setLabel(event.target.value); onDirty(true); }} /></label>
         <label>Tipo de conceito<Select aria-label="Tipo de conceito proposto" value={type} disabled={saving} onChange={(value) => { setType(value); onDirty(true); }} options={(["skill", "competency", "knowledge", "technology", "methodology", "certification"] as const).map((value) => ({ value, label: taxonomyGroups[value] }))} /></label></>}
       {proposal ? <label>Descrição do conceito<Input.TextArea aria-label="Descrição do conceito" placeholder="Descrição opcional do conceito..." value={description} disabled={saving} rows={3} maxLength={2000} showCount onChange={(event) => { setDescription(event.target.value); onDirty(true); }} /></label> : null}

@@ -88,9 +88,11 @@ Deno.serve(async (request) => {
       return await handleOccupationResolution(serviceClient, authUser.id, payload, startedAt);
     }
     const inboxId = String(payload?.inboxId ?? "");
+    const contributionProposalId = typeof payload?.contributionProposalId === "string" ? payload.contributionProposalId : null;
     if (!inboxId) throw new HttpError(400, "Inbox não informada.");
     const inbox = await readInbox(serviceClient, inboxId);
     await requireResearchAuthority(serviceClient, authUser.id, inbox);
+    if (contributionProposalId) await requireGlobalContribution(serviceClient, contributionProposalId, inbox.id, authUser.id);
     enforceCooldown(inbox);
     await enforceBudgets(serviceClient);
 
@@ -102,7 +104,22 @@ Deno.serve(async (request) => {
     const existing = await selectRows<{ id: string; status: string }>(serviceClient.from("knowledge_research_runs")
       .select("id, status").eq("request_fingerprint", requestFingerprint)
       .in("status", ["queued", "researching", "proposal_ready"]));
-    if (existing[0]) return jsonResponse(200, { runId: existing[0].id, status: existing[0].status, reused: true });
+    if (existing[0]) {
+      if (contributionProposalId && existing[0].status === "proposal_ready") {
+        const prior = await selectRows<{ original_proposal: unknown; provider: string | null; model: string | null; prompt_version: string | null; output_schema_version: string | null; source_policy_version: string | null }>(serviceClient.from("knowledge_proposals")
+          .select("original_proposal, provider, model, prompt_version, output_schema_version, source_policy_version")
+          .eq("research_run_id", existing[0].id).neq("id", contributionProposalId).limit(1));
+        if (prior[0]) {
+          const { error: reuseError } = await serviceClient.from("knowledge_proposals").update({
+            research_run_id: existing[0].id, original_proposal: prior[0].original_proposal, status: "awaiting_human_review",
+            provider: prior[0].provider, model: prior[0].model, prompt_version: prior[0].prompt_version,
+            output_schema_version: prior[0].output_schema_version, source_policy_version: prior[0].source_policy_version,
+          }).eq("id", contributionProposalId).eq("scope", "global");
+          if (reuseError) throw new HttpError(500, "Falha ao reutilizar a pesquisa existente.");
+        }
+      }
+      return jsonResponse(200, { runId: existing[0].id, status: existing[0].status, reused: true });
+    }
 
     const model = readRequiredEnv("KNOWLEDGE_RESEARCH_MODEL");
     const { data: insertedRun, error: runError } = await serviceClient.from("knowledge_research_runs").insert({
@@ -127,11 +144,14 @@ Deno.serve(async (request) => {
     }));
     const sourceInsert = await serviceClient.from("knowledge_research_sources").insert(sourceRows);
     if (sourceInsert.error) throw new HttpError(500, "Falha ao persistir fontes validadas.");
-    const { data: insertedProposal, error: proposalError } = await serviceClient.from("knowledge_proposals").insert({
-      inbox_id: inbox.id, research_run_id: runId, scope: inbox.scope, organization_id: inbox.organization_id,
-      original_proposal: proposal, status: "awaiting_human_review", provider: "openai", model,
-      prompt_version: promptVersion, output_schema_version: outputSchemaVersion, source_policy_version: sourcePolicyVersion,
-    }).select("id").single();
+    const proposalWrite = contributionProposalId
+      ? serviceClient.from("knowledge_proposals").update({ research_run_id: runId, original_proposal: proposal, status: "awaiting_human_review", provider: "openai", model,
+        prompt_version: promptVersion, output_schema_version: outputSchemaVersion, source_policy_version: sourcePolicyVersion }).eq("id", contributionProposalId).eq("scope", "global").select("id").single()
+      : serviceClient.from("knowledge_proposals").insert({ inbox_id: inbox.id, research_run_id: runId, scope: inbox.scope, organization_id: inbox.organization_id,
+        original_proposal: proposal, status: "awaiting_human_review", provider: "openai", model,
+        prompt_version: promptVersion, output_schema_version: outputSchemaVersion, source_policy_version: sourcePolicyVersion,
+      }).select("id").single();
+    const { data: insertedProposal, error: proposalError } = await proposalWrite;
     if (proposalError || !insertedProposal) throw new HttpError(500, "Falha ao persistir proposta.");
     const usage = providerResponse.usage ?? {};
     await serviceClient.from("knowledge_research_runs").update({
@@ -477,6 +497,7 @@ async function requireResearchAuthority(serviceClient: ReturnType<typeof createS
     return;
   }
   if (!inbox.organization_id || !["super_admin", "owner", "admin"].includes(actor.access_profile)) throw new HttpError(403, "Pesquisa organizacional não autorizada.");
+  if (actor.access_profile === "super_admin") return;
   if (actor.access_profile !== "super_admin") {
     const memberships = await selectRows<{ id: string }>(serviceClient.from("organization_memberships")
       .select("id").eq("organization_id", inbox.organization_id).eq("user_id", authUserId).in("role", ["owner", "admin"]));
@@ -485,6 +506,12 @@ async function requireResearchAuthority(serviceClient: ReturnType<typeof createS
   const [settings] = await selectRows<{ allow_external_knowledge_enrichment: boolean }>(serviceClient.from("organization_knowledge_settings")
     .select("allow_external_knowledge_enrichment").eq("organization_id", inbox.organization_id));
   if (!settings?.allow_external_knowledge_enrichment) throw new HttpError(403, "Enriquecimento externo da organização está desativado.");
+}
+
+async function requireGlobalContribution(serviceClient: ReturnType<typeof createServiceClient>, proposalId: string, inboxId: string, authUserId: string) {
+  const [actor] = await selectRows<{ access_profile: string; status: string }>(serviceClient.from("platform_users").select("access_profile, status").eq("auth_user_id", authUserId));
+  const [proposal] = await selectRows<{ id: string }>(serviceClient.from("knowledge_proposals").select("id").eq("id", proposalId).eq("inbox_id", inboxId).eq("scope", "global").not("origin_concept_id", "is", null));
+  if (!actor || actor.status !== "active" || actor.access_profile !== "super_admin" || !proposal) throw new HttpError(403, "Pesquisa de contribuição global não autorizada.");
 }
 
 async function requireVacancyAdvisorAuthority(serviceClient: ReturnType<typeof createServiceClient>, authUserId: string, organizationId: string) {

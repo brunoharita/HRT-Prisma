@@ -1,15 +1,15 @@
 {
   "schemaVersion": "1.0.0",
   "projectRef": "ioldpnqqvobprjiontre",
-  "verifiedAt": "2026-09-18",
+  "verifiedAt": "2026-09-19",
   "cliDbPushAllowed": false,
   "rationale": "The production ledger contains historical timestamp aliases, split remote migrations, local-only files, and statement fingerprints that are not all byte-equivalent. The dispatcher must apply only explicitly reviewed new migrations and must not repair or replay history automatically.",
   "summary": {
-    "localMigrations": 136,
-    "remoteMigrations": 140,
-    "mappedByName": 134,
+    "localMigrations": 138,
+    "remoteMigrations": 142,
+    "mappedByName": 136,
     "versionAliases": 73,
-    "equalCanonicalFingerprints": 77,
+    "equalCanonicalFingerprints": 79,
     "differentCanonicalFingerprints": 57,
     "localOnly": 2,
     "remoteOnly": 6
@@ -1220,6 +1220,20 @@
       "statementFingerprintStatus": "different",
       "localCanonicalLength": 19076,
       "remoteCanonicalLength": 19061
+    },
+    {
+      "name": "m77_company_knowledge_global_governance",
+      "localVersion": "20260919040000",
+      "remoteVersion": "20260919040000",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal"
+    },
+    {
+      "name": "m77_global_contribution_review_actions",
+      "localVersion": "20260919041500",
+      "remoteVersion": "20260919041500",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal"
     }
   ],
   "localOnly": [

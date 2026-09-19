@@ -70,6 +70,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-064](ADR-064-contextual-competency-curation.md) | accepted | Curadoria contextual reutiliza Knowledge e grava decisões auditadas no Perfil |
 | [ADR-065](ADR-065-common-professional-taxonomy-domains.md) | accepted | Knowledge comum sustenta domínios ocupacional e de competências separados e versionados |
 | [ADR-068](ADR-068-impact-scoped-release-dispatcher.md) | accepted | Release limitado ao impacto, SHA validado e publicação seletiva por superfície |
+| [ADR-069](ADR-069-m77-company-global-knowledge-governance.md) | accepted | Knowledge local imediata, contribuição global central e IA assistiva auditável |
 
 ## Rules
 

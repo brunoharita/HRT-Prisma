@@ -21,6 +21,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   const [decisionReason, setDecisionReason] = useState("");
   const [proposalLabel, setProposalLabel] = useState("");
   const [proposalType, setProposalType] = useState<"occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification">("skill");
+  const [proposalDecisionReasons, setProposalDecisionReasons] = useState<Record<string, string>>({});
   const [decisionLoading, setDecisionLoading] = useState(false);
   const [conceptSearch, setConceptSearch] = useViewState("conceptSearch", "");
   const [conceptTypeFilter, setConceptTypeFilter] = useViewState("conceptTypeFilter", "all");
@@ -59,7 +60,6 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
     { key: "organization", label: "Conhecimento da empresa", children: conceptsPanel("organization") },
     { key: "global", label: "Base Prisma", children: conceptsPanel("global") },
     { key: "inbox", label: "Termos para revisar", children: inboxPanel() },
-    { key: "proposals", label: "Propostas", children: proposalsPanel() },
     { key: "impacts", label: "Impactos", children: impactsPanel() },
     { key: "settings", label: "Configurações", children: settingsPanel() },
   ];
@@ -106,7 +106,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
         <Typography.Title level={5}>Nenhum conceito existente é adequado</Typography.Title>
         <Input value={proposalLabel} onChange={(event) => setProposalLabel(event.target.value)} placeholder="Nome canônico proposto" />
         <Select value={proposalType} onChange={setProposalType} options={["occupation", "skill", "competency", "knowledge", "technology", "methodology", "certification"].map((value) => ({ value, label: describeType(value) }))} />
-        <Button loading={decisionLoading} disabled={!proposalLabel.trim() || decisionReason.trim().length < 5} onClick={async () => { setDecisionLoading(true); try { await knowledgeService.proposeConcept({ inboxId: selectedInbox.id, scope: isGlobal ? "global" : "organization", canonicalLabel: proposalLabel, conceptType: proposalType, description: "", reason: decisionReason }); message.success("Proposta criada para revisão humana e pesquisa de fontes."); setSelectedInbox(null); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha ao criar proposta."); } finally { setDecisionLoading(false); } }}>Criar proposta, sem publicar</Button>
+        <Button loading={decisionLoading} disabled={!proposalLabel.trim() || decisionReason.trim().length < 5} onClick={async () => { setDecisionLoading(true); try { await knowledgeService.proposeConcept({ inboxId: selectedInbox.id, scope: isGlobal ? "global" : "organization", canonicalLabel: proposalLabel, conceptType: proposalType, description: "", reason: decisionReason }); message.success(isGlobal ? "Proposta criada para revisão humana." : "Conhecimento salvo na empresa; contribuição global enviada para revisão."); setSelectedInbox(null); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha ao criar proposta."); } finally { setDecisionLoading(false); } }}>{isGlobal ? "Criar proposta, sem publicar" : "Salvar na Knowledge da empresa"}</Button>
       </Space> : null}
     </Drawer>
     <Drawer open={Boolean(selectedSource)} onClose={() => setSelectedSource(null)} title={selectedSource ? `Revisar versão · ${selectedSource.name}` : "Revisar versão"} width={560}>
@@ -156,10 +156,11 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   }
   function proposalsPanel() {
     return <div className="prisma-knowledge-proposals">{dashboard?.proposals.length ? dashboard.proposals.map((proposal) => <PrismaCard key={proposal.id} title={proposal.proposedConcept.canonical_label ?? proposal.observedTerm}>
-      <Space direction="vertical" size="middle" style={{ width: "100%" }}><Space wrap><Tag>{proposal.proposedConcept.concept_type ?? "tipo pendente"}</Tag><Tag color={proposal.scope === "global" ? "blue" : "purple"}>{proposal.scope === "global" ? "Global Prisma" : "Empresa ativa"}</Tag>{statusTag(proposal.status)}</Space>
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}><Space wrap><Tag>{proposal.proposedConcept.concept_type ?? "tipo pendente"}</Tag><Tag color={proposal.scope === "global" ? "blue" : "purple"}>{proposal.originOrganizationId ? "Contribuição de empresa" : "Global Prisma"}</Tag>{statusTag(proposal.status)}</Space>
       <Typography.Paragraph>{proposal.proposedConcept.description ?? "Sem descrição."}</Typography.Paragraph>
+      {proposal.candidateConcepts.length ? <Alert type="info" showIcon message="Candidatos globais para análise" description={<Space wrap>{proposal.candidateConcepts.map((candidate, index) => <Tag key={candidate.id ?? index}>{candidate.canonical_label ?? "Conceito"} · {candidate.match ?? "candidato"}</Tag>)}</Space>} /> : null}
       <div>{proposal.sources.map((source, index) => <p key={`${proposal.id}-${index}`}><LinkOutlined /> <a href={source.url} target="_blank" rel="noreferrer">{source.title ?? source.url}</a> · {source.publisher} · {source.source_class}</p>)}</div>
-      {proposal.status === "awaiting_human_review" ? <Button type="primary" onClick={async () => { try { await knowledgeService.approveProposal(proposal.id); message.success("Conhecimento aprovado e versionado."); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha na aprovação."); } }}>Aprovar</Button> : null}</Space>
+      {proposal.status === "awaiting_human_review" ? <><Input.TextArea value={proposalDecisionReasons[proposal.id] ?? ""} onChange={(event) => setProposalDecisionReasons((current) => ({ ...current, [proposal.id]: event.target.value }))} placeholder="Motivo auditável da decisão global" autoSize={{ minRows: 2, maxRows: 4 }} /><Space><Button onClick={async () => { try { await knowledgeService.researchGlobalContribution(proposal.id, proposal.inboxId); message.success("Pesquisa externa por IA enfileirada."); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha na pesquisa."); } }}>Pesquisar com IA</Button><Button type="primary" onClick={async () => { try { await knowledgeService.approveProposal(proposal.id); message.success("Conhecimento aprovado e versionado."); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha na aprovação."); } }}>Aprovar</Button>{proposal.originOrganizationId ? <><Button disabled={(proposalDecisionReasons[proposal.id] ?? "").trim().length < 5} onClick={async () => { try { await knowledgeService.decideGlobalContribution(proposal.id, "deferred", proposalDecisionReasons[proposal.id] ?? ""); message.success("Contribuição mantida somente na empresa."); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha ao adiar contribuição."); } }}>Manter somente local</Button><Button danger disabled={(proposalDecisionReasons[proposal.id] ?? "").trim().length < 5} onClick={async () => { try { await knowledgeService.decideGlobalContribution(proposal.id, "rejected", proposalDecisionReasons[proposal.id] ?? ""); message.success("Contribuição global rejeitada; origem local preservada."); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha ao rejeitar contribuição."); } }}>Rejeitar</Button></> : null}</Space></> : null}</Space>
     </PrismaCard>) : <Empty description="Nenhuma proposta disponível." />}</div>;
   }
   function impactsPanel() {

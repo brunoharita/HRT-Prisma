@@ -35,7 +35,7 @@ pnpm run release:plan -- --receipt=tmp/release/plan.json
 
 ## Ledger Supabase
 
-`supabase/migration-ledger-map.json` registra o estado observado no projeto `ioldpnqqvobprjiontre`. A auditoria de 2026-09-18 encontrou 136 migrations locais, 140 remotas, 134 nomes mapeados, 73 aliases de versão, seis registros somente remotos, dois arquivos somente locais e 57 fingerprints canônicas diferentes.
+`supabase/migration-ledger-map.json` registra o estado observado no projeto `ioldpnqqvobprjiontre`. A verificação de 2026-09-19 encontrou 138 migrations locais, 142 remotas, 136 nomes mapeados, 73 aliases de versão, seis registros somente remotos, dois arquivos somente locais e 57 fingerprints canônicas diferentes.
 
 Isso não prova schema incorreto, mas impede afirmar equivalência histórica. Portanto:
 

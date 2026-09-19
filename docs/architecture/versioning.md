@@ -1,5 +1,7 @@
 # Versionamento
 
+M7.7 (2026-09-19): Knowledge da empresa é aprovada imediatamente para `owner`/`admin`; cada criação gera contribuição Global sanitizada para decisão exclusiva do Super Admin. Resolução preserva Empresa → Global e a pesquisa externa por IA é explícita e auditável. ADR-069.
+
 M7.6 (2026-09-18): curadoria 4.0.0, descrição opcional, sem justificativa e Global só Super Admin. ADR-067.
 
 Correção de 2026-09-19: a governança de Conhecimento voltou a exibir ao Super Admin as propostas da empresa ativa, além das Globais, sem exibir outra empresa. Não altera contrato persistido, workflow, RLS ou versão pública; Prisma permanece v1.7.6. AoT: `aot-knowledge-proposal-visibility.md`.

@@ -7,15 +7,15 @@ const globalProposal = { scope: "global", organizationId: null } as const;
 const activeOrganizationProposal = { scope: "organization", organizationId: "org-a" } as const;
 const otherOrganizationProposal = { scope: "organization", organizationId: "org-b" } as const;
 
-test("Super Admin vê propostas globais e da empresa ativa, sem vazar outra empresa", () => {
+test("Super Admin vê apenas a fila global de propostas", () => {
   assert.equal(isKnowledgeProposalVisible(globalProposal, "super_admin", "org-a"), true);
-  assert.equal(isKnowledgeProposalVisible(activeOrganizationProposal, "super_admin", "org-a"), true);
+  assert.equal(isKnowledgeProposalVisible(activeOrganizationProposal, "super_admin", "org-a"), false);
   assert.equal(isKnowledgeProposalVisible(otherOrganizationProposal, "super_admin", "org-a"), false);
 });
 
-test("administradores da empresa não veem propostas globais nem de outra empresa", () => {
+test("administradores da empresa não veem a fila de propostas", () => {
   assert.equal(isKnowledgeProposalVisible(globalProposal, "admin", "org-a"), false);
-  assert.equal(isKnowledgeProposalVisible(activeOrganizationProposal, "owner", "org-a"), true);
+  assert.equal(isKnowledgeProposalVisible(activeOrganizationProposal, "owner", "org-a"), false);
   assert.equal(isKnowledgeProposalVisible(otherOrganizationProposal, "owner", "org-a"), false);
   assert.equal(isKnowledgeProposalVisible(activeOrganizationProposal, "admin", null), false);
 });
@@ -23,6 +23,6 @@ test("administradores da empresa não veem propostas globais nem de outra empres
 test("card de proposta informa o alcance que está sendo revisado", async () => {
   const page = await readFile("web/src/pages/KnowledgePage.tsx", "utf8");
   assert.match(page, /Global Prisma/);
-  assert.match(page, /Empresa ativa/);
+  assert.match(page, /Salvar na Knowledge da empresa/);
   assert.match(page, /proposal\.scope === "global"/);
 });

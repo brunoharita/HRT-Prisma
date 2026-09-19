@@ -18,9 +18,10 @@ export interface KnowledgeInboxView {
   observationCount: number;
 }
 export interface KnowledgeProposalView {
-  id: string; observedTerm: string; proposedConcept: { canonical_label?: string; concept_type?: string; description?: string };
+  id: string; inboxId: string; observedTerm: string; proposedConcept: { canonical_label?: string; concept_type?: string; description?: string };
   sources: Array<{ url?: string; title?: string; publisher?: string; source_class?: string; retrieved_at?: string }>;
-  scope: "global" | "organization"; status: string; originalProposal: Json;
+  candidateConcepts: Array<{ id?: string | undefined; canonical_label?: string | undefined; concept_type?: string | undefined; match?: string | undefined }>;
+  originOrganizationId: string | null; scope: "global" | "organization"; status: string; originalProposal: Json;
 }
 export interface KnowledgeImpactView {
   id: string; personId: string; profileId: string; conceptId: string; policy: string; status: string; createdAt: string;

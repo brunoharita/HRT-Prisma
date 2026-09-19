@@ -74,6 +74,11 @@ export const knowledgeService = {
     if (error) throw await supabaseFunctionOperationError(error, "Não foi possível pesquisar este termo.");
     return data;
   },
+  async researchGlobalContribution(proposalId: string, inboxId: string) {
+    const { data, error } = await supabase.functions.invoke("knowledge-agent", { body: { inboxId, contributionProposalId: proposalId } });
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível pesquisar esta contribuição.");
+    return data;
+  },
   async publishSourceVersion(sourceVersionId: string) {
     for (let attempt = 0; attempt < 100; attempt += 1) {
       const { data, error } = await supabase.functions.invoke("knowledge-source-publish", { body: { sourceVersionId, batchSize: 5000 } });
@@ -87,6 +92,13 @@ export const knowledgeService = {
     const { data, error } = await supabase.rpc("approve_knowledge_proposal", { p_proposal_id: proposalId, p_human_edited_proposal: null, p_decision_reason: "Aprovado na administração de Conhecimento" });
     if (error) throw supabaseOperationError(error, "Não foi possível aprovar esta proposta.");
     return data[0];
+  },
+  async decideGlobalContribution(proposalId: string, decision: "rejected" | "deferred", reason: string) {
+    const { data, error } = await supabase.rpc("decide_knowledge_global_contribution", {
+      p_proposal_id: proposalId, p_decision: decision, p_reason: reason,
+    });
+    if (error) throw supabaseOperationError(error, "Não foi possível registrar esta decisão global.");
+    return data;
   },
   async saveSettings(organizationId: string, settings: KnowledgeSettingsView) {
     const { error } = await supabase.from("organization_knowledge_settings").upsert({
@@ -106,13 +118,20 @@ export const knowledgeService = {
   },
 };
 
-function mapProposal(row: { id: string; scope: "global" | "organization"; status: string; original_proposal: Json }): KnowledgeProposalView {
+function mapProposal(row: { id: string; inbox_id: string; scope: "global" | "organization"; status: string; origin_organization_id: string | null; original_proposal: Json }): KnowledgeProposalView {
   const payload = isObject(row.original_proposal) ? row.original_proposal : {};
   return {
-    id: row.id, scope: row.scope, status: row.status, originalProposal: row.original_proposal,
+    id: row.id, inboxId: row.inbox_id, scope: row.scope, status: row.status, originalProposal: row.original_proposal,
     observedTerm: typeof payload.observed_term === "string" ? payload.observed_term : "Termo não informado",
     proposedConcept: isObject(payload.proposed_concept) ? payload.proposed_concept : {},
     sources: Array.isArray(payload.sources) ? payload.sources.filter(isObject) : [],
+    candidateConcepts: Array.isArray(payload.candidate_concepts) ? payload.candidate_concepts.filter(isObject).map((candidate) => ({
+      id: typeof candidate.id === "string" ? candidate.id : undefined,
+      canonical_label: typeof candidate.canonical_label === "string" ? candidate.canonical_label : undefined,
+      concept_type: typeof candidate.concept_type === "string" ? candidate.concept_type : undefined,
+      match: typeof candidate.match === "string" ? candidate.match : undefined,
+    })) : [],
+    originOrganizationId: row.origin_organization_id,
   };
 }
 function isObject(value: unknown): value is Record<string, Json | undefined> { return typeof value === "object" && value !== null && !Array.isArray(value); }
