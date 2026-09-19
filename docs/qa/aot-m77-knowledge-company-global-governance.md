@@ -56,7 +56,7 @@ O Product Owner autorizou o contrato e a implementação M7.7. A complementaçã
 
 ## Git / QA / ambiente
 
-O banco e a Function já foram publicados no projeto `ioldpnqqvobprjiontre`. A publicação web, SHA e smoke HTTP serão registrados depois do dispatcher; o smoke autenticado da tela Knowledge continua pendente, sem criar contribuição ou decisão de teste.
+O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `705f306a62a8864cbb60a9930da2843d1a803ef5` foi validado pelo dispatcher e promovido por fast-forward para `main`/GitHub; a verificação confirmou `local == origin/main`. A publicação web não ocorreu: esta máquina não possui alias/configuração SSH da VPS Prisma, portanto o dispatcher não recebeu destino e o smoke HTTP/autenticado da tela Knowledge permanece pendente. Nenhuma contribuição ou decisão de teste foi criada.
 
 ## Conclusão
 
