@@ -32,7 +32,8 @@ test("release tooling does not redeploy the application", () => {
 
 test("dispatcher resolves pnpm through the Windows command shim", async () => {
   const dispatcher = await readFile(new URL("../../scripts/release-dispatcher.mjs", import.meta.url), "utf8");
-  assert.match(dispatcher, /process\.platform === "win32" && command === "pnpm" \? "pnpm\.cmd" : command/);
+  assert.match(dispatcher, /process\.platform === "win32" && command === "pnpm"/);
+  assert.match(dispatcher, /\["\/d", "\/s", "\/c", `pnpm\.cmd \$\{args\.join\(" "\)\}`\]/);
 });
 
 test("routes web changes only to web and hosting", () => {
