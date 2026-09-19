@@ -56,8 +56,8 @@ O Product Owner autorizou o contrato e a implementação M7.7. A complementaçã
 
 ## Git / QA / ambiente
 
-O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `705f306a62a8864cbb60a9930da2843d1a803ef5` foi validado pelo dispatcher e promovido por fast-forward para `main`/GitHub; a verificação confirmou `local == origin/main`. A publicação web não ocorreu: esta máquina não possui alias/configuração SSH da VPS Prisma, portanto o dispatcher não recebeu destino e o smoke HTTP/autenticado da tela Knowledge permanece pendente. Nenhuma contribuição ou decisão de teste foi criada.
+O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `705f306a62a8864cbb60a9930da2843d1a803ef5` foi validado pelo dispatcher e promovido por fast-forward para `main`/GitHub. Após a configuração explícita do alias SSH `prisma-vps`, o deploy controlado atualizou a VPS `/opt/prisma` para `040400d6cec14c8d00a3c467c26394bc8991e5c3`, recriou somente `prisma-web` e preservou a imagem anterior. Verificação independente: container `running`, zero reinícios e HTTPS `200`. O smoke autenticado da tela Knowledge continua pendente; nenhuma contribuição ou decisão de teste foi criada.
 
 ## Conclusão
 
-Implementação e validações técnicas locais/servidor: PASS. Aceite visual autenticado: pendente de operador com sessão Super Admin; não é substituído por esta documentação.
+Implementação, publicação e smoke técnico: PASS. Aceite visual autenticado: pendente de operador com sessão Super Admin; não é substituído por esta documentação.

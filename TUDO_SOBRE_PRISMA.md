@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 237
-source_manifest_sha256: b695d56a767f6df55a39fec7ac3e0b4bde76223b18e8413dda10e83dd9f48bea
+source_manifest_sha256: 37fe9e3a21bf8b7a0e309077c8cdd689c60022e7dcc44f275563c305eb65f4ce
 -->
 
 # Tudo sobre o Prisma
@@ -561,7 +561,7 @@ Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledg
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
-M7.7 entregue tecnicamente em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; SHA `705f306` está em `main`/GitHub. A web e o smoke autenticado permanecem pendentes porque não há configuração SSH da VPS nesta máquina. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
+M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. O smoke autenticado da tela Knowledge permanece pendente. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
 
 Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
@@ -12071,11 +12071,11 @@ O Product Owner autorizou o contrato e a implementação M7.7. A complementaçã
 
 ## Git / QA / ambiente
 
-O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `705f306a62a8864cbb60a9930da2843d1a803ef5` foi validado pelo dispatcher e promovido por fast-forward para `main`/GitHub; a verificação confirmou `local == origin/main`. A publicação web não ocorreu: esta máquina não possui alias/configuração SSH da VPS Prisma, portanto o dispatcher não recebeu destino e o smoke HTTP/autenticado da tela Knowledge permanece pendente. Nenhuma contribuição ou decisão de teste foi criada.
+O banco e a Function foram publicados no projeto `ioldpnqqvobprjiontre`. O SHA `705f306a62a8864cbb60a9930da2843d1a803ef5` foi validado pelo dispatcher e promovido por fast-forward para `main`/GitHub. Após a configuração explícita do alias SSH `prisma-vps`, o deploy controlado atualizou a VPS `/opt/prisma` para `040400d6cec14c8d00a3c467c26394bc8991e5c3`, recriou somente `prisma-web` e preservou a imagem anterior. Verificação independente: container `running`, zero reinícios e HTTPS `200`. O smoke autenticado da tela Knowledge continua pendente; nenhuma contribuição ou decisão de teste foi criada.
 
 ## Conclusão
 
-Implementação e validações técnicas locais/servidor: PASS. Aceite visual autenticado: pendente de operador com sessão Super Admin; não é substituído por esta documentação.
+Implementação, publicação e smoke técnico: PASS. Aceite visual autenticado: pendente de operador com sessão Super Admin; não é substituído por esta documentação.
 
 ---
 
