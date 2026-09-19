@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 225
-source_manifest_sha256: 7998af797f9a677694c94f34f9296e5878a495e4d29308bbb46d8ad8cb7aa7ed
+source_manifest_sha256: 9601b5370de21ef7f513d54bb9b15fa67f089a686fcedba19d93d31e0ffc086d
 -->
 
 # Tudo sobre o Prisma
@@ -6979,7 +6979,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-M7.6 em produção em 2026-09-18: workflow de curadoria `profile-competency-curation-4.0.0`, descrição opcional de conceito, justificativa textual removida da curadoria e Global restrito a Super Admin. A migration `20260918220000_m76_curation_description_scope` foi aplicada atomicamente no único Supabase e registrada no ledger remoto. Main/GitHub/VPS estão em `cc2e596`; somente `prisma-web` foi recriado com baseline + Parser IA hosted. Imagem ativa `sha256:e96c30ed09ac6e4e0423564bb21566286f3e01ba8458adb1e53dfd6ccef339f1`; rollback `prisma-web:rollback-before-m76-curation-description-20260918`; gateway e Traefik permaneceram ativos. HTTPS 200; bundle e smoke autenticado read-only confirmaram o campo de descrição, a ausência da justificativa na curadoria e o escopo da empresa. Evidências e limites em `docs/qa/aot-m76-curation-description-scope.md`.
+M7.6 em produção em 2026-09-18: workflow de curadoria `profile-competency-curation-4.0.0`, descrição opcional de conceito, justificativa textual removida da curadoria e Global restrito a Super Admin. A migration `20260918220000_m76_curation_description_scope` foi aplicada atomicamente no único Supabase e registrada no ledger remoto. O runtime funcional foi construído de `cc2e596`; o fechamento/teste final `13a0164` está sincronizado em main/GitHub/VPS. Somente `prisma-web` foi recriado com baseline + Parser IA hosted. Imagem ativa `sha256:e96c30ed09ac6e4e0423564bb21566286f3e01ba8458adb1e53dfd6ccef339f1`; rollback `prisma-web:rollback-before-m76-curation-description-20260918`; gateway e Traefik permaneceram ativos. HTTPS 200; bundle e smoke autenticado read-only confirmaram o campo de descrição, a ausência da justificativa na curadoria e o escopo da empresa. Evidências e limites em `docs/qa/aot-m76-curation-description-scope.md`.
 
 M7.5 em produção em 2026-09-18: **v1.7.6**, runtime final `b9360e0`, migration remota `20260918193317_m75_competency_coverage_recovery` e Knowledge Agent v16. A normalização ganhou orçamento dedicado de 20 chamadas/dia e 200/mês; o lote service-only concluiu 7/7 Perfis aprovados, preservou os hashes dos snapshots e recuperou o Perfil investigado de 3 para 5 conceitos visíveis. As associações automáticas totais permaneceram 14 antes/depois; o restante exige curadoria humana por alias ou proposta de conceito. A busca manual da curadoria usa debounce de 400 ms, com Buscar/Enter imediatos e sem pré-seleção. Somente `prisma-web` foi reconstruído com baseline + Parser IA hosted; imagem ativa `sha256:a16f82d17a246e9aa5e2c6ddc528761c09a1616182af8dc1159ffabf955135b9`, rollback `prisma-web:rollback-before-m76-search-debounce-20260918`. HTTPS 200; bundle/CI e smoke autenticado confirmaram a melhoria. GitHub/VPS sincronizados; evidências, advisors e limites no AoT M7.5.
 
@@ -11573,7 +11573,8 @@ Data: 2026-09-18
 Contrato: `docs/qa/agreement-m76-curation-description-scope.md` 1.0.0
 Execução: `docs/qa/execution-m76-curation-description-scope.md` 1.0.0
 Baseline: `15a82a4`
-Entrega: `cc2e5966f25232e5880d1ceabd1e596c214cdf56`
+Entrega funcional: `cc2e5966f25232e5880d1ceabd1e596c214cdf56`
+Fechamento/teste: `13a0164853c075bd7997a7a919bc5d7a0d871221`
 Migration: `20260918220000_m76_curation_description_scope`
 
 ## Acordo -> implementação -> teste -> evidência
@@ -11598,6 +11599,7 @@ Migration: `20260918220000_m76_curation_description_scope`
 - Testes direcionados: PASS, 16/16 (`profileCompetencyCuration`, `knowledgeFoundation`, `m76CurationDescriptionScope`).
 - PostgreSQL descartável M7.6: PASS, incluindo proposta com descrição, descrição vazia, Global negado e grants.
 - Context Pack: PASS (`generate-prisma-context` e `check:prisma-context`).
+- CI GitHub `35409786406` no fechamento `13a0164`: PASS em foundation, auditoria de dependências, typechecks, build e suítes completas.
 - Migration remota: PASS no único Supabase de produção; ledger registrado como `20260918220000`.
 - Produção web: `main`/GitHub/VPS em `cc2e596`; imagem ativa `sha256:e96c30ed09ac6e4e0423564bb21566286f3e01ba8458adb1e53dfd6ccef339f1`; rollback preservado em `prisma-web:rollback-before-m76-curation-description-20260918`; somente `prisma-web` recriado; gateway e Traefik permaneceram ativos.
 - HTTPS: `200`.

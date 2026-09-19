@@ -4,7 +4,8 @@ Data: 2026-09-18
 Contrato: `docs/qa/agreement-m76-curation-description-scope.md` 1.0.0
 Execução: `docs/qa/execution-m76-curation-description-scope.md` 1.0.0
 Baseline: `15a82a4`
-Entrega: `cc2e5966f25232e5880d1ceabd1e596c214cdf56`
+Entrega funcional: `cc2e5966f25232e5880d1ceabd1e596c214cdf56`
+Fechamento/teste: `13a0164853c075bd7997a7a919bc5d7a0d871221`
 Migration: `20260918220000_m76_curation_description_scope`
 
 ## Acordo -> implementação -> teste -> evidência
@@ -29,6 +30,7 @@ Migration: `20260918220000_m76_curation_description_scope`
 - Testes direcionados: PASS, 16/16 (`profileCompetencyCuration`, `knowledgeFoundation`, `m76CurationDescriptionScope`).
 - PostgreSQL descartável M7.6: PASS, incluindo proposta com descrição, descrição vazia, Global negado e grants.
 - Context Pack: PASS (`generate-prisma-context` e `check:prisma-context`).
+- CI GitHub `35409786406` no fechamento `13a0164`: PASS em foundation, auditoria de dependências, typechecks, build e suítes completas.
 - Migration remota: PASS no único Supabase de produção; ledger registrado como `20260918220000`.
 - Produção web: `main`/GitHub/VPS em `cc2e596`; imagem ativa `sha256:e96c30ed09ac6e4e0423564bb21566286f3e01ba8458adb1e53dfd6ccef339f1`; rollback preservado em `prisma-web:rollback-before-m76-curation-description-20260918`; somente `prisma-web` recriado; gateway e Traefik permaneceram ativos.
 - HTTPS: `200`.
