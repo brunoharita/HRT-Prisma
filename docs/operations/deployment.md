@@ -50,6 +50,8 @@ Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF
 
 ## Validação antes da produção
 
+Começar por `pnpm run release:plan -- --base=origin/main --head=HEAD`. O plano limita validações e destinos ao diff comprometido. O runbook e os guards ficam em `docs/operations/release-dispatcher.md`; o mapa `supabase/migration-ledger-map.json` mantém `cliDbPushAllowed=false` enquanto as divergências históricas não tiverem equivalência demonstrada.
+
 1. aplicar migrations em ordem;
 2. executar advisors e testes RLS;
 3. publicar backend/UI quando existirem;

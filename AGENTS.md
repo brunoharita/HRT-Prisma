@@ -1,6 +1,6 @@
 # Prisma agent contract
 
-Instruction contract version: 1.3.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity and standing main/production authorization 2026-09-18. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -64,9 +64,10 @@ For factual availability, consult the relevant section of `docs/ai-context/PRISM
 1. Identify the exact request and expected outcome.
 2. Inspect Git status and preserve user changes.
 3. Read the smallest sufficient set of directly related files.
-4. Classify risk and identify applicable contracts and ADRs.
-5. Explain expected impact and a short execution plan.
-6. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
+4. Classify the exact affected objects, flows, processes and release surfaces; adjacency or possible relevance alone does not enter scope.
+5. Classify risk and identify applicable contracts and ADRs.
+6. Explain expected impact and a short execution plan.
+7. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
 
 ### During implementation
 
@@ -161,6 +162,8 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 ## 8. Economic but safe operation
 
 - Reuse recent verified context and avoid reopening large files without reason.
+- Include an item only when it is directly and demonstrably necessary to implement, validate or document the requested change. Record relevant adjacent findings without incorporating them silently.
+- Before adding an optional improvement, state the proposal, concrete value, incremental surfaces, time/validation/risk cost and recommendation; wait for the Product Owner's decision.
 - Apply the reuse-first decision process in Section 5 before committing development effort to a material custom solution.
 - Do not repeat extensive prompts in reports.
 - Do not use subagents without clear independent benefit.
@@ -171,6 +174,8 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 ## 9. Git and environments
 
 - Start implementation in Classes C, D and E from a known baseline on an isolated `codex/` branch. For A/B, reuse a task-scoped branch or create one when it avoids collision; a read-only investigation requires no branch change.
+- Use `pnpm run release:plan` to derive the release surfaces from the committed diff. Documentation, migrations, Edge Functions and web are independent destinations; do not access or publish a destination that the plan does not require.
+- Publish one coherent validated SHA. `release:publish` requires that SHA explicitly and remains dry-run without `--execute`; never use it to bypass human authority or safety gates.
 - Use worktrees only when they materially reduce collision or risk.
 - Keep commits semantically coherent and never overwrite user work.
 - Local is the first implementation surface. Sensitive changes flow `local -> QA -> evidence -> approval -> production -> smoke -> synchronization`.
@@ -180,6 +185,8 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 ## 10. Required validation
 
 Use pnpm and select the least costly validation that proves the change safely:
+
+- begin with the dispatcher plan and deduplicate its commands; it is a routing aid, not evidence by itself;
 
 - mechanical or documentation-only changes: formatting/lint and the directly affected documentation or generator checks;
 - bounded frontend or backend changes: typecheck/build and targeted tests for changed and affected modules;

@@ -1,0 +1,1261 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectRef": "ioldpnqqvobprjiontre",
+  "verifiedAt": "2026-09-18",
+  "cliDbPushAllowed": false,
+  "rationale": "The production ledger contains historical timestamp aliases, split remote migrations, local-only files, and statement fingerprints that are not all byte-equivalent. The dispatcher must apply only explicitly reviewed new migrations and must not repair or replay history automatically.",
+  "summary": {
+    "localMigrations": 136,
+    "remoteMigrations": 140,
+    "mappedByName": 134,
+    "versionAliases": 73,
+    "equalCanonicalFingerprints": 77,
+    "differentCanonicalFingerprints": 57,
+    "localOnly": 2,
+    "remoteOnly": 6
+  },
+  "entries": [
+    {
+      "name": "initial_prisma_schema",
+      "localVersion": "20260820200810",
+      "remoteVersion": "20260823215020",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 23640,
+      "remoteCanonicalLength": 23640
+    },
+    {
+      "name": "harden_rls_auto_enable_permissions",
+      "localVersion": "20260824021143",
+      "remoteVersion": "20260824021143",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 188,
+      "remoteCanonicalLength": 188
+    },
+    {
+      "name": "m2b_people_ingestion",
+      "localVersion": "20260824150653",
+      "remoteVersion": "20260824153410",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 13560,
+      "remoteCanonicalLength": 13560
+    },
+    {
+      "name": "m2b_atomic_extraction_rpc",
+      "localVersion": "20260824155000",
+      "remoteVersion": "20260824154022",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 7042,
+      "remoteCanonicalLength": 7042
+    },
+    {
+      "name": "m2_supporting_indexes",
+      "localVersion": "20260824161000",
+      "remoteVersion": "20260824154323",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1902,
+      "remoteCanonicalLength": 1902
+    },
+    {
+      "name": "m2c_document_reliability_review",
+      "localVersion": "20260824190000",
+      "remoteVersion": "20260824214531",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 46575,
+      "remoteCanonicalLength": 46016
+    },
+    {
+      "name": "m2c_document_status_values",
+      "localVersion": "20260824220000",
+      "remoteVersion": "20260824214648",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 442,
+      "remoteCanonicalLength": 442
+    },
+    {
+      "name": "m2c_authorization_helper_grants",
+      "localVersion": "20260824221000",
+      "remoteVersion": "20260824215008",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 299,
+      "remoteCanonicalLength": 299
+    },
+    {
+      "name": "m2c_rpc_extension_search_path",
+      "localVersion": "20260824222000",
+      "remoteVersion": "20260824215128",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1013,
+      "remoteCanonicalLength": 1013
+    },
+    {
+      "name": "m2c_persist_status_enum_cast",
+      "localVersion": "20260824223000",
+      "remoteVersion": "20260824215235",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 795,
+      "remoteCanonicalLength": 795
+    },
+    {
+      "name": "m2c_domain_conflict_codes",
+      "localVersion": "20260824224000",
+      "remoteVersion": "20260824215904",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 788,
+      "remoteCanonicalLength": 788
+    },
+    {
+      "name": "m2c_service_role_user_helpers",
+      "localVersion": "20260824225000",
+      "remoteVersion": "20260824220424",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 582,
+      "remoteCanonicalLength": 582
+    },
+    {
+      "name": "m2c_foreign_key_indexes",
+      "localVersion": "20260824230000",
+      "remoteVersion": "20260824222956",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2004,
+      "remoteCanonicalLength": 2004
+    },
+    {
+      "name": "curriculum_first_resume_intake",
+      "localVersion": "20260826114333",
+      "remoteVersion": "20260826121300",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 23168,
+      "remoteCanonicalLength": 23168
+    },
+    {
+      "name": "curriculum_first_idempotent_completion",
+      "localVersion": "20260826125000",
+      "remoteVersion": "20260826122824",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1752,
+      "remoteCanonicalLength": 1752
+    },
+    {
+      "name": "m4_knowledge_foundation",
+      "localVersion": "20260826201154",
+      "remoteVersion": "20260826204413",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 47947,
+      "remoteCanonicalLength": 47947
+    },
+    {
+      "name": "m4_knowledge_indexes_rls",
+      "localVersion": "20260826205033",
+      "remoteVersion": "20260826205027",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 5272,
+      "remoteCanonicalLength": 5272
+    },
+    {
+      "name": "m5_spatial_cv_evidence",
+      "localVersion": "20260827034147",
+      "remoteVersion": "20260827040834",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 24071,
+      "remoteCanonicalLength": 24071
+    },
+    {
+      "name": "m5_spatial_evidence_fk_indexes",
+      "localVersion": "20260827041613",
+      "remoteVersion": "20260827041541",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 350,
+      "remoteCanonicalLength": 350
+    },
+    {
+      "name": "m5_spatial_evidence_idempotent_replay",
+      "localVersion": "20260827042829",
+      "remoteVersion": "20260827042842",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 4088,
+      "remoteCanonicalLength": 4088
+    },
+    {
+      "name": "adaptive_resume_extraction",
+      "localVersion": "20260828055309",
+      "remoteVersion": "20260828055309",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 16709,
+      "remoteCanonicalLength": 16709
+    },
+    {
+      "name": "adaptive_review_learning_v2",
+      "localVersion": "20260828111135",
+      "remoteVersion": "20260828112434",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 12463,
+      "remoteCanonicalLength": 12455
+    },
+    {
+      "name": "adaptive_review_learning_v2_rpc_fix",
+      "localVersion": "20260828112737",
+      "remoteVersion": "20260828112756",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 928,
+      "remoteCanonicalLength": 928
+    },
+    {
+      "name": "adaptive_review_learning_v2_fk_indexes",
+      "localVersion": "20260828115300",
+      "remoteVersion": "20260828115139",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 289,
+      "remoteCanonicalLength": 289
+    },
+    {
+      "name": "strict_pdf_character_region",
+      "localVersion": "20260828160707",
+      "remoteVersion": "20260828161125",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1733,
+      "remoteCanonicalLength": 1733
+    },
+    {
+      "name": "custom_profile_sections",
+      "localVersion": "20260829021015",
+      "remoteVersion": "20260829023309",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 11216,
+      "remoteCanonicalLength": 11216
+    },
+    {
+      "name": "custom_section_learning_provenance",
+      "localVersion": "20260829024200",
+      "remoteVersion": "20260829024007",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 3586,
+      "remoteCanonicalLength": 3586
+    },
+    {
+      "name": "spatial_evidence_refinement",
+      "localVersion": "20260829111414",
+      "remoteVersion": "20260829113031",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 9269,
+      "remoteCanonicalLength": 9269
+    },
+    {
+      "name": "spatial_evidence_refinement_rpc_fix",
+      "localVersion": "20260829113452",
+      "remoteVersion": "20260829113502",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 966,
+      "remoteCanonicalLength": 966
+    },
+    {
+      "name": "structured_resume_summary",
+      "localVersion": "20260830160132",
+      "remoteVersion": "20260830162510",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 21118,
+      "remoteCanonicalLength": 21118
+    },
+    {
+      "name": "review_field_lifecycle",
+      "localVersion": "20260830175144",
+      "remoteVersion": "20260830181745",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 16226,
+      "remoteCanonicalLength": 16226
+    },
+    {
+      "name": "review_approval_runtime_hardening",
+      "localVersion": "20260830201029",
+      "remoteVersion": "20260830201459",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2593,
+      "remoteCanonicalLength": 2593
+    },
+    {
+      "name": "invalidate_document_review",
+      "localVersion": "20260831022615",
+      "remoteVersion": "20260831024503",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 4150,
+      "remoteCanonicalLength": 4150
+    },
+    {
+      "name": "invalidate_document_review_approved_guard",
+      "localVersion": "20260831025456",
+      "remoteVersion": "20260831025522",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 4318,
+      "remoteCanonicalLength": 4318
+    },
+    {
+      "name": "recover_partial_resume_review",
+      "localVersion": "20260831204334",
+      "remoteVersion": "20260831205547",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 16509,
+      "remoteCanonicalLength": 16509
+    },
+    {
+      "name": "profile_publication_delta",
+      "localVersion": "20260831230000",
+      "remoteVersion": "20260901005459",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 14950,
+      "remoteCanonicalLength": 14950
+    },
+    {
+      "name": "profile_publication_review_attempt_guard",
+      "localVersion": "20260831233000",
+      "remoteVersion": "20260901005743",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2450,
+      "remoteCanonicalLength": 2450
+    },
+    {
+      "name": "profile_publication_review_attempt_guard_fix",
+      "localVersion": "20260831234000",
+      "remoteVersion": "20260901005844",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 535,
+      "remoteCanonicalLength": 535
+    },
+    {
+      "name": "profile_publication_removal_alias_fix",
+      "localVersion": "20260831235000",
+      "remoteVersion": "20260901005935",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1475,
+      "remoteCanonicalLength": 1475
+    },
+    {
+      "name": "profile_publication_removal_conflict_fix",
+      "localVersion": "20260831235500",
+      "remoteVersion": "20260901010029",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 593,
+      "remoteCanonicalLength": 593
+    },
+    {
+      "name": "enforce_profile_publication_boundary",
+      "localVersion": "20260901000000",
+      "remoteVersion": "20260901010732",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1146,
+      "remoteCanonicalLength": 1146
+    },
+    {
+      "name": "profile_publication_removals_actor_index",
+      "localVersion": "20260901001000",
+      "remoteVersion": "20260901012548",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 112,
+      "remoteCanonicalLength": 112
+    },
+    {
+      "name": "m51a_verification_intelligence",
+      "localVersion": "20260901082542",
+      "remoteVersion": "20260901082542",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 39147,
+      "remoteCanonicalLength": 39051
+    },
+    {
+      "name": "m51a_grant_hardening",
+      "localVersion": "20260901111841",
+      "remoteVersion": "20260901111841",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 9951,
+      "remoteCanonicalLength": 9866
+    },
+    {
+      "name": "m51b_verification_execution",
+      "localVersion": "20260901115938",
+      "remoteVersion": "20260901115938",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 68065,
+      "remoteCanonicalLength": 67979
+    },
+    {
+      "name": "m51b_submission_dimension_coverage_fix",
+      "localVersion": "20260901124012",
+      "remoteVersion": "20260901124012",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 1098,
+      "remoteCanonicalLength": 1095
+    },
+    {
+      "name": "m51a_workspace_item_bank_summary_fix",
+      "localVersion": "20260901124345",
+      "remoteVersion": "20260901124345",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 4696,
+      "remoteCanonicalLength": 4693
+    },
+    {
+      "name": "m51c_item_bank_governance",
+      "localVersion": "20260901145444",
+      "remoteVersion": "20260901145444",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 43737,
+      "remoteCanonicalLength": 40219
+    },
+    {
+      "name": "m51c_generation_transaction_hardening",
+      "localVersion": "20260901150902",
+      "remoteVersion": "20260901150902",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 20787,
+      "remoteCanonicalLength": 20787
+    },
+    {
+      "name": "m51c_analytics_budget_and_state_contract",
+      "localVersion": "20260901152207",
+      "remoteVersion": "20260901152207",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 16322,
+      "remoteCanonicalLength": 16322
+    },
+    {
+      "name": "m51c_budget_reservation_and_request_lifecycle",
+      "localVersion": "20260901152216",
+      "remoteVersion": "20260901152216",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 13864,
+      "remoteCanonicalLength": 13863
+    },
+    {
+      "name": "m51c_deduplication_and_need_backfill",
+      "localVersion": "20260901152451",
+      "remoteVersion": "20260901152451",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 4880,
+      "remoteCanonicalLength": 4880
+    },
+    {
+      "name": "m51c_generation_failure_audit_result_fix",
+      "localVersion": "20260901153011",
+      "remoteVersion": "20260901153011",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2205,
+      "remoteCanonicalLength": 2205
+    },
+    {
+      "name": "m5_sibling_block_learning",
+      "localVersion": "20260902003617",
+      "remoteVersion": "20260902003617",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 15862,
+      "remoteCanonicalLength": 15852
+    },
+    {
+      "name": "m5_sibling_block_learning_hardening",
+      "localVersion": "20260902011222",
+      "remoteVersion": "20260902011222",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 9303,
+      "remoteCanonicalLength": 9290
+    },
+    {
+      "name": "restore_adaptive_page_geometry",
+      "localVersion": "20260902021134",
+      "remoteVersion": "20260902021134",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 4649,
+      "remoteCanonicalLength": 4643
+    },
+    {
+      "name": "accept_current_adaptive_field_paths",
+      "localVersion": "20260902022059",
+      "remoteVersion": "20260902022059",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 4507,
+      "remoteCanonicalLength": 4504
+    },
+    {
+      "name": "education_academic_classification",
+      "localVersion": "20260902122414",
+      "remoteVersion": "20260902122414",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 23387,
+      "remoteCanonicalLength": 23364
+    },
+    {
+      "name": "education_academic_classification_legacy_compatibility",
+      "localVersion": "20260902125511",
+      "remoteVersion": "20260902125511",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 7058,
+      "remoteCanonicalLength": 7050
+    },
+    {
+      "name": "automatic_review_audit_reason",
+      "localVersion": "20260902181013",
+      "remoteVersion": "20260902181013",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 3807,
+      "remoteCanonicalLength": 3802
+    },
+    {
+      "name": "actionable_review_errors_and_legacy_publication",
+      "localVersion": "20260902213000",
+      "remoteVersion": "20260902213000",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 11513,
+      "remoteCanonicalLength": 11501
+    },
+    {
+      "name": "m52_knowledge_normalization",
+      "localVersion": "20260903094700",
+      "remoteVersion": "20260903094700",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 53445,
+      "remoteCanonicalLength": 53383
+    },
+    {
+      "name": "m52_knowledge_stage_rpc_fix",
+      "localVersion": "20260903100340",
+      "remoteVersion": "20260903100340",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 5093,
+      "remoteCanonicalLength": 5090
+    },
+    {
+      "name": "m52_knowledge_observation_state_fix",
+      "localVersion": "20260903101644",
+      "remoteVersion": "20260903101644",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 421,
+      "remoteCanonicalLength": 419
+    },
+    {
+      "name": "m52_knowledge_publish_mapping_fix",
+      "localVersion": "20260903102721",
+      "remoteVersion": "20260903102721",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 9441,
+      "remoteCanonicalLength": 9438
+    },
+    {
+      "name": "knowledge_source_monitoring",
+      "localVersion": "20260903161003",
+      "remoteVersion": "20260903161003",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 14210,
+      "remoteCanonicalLength": 14171
+    },
+    {
+      "name": "knowledge_source_monitor_grants_fix",
+      "localVersion": "20260903163053",
+      "remoteVersion": "20260903163053",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 301,
+      "remoteCanonicalLength": 299
+    },
+    {
+      "name": "profile_document_lifecycle",
+      "localVersion": "20260903194822",
+      "remoteVersion": "20260903194822",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 35609,
+      "remoteCanonicalLength": 35374
+    },
+    {
+      "name": "restore_profile_contract_signature_fix",
+      "localVersion": "20260903202226",
+      "remoteVersion": "20260903202226",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 4272,
+      "remoteCanonicalLength": 4268
+    },
+    {
+      "name": "reset_profile_column_ambiguity_fix",
+      "localVersion": "20260903202536",
+      "remoteVersion": "20260903202536",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 2237,
+      "remoteCanonicalLength": 2233
+    },
+    {
+      "name": "document_deletion_profile_contract_fix",
+      "localVersion": "20260903202831",
+      "remoteVersion": "20260903202831",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 8382,
+      "remoteCanonicalLength": 8324
+    },
+    {
+      "name": "lifecycle_historical_profile_normalization",
+      "localVersion": "20260903203217",
+      "remoteVersion": "20260903203217",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 1764,
+      "remoteCanonicalLength": 980
+    },
+    {
+      "name": "approved_profile_classification_review_fix",
+      "localVersion": "20260903203513",
+      "remoteVersion": "20260903203513",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 1539,
+      "remoteCanonicalLength": 1534
+    },
+    {
+      "name": "document_deletion_column_ambiguity_fix",
+      "localVersion": "20260903203822",
+      "remoteVersion": "20260903203822",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 8359,
+      "remoteCanonicalLength": 8355
+    },
+    {
+      "name": "document_exclusive_dependencies_cascade",
+      "localVersion": "20260903204244",
+      "remoteVersion": "20260903204244",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 5994,
+      "remoteCanonicalLength": 5982
+    },
+    {
+      "name": "m53_pilot_operational_resilience",
+      "localVersion": "20260903232237",
+      "remoteVersion": "20260903232237",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 60216,
+      "remoteCanonicalLength": 60163
+    },
+    {
+      "name": "m53_operation_column_ambiguity_fix",
+      "localVersion": "20260904000509",
+      "remoteVersion": "20260904000509",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 10780,
+      "remoteCanonicalLength": 10772
+    },
+    {
+      "name": "m53_publication_conflict_target_fix",
+      "localVersion": "20260904000810",
+      "remoteVersion": "20260904000810",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 700,
+      "remoteCanonicalLength": 697
+    },
+    {
+      "name": "m53_document_reassignment_spatial_fix",
+      "localVersion": "20260904001336",
+      "remoteVersion": "20260904001336",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 2785,
+      "remoteCanonicalLength": 2780
+    },
+    {
+      "name": "m53_merge_idempotent_replay_fix",
+      "localVersion": "20260904001602",
+      "remoteVersion": "20260904001602",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 11344,
+      "remoteCanonicalLength": 11339
+    },
+    {
+      "name": "m54_vacancy_intelligence",
+      "localVersion": "20260904222624",
+      "remoteVersion": "20260904225430",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 26175,
+      "remoteCanonicalLength": 26175
+    },
+    {
+      "name": "m54_vacancy_policy_hardening",
+      "localVersion": "20260904225612",
+      "remoteVersion": "20260904225609",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 316,
+      "remoteCanonicalLength": 316
+    },
+    {
+      "name": "m54_vacancy_fk_indexes",
+      "localVersion": "20260904230234",
+      "remoteVersion": "20260904230236",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2834,
+      "remoteCanonicalLength": 2834
+    },
+    {
+      "name": "m54_vacancy_position_status_guard",
+      "localVersion": "20260904230903",
+      "remoteVersion": "20260904230921",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1693,
+      "remoteCanonicalLength": 1693
+    },
+    {
+      "name": "m54_vacancy_advisor_web_search",
+      "localVersion": "20260904235900",
+      "remoteVersion": "20260905021411",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 3597,
+      "remoteCanonicalLength": 3593
+    },
+    {
+      "name": "m54_vacancy_advisor_actor_index",
+      "localVersion": "20260905023000",
+      "remoteVersion": "20260905022602",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 128,
+      "remoteCanonicalLength": 128
+    },
+    {
+      "name": "knowledge_occupational_relations",
+      "localVersion": "20260906155011",
+      "remoteVersion": "20260906155011",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 4508,
+      "remoteCanonicalLength": 4497
+    },
+    {
+      "name": "knowledge_occupational_stage_rpc_fix",
+      "localVersion": "20260906160538",
+      "remoteVersion": "20260906160538",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 1785,
+      "remoteCanonicalLength": 1782
+    },
+    {
+      "name": "knowledge_publish_relation_attributes_fix",
+      "localVersion": "20260906205804",
+      "remoteVersion": "20260906205804",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 2160,
+      "remoteCanonicalLength": 2157
+    },
+    {
+      "name": "knowledge_publish_exact_canonical_reuse",
+      "localVersion": "20260906210013",
+      "remoteVersion": "20260906210013",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 3264,
+      "remoteCanonicalLength": 3261
+    },
+    {
+      "name": "knowledge_publish_canonical_reuse_terms",
+      "localVersion": "20260906210235",
+      "remoteVersion": "20260906210235",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 5036,
+      "remoteCanonicalLength": 5033
+    },
+    {
+      "name": "knowledge_publish_canonical_reuse_stage_fix",
+      "localVersion": "20260906210407",
+      "remoteVersion": "20260906210407",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 4845,
+      "remoteCanonicalLength": 4842
+    },
+    {
+      "name": "occupation_reconciliation",
+      "localVersion": "20260906213519",
+      "remoteVersion": "20260906213519",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 3523,
+      "remoteCanonicalLength": 3516
+    },
+    {
+      "name": "knowledge_source_identity_before_label",
+      "localVersion": "20260906220244",
+      "remoteVersion": "20260906220244",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 522,
+      "remoteCanonicalLength": 520
+    },
+    {
+      "name": "occupation_resolution_on_demand",
+      "localVersion": "20260906233411",
+      "remoteVersion": "20260906233411",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 7946,
+      "remoteCanonicalLength": 7937
+    },
+    {
+      "name": "occupation_resolution_column_fix",
+      "localVersion": "20260906234116",
+      "remoteVersion": "20260906234116",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 957,
+      "remoteCanonicalLength": 956
+    },
+    {
+      "name": "occupation_resolution_output_fix",
+      "localVersion": "20260906234225",
+      "remoteVersion": "20260906234225",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 866,
+      "remoteCanonicalLength": 865
+    },
+    {
+      "name": "m54_vacancy_cancellation",
+      "localVersion": "20260907000000",
+      "remoteVersion": "20260907014603",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2104,
+      "remoteCanonicalLength": 2104
+    },
+    {
+      "name": "m544_occupation_resolution_ai_explorer",
+      "localVersion": "20260907010000",
+      "remoteVersion": "20260907030732",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 18090,
+      "remoteCanonicalLength": 18090
+    },
+    {
+      "name": "m545_vacancy_structure_provenance",
+      "localVersion": "20260907020000",
+      "remoteVersion": "20260907040148",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2234,
+      "remoteCanonicalLength": 2234
+    },
+    {
+      "name": "m545_preserve_assisted_description_origin",
+      "localVersion": "20260907110000",
+      "remoteVersion": "20260907105347",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 2112,
+      "remoteCanonicalLength": 2112
+    },
+    {
+      "name": "m546_vacancy_canonical_review",
+      "localVersion": "20260907130000",
+      "remoteVersion": "20260907124826",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 7840,
+      "remoteCanonicalLength": 7901
+    },
+    {
+      "name": "m546_dimension_feedback_conflict_fix",
+      "localVersion": "20260907130500",
+      "remoteVersion": "20260907125151",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 556,
+      "remoteCanonicalLength": 556
+    },
+    {
+      "name": "m52_knowledge_publish_set_based_batches",
+      "localVersion": "20260909090000",
+      "remoteVersion": "20260909123901",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 8977,
+      "remoteCanonicalLength": 8977
+    },
+    {
+      "name": "m52_knowledge_publish_resumable_batches",
+      "localVersion": "20260909093000",
+      "remoteVersion": "20260909124504",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 14018,
+      "remoteCanonicalLength": 14018
+    },
+    {
+      "name": "person_definitive_deletion",
+      "localVersion": "20260909175124",
+      "remoteVersion": "20260909183606",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 63484,
+      "remoteCanonicalLength": 63484
+    },
+    {
+      "name": "person_definitive_deletion_storage_conflict_fix",
+      "localVersion": "20260909184831",
+      "remoteVersion": "20260909184825",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 711,
+      "remoteCanonicalLength": 711
+    },
+    {
+      "name": "person_definitive_deletion_residue_conflict_fix",
+      "localVersion": "20260909184943",
+      "remoteVersion": "20260909185007",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 810,
+      "remoteCanonicalLength": 810
+    },
+    {
+      "name": "allow_ocr_spatial_field_evidence",
+      "localVersion": "20260910104122",
+      "remoteVersion": "20260910104557",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 5019,
+      "remoteCanonicalLength": 5019
+    },
+    {
+      "name": "generic_record_pattern_learning",
+      "localVersion": "20260910193000",
+      "remoteVersion": "20260911004459",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 19554,
+      "remoteCanonicalLength": 19554
+    },
+    {
+      "name": "allow_name_only_existing_person_resume_link",
+      "localVersion": "20260911143000",
+      "remoteVersion": "20260911114200",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 6478,
+      "remoteCanonicalLength": 6478
+    },
+    {
+      "name": "allow_human_confirmed_name_only_resume_link",
+      "localVersion": "20260911144500",
+      "remoteVersion": "20260911114631",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 6686,
+      "remoteCanonicalLength": 6686
+    },
+    {
+      "name": "person_deletion_learning_metadata_shape",
+      "localVersion": "20260911153000",
+      "remoteVersion": "20260911131331",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 884,
+      "remoteCanonicalLength": 721
+    },
+    {
+      "name": "fix_person_deletion_trigger_execution",
+      "localVersion": "20260913132559",
+      "remoteVersion": "20260913132559",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 1084,
+      "remoteCanonicalLength": 1081
+    },
+    {
+      "name": "m61_requirement_classification_invariant",
+      "localVersion": "20260914015642",
+      "remoteVersion": "20260914015642",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 3249,
+      "remoteCanonicalLength": 3249
+    },
+    {
+      "name": "m62_contextual_verification_journey",
+      "localVersion": "20260914051751",
+      "remoteVersion": "20260914051751",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 18765,
+      "remoteCanonicalLength": 18765
+    },
+    {
+      "name": "m62_demo_need_retirement",
+      "localVersion": "20260914051918",
+      "remoteVersion": "20260914051918",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 374,
+      "remoteCanonicalLength": 374
+    },
+    {
+      "name": "m62_requirement_parameter_hardening",
+      "localVersion": "20260914053202",
+      "remoteVersion": "20260914053202",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 7237,
+      "remoteCanonicalLength": 7237
+    },
+    {
+      "name": "m61_trajectory_matching_version",
+      "localVersion": "20260914161427",
+      "remoteVersion": "20260914161427",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 7510,
+      "remoteCanonicalLength": 7508
+    },
+    {
+      "name": "production_resume_quality_observability",
+      "localVersion": "20260916203000",
+      "remoteVersion": "20260916185737",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 5168,
+      "remoteCanonicalLength": 5168
+    },
+    {
+      "name": "preserve_institution_only_education_evidence",
+      "localVersion": "20260917143000",
+      "remoteVersion": "20260917143000",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 9940,
+      "remoteCanonicalLength": 9935
+    },
+    {
+      "name": "harden_linkedin_draft_persistence",
+      "localVersion": "20260917154500",
+      "remoteVersion": "20260917154500",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 4981,
+      "remoteCanonicalLength": 4970
+    },
+    {
+      "name": "preserve_nullable_education_classifier_snapshot",
+      "localVersion": "20260917164000",
+      "remoteVersion": "20260917164000",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 7368,
+      "remoteCanonicalLength": 4854
+    },
+    {
+      "name": "m71_position_taxonomy",
+      "localVersion": "20260918010000",
+      "remoteVersion": "20260918044935",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 25252,
+      "remoteCanonicalLength": 25320
+    },
+    {
+      "name": "m72_person_professional_evidence",
+      "localVersion": "20260918160000",
+      "remoteVersion": "20260918081743",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 14076,
+      "remoteCanonicalLength": 14076
+    },
+    {
+      "name": "m73_declared_competency_normalization",
+      "localVersion": "20260918180000",
+      "remoteVersion": "20260918100714",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 23405,
+      "remoteCanonicalLength": 23405
+    },
+    {
+      "name": "m73_normalization_scheduler",
+      "localVersion": "20260918181000",
+      "remoteVersion": "20260918100819",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 1179,
+      "remoteCanonicalLength": 1179
+    },
+    {
+      "name": "m73_scheduler_jwt_guard",
+      "localVersion": "20260918182000",
+      "remoteVersion": "20260918101319",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 3030,
+      "remoteCanonicalLength": 3030
+    },
+    {
+      "name": "m74_contextual_competency_curation",
+      "localVersion": "20260918190000",
+      "remoteVersion": "20260918134315",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 11541,
+      "remoteCanonicalLength": 11541
+    },
+    {
+      "name": "m72_competency_concept_type",
+      "localVersion": "20260918195000",
+      "remoteVersion": "20260918163719",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 186,
+      "remoteCanonicalLength": 186
+    },
+    {
+      "name": "m72_competency_taxonomy_v2",
+      "localVersion": "20260918200000",
+      "remoteVersion": "20260918163736",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 17661,
+      "remoteCanonicalLength": 17661
+    },
+    {
+      "name": "m72_competency_taxonomy_indexes",
+      "localVersion": "20260918201000",
+      "remoteVersion": "20260918164009",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 398,
+      "remoteCanonicalLength": 398
+    },
+    {
+      "name": "m75_competency_coverage_recovery",
+      "localVersion": "20260918203000",
+      "remoteVersion": "20260918193317",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 13833,
+      "remoteCanonicalLength": 13833
+    },
+    {
+      "name": "m76_curation_description_scope",
+      "localVersion": "20260918220000",
+      "remoteVersion": "20260918220000",
+      "versionStatus": "same",
+      "statementFingerprintStatus": "different",
+      "localCanonicalLength": 19076,
+      "remoteCanonicalLength": 19061
+    }
+  ],
+  "localOnly": [
+    {
+      "name": "m2_users_people",
+      "localVersion": "20260824113000"
+    },
+    {
+      "name": "m56_document_intelligence_observability",
+      "localVersion": "20260910164522"
+    }
+  ],
+  "remoteOnly": [
+    {
+      "name": "m2_probe_create_group_table",
+      "remoteVersion": "20260824094848"
+    },
+    {
+      "name": "m2a_01_groups",
+      "remoteVersion": "20260824095016"
+    },
+    {
+      "name": "m2a_02_platform_users_tables",
+      "remoteVersion": "20260824095042"
+    },
+    {
+      "name": "m2a_04a_membership_role_shadow",
+      "remoteVersion": "20260824095241"
+    },
+    {
+      "name": "m2a_operator_self_read",
+      "remoteVersion": "20260824102629"
+    },
+    {
+      "name": "m2a_04b_atomic_role_cutover_and_rls",
+      "remoteVersion": "20260824153211"
+    }
+  ]
+}

@@ -69,6 +69,11 @@ Local port convention:
 | `pnpm run demo` | Reproduce the end-to-end proof |
 | `pnpm run generate:prisma-context` | Regenerate the compact GPT source and complete portable export from canonical sources |
 | `pnpm run check:prisma-context` | Fail on missing, stale, oversized, conflicting, or divergent context artifacts |
+| `pnpm run release:plan` | Classify the committed diff and select only affected validation/deployment surfaces |
+| `pnpm run release:validate` | Execute the deduplicated checks selected by the release plan |
+| `pnpm run release:publish` | Dry-run or publish an explicitly identified SHA from an isolated branch |
+| `pnpm run release:verify` | Verify Git alignment and the production endpoint only when web is affected |
+| `pnpm run check:supabase-ledger` | Validate the factual local/remote migration ledger map without mutating production |
 | `pnpm run knowledge:prepare` | Validate an official CBO/ESCO snapshot and generate auditable stage, diff and publication SQL |
 | `pnpm run audit:dependencies` | Query the package registry for high-severity production dependency advisories |
 | `pnpm run validate` | Run the complete local foundation gate when explicitly authorized for a broad-risk change |
@@ -91,6 +96,8 @@ docs/ai-context/        five canonical context sources for authorized AIs
 FONTE_GPT_PRISMA.md     generated compact source for the prompt-authoring GPT
 TUDO_SOBRE_PRISMA.md   generated complete portable context export
 ```
+
+Release routing, Supabase ledger limits and the prompt-authoring workflow are documented in [release-dispatcher.md](docs/operations/release-dispatcher.md).
 
 ## Non-negotiable boundaries
 

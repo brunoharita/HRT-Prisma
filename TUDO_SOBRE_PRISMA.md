@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 225
-source_manifest_sha256: 9601b5370de21ef7f513d54bb9b15fa67f089a686fcedba19d93d31e0ffc086d
+documentation_source_count: 230
+source_manifest_sha256: f12c6561ab15286ca281a17df609a76b95382260ed8501f94544610105fd7334
 -->
 
 # Tudo sobre o Prisma
@@ -17,7 +17,7 @@ Para interpretar esta exportação, comece pelo índice e pelo estado atual. Dep
 
 # Prisma agent contract
 
-Instruction contract version: 1.3.0. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity and standing main/production authorization 2026-09-18. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -81,9 +81,10 @@ For factual availability, consult the relevant section of `docs/ai-context/PRISM
 1. Identify the exact request and expected outcome.
 2. Inspect Git status and preserve user changes.
 3. Read the smallest sufficient set of directly related files.
-4. Classify risk and identify applicable contracts and ADRs.
-5. Explain expected impact and a short execution plan.
-6. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
+4. Classify the exact affected objects, flows, processes and release surfaces; adjacency or possible relevance alone does not enter scope.
+5. Classify risk and identify applicable contracts and ADRs.
+6. Explain expected impact and a short execution plan.
+7. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
 
 ### During implementation
 
@@ -178,6 +179,8 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 ## 8. Economic but safe operation
 
 - Reuse recent verified context and avoid reopening large files without reason.
+- Include an item only when it is directly and demonstrably necessary to implement, validate or document the requested change. Record relevant adjacent findings without incorporating them silently.
+- Before adding an optional improvement, state the proposal, concrete value, incremental surfaces, time/validation/risk cost and recommendation; wait for the Product Owner's decision.
 - Apply the reuse-first decision process in Section 5 before committing development effort to a material custom solution.
 - Do not repeat extensive prompts in reports.
 - Do not use subagents without clear independent benefit.
@@ -188,6 +191,8 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 ## 9. Git and environments
 
 - Start implementation in Classes C, D and E from a known baseline on an isolated `codex/` branch. For A/B, reuse a task-scoped branch or create one when it avoids collision; a read-only investigation requires no branch change.
+- Use `pnpm run release:plan` to derive the release surfaces from the committed diff. Documentation, migrations, Edge Functions and web are independent destinations; do not access or publish a destination that the plan does not require.
+- Publish one coherent validated SHA. `release:publish` requires that SHA explicitly and remains dry-run without `--execute`; never use it to bypass human authority or safety gates.
 - Use worktrees only when they materially reduce collision or risk.
 - Keep commits semantically coherent and never overwrite user work.
 - Local is the first implementation surface. Sensitive changes flow `local -> QA -> evidence -> approval -> production -> smoke -> synchronization`.
@@ -197,6 +202,8 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 ## 10. Required validation
 
 Use pnpm and select the least costly validation that proves the change safely:
+
+- begin with the dispatcher plan and deduplicate its commands; it is a routing aid, not evidence by itself;
 
 - mechanical or documentation-only changes: formatting/lint and the directly affected documentation or generator checks;
 - bounded frontend or backend changes: typecheck/build and targeted tests for changed and affected modules;
@@ -323,6 +330,11 @@ Local port convention:
 | `pnpm run demo` | Reproduce the end-to-end proof |
 | `pnpm run generate:prisma-context` | Regenerate the compact GPT source and complete portable export from canonical sources |
 | `pnpm run check:prisma-context` | Fail on missing, stale, oversized, conflicting, or divergent context artifacts |
+| `pnpm run release:plan` | Classify the committed diff and select only affected validation/deployment surfaces |
+| `pnpm run release:validate` | Execute the deduplicated checks selected by the release plan |
+| `pnpm run release:publish` | Dry-run or publish an explicitly identified SHA from an isolated branch |
+| `pnpm run release:verify` | Verify Git alignment and the production endpoint only when web is affected |
+| `pnpm run check:supabase-ledger` | Validate the factual local/remote migration ledger map without mutating production |
 | `pnpm run knowledge:prepare` | Validate an official CBO/ESCO snapshot and generate auditable stage, diff and publication SQL |
 | `pnpm run audit:dependencies` | Query the package registry for high-severity production dependency advisories |
 | `pnpm run validate` | Run the complete local foundation gate when explicitly authorized for a broad-risk change |
@@ -345,6 +357,8 @@ docs/ai-context/        five canonical context sources for authorized AIs
 FONTE_GPT_PRISMA.md     generated compact source for the prompt-authoring GPT
 TUDO_SOBRE_PRISMA.md   generated complete portable context export
 ```
+
+Release routing, Supabase ledger limits and the prompt-authoring workflow are documented in [release-dispatcher.md](docs/operations/release-dispatcher.md).
 
 ## Non-negotiable boundaries
 
@@ -543,6 +557,8 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
+Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
+
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
@@ -650,9 +666,9 @@ Prisma v1.7.5 registra o M7.2 v2 como quinta entrega aceita do Movimento 7. O co
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Baseline funcional: `7cfd22bc963c2abc49d9242156c7f53c9c799778`, proveniente de `codex/m5-6-resume-parser-upgrade`; auditoria de instruções entregue em `e8fb794`. Branch da estrutura de validação local: `codex/reproducible-person-flow-validation`, derivada dessa auditoria; a troca de branch não representa rollout.
+- Baseline anterior a este movimento: `8259d0f` em `main` e `origin/main`.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
-- Em 2026-09-12, Bruno autorizou permanentemente commit/push das melhorias aprovadas e validadas na branch de entrega para esse mesmo repositório, sem nova confirmação por entrega. Registrado em `AGENTS.md` 1.1.1; não amplia permissão para merge, deploy, force-push, outro destino ou bypass de segurança. O push da validação reproduzível (`fa50b40`) foi confirmado no origin.
+- Autorização operacional vigente: `AGENTS.md` 1.3.1; não autoriza force-push, outro destino ou bypass de segurança.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente
@@ -6885,6 +6901,40 @@ Migration `20260918220000_m76_curation_description_scope` remove apenas `reason`
 
 ---
 
+## Source: `docs/decisions/ADR-068-impact-scoped-release-dispatcher.md`
+
+# ADR-068 — Dispatcher de release limitado pelo impacto
+
+Status: accepted
+
+Date: 2026-09-18
+
+## Context
+
+O Prisma possui CI completo, um único Supabase remoto de produção e frontend em VPS. O processo manual vinha repetindo leitura, validação, Git, Supabase e deploy mesmo quando apenas uma superfície mudava. O ledger remoto também preserva timestamps históricos diferentes dos arquivos locais, o que torna um `db push` geral inseguro.
+
+## Decision
+
+Adotar um dispatcher local e versionado que deriva um plano do diff, classifica somente superfícies diretamente afetadas e seleciona validação e publicação correspondentes. Os comandos são `plan`, `validate`, `publish` e `verify`. Escritas externas exigem SHA completo e execução explícita; caminhos desconhecidos e alterações de migrations existentes falham fechados.
+
+O ledger terá um mapa factual por nome, versão local, versão remota e fingerprint canônica. Enquanto nem toda divergência histórica tiver equivalência demonstrada, `cliDbPushAllowed=false`: migrations novas serão aplicadas isoladamente pelo mecanismo autorizado, Edge Functions serão publicadas nominalmente e web será recriada somente quando afetada.
+
+## Consequences
+
+- Releases documentais não consultam Supabase nem VPS.
+- Releases web não republicam banco ou funções.
+- Banco e funções recebem somente os artefatos novos presentes no plano.
+- O CI completo continua como gate remoto; o agente executa localmente apenas provas proporcionais e um gate transversal quando o risco justificar e houver autorização.
+- O mapa não altera nem “corrige” o histórico remoto; divergências permanecem visíveis até uma auditoria de equivalência própria.
+
+## Alternatives considered
+
+- Automatizar `db push` geral: rejeitado enquanto o ledger não é equivalente.
+- Renomear migrations locais para timestamps remotos: rejeitado por quebrar referências e ocultar diferenças de conteúdo.
+- CI/CD integral com secrets na GitHub Actions: adiado; o dispatcher reutiliza autenticação local existente e evita ampliar a superfície de secrets antes de evidência de benefício.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -6958,6 +7008,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-063](ADR-063-declared-competency-normalization.md) | accepted | Normalização derivada preserva declarações e exige associação Knowledge segura |
 | [ADR-064](ADR-064-contextual-competency-curation.md) | accepted | Curadoria contextual reutiliza Knowledge e grava decisões auditadas no Perfil |
 | [ADR-065](ADR-065-common-professional-taxonomy-domains.md) | accepted | Knowledge comum sustenta domínios ocupacional e de competências separados e versionados |
+| [ADR-068](ADR-068-impact-scoped-release-dispatcher.md) | accepted | Release limitado ao impacto, SHA validado e publicação seletiva por superfície |
 
 ## Rules
 
@@ -7026,6 +7077,8 @@ Em 2026-09-16, o pipeline serial de importação foi ativado nesse ambiente: PDF
 - rollback e owner definidos.
 
 ## Validação antes da produção
+
+Começar por `pnpm run release:plan -- --base=origin/main --head=HEAD`. O plano limita validações e destinos ao diff comprometido. O runbook e os guards ficam em `docs/operations/release-dispatcher.md`; o mapa `supabase/migration-ledger-map.json` mantém `cliDbPushAllowed=false` enquanto as divergências históricas não tiverem equivalência demonstrada.
 
 1. aplicar migrations em ordem;
 2. executar advisors e testes RLS;
@@ -7464,6 +7517,77 @@ O volume exclusivo com os três modelos candidatos foi preservado para reproduç
 | Aprovar qualidade semântica ou liberar produção | Não era o escopo autorizado; não houve publicação, IA ou banco | NOT TESTED |
 
 Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, preservação do gerador, ausência de conteúdo textual no resumo e serialização de coordenadas sem persistência. Sintaxe PowerShell validada. Não foi executado `pnpm run validate` nem uma suíte transversal: não houve alteração do aplicativo ou do contrato de ingestão. O Context Pack é atualizado como evidência documental, não como aprovação do candidato.
+
+---
+
+## Source: `docs/operations/release-dispatcher.md`
+
+# Dispatcher de release do Prisma
+
+## Objetivo
+
+Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions e web são destinos independentes.
+
+## Comandos
+
+```powershell
+pnpm run release:plan -- --base=origin/main --head=HEAD
+pnpm run release:validate -- --base=origin/main --head=HEAD
+pnpm run release:publish -- --base=origin/main --head=HEAD --expected-sha=<SHA>
+pnpm run release:verify -- --base=origin/main --head=HEAD --json
+```
+
+`publish` é dry-run sem `--execute`. Com execução, publica primeiro o branch atual; `--wait-ci` aguarda o workflow e `--promote-main` promove por fast-forward e envia exatamente o SHA informado. O comando recusa `main` como origem, SHA divergente, worktree rastreado sujo, caminho desconhecido e migration histórica modificada.
+
+Quando o plano contém web, `--vps-host=<alias>` ou `PRISMA_VPS_SSH_HOST` aciona `deploy/release-web.sh` após a promoção. O script avança `/opt/prisma` por fast-forward, exige o mesmo SHA, preserva a imagem anterior, constrói e recria somente `prisma-web` e executa o smoke HTTP. `PRISMA_VPS_PATH` altera o caminho sem gravar host, usuário ou chave no Git. Banco e funções permanecem no conector Supabase autorizado, porque o CLI geral está bloqueado pelo ledger; o recibo os mantém pendentes até a verificação remota.
+
+Um comprovante único pode ser gravado em caminho ignorado:
+
+```powershell
+pnpm run release:plan -- --receipt=tmp/release/plan.json
+```
+
+## Matriz
+
+| Diff | Validação | Supabase | VPS |
+| --- | --- | --- | --- |
+| somente docs | Context Pack afetado | não acessar | não acessar |
+| web | typecheck, build e testes afetados | não acessar | somente `prisma-web` |
+| migration nova | testes/contratos de banco e negativos aplicáveis | somente o arquivo novo | apenas se houver consumidor web |
+| Edge Function | testes afetados | somente a função nomeada | não acessar |
+| combinação | união sem duplicar comandos | banco → funções | web por último |
+
+## Ledger Supabase
+
+`supabase/migration-ledger-map.json` registra o estado observado no projeto `ioldpnqqvobprjiontre`. A auditoria de 2026-09-18 encontrou 136 migrations locais, 140 remotas, 134 nomes mapeados, 73 aliases de versão, seis registros somente remotos, dois arquivos somente locais e 57 fingerprints canônicas diferentes.
+
+Isso não prova schema incorreto, mas impede afirmar equivalência histórica. Portanto:
+
+- não executar `supabase db push` geral;
+- não executar `migration repair` automaticamente;
+- não editar migration já aplicada;
+- aplicar somente migration nova revisada pelo conector/fluxo autorizado;
+- verificar definição, grants/RLS afetados e registro remoto;
+- atualizar o mapa somente com evidência observada.
+
+`pnpm run check:supabase-ledger` valida a integridade local do mapa. A reconciliação registrada é funcional e fail-closed; não reescreve o ledger de produção.
+
+## Projeto do ChatGPT e prompts maiores
+
+O projeto do ChatGPT compartilha instruções, arquivos e fontes entre seus chats, mas não acessa automaticamente a pasta local; a [documentação oficial](https://learn.chatgpt.com/pt-BR/docs/projects) recomenda um chat separado por resultado. O projeto não deve receber o repositório inteiro por movimento. Use:
+
+1. instruções permanentes curtas do projeto, incluindo o protocolo de escopo e sugestão/custo;
+2. `FONTE_GPT_PRISMA.md` como fonte compacta compartilhada, regenerada pelo repositório;
+3. um chat novo para cada movimento material;
+4. somente os owner docs e referências específicas necessárias à decisão;
+5. saída inicial em Agreement Contract, com sugestões opcionais separadas por valor e custo;
+6. Execution Prompt somente depois de todos os `Q-*` materiais estarem resolvidos.
+
+Prompt inicial recomendado:
+
+```text
+Use FONTE_GPT_PRISMA.md como contexto-base e leia apenas as fontes específicas necessárias a este movimento. Antes de ampliar o escopo, apresente a sugestão, o valor, o custo em superfícies/tempo/validação/risco e aguarde minha decisão. Separe necessário, sugestão opcional e assunto adjacente. Produza primeiro o Agreement Contract; não gere o Execution Prompt final enquanto houver Q-* material.
+```
 
 ---
 
@@ -10108,6 +10232,71 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 
 ---
 
+## Source: `docs/qa/agreement-release-efficiency.md`
+
+# Contrato de Acordos — Publicação eficiente por impacto
+
+## Objetivo
+
+- Versão do contrato: 1.0.0.
+- Fonte da decisão: aprovação do Product Owner em 2026-09-18 para implementar integralmente o fluxo proposto de Git, Supabase, VPS e adaptação do processo de prompts no Projeto do ChatGPT.
+- Delta: cria governança e automação operacional; não altera comportamento funcional do produto.
+
+## DEVE — Inegociável
+
+- D-01 — Classificar cada movimento somente pelas superfícies diretamente presentes no diff ou exigidas por dependência demonstrável.
+- D-02 — Selecionar validações e destinos entre Git, banco, Edge Functions e web sem republicar superfícies não afetadas.
+- D-03 — Disponibilizar comandos reproduzíveis `plan`, `validate`, `publish` e `verify`, com publicação mutável exigindo SHA completo e opção explícita de execução.
+- D-04 — Publicar um commit coerente e promover exatamente o SHA validado, sem commits ou pushes intermediários desnecessários.
+- D-05 — Manter registro verificável das divergências do ledger Supabase e aplicar apenas migrations novas revisadas enquanto o histórico não for integralmente equivalente.
+- D-06 — Produzir um único comprovante compacto por release, separando Git, Supabase, Edge Functions, web, validações e limites.
+- D-07 — Entregar uma rotina específica para construir prompts maiores no Projeto do ChatGPT a partir da fonte compacta gerada, sem enviar o repositório inteiro como contexto padrão.
+
+## PROIBIDO
+
+- P-01 — Incluir melhoria adjacente, arquivo alheio, teste ou destino sem relação direta e necessária com o movimento.
+- P-02 — Force-push, reescrita de histórico Git, alteração retroativa de migration aplicada ou reparo do ledger sem prova de equivalência.
+- P-03 — `supabase db push` geral enquanto `cliDbPushAllowed` estiver falso; republicação de todas as Edge Functions por padrão.
+- P-04 — Reconstruir VPS, gateway, workers ou frontend quando a superfície correspondente não mudou.
+- P-05 — Gravar secrets, tokens, chaves ou dados pessoais em Git, recibos, logs ou prompts.
+
+## FORA DE ESCOPO
+
+- F-01 — Criar um segundo ambiente remoto ou branch paga do Supabase.
+- F-02 — Alterar regras funcionais, schema, RLS, Auth, dados ou runtime do Prisma.
+- F-03 — Apagar, renomear em massa ou reaplicar migrations históricas para fazer o CLI aparentar alinhamento.
+- F-04 — Automatizar decisões humanas de produto, risco, rollback ou aceite.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01 — Estrutura interna dos scripts, formato JSON do mapa/recibo e seleção de APIs nativas de Node e Git.
+- A-02 — Organização documental e testes negativos necessários para provar fail-closed.
+
+## PENDÊNCIAS
+
+- Nenhuma decisão material pendente para esta versão.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01/D02 — Diffs sintéticos de docs, web, migration e função geram rotas distintas e não acionam destinos alheios.
+- CA-D03/D04 — Publicação sem SHA, em `main`, com worktree rastreado sujo ou caminho desconhecido falha antes de mutar o remoto.
+- CA-D05 — Auditoria local cobre todas as migrations conhecidas, registra divergências e mantém o push geral bloqueado.
+- CA-D06 — `--receipt` produz um único JSON estruturado.
+- CA-D07 — Runbook informa fonte, instrução de projeto, abertura de chat por movimento e prompt mínimo.
+
+## ESTADO
+
+- `agreed`
+
+## APROVAÇÃO
+
+- Product Owner: Bruno.
+- Data: 2026-09-18.
+- Evidência de aprovação: “pode implementar tudo”.
+- Referência para execução: versão 1.0.0 deste contrato.
+
+---
+
 ## Source: `docs/qa/agreement-sidebar-branding-v171.md`
 
 # Contrato de Acordos — Sidebar institucional e Prisma v1.7.1
@@ -11892,6 +12081,57 @@ A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de
 
 ---
 
+## Source: `docs/qa/aot-release-efficiency.md`
+
+# AoT — Publicação eficiente por impacto
+
+Contrato de referência: `docs/qa/agreement-release-efficiency.md` 1.0.0. Execução: `docs/qa/execution-release-efficiency.md`.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status | Limitação |
+| --- | --- | --- | --- | --- |
+| D-01/D-02 | classificador e plano em `scripts/release-impact.mjs` | testes sintéticos de docs, web, migration e função | PASS | não infere dependências sem presença no diff |
+| D-03/D-04 | `release-dispatcher.mjs` com SHA, branch e worktree guards | testes positivos/negativos e gate completo | PASS | publicação externa usa o próprio SHA deste fechamento |
+| D-05 | mapa e checker do ledger | inventário remoto 140/local 136; checker local | PASS | equivalência histórica não demonstrada; push geral bloqueado |
+| D-06 | opção `--receipt` | teste cria, lê e remove um único JSON estruturado | PASS | recibos reais ficam em `tmp/` ignorado |
+| D-07 | runbook e prompt inicial | owner doc e Context Pack regenerado/verificado | PASS | configuração do Projeto do ChatGPT é ação manual do PO |
+
+## Proibições verificadas
+
+| ID | Evidência | Status |
+| --- | --- | --- |
+| P-01/P-04 | matriz seletiva e arquivos alheios preservados | PASS |
+| P-02/P-03 | alteração histórica e caminho desconhecido bloqueiam; `cliDbPushAllowed=false` | PASS |
+| P-05 | mapa e recibos não contêm secrets nem PII | PASS |
+
+## Fora de escopo preservado
+
+F-01 a F-04 preservados: nenhum ambiente, schema, dado ou regra funcional foi alterado.
+
+## Desvios do contrato
+
+Nenhum desvio funcional. O ledger foi reconciliado por mapa factual, não por mutação remota, porque 57 pares não têm fingerprint textual equivalente e seis registros remotos representam histórico desdobrado. Isso cumpre P-02/P-03 e preserva a verdade operacional.
+
+## Validação final
+
+- `pnpm run test:release-tooling`: 13/13.
+- `pnpm run check:supabase-ledger`: 134 nomes mapeados, dois locais, seis remotos e nenhum pendente desconhecido; push geral bloqueado.
+- `pnpm run validate`: lint 599 arquivos, foundation, Context Pack, typechecks, build web, 519 testes técnicos, 23 goldens e `VERTICAL_SLICE_OK`.
+- `pnpm run audit:dependencies`: nenhuma vulnerabilidade conhecida.
+- `git diff --check`: aprovado.
+- `bash -n deploy/release-web.sh`: delegado ao CI Linux porque o bash/WSL local retornou acesso negado antes de carregar o arquivo.
+
+## Git / ambiente
+
+Branch `codex/release-efficiency-dispatcher`; baseline `8259d0f`. Supabase foi consultado somente para inventário. Nenhuma migration, função, dado ou VPS foi alterado; o próprio plano desta entrega deve permanecer Git-only.
+
+## Conclusão
+
+Implementação local e provas concluídas. O fechamento externo publica o mesmo SHA em branch/main e confirma CI; Supabase e VPS permanecem corretamente fora da rota.
+
+---
+
 ## Source: `docs/qa/aot-sidebar-branding-v171.md`
 
 # AoT — Sidebar institucional e Prisma v1.7.1
@@ -13468,6 +13708,34 @@ Não declarar conclusão se qualquer D-* obrigatório não estiver `PASS`, se um
 
 ---
 
+## Source: `docs/qa/execution-release-efficiency.md`
+
+# Execução — Publicação eficiente por impacto
+
+Contrato: `docs/qa/agreement-release-efficiency.md` 1.0.0.
+
+## Escopo entendido
+
+- Implementar D-01 a D-07 com dispatcher local, testes, registro do ledger, owner docs, Context Pack e orientação para o Projeto do ChatGPT.
+- Impedir P-01 a P-05 por classificação fechada, guards de SHA/branch/worktree, imutabilidade de migration e bloqueio explícito do push geral.
+- Preservar F-01 a F-04: nenhum ambiente, schema, dado, segredo ou regra funcional será criado ou alterado.
+- A-01/A-02 permitem Node nativo, JSON versionado e testes sintéticos.
+
+## Ordem
+
+1. Auditar diff, fluxo Git/CI, Supabase remoto e VPS existente.
+2. Registrar a reconciliação funcional do ledger sem mutá-lo.
+3. Implementar `release:plan`, `release:validate`, `release:publish` e `release:verify`.
+4. Validar rotas positivas e negativas.
+5. Atualizar owner docs, ADR, Current State e Context Pack.
+6. Executar gate completo uma vez, revisar diff, publicar o branch, promover o mesmo SHA e verificar sincronização aplicável.
+
+## Limite operacional do Supabase
+
+O conector confirmou um único projeto remoto de produção. A auditoria encontrou aliases de timestamp, migrations remotas desdobradas, arquivos locais sem registro e fingerprints divergentes. Esta execução não usa `migration repair`, não reaplica SQL e não altera `supabase_migrations.schema_migrations`. Migrations futuras são publicadas individualmente pelo mecanismo autorizado e verificadas antes de atualizar o mapa.
+
+---
+
 ## Source: `docs/qa/execution-sidebar-branding-v171.md`
 
 # Execução — Sidebar institucional e Prisma v1.7.1
@@ -14838,6 +15106,7 @@ Produção não é inferida a partir de QA.
 - [ ] status Git revisado e mudanças do usuário preservadas;
 - [ ] contratos, ADRs e owners identificados;
 - [ ] diff limitado ao objetivo.
+- [ ] `pnpm run release:plan` classificou somente as superfícies diretamente afetadas; caminhos desconhecidos foram resolvidos antes da publicação.
 
 ## Código e contratos
 
@@ -14884,6 +15153,14 @@ Produção não é inferida a partir de QA.
 - [ ] smoke aprovado;
 - [ ] rollback testável;
 - [ ] riscos residuais aceitos.
+
+## Roteamento de publicação
+
+- [ ] um único SHA validado identificado;
+- [ ] Supabase não acessado quando não há migration/função afetada;
+- [ ] somente migrations novas e funções nomeadas no plano foram publicadas;
+- [ ] VPS não acessada quando web/deploy não mudou;
+- [ ] recibo único separa Git, banco, funções, web, testes e limites.
 
 ## Produção
 

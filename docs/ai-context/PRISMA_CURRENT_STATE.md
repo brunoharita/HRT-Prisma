@@ -10,6 +10,8 @@ last_verified: 2026-09-18
 
 ## Resumo operacional para prompts
 
+Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
+
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
 Prisma v1.7.6 registra M7.5 em produção, runtime `b9360e0`; curadoria 3.0 agrupa e busca após 400 ms, sem pré-seleção. Teto 20/dia, 200/mês; lote 7/7 preservou snapshots; Perfil 3→5 conceitos, automáticos 14. CI/smoke PASS. AoT M7.5 e ADR-066.
@@ -117,9 +119,9 @@ Prisma v1.7.5 registra o M7.2 v2 como quinta entrega aceita do Movimento 7. O co
 ## Repositório
 
 - Raiz local oficial: `C:\Users\Bruno\Documents\Prisma`.
-- Baseline funcional: `7cfd22bc963c2abc49d9242156c7f53c9c799778`, proveniente de `codex/m5-6-resume-parser-upgrade`; auditoria de instruções entregue em `e8fb794`. Branch da estrutura de validação local: `codex/reproducible-person-flow-validation`, derivada dessa auditoria; a troca de branch não representa rollout.
+- Baseline anterior a este movimento: `8259d0f` em `main` e `origin/main`.
 - Remoto Git configurado: `git@github.com:brunoharita/HRT-Prisma.git`.
-- Em 2026-09-12, Bruno autorizou permanentemente commit/push das melhorias aprovadas e validadas na branch de entrega para esse mesmo repositório, sem nova confirmação por entrega. Registrado em `AGENTS.md` 1.1.1; não amplia permissão para merge, deploy, force-push, outro destino ou bypass de segurança. O push da validação reproduzível (`fa50b40`) foi confirmado no origin.
+- Autorização operacional vigente: `AGENTS.md` 1.3.1; não autoriza force-push, outro destino ou bypass de segurança.
 - Stack local: Node.js, TypeScript e pnpm.
 
 ## Disponível localmente

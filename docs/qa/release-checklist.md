@@ -7,6 +7,7 @@
 - [ ] status Git revisado e mudanças do usuário preservadas;
 - [ ] contratos, ADRs e owners identificados;
 - [ ] diff limitado ao objetivo.
+- [ ] `pnpm run release:plan` classificou somente as superfícies diretamente afetadas; caminhos desconhecidos foram resolvidos antes da publicação.
 
 ## Código e contratos
 
@@ -53,6 +54,14 @@
 - [ ] smoke aprovado;
 - [ ] rollback testável;
 - [ ] riscos residuais aceitos.
+
+## Roteamento de publicação
+
+- [ ] um único SHA validado identificado;
+- [ ] Supabase não acessado quando não há migration/função afetada;
+- [ ] somente migrations novas e funções nomeadas no plano foram publicadas;
+- [ ] VPS não acessada quando web/deploy não mudou;
+- [ ] recibo único separa Git, banco, funções, web, testes e limites.
 
 ## Produção
 
