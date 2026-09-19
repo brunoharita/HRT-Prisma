@@ -43,7 +43,7 @@ test("M7.2 v2 preserva clientes históricos e usa RPCs aditivas", async () => {
   assert.doesNotMatch(migration, /drop function public\.load_person_professional_evidence_map/);
   assert.match(repository, /load_person_professional_evidence_map_v5/);
   assert.match(curation, /searchCompetencyTaxonomy/);
-  assert.match(curation, /curate_profile_competency_v3/);
+  assert.match(curation, /curate_profile_competency_v4/);
 });
 
 test("M7.5 preserva o último resultado completo e isola orçamento e reprocessamento", async () => {
