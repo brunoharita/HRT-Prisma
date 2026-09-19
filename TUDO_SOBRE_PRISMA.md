@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 230
-source_manifest_sha256: f12c6561ab15286ca281a17df609a76b95382260ed8501f94544610105fd7334
+documentation_source_count: 232
+source_manifest_sha256: 01f1bb27ea5e139e276570644416c01917105447f2e1580d42f38707fd80d329
 -->
 
 # Tudo sobre o Prisma
@@ -8578,7 +8578,7 @@ Os resultados são ordenados por quantidade de critérios objetivos atendidos e,
 
 ## Curadoria contextual M7.4
 
-Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição e alcance. Ao propor conceito, a descrição é opcional; a justificativa textual da associação não é coletada. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência.
+Na aba Competências, administradores autorizados revisam declarações pendentes em painel lateral, mantendo a lista visível, sem navegar à Knowledge. A curadoria reutiliza conceitos/aliases aprovados e propostas existentes, com fonte, termo original, definição e alcance. Ao propor conceito, a descrição é opcional; a justificativa textual da associação não é coletada. Empresa é o alcance padrão; Global exige Super Admin e informa o impacto em outros perfis. Proposta não publica conceito nem encerra pendência. Na governança de Conhecimento, o Super Admin vê propostas Globais e da empresa ativa, identificadas pelo alcance; propostas de outra empresa não aparecem.
 
 Gravar atualiza a projeção e fecha o painel; Cancelar não grava. Página, filtro e posição permanecem. Se o item resolvido desaparecer, o foco passa ao próximo sobrevivente, ou ao anterior se era o último; página vazia recua à última válida. Gravar e próximo mantém a revisão aberta no próximo pendente. Alterações não salvas pedem confirmação de descarte, e falhas preservam a edição. No celular, o painel ocupa a tela e retorna à lista na mesma posição. Perfis antigos sem itens normalizados mantêm pendências explícitas e exigem normalização antes da curadoria contextual.
 
@@ -8965,6 +8965,60 @@ Sem escolha arquitetural pendente para a ponte aprovada. Sessão autenticada e j
 - CA-D06: teste dirigido da integração ao callback existente e, na interface, correção/cancelamento, bloqueio de criação durante edição, confirmação server-side e identidade correta antes de prosseguir. Nome sem contato continua insuficiente para criar; vínculo name-only já permitido não é removido.
 
 Ativação enabled é limitada ao teste/piloto hospedado solicitado; não declara concluído o benchmark/cutover geral M5.6. Publicação de Perfil permanece humana.
+
+---
+
+## Source: `docs/qa/agreement-knowledge-proposal-visibility.md`
+
+# Contrato de Acordos — Visibilidade de propostas da Knowledge
+
+## Objetivo
+
+- Versão: 1.0.0
+- Fonte da decisão: Bruno autorizou a correção em 2026-09-19 após a proposta de `Transformação operacional` ficar invisível na tela de Propostas.
+- Delta: corrigir somente o filtro de leitura do dashboard; a autorização da aprovação no Supabase permanece vigente.
+
+## DEVE — Inegociável
+
+- D-01 — Super Admin vê propostas Globais e propostas da empresa ativa no dashboard de Conhecimento.
+- D-02 — Cada proposta informa visualmente se é Global Prisma ou Empresa ativa.
+- D-03 — A aprovação continua submetida ao `require_knowledge_admin` server-side.
+
+## PROIBIDO
+
+- P-01 — Não exibir proposta de outra empresa apenas por o usuário ser Super Admin.
+- P-02 — Não criar, aprovar, editar ou associar conceitos nesta correção.
+- P-03 — Não alterar RLS, schema, RPCs ou histórico de proposals.
+
+## FORA DE ESCOPO
+
+- F-01 — Reinterpretação de Perfis, taxonomia, normalização e pesquisa de Knowledge.
+- F-02 — Alteração do nome ou aprovação da proposta `Transformação operacional`.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01 — Extrair a regra de visibilidade para função pura e cobri-la com testes positivos e negativos.
+
+## PENDÊNCIAS
+
+- Nenhuma.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01 — Com empresa ativa A, Super Admin vê propostas global e A, mas não B.
+- CA-D02 — O card da proposta exibe o alcance.
+- CA-D03 — A revisão do diff confirma que a função server-side de aprovação e o banco não mudaram.
+
+## ESTADO
+
+- agreed
+
+## APROVAÇÃO
+
+- Product Owner: Bruno
+- Data: 2026-09-19
+- Evidência: "pode fazer, AoT"
+- Referência imutável: versão 1.0.0 deste arquivo.
 
 ---
 
@@ -12684,6 +12738,28 @@ Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.
 Aditivo: reutilizar IdentityForm e identifyResumeIntake para expor correção explícita antes da criação; revalidar correspondências, bloquear resolução durante a edição e preservar o formulário em erro. Não corrigir o algoritmo extrator neste escopo. Implantar o ajuste e repetir a jornada real autorizada sem publicar Perfil.
 
 Sequência: diagnóstico existente -> branch isolada do deploy f1cc983 -> gateway de transporte reutilizando Auth/RLS -> SSH reverso -> negativos/adapter/build -> implantação reversível -> jornada real hospedada -> AoT e contexto gerado. Gateway não contém parser, modelo nem regra de extração; usa Node já adotado pelo repositório e nenhuma biblioteca nova. Não executar validação integral sem autorização adicional. Não publicar Perfil nem ativar Parser IA M5.7. Se acesso autenticado/qualidade/tempo impedir prova, registrar PARTIAL/BLOCKED no AoT, sem declarar encerramento.
+
+---
+
+## Source: `docs/qa/execution-knowledge-proposal-visibility.md`
+
+# Execução — Visibilidade de propostas da Knowledge
+
+Contrato: `docs/qa/agreement-knowledge-proposal-visibility.md` 1.0.0.
+
+## Escopo entendido
+
+- Implementar D-01 a D-03 no filtro cliente do dashboard e no card da proposta.
+- Impedir P-01 a P-03: filtro explícito por empresa ativa; nenhuma escrita, migration, RPC ou RLS.
+- Preservar F-01 e F-02.
+- A-01 permite uma função pura compartilhada e teste direcionado.
+
+## Ordem
+
+1. Extrair e testar a regra de visibilidade por escopo e organização ativa.
+2. Aplicar a regra ao carregamento da Knowledge e mostrar o alcance no card.
+3. Atualizar owner docs, Context Pack e AoT.
+4. Executar typecheck web, testes direcionados e build web; revisar diff e publicar somente web/Git.
 
 ---
 

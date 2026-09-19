@@ -4,6 +4,7 @@ import { supabaseFunctionOperationError, supabaseOperationError } from "../../do
 import type { Json } from "./database.types";
 import { supabase } from "./client";
 import { readCompetencyTaxonomySearch } from "../../domain/competencyTaxonomy";
+import { isKnowledgeProposalVisible } from "../../shared/knowledgeProposalVisibility";
 
 export const knowledgeService = {
   async loadDashboard(profile: PlatformAccessProfile, organizationId: string | null): Promise<KnowledgeDashboard> {
@@ -24,7 +25,7 @@ export const knowledgeService = {
     }
     const concepts = (conceptsResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.scope === "global" || row.organization_id === organizationId);
     const inbox = (inboxResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.organization_id === organizationId);
-    const proposals = (proposalsResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.organization_id === organizationId);
+    const proposals = (proposalsResult.data ?? []).filter((row) => isKnowledgeProposalVisible({ scope: row.scope, organizationId: row.organization_id }, profile, organizationId));
     const conceptsById = new Map(concepts.map((row) => [row.id, row]));
     const sourcesById = new Map((sourcesResult.data ?? []).map((row) => [row.id, row]));
     const versionsById = new Map((versionsResult.data ?? []).map((row) => [row.id, row]));
@@ -105,10 +106,10 @@ export const knowledgeService = {
   },
 };
 
-function mapProposal(row: { id: string; status: string; original_proposal: Json }): KnowledgeProposalView {
+function mapProposal(row: { id: string; scope: "global" | "organization"; status: string; original_proposal: Json }): KnowledgeProposalView {
   const payload = isObject(row.original_proposal) ? row.original_proposal : {};
   return {
-    id: row.id, status: row.status, originalProposal: row.original_proposal,
+    id: row.id, scope: row.scope, status: row.status, originalProposal: row.original_proposal,
     observedTerm: typeof payload.observed_term === "string" ? payload.observed_term : "Termo não informado",
     proposedConcept: isObject(payload.proposed_concept) ? payload.proposed_concept : {},
     sources: Array.isArray(payload.sources) ? payload.sources.filter(isObject) : [],

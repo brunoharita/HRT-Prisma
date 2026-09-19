@@ -20,7 +20,7 @@ export interface KnowledgeInboxView {
 export interface KnowledgeProposalView {
   id: string; observedTerm: string; proposedConcept: { canonical_label?: string; concept_type?: string; description?: string };
   sources: Array<{ url?: string; title?: string; publisher?: string; source_class?: string; retrieved_at?: string }>;
-  status: string; originalProposal: Json;
+  scope: "global" | "organization"; status: string; originalProposal: Json;
 }
 export interface KnowledgeImpactView {
   id: string; personId: string; profileId: string; conceptId: string; policy: string; status: string; createdAt: string;

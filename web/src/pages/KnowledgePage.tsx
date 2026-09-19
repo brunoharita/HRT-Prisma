@@ -156,7 +156,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   }
   function proposalsPanel() {
     return <div className="prisma-knowledge-proposals">{dashboard?.proposals.length ? dashboard.proposals.map((proposal) => <PrismaCard key={proposal.id} title={proposal.proposedConcept.canonical_label ?? proposal.observedTerm}>
-      <Space direction="vertical" size="middle" style={{ width: "100%" }}><Space wrap><Tag>{proposal.proposedConcept.concept_type ?? "tipo pendente"}</Tag>{statusTag(proposal.status)}</Space>
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}><Space wrap><Tag>{proposal.proposedConcept.concept_type ?? "tipo pendente"}</Tag><Tag color={proposal.scope === "global" ? "blue" : "purple"}>{proposal.scope === "global" ? "Global Prisma" : "Empresa ativa"}</Tag>{statusTag(proposal.status)}</Space>
       <Typography.Paragraph>{proposal.proposedConcept.description ?? "Sem descrição."}</Typography.Paragraph>
       <div>{proposal.sources.map((source, index) => <p key={`${proposal.id}-${index}`}><LinkOutlined /> <a href={source.url} target="_blank" rel="noreferrer">{source.title ?? source.url}</a> · {source.publisher} · {source.source_class}</p>)}</div>
       {proposal.status === "awaiting_human_review" ? <Button type="primary" onClick={async () => { try { await knowledgeService.approveProposal(proposal.id); message.success("Conhecimento aprovado e versionado."); await load(); } catch (reason) { message.error(reason instanceof Error ? reason.message : "Falha na aprovação."); } }}>Aprovar</Button> : null}</Space>
