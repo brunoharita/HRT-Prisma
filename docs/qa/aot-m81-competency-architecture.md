@@ -86,6 +86,7 @@ Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b
 - `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, quatro migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
 - Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
 - Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
+- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` preparados para dump completo, cópia de todos os buckets, hashes e comparação de inventários. A consulta SQL exata do inventário passou em leitura remota (1 bucket, 15 objetos, 2.118.277 bytes); `node --check`, lint, rejeição de destino no repositório, rejeição de credencial ausente e detecção de checksum corrompido passaram. **NOT TESTED** com credenciais reais; Bruno optou por autenticar depois. Nenhum arquivo de backup foi gerado, restauração e agendamento não ocorreram. D-22 permanece `BLOCKED`.
 
 ## Desvios e bloqueios
 

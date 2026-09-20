@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 250
-source_manifest_sha256: c215df88d8c1ded9018eb7bd38b68c8a83dd8a4ef81c246fb3cbef858d4be39b
+documentation_source_count: 251
+source_manifest_sha256: 4cd404aa54501564911256f3c5ca2f9706f3c91e8809e737fbc4a49637f2174d
 -->
 
 # Tudo sobre o Prisma
@@ -2538,7 +2538,7 @@ last_verified: 2026-09-20
 
 ## M8.1 em implementação local, ainda sem rollout
 
-O Agreement M8 v1.0.0, aditivo M8.1 v1.1.0 e imagem normativa de nove telas autorizam a migração de competências. A branch `codex/m81-competency-architecture` contém schema aditivo para dois macrogrupos, nove subagrupadores globais, futuros subagrupadores tenant-scoped e classificação principal versionada dos conceitos Knowledge. Backfill automático só para tecnologias com mapping oficial O*NET; demais classificações aguardam decisão humana. A projeção M8 separa Declaração, Contexto, Certificado, Assessment e habilidade prática; vínculo factual de experiência/credencial exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional são preservados. QA PostgreSQL sintético com rollback passou para classificação, escopo, aprovação, curadoria e natureza da evidência. Ainda não há prova de comparação visual completa, backup/limpeza, smoke real nem implantação; M8.1 não está ativo em produção. ADR-070 e AoT M8.1 acompanham a evidência.
+O Agreement M8 v1.0.0, aditivo M8.1 v1.1.0 e imagem normativa de nove telas autorizam a migração de competências. A branch `codex/m81-competency-architecture` contém schema aditivo para dois macrogrupos, nove subagrupadores globais, futuros subagrupadores tenant-scoped e classificação principal versionada dos conceitos Knowledge. Backfill automático só para tecnologias com mapping oficial O*NET; demais classificações aguardam decisão humana. A projeção M8 separa Declaração, Contexto, Certificado, Assessment e habilidade prática; vínculo factual de experiência/credencial exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional são preservados. QA PostgreSQL sintético com rollback passou para classificação, escopo, aprovação, curadoria e natureza da evidência. A rotina manual de backup de banco e Storage está preparada em `scripts/backup-prisma-production.mjs`, mas ainda não foi autenticada, executada ou restaurada em ambiente isolado. Ainda não há prova de comparação visual completa, backup/limpeza, smoke real nem implantação; M8.1 não está ativo em produção. ADR-070 e AoT M8.1 acompanham a evidência.
 
 ## Resumo operacional para prompts
 
@@ -9312,8 +9312,8 @@ Estado: **plano, não executado**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/
 
 ## Guardas antes de qualquer exclusão
 
-1. Obter backup técnico recuperável do PostgreSQL remoto por `supabase db dump --linked`/`pg_dump` autenticado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho.
-2. Copiar separadamente todos os objetos Storage no escopo para destino privado, com inventário de bucket/path, tamanho e checksum, antes de excluí-los. [Backups de banco não contêm os objetos](https://supabase.com/docs/guides/platform/backups).
+1. Executar a [rotina de backup do Prisma](prisma-production-backup.md) com autenticação e destino privado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho. A rotina foi preparada, mas ainda não executada com credenciais.
+2. Confirmar que a rotina copiou separadamente todos os objetos Storage no escopo, com inventário de bucket/path, tamanho e checksum, antes de excluí-los. [Backups de banco não contêm os objetos](https://supabase.com/docs/guides/platform/backups).
 3. Testar leitura/restauração do dump em ambiente isolado sem publicar dados pessoais. Confirmar que o backup e as cópias de Storage cobrem o mesmo corte temporal; suspender novas importações durante o corte ou revalidar fingerprints imediatamente antes da exclusão.
 4. Confirmar server-side `harita.super`: exatamente um `platform_users`, Auth existente, status ativo, perfil `super_admin` e memberships atuais. Não incluir Auth/memberships no conjunto a excluir.
 5. Montar lista de Pessoas pelo vínculo `resume_intakes.resolution_type='created_new_person'` e `resolved_person_id`, agrupada por organização. `latest_source_type` isolado não prova origem. Em 2026-09-20 havia oito Pessoas com criação por intake rastreável e duas sem intake resolvido; uma destas tinha `latest_source_type=resume_pdf` e permanece ambígua. Uma Pessoa criada por intake tem também outro intake vinculado. Exigir prova individual de qualquer linha adicional sem intake antes de incluí-la.
@@ -9604,6 +9604,47 @@ O volume exclusivo com os três modelos candidatos foi preservado para reproduç
 | Aprovar qualidade semântica ou liberar produção | Não era o escopo autorizado; não houve publicação, IA ou banco | NOT TESTED |
 
 Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, preservação do gerador, ausência de conteúdo textual no resumo e serialização de coordenadas sem persistência. Sintaxe PowerShell validada. Não foi executado `pnpm run validate` nem uma suíte transversal: não houve alteração do aplicativo ou do contrato de ingestão. O Context Pack é atualizado como evidência documental, não como aprovação do candidato.
+
+---
+
+## Source: `docs/operations/prisma-production-backup.md`
+
+# Backup operacional do Prisma em produção
+
+Estado em 2026-09-20: **rotina preparada; primeira execução e restauração ainda pendentes de autenticação e destino privado**. Projeto único esperado: `ioldpnqqvobprjiontre`. Este procedimento é pré-requisito para a limpeza M8.1, não uma prova de que ela já pode começar.
+
+## O que a rotina produz
+
+`scripts/backup-prisma-production.mjs` executa um `pg_dump` custom do banco inteiro e copia cada objeto de todos os buckets pelo Storage API. A pasta final contém `database.dump`, `storage/*.bin` e `manifest.json` com projeto, horários, caminhos originais, tamanhos e SHA-256. Nomes de objetos só aparecem no manifesto privado; o terminal mostra contagens e tamanhos agregados. O script confere o arquivo via `pg_restore --list`, recalcula hashes e compara inventários de `storage.objects` antes e depois da cópia. Se houver mudança ou falha, deixa a pasta `.incomplete-*` identificada e retorna erro. Ela não é um backup válido.
+
+O dump usa `pg_dump` direto porque o [dump padrão da Supabase CLI exclui os schemas gerenciados `auth` e `storage`](https://supabase.com/docs/reference/cli/su#supabase-db-dump). O backup bruto preserva esses schemas e os dados da aplicação; sua restauração precisa ser planejada em ambiente Supabase compatível e testada antes de qualquer exclusão. [Backups de banco não contêm bytes dos arquivos Storage](https://supabase.com/docs/guides/platform/backups), por isso a cópia separada é obrigatória. Configuração hospedada, chaves de API, Edge Functions e papéis globais não são recriados por este dump; código e migrations seguem no Git e a configuração hospedada exige recuperação própria.
+
+## Preparação pelo operador
+
+1. Escolher uma pasta **privada, fora do repositório e fora de `%TEMP%`**, preferencialmente em volume criptografado e com cópia externa protegida. A rotina não cria nem publica um novo destino. Verificar espaço livre para banco e Storage. Não versionar nem sincronizar em uma pasta pública.
+2. Usar conexão PostgreSQL direta ou session pooler na porta 5432. `PGHOST` ou `PGUSER` precisa identificar `ioldpnqqvobprjiontre`, e `PGDATABASE` deve ser `postgres`. O PostgreSQL 17 (`psql`, `pg_dump`, `pg_restore`) já está instalado nesta máquina; para outro local, definir `PRISMA_BACKUP_PG_BIN`.
+3. Obter uma credencial **server-side** autorizada para listar e baixar todos os buckets privados. `PRISMA_BACKUP_STORAGE_KEY` é uma chave sensível de Storage/Supabase; nunca usar `VITE_*`, inserir no Git, no histórico do shell, em argumentos da linha de comando ou no chat. A chave deve permanecer somente no ambiente do processo durante a execução.
+
+Exemplo de sessão PowerShell interativa. Substituir host, usuário e pasta pelos valores da conexão real; as senhas são digitadas em prompts ocultos:
+
+```powershell
+$env:PGHOST = 'db.ioldpnqqvobprjiontre.supabase.co'
+$env:PGPORT = '5432'
+$env:PGUSER = 'postgres'
+$env:PGDATABASE = 'postgres'
+$env:PGPASSWORD = [System.Net.NetworkCredential]::new('', (Read-Host 'Senha do banco' -AsSecureString)).Password
+$env:PRISMA_BACKUP_STORAGE_KEY = [System.Net.NetworkCredential]::new('', (Read-Host 'Chave server-side do Storage' -AsSecureString)).Password
+node scripts/backup-prisma-production.mjs backup 'D:\DestinoPrivado\Prisma'
+Remove-Item Env:PGPASSWORD, Env:PRISMA_BACKUP_STORAGE_KEY -ErrorAction SilentlyContinue
+```
+
+Se a conexão for pelo session pooler, usar o host fornecido pelo Dashboard e `PGUSER=postgres.ioldpnqqvobprjiontre`. Também é possível usar `PGPASSFILE` no lugar de `PGPASSWORD`, desde que o arquivo seja privado. A pasta de destino precisa existir; o script recusa destino dentro do repositório ou temporário. Em caso de erro, remover as variáveis sensíveis da sessão e tratar a pasta `.incomplete-*` como dado pessoal não protegido por uma verificação concluída.
+
+## Verificação e restauração
+
+Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra `isolated-restore-pending` porque essa verificação estrutural **não prova restauração**. Antes da limpeza M8.1, restaurar uma cópia em PostgreSQL/Supabase isolado e compatível, conferir tabelas e dados necessários de `public`, `auth` e `storage`, reconstruir os arquivos no Storage de teste pelos caminhos do manifesto, e fazer smoke de leitura. Nunca testar restauração sobre produção.
+
+O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocorre depois. Suspender novas importações durante o corte da limpeza ou revalidar fingerprints imediatamente antes de excluir; nenhum backup manual substitui recuperação ponto a ponto. Para operação recorrente, agendar apenas após o primeiro backup e teste de restauração, com armazenamento seguro das credenciais no mesmo usuário que executará a tarefa e alerta para falhas. Ainda não há tarefa agendada, política de retenção nem cópia externa configuradas; essas decisões dependem do destino e da autenticação do operador.
 
 ---
 
@@ -14456,6 +14497,7 @@ Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b
 - `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, quatro migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
 - Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
 - Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
+- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` preparados para dump completo, cópia de todos os buckets, hashes e comparação de inventários. A consulta SQL exata do inventário passou em leitura remota (1 bucket, 15 objetos, 2.118.277 bytes); `node --check`, lint, rejeição de destino no repositório, rejeição de credencial ausente e detecção de checksum corrompido passaram. **NOT TESTED** com credenciais reais; Bruno optou por autenticar depois. Nenhum arquivo de backup foi gerado, restauração e agendamento não ocorreram. D-22 permanece `BLOCKED`.
 
 ## Desvios e bloqueios
 
