@@ -27,7 +27,7 @@ Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
 | D-19 | Saga M5.5 existente inspecionada | BLOCKED | Exclusão dependente pendente |
 | D-20 | Storage não foi removido | BLOCKED | Backup de objetos e deleção pendentes |
 | D-21 | FKs e QA local do novo schema | PARTIAL | Ausência de órfãos pós-limpeza pendente |
-| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; sem escrita remota | BLOCKED | Plano Free sem backup automático; dump DB e cópia Storage necessários |
+| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; backup técnico concluído sem escrita remota | PARTIAL | Restauração isolada e smoke ainda pendentes |
 | D-23 | Nenhum ledger novo criado | PARTIAL | Ledger pessoal histórico M5.5 só pode ser tratado após inventário/backup |
 | D-24 | Contratos intake/Perfil preservados | NOT TESTED | Falta novo ciclo sintético real |
 | D-25 | Sem mudança de matching/score no diff; regressões M7.1 dirigidas | PARTIAL | Smoke de matching faltante |
@@ -86,7 +86,7 @@ Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b
 - `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, quatro migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
 - Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
 - Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
-- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` preparados para dump completo, cópia de todos os buckets, hashes e comparação de inventários. A consulta SQL exata do inventário passou em leitura remota (1 bucket, 15 objetos, 2.118.277 bytes); `node --check`, lint, rejeição de destino no repositório, rejeição de credencial ausente e detecção de checksum corrompido passaram. **NOT TESTED** com credenciais reais; Bruno optou por autenticar depois. Nenhum arquivo de backup foi gerado, restauração e agendamento não ocorreram. D-22 permanece `BLOCKED`.
+- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` executados com a CLI Supabase autenticada, acesso temporário `cli_login_postgres`/`SET ROLE postgres` e chave Secret transitória para o Storage. A cópia privada `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z` contém dump customizado de 28.619.375 bytes, 15 objetos Storage/2.118.277 bytes e manifesto com SHA-256; `node --check`, verificação estrutural/hash e ACL protegida passaram. A restauração isolada, smoke de leitura e agendamento ainda não ocorreram. D-22 permanece `PARTIAL`.
 
 ## Desvios e bloqueios
 

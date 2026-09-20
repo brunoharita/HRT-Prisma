@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 251
-source_manifest_sha256: 4cd404aa54501564911256f3c5ca2f9706f3c91e8809e737fbc4a49637f2174d
+source_manifest_sha256: 4b6f621fd690ceef3c92327d2cac45a05c235fead9810607dd866efa57b690a8
 -->
 
 # Tudo sobre o Prisma
@@ -9308,11 +9308,11 @@ Não existe publicação automática após a checagem. Para CBO, ESCO e O*NET, o
 
 # M8.1 — Preflight e limpeza controlada de dados de currículo
 
-Estado: **plano, não executado**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/P-01 a P-08/P-13 a P-15/P-21 a P-23. O backend alvo é o projeto Supabase existente `ioldpnqqvobprjiontre`.
+Estado: **plano, backup técnico concluído; limpeza e restauração isolada não executadas**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/P-01 a P-08/P-13 a P-15/P-21 a P-23. O backend alvo é o projeto Supabase existente `ioldpnqqvobprjiontre`.
 
 ## Guardas antes de qualquer exclusão
 
-1. Executar a [rotina de backup do Prisma](prisma-production-backup.md) com autenticação e destino privado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho. A rotina foi preparada, mas ainda não executada com credenciais.
+1. Executar e verificar a [rotina de backup do Prisma](prisma-production-backup.md) com autenticação e destino privado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho. Primeira cópia concluída em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`; a restauração isolada ainda é obrigatória.
 2. Confirmar que a rotina copiou separadamente todos os objetos Storage no escopo, com inventário de bucket/path, tamanho e checksum, antes de excluí-los. [Backups de banco não contêm os objetos](https://supabase.com/docs/guides/platform/backups).
 3. Testar leitura/restauração do dump em ambiente isolado sem publicar dados pessoais. Confirmar que o backup e as cópias de Storage cobrem o mesmo corte temporal; suspender novas importações durante o corte ou revalidar fingerprints imediatamente antes da exclusão.
 4. Confirmar server-side `harita.super`: exatamente um `platform_users`, Auth existente, status ativo, perfil `super_admin` e memberships atuais. Não incluir Auth/memberships no conjunto a excluir.
@@ -9611,38 +9611,35 @@ Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, pre
 
 # Backup operacional do Prisma em produção
 
-Estado em 2026-09-20: **rotina preparada; primeira execução e restauração ainda pendentes de autenticação e destino privado**. Projeto único esperado: `ioldpnqqvobprjiontre`. Este procedimento é pré-requisito para a limpeza M8.1, não uma prova de que ela já pode começar.
+Estado em 2026-09-20: **primeiro backup concluído e verificado; restauração isolada ainda pendente**. Projeto: `ioldpnqqvobprjiontre`. A cópia válida está em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`. Este procedimento é pré-requisito para a limpeza M8.1, não uma prova de que ela já pode começar.
 
 ## O que a rotina produz
 
-`scripts/backup-prisma-production.mjs` executa um `pg_dump` custom do banco inteiro e copia cada objeto de todos os buckets pelo Storage API. A pasta final contém `database.dump`, `storage/*.bin` e `manifest.json` com projeto, horários, caminhos originais, tamanhos e SHA-256. Nomes de objetos só aparecem no manifesto privado; o terminal mostra contagens e tamanhos agregados. O script confere o arquivo via `pg_restore --list`, recalcula hashes e compara inventários de `storage.objects` antes e depois da cópia. Se houver mudança ou falha, deixa a pasta `.incomplete-*` identificada e retorna erro. Ela não é um backup válido.
+`scripts/backup-prisma-production.mjs` executa um `pg_dump` custom do banco inteiro e copia cada objeto de todos os buckets pelo Storage API. A pasta final contém `database.dump`, `storage/*.bin` e `manifest.json` com projeto, horários, caminhos originais, tamanhos e SHA-256. Nomes de objetos só aparecem no manifesto privado; o terminal mostra contagens e tamanhos agregados. O script exige dados de `public`, `auth` e `storage` no índice do archive, percorre o dump inteiro com `pg_restore` sem gravar o SQL extraído, recalcula hashes e compara inventários de `storage.objects` antes e depois da cópia. Se houver mudança ou falha, deixa a pasta `.incomplete-*` identificada e retorna erro. Ela não é um backup válido.
 
 O dump usa `pg_dump` direto porque o [dump padrão da Supabase CLI exclui os schemas gerenciados `auth` e `storage`](https://supabase.com/docs/reference/cli/su#supabase-db-dump). O backup bruto preserva esses schemas e os dados da aplicação; sua restauração precisa ser planejada em ambiente Supabase compatível e testada antes de qualquer exclusão. [Backups de banco não contêm bytes dos arquivos Storage](https://supabase.com/docs/guides/platform/backups), por isso a cópia separada é obrigatória. Configuração hospedada, chaves de API, Edge Functions e papéis globais não são recriados por este dump; código e migrations seguem no Git e a configuração hospedada exige recuperação própria.
 
 ## Preparação pelo operador
 
 1. Escolher uma pasta **privada, fora do repositório e fora de `%TEMP%`**, preferencialmente em volume criptografado e com cópia externa protegida. A rotina não cria nem publica um novo destino. Verificar espaço livre para banco e Storage. Não versionar nem sincronizar em uma pasta pública.
-2. Usar conexão PostgreSQL direta ou session pooler na porta 5432. `PGHOST` ou `PGUSER` precisa identificar `ioldpnqqvobprjiontre`, e `PGDATABASE` deve ser `postgres`. O PostgreSQL 17 (`psql`, `pg_dump`, `pg_restore`) já está instalado nesta máquina; para outro local, definir `PRISMA_BACKUP_PG_BIN`.
+2. Preferir a CLI Supabase já autenticada: `supabase db dump --linked --dry-run` cria um acesso temporário `cli_login_postgres`. Usar o host `db.ioldpnqqvobprjiontre.supabase.co`, `PGDATABASE=postgres` e o `PGPASSWORD` temporário somente no processo; a rotina aplica `SET ROLE postgres` para ler os schemas gerenciados. Como alternativa, usar conexão PostgreSQL direta ou session pooler na porta 5432 com senha permanente. O PostgreSQL 17 (`psql`, `pg_dump`, `pg_restore`) já está instalado nesta máquina; para outro local, definir `PRISMA_BACKUP_PG_BIN`.
 3. Obter uma credencial **server-side** autorizada para listar e baixar todos os buckets privados. `PRISMA_BACKUP_STORAGE_KEY` é uma chave sensível de Storage/Supabase; nunca usar `VITE_*`, inserir no Git, no histórico do shell, em argumentos da linha de comando ou no chat. A chave deve permanecer somente no ambiente do processo durante a execução.
 
-Exemplo de sessão PowerShell interativa. Substituir host, usuário e pasta pelos valores da conexão real; as senhas são digitadas em prompts ocultos:
+Execução interativa com senha permanente, quando a senha estiver disponível. O wrapper pede as duas credenciais em prompts ocultos, usa-as somente no processo e as remove do ambiente ao terminar:
 
 ```powershell
-$env:PGHOST = 'db.ioldpnqqvobprjiontre.supabase.co'
-$env:PGPORT = '5432'
-$env:PGUSER = 'postgres'
-$env:PGDATABASE = 'postgres'
-$env:PGPASSWORD = [System.Net.NetworkCredential]::new('', (Read-Host 'Senha do banco' -AsSecureString)).Password
-$env:PRISMA_BACKUP_STORAGE_KEY = [System.Net.NetworkCredential]::new('', (Read-Host 'Chave server-side do Storage' -AsSecureString)).Password
-node scripts/backup-prisma-production.mjs backup 'D:\DestinoPrivado\Prisma'
-Remove-Item Env:PGPASSWORD, Env:PRISMA_BACKUP_STORAGE_KEY -ErrorAction SilentlyContinue
+pwsh -NoProfile -File scripts/run-prisma-backup-interactive.ps1 -Destination 'C:\Users\Bruno\Documents\Prisma-Backups'
 ```
 
-Se a conexão for pelo session pooler, usar o host fornecido pelo Dashboard e `PGUSER=postgres.ioldpnqqvobprjiontre`. Também é possível usar `PGPASSFILE` no lugar de `PGPASSWORD`, desde que o arquivo seja privado. A pasta de destino precisa existir; o script recusa destino dentro do repositório ou temporário. Em caso de erro, remover as variáveis sensíveis da sessão e tratar a pasta `.incomplete-*` como dado pessoal não protegido por uma verificação concluída.
+Se o terminal não aceitar a colagem no prompt oculto, copie a chave existente no Dashboard e acrescente `-StorageKeyFromClipboard` ao comando. Essa opção aceita somente os formatos Secret ou `service_role`, usa o valor sem imprimi-lo e limpa a área de transferência após a leitura. Não use a opção se a área de transferência contiver outro dado.
+
+Na primeira execução de 2026-09-20, a senha permanente não foi necessária: a CLI autenticada forneceu o acesso temporário do PostgreSQL e a chave Secret foi lida uma vez da área de transferência para a cópia do Storage. O processo limpou a variável de ambiente e a área de transferência ao terminar. Resultado: 15 objetos, 2.118.277 bytes de Storage e dump customizado de 28.619.375 bytes; a verificação de hashes e leitura do archive passou.
+
+Se a conexão for pelo session pooler, informar `-DatabaseHost` com o host fornecido pelo Dashboard e `-DatabaseUser 'postgres.ioldpnqqvobprjiontre'`. Para execução não interativa, o script Node aceita `PGPASSWORD` ou `PGPASSFILE` e `PRISMA_BACKUP_STORAGE_KEY` no ambiente privado do processo; a gestão dessas credenciais para agendamento ainda precisa ser definida. A pasta de destino precisa existir; o script recusa destino dentro do repositório ou temporário. Em caso de erro, tratar a pasta `.incomplete-*` como dado pessoal sem verificação concluída.
 
 ## Verificação e restauração
 
-Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra `isolated-restore-pending` porque essa verificação estrutural **não prova restauração**. Antes da limpeza M8.1, restaurar uma cópia em PostgreSQL/Supabase isolado e compatível, conferir tabelas e dados necessários de `public`, `auth` e `storage`, reconstruir os arquivos no Storage de teste pelos caminhos do manifesto, e fazer smoke de leitura. Nunca testar restauração sobre produção.
+Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra `isolated-restore-pending` porque essa verificação estrutural **não prova restauração**. Antes da limpeza M8.1, restaurar a cópia concluída em PostgreSQL/Supabase isolado e compatível, conferir tabelas e dados necessários de `public`, `auth` e `storage`, reconstruir os arquivos no Storage de teste pelos caminhos do manifesto, e fazer smoke de leitura. Nunca testar restauração sobre produção.
 
 O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocorre depois. Suspender novas importações durante o corte da limpeza ou revalidar fingerprints imediatamente antes de excluir; nenhum backup manual substitui recuperação ponto a ponto. Para operação recorrente, agendar apenas após o primeiro backup e teste de restauração, com armazenamento seguro das credenciais no mesmo usuário que executará a tarefa e alerta para falhas. Ainda não há tarefa agendada, política de retenção nem cópia externa configuradas; essas decisões dependem do destino e da autenticação do operador.
 
@@ -14438,7 +14435,7 @@ Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
 | D-19 | Saga M5.5 existente inspecionada | BLOCKED | Exclusão dependente pendente |
 | D-20 | Storage não foi removido | BLOCKED | Backup de objetos e deleção pendentes |
 | D-21 | FKs e QA local do novo schema | PARTIAL | Ausência de órfãos pós-limpeza pendente |
-| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; sem escrita remota | BLOCKED | Plano Free sem backup automático; dump DB e cópia Storage necessários |
+| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; backup técnico concluído sem escrita remota | PARTIAL | Restauração isolada e smoke ainda pendentes |
 | D-23 | Nenhum ledger novo criado | PARTIAL | Ledger pessoal histórico M5.5 só pode ser tratado após inventário/backup |
 | D-24 | Contratos intake/Perfil preservados | NOT TESTED | Falta novo ciclo sintético real |
 | D-25 | Sem mudança de matching/score no diff; regressões M7.1 dirigidas | PARTIAL | Smoke de matching faltante |
@@ -14497,7 +14494,7 @@ Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b
 - `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, quatro migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
 - Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
 - Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
-- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` preparados para dump completo, cópia de todos os buckets, hashes e comparação de inventários. A consulta SQL exata do inventário passou em leitura remota (1 bucket, 15 objetos, 2.118.277 bytes); `node --check`, lint, rejeição de destino no repositório, rejeição de credencial ausente e detecção de checksum corrompido passaram. **NOT TESTED** com credenciais reais; Bruno optou por autenticar depois. Nenhum arquivo de backup foi gerado, restauração e agendamento não ocorreram. D-22 permanece `BLOCKED`.
+- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` executados com a CLI Supabase autenticada, acesso temporário `cli_login_postgres`/`SET ROLE postgres` e chave Secret transitória para o Storage. A cópia privada `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z` contém dump customizado de 28.619.375 bytes, 15 objetos Storage/2.118.277 bytes e manifesto com SHA-256; `node --check`, verificação estrutural/hash e ACL protegida passaram. A restauração isolada, smoke de leitura e agendamento ainda não ocorreram. D-22 permanece `PARTIAL`.
 
 ## Desvios e bloqueios
 

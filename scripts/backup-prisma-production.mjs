@@ -82,9 +82,10 @@ function pgArgs() {
 }
 
 async function dbInventory(connection) {
-  const output = await command(pgTool("psql"), ["-X", "-A", "-t", "-v", "ON_ERROR_STOP=1", ...connection, "--command", inventorySql], { capture: true });
+  const output = await command(pgTool("psql"), ["-X", "-A", "-t", "-v", "ON_ERROR_STOP=1", ...connection, "--command", `set role postgres; ${inventorySql}`], { capture: true });
   try {
-    const parsed = JSON.parse(output.trim());
+    const jsonLine = output.trim().split(/\r?\n/).reverse().find((line) => line.trim().startsWith("{"));
+    const parsed = JSON.parse(jsonLine || "");
     if (!Number.isSafeInteger(parsed.objects) || !Number.isSafeInteger(parsed.bytes) || !Number.isSafeInteger(parsed.buckets) || !/^[a-f0-9]{32}$/.test(parsed.fingerprint) || !/^[a-f0-9]{32}$/.test(parsed.bucketFingerprint)) fail("Inventário PostgreSQL inválido.");
     return parsed;
   } catch {
@@ -129,7 +130,12 @@ async function verify(backupDir) {
     if (!inside(root, resolved) || !(await stat(resolved)).isFile()) fail("Arquivo de backup ausente ou fora da pasta.");
     if ((await stat(resolved)).size !== item.bytes || (await hashFile(resolved)) !== item.sha256) fail(`Checksum inválido: ${item.file}`);
   }
-  await command(pgTool("pg_restore"), ["--list", path.join(root, "database.dump")]);
+  const archive = path.join(root, "database.dump");
+  const toc = await command(pgTool("pg_restore"), ["--list", archive], { capture: true });
+  for (const schema of ["public", "auth", "storage"]) {
+    if (!toc.includes(`TABLE DATA ${schema} `)) fail(`O dump não contém dados do schema ${schema}.`);
+  }
+  await command(pgTool("pg_restore"), ["--file", process.platform === "win32" ? "NUL" : "/dev/null", archive]);
   if (manifest.objects.length !== manifest.inventoryAfter.objects) fail("Contagem de objetos divergente no manifesto.");
   console.log(JSON.stringify({ status: "integrity-verified", restoreTest: "pending", projectRef: PROJECT_REF, objects: manifest.objects.length, backupDir: root }));
 }
@@ -147,7 +153,7 @@ async function backup(destination) {
   await mkdir(path.join(incomplete, "storage"), { mode: 0o700 });
   try {
     const databaseFile = path.join(incomplete, "database.dump");
-    await command(pgTool("pg_dump"), ["--format=custom", "--blobs", "--serializable-deferrable", ...connection, "--file", databaseFile]);
+    await command(pgTool("pg_dump"), ["--format=custom", "--blobs", "--serializable-deferrable", "--role", "postgres", ...connection, "--file", databaseFile]);
     await command(pgTool("pg_restore"), ["--list", databaseFile]);
 
     const client = createClient(PROJECT_URL, storageKey, { auth: { persistSession: false, autoRefreshToken: false } });
@@ -185,7 +191,7 @@ async function backup(destination) {
       inventoryBefore: before,
       inventoryAfter: after,
       objects,
-      verification: "archive-readable-and-file-checksums; isolated-restore-pending",
+      verification: "archive-stream-readable-and-file-checksums; isolated-restore-pending",
     };
     await writeFile(path.join(incomplete, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n", { mode: 0o600 });
     await verify(incomplete);
