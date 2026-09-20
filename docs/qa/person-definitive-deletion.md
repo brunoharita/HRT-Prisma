@@ -19,6 +19,10 @@ A allowlist passou a incluir explicitamente a origem HTTPS de produção, manten
 
 A migration `20260911153000_person_deletion_learning_metadata_shape` permite que casos de aprendizado aprovados ou rejeitados sobrevivam como metadata-only quando a revisão da Pessoa é purgada. Isso evita que a restrição de forma do aprendizado impeça a conclusão da exclusão definitiva; casos candidatos continuam sendo removidos.
 
+## Proteção de Inbox não relacionada no preflight M8.1 — 2026-09-20
+
+A saga M5.5 removia toda Inbox `unresolved` vazia da organização durante a finalização de qualquer Pessoa. O backup restaurado revelou 80 linhas assim sem vínculo com as oito Pessoas elegíveis para a limpeza M8.1. A migration forward-only local `20260920153000_m81_person_deletion_inbox_scope` passa a excluir apenas Inbox que perderam referências da Pessoa da operação. A fixture sintética em `supabase/tests/person_definitive_deletion_qa.sql` confirmou, com `ROLLBACK`, que a Inbox ligada à Pessoa é removida e outra Inbox vazia, sem vínculo, permanece. Um ensaio das oito finalizações no banco restaurado também passou e foi revertido; marcou 9 itens de Storage apenas no ledger local, sem executar o Storage API. A versão pública M5.5 permanece 1.0.0: a correção restabelece o escopo já aprovado da exclusão e não altera sua interface.
+
 ## Correção dos guards em escrita autenticada — 2026-09-13
 
 A migration `20260913132559_fix_person_deletion_trigger_execution` corrige a execução dos guards que protegem referências a Pessoas em exclusão. O helper `private.person_deletion_context_allows` havia sido declarado como `SECURITY DEFINER`, embora sua própria proteção dependesse de distinguir o `current_user` da rotina autoritativa. Além disso, o `EXECUTE` estava revogado para o papel autenticado. Como consequência, qualquer escrita protegida pelo gatilho falhava antes mesmo de avaliar que a Pessoa estava ativa, inclusive a decisão humana “Não considerar” em `match_evaluations`.

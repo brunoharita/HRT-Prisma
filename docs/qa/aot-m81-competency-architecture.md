@@ -19,16 +19,16 @@ Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
 | D-11 | RPC e testes M7.1 existentes preservados; 22 regressões dirigidas PASS | PASS | Local |
 | D-12 | UI M8 agrupa por Hard/Soft/subagrupador, não pelos seis tipos | PARTIAL | Falta comparação visual e smoke real |
 | D-13 | RPCs, trigger, RLS, cliente e UI rejeitam escopo/natureza inválidos; QA SQL | PASS | Local |
-| D-14 | Inventário: 8 Pessoas com criação por intake rastreável | BLOCKED | Backup e descarte remoto pendentes |
+| D-14 | Inventário: 8 Pessoas com criação por intake rastreável; preview e ensaio da saga local passaram | PARTIAL | Descarte remoto pendente |
 | D-15 | Uma Pessoa com origem de currículo sem intake resolvido permanece ambígua | BLOCKED | Não há prova de origem exclusiva |
 | D-16 | Leitura remota: 1 `platform_users`, 1 Auth e 1 Super Admin ativo para `harita.super` | PARTIAL | Preservação pós-limpeza não testada |
-| D-17 | Sem exclusão de Knowledge | BLOCKED | Proveniência exclusiva e backup não fechados |
+| D-17 | 128 observações e 78 Inbox ligadas aos oito alvos inventariadas; 80 Inbox vazias não relacionadas protegidas por migration local | PARTIAL | Limpeza remota e decisão sobre cinco Inbox não `unresolved`/conceito organizacional pendentes |
 | D-18 | CBO/ESCO/O*NET sem mutação; backfill estruturado só O*NET technology | PARTIAL | Preservação pós-limpeza pendente |
 | D-19 | Saga M5.5 existente inspecionada | BLOCKED | Exclusão dependente pendente |
-| D-20 | Storage não foi removido | BLOCKED | Backup de objetos e deleção pendentes |
+| D-20 | Backup de 15 objetos e plano local de 9 objetos dos alvos verificados | PARTIAL | Remoção remota e smoke do Storage pendentes |
 | D-21 | FKs e QA local do novo schema | PARTIAL | Ausência de órfãos pós-limpeza pendente |
-| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; backup técnico concluído sem escrita remota | PARTIAL | Restauração isolada e smoke ainda pendentes |
-| D-23 | Nenhum ledger novo criado | PARTIAL | Ledger pessoal histórico M5.5 só pode ser tratado após inventário/backup |
+| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; backup e restauração integral do banco isolado concluídos | PARTIAL | Reconstrução pelo Storage API de teste, limpeza, deploy e smoke pendentes |
+| D-23 | Nenhum ledger novo criado; 22 operações M5.5 concluídas e 31 itens Storage removidos foram inspecionados no snapshot, sem vínculo com os oito alvos atuais | PARTIAL | Preservação e ausência de resíduo após a limpeza remota pendentes |
 | D-24 | Contratos intake/Perfil preservados | NOT TESTED | Falta novo ciclo sintético real |
 | D-25 | Sem mudança de matching/score no diff; regressões M7.1 dirigidas | PARTIAL | Smoke de matching faltante |
 | D-26 | ADR-070, owners e Context Pack atualizados; geração/check PASS | PARTIAL | AoT e estado de rollout requerem fechamento |
@@ -83,15 +83,16 @@ Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b
 - PostgreSQL 17 descartável: migrations M8.1 e QA em transação com `ROLLBACK` passaram, incluindo escopo cruzado, RLS, histórico, aprovação, curadoria e naturezas de evidência. Nenhum dado sintético foi persistido no remoto.
 - `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run build`, 11 testes dirigidos de M8/M7.2/M7.6 e 22 regressões dirigidas de M7.1/M7.3/M7.7: PASS. O build Vite avisou sobre chunks grandes e import dinâmico ineficaz, sem falha.
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
-- `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, quatro migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
+- `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, cinco migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
 - Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
 - Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
-- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` executados com a CLI Supabase autenticada, acesso temporário `cli_login_postgres`/`SET ROLE postgres` e chave Secret transitória para o Storage. A cópia privada `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z` contém dump customizado de 28.619.375 bytes, 15 objetos Storage/2.118.277 bytes e manifesto com SHA-256; `node --check`, verificação estrutural/hash e ACL protegida passaram. A restauração isolada, smoke de leitura e agendamento ainda não ocorreram. D-22 permanece `PARTIAL`.
+- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` executados com a CLI Supabase autenticada, acesso temporário `cli_login_postgres`/`SET ROLE postgres` e chave Secret transitória para o Storage. A cópia privada `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z` contém dump customizado de 28.619.375 bytes, 15 objetos Storage/2.118.277 bytes e manifesto com SHA-256; `node --check`, verificação estrutural/hash e ACL protegida passaram. `pg_restore --exit-on-error` restaurou o banco em PostgreSQL Supabase 17.6.1.155 isolado; 7 Auth, 10 Pessoas, 15 intakes, 1 bucket e 15 objetos passaram no smoke de leitura. Fingerprints de buckets/objetos e os 15 caminhos/tamanhos corresponderam ao manifesto. O Storage API de teste e agendamento continuam pendentes. D-22 permanece `PARTIAL`.
+- Preflight M8.1 sobre o banco restaurado: 8 Pessoas têm criação por intake comprovada; a nona Pessoa com `latest_source_type=resume_pdf` e sem intake resolvido permanece fora do conjunto. `preview_person_definitive_deletion` retornou 8 operações com 9 documentos/objetos e 128 observações. A preparação, marcação local de 9 itens e finalização relacional das 8 Pessoas passou com `ROLLBACK`, preservando usuários, conceitos e 80 Inbox vazias não relacionadas; contagens originais 10/160/22 de Pessoas/Inbox/ledger foram confirmadas após o rollback. A migration local `20260920153000_m81_person_deletion_inbox_scope` corrige a exclusão ampla de Inbox da saga M5.5; fixture sintética negativa passou no banco isolado. Nenhum objeto Storage foi removido no ensaio.
 
 ## Desvios e bloqueios
 
-Nenhum desvio implementado foi aprovado como substituto de requisito. A limpeza, o rollout e a comparação visual permanecem requisitos pendentes, não itens dispensados. A exclusão real exige backup técnico verificável do banco e dos objetos Storage, inventário da Pessoa sem origem de intake inequívoca e preflight de Knowledge/ledger. `supabase db push` geral e `migration repair` automático continuam vedados pelo ledger histórico.
+Nenhum desvio implementado foi aprovado como substituto de requisito. A limpeza, o rollout e a comparação visual permanecem requisitos pendentes, não itens dispensados. A exclusão real exige revalidação do inventário remoto, reconstrução dos bytes via Storage API de teste, aplicação revisada da migration de proteção de Inbox e preflight final de Knowledge/ledger. A Pessoa sem origem inequívoca, as cinco Inbox com status aprovado/ambíguo e o conceito organizacional sem proveniência exclusiva comprovada permanecem preservados. `supabase db push` geral e `migration repair` automático continuam vedados pelo ledger histórico.
 
 ## Git / QA / produção
 
-Branch `codex/m81-competency-architecture`, commit local/remoto `ab25ab5`, publicada apenas em `origin/codex/m81-competency-architecture`. Sem integração, QA compartilhado ou deploy. Produção permanece no contrato M7 anterior. O trabalho não pode ser declarado concluído enquanto houver `D-*` bloqueado, parcial ou sem teste.
+Branch `codex/m81-competency-architecture`. O registro de publicação consta do Git; ainda sem integração, QA compartilhado ou deploy. Produção permanece no contrato M7 anterior. O trabalho não pode ser declarado concluído enquanto houver `D-*` bloqueado, parcial ou sem teste.

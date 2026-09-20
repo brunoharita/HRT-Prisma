@@ -7,6 +7,8 @@ declare
   actor_id uuid; person_id uuid := gen_random_uuid(); absorbed_id uuid := gen_random_uuid();
   new_person_id uuid := gen_random_uuid(); document_id uuid := gen_random_uuid();
   attempt_id uuid := gen_random_uuid(); evidence_id uuid := gen_random_uuid(); vacancy_id uuid;
+  observation_id uuid := gen_random_uuid(); related_inbox_id uuid := gen_random_uuid();
+  unrelated_inbox_id uuid := gen_random_uuid();
   preview record; started record; finalized record;
   knowledge_before bigint; item_before bigint; users_before bigint;
   expected_failure boolean := false; blocked_mutation boolean := false;
@@ -49,9 +51,17 @@ begin
   insert into public.profile_reviews(organization_id,person_id,document_id,processing_attempt_id,extracted_data,
     reviewed_data,started_by_auth_user_id,last_edited_by_auth_user_id)
     values(org_id,person_id,document_id,attempt_id,'{}','{}',actor_id,actor_id);
-  insert into public.knowledge_observations(organization_id,person_id,evidence_id,original_term,normalized_term,
+  insert into public.knowledge_observations(id,organization_id,person_id,evidence_id,original_term,normalized_term,
     resolution_state,normalization_method,knowledge_global_version,source_snapshot)
-    values(org_id,person_id,evidence_id,'Synthetic Skill','synthetic skill','unresolved','qa-m55',1,'{}');
+    values(observation_id,org_id,person_id,evidence_id,'Synthetic Skill','synthetic skill','unresolved','qa-m55',1,'{}');
+  insert into public.knowledge_inbox(id,scope,organization_id,fingerprint,original_term,normalized_search_term,observation_ids)
+    values(related_inbox_id,'organization',org_id,
+      encode(extensions.digest(person_id::text||':related-inbox','sha256'),'hex'),
+      'Synthetic Skill','synthetic skill',array[observation_id]);
+  insert into public.knowledge_inbox(id,scope,organization_id,fingerprint,original_term,normalized_search_term)
+    values(unrelated_inbox_id,'organization',org_id,
+      encode(extensions.digest(person_id::text||':unrelated-inbox','sha256'),'hex'),
+      'Unrelated Synthetic Term','unrelated synthetic term');
   if vacancy_id is not null then
     insert into public.match_evaluations(organization_id,person_id,vacancy_id,evaluation_data,matching_version,prompt_version,model_version)
       values(org_id,person_id,vacancy_id,'{}','qa-m55','qa-m55','qa-m55');
@@ -91,6 +101,10 @@ begin
     then raise exception 'individual residue'; end if;
   if (select merged_into_person_id from public.people where id=absorbed_id) is not null
     then raise exception 'merge redirect residue'; end if;
+  if exists(select 1 from public.knowledge_inbox where id=related_inbox_id)
+    then raise exception 'Person-only Inbox residue'; end if;
+  if not exists(select 1 from public.knowledge_inbox where id=unrelated_inbox_id)
+    then raise exception 'unrelated Inbox was deleted'; end if;
   if not exists(select 1 from public.person_deletion_operations where id=started.operation_id and status='completed'
     and person_name_snapshot='M55 Synthetic Rich Fixture' and actor_kind='owner') then raise exception 'minimal audit missing'; end if;
   if (select count(*) from public.knowledge_concepts where organization_id is null or organization_id=org_id)<>knowledge_before

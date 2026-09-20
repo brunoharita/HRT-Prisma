@@ -1,6 +1,6 @@
 # Backup operacional do Prisma em produção
 
-Estado em 2026-09-20: **primeiro backup concluído e verificado; restauração isolada ainda pendente**. Projeto: `ioldpnqqvobprjiontre`. A cópia válida está em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`. Este procedimento é pré-requisito para a limpeza M8.1, não uma prova de que ela já pode começar.
+Estado em 2026-09-20: **primeiro backup concluído e banco restaurado em contêiner isolado; reconstrução pelo Storage API ainda pendente**. Projeto: `ioldpnqqvobprjiontre`. A cópia válida está em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`. A limpeza M8.1 ainda exige preflight e revalidação imediatamente antes da exclusão.
 
 ## O que a rotina produz
 
@@ -14,13 +14,13 @@ O dump usa `pg_dump` direto porque o [dump padrão da Supabase CLI exclui os sch
 2. Preferir a CLI Supabase já autenticada: `supabase db dump --linked --dry-run` cria um acesso temporário `cli_login_postgres`. Usar o host `db.ioldpnqqvobprjiontre.supabase.co`, `PGDATABASE=postgres` e o `PGPASSWORD` temporário somente no processo; a rotina aplica `SET ROLE postgres` para ler os schemas gerenciados. Como alternativa, usar conexão PostgreSQL direta ou session pooler na porta 5432 com senha permanente. O PostgreSQL 17 (`psql`, `pg_dump`, `pg_restore`) já está instalado nesta máquina; para outro local, definir `PRISMA_BACKUP_PG_BIN`.
 3. Obter uma credencial **server-side** autorizada para listar e baixar todos os buckets privados. `PRISMA_BACKUP_STORAGE_KEY` é uma chave sensível de Storage/Supabase; nunca usar `VITE_*`, inserir no Git, no histórico do shell, em argumentos da linha de comando ou no chat. A chave deve permanecer somente no ambiente do processo durante a execução.
 
-Execução interativa com senha permanente, quando a senha estiver disponível. O wrapper pede as duas credenciais em prompts ocultos, usa-as somente no processo e as remove do ambiente ao terminar:
+Execução interativa com a CLI já autenticada e chave Secret copiada pelo operador. O wrapper captura o acesso PostgreSQL temporário sem imprimi-lo, valida o projeto vinculado e limpa a área de transferência e as variáveis sensíveis:
 
 ```powershell
-pwsh -NoProfile -File scripts/run-prisma-backup-interactive.ps1 -Destination 'C:\Users\Bruno\Documents\Prisma-Backups'
+pwsh -NoProfile -File scripts/run-prisma-backup-interactive.ps1 -Destination 'C:\Users\Bruno\Documents\Prisma-Backups' -UseSupabaseCli -StorageKeyFromClipboard
 ```
 
-Se o terminal não aceitar a colagem no prompt oculto, copie a chave existente no Dashboard e acrescente `-StorageKeyFromClipboard` ao comando. Essa opção aceita somente os formatos Secret ou `service_role`, usa o valor sem imprimi-lo e limpa a área de transferência após a leitura. Não use a opção se a área de transferência contiver outro dado.
+Se a senha PostgreSQL permanente estiver disponível, omitir `-UseSupabaseCli`; o wrapper pedirá a senha em prompt oculto. Se a chave Storage também for digitada no prompt oculto, omitir `-StorageKeyFromClipboard`. A opção de clipboard aceita somente formatos Secret ou `service_role` e limpa seu conteúdo mesmo quando falha. Não use a opção se a área de transferência contiver outro dado.
 
 Na primeira execução de 2026-09-20, a senha permanente não foi necessária: a CLI autenticada forneceu o acesso temporário do PostgreSQL e a chave Secret foi lida uma vez da área de transferência para a cópia do Storage. O processo limpou a variável de ambiente e a área de transferência ao terminar. Resultado: 15 objetos, 2.118.277 bytes de Storage e dump customizado de 28.619.375 bytes; a verificação de hashes e leitura do archive passou.
 
@@ -28,6 +28,6 @@ Se a conexão for pelo session pooler, informar `-DatabaseHost` com o host forne
 
 ## Verificação e restauração
 
-Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra `isolated-restore-pending` porque essa verificação estrutural **não prova restauração**. Antes da limpeza M8.1, restaurar a cópia concluída em PostgreSQL/Supabase isolado e compatível, conferir tabelas e dados necessários de `public`, `auth` e `storage`, reconstruir os arquivos no Storage de teste pelos caminhos do manifesto, e fazer smoke de leitura. Nunca testar restauração sobre produção.
+Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra o estado no instante do backup; sua marca `isolated-restore-pending` não é atualizada retroativamente. Em 2026-09-20, o `database.dump` foi restaurado com `pg_restore --exit-on-error` em PostgreSQL Supabase 17.6.1.155, sem porta exposta nem volume persistente. O contêiner precisou de `cron.database_name` apontado ao banco de teste, dos papéis locais sem login `supabase_realtime_admin` e `supabase_functions_admin`, e de `postgres` superusuário local para o gatilho de DDL do dump. A restauração terminou sem erro: `auth.users` 7, `people` 10, `resume_intakes` 15, `storage.buckets` 1 e `storage.objects` 15. Os 15 caminhos/tamanhos e os fingerprints de objetos e buckets coincidiram com o manifesto; os hashes dos bytes copiados passaram. Ainda falta reconstruir os objetos pelo Storage API em um serviço de teste e fazer seu smoke de leitura. Nunca testar restauração sobre produção.
 
 O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocorre depois. Suspender novas importações durante o corte da limpeza ou revalidar fingerprints imediatamente antes de excluir; nenhum backup manual substitui recuperação ponto a ponto. Para operação recorrente, agendar apenas após o primeiro backup e teste de restauração, com armazenamento seguro das credenciais no mesmo usuário que executará a tarefa e alerta para falhas. Ainda não há tarefa agendada, política de retenção nem cópia externa configuradas; essas decisões dependem do destino e da autenticação do operador.

@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 251
-source_manifest_sha256: 4b6f621fd690ceef3c92327d2cac45a05c235fead9810607dd866efa57b690a8
+source_manifest_sha256: 73306b4aab32a81596319b960dda87503845d8674457d6bd404fe430b1f96bf9
 -->
 
 # Tudo sobre o Prisma
@@ -2538,11 +2538,11 @@ last_verified: 2026-09-20
 
 ## M8.1 em implementação local, ainda sem rollout
 
-O Agreement M8 v1.0.0, aditivo M8.1 v1.1.0 e imagem normativa de nove telas autorizam a migração de competências. A branch `codex/m81-competency-architecture` contém schema aditivo para dois macrogrupos, nove subagrupadores globais, futuros subagrupadores tenant-scoped e classificação principal versionada dos conceitos Knowledge. Backfill automático só para tecnologias com mapping oficial O*NET; demais classificações aguardam decisão humana. A projeção M8 separa Declaração, Contexto, Certificado, Assessment e habilidade prática; vínculo factual de experiência/credencial exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional são preservados. QA PostgreSQL sintético com rollback passou para classificação, escopo, aprovação, curadoria e natureza da evidência. A rotina manual de backup de banco e Storage está preparada em `scripts/backup-prisma-production.mjs`, mas ainda não foi autenticada, executada ou restaurada em ambiente isolado. Ainda não há prova de comparação visual completa, backup/limpeza, smoke real nem implantação; M8.1 não está ativo em produção. ADR-070 e AoT M8.1 acompanham a evidência.
+O Agreement M8 v1.0.0, aditivo M8.1 v1.1.0 e imagem normativa de nove telas autorizam a migração de competências. A branch `codex/m81-competency-architecture` contém schema aditivo para dois macrogrupos, nove subagrupadores globais, futuros subagrupadores tenant-scoped e classificação principal versionada dos conceitos Knowledge. Backfill automático só para tecnologias com mapping oficial O*NET; demais classificações aguardam decisão humana. A projeção M8 separa Declaração, Contexto, Certificado, Assessment e habilidade prática; vínculo factual de experiência/credencial exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional são preservados. QA PostgreSQL sintético com rollback passou para classificação, escopo, aprovação, curadoria e natureza da evidência. O primeiro backup de banco/Storage foi concluído em pasta privada e o banco restaurou integralmente em PostgreSQL Supabase isolado, com contagens e fingerprints de Storage coincidentes. A migration local `20260920153000_m81_person_deletion_inbox_scope` corrige a exclusão ampla de Inbox descoberta no preflight; ensaio das oito Pessoas comprovadas passou com rollback. A Pessoa sem intake resolvido permanece ambígua. Reconstrução via Storage API de teste, comparação visual completa, limpeza remota, smoke real e implantação ainda faltam; M8.1 não está ativo em produção. ADR-070 e AoT M8.1 acompanham a evidência.
 
 ## Resumo operacional para prompts
 
-M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. QA sintético local passou; comparação visual completa, backup/limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
+M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. Backup privado e restauração isolada do banco passaram; um guard local protege Inbox não relacionada na saga de exclusão. Comparação visual completa, reconstrução Storage via API de teste, limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
 
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
@@ -9308,17 +9308,18 @@ Não existe publicação automática após a checagem. Para CBO, ESCO e O*NET, o
 
 # M8.1 — Preflight e limpeza controlada de dados de currículo
 
-Estado: **plano, backup técnico concluído; limpeza e restauração isolada não executadas**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/P-01 a P-08/P-13 a P-15/P-21 a P-23. O backend alvo é o projeto Supabase existente `ioldpnqqvobprjiontre`.
+Estado: **plano, backup técnico e restauração isolada do banco concluídos; limpeza e restauração via Storage API não executadas**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/P-01 a P-08/P-13 a P-15/P-21 a P-23. O backend alvo é o projeto Supabase existente `ioldpnqqvobprjiontre`.
 
 ## Guardas antes de qualquer exclusão
 
-1. Executar e verificar a [rotina de backup do Prisma](prisma-production-backup.md) com autenticação e destino privado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho. Primeira cópia concluída em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`; a restauração isolada ainda é obrigatória.
+1. Executar e verificar a [rotina de backup do Prisma](prisma-production-backup.md) com autenticação e destino privado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho. Primeira cópia concluída em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`; a restauração integral do banco em contêiner isolado passou. A reconstrução dos bytes via Storage API de teste segue pendente.
 2. Confirmar que a rotina copiou separadamente todos os objetos Storage no escopo, com inventário de bucket/path, tamanho e checksum, antes de excluí-los. [Backups de banco não contêm os objetos](https://supabase.com/docs/guides/platform/backups).
 3. Testar leitura/restauração do dump em ambiente isolado sem publicar dados pessoais. Confirmar que o backup e as cópias de Storage cobrem o mesmo corte temporal; suspender novas importações durante o corte ou revalidar fingerprints imediatamente antes da exclusão.
 4. Confirmar server-side `harita.super`: exatamente um `platform_users`, Auth existente, status ativo, perfil `super_admin` e memberships atuais. Não incluir Auth/memberships no conjunto a excluir.
 5. Montar lista de Pessoas pelo vínculo `resume_intakes.resolution_type='created_new_person'` e `resolved_person_id`, agrupada por organização. `latest_source_type` isolado não prova origem. Em 2026-09-20 havia oito Pessoas com criação por intake rastreável e duas sem intake resolvido; uma destas tinha `latest_source_type=resume_pdf` e permanece ambígua. Uma Pessoa criada por intake tem também outro intake vinculado. Exigir prova individual de qualquer linha adicional sem intake antes de incluí-la.
 6. Para cada Pessoa elegível, usar `preview_person_definitive_deletion` e a saga M5.5 existente para obter fingerprints, plano de Storage, deleção relacional e verificação de resíduos. Não apagar Vaga/Posição; aplicar apenas a desvinculação de ocupante prevista no contrato vigente. Não criar Pessoa, Knowledge ou decisão humana de teste em produção.
 7. Para Knowledge, construir grafo de origem a partir de `knowledge_observations`, `knowledge_inbox.observation_ids`, propostas, conceitos e aliases; eliminar apenas nós sem proveniência independente, fonte oficial ou uso compartilhado. CBO/ESCO/O*NET e conceitos institucionais ficam fora. Não inferir exclusividade de coincidência textual ou do nome do usuário.
+   No snapshot de 2026-09-20, as 128 observações pertencem às oito Pessoas de intake comprovado; 78 Inbox têm somente essas observações, sem evidência adicional nem proposta vinculada. Outras 80 Inbox `unresolved` já estavam vazias e são preservadas pela migration local `20260920153000_m81_person_deletion_inbox_scope`, que restringe a remoção às linhas afetadas na operação. O único conceito organizacional tem proposta aprovada com Inbox sem observações; não há prova de exclusividade para excluí-lo.
 8. Examinar `person_deletion_operations` e `person_deletion_storage_items` existentes antes de decidir se um registro exclusivamente ligado ao conjunto pode ser removido. Caso uma regra estrutural obrigatória ou imutável impeça, bloquear essa parte e registrar o conflito no AoT, sem corromper a auditoria.
 
 ## Execução e verificação
@@ -9611,7 +9612,7 @@ Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, pre
 
 # Backup operacional do Prisma em produção
 
-Estado em 2026-09-20: **primeiro backup concluído e verificado; restauração isolada ainda pendente**. Projeto: `ioldpnqqvobprjiontre`. A cópia válida está em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`. Este procedimento é pré-requisito para a limpeza M8.1, não uma prova de que ela já pode começar.
+Estado em 2026-09-20: **primeiro backup concluído e banco restaurado em contêiner isolado; reconstrução pelo Storage API ainda pendente**. Projeto: `ioldpnqqvobprjiontre`. A cópia válida está em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`. A limpeza M8.1 ainda exige preflight e revalidação imediatamente antes da exclusão.
 
 ## O que a rotina produz
 
@@ -9625,13 +9626,13 @@ O dump usa `pg_dump` direto porque o [dump padrão da Supabase CLI exclui os sch
 2. Preferir a CLI Supabase já autenticada: `supabase db dump --linked --dry-run` cria um acesso temporário `cli_login_postgres`. Usar o host `db.ioldpnqqvobprjiontre.supabase.co`, `PGDATABASE=postgres` e o `PGPASSWORD` temporário somente no processo; a rotina aplica `SET ROLE postgres` para ler os schemas gerenciados. Como alternativa, usar conexão PostgreSQL direta ou session pooler na porta 5432 com senha permanente. O PostgreSQL 17 (`psql`, `pg_dump`, `pg_restore`) já está instalado nesta máquina; para outro local, definir `PRISMA_BACKUP_PG_BIN`.
 3. Obter uma credencial **server-side** autorizada para listar e baixar todos os buckets privados. `PRISMA_BACKUP_STORAGE_KEY` é uma chave sensível de Storage/Supabase; nunca usar `VITE_*`, inserir no Git, no histórico do shell, em argumentos da linha de comando ou no chat. A chave deve permanecer somente no ambiente do processo durante a execução.
 
-Execução interativa com senha permanente, quando a senha estiver disponível. O wrapper pede as duas credenciais em prompts ocultos, usa-as somente no processo e as remove do ambiente ao terminar:
+Execução interativa com a CLI já autenticada e chave Secret copiada pelo operador. O wrapper captura o acesso PostgreSQL temporário sem imprimi-lo, valida o projeto vinculado e limpa a área de transferência e as variáveis sensíveis:
 
 ```powershell
-pwsh -NoProfile -File scripts/run-prisma-backup-interactive.ps1 -Destination 'C:\Users\Bruno\Documents\Prisma-Backups'
+pwsh -NoProfile -File scripts/run-prisma-backup-interactive.ps1 -Destination 'C:\Users\Bruno\Documents\Prisma-Backups' -UseSupabaseCli -StorageKeyFromClipboard
 ```
 
-Se o terminal não aceitar a colagem no prompt oculto, copie a chave existente no Dashboard e acrescente `-StorageKeyFromClipboard` ao comando. Essa opção aceita somente os formatos Secret ou `service_role`, usa o valor sem imprimi-lo e limpa a área de transferência após a leitura. Não use a opção se a área de transferência contiver outro dado.
+Se a senha PostgreSQL permanente estiver disponível, omitir `-UseSupabaseCli`; o wrapper pedirá a senha em prompt oculto. Se a chave Storage também for digitada no prompt oculto, omitir `-StorageKeyFromClipboard`. A opção de clipboard aceita somente formatos Secret ou `service_role` e limpa seu conteúdo mesmo quando falha. Não use a opção se a área de transferência contiver outro dado.
 
 Na primeira execução de 2026-09-20, a senha permanente não foi necessária: a CLI autenticada forneceu o acesso temporário do PostgreSQL e a chave Secret foi lida uma vez da área de transferência para a cópia do Storage. O processo limpou a variável de ambiente e a área de transferência ao terminar. Resultado: 15 objetos, 2.118.277 bytes de Storage e dump customizado de 28.619.375 bytes; a verificação de hashes e leitura do archive passou.
 
@@ -9639,7 +9640,7 @@ Se a conexão for pelo session pooler, informar `-DatabaseHost` com o host forne
 
 ## Verificação e restauração
 
-Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra `isolated-restore-pending` porque essa verificação estrutural **não prova restauração**. Antes da limpeza M8.1, restaurar a cópia concluída em PostgreSQL/Supabase isolado e compatível, conferir tabelas e dados necessários de `public`, `auth` e `storage`, reconstruir os arquivos no Storage de teste pelos caminhos do manifesto, e fazer smoke de leitura. Nunca testar restauração sobre produção.
+Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra o estado no instante do backup; sua marca `isolated-restore-pending` não é atualizada retroativamente. Em 2026-09-20, o `database.dump` foi restaurado com `pg_restore --exit-on-error` em PostgreSQL Supabase 17.6.1.155, sem porta exposta nem volume persistente. O contêiner precisou de `cron.database_name` apontado ao banco de teste, dos papéis locais sem login `supabase_realtime_admin` e `supabase_functions_admin`, e de `postgres` superusuário local para o gatilho de DDL do dump. A restauração terminou sem erro: `auth.users` 7, `people` 10, `resume_intakes` 15, `storage.buckets` 1 e `storage.objects` 15. Os 15 caminhos/tamanhos e os fingerprints de objetos e buckets coincidiram com o manifesto; os hashes dos bytes copiados passaram. Ainda falta reconstruir os objetos pelo Storage API em um serviço de teste e fazer seu smoke de leitura. Nunca testar restauração sobre produção.
 
 O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocorre depois. Suspender novas importações durante o corte da limpeza ou revalidar fingerprints imediatamente antes de excluir; nenhum backup manual substitui recuperação ponto a ponto. Para operação recorrente, agendar apenas após o primeiro backup e teste de restauração, com armazenamento seguro das credenciais no mesmo usuário que executará a tarefa e alerta para falhas. Ainda não há tarefa agendada, política de retenção nem cópia externa configuradas; essas decisões dependem do destino e da autenticação do operador.
 
@@ -14427,16 +14428,16 @@ Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
 | D-11 | RPC e testes M7.1 existentes preservados; 22 regressões dirigidas PASS | PASS | Local |
 | D-12 | UI M8 agrupa por Hard/Soft/subagrupador, não pelos seis tipos | PARTIAL | Falta comparação visual e smoke real |
 | D-13 | RPCs, trigger, RLS, cliente e UI rejeitam escopo/natureza inválidos; QA SQL | PASS | Local |
-| D-14 | Inventário: 8 Pessoas com criação por intake rastreável | BLOCKED | Backup e descarte remoto pendentes |
+| D-14 | Inventário: 8 Pessoas com criação por intake rastreável; preview e ensaio da saga local passaram | PARTIAL | Descarte remoto pendente |
 | D-15 | Uma Pessoa com origem de currículo sem intake resolvido permanece ambígua | BLOCKED | Não há prova de origem exclusiva |
 | D-16 | Leitura remota: 1 `platform_users`, 1 Auth e 1 Super Admin ativo para `harita.super` | PARTIAL | Preservação pós-limpeza não testada |
-| D-17 | Sem exclusão de Knowledge | BLOCKED | Proveniência exclusiva e backup não fechados |
+| D-17 | 128 observações e 78 Inbox ligadas aos oito alvos inventariadas; 80 Inbox vazias não relacionadas protegidas por migration local | PARTIAL | Limpeza remota e decisão sobre cinco Inbox não `unresolved`/conceito organizacional pendentes |
 | D-18 | CBO/ESCO/O*NET sem mutação; backfill estruturado só O*NET technology | PARTIAL | Preservação pós-limpeza pendente |
 | D-19 | Saga M5.5 existente inspecionada | BLOCKED | Exclusão dependente pendente |
-| D-20 | Storage não foi removido | BLOCKED | Backup de objetos e deleção pendentes |
+| D-20 | Backup de 15 objetos e plano local de 9 objetos dos alvos verificados | PARTIAL | Remoção remota e smoke do Storage pendentes |
 | D-21 | FKs e QA local do novo schema | PARTIAL | Ausência de órfãos pós-limpeza pendente |
-| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; backup técnico concluído sem escrita remota | PARTIAL | Restauração isolada e smoke ainda pendentes |
-| D-23 | Nenhum ledger novo criado | PARTIAL | Ledger pessoal histórico M5.5 só pode ser tratado após inventário/backup |
+| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; backup e restauração integral do banco isolado concluídos | PARTIAL | Reconstrução pelo Storage API de teste, limpeza, deploy e smoke pendentes |
+| D-23 | Nenhum ledger novo criado; 22 operações M5.5 concluídas e 31 itens Storage removidos foram inspecionados no snapshot, sem vínculo com os oito alvos atuais | PARTIAL | Preservação e ausência de resíduo após a limpeza remota pendentes |
 | D-24 | Contratos intake/Perfil preservados | NOT TESTED | Falta novo ciclo sintético real |
 | D-25 | Sem mudança de matching/score no diff; regressões M7.1 dirigidas | PARTIAL | Smoke de matching faltante |
 | D-26 | ADR-070, owners e Context Pack atualizados; geração/check PASS | PARTIAL | AoT e estado de rollout requerem fechamento |
@@ -14491,18 +14492,19 @@ Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b
 - PostgreSQL 17 descartável: migrations M8.1 e QA em transação com `ROLLBACK` passaram, incluindo escopo cruzado, RLS, histórico, aprovação, curadoria e naturezas de evidência. Nenhum dado sintético foi persistido no remoto.
 - `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run build`, 11 testes dirigidos de M8/M7.2/M7.6 e 22 regressões dirigidas de M7.1/M7.3/M7.7: PASS. O build Vite avisou sobre chunks grandes e import dinâmico ineficaz, sem falha.
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
-- `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, quatro migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
+- `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, cinco migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
 - Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
 - Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
-- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` executados com a CLI Supabase autenticada, acesso temporário `cli_login_postgres`/`SET ROLE postgres` e chave Secret transitória para o Storage. A cópia privada `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z` contém dump customizado de 28.619.375 bytes, 15 objetos Storage/2.118.277 bytes e manifesto com SHA-256; `node --check`, verificação estrutural/hash e ACL protegida passaram. A restauração isolada, smoke de leitura e agendamento ainda não ocorreram. D-22 permanece `PARTIAL`.
+- Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` executados com a CLI Supabase autenticada, acesso temporário `cli_login_postgres`/`SET ROLE postgres` e chave Secret transitória para o Storage. A cópia privada `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z` contém dump customizado de 28.619.375 bytes, 15 objetos Storage/2.118.277 bytes e manifesto com SHA-256; `node --check`, verificação estrutural/hash e ACL protegida passaram. `pg_restore --exit-on-error` restaurou o banco em PostgreSQL Supabase 17.6.1.155 isolado; 7 Auth, 10 Pessoas, 15 intakes, 1 bucket e 15 objetos passaram no smoke de leitura. Fingerprints de buckets/objetos e os 15 caminhos/tamanhos corresponderam ao manifesto. O Storage API de teste e agendamento continuam pendentes. D-22 permanece `PARTIAL`.
+- Preflight M8.1 sobre o banco restaurado: 8 Pessoas têm criação por intake comprovada; a nona Pessoa com `latest_source_type=resume_pdf` e sem intake resolvido permanece fora do conjunto. `preview_person_definitive_deletion` retornou 8 operações com 9 documentos/objetos e 128 observações. A preparação, marcação local de 9 itens e finalização relacional das 8 Pessoas passou com `ROLLBACK`, preservando usuários, conceitos e 80 Inbox vazias não relacionadas; contagens originais 10/160/22 de Pessoas/Inbox/ledger foram confirmadas após o rollback. A migration local `20260920153000_m81_person_deletion_inbox_scope` corrige a exclusão ampla de Inbox da saga M5.5; fixture sintética negativa passou no banco isolado. Nenhum objeto Storage foi removido no ensaio.
 
 ## Desvios e bloqueios
 
-Nenhum desvio implementado foi aprovado como substituto de requisito. A limpeza, o rollout e a comparação visual permanecem requisitos pendentes, não itens dispensados. A exclusão real exige backup técnico verificável do banco e dos objetos Storage, inventário da Pessoa sem origem de intake inequívoca e preflight de Knowledge/ledger. `supabase db push` geral e `migration repair` automático continuam vedados pelo ledger histórico.
+Nenhum desvio implementado foi aprovado como substituto de requisito. A limpeza, o rollout e a comparação visual permanecem requisitos pendentes, não itens dispensados. A exclusão real exige revalidação do inventário remoto, reconstrução dos bytes via Storage API de teste, aplicação revisada da migration de proteção de Inbox e preflight final de Knowledge/ledger. A Pessoa sem origem inequívoca, as cinco Inbox com status aprovado/ambíguo e o conceito organizacional sem proveniência exclusiva comprovada permanecem preservados. `supabase db push` geral e `migration repair` automático continuam vedados pelo ledger histórico.
 
 ## Git / QA / produção
 
-Branch `codex/m81-competency-architecture`, commit local/remoto `ab25ab5`, publicada apenas em `origin/codex/m81-competency-architecture`. Sem integração, QA compartilhado ou deploy. Produção permanece no contrato M7 anterior. O trabalho não pode ser declarado concluído enquanto houver `D-*` bloqueado, parcial ou sem teste.
+Branch `codex/m81-competency-architecture`. O registro de publicação consta do Git; ainda sem integração, QA compartilhado ou deploy. Produção permanece no contrato M7 anterior. O trabalho não pode ser declarado concluído enquanto houver `D-*` bloqueado, parcial ou sem teste.
 
 ---
 
@@ -19101,6 +19103,10 @@ A allowlist passou a incluir explicitamente a origem HTTPS de produção, manten
 | P-013 sem travessia ou bypass de autoridade | CORS não concede autoridade; POST administrativo continua exigindo Bearer e RPC autorizada | origem arbitrária `403` e preview sem sessão `401` | PASS |
 
 A migration `20260911153000_person_deletion_learning_metadata_shape` permite que casos de aprendizado aprovados ou rejeitados sobrevivam como metadata-only quando a revisão da Pessoa é purgada. Isso evita que a restrição de forma do aprendizado impeça a conclusão da exclusão definitiva; casos candidatos continuam sendo removidos.
+
+## Proteção de Inbox não relacionada no preflight M8.1 — 2026-09-20
+
+A saga M5.5 removia toda Inbox `unresolved` vazia da organização durante a finalização de qualquer Pessoa. O backup restaurado revelou 80 linhas assim sem vínculo com as oito Pessoas elegíveis para a limpeza M8.1. A migration forward-only local `20260920153000_m81_person_deletion_inbox_scope` passa a excluir apenas Inbox que perderam referências da Pessoa da operação. A fixture sintética em `supabase/tests/person_definitive_deletion_qa.sql` confirmou, com `ROLLBACK`, que a Inbox ligada à Pessoa é removida e outra Inbox vazia, sem vínculo, permanece. Um ensaio das oito finalizações no banco restaurado também passou e foi revertido; marcou 9 itens de Storage apenas no ledger local, sem executar o Storage API. A versão pública M5.5 permanece 1.0.0: a correção restabelece o escopo já aprovado da exclusão e não altera sua interface.
 
 ## Correção dos guards em escrita autenticada — 2026-09-13
 

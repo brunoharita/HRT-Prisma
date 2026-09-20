@@ -6,7 +6,7 @@ product_version: 1.7.6
 current_state_version: 2.44.4
 current_state_last_verified: 2026-09-20
 documentation_source_count: 251
-source_manifest_sha256: 4b6f621fd690ceef3c92327d2cac45a05c235fead9810607dd866efa57b690a8
+source_manifest_sha256: 73306b4aab32a81596319b960dda87503845d8674457d6bd404fe430b1f96bf9
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,7 +267,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. QA sintético local passou; comparação visual completa, backup/limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
+M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. Backup privado e restauração isolada do banco passaram; um guard local protege Inbox não relacionada na saga de exclusão. Comparação visual completa, reconstrução Storage via API de teste, limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
 
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
