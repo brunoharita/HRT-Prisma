@@ -71,7 +71,8 @@ test("navigation groups shipped capabilities and keeps positions in operation", 
   assert.equal(navigationGroup("/vacancies"), "Operação");
   assert.equal(navigationGroup("/knowledge"), "Curadoria");
   assert.equal(navigationGroup("/users"), "Administração");
-  for (const path of ["/organizations", "/settings", "/matching"]) assert.equal(isDeliveredNavigation(path), false);
+  for (const path of ["/organizations", "/matching"]) assert.equal(isDeliveredNavigation(path), false);
+  assert.equal(isDeliveredNavigation("/settings"), true);
   assert.equal(isDeliveredNavigation("/verifications"), true);
   assert.equal(interfaceText("Vagas: editar vaga e buscar vagas"), "Posições: editar posição e buscar posições");
   assert.equal(interfaceText("/vacancies"), "/vacancies");
