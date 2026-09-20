@@ -1,10 +1,10 @@
 # M8.1 — Preflight e limpeza controlada de dados de currículo
 
-Estado: **plano, backup técnico e restauração isolada do banco concluídos; limpeza e restauração via Storage API não executadas**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/P-01 a P-08/P-13 a P-15/P-21 a P-23. O backend alvo é o projeto Supabase existente `ioldpnqqvobprjiontre`.
+Estado: **plano, backup técnico e restauração isolada de banco/Storage concluídos; limpeza remota não executada**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/P-01 a P-08/P-13 a P-15/P-21 a P-23. O backend alvo é o projeto Supabase existente `ioldpnqqvobprjiontre`.
 
 ## Guardas antes de qualquer exclusão
 
-1. Executar e verificar a [rotina de backup do Prisma](prisma-production-backup.md) com autenticação e destino privado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho. Primeira cópia concluída em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`; a restauração integral do banco em contêiner isolado passou. A reconstrução dos bytes via Storage API de teste segue pendente.
+1. Executar e verificar a [rotina de backup do Prisma](prisma-production-backup.md) com autenticação e destino privado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho. Primeira cópia concluída em `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z`; a restauração integral do banco em contêiner isolado passou. Os 15 objetos foram reconstruídos e lidos pela Storage API isolada com SHA-256 idêntico ao manifesto.
 2. Confirmar que a rotina copiou separadamente todos os objetos Storage no escopo, com inventário de bucket/path, tamanho e checksum, antes de excluí-los. [Backups de banco não contêm os objetos](https://supabase.com/docs/guides/platform/backups).
 3. Testar leitura/restauração do dump em ambiente isolado sem publicar dados pessoais. Confirmar que o backup e as cópias de Storage cobrem o mesmo corte temporal; suspender novas importações durante o corte ou revalidar fingerprints imediatamente antes da exclusão.
 4. Confirmar server-side `harita.super`: exatamente um `platform_users`, Auth existente, status ativo, perfil `super_admin` e memberships atuais. Não incluir Auth/memberships no conjunto a excluir.
