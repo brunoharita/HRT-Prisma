@@ -41,6 +41,12 @@ export const PRISMA_RELEASE_HISTORY = [{
     "M7.2 v2: taxonomia de competências e perfil de evidências",
     "M7.5: recuperação de cobertura de competências",
   ],
+}, {
+  productGeneration: 1,
+  movement: 8,
+  deliveries: [
+    "M8.1: arquitetura sistêmica de competências",
+  ],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {

@@ -32,7 +32,7 @@ Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
 | D-24 | Contratos intake/Perfil preservados | NOT TESTED | Falta novo ciclo sintético real |
 | D-25 | Sem mudança de matching/score no diff; regressões M7.1 dirigidas | PARTIAL | Smoke de matching faltante |
 | D-26 | ADR-070, owners e Context Pack atualizados; geração/check PASS | PARTIAL | AoT e estado de rollout requerem fechamento |
-| D-27 | Contratos persistidos versionados; versão pública atual mantida; CI e web publicados no SHA `11ff0ab` | PARTIAL | Aceite final depende da limpeza e da jornada funcional |
+| D-27 | Contratos persistidos versionados; M8.1 registrada como primeira entrega do Movimento 8, calculando `v1.8.1` para login e menu | PARTIAL | Publicação e conferência hospedada da nova versão pendentes |
 | D-28 | QA SQL e testes TS usam dados sintéticos | PASS | Local |
 | D-29 | RLS, papéis, escopo cruzado e escrita direta negativos no PostgreSQL local | PASS | Sem smoke remoto autenticado |
 | D-30 | Nove superfícies renderizadas e comparadas em sessão local autenticada com a imagem normativa; topologia, ordem, densidade e ação principal corrigidas | PASS | Smoke visual hospedado ainda pendente |
