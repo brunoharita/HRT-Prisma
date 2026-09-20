@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.8.1
-current_state_version: 2.45.0
+current_state_version: 2.46.0
 current_state_last_verified: 2026-09-20
 documentation_source_count: 256
-source_manifest_sha256: 3c3aa6fc5d9713d3e3a3b38e58906c008323e29d56412d1dd695638c5b4037ec
+source_manifest_sha256: f1513192ed7f9e3cafe6747f8aaeb23c112ac1d7dc6e78cfa39840657b6643ba
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,7 +267,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M8.2 está validado no PostgreSQL isolado e ainda aguarda produção. Prisma v1.8.2 está no registro local de releases, não na web hospedada. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; o QA local conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. O Perfil real citado pelo Product Owner precisa de smoke remoto porque o backup isolado antecede a associação. Agreement M8.2, ADR-071 e AoT M8.2.
+M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 
 M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. Prisma v1.8.1 aparece no login hospedado; o menu consome o mesmo registro, ainda sem inspeção hospedada autenticada. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e não pediu retomada. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O AoT permanece parcial por critérios funcionais ainda sem evidência. ADR-070 e AoT M8.1.
 

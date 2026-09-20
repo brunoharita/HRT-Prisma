@@ -2,17 +2,17 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.45.0
+version: 2.46.0
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
 
-## M8.2: classificação global assistida validada localmente; publicação pendente
+## M8.2: classificação global assistida em produção
 
-O Product Owner decidiu substituir a pendência manual em massa por classificação semântica de conceitos globais de competência. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 governam o movimento. O classificador offline recebeu somente dados públicos ESCO 1.2.1 e O*NET 31.0: 13.939 URIs ESCO foram analisadas; após auditoria independente das 1.011 decisões Soft, amostra determinística de 1.289 Hard, arbitragem de 820 divergências e oito correções explícitas por URI, três URIs ficaram pendentes. Sete nós amplos O*NET ficaram pendentes; 37 habilidades O*NET receberam classe. O único conceito Global Prisma fora dessas fontes, “Transformação operacional”, recebeu H4 no plano de migração. A versão do classificador e a razão de cada decisão ficarão na classificação `ai_assisted`, separadas de `human_curated`.
+O Product Owner decidiu substituir a pendência manual em massa por classificação semântica de conceitos globais de competência. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 governam o movimento. O classificador offline recebeu somente dados públicos ESCO 1.2.1 e O*NET 31.0: 13.939 URIs ESCO foram analisadas; após auditoria independente das 1.011 decisões Soft, amostra determinística de 1.289 Hard, arbitragem de 820 divergências e oito correções explícitas por URI, três URIs ficaram pendentes. Sete nós amplos O*NET ficaram pendentes; 37 habilidades O*NET receberam classe. O único conceito Global Prisma fora dessas fontes, “Transformação operacional”, recebeu H4. A versão do classificador e a razão de cada decisão estão na classificação `ai_assisted`, separadas de `human_curated`.
 
-Prisma v1.8.2 consta no registro local de entregas, ainda sem publicação. O restore privado anterior ao M8.1 foi usado em PostgreSQL isolado sem rede; depois de aplicar M8.1 e as migrations M8.2, o QA conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), “comunicação” em S1, preservação de histórico/escopo, proveniência obrigatória e retomada idempotente. O contêiner foi removido. O snapshot do backup antecede a associação da captura do Product Owner, portanto o smoke do Perfil real e o rollout remoto seguem pendentes. A classificação altera a taxonomia do conceito, sem criar evidência da Pessoa ou mudar matching/Score.
+O restore privado anterior ao M8.1 foi usado em PostgreSQL isolado sem rede; depois de aplicar M8.1 e as migrations M8.2, o QA conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), “comunicação” em S1, preservação de histórico/escopo, proveniência obrigatória e retomada idempotente. O contêiner foi removido. As 17 migrations M8.2 foram aplicadas e registradas no único Supabase remoto; a consulta de produção confirmou a mesma cobertura de 99,96% e a RPC autenticada do Perfil da captura retornou uma associação de Comunicação em Soft/S1. O CI do SHA `6525cfc` passou; `main`, `origin/main` e VPS foram sincronizados nesse SHA, somente `prisma-web` foi recriado, o contêiner ficou ativo sem reinícios, HTTPS respondeu 200 e o login hospedado exibiu v1.8.2. A inspeção visual autenticada do Perfil ainda não foi concluída. A classificação altera a taxonomia do conceito, sem criar evidência da Pessoa ou mudar matching/Score.
 
 ## M8.1: schema e web publicados
 
@@ -22,7 +22,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-M8.2 está validado no PostgreSQL isolado e ainda aguarda produção. Prisma v1.8.2 está no registro local de releases, não na web hospedada. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; o QA local conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. O Perfil real citado pelo Product Owner precisa de smoke remoto porque o backup isolado antecede a associação. Agreement M8.2, ADR-071 e AoT M8.2.
+M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 
 M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. Prisma v1.8.1 aparece no login hospedado; o menu consome o mesmo registro, ainda sem inspeção hospedada autenticada. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e não pediu retomada. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O AoT permanece parcial por critérios funcionais ainda sem evidência. ADR-070 e AoT M8.1.
 

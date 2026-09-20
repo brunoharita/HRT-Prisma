@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 256
-source_manifest_sha256: 3c3aa6fc5d9713d3e3a3b38e58906c008323e29d56412d1dd695638c5b4037ec
+source_manifest_sha256: f1513192ed7f9e3cafe6747f8aaeb23c112ac1d7dc6e78cfa39840657b6643ba
 -->
 
 # Tudo sobre o Prisma
@@ -2578,17 +2578,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.45.0
+version: 2.46.0
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
 
-## M8.2: classificação global assistida validada localmente; publicação pendente
+## M8.2: classificação global assistida em produção
 
-O Product Owner decidiu substituir a pendência manual em massa por classificação semântica de conceitos globais de competência. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 governam o movimento. O classificador offline recebeu somente dados públicos ESCO 1.2.1 e O*NET 31.0: 13.939 URIs ESCO foram analisadas; após auditoria independente das 1.011 decisões Soft, amostra determinística de 1.289 Hard, arbitragem de 820 divergências e oito correções explícitas por URI, três URIs ficaram pendentes. Sete nós amplos O*NET ficaram pendentes; 37 habilidades O*NET receberam classe. O único conceito Global Prisma fora dessas fontes, “Transformação operacional”, recebeu H4 no plano de migração. A versão do classificador e a razão de cada decisão ficarão na classificação `ai_assisted`, separadas de `human_curated`.
+O Product Owner decidiu substituir a pendência manual em massa por classificação semântica de conceitos globais de competência. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 governam o movimento. O classificador offline recebeu somente dados públicos ESCO 1.2.1 e O*NET 31.0: 13.939 URIs ESCO foram analisadas; após auditoria independente das 1.011 decisões Soft, amostra determinística de 1.289 Hard, arbitragem de 820 divergências e oito correções explícitas por URI, três URIs ficaram pendentes. Sete nós amplos O*NET ficaram pendentes; 37 habilidades O*NET receberam classe. O único conceito Global Prisma fora dessas fontes, “Transformação operacional”, recebeu H4. A versão do classificador e a razão de cada decisão estão na classificação `ai_assisted`, separadas de `human_curated`.
 
-Prisma v1.8.2 consta no registro local de entregas, ainda sem publicação. O restore privado anterior ao M8.1 foi usado em PostgreSQL isolado sem rede; depois de aplicar M8.1 e as migrations M8.2, o QA conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), “comunicação” em S1, preservação de histórico/escopo, proveniência obrigatória e retomada idempotente. O contêiner foi removido. O snapshot do backup antecede a associação da captura do Product Owner, portanto o smoke do Perfil real e o rollout remoto seguem pendentes. A classificação altera a taxonomia do conceito, sem criar evidência da Pessoa ou mudar matching/Score.
+O restore privado anterior ao M8.1 foi usado em PostgreSQL isolado sem rede; depois de aplicar M8.1 e as migrations M8.2, o QA conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), “comunicação” em S1, preservação de histórico/escopo, proveniência obrigatória e retomada idempotente. O contêiner foi removido. As 17 migrations M8.2 foram aplicadas e registradas no único Supabase remoto; a consulta de produção confirmou a mesma cobertura de 99,96% e a RPC autenticada do Perfil da captura retornou uma associação de Comunicação em Soft/S1. O CI do SHA `6525cfc` passou; `main`, `origin/main` e VPS foram sincronizados nesse SHA, somente `prisma-web` foi recriado, o contêiner ficou ativo sem reinícios, HTTPS respondeu 200 e o login hospedado exibiu v1.8.2. A inspeção visual autenticada do Perfil ainda não foi concluída. A classificação altera a taxonomia do conceito, sem criar evidência da Pessoa ou mudar matching/Score.
 
 ## M8.1: schema e web publicados
 
@@ -2598,7 +2598,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-M8.2 está validado no PostgreSQL isolado e ainda aguarda produção. Prisma v1.8.2 está no registro local de releases, não na web hospedada. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; o QA local conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. O Perfil real citado pelo Product Owner precisa de smoke remoto porque o backup isolado antecede a associação. Agreement M8.2, ADR-071 e AoT M8.2.
+M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 
 M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. Prisma v1.8.1 aparece no login hospedado; o menu consome o mesmo registro, ainda sem inspeção hospedada autenticada. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e não pediu retomada. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O AoT permanece parcial por critérios funcionais ainda sem evidência. ADR-070 e AoT M8.1.
 
@@ -5058,7 +5058,7 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 # Versionamento
 
-M8.2 (2026-09-20, validação local): a classificação assistida do catálogo Global é uma segunda entrega do Movimento 8. O registro executável calcula **Prisma v1.8.2** para login e menu no próximo build publicado; produção ainda exibe v1.8.1 até o rollout. Os nove subagrupadores e `competency-taxonomy-2.0.0` permanecem; `prisma-competency-classification-1.1.0` versiona o classificador e `ai_assisted` distingue sua proveniência. ADR-071 e AoT M8.2 separam QA local de ativação remota.
+M8.2 (2026-09-20, publicado): a classificação assistida do catálogo Global é a segunda entrega do Movimento 8. **Prisma v1.8.2** foi publicado no SHA `6525cfc`; o login hospedado exibiu a versão após recarga, e o menu consome o mesmo registro. Os nove subagrupadores e `competency-taxonomy-2.0.0` permanecem; `prisma-competency-classification-1.1.0` versiona o classificador e `ai_assisted` distingue sua proveniência. As 17 migrations M8.2 constam no único Supabase remoto. ADR-071 e AoT M8.2 registram a validação e os limites da inspeção visual do Perfil.
 
 M8.1 (2026-09-20): o Product Owner apontou a omissão da nova versão no login e no menu após o deploy da arquitetura de competências. O registro oficial inclui M8.1 como primeira entrega do Movimento 8, calculando **Prisma v1.8.1** em ambas as superfícies. `competency-taxonomy-2.0.0`, `person-professional-evidence-4.0.0` e `profile-competency-curation-5.0.0` são contratos novos e aditivos; versões históricas permanecem. O SHA `4147a36` passou no CI e foi publicado em produção; o login hospedado exibiu `v1.8.1`, e o menu consome o mesmo registro. O número identifica a entrega publicada, sem declarar todos os critérios do AoT concluídos. ADR-070 e AoT M8.1 documentam limites e evidência.
 
@@ -9189,6 +9189,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 # Deployment
 
 ## Estado
+
+M8.2 em produção em 2026-09-20: **Prisma v1.8.2**, runtime `6525cfc`, 17 migrations de classificação global assistida no único Supabase. A consulta remota confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), e a projeção autenticada da Pessoa da captura retornou Comunicação em Soft/S1. `main`, GitHub e checkout da VPS foram alinhados; somente `prisma-web` foi recriado, com imagem `sha256:7650d70d8bde9fcb5383a528b9f8e02fd6df464f8859d054eb4092ca6b43896e`, contêiner ativo, zero reinícios e HTTPS 200. O login hospedado exibiu v1.8.2 após recarga. A inspeção visual autenticada do Perfil permanece pendente; evidências e limites no AoT M8.2.
 
 Correção de visibilidade de propostas em 2026-09-19: o runtime web da VPS foi sincronizado no commit `2230d15`. Somente `prisma-web` foi reconstruído e recriado; Supabase, Edge Functions, gateway, workers e Traefik permaneceram intactos. O checkout remoto foi atualizado por fast-forward a partir de `8259d0f`; o primeiro smoke após a recriação retornou 502 transitório e a leitura posterior confirmou HTTPS 200, container em execução e zero reinícios. Fechamentos posteriores apenas documentais não alteram esse frontend ativo. Evidência: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
@@ -14644,19 +14646,19 @@ Branch `codex/m81-competency-architecture` integrada em `main` no SHA `11ff0ab1d
 
 # AoT — M8.2 Classificação global de competências
 
-Contrato: `docs/agreements/agreement-m82-global-competency-classification.md` v1.0.0. Prompt: `docs/qa/execution-m82-global-competency-classification.md`. Evidência abaixo distingue lote local, banco remoto e Perfil real. Estado: **PARCIAL** até publicação e smoke.
+Contrato: `docs/agreements/agreement-m82-global-competency-classification.md` v1.0.0. Prompt: `docs/qa/execution-m82-global-competency-classification.md`. Evidência abaixo distingue lote local, banco remoto e Perfil real. Estado: **PARCIAL** apenas pela inspeção visual autenticada do Perfil real ainda pendente.
 
 ## Matriz de Acordos
 
 | ID | Implementação | Teste | Evidência | Status | Ambiente / limitação |
 | --- | --- | --- | --- | --- | --- |
 | D-01 | Classificador ESCO/O*NET sobre fonte oficial e nove subgrupos | Revisão semântica e URI de Comunicação | 13.939 URIs ESCO processadas; 37/44 habilidades O*NET classificadas; 1 conceito Prisma H4 | PASS | Lote local |
-| D-02 | 14 migrations ESCO e migrations O*NET/Prisma | QA SQL de cobertura | Restore isolado: 22.876/22.885 elegíveis (99,96%); nove pendentes | PARTIAL | Aplicação remota pendente |
-| D-03 | Comunicação ESCO → S1 na classificação canônica | QA SQL e projeção v6 | URI `15d76317-c71a-4fa2-aadc-2ecc34e627b7` em S1 no restore; Perfil da captura ainda tinha zero associações no backup anterior | PARTIAL | Smoke do Perfil real remoto pendente |
+| D-02 | 14 migrations ESCO e migrations O*NET/Prisma | QA SQL de cobertura local e remoto | Produção: 22.876/22.885 elegíveis (99,96%); nove pendentes; 17 migrations M8.2 no ledger remoto | PASS | Único Supabase remoto |
+| D-03 | Comunicação ESCO → S1 na classificação canônica | QA SQL e projeção v6 | URI `15d76317-c71a-4fa2-aadc-2ecc34e627b7` em S1; RPC autenticada do Perfil real: uma associação de Comunicação em Soft/S1 | PARTIAL | A tela hospedada do Perfil ainda não foi inspecionada autenticada |
 | D-04 | Método `ai_assisted`, constraint e razão/versão/fonte por linha | Migration e teste negativo de proveniência | QA SQL PASS; classificação humana conserva método distinto | PASS | Restore local |
 | D-05 | Auditoria independente, arbitragem e overrides por URI | 1.011 Soft + 1.289 Hard amostrados; 820 divergências arbitradas; revisão manual de exemplos | 13.936 URIs ESCO classificadas, três pendentes; oito correções explícitas; nenhum dado pessoal enviado | PASS | A auditoria reduz erros conhecidos; não prova acurácia perfeita |
-| D-06 | Classificação global com `not exists` para corrente | QA SQL de escopo/histórico e revisão das migrations | Zero `ai_assisted` organizacional/ocupação/certificação; zero sobrescrita humana no restore | PASS | Produção pendente |
-| D-07 | Preflight de mapping, migrations idempotentes, reversão documentada | 14 lotes ESCO + O*NET + Prisma aplicados em PostgreSQL isolado; rerun representativo | QA local PASS; restore removido; runbook de reversão criado | PARTIAL | Rollout e Perfil remoto pendentes |
+| D-06 | Classificação global com `not exists` para corrente | QA SQL de escopo/histórico e revisão das migrations | Zero `ai_assisted` organizacional/ocupação/certificação; zero sobrescrita humana no restore e no QA remoto | PASS | Produção conferida |
+| D-07 | Preflight de mapping, migrations idempotentes, reversão documentada | 14 lotes ESCO + O*NET + Prisma aplicados em PostgreSQL isolado; rerun representativo; QA remoto | QA local/remoto PASS; restore removido; runbook de reversão; projeção v6 do Perfil real confirmada | PASS | Rollout remoto concluído |
 
 ## Proibições verificadas
 
@@ -14681,7 +14683,7 @@ Não aplicável: o movimento reusa a projeção e as telas M8.1; não cria nem a
 
 ## Desvios do contrato
 
-Nenhum desvio identificado no escopo local. O Perfil real e a produção ainda não estão provados.
+Nenhum desvio de implementação identificado. O backend do Perfil real foi provado; falta a conferência visual da tela autenticada.
 
 ## Mudanças autorizadas durante a execução
 
@@ -14689,15 +14691,15 @@ A decisão do Product Owner de 2026-09-20 autoriza a classificação inteligente
 
 ## Validação final
 
-As chamadas de IA receberam somente dados públicos de conceitos. Custo estimado pelo uso registrado: ESCO US$11,55; O*NET US$0,024; auditorias US$0,8225 + US$0,8567; arbitragem US$1,1464; total aproximado US$14,40, abaixo do teto US$20 comunicado. A autoconfiança do classificador não foi usada como prova. O restore local foi aplicado em contêiner PostgreSQL Supabase 17.6.1 sem rede nem volume persistente, incluindo M8.1 e M8.2; QA `m82_global_competency_verification.sql` retornou 22.876/22.885 e teste negativo de proveniência PASS. O contêiner foi removido. A tentativa de projeção sem usuário autenticado rejeitou como esperado. O backup antecede a associação do Perfil citado, logo não comprova essa jornada real.
+As chamadas de IA receberam somente dados públicos de conceitos. Custo estimado pelo uso registrado: ESCO US$11,55; O*NET US$0,024; auditorias US$0,8225 + US$0,8567; arbitragem US$1,1464; total aproximado US$14,40, abaixo do teto US$20 comunicado. A autoconfiança do classificador não foi usada como prova. O restore local foi aplicado em contêiner PostgreSQL Supabase 17.6.1 sem rede nem volume persistente, incluindo M8.1 e M8.2; QA `m82_global_competency_verification.sql` retornou 22.876/22.885 e teste negativo de proveniência PASS. O contêiner foi removido. A tentativa de projeção sem usuário autenticado rejeitou como esperado. No Supabase remoto, o mesmo QA passou, a cobertura é 22.876/22.885, e a RPC v6 autenticada retornou uma associação de Comunicação em Soft/S1 para o Perfil citado, sem novo vínculo pessoal.
 
 ## Git / QA / ambiente
 
-Branch `codex/m82-global-competency-classification`; commit, main, remoto e web ainda pendentes.
+Branch `codex/m82-global-competency-classification`; commit `6525cfc2ade94106c449d34f84dc5d0ca5ec6c74`. CI `Prisma foundation CI` [#35534203056](https://github.com/brunoharita/HRT-Prisma/actions/runs/35534203056) PASS. `main`, `origin/main` e VPS `/opt/prisma` alinhados nesse SHA. As 17 migrations M8.2 constam no ledger do único Supabase remoto. Somente `prisma-web` foi reconstruído e recriado; imagem `sha256:7650d70d8bde9fcb5383a528b9f8e02fd6df464f8859d054eb4092ca6b43896e`, contêiner `running`, zero reinícios. `release:verify`: Git alinhado e HTTPS 200. Login hospedado exibiu `v1.8.2` após recarga; o menu consome o mesmo registro de versão.
 
 ## Conclusão
 
-Localmente validado. A entrega completa depende do rollout e smoke remoto.
+Banco, release web e projeção autenticada do Perfil real validados em produção. CA-02 permanece parcial até confirmar visualmente a tela hospedada do Perfil; nenhuma acurácia perfeita é alegada.
 
 ---
 
