@@ -1,5 +1,11 @@
 # Arquitetura da Fundação de Conhecimento
 
+## M8.2: classificação assistida do catálogo global (em validação)
+
+O aditivo M8.2 v1.0.0 determina classificação semântica em lote dos conceitos globais de competência ESCO/O*NET, usando as mesmas identidades `knowledge_concepts` e os nove subagrupadores M8.1. O tipo nativo `knowledge`/`skill/competence` da ESCO é evidência de origem, não resposta Hard/Soft. O classificador recebe apenas rótulo, definição e contexto públicos da fonte; a saída traz subagrupador, razão, versão e método `ai_assisted`. Auditoria adversarial, amostra diversificada e resolução dos conceitos com múltiplas URIs antecedem a gravação. A meta de ≥99% refere-se à cobertura; erros de classificação são medidos e corrigidos separadamente. Classificações humanas correntes não são sobrescritas. ADR-071 e AoT M8.2 registram decisão e prova.
+
+O backfill adiciona a classe ao conceito canônico, não à Pessoa. Assim, a projeção `load_person_professional_evidence_map_v6` existente apresenta uma associação já declarada em Hard/Soft após a publicação da classificação, preservando estado, fonte e evidências da Pessoa. Novas propostas humanas seguem exigindo subagrupador na aprovação; novas versões de fontes oficiais precisam repetir classificação e auditoria para conceitos novos. Matching, Score e taxonomia ocupacional não mudam.
+
 ## M8.1: classificação sistêmica de competências (implementação local)
 
 O Agreement M8 v1.0.0 e o aditivo M8.1 v1.1.0 definem Hard Skills, Soft Skills e nove subagrupadores. `competency_macro_groups` e `competency_subgroups` persistem as definições; `knowledge_competency_classifications` liga um conceito canônico da Knowledge ao subagrupador principal atual com histórico de versões. O conceito Global só aceita subagrupador Global; um subagrupador de organização só classifica conceito da mesma organização. O schema prevê linhas organizacionais para cadastro futuro, sem expor edição neste movimento. Os seis tipos nativos da Knowledge continuam como proveniência e não governam a apresentação M8.

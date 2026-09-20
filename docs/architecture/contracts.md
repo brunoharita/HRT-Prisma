@@ -1,5 +1,7 @@
 # Catálogo de contratos
 
+M8.2 em validação: a estrutura `competency-taxonomy-2.0.0` permanece; `knowledge_competency_classifications.method` admite `ai_assisted` com proveniência obrigatória de fonte, versão, classificador e razão. O backfill ESCO/O*NET acrescenta classificação global a identidades Knowledge já aprovadas, sem novo contrato Pessoa × conceito ou alteração da projeção `person-professional-evidence-4.0.0`. Classificação humana posterior continua versionada e prevalece. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 são os owners.
+
 M8.1 em implementação local: `competency-taxonomy-2.0.0` acrescenta classificação principal versionada sobre conceitos Knowledge existentes; `person-professional-evidence-4.0.0` separa Declaração, Contexto, Certificado, Verificação por Assessment e Habilidade Evidenciada, com fontes cumulativas; `profile-competency-curation-5.0.0` exige subagrupador para proposta nova. Migrations aditivas e RPCs `_v2`/`_v5`/`_v6` preservam contratos históricos. Fonte curricular não qualifica Assessment nem habilidade prática. ADR-070 e AoT M8.1 são as referências; ativação remota não é presumida.
 
 Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `parser-ia-hosted-transport-1.0.0` (ADR-059), owner operations/security, cabeçalhos sessão/organização e gateway. Não alteram `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0 nem `parser-ia` 1.0.0. Status do pipeline serial e rollout em `docs/qa/aot-production-resume-quality-pipeline.md`; rollback para imagem web anterior e interrupção do túnel.

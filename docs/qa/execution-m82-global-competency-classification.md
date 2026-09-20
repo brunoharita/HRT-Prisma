@@ -1,0 +1,5 @@
+# Execution Prompt — M8.2 — Classificação global de competências
+
+Contrato integral: `docs/agreements/agreement-m82-global-competency-classification.md` versão 1.0.0. Ler o contrato, os Agreements M8/M8.1 e as migrations M8.1 pertinentes antes de implementar. A decisão mais recente do Product Owner exige classificação sem revisão manual item a item, próxima de 100% dos conceitos globais de competência.
+
+Executar D-01 a D-07, impedir P-01 a P-05, manter F-01/F-02 fora do movimento e exercer A-01 a A-03. Classificar a base pública ESCO por significado com contexto de origem e revisão de qualidade. Integrar à classificação canônica M8.1 sem transformar inferência de taxonomia em evidência da Pessoa. Preservar autoridade humana e isolamento de organização. Auditar cobertura e erros antes do backfill remoto. Usar migration versionada e rollback para mudança de schema/dados, testes direcionados e QA transacional. Atualizar owners/ADR/AoT/Context Pack. Publicar somente as superfícies exigidas pelo release plan e registrar CA-01 a CA-06 com evidência real.

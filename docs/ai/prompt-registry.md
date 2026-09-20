@@ -12,8 +12,18 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 | `knowledge-agent` | AI engineering | 1.0.0 | Propor conceito com fontes aprovadas | `KNOWLEDGE_RESEARCH_MODEL` | Knowledge Agent | encontrado no código; ativação não revalidada nesta auditoria |
 | `vacancy-advisor-web` | AI engineering | 1.0.0 | Orientação de mercado para Vaga | `KNOWLEDGE_RESEARCH_MODEL` | Assistente Prisma | encontrado no código; ativação não revalidada nesta auditoria |
 | `occupation-resolution-agent` | AI engineering | 1.0.0 | Escolher referência ocupacional equivalente entre candidatos permitidos | `KNOWLEDGE_RESEARCH_MODEL` | resolução ocupacional | encontrado no código; ativação não revalidada nesta auditoria |
+| `prisma-competency-classification` | AI engineering | 1.1.0 | Classificar conceitos globais ESCO/O*NET em Hard/Soft e subagrupador M8 | `gpt-5.6-terra` | scripts offline M8.2 | lote em validação; não é prompt de runtime |
+| `prisma-competency-classification-audit` | AI engineering | 1.0.0 | Contestar falsos Soft e amostrar decisões Hard | `gpt-5.6-terra` | auditoria offline M8.2 | planejado para QA do lote |
+| `prisma-competency-adjudication` | AI engineering | 1.0.0 | Resolver divergências entre classificação e auditoria com contexto ESCO | `gpt-5.6-terra` | arbitragem offline M8.2 | lote em validação; sem publicação automática |
 
 Inventário verificado no código em 2026-09-11. A entrada determinística descreve o provider local original, não todos os fluxos atuais de extração. Esta revisão não muda prompts nem demonstra sua qualidade ou rollout. Novos providers devem ter registro próprio antes de ativação.
+
+### Classificação global M8.2
+
+- Templates e schemas Structured Output: `scripts/classify-esco-competencies.mjs`, `scripts/classify-onet-unclassified.mjs`, `scripts/audit-esco-competency-classifications.mjs` e `scripts/adjudicate-esco-competencies.mjs`. Versões de classificador, auditoria e arbitragem são explícitas no código; os resultados gravam fonte, versão, hash quando disponível, modelo e justificativa.
+- Entrada: somente rótulo, descrição, tipo e hierarquia públicos ESCO/O*NET; o auditor reclassifica sem receber a decisão anterior. Saída: URI/ID oficial, um dos nove códigos ou `pending`, razão e nível de certeza no classificador principal. O banco aceita `ai_assisted` somente com proveniência obrigatória; autoconfiança não é critério único de qualidade.
+- OpenAI Responses, `store:false`, sem Web/tools, reasoning `low`, lotes limitados e teto financeiro na rotina ESCO. Currículos, Perfis, Pessoas, dados de organizações e segredos são proibidos no input. Textos da fonte são tratados como dados não confiáveis.
+- Ativação: offline em validação no M8.2; a publicação das classificações no Supabase exige auditoria e QA separados. O árbitro recebe os dois pareceres divergentes e o contexto de origem, mas não publica diretamente. Alterar instruções exige nova versão e não reescreve a proveniência anterior.
 
 ### `no-llm-extraction` 1.0.0
 

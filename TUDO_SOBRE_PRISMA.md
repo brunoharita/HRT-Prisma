@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 251
-source_manifest_sha256: 01e775372778a1cf347aaa76977a21e0a70c5f143d28fa05777984903aa3d175
+documentation_source_count: 256
+source_manifest_sha256: 3c3aa6fc5d9713d3e3a3b38e58906c008323e29d56412d1dd695638c5b4037ec
 -->
 
 # Tudo sobre o Prisma
@@ -2358,6 +2358,52 @@ A limpeza proposta envolve dados destrutivos, identidade Pessoa × Usuário, Kno
 
 ---
 
+## Source: `docs/agreements/agreement-m82-global-competency-classification.md`
+
+# Agreement Contract — M8.2 — Classificação inteligente dos conceitos globais de competência
+
+Versão: 1.0.0. Decisão do Product Owner em 2026-09-20: classificar Hard/Soft com inteligência e cobertura próxima de 100%, sem revisão manual conceito a conceito. Este aditivo complementa o Agreement M8 v1.0.0 e o M8.1 v1.1.1. Substitui somente a decisão A-12 do M8.1 de deixar todos os conceitos não determinísticos pendentes. A classificação de conceitos globais continua global e única por conceito.
+
+## DEVE
+
+- **D-01** Interpretar semanticamente o conceito global de competência, usando rótulo, definição, contexto e tipo da fonte como evidência, para atribuir um dos nove subagrupadores M8.1. O tipo nativo `knowledge` ou `skill/competence` da ESCO não determina Hard/Soft.
+- **D-02** Cobrir pelo menos 99% dos conceitos globais de competência publicados de ESCO e O*NET com classificação atual, preservando ocupações e certificações fora da taxonomia de competências.
+- **D-03** Classificar o conceito ESCO “comunicação” como Soft Skills → Interpessoais. O conceito global selecionado deve aparecer no macrogrupo da Pessoa assim que a classificação estiver publicada, sem editar evidência ou declaração da Pessoa.
+- **D-04** Usar a identidade canônica da Knowledge e as tabelas M8.1 de macrogrupos, subagrupadores e classificações. Persistir método, versão, fonte, versão do classificador, justificativa e histórico; uma decisão automática nunca será registrada como humana.
+- **D-05** Submeter a classificação em lote a auditoria proporcional: exemplos normativos M8, amostra diversificada Hard/Soft, casos semanticamente parecidos e verificações de integridade e isolamento. Corrigir erros comprovados antes da publicação. Conceitos realmente indetermináveis permanecem pendentes e identificáveis.
+- **D-06** Manter a classificação global reutilizável por todas as organizações; classificação e correção humanas autorizadas prevalecem sobre propostas automáticas. Novo conceito criado pelo fluxo humano M8.1 continua exigindo subagrupador na aprovação.
+- **D-07** Publicar somente após validar correspondência entre URIs da fonte e conceitos presentes, ausência de sobrescrita de classificação humana, rollback e projeção do Perfil afetado.
+
+## PROIBIDO
+
+- **P-01** Inferir que uma Pessoa domina uma competência a partir da classificação do conceito; criar ou elevar evidências, certificação, Assessment ou habilidade prática.
+- **P-02** Classificar Hard/Soft por palavra isolada, pelo tipo nativo da ESCO ou apenas pela autoconfiança declarada pelo modelo.
+- **P-03** Reclassificar ocupações, certificações, conceitos organizacionais, classificações humanas correntes ou subagrupadores de outra organização em lote.
+- **P-04** Enviar currículos, Perfis, nomes de Pessoas, dados de organizações ou segredos ao classificador externo.
+- **P-05** Inventar equivalência entre conceitos ou duplicar identidades Knowledge para obter cobertura.
+
+## FORA DE ESCOPO
+
+- **F-01** Limpeza de Pessoas/dados M8.1, matching, Score, parser, Assessment, cadastro de subagrupadores organizacionais e redesign visual.
+- **F-02** Classificação automática de conceitos criados por organização e alteração da governança de publicação humana de conceitos novos.
+
+## AUTONOMIA
+
+- **A-01** Modelo, lotes, amostragem e implementação do classificador, dentro do orçamento comunicado de US$ 20 para a classificação inicial de dados públicos da ESCO.
+- **A-02** Migração e operação de backfill reversíveis, sem alterar os IDs, termos e mappings de Knowledge.
+- **A-03** Critérios de revisão para casos difíceis, com registro de justificativa e limite objetivo de qualidade; não há autorização para afirmar acurácia perfeita.
+
+## CRITÉRIOS DE ACEITE
+
+- **CA-01** Cobertura ≥99% dos conceitos globais elegíveis publicados, contada no banco, e relatório separado de pendências.
+- **CA-02** Comunicação ESCO aparece em Soft → Interpessoais no Perfil que já a associa, sem novo vínculo Pessoa × conceito.
+- **CA-03** Exemplos M8 aplicáveis e amostra diversificada auditados; conflitos conhecidos corrigidos antes do rollout.
+- **CA-04** Cada classificação automática tem método distinto de `human_curated`, URI/versão de origem, versão do classificador e justificativa; histórico humano anterior permanece recuperável.
+- **CA-05** Testes negativos rejeitam escopo incorreto, classificação de ocupação/certificação e sobrescrita humana; Perfil preserva natureza e fonte da evidência.
+- **CA-06** Diff, release, smoke e AoT registram cobertura, limites da medição de qualidade e estado real de local/main/produção.
+
+---
+
 ## Source: `docs/ai-context/PRISMA_AI_REFERENCE.md`
 
 ---
@@ -2532,11 +2578,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.44.9
+version: 2.45.0
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
+
+## M8.2: classificação global assistida validada localmente; publicação pendente
+
+O Product Owner decidiu substituir a pendência manual em massa por classificação semântica de conceitos globais de competência. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 governam o movimento. O classificador offline recebeu somente dados públicos ESCO 1.2.1 e O*NET 31.0: 13.939 URIs ESCO foram analisadas; após auditoria independente das 1.011 decisões Soft, amostra determinística de 1.289 Hard, arbitragem de 820 divergências e oito correções explícitas por URI, três URIs ficaram pendentes. Sete nós amplos O*NET ficaram pendentes; 37 habilidades O*NET receberam classe. O único conceito Global Prisma fora dessas fontes, “Transformação operacional”, recebeu H4 no plano de migração. A versão do classificador e a razão de cada decisão ficarão na classificação `ai_assisted`, separadas de `human_curated`.
+
+Prisma v1.8.2 consta no registro local de entregas, ainda sem publicação. O restore privado anterior ao M8.1 foi usado em PostgreSQL isolado sem rede; depois de aplicar M8.1 e as migrations M8.2, o QA conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), “comunicação” em S1, preservação de histórico/escopo, proveniência obrigatória e retomada idempotente. O contêiner foi removido. O snapshot do backup antecede a associação da captura do Product Owner, portanto o smoke do Perfil real e o rollout remoto seguem pendentes. A classificação altera a taxonomia do conceito, sem criar evidência da Pessoa ou mudar matching/Score.
 
 ## M8.1: schema e web publicados
 
@@ -2545,6 +2597,8 @@ Prisma v1.8.1 registra M8.1 como primeira entrega do Movimento 8, após o Produc
 O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. Dos nove alvos autorizados, três foram excluídos pela saga M5.5; após orientação do Product Owner, os seis restantes serão preservados nesta execução. Consulta SQL confirmou 7 Pessoas, 11 objetos Storage, 7 Auth, 7 usuários da plataforma e 8 Vagas. A outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. O CI do SHA `11ff0ab` passou, `main` foi promovida, a web foi publicada na VPS nesse SHA, o contêiner está ativo e HTTPS respondeu 200. A limpeza remota é parcial; smoke funcional autenticado hospedado e novo ciclo intake → revisão → publicação permanecem pendentes. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
+
+M8.2 está validado no PostgreSQL isolado e ainda aguarda produção. Prisma v1.8.2 está no registro local de releases, não na web hospedada. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; o QA local conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. O Perfil real citado pelo Product Owner precisa de smoke remoto porque o backup isolado antecede a associação. Agreement M8.2, ADR-071 e AoT M8.2.
 
 M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. Prisma v1.8.1 aparece no login hospedado; o menu consome o mesmo registro, ainda sem inspeção hospedada autenticada. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e não pediu retomada. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O AoT permanece parcial por critérios funcionais ainda sem evidência. ADR-070 e AoT M8.1.
 
@@ -4052,8 +4106,18 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 | `knowledge-agent` | AI engineering | 1.0.0 | Propor conceito com fontes aprovadas | `KNOWLEDGE_RESEARCH_MODEL` | Knowledge Agent | encontrado no código; ativação não revalidada nesta auditoria |
 | `vacancy-advisor-web` | AI engineering | 1.0.0 | Orientação de mercado para Vaga | `KNOWLEDGE_RESEARCH_MODEL` | Assistente Prisma | encontrado no código; ativação não revalidada nesta auditoria |
 | `occupation-resolution-agent` | AI engineering | 1.0.0 | Escolher referência ocupacional equivalente entre candidatos permitidos | `KNOWLEDGE_RESEARCH_MODEL` | resolução ocupacional | encontrado no código; ativação não revalidada nesta auditoria |
+| `prisma-competency-classification` | AI engineering | 1.1.0 | Classificar conceitos globais ESCO/O*NET em Hard/Soft e subagrupador M8 | `gpt-5.6-terra` | scripts offline M8.2 | lote em validação; não é prompt de runtime |
+| `prisma-competency-classification-audit` | AI engineering | 1.0.0 | Contestar falsos Soft e amostrar decisões Hard | `gpt-5.6-terra` | auditoria offline M8.2 | planejado para QA do lote |
+| `prisma-competency-adjudication` | AI engineering | 1.0.0 | Resolver divergências entre classificação e auditoria com contexto ESCO | `gpt-5.6-terra` | arbitragem offline M8.2 | lote em validação; sem publicação automática |
 
 Inventário verificado no código em 2026-09-11. A entrada determinística descreve o provider local original, não todos os fluxos atuais de extração. Esta revisão não muda prompts nem demonstra sua qualidade ou rollout. Novos providers devem ter registro próprio antes de ativação.
+
+### Classificação global M8.2
+
+- Templates e schemas Structured Output: `scripts/classify-esco-competencies.mjs`, `scripts/classify-onet-unclassified.mjs`, `scripts/audit-esco-competency-classifications.mjs` e `scripts/adjudicate-esco-competencies.mjs`. Versões de classificador, auditoria e arbitragem são explícitas no código; os resultados gravam fonte, versão, hash quando disponível, modelo e justificativa.
+- Entrada: somente rótulo, descrição, tipo e hierarquia públicos ESCO/O*NET; o auditor reclassifica sem receber a decisão anterior. Saída: URI/ID oficial, um dos nove códigos ou `pending`, razão e nível de certeza no classificador principal. O banco aceita `ai_assisted` somente com proveniência obrigatória; autoconfiança não é critério único de qualidade.
+- OpenAI Responses, `store:false`, sem Web/tools, reasoning `low`, lotes limitados e teto financeiro na rotina ESCO. Currículos, Perfis, Pessoas, dados de organizações e segredos são proibidos no input. Textos da fonte são tratados como dados não confiáveis.
+- Ativação: offline em validação no M8.2; a publicação das classificações no Supabase exige auditoria e QA separados. O árbitro recebe os dois pareceres divergentes e o contexto de origem, mas não publica diretamente. Alterar instruções exige nova versão e não reescreve a proveniência anterior.
 
 ### `no-llm-extraction` 1.0.0
 
@@ -4376,6 +4440,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 ## Source: `docs/architecture/contracts.md`
 
 # Catálogo de contratos
+
+M8.2 em validação: a estrutura `competency-taxonomy-2.0.0` permanece; `knowledge_competency_classifications.method` admite `ai_assisted` com proveniência obrigatória de fonte, versão, classificador e razão. O backfill ESCO/O*NET acrescenta classificação global a identidades Knowledge já aprovadas, sem novo contrato Pessoa × conceito ou alteração da projeção `person-professional-evidence-4.0.0`. Classificação humana posterior continua versionada e prevalece. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 são os owners.
 
 M8.1 em implementação local: `competency-taxonomy-2.0.0` acrescenta classificação principal versionada sobre conceitos Knowledge existentes; `person-professional-evidence-4.0.0` separa Declaração, Contexto, Certificado, Verificação por Assessment e Habilidade Evidenciada, com fontes cumulativas; `profile-competency-curation-5.0.0` exige subagrupador para proposta nova. Migrations aditivas e RPCs `_v2`/`_v5`/`_v6` preservam contratos históricos. Fonte curricular não qualifica Assessment nem habilidade prática. ADR-070 e AoT M8.1 são as referências; ativação remota não é presumida.
 
@@ -4729,6 +4795,12 @@ Flags não substituem autorização, RLS, migration, contrato ou aprovação de 
 
 # Arquitetura da Fundação de Conhecimento
 
+## M8.2: classificação assistida do catálogo global (em validação)
+
+O aditivo M8.2 v1.0.0 determina classificação semântica em lote dos conceitos globais de competência ESCO/O*NET, usando as mesmas identidades `knowledge_concepts` e os nove subagrupadores M8.1. O tipo nativo `knowledge`/`skill/competence` da ESCO é evidência de origem, não resposta Hard/Soft. O classificador recebe apenas rótulo, definição e contexto públicos da fonte; a saída traz subagrupador, razão, versão e método `ai_assisted`. Auditoria adversarial, amostra diversificada e resolução dos conceitos com múltiplas URIs antecedem a gravação. A meta de ≥99% refere-se à cobertura; erros de classificação são medidos e corrigidos separadamente. Classificações humanas correntes não são sobrescritas. ADR-071 e AoT M8.2 registram decisão e prova.
+
+O backfill adiciona a classe ao conceito canônico, não à Pessoa. Assim, a projeção `load_person_professional_evidence_map_v6` existente apresenta uma associação já declarada em Hard/Soft após a publicação da classificação, preservando estado, fonte e evidências da Pessoa. Novas propostas humanas seguem exigindo subagrupador na aprovação; novas versões de fontes oficiais precisam repetir classificação e auditoria para conceitos novos. Matching, Score e taxonomia ocupacional não mudam.
+
 ## M8.1: classificação sistêmica de competências (implementação local)
 
 O Agreement M8 v1.0.0 e o aditivo M8.1 v1.1.0 definem Hard Skills, Soft Skills e nove subagrupadores. `competency_macro_groups` e `competency_subgroups` persistem as definições; `knowledge_competency_classifications` liga um conceito canônico da Knowledge ao subagrupador principal atual com histórico de versões. O conceito Global só aceita subagrupador Global; um subagrupador de organização só classifica conceito da mesma organização. O schema prevê linhas organizacionais para cadastro futuro, sem expor edição neste movimento. Os seis tipos nativos da Knowledge continuam como proveniência e não governam a apresentação M8.
@@ -4985,6 +5057,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M8.2 (2026-09-20, validação local): a classificação assistida do catálogo Global é uma segunda entrega do Movimento 8. O registro executável calcula **Prisma v1.8.2** para login e menu no próximo build publicado; produção ainda exibe v1.8.1 até o rollout. Os nove subagrupadores e `competency-taxonomy-2.0.0` permanecem; `prisma-competency-classification-1.1.0` versiona o classificador e `ai_assisted` distingue sua proveniência. ADR-071 e AoT M8.2 separam QA local de ativação remota.
 
 M8.1 (2026-09-20): o Product Owner apontou a omissão da nova versão no login e no menu após o deploy da arquitetura de competências. O registro oficial inclui M8.1 como primeira entrega do Movimento 8, calculando **Prisma v1.8.1** em ambas as superfícies. `competency-taxonomy-2.0.0`, `person-professional-evidence-4.0.0` e `profile-competency-curation-5.0.0` são contratos novos e aditivos; versões históricas permanecem. O SHA `4147a36` passou no CI e foi publicado em produção; o login hospedado exibiu `v1.8.1`, e o menu consome o mesmo registro. O número identifica a entrega publicada, sem declarar todos os critérios do AoT concluídos. ADR-070 e AoT M8.1 documentam limites e evidência.
 
@@ -8996,6 +9070,30 @@ Migrations `20260920110000`, `20260920111000`, `20260920111500` e `2026092011200
 
 ---
 
+## Source: `docs/decisions/ADR-071-assisted-global-competency-classification.md`
+
+# ADR-071 — Classificação assistida do catálogo global de competências
+
+Status: implementação M8.2 em validação. Autoridade de produto: Agreement M8.2 v1.0.0, aditivo ao M8/M8.1; decisão explícita de Bruno em 2026-09-20.
+
+## Contexto e alternativas
+
+O backfill M8.1 usou o tipo estruturado `technology` do O*NET para H2. Isso deixou 13.933 conceitos ESCO e 44 conceitos O*NET de competência sem Hard/Soft no banco; a associação ao Perfil preservava a declaração, mas aparecia em classificação pendente. O tipo nativo `knowledge` da ESCO não implica Hard e `skill/competence` não implica Soft. Revisão humana de cada item é impraticável para o Product Owner.
+
+Foram consideradas: (1) manter revisão manual, incompatível com a cobertura requerida; (2) classificar por tipo/termos da fonte, rápido mas semanticamente incorreto; (3) criar ontologia paralela ou embeddings, introduzindo identidade e operações redundantes; (4) reutilizar os conceitos e classificações M8.1 e fazer classificação semântica em lote sobre o snapshot oficial. Adotamos (4). O classificador recebe somente dados públicos da fonte, decide um dos nove subagrupadores e registra justificativa, versão e método `ai_assisted`. O operador audita amostras e conflitos antes da publicação. Decisões humanas continuam com `human_curated` e têm precedência.
+
+## Limites e controles
+
+O processo offline não recebe Pessoas, currículos, Perfis nem dados de organizações. Os dados da fonte são entradas não confiáveis. A execução tem orçamento limitado, saída estruturada, validação de cardinalidade/enum, arquivos de retomada e hash do catálogo. Uma segunda revisão busca falsos Soft e a auditoria de conceitos com duas URIs evita conflito de classificação por identidade. O backfill usa URI de mapping oficial, versão de fonte publicada, FK para o subagrupador global e proteção contra sobrescrever uma classificação corrente. O modelo não decide evidência ou aptidão de uma Pessoa.
+
+Não se pode provar acurácia perfeita de milhares de decisões por amostragem. A meta ≥99% é cobertura de conceitos elegíveis; qualidade é medida separadamente pelos exemplos normativos, revisão adversarial e amostra diversificada. Conceitos indetermináveis permanecem pendentes. Publicar nova versão de fonte oficial requer novo lote e auditoria para conceitos novos; a aprovação humana de novo conceito já exige subagrupador no fluxo M8.1.
+
+## Compatibilidade e reversão
+
+`competency-taxonomy-2.0.0` e os nove subagrupadores não mudam. A migration amplia apenas o método da tabela de classificações e grava linhas versionadas; RPCs e projeção do Perfil existentes passam a mostrar a classe corrente sem novo vínculo pessoal. Uma reversão de dados desativa apenas classificações `ai_assisted` identificadas pelo classificador M8.2, preservando histórico e decisões humanas posteriores. O método pode permanecer no schema. A limpeza M8.1, matching e Assessment não participam.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -9333,6 +9431,31 @@ Executar lote tenant-scoped, idempotente e revalidado pelo servidor; Storage e D
 ## Parada obrigatória
 
 Não executar exclusão quando faltar backup verificável de DB ou objetos Storage, autorização server-side, exclusividade de proveniência, contrato de desvinculação ou capacidade de verificar resíduos. A aprovação geral da implementação M8.1 não transforma uma linha ambígua em alvo seguro.
+
+---
+
+## Source: `docs/operations/m82-global-competency-classification.md`
+
+# M8.2 — Classificação assistida do catálogo global
+
+Contrato: `docs/agreements/agreement-m82-global-competency-classification.md` v1.0.0. Fonte: ESCO 1.2.1 e O*NET 31.0 publicados no único Supabase existente. O procedimento não usa dados pessoais ou organizacionais como entrada de IA.
+
+## Execução de uma versão de fonte
+
+1. Fixar versão, arquivos oficiais, URI/external ID, hash do catálogo e conceitos realmente publicados. Não usar rótulo textual como chave de gravação.
+2. Rodar `node scripts/classify-esco-competencies.mjs prepare`; comparar contagem e hash com o lote esperado. `run --model=gpt-5.6-terra --budget-usd=20 --concurrency=5` grava chunks fora do Git e pode retomar. A chave fica em `.env.local`; não a imprimir nem enviar a logs.
+3. Auditar exemplos normativos, as decisões Soft com `node scripts/audit-esco-competency-classifications.mjs --selection=soft` e uma amostra determinística Hard com `--selection=hard-sample`. Revisar divergências e os conceitos que compartilham identidade canônica. Registrar correções pontuais por URI no arquivo de overrides versionado, com razão.
+4. Somente após a auditoria, gerar migrations com `node scripts/generate-m82-esco-backfill.mjs`. As migrations exigem mapping de versão publicada, conceito global aprovado e subagrupador global ativo; não sobrescrevem classificação corrente. O método `ai_assisted` preserva justificativa, fonte, versão e modelo.
+5. Aplicar a migration de método e os lotes na ordem. O histórico de migrations deste projeto não é equivalente entre local/remoto; usar somente migrations revisadas pelo conector autorizado. Não usar `supabase db push` geral ou `migration repair` automático.
+6. Conferir cobertura no banco, distribuição por subgrupo, pendências, Comunicação → S1, ausência de sobrescrita humana, integridade/tenant, projeção da Pessoa e estado do release.
+
+## Nova versão oficial
+
+O monitor de fonte detecta atualização, mas não publica snapshot. Ao publicar uma nova versão ESCO/O*NET, repetir classificação e auditoria para URIs novas antes de considerar o catálogo M8 coberto. A classificação atual de um conceito canônico não é substituída só porque ganhou outro mapping; divergência entre duas URIs do mesmo conceito exige reconciliação explícita. Propostas humanas de conceitos novos continuam usando o subagrupador exigido na aprovação M8.1.
+
+## Reversão de dados
+
+Em incidente comprovado, numa transação e após registrar a contagem alvo, desativar somente linhas `is_current and method='ai_assisted' and provenance->>'agreement'='M8.2-1.0.0'` dos conceitos afetados; preservar histórico e quaisquer decisões `human_curated` posteriores. A projeção voltará a mostrar esses conceitos como pendentes. Não reverter por exclusão de conceitos, mappings, subagrupadores ou dados da Pessoa. Correção pontual pela RPC humana versionada é preferível para erros isolados.
 
 ---
 
@@ -14517,6 +14640,67 @@ Branch `codex/m81-competency-architecture` integrada em `main` no SHA `11ff0ab1d
 
 ---
 
+## Source: `docs/qa/aot-m82-global-competency-classification.md`
+
+# AoT — M8.2 Classificação global de competências
+
+Contrato: `docs/agreements/agreement-m82-global-competency-classification.md` v1.0.0. Prompt: `docs/qa/execution-m82-global-competency-classification.md`. Evidência abaixo distingue lote local, banco remoto e Perfil real. Estado: **PARCIAL** até publicação e smoke.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste | Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- |
+| D-01 | Classificador ESCO/O*NET sobre fonte oficial e nove subgrupos | Revisão semântica e URI de Comunicação | 13.939 URIs ESCO processadas; 37/44 habilidades O*NET classificadas; 1 conceito Prisma H4 | PASS | Lote local |
+| D-02 | 14 migrations ESCO e migrations O*NET/Prisma | QA SQL de cobertura | Restore isolado: 22.876/22.885 elegíveis (99,96%); nove pendentes | PARTIAL | Aplicação remota pendente |
+| D-03 | Comunicação ESCO → S1 na classificação canônica | QA SQL e projeção v6 | URI `15d76317-c71a-4fa2-aadc-2ecc34e627b7` em S1 no restore; Perfil da captura ainda tinha zero associações no backup anterior | PARTIAL | Smoke do Perfil real remoto pendente |
+| D-04 | Método `ai_assisted`, constraint e razão/versão/fonte por linha | Migration e teste negativo de proveniência | QA SQL PASS; classificação humana conserva método distinto | PASS | Restore local |
+| D-05 | Auditoria independente, arbitragem e overrides por URI | 1.011 Soft + 1.289 Hard amostrados; 820 divergências arbitradas; revisão manual de exemplos | 13.936 URIs ESCO classificadas, três pendentes; oito correções explícitas; nenhum dado pessoal enviado | PASS | A auditoria reduz erros conhecidos; não prova acurácia perfeita |
+| D-06 | Classificação global com `not exists` para corrente | QA SQL de escopo/histórico e revisão das migrations | Zero `ai_assisted` organizacional/ocupação/certificação; zero sobrescrita humana no restore | PASS | Produção pendente |
+| D-07 | Preflight de mapping, migrations idempotentes, reversão documentada | 14 lotes ESCO + O*NET + Prisma aplicados em PostgreSQL isolado; rerun representativo | QA local PASS; restore removido; runbook de reversão criado | PARTIAL | Rollout e Perfil remoto pendentes |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| P-01 | Sem inferência ou elevação de evidência pessoal | Diff não altera Pessoa/evidência; projeção v6 reutilizada | PASS local | PASS |
+| P-02 | Sem regra lexical/tipo nativo/confiança isolada | Prompts, amostra independente e arbitragem; Comunicação `knowledge` → S1 | PASS local | PASS |
+| P-03 | Sem escopo incorreto ou sobrescrita humana | Trigger/constraint, `not exists`, QA SQL negativo | PASS local | PASS |
+| P-04 | Sem dado pessoal/segredo enviado à IA | Inspeção dos campos dos scripts e arquivos de resultados | Só dados públicos ESCO/O*NET; chave lida de `.env.local`, não impressa | PASS |
+| P-05 | Sem equivalência/identidade duplicada | Join por URI/external ID; seis pares de URI revisados | Um conceito canônico ambíguo ficou pendente, sem duplicação | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 | Diff não altera limpeza, matching, Score, parser, Assessment, cadastro de subgrupos ou layout | PASS |
+| F-02 | Só conceitos Globais recebem `ai_assisted`; proposta humana M8.1 permanece | PASS |
+
+## Evidência de fidelidade visual
+
+Não aplicável: o movimento reusa a projeção e as telas M8.1; não cria nem altera layout.
+
+## Desvios do contrato
+
+Nenhum desvio identificado no escopo local. O Perfil real e a produção ainda não estão provados.
+
+## Mudanças autorizadas durante a execução
+
+A decisão do Product Owner de 2026-09-20 autoriza a classificação inteligente em quase todos os casos, superando A-12 do M8.1 apenas para o catálogo global.
+
+## Validação final
+
+As chamadas de IA receberam somente dados públicos de conceitos. Custo estimado pelo uso registrado: ESCO US$11,55; O*NET US$0,024; auditorias US$0,8225 + US$0,8567; arbitragem US$1,1464; total aproximado US$14,40, abaixo do teto US$20 comunicado. A autoconfiança do classificador não foi usada como prova. O restore local foi aplicado em contêiner PostgreSQL Supabase 17.6.1 sem rede nem volume persistente, incluindo M8.1 e M8.2; QA `m82_global_competency_verification.sql` retornou 22.876/22.885 e teste negativo de proveniência PASS. O contêiner foi removido. A tentativa de projeção sem usuário autenticado rejeitou como esperado. O backup antecede a associação do Perfil citado, logo não comprova essa jornada real.
+
+## Git / QA / ambiente
+
+Branch `codex/m82-global-competency-classification`; commit, main, remoto e web ainda pendentes.
+
+## Conclusão
+
+Localmente validado. A entrega completa depende do rollout e smoke remoto.
+
+---
+
 ## Source: `docs/qa/aot-person-flow-validation.md`
 
 # AoT: validação reproduzível do fluxo da Pessoa
@@ -18203,6 +18387,16 @@ aguarde decisão do Product Owner;
 não reinterprete o contrato silenciosamente.
 
 Fora disso, execute o movimento até o fechamento completo, sem pedir aprovações intermediárias para decisões já delegadas em AUTONOMIA.
+
+---
+
+## Source: `docs/qa/execution-m82-global-competency-classification.md`
+
+# Execution Prompt — M8.2 — Classificação global de competências
+
+Contrato integral: `docs/agreements/agreement-m82-global-competency-classification.md` versão 1.0.0. Ler o contrato, os Agreements M8/M8.1 e as migrations M8.1 pertinentes antes de implementar. A decisão mais recente do Product Owner exige classificação sem revisão manual item a item, próxima de 100% dos conceitos globais de competência.
+
+Executar D-01 a D-07, impedir P-01 a P-05, manter F-01/F-02 fora do movimento e exercer A-01 a A-03. Classificar a base pública ESCO por significado com contexto de origem e revisão de qualidade. Integrar à classificação canônica M8.1 sem transformar inferência de taxonomia em evidência da Pessoa. Preservar autoridade humana e isolamento de organização. Auditar cobertura e erros antes do backfill remoto. Usar migration versionada e rollback para mudança de schema/dados, testes direcionados e QA transacional. Atualizar owners/ADR/AoT/Context Pack. Publicar somente as superfícies exigidas pelo release plan e registrar CA-01 a CA-06 com evidência real.
 
 ---
 

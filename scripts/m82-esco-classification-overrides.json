@@ -1,0 +1,42 @@
+[
+  {
+    "uri": "http://data.europa.eu/esco/skill/8a8bf6e7-a404-4c7f-9e89-ce2e15980913",
+    "category": "H1",
+    "reason": "O cálculo de probabilidades é conhecimento quantitativo técnico, inclusive quando aplicado a desporto e corridas."
+  },
+  {
+    "uri": "http://data.europa.eu/esco/skill/795f25e5-7989-4e60-9be7-8b1b686a1547",
+    "category": "pending",
+    "reason": "Duas URIs ESCO de ensino médico compartilham uma identidade Prisma, mas os contextos de especialidade e desenvolvimento de pessoas não definem um único subagrupador com segurança."
+  },
+  {
+    "uri": "http://data.europa.eu/esco/skill/9437a218-22d2-4eb7-bc64-b4555eb4a95f",
+    "category": "pending",
+    "reason": "Duas URIs ESCO de ensino médico compartilham uma identidade Prisma, mas os contextos de especialidade e desenvolvimento de pessoas não definem um único subagrupador com segurança."
+  },
+  {
+    "uri": "http://data.europa.eu/esco/skill/2e55bf22-45f2-43f6-8aa0-28894263313d",
+    "category": "H2",
+    "reason": "O conceito canônico representa motores elétricos concretos, classificados como equipamento/tecnologia."
+  },
+  {
+    "uri": "http://data.europa.eu/esco/skill/2c66f1a3-0f4c-498c-acbe-1b369dfcb6f2",
+    "category": "H3",
+    "reason": "Ensinar literacia a adultos é uma prática pedagógica estruturada, específica de alfabetização."
+  },
+  {
+    "uri": "http://data.europa.eu/esco/skill/3f5feb70-81c6-4afa-879a-fa588c4d4ded",
+    "category": "H1",
+    "reason": "Aconselhar sobre marcas, modelos e funcionalidades de relógios exige conhecimento técnico do produto."
+  },
+  {
+    "uri": "http://data.europa.eu/esco/skill/6fc6f757-6baa-49fe-9a82-6ba6a52f2e13",
+    "category": "H1",
+    "reason": "Interpretar dados com termos, conceitos e princípios matemáticos é repertório técnico de matemática."
+  },
+  {
+    "uri": "http://data.europa.eu/esco/skill/81b7bab6-4662-4002-96ae-605ae26b8cb4",
+    "category": "H3",
+    "reason": "Avaliar alunos em componente prática de serviço social é procedimento de avaliação profissional."
+  }
+]

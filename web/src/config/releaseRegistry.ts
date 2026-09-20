@@ -46,6 +46,7 @@ export const PRISMA_RELEASE_HISTORY = [{
   movement: 8,
   deliveries: [
     "M8.1: arquitetura sistêmica de competências",
+    "M8.2: classificação global assistida de competências",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 

@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.8.1
-current_state_version: 2.44.9
+current_state_version: 2.45.0
 current_state_last_verified: 2026-09-20
-documentation_source_count: 251
-source_manifest_sha256: 01e775372778a1cf347aaa76977a21e0a70c5f143d28fa05777984903aa3d175
+documentation_source_count: 256
+source_manifest_sha256: 3c3aa6fc5d9713d3e3a3b38e58906c008323e29d56412d1dd695638c5b4037ec
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,6 +267,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
+M8.2 está validado no PostgreSQL isolado e ainda aguarda produção. Prisma v1.8.2 está no registro local de releases, não na web hospedada. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; o QA local conferiu 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. O Perfil real citado pelo Product Owner precisa de smoke remoto porque o backup isolado antecede a associação. Agreement M8.2, ADR-071 e AoT M8.2.
+
 M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. Prisma v1.8.1 aparece no login hospedado; o menu consome o mesmo registro, ainda sem inspeção hospedada autenticada. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e não pediu retomada. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O AoT permanece parcial por critérios funcionais ainda sem evidência. ADR-070 e AoT M8.1.
 
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
@@ -276,8 +278,6 @@ Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba
 Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
-
-M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. Smoke autenticado PASS: `bruno.harita`/Super Admin abriu `Conhecimento > Propostas`; fila vazia, sem escrita de teste. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
 
 ---
 
