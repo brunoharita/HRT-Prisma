@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.7.6
-current_state_version: 2.44.6
+current_state_version: 2.44.7
 current_state_last_verified: 2026-09-20
 documentation_source_count: 251
-source_manifest_sha256: 4d3c0f0c5a86e999b61705c2e4b74cd83a48e0070c309b765e28a6d8b7b456cf
+source_manifest_sha256: fcd163df1fa6f4a36a57a9f996bb69593bf4888a477b330249619c7618718f0a
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,7 +267,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M8.1 está na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção, mas a web hospedada ainda usa a interface anterior. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e pediu o deploy, deixando seis alvos pendentes. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada e comparação visual local das nove telas passaram. O estado de rollout é parcial; a sincronização e o smoke final ainda faltam. ADR-070 e AoT M8.1.
+M8.1 está em `main` e na web de produção no SHA `11ff0ab`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e pediu o deploy, deixando seis alvos pendentes. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O estado de entrega é parcial por limpeza, smoke funcional autenticado e ciclo real de intake ainda pendentes. ADR-070 e AoT M8.1.
 
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
