@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 256
-source_manifest_sha256: f1513192ed7f9e3cafe6747f8aaeb23c112ac1d7dc6e78cfa39840657b6643ba
+source_manifest_sha256: 916da941b500116a7a213ea86aaedf5ebf316eaa65947a71f1a9df125433b160
 -->
 
 # Tudo sobre o Prisma
@@ -2578,11 +2578,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.46.0
+version: 2.47.0
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
+
+## M8.2: correção de projeção para conceito criado pela empresa (local)
+
+O conceito organizacional “Governança Corporativa” foi aprovado em Hard Skills → Gestão, Negócios e Estratégia; a observação humana da declaração “governança” no Perfil publicado também foi resolvida. A RPC `_v6` em produção, porém, ainda retorna zero associações desse conceito: a projeção M7 de base filtra o método Knowledge governance e a curadoria marca o item como `human_preserved`. Uma migration M8.2 corrige somente a leitura `_v6`, projetando a observação humana corrente como declaração, com classificação canônica, sem criar evidência ou cruzar organização. O teste sintético reproduziu zero associações antes e uma depois, com bloqueio para outra organização. Publicação remota da correção ainda pendente; a versão pública permanece v1.8.2.
 
 ## M8.2: classificação global assistida em produção
 
@@ -4795,11 +4799,13 @@ Flags não substituem autorização, RLS, migration, contrato ou aprovação de 
 
 # Arquitetura da Fundação de Conhecimento
 
-## M8.2: classificação assistida do catálogo global (em validação)
+## M8.2: classificação assistida do catálogo global (publicada)
 
 O aditivo M8.2 v1.0.0 determina classificação semântica em lote dos conceitos globais de competência ESCO/O*NET, usando as mesmas identidades `knowledge_concepts` e os nove subagrupadores M8.1. O tipo nativo `knowledge`/`skill/competence` da ESCO é evidência de origem, não resposta Hard/Soft. O classificador recebe apenas rótulo, definição e contexto públicos da fonte; a saída traz subagrupador, razão, versão e método `ai_assisted`. Auditoria adversarial, amostra diversificada e resolução dos conceitos com múltiplas URIs antecedem a gravação. A meta de ≥99% refere-se à cobertura; erros de classificação são medidos e corrigidos separadamente. Classificações humanas correntes não são sobrescritas. ADR-071 e AoT M8.2 registram decisão e prova.
 
 O backfill adiciona a classe ao conceito canônico, não à Pessoa. Assim, a projeção `load_person_professional_evidence_map_v6` existente apresenta uma associação já declarada em Hard/Soft após a publicação da classificação, preservando estado, fonte e evidências da Pessoa. Novas propostas humanas seguem exigindo subagrupador na aprovação; novas versões de fontes oficiais precisam repetir classificação e auditoria para conceitos novos. Matching, Score e taxonomia ocupacional não mudam.
+
+Correção de projeção M8.2: uma proposta organizacional criada a partir de uma declaração pode aprovar o conceito e resolver sua observação com método Knowledge governance. A leitura M7 anterior só incluía observações com o método antigo de normalização, enquanto a curadoria marcava a declaração como preservada por decisão humana. A `_v6` agora projeta a observação humana do Perfil publicado como `declared`, com o subagrupador canônico atual. Ela não cria vínculo Pessoa × conceito, não eleva Assessment, certificação ou habilidade prática, ignora versões antigas do Perfil e preserva o isolamento da organização. O contrato JSON `person-professional-evidence-4.0.0` permanece compatível.
 
 ## M8.1: classificação sistêmica de competências (implementação local)
 
@@ -5057,6 +5063,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+A correção da projeção de conceito criado pela empresa, dentro de M8.2, mantém **Prisma v1.8.2** e `person-professional-evidence-4.0.0`: restaura uma associação declarada que o contrato já exigia, sem mudar campos, natureza ou tela. A migration revisada altera somente a RPC `_v6`; não há nova entrega numerada de produto. O AoT M8.2 registra a prova e o rollout.
 
 M8.2 (2026-09-20, publicado): a classificação assistida do catálogo Global é a segunda entrega do Movimento 8. **Prisma v1.8.2** foi publicado no SHA `6525cfc`; o login hospedado exibiu a versão após recarga, e o menu consome o mesmo registro. Os nove subagrupadores e `competency-taxonomy-2.0.0` permanecem; `prisma-competency-classification-1.1.0` versiona o classificador e `ai_assisted` distingue sua proveniência. As 17 migrations M8.2 constam no único Supabase remoto. ADR-071 e AoT M8.2 registram a validação e os limites da inspeção visual do Perfil.
 
@@ -14700,6 +14708,17 @@ Branch `codex/m82-global-competency-classification`; commit `6525cfc2ade94106c44
 ## Conclusão
 
 Banco, release web e projeção autenticada do Perfil real validados em produção. CA-02 permanece parcial até confirmar visualmente a tela hospedada do Perfil; nenhuma acurácia perfeita é alegada.
+
+## Correção posterior: conceito organizacional criado a partir do Perfil
+
+O Product Owner relatou que “Governança Corporativa”, criada como Hard/Gestão, não apareceu na lista da Pessoa. Leitura remota: conceito aprovado, classificação H4 corrente, duas observações resolvidas para uma Pessoa, uma delas no Perfil publicado. A RPC `_v6` antes da correção retornou zero associações para esse conceito. A base M7 filtrava o método `knowledge-governance-3.0.0`, e a curadoria preservava a decisão humana sem reconstruir a associação. A migration `20260920223000_m82_human_created_competency_profile_projection.sql` corrige a projeção da declaração, mantendo o contrato JSON v4, a classificação humana e a natureza `declared`. O schema do backup foi restaurado sem dados pessoais em PostgreSQL Supabase descartável; conflitos de objetos Supabase preexistentes foram registrados pelo `pg_restore`, mas as quatro migrations M8.1 necessárias e os testes direcionados passaram. O contêiner sem rede nem volume foi removido.
+
+| Critério | Prova | Status |
+| --- | --- | --- |
+| Conceito humano aprovado aparece em Hard/Gestão no Perfil corrente | Fixture sintética: 0 antes da migration, 1 depois; subgrupo H4 | PASS local |
+| Sem invenção ou elevação de evidência | Nenhum `verified_assessment`, `demonstrated_skill` ou `certified` criado; observação existente é a fonte | PASS local |
+| Escopo, idempotência e contagem | Outro tenant recebe 42501; duas leituras retornam uma associação; cobertura conta um conceito | PASS local |
+| Produção e Perfil real | Migration e smoke remoto pendentes | NOT TESTED |
 
 ---
 

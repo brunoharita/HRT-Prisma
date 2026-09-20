@@ -54,3 +54,14 @@ Branch `codex/m82-global-competency-classification`; commit `6525cfc2ade94106c44
 ## Conclusão
 
 Banco, release web e projeção autenticada do Perfil real validados em produção. CA-02 permanece parcial até confirmar visualmente a tela hospedada do Perfil; nenhuma acurácia perfeita é alegada.
+
+## Correção posterior: conceito organizacional criado a partir do Perfil
+
+O Product Owner relatou que “Governança Corporativa”, criada como Hard/Gestão, não apareceu na lista da Pessoa. Leitura remota: conceito aprovado, classificação H4 corrente, duas observações resolvidas para uma Pessoa, uma delas no Perfil publicado. A RPC `_v6` antes da correção retornou zero associações para esse conceito. A base M7 filtrava o método `knowledge-governance-3.0.0`, e a curadoria preservava a decisão humana sem reconstruir a associação. A migration `20260920223000_m82_human_created_competency_profile_projection.sql` corrige a projeção da declaração, mantendo o contrato JSON v4, a classificação humana e a natureza `declared`. O schema do backup foi restaurado sem dados pessoais em PostgreSQL Supabase descartável; conflitos de objetos Supabase preexistentes foram registrados pelo `pg_restore`, mas as quatro migrations M8.1 necessárias e os testes direcionados passaram. O contêiner sem rede nem volume foi removido.
+
+| Critério | Prova | Status |
+| --- | --- | --- |
+| Conceito humano aprovado aparece em Hard/Gestão no Perfil corrente | Fixture sintética: 0 antes da migration, 1 depois; subgrupo H4 | PASS local |
+| Sem invenção ou elevação de evidência | Nenhum `verified_assessment`, `demonstrated_skill` ou `certified` criado; observação existente é a fonte | PASS local |
+| Escopo, idempotência e contagem | Outro tenant recebe 42501; duas leituras retornam uma associação; cobertura conta um conceito | PASS local |
+| Produção e Perfil real | Migration e smoke remoto pendentes | NOT TESTED |

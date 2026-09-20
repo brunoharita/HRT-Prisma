@@ -1,10 +1,12 @@
 # Arquitetura da Fundação de Conhecimento
 
-## M8.2: classificação assistida do catálogo global (em validação)
+## M8.2: classificação assistida do catálogo global (publicada)
 
 O aditivo M8.2 v1.0.0 determina classificação semântica em lote dos conceitos globais de competência ESCO/O*NET, usando as mesmas identidades `knowledge_concepts` e os nove subagrupadores M8.1. O tipo nativo `knowledge`/`skill/competence` da ESCO é evidência de origem, não resposta Hard/Soft. O classificador recebe apenas rótulo, definição e contexto públicos da fonte; a saída traz subagrupador, razão, versão e método `ai_assisted`. Auditoria adversarial, amostra diversificada e resolução dos conceitos com múltiplas URIs antecedem a gravação. A meta de ≥99% refere-se à cobertura; erros de classificação são medidos e corrigidos separadamente. Classificações humanas correntes não são sobrescritas. ADR-071 e AoT M8.2 registram decisão e prova.
 
 O backfill adiciona a classe ao conceito canônico, não à Pessoa. Assim, a projeção `load_person_professional_evidence_map_v6` existente apresenta uma associação já declarada em Hard/Soft após a publicação da classificação, preservando estado, fonte e evidências da Pessoa. Novas propostas humanas seguem exigindo subagrupador na aprovação; novas versões de fontes oficiais precisam repetir classificação e auditoria para conceitos novos. Matching, Score e taxonomia ocupacional não mudam.
+
+Correção de projeção M8.2: uma proposta organizacional criada a partir de uma declaração pode aprovar o conceito e resolver sua observação com método Knowledge governance. A leitura M7 anterior só incluía observações com o método antigo de normalização, enquanto a curadoria marcava a declaração como preservada por decisão humana. A `_v6` agora projeta a observação humana do Perfil publicado como `declared`, com o subagrupador canônico atual. Ela não cria vínculo Pessoa × conceito, não eleva Assessment, certificação ou habilidade prática, ignora versões antigas do Perfil e preserva o isolamento da organização. O contrato JSON `person-professional-evidence-4.0.0` permanece compatível.
 
 ## M8.1: classificação sistêmica de competências (implementação local)
 

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.46.0
+version: 2.47.0
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
+
+## M8.2: correção de projeção para conceito criado pela empresa (local)
+
+O conceito organizacional “Governança Corporativa” foi aprovado em Hard Skills → Gestão, Negócios e Estratégia; a observação humana da declaração “governança” no Perfil publicado também foi resolvida. A RPC `_v6` em produção, porém, ainda retorna zero associações desse conceito: a projeção M7 de base filtra o método Knowledge governance e a curadoria marca o item como `human_preserved`. Uma migration M8.2 corrige somente a leitura `_v6`, projetando a observação humana corrente como declaração, com classificação canônica, sem criar evidência ou cruzar organização. O teste sintético reproduziu zero associações antes e uma depois, com bloqueio para outra organização. Publicação remota da correção ainda pendente; a versão pública permanece v1.8.2.
 
 ## M8.2: classificação global assistida em produção
 
