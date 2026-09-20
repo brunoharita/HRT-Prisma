@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Empty, Input, Modal, Pagination, Radio, Select, Space, Tag, Typography } from "antd";
 import { CloseOutlined, LeftOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
 import type { ProfessionalEvidenceProjection } from "../../domain/personProfessionalEvidence";
-import { taxonomyGroups } from "../../domain/positionTaxonomy";
-import { competencyKey, curationPage, curationReturnTarget, CURATION_PAGE_SIZE, groupPendingCompetencies, pendingCompetencies, type CompetencyCurationAdapter, type CurationCandidate, type CurationDecision, type PendingCompetency } from "../../domain/profileCompetencyCuration";
+import { competencyKey, curationPage, curationReturnTarget, CURATION_PAGE_SIZE, groupPendingCompetencies, pendingCompetencies, type CompetencyCurationAdapter, type CompetencySubgroupOption, type CurationCandidate, type CurationDecision, type PendingCompetency } from "../../domain/profileCompetencyCuration";
 import { PrismaCard } from "../../ui/PrismaCard";
 import { useUnsavedChanges } from "../../ui/PrismaNavigation";
 
@@ -159,7 +158,8 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   const [proposal, setProposal] = useState(false);
   const [label, setLabel] = useState(item.normalizedTerm);
   const [description, setDescription] = useState("");
-  const [type, setType] = useState<CurationDecision["proposalType"]>("skill");
+  const [subgroups, setSubgroups] = useState<CompetencySubgroupOption[]>([]);
+  const [subgroupId, setSubgroupId] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -170,6 +170,12 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
     if (searchTimer.current !== null) { window.clearTimeout(searchTimer.current); searchTimer.current = null; }
   }
   useEffect(() => { void searchSuggested(item.searchTerms); return () => { request.current++; clearSearchTimer(); }; }, []);
+  useEffect(() => {
+    let active = true;
+    void adapter.loadSubgroups().then((rows) => { if (active) setSubgroups(rows); })
+      .catch(() => { if (active) setError("Não foi possível carregar os subagrupadores. Atualize a curadoria antes de propor um conceito."); });
+    return () => { active = false; };
+  }, [adapter]);
   async function searchSuggested(terms: string[]) {
     const id = ++request.current;
     setSearching(true); setError(null);
@@ -179,7 +185,7 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
       if (id !== request.current) return;
       const merged = new Map<string, CurationCandidate>();
       for (const result of results) if (result.status === "fulfilled") for (const candidate of result.value) {
-        if (candidate.conceptType === "occupation") continue;
+        if (candidate.conceptType === "occupation" || candidate.conceptType === "certification") continue;
         const current = merged.get(candidate.id);
         if (!current || candidatePriority(candidate) < candidatePriority(current)) merged.set(candidate.id, candidate);
       }
@@ -197,7 +203,7 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
       return;
     }
     setSearching(true); setError(null);
-    try { const result = await adapter.search(normalizedTerm); if (id === request.current) setCandidates(result.filter((candidate) => candidate.conceptType !== "occupation")); }
+    try { const result = await adapter.search(normalizedTerm); if (id === request.current) setCandidates(result.filter((candidate) => candidate.conceptType !== "occupation" && candidate.conceptType !== "certification")); }
     catch { if (id === request.current) setError("Não foi possível buscar conceitos. Tente novamente; sua edição foi preservada."); }
     finally { if (id === request.current) setSearching(false); }
   }
@@ -215,12 +221,15 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   }
   const chosen = candidates.find((candidate) => candidate.id === conceptId);
   const validScope = scope === "organization" || adapter.canUseGlobal;
-  const valid = validScope && (proposal ? label.trim().length > 0 && description.trim().length <= 2000 : Boolean(chosen && (scope === "organization" || chosen.scope === "global")));
+  const chosenSubgroup = subgroups.find((item) => item.id === subgroupId);
+  const validSubgroup = Boolean(chosenSubgroup && (scope === "organization" || chosenSubgroup.scope === "global"));
+  const valid = validScope && (proposal ? label.trim().length > 0 && description.trim().length <= 2000 && validSubgroup
+    : Boolean(chosen && (scope === "organization" || chosen.scope === "global")));
   async function save(advance: boolean) {
     if (!valid || savingLock.current) return;
     savingLock.current = true;
     setSaving(true); onBusy(true); setError(null);
-    try { await onSave({ item, profileId, scope, action: proposal ? "proposal" : "alias", conceptId: proposal ? null : conceptId, proposalLabel: label, proposalDescription: description, proposalType: type }, advance); }
+    try { await onSave({ item, profileId, scope, action: proposal ? "proposal" : "alias", conceptId: proposal ? null : conceptId, proposalLabel: label, proposalDescription: description, subgroupId: proposal ? subgroupId : null }, advance); }
     catch (failure) { setError(failure instanceof Error ? failure.message : "Falha ao gravar. A edição foi preservada."); }
     finally { savingLock.current = false; setSaving(false); onBusy(false); }
   }
@@ -237,14 +246,16 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
         {!searching && !candidates.length ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Nenhum conceito encontrado. Ajuste a busca ou proponha um conceito." /> : null}
         <Radio.Group aria-label="Conceito para associação" value={conceptId} disabled={saving} onChange={(event) => { setConceptId(event.target.value); onDirty(true); }} className="prisma-m74-candidates">
           {candidates.map((candidate) => <div key={candidate.id} className={conceptId === candidate.id ? "is-selected" : ""}><Radio value={candidate.id}>{candidate.canonicalLabel}</Radio>
-            <Space wrap><Tag>{taxonomyGroups[candidate.conceptType as keyof typeof taxonomyGroups] ?? candidate.conceptType}</Tag><Tag>{candidate.scope === "global" ? "Global" : "Empresa"}</Tag><Tag color={candidate.matchClass === "relevant_partial" || candidate.matchClass === "ambiguous" ? "orange" : "blue"}>{matchLabels[candidate.matchClass]}</Tag></Space>
+            <Space wrap><Tag>{candidate.classification ? `${candidate.classification.macroGroupLabel} > ${candidate.classification.subgroupLabel}` : "Classificação pendente"}</Tag><Tag>{candidate.scope === "global" ? "Global" : "Empresa"}</Tag><Tag color={candidate.matchClass === "relevant_partial" || candidate.matchClass === "ambiguous" ? "orange" : "blue"}>{matchLabels[candidate.matchClass]}</Tag></Space>
             <p>{candidate.description || "Sem definição publicada."}</p><small>{candidate.sourceName ? `${candidate.sourceName} · ${candidate.sourceVersion ?? "Versão não informada"}` : "Conceito interno aprovado"}</small>
             {candidate.matchedTerm !== candidate.canonicalLabel ? <small>Correspondência sustentada por: {candidate.matchedTerm}</small> : null}
             {candidate.references.length > 1 ? <small>{candidate.references.length} referências oficiais versionadas</small> : null}
           </div>)}
         </Radio.Group></> : <><Typography.Title level={5}>{scope === "organization" ? "Criar conhecimento da empresa" : "Propor novo conceito global"}</Typography.Title><Alert type="info" title={scope === "organization" ? "O conhecimento será salvo nesta empresa e enviado como contribuição para revisão global." : "A proposta não publica um conceito e não encerra esta pendência."} />
         <label>Nome canônico proposto<Input aria-label="Nome canônico proposto" value={label} disabled={saving} onChange={(event) => { setLabel(event.target.value); onDirty(true); }} /></label>
-        <label>Tipo de conceito<Select aria-label="Tipo de conceito proposto" value={type} disabled={saving} onChange={(value) => { setType(value); onDirty(true); }} options={(["skill", "competency", "knowledge", "technology", "methodology", "certification"] as const).map((value) => ({ value, label: taxonomyGroups[value] }))} /></label></>}
+        <label>Subagrupador principal<Select aria-label="Subagrupador principal proposto" value={subgroupId} disabled={saving} onChange={(value) => { setSubgroupId(value); onDirty(true); }} placeholder="Selecione o significado do conceito" options={(["hard", "soft"] as const).map((macro) => ({ label: macro === "hard" ? "Hard Skills" : "Soft Skills", options: subgroups.filter((item) => item.macroGroupCode === macro && (scope === "organization" || item.scope === "global")).map((item) => ({ value: item.id, label: `${item.code} · ${item.label}${item.scope === "organization" ? " (empresa)" : ""}` })) }))} /></label>
+        {chosenSubgroup ? <Alert type="info" title={`${chosenSubgroup.macroGroupCode === "hard" ? "Hard Skills" : "Soft Skills"} > ${chosenSubgroup.label}`}
+          description={<><p>{chosenSubgroup.definition}</p><p>{chosenSubgroup.classificationQuestion}</p>{chosenSubgroup.examples?.length ? <small>Exemplos: {chosenSubgroup.examples.join(", ")}</small> : null}</>} /> : null}</>}
       {proposal ? <label>Descrição do conceito<Input.TextArea aria-label="Descrição do conceito" placeholder="Descrição opcional do conceito..." value={description} disabled={saving} rows={3} maxLength={2000} showCount onChange={(event) => { setDescription(event.target.value); onDirty(true); }} /></label> : null}
       <label>Alcance da decisão<Select aria-label="Alcance da decisão" value={scope} disabled={saving} onChange={(value) => { setScope(value); onDirty(true); }} options={[{ value: "organization", label: "Knowledge da empresa" }, ...(adapter.canUseGlobal ? [{ value: "global", label: "Knowledge Global" }] : [])]} /></label>
       <Typography.Text type="secondary">{scope === "global" ? "Decisão Global: pode ser reutilizada por outras empresas e perfis." : "Pode ser reutilizada em outros perfis desta empresa."}</Typography.Text>

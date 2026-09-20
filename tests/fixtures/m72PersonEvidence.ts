@@ -9,7 +9,10 @@ import { POSITION_TAXONOMY_CONTRACT } from "../../web/src/domain/positionTaxonom
 export const m72DeclaredEvidence: ProfessionalEvidenceAssociation = {
   id: "observation:declared-fixture",
   nature: "declared",
-  concept: { id: "concept-java", label: "Java", type: "technology", scope: "global", version: 1 },
+  concept: { id: "concept-java", label: "Java", type: "technology", scope: "global", version: 1,
+    classificationState: "classified", classification: { macroGroupCode: "hard", macroGroupLabel: "Hard Skills",
+      subgroupId: "subgroup-h2", subgroupCode: "H2", subgroupLabel: "Tecnologias, Ferramentas e Equipamentos",
+      classificationVersion: 1, taxonomyVersion: COMPETENCY_TAXONOMY_CONTRACT } },
   observedTerm: "Java",
   evidence: {
     id: "evidence-declared",
@@ -45,7 +48,7 @@ export const m72DeclaredEvidence: ProfessionalEvidenceAssociation = {
 export const m72DemonstratedEvidence: ProfessionalEvidenceAssociation = {
   ...m72DeclaredEvidence,
   id: "demonstrated:fixture",
-  nature: "demonstrated",
+  nature: "verified_assessment",
   evidence: {
     ...m72DeclaredEvidence.evidence,
     id: "demonstrated-fixture",

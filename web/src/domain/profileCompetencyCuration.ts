@@ -1,9 +1,9 @@
 import type { ProfessionalEvidenceProjection } from "./personProfessionalEvidence.js";
 import type { KnowledgeConceptSuggestion } from "./knowledgeData.js";
-import type { CompetencyMatchClass, CompetencyTaxonomyReference } from "./competencyTaxonomy.js";
+import type { CompetencyClassification, CompetencyMatchClass, CompetencyTaxonomyReference } from "./competencyTaxonomy.js";
 
 export type PendingCompetency = ProfessionalEvidenceProjection["normalization"]["items"][number] & { occurrence?: number; groupCount?: number };
-export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-4.0.0";
+export const CURATION_WORKFLOW_VERSION = "profile-competency-curation-5.0.0";
 export const CURATION_PAGE_SIZE = 10;
 export function competencyKey(item: PendingCompetency): string {
   return JSON.stringify([item.originalIndex, item.originalTerm, item.sourceText, item.normalizedTerm, item.occurrence ?? 0]);
@@ -33,6 +33,20 @@ export interface CurationCandidate extends KnowledgeConceptSuggestion {
   matchClass: CompetencyMatchClass;
   aliasAuthority: string;
   references: CompetencyTaxonomyReference[];
+  classificationState: "classified" | "pending";
+  classification: CompetencyClassification | null;
+}
+export interface CompetencySubgroupOption {
+  id: string;
+  code: string;
+  label: string;
+  macroGroupCode: "hard" | "soft";
+  scope: "global" | "organization";
+  organizationId: string | null;
+  definition?: string;
+  classificationQuestion?: string;
+  examples?: string[];
+  sortOrder?: number;
 }
 export function groupPendingCompetencies(items: PendingCompetency[]): PendingCompetency[] {
   const groups = new Map<string, PendingCompetency[]>();
@@ -49,11 +63,15 @@ export function groupPendingCompetencies(items: PendingCompetency[]): PendingCom
 export interface CurationDecision {
   item: PendingCompetency; profileId: string; scope: "organization" | "global";
   action: "alias" | "proposal"; conceptId: string | null; proposalLabel: string; proposalDescription: string;
-  proposalType: "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification";
+  subgroupId: string | null;
 }
 export interface CompetencyCurationAdapter {
   canUseGlobal: boolean;
+  loadSubgroups(): Promise<CompetencySubgroupOption[]>;
   search(query: string): Promise<CurationCandidate[]>;
   save(decision: CurationDecision): Promise<{ projection: ProfessionalEvidenceProjection; outcome: "alias" | "proposal" }>;
   refresh(): Promise<ProfessionalEvidenceProjection>;
+  loadEvidenceSources(profileId: string): Promise<Array<{ nature: "contextual" | "certified"; index: number; label: string; quote: string }>>;
+  linkEvidence(input: { profileId: string; conceptId: string; nature: "contextual" | "certified"; sourceIndex: number;
+    sourceQuote: string; credentialName: string | null; credentialIssuer: string | null; reason: string }): Promise<ProfessionalEvidenceProjection>;
 }

@@ -1,5 +1,7 @@
 # Versionamento
 
+M8.1 (2026-09-20, implementação local): `competency-taxonomy-2.0.0`, `person-professional-evidence-4.0.0` e `profile-competency-curation-5.0.0` são contratos novos e aditivos; versões históricas permanecem. A decisão de versão pública depende da entrega validada e publicada. Até então, `PRISMA_RELEASE_HISTORY` continua em v1.7.6, sem afirmar ativação M8.1. ADR-070 e AoT M8.1.
+
 Regularização de proposta legada M7.7 (2026-09-19): a transição autenticada `transition_legacy_knowledge_proposal` reaproveita a aprovação local e o enfileiramento Global já aprovados, com motivo humano e operação atômica. A publicação de termos ignora aliases redundantes com o canônico, mantendo o payload e a auditoria originais; a pendência Global recebe rótulo legível. É uma correção de compatibilidade para propostas anteriores ao M7.7, sem nova entrega numerada; Prisma permanece v1.7.6. A execução real e seus limites são registrados em `docs/qa/aot-m77-legacy-company-proposal-transition.md`.
 
 Resumo operacional M7 da Pessoa (2026-09-19): evolução visual da aba Resumo sem novo contrato persistido, schema, IA ou entrega numerada aceita para o registro público. `PRISMA_RELEASE_HISTORY` permanece em v1.7.6; a decisão de não incrementar não antecipa eventual aceite de uma nova entrega numerada. A prova local e os limites estão em `docs/qa/aot-m7-person-summary-ux.md`.

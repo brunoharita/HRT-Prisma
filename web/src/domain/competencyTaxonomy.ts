@@ -1,7 +1,17 @@
 import type { ProfessionalConceptType } from "./positionTaxonomy.js";
 
-export const COMPETENCY_TAXONOMY_CONTRACT = "competency-taxonomy-1.0.0";
-export const COMPETENCY_TAXONOMY_SEARCH_CONTRACT = "competency-taxonomy-search-1.0.0";
+export const COMPETENCY_TAXONOMY_CONTRACT = "competency-taxonomy-2.0.0";
+export const COMPETENCY_TAXONOMY_SEARCH_CONTRACT = "competency-taxonomy-search-2.0.0";
+
+export interface CompetencyClassification {
+  macroGroupCode: "hard" | "soft";
+  macroGroupLabel: string;
+  subgroupId: string;
+  subgroupCode: string;
+  subgroupLabel: string;
+  classificationVersion: number;
+  taxonomyVersion: typeof COMPETENCY_TAXONOMY_CONTRACT;
+}
 
 export type CompetencyMatchClass = "exact" | "official_alias" | "human_alias" | "relevant_partial" | "ambiguous";
 export type CompetencySearchState = CompetencyMatchClass | "no_equivalent";
@@ -27,6 +37,8 @@ export interface CompetencyTaxonomyCandidate {
   aliasAuthority: "prisma_canonical" | "official_source" | "human_audited" | "published_knowledge";
   aliases: string[];
   references: CompetencyTaxonomyReference[];
+  classificationState: "classified" | "pending";
+  classification: CompetencyClassification | null;
 }
 
 export interface CompetencyTaxonomySearchResult {
@@ -60,10 +72,20 @@ function validCandidate(value: unknown): boolean {
     && ["exact", "official_alias", "human_alias", "relevant_partial", "ambiguous"].includes(String(value.matchClass))
     && ["prisma_canonical", "official_source", "human_audited", "published_knowledge"].includes(String(value.aliasAuthority))
     && Array.isArray(value.aliases) && value.aliases.every((item) => typeof item === "string")
+    && ["classified", "pending"].includes(String(value.classificationState))
+    && (value.classificationState === "pending" ? value.classification === null : validClassification(value.classification))
     && Array.isArray(value.references) && value.references.every((item) => isRecord(item)
       && typeof item.source === "string" && typeof item.sourceVersion === "string" && typeof item.externalId === "string"
       && (item.externalUri === null || typeof item.externalUri === "string") && typeof item.mappingType === "string"
       && (item.nativeType === null || typeof item.nativeType === "string") && isRecord(item.provenance));
+}
+
+export function validClassification(value: unknown): value is CompetencyClassification {
+  return isRecord(value) && ["hard", "soft"].includes(String(value.macroGroupCode))
+    && typeof value.macroGroupLabel === "string" && typeof value.subgroupId === "string"
+    && typeof value.subgroupCode === "string" && typeof value.subgroupLabel === "string"
+    && Number.isSafeInteger(value.classificationVersion) && Number(value.classificationVersion) > 0
+    && value.taxonomyVersion === COMPETENCY_TAXONOMY_CONTRACT;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -1,5 +1,11 @@
 # Arquitetura da Fundação de Conhecimento
 
+## M8.1: classificação sistêmica de competências (implementação local)
+
+O Agreement M8 v1.0.0 e o aditivo M8.1 v1.1.0 definem Hard Skills, Soft Skills e nove subagrupadores. `competency_macro_groups` e `competency_subgroups` persistem as definições; `knowledge_competency_classifications` liga um conceito canônico da Knowledge ao subagrupador principal atual com histórico de versões. O conceito Global só aceita subagrupador Global; um subagrupador de organização só classifica conceito da mesma organização. O schema prevê linhas organizacionais para cadastro futuro, sem expor edição neste movimento. Os seis tipos nativos da Knowledge continuam como proveniência e não governam a apresentação M8.
+
+Somente conceitos `technology` com mapping oficial O*NET recebem H2 por backfill inequívoco. Os demais aguardam classificação humana. As RPCs `_v2`/`_v5` e a projeção de evidências `_v6` aplicam essa estrutura sem alterar a identidade dos conceitos, a taxonomia ocupacional ou o matching. A tabela `person_competency_evidence_links` guarda vínculos humanos de experiência/credencial ao Perfil publicado; Assessment permanece fonte própria e nenhuma fonte de currículo cria Habilidade Evidenciada. ADR-070 e AoT M8.1 registram validação e rollout separadamente.
+
 O pipeline passa a ser `documento -> evidência -> termo observado -> normalização -> relações -> inferência -> Perfil Prisma`. `knowledge_observations` preserva o termo e as versões Global/Organization usadas; `knowledge_inbox` deduplica pendências por fingerprint e guarda somente IDs de evidência.
 
 `knowledge_concepts`, `knowledge_terms`, `knowledge_relations` e `knowledge_external_mappings` formam a ontologia Prisma. Escopo global exige `organization_id = null`; escopo organizacional exige tenant. A resolução consulta primeiro termos aprovados da empresa e depois a base global. Mais de um candidato ou alias marcado como ambíguo retorna `ambiguous`.

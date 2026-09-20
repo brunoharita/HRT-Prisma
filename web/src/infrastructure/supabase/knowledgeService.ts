@@ -5,6 +5,7 @@ import type { Json } from "./database.types";
 import { supabase } from "./client";
 import { readCompetencyTaxonomySearch } from "../../domain/competencyTaxonomy";
 import { isKnowledgeProposalVisible } from "../../shared/knowledgeProposalVisibility";
+import type { CompetencySubgroupOption } from "../../domain/profileCompetencyCuration";
 
 export const knowledgeService = {
   async loadDashboard(profile: PlatformAccessProfile, organizationId: string | null): Promise<KnowledgeDashboard> {
@@ -53,19 +54,42 @@ export const knowledgeService = {
       externalId: row.external_id, externalUri: row.external_uri, method: row.suggestion_method }));
   },
   async searchCompetencyTaxonomy(organizationId: string, query: string) {
-    const { data, error } = await supabase.rpc("search_competency_taxonomy" as never, {
+    const { data, error } = await supabase.rpc("search_competency_taxonomy_v2" as never, {
       p_organization_id: organizationId, p_query: query, p_limit: 8,
     } as never);
     if (error) throw supabaseOperationError(error, "Não foi possível buscar na Taxonomia de Competências.");
     return readCompetencyTaxonomySearch(data);
+  },
+  async listCompetencySubgroups(organizationId: string | null): Promise<CompetencySubgroupOption[]> {
+    const { data, error } = await supabase.from("competency_subgroups" as never).select("id,code,label,macro_group_code,scope,organization_id,definition,classification_question,examples,sort_order")
+      .eq("status", "active").order("sort_order");
+    if (error) throw supabaseOperationError(error, "Não foi possível carregar os subagrupadores.");
+    return ((data ?? []) as Array<{ id: string; code: string; label: string; macro_group_code: "hard" | "soft";
+      scope: "global" | "organization"; organization_id: string | null; definition: string;
+      classification_question: string; examples: unknown; sort_order: number }>).filter((row) => row.scope === "global" || row.organization_id === organizationId)
+      .map((row) => ({ id: row.id, code: row.code, label: row.label, macroGroupCode: row.macro_group_code,
+        scope: row.scope, organizationId: row.organization_id, definition: row.definition,
+        classificationQuestion: row.classification_question,
+        examples: Array.isArray(row.examples) ? row.examples.filter((value): value is string => typeof value === "string") : [],
+        sortOrder: row.sort_order }));
+  },
+  async listCompetencyMacroGroups(): Promise<Array<{ code: "hard" | "soft"; label: string; definition: string; sortOrder: number }>> {
+    const { data, error } = await supabase.from("competency_macro_groups" as never).select("code,label,definition,sort_order").order("sort_order");
+    if (error) throw supabaseOperationError(error, "Não foi possível carregar os macrogrupos.");
+    return ((data ?? []) as Array<{ code: "hard" | "soft"; label: string; definition: string; sort_order: number }>).map((row) => ({
+      code: row.code, label: row.label, definition: row.definition, sortOrder: row.sort_order,
+    }));
   },
   async resolveInboxAlias(input: { inboxId: string; conceptId: string; scope: "global" | "organization"; reason: string }) {
     const { data, error } = await supabase.rpc("resolve_knowledge_inbox_alias", { p_inbox_id: input.inboxId, p_concept_id: input.conceptId, p_scope: input.scope, p_reason: input.reason });
     if (error) throw supabaseOperationError(error, "Não foi possível aprovar o alias.");
     return data[0];
   },
-  async proposeConcept(input: { inboxId: string; scope: "global" | "organization"; canonicalLabel: string; conceptType: "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification"; description: string; reason: string }) {
-    const { data, error } = await supabase.rpc("propose_knowledge_concept_from_inbox", { p_inbox_id: input.inboxId, p_scope: input.scope, p_canonical_label: input.canonicalLabel, p_concept_type: input.conceptType, p_description: input.description, p_reason: input.reason });
+  async proposeConcept(input: { inboxId: string; scope: "global" | "organization"; canonicalLabel: string; conceptType: "occupation" | "competency"; subgroupId: string | null; description: string; reason: string }) {
+    const { data, error } = input.conceptType === "occupation"
+      ? await supabase.rpc("propose_knowledge_concept_from_inbox", { p_inbox_id: input.inboxId, p_scope: input.scope, p_canonical_label: input.canonicalLabel, p_concept_type: "occupation", p_description: input.description, p_reason: input.reason })
+      : await supabase.rpc("propose_knowledge_concept_from_inbox_v2" as never, { p_inbox_id: input.inboxId, p_scope: input.scope,
+        p_canonical_label: input.canonicalLabel, p_subgroup_id: input.subgroupId, p_description: input.description, p_reason: input.reason } as never);
     if (error) throw supabaseOperationError(error, "Não foi possível criar a proposta.");
     return data;
   },
@@ -88,14 +112,15 @@ export const knowledgeService = {
     }
     throw new Error("A publicação foi interrompida antes da conclusão. Tente novamente para continuar.");
   },
-  async approveProposal(proposalId: string) {
-    const { data, error } = await supabase.rpc("approve_knowledge_proposal", { p_proposal_id: proposalId, p_human_edited_proposal: null, p_decision_reason: "Aprovado na administração de Conhecimento" });
+  async approveProposal(proposalId: string, subgroupId: string | null, reason: string) {
+    const { data, error } = await supabase.rpc("approve_knowledge_proposal_v2" as never, { p_proposal_id: proposalId,
+      p_subgroup_id: subgroupId, p_decision_reason: reason } as never);
     if (error) throw supabaseOperationError(error, "Não foi possível aprovar esta proposta.");
     return data[0];
   },
-  async transitionLegacyProposal(proposalId: string, organizationId: string, reason: string) {
-    const { data, error } = await supabase.rpc("transition_legacy_knowledge_proposal" as never, {
-      p_proposal_id: proposalId, p_organization_id: organizationId, p_reason: reason,
+  async transitionLegacyProposal(proposalId: string, organizationId: string, subgroupId: string | null, reason: string) {
+    const { data, error } = await supabase.rpc("transition_legacy_knowledge_proposal_v2" as never, {
+      p_proposal_id: proposalId, p_organization_id: organizationId, p_subgroup_id: subgroupId, p_reason: reason,
     } as never);
     if (error) throw supabaseOperationError(error, "Não foi possível regularizar a proposta legada.");
     return data;

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 243
-source_manifest_sha256: 6eba53d7b3b79fa3572eeb19b5ad396a7cb2104c6cce7556e7bdbcc7cef88079
+documentation_source_count: 250
+source_manifest_sha256: ea090ca1c3a9ecb5b4030e37678b878eb1dccd71abbe385b7d7077c1f1be0f49
 -->
 
 # Tudo sobre o Prisma
@@ -375,6 +375,1987 @@ Release routing, Supabase ledger limits and the prompt-authoring workflow are do
 
 ---
 
+## Source: `docs/agreements/AGREEMENT_M8.1_FINAL.md`
+
+# Agreement Contract — M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada
+
+**Versão:** 1.1.0
+**Estado:** `agreed`
+**Movimento:** M8.1
+**Contrato-base:** Agreement Contract M8 — Redefinição das Regras de Agrupamento de Competências v1.0.0
+**Product Owner:** Bruno
+**Decisões finais do Product Owner:** 2026-09-20
+**Natureza:** mudança material, arquitetural e destrutiva controlada
+
+Este contrato é aditivo ao Agreement M8. Ele não substitui as definições de Hard Skills, Soft Skills, subagrupadores e qualificação Pessoa × Conceito; define como implementar a nova arquitetura e como limpar os dados atuais derivados de importações de currículos.
+
+## Decisões materiais resolvidas
+
+- **Q-01 = A:** Pessoa originada por currículo deve ser excluída integralmente, com todos os dados descendentes.
+- **Q-02 = A:** se existir uma Pessoa correspondente a Bruno criada por currículo, essa Pessoa deve ser excluída normalmente; o Usuário `harita.super`, autenticação, papel e memberships devem ser integralmente preservados.
+- **Q-03 = C:** remover toda evolução de Knowledge rastreável exclusivamente aos currículos de teste, incluindo observações, Inbox, aliases/conceitos Organization-owned e contribuições/propostas ainda não incorporadas; preservar CBO, ESCO, O*NET e conhecimento institucional independente.
+- **Q-04 = A:** remover convites/tentativas/resultados de assessment, Evidência Demonstrada, match evaluations e demais derivados dependentes das Pessoas excluídas.
+- **Q-05 = B:** não criar nem preservar ledger histórico específico da limpeza; buscar ausência total dos registros históricos relacionados ao conjunto apagado dentro do que a arquitetura permitir. O AoT pode registrar somente evidência operacional agregada e sem PII. Se um registro de auditoria imutável/obrigatório impedir essa decisão sem violar contrato estrutural, bloquear a parte afetada e reportar o conflito em vez de corromper a arquitetura.
+- **Q-06 = A:** executar a limpeza no backend remoto atual usado pelo Prisma e publicar a alteração completa no frontend hospedado, com snapshot/backup técnico prévio, execução controlada e smoke autenticado.
+
+## Decisão superveniente sobre persistência e alcance
+
+O Product Owner definiu em 2026-09-20 que as definições dos macrogrupos `Hard Skill` e `Soft Skill` e dos subagrupadores devem residir em tabelas próprias do banco. A classificação principal referencia essas definições e a identidade canônica existente de `knowledge_concepts`; ela não cria outro catálogo de conceitos.
+
+- Os dois macrogrupos e os nove subagrupadores aprovados constituem definições globais da estrutura M8.
+- Cada subagrupador referencia exatamente um macrogrupo. Cada conceito de competência classificado referencia exatamente um subagrupador principal; o macrogrupo é determinado por essa referência.
+- Um conceito Global usa somente um subagrupador Global. Sua classificação canônica não é alterada por organização, Pessoa, vaga ou evidência.
+- A estrutura admite futuramente subagrupadores de alcance exclusivo de uma organização. Eles só podem classificar conceitos pertencentes à mesma organização; conceitos dessa organização também podem usar os subagrupadores globais.
+- O cadastro e a edição de subagrupadores por usuários, seus papéis autorizados e a experiência de gestão são um movimento futuro. O M8.1 prepara a integridade e o isolamento dos dados, sem antecipar esse fluxo.
+- Definições em uso mantêm identidade e rastreabilidade; alteração de rótulo ou desativação futura não reescreve silenciosamente o significado de classificações já publicadas.
+
+**Q-07 resolvida:** subagrupadores próprios de uma organização nunca reclassificam conceitos Globais nem aparecem para outras organizações. A imagem composta de nove telas em `docs/assets/m81-nine-screen-reference.png` (SHA-256 `f7b586ccaa224d3d9bc146827e64822c6b43fb0d58d014a1e576feadbcb3f681`) é a referência normativa de arquitetura visual do M8.1.
+
+Não existe `Q-*` material conhecido após essas decisões.
+
+---
+
+# 1. Objetivo
+
+O M8.1 deve:
+
+1. substituir sistemicamente a classificação operacional legada de competências;
+2. implementar a nova arquitetura M8;
+3. separar classificação do conceito de qualificação da relação Pessoa × Conceito;
+4. atualizar persistência, contratos, queries, RPCs, curadoria, Perfil e consumidores diretamente afetados;
+5. preservar a Taxonomia Ocupacional e Knowledge institucional;
+6. limpar dados derivados das importações atuais de currículos conforme proveniência;
+7. manter Usuários, autenticação, organizações, memberships e autoridade, especialmente `harita.super`;
+8. revalidar o ciclo de importação/publicação em produção depois da limpeza.
+
+# 2. Arquitetura de competências
+
+## 2.1 Macrogrupos
+
+Somente:
+
+- `Hard Skill`
+- `Soft Skill`
+
+## 2.2 Subagrupadores Hard Skill
+
+1. `Domínios e Especialidades Profissionais`
+2. `Tecnologias, Ferramentas e Equipamentos`
+3. `Métodos, Processos e Padrões`
+4. `Gestão, Negócios e Estratégia`
+5. `Idiomas`
+
+## 2.3 Subagrupadores Soft Skill
+
+1. `Interpessoais`
+2. `Intrapessoais`
+3. `Cognitivo-Executivas`
+4. `Liderança`
+
+## 2.4 Regra canônica
+
+Cada conceito possui exatamente um macrogrupo e um subagrupador principal. Classificação pertence ao conceito, não à Pessoa, vaga ou evidência.
+
+## 2.5 Gestão × Liderança
+
+- disciplina, método ou capacidade estruturada de gestão/negócio/estratégia -> `Hard Skill > Gestão, Negócios e Estratégia`;
+- comportamento de mobilizar, orientar, influenciar ou desenvolver pessoas -> `Soft Skill > Liderança`.
+
+# 3. Qualificação Pessoa × Conceito
+
+As naturezas de evidência são independentes e acumulativas:
+
+- `Declarado`
+- `Contextualizado`
+- `Certificado`
+- `Verificado por Assessment`
+- `Habilidade Evidenciada`
+
+Elas não são novos conceitos e não substituem evidências anteriores.
+
+## 3.1 Declarado
+
+Autorrelato explícito da Pessoa.
+
+## 3.2 Contextualizado
+
+Autorrelato ligado a experiência/projeto/resultado/responsabilidade concreta. Continua autorrelato quando originado do próprio currículo.
+
+## 3.3 Certificado
+
+Credencial relacionada ao conceito. Certificação deixa de ser tipo de competência. Texto ambíguo entre curso/certificação não promove automaticamente `Certificado`.
+
+## 3.4 Verificado por Assessment
+
+Resultado direto de assessment do Prisma que atende ao critério da avaliação. Reutilizar M5.1 quando compatível. Não equivale a habilidade prática.
+
+## 3.5 Habilidade Evidenciada
+
+Aplicação profissional real validada por fonte organizacional autorizada. Currículo, certificação ou assessment isolados não a produzem.
+
+# 4. Regras da importação de currículo
+
+Uma importação pode produzir:
+
+- Declaração;
+- Contextualização;
+- credencial/certificação declarada quando sustentada.
+
+Nunca pode produzir automaticamente:
+
+- Verificado por Assessment;
+- Habilidade Evidenciada.
+
+Ausência de evidência é neutra: sem zero, deficiência ou inferência negativa.
+
+# 5. Agrupadores legados
+
+Deixam de governar a experiência:
+
+- Habilidades;
+- Competências;
+- Conhecimentos;
+- Tecnologia e Ferramentas;
+- Métodos e Práticas;
+- Certificações.
+
+Podem permanecer tecnicamente apenas quando necessários a compatibilidade histórica/fonte nativa/rollback e devem ser tratados como metadado legado, não como taxonomia operacional M8.
+
+# 6. Limpeza
+
+## 6.1 Pessoas originadas por currículo
+
+Excluir integralmente o agregado da Pessoa e descendentes.
+
+## 6.2 Pessoas preexistentes/manual + currículo posterior
+
+Preservar a identidade manual da Pessoa e remover somente artefatos/fatos/evidências derivados das importações em escopo, preservando conteúdo manual independente. Se o repositório não permite distinguir proveniência com segurança, não apagar por aproximação.
+
+## 6.3 `harita.super`
+
+Preservar integralmente:
+
+- Auth user;
+- `platform_users`;
+- status;
+- papel Super Admin;
+- memberships;
+- organizações acessíveis;
+- login e autorização.
+
+Uma Pessoa homônima/originada de currículo é outro agregado e deve ser apagada conforme a regra normal.
+
+## 6.4 Knowledge
+
+Remover tudo que seja **exclusivamente** derivado dos currículos de teste apagados:
+
+- observations;
+- Inbox;
+- aliases humanos;
+- conceitos Organization-owned;
+- change/proposal/contribution ainda dependente;
+- demais derivados encontrados.
+
+Preservar tudo que tenha proveniência institucional independente ou fonte oficial.
+
+Preservar sempre CBO, ESCO e O*NET.
+
+## 6.5 Assessment e matching
+
+Para Pessoas excluídas, remover:
+
+- invitations;
+- attempts;
+- responses/events/metrics/evaluations;
+- demonstrated evidence;
+- match evaluations;
+- derivados diretamente dependentes.
+
+## 6.6 Vagas e Posições
+
+Preservar definições. Remover/destacar somente vínculos à Pessoa apagada necessários para integridade. Não apagar Vaga/Posição por causa da Pessoa. Se uma Posição tiver ocupante apagado, aplicar o estado canônico coerente previsto pelo contrato vigente, sem inventar semântica nova.
+
+## 6.7 Storage
+
+Remover PDFs/artefatos privados do conjunto apagado; preservar bucket e configuração.
+
+## 6.8 Auditoria/ledger da limpeza
+
+Não criar ledger persistente novo para a limpeza. Remover histórico exclusivamente ligado ao conjunto apagado quando permitido. AoT deve registrar somente contagens, hashes/SHA de release, checks e evidência agregada sem PII. Registro obrigatório/imutável incompatível deve ser reportado como bloqueio da parte afetada.
+
+# 7. Proteção operacional
+
+Antes de apagar qualquer dado, confirmar server-side o usuário `harita.super`, papel, status e memberships sem expor secrets.
+
+Após deploy, smoke autenticado deve provar:
+
+1. login;
+2. App Shell;
+3. organizações;
+4. Pessoas;
+5. Conhecimento;
+6. Posições/Vagas;
+7. importação de currículo;
+8. ausência de resíduos/erros da limpeza.
+
+# 8. DEVE
+
+- **D-01** Implementar Hard/Soft + 9 subagrupadores.
+- **D-02** Um macrogrupo + um subagrupador principal por conceito.
+- **D-03** Separar taxonomia de evidência Pessoa × Conceito.
+- **D-04** Certificação é credencial/evidência, não tipo de conceito.
+- **D-05** Evidências são cumulativas e não destrutivas.
+- **D-06** Currículo produz somente os estados permitidos.
+- **D-07** M5.1 projeta `Verificado por Assessment` quando compatível.
+- **D-08** Habilidade Evidenciada exige evidência real organizacional.
+- **D-09** Ausência permanece neutra.
+- **D-10** Reutilizar Knowledge e identidades existentes.
+- **D-11** Preservar Taxonomia Ocupacional.
+- **D-12** Remover a governança UX dos seis agrupadores legados.
+- **D-13** Atualizar backend e frontend para impedir combinações inválidas.
+- **D-14** Excluir integralmente Pessoas originadas por currículo e descendentes.
+- **D-15** Preservar Pessoa manual quando distinguível e limpar somente derivados de currículo.
+- **D-16** Preservar integralmente `harita.super` como Usuário.
+- **D-17** Remover Knowledge exclusivamente originada pelos currículos de teste.
+- **D-18** Preservar Knowledge institucional e fontes oficiais.
+- **D-19** Remover assessment/matching dependente de Pessoas excluídas.
+- **D-20** Remover Storage no escopo.
+- **D-21** Não deixar referências órfãs.
+- **D-22** Executar no backend remoto atual com backup técnico prévio e smoke.
+- **D-23** Não criar ledger persistente específico da limpeza.
+- **D-24** Revalidar ciclo intake -> revisão -> publicação -> Perfil sob M8.
+- **D-25** Preservar matching/Prisma Score semanticamente.
+- **D-26** Atualizar owners, contratos, ADR/AoT e Context Pack proporcionalmente.
+- **D-27** Registrar release/versionamento conforme contrato vigente, sem inventar versão em conflito.
+- **D-28** Usar dados sintéticos em testes e não currículos reais versionados.
+- **D-29** Preservar isolamento tenant/RLS/autoridade.
+- **D-30** As telas M8.1 anexadas ao Execution Prompt são referência normativa de arquitetura visual, nos termos de `docs/product/ux-foundation.md`.
+- **D-31** Persistir definições de macrogrupos e subagrupadores em tabelas próprias, vinculadas por integridade referencial à classificação do conceito canônico em Knowledge.
+- **D-32** Preservar a classificação Global de conceitos Globais e impedir que subagrupadores de uma organização classifiquem conceitos Globais ou de outra organização.
+- **D-33** Preparar a representação tenant-scoped de subagrupadores organizacionais sem implementar neste movimento seu cadastro/edição por usuários.
+
+# 9. PROIBIDO
+
+- **P-01** Não apagar Auth/`platform_users`.
+- **P-02** Não apagar memberships/papéis por deleção de Pessoa.
+- **P-03** Não prejudicar `harita.super`.
+- **P-04** Não truncar indiscriminadamente tabelas mistas.
+- **P-05** Não apagar CBO/ESCO/O*NET.
+- **P-06** Não apagar Knowledge com proveniência independente.
+- **P-07** Não apagar Vagas/Posições apenas por referência a Pessoa.
+- **P-08** Não deixar órfãos funcionais.
+- **P-09** Não reusar silenciosamente tipos legados como M8.
+- **P-10** Não criar Habilidade Evidenciada de currículo.
+- **P-11** Não criar Verificado de currículo/certificação.
+- **P-12** Não mudar matching/score.
+- **P-13** Não `drop schema`, `db reset`, `truncate cascade` global.
+- **P-14** Não expor secrets/PII em logs.
+- **P-15** Não declarar limpeza só pela UI.
+- **P-16** Não inventar classificação ambígua.
+- **P-17** Não criar conceito duplicado para evidência.
+- **P-18** Não criar nova fonte/API/provider/modelo por este movimento.
+- **P-19** Não implementar sucessão/PDI/9-Box/gap.
+- **P-20** Não usar currículo real como fixture versionada.
+- **P-21** Não criar ledger persistente novo da limpeza.
+- **P-22** Não manter histórico pessoal deletável apenas para “auditar a limpeza”.
+- **P-23** Não remover auditoria estrutural imutável por corrupção; bloquear/reportar conflito se existir.
+- **P-24** Não codificar as definições de Hard/Soft e subagrupadores apenas como enums, constantes de frontend ou texto livre sem integridade no banco.
+- **P-25** Não aplicar classificação organizacional a conceito Global nem permitir referência entre organizações.
+
+# 10. FORA DE ESCOPO
+
+- **F-01** sucessão;
+- **F-02** 9-Box;
+- **F-03** PDI;
+- **F-04** gap de execução;
+- **F-05** score Técnica × Gestão;
+- **F-06** nova fórmula de matching;
+- **F-07** nova fórmula Prisma Score;
+- **F-08** novo motor de assessment;
+- **F-09** novo feedback 360/1-on-1/performance;
+- **F-10** verificação externa automática de certificações;
+- **F-11** novo provider/modelo externo;
+- **F-12** redesign global do App Shell;
+- **F-13** mudança de OCR/parser não necessária ao contrato.
+- **F-14** cadastro e edição de subagrupadores por usuários neste movimento.
+
+# 11. AUTONOMIA
+
+- **A-01** estratégia de migration/backfill;
+- **A-02** compatibilidade técnica legada;
+- **A-03** projeção/materialização;
+- **A-04** ordem segura de deleção;
+- **A-05** reuso do contrato de exclusão de Pessoa;
+- **A-06** RPC/migration administrativa segura;
+- **A-07** índices/constraints;
+- **A-08** microcopy/componentes;
+- **A-09** fixtures sintéticas;
+- **A-10** rollback técnico;
+- **A-11** limpeza de referências de ocupante em Posição conforme contrato vigente;
+- **A-12** classificação determinística de conceitos existentes apenas onde semanticamente inequívoca; demais permanecem pendentes.
+
+# 12. CRITÉRIOS DE ACEITE
+
+- **CA-01** Excel -> Hard > Tecnologias, Ferramentas e Equipamentos.
+- **CA-02** Gestão de Projetos -> Hard > Gestão, Negócios e Estratégia.
+- **CA-03** Comunicação -> Soft > Interpessoais.
+- **CA-04** Resiliência -> Soft > Intrapessoais.
+- **CA-05** Resolução de Problemas -> Soft > Cognitivo-Executivas.
+- **CA-06** Visão Estratégica -> Soft > Liderança.
+- **CA-07** Planejamento Estratégico -> Hard > Gestão, Negócios e Estratégia.
+- **CA-08** SAP e HPLC compartilham H2, demonstrando neutralidade setorial.
+- **CA-09** currículo com AWS apenas -> Declarado no máximo.
+- **CA-10** currículo com AWS + experiência concreta -> Declarado + Contextualizado possível.
+- **CA-11** currículo nunca -> Habilidade Evidenciada.
+- **CA-12** assessment pode -> Verificado por Assessment.
+- **CA-13** assessment não -> Habilidade Evidenciada.
+- **CA-14** Certificado e Verificado coexistem.
+- **CA-15** ausência não vira zero.
+- **CA-16** evidência nova não apaga anterior.
+- **CA-17** identidade canônica não é duplicada.
+- **CA-18** tipos/mappings nativos permanecem recuperáveis.
+- **CA-19** taxonomia ocupacional permanece independente.
+- **CA-20** ambiguidade não autoassocia.
+- **CA-21** usuários/organizações/memberships preservados.
+- **CA-22** `harita.super` autentica e mantém Super Admin.
+- **CA-23** Pessoas originadas por currículos no escopo não permanecem.
+- **CA-24** dados descendentes/Storage dessas Pessoas não permanecem.
+- **CA-25** Knowledge exclusivamente derivada desses currículos não permanece.
+- **CA-26** CBO/ESCO/O*NET e Knowledge independente permanecem.
+- **CA-27** assessment/matching dependente de Pessoas excluídas não permanece.
+- **CA-28** sem referências funcionais órfãs.
+- **CA-29** Vagas/Posições preservadas.
+- **CA-30** novo currículo sintético percorre intake -> revisão -> publicação.
+- **CA-31** novo Perfil usa M8.
+- **CA-32** os seis agrupadores legados não governam criação/associação.
+- **CA-33** UI/backend impedem combinações inválidas.
+- **CA-34** matching/score sem regressão semântica.
+- **CA-35** RLS/tenant sem regressão.
+- **CA-36** AoT contém evidência agregada sem PII e sem novo ledger de cleanup.
+- **CA-37** frontend hospedado e backend remoto atual estão sincronizados no SHA final.
+- **CA-38** tabelas próprias contêm dois macrogrupos e nove subagrupadores globais aprovados, com FK válida e classificação principal única por conceito classificado.
+- **CA-39** conceito Global rejeita subagrupador organizacional; conceito de uma organização rejeita subagrupador de outra, inclusive por escrita direta e RPC.
+- **CA-40** telas são comparadas com a imagem composta de nove telas em estado, dados e viewport equivalentes; divergências estruturais são registradas no AoT.
+
+---
+
+## Source: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
+
+# Agreement Contract — M8 — Redefinição das Regras de Agrupamento de Competências
+
+**Versão do contrato:** 1.0.0
+**Estado:** draft para aprovação do Product Owner
+**Movimento:** M8 — Redefinição das regras de agrupamento de competências
+**Objetivo:** substituir a classificação operacional atual de competências por uma arquitetura mais simples, genérica entre setores e preparada para recrutamento, gestão de pessoas, desenvolvimento e sucessão, sem confundir natureza do conceito com força/evidência da relação da Pessoa com esse conceito.
+
+---
+
+## 1. Contexto e problema
+
+Hoje o Prisma apresenta/usa como agrupadores de tipo de conceito:
+
+- Habilidades;
+- Competências;
+- Conhecimentos;
+- Tecnologia e Ferramentas;
+- Métodos e Práticas;
+- Certificações.
+
+Essa estrutura cria ambiguidade operacional para o administrador, porque mistura no mesmo nível:
+
+1. natureza do conceito profissional;
+2. forma de aplicação;
+3. artefato/ferramenta;
+4. método;
+5. credencial;
+6. forma de comprovação.
+
+Exemplos de ambiguidade observada:
+
+- `Transformação Digital` pode ser interpretada como conhecimento, competência ou prática;
+- `Comunicação` pode ser interpretada como habilidade ou competência;
+- `Gestão de Projetos` pode ser interpretada como conhecimento, competência ou método;
+- `AWS` pode aparecer como tecnologia, conhecimento ou competência;
+- uma certificação é uma credencial sobre um conhecimento, não uma família de competência equivalente a Hard/Soft Skill.
+
+O M8 redefine essa arquitetura.
+
+---
+
+# 2. Modelo conceitual aprovado
+
+O novo modelo separa obrigatoriamente duas dimensões independentes:
+
+## 2.1. Dimensão A — Classificação do conceito
+
+Responde:
+
+> **Que tipo de capacidade profissional é esta?**
+
+Estrutura:
+
+```text
+Macrogrupo
+  -> Subagrupador
+      -> Conceito canônico
+```
+
+O macrogrupo possui somente dois valores:
+
+1. **Hard Skills**
+2. **Soft Skills**
+
+Cada conceito deve possuir **um único macrogrupo principal** e **um único subagrupador principal**.
+
+Relações adicionais entre conceitos podem existir na Knowledge, mas não transformam um conceito em múltiplas classificações primárias.
+
+---
+
+## 2.2. Dimensão B — Qualificação da relação Pessoa × Conceito
+
+Responde:
+
+> **O que o Prisma efetivamente sabe sobre a relação desta Pessoa com este conceito, e com qual tipo de evidência?**
+
+A classificação taxonômica do conceito não muda quando surgem novas evidências.
+
+Exemplo:
+
+```text
+AWS
+Hard Skill
+Tecnologias, Ferramentas e Equipamentos
+```
+
+continua sendo o mesmo conceito independentemente de a Pessoa apenas declará-lo, apresentar uma certificação, realizar um assessment ou demonstrar aplicação prática no trabalho.
+
+As evidências se acumulam; não substituem a identidade do conceito.
+
+---
+
+# 3. Estrutura dos agrupadores
+
+## 3.1. Hard Skills
+
+Hard Skills representam conhecimentos, técnicas, métodos, tecnologias, idiomas e capacidades estruturadas que podem ser aprendidas, ensinadas, descritas por conteúdo técnico e, quando aplicável, avaliadas diretamente.
+
+### H1 — Domínios e Especialidades Profissionais
+
+**Definição:** campo de conhecimento ou especialidade profissional sobre o qual a Pessoa precisa possuir repertório técnico.
+
+**Pergunta de classificação:**
+
+> “Este conceito representa uma área, disciplina ou especialidade profissional que precisa ser dominada?”
+
+**Exemplos:**
+
+- Arquitetura de Software;
+- Cibersegurança;
+- Engenharia de Processos;
+- Contabilidade;
+- Logística;
+- Supply Chain;
+- Business Intelligence;
+- Data Science;
+- Inteligência Artificial;
+- Segurança da Informação.
+
+**Não usar para:** uma ferramenta específica, um método formal, uma língua ou uma capacidade comportamental.
+
+---
+
+### H2 — Tecnologias, Ferramentas e Equipamentos
+
+**Definição:** produto, plataforma, sistema, linguagem, ferramenta, tecnologia ou equipamento concreto utilizado no trabalho.
+
+**Pergunta de classificação:**
+
+> “Este conceito representa algo específico que a Pessoa usa, opera, configura, programa ou manipula?”
+
+**Exemplos:**
+
+- Microsoft Excel;
+- SAP;
+- SAP EWM;
+- AWS;
+- Java;
+- Power BI;
+- Salesforce;
+- SQL;
+- n8n;
+- Supabase;
+- HPLC;
+- espectrômetro;
+- sistema LIMS;
+- KNAPP.
+
+**Observação:** linguagens de programação pertencem aqui. Idiomas humanos pertencem ao agrupador H5.
+
+---
+
+### H3 — Métodos, Processos e Padrões
+
+**Definição:** método, framework, prática estruturada, padrão, norma ou forma organizada de executar trabalho.
+
+**Pergunta de classificação:**
+
+> “Este conceito representa uma forma estruturada, normatizada ou repetível de realizar uma atividade?”
+
+**Exemplos:**
+
+- Scrum;
+- Kanban;
+- Lean;
+- Six Sigma;
+- ITIL;
+- BPM;
+- BPMN;
+- PDCA;
+- HAZOP;
+- ISO 27001;
+- ISO 17025;
+- Design Thinking;
+- As-Is/To-Be.
+
+**Não usar para:** domínio profissional amplo ou ferramenta concreta.
+
+---
+
+### H4 — Gestão, Negócios e Estratégia
+
+**Definição:** conhecimentos e capacidades estruturadas relacionados a administrar recursos, projetos, operações, processos, portfólios, negócio ou estratégia.
+
+**Pergunta de classificação:**
+
+> “Este conceito representa saber estruturar ou executar gestão, negócio, operação ou estratégia?”
+
+**Exemplos:**
+
+- Gestão de Projetos;
+- Gestão de Programas;
+- PMO;
+- Gestão Financeira;
+- Gestão de Operações;
+- Gestão de Processos;
+- Gestão da Mudança;
+- Transformação Digital;
+- Planejamento Estratégico;
+- Gestão de Portfólio;
+- Gestão de Produto;
+- Gestão de Riscos;
+- Gestão de Stakeholders;
+- Gestão de Fornecedores;
+- Gestão de Capacidade;
+- Gestão de Prioridades;
+- Governança de Tecnologia;
+- Excelência Operacional.
+
+### Regra de separação Gestão × Liderança
+
+`Gestão, Negócios e Estratégia` é Hard Skill quando o conceito descreve uma disciplina, prática estruturada ou capacidade de gestão.
+
+`Liderança` é Soft Skill quando o conceito descreve comportamento de mobilizar, orientar, influenciar, desenvolver ou direcionar pessoas.
+
+Exemplos:
+
+- `Planejamento Estratégico` -> Hard Skill -> Gestão, Negócios e Estratégia;
+- `Visão Estratégica` -> Soft Skill -> Liderança;
+- `Gestão de Pessoas` pode conter conceitos hard de gestão e conceitos soft de liderança, que devem permanecer conceitos distintos;
+- `Desenvolvimento de Pessoas` -> Soft Skill -> Liderança.
+
+---
+
+### H5 — Idiomas
+
+**Definição:** capacidade linguística humana utilizada em contexto profissional.
+
+**Pergunta de classificação:**
+
+> “Este conceito é um idioma humano?”
+
+**Exemplos:**
+
+- Português;
+- Inglês;
+- Espanhol;
+- Alemão;
+- Japonês.
+
+O nível declarado de idioma não transforma a declaração em verificação.
+
+---
+
+## 3.2. Soft Skills
+
+Soft Skills representam capacidades comportamentais, relacionais, cognitivas ou de liderança observáveis na forma como a Pessoa pensa, age, reage e interage.
+
+### S1 — Interpessoais
+
+**Definição:** capacidades relacionadas à interação e relação com outras pessoas.
+
+**Pergunta de classificação:**
+
+> “Este conceito descreve como a Pessoa se comunica, coopera, negocia ou se relaciona com outras pessoas?”
+
+**Exemplos:**
+
+- Comunicação;
+- Comunicação Executiva;
+- Negociação;
+- Colaboração;
+- Escuta;
+- Gestão de Conflitos;
+- relacionamento com stakeholders.
+
+---
+
+### S2 — Intrapessoais
+
+**Definição:** capacidades relacionadas à autorregulação e à forma como a Pessoa administra a si própria.
+
+**Pergunta de classificação:**
+
+> “Este conceito descreve como a Pessoa administra suas próprias emoções, energia, disciplina ou adaptação?”
+
+**Exemplos:**
+
+- Resiliência;
+- Adaptabilidade;
+- Autocontrole;
+- Autoconhecimento;
+- Disciplina;
+- perseverança.
+
+---
+
+### S3 — Cognitivo-Executivas
+
+**Definição:** capacidades relacionadas a raciocínio, análise, decisão, organização mental, criatividade e solução de problemas.
+
+**Pergunta de classificação:**
+
+> “Este conceito descreve principalmente como a Pessoa pensa, analisa, decide, organiza ou resolve?”
+
+**Exemplos:**
+
+- Resolução de Problemas;
+- Pensamento Crítico;
+- Criatividade;
+- Tomada de Decisão;
+- Pensamento Analítico;
+- Pensamento Estratégico;
+- priorização;
+- raciocínio sistêmico.
+
+---
+
+### S4 — Liderança
+
+**Definição:** capacidades comportamentais usadas para mobilizar, direcionar, desenvolver, influenciar ou alinhar pessoas e organizações.
+
+**Pergunta de classificação:**
+
+> “Este conceito descreve como a Pessoa lidera, orienta, mobiliza ou desenvolve outras pessoas ou uma organização?”
+
+**Exemplos:**
+
+- Visão Estratégica;
+- Delegação;
+- Desenvolvimento de Pessoas;
+- Formação de Times;
+- Influência de Liderança;
+- liderança multidisciplinar;
+- mobilização de equipes;
+- direcionamento;
+- inspiração.
+
+---
+
+# 4. Regra canônica de classificação
+
+## D-CLASS-01 — Classificação única principal
+
+Cada conceito canônico deve possuir:
+
+- exatamente um macrogrupo principal: `Hard Skill` ou `Soft Skill`;
+- exatamente um subagrupador principal compatível com o macrogrupo.
+
+Não apresentar ao administrador múltiplas classificações principais concorrentes para o mesmo conceito.
+
+---
+
+## D-CLASS-02 — Classificar pelo significado do conceito, não pela Pessoa
+
+A classificação é propriedade do conceito canônico e não deve mudar de acordo com:
+
+- a Pessoa;
+- a vaga;
+- a experiência em que apareceu;
+- o nível de proficiência;
+- o tipo de evidência disponível.
+
+Exemplo:
+
+`AWS` continua sendo `Hard Skill -> Tecnologias, Ferramentas e Equipamentos` para todas as Pessoas.
+
+---
+
+## D-CLASS-03 — Definição canônica governa casos ambíguos
+
+A classificação deve considerar o significado canônico do conceito, e não apenas a palavra isolada.
+
+Exemplo:
+
+- `Planejamento Estratégico` -> Hard -> Gestão, Negócios e Estratégia;
+- `Visão Estratégica` -> Soft -> Liderança;
+- `Pensamento Estratégico` -> Soft -> Cognitivo-Executiva.
+
+Quando a definição não permitir decisão segura, o conceito deve permanecer pendente de curadoria em vez de receber classificação inventada.
+
+---
+
+## D-CLASS-04 — Sem agrupador genérico “Outros” como escape automático
+
+Não criar um agrupador principal genérico apenas para eliminar pendências.
+
+Conceitos realmente ambíguos devem entrar em curadoria.
+
+---
+
+# 5. Qualificação da relação Pessoa × Conceito
+
+A segunda dimensão não é taxonômica.
+
+Ela descreve **qual evidência existe sobre o conhecimento e a aplicação daquela Pessoa**.
+
+Os estados/naturezas abaixo podem coexistir.
+
+---
+
+## K1 — Declarado
+
+**Significado:** a própria Pessoa afirma possuir o conhecimento/capacidade.
+
+Fontes típicas:
+
+- currículo;
+- ATS;
+- formulário preenchido pela própria Pessoa;
+- perfil profissional declarado.
+
+Exemplo:
+
+`AWS` listado no currículo.
+
+### Regra
+
+Uma declaração não é verificação e não é evidência prática independente.
+
+---
+
+## K2 — Contextualizado
+
+**Significado:** existe relato concreto de utilização daquele conceito em experiência, projeto, resultado ou responsabilidade descrita pela própria Pessoa.
+
+Exemplo:
+
+`SAP` aparece como competência e o currículo também descreve participação em migração ERP/SAP, operação logística e resultados associados.
+
+### Regra
+
+Contextualização aumenta a riqueza factual da declaração, mas continua sendo autorrelato quando a origem é o próprio currículo.
+
+Portanto:
+
+```text
+Declarado + Contextualizado != Verificado
+Declarado + Contextualizado != Habilidade Evidenciada
+```
+
+---
+
+## K3 — Certificado
+
+**Significado:** existe uma credencial/certificação válida relacionada ao conceito.
+
+### Regra estrutural
+
+Certificação **não é tipo de competência**.
+
+Ela é uma credencial/evidência relacionada ao conceito.
+
+Exemplo:
+
+```text
+Conceito: AWS
+Classificação: Hard -> Tecnologias, Ferramentas e Equipamentos
+Credencial: certificação AWS
+Qualificação: Certificado
+```
+
+### Regra de segurança
+
+Texto genérico como `certificações e cursos: X, Y, Z` não deve virar automaticamente `Certificado` se não for possível distinguir com segurança:
+
+- qual item é certificação;
+- qual é formação/curso;
+- qual o emissor;
+- qual a credencial;
+- status/validade quando aplicável.
+
+Nesses casos, preservar a credencial declarada e a pendência de confirmação sem promover o conceito para `Certificado`.
+
+### Certificação × Assessment
+
+Certificação não substitui o assessment Prisma.
+
+Uma Pessoa pode possuir simultaneamente:
+
+- Certificado;
+- Verificado por assessment.
+
+O Prisma não deve inferir equivalência automática entre certificação e resultado de assessment.
+
+---
+
+## K4 — Verificado por Assessment
+
+**Significado:** o conhecimento foi diretamente avaliado por um assessment/teste do Prisma e o resultado atingiu o critério definido pela avaliação.
+
+Exemplo:
+
+```text
+AWS
+Declarado: sim
+Contextualizado: sim
+Certificado: sim
+Verificado por assessment: sim
+```
+
+### Regra
+
+O assessment verifica conhecimento no escopo, versão e data daquele instrumento.
+
+Ele não comprova automaticamente aplicação profissional real.
+
+O conceito `Verificado por Assessment` deve reutilizar, quando compatível, a infraestrutura vigente de M5.1/Evidência Demonstrada, sem criar um segundo motor de avaliação.
+
+Mudança de nomenclatura/projeção não autoriza alterar:
+
+- banco de itens;
+- blueprint;
+- convite;
+- tentativa;
+- correção;
+- budgets;
+- provider;
+- política de geração de itens;
+- segurança do M5.1,
+
+salvo o mínimo estritamente necessário para projetar o resultado como `Conhecimento Verificado`.
+
+---
+
+## K5 — Habilidade Evidenciada
+
+**Significado:** existe evidência de aplicação prática real daquele conhecimento/capacidade em contexto de trabalho, validada por fonte organizacional autorizada.
+
+Exemplos futuros:
+
+- resultado real de projeto;
+- avaliação de gestor;
+- registro organizacional de entrega;
+- avaliação de desempenho;
+- outros ritos aprovados de gestão.
+
+### Regra fundamental
+
+Currículo sozinho nunca cria `Habilidade Evidenciada`.
+
+Assessment de conhecimento sozinho nunca cria `Habilidade Evidenciada`.
+
+Certificação sozinha nunca cria `Habilidade Evidenciada`.
+
+A habilidade evidenciada pertence ao universo de aplicação prática.
+
+---
+
+# 6. Evidências são acumulativas, não substitutivas
+
+## D-EVID-01
+
+A evolução não deve funcionar como uma máquina de estados destrutiva.
+
+Exemplo válido:
+
+```text
+AWS
+- Declarado
+- Contextualizado
+- Certificado
+- Verificado por Assessment
+- Habilidade Evidenciada
+```
+
+Todas as naturezas podem coexistir e manter:
+
+- origem;
+- evidência;
+- data;
+- método;
+- versão;
+- decisão humana quando aplicável.
+
+Nenhuma nova evidência deve apagar a evidência anterior.
+
+---
+
+# 7. Regra específica para importação de currículo
+
+## D-CV-01 — Limite máximo da importação
+
+Ao importar somente um currículo, o Prisma pode criar ou relacionar:
+
+- `Declarado`;
+- `Contextualizado`;
+- credenciais/certificações declaradas, respeitando as regras de validação.
+
+A importação de currículo **não pode** gerar automaticamente:
+
+- `Verificado por Assessment`;
+- `Habilidade Evidenciada`.
+
+---
+
+## D-CV-02 — Contexto precisa de vínculo factual
+
+Um conceito só deve receber contextualização quando houver evidência textual identificável relacionando-o a:
+
+- experiência;
+- projeto;
+- responsabilidade;
+- resultado;
+- atividade concreta.
+
+A mera repetição do termo em outra seção não basta.
+
+---
+
+## D-CV-03 — Ausência permanece neutra
+
+Se não houver evidência para determinada natureza:
+
+- não atribuir zero;
+- não atribuir deficiência;
+- não atribuir “não sabe”;
+- não penalizar a Pessoa;
+- não inventar estado negativo.
+
+Usar linguagem neutra como:
+
+- não avaliado;
+- sem evidência disponível;
+- não verificado;
+- sem evidência prática registrada.
+
+---
+
+# 8. Exemplos canônicos para implementação e QA
+
+Os exemplos abaixo são normativos para a regra de classificação, mas devem ser implementados em fixtures sintéticas sem PII.
+
+| Conceito | Macrogrupo | Subagrupador |
+|---|---|---|
+| Microsoft Excel | Hard Skill | Tecnologias, Ferramentas e Equipamentos |
+| SAP | Hard Skill | Tecnologias, Ferramentas e Equipamentos |
+| AWS | Hard Skill | Tecnologias, Ferramentas e Equipamentos |
+| Java | Hard Skill | Tecnologias, Ferramentas e Equipamentos |
+| HPLC | Hard Skill | Tecnologias, Ferramentas e Equipamentos |
+| Cibersegurança | Hard Skill | Domínios e Especialidades Profissionais |
+| Engenharia de Processos | Hard Skill | Domínios e Especialidades Profissionais |
+| Inteligência Artificial | Hard Skill | Domínios e Especialidades Profissionais |
+| Scrum | Hard Skill | Métodos, Processos e Padrões |
+| ITIL | Hard Skill | Métodos, Processos e Padrões |
+| HAZOP | Hard Skill | Métodos, Processos e Padrões |
+| ISO 27001 | Hard Skill | Métodos, Processos e Padrões |
+| Gestão de Projetos | Hard Skill | Gestão, Negócios e Estratégia |
+| Transformação Digital | Hard Skill | Gestão, Negócios e Estratégia |
+| Gestão Financeira | Hard Skill | Gestão, Negócios e Estratégia |
+| Gestão de Operações | Hard Skill | Gestão, Negócios e Estratégia |
+| Planejamento Estratégico | Hard Skill | Gestão, Negócios e Estratégia |
+| Inglês | Hard Skill | Idiomas |
+| Comunicação | Soft Skill | Interpessoais |
+| Negociação | Soft Skill | Interpessoais |
+| Gestão de Conflitos | Soft Skill | Interpessoais |
+| Resiliência | Soft Skill | Intrapessoais |
+| Adaptabilidade | Soft Skill | Intrapessoais |
+| Autocontrole | Soft Skill | Intrapessoais |
+| Resolução de Problemas | Soft Skill | Cognitivo-Executivas |
+| Pensamento Crítico | Soft Skill | Cognitivo-Executivas |
+| Pensamento Estratégico | Soft Skill | Cognitivo-Executivas |
+| Visão Estratégica | Soft Skill | Liderança |
+| Delegação | Soft Skill | Liderança |
+| Desenvolvimento de Pessoas | Soft Skill | Liderança |
+| Liderança Multidisciplinar | Soft Skill | Liderança |
+
+---
+
+# 9. Compatibilidade com a Knowledge existente
+
+## D-KNOW-01
+
+A nova estrutura deve reutilizar a identidade canônica existente em `knowledge_concepts`/Professional Concept quando ela for válida.
+
+Não criar uma segunda identidade canônica para:
+
+- AWS;
+- SAP;
+- Comunicação;
+- Gestão de Projetos;
+- ou qualquer outro conceito já existente,
+
+apenas para suportar a nova classificação.
+
+---
+
+## D-KNOW-02 — Separar tipo nativo/origem de classificação Prisma
+
+Tipos e classificações provenientes de fontes externas, contratos históricos ou estrutura interna existente não devem ser destruídos apenas porque o agrupamento de apresentação mudou.
+
+A nova classificação `Hard/Soft + subagrupador` é uma semântica Prisma de organização profissional.
+
+Quando necessário, preservar separadamente:
+
+- tipo nativo da fonte;
+- identidade da fonte;
+- mapping;
+- versão;
+- proveniência;
+- classificação Prisma.
+
+---
+
+## D-KNOW-03 — Não misturar ocupação com competência
+
+Taxonomia ocupacional e taxonomia de competências continuam domínios separados.
+
+Relações ocupação -> competência podem existir, mas não:
+
+- classificam uma Pessoa;
+- criam evidência;
+- criam requisito automaticamente;
+- provam que a Pessoa possui a competência.
+
+---
+
+# 10. Aplicação na interface de administração
+
+## D-UX-01
+
+O fluxo de criar/associar um conceito de competência não deve exigir que o administrador escolha entre os seis agrupadores legados como decisão principal.
+
+A classificação principal deve utilizar:
+
+1. Hard Skill / Soft Skill;
+2. subagrupador compatível.
+
+---
+
+## D-UX-02
+
+A interface deve tornar a classificação compreensível por meio de:
+
+- nome do macrogrupo;
+- nome do subagrupador;
+- definição curta;
+- exemplos;
+- regra/pergunta de classificação.
+
+O administrador não deve precisar conhecer a implementação da Knowledge ou nomes técnicos internos.
+
+---
+
+## D-UX-03 — Compatibilidade entre macrogrupo e subagrupador
+
+A UI e o backend devem impedir combinações inválidas.
+
+Exemplo proibido:
+
+```text
+Soft Skill -> Tecnologias, Ferramentas e Equipamentos
+```
+
+---
+
+## D-UX-04 — Classificação existente
+
+Conceitos já existentes devem ser apresentados na nova organização quando houver classificação segura.
+
+Ambiguidade real deve permanecer pendente de curadoria.
+
+Não reclassificar silenciosamente por similaridade lexical.
+
+---
+
+# 11. Impacto em Pessoa e Perfil
+
+## D-PER-01
+
+O Perfil deve ser capaz de apresentar a competência pela nova estrutura:
+
+```text
+Macrogrupo -> Subagrupador -> Conceito
+```
+
+ e, separadamente, as naturezas de evidência existentes para a Pessoa.
+
+---
+
+## D-PER-02
+
+Exemplo esperado:
+
+```text
+AWS
+Hard Skill
+Tecnologias, Ferramentas e Equipamentos
+
+Evidências:
+- Declarado
+- Contextualizado
+- Certificado
+- Verificado por Assessment
+- Habilidade Evidenciada
+```
+
+Apenas as naturezas realmente sustentadas devem aparecer.
+
+---
+
+## D-PER-03
+
+A classificação taxonômica nunca deve ser mostrada como evidência de que a Pessoa possui a competência.
+
+---
+
+# 12. Aplicação futura em inteligência de pessoas
+
+A estrutura deve ser compatível com futura leitura de trajetória:
+
+- técnica;
+- gestão;
+- híbrida;
+
+ e com futuras funcionalidades de:
+
+- desenvolvimento;
+- inteligência de pessoas;
+- sucessão;
+- readiness;
+- planejamento de talentos.
+
+## Importante
+
+M8 **não autoriza automaticamente** implementar:
+
+- score Técnica × Gestão;
+- classificação automática de trajetória;
+- 9-Box;
+- sucessão;
+- readiness;
+- PDI;
+- gap de execução;
+- recomendação automática de carreira.
+
+Essas capacidades exigem contratos próprios.
+
+O M8 apenas deve evitar decisões de arquitetura que impeçam essas evoluções.
+
+---
+
+# 13. DEVE
+
+### Estrutura
+
+- **D-01** — Substituir a organização operacional principal baseada em `Habilidades / Competências / Conhecimentos / Tecnologia e Ferramentas / Métodos e Práticas / Certificações` pela classificação `Hard Skills / Soft Skills` com subagrupadores.
+- **D-02** — Hard Skills possuem exatamente os cinco subagrupadores definidos neste contrato.
+- **D-03** — Soft Skills possuem exatamente os quatro subagrupadores definidos neste contrato.
+- **D-04** — Cada conceito possui um único macrogrupo e um único subagrupador principal.
+- **D-05** — Casos ambíguos não são classificados automaticamente.
+- **D-06** — Certificação deixa de ser agrupador principal de competência e passa a ser credencial/evidência relacionada ao conceito.
+- **D-07** — Classificação do conceito e qualificação da evidência da Pessoa são dimensões distintas.
+- **D-08** — Evidências são acumulativas e não destrutivas.
+- **D-09** — Importação de currículo pode produzir declaração e contextualização, mas nunca assessment verificado ou habilidade prática evidenciada.
+- **D-10** — Assessment Prisma qualifica conhecimento como `Verificado por Assessment`, sem equivaler automaticamente a habilidade prática.
+- **D-11** — Habilidade Evidenciada exige aplicação profissional real sustentada por evidência organizacional autorizada.
+- **D-12** — Ausência de evidência permanece neutra.
+- **D-13** — Preservar proveniência, método, versão e origem de cada evidência.
+- **D-14** — Reutilizar identidades canônicas e Knowledge existentes.
+- **D-15** — Preservar compatibilidade histórica e tipos nativos/fontes quando necessários.
+- **D-16** — Taxonomia ocupacional continua separada da Taxonomia de Competências.
+- **D-17** — Backend e UI devem impedir combinações inválidas de macrogrupo/subagrupador.
+- **D-18** — O operador deve compreender a classificação sem depender de terminologia técnica interna.
+- **D-19** — M5.1 deve ser reutilizado para assessment quando compatível; não criar motor paralelo.
+- **D-20** — O novo modelo deve ser genérico para diferentes setores, incluindo tecnologia, indústria, serviços, varejo, finanças, saúde e indústria química, sem criar agrupadores setoriais de primeiro nível.
+
+---
+
+# 14. PROIBIDO
+
+- **P-01** — Não usar `Certificações` como família principal de competência.
+- **P-02** — Não misturar natureza do conceito com tipo de evidência.
+- **P-03** — Não criar conceito duplicado para representar `declarado`, `certificado`, `verificado` ou `evidenciado`.
+- **P-04** — Não transformar autorrelato de currículo em Habilidade Evidenciada.
+- **P-05** — Não transformar contexto do próprio currículo em verificação independente.
+- **P-06** — Não transformar certificação em assessment Prisma.
+- **P-07** — Não transformar assessment em evidência automática de performance real.
+- **P-08** — Não usar ausência como zero, deficiência ou incapacidade.
+- **P-09** — Não introduzir score, ranking ou nível de domínio sem contrato específico.
+- **P-10** — Não classificar por simples igualdade de rótulo quando houver ambiguidade semântica.
+- **P-11** — Não destruir tipo nativo, origem, mapping ou versão de fonte externa por causa da nova classificação Prisma.
+- **P-12** — Não alterar fórmula de matching ou Prisma Score como efeito colateral.
+- **P-13** — Não criar nova taxonomia ocupacional.
+- **P-14** — Não criar nova fonte externa, API, provider ou modelo de IA sem decisão específica.
+- **P-15** — Não implementar sucessão, PDI, 9-Box ou gap de execução dentro deste movimento.
+- **P-16** — Não usar dados reais/PII de currículos como fixture versionada de QA.
+
+---
+
+# 15. FORA DE ESCOPO
+
+- **F-01** — Fórmula de score Técnica × Gestão.
+- **F-02** — Classificação automática de trajetória em Técnica / Híbrida / Gestão.
+- **F-03** — 9-Box.
+- **F-04** — Succession Readiness.
+- **F-05** — Plano de Desenvolvimento Individual.
+- **F-06** — Fórmula de Gap de Execução.
+- **F-07** — Novo motor de assessment.
+- **F-08** — Novo fluxo de feedback 360°.
+- **F-09** — Novo fluxo de 1-on-1.
+- **F-10** — Nova avaliação de desempenho.
+- **F-11** — Verificação externa automática de certificações.
+- **F-12** — Mudança de matching, Prisma Score ou grupos A/B/C.
+- **F-13** — Mudança no parser/OCR além do necessário para preservar os conceitos já extraídos.
+- **F-14** — Implementação de Lominger como taxonomia do Prisma.
+
+---
+
+# 16. AUTONOMIA TÉCNICA
+
+- **A-01** — Codex pode escolher nomes físicos de campos/tabelas/contratos, preservando a semântica deste Agreement.
+- **A-02** — Pode decidir entre projeção, coluna adicional, relação taxonômica ou estrutura equivalente, desde que não duplique identidade canônica.
+- **A-03** — Pode preservar tipos legados internamente e projetar a nova classificação na UI.
+- **A-04** — Pode definir estratégia de migração/backfill não destrutiva para conceitos já classificados.
+- **A-05** — Pode criar índices e queries necessários.
+- **A-06** — Pode ajustar componentes de UX já existentes sem redesenhar superfícies fora do escopo.
+- **A-07** — Pode reutilizar estruturas M7.2/M7.4 e M5.1 quando tecnicamente compatíveis.
+- **A-08** — Pode definir microcopy final em pt-BR, preservando exatamente o significado dos termos acordados.
+- **A-09** — Pode criar fixtures sintéticas equivalentes aos exemplos deste contrato.
+- **A-10** — Pode manter nomenclaturas técnicas legadas para compatibilidade, desde que elas deixem de determinar a classificação operacional apresentada ao usuário.
+
+---
+
+# 17. PENDENTES
+
+**Q-01 — Nenhuma pendência material de produto conhecida no momento.**
+
+Se durante a inspeção do repositório o Codex descobrir que algum dos seis agrupadores atuais possui significado persistido necessário para integração externa, fonte oficial ou contrato histórico, isso **não autoriza destruí-lo**.
+
+Nesse caso:
+
+1. preservar o dado técnico legado;
+2. implementar a nova classificação Prisma em camada compatível;
+3. registrar a compatibilidade;
+4. somente abrir nova Q-* se houver conflito real que altere comportamento de produto acordado neste contrato.
+
+---
+
+# 18. CRITÉRIOS DE ACEITE
+
+### Classificação
+
+- **CA-01** — `Microsoft Excel` é classificado como `Hard Skill -> Tecnologias, Ferramentas e Equipamentos`.
+- **CA-02** — `Gestão de Projetos` é classificado como `Hard Skill -> Gestão, Negócios e Estratégia`.
+- **CA-03** — `Comunicação` é classificada como `Soft Skill -> Interpessoais`.
+- **CA-04** — `Resiliência` é classificada como `Soft Skill -> Intrapessoais`.
+- **CA-05** — `Resolução de Problemas` é classificada como `Soft Skill -> Cognitivo-Executivas`.
+- **CA-06** — `Visão Estratégica` é classificada como `Soft Skill -> Liderança`.
+- **CA-07** — `Planejamento Estratégico` é classificado como `Hard Skill -> Gestão, Negócios e Estratégia`.
+- **CA-08** — `SAP` e `HPLC` entram no mesmo subagrupador estrutural, demonstrando neutralidade setorial da taxonomia.
+
+### Evidência
+
+- **CA-09** — Currículo contendo apenas `AWS` cria no máximo declaração.
+- **CA-10** — Currículo contendo `AWS` e uma experiência concreta com AWS pode registrar declaração + contextualização.
+- **CA-11** — Nenhum currículo isolado produz `Habilidade Evidenciada`.
+- **CA-12** — Resultado direto de assessment compatível pode projetar `Verificado por Assessment`.
+- **CA-13** — Assessment não cria automaticamente `Habilidade Evidenciada`.
+- **CA-14** — Certificação e assessment podem coexistir.
+- **CA-15** — Ausência de assessment aparece de forma neutra e não como nota zero.
+- **CA-16** — Nova evidência não apaga declaração, contexto, certificação ou evidência anterior.
+
+### Knowledge e compatibilidade
+
+- **CA-17** — Um conceito canônico já existente não é duplicado apenas por causa da nova estrutura.
+- **CA-18** — Tipos/mappings nativos de fontes continuam recuperáveis.
+- **CA-19** — Taxonomia ocupacional permanece semanticamente independente.
+- **CA-20** — Ambiguidade de classificação não gera associação automática.
+- **CA-21** — Conceitos existentes podem ser projetados na nova estrutura sem reimportar currículo.
+- **CA-22** — Histórico de Perfil e evidência não é reescrito destrutivamente.
+
+### UX e autorização
+
+- **CA-23** — O administrador não precisa escolher entre os seis agrupadores antigos como classificação principal.
+- **CA-24** — A UI impede macrogrupo/subagrupador incompatível.
+- **CA-25** — Definição e exemplos tornam a decisão operacional compreensível.
+- **CA-26** — RLS, tenant scope e autoridade existente permanecem.
+- **CA-27** — Nenhum dado cross-tenant é exposto pela nova classificação.
+
+### Regressão
+
+- **CA-28** — Matching e Prisma Score mantêm comportamento semântico vigente.
+- **CA-29** — M5.1 continua funcional nos fluxos existentes.
+- **CA-30** — Perfil vigente permanece legível durante compatibilidade/migração.
+- **CA-31** — Testes usam dados sintéticos, não o currículo real fornecido na discussão.
+
+---
+
+# 19. Superfícies que o Codex deve inspecionar antes de implementar
+
+O Execution Prompt futuro deverá mandar o Codex localizar e ler apenas os owners e código diretamente envolvidos, incluindo, conforme existirem no baseline real:
+
+- `AGENTS.md`;
+- seção pertinente de `docs/ai-context/PRISMA_CURRENT_STATE.md`;
+- `docs/architecture/contracts.md`;
+- owners de Professional Concept / Knowledge;
+- owners de Perfil Profissional;
+- Agreement/Execution/AoT vigentes de M7.2 e M7.4;
+- ADR vigente da Taxonomia Profissional/Competências;
+- owners do M5.1 para o mapeamento de assessment;
+- migrations/RPCs que persistem ou projetam `knowledge_concepts`;
+- backend de busca/curadoria de conceitos;
+- UI de criação/associação/curadoria de competência;
+- UI de Perfil/Competências;
+- testes diretamente relacionados.
+
+O Codex deve confirmar no código e nas migrations:
+
+1. onde os seis agrupadores legados são persistidos ou derivados;
+2. quais são apenas apresentação;
+3. quais são necessários para fontes externas;
+4. quais consumidores dependem deles;
+5. se existe enum, constraint, RPC, índice ou contrato que precise de compatibilidade.
+
+Não assumir que documentação prova implementação.
+
+---
+
+# 20. Resultado esperado do M8
+
+Ao final do movimento, o Prisma deve possuir uma linguagem de competências simples para o operador e robusta para evolução futura:
+
+```text
+CONCEITO
+  -> Hard Skill ou Soft Skill
+      -> Subagrupador
+```
+
+separada de:
+
+```text
+PESSOA x CONCEITO
+  -> Declarado
+  -> Contextualizado
+  -> Certificado
+  -> Verificado por Assessment
+  -> Habilidade Evidenciada
+```
+
+O modelo deve permitir responder perguntas diferentes sem misturá-las:
+
+- **O que é esta competência?** -> classificação taxonômica.
+- **A Pessoa diz possuir?** -> declarado.
+- **Há contexto profissional relatado?** -> contextualizado.
+- **Há credencial?** -> certificado.
+- **O conhecimento foi testado?** -> verificado por assessment.
+- **A aplicação real foi comprovada no trabalho?** -> habilidade evidenciada.
+
+Essa separação é a fundação aprovada para futuras capacidades de Talent Intelligence, gestão de pessoas e sucessão, sem implementar essas funcionalidades antecipadamente.
+
+---
+
+## Source: `docs/agreements/agreement-m81-migracao-sistemica-limpeza-controlada.md`
+
+# Agreement Contract — M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada de Dados
+
+**Versão:** 0.1.0
+**Estado:** `pending-product-decisions`
+**Movimento:** M8.1
+**Contrato-base:** Agreement Contract M8 — Redefinição das Regras de Agrupamento de Competências v1.0.0
+**Natureza:** mudança material, arquitetural e destrutiva controlada
+
+> Este contrato é um aditivo operacional ao M8. Ele não substitui as definições de Hard Skills, Soft Skills, subagrupadores e qualificação da relação Pessoa × Conceito já aprovadas no Agreement M8. Ele acrescenta as regras necessárias para executar a migração sistêmica e a limpeza dos dados atuais derivados de importações de currículos.
+
+---
+
+## 1. Objetivo do M8.1
+
+Executar a mudança sistêmica necessária para que o Prisma passe a operar com a nova arquitetura de competências aprovada no M8, incluindo:
+
+1. substituir a classificação operacional legada de competências;
+2. alterar contratos, persistência, projeções e superfícies consumidoras diretamente afetadas;
+3. criar a nova classificação canônica Prisma `Hard Skill / Soft Skill -> subagrupador`;
+4. separar classificação do conceito da qualificação da relação Pessoa × Conceito;
+5. preservar compatibilidade apenas onde necessária para fontes, contratos ou histórico técnico;
+6. limpar os dados derivados das importações de currículos existentes para permitir novo ciclo de testes sobre uma base coerente com a arquitetura M8;
+7. preservar autenticação, autorização, organizações e usabilidade operacional do sistema, com atenção especial ao acesso do Super Admin `harita.super`;
+8. revalidar o fluxo completo de nova importação após a limpeza.
+
+---
+
+# 2. Necessário para o movimento
+
+## D-ARCH-01 — Nova arquitetura M8
+
+Implementar integralmente a arquitetura aprovada no Agreement M8:
+
+```text
+Conceito
+  -> Hard Skill | Soft Skill
+      -> Subagrupador principal
+```
+
+separada de:
+
+```text
+Pessoa × Conceito
+  -> Declarado
+  -> Contextualizado
+  -> Certificado
+  -> Verificado por Assessment
+  -> Habilidade Evidenciada
+```
+
+A implementação não pode fundir essas duas dimensões.
+
+---
+
+## D-ARCH-02 — Agrupadores legados deixam de governar a experiência
+
+Os agrupadores atuais:
+
+- Habilidades;
+- Competências;
+- Conhecimentos;
+- Tecnologia e Ferramentas;
+- Métodos e Práticas;
+- Certificações;
+
+não podem continuar sendo a classificação operacional principal apresentada ao administrador para classificar uma competência.
+
+O Codex deve localizar todos os locais em que esses valores:
+
+- são persistidos;
+- são inferidos;
+- são validados;
+- são usados em filtros;
+- são exibidos;
+- condicionam busca;
+- condicionam matching;
+- condicionam curadoria;
+- condicionam Perfil;
+- condicionam formulários;
+- condicionam testes.
+
+A substituição deve ser sistêmica nas superfícies diretamente envolvidas.
+
+---
+
+## D-ARCH-03 — Compatibilidade legada apenas quando tecnicamente necessária
+
+Caso algum agrupador legado seja necessário para:
+
+- identidade nativa de fonte externa;
+- contrato histórico;
+- leitura de snapshot antigo;
+- compatibilidade de API;
+- rollback;
+
+ele pode permanecer internamente, mas:
+
+1. deve ser explicitamente marcado como legado/técnico;
+2. não pode governar a nova UX;
+3. não pode ser confundido com a classificação canônica M8;
+4. não pode ser reusado silenciosamente como substituto da nova estrutura.
+
+---
+
+## D-ARCH-04 — Classificação canônica
+
+Cada conceito de competência deve possuir:
+
+- um macrogrupo principal;
+- um subagrupador principal compatível.
+
+Hard Skills:
+
+1. Domínios e Especialidades Profissionais;
+2. Tecnologias, Ferramentas e Equipamentos;
+3. Métodos, Processos e Padrões;
+4. Gestão, Negócios e Estratégia;
+5. Idiomas.
+
+Soft Skills:
+
+1. Interpessoais;
+2. Intrapessoais;
+3. Cognitivo-Executivas;
+4. Liderança.
+
+---
+
+## D-ARCH-05 — Casos ambíguos
+
+Classificação incerta não pode ser resolvida por semelhança lexical simples.
+
+Conceito sem classificação segura deve:
+
+- permanecer utilizável conforme a política de compatibilidade definida pelo Codex;
+- ser marcado como pendente de classificação/curadoria;
+- não receber categoria inventada.
+
+---
+
+# 3. Limpeza controlada de dados
+
+A intenção do Product Owner é remover os dados gerados a partir das importações de currículos atuais para que o novo ciclo M8.1 comece sobre dados de Pessoa coerentes com a nova arquitetura.
+
+A limpeza é destrutiva e deve ser executada somente após inventário e plano de deleção.
+
+---
+
+## D-CLEAN-01 — Inventário antes da deleção
+
+Antes de qualquer exclusão, o Codex deve produzir um inventário factual das tabelas, Storage objects e agregados alcançados pelas importações de currículo no ambiente alvo.
+
+O inventário deve distinguir no mínimo:
+
+- autenticação/usuários;
+- grupos e organizações;
+- memberships e papéis;
+- Pessoas;
+- dados privados da Pessoa;
+- resume intakes;
+- documentos;
+- objetos PDF no Storage;
+- processamento/tentativas;
+- extrações por página;
+- extraction drafts;
+- evidência espacial;
+- revisões;
+- revisões de Perfil e mudanças;
+- professional profiles;
+- competências e associações da Pessoa;
+- evidências;
+- inferências;
+- Knowledge observations;
+- Knowledge Inbox;
+- aprendizado adaptativo derivado de currículo;
+- eventos de ingestão;
+- match evaluations;
+- verificação/assessment vinculada a Pessoas;
+- logs/ledgers/auditoria;
+- quaisquer tabelas novas descobertas pelo código ou migrations.
+
+Não executar deleção baseado apenas nesta lista: o repositório e o banco são a autoridade técnica para descobrir o conjunto completo.
+
+---
+
+## D-CLEAN-02 — Preservar a plataforma
+
+A limpeza não deve remover nem invalidar:
+
+- autenticação necessária ao acesso;
+- `platform_users`;
+- grupos organizacionais;
+- organizações;
+- memberships;
+- papéis;
+- permissões;
+- configuração do Super Admin;
+- configuração operacional necessária ao login e navegação;
+- Knowledge oficial/global que não seja dado pessoal derivado de currículo;
+- CBO;
+- ESCO;
+- O*NET;
+- fontes publicadas oficiais;
+- configurações de ambiente;
+- secrets;
+- migrations;
+- contratos;
+- Vagas e Posições, salvo dado explicitamente derivado de Pessoa que precise ser removido por integridade referencial.
+
+O acesso `harita.super` deve permanecer funcional após a limpeza.
+
+---
+
+## D-CLEAN-03 — Usuário e Pessoa são agregados distintos
+
+A existência de uma Pessoa relacionada nominalmente ao mesmo indivíduo de um Usuário da plataforma não autoriza remover ou alterar o Usuário.
+
+A limpeza de dados de Pessoa não pode:
+
+- excluir o login;
+- alterar senha;
+- remover membership;
+- reduzir papel;
+- remover organização ativa;
+- quebrar sessão/autorização do `harita.super`.
+
+---
+
+## D-CLEAN-04 — Exclusão por proveniência
+
+A limpeza deve operar por proveniência real, relações e ownership.
+
+É proibido apagar indiscriminadamente tabelas inteiras quando elas também contêm:
+
+- Knowledge institucional;
+- configuração;
+- dados globais;
+- usuários;
+- organizações;
+- dados não derivados de currículo.
+
+---
+
+## D-CLEAN-05 — Storage
+
+Todo PDF/artefato privado pertencente aos currículos que estiverem no escopo de exclusão deve ser removido do Storage conforme o contrato de deleção existente, sem deixar objeto órfão.
+
+Não apagar bucket ou configuração do Storage.
+
+---
+
+## D-CLEAN-06 — Referências órfãs
+
+Após a limpeza não podem permanecer registros funcionais órfãos que façam a UI:
+
+- listar Pessoa inexistente;
+- mostrar Perfil sem Pessoa;
+- mostrar documento sem owner válido;
+- mostrar pendência de competência de Pessoa apagada;
+- mostrar match de Pessoa apagada;
+- mostrar assessment ativo de Pessoa apagada;
+- contar dados apagados em indicadores operacionais.
+
+---
+
+# 4. Proteção de acesso e usabilidade
+
+## D-AUTH-01
+
+Antes da limpeza, o Codex deve confirmar factual e server-side:
+
+- ID do `platform_user` correspondente ao usuário `harita.super`;
+- papel;
+- status;
+- memberships;
+- organizações acessíveis;
+- mecanismo de autenticação em uso.
+
+Não registrar ou expor senha, token, secret ou PII desnecessária.
+
+---
+
+## D-AUTH-02
+
+Após limpeza e deploy, executar smoke autenticado com `harita.super` cobrindo no mínimo:
+
+1. login;
+2. carregamento do App Shell;
+3. seleção/visibilidade da organização esperada;
+4. acesso a Pessoas;
+5. acesso a Conhecimento;
+6. acesso a Posições/Vagas existentes;
+7. abertura da importação de currículo;
+8. ausência de erro causado por registros removidos.
+
+---
+
+## D-AUTH-03
+
+Se qualquer passo de deleção ameaçar autenticação, membership, papel ou acesso do `harita.super`, a execução deve parar antes da ação destrutiva afetada.
+
+---
+
+# 5. Recriação do ciclo de Pessoa após a limpeza
+
+## D-FLOW-01
+
+Após a limpeza, o Prisma deve continuar apto a:
+
+1. receber novo currículo;
+2. resolver identidade conforme contrato vigente;
+3. criar/vincular Pessoa;
+4. extrair dados;
+5. revisar;
+6. publicar Perfil;
+7. classificar conceitos segundo M8;
+8. registrar declaração/contextualização conforme evidência;
+9. mostrar a nova estrutura no Perfil.
+
+---
+
+## D-FLOW-02
+
+Uma nova importação não pode recriar os agrupadores legados como classificação operacional principal.
+
+---
+
+## D-FLOW-03
+
+Currículo importado após M8.1 pode gerar no máximo:
+
+- Declarado;
+- Contextualizado;
+- credencial/certificação declarada conforme regra aprovada.
+
+Não pode gerar por importação:
+
+- Verificado por Assessment;
+- Habilidade Evidenciada.
+
+---
+
+# 6. Superfícies UX necessárias
+
+O M8.1 deverá alterar apenas as superfícies diretamente envolvidas na nova arquitetura.
+
+### D-UX-01 — Curadoria / associação de conceito
+
+A tela de criar ou associar competência deve apresentar:
+
+- Macrogrupo: Hard Skill / Soft Skill;
+- Subagrupador compatível;
+- conceito;
+- definição/descrição quando disponível;
+- origem/escopo aplicável;
+- indicação clara de pendência se a classificação ainda não for segura.
+
+Os seis agrupadores legados não devem aparecer como escolha principal.
+
+### D-UX-02 — Perfil da Pessoa / Competências
+
+A tela deve organizar conceitos por:
+
+```text
+Hard Skills
+  -> subagrupadores
+
+Soft Skills
+  -> subagrupadores
+```
+
+e mostrar separadamente as evidências da relação Pessoa × Conceito.
+
+### D-UX-03 — Detalhe da competência
+
+O detalhe deve permitir compreender:
+
+- conceito canônico;
+- macrogrupo;
+- subagrupador;
+- termo observado;
+- origem;
+- natureza(s) de evidência;
+- documento/contexto quando disponível;
+- assessment quando existir;
+- evidência prática quando futuramente existir.
+
+Não mostrar força, score ou nível inexistente.
+
+---
+
+# 7. PROIBIDO
+
+- **P-01** — Não apagar `platform_users` como efeito da limpeza de currículos.
+- **P-02** — Não apagar Auth users por correspondência de nome/e-mail com Pessoa.
+- **P-03** — Não remover memberships ou papéis por causa da deleção de Pessoa.
+- **P-04** — Não prejudicar o acesso do `harita.super`.
+- **P-05** — Não truncar indiscriminadamente tabelas mistas.
+- **P-06** — Não apagar CBO, ESCO, O*NET ou Knowledge oficial/global não pessoal.
+- **P-07** — Não apagar Vagas/Posições apenas porque matches apontavam para Pessoas removidas.
+- **P-08** — Não manter referências funcionais órfãs.
+- **P-09** — Não converter agrupadores legados em aliases da nova taxonomia sem significado explícito.
+- **P-10** — Não criar automaticamente `Habilidade Evidenciada` a partir de currículo.
+- **P-11** — Não criar automaticamente `Verificado por Assessment` a partir de currículo ou certificação.
+- **P-12** — Não alterar matching/Prisma Score por conveniência da migração.
+- **P-13** — Não executar `db reset`, `drop schema`, `truncate cascade` global ou equivalente sem escopo provado.
+- **P-14** — Não usar usuário, senha, token ou secret em fixtures/logs.
+- **P-15** — Não declarar limpeza concluída apenas porque a UI ficou vazia; provar ausência de resíduos no banco/Storage.
+- **P-16** — Não usar documentação como prova do estado real antes ou depois da execução.
+
+---
+
+# 8. FORA DE ESCOPO
+
+- **F-01** — Implementação de sucessão.
+- **F-02** — 9-Box.
+- **F-03** — PDI.
+- **F-04** — Gap de execução.
+- **F-05** — Score Técnica × Gestão.
+- **F-06** — Nova fórmula de matching.
+- **F-07** — Nova fórmula de Prisma Score.
+- **F-08** — Novo motor de assessment.
+- **F-09** — Novo provider/modelo externo.
+- **F-10** — Redesign global do shell.
+- **F-11** — Limpeza de usuários ou organizações não derivada do objetivo deste movimento.
+
+---
+
+# 9. AUTONOMIA TÉCNICA
+
+- **A-01** — Definir estratégia segura de migration/backfill para a nova classificação.
+- **A-02** — Preservar campos/enum legados internamente para compatibilidade, desde que deixem de governar a UX.
+- **A-03** — Escolher projection/on-read/materialização para classificação M8, respeitando identidade única.
+- **A-04** — Definir ordem técnica de deleção conforme FKs, RLS, Storage e transações.
+- **A-05** — Reutilizar o contrato de exclusão definitiva de Pessoa onde ele for tecnicamente adequado.
+- **A-06** — Criar migration/RPC administrativa específica e auditável se necessário; não usar operação genérica insegura.
+- **A-07** — Definir índices e constraints necessários.
+- **A-08** — Definir microcopy e componentes respeitando o design system atual.
+- **A-09** — Criar fixtures sintéticas para testes.
+- **A-10** — Implementar rollback técnico compatível com a arquitetura descoberta, exceto restauração de dados destruídos sem backup/snapshot prévio.
+
+---
+
+# 10. PENDENTES MATERIAIS
+
+## Q-01 — Pessoas originadas por currículo
+
+Quando uma Pessoa foi criada originalmente por importação de currículo e depois recebeu revisão/curadoria/edições humanas, o M8.1 deve:
+
+**A.** excluir o agregado inteiro da Pessoa e todos os seus dados descendentes;
+ou
+**B.** preservar a Pessoa e remover somente documentos/dados derivados do currículo?
+
+---
+
+## Q-02 — Pessoa correspondente ao `harita.super`
+
+Se existir no Prisma uma **Pessoa** de Bruno criada por currículo, distinta do **Usuário** `harita.super`, devemos:
+
+**A.** excluir essa Pessoa normalmente e preservar apenas o Usuário/acesso;
+ou
+**B.** preservar também essa Pessoa e seu Perfil?
+
+---
+
+## Q-03 — Knowledge derivada de currículo
+
+Quando termos de currículos originaram:
+
+- `knowledge_observations`;
+- Inbox;
+- aliases humanos;
+- conceitos Organization-owned;
+- contribuições/propostas Globais;
+
+devemos:
+
+**A.** remover somente observações/pendências pessoais e preservar conceitos/aliases já aprovados;
+**B.** remover também conceitos/aliases Organization-owned que tenham origem exclusiva nesses currículos;
+**C.** remover toda evolução de Knowledge rastreável exclusivamente aos currículos de teste, inclusive contribuições/propostas ainda não aprovadas?
+
+Knowledge oficial de CBO/ESCO/O*NET permanece preservada em todas as opções.
+
+---
+
+## Q-04 — Assessments e matching vinculados às Pessoas apagadas
+
+Para Pessoas no escopo da limpeza, devemos excluir também:
+
+- convites/tentativas/resultados de assessment;
+- Evidência Demonstrada;
+- `match_evaluations`;
+- demais resultados derivados dessas Pessoas?
+
+**A. Sim, remover tudo que dependa dessas Pessoas.**
+**B. Não, preservar histórico anonimizado quando tecnicamente possível.**
+
+---
+
+## Q-05 — Auditoria mínima após limpeza
+
+Aceita-se preservar **ledger técnico mínimo e não-PII** de operação/deleção para comprovar a limpeza e manter integridade/auditoria?
+
+**A. Sim.**
+**B. Não, deseja-se ausência total de registros históricos relacionados, dentro do que a arquitetura permitir.**
+
+---
+
+## Q-06 — Ambiente alvo da limpeza
+
+A limpeza destrutiva deve ocorrer no **backend remoto atual usado pelo Prisma**, após snapshot/backup técnico e validação, ou apenas local/QA?
+
+**A. Backend remoto atual + frontend hospedado, com execução controlada e smoke.**
+**B. Somente local/QA por enquanto.**
+
+---
+
+# 11. CRITÉRIOS DE ACEITE
+
+- **CA-01** — Nova UX não oferece os seis agrupadores legados como classificação principal.
+- **CA-02** — Hard/Soft e os nove subagrupadores M8 estão implementados e validados.
+- **CA-03** — Combinações macrogrupo/subagrupador inválidas são rejeitadas no backend.
+- **CA-04** — Classificação M8 não duplica identidade canônica.
+- **CA-05** — Certificação é tratada como credencial/evidência, não como macro/subagrupador.
+- **CA-06** — Importação nova produz somente naturezas permitidas pelo contrato.
+- **CA-07** — Todos os registros de currículo no escopo aprovado da limpeza foram removidos.
+- **CA-08** — Todos os objetos Storage no escopo foram removidos.
+- **CA-09** — Nenhum resíduo funcional órfão permanece.
+- **CA-10** — CBO/ESCO/O*NET e Knowledge institucional preservados.
+- **CA-11** — Usuários, organizações, memberships e papéis preservados conforme contrato.
+- **CA-12** — `harita.super` autentica e mantém autoridade de Super Admin.
+- **CA-13** — Pessoas apresenta estado vazio/coerente após limpeza quando aplicável.
+- **CA-14** — Um novo currículo sintético pode percorrer intake -> revisão -> publicação após a migração.
+- **CA-15** — Competências desse novo Perfil aparecem na nova estrutura M8.
+- **CA-16** — Matching/Prisma Score não mudaram semanticamente.
+- **CA-17** — Evidência de banco e Storage comprova a limpeza, não apenas a UI.
+- **CA-18** — Testes negativos provam que Auth/Usuário não foi apagado pela deleção de Pessoa.
+- **CA-19** — AoT mapeia D/P para implementação, teste e evidência.
+- **CA-20** — Não há Q-* material aberto no momento da geração do Execution Prompt final.
+
+---
+
+# 12. Referências obrigatórias para o futuro Execution Prompt
+
+O Execution Prompt M8.1 deverá exigir leitura integral de:
+
+1. Agreement Contract M8 aprovado;
+2. este Agreement M8.1 aprovado;
+3. `AGENTS.md`;
+4. seção pertinente de `docs/ai-context/PRISMA_CURRENT_STATE.md`;
+5. owners de Knowledge/Professional Concept;
+6. contratos e ADRs M7.2/M7.4/M7.5/M7.6/M7.7 aplicáveis;
+7. owners de Pessoa/currículo/revisão/publicação;
+8. owners e implementação da exclusão definitiva de Pessoa;
+9. owners do M5.1 quando assessment for projetado como conhecimento verificado;
+10. migrations/RPCs/FKs/RLS/Storage diretamente afetados;
+11. `docs/product/ux-foundation.md` para as referências visuais.
+
+O Codex deve confirmar no código, banco e ambiente o que realmente existe antes de qualquer deleção ou migração.
+
+---
+
+# 13. Regra de bloqueio
+
+**Não gerar nem executar o Execution Prompt final do M8.1 enquanto Q-01 a Q-06 não estiverem resolvidas pelo Product Owner.**
+
+A limpeza proposta envolve dados destrutivos, identidade Pessoa × Usuário, Knowledge derivada, assessments, matching, auditoria e ambiente remoto. Essas decisões alteram materialmente escopo, dados, segurança e rollback.
+
+---
+
 ## Source: `docs/ai-context/PRISMA_AI_REFERENCE.md`
 
 ---
@@ -549,13 +2530,19 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.44.3
-last_verified: 2026-09-19
+version: 2.44.4
+last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
 
+## M8.1 em implementação local, ainda sem rollout
+
+O Agreement M8 v1.0.0, aditivo M8.1 v1.1.0 e imagem normativa de nove telas autorizam a migração de competências. A branch `codex/m81-competency-architecture` contém schema aditivo para dois macrogrupos, nove subagrupadores globais, futuros subagrupadores tenant-scoped e classificação principal versionada dos conceitos Knowledge. Backfill automático só para tecnologias com mapping oficial O*NET; demais classificações aguardam decisão humana. A projeção M8 separa Declaração, Contexto, Certificado, Assessment e habilidade prática; vínculo factual de experiência/credencial exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional são preservados. QA PostgreSQL sintético com rollback passou para classificação, escopo, aprovação, curadoria e natureza da evidência. Ainda não há prova de comparação visual completa, backup/limpeza, smoke real nem implantação; M8.1 não está ativo em produção. ADR-070 e AoT M8.1 acompanham a evidência.
+
 ## Resumo operacional para prompts
+
+M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. QA sintético local passou; comparação visual completa, backup/limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
 
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
@@ -2386,6 +4373,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+M8.1 em implementação local: `competency-taxonomy-2.0.0` acrescenta classificação principal versionada sobre conceitos Knowledge existentes; `person-professional-evidence-4.0.0` separa Declaração, Contexto, Certificado, Verificação por Assessment e Habilidade Evidenciada, com fontes cumulativas; `profile-competency-curation-5.0.0` exige subagrupador para proposta nova. Migrations aditivas e RPCs `_v2`/`_v5`/`_v6` preservam contratos históricos. Fonte curricular não qualifica Assessment nem habilidade prática. ADR-070 e AoT M8.1 são as referências; ativação remota não é presumida.
+
 Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `parser-ia-hosted-transport-1.0.0` (ADR-059), owner operations/security, cabeçalhos sessão/organização e gateway. Não alteram `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0 nem `parser-ia` 1.0.0. Status do pipeline serial e rollout em `docs/qa/aot-production-resume-quality-pipeline.md`; rollback para imagem web anterior e interrupção do túnel.
 
 ## Política
@@ -2736,6 +4725,12 @@ Flags não substituem autorização, RLS, migration, contrato ou aprovação de 
 
 # Arquitetura da Fundação de Conhecimento
 
+## M8.1: classificação sistêmica de competências (implementação local)
+
+O Agreement M8 v1.0.0 e o aditivo M8.1 v1.1.0 definem Hard Skills, Soft Skills e nove subagrupadores. `competency_macro_groups` e `competency_subgroups` persistem as definições; `knowledge_competency_classifications` liga um conceito canônico da Knowledge ao subagrupador principal atual com histórico de versões. O conceito Global só aceita subagrupador Global; um subagrupador de organização só classifica conceito da mesma organização. O schema prevê linhas organizacionais para cadastro futuro, sem expor edição neste movimento. Os seis tipos nativos da Knowledge continuam como proveniência e não governam a apresentação M8.
+
+Somente conceitos `technology` com mapping oficial O*NET recebem H2 por backfill inequívoco. Os demais aguardam classificação humana. As RPCs `_v2`/`_v5` e a projeção de evidências `_v6` aplicam essa estrutura sem alterar a identidade dos conceitos, a taxonomia ocupacional ou o matching. A tabela `person_competency_evidence_links` guarda vínculos humanos de experiência/credencial ao Perfil publicado; Assessment permanece fonte própria e nenhuma fonte de currículo cria Habilidade Evidenciada. ADR-070 e AoT M8.1 registram validação e rollout separadamente.
+
 O pipeline passa a ser `documento -> evidência -> termo observado -> normalização -> relações -> inferência -> Perfil Prisma`. `knowledge_observations` preserva o termo e as versões Global/Organization usadas; `knowledge_inbox` deduplica pendências por fingerprint e guarda somente IDs de evidência.
 
 `knowledge_concepts`, `knowledge_terms`, `knowledge_relations` e `knowledge_external_mappings` formam a ontologia Prisma. Escopo global exige `organization_id = null`; escopo organizacional exige tenant. A resolução consulta primeiro termos aprovados da empresa e depois a base global. Mais de um candidato ou alias marcado como ambíguo retorna `ambiguous`.
@@ -2986,6 +4981,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M8.1 (2026-09-20, implementação local): `competency-taxonomy-2.0.0`, `person-professional-evidence-4.0.0` e `profile-competency-curation-5.0.0` são contratos novos e aditivos; versões históricas permanecem. A decisão de versão pública depende da entrega validada e publicada. Até então, `PRISMA_RELEASE_HISTORY` continua em v1.7.6, sem afirmar ativação M8.1. ADR-070 e AoT M8.1.
 
 Regularização de proposta legada M7.7 (2026-09-19): a transição autenticada `transition_legacy_knowledge_proposal` reaproveita a aprovação local e o enfileiramento Global já aprovados, com motivo humano e operação atômica. A publicação de termos ignora aliases redundantes com o canônico, mantendo o payload e a auditoria originais; a pendência Global recebe rótulo legível. É uma correção de compatibilidade para propostas anteriores ao M7.7, sem nova entrega numerada; Prisma permanece v1.7.6. A execução real e seus limites são registrados em `docs/qa/aot-m77-legacy-company-proposal-transition.md`.
 
@@ -6969,6 +8966,32 @@ Não há nova Knowledge, provider, embedding ou pesquisa automática. A extensã
 
 ---
 
+## Source: `docs/decisions/ADR-070-m81-competency-architecture.md`
+
+# ADR-070 — Arquitetura sistêmica de competências M8.1
+
+Status: implementação local em validação. Decisão de produto: Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0, com as decisões posteriores de Bruno registradas no aditivo.
+
+## Contexto e decisão
+
+A Knowledge já fornece identidade canônica, termos, aliases, fontes e escopos. Os seis tipos históricos continuam necessários para ingestão e proveniência, mas não representam a estrutura de Hard Skills e Soft Skills. Criar outra base de conceitos duplicaria identidade e produziria equivalências artificiais.
+
+M8.1 mantém `knowledge_concepts.id` e acrescenta três tabelas: `competency_macro_groups` guarda as duas definições globais; `competency_subgroups` guarda os nove subagrupadores globais e admite linhas de uma organização; `knowledge_competency_classifications` liga cada conceito aprovado a um subagrupador principal atual, com versões históricas e `organization_id` persistido para linhas tenant-owned. A FK, a unicidade parcial e o trigger protegem integridade e escopo inclusive em escrita direta. Conceito global só aceita subagrupador global; subagrupador organizacional só classifica conceito da mesma organização. Organização pode usar a estrutura global. Cadastro e edição de subagrupadores pela UI ficam para outro movimento.
+
+O backfill determinístico usa apenas o tipo `technology` proveniente de mapping oficial O*NET para H2. Os demais conceitos existentes ficam pendentes até decisão humana; o tipo nativo, aliases, fontes e taxonomia ocupacional não são reescritos. Propostas novas de competência exigem subagrupador compatível na aprovação. A curadoria contextual, complemento de Posição e aprovação da Knowledge reutilizam os fluxos e auditoria existentes.
+
+A relação Pessoa × conceito continua uma projeção do Perfil publicado, Knowledge e Assessment. Declaração, contexto factual, credencial, resultado de Assessment e habilidade prática são naturezas diferentes e cumulativas. A nova tabela `person_competency_evidence_links` registra somente vínculo humano a experiência publicada ou credencial declarada, com trecho e justificativa; currículo e certificado não geram verificação ou habilidade prática. Sem fonte de prática organizacional suportada neste movimento, não existe escrita de `demonstrated_skill`.
+
+## Compatibilidade, risco e reversão
+
+RPCs e contratos M8 têm nomes/versões novos; os anteriores permanecem para consumidores históricos. Matching, Prisma Score, Assessment e snapshots anteriores não mudam. RLS de leitura e RPCs administrativas impõem tenant e papel fora do frontend. A projeção falha fechada em versão/tenant inválido. O rollback de interface retorna ao consumidor anterior; os dados novos permanecem até uma reversão de schema explicitamente planejada. A limpeza de dados do M8.1 é uma operação separada e só pode ocorrer após backup, inventário de proveniência, prova das guardas e plano de Storage.
+
+## Evidência
+
+Migrations `20260920110000`, `20260920111000`, `20260920111500` e `20260920112000`; QA sintético transacional em `supabase/qa/m81_competency_verification.sql`; contratos TypeScript e AoT M8.1. A aprovação deste ADR não afirma rollout remoto.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -7278,6 +9301,33 @@ Para um Super Admin, o fluxo completo é:
 5. Ao finalizar, a versão passa a ser corrente, a versão anterior deixa de ser corrente, o staging é removido e a Governança passa a exibir a data de publicação e a contagem publicada. Uma falha interrompe o processamento sem substituir a versão anterior.
 
 Não existe publicação automática após a checagem. Para CBO, ESCO e O*NET, o princípio é o mesmo: detectar, preparar, validar, revisar e publicar explicitamente. Se a versão ainda estiver apenas `catalogued`, a interface não oferece um botão de publicação falso; primeiro é necessário preparar o pacote oficial e gerar o `diff_ready`.
+
+---
+
+## Source: `docs/operations/m81-cleanup-runbook.md`
+
+# M8.1 — Preflight e limpeza controlada de dados de currículo
+
+Estado: **plano, não executado**. Contrato: Agreement M8.1 v1.1.0, D-14 a D-23/P-01 a P-08/P-13 a P-15/P-21 a P-23. O backend alvo é o projeto Supabase existente `ioldpnqqvobprjiontre`.
+
+## Guardas antes de qualquer exclusão
+
+1. Obter backup técnico recuperável do PostgreSQL remoto por `supabase db dump --linked`/`pg_dump` autenticado, registrar horário, tamanho e hash fora do repositório. O plano Free **não oferece backup automático** no Dashboard. Não ligar/desligar PITR nem contratar plano como atalho.
+2. Copiar separadamente todos os objetos Storage no escopo para destino privado, com inventário de bucket/path, tamanho e checksum, antes de excluí-los. [Backups de banco não contêm os objetos](https://supabase.com/docs/guides/platform/backups).
+3. Testar leitura/restauração do dump em ambiente isolado sem publicar dados pessoais. Confirmar que o backup e as cópias de Storage cobrem o mesmo corte temporal; suspender novas importações durante o corte ou revalidar fingerprints imediatamente antes da exclusão.
+4. Confirmar server-side `harita.super`: exatamente um `platform_users`, Auth existente, status ativo, perfil `super_admin` e memberships atuais. Não incluir Auth/memberships no conjunto a excluir.
+5. Montar lista de Pessoas pelo vínculo `resume_intakes.resolution_type='created_new_person'` e `resolved_person_id`, agrupada por organização. `latest_source_type` isolado não prova origem. Em 2026-09-20 havia oito Pessoas com criação por intake rastreável e duas sem intake resolvido; uma destas tinha `latest_source_type=resume_pdf` e permanece ambígua. Uma Pessoa criada por intake tem também outro intake vinculado. Exigir prova individual de qualquer linha adicional sem intake antes de incluí-la.
+6. Para cada Pessoa elegível, usar `preview_person_definitive_deletion` e a saga M5.5 existente para obter fingerprints, plano de Storage, deleção relacional e verificação de resíduos. Não apagar Vaga/Posição; aplicar apenas a desvinculação de ocupante prevista no contrato vigente. Não criar Pessoa, Knowledge ou decisão humana de teste em produção.
+7. Para Knowledge, construir grafo de origem a partir de `knowledge_observations`, `knowledge_inbox.observation_ids`, propostas, conceitos e aliases; eliminar apenas nós sem proveniência independente, fonte oficial ou uso compartilhado. CBO/ESCO/O*NET e conceitos institucionais ficam fora. Não inferir exclusividade de coincidência textual ou do nome do usuário.
+8. Examinar `person_deletion_operations` e `person_deletion_storage_items` existentes antes de decidir se um registro exclusivamente ligado ao conjunto pode ser removido. Caso uma regra estrutural obrigatória ou imutável impeça, bloquear essa parte e registrar o conflito no AoT, sem corromper a auditoria.
+
+## Execução e verificação
+
+Executar lote tenant-scoped, idempotente e revalidado pelo servidor; Storage e DB seguem a ordem exigida pela saga M5.5. Repetir contagens de Pessoas/intakes/documentos, dependências de Assessment/matching, Storage e referências órfãs. Confirmar preservação de Auth/memberships, Knowledge independente e Vagas/Posições. Depois fazer smoke autenticado de login, App Shell, organizações, Pessoas, Conhecimento, Posições/Vagas, nova importação sintética, revisão, publicação e Perfil M8. Registrar somente contagens/hashes no AoT.
+
+## Parada obrigatória
+
+Não executar exclusão quando faltar backup verificável de DB ou objetos Storage, autorização server-side, exclusividade de proveniência, contrato de desvinculação ou capacidade de verificar resíduos. A aprovação geral da implementação M8.1 não transforma uma linha ambígua em alvo seguro.
 
 ---
 
@@ -12316,6 +14366,106 @@ Nenhum desvio conhecido do acordo. O resultado de dados solicitado está confirm
 
 ---
 
+## Source: `docs/qa/aot-m81-competency-architecture.md`
+
+# AoT — M8.1 Migração Sistêmica da Arquitetura de Competências
+
+Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` v1.0.0 e aditivo `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.0. Prompt: `docs/qa/execution-m81-competency-architecture.md`. Estado deste AoT: **PARCIAL**, em 2026-09-20. `PASS` abaixo significa prova local ou leitura remota específica, nunca entrega completa.
+
+## Matriz de Acordos
+
+| ID | Implementação e prova | Status | Limite |
+| --- | --- | --- | --- |
+| D-01 | `competency_macro_groups`, `competency_subgroups`; QA SQL 2/9 | PASS | Local |
+| D-02 | FK classificação → subagrupador, unicidade da linha corrente; QA SQL | PASS | Local |
+| D-03 | Projeção `person-professional-evidence-4.0.0`; testes TS e SQL | PASS | Local |
+| D-04 | Tipo nativo `certification` excluído da classificação e projeção; credencial como evidência vinculada | PASS | Local |
+| D-05 | Links cumulativos; QA SQL com contexto e certificado simultâneos | PASS | Local |
+| D-06 | Currículo só produz declaração e vínculo contextual/credencial humano; teste negativo SQL | PASS | Local |
+| D-07 | M5.1 é projetado como `verified_assessment` quando vigente; teste de contrato | PARTIAL | Sem jornada real M5.1 |
+| D-08 | Sem escrita de habilidade prática a partir de currículo; teste negativo SQL | PASS | Fonte organizacional própria ainda indisponível |
+| D-09 | Pendência explícita e ausência neutra; testes de domínio | PASS | Local |
+| D-10 | FK usa `knowledge_concepts.id`; sem catálogo paralelo | PASS | Local |
+| D-11 | RPC e testes M7.1 existentes preservados; 22 regressões dirigidas PASS | PASS | Local |
+| D-12 | UI M8 agrupa por Hard/Soft/subagrupador, não pelos seis tipos | PARTIAL | Falta comparação visual e smoke real |
+| D-13 | RPCs, trigger, RLS, cliente e UI rejeitam escopo/natureza inválidos; QA SQL | PASS | Local |
+| D-14 | Inventário: 8 Pessoas com criação por intake rastreável | BLOCKED | Backup e descarte remoto pendentes |
+| D-15 | Uma Pessoa com origem de currículo sem intake resolvido permanece ambígua | BLOCKED | Não há prova de origem exclusiva |
+| D-16 | Leitura remota: 1 `platform_users`, 1 Auth e 1 Super Admin ativo para `harita.super` | PARTIAL | Preservação pós-limpeza não testada |
+| D-17 | Sem exclusão de Knowledge | BLOCKED | Proveniência exclusiva e backup não fechados |
+| D-18 | CBO/ESCO/O*NET sem mutação; backfill estruturado só O*NET technology | PARTIAL | Preservação pós-limpeza pendente |
+| D-19 | Saga M5.5 existente inspecionada | BLOCKED | Exclusão dependente pendente |
+| D-20 | Storage não foi removido | BLOCKED | Backup de objetos e deleção pendentes |
+| D-21 | FKs e QA local do novo schema | PARTIAL | Ausência de órfãos pós-limpeza pendente |
+| D-22 | Projeto remoto identificado `ioldpnqqvobprjiontre`; sem escrita remota | BLOCKED | Plano Free sem backup automático; dump DB e cópia Storage necessários |
+| D-23 | Nenhum ledger novo criado | PARTIAL | Ledger pessoal histórico M5.5 só pode ser tratado após inventário/backup |
+| D-24 | Contratos intake/Perfil preservados | NOT TESTED | Falta novo ciclo sintético real |
+| D-25 | Sem mudança de matching/score no diff; regressões M7.1 dirigidas | PARTIAL | Smoke de matching faltante |
+| D-26 | ADR-070, owners e Context Pack atualizados; geração/check PASS | PARTIAL | AoT e estado de rollout requerem fechamento |
+| D-27 | Contratos persistidos versionados; versão pública atual mantida | PARTIAL | Registro de entrega depende de validação/publicação |
+| D-28 | QA SQL e testes TS usam dados sintéticos | PASS | Local |
+| D-29 | RLS, papéis, escopo cruzado e escrita direta negativos no PostgreSQL local | PASS | Sem smoke remoto autenticado |
+| D-30 | Imagem de nove telas registrada como referência normativa no Agreement/Prompt | PARTIAL | Comparação same-state/same-data/same-viewport faltante |
+| D-31 | Três tabelas com FKs, dois macros e nove subgrupos; QA SQL | PASS | Local |
+| D-32 | Global/organização protegidos por trigger, RPC e RLS; QA negativo | PASS | Local |
+| D-33 | Schema admite subgrupo organizacional tenant-scoped; UI sem cadastro/edição | PASS | Local |
+
+## Proibições verificadas
+
+### Contrato-base M8 v1.0.0
+
+| IDs | Implementação/prova | Status e limite |
+| --- | --- | --- |
+| D-01 a D-04 | Dois macrogrupos, H1–H5, S1–S4 e FK única corrente; QA SQL | PASS local |
+| D-05 | Conceitos sem fonte inequívoca ficam pendentes; teste negativo SQL | PASS local |
+| D-06 a D-08 | Credencial separada, evidências por natureza e links cumulativos | PASS local |
+| D-09 a D-11 | Currículo não produz Assessment/prática; M5.1 é fonte de verificação | PARTIAL: falta jornada M5.1 real |
+| D-12 a D-16 | Ausência neutra, proveniência/versão, Knowledge existente, tipos e taxonomia ocupacional preservados | PASS local |
+| D-17 a D-18 | FK/trigger/RPC/UI e ajuda com definição, exemplos e pergunta de classificação | PARTIAL: sem QA visual autenticada |
+| D-19 a D-20 | M5.1 reaproveitado, nove subgrupos genéricos sem setor no primeiro nível | PASS local |
+| D-UX-01 a D-UX-04 | Formulários usam Hard/Soft/subgrupo e exibem significado; pendentes não são reclassificados lexicalmente | PARTIAL: comparação visual pendente |
+| P-01 a P-03 | Credencial não é família; natureza da evidência não muda identidade do conceito | PASS local |
+| P-04 a P-08 | Negativos SQL para currículo, certificado, Assessment/prática; ausência neutra | PASS local |
+| P-09 a P-13 | Sem score/nível, equivalência lexical automática, perda de fonte ou mudança de matching/taxonomia ocupacional | PASS local |
+| P-14 a P-16 | Sem provider externo, sucessão/PDI/9-Box/gap ou fixture com PII | PASS local |
+
+| IDs | Prova | Status |
+| --- | --- | --- |
+| P-01 a P-08 | Nenhuma mutação remota de Auth, Pessoas, Knowledge, Vagas ou Storage; FKs e inventário agregados | PARTIAL |
+| P-09 a P-11 | Tipos nativos preservados; currículo e credencial não produzem Assessment ou habilidade prática; QA SQL | PASS |
+| P-12 a P-13 | Matching/score e schema global sem alteração destrutiva | PASS |
+| P-14 a P-15 | Sem PII em logs/AoT e sem alegação de limpeza pela UI | PASS |
+| P-16 a P-17 | Conceitos ambíguos ficam pendentes; evidência referencia identidade Knowledge existente | PASS |
+| P-18 a P-20 | Nenhuma nova fonte/provider/modelo, produto adjacente ou currículo real versionado | PASS |
+| P-21 a P-23 | Sem novo ledger; nenhum histórico pessoal apagado sem avaliar contrato M5.5 | PARTIAL |
+| P-24 a P-25 | Tabelas próprias, FK e rejeição tenant/global em escrita direta/RPC | PASS |
+
+## Fora de escopo preservado
+
+F-01 a F-14: sem sucessão, 9-Box, PDI, gap, nova fórmula de score/matching, novo Assessment, performance, verificação externa de credencial, provider/modelo, redesign global de shell, mudança de OCR/parser ou cadastro/edição de subagrupadores por usuário. O schema apenas prepara a representação organizacional. `PASS` no diff local.
+
+## Fidelidade visual
+
+Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b586ccaa224d3d9bc146827e64822c6b43fb0d58d014a1e576feadbcb3f681`. Topologia principal de Hard/Soft, subagrupadores, Perfil, Knowledge, Pessoas e Configurações foi implementada sobre componentes existentes. **NOT TESTED** para CA-40: ainda não houve render das nove telas com o mesmo estado, dados e viewport nem comparação registrada de proporções, densidade e posição relativa. A imagem é alvo estrutural; pessoas, nomes e contagens nela são ilustrativos.
+
+## Evidência e validação
+
+- PostgreSQL 17 descartável: migrations M8.1 e QA em transação com `ROLLBACK` passaram, incluindo escopo cruzado, RLS, histórico, aprovação, curadoria e naturezas de evidência. Nenhum dado sintético foi persistido no remoto.
+- `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run build`, 11 testes dirigidos de M8/M7.2/M7.6 e 22 regressões dirigidas de M7.1/M7.3/M7.7: PASS. O build Vite avisou sobre chunks grandes e import dinâmico ineficaz, sem falha.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
+- Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
+- Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
+
+## Desvios e bloqueios
+
+Nenhum desvio implementado foi aprovado como substituto de requisito. A limpeza, o rollout e a comparação visual permanecem requisitos pendentes, não itens dispensados. A exclusão real exige backup técnico verificável do banco e dos objetos Storage, inventário da Pessoa sem origem de intake inequívoca e preflight de Knowledge/ledger. `supabase db push` geral e `migration repair` automático continuam vedados pelo ledger histórico.
+
+## Git / QA / produção
+
+Branch local `codex/m81-competency-architecture`, ainda sem commit, push, integração, QA compartilhado ou deploy. Produção permanece no contrato M7 anterior. O trabalho não pode ser declarado concluído enquanto houver `D-*` bloqueado, parcial ou sem teste.
+
+---
+
 ## Source: `docs/qa/aot-person-flow-validation.md`
 
 # AoT: validação reproduzível do fluxo da Pessoa
@@ -14258,6 +16408,1748 @@ AoT com matriz D/P, migration aplicada e validada no ambiente autorizado, evidê
 Contrato congelado: `docs/qa/agreement-m77-legacy-company-proposal-transition.md` 1.0.0. Ler o acordo integralmente. Implementar D-01 a D-05 e CA-01 a CA-04; impedir P-01 a P-04; preservar F-01 a F-03; aplicar A-01 e A-02.
 
 O único registro identificado na inspeção read-only de produção é a proposta `8415c9fa-3986-419c-be32-b2e47209637f`, da organização Prisma, com termo e label “Transformação operacional”, `scope=organization`, `status=awaiting_human_review` e nenhum conceito/alias exato publicado. O ID identifica o alvo operacional, não deve virar regra hard-coded de produto. Antes da ação, reconfirmar seu estado. Processar a decisão do PO por sessão autenticada, nunca por SQL privilegiado com ator simulado. Reutilizar aprovação e enfileiramento existentes em uma transação; revisar negativos, rollback, diff, CI, release plan e resultado real. Nenhuma decisão Global é delegada ao agente.
+
+---
+
+## Source: `docs/qa/execution-m81-competency-architecture.md`
+
+# Prompt Mestre — M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada da Base
+
+**Revisão de execução:** 1.1.0, decisão superveniente do Product Owner em 2026-09-20. Ler integralmente `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` e `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.0 antes de implementar. Esta revisão prevalece nas regras físicas e visuais abaixo sobre referências anteriores deste prompt.
+
+## Adendo vinculante: definições em tabelas e alcance
+
+- Persistir os dois macrogrupos e os nove subagrupadores aprovados em tabelas próprias do PostgreSQL, com vínculo referencial entre eles e com a classificação principal do conceito canônico em `knowledge_concepts`.
+- O macrogrupo do conceito decorre do seu único subagrupador principal; conceitos pendentes não recebem classificação inventada.
+- Conceitos Globais usam somente subagrupadores Globais. Um subagrupador futuro de organização só pode classificar conceitos da mesma organização; conceitos de organização podem usar subagrupadores Globais. Provar as negações por FK/constraint/RPC e RLS, sem confiar apenas na UI.
+- Preparar a representação isolada por organização. Cadastro e edição de subagrupadores por usuários ficam fora do M8.1.
+- Incluir D-31 a D-33, P-24 a P-25, F-14 e CA-38 a CA-40 do Agreement M8.1 v1.1.0 no AoT.
+
+## Adendo vinculante: referência visual
+
+A imagem composta de nove telas enviada pelo Product Owner, preservada em `docs/assets/m81-nine-screen-reference.png` (SHA-256 `f7b586ccaa224d3d9bc146827e64822c6b43fb0d58d014a1e576feadbcb3f681`), substitui as três imagens mencionadas na seção 10 abaixo. As nove composições são referências normativas de arquitetura visual para as superfícies diretamente alteradas. Conteúdo, nomes e contagens são ilustrativos. Preservar topologia, hierarquia, agrupamentos, densidade, ordem da informação, posição relativa das ações e estados mostrados, ajustando à aplicação real e à acessibilidade. Comparar implementação e imagem com estado, dados e viewport equivalentes; registrar no AoT qualquer divergência estrutural.
+
+0. Autoridade, natureza e objetivo
+
+Você está executando o M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada da Base no repositório oficial do Prisma.
+
+Este é um movimento material, arquitetural, de dados, segurança e UX, com ação destrutiva aprovada sobre dados de teste derivados de importações de currículos. Trate-o como mudança de alto risco.
+
+A autoridade de produto é:
+
+decisão explícita mais recente do Product Owner;
+
+Agreement Contract M8 v1.0.0;
+
+Agreement Contract M8.1 v1.0.0;
+
+este Execution Prompt;
+
+contratos/ADRs vigentes do Prisma;
+
+arquitetura e implementação atual.
+
+Não reinterprete requisitos para “simplificar” o movimento. Otimize o como, não o quê.
+
+Objetivo final
+
+Ao terminar, o Prisma deve:
+
+operar com a nova arquitetura de competências M8;
+
+não usar mais os seis agrupadores legados como classificação operacional principal;
+
+manter Taxonomia Ocupacional e Knowledge institucional;
+
+ter removido de forma controlada os dados atuais derivados das importações de currículos conforme este prompt;
+
+preservar Usuários, Auth, organizações, memberships e autoridade;
+
+preservar especificamente a usabilidade e autoridade de harita.super;
+
+estar publicado no backend remoto atual e frontend hospedado;
+
+conseguir importar novamente um currículo sintético e produzir Perfil/competências sob a nova arquitetura;
+
+possuir AoT completo, rastreando requisito -> implementação -> teste -> evidência.
+
+1. Contrato congelado
+
+Implemente integralmente os requisitos abaixo. Eles correspondem ao Agreement aprovado e são vinculantes.
+
+1.1 Nova arquitetura taxonômica
+
+Macrogrupos
+
+Apenas:
+
+Hard Skill
+
+Soft Skill
+
+Hard Skills — subagrupadores
+
+Domínios e Especialidades Profissionais
+
+Tecnologias, Ferramentas e Equipamentos
+
+Métodos, Processos e Padrões
+
+Gestão, Negócios e Estratégia
+
+Idiomas
+
+Soft Skills — subagrupadores
+
+Interpessoais
+
+Intrapessoais
+
+Cognitivo-Executivas
+
+Liderança
+
+Regra
+
+Cada conceito de competência deve possuir um único macrogrupo principal e um único subagrupador principal.
+
+A classificação pertence ao conceito canônico. Não muda por Pessoa, vaga, experiência, assessment ou origem da evidência.
+
+Relações adicionais podem existir na Knowledge, mas não podem criar múltiplas classificações principais na UX.
+
+1.2 Definições normativas dos subagrupadores
+
+Hard > Domínios e Especialidades Profissionais
+
+Campo técnico/profissional que exige domínio de conhecimento.
+
+Exemplos:
+
+Arquitetura de Software;
+
+Cibersegurança;
+
+Engenharia de Processos;
+
+Contabilidade;
+
+Logística;
+
+Supply Chain;
+
+Business Intelligence;
+
+Data Science;
+
+Inteligência Artificial;
+
+Segurança da Informação.
+
+Pergunta operacional:
+
+Este conceito é uma área, disciplina ou especialidade profissional que precisa ser dominada?
+
+Hard > Tecnologias, Ferramentas e Equipamentos
+
+Produto, plataforma, sistema, linguagem, tecnologia, ferramenta ou equipamento concreto.
+
+Exemplos:
+
+Microsoft Excel;
+
+SAP;
+
+SAP EWM;
+
+AWS;
+
+Java;
+
+Power BI;
+
+Salesforce;
+
+SQL;
+
+n8n;
+
+Supabase;
+
+HPLC;
+
+espectrômetro;
+
+LIMS;
+
+KNAPP.
+
+Pergunta operacional:
+
+Este conceito é algo específico que a Pessoa usa, opera, configura, programa ou manipula?
+
+Linguagens de programação ficam aqui. Idiomas humanos não.
+
+Hard > Métodos, Processos e Padrões
+
+Método, framework, prática estruturada, norma, padrão ou forma organizada/repetível de trabalhar.
+
+Exemplos:
+
+Scrum;
+
+Kanban;
+
+Lean;
+
+Six Sigma;
+
+ITIL;
+
+BPM;
+
+BPMN;
+
+PDCA;
+
+HAZOP;
+
+ISO 27001;
+
+ISO 17025;
+
+Design Thinking;
+
+As-Is/To-Be.
+
+Pergunta operacional:
+
+Este conceito representa uma forma estruturada, normatizada ou repetível de realizar trabalho?
+
+Hard > Gestão, Negócios e Estratégia
+
+Conhecimentos/capacidades estruturadas para administrar projetos, operações, processos, recursos, portfólio, negócio ou estratégia.
+
+Exemplos:
+
+Gestão de Projetos;
+
+Gestão de Programas;
+
+PMO;
+
+Gestão Financeira;
+
+Gestão de Operações;
+
+Gestão de Processos;
+
+Gestão da Mudança;
+
+Transformação Digital;
+
+Planejamento Estratégico;
+
+Gestão de Portfólio;
+
+Gestão de Produto;
+
+Gestão de Riscos;
+
+Gestão de Stakeholders;
+
+Gestão de Fornecedores;
+
+Gestão de Capacidade;
+
+Gestão de Prioridades;
+
+Governança de Tecnologia;
+
+Excelência Operacional.
+
+Pergunta operacional:
+
+Este conceito representa saber estruturar ou executar gestão, negócio, operação ou estratégia?
+
+Gestão × Liderança
+
+Planejamento Estratégico -> Hard > Gestão, Negócios e Estratégia.
+
+Visão Estratégica -> Soft > Liderança.
+
+Pensamento Estratégico -> Soft > Cognitivo-Executivas.
+
+Desenvolvimento de Pessoas -> Soft > Liderança.
+
+Não misture disciplina de gestão com comportamento de liderança.
+
+Hard > Idiomas
+
+Idiomas humanos utilizados profissionalmente.
+
+Exemplos:
+
+Português;
+
+Inglês;
+
+Espanhol;
+
+Alemão;
+
+Japonês.
+
+Proficiência declarada não vira verificação.
+
+Soft > Interpessoais
+
+Como a Pessoa se comunica, coopera, negocia e se relaciona.
+
+Exemplos:
+
+Comunicação;
+
+Comunicação Executiva;
+
+Negociação;
+
+Colaboração;
+
+Escuta;
+
+Gestão de Conflitos.
+
+Soft > Intrapessoais
+
+Como a Pessoa administra a si própria.
+
+Exemplos:
+
+Resiliência;
+
+Adaptabilidade;
+
+Autocontrole;
+
+Autoconhecimento;
+
+Disciplina;
+
+Perseverança.
+
+Soft > Cognitivo-Executivas
+
+Como a Pessoa pensa, analisa, decide, organiza mentalmente e resolve.
+
+Exemplos:
+
+Resolução de Problemas;
+
+Pensamento Crítico;
+
+Criatividade;
+
+Tomada de Decisão;
+
+Pensamento Analítico;
+
+Pensamento Estratégico;
+
+raciocínio sistêmico.
+
+Soft > Liderança
+
+Como a Pessoa mobiliza, orienta, desenvolve, influencia ou direciona pessoas/organização.
+
+Exemplos:
+
+Visão Estratégica;
+
+Delegação;
+
+Desenvolvimento de Pessoas;
+
+Formação de Times;
+
+Liderança Multidisciplinar;
+
+mobilização de equipes;
+
+inspiração.
+
+2. Segunda dimensão: relação Pessoa × Conceito
+
+A taxonomia responde o que o conceito é.
+
+A relação Pessoa × Conceito responde o que sabemos sobre a relação daquela Pessoa com o conceito.
+
+As naturezas abaixo são acumulativas e independentes:
+
+Declarado
+
+Contextualizado
+
+Certificado
+
+Verificado por Assessment
+
+Habilidade Evidenciada
+
+Nunca crie cinco conceitos diferentes.
+
+Exemplo:
+
+AWS
+Hard Skill
+Tecnologias, Ferramentas e Equipamentos
+
+Pessoa X:
+- Declarado
+- Contextualizado
+- Certificado
+- Verificado por Assessment
+- Habilidade Evidenciada
+
+Cada natureza deve manter, quando aplicável:
+
+evidência;
+
+origem;
+
+método;
+
+data;
+
+versão;
+
+decisão humana;
+
+vínculo documental/assessment.
+
+2.1 Declarado
+
+Autorrelato explícito.
+
+Exemplos de origem:
+
+currículo;
+
+ATS;
+
+formulário preenchido pela Pessoa.
+
+Não é verificação.
+
+2.2 Contextualizado
+
+Existe relato concreto ligando o conceito a experiência, projeto, responsabilidade ou resultado.
+
+Exemplo:
+
+SAP listado nas competências + experiência narrando participação em migração SAP.
+
+Se a fonte é o próprio currículo, continua autorrelato.
+
+Portanto:
+
+Declarado + Contextualizado != Verificado
+Declarado + Contextualizado != Habilidade Evidenciada
+
+2.3 Certificado
+
+Existe credencial/certificação relacionada ao conceito.
+
+Certificação deixa de ser tipo de conceito.
+
+Certificação e assessment são naturezas diferentes e podem coexistir.
+
+Não promova automaticamente Certificado quando um texto mistura genericamente cursos e certificações sem permitir identificar com segurança qual item é credencial.
+
+Preserve a credencial declarada e a pendência quando necessário.
+
+2.4 Verificado por Assessment
+
+Conhecimento diretamente avaliado por assessment do Prisma com resultado suficiente conforme contrato do instrumento.
+
+Reutilize a infraestrutura M5.1 existente quando compatível.
+
+Não crie segundo motor de assessment.
+
+Não altere Item Bank, geração externa, budget, provider, correção ou segurança do M5.1 além do mínimo necessário para projetar semanticamente o resultado como Verificado por Assessment.
+
+Assessment não gera Habilidade Evidenciada.
+
+2.5 Habilidade Evidenciada
+
+Aplicação profissional real sustentada por evidência organizacional autorizada.
+
+Pode ser suportada futuramente por:
+
+projeto real;
+
+avaliação de gestor;
+
+avaliação de desempenho;
+
+rito organizacional aprovado;
+
+fonte interna comprovável.
+
+Neste M8.1, crie suporte contratual/representacional apenas na medida necessária à arquitetura.
+
+Não invente produtor automático de Habilidade Evidenciada.
+
+Currículo, certificação e assessment isolados nunca geram esse estado.
+
+3. O que deve deixar de existir operacionalmente
+
+Os seguintes agrupadores não podem continuar governando a criação, associação, curadoria ou apresentação principal das competências:
+
+Habilidades;
+
+Competências;
+
+Conhecimentos;
+
+Tecnologia e Ferramentas;
+
+Métodos e Práticas;
+
+Certificações.
+
+3.1 Faça inventário sistêmico
+
+Antes de alterar, procure todos os usos reais desses tipos em:
+
+schema;
+
+migrations;
+
+enums;
+
+constraints;
+
+TypeScript;
+
+domain contracts;
+
+RPCs;
+
+SQL;
+
+Edge Functions;
+
+Knowledge;
+
+normalização;
+
+pesquisa;
+
+curadoria;
+
+formulário de criação;
+
+filtros;
+
+Perfil;
+
+Vagas/Posições;
+
+matching;
+
+Item Bank/verificação;
+
+testes;
+
+documentação.
+
+Classifique cada uso como:
+
+governança operacional a substituir;
+
+metadado histórico a preservar;
+
+tipo nativo de fonte externa a preservar;
+
+compatibilidade temporária;
+
+código morto a remover, se comprovado.
+
+Não remova por busca textual cega.
+
+3.2 Compatibilidade legada
+
+Se um tipo antigo for necessário para:
+
+leitura histórica;
+
+identidade nativa de ESCO/O*NET/etc.;
+
+contrato antigo;
+
+rollback;
+
+preserve-o tecnicamente.
+
+Mas:
+
+marque semanticamente como legado/nativo;
+
+não o apresente como classificação M8;
+
+não o use como fallback silencioso;
+
+não permita que a nova criação dependa dele.
+
+4. O que deve ser criado/alterado
+
+4.1 Contrato de classificação M8
+
+Implemente representação persistente ou projetada equivalente a:
+
+macro_group: Hard/Soft;
+
+subgroup: um dos nove valores;
+
+versão da classificação;
+
+proveniência/método da classificação quando relevante;
+
+estado de classificação: classificado ou pendente/ambíguo.
+
+Escolha nomes físicos após inspecionar o padrão do repositório.
+
+Não duplique knowledge_concepts.id.
+
+4.2 Integridade
+
+Backend deve rejeitar combinações inválidas, por exemplo:
+
+Soft -> Tecnologias;
+
+Hard -> Liderança;
+
+Hard/Soft sem subagrupador quando a classificação é declarada completa;
+
+subagrupador desconhecido em versão ativa.
+
+Versão desconhecida falha explicitamente.
+
+4.3 Conceitos existentes
+
+Para Knowledge institucional existente:
+
+não reclassifique por mera semelhança lexical;
+
+aplique backfill determinístico apenas quando a semântica existente/fonte/tipo tornar a conversão inequívoca;
+
+mantenha demais conceitos como pendentes de classificação;
+
+preserve sua utilidade conforme o contrato de busca/Knowledge sem fabricar categoria;
+
+exponha pendência de forma administrável.
+
+Exemplos de mapeamento seguro devem ser demonstrados por testes, não presumidos para toda a base.
+
+4.4 Criação de conceito
+
+A criação de novo conceito de competência por usuário autorizado deve exigir:
+
+nome;
+
+definição/descrição se o contrato vigente a suportar;
+
+Hard/Soft;
+
+subagrupador;
+
+alcance/escopo conforme governança M7.7;
+
+aliases/fontes conforme fluxo vigente.
+
+Owner/Admin continuam seguindo a governança vigente de Knowledge da empresa/Global; M8.1 não muda autoridade de publicação.
+
+4.5 Curadoria
+
+Atualize a curadoria para mostrar:
+
+termo observado;
+
+conceito candidato;
+
+macrogrupo;
+
+subagrupador;
+
+definição;
+
+origem/escopo;
+
+autoridade do alias;
+
+classificação pendente quando aplicável.
+
+Não pré-selecione uma categoria ambígua.
+
+4.6 Perfil da Pessoa
+
+A aba Competências deve organizar visualmente:
+
+Hard Skills
+  Domínios e Especialidades
+  Tecnologias, Ferramentas e Equipamentos
+  Métodos, Processos e Padrões
+  Gestão, Negócios e Estratégia
+  Idiomas
+
+Soft Skills
+  Interpessoais
+  Intrapessoais
+  Cognitivo-Executivas
+  Liderança
+
+Mostre somente subgrupos com conteúdo, salvo quando um estado vazio for útil à ação atual.
+
+Para cada conceito, mostre as naturezas de evidência realmente presentes.
+
+Não mostrar score, estrelas, barras, nível inventado ou “0”.
+
+5. Regras da nova importação de currículo
+
+Depois da migração/limpeza, uma nova importação deve:
+
+preservar o pipeline vigente de identidade;
+
+extrair fatos conforme contratos atuais;
+
+resolver conceitos via Knowledge;
+
+usar a classificação M8 do conceito;
+
+registrar Declarado quando sustentado por declaração;
+
+registrar Contextualizado apenas quando houver vínculo factual identificável com experiência/projeto/resultado;
+
+preservar credenciais/certificações;
+
+não criar Verificado por Assessment;
+
+não criar Habilidade Evidenciada.
+
+A mera repetição do termo em outra seção não basta para contextualização.
+
+Não introduza novo provider/LLM para cumprir isso. Reutilize evidência e estruturas existentes. Se um contexto não puder ser vinculado com segurança pelo pipeline atual, deixe de contextualizar e preserve a declaração.
+
+6. Limpeza destrutiva aprovada
+
+A limpeza é parte obrigatória deste movimento.
+
+6.1 Princípio
+
+Remover os dados atuais gerados pelas importações de currículos de teste para que o próximo ciclo de validação comece coerente com M8.
+
+Não equivale a resetar a plataforma.
+
+6.2 Pré-condições obrigatórias
+
+Antes de qualquer DELETE:
+
+verificar Git status e baseline;
+
+identificar ambiente remoto ativo;
+
+capturar versão/SHA/runtime atual;
+
+gerar snapshot/backup técnico recuperável do banco e, se aplicável, inventário de objetos Storage;
+
+confirmar harita.super server-side:
+
+Auth existente;
+
+platform_user;
+
+status ativo;
+
+papel Super Admin;
+
+memberships;
+
+organizações;
+
+inventariar Pessoas e sua origem/proveniência;
+
+construir grafo real de dependências/FKs/RPCs/cascatas;
+
+contar registros por tabela/owner no escopo da limpeza;
+
+determinar Knowledge exclusiva vs. compartilhada/independente;
+
+preparar rollback antes da primeira ação destrutiva.
+
+Não registrar secrets, senha ou tokens.
+
+6.3 Pessoas originadas por currículo
+
+Decisão do Product Owner: excluir integralmente.
+
+Para toda Pessoa cuja origem comprovada seja criação a partir de currículo/intake:
+
+excluir Pessoa;
+
+private data;
+
+resume intake;
+
+documentos;
+
+Storage;
+
+tentativas;
+
+page extractions;
+
+drafts;
+
+evidence regions;
+
+reviews/revisions/changes;
+
+Perfil publicado;
+
+profile competencies;
+
+evidence;
+
+inferences;
+
+Knowledge observations;
+
+ingestion events;
+
+adaptive-learning data;
+
+assessments;
+
+demonstrated evidence;
+
+matching;
+
+demais descendentes reais.
+
+A lista acima é orientativa. Use o schema real para completar.
+
+6.4 Pessoa manual/preexistente com currículo posterior
+
+Se a Pessoa existir independentemente da importação:
+
+preserve a Pessoa;
+
+preserve dados manuais independentes;
+
+remova somente artefatos/fatos/evidências cuja proveniência seja o currículo no escopo da limpeza.
+
+Se não for possível distinguir proveniência com segurança, não apague por aproximação. Registre bloqueio específico no AoT.
+
+6.5 Pessoa homônima do Usuário harita.super
+
+Usuário e Pessoa são agregados diferentes.
+
+Se houver uma Pessoa Bruno originada por currículo:
+
+apague a Pessoa conforme regra normal;
+
+preserve integralmente o Usuário harita.super.
+
+Proibido correlacionar e apagar Auth pelo mesmo e-mail/nome.
+
+6.6 Knowledge derivada
+
+Decisão do Product Owner: opção C.
+
+Remova toda evolução de Knowledge que seja rastreável exclusivamente aos currículos de teste apagados, inclusive quando aplicável:
+
+knowledge observations;
+
+knowledge inbox;
+
+aliases humanos;
+
+conceitos Organization-owned;
+
+propostas pendentes;
+
+contribuições Global não incorporadas;
+
+change/proposal artifacts;
+
+demais derivados descobertos.
+
+Preservar obrigatoriamente
+
+CBO;
+
+ESCO;
+
+O*NET;
+
+source versions oficiais;
+
+conceitos/aliases com proveniência independente;
+
+Knowledge institucional não dependente dos currículos apagados;
+
+decisões que tenham origem manual/institucional independente.
+
+Não use “foi criado depois de um currículo” como prova de exclusividade. Prove proveniência.
+
+6.7 Assessments e matching
+
+Para Pessoas excluídas, remova tudo que depende delas:
+
+verification needs;
+
+invitations;
+
+attempts;
+
+question instances vinculadas à tentativa quando exclusivas;
+
+responses;
+
+browser/attempt events;
+
+metrics;
+
+evaluations;
+
+demonstrated evidence;
+
+match evaluations;
+
+caches/derivações pessoais.
+
+Não delete Item Bank global/organizacional reutilizável apenas porque foi usado por uma Pessoa removida.
+
+6.8 Vagas e Posições
+
+Preserve Vagas e Posições.
+
+Remova referências às Pessoas apagadas.
+
+Se houver ocupante em Posição:
+
+use a transição canônica existente para remover o ocupante;
+
+preserve a Posição;
+
+não invente novo status;
+
+mantenha snapshot/histórico da Posição conforme contrato.
+
+Matching histórico dependente das Pessoas apagadas deve sair conforme regra 6.7.
+
+6.9 Storage
+
+Remova objetos privados dos currículos apagados.
+
+Não:
+
+apague bucket;
+
+altere policy além do necessário;
+
+deixe arquivo órfão;
+
+deixe banco apontando para objeto removido.
+
+6.10 Auditoria e histórico da limpeza
+
+Decisão do Product Owner: não preservar ledger específico da limpeza.
+
+Portanto:
+
+não crie tabela/ledger de cleanup;
+
+não crie registros pessoais apenas para dizer que foram apagados;
+
+remova registros históricos exclusivamente dependentes das Pessoas/currículos apagados quando a arquitetura permitir;
+
+o AoT deve registrar apenas:
+
+contagens agregadas;
+
+tabelas/owners afetados;
+
+validações;
+
+SHA/release;
+
+evidência de ausência;
+
+sem PII.
+
+Se houver auditoria imutável obrigatória que não possa ser apagada sem violar contrato estrutural:
+
+não corrompa ou burle o mecanismo;
+
+pare apenas a parte incompatível;
+
+documente o conflito factual;
+
+não declare CA correspondente como PASS.
+
+7. Ordem segura recomendada de execução
+
+Você pode adaptar a ordem por FK/arquitetura real, mas deve preservar estes gates.
+
+Fase 0 — Understanding Check
+
+Antes de mudar arquivos, declare de forma concisa:
+
+D-* que implementará;
+
+P-* que não podem ocorrer;
+
+F-*;
+
+A-*;
+
+superfícies previstas.
+
+Isso não é pedido de nova aprovação.
+
+Fase 1 — Descoberta dirigida
+
+Leia somente fontes necessárias:
+
+AGENTS.md;
+
+seção relevante de PRISMA_CURRENT_STATE.md;
+
+docs/architecture/contracts.md;
+
+Knowledge/Professional Concept owners;
+
+Perfil/competências owners;
+
+M7.2/M7.4/M7.5/M7.6/M7.7 agreements/executions/AoTs/ADRs aplicáveis;
+
+M5.1 owners;
+
+exclusão definitiva de Pessoa;
+
+data model/security;
+
+UX foundation;
+
+migrations/RPCs/código afetado.
+
+Confirme estado real em código/config/banco.
+
+Fase 2 — Inventário da classificação antiga
+
+Produza internamente uma matriz:
+
+uso legado -> owner -> consumidor -> persistido? -> preservar? -> substituir? -> teste
+
+Remova dependência operacional dos seis agrupadores antigos sem destruir metadado necessário.
+
+Fase 3 — Contratos/schema M8
+
+Implemente:
+
+classificação Hard/Soft;
+
+subagrupador;
+
+constraints;
+
+versão;
+
+projeções/RPCs;
+
+compatibilidade;
+
+representação de evidências Pessoa × Conceito.
+
+Prefira extensão da infraestrutura Knowledge atual.
+
+Não crie catálogo paralelo.
+
+Fase 4 — Curadoria e criação Knowledge
+
+Atualize:
+
+busca;
+
+formulário de criação;
+
+edição/curadoria;
+
+filtros;
+
+propostas/contribuições;
+
+detalhe.
+
+Mantenha governança de escopo e autoridade vigente.
+
+Fase 5 — Perfil e evidências
+
+Atualize projeção e UI para:
+
+Hard/Soft;
+
+subgrupos;
+
+badges/naturezas de evidência;
+
+detalhe explicável;
+
+origem/documento/assessment quando aplicável.
+
+Mantenha Declarado, Contextualizado, Certificado, Verificado por Assessment, Habilidade Evidenciada separados.
+
+Fase 6 — Adequação do pipeline de importação
+
+Garanta que novo currículo:
+
+resolve conceito;
+
+herda classificação do conceito;
+
+cria evidência permitida;
+
+não cria estados proibidos.
+
+Fase 7 — Snapshot e plano destrutivo
+
+Somente quando código/migrations de nova arquitetura estiverem prontos e validados localmente:
+
+snapshot/backup;
+
+inventário remoto final;
+
+confirmação harita.super;
+
+plano de delete por dependência;
+
+dry-run/read-only counts.
+
+Fase 8 — Migração remota
+
+Aplique migrations necessárias antes da limpeza se isso for requisito para executar a limpeza de modo seguro.
+
+Não use reset geral.
+
+Fase 9 — Limpeza remota
+
+Execute a deleção controlada.
+
+Prefira transações/RPCs administrativas seguras e idempotência/reentrância quando o volume/Storage exigir.
+
+Se reutilizar o contrato de exclusão definitiva de Pessoa:
+
+confirme que ele cobre o objetivo;
+
+não preserve ledger pessoal proibido por este Agreement;
+
+adapte somente dentro do escopo aprovado.
+
+Fase 10 — Provas de limpeza
+
+Prove no banco e Storage:
+
+Pessoas originadas por currículos = ausentes;
+
+descendentes = ausentes;
+
+objetos Storage = ausentes;
+
+Knowledge exclusiva = ausente;
+
+assessments/matches dependentes = ausentes;
+
+CBO/ESCO/O*NET = preservados;
+
+Users/orgs/memberships = preservados;
+
+sem órfãos;
+
+sem contagens residuais em UI.
+
+Não exponha PII nos relatórios.
+
+Fase 11 — Deploy frontend
+
+Publique o frontend coerente com o schema/contratos novos.
+
+Evite janela em que frontend antigo dependa de semântica removida. Use estratégia compatível/reversível.
+
+Fase 12 — Smoke autenticado
+
+Com harita.super, valide:
+
+login;
+
+sidebar/App Shell;
+
+organização;
+
+Pessoas;
+
+Conhecimento;
+
+Propostas/curadoria quando autorizadas;
+
+Posições;
+
+Vagas;
+
+importação.
+
+Depois faça um teste sintético end-to-end de currículo sem PII real versionada:
+
+intake
+-> identidade
+-> processamento
+-> revisão
+-> publicação
+-> Perfil
+-> competências M8
+
+Exclua o dado sintético após a prova, salvo se o ambiente possuir fixture temporária explicitamente destinada a smoke.
+
+8. Casos canônicos de teste da taxonomia
+
+Inclua testes determinísticos no mínimo para:
+
+Conceito
+
+Resultado
+
+Microsoft Excel
+
+Hard > Tecnologias, Ferramentas e Equipamentos
+
+SAP
+
+Hard > Tecnologias, Ferramentas e Equipamentos
+
+AWS
+
+Hard > Tecnologias, Ferramentas e Equipamentos
+
+HPLC
+
+Hard > Tecnologias, Ferramentas e Equipamentos
+
+Cibersegurança
+
+Hard > Domínios e Especialidades Profissionais
+
+Engenharia de Processos
+
+Hard > Domínios e Especialidades Profissionais
+
+Scrum
+
+Hard > Métodos, Processos e Padrões
+
+HAZOP
+
+Hard > Métodos, Processos e Padrões
+
+Gestão de Projetos
+
+Hard > Gestão, Negócios e Estratégia
+
+Transformação Digital
+
+Hard > Gestão, Negócios e Estratégia
+
+Planejamento Estratégico
+
+Hard > Gestão, Negócios e Estratégia
+
+Inglês
+
+Hard > Idiomas
+
+Comunicação
+
+Soft > Interpessoais
+
+Resiliência
+
+Soft > Intrapessoais
+
+Resolução de Problemas
+
+Soft > Cognitivo-Executivas
+
+Pensamento Estratégico
+
+Soft > Cognitivo-Executivas
+
+Visão Estratégica
+
+Soft > Liderança
+
+Delegação
+
+Soft > Liderança
+
+Também prove que classificação ambígua não é inventada.
+
+9. Casos canônicos de evidência
+
+Caso A — apenas lista
+
+Currículo contém:
+
+AWS
+
+Esperado:
+
+conceito resolvido;
+
+Hard > Tecnologia/Ferramentas/Equipamentos;
+
+Declarado;
+
+não Contextualizado sem vínculo concreto;
+
+não Certificado;
+
+não Verificado;
+
+não Habilidade Evidenciada.
+
+Caso B — contexto
+
+Currículo contém SAP e experiência concreta em projeto SAP.
+
+Esperado:
+
+Declarado;
+
+Contextualizado;
+
+não Verificado;
+
+não Habilidade Evidenciada.
+
+Caso C — certificação
+
+Currículo apresenta certificação identificável relacionada ao conceito.
+
+Esperado:
+
+credencial preservada;
+
+Certificado somente se a identidade da certificação estiver suficientemente sustentada;
+
+não Verificado automaticamente.
+
+Caso D — assessment
+
+Assessment M5.1 válido.
+
+Esperado:
+
+Verificado por Assessment;
+
+manter declaração/contexto/certificação preexistentes;
+
+não criar Habilidade Evidenciada.
+
+10. Telas normativas anexadas
+
+Este prompt será entregue ao Codex junto das imagens M8.1.
+
+Classifique-as como alvos normativos de arquitetura visual, conforme docs/product/ux-foundation.md.
+
+Os dados, nomes e contagens são ilustrativos; a estrutura visual é normativa.
+
+Imagem 1 — Conhecimento / Competências / Classificação
+
+Deve orientar:
+
+shell Prisma vigente;
+
+busca/lista à esquerda/centro;
+
+detalhe/edição à direita;
+
+seleção Hard/Soft;
+
+subagrupador dependente do macrogrupo;
+
+definição curta;
+
+exemplos;
+
+origem/escopo;
+
+estado de classificação;
+
+ausência dos seis agrupadores legados como decisão principal.
+
+Imagem 2 — Perfil da Pessoa / Competências M8
+
+Deve orientar:
+
+resumo executivo;
+
+Hard Skills e Soft Skills como grandes blocos;
+
+subagrupos internos;
+
+conceitos;
+
+chips de evidência;
+
+pendências reais;
+
+busca/filtros sem poluição técnica;
+
+sem score/estrelas/barras.
+
+Imagem 3 — Detalhe de competência e evidências
+
+Deve orientar:
+
+conceito;
+
+classificação;
+
+termo observado;
+
+naturezas acumulativas de evidência;
+
+origem;
+
+documento/experiência;
+
+certificação;
+
+assessment;
+
+habilidade prática quando existir;
+
+linguagem neutra para o que ainda não existe.
+
+Fidelidade visual
+
+Compare a implementação com as imagens usando:
+
+mesmo estado;
+
+dados equivalentes;
+
+viewport equivalente;
+
+desktop e larguras responsivas aplicáveis.
+
+Preserve:
+
+topologia;
+
+hierarquia;
+
+proporções;
+
+agrupamentos;
+
+densidade;
+
+alinhamentos;
+
+posição relativa de ações;
+
+disclosure;
+
+relação lista/detalhe.
+
+Não é pixel-perfect obrigatório, mas divergência estrutural precisa de justificativa/autorização.
+
+11. Requisitos e proibições vinculantes
+
+DEVE
+
+D-01 a D-30 do Agreement M8.1 são obrigatórios.
+
+Todos devem aparecer no AoT.
+
+Cada D deve ter implementação, teste e evidência ou status explícito.
+
+PROIBIDO
+
+P-01 a P-23 do Agreement M8.1 são vinculantes.
+
+Inclua provas negativas onde testável.
+
+Nenhum P pode ser violado na conclusão.
+
+FORA DE ESCOPO
+
+F-01 a F-13 não podem ser incluídos “por oportunidade”.
+
+AUTONOMIA
+
+A-01 a A-12 permitem otimizar implementação sem alterar comportamento aprovado.
+
+12. Segurança e deleção
+
+Classifique o movimento no mínimo como D sensível e avalie se alguma decisão arquitetural nova eleva parte a E.
+
+Inclua:
+
+testes negativos de tenant;
+
+testes negativos de autorização;
+
+prova de preservação de harita.super;
+
+prova de que excluir Pessoa não exclui Usuário;
+
+prova de que Knowledge oficial não é apagada;
+
+prova de que delete não cruza tenant;
+
+prova de que Storage removido pertence ao tenant/Pessoa corretos.
+
+Não confie no frontend para autorização.
+
+13. Validação proporcional
+
+Execute validações integradas e sensíveis das áreas realmente alteradas.
+
+No mínimo:
+
+TypeScript typecheck das superfícies tocadas;
+
+build web;
+
+testes de domínio/classificação;
+
+testes das RPCs/migrations;
+
+testes de RLS/tenant afetados;
+
+regressão dirigida do fluxo currículo;
+
+regressão dirigida de Knowledge;
+
+regressão dirigida do Perfil;
+
+regressão dirigida de M5.1 afetado;
+
+regressão dirigida de matching/score para provar não alteração;
+
+validação de deleção;
+
+smoke remoto.
+
+Não rode validação completa do repositório apenas porque existe. Se a mudança demonstrar risco cross-cutting que exija pnpm run validate completo, explique ao Product Owner e peça autorização explícita conforme AGENTS.md.
+
+14. Release e rollback
+
+14.1 Release
+
+O movimento autorizado inclui publicação no ambiente remoto atual e frontend hospedado.
+
+Aplique a ordem segura descoberta no repositório.
+
+Não declare produção apenas por:
+
+commit;
+
+migration local;
+
+CI;
+
+build;
+
+documentação.
+
+Comprove ambiente real.
+
+14.2 Backup
+
+Crie snapshot/backup técnico antes da limpeza.
+
+Ele serve somente como rollback da execução destrutiva.
+
+Não use o backup como “histórico funcional” do Prisma.
+
+Observe política real do provedor. Se o backup específico puder ser removido após conclusão segura sem violar política obrigatória, não preserve material desnecessário por causa do M8.1.
+
+14.3 Rollback
+
+Documente:
+
+rollback de frontend;
+
+rollback de migration quando reversível;
+
+restauração do snapshot em caso de falha destrutiva;
+
+limites de rollback depois que nova importação pós-M8 começar.
+
+Nunca prometa rollback que o ambiente não suporta.
+
+15. Documentação obrigatória
+
+Atualize somente owners afetados.
+
+No mínimo, conforme aplicável:
+
+product/competências;
+
+Knowledge architecture;
+
+data model;
+
+contracts;
+
+security;
+
+AI reference se a projeção de assessment mudar;
+
+current state;
+
+versioning;
+
+ADR para decisão durável M8;
+
+Agreement/Execution;
+
+AoT.
+
+Depois:
+
+pnpm run generate:prisma-context
+pnpm run check:prisma-context
+
+Não edite manualmente FONTE_GPT_PRISMA.md ou TUDO_SOBRE_PRISMA.md.
+
+16. AoT obrigatório
+
+Crie o AoT no owner de QA usando o template vigente.
+
+Para cada requisito:
+
+Agreement
+-> Implementation
+-> Test
+-> Evidence
+-> Status
+
+Status permitidos:
+
+PASS
+
+FAIL
+
+PARTIAL
+
+BLOCKED
+
+NOT TESTED
+
+Conclusão só é permitida quando:
+
+todo D aplicável = PASS;
+
+nenhum P violado;
+
+evidência tecnicamente disponível está registrada;
+
+harita.super está funcional;
+
+limpeza foi comprovada no banco/Storage;
+
+fluxo sintético pós-M8 foi comprovado;
+
+backend/frontend estão sincronizados.
+
+O AoT não deve conter PII dos currículos apagados.
+
+Use contagens e identificadores técnicos não sensíveis quando necessário.
+
+17. Critérios objetivos de encerramento
+
+Não considere M8.1 concluído até provar todos os seguintes pontos:
+
+Hard/Soft + nove subgrupos ativos.
+
+Seis agrupadores legados não governam UX.
+
+Backend bloqueia classificação inválida.
+
+Conceitos canônicos não foram duplicados.
+
+Certificação virou evidência/credencial.
+
+Person evidence diferencia Declarado/Contextualizado/Certificado/Verificado/Habilidade.
+
+Importação não cria Verificado/Habilidade.
+
+Pessoas originadas por currículo no escopo foram apagadas.
+
+Descendentes e Storage foram apagados.
+
+Knowledge exclusivamente derivada foi apagada.
+
+CBO/ESCO/O*NET preservados.
+
+Knowledge independente preservada.
+
+Assessments/matching dependentes das Pessoas apagadas foram removidos.
+
+Sem órfãos funcionais.
+
+Vagas/Posições preservadas.
+
+Usuários/memberships/organizações preservados.
+
+harita.super mantém Super Admin e login funcional.
+
+Novo currículo sintético conclui publicação.
+
+Novo Perfil exibe competências M8.
+
+Matching/Prisma Score não mudou semanticamente.
+
+RLS/tenant sem regressão.
+
+frontend e backend publicados e smoke PASS.
+
+AoT completo.
+
+nenhuma expansão para sucessão/PDI/9-Box/gap.
+
+nenhuma fonte/modelo/API nova não aprovada.
+
+Se qualquer item não puder ser provado, registre o status real e não declare “concluído”.
+
+18. Forma de trabalho esperada
+
+Se durante a implementação surgir conflito técnico real com requisito aprovado:
+
+pare apenas a parte afetada;
+
+descreva o conflito factual;
+
+apresente alternativas e impactos;
+
+aguarde decisão do Product Owner;
+
+não reinterprete o contrato silenciosamente.
+
+Fora disso, execute o movimento até o fechamento completo, sem pedir aprovações intermediárias para decisões já delegadas em AUTONOMIA.
 
 ---
 

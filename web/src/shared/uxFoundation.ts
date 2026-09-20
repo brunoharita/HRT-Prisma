@@ -10,7 +10,7 @@ export function navigationGroup(path: string): NavigationGroup {
 }
 
 export function isDeliveredNavigation(path: string): boolean {
-  return !["/matching", "/organizations", "/settings"].includes(path);
+  return !["/matching", "/organizations"].includes(path);
 }
 
 /** Presentation only. Historical data, source terms and persisted identifiers remain untouched. */

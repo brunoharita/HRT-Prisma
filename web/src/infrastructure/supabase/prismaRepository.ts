@@ -297,7 +297,7 @@ function requireCentralSourceName(value: string): "CBO" | "ESCO" | "O*NET" {
 }
 
 async function loadPersonProfessionalEvidence(organizationId: string, personId: string) {
-  const { data, error } = await supabase.rpc("load_person_professional_evidence_map_v5" as never, {
+  const { data, error } = await supabase.rpc("load_person_professional_evidence_map_v6" as never, {
     p_organization_id: organizationId,
     p_person_id: personId,
   } as never);

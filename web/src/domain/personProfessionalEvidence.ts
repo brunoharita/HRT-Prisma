@@ -1,14 +1,12 @@
-import { COMPETENCY_TAXONOMY_CONTRACT } from "./competencyTaxonomy.js";
+import { COMPETENCY_TAXONOMY_CONTRACT, validClassification, type CompetencyClassification } from "./competencyTaxonomy.js";
 import { POSITION_TAXONOMY_CONTRACT, taxonomyGroups, type ProfessionalConceptType } from "./positionTaxonomy.js";
 
-export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-3.1.0";
-const competencyConceptTypes = (Object.keys(taxonomyGroups) as ProfessionalConceptType[])
-  .filter((type) => type !== "occupation");
+export const PERSON_PROFESSIONAL_EVIDENCE_CONTRACT = "person-professional-evidence-4.0.0";
 
-export type ProfessionalEvidenceNature = "declared" | "contextual" | "demonstrated";
+export type ProfessionalEvidenceNature = "declared" | "contextual" | "certified" | "verified_assessment" | "demonstrated_skill" | "assessment_result";
 
 export interface ProfessionalEvidenceSource {
-  kind: "published_profile" | "document" | "demonstrated_evidence";
+  kind: "published_profile" | "document" | "demonstrated_evidence" | "credential" | "organizational_evidence";
   label: string;
   documentId: string | null;
   filename: string | null;
@@ -28,6 +26,8 @@ export interface ProfessionalEvidenceAssociation {
     type: ProfessionalConceptType;
     scope: "global" | "organization";
     version: number;
+    classificationState: "classified" | "pending";
+    classification: CompetencyClassification | null;
   };
   observedTerm: string;
   evidence: {
@@ -108,14 +108,19 @@ export interface ProfessionalConceptEvidenceView {
   type: ProfessionalConceptType;
   scope: "global" | "organization";
   version: number;
+  classificationState: "classified" | "pending";
+  classification: CompetencyClassification | null;
   evidences: ProfessionalEvidenceAssociation[];
   natures: ProfessionalEvidenceNature[];
-  hasCurrentDemonstratedEvidence: boolean;
+  hasCurrentVerifiedAssessment: boolean;
+  hasDemonstratedSkill: boolean;
 }
 
 export interface ProfessionalEvidenceGroupView {
-  key: ProfessionalConceptType;
+  key: string;
   label: string;
+  macroGroupCode: "hard" | "soft" | "pending";
+  macroGroupLabel: string;
   concepts: ProfessionalConceptEvidenceView[];
 }
 
@@ -154,9 +159,9 @@ export function groupProfessionalEvidence(
     const existing = concepts.get(association.concept.id);
     if (existing) {
       existing.evidences.push(association);
-      if (!existing.natures.includes(association.nature)) existing.natures.push(association.nature);
-      existing.hasCurrentDemonstratedEvidence ||= association.nature === "demonstrated"
-        && Boolean(association.verification?.qualifiesAsVerified);
+      if (association.nature !== "assessment_result" && !existing.natures.includes(association.nature)) existing.natures.push(association.nature);
+      existing.hasCurrentVerifiedAssessment ||= association.nature === "verified_assessment";
+      existing.hasDemonstratedSkill ||= association.nature === "demonstrated_skill";
       continue;
     }
     concepts.set(association.concept.id, {
@@ -165,18 +170,32 @@ export function groupProfessionalEvidence(
       type: association.concept.type,
       scope: association.concept.scope,
       version: association.concept.version,
+      classificationState: association.concept.classificationState,
+      classification: association.concept.classification,
       evidences: [association],
-      natures: [association.nature],
-      hasCurrentDemonstratedEvidence: association.nature === "demonstrated"
-        && Boolean(association.verification?.qualifiesAsVerified),
+      natures: association.nature === "assessment_result" ? [] : [association.nature],
+      hasCurrentVerifiedAssessment: association.nature === "verified_assessment",
+      hasDemonstratedSkill: association.nature === "demonstrated_skill",
     });
   }
-  return competencyConceptTypes.flatMap((key) => {
-    const grouped = [...concepts.values()]
-      .filter((concept) => concept.type === key)
-      .sort((left, right) => left.label.localeCompare(right.label, "pt-BR"));
-    return grouped.length ? [{ key, label: taxonomyGroups[key], concepts: grouped }] : [];
-  });
+  const groups = new Map<string, ProfessionalEvidenceGroupView>();
+  for (const concept of concepts.values()) {
+    const classification = concept.classification;
+    const key = classification?.subgroupId ?? "pending";
+    const group = groups.get(key) ?? {
+      key, label: classification?.subgroupLabel ?? "Classificação pendente",
+      macroGroupCode: classification?.macroGroupCode ?? "pending",
+      macroGroupLabel: classification?.macroGroupLabel ?? "Aguardando curadoria",
+      concepts: [],
+    };
+    group.concepts.push(concept);
+    groups.set(key, group);
+  }
+  const order = { hard: 0, soft: 1, pending: 2 };
+  return [...groups.values()].map((group) => ({ ...group,
+    concepts: group.concepts.sort((left, right) => left.label.localeCompare(right.label, "pt-BR")),
+  })).sort((left, right) => order[left.macroGroupCode] - order[right.macroGroupCode]
+    || left.label.localeCompare(right.label, "pt-BR"));
 }
 
 export function summarizeProfessionalEvidence(projection: ProfessionalEvidenceProjection) {
@@ -187,25 +206,31 @@ export function summarizeProfessionalEvidence(projection: ProfessionalEvidencePr
     conceptCount: concepts.length,
     declaredCount: projection.normalization.declaredCount,
     contextualCount: concepts.filter((concept) => concept.natures.includes("contextual")).length,
-    demonstratedCount: concepts.filter((concept) => concept.hasCurrentDemonstratedEvidence).length,
+    verifiedCount: concepts.filter((concept) => concept.hasCurrentVerifiedAssessment).length,
+    demonstratedSkillCount: concepts.filter((concept) => concept.hasDemonstratedSkill).length,
     evidenceCount: projection.associations.length,
   };
 }
 
 export function evidenceNatureLabel(nature: ProfessionalEvidenceNature): string {
   if (nature === "declared") return "Declarada";
-  if (nature === "contextual") return "Contextual";
-  return "Evidência demonstrada";
+  if (nature === "contextual") return "Contextualizada";
+  if (nature === "certified") return "Certificada";
+  if (nature === "verified_assessment") return "Verificada por Assessment";
+  if (nature === "demonstrated_skill") return "Habilidade Evidenciada";
+  return "Assessment sem verificação vigente";
 }
 
 function validAssociation(value: unknown): boolean {
   if (!isRecord(value) || typeof value.id !== "string"
-    || !["declared", "contextual", "demonstrated"].includes(String(value.nature))
+    || !["declared", "contextual", "certified", "verified_assessment", "demonstrated_skill", "assessment_result"].includes(String(value.nature))
     || !isRecord(value.concept) || typeof value.concept.id !== "string" || typeof value.concept.label !== "string"
     || !Object.hasOwn(taxonomyGroups, String(value.concept.type))
     || value.concept.type === "occupation"
     || !["global", "organization"].includes(String(value.concept.scope))
     || !Number.isSafeInteger(value.concept.version)
+    || !["classified", "pending"].includes(String(value.concept.classificationState))
+    || (value.concept.classificationState === "pending" ? value.concept.classification !== null : !validClassification(value.concept.classification))
     || typeof value.observedTerm !== "string"
     || !isRecord(value.evidence) || typeof value.evidence.id !== "string" || typeof value.evidence.title !== "string"
     || typeof value.evidence.fact !== "string" || typeof value.evidence.recordedAt !== "string"
@@ -218,7 +243,7 @@ function validAssociation(value: unknown): boolean {
     || !nullableNumber(value.explanation.knowledgeOrganizationVersion)
     || !nullableString(value.explanation.sourceName) || !nullableString(value.explanation.sourceVersion)
     || !nullableString(value.explanation.humanDecision)) return false;
-  if (value.nature === "demonstrated") {
+  if (value.nature === "verified_assessment" || value.nature === "assessment_result") {
     return isRecord(value.verification) && typeof value.verification.status === "string"
       && typeof value.verification.qualifiesAsVerified === "boolean"
       && typeof value.verification.demonstratedLevel === "string"
@@ -231,7 +256,7 @@ function validAssociation(value: unknown): boolean {
 
 function validSource(value: unknown): boolean {
   return isRecord(value)
-    && ["published_profile", "document", "demonstrated_evidence"].includes(String(value.kind))
+    && ["published_profile", "document", "demonstrated_evidence", "credential", "organizational_evidence"].includes(String(value.kind))
     && typeof value.label === "string"
     && nullableString(value.documentId) && nullableString(value.filename) && nullableNumber(value.pageNumber)
     && nullableString(value.fieldPath) && nullableString(value.reviewId)

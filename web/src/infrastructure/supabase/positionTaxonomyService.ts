@@ -1,4 +1,4 @@
-import { POSITION_TAXONOMY_CONTRACT, readPositionTaxonomy, type PositionTaxonomy, type ProfessionalConceptType, type TaxonomyCandidate, type TaxonomyDecision } from "../../domain/positionTaxonomy.js";
+import { POSITION_TAXONOMY_CONTRACT, readPositionTaxonomy, type PositionTaxonomy, type TaxonomyCandidate, type TaxonomyDecision } from "../../domain/positionTaxonomy.js";
 import type { VacancyDraft } from "../../domain/vacancy.js";
 import type { Json } from "./database.types.js";
 import { supabase } from "./client.js";
@@ -29,9 +29,9 @@ export const positionTaxonomyService = {
     if (!result || !Array.isArray(result.items) || typeof result.total !== "number") throw new Error("Busca de Knowledge inválida.");
     return result;
   },
-  async createComplement(organizationId: string, label: string, type: Exclude<ProfessionalConceptType, "occupation">, description: string): Promise<string> {
-    const { data, error } = await supabase.rpc("create_position_knowledge_complement" as never,
-      { p_organization_id: organizationId, p_label: label, p_concept_type: type, p_description: description } as never);
+  async createComplement(organizationId: string, label: string, subgroupId: string, description: string): Promise<string> {
+    const { data, error } = await supabase.rpc("create_position_knowledge_complement_v2" as never,
+      { p_organization_id: organizationId, p_label: label, p_subgroup_id: subgroupId, p_description: description } as never);
     if (error || typeof data !== "string") throw new Error("Não foi possível confirmar o complemento. A criação exige administrador da Knowledge da empresa.");
     return data;
   },

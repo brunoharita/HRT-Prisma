@@ -67,7 +67,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
       onNavigate(`/profiles/${personId}/documents/${source.documentId}`);
       return;
     }
-    if (evidence.nature === "demonstrated") onNavigate("/verifications");
+    if (evidence.nature === "verified_assessment" || evidence.nature === "assessment_result") onNavigate("/verifications");
   }
 
   return (

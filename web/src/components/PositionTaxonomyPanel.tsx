@@ -6,6 +6,8 @@ import type { VacancyDraft } from "../domain/vacancy.js";
 import { applyTaxonomy, groupTaxonomyItems, selectTaxonomyRequirement, taxonomyGroups, taxonomyMethodLabels, taxonomyRequirementCategory, taxonomyStateLabels,
   type PositionTaxonomy, type ProfessionalConceptType, type TaxonomyCandidate, type TaxonomyItem, type TaxonomyReference } from "../domain/positionTaxonomy.js";
 import { positionTaxonomyService } from "../infrastructure/supabase/positionTaxonomyService.js";
+import { knowledgeService } from "../infrastructure/supabase/knowledgeService.js";
+import type { CompetencySubgroupOption } from "../domain/profileCompetencyCuration.js";
 import { PrismaCard } from "../ui/PrismaCard.js";
 
 interface Props {
@@ -203,11 +205,20 @@ function KnowledgePicker({ open, kind, organizationId, initialQuery = "", candid
 }
 function ComplementDialog({ open, organizationId, canCreate, onClose, onAdd }: { open: boolean; organizationId: string; canCreate: boolean; onClose: () => void; onAdd: (id: string) => void }) {
   const [picker, setPicker] = useState(false); const [label, setLabel] = useState("");
-  const [type, setType] = useState<Exclude<ProfessionalConceptType, "occupation">>("knowledge");
+  const [subgroups, setSubgroups] = useState<CompetencySubgroupOption[]>([]);
+  const [subgroupId, setSubgroupId] = useState<string | null>(null);
   const [description, setDescription] = useState(""); const [busy, setBusy] = useState(false); const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    if (!open || !canCreate) return;
+    let active = true;
+    void knowledgeService.listCompetencySubgroups(organizationId).then((rows) => { if (active) setSubgroups(rows); })
+      .catch(() => { if (active) setError("Não foi possível carregar os subagrupadores."); });
+    return () => { active = false; };
+  }, [open, canCreate, organizationId]);
   async function create() {
+    if (!subgroupId) return;
     setBusy(true); setError(null);
-    try { const id = await positionTaxonomyService.createComplement(organizationId, label, type, description); onAdd(id); setLabel(""); setDescription(""); }
+    try { const id = await positionTaxonomyService.createComplement(organizationId, label, subgroupId, description); onAdd(id); setLabel(""); setDescription(""); setSubgroupId(null); }
     catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível criar o complemento."); }
     finally { setBusy(false); }
   }
@@ -216,9 +227,9 @@ function ComplementDialog({ open, organizationId, canCreate, onClose, onAdd }: {
     <Button block onClick={() => setPicker(true)} className="prisma-taxonomy-item-actions">Selecionar item existente</Button>
     {canCreate ? <Form layout="vertical" onFinish={() => void create()}>
       <Form.Item label="Nome do item" required><Input aria-label="Nome do item complementar" value={label} maxLength={240} onChange={(event) => setLabel(event.target.value)} /></Form.Item>
-      <Form.Item label="Tipo"><Select aria-label="Tipo do complemento" value={type} onChange={setType} options={Object.entries(taxonomyGroups).filter(([key]) => key !== "occupation").map(([value, text]) => ({ value, label: text }))} /></Form.Item>
+      <Form.Item label="Subagrupador principal" required><Select aria-label="Subagrupador principal do complemento" value={subgroupId} onChange={setSubgroupId} placeholder="Selecione a classificação" options={(["hard", "soft"] as const).map((macro) => ({ label: macro === "hard" ? "Hard Skills" : "Soft Skills", options: subgroups.filter((item) => item.macroGroupCode === macro).map((item) => ({ value: item.id, label: `${item.code} · ${item.label}` })) }))} /></Form.Item>
       <Form.Item label="Contexto ou descrição (opcional)"><Input.TextArea aria-label="Contexto ou descrição do complemento" maxLength={4000} value={description} onChange={(event) => setDescription(event.target.value)} /></Form.Item>
-      {error ? <Alert type="error" title={error} /> : null}<Space><Button onClick={onClose}>Cancelar</Button><Button type="primary" htmlType="submit" loading={busy} disabled={!label.trim()}>Criar e associar complemento</Button></Space>
+      {error ? <Alert type="error" title={error} /> : null}<Space><Button onClick={onClose}>Cancelar</Button><Button type="primary" htmlType="submit" loading={busy} disabled={!label.trim() || !subgroupId}>Criar e associar complemento</Button></Space>
     </Form> : <Typography.Paragraph>A criação de Knowledge exige Owner, Admin ou Super Admin. Você pode reutilizar itens já publicados para sua empresa.</Typography.Paragraph>}
   </Modal><KnowledgePicker open={picker && open} kind="complement" organizationId={organizationId} onClose={() => setPicker(false)} onChoose={(candidate) => { setPicker(false); onAdd(candidate.id); }} /></>;
 }

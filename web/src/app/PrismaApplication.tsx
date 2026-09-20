@@ -37,6 +37,7 @@ import { ResumeImportPage } from "../pages/ResumeImportPage";
 import { UserFormPage } from "../pages/UserFormPage";
 import { UsersPage } from "../pages/UsersPage";
 import { KnowledgePage } from "../pages/KnowledgePage";
+import { SettingsPage } from "../pages/SettingsPage";
 import { CompetencyVerificationPage } from "../pages/CompetencyVerificationPage";
 import { VerificationOperationsPage } from "../pages/VerificationOperationsPage";
 import { VerificationSessionPage } from "../pages/VerificationSessionPage";
@@ -469,7 +470,7 @@ function renderRouteContent(
     return <PlaceholderPage title="Organizações" description="Gestão estrutural de grupos e empresas permanece fora deste movimento." />;
   }
   if (route.path === "/settings") {
-    return <PlaceholderPage title="Configurações" description="Configurações operacionais e de segurança ficam centralizadas aqui." />;
+    return <SettingsPage organizationId={activeMembership?.organizationId ?? null} />;
   }
   if (route.path === "/access-denied") {
     return <AccessResult activeMembership={activeMembership} currentOperator={currentOperator} unauthorized={false} />;

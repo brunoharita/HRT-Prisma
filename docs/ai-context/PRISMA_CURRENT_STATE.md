@@ -2,13 +2,19 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.44.3
-last_verified: 2026-09-19
+version: 2.44.4
+last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
 
+## M8.1 em implementação local, ainda sem rollout
+
+O Agreement M8 v1.0.0, aditivo M8.1 v1.1.0 e imagem normativa de nove telas autorizam a migração de competências. A branch `codex/m81-competency-architecture` contém schema aditivo para dois macrogrupos, nove subagrupadores globais, futuros subagrupadores tenant-scoped e classificação principal versionada dos conceitos Knowledge. Backfill automático só para tecnologias com mapping oficial O*NET; demais classificações aguardam decisão humana. A projeção M8 separa Declaração, Contexto, Certificado, Assessment e habilidade prática; vínculo factual de experiência/credencial exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional são preservados. QA PostgreSQL sintético com rollback passou para classificação, escopo, aprovação, curadoria e natureza da evidência. Ainda não há prova de comparação visual completa, backup/limpeza, smoke real nem implantação; M8.1 não está ativo em produção. ADR-070 e AoT M8.1 acompanham a evidência.
+
 ## Resumo operacional para prompts
+
+M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. QA sintético local passou; comparação visual completa, backup/limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
 
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 

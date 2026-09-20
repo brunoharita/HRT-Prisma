@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.7.6
-current_state_version: 2.44.3
-current_state_last_verified: 2026-09-19
-documentation_source_count: 243
-source_manifest_sha256: 6eba53d7b3b79fa3572eeb19b5ad396a7cb2104c6cce7556e7bdbcc7cef88079
+current_state_version: 2.44.4
+current_state_last_verified: 2026-09-20
+documentation_source_count: 250
+source_manifest_sha256: ea090ca1c3a9ecb5b4030e37678b878eb1dccd71abbe385b7d7077c1f1be0f49
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -267,6 +267,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
+M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. QA sintético local passou; comparação visual completa, backup/limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
+
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
 Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
@@ -276,8 +278,6 @@ Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledg
 M7.6 produção: curadoria 4.0.0, descrição opcional, sem justificativa; Global só Super Admin. Migration `20260918220000`, runtime `cc2e596`, smoke PASS; AoT.
 
 M7.7 entregue e publicado em 2026-09-19: `owner`/`admin` salvam Knowledge imediatamente na empresa; cada criação vira contribuição Global sanitizada, revisável apenas pelo Super Admin. Empresa vence Global dentro da organização; candidatos são informativos e a IA externa é ação explícita, auditável e sem publicação automática. Migrations `20260919040000`/`20260919041500` e `knowledge-agent` v18 estão no Supabase; `main`/GitHub e a web hospedada usam o runtime `040400d`, com container estável e HTTPS 200. Smoke autenticado PASS: `bruno.harita`/Super Admin abriu `Conhecimento > Propostas`; fila vazia, sem escrita de teste. Contrato, prompt e evidência: `docs/qa/agreement-m77-knowledge-company-global-governance.md`, `docs/qa/execution-m77-knowledge-company-global-governance.md`, `docs/qa/aot-m77-knowledge-company-global-governance.md`.
-
-Correção publicada em 2026-09-19: a aba `Conhecimento > Propostas` mostra ao Super Admin as propostas Globais e da empresa ativa, com alcance explícito, sem expor outra empresa. O servidor continua impondo autorização por organização na aprovação; não houve migration, RLS, Edge Function ou escrita de curadoria. Runtime web `2230d15`, HTTPS 200 e container estável; inspeção visual autenticada permanece ação manual. AoT: `docs/qa/aot-knowledge-proposal-visibility.md`.
 
 ---
 

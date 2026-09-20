@@ -16,22 +16,27 @@ test("M7.2 lê apenas o contrato e o tenant esperados", () => {
   assert.throws(() => readProfessionalEvidenceProjection(m72Fixture({ normalization: { ...m72Fixture().normalization, coverage: undefined as never } }), "org-fixture", "person-fixture"), /incompatível/);
 });
 
-test("M7.2 preserva múltiplas naturezas e só conta demonstração válida", () => {
+test("M8 preserva múltiplas naturezas e distingue Assessment de habilidade prática", () => {
   const groups = groupProfessionalEvidence(m72Fixture());
   const java = groups.flatMap((group) => group.concepts).find((concept) => concept.label === "Java");
-  assert.deepEqual(java?.natures, ["declared", "demonstrated"]);
+  assert.deepEqual(java?.natures, ["declared", "verified_assessment"]);
   assert.equal(java?.evidences.length, 2);
-  assert.equal(java?.hasCurrentDemonstratedEvidence, true);
+  assert.equal(java?.hasCurrentVerifiedAssessment, true);
+  assert.equal(java?.hasDemonstratedSkill, false);
+  assert.equal(groups[0]?.macroGroupCode, "hard");
+  assert.equal(groups[0]?.label, "Tecnologias, Ferramentas e Equipamentos");
   assert.deepEqual(summarizeProfessionalEvidence(m72Fixture()), {
     groupCount: 1,
     conceptCount: 1,
     declaredCount: 1,
     contextualCount: 0,
-    demonstratedCount: 1,
+    verifiedCount: 1,
+    demonstratedSkillCount: 0,
     evidenceCount: 2,
   });
-  const expired = { ...m72DemonstratedEvidence, verification: { ...m72DemonstratedEvidence.verification!, status: "expired", qualifiesAsVerified: false } };
-  assert.equal(summarizeProfessionalEvidence(m72Fixture({ associations: [m72DeclaredEvidence, expired] })).demonstratedCount, 0);
+  const expired = { ...m72DemonstratedEvidence, nature: "assessment_result" as const,
+    verification: { ...m72DemonstratedEvidence.verification!, status: "expired", qualifiesAsVerified: false } };
+  assert.equal(summarizeProfessionalEvidence(m72Fixture({ associations: [m72DeclaredEvidence, expired] })).verifiedCount, 0);
 });
 
 test("M7.2 mantém ambiguidade explícita sem fabricar conceito", () => {
@@ -76,13 +81,13 @@ test("M7.2 UI oferece superfícies, filtros, explicação, origem e responsivida
     readFile("web/src/pages/ProfileReviewPage.tsx", "utf8"),
     readFile("web/src/config/releaseRegistry.ts", "utf8"),
   ]);
-  for (const label of ["Resumo", "Competências", "Evidências", "Por que o Prisma está mostrando isso?", "Abrir origem", "Declaradas", "Contextuais", "Evidência Demonstrada"] ) assert.ok(ui.includes(label), label);
+  for (const label of ["Resumo", "Competências", "Evidências", "Por que o Prisma está mostrando isso?", "Abrir origem", "Declaradas", "Contextualizadas", "Verificadas por Assessment"] ) assert.ok(ui.includes(label), label);
   assert.match(page, /prisma\.review-evidence/);
   assert.match(review, /readStoredEvidenceTarget/);
   assert.match(review, /setNavigationTarget\(\{ pageNumber: evidenceTarget\.pageNumber/);
   assert.match(css, /@media \(max-width: 720px\)/);
   assert.match(release, /M7\.2: perfil de competências e evidências/);
-  assert.match(ui, /Não representam nível de proficiência, senioridade ou score/);
+  assert.match(ui, /não é score, avaliação absoluta/);
   const domain = await readFile("web/src/domain/personProfessionalEvidence.ts", "utf8");
   assert.doesNotMatch(domain, /score:|proficiency:|seniority:/i);
 });
