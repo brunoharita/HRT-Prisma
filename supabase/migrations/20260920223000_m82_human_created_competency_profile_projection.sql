@@ -136,4 +136,3 @@ begin
 end $$;
 revoke all on function public.load_person_professional_evidence_map_v6(uuid,uuid) from public,anon;
 grant execute on function public.load_person_professional_evidence_map_v6(uuid,uuid) to authenticated;
-
