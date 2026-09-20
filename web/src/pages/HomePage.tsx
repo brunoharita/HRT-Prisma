@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ApartmentOutlined, CheckCircleOutlined, ClockCircleOutlined, DatabaseOutlined, FileAddOutlined, SafetyCertificateOutlined, SyncOutlined, TeamOutlined } from "@ant-design/icons";
-import { Alert, Button, Drawer, Empty, Skeleton, Statistic, Steps, Tag, Typography } from "antd";
+import { Alert, Button, Collapse, Drawer, Skeleton, Statistic, Steps, Tag, Typography } from "antd";
 import type { HomeSummary, KnowledgeSourceHealth, KnowledgeSourceMonitorStatus, PrismaDataRepository } from "../domain/prismaData";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -40,34 +40,20 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
   }, [activeMembership.organizationId, repository]);
 
   return (
-    <PrismaPage>
+    <PrismaPage className="prisma-m81-home">
       <PrismaPageHeader
-        title="Início"
-        description={`Visão consolidada das informações profissionais de ${activeMembership.organizationName}.`}
+        title="Olá!"
+        description={`Bem-vindo ao Prisma · ${activeMembership.organizationName}`}
       />
       {error ? <Alert message={error} showIcon type="error" /> : null}
-      {activeMembership.role !== "member" ? (
-        <PrismaCard className="prisma-curriculum-first-card">
-          <div>
-            <Typography.Title level={2}>Importar currículo</Typography.Title>
-            <Typography.Paragraph>
-              Transforme um currículo em um perfil estruturado para revisão, preservando a fonte e cada evidência.
-            </Typography.Paragraph>
-          </div>
-          <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")} size="large" type="primary">
-            Importar currículo
-          </Button>
-        </PrismaCard>
-      ) : null}
       <section className="prisma-dashboard-grid" aria-label="Resumo da organização">
         {loading ? <HomeSkeleton /> : summary ? <HomeMetrics summary={summary} /> : null}
-        {!loading && summary && summary.peopleCount === 0 && summary.structuredProfilesCount === 0 && summary.openVacanciesCount === 0 ? (
-          <PrismaCard className="prisma-foundation-card">
-            <Empty description="Esta organização ainda não possui dados estruturados." image={Empty.PRESENTED_IMAGE_SIMPLE} />
-          </PrismaCard>
-        ) : null}
-        {!loading && summary ? (
-        <KnowledgeSourcesCard
+      </section>
+      {!loading && summary ? <Alert className="prisma-m81-home-notice" type="info" showIcon
+        message="Estrutura de competências M8 disponível"
+        description="A base institucional de Conhecimento permanece disponível. Pessoas e perfis são mostrados conforme a organização ativa." /> : null}
+      {activeMembership.role !== "member" ? <Button className="prisma-m81-home-import" icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")}>Importar currículo</Button> : null}
+      {!loading && summary ? <Collapse className="prisma-m81-home-details" ghost items={[{ key: "sources", label: "Acompanhar bases de conhecimento", children: <KnowledgeSourcesCard
             sources={summary.knowledgeSources}
             canManage={activeMembership.role === "super_admin"}
             onNavigate={onNavigate}
@@ -85,16 +71,13 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
                 setCheckingSourceId(null);
               }
             }}
-          />
-        ) : null}
-      <PrismaCard className="prisma-contract-card" title="Confiança em cada etapa">
+          /> }, { key: "principles", label: "Confiança em cada etapa", children: <PrismaCard className="prisma-contract-card" title="Confiança em cada etapa">
           <div className="prisma-home-principles">
             <div><CheckCircleOutlined /><span><strong>Decisão humana</strong><small>O Prisma organiza evidências, mas não decide contratações.</small></span></div>
             <div><SafetyCertificateOutlined /><span><strong>Origem preservada</strong><small>Cada informação permanece vinculada à sua fonte e versão.</small></span></div>
             <div><DatabaseOutlined /><span><strong>Dados protegidos</strong><small>O acesso respeita a empresa ativa e o papel de cada usuário.</small></span></div>
           </div>
-      </PrismaCard>
-      </section>
+      </PrismaCard> }]} /> : null}
       <SourceResolutionDrawer source={resolutionSource} onClose={() => setResolutionSource(null)} onNavigate={onNavigate} />
     </PrismaPage>
   );
@@ -108,12 +91,16 @@ function HomeMetrics({ summary }: { summary: HomeSummary }) {
         <Typography.Text type="secondary">Pessoas registradas na empresa ativa.</Typography.Text>
       </PrismaCard>
       <PrismaCard className="prisma-status-card">
-        <Statistic prefix={<DatabaseOutlined />} title="Perfis estruturados" value={summary.structuredProfilesCount} />
-        <Typography.Text type="secondary">Perfis aprovados e prontos para consulta.</Typography.Text>
+        <Statistic prefix={<ApartmentOutlined />} title="Vagas" value={summary.openVacanciesCount} />
+        <Typography.Text type="secondary">Posições abertas na empresa.</Typography.Text>
       </PrismaCard>
       <PrismaCard className="prisma-status-card">
-        <Statistic prefix={<ApartmentOutlined />} title="Posições abertas" value={summary.openVacanciesCount} />
-        <Typography.Text type="secondary">Posições atualmente abertas na empresa.</Typography.Text>
+        <Statistic prefix={<CheckCircleOutlined />} title="Perfis aprovados" value={summary.structuredProfilesCount} />
+        <Typography.Text type="secondary">Perfis estruturados disponíveis.</Typography.Text>
+      </PrismaCard>
+      <PrismaCard className="prisma-status-card">
+        <Statistic prefix={<DatabaseOutlined />} title="Conhecimento" value={summary.knowledgeSources.length} />
+        <Typography.Text type="secondary">Fontes institucionais acompanhadas.</Typography.Text>
       </PrismaCard>
     </>
   );
@@ -122,7 +109,7 @@ function HomeMetrics({ summary }: { summary: HomeSummary }) {
 function HomeSkeleton() {
   return (
     <>
-      {[0, 1, 2].map((item) => <PrismaCard key={item} className="prisma-status-card"><Skeleton active paragraph={{ rows: 1 }} /></PrismaCard>)}
+      {[0, 1, 2, 3].map((item) => <PrismaCard key={item} className="prisma-status-card"><Skeleton active paragraph={{ rows: 1 }} /></PrismaCard>)}
     </>
   );
 }

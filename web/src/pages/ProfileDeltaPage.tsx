@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, Empty, Radio, Select, Skeleton, Statistic, Tabs, Tag, Typography } from "antd";
+import { Alert, Button, Card, Empty, Radio, Select, Skeleton, Statistic, Steps, Tabs, Tag, Typography } from "antd";
 import { deriveProfileDelta, isProfileBlockDecisionItem, type ProfileDeltaItem, type ProfileDeltaKind, type ProfileDeltaSection } from "../domain/profileDelta";
 import type { ProfileBlockAction, ProfileBlockDecision, ProfilePublicationMode, ProfileReviewWorkspace, ProfileVersionView } from "../domain/personIngestion";
 import { normalizeReviewDraft, validateEducationClassificationsForApproval, validateReviewDraftForSave } from "../domain/reviewFieldLifecycle";
@@ -159,6 +159,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion ?? workspace.baseProfileVersion}` : workspace.documentName}</strong><small>{workspace.sourceKind === "profile" ? "Versão usada como base" : `Documento v${workspace.documentVersion}`}</small></span></Card>}
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => returnToReview()} type="text">Voltar para revisão</Button>
+      <Steps className="prisma-m81-publication-steps" current={2} items={[{ title: "Dados extraídos" }, { title: "Revisão" }, { title: "Comparação" }, { title: "Publicação" }]} size="small" />
       <Card className="prisma-delta-summary-card">
         {!delta.firstPublication ? <div className="prisma-publication-mode" aria-label="Escolha como o perfil será publicado">
           <Typography.Title level={4}>Como esta revisão deve formar o Perfil?</Typography.Title>
@@ -180,6 +181,11 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
           <Statistic title="Remoções" value={delta.counts.explicit_removal} />
         </div>
       </Card>
+
+      <div className="prisma-m81-publication-columns" aria-label="Comparação das informações do perfil">
+        <Card title="Informações revisadas" size="small"><p>Conteúdo proposto nesta revisão</p>{delta.items.filter((item) => ["summary", "private_contact"].includes(item.section)).slice(0, 5).map((item) => <div className="prisma-m81-publication-field" key={item.key}><strong>{item.label}</strong><span>{item.after ? preview(item.after) : "Não citado nesta revisão"}</span></div>)}</Card>
+        <Card title="Perfil vigente" size="small"><p>Informações já publicadas</p>{delta.items.filter((item) => ["summary", "private_contact"].includes(item.section)).slice(0, 5).map((item) => <div className="prisma-m81-publication-field" key={item.key}><strong>{item.label}</strong><span>{preview(item.before)}</span></div>)}</Card>
+      </div>
 
       <Card className="prisma-delta-content-card">
         <Tabs items={sections.map((section) => ({

@@ -1,6 +1,6 @@
 # Agreement Contract — M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada
 
-**Versão:** 1.1.0
+**Versão:** 1.1.1
 **Estado:** `agreed`
 **Movimento:** M8.1
 **Contrato-base:** Agreement Contract M8 — Redefinição das Regras de Agrupamento de Competências v1.0.0
@@ -33,6 +33,8 @@ O Product Owner definiu em 2026-09-20 que as definições dos macrogrupos `Hard 
 **Q-07 resolvida:** subagrupadores próprios de uma organização nunca reclassificam conceitos Globais nem aparecem para outras organizações. A imagem composta de nove telas em `docs/assets/m81-nine-screen-reference.png` (SHA-256 `f7b586ccaa224d3d9bc146827e64822c6b43fb0d58d014a1e576feadbcb3f681`) é a referência normativa de arquitetura visual do M8.1.
 
 Não existe `Q-*` material conhecido após essas decisões.
+
+**Decisão posterior do Product Owner (2026-09-20, cadastro específico):** a Pessoa de teste identificada como `[QA] Marina Dados`, antes preservada por falta de intake resolvido, foi confirmada pelo Product Owner como criada artificialmente para testes. Essa confirmação individual autoriza incluí-la na exclusão D-14/CA-23, após o mesmo preflight, backup e preview da saga M5.5. A dúvida de proveniência anterior de D-15 fica resolvida somente para esse cadastro; a outra Pessoa sem criação por intake comprovada continua preservada. Nenhuma outra linha ambígua é autorizada por analogia. D-30/CA-40 continuam exigindo fidelidade visual antes da publicação, conforme decisão explícita posterior do Product Owner.
 
 ---
 

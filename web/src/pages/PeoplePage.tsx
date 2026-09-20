@@ -6,12 +6,13 @@ import {
   FileAddOutlined,
   FileSearchOutlined,
   FilterOutlined,
+  MoreOutlined,
   PlusOutlined,
   SearchOutlined,
   TeamOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Empty, Input, Select, Skeleton, Space, Statistic, Table, Tag, Typography } from "antd";
+import { Alert, Button, Dropdown, Empty, Input, Select, Skeleton, Space, Statistic, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   currentProfileDescription,
@@ -46,6 +47,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   const [operationalFilter, setOperationalFilter] = useViewState<OperationalFilter>("operationalFilter", "active");
   const [pagination, setPagination] = useViewState("pagination", { current: 1, pageSize: 10 });
   const [retry, setRetry] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
   const deferredSearch = useDeferredValue(search);
   const [people, setPeople] = useState<PersonWorkspaceSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,7 +86,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       title: "Pessoa",
       dataIndex: "fullName",
       key: "fullName",
-      width: 320,
+      width: 250,
       sorter: (left, right) => left.fullName.localeCompare(right.fullName),
       render: (name: string, person) => (
         <button className="prisma-person-name-button prisma-person-primary-cell" onClick={() => onNavigate(personPath(person.id))} type="button">
@@ -99,7 +101,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     {
       title: "Perfil atual",
       key: "currentProfile",
-      width: 240,
+      width: 190,
       render: (_, person) => (
         <div className="prisma-person-state-cell">
           <Tag color={person.currentProfile ? "green" : "default"}>{currentProfileLabel(person.currentProfile)}</Tag>
@@ -110,7 +112,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     {
       title: "Última importação",
       key: "latestDocument",
-      width: 390,
+      width: 310,
       render: (_, person) => {
         const presentation = presentDocument(person.latestDocument);
         return (
@@ -125,7 +127,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     {
       title: "Ações",
       key: "actions",
-      width: 120,
+      width: 100,
       align: "center",
       render: (_, person) => <Button icon={<EyeOutlined />} onClick={() => onNavigate(personPath(person.id))}>Abrir</Button>,
     },
@@ -137,22 +139,18 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         title="Pessoas"
         description="Gerencie as pessoas e acompanhe, separadamente, o Perfil atual e as importações recentes."
         actions={<Space wrap>
-            <Button icon={<SearchOutlined />} onClick={() => onNavigate("/profiles/search")} type="primary">Encontrar pessoas</Button>
-            {canManagePeople ? <>
-            <Button icon={<FileSearchOutlined />} onClick={() => onNavigate("/profiles/processes")}>Processamento e revisões</Button>
-            <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/new")}>Cadastrar pessoa</Button>
-            <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")}>Importar currículo</Button>
-            </> : null}
+            {canManagePeople ? <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")} type="primary">Importar currículo</Button> : null}
+            <Dropdown menu={{ items: [
+              { key: "search", label: "Encontrar pessoas", icon: <SearchOutlined /> },
+              ...(canManagePeople ? [
+                { key: "processes", label: "Processamento e revisões", icon: <FileSearchOutlined /> },
+                { key: "new", label: "Cadastrar pessoa", icon: <PlusOutlined /> },
+              ] : []),
+            ], onClick: ({ key }) => onNavigate(key === "search" ? "/profiles/search" : key === "processes" ? "/profiles/processes" : "/profiles/new") }}>
+              <Button icon={<MoreOutlined />}>Outras ações</Button>
+            </Dropdown>
           </Space>}
       />
-
-      <div className="prisma-people-stats">
-        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<TeamOutlined />} label="Pessoas ativas" value={activePeople.length} tone="neutral" />
-        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<CheckCircleOutlined />} label="Com perfil aprovado" value={approvedProfiles} tone="success" />
-        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<ClockCircleOutlined />} label="Aguardando revisão" value={awaitingReview} tone="review" />
-        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<UploadOutlined />} label="Importações hoje" value={importedToday} tone="processing" />
-      </div>
-
       <PrismaCard className="prisma-people-toolbar prisma-m2b-toolbar">
         <Input
           allowClear
@@ -162,7 +160,8 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
           prefix={<SearchOutlined />}
           value={search}
         />
-        <div className="prisma-people-filters">
+        <Button icon={<FilterOutlined />} onClick={() => setShowFilters((value) => !value)} aria-expanded={showFilters}>Filtros</Button>
+        {showFilters ? <div className="prisma-people-filters">
           <Select<OperationalFilter>
             aria-label="Filtrar situação da Pessoa"
             onChange={(value) => { setOperationalFilter(value); resetPage(); }}
@@ -197,7 +196,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
             value={importFilter}
           />
 
-        </div>
+        </div> : null}
       </PrismaCard>
       {error ? <PrismaState kind="error" description={error} action={{ label: "Tentar novamente", onClick: () => setRetry((value) => value + 1) }} /> : null}
       <PrismaCard className="prisma-people-table-card">
@@ -205,16 +204,22 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
           <Table
             columns={columns}
             dataSource={filteredPeople}
-            locale={{ emptyText: <PrismaState compact kind={hasFilters ? "filtered" : "empty"} description={hasFilters ? "Ajuste os filtros para ampliar a busca." : canManagePeople ? "Cadastre uma pessoa ou importe um currículo para começar." : "As pessoas cadastradas e disponíveis nesta empresa aparecerão aqui."} {...(hasFilters ? { action: { label: "Limpar filtros", onClick: clearFilters } } : canManagePeople ? { action: { label: "Cadastrar pessoa", onClick: () => onNavigate("/profiles/new") } } : {})} /> }}
+            locale={{ emptyText: <PrismaState compact kind={hasFilters ? "filtered" : "empty"} description={hasFilters ? "Ajuste os filtros para ampliar a busca." : canManagePeople ? "Importe um currículo para criar o primeiro perfil profissional." : "As pessoas cadastradas e disponíveis nesta empresa aparecerão aqui."} {...(hasFilters ? { action: { label: "Limpar filtros", onClick: clearFilters } } : canManagePeople ? { action: { label: "Importar currículo", onClick: () => onNavigate("/profiles/import") } } : {})} /> }}
             pagination={{ ...pagination, onChange: (current, pageSize) => setPagination({ current, pageSize }), showSizeChanger: true, showTotal: (total, range) => `${range[0]}-${range[1]} de ${total}` }}
             rowKey="id"
-            scroll={{ x: 1070 }}
+            scroll={{ x: 850 }}
             size="middle"
             tableLayout="fixed"
             onRow={(person) => ({ onDoubleClick: () => onNavigate(personPath(person.id)) })}
           />
         )}
       </PrismaCard>
+      <details className="prisma-m81-people-summary"><summary>Resumo de Pessoas</summary><div className="prisma-people-stats">
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<TeamOutlined />} label="Pessoas ativas" value={activePeople.length} tone="neutral" />
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<CheckCircleOutlined />} label="Com perfil aprovado" value={approvedProfiles} tone="success" />
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<ClockCircleOutlined />} label="Aguardando revisão" value={awaitingReview} tone="review" />
+        <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<UploadOutlined />} label="Importações hoje" value={importedToday} tone="processing" />
+      </div></details>
       <Typography.Text className="prisma-table-scope-note" type="secondary">
         Perfil aprovado e importação são estados independentes. A busca mostra apenas informações acessíveis na empresa ativa.
       </Typography.Text>

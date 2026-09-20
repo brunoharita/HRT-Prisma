@@ -14,7 +14,7 @@ import {
   LinkOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Collapse, Descriptions, Drawer, Empty, Input, Modal, Select, Space, Switch, Tag, Typography } from "antd";
+import { Alert, Button, Collapse, Descriptions, Drawer, Empty, Input, Modal, Select, Space, Switch, Tabs, Tag, Typography } from "antd";
 import type { PrismaProfileView } from "../../domain/canonicalProfile";
 import {
   evidenceNatureLabel,
@@ -24,6 +24,7 @@ import {
   type ProfessionalEvidenceAssociation,
   type ProfessionalEvidenceNature,
   type ProfessionalEvidenceProjection,
+  type ProfessionalEvidenceGroupView,
 } from "../../domain/personProfessionalEvidence";
 import { personProfileSummary } from "../../domain/personProfileSummary";
 import { PrismaCard } from "../../ui/PrismaCard";
@@ -58,9 +59,11 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
   const [surface, setSurface] = useState<Surface>("summary");
   const [selectedEvidence, setSelectedEvidence] = useState<ProfessionalEvidenceAssociation | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<ProfessionalConceptEvidenceView | null>(null);
+  const [selectedGroupKey, setSelectedGroupKey] = useState<string | null>(null);
   const [linkConcept, setLinkConcept] = useState<ProfessionalConceptEvidenceView | null>(null);
   const [focusPending, setFocusPending] = useState(false);
   const groups = useMemo(() => projection ? groupProfessionalEvidence(projection) : [], [projection]);
+  const selectedGroup = groups.find((item) => item.key === selectedGroupKey);
   const summary = useMemo(() => personProfileSummary(projection), [projection]);
   useEffect(() => {
     if (surface !== "competencies" || !focusPending) return;
@@ -75,16 +78,18 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
     <nav aria-label="Áreas do Perfil profissional" className="prisma-m72-tabs">
       {([
         ["summary", "Resumo"], ["competencies", "Competências"], ["evidence", "Evidências"], ["profile", "Perfil completo"],
-      ] as const).map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => setSurface(key)} type="button">{label}</button>)}
+      ] as const).map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => { setSurface(key); setSelectedConcept(null); setSelectedGroupKey(null); }} type="button">{label}</button>)}
     </nav>
     {projection && surface !== "summary" ? <NormalizationStatus projection={projection} disabled={curationOpen} /> : null}
     {projectionError ? <Alert action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>} description="O Perfil publicado continua disponível abaixo." title={projectionError} showIcon type="warning" /> : null}
     {!projection && !projectionError ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
     {surface === "summary" ? <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} /> : null}
-    {surface === "competencies" ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} onLink={setLinkConcept} curation={curation} onProjection={setProjection} onCurationOpen={setCurationOpen} /> : null}
+    {surface === "competencies" && selectedConcept ? <ConceptDetailSurface concept={selectedConcept} onBack={() => setSelectedConcept(null)} onEvidence={setSelectedEvidence} onOpenSource={onOpenSource} /> : null}
+    {surface === "competencies" && !selectedConcept && selectedGroup ? <SubgroupDetailSurface group={selectedGroup} onBack={() => setSelectedGroupKey(null)} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} /> : null}
+    {surface === "competencies" && !selectedConcept && !selectedGroup ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onGroup={setSelectedGroupKey} onEvidence={setSelectedEvidence} onLink={setLinkConcept} curation={curation} onProjection={setProjection} onCurationOpen={setCurationOpen} /> : null}
     {surface === "evidence" ? <EvidenceSurface groups={groups} projection={projection} onExplain={setSelectedEvidence} onOpenSource={onOpenSource} /> : null}
     {surface === "profile" ? <CanonicalProfileView profile={profile} showCompetencies={false} showHeader={false} /> : null}
-    <ExplanationDrawer concept={selectedConcept} evidence={selectedEvidence} onClose={() => { setSelectedConcept(null); setSelectedEvidence(null); }} onOpenSource={onOpenSource} />
+    <ExplanationDrawer concept={surface === "competencies" ? null : selectedConcept} evidence={selectedEvidence} onClose={() => { if (surface !== "competencies") setSelectedConcept(null); setSelectedEvidence(null); }} onOpenSource={onOpenSource} />
     {projection && curation ? <EvidenceLinkModal adapter={curation} concept={linkConcept} profileId={projection.profile.id} onClose={() => setLinkConcept(null)} onProjection={setProjection} /> : null}
   </div>;
 }
@@ -170,10 +175,11 @@ function formatSummaryDate(value: string): string | null {
   return Number.isNaN(date.getTime()) ? null : new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
 }
 
-function CompetencySurface({ groups, projection, onConcept, onEvidence, onLink, curation, onProjection, onCurationOpen }: {
+function CompetencySurface({ groups, projection, onConcept, onGroup, onEvidence, onLink, curation, onProjection, onCurationOpen }: {
   groups: ReturnType<typeof groupProfessionalEvidence>;
   projection: ProfessionalEvidenceProjection | null;
   onConcept: (value: ProfessionalConceptEvidenceView) => void;
+  onGroup: (key: string) => void;
   onEvidence: (value: ProfessionalEvidenceAssociation) => void;
   onLink: (value: ProfessionalConceptEvidenceView) => void;
   curation: CompetencyCurationAdapter | undefined;
@@ -192,7 +198,7 @@ function CompetencySurface({ groups, projection, onConcept, onEvidence, onLink, 
   const macroGroups = (["hard", "soft", "pending"] as const).map((code) => ({
     code, label: code === "hard" ? "Hard Skills" : code === "soft" ? "Soft Skills" : "Classificação pendente",
     subgroups: filtered.filter((item) => item.macroGroupCode === code),
-  })).filter((item) => item.subgroups.length);
+  })).filter((item) => item.subgroups.length || (group === "all" && item.code !== "pending"));
   const summary = projection ? summarizeProfessionalEvidence(projection) : null;
   return <div className="prisma-m72-competency-layout">
     <main>
@@ -204,15 +210,15 @@ function CompetencySurface({ groups, projection, onConcept, onEvidence, onLink, 
       </section>
       <PrismaCard title="Competências" extra={<WhyButton onClick={() => onConcept(filtered[0]?.concepts[0]!)} disabled={!filtered.length} />}>
         {macroGroups.length ? <div className="prisma-m81-macro-groups">{macroGroups.map((macro) => <section aria-label={macro.label} className={`prisma-m81-macro-card is-${macro.code}`} key={macro.code}>
-          <h3>{macro.label}</h3><Collapse className="prisma-m72-concept-collapse" defaultActiveKey={[macro.subgroups[0]!.key]} items={macro.subgroups.map((item) => ({
+          <h3>{macro.label}</h3>{macro.subgroups.length ? <Collapse className="prisma-m72-concept-collapse" items={macro.subgroups.map((item) => ({
             key: item.key,
             label: <span className="prisma-m72-collapse-label"><GroupIcon type={macro.code} /><strong>{item.label}</strong><small>{item.concepts.length} itens</small></span>,
-            children: <div className="prisma-m72-concept-list">{item.concepts.map((concept) => <article key={concept.id}>
+            children: <div className="prisma-m72-concept-list"><Button className="prisma-m81-subgroup-open" onClick={() => onGroup(item.key)} type="link">Abrir detalhe do subagrupador <ArrowRightOutlined /></Button>{item.concepts.map((concept) => <article key={concept.id}>
               <button onClick={() => onConcept(concept)} type="button"><strong>{concept.label}</strong><NatureTags concept={concept} /><span><FileTextOutlined /> {concept.evidences.length} {concept.evidences.length === 1 ? "evidência" : "evidências"}</span></button>
               <Space><Button aria-label={`Abrir evidência de ${concept.label}`} onClick={() => onEvidence(concept.evidences[0]!)} type="text">›</Button>
               {curation && concept.type !== "occupation" && concept.type !== "certification" ? <Button onClick={() => onLink(concept)} type="link">Vincular evidência</Button> : null}</Space>
             </article>)}</div>,
-          }))} />
+          }))} /> : <p className="prisma-m81-empty-group">Nenhuma competência classificada neste macrogrupo.</p>}
         </section>)}</div> : <Empty description="Nenhum conceito evidenciado corresponde aos filtros." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </PrismaCard>
       {projection ? <CompetencyCuration projection={projection} adapter={curation} onProjection={onProjection} onOpenChange={onCurationOpen} /> : null}
@@ -225,6 +231,45 @@ function CompetencySurface({ groups, projection, onConcept, onEvidence, onLink, 
       <Alert description="Declaração e contexto do currículo continuam autorrelato. Assessment verifica conhecimento no seu instrumento; habilidade prática exige evidência organizacional própria." title="Como ler as evidências" showIcon type="info" />
     </aside>
   </div>;
+}
+
+function SubgroupDetailSurface({ group, onBack, onConcept, onEvidence }: {
+  group: ProfessionalEvidenceGroupView;
+  onBack: () => void;
+  onConcept: (value: ProfessionalConceptEvidenceView) => void;
+  onEvidence: (value: ProfessionalEvidenceAssociation) => void;
+}) {
+  return <section className="prisma-m81-detail-surface">
+    <nav aria-label="Caminho do subagrupador" className="prisma-m81-detail-breadcrumb"><Button onClick={onBack} type="link">Competências</Button><span>›</span><span>{group.macroGroupLabel}</span><span>›</span><strong>{group.label}</strong></nav>
+    <header className="prisma-m81-detail-heading"><div><h2>{group.label}</h2><p>{group.macroGroupLabel} · {group.concepts.length} {group.concepts.length === 1 ? "competência" : "competências"} com evidência neste Perfil.</p></div></header>
+    <PrismaCard><div className="prisma-m81-subgroup-table-wrap"><table className="prisma-m81-subgroup-table"><thead><tr><th>Competência</th><th>Status</th><th>Evidências</th><th>Ações</th></tr></thead><tbody>{group.concepts.map((concept) => <tr key={concept.id}><td><button className="prisma-m81-table-link" onClick={() => onConcept(concept)} type="button">{concept.label}</button></td><td><NatureTags concept={concept} compact /></td><td>{concept.evidences.length}</td><td><Button aria-label={`Abrir evidência de ${concept.label}`} onClick={() => onEvidence(concept.evidences[0]!)} type="text">•••</Button></td></tr>)}</tbody></table></div></PrismaCard>
+  </section>;
+}
+
+function ConceptDetailSurface({ concept, onBack, onEvidence, onOpenSource }: {
+  concept: ProfessionalConceptEvidenceView;
+  onBack: () => void;
+  onEvidence: (value: ProfessionalEvidenceAssociation) => void;
+  onOpenSource: (value: ProfessionalEvidenceAssociation) => void;
+}) {
+  const first = concept.evidences[0];
+  const status = ([
+    ["Declarado", concept.natures.includes("declared"), "Identificado em fonte publicada."],
+    ["Contextualizado", concept.natures.includes("contextual"), "Uso associado a uma experiência publicada."],
+    ["Certificado", concept.natures.includes("certified"), "Credencial identificada e vinculada."],
+    ["Verificado por Assessment", concept.hasCurrentVerifiedAssessment, "Resultado direto vigente de Assessment."],
+    ["Habilidade Evidenciada", concept.hasDemonstratedSkill, "Evidência organizacional de prática."],
+  ] as const);
+  return <section className="prisma-m81-detail-surface">
+    <nav aria-label="Caminho da competência" className="prisma-m81-detail-breadcrumb"><Button onClick={onBack} type="link">Competências</Button><span>›</span><span>{concept.classification?.subgroupLabel ?? "Classificação pendente"}</span><span>›</span><strong>{concept.label}</strong></nav>
+    <header className="prisma-m81-detail-heading"><div><h2>{concept.label}</h2><Tag>{concept.classification?.subgroupLabel ?? "Classificação pendente"}</Tag><p>Conceito profissional com {concept.evidences.length} {concept.evidences.length === 1 ? "evidência preservada" : "evidências preservadas"} neste Perfil.</p></div></header>
+    <Tabs items={[
+      { key: "overview", label: "Visão Geral", children: <PrismaCard title="Status da Competência na Pessoa"><div className="prisma-m81-status-list">{status.map(([label, present, description]) => <div key={label}><span className={present ? "is-present" : "is-unverified"}>{present ? <CheckCircleOutlined /> : <ClockCircleOutlined />}</span><strong>{label}</strong><span>{present ? description : label === "Verificado por Assessment" ? "Ainda não verificado por Assessment." : label === "Habilidade Evidenciada" ? "Ainda não evidenciada pela organização." : "Nenhuma evidência dessa natureza registrada."}</span></div>)}</div></PrismaCard> },
+      { key: "evidence", label: `Evidências (${concept.evidences.length})`, children: <PrismaCard title="Evidências preservadas"><div className="prisma-m81-concept-evidence-list">{concept.evidences.map((item) => <article key={item.id}><Tag color={natureColors[item.nature]}>{evidenceNatureLabel(item.nature)}</Tag><strong>{item.evidence.title}</strong><span>{item.evidence.source.label}</span><Button onClick={() => onEvidence(item)} type="link">Ver explicação</Button></article>)}</div></PrismaCard> },
+      { key: "context", label: "Contexto", children: first ? <PrismaCard title="Origem e proveniência"><EvidenceDetails evidence={first} onOpenSource={onOpenSource} /></PrismaCard> : null },
+      { key: "history", label: "Histórico", children: <PrismaCard title="Registros preservados"><div className="prisma-m81-concept-evidence-list">{concept.evidences.map((item) => <article key={item.id}><strong>{evidenceNatureLabel(item.nature)}</strong><span>{formatSummaryDate(item.evidence.recordedAt) ?? "Data indisponível"}</span><span>{item.evidence.source.label}</span></article>)}</div></PrismaCard> },
+    ]} />
+  </section>;
 }
 
 function EvidenceLinkModal({ adapter, concept, profileId, onClose, onProjection }: {

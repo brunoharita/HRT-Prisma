@@ -1,6 +1,8 @@
 # Prompt Mestre — M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada da Base
 
-**Revisão de execução:** 1.1.0, decisão superveniente do Product Owner em 2026-09-20. Ler integralmente `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` e `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.0 antes de implementar. Esta revisão prevalece nas regras físicas e visuais abaixo sobre referências anteriores deste prompt.
+**Revisão de execução:** 1.1.1, decisões supervenientes do Product Owner em 2026-09-20. Ler integralmente `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` e `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.1 antes de implementar. Esta revisão prevalece nas regras físicas e visuais abaixo sobre referências anteriores deste prompt.
+
+**Decisões de execução posteriores:** incluir exclusivamente `[QA] Marina Dados` no conjunto de Pessoas de teste a excluir após preflight/preview, conforme confirmação individual do Product Owner; preservar a outra Pessoa sem origem de currículo comprovada. Concluir a fidelidade estrutural das nove telas de referência antes do deploy do frontend. Esses pontos atualizam a evidência de D-14/D-15/CA-23 e reiteram D-30/CA-40; não dispensam os demais critérios.
 
 ## Adendo vinculante: definições em tabelas e alcance
 

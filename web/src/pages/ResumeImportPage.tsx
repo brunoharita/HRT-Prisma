@@ -1,8 +1,8 @@
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useState } from "react";
 import {
-  ArrowLeftOutlined, CheckCircleOutlined, CloudUploadOutlined, EyeOutlined, FilePdfOutlined,
-  LockOutlined, PlusOutlined, SafetyCertificateOutlined, ScanOutlined, SearchOutlined, UserAddOutlined,
+  ArrowLeftOutlined, CloudUploadOutlined, EyeOutlined, FilePdfOutlined,
+  LockOutlined, PlusOutlined, SafetyCertificateOutlined, UserAddOutlined,
 } from "@ant-design/icons";
 import { Alert, Button, Card, Descriptions, Form, Input, Modal, Progress, Steps, Tag, Typography, Upload } from "antd";
 import type { UploadFile } from "antd";
@@ -167,7 +167,9 @@ function UploadScreen(props: { busy: boolean; error: string | null; fileList: Up
   return <>
     <PrismaPageHeader title="Importar currículo" description="Envie o currículo para iniciarmos a análise e a construção do Perfil Prisma." />
     <Button icon={<ArrowLeftOutlined />} onClick={props.onBack} type="text">Voltar para Pessoas</Button>
-    {parserIaEnabled() ? <Alert showIcon title="Importação com IA ativada" description="O PDF será enviado à OpenAI para organizar os campos. Você poderá conferir e corrigir o resultado antes de publicar o perfil." type="info" /> : null}
+    <Steps className="prisma-m81-import-steps" current={0} size="small" responsive items={[
+      { title: "Upload" }, { title: "Processamento" }, { title: "Revisão" }, { title: "Publicação" },
+    ]} />
     {props.error ? <Alert showIcon title={props.error} type="error" /> : null}
     <PrismaCard className="prisma-journey-upload-card">
       <Upload.Dragger accept="application/pdf,.pdf" beforeUpload={() => false} disabled={props.busy} fileList={props.fileList} maxCount={1} onChange={({ fileList }) => props.onChange(fileList.slice(-1))} onRemove={() => { props.onChange([]); return true; }}>
@@ -178,14 +180,10 @@ function UploadScreen(props: { busy: boolean; error: string | null; fileList: Up
       {props.progress ? <Alert description={props.progress.message} showIcon title="Leitura inicial em andamento" type="info" /> : null}
       <Button className="prisma-journey-upload-submit" disabled={!props.fileList.length} loading={props.busy} onClick={props.onImport} type="primary">Importar currículo</Button>
     </PrismaCard>
-    <PrismaCard className="prisma-journey-explainer" title="O que acontece após o envio?">
-      <div>{[
-        [<CloudUploadOutlined />, "1. Importar", "Arquivo recebido e preservado."], [<SearchOutlined />, "2. Identificar", "Confirmamos de quem é o currículo."],
-        [<ScanOutlined />, "3. Analisar", "Recuperamos conteúdo e evidências."], [<SafetyCertificateOutlined />, "4. Revisar", "Você corrige e complementa."],
-        [<CheckCircleOutlined />, "5. Publicar", "Uma nova versão do perfil é criada."],
-      ].map(([icon, title, description]) => <article key={String(title)}><span>{icon}</span><strong>{title}</strong><small>{description}</small></article>)}</div>
-    </PrismaCard>
-    <Alert icon={<LockOutlined />} showIcon title="Seus dados estão protegidos" description="O currículo é armazenado de forma privada, isolado por organização e acessível somente a operadores autorizados." type="info" />
+    <details className="prisma-m81-import-details"><summary>Como funciona e como os dados são protegidos</summary>
+      {parserIaEnabled() ? <Alert showIcon title="Importação com IA ativada" description="O PDF será enviado à OpenAI para organizar os campos. Você poderá conferir e corrigir o resultado antes de publicar o perfil." type="info" /> : null}
+      <Alert icon={<LockOutlined />} showIcon title="Seus dados estão protegidos" description="O currículo é armazenado de forma privada, isolado por organização e acessível somente a operadores autorizados." type="info" />
+    </details>
   </>;
 }
 

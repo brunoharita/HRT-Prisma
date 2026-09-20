@@ -13,7 +13,7 @@ import { PrismaCard } from "../ui/PrismaCard";
 interface Props { profile: PlatformAccessProfile; activeMembership: OrganizationMembership | null; }
 
 export function KnowledgePage({ profile, activeMembership }: Props) {
-  const [activeTab, setActiveTab] = useViewState("tab", profile === "super_admin" ? "global" : "organization");
+  const [activeTab, setActiveTab] = useViewState("tab", "overview");
   const [dashboard, setDashboard] = useState<KnowledgeDashboard | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<KnowledgeConceptView | null>(null);
   const [selectedInbox, setSelectedInbox] = useState<KnowledgeInboxView | null>(null);
@@ -58,12 +58,14 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
 
   if (error && !dashboard) return <PrismaPage><Alert message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
   const tabs = isGlobal ? [
+    { key: "overview", label: "Visão Geral", children: overviewPanel() },
     { key: "global", label: "Base global de conhecimento", children: conceptsPanel() },
     { key: "sources", label: "Fontes", children: sourcesPanel() },
     { key: "inbox", label: "Termos para revisar", children: inboxPanel() },
     { key: "proposals", label: "Propostas", children: proposalsPanel() },
     { key: "impacts", label: "Impactos", children: impactsPanel() },
   ] : [
+    { key: "overview", label: "Visão Geral", children: overviewPanel() },
     { key: "organization", label: "Conhecimento da empresa", children: conceptsPanel("organization") },
     { key: "global", label: "Base Prisma", children: conceptsPanel("global") },
     { key: "inbox", label: "Termos para revisar", children: inboxPanel() },
@@ -133,6 +135,33 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
     </Drawer>
   </PrismaPage>;
 
+  function overviewPanel() {
+    const sources = dashboard?.sources ?? [];
+    const featuredSources = ["CBO", "ESCO", "O*NET"].map((name) => sources.find((source) => source.name === name)).filter((source): source is KnowledgeSourceView => Boolean(source));
+    const otherSources = sources.filter((source) => !featuredSources.some((featured) => featured.id === source.id));
+    return <div className="prisma-m81-knowledge-overview">
+      <Alert type="success" showIcon message="Base de conhecimento preservada"
+        description="Fontes oficiais e conhecimento institucional permanecem disponíveis. Dados de currículos são tratados por proveniência." />
+      <div className="prisma-m81-knowledge-sources">
+        {featuredSources.map((source) => <article key={source.id} className="prisma-m81-knowledge-source">
+          <span className="prisma-m81-knowledge-source-icon"><SafetyCertificateOutlined /></span>
+          <strong>{source.name}</strong>
+          <small>{source.domain || source.sourceClass}</small>
+          <Tag color={source.currentVersion ? "success" : "default"}>{source.currentVersion ? "Ativa" : "Catalogada"}</Tag>
+        </article>)}
+        <article className="prisma-m81-knowledge-source">
+          <span className="prisma-m81-knowledge-source-icon"><GlobalOutlined /></span>
+          <strong>Conceitos da organização</strong>
+          <small>Conhecimento institucional da empresa ativa</small>
+          <Tag color="success">Empresa ativa</Tag>
+        </article>
+      </div>
+      {otherSources.length ? <details className="prisma-m81-knowledge-more"><summary>Outras fontes catalogadas ({otherSources.length})</summary>
+        <ul>{otherSources.map((source) => <li key={source.id}>{source.name} · {source.currentVersion ? "Ativa" : "Catalogada"}</li>)}</ul>
+      </details> : null}
+      {!loading && !sources.length ? <Empty description="Nenhuma fonte catalogada nesta camada." /> : null}
+    </div>;
+  }
   function conceptsPanel(scope?: "global" | "organization") {
     const query = conceptSearch.trim().toLocaleLowerCase("pt-BR");
     const rows = (dashboard?.concepts ?? []).filter((concept) => (!scope || concept.scope === scope)

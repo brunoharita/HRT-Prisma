@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 251
-source_manifest_sha256: 7ea82a99fc62e36717124ffa974d730193c1f476bd5f1627b8e94c81e5caca8a
+source_manifest_sha256: 9781520fb18a1e37865d82ecb7f8b74042b6a95b8b8ff042279849861c24d886
 -->
 
 # Tudo sobre o Prisma
@@ -379,7 +379,7 @@ Release routing, Supabase ledger limits and the prompt-authoring workflow are do
 
 # Agreement Contract — M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada
 
-**Versão:** 1.1.0
+**Versão:** 1.1.1
 **Estado:** `agreed`
 **Movimento:** M8.1
 **Contrato-base:** Agreement Contract M8 — Redefinição das Regras de Agrupamento de Competências v1.0.0
@@ -412,6 +412,8 @@ O Product Owner definiu em 2026-09-20 que as definições dos macrogrupos `Hard 
 **Q-07 resolvida:** subagrupadores próprios de uma organização nunca reclassificam conceitos Globais nem aparecem para outras organizações. A imagem composta de nove telas em `docs/assets/m81-nine-screen-reference.png` (SHA-256 `f7b586ccaa224d3d9bc146827e64822c6b43fb0d58d014a1e576feadbcb3f681`) é a referência normativa de arquitetura visual do M8.1.
 
 Não existe `Q-*` material conhecido após essas decisões.
+
+**Decisão posterior do Product Owner (2026-09-20, cadastro específico):** a Pessoa de teste identificada como `[QA] Marina Dados`, antes preservada por falta de intake resolvido, foi confirmada pelo Product Owner como criada artificialmente para testes. Essa confirmação individual autoriza incluí-la na exclusão D-14/CA-23, após o mesmo preflight, backup e preview da saga M5.5. A dúvida de proveniência anterior de D-15 fica resolvida somente para esse cadastro; a outra Pessoa sem criação por intake comprovada continua preservada. Nenhuma outra linha ambígua é autorizada por analogia. D-30/CA-40 continuam exigindo fidelidade visual antes da publicação, conforme decisão explícita posterior do Product Owner.
 
 ---
 
@@ -2530,19 +2532,19 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.44.4
+version: 2.44.5
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
 
-## M8.1 em implementação local, ainda sem rollout
+## M8.1: schema remoto aplicado, limpeza e frontend pendentes
 
-O Agreement M8 v1.0.0, aditivo M8.1 v1.1.0 e imagem normativa de nove telas autorizam a migração de competências. A branch `codex/m81-competency-architecture` contém schema aditivo para dois macrogrupos, nove subagrupadores globais, futuros subagrupadores tenant-scoped e classificação principal versionada dos conceitos Knowledge. Backfill automático só para tecnologias com mapping oficial O*NET; demais classificações aguardam decisão humana. A projeção M8 separa Declaração, Contexto, Certificado, Assessment e habilidade prática; vínculo factual de experiência/credencial exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional são preservados. QA PostgreSQL sintético com rollback passou para classificação, escopo, aprovação, curadoria e natureza da evidência. O primeiro backup de banco/Storage foi concluído em pasta privada; o banco restaurou integralmente em PostgreSQL Supabase isolado e os 15 PDFs foram reconstruídos e lidos pela Storage API local com SHA-256 idêntico ao manifesto. A migration local `20260920153000_m81_person_deletion_inbox_scope` corrige a exclusão ampla de Inbox descoberta no preflight; ensaio das oito Pessoas comprovadas passou com rollback. A Pessoa sem intake resolvido permanece ambígua. Comparação visual completa, limpeza remota, smoke real e implantação ainda faltam; M8.1 não está ativo em produção. ADR-070 e AoT M8.1 acompanham a evidência.
+O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. O Product Owner confirmou `[QA] Marina Dados` como cadastro artificial; o lote controlado contém nove Pessoas, enquanto a outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. A limpeza remota, o frontend hospedado e o smoke final ainda não ocorreram; M8.1 está apenas parcialmente ativo em produção. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
 
-M8.1 está em implementação local na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.0. Dois macrogrupos e nove subagrupadores globais estão modelados em tabelas próprias; conceitos globais só recebem classificação global, e subagrupadores organizacionais permanecem restritos à mesma organização. Backup privado e restauração isolada de banco/Storage passaram; um guard local protege Inbox não relacionada na saga de exclusão. Comparação visual completa, limpeza, smoke e rollout não ocorreram. A produção continua em M7, sem mudança remota M8.1. ADR-070 e AoT M8.1.
+M8.1 está na branch `codex/m81-competency-architecture`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção, mas a web hospedada ainda usa a interface anterior e os dados de teste ainda aguardam limpeza. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada e comparação visual local das nove telas passaram. O estado de rollout é parcial; a sincronização e o smoke final ainda faltam. ADR-070 e AoT M8.1.
 
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
@@ -9316,7 +9318,7 @@ Estado: **plano, backup técnico e restauração isolada de banco/Storage conclu
 2. Confirmar que a rotina copiou separadamente todos os objetos Storage no escopo, com inventário de bucket/path, tamanho e checksum, antes de excluí-los. [Backups de banco não contêm os objetos](https://supabase.com/docs/guides/platform/backups).
 3. Testar leitura/restauração do dump em ambiente isolado sem publicar dados pessoais. Confirmar que o backup e as cópias de Storage cobrem o mesmo corte temporal; suspender novas importações durante o corte ou revalidar fingerprints imediatamente antes da exclusão.
 4. Confirmar server-side `harita.super`: exatamente um `platform_users`, Auth existente, status ativo, perfil `super_admin` e memberships atuais. Não incluir Auth/memberships no conjunto a excluir.
-5. Montar lista de Pessoas pelo vínculo `resume_intakes.resolution_type='created_new_person'` e `resolved_person_id`, agrupada por organização. `latest_source_type` isolado não prova origem. Em 2026-09-20 havia oito Pessoas com criação por intake rastreável e duas sem intake resolvido; uma destas tinha `latest_source_type=resume_pdf` e permanece ambígua. Uma Pessoa criada por intake tem também outro intake vinculado. Exigir prova individual de qualquer linha adicional sem intake antes de incluí-la.
+5. Montar lista de Pessoas pelo vínculo `resume_intakes.resolution_type='created_new_person'` e `resolved_person_id`, agrupada por organização. `latest_source_type` isolado não prova origem. Em 2026-09-20 havia oito Pessoas com criação por intake rastreável e duas sem intake resolvido. O Product Owner confirmou individualmente que `[QA] Marina Dados` foi criada artificialmente para teste e autorizou sua exclusão; incluí-la somente após conferir sua identidade, organização e preview. A outra Pessoa sem intake resolvido permanece preservada. Uma Pessoa criada por intake tem também outro intake vinculado. Exigir prova individual de qualquer outra linha adicional sem intake antes de incluí-la.
 6. Para cada Pessoa elegível, usar `preview_person_definitive_deletion` e a saga M5.5 existente para obter fingerprints, plano de Storage, deleção relacional e verificação de resíduos. Não apagar Vaga/Posição; aplicar apenas a desvinculação de ocupante prevista no contrato vigente. Não criar Pessoa, Knowledge ou decisão humana de teste em produção.
 7. Para Knowledge, construir grafo de origem a partir de `knowledge_observations`, `knowledge_inbox.observation_ids`, propostas, conceitos e aliases; eliminar apenas nós sem proveniência independente, fonte oficial ou uso compartilhado. CBO/ESCO/O*NET e conceitos institucionais ficam fora. Não inferir exclusividade de coincidência textual ou do nome do usuário.
    No snapshot de 2026-09-20, as 128 observações pertencem às oito Pessoas de intake comprovado; 78 Inbox têm somente essas observações, sem evidência adicional nem proposta vinculada. Outras 80 Inbox `unresolved` já estavam vazias e são preservadas pela migration local `20260920153000_m81_person_deletion_inbox_scope`, que restringe a remoção às linhas afetadas na operação. O único conceito organizacional tem proposta aprovada com Inbox sem observações; não há prova de exclusividade para excluí-lo.
@@ -14409,7 +14411,7 @@ Nenhum desvio conhecido do acordo. O resultado de dados solicitado está confirm
 
 # AoT — M8.1 Migração Sistêmica da Arquitetura de Competências
 
-Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` v1.0.0 e aditivo `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.0. Prompt: `docs/qa/execution-m81-competency-architecture.md`. Estado deste AoT: **PARCIAL**, em 2026-09-20. `PASS` abaixo significa prova local ou leitura remota específica, nunca entrega completa.
+Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` v1.0.0 e aditivo `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.1. Prompt: `docs/qa/execution-m81-competency-architecture.md` revisão 1.1.1. Estado deste AoT: **PARCIAL**, em 2026-09-20. `PASS` abaixo significa prova local ou leitura remota específica, nunca entrega completa.
 
 ## Matriz de Acordos
 
@@ -14426,10 +14428,10 @@ Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
 | D-09 | Pendência explícita e ausência neutra; testes de domínio | PASS | Local |
 | D-10 | FK usa `knowledge_concepts.id`; sem catálogo paralelo | PASS | Local |
 | D-11 | RPC e testes M7.1 existentes preservados; 22 regressões dirigidas PASS | PASS | Local |
-| D-12 | UI M8 agrupa por Hard/Soft/subagrupador, não pelos seis tipos | PARTIAL | Falta comparação visual e smoke real |
+| D-12 | UI M8 agrupa por Hard/Soft/subagrupador, com lista e detalhes de subagrupador e conceito; comparação autenticada das nove composições locais | PASS | Smoke hospedado ainda pendente |
 | D-13 | RPCs, trigger, RLS, cliente e UI rejeitam escopo/natureza inválidos; QA SQL | PASS | Local |
-| D-14 | Inventário: 8 Pessoas com criação por intake rastreável; preview e ensaio da saga local passaram | PARTIAL | Descarte remoto pendente |
-| D-15 | Uma Pessoa com origem de currículo sem intake resolvido permanece ambígua | BLOCKED | Não há prova de origem exclusiva |
+| D-14 | Inventário remoto: 8 Pessoas com criação por intake rastreável e `[QA] Marina Dados` confirmada individualmente pelo Product Owner como teste; preview das 9 sagas | PARTIAL | Descarte remoto pendente |
+| D-15 | Outra Pessoa sem criação por intake comprovada foi excluída do lote; `[QA] Marina Dados` recebeu autorização individual explícita | PARTIAL | Preservação após o descarte pendente |
 | D-16 | Leitura remota: 1 `platform_users`, 1 Auth e 1 Super Admin ativo para `harita.super` | PARTIAL | Preservação pós-limpeza não testada |
 | D-17 | 128 observações e 78 Inbox ligadas aos oito alvos inventariadas; 80 Inbox vazias não relacionadas protegidas por migration local | PARTIAL | Limpeza remota e decisão sobre cinco Inbox não `unresolved`/conceito organizacional pendentes |
 | D-18 | CBO/ESCO/O*NET sem mutação; backfill estruturado só O*NET technology | PARTIAL | Preservação pós-limpeza pendente |
@@ -14444,7 +14446,7 @@ Contrato: `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md`
 | D-27 | Contratos persistidos versionados; versão pública atual mantida | PARTIAL | Registro de entrega depende de validação/publicação |
 | D-28 | QA SQL e testes TS usam dados sintéticos | PASS | Local |
 | D-29 | RLS, papéis, escopo cruzado e escrita direta negativos no PostgreSQL local | PASS | Sem smoke remoto autenticado |
-| D-30 | Imagem de nove telas registrada como referência normativa no Agreement/Prompt | PARTIAL | Comparação same-state/same-data/same-viewport faltante |
+| D-30 | Nove superfícies renderizadas e comparadas em sessão local autenticada com a imagem normativa; topologia, ordem, densidade e ação principal corrigidas | PASS | Smoke visual hospedado ainda pendente |
 | D-31 | Três tabelas com FKs, dois macros e nove subgrupos; QA SQL | PASS | Local |
 | D-32 | Global/organização protegidos por trigger, RPC e RLS; QA negativo | PASS | Local |
 | D-33 | Schema admite subgrupo organizacional tenant-scoped; UI sem cadastro/edição | PASS | Local |
@@ -14485,26 +14487,28 @@ F-01 a F-14: sem sucessão, 9-Box, PDI, gap, nova fórmula de score/matching, no
 
 ## Fidelidade visual
 
-Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b586ccaa224d3d9bc146827e64822c6b43fb0d58d014a1e576feadbcb3f681`. Topologia principal de Hard/Soft, subagrupadores, Perfil, Knowledge, Pessoas e Configurações foi implementada sobre componentes existentes. **NOT TESTED** para CA-40: ainda não houve render das nove telas com o mesmo estado, dados e viewport nem comparação registrada de proporções, densidade e posição relativa. A imagem é alvo estrutural; pessoas, nomes e contagens nela são ilustrativos.
+Referência normativa: `docs/assets/m81-nine-screen-reference.png`, SHA-256 `f7b586ccaa224d3d9bc146827e64822c6b43fb0d58d014a1e576feadbcb3f681`. Em 2026-09-20, o app local autenticado em viewport desktop 1277 × 1272 foi confrontado com as nove composições da imagem: Dashboard (`/`), importação (`/profiles/import`), Perfil/Competências, detalhe de subagrupador, detalhe de conceito, revisão/comparação (`/delta`), Pessoas (`/profiles`), Conhecimento (`/knowledge`) e Configurações (`/settings`). As capturas da sessão Codex M8.1 identificam as telas renderizadas; a imagem composta não informa o viewport original de cada miniatura, portanto a equivalência foi julgada pela composição desktop e não por pixels. Houve ainda inspeção responsiva em 760 × 900 para Configurações. A renderização usou dados reais do ambiente de teste, sem preencher contagens fictícias.
+
+Dashboard agora apresenta quatro indicadores compactos e aviso M8; importação coloca a jornada em quatro passos acima do upload; Perfil separa Hard/Soft e pendências; subagrupador tem título, breadcrumb e tabela; conceito tem status cumulativos e guias de evidência, contexto e histórico; comparação de revisão apresenta duas colunas; Pessoas mantém busca/filtros próximos da ação de importar; Conhecimento abre com fontes oficiais preservadas; Configurações mostra listas compactas Hard/Soft. As diferenças de conteúdo são dados ilustrativos da referência: a aplicação aceita PDF no contrato vigente, o ambiente tem Pessoas e fontes existentes antes da limpeza, e a Pessoa QA legada com perfil publicado inconsistente retorna `PERSON_PUBLISHED_PROFILE_NOT_FOUND` no mapa e está no lote confirmado de exclusão. A comparação usou outra Pessoa de teste com projeção M8 válida. O App Shell existente foi preservado conforme F-12. Nenhuma divergência estrutural remanescente foi identificada nas nove composições locais; a validação hospedada ainda depende do deploy.
 
 ## Evidência e validação
 
 - PostgreSQL 17 descartável: migrations M8.1 e QA em transação com `ROLLBACK` passaram, incluindo escopo cruzado, RLS, histórico, aprovação, curadoria e naturezas de evidência. Nenhum dado sintético foi persistido no remoto.
 - `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run build`, 11 testes dirigidos de M8/M7.2/M7.6 e 22 regressões dirigidas de M7.1/M7.3/M7.7: PASS. O build Vite avisou sobre chunks grandes e import dinâmico ineficaz, sem falha.
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
-- `pnpm run check:supabase-ledger`: PASS como inspeção; 137 migrações mapeadas, cinco migrations M8.1 pendentes e `cliDbPushAllowed=false`. Nenhum `db push` geral foi executado.
-- Leitura remota agregada: 10 Pessoas, 8 com criação por intake rastreável (uma também ligada a outro intake), 1 com `latest_source_type=resume_pdf` sem intake resolvido; identidade `harita.super` ativa/Super Admin. Sem alteração remota.
+- `pnpm run check:supabase-ledger`: PASS como inspeção histórica; `cliDbPushAllowed=false`. As cinco migrations M8.1 foram aplicadas individualmente ao projeto remoto em ordem, após revisão, sem `db push` geral nem `migration repair`. No remoto: 2 macrogrupos, 9 subagrupadores, 8.908 classificações correntes de tecnologia O*NET e RLS verificado. A migração de proteção da saga M5.5 foi aplicada antes de qualquer descarte.
+- Leitura remota agregada antes da limpeza: 10 Pessoas, 9 alvos autorizados (8 por intake e `[QA] Marina Dados` por confirmação individual), 14 documentos, 128 observações, 15 objetos Storage/2.118.277 bytes; 7 Auth, 7 `platform_users`, 8 Vagas, 30.230 conceitos globais, 8.908 classificações correntes. `harita.super` continua ativo; 80 Inbox vazias não relacionadas foram identificadas para preservação. O esquema remoto M8.1 foi alterado; os dados pessoais ainda não.
 - Dashboard Supabase, projeto Prisma Free: **sem backups automáticos**. [Documentação oficial](https://supabase.com/docs/guides/platform/backups) informa que backup de banco não inclui objetos Storage.
 - Backup M8.1: `scripts/backup-prisma-production.mjs` e `docs/operations/prisma-production-backup.md` executados com a CLI Supabase autenticada, acesso temporário `cli_login_postgres`/`SET ROLE postgres` e chave Secret transitória para o Storage. A cópia privada `C:\Users\Bruno\Documents\Prisma-Backups\prisma-2026-09-20T15-16-28-483Z` contém dump customizado de 28.619.375 bytes, 15 objetos Storage/2.118.277 bytes e manifesto com SHA-256; `node --check`, verificação estrutural/hash e ACL protegida passaram. `pg_restore --clean --if-exists --exit-on-error` restaurou o banco em PostgreSQL Supabase 17.6.1.155 isolado; 7 Auth, 10 Pessoas, 15 intakes, 1 bucket e 15 objetos passaram no smoke de leitura. Fingerprints de buckets/objetos e os 15 caminhos/tamanhos corresponderam ao manifesto. Em rede Docker interna, PostgREST 14.15 e Storage API 1.71.0 restauraram os 15 PDFs pelo endpoint de objetos; download autenticado confirmou 2.118.277 bytes e SHA-256 individual. Contagens finais: 7 Auth, 10 Pessoas, 1 bucket, 15 objetos. Contêineres e rede removidos; backup original intacto. O agendamento continua pendente. D-22 permanece `PARTIAL`.
-- Preflight M8.1 sobre o banco restaurado: 8 Pessoas têm criação por intake comprovada; a nona Pessoa com `latest_source_type=resume_pdf` e sem intake resolvido permanece fora do conjunto. `preview_person_definitive_deletion` retornou 8 operações com 9 documentos/objetos e 128 observações. A preparação, marcação local de 9 itens e finalização relacional das 8 Pessoas passou com `ROLLBACK`, preservando usuários, conceitos e 80 Inbox vazias não relacionadas; contagens originais 10/160/22 de Pessoas/Inbox/ledger foram confirmadas após o rollback. A migration local `20260920153000_m81_person_deletion_inbox_scope` corrige a exclusão ampla de Inbox da saga M5.5; fixture sintética negativa passou no banco isolado. Nenhum objeto Storage foi removido no ensaio.
+- Preflight M8.1 sobre o banco restaurado: 8 Pessoas têm criação por intake comprovada; a nona, `[QA] Marina Dados`, recebeu confirmação individual posterior do Product Owner como teste artificial. `preview_person_definitive_deletion` retornou 8 operações com 9 documentos/objetos e 128 observações. A preparação, marcação local de 9 itens e finalização relacional das 8 Pessoas passou com `ROLLBACK`, preservando usuários, conceitos e 80 Inbox vazias não relacionadas; contagens originais 10/160/22 de Pessoas/Inbox/ledger foram confirmadas após o rollback. A migration `20260920153000_m81_person_deletion_inbox_scope` corrige a exclusão ampla de Inbox da saga M5.5; fixture sintética negativa passou no banco isolado. Nenhum objeto Storage foi removido no ensaio. No remoto, as nove prévias foram conferidas pela interface antes da confirmação de exclusão: 14 documentos e 11 arquivos Storage no lote.
 
 ## Desvios e bloqueios
 
-Nenhum desvio implementado foi aprovado como substituto de requisito. A limpeza, o rollout e a comparação visual permanecem requisitos pendentes, não itens dispensados. A exclusão real exige revalidação do inventário remoto, aplicação revisada da migration de proteção de Inbox e preflight final de Knowledge/ledger. A Pessoa sem origem inequívoca, as cinco Inbox com status aprovado/ambíguo e o conceito organizacional sem proveniência exclusiva comprovada permanecem preservados. `supabase db push` geral e `migration repair` automático continuam vedados pelo ledger histórico.
+Nenhum desvio implementado foi aprovado como substituto de requisito. Limpeza, smoke e rollout permanecem pendentes. A confirmação individual do Product Owner resolveu a origem de `[QA] Marina Dados` apenas para esse cadastro; a outra Pessoa fica preservada. Cinco Inbox vinculadas exclusivamente às observações do lote e dois aliases organizacionais requerem limpeza exata após a saga, com guarda de referências independentes; o conceito organizacional aprovado com proposta própria e os conceitos globais permanecem preservados. `supabase db push` geral e `migration repair` automático continuam vedados pelo ledger histórico.
 
 ## Git / QA / produção
 
-Branch `codex/m81-competency-architecture`. O registro de publicação consta do Git; ainda sem integração, QA compartilhado ou deploy. Produção permanece no contrato M7 anterior. O trabalho não pode ser declarado concluído enquanto houver `D-*` bloqueado, parcial ou sem teste.
+Branch `codex/m81-competency-architecture`. As migrations M8.1 estão no backend remoto; o frontend hospedado, a limpeza de dados de teste, a integração em main e o smoke final ainda não ocorreram. O trabalho não pode ser declarado concluído enquanto houver `D-*` bloqueado, parcial ou sem teste.
 
 ---
 
@@ -16457,7 +16461,9 @@ O único registro identificado na inspeção read-only de produção é a propos
 
 # Prompt Mestre — M8.1 — Migração Sistêmica da Arquitetura de Competências e Limpeza Controlada da Base
 
-**Revisão de execução:** 1.1.0, decisão superveniente do Product Owner em 2026-09-20. Ler integralmente `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` e `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.0 antes de implementar. Esta revisão prevalece nas regras físicas e visuais abaixo sobre referências anteriores deste prompt.
+**Revisão de execução:** 1.1.1, decisões supervenientes do Product Owner em 2026-09-20. Ler integralmente `docs/agreements/agreement-m8-redefinicao-agrupamento-competencias.md` e `docs/agreements/AGREEMENT_M8.1_FINAL.md` v1.1.1 antes de implementar. Esta revisão prevalece nas regras físicas e visuais abaixo sobre referências anteriores deste prompt.
+
+**Decisões de execução posteriores:** incluir exclusivamente `[QA] Marina Dados` no conjunto de Pessoas de teste a excluir após preflight/preview, conforme confirmação individual do Product Owner; preservar a outra Pessoa sem origem de currículo comprovada. Concluir a fidelidade estrutural das nove telas de referência antes do deploy do frontend. Esses pontos atualizam a evidência de D-14/D-15/CA-23 e reiteram D-30/CA-40; não dispensam os demais critérios.
 
 ## Adendo vinculante: definições em tabelas e alcance
 

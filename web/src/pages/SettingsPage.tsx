@@ -37,12 +37,13 @@ export function SettingsPage({ organizationId }: { organizationId: string | null
           {loading ? <Typography.Text type="secondary">Carregando estrutura...</Typography.Text> : null}
           {!loading && !error && !macroGroups.length ? <Empty description="Estrutura de competências indisponível." /> : null}
           {!loading && !error ? <div className="prisma-m81-settings-grid">{macroGroups.map((macro) => <section className={`prisma-m81-settings-group is-${macro.code}`} key={macro.code} aria-label={macro.label}>
-            <header><DatabaseOutlined /><div><h2>{macro.label}</h2><p>{macro.definition}</p></div></header>
+            <header><DatabaseOutlined /><h2>{macro.label}</h2></header>
             <ul>{subgroups.filter((item) => item.macroGroupCode === macro.code).sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)).map((item) => <li key={item.id}>
-              <strong>{item.code} · {item.label}</strong>{item.scope === "organization" ? <Tag>Empresa</Tag> : null}
-              <p>{item.definition}</p>
-              {item.classificationQuestion ? <p><b>Pergunta de classificação:</b> {item.classificationQuestion}</p> : null}
-              {item.examples?.length ? <p><b>Exemplos:</b> {item.examples.join(", ")}</p> : null}
+              <details><summary><strong>{item.label}</strong>{item.scope === "organization" ? <Tag>Empresa</Tag> : null}</summary>
+                <p>{item.definition}</p>
+                {item.classificationQuestion ? <p><b>Pergunta de classificação:</b> {item.classificationQuestion}</p> : null}
+                {item.examples?.length ? <p><b>Exemplos:</b> {item.examples.join(", ")}</p> : null}
+              </details>
             </li>)}</ul>
           </section>)}</div> : null}
         </PrismaCard>

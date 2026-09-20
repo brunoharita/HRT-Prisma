@@ -379,7 +379,7 @@ function renderRouteContent(
   onNavigate: (path: string) => void,
   onPasswordCompleted: () => Promise<void>,
 ) {
-  if (["/not-found", "/organizations", "/settings"].includes(route.path)) {
+  if (["/not-found", "/organizations"].includes(route.path)) {
     return <PrismaPage><PrismaPageHeader title={route.path === "/not-found" ? "Página não encontrada" : "Área em preparação"} /><PrismaState kind="unavailable" description={route.path === "/not-found" ? "Este endereço não está disponível. Volte ao início para continuar." : "Esta área ainda não está disponível. As funcionalidades atuais continuam acessíveis pelo menu."} action={{ label: "Voltar ao início", onClick: () => onNavigate("/") }} /></PrismaPage>;
   }
   if (route.path === "/" && activeMembership) {
