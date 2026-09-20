@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 256
-source_manifest_sha256: 916da941b500116a7a213ea86aaedf5ebf316eaa65947a71f1a9df125433b160
+source_manifest_sha256: 67a3bd74c8e90c017335100d9c761a1ab3470641d82446989d462af9671a6df5
 -->
 
 # Tudo sobre o Prisma
@@ -2578,15 +2578,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.47.0
+version: 2.48.0
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
 
-## M8.2: correção de projeção para conceito criado pela empresa (local)
+## M8.2: correção de projeção para conceito criado pela empresa (publicada)
 
-O conceito organizacional “Governança Corporativa” foi aprovado em Hard Skills → Gestão, Negócios e Estratégia; a observação humana da declaração “governança” no Perfil publicado também foi resolvida. A RPC `_v6` em produção, porém, ainda retorna zero associações desse conceito: a projeção M7 de base filtra o método Knowledge governance e a curadoria marca o item como `human_preserved`. Uma migration M8.2 corrige somente a leitura `_v6`, projetando a observação humana corrente como declaração, com classificação canônica, sem criar evidência ou cruzar organização. O teste sintético reproduziu zero associações antes e uma depois, com bloqueio para outra organização. Publicação remota da correção ainda pendente; a versão pública permanece v1.8.2.
+O conceito organizacional “Governança Corporativa” foi aprovado em Hard Skills → Gestão, Negócios e Estratégia; a observação humana da declaração “governança” no Perfil publicado também foi resolvida. A projeção M7 de base filtrava o método Knowledge governance e a curadoria marcava o item como `human_preserved`, deixando zero associações visíveis. A migration M8.2 `m82_human_created_competency_profile_projection` corrigiu somente a leitura `_v6`: o teste sintético passou de zero para uma associação e bloqueou outro tenant; no Supabase de produção, a RPC autenticada passou de zero para uma associação `declared` em Hard/H4, sem novo vínculo explícito da Pessoa. O CI da branch passou, `main`/GitHub/VPS foram sincronizados em `7d57555`, e o contêiner web existente permaneceu ativo sem rebuild. A versão pública continua v1.8.2. A inspeção visual autenticada desta Pessoa ainda depende da atualização da tela.
 
 ## M8.2: classificação global assistida em produção
 
@@ -9198,6 +9198,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Correção de projeção M8.2 em 2026-09-20: a migration remota `20260920223716_m82_human_created_competency_profile_projection` atualizou somente a RPC `_v6`. A consulta autenticada do Perfil afetado passou de zero para uma associação de “Governança Corporativa” em Hard/H4 como declaração, sem novos vínculos pessoais persistidos. SHA funcional `7d57555` em `main`/GitHub/VPS, CI aprovado; o release plan não exigiu rebuild web, e `prisma-web` permaneceu ativo, sem reinícios, na imagem anterior. Prisma continua v1.8.2. A inspeção visual autenticada da tela ainda está pendente; detalhes no AoT M8.2.
+
 M8.2 em produção em 2026-09-20: **Prisma v1.8.2**, runtime `6525cfc`, 17 migrations de classificação global assistida no único Supabase. A consulta remota confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), e a projeção autenticada da Pessoa da captura retornou Comunicação em Soft/S1. `main`, GitHub e checkout da VPS foram alinhados; somente `prisma-web` foi recriado, com imagem `sha256:7650d70d8bde9fcb5383a528b9f8e02fd6df464f8859d054eb4092ca6b43896e`, contêiner ativo, zero reinícios e HTTPS 200. O login hospedado exibiu v1.8.2 após recarga. A inspeção visual autenticada do Perfil permanece pendente; evidências e limites no AoT M8.2.
 
 Correção de visibilidade de propostas em 2026-09-19: o runtime web da VPS foi sincronizado no commit `2230d15`. Somente `prisma-web` foi reconstruído e recriado; Supabase, Edge Functions, gateway, workers e Traefik permaneceram intactos. O checkout remoto foi atualizado por fast-forward a partir de `8259d0f`; o primeiro smoke após a recriação retornou 502 transitório e a leitura posterior confirmou HTTPS 200, container em execução e zero reinícios. Fechamentos posteriores apenas documentais não alteram esse frontend ativo. Evidência: `docs/qa/aot-knowledge-proposal-visibility.md`.
@@ -14718,7 +14720,10 @@ O Product Owner relatou que “Governança Corporativa”, criada como Hard/Gest
 | Conceito humano aprovado aparece em Hard/Gestão no Perfil corrente | Fixture sintética: 0 antes da migration, 1 depois; subgrupo H4 | PASS local |
 | Sem invenção ou elevação de evidência | Nenhum `verified_assessment`, `demonstrated_skill` ou `certified` criado; observação existente é a fonte | PASS local |
 | Escopo, idempotência e contagem | Outro tenant recebe 42501; duas leituras retornam uma associação; cobertura conta um conceito | PASS local |
-| Produção e Perfil real | Migration e smoke remoto pendentes | NOT TESTED |
+| Produção e Perfil real | Migration remota `20260920223716` aplicada; RPC autenticada da Pessoa: zero antes, uma associação `declared` Hard/H4 depois; zero novos `person_competency_evidence_links` | PASS backend |
+| Tela hospedada | Atualização e inspeção visual pelo usuário pendentes | NOT TESTED |
+
+O CI da branch no SHA funcional `7d5755520ce65f1f3a915e034f16e8a5b9c59f07` passou ([run #35542172079](https://github.com/brunoharita/HRT-Prisma/actions/runs/35542172079)). Esse SHA foi promovido por fast-forward para `main`/GitHub e para o checkout da VPS. O release plan apontou apenas banco, QA e documentação: não houve nova Edge Function nem rebuild web; `prisma-web` permaneceu `running`, zero reinícios, na imagem anterior. A correção preserva Prisma v1.8.2 e o contrato JSON v4. O registro de tela permanece parcial até a confirmação visual.
 
 ---
 

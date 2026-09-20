@@ -64,4 +64,7 @@ O Product Owner relatou que “Governança Corporativa”, criada como Hard/Gest
 | Conceito humano aprovado aparece em Hard/Gestão no Perfil corrente | Fixture sintética: 0 antes da migration, 1 depois; subgrupo H4 | PASS local |
 | Sem invenção ou elevação de evidência | Nenhum `verified_assessment`, `demonstrated_skill` ou `certified` criado; observação existente é a fonte | PASS local |
 | Escopo, idempotência e contagem | Outro tenant recebe 42501; duas leituras retornam uma associação; cobertura conta um conceito | PASS local |
-| Produção e Perfil real | Migration e smoke remoto pendentes | NOT TESTED |
+| Produção e Perfil real | Migration remota `20260920223716` aplicada; RPC autenticada da Pessoa: zero antes, uma associação `declared` Hard/H4 depois; zero novos `person_competency_evidence_links` | PASS backend |
+| Tela hospedada | Atualização e inspeção visual pelo usuário pendentes | NOT TESTED |
+
+O CI da branch no SHA funcional `7d5755520ce65f1f3a915e034f16e8a5b9c59f07` passou ([run #35542172079](https://github.com/brunoharita/HRT-Prisma/actions/runs/35542172079)). Esse SHA foi promovido por fast-forward para `main`/GitHub e para o checkout da VPS. O release plan apontou apenas banco, QA e documentação: não houve nova Edge Function nem rebuild web; `prisma-web` permaneceu `running`, zero reinícios, na imagem anterior. A correção preserva Prisma v1.8.2 e o contrato JSON v4. O registro de tela permanece parcial até a confirmação visual.

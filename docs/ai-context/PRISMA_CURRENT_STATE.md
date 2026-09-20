@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.47.0
+version: 2.48.0
 last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
 
-## M8.2: correção de projeção para conceito criado pela empresa (local)
+## M8.2: correção de projeção para conceito criado pela empresa (publicada)
 
-O conceito organizacional “Governança Corporativa” foi aprovado em Hard Skills → Gestão, Negócios e Estratégia; a observação humana da declaração “governança” no Perfil publicado também foi resolvida. A RPC `_v6` em produção, porém, ainda retorna zero associações desse conceito: a projeção M7 de base filtra o método Knowledge governance e a curadoria marca o item como `human_preserved`. Uma migration M8.2 corrige somente a leitura `_v6`, projetando a observação humana corrente como declaração, com classificação canônica, sem criar evidência ou cruzar organização. O teste sintético reproduziu zero associações antes e uma depois, com bloqueio para outra organização. Publicação remota da correção ainda pendente; a versão pública permanece v1.8.2.
+O conceito organizacional “Governança Corporativa” foi aprovado em Hard Skills → Gestão, Negócios e Estratégia; a observação humana da declaração “governança” no Perfil publicado também foi resolvida. A projeção M7 de base filtrava o método Knowledge governance e a curadoria marcava o item como `human_preserved`, deixando zero associações visíveis. A migration M8.2 `m82_human_created_competency_profile_projection` corrigiu somente a leitura `_v6`: o teste sintético passou de zero para uma associação e bloqueou outro tenant; no Supabase de produção, a RPC autenticada passou de zero para uma associação `declared` em Hard/H4, sem novo vínculo explícito da Pessoa. O CI da branch passou, `main`/GitHub/VPS foram sincronizados em `7d57555`, e o contêiner web existente permaneceu ativo sem rebuild. A versão pública continua v1.8.2. A inspeção visual autenticada desta Pessoa ainda depende da atualização da tela.
 
 ## M8.2: classificação global assistida em produção
 
