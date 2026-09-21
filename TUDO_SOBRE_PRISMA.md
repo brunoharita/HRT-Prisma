@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 261
-source_manifest_sha256: af9e56e65a99b07455577503dc3117605b03c2206ce132c8ccc823c54d45b049
+documentation_source_count: 262
+source_manifest_sha256: b69c4ae8362a23fc6150fd7dfb9a4e345339033c53cde0ec03827e3787dacb9d
 -->
 
 # Tudo sobre o Prisma
@@ -9250,6 +9250,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+M5.8 — Formação complementar está em preparação para publicação: o nível `complementary` / `Formação complementar` reutiliza `education[]`, com classificador determinístico para marcadores explícitos de cursos curtos e validador server-side compatível. A migration foi aplicada no Supabase como `20260921123328_complementary_education_level`; a prova remota aceitou um item complementar válido e rejeitou `complementary+bachelor`. Frontend, `main` e VPS aguardam o smoke final deste movimento. Evidência: `docs/qa/aot-m58-complementary-education.md`.
+
 Correção de reprodução de marcadores publicada em 2026-09-21: textos narrativos estruturados pelo Parser IA e rascunhos persistidos carregados pela revisão agora mantêm marcadores explícitos em linhas separadas, sem alterar a evidência de origem. O SHA funcional `7d71241` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi recriado, com container ativo, zero reinícios, `/profiles/import` HTTP 200 e assets versionados preservados. Supabase, gateway, worker e OCR não foram alterados. Evidência: `docs/qa/aot-m57-parser-bullet-linebreaks.md`.
 
 Correção do preflight do Parser IA publicada em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. O SHA `8d011f7` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi reconstruído, com imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`, zero reinícios e HTTPS 200 após a estabilização. O bundle confirma `hosted`, `local=false` e o SHA publicado. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
@@ -13869,6 +13871,51 @@ A passagem para comparação acionou corretamente a pendência de confirmar Situ
 Bruno confirmou "deu certo, pode atualizar tudo". Consulta posterior somente de leitura confirmou o documento v2 approved, review_state approved e exatamente um Perfil publicado a partir dele; approved_at 2026-09-13 01:27:26 UTC. A tentativa v1 continua failed/not_ready no histórico, sem Perfil publicado. Não houve limpeza de histórico, nova importação ou alteração de dados pelo agente nesta atualização.
 
 Entrega M5.7 aprovada para uso local. O PARTIAL registrado nas etapas anteriores descreve os limites existentes naquele momento e não o estado atual desta entrega. O aceite do caso e a publicação humana não substituem avaliação cega/ampliada nem autorizam rollout Hostinger. Não há migração pendente desta correção; código e evidência são sincronizados na branch M5.7 e raiz oficial. Como esta atualização é documental, preserva o gate de 392 testes/19 golden do código e executa geração/verificação do Context Pack e revisão de diff.
+
+---
+
+## Source: `docs/qa/aot-m58-complementary-education.md`
+
+# AoT — M5.8 — Formação complementar
+
+Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.md`, classificação `education-academic-classification-1.2.0`. O movimento adiciona um nível controlado à formação estruturada existente; não cria uma tabela paralela e não altera a separação de certificações.
+
+## Matriz de entrega
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | `education.level=complementary` e rótulo visual `Formação complementar`, reutilizando `education[]` | 37 testes direcionados, incluindo classificador, migration e UI | PASS |
+| D-02 | Marcadores explícitos de curso livre, capacitação, treinamento, workshop, bootcamp, extensão, microcredencial e desenvolvimento profissional classificam o item como complementar | Testes de classificação para curso livre e curso de curta duração | PASS |
+| D-03 | Graus formais continuam em `technical`, `undergraduate` ou `postgraduate`; certificações permanecem em sua seção própria | Suite de regressão da classificação e contrato documental | PASS |
+| D-04 | Conclusão não explícita continua inferida e exige confirmação humana | Teste de curso complementar verifica `educationClassificationNeedsReview=true` | PASS |
+| D-05 | Validação server-side aceita apenas combinações compatíveis com o novo nível | Migration aplicada no Supabase; caso complementar válido aceito e `complementary+bachelor` rejeitado | PASS |
+| D-06 | Interface comunica formação acadêmica e complementar sem alterar a ordem do fluxo de revisão | `typecheck:web`, build e teste de UI aprovados | PASS |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Não classificar grau acadêmico formal como formação complementar | Compatibilidade server-side rejeita qualificações incompatíveis | PASS |
+| P-02 | Não reclassificar certificações como formação | Diff limitado ao domínio `education[]`, parser e telas de formação | PASS |
+| P-03 | Não transformar status inferido em fato confirmado | Classificador preserva a pendência de revisão humana | PASS |
+| P-04 | Não alterar tenant, RLS, permissões ou autoridade humana | Migration somente substitui o validador privado e a função de identidade do curso | PASS |
+
+## Validação
+
+- `pnpm run build`: PASS.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm exec node --test dist/tests/educationClassification.test.js dist/tests/educationClassificationMigration.test.js dist/tests/educationClassificationUi.test.js`: 37/37 PASS.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
+- `git diff --check`: PASS.
+- Supabase remoto: função instalada contém `complementary`; teste positivo retornou `true` e teste negativo de `complementary+bachelor` retornou rejeição.
+
+## Limites
+
+Sem marcador explícito, o classificador não inventa a natureza do curso: mantém a classificação determinística disponível e a confirmação humana quando a conclusão ou a categoria não estiverem comprovadas. A regra melhora a separação automática, mas não substitui a revisão de casos ambíguos.
+
+## Conclusão
+
+PASS técnico para a implementação local e para a migração remota. A publicação web e a sincronização de `main` são registradas em `docs/operations/deployment.md` após o smoke do runtime.
 
 ---
 
