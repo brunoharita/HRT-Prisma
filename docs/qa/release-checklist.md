@@ -8,6 +8,7 @@
 - [ ] contratos, ADRs e owners identificados;
 - [ ] diff limitado ao objetivo.
 - [ ] `pnpm run release:plan` classificou somente as superfícies diretamente afetadas; caminhos desconhecidos foram resolvidos antes da publicação.
+- [ ] mapa de impacto final, capacidades protegidas, baseline e regressões proporcionais estão no AoT; uma preservação sem evidência não é marcada como aprovada.
 
 ## Código e contratos
 

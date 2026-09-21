@@ -39,6 +39,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | Knowledge ou pesquisa externa | owners de professional concept, Knowledge, model/prompt policy, migrations e Edge Function aplicáveis |
 | Auth, RLS, PII ou Supabase | `docs/security`, contratos de arquitetura, migrations/RPCs e provas negativas do limite afetado |
 | Ambiente, release ou implantação | `docs/operations`, `docs/architecture/versioning.md`, release checklist e evidência do ambiente alvo |
+| Governança de impacto, preservação e regressão | `AGENTS.md`, `docs/qa/agreement-contract-template.md`, `docs/qa/aot-template.md`, `docs/qa/product-agreement-traceability.md`, `docs/operations/release-dispatcher.md` e Agreement/AoT do movimento |
 
 Quando um Agreement Contract específico existir, o prompt deve exigir sua leitura integral por caminho e versão. Um resumo ou uma lista de IDs não o substitui.
 

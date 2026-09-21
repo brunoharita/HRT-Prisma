@@ -69,6 +69,12 @@ For factual availability, consult the relevant section of `docs/ai-context/PRISM
 6. Explain expected impact and a short execution plan.
 7. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
 
+### Mapa de impacto e preservação (GOV-01)
+
+Todo movimento material deve registrar, antes da implementação, um Mapa de Impacto que liste áreas diretas, dependências compartilhadas, áreas potencialmente afetadas e capacidades concretas a preservar. Cada relação deve ser classificada como `direct`, `plausible_indirect`, `critical_transversal` ou `no_impact_identified`; esta última exige análise proporcional, não apenas ausência de arquivos no diff. O mapa define o baseline mínimo (capacidade, ambiente/estado, SHA ou versão, cenário e evidência disponível), a regressão proporcional e o AoT de fechamento.
+
+Dependência nova, capacidade descoberta ou divergência material revisa o mapa e a validação antes do encerramento. Relações diretas exigem regressão; relações plausivelmente indiretas exigem prova proporcional; jornadas transversais críticas exigem smoke quando houver consequência material. O AoT separa comportamento novo de preservação e não pode declarar `PASS` para uma capacidade protegida que falhou ou para a qual faltou evidência necessária; limitações de baseline permanecem explícitas. O mapa orienta a validação e não autoriza suíte integral por padrão.
+
 ### During implementation
 
 - Implement only what the outcome requires.
@@ -192,6 +198,7 @@ Use pnpm and select the least costly validation that proves the change safely:
 - bounded frontend or backend changes: typecheck/build and targeted tests for changed and affected modules;
 - integrated or sensitive changes: targeted integration, security, negative and contract tests for the affected boundaries;
 - full repository validation, including `pnpm run validate`, only with explicit Product Owner authorization and a written explanation of the cross-cutting risk that justifies it.
+- Every material validation records the affected map, protected capabilities, baseline, proportional regression and evidence in the AoT; a diff-only review cannot prove preservation.
 
 The existence of `pnpm run validate` as the complete foundation gate does not make it automatic for every change. A complete run is evidence for a broader risk decision, not a default response to a local edit.
 

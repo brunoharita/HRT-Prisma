@@ -33,6 +33,10 @@ pnpm run release:plan -- --receipt=tmp/release/plan.json
 | Edge Function | testes afetados | somente a função nomeada | não acessar |
 | combinação | união sem duplicar comandos | banco → funções | web por último |
 
+## Gate orientado ao impacto
+
+O plano de release é combinado com o Mapa de Impacto do movimento. Cada capacidade protegida por relação direta recebe regressão obrigatória; relação plausivelmente indireta recebe prova proporcional; jornada transversal crítica recebe smoke quando houver consequência material. `no_impact_identified` somente é válido depois da análise proporcional registrada no AoT. O dispatcher não transforma um diff somente documental em prova de preservação e não exige suíte integral quando as áreas afetadas não a justificam.
+
 ## Ledger Supabase
 
 `supabase/migration-ledger-map.json` registra o estado observado no projeto `ioldpnqqvobprjiontre`. A verificação de 2026-09-19 encontrou 138 migrations locais, 142 remotas, 136 nomes mapeados, 73 aliases de versão, seis registros somente remotos, dois arquivos somente locais e 57 fingerprints canônicas diferentes.

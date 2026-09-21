@@ -30,6 +30,16 @@
 
 - CA-D01 — Dado, quando, então; teste e evidência esperados.
 
+## MAPA DE IMPACTO E PRESERVAÇÃO — obrigatório em movimento material
+
+Registrar antes da implementação. O mapa deve ser revisado se surgir dependência, capacidade ou risco novo.
+
+| Área / capacidade | Relação (`direct` \| `plausible_indirect` \| `critical_transversal` \| `no_impact_identified`) | Dependência / mecanismo | Baseline mínimo (ambiente, SHA/versão, cenário, evidência) | Regressão proporcional / evidência prevista |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
+
+Separar funcionalidades novas das capacidades preservadas. `no_impact_identified` somente após análise proporcional; ausência de arquivo alterado não é prova suficiente. Relações diretas exigem regressão, relações plausivelmente indiretas exigem prova proporcional e jornadas transversais críticas exigem smoke quando houver consequência material.
+
 ## FIDELIDADE VISUAL — obrigatório quando houver referência
 
 - Classificação de cada referência: alvo normativo | inspiração | contraexemplo | exemplo de conteúdo.

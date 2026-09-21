@@ -1,5 +1,7 @@
 # Versionamento
 
+GOV-01 (2026-09-20) registra uma regra permanente de governança para Mapa de Impacto, baseline, regressão proporcional e preservação no AoT. É uma mudança documental/processual sem comportamento de produto, schema, runtime ou entrega pública; por isso não incrementa `Prisma v1.8.2` nem contratos executáveis. O ADR-072 e o AoT GOV-01 registram a decisão e as provas.
+
 A correção da projeção de conceito criado pela empresa, dentro de M8.2, mantém **Prisma v1.8.2** e `person-professional-evidence-4.0.0`: restaura uma associação declarada que o contrato já exigia, sem mudar campos, natureza ou tela. A migration revisada altera somente a RPC `_v6`; não há nova entrega numerada de produto. O AoT M8.2 registra a prova e o rollout.
 
 M8.2 (2026-09-20, publicado): a classificação assistida do catálogo Global é a segunda entrega do Movimento 8. **Prisma v1.8.2** foi publicado no SHA `6525cfc`; o login hospedado exibiu a versão após recarga, e o menu consome o mesmo registro. Os nove subagrupadores e `competency-taxonomy-2.0.0` permanecem; `prisma-competency-classification-1.1.0` versiona o classificador e `ai_assisted` distingue sua proveniência. As 17 migrations M8.2 constam no único Supabase remoto. ADR-071 e AoT M8.2 registram a validação e os limites da inspeção visual do Perfil.

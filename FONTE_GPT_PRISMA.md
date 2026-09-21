@@ -5,8 +5,8 @@ context_bundle_version: 2.0.0
 product_version: 1.8.1
 current_state_version: 2.48.0
 current_state_last_verified: 2026-09-20
-documentation_source_count: 256
-source_manifest_sha256: 67a3bd74c8e90c017335100d9c761a1ab3470641d82446989d462af9671a6df5
+documentation_source_count: 260
+source_manifest_sha256: f994954afedfd89a516a1fc4a3b0cba18f76257ee0bf9edd67dafa9ffe6ff1ea
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -204,6 +204,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | Knowledge ou pesquisa externa | owners de professional concept, Knowledge, model/prompt policy, migrations e Edge Function aplicáveis |
 | Auth, RLS, PII ou Supabase | `docs/security`, contratos de arquitetura, migrations/RPCs e provas negativas do limite afetado |
 | Ambiente, release ou implantação | `docs/operations`, `docs/architecture/versioning.md`, release checklist e evidência do ambiente alvo |
+| Governança de impacto, preservação e regressão | `AGENTS.md`, `docs/qa/agreement-contract-template.md`, `docs/qa/aot-template.md`, `docs/qa/product-agreement-traceability.md`, `docs/operations/release-dispatcher.md` e Agreement/AoT do movimento |
 
 Quando um Agreement Contract específico existir, o prompt deve exigir sua leitura integral por caminho e versão. Um resumo ou uma lista de IDs não o substitui.
 

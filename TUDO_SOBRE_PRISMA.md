@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 256
-source_manifest_sha256: 67a3bd74c8e90c017335100d9c761a1ab3470641d82446989d462af9671a6df5
+documentation_source_count: 260
+source_manifest_sha256: f994954afedfd89a516a1fc4a3b0cba18f76257ee0bf9edd67dafa9ffe6ff1ea
 -->
 
 # Tudo sobre o Prisma
@@ -85,6 +85,12 @@ For factual availability, consult the relevant section of `docs/ai-context/PRISM
 5. Classify risk and identify applicable contracts and ADRs.
 6. Explain expected impact and a short execution plan.
 7. Stop for material ambiguity, missing authority, production outside Section 7 authorization, destructive action, unexpected external cost, or unresolved security risk.
+
+### Mapa de impacto e preservação (GOV-01)
+
+Todo movimento material deve registrar, antes da implementação, um Mapa de Impacto que liste áreas diretas, dependências compartilhadas, áreas potencialmente afetadas e capacidades concretas a preservar. Cada relação deve ser classificada como `direct`, `plausible_indirect`, `critical_transversal` ou `no_impact_identified`; esta última exige análise proporcional, não apenas ausência de arquivos no diff. O mapa define o baseline mínimo (capacidade, ambiente/estado, SHA ou versão, cenário e evidência disponível), a regressão proporcional e o AoT de fechamento.
+
+Dependência nova, capacidade descoberta ou divergência material revisa o mapa e a validação antes do encerramento. Relações diretas exigem regressão; relações plausivelmente indiretas exigem prova proporcional; jornadas transversais críticas exigem smoke quando houver consequência material. O AoT separa comportamento novo de preservação e não pode declarar `PASS` para uma capacidade protegida que falhou ou para a qual faltou evidência necessária; limitações de baseline permanecem explícitas. O mapa orienta a validação e não autoriza suíte integral por padrão.
 
 ### During implementation
 
@@ -209,6 +215,7 @@ Use pnpm and select the least costly validation that proves the change safely:
 - bounded frontend or backend changes: typecheck/build and targeted tests for changed and affected modules;
 - integrated or sensitive changes: targeted integration, security, negative and contract tests for the affected boundaries;
 - full repository validation, including `pnpm run validate`, only with explicit Product Owner authorization and a written explanation of the cross-cutting risk that justifies it.
+- Every material validation records the affected map, protected capabilities, baseline, proportional regression and evidence in the AoT; a diff-only review cannot prove preservation.
 
 The existence of `pnpm run validate` as the complete foundation gate does not make it automatic for every change. A complete run is evidence for a broader risk decision, not a default response to a local edit.
 
@@ -2537,6 +2544,7 @@ O GPT usa apenas a fonte compacta como arquivo permanente. O prompt produzido de
 | Knowledge ou pesquisa externa | owners de professional concept, Knowledge, model/prompt policy, migrations e Edge Function aplicáveis |
 | Auth, RLS, PII ou Supabase | `docs/security`, contratos de arquitetura, migrations/RPCs e provas negativas do limite afetado |
 | Ambiente, release ou implantação | `docs/operations`, `docs/architecture/versioning.md`, release checklist e evidência do ambiente alvo |
+| Governança de impacto, preservação e regressão | `AGENTS.md`, `docs/qa/agreement-contract-template.md`, `docs/qa/aot-template.md`, `docs/qa/product-agreement-traceability.md`, `docs/operations/release-dispatcher.md` e Agreement/AoT do movimento |
 
 Quando um Agreement Contract específico existir, o prompt deve exigir sua leitura integral por caminho e versão. Um resumo ou uma lista de IDs não o substitui.
 
@@ -5063,6 +5071,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+GOV-01 (2026-09-20) registra uma regra permanente de governança para Mapa de Impacto, baseline, regressão proporcional e preservação no AoT. É uma mudança documental/processual sem comportamento de produto, schema, runtime ou entrega pública; por isso não incrementa `Prisma v1.8.2` nem contratos executáveis. O ADR-072 e o AoT GOV-01 registram a decisão e as provas.
 
 A correção da projeção de conceito criado pela empresa, dentro de M8.2, mantém **Prisma v1.8.2** e `person-professional-evidence-4.0.0`: restaura uma associação declarada que o contrato já exigia, sem mudar campos, natureza ou tela. A migration revisada altera somente a RPC `_v6`; não há nova entrega numerada de produto. O AoT M8.2 registra a prova e o rollout.
 
@@ -9102,6 +9112,36 @@ Não se pode provar acurácia perfeita de milhares de decisões por amostragem. 
 
 ---
 
+## Source: `docs/decisions/ADR-072-impact-mapping-regression-preservation.md`
+
+# ADR-072 — Mapa de impacto e preservação orientam a regressão
+
+Status: accepted
+Date: 2026-09-20
+
+## Context
+
+Movimentos materiais do Prisma atravessam documentação, código, contratos, banco, integrações e ambientes com riscos diferentes. O diff identifica arquivos alterados, mas não prova que uma capacidade compartilhada ou uma jornada relacionada permaneceu funcionando. A suíte completa em todo movimento aumenta custo sem melhorar a prova quando o impacto é limitado.
+
+## Decision
+
+Todo movimento material registra um Mapa de Impacto antes da implementação, com áreas diretas, dependências compartilhadas, áreas potencialmente afetadas, capacidades protegidas, relação classificada, baseline e regressão proporcional. O AoT final diferencia entrega nova de preservação. O mapa é revisado quando surge nova dependência ou capacidade. O dispatcher e o checklist usam essa prova para selecionar validação e não exigem suíte integral por padrão.
+
+## Consequences
+
+- A ausência de arquivo no diff deixa de ser tratada como prova de ausência de risco.
+- Relações diretas, plausivelmente indiretas e transversais recebem evidência compatível com o risco.
+- Baseline insuficiente permanece declarado como limitação.
+- O processo não altera comportamento de produto nem cria uma nova suíte global.
+
+## Alternatives rejected
+
+- Executar `pnpm run validate` em todo movimento: custo desproporcional e sem relação necessária com o impacto.
+- Usar somente revisão de diff: não cobre dependências compartilhadas e jornadas afetadas.
+- Criar um sistema externo de observabilidade: fora do escopo e desnecessário para a governança documental.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -9821,6 +9861,10 @@ pnpm run release:plan -- --receipt=tmp/release/plan.json
 | migration nova | testes/contratos de banco e negativos aplicáveis | somente o arquivo novo | apenas se houver consumidor web |
 | Edge Function | testes afetados | somente a função nomeada | não acessar |
 | combinação | união sem duplicar comandos | banco → funções | web por último |
+
+## Gate orientado ao impacto
+
+O plano de release é combinado com o Mapa de Impacto do movimento. Cada capacidade protegida por relação direta recebe regressão obrigatória; relação plausivelmente indireta recebe prova proporcional; jornada transversal crítica recebe smoke quando houver consequência material. `no_impact_identified` somente é válido depois da análise proporcional registrada no AoT. O dispatcher não transforma um diff somente documental em prova de preservação e não exige suíte integral quando as áreas afetadas não a justificam.
 
 ## Ledger Supabase
 
@@ -11174,6 +11218,16 @@ O build mantém o aviso já conhecido de chunk Ant Design acima de 900 kB. Não 
 
 - CA-D01 — Dado, quando, então; teste e evidência esperados.
 
+## MAPA DE IMPACTO E PRESERVAÇÃO — obrigatório em movimento material
+
+Registrar antes da implementação. O mapa deve ser revisado se surgir dependência, capacidade ou risco novo.
+
+| Área / capacidade | Relação (`direct` \| `plausible_indirect` \| `critical_transversal` \| `no_impact_identified`) | Dependência / mecanismo | Baseline mínimo (ambiente, SHA/versão, cenário, evidência) | Regressão proporcional / evidência prevista |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
+
+Separar funcionalidades novas das capacidades preservadas. `no_impact_identified` somente após análise proporcional; ausência de arquivo alterado não é prova suficiente. Relações diretas exigem regressão, relações plausivelmente indiretas exigem prova proporcional e jornadas transversais críticas exigem smoke quando houver consequência material.
+
 ## FIDELIDADE VISUAL — obrigatório quando houver referência
 
 - Classificação de cada referência: alvo normativo | inspiração | contraexemplo | exemplo de conteúdo.
@@ -11193,6 +11247,96 @@ O build mantém o aviso já conhecido de chunk Ant Design acima de 900 kB. Não 
 - Data:
 - Evidência de aprovação:
 - Referência imutável para o prompt: versão deste contrato ou Git revisão/hash.
+
+---
+
+## Source: `docs/qa/agreement-gov-01-impact-mapping-regression-preservation.md`
+
+# Agreement Contract GOV-01 — Mapa de Impacto e Preservação de Funcionalidades
+
+Versão: 1.0.0. Estado: `agreed`. Product Owner: Bruno. Data: 2026-09-20.
+
+## Objetivo
+
+Estabelecer, para todo movimento material do Prisma, um mapa prévio de impacto, um baseline mínimo e uma prova proporcional de regressão e preservação. Este contrato governa o processo de engenharia e QA; não altera produto, dados ou runtime.
+
+## DEVE
+
+- D-01 — Registrar o Mapa de Impacto antes da implementação.
+- D-02 — Listar áreas, objetos, fluxos e processos diretamente afetados.
+- D-03 — Listar dependências compartilhadas: código, contratos, schema, migrations, RPCs, funções, serviços, integrações, flags, ambiente, runtime e deploy.
+- D-04 — Listar áreas potencialmente afetadas, mesmo quando não forem alteradas diretamente.
+- D-05 — Listar capacidades concretas a preservar.
+- D-06 — Classificar cada relação como `direct`, `plausible_indirect`, `critical_transversal` ou `no_impact_identified`.
+- D-07 — Relação direta exige teste de regressão.
+- D-08 — Relação plausivelmente indireta exige teste proporcional.
+- D-09 — Jornada transversal crítica exige smoke quando houver consequência material.
+- D-10 — `no_impact_identified` só pode ser usado após análise proporcional.
+- D-11 — Selecionar testes pelo impacto, sem suíte completa por reflexo.
+- D-12 — Registrar baseline antes da mudança quando necessário para provar preservação.
+- D-13 — Baseline mínimo: capacidade, ambiente/estado, SHA ou versão, cenário e evidência.
+- D-14 — Capacidade que funcionava antes e quebra depois impede `PASS`.
+- D-15 — O AoT separa comportamento novo de capacidade preservada.
+- D-16 — O AoT rastreia previsão, baseline, regressão, evidência e status de cada capacidade protegida.
+- D-17 — Baseline ausente quando necessário é limitação explícita; não permite alegar ausência de regressão.
+- D-18 — Dependência nova revisa o mapa.
+- D-19 — Área nova descoberta exige mapa e regressão antes do fechamento.
+- D-20 — Manter a classe de risco proporcional ao impacto.
+- D-21 — Template de Agreement deve suportar áreas e capacidades preservadas.
+- D-22 — Template de AoT deve suportar mapa, baseline e regressão.
+- D-23 — `AGENTS.md` é a regra normativa para agentes.
+- D-24 — Atualizar coerentemente owners de QA e release.
+- D-25 — Context Pack gerado deve refletir a regra.
+
+## PROIBIDO
+
+- P-01 — Executar a suíte completa em todo movimento sem justificativa e autorização aplicável.
+- P-02 — Provar ausência de impacto apenas pelo diff.
+- P-03 — Afirmar preservação sem evidência proporcional.
+- P-04 — Tratar fora de escopo como prova de ausência de risco.
+- P-05 — Executar testes irrelevantes ao impacto.
+- P-06 — Repetir baseline equivalente recente sem necessidade.
+- P-07 — Ampliar escopo de produto, arquitetura ou UX.
+- P-08 — Alterar comportamento de produto neste movimento.
+- P-09 — Editar manualmente artefatos gerados do Context Pack.
+- P-10 — Criar documento canônico concorrente.
+
+## FORA DE ESCOPO
+
+- F-01 — Corrigir regressões atuais, inclusive Parser IA.
+- F-02 — Criar nova suíte E2E global.
+- F-03 — Redesenhar CI/CD.
+- F-04 — Alterar produto, banco, RLS, UX, IA, parser, matching ou runtime.
+- F-05 — Executar todas as jornadas críticas em todo movimento.
+- F-06 — Adicionar ferramenta externa de observabilidade ou testes.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01 — Escolher a seção normativa adequada de `AGENTS.md`.
+- A-02 — Adaptar os templates existentes.
+- A-03 — Escolher os owners QA/release já existentes.
+- A-04 — Criar ADR somente se não houver decisão equivalente.
+- A-05 — Definir nomes e caminhos consistentes com o repositório.
+- A-06 — Reutilizar classes de risco, AoT e dispatcher existentes.
+- A-07 — Definir validação proporcional e evidência metadata-only.
+- A-08 — Definir a versão documental sem criar versão pública de produto.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — AGENTS contém a regra normativa e a exige antes da implementação.
+- CA-02 — Templates de Agreement e AoT contêm campos de mapa, capacidades, baseline e regressão.
+- CA-03 — Owner QA registra a matriz de rastreabilidade; owner release aplica o gate orientado ao impacto.
+- CA-04 — Cada relação é classificada e `no_impact_identified` tem análise proporcional.
+- CA-05 — Validação do movimento usa somente provas proporcionais; suíte integral não é executada por reflexo.
+- CA-06 — Context Pack é regenerado e verificado; fontes geradas não são editadas manualmente.
+- CA-07 — Nenhum comportamento de produto, schema, RLS, runtime, IA ou deploy é alterado.
+- CA-08 — Versionamento registra a decisão sem incrementar a versão pública.
+
+## Referências e aprovação
+
+Execution Prompt: `docs/qa/execution-gov-01-impact-mapping-regression-preservation.md`.
+ADR: `docs/decisions/ADR-072-impact-mapping-regression-preservation.md`.
+AoT: `docs/qa/aot-gov-01-impact-mapping-regression-preservation.md`.
 
 ---
 
@@ -12965,6 +13109,90 @@ Nenhuma pendência material no escopo autorizado.
 - Data: 2026-09-18.
 - Evidência de aprovação: mensagem “faça isso para garantir que o gpt internalize a regra ao criar prompts que demandem criação ou alteração de telas ou elementos visuais”.
 - Referência para o prompt: este contrato versão 1.0.0 e ADR-061.
+
+---
+
+## Source: `docs/qa/aot-gov-01-impact-mapping-regression-preservation.md`
+
+# AoT — GOV-01 — Mapa de Impacto e Preservação
+
+Contrato de referência: `docs/qa/agreement-gov-01-impact-mapping-regression-preservation.md` versão 1.0.0. Execution Prompt: `docs/qa/execution-gov-01-impact-mapping-regression-preservation.md` versão 1.0.0.
+
+## Baseline e mapa inicial
+
+- Baseline: `5d1c51a53b638989a0b13aa583fe21688903e5e9`, branch `main`, working tree com `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` não relacionados preservados.
+- Ambiente: checkout local Prisma; nenhum produto, banco, Supabase, VPS ou navegador foi alterado.
+- Cenário: governança documental antes da implementação do GOV-01.
+- Evidência: `git status --short --branch`, `git rev-parse HEAD` e inspeção dos owners/templates.
+
+| Área / capacidade | Relação | Dependência / mecanismo | Baseline mínimo | Regressão proporcional / evidência prevista |
+| --- | --- | --- | --- | --- |
+| `AGENTS.md` e processo de implementação material | direct | regra normativa lida pelos agentes | SHA acima; texto existente | revisão de conteúdo e `git diff --check` |
+| Templates Agreement/AoT e rastreabilidade QA | direct | owners de QA e contratos de movimento | templates existentes no baseline | inspeção estrutural e checagem de referências |
+| Dispatcher, checklist e versionamento | direct | release plan, gate e catálogo documental | docs existentes; Prisma v1.8.2 | inspeção de escopo e `release:plan` |
+| Context Pack gerado | direct | índice, gerador e checker | artefatos gerados do baseline | `generate:prisma-context` e `check:prisma-context` |
+| Fluxos, schema, migrations, RPCs, Edge Functions, web e VPS | plausible_indirect | somente regra documental; nenhuma alteração de runtime prevista | estado do baseline; release plan sem essas superfícies | prova de não roteamento e diff de caminhos; sem deploy |
+| Produto publicado e versão pública | no_impact_identified | GOV-01 é processual e não incrementa produto | Prisma v1.8.2 documentado | versionamento + release plan, após análise proporcional |
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste | Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- | --- |
+| D-01–D-25 | Mapa, baseline, regressão, AoT, owners e Context Pack | `AGENTS.md`, templates, owners e documentos GOV-01 | checks abaixo | diff, Context Pack, release plan | PASS | local |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| P-01–P-10 | Sem suíte integral reflexa, diff-only, escopo de produto, edição manual gerada ou documento concorrente | revisão de caminhos, plano de release e diff | nenhum arquivo de produto/runtime; gerador usado | PASS |
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01–F-06 | nenhum código de produto, teste E2E global, CI/CD ou ferramenta externa alterado | PASS |
+
+## Mapa final e preservação
+
+O mapa final não descobriu nova dependência material. A relação dos fluxos de produto permanece `plausible_indirect`/`no_impact_identified` após o `release:plan`; não houve publicação nem acesso a Supabase/VPS. A mudança nova é a regra documental GOV-01; capacidades preservadas são os fluxos e contratos de produto existentes.
+
+| Capacidade protegida / área | Relação | Impacto previsto | Baseline | Regressão executada | Evidência | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| AGENTS e governança de implementação | direct | nova exigência de mapa antes da mudança | SHA baseline | revisão de conteúdo | `AGENTS.md`, diff check | PASS |
+| Agreement/AoT/QA/release | direct | templates e gates passam a exigir preservação | templates baseline | inspeção estrutural | arquivos owner e checker | PASS |
+| Context Pack | direct | fontes canônicas refletem GOV-01 | artefatos baseline | geração + checker | comandos Context Pack | PASS |
+| Produto, banco, integrações e deploy | plausible_indirect | risco processual sem alteração runtime | SHA baseline | release plan e revisão de caminhos | plano sem web/db/functions/VPS | PASS |
+| Versão pública Prisma v1.8.2 | no_impact_identified | nenhum incremento de produto | `docs/architecture/versioning.md` | revisão do registro | versão permanece 1.8.2 | PASS |
+
+### Novidade e preservação
+
+- Entrega nova comprovada: protocolo documental GOV-01, templates, ADR e documentação owner.
+- Capacidades preservadas comprovadas: código/runtime/produto fora do diff; Context Pack regenerado; plano de release limitado a documentação.
+- Relações reclassificadas ou dependências descobertas: nenhuma.
+- Limitações de baseline/evidência: não houve smoke autenticado porque não houve alteração de produto; preservação runtime é limitada à análise de caminhos e ao release plan, conforme o contrato.
+
+## Validação executada
+
+- `git diff --check` — PASS.
+- `pnpm run generate:prisma-context` — PASS.
+- `pnpm run check:prisma-context` — PASS.
+- `pnpm run check:foundation` — PASS; contratos/templates normativos permanecem íntegros.
+- `pnpm run test:release-tooling` — PASS; 14 testes direcionados de Context Pack/dispatcher.
+- `pnpm run release:plan -- --base=origin/main --head=HEAD` — PASS; somente documentação/Context Pack, sem Supabase, Edge Functions, web ou VPS.
+- Plano confirmado contra o commit sob teste: superfícies `context-pack`, `documentation` e `generated-context`; banco, Edge Functions e web/VPS não roteados.
+- Suíte completa `pnpm run validate` — NÃO EXECUTADA; não é proporcional a uma mudança exclusivamente documental e o contrato a proíbe sem justificativa/autorização específica.
+
+## Desvios do contrato
+
+Nenhum desvio identificado.
+
+## Git / QA / ambiente
+
+Branch de implementação: `codex/gov-01-impact-mapping`. SHA validado: HEAD do commit final deste movimento. Artefatos não relacionados `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Não há migration, função, web ou deploy para publicar.
+
+## Conclusão
+
+`PASS` para o escopo documental GOV-01. A prova não declara smoke de produto nem rollout de runtime; esses itens são fora de escopo e permanecem não aplicáveis.
 
 ---
 
@@ -15154,6 +15382,21 @@ Contrato de referência: caminho + versão/revisão imutável. Preencher conclus
 | --- | --- | --- | --- | --- |
 | P-01 |  |  |  | NOT TESTED |
 
+## Mapa de Impacto e Preservação
+
+O mapa abaixo é a versão final após a implementação. Registrar a diferença em relação ao mapa inicial e toda nova dependência descoberta.
+
+| Capacidade protegida / área | Relação | Impacto previsto | Baseline | Regressão executada | Evidência | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+|  | direct / plausible_indirect / critical_transversal / no_impact_identified |  |  |  |  | NOT TESTED |
+
+### Novidade e preservação
+
+- Entrega nova comprovada:
+- Capacidades preservadas comprovadas:
+- Relações reclassificadas ou dependências descobertas:
+- Limitações de baseline/evidência:
+
 ## Fora de escopo preservado
 
 | ID | Evidência no diff | Status |
@@ -15597,6 +15840,18 @@ Validar M5, Central da Pessoa e Documentos em `1920x1080`, `1600x900`, `1440x900
 - Smoke autenticado: M5, Central da Pessoa e Documentos aprovados em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, sem overflow horizontal. O M5 apresentou três seletores em colunas no desktop e uma coluna no mobile; a seleção de `Nível acadêmico` atualizou o caminho ativo de evidência. Nenhum descarte, salvamento ou publicação foi acionado.
 - Casos deliberadamente não classificados: quatro formações do Perfil v1 e cinco registros da importação histórica de Bruno Harita permanecem `legacy-unclassified` até revisão humana, porque foram extraídos antes deste classificador. Nenhum backfill sem evidência foi executado.
 - Resíduo externo ao movimento: `supabase db lint` continua apontando o erro histórico de cast do enum `knowledge_inbox_status` em `public.enqueue_knowledge_observation`. Não foi alterado porque pertence ao domínio Knowledge.
+
+---
+
+## Source: `docs/qa/execution-gov-01-impact-mapping-regression-preservation.md`
+
+# Execution Prompt — GOV-01 — Mapa de Impacto e Preservação 1.0.0
+
+Contrato integral: `docs/qa/agreement-gov-01-impact-mapping-regression-preservation.md`, versão 1.0.0. Ler a íntegra antes de implementar.
+
+Aplicar D-01 a D-25, impedir P-01 a P-10, manter F-01 a F-06 fora do movimento e exercer A-01 a A-08. Atualizar `AGENTS.md`, os templates de Agreement/AoT, owners de QA e release, versionamento, ADR e índice do Context Pack. Criar o AoT do movimento com mapa inicial/final, baseline, regressões, evidência e limites.
+
+Este movimento é documental e de governança. Não alterar produto, schema, RLS, migrations, RPCs, Edge Functions, IA, parser, matching, runtime, UX, infraestrutura ou deploy. Regenerar e verificar o Context Pack pelo gerador oficial. Executar somente validações proporcionais aos arquivos alterados e registrar o plano de release, sem acessar Supabase ou VPS quando o plano não os exigir.
 
 ---
 
@@ -19672,6 +19927,8 @@ Este documento define a prova de QA para o protocolo de fidelidade entre acordos
 
 Cada `D-*` deve ter pelo menos um `CA-*` objetivo e uma linha no AoT com implementação, teste, evidência e status. Toda proibição material testável (`P-*`) exige teste negativo ou evidência equivalente. `F-*` exige prova de preservação no diff. `A-*` não exige aprovação adicional, mas não pode alterar `D-*` ou `P-*`.
 
+Todo movimento material também registra, antes da implementação, um Mapa de Impacto e Preservação: áreas diretas, dependências compartilhadas, áreas potencialmente afetadas, capacidades protegidas, relação (`direct`, `plausible_indirect`, `critical_transversal` ou `no_impact_identified`), baseline e regressão proporcional. O AoT distingue comportamento novo de preservação. A ausência de arquivo no diff não encerra a análise; mapa e evidência devem ser revisados quando uma dependência nova aparecer.
+
 ## Estados
 
 Somente `PASS`, `FAIL`, `PARTIAL`, `BLOCKED` e `NOT TESTED` são aceitos. Um movimento não está concluído quando qualquer requisito obrigatório não for `PASS`, quando uma proibição for violada ou quando uma comprovação tecnicamente disponível estiver ausente.
@@ -19868,6 +20125,7 @@ Produção não é inferida a partir de QA.
 - [ ] contratos, ADRs e owners identificados;
 - [ ] diff limitado ao objetivo.
 - [ ] `pnpm run release:plan` classificou somente as superfícies diretamente afetadas; caminhos desconhecidos foram resolvidos antes da publicação.
+- [ ] mapa de impacto final, capacidades protegidas, baseline e regressões proporcionais estão no AoT; uma preservação sem evidência não é marcada como aprovada.
 
 ## Código e contratos
 

@@ -14,6 +14,21 @@ Contrato de referência: caminho + versão/revisão imutável. Preencher conclus
 | --- | --- | --- | --- | --- |
 | P-01 |  |  |  | NOT TESTED |
 
+## Mapa de Impacto e Preservação
+
+O mapa abaixo é a versão final após a implementação. Registrar a diferença em relação ao mapa inicial e toda nova dependência descoberta.
+
+| Capacidade protegida / área | Relação | Impacto previsto | Baseline | Regressão executada | Evidência | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+|  | direct / plausible_indirect / critical_transversal / no_impact_identified |  |  |  |  | NOT TESTED |
+
+### Novidade e preservação
+
+- Entrega nova comprovada:
+- Capacidades preservadas comprovadas:
+- Relações reclassificadas ou dependências descobertas:
+- Limitações de baseline/evidência:
+
 ## Fora de escopo preservado
 
 | ID | Evidência no diff | Status |

@@ -8,6 +8,8 @@ Este documento define a prova de QA para o protocolo de fidelidade entre acordos
 
 Cada `D-*` deve ter pelo menos um `CA-*` objetivo e uma linha no AoT com implementação, teste, evidência e status. Toda proibição material testável (`P-*`) exige teste negativo ou evidência equivalente. `F-*` exige prova de preservação no diff. `A-*` não exige aprovação adicional, mas não pode alterar `D-*` ou `P-*`.
 
+Todo movimento material também registra, antes da implementação, um Mapa de Impacto e Preservação: áreas diretas, dependências compartilhadas, áreas potencialmente afetadas, capacidades protegidas, relação (`direct`, `plausible_indirect`, `critical_transversal` ou `no_impact_identified`), baseline e regressão proporcional. O AoT distingue comportamento novo de preservação. A ausência de arquivo no diff não encerra a análise; mapa e evidência devem ser revisados quando uma dependência nova aparecer.
+
 ## Estados
 
 Somente `PASS`, `FAIL`, `PARTIAL`, `BLOCKED` e `NOT TESTED` são aceitos. Um movimento não está concluído quando qualquer requisito obrigatório não for `PASS`, quando uma proibição for violada ou quando uma comprovação tecnicamente disponível estiver ausente.
