@@ -2829,6 +2829,9 @@ textarea {
 .prisma-review-tabs > .ant-tabs-nav { padding: 0 12px; margin: 0; }
 .prisma-review-tabs > .ant-tabs-content-holder { padding: 12px; }
 .prisma-review-tabs .ant-tabs-tab { padding-top: 8px; padding-bottom: 8px; font-size: 0.78rem; }
+.prisma-review-tab-label { display: inline-flex; align-items: center; gap: 6px; }
+.prisma-review-tab-label.is-blocked { color: #b42318; font-weight: 600; }
+.prisma-review-tab-issue-count { display: inline-flex; min-width: 18px; height: 18px; align-items: center; justify-content: center; padding: 0 5px; border: 1px solid #ffa39e; border-radius: 999px; background: #fff1f0; color: #cf1322; font-size: .65rem; line-height: 1; }
 
 .prisma-review-unsaved-alert { margin: 8px 12px 0; }
 .prisma-review-unsaved-alert .ant-alert-content { min-width: 0; }

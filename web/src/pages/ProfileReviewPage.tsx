@@ -130,9 +130,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         const evidenceFieldPath = evidenceTarget?.fieldPath && reviewFieldPathExists(result.reviewedData, evidenceTarget.fieldPath) ? evidenceTarget.fieldPath : null;
         const initialFieldPath = evidenceFieldPath ?? (requestedFieldPath && reviewFieldPathExists(result.reviewedData, requestedFieldPath)
           ? requestedFieldPath
-          : result.reviewedData.experiences[0]
-            ? reviewEntityFieldPath("experience", result.reviewedData.experiences[0], "role")
-            : "identity.fullName");
+          : "identity.fullName");
         setSelectedFieldPath(initialFieldPath);
         if (evidenceTarget?.pageNumber) {
           setActiveLinkId(evidenceTarget.linkId);
@@ -168,6 +166,26 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const transientOnly = changeState.transientOnly;
   const viewOnly = mode === "view";
   const editable = !viewOnly && workspace?.state === "draft";
+  const mandatoryValidationIssues = useMemo(() => {
+    if (!editable || !workspace || !draft) return [];
+    return [
+      ...validateReviewDraftForSave(draft, {
+        existingPhone: workspace.personPrivateContact.phone,
+        existingEmail: workspace.personPrivateContact.email,
+      }),
+      ...validateEducationClassificationsForApproval(draft),
+    ];
+  }, [draft, editable, workspace]);
+  const visibleValidationIssues = useMemo(() => {
+    const seen = new Set<string>();
+    return [...mandatoryValidationIssues, ...validationIssues].filter((issue) => {
+      const key = `${issue.fieldPath}:${issue.message}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [mandatoryValidationIssues, validationIssues]);
+  const comparisonIssueCount = visibleValidationIssues.length;
   const markSaved = useUnsavedChanges(Boolean(editable && (changeState.rawChanged || pendingSelection)));
   const replacementLinkId = useMemo(() => workspace?.evidenceLinks.find((link) => link.state === "active" && link.linkKind === "reviewer" && fieldsOverlap(link.fieldPath, selectedFieldPath))?.id ?? null, [selectedFieldPath, workspace]);
   const fallbackOriginalEvidence = useMemo(() => {
@@ -719,7 +737,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           ? workspace.documentId ? <Button icon={<EyeOutlined />} onClick={() => onNavigate(`/profiles/${personId}/documents/${workspace.documentId}`)}>Detalhes técnicos</Button> : undefined
           : <Space wrap>
             <Tooltip title={saveBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(saveBlockedReason) || busy} icon={<SaveOutlined />} loading={busy} onClick={() => void handleSave()}>Salvar revisão</Button></span></Tooltip>
-            <Tooltip title={approvalBlockedReason}><span className="prisma-disabled-action-tooltip"><Button disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={handleContinueToDelta} type="primary">Comparar com o perfil atual</Button></span></Tooltip>
+            <Tooltip title={approvalBlockedReason ?? (comparisonIssueCount ? `Conclua ${comparisonIssueCount === 1 ? "a pendência obrigatória" : `as ${comparisonIssueCount} pendências obrigatórias`} antes de comparar.` : undefined)}><span className="prisma-disabled-action-tooltip"><Button danger={comparisonIssueCount > 0} disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={handleContinueToDelta} type="primary">Comparar com o perfil atual</Button></span></Tooltip>
           </Space>}
       />
       <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>
@@ -773,7 +791,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             onFieldSelect={handleFieldSelect}
             onSaveAndContinue={() => void handleSave()}
             onStartSelection={(fieldPath) => { if (dirty) { deferReviewAction({ type: "start_evidence_selection", fieldPath }); return; } startEvidenceSelection(fieldPath); }}
-            selectedFieldPath={selectedFieldPath} validationIssues={validationIssues} viewOnly={viewOnly} workspace={workspace}
+            selectedFieldPath={selectedFieldPath} validationIssues={visibleValidationIssues} viewOnly={viewOnly} workspace={workspace}
           />
         </div>
       </div>

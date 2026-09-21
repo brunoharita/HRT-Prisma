@@ -95,6 +95,14 @@ export function StructuredReviewPanel({
   const [historyOpen, setHistoryOpen] = useState(false);
   const [removedEntries, setRemovedEntries] = useState<RemovedDraftEntry[]>([]);
   const activeTab = tabForField(selectedFieldPath);
+  const issueCountByTab = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const issue of validationIssues) {
+      const tab = tabForField(issue.fieldPath);
+      counts.set(tab, (counts.get(tab) ?? 0) + 1);
+    }
+    return counts;
+  }, [validationIssues]);
   useEffect(() => setRemovedEntries([]), [workspace.lockVersion]);
 
   function validationMessage(fieldPath: string): string | null {
@@ -230,12 +238,12 @@ export function StructuredReviewPanel({
         activeKey={activeTab}
         className="prisma-review-tabs"
         items={[
-          { key: "summary", label: "Resumo", children: <SummaryEditor {...commonProps()} onAddResult={addResult} onRemoveResult={removeResult} removedResults={removedEntries.filter((entry) => entry.kind === "result")} validationIssues={validationIssues} onUndoRemoval={undoRemoval} /> },
-          { key: "experience", label: `Experiência (${draft.experiences.length})`, children: ExperienceEditor() },
-          { key: "education", label: `Formação (${draft.education.length})`, children: EducationEditor() },
-          { key: "skills", label: "Competências", children: TagField({ fieldPath: "competencies", label: "Competências explícitas" }) },
-          { key: "languages", label: "Idiomas", children: TagField({ fieldPath: "languages", label: "Idiomas" }) },
-          { key: "other", label: "Outros", children: OtherEditor() },
+          { key: "summary", label: tabLabel("summary", "Resumo"), children: <SummaryEditor {...commonProps()} onAddResult={addResult} onRemoveResult={removeResult} removedResults={removedEntries.filter((entry) => entry.kind === "result")} validationIssues={validationIssues} onUndoRemoval={undoRemoval} /> },
+          { key: "experience", label: tabLabel("experience", `Experiência (${draft.experiences.length})`), children: ExperienceEditor() },
+          { key: "education", label: tabLabel("education", `Formação (${draft.education.length})`), children: EducationEditor() },
+          { key: "skills", label: tabLabel("skills", "Competências"), children: TagField({ fieldPath: "competencies", label: "Competências explícitas" }) },
+          { key: "languages", label: tabLabel("languages", "Idiomas"), children: TagField({ fieldPath: "languages", label: "Idiomas" }) },
+          { key: "other", label: tabLabel("other", "Outros"), children: OtherEditor() },
         ]}
         onChange={selectTab}
       />
@@ -305,6 +313,14 @@ export function StructuredReviewPanel({
 
   function commonProps() {
     return { workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect };
+  }
+
+  function tabLabel(key: string, label: string) {
+    const issueCount = issueCountByTab.get(key) ?? 0;
+    return <span aria-label={issueCount ? `${label}. ${issueCount} pendência obrigatória` : label} className={["prisma-review-tab-label", issueCount ? "is-blocked" : ""].filter(Boolean).join(" ")}>
+      <span>{label}</span>
+      {issueCount ? <span aria-hidden="true" className="prisma-review-tab-issue-count">{issueCount}</span> : null}
+    </span>;
   }
 
   function ExperienceEditor() {

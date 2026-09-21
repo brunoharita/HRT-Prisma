@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 260
-source_manifest_sha256: 8b0a0cf7e99cfcc25f1d227f602eea4ffa1e8621dfdbaa1011dd58026dc9f6da
+source_manifest_sha256: 7e547b2d3a6e0b42226a031423964fb9f56e5dbff306acab6ee8590e16e895a7
 -->
 
 # Tudo sobre o Prisma
@@ -10981,6 +10981,8 @@ O processamento local de PDF pode pausar quando o navegador é fechado. O Prisma
 ## Mensagens e interação
 
 Toda falha corrigível informa o que falta e oferece a ação correspondente. Falha interna não culpa um campo do operador. Confirmação adicional existe apenas para exclusão física e reinício do Perfil, pois representam risco material. Metadados de auditoria são automáticos.
+
+Na revisão documental, a aba `Resumo` é a abertura padrão e a navegação segue da esquerda para a direita. Um link contextual para evidência ou campo específico pode abrir diretamente a área solicitada. Pendências obrigatórias para comparar com o Perfil atual são derivadas das validações existentes e recebem destaque leve na aba correspondente, no campo de origem e no CTA de comparação; o destaque desaparece assim que a pendência é resolvida. Ausências informativas não são tratadas como erro.
 
 ## Exclusão definitiva da Pessoa
 

@@ -34,6 +34,8 @@ O processamento local de PDF pode pausar quando o navegador é fechado. O Prisma
 
 Toda falha corrigível informa o que falta e oferece a ação correspondente. Falha interna não culpa um campo do operador. Confirmação adicional existe apenas para exclusão física e reinício do Perfil, pois representam risco material. Metadados de auditoria são automáticos.
 
+Na revisão documental, a aba `Resumo` é a abertura padrão e a navegação segue da esquerda para a direita. Um link contextual para evidência ou campo específico pode abrir diretamente a área solicitada. Pendências obrigatórias para comparar com o Perfil atual são derivadas das validações existentes e recebem destaque leve na aba correspondente, no campo de origem e no CTA de comparação; o destaque desaparece assim que a pendência é resolvida. Ausências informativas não são tratadas como erro.
+
 ## Exclusão definitiva da Pessoa
 
 Arquivar continua reversível e preserva todo o agregado. `Excluir definitivamente` é uma ação crítica separada, disponível somente a Super Admin, Owner ou Admin no escopo autorizado, ou ao próprio titular por uma capability exclusiva de Meus dados. Uma única confirmação explica a irreversibilidade e as categorias removidas, sem decisões técnicas item a item.
