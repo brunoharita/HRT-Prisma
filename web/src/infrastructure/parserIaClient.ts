@@ -23,6 +23,10 @@ const parserIaMessages: Record<string, string> = {
   PARSER_KEY_REJECTED: "A OpenAI recusou a credencial configurada no Parser IA.",
   PARSER_BUSY: "Já existe um currículo sendo interpretado pela IA. Aguarde a conclusão e tente novamente.",
   worker_busy: "Já existe um currículo sendo processado. Aguarde a conclusão e tente novamente.",
+  worker_unavailable: "O serviço de interpretação está temporariamente indisponível. O currículo não foi alterado. Tente novamente em alguns instantes.",
+  worker_failed: "O serviço de interpretação não concluiu o processamento. O currículo não foi alterado. Tente novamente.",
+  gateway_unavailable: "O serviço de interpretação está temporariamente indisponível. O currículo não foi alterado. Tente novamente em alguns instantes.",
+  PARSER_NO_SUPPORTED_FACTS: "A IA não encontrou fatos com suporte verificável neste currículo. O documento foi preservado para nova tentativa e revisão manual.",
 };
 
 export function parserIaErrorMessage(code?: string): string {

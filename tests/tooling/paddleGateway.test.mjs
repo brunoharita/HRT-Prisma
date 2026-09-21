@@ -93,7 +93,7 @@ test("parser route authenticates the binding and forwards only loopback worker h
   assert.equal(JSON.stringify(calls[0]).includes("Bearer"), false);
 });
 
-test("parser route forwards only allowlisted billing and rate codes", async (t) => {
+test("parser route forwards only allowlisted parser codes", async (t) => {
   const pdf = Buffer.from("%PDF-1.7\nsynthetic\n%%EOF");
   const parserPayload = { organizationId, pdfBase64: pdf.toString("base64"), sourceSha256: createHash("sha256").update(pdf).digest("hex") };
   const parserHeaders = {
@@ -101,7 +101,7 @@ test("parser route forwards only allowlisted billing and rate codes", async (t) 
     "X-Prisma-Organization-Id": organizationId, "X-Prisma-Parser-Contract": PARSER_TRANSPORT_VERSION,
     "Content-Type": "application/json",
   };
-  for (const code of ["PARSER_CREDIT_BALANCE_EXHAUSTED", "PARSER_SPEND_LIMIT_EXCEEDED", "PARSER_RATE_LIMIT"]) {
+  for (const code of ["PARSER_CREDIT_BALANCE_EXHAUSTED", "PARSER_SPEND_LIMIT_EXCEEDED", "PARSER_RATE_LIMIT", "PARSER_NO_SUPPORTED_FACTS"]) {
     const { base } = await fixture(t, { fetchImpl: async () => Response.json({ error: code }, { status: 422 }) });
     const response = await fetch(`${base}/parser-ia-hosted/parse`, { method: "POST", headers: parserHeaders, body: JSON.stringify(parserPayload) });
     assert.equal(response.status, 422); assert.deepEqual(await response.json(), { error: code });

@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 260
-source_manifest_sha256: 24f3e2b023d1f08fcd25a9d652ec9eefd49686ecb7b1288faf28e1aa91b8ee78
+source_manifest_sha256: 8b0a0cf7e99cfcc25f1d227f602eea4ffa1e8621dfdbaa1011dd58026dc9f6da
 -->
 
 # Tudo sobre o Prisma
@@ -9249,6 +9249,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 Correção do preflight do Parser IA publicada em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. O SHA `8d011f7` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi reconstruído, com imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`, zero reinícios e HTTPS 200 após a estabilização. O bundle confirma `hosted`, `local=false` e o SHA publicado. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
 
 Correção de rollover de assets em 2026-09-21: uma aba aberta carregou um bundle anterior e tentou buscar `pdf-hx5T6pJb.js` depois da recriação web; o asset não existia na imagem nova e o import dinâmico falhou antes do processamento. O asset e os demais chunks versionados foram restaurados no contêiner ativo sem reinício, e `release-web.sh` passou a preservar os assets do contêiner anterior em cada troca. Nginx não armazena `index.html`; assets versionados usam cache longo. O Parser IA, banco, gateway e worker não foram alterados.
+
+Falha de transporte observada em 2026-09-21: uma tentativa de importação retornou `502` porque o túnel reverso entre o VPS e o worker Parser IA no computador local estava desconectado. O túnel foi restabelecido e as portas reversas foram confirmadas no VPS. O gateway agora encaminha `PARSER_NO_SUPPORTED_FACTS` de forma explícita, e o frontend diferencia indisponibilidade de transporte de uma resposta da IA sem fatos suportados; nenhum desses estados altera o currículo ou cria perfil parcial.
 
 Correção de projeção M8.2 em 2026-09-20: a migration remota `20260920223716_m82_human_created_competency_profile_projection` atualizou somente a RPC `_v6`. A consulta autenticada do Perfil afetado passou de zero para uma associação de “Governança Corporativa” em Hard/H4 como declaração, sem novos vínculos pessoais persistidos. SHA funcional `7d57555` em `main`/GitHub/VPS, CI aprovado; o release plan não exigiu rebuild web, e `prisma-web` permaneceu ativo, sem reinícios, na imagem anterior. Prisma continua v1.8.2. A inspeção visual autenticada da tela ainda está pendente; detalhes no AoT M8.2.
 
