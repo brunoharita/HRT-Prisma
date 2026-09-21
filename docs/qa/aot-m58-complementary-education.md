@@ -40,4 +40,4 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS. O commit funcional anterior `9d237a1f50e3c3aec48350a288e4639033f8e22e` está em `main`, GitHub e VPS; esta correção aguarda o novo rollout. O `prisma-web` permanece ativo com zero reinícios e HTTPS 200 em `/` e `/profiles/import`; o bundle contém os três agrupadores do seletor. A migration e as provas remotas permanecem válidas.
+PASS. O commit funcional `2867ca3ec9ef2942b0ceea94a728059fe3a789c0` está em `main`, GitHub e VPS. O `prisma-web` está ativo com zero reinícios e HTTPS 200 em `/` e `/profiles/import`; o bundle contém a regra de reparo da qualificação incompatível. A migration e as provas remotas permanecem válidas.

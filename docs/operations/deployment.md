@@ -2,7 +2,7 @@
 
 ## Estado
 
-Correção de compatibilidade da formação complementar em preparação: rascunhos legados que carregavam uma qualificação acadêmica incompatível agora são normalizados para `unknown`, preservando a origem e exigindo confirmação humana. Isso evita bloqueio quando a qualificação fica oculta para `complementary`; o servidor continua rejeitando combinações incompatíveis. A publicação web ocorrerá após o commit e smoke deste movimento. Evidência: `docs/qa/aot-m58-complementary-education.md`.
+Correção de compatibilidade da formação complementar publicada em 2026-09-21: rascunhos legados que carregavam uma qualificação acadêmica incompatível agora são normalizados para `unknown`, preservando a origem e exigindo confirmação humana. Isso evita bloqueio quando a qualificação fica oculta para `complementary`; o servidor continua rejeitando combinações incompatíveis. O SHA funcional `2867ca3ec9ef2942b0ceea94a728059fe3a789c0` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:002f70e276fe55a6f8c8190220d5be4ec9abeea2a694bec186693ee8d1266422`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Evidência: `docs/qa/aot-m58-complementary-education.md`.
 
 Melhoria do seletor de formação publicada em 2026-09-21: as opções agora aparecem agrupadas em **Educação formal**, **Formação complementar** e **Sem classificação**, preservando os valores e contratos existentes. O SHA funcional `9d237a1f50e3c3aec48350a288e4639033f8e22e` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:d704c497fa09b702a2dc066ec47d8cf928a2168374ff122f2dbf530d4882dbab`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Evidência: `docs/qa/aot-m58-complementary-education.md`.
 
