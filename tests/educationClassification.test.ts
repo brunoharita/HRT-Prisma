@@ -13,7 +13,7 @@ import {
   withHumanEducationClassification,
 } from "../src/domain/educationClassification.js";
 import type { StructuredDraft } from "../web/src/domain/personIngestion.js";
-import { validateEducationClassificationsForApproval } from "../web/src/domain/reviewFieldLifecycle.js";
+import { normalizeReviewDraft, validateEducationClassificationsForApproval } from "../web/src/domain/reviewFieldLifecycle.js";
 
 const cases = [
   ["Bacharelado em Sistemas de Informação", "undergraduate", "bachelor", "Sistemas de Informação"],
@@ -138,6 +138,7 @@ test("basic education hides fields that do not add value and derives technical q
   assert.deepEqual(educationFieldVisibility("secondary"), { showCourse: true, showInstitution: false, showPeriod: false, showQualification: false });
   assert.deepEqual(educationFieldVisibility("technical"), { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false });
   assert.deepEqual(educationFieldVisibility("complementary"), { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false });
+  assert.deepEqual(educationFieldVisibility("unknown"), { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false });
   const secondary = withHumanEducationClassification({ course: null, level: "unknown", qualification: "unknown", status: "unknown" }, { level: "secondary" });
   assert.equal(secondary.qualification, "other");
   const technical = withHumanEducationClassification({ course: "Processamento de Dados", level: "unknown", qualification: "unknown", status: "unknown" }, { level: "technical" });
@@ -167,4 +168,26 @@ test("approval blocks unresolved classification until explicit human confirmatio
   assert.equal(validateEducationClassificationsForApproval(draft).length, 1);
   draft.education[0] = confirmEducationClassification(draft.education[0]!);
   assert.equal(validateEducationClassificationsForApproval(draft).length, 0);
+});
+
+test("normalized review repairs a stale qualification before approval validation", () => {
+  const classification = classifyEducationRecord({ course: "Curso livre de Liderança", period: "2020" });
+  const draft: StructuredDraft = {
+    identity: { fullName: "Pessoa QA" }, contact: { city: null, state: null, phone: null, email: "qa@example.com", linkedin: null },
+    professionalTitle: "Diretor", areasOfExpertise: [], professionalObjective: null, summary: null, keyResults: [], experiences: [],
+    education: [{
+      id: "education_12345678", source: "extracted", institution: "Instituto QA", period: "2020", description: null,
+      evidenceText: classification.originalText, page: 1, ...classification,
+      level: "complementary", qualification: "bachelor", classificationReviewed: true,
+      classificationSources: { level: "human", qualification: "human", status: "human" },
+    }],
+    certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
+  };
+  const normalized = normalizeReviewDraft(draft);
+  assert.equal(normalized.education[0]?.qualification, "unknown");
+  const issues = validateEducationClassificationsForApproval(normalized);
+  assert.equal(issues.length, 1);
+  assert.equal(issues[0]?.fieldPath, "education.education_12345678.classificationOrigin");
+  assert.match(issues[0]?.message ?? "", /confirme|preencha/);
+  assert.doesNotMatch(issues[0]?.message ?? "", /qualificação compatível/);
 });

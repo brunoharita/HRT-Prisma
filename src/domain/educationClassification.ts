@@ -192,6 +192,7 @@ export function qualificationOptionsForLevel(level: EducationLevel): readonly Ed
 export function educationFieldVisibility(level: EducationLevel): EducationFieldVisibility {
   if (level === "secondary") return { showCourse: true, showInstitution: false, showPeriod: false, showQualification: false };
   if (level === "technical" || level === "complementary") return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false };
+  if (level === "unknown") return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false };
   return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: true };
 }
 

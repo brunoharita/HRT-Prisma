@@ -37,6 +37,12 @@ test("education review adapts fields to the selected academic level", () => {
   assert.match(review, /fieldVisibility\.showQualification/);
 });
 
+test("profile review validates the normalized education draft", () => {
+  const page = readFileSync("web/src/pages/ProfileReviewPage.tsx", "utf8");
+  assert.match(page, /const normalizedDraft = normalizeReviewDraft\(draft\);[\s\S]*validateReviewDraftForSave\(normalizedDraft/);
+  assert.match(page, /validateEducationClassificationsForApproval\(normalizedDraft\)/);
+});
+
 test("education level selector groups formal, complementary and unclassified options", () => {
   assert.match(review, /label: "Educação formal"/);
   assert.match(review, /label: "Formação complementar"/);

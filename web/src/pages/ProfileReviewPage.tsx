@@ -168,12 +168,13 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const editable = !viewOnly && workspace?.state === "draft";
   const mandatoryValidationIssues = useMemo(() => {
     if (!editable || !workspace || !draft) return [];
+    const normalizedDraft = normalizeReviewDraft(draft);
     return [
-      ...validateReviewDraftForSave(draft, {
+      ...validateReviewDraftForSave(normalizedDraft, {
         existingPhone: workspace.personPrivateContact.phone,
         existingEmail: workspace.personPrivateContact.email,
       }),
-      ...validateEducationClassificationsForApproval(draft),
+      ...validateEducationClassificationsForApproval(normalizedDraft),
     ];
   }, [draft, editable, workspace]);
   const visibleValidationIssues = useMemo(() => {

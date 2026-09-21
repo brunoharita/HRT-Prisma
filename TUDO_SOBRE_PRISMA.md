@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 262
-source_manifest_sha256: 405b9e28a7ce5dc193696fb7aaeeed637977cf402fa7c93bdab5d693a833d6a7
+source_manifest_sha256: 28ccf5e009ea9c9a38202f5bb73897f5b41fdd368634be57f111ea2021e0e6ce
 -->
 
 # Tudo sobre o Prisma
@@ -13896,6 +13896,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 | D-06 | Interface comunica formação acadêmica e complementar sem alterar a ordem do fluxo de revisão | `typecheck:web`, build e teste de UI aprovados | PASS |
 | D-07 | Seletor de nível agrupa opções em Educação formal, Formação complementar e Sem classificação | Teste de UI com os três grupos; bundle publicado contém `Educação formal` | PASS |
 | D-08 | Rascunho legado com qualificação incompatível não fica preso quando o nível oculta o campo | Normalização redefine a qualificação para `unknown`, preserva a origem e mantém confirmação humana obrigatória; regressão aprovada | PASS |
+| D-09 | Qualificação permanece oculta para `Não identificado`, `Ensino médio`, `Técnico` e `Formação complementar`; a validação da tela usa o mesmo rascunho normalizado do salvamento | Regressões de visibilidade e de preflight aprovadas; combinações legadas não exibem mais o erro incompatível após a troca de nível | PASS |
 
 ## Proibições verificadas
 
@@ -13910,7 +13911,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 
 - `pnpm run build`: PASS.
 - `pnpm run typecheck:web`: PASS.
-- `pnpm exec node --test dist/tests/educationClassification.test.js dist/tests/educationClassificationMigration.test.js dist/tests/educationClassificationUi.test.js`: 37/37 PASS.
+- `pnpm exec node --test dist/tests/educationClassification.test.js dist/tests/educationClassificationMigration.test.js dist/tests/educationClassificationUi.test.js`: 39/39 PASS.
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
 - `git diff --check`: PASS.
 - Supabase remoto: função instalada contém `complementary`; teste positivo retornou `true` e teste negativo de `complementary+bachelor` retornou rejeição.
