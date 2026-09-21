@@ -16,6 +16,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 | D-08 | Rascunho legado com qualificação incompatível não fica preso quando o nível oculta o campo | Normalização redefine a qualificação para `unknown`, preserva a origem e mantém confirmação humana obrigatória; regressão aprovada | PASS |
 | D-09 | Qualificação permanece oculta para `Não identificado`, `Ensino médio`, `Técnico` e `Formação complementar`; a validação da tela usa o mesmo rascunho normalizado do salvamento | Regressões de visibilidade e de preflight aprovadas; combinações legadas não exibem mais o erro incompatível após a troca de nível | PASS |
 | D-10 | A interface distingue qualificação inaplicável de evidência formal ausente sem alterar os valores persistidos | `educationQualificationLabel` exibe `Não se aplica` para níveis sem qualificação e mantém `Não identificada` para Graduação/Pós-graduação sem evidência | PASS |
+| D-11 | A fronteira de publicação aceita `education.level=complementary` com qualificação compatível | Migration forward-only aplicada no Supabase; definição remota contém o ramo `complementary`, sem execução concedida a `anon` ou `authenticated` | PASS |
 
 ## Proibições verificadas
 
@@ -34,6 +35,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
 - `git diff --check`: PASS.
 - Supabase remoto: função instalada contém `complementary`; teste positivo retornou `true` e teste negativo de `complementary+bachelor` retornou rejeição.
+- Supabase remoto: migration `20260921235300_allow_complementary_education_publication` aplicada; `private.enforce_approved_education_classification()` contém o ramo `complementary` e mantém `EXECUTE` negado a `anon` e `authenticated`.
 - `pnpm run check:supabase-ledger`: BLOCKED conforme o guardrail histórico (`cliDbPushAllowed=false`, migrations antigas com timestamps divergentes e outras M8/M8.2 locais pendentes). A migration deste movimento foi aplicada pelo conector autorizado e verificada diretamente no banco; `db push` não foi usado.
 
 ## Limites
@@ -42,4 +44,4 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS. A correção funcional anterior está em `main`, GitHub e VPS; esta melhoria de nomenclatura mantém o mesmo contrato persistido e adiciona somente a apresentação contextual. Os testes direcionados, lint, typecheck web e build web passaram. A migration e as provas remotas permanecem válidas.
+PASS. A correção funcional anterior está em `main`, GitHub e VPS; a nomenclatura mantém o mesmo contrato persistido e a fronteira server-side agora aceita a formação complementar na publicação. Os testes direcionados, lint, typecheck web, build web e prova remota passaram. A migration e as provas remotas permanecem válidas.

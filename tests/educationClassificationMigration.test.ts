@@ -42,3 +42,9 @@ test("complementary formation is accepted only with its compatible qualification
   assert.match(complementaryMigration, /when 'complementary' then \(item ->> 'qualification'\) in \('other', 'unknown'\)/);
   assert.match(complementaryMigration, /coalesce\(snapshot ->> 'level', ''\) not in \([^)]*'complementary'/s);
 });
+
+test("approved education publication accepts complementary formation", () => {
+  const migration = readFileSync("supabase/migrations/20260921140000_allow_complementary_education_publication.sql", "utf8");
+  assert.match(migration, /when 'complementary' then \(education_item\.value ->> 'qualification'\) in \('other', 'unknown'\)/);
+  assert.match(migration, /enforce_approved_education_classification/);
+});

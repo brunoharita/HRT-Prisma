@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 262
-source_manifest_sha256: 18981d7a53da8c912f72a56cca1064a0f43f01f14dcdc0be90014960150fb75d
+source_manifest_sha256: b302f2715cbd79fd11256ec6690ecc42b4404d600e363ae8f4980ff4ace07aac
 -->
 
 # Tudo sobre o Prisma
@@ -9250,6 +9250,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Correção do bloqueio server-side de formação complementar publicada em 2026-09-21: a função de publicação ainda usava um `CASE` anterior à inclusão de `education.level=complementary`, por isso a revisão passava na tela e falhava ao criar o Perfil. A migration forward-only remota `20260921235300_allow_complementary_education_publication` atualizou `private.enforce_approved_education_classification()` mantendo a compatibilidade server-side e os privilégios privados; `anon` e `authenticated` continuam sem executar a função. Nenhuma linha de Pessoa ou Perfil foi alterada.
+
 Melhoria de nomenclatura da classificação acadêmica publicada em 2026-09-21: a interface exibe `Não se aplica` para a qualificação de Ensino médio, Técnico e Formação complementar, mantendo `Não identificada` quando uma Graduação ou Pós-graduação não tiver qualificação comprovada. O valor persistido continua `unknown`; o nível sem classificação continua `Não identificado`. O SHA funcional `3036675542dbda0e56c0acf99772b9cc2c4acdbf` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:9696c8ae48780c038b6562ae5db426f48901821b84fd30f9b2bae576cd794ed5`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. O bundle ativo contém `Não se aplica`.
 
 Correção do bloqueio de classificação acadêmica publicada em 2026-09-21: a tela de revisão agora oculta Qualificação para `Não identificado`, além de `Ensino médio`, `Técnico` e `Formação complementar`, e calcula o preflight sobre o mesmo rascunho normalizado usado no salvamento. Qualificações antigas incompatíveis são redefinidas para `unknown` e seguem para confirmação humana, sem bloquear a criação por um campo oculto. O SHA funcional `766c263ea6244f12b6da844db889b01d1577c2b0` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:ce5648b801f479011c181c95ef85f953b0dcce3670208b9fe8c09561ac26d484`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Evidência: `docs/qa/aot-m58-complementary-education.md`.
@@ -13902,6 +13904,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 | D-08 | Rascunho legado com qualificação incompatível não fica preso quando o nível oculta o campo | Normalização redefine a qualificação para `unknown`, preserva a origem e mantém confirmação humana obrigatória; regressão aprovada | PASS |
 | D-09 | Qualificação permanece oculta para `Não identificado`, `Ensino médio`, `Técnico` e `Formação complementar`; a validação da tela usa o mesmo rascunho normalizado do salvamento | Regressões de visibilidade e de preflight aprovadas; combinações legadas não exibem mais o erro incompatível após a troca de nível | PASS |
 | D-10 | A interface distingue qualificação inaplicável de evidência formal ausente sem alterar os valores persistidos | `educationQualificationLabel` exibe `Não se aplica` para níveis sem qualificação e mantém `Não identificada` para Graduação/Pós-graduação sem evidência | PASS |
+| D-11 | A fronteira de publicação aceita `education.level=complementary` com qualificação compatível | Migration forward-only aplicada no Supabase; definição remota contém o ramo `complementary`, sem execução concedida a `anon` ou `authenticated` | PASS |
 
 ## Proibições verificadas
 
@@ -13920,6 +13923,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
 - `git diff --check`: PASS.
 - Supabase remoto: função instalada contém `complementary`; teste positivo retornou `true` e teste negativo de `complementary+bachelor` retornou rejeição.
+- Supabase remoto: migration `20260921235300_allow_complementary_education_publication` aplicada; `private.enforce_approved_education_classification()` contém o ramo `complementary` e mantém `EXECUTE` negado a `anon` e `authenticated`.
 - `pnpm run check:supabase-ledger`: BLOCKED conforme o guardrail histórico (`cliDbPushAllowed=false`, migrations antigas com timestamps divergentes e outras M8/M8.2 locais pendentes). A migration deste movimento foi aplicada pelo conector autorizado e verificada diretamente no banco; `db push` não foi usado.
 
 ## Limites
@@ -13928,7 +13932,7 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS. A correção funcional anterior está em `main`, GitHub e VPS; esta melhoria de nomenclatura mantém o mesmo contrato persistido e adiciona somente a apresentação contextual. Os testes direcionados, lint, typecheck web e build web passaram. A migration e as provas remotas permanecem válidas.
+PASS. A correção funcional anterior está em `main`, GitHub e VPS; a nomenclatura mantém o mesmo contrato persistido e a fronteira server-side agora aceita a formação complementar na publicação. Os testes direcionados, lint, typecheck web, build web e prova remota passaram. A migration e as provas remotas permanecem válidas.
 
 ---
 
