@@ -229,7 +229,11 @@ function DeltaSection({ actions, items, mode, onAction }: { actions: Map<string,
     const group = items.filter((item) => item.kind === kind);
     if (!group.length) return null;
     return <section key={kind}><Typography.Text className={`prisma-delta-group-title is-${kind}`} strong>{kindLabel(kind)} ({group.length})</Typography.Text>{group.map((item) => <article className={`prisma-delta-item is-${kind}`} key={item.key}>
-      <div><strong>{item.label}</strong><Tag>{provenanceLabel(item.provenance)}</Tag>{item.kind === "updated" ? <><small>Antes: {preview(item.before)}</small><small>Depois: {preview(item.after)}</small></> : <small>{preview(item.after ?? item.before)}</small>}</div>
+      <div className={item.section === "competencies" ? "prisma-delta-item-main is-competency" : "prisma-delta-item-main"}>
+        {item.section === "competencies"
+          ? <><strong className="prisma-delta-item-primary">{preview(item.after ?? item.before)}</strong><span className="prisma-delta-item-context">{item.label}</span><Tag>{provenanceLabel(item.provenance)}</Tag>{item.kind === "updated" ? <><small>Antes: {preview(item.before)}</small><small>Depois: {preview(item.after)}</small></> : null}</>
+          : <><strong>{item.label}</strong><Tag>{provenanceLabel(item.provenance)}</Tag>{item.kind === "updated" ? <><small>Antes: {preview(item.before)}</small><small>Depois: {preview(item.after)}</small></> : <small>{preview(item.after ?? item.before)}</small>}</>}
+      </div>
       <div className="prisma-delta-item-action"><Tag color={kindColor(kind)}>{kindBadge(kind)}</Tag>{item.section === "private_contact" ? <Typography.Text type="secondary">Atualizado no cadastro privado</Typography.Text> : <>{item.kind === "not_cited" ? <Typography.Text type="secondary">{mode === "merge" ? "Mantido por já estar aprovado" : "Não fará parte do novo perfil"}</Typography.Text> : null}<Select aria-label={`Ação para ${item.label}`} onChange={(value) => onAction(item, value)} options={blockActionOptions(item, mode)} value={actions.get(item.key) ?? defaultBlockAction(item, mode)} /></>}</div>
     </article>)}</section>;
   })}</div>;

@@ -5182,6 +5182,29 @@ textarea {
 .prisma-delta-item.is-not_cited { border-left-color: #b7c0ce; background: #fafbfc; }
 .prisma-delta-item.is-explicit_removal { border-left-color: #ef4f5f; background: #fffafa; }
 
+.prisma-delta-item-main {
+  min-width: 0;
+}
+
+.prisma-delta-item-main.is-competency {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
+.prisma-delta-item-primary {
+  flex-basis: 100%;
+  color: #102a56;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.prisma-delta-item-context {
+  color: #71809c;
+  font-size: 12px;
+}
+
 .prisma-delta-item-action {
   display: flex;
   align-items: center;
