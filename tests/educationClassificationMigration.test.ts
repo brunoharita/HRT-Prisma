@@ -4,6 +4,7 @@ import test from "node:test";
 
 const migration = readFileSync("supabase/migrations/20260902122414_education_academic_classification.sql", "utf8");
 const compatibilityMigration = readFileSync("supabase/migrations/20260902125511_education_academic_classification_legacy_compatibility.sql", "utf8");
+const complementaryMigration = readFileSync("supabase/migrations/20260921120000_complementary_education_level.sql", "utf8");
 
 test("migration extends the canonical education JSON instead of creating a parallel table", () => {
   assert.match(migration, /is_valid_education_classification/);
@@ -34,4 +35,10 @@ test("classification evidence paths remain bounded to the existing review contra
 test("reviewed historical records enter the current lifecycle without a fabricated snapshot", () => {
   assert.match(compatibilityMigration, /classificationMethodVersion' <> 'legacy-unclassified'/);
   assert.match(compatibilityMigration, /without a fabricated classifier snapshot/);
+});
+
+test("complementary formation is accepted only with its compatible qualification", () => {
+  assert.match(complementaryMigration, /'complementary'/);
+  assert.match(complementaryMigration, /when 'complementary' then \(item ->> 'qualification'\) in \('other', 'unknown'\)/);
+  assert.match(complementaryMigration, /coalesce\(snapshot ->> 'level', ''\) not in \([^)]*'complementary'/s);
 });

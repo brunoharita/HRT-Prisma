@@ -19,6 +19,7 @@ const cases = [
   ["LICENCIATURA EM LETRAS", "undergraduate", "licentiate", "LETRAS"],
   ["Tecnologia em Gestão da Tecnologia da Informação", "undergraduate", "technologist", "Gestão da Tecnologia da Informação"],
   ["Técnico em Processamento de Dados", "technical", "technical_course", "Processamento de Dados"],
+  ["Curso livre de Liderança", "complementary", "other", "Liderança"],
   ["MBA em Gestão Estratégica de Negócios", "postgraduate", "mba", "Gestão Estratégica de Negócios"],
   ["Especialização em Gestão de Processos", "postgraduate", "specialization", "Gestão de Processos"],
   ["Pós-graduação em Gestão de Projetos", "postgraduate", "unknown", "Gestão de Projetos"],
@@ -44,6 +45,14 @@ test("does not confuse a technologist degree with technical education", () => {
   const result = classifyEducationRecord({ course: "teCnÓLoGo em Análise e Desenvolvimento de Sistemas" });
   assert.equal(result.level, "undergraduate");
   assert.equal(result.qualification, "technologist");
+});
+
+test("classifies explicit short professional courses as complementary formation", () => {
+  const result = classifyEducationRecord({ course: "Curso de curta duração em Liderança", originalText: "Curso de curta duração em Liderança" });
+  assert.equal(result.level, "complementary");
+  assert.equal(result.qualification, "other");
+  assert.equal(result.classificationReasons.includes("explicit_complementary_course_marker"), true);
+  assert.equal(educationClassificationNeedsReview(result), true);
 });
 
 test("keeps generic postgraduate qualification unknown and reviewable", () => {
@@ -109,6 +118,7 @@ test("invalid academic combinations are rejected and level changes clear them", 
 test("basic education hides fields that do not add value and derives technical qualification", () => {
   assert.deepEqual(educationFieldVisibility("secondary"), { showCourse: true, showInstitution: false, showPeriod: false, showQualification: false });
   assert.deepEqual(educationFieldVisibility("technical"), { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false });
+  assert.deepEqual(educationFieldVisibility("complementary"), { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false });
   const secondary = withHumanEducationClassification({ course: null, level: "unknown", qualification: "unknown", status: "unknown" }, { level: "secondary" });
   assert.equal(secondary.qualification, "other");
   const technical = withHumanEducationClassification({ course: "Processamento de Dados", level: "unknown", qualification: "unknown", status: "unknown" }, { level: "technical" });
@@ -124,6 +134,7 @@ test("historical records remain readable without retroactive invention", () => {
 
 test("canonical identity recognizes qualified and unqualified course labels", () => {
   assert.equal(educationCourseIdentity("Bacharelado em Sistemas de Informação"), educationCourseIdentity("Sistemas de Informação"));
+  assert.equal(educationCourseIdentity("Curso livre de Liderança"), educationCourseIdentity("Liderança"));
 });
 
 test("approval blocks unresolved classification until explicit human confirmation", () => {

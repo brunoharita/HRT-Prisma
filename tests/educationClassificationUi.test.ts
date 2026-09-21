@@ -6,15 +6,15 @@ const review = readFileSync("web/src/components/review/StructuredReviewPanel.tsx
 const center = readFileSync("web/src/pages/PersonWorkspacePage.tsx", "utf8");
 const styles = readFileSync("web/src/styles.css", "utf8");
 
-test("M5 review exposes the four academic dimensions and an explicit confirmation", () => {
-  for (const label of ["Curso", "Instituição", "Período", "Situação", "Nível acadêmico", "Qualificação", "Origem da classificação"]) assert.match(review, new RegExp(label));
+test("M5 review exposes the four education dimensions and an explicit confirmation", () => {
+  for (const label of ["Curso", "Instituição", "Período", "Situação", "Nível de formação", "Qualificação", "Origem da classificação"]) assert.match(review, new RegExp(label));
   assert.match(review, /Confirmar classificação/);
   assert.match(review, /Inferências e campos não identificados precisam da sua confirmação/);
 });
 
 test("person center and document context present structured education without a confidence score", () => {
   assert.match(center, /DocumentEducationSummary/);
-  assert.match(center, /Formação acadêmica identificada/);
+  assert.match(center, /Formação acadêmica e complementar identificada/);
   assert.match(center, /Explícita: informada diretamente no documento/);
   assert.doesNotMatch(center, /Confiança da extração/);
 });

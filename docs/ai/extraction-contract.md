@@ -2,7 +2,7 @@
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0 (shape preservado). Consumidores: `processResume` e ingestão M2-B. A ingestão web acrescenta `adaptive-resume-extraction` 7.2.0 e `education-academic-classification` 1.1.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, colunas paralelas e descoberta genérica de registros irmãos. A regra local de 2026-09-12 normaliza datas e períodos por `resume-dates-1.0.0`, conforme `docs/qa/resume-date-education-rules.md`; não equivale a novo rollout do banco.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0 (shape preservado). Consumidores: `processResume` e ingestão M2-B. A ingestão web acrescenta `adaptive-resume-extraction` 7.2.0 e `education-academic-classification` 1.2.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, formação complementar, colunas paralelas e descoberta genérica de registros irmãos. A regra local de 2026-09-12 normaliza datas e períodos por `resume-dates-1.0.0`, conforme `docs/qa/resume-date-education-rules.md`; não equivale a novo rollout do banco.
 
 ## Entrada
 
@@ -20,7 +20,7 @@ Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR
 - blocos irmãos: uma experiência humana completa e com evidência espacial gera uma assinatura temporária do documento. Seção, cabeçalho, período, corpo, espaçamento e coluna são avaliados por critérios nomeados. Fontes sem geometria, colunas distintas, ambiguidades e duplicidades não geram novas experiências seguras.
 - áreas personalizadas: somente títulos previamente aprovados no mesmo tenant são candidatos; o título precisa coincidir após normalização e o conteúdo é relido no documento até o próximo cabeçalho reconhecido, com evidência por item.
 - resumo profissional: somente uma seção explicitamente intitulada é extraída. Variações PT/EN e conteúdo unido ao cabeçalho pelo PDF são aceitos; a próxima seção reconhecida encerra a captura, e a ausência permanece nula em vez de produzir uma síntese automática.
-- formação: curso, nível, qualificação e situação são dimensões independentes. Regras PT/EN ignoram caixa, acentos e variações de hífen. Curso declarado sem indicação contrária assume conclusão inferida; status de não conclusão ou andamento explícito prevalece. `Atual/Present` sugere andamento; pós-graduação genérica não vira especialização; `Tecnologia em` é graduação tecnológica, nunca curso técnico. Evidência e confirmação humana continuam obrigatórias conforme o contrato de revisão.
+- formação: curso, nível, qualificação e situação são dimensões independentes. Regras PT/EN ignoram caixa, acentos e variações de hífen. Curso declarado sem indicação contrária assume conclusão inferida; status de não conclusão ou andamento explícito prevalece. `Atual/Present` sugere andamento; pós-graduação genérica não vira especialização; `Tecnologia em` é graduação tecnológica, nunca curso técnico. Marcadores explícitos de curso livre, capacitação, treinamento, workshop, bootcamp, extensão, microcredencial ou desenvolvimento profissional classificam o registro como `complementary` / Formação complementar, sem transformar o item em grau acadêmico. Evidência e confirmação humana continuam obrigatórias conforme o contrato de revisão.
 
 ## Saída de sucesso
 

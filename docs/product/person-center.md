@@ -27,7 +27,7 @@ Antes de criar uma Pessoa, a tela de identificação permite `Corrigir identific
 - Pendências: ações reais derivadas dos estados documentais, com documento, data, explicação e CTA direto.
 - Perfil vigente: versão publicada e fonte preservadas em bloco estável, sem competir com a ação principal.
 - Resumo: documentos, pendências, experiências e competências explícitas com contexto.
-- Conhecimento profissional: resumo, experiências, formação acadêmica estruturada, competências e demais fatos publicados, sem logos ou métricas inventadas. Formação apresenta curso, instituição, período, situação, nível e qualificação; a origem permanece visível sem score arbitrário.
+- Conhecimento profissional: resumo, experiências, formação acadêmica e complementar estruturada, competências e demais fatos publicados, sem logos ou métricas inventadas. Formação apresenta curso, instituição, período, situação, nível e qualificação; a origem permanece visível sem score arbitrário. Cursos livres, capacitações, treinamentos e extensões usam o nível `complementary` / Formação complementar; certificações continuam em Credenciais.
 - Documentos e versões: lista selecionável e painel contextual com estado, dados recuperados, pontos pendentes, resultado no Perfil e próxima ação.
 - Atividade recente: no máximo cinco eventos de produto; auditoria técnica permanece fora da visão geral.
 

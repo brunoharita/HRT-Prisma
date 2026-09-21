@@ -21,7 +21,7 @@ ProfessionalProfile
   education[]
     id, source, course, institution, period, evidenceText, page
     originalText
-    level(secondary|technical|undergraduate|postgraduate|unknown)
+    level(secondary|technical|undergraduate|postgraduate|complementary|unknown)
     qualification(technical_course|technologist|bachelor|licentiate|specialization|mba|master|doctorate|postdoctorate|other|unknown)
     status(completed|in_progress|interrupted|suspended|unknown)
     classificationOrigin(explicit|inferred|human|unknown)

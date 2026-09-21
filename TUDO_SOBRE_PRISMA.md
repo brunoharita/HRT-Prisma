@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 261
-source_manifest_sha256: 069fb2675bf01c407184b2f3bbdd3f001eeb5f064c59297888e0042150569bc7
+source_manifest_sha256: af9e56e65a99b07455577503dc3117605b03c2206ce132c8ccc823c54d45b049
 -->
 
 # Tudo sobre o Prisma
@@ -3580,7 +3580,7 @@ O primeiro ciclo detectou duas regressões: a expressão "analisou dados" não e
 
 ## Identidade
 
-Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0 (shape preservado). Consumidores: `processResume` e ingestão M2-B. A ingestão web acrescenta `adaptive-resume-extraction` 7.2.0 e `education-academic-classification` 1.1.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, colunas paralelas e descoberta genérica de registros irmãos. A regra local de 2026-09-12 normaliza datas e períodos por `resume-dates-1.0.0`, conforme `docs/qa/resume-date-education-rules.md`; não equivale a novo rollout do banco.
+Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0 (shape preservado). Consumidores: `processResume` e ingestão M2-B. A ingestão web acrescenta `adaptive-resume-extraction` 7.2.0 e `education-academic-classification` 1.2.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, formação complementar, colunas paralelas e descoberta genérica de registros irmãos. A regra local de 2026-09-12 normaliza datas e períodos por `resume-dates-1.0.0`, conforme `docs/qa/resume-date-education-rules.md`; não equivale a novo rollout do banco.
 
 ## Entrada
 
@@ -3598,7 +3598,7 @@ Extensão experimental M5.7: `parser-ia-1.0.0`, descrita em `parser-ia.md` e ADR
 - blocos irmãos: uma experiência humana completa e com evidência espacial gera uma assinatura temporária do documento. Seção, cabeçalho, período, corpo, espaçamento e coluna são avaliados por critérios nomeados. Fontes sem geometria, colunas distintas, ambiguidades e duplicidades não geram novas experiências seguras.
 - áreas personalizadas: somente títulos previamente aprovados no mesmo tenant são candidatos; o título precisa coincidir após normalização e o conteúdo é relido no documento até o próximo cabeçalho reconhecido, com evidência por item.
 - resumo profissional: somente uma seção explicitamente intitulada é extraída. Variações PT/EN e conteúdo unido ao cabeçalho pelo PDF são aceitos; a próxima seção reconhecida encerra a captura, e a ausência permanece nula em vez de produzir uma síntese automática.
-- formação: curso, nível, qualificação e situação são dimensões independentes. Regras PT/EN ignoram caixa, acentos e variações de hífen. Curso declarado sem indicação contrária assume conclusão inferida; status de não conclusão ou andamento explícito prevalece. `Atual/Present` sugere andamento; pós-graduação genérica não vira especialização; `Tecnologia em` é graduação tecnológica, nunca curso técnico. Evidência e confirmação humana continuam obrigatórias conforme o contrato de revisão.
+- formação: curso, nível, qualificação e situação são dimensões independentes. Regras PT/EN ignoram caixa, acentos e variações de hífen. Curso declarado sem indicação contrária assume conclusão inferida; status de não conclusão ou andamento explícito prevalece. `Atual/Present` sugere andamento; pós-graduação genérica não vira especialização; `Tecnologia em` é graduação tecnológica, nunca curso técnico. Marcadores explícitos de curso livre, capacitação, treinamento, workshop, bootcamp, extensão, microcredencial ou desenvolvimento profissional classificam o registro como `complementary` / Formação complementar, sem transformar o item em grau acadêmico. Evidência e confirmação humana continuam obrigatórias conforme o contrato de revisão.
 
 ## Saída de sucesso
 
@@ -3937,7 +3937,7 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 
 # M5.7 Parser IA
 
-Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.3.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites operacionais.
+Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Classificação acadêmica: `education-academic-classification-1.2.0`, incluindo o nível `complementary` / Formação complementar. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.3.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites operacionais.
 
 ## Funcionamento
 
@@ -4062,7 +4062,7 @@ ProfessionalProfile
   education[]
     id, source, course, institution, period, evidenceText, page
     originalText
-    level(secondary|technical|undergraduate|postgraduate|unknown)
+    level(secondary|technical|undergraduate|postgraduate|complementary|unknown)
     qualification(technical_course|technologist|bachelor|licentiate|specialization|mba|master|doctorate|postdoctorate|other|unknown)
     status(completed|in_progress|interrupted|suspended|unknown)
     classificationOrigin(explicit|inferred|human|unknown)
@@ -10670,7 +10670,7 @@ Antes de criar uma Pessoa, a tela de identificação permite `Corrigir identific
 - Pendências: ações reais derivadas dos estados documentais, com documento, data, explicação e CTA direto.
 - Perfil vigente: versão publicada e fonte preservadas em bloco estável, sem competir com a ação principal.
 - Resumo: documentos, pendências, experiências e competências explícitas com contexto.
-- Conhecimento profissional: resumo, experiências, formação acadêmica estruturada, competências e demais fatos publicados, sem logos ou métricas inventadas. Formação apresenta curso, instituição, período, situação, nível e qualificação; a origem permanece visível sem score arbitrário.
+- Conhecimento profissional: resumo, experiências, formação acadêmica e complementar estruturada, competências e demais fatos publicados, sem logos ou métricas inventadas. Formação apresenta curso, instituição, período, situação, nível e qualificação; a origem permanece visível sem score arbitrário. Cursos livres, capacitações, treinamentos e extensões usam o nível `complementary` / Formação complementar; certificações continuam em Credenciais.
 - Documentos e versões: lista selecionável e painel contextual com estado, dados recuperados, pontos pendentes, resultado no Perfil e próxima ação.
 - Atividade recente: no máximo cinco eventos de produto; auditoria técnica permanece fora da visão geral.
 

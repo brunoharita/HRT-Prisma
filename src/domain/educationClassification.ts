@@ -1,6 +1,6 @@
-export const EDUCATION_CLASSIFIER_VERSION = "1.1.0";
+export const EDUCATION_CLASSIFIER_VERSION = "1.2.0";
 
-export const EDUCATION_LEVELS = ["secondary", "technical", "undergraduate", "postgraduate", "unknown"] as const;
+export const EDUCATION_LEVELS = ["secondary", "technical", "undergraduate", "postgraduate", "complementary", "unknown"] as const;
 export const EDUCATION_QUALIFICATIONS = [
   "technical_course", "technologist", "bachelor", "licentiate", "specialization", "mba",
   "master", "doctorate", "postdoctorate", "other", "unknown",
@@ -62,6 +62,7 @@ export const EDUCATION_LEVEL_LABELS: Record<EducationLevel, string> = {
   technical: "Técnico",
   undergraduate: "Graduação",
   postgraduate: "Pós-graduação",
+  complementary: "Formação complementar",
   unknown: "Não identificado",
 };
 
@@ -99,6 +100,7 @@ const QUALIFICATIONS_BY_LEVEL: Record<EducationLevel, readonly EducationQualific
   technical: ["technical_course", "unknown"],
   undergraduate: ["technologist", "bachelor", "licentiate", "other", "unknown"],
   postgraduate: ["specialization", "mba", "master", "doctorate", "postdoctorate", "other", "unknown"],
+  complementary: ["other", "unknown"],
   unknown: ["unknown"],
 };
 
@@ -137,6 +139,8 @@ export function classifyEducationRecord(input: EducationClassificationInput): Ed
     assign("undergraduate", "technologist", "explicit_technologist_marker");
   } else if (/\b(curso tecnico|tecnico em|technical (?:course|diploma|program))\b/.test(normalized)) {
     assign("technical", "technical_course", "explicit_technical_course_marker");
+  } else if (/\b(curso livre|capacitacao|treinamento|workshop|boot ?camp|extensao|formacao complementar|curso de curta duracao|microcredencial|microcredential|continuing education|professional development)\b/.test(normalized)) {
+    assign("complementary", "other", "explicit_complementary_course_marker");
   } else if (/\b(graduacao|undergraduate|college degree|associate degree)\b/.test(normalized)) {
     assign("undergraduate", "other", "explicit_undergraduate_level_marker");
   } else if (/\b(ensino medio|high school|secondary school)\b/.test(normalized)) {
@@ -187,7 +191,7 @@ export function qualificationOptionsForLevel(level: EducationLevel): readonly Ed
 
 export function educationFieldVisibility(level: EducationLevel): EducationFieldVisibility {
   if (level === "secondary") return { showCourse: true, showInstitution: false, showPeriod: false, showQualification: false };
-  if (level === "technical") return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false };
+  if (level === "technical" || level === "complementary") return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: false };
   return { showCourse: true, showInstitution: true, showPeriod: true, showQualification: true };
 }
 
@@ -304,7 +308,7 @@ function appendClassificationReason(reasons: string[], reason: string): string[]
 
 function cleanCourseName(value: string): string | null {
   const cleaned = value
-    .replace(/^\s*(?:p[oó]s[- ]?doutor(?:ado|amento)|doutorado|mestrado|m\.?b\.?a\.?|p[oó]s[- ]?gradua[cç][aã]o|especializa[cç][aã]o|bacharelado|bacharel|licenciatura|tecnologia|tecn[oó]logo|curso t[eé]cnico|t[eé]cnico)\s+(?:em|in|of)\s+/i, "")
+    .replace(/^\s*(?:p[oó]s[- ]?doutor(?:ado|amento)|doutorado|mestrado|m\.?b\.?a\.?|p[oó]s[- ]?gradua[cç][aã]o|especializa[cç][aã]o|bacharelado|bacharel|licenciatura|tecnologia|tecn[oó]logo|curso t[eé]cnico|t[eé]cnico|curso livre|capacita[cç][aã]o|treinamento|extens[aã]o|forma[cç][aã]o complementar)\s+(?:em|de|in|of)\s+/i, "")
     .replace(/^\s*(?:bachelor(?:'s)?(?: degree)?|master(?:'s)?(?: degree)?|doctorate|doctoral|postdoctoral|technical (?:course|diploma|program))\s+(?:in|of)\s+/i, "")
     .trim();
   return cleaned || value.trim() || null;
