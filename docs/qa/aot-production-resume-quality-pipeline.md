@@ -85,6 +85,15 @@ Resultado final deste rollout: `9d4375b` implantado, serviço de IA reiniciado e
 
 O erro da captura era um bloqueio de configuração no frontend, anterior a qualquer chamada de IA. Esta correção não declara sucesso da importação completa enquanto o caminho hospedado não for exercitado com o worker e túnel ativos.
 
+## Rollover de assets durante publicação web — 2026-09-21
+
+| Acordo | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| `D-ASSET-01`: uma aba com bundle anterior não deve perder chunks dinâmicos durante a troca | `release-web.sh` preserva os assets do contêiner anterior e os restaura no novo; Nginx não armazena `index.html` | `pdf-hx5T6pJb.js` restaurado no contêiner ativo; HTTPS 200; contêiner sem reinício | PASS |
+| `P-ASSET-01`: não remover assets versionados necessários a uma sessão já aberta | cópia acumulativa antes do rebuild e cache longo somente para assets versionados | a captura reproduzida deixou de falhar no asset ausente; nenhuma chamada de IA foi repetida nesta correção | PASS |
+
+O erro ocorreu antes da importação do currículo e não alterou dados, intake ou cobrança.
+
 Movimento geral permanece incompleto: D-03 FAIL por timeout Paddle e D-04 PARTIAL pela ausência de prova ponta a ponta até rascunho persistido. O reteste usou leitura preservada após o timeout, não uma nova execução Paddle. A utilização da saída canônica Paddle pelo Parser IA ainda requer validação/correção. Não declarar o fluxo completo corrigido.
 
 ## Comparação ponta a ponta — 2026-09-17

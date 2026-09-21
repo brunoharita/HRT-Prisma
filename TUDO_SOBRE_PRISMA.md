@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 260
-source_manifest_sha256: aaea280ecc57a18bfd84c20f6dbb0360de41a990259106549db5059db931e616
+source_manifest_sha256: 24f3e2b023d1f08fcd25a9d652ec9eefd49686ecb7b1288faf28e1aa91b8ee78
 -->
 
 # Tudo sobre o Prisma
@@ -2591,6 +2591,10 @@ last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
+
+## Rollover de assets web (correção publicada)
+
+Em 2026-09-21, uma aba com bundle anterior falhou ao importar PDF porque o chunk dinâmico versionado não existia após a troca do contêiner web. Os assets do runtime anterior foram restaurados sem reinício; `release-web.sh` agora preserva os assets versionados do contêiner anterior durante cada rebuild e Nginx não mantém `index.html` em cache. O fluxo Parser IA, gateway, worker e banco não mudaram.
 
 ## Correção do preflight do Parser IA em produção (publicada)
 
@@ -9244,6 +9248,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 Correção do preflight do Parser IA publicada em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. O SHA `8d011f7` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi reconstruído, com imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`, zero reinícios e HTTPS 200 após a estabilização. O bundle confirma `hosted`, `local=false` e o SHA publicado. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
 
+Correção de rollover de assets em 2026-09-21: uma aba aberta carregou um bundle anterior e tentou buscar `pdf-hx5T6pJb.js` depois da recriação web; o asset não existia na imagem nova e o import dinâmico falhou antes do processamento. O asset e os demais chunks versionados foram restaurados no contêiner ativo sem reinício, e `release-web.sh` passou a preservar os assets do contêiner anterior em cada troca. Nginx não armazena `index.html`; assets versionados usam cache longo. O Parser IA, banco, gateway e worker não foram alterados.
+
 Correção de projeção M8.2 em 2026-09-20: a migration remota `20260920223716_m82_human_created_competency_profile_projection` atualizou somente a RPC `_v6`. A consulta autenticada do Perfil afetado passou de zero para uma associação de “Governança Corporativa” em Hard/H4 como declaração, sem novos vínculos pessoais persistidos. SHA funcional `7d57555` em `main`/GitHub/VPS, CI aprovado; o release plan não exigiu rebuild web, e `prisma-web` permaneceu ativo, sem reinícios, na imagem anterior. Prisma continua v1.8.2. A inspeção visual autenticada da tela ainda está pendente; detalhes no AoT M8.2.
 
 M8.2 em produção em 2026-09-20: **Prisma v1.8.2**, runtime `6525cfc`, 17 migrations de classificação global assistida no único Supabase. A consulta remota confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), e a projeção autenticada da Pessoa da captura retornou Comunicação em Soft/S1. `main`, GitHub e checkout da VPS foram alinhados; somente `prisma-web` foi recriado, com imagem `sha256:7650d70d8bde9fcb5383a528b9f8e02fd6df464f8859d054eb4092ca6b43896e`, contêiner ativo, zero reinícios e HTTPS 200. O login hospedado exibiu v1.8.2 após recarga. A inspeção visual autenticada do Perfil permanece pendente; evidências e limites no AoT M8.2.
@@ -15150,6 +15156,15 @@ Resultado final deste rollout: `9d4375b` implantado, serviço de IA reiniciado e
 | `A-PREFLIGHT-01`: gateway, túnel reverso e worker loopback permanecem pré-requisitos operacionais | nenhuma mudança em banco, gateway, worker ou modelo | smoke web confirma desbloqueio; importação ponta a ponta ainda depende de reteste autenticado do operador | PARTIAL até reteste |
 
 O erro da captura era um bloqueio de configuração no frontend, anterior a qualquer chamada de IA. Esta correção não declara sucesso da importação completa enquanto o caminho hospedado não for exercitado com o worker e túnel ativos.
+
+## Rollover de assets durante publicação web — 2026-09-21
+
+| Acordo | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| `D-ASSET-01`: uma aba com bundle anterior não deve perder chunks dinâmicos durante a troca | `release-web.sh` preserva os assets do contêiner anterior e os restaura no novo; Nginx não armazena `index.html` | `pdf-hx5T6pJb.js` restaurado no contêiner ativo; HTTPS 200; contêiner sem reinício | PASS |
+| `P-ASSET-01`: não remover assets versionados necessários a uma sessão já aberta | cópia acumulativa antes do rebuild e cache longo somente para assets versionados | a captura reproduzida deixou de falhar no asset ausente; nenhuma chamada de IA foi repetida nesta correção | PASS |
+
+O erro ocorreu antes da importação do currículo e não alterou dados, intake ou cobrança.
 
 Movimento geral permanece incompleto: D-03 FAIL por timeout Paddle e D-04 PARTIAL pela ausência de prova ponta a ponta até rascunho persistido. O reteste usou leitura preservada após o timeout, não uma nova execução Paddle. A utilização da saída canônica Paddle pelo Parser IA ainda requer validação/correção. Não declarar o fluxo completo corrigido.
 

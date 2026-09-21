@@ -46,6 +46,8 @@ Se o campo não existir em `.env.production`, o `docker-compose.yml` assume `hos
 
 O arquivo operacional atual é .env.production, ignorado pelo Git.
 
+O `release-web.sh` preserva os assets versionados que já estão no contêiner antes de recriá-lo e os restaura no contêiner novo. Isso permite que abas abertas terminem imports dinâmicos de um bundle anterior durante a troca; `index.html` não fica em cache e os chunks versionados podem permanecer em cache longo.
+
 ## Build
 
     docker compose \

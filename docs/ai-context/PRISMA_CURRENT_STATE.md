@@ -8,6 +8,10 @@ last_verified: 2026-09-20
 
 # Estado atual do Prisma
 
+## Rollover de assets web (correção publicada)
+
+Em 2026-09-21, uma aba com bundle anterior falhou ao importar PDF porque o chunk dinâmico versionado não existia após a troca do contêiner web. Os assets do runtime anterior foram restaurados sem reinício; `release-web.sh` agora preserva os assets versionados do contêiner anterior durante cada rebuild e Nginx não mantém `index.html` em cache. O fluxo Parser IA, gateway, worker e banco não mudaram.
+
 ## Correção do preflight do Parser IA em produção (publicada)
 
 O bundle hospedado estava com `VITE_PARSER_IA_MODE=disabled` porque o `.env.production` não declarava a variável e o compose adotava esse valor como padrão. A correção torna `hosted` o padrão seguro para o `prisma-web`; `disabled` permanece somente como rollback explícito. O SHA `8d011f7` foi publicado somente na web; o contêiner está ativo sem reinícios, HTTPS respondeu 200 e o bundle confirma `hosted`, `local=false` e o SHA correto. Isso remove o bloqueio inicial da tela de importação. O gateway autenticado, o túnel reverso e o worker loopback continuam pré-requisitos para a chamada efetiva e não são alterados por esta correção.
