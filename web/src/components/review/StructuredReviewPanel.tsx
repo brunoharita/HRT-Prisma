@@ -11,9 +11,9 @@ import {
 } from "@ant-design/icons";
 import { Alert, Button, Divider, Drawer, Empty, Input, Popconfirm, Select, Space, Tabs, Tag, Timeline, Tooltip, Typography } from "antd";
 import type { RefSelectProps } from "antd";
+import type { DefaultOptionType } from "antd/es/select";
 import type { ProfileReviewWorkspace, StructuredDraft } from "../../domain/personIngestion";
 import {
-  EDUCATION_LEVELS,
   EDUCATION_LEVEL_LABELS,
   EDUCATION_ORIGIN_LABELS,
   EDUCATION_QUALIFICATION_LABELS,
@@ -428,7 +428,7 @@ export function StructuredReviewPanel({
            {fieldVisibility.showPeriod ? <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} value={reviewed.period ?? ""} /> : null}
           <div className="prisma-education-classification-grid">
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.status`} label="Situação" onChange={(value) => updateClassification({ status: value as EducationStatus })} onSelect={onFieldSelect} options={EDUCATION_STATUSES.map((value) => ({ value, label: EDUCATION_STATUS_LABELS[value] }))} origin={classification.classificationSources.status} selectedFieldPath={selectedFieldPath} value={classification.status} />
-            <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.level`} label="Nível de formação" onChange={(value) => updateClassification({ level: value as EducationLevel })} onSelect={onFieldSelect} options={EDUCATION_LEVELS.map((value) => ({ value, label: EDUCATION_LEVEL_LABELS[value] }))} origin={classification.classificationSources.level} selectedFieldPath={selectedFieldPath} value={classification.level} />
+            <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.level`} label="Nível de formação" onChange={(value) => updateClassification({ level: value as EducationLevel })} onSelect={onFieldSelect} options={educationLevelOptions} origin={classification.classificationSources.level} selectedFieldPath={selectedFieldPath} value={classification.level} />
              {fieldVisibility.showQualification ? <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.qualification`} label="Qualificação" onChange={(value) => updateClassification({ qualification: value as EducationQualification })} onSelect={onFieldSelect} options={qualificationOptionsForLevel(classification.level).map((value) => ({ value, label: EDUCATION_QUALIFICATION_LABELS[value] }))} origin={classification.classificationSources.qualification} selectedFieldPath={selectedFieldPath} value={classification.qualification} /> : null}
           </div>
           <div className={["prisma-education-classification-card__footer", classificationMessage ? "has-validation-error" : ""].filter(Boolean).join(" ")} data-review-field-path={classificationPath}><div><small>Origem da classificação</small><strong>{EDUCATION_ORIGIN_LABELS[classification.classificationOrigin]}</strong><span>{classification.classificationMethodVersion === "legacy-unclassified" ? "Registro histórico preservado sem reclassificação retroativa." : classification.classificationReasons.map(classificationReasonLabel).join(" · ")}</span>{classificationMessage ? <Typography.Text type="danger">{classificationMessage}</Typography.Text> : null}</div>{editable ? <Button className="prisma-education-classification-confirm" icon={<CheckCircleOutlined />} onClick={() => update(confirmEducationClassification(reviewed))} type={requiresClassificationReview ? "primary" : "default"}>{requiresClassificationReview ? "Confirmar classificação" : "Confirmada"}</Button> : null}</div>
@@ -681,13 +681,28 @@ function ValueSurface({ label, value, onSelect }: { label: string; value: string
   return <div className="prisma-extracted-surface" onClick={(event) => { event.stopPropagation(); onSelect?.(); }}><small>{label}</small><p>{value}</p></div>;
 }
 
+const educationLevelOptions: DefaultOptionType[] = [
+  {
+    label: "Educação formal",
+    options: ["secondary", "technical", "undergraduate", "postgraduate"].map((value) => ({ value, label: EDUCATION_LEVEL_LABELS[value as EducationLevel] })),
+  },
+  {
+    label: "Formação complementar",
+    options: [{ value: "complementary", label: EDUCATION_LEVEL_LABELS.complementary }],
+  },
+  {
+    label: "Sem classificação",
+    options: [{ value: "unknown", label: EDUCATION_LEVEL_LABELS.unknown }],
+  },
+];
+
 function AcademicSelect({ editable, fieldPath, label, onChange, onSelect, options, origin, selectedFieldPath, value }: {
   editable: boolean;
   fieldPath: string;
   label: string;
   onChange: (value: string) => void;
   onSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
-  options: Array<{ value: string; label: string }>;
+  options: DefaultOptionType[];
   origin: EducationClassificationOrigin;
   selectedFieldPath: string;
   value: string;

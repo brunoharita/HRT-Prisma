@@ -36,3 +36,10 @@ test("education review adapts fields to the selected academic level", () => {
   assert.match(review, /fieldVisibility\.showPeriod/);
   assert.match(review, /fieldVisibility\.showQualification/);
 });
+
+test("education level selector groups formal, complementary and unclassified options", () => {
+  assert.match(review, /label: "Educação formal"/);
+  assert.match(review, /label: "Formação complementar"/);
+  assert.match(review, /label: "Sem classificação"/);
+  assert.match(review, /value: "complementary"/);
+});
