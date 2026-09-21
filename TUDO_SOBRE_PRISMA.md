@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 260
-source_manifest_sha256: f994954afedfd89a516a1fc4a3b0cba18f76257ee0bf9edd67dafa9ffe6ff1ea
+source_manifest_sha256: d13de12c543e7b0c4d7d80f17d3deb2667be7fd62f5544dadde94109aaae61ef
 -->
 
 # Tudo sobre o Prisma
@@ -2591,6 +2591,10 @@ last_verified: 2026-09-20
 ---
 
 # Estado atual do Prisma
+
+## Correção do preflight do Parser IA em produção (em publicação)
+
+O bundle hospedado estava com `VITE_PARSER_IA_MODE=disabled` porque o `.env.production` não declarava a variável e o compose adotava esse valor como padrão. A correção torna `hosted` o padrão seguro para o `prisma-web`; `disabled` permanece somente como rollback explícito. Isso remove o bloqueio inicial da tela de importação. O gateway autenticado, o túnel reverso e o worker loopback continuam pré-requisitos para a chamada efetiva e não são alterados por esta correção.
 
 ## M8.2: correção de projeção para conceito criado pela empresa (publicada)
 
@@ -9238,6 +9242,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Correção do preflight do Parser IA em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. A tela deixa de bloquear a importação antes do envio. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
+
 Correção de projeção M8.2 em 2026-09-20: a migration remota `20260920223716_m82_human_created_competency_profile_projection` atualizou somente a RPC `_v6`. A consulta autenticada do Perfil afetado passou de zero para uma associação de “Governança Corporativa” em Hard/H4 como declaração, sem novos vínculos pessoais persistidos. SHA funcional `7d57555` em `main`/GitHub/VPS, CI aprovado; o release plan não exigiu rebuild web, e `prisma-web` permaneceu ativo, sem reinícios, na imagem anterior. Prisma continua v1.8.2. A inspeção visual autenticada da tela ainda está pendente; detalhes no AoT M8.2.
 
 M8.2 em produção em 2026-09-20: **Prisma v1.8.2**, runtime `6525cfc`, 17 migrations de classificação global assistida no único Supabase. A consulta remota confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), e a projeção autenticada da Pessoa da captura retornou Comunicação em Soft/S1. `main`, GitHub e checkout da VPS foram alinhados; somente `prisma-web` foi recriado, com imagem `sha256:7650d70d8bde9fcb5383a528b9f8e02fd6df464f8859d054eb4092ca6b43896e`, contêiner ativo, zero reinícios e HTTPS 200. O login hospedado exibiu v1.8.2 após recarga. A inspeção visual autenticada do Perfil permanece pendente; evidências e limites no AoT M8.2.
@@ -15134,6 +15140,16 @@ Autorização original registrada no contrato 1.0.0. Durante a execução, nenhu
 Atualização autorizada pelo PO: `7aa8c53` implantado no gateway e worker reiniciado com telemetria mínima. Reteste comprovou `403 PARSER_LOCAL_ONLY`, origem do 502; teste de integração HTTP revelou que o fetch não preservava Host. Correção por HTTP nativo preserva o contrato de loopback, redirects bloqueados e AbortSignal; 31 testes aprovados, incluindo sanitização dos logs. Não altera payload/modelo/prompt e não exige nova versão persistida. A pendência do timeout Paddle continua; resultado do próximo reteste será registrado após o rollout.
 
 Resultado final deste rollout: `9d4375b` implantado, serviço de IA reiniciado e reteste autenticado aprovado na etapa de interpretação. Worker 200/PARSER_OK, 34.053 ms; gateway 200, 35.013 ms. Ledger aumentou de 6 para 7 tentativas, custo US$0,0120815, resultado partial: 56 fatos aceitos, 9 experiências, 2 formações. A tela aguarda confirmação de identidade; nenhuma Pessoa criada ou Perfil publicado pelo agente. Smoke sem sessão 401, 31 testes dirigidos, lint e Context Pack aprovados. Imagem anterior preservada como `prisma-paddle-gateway:rollback-before-7aa8c53`; banco e frontend não alterados neste rollout.
+
+## Correção do bloqueio de preflight do Parser IA — 2026-09-20
+
+| Acordo | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| `D-PREFLIGHT-01`: a importação hospedada deve alcançar o envio ao Parser IA quando o serviço estiver operacional | `deploy/docker-compose.yml` usa `hosted` por padrão; `disabled` exige declaração explícita de rollback | bundle anterior confirmou `VITE_PARSER_IA_MODE=disabled` e a mensagem da captura; build novo e bundle publicado devem confirmar `hosted` | PASS após publicação |
+| `P-PREFLIGHT-01`: não publicar uma tela bloqueada por omissão de variável nem expor segredo no frontend | regra documentada em `deploy/README.md` e `docs/operations/deployment.md`; nenhum segredo foi adicionado | inspeção do bundle verifica somente a flag pública e o SHA; gateway/worker não foram alterados | PASS |
+| `A-PREFLIGHT-01`: gateway, túnel reverso e worker loopback permanecem pré-requisitos operacionais | nenhuma mudança em banco, gateway, worker ou modelo | smoke web confirma desbloqueio; importação ponta a ponta depende de reteste autenticado do operador | PARTIAL até reteste |
+
+O erro da captura era um bloqueio de configuração no frontend, anterior a qualquer chamada de IA. Esta correção não declara sucesso da importação completa enquanto o caminho hospedado não for exercitado com o worker e túnel ativos.
 
 Movimento geral permanece incompleto: D-03 FAIL por timeout Paddle e D-04 PARTIAL pela ausência de prova ponta a ponta até rascunho persistido. O reteste usou leitura preservada após o timeout, não uma nova execução Paddle. A utilização da saída canônica Paddle pelo Parser IA ainda requer validação/correção. Não declarar o fluxo completo corrigido.
 

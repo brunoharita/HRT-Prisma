@@ -8,6 +8,10 @@ last_verified: 2026-09-20
 
 # Estado atual do Prisma
 
+## Correção do preflight do Parser IA em produção (em publicação)
+
+O bundle hospedado estava com `VITE_PARSER_IA_MODE=disabled` porque o `.env.production` não declarava a variável e o compose adotava esse valor como padrão. A correção torna `hosted` o padrão seguro para o `prisma-web`; `disabled` permanece somente como rollback explícito. Isso remove o bloqueio inicial da tela de importação. O gateway autenticado, o túnel reverso e o worker loopback continuam pré-requisitos para a chamada efetiva e não são alterados por esta correção.
+
 ## M8.2: correção de projeção para conceito criado pela empresa (publicada)
 
 O conceito organizacional “Governança Corporativa” foi aprovado em Hard Skills → Gestão, Negócios e Estratégia; a observação humana da declaração “governança” no Perfil publicado também foi resolvida. A projeção M7 de base filtrava o método Knowledge governance e a curadoria marcava o item como `human_preserved`, deixando zero associações visíveis. A migration M8.2 `m82_human_created_competency_profile_projection` corrigiu somente a leitura `_v6`: o teste sintético passou de zero para uma associação e bloqueou outro tenant; no Supabase de produção, a RPC autenticada passou de zero para uma associação `declared` em Hard/H4, sem novo vínculo explícito da Pessoa. O CI da branch passou, `main`/GitHub/VPS foram sincronizados em `7d57555`, e o contêiner web existente permaneceu ativo sem rebuild. A versão pública continua v1.8.2. A inspeção visual autenticada desta Pessoa ainda depende da atualização da tela.

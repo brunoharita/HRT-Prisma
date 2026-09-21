@@ -75,6 +75,16 @@ Atualização autorizada pelo PO: `7aa8c53` implantado no gateway e worker reini
 
 Resultado final deste rollout: `9d4375b` implantado, serviço de IA reiniciado e reteste autenticado aprovado na etapa de interpretação. Worker 200/PARSER_OK, 34.053 ms; gateway 200, 35.013 ms. Ledger aumentou de 6 para 7 tentativas, custo US$0,0120815, resultado partial: 56 fatos aceitos, 9 experiências, 2 formações. A tela aguarda confirmação de identidade; nenhuma Pessoa criada ou Perfil publicado pelo agente. Smoke sem sessão 401, 31 testes dirigidos, lint e Context Pack aprovados. Imagem anterior preservada como `prisma-paddle-gateway:rollback-before-7aa8c53`; banco e frontend não alterados neste rollout.
 
+## Correção do bloqueio de preflight do Parser IA — 2026-09-20
+
+| Acordo | Implementação | Teste e evidência | Status |
+| --- | --- | --- | --- |
+| `D-PREFLIGHT-01`: a importação hospedada deve alcançar o envio ao Parser IA quando o serviço estiver operacional | `deploy/docker-compose.yml` usa `hosted` por padrão; `disabled` exige declaração explícita de rollback | bundle anterior confirmou `VITE_PARSER_IA_MODE=disabled` e a mensagem da captura; build novo e bundle publicado devem confirmar `hosted` | PASS após publicação |
+| `P-PREFLIGHT-01`: não publicar uma tela bloqueada por omissão de variável nem expor segredo no frontend | regra documentada em `deploy/README.md` e `docs/operations/deployment.md`; nenhum segredo foi adicionado | inspeção do bundle verifica somente a flag pública e o SHA; gateway/worker não foram alterados | PASS |
+| `A-PREFLIGHT-01`: gateway, túnel reverso e worker loopback permanecem pré-requisitos operacionais | nenhuma mudança em banco, gateway, worker ou modelo | smoke web confirma desbloqueio; importação ponta a ponta depende de reteste autenticado do operador | PARTIAL até reteste |
+
+O erro da captura era um bloqueio de configuração no frontend, anterior a qualquer chamada de IA. Esta correção não declara sucesso da importação completa enquanto o caminho hospedado não for exercitado com o worker e túnel ativos.
+
 Movimento geral permanece incompleto: D-03 FAIL por timeout Paddle e D-04 PARTIAL pela ausência de prova ponta a ponta até rascunho persistido. O reteste usou leitura preservada após o timeout, não uma nova execução Paddle. A utilização da saída canônica Paddle pelo Parser IA ainda requer validação/correção. Não declarar o fluxo completo corrigido.
 
 ## Comparação ponta a ponta — 2026-09-17

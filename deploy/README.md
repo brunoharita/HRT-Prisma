@@ -39,9 +39,10 @@ Devem existir fora do Git:
 - VITE_DOCUMENT_INTELLIGENCE_MODE
 - VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS
 - VITE_PARSER_IA_LOCAL
-- VITE_PARSER_IA_MODE (`hosted` no rollout autorizado; `disabled` no rollback)
+- VITE_PARSER_IA_MODE (`hosted` por padrão no rollout; `disabled` somente em rollback explícito)
 
 Nunca colocar service role, OpenAI API key ou outro secret server-side em variável VITE_*.
+Se o campo não existir em `.env.production`, o `docker-compose.yml` assume `hosted` para não publicar uma tela que bloqueia a importação antes do envio. O modo hosted depende do gateway autenticado e do túnel reverso/worker loopback ativos; sem eles a chamada falha de forma explícita e sanitizada.
 
 O arquivo operacional atual é .env.production, ignorado pelo Git.
 
