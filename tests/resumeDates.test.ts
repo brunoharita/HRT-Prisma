@@ -80,7 +80,7 @@ test("AI import, review save and reload preserve dates, assumptions, evidence an
   assert.equal(normalized.education[0]?.period, "01/01/2020 - 31/12/2021");
   assert.equal(normalized.education[0]?.status, "completed");
   assert.equal(normalized.education[0]?.classificationSources?.status, "inferred");
-  assert.equal(normalized.education[0]?.classificationMethodVersion, "1.1.0");
+  assert.equal(normalized.education[0]?.classificationMethodVersion, "1.2.0");
   assert.ok(normalized.uncertainties.some((value) => value.includes("março de 2020 - Atual") && value.includes("assumidos")));
   assert.equal(result.acceptedFacts[4]?.value, lines[4]);
   assert.equal(result.fieldEvidence.find((item) => item.fieldPath.endsWith(".period"))?.text, lines[4]);
