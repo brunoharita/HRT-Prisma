@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 260
-source_manifest_sha256: 696f42bbd5d9e62f73201ef41998acf22c565990bfbe20e12fa6882b40fbc869
+documentation_source_count: 261
+source_manifest_sha256: ac7f52be09f84c0e535acc8ae1ee76b53753a7dc33f255caebe945d259796cf5
 -->
 
 # Tudo sobre o Prisma
@@ -9248,6 +9248,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Correção de reprodução de marcadores publicada em 2026-09-21: textos narrativos estruturados pelo Parser IA agora mantêm marcadores explícitos em linhas separadas, sem alterar a evidência de origem. O SHA `1555cb1` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi recriado, com container ativo, zero reinícios, `/profiles/import` HTTP 200 e assets versionados preservados. Supabase, gateway, worker e OCR não foram alterados. Evidência: `docs/qa/aot-m57-parser-bullet-linebreaks.md`.
+
 Correção do preflight do Parser IA publicada em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. O SHA `8d011f7` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi reconstruído, com imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`, zero reinícios e HTTPS 200 após a estabilização. O bundle confirma `hosted`, `local=false` e o SHA publicado. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
 
 Correção de rollover de assets em 2026-09-21: uma aba aberta carregou um bundle anterior e tentou buscar `pdf-hx5T6pJb.js` depois da recriação web; o asset não existia na imagem nova e o import dinâmico falhou antes do processamento. O asset e os demais chunks versionados foram restaurados no contêiner ativo sem reinício, e `release-web.sh` passou a preservar os assets do contêiner anterior em cada troca. Nginx não armazena `index.html`; assets versionados usam cache longo. O Parser IA, banco, gateway e worker não foram alterados.
@@ -13713,6 +13715,48 @@ Nenhum. D-11 foi registrado como aditivo autorizado após o smoke revelar um blo
 ## Conclusão
 
 O upgrade reduz trabalho humano nos padrões comprovados e mantém revisão obrigatória para lacunas. A qualidade representativa ainda não está provada: cutover depende de 8 a 12 currículos reais autorizados e medição cega contra baseline.
+
+---
+
+## Source: `docs/qa/aot-m57-parser-bullet-linebreaks.md`
+
+# AoT — M5.7 — Marcadores de item em texto narrativo
+
+Contrato de referência: `docs/ai/parser-ia.md` (M5.7, regra de reprodução de marcadores, 2026-09-21). Movimento restrito à estruturação do texto para revisão; não altera o modelo, o prompt, o banco ou a evidência de origem.
+
+## Matriz de entrega
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | `clean` preserva os marcadores explícitos `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙` e inicia cada item em uma nova linha no valor estruturado | Teste Parser IA com dois marcadores inline e comparação exata do texto reproduzido | PASS |
+| D-02 | O texto e as coordenadas em `fieldEvidence` continuam sendo os da fonte original | O mesmo teste confirma que `fieldEvidence.text` não recebe a normalização visual | PASS |
+| D-03 | A regra mantém a normalização anterior de espaços e não altera campos sem marcador | 22 testes `parserIa` aprovados, incluindo recuperação de espaços, listas, contatos, experiências e educação | PASS |
+| D-04 | A correção é publicada somente na camada web | Commit `1555cb1` em `main`/GitHub/VPS; container `prisma-web` ativo, zero reinícios, HTTPS 200 | PASS |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Não reescrever o texto de evidência nem suas coordenadas | Teste de proveniência e diff restrito ao parser, teste e documentação | PASS |
+| P-02 | Não chamar PaddleOCR/Tesseract nem alterar o pipeline de OCR | Diff sem alteração em Document Intelligence; apenas `parserIa.ts` foi modificado no runtime | PASS |
+| P-03 | Não criar migração, dado, Perfil ou decisão humana | Release plan sem banco/funções; deploy recriou somente `prisma-web` | PASS |
+
+## Validação
+
+- `pnpm run build`: PASS.
+- `pnpm run typecheck:web`: PASS.
+- `pnpm exec node --test dist/tests/parserIa.test.js`: 22/22 PASS.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
+- `git diff --check`: PASS.
+- Smoke remoto: SHA `1555cb1419f476646c2ae1073db468b42b5bf6fe`, `prisma-web` `running`, `RestartCount=0`, `/`, `/profiles/import` e bundle principal HTTP 200; asset legado `pdf-hx5T6pJb.js` preservado e HTTP 200.
+
+## Limites
+
+A quebra de linha é aplicada quando o texto reproduz um marcador explícito reconhecido. O parser não infere marcadores ausentes a partir de layout desconhecido e não tenta reconstruir listas que não estejam presentes na fonte ou na resposta aceita. A validação visual autenticada de um currículo específico permanece responsabilidade da revisão humana.
+
+## Conclusão
+
+PASS. O texto narrativo reproduzido pelo Parser IA agora respeita marcadores explícitos como itens separados, preservando a evidência original para auditoria.
 
 ---
 
