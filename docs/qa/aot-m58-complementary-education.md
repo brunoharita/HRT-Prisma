@@ -37,4 +37,4 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS técnico para a implementação local e para a migração remota. A publicação web e a sincronização de `main` são registradas em `docs/operations/deployment.md` após o smoke do runtime.
+PASS. O commit `6db8c4c2d97771675365ed8805679d586f2b9a55` está em `main`, GitHub e VPS. O `prisma-web` está ativo com zero reinícios e HTTPS 200 em `/` e `/profiles/import`; a migration e as provas remotas permanecem válidas. O 404 transitório observado durante a recriação não persistiu no smoke posterior.
