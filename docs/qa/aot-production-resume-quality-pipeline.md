@@ -79,9 +79,9 @@ Resultado final deste rollout: `9d4375b` implantado, serviço de IA reiniciado e
 
 | Acordo | Implementação | Teste e evidência | Status |
 | --- | --- | --- | --- |
-| `D-PREFLIGHT-01`: a importação hospedada deve alcançar o envio ao Parser IA quando o serviço estiver operacional | `deploy/docker-compose.yml` usa `hosted` por padrão; `disabled` exige declaração explícita de rollback | bundle anterior confirmou `VITE_PARSER_IA_MODE=disabled` e a mensagem da captura; build novo e bundle publicado devem confirmar `hosted` | PASS após publicação |
+| `D-PREFLIGHT-01`: a importação hospedada deve alcançar o envio ao Parser IA quando o serviço estiver operacional | `deploy/docker-compose.yml` usa `hosted` por padrão; `disabled` exige declaração explícita de rollback | SHA `8d011f7` sincronizado em main/GitHub/VPS; imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`; bundle confirma `hosted`, `local=false`, SHA correto; HTTPS 200 e contêiner sem reinício | PASS |
 | `P-PREFLIGHT-01`: não publicar uma tela bloqueada por omissão de variável nem expor segredo no frontend | regra documentada em `deploy/README.md` e `docs/operations/deployment.md`; nenhum segredo foi adicionado | inspeção do bundle verifica somente a flag pública e o SHA; gateway/worker não foram alterados | PASS |
-| `A-PREFLIGHT-01`: gateway, túnel reverso e worker loopback permanecem pré-requisitos operacionais | nenhuma mudança em banco, gateway, worker ou modelo | smoke web confirma desbloqueio; importação ponta a ponta depende de reteste autenticado do operador | PARTIAL até reteste |
+| `A-PREFLIGHT-01`: gateway, túnel reverso e worker loopback permanecem pré-requisitos operacionais | nenhuma mudança em banco, gateway, worker ou modelo | smoke web confirma desbloqueio; importação ponta a ponta ainda depende de reteste autenticado do operador | PARTIAL até reteste |
 
 O erro da captura era um bloqueio de configuração no frontend, anterior a qualquer chamada de IA. Esta correção não declara sucesso da importação completa enquanto o caminho hospedado não for exercitado com o worker e túnel ativos.
 

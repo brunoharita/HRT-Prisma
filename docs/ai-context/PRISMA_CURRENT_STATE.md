@@ -8,9 +8,9 @@ last_verified: 2026-09-20
 
 # Estado atual do Prisma
 
-## Correção do preflight do Parser IA em produção (em publicação)
+## Correção do preflight do Parser IA em produção (publicada)
 
-O bundle hospedado estava com `VITE_PARSER_IA_MODE=disabled` porque o `.env.production` não declarava a variável e o compose adotava esse valor como padrão. A correção torna `hosted` o padrão seguro para o `prisma-web`; `disabled` permanece somente como rollback explícito. Isso remove o bloqueio inicial da tela de importação. O gateway autenticado, o túnel reverso e o worker loopback continuam pré-requisitos para a chamada efetiva e não são alterados por esta correção.
+O bundle hospedado estava com `VITE_PARSER_IA_MODE=disabled` porque o `.env.production` não declarava a variável e o compose adotava esse valor como padrão. A correção torna `hosted` o padrão seguro para o `prisma-web`; `disabled` permanece somente como rollback explícito. O SHA `8d011f7` foi publicado somente na web; o contêiner está ativo sem reinícios, HTTPS respondeu 200 e o bundle confirma `hosted`, `local=false` e o SHA correto. Isso remove o bloqueio inicial da tela de importação. O gateway autenticado, o túnel reverso e o worker loopback continuam pré-requisitos para a chamada efetiva e não são alterados por esta correção.
 
 ## M8.2: correção de projeção para conceito criado pela empresa (publicada)
 

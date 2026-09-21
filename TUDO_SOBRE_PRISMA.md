@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 260
-source_manifest_sha256: d13de12c543e7b0c4d7d80f17d3deb2667be7fd62f5544dadde94109aaae61ef
+source_manifest_sha256: aaea280ecc57a18bfd84c20f6dbb0360de41a990259106549db5059db931e616
 -->
 
 # Tudo sobre o Prisma
@@ -2592,9 +2592,9 @@ last_verified: 2026-09-20
 
 # Estado atual do Prisma
 
-## Correção do preflight do Parser IA em produção (em publicação)
+## Correção do preflight do Parser IA em produção (publicada)
 
-O bundle hospedado estava com `VITE_PARSER_IA_MODE=disabled` porque o `.env.production` não declarava a variável e o compose adotava esse valor como padrão. A correção torna `hosted` o padrão seguro para o `prisma-web`; `disabled` permanece somente como rollback explícito. Isso remove o bloqueio inicial da tela de importação. O gateway autenticado, o túnel reverso e o worker loopback continuam pré-requisitos para a chamada efetiva e não são alterados por esta correção.
+O bundle hospedado estava com `VITE_PARSER_IA_MODE=disabled` porque o `.env.production` não declarava a variável e o compose adotava esse valor como padrão. A correção torna `hosted` o padrão seguro para o `prisma-web`; `disabled` permanece somente como rollback explícito. O SHA `8d011f7` foi publicado somente na web; o contêiner está ativo sem reinícios, HTTPS respondeu 200 e o bundle confirma `hosted`, `local=false` e o SHA correto. Isso remove o bloqueio inicial da tela de importação. O gateway autenticado, o túnel reverso e o worker loopback continuam pré-requisitos para a chamada efetiva e não são alterados por esta correção.
 
 ## M8.2: correção de projeção para conceito criado pela empresa (publicada)
 
@@ -9242,7 +9242,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-Correção do preflight do Parser IA em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. A tela deixa de bloquear a importação antes do envio. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
+Correção do preflight do Parser IA publicada em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. O SHA `8d011f7` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi reconstruído, com imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`, zero reinícios e HTTPS 200 após a estabilização. O bundle confirma `hosted`, `local=false` e o SHA publicado. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
 
 Correção de projeção M8.2 em 2026-09-20: a migration remota `20260920223716_m82_human_created_competency_profile_projection` atualizou somente a RPC `_v6`. A consulta autenticada do Perfil afetado passou de zero para uma associação de “Governança Corporativa” em Hard/H4 como declaração, sem novos vínculos pessoais persistidos. SHA funcional `7d57555` em `main`/GitHub/VPS, CI aprovado; o release plan não exigiu rebuild web, e `prisma-web` permaneceu ativo, sem reinícios, na imagem anterior. Prisma continua v1.8.2. A inspeção visual autenticada da tela ainda está pendente; detalhes no AoT M8.2.
 
@@ -15145,9 +15145,9 @@ Resultado final deste rollout: `9d4375b` implantado, serviço de IA reiniciado e
 
 | Acordo | Implementação | Teste e evidência | Status |
 | --- | --- | --- | --- |
-| `D-PREFLIGHT-01`: a importação hospedada deve alcançar o envio ao Parser IA quando o serviço estiver operacional | `deploy/docker-compose.yml` usa `hosted` por padrão; `disabled` exige declaração explícita de rollback | bundle anterior confirmou `VITE_PARSER_IA_MODE=disabled` e a mensagem da captura; build novo e bundle publicado devem confirmar `hosted` | PASS após publicação |
+| `D-PREFLIGHT-01`: a importação hospedada deve alcançar o envio ao Parser IA quando o serviço estiver operacional | `deploy/docker-compose.yml` usa `hosted` por padrão; `disabled` exige declaração explícita de rollback | SHA `8d011f7` sincronizado em main/GitHub/VPS; imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`; bundle confirma `hosted`, `local=false`, SHA correto; HTTPS 200 e contêiner sem reinício | PASS |
 | `P-PREFLIGHT-01`: não publicar uma tela bloqueada por omissão de variável nem expor segredo no frontend | regra documentada em `deploy/README.md` e `docs/operations/deployment.md`; nenhum segredo foi adicionado | inspeção do bundle verifica somente a flag pública e o SHA; gateway/worker não foram alterados | PASS |
-| `A-PREFLIGHT-01`: gateway, túnel reverso e worker loopback permanecem pré-requisitos operacionais | nenhuma mudança em banco, gateway, worker ou modelo | smoke web confirma desbloqueio; importação ponta a ponta depende de reteste autenticado do operador | PARTIAL até reteste |
+| `A-PREFLIGHT-01`: gateway, túnel reverso e worker loopback permanecem pré-requisitos operacionais | nenhuma mudança em banco, gateway, worker ou modelo | smoke web confirma desbloqueio; importação ponta a ponta ainda depende de reteste autenticado do operador | PARTIAL até reteste |
 
 O erro da captura era um bloqueio de configuração no frontend, anterior a qualquer chamada de IA. Esta correção não declara sucesso da importação completa enquanto o caminho hospedado não for exercitado com o worker e túnel ativos.
 
