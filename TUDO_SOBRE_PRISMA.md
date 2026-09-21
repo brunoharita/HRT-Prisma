@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 262
-source_manifest_sha256: ea7cabc32f4af85cb1780009c658bcb72f4354d7747cf9d4955d89fc84eb5e4c
+source_manifest_sha256: e370fada933e78ef0197cc64252e7360826704f15419a734da83966018abd55b
 -->
 
 # Tudo sobre o Prisma
@@ -9250,6 +9250,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Correção de compatibilidade da formação complementar em preparação: rascunhos legados que carregavam uma qualificação acadêmica incompatível agora são normalizados para `unknown`, preservando a origem e exigindo confirmação humana. Isso evita bloqueio quando a qualificação fica oculta para `complementary`; o servidor continua rejeitando combinações incompatíveis. A publicação web ocorrerá após o commit e smoke deste movimento. Evidência: `docs/qa/aot-m58-complementary-education.md`.
+
 Melhoria do seletor de formação publicada em 2026-09-21: as opções agora aparecem agrupadas em **Educação formal**, **Formação complementar** e **Sem classificação**, preservando os valores e contratos existentes. O SHA funcional `9d237a1f50e3c3aec48350a288e4639033f8e22e` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:d704c497fa09b702a2dc066ec47d8cf928a2168374ff122f2dbf530d4882dbab`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Evidência: `docs/qa/aot-m58-complementary-education.md`.
 
 M5.8 — Formação complementar publicada em 2026-09-21: o nível `complementary` / `Formação complementar` reutiliza `education[]`, com classificador determinístico para marcadores explícitos de cursos curtos e validador server-side compatível. A migration foi aplicada no Supabase como `20260921123328_complementary_education_level`; a prova remota aceitou um item complementar válido e rejeitou `complementary+bachelor`. O SHA `6db8c4c2d97771675365ed8805679d586f2b9a55` foi integrado em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:3aa2cc1b3f7a3cb0c1b0ce796f3c667ff50f08e78f47062d554b0b3efa9d9934`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Um 404 transitório durante a troca foi seguido por smoke estável. Evidência: `docs/qa/aot-m58-complementary-education.md`.
@@ -13893,6 +13895,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 | D-05 | Validação server-side aceita apenas combinações compatíveis com o novo nível | Migration aplicada no Supabase; caso complementar válido aceito e `complementary+bachelor` rejeitado | PASS |
 | D-06 | Interface comunica formação acadêmica e complementar sem alterar a ordem do fluxo de revisão | `typecheck:web`, build e teste de UI aprovados | PASS |
 | D-07 | Seletor de nível agrupa opções em Educação formal, Formação complementar e Sem classificação | Teste de UI com os três grupos; bundle publicado contém `Educação formal` | PASS |
+| D-08 | Rascunho legado com qualificação incompatível não fica preso quando o nível oculta o campo | Normalização redefine a qualificação para `unknown`, preserva a origem e mantém confirmação humana obrigatória; regressão aprovada | PASS |
 
 ## Proibições verificadas
 
@@ -13919,7 +13922,7 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS. O commit funcional `9d237a1f50e3c3aec48350a288e4639033f8e22e` está em `main`, GitHub e VPS. O `prisma-web` está ativo com zero reinícios e HTTPS 200 em `/` e `/profiles/import`; o bundle contém os três agrupadores do seletor. O 404 transitório observado durante a recriação não persistiu no smoke posterior. A migration e as provas remotas permanecem válidas.
+PASS. O commit funcional anterior `9d237a1f50e3c3aec48350a288e4639033f8e22e` está em `main`, GitHub e VPS; esta correção aguarda o novo rollout. O `prisma-web` permanece ativo com zero reinícios e HTTPS 200 em `/` e `/profiles/import`; o bundle contém os três agrupadores do seletor. A migration e as provas remotas permanecem válidas.
 
 ---
 

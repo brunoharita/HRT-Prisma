@@ -7,6 +7,7 @@ import { normalizeDraftPeriods } from "./resumeDates.js";
 import {
   educationClassificationNeedsReview,
   isEducationLevelQualificationCompatible,
+  repairEducationClassificationCompatibility,
   resolveEducationClassification,
 } from "../../../src/domain/educationClassification.js";
 
@@ -132,7 +133,7 @@ export function normalizeReviewDraft(draft: StructuredDraft): StructuredDraft {
         institution: nullableText(item.institution),
         period: nullableText(item.period),
         description: nullableText(item.description),
-        ...resolveEducationClassification(item),
+        ...repairEducationClassificationCompatibility(item),
       }))
       .filter((item) => !isEducationEmpty(item)),
     certifications: normalizeTags(draft.certifications),

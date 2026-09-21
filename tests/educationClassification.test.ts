@@ -8,6 +8,7 @@ import {
   educationCourseIdentity,
   educationFieldVisibility,
   isEducationLevelQualificationCompatible,
+  repairEducationClassificationCompatibility,
   resolveEducationClassification,
   withHumanEducationClassification,
 } from "../src/domain/educationClassification.js";
@@ -113,6 +114,24 @@ test("invalid academic combinations are rejected and level changes clear them", 
   const mba = classifyEducationRecord({ course: "MBA em Gestão", status: "Concluído" });
   const changed = withHumanEducationClassification(mba, { level: "undergraduate" });
   assert.equal(changed.qualification, "unknown");
+});
+
+test("stale academic qualification is reset when a complementary level is normalized", () => {
+  const repaired = repairEducationClassificationCompatibility({
+    course: "Curso livre de Liderança",
+    level: "complementary",
+    qualification: "bachelor",
+    status: "completed",
+    classificationOrigin: "human",
+    classificationSources: { level: "human", qualification: "human", status: "human" },
+    classificationReasons: ["human_classification_changed"],
+    classificationMethodVersion: "1.2.0",
+    classificationReviewed: true,
+  });
+  assert.equal(repaired.qualification, "unknown");
+  assert.equal(repaired.classificationSources.qualification, "unknown");
+  assert.equal(repaired.classificationReviewed, false);
+  assert.ok(repaired.classificationReasons.includes("incompatible_qualification_reset"));
 });
 
 test("basic education hides fields that do not add value and derives technical qualification", () => {

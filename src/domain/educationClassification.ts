@@ -218,6 +218,25 @@ export function resolveEducationClassification(input: EducationClassificationInp
   };
 }
 
+/**
+ * Removes a stale qualification left behind when a review changes its level.
+ * The reset is deliberately reviewable: it never invents a compatible degree
+ * and marks the qualification as unknown until a person confirms the record.
+ */
+export function repairEducationClassificationCompatibility(input: EducationClassificationInput & Partial<EducationClassificationFields>): EducationClassificationFields {
+  const current = resolveEducationClassification(input);
+  if (isEducationLevelQualificationCompatible(current.level, current.qualification)) return current;
+  const classificationSources = { ...current.classificationSources, qualification: "unknown" as const };
+  return {
+    ...current,
+    qualification: "unknown",
+    classificationSources,
+    classificationOrigin: overallOrigin(classificationSources),
+    classificationReviewed: false,
+    classificationReasons: appendClassificationReason(current.classificationReasons, "incompatible_qualification_reset"),
+  };
+}
+
 export function withHumanEducationClassification<T extends EducationClassificationInput & Partial<EducationClassificationFields>>(
   input: T,
   patch: Partial<Pick<EducationClassificationFields, "level" | "qualification" | "status">>,

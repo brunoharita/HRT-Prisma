@@ -738,6 +738,7 @@ function classificationReasonLabel(reason: string): string {
     current_period_suggests_in_progress: "Período atual sugere andamento",
     insufficient_explicit_academic_evidence: "Evidência insuficiente para classificar",
     historical_record_without_classification: "Registro anterior ao classificador acadêmico",
+    incompatible_qualification_reset: "Qualificação incompatível redefinida para revisão",
     human_classification_changed: "Classificação ajustada por pessoa",
     human_classification_confirmed: "Classificação confirmada por pessoa",
     human_record_created: "Formação adicionada por pessoa",
