@@ -70,7 +70,7 @@ import type { PersonDeletionImpactSummary } from "../domain/personDeletion";
 import {
   EDUCATION_LEVEL_LABELS,
   EDUCATION_ORIGIN_LABELS,
-  EDUCATION_QUALIFICATION_LABELS,
+  educationQualificationLabel,
   EDUCATION_STATUS_LABELS,
   educationClassificationNeedsReview,
   resolveEducationClassification,
@@ -974,7 +974,7 @@ function PublishedEducationItem({ item }: { item: StructuredEducation }) {
   const title = course ?? institution ?? "Formação registrada";
   const metadata = [institution && institution !== title ? institution : null, conciseRecordValue(item.period)].filter(Boolean).join(" · ");
   const detail = recordDetail([item.description, item.evidenceText, course ? null : item.course, institution ? null : item.institution], title, metadata);
-  return <PublishedRecord detail={detail} metadata={metadata} title={title} badges={<><Tag color={classification.status === "completed" ? "green" : classification.status === "in_progress" ? "blue" : "default"}>{EDUCATION_STATUS_LABELS[classification.status]}</Tag><Tag color="geekblue">{EDUCATION_LEVEL_LABELS[classification.level]}</Tag><Tag color="purple">{EDUCATION_QUALIFICATION_LABELS[classification.qualification]}</Tag><Tag>{EDUCATION_ORIGIN_LABELS[classification.classificationOrigin]}</Tag></>} />;
+  return <PublishedRecord detail={detail} metadata={metadata} title={title} badges={<><Tag color={classification.status === "completed" ? "green" : classification.status === "in_progress" ? "blue" : "default"}>{EDUCATION_STATUS_LABELS[classification.status]}</Tag><Tag color="geekblue">{EDUCATION_LEVEL_LABELS[classification.level]}</Tag><Tag color="purple">{educationQualificationLabel(classification.level, classification.qualification)}</Tag><Tag>{EDUCATION_ORIGIN_LABELS[classification.classificationOrigin]}</Tag></>} />;
 }
 
 function PublishedRecord({ detail, metadata, title, badges }: { detail: string | null; metadata: string; title: string; badges?: ReactNode }) {
@@ -995,7 +995,7 @@ function DocumentEducationSummary({ education }: { education: StructuredEducatio
   return (
     <section className="prisma-document-education-summary">
       <div className="prisma-document-education-summary__heading"><div><small>Formação acadêmica e complementar identificada</small><strong>{education.length} {education.length === 1 ? "registro" : "registros"}</strong></div>{pending ? <Tag color="gold">{pending} requer {pending === 1 ? "validação" : "validações"}</Tag> : <Tag color="green">Classificação confirmada</Tag>}</div>
-      <div className="prisma-document-education-summary__list">{education.slice(0, 4).map((item) => { const classification = resolveEducationClassification(item); return <article key={item.id}><div><strong>{item.course || "Curso não identificado"}</strong><span>{item.institution || "Instituição não identificada"}</span></div><div><Tag color="geekblue">{EDUCATION_LEVEL_LABELS[classification.level]}</Tag><Tag color={educationClassificationNeedsReview(classification) ? "gold" : "green"}>{EDUCATION_QUALIFICATION_LABELS[classification.qualification]}</Tag></div></article>; })}</div>
+      <div className="prisma-document-education-summary__list">{education.slice(0, 4).map((item) => { const classification = resolveEducationClassification(item); return <article key={item.id}><div><strong>{item.course || "Curso não identificado"}</strong><span>{item.institution || "Instituição não identificada"}</span></div><div><Tag color="geekblue">{EDUCATION_LEVEL_LABELS[classification.level]}</Tag><Tag color={educationClassificationNeedsReview(classification) ? "gold" : "green"}>{educationQualificationLabel(classification.level, classification.qualification)}</Tag></div></article>; })}</div>
       <div className="prisma-document-education-summary__legend"><span><i className="explicit" />Explícita: informada diretamente no documento</span><span><i className="inferred" />Inferida: deduzida por regra e sujeita à validação</span></div>
     </section>
   );

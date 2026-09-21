@@ -16,7 +16,7 @@ import type { ProfileReviewWorkspace, StructuredDraft } from "../../domain/perso
 import {
   EDUCATION_LEVEL_LABELS,
   EDUCATION_ORIGIN_LABELS,
-  EDUCATION_QUALIFICATION_LABELS,
+  educationQualificationLabel,
   EDUCATION_STATUSES,
   EDUCATION_STATUS_LABELS,
   confirmEducationClassification,
@@ -429,7 +429,7 @@ export function StructuredReviewPanel({
           <div className="prisma-education-classification-grid">
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.status`} label="Situação" onChange={(value) => updateClassification({ status: value as EducationStatus })} onSelect={onFieldSelect} options={EDUCATION_STATUSES.map((value) => ({ value, label: EDUCATION_STATUS_LABELS[value] }))} origin={classification.classificationSources.status} selectedFieldPath={selectedFieldPath} value={classification.status} />
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.level`} label="Nível de formação" onChange={(value) => updateClassification({ level: value as EducationLevel })} onSelect={onFieldSelect} options={educationLevelOptions} origin={classification.classificationSources.level} selectedFieldPath={selectedFieldPath} value={classification.level} />
-             {fieldVisibility.showQualification ? <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.qualification`} label="Qualificação" onChange={(value) => updateClassification({ qualification: value as EducationQualification })} onSelect={onFieldSelect} options={qualificationOptionsForLevel(classification.level).map((value) => ({ value, label: EDUCATION_QUALIFICATION_LABELS[value] }))} origin={classification.classificationSources.qualification} selectedFieldPath={selectedFieldPath} value={classification.qualification} /> : null}
+             {fieldVisibility.showQualification ? <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.qualification`} label="Qualificação" onChange={(value) => updateClassification({ qualification: value as EducationQualification })} onSelect={onFieldSelect} options={qualificationOptionsForLevel(classification.level).map((value) => ({ value, label: educationQualificationLabel(classification.level, value) }))} origin={classification.classificationSources.qualification} selectedFieldPath={selectedFieldPath} value={classification.qualification} /> : null}
           </div>
           <div className={["prisma-education-classification-card__footer", classificationMessage ? "has-validation-error" : ""].filter(Boolean).join(" ")} data-review-field-path={classificationPath}><div><small>Origem da classificação</small><strong>{EDUCATION_ORIGIN_LABELS[classification.classificationOrigin]}</strong><span>{classification.classificationMethodVersion === "legacy-unclassified" ? "Registro histórico preservado sem reclassificação retroativa." : classification.classificationReasons.map(classificationReasonLabel).join(" · ")}</span>{classificationMessage ? <Typography.Text type="danger">{classificationMessage}</Typography.Text> : null}</div>{editable ? <Button className="prisma-education-classification-confirm" icon={<CheckCircleOutlined />} onClick={() => update(confirmEducationClassification(reviewed))} type={requiresClassificationReview ? "primary" : "default"}>{requiresClassificationReview ? "Confirmar classificação" : "Confirmada"}</Button> : null}</div>
         </div>

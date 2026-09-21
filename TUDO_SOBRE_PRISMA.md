@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 262
-source_manifest_sha256: 622bfeef250262c0d53ab77ebd5e622321813915052c8ac849f244d26106f147
+source_manifest_sha256: 00a9382598b1b0fdff7b45782e223b42c8dbea006f9446a2de5fe15603883835
 -->
 
 # Tudo sobre o Prisma
@@ -9250,6 +9250,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Melhoria de nomenclatura da classificação acadêmica em preparação para publicação: a interface exibirá `Não se aplica` para a qualificação de Ensino médio, Técnico e Formação complementar, mantendo `Não identificada` quando uma Graduação ou Pós-graduação não tiver qualificação comprovada. O valor persistido continua `unknown`; o nível sem classificação continua `Não identificado`.
+
 Correção do bloqueio de classificação acadêmica publicada em 2026-09-21: a tela de revisão agora oculta Qualificação para `Não identificado`, além de `Ensino médio`, `Técnico` e `Formação complementar`, e calcula o preflight sobre o mesmo rascunho normalizado usado no salvamento. Qualificações antigas incompatíveis são redefinidas para `unknown` e seguem para confirmação humana, sem bloquear a criação por um campo oculto. O SHA funcional `766c263ea6244f12b6da844db889b01d1577c2b0` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:ce5648b801f479011c181c95ef85f953b0dcce3670208b9fe8c09561ac26d484`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Evidência: `docs/qa/aot-m58-complementary-education.md`.
 
 Correção de compatibilidade da formação complementar publicada em 2026-09-21: rascunhos legados que carregavam uma qualificação acadêmica incompatível agora são normalizados para `unknown`, preservando a origem e exigindo confirmação humana. Isso evita bloqueio quando a qualificação fica oculta para `complementary`; o servidor continua rejeitando combinações incompatíveis. O SHA funcional `2867ca3ec9ef2942b0ceea94a728059fe3a789c0` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:002f70e276fe55a6f8c8190220d5be4ec9abeea2a694bec186693ee8d1266422`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Evidência: `docs/qa/aot-m58-complementary-education.md`.
@@ -13899,6 +13901,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 | D-07 | Seletor de nível agrupa opções em Educação formal, Formação complementar e Sem classificação | Teste de UI com os três grupos; bundle publicado contém `Educação formal` | PASS |
 | D-08 | Rascunho legado com qualificação incompatível não fica preso quando o nível oculta o campo | Normalização redefine a qualificação para `unknown`, preserva a origem e mantém confirmação humana obrigatória; regressão aprovada | PASS |
 | D-09 | Qualificação permanece oculta para `Não identificado`, `Ensino médio`, `Técnico` e `Formação complementar`; a validação da tela usa o mesmo rascunho normalizado do salvamento | Regressões de visibilidade e de preflight aprovadas; combinações legadas não exibem mais o erro incompatível após a troca de nível | PASS |
+| D-10 | A interface distingue qualificação inaplicável de evidência formal ausente sem alterar os valores persistidos | `educationQualificationLabel` exibe `Não se aplica` para níveis sem qualificação e mantém `Não identificada` para Graduação/Pós-graduação sem evidência | PASS |
 
 ## Proibições verificadas
 
@@ -13925,7 +13928,7 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS. O commit funcional `766c263ea6244f12b6da844db889b01d1577c2b0` está em `main`, GitHub e VPS. O `prisma-web` está ativo com zero reinícios, imagem `sha256:ce5648b801f479011c181c95ef85f953b0dcce3670208b9fe8c09561ac26d484` e HTTPS 200 em `/` e `/profiles/import`; o bundle contém a regra de reparo da qualificação incompatível e a visibilidade sem qualificação para níveis sem aplicação. A migration e as provas remotas permanecem válidas.
+PASS. A correção funcional anterior está em `main`, GitHub e VPS; esta melhoria de nomenclatura mantém o mesmo contrato persistido e adiciona somente a apresentação contextual. Os testes direcionados, lint, typecheck web e build web passaram. A migration e as provas remotas permanecem válidas.
 
 ---
 

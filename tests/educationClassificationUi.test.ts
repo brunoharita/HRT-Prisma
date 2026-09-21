@@ -19,6 +19,13 @@ test("person center and document context present structured education without a 
   assert.doesNotMatch(center, /Confiança da extração/);
 });
 
+test("education summaries use context-aware qualification labels", () => {
+  const domain = readFileSync("src/domain/educationClassification.ts", "utf8");
+  const workspace = readFileSync("web/src/pages/PersonWorkspacePage.tsx", "utf8");
+  assert.match(domain, /educationQualificationLabel/);
+  assert.match(workspace, /educationQualificationLabel\(classification\.level, classification\.qualification\)/);
+});
+
 test("academic cards reflow to one column on mobile", () => {
   assert.match(styles, /\.prisma-education-classification-grid[\s\S]*grid-template-columns: repeat\(3/);
   assert.match(styles, /@media \(max-width: 640px\)[\s\S]*\.prisma-education-classification-grid \{ grid-template-columns: 1fr; \}/);

@@ -7,6 +7,7 @@ import {
   educationClassificationNeedsReview,
   educationCourseIdentity,
   educationFieldVisibility,
+  educationQualificationLabel,
   isEducationLevelQualificationCompatible,
   repairEducationClassificationCompatibility,
   resolveEducationClassification,
@@ -143,6 +144,14 @@ test("basic education hides fields that do not add value and derives technical q
   assert.equal(secondary.qualification, "other");
   const technical = withHumanEducationClassification({ course: "Processamento de Dados", level: "unknown", qualification: "unknown", status: "unknown" }, { level: "technical" });
   assert.equal(technical.qualification, "technical_course");
+});
+
+test("qualification labels distinguish inapplicable fields from missing formal evidence", () => {
+  assert.equal(educationQualificationLabel("secondary", "other"), "Não se aplica");
+  assert.equal(educationQualificationLabel("technical", "technical_course"), "Não se aplica");
+  assert.equal(educationQualificationLabel("complementary", "unknown"), "Não se aplica");
+  assert.equal(educationQualificationLabel("unknown", "unknown"), "Não identificada");
+  assert.equal(educationQualificationLabel("postgraduate", "unknown"), "Não identificada");
 });
 
 test("historical records remain readable without retroactive invention", () => {

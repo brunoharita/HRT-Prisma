@@ -80,6 +80,11 @@ export const EDUCATION_QUALIFICATION_LABELS: Record<EducationQualification, stri
   unknown: "Não identificada",
 };
 
+export function educationQualificationLabel(level: EducationLevel, qualification: EducationQualification): string {
+  if (level === "secondary" || level === "technical" || level === "complementary") return "Não se aplica";
+  return EDUCATION_QUALIFICATION_LABELS[qualification];
+}
+
 export const EDUCATION_STATUS_LABELS: Record<EducationStatus, string> = {
   completed: "Concluído",
   in_progress: "Em andamento",

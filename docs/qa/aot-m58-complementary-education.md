@@ -15,6 +15,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 | D-07 | Seletor de nível agrupa opções em Educação formal, Formação complementar e Sem classificação | Teste de UI com os três grupos; bundle publicado contém `Educação formal` | PASS |
 | D-08 | Rascunho legado com qualificação incompatível não fica preso quando o nível oculta o campo | Normalização redefine a qualificação para `unknown`, preserva a origem e mantém confirmação humana obrigatória; regressão aprovada | PASS |
 | D-09 | Qualificação permanece oculta para `Não identificado`, `Ensino médio`, `Técnico` e `Formação complementar`; a validação da tela usa o mesmo rascunho normalizado do salvamento | Regressões de visibilidade e de preflight aprovadas; combinações legadas não exibem mais o erro incompatível após a troca de nível | PASS |
+| D-10 | A interface distingue qualificação inaplicável de evidência formal ausente sem alterar os valores persistidos | `educationQualificationLabel` exibe `Não se aplica` para níveis sem qualificação e mantém `Não identificada` para Graduação/Pós-graduação sem evidência | PASS |
 
 ## Proibições verificadas
 
@@ -41,4 +42,4 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS. O commit funcional `766c263ea6244f12b6da844db889b01d1577c2b0` está em `main`, GitHub e VPS. O `prisma-web` está ativo com zero reinícios, imagem `sha256:ce5648b801f479011c181c95ef85f953b0dcce3670208b9fe8c09561ac26d484` e HTTPS 200 em `/` e `/profiles/import`; o bundle contém a regra de reparo da qualificação incompatível e a visibilidade sem qualificação para níveis sem aplicação. A migration e as provas remotas permanecem válidas.
+PASS. A correção funcional anterior está em `main`, GitHub e VPS; esta melhoria de nomenclatura mantém o mesmo contrato persistido e adiciona somente a apresentação contextual. Os testes direcionados, lint, typecheck web e build web passaram. A migration e as provas remotas permanecem válidas.
