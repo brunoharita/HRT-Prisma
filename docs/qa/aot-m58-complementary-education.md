@@ -12,6 +12,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 | D-04 | Conclusão não explícita continua inferida e exige confirmação humana | Teste de curso complementar verifica `educationClassificationNeedsReview=true` | PASS |
 | D-05 | Validação server-side aceita apenas combinações compatíveis com o novo nível | Migration aplicada no Supabase; caso complementar válido aceito e `complementary+bachelor` rejeitado | PASS |
 | D-06 | Interface comunica formação acadêmica e complementar sem alterar a ordem do fluxo de revisão | `typecheck:web`, build e teste de UI aprovados | PASS |
+| D-07 | Seletor de nível agrupa opções em Educação formal, Formação complementar e Sem classificação | Teste de UI com os três grupos; bundle publicado contém `Educação formal` | PASS |
 
 ## Proibições verificadas
 
@@ -38,4 +39,4 @@ Sem marcador explícito, o classificador não inventa a natureza do curso: mant�
 
 ## Conclusão
 
-PASS. O commit `6db8c4c2d97771675365ed8805679d586f2b9a55` está em `main`, GitHub e VPS. O `prisma-web` está ativo com zero reinícios e HTTPS 200 em `/` e `/profiles/import`; a migration e as provas remotas permanecem válidas. O 404 transitório observado durante a recriação não persistiu no smoke posterior.
+PASS. O commit funcional `9d237a1f50e3c3aec48350a288e4639033f8e22e` está em `main`, GitHub e VPS. O `prisma-web` está ativo com zero reinícios e HTTPS 200 em `/` e `/profiles/import`; o bundle contém os três agrupadores do seletor. O 404 transitório observado durante a recriação não persistiu no smoke posterior. A migration e as provas remotas permanecem válidas.
