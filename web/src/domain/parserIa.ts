@@ -52,7 +52,13 @@ const listPath = /^(competencies|languages|certifications|areasOfExpertise|tools
 const resultPath = /^keyResults\.([a-zA-Z][a-zA-Z0-9_-]{0,63})\.value$/;
 const customPath = /^customSections\.([a-zA-Z][a-zA-Z0-9_-]{0,63})\.(name|items\.(0|[1-9][0-9]{0,2}))$/;
 const forbiddenIds = new Set(["__proto__", "prototype", "constructor"]);
-const clean = (s: string) => s.normalize("NFKC").replace(/&amp;/g, "&").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim();
+const clean = (s: string) => {
+  const normalized = s.normalize("NFKC").replace(/&amp;/g, "&").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim();
+  return normalized
+    .replace(/ *([•▪●◦‣⁃∙])/gu, "\n$1")
+    .replace(/([•▪●◦‣⁃∙])(?=\S)/gu, "$1 ")
+    .trim();
+};
 const compact = (s: string) => clean(s).replace(/[•▪●]/g, "").replace(/\s/g, "");
 const reviewListFieldPath = (path: string) => path.replace(/^(competencies|languages|certifications|areasOfExpertise)\.(0|[1-9][0-9]{0,2})$/, "$1");
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);

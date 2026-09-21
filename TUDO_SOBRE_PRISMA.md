@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 260
-source_manifest_sha256: f3afba7e20c915009263ed89d9762fff58a2782685f1812c5aacb5a8313eaf72
+source_manifest_sha256: 696f42bbd5d9e62f73201ef41998acf22c565990bfbe20e12fa6882b40fbc869
 -->
 
 # Tudo sobre o Prisma
@@ -3946,6 +3946,8 @@ Complemento aprovado em 2026-09-12: após validar as propostas contra a fonte, a
 Backend Node local lê o PDF com PDF.js, mantendo spans e coordenadas independentes de coluna. OpenAI recebe PDF inline e spans com IDs, sem referência humana ou baseline como gabarito. Resposta estrita contém `status`, `facts[{path,value,sources}]` e `uncertainties`. O domínio verifica IDs, caminhos, duplicações, suporte textual, campos de contato e vínculo organização/hash. Fatos sem suporte ficam fora do rascunho e geram pendência; zero fatos é erro.
 
 As coordenadas de evidência são exclusivamente da fonte. Vários spans/páginas podem suportar um campo. Preservar palavra composta, separação explícita de listas, múltiplos cargos e períodos; títulos/cursos ausentes permanecem nulos. Duplicatas de formação são sinalizadas para decisão humana. O modelo não decide publicação, contratação, permissões ou mutação de dados aprovados.
+
+Quando um texto narrativo reproduz marcadores explícitos de item, como `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙`, a versão estruturada para revisão mantém o marcador e inicia cada item em uma nova linha. Essa normalização atua somente no valor reproduzido; o texto e as coordenadas da evidência de origem permanecem inalterados para rastreabilidade.
 
 O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa e retomada de intake interrompido também recebem a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do túnel loopback. Falha na importação é explícita e oferece somente nova tentativa; não existe continuação automática pela leitura local. Resultado parcial mostra aviso e pendências.
 

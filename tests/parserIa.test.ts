@@ -107,6 +107,17 @@ test("M5.7 groups distinct roles and preserves description continuation across p
   assert.deepEqual(result.fieldEvidence.filter((e) => e.fieldPath.endsWith(".description")).map((e) => e.pageNumber), [1, 2]);
   assert.deepEqual(result.draft.experiences.map((e) => e.organization), ["Empresa Um", "Empresa Um"]);
 });
+test("M5.7 reproduces inline bullet markers as new lines without changing source evidence", () => {
+  const source = "Atuação estratégica ao lado do CEO, conectando Marketing e Operações. • Liderança das estratégias de Marketing. • Estruturação da operação comercial.";
+  const result = run([page(1, ["Empresa Um", "Gestor", "2023 - Present", source])], [
+    fact("experiences.a.organization", "Empresa Um", "p1l1"),
+    fact("experiences.a.role", "Gestor", "p1l2"),
+    fact("experiences.a.period", "2023 - Present", "p1l3"),
+    fact("experiences.a.description", source, "p1l4"),
+  ]);
+  assert.equal(result.draft.experiences[0]!.description, "Atuação estratégica ao lado do CEO, conectando Marketing e Operações.\n• Liderança das estratégias de Marketing.\n• Estruturação da operação comercial.");
+  assert.equal(result.fieldEvidence.find((item) => item.fieldPath.endsWith(".description"))?.text, source);
+});
 test("M5.7 absent education course and status remain unasserted", () => {
   const result = run([page(1, ["Instituição Um", "2022 - 2023"])], [fact("education.a.institution", "Instituição Um", "p1l1"), fact("education.a.period", "2022 - 2023", "p1l2")]);
   assert.equal(result.draft.education[0]!.course, null);
