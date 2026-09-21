@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 261
-source_manifest_sha256: 3953ca1b640429c0a3738daac3fdef00a5c435c4a8a0f2f39df991291cb8f3df
+source_manifest_sha256: 069fb2675bf01c407184b2f3bbdd3f001eeb5f064c59297888e0042150569bc7
 -->
 
 # Tudo sobre o Prisma
@@ -9250,7 +9250,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-Correção de reprodução de marcadores publicada em 2026-09-21: textos narrativos estruturados pelo Parser IA agora mantêm marcadores explícitos em linhas separadas, sem alterar a evidência de origem. O SHA `1555cb1` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi recriado, com container ativo, zero reinícios, `/profiles/import` HTTP 200 e assets versionados preservados. Supabase, gateway, worker e OCR não foram alterados. Evidência: `docs/qa/aot-m57-parser-bullet-linebreaks.md`.
+Correção de reprodução de marcadores publicada em 2026-09-21: textos narrativos estruturados pelo Parser IA e rascunhos persistidos carregados pela revisão agora mantêm marcadores explícitos em linhas separadas, sem alterar a evidência de origem. O SHA funcional `7d71241` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi recriado, com container ativo, zero reinícios, `/profiles/import` HTTP 200 e assets versionados preservados. Supabase, gateway, worker e OCR não foram alterados. Evidência: `docs/qa/aot-m57-parser-bullet-linebreaks.md`.
 
 Correção do preflight do Parser IA publicada em 2026-09-20: a produção estava compilando com `VITE_PARSER_IA_MODE=disabled` porque o campo não existia no `.env.production` e o compose usava `disabled` como padrão. O padrão do `prisma-web` agora é `hosted`; rollback exige `VITE_PARSER_IA_MODE=disabled` explícito. O SHA `8d011f7` foi sincronizado em `main`/GitHub/VPS; somente `prisma-web` foi reconstruído, com imagem `sha256:892fd8cbcfeb126ff558868d69f222763a8c805aa027ffcb488ff85c661704b1`, zero reinícios e HTTPS 200 após a estabilização. O bundle confirma `hosted`, `local=false` e o SHA publicado. Gateway autenticado, túnel reverso e worker loopback continuam pré-requisitos operacionais separados e devem produzir falha sanitizada quando indisponíveis.
 
@@ -13733,7 +13733,7 @@ Contrato de referência: `docs/ai/parser-ia.md` (M5.7, regra de reprodução de 
 | D-01 | `clean` e a decodificação de revisão preservam os marcadores explícitos `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙` e iniciam cada item em uma nova linha no valor exibido | Testes Parser IA com dois marcadores inline, incluindo narrativa já persistida | PASS |
 | D-02 | O texto e as coordenadas em `fieldEvidence` continuam sendo os da fonte original | O mesmo teste confirma que `fieldEvidence.text` não recebe a normalização visual | PASS |
 | D-03 | A regra mantém a normalização anterior de espaços e não altera campos sem marcador | 22 testes `parserIa` aprovados, incluindo recuperação de espaços, listas, contatos, experiências e educação | PASS |
-| D-04 | A correção é publicada somente na camada web | Publicação final após o ajuste de decodificação; container `prisma-web` ativo, zero reinícios, HTTPS 200 | PASS |
+| D-04 | A correção é publicada somente na camada web | Commit funcional `7d71241` em `main`/GitHub/VPS; container `prisma-web` ativo, zero reinícios, HTTPS 200 | PASS |
 
 ## Proibições verificadas
 
