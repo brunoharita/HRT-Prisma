@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 262
-source_manifest_sha256: 6c198f9ce52f0d57f9a80be72627d0f7e257cfbadcd60c84c103729d7234de2b
+source_manifest_sha256: 241e3241a4c56c5fc1dca5ffe2972e0c144c19c767c25acfd5531c3b6af44dec
 -->
 
 # Tudo sobre o Prisma
@@ -13908,6 +13908,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
 - `git diff --check`: PASS.
 - Supabase remoto: função instalada contém `complementary`; teste positivo retornou `true` e teste negativo de `complementary+bachelor` retornou rejeição.
+- `pnpm run check:supabase-ledger`: BLOCKED conforme o guardrail histórico (`cliDbPushAllowed=false`, migrations antigas com timestamps divergentes e outras M8/M8.2 locais pendentes). A migration deste movimento foi aplicada pelo conector autorizado e verificada diretamente no banco; `db push` não foi usado.
 
 ## Limites
 

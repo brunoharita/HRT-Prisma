@@ -30,6 +30,7 @@ Contrato de referência: `docs/ai/extraction-contract.md` e `docs/ai/parser-ia.m
 - `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS.
 - `git diff --check`: PASS.
 - Supabase remoto: função instalada contém `complementary`; teste positivo retornou `true` e teste negativo de `complementary+bachelor` retornou rejeição.
+- `pnpm run check:supabase-ledger`: BLOCKED conforme o guardrail histórico (`cliDbPushAllowed=false`, migrations antigas com timestamps divergentes e outras M8/M8.2 locais pendentes). A migration deste movimento foi aplicada pelo conector autorizado e verificada diretamente no banco; `db push` não foi usado.
 
 ## Limites
 
