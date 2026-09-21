@@ -4,6 +4,7 @@ import { classifyEducationRecord } from "../../../src/domain/educationClassifica
 import { stableReviewEntityId } from "./reviewFieldLifecycle.js";
 import { normalizeResumeEmail, normalizeResumePhone, type ResumeIdentity } from "../../../src/domain/resumeIdentity.js";
 import { normalizeDraftPeriods } from "./resumeDates.js";
+import { preserveExplicitItemLineBreaks } from "./narrativeText.js";
 
 export const PARSER_IA_VERSION = "parser-ia-1.0.0";
 export const PARSER_IA_SOURCE_VERSION = "pdfjs-5.4.296/parser-ia-spans-v1";
@@ -54,10 +55,7 @@ const customPath = /^customSections\.([a-zA-Z][a-zA-Z0-9_-]{0,63})\.(name|items\
 const forbiddenIds = new Set(["__proto__", "prototype", "constructor"]);
 const clean = (s: string) => {
   const normalized = s.normalize("NFKC").replace(/&amp;/g, "&").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim();
-  return normalized
-    .replace(/ *([•▪●◦‣⁃∙])/gu, "\n$1")
-    .replace(/([•▪●◦‣⁃∙])(?=\S)/gu, "$1 ")
-    .trim();
+  return preserveExplicitItemLineBreaks(normalized);
 };
 const compact = (s: string) => clean(s).replace(/[•▪●]/g, "").replace(/\s/g, "");
 const reviewListFieldPath = (path: string) => path.replace(/^(competencies|languages|certifications|areasOfExpertise)\.(0|[1-9][0-9]{0,2})$/, "$1");

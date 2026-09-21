@@ -1,6 +1,7 @@
 import type { Json } from "./database.types";
 import { supabase } from "./client";
 import { normalizeDraftPeriods } from "../../domain/resumeDates.js";
+import { preserveExplicitItemLineBreaks } from "../../domain/narrativeText.js";
 import type { ResumeIdentity } from "../../../../src/domain/resumeIdentity.js";
 import {
   EXTRACTION_DRAFT_VERSION,
@@ -1707,7 +1708,7 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
         role: typeof candidate.role === "string" ? candidate.role : null,
         organization: typeof candidate.organization === "string" ? candidate.organization : null,
         period: typeof candidate.period === "string" ? candidate.period : null,
-        description: typeof candidate.description === "string" ? candidate.description : null,
+        description: typeof candidate.description === "string" ? preserveExplicitItemLineBreaks(candidate.description) : null,
         evidenceText: typeof candidate.evidenceText === "string" ? candidate.evidenceText : "",
         page: typeof candidate.page === "number" ? candidate.page : null,
       }];
@@ -1724,7 +1725,7 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
         course: typeof candidate.course === "string" ? candidate.course : null,
         institution: typeof candidate.institution === "string" ? candidate.institution : null,
         period: typeof candidate.period === "string" ? candidate.period : null,
-        description: typeof candidate.description === "string" ? candidate.description : null,
+        description: typeof candidate.description === "string" ? preserveExplicitItemLineBreaks(candidate.description) : null,
         evidenceText: typeof candidate.evidenceText === "string" ? candidate.evidenceText : "",
         page: typeof candidate.page === "number" ? candidate.page : null,
         ...classification,

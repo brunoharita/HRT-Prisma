@@ -6,10 +6,10 @@ Contrato de referência: `docs/ai/parser-ia.md` (M5.7, regra de reprodução de 
 
 | ID | Implementação | Teste / evidência | Status |
 | --- | --- | --- | --- |
-| D-01 | `clean` preserva os marcadores explícitos `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙` e inicia cada item em uma nova linha no valor estruturado | Teste Parser IA com dois marcadores inline e comparação exata do texto reproduzido | PASS |
+| D-01 | `clean` e a decodificação de revisão preservam os marcadores explícitos `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙` e iniciam cada item em uma nova linha no valor exibido | Testes Parser IA com dois marcadores inline, incluindo narrativa já persistida | PASS |
 | D-02 | O texto e as coordenadas em `fieldEvidence` continuam sendo os da fonte original | O mesmo teste confirma que `fieldEvidence.text` não recebe a normalização visual | PASS |
 | D-03 | A regra mantém a normalização anterior de espaços e não altera campos sem marcador | 22 testes `parserIa` aprovados, incluindo recuperação de espaços, listas, contatos, experiências e educação | PASS |
-| D-04 | A correção é publicada somente na camada web | Commit `1555cb1` em `main`/GitHub/VPS; container `prisma-web` ativo, zero reinícios, HTTPS 200 | PASS |
+| D-04 | A correção é publicada somente na camada web | Publicação final após o ajuste de decodificação; container `prisma-web` ativo, zero reinícios, HTTPS 200 | PASS |
 
 ## Proibições verificadas
 

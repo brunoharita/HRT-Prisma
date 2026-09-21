@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 261
-source_manifest_sha256: ac7f52be09f84c0e535acc8ae1ee76b53753a7dc33f255caebe945d259796cf5
+source_manifest_sha256: 3953ca1b640429c0a3738daac3fdef00a5c435c4a8a0f2f39df991291cb8f3df
 -->
 
 # Tudo sobre o Prisma
@@ -3948,6 +3948,8 @@ Backend Node local lê o PDF com PDF.js, mantendo spans e coordenadas independen
 As coordenadas de evidência são exclusivamente da fonte. Vários spans/páginas podem suportar um campo. Preservar palavra composta, separação explícita de listas, múltiplos cargos e períodos; títulos/cursos ausentes permanecem nulos. Duplicatas de formação são sinalizadas para decisão humana. O modelo não decide publicação, contratação, permissões ou mutação de dados aprovados.
 
 Quando um texto narrativo reproduz marcadores explícitos de item, como `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙`, a versão estruturada para revisão mantém o marcador e inicia cada item em uma nova linha. Essa normalização atua somente no valor reproduzido; o texto e as coordenadas da evidência de origem permanecem inalterados para rastreabilidade.
+
+Rascunhos de revisão persistidos antes desta regra também passam pela mesma normalização ao serem decodificados para a tela. O carregamento não reescreve o banco nem altera a evidência; a nova formatação só é persistida quando o operador salvar a revisão.
 
 O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa e retomada de intake interrompido também recebem a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do túnel loopback. Falha na importação é explícita e oferece somente nova tentativa; não existe continuação automática pela leitura local. Resultado parcial mostra aviso e pendências.
 
@@ -13728,10 +13730,10 @@ Contrato de referência: `docs/ai/parser-ia.md` (M5.7, regra de reprodução de 
 
 | ID | Implementação | Teste / evidência | Status |
 | --- | --- | --- | --- |
-| D-01 | `clean` preserva os marcadores explícitos `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙` e inicia cada item em uma nova linha no valor estruturado | Teste Parser IA com dois marcadores inline e comparação exata do texto reproduzido | PASS |
+| D-01 | `clean` e a decodificação de revisão preservam os marcadores explícitos `•`, `▪`, `●`, `◦`, `‣`, `⁃`, `∙` e iniciam cada item em uma nova linha no valor exibido | Testes Parser IA com dois marcadores inline, incluindo narrativa já persistida | PASS |
 | D-02 | O texto e as coordenadas em `fieldEvidence` continuam sendo os da fonte original | O mesmo teste confirma que `fieldEvidence.text` não recebe a normalização visual | PASS |
 | D-03 | A regra mantém a normalização anterior de espaços e não altera campos sem marcador | 22 testes `parserIa` aprovados, incluindo recuperação de espaços, listas, contatos, experiências e educação | PASS |
-| D-04 | A correção é publicada somente na camada web | Commit `1555cb1` em `main`/GitHub/VPS; container `prisma-web` ativo, zero reinícios, HTTPS 200 | PASS |
+| D-04 | A correção é publicada somente na camada web | Publicação final após o ajuste de decodificação; container `prisma-web` ativo, zero reinícios, HTTPS 200 | PASS |
 
 ## Proibições verificadas
 

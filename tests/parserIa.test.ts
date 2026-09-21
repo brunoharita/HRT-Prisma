@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { canResumeFailedAiIntake, PARSER_IA_SOURCE_VERSION, parserIaSource, structureParserIa, validateParserPayload, parserIaIdentity, preparedParserIa, parserIaMethodVersion, type ParserFact } from "../web/src/domain/parserIa.js";
 import type { ExtractedPage, PersonDocumentTimelineItem } from "../web/src/domain/personIngestion.js";
+import { preserveExplicitItemLineBreaks } from "../web/src/domain/narrativeText.js";
 
 test("M5.7 only offers source recovery for a failed AI intake without reusable review", () => {
   const document: PersonDocumentTimelineItem = {
@@ -117,6 +118,12 @@ test("M5.7 reproduces inline bullet markers as new lines without changing source
   ]);
   assert.equal(result.draft.experiences[0]!.description, "Atuação estratégica ao lado do CEO, conectando Marketing e Operações.\n• Liderança das estratégias de Marketing.\n• Estruturação da operação comercial.");
   assert.equal(result.fieldEvidence.find((item) => item.fieldPath.endsWith(".description"))?.text, source);
+});
+test("M5.7 also normalizes an already persisted inline narrative when it is decoded", () => {
+  assert.equal(
+    preserveExplicitItemLineBreaks("Atuação estratégica. • Liderança. • Resultados."),
+    "Atuação estratégica.\n• Liderança.\n• Resultados.",
+  );
 });
 test("M5.7 absent education course and status remain unasserted", () => {
   const result = run([page(1, ["Instituição Um", "2022 - 2023"])], [fact("education.a.institution", "Instituição Um", "p1l1"), fact("education.a.period", "2022 - 2023", "p1l2")]);
