@@ -36,10 +36,10 @@ trap cleanup EXIT
 # index can finish their dynamic imports during the rollout. Prefer the live
 # container because it may already contain assets preserved by an earlier run.
 if docker inspect prisma-web >/dev/null 2>&1; then
-  docker cp "prisma-web:/usr/share/nginx/html/assets/." "$legacy_assets_dir/"
+  docker cp "prisma-web:/usr/share/nginx/html/assets" "$legacy_assets_dir/"
 elif [[ -n "$previous_image" ]]; then
   legacy_assets_source="$(docker create "$previous_image")"
-  docker cp "$legacy_assets_source:/usr/share/nginx/html/assets/." "$legacy_assets_dir/"
+  docker cp "$legacy_assets_source:/usr/share/nginx/html/assets" "$legacy_assets_dir/"
 fi
 
 if [[ -n "$previous_image" ]]; then
@@ -49,8 +49,8 @@ fi
 export PRISMA_DEPLOY_COMMIT="$expected_sha"
 docker compose --env-file .env.production -f deploy/docker-compose.yml build prisma-web
 docker compose --env-file .env.production -f deploy/docker-compose.yml up -d --no-deps prisma-web
-if [[ -n "$(find "$legacy_assets_dir" -maxdepth 1 -type f -print -quit)" ]]; then
-  docker cp "$legacy_assets_dir/." prisma-web:/usr/share/nginx/html/assets/
+if [[ -n "$(find "$legacy_assets_dir/assets" -maxdepth 1 -type f -print -quit 2>/dev/null)" ]]; then
+  docker cp "$legacy_assets_dir/assets/." prisma-web:/usr/share/nginx/html/assets/
 fi
 
 curl --fail --silent --show-error --head https://prisma.hrtsolutions.com.br >/dev/null
