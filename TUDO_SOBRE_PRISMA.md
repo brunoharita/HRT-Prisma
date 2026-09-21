@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 262
-source_manifest_sha256: 00a9382598b1b0fdff7b45782e223b42c8dbea006f9446a2de5fe15603883835
+source_manifest_sha256: 18981d7a53da8c912f72a56cca1064a0f43f01f14dcdc0be90014960150fb75d
 -->
 
 # Tudo sobre o Prisma
@@ -9250,7 +9250,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-Melhoria de nomenclatura da classificação acadêmica em preparação para publicação: a interface exibirá `Não se aplica` para a qualificação de Ensino médio, Técnico e Formação complementar, mantendo `Não identificada` quando uma Graduação ou Pós-graduação não tiver qualificação comprovada. O valor persistido continua `unknown`; o nível sem classificação continua `Não identificado`.
+Melhoria de nomenclatura da classificação acadêmica publicada em 2026-09-21: a interface exibe `Não se aplica` para a qualificação de Ensino médio, Técnico e Formação complementar, mantendo `Não identificada` quando uma Graduação ou Pós-graduação não tiver qualificação comprovada. O valor persistido continua `unknown`; o nível sem classificação continua `Não identificado`. O SHA funcional `3036675542dbda0e56c0acf99772b9cc2c4acdbf` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:9696c8ae48780c038b6562ae5db426f48901821b84fd30f9b2bae576cd794ed5`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. O bundle ativo contém `Não se aplica`.
 
 Correção do bloqueio de classificação acadêmica publicada em 2026-09-21: a tela de revisão agora oculta Qualificação para `Não identificado`, além de `Ensino médio`, `Técnico` e `Formação complementar`, e calcula o preflight sobre o mesmo rascunho normalizado usado no salvamento. Qualificações antigas incompatíveis são redefinidas para `unknown` e seguem para confirmação humana, sem bloquear a criação por um campo oculto. O SHA funcional `766c263ea6244f12b6da844db889b01d1577c2b0` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:ce5648b801f479011c181c95ef85f953b0dcce3670208b9fe8c09561ac26d484`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. Evidência: `docs/qa/aot-m58-complementary-education.md`.
 
