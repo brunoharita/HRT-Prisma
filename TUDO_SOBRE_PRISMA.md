@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 265
-source_manifest_sha256: 5f4dc5541b9c02d85c4f8c10f1b3c0966fc7e945823cddc2b58a0431626ae5ae
+source_manifest_sha256: 8f6fbf6612e363f11c07b8843dbccf7615fe9f8d42bad0941e68708bfc645619
 -->
 
 # Tudo sobre o Prisma
@@ -2632,7 +2632,7 @@ last_verified: 2026-09-21
 
 ## M8 UX: sugestão de descrição de competência (implementação local)
 
-O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida, alteração de Inbox/evidência ou publicação. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. Implementação está na branch `codex/m82-ai-description-suggestion`; ainda não foi publicada nem exercitada com chamada paga ou smoke hospedado.
+O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida ou alteração de Inbox/evidência. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. O commit `dfd2e4a` está em `main`/GitHub; a Edge Function e a web hospedada ainda não foram publicadas, e o fluxo não foi exercitado com chamada paga ou smoke hospedado.
 
 ## Rollover de assets web (correção publicada)
 
