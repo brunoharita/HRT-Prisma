@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 265
-source_manifest_sha256: 8f6fbf6612e363f11c07b8843dbccf7615fe9f8d42bad0941e68708bfc645619
+source_manifest_sha256: b5b0fef8de3068587d099c0813cdbeb7fa9309d3a5831aac1038e67039943952
 -->
 
 # Tudo sobre o Prisma
@@ -2630,9 +2630,9 @@ last_verified: 2026-09-21
 
 # Estado atual do Prisma
 
-## M8 UX: sugestão de descrição de competência (implementação local)
+## M8 UX: sugestão de descrição de competência (publicada)
 
-O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida ou alteração de Inbox/evidência. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. O commit `dfd2e4a` está em `main`/GitHub; a Edge Function e a web hospedada ainda não foram publicadas, e o fluxo não foi exercitado com chamada paga ou smoke hospedado.
+O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida ou alteração de Inbox/evidência. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. O SHA `8dd0f0c22eef1318153006a21a6304a79c61ea98` está em `main`, GitHub e VPS; a Edge Function `knowledge-agent` foi publicada no projeto Supabase `ioldpnqqvobprjiontre`, e somente `prisma-web` foi recriado. O smoke hospedado não foi executado por solicitação do Product Owner; não houve chamada paga durante a validação local.
 
 ## Rollover de assets web (correção publicada)
 
@@ -9302,6 +9302,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+M8 UX — sugestão de descrição de competência publicada em 2026-09-21: o SHA `8dd0f0c22eef1318153006a21a6304a79c61ea98` está alinhado em `main`, GitHub e checkout da VPS `/opt/prisma`. A Edge Function `knowledge-agent` foi publicada no único projeto Supabase `ioldpnqqvobprjiontre`, sem migration. Somente `prisma-web` foi reconstruído e recriado; a imagem anterior e os assets versionados foram preservados. O contêiner terminou `running`, com zero reinícios. O smoke HTTP/hospedado não foi executado por solicitação do Product Owner; portanto a disponibilidade funcional remota permanece não testada neste fechamento. Evidência e limites: `docs/qa/aot-m8-concept-description-suggestion.md`.
+
 Correção do bloqueio server-side de formação complementar publicada em 2026-09-21: a função de publicação ainda usava um `CASE` anterior à inclusão de `education.level=complementary`, por isso a revisão passava na tela e falhava ao criar o Perfil. A migration forward-only remota `20260921235300_allow_complementary_education_publication` atualizou `private.enforce_approved_education_classification()` mantendo a compatibilidade server-side e os privilégios privados; `anon` e `authenticated` continuam sem executar a função. Nenhuma linha de Pessoa ou Perfil foi alterada.
 
 Melhoria de nomenclatura da classificação acadêmica publicada em 2026-09-21: a interface exibe `Não se aplica` para a qualificação de Ensino médio, Técnico e Formação complementar, mantendo `Não identificada` quando uma Graduação ou Pós-graduação não tiver qualificação comprovada. O valor persistido continua `unknown`; o nível sem classificação continua `Não identificado`. O SHA funcional `3036675542dbda0e56c0acf99772b9cc2c4acdbf` está em `main`, GitHub e VPS; somente `prisma-web` foi recriado, com imagem `sha256:9696c8ae48780c038b6562ae5db426f48901821b84fd30f9b2bae576cd794ed5`, container ativo, zero reinícios e HTTPS 200 em `/` e `/profiles/import`. O bundle ativo contém `Não se aplica`.
@@ -14958,7 +14960,7 @@ Nenhum desvio conhecido do acordo. O resultado de dados solicitado está confirm
 
 # AoT — M8 UX — Sugestão de descrição de competência
 
-Contrato: `docs/agreements/agreement-m8-concept-description-suggestion.md` v1.0.0. Prompt: `docs/qa/execution-m8-concept-description-suggestion.md`. Estado: **PARCIAL**, em 2026-09-21, até a validação final desta branch.
+Contrato: `docs/agreements/agreement-m8-concept-description-suggestion.md` v1.0.0. Prompt: `docs/qa/execution-m8-concept-description-suggestion.md`. Estado: **PARCIAL**, em 2026-09-21, porque o rollout foi concluído sem smoke hospedado, conforme decisão do Product Owner.
 
 ## Matriz de Acordos
 
@@ -14973,7 +14975,7 @@ Contrato: `docs/agreements/agreement-m8-concept-description-suggestion.md` v1.0.
 
 ## Fora de escopo e limites
 
-Não houve migration, provenance persistida, chamada paga, deploy de Edge Function ou mutação Supabase. A sugestão usa o bloqueio de orçamento existente do Knowledge Agent, mas não cria registro próprio de uso nesta opção sem schema. A ativação hospedada e a inspeção visual autenticada permanecem pendentes até publicação autorizada; portanto o movimento permanece `PARTIAL` para rollout.
+Não houve migration, provenance persistida, chamada paga durante a validação ou mutação de dados Supabase. A sugestão usa o bloqueio de orçamento existente do Knowledge Agent, mas não cria registro próprio de uso nesta opção sem schema. O rollout foi concluído: a Edge Function `knowledge-agent` está publicada no projeto `ioldpnqqvobprjiontre`, `main`/GitHub/VPS estão no SHA `8dd0f0c22eef1318153006a21a6304a79c61ea98` e somente `prisma-web` foi recriado, com contêiner `running`, zero reinícios e assets legados preservados. O smoke hospedado não foi executado por solicitação do Product Owner; a disponibilidade funcional remota e a inspeção visual autenticada permanecem `NOT TESTED`, mantendo o movimento `PARTIAL`.
 
 ---
 

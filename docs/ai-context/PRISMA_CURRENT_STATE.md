@@ -8,9 +8,9 @@ last_verified: 2026-09-21
 
 # Estado atual do Prisma
 
-## M8 UX: sugestão de descrição de competência (implementação local)
+## M8 UX: sugestão de descrição de competência (publicada)
 
-O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida ou alteração de Inbox/evidência. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. O commit `dfd2e4a` está em `main`/GitHub; a Edge Function e a web hospedada ainda não foram publicadas, e o fluxo não foi exercitado com chamada paga ou smoke hospedado.
+O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida ou alteração de Inbox/evidência. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. O SHA `8dd0f0c22eef1318153006a21a6304a79c61ea98` está em `main`, GitHub e VPS; a Edge Function `knowledge-agent` foi publicada no projeto Supabase `ioldpnqqvobprjiontre`, e somente `prisma-web` foi recriado. O smoke hospedado não foi executado por solicitação do Product Owner; não houve chamada paga durante a validação local.
 
 ## Rollover de assets web (correção publicada)
 
