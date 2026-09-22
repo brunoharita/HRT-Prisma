@@ -6585,6 +6585,8 @@ textarea {
 .prisma-m74-curation-body > * { flex-shrink: 0; }
 .prisma-m74-curation-body > .ant-typography { margin: 0; }
 .prisma-m74-curation-body > label { display: flex; flex-direction: column; gap: 8px; font-weight: 600; }
+.prisma-m74-description-field { display: flex; flex-direction: column; gap: 8px; }
+.prisma-m74-description-field > .ant-space { font-weight: 600; }
 .prisma-m74-curation-body > label .ant-select { width: 100%; }
 .prisma-m74-source { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; background: #f4f7fc; border: 1px solid #dbe4f0; border-radius: 8px; overflow-wrap: anywhere; }
 .prisma-m74-candidates { display: flex; flex-direction: column; gap: 12px; }

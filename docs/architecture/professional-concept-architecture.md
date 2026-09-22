@@ -34,7 +34,7 @@ M7.5 adiciona a projeção `person-professional-evidence-3.1.0`: resultado compl
 
 `search_competency_taxonomy` consulta apenas conceitos não ocupacionais antes do limite, distingue canônico, alias oficial, alias humano, parcial e ambiguidade, e impede substring curta. `relevant_partial` nunca resolve associação. Requisitos de Posição continuam referenciando a mesma identidade `knowledge_concepts.id`; novas associações registram a versão da Taxonomia de Competências, sem criar requisito nem alterar matching.
 
-Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.
+Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação. O modo M8 UX de sugestão de descrição é separado da pesquisa: não usa Web Search, não cria proposta nem altera Inbox e devolve apenas um rascunho local para revisão humana.
 
 Impactos usam observações relacionadas e perfis atuais. `dispatch_knowledge_reinterpretation` é idempotente; `prepare_knowledge_reinterpretation_review` cria um draft ligado ao perfil-base, documento e tentativa existentes. A aprovação continua em `approve_profile_review`, reutilizando M2-C. Trigger copia versões Knowledge para a nova versão do perfil.
 

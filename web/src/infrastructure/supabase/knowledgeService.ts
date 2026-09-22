@@ -80,6 +80,16 @@ export const knowledgeService = {
       code: row.code, label: row.label, definition: row.definition, sortOrder: row.sort_order,
     }));
   },
+  async suggestConceptDescription(organizationId: string, competencyName: string): Promise<string> {
+    const { data, error } = await supabase.functions.invoke("knowledge-agent", { body: {
+      mode: "concept_description", contract: "concept-description-suggestion-request-1.0.0",
+      organizationId, competencyName, language: "pt-BR",
+    } });
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível gerar a sugestão de descrição.");
+    const description = (data as { description?: unknown } | null)?.description;
+    if (typeof description !== "string" || !description.trim()) throw new Error("A sugestão de descrição retornou um formato inválido.");
+    return description.trim();
+  },
   async resolveInboxAlias(input: { inboxId: string; conceptId: string; scope: "global" | "organization"; reason: string }) {
     const { data, error } = await supabase.rpc("resolve_knowledge_inbox_alias", { p_inbox_id: input.inboxId, p_concept_id: input.conceptId, p_scope: input.scope, p_reason: input.reason });
     if (error) throw supabaseOperationError(error, "Não foi possível aprovar o alias.");

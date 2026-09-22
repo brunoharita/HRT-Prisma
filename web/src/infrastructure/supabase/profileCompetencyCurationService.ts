@@ -22,6 +22,9 @@ export function profileCompetencyCurationService(organizationId: string, personI
         classificationState: item.classificationState, classification: item.classification,
       }));
     },
+    async suggestDescription(label) {
+      return knowledgeService.suggestConceptDescription(organizationId, label);
+    },
     async refresh() {
       const { data, error } = await supabase.rpc("load_person_professional_evidence_map_v6" as never, { p_organization_id: organizationId, p_person_id: personId } as never);
       if (error) throw new Error("Não foi possível atualizar a lista. Tente novamente.");

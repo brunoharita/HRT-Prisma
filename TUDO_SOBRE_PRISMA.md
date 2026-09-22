@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 262
-source_manifest_sha256: b302f2715cbd79fd11256ec6690ecc42b4404d600e363ae8f4980ff4ace07aac
+documentation_source_count: 265
+source_manifest_sha256: 5f4dc5541b9c02d85c4f8c10f1b3c0966fc7e945823cddc2b58a0431626ae5ae
 -->
 
 # Tudo sobre o Prisma
@@ -745,6 +745,44 @@ Após deploy, smoke autenticado deve provar:
 - **CA-38** tabelas próprias contêm dois macrogrupos e nove subagrupadores globais aprovados, com FK válida e classificação principal única por conceito classificado.
 - **CA-39** conceito Global rejeita subagrupador organizacional; conceito de uma organização rejeita subagrupador de outra, inclusive por escrita direta e RPC.
 - **CA-40** telas são comparadas com a imagem composta de nove telas em estado, dados e viewport equivalentes; divergências estruturais são registradas no AoT.
+
+---
+
+## Source: `docs/agreements/agreement-m8-concept-description-suggestion.md`
+
+# Agreement Contract — M8 UX — Sugestão de descrição de competência
+
+Versão: 1.0.0. Decisão do Product Owner em 2026-09-21. Este movimento adiciona assistência opcional ao formulário de criação de conhecimento da empresa, sem alterar a autoridade humana, a persistência ou a Inbox.
+
+## DEVE
+
+- **D-UX-01** Exibir “Sugerir com IA” junto ao campo “Descrição do conceito” no fluxo de proposta de novo conceito.
+- **D-UX-02** Enviar ao agente somente o nome da competência e receber uma definição em um único parágrafo editável.
+- **D-UX-03** Preencher o campo localmente; somente “Gravar” persiste a descrição na proposta.
+- **D-UX-04** Preservar a edição humana e comunicar carregamento, erro e origem da sugestão.
+
+## PROIBIDO
+
+- **P-UX-01** Criar proposta, associação, evidência, alteração na Inbox ou qualquer gravação durante a sugestão.
+- **P-UX-02** Enviar currículo, Perfil, Pessoa, organização, PII ou segredo ao modelo.
+- **P-UX-03** Tratar a definição gerada como evidência pessoal, equivalência Knowledge ou decisão de contratação.
+
+## FORA DE ESCOPO
+
+- **F-UX-01** Proveniência persistida da sugestão, migration, novo ledger ou alteração do contrato salvo.
+- **F-UX-02** Redesign do painel, mudança das regras de curadoria, pesquisa Web e sugestão para associação a conceito existente.
+
+## AUTONOMIA
+
+- **A-UX-01** Reutilizar a Edge Function `knowledge-agent` em modo dedicado, autenticação, autorização organizacional, bloqueio no-PII, orçamento e Structured Outputs.
+- **A-UX-02** Normalizar a saída para um único parágrafo de até 2.000 caracteres e usar fallback de erro sem apagar o rascunho.
+
+## CRITÉRIOS DE ACEITE
+
+- **CA-UX-01** O botão aparece somente na proposta de novo conceito e fica indisponível sem nome ou durante a chamada.
+- **CA-UX-02** A resposta aceita contém apenas uma definição não vazia de até 2.000 caracteres; formato inválido é rejeitado.
+- **CA-UX-03** Testes estáticos provam o modo dedicado, ausência de Web Search/persistência na sugestão e bloqueio de PII no servidor.
+- **CA-UX-04** Typecheck web, build/testes direcionados e diff review passam; nenhuma migration ou mutação remota é necessária.
 
 ---
 
@@ -2586,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.48.0
-last_verified: 2026-09-20
+version: 2.49.0
+last_verified: 2026-09-21
 ---
 
 # Estado atual do Prisma
+
+## M8 UX: sugestão de descrição de competência (implementação local)
+
+O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida, alteração de Inbox/evidência ou publicação. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. Implementação está na branch `codex/m82-ai-description-suggestion`; ainda não foi publicada nem exercitada com chamada paga ou smoke hospedado.
 
 ## Rollover de assets web (correção publicada)
 
@@ -4033,6 +4075,8 @@ Sem `OPENAI_API_KEY`, modelo, flag explícita e caps positivos, o provider falha
 
 O mesmo Knowledge Agent aceita `vacancy-advisor-request-1.0.0`. Esse modo não cria conceito nem proposta Knowledge. Ele pesquisa somente quando a interface identifica dependência de informação atual, recebe pergunta, título, área, idioma e data, e nunca recebe Perfil, currículo, Pessoa, nome da organização, missão, responsabilidades ou contexto interno.
 
+O modo `concept-description` (`concept-description-suggestion-request-1.0.0`) é uma assistência opcional do formulário de proposta humana. O servidor autoriza o operador na organização, aplica o bloqueio no-PII e o orçamento compartilhado, e envia ao modelo somente `{ competency_name, language }`. Usa Structured Outputs sem ferramentas e `store:false`; retorna uma definição de até 2.000 caracteres para edição local. Não acessa nem altera Inbox, propostas, conceitos ou evidências. A descrição só é persistida quando o operador grava a proposta, conforme o Agreement M8 UX; a opção atual não persiste provenance da sugestão.
+
 O prompt `vacancy-advisor-web-1.0.0` e o schema `vacancy-advisor-market-answer-1.0.0` separam síntese factual, recomendação e ressalvas. Toda fonte retornada deve estar tanto nas citações reais do Web Search quanto no catálogo aprovado; publisher, classe e instante de consulta são definidos pelo servidor. Uma fonte oficial basta; sem fonte oficial, são necessárias duas secundárias independentes. O resultado fica em cache tenant-scoped por 24 horas e o ledger não persiste a pergunta.
 
 ---
@@ -4130,6 +4174,7 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 | `knowledge-agent` | AI engineering | 1.0.0 | Propor conceito com fontes aprovadas | `KNOWLEDGE_RESEARCH_MODEL` | Knowledge Agent | encontrado no código; ativação não revalidada nesta auditoria |
 | `vacancy-advisor-web` | AI engineering | 1.0.0 | Orientação de mercado para Vaga | `KNOWLEDGE_RESEARCH_MODEL` | Assistente Prisma | encontrado no código; ativação não revalidada nesta auditoria |
 | `occupation-resolution-agent` | AI engineering | 1.0.0 | Escolher referência ocupacional equivalente entre candidatos permitidos | `KNOWLEDGE_RESEARCH_MODEL` | resolução ocupacional | encontrado no código; ativação não revalidada nesta auditoria |
+| `knowledge-concept-description` | AI engineering | 1.0.0 | Sugerir uma definição didática de competência para edição humana | `KNOWLEDGE_RESEARCH_MODEL` | curadoria de Perfil | implementado local; não ativado/publicado |
 | `prisma-competency-classification` | AI engineering | 1.1.0 | Classificar conceitos globais ESCO/O*NET em Hard/Soft e subagrupador M8 | `gpt-5.6-terra` | scripts offline M8.2 | lote em validação; não é prompt de runtime |
 | `prisma-competency-classification-audit` | AI engineering | 1.0.0 | Contestar falsos Soft e amostrar decisões Hard | `gpt-5.6-terra` | auditoria offline M8.2 | planejado para QA do lote |
 | `prisma-competency-adjudication` | AI engineering | 1.0.0 | Resolver divergências entre classificação e auditoria com contexto ESCO | `gpt-5.6-terra` | arbitragem offline M8.2 | lote em validação; sem publicação automática |
@@ -4165,6 +4210,7 @@ Fonte dos três templates e schemas: `supabase/functions/knowledge-agent/index.t
 | `knowledge-agent-1.0.0` | `fb89e51010fff426f6aeee65ad406e95a5c9db89081e7afd4d84e06e22808476` |
 | `vacancy-advisor-web-1.0.0` | `af42c470bd1ce74594231fdd919115f11a86284f81949da9c9d0ea1f7823deed` |
 | `occupation-resolution-agent-1.0.0` | `916acaf7204dd7089c7f45b57b060c494f80deaa55a6a5b63d6ba9d76e0c7673` |
+| `knowledge-concept-description-1.0.0` | `f444be12f019c96ceb9010bb13d5ff2683192c512aa50dc3c02ef706ca897050` |
 
 ### Knowledge Agent
 
@@ -4183,6 +4229,12 @@ Fonte dos três templates e schemas: `supabase/functions/knowledge-agent/index.t
 - Template: `handleOccupationResolution`; o request identifica organização/tentativa, mas o input do modelo contém termo, idioma e candidatos ocupacionais permitidos. Saída/schema: `occupation-resolution-answer-1.0.0`, `occupationResolutionSchema`.
 - OpenAI Responses, `store: false`, `max_output_tokens: 400`, `safety_identifier` derivado do usuário; sem Web/tools. Temperatura não definida.
 - Só escolher equivalência segura de título entre candidatos; incerteza mantém `safe` falso. Não inferir ocupação por competências/senioridade. O servidor verifica allowlist, autoridade, limites e conclusão da tentativa; a resposta não publica Knowledge por conta própria.
+
+### Sugestão de descrição de conceito
+
+- Template: `callOpenAiForConceptDescription`; entrada do modelo: somente nome da competência e idioma; saída/schema: `knowledge-concept-description-answer-1.0.0`, `conceptDescriptionSchema`.
+- OpenAI Responses, `store:false`, `max_output_tokens:400`, `safety_identifier` derivado do usuário, sem Web Search/tools. A resposta deve conter um único campo `definition`, normalizado para um parágrafo de até 2.000 caracteres.
+- Guardrails: operador autenticado e autorizado na organização, enriquecimento externo habilitado, orçamento compartilhado, no-PII e nenhuma gravação durante a sugestão. O texto é editável e só persiste no salvamento humano da proposta.
 
 ### Evidência, custos e lacunas
 
@@ -4853,7 +4905,7 @@ M7.5 adiciona a projeção `person-professional-evidence-3.1.0`: resultado compl
 
 `search_competency_taxonomy` consulta apenas conceitos não ocupacionais antes do limite, distingue canônico, alias oficial, alias humano, parcial e ambiguidade, e impede substring curta. `relevant_partial` nunca resolve associação. Requisitos de Posição continuam referenciando a mesma identidade `knowledge_concepts.id`; novas associações registram a versão da Taxonomia de Competências, sem criar requisito nem alterar matching.
 
-Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação.
+Pesquisa externa ocorre na Edge Function `knowledge-agent`. O domínio depende de `KnowledgeResearchProvider`, não do SDK OpenAI. Propostas persistidas são imutáveis; edição humana fica em campo separado. `approve_knowledge_proposal` cria change set, conceito e termos em transação. O modo M8 UX de sugestão de descrição é separado da pesquisa: não usa Web Search, não cria proposta nem altera Inbox e devolve apenas um rascunho local para revisão humana.
 
 Impactos usam observações relacionadas e perfis atuais. `dispatch_knowledge_reinterpretation` é idempotente; `prepare_knowledge_reinterpretation_review` cria um draft ligado ao perfil-base, documento e tentativa existentes. A aprovação continua em `approve_profile_review`, reutilizando M2-C. Trigger copia versões Knowledge para a nova versão do perfil.
 
@@ -14902,6 +14954,29 @@ Nenhum desvio conhecido do acordo. O resultado de dados solicitado está confirm
 
 ---
 
+## Source: `docs/qa/aot-m8-concept-description-suggestion.md`
+
+# AoT — M8 UX — Sugestão de descrição de competência
+
+Contrato: `docs/agreements/agreement-m8-concept-description-suggestion.md` v1.0.0. Prompt: `docs/qa/execution-m8-concept-description-suggestion.md`. Estado: **PARCIAL**, em 2026-09-21, até a validação final desta branch.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-UX-01 | Botão junto ao rótulo da descrição, somente no modo de proposta | Teste estático da UI e build web | PASS local |
+| D-UX-02 | Adapter → `knowledgeService` → modo dedicado; JSON `definition` normalizado | Teste estático do payload/schema; typecheck | PASS local |
+| D-UX-03 | Sugestão altera apenas estado do formulário; RPC existente continua no Gravar | Revisão do diff e teste da UI/adapter | PASS local |
+| D-UX-04 | Loading, erro, aviso de IA e preservação de edição | Teste estático e inspeção visual do fixture local em viewport desktop; sugestão sintética preenchida sem gravação | PASS local |
+| P-UX-01/P-UX-02 | Handler não acessa Inbox/propostas e rejeita PII | Teste estático; sem chamada real | PASS local |
+| P-UX-03 | Prompt limita saída a definição, sem evidência/decisão | Revisão do prompt e schema | PASS local |
+
+## Fora de escopo e limites
+
+Não houve migration, provenance persistida, chamada paga, deploy de Edge Function ou mutação Supabase. A sugestão usa o bloqueio de orçamento existente do Knowledge Agent, mas não cria registro próprio de uso nesta opção sem schema. A ativação hospedada e a inspeção visual autenticada permanecem pendentes até publicação autorizada; portanto o movimento permanece `PARTIAL` para rollout.
+
+---
+
 ## Source: `docs/qa/aot-m81-competency-architecture.md`
 
 # AoT — M8.1 Migração Sistêmica da Arquitetura de Competências
@@ -17073,6 +17148,16 @@ AoT com matriz D/P, migration aplicada e validada no ambiente autorizado, evidê
 Contrato congelado: `docs/qa/agreement-m77-legacy-company-proposal-transition.md` 1.0.0. Ler o acordo integralmente. Implementar D-01 a D-05 e CA-01 a CA-04; impedir P-01 a P-04; preservar F-01 a F-03; aplicar A-01 e A-02.
 
 O único registro identificado na inspeção read-only de produção é a proposta `8415c9fa-3986-419c-be32-b2e47209637f`, da organização Prisma, com termo e label “Transformação operacional”, `scope=organization`, `status=awaiting_human_review` e nenhum conceito/alias exato publicado. O ID identifica o alvo operacional, não deve virar regra hard-coded de produto. Antes da ação, reconfirmar seu estado. Processar a decisão do PO por sessão autenticada, nunca por SQL privilegiado com ator simulado. Reutilizar aprovação e enfileiramento existentes em uma transação; revisar negativos, rollback, diff, CI, release plan e resultado real. Nenhuma decisão Global é delegada ao agente.
+
+---
+
+## Source: `docs/qa/execution-m8-concept-description-suggestion.md`
+
+# Execution Prompt — M8 UX — Sugestão de descrição de competência
+
+Contrato integral: `docs/agreements/agreement-m8-concept-description-suggestion.md` versão 1.0.0.
+
+Implementar D-UX-01 a D-UX-04, impedir P-UX-01 a P-UX-03, manter F-UX-01/F-UX-02 fora do movimento e exercer A-UX-01/A-UX-02. Integrar o botão ao `CompetencyCuration`, transportar somente o nome canônico por `knowledgeService` e pelo modo `concept_description` do `knowledge-agent`, sem reutilizar o caminho de pesquisa que grava Inbox/propostas. Usar resposta JSON estruturada, `store:false`, sem tools/Web Search, autenticação e autorização server-side. Atualizar registro de prompt, owner de arquitetura, AoT e Context Pack. Validar sem chamada paga real e sem mutation remota.
 
 ---
 

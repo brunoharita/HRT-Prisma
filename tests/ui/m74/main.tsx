@@ -36,9 +36,11 @@ function Harness() {
   const [fail, setFail] = useState(false);
   const failRef = useRef(false); failRef.current = fail;
   const adapter = useMemo<CompetencyCurationAdapter>(() => ({ canUseGlobal: false,
+    async loadSubgroups() { return [{ id: "subgroup-hard", code: "H3", label: "Processos e métodos", macroGroupCode: "hard" as const, scope: "global" as const, organizationId: null, definition: "Competências técnicas aplicadas a processos e métodos.", classificationQuestion: "O conceito descreve um processo ou método técnico?", examples: ["BPMN"] }]; },
     async refresh() { return structuredClone(current.current); },
-    async search() { return [{ id: "concept-bpmn", canonicalLabel: "Business Process Model and Notation", conceptType: "methodology", scope: "global", aliases: ["BPMN"], description: "Notação para representar processos de negócio.", sourceName: "Fonte sintética", sourceVersion: "1.0", externalId: null, externalUri: null, method: "alias", matchedTerm: "BPMN", matchClass: "official_alias", aliasAuthority: "official_source", references: [{ source: "Fonte sintética", sourceVersion: "1.0", externalId: null, externalUri: null, mappingType: "exact", nativeType: "methodology", provenance: {} }] }]; },
-    async save(decision) {
+     async search() { return [{ id: "concept-bpmn", canonicalLabel: "Business Process Model and Notation", conceptType: "methodology", scope: "global", aliases: ["BPMN"], description: "Notação para representar processos de negócio.", sourceName: "Fonte sintética", sourceVersion: "1.0", externalId: null, externalUri: null, method: "alias", matchedTerm: "BPMN", matchClass: "official_alias", aliasAuthority: "official_source", references: [{ source: "Fonte sintética", sourceVersion: "1.0", externalId: null, externalUri: null, mappingType: "exact", nativeType: "methodology", provenance: {} }] }]; },
+     async suggestDescription() { return "Definição sintética para validação visual."; },
+     async save(decision) {
       if (failRef.current) throw new Error("Falha sintética de gravação. Sua edição foi preservada.");
       const next = structuredClone(current.current);
       if (decision.action === "alias") {
@@ -53,9 +55,11 @@ function Harness() {
         next.associations.push(association);
         next.issues = next.normalization.items.filter((value) => value.state !== "resolved").map((value) => ({ code: "unresolved", observedTerm: value.normalizedTerm, explanation: value.reason }));
       }
-      current.current = next;
+     current.current = next;
       return { projection: next, outcome: decision.action };
     },
+    async loadEvidenceSources() { return []; },
+    async linkEvidence() { return structuredClone(current.current); },
   }), []);
   return <ConfigProvider locale={ptBR} theme={prismaTheme}><PrismaAppShell navigationItems={[{ path: "/", label: "Início", icon: <HomeOutlined /> }, { path: "/profiles", label: "Pessoas", icon: <TeamOutlined /> }, { path: "/knowledge", label: "Knowledge", icon: <ReadOutlined /> }]} selectedPath="/profiles" memberships={[membership]} activeMembership={membership} profileName="Operadora sintética" profileSubtitle="Admin" onNavigate={() => undefined} onOrganizationChange={() => undefined} onSignOut={() => undefined}>
     <div className="prisma-profile-page"><label><Switch checked={fail} onChange={setFail} /> Simular falha de gravação (somente fixture)</label><CanonicalProfileHeader profile={profile} /><PersonProfessionalEvidenceMap profile={profile} projection={initial} projectionError={null} onOpenSource={() => undefined} curation={adapter} /></div>

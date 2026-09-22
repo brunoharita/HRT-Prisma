@@ -69,6 +69,7 @@ export interface CompetencyCurationAdapter {
   canUseGlobal: boolean;
   loadSubgroups(): Promise<CompetencySubgroupOption[]>;
   search(query: string): Promise<CurationCandidate[]>;
+  suggestDescription(label: string): Promise<string>;
   save(decision: CurationDecision): Promise<{ projection: ProfessionalEvidenceProjection; outcome: "alias" | "proposal" }>;
   refresh(): Promise<ProfessionalEvidenceProjection>;
   loadEvidenceSources(profileId: string): Promise<Array<{ nature: "contextual" | "certified"; index: number; label: string; quote: string }>>;

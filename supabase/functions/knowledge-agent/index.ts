@@ -32,6 +32,7 @@ interface VacancyAdvisorRequest {
 }
 
 interface OccupationResolutionRequest { organizationId: string; attemptId: string; contract: string; }
+interface ConceptDescriptionRequest { organizationId: string; competencyName: string; language: "pt-BR"; contract: string; }
 
 interface VacancyAdvisorSource {
   url: string;
@@ -62,6 +63,8 @@ const vacancyAdvisorPromptVersion = "vacancy-advisor-web-1.0.0";
 const vacancyAdvisorOutputSchemaVersion = "vacancy-advisor-market-answer-1.0.0";
 const occupationResolutionPromptVersion = "occupation-resolution-agent-1.0.0";
 const occupationResolutionOutputSchemaVersion = "occupation-resolution-answer-1.0.0";
+const conceptDescriptionPromptVersion = "knowledge-concept-description-1.0.0";
+const conceptDescriptionOutputSchemaVersion = "knowledge-concept-description-answer-1.0.0";
 
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -86,6 +89,9 @@ Deno.serve(async (request) => {
     }
     if (payload?.mode === "occupation_resolution") {
       return await handleOccupationResolution(serviceClient, authUser.id, payload, startedAt);
+    }
+    if (payload?.mode === "concept_description") {
+      return await handleConceptDescription(serviceClient, authUser.id, payload, startedAt);
     }
     const inboxId = String(payload?.inboxId ?? "");
     const contributionProposalId = typeof payload?.contributionProposalId === "string" ? payload.contributionProposalId : null;
@@ -175,6 +181,65 @@ Deno.serve(async (request) => {
     return jsonResponse(status, { error: message });
   }
 });
+
+async function handleConceptDescription(
+  serviceClient: ReturnType<typeof createServiceClient>,
+  authUserId: string,
+  payload: Record<string, unknown>,
+  startedAt: number,
+) {
+  if (payload.contract !== "concept-description-suggestion-request-1.0.0") throw new HttpError(400, "Contrato de sugestão de descrição não suportado.");
+  const input: ConceptDescriptionRequest = {
+    organizationId: sanitizeUuid(payload.organizationId, "Organização inválida."),
+    competencyName: sanitizeTerm(typeof payload.competencyName === "string" ? payload.competencyName : ""),
+    language: payload.language === "pt-BR" ? "pt-BR" : (() => { throw new HttpError(400, "Idioma não suportado."); })(),
+    contract: String(payload.contract),
+  };
+  rejectObviousPii(input.competencyName);
+  await requireDescriptionSuggestionAuthority(serviceClient, authUserId, input.organizationId);
+  await enforceBudgets(serviceClient);
+  const model = readRequiredEnv("KNOWLEDGE_RESEARCH_MODEL");
+  const providerResponse = await callOpenAiForConceptDescription(input, model, await sha256(authUserId));
+  const description = parseAndValidateConceptDescription(providerResponse.output_text);
+  return jsonResponse(200, {
+    description,
+    provider: "openai",
+    model,
+    promptVersion: conceptDescriptionPromptVersion,
+    outputSchemaVersion: conceptDescriptionOutputSchemaVersion,
+    durationMs: Date.now() - startedAt,
+  });
+}
+
+async function callOpenAiForConceptDescription(input: ConceptDescriptionRequest, model: string, safetyIdentifier: string) {
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${readRequiredEnv("OPENAI_API_KEY")}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model, store: false, max_output_tokens: 400, safety_identifier: safetyIdentifier,
+      instructions: [
+        "Você define conceitos de competências para uma base profissional.",
+        "Responda em português do Brasil, de maneira didática, direta e acadêmica.",
+        "Retorne exatamente um único parágrafo contínuo no campo definition, sem título, listas, marcadores, citações, exemplos inventados ou comentários sobre o processo.",
+        "Defina o conceito solicitado sem transformar a definição em evidência sobre uma pessoa, requisito de vaga ou decisão de contratação.",
+      ].join(" "),
+      input: JSON.stringify({ competency_name: input.competencyName, language: input.language }),
+      text: { format: { type: "json_schema", name: "knowledge_concept_description", strict: true, schema: conceptDescriptionSchema } },
+    }),
+  });
+  if (!response.ok) throw new HttpError(502, `Provider failure (${response.status}).`);
+  const body = await response.json();
+  return { output_text: readProviderOutputText(body), usage: body.usage };
+}
+
+function parseAndValidateConceptDescription(text: string): string {
+  let answer: { definition?: unknown };
+  try { answer = JSON.parse(text); } catch { throw new HttpError(502, "A IA retornou uma resposta estruturada inválida."); }
+  if (typeof answer.definition !== "string") throw new HttpError(502, "A IA não retornou uma definição válida.");
+  const definition = answer.definition.replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim();
+  if (!definition || definition.length > 2000) throw new HttpError(502, "A definição retornada excede o limite permitido.");
+  return definition;
+}
 
 async function handleOccupationResolution(
   serviceClient: ReturnType<typeof createServiceClient>, authUserId: string, payload: Record<string, unknown>, startedAt: number,
@@ -528,6 +593,20 @@ async function requireVacancyAdvisorAuthority(serviceClient: ReturnType<typeof c
   if (!settings?.allow_external_knowledge_enrichment) throw new HttpError(403, "Pesquisa externa da organização está desativada.");
 }
 
+async function requireDescriptionSuggestionAuthority(serviceClient: ReturnType<typeof createServiceClient>, authUserId: string, organizationId: string) {
+  const [actor] = await selectRows<{ access_profile: string; status: string }>(serviceClient.from("platform_users")
+    .select("access_profile, status").eq("auth_user_id", authUserId));
+  if (!actor || actor.status !== "active") throw new HttpError(403, "Operador inativo ou inexistente.");
+  if (actor.access_profile !== "super_admin") {
+    const [membership] = await selectRows<{ id: string }>(serviceClient.from("organization_memberships")
+      .select("id").eq("organization_id", organizationId).eq("user_id", authUserId).in("role", ["owner", "admin"]));
+    if (!membership) throw new HttpError(403, "Sugestão de descrição não autorizada.");
+  }
+  const [settings] = await selectRows<{ allow_external_knowledge_enrichment: boolean }>(serviceClient.from("organization_knowledge_settings")
+    .select("allow_external_knowledge_enrichment").eq("organization_id", organizationId));
+  if (!settings?.allow_external_knowledge_enrichment) throw new HttpError(403, "Enriquecimento externo da organização está desativado.");
+}
+
 async function enforceBudgets(serviceClient: ReturnType<typeof createServiceClient>) {
   const dailyCap = readIntegerEnv("KNOWLEDGE_RESEARCH_DAILY_CAP", 0);
   const monthlyCap = readIntegerEnv("KNOWLEDGE_RESEARCH_MONTHLY_CAP", 0);
@@ -674,4 +753,9 @@ const vacancyAdvisorSchema = {
 const occupationResolutionSchema = {
   type: "object", additionalProperties: false, required: ["safe", "selected_external_id", "reason"],
   properties: { safe: { type: "boolean" }, selected_external_id: { type: ["string", "null"] }, reason: { type: "string" } },
+};
+
+const conceptDescriptionSchema = {
+  type: "object", additionalProperties: false, required: ["definition"],
+  properties: { definition: { type: "string", minLength: 1, maxLength: 2000 } },
 };

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.48.0
-last_verified: 2026-09-20
+version: 2.49.0
+last_verified: 2026-09-21
 ---
 
 # Estado atual do Prisma
+
+## M8 UX: sugestão de descrição de competência (implementação local)
+
+O fluxo de proposta de novo conceito em `CompetencyCuration` agora possui a ação opcional “Sugerir com IA” junto ao campo “Descrição do conceito”. O modo dedicado `concept_description` do `knowledge-agent` recebe, após autenticação/autorização e bloqueio no-PII, somente o nome da competência e o idioma; usa Structured Outputs sem Web Search/tools e `store:false`, retornando uma definição de até 2.000 caracteres. A resposta preenche apenas o rascunho editável; a proposta só é persistida no botão “Gravar”. Não há migration, provenance persistida, alteração de Inbox/evidência ou publicação. Agreement, Execution Prompt, AoT e registro de prompt estão versionados. Implementação está na branch `codex/m82-ai-description-suggestion`; ainda não foi publicada nem exercitada com chamada paga ou smoke hospedado.
 
 ## Rollover de assets web (correção publicada)
 

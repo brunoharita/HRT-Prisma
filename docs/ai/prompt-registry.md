@@ -12,6 +12,7 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 | `knowledge-agent` | AI engineering | 1.0.0 | Propor conceito com fontes aprovadas | `KNOWLEDGE_RESEARCH_MODEL` | Knowledge Agent | encontrado no código; ativação não revalidada nesta auditoria |
 | `vacancy-advisor-web` | AI engineering | 1.0.0 | Orientação de mercado para Vaga | `KNOWLEDGE_RESEARCH_MODEL` | Assistente Prisma | encontrado no código; ativação não revalidada nesta auditoria |
 | `occupation-resolution-agent` | AI engineering | 1.0.0 | Escolher referência ocupacional equivalente entre candidatos permitidos | `KNOWLEDGE_RESEARCH_MODEL` | resolução ocupacional | encontrado no código; ativação não revalidada nesta auditoria |
+| `knowledge-concept-description` | AI engineering | 1.0.0 | Sugerir uma definição didática de competência para edição humana | `KNOWLEDGE_RESEARCH_MODEL` | curadoria de Perfil | implementado local; não ativado/publicado |
 | `prisma-competency-classification` | AI engineering | 1.1.0 | Classificar conceitos globais ESCO/O*NET em Hard/Soft e subagrupador M8 | `gpt-5.6-terra` | scripts offline M8.2 | lote em validação; não é prompt de runtime |
 | `prisma-competency-classification-audit` | AI engineering | 1.0.0 | Contestar falsos Soft e amostrar decisões Hard | `gpt-5.6-terra` | auditoria offline M8.2 | planejado para QA do lote |
 | `prisma-competency-adjudication` | AI engineering | 1.0.0 | Resolver divergências entre classificação e auditoria com contexto ESCO | `gpt-5.6-terra` | arbitragem offline M8.2 | lote em validação; sem publicação automática |
@@ -47,6 +48,7 @@ Fonte dos três templates e schemas: `supabase/functions/knowledge-agent/index.t
 | `knowledge-agent-1.0.0` | `fb89e51010fff426f6aeee65ad406e95a5c9db89081e7afd4d84e06e22808476` |
 | `vacancy-advisor-web-1.0.0` | `af42c470bd1ce74594231fdd919115f11a86284f81949da9c9d0ea1f7823deed` |
 | `occupation-resolution-agent-1.0.0` | `916acaf7204dd7089c7f45b57b060c494f80deaa55a6a5b63d6ba9d76e0c7673` |
+| `knowledge-concept-description-1.0.0` | `f444be12f019c96ceb9010bb13d5ff2683192c512aa50dc3c02ef706ca897050` |
 
 ### Knowledge Agent
 
@@ -65,6 +67,12 @@ Fonte dos três templates e schemas: `supabase/functions/knowledge-agent/index.t
 - Template: `handleOccupationResolution`; o request identifica organização/tentativa, mas o input do modelo contém termo, idioma e candidatos ocupacionais permitidos. Saída/schema: `occupation-resolution-answer-1.0.0`, `occupationResolutionSchema`.
 - OpenAI Responses, `store: false`, `max_output_tokens: 400`, `safety_identifier` derivado do usuário; sem Web/tools. Temperatura não definida.
 - Só escolher equivalência segura de título entre candidatos; incerteza mantém `safe` falso. Não inferir ocupação por competências/senioridade. O servidor verifica allowlist, autoridade, limites e conclusão da tentativa; a resposta não publica Knowledge por conta própria.
+
+### Sugestão de descrição de conceito
+
+- Template: `callOpenAiForConceptDescription`; entrada do modelo: somente nome da competência e idioma; saída/schema: `knowledge-concept-description-answer-1.0.0`, `conceptDescriptionSchema`.
+- OpenAI Responses, `store:false`, `max_output_tokens:400`, `safety_identifier` derivado do usuário, sem Web Search/tools. A resposta deve conter um único campo `definition`, normalizado para um parágrafo de até 2.000 caracteres.
+- Guardrails: operador autenticado e autorizado na organização, enriquecimento externo habilitado, orçamento compartilhado, no-PII e nenhuma gravação durante a sugestão. O texto é editável e só persiste no salvamento humano da proposta.
 
 ### Evidência, custos e lacunas
 

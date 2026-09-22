@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Empty, Input, Modal, Pagination, Radio, Select, Space, Tag, Typography } from "antd";
-import { CloseOutlined, LeftOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
+import { BulbOutlined, CloseOutlined, LeftOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
 import type { ProfessionalEvidenceProjection } from "../../domain/personProfessionalEvidence";
 import { competencyKey, curationPage, curationReturnTarget, CURATION_PAGE_SIZE, groupPendingCompetencies, pendingCompetencies, type CompetencyCurationAdapter, type CompetencySubgroupOption, type CurationCandidate, type CurationDecision, type PendingCompetency } from "../../domain/profileCompetencyCuration";
 import { PrismaCard } from "../../ui/PrismaCard";
@@ -161,6 +161,8 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   const [subgroups, setSubgroups] = useState<CompetencySubgroupOption[]>([]);
   const [subgroupId, setSubgroupId] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
+  const [suggestingDescription, setSuggestingDescription] = useState(false);
+  const [descriptionSuggested, setDescriptionSuggested] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const request = useRef(0);
@@ -206,6 +208,19 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
     try { const result = await adapter.search(normalizedTerm); if (id === request.current) setCandidates(result.filter((candidate) => candidate.conceptType !== "occupation" && candidate.conceptType !== "certification")); }
     catch { if (id === request.current) setError("Não foi possível buscar conceitos. Tente novamente; sua edição foi preservada."); }
     finally { if (id === request.current) setSearching(false); }
+  }
+  async function suggestDescription() {
+    const competencyName = label.trim();
+    if (!competencyName || saving || suggestingDescription) return;
+    setSuggestingDescription(true); onBusy(true); setError(null);
+    try {
+      const suggestion = await adapter.suggestDescription(competencyName);
+      setDescription(suggestion);
+      setDescriptionSuggested(true);
+      onDirty(true);
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : "Não foi possível gerar a sugestão de descrição. A edição foi preservada.");
+    } finally { setSuggestingDescription(false); onBusy(false); }
   }
   function scheduleSearch(term: string) {
     clearSearchTimer();
@@ -256,7 +271,7 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
         <label>Subagrupador principal<Select aria-label="Subagrupador principal proposto" value={subgroupId} disabled={saving} onChange={(value) => { setSubgroupId(value); onDirty(true); }} placeholder="Selecione o significado do conceito" options={(["hard", "soft"] as const).map((macro) => ({ label: macro === "hard" ? "Hard Skills" : "Soft Skills", options: subgroups.filter((item) => item.macroGroupCode === macro && (scope === "organization" || item.scope === "global")).map((item) => ({ value: item.id, label: `${item.code} · ${item.label}${item.scope === "organization" ? " (empresa)" : ""}` })) }))} /></label>
         {chosenSubgroup ? <Alert type="info" title={`${chosenSubgroup.macroGroupCode === "hard" ? "Hard Skills" : "Soft Skills"} > ${chosenSubgroup.label}`}
           description={<><p>{chosenSubgroup.definition}</p><p>{chosenSubgroup.classificationQuestion}</p>{chosenSubgroup.examples?.length ? <small>Exemplos: {chosenSubgroup.examples.join(", ")}</small> : null}</>} /> : null}</>}
-      {proposal ? <label>Descrição do conceito<Input.TextArea aria-label="Descrição do conceito" placeholder="Descrição opcional do conceito..." value={description} disabled={saving} rows={3} maxLength={2000} showCount onChange={(event) => { setDescription(event.target.value); onDirty(true); }} /></label> : null}
+      {proposal ? <div className="prisma-m74-description-field"><Space size="small"><label htmlFor="prisma-concept-description">Descrição do conceito</label><Button aria-label="Sugerir descrição com IA" type="link" size="small" icon={<BulbOutlined />} disabled={saving || suggestingDescription || !label.trim()} loading={suggestingDescription} onClick={() => void suggestDescription()}>Sugerir com IA</Button></Space><Input.TextArea id="prisma-concept-description" aria-label="Descrição do conceito" placeholder="Descrição opcional do conceito..." value={description} disabled={saving || suggestingDescription} rows={3} maxLength={2000} showCount onChange={(event) => { setDescription(event.target.value); onDirty(true); }} />{descriptionSuggested ? <Typography.Text type="secondary">Sugestão gerada por IA. Revise o texto antes de gravar.</Typography.Text> : null}</div> : null}
       <label>Alcance da decisão<Select aria-label="Alcance da decisão" value={scope} disabled={saving} onChange={(value) => { setScope(value); onDirty(true); }} options={[{ value: "organization", label: "Knowledge da empresa" }, ...(adapter.canUseGlobal ? [{ value: "global", label: "Knowledge Global" }] : [])]} /></label>
       <Typography.Text type="secondary">{scope === "global" ? "Decisão Global: pode ser reutilizada por outras empresas e perfis." : "Pode ser reutilizada em outros perfis desta empresa."}</Typography.Text>
       <Button type="link" disabled={saving} onClick={() => { setProposal(!proposal); onDirty(true); }}>{proposal ? "Voltar à associação de conceito existente" : "Não encontrou? Propor novo conceito"}</Button>
