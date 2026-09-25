@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 268
-source_manifest_sha256: 53a33fa17fd1f9b0e1fe39fab1342e731089ef8500534e6ff0251c4a982a1387
+source_manifest_sha256: 2ca7cd9593adccce76f4529a9174ee37b920a8de4ee7e7b4f62ede698338e235
 -->
 
 # Tudo sobre o Prisma
@@ -2632,7 +2632,7 @@ last_verified: 2026-09-25
 
 ## Disponibilidade antecipada da importação (publicada)
 
-A tela de importação consulta o gateway e o worker antes do envio, com estado/horário, nova checagem, atualização periódica visível e expiração. `parser-ia-readiness-1.0.0` reutiliza sessão, empresa e túnel; consulta somente ocupação/configuração, sem PDF, OpenAI ou persistência. Incerteza permanece explícita e consultiva; indisponibilidade confirmada bloqueia início e mantém arquivo selecionado. 68 testes direcionados, tipos/build e CI passaram; rollout inicial `e6a9909` e smoke hospedado autenticado confirmaram `200 available/ready`. Diagnóstico de 25/09 encontrou worker local e túnel 18787 ausentes, ambos restabelecidos; gateway/web atualizados com rollback preservado. Simulações somente na aba comprovaram bloqueio/seleção mantida e nova checagem no clique, sem enviar currículo. AoT `docs/qa/aot-import-readiness.md`. Monitor externo/canal de alertas ficam fora desta primeira etapa.
+A tela de importação consulta o gateway e o worker antes do envio, com estado/horário, nova checagem, atualização periódica visível e expiração. `parser-ia-readiness-1.0.0` reutiliza sessão, empresa e túnel; consulta somente ocupação/configuração, sem PDF, OpenAI ou persistência. Incerteza permanece explícita e consultiva; indisponibilidade confirmada bloqueia início e mantém arquivo selecionado. 68 testes direcionados, tipos/build e CI passaram; runtime final web `05c8972` e smoke hospedado autenticado confirmaram `200 available/ready`, layout legível a 390 px e cancelamento quando a seleção muda durante a checagem. Diagnóstico de 25/09 encontrou worker local e túnel 18787 ausentes, ambos restabelecidos; gateway/web atualizados com rollback preservado. Simulações somente na aba comprovaram bloqueio/seleção mantida e nova checagem no clique, sem enviar currículo. AoT `docs/qa/aot-import-readiness.md`. Monitor externo/canal de alertas ficam fora desta primeira etapa.
 
 ## M8 UX: sugestão de descrição de competência (publicada)
 
@@ -13426,11 +13426,11 @@ Contrato: `docs/qa/agreement-import-readiness.md` 1.0.0; execução: `docs/qa/ex
 | ID | Implementação | Teste/evidência | Status | Ambiente/limitação |
 | --- | --- | --- | --- | --- |
 | D-01 | rota gateway e worker read-only | HTTP integrado e resposta autenticada real `200 available/ready` | PASS | local e produção |
-| D-02 | Alert acessível, cinco estados, horário e botão | render desktop 1276 px e simulação isolada na aba | PASS | tela real autenticada |
+| D-02 | Alert acessível, cinco estados, horário e botão | render desktop 1276 px e móvel 390 px, simulação isolada na aba | PASS | tela real autenticada; largura móvel sem overflow |
 | D-03 | checagem anterior a PDF.js; seleção mantida | PDF sintético selecionado; unavailable/busy bloqueiam; unknown permite tentativa; clique renova check e interrompe antes de PDF.js | PASS | seleção sem envio à IA; remoção de seleção durante check também cancela início |
 | D-04 | limites/timeout, autorização existente, sem lock da checagem | HTTP negativos, ocupação, falha sem cooldown | PASS | local |
 | D-05 | TTL, escopo por empresa, abort/sequence na desmontagem; parse preservado | domínio/68 testes direcionados incluindo regressão | PASS | local |
-| D-06 | worker → gateway → web, main e produção | rollout funcional `e6a9909`, CI e smoke autenticado PASS | PASS | remoto; complemento de seleção acompanha fechamento |
+| D-06 | worker → gateway → web, main e produção | rollout inicial `e6a9909`, final web `05c8972`, CI e smoke autenticado PASS | PASS | remoto |
 
 ## Proibições verificadas
 
@@ -13470,9 +13470,10 @@ QA local sintético. Produção única. Arquivos alheios `.tmp.driveupload/`, `s
 - Gateway `sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99`, web inicial `sha256:c295547f29a4694329d16e87736f265ae0bdd0a9369f9e38b67a9f740919ea42`; ambos running, zero restart. Rollbacks `prisma-paddle-gateway:rollback-before-e6a990941da7` e `prisma-web:rollback-before-e6a990941da7` preservados.
 - Primeiro curl imediatamente após recriação retornou 404 transitório; checagem posterior confirmou `/profiles/import` 200, containers estáveis, rota anônima recusada com `session_required`. Não houve novo rebuild por esse retorno transitório.
 - Navegador autenticado mostrou `Serviço de importação disponível`; resposta real sanitizada contém versão, state, reason e checkedAt. Estados checking/available/busy/unavailable/unknown inspecionados. Seleção sintética mantida durante falhas; botão bloqueado antes do envio e liberado sob incerteza consultiva. Ao clicar com último estado available e nova resposta unavailable, permaneceu na etapa Upload, sem inferência.
-- Refinamento de preservação: troca/remoção do arquivo durante o await da checagem invalida aquela tentativa; não processar uma seleção anterior. Inspeção móvel a 390 px revelou compressão do texto pelo botão; ajuste scoped posiciona a ação abaixo do texto até 600 px. Nova inspeção após rollout do complemento.
+- Refinamento de preservação: troca/remoção do arquivo durante o await da checagem invalida aquela tentativa; não processar uma seleção anterior. Inspeção móvel a 390 px revelou compressão do texto pelo botão; ajuste scoped posiciona a ação abaixo do texto até 600 px. Nova inspeção em produção confirmou texto legível, botão abaixo e `innerWidth = scrollWidth = 390`. Viewport restaurado ao final.
 - Bloqueio Git incidental: ref local inválida `.git/refs/remotes/origin/main (1)` apontava objeto ausente e impedia fetch. Conteúdo preservado em `.git/quarantine-import-readiness/origin-main-duplicate.ref`; nenhuma exclusão de commit/ref remota. main legítima conferida contra GitHub antes de retomar fast-forward.
 - Dispatcher reconheceu web/hosting/infrastructure/tooling/docs, sem banco/funções. Seu texto de publicação automatiza somente web; worker/gateway foram publicados explicitamente conforme mapa e execução. Testes locais substituíram recomendação genérica `pnpm run test` por regressão direcionada.
+- Complemento final `05c8972ce4f72d17c2190f23d40e7114ffb2349c`, CI `36139554719` PASS. Main local, GitHub e VPS alinhadas nesse SHA funcional; web `sha256:02d47e87660dc796ffa1be6472d5c219105e2f33c59278c265028aebda20da02`, zero restart. Gateway permaneceu na imagem já validada. Smoke HTTP 200 e tela autenticada disponível; arquivo removido enquanto readiness estava pendente não iniciou processamento após resposta available. Interceptações de teste e seleção sintética removidas. O curl imediato do dispatcher repetiu 404 transitório; leitura posterior confirmou estabilização, sem repetir rebuild.
 
 ## Limites
 
