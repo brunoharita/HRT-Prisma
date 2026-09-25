@@ -8,11 +8,11 @@ Contrato: `docs/qa/agreement-m83-semantic-trajectory.md` v1.0.0; execução hom�
 | --- | --- | --- | --- |
 | D-01/D-02 | Classificações fechadas + regras em semanticMatching; requisitos intactos | Testes direcionados de domínio/regressão, incluindo revisão independente | PASS |
 | D-03 | Cache/lease/versões M83 | SQL e Edge negativos/replay; seis conexões concorrentes, uma linha/um lease | PASS |
-| D-04 | Busca, comparação, drawer, pendências neutras | Build/tipos; smoke autenticado local desktop/mobile em estado degradado; sucesso/reabertura ainda pendentes | PARTIAL |
-| D-05 | Piloto backend, método legado fora | Prompt 1.1.0: 12 bases, 60 variantes, 120 leituras frescas válidas e corretas, nenhuma divergência | PASS |
+| D-04 | Busca, comparação, drawer, pendências neutras | Smoke autenticado local degradado e produção concluída/provisória; comparação desktop/mobile, reabertura com cache e snapshot servidor | PASS |
+| D-05 | Piloto backend, método legado fora | Prompt 1.2.0: 120 leituras do corpus original + 30 suplementares válidas/corretas, nenhuma divergência; limites reais abaixo | PASS |
 | D-06 | Autorização, minimização, validação de evidências | Negativos SQL/Edge/contexto e revisão independente | PASS |
 | D-07 | Política financeira provider-authoritative | Revisão, testes de concorrência/timeout/replay; nenhum teto monetário no código | PASS |
-| D-08 | Main, banco, Edge, web e smoke | Dispatcher e evidência operacional | NOT TESTED |
+| D-08 | Main, banco, Edge, web e smoke | Runtime 60c642f, CI 36172170220, migration/Edge v2/HTTPS 200 e smoke autenticado | PASS |
 
 ## Proibições verificadas
 
@@ -65,4 +65,18 @@ Calibração backend: 25 testes Deno + check/lint PASS; SQL comprova compatibili
 
 Fechamento local da calibração: 177 testes Node direcionados, build/tipos web, lint e Context Pack PASS. O plano detectou uma dependência compartilhada ainda não roteada: `src/domain/semanticTrajectory.ts` é consumido pela web e pela Edge. Dispatcher 1.0.1 passa a incluir exatamente esses dois destinos, com regressão de roteamento, sem ampliar para Parser ou outros serviços. Mapa de impacto de release atualizado por essa evidência.
 
-Branch `codex/m83-semantic-trajectory`. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Surgiu cópia não criada pelo agente `tests/matchingRuntime (1).test.ts`, mantida fora do commit enquanto sua origem é desconhecida. Conclusão final pendente: não declarar sucesso da comparação Bruno/Diego apenas pelo deploy.
+### Segundo rollout e aceite operacional
+
+Runtime `60c642f1877c2f9d2d3e3fee87ef6426965f6a69` integrado em main e publicado. CI [36172170220](https://github.com/brunoharita/HRT-Prisma/actions/runs/36172170220) PASS, 177 testes Node direcionados + 25 Deno + 15 tooling no gate local. Migration remota `20260925181606_m83_prompt_compatibility`; Edge v2 ACTIVE, hash `af106c006ee78df832f2086756d2c967c6d8f37d5e7c3750d2a13920f73d73c7`. Smoke sem sessão 401 `AUTH_REQUIRED`; commit continua service-only. Web imagem `sha256:5300ac1c5749374bc6eae575e366ff150dc7e0972421baa2bd1b45b76903aef7`, running/zero reinícios, HTTPS 200 e SHA local/main/VPS iguais. O 404 transitório imediato do script repetiu-se durante a troca; confirmação posterior read-only PASS, sem novo rebuild. Registro documental posterior não exige rebuild de runtime.
+
+Smoke autenticado em 25/09/2026, Posição backend v3: quatro de sete interpretações completas, três indeterminadas por `READINGS_DISAGREE`, nenhuma resposta inválida. As três pendências ficaram neutras, sem zero ou última posição. Esta taxa de abstenção real é limitação explícita do piloto; o PASS sintético não a elimina. Não foram feitas novas tentativas para escolher uma classificação conveniente.
+
+Bruno (Perfil v5) e Diego (Perfil v1) ficaram no Grupo B, **47/100 provisório**, cobertura 50%: área 30/30, função 17/20, requisitos obrigatórios 0/35 e desejáveis 0/15 por ausência de evidência suficiente. Programação histórica de Bruno e cargo de programação de Diego sustentam a mesma classe; nenhum requisito backend foi inventado. Não há fundamento neste recorte para ordenar um à frente do outro. A comparação mostra ausência de prioridade segura, não capacidade igual ou decisão de contratação.
+
+Busca, detalhe dos dois, comparação e retorno/reabertura passaram em produção. Análises derivadas `9bc52c82-4d14-447c-a760-91c5029dea53` (Bruno) e `1a546342-9852-4de7-8ba2-0992c16c2313` (Diego) permanecem completas com uma tentativa cada; `gpt-5.6-luna`, prompt 1.2.0. Snapshots calculados pelo servidor `3260bdfe-7fd1-40fe-9466-41b809ec13e7` e `45dc0e88-215e-4110-9724-3cc00935208d` confirmados, fingerprints coerentes com a tela; controles M6.2 aparecem somente após confirmação. Nenhuma verificação, relação confirmada/descartada, curadoria ou edição de fonte real foi criada pelo smoke.
+
+Inspeção visual no navegador interno: comparação desktop em duas colunas; móvel 390 × 844 empilhado, aviso de incerteza legível, documento 375px sem overflow horizontal; drawer com decomposição, citação e versões. Capturas renderizadas constam no registro da tarefa; viewport restaurada. Estado degradado já exercitado localmente e nos dois rollouts. Parser, Perfil publicado, Posição e Knowledge não foram alterados nesta validação.
+
+Desvios do acordo: nenhum. Limites: piloto backend, abstenção em três Perfis reais, cobertura insuficiente para prioridade dos dois Perfis citados, nenhum holdout independente ou garantia universal de justiça. Aprendizado continua fora de escopo. Infraestrutura e critérios aceitos entregues, sem afirmar que todas as trajetórias conseguem classificação.
+
+Branch de execução `codex/m83-semantic-trajectory`, integração main por fast-forward. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Cópia não criada pelo agente `tests/matchingRuntime (1).test.ts` mantida fora do commit; origem desconhecida.
