@@ -63,4 +63,6 @@ Correção em calibração: prompt 1.2.0 explicita flexões e declarações cont
 
 Calibração backend: 25 testes Deno + check/lint PASS; SQL comprova compatibilidade 1.1.0/1.2.0, recusa de versões desconhecidas e preservação de histórico; concorrência seis conexões/um lease, contenção `55P03` em 0,28–0,31s. DB sintético `m72_semantic_trajectory_race_20260925150307` preservado. Nenhuma alteração das proteções de citação literal, concordância por item ou cálculo determinístico.
 
+Fechamento local da calibração: 177 testes Node direcionados, build/tipos web, lint e Context Pack PASS. O plano detectou uma dependência compartilhada ainda não roteada: `src/domain/semanticTrajectory.ts` é consumido pela web e pela Edge. Dispatcher 1.0.1 passa a incluir exatamente esses dois destinos, com regressão de roteamento, sem ampliar para Parser ou outros serviços. Mapa de impacto de release atualizado por essa evidência.
+
 Branch `codex/m83-semantic-trajectory`. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Surgiu cópia não criada pelo agente `tests/matchingRuntime (1).test.ts`, mantida fora do commit enquanto sua origem é desconhecida. Conclusão final pendente: não declarar sucesso da comparação Bruno/Diego apenas pelo deploy.

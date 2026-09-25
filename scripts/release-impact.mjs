@@ -1,6 +1,6 @@
 import { basename } from "node:path";
 
-export const RELEASE_PLAN_VERSION = "1.0.0";
+export const RELEASE_PLAN_VERSION = "1.0.1";
 
 const contextSource = (path) => path === "AGENTS.md" || path === "README.md" || path.startsWith("docs/");
 
@@ -44,6 +44,13 @@ export function classifyChanges(changes) {
     if (path.startsWith("src/")) {
       surfaces.add("backend");
       classified = true;
+    }
+    // M8.3 shares its source contract between the web bundle and this Edge Function.
+    if (path === "src/domain/semanticTrajectory.ts") {
+      surfaces.add("web");
+      surfaces.add("hosting");
+      surfaces.add("edge-functions");
+      edgeFunctions.add("matching-trajectory");
     }
     if (path.startsWith("tests/")) {
       surfaces.add("tests");

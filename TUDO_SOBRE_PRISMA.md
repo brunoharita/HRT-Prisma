@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 272
-source_manifest_sha256: 91c689047ff62d0686fe03d916e0d02a46464ac629ffcdf18a1f6b6c723cb2e9
+source_manifest_sha256: f6acf155747d6a61c6e3b0a2a8ae4c666d743f0c7d898e18005887cd34096480
 -->
 
 # Tudo sobre o Prisma
@@ -15476,6 +15476,8 @@ Smoke autenticado real com prompt 1.1.0: sete Perfis consultados, três interpre
 Correção em calibração: prompt 1.2.0 explicita flexões e declarações contextuais, exige cópia literal curta e mantém todos os bloqueios. Novo gate sintético inicial: 120/120 válidas/corretas, 130/130 itens, 0/60 divergências, 12/12 bases estáveis. Dataset longo suplementar: três bases com oito fontes cada, cinco variações, 30/30 leituras válidas/corretas, 240/240 itens, 0/15 divergências e 3/3 bases estáveis. Fontes sintéticas escritas separadamente, mas informadas pela rubrica e falhas observadas; não constituem holdout independente. Segundo rollout pendente neste registro. A migration aplicada permanece imutável; nova migration estende compatibilidade sem apagar cache 1.1.0. Corrigido gerador para normalizar CRLF antes da transpilação, garantindo reprodutibilidade após checkout Windows.
 
 Calibração backend: 25 testes Deno + check/lint PASS; SQL comprova compatibilidade 1.1.0/1.2.0, recusa de versões desconhecidas e preservação de histórico; concorrência seis conexões/um lease, contenção `55P03` em 0,28–0,31s. DB sintético `m72_semantic_trajectory_race_20260925150307` preservado. Nenhuma alteração das proteções de citação literal, concordância por item ou cálculo determinístico.
+
+Fechamento local da calibração: 177 testes Node direcionados, build/tipos web, lint e Context Pack PASS. O plano detectou uma dependência compartilhada ainda não roteada: `src/domain/semanticTrajectory.ts` é consumido pela web e pela Edge. Dispatcher 1.0.1 passa a incluir exatamente esses dois destinos, com regressão de roteamento, sem ampliar para Parser ou outros serviços. Mapa de impacto de release atualizado por essa evidência.
 
 Branch `codex/m83-semantic-trajectory`. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Surgiu cópia não criada pelo agente `tests/matchingRuntime (1).test.ts`, mantida fora do commit enquanto sua origem é desconhecida. Conclusão final pendente: não declarar sucesso da comparação Bruno/Diego apenas pelo deploy.
 

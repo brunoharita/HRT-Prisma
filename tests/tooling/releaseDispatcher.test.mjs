@@ -50,6 +50,15 @@ test("routes only the named Edge Function", () => {
   assert.equal(plan.deployments.web, false);
 });
 
+test("shared trajectory source routes both consumers without publishing unrelated services", () => {
+  const plan = buildReleasePlan([change("M", "src/domain/semanticTrajectory.ts")]);
+  assert.equal(plan.deployments.web, true);
+  assert.deepEqual(plan.deployments.edgeFunctions, ["matching-trajectory"]);
+  assert.deepEqual(plan.deployments.database, []);
+  assert.ok(plan.validationCommands.includes("pnpm run typecheck:web"));
+  assert.equal(buildReleasePlan([change("M", "src/fixtures/semanticTrajectoryComplexPilot.ts")]).deployments.web, false);
+});
+
 test("new migrations are publishable and historical edits fail closed", () => {
   const added = buildReleasePlan([change("A", "supabase/migrations/20260919010000_example.sql")]);
   assert.equal(added.publishable, true);
