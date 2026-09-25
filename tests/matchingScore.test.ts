@@ -370,7 +370,7 @@ test("UI expõe score, cobertura, grupos, explicação, versões e proteção mo
   assert.match(page, /Sem trajetória profissional relacionada/);
   assert.match(page, /prisma-contextual-signals-group/);
   assert.match(page, /maior Prisma Score primeiro/);
-  assert.match(page, /valores provisórios continuam identificados/);
+  assert.match(page, /Comparação ainda incompleta · sem prioridade segura/);
   assert.doesNotMatch(page, /não participa da ordenação/);
   assert.match(page, /matchingContractVersion/);
   assert.match(styles, /prisma-score-dimensions \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.50.0
+version: 2.51.0
 last_verified: 2026-09-25
 ---
 
 # Estado atual do Prisma
+
+## M8.3: interpretação da trajetória (em validação, ainda não publicada)
+
+Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendendo área/função/grupos com interpretação derivada no piloto de desenvolvimento backend. Duas leituras independentes classificam evidências em categorias fechadas, com citações e sem nota livre. Cache isolado por empresa e versões evita nova opinião em cada reabertura. Divergência/falha vira pendência, não zero; comparação incompleta não indica prioridade segura. Perfis, Posições, Knowledge e decisões humanas não são reescritos. Modelo/configuração de fornecedor existente, política financeira do Parser (decisão «siga o parser»); nenhum teto monetário paralelo. Aprendizado por correções humanas fica fora. Situação real de testes, publicação e limitações no AoT `docs/qa/aot-m83-semantic-trajectory.md`; código local não é evidência de rollout.
 
 ## Disponibilidade antecipada da importação (publicada)
 

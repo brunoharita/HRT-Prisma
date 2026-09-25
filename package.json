@@ -18,6 +18,8 @@
     "check:foundation": "node scripts/check-foundation.mjs",
     "generate:prisma-context": "node scripts/generate-prisma-context.mjs",
     "check:prisma-context": "node scripts/check-prisma-context.mjs",
+    "generate:matching-runtime": "node scripts/generate-matching-runtime.mjs",
+    "check:matching-runtime": "node scripts/generate-matching-runtime.mjs --check",
     "check:supabase-ledger": "node scripts/check-supabase-ledger.mjs",
     "release:plan": "node scripts/release-dispatcher.mjs plan",
     "release:validate": "node scripts/release-dispatcher.mjs validate",

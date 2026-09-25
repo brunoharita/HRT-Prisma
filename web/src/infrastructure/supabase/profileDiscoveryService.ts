@@ -111,7 +111,7 @@ async function materializePublishedProfileCandidates(
     supabase.from("knowledge_observations")
       .select("profile_id, original_term, resolution_state, concept_id, source_field_path, knowledge_global_version, knowledge_organization_version, resolution_source_version_id, resolution_method_version")
       .eq("organization_id", organizationId)
-      .in("profile_id", profiles.map((profile) => profile.id)),
+      .in("profile_id", profiles.map((profile) => profile.id)).order("id"),
   ]);
   throwIfError(peopleResult.error, "Não foi possível confirmar as Pessoas dos Perfis encontrados.");
   throwIfError(privateResult.error, "Não foi possível consultar as localizações permitidas.");
@@ -119,7 +119,7 @@ async function materializePublishedProfileCandidates(
 
   const conceptIds = [...new Set((observationsResult.data ?? []).flatMap((item) => item.concept_id ? [item.concept_id] : []))];
   const conceptResult = conceptIds.length
-    ? await supabase.from("knowledge_concepts").select("id, canonical_label, concept_type").in("id", conceptIds)
+    ? await supabase.from("knowledge_concepts").select("id, canonical_label, concept_type").in("id", conceptIds).eq("status", "approved").or(`scope.eq.global,organization_id.eq.${organizationId}`)
     : { data: [], error: null };
   throwIfError(conceptResult.error, "Não foi possível resolver os conceitos profissionais encontrados.");
   const people = new Map((peopleResult.data ?? []).map((person) => [person.id, person]));
@@ -143,8 +143,8 @@ async function materializePublishedProfileCandidates(
       knowledge: observations.filter((item) => item.profile_id === profile.id).map((item) => ({
         originalTerm: item.original_term,
         canonicalLabel: item.concept_id ? concepts.get(item.concept_id)?.canonical_label ?? null : null,
-        state: knowledgeResolutionState(item.resolution_state),
-        conceptId: item.concept_id,
+        state: knowledgeResolutionState(item.resolution_state, Boolean(item.concept_id && concepts.has(item.concept_id))),
+        conceptId: item.concept_id && concepts.has(item.concept_id) ? item.concept_id : null,
         conceptType: item.concept_id ? concepts.get(item.concept_id)?.concept_type ?? null : null,
         sourceFieldPath: item.source_field_path,
         sourceVersion: `global:${item.knowledge_global_version}|organization:${item.knowledge_organization_version ?? "none"}|source:${item.resolution_source_version_id ?? "none"}|method:${item.resolution_method_version}`,
@@ -169,8 +169,8 @@ function normalize(value: string): string {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").trim();
 }
 
-function knowledgeResolutionState(value: string): "resolved" | "ambiguous" | "unresolved" {
-  return value === "resolved" || value === "ambiguous" ? value : "unresolved";
+function knowledgeResolutionState(value: string, approvedConcept: boolean): "resolved" | "ambiguous" | "unresolved" {
+  return value === "resolved" && approvedConcept ? "resolved" : value === "ambiguous" ? "ambiguous" : "unresolved";
 }
 
 function throwIfError(error: PostgrestError | null, message: string): void {

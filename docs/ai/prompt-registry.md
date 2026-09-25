@@ -6,6 +6,14 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 
 ## Registry atual
 
+### Trajetória M8.3
+
+`trajectory-evidence-1.1.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. Modelo lógico `KNOWLEDGE_RESEARCH_MODEL`, sem troca silenciosa. Entrada: cargo/descrição de experiências e declarações de título/área, com contexto da Posição. Proibidos campos de identidade, contatos, empregadores, instituições, datas, currículo integral, evidências privadas e decisões humanas. Texto livre é minimizado, não garantidamente anônimo.
+
+Saída fechada por trecho: `backend_execution`, `software_execution`, `software_analysis`, `software_leadership`, `software_context`, `other` ou `unclear`, com ID e citação literal. Não produz nota, contratação ou fato publicado. Duas leituras independentes com ordem invertida devem concordar; resposta parcial, invenção de fonte e divergência não viram média ou zero. Responses `store:false`, sem tools/Web, timeout, concorrência e lease. Política financeira do Parser, sem reserva monetária paralela.
+
+Rubrica `trajectory-backend-1.0.0`, matching `vacancy-matching-semantic-6.0.0`, score `matching-score-1.3.0`. Histórico, classes, modelos e hashes persistem em cache derivado por tenant e versões, não em fonte profissional. Dataset sintético: 12 bases × 5 variações × 2 leituras; não é holdout independente nem comprovação universal de justiça. Estado operacional/evidência: `docs/qa/aot-m83-semantic-trajectory.md`. Fora do piloto explícito backend mantém método anterior.
+
 | Nome | Owner | Versão | Propósito | Modelo lógico | Consumidor | Estado |
 | --- | --- | --- | --- | --- | --- | --- |
 | `no-llm-extraction` | AI engineering | 1.0.0 | Registrar que o provider local não usa prompt | deterministic extractor | `processResume` | ativo local |

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 268
-source_manifest_sha256: 2ca7cd9593adccce76f4529a9174ee37b920a8de4ee7e7b4f62ede698338e235
+documentation_source_count: 272
+source_manifest_sha256: de4658598695c6167b7fdee91f0d050051a93a68de1a09658d4e40c191cab6e7
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.50.0
+version: 2.51.0
 last_verified: 2026-09-25
 ---
 
 # Estado atual do Prisma
+
+## M8.3: interpretação da trajetória (em validação, ainda não publicada)
+
+Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendendo área/função/grupos com interpretação derivada no piloto de desenvolvimento backend. Duas leituras independentes classificam evidências em categorias fechadas, com citações e sem nota livre. Cache isolado por empresa e versões evita nova opinião em cada reabertura. Divergência/falha vira pendência, não zero; comparação incompleta não indica prioridade segura. Perfis, Posições, Knowledge e decisões humanas não são reescritos. Modelo/configuração de fornecedor existente, política financeira do Parser (decisão «siga o parser»); nenhum teto monetário paralelo. Aprendizado por correções humanas fica fora. Situação real de testes, publicação e limitações no AoT `docs/qa/aot-m83-semantic-trajectory.md`; código local não é evidência de rollout.
 
 ## Disponibilidade antecipada da importação (publicada)
 
@@ -3963,6 +3967,8 @@ Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no 
 
 ## Troca de modelo
 
+M8.3 reutiliza o modelo server-side `KNOWLEDGE_RESEARCH_MODEL` para interpretação fechada de trajetória, com registry próprio `trajectory-evidence-1.1.0`. Não reutiliza pesquisa Web nem budgets do Knowledge. A decisão do PO em 25/09 («siga o parser») torna limites da conta/projeto OpenAI a autoridade financeira, sem teto monetário paralelo; concorrência, timeout, lease e cooldown de falhas são operacionais. O modelo configurado entra na chave e o modelo retornado é registrado; alias mutável continua uma limitação para futuras chamadas, não motivo para reescrever avaliações persistidas. Ativação depende da evidência do piloto no AoT M8.3, sem alegar validação para todas as ocupações.
+
 M7.3 reutiliza o modelo configurado do Knowledge Agent para normalização de competências declaradas (`declared-competency-normalization-1.0.0`). Recebe apenas termos minimizados, sem Perfil/currículo integral ou identificadores; sem ferramentas/pesquisa, `store:false`, Structured Outputs e cobertura integral validada. Uma chamada por tentativa, com reserva auditada dentro dos limites existentes, timeout 90 s, opt-in organizacional e fallback determinístico explicitamente parcial quando a chamada falha. Nomes produzidos são buscas a reconciliar com aliases aprovados, nunca criação de conceito. Evidência: ADR-063 e AoT M7.3. Este movimento não troca o modelo nem altera a política financeira do Parser IA.
 
 M7.5 mantém provider, modelo, prompt, schema e política de minimização do M7.3, mas separa o teto de normalização dos tetos de pesquisa do Knowledge Agent. Os limites iniciais são 20 chamadas/dia e 200/mês, configurados server-side; ausência, zero, valor inválido ou esgotamento falham fechado. A tentativa falha permanece auditada e o último resultado completo continua como base. Evidência: ADR-066 e AoT M7.5.
@@ -4175,6 +4181,14 @@ Os golden tests revelaram e corrigiram flexão verbal em "analisou dados" e o ca
 Prompt controlado possui nome, owner, versão, propósito, entrada, saída, schema, função lógica de modelo, parâmetros, consumidores, dados enviados, dados proibidos, guardrails, golden tests, ativação e histórico. String produtiva escondida no código é proibida.
 
 ## Registry atual
+
+### Trajetória M8.3
+
+`trajectory-evidence-1.1.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. Modelo lógico `KNOWLEDGE_RESEARCH_MODEL`, sem troca silenciosa. Entrada: cargo/descrição de experiências e declarações de título/área, com contexto da Posição. Proibidos campos de identidade, contatos, empregadores, instituições, datas, currículo integral, evidências privadas e decisões humanas. Texto livre é minimizado, não garantidamente anônimo.
+
+Saída fechada por trecho: `backend_execution`, `software_execution`, `software_analysis`, `software_leadership`, `software_context`, `other` ou `unclear`, com ID e citação literal. Não produz nota, contratação ou fato publicado. Duas leituras independentes com ordem invertida devem concordar; resposta parcial, invenção de fonte e divergência não viram média ou zero. Responses `store:false`, sem tools/Web, timeout, concorrência e lease. Política financeira do Parser, sem reserva monetária paralela.
+
+Rubrica `trajectory-backend-1.0.0`, matching `vacancy-matching-semantic-6.0.0`, score `matching-score-1.3.0`. Histórico, classes, modelos e hashes persistem em cache derivado por tenant e versões, não em fonte profissional. Dataset sintético: 12 bases × 5 variações × 2 leituras; não é holdout independente nem comprovação universal de justiça. Estado operacional/evidência: `docs/qa/aot-m83-semantic-trajectory.md`. Fora do piloto explícito backend mantém método anterior.
 
 | Nome | Owner | Versão | Propósito | Modelo lógico | Consumidor | Estado |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -9216,6 +9230,42 @@ Todo movimento material registra um Mapa de Impacto antes da implementação, co
 
 ---
 
+## Source: `docs/decisions/ADR-073-semantic-trajectory-score.md`
+
+# ADR-073 — Interpretação derivada da trajetória
+
+Estado: accepted para escopo autorizado M8.3, rollout condicionado à validação. Data: 2026-09-25. Acordo: `docs/qa/agreement-m83-semantic-trajectory.md` v1.0.0.
+
+## Reuso e alternativas
+
+O score M6.1 já decompõe quatro dimensões e requisitos com evidência. A heurística de títulos/área não diferencia bem liderança de execução. Reutilizar esse cálculo e suas telas é suficiente; não há necessidade de outra biblioteca de ranking ou base profissional. Um bônus independente de IA duplicaria evidências. Substituir todo o score descartaria contratos úteis. Optamos por estender somente a interpretação de área/função no piloto, sem peso novo.
+
+## Decisão
+
+Contexto mínimo é construído no backend a partir de versões publicadas. Experiências enviam cargo e descrição, não empregador/datas; declarações não viram experiência. Dados pessoais conhecidos e contatos são removidos. Texto livre continua sendo dado não confiável; minimização não é garantia absoluta de anonimização.
+
+Duas leituras independentes classificam cada trecho em sete categorias fechadas, sem nota nem justificativa livre. Citações são validadas como substrings da fonte. Discordância produz estado indeterminado, não média. Concordância tampouco prova correção: fixtures contrastadas e variantes são requisito separado.
+
+A rubrica mantém faixas preexistentes: execução backend 20 (direta), desenvolvimento de software sem especialização backend 17 (mesma família de execução, transferência ainda não comprova ferramentas), análise de software 12 (adjacente), liderança técnica 8 (contexto profissional), menção sem atuação técnica não produz elegibilidade. Só execução backend forma grupo A; execução genérica/análise/liderança formam B; menção/declarativo forma C. Área de software demonstrada por experiência vale 30; declaração isolada pode explicar 24, mas não torna um Perfil elegível sozinha. O melhor nível sustentado em experiência é preservado, inclusive histórico, sem bônus por quantidade/repetição/duração. Não se presume senioridade. Requisitos mantêm método existente; o significado dos pontos fica explicitamente versionado.
+
+Não se força que Diego vença Bruno: se ambos possuem execução histórica comprovada, podem receber a mesma classificação de função. Prioridade requer evidência discriminante da Posição, não uma preferência por pessoa.
+
+Cache derivado pertence ao tenant e vincula fontes/método/prompt/modelo. Lease atômico e timeout reduzem duplicação e travamento; erro não cria score e não sobrescreve fatos. Não há orçamento monetário paralelo: política do Parser/provedor. Chamadas não ficam dentro de transações SQL.
+
+O snapshot semântico persistido é recalculado no backend, que recebe somente IDs, lê as fontes autorizadas e reutiliza o mesmo motor puro de matching da aplicação. O bundle da Edge é gerado desses módulos e verificado contra a fonte; não há segundo algoritmo de pontuação. INSERT/UPDATE de avaliações semânticas concluídas pelo cliente é bloqueado. Revogação do solicitante não esgota o cache compartilhado de outros operadores autorizados. A interpretação e outro campo do mesmo Perfil não constituem fontes independentes.
+
+O decoder puro já existente também é extraído por AST para preservar IDs legados, listas e defaults, sem levar SDK ou código de navegador à Edge. A leitura web/SQL de conceitos só considera aprovados no escopo global/empresa. O commit revalida o fingerprint das fontes com bloqueios curtos sem espera, inclusive contra alterações concorrentes; contenção retorna indisponibilidade recuperável. O fingerprint autoritativo do score é comparado ao exibido antes de habilitar verificações M6.2. Uma evidência que mudou exige atualização da análise, não associação silenciosa de tela antiga a snapshot novo.
+
+O prompt 1.0.0 falhou na primeira avaliação de constância. A versão 1.1.0 esclarece atividade declarada versus experiência e a classificação ocupacional de títulos explícitos, sem mudar pesos ou resultados esperados. Datas e atributos conhecidos são minimizados; contexto sensível que não possa ser isolado sem remover evidência/negação exige abstenção, não remoção arbitrária de frases.
+
+Conjunto parcialmente avaliado fica disponível para análise humana, com pendências em seção neutra e sem ordenação numérica enquanto houver dependência material. No piloto, scores provisórios continuam visíveis, mas não estabelecem prioridade segura. Isso supersede D-016 do acordo M6.1 apenas no piloto. Métodos legados e snapshots mantêm suas versões.
+
+## Limites e operação
+
+Primeiro piloto: títulos explicitamente de desenvolvimento backend, excluindo direção/gestão e posições de estágio. Demais ocupações conservam método anterior identificado; não alegar validação universal. Histórico sem descrição pode não discriminar candidatos. Nenhuma rejeição automática. Regressão modelo é distinta de cache/determinismo. Mudanças de rubrica/modelo exigem versão e revalidação. Rollback web/Edge preserva tabela histórica e snapshots; nenhuma migration destrutiva necessária.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -9304,6 +9354,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - Reference code, migrations, contracts, tests, and rollout evidence separately.
 - Accepted does not mean implemented or active; each ADR states its evidence and environment.
 
+- [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.
+
 ---
 
 ## Source: `docs/operations/deployment.md`
@@ -9311,6 +9363,10 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 # Deployment
 
 ## Estado
+
+M8.3 — interpretação de trajetória: rollout em preparação, não publicado neste registro. Destinos: somente a migration nova `20260925150000_m83_semantic_trajectory.sql`, Edge `matching-trajectory` e `prisma-web`. A Edge reutiliza `OPENAI_API_KEY`, `KNOWLEDGE_RESEARCH_MODEL` e `KNOWLEDGE_AGENT_ENABLED`; nenhuma configuração monetária paralela. O bundle deve incluir `src/domain/semanticTrajectory.ts` e os módulos `_generated`, produzidos por `pnpm generate:matching-runtime` e conferidos por `pnpm check:matching-runtime`. A autenticação usa `auth.getUser()` antes de qualquer acesso com service role; as RPCs autorizam empresa/fontes. Não publicar o frontend antes do backend compatível. Local sintético é o gate QA; usar somente a migration nova pelo connector, nunca `db push` geral. Evidência e conclusão: `docs/qa/aot-m83-semantic-trajectory.md`.
+
+Rollback M8.3: reativar a imagem web preservada pelo dispatcher e a revisão anterior da Edge, se houver; na primeira publicação, o frontend anterior não chama a função nova. Manter a tabela/snapshots para auditoria, sem apagar/reclassificar Perfis ou restaurar notas em registros históricos. A extensão M6.2 é retrocompatível. Desativação global de `KNOWLEDGE_AGENT_ENABLED` não é rollback isolado, pois afetaria outras capacidades Knowledge; não fazê-la para testar falha desta entrega. Cache e estados pendentes permitem consulta manual sem nova chamada. Timeout de provedor, limite operacional de duas análises, lease e cooldown não substituem os limites financeiros OpenAI.
 
 M8 UX — sugestão de descrição de competência publicada em 2026-09-21: o runtime web foi construído e ativado a partir do SHA funcional `8dd0f0c22eef1318153006a21a6304a79c61ea98`; o fechamento documental está alinhado em `main`, GitHub e checkout da VPS `/opt/prisma`. A Edge Function `knowledge-agent` foi publicada no único projeto Supabase `ioldpnqqvobprjiontre`, sem migration. Somente `prisma-web` foi reconstruído e recriado; a imagem anterior e os assets versionados foram preservados. O contêiner terminou `running`, com zero reinícios. O smoke HTTP/hospedado não foi executado por solicitação do Product Owner; portanto a disponibilidade funcional remota permanece não testada neste fechamento. Evidência e limites: `docs/qa/aot-m8-concept-description-suggestion.md`.
 
@@ -12834,6 +12890,71 @@ Nenhuma decisão material adicional. O motivo da ação deve registrar a decisã
 
 ---
 
+## Source: `docs/qa/agreement-m83-semantic-trajectory.md`
+
+# M8.3 — Interpretação da trajetória no Score Prisma
+
+Versão 1.0.0. Estado: agreed. Product Owner: Bruno, 2026-09-25. Fonte: discussão de justiça e constância, autorização explícita de implementação completa em main/produção e decisão financeira «siga o parser».
+
+## DEVE
+
+- D-01 — Reutilizar Perfis publicados, Posições versionadas, Knowledge, requisitos e evidências. Preservar pesos 30/20/35/15 e cálculo determinístico; a IA interpreta evidências, não dá pontos.
+- D-02 — Interpretar natureza do trabalho com categorias finitas e referências verificáveis. Separar execução de desenvolvimento, análise, liderança e menção contextual. Histórico técnico continua válido; ausência de evidência não significa incapacidade. Não garantir uma ordem entre Bruno e Diego quando os dados não a sustentarem.
+- D-03 — Persistir interpretação derivada, isolada por empresa, Perfil, Posição, método, prompt, modelo e fontes usadas. Reabertura e comparação reutilizam a mesma interpretação compatível. Concorrência não produz versões concorrentes nem chamadas duplicadas.
+- D-04 — Manter a jornada atual de encontrar, comparar e detalhar Pessoas. Publicar o conjunto estável; mostrar processamento e pendências sem formulário novo. Falha não vira zero nem última posição automática. Diferenças incompletas não representam prioridade segura.
+- D-05 — Aplicar a interpretação aos grupos e a área/função, sem equivalência automática nos requisitos. Avaliar piloto de desenvolvimento backend com 12 casos contrastados, variações e chamadas independentes; declarar o limite de validação fora do piloto.
+- D-06 — Backend autoriza empresa e versões e constrói contexto mínimo. Não enviar identidade, contatos, empregadores, escolas ou currículo integral como campos da análise. Registrar método, proveniência e códigos operacionais sem PII em logs. Divergência entre leituras independentes impede conclusão competitiva.
+- D-07 — Política financeira segue Parser: limites da conta/projeto OpenAI são autoridade financeira; não criar teto monetário paralelo. Preservar timeout, concorrência e reutilização operacional.
+- D-08 — Validar localmente antes de produção, documentar limitações, publicar um SHA coerente em main e executar smoke autenticado. Preservar histórico e decisões humanas.
+
+## PROIBIDO
+
+- P-01 — Nota livre da IA, alteração do Perfil/Posição, contratação/rejeição automática, fato inventado, bônus por nome, prestígio, texto longo, idade, características sensíveis, duração ou lacunas da carreira.
+- P-02 — Inferir ferramenta específica de outra ferramenta, apagar experiência histórica, tratar cache estável como prova de justiça, reaproveitar avaliação incompatível ou aceitar instruções de currículo.
+- P-03 — Misturar tenants, confiar em texto/pontos enviados pelo browser, registrar dados pessoais em logs, substituir autoridade humana por classificação sem evidência.
+
+## FORA DE ESCOPO
+
+- F-01 — Aprendizado por correções humanas, edição manual de notas, reformulação cadastral, alteração dos pesos, validação universal de profissões e novas integrações externas.
+
+## AUTONOMIA
+
+- A-01 — Estender componentes e contratos existentes, rubrica fechada usando faixas atuais de pontos, controles operacionais, persistência derivada, testes e apresentação progressiva. Não adicionar biblioteca sem necessidade.
+
+## PENDÊNCIAS
+
+Nenhuma decisão financeira pendente: resolvida por «siga o parser». Qualquer nova decisão material exige retorno ao Product Owner.
+
+## ACEITE
+
+- CA-D01/D02/D05 — Testes contrastados de execução/gestão/contexto/ausência, requisitos intactos, pesos idênticos, citações válidas, equivalência semântica e variação factual controlada. Testes de modelo não substituem testes determinísticos.
+- CA-D03/D06 — Negativos de autorização, fonte/versão divergente, resposta inválida, lease concorrente, replay e isolamento. Duas leituras com divergência não produzem classificação válida.
+- CA-D04 — Estados carregando, concluído e indisponível; acesso manual preservado; comparação e reabertura compatíveis; inspeção desktop/mobile.
+- CA-D07 — Nenhum contador de orçamento paralelo; falhas do provedor tratadas explicitamente sem repetição financeira ilimitada.
+- CA-D08 — Validação proporcional, migrations novas revisadas, deploy e smoke comprovados; limitações e rollback registrados no AoT.
+
+## Mapa de impacto e preservação (antes da implementação)
+
+Baseline local: main 967209240a6eab0acd6bf154f93d2b3dd7ba7165, matching 5.0.0 / score 1.2.0. Baseline de produção histórico desta tarefa: backend v3, Bruno 43/A, Diego 8/B; observação histórica, não critério obrigatório de resultado.
+
+| Área/capacidade | Relação | Mecanismo | Regressão |
+| --- | --- | --- | --- |
+| Matching e score | direct | Interpretação derivada de área/função e grupos no piloto | Rubrica, determinismo, casos negativos, requisitos/pesos preservados |
+| Busca/comparação/detalhe | direct | Consumo da interpretação versionada | Conjunto estável, estados degradados, reabertura e mobile |
+| Auth/RLS/PII | critical_transversal | Nova leitura de fontes e cache backend | SQL negativo, isolamento, autenticação e contexto mínimo |
+| Knowledge | plausible_indirect | Proveniência e versões existentes preservadas; sem curadoria nova | Invalidação e nenhuma mutação de conceitos |
+| Verificações M6.2 | plausible_indirect | Nova versão do snapshot de matching | Aceite explícito da nova versão; requisitos exatos e decisão humana preservados |
+| Parser/publicação de Perfil | no_impact_identified | Apenas leitura de Perfil já publicado; política financeira reutilizada sem tocar Parser | Diff e contrato sem escrita em fontes |
+| Deploy/release | direct | Nova migration, Edge e web | Plano de destinos, build, smoke e sincronização |
+
+Sem referência visual normativa para esta melhoria; screenshot de importação é exemplo histórico de erro, não alvo de redesenho.
+
+## Compatibilidade
+
+Este acordo supersede somente a proibição de LLM/persistência derivada e a interpretação área/função/grupo do acordo M6.1 no piloto M8.3. Requisitos, pesos, verificações e decisões humanas permanecem. Fora do piloto, método anterior identificado explicitamente. Snapshots anteriores continuam legíveis e não são reescritos.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -15280,6 +15401,67 @@ O Product Owner relatou que “Governança Corporativa”, criada como Hard/Gest
 | Tela hospedada | Atualização e inspeção visual pelo usuário pendentes | NOT TESTED |
 
 O CI da branch no SHA funcional `7d5755520ce65f1f3a915e034f16e8a5b9c59f07` passou ([run #35542172079](https://github.com/brunoharita/HRT-Prisma/actions/runs/35542172079)). Esse SHA foi promovido por fast-forward para `main`/GitHub e para o checkout da VPS. O release plan apontou apenas banco, QA e documentação: não houve nova Edge Function nem rebuild web; `prisma-web` permaneceu `running`, zero reinícios, na imagem anterior. A correção preserva Prisma v1.8.2 e o contrato JSON v4. O registro de tela permanece parcial até a confirmação visual.
+
+---
+
+## Source: `docs/qa/aot-m83-semantic-trajectory.md`
+
+# AoT — M8.3 Interpretação da trajetória
+
+Contrato: `docs/qa/agreement-m83-semantic-trajectory.md` v1.0.0; execução homônima; ADR-073. Baseline main `967209240a6eab0acd6bf154f93d2b3dd7ba7165`.
+
+## Matriz de Acordos
+
+| ID | Implementação prevista | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01/D-02 | Classificações fechadas + regras em semanticMatching; requisitos intactos | Testes direcionados de domínio/regressão, incluindo revisão independente | PASS |
+| D-03 | Cache/lease/versões M83 | SQL e Edge negativos/replay; seis conexões concorrentes, uma linha/um lease | PASS |
+| D-04 | Busca, comparação, drawer, pendências neutras | Build/tipos; smoke autenticado local desktop/mobile em estado degradado; sucesso/reabertura ainda pendentes | PARTIAL |
+| D-05 | Piloto backend, método legado fora | Prompt 1.1.0: 12 bases, 60 variantes, 120 leituras frescas válidas e corretas, nenhuma divergência | PASS |
+| D-06 | Autorização, minimização, validação de evidências | Negativos SQL/Edge/contexto e revisão independente | PASS |
+| D-07 | Política financeira provider-authoritative | Revisão, testes de concorrência/timeout/replay; nenhum teto monetário no código | PASS |
+| D-08 | Main, banco, Edge, web e smoke | Dispatcher e evidência operacional | NOT TESTED |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem nota livre, uso de atributos sensíveis, mutação de fatos ou contratação | Domínio/contexto/prompt, SQL/Edge e revisão independente | PASS |
+| P-02 | Sem equivalência de ferramenta inventada, recência ou replay incompatível | Domínio: requisitos preservados, histórico válido, metadados incompatíveis recusados | PASS |
+| P-03 | Tenant e fonte no backend; logs sanitizados | Negativos SQL/Edge, snapshot forjado recusado, cache revogado não envenena outro ator | PASS |
+
+## Mapa de impacto e preservação
+
+Mapa inicial integral no acordo. Áreas diretas: matching, busca/comparação, cache e release. Auth/RLS/PII são transversais críticas. Knowledge e M6.2 são indiretamente afetados. Parser e publicação de Perfil não mudam: reutilização da política financeira não altera o serviço Parser. Nenhuma área protegida pode receber PASS sem sua evidência proporcional.
+
+Novidade: interpretação derivada versionada. Preservação: requisitos 35/15 e pesos provados no domínio; fatos, decisões humanas, tenant, M6.2 e histórico dependem também do gate SQL/Edge. Baseline de produção citado no acordo é histórico, não alvo artificial de ranking. Nenhuma referência visual normativa foi fornecida para esta melhoria; preservar componentes e jornada existentes.
+
+Extensão identificada na revisão: o snapshot semântico deve ser recalculado no backend e não aceitar score do cliente. `match_evaluations` e M6.2 passam a ser relações diretas. Motor de domínio e decoder puro da aplicação são gerados para a Edge, com teste de igualdade à fonte no CI. Sem SDK/browser no bundle gerado. A transação de commit revalida fontes; não contém chamada de IA. A leitura de fontes inclui Knowledge/evidências existentes, sem criar curadoria ou segunda base de fatos. Regressão proporcional: falsificação de snapshot, requisito exato, fonte alterada, decisão humana, revogação, replay e compatibilidade M6.2.
+
+Revisão final de preservação: as projeções web e backend de Knowledge precisam concordar. A consulta compartilhada de Perfis passa a exigir conceito aprovado no escopo global/empresa, mantendo a observação original e marcando resolução indisponível como `unresolved`; nenhuma linha é alterada. Rótulos de requisitos também usam somente conceitos aprovados, sem apagar o vínculo persistido na definição. Ordenações de requisitos, observações, sinais e Evidências Demonstradas ganham desempate por ID para reprodutibilidade. Descoberta de Perfis é `plausible_indirect`, com regressão do contrato de leitura. O backend devolve o fingerprint da avaliação confirmada e a tela não habilita M6.2 se divergir da análise exibida. Bloqueios SQL do snapshot são sem espera; contenção não aguarda curadoria nem altera fontes.
+
+## Fora de escopo
+
+F-01: aprendizado, nota manual, alteração de pesos e validação universal não implementados.
+
+## Validação, ambiente e limitações
+
+Local sintético é QA; único Supabase remoto existente é produção. Cache estável e concordância do modelo não demonstram justiça universal; corpus do piloto não é holdout independente. Dados escassos podem produzir empate entre Bruno e Diego. Não há obrigação de produzir vencedor. Minimização de texto livre não garante anonimização completa; contexto sensível ambíguo gera abstenção.
+
+### Evidência local até o gate de publicação
+
+- `pnpm run build`, `pnpm run typecheck:web`, `pnpm run build:web`: PASS. Avisos preexistentes de tamanho de chunk/importação dinâmica, sem mudança de dependências.
+- Sete arquivos Node direcionados: `semanticTrajectory`, `semanticTrajectoryReview`, `matchingRuntime`, `matchingScore`, `vacancyIntelligence`, `m62VerificationJourney`, `productRelease`: 164 testes PASS antes dos testes adicionais de consistência final. Não foi executado `pnpm validate` local integral.
+- Revisão independente cobriu negação junto a atributo sensível, nomes de duas letras, limites Unicode sem corromper termos técnicos, identidade canônica da evidência e ausência de corroboracão artificial. Correções de geração de tela impedem respostas antigas de reabrir drawer; processamento tem polling limitado e cancelamento.
+- Navegador autenticado local `127.0.0.1:5555`: sete Perfis em seção neutra alfabética com Edge ainda ausente; detalhe de Diego abre sem snapshot falso; comparação Bruno/Diego preserva requisitos e não recomenda prioridade. Desktop e viewport 390 × 844 inspecionados, sem transbordamento horizontal; viewport restaurada. Nenhuma alteração de Perfil, Posição ou decisão humana.
+- Piloto real com `gpt-5.6-luna`, fontes exclusivamente sintéticas e `store:false`: prompt 1.0.0 FAIL (119/120 válidas, 105/120 leituras corretas, 4 divergências/59 pares válidos). Esclarecimento da rubrica existente no prompt 1.1.0, sem mudar rótulos esperados: PASS 120/120 válidas/corretas, 130/130 itens corretos, 0/60 divergências, 12/12 bases estáveis nas cinco variantes. Seis chamadas diagnósticas intermediárias. Não confundir este corpus de desenvolvimento com validação universal/holdout.
+- Backend final: Deno check/lint e 24 testes PASS (handler/snapshot/decoder). `scripts/test-m83-postgres.ps1` PASS com transação encerrada em ROLLBACK: isolamento, spoofing, revogação, fontes alteradas/expiradas, M6.2 com requisito exato e rejeição de outro requisito, versões legadas 4/5 preservadas. `scripts/test-m83-concurrency.ps1` PASS: seis conexões independentes, um lease/uma linha; quatro contenções recusadas em 0,25–0,82s. DB sintético `m72_semantic_trajectory_race_20260925144054` preservado para inspeção, sem reset/drop. Revisão independente reproduziu deadlock com bloqueios antigos; versão final `NOWAIT`/try-advisory recusa contenção com `55P03` recuperável.
+- Revisão final adicionou dez testes de fingerprint/Knowledge (21 testes próprios PASS), incluindo evidência nova com mesmos IDs, mesma nota com fonte diferente, ordem de arrays e conceito desativado. FNV32 do score é detector de coerência da tela, não proteção criptográfica; autoridade e fingerprint transacional SHA-256 ficam no backend.
+- Preflight remoto somente leitura: nova tabela/migration ainda ausentes, `m72_require_profile_reader` presente e baseline M6.2 compatível. `origin/main` continua `9672092`. Publicação ainda pendente nesta revisão documental.
+
+## Git / produção / conclusão
+
+Branch `codex/m83-semantic-trajectory`. Sem publicação até concluir os gates. Não usar db push geral nem repair do ledger histórico. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Conclusão pendente, não declarar entregue.
 
 ---
 
@@ -19048,6 +19230,18 @@ Executar D-01 a D-07, impedir P-01 a P-05, manter F-01/F-02 fora do movimento e 
 
 ---
 
+## Source: `docs/qa/execution-m83-semantic-trajectory.md`
+
+# Execução M8.3
+
+Implementar integralmente `docs/qa/agreement-m83-semantic-trajectory.md`, versão congelada 1.0.0, incluindo D-01–D-08, P-01–P-03, F-01, A-01 e critérios de aceite. Classificação D/E: matching, IA, PII e persistência derivada. Mapa de impacto no acordo é baseline mínimo.
+
+Reutilizar o score, requisitos e componentes existentes; estender com interpretação backend versionada. Sem aprendizado, nova base de fatos ou nota livre. Política financeira do Parser. Validar em ambiente local sintético, depois migration/Edge/web nas superfícies do dispatcher, smoke e sincronização main. Não executar db push geral nem repair de ledger.
+
+AoT: `docs/qa/aot-m83-semantic-trajectory.md`. Decisão técnica: ADR de interpretação derivada M8.3. Não declarar aceite de itens sem evidência.
+
+---
+
 ## Source: `docs/qa/execution-prisma-context-pack-v2.md`
 
 # Prompt de Execução — Context Pack Prisma 2.0
@@ -21159,6 +21353,8 @@ Questões abertas antes de implementação: prazo de retenção de respostas, te
 # Privacidade e LGPD
 
 ## Estado
+
+Atualização técnica M8.3 (2026-09-25): o PO autorizou interpretação derivada para matching usando o provedor OpenAI já integrado. O backend envia somente contexto profissional minimizado de cargo/descrição/título/área e Posição; não envia campos de identidade, contato, empregador, instituição, datas ou currículo integral. Dados conhecidos são removidos do texto livre, sem alegar anonimização completa. `store:false` não equivale a garantia de retenção zero do fornecedor. Cache derivado mantém tenant, acesso por RPC autorizado, versões, citações e exclusão em cascata com Perfil/Posição. Não concede leitura direta ou escrita de cache aos clientes. Decisões e fatos publicados não são alterados. Essa implementação não resolve ou certifica as pendências jurídicas listadas abaixo; afirmações históricas de ausência de provedor externo não descrevem as integrações técnicas atuais. Evidência e estado de ativação: AoT M8.3.
 
 Privacy by design está definida e refletida na separação de PII, perfil e Storage privado. Base legal, aviso de privacidade, retenção, subprocessadores, operações de titular e auditoria de visualização/exportação ainda não estão aprovados. QA usa apenas fixtures sintéticas.
 

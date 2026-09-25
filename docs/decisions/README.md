@@ -83,3 +83,5 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - Never edit an accepted decision to hide history. Amend the history or supersede it.
 - Reference code, migrations, contracts, tests, and rollout evidence separately.
 - Accepted does not mean implemented or active; each ADR states its evidence and environment.
+
+- [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.

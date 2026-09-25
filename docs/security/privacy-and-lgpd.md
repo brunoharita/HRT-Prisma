@@ -2,6 +2,8 @@
 
 ## Estado
 
+Atualização técnica M8.3 (2026-09-25): o PO autorizou interpretação derivada para matching usando o provedor OpenAI já integrado. O backend envia somente contexto profissional minimizado de cargo/descrição/título/área e Posição; não envia campos de identidade, contato, empregador, instituição, datas ou currículo integral. Dados conhecidos são removidos do texto livre, sem alegar anonimização completa. `store:false` não equivale a garantia de retenção zero do fornecedor. Cache derivado mantém tenant, acesso por RPC autorizado, versões, citações e exclusão em cascata com Perfil/Posição. Não concede leitura direta ou escrita de cache aos clientes. Decisões e fatos publicados não são alterados. Essa implementação não resolve ou certifica as pendências jurídicas listadas abaixo; afirmações históricas de ausência de provedor externo não descrevem as integrações técnicas atuais. Evidência e estado de ativação: AoT M8.3.
+
 Privacy by design está definida e refletida na separação de PII, perfil e Storage privado. Base legal, aviso de privacidade, retenção, subprocessadores, operações de titular e auditoria de visualização/exportação ainda não estão aprovados. QA usa apenas fixtures sintéticas.
 
 ## Mapa de dados

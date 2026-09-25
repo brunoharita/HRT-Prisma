@@ -1,4 +1,6 @@
 import type { PublishedProfileCandidate } from "./profileDiscovery.js";
+import type { SemanticAssessment } from "../../../src/domain/semanticTrajectory.js";
+import { semanticComparisonPending } from "./semanticMatching.js";
 import type { PositionTaxonomy, TaxonomyDecision, TaxonomyItem } from "./positionTaxonomy.js";
 import {
   calculateMatchingScore,
@@ -117,7 +119,7 @@ export interface VacancyMatchEvidence {
   sourceVersion?: string;
 }
 
-export type VacancyPositionRelationStatus = "same_reference" | "equivalent_reference" | "related_reference" | "possible_title_relation" | "none";
+export type VacancyPositionRelationStatus = "same_reference" | "equivalent_reference" | "related_reference" | "possible_title_relation" | "interpreted_function" | "none";
 export type VacancyAreaRelationStatus = "profile_area" | "experience_area" | "none";
 export type VacancyPositionRelationDecision = "confirmed" | "dismissed" | null;
 export type VacancyDetailedEvaluationStatus = "ready" | "pending_classification" | "no_requirements";
@@ -178,6 +180,7 @@ export interface VacancyRequirementMatch {
 }
 
 export interface VacancyCandidateMatch {
+  semanticAssessment?: SemanticAssessment;
   candidate: PublishedProfileCandidate;
   areaRelation: VacancyAreaRelation;
   positionRelation: VacancyPositionRelation;
@@ -674,13 +677,17 @@ export function shouldResearchVacancyMarket(question: string): boolean {
 }
 
 export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCandidateMatch[] {
+  const pending = semanticComparisonPending(matches);
+  const awaiting = (match: VacancyCandidateMatch) => Boolean(match.semanticAssessment && match.semanticAssessment.status !== "complete");
+  const byName = (left: VacancyCandidateMatch, right: VacancyCandidateMatch) => left.candidate.fullName.localeCompare(right.candidate.fullName, "pt-BR") || left.candidate.personId.localeCompare(right.candidate.personId);
   return [...matches]
-    .sort((left, right) =>
+    .sort((left, right) => awaiting(left) || awaiting(right)
+      ? Number(awaiting(right)) - Number(awaiting(left)) || byName(left, right)
+      :
       discoveryGroupPriority(right.discoveryGroup) - discoveryGroupPriority(left.discoveryGroup)
-      || prismaScoreComparison(left, right)
-      || decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision)
-      || left.candidate.fullName.localeCompare(right.candidate.fullName, "pt-BR")
-      || left.candidate.personId.localeCompare(right.candidate.personId),
+      || (pending ? 0 : prismaScoreComparison(left, right))
+      || (pending ? 0 : decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision))
+      || byName(left, right),
     );
 }
 
@@ -1114,7 +1121,7 @@ const OCCUPATIONAL_ROLE_MARKERS = new Set([
   "diretor", "executivo", "supervisor", "tecnico", "desenvolvedor", "designer", "vendedor", "operador",
 ]);
 
-function assessVacancyEvidence(area: VacancyAreaRelation, position: VacancyPositionRelation, requirements: VacancyRequirementMatch[]): VacancyEvidenceAssessment {
+export function assessVacancyEvidence(area: VacancyAreaRelation, position: VacancyPositionRelation, requirements: VacancyRequirementMatch[]): VacancyEvidenceAssessment {
   const evidenceItems = uniqueEvidence([...area.evidence, ...position.evidence, ...requirements.flatMap((item) => item.evidence)]);
   const independentSourceCount = new Set(evidenceItems.map((item) => item.sourceId ?? `${item.fieldPath}:${normalize(item.label)}`)).size;
   const professionalContextEvidenceCount = evidenceItems.filter((item) => item.fieldPath === "professionalTitle" || item.fieldPath?.startsWith("experiences.")).length;
@@ -1159,7 +1166,7 @@ function assessVacancyFunction(
         equivalent_reference: ["equivalent_function", 17],
         related_reference: ["related_function", 12],
         possible_title_relation: ["contextual_relation", 8],
-      } as const)[position.status as Exclude<VacancyPositionRelationStatus, "none">];
+      } as const)[position.status as Exclude<VacancyPositionRelationStatus, "none" | "interpreted_function">];
   let relation: VacancyFunctionAssessment["relation"] = "no_relation";
   let basePoints: VacancyFunctionAssessment["basePoints"] = 0;
   let explanation = position.explanation;
