@@ -46,6 +46,8 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   const [processingRecovery, setProcessingRecovery] = useState<OperationRecovery>("none");
   const [lastResolution, setLastResolution] = useState<ResolutionAttempt | null>(null);
   const checkingImport = useRef(false);
+  const importSelection = useRef(fileList[0]?.originFileObj);
+  importSelection.current = fileList[0]?.originFileObj;
   const { readiness, refresh: refreshReadiness } = useParserReadiness(activeMembership.organizationId, phase === "upload" && !busy);
 
   useUnsavedChanges(fileList.length > 0 && phase !== "analysis");
@@ -71,7 +73,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     if (!parserIaEnabled()) { setError("O Parser IA não está disponível. A importação não foi iniciada."); return; }
     checkingImport.current = true;
     const availability = await refreshReadiness().finally(() => { checkingImport.current = false; });
-    if (parserReadinessBlocksImport(availability)) return;
+    if (parserReadinessBlocksImport(availability) || importSelection.current !== file) return;
     setBusy(true); setError(null); setResult(null);
     try {
       const nativeProcessed = await validateAndProcessPdf(file, setProgress, {
@@ -187,6 +189,7 @@ function UploadScreen(props: { busy: boolean; error: string | null; fileList: Up
       {props.fileList[0] ? <div className="prisma-selected-file"><FilePdfOutlined /><div><strong>{props.fileList[0].name}</strong><span>{formatBytes(props.fileList[0].size ?? 0)}</span></div><Tag>Arquivo selecionado</Tag></div> : null}
       {props.progress ? <Alert description={props.progress.message} showIcon title="Leitura inicial em andamento" type="info" /> : null}
       {!props.busy ? <div role="status" aria-live="polite"><Alert
+        className="prisma-parser-readiness"
         showIcon
         type={props.readiness.state === "available" ? "success" : props.readiness.state === "checking" ? "info" : "warning"}
         title={parserReadinessTitles[props.readiness.state]}

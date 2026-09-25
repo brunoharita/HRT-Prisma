@@ -8,9 +8,9 @@ last_verified: 2026-09-25
 
 # Estado atual do Prisma
 
-## Disponibilidade antecipada da importação (validação local)
+## Disponibilidade antecipada da importação (publicada)
 
-A tela de importação consulta o gateway e o worker antes do envio, com estado/horário, nova checagem, atualização periódica visível e expiração. `parser-ia-readiness-1.0.0` reutiliza sessão, empresa e túnel; consulta somente ocupação/configuração, sem PDF, OpenAI ou persistência. Incerteza permanece explícita e consultiva; indisponibilidade confirmada bloqueia início e mantém arquivo selecionado. Testes direcionados do parser/gateway e tipos/build passaram; rollout e smoke hospedado registrados no AoT `docs/qa/aot-import-readiness.md`. Diagnóstico operacional de 25/09 encontrou worker local e túnel 18787 ausentes. Monitor externo/canal de alertas ficam fora desta primeira etapa.
+A tela de importação consulta o gateway e o worker antes do envio, com estado/horário, nova checagem, atualização periódica visível e expiração. `parser-ia-readiness-1.0.0` reutiliza sessão, empresa e túnel; consulta somente ocupação/configuração, sem PDF, OpenAI ou persistência. Incerteza permanece explícita e consultiva; indisponibilidade confirmada bloqueia início e mantém arquivo selecionado. 68 testes direcionados, tipos/build e CI passaram; rollout inicial `e6a9909` e smoke hospedado autenticado confirmaram `200 available/ready`. Diagnóstico de 25/09 encontrou worker local e túnel 18787 ausentes, ambos restabelecidos; gateway/web atualizados com rollback preservado. Simulações somente na aba comprovaram bloqueio/seleção mantida e nova checagem no clique, sem enviar currículo. AoT `docs/qa/aot-import-readiness.md`. Monitor externo/canal de alertas ficam fora desta primeira etapa.
 
 ## M8 UX: sugestão de descrição de competência (publicada)
 

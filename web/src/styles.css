@@ -4070,6 +4070,23 @@ textarea {
   margin: 18px 0 0 auto;
 }
 
+.prisma-parser-readiness {
+  margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .prisma-parser-readiness.ant-alert {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    column-gap: 12px;
+  }
+
+  .prisma-parser-readiness .ant-alert-actions {
+    grid-column: 2;
+    margin: 12px 0 0;
+  }
+}
+
 .prisma-journey-explainer > .ant-card-body > div {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
