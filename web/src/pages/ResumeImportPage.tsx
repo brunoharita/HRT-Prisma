@@ -1,5 +1,5 @@
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowLeftOutlined, CloudUploadOutlined, EyeOutlined, FilePdfOutlined,
   LockOutlined, PlusOutlined, SafetyCertificateOutlined, UserAddOutlined,
@@ -23,6 +23,8 @@ import { parserIaIdentity } from "../domain/parserIa";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
+import { useParserReadiness } from "../ui/useParserReadiness";
+import { parserReadinessBlocksImport, parserReadinessTitles, type ParserReadiness } from "../domain/parserReadiness";
 
 interface ResumeImportPageProps { activeMembership: OrganizationMembership; onNavigate: (path: string) => void; }
 interface IdentityFormValue { fullName: string; email: string; phone: string; }
@@ -43,6 +45,8 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   const [error, setError] = useState<string | null>(null);
   const [processingRecovery, setProcessingRecovery] = useState<OperationRecovery>("none");
   const [lastResolution, setLastResolution] = useState<ResolutionAttempt | null>(null);
+  const checkingImport = useRef(false);
+  const { readiness, refresh: refreshReadiness } = useParserReadiness(activeMembership.organizationId, phase === "upload" && !busy);
 
   useUnsavedChanges(fileList.length > 0 && phase !== "analysis");
 
@@ -61,9 +65,13 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   }
 
   async function handleImport() {
+    if (checkingImport.current || busy) return;
     const file = fileList[0]?.originFileObj;
     if (!file) { setError("Selecione um currículo em PDF antes de iniciar."); return; }
     if (!parserIaEnabled()) { setError("O Parser IA não está disponível. A importação não foi iniciada."); return; }
+    checkingImport.current = true;
+    const availability = await refreshReadiness().finally(() => { checkingImport.current = false; });
+    if (parserReadinessBlocksImport(availability)) return;
     setBusy(true); setError(null); setResult(null);
     try {
       const nativeProcessed = await validateAndProcessPdf(file, setProgress, {
@@ -155,7 +163,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   }
 
   return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase}`}>
-    {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} /> : null}
+    {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} readiness={readiness} onCheck={() => void refreshReadiness()} /> : null}
     {phase !== "upload" && processed?.parserIa?.status === "partial" ? <Alert type="warning" showIcon message="Interpretação parcial: há informações que precisam de conferência na revisão." /> : null}
     {phase === "identity" && intake ? <IdentityScreen busy={busy} error={error} identity={identity} intake={intake} onBack={() => setPhase("upload")} onCreate={handleCreateDespiteMatch} onIdentityReview={handleIdentityReview} onLink={(candidate) => void resolveIntake("link_existing_person", candidate.personId)} processed={processed} /> : null}
     {phase === "processing" ? <ProcessingScreen busy={busy} error={error} onBack={() => onNavigate("/profiles")} onReplace={restartImport} onRetry={processingRecovery === "retry" && lastResolution ? () => void resolveIntake(lastResolution.action, lastResolution.personId) : null} processed={processed} progress={processingProgress} recovery={processingRecovery} /> : null}
@@ -163,7 +171,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   </PrismaPage>;
 }
 
-function UploadScreen(props: { busy: boolean; error: string | null; fileList: UploadFile[]; progress: PdfProcessingProgress | null; onBack: () => void; onChange: (files: UploadFile[]) => void; onImport: () => void }) {
+function UploadScreen(props: { busy: boolean; error: string | null; fileList: UploadFile[]; progress: PdfProcessingProgress | null; onBack: () => void; onChange: (files: UploadFile[]) => void; onImport: () => void; readiness: ParserReadiness; onCheck: () => void }) {
   return <>
     <PrismaPageHeader title="Importar currículo" description="Envie o currículo para iniciarmos a análise e a construção do Perfil Prisma." />
     <Button icon={<ArrowLeftOutlined />} onClick={props.onBack} type="text">Voltar para Pessoas</Button>
@@ -176,9 +184,22 @@ function UploadScreen(props: { busy: boolean; error: string | null; fileList: Up
         <p className="ant-upload-drag-icon"><CloudUploadOutlined /></p><p className="ant-upload-text">Arraste e solte o arquivo aqui</p><p className="ant-upload-hint">ou</p>
         <Button disabled={props.busy} type="primary">Selecionar arquivo</Button><p className="prisma-upload-contract">Formato aceito: PDF · Tamanho máximo: 15 MB</p>
       </Upload.Dragger>
-      {props.fileList[0] ? <div className="prisma-selected-file"><FilePdfOutlined /><div><strong>{props.fileList[0].name}</strong><span>{formatBytes(props.fileList[0].size ?? 0)}</span></div><Tag color="green">Pronto para importar</Tag></div> : null}
+      {props.fileList[0] ? <div className="prisma-selected-file"><FilePdfOutlined /><div><strong>{props.fileList[0].name}</strong><span>{formatBytes(props.fileList[0].size ?? 0)}</span></div><Tag>Arquivo selecionado</Tag></div> : null}
       {props.progress ? <Alert description={props.progress.message} showIcon title="Leitura inicial em andamento" type="info" /> : null}
-      <Button className="prisma-journey-upload-submit" disabled={!props.fileList.length} loading={props.busy} onClick={props.onImport} type="primary">Importar currículo</Button>
+      {!props.busy ? <div role="status" aria-live="polite"><Alert
+        showIcon
+        type={props.readiness.state === "available" ? "success" : props.readiness.state === "checking" ? "info" : "warning"}
+        title={parserReadinessTitles[props.readiness.state]}
+        description={<>
+          {props.readiness.state === "available" ? "Conexão verificada. A resposta da IA será confirmada durante o processamento."
+            : props.readiness.state === "unavailable" ? (["access_denied", "session_required"].includes(props.readiness.reason) ? "Confira sua sessão e o acesso à empresa antes de tentar novamente." : "O serviço não está pronto para receber o currículo. Seu arquivo selecionado será mantido.")
+              : props.readiness.state === "unknown" ? "Você pode verificar novamente ou tentar importar. A disponibilidade será conferida antes do envio."
+                : props.readiness.state === "busy" ? "A disponibilidade será atualizada automaticamente. Seu arquivo selecionado será mantido." : "Aguarde a checagem do serviço."}
+          {props.readiness.observedAt > 0 && props.readiness.state !== "checking" ? <div>Verificado às {new Date(props.readiness.observedAt).toLocaleTimeString("pt-BR")}</div> : null}
+        </>}
+        action={<Button size="small" loading={props.readiness.state === "checking"} onClick={props.onCheck}>Verificar novamente</Button>}
+      /></div> : null}
+      <Button className="prisma-journey-upload-submit" disabled={!props.fileList.length || parserReadinessBlocksImport(props.readiness)} loading={props.busy} onClick={props.onImport} type="primary">Importar currículo</Button>
     </PrismaCard>
     <details className="prisma-m81-import-details"><summary>Como funciona e como os dados são protegidos</summary>
       {parserIaEnabled() ? <Alert showIcon title="Importação com IA ativada" description="O PDF será enviado à OpenAI para organizar os campos. Você poderá conferir e corrigir o resultado antes de publicar o perfil." type="info" /> : null}

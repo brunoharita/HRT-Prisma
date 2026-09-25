@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.49.0
-last_verified: 2026-09-21
+version: 2.50.0
+last_verified: 2026-09-25
 ---
 
 # Estado atual do Prisma
+
+## Disponibilidade antecipada da importação (validação local)
+
+A tela de importação consulta o gateway e o worker antes do envio, com estado/horário, nova checagem, atualização periódica visível e expiração. `parser-ia-readiness-1.0.0` reutiliza sessão, empresa e túnel; consulta somente ocupação/configuração, sem PDF, OpenAI ou persistência. Incerteza permanece explícita e consultiva; indisponibilidade confirmada bloqueia início e mantém arquivo selecionado. Testes direcionados do parser/gateway e tipos/build passaram; rollout e smoke hospedado registrados no AoT `docs/qa/aot-import-readiness.md`. Diagnóstico operacional de 25/09 encontrou worker local e túnel 18787 ausentes. Monitor externo/canal de alertas ficam fora desta primeira etapa.
 
 ## M8 UX: sugestão de descrição de competência (publicada)
 

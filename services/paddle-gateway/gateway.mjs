@@ -6,12 +6,14 @@ import { pathToFileURL } from "node:url";
 
 export const TRANSPORT_VERSION = "paddle-hosted-transport-1.0.0";
 export const PARSER_TRANSPORT_VERSION = "parser-ia-hosted-transport-1.0.0";
+export const READINESS_VERSION = "parser-ia-readiness-1.0.0";
 export const MAX_BODY_BYTES = 21 * 1024 * 1024;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ROUTES = new Map([
   ["/document-intelligence/layout-parsing", { target: "http://127.0.0.1:18080/layout-parsing", kind: "structure" }],
   ["/document-intelligence-vl/layout-parsing", { target: "http://127.0.0.1:18081/layout-parsing", kind: "recovery" }],
   ["/parser-ia-hosted/parse", { target: "http://127.0.0.1:18787/parse", kind: "parser" }],
+  ["/parser-ia-hosted/readiness", { target: "http://127.0.0.1:18787/readiness", kind: "parser", readiness: true }],
 ]);
 const FORWARDED_PARSER_ERRORS = new Set([
   "PARSER_BUSY", "PARSER_KEY_MISSING", "PARSER_KEY_REJECTED", "PARSER_CREDIT_BALANCE_EXHAUSTED",
@@ -122,7 +124,7 @@ export function requestLoopbackWorker(target, { method, headers, body, signal })
   });
 }
 
-export function createGateway({ authorize, fetchImpl = requestLoopbackWorker, origin = "https://prisma.hrtsolutions.com.br", timeoutMs = 295000, log = (entry) => console.log(JSON.stringify(entry)) }) {
+export function createGateway({ authorize, fetchImpl = requestLoopbackWorker, origin = "https://prisma.hrtsolutions.com.br", timeoutMs = 295000, readinessTimeoutMs = 3000, log = (entry) => console.log(JSON.stringify(entry)) }) {
   // Keep local Paddle inference serialized across both routes. Its uncertain
   // cancellation must not hold capacity for the separate Parser IA service.
   const busyUntilByWorker = new Map();
@@ -159,6 +161,31 @@ export function createGateway({ authorize, fetchImpl = requestLoopbackWorker, or
       if (typeof organizationId !== "string" || !UUID.test(organizationId)) throw new HttpFailure(403, "organization_required");
       await authorize(authorization, organizationId);
       if (controller.signal.aborted) throw new HttpFailure(499, "client_disconnected");
+      if (route.readiness) {
+        const body = await readBody(request, 32);
+        if (body.trim() !== "{}") throw new HttpFailure(400, "invalid_payload");
+        const respond = (state, reason) => reply(200, { version: READINESS_VERSION, state, reason, checkedAt: new Date().toISOString() });
+        if (Date.now() < (busyUntilByWorker.get(worker) ?? 0)) { respond("busy", "worker_busy"); return; }
+        timer = setTimeout(() => controller.abort(), readinessTimeoutMs);
+        try {
+          const upstream = await fetchImpl(route.target, {
+            method: "POST", headers: { "Content-Type": "application/json", Host: "127.0.0.1:8787", Origin: "http://127.0.0.1:5555", "X-Prisma-Local-Parser": "1" },
+            body: "{}", signal: controller.signal, redirect: "error",
+          });
+          if (!upstream.ok || !upstream.headers.get("content-type")?.includes("application/json")) { respond("unknown", "check_failed"); return; }
+          const result = JSON.parse(await readWorkerBody(upstream, 1024));
+          const allowed = { ready: "available", worker_busy: "busy", configuration_missing: "unavailable", parser_disabled: "unavailable", check_failed: "unknown" };
+          if (result?.version !== READINESS_VERSION || !Object.hasOwn(allowed, result.reason) || allowed[result.reason] !== result.state) {
+            respond("unknown", "check_failed"); return;
+          }
+          respond(result.state, result.reason);
+        } catch (error) {
+          // Connection failure does not distinguish a broken tunnel from a stopped worker.
+          const connectionFailed = ["ECONNREFUSED", "ECONNRESET", "EPIPE"].includes(error?.code);
+          respond(connectionFailed ? "unavailable" : "unknown", controller.signal.aborted ? "check_timeout" : connectionFailed ? "worker_unreachable" : "check_failed");
+        }
+        return;
+      }
       if (Date.now() < (busyUntilByWorker.get(worker) ?? 0)) throw new HttpFailure(429, "worker_busy");
       busyUntilByWorker.set(worker, Number.POSITIVE_INFINITY);
       ownsWorker = true;
@@ -203,7 +230,7 @@ export function createGateway({ authorize, fetchImpl = requestLoopbackWorker, or
       response.off("close", onClose);
       if (ownsWorker) busyUntilByWorker.set(worker, holdWorker ? Date.now() + timeoutMs : 0);
       activeRequests -= 1;
-      log({ event: "document_transport", route: route?.kind ?? "unknown", status, durationMs: Date.now() - started });
+      try { log({ event: route?.readiness ? "parser_readiness" : "document_transport", route: route?.kind ?? "unknown", status, durationMs: Date.now() - started }); } catch { /* Optional telemetry cannot block requests. */ }
     }
   });
 }

@@ -1,5 +1,5 @@
 // Loopback-only inference worker. Never import this module into a browser bundle.
-import { readFile, writeFile, mkdir, open, unlink } from "node:fs/promises";
+import { readFile, writeFile, mkdir, open, unlink, stat } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
 import { resolve, join } from "node:path";
@@ -117,7 +117,7 @@ export function providerFailureCode(status, rawBody = "") {
 
 export function createParserService({ directory = resolve("tmp/m57-parser-ia"), fetchImpl = fetch, keyProvider = loadParserSecret, timeoutMs = 120000, allowNetwork = true } = {}) {
   let busy = false;
-  return async function parse({ bytes, organizationId, sourceSha256 }) {
+  const parse = async function parse({ bytes, organizationId, sourceSha256 }) {
     if (busy) throw new Error("PARSER_BUSY");
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(organizationId ?? "") || !/^[a-f0-9]{64}$/.test(sourceSha256 ?? "")) throw new Error("PARSER_BINDING_INVALID");
     if (createHash("sha256").update(bytes).digest("hex") !== sourceSha256) throw new Error("PARSER_SOURCE_MISMATCH");
@@ -164,6 +164,20 @@ export function createParserService({ directory = resolve("tmp/m57-parser-ia"), 
       busy = false;
     }
   };
+  // Read-only snapshot: no inference, reservations, cache or ledger writes.
+  parse.readiness = async () => {
+    if (busy) return { state: "busy", reason: "worker_busy" };
+    try {
+      await stat(join(directory, "operation.lock"));
+      return { state: "busy", reason: "worker_busy" };
+    } catch (error) {
+      if (error.code !== "ENOENT") return { state: "unknown", reason: "check_failed" };
+    }
+    if (!allowNetwork) return { state: "unavailable", reason: "parser_disabled" };
+    try { await keyProvider(); } catch { return { state: "unavailable", reason: "configuration_missing" }; }
+    return busy ? { state: "busy", reason: "worker_busy" } : { state: "available", reason: "ready" };
+  };
+  return parse;
 }
 
 const safeCodes = new Set(["PARSER_BUSY", "PARSER_INVALID_PDF", "PARSER_PAGE_LIMIT", "PARSER_SOURCE_LIMIT", "PARSER_SOURCE_INVALID", "PARSER_GEOMETRY_INVALID", "PARSER_KEY_MISSING", "PARSER_KEY_REJECTED", "PARSER_CREDIT_BALANCE_EXHAUSTED", "PARSER_SPEND_LIMIT_EXCEEDED", "PARSER_RATE_LIMIT", "PARSER_PROVIDER_FAILED", "PARSER_INCOMPLETE_RESPONSE", "PARSER_REFUSED", "PARSER_RESPONSE_INVALID", "PARSER_RESPONSE_LIMIT", "PARSER_USAGE_INVALID", "PARSER_BINDING_INVALID", "PARSER_SOURCE_MISMATCH", "PARSER_CACHE_INVALID", "PARSER_NO_SUPPORTED_FACTS", "PARSER_TIMEOUT"]);
@@ -186,7 +200,24 @@ export function createParserHttpServer(parse = createParserService(), port = 878
     };
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
-    if (!allowedLocalRequest(req, port) || req.method !== "POST" || req.url !== "/parse") { res.writeHead(403); res.end('{"error":"PARSER_LOCAL_ONLY"}'); report(403, "PARSER_LOCAL_ONLY"); return; }
+    if (!allowedLocalRequest(req, port) || req.method !== "POST" || !["/parse", "/readiness"].includes(req.url)) { res.writeHead(403); res.end('{"error":"PARSER_LOCAL_ONLY"}'); report(403, "PARSER_LOCAL_ONLY"); return; }
+    if (req.url === "/readiness") {
+      try {
+        let size = 0; const chunks = [];
+        for await (const chunk of req) {
+          size += chunk.length;
+          if (size > 32) throw new Error("invalid_readiness_body");
+          chunks.push(chunk);
+        }
+        if (Buffer.concat(chunks).toString().trim() !== "{}") throw new Error("invalid_readiness_body");
+        const result = await parse.readiness?.() ?? { state: "unknown", reason: "check_failed" };
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ version: "parser-ia-readiness-1.0.0", ...result }));
+      } catch {
+        res.writeHead(400, { "Content-Type": "application/json" }); res.end('{"error":"readiness_check_failed"}');
+      }
+      return;
+    }
     try {
       let total = 0; const chunks = [];
       for await (const chunk of req) { total += chunk.length; if (total > 22 * 1024 * 1024) throw new Error("PARSER_INVALID_PDF"); chunks.push(chunk); }

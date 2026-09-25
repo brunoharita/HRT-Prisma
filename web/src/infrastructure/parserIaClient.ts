@@ -1,6 +1,7 @@
 import type { ProcessedDocumentInput } from "../domain/personIngestion";
 import { PARSER_IA_VERSION, preparedParserIa, structureParserIa } from "../domain/parserIa";
 import { supabase } from "./supabase/client";
+import { decodeParserReadiness, type ParserReadiness } from "../domain/parserReadiness";
 
 export const PARSER_IA_HOSTED_TRANSPORT_VERSION = "parser-ia-hosted-transport-1.0.0";
 export type ParserIaMode = "disabled" | "local" | "hosted";
@@ -13,6 +14,43 @@ export function parserIaMode(): ParserIaMode {
 
 export function parserIaEnabled(): boolean {
   return parserIaMode() !== "disabled";
+}
+
+export async function checkParserIaReadiness(organizationId: string, signal?: AbortSignal): Promise<ParserReadiness> {
+  const result = (state: ParserReadiness["state"], reason: string): ParserReadiness => ({ state, reason, organizationId, observedAt: Date.now() });
+  const mode = parserIaMode();
+  if (mode === "disabled") return result("unavailable", "parser_disabled");
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  signal?.addEventListener("abort", abort, { once: true });
+  if (signal?.aborted) controller.abort();
+  const timer = window.setTimeout(abort, 8000);
+  try {
+    const check = async (): Promise<ParserReadiness> => {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (mode === "local") headers["X-Prisma-Local-Parser"] = "1";
+      else {
+        const { data, error } = await supabase.auth.getSession();
+        if (error || !data.session?.access_token) return result("unavailable", "session_required");
+        headers.Authorization = `Bearer ${data.session.access_token}`;
+        headers["X-Prisma-Organization-Id"] = organizationId;
+        headers["X-Prisma-Parser-Contract"] = PARSER_IA_HOSTED_TRANSPORT_VERSION;
+      }
+      const response = await fetch(mode === "local" ? "/parser-ia-local/readiness" : "/parser-ia-hosted/readiness", {
+        method: "POST", headers, body: "{}", signal: controller.signal, cache: "no-store",
+      });
+      if ([401, 403].includes(response.status)) return result("unavailable", "access_denied");
+      if (!response.ok) return result("unknown", "check_failed");
+      return decodeParserReadiness(await response.json(), organizationId);
+    };
+    // Bound session lookup as well as transport; a late lookup cannot start a fetch after abort.
+    if (controller.signal.aborted) return result("unknown", "check_timeout");
+    return await Promise.race([
+      check(),
+      new Promise<ParserReadiness>((resolve) => controller.signal.addEventListener("abort", () => resolve(result("unknown", "check_timeout")), { once: true })),
+    ]);
+  } catch { return result("unknown", controller.signal.aborted ? "check_timeout" : "check_failed"); }
+  finally { window.clearTimeout(timer); signal?.removeEventListener("abort", abort); }
 }
 
 const parserIaMessages: Record<string, string> = {

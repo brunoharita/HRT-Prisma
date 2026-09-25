@@ -254,6 +254,75 @@ test("both Paddle routes share capacity while the separate Parser IA can proceed
   assert.equal((await first).status, 200);
 });
 
+const readinessHeaders = { ...headers, "X-Prisma-Parser-Contract": PARSER_TRANSPORT_VERSION };
+const readinessPath = "/parser-ia-hosted/readiness";
+const readinessBody = (state = "available", reason = "ready") => ({ version: "parser-ia-readiness-1.0.0", state, reason });
+
+test("readiness follows authorized loopback path with no document/token and sanitized output", async (t) => {
+  let called = 0;
+  const { send } = await fixture(t, { fetchImpl: async (url, init) => {
+    called++; assert.equal(url, "http://127.0.0.1:18787/readiness");
+    assert.equal(init.body, "{}"); assert.equal(init.headers.Authorization, undefined);
+    assert.equal(init.headers["X-Prisma-Organization-Id"], undefined);
+    return Response.json({ ...readinessBody(), secret: "private" });
+  } });
+  const response = await send({ headers: readinessHeaders, body: "{}" }, readinessPath);
+  assert.equal(response.status, 200); assert.equal(response.headers.get("cache-control"), "no-store");
+  const result = await response.json(); assert.equal(result.state, "available");
+  assert.ok(Number.isFinite(Date.parse(result.checkedAt))); assert.equal(JSON.stringify(result).includes("private"), false);
+  assert.equal(called, 1);
+});
+
+test("readiness rejects missing auth, wrong origin/contract/tenant and documents before reaching worker", async (t) => {
+  let calls = 0;
+  const { send } = await fixture(t, { fetchImpl: async () => { calls++; return Response.json(readinessBody()); } });
+  for (const override of [{ Authorization: "" }, { Origin: "https://attacker.example" }, { "X-Prisma-Parser-Contract": "bad" }, { "X-Prisma-Organization-Id": "bad" }]) {
+    assert.ok((await send({ headers: { ...readinessHeaders, ...override }, body: "{}" }, readinessPath)).status >= 400);
+  }
+  assert.equal((await send({ headers: readinessHeaders, body: '{"pdfBase64":"secret"}' }, readinessPath)).status, 400);
+  assert.equal((await send({ headers: readinessHeaders, body: "x".repeat(33) }, readinessPath)).status, 413);
+  assert.equal(calls, 0);
+  const denied = await fixture(t, { authorize: authFixture({ orgs: [] }).authorize, fetchImpl: async () => { assert.fail("No worker access"); } });
+  assert.equal((await denied.send({ headers: readinessHeaders, body: "{}" }, readinessPath)).status, 403);
+});
+
+test("readiness failure does not retain cooldown or reserve inference capacity", async (t) => {
+  let checks = 0;
+  const { send } = await fixture(t, { fetchImpl: async (url) => {
+    if (url.endsWith("/readiness")) { checks++; throw Object.assign(new Error("private"), { code: "ECONNREFUSED" }); }
+    return Response.json({ errorCode: 0 });
+  } });
+  for (let i = 0; i < 2; i++) {
+    const result = await (await send({ headers: readinessHeaders, body: "{}" }, readinessPath)).json();
+    assert.equal(result.state, "unavailable"); assert.equal(result.reason, "worker_unreachable");
+  }
+  const pdf = Buffer.from(payload.file, "base64");
+  assert.equal((await send({ headers: readinessHeaders, body: JSON.stringify({ organizationId, pdfBase64: payload.file, sourceSha256: createHash("sha256").update(pdf).digest("hex") }) }, "/parser-ia-hosted/parse")).status, 200);
+  assert.equal(checks, 2);
+});
+
+test("old workers, malformed responses and timeout are inconclusive, never green", async (t) => {
+  for (const reply of [() => new Response("private", { status: 403 }), () => Response.json({ ...readinessBody(), version: "old" }), () => Response.json(readinessBody("available", "worker_busy")), () => new Response("x".repeat(1025), { headers: { "Content-Type": "application/json" } })]) {
+    const { send } = await fixture(t, { fetchImpl: async () => reply() });
+    assert.equal((await (await send({ headers: readinessHeaders, body: "{}" }, readinessPath)).json()).state, "unknown");
+  }
+  const { send } = await fixture(t, { readinessTimeoutMs: 20, fetchImpl: (_url, { signal }) => new Promise((_resolve, reject) => signal.addEventListener("abort", () => reject(new Error("timeout")))) });
+  assert.equal((await (await send({ headers: readinessHeaders, body: "{}" }, readinessPath)).json()).reason, "check_timeout");
+});
+
+test("readiness reports gateway parser occupancy without calling worker or changing capacity", async (t) => {
+  let release; let started; let calls = 0;
+  const waiting = new Promise((r) => { started = r; });
+  const hold = new Promise((r) => { release = r; });
+  const { send } = await fixture(t, { fetchImpl: async () => { calls++; started(); await hold; return Response.json({ ok: true }); } });
+  const pdf = Buffer.from(payload.file, "base64");
+  const pending = send({ headers: readinessHeaders, body: JSON.stringify({ organizationId, pdfBase64: payload.file, sourceSha256: createHash("sha256").update(pdf).digest("hex") }) }, "/parser-ia-hosted/parse");
+  await waiting;
+  try { assert.equal((await (await send({ headers: readinessHeaders, body: "{}" }, readinessPath)).json()).state, "busy"); assert.equal(calls, 1); }
+  finally { release(); }
+  assert.equal((await pending).status, 200);
+});
+
 function authFixture({ role = "recruiter", status = "active", memberRole = "recruiter", orgs = [{ id: organizationId }], memberships, user = { id: userId } } = {}) {
   const calls = [];
   const authorize = createAuthorizer({ supabaseUrl: "https://ioldpnqqvobprjiontre.supabase.co", publishableKey: "synthetic-publishable", fetchImpl: async (url, init) => {

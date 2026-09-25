@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { once } from "node:events";
-import { requestLoopbackWorker } from "../../services/paddle-gateway/gateway.mjs";
+import { createGateway, requestLoopbackWorker, PARSER_TRANSPORT_VERSION } from "../../services/paddle-gateway/gateway.mjs";
 import { createParserHttpServer, createParserService, readParserPdf, parserRequest, parseProviderResponse, providerFailureCode, safeParserError, allowedLocalRequest, readLimitedProviderBody, PARSER_MODEL } from "../../scripts/parser-ia-service.mjs";
 import { structureParserIa, preparedParserIa, parserIaMethodVersion } from "../../dist/web/src/domain/parserIa.js";
 
@@ -47,6 +47,44 @@ test("M5.7 backend uses original PDF spans and constrained OpenAI request", asyn
   assert.equal(request.max_output_tokens, 12000); assert.equal(request.text.format.strict, true);
   assert.match(request.input[0].content[0].file_data, /^data:application\/pdf;base64,/);
   assert.equal(pages[0].layoutLines[0].text, "Synthetic Person");
+});
+
+test("readiness inspects configuration and existing locks without network or filesystem writes", async () => {
+  const dir = await directory();
+  const parse = createParserService({ directory: dir, keyProvider: async () => "synthetic", fetchImpl: () => assert.fail("No inference") });
+  assert.deepEqual(await parse.readiness(), { state: "available", reason: "ready" });
+  assert.deepEqual(await readdir(dir), []);
+  const missing = createParserService({ directory: dir, keyProvider: async () => { throw new Error("private"); } });
+  assert.deepEqual(await missing.readiness(), { state: "unavailable", reason: "configuration_missing" });
+  await writeFile(join(dir, "operation.lock"), "preserved");
+  assert.deepEqual(await parse.readiness(), { state: "busy", reason: "worker_busy" });
+  assert.equal(await readFile(join(dir, "operation.lock"), "utf8"), "preserved");
+});
+
+test("readiness HTTP preserves loopback controls and never executes parse", async (t) => {
+  const parse = Object.assign(async () => assert.fail("No parse"), { readiness: async () => ({ state: "available", reason: "ready" }) });
+  const server = createParserHttpServer(parse); server.listen(0, "127.0.0.1"); await once(server, "listening");
+  t.after(() => { server.closeAllConnections(); server.close(); });
+  const url = `http://127.0.0.1:${server.address().port}/readiness`;
+  const headers = { Host: "127.0.0.1:8787", Origin: "http://127.0.0.1:5555", "X-Prisma-Local-Parser": "1", "Content-Type": "application/json" };
+  const response = await requestLoopbackWorker(url, { method: "POST", headers, body: "{}" });
+  assert.equal(response.status, 200); assert.equal((await response.json()).state, "available");
+  assert.equal((await fetch(url)).status, 403);
+  assert.equal((await requestLoopbackWorker(url, { method: "POST", headers, body: '{"pdf":"private"}' })).status, 400);
+});
+
+test("authenticated gateway-to-worker readiness uses real HTTP and no inference or writes", async (t) => {
+  const dir = await directory();
+  const parse = createParserService({ directory: dir, keyProvider: async () => "synthetic", fetchImpl: () => assert.fail("No OpenAI") });
+  const worker = createParserHttpServer(parse); worker.listen(0, "127.0.0.1"); await once(worker, "listening");
+  const gateway = createGateway({ authorize: async () => {}, log: () => {}, fetchImpl: (url, options) => requestLoopbackWorker(url.replace(":18787/", `:${worker.address().port}/`), options) });
+  gateway.listen(0, "127.0.0.1"); await once(gateway, "listening");
+  t.after(() => { for (const server of [gateway, worker]) { server.closeAllConnections(); server.close(); } });
+  const response = await fetch(`http://127.0.0.1:${gateway.address().port}/parser-ia-hosted/readiness`, {
+    method: "POST", headers: { Origin: "https://prisma.hrtsolutions.com.br", Authorization: "Bearer synthetic", "X-Prisma-Organization-Id": "11111111-1111-4111-8111-111111111111", "X-Prisma-Parser-Contract": PARSER_TRANSPORT_VERSION, "Content-Type": "application/json" }, body: "{}",
+  });
+  assert.equal(response.status, 200); assert.equal((await response.json()).state, "available");
+  assert.deepEqual(await readdir(dir), []);
 });
 test("M5.7 no external call without correct source binding or credential", async () => {
   let calls = 0;

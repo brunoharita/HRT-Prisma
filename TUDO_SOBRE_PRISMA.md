@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 265
-source_manifest_sha256: 2feaa790dc635a2d96884581879d7e631805997b1cd375eefb7a1cf30fc33a18
+documentation_source_count: 268
+source_manifest_sha256: 44e064df1cb7a4f9bf2d08dc9a0dec6c4dc93d1404d884fb171ce1c795a956eb
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.49.0
-last_verified: 2026-09-21
+version: 2.50.0
+last_verified: 2026-09-25
 ---
 
 # Estado atual do Prisma
+
+## Disponibilidade antecipada da importação (validação local)
+
+A tela de importação consulta o gateway e o worker antes do envio, com estado/horário, nova checagem, atualização periódica visível e expiração. `parser-ia-readiness-1.0.0` reutiliza sessão, empresa e túnel; consulta somente ocupação/configuração, sem PDF, OpenAI ou persistência. Incerteza permanece explícita e consultiva; indisponibilidade confirmada bloqueia início e mantém arquivo selecionado. Testes direcionados do parser/gateway e tipos/build passaram; rollout e smoke hospedado registrados no AoT `docs/qa/aot-import-readiness.md`. Diagnóstico operacional de 25/09 encontrou worker local e túnel 18787 ausentes. Monitor externo/canal de alertas ficam fora desta primeira etapa.
 
 ## M8 UX: sugestão de descrição de competência (publicada)
 
@@ -3983,6 +3987,10 @@ Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-
 
 ## Funcionamento
 
+Disponibilidade antecipada (2026-09-25): contrato aditivo `parser-ia-readiness-1.0.0`, acordo `../qa/agreement-import-readiness.md` 1.0.0. `POST /parser-ia-hosted/readiness` recebe somente `{}` com os mesmos cabeçalhos de sessão, empresa e transporte da importação. Gateway autoriza antes de consultar `/readiness` do worker pelo túnel existente. Worker observa ocupação/lock e presença da configuração; nenhuma inferência, escrita ou documento. Estados: `available`, `busy`, `unavailable`, `unknown`, com razões fixas sanitizadas. `worker_unreachable` não distingue túnel de worker. Verificação disponível não prova crédito, validade remota da chave, resposta futura da OpenAI nem sucesso de uma importação.
+
+A tela consulta na abertura, foco, a cada 30 s visível e antes de importar; resultados expiram em 45 s e não cruzam empresa/montagem. Cliente cancela transporte em 8 s; consulta do worker tem 3 s. Ocupação/indisponibilidade confirmadas bloqueiam início; incerteza consultiva permite tentativa humana normal, com todos os controles do parse. Seleção é preservada. Monitor externo e alertas estão fora desta entrega. Contratos de parse, modelo, prompt e versão pública M8.2 permanecem iguais.
+
 Complemento aprovado em 2026-09-12: após validar as propostas contra a fonte, a aplicação normaliza períodos por `resume-dates-1.0.0` e classifica formação por 1.1.0. Curso declarado sem indicação contrária recebe conclusão inferida; datas usam DD/MM/YYYY e limites aprovados para componentes ausentes. “Atual” não ganha data final persistida. Originais continuam em `acceptedFacts`, evidências e notas de inferência do rascunho 8.2.0. O cache da resposta bruta continua reutilizável, sem nova chamada ao modelo por causa dessa regra. Contrato e testes: `../qa/resume-date-education-rules.md`.
 
 Backend Node local lê o PDF com PDF.js, mantendo spans e coordenadas independentes de coluna. OpenAI recebe PDF inline e spans com IDs, sem referência humana ou baseline como gabarito. Resposta estrita contém `status`, `facts[{path,value,sources}]` e `uncertainties`. O domínio verifica IDs, caminhos, duplicações, suporte textual, campos de contato e vínculo organização/hash. Fatos sem suporte ficam fora do rascunho e geram pendência; zero fatos é erro.
@@ -4524,6 +4532,8 @@ M8.1 em implementação local: `competency-taxonomy-2.0.0` acrescenta classifica
 Ponte operacional temporária: `paddle-hosted-transport-1.0.0` (ADR-058) e `parser-ia-hosted-transport-1.0.0` (ADR-059), owner operations/security, cabeçalhos sessão/organização e gateway. Não alteram `document-intelligence-provider` 1.0.0, `canonical-document` 1.0.0 nem `parser-ia` 1.0.0. Status do pipeline serial e rollout em `docs/qa/aot-production-resume-quality-pipeline.md`; rollback para imagem web anterior e interrupção do túnel.
 
 ## Política
+
+`parser-ia-readiness-1.0.0`: diagnóstico aditivo autenticado, read-only, para o caminho gateway/túnel/worker existente. Não reserva capacidade nem modifica `parser-ia-1.0.0` ou seu transporte. Payload vazio, estados e razões fixas; dados de currículo/credenciais proibidos na resposta. Owner: `docs/ai/parser-ia.md`; acordo `docs/qa/agreement-import-readiness.md` 1.0.0.
 
 M7.6 acrescenta `profile-competency-curation-4.0.0`: descrição opcional, sem justificativa e Global só `super_admin` server-side. Proposta pendente, tenant e natureza declarada permanecem; outros motivos Knowledge ficam fora. ADR-067.
 
@@ -11477,6 +11487,51 @@ Ativação enabled é limitada ao teste/piloto hospedado solicitado; não declar
 
 ---
 
+## Source: `docs/qa/agreement-import-readiness.md`
+
+# Acordo — disponibilidade antecipada da importação
+
+Versão 1.0.0, 2026-09-25. Aprovado pelo PO nesta tarefa: “pode construir isso e já implementar atualizado em main em produção”, sobre a recomendação de implementar primeiro a disponibilidade na tela. Risco D: transporte autenticado e ingestão. Baseline `eb561b4ea128f749eac4a34b241b4d7c4b876335`.
+
+## Requisitos e aceite
+
+- D-01: consultar disponibilidade ao abrir a importação pelo caminho autenticado gateway → túnel → worker. CA-01: HTTP sintético integrado comprova resposta sem documento, inferência ou escrita de dados.
+- D-02: mostrar verificando, disponível, ocupado, indisponível ou inconclusivo, horário observado e ação de nova checagem. CA-02: estados renderizados e respostas inválidas nunca verdes.
+- D-03: preservar arquivo selecionado e impedir início em indisponibilidade/ocupação confirmadas; atualizar checagem antes de importar. Resultado inconclusivo é consultivo e permite tentativa explícita normal, preservando gates reais de autorização. CA-03: prova dos gates antes de PDF.js/intake e preservação da seleção.
+- D-04: checagem tem prazo curto, resposta estritamente sanitizada, mesma autorização de importação, não reserva capacidade nem cria cooldown. CA-04: negativos de sessão, origem, empresa, contrato, timeout, concorrência, worker antigo e corpo inválido.
+- D-05: expirar resultados antigos e descartar respostas de contexto anterior; falhas durante a importação continuam explícitas. CA-05: testes de validade e contexto, regressão do transporte de parse.
+- D-06: publicar worker, gateway e web compatíveis; comprovar estado em produção sem importar currículo real. CA-06: smoke da tela e rota autenticada, recusas anônimas, SHA e containers verificados.
+
+## Proibições
+
+- P-01: sem PDF, PII, token, chave, detalhes de infraestrutura ou texto de erros nos resultados/logs de disponibilidade; sem chamada OpenAI, retry de inferência ou escrita em banco/cache/ledger na checagem.
+- P-02: não contornar autorização, isolamento de empresa, lock de processamento, revisão humana ou integridade do PDF; não prometer que disponibilidade garante sucesso da OpenAI.
+- P-03: não substituir estado desconhecido por disponível, nem atribuir falha ao túnel/worker individual sem evidência.
+
+## Limites e autonomia
+
+- F-01: monitor periódico externo, canal de alertas, painel operacional novo, hospedagem permanente do worker e supervisão automática de túnel.
+- F-02: OCR, modelo, prompt, banco, migrações, taxonomia M8, publicação de Perfis e reprocessamento real.
+- A-01: reutilizar gateway/worker/Ant Design; rota aditiva, estados tipados, limites, textos e testes delegados à engenharia. Sem nova biblioteca.
+- Q: nenhuma decisão material pendente nesta primeira etapa.
+- Versão: contrato aditivo `parser-ia-readiness-1.0.0`; contratos de parse/persistência e versão pública M8.2 preservados, pois complementa robustez operacional.
+- Referência visual: captura é evidência do incidente, não novo alvo normativo. Preservar composição atual e acrescentar aviso compacto próximo da ação.
+
+## Mapa de impacto inicial
+
+| Área/capacidade | Relação | Baseline e preservação | Prova prevista |
+| --- | --- | --- | --- |
+| Tela de importação | direct | baseline acima: seleção, PDF.js, identidade, revisão existentes | estados, seleção preservada, gate, smoke visual |
+| Gateway e worker | direct | POST parse, loopback, lock, erros sanitizados existentes | testes HTTP com mocks e negativos, sem IA real |
+| Auth/tenant | critical_transversal | autorizador live do gateway reutilizado | negativos existentes + readiness sem permissão não alcança worker |
+| Paddle e outras entradas de parse | plausible_indirect | gateway e worker compartilhados | regressão de ambas rotas, capacidade independente e parse |
+| Web/assets | plausible_indirect | Nginx e rollout compartilhados | build, rota exata, preservação de assets, HTTPS |
+| Dados, matching, Knowledge | no_impact_identified | checagem sem persistência e anterior ao intake | inspeção do contrato e diff; sem acessos a dados de Pessoas |
+
+Limite do baseline: falha da captura não correlacionada com logs atuais. Checagem não valida saldo/crédito nem disponibilidade futura da OpenAI.
+
+---
+
 ## Source: `docs/qa/agreement-knowledge-proposal-visibility.md`
 
 # Contrato de Acordos — Visibilidade de propostas da Knowledge
@@ -13357,6 +13412,56 @@ Qualidade: inspeção visual do PDF original na revisão confirmou nome, título
 ## Conclusão
 
 PARTIAL. Correção de identidade entregue e validada; jornada hospedada chegou à revisão sem publicar Perfil. Runtime ativo `55733a0`; túnel e workers dependem do PC ligado, sem retomada automática. Qualidade do rascunho insuficiente, telemetria não persistida e inferência Paddle não exercitada pela rota nativa escolhida. Não há conclusão de cutover nem evidência de viabilidade CPU para este PDF. Parser/roteamento e disponibilização da telemetria exigem movimento separado autorizado.
+
+---
+
+## Source: `docs/qa/aot-import-readiness.md`
+
+# AoT — disponibilidade antecipada da importação
+
+Contrato: `docs/qa/agreement-import-readiness.md` 1.0.0; execução: `docs/qa/execution-import-readiness.md`. Baseline `eb561b4ea128f749eac4a34b241b4d7c4b876335`; branch `codex/import-readiness`; risco D.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste/evidência | Status | Ambiente/limitação |
+| --- | --- | --- | --- | --- |
+| D-01 | rota gateway e worker read-only | HTTP sintético, payload `{}`, headers mínimos | PASS | local; smoke real pendente |
+| D-02 | Alert acessível, cinco estados, horário e botão | domínio tipado; build | PARTIAL | inspeção renderizada pendente |
+| D-03 | checagem anterior a PDF.js; seleção mantida | política de bloqueio e inspeção do fluxo | PARTIAL | smoke de seleção pendente |
+| D-04 | limites/timeout, autorização existente, sem lock da checagem | HTTP negativos, ocupação, falha sem cooldown | PASS | local |
+| D-05 | TTL, escopo por empresa, abort/sequence na desmontagem; parse preservado | domínio/67 testes direcionados incluindo regressão | PASS | local |
+| D-06 | worker → gateway → web, main e produção | rollout pendente | NOT TESTED | remoto |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | sem documento/segredo/IA/escrita na checagem | spies de fetch; diretório vazio após consulta; respostas sanitizadas | PASS |
+| P-02 | autorização/tenant, lock, parse preservados | negativos e regressão de gateway/worker/parse | PASS |
+| P-03 | desconhecido nunca disponível; causa não inventada | schema estrito, worker antigo, timeout, conectividade | PASS |
+
+## Mapa de Impacto e Preservação
+
+Mapa inicial no acordo, sem ampliação de domínio. Importação/gateway/worker `direct`; auth/tenant `critical_transversal`; Paddle/outras entradas de parse e web/assets `plausible_indirect`; dados/matching/Knowledge `no_impact_identified`. Consulta anterior ao intake, sem banco ou payload pessoal. Regressores: `paddleGateway`, `parserIaService`, `parserIaRecovery`, `parserIa`, `parserReadiness`. Baseline operacional atual sem listener 8787 local e sem listener 18787 VPS; não é correlação retrospectiva com horário da captura.
+
+### Novidade e preservação
+
+- Nova disponibilidade comprovada nos testes HTTP/domínio; UI/produção pendentes.
+- Parse, recuperação, bloqueio de concorrência, negativas de permissão e Paddle compartilhado passaram nos 67 testes.
+- Build TS, typecheck web, build web e lint passaram. Avisos existentes de bundle grande/import dinâmico e update-check do pnpm sem rede não invalidaram comandos.
+- Sem suíte integral; seleção proporcional por mapa, não `pnpm run validate`.
+
+## Fora de escopo e fidelidade
+
+F-01/F-02 preservados: sem monitor externo, canal, painel, OCR, modelo/prompt, banco, taxonomia ou dados humanos. Captura é evidência de incidente, não mockup normativo. Estrutura da tela mantida com aviso compacto junto ao botão.
+
+## Desvios e mudanças autorizadas
+
+Nenhum desvio identificado na implementação local. Usuário autorizou main/produção. Rollout e smoke pendentes, sem alegar conclusão.
+
+## Git / QA / ambiente
+
+QA local sintético. Produção única. Arquivos alheios `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `models/` remoto preservados. Rollback: imagens anteriores de gateway/web e revisão anterior do worker; contratos aditivos permitem clientes antigos. Parser e túnel continuam dependentes do PC.
 
 ---
 
@@ -16090,6 +16195,16 @@ Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.
 Aditivo: reutilizar IdentityForm e identifyResumeIntake para expor correção explícita antes da criação; revalidar correspondências, bloquear resolução durante a edição e preservar o formulário em erro. Não corrigir o algoritmo extrator neste escopo. Implantar o ajuste e repetir a jornada real autorizada sem publicar Perfil.
 
 Sequência: diagnóstico existente -> branch isolada do deploy f1cc983 -> gateway de transporte reutilizando Auth/RLS -> SSH reverso -> negativos/adapter/build -> implantação reversível -> jornada real hospedada -> AoT e contexto gerado. Gateway não contém parser, modelo nem regra de extração; usa Node já adotado pelo repositório e nenhuma biblioteca nova. Não executar validação integral sem autorização adicional. Não publicar Perfil nem ativar Parser IA M5.7. Se acesso autenticado/qualidade/tempo impedir prova, registrar PARTIAL/BLOCKED no AoT, sem declarar encerramento.
+
+---
+
+## Source: `docs/qa/execution-import-readiness.md`
+
+# Execução — disponibilidade antecipada da importação
+
+Executar integralmente `docs/qa/agreement-import-readiness.md` versão 1.0.0, incluindo D-01 a D-06, P-01 a P-03, F-01/F-02, A-01 e respectivos CA. Aprovação explícita do PO para implementar, integrar main e publicar produção. Reutilizar ADR-059 e a ponte autenticada existente; nenhuma nova fronteira de confiança.
+
+Ordem: contrato/mapa → rota read-only do worker → gateway autorizado → cliente/tela → testes locais direcionados → Context Pack → commit/plano de release → worker/gateway/web → smoke autenticado sem currículo → AoT. Publicar worker e gateway antes da web; manter imagens anteriores e preservar arquivos alheios. Dispatcher não automatiza worker/gateway: registrar operação complementar exigida pelo mapa, sem ampliar destinos.
 
 ---
 
