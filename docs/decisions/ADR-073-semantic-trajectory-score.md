@@ -24,6 +24,8 @@ O decoder puro já existente também é extraído por AST para preservar IDs leg
 
 O prompt 1.0.0 falhou na primeira avaliação de constância. A versão 1.1.0 esclarece atividade declarada versus experiência e a classificação ocupacional de títulos explícitos, sem mudar pesos ou resultados esperados. Datas e atributos conhecidos são minimizados; contexto sensível que não possa ser isolado sem remover evidência/negação exige abstenção, não remoção arbitrária de frases.
 
+O primeiro smoke real da 1.1.0 mostrou que aprovação no corpus sintético inicial não garantia robustez: quatro de sete análises ficaram pendentes (duas divergências e duas respostas inválidas), sem notas negativas. Um diagnóstico sem persistência de respostas confirmou oscilação em flexão singular/plural e citação reescrita, não falta de crédito ou limite financeiro. A calibração 1.2.0 explicita a mesma rubrica para variantes linguísticas e contexto declarativo e pede citações literais curtas. Mantém a rejeição integral de divergência e de citação inválida. Cache antigo é preservado; compatibilidade de versão é estendida por migration nova, não edição da migration aplicada. O teste adicional de trajetórias longas não é holdout nem promessa universal de qualidade.
+
 Conjunto parcialmente avaliado fica disponível para análise humana, com pendências em seção neutra e sem ordenação numérica enquanto houver dependência material. No piloto, scores provisórios continuam visíveis, mas não estabelecem prioridade segura. Isso supersede D-016 do acordo M6.1 apenas no piloto. Métodos legados e snapshots mantêm suas versões.
 
 ## Limites e operação

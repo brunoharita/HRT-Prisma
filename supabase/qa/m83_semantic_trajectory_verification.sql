@@ -1,4 +1,5 @@
 -- Synthetic fixture; the harness wraps migration and verification in one rollback.
+select set_config('m83_test.prompt_version',coalesce(nullif(current_setting('m83_test.prompt_version',true),''),'trajectory-evidence-1.2.0'),true);
 create function public.m83_id(text) returns uuid language sql immutable as $$select md5('m83-'||$1)::uuid$$;
 create function public.m83_assert(boolean,text) returns void language plpgsql as $$begin
   if $1 is distinct from true then raise exception 'M83 FAIL: %',$2; end if; raise notice 'PASS: %',$2; end$$;
@@ -33,7 +34,7 @@ insert into m83_state values('context','{"position":"Backend developer","entries
 -- This invoker helper is only a test fixture, never a deployed RPC.
 create function public.m83_claim(p_hash text default repeat('a',64)) returns jsonb language sql as $$
  select public.claim_matching_trajectory(public.m83_id('member'),public.m83_id('a'),public.m83_id('profile'),public.m83_id('v2'),p_hash,
- 'trajectory-backend-1.0.0','trajectory-evidence-1.1.0','configured-model',
+ 'trajectory-backend-1.0.0',coalesce(nullif(current_setting('m83_test.prompt_version',true),''),'trajectory-evidence-1.2.0'),'configured-model',
  (select value from m83_state where key='versions'),(select value from m83_state where key='context')) $$;
 -- M83 transactional checks start here (also the concurrency harness seed boundary).
 set local role authenticated;
@@ -77,10 +78,10 @@ do $$ declare c jsonb; r jsonb; begin
  perform m83_assert(public.m83_claim()->>'status'='complete' and public.m83_claim()->>'acquired'='false','complete reused without provider replay');
  perform m83_assert(public.m83_claim()->>'actual_model_version'='provider-model-revision' and public.m83_claim()->>'model_version'='configured-model','resolved model and configured key recorded separately');
  perform m83_assert(public.claim_matching_trajectory(m83_id('member'),m83_id('a'),m83_id('profile'),m83_id('v2'),repeat('a',64),
-   'trajectory-backend-1.0.0','trajectory-evidence-1.1.0','configured-model',
+   'trajectory-backend-1.0.0',current_setting('m83_test.prompt_version'),'configured-model',
    (select value from m83_state where key='versions'),(select value from m83_state where key='context'),false)->>'status'='complete','disabled AI still returns compatible completed cache');
  perform m83_assert(public.claim_matching_trajectory(m83_id('member'),m83_id('a'),m83_id('profile'),m83_id('v2'),repeat('9',64),
-   'trajectory-backend-1.0.0','trajectory-evidence-1.1.0','configured-model',
+   'trajectory-backend-1.0.0',current_setting('m83_test.prompt_version'),'configured-model',
    (select value from m83_state where key='versions'),(select value from m83_state where key='context'),false)->>'reason_code'='AI_DISABLED','disabled AI cannot acquire a new lease');
  c:=public.m83_claim(repeat('b',64));
  perform public.complete_matching_trajectory(m83_id('member'),(c->>'id')::uuid,(c->>'lease')::uuid,'indeterminate',null,'READINGS_DISAGREE','provider-model-revision');
@@ -155,7 +156,7 @@ reset role;
 select m83_assert((select attempts<3 and reason_code='AUTH_REVOKED' from matching_trajectory_assessments where input_hash=repeat('2',64)), 'revoked actor does not exhaust shared cache attempts');
 set local role service_role;
 select m83_assert(public.claim_matching_trajectory(m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),repeat('2',64),
- 'trajectory-backend-1.0.0','trajectory-evidence-1.1.0','configured-model',
+ 'trajectory-backend-1.0.0',current_setting('m83_test.prompt_version'),'configured-model',
  (select value from m83_state where key='versions'),(select value from m83_state where key='context'))->>'acquired'='true','another authorized actor retries after revocation');
 reset role;
 -- Exact historical/current matching version compatibility, using actual M6.2 function.
@@ -273,6 +274,53 @@ do $$ declare mutation text; begin
   (select value->>'fingerprint' from m83_state where key='snapshot-sources'),(select value from m83_state where key='snapshot-evaluation')),'40001');
 end $$;
 -- Temporarily permit UPDATE in this rolled-back fixture to exercise the trigger beyond current RLS.
+-- Both prompt generations coexist under the same source/hash without rewriting prior evaluations.
+do $$ declare other_prompt text; claimed jsonb; evaluated jsonb; committed jsonb; old_cache jsonb; old_snapshot jsonb; bad_prompt text;
+begin
+ other_prompt:=case current_setting('m83_test.prompt_version') when 'trajectory-evidence-1.1.0'
+   then 'trajectory-evidence-1.2.0' else 'trajectory-evidence-1.1.0' end;
+ select to_jsonb(c) into old_cache from public.matching_trajectory_assessments c
+   where id=(select (value#>>'{semanticInterpretation,analysisId}')::uuid from m83_state where key='snapshot-evaluation');
+ select to_jsonb(e) into old_snapshot from public.match_evaluations e
+   where id=(select (value->>'evaluationId')::uuid from m83_state where key='snapshot-committed');
+ perform m83_assert(has_function_privilege('service_role','public.claim_matching_trajectory(uuid,uuid,uuid,uuid,text,text,text,text,jsonb,jsonb,boolean)','execute')
+   and not has_function_privilege('authenticated','public.claim_matching_trajectory(uuid,uuid,uuid,uuid,text,text,text,text,jsonb,jsonb,boolean)','execute')
+   and not has_function_privilege('anon','public.commit_matching_snapshot(uuid,uuid,uuid,uuid,uuid,text,jsonb)','execute'), 'forward migration preserves service-only RPC privileges');
+ foreach bad_prompt in array array[null,'trajectory-evidence-1.0.0','trajectory-evidence-1.3.0','unknown'] loop
+  perform m83_reject(format('select public.claim_matching_trajectory(%L,%L,%L,%L,%L,%L,%L,%L,%L,%L)',
+   m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),repeat('2',64),'trajectory-backend-1.0.0',bad_prompt,'configured-model',
+   (select value from m83_state where key='versions'),(select value from m83_state where key='context')),'22023');
+ end loop;
+ claimed:=public.claim_matching_trajectory(m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),repeat('2',64),
+   'trajectory-backend-1.0.0',other_prompt,'configured-model',
+   (select value from m83_state where key='versions'),(select value from m83_state where key='context'));
+ perform m83_assert(claimed->>'acquired'='true' and claimed->>'id'<>old_cache->>'id' and claimed->>'prompt_version'=other_prompt,
+   'other allowed prompt has a separate cache entry with identical source/hash');
+ perform public.complete_matching_trajectory(m83_id('recruiter'),(claimed->>'id')::uuid,(claimed->>'lease')::uuid,'complete',
+   (select value from m83_state where key='reading'),null,'provider-model-revision');
+ perform m83_assert(public.claim_matching_trajectory(m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),repeat('2',64),
+   'trajectory-backend-1.0.0',other_prompt,'configured-model',
+   (select value from m83_state where key='versions'),(select value from m83_state where key='context'),false)->>'status'='complete',
+   'other allowed prompt reuses complete cache with computation disabled');
+ select jsonb_set(jsonb_set(value,'{semanticInterpretation,promptVersion}',to_jsonb(other_prompt)),
+   '{semanticInterpretation,analysisId}',claimed->'id') into evaluated from m83_state where key='snapshot-evaluation';
+ committed:=public.commit_matching_snapshot(m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),(claimed->>'id')::uuid,
+   (select value->>'fingerprint' from m83_state where key='snapshot-sources'),evaluated);
+ perform m83_assert(committed->>'evaluationId'<>old_snapshot->>'id' and exists(select 1 from public.match_evaluations
+   where id=(committed->>'evaluationId')::uuid and prompt_version=other_prompt), 'other allowed prompt commits separate version-bound snapshot');
+ perform m83_assert(public.create_m62_verification_need((committed->>'evaluationId')::uuid,m83_id('requirement'),'intermediate','medium')->>'needId' is not null,
+   'M62 accepts exact requirement for both prompt generations');
+ begin
+  update public.matching_trajectory_assessments set prompt_version='unknown' where id=(claimed->>'id')::uuid;
+  perform m83_reject(format('select public.commit_matching_snapshot(%L,%L,%L,%L,%L,%L,%L)',
+    m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),claimed->>'id',
+    (select value->>'fingerprint' from m83_state where key='snapshot-sources'),evaluated),'40001');
+  raise exception 'rollback fixture' using errcode='ZX001';
+ exception when sqlstate 'ZX001' then null; end;
+ perform m83_assert((select to_jsonb(c)=old_cache from public.matching_trajectory_assessments c where id=(old_cache->>'id')::uuid)
+   and (select to_jsonb(e)=old_snapshot from public.match_evaluations e where id=(old_snapshot->>'id')::uuid),
+   'prior compatible cache and snapshot remain byte-for-byte unchanged');
+end $$;
 create policy m83_test_update on public.match_evaluations for update to authenticated using (true) with check (true);
 set local role authenticated;
 select m83_reject(format('update public.match_evaluations set evaluation_data=''{}'',matching_version=''vacancy-matching-explainable-5.0.0'' where id=%L',

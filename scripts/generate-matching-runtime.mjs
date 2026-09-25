@@ -25,7 +25,7 @@ const extracted = new Map([
 const check = process.argv.slice(2).includes("--check");
 if (process.argv.slice(2).some(arg => arg !== "--check")) throw new Error("Only --check is supported");
 for (const source of [...sources, ...extracted.keys()]) {
-  const input = extracted.get(source) ?? await readFile(resolve(root, source), "utf8");
+  const input = (extracted.get(source) ?? await readFile(resolve(root, source), "utf8")).replace(/\r\n/g, "\n");
   const transpiled = ts.transpileModule(input, { fileName: source,
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, newLine: ts.NewLineKind.LineFeed, removeComments: false },
     reportDiagnostics: true,

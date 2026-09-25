@@ -19,7 +19,7 @@ $boundary=$verification.IndexOf($marker)
 if ($boundary -lt 0) { throw 'Fixture boundary missing' }
 # Persistent synthetic fixture in the newly cloned database lets independent connections see the same sources.
 $fixture=$verification.Substring(0,$boundary).Replace('create temp table m83_state','create table public.m83_state')
-$setup="begin;`n"+(Get-Content -Raw supabase/migrations/20260925150000_m83_semantic_trajectory.sql)+"`n"+$fixture+"`ninsert into m83_state select 'versions',private.m83_sources(m83_id('member'),m83_id('a'),m83_id('profile'),m83_id('v2'))->'sourceVersions';`ncommit;"
+$setup="begin;`n"+(Get-Content -Raw supabase/migrations/20260925150000_m83_semantic_trajectory.sql)+"`n"+(Get-Content -Raw supabase/migrations/20260925190000_m83_prompt_compatibility.sql)+"`n"+$fixture+"`ninsert into m83_state select 'versions',private.m83_sources(m83_id('member'),m83_id('a'),m83_id('profile'),m83_id('v2'))->'sourceVersions';`ncommit;"
 $setup | & $psql @connection -q
 if ($LASTEXITCODE -ne 0) { throw 'Concurrency setup failed' }
 $processes=@()

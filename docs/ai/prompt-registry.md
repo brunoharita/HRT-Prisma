@@ -8,7 +8,9 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 
 ### Trajetória M8.3
 
-`trajectory-evidence-1.1.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. Modelo lógico `KNOWLEDGE_RESEARCH_MODEL`, sem troca silenciosa. Entrada: cargo/descrição de experiências e declarações de título/área, com contexto da Posição. Proibidos campos de identidade, contatos, empregadores, instituições, datas, currículo integral, evidências privadas e decisões humanas. Texto livre é minimizado, não garantidamente anônimo.
+`trajectory-evidence-1.2.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. Modelo lógico `KNOWLEDGE_RESEARCH_MODEL`, sem troca silenciosa. Entrada: cargo/descrição de experiências e declarações de título/área, com contexto da Posição. Proibidos campos de identidade, contatos, empregadores, instituições, datas, currículo integral, evidências privadas e decisões humanas. Texto livre é minimizado, não garantidamente anônimo.
+
+Histórico: 1.1.0 passou no corpus inicial, mas o smoke real revelou divergência singular/plural e citação não literal. 1.2.0 esclarece flexões linguísticas, áreas declaradas como contexto sem execução e cópia literal curta. Não relaxa validação de citações/concordância, não muda pontos, não reescreve cache anterior. Calibração adicional e ativação constam do AoT M8.3.
 
 Saída fechada por trecho: `backend_execution`, `software_execution`, `software_analysis`, `software_leadership`, `software_context`, `other` ou `unclear`, com ID e citação literal. Não produz nota, contratação ou fato publicado. Duas leituras independentes com ordem invertida devem concordar; resposta parcial, invenção de fonte e divergência não viram média ou zero. Responses `store:false`, sem tools/Web, timeout, concorrência e lease. Política financeira do Parser, sem reserva monetária paralela.
 

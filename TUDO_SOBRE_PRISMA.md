@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 272
-source_manifest_sha256: de4658598695c6167b7fdee91f0d050051a93a68de1a09658d4e40c191cab6e7
+source_manifest_sha256: 91c689047ff62d0686fe03d916e0d02a46464ac629ffcdf18a1f6b6c723cb2e9
 -->
 
 # Tudo sobre o Prisma
@@ -2624,15 +2624,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.0
+version: 2.51.1
 last_verified: 2026-09-25
 ---
 
 # Estado atual do Prisma
 
-## M8.3: interpretação da trajetória (em validação, ainda não publicada)
+## M8.3: interpretação da trajetória (primeiro rollout publicado; calibração em validação)
 
 Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendendo área/função/grupos com interpretação derivada no piloto de desenvolvimento backend. Duas leituras independentes classificam evidências em categorias fechadas, com citações e sem nota livre. Cache isolado por empresa e versões evita nova opinião em cada reabertura. Divergência/falha vira pendência, não zero; comparação incompleta não indica prioridade segura. Perfis, Posições, Knowledge e decisões humanas não são reescritos. Modelo/configuração de fornecedor existente, política financeira do Parser (decisão «siga o parser»); nenhum teto monetário paralelo. Aprendizado por correções humanas fica fora. Situação real de testes, publicação e limitações no AoT `docs/qa/aot-m83-semantic-trajectory.md`; código local não é evidência de rollout.
+
+Runtime inicial `8da013a` publicado em main, banco, Edge e web; smoke real revelou abstenções por divergência e citação inválida que o corpus inicial não detectou. Calibração do prompt 1.2.0 mantém a rubrica e guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências e com expectativas inalteradas. Esses conjuntos são desenvolvimento, não holdout independente nem prova de justiça universal. Segundo rollout e aceite da jornada concluída ainda pendentes.
 
 ## Disponibilidade antecipada da importação (publicada)
 
@@ -3967,7 +3969,7 @@ Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no 
 
 ## Troca de modelo
 
-M8.3 reutiliza o modelo server-side `KNOWLEDGE_RESEARCH_MODEL` para interpretação fechada de trajetória, com registry próprio `trajectory-evidence-1.1.0`. Não reutiliza pesquisa Web nem budgets do Knowledge. A decisão do PO em 25/09 («siga o parser») torna limites da conta/projeto OpenAI a autoridade financeira, sem teto monetário paralelo; concorrência, timeout, lease e cooldown de falhas são operacionais. O modelo configurado entra na chave e o modelo retornado é registrado; alias mutável continua uma limitação para futuras chamadas, não motivo para reescrever avaliações persistidas. Ativação depende da evidência do piloto no AoT M8.3, sem alegar validação para todas as ocupações.
+M8.3 reutiliza o modelo server-side `KNOWLEDGE_RESEARCH_MODEL` para interpretação fechada de trajetória, com registry próprio `trajectory-evidence-1.2.0`. Não reutiliza pesquisa Web nem budgets do Knowledge. A decisão do PO em 25/09 («siga o parser») torna limites da conta/projeto OpenAI a autoridade financeira, sem teto monetário paralelo; concorrência, timeout, lease e cooldown de falhas são operacionais. O modelo configurado entra na chave e o modelo retornado é registrado; alias mutável continua uma limitação para futuras chamadas, não motivo para reescrever avaliações persistidas. Ativação depende da evidência do piloto no AoT M8.3, sem alegar validação para todas as ocupações.
 
 M7.3 reutiliza o modelo configurado do Knowledge Agent para normalização de competências declaradas (`declared-competency-normalization-1.0.0`). Recebe apenas termos minimizados, sem Perfil/currículo integral ou identificadores; sem ferramentas/pesquisa, `store:false`, Structured Outputs e cobertura integral validada. Uma chamada por tentativa, com reserva auditada dentro dos limites existentes, timeout 90 s, opt-in organizacional e fallback determinístico explicitamente parcial quando a chamada falha. Nomes produzidos são buscas a reconciliar com aliases aprovados, nunca criação de conceito. Evidência: ADR-063 e AoT M7.3. Este movimento não troca o modelo nem altera a política financeira do Parser IA.
 
@@ -4184,7 +4186,9 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 
 ### Trajetória M8.3
 
-`trajectory-evidence-1.1.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. Modelo lógico `KNOWLEDGE_RESEARCH_MODEL`, sem troca silenciosa. Entrada: cargo/descrição de experiências e declarações de título/área, com contexto da Posição. Proibidos campos de identidade, contatos, empregadores, instituições, datas, currículo integral, evidências privadas e decisões humanas. Texto livre é minimizado, não garantidamente anônimo.
+`trajectory-evidence-1.2.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. Modelo lógico `KNOWLEDGE_RESEARCH_MODEL`, sem troca silenciosa. Entrada: cargo/descrição de experiências e declarações de título/área, com contexto da Posição. Proibidos campos de identidade, contatos, empregadores, instituições, datas, currículo integral, evidências privadas e decisões humanas. Texto livre é minimizado, não garantidamente anônimo.
+
+Histórico: 1.1.0 passou no corpus inicial, mas o smoke real revelou divergência singular/plural e citação não literal. 1.2.0 esclarece flexões linguísticas, áreas declaradas como contexto sem execução e cópia literal curta. Não relaxa validação de citações/concordância, não muda pontos, não reescreve cache anterior. Calibração adicional e ativação constam do AoT M8.3.
 
 Saída fechada por trecho: `backend_execution`, `software_execution`, `software_analysis`, `software_leadership`, `software_context`, `other` ou `unclear`, com ID e citação literal. Não produz nota, contratação ou fato publicado. Duas leituras independentes com ordem invertida devem concordar; resposta parcial, invenção de fonte e divergência não viram média ou zero. Responses `store:false`, sem tools/Web, timeout, concorrência e lease. Política financeira do Parser, sem reserva monetária paralela.
 
@@ -9258,6 +9262,8 @@ O decoder puro já existente também é extraído por AST para preservar IDs leg
 
 O prompt 1.0.0 falhou na primeira avaliação de constância. A versão 1.1.0 esclarece atividade declarada versus experiência e a classificação ocupacional de títulos explícitos, sem mudar pesos ou resultados esperados. Datas e atributos conhecidos são minimizados; contexto sensível que não possa ser isolado sem remover evidência/negação exige abstenção, não remoção arbitrária de frases.
 
+O primeiro smoke real da 1.1.0 mostrou que aprovação no corpus sintético inicial não garantia robustez: quatro de sete análises ficaram pendentes (duas divergências e duas respostas inválidas), sem notas negativas. Um diagnóstico sem persistência de respostas confirmou oscilação em flexão singular/plural e citação reescrita, não falta de crédito ou limite financeiro. A calibração 1.2.0 explicita a mesma rubrica para variantes linguísticas e contexto declarativo e pede citações literais curtas. Mantém a rejeição integral de divergência e de citação inválida. Cache antigo é preservado; compatibilidade de versão é estendida por migration nova, não edição da migration aplicada. O teste adicional de trajetórias longas não é holdout nem promessa universal de qualidade.
+
 Conjunto parcialmente avaliado fica disponível para análise humana, com pendências em seção neutra e sem ordenação numérica enquanto houver dependência material. No piloto, scores provisórios continuam visíveis, mas não estabelecem prioridade segura. Isso supersede D-016 do acordo M6.1 apenas no piloto. Métodos legados e snapshots mantêm suas versões.
 
 ## Limites e operação
@@ -9364,7 +9370,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
-M8.3 — interpretação de trajetória: rollout em preparação, não publicado neste registro. Destinos: somente a migration nova `20260925150000_m83_semantic_trajectory.sql`, Edge `matching-trajectory` e `prisma-web`. A Edge reutiliza `OPENAI_API_KEY`, `KNOWLEDGE_RESEARCH_MODEL` e `KNOWLEDGE_AGENT_ENABLED`; nenhuma configuração monetária paralela. O bundle deve incluir `src/domain/semanticTrajectory.ts` e os módulos `_generated`, produzidos por `pnpm generate:matching-runtime` e conferidos por `pnpm check:matching-runtime`. A autenticação usa `auth.getUser()` antes de qualquer acesso com service role; as RPCs autorizam empresa/fontes. Não publicar o frontend antes do backend compatível. Local sintético é o gate QA; usar somente a migration nova pelo connector, nunca `db push` geral. Evidência e conclusão: `docs/qa/aot-m83-semantic-trajectory.md`.
+M8.3 — interpretação de trajetória: runtime inicial `8da013a` publicado; calibração 1.2.0 em validação. Migration inicial `20260925150000_m83_semantic_trajectory.sql` já aplicada e imutável. Próximo delta: somente `20260925190000_m83_prompt_compatibility.sql`, Edge `matching-trajectory` e `prisma-web`. A Edge reutiliza `OPENAI_API_KEY`, `KNOWLEDGE_RESEARCH_MODEL` e `KNOWLEDGE_AGENT_ENABLED`; nenhuma configuração monetária paralela. O bundle deve incluir `src/domain/semanticTrajectory.ts` e os módulos `_generated`, produzidos por `pnpm generate:matching-runtime` e conferidos por `pnpm check:matching-runtime`. A autenticação usa `auth.getUser()` antes de qualquer acesso com service role; as RPCs autorizam empresa/fontes. Não publicar o frontend antes do backend compatível. Local sintético é o gate QA; usar somente a migration nova pelo connector, nunca `db push` geral. Evidência e conclusão: `docs/qa/aot-m83-semantic-trajectory.md`.
 
 Rollback M8.3: reativar a imagem web preservada pelo dispatcher e a revisão anterior da Edge, se houver; na primeira publicação, o frontend anterior não chama a função nova. Manter a tabela/snapshots para auditoria, sem apagar/reclassificar Perfis ou restaurar notas em registros históricos. A extensão M6.2 é retrocompatível. Desativação global de `KNOWLEDGE_AGENT_ENABLED` não é rollback isolado, pois afetaria outras capacidades Knowledge; não fazê-la para testar falha desta entrega. Cache e estados pendentes permitem consulta manual sem nova chamada. Timeout de provedor, limite operacional de duas análises, lease e cooldown não substituem os limites financeiros OpenAI.
 
@@ -15461,7 +15467,17 @@ Local sintético é QA; único Supabase remoto existente é produção. Cache es
 
 ## Git / produção / conclusão
 
-Branch `codex/m83-semantic-trajectory`. Sem publicação até concluir os gates. Não usar db push geral nem repair do ledger histórico. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Conclusão pendente, não declarar entregue.
+Primeiro runtime `8da013a6d57b26d358e34117ecffe6adcdb5bb3e` integrado em main e publicado. CI [36169263170](https://github.com/brunoharita/HRT-Prisma/actions/runs/36169263170) PASS; 174 testes Node direcionados + 24 Deno + 14 tooling no fechamento local. Migration remota `20260925174830_m83_semantic_trajectory` corresponde ao arquivo local `20260925150000_m83_semantic_trajectory.sql`. Edge `matching-trajectory` v1 ACTIVE, hash `009e0f26165b0eaa7ed2f0aab95dcb0bafb9138290c4443677433af4e124cdf0`; autenticação implementada por `auth.getUser`, smoke sem token retorna 401 `AUTH_REQUIRED`. RLS ativa, clientes sem SELECT de cache nem EXECUTE de commit, service role com EXECUTE. Nenhuma migration anterior reaplicada/reparada.
+
+Web publicada somente em `prisma-web`, imagem `sha256:de63d82db1b8e5a00d9c10220d0223ae2ddc24dc75af5461d2494459c4790cd5`, estado running/zero reinícios; rollback preservado. O smoke imediato do script viu 404 durante a troca; verificação posterior confirmou HTTPS 200, mesmo SHA local/main/VPS, sem segundo rebuild. Parser e gateway não foram publicados.
+
+Smoke autenticado real com prompt 1.1.0: sete Perfis consultados, três interpretações completas/contextuais, duas divergências, duas respostas inválidas. Bruno ficou indisponível; Diego indeterminado. A UI exibiu seção neutra e não atribuiu zero/prioridade. Limitação de qualidade detectada no smoke, não ocultada pelo PASS sintético. Diagnóstico separado de quatro chamadas, sem gravar nova opinião no cache ou resposta bruta: oscilação `Analista de sistema` entre análise e indeterminação; citação não literal em texto longo e diferença em declaração de áreas. Nenhuma Pessoa/Perfil/Posição/decisão humana foi alterada.
+
+Correção em calibração: prompt 1.2.0 explicita flexões e declarações contextuais, exige cópia literal curta e mantém todos os bloqueios. Novo gate sintético inicial: 120/120 válidas/corretas, 130/130 itens, 0/60 divergências, 12/12 bases estáveis. Dataset longo suplementar: três bases com oito fontes cada, cinco variações, 30/30 leituras válidas/corretas, 240/240 itens, 0/15 divergências e 3/3 bases estáveis. Fontes sintéticas escritas separadamente, mas informadas pela rubrica e falhas observadas; não constituem holdout independente. Segundo rollout pendente neste registro. A migration aplicada permanece imutável; nova migration estende compatibilidade sem apagar cache 1.1.0. Corrigido gerador para normalizar CRLF antes da transpilação, garantindo reprodutibilidade após checkout Windows.
+
+Calibração backend: 25 testes Deno + check/lint PASS; SQL comprova compatibilidade 1.1.0/1.2.0, recusa de versões desconhecidas e preservação de histórico; concorrência seis conexões/um lease, contenção `55P03` em 0,28–0,31s. DB sintético `m72_semantic_trajectory_race_20260925150307` preservado. Nenhuma alteração das proteções de citação literal, concordância por item ou cálculo determinístico.
+
+Branch `codex/m83-semantic-trajectory`. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Surgiu cópia não criada pelo agente `tests/matchingRuntime (1).test.ts`, mantida fora do commit enquanto sua origem é desconhecida. Conclusão final pendente: não declarar sucesso da comparação Bruno/Diego apenas pelo deploy.
 
 ---
 

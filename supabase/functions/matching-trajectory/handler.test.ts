@@ -1,5 +1,5 @@
 import { handleMatchingTrajectory, canonical, inputHash, type Dependencies, type RpcClient } from "./handler.ts";
-import { prepareTrajectoryContext } from "../../../src/domain/semanticTrajectory.ts";
+import { prepareTrajectoryContext, SEMANTIC_PROMPT_VERSION } from "../../../src/domain/semanticTrajectory.ts";
 
 function assert(condition: unknown, message = "assertion failed"): asserts condition {
   if (!condition) throw new Error(message);
@@ -87,6 +87,24 @@ Deno.test("snapshot returns committed ID and server-computed score fingerprint",
   assert(evaluation.score.score === 100 && evaluation.score.matchingContractVersion === "vacancy-matching-semantic-6.0.0");
   assert(evaluation.requirements[0].stableId === "stable" && evaluation.requirements[0].status === "met");
   assert(call.params.p_source_fingerprint === "db-fingerprint" && call.params.p_analysis_id === "analysis");
+});
+Deno.test("prompt 1.2 binds cached assessment and server snapshot without provider replay", async () => {
+  assert(SEMANTIC_PROMPT_VERSION === "trajectory-evidence-1.2.0");
+  for (const snapshot of [false, true]) {
+    const f = fixture();
+    delete f.env.OPENAI_API_KEY;
+    f.env.KNOWLEDGE_AGENT_ENABLED = "false";
+    const context = prepareTrajectoryContext(source.profileData, source.position, source.redactions);
+    f.setCache({ status: "complete", acquired: false, id: "analysis", actual_model_version: "resolved", prompt_version: SEMANTIC_PROMPT_VERSION,
+      reading: { items: context.entries.map(e => ({ id: e.id, activity: "backend_execution", quote: e.text })) } });
+    const data = await (await handleMatchingTrajectory(f.request(snapshot ? { ...ids, operation: "snapshot" } : ids), f.deps)).json();
+    const claim = f.calls.find(c => c.name === "claim_matching_trajectory")!;
+    assert(claim.params.p_prompt_version === SEMANTIC_PROMPT_VERSION && claim.params.p_allow_compute === false && f.requests.length === 0);
+    if (snapshot) {
+      const evaluation = f.calls.find(c => c.name === "commit_matching_snapshot")!.params.p_evaluation as { semanticInterpretation: { promptVersion: string }; score: { inputFingerprint: string } };
+      assert(data.evaluationId && data.inputFingerprint === evaluation.score.inputFingerprint && evaluation.semanticInterpretation.promptVersion === SEMANTIC_PROMPT_VERSION);
+    } else assert(data.status === "complete" && data.promptVersion === SEMANTIC_PROMPT_VERSION);
+  }
 });
 Deno.test("snapshot ignores no client fields: forged points, sources or analysis ID rejected", async () => {
   for (const key of ["score", "analysisId", "evaluation", "candidate", "fingerprint", "inputFingerprint", "reading"]) {
