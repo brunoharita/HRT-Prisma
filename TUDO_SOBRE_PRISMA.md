@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 284
-source_manifest_sha256: 2564ba0016febdbbb03354efc8b15620d71e1fc431dfebf8d4290ab7ea520ec1
+source_manifest_sha256: 700bde487aa64772271f95257ace0c595ee5fa821b449b17df8d91ebd0cb1f09
 -->
 
 # Tudo sobre o Prisma
@@ -2636,9 +2636,9 @@ Decisão de Bruno em 2026-09-27: aceitar anos de dois e quatro dígitos com limi
 
 Runtime `e84497e` publicado em main, VPS e Edge `matching-trajectory` v5; CI e smoke autenticado PASS. O caso `Jun/08 - Nov/12` mostra duração 7/10 (54 meses), recência 0/10 (166 meses em 2026-09-27), score 38/100 provisório e cobertura 55%, preservando grupo B e 11 requisitos sem evidência. O fluxo normal do detalhe confirmou o snapshot no servidor; nenhum Perfil/Posição foi editado. Deno: 23 testes de handler e cinco de snapshot PASS. O 404 transitório na troca web recuperou para HTTPS 200, container running e zero reinícios. Fechamento documental posterior não exige novo deploy.
 
-## Lista de Pessoas: alerta de consulta e ordenação (em validação)
+## Lista de Pessoas: alerta de consulta e ordenação (publicado em produção)
 
-Em 2026-09-27, a lista de Pessoas deixa de exibir confirmação quando a paginação está completa e só informa falha quando `complete` é falso, com contagens de registros consultados/esperados. Pendências de classificação continuam com alerta próprio; a pendência semântica não ocupa mais um banner geral redundante. Grupos A/B/C permanecem na ordem atual; dentro de cada grupo os scores numéricos são exibidos em ordem decrescente, mesmo quando outra interpretação está pendente. Fórmula, pesos, score, snapshots, banco e versão não mudam. O espelho puro gerado para `matching-trajectory` acompanha o domínio web; o handler não consome a ordenação. Implementação, testes e rollout: `docs/qa/aot-vacancy-people-alert-order.md`.
+Em 2026-09-27, a lista de Pessoas deixa de exibir confirmação quando a paginação está completa e só informa falha quando `complete` é falso, com contagens de registros consultados/esperados. Pendências de classificação continuam com alerta próprio; a pendência semântica não ocupa mais um banner geral redundante. Grupos A/B/C permanecem na ordem atual; dentro de cada grupo os scores numéricos são exibidos em ordem decrescente, mesmo quando outra interpretação está pendente. Fórmula, pesos, score, snapshots, banco e versão não mudam. O espelho puro gerado acompanha o domínio web. SHA `0e42bdc93ff9cc42736637293eca17c2a91faac6` está em `main`/VPS; `matching-trajectory` v6 ACTIVE com JWT obrigatório. HTTP 200 e smoke anônimo 401; smoke autenticado da lista não feito para evitar reanálise/custo em Perfis reais. Evidências e rollback: `docs/qa/aot-vacancy-people-alert-order.md`.
 
 ## M8.4: dimensões temporais do Score Prisma
 
@@ -9437,6 +9437,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 # Deployment
 
 ## Estado
+
+Lista de Pessoas por Posição publicada em 27/09: SHA `0e42bdc93ff9cc42736637293eca17c2a91faac6` sincronizado em `main`, GitHub e VPS. Somente `prisma-web` foi reconstruído/recriado; imagem `sha256:58af5ddf16854692e196573b28386fb73c027e66d0d79d5eb498655c97e197d5`, container running, zero reinícios e HTTPS 200 após 404 transitório durante a troca. Rollback `prisma-web:rollback-before-0e42bdc93ff9`. A Edge `matching-trajectory` foi sincronizada via conector Supabase na versão 6, ACTIVE, `verify_jwt=true`, hash `bf0bceb24dc0aa8de1beadc96f1d3a20b2e1e584d87559db31551c929a74d445`; chamada POST anônima retornou 401. Sem migration; fórmula e versão do score não mudaram. CI `36341051361` PASS. Smoke autenticado da lista não executado para evitar reanálise/custo em Perfis reais. Evidência: `docs/qa/aot-vacancy-people-alert-order.md`.
 
 M8.4 Score Prisma temporal publicado em 27/09: SHA `20a39a9e4e598dbfc4cc51146e7c4b7441923624` sincronizado em `main`, GitHub e VPS. A migration remota `20260927162056_m84_score_temporal_compatibility` foi aplicada individualmente; a Edge `matching-trajectory` está ativa na versão 4 com `verify_jwt=true`. Somente `prisma-web` foi reconstruído e recriado, com imagem `sha256:eccbb7345f96ac21ca2e170fdb35bf597a6b6a5b39a60055abe3128b2f25f3b7`, container `running`, zero reinícios e HTTPS 200 após 404 transitório durante a troca. Rollback `prisma-web:rollback-before-20a39a9e4e59`; smoke sem token da Edge retornou 401. Evidência completa em `docs/qa/aot-m84-prisma-score-temporal.md`.
 
@@ -16522,11 +16524,12 @@ Implementação: `profileDiscoveryService` agora expõe registros paginados e to
 | D-PEOPLE-03 / CA-PEOPLE-01 | `tests/semanticTrajectory.test.ts`, `tests/matchingScore.test.ts`, `tests/vacancyIntelligence.test.ts` e `tests/matchingRuntime.test.ts`: 149 testes, 149 PASS, incluindo pendência sem bloquear score descendente. | PASS |
 | Espelho Edge | `pnpm run check:matching-runtime` e `tests/matchingRuntime.test.ts` confirmam paridade do runtime gerado; handler Edge não chama a função de ordenação. | PASS |
 | CA-PEOPLE-03 | `pnpm run build`, `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`, `pnpm run generate:matching-runtime`, `pnpm run check:matching-runtime`, `git diff --check`. Build web PASS com warnings preexistentes do chunk/injeção dinâmica; Context Pack e espelho Edge PASS. | PASS |
-| D-PEOPLE-01 produção | Publicação web/VPS e smoke ainda não executados neste registro. | NOT TESTED |
+| D-PEOPLE-01 produção / CA-PEOPLE-03 | CI `36341051361` aprovado; `main`, GitHub e VPS sincronizados no SHA `0e42bdc93ff9cc42736637293eca17c2a91faac6`. `prisma-web` running, reinícios 0, imagem `sha256:58af5ddf16854692e196573b28386fb73c027e66d0d79d5eb498655c97e197d5`; HTTPS 200 após 404 transitório imediato. Edge `matching-trajectory` v6 ACTIVE, `verify_jwt=true`, hash `bf0bceb24dc0aa8de1beadc96f1d3a20b2e1e584d87559db31551c929a74d445`; POST anônimo 401. | PASS |
+| Smoke autenticado da lista | Não executado: abrir a lista poderia reanalisar Perfis reais e acionar IA/custo; testes focados provam ordenação e estados da interface sem escrever dados reais. | NOT TESTED |
 
-Versão: nenhuma alteração; fórmula e contrato `matching-score-1.4.0` são preservados. Sem mudança de schema, RPC, RLS, handler ou comportamento Edge; o módulo puro gerado é espelhado para satisfazer o contrato de runtime. O dispatcher determinará se a publicação Edge é necessária. Rollback web pela imagem anterior de `prisma-web`; eventual espelho Edge pode voltar ao SHA baseline, sem operação de banco. Desvios conhecidos: nenhum funcional; CI e smoke aguardam publicação.
+Versão: nenhuma alteração; fórmula e contrato `matching-score-1.4.0` são preservados. Sem mudança de schema, RPC, RLS, handler ou comportamento Edge; foi publicado somente o módulo puro gerado para manter paridade fonte/artefato. Rollback web: `prisma-web:rollback-before-0e42bdc93ff9`; Edge pode retornar à versão 5/hash `a65990adb020b9dfd2c7993ae9e99fa8a8e4b506f736cfb4c21ce897f873f6df`. Nenhuma migration ou dado foi alterado. Desvio: a lista não recebeu smoke autenticado em produção pelo risco/custo descrito acima.
 
-O primeiro CI da branch parou no verificador de Context Pack porque os arquivos gerados não incluíam a seção de evidências acima, atualizada após a geração local. Os dois artefatos foram regenerados e `check:prisma-context` passou. O CI seguinte aprovou Context Pack, lint, foundation e typechecks, mas apontou que o módulo gerado da Edge ainda não refletia a ordenação atualizada; `generate:matching-runtime`, `check:matching-runtime` e os 149 testes focados agora passaram localmente. O dispatcher deverá incluir o espelho na superfície Edge conforme o plano do diff. Uma nova execução do CI completo ainda é necessária.
+Os dois primeiros CI da branch apontaram, respectivamente, exports do Context Pack desatualizados e o espelho Edge anterior. Ambos foram regenerados; `check:prisma-context`, `check:matching-runtime`, os 149 testes focados e o terceiro CI completo passaram. O dispatcher publicou web; o connector Supabase publicou somente `matching-trajectory` para sincronizar o espelho, preservando JWT. A primeira verificação HTTP da VPS retornou 404 durante a recriação; a checagem posterior confirmou recuperação para 200.
 
 ---
 
