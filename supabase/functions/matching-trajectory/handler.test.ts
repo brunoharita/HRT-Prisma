@@ -73,6 +73,33 @@ Deno.test("auth/session/source authorization precedes all service and provider a
     assert([401, 403].includes(result.status)); assert(f.serviceCreated() === 0); assert(f.requests.length === 0);
   }
 });
+Deno.test("server triage rejects C and unrelated profiles before cache, service or provider, even on snapshot", async () => {
+  for (const contextual of [false, true]) for (const snapshot of [false, true]) {
+    const f = fixture(), s = f.snapshotSources();
+    const candidate = s.candidate as Record<string, unknown>;
+    f.setSnapshotSources({ ...s, candidate: { ...candidate, profileData: { experiences: [{ role: "Vendedor" }], competencies: contextual ? ["APIs"] : [] } } });
+    const data = await (await handleMatchingTrajectory(f.request(snapshot ? { ...ids, operation: "snapshot" } : ids), f.deps)).json();
+    assert(data.reasonCode === "OUTSIDE_SEMANTIC_TRIAGE");
+    assert(f.serviceCreated() === 0 && f.requests.length === 0);
+    assert(!f.calls.some(c => c.name === "claim_matching_trajectory"));
+  }
+});
+Deno.test("server triage uses source identity and revisions, never browser approval", async () => {
+  for (const change of ["tenant", "profile", "version", "revision"] as const) {
+    const f = fixture(), s = structuredClone(f.snapshotSources());
+    if (change === "tenant") (s.vacancy as Record<string, unknown>).organizationId = "another";
+    if (change === "profile") (s.candidate as Record<string, unknown>).profileId = "another";
+    if (change === "version") (s.vacancy as Record<string, unknown>).versionId = "another";
+    if (change === "revision") s.sourceVersions = { changed: true };
+    f.setSnapshotSources(s);
+    const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
+    assert(["SOURCE_STALE", "TRIAGE_SOURCE_INVALID"].includes(data.reasonCode));
+    assert(f.serviceCreated() === 0 && f.requests.length === 0);
+  }
+  const f = fixture();
+  assert((await handleMatchingTrajectory(f.request({ ...ids, discoveryGroup: "main_area" }), f.deps)).status === 400);
+  assert(f.calls.length === 0);
+});
 Deno.test("snapshot returns committed ID and server-computed score fingerprint", async () => {
   const f = fixture();
   const context = prepareTrajectoryContext(source.profileData, source.position, source.redactions);

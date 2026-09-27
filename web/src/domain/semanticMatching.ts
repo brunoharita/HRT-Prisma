@@ -1,7 +1,13 @@
 import { readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION, type SemanticAssessment, type TrajectoryActivity } from "../../../src/domain/semanticTrajectory.js";
 import { calculateMatchingScore, type VacancyFunctionAssessment } from "./matchingScore.js";
 import type { VacancyAreaRelation, VacancyCandidateMatch, VacancyDetail, VacancyMatchEvidence } from "./vacancy.js";
-import { assessVacancyEvidence } from "./vacancy.js";
+import { assessVacancyEvidence, isVacancyDiscoveryCandidate } from "./vacancy.js";
+
+/** Activation policy only: apply to the deterministic match, never the interpreted result. */
+export function isSemanticTriageEligible(match: VacancyCandidateMatch): boolean {
+  return isVacancyDiscoveryCandidate(match)
+    && (match.discoveryGroup === "main_area" || match.discoveryGroup === "related_area");
+}
 
 const POINTS = { backend_execution: 20, software_execution: 17, software_analysis: 12, software_leadership: 8, software_context: 0, other: 0, unclear: 0 } as const;
 const LABELS: Record<TrajectoryActivity, string> = {

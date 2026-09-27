@@ -1,7 +1,12 @@
 // Generated from web/src/domain/semanticMatching.ts; run node scripts/generate-matching-runtime.mjs. DO NOT EDIT.
 import { readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION } from "../../../src/domain/semanticTrajectory.js";
 import { calculateMatchingScore } from "./matchingScore.js";
-import { assessVacancyEvidence } from "./vacancy.js";
+import { assessVacancyEvidence, isVacancyDiscoveryCandidate } from "./vacancy.js";
+/** Activation policy only: apply to the deterministic match, never the interpreted result. */
+export function isSemanticTriageEligible(match) {
+    return isVacancyDiscoveryCandidate(match)
+        && (match.discoveryGroup === "main_area" || match.discoveryGroup === "related_area");
+}
 const POINTS = { backend_execution: 20, software_execution: 17, software_analysis: 12, software_leadership: 8, software_context: 0, other: 0, unclear: 0 };
 const LABELS = {
     backend_execution: "Execução de desenvolvimento backend explicitamente descrita.",

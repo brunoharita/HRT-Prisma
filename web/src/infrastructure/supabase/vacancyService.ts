@@ -1,6 +1,6 @@
 import type { PostgrestError } from "@supabase/supabase-js";
 import { isSemanticPilot, type SemanticAssessment } from "../../../../src/domain/semanticTrajectory.js";
-import { applySemanticAssessment, unavailableSemantic } from "../../domain/semanticMatching.js";
+import { applySemanticAssessment, isSemanticTriageEligible, unavailableSemantic } from "../../domain/semanticMatching.js";
 import {
   isVacancyDiscoveryCandidate,
   matchVacancyCandidate,
@@ -418,7 +418,7 @@ export const vacancyService = {
       ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : []),
       positionDecision: decisions.get(candidate.personId) ?? null,
     }));
-    const interpreted = await interpretMatches(vacancy, baseMatches, onProgress, signal);
+    const interpreted = await interpretMatches(vacancy, baseMatches.filter(isVacancyDiscoveryCandidate), onProgress, signal);
     const matches = sortVacancyMatches(interpreted.filter(match => Boolean(match.semanticAssessment) || isVacancyDiscoveryCandidate(match)));
     return {
       matches,
@@ -440,7 +440,7 @@ export const vacancyService = {
       const candidate = candidates.find((item) => item.personId === id);
       return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : []), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
     });
-    return interpretMatches(vacancy, matches, undefined, signal);
+    return interpretMatches(vacancy, matches.filter(isVacancyDiscoveryCandidate), undefined, signal);
   },
 
   async recordPositionRelationDecision(vacancy: VacancyDetail, match: VacancyCandidateMatch, decision: Exclude<VacancyPositionRelationDecision, null>): Promise<void> {
@@ -520,12 +520,13 @@ const POSITION_DECISION_PAGE_SIZE = 200;
 
 async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidateMatch[], onProgress?: (completed: number, total: number) => void, signal?: AbortSignal): Promise<VacancyCandidateMatch[]> {
   if (!isSemanticPilot(vacancy.title)) return matches;
-  const result = matches.map(match => applySemanticAssessment(vacancy, match, unavailableSemantic(vacancy, match)));
+  const eligible = matches.flatMap((match, index) => isSemanticTriageEligible(match) ? [index] : []);
+  const result = [...matches];
   let next = 0, completed = 0;
-  onProgress?.(0, matches.length);
+  onProgress?.(0, eligible.length);
   async function worker() {
-    while (next < matches.length && !signal?.aborted) {
-      const index = next++, match = matches[index]!;
+    while (next < eligible.length && !signal?.aborted) {
+      const index = eligible[next++]!, match = matches[index]!;
       let assessment = unavailableSemantic(vacancy, match);
       const requestSignal = signal ? AbortSignal.any([signal, AbortSignal.timeout(110_000)]) : AbortSignal.timeout(110_000);
       try {
@@ -548,7 +549,7 @@ async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidat
       } catch { /* Backend outage is not candidate evidence; never convert to zero. */ }
       result[index] = applySemanticAssessment(vacancy, match, assessment);
       completed += 1;
-      onProgress?.(completed, matches.length);
+      onProgress?.(completed, eligible.length);
     }
   }
   await Promise.all([worker(), worker()]);

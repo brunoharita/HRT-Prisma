@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 272
-source_manifest_sha256: a49d2776f9c0d2bbf50dfa65537b52b1a00a2e0af818d13b3c24fa6a7217de2a
+documentation_source_count: 275
+source_manifest_sha256: 62755cf1ba7e548fda79347dfd9ec15fa28a695f800942b61d3a4f1c202f73a5
 -->
 
 # Tudo sobre o Prisma
@@ -2624,13 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.2
-last_verified: 2026-09-25
+version: 2.51.3
+last_verified: 2026-09-27
 ---
 
 # Estado atual do Prisma
 
 ## M8.3: interpretação da trajetória (piloto backend publicado)
+
+Correção de acionamento em validação local (27/09): somente A/B da descoberta determinística seguem automaticamente para IA; C permanece recolhido sem IA, fora da descoberta não aparece nem como pendência. Baseline real dos sete Perfis confirmou A Bruno, B Diego, C João e quatro fora. Mesma regra no backend antes de cache/provedor; score/prompt/modelo preservados. AoT `docs/qa/aot-m83-triage-before-ai.md` registra rollout e limites; este parágrafo não comprova publicação.
 
 Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendendo área/função/grupos com interpretação derivada no piloto de desenvolvimento backend. Duas leituras independentes classificam evidências em categorias fechadas, com citações e sem nota livre. Cache isolado por empresa e versões evita nova opinião em cada reabertura. Divergência/falha vira pendência, não zero; comparação incompleta não indica prioridade segura. Perfis, Posições, Knowledge e decisões humanas não são reescritos. Modelo/configuração de fornecedor existente, política financeira do Parser (decisão «siga o parser»); nenhum teto monetário paralelo. Aprendizado por correções humanas fica fora. Situação real de testes, publicação e limitações no AoT `docs/qa/aot-m83-semantic-trajectory.md`; código local não é evidência de rollout.
 
@@ -9268,6 +9270,8 @@ Conjunto parcialmente avaliado fica disponível para análise humana, com pendê
 
 ## Limites e operação
 
+Revisão autorizada em 2026-09-27, acordo `docs/qa/agreement-m83-triage-before-ai.md` v1.0.0: descoberta determinística vem antes do acionamento semântico. A/B recebem interpretação automática; C descoberto permanece recolhido e determinístico; sem relação não entra nos resultados nem nas pendências. O grupo inicial não fixa o grupo final. Busca e comparação usam o mesmo gate; Edge recalcula a triagem com `load_matching_snapshot_sources` autenticada antes de qualquer claim/cache/provedor, sem confiar no cliente. Reutiliza motor gerado e RPC existentes, sem migration. Cache histórico C/fora é preservado, mas não consumido na nova jornada. Scores, prompt, modelo e rubrica não mudam; versão da política é o acordo 1.0.0 e SHA de runtime. Produto permanece v1.8.3 por ser correção do acionamento M8.3, não nova entrega numerada.
+
 Primeiro piloto: títulos explicitamente de desenvolvimento backend, excluindo direção/gestão e posições de estágio. Demais ocupações conservam método anterior identificado; não alegar validação universal. Histórico sem descrição pode não discriminar candidatos. Nenhuma rejeição automática. Regressão modelo é distinta de cache/determinismo. Mudanças de rubrica/modelo exigem versão e revalidação. Rollback web/Edge preserva tabela histórica e snapshots; nenhuma migration destrutiva necessária.
 
 ---
@@ -12961,6 +12965,41 @@ Este acordo supersede somente a proibição de LLM/persistência derivada e a in
 
 ---
 
+## Source: `docs/qa/agreement-m83-triage-before-ai.md`
+
+# Acordo M8.3 — triagem antes da IA
+
+Versão 1.0.0, agreed em 2026-09-27 por Bruno: «faça essa implementação», após recomendação explícita A/B automáticos, C recolhido sem IA, fora da descoberta ausente. Supersede o acionamento indiscriminado de D-03/D-04/D-05 do acordo M8.3 original, sem alterar sua rubrica.
+
+- D-01: reutilizar a classificação determinística existente antes da IA. Somente grupos A/B descobertos recebem interpretação automática, na busca, comparação e endpoint servidor.
+- D-02: C descoberto permanece recolhido, sem chamada/opção de IA ou pendência semântica. Fora da descoberta não aparece nem como pendência. Resultados históricos não são apagados.
+- D-03: A/B podem mudar de grupo após interpretação; falhas continuam neutras e nunca viram zero. Requisitos, pesos, autoridade humana, isolamento e versões de fonte são preservados.
+- D-04: validar baseline dos sete Perfis, regressão negativa e smoke autenticado; integrar main e publicar apenas superfícies necessárias.
+- P-01: não filtrar por nota, nome, cargo atual isolado ou atributos sensíveis; não inventar relação nem decisão humana.
+- P-02: não confiar no grupo enviado pelo cliente nem ler cache/acionar provedor para C/fora por chamada direta.
+- F-01: expansão além do piloto backend, alteração da triagem determinística, pesos, prompt/modelo, aprendizado e redesenho/remoção dos avisos discutidos anteriormente.
+- A-01: reutilizar motor e RPC de fontes já existentes, sem tabela, biblioteca ou migration nova; escolhas mecânicas delegadas.
+- Q: nenhuma pendência material após baseline: A Bruno; B Diego; C João; Beatriz/Júlia/Ivan/Vagner fora da descoberta.
+- CA-01: testes A/B elegíveis, C/fora sem provedor/cache e sem pendência, comparação/reabertura, grupo final mutável, backend sem autoridade cliente.
+- CA-02: testes dirigidos, tipos/build, runtime gerado, CI, deploy, smoke com mesmos sete Perfis; nenhum dado real alterado para teste.
+
+## Mapa de impacto e preservação
+
+Baseline `cf8e2045d9e68d3812414e8a2a0ab6d6db46c465`, runtime `60c642f`, Edge v2. Diagnóstico read-only executou motor gerado existente com projeção dos campos usados, sem provedor/arquivos pessoais persistidos: Bruno A/43, Diego B/8, João contextual, quatro sem relação. IDs/proveniência de apresentação omitidos do relatório, não critérios de cálculo.
+
+| Área | Relação | Preservação / prova |
+| --- | --- | --- |
+| Descoberta e acionamento da IA | direct | Grupo inicial antes de interpretação; teste de não chamada e baseline sete Perfis |
+| Comparação/detalhe/cache | direct | A/B reutilizam cache; C mantém consulta manual; fontes/snapshots antigos preservados |
+| Edge/auth/tenant | critical_transversal | Triagem a partir de RPC autenticada, fontes consistentes, rejeição antes do service/provedor |
+| Score/requisitos/M6.2 | plausible_indirect | Mesmo motor e rubrica; testes de snapshot e score, confirmação backend |
+| Parser, edição/publicação de Perfil, Knowledge | no_impact_identified | Somente leituras das fontes; nenhum novo caminho de escrita, schema ou parser |
+| Release | direct | Web + matching-trajectory; documentação e runtime gerado; rollback para runtime/Edge anteriores |
+
+Screenshots do relato são contraexemplos do comportamento de descoberta, não pedido de redesign.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -15494,6 +15533,31 @@ Inspeção visual no navegador interno: comparação desktop em duas colunas; m�
 Desvios do acordo: nenhum. Limites: piloto backend, abstenção em três Perfis reais, cobertura insuficiente para prioridade dos dois Perfis citados, nenhum holdout independente ou garantia universal de justiça. Aprendizado continua fora de escopo. Infraestrutura e critérios aceitos entregues, sem afirmar que todas as trajetórias conseguem classificação.
 
 Branch de execução `codex/m83-semantic-trajectory`, integração main por fast-forward. Untracked anteriores `.tmp.driveupload/` e `services/paddle/Dockerfile.gpu` preservados. Cópia não criada pelo agente `tests/matchingRuntime (1).test.ts` mantida fora do commit; origem desconhecida.
+
+---
+
+## Source: `docs/qa/aot-m83-triage-before-ai.md`
+
+# AoT — triagem antes da IA
+
+Contrato/execution homônimos v1.0.0. Baseline e mapa no acordo.
+
+| Acordo | Implementação/evidência | Estado |
+| --- | --- | --- |
+| D-01/P-02 | Gate compartilhado frontend/Edge, antes do cache/provedor; testes de chamada A/B e rejeição C/fora/injeção de grupo | PASS |
+| D-02 | C determinístico recolhido; fora filtrado; smoke local autenticado confirma João sem opção de IA, quatro fora ausentes | PASS |
+| D-03/P-01 | Mesmo score/prompt, snapshot e decisões; regressão dirigida, notas Bruno/Diego 47 provisórias preservadas | PASS |
+| D-04 | Baseline real lido sem alterações; release/smoke pendentes | PARTIAL |
+
+Baseline confirmado: Bruno A, Diego B, João C, Beatriz/Júlia/Ivan/Vagner fora. Nenhuma chamada de IA na conferência. Material de outros trabalhos preservado: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu`, `tests/matchingRuntime (1).test.ts`.
+
+## Validação local em 2026-09-27
+
+175 testes Node dirigidos PASS: semanticTriage, semanticTrajectory, semanticTrajectoryReview, matchingRuntime, matchingScore, vacancyIntelligence e m62VerificationJourney. 27 testes Deno de handler/snapshot PASS, incluindo autorização, fontes divergentes e bloqueio antes de service/cache/provedor. Tipos raiz/web, build web, Deno lint, lint do repositório, geração/check de contexto e `git diff --check` PASS. Nenhuma suíte integral local executada.
+
+Smoke autenticado em `127.0.0.1:5555`, mesma Posição e sete Perfis: progresso 0/2; Bruno/Diego em B final com 47/100 provisórios e cobertura 50%; C inicialmente recolhido (1), expansão mostra João, sem pendência nem ação de IA. Quatro fora não aparecem. Aviso de comparação incompleta permanece corretamente pela cobertura dos elegíveis; banners/redesign fora do escopo. Nenhuma confirmação humana ou dado de Perfil foi alterado.
+
+Publicação e smoke de produção ainda pendentes. QA desta mudança: testes sintéticos locais e frontend local autenticado contra fontes existentes; não foi criado outro ambiente remoto.
 
 ---
 
@@ -19271,6 +19335,14 @@ Implementar integralmente `docs/qa/agreement-m83-semantic-trajectory.md`, versã
 Reutilizar o score, requisitos e componentes existentes; estender com interpretação backend versionada. Sem aprendizado, nova base de fatos ou nota livre. Política financeira do Parser. Validar em ambiente local sintético, depois migration/Edge/web nas superfícies do dispatcher, smoke e sincronização main. Não executar db push geral nem repair de ledger.
 
 AoT: `docs/qa/aot-m83-semantic-trajectory.md`. Decisão técnica: ADR de interpretação derivada M8.3. Não declarar aceite de itens sem evidência.
+
+---
+
+## Source: `docs/qa/execution-m83-triage-before-ai.md`
+
+# Execução M8.3 — triagem antes da IA
+
+Implementar integralmente `docs/qa/agreement-m83-triage-before-ai.md` v1.0.0 (D-01–D-04, P-01/P-02, F-01, A-01 e CA-01/CA-02). Classe D; preservar motor determinístico e regras semânticas, estender somente acionamento. QA local sintética e smoke autenticado em produção autorizados. AoT em `docs/qa/aot-m83-triage-before-ai.md`.
 
 ---
 

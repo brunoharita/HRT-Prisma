@@ -3,7 +3,8 @@ import {
   SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, trajectoryInstructions, trajectoryResponseSchema,
   type SemanticAssessment, type SemanticContext, type SemanticReading,
 } from "../../../src/domain/semanticTrajectory.ts";
-import { buildSnapshotEvaluation } from "./snapshot.ts";
+import { buildDeterministicMatch, buildSnapshotEvaluation } from "./snapshot.ts";
+import { isSemanticTriageEligible } from "./_generated/web/src/domain/semanticMatching.js";
 
 type RpcResult = { data: unknown; error: { code?: string } | null };
 export interface RpcClient { rpc(name: string, params: Record<string, unknown>): PromiseLike<RpcResult> }
@@ -120,6 +121,13 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
       return unavailable(error instanceof Error && error.message === "TRAJECTORY_SENSITIVE_CONTEXT" ? "INPUT_REQUIRES_REVIEW" : "INPUT_LIMIT");
     }
     if (!context.entries.length) return unavailable("NO_TRAJECTORY_EVIDENCE");
+    const triage = await actor.client.rpc("load_matching_snapshot_sources", sourceArgs(ids));
+    if (triage.error || !triage.data) return unavailable(triage.error?.code === "42501" ? "NOT_AUTHORIZED" : "TRIAGE_UNAVAILABLE", triage.error?.code === "42501" ? 403 : 200);
+    const triageSources = record(triage.data);
+    if (canonical(triageSources.sourceVersions) !== canonical(sources.sourceVersions)) return unavailable("SOURCE_STALE");
+    try {
+      if (!isSemanticTriageEligible(buildDeterministicMatch(triageSources, ids))) return unavailable("OUTSIDE_SEMANTIC_TRIAGE");
+    } catch { return unavailable("TRIAGE_SOURCE_INVALID"); }
     const key = deps.env("OPENAI_API_KEY");
     if (!model) return unavailable("AI_DISABLED");
     const allowCompute = !snapshot && deps.env("KNOWLEDGE_AGENT_ENABLED") === "true" && Boolean(key);
