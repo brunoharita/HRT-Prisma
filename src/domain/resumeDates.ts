@@ -1,12 +1,15 @@
 /** Civil dates from resumes, independent of audit timestamps and time zones. */
-export const RESUME_DATE_METHOD_VERSION = "resume-dates-1.0.0";
+export const RESUME_DATE_METHOD_VERSION = "resume-dates-1.1.0";
+// Fixed policy approved on 2026-09-27. Review with the Product Owner in 2050;
+// never move the pivot with the clock or reinterpret historical snapshots.
+export const RESUME_TWO_DIGIT_YEAR_MAX = 2050;
 
 export interface ResumeDate {
   value: string;
   year: number;
   month: number;
   day: number;
-  inferred: Array<"month" | "day">;
+  inferred: Array<"century" | "month" | "day">;
   originalText: string;
 }
 
@@ -30,27 +33,33 @@ const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u0
 const currentPattern = /^(?:atual|presente|present|current|hoje|today|ate (?:o momento|hoje)|to date)$/;
 const dayMs = 86_400_000;
 const namedMonth = `(?:${months.join("|").replace("co|ch", "[cç]o|ch")})\\.?`;
-const dateToken = `(?:\\d{4}-\\d{1,2}(?:-\\d{1,2})?|(?:\\d{1,2}[/-])?\\d{1,2}[/-]\\d{4}|(?:\\d{1,2}\\s+(?:de\\s+)?)?${namedMonth}(?:\\s+(?:de\\s+)?|[/-])\\d{4}|\\d{4})`;
-export const RESUME_PERIOD_PATTERN = new RegExp(`\\b${dateToken}\\s*(?:a|at[eé]|to|[-–—])\\s*(?:atual|presente|present|current|hoje|today|${dateToken})\\b`, "i");
+const yearToken = `(?:\\d{4}|\\d{2})`;
+const dateToken = `(?:\\d{4}-\\d{1,2}(?:-\\d{1,2})?|(?:\\d{1,2}[/-])?\\d{1,2}[/-]${yearToken}|(?:\\d{1,2}\\s+(?:de\\s+)?)?${namedMonth}(?:\\s+(?:de\\s+)?|[/-])${yearToken}|${yearToken})`;
+export const RESUME_PERIOD_PATTERN = new RegExp(`(?<![\\w/–—-])\\b${dateToken}\\s*(?:a|at[eé]|to|[-–—])\\s*(?:atual|presente|present|current|hoje|today|${dateToken})\\b(?![\\w/–—-])`, "i");
 
 export function parseResumeDate(input: string, boundary: "single" | "start" | "end" = "single"): ResumeDate | null {
   const text = normalize(input).replace(/(?<=\d)\.(?=\d)/g, "/").replace(/\./g, "").replace(/\s+de\s+/g, " ").replace(/\s+/g, " ");
-  let year: number;
+  let yearText: string;
   let month: number | undefined;
   let day: number | undefined;
   let match: RegExpMatchArray | null;
   if ((match = text.match(/^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$/))) {
-    year = Number(match[1]); month = Number(match[2]); day = match[3] ? Number(match[3]) : undefined;
-  } else if ((match = text.match(/^(?:(\d{1,2})[/-])?(\d{1,2})[/-](\d{4})$/))) {
-    year = Number(match[3]); month = Number(match[2]); day = match[1] ? Number(match[1]) : undefined;
-  } else if ((match = text.match(/^(?:(\d{1,2})\s+)?([a-z]+)[ /-](\d{4})$/))) {
-    year = Number(match[3]); month = months.findIndex((pattern) => new RegExp(`^${pattern}$`).test(match![2]!)) + 1;
+    yearText = match[1]!; month = Number(match[2]); day = match[3] ? Number(match[3]) : undefined;
+  } else if ((match = text.match(/^(?:(\d{1,2})[/-])?(\d{1,2})[/-](\d{4}|\d{2})$/))) {
+    yearText = match[3]!; month = Number(match[2]); day = match[1] ? Number(match[1]) : undefined;
+  } else if ((match = text.match(/^(?:(\d{1,2})\s+)?([a-z]+)[ /-](\d{4}|\d{2})$/))) {
+    yearText = match[3]!; month = months.findIndex((pattern) => new RegExp(`^${pattern}$`).test(match![2]!)) + 1;
     day = match[1] ? Number(match[1]) : undefined;
-  } else if (/^\d{4}$/.test(text)) {
-    year = Number(text);
+  } else if (/^(?:\d{4}|\d{2})$/.test(text)) {
+    yearText = text;
   } else return null;
-  if (year < 1000 || year > 9999 || (month !== undefined && (month < 1 || month > 12))) return null;
   const inferred: ResumeDate["inferred"] = [];
+  let year = Number(yearText);
+  if (yearText.length === 2) {
+    year += year <= RESUME_TWO_DIGIT_YEAR_MAX % 100 ? 2000 : 1900;
+    inferred.push("century");
+  }
+  if (year < 1000 || year > 9999 || (month !== undefined && (month < 1 || month > 12))) return null;
   if (month === undefined) { month = boundary === "end" ? 12 : 1; inferred.push("month"); }
   const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
   if (day === undefined) { day = boundary === "end" ? lastDay : 1; inferred.push("day"); }

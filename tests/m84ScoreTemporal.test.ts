@@ -61,3 +61,25 @@ test("M8.4 rejeita atuação atual com início posterior à data de referência"
   assert.equal(result.dimensions.find(item => item.key === "duration")?.determined, false);
   assert.equal(result.dimensions.find(item => item.key === "recency")?.determined, false);
 });
+
+test("M8.4 calcula Jun/08 - Nov/12 como 54 meses sem mudar faixas ou evidência original", () => {
+  const abbreviated = score(["Jun/08 - Nov/12"]);
+  const explicit = score(["Jun/2008 - Nov/2012"]);
+  assert.equal(abbreviated.score, explicit.score);
+  assert.equal(abbreviated.unavailableReason, null);
+  for (const key of ["duration", "recency"] as const) {
+    const dimension = abbreviated.dimensions.find(item => item.key === key)!;
+    assert.equal(dimension.determined, true);
+    assert.equal(dimension.earnedPoints, key === "duration" ? 7 : 0);
+    assert.match(dimension.explanation, key === "duration" ? /54 m[eê]ses/ : /166 m[eê]ses/);
+    assert.match(dimension.evidence[0]!.label, /Jun\/08 - Nov\/12/);
+    assert.match(dimension.evidence[0]!.label, /resume-dates-1\.1\.0/);
+  }
+  assert.deepEqual(abbreviated.dimensions.slice(0, 4), explicit.dimensions.slice(0, 4));
+  assert.equal(score(["Jan/25 - Atual"]).score, score(["Jan/2025 - Atual"]).score);
+  const annual = score(["24 - Atual"]);
+  assert.equal(annual.dimensions.find(item => item.key === "duration")?.determined, false);
+  assert.equal(annual.dimensions.find(item => item.key === "recency")?.determined, true);
+  assert.equal(score(["Jan/27 - Atual"]).score, null);
+  assert.equal(score(["Jan/50 - Atual"]).score, null);
+});

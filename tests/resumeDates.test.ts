@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parseResumeDate, parseResumePeriod, resumePeriodDurationDays } from "../src/domain/resumeDates.js";
+import { parseResumeDate, parseResumePeriod, resumePeriodDurationDays, RESUME_DATE_METHOD_VERSION, RESUME_PERIOD_PATTERN } from "../src/domain/resumeDates.js";
 import { classifyEducationRecord } from "../src/domain/educationClassification.js";
 import { buildAdaptiveExtraction } from "../web/src/domain/adaptiveResumeExtraction.js";
 import { structureParserIa } from "../web/src/domain/parserIa.js";
@@ -30,12 +30,61 @@ test("normalizes single dates, partial dates, mixed periods and exact explicit d
 });
 
 test("does not fabricate years, roll invalid dates over, or accept reversed ranges", () => {
-  for (const value of ["", "março", "03/20", "31/04/2020", "29/02/2023", "00/2024", "13/2024", "2024 - 2020", "2024 - desconhecido", "3 anos", "2020 -", "2020 ou 2021"]) {
+  for (const value of ["", "março", "31/04/2020", "29/02/2023", "00/2024", "13/2024", "2024 - 2020", "2024 - desconhecido", "3 anos", "2020 -", "2020 ou 2021",
+    "Jun/8", "Jun/008", "Jun/20008", "31/04/20", "29/02/23", "00/24", "13/24", "Nov/12 - Jun/08", "Jan/50 - Dez/51", "Jun/08 - desconhecido"]) {
     assert.equal(parseResumePeriod(value), null, value);
     assert.equal(resumePeriodDurationDays(value), null, value);
   }
   assert.equal(parseResumeDate("29/02/2000")?.value, "29/02/2000");
   assert.equal(parseResumeDate("29/02/1900"), null);
+});
+
+test("two-digit years have a fixed inclusive 2050 pivot and explicit century provenance", () => {
+  for (const [short, full] of [["00", "2000"], ["08", "2008"], ["49", "2049"], ["50", "2050"], ["51", "1951"], ["99", "1999"]]) {
+    for (const prefix of ["", "06/", "15/06/", "jun/", "15 de junho de "]) {
+      const source = `${prefix}${short}`;
+      const abbreviated = parseResumeDate(source)!;
+      const explicit = parseResumeDate(`${prefix}${full}`)!;
+      assert.ok(abbreviated, source);
+      assert.equal(abbreviated.value, explicit.value, source);
+      assert.equal(abbreviated.originalText, source);
+      assert.deepEqual(abbreviated.inferred, ["century", ...explicit.inferred]);
+    }
+  }
+  assert.equal(parseResumeDate("01/01/1950")?.year, 1950);
+  assert.equal(parseResumeDate("01/01/2051")?.year, 2051);
+  assert.equal(parseResumeDate("29/02/00")?.value, "29/02/2000");
+  assert.equal(parseResumeDate("29/02/24")?.value, "29/02/2024");
+  assert.equal(parseResumePeriod("Jun/08 - Nov/12")?.methodVersion, RESUME_DATE_METHOD_VERSION);
+});
+
+test("abbreviated, mixed and current periods preserve durations and extraction boundaries", () => {
+  const today = new Date(2026, 8, 27);
+  const cases = [
+    ["Jun/08 - Nov/12", "01/06/2008 - 30/11/2012"],
+    ["Jun/2008-Nov/12", "01/06/2008 - 30/11/2012"],
+    ["Jun/08 - Nov/2012", "01/06/2008 - 30/11/2012"],
+    ["06/08 - 11/12", "01/06/2008 - 30/11/2012"],
+    ["15/06/08 - 04/11/12", "15/06/2008 - 04/11/2012"],
+    ["March 08 to November 12", "01/03/2008 - 30/11/2012"],
+    ["Jan/25 - Atual", "01/01/2025 - Atual"],
+    ["dez/99 - jan/00", "01/12/1999 - 31/01/2000"],
+    ["08 - 12", "01/01/2008 - 31/12/2012"],
+    ["49 - 50", "01/01/2049 - 31/12/2050"],
+  ];
+  for (const [source, expected] of cases) {
+    const parsed = parseResumePeriod(source);
+    assert.equal(parsed?.value, expected, source);
+    assert.equal(parsed?.originalText, source);
+    assert.equal(parseResumePeriod(parsed?.value)?.value, expected);
+    assert.equal(resumePeriodDurationDays(source, today), resumePeriodDurationDays(expected, today));
+    assert.equal(RESUME_PERIOD_PATTERN.exec(`Cargo | ${source} | Empresa`)?.[0], source);
+  }
+  for (const invalid of ["Jun/008 - Nov/012", "03/202 - 06/024", "03/20020 - 06/20024"]) {
+    assert.equal(RESUME_PERIOD_PATTERN.exec(invalid), null, invalid);
+  }
+  assert.equal(resumePeriodDurationDays("03/20", today), null);
+  assert.equal(resumePeriodDurationDays("Jan/27 - Atual", today), null);
 });
 
 test("duration subtracts civil days and recalculates Atual on the day of each query", () => {
@@ -96,4 +145,36 @@ test("native extraction preserves explicitly declared days instead of matching o
   const text = "Pessoa Teste\nExperiência profissional\nGerente | Empresa Teste Ltda | 15/03/2020 - 04/02/2024\nGestão de projetos.";
   const result = buildAdaptiveExtraction([{ pageNumber: 1, text, usefulCharacterCount: text.length, origin: "manual_text", method: "manual", methodVersion: "test" }]);
   assert.equal(result.draft.experiences[0]?.period, "15/03/2020 - 04/02/2024");
+});
+
+test("native extraction and review preserve abbreviated evidence and explain the century once", () => {
+  const period = "Jun/08 - Nov/12";
+  const text = `Pessoa Teste\nExperiência profissional\nDesenvolvedor | Empresa Teste Ltda | ${period}\nDesenvolvimento de software.`;
+  const result = buildAdaptiveExtraction([{ pageNumber: 1, text, usefulCharacterCount: text.length, origin: "manual_text", method: "manual", methodVersion: "test" }]);
+  assert.equal(result.draft.experiences[0]?.period, "01/06/2008 - 30/11/2012");
+  const normalized = normalizeReviewDraft(result.draft);
+  assert.ok(normalized.uncertainties.some(note => note.includes(period) && note.includes("século inferido") && note.includes("2050")));
+  assert.match(normalized.experiences[0]?.evidenceText ?? "", /Jun\/08 - Nov\/12/);
+  assert.deepEqual(normalizeReviewDraft(JSON.parse(JSON.stringify(normalized))), normalized);
+  const abbreviated = normalized.experiences.map(item => ({ ...item, period }));
+  assert.equal(estimateExperienceYears(abbreviated), estimateExperienceYears(normalized.experiences));
+});
+
+test("AI import preserves original two-digit facts for experience and education without a provider", () => {
+  const lines = ["Pessoa Teste", "Desenvolvedor", "Empresa Teste", "Jun/08 - Nov/12", "MBA em Gestão", "15/03/20 - 15/03/21"];
+  const page: ExtractedPage = { pageNumber: 1, text: lines.join("\n"), usefulCharacterCount: 200, origin: "native_pdf", method: "pdfjs", methodVersion: "test", layoutLines: lines.map((text, index) => ({ text, x: .1, y: .1 + index * .03, width: .8, height: .02, fontSize: 12, emphasis: "regular" })) };
+  const paths = ["identity.fullName", "experiences.a.role", "experiences.a.organization", "experiences.a.period", "education.a.course", "education.a.period"];
+  const payload = { status: "complete", facts: lines.map((value, index) => ({ path: paths[index], value, sources: [`p1l${index + 1}`] })), uncertainties: [] };
+  const before = JSON.stringify(payload);
+  const result = structureParserIa(payload, [page], { organizationId: "test-org", sourceSha256: "a".repeat(64), provenance: { model: "synthetic", promptSha256: "b".repeat(64), responseId: "test", inputTokens: 0, outputTokens: 0, costUsd: 0, durationMs: 1 } });
+  const normalized = normalizeReviewDraft(result.draft);
+  assert.equal(normalized.experiences[0]?.period, "01/06/2008 - 30/11/2012");
+  assert.equal(normalized.education[0]?.period, "15/03/2020 - 15/03/2021");
+  assert.equal(result.acceptedFacts[3]?.value, lines[3]);
+  assert.ok(result.fieldEvidence.some(item => item.text === lines[3]));
+  assert.equal(JSON.stringify(payload), before);
+  const educationNote = normalized.uncertainties.find(note => note.includes(lines[5]!));
+  assert.match(educationNote ?? "", /século inferido/);
+  assert.doesNotMatch(educationNote ?? "", /dias ou meses ausentes/);
+  assert.deepEqual(normalizeReviewDraft(JSON.parse(JSON.stringify(normalized))), normalized);
 });

@@ -3,7 +3,7 @@ import type {
   VacancyMatchEvidence,
   VacancyRequirementMatch,
 } from "./vacancy.js";
-import { parseResumePeriod } from "../../../src/domain/resumeDates.js";
+import { parseResumePeriod, RESUME_DATE_METHOD_VERSION } from "../../../src/domain/resumeDates.js";
 
 export const MATCHING_SCORE_CONTRACT_VERSION = "matching-score-1.4.0";
 
@@ -132,6 +132,7 @@ export function calculateMatchingScore(input: MatchingScoreInput): MatchingScore
     ...(item.items ?? []).flatMap((scoreItem) => scoreItem.evidence.flatMap((evidence) => evidence.sourceVersion ? [evidence.sourceVersion] : [])),
   ]))].sort();
   const inputFingerprint = fingerprint({
+    resumeDateMethodVersion: RESUME_DATE_METHOD_VERSION,
     areaApplicable: input.areaApplicable,
     functionApplicable: input.functionApplicable,
     areaRelation: compactRelation(input.areaRelation),
@@ -280,6 +281,12 @@ function scoreTemporal(experiences: MatchingScoreExperience[], referenceDate: st
     ? "não há experiência relacionada com período determinável"
     : "a data de referência é inválida");
   const periods = experiences.map((item) => ({ item, period: parseResumePeriod(item.period) }));
+  const abbreviated = periods.filter(({ period }) => period?.start?.inferred.includes("century") || period?.end?.inferred.includes("century"));
+  for (const { item, period } of abbreviated) {
+    for (const entry of evidence.filter((entry) => entry.reference.startsWith(`${item.id}:`))) {
+      entry.label += ` · interpretado como ${period!.value}; século inferido por ${RESUME_DATE_METHOD_VERSION} (limite 2050)`;
+    }
+  }
   if (periods.some(({ period }) => !period?.isRange || !period.start || (!period.end && !period.current))) return unknown("o período completo de uma ou mais experiências relacionadas não está determinado");
   const windows = periods.map(({ period }) => monthWindow(period!, reference));
   if (windows.some((window) => window === null)) return unknown("a precisão mensal de uma ou mais experiências relacionadas não está determinada");

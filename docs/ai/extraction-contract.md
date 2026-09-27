@@ -1,5 +1,7 @@
 # Contrato de extração
 
+Atualização de 2026-09-27: o normalizador compartilhado usa `resume-dates-1.1.0`, aceitando ano com dois ou quatro dígitos e pivot fixo inclusivo em 2050 (`00–50 → 2000–2050`; `51–99 → 1951–1999`). A expansão do século é inferência registrada; fatos/fontes originais são preservados. Revisão de produto prevista para 2050. Não altera prompt, modelo, cache bruto ou shape SQL. Evidência: `docs/qa/aot-resume-two-digit-years.md`.
+
 ## Identidade
 
 Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0 (shape preservado). Consumidores: `processResume` e ingestão M2-B. A ingestão web acrescenta `adaptive-resume-extraction` 7.2.0 e `education-academic-classification` 1.2.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, formação complementar, colunas paralelas e descoberta genérica de registros irmãos. A regra local de 2026-09-12 normaliza datas e períodos por `resume-dates-1.0.0`, conforme `docs/qa/resume-date-education-rules.md`; não equivale a novo rollout do banco.

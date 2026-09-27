@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 282
-source_manifest_sha256: 21637df5c97b362f9a96005210ac20dca35a5d061a94c7615cc36cedb2ae9623
+documentation_source_count: 283
+source_manifest_sha256: 88fd4f0f8891608238b1fd74674fd5c6e74c8dab02c8a792019e1130360a7807
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.4
+version: 2.51.5
 last_verified: 2026-09-27
 ---
 
 # Estado atual do Prisma
+
+## Anos abreviados nos períodos (correção em validação)
+
+Decisão de Bruno em 2026-09-27: aceitar anos de dois e quatro dígitos com limite inclusivo de 2050. `resume-dates-1.1.0` usa `00–50 → 2000–2050`, `51–99 → 1951–1999`, sem pivot móvel; revisar com o Product Owner em 2050. A inferência do século fica explícita e o original é preservado. Leitor compartilhado entre extração, revisão, busca, matching web e runtime Edge. Pesos/faixas do `matching-score-1.4.0` permanecem; a versão do leitor entra no fingerprint. Sem migration, reescrita de perfis/snapshots ou nova chamada de IA. Evidências e rollout: `docs/qa/aot-resume-two-digit-years.md`.
 
 ## M8.4: dimensões temporais do Score Prisma (implementação local em validação)
 
@@ -3642,6 +3646,8 @@ O primeiro ciclo detectou duas regressões: a expressão "analisou dados" não e
 
 # Contrato de extração
 
+Atualização de 2026-09-27: o normalizador compartilhado usa `resume-dates-1.1.0`, aceitando ano com dois ou quatro dígitos e pivot fixo inclusivo em 2050 (`00–50 → 2000–2050`; `51–99 → 1951–1999`). A expansão do século é inferência registrada; fatos/fontes originais são preservados. Revisão de produto prevista para 2050. Não altera prompt, modelo, cache bruto ou shape SQL. Evidência: `docs/qa/aot-resume-two-digit-years.md`.
+
 ## Identidade
 
 Nome: `extraction-provider`. Owner: AI engineering. Versão: 1.0.0 (shape preservado). Consumidores: `processResume` e ingestão M2-B. A ingestão web acrescenta `adaptive-resume-extraction` 7.2.0 e `education-academic-classification` 1.2.0: resumo estruturado, IDs estáveis, evidência por campo, classificação acadêmica determinística, formação complementar, colunas paralelas e descoberta genérica de registros irmãos. A regra local de 2026-09-12 normaliza datas e períodos por `resume-dates-1.0.0`, conforme `docs/qa/resume-date-education-rules.md`; não equivale a novo rollout do banco.
@@ -3890,6 +3896,8 @@ As dimensões temporais usam somente experiências já reconhecidas como relacio
 
 A data de referência é civil, explícita no cálculo e persistida no fingerprint. Datas parciais, inválidas, contraditórias, invertidas ou com faixa temporal indeterminável deixam a dimensão como `Não determinado`; não viram zero factual. O score fica indisponível quando uma dimensão temporal aplicável não pode ser determinada. O detalhe exibe pontos, máximos, estado, explicação, evidência relacionada e data de referência.
 
+O leitor compartilhado `resume-dates-1.1.0` aceita anos com dois ou quatro dígitos: `00–50 → 2000–2050`, `51–99 → 1951–1999`, conforme aprovação de 2026-09-27. Regra fixa, a revisar em 2050, sem deslocamento automático pelo relógio. A inferência do século não reduz a precisão mensal documentada; somente o ano abreviado é expandido. Períodos apenas anuais continuam sujeitos à estabilidade da faixa. As evidências mostram o texto original, a interpretação e a versão do leitor, que também entra no fingerprint. Web e snapshot Edge reutilizam o mesmo domínio gerado. Exemplo: `Jun/08 - Nov/12` equivale a junho/2008 até novembro/2012, 54 meses inclusivos, duração 7/10 e recência 0/10 em 2026-09-27. Snapshots antigos e perfis publicados não são reescritos.
+
 Cobertura usa o mesmo denominador, mas conta pontos avaliados com evidência suficiente independentemente do valor obtido. Falta de evidência não cobre e credita zero; relação avaliada como inexistente cobre e credita zero. Consequentemente, `score <= cobertura`. Cobertura abaixo de 60%, requisito `unclassified` ou dependência material torna o score provisório. O valor continua ordenando dentro do respectivo grupo, com o estado provisório sempre visível; score indisponível fica depois dos valores numéricos.
 
 O cálculo é puro, local, sem IA ou I/O. Condições operacionais e atributos pessoais/sensíveis não entram no input. Evidência Demonstrada vigente e de versão reconhecida pode fortalecer somente o requisito de vínculo exato, sem bônus. Breakdown, versões, data de referência e fingerprint permitem reprodução.
@@ -4006,6 +4014,8 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 ## Source: `docs/ai/parser-ia.md`
 
 # M5.7 Parser IA
+
+Atualização de datas em 2026-09-27: após validar fatos, o normalizador passa a `resume-dates-1.1.0`: anos de dois ou quatro dígitos, `00–50 → 2000–2050` e `51–99 → 1951–1999`, regra fixa a revisar em 2050. Originais e cache bruto permanecem; a expansão do século gera nota de inferência, sem nova chamada ao modelo. Contrato do delta: `../qa/aot-resume-two-digit-years.md`.
 
 Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Classificação acadêmica: `education-academic-classification-1.2.0`, incluindo o nível `complementary` / Formação complementar. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.3.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites operacionais.
 
@@ -5179,6 +5189,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Correção de datas (2026-09-27): `resume-dates-1.1.0` aceita anos civis de dois e quatro dígitos. Por decisão explícita do Product Owner, `00–50` representam `2000–2050` e `51–99`, `1951–1999`; pivot fixo, com revisão necessária em 2050. `century` identifica a inferência no helper, sem alterar o shape persistido: notas/evidências preservam o original e explicam a expansão. A versão do parser integra o fingerprint de novos scores; `matching-score-1.4.0` mantém pesos/faixas e estrutura, sem reescrever snapshots históricos. Não requer migration nem nova chamada de IA. Acordo, mapa e evidência: `docs/qa/aot-resume-two-digit-years.md`.
 
 M8.4 (2026-09-27, implementação autorizada): o registro oficial avança para Prisma v1.8.4 como quarta entrega do Movimento 8. `matching-score-1.4.0` adiciona duração e recência de experiência relacionada, referência civil explícita e fingerprint determinístico; pontuação histórica não é reescrita. A migration `20260927110000_m84_score_temporal_compatibility.sql` aceita snapshots novos 1.4.0 e preserva leitura/commit de 1.3.0. Acordo, execução e evidências estão em `docs/qa/agreement-m84-prisma-score-temporal.md`, `docs/qa/execution-m84-prisma-score-temporal.md` e no AoT correspondente.
 
@@ -16150,6 +16162,64 @@ Implementação local e provas concluídas. O fechamento externo publica o mesmo
 
 ---
 
+## Source: `docs/qa/aot-resume-two-digit-years.md`
+
+# AoT — anos de dois ou quatro dígitos
+
+## Acordo e execução do delta
+
+Versão 1.0.0, aprovado por Bruno em 2026-09-27 nesta conversa: aceitar anos com dois e quatro dígitos; limite inclusivo de 2050 e revisão da regra em 2050. Complementa o acordo M8.4 v1.0.0, sem substituir suas faixas ou seleção de experiências. Baseline local `main`: `27e767a8e2bfe5c0d15af457dd15b5fea184caf2`.
+
+- D-DATE-01: aceitar os dois comprimentos nos formatos civis existentes; expandir `00–50` para `2000–2050` e `51–99` para `1951–1999`, com regra fixa, sem pivot móvel dependente do relógio.
+- D-DATE-02: preservar o texto original e explicitar a inferência do século; reutilizar o leitor compartilhado na importação, revisão, busca e score, inclusive runtime Edge gerado.
+- D-DATE-03: `Jun/08 - Nov/12` deve equivaler a `Jun/2008 - Nov/2012`: 54 meses relacionados, duração 7/10 e recência 0/10 em 2026-09-27.
+- P-DATE-01: não reescrever perfis/snapshots históricos, não criar dados reais para teste, não alterar pesos, faixas, grupos, requisitos ou elegibilidade das experiências.
+- P-DATE-02: não aceitar datas impossíveis, não converter ausência de período em zero factual e não inventar precisão mensal em datas apenas anuais.
+- F-DATE-01: mudanças em Auth/RLS, schema, IA, Knowledge, curadoria, layout e outras funções ficam fora do escopo.
+- A-DATE-01: implementação e testes locais podem estender o parser existente e versionar seu método; sem biblioteca nova. ISO continua exigindo ano inicial com quatro dígitos, preservando sua sintaxe não ambígua. Nos formatos numéricos civis, mês precede ano.
+- CA-DATE-01: testes de equivalência, 00/49/50/51/99, virada de século, bissexto, períodos mistos, Atual, precisão anual e entradas inválidas.
+- CA-DATE-02: regressão na extração/revisão com proveniência, busca, matching e igualdade web/Edge; checks gerados, typecheck/build e smoke de release afetado.
+
+Prompt de execução deste delta: implementar D-DATE-01 a D-DATE-03, respeitando P-DATE-01/P-DATE-02 e F-DATE-01; usar A-DATE-01, validar CA-DATE-01/CA-DATE-02 e publicar somente os destinos exigidos pelo diff. Não executar suíte integral local; o workflow CI existente não será alterado. Revisão de produto necessária em 2050 antes de mudar o pivot, nunca mudança silenciosa baseada na data atual.
+
+## Mapa de impacto e preservação, antes da implementação
+
+| Capacidade | Relação | Baseline e prova proporcional |
+| --- | --- | --- |
+| Parser civil e cálculo temporal | direct | Baseline rejeita `Jun/08 - Nov/12`; testes dos dois formatos, limites e inválidos |
+| Extração nativa/IA e revisão | direct | Mesmo normalizador; testes de evidência original, inferência e idempotência |
+| Busca de perfis por tempo | direct | Mesmo cálculo de dias; equivalência dos dois formatos |
+| Score web e snapshot Edge | direct | Runtime gerado do mesmo domínio; equivalência e testes de snapshot |
+| Grupos, requisitos e seleção semântica | plausible_indirect | Regressão matching/semântico mantém seleção anterior; apenas período muda |
+| Auth, tenant e dados pessoais | critical_transversal | Sem alteração de guardas ou escrita de dados; testes negativos existentes e smoke autorizado |
+| Schema, Knowledge e curadoria | no_impact_identified | Não são consumidores do parser nem destinos do diff; nenhuma migration/decisão criada |
+
+## Evidência e fechamento
+
+| Acordo | Implementação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D-DATE-01 / CA-DATE-01 | `resume-dates-1.1.0`, limite inclusivo de 2050 | `resumeDates.test`: formatos mistos, 00/49/50/51/99, virada, bissexto, negativos | PASS local |
+| D-DATE-02 | `century`, notas de revisão, evidência do score e versão no fingerprint | integração Parser IA/nativa, idempotência e busca; igualdade runtime gerado | PASS local |
+| D-DATE-03 | Mesmo cálculo M8.4 sem alterar faixas | regressão 54 meses / 7 pontos / 0 pontos; integração semântica com score 38, cobertura 55%, provisório | PASS local |
+| P-DATE-01 | Sem escrita em registros ou mudança de seleção | testes de imutabilidade, requisitos/grupos e exclusão de liderança atual | PASS local |
+| P-DATE-02 | Guardas de validade e precisão mantidas | período anual incerto, futuro/Atual, invertidos e snapshot recusado | PASS local |
+| CA-DATE-02 | Regressão proporcional e rollout | testes locais abaixo; release/smoke remoto ainda pendentes | PARTIAL |
+
+Validação em 2026-09-27:
+
+- `pnpm run build`, `typecheck:web`, `build:web`, `lint`, `check:matching-runtime`: PASS. Avisos preexistentes de chunks/import dinâmico no build; consulta opcional de atualização do pnpm falhou por rede, sem impedir os comandos.
+- Regressão Node direcionada: `resumeDates`, `m84ScoreTemporal`, `matchingRuntime`, `matchingScore`, `semanticTrajectory`, `semanticTrajectoryReview`, `semanticTriage`, `adaptiveResumeExtraction`, `parserIa`, `reviewFieldLifecycle`, `profileProfessionalStandard` e `m5SpatialEvidence`. O teste antigo que esperava `Jan/25` bruto foi atualizado para a normalização autorizada, preservando a asserção do texto original em `fieldEvidence`. Reexecução final dos testes afetados: 64/64 PASS; demais testes das suítes dirigidas passaram na rodada anterior.
+- Golden de extração/matching: 23/23 PASS.
+- Deno: 23 testes de handler e cinco de snapshot PASS, incluindo rejeições de auth/tenant/fontes e snapshot com ano abreviado. O sandbox bloqueou inicialmente o binário; a execução local autorizada fora dele passou. Nenhum acesso ao provider ou banco foi necessário.
+- `generate:prisma-context`, `check:prisma-context` e `git diff --check`: PASS; artefatos gerados, nunca editados à mão.
+- Sem `pnpm run validate` local; CI existente permanece com seus próprios gates. Não existe QA remoto separado: fixtures locais determinísticas antes do único remoto de produção.
+
+Decisão de versão: parser `1.1.0`; score `1.4.0` e produto `1.8.4` mantidos porque pesos, faixas, estrutura e política de elegibilidade não mudam. A versão do parser integra novos fingerprints; snapshots anteriores não são recalculados. Rollback: republicar parser/bundle Edge e imagem web do baseline, sem rollback de dados ou banco.
+
+Publicação e smoke pendentes nesta revisão. Arquivos não rastreados preexistentes são preservados e excluídos do commit. Desvios funcionais identificados: nenhum; limites de evidência remota serão registrados após a publicação.
+
+---
+
 ## Source: `docs/qa/aot-sidebar-branding-v171.md`
 
 # AoT — Sidebar institucional e Prisma v1.7.1
@@ -21188,6 +21258,8 @@ Versão: 1.0.0. Autoridade: decisões de Bruno nesta conversa, autorizadas com �
 - CA-04: integração sintética atravessa extração, normalização para salvamento, serialização/recarga e cálculo; teste do serviço verifica payload RPC e vínculos preservados.
 
 ## Execução
+
+Delta aprovado em 2026-09-27: D-02 passa a aceitar ano de dois ou quatro dígitos pela regra fixa `00–50 → 2000–2050`, `51–99 → 1951–1999`, mantendo a saída `DD/MM/YYYY`. Método `resume-dates-1.1.0`; registrar inferência de século separadamente de dia/mês e preservar texto original. ISO mantém ano inicial de quatro dígitos; formatos civis numéricos seguem mês/ano (ou dia/mês/ano). Revisar a regra em 2050, sem pivot móvel. D-04 e todas as proibições permanecem: leitura não reescreve registros históricos. O delta tem execução/publicação autorizadas em `aot-resume-two-digit-years.md`, que amplia somente os destinos de release necessários; as restrições de rollout abaixo descrevem a entrega histórica de 12/09.
 
 Executar integralmente o acordo 1.0.0 acima. Reutilizar `educationClassification`, `normalizeReviewDraft`, `structureParserIa`, `buildAdaptiveExtraction` e `profileDiscovery`. O método `resume-dates-1.0.0` representa datas civis sem depender de parsing regional de `Date`. Componentes inferidos ficam no resultado do helper; o contrato persistido existente guarda a explicação da inferência, origem textual e valor padronizado em `uncertainties`, enquanto fatos e coordenadas continuam originais. `extraction-draft` 8.2.0 identifica a nova semântica; não adicionar chaves rejeitadas pelo SQL vigente.
 

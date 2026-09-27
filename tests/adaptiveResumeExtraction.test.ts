@@ -57,7 +57,9 @@ test("adaptive extraction separates role, descriptor, period and company on the 
   const result = buildAdaptiveExtraction([page]);
   assert.equal(result.draft.experiences[0]?.role, "Fundador & Diretor Executivo");
   assert.equal(result.draft.experiences[0]?.organization, "HRT Solutions");
-  assert.equal(result.draft.experiences[0]?.period, "Jan/25 - Atual");
+  assert.equal(result.draft.experiences[0]?.period, "01/01/2025 - Atual");
+  assert.equal(result.draft.experiences[1]?.period, "01/04/2025 - 31/03/2026");
+  assert.ok(result.draft.uncertainties.some(note => note.includes("Jan/25 - Atual") && note.includes("século inferido")));
   assert.equal(result.draft.experiences[1]?.organization, "Bencato Engenharia e Empreendimentos");
   assert.equal(result.pattern.experienceHeader, "role-period-company-next-line");
   const firstId = result.draft.experiences[0]!.id;

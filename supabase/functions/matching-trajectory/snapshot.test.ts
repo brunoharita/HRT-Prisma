@@ -56,3 +56,31 @@ Deno.test("snapshot uses active demonstrated evidence and exact stable requireme
     "changed demonstrated evidence must change the authoritative score fingerprint");
   assert(buildSnapshotEvaluation(sources, { ...assessment, status: "indeterminate" }) === null);
 });
+
+Deno.test("server snapshot accepts abbreviated historical execution and excludes current leadership", () => {
+  for (const period of ["Jun/08 - Nov/12", "Jun/2008 - Nov/2012"]) {
+    const raw = { experiences: [
+      { id: "experience_leadership", role: "Diretor de tecnologia", period: "Jan/25 - Atual", description: "Lidero equipes de software." },
+      { id: "experience_execution", role: "Desenvolvedor de software", period, description: "Desenvolvi sistemas." },
+    ] };
+    const context = prepareTrajectoryContext(raw, { title: "Desenvolvedor backend" });
+    const assessment: SemanticAssessment = { status: "complete", organizationId: "org", profileId: "profile", positionVersionId: "version",
+      analysisId: "analysis", inputHash: "hash", modelVersion: "synthetic", methodVersion: SEMANTIC_METHOD_VERSION, promptVersion: SEMANTIC_PROMPT_VERSION,
+      context, reading: { items: context.entries.map(e => ({ id: e.id, activity: e.id === "e1" ? "software_execution" : "software_leadership", quote: e.text })) } };
+    const sources = {
+      vacancy: { id: "vacancy", organizationId: "org", versionId: "version", version: 1, title: "Desenvolvedor backend", area: "Software", requirements: [] },
+      candidate: { personId: "person", profileId: "profile", profileVersion: 1, profileData: raw, knowledge: [] },
+      occupationReference: null, positionDecision: null, demonstratedEvidence: [],
+    };
+    const before = JSON.stringify(sources);
+    const evaluation = buildSnapshotEvaluation(sources, assessment, "2026-09-27");
+    assert(evaluation !== null, period);
+    const score = evaluation.score as { dimensions: { key: string; earnedPoints: number; determined: boolean }[] };
+    assert(score.dimensions.find(item => item.key === "duration")?.earnedPoints === 7);
+    assert(score.dimensions.find(item => item.key === "recency")?.earnedPoints === 0);
+    assert(score.dimensions.every(item => item.determined));
+    assert(JSON.stringify(sources) === before, "source facts must not be rewritten");
+    raw.experiences[1].period = "Nov/12 - Jun/08";
+    assert(buildSnapshotEvaluation(sources, assessment, "2026-09-27") === null, "invalid dates must still prevent snapshot");
+  }
+});

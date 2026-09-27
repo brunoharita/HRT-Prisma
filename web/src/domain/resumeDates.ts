@@ -1,4 +1,4 @@
-import { parseResumePeriod } from "../../../src/domain/resumeDates.js";
+import { parseResumePeriod, RESUME_DATE_METHOD_VERSION } from "../../../src/domain/resumeDates.js";
 import type { StructuredDraft } from "./personIngestion.js";
 
 /** Uses the existing persisted uncertainty/evidence contract, without rewriting source facts. */
@@ -8,7 +8,12 @@ export function normalizeDraftPeriods(draft: StructuredDraft): StructuredDraft {
     const parsed = parseResumePeriod(item.period);
     if (!parsed) return item;
     if (parsed.start?.inferred.length || parsed.end?.inferred.length) {
-      const note = `${label}: período “${item.period}” padronizado para “${parsed.value}”; dias ou meses ausentes foram assumidos pela regra de datas.`;
+      const inferred = [...(parsed.start?.inferred ?? []), ...(parsed.end?.inferred ?? [])];
+      const assumptions = [
+        ...(inferred.some((part) => part === "day" || part === "month") ? ["dias ou meses ausentes foram assumidos pela regra de datas"] : []),
+        ...(inferred.includes("century") ? [`século inferido pela regra fixa 00–50 → 2000–2050 e 51–99 → 1951–1999 (${RESUME_DATE_METHOD_VERSION})`] : []),
+      ];
+      const note = `${label}: período “${item.period}” padronizado para “${parsed.value}”; ${assumptions.join("; ")}.`;
       if (!uncertainties.includes(note)) uncertainties.push(note);
     }
     return parsed.value === item.period ? item : { ...item, period: parsed.value };

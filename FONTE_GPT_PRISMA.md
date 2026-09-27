@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 1.8.1
-current_state_version: 2.51.4
+current_state_version: 2.51.5
 current_state_last_verified: 2026-09-27
-documentation_source_count: 282
-source_manifest_sha256: 21637df5c97b362f9a96005210ac20dca35a5d061a94c7615cc36cedb2ae9623
+documentation_source_count: 283
+source_manifest_sha256: 88fd4f0f8891608238b1fd74674fd5c6e74c8dab02c8a792019e1130360a7807
 -->
 
 # Fonte do GPT para prompts do Prisma

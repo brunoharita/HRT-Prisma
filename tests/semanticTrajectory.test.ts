@@ -261,6 +261,24 @@ test("liderança sem execução pessoal não qualifica as dimensões temporais d
   assert.equal(actual.score.dimensions.find(row => row.key === "recency")?.determined, false);
 });
 
+test("historical execution with two-digit dates is scored without treating current leadership as programming", () => {
+  const item = structuredClone(fixture("historic_programmer"));
+  item.profile.experiences![0]!.period = "Jan/25 - Atual";
+  item.profile.experiences![1]!.period = "Jun/08 - Nov/12";
+  const { need, person, assessment } = setup(item);
+  const before = JSON.stringify(person.profileData);
+  const legacy = matchVacancyCandidate(need, person, null, [], [], "2026-09-27");
+  const actual = applySemanticAssessment(need, legacy, assessment);
+  assert.equal(actual.discoveryGroup, "related_area");
+  assert.equal(actual.score.score, 38);
+  assert.equal(actual.score.coveragePercent, 55);
+  assert.equal(actual.score.status, "provisional");
+  assert.equal(actual.score.dimensions.find(row => row.key === "duration")?.earnedPoints, 7);
+  assert.equal(actual.score.dimensions.find(row => row.key === "recency")?.earnedPoints, 0);
+  assert.deepEqual(actual.requirements, legacy.requirements);
+  assert.equal(JSON.stringify(person.profileData), before);
+});
+
 test("two different histories with proven backend execution remain additive and traceable", () => {
   const first = setup(fixture("historic_programmer"), "synthetic-a");
   const second = setup(fixture("hands_on_lead"), "synthetic-b");
