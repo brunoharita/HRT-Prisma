@@ -8,13 +8,15 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
-## Anos abreviados nos períodos (correção em validação)
+## Anos abreviados nos períodos (publicado em produção)
 
 Decisão de Bruno em 2026-09-27: aceitar anos de dois e quatro dígitos com limite inclusivo de 2050. `resume-dates-1.1.0` usa `00–50 → 2000–2050`, `51–99 → 1951–1999`, sem pivot móvel; revisar com o Product Owner em 2050. A inferência do século fica explícita e o original é preservado. Leitor compartilhado entre extração, revisão, busca, matching web e runtime Edge. Pesos/faixas do `matching-score-1.4.0` permanecem; a versão do leitor entra no fingerprint. Sem migration, reescrita de perfis/snapshots ou nova chamada de IA. Evidências e rollout: `docs/qa/aot-resume-two-digit-years.md`.
 
-## M8.4: dimensões temporais do Score Prisma (implementação local em validação)
+Runtime `e84497e` publicado em main, VPS e Edge `matching-trajectory` v5; CI e smoke autenticado PASS. O caso `Jun/08 - Nov/12` mostra duração 7/10 (54 meses), recência 0/10 (166 meses em 2026-09-27), score 38/100 provisório e cobertura 55%, preservando grupo B e 11 requisitos sem evidência. O fluxo normal do detalhe confirmou o snapshot no servidor; nenhum Perfil/Posição foi editado. Deno: 23 testes de handler e cinco de snapshot PASS. O 404 transitório na troca web recuperou para HTTPS 200, container running e zero reinícios. Fechamento documental posterior não exige novo deploy.
 
-O acordo M8.4 v1.0.0 e ADR-074 avançam o registro oficial para Prisma v1.8.4 e o contrato para `matching-score-1.4.0`, com área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10. A soma é direta e independente. Duração une períodos relacionados antes de somar; recência usa data civil explícita. Período parcial, inválido ou contraditório permanece `Não determinado`, nunca zero factual. Só experiências relacionadas entram; no fluxo semântico, liderança, análise, familiaridade tecnológica e contexto comercial não provam execução de programação. A UI mostra breakdown, evidências e data de referência; o fingerprint inclui a referência. A migration `20260927110000_m84_score_temporal_compatibility.sql` é forward-only e aceita snapshots 1.3.0/1.4.0 sem reescrever histórico. Implementação local e validações direcionadas estão no AoT `docs/qa/aot-m84-prisma-score-temporal.md`; Deno e smoke remoto ainda não foram executados.
+## M8.4: dimensões temporais do Score Prisma
+
+O acordo M8.4 v1.0.0 e ADR-074 avançam o registro oficial para Prisma v1.8.4 e o contrato para `matching-score-1.4.0`, com área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10. A soma é direta e independente. Duração une períodos relacionados antes de somar; recência usa data civil explícita. Período parcial, inválido ou contraditório permanece `Não determinado`, nunca zero factual. Só experiências relacionadas entram; no fluxo semântico, liderança, análise, familiaridade tecnológica e contexto comercial não provam execução de programação. A UI mostra breakdown, evidências e data de referência; o fingerprint inclui a referência. A migration `20260927110000_m84_score_temporal_compatibility.sql` é forward-only e aceita snapshots 1.3.0/1.4.0 sem reescrever histórico. Rollout inicial registrado em `docs/qa/aot-m84-prisma-score-temporal.md`; correção de anos abreviados, Deno e smoke autenticado posteriores em `docs/qa/aot-resume-two-digit-years.md`.
 
 ## Precisão do rótulo na lista de Pessoas
 
@@ -62,7 +64,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-M8.4 está implementado localmente como Prisma v1.8.4 em validação direcionada. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. Deno e smoke remoto ainda não foram executados; AoT `docs/qa/aot-m84-prisma-score-temporal.md` registra a limitação.
+M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 

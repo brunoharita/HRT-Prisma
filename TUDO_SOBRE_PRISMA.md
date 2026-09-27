@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 283
-source_manifest_sha256: 88fd4f0f8891608238b1fd74674fd5c6e74c8dab02c8a792019e1130360a7807
+source_manifest_sha256: 4bdd16cbaa8afd45eb9c759fcf8066e2b56e88e548fa3cad1eeab2e295cfaf29
 -->
 
 # Tudo sobre o Prisma
@@ -2630,13 +2630,15 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
-## Anos abreviados nos períodos (correção em validação)
+## Anos abreviados nos períodos (publicado em produção)
 
 Decisão de Bruno em 2026-09-27: aceitar anos de dois e quatro dígitos com limite inclusivo de 2050. `resume-dates-1.1.0` usa `00–50 → 2000–2050`, `51–99 → 1951–1999`, sem pivot móvel; revisar com o Product Owner em 2050. A inferência do século fica explícita e o original é preservado. Leitor compartilhado entre extração, revisão, busca, matching web e runtime Edge. Pesos/faixas do `matching-score-1.4.0` permanecem; a versão do leitor entra no fingerprint. Sem migration, reescrita de perfis/snapshots ou nova chamada de IA. Evidências e rollout: `docs/qa/aot-resume-two-digit-years.md`.
 
-## M8.4: dimensões temporais do Score Prisma (implementação local em validação)
+Runtime `e84497e` publicado em main, VPS e Edge `matching-trajectory` v5; CI e smoke autenticado PASS. O caso `Jun/08 - Nov/12` mostra duração 7/10 (54 meses), recência 0/10 (166 meses em 2026-09-27), score 38/100 provisório e cobertura 55%, preservando grupo B e 11 requisitos sem evidência. O fluxo normal do detalhe confirmou o snapshot no servidor; nenhum Perfil/Posição foi editado. Deno: 23 testes de handler e cinco de snapshot PASS. O 404 transitório na troca web recuperou para HTTPS 200, container running e zero reinícios. Fechamento documental posterior não exige novo deploy.
 
-O acordo M8.4 v1.0.0 e ADR-074 avançam o registro oficial para Prisma v1.8.4 e o contrato para `matching-score-1.4.0`, com área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10. A soma é direta e independente. Duração une períodos relacionados antes de somar; recência usa data civil explícita. Período parcial, inválido ou contraditório permanece `Não determinado`, nunca zero factual. Só experiências relacionadas entram; no fluxo semântico, liderança, análise, familiaridade tecnológica e contexto comercial não provam execução de programação. A UI mostra breakdown, evidências e data de referência; o fingerprint inclui a referência. A migration `20260927110000_m84_score_temporal_compatibility.sql` é forward-only e aceita snapshots 1.3.0/1.4.0 sem reescrever histórico. Implementação local e validações direcionadas estão no AoT `docs/qa/aot-m84-prisma-score-temporal.md`; Deno e smoke remoto ainda não foram executados.
+## M8.4: dimensões temporais do Score Prisma
+
+O acordo M8.4 v1.0.0 e ADR-074 avançam o registro oficial para Prisma v1.8.4 e o contrato para `matching-score-1.4.0`, com área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10. A soma é direta e independente. Duração une períodos relacionados antes de somar; recência usa data civil explícita. Período parcial, inválido ou contraditório permanece `Não determinado`, nunca zero factual. Só experiências relacionadas entram; no fluxo semântico, liderança, análise, familiaridade tecnológica e contexto comercial não provam execução de programação. A UI mostra breakdown, evidências e data de referência; o fingerprint inclui a referência. A migration `20260927110000_m84_score_temporal_compatibility.sql` é forward-only e aceita snapshots 1.3.0/1.4.0 sem reescrever histórico. Rollout inicial registrado em `docs/qa/aot-m84-prisma-score-temporal.md`; correção de anos abreviados, Deno e smoke autenticado posteriores em `docs/qa/aot-resume-two-digit-years.md`.
 
 ## Precisão do rótulo na lista de Pessoas
 
@@ -2684,7 +2686,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-M8.4 está implementado localmente como Prisma v1.8.4 em validação direcionada. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. Deno e smoke remoto ainda não foram executados; AoT `docs/qa/aot-m84-prisma-score-temporal.md` registra a limitação.
+M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 
@@ -16203,7 +16205,7 @@ Prompt de execução deste delta: implementar D-DATE-01 a D-DATE-03, respeitando
 | D-DATE-03 | Mesmo cálculo M8.4 sem alterar faixas | regressão 54 meses / 7 pontos / 0 pontos; integração semântica com score 38, cobertura 55%, provisório | PASS local |
 | P-DATE-01 | Sem escrita em registros ou mudança de seleção | testes de imutabilidade, requisitos/grupos e exclusão de liderança atual | PASS local |
 | P-DATE-02 | Guardas de validade e precisão mantidas | período anual incerto, futuro/Atual, invertidos e snapshot recusado | PASS local |
-| CA-DATE-02 | Regressão proporcional e rollout | testes locais abaixo; release/smoke remoto ainda pendentes | PARTIAL |
+| CA-DATE-02 | Regressão proporcional e rollout | testes locais, CI, web/Edge e smoke autenticado abaixo | PASS |
 
 Validação em 2026-09-27:
 
@@ -16216,7 +16218,20 @@ Validação em 2026-09-27:
 
 Decisão de versão: parser `1.1.0`; score `1.4.0` e produto `1.8.4` mantidos porque pesos, faixas, estrutura e política de elegibilidade não mudam. A versão do parser integra novos fingerprints; snapshots anteriores não são recalculados. Rollback: republicar parser/bundle Edge e imagem web do baseline, sem rollback de dados ou banco.
 
-Publicação e smoke pendentes nesta revisão. Arquivos não rastreados preexistentes são preservados e excluídos do commit. Desvios funcionais identificados: nenhum; limites de evidência remota serão registrados após a publicação.
+## Publicação e smoke (2026-09-27)
+
+SHA funcional: `e84497e4a5a6ce05e202e7b9dcc138dca2dc4305`, integrado por fast-forward em `main` e enviado ao `origin` autorizado. CI PASS na branch (`36338755086`) e em main (`36338872598`). O plano do commit roteou 20 arquivos para documentação/contexto, web e somente Edge `matching-trajectory`; banco ficou `skip`. O comando genérico `pnpm run test` do dispatcher foi substituído localmente pela união proporcional das suítes do mapa; o CI existente executou seus gates sem alteração de workflow.
+
+- Edge versão 5 ACTIVE, `verify_jwt=true` preservado; hash `a65990adb020b9dfd2c7993ae9e99fa8a8e4b506f736cfb4c21ce897f873f6df`. Os 13 arquivos remotos foram comparados com o release e coincidem. Comparação com baseline remoto versão 4: somente `resumeDates.js` e `matchingScore.js` gerados mudaram. POST anônimo retorna 401 `UNAUTHORIZED_NO_AUTH_HEADER`.
+- VPS em `/opt/prisma`: checkout no SHA funcional e somente `prisma-web` recriado. Imagem `sha256:d14d7875901709fd5a2a73a652a1c937917ae7f5ed229707d4ae570e0ea99b16`, estado `running`, zero reinícios e HTTPS 200. O smoke imediato do script retornou 404 transitório durante a troca, fazendo o dispatcher encerrar com código 1; inspeção posterior confirmou implantação e recuperação, sem repetir build/deploy. Não apresentar a saída inicial como PASS.
+- Rollback web mantido em `prisma-web:rollback-before-e84497e4a5a6`, imagem anterior `sha256:eccbb7345f96ac21ca2e170fdb35bf597a6b6a5b39a60055abe3128b2f25f3b7`. Edge anterior pode ser republicada a partir do baseline Git; sem rollback de banco.
+- Smoke autenticado na organização ativa, jornada Posições → Desenvolvedor backend → Pessoas → detalhe do score: sete perfis consultados; Perfil v5 / Posição v3; grupo B, score 38/100 provisório, 38,25 pontos e cobertura 55%. Área 10/10, função 21,25/25, requisitos 0/35 e 0/10, duração 7/10 (54 meses), recência 0/10 (166 meses), referência 2026-09-27. Onze requisitos continuam sem evidência encontrada; aviso de comparação incompleta preservado.
+- O detalhe exibiu `Jun/08 - Nov/12`, interpretação `01/06/2008 - 30/11/2012` e `resume-dates-1.1.0 (limite 2050)`. Evidência visual: capturas desta conversa, painel “Score Prisma” com as duas dimensões e detalhe de inferência. A aba foi deixada disponível ao operador.
+- A abertura do detalhe usa o fluxo existente de `recordEvaluation`: a confirmação transitória das fontes concluiu e o painel passou a “Reduzir incerteza por requisito”. Isso comprova aceitação do snapshot/fingerprint pelo servidor. Não foi iniciada verificação, selecionado requisito, confirmada relação humana ou editado/publicado Perfil/Posição. A avaliação derivada foi registrada pelo fluxo normal, sem dado sintético ou alteração do histórico anterior. Interpretação semântica existente foi reutilizada.
+
+Preservação: períodos explícitos, fonte original, grupos/requisitos, exclusão de gestão como programação, guardas de auth/tenant e snapshots históricos cobertos pelas provas locais/operacionais acima. Conhecimento, curadoria e banco não foram modificados. Não houve importação real para teste; essa fronteira foi validada com fixtures locais.
+
+Arquivos não rastreados preexistentes preservados e excluídos do commit: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `tests/matchingRuntime (1).test.ts`. Desvios funcionais identificados: nenhum. Este fechamento documental não muda o SHA do runtime nem exige novo deploy. A regra de século requer revisão de produto em 2050.
 
 ---
 

@@ -6,7 +6,7 @@ product_version: 1.8.1
 current_state_version: 2.51.5
 current_state_last_verified: 2026-09-27
 documentation_source_count: 283
-source_manifest_sha256: 88fd4f0f8891608238b1fd74674fd5c6e74c8dab02c8a792019e1130360a7807
+source_manifest_sha256: 4bdd16cbaa8afd45eb9c759fcf8066e2b56e88e548fa3cad1eeab2e295cfaf29
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,7 +268,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-M8.4 está implementado localmente como Prisma v1.8.4 em validação direcionada. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. Deno e smoke remoto ainda não foram executados; AoT `docs/qa/aot-m84-prisma-score-temporal.md` registra a limitação.
+M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 

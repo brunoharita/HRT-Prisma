@@ -37,7 +37,7 @@ Prompt de execução deste delta: implementar D-DATE-01 a D-DATE-03, respeitando
 | D-DATE-03 | Mesmo cálculo M8.4 sem alterar faixas | regressão 54 meses / 7 pontos / 0 pontos; integração semântica com score 38, cobertura 55%, provisório | PASS local |
 | P-DATE-01 | Sem escrita em registros ou mudança de seleção | testes de imutabilidade, requisitos/grupos e exclusão de liderança atual | PASS local |
 | P-DATE-02 | Guardas de validade e precisão mantidas | período anual incerto, futuro/Atual, invertidos e snapshot recusado | PASS local |
-| CA-DATE-02 | Regressão proporcional e rollout | testes locais abaixo; release/smoke remoto ainda pendentes | PARTIAL |
+| CA-DATE-02 | Regressão proporcional e rollout | testes locais, CI, web/Edge e smoke autenticado abaixo | PASS |
 
 Validação em 2026-09-27:
 
@@ -50,4 +50,17 @@ Validação em 2026-09-27:
 
 Decisão de versão: parser `1.1.0`; score `1.4.0` e produto `1.8.4` mantidos porque pesos, faixas, estrutura e política de elegibilidade não mudam. A versão do parser integra novos fingerprints; snapshots anteriores não são recalculados. Rollback: republicar parser/bundle Edge e imagem web do baseline, sem rollback de dados ou banco.
 
-Publicação e smoke pendentes nesta revisão. Arquivos não rastreados preexistentes são preservados e excluídos do commit. Desvios funcionais identificados: nenhum; limites de evidência remota serão registrados após a publicação.
+## Publicação e smoke (2026-09-27)
+
+SHA funcional: `e84497e4a5a6ce05e202e7b9dcc138dca2dc4305`, integrado por fast-forward em `main` e enviado ao `origin` autorizado. CI PASS na branch (`36338755086`) e em main (`36338872598`). O plano do commit roteou 20 arquivos para documentação/contexto, web e somente Edge `matching-trajectory`; banco ficou `skip`. O comando genérico `pnpm run test` do dispatcher foi substituído localmente pela união proporcional das suítes do mapa; o CI existente executou seus gates sem alteração de workflow.
+
+- Edge versão 5 ACTIVE, `verify_jwt=true` preservado; hash `a65990adb020b9dfd2c7993ae9e99fa8a8e4b506f736cfb4c21ce897f873f6df`. Os 13 arquivos remotos foram comparados com o release e coincidem. Comparação com baseline remoto versão 4: somente `resumeDates.js` e `matchingScore.js` gerados mudaram. POST anônimo retorna 401 `UNAUTHORIZED_NO_AUTH_HEADER`.
+- VPS em `/opt/prisma`: checkout no SHA funcional e somente `prisma-web` recriado. Imagem `sha256:d14d7875901709fd5a2a73a652a1c937917ae7f5ed229707d4ae570e0ea99b16`, estado `running`, zero reinícios e HTTPS 200. O smoke imediato do script retornou 404 transitório durante a troca, fazendo o dispatcher encerrar com código 1; inspeção posterior confirmou implantação e recuperação, sem repetir build/deploy. Não apresentar a saída inicial como PASS.
+- Rollback web mantido em `prisma-web:rollback-before-e84497e4a5a6`, imagem anterior `sha256:eccbb7345f96ac21ca2e170fdb35bf597a6b6a5b39a60055abe3128b2f25f3b7`. Edge anterior pode ser republicada a partir do baseline Git; sem rollback de banco.
+- Smoke autenticado na organização ativa, jornada Posições → Desenvolvedor backend → Pessoas → detalhe do score: sete perfis consultados; Perfil v5 / Posição v3; grupo B, score 38/100 provisório, 38,25 pontos e cobertura 55%. Área 10/10, função 21,25/25, requisitos 0/35 e 0/10, duração 7/10 (54 meses), recência 0/10 (166 meses), referência 2026-09-27. Onze requisitos continuam sem evidência encontrada; aviso de comparação incompleta preservado.
+- O detalhe exibiu `Jun/08 - Nov/12`, interpretação `01/06/2008 - 30/11/2012` e `resume-dates-1.1.0 (limite 2050)`. Evidência visual: capturas desta conversa, painel “Score Prisma” com as duas dimensões e detalhe de inferência. A aba foi deixada disponível ao operador.
+- A abertura do detalhe usa o fluxo existente de `recordEvaluation`: a confirmação transitória das fontes concluiu e o painel passou a “Reduzir incerteza por requisito”. Isso comprova aceitação do snapshot/fingerprint pelo servidor. Não foi iniciada verificação, selecionado requisito, confirmada relação humana ou editado/publicado Perfil/Posição. A avaliação derivada foi registrada pelo fluxo normal, sem dado sintético ou alteração do histórico anterior. Interpretação semântica existente foi reutilizada.
+
+Preservação: períodos explícitos, fonte original, grupos/requisitos, exclusão de gestão como programação, guardas de auth/tenant e snapshots históricos cobertos pelas provas locais/operacionais acima. Conhecimento, curadoria e banco não foram modificados. Não houve importação real para teste; essa fronteira foi validada com fixtures locais.
+
+Arquivos não rastreados preexistentes preservados e excluídos do commit: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `tests/matchingRuntime (1).test.ts`. Desvios funcionais identificados: nenhum. Este fechamento documental não muda o SHA do runtime nem exige novo deploy. A regra de século requer revisão de produto em 2050.
