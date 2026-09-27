@@ -9,19 +9,19 @@ function record(value: unknown): Record<string, unknown> {
 }
 
 /** Reuse exact legacy discovery on authenticated sources, before cache/provider access. */
-export function buildDeterministicMatch(sources: Record<string, unknown>, assessment: Pick<SemanticAssessment, "organizationId" | "positionVersionId" | "profileId">) {
+export function buildDeterministicMatch(sources: Record<string, unknown>, assessment: Pick<SemanticAssessment, "organizationId" | "positionVersionId" | "profileId">, referenceDate = new Date().toISOString().slice(0, 10)) {
   const vacancy = record(sources.vacancy), rawCandidate = record(sources.candidate);
   if (vacancy.organizationId !== assessment.organizationId || vacancy.versionId !== assessment.positionVersionId
     || rawCandidate.profileId !== assessment.profileId || !Array.isArray(vacancy.requirements)
     || !Array.isArray(rawCandidate.knowledge) || !Array.isArray(sources.demonstratedEvidence)) throw new Error("SNAPSHOT_SOURCE_INVALID");
   const candidate = { ...rawCandidate, profileData: decodeProfileDataForPresentation(rawCandidate.profileData) };
-  return matchVacancyCandidate(vacancy, candidate, sources.occupationReference as never, sources.demonstratedEvidence as never);
+  return matchVacancyCandidate(vacancy, candidate, sources.occupationReference as never, sources.demonstratedEvidence as never, [], referenceDate);
 }
 
 /** Database-to-engine adapter only. All score and evidence rules live in generated source modules. */
-export function buildSnapshotEvaluation(sources: Record<string, unknown>, assessment: SemanticAssessment): Record<string, unknown> | null {
+export function buildSnapshotEvaluation(sources: Record<string, unknown>, assessment: SemanticAssessment, referenceDate = new Date().toISOString().slice(0, 10)): Record<string, unknown> | null {
   if (assessment.status !== "complete") return null;
-  const base = buildDeterministicMatch(sources, assessment);
+  const base = buildDeterministicMatch(sources, assessment, referenceDate);
   if (!isSemanticTriageEligible(base)) return null;
   const vacancy = record(sources.vacancy);
   const match = applySemanticAssessment(vacancy, { ...base, positionDecision: sources.positionDecision ?? null }, assessment);

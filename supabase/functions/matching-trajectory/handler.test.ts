@@ -4,11 +4,11 @@ import { prepareTrajectoryContext, SEMANTIC_PROMPT_VERSION } from "../../../src/
 function assert(condition: unknown, message = "assertion failed"): asserts condition {
   if (!condition) throw new Error(message);
 }
-const ids = { organizationId: "10000000-0000-0000-0000-000000000001", profileId: "20000000-0000-0000-0000-000000000001", positionVersionId: "30000000-0000-0000-0000-000000000001" };
+const ids = { organizationId: "10000000-0000-0000-0000-000000000001", profileId: "20000000-0000-0000-0000-000000000001", positionVersionId: "30000000-0000-0000-0000-000000000001", referenceDate: "2026-09-27" };
 const source = {
   profileData: { professionalTitle: "Backend developer", experiences: [
-    { organization: "SecretEmployer", role: "Backend developer", description: "Built APIs; Test Person SecretEmployer test@example.invalid https://example.invalid +5511999999999" },
-    { role: "Software developer", description: "Programmed software" },
+    { organization: "SecretEmployer", role: "Backend developer", period: "01/2020 - 09/2026", description: "Built APIs; Test Person SecretEmployer test@example.invalid https://example.invalid +5511999999999" },
+    { role: "Software developer", period: "01/2020 - 09/2026", description: "Programmed software" },
   ] },
   position: { title: "Backend developer", mission: "Build APIs", responsibilities: [] },
   redactions: ["Test Person", "SecretEmployer"], sourceVersions: { profileVersion: 2, positionVersion: 1, knowledgeGlobalVersion: 4 },

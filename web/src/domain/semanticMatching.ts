@@ -1,5 +1,5 @@
 import { readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION, type SemanticAssessment, type TrajectoryActivity } from "../../../src/domain/semanticTrajectory.js";
-import { calculateMatchingScore, type VacancyFunctionAssessment } from "./matchingScore.js";
+import { calculateMatchingScore, type MatchingScoreExperience, type VacancyFunctionAssessment } from "./matchingScore.js";
 import type { VacancyAreaRelation, VacancyCandidateMatch, VacancyDetail, VacancyMatchEvidence } from "./vacancy.js";
 import { assessVacancyEvidence, isVacancyDiscoveryCandidate } from "./vacancy.js";
 
@@ -89,6 +89,7 @@ export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCa
   const score = calculateMatchingScore({
     areaApplicable: Boolean(vacancy.area.trim()), functionApplicable: Boolean(vacancy.title.trim()), areaRelation, functionAssessment,
     requirements: match.requirements, unclassifiedRequirementCount: match.unclassifiedRequirementCount,
+    relatedExperiences: semanticTemporalExperiences(match, experience), referenceDate: match.score.referenceDate,
     competitiveEligibility: points ? "eligible" : "contextual_only", materialDependencies: dependencies,
     positionVersion: vacancy.versionId, positionVersionNumber: vacancy.version, profileVersion: match.candidate.profileId, profileVersionNumber: match.candidate.profileVersion,
     matchingContractVersion: SEMANTIC_MATCHING_VERSION, scoreContractVersion: SEMANTIC_SCORE_VERSION,
@@ -101,6 +102,19 @@ export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCa
     positionRelation,
     reasons: [explanation, ...match.reasons.filter(reason => reason.includes("requisito"))],
   };
+}
+
+function semanticTemporalExperiences(
+  match: VacancyCandidateMatch,
+  experiences: Array<{ id: string; activity: TrajectoryActivity; quote: string; source: { kind: string; fieldPath: string } }>,
+): MatchingScoreExperience[] {
+  return experiences.flatMap((item) => {
+    if (!(["backend_execution", "software_execution"] as TrajectoryActivity[]).includes(item.activity)) return [];
+    const index = Number(item.source.fieldPath.match(/^experiences\.(\d+)$/)?.[1]);
+    const original = match.candidate.profileData.experiences[index];
+    if (!original) return [];
+    return [{ id: original.id, period: original.period, evidence: [{ reference: `experience:${original.id}:semantic`, label: item.quote, source: "Interpretação de trajetória", sourceVersion: `Perfil ${match.candidate.profileVersion}` }] }];
+  });
 }
 
 export function semanticComparisonPending(matches: VacancyCandidateMatch[]): boolean {

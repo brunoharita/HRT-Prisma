@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const sources = ["web/src/domain/vacancy.ts", "web/src/domain/matchingScore.ts", "web/src/domain/semanticMatching.ts", "src/domain/semanticTrajectory.ts",
+const sources = ["web/src/domain/vacancy.ts", "web/src/domain/matchingScore.ts", "web/src/domain/semanticMatching.ts", "src/domain/semanticTrajectory.ts", "src/domain/resumeDates.ts",
   "src/domain/educationClassification.ts", "web/src/domain/narrativeText.ts"];
 // The browser service mixes persistence/SDK with this pure decoder. Extract its exact
 // named declarations and existing ID helpers, not a separately maintained decoder.

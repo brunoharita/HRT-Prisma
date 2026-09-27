@@ -143,7 +143,7 @@ export function validateVacancyReady(draft) {
         ? ["A descoberta de Pessoas está disponível. Classifique os requisitos pendentes para concluir a avaliação detalhada de aderência."]
         : [];
 }
-export function matchVacancyCandidate(vacancy, candidate, occupationReference = null, demonstratedEvidence = [], materialDependencies = []) {
+export function matchVacancyCandidate(vacancy, candidate, occupationReference = null, demonstratedEvidence = [], materialDependencies = [], referenceDate = new Date().toISOString().slice(0, 10)) {
     const areaRelation = matchVacancyArea(vacancy, candidate);
     const positionRelation = matchVacancyPosition(vacancy, candidate, occupationReference);
     const professionalEvidence = allProfessionalProfileEvidence(candidate);
@@ -265,6 +265,8 @@ export function matchVacancyCandidate(vacancy, candidate, occupationReference = 
         unclassifiedRequirementCount,
         competitiveEligibility: discoveryGroup === "contextual_signals" ? "contextual_only" : "eligible",
         materialDependencies,
+        relatedExperiences: deterministicTemporalExperiences(vacancy, candidate, areaRelation, positionRelation, functionAssessment),
+        referenceDate,
         positionVersion: vacancy.versionId,
         positionVersionNumber: vacancy.version,
         profileVersion: candidate.profileId,
@@ -810,6 +812,30 @@ const OCCUPATIONAL_ROLE_MARKERS = new Set([
     "lideranca", "analista", "assistente", "auxiliar", "estagiario", "especialista", "consultor", "engenheiro",
     "diretor", "executivo", "supervisor", "tecnico", "desenvolvedor", "designer", "vendedor", "operador",
 ]);
+function deterministicTemporalExperiences(vacancy, candidate, area, position, functionAssessment) {
+    const ids = new Set();
+    const add = (item) => { if (item.id)
+        ids.add(item.id); };
+    const experienceEvidenceIds = new Set([...position.evidence, ...functionAssessment.evidence]
+        .map((item) => item.sourceId?.match(/^experience:([^:]+)/)?.[1])
+        .filter((value) => Boolean(value)));
+    candidate.profileData.experiences.forEach((item) => {
+        const areaRelated = area.status === "experience_area" && Boolean(vacancy.area.trim())
+            && [item.role, item.description, item.evidenceText].filter(Boolean).some((value) => phrasesOverlap(value, vacancy.area)
+                && (value === item.role || supportsProfessionalAreaPractice(value, vacancy.area)));
+        const titleRelated = Boolean(item.role) && occupationalTitleRelationStrength(vacancy.title, item.role) >= 60;
+        if (areaRelated || titleRelated || experienceEvidenceIds.has(item.id))
+            add(item);
+    });
+    return candidate.profileData.experiences.filter((item) => ids.has(item.id)).map((item) => ({
+        id: item.id,
+        period: item.period,
+        evidence: [item.role ? evidence(item.role, "Cargo em experiência profissional", `experience:${item.id}:role`, `experiences.${item.id}.role`, "professionalTitle")
+                : item.description ? evidence(item.description, "Descrição de experiência profissional", `experience:${item.id}:description`, `experiences.${item.id}.description`, "experience")
+                    : evidence(item.evidenceText, "Evidência de experiência profissional", `experience:${item.id}:evidence`, `experiences.${item.id}.evidenceText`, "experience")]
+            .map((item) => ({ reference: item.sourceId ?? item.fieldPath ?? item.source, label: item.label, source: item.source, ...(item.sourceVersion ? { sourceVersion: item.sourceVersion } : {}) })),
+    }));
+}
 export function assessVacancyEvidence(area, position, requirements) {
     const evidenceItems = uniqueEvidence([...area.evidence, ...position.evidence, ...requirements.flatMap((item) => item.evidence)]);
     const independentSourceCount = new Set(evidenceItems.map((item) => item.sourceId ?? `${item.fieldPath}:${normalize(item.label)}`)).size;

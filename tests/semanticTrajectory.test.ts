@@ -194,6 +194,7 @@ function inputFor(match: VacancyCandidateMatch): MatchingScoreInput {
     positionVersion: match.score.positionVersion, positionVersionNumber: match.score.positionVersionNumber,
     profileVersion: match.score.profileVersion, profileVersionNumber: match.score.profileVersionNumber,
     matchingContractVersion: SEMANTIC_MATCHING_VERSION, scoreContractVersion: SEMANTIC_SCORE_VERSION, interpretationReference: "synthetic-analysis",
+    relatedExperiences: [{ id: "semantic-experience", period: "01/2020 - 09/2026", evidence: [] }], referenceDate: match.score.referenceDate,
   };
 }
 
@@ -206,15 +207,21 @@ for (const item of semanticPilotCases) {
     if (expected.functionPoints !== null) assert.equal(actual.functionAssessment.basePoints, expected.functionPoints);
     if (expected.group !== null) assert.equal(actual.discoveryGroup, { A: "main_area", B: "related_area", C: "contextual_signals" }[expected.group]);
     if (expected.functionPoints === null || expected.group === "C") assert.equal(actual.score.score, null);
-    if (expected.functionPoints && expected.functionPoints > 0) assert.equal(actual.score.dimensions.find(row => row.key === "area")?.earnedPoints, 30);
+    if (expected.functionPoints && expected.functionPoints > 0) assert.equal(actual.score.dimensions.find(row => row.key === "area")?.earnedPoints, 10);
     assert.equal(actual.functionAssessment.seniorityAdjustment, 0);
     assert.equal(actual.functionAssessment.seniorityRelation, "not_available");
     assert.deepEqual(actual.requirements, legacy.requirements);
     assert.deepEqual(actual.score.dimensions.filter(row => ["required", "desired"].includes(row.key)), legacy.score.dimensions.filter(row => ["required", "desired"].includes(row.key)));
     if (expected.functionPoints === null) {
       assert.equal(semanticComparisonPending([actual]), true);
-      assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [35, 15]);
-    } else assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [30, 20, 35, 15]);
+      assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [35, 10]);
+    } else if (["backend", "abap", "historic_programmer", "hands_on_lead"].includes(item.baseId)) {
+      assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [10, 25, 35, 10, 10, 10]);
+    } else if (expected.group === "C") {
+      assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [10, 25, 35, 10, 0, 0]);
+    } else {
+      assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [10, 25, 35, 10, 10, 10]);
+    }
     assert.deepEqual({ need, legacy, assessment }, before);
   });
 }
@@ -231,21 +238,30 @@ test("systems analyst earns 12, ABAP does not invent Node.js or backend eligibil
   assert.doesNotMatch(JSON.stringify(actual.functionAssessment.evidence), /Node\.js/);
 });
 
-test("historical programming survives current leadership and permits an evidence-grounded tie", () => {
+test("historical programming survives current leadership and exposes temporal differentiation", () => {
   const first = setup(fixture("historic_programmer"), "synthetic-a");
   const second = setup(fixture("abap"), "synthetic-b");
   const historical = applySemanticAssessment(first.need, first.legacy, first.assessment);
   const current = applySemanticAssessment(second.need, second.legacy, second.assessment);
   assert.equal(historical.functionAssessment.basePoints, 17);
   assert.equal(historical.functionAssessment.evidence[0]?.fieldPath, "experiences.exp-1");
-  assert.equal(historical.score.score, current.score.score);
+  assert.equal(historical.score.score, 38);
+  assert.equal(current.score.score, 51);
   assert.equal(historical.discoveryGroup, current.discoveryGroup);
   const reversed = structuredClone(first.assessment);
   reversed.context!.entries.reverse(); reversed.reading!.items.reverse();
   assert.equal(applySemanticAssessment(first.need, first.legacy, reversed).score.score, historical.score.score);
 });
 
-test("two different histories with proven backend execution may tie without a person preference", () => {
+test("liderança sem execução pessoal não qualifica as dimensões temporais de programação", () => {
+  const leadership = setup(fixture("leadership"));
+  const actual = applySemanticAssessment(leadership.need, leadership.legacy, leadership.assessment);
+  assert.equal(actual.score.score, null);
+  assert.equal(actual.score.dimensions.find(row => row.key === "duration")?.determined, false);
+  assert.equal(actual.score.dimensions.find(row => row.key === "recency")?.determined, false);
+});
+
+test("two different histories with proven backend execution remain additive and traceable", () => {
   const first = setup(fixture("historic_programmer"), "synthetic-a");
   const second = setup(fixture("hands_on_lead"), "synthetic-b");
   const history = first.person.profileData as StructuredDraft;
@@ -259,13 +275,14 @@ test("two different histories with proven backend execution may tie without a pe
   assert.equal(a.functionAssessment.basePoints, 20);
   assert.equal(b.functionAssessment.basePoints, 20);
   assert.equal(a.discoveryGroup, "main_area");
-  assert.equal(a.score.score, b.score.score);
+  assert.equal(a.score.score, 42);
+  assert.equal(b.score.score, 55);
 });
 
-test("declarations explain 24 area points but do not fabricate experience or eligibility", () => {
+test("declarations explain 8 area points but do not fabricate experience or eligibility", () => {
   const { need, legacy, assessment } = setup(fixture("declaration_only"));
   const actual = applySemanticAssessment(need, legacy, assessment);
-  assert.equal(actual.score.dimensions.find(row => row.key === "area")?.earnedPoints, 24);
+  assert.equal(actual.score.dimensions.find(row => row.key === "area")?.earnedPoints, 8);
   assert.equal(actual.score.score, null);
   assert.equal(actual.functionAssessment.basePoints, 0);
   assert.deepEqual(actual.functionAssessment.evidence, []);
@@ -286,7 +303,7 @@ test("duplicate sources and verbosity do not increase points or establish a pers
   const profile = renamed.candidate.profileData as StructuredDraft;
   profile.identity = { fullName: "SYNTHETIC_ALTERNATE_NAME", birthDate: "1900-01-01", gender: "SYNTHETIC_SENSITIVE" } as StructuredDraft["identity"];
   profile.experiences[0]!.organization = "SYNTHETIC_PRESTIGE_COMPANY";
-  profile.experiences[0]!.period = "1980 - 2026";
+  profile.experiences[0]!.period = "01/2020 - Atual";
   const neutral = applySemanticAssessment(need, renamed, assessment);
   assert.equal(neutral.score.score, original.score.score);
   assert.equal(neutral.score.inputFingerprint, original.score.inputFingerprint);
@@ -338,20 +355,20 @@ test("tenant, profile, position, method, prompt and missing provenance fail clos
   }
 });
 
-test("semantic scoring supports exactly matching 6.0.0 with score 1.3.0 and a versioned interpretation", () => {
+test("semantic scoring supports exactly matching 6.0.0 with score 1.4.0 and a versioned interpretation", () => {
   const { need, legacy, assessment } = setup();
   const actual = applySemanticAssessment(need, legacy, assessment);
   assert.equal(actual.score.matchingContractVersion, "vacancy-matching-semantic-6.0.0");
-  assert.equal(actual.score.scoreContractVersion, "matching-score-1.3.0");
+  assert.equal(actual.score.scoreContractVersion, "matching-score-1.4.0");
   const input = inputFor(actual);
   assert.notEqual(calculateMatchingScore(input).score, null);
   for (const override of [
     { matchingContractVersion: "vacancy-matching-semantic-6.0.1" },
     { matchingContractVersion: "vacancy-matching-semantic-7.0.0" },
-    { scoreContractVersion: "matching-score-1.2.0" }, { scoreContractVersion: "matching-score-1.3.1" },
-    { matchingContractVersion: "vacancy-matching-explainable-5.0.0" }, { interpretationReference: "" },
+    { scoreContractVersion: "matching-score-1.2.0" }, { scoreContractVersion: "matching-score-1.3.0" }, { scoreContractVersion: "matching-score-1.4.1" },
+    { interpretationReference: "" },
   ]) assert.equal(calculateMatchingScore({ ...input, ...override }).score, null);
-  assert.notEqual(calculateMatchingScore({ ...input, matchingContractVersion: "vacancy-matching-explainable-5.0.0", scoreContractVersion: "matching-score-1.2.0" }).score, null);
+  assert.notEqual(calculateMatchingScore({ ...input, matchingContractVersion: "vacancy-matching-explainable-5.0.0", scoreContractVersion: "matching-score-1.4.0" }).score, null);
 });
 
 test("fingerprint is deterministic, changes with interpretation identity and never mutates old snapshots", () => {

@@ -88,6 +88,7 @@ export function applySemanticAssessment(vacancy, match, assessment) {
     const score = calculateMatchingScore({
         areaApplicable: Boolean(vacancy.area.trim()), functionApplicable: Boolean(vacancy.title.trim()), areaRelation, functionAssessment,
         requirements: match.requirements, unclassifiedRequirementCount: match.unclassifiedRequirementCount,
+        relatedExperiences: semanticTemporalExperiences(match, experience), referenceDate: match.score.referenceDate,
         competitiveEligibility: points ? "eligible" : "contextual_only", materialDependencies: dependencies,
         positionVersion: vacancy.versionId, positionVersionNumber: vacancy.version, profileVersion: match.candidate.profileId, profileVersionNumber: match.candidate.profileVersion,
         matchingContractVersion: SEMANTIC_MATCHING_VERSION, scoreContractVersion: SEMANTIC_SCORE_VERSION,
@@ -100,6 +101,17 @@ export function applySemanticAssessment(vacancy, match, assessment) {
         positionRelation,
         reasons: [explanation, ...match.reasons.filter(reason => reason.includes("requisito"))],
     };
+}
+function semanticTemporalExperiences(match, experiences) {
+    return experiences.flatMap((item) => {
+        if (!["backend_execution", "software_execution"].includes(item.activity))
+            return [];
+        const index = Number(item.source.fieldPath.match(/^experiences\.(\d+)$/)?.[1]);
+        const original = match.candidate.profileData.experiences[index];
+        if (!original)
+            return [];
+        return [{ id: original.id, period: original.period, evidence: [{ reference: `experience:${original.id}:semantic`, label: item.quote, source: "Interpretação de trajetória", sourceVersion: `Perfil ${match.candidate.profileVersion}` }] }];
+    });
 }
 export function semanticComparisonPending(matches) {
     return matches.some(match => Boolean(match.semanticAssessment) && (match.semanticAssessment?.status !== "complete" || match.score.status === "provisional"));

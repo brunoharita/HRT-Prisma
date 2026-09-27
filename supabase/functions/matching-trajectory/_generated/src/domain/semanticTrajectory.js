@@ -3,7 +3,7 @@
 export const SEMANTIC_METHOD_VERSION = "trajectory-backend-1.0.0";
 export const SEMANTIC_PROMPT_VERSION = "trajectory-evidence-1.2.0";
 export const SEMANTIC_MATCHING_VERSION = "vacancy-matching-semantic-6.0.0";
-export const SEMANTIC_SCORE_VERSION = "matching-score-1.3.0";
+export const SEMANTIC_SCORE_VERSION = "matching-score-1.4.0";
 export const activities = ["backend_execution", "software_execution", "software_analysis", "software_leadership", "software_context", "other", "unclear"];
 export function isSemanticPilot(title) {
     // Deliberately narrow activation. Other professions retain their identified legacy method.

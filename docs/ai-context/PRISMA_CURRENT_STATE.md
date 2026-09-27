@@ -8,6 +8,10 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
+## M8.4: dimensões temporais do Score Prisma (implementação local em validação)
+
+O acordo M8.4 v1.0.0 e ADR-074 avançam o registro oficial para Prisma v1.8.4 e o contrato para `matching-score-1.4.0`, com área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10. A soma é direta e independente. Duração une períodos relacionados antes de somar; recência usa data civil explícita. Período parcial, inválido ou contraditório permanece `Não determinado`, nunca zero factual. Só experiências relacionadas entram; no fluxo semântico, liderança, análise, familiaridade tecnológica e contexto comercial não provam execução de programação. A UI mostra breakdown, evidências e data de referência; o fingerprint inclui a referência. A migration `20260927110000_m84_score_temporal_compatibility.sql` é forward-only e aceita snapshots 1.3.0/1.4.0 sem reescrever histórico. Implementação local e validações direcionadas estão no AoT `docs/qa/aot-m84-prisma-score-temporal.md`; Deno e smoke remoto ainda não foram executados.
+
 ## Precisão do rótulo na lista de Pessoas
 
 Correção de apresentação publicada em 27/09, runtime `91db60f`: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Tipos/build, três testes dirigidos, CI e smoke visual autenticado PASS; 11 itens e notas preservados. Publicação somente web, sem Edge/migration. Evidência em `docs/qa/aot-m83-evidence-label.md`.
@@ -53,6 +57,8 @@ Prisma v1.8.1 registra M8.1 como primeira entrega do Movimento 8, após o Produc
 O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. Dos nove alvos autorizados, três foram excluídos pela saga M5.5; após orientação do Product Owner, os seis restantes serão preservados nesta execução. Consulta SQL confirmou 7 Pessoas, 11 objetos Storage, 7 Auth, 7 usuários da plataforma e 8 Vagas. A outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. O CI do SHA `11ff0ab` passou, `main` foi promovida, a web foi publicada na VPS nesse SHA, o contêiner está ativo e HTTPS respondeu 200. A limpeza remota é parcial; smoke funcional autenticado hospedado e novo ciclo intake → revisão → publicação permanecem pendentes. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
+
+M8.4 está implementado localmente como Prisma v1.8.4 em validação direcionada. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. Deno e smoke remoto ainda não foram executados; AoT `docs/qa/aot-m84-prisma-score-temporal.md` registra a limitação.
 
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 
@@ -102,7 +108,7 @@ Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor p
 
 Prisma v1.8.1 é a versão de produto registrada e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` permanece e `matching-score-1.4.0` é o contrato atual para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis, com migration M8.4 explicitando 1.3.0 e 1.4.0, sem delivery automático ou nova autorização para uso com Pessoas reais.
 
 ## Frontend hospedado — 2026-09-15
 
@@ -126,7 +132,7 @@ As cinco fontes em `docs/ai-context` continuam canônicas por responsabilidade. 
 
 ## Ordenação por Prisma Score
 
-Por decisão do Product Owner em 2026-09-14, `matching-score-1.2.0` ordena as Pessoas dos Grupos A e B, dentro do próprio grupo, do maior para o menor valor. Scores provisórios participam sem perder o rótulo. Grupo C fica depois de A/B, sem número comparável; empate dentro dele usa decisão humana, nome e ID. Fórmula, pesos, Perfil, Posição, Knowledge e autoridade humana não mudam.
+Por decisão do Product Owner em 2026-09-14, o score vigente `matching-score-1.4.0` ordena as Pessoas dos Grupos A e B, dentro do próprio grupo, do maior para o menor valor. Scores provisórios participam sem perder o rótulo. Grupo C fica depois de A/B, sem número comparável; empate dentro dele usa decisão humana, nome e ID. As dimensões temporais são aditivas e não criam desempate novo. Perfil, Posição, Knowledge e autoridade humana não mudam.
 
 ## M6.2 — jornada contextual de verificação
 

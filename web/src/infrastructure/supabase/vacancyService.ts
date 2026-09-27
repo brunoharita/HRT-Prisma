@@ -414,8 +414,9 @@ export const vacancyService = {
       loadPositionRelationDecisions(organizationId, vacancy.id!),
     ]);
     const demonstratedEvidence = await loadDemonstratedEvidence(organizationId, collection.candidates.map((candidate) => candidate.personId));
+    const referenceDate = new Date().toISOString().slice(0, 10);
     const baseMatches = collection.candidates.map((candidate) => ({
-      ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : []),
+      ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate),
       positionDecision: decisions.get(candidate.personId) ?? null,
     }));
     const interpreted = await interpretMatches(vacancy, baseMatches.filter(isVacancyDiscoveryCandidate), onProgress, signal);
@@ -436,9 +437,10 @@ export const vacancyService = {
       loadPositionRelationDecisions(organizationId, vacancy.id!),
     ]);
     const demonstratedEvidence = await loadDemonstratedEvidence(organizationId, candidates.map((candidate) => candidate.personId));
+    const referenceDate = new Date().toISOString().slice(0, 10);
     const matches = personIds.flatMap((id) => {
       const candidate = candidates.find((item) => item.personId === id);
-      return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : []), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
+      return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
     });
     return interpretMatches(vacancy, matches.filter(isVacancyDiscoveryCandidate), undefined, signal);
   },
@@ -468,7 +470,7 @@ export const vacancyService = {
     if (match.semanticAssessment) {
       if (match.semanticAssessment.status !== "complete") throw new Error("A interpretação ainda está pendente. O Perfil e seus requisitos continuam disponíveis para consulta.");
       const { data, error } = await supabase.functions.invoke("matching-trajectory", {
-        body: { organizationId: vacancy.organizationId, profileId: match.candidate.profileId, positionVersionId: vacancy.versionId, operation: "snapshot" },
+        body: { organizationId: vacancy.organizationId, profileId: match.candidate.profileId, positionVersionId: vacancy.versionId, referenceDate: match.score.referenceDate, operation: "snapshot" },
         signal: AbortSignal.timeout(110_000),
       });
       if (error || typeof data?.evaluationId !== "string" || data.inputFingerprint !== match.score.inputFingerprint) throw new Error("Não foi possível confirmar o snapshot com as fontes atuais. Atualize a análise antes de preparar uma verificação. A consulta manual foi preservada.");
@@ -532,7 +534,7 @@ async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidat
       try {
         while (!requestSignal.aborted) {
           const { data, error } = await supabase.functions.invoke("matching-trajectory", {
-            body: { organizationId: vacancy.organizationId, profileId: match.candidate.profileId, positionVersionId: vacancy.versionId },
+            body: { organizationId: vacancy.organizationId, profileId: match.candidate.profileId, positionVersionId: vacancy.versionId, referenceDate: match.score.referenceDate },
             signal: requestSignal,
           });
           if (error || !data || typeof data !== "object" || !["complete", "indeterminate", "unavailable", "processing"].includes(data.status)) break;

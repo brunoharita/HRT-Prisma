@@ -71,6 +71,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-065](ADR-065-common-professional-taxonomy-domains.md) | accepted | Knowledge comum sustenta domínios ocupacional e de competências separados e versionados |
 | [ADR-068](ADR-068-impact-scoped-release-dispatcher.md) | accepted | Release limitado ao impacto, SHA validado e publicação seletiva por superfície |
 | [ADR-069](ADR-069-m77-company-global-knowledge-governance.md) | accepted | Knowledge local imediata, contribuição global central e IA assistiva auditável |
+| [ADR-074](ADR-074-m84-temporal-prisma-score.md) | accepted | Duração e recência como dimensões independentes e determinísticas do Prisma Score |
 
 ## Rules
 

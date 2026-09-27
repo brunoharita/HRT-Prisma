@@ -204,6 +204,8 @@ async function runMatchingScoreCases(): Promise<GoldenResult[]> {
       profileVersionNumber: 1,
       matchingContractVersion: VACANCY_MATCHING_VERSION,
       scoreContractVersion: MATCHING_SCORE_CONTRACT_VERSION,
+      relatedExperiences: item.id === "zero-applicable-unavailable" ? [] : [{ id: "golden-experience", period: "01/2020 - 09/2026", evidence: [{ reference: "golden-experience", label: "Experiência sintética", source: "Experiência relacionada" }] }],
+      referenceDate: "2026-09-27",
     });
     if (result.score !== item.expectedScore) differences.push(`score expected=${item.expectedScore} actual=${result.score}`);
     if (result.coveragePercent !== item.expectedCoverage) differences.push(`coverage expected=${item.expectedCoverage} actual=${result.coveragePercent}`);

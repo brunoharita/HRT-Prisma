@@ -1,5 +1,7 @@
 # Versionamento
 
+M8.4 (2026-09-27, implementação autorizada): o registro oficial avança para Prisma v1.8.4 como quarta entrega do Movimento 8. `matching-score-1.4.0` adiciona duração e recência de experiência relacionada, referência civil explícita e fingerprint determinístico; pontuação histórica não é reescrita. A migration `20260927110000_m84_score_temporal_compatibility.sql` aceita snapshots novos 1.4.0 e preserva leitura/commit de 1.3.0. Acordo, execução e evidências estão em `docs/qa/agreement-m84-prisma-score-temporal.md`, `docs/qa/execution-m84-prisma-score-temporal.md` e no AoT correspondente.
+
 GOV-01 (2026-09-20) registra uma regra permanente de governança para Mapa de Impacto, baseline, regressão proporcional e preservação no AoT. É uma mudança documental/processual sem comportamento de produto, schema, runtime ou entrega pública; por isso não incrementa `Prisma v1.8.2` nem contratos executáveis. O ADR-072 e o AoT GOV-01 registram a decisão e as provas.
 
 A correção da projeção de conceito criado pela empresa, dentro de M8.2, mantém **Prisma v1.8.2** e `person-professional-evidence-4.0.0`: restaura uma associação declarada que o contrato já exigia, sem mudar campos, natureza ou tela. A migration revisada altera somente a RPC `_v6`; não há nova entrega numerada de produto. O AoT M8.2 registra a prova e o rollout.

@@ -34,9 +34,9 @@ test("fonte compacta contém contexto vigente e encaminha aprofundamento ao Code
   assert.ok(compact.includes(scopeProtocol), "missing approved scope and prompt protocol");
 
   for (const expected of [
-    "Prisma v1.8.2",
+    "Prisma v1.8.4",
     "vacancy-matching-explainable-5.0.0",
-    "matching-score-1.2.0",
+    "matching-score-1.4.0",
     "FONTE_GPT_PRISMA.md",
     "TUDO_SOBRE_PRISMA.md",
     "docs/qa/agreement-contract-template.md",

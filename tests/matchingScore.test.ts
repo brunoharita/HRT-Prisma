@@ -82,7 +82,7 @@ function vacancy(overrides: Partial<VacancyDetail> = {}): VacancyDetail {
 }
 
 function experience(role: string, description = ""): StructuredDraft["experiences"][number] {
-  return { id: `exp-${role}`, source: "human", role, organization: "Empresa", period: "2024 - atual", description, evidenceText: role, page: 1 };
+  return { id: `exp-${role}`, source: "human", role, organization: "Empresa", period: "01/2020 - Atual", description, evidenceText: role, page: 1 };
 }
 
 function demonstrated(overrides: Partial<VacancyDemonstratedEvidence> = {}): VacancyDemonstratedEvidence {
@@ -118,7 +118,7 @@ test("M6.1 calcula 100 com quatro dimensões totalmente atendidas", () => {
   assert.equal(score.scoreContractVersion, MATCHING_SCORE_CONTRACT_VERSION);
 });
 
-test("Analista de Sistemas sem desejáveis usa 85 pontos aplicáveis e arredonda somente o final", () => {
+test("Analista de Sistemas sem desejáveis usa 90 pontos aplicáveis e arredonda somente o final", () => {
   const need = vacancy({
     title: "Analista de Sistemas",
     area: "Sistemas",
@@ -132,8 +132,8 @@ test("Analista de Sistemas sem desejáveis usa 85 pontos aplicáveis e arredonda
     toolsAndTechnologies: ["SQL", "APIs REST", "Git"],
   }), { knowledge: [{ originalTerm: "Consultor de Sistemas", canonicalLabel: "Consultor de Sistemas", state: "resolved", conceptId: "occupation-systems-consultant", conceptType: "occupation" }] });
   const match = matchVacancyCandidate(need, person, { conceptId: "occupation-systems-analyst", canonicalLabel: need.title, aliases: [], relations: [{ conceptId: "occupation-systems-consultant", label: "Consultor de Sistemas", relationType: "equivalent_to" }] });
-  assert.equal(match.score.earnedPoints, 77.625);
-  assert.equal(match.score.applicablePoints, 85);
+  assert.equal(match.score.earnedPoints, 81.875);
+  assert.equal(match.score.applicablePoints, 90);
   assert.equal(match.score.score, 91);
   assert.equal(match.score.dimensions.find((item) => item.key === "desired")?.applicablePoints, 0);
 });
@@ -142,11 +142,11 @@ test("categorias ausentes saem do denominador e ausência total retorna indispon
   const areaOnly = matchVacancyCandidate(vacancy({ title: "", area: "Marketing" }), candidate("area", profile({ experiences: [experience("Assistente de Marketing")] }))).score;
   assert.equal(areaOnly.applicablePoints, 30);
   assert.equal(areaOnly.score, 100);
-  const empty = calculateMatchingScore(baseScoreInput({ areaApplicable: false, functionApplicable: false }));
-  assert.equal(empty.applicablePoints, 0);
+  const empty = calculateMatchingScore(baseScoreInput({ areaApplicable: false, functionApplicable: false, relatedExperiences: [] }));
+  assert.equal(empty.applicablePoints, 20);
   assert.equal(empty.score, null);
   assert.equal(empty.status, "unavailable");
-  assert.match(empty.unavailableReason ?? "", /critérios aplicáveis/i);
+  assert.match(empty.unavailableReason ?? "", /(critérios aplicáveis|duração e\/ou recência)/i);
 });
 
 test("requisitos dividem 35 e 15 igualmente e aplicam escala 100/50/25/0", () => {
@@ -160,8 +160,8 @@ test("requisitos dividem 35 e 15 igualmente e aplicam escala 100/50/25/0", () =>
   const desired = match.score.dimensions.find((item) => item.key === "desired")!;
   assert.deepEqual(required.items?.map((item) => item.applicablePoints), [8.75, 8.75, 8.75, 8.75]);
   assert.deepEqual(required.items?.map((item) => item.earnedPoints), [8.75, 4.375, 2.1875, 0]);
-  assert.deepEqual(desired.items?.map((item) => item.applicablePoints), [7.5, 7.5]);
-  assert.deepEqual(desired.items?.map((item) => item.earnedPoints), [7.5, 0]);
+  assert.deepEqual(desired.items?.map((item) => item.applicablePoints), [5, 5]);
+  assert.deepEqual(desired.items?.map((item) => item.earnedPoints), [5, 0]);
 });
 
 test("SAP explícito sem trajetória relacionada permanece sinal contextual sem score comparável", () => {
@@ -196,7 +196,7 @@ test("unclassified fica fora dos pesos, torna o score provisório e não bloquei
   const match = matchVacancyCandidate(need, candidate("unclassified", profile({ experiences: [experience("Assistente de Marketing")] })));
   assert.equal(isVacancyDiscoveryCandidate(match), true);
   assert.equal(match.score.status, "provisional");
-  assert.equal(match.score.applicablePoints, 50);
+  assert.equal(match.score.applicablePoints, 55);
   assert.match(match.score.provisionalReasons.join(" "), /aguard(?:a|am) classificação/i);
   assert.match(match.score.dimensions.find((item) => item.key === "required")?.explanation ?? "", /nenhum requisito está confirmado como obrigatório; 3 requisitos aguardam classificação/i);
   assert.doesNotMatch(match.score.dimensions.find((item) => item.key === "required")?.explanation ?? "", /não definiu requisitos obrigatórios/i);
@@ -287,7 +287,8 @@ test("trajetória separa A, B e C e a exceção de entrada promove potencial ao 
   const potential = matchVacancyCandidate(entry, candidate("entry-potential", profile({ competencies: ["SAP"] })));
   assert.equal(potential.trajectoryAssessment.relation, "entry_potential");
   assert.equal(potential.discoveryGroup, "related_area");
-  assert.notEqual(potential.score.score, null);
+  assert.equal(potential.score.score, null);
+  assert.equal(potential.score.dimensions.find((item) => item.key === "duration")?.determined, false);
 });
 
 test("Evidência Demonstrada fortalece somente o requisito exato e respeita nível e teto", () => {
@@ -316,9 +317,9 @@ test("atributos proibidos, nome, volume e repetição não entram no cálculo", 
 
 test("ordenação preserva grupos e usa Prisma Score decrescente inclusive para provisórios", () => {
   const main = matchVacancyCandidate(vacancy({ requirements: [requirement("CRM")] }), candidate("main", profile({ experiences: [experience("Assistente de Marketing")], competencies: [] }), { fullName: "Zelda" }));
-  const related = matchVacancyCandidate(vacancy({ requirements: [requirement("CRM")] }), candidate("related", profile({ professionalTitle: "Analista de Marketing Digital", competencies: ["CRM"] }), { fullName: "Ana" }));
+  const related = matchVacancyCandidate(vacancy({ requirements: [requirement("CRM")] }), candidate("related", profile({ professionalTitle: "Analista de Marketing Digital", experiences: [experience("Analista de Marketing Digital")], competencies: ["CRM"] }), { fullName: "Ana" }));
   assert.ok(related.score.score! > main.score.score!);
-  assert.deepEqual(sortVacancyMatches([related, main]).map((item) => item.candidate.personId), ["main", "related"]);
+  assert.deepEqual(sortVacancyMatches([related, main]).map((item) => item.candidate.personId), ["related", "main"]);
 
   const need = vacancy({ title: "", area: "Marketing", requirements: [requirement("SQL"), requirement("Git")] });
   const provisionalHigh = matchVacancyCandidate(need, candidate("provisional-high", profile({ experiences: [experience("Assistente de Marketing")], competencies: ["SQL"] }), { fullName: "Zoe" }));
@@ -330,7 +331,7 @@ test("ordenação preserva grupos e usa Prisma Score decrescente inclusive para 
 
   const rankingNeed = vacancy({ title: "", requirements: [] });
   const high = matchVacancyCandidate(rankingNeed, candidate("high", profile({ experiences: [experience("Assistente de Marketing")] }), { fullName: "Zoe" }));
-  const low = matchVacancyCandidate(rankingNeed, candidate("low-score", profile({ areasOfExpertise: ["Marketing"] }), { fullName: "Ana" }));
+  const low = matchVacancyCandidate(rankingNeed, candidate("low-score", profile({ areasOfExpertise: ["Marketing"], experiences: [{ ...experience("Assistente de Marketing"), period: "01/2024 - 12/2024" }] }), { fullName: "Ana" }));
   assert.equal(high.score.status, "definitive");
   assert.equal(low.score.status, "definitive");
   assert.deepEqual(sortVacancyMatches([low, high]).map((item) => item.candidate.personId), ["high", "low-score"]);
@@ -344,8 +345,8 @@ test("ordenação preserva grupos e usa Prisma Score decrescente inclusive para 
 
 test("relatório sombra ordena pelo score, registra decisão sem usá-la como feature e evita PII textual", () => {
   const need = vacancy({ requirements: [requirement("CRM")] });
-  const first = matchVacancyCandidate(need, candidate("first", profile({ areasOfExpertise: ["Marketing"], competencies: ["CRM"] })));
-  const second = matchVacancyCandidate(need, candidate("second", profile({ areasOfExpertise: ["Marketing"] })));
+  const first = matchVacancyCandidate(need, candidate("first", profile({ areasOfExpertise: ["Marketing"], experiences: [experience("Analista de Marketing")], competencies: ["CRM"] })));
+  const second = matchVacancyCandidate(need, candidate("second", profile({ areasOfExpertise: ["Marketing"], experiences: [experience("Assistente de Marketing")] })));
   second.positionDecision = "confirmed";
   const report = buildMatchingScoreShadowReport([first, second], ["first", "second"]);
   assert.deepEqual(report.map((item) => item.personReference), ["first", "second"]);
@@ -406,6 +407,8 @@ function baseScoreInput(overrides: Partial<MatchingScoreInput> = {}): MatchingSc
     profileVersionNumber: 1,
     matchingContractVersion: VACANCY_MATCHING_VERSION,
     scoreContractVersion: MATCHING_SCORE_CONTRACT_VERSION,
+    relatedExperiences: [{ id: "score-experience", period: "01/2020 - 09/2026", evidence: [] }],
+    referenceDate: "2026-09-27",
     ...overrides,
   };
 }

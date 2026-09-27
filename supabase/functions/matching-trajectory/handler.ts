@@ -100,10 +100,15 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     let body: Record<string, unknown>;
     try { body = record(JSON.parse(new TextDecoder().decode(bytes))); } catch { return unavailable("REQUEST_INVALID", 400); }
     const snapshot = body.operation === "snapshot";
-    if (Object.keys(body).sort().join() !== (snapshot ? "operation,organizationId,positionVersionId,profileId" : "organizationId,positionVersionId,profileId")
-      || ![body.organizationId, body.profileId, body.positionVersionId].every(value => typeof value === "string" && uuid.test(value))) {
+    const expectedKeys = snapshot ? "operation,organizationId,positionVersionId,profileId,referenceDate" : "organizationId,positionVersionId,profileId,referenceDate";
+    if (Object.keys(body).sort().join() !== expectedKeys
+      || ![body.organizationId, body.profileId, body.positionVersionId].every(value => typeof value === "string" && uuid.test(value))
+      || typeof body.referenceDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(body.referenceDate)
+      || Number.isNaN(Date.parse(`${body.referenceDate}T00:00:00.000Z`))
+      || new Date(`${body.referenceDate}T00:00:00.000Z`).toISOString().slice(0, 10) !== body.referenceDate) {
       return unavailable("REQUEST_INVALID", 400);
     }
+    const referenceDate = body.referenceDate;
     const ids: RequestIds = { organizationId: body.organizationId as string, profileId: body.profileId as string, positionVersionId: body.positionVersionId as string };
     const model = deps.env("KNOWLEDGE_RESEARCH_MODEL")?.trim() ?? "";
     base = { ...ids, status: "unavailable", methodVersion: SEMANTIC_METHOD_VERSION, promptVersion: SEMANTIC_PROMPT_VERSION,
@@ -126,7 +131,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     const triageSources = record(triage.data);
     if (canonical(triageSources.sourceVersions) !== canonical(sources.sourceVersions)) return unavailable("SOURCE_STALE");
     try {
-      if (!isSemanticTriageEligible(buildDeterministicMatch(triageSources, ids))) return unavailable("OUTSIDE_SEMANTIC_TRIAGE");
+      if (!isSemanticTriageEligible(buildDeterministicMatch(triageSources, ids, referenceDate))) return unavailable("OUTSIDE_SEMANTIC_TRIAGE");
     } catch { return unavailable("TRIAGE_SOURCE_INVALID"); }
     const key = deps.env("OPENAI_API_KEY");
     if (!model) return unavailable("AI_DISABLED");
@@ -180,7 +185,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
           if (loaded.error || !loaded.data) return unavailable(loaded.error?.code === "42501" ? "AUTH_REVOKED" : "SNAPSHOT_SOURCE_UNAVAILABLE");
           const snapshotSources = record(loaded.data);
           if (canonical(snapshotSources.sourceVersions) !== canonical(sources.sourceVersions)) return unavailable("SOURCE_STALE");
-          const evaluation = buildSnapshotEvaluation(snapshotSources, { ...base, status: "complete", reading: validReading, context });
+          const evaluation = buildSnapshotEvaluation(snapshotSources, { ...base, status: "complete", reading: validReading, context }, referenceDate);
           if (!evaluation) return unavailable("SNAPSHOT_NOT_READY");
           const committed = await service.rpc("commit_matching_snapshot", { ...sourceArgs(ids), p_actor_id: actor.id,
             p_analysis_id: base.analysisId, p_source_fingerprint: snapshotSources.fingerprint, p_evaluation: evaluation });

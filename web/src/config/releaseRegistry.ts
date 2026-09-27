@@ -48,6 +48,7 @@ export const PRISMA_RELEASE_HISTORY = [{
     "M8.1: arquitetura sistêmica de competências",
     "M8.2: classificação global assistida de competências",
     "M8.3: interpretação versionada da trajetória no Score Prisma",
+    "M8.4: dimensões temporais do Score Prisma",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 

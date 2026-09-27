@@ -38,7 +38,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - retrieval: `structured-lexical-1.0.0`;
 - matching do vertical slice base: `matching-explainable-1.0.0`;
 - matching de Posições: `vacancy-matching-explainable-5.0.0`;
-- Prisma Score: `matching-score-1.2.0`;
+- Prisma Score atual: `matching-score-1.4.0`; `matching-score-1.3.0` permanece compatível para snapshots históricos;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model local base: `deterministic-local-2.0.0`;
 - revisão adaptativa: `adaptive-resume-extraction-7.2.0` / `prisma-document-learning-v4` / `generic-record-pattern-v1` / `relative-record-signature-v1`;

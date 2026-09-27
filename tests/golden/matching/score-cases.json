@@ -33,9 +33,9 @@
       { "importance": "required", "status": "met" },
       { "importance": "required", "status": "no_evidence" }
     ],
-    "expectedScore": 50,
-    "expectedCoverage": 50,
-    "expectedStatus": "provisional"
+    "expectedScore": 68,
+    "expectedCoverage": 68,
+    "expectedStatus": "definitive"
   },
   {
     "id": "zero-applicable-unavailable",

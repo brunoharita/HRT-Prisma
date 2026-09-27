@@ -69,7 +69,7 @@ function setup(profileChanges: Partial<StructuredDraft> = {}, demonstrated: Vaca
     contact: { city: null, state: null, phone: null, email: null, linkedin: null },
     professionalTitle: null, areasOfExpertise: [], professionalObjective: null, summary: null, keyResults: [],
     experiences: [{ id: "exp-canonical", source: "human", role: position.title, description,
-      organization: null, period: null, evidenceText: "", page: null }],
+      organization: null, period: "01/2020 - Atual", evidenceText: "", page: null }],
     education: [], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
     ...profileChanges,
   };
@@ -160,7 +160,7 @@ test("M8.3 review #9: new Demonstrated evidence changes the fingerprint without 
   }]), assessment);
   assert.equal(previous.requirements[0]?.status, "partially_met");
   assert.equal(current.requirements[0]?.status, "met");
-  assert.equal(previous.score.score, 79);
+  assert.equal(previous.score.score, 81);
   assert.equal(current.score.score, 100);
   assert.equal(previous.score.profileVersion, current.score.profileVersion);
   assert.equal(previous.score.positionVersion, current.score.positionVersion);

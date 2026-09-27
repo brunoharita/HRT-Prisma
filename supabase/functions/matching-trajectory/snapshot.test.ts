@@ -34,7 +34,7 @@ Deno.test("generated decoder reuses stable legacy IDs and preserves canonical ID
   assert(a.education[0].level && a.education[0].qualification && a.education[0].classificationMethodVersion);
 });
 Deno.test("snapshot uses active demonstrated evidence and exact stable requirement identity", () => {
-  const raw = { experiences: [{ id: "experience_abcdefgh", role: "Backend developer", description: "Built APIs" }] };
+  const raw = { experiences: [{ id: "experience_abcdefgh", role: "Backend developer", period: "01/2020 - 09/2026", description: "Built APIs" }] };
   const context = prepareTrajectoryContext(raw, { title: "Backend developer" });
   const assessment: SemanticAssessment = { status: "complete", organizationId: "org", profileId: "profile", positionVersionId: "version",
     analysisId: "analysis", inputHash: "hash", modelVersion: "model", methodVersion: SEMANTIC_METHOD_VERSION, promptVersion: SEMANTIC_PROMPT_VERSION,

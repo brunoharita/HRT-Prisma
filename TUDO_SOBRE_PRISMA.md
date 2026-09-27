@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 278
-source_manifest_sha256: befcb4530608b238a0284b28901aac0233b028afe410d0122577123e48afb913
+documentation_source_count: 282
+source_manifest_sha256: 1d14da047ff7144bebd7963c4bf52d0edeb95008d9908410aba079b7f18288f3
 -->
 
 # Tudo sobre o Prisma
@@ -2491,7 +2491,7 @@ Fato liga-se a documento, bloco, trecho, página quando disponível, método, ve
 - retrieval: `structured-lexical-1.0.0`;
 - matching do vertical slice base: `matching-explainable-1.0.0`;
 - matching de Posições: `vacancy-matching-explainable-5.0.0`;
-- Prisma Score: `matching-score-1.2.0`;
+- Prisma Score atual: `matching-score-1.4.0`; `matching-score-1.3.0` permanece compatível para snapshots históricos;
 - prompt sentinel: `no-llm-prompt-1.0.0`;
 - model local base: `deterministic-local-2.0.0`;
 - revisão adaptativa: `adaptive-resume-extraction-7.2.0` / `prisma-document-learning-v4` / `generic-record-pattern-v1` / `relative-record-signature-v1`;
@@ -2630,6 +2630,10 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
+## M8.4: dimensões temporais do Score Prisma (implementação local em validação)
+
+O acordo M8.4 v1.0.0 e ADR-074 avançam o registro oficial para Prisma v1.8.4 e o contrato para `matching-score-1.4.0`, com área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10. A soma é direta e independente. Duração une períodos relacionados antes de somar; recência usa data civil explícita. Período parcial, inválido ou contraditório permanece `Não determinado`, nunca zero factual. Só experiências relacionadas entram; no fluxo semântico, liderança, análise, familiaridade tecnológica e contexto comercial não provam execução de programação. A UI mostra breakdown, evidências e data de referência; o fingerprint inclui a referência. A migration `20260927110000_m84_score_temporal_compatibility.sql` é forward-only e aceita snapshots 1.3.0/1.4.0 sem reescrever histórico. Implementação local e validações direcionadas estão no AoT `docs/qa/aot-m84-prisma-score-temporal.md`; Deno e smoke remoto ainda não foram executados.
+
 ## Precisão do rótulo na lista de Pessoas
 
 Correção de apresentação publicada em 27/09, runtime `91db60f`: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Tipos/build, três testes dirigidos, CI e smoke visual autenticado PASS; 11 itens e notas preservados. Publicação somente web, sem Edge/migration. Evidência em `docs/qa/aot-m83-evidence-label.md`.
@@ -2675,6 +2679,8 @@ Prisma v1.8.1 registra M8.1 como primeira entrega do Movimento 8, após o Produc
 O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. Dos nove alvos autorizados, três foram excluídos pela saga M5.5; após orientação do Product Owner, os seis restantes serão preservados nesta execução. Consulta SQL confirmou 7 Pessoas, 11 objetos Storage, 7 Auth, 7 usuários da plataforma e 8 Vagas. A outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. O CI do SHA `11ff0ab` passou, `main` foi promovida, a web foi publicada na VPS nesse SHA, o contêiner está ativo e HTTPS respondeu 200. A limpeza remota é parcial; smoke funcional autenticado hospedado e novo ciclo intake → revisão → publicação permanecem pendentes. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
+
+M8.4 está implementado localmente como Prisma v1.8.4 em validação direcionada. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. Deno e smoke remoto ainda não foram executados; AoT `docs/qa/aot-m84-prisma-score-temporal.md` registra a limitação.
 
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 
@@ -2724,7 +2730,7 @@ Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor p
 
 Prisma v1.8.1 é a versão de produto registrada e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0` não mudaram. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots 4.0.0 históricos e 5.0.0 atuais, sem delivery automático ou nova autorização para uso com Pessoas reais.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` permanece e `matching-score-1.4.0` é o contrato atual para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis, com migration M8.4 explicitando 1.3.0 e 1.4.0, sem delivery automático ou nova autorização para uso com Pessoas reais.
 
 ## Frontend hospedado — 2026-09-15
 
@@ -2748,7 +2754,7 @@ As cinco fontes em `docs/ai-context` continuam canônicas por responsabilidade. 
 
 ## Ordenação por Prisma Score
 
-Por decisão do Product Owner em 2026-09-14, `matching-score-1.2.0` ordena as Pessoas dos Grupos A e B, dentro do próprio grupo, do maior para o menor valor. Scores provisórios participam sem perder o rótulo. Grupo C fica depois de A/B, sem número comparável; empate dentro dele usa decisão humana, nome e ID. Fórmula, pesos, Perfil, Posição, Knowledge e autoridade humana não mudam.
+Por decisão do Product Owner em 2026-09-14, o score vigente `matching-score-1.4.0` ordena as Pessoas dos Grupos A e B, dentro do próprio grupo, do maior para o menor valor. Scores provisórios participam sem perder o rótulo. Grupo C fica depois de A/B, sem número comparável; empate dentro dele usa decisão humana, nome e ID. As dimensões temporais são aditivas e não criam desempate novo. Perfil, Posição, Knowledge e autoridade humana não mudam.
 
 ## M6.2 — jornada contextual de verificação
 
@@ -3075,7 +3081,7 @@ ADR-058 / `paddle-hosted-transport-1.0.0`: Nginx encaminha as duas rotas existen
 
 ## M6.1.2 Matching por trajetória antes dos requisitos
 
-`vacancy-matching-explainable-5.0.0` avalia primeiro a trajetória profissional e depois usa os requisitos para refinar a aderência. Grupo A exige experiência direta na área ou função equivalente; Grupo B reúne trajetória adjacente/transferível e potencial de entrada; Grupo C preserva termos e ferramentas encontrados sem trajetória relacionada, fica recolhido e não recebe score comparável. Posições de entrada podem usar formação, projetos e conhecimentos para o Grupo B. `matching-score-1.2.0` preserva fórmula e pesos para A/B e registra indisponibilidade explícita no C. A conexão factual introduzida no 4.0.0 continua ativa: categoria organiza, mas não bloqueia termo explícito, limite lexical e negação permanecem.
+`vacancy-matching-explainable-5.0.0` avalia primeiro a trajetória profissional e depois usa os requisitos para refinar a aderência. Grupo A exige experiência direta na área ou função equivalente; Grupo B reúne trajetória adjacente/transferível e potencial de entrada; Grupo C preserva termos e ferramentas encontrados sem trajetória relacionada, fica recolhido e não recebe score comparável. Posições de entrada podem usar formação, projetos e conhecimentos para o Grupo B. `matching-score-1.4.0` usa pesos 10/25/35/10/10/10 para área, função, obrigatórios, desejáveis, duração e recência. Duração une meses de experiências relacionadas e recência usa data civil explícita; datas insuficientes ficam não determinadas. `matching-score-1.3.0` permanece compatível para snapshots históricos. A conexão factual introduzida no 4.0.0 continua ativa: categoria organiza, mas não bloqueia termo explícito, limite lexical e negação permanecem.
 
 ## M6.2 Verificação contextual
 
@@ -3874,15 +3880,19 @@ Somente A e B recebem Prisma Score comparável. C permanece visível e recolhido
 
 ## Score Prisma de matching
 
-`matching-score-1.2.0` é uma projeção determinística do matching resolvido, disponível somente para os Grupos A e B. Os pesos nominais permanecem área 30, função 20, obrigatórios 35 e desejáveis 15. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`. No Grupo C, a conexão por requisito continua rastreável, mas o número agregado retorna indisponível por falta de elegibilidade competitiva da trajetória.
+`matching-score-1.4.0` é uma projeção determinística do matching resolvido, disponível somente para os Grupos A e B. Os pesos são área 10, função 25, obrigatórios 35, desejáveis 10, duração da experiência relacionada 10 e recência da experiência relacionada 10. As dimensões são independentes: não há multiplicador, bônus cruzado, veto, prioridade automática ou desempate novo. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`. No Grupo C, a conexão por requisito continua rastreável, mas o número agregado retorna indisponível por falta de elegibilidade competitiva da trajetória.
 
 Desde `vacancy-definition-1.2.0`, `unclassified` existe somente durante a preparação de um rascunho assistido. Um requisito incluído manualmente nasce de forma coerente como `required`; qualquer rascunho com requisito ainda não classificado deve exigir a decisão entre obrigatório e desejável antes de salvar. A RPC rejeita novas versões com `unclassified`. Versões históricas permanecem legíveis, e o matching continua explicando suas pendências sem inventar importância.
 
-Área por experiência explícita vale 30; declaração de área sem experiência vinculada suficiente vale 24. Função vale 20/17/12/8/0 para mesma função, equivalente, relacionada, contexto profissional corroborado ou nenhuma relação, com ajuste explícito de senioridade 0/-1/-4. Senioridade desconhecida nunca é inventada.
+Área por experiência explícita vale 10; declaração de área sem experiência vinculada suficiente vale 8. Função vale 25/21,25/15/10/0 para mesma função, equivalente, relacionada, contexto profissional corroborado ou nenhuma relação, com ajuste explícito de senioridade escalado na mesma proporção. Senioridade desconhecida nunca é inventada.
+
+As dimensões temporais usam somente experiências já reconhecidas como relacionadas pela avaliação determinística ou, no fluxo semântico, como `backend_execution` ou `software_execution`. Liderança, análise de sistemas, familiaridade com ferramenta, título isolado e contexto comercial não provam execução de programação. Duração soma meses ocupados depois de unir sobreposições, sem dupla contagem: 0 ponto para menos de 12 meses, 3 para 12–<24, 5 para 24–<36, 7 para 36–<60 e 10 para 60 ou mais. Recência vale 10 para atuação atual ou encerrada há menos de 6 meses, 7 para 6–<12, 5 para 12–<18, 3 para 18–<24 e 0 para 24 meses ou mais.
+
+A data de referência é civil, explícita no cálculo e persistida no fingerprint. Datas parciais, inválidas, contraditórias, invertidas ou com faixa temporal indeterminável deixam a dimensão como `Não determinado`; não viram zero factual. O score fica indisponível quando uma dimensão temporal aplicável não pode ser determinada. O detalhe exibe pontos, máximos, estado, explicação, evidência relacionada e data de referência.
 
 Cobertura usa o mesmo denominador, mas conta pontos avaliados com evidência suficiente independentemente do valor obtido. Falta de evidência não cobre e credita zero; relação avaliada como inexistente cobre e credita zero. Consequentemente, `score <= cobertura`. Cobertura abaixo de 60%, requisito `unclassified` ou dependência material torna o score provisório. O valor continua ordenando dentro do respectivo grupo, com o estado provisório sempre visível; score indisponível fica depois dos valores numéricos.
 
-O cálculo é puro, local, sem IA ou I/O. Condições operacionais e atributos pessoais/sensíveis não entram no input. Evidência Demonstrada vigente e de versão reconhecida pode fortalecer somente o requisito de vínculo exato, sem bônus. Breakdown, versões e fingerprint permitem reprodução.
+O cálculo é puro, local, sem IA ou I/O. Condições operacionais e atributos pessoais/sensíveis não entram no input. Evidência Demonstrada vigente e de versão reconhecida pode fortalecer somente o requisito de vínculo exato, sem bônus. Breakdown, versões, data de referência e fingerprint permitem reprodução.
 
 ## Suficiência
 
@@ -3916,7 +3926,7 @@ Competências transferíveis são declaradas na vaga. O mecanismo não inventa a
 
 Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM também deverá persistir `promptVersion` e `modelVersion`.
 
-A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avançou o score para `matching-score-1.1.0`, conforme ADR-055. O ADR-057 avança para `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`: trajetória define A/B/C e sinais sem trajetória deixam de produzir score comparável.
+A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avançou o score para `matching-score-1.1.0`, conforme ADR-055. O ADR-057 avança para `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`: trajetória define A/B/C e sinais sem trajetória deixam de produzir score comparável. O M8.4, em `matching-score-1.4.0` e ADR-074, adiciona duração e recência como dimensões independentes, com referência civil explícita, sem reescrever snapshots históricos.
 
 O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. A fronteira aceita snapshots históricos 4.0.0 e atuais 5.0.0, rejeitando qualquer versão desconhecida. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
 
@@ -3966,7 +3976,7 @@ Usar o menor modelo disponível que cumpra segurança, qualidade, contexto, Stru
 | Inference | local | `inference-ontology-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Retrieval | local | `structured-lexical-1.0.0` | nenhum | 1.0.0 | ativo local |
 | Matching do vertical slice base | local | `matching-explainable-1.0.0` | nenhum | 1.0.0 | ativo local |
-| Matching de Posições | local | `vacancy-matching-explainable-5.0.0` + `matching-score-1.2.0` | nenhum | 5.0.0 / 1.2.0 | ativo local/QA |
+| Matching de Posições | local | `vacancy-matching-explainable-5.0.0` + `matching-score-1.4.0` | nenhum | 5.0.0 / 1.4.0 | ativo local/QA |
 | Knowledge research | OpenAI | `gpt-5.6-luna` | nenhum | 1.0.0 | ativo e validado no Prisma-QA |
 | Assessment item generation | local | `fake-deterministic` | nenhum | 1.0.0 | ativo local/QA, sintético |
 | Assessment item generation external | não aprovado | nenhum | provider fake | 1.0.0 | desativado |
@@ -5169,6 +5179,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M8.4 (2026-09-27, implementação autorizada): o registro oficial avança para Prisma v1.8.4 como quarta entrega do Movimento 8. `matching-score-1.4.0` adiciona duração e recência de experiência relacionada, referência civil explícita e fingerprint determinístico; pontuação histórica não é reescrita. A migration `20260927110000_m84_score_temporal_compatibility.sql` aceita snapshots novos 1.4.0 e preserva leitura/commit de 1.3.0. Acordo, execução e evidências estão em `docs/qa/agreement-m84-prisma-score-temporal.md`, `docs/qa/execution-m84-prisma-score-temporal.md` e no AoT correspondente.
 
 GOV-01 (2026-09-20) registra uma regra permanente de governança para Mapa de Impacto, baseline, regressão proporcional e preservação no AoT. É uma mudança documental/processual sem comportamento de produto, schema, runtime ou entrega pública; por isso não incrementa `Prisma v1.8.2` nem contratos executáveis. O ADR-072 e o AoT GOV-01 registram a decisão e as provas.
 
@@ -9280,6 +9292,35 @@ Primeiro piloto: títulos explicitamente de desenvolvimento backend, excluindo d
 
 ---
 
+## Source: `docs/decisions/ADR-074-m84-temporal-prisma-score.md`
+
+# ADR-074 — Dimensões temporais do Prisma Score
+
+Estado: accepted. Data: 2026-09-27. Acordo: `docs/qa/agreement-m84-prisma-score-temporal.md` v1.0.0.
+
+## Contexto
+
+O Score Prisma 1.2.0/1.3.0 comparava área, função e requisitos, mas não distinguia duração acumulada nem recência da experiência relacionada. O Product Owner aprovou seis dimensões independentes e exigiu que datas incompletas permanecessem desconhecidas, sem zero factual.
+
+## Decisão
+
+O contrato `matching-score-1.4.0` mantém grupos A/B/C, requisitos, autoridade humana e ordenação existentes e redistribui os pesos para área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10. A duração une intervalos em meses antes de somar; a recência usa a última atuação e uma data civil explícita. O cálculo é local, determinístico e inclui a data de referência e as experiências relacionadas no fingerprint.
+
+Somente períodos de experiências já reconhecidas como relacionadas entram no cálculo. No fluxo semântico, apenas `backend_execution` e `software_execution` qualificam programação; liderança, análise, declaração e familiaridade de ferramenta não são convertidas em execução. Período parcial, inválido ou contraditório deixa as dimensões aplicáveis como não determinadas e o score indisponível.
+
+## Alternativas consideradas
+
+- Manter 30/20/35/15 e exibir tempo apenas como informação: rejeitada porque não produziria a dimensão aprovada nem soma máxima 100.
+- Usar multiplicadores ou bônus de recência: rejeitada por ocultar a contribuição de cada dimensão e alterar a interpretação do score.
+- Inferir meses por cargo, senioridade ou atividade atual: rejeitada por violar proveniência e transformar ausência de precisão em fato.
+- Reescrever snapshots anteriores: rejeitada; a migration é somente de compatibilidade e aceita o novo contrato sem alterar histórico.
+
+## Consequências
+
+O runtime web e o runtime Edge são gerados do mesmo módulo. O snapshot continua calculado no servidor e a RPC aceita 1.3.0 e 1.4.0. A UI exibe data de referência e estado `Não determinado`; não há nova persistência de fatos, IA, curadoria, desempate ou mudança de grupos.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -9355,6 +9396,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-065](ADR-065-common-professional-taxonomy-domains.md) | accepted | Knowledge comum sustenta domínios ocupacional e de competências separados e versionados |
 | [ADR-068](ADR-068-impact-scoped-release-dispatcher.md) | accepted | Release limitado ao impacto, SHA validado e publicação seletiva por superfície |
 | [ADR-069](ADR-069-m77-company-global-knowledge-governance.md) | accepted | Knowledge local imediata, contribuição global central e IA assistiva auditável |
+| [ADR-074](ADR-074-m84-temporal-prisma-score.md) | accepted | Duração e recência como dimensões independentes e determinísticas do Prisma Score |
 
 ## Rules
 
@@ -13038,6 +13080,64 @@ Screenshots do relato são contraexemplos do comportamento de descoberta, não p
 
 ---
 
+## Source: `docs/qa/agreement-m84-prisma-score-temporal.md`
+
+# Acordo M8.4 — duração e recência no Prisma Score
+
+Versão 1.0.0. Estado: agreed. Product Owner: Bruno, 2026-09-27. Execução autorizada nesta conversa. Fonte: decisões explícitas do movimento M8.4.
+
+## DEVE
+
+- D-01 — O Prisma Score terá seis dimensões independentes, com máximos área profissional 10, proximidade da função 25, requisitos obrigatórios 35, requisitos desejáveis 10, duração da experiência relacionada 10 e recência da experiência relacionada 10. O total máximo é 100.
+- D-02 — Duração e recência somam pontos diretamente; não alteram função, requisitos ou outra dimensão. Não há multiplicador, bônus oculto, veto ou prioridade automática por recência.
+- D-03 — Duração usa a escala inteira 0, 3, 5, 7, 10: menos de 12 meses; 12 a menos de 24; 24 a menos de 36; 36 a menos de 60; 60 ou mais. Períodos relacionados são unidos antes da soma, sem duplicar sobreposições.
+- D-04 — Recência usa a escala inteira 10, 7, 5, 3, 0: atuação atual explicitamente documentada ou encerrada há menos de 6 meses; 6 a menos de 12; 12 a menos de 18; 18 a menos de 24; 24 ou mais.
+- D-05 — A regra temporal só consome experiências já reconhecidas como relacionadas pelo matching. No piloto semântico, somente `backend_execution` e `software_execution` qualificam o período para o backend; declaração profissional, familiaridade tecnológica e liderança/gestão sem execução explícita não qualificam programação.
+- D-06 — A data de referência é explícita, em calendário civil `YYYY-MM-DD`, entra no fingerprint e é reutilizada no snapshot. Períodos com mês insuficiente, inválidos, contraditórios ou sem sustentação permanecem não determinados; não recebem zero factual.
+- D-07 — A decomposição mostra as duas dimensões, pontos/faixas, evidências e períodos considerados em divulgação progressiva. A interface preserva a jornada e não exige confirmação manual para cálculo seguro.
+- D-08 — A regra é determinística. A IA não atribui pontos, não escolhe meses e não substitui a evidência publicada. O desempate temporal entre Pessoas fica fora deste movimento.
+
+## PROIBIDO
+
+- P-01 — Não transformar desconhecimento de datas em ausência de experiência, zero factual, incapacidade ou pontuação escolhida para completar 100.
+- P-02 — Não somar períodos simultâneos duas vezes, não fabricar mês/dia, não assumir que toda atividade do vínculo ocorreu durante todo o período e não usar emprego atual de gestor como prova de programação atual.
+- P-03 — Não alterar a política de grupos A/B/C, ordenação, decisão humana, requisitos, triagem M8.3, autoridade de contratação, Knowledge, Perfil ou Posição.
+
+## FORA DE ESCOPO
+
+- F-01 — Desempates por meses ou duração, aprendizado com correções humanas, curadoria ocupacional/aliases, expansão do piloto semântico, nova dimensão, mudanças de banners e alterações não necessárias à apresentação do breakdown.
+
+## AUTONOMIA
+
+- A-01 — Reutilizar `parseResumePeriod`, o matching existente, o motor de score e o runtime gerado da Edge. A implementação pode introduzir somente tipos/helpers locais e a migration forward-only necessária para aceitar o novo contrato.
+- A-02 — Para não inventar precisão, o cálculo usa mês-calendário quando o mês está documentado; intervalo apenas anual só é pontuado quando seus limites possíveis permanecem na mesma faixa. Sobreposição é unificada por intervalos mensais.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — Testes cobrem os cinco limites da duração, os cinco limites da recência, atual explicitamente documentado, ausência/ano parcial, período inválido, sobreposição e determinismo pela data de referência.
+- CA-02 — Testes demonstram seis máximos 10/25/35/10/10/10, pontos inteiros das dimensões novas, soma direta, preservação das quatro dimensões existentes e ausência de multiplicadores/desempates.
+- CA-03 — Testes determinísticos demonstram que somente experiências relacionadas entram no tempo; tecnologia solta, área declarada sem experiência e gestão sem execução não fabricam duração/recência.
+- CA-04 — Testes semânticos demonstram que histórico de execução continua elegível, liderança não prova programação atual, requisitos e grupos M8.3 permanecem e entradas desconhecidas ficam não determinadas.
+- CA-05 — Web e bundle Edge são gerados do mesmo módulo; testes de runtime, snapshot, rejeição de versão antiga/incompatível e migration forward-only são dirigidos.
+- CA-06 — Context Pack, contrato, ADR e AoT registram mapa de impacto, evidência local, release surfaces, limites e smoke real; nenhum dado real é criado ou alterado para teste.
+
+## Mapa de impacto e preservação
+
+| Área/capacidade | Relação | Preservação e regressão proporcional |
+| --- | --- | --- |
+| Motor determinístico e breakdown do Prisma Score | direct | Seis dimensões, soma, faixas, desconhecimento, fingerprint e limites temporais |
+| Piloto semântico M8.3 e runtime Edge | direct | Execução histórica, exclusão de gestão como prova de programação, snapshot calculado no servidor e versões |
+| Busca, comparação, ordenação e decisão humana | plausible_indirect | A/B/C, ordenação existente, desempate e decisões sem alteração |
+| Perfil/publicação/parser/datas | plausible_indirect | Somente leitura de Perfil publicado; normalização, proveniência e texto original preservados |
+| M6.2/verificações | plausible_indirect | Snapshot histórico continua legível; score novo é aceito apenas por contrato explícito |
+| Auth/RLS/tenant/PII | critical_transversal | Nenhuma fonte nova, nenhum campo sensível no contexto semântico, guardas RPC preservadas |
+| Knowledge/curadoria | no_impact_identified | Nenhuma equivalência, alias ou decisão de curadoria criada |
+| Web, Edge, migration e release | direct | Plano de release roteia somente web, matching-trajectory, migration e documentação gerada |
+
+Baseline local: `main` em `d1be125a0628d5984c9da6e18a3eba62fb7f33d7`; estado operacional será confirmado no AoT. Os arquivos não rastreados existentes são preservados e não fazem parte do movimento.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -15627,6 +15727,71 @@ Runtime `a5ddd5a2ac9547d6aab6a11aaf8df04726dc48ed`, integrado em main e origin/m
 Smoke autenticado no navegador interno em 27/09: lista de backend somente Bruno/Diego e C recolhido (João); quatro fora ausentes, sem seção de pendências indevidas; C expandido oferece consulta de sinais, não IA. Comparação dos dois elegíveis abre com 47/100 provisórios, cobertura 50% e os mesmos 11 requisitos sem evidência suficiente. Captura visual da lista e leitura DOM/AX da comparação registradas na tarefa, sem publicação de currículos em arquivos de teste. Consulta posterior confirmou os mesmos IDs de análise de 25/09, completos e uma tentativa cada. Agregados históricos preservados: prompt 1.1 com 7 registros; prompt 1.2 com 7 (4 completos, 3 indeterminados), uma tentativa por registro. Essas três pendências históricas não contaminam a nova descoberta.
 
 Limites: piloto backend mantido; triagem legada não foi reescrita nem validada universalmente por esta entrega. Pesos/prompt/modelo, requisitos, decisões humanas e dados reais não alterados. O aviso de comparação incompleta permanece pela cobertura insuficiente de A/B. Sem nova avaliação paga necessária, pois a semântica não mudou. Desvios do acordo: nenhum. Fechamento documental posterior não exige nova publicação de runtime/Edge.
+
+---
+
+## Source: `docs/qa/aot-m84-prisma-score-temporal.md`
+
+# AoT — M8.4 Score Prisma temporal
+
+Contrato: `docs/qa/agreement-m84-prisma-score-temporal.md` v1.0.0. Execução: `docs/qa/execution-m84-prisma-score-temporal.md`. ADR: `docs/decisions/ADR-074-m84-temporal-prisma-score.md`. Baseline `main` em `d1be125a0628d5984c9da6e18a3eba62fb7f33d7`.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01/D-02 | `matchingScore.ts` com seis dimensões e soma direta | `m84ScoreTemporal`, `matchingScore`, golden | PASS |
+| D-03 | Janelas mensais unificadas e bandas 0/3/5/7/10 | `m84ScoreTemporal` com limites e sobreposição | PASS |
+| D-04 | Recência atual/6/12/18/24 meses | `m84ScoreTemporal` com cinco fronteiras | PASS |
+| D-05/D-06 | Experiências relacionadas, referência civil e fingerprint | testes semântico/determinístico e score temporal | PASS |
+| D-07 | Breakdown progressivo, evidência e data na UI | `matchingScore` UI/service assertions; build | PASS |
+| D-08 | Cálculo determinístico e sem desempate | testes de determinismo e ordenação | PASS |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01/P-02 | Desconhecimento não vira zero; sobreposição não duplica; gestão não prova programação | testes de ausência, ano parcial, sobreposição e piloto semântico | PASS |
+| P-03 | A/B/C, requisitos, decisão humana e Knowledge preservados | regressão direcionada e diff | PASS |
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline/regressão | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| Motor/breakdown do score | direct | Score anterior e novos máximos | build, testes M8.4 e golden 23/23 | PASS |
+| Semântico M8.3 e Edge | direct | versão 1.3.0 aceita; 1.4.0 gerada | build e check de runtime | PASS |
+| Busca, comparação, ordenação | plausible_indirect | grupos e ordenação existentes | `matchingScore.test` | PASS |
+| Perfil/parser/publicação | plausible_indirect | sem escrita ou alteração de fatos | diff e testes semânticos | PASS |
+| M6.2/snapshots | plausible_indirect | compatibilidade SQL forward-only | migration e testes de snapshot | PARTIAL |
+| Auth/RLS/tenant/PII | critical_transversal | sem nova fonte ou autoridade | revisão de escopo; Deno bloqueado no host | NOT TESTED |
+| Knowledge/curadoria | no_impact_identified | nenhum objeto tocado | diff | PASS |
+
+## Fora de escopo
+
+F-01 desempate temporal, aprendizado, curadoria, nova dimensão, expansão semântica e mudança de banners: não implementados.
+
+## Validação local
+
+- `pnpm run build`: PASS.
+- Testes direcionados `matchingScore`, `m84ScoreTemporal` e `semanticTrajectory`: PASS após atualização dos fixtures; golden matching/extraction: 23/23 PASS.
+- `pnpm run check:matching-runtime`: PASS; sete módulos fonte e dois extratos exatos conferidos.
+- `pnpm run generate:prisma-context` e `pnpm run check:prisma-context`: PASS; exports gerados do Context Pack conferidos.
+- `pnpm run check:foundation`: PASS; 18 tabelas públicas e 6 versões de processamento.
+- `pnpm run typecheck:web`, `pnpm run build:web` e `pnpm run lint`: PASS. Build web manteve apenas avisos existentes de chunk/import dinâmico.
+- `pnpm run test`: PASS; 689 testes Node, com probes de falha sintéticos esperados pelo próprio harness; nenhum teste final falhou.
+- `pnpm run test:release-tooling`: PASS, 15 testes.
+- `pnpm run release:plan` após o commit `da9562f`: 42 arquivos; roteamento backend, Context Pack, database, documentação, Edge `matching-trajectory`, hosting/web e testes. Parser e outras Edge Functions ficaram fora.
+- `pnpm run check:supabase-ledger`: PASS como diagnóstico de ledger; `cliDbPushAllowed: false`, 137 migrations mapeadas, 2 somente locais e 6 somente remotas. O novo M8.4 aparece como `pendingLocal` e não foi aplicado por `db push` genérico.
+- Deno handler/snapshot: não executado; o binário disponível falhou com acesso negado ao `deno.exe`. Limitação permanece explícita.
+- Não foi executado `pnpm run validate` integral, conforme escopo econômico e contrato do repositório.
+
+## Ambiente, release e limitações
+
+O plano de release foi derivado do commit `da9562f`. A migration é nova e forward-only; não usar `db push` genérico nem `migration repair`. O único remoto Prisma é produção, com ledger histórico divergente e `cliDbPushAllowed: false`; a migration exige publicação revisada pelo dispatcher/connector autorizado. Deno handler/snapshot não foi executado porque o `deno.exe` disponível retornou acesso negado no host. Publicação, smoke autenticado e sincronização permanecem pendentes até o gate final; nenhum dado real foi criado ou alterado para testes.
+
+## Desvios
+
+Nenhum desvio funcional identificado. Limitações: Deno não executado no host e smoke remoto ainda não realizado neste AoT.
 
 ---
 
@@ -19420,6 +19585,20 @@ AoT: `docs/qa/aot-m83-semantic-trajectory.md`. Decisão técnica: ADR de interpr
 # Execução M8.3 — triagem antes da IA
 
 Implementar integralmente `docs/qa/agreement-m83-triage-before-ai.md` v1.0.0 (D-01–D-04, P-01/P-02, F-01, A-01 e CA-01/CA-02). Classe D; preservar motor determinístico e regras semânticas, estender somente acionamento. QA local sintética e smoke autenticado em produção autorizados. AoT em `docs/qa/aot-m83-triage-before-ai.md`.
+
+---
+
+## Source: `docs/qa/execution-m84-prisma-score-temporal.md`
+
+# Execution Prompt M8.4 — duração e recência no Prisma Score
+
+Contrato congelado: `docs/qa/agreement-m84-prisma-score-temporal.md` v1.0.0.
+
+Implemente D-01 a D-08. As proibições P-01 a P-03 não podem ocorrer. F-01 permanece fora do escopo. A engenharia pode aplicar A-01 e A-02, desde que preserve o contrato completo.
+
+Entregue um score versionado novo, com seis dimensões e máximos 10/25/35/10/10/10. Use experiências relacionadas já reconhecidas pela regra determinística e, no piloto semântico, apenas execução backend/software explicitamente classificada. Una intervalos mensais sobrepostos, use data civil de referência explícita e falhe de modo neutro quando a precisão temporal não for suficiente. Integre o breakdown progressivo existente, sem alterar grupos, ordenação, desempate, triagem, requisitos ou autoridade humana.
+
+Atualize o runtime gerado da Edge, a guarda persistida do snapshot e a documentação proprietária. Valide CA-01 a CA-06 com testes dirigidos, typecheck/build web, lint, runtime gerado, release plan e smoke proporcional. Não execute a suíte integral. Não crie dados humanos ou decisões de curadoria em produção.
 
 ---
 
