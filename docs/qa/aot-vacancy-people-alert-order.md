@@ -38,3 +38,5 @@ Implementação: `profileDiscoveryService` agora expõe registros paginados e to
 | D-PEOPLE-01 produção | Publicação web/VPS e smoke ainda não executados neste registro. | NOT TESTED |
 
 Versão: nenhuma alteração; fórmula e contrato `matching-score-1.4.0` são preservados. Diff sem alteração de schema, RPC, RLS, backend ou Edge; release esperado apenas web/VPS e documentação. Rollback previsto: restaurar a imagem anterior do `prisma-web`, sem operação de banco. Desvios conhecidos: nenhum funcional; CI e smoke de produção aguardam publicação.
+
+O primeiro CI da branch parou no verificador de Context Pack porque os arquivos gerados não incluíam a seção de evidências acima, atualizada após a geração local. Os dois artefatos foram regenerados e `check:prisma-context` passou; a nova execução de CI ainda é necessária.

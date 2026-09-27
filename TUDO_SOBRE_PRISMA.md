@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 284
-source_manifest_sha256: 999280f8bd8bbb74888a975de35dccbf44acecd68493e624759ae42fdcb8c94a
+source_manifest_sha256: b1cc106f2f314926b9116ce138b27922c550359f97638b180903f2a85fd27bad
 -->
 
 # Tudo sobre o Prisma
@@ -16512,7 +16512,19 @@ Escopo aprovado por Bruno em 2026-09-27: corrigir os avisos da tela Pessoas para
 
 ## Execução e evidências
 
-Preencher implementação, validação, publicação, smoke, SHA, rollback e desvios ao concluir. O método e a versão de score permanecem inalterados.
+Implementação: `profileDiscoveryService` agora expõe registros paginados e total esperado, mantendo os totais de candidatos analisados intactos. `VacancyPeoplePage` oculta avisos de sucesso e comparação pendente, conserva aviso de requisitos não classificados e só mostra alerta de consulta incompleta quando `complete` é falso. `sortVacancyMatches` sempre aplica grupo, score descendente, decisão existente e nome como desempates; comparação individual, pesos e elegibilidade não mudam.
+
+| Critério | Evidência local | Status |
+| --- | --- | --- |
+| D-PEOPLE-01 / CA-PEOPLE-02 | `tests/vacancyIntelligence.test.ts` e `tests/matchingScore.test.ts` verificam o alerta condicionado a `complete`, contagens, ausência de confirmação e preservação da pendência de classificação. | PASS |
+| D-PEOPLE-02 | Regressões da lista confirmam ausência do aviso de comparação pendente/ordem alfabética; a tela de comparação selecionada não foi alterada. | PASS |
+| D-PEOPLE-03 / CA-PEOPLE-01 | `tests/semanticTrajectory.test.ts`, `tests/matchingScore.test.ts` e `tests/vacancyIntelligence.test.ts`: 146 testes, 146 PASS, incluindo pendência sem bloquear score descendente. | PASS |
+| CA-PEOPLE-03 | `pnpm run build`, `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`, `git diff --check`. Build web PASS com warnings preexistentes do chunk/injeção dinâmica; Context Pack PASS. | PASS |
+| D-PEOPLE-01 produção | Publicação web/VPS e smoke ainda não executados neste registro. | NOT TESTED |
+
+Versão: nenhuma alteração; fórmula e contrato `matching-score-1.4.0` são preservados. Diff sem alteração de schema, RPC, RLS, backend ou Edge; release esperado apenas web/VPS e documentação. Rollback previsto: restaurar a imagem anterior do `prisma-web`, sem operação de banco. Desvios conhecidos: nenhum funcional; CI e smoke de produção aguardam publicação.
+
+O primeiro CI da branch parou no verificador de Context Pack porque os arquivos gerados não incluíam a seção de evidências acima, atualizada após a geração local. Os dois artefatos foram regenerados e `check:prisma-context` passou; a nova execução de CI ainda é necessária.
 
 ---
 
