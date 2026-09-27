@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 275
-source_manifest_sha256: 62755cf1ba7e548fda79347dfd9ec15fa28a695f800942b61d3a4f1c202f73a5
+source_manifest_sha256: a0d776e49b2b99f19a0aaf46a3ddb282024f3e4901a6e8564375544c997bc889
 -->
 
 # Tudo sobre o Prisma
@@ -2632,11 +2632,11 @@ last_verified: 2026-09-27
 
 ## M8.3: interpretação da trajetória (piloto backend publicado)
 
-Correção de acionamento em validação local (27/09): somente A/B da descoberta determinística seguem automaticamente para IA; C permanece recolhido sem IA, fora da descoberta não aparece nem como pendência. Baseline real dos sete Perfis confirmou A Bruno, B Diego, C João e quatro fora. Mesma regra no backend antes de cache/provedor; score/prompt/modelo preservados. AoT `docs/qa/aot-m83-triage-before-ai.md` registra rollout e limites; este parágrafo não comprova publicação.
+Correção de acionamento publicada em 27/09: runtime `a5ddd5a`, Edge v3 e web, sem migration. Somente A/B da descoberta determinística seguem automaticamente para IA; C permanece recolhido sem IA, fora da descoberta não aparece nem como pendência. Baseline real dos sete Perfis confirmou A Bruno, B Diego, C João e quatro fora. Mesma regra no backend antes de cache/provedor; score/prompt/modelo preservados. CI, 175 testes Node dirigidos, 27 Deno e smoke autenticado de lista/comparação PASS. Bruno/Diego mantiveram análises anteriores e notas; históricos preservados. AoT `docs/qa/aot-m83-triage-before-ai.md` registra rollout e limites.
 
 Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendendo área/função/grupos com interpretação derivada no piloto de desenvolvimento backend. Duas leituras independentes classificam evidências em categorias fechadas, com citações e sem nota livre. Cache isolado por empresa e versões evita nova opinião em cada reabertura. Divergência/falha vira pendência, não zero; comparação incompleta não indica prioridade segura. Perfis, Posições, Knowledge e decisões humanas não são reescritos. Modelo/configuração de fornecedor existente, política financeira do Parser (decisão «siga o parser»); nenhum teto monetário paralelo. Aprendizado por correções humanas fica fora. Situação real de testes, publicação e limitações no AoT `docs/qa/aot-m83-semantic-trajectory.md`; código local não é evidência de rollout.
 
-Runtime final `60c642f` publicado em main, banco, Edge v2 e web; CI e smoke autenticado PASS. Prompt 1.2.0 mantém rubrica/guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências. São conjuntos de desenvolvimento, não holdout ou prova de justiça universal. Smoke real: quatro interpretações completas e três abstenções por divergência, sem nota/prioridade para pendências. Bruno e Diego: 47/100 provisório, cobertura 50%, Grupo B, programação reconhecida mas requisitos backend ainda sem evidência suficiente. Comparação/reabertura mantiveram análises, uma tentativa cada; snapshots servidor confirmados. 177 testes Node direcionados, 25 Deno, 15 tooling e SQL concorrente/negativo PASS; desktop/mobile inspecionados. Aprendizado, outras profissões e redução adicional da abstenção não estão validados por este piloto.
+Baseline semântico anterior `60c642f`, Edge v2, publicado em 25/09; CI e smoke autenticado PASS. Prompt 1.2.0 mantém rubrica/guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências. São conjuntos de desenvolvimento, não holdout ou prova de justiça universal. Smoke anterior: quatro interpretações completas e três abstenções por divergência, sem nota/prioridade para pendências; agora somente elegíveis A/B consomem essa camada. Bruno e Diego: 47/100 provisório, cobertura 50%, Grupo B, programação reconhecida mas requisitos backend ainda sem evidência suficiente. Comparação/reabertura mantiveram análises, uma tentativa cada; snapshots servidor confirmados. Baseline: 177 testes Node direcionados, 25 Deno, 15 tooling e SQL concorrente/negativo PASS; desktop/mobile inspecionados. Aprendizado, outras profissões e redução adicional da abstenção não estão validados por este piloto.
 
 ## Disponibilidade antecipada da importação (publicada)
 
@@ -9374,6 +9374,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Correção M8.3 de 27/09: runtime `a5ddd5a`, Edge `matching-trajectory` v3 e `prisma-web` publicados após CI. Triagem determinística A/B antes de cache/provedor; C e fora não acionam IA. Sem migration, prompt/modelo e demais serviços preservados. Web running/zero reinícios, HTTPS 200 e smoke autenticado de lista/comparação PASS. Rollback web `prisma-web:rollback-before-a5ddd5a2ac95`, Edge anterior v2. Evidência: `docs/qa/aot-m83-triage-before-ai.md`. Registro abaixo descreve o baseline anterior.
+
 M8.3 — interpretação de trajetória: runtime `60c642f` publicado, prompt 1.2.0, Edge v2, smoke autenticado PASS com limitações explícitas. Migrations `20260925150000_m83_semantic_trajectory.sql` e `20260925190000_m83_prompt_compatibility.sql` aplicadas e imutáveis, correspondências remotas no AoT. Destinos foram somente migrations novas, Edge `matching-trajectory` e `prisma-web`. A Edge reutiliza `OPENAI_API_KEY`, `KNOWLEDGE_RESEARCH_MODEL` e `KNOWLEDGE_AGENT_ENABLED`; nenhuma configuração monetária paralela. O bundle deve incluir `src/domain/semanticTrajectory.ts` e os módulos `_generated`, produzidos por `pnpm generate:matching-runtime` e conferidos por `pnpm check:matching-runtime`. Dispatcher 1.0.1 reconhece os dois consumidores do contrato compartilhado. A autenticação usa `auth.getUser()` antes de qualquer acesso com service role; as RPCs autorizam empresa/fontes. Não publicar o frontend antes do backend compatível. Local sintético é o gate QA; usar somente migrations novas pelo connector, nunca `db push` geral. Evidência e conclusão: `docs/qa/aot-m83-semantic-trajectory.md`.
 
 Rollback M8.3: reativar a imagem web preservada pelo dispatcher e a revisão anterior da Edge, se houver; na primeira publicação, o frontend anterior não chama a função nova. Manter a tabela/snapshots para auditoria, sem apagar/reclassificar Perfis ou restaurar notas em registros históricos. A extensão M6.2 é retrocompatível. Desativação global de `KNOWLEDGE_AGENT_ENABLED` não é rollback isolado, pois afetaria outras capacidades Knowledge; não fazê-la para testar falha desta entrega. Cache e estados pendentes permitem consulta manual sem nova chamada. Timeout de provedor, limite operacional de duas análises, lease e cooldown não substituem os limites financeiros OpenAI.
@@ -15547,7 +15549,7 @@ Contrato/execution homônimos v1.0.0. Baseline e mapa no acordo.
 | D-01/P-02 | Gate compartilhado frontend/Edge, antes do cache/provedor; testes de chamada A/B e rejeição C/fora/injeção de grupo | PASS |
 | D-02 | C determinístico recolhido; fora filtrado; smoke local autenticado confirma João sem opção de IA, quatro fora ausentes | PASS |
 | D-03/P-01 | Mesmo score/prompt, snapshot e decisões; regressão dirigida, notas Bruno/Diego 47 provisórias preservadas | PASS |
-| D-04 | Baseline real lido sem alterações; release/smoke pendentes | PARTIAL |
+| D-04 | Baseline real, CI, main, Edge v3, web e smoke autenticado confirmados | PASS |
 
 Baseline confirmado: Bruno A, Diego B, João C, Beatriz/Júlia/Ivan/Vagner fora. Nenhuma chamada de IA na conferência. Material de outros trabalhos preservado: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu`, `tests/matchingRuntime (1).test.ts`.
 
@@ -15557,7 +15559,15 @@ Baseline confirmado: Bruno A, Diego B, João C, Beatriz/Júlia/Ivan/Vagner fora.
 
 Smoke autenticado em `127.0.0.1:5555`, mesma Posição e sete Perfis: progresso 0/2; Bruno/Diego em B final com 47/100 provisórios e cobertura 50%; C inicialmente recolhido (1), expansão mostra João, sem pendência nem ação de IA. Quatro fora não aparecem. Aviso de comparação incompleta permanece corretamente pela cobertura dos elegíveis; banners/redesign fora do escopo. Nenhuma confirmação humana ou dado de Perfil foi alterado.
 
-Publicação e smoke de produção ainda pendentes. QA desta mudança: testes sintéticos locais e frontend local autenticado contra fontes existentes; não foi criado outro ambiente remoto.
+QA desta mudança: testes sintéticos locais e frontend local autenticado contra fontes existentes; não foi criado outro ambiente remoto.
+
+## Produção e preservação
+
+Runtime `a5ddd5a2ac9547d6aab6a11aaf8df04726dc48ed`, integrado em main e origin/main pelo dispatcher 1.0.1. CI [36317071235](https://github.com/brunoharita/HRT-Prisma/actions/runs/36317071235) PASS. Plano: somente Edge `matching-trajectory` e `prisma-web`, sem migration. Edge v3 ACTIVE, hash `8edd21c7de87b5c591edee8b15897325e1326a7c596c06092ffcbeb2170467ce`; autenticação própria preservada, POST sem sessão retorna 401 `AUTH_REQUIRED`. Web/VPS no mesmo SHA funcional, imagem `sha256:eab8be92fd71577d4df16c3ebd0645cacc91c1d41fbb04bf6e14173e6c0017ab`, running, zero reinícios, HTTPS 200. Rollback web `prisma-web:rollback-before-a5ddd5a2ac95`; revisão Edge anterior v2 e seu código em `cf8e204` preservados.
+
+Smoke autenticado no navegador interno em 27/09: lista de backend somente Bruno/Diego e C recolhido (João); quatro fora ausentes, sem seção de pendências indevidas; C expandido oferece consulta de sinais, não IA. Comparação dos dois elegíveis abre com 47/100 provisórios, cobertura 50% e os mesmos 11 requisitos sem evidência suficiente. Captura visual da lista e leitura DOM/AX da comparação registradas na tarefa, sem publicação de currículos em arquivos de teste. Consulta posterior confirmou os mesmos IDs de análise de 25/09, completos e uma tentativa cada. Agregados históricos preservados: prompt 1.1 com 7 registros; prompt 1.2 com 7 (4 completos, 3 indeterminados), uma tentativa por registro. Essas três pendências históricas não contaminam a nova descoberta.
+
+Limites: piloto backend mantido; triagem legada não foi reescrita nem validada universalmente por esta entrega. Pesos/prompt/modelo, requisitos, decisões humanas e dados reais não alterados. O aviso de comparação incompleta permanece pela cobertura insuficiente de A/B. Sem nova avaliação paga necessária, pois a semântica não mudou. Desvios do acordo: nenhum. Fechamento documental posterior não exige nova publicação de runtime/Edge.
 
 ---
 
