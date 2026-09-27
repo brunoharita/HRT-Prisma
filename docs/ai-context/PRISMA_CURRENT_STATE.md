@@ -16,7 +16,7 @@ Runtime `e84497e` publicado em main, VPS e Edge `matching-trajectory` v5; CI e s
 
 ## Lista de Pessoas: alerta de consulta e ordenação (em validação)
 
-Em 2026-09-27, a lista de Pessoas deixa de exibir confirmação quando a paginação está completa e só informa falha quando `complete` é falso, com contagens de registros consultados/esperados. Pendências de classificação continuam com alerta próprio; a pendência semântica não ocupa mais um banner geral redundante. Grupos A/B/C permanecem na ordem atual; dentro de cada grupo os scores numéricos são exibidos em ordem decrescente, mesmo quando outra interpretação está pendente. Fórmula, pesos, score, snapshots, banco e versão não mudam. Implementação, testes e rollout: `docs/qa/aot-vacancy-people-alert-order.md`.
+Em 2026-09-27, a lista de Pessoas deixa de exibir confirmação quando a paginação está completa e só informa falha quando `complete` é falso, com contagens de registros consultados/esperados. Pendências de classificação continuam com alerta próprio; a pendência semântica não ocupa mais um banner geral redundante. Grupos A/B/C permanecem na ordem atual; dentro de cada grupo os scores numéricos são exibidos em ordem decrescente, mesmo quando outra interpretação está pendente. Fórmula, pesos, score, snapshots, banco e versão não mudam. O espelho puro gerado para `matching-trajectory` acompanha o domínio web; o handler não consome a ordenação. Implementação, testes e rollout: `docs/qa/aot-vacancy-people-alert-order.md`.
 
 ## M8.4: dimensões temporais do Score Prisma
 

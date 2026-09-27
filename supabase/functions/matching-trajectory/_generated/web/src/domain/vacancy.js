@@ -1,5 +1,4 @@
 // Generated from web/src/domain/vacancy.ts; run node scripts/generate-matching-runtime.mjs. DO NOT EDIT.
-import { semanticComparisonPending } from "./semanticMatching.js";
 import { calculateMatchingScore, MATCHING_SCORE_CONTRACT_VERSION, } from "./matchingScore.js";
 export const VACANCY_DEFINITION_VERSION = "1.3.0";
 export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-5.0.0";
@@ -387,17 +386,12 @@ export function shouldResearchVacancyMarket(question) {
     return Boolean(question.trim());
 }
 export function sortVacancyMatches(matches) {
-    const pending = semanticComparisonPending(matches);
-    const awaiting = (match) => Boolean(match.semanticAssessment && match.semanticAssessment.status !== "complete");
     const byName = (left, right) => left.candidate.fullName.localeCompare(right.candidate.fullName, "pt-BR") || left.candidate.personId.localeCompare(right.candidate.personId);
     return [...matches]
-        .sort((left, right) => awaiting(left) || awaiting(right)
-        ? Number(awaiting(right)) - Number(awaiting(left)) || byName(left, right)
-        :
-            discoveryGroupPriority(right.discoveryGroup) - discoveryGroupPriority(left.discoveryGroup)
-                || (pending ? 0 : prismaScoreComparison(left, right))
-                || (pending ? 0 : decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision))
-                || byName(left, right));
+        .sort((left, right) => discoveryGroupPriority(right.discoveryGroup) - discoveryGroupPriority(left.discoveryGroup)
+        || prismaScoreComparison(left, right)
+        || decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision)
+        || byName(left, right));
 }
 export function buildMatchingScoreShadowReport(matches, baselineOrder = matches.map((item) => item.candidate.personId)) {
     const baseline = new Map(baselineOrder.map((personId, index) => [personId, index]));

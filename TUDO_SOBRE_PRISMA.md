@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 284
-source_manifest_sha256: b1cc106f2f314926b9116ce138b27922c550359f97638b180903f2a85fd27bad
+source_manifest_sha256: 2564ba0016febdbbb03354efc8b15620d71e1fc431dfebf8d4290ab7ea520ec1
 -->
 
 # Tudo sobre o Prisma
@@ -2638,7 +2638,7 @@ Runtime `e84497e` publicado em main, VPS e Edge `matching-trajectory` v5; CI e s
 
 ## Lista de Pessoas: alerta de consulta e ordenação (em validação)
 
-Em 2026-09-27, a lista de Pessoas deixa de exibir confirmação quando a paginação está completa e só informa falha quando `complete` é falso, com contagens de registros consultados/esperados. Pendências de classificação continuam com alerta próprio; a pendência semântica não ocupa mais um banner geral redundante. Grupos A/B/C permanecem na ordem atual; dentro de cada grupo os scores numéricos são exibidos em ordem decrescente, mesmo quando outra interpretação está pendente. Fórmula, pesos, score, snapshots, banco e versão não mudam. Implementação, testes e rollout: `docs/qa/aot-vacancy-people-alert-order.md`.
+Em 2026-09-27, a lista de Pessoas deixa de exibir confirmação quando a paginação está completa e só informa falha quando `complete` é falso, com contagens de registros consultados/esperados. Pendências de classificação continuam com alerta próprio; a pendência semântica não ocupa mais um banner geral redundante. Grupos A/B/C permanecem na ordem atual; dentro de cada grupo os scores numéricos são exibidos em ordem decrescente, mesmo quando outra interpretação está pendente. Fórmula, pesos, score, snapshots, banco e versão não mudam. O espelho puro gerado para `matching-trajectory` acompanha o domínio web; o handler não consome a ordenação. Implementação, testes e rollout: `docs/qa/aot-vacancy-people-alert-order.md`.
 
 ## M8.4: dimensões temporais do Score Prisma
 
@@ -16506,6 +16506,7 @@ Escopo aprovado por Bruno em 2026-09-27: corrigir os avisos da tela Pessoas para
 | Consulta/paginação de Perfis publicada | direct | `complete` já compara páginas processadas ao total exato; testes do contrato de contagens e alerta incompleto |
 | Lista Pessoas e grupos A/B/C | direct | Baseline contém alertas de sucesso e pendência; teste de ausência e preservação dos grupos |
 | Ordenação por score | direct | `prismaScoreComparison` já ordena descendente e coloca null ao final; regressão com interpretação pendente |
+| Espelho de matching `matching-trajectory` | direct | `sortVacancyMatches` é exportado no runtime gerado, embora o handler atual não o consuma; regenerar e executar `tests/matchingRuntime.test.ts` para manter igualdade fonte/artefato |
 | Comparação selecionada | plausible_indirect | Continua ordenada pela seleção explícita de IDs; revisar diff e teste existente |
 | Score, dados, tenant e autoridade humana | critical_transversal | Sem cálculo novo, escrita, banco ou autorização; testes de score e revisão do diff |
 | Outras telas/domínios sem dependência identificada | no_impact_identified | Confirmado por busca de consumidores; sem alteração |
@@ -16518,13 +16519,14 @@ Implementação: `profileDiscoveryService` agora expõe registros paginados e to
 | --- | --- | --- |
 | D-PEOPLE-01 / CA-PEOPLE-02 | `tests/vacancyIntelligence.test.ts` e `tests/matchingScore.test.ts` verificam o alerta condicionado a `complete`, contagens, ausência de confirmação e preservação da pendência de classificação. | PASS |
 | D-PEOPLE-02 | Regressões da lista confirmam ausência do aviso de comparação pendente/ordem alfabética; a tela de comparação selecionada não foi alterada. | PASS |
-| D-PEOPLE-03 / CA-PEOPLE-01 | `tests/semanticTrajectory.test.ts`, `tests/matchingScore.test.ts` e `tests/vacancyIntelligence.test.ts`: 146 testes, 146 PASS, incluindo pendência sem bloquear score descendente. | PASS |
-| CA-PEOPLE-03 | `pnpm run build`, `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`, `git diff --check`. Build web PASS com warnings preexistentes do chunk/injeção dinâmica; Context Pack PASS. | PASS |
+| D-PEOPLE-03 / CA-PEOPLE-01 | `tests/semanticTrajectory.test.ts`, `tests/matchingScore.test.ts`, `tests/vacancyIntelligence.test.ts` e `tests/matchingRuntime.test.ts`: 149 testes, 149 PASS, incluindo pendência sem bloquear score descendente. | PASS |
+| Espelho Edge | `pnpm run check:matching-runtime` e `tests/matchingRuntime.test.ts` confirmam paridade do runtime gerado; handler Edge não chama a função de ordenação. | PASS |
+| CA-PEOPLE-03 | `pnpm run build`, `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`, `pnpm run generate:matching-runtime`, `pnpm run check:matching-runtime`, `git diff --check`. Build web PASS com warnings preexistentes do chunk/injeção dinâmica; Context Pack e espelho Edge PASS. | PASS |
 | D-PEOPLE-01 produção | Publicação web/VPS e smoke ainda não executados neste registro. | NOT TESTED |
 
-Versão: nenhuma alteração; fórmula e contrato `matching-score-1.4.0` são preservados. Diff sem alteração de schema, RPC, RLS, backend ou Edge; release esperado apenas web/VPS e documentação. Rollback previsto: restaurar a imagem anterior do `prisma-web`, sem operação de banco. Desvios conhecidos: nenhum funcional; CI e smoke de produção aguardam publicação.
+Versão: nenhuma alteração; fórmula e contrato `matching-score-1.4.0` são preservados. Sem mudança de schema, RPC, RLS, handler ou comportamento Edge; o módulo puro gerado é espelhado para satisfazer o contrato de runtime. O dispatcher determinará se a publicação Edge é necessária. Rollback web pela imagem anterior de `prisma-web`; eventual espelho Edge pode voltar ao SHA baseline, sem operação de banco. Desvios conhecidos: nenhum funcional; CI e smoke aguardam publicação.
 
-O primeiro CI da branch parou no verificador de Context Pack porque os arquivos gerados não incluíam a seção de evidências acima, atualizada após a geração local. Os dois artefatos foram regenerados e `check:prisma-context` passou; a nova execução de CI ainda é necessária.
+O primeiro CI da branch parou no verificador de Context Pack porque os arquivos gerados não incluíam a seção de evidências acima, atualizada após a geração local. Os dois artefatos foram regenerados e `check:prisma-context` passou. O CI seguinte aprovou Context Pack, lint, foundation e typechecks, mas apontou que o módulo gerado da Edge ainda não refletia a ordenação atualizada; `generate:matching-runtime`, `check:matching-runtime` e os 149 testes focados agora passaram localmente. O dispatcher deverá incluir o espelho na superfície Edge conforme o plano do diff. Uma nova execução do CI completo ainda é necessária.
 
 ---
 
