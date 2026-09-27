@@ -402,7 +402,7 @@ test("fingerprint is deterministic, changes with interpretation identity and nev
   assert.deepEqual(original, snapshot);
 });
 
-test("a material pending interpretation disables numeric ordering even for completed peers", () => {
+test("a material pending interpretation does not disable group and score ordering", () => {
   const high = setup(fixture("backend"), "high");
   const low = setup(fixture("backend"), "low");
   const pending = applySemanticAssessment(high.need, high.legacy, { ...high.assessment, status: "indeterminate" });
@@ -412,7 +412,8 @@ test("a material pending interpretation disables numeric ordering even for compl
   a.score = { ...a.score, score: 99 }; b.score = { ...b.score, score: 20 };
   const sorted = sortVacancyMatches([a, b, pending]);
   assert.equal(semanticComparisonPending(sorted), true);
-  assert.ok(sorted.indexOf(b) < sorted.indexOf(a));
+  assert.ok(sorted.indexOf(a) < sorted.indexOf(b));
+  assert.ok(sorted.indexOf(b) < sorted.indexOf(pending));
 });
 
 test("runner offline is default even with credentials; only exact --execute can dispatch", async () => {

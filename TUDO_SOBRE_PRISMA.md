@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 283
-source_manifest_sha256: 4bdd16cbaa8afd45eb9c759fcf8066e2b56e88e548fa3cad1eeab2e295cfaf29
+documentation_source_count: 284
+source_manifest_sha256: 999280f8bd8bbb74888a975de35dccbf44acecd68493e624759ae42fdcb8c94a
 -->
 
 # Tudo sobre o Prisma
@@ -2635,6 +2635,10 @@ last_verified: 2026-09-27
 Decisão de Bruno em 2026-09-27: aceitar anos de dois e quatro dígitos com limite inclusivo de 2050. `resume-dates-1.1.0` usa `00–50 → 2000–2050`, `51–99 → 1951–1999`, sem pivot móvel; revisar com o Product Owner em 2050. A inferência do século fica explícita e o original é preservado. Leitor compartilhado entre extração, revisão, busca, matching web e runtime Edge. Pesos/faixas do `matching-score-1.4.0` permanecem; a versão do leitor entra no fingerprint. Sem migration, reescrita de perfis/snapshots ou nova chamada de IA. Evidências e rollout: `docs/qa/aot-resume-two-digit-years.md`.
 
 Runtime `e84497e` publicado em main, VPS e Edge `matching-trajectory` v5; CI e smoke autenticado PASS. O caso `Jun/08 - Nov/12` mostra duração 7/10 (54 meses), recência 0/10 (166 meses em 2026-09-27), score 38/100 provisório e cobertura 55%, preservando grupo B e 11 requisitos sem evidência. O fluxo normal do detalhe confirmou o snapshot no servidor; nenhum Perfil/Posição foi editado. Deno: 23 testes de handler e cinco de snapshot PASS. O 404 transitório na troca web recuperou para HTTPS 200, container running e zero reinícios. Fechamento documental posterior não exige novo deploy.
+
+## Lista de Pessoas: alerta de consulta e ordenação (em validação)
+
+Em 2026-09-27, a lista de Pessoas deixa de exibir confirmação quando a paginação está completa e só informa falha quando `complete` é falso, com contagens de registros consultados/esperados. Pendências de classificação continuam com alerta próprio; a pendência semântica não ocupa mais um banner geral redundante. Grupos A/B/C permanecem na ordem atual; dentro de cada grupo os scores numéricos são exibidos em ordem decrescente, mesmo quando outra interpretação está pendente. Fórmula, pesos, score, snapshots, banco e versão não mudam. Implementação, testes e rollout: `docs/qa/aot-vacancy-people-alert-order.md`.
 
 ## M8.4: dimensões temporais do Score Prisma
 
@@ -16474,6 +16478,41 @@ Branch de entrega: `codex/ux-shared-foundation`, origin existente `git@github.co
 ## Conclusão
 
 Padrões aprovados formalizados e base compartilhada implementada para orientar os próximos agrupadores. A busca de referências agora torna explícitas sua origem e evolução. Critérios da fundação atendidos com os limites L-01 a L-04 explicitados.
+
+---
+
+## Source: `docs/qa/aot-vacancy-people-alert-order.md`
+
+# AoT — consulta e ordenação de Pessoas por Posição
+
+## Acordo do delta aprovado
+
+Escopo aprovado por Bruno em 2026-09-27: corrigir os avisos da tela Pessoas para uma Posição e a ordenação das Pessoas dentro de cada grupo. Baseline `main`/`origin/main`: `a5ec007ff04d69df2bbf619ee4604983cda63f8a`.
+
+- D-PEOPLE-01: ocultar confirmação de consulta completa; alertar apenas quando a paginação dos Perfis publicados terminar incompleta, informando contagens de registros consultados e esperados.
+- D-PEOPLE-02: retirar da lista o aviso redundante de comparação incompleta e a alegação de ordem alfabética; manter a apresentação de cobertura e as pendências específicas de classificação.
+- D-PEOPLE-03: manter a ordem dos grupos e ordenar scores numéricos do maior para o menor dentro de cada grupo; score indisponível permanece após scores numéricos.
+- P-PEOPLE-01: não alterar fórmula/pesos/versão do score, elegibilidade, classificação A/B/C, decisões humanas, tela de comparação individual, dados persistidos, banco ou IA.
+- F-PEOPLE-01: refatorações, mudanças de metodologia do matching e ajustes fora da tela de Pessoas ficam fora do escopo.
+- A-PEOPLE-01: reutilizar `complete` da paginação e o comparador de score já existente; expor somente as contagens reais necessárias ao aviso de falha.
+- CA-PEOPLE-01: teste prova grupo antes de score, score descendente mesmo quando existe interpretação pendente e score nulo por último.
+- CA-PEOPLE-02: teste/checagem prova que a lista não mostra confirmação de sucesso nem aviso geral de comparação pendente e preserva aviso de requisitos não classificados.
+- CA-PEOPLE-03: validar contagens de registros consultados/esperados, typecheck/build web, testes afetados, Context Pack e release web; smoke de produção confirma implantação.
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline e prova proporcional |
+| --- | --- | --- |
+| Consulta/paginação de Perfis publicada | direct | `complete` já compara páginas processadas ao total exato; testes do contrato de contagens e alerta incompleto |
+| Lista Pessoas e grupos A/B/C | direct | Baseline contém alertas de sucesso e pendência; teste de ausência e preservação dos grupos |
+| Ordenação por score | direct | `prismaScoreComparison` já ordena descendente e coloca null ao final; regressão com interpretação pendente |
+| Comparação selecionada | plausible_indirect | Continua ordenada pela seleção explícita de IDs; revisar diff e teste existente |
+| Score, dados, tenant e autoridade humana | critical_transversal | Sem cálculo novo, escrita, banco ou autorização; testes de score e revisão do diff |
+| Outras telas/domínios sem dependência identificada | no_impact_identified | Confirmado por busca de consumidores; sem alteração |
+
+## Execução e evidências
+
+Preencher implementação, validação, publicação, smoke, SHA, rollback e desvios ao concluir. O método e a versão de score permanecem inalterados.
 
 ---
 

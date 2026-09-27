@@ -308,13 +308,19 @@ test("descoberta pagina todos os Perfis e persiste confirmação ou descarte sem
   ]);
   assert.match(profileService, /PROFILE_DISCOVERY_PAGE_SIZE = 200/);
   assert.match(profileService, /while \(true\)[\s\S]*?\.range\(from, from \+ PROFILE_DISCOVERY_PAGE_SIZE - 1\)/);
+  assert.match(profileService, /queriedProfileRecordCount: processedProfileCount/);
+  assert.match(profileService, /expectedProfileRecordCount: publishedProfileCount/);
+  assert.match(profileService, /complete: processedProfileCount >= publishedProfileCount/);
   assert.doesNotMatch(profileService, /MAX_PILOT_PROFILES/);
   assert.match(vacancyServiceSource, /type: "position_relation_decision"/);
   assert.match(vacancyServiceSource, /recordPositionRelationDecision/);
   assert.match(vacancyServiceSource, /Boolean\(match.semanticAssessment\) \|\| isVacancyDiscoveryCandidate\(match\)/);
   assert.match(page, /Confirmar relação/);
   assert.match(page, /Não considerar/);
-  assert.match(page, /Perfis publicados consultados/);
+  assert.match(page, /discovery && !discovery.complete/);
+  assert.match(page, /queriedProfileRecordCount/);
+  assert.match(page, /expectedProfileRecordCount/);
+  assert.doesNotMatch(page, /A análise percorreu todos os Perfis publicados acessíveis/);
   assert.match(page, /Nenhum Perfil apresentou experiência na área, relação ocupacional ou outra evidência rastreável/);
 });
 

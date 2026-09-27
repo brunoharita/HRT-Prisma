@@ -15,6 +15,8 @@ export interface PublishedProfileCandidateCollection {
   candidates: PublishedProfileCandidate[];
   publishedProfileCount: number;
   analyzedProfileCount: number;
+  queriedProfileRecordCount: number;
+  expectedProfileRecordCount: number;
   complete: boolean;
 }
 
@@ -89,6 +91,8 @@ export async function loadPublishedProfileCandidateCollection(
     candidates,
     publishedProfileCount: candidates.length,
     analyzedProfileCount: candidates.length,
+    queriedProfileRecordCount: processedProfileCount,
+    expectedProfileRecordCount: publishedProfileCount,
     complete: processedProfileCount >= publishedProfileCount,
   };
 }

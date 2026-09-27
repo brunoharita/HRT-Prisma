@@ -1,6 +1,5 @@
 import type { PublishedProfileCandidate } from "./profileDiscovery.js";
 import type { SemanticAssessment } from "../../../src/domain/semanticTrajectory.js";
-import { semanticComparisonPending } from "./semanticMatching.js";
 import type { PositionTaxonomy, TaxonomyDecision, TaxonomyItem } from "./positionTaxonomy.js";
 import {
   calculateMatchingScore,
@@ -205,6 +204,8 @@ export interface VacancyPeopleDiscovery {
   matches: VacancyCandidateMatch[];
   analyzedProfileCount: number;
   publishedProfileCount: number;
+  queriedProfileRecordCount: number;
+  expectedProfileRecordCount: number;
   complete: boolean;
   unclassifiedRequirementCount: number;
 }
@@ -681,16 +682,11 @@ export function shouldResearchVacancyMarket(question: string): boolean {
 }
 
 export function sortVacancyMatches(matches: VacancyCandidateMatch[]): VacancyCandidateMatch[] {
-  const pending = semanticComparisonPending(matches);
-  const awaiting = (match: VacancyCandidateMatch) => Boolean(match.semanticAssessment && match.semanticAssessment.status !== "complete");
   const byName = (left: VacancyCandidateMatch, right: VacancyCandidateMatch) => left.candidate.fullName.localeCompare(right.candidate.fullName, "pt-BR") || left.candidate.personId.localeCompare(right.candidate.personId);
   return [...matches]
-    .sort((left, right) => awaiting(left) || awaiting(right)
-      ? Number(awaiting(right)) - Number(awaiting(left)) || byName(left, right)
-      :
-      discoveryGroupPriority(right.discoveryGroup) - discoveryGroupPriority(left.discoveryGroup)
-      || (pending ? 0 : prismaScoreComparison(left, right))
-      || (pending ? 0 : decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision))
+    .sort((left, right) => discoveryGroupPriority(right.discoveryGroup) - discoveryGroupPriority(left.discoveryGroup)
+      || prismaScoreComparison(left, right)
+      || decisionPriority(right.positionDecision) - decisionPriority(left.positionDecision)
       || byName(left, right),
     );
 }

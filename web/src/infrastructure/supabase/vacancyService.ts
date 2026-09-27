@@ -425,6 +425,8 @@ export const vacancyService = {
       matches,
       analyzedProfileCount: collection.analyzedProfileCount,
       publishedProfileCount: collection.publishedProfileCount,
+      queriedProfileRecordCount: collection.queriedProfileRecordCount,
+      expectedProfileRecordCount: collection.expectedProfileRecordCount,
       complete: collection.complete,
       unclassifiedRequirementCount: vacancy.requirements.filter((item) => item.importance === "unclassified").length,
     };
