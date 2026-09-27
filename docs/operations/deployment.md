@@ -2,6 +2,8 @@
 
 ## Estado
 
+M8.4 Score Prisma temporal publicado em 27/09: SHA `20a39a9e4e598dbfc4cc51146e7c4b7441923624` sincronizado em `main`, GitHub e VPS. A migration remota `20260927162056_m84_score_temporal_compatibility` foi aplicada individualmente; a Edge `matching-trajectory` está ativa na versão 4 com `verify_jwt=true`. Somente `prisma-web` foi reconstruído e recriado, com imagem `sha256:eccbb7345f96ac21ca2e170fdb35bf597a6b6a5b39a60055abe3128b2f25f3b7`, container `running`, zero reinícios e HTTPS 200 após 404 transitório durante a troca. Rollback `prisma-web:rollback-before-20a39a9e4e59`; smoke sem token da Edge retornou 401. Evidência completa em `docs/qa/aot-m84-prisma-score-temporal.md`.
+
 Precisão de texto M8.3 em 27/09: runtime web `91db60f` publicado após CI; coluna da lista identifica “Requisitos sem evidência encontrada” e explicita a fonte Perfil publicado. Apenas web, sem alteração de score, Edge ou banco. Smoke autenticado/visual PASS, HTTPS 200 após 404 transitório na recriação; running/zero reinícios. Rollback `prisma-web:rollback-before-91db60f298ba`. Evidência em `docs/qa/aot-m83-evidence-label.md`.
 
 Correção M8.3 de 27/09: runtime `a5ddd5a`, Edge `matching-trajectory` v3 e `prisma-web` publicados após CI. Triagem determinística A/B antes de cache/provedor; C e fora não acionam IA. Sem migration, prompt/modelo e demais serviços preservados. Web running/zero reinícios, HTTPS 200 e smoke autenticado de lista/comparação PASS. Rollback web `prisma-web:rollback-before-a5ddd5a2ac95`, Edge anterior v2. Evidência: `docs/qa/aot-m83-triage-before-ai.md`. Registro abaixo descreve o baseline anterior.
