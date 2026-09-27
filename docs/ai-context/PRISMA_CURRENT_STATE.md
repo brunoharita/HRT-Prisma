@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.3
+version: 2.51.4
 last_verified: 2026-09-27
 ---
 
 # Estado atual do Prisma
+
+## Precisão do rótulo na lista de Pessoas
+
+Correção de apresentação aprovada em 27/09: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Em validação local; evidência e publicação em `docs/qa/aot-m83-evidence-label.md`.
 
 ## M8.3: interpretação da trajetória (piloto backend publicado)
 

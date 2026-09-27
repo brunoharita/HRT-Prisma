@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 275
-source_manifest_sha256: a0d776e49b2b99f19a0aaf46a3ddb282024f3e4901a6e8564375544c997bc889
+documentation_source_count: 278
+source_manifest_sha256: e2256dd4e2cb4fd70226eb34c36571afe8d189ed6f5692b95d61f2447bdb226b
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.3
+version: 2.51.4
 last_verified: 2026-09-27
 ---
 
 # Estado atual do Prisma
+
+## Precisão do rótulo na lista de Pessoas
+
+Correção de apresentação aprovada em 27/09: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Em validação local; evidência e publicação em `docs/qa/aot-m83-evidence-label.md`.
 
 ## M8.3: interpretação da trajetória (piloto backend publicado)
 
@@ -12902,6 +12906,36 @@ Nenhuma decisão material adicional. O motivo da ação deve registrar a decisã
 
 ---
 
+## Source: `docs/qa/agreement-m83-evidence-label.md`
+
+# Acordo M8.3 — precisão do rótulo de ausência de evidência
+
+Versão 1.0.0. Aprovado por Bruno em 27/09/2026 (resposta “sim” à proposta textual explícita).
+
+- D-01: na coluna da lista de Pessoas para a Posição, substituir o título por “Requisitos sem evidência encontrada (N)”, preservando a contagem dinâmica.
+- D-02: exibir “Requisitos da posição para os quais não foi encontrada evidência no Perfil publicado.” junto ao título dessa coluna.
+- D-03: preservar itens, classificação, cálculo, fontes consultadas e demais regras; publicar em main e produção.
+- P-01: não afirmar ausência de competência ou consulta ao PDF; não alterar regras, IA, score, persistência ou dados reais.
+- F-01: revisão de outros rótulos, banners, comparação e redesign da tela.
+- A-01: reutilizar MatchBucket, com descrição opcional apenas nessa coluna; validação dirigida e release web.
+- Q: nenhuma decisão pendente.
+- CA-01: testes do título dinâmico e descrição exclusivos do bucket no_evidence; tipos/build; smoke autenticado com 11 itens e score preservado.
+
+## Mapa de impacto e preservação
+
+Baseline main `512d7d26d4cabbccd15fef908e42fa57d9aa8f51`, web `a5ddd5a`, Edge v3. Classe B, apresentação sem mudança de contrato persistido; produto v1.8.3 mantido.
+
+| Área | Relação | Prova proporcional |
+| --- | --- | --- |
+| Coluna no_evidence na lista | direct | Texto aprovado e contagem dinâmica; teste e inspeção visual |
+| MatchBucket compartilhado | plausible_indirect | Descrição opcional, demais chamadas intactas, quatro colunas preservadas |
+| Score, matching, IA, banco, parser e autorização | no_impact_identified | Mudança restrita a JSX de apresentação; diff e score do baseline no smoke, sem novo caminho de dados |
+| Web/release | direct | Tipos/build/CI, deploy seletivo e HTTPS/smoke |
+
+A captura fornecida é contraexemplo do texto, não autorização de redesign. Manter ordem, cores, agrupamento e ações; permitir quebra natural do título e uma descrição na mesma coluna. Layout responsivo existente preservado.
+
+---
+
 ## Source: `docs/qa/agreement-m83-semantic-trajectory.md`
 
 # M8.3 — Interpretação da trajetória no Score Prisma
@@ -15448,6 +15482,23 @@ O Product Owner relatou que “Governança Corporativa”, criada como Hard/Gest
 | Tela hospedada | Atualização e inspeção visual pelo usuário pendentes | NOT TESTED |
 
 O CI da branch no SHA funcional `7d5755520ce65f1f3a915e034f16e8a5b9c59f07` passou ([run #35542172079](https://github.com/brunoharita/HRT-Prisma/actions/runs/35542172079)). Esse SHA foi promovido por fast-forward para `main`/GitHub e para o checkout da VPS. O release plan apontou apenas banco, QA e documentação: não houve nova Edge Function nem rebuild web; `prisma-web` permaneceu `running`, zero reinícios, na imagem anterior. A correção preserva Prisma v1.8.2 e o contrato JSON v4. O registro de tela permanece parcial até a confirmação visual.
+
+---
+
+## Source: `docs/qa/aot-m83-evidence-label.md`
+
+# AoT — rótulo de ausência de evidência
+
+Acordo e execução homônimos v1.0.0; baseline/mapa no acordo.
+
+| Acordo | Implementação e evidência | Status |
+| --- | --- | --- |
+| D-01/D-02 | Três testes dirigidos PASS; smoke local autenticado e inspeção visual confirmam título/descrição aprovados | PASS |
+| D-03/P-01 | Diff restrito à apresentação; 11 itens e 47/100 preservados; publicação pendente | PARTIAL |
+
+Escopo somente web/documentação. Tipos raiz/web, build web, três testes `matchingEvidenceLabel`, geração/check de contexto e diff check PASS. A mudança de runtime é de duas linhas JSX: título/descrição do bucket e suporte opcional à descrição. Nenhum algoritmo, dado, fonte, classificação, CSS ou contrato persistido alterado. Tela local autenticada: Bruno/Diego continuam 47/100, cobertura 50%, 11 itens; outros buckets e C recolhido preservados. Inspeção visual em 1265×712 confirmou quatro colunas, quebra natural do novo texto e ausência de sobreposição. Captura registrada na tarefa; nenhuma ação humana de confirmação executada.
+
+Publicação pendente. Resíduos alheios preservados: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu`, `tests/matchingRuntime (1).test.ts`.
 
 ---
 
@@ -19333,6 +19384,14 @@ Fora disso, execute o movimento até o fechamento completo, sem pedir aprovaçõ
 Contrato integral: `docs/agreements/agreement-m82-global-competency-classification.md` versão 1.0.0. Ler o contrato, os Agreements M8/M8.1 e as migrations M8.1 pertinentes antes de implementar. A decisão mais recente do Product Owner exige classificação sem revisão manual item a item, próxima de 100% dos conceitos globais de competência.
 
 Executar D-01 a D-07, impedir P-01 a P-05, manter F-01/F-02 fora do movimento e exercer A-01 a A-03. Classificar a base pública ESCO por significado com contexto de origem e revisão de qualidade. Integrar à classificação canônica M8.1 sem transformar inferência de taxonomia em evidência da Pessoa. Preservar autoridade humana e isolamento de organização. Auditar cobertura e erros antes do backfill remoto. Usar migration versionada e rollback para mudança de schema/dados, testes direcionados e QA transacional. Atualizar owners/ADR/AoT/Context Pack. Publicar somente as superfícies exigidas pelo release plan e registrar CA-01 a CA-06 com evidência real.
+
+---
+
+## Source: `docs/qa/execution-m83-evidence-label.md`
+
+# Execução M8.3 — rótulo de ausência de evidência
+
+Executar integralmente `docs/qa/agreement-m83-evidence-label.md` v1.0.0, D-01–D-03, P-01, F-01, A-01 e CA-01. Somente apresentação da coluna; nenhuma reinterpretação das regras. Registrar testes, preservação, main e produção em `docs/qa/aot-m83-evidence-label.md`.
 
 ---
 
