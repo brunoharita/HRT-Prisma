@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 278
-source_manifest_sha256: e2256dd4e2cb4fd70226eb34c36571afe8d189ed6f5692b95d61f2447bdb226b
+source_manifest_sha256: befcb4530608b238a0284b28901aac0233b028afe410d0122577123e48afb913
 -->
 
 # Tudo sobre o Prisma
@@ -2632,7 +2632,7 @@ last_verified: 2026-09-27
 
 ## Precisão do rótulo na lista de Pessoas
 
-Correção de apresentação aprovada em 27/09: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Em validação local; evidência e publicação em `docs/qa/aot-m83-evidence-label.md`.
+Correção de apresentação publicada em 27/09, runtime `91db60f`: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Tipos/build, três testes dirigidos, CI e smoke visual autenticado PASS; 11 itens e notas preservados. Publicação somente web, sem Edge/migration. Evidência em `docs/qa/aot-m83-evidence-label.md`.
 
 ## M8.3: interpretação da trajetória (piloto backend publicado)
 
@@ -9378,6 +9378,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+Precisão de texto M8.3 em 27/09: runtime web `91db60f` publicado após CI; coluna da lista identifica “Requisitos sem evidência encontrada” e explicita a fonte Perfil publicado. Apenas web, sem alteração de score, Edge ou banco. Smoke autenticado/visual PASS, HTTPS 200 após 404 transitório na recriação; running/zero reinícios. Rollback `prisma-web:rollback-before-91db60f298ba`. Evidência em `docs/qa/aot-m83-evidence-label.md`.
+
 Correção M8.3 de 27/09: runtime `a5ddd5a`, Edge `matching-trajectory` v3 e `prisma-web` publicados após CI. Triagem determinística A/B antes de cache/provedor; C e fora não acionam IA. Sem migration, prompt/modelo e demais serviços preservados. Web running/zero reinícios, HTTPS 200 e smoke autenticado de lista/comparação PASS. Rollback web `prisma-web:rollback-before-a5ddd5a2ac95`, Edge anterior v2. Evidência: `docs/qa/aot-m83-triage-before-ai.md`. Registro abaixo descreve o baseline anterior.
 
 M8.3 — interpretação de trajetória: runtime `60c642f` publicado, prompt 1.2.0, Edge v2, smoke autenticado PASS com limitações explícitas. Migrations `20260925150000_m83_semantic_trajectory.sql` e `20260925190000_m83_prompt_compatibility.sql` aplicadas e imutáveis, correspondências remotas no AoT. Destinos foram somente migrations novas, Edge `matching-trajectory` e `prisma-web`. A Edge reutiliza `OPENAI_API_KEY`, `KNOWLEDGE_RESEARCH_MODEL` e `KNOWLEDGE_AGENT_ENABLED`; nenhuma configuração monetária paralela. O bundle deve incluir `src/domain/semanticTrajectory.ts` e os módulos `_generated`, produzidos por `pnpm generate:matching-runtime` e conferidos por `pnpm check:matching-runtime`. Dispatcher 1.0.1 reconhece os dois consumidores do contrato compartilhado. A autenticação usa `auth.getUser()` antes de qualquer acesso com service role; as RPCs autorizam empresa/fontes. Não publicar o frontend antes do backend compatível. Local sintético é o gate QA; usar somente migrations novas pelo connector, nunca `db push` geral. Evidência e conclusão: `docs/qa/aot-m83-semantic-trajectory.md`.
@@ -15494,11 +15496,17 @@ Acordo e execução homônimos v1.0.0; baseline/mapa no acordo.
 | Acordo | Implementação e evidência | Status |
 | --- | --- | --- |
 | D-01/D-02 | Três testes dirigidos PASS; smoke local autenticado e inspeção visual confirmam título/descrição aprovados | PASS |
-| D-03/P-01 | Diff restrito à apresentação; 11 itens e 47/100 preservados; publicação pendente | PARTIAL |
+| D-03/P-01 | Diff restrito à apresentação; 11 itens e 47/100 preservados em produção; main, CI e deploy web confirmados | PASS |
 
 Escopo somente web/documentação. Tipos raiz/web, build web, três testes `matchingEvidenceLabel`, geração/check de contexto e diff check PASS. A mudança de runtime é de duas linhas JSX: título/descrição do bucket e suporte opcional à descrição. Nenhum algoritmo, dado, fonte, classificação, CSS ou contrato persistido alterado. Tela local autenticada: Bruno/Diego continuam 47/100, cobertura 50%, 11 itens; outros buckets e C recolhido preservados. Inspeção visual em 1265×712 confirmou quatro colunas, quebra natural do novo texto e ausência de sobreposição. Captura registrada na tarefa; nenhuma ação humana de confirmação executada.
 
-Publicação pendente. Resíduos alheios preservados: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu`, `tests/matchingRuntime (1).test.ts`.
+## Publicação e smoke em 27/09/2026
+
+Runtime `91db60f298baf9b2e7d004ea18316223ec9c5ecc`, main/origin e VPS no SHA funcional. CI [36320731488](https://github.com/brunoharita/HRT-Prisma/actions/runs/36320731488) PASS. Dispatcher publicou somente prisma-web; banco/Edge/parser não acionados. Imagem `sha256:f78ed4ffefd156e323e5b6bed11a469ae78a471d8c8cad28125a1edc3393e83f`, running, zero reinícios. O probe imediato teve 404 durante a troca; verificação posterior HTTPS 200, sem repetir deploy. Rollback `prisma-web:rollback-before-91db60f298ba` preservado.
+
+Smoke autenticado e captura em produção, mesmos dados e viewport 1265×712 do local: título exato com 11, explicação exata, quatro categorias na ordem original, quebra natural e nenhuma sobreposição. Bruno/Diego mantêm 47/100; C recolhido. Capturas local e produção registradas na tarefa. Sem decisões humanas, alteração de dados ou novas análises provocadas para teste. Outros rótulos e banners não foram revisados nesta correção. Desvios do acordo: nenhum. Fechamento documental posterior não exige republicar runtime.
+
+Resíduos alheios preservados: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu`, `tests/matchingRuntime (1).test.ts`.
 
 ---
 

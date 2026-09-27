@@ -10,7 +10,7 @@ last_verified: 2026-09-27
 
 ## Precisão do rótulo na lista de Pessoas
 
-Correção de apresentação aprovada em 27/09: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Em validação local; evidência e publicação em `docs/qa/aot-m83-evidence-label.md`.
+Correção de apresentação publicada em 27/09, runtime `91db60f`: coluna `no_evidence` passa a “Requisitos sem evidência encontrada (N)”, com explicação de que são requisitos da Posição sem evidência encontrada no Perfil publicado. Nenhuma mudança em classificação, cálculo, fontes ou IA; demais rótulos fora deste escopo. Produto v1.8.3 mantido. Tipos/build, três testes dirigidos, CI e smoke visual autenticado PASS; 11 itens e notas preservados. Publicação somente web, sem Edge/migration. Evidência em `docs/qa/aot-m83-evidence-label.md`.
 
 ## M8.3: interpretação da trajetória (piloto backend publicado)
 
