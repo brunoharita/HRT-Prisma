@@ -15,6 +15,7 @@ const source = {
 };
 function fixture() {
   const requests: Record<string, unknown>[] = [], calls: Array<{ name: string; params: Record<string, unknown> }> = [];
+  const diagnostics: Array<Parameters<NonNullable<Dependencies["logDiagnostic"]>>[0]> = [];
   let serviceCreated = 0, authorized = true, authenticated = true, sourceReads = 0;
   let finalSource = source, cached: Record<string, unknown> | null = null;
   let snapshotSources: Record<string, unknown> = {
@@ -52,9 +53,10 @@ function fixture() {
       const payload = JSON.parse(String(init?.body)); requests.push(payload);
       return Promise.resolve(new Response(JSON.stringify(provider(JSON.parse(payload.input), requests.length - 1)), { status: 200 }));
     }) as typeof fetch,
+    logDiagnostic: event => diagnostics.push(event),
   };
   const request = (body: unknown = ids, bearer = "Bearer test") => new Request("https://test.invalid/matching-trajectory", { method: "POST", headers: { Authorization: bearer, "Content-Type": "application/json" }, body: JSON.stringify(body) });
-  return { deps, env, calls, requests, request, setAuthorized: (value: boolean) => authorized = value,
+  return { deps, env, calls, requests, diagnostics, request, setAuthorized: (value: boolean) => authorized = value,
     setAuthenticated: (value: boolean) => authenticated = value, serviceCreated: () => serviceCreated,
     setFinalSource: (value: typeof source) => finalSource = value,
     setCache: (value: Record<string, unknown>) => cached = value,
@@ -71,6 +73,7 @@ Deno.test("auth/session/source authorization precedes all service and provider a
     if (kind === "tenant") f.setAuthorized(false);
     const result = await handleMatchingTrajectory(f.request(ids, kind === "missing" ? "" : "Bearer test"), f.deps);
     assert([401, 403].includes(result.status)); assert(f.serviceCreated() === 0); assert(f.requests.length === 0);
+    assert(f.diagnostics.length === 0);
   }
 });
 Deno.test("server triage admits usable professional content before cache, service or provider, even on snapshot", async () => {
@@ -206,6 +209,7 @@ Deno.test("two independent reverse-order reads, strict/store false, minimized co
   const completion = f.calls.find(c => c.name === "complete_matching_trajectory")!;
   assert(completion.params.p_actual_model_version === "provider-model-revision");
   assert(!JSON.stringify(data).includes("private-lease") && !JSON.stringify(data).includes("test-key"));
+  assert(f.diagnostics.length === 0);
 });
 Deno.test("disagreement persists indeterminate without a reading", async () => {
   const f = fixture();
@@ -213,6 +217,68 @@ Deno.test("disagreement persists indeterminate without a reading", async () => {
   const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
   assert(data.status === "indeterminate" && data.reasonCode === "READINGS_DISAGREE" && !data.reading);
   assert(f.calls.find(c => c.name === "complete_matching_trajectory")?.params.p_reading === null);
+  assert(f.diagnostics.length === 1 && f.diagnostics[0].stage === "readings_disagree");
+  assert(f.diagnostics[0].readings.every(item => item.outcome === "validated"));
+});
+Deno.test("diagnostic isolates both readings, incomplete reason and bounded usage without provider content", async () => {
+  const f = fixture();
+  f.setProvider((ctx, index) => index === 0
+    ? { status: "incomplete", model: "resolved", incomplete_details: { reason: "max_output_tokens", detail: "private provider text" },
+      usage: { input_tokens: 123, output_tokens: 6000 }, output: [{ type: "message", content: [{ text: "secret response" }] }] }
+    : { status: "completed", model: "resolved", output: [{ type: "message", role: "assistant", status: "completed",
+      content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "unclear", quote: "" })) }) }] }] });
+  const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
+  assert(data.status === "unavailable" && data.reasonCode === "RESPONSE_INVALID");
+  assert(f.diagnostics.length === 1);
+  const log = f.diagnostics[0];
+  assert(log.event === "matching_trajectory_readings" && log.analysisId === "analysis" && log.stage === "reading_failure");
+  assert(log.readings[0].stage === "provider_status" && log.readings[0].outcome === "failed");
+  assert(log.readings[0].httpStatus === 200 && log.readings[0].providerStatus === "incomplete"
+    && log.readings[0].incompleteReason === "max_output_tokens" && log.readings[0].outputTokens === 6000);
+  assert(log.readings[1].stage === "validated" && log.readings[1].outcome === "validated");
+  for (const sensitive of ["secret", "private", "Test Person", "test@example.invalid", "Bearer", "provider text"]) {
+    assert(!JSON.stringify(log).includes(sensitive));
+  }
+});
+Deno.test("diagnostic distinguishes malformed JSON, invalid quote and model mismatch without changing public reason", async () => {
+  for (const stage of ["output_json", "reading_quote", "model_disagreement"] as const) {
+    const f = fixture();
+    f.setProvider((ctx, index) => ({ status: "completed", model: stage === "model_disagreement" ? `model-${index}` : "resolved",
+      output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text",
+        text: stage === "output_json" && index === 0 ? "private malformed JSON"
+          : JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "backend_execution",
+            quote: stage === "reading_quote" && index === 0 ? "invented private quote" : e.text })) }) }] }] }));
+    const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
+    assert(data.status === "unavailable" && data.reasonCode === "RESPONSE_INVALID", stage);
+    assert(f.diagnostics.length === 1 && f.diagnostics[0].readings.length === 2, stage);
+    assert((stage === "model_disagreement" ? f.diagnostics[0].stage : f.diagnostics[0].readings[0].stage) === stage, stage);
+    assert(!JSON.stringify(f.diagnostics[0]).includes("private"), stage);
+  }
+});
+Deno.test("diagnostic logger failure cannot alter a completed assessment or public error", async () => {
+  for (const invalid of [false, true]) {
+    const f = fixture();
+    f.deps.logDiagnostic = () => { throw new Error("logging unavailable private detail"); };
+    if (invalid) f.setProvider(() => ({ status: "incomplete", model: "resolved", output: [] }));
+    const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
+    assert(data.status === (invalid ? "unavailable" : "complete"));
+    assert(data.reasonCode === (invalid ? "RESPONSE_INVALID" : undefined));
+    assert(f.calls.some(call => call.name === "complete_matching_trajectory"));
+  }
+});
+Deno.test("diagnostic sanitizes unknown provider metadata and does not record cached failures", async () => {
+  const f = fixture();
+  f.setProvider(() => ({ status: "incomplete-private", model: "resolved",
+    incomplete_details: { reason: "private diagnosis" }, usage: { input_tokens: -4, output_tokens: "123" }, output: [] }));
+  const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
+  assert(data.reasonCode === "RESPONSE_INVALID");
+  const diagnostic = f.diagnostics[0].readings[0];
+  assert(diagnostic.providerStatus === "other" && diagnostic.incompleteReason === "other");
+  assert(diagnostic.inputTokens === undefined && diagnostic.outputTokens === undefined);
+  assert(!JSON.stringify(f.diagnostics[0]).includes("private"));
+  const cached = fixture(); cached.setCache({ acquired: false, status: "unavailable", reason_code: "RESPONSE_INVALID", id: "analysis" });
+  assert((await (await handleMatchingTrajectory(cached.request(), cached.deps)).json()).reasonCode === "RESPONSE_INVALID");
+  assert(cached.requests.length === 0 && cached.diagnostics.length === 0);
 });
 Deno.test("refusal, incomplete, missing model, invented quotes and malformed JSON remain unavailable", async () => {
   for (const output of [

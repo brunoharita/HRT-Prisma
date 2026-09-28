@@ -21,8 +21,25 @@ export interface Dependencies {
   authenticate(bearer: string): Promise<{ id: string; client: RpcClient } | null>;
   service(): RpcClient;
   fetch: typeof fetch;
+  logDiagnostic?: (event: TrajectoryDiagnosticEvent) => void;
 }
 type RequestIds = Pick<SemanticAssessment, "organizationId" | "profileId" | "positionVersionId">;
+type ReadingStage = "provider_transport" | "provider_http" | "provider_json" | "provider_status" | "provider_model"
+  | "provider_output" | "provider_content" | "output_json" | "reading_quote" | "reading_contract" | "validated" | "internal";
+type ReadingDiagnostic = {
+  outcome: "validated" | "failed"; stage: ReadingStage; reasonCode?: string; httpStatus?: number;
+  providerStatus?: string; incompleteReason?: string; inputTokens?: number; outputTokens?: number;
+};
+type TrajectoryDiagnosticEvent = {
+  event: "matching_trajectory_readings"; version: 1; analysisId: string; attempt: number | null;
+  stage: "reading_failure" | "model_disagreement" | "readings_disagree";
+  readings: [ReadingDiagnostic, ReadingDiagnostic];
+};
+class ReadingError extends Error {
+  constructor(code: "RESPONSE_INVALID" | "PROVIDER_UNAVAILABLE" | "PROVIDER_TIMEOUT", readonly diagnostic: Omit<ReadingDiagnostic, "outcome" | "reasonCode">) {
+    super(code);
+  }
+}
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function record(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
@@ -42,7 +59,41 @@ export async function inputHash(context: SemanticContext, sourceVersions: unknow
 function sourceArgs(ids: RequestIds) {
   return { p_organization_id: ids.organizationId, p_profile_id: ids.profileId, p_position_version_id: ids.positionVersionId };
 }
-async function reading(context: SemanticContext, model: string, key: string, deps: Dependencies): Promise<{ reading: SemanticReading; model: string }> {
+function allowed(value: unknown, options: readonly string[]): string | undefined {
+  return typeof value === "string" ? (options.includes(value) ? value : "other") : undefined;
+}
+function tokenCount(value: unknown): number | undefined {
+  return Number.isSafeInteger(value) && Number(value) >= 0 && Number(value) <= 10_000_000 ? Number(value) : undefined;
+}
+function providerDiagnostic(provider: Record<string, unknown>, httpStatus: number): Omit<ReadingDiagnostic, "outcome" | "reasonCode" | "stage"> {
+  const usage = record(provider.usage), incomplete = record(provider.incomplete_details);
+  return { httpStatus,
+    providerStatus: allowed(provider.status, ["completed", "incomplete", "failed", "in_progress", "queued", "cancelled"]),
+    incompleteReason: allowed(incomplete.reason, ["max_output_tokens", "content_filter"]),
+    inputTokens: tokenCount(usage.input_tokens), outputTokens: tokenCount(usage.output_tokens) };
+}
+function quoteFailure(value: unknown, context: SemanticContext): boolean {
+  const items = record(value).items;
+  return Array.isArray(items) && items.some(item => {
+    const row = record(item), entry = context.entries.find(source => source.id === row.id);
+    return entry && typeof row.quote === "string" &&
+      (!entry.text.includes(row.quote) || (row.activity !== "unclear" && row.quote.trim().length < Math.min(6, entry.text.length)));
+  });
+}
+function readingDiagnostic(result: PromiseSettledResult<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic }>): ReadingDiagnostic {
+  if (result.status === "fulfilled") return result.value.diagnostic;
+  const error = result.reason;
+  return error instanceof ReadingError
+    ? { outcome: "failed", reasonCode: error.message, ...error.diagnostic }
+    : { outcome: "failed", reasonCode: "RESPONSE_INVALID", stage: "internal" };
+}
+function emitDiagnostic(deps: Dependencies, event: TrajectoryDiagnosticEvent): void {
+  try {
+    if (deps.logDiagnostic) deps.logDiagnostic(event);
+    else console.warn(JSON.stringify(event));
+  } catch { /* Optional telemetry must never affect the assessment. */ }
+}
+async function reading(context: SemanticContext, model: string, key: string, deps: Dependencies): Promise<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic }> {
   let response: Response;
   try {
     response = await deps.fetch("https://api.openai.com/v1/responses", {
@@ -54,23 +105,32 @@ async function reading(context: SemanticContext, model: string, key: string, dep
       }),
     });
   } catch (error) {
-    throw new Error(error instanceof DOMException && ["TimeoutError", "AbortError"].includes(error.name)
-      ? "PROVIDER_TIMEOUT" : "PROVIDER_UNAVAILABLE");
+    throw new ReadingError(error instanceof DOMException && ["TimeoutError", "AbortError"].includes(error.name)
+      ? "PROVIDER_TIMEOUT" : "PROVIDER_UNAVAILABLE", { stage: "provider_transport" });
   }
-  if (!response.ok) throw new Error("PROVIDER_UNAVAILABLE");
-  try {
-    const provider = record(await response.json());
-    if (provider.status !== "completed" || provider.error != null || provider.incomplete_details != null
-      || typeof provider.model !== "string" || !provider.model.trim() || provider.model.length > 160) throw new Error("RESPONSE_INVALID");
-    const outputs = Array.isArray(provider.output) ? provider.output : [];
-    const messages = outputs.map(record).filter(item => item.type === "message");
-    if (outputs.some(item => !["message", "reasoning"].includes(String(record(item).type)))
-      || messages.length !== 1 || messages[0].role !== "assistant" || messages[0].status !== "completed") throw new Error("RESPONSE_INVALID");
-    const texts = Array.isArray(messages[0].content) ? messages[0].content.map(record) : [];
-    if (texts.length !== 1 || texts[0].type !== "output_text" || typeof texts[0].text !== "string") throw new Error("RESPONSE_INVALID");
-    const text = texts[0].text;
-    return { reading: readTrajectoryResponse(JSON.parse(text), context), model: provider.model };
-  } catch { throw new Error("RESPONSE_INVALID"); }
+  if (!response.ok) throw new ReadingError("PROVIDER_UNAVAILABLE", { stage: "provider_http", httpStatus: response.status });
+  let provider: Record<string, unknown>;
+  try { provider = record(await response.json()); }
+  catch { throw new ReadingError("RESPONSE_INVALID", { stage: "provider_json", httpStatus: response.status }); }
+  const diagnostic = providerDiagnostic(provider, response.status);
+  const fail = (stage: ReadingStage): never => { throw new ReadingError("RESPONSE_INVALID", { ...diagnostic, stage }); };
+  if (provider.status !== "completed" || provider.error != null || provider.incomplete_details != null) fail("provider_status");
+  if (typeof provider.model !== "string" || !provider.model.trim() || provider.model.length > 160) fail("provider_model");
+  const resolvedModel = provider.model as string;
+  const outputs = Array.isArray(provider.output) ? provider.output : [];
+  const messages = outputs.map(record).filter(item => item.type === "message");
+  if (outputs.some(item => !["message", "reasoning"].includes(String(record(item).type)))
+    || messages.length !== 1 || messages[0].role !== "assistant" || messages[0].status !== "completed") fail("provider_output");
+  const texts = Array.isArray(messages[0].content) ? messages[0].content.map(record) : [];
+  if (texts.length !== 1 || texts[0].type !== "output_text" || typeof texts[0].text !== "string") fail("provider_content");
+  let parsed: unknown;
+  try { parsed = JSON.parse(texts[0].text as string); }
+  catch { fail("output_json"); }
+  const validReading = (() => {
+    try { return readTrajectoryResponse(parsed, context); }
+    catch { return fail(quoteFailure(parsed, context) ? "reading_quote" : "reading_contract"); }
+  })();
+  return { reading: validReading, model: resolvedModel, diagnostic: { outcome: "validated", ...diagnostic, stage: "validated" } };
 }
 
 export async function handleMatchingTrajectory(request: Request, deps: Dependencies): Promise<Response> {
@@ -129,7 +189,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     let context: SemanticContext;
     try {
       context = prepareTrajectoryContext(sources.profileData, { ...position, title: position.title },
-        Array.isArray(sources.redactions) ? sources.redactions.filter((item): item is string => typeof item === "string") : []);
+        Array.isArray(sources.redactions) ? sources.redactions.filter((item): item is string => typeof item === "string") : []) as SemanticContext;
     } catch (error) {
       return unavailable(error instanceof Error && error.message === "TRAJECTORY_SENSITIVE_CONTEXT" ? "INPUT_REQUIRES_REVIEW" : "INPUT_LIMIT");
     }
@@ -162,6 +222,15 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
           reading({ ...context, entries: [...context.entries].reverse() }, model, key, deps),
         ]);
         const [a, b] = settled;
+        const diagnostics: [ReadingDiagnostic, ReadingDiagnostic] = [readingDiagnostic(a), readingDiagnostic(b)];
+        const diagnosticStage = a.status === "rejected" || b.status === "rejected" ? "reading_failure"
+          : a.value.model !== b.value.model ? "model_disagreement"
+          : !agreeTrajectoryReadings(a.value.reading, b.value.reading) ? "readings_disagree" : null;
+        const attempt = typeof result.attempts === "number" && Number.isInteger(result.attempts) && result.attempts >= 1 && result.attempts <= 3
+          ? result.attempts : null;
+        if (diagnosticStage) emitDiagnostic(deps, { event: "matching_trajectory_readings", version: 1,
+          analysisId: base.analysisId, attempt,
+          stage: diagnosticStage, readings: diagnostics });
         if (a.status === "rejected") throw a.reason;
         if (b.status === "rejected") throw b.reason;
         const first = a.value, second = b.value;

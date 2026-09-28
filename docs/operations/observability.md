@@ -28,6 +28,8 @@ Fato correto, omissão, alucinação, ambiguidade, falso positivo, falso negativ
 
 O M5.6 adiciona `document_intelligence_runs` para rota selecionada/efetiva, modo, provider/modelo/versionamento, fallback, diagnóstico allowlisted e duração por estágio. O registro é organization-scoped, protegido por RLS e não contém texto, imagem, PII, prompt ou resposta integral. A gravação é opcional e sua falha não bloqueia revisão humana. Métricas de qualidade detalhadas ficam no harness privado de benchmark e somente relatórios sanitizados podem ser versionados.
 
+Na Edge `matching-trajectory`, tentativas com falha ou discordância emitem um único evento JSON `matching_trajectory_readings` v1 após as duas leituras terminarem. `analysisId` e `attempt` correlacionam o evento com o cache; cada leitura informa `outcome`, `stage`, motivo limitado, HTTP status, provider status, incomplete reason e contagens de tokens quando disponíveis. Valores vindos do provedor são reduzidos a listas fechadas ou números limitados. Não se registra nome/ID da pessoa, conteúdo profissional, posição, prompt, citação, resposta bruta ou mensagem livre de erro. A falha do logger não modifica o resultado; leituras bem-sucedidas sem discordância e respostas vindas somente do cache não geram evento. O evento fica apenas no log operacional da Edge, não no banco nem na resposta ao navegador. Logs antigos `RESPONSE_INVALID` continuam sem etapa recuperável. Versões de prompt, método e score permanecem as mesmas.
+
 ## Alertas planejados
 
 Cross-tenant denial anômalo, pico de exportação, falhas de Auth, custo por tenant, timeout, regressão, revisão manual crescente, parser failure e indisponibilidade de provider.
