@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 290
-source_manifest_sha256: cc223d8a9bda94c50dc1be7c6072b5e91840522290de94ec68ad8f7afe1c336e
+documentation_source_count: 293
+source_manifest_sha256: 351c767dcb1b924dcafbae7d48b27b67c89cc5beb1ff8a2e139230fd1b9e8943
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.6
+version: 2.51.7
 last_verified: 2026-09-28
 ---
 
 # Estado atual do Prisma
+
+## Diagnóstico seguro das duas leituras de trajetória (em implementação)
+
+A Edge `matching-trajectory` passa a emitir um evento sanitizado `matching_trajectory_readings` v1 quando uma leitura falha ou as leituras divergem. O evento identifica a análise/tentativa e as etapas de cada leitura, incluindo metadados permitidos do provedor e uso de tokens quando disponíveis. Não contém conteúdo do Perfil, Posição, prompt ou resposta da IA e sua gravação não interfere no matching. Nenhuma migration, UI, prompt, modelo, score ou versão persistida muda. Falhas anteriores à publicação, inclusive as duas tentativas da Beatriz em 2026-09-28, não ganham diagnóstico retroativo. Contrato e evidência: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0 e `docs/qa/aot-matching-trajectory-diagnostics.md`.
 
 ## Fallback após falha da IA no matching (publicado em produção)
 
@@ -9814,6 +9818,8 @@ Fato correto, omissão, alucinação, ambiguidade, falso positivo, falso negativ
 
 O M5.6 adiciona `document_intelligence_runs` para rota selecionada/efetiva, modo, provider/modelo/versionamento, fallback, diagnóstico allowlisted e duração por estágio. O registro é organization-scoped, protegido por RLS e não contém texto, imagem, PII, prompt ou resposta integral. A gravação é opcional e sua falha não bloqueia revisão humana. Métricas de qualidade detalhadas ficam no harness privado de benchmark e somente relatórios sanitizados podem ser versionados.
 
+Na Edge `matching-trajectory`, tentativas com falha ou discordância emitem um único evento JSON `matching_trajectory_readings` v1 após as duas leituras terminarem. `analysisId` e `attempt` correlacionam o evento com o cache; cada leitura informa `outcome`, `stage`, motivo limitado, HTTP status, provider status, incomplete reason e contagens de tokens quando disponíveis. Valores vindos do provedor são reduzidos a listas fechadas ou números limitados. Não se registra nome/ID da pessoa, conteúdo profissional, posição, prompt, citação, resposta bruta ou mensagem livre de erro. A falha do logger não modifica o resultado; leituras bem-sucedidas sem discordância e respostas vindas somente do cache não geram evento. O evento fica apenas no log operacional da Edge, não no banco nem na resposta ao navegador. Logs antigos `RESPONSE_INVALID` continuam sem etapa recuperável. Versões de prompt, método e score permanecem as mesmas.
+
 ## Alertas planejados
 
 Cross-tenant denial anômalo, pico de exportação, falhas de Auth, custo por tenant, timeout, regressão, revisão manual crescente, parser failure e indisponibilidade de provider.
@@ -13321,6 +13327,54 @@ Decisão de versão: sem bump dos contratos persistidos `vacancy-matching-semant
 
 ---
 
+## Source: `docs/qa/agreement-matching-trajectory-diagnostics.md`
+
+# Acordo — diagnóstico seguro da interpretação de trajetória v1.0.0
+
+Decisão: Bruno autorizou em 2026-09-28 implementar o registro de falhas discutido após duas tentativas `RESPONSE_INVALID` da análise da Beatriz para Analista de Marketing. Este é um delta de observabilidade do contrato M8.6 e do fallback já publicado; não reabre a classificação.
+
+## DEVE
+
+- D-01 — Registrar, para cada uma das duas leituras de uma tentativa problemática, sucesso/falha e a etapa tipificada da falha; incluir status HTTP do provedor, status/incomplete reason permitidos e contagens de tokens quando disponíveis, com correlação ao ID da análise e número da tentativa.
+- D-02 — Distinguir falha de transporte, HTTP, envelope, JSON, contrato da leitura/citação, divergência de modelo e discordância entre leituras, preservando os códigos públicos existentes.
+- D-03 — O registro é apenas diagnóstico e falha aberta: indisponibilidade da telemetria não altera cálculo, cache, resultado, autoridade nem fluxo manual.
+
+## PROIBIDO
+
+- P-01 — Não registrar texto de perfil/posição, prompt, resposta bruta, citação, erro livre do provedor, chave, token de autenticação ou identificador de pessoa.
+- P-02 — Não enviar diagnóstico ao cliente nem usar o log para inferir adequação, grupo ou score.
+
+## FORA DE ESCOPO
+
+- F-01 — Alterar prompt/modelo, limite de tokens, estratégia de retry, regra de matching, banco, interface ou reprocessar perfis reais para testar.
+
+## AUTONOMIA
+
+- A-01 — Formato do evento e mecanismo de log da Edge, desde que os campos sejam fechados, pequenos, testáveis e consultáveis.
+
+## PENDÊNCIAS
+
+- Nenhuma decisão material pendente dentro deste escopo.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01 — Testes sintéticos mostram a etapa e ambos os lados da tentativa, inclusive resposta incompleta e citação inválida.
+- CA-D02 — Testes preservam códigos públicos e ausência de log com dados sensíveis, também quando o provedor devolve detalhes maliciosos.
+- CA-D03 — Teste de falha do logger mantém resposta e persistência inalteradas; cache e chamadas não autorizadas não produzem novo log de provedor.
+
+## MAPA DE IMPACTO E PRESERVAÇÃO — baseline antes da implementação
+
+| Área/capacidade | Relação | Baseline | Regressão proporcional |
+| --- | --- | --- | --- |
+| Edge `matching-trajectory`, duas leituras e motivo público | direct | `main` em `4d381cf`, Edge v8, `RESPONSE_INVALID` agrupa causas; testes Deno existentes | Testes de etapas, pares e motivos, sem chamada real à IA |
+| Logging/privacidade | critical_transversal | Handler não registra conteúdo nem erros do provedor; PII restrita | Testes negativos com dados sensíveis e logger indisponível; revisão do diff |
+| Cache, triagem A/B, score e snapshot | plausible_indirect | Fallback publicado em `a20bd84`; testes existentes do handler/snapshot | Regressão Deno focada, nenhuma mutação de perfis reais |
+| Banco, prompt, UI e VPS | no_impact_identified | Sem alteração de contrato persistido ou visual pretendida | Plano de release confirma destinos ignorados; smoke público da Edge após publicação |
+
+Estado: agreed. Aprovação: pedido explícito de implementação de Bruno nesta conversa em 2026-09-28.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -16160,6 +16214,41 @@ SHA funcional `a20bd84dd1f25eacb9e216f5dcbb230626fdbb8a` na branch `codex/matchi
 ## Conclusão
 
 `PARTIAL`: correção implementada e publicada com testes e verificações de infraestrutura aprovados; o resultado visual autenticado com os Perfis reais não foi exercitado para evitar reanálise e custo de IA.
+
+---
+
+## Source: `docs/qa/aot-matching-trajectory-diagnostics.md`
+
+# AoT — diagnóstico seguro da trajetória
+
+Contrato: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0. Execução: `docs/qa/execution-matching-trajectory-diagnostics.md`. Baseline local: `main` em `4d381cf`; Edge de produção v8, sem diagnóstico de etapa. Esta entrega não reconstitui as falhas históricas da Beatriz.
+
+## Acordos → implementação → teste → evidência
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Evento único `matching_trajectory_readings` v1 com dois resultados, análise, tentativa e metadados permitidos | Fixture de resposta incompleta verifica lado, etapa, HTTP, status, razão e tokens; typecheck Deno | PASS |
+| D-02 | `ReadingError` tipificado, validação por etapa, diagnóstico de quote, modelo e discordância; motivo público preservado | Fixtures de JSON, quote, modelo e discordância; suíte existente de envelope/timeout | PASS |
+| D-03 | `emitDiagnostic` isolado com `try/catch`, sem escrita no cache ou cliente | Logger que lança mantém resultado e RPC; cache/sucesso/autorização não geram evento | PASS |
+| P-01 | Allowlist de status/razão e tokens limitados; log não recebe texto, prompt ou erro livre | Negativos com resposta e detalhes maliciosos; revisão do diff | PASS |
+| P-02 | Evento fica somente no log da Edge, sem efeito no cálculo | Motivos públicos e snapshots preservados nos testes Deno | PASS |
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline | Regressão/evidência | Status |
+| --- | --- | --- | --- | --- |
+| Duas leituras/erro público da Edge | direct | `RESPONSE_INVALID` sem detalhe, 2 chamadas com ordem invertida | 27 testes do handler, typecheck Deno | PASS |
+| Privacidade/segurança do log | critical_transversal | Sem log de resposta bruta | Fixtures com conteúdo sensível, allowlist e logger indisponível | PASS |
+| Cache, triagem, score e snapshot | plausible_indirect | Contratos M8.6 e fallback vigentes | 5 testes de snapshot + negativos do handler; sem chamada real | PASS |
+| Banco, prompt, UI e VPS | no_impact_identified | Nenhuma alteração pretendida | Revisão de diff e plano seletivo de release | NOT TESTED |
+
+Novidade: correlação e etapa por leitura em tentativas problemáticas. Preservação: mesma resposta pública, motivo, cache, score e fallback. Relação reclassificada: nenhuma. Limitação: nenhum log anterior à implantação contém essa etapa; o smoke autenticado em produção poderia consumir IA e por isso não será usado como teste de telemetria.
+
+Fora de escopo F-01: sem alteração de prompt/modelo/limites/retry/banco/UI e sem reprocessamento de Perfil real. Fidelidade visual: não aplicável, sem superfície visual alterada. Desvios do contrato: nenhum na implementação local. Mudanças autorizadas durante a execução: nenhuma.
+
+Validação local: `deno check` do handler e testes; `deno test --no-check` do handler/snapshot: 32/32 PASS; `pnpm run lint` PASS; `pnpm run check:matching-runtime` PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` PASS. O typecheck Deno exigiu tipagem explícita do retorno já usado de `prepareTrajectoryContext`, sem mudança de dado.
+
+Git/CI/produção: pendente nesta fase. Não declarar publicação antes de verificar SHA, plano, CI, Edge e smoke seguro.
 
 ---
 
@@ -20110,6 +20199,14 @@ Validar antes de liberar: corpus sintético separado da calibração; positivos/
 # Execução — preservação do matching após falha da IA
 
 Fonte obrigatória: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler integralmente antes da implementação. O resultado pré-IA deve sobreviver a qualquer tentativa sem resposta válida (D-01/P-01/P-02/P-03); a tela informa a falha e identifica o Perfil (D-02); leitura válida continua versionada (D-03). A política de chamadas, o provedor, Knowledge, score, dados persistidos e schema ficam fora do movimento (F-01/F-02). A implementação da anotação transitória é delegada (A-01). Comprovar CA-01 a CA-03 e registrar AoT com evidência local e de release.
+
+---
+
+## Source: `docs/qa/execution-matching-trajectory-diagnostics.md`
+
+# Execução — diagnóstico seguro da interpretação de trajetória
+
+Fonte integral e imutável por versão: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0. Aplicar todos os D-01..D-03, P-01..P-02, F-01 e A-01. Implementar somente na Edge e testes pertinentes. Preservar os contratos públicos e o fallback anterior. Validar CA-D01..CA-D03 com fixtures sem provedor real, revisar payloads dos logs e registrar AoT e mapa final. Regenerar Context Pack por ser mudança material. Publicar somente destinos indicados pelo plano do diff validado.
 
 ---
 
