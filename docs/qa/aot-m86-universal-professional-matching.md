@@ -35,7 +35,7 @@ Contrato de referência: `docs/qa/agreement-m86-universal-professional-matching.
 | Auth/RLS/cache/snapshot | critical_transversal | aceitar versão nova sem reescrever histórico | M8.3/M8.4 | negativos de autoridade, tenant, stale, forged input | 28 Deno | PASS |
 | Position/temporal policy | direct | persistir regra explícita por versão | vacancy-definition 1.3.0 | typecheck, migration review | migration M8.6 | PARTIAL |
 | Knowledge | direct | leitura anterior e proposta humana reutilizável | Knowledge Inbox existente | grants/RPC e revisão estática | migration M8.6 | PARTIAL |
-| UI de Posições/matching | plausible_indirect | exibir experiência anterior e proposta de aprendizado | Vagas local | typecheck/build | `build:web` | PASS |
+| UI de Posições/matching | plausible_indirect | exibir experiência anterior e proposta de aprendizado | Vagas local | typecheck/build + smoke HTTP hospedado | `build:web`; VPS `prisma-web` ativo, restart 0, HTTPS 200 | PASS |
 | Parser/publicação de Perfil | no_impact_identified | somente leitura de Perfil publicado | contratos existentes | diff e testes | sem alteração de publicação | PASS |
 
 ### Novidade e preservação
@@ -79,6 +79,8 @@ Nenhuma mudança de produto além do acordo congelado. O teste Deno do piloto fo
 - Deno Edge direcionado: 28/28 PASS.
 - `pnpm run check:supabase-ledger`: PASS como diagnóstico; migration M8.6 aparece pendente local e o CLI de banco não está instalado neste ambiente.
 - `pnpm run release:plan`: PASS; superfícies detectadas: database, matching-trajectory Edge, web/VPS, Context Pack, documentação e testes.
+- `pnpm run release:validate`: PASS; gate final com 697/697 testes, tipos, build web e ledger diagnóstico.
+- CI GitHub `36371291928`: PASS; job `validate` verde.
 
 ## Evidência remota de migration e Edge
 
@@ -86,11 +88,12 @@ Nenhuma mudança de produto além do acordo congelado. O teste Deno do piloto fo
 - Consulta SQL somente leitura confirmou `experience_policy`, `knowledge_relation_learning_requests`, `enqueue_position_relation_learning(...)` e uma policy tenant-scoped na fila.
 - Edge Function `matching-trajectory`: ACTIVE, versão 7, `verify_jwt=true`, hash de bundle `8563aac2a3238a409d0b6f503843760144918b99b2e37a76042da81b55d00167`.
 - POST anônimo sem token ao endpoint retornou HTTP 401 `UNAUTHORIZED_NO_AUTH_HEADER`; nenhuma Pessoa, relação ou proposta foi criada em produção.
+- VPS: checkout `/opt/prisma` em `b2c09f8d6f071483f98f57a4a839b9638c362fbd`; `prisma-web:1.6.4` ativo, restart count `0`; `/`, `/login` e `/index.html` retornaram HTTP 200.
 
 ## Git / QA / ambiente
 
-Implementação isolada na branch `codex/m86-universal-professional-matching`, com commit local validado. Migration e Edge já estão publicados com a evidência acima; integração em `main` e publicação web/VPS ainda dependem do fechamento seletivo deste SHA. Produção não foi usada como ambiente de teste.
+Implementação integrada por fast-forward em `main`, GitHub e VPS no SHA funcional `b2c09f8d6f071483f98f57a4a839b9638c362fbd`. Migration, Edge e `prisma-web` estão publicados com a evidência acima. O checkout canônico local preservou quatro arquivos não rastreados preexistentes. Produção não foi usada como ambiente de teste.
 
 ## Conclusão
 
-`PARTIAL`: implementação, validação local direcionada, migration remota e Edge aprovados; integração em `main`, publicação web/VPS, smoke autenticado e confirmação conectada do fluxo Knowledge Inbox ainda permanecem para concluir M8.6.
+`PARTIAL`: implementação, validação local, CI, migration remota, Edge e web/VPS aprovados; permanecem parciais o corpus universal independente, o smoke autenticado de matching e a confirmação conectada do fluxo Knowledge Inbox. Nenhum desses limites foi mascarado como qualidade universal comprovada.

@@ -8,11 +8,11 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
-## M8.6: interpretação universal de Posições (migration e Edge publicados; web em release)
+## M8.6: interpretação universal de Posições (publicado em migration, Edge e web)
 
 O contrato aprovado amplia a interpretação semântica para qualquer profissão. A ordem é Knowledge Global/Empresa e decisões humanas autorizadas, depois IA somente quando não houver relação interna segura. Título incompatível não barra o Perfil; Perfis sem conteúdo profissional utilizável são excluídos antes da IA e não significam incapacidade. As categorias `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` e `unclear` preservam evidência e provenance, com grupos A/B/C e score somente onde há relação competitiva.
 
-`trajectory-position-2.0.0`, `trajectory-evidence-2.0.0`, `vacancy-matching-semantic-7.0.0` e `matching-score-1.4.0` são os contratos do novo fluxo. `vacancy_versions.experience_policy` é explícito: `not_required`, `required` ou `unspecified`; somente `not_required` retira duração/recência do denominador. Senioridade usa apenas marcadores explícitos e penalização simétrica para acima/abaixo. Propostas confirmadas podem entrar na Inbox tenant-scoped da Knowledge para revisão; não há publicação automática. Migration, Agreement e Execution Prompt estão no repositório. A migration M8.6 está registrada remotamente e a Edge `matching-trajectory` está ACTIVE v7; a publicação web/VPS e o smoke autenticado permanecem pendentes neste registro. O smoke remoto executado foi anônimo e confirmou apenas a barreira HTTP 401, sem escrita de dados.
+`trajectory-position-2.0.0`, `trajectory-evidence-2.0.0`, `vacancy-matching-semantic-7.0.0` e `matching-score-1.4.0` são os contratos do novo fluxo. `vacancy_versions.experience_policy` é explícito: `not_required`, `required` ou `unspecified`; somente `not_required` retira duração/recência do denominador. Senioridade usa apenas marcadores explícitos e penalização simétrica para acima/abaixo. Propostas confirmadas podem entrar na Inbox tenant-scoped da Knowledge para revisão; não há publicação automática. Migration, Agreement e Execution Prompt estão no repositório. A migration M8.6 está registrada remotamente, a Edge `matching-trajectory` está ACTIVE v7 e o web/VPS foi publicado no SHA funcional `b2c09f8d6f071483f98f57a4a839b9638c362fbd`; smoke HTTP público retornou 200. O smoke autenticado de matching e a revisão conectada da Inbox não foram executados para evitar mutação de Pessoas/propostas reais.
 
 ## Anos abreviados nos períodos (publicado em produção)
 

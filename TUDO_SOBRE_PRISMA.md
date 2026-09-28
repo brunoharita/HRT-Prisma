@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 287
-source_manifest_sha256: a8c18c5374e94d7c369cd87e2cd2d4037aadefb2b64d36704423b698e659828a
+source_manifest_sha256: 4538d509cb0162de715c725d5d4d63f06d2c79ce18f95137b09dc54c35dee96f
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,11 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
-## M8.6: interpretação universal de Posições (migration e Edge publicados; web em release)
+## M8.6: interpretação universal de Posições (publicado em migration, Edge e web)
 
 O contrato aprovado amplia a interpretação semântica para qualquer profissão. A ordem é Knowledge Global/Empresa e decisões humanas autorizadas, depois IA somente quando não houver relação interna segura. Título incompatível não barra o Perfil; Perfis sem conteúdo profissional utilizável são excluídos antes da IA e não significam incapacidade. As categorias `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` e `unclear` preservam evidência e provenance, com grupos A/B/C e score somente onde há relação competitiva.
 
-`trajectory-position-2.0.0`, `trajectory-evidence-2.0.0`, `vacancy-matching-semantic-7.0.0` e `matching-score-1.4.0` são os contratos do novo fluxo. `vacancy_versions.experience_policy` é explícito: `not_required`, `required` ou `unspecified`; somente `not_required` retira duração/recência do denominador. Senioridade usa apenas marcadores explícitos e penalização simétrica para acima/abaixo. Propostas confirmadas podem entrar na Inbox tenant-scoped da Knowledge para revisão; não há publicação automática. Migration, Agreement e Execution Prompt estão no repositório. A migration M8.6 está registrada remotamente e a Edge `matching-trajectory` está ACTIVE v7; a publicação web/VPS e o smoke autenticado permanecem pendentes neste registro. O smoke remoto executado foi anônimo e confirmou apenas a barreira HTTP 401, sem escrita de dados.
+`trajectory-position-2.0.0`, `trajectory-evidence-2.0.0`, `vacancy-matching-semantic-7.0.0` e `matching-score-1.4.0` são os contratos do novo fluxo. `vacancy_versions.experience_policy` é explícito: `not_required`, `required` ou `unspecified`; somente `not_required` retira duração/recência do denominador. Senioridade usa apenas marcadores explícitos e penalização simétrica para acima/abaixo. Propostas confirmadas podem entrar na Inbox tenant-scoped da Knowledge para revisão; não há publicação automática. Migration, Agreement e Execution Prompt estão no repositório. A migration M8.6 está registrada remotamente, a Edge `matching-trajectory` está ACTIVE v7 e o web/VPS foi publicado no SHA funcional `b2c09f8d6f071483f98f57a4a839b9638c362fbd`; smoke HTTP público retornou 200. O smoke autenticado de matching e a revisão conectada da Inbox não foram executados para evitar mutação de Pessoas/propostas reais.
 
 ## Anos abreviados nos períodos (publicado em produção)
 
@@ -9465,6 +9465,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 ## Estado
 
+M8.6 — interpretação profissional universal publicado em 27/09: SHA funcional `b2c09f8d6f071483f98f57a4a839b9638c362fbd` integrado em `main`, GitHub e VPS. A migration foi aplicada individualmente e registrada remotamente na versão `20260928023716`, com nome `20260927130000_m86_universal_professional_matching`; a Edge `matching-trajectory` está ACTIVE v7, `verify_jwt=true`, com hash `8563aac2a3238a409d0b6f503843760144918b99b2e37a76042da81b55d00167`. Somente `prisma-web` foi reconstruído/recriado, imagem `prisma-web:1.6.4`, checkout remoto no mesmo SHA, container ativo, zero reinícios e `/`, `/login` e `/index.html` HTTP 200. Smoke anônimo da Edge retornou 401 por ausência de Authorization. Não houve escrita de Pessoa, relação ou proposta em produção. CI `36371291928` PASS. Limites funcionais e evidências: `docs/qa/aot-m86-universal-professional-matching.md`.
+
 Lista de Pessoas por Posição publicada em 27/09: runtime SHA `0e42bdc93ff9cc42736637293eca17c2a91faac6` integrado ao histórico de `main`/GitHub e implantado na VPS; o HEAD de `main` avançou depois para `88ea5dbd0d267747d7dadf1a871c01eb3dacb120` somente com o fechamento documental, sem novo deploy web. Somente `prisma-web` foi reconstruído/recriado; imagem `sha256:58af5ddf16854692e196573b28386fb73c027e66d0d79d5eb498655c97e197d5`, container running, zero reinícios e HTTPS 200 após 404 transitório durante a troca. Rollback `prisma-web:rollback-before-0e42bdc93ff9`. A Edge `matching-trajectory` foi sincronizada via conector Supabase na versão 6, ACTIVE, `verify_jwt=true`, hash `bf0bceb24dc0aa8de1beadc96f1d3a20b2e1e584d87559db31551c929a74d445`; chamada POST anônima retornou 401. Sem migration; fórmula e versão do score não mudaram. CI `36341051361` PASS. Smoke autenticado da lista não executado para evitar reanálise/custo em Perfis reais. Evidência: `docs/qa/aot-vacancy-people-alert-order.md`.
 
 M8.4 Score Prisma temporal publicado em 27/09: SHA `20a39a9e4e598dbfc4cc51146e7c4b7441923624` sincronizado em `main`, GitHub e VPS. A migration remota `20260927162056_m84_score_temporal_compatibility` foi aplicada individualmente; a Edge `matching-trajectory` está ativa na versão 4 com `verify_jwt=true`. Somente `prisma-web` foi reconstruído e recriado, com imagem `sha256:eccbb7345f96ac21ca2e170fdb35bf597a6b6a5b39a60055abe3128b2f25f3b7`, container `running`, zero reinícios e HTTPS 200 após 404 transitório durante a troca. Rollback `prisma-web:rollback-before-20a39a9e4e59`; smoke sem token da Edge retornou 401. Evidência completa em `docs/qa/aot-m84-prisma-score-temporal.md`.
@@ -15965,7 +15967,7 @@ Contrato de referência: `docs/qa/agreement-m86-universal-professional-matching.
 | Auth/RLS/cache/snapshot | critical_transversal | aceitar versão nova sem reescrever histórico | M8.3/M8.4 | negativos de autoridade, tenant, stale, forged input | 28 Deno | PASS |
 | Position/temporal policy | direct | persistir regra explícita por versão | vacancy-definition 1.3.0 | typecheck, migration review | migration M8.6 | PARTIAL |
 | Knowledge | direct | leitura anterior e proposta humana reutilizável | Knowledge Inbox existente | grants/RPC e revisão estática | migration M8.6 | PARTIAL |
-| UI de Posições/matching | plausible_indirect | exibir experiência anterior e proposta de aprendizado | Vagas local | typecheck/build | `build:web` | PASS |
+| UI de Posições/matching | plausible_indirect | exibir experiência anterior e proposta de aprendizado | Vagas local | typecheck/build + smoke HTTP hospedado | `build:web`; VPS `prisma-web` ativo, restart 0, HTTPS 200 | PASS |
 | Parser/publicação de Perfil | no_impact_identified | somente leitura de Perfil publicado | contratos existentes | diff e testes | sem alteração de publicação | PASS |
 
 ### Novidade e preservação
@@ -16009,6 +16011,8 @@ Nenhuma mudança de produto além do acordo congelado. O teste Deno do piloto fo
 - Deno Edge direcionado: 28/28 PASS.
 - `pnpm run check:supabase-ledger`: PASS como diagnóstico; migration M8.6 aparece pendente local e o CLI de banco não está instalado neste ambiente.
 - `pnpm run release:plan`: PASS; superfícies detectadas: database, matching-trajectory Edge, web/VPS, Context Pack, documentação e testes.
+- `pnpm run release:validate`: PASS; gate final com 697/697 testes, tipos, build web e ledger diagnóstico.
+- CI GitHub `36371291928`: PASS; job `validate` verde.
 
 ## Evidência remota de migration e Edge
 
@@ -16016,14 +16020,15 @@ Nenhuma mudança de produto além do acordo congelado. O teste Deno do piloto fo
 - Consulta SQL somente leitura confirmou `experience_policy`, `knowledge_relation_learning_requests`, `enqueue_position_relation_learning(...)` e uma policy tenant-scoped na fila.
 - Edge Function `matching-trajectory`: ACTIVE, versão 7, `verify_jwt=true`, hash de bundle `8563aac2a3238a409d0b6f503843760144918b99b2e37a76042da81b55d00167`.
 - POST anônimo sem token ao endpoint retornou HTTP 401 `UNAUTHORIZED_NO_AUTH_HEADER`; nenhuma Pessoa, relação ou proposta foi criada em produção.
+- VPS: checkout `/opt/prisma` em `b2c09f8d6f071483f98f57a4a839b9638c362fbd`; `prisma-web:1.6.4` ativo, restart count `0`; `/`, `/login` e `/index.html` retornaram HTTP 200.
 
 ## Git / QA / ambiente
 
-Implementação isolada na branch `codex/m86-universal-professional-matching`, com commit local validado. Migration e Edge já estão publicados com a evidência acima; integração em `main` e publicação web/VPS ainda dependem do fechamento seletivo deste SHA. Produção não foi usada como ambiente de teste.
+Implementação integrada por fast-forward em `main`, GitHub e VPS no SHA funcional `b2c09f8d6f071483f98f57a4a839b9638c362fbd`. Migration, Edge e `prisma-web` estão publicados com a evidência acima. O checkout canônico local preservou quatro arquivos não rastreados preexistentes. Produção não foi usada como ambiente de teste.
 
 ## Conclusão
 
-`PARTIAL`: implementação, validação local direcionada, migration remota e Edge aprovados; integração em `main`, publicação web/VPS, smoke autenticado e confirmação conectada do fluxo Knowledge Inbox ainda permanecem para concluir M8.6.
+`PARTIAL`: implementação, validação local, CI, migration remota, Edge e web/VPS aprovados; permanecem parciais o corpus universal independente, o smoke autenticado de matching e a confirmação conectada do fluxo Knowledge Inbox. Nenhum desses limites foi mascarado como qualidade universal comprovada.
 
 ---
 
