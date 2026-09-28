@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.7
+version: 2.51.8
 last_verified: 2026-09-28
 ---
 
 # Estado atual do Prisma
 
-## Diagnóstico seguro das duas leituras de trajetória (em implementação)
+## Diagnóstico seguro das duas leituras de trajetória (publicado em produção)
 
-A Edge `matching-trajectory` passa a emitir um evento sanitizado `matching_trajectory_readings` v1 quando uma leitura falha ou as leituras divergem. O evento identifica a análise/tentativa e as etapas de cada leitura, incluindo metadados permitidos do provedor e uso de tokens quando disponíveis. Não contém conteúdo do Perfil, Posição, prompt ou resposta da IA e sua gravação não interfere no matching. Nenhuma migration, UI, prompt, modelo, score ou versão persistida muda. Falhas anteriores à publicação, inclusive as duas tentativas da Beatriz em 2026-09-28, não ganham diagnóstico retroativo. Contrato e evidência: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0 e `docs/qa/aot-matching-trajectory-diagnostics.md`.
+A Edge `matching-trajectory` v9 está ACTIVE com JWT obrigatório e bundle idêntico ao SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` em `main`/GitHub. Emite um evento sanitizado `matching_trajectory_readings` v1 quando uma leitura falha ou as leituras divergem. O evento identifica a análise/tentativa e as etapas de cada leitura, incluindo metadados permitidos do provedor e uso de tokens quando disponíveis. Não contém conteúdo do Perfil, Posição, prompt ou resposta da IA e sua gravação não interfere no matching. CI `36377229062` PASS; POST anônimo retornou 401. Nenhuma migration, UI, prompt, modelo, score ou versão persistida mudou. Falhas anteriores à publicação, inclusive as duas tentativas da Beatriz em 2026-09-28, não ganham diagnóstico retroativo. Contrato e evidência: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0 e `docs/qa/aot-matching-trajectory-diagnostics.md`.
 
 ## Fallback após falha da IA no matching (publicado em produção)
 

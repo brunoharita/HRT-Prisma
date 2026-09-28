@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 293
-source_manifest_sha256: 351c767dcb1b924dcafbae7d48b27b67c89cc5beb1ff8a2e139230fd1b9e8943
+source_manifest_sha256: 44f5e4a8278d236b2b8c6659b27fba2f965d7778d72e9d2ef1ced4018a0e5fdd
 -->
 
 # Tudo sobre o Prisma
@@ -2624,15 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.7
+version: 2.51.8
 last_verified: 2026-09-28
 ---
 
 # Estado atual do Prisma
 
-## Diagnóstico seguro das duas leituras de trajetória (em implementação)
+## Diagnóstico seguro das duas leituras de trajetória (publicado em produção)
 
-A Edge `matching-trajectory` passa a emitir um evento sanitizado `matching_trajectory_readings` v1 quando uma leitura falha ou as leituras divergem. O evento identifica a análise/tentativa e as etapas de cada leitura, incluindo metadados permitidos do provedor e uso de tokens quando disponíveis. Não contém conteúdo do Perfil, Posição, prompt ou resposta da IA e sua gravação não interfere no matching. Nenhuma migration, UI, prompt, modelo, score ou versão persistida muda. Falhas anteriores à publicação, inclusive as duas tentativas da Beatriz em 2026-09-28, não ganham diagnóstico retroativo. Contrato e evidência: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0 e `docs/qa/aot-matching-trajectory-diagnostics.md`.
+A Edge `matching-trajectory` v9 está ACTIVE com JWT obrigatório e bundle idêntico ao SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` em `main`/GitHub. Emite um evento sanitizado `matching_trajectory_readings` v1 quando uma leitura falha ou as leituras divergem. O evento identifica a análise/tentativa e as etapas de cada leitura, incluindo metadados permitidos do provedor e uso de tokens quando disponíveis. Não contém conteúdo do Perfil, Posição, prompt ou resposta da IA e sua gravação não interfere no matching. CI `36377229062` PASS; POST anônimo retornou 401. Nenhuma migration, UI, prompt, modelo, score ou versão persistida mudou. Falhas anteriores à publicação, inclusive as duas tentativas da Beatriz em 2026-09-28, não ganham diagnóstico retroativo. Contrato e evidência: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0 e `docs/qa/aot-matching-trajectory-diagnostics.md`.
 
 ## Fallback após falha da IA no matching (publicado em produção)
 
@@ -9473,6 +9473,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 # Deployment
 
+Diagnóstico da IA no matching publicado em 28/09: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` no `main`/GitHub, CI `36377229062` PASS. Plano seletivo publicou somente Edge `matching-trajectory` v9, ACTIVE/JWT obrigatório, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`; 12 arquivos conferidos com a origem. POST anônimo retornou 401. Sem migration, web/VPS ou chamada autenticada a IA em Perfil real. Logs anteriores não contêm a nova etapa. Evidência: `docs/qa/aot-matching-trajectory-diagnostics.md`.
+
 ## Estado
 
 M8.6 — interpretação profissional universal publicado em 27/09: SHA funcional `b2c09f8d6f071483f98f57a4a839b9638c362fbd` integrado em `main`, GitHub e VPS. A migration foi aplicada individualmente e registrada remotamente na versão `20260928023716`, com nome `20260927130000_m86_universal_professional_matching`; a Edge `matching-trajectory` está ACTIVE v7, `verify_jwt=true`, com hash `8563aac2a3238a409d0b6f503843760144918b99b2e37a76042da81b55d00167`. Somente `prisma-web` foi reconstruído/recriado, imagem `prisma-web:1.6.4`, checkout remoto no mesmo SHA, container ativo, zero reinícios e `/`, `/login` e `/index.html` HTTP 200. Smoke anônimo da Edge retornou 401 por ausência de Authorization. Não houve escrita de Pessoa, relação ou proposta em produção. CI `36371291928` PASS. Limites funcionais e evidências: `docs/qa/aot-m86-universal-professional-matching.md`.
@@ -16240,7 +16242,7 @@ Contrato: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0. Execuç
 | Duas leituras/erro público da Edge | direct | `RESPONSE_INVALID` sem detalhe, 2 chamadas com ordem invertida | 27 testes do handler, typecheck Deno | PASS |
 | Privacidade/segurança do log | critical_transversal | Sem log de resposta bruta | Fixtures com conteúdo sensível, allowlist e logger indisponível | PASS |
 | Cache, triagem, score e snapshot | plausible_indirect | Contratos M8.6 e fallback vigentes | 5 testes de snapshot + negativos do handler; sem chamada real | PASS |
-| Banco, prompt, UI e VPS | no_impact_identified | Nenhuma alteração pretendida | Revisão de diff e plano seletivo de release | NOT TESTED |
+| Banco, prompt, UI e VPS | no_impact_identified | Nenhuma alteração pretendida | Plano: database/web skip; diff e deploy só da Edge; smoke anônimo | PASS |
 
 Novidade: correlação e etapa por leitura em tentativas problemáticas. Preservação: mesma resposta pública, motivo, cache, score e fallback. Relação reclassificada: nenhuma. Limitação: nenhum log anterior à implantação contém essa etapa; o smoke autenticado em produção poderia consumir IA e por isso não será usado como teste de telemetria.
 
@@ -16248,7 +16250,7 @@ Fora de escopo F-01: sem alteração de prompt/modelo/limites/retry/banco/UI e s
 
 Validação local: `deno check` do handler e testes; `deno test --no-check` do handler/snapshot: 32/32 PASS; `pnpm run lint` PASS; `pnpm run check:matching-runtime` PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` PASS. O typecheck Deno exigiu tipagem explícita do retorno já usado de `prepareTrajectoryContext`, sem mudança de dado.
 
-Git/CI/produção: pendente nesta fase. Não declarar publicação antes de verificar SHA, plano, CI, Edge e smoke seguro.
+Git/CI/produção: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` integrado por fast-forward em `main` e `origin/main`. CI `36377229062` PASS. Plano 1.0.1: nove arquivos; documentação/Context Pack e somente Edge `matching-trajectory`; database e web/VPS `skip`. Edge v9 ACTIVE, `verify_jwt=true`, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`, os 12 arquivos publicados comparados ao bundle local. POST sem autenticação recebeu 401; não houve chamada autenticada com Perfil real nem custo de IA de smoke. Git local no worktree de release e GitHub alinhados no SHA funcional. O checkout principal mantém quatro itens não rastreados do usuário e exports gerados temporários fora do commit; não foram sobrescritos. Logs históricos não são recuperáveis. Conclusão: D-01..D-03 e P-01..P-02 PASS, sem desvio; efeito operacional de telemetria em erro real ainda não observado, por decisão de não provocar uma falha paga em produção.
 
 ---
 

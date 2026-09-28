@@ -1,5 +1,7 @@
 # Deployment
 
+Diagnóstico da IA no matching publicado em 28/09: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` no `main`/GitHub, CI `36377229062` PASS. Plano seletivo publicou somente Edge `matching-trajectory` v9, ACTIVE/JWT obrigatório, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`; 12 arquivos conferidos com a origem. POST anônimo retornou 401. Sem migration, web/VPS ou chamada autenticada a IA em Perfil real. Logs anteriores não contêm a nova etapa. Evidência: `docs/qa/aot-matching-trajectory-diagnostics.md`.
+
 ## Estado
 
 M8.6 — interpretação profissional universal publicado em 27/09: SHA funcional `b2c09f8d6f071483f98f57a4a839b9638c362fbd` integrado em `main`, GitHub e VPS. A migration foi aplicada individualmente e registrada remotamente na versão `20260928023716`, com nome `20260927130000_m86_universal_professional_matching`; a Edge `matching-trajectory` está ACTIVE v7, `verify_jwt=true`, com hash `8563aac2a3238a409d0b6f503843760144918b99b2e37a76042da81b55d00167`. Somente `prisma-web` foi reconstruído/recriado, imagem `prisma-web:1.6.4`, checkout remoto no mesmo SHA, container ativo, zero reinícios e `/`, `/login` e `/index.html` HTTP 200. Smoke anônimo da Edge retornou 401 por ausência de Authorization. Não houve escrita de Pessoa, relação ou proposta em produção. CI `36371291928` PASS. Limites funcionais e evidências: `docs/qa/aot-m86-universal-professional-matching.md`.
