@@ -213,8 +213,10 @@ for (const item of semanticPilotCases) {
     assert.deepEqual(actual.requirements, legacy.requirements);
     assert.deepEqual(actual.score.dimensions.filter(row => ["required", "desired"].includes(row.key)), legacy.score.dimensions.filter(row => ["required", "desired"].includes(row.key)));
     if (expected.functionPoints === null) {
-      assert.equal(semanticComparisonPending([actual]), true);
-      assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [35, 10]);
+      const { semanticFallback, ...priorResult } = actual;
+      assert.ok(semanticFallback);
+      assert.equal(semanticComparisonPending([actual]), false);
+      assert.deepEqual(priorResult, legacy);
     } else if (["backend", "abap", "historic_programmer", "hands_on_lead"].includes(item.baseId)) {
       assert.deepEqual(actual.score.dimensions.map(row => row.applicablePoints), [10, 25, 35, 10, 10, 10]);
     } else if (expected.group === "C") {
@@ -338,7 +340,7 @@ test("unclear additional work preserves proven history but makes comparison prov
   assert.equal(semanticComparisonPending([actual]), true);
 });
 
-test("pending, divergent, unavailable and malformed interpretations never become zero or lose manual evidence", () => {
+test("failed, divergent and malformed interpretations preserve the entire prior match", () => {
   const { need, legacy, assessment } = setup();
   legacy.positionDecision = "confirmed";
   const variants: SemanticAssessment[] = [
@@ -347,19 +349,17 @@ test("pending, divergent, unavailable and malformed interpretations never become
   ];
   for (const variant of variants) {
     const actual = applySemanticAssessment(need, legacy, variant);
-    assert.equal(actual.score.score, null);
-    assert.equal(actual.score.status, "unavailable");
-    assert.equal(semanticComparisonPending([actual]), true);
-    assert.deepEqual(actual.candidate, legacy.candidate);
-    assert.deepEqual(actual.requirements, legacy.requirements);
-    assert.equal(actual.positionDecision, "confirmed");
-    assert.deepEqual(actual.score.dimensions, legacy.score.dimensions.filter(row => ["required", "desired"].includes(row.key)));
+    const { semanticFallback, ...priorResult } = actual;
+    assert.ok(semanticFallback);
+    assert.equal(semanticFallback.status, variant.status);
+    assert.deepEqual(priorResult, legacy);
+    assert.equal(semanticComparisonPending([actual]), false);
   }
   assert.equal(semanticComparisonPending([]), false);
   assert.equal(semanticComparisonPending([legacy]), false);
 });
 
-test("tenant, profile, position, method, prompt and missing provenance fail closed", () => {
+test("tenant, profile, position, method, prompt and missing provenance cannot replace the prior match", () => {
   const { need, legacy, assessment } = setup();
   const invalid: Array<Partial<SemanticAssessment>> = [
     { organizationId: "other-tenant" }, { profileId: "other-profile" }, { positionVersionId: "position-v2" },
@@ -367,9 +367,9 @@ test("tenant, profile, position, method, prompt and missing provenance fail clos
   ];
   for (const override of invalid) {
     const actual = applySemanticAssessment(need, legacy, { ...assessment, ...override });
-    assert.equal(actual.score.score, null, Object.keys(override)[0]);
-    assert.equal(actual.semanticAssessment?.status, "unavailable");
-    assert.equal(semanticComparisonPending([actual]), true);
+    const { semanticFallback, ...priorResult } = actual;
+    assert.equal(semanticFallback?.reasonCode, "INVALID_ASSESSMENT", Object.keys(override)[0]);
+    assert.deepEqual(priorResult, legacy);
   }
 });
 
@@ -402,7 +402,7 @@ test("fingerprint is deterministic, changes with interpretation identity and nev
   assert.deepEqual(original, snapshot);
 });
 
-test("a material pending interpretation does not disable group and score ordering", () => {
+test("a failed interpretation keeps its prior group and score ordering", () => {
   const high = setup(fixture("backend"), "high");
   const low = setup(fixture("backend"), "low");
   const pending = applySemanticAssessment(high.need, high.legacy, { ...high.assessment, status: "indeterminate" });
@@ -411,9 +411,10 @@ test("a material pending interpretation does not disable group and score orderin
   a.candidate = { ...a.candidate, fullName: "SYNTHETIC_Z" }; b.candidate = { ...b.candidate, fullName: "SYNTHETIC_A" };
   a.score = { ...a.score, score: 99 }; b.score = { ...b.score, score: 20 };
   const sorted = sortVacancyMatches([a, b, pending]);
-  assert.equal(semanticComparisonPending(sorted), true);
+  assert.equal(pending.discoveryGroup, high.legacy.discoveryGroup);
+  assert.deepEqual(pending.score, high.legacy.score);
   assert.ok(sorted.indexOf(a) < sorted.indexOf(b));
-  assert.ok(sorted.indexOf(b) < sorted.indexOf(pending));
+  assert.ok(sorted.indexOf(pending) < sorted.indexOf(b));
 });
 
 test("runner offline is default even with credentials; only exact --execute can dispatch", async () => {

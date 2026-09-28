@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 287
-source_manifest_sha256: 4538d509cb0162de715c725d5d4d63f06d2c79ce18f95137b09dc54c35dee96f
+documentation_source_count: 290
+source_manifest_sha256: badbc5fcd97df0fe82ea1bd8f49e94b2b03df34d3e48945448a1202dc5b16f15
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.5
-last_verified: 2026-09-27
+version: 2.51.6
+last_verified: 2026-09-28
 ---
 
 # Estado atual do Prisma
+
+## Fallback após falha da IA no matching (em validação local)
+
+A decisão de 2026-09-28 determina que uma interpretação sem resposta válida preserve integralmente o resultado determinístico anterior, inclusive grupo, score e evidências, com aviso na busca e na comparação. O diagnóstico de produção para `Analista de Marketing` registrou Beatriz com `RESPONSE_INVALID` e leitura nula; o apagamento anterior do resultado local impedia sua apresentação em A/B. A correção é transitória na web/domínio compartilhado, sem alteração de banco, prompt ou pesos. Evidência de release será registrada em `docs/qa/aot-matching-ai-failure-fallback.md`.
 
 ## M8.6: interpretação universal de Posições (publicado em migration, Edge e web)
 
@@ -3876,6 +3880,8 @@ Toda Posição com título pode usar a mesma leitura profissional, independentem
 As relações semânticas são `direct`, `equivalent`, `related`, `entry_potential`, `context`, `other` e `unclear`, projetadas respectivamente nos Grupos A, B ou C sem confundir ausência de prova com prova negativa. Híbridos exigem evidência dos dois componentes centrais para relação integral; uma só parte permanece parcial/relacionada. Senioridade só é comparada quando os níveis estão explicitamente marcados, com penalização simétrica por subqualificação e sobrequalificação. A Posição versiona `experiencePolicy` como `not_required`, `required` ou `unspecified`; somente a primeira remove duração/recência do denominador.
 
 Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox existente da Knowledge com termo original, relação, evidência e versões. A proposta não publica alias ou relação global automaticamente.
+
+Quando uma tentativa de interpretação por IA não produz leitura válida, a busca conserva integralmente o matching determinístico calculado antes da tentativa. A interface avisa que a IA não concluiu, identifica os Perfis afetados e mantém grupo, score, relações e evidências anteriores; a falha não constitui classificação semântica ou fato negativo sobre a Pessoa. Este ajuste de fallback transitório não altera o contrato persistido, a rubrica de uma resposta válida nem a política de acionamento da IA. Acordo específico: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0.
 
 ## Saída por requisito
 
@@ -13267,6 +13273,54 @@ Baseline: `98bb6cc919d1c90dac04a0bf7e2cf1d6cc1674d2`. Nenhuma aceitação presum
 
 ---
 
+## Source: `docs/qa/agreement-matching-ai-failure-fallback.md`
+
+# Acordo — preservação do matching após falha da IA
+
+Versão 1.0.0. Decisão explícita de Bruno em 2026-09-28. Para uma tentativa de interpretação sem resultado válido, este acordo substitui somente o estado de pendência com apagamento do resultado prévio previsto em D-05 do acordo M8.6. As regras de uma interpretação válida permanecem as mesmas.
+
+## DEVE
+
+- D-01: guardar o resultado determinístico anterior à chamada e preservá-lo integralmente quando a IA falhar, divergir, permanecer em processamento ou retornar leitura/proveniência inválida. Isso inclui grupo, score, dimensões, relações, requisitos, evidências e decisões humanas.
+- D-02: sinalizar a falha na busca e na comparação, indicando que os resultados exibidos são os calculados antes da tentativa. Identificar os Perfis afetados sem expor dados internos do provedor.
+- D-03: uma resposta completa e válida continua a seguir a interpretação versionada atual. Nova consulta pode recuperar a análise, sem apagar histórico.
+
+## PROIBIDO
+
+- P-01: converter a falha em zero, em Grupo C, em ausência de experiência ou em classificação semântica válida.
+- P-02: substituir relações, score ou evidências determinísticas por campos vazios/indisponíveis apenas porque a IA falhou.
+- P-03: aceitar leitura malformada, tenant/Perfil/Posição/versão divergente ou proveniência ausente como conclusão da IA.
+
+## FORA DE ESCOPO
+
+- F-01: mudar a política de acionamento A/B/C, o prompt, modelo, orçamento ou número de leituras.
+- F-02: alterar Knowledge, banco, contratos persistidos, pesos ou dados reais de Pessoas e Posições.
+
+## AUTONOMIA
+
+- A-01: engenharia define uma anotação transitória de falha e os avisos nas superfícies existentes, com testes de regressão.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01: falha indisponível, divergência, resposta inválida e proveniência incompatível deixam o resultado anterior intacto, inclusive para Analista de Marketing com experiência publicada em Marketing.
+- CA-02: busca e comparação exibem aviso e ainda mostram grupo, score e evidência anteriores; resposta válida mantém o comportamento vigente.
+- CA-03: testes direcionados, tipos/build, runtime compartilhado e regressão proporcional passam; release somente de superfícies necessárias.
+
+## Mapa inicial de impacto
+
+| Área | Relação | Baseline e preservação |
+| --- | --- | --- |
+| Aplicação da interpretação e descoberta | direct | `main` anterior: falha apaga área/score; preservar objeto determinístico completo |
+| Busca e comparação | direct | Aviso visível e grupo/score anteriores; manter ações humanas e acesso ao Perfil |
+| Score, snapshots e versões | plausible_indirect | Não mudar cálculo nem contrato persistido; regressão de ordenação e avaliação determinística |
+| Edge, autenticação e tenant | critical_transversal | Sem mudança de RPC/provedor; rejeitar saída inválida, não aceitar como semântica |
+| Knowledge, parser, publicação e banco | no_impact_identified | Somente resultado em memória e UI; sem nova escrita de fonte ou schema |
+| Release | direct | Web e espelho gerado do domínio, sem migration nem publicação de Edge se o bundle não mudar materialmente |
+
+Decisão de versão: sem bump dos contratos persistidos `vacancy-matching-semantic-7.0.0` e `matching-score-1.4.0`, pois a resposta válida e o cálculo não mudam. A mudança é o fallback transitório da interface.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -16029,6 +16083,80 @@ Implementação integrada por fast-forward em `main`, GitHub e VPS no SHA funcio
 ## Conclusão
 
 `PARTIAL`: implementação, validação local, CI, migration remota, Edge e web/VPS aprovados; permanecem parciais o corpus universal independente, o smoke autenticado de matching e a confirmação conectada do fluxo Knowledge Inbox. Nenhum desses limites foi mascarado como qualidade universal comprovada.
+
+---
+
+## Source: `docs/qa/aot-matching-ai-failure-fallback.md`
+
+# AoT — preservação do matching após falha da IA
+
+Contrato: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0; execução: `docs/qa/execution-matching-ai-failure-fallback.md`. Baseline: `origin/main` em 2026-09-28. Este movimento responde à falha real `RESPONSE_INVALID` observada na busca da Posição Analista de Marketing, sem alterar registros de produção.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- | --- |
+| D-01 | Preservar o resultado pré-IA | `applySemanticAssessment` conserva o `VacancyCandidateMatch` e acrescenta somente `semanticFallback` transitório | `semanticTrajectory.test.ts` exige igualdade de todos os campos anteriores; caso Marketing em `semanticTriage.test.ts` | PASS |
+| D-02 | Notificar em tela | Aviso na busca e comparação, marcador nos Perfis afetados | Typecheck e build web; smoke visual autenticado ainda pendente | PARTIAL |
+| D-03 | Manter leitura válida e permitir atualização | Caminho de resposta completa mantém cálculo/versionamento; botão de atualizar refaz a consulta existente | Corpus semântico offline e testes de orquestração | PASS |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| P-01/P-02 | Falha não zera nem apaga grupo, score e evidências | Igualdade integral e ordenação em testes dirigidos | PASS |
+| P-03 | Resposta/proveniência inválida não vira conclusão semântica | Negativos de tenant, Perfil, Posição, método, prompt, hash e leitura malformada | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Área / capacidade | Relação | Baseline | Regressão proporcional | Status |
+| --- | --- | --- | --- | --- |
+| Matching e descoberta | direct | Erro convertia área, função, trajetória e score em indisponível | Igualdade do match anterior sob falhas; Marketing fica no grupo anterior | PASS |
+| Busca e comparação | direct | Seção de pendências retirava o Perfil do Grupo A/B | Avisos e marcador; typecheck/build; smoke autenticado pendente | PARTIAL |
+| Score, ordenação e avaliação | plausible_indirect | Cálculo determinístico e versões vigentes | Testes de score/ordenação e corpus semântico; nenhuma fórmula alterada | PASS |
+| Edge, autoridade e tenant | critical_transversal | Resposta do backend validada antes da aplicação | Negativos de proveniência e runtime gerado; teste Edge direcionado pendente | PARTIAL |
+| Knowledge, parser, publicação e banco | no_impact_identified | Sem novo caminho de escrita ou schema | Diff restrito a objeto transitório, apresentação, testes e documentação | PASS |
+| Release | direct | Web/VPS e Edge existentes | Plano após commit, CI e publicação ainda pendentes | NOT TESTED |
+
+### Novidade e preservação
+
+- Novo: aviso transitório de falha que não substitui o resultado calculado.
+- Preservado: grupo, score, dimensões, relações, evidências, requisitos, decisões humanas, cálculo e versão persistida.
+- Limitação: a classificação determinística anterior continua sujeita às suas próprias limitações de evidência; a falha de IA não a valida nem a invalida.
+
+## Fora de escopo preservado
+
+| ID | Evidência | Status |
+| --- | --- | --- |
+| F-01 | Política de acionamento, prompt, modelo e orçamento sem alteração | PASS |
+| F-02 | Sem migration, pesos, Knowledge ou mutação de dados reais | PASS |
+
+## Evidência de fidelidade visual
+
+Não há referência visual normativa. A apresentação acrescenta aviso e marcador às superfícies existentes, sem alteração da estrutura da página. O build web passou; smoke visual autenticado permanece pendente.
+
+## Desvios do contrato
+
+Nenhum desvio intencional. CA-02 e CA-03 permanecem parciais até smoke e release.
+
+## Mudanças autorizadas durante a execução
+
+A decisão de Bruno em 2026-09-28 substitui o estado de pendência com apagamento do resultado pré-IA em falhas; demais regras M8.6 permanecem.
+
+## Validação final
+
+- `pnpm run build`: PASS.
+- `node --test dist/tests/semanticTrajectory.test.js dist/tests/semanticTriage.test.js`: 95/95 PASS após atualização das expectativas antigas.
+- `pnpm run typecheck:web`, `pnpm run build:web`, `pnpm run lint`: PASS.
+- `pnpm run check:matching-runtime`, `pnpm run check:prisma-context`: PASS no workspace; o Context Pack será regenerado novamente sem incluir o rascunho não rastreado de outro movimento antes do commit.
+
+## Git / QA / ambiente
+
+Branch `codex/matching-ai-fallback`. Release ainda não executado. Quatro itens não rastreados preexistentes do usuário serão preservados e não entram no commit.
+
+## Conclusão
+
+`PARTIAL` até validação final, CI, publicação seletiva e smoke.
 
 ---
 
@@ -19971,6 +20099,14 @@ Entregar em uma mudança coerente: generalização do interpretador e do prompt;
 Não criar taxonomia paralela, não reprocessar históricos, não pesquisar Pessoas externamente, não publicar aprendizado automaticamente e não tratar falha/ausência como incapacidade ou zero.
 
 Validar antes de liberar: corpus sintético separado da calibração; positivos/negativos e invariância de nomenclatura; testes de autoridade/tenant/cache/snapshot/citações; build, typecheck, lint, runtime gerado, release plan e smoke proporcional. Atualizar Context Pack e AoT com PASS/PARTIAL/BLOCKED real. Se qualquer CA crítica falhar, não declarar M8.6 concluído nem publicar a ativação como validada.
+
+---
+
+## Source: `docs/qa/execution-matching-ai-failure-fallback.md`
+
+# Execução — preservação do matching após falha da IA
+
+Fonte obrigatória: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler integralmente antes da implementação. O resultado pré-IA deve sobreviver a qualquer tentativa sem resposta válida (D-01/P-01/P-02/P-03); a tela informa a falha e identifica o Perfil (D-02); leitura válida continua versionada (D-03). A política de chamadas, o provedor, Knowledge, score, dados persistidos e schema ficam fora do movimento (F-01/F-02). A implementação da anotação transitória é delegada (A-01). Comprovar CA-01 a CA-03 e registrar AoT com evidência local e de release.
 
 ---
 

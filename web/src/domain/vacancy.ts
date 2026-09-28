@@ -184,6 +184,7 @@ export interface VacancyRequirementMatch {
 
 export interface VacancyCandidateMatch {
   semanticAssessment?: SemanticAssessment;
+  semanticFallback?: { status: SemanticAssessment["status"]; reasonCode: string } | undefined;
   candidate: PublishedProfileCandidate;
   areaRelation: VacancyAreaRelation;
   positionRelation: VacancyPositionRelation;

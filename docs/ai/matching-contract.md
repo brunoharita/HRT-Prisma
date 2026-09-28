@@ -12,6 +12,8 @@ As relações semânticas são `direct`, `equivalent`, `related`, `entry_potenti
 
 Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox existente da Knowledge com termo original, relação, evidência e versões. A proposta não publica alias ou relação global automaticamente.
 
+Quando uma tentativa de interpretação por IA não produz leitura válida, a busca conserva integralmente o matching determinístico calculado antes da tentativa. A interface avisa que a IA não concluiu, identifica os Perfis afetados e mantém grupo, score, relações e evidências anteriores; a falha não constitui classificação semântica ou fato negativo sobre a Pessoa. Este ajuste de fallback transitório não altera o contrato persistido, a rubrica de uma resposta válida nem a política de acionamento da IA. Acordo específico: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0.
+
 ## Saída por requisito
 
 | Estado | Regra |

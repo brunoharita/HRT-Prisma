@@ -48,9 +48,11 @@ test("production batch calls every usable profile and counts eligible progress",
   const results = await orchestrator(calls)(vacancy, [a, b, c, outside], (done: number, total: number) => progress.push([done, total]));
   assert.deepEqual(calls.sort(), ["a", "b", "c", "outside"]);
   assert.deepEqual(progress, [[0, 4], [1, 4], [2, 4], [3, 4], [4, 4]]);
-  assert.equal(results[0].semanticAssessment.status, "unavailable");
-  assert.equal(results[1].semanticAssessment.status, "unavailable");
-  assert.equal(results[2].semanticAssessment.status, "unavailable"); assert.equal(results[3].semanticAssessment.status, "unavailable");
+  for (const [index, result] of results.entries()) {
+    const { semanticFallback, ...priorResult } = result;
+    assert.equal(semanticFallback?.status, "unavailable");
+    assert.deepEqual(priorResult, [a, b, c, outside][index]);
+  }
   assert.deepEqual(results.map((m: typeof a) => m.candidate.personId), ["a", "b", "c", "outside"]);
 });
 test("dismissed profiles and empty positions never call AI", async () => {
@@ -59,7 +61,7 @@ test("dismissed profiles and empty positions never call AI", async () => {
   const original = [a, b];
   const interpreted = await orchestrator(calls)({ ...vacancy, title: "Gerente de projetos" }, original);
   assert.deepEqual(calls, ["a", "b"]);
-  assert.equal(interpreted.every((item: typeof a) => item.semanticAssessment?.status === "unavailable"), true);
+  assert.equal(interpreted.every((item: typeof a) => item.semanticFallback?.status === "unavailable" && !item.semanticAssessment), true);
 });
 
 test("profiles without usable professional content are excluded before interpretation", () => {
@@ -69,6 +71,20 @@ test("profiles without usable professional content are excluded before interpret
     professionalTitle: null, summary: null, professionalObjective: null, areasOfExpertise: [], keyResults: [], experiences: [],
   };
   assert.equal(isSemanticTriageEligible(empty), false);
+});
+
+test("a Marketing profile stays in its original group when AI returns an invalid response", () => {
+  const marketingVacancy = { ...vacancy, title: "Analista de Marketing", area: "Marketing", requirements: [] };
+  const candidate = structuredClone(a.candidate);
+  candidate.profileData.experiences = [{ ...candidate.profileData.experiences[0]!, role: "Assistente de Marketing & Business Development",
+    description: "Planejamento de campanhas de marketing, geração de demanda e pesquisa de mercado." }];
+  const baseline = matchVacancyCandidate(marketingVacancy, candidate);
+  assert.equal(baseline.discoveryGroup, "main_area");
+  const result = applySemanticAssessment(marketingVacancy, baseline, { ...unavailableSemantic(marketingVacancy, baseline),
+    modelVersion: "synthetic-model", inputHash: "synthetic-hash", analysisId: "synthetic-id", reasonCode: "RESPONSE_INVALID" });
+  const { semanticFallback, ...restored } = result;
+  assert.equal(semanticFallback?.reasonCode, "RESPONSE_INVALID");
+  assert.deepEqual(restored, baseline);
 });
 
 test("seniority penalty is symmetric and only uses explicit level markers", () => {

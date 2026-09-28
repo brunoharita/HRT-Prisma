@@ -40,21 +40,10 @@ export function applySemanticAssessment(vacancy, match, assessment) {
         catch { /* Fail closed, preserve manual access. */ }
     }
     if (!reading || !assessment.context) {
-        const message = assessment.status === "indeterminate"
-            ? assessment.reasonCode === "INSUFFICIENT_EVIDENCE" ? "A evidência publicada é insuficiente para classificar a trajetória. A comparação permanece pendente, não negativa." : "As leituras da trajetória divergiram. A comparação permanece pendente, sem nota ou prioridade automática."
-            : "A interpretação da trajetória está pendente ou indisponível. O Perfil e os requisitos continuam acessíveis; isso não reduz a avaliação da Pessoa.";
-        const pendingArea = { status: "none", coverageState: "insufficient_evidence", evidence: [], explanation: message };
-        const pendingPosition = { status: "none", evidence: [], explanation: message };
-        return { ...match, semanticAssessment: valid && assessment.status !== "complete" ? assessment : unavailableSemantic(vacancy, match),
-            areaRelation: pendingArea,
-            evidenceAssessment: semanticEvidenceAssessment(match, pendingArea, pendingPosition),
-            functionAssessment: { relation: "no_relation", basePoints: 0, seniorityAdjustment: 0, seniorityRelation: "not_available", coverageState: "insufficient_evidence", evidence: [], explanation: message },
-            trajectoryAssessment: { relation: "none", entryLevelVacancy: false, evidence: [], explanation: message },
-            positionRelation: pendingPosition, reasons: [message],
-            score: { ...match.score, score: null, status: "unavailable", dimensions: match.score.dimensions.filter(item => item.key === "required" || item.key === "desired"),
-                earnedPoints: 0, coveragePoints: 0, coveragePercent: 0, unavailableReason: message, provisionalReasons: [],
-                matchingContractVersion: SEMANTIC_MATCHING_VERSION, scoreContractVersion: SEMANTIC_SCORE_VERSION, inputFingerprint: "unavailable" },
-        };
+        return { ...match, semanticFallback: {
+                status: assessment.status,
+                reasonCode: assessment.reasonCode ?? (!valid ? "INVALID_ASSESSMENT" : assessment.status === "complete" ? "INVALID_READING" : "NO_SEMANTIC_RESULT"),
+            } };
     }
     const context = assessment.context;
     const sources = reading.items.map(item => ({ ...item, source: context.entries.find(entry => entry.id === item.id) }));
@@ -102,7 +91,7 @@ export function applySemanticAssessment(vacancy, match, assessment) {
         interpretationReference: `${assessment.methodVersion}:${assessment.promptVersion}:${assessment.modelVersion}:${assessment.inputHash}:${assessment.analysisId}`,
     });
     const positionRelation = { status: points ? "interpreted_function" : "none", explanation, evidence };
-    return { ...match, semanticAssessment: assessment, areaRelation, functionAssessment, discoveryGroup, score,
+    return { ...match, semanticAssessment: assessment, semanticFallback: undefined, areaRelation, functionAssessment, discoveryGroup, score,
         evidenceAssessment: semanticEvidenceAssessment(match, areaRelation, positionRelation),
         trajectoryAssessment: { relation: relation.trajectoryRelation, entryLevelVacancy: vacancy.experiencePolicy === "not_required", evidence, explanation },
         positionRelation,

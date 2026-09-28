@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.5
-last_verified: 2026-09-27
+version: 2.51.6
+last_verified: 2026-09-28
 ---
 
 # Estado atual do Prisma
+
+## Fallback após falha da IA no matching (em validação local)
+
+A decisão de 2026-09-28 determina que uma interpretação sem resposta válida preserve integralmente o resultado determinístico anterior, inclusive grupo, score e evidências, com aviso na busca e na comparação. O diagnóstico de produção para `Analista de Marketing` registrou Beatriz com `RESPONSE_INVALID` e leitura nula; o apagamento anterior do resultado local impedia sua apresentação em A/B. A correção é transitória na web/domínio compartilhado, sem alteração de banco, prompt ou pesos. Evidência de release será registrada em `docs/qa/aot-matching-ai-failure-fallback.md`.
 
 ## M8.6: interpretação universal de Posições (publicado em migration, Edge e web)
 

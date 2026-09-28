@@ -1,0 +1,3 @@
+# Execução — preservação do matching após falha da IA
+
+Fonte obrigatória: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler integralmente antes da implementação. O resultado pré-IA deve sobreviver a qualquer tentativa sem resposta válida (D-01/P-01/P-02/P-03); a tela informa a falha e identifica o Perfil (D-02); leitura válida continua versionada (D-03). A política de chamadas, o provedor, Knowledge, score, dados persistidos e schema ficam fora do movimento (F-01/F-02). A implementação da anotação transitória é delegada (A-01). Comprovar CA-01 a CA-03 e registrar AoT com evidência local e de release.
