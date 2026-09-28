@@ -8,9 +8,9 @@ last_verified: 2026-09-28
 
 # Estado atual do Prisma
 
-## Fallback após falha da IA no matching (em validação local)
+## Fallback após falha da IA no matching (publicado em produção)
 
-A decisão de 2026-09-28 determina que uma interpretação sem resposta válida preserve integralmente o resultado determinístico anterior, inclusive grupo, score e evidências, com aviso na busca e na comparação. O diagnóstico de produção para `Analista de Marketing` registrou Beatriz com `RESPONSE_INVALID` e leitura nula; o apagamento anterior do resultado local impedia sua apresentação em A/B. A correção é transitória na web/domínio compartilhado, sem alteração de banco, prompt ou pesos. Evidência de release será registrada em `docs/qa/aot-matching-ai-failure-fallback.md`.
+A decisão de 2026-09-28 determina que uma interpretação sem resposta válida preserve integralmente o resultado determinístico anterior, inclusive grupo, score e evidências, com aviso na busca e na comparação. O diagnóstico de produção para `Analista de Marketing` registrou Beatriz com `RESPONSE_INVALID` e leitura nula; o apagamento anterior do resultado local impedia sua apresentação em A/B. A correção é transitória na web/domínio compartilhado, sem alteração de banco, prompt ou pesos. O SHA funcional `a20bd84dd1f25eacb9e216f5dcbb230626fdbb8a` passou no CI, foi integrado em `main` e está na VPS; `matching-trajectory` v8 está ACTIVE com JWT obrigatório. Após um 404 transitório no smoke imediato da troca, `/`, `/login` e o asset novo retornaram HTTP 200, com contêiner ativo e zero reinícios. O smoke autenticado da lista não foi executado, pois poderia reabrir chamadas de IA em Perfis reais. Evidência: `docs/qa/aot-matching-ai-failure-fallback.md`.
 
 ## M8.6: interpretação universal de Posições (publicado em migration, Edge e web)
 
