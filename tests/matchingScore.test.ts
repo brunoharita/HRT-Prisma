@@ -234,7 +234,7 @@ test("função pura mantém p95 local abaixo de 5 ms em fixture pequena", () => 
   assert.ok(durations[Math.floor(durations.length * 0.95)]! < 5);
 });
 
-test("Beatriz e Gerente de Marketing permanecem no grupo principal com senioridade explícita", () => {
+test("Beatriz e Gerente de Marketing permanecem descobríveis sem inferir senioridade implícita", () => {
   const need = vacancy();
   const beatriz = matchVacancyCandidate(need, candidate("beatriz", profile({ experiences: [experience("Assistente de Marketing")] })));
   const manager = matchVacancyCandidate(need, candidate("manager", profile({ experiences: [experience("Gerente de Marketing")] })));
@@ -242,11 +242,11 @@ test("Beatriz e Gerente de Marketing permanecem no grupo principal com seniorida
   assert.equal(beatriz.discoveryGroup, "main_area");
   assert.equal(beatriz.areaRelation.status, "experience_area");
   assert.equal(beatriz.positionRelation.status, "none");
-  assert.equal(beatriz.functionAssessment.basePoints, 17);
-  assert.equal(beatriz.functionAssessment.seniorityAdjustment, -1);
+  assert.equal(beatriz.functionAssessment.basePoints, 8);
+  assert.equal(beatriz.functionAssessment.seniorityAdjustment, 0);
   assert.equal(manager.discoveryGroup, "main_area");
-  assert.equal(manager.functionAssessment.seniorityAdjustment, -4);
-  assert.match(manager.functionAssessment.explanation, /acima da senioridade prevista/i);
+  assert.equal(manager.functionAssessment.seniorityAdjustment, 0);
+  assert.doesNotMatch(manager.functionAssessment.explanation, /acima da senioridade prevista/i);
   assert.equal(unknown.functionAssessment.seniorityAdjustment, 0);
   assert.equal(unknown.functionAssessment.seniorityRelation, "not_available");
 });

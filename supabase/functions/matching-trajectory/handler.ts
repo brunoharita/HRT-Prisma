@@ -1,10 +1,18 @@
 import {
   agreeTrajectoryReadings, isSemanticPilot, prepareTrajectoryContext, readTrajectoryResponse,
   SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, trajectoryInstructions, trajectoryResponseSchema,
-  type SemanticAssessment, type SemanticContext, type SemanticReading,
-} from "../../../src/domain/semanticTrajectory.ts";
+} from "./_generated/src/domain/semanticTrajectory.js";
 import { buildDeterministicMatch, buildSnapshotEvaluation } from "./snapshot.ts";
 import { isSemanticTriageEligible } from "./_generated/web/src/domain/semanticMatching.js";
+
+export type SemanticEntry = { id: string; fieldPath: string; text: string; kind: "experience" | "education" | "declaration" };
+export type SemanticContext = { position: string; entries: SemanticEntry[] };
+export type SemanticReading = { items: Array<{ id: string; activity: string; quote: string }> };
+export type SemanticAssessment = {
+  organizationId: string; profileId: string; positionVersionId: string; status: string;
+  methodVersion: string; promptVersion: string; modelVersion: string; inputHash: string; analysisId: string;
+  context?: SemanticContext; reading?: SemanticReading;
+};
 
 type RpcResult = { data: unknown; error: { code?: string } | null };
 export interface RpcClient { rpc(name: string, params: Record<string, unknown>): PromiseLike<RpcResult> }

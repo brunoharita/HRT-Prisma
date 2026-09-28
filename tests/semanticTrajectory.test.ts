@@ -56,9 +56,9 @@ test("M8.3 pilot has 12 contrasted bases, five realizations each and 120 later c
   assert.match(semanticPilotLimitation, /not an independent holdout/i);
 });
 
-test("pilot activation stays narrow and does not turn management, internships or other occupations into backend", () => {
-  for (const title of ["Desenvolvedor backend", "Backend developer", "Engenheira back-end"]) assert.equal(isSemanticPilot(title), true, title);
-  for (const title of ["Diretor de backend", "Gerente desenvolvedor backend", "Estágio desenvolvedor backend", "Analista de Sistemas", "Desenvolvedor frontend", ""]) assert.equal(isSemanticPilot(title), false, title);
+test("universal activation accepts every non-empty position title and never an empty position", () => {
+  for (const title of ["Desenvolvedor backend", "Backend developer", "Diretor de backend", "Analista de Sistemas", "Enfermeira", ""])
+    assert.equal(isSemanticPilot(title), Boolean(title.trim()), title);
 });
 
 test("response schema is closed, finite and has no score or free explanation", () => {
@@ -373,16 +373,16 @@ test("tenant, profile, position, method, prompt and missing provenance fail clos
   }
 });
 
-test("semantic scoring supports exactly matching 6.0.0 with score 1.4.0 and a versioned interpretation", () => {
+test("semantic scoring supports the universal 7.0.0 contract with score 1.4.0 and a versioned interpretation", () => {
   const { need, legacy, assessment } = setup();
   const actual = applySemanticAssessment(need, legacy, assessment);
-  assert.equal(actual.score.matchingContractVersion, "vacancy-matching-semantic-6.0.0");
+  assert.equal(actual.score.matchingContractVersion, "vacancy-matching-semantic-7.0.0");
   assert.equal(actual.score.scoreContractVersion, "matching-score-1.4.0");
   const input = inputFor(actual);
   assert.notEqual(calculateMatchingScore(input).score, null);
   for (const override of [
     { matchingContractVersion: "vacancy-matching-semantic-6.0.1" },
-    { matchingContractVersion: "vacancy-matching-semantic-7.0.0" },
+    { matchingContractVersion: "vacancy-matching-semantic-7.0.1" },
     { scoreContractVersion: "matching-score-1.2.0" }, { scoreContractVersion: "matching-score-1.3.0" }, { scoreContractVersion: "matching-score-1.4.1" },
     { interpretationReference: "" },
   ]) assert.equal(calculateMatchingScore({ ...input, ...override }).score, null);

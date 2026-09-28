@@ -18,6 +18,7 @@ export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1
 
 export type VacancyOccupancy = "occupied" | "vacant";
 export type VacancySourceKind = "manual" | "organization_role" | "previous_vacancy" | "knowledge_reference" | "assisted_description";
+export type VacancyExperiencePolicy = "not_required" | "required" | "unspecified";
 export type VacancyRequirementCategory = "experience" | "competency" | "knowledge" | "technology" | "education" | "certification" | "language" | "context";
 export type VacancyRequirementImportance = "required" | "desired" | "unclassified";
 export type VacancyRequirementOrigin = "description" | "human";
@@ -65,6 +66,8 @@ export interface VacancyDraft {
   occupancy: VacancyOccupancy;
   occupantPersonId: string | null;
   mission: string;
+  /** Explicit policy on prior experience for this immutable Position version. */
+  experiencePolicy: VacancyExperiencePolicy;
   responsibilities: string[];
   expectedOutcomes: string[];
   requirements: VacancyRequirementDraft[];
@@ -300,6 +303,7 @@ export function emptyVacancyDraft(): VacancyDraft {
     occupancy: "vacant",
     occupantPersonId: null,
     mission: "",
+    experiencePolicy: "unspecified",
     responsibilities: [],
     expectedOutcomes: [],
     requirements: [],
@@ -543,6 +547,7 @@ export function matchVacancyCandidate(
     requirements,
     unclassifiedRequirementCount,
     competitiveEligibility: discoveryGroup === "contextual_signals" ? "contextual_only" : "eligible",
+    temporalApplicable: vacancy.experiencePolicy !== "not_required",
     materialDependencies,
     relatedExperiences: deterministicTemporalExperiences(vacancy, candidate, areaRelation, positionRelation, functionAssessment),
     referenceDate,
@@ -714,6 +719,14 @@ export function buildMatchingScoreShadowReport(matches: VacancyCandidateMatch[],
 export function isVacancyDiscoveryCandidate(match: VacancyCandidateMatch): boolean {
   return match.positionDecision === "confirmed"
     || match.trajectoryAssessment.relation !== "none";
+}
+
+/** A usable professional source is required before universal semantic analysis. */
+export function hasUsableProfessionalContent(candidate: PublishedProfileCandidate): boolean {
+  const profile = candidate.profileData;
+  return profile.experiences.some((item) => Boolean(item.role?.trim() || item.description?.trim() || item.evidenceText?.trim()))
+    || Boolean(profile.professionalTitle?.trim() || profile.areasOfExpertise?.some((item) => item.trim()) || profile.professionalObjective?.trim() || profile.summary?.trim()
+      || profile.keyResults?.some((item) => item.value.trim()));
 }
 
 export const VACANCY_PROFILE_MATRIX = [
@@ -1215,7 +1228,7 @@ function assessVacancyFunction(
     explanation = "Há contexto profissional da área que permite uma comparação limitada da função, sem equivalência ocupacional estruturada.";
   }
 
-  const seniority = assessSeniority(vacancy.title, selectedEvidence?.label, basePoints);
+  const seniority = assessVacancySeniority(vacancy.title, selectedEvidence?.label, basePoints);
   return {
     relation,
     basePoints,
@@ -1290,7 +1303,7 @@ function isEntryLevelVacancy(title: string): boolean {
   return /(?:^| )(?:aprendiz|estagiario|trainee|auxiliar|assistente|junior|jr)(?= |$)/.test(normalized);
 }
 
-function assessSeniority(targetTitle: string, observedTitle: string | undefined, basePoints: number): {
+export function assessVacancySeniority(targetTitle: string, observedTitle: string | undefined, basePoints: number): {
   adjustment: VacancyFunctionAssessment["seniorityAdjustment"];
   relation: VacancyFunctionAssessment["seniorityRelation"];
   explanation: string;
@@ -1306,14 +1319,15 @@ function assessSeniority(targetTitle: string, observedTitle: string | undefined,
 }
 
 function seniorityRank(title: string): number | null {
-  const tokens = occupationalTokens(normalize(title));
+  // Do not use occupationalTokens here: it intentionally removes level words
+  // for title-comparison heuristics, while this contract needs explicit levels.
+  const tokens = new Set(normalize(title).split(" ").filter(Boolean));
   const ranks: Array<[number, string[]]> = [
     [5, ["diretor", "executivo"]],
-    [4, ["lideranca"]],
-    [3, ["supervisor"]],
-    [2, ["analista", "especialista", "consultor", "engenheiro", "tecnico", "desenvolvedor", "designer"]],
-    [1, ["assistente", "auxiliar", "vendedor", "operador"]],
-    [0, ["estagiario"]],
+    [4, ["gerente", "head", "lideranca", "lider"]],
+    [3, ["coordenador", "supervisor", "lead"]],
+    [2, ["senior", "pleno", "principal"]],
+    [1, ["junior", "jr", "assistente", "auxiliar", "trainee", "estagiario"]],
   ];
   return ranks.find(([, labels]) => labels.some((label) => tokens.has(label)))?.[0] ?? null;
 }

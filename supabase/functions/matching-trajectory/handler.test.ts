@@ -73,15 +73,15 @@ Deno.test("auth/session/source authorization precedes all service and provider a
     assert([401, 403].includes(result.status)); assert(f.serviceCreated() === 0); assert(f.requests.length === 0);
   }
 });
-Deno.test("server triage rejects C and unrelated profiles before cache, service or provider, even on snapshot", async () => {
+Deno.test("server triage admits usable professional content before cache, service or provider, even on snapshot", async () => {
   for (const contextual of [false, true]) for (const snapshot of [false, true]) {
     const f = fixture(), s = f.snapshotSources();
     const candidate = s.candidate as Record<string, unknown>;
     f.setSnapshotSources({ ...s, candidate: { ...candidate, profileData: { experiences: [{ role: "Vendedor" }], competencies: contextual ? ["APIs"] : [] } } });
     const data = await (await handleMatchingTrajectory(f.request(snapshot ? { ...ids, operation: "snapshot" } : ids), f.deps)).json();
-    assert(data.reasonCode === "OUTSIDE_SEMANTIC_TRIAGE");
-    assert(f.serviceCreated() === 0 && f.requests.length === 0);
-    assert(!f.calls.some(c => c.name === "claim_matching_trajectory"));
+    assert(data.reasonCode !== "OUTSIDE_SEMANTIC_TRIAGE");
+    assert(f.serviceCreated() > 0);
+    assert(f.calls.some(c => c.name === "claim_matching_trajectory"));
   }
 });
 Deno.test("server triage uses source identity and revisions, never browser approval", async () => {
@@ -111,12 +111,12 @@ Deno.test("snapshot returns committed ID and server-computed score fingerprint",
   const call = f.calls.find(c => c.name === "commit_matching_snapshot")!;
   const evaluation = call.params.p_evaluation as { score: { score: number; matchingContractVersion: string; inputFingerprint: string }; requirements: { stableId: string; status: string }[] };
   assert(typeof data.inputFingerprint === "string" && data.inputFingerprint === evaluation.score.inputFingerprint);
-  assert(evaluation.score.score === 100 && evaluation.score.matchingContractVersion === "vacancy-matching-semantic-6.0.0");
+  assert(evaluation.score.score === 100 && evaluation.score.matchingContractVersion === "vacancy-matching-semantic-7.0.0");
   assert(evaluation.requirements[0].stableId === "stable" && evaluation.requirements[0].status === "met");
   assert(call.params.p_source_fingerprint === "db-fingerprint" && call.params.p_analysis_id === "analysis");
 });
-Deno.test("prompt 1.2 binds cached assessment and server snapshot without provider replay", async () => {
-  assert(SEMANTIC_PROMPT_VERSION === "trajectory-evidence-1.2.0");
+Deno.test("prompt 2.0 binds cached assessment and server snapshot without provider replay", async () => {
+  assert(SEMANTIC_PROMPT_VERSION === "trajectory-evidence-2.0.0");
   for (const snapshot of [false, true]) {
     const f = fixture();
     delete f.env.OPENAI_API_KEY;

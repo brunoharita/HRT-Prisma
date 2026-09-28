@@ -29,6 +29,7 @@ export function emptyVacancyDraft() {
         occupancy: "vacant",
         occupantPersonId: null,
         mission: "",
+        experiencePolicy: "unspecified",
         responsibilities: [],
         expectedOutcomes: [],
         requirements: [],
@@ -263,6 +264,7 @@ export function matchVacancyCandidate(vacancy, candidate, occupationReference = 
         requirements,
         unclassifiedRequirementCount,
         competitiveEligibility: discoveryGroup === "contextual_signals" ? "contextual_only" : "eligible",
+        temporalApplicable: vacancy.experiencePolicy !== "not_required",
         materialDependencies,
         relatedExperiences: deterministicTemporalExperiences(vacancy, candidate, areaRelation, positionRelation, functionAssessment),
         referenceDate,
@@ -415,6 +417,13 @@ export function buildMatchingScoreShadowReport(matches, baselineOrder = matches.
 export function isVacancyDiscoveryCandidate(match) {
     return match.positionDecision === "confirmed"
         || match.trajectoryAssessment.relation !== "none";
+}
+/** A usable professional source is required before universal semantic analysis. */
+export function hasUsableProfessionalContent(candidate) {
+    const profile = candidate.profileData;
+    return profile.experiences.some((item) => Boolean(item.role?.trim() || item.description?.trim() || item.evidenceText?.trim()))
+        || Boolean(profile.professionalTitle?.trim() || profile.areasOfExpertise?.some((item) => item.trim()) || profile.professionalObjective?.trim() || profile.summary?.trim()
+            || profile.keyResults?.some((item) => item.value.trim()));
 }
 export const VACANCY_PROFILE_MATRIX = [
     { category: "professionalTitle", profileDimension: "professionalTitle", matching: true },
@@ -889,7 +898,7 @@ function assessVacancyFunction(vacancy, candidate, area, position) {
         relationEvidence = area.evidence;
         explanation = "Há contexto profissional da área que permite uma comparação limitada da função, sem equivalência ocupacional estruturada.";
     }
-    const seniority = assessSeniority(vacancy.title, selectedEvidence?.label, basePoints);
+    const seniority = assessVacancySeniority(vacancy.title, selectedEvidence?.label, basePoints);
     return {
         relation,
         basePoints,
@@ -956,7 +965,7 @@ function isEntryLevelVacancy(title) {
     const normalized = normalize(title);
     return /(?:^| )(?:aprendiz|estagiario|trainee|auxiliar|assistente|junior|jr)(?= |$)/.test(normalized);
 }
-function assessSeniority(targetTitle, observedTitle, basePoints) {
+export function assessVacancySeniority(targetTitle, observedTitle, basePoints) {
     if (!basePoints || !observedTitle)
         return { adjustment: 0, relation: "not_available", explanation: "A senioridade não foi usada como inferência." };
     const target = seniorityRank(targetTitle);
@@ -971,14 +980,15 @@ function assessSeniority(targetTitle, observedTitle, basePoints) {
     return { adjustment: -4, relation: difference > 0 ? "materially_above" : "materially_below", explanation: `Experiência ${difference > 0 ? "acima" : "abaixo"} da senioridade prevista para a posição; somente a dimensão Função recebeu ajuste.` };
 }
 function seniorityRank(title) {
-    const tokens = occupationalTokens(normalize(title));
+    // Do not use occupationalTokens here: it intentionally removes level words
+    // for title-comparison heuristics, while this contract needs explicit levels.
+    const tokens = new Set(normalize(title).split(" ").filter(Boolean));
     const ranks = [
         [5, ["diretor", "executivo"]],
-        [4, ["lideranca"]],
-        [3, ["supervisor"]],
-        [2, ["analista", "especialista", "consultor", "engenheiro", "tecnico", "desenvolvedor", "designer"]],
-        [1, ["assistente", "auxiliar", "vendedor", "operador"]],
-        [0, ["estagiario"]],
+        [4, ["gerente", "head", "lideranca", "lider"]],
+        [3, ["coordenador", "supervisor", "lead"]],
+        [2, ["senior", "pleno", "principal"]],
+        [1, ["junior", "jr", "assistente", "auxiliar", "trainee", "estagiario"]],
     ];
     return ranks.find(([, labels]) => labels.some((label) => tokens.has(label)))?.[0] ?? null;
 }

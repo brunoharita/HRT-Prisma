@@ -119,6 +119,7 @@ export interface Database {
         work_arrangement: "onsite" | "hybrid" | "remote" | "flexible" | null;
         employment_type: string | null;
         mission: string | null;
+        experience_policy: "not_required" | "required" | "unspecified";
         responsibilities: Json;
         expected_outcomes: Json;
         context_items: Json;
@@ -1636,6 +1637,10 @@ export interface Database {
       resolve_knowledge_inbox_alias: {
         Args: { p_inbox_id: string; p_concept_id: string; p_scope: Database["public"]["Enums"]["knowledge_scope"]; p_reason: string };
         Returns: Array<{ inbox_id: string; concept_id: string; knowledge_version: number; observations_updated: number }>;
+      };
+      enqueue_position_relation_learning: {
+        Args: { p_organization_id: string; p_position_version_id: string; p_profile_id: string; p_observed_term: string; p_relation_type: string; p_human_decision: string; p_evidence_snapshot?: Json };
+        Returns: Array<{ request_id: string; inbox_id: string }>;
       };
       propose_knowledge_concept_from_inbox: {
         Args: { p_inbox_id: string; p_scope: Database["public"]["Enums"]["knowledge_scope"]; p_canonical_label: string;

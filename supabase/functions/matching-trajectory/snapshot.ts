@@ -1,7 +1,7 @@
 import { matchVacancyCandidate } from "./_generated/web/src/domain/vacancy.js";
 import { applySemanticAssessment, isSemanticTriageEligible } from "./_generated/web/src/domain/semanticMatching.js";
 import { decodeProfileDataForPresentation } from "./_generated/web/src/infrastructure/supabase/personIngestionService.js";
-import type { SemanticAssessment } from "../../../src/domain/semanticTrajectory.ts";
+import type { SemanticAssessment } from "./handler.ts";
 
 function record(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("SNAPSHOT_SOURCE_INVALID");

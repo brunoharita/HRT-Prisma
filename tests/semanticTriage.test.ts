@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import ts from "typescript";
 import { isSemanticPilot } from "../src/domain/semanticTrajectory.js";
 import { applySemanticAssessment, isSemanticTriageEligible, unavailableSemantic } from "../web/src/domain/semanticMatching.js";
-import { emptyVacancyDraft, isVacancyDiscoveryCandidate, matchVacancyCandidate, newVacancyRequirement, type VacancyDetail } from "../web/src/domain/vacancy.js";
+import { assessVacancySeniority, emptyVacancyDraft, matchVacancyCandidate, newVacancyRequirement, type VacancyDetail } from "../web/src/domain/vacancy.js";
 import type { StructuredDraft } from "../web/src/domain/personIngestion.js";
 
 const vacancy: VacancyDetail = { ...emptyVacancyDraft(), id: "v", versionId: "v1", version: 1, organizationId: "org",
@@ -21,13 +21,12 @@ function match(id: string, role: string, competencies: string[] = [], areasOfExp
 const a = match("a", "Desenvolvedor backend"), b = match("b", "Programador de sistemas", [], ["Tecnologia"]),
   c = match("c", "Vendedor", ["Node.js"]), outside = match("outside", "Vendedor");
 
-test("legacy triage admits A and B, keeps C contextual, excludes no relation without score thresholds", () => {
+test("universal triage admits every published profile with usable professional content", () => {
   assert.equal(a.discoveryGroup, "main_area"); assert.equal(b.discoveryGroup, "related_area");
-  assert.equal(c.discoveryGroup, "contextual_signals"); assert.equal(isVacancyDiscoveryCandidate(c), true);
-  assert.equal(isVacancyDiscoveryCandidate(outside), false);
-  assert.deepEqual([a, b, c, outside].map(isSemanticTriageEligible), [true, true, false, false]);
+  assert.equal(c.discoveryGroup, "contextual_signals");
+  assert.deepEqual([a, b, c, outside].map(isSemanticTriageEligible), [true, true, true, true]);
   assert.equal(isSemanticTriageEligible({ ...b, score: { ...b.score, score: 0 } }), true);
-  assert.equal(isSemanticTriageEligible({ ...c, positionDecision: "confirmed" }), false);
+  assert.equal(isSemanticTriageEligible({ ...c, positionDecision: "dismissed" }), false);
 });
 
 // Execute the production orchestration declaration with injected infrastructure, not a second implementation.
@@ -44,25 +43,42 @@ function orchestrator(calls: string[]) {
     } } },
   );
 }
-test("production batch calls only A/B, preserves C/outside untouched and counts eligible progress", async () => {
+test("production batch calls every usable profile and counts eligible progress", async () => {
   const calls: string[] = [], progress: number[][] = [];
   const results = await orchestrator(calls)(vacancy, [a, b, c, outside], (done: number, total: number) => progress.push([done, total]));
-  assert.deepEqual(calls.sort(), ["a", "b"]);
-  assert.deepEqual(progress, [[0, 2], [1, 2], [2, 2]]);
-  assert.equal(results[2], c); assert.equal(results[3], outside);
+  assert.deepEqual(calls.sort(), ["a", "b", "c", "outside"]);
+  assert.deepEqual(progress, [[0, 4], [1, 4], [2, 4], [3, 4], [4, 4]]);
   assert.equal(results[0].semanticAssessment.status, "unavailable");
   assert.equal(results[1].semanticAssessment.status, "unavailable");
-  assert.equal(results[2].semanticAssessment, undefined); assert.equal(results[3].semanticAssessment, undefined);
-  assert.deepEqual(results.filter((m: typeof a) => m.semanticAssessment || isVacancyDiscoveryCandidate(m)).map((m: typeof a) => m.candidate.personId), ["a", "b", "c"]);
+  assert.equal(results[2].semanticAssessment.status, "unavailable"); assert.equal(results[3].semanticAssessment.status, "unavailable");
+  assert.deepEqual(results.map((m: typeof a) => m.candidate.personId), ["a", "b", "c", "outside"]);
 });
-test("empty eligible set and positions outside the pilot never call AI", async () => {
+test("dismissed profiles and empty positions never call AI", async () => {
   const calls: string[] = [];
-  await orchestrator(calls)(vacancy, [c, outside]);
+  await orchestrator(calls)(vacancy, [{ ...c, positionDecision: "dismissed" }]);
   const original = [a, b];
-  assert.equal(await orchestrator(calls)({ ...vacancy, title: "Gerente de projetos" }, original), original);
-  assert.deepEqual(calls, []);
+  const interpreted = await orchestrator(calls)({ ...vacancy, title: "Gerente de projetos" }, original);
+  assert.deepEqual(calls, ["a", "b"]);
+  assert.equal(interpreted.every((item: typeof a) => item.semanticAssessment?.status === "unavailable"), true);
 });
-test("discovery and direct comparison both filter legacy discovery before orchestration", () => {
-  assert.match(source, /interpretMatches\(vacancy, baseMatches\.filter\(isVacancyDiscoveryCandidate\)/);
-  assert.match(source, /interpretMatches\(vacancy, matches\.filter\(isVacancyDiscoveryCandidate\)/);
+
+test("profiles without usable professional content are excluded before interpretation", () => {
+  const empty = structuredClone(a);
+  empty.candidate.profileData = {
+    ...empty.candidate.profileData,
+    professionalTitle: null, summary: null, professionalObjective: null, areasOfExpertise: [], keyResults: [], experiences: [],
+  };
+  assert.equal(isSemanticTriageEligible(empty), false);
+});
+
+test("seniority penalty is symmetric and only uses explicit level markers", () => {
+  assert.equal(assessVacancySeniority("Gerente de operações", "Diretor de operações", 20).adjustment, -1);
+  assert.equal(assessVacancySeniority("Diretor de operações", "Gerente de operações", 20).adjustment, -1);
+  assert.equal(assessVacancySeniority("Júnior de operações", "Diretor de operações", 20).adjustment, -4);
+  assert.equal(assessVacancySeniority("Diretor de operações", "Júnior de operações", 20).adjustment, -4);
+  assert.equal(assessVacancySeniority("Desenvolvedor de operações", "Programador de operações", 20).adjustment, 0);
+});
+test("discovery and direct comparison filter only profiles without usable content before orchestration", () => {
+  assert.match(source, /interpretMatches\(vacancy, baseMatches\.filter\(match => isSemanticTriageEligible\(match\)\)/);
+  assert.match(source, /interpretMatches\(vacancy, matches\.filter\(match => isSemanticTriageEligible\(match\)\)/);
 });

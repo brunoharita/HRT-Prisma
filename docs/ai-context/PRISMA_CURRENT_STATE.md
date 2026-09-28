@@ -8,6 +8,12 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
+## M8.6: interpretação universal de Posições (migration e Edge publicados; web em release)
+
+O contrato aprovado amplia a interpretação semântica para qualquer profissão. A ordem é Knowledge Global/Empresa e decisões humanas autorizadas, depois IA somente quando não houver relação interna segura. Título incompatível não barra o Perfil; Perfis sem conteúdo profissional utilizável são excluídos antes da IA e não significam incapacidade. As categorias `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` e `unclear` preservam evidência e provenance, com grupos A/B/C e score somente onde há relação competitiva.
+
+`trajectory-position-2.0.0`, `trajectory-evidence-2.0.0`, `vacancy-matching-semantic-7.0.0` e `matching-score-1.4.0` são os contratos do novo fluxo. `vacancy_versions.experience_policy` é explícito: `not_required`, `required` ou `unspecified`; somente `not_required` retira duração/recência do denominador. Senioridade usa apenas marcadores explícitos e penalização simétrica para acima/abaixo. Propostas confirmadas podem entrar na Inbox tenant-scoped da Knowledge para revisão; não há publicação automática. Migration, Agreement e Execution Prompt estão no repositório. A migration M8.6 está registrada remotamente e a Edge `matching-trajectory` está ACTIVE v7; a publicação web/VPS e o smoke autenticado permanecem pendentes neste registro. O smoke remoto executado foi anônimo e confirmou apenas a barreira HTTP 401, sem escrita de dados.
+
 ## Anos abreviados nos períodos (publicado em produção)
 
 Decisão de Bruno em 2026-09-27: aceitar anos de dois e quatro dígitos com limite inclusivo de 2050. `resume-dates-1.1.0` usa `00–50 → 2000–2050`, `51–99 → 1951–1999`, sem pivot móvel; revisar com o Product Owner em 2050. A inferência do século fica explícita e o original é preservado. Leitor compartilhado entre extração, revisão, busca, matching web e runtime Edge. Pesos/faixas do `matching-score-1.4.0` permanecem; a versão do leitor entra no fingerprint. Sem migration, reescrita de perfis/snapshots ou nova chamada de IA. Evidências e rollout: `docs/qa/aot-resume-two-digit-years.md`.

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 284
-source_manifest_sha256: abf9ef79015385833e09a900b438536f051f5b2226f84570d765b06b231b3e78
+documentation_source_count: 287
+source_manifest_sha256: a8c18c5374e94d7c369cd87e2cd2d4037aadefb2b64d36704423b698e659828a
 -->
 
 # Tudo sobre o Prisma
@@ -2630,6 +2630,12 @@ last_verified: 2026-09-27
 
 # Estado atual do Prisma
 
+## M8.6: interpretação universal de Posições (migration e Edge publicados; web em release)
+
+O contrato aprovado amplia a interpretação semântica para qualquer profissão. A ordem é Knowledge Global/Empresa e decisões humanas autorizadas, depois IA somente quando não houver relação interna segura. Título incompatível não barra o Perfil; Perfis sem conteúdo profissional utilizável são excluídos antes da IA e não significam incapacidade. As categorias `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` e `unclear` preservam evidência e provenance, com grupos A/B/C e score somente onde há relação competitiva.
+
+`trajectory-position-2.0.0`, `trajectory-evidence-2.0.0`, `vacancy-matching-semantic-7.0.0` e `matching-score-1.4.0` são os contratos do novo fluxo. `vacancy_versions.experience_policy` é explícito: `not_required`, `required` ou `unspecified`; somente `not_required` retira duração/recência do denominador. Senioridade usa apenas marcadores explícitos e penalização simétrica para acima/abaixo. Propostas confirmadas podem entrar na Inbox tenant-scoped da Knowledge para revisão; não há publicação automática. Migration, Agreement e Execution Prompt estão no repositório. A migration M8.6 está registrada remotamente e a Edge `matching-trajectory` está ACTIVE v7; a publicação web/VPS e o smoke autenticado permanecem pendentes neste registro. O smoke remoto executado foi anônimo e confirmou apenas a barreira HTTP 401, sem escrita de dados.
+
 ## Anos abreviados nos períodos (publicado em produção)
 
 Decisão de Bruno em 2026-09-27: aceitar anos de dois e quatro dígitos com limite inclusivo de 2050. `resume-dates-1.1.0` usa `00–50 → 2000–2050`, `51–99 → 1951–1999`, sem pivot móvel; revisar com o Product Owner em 2050. A inferência do século fica explícita e o original é preservado. Leitor compartilhado entre extração, revisão, busca, matching web e runtime Edge. Pesos/faixas do `matching-score-1.4.0` permanecem; a versão do leitor entra no fingerprint. Sem migration, reescrita de perfis/snapshots ou nova chamada de IA. Evidências e rollout: `docs/qa/aot-resume-two-digit-years.md`.
@@ -3863,6 +3869,14 @@ A primeira rodada dos quatro PDFs foi independente. Depois de observar defeitos 
 
 Uma avaliação compara uma pessoa com uma vaga específica. Ela não altera o perfil permanente e não decide contratação ou rejeição.
 
+## Interpretação universal M8.6
+
+Toda Posição com título pode usar a mesma leitura profissional, independentemente da profissão. O servidor preserva a ordem `Knowledge Global/Empresa e decisões humanas autorizadas -> IA somente como último recurso -> revisão humana`; uma resposta interna segura não é substituída por pesquisa. Título incompatível não é veto lexical. Perfis publicados sem conteúdo profissional utilizável não entram no fluxo e não consomem IA, sem que isso seja tratado como incapacidade.
+
+As relações semânticas são `direct`, `equivalent`, `related`, `entry_potential`, `context`, `other` e `unclear`, projetadas respectivamente nos Grupos A, B ou C sem confundir ausência de prova com prova negativa. Híbridos exigem evidência dos dois componentes centrais para relação integral; uma só parte permanece parcial/relacionada. Senioridade só é comparada quando os níveis estão explicitamente marcados, com penalização simétrica por subqualificação e sobrequalificação. A Posição versiona `experiencePolicy` como `not_required`, `required` ou `unspecified`; somente a primeira remove duração/recência do denominador.
+
+Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox existente da Knowledge com termo original, relação, evidência e versões. A proposta não publica alias ou relação global automaticamente.
+
 ## Saída por requisito
 
 | Estado | Regra |
@@ -3998,6 +4012,8 @@ Usar o menor modelo disponível que cumpra segurança, qualidade, contexto, Stru
 Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no catálogo oficial atual para workloads sensíveis a custo e compatível com Responses API, Web Search e Structured Outputs. A seleção fica em configuração server-side, não no domínio. Caps de QA limitam 10 pesquisas por dia e 100 por mês; no máximo quatro chamadas de Web Search são permitidas por resposta. `OPENAI_API_KEY` foi configurada no cofre do Prisma-QA e o smoke vivo foi concluído em 2026-09-04. Ausência futura da credencial continua falhando de forma fechada.
 
 ## Troca de modelo
+
+M8.6 reutiliza `KNOWLEDGE_RESEARCH_MODEL` para a interpretação fechada de qualquer profissão, com `trajectory-position-2.0.0` e `trajectory-evidence-2.0.0`. A Knowledge Global/Empresa e as decisões humanas autorizadas são consultadas antes; somente uma relação não resolvida pode chamar IA. Perfis sem conteúdo profissional utilizável não consomem IA. O input permanece minimizado, `store:false`, sem Web/tools e sem autoridade para publicar, pontuar, contratar ou rejeitar. O modelo retornado e a identidade da análise entram na proveniência do snapshot; concorrência, lease e cache controlam custo sem transformar falha em equivalência.
 
 M8.3 reutiliza o modelo server-side `KNOWLEDGE_RESEARCH_MODEL` para interpretação fechada de trajetória, com registry próprio `trajectory-evidence-1.2.0`. Não reutiliza pesquisa Web nem budgets do Knowledge. A decisão do PO em 25/09 («siga o parser») torna limites da conta/projeto OpenAI a autoridade financeira, sem teto monetário paralelo; concorrência, timeout, lease e cooldown de falhas são operacionais. O modelo configurado entra na chave e o modelo retornado é registrado; alias mutável continua uma limitação para futuras chamadas, não motivo para reescrever avaliações persistidas. Ativação depende da evidência do piloto no AoT M8.3, sem alegar validação para todas as ocupações.
 
@@ -4215,6 +4231,14 @@ Os golden tests revelaram e corrigiram flexão verbal em "analisou dados" e o ca
 Prompt controlado possui nome, owner, versão, propósito, entrada, saída, schema, função lógica de modelo, parâmetros, consumidores, dados enviados, dados proibidos, guardrails, golden tests, ativação e histórico. String produtiva escondida no código é proibida.
 
 ## Registry atual
+
+### Interpretação universal M8.6
+
+`trajectory-evidence-2.0.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. O fluxo recebe somente contexto profissional publicado minimizado e uma Posição versionada de qualquer profissão. Antes de chamar este prompt, o runtime consulta relações autorizadas da Knowledge Global/Empresa e decisões humanas persistidas; resposta segura interna encerra o fluxo. A IA é último recurso para uma relação ainda não resolvida e nunca publica relação global, altera Perfil ou decide contratação.
+
+Saída fechada por trecho: `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` ou `unclear`, com ID e citação literal. A interpretação preserva evidência, origem, versão e tenant; não atribui score, senioridade ou decisão. Perfis sem conteúdo profissional utilizável são filtrados antes da chamada. `store:false`, sem Web/tools, concorrência limitada, cache/lease existentes e falha explícita mantêm a revisão humana.
+
+Rubrica `trajectory-position-2.0.0`, matching `vacancy-matching-semantic-7.0.0`, score `matching-score-1.4.0`. A interpretação é universal; categorias antigas permanecem apenas para ler snapshots históricos. A proposta de aprendizado reutiliza a Inbox da Knowledge e exige confirmação humana; não é publicação automática. Acordo e execução: `docs/qa/agreement-m86-universal-professional-matching.md` e `docs/qa/execution-m86-universal-professional-matching.md`.
 
 ### Trajetória M8.3
 
@@ -4614,6 +4638,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `competency-taxonomy` | product/Knowledge/data/security | 1.0.0 | Perfil, requisitos de Posição e curadoria | ativo em produção desde 2026-09-18 | release independente sobre Knowledge publicada; busca server-side tipada; ADR-065 e AoT M7.2 v2 | local/produção única | falhar fechado sem versão, publicação, autoridade ou identidade compatível |
 | `person-professional-evidence` | product/Knowledge/data/UI/security | 3.1.0; versões anteriores preservadas | Perfil de Pessoa, mapa de competências, explorador de evidências | V3.1 ativo em produção; versões anteriores preservadas | Perfil vigente + taxonomia publicada + Evidência Demonstrada; último resultado completo protegido e tentativa recente separada; ADR-062/065/066 | local/produção única | falhar fechado sem associação quando versão, tenant, Perfil ou conceito forem incompatíveis |
 | `vacancy-matching-explainable` | product/application/domain | 5.0.0 | descoberta e comparação M6.1 | local/QA, inalterado pelo M7.1 | trajetória A/B/C antes de requisitos, score comparável somente em A/B; ADR-057 | local/QA | retornar indisponível para versão desconhecida e preservar análise manual |
+| `vacancy-matching-semantic` | product/application/AI/Knowledge | 7.0.0; históricos 6.0.0 preservados | interpretação universal de Posições, score e aprendizado para Knowledge | implementação local em validação | Knowledge/decisão humana antes de IA, categorias universais, conteúdo utilizável, temporal policy explícita, senioridade com marcadores e Inbox tenant-scoped sem publicação automática; M8.6 | local/migration | falhar fechado e preservar avaliação manual |
 | `vacancy-structure-assistant` | product/application/UI | 1.3.0 | criação e revisão contextual M5.4 | interface local atualizada; backend QA ativo | entrada livre, contexto interno, pesquisa Web para toda pergunta preenchida por padrão, opção explícita somente interna, ajuda contextual, fontes visíveis e nenhuma alteração sem ação humana | local/QA | preservar análise interna e declarar a falha externa |
 | `vacancy-market-research` | AI/security/operations | 1.0.0 | modo `vacancy_advisor` do Knowledge Agent | schema, Edge Function e provider ativos e validados em QA | request mínimo no-PII, Web Search allowlisted, Structured Output, fontes pós-validadas, cache 24h, ledger e caps | local/QA | não chamar provider e preservar edição manual |
 | `profile-publication-delta` | product/application/data | 2.0.0 | revisão, publicação, Central da Pessoa | ativo no Prisma-QA | merge/replace, decisões por bloco, resolvedor determinístico e auditoria automática | local/QA | bloquear publicação com campo acionável |
@@ -5195,6 +5220,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+M8.6 (2026-09-27, implementação autorizada): a interpretação de trajetória avança para `trajectory-position-2.0.0` e `trajectory-evidence-2.0.0`, com `vacancy-matching-semantic-7.0.0`. A mesma leitura vale para qualquer profissão e consulta Knowledge/decisões humanas antes da IA. Perfis sem conteúdo profissional utilizável são excluídos antes do provider; títulos não são veto lexical. `vacancy_versions.experience_policy` registra `not_required`, `required` ou `unspecified`, e `matching-score-1.4.0` omite duração/recência apenas no primeiro caso. A migration `20260927130000_m86_universal_professional_matching.sql` aceita snapshots sem reescrever históricos e cria fila tenant-scoped de propostas para a Inbox, sem publicação automática. Acordo, execução e AoT: `docs/qa/agreement-m86-universal-professional-matching.md`, `docs/qa/execution-m86-universal-professional-matching.md` e `docs/qa/aot-m86-universal-professional-matching.md`.
 
 Correção de datas (2026-09-27): `resume-dates-1.1.0` aceita anos civis de dois e quatro dígitos. Por decisão explícita do Product Owner, `00–50` representam `2000–2050` e `51–99`, `1951–1999`; pivot fixo, com revisão necessária em 2050. `century` identifica a inferência no helper, sem alterar o shape persistido: notas/evidências preservam o original e explicam a expansão. A versão do parser integra o fingerprint de novos scores; `matching-score-1.4.0` mantém pesos/faixas e estrutura, sem reescrever snapshots históricos. Não requer migration nem nova chamada de IA. Acordo, mapa e evidência: `docs/qa/aot-resume-two-digit-years.md`.
 
@@ -11296,6 +11323,12 @@ Sem referência normativa, engenharia escolhe medidas, espaçamento, tipografia,
 
 # Vagas como necessidade profissional estruturada
 
+## M8.6 — Interpretação profissional universal
+
+Toda Posição com título pode ser comparada com qualquer profissão usando o mesmo contrato de evidência. A busca aproveita primeiro Knowledge Global/Empresa e decisões humanas autorizadas; a IA só interpreta relações não resolvidas. Títulos não eliminam Perfis por veto lexical. Um Perfil sem conteúdo profissional utilizável fica fora daquela Posição e não consome IA, sem conclusão de incapacidade.
+
+A relação distingue atuação direta, equivalente, relacionada/transferível, potencial de entrada, contexto, outro domínio e indeterminação. Híbridos exigem prova dos dois componentes para equivalência integral. A Posição registra se experiência anterior não é necessária, necessária ou não especificada. A decisão humana continua necessária para confirmar, descartar ou propor aprendizado à Inbox da Knowledge; nenhuma relação global é publicada automaticamente.
+
 ## M7.1 — Taxonomia Profissional e Inteligência de Posições
 
 Ativo no frontend/backend único desde o rollout autorizado de 2026-09-18: o nome da empresa permanece separado do conceito profissional Prisma e das referências CBO/ESCO/O*NET sustentadas. Correspondência aprovada inequívoca é automática, visível e corrigível; ambiguidade exige escolha e insuficiência preserva o preenchimento manual, sem inventar referência.
@@ -13157,6 +13190,78 @@ Versão 1.0.0. Estado: agreed. Product Owner: Bruno, 2026-09-27. Execução auto
 | Web, Edge, migration e release | direct | Plano de release roteia somente web, matching-trajectory, migration e documentação gerada |
 
 Baseline local: `main` em `d1be125a0628d5984c9da6e18a3eba62fb7f33d7`; estado operacional será confirmado no AoT. Os arquivos não rastreados existentes são preservados e não fazem parte do movimento.
+
+---
+
+## Source: `docs/qa/agreement-m86-universal-professional-matching.md`
+
+# Contrato de Acordo — M8.6 Matching profissional universal
+
+Versão: 1.0.0
+Estado: `agreed`
+Escopo: interpretar a relação entre o trabalho descrito na Posição e a trajetória publicada da Pessoa, com Knowledge-first e IA somente como último recurso.
+
+## DEVE
+
+- **D-01 — Knowledge-first.** Buscar primeiro relações, aliases e referências aprovados na Knowledge global e da empresa, preservando origem, versão e tenant. Uma relação interna suficiente é reutilizada sem chamada de IA.
+- **D-02 — IA como último recurso.** Se não houver resposta interna segura, ou houver somente relação relacionada que exija esclarecimento, a IA interpreta o par Posição/Perfil usando contexto mínimo, missão, responsabilidades e evidências atribuíveis. A IA não grava regra global automaticamente.
+- **D-03 — Cobertura universal.** A ausência de correspondência lexical entre títulos não exclui o Perfil antes da interpretação. Só não consomem IA e são desconsiderados para aquela Posição os Perfis publicados/autorizados sem conteúdo profissional utilizável.
+- **D-04 — Contrato comum.** A interpretação usa categorias fechadas: `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` e `unclear`. A categoria descreve a relação com a Posição; a natureza e a fonte da evidência permanecem separadas.
+- **D-05 — Grupos e cálculo.** Relação direta ou equivalência funcional sustentada pertence ao Grupo A; relação transferível/adjacente ou potencial de entrada ao Grupo B; somente contexto ao Grupo C sem score comparável; indeterminado, erro e ausência de dados permanecem pendentes. O cálculo é determinístico e a equivalência semântica preserva grupo e score da relação equivalente.
+- **D-06 — Limites semânticos.** Família, setor, ferramenta ou palavra parecida não bastam. Especialização, habilitação, requisito específico, simultaneidade e atividade atribuível exigem evidência própria. Título não prova todas as tarefas nem senioridade.
+- **D-07 — Híbridos.** Quando dois componentes forem centrais, relação integral exige evidência direta ou funcionalmente equivalente nos dois. Evidência de um só componente é parcial/relacionada; experiências separadas não provam simultaneidade; o sistema não escolhe silenciosamente o componente principal.
+- **D-08 — Tempo.** Duração e recência são propriedades da versão da Posição e aplicam-se igualmente a todas as Pessoas comparadas. Posição que não exige experiência não usa essas dimensões, mas continua valorizando experiência relevante nas dimensões de área e função. Datas insuficientes permanecem não determinadas.
+- **D-09 — Senioridade.** Quando Posição e evidência sustentarem explicitamente os níveis, a diferença de um nível recebe ajuste `-1` e diferença material `-4`, tanto acima quanto abaixo; alinhamento recebe `0`. Título isolado, idade, prestígio e anos de carreira não bastam.
+- **D-10 — Aprendizado governado.** Usuário autorizado pode corrigir/confirmar uma relação reutilizável e propor sua entrada na Knowledge da empresa pelo Inbox/proposta/aprovação existente. Associação específica Pessoa/Posição permanece separada. Preservar termo original, justificativa, autor, evidências e histórico.
+- **D-11 — Autoridade e proveniência.** Persistem tenant, versões, snapshots, cache compatível, citações literais válidas, estados de ausência/ambiguidade/erro e autoridade server-side. A IA não decide contratação, rejeição, acesso ou habilitação.
+
+## PROIBIDO
+
+- **P-01.** Equivalência automática por palavra, família, setor, ferramenta, prestígio ou cargo; inferência de especialização, credencial, simultaneidade ou capacidade pessoal.
+- **P-02.** Usar ausência de evidência como incapacidade, converter erro/pendência em zero, omitir dimensão aplicável para compensar lacuna ou criar nota livre.
+- **P-03.** Criar base paralela, publicar relação global automaticamente, sobrescrever Knowledge aprovada, reescrever fontes/snapshots ou misturar tenants/versões/cache.
+- **P-04.** Enviar currículo integral, pesquisar externamente Pessoas, registrar PII/segredos desnecessários ou aceitar instruções contidas nas fontes.
+- **P-05.** Decidir contratação/rejeição automaticamente ou apresentar score como probabilidade de sucesso.
+- **P-06.** Declarar qualidade universal, economia ou cobertura sem corpus e evidência correspondentes.
+
+## FORA DE ESCOPO
+
+- **F-01.** Nova taxonomia paralela, novo fornecedor/infraestrutura, embeddings, pesquisa externa de Pessoas e reprocessamento retroativo fora da jornada.
+- **F-02.** Alteração dos requisitos como se fossem trajetória, novas faixas de pontuação não aprovadas, parecer jurídico e decisão automática de contratação.
+- **F-03.** Publicação global automática de aprendizado; somente a Knowledge da empresa pelo fluxo humano existente.
+
+## AUTONOMIA
+
+- **A-01.** Engenharia pode adaptar módulos, prompt/schema versionado, cache, concorrência, lotes, feature flag, compatibilidade aditiva, migration forward-only, runtime gerado e release seletivo.
+- **A-02.** Engenharia pode escolher corpus sintético e holdout sem PII, desde que fixe expectativas antes da avaliação e registre limitações.
+- **A-03.** Limiar operacional de custo/latência pode ser protegido por configuração existente ou nova configuração versionada, sem transformar falha opcional em evidência negativa.
+
+## CRITÉRIOS DE ACEITE
+
+- **CA-01.** Knowledge aprovada suficiente evita chamada de IA; relação apenas relacionada pode chamar IA; ausência segura preserva origem e estado.
+- **CA-02.** Desenvolvedor/programador no mesmo domínio e descrições parafraseadas preservam relação, grupo e score sem alias pré-cadastrado; negativos de domínio, especialização e autoria distinguem-se.
+- **CA-03.** Perfis sem conteúdo profissional utilizável não chamam IA e são desconsiderados para a Posição; a interface não os apresenta como incapazes.
+- **CA-04.** Funções híbridas, entrada, trabalho não formal, histórico, datas ausentes, sobreposição e senioridade acima/abaixo exercitam regras separadamente.
+- **CA-05.** Cálculo frontend/backend compartilhado permanece determinístico; snapshots, cache, autorização, RLS/SQL e fonte literal falham fechados em negativos.
+- **CA-06.** Correção reutilizável gera proposta tenant-scoped auditável, sem publicação automática e sem alteração da associação específica.
+- **CA-07.** Corpus de avaliação é separado da calibração e mede relações reconhecidas/perdidas, falsas equivalências, abstenções, citações, cobertura, chamadas, cache e latência. Nenhum caso crítico positivo pode falhar e ser mascarado por média global.
+- **CA-08.** Validação inclui testes dirigidos, typecheck/build/lint, runtime gerado, release plan, Context Pack, CI, smoke autenticado proporcional, SHA coerente e rollback. Produção não é ambiente de teste.
+
+## Mapa de impacto
+
+| Área | Relação | Preservação/prova |
+| --- | --- | --- |
+| Interpretação e prompt | `direct` | categorias, citações, invariância e negativos |
+| Descoberta | `direct` | sem veto lexical; sem IA para Perfil vazio; custo/retomada |
+| Score/tempo/senioridade | `direct` | cálculo determinístico, versão e ajuste explícito |
+| Híbridos/grupos | `direct` | componentes centrais e A/B/C |
+| Knowledge | `direct` | leitura primeiro; proposta humana tenant-scoped |
+| Auth/RLS/PII/cache/snapshot | `critical_transversal` | negativos de tenant, versão, autoridade e fonte |
+| UI | `plausible_indirect` | explicação de relação, pendência e origem |
+| Parser/publicação | `no_impact_identified` | somente leitura de Perfil publicado |
+| Release | `direct` | web, Edge Function e migration conforme diff |
+
+Baseline: `98bb6cc919d1c90dac04a0bf7e2cf1d6cc1674d2`. Nenhuma aceitação presume que todas as profissões já tenham qualidade empiricamente comprovada.
 
 ---
 
@@ -15818,6 +15923,107 @@ Deno handler/snapshot não foi executado localmente porque o `deno.exe` disponí
 ## Desvios
 
 Nenhum desvio funcional identificado. Limitações: Deno não executado localmente e o smoke autenticado de uma jornada de comparação não foi realizado; a verificação web foi HTTPS/bundle e a verificação Edge foi negativa, sem token e sem escrita.
+
+---
+
+## Source: `docs/qa/aot-m86-universal-professional-matching.md`
+
+# AoT — M8.6 Matching profissional universal
+
+Contrato de referência: `docs/qa/agreement-m86-universal-professional-matching.md` v1.0.0; execução: `docs/qa/execution-m86-universal-professional-matching.md`. Baseline: `98bb6cc919d1c90dac04a0bf7e2cf1d6cc1674d2`.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste | Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- | --- |
+| D-01/D-02 | Knowledge-first e IA como último recurso | Relações internas confirmadas encerram interpretação; provider só é chamado para relação não resolvida | Deno cache/AI disabled; orchestration tests | `vacancyService.ts`, `handler.test.ts` | PASS | lógica local validada; smoke remoto foi somente de autenticação |
+| D-03 | Cobertura universal e filtro de Perfil vazio | `isSemanticPilot` aceita título não vazio; `hasUsableProfessionalContent` filtra antes da IA | `semanticTriage.test.ts`, Deno triage | 115 Node + 28 Deno | PASS | universalidade sem qualidade universal comprovada |
+| D-04/D-05 | Categorias, grupos e cálculo determinísticos | Categorias 2.0, A/B/C e score 1.4.0 compartilhados no web/runtime gerado | semântica, score e runtime | `check:matching-runtime`; 115 Node | PASS | corpus histórico ainda majoritariamente técnico |
+| D-06/D-07 | Limites semânticos e híbridos | Prompt fechado, citações literais e ausência de inferência; composição preservada no domínio | corpus contrastado e parser negativo | `semanticTrajectory.test.ts` | PARTIAL | híbridos têm contrato e rota, mas falta corpus específico universal |
+| D-08 | Política temporal explícita | `experience_policy` e `temporalApplicable` removem tempo somente em `not_required` | score temporal existente + typecheck | migration e `matchingScore.ts` | PASS | coluna remota confirmada; smoke autenticado de UI pendente |
+| D-09 | Penalização simétrica de senioridade | Marcadores explícitos; ajuste -1/-4 acima e abaixo | teste dedicado | `semanticTriage.test.ts` | PASS | sem inferência por anos/título genérico |
+| D-10 | Aprendizado governado | RPC enfileira Inbox e request tenant-scoped após confirmação; não publica | typecheck, SQL review e contrato de RPC | migration M8.6 | PARTIAL | revisão conectada da Inbox ainda pendente |
+| D-11 | Autoridade e proveniência | versões, tenant, snapshot, cache, citações e guardas preservados | 28 Deno de segurança/snapshot | handler/snapshot suites + inspeção remota | PASS | migration e Edge ativos; smoke funcional autenticado pendente |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| P-01 | Sem equivalência lexical automática | corpus de cargos distintos e título sem marcador de senioridade | prompt/schema e função determinística | PASS |
+| P-02 | Ausência/erro não vira incapacidade ou score zero | pending, unavailable, malformed e triage vazio | 115 Node + 28 Deno | PASS |
+| P-03 | Sem base paralela/publicação automática | RPC somente Inbox/review; tabela de fila sem publicação | migration e grants | PASS |
+| P-04 | Sem PII/currículo integral/provider body | sanitização, input hash e envelope negativo | semanticTrajectory e handler tests | PASS |
+| P-05 | Sem decisão de contratação | score/reading fechados e decisão humana separada | domínio e UI | PASS |
+| P-06 | Sem alegação de qualidade universal | limitação registrada e CA-07 parcial | este AoT | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade protegida / área | Relação | Impacto previsto | Baseline | Regressão executada | Evidência | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Interpretação/prompt | direct | universalizar categorias e contexto mínimo | M8.3 v1.2 | corpus, schema, duas leituras | 115 Node | PASS |
+| Matching web/Edge gerado | direct | manter cálculo e espelho | matching 1.4.0 / runtime atual | typecheck, build, runtime check, Deno | comandos acima | PASS |
+| Auth/RLS/cache/snapshot | critical_transversal | aceitar versão nova sem reescrever histórico | M8.3/M8.4 | negativos de autoridade, tenant, stale, forged input | 28 Deno | PASS |
+| Position/temporal policy | direct | persistir regra explícita por versão | vacancy-definition 1.3.0 | typecheck, migration review | migration M8.6 | PARTIAL |
+| Knowledge | direct | leitura anterior e proposta humana reutilizável | Knowledge Inbox existente | grants/RPC e revisão estática | migration M8.6 | PARTIAL |
+| UI de Posições/matching | plausible_indirect | exibir experiência anterior e proposta de aprendizado | Vagas local | typecheck/build | `build:web` | PASS |
+| Parser/publicação de Perfil | no_impact_identified | somente leitura de Perfil publicado | contratos existentes | diff e testes | sem alteração de publicação | PASS |
+
+### Novidade e preservação
+
+- Entrega nova comprovada: interpretação universal, filtro pré-IA, política temporal, senioridade explícita e fila de aprendizado.
+- Capacidades preservadas comprovadas: isolamento tenant/server-side, histórico, score determinístico, snapshots, citações e falhas fechadas.
+- Relações reclassificadas: o antigo veto lexical de piloto foi substituído por cobertura universal; categorias antigas permanecem somente para compatibilidade histórica.
+- Limitações de baseline/evidência: não há corpus universal independente nem smoke funcional autenticado; o corpus M8.3 não prova todas as profissões. O smoke remoto executado foi deliberadamente anônimo e somente confirmou a barreira de autenticação.
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 | sem embeddings, novo fornecedor, taxonomia paralela, pesquisa de Pessoas ou backfill | PASS |
+| F-02 | requisitos, pesos e decisão de contratação não foram substituídos | PASS |
+| F-03 | RPC cria Inbox/review, não publicação Global automática | PASS |
+
+## Evidência de fidelidade visual
+
+Não aplicável: não houve screenshot ou referência visual normativa. A alteração visual é limitada ao controle explícito de política de experiência e à ação de proposta, validada por build/typecheck; comparação visual autenticada permanece pendente do smoke.
+
+## Desvios do contrato
+
+Nenhum desvio intencional identificado. CA-04, CA-06, CA-07 e CA-08 permanecem `PARTIAL` até corpus/Inbox conectado, release e smoke proporcional.
+
+## Mudanças autorizadas durante a execução
+
+Nenhuma mudança de produto além do acordo congelado. O teste Deno do piloto foi atualizado para esperar a versão universal 2.0/7.0 e admitir conteúdo profissional utilizável, preservando os negativos de segurança.
+
+## Validação final
+
+- `pnpm run typecheck` PASS.
+- `pnpm run typecheck:web` PASS.
+- `pnpm run build` PASS.
+- `pnpm run build:web` PASS, com warnings históricos de chunk grande/dynamic import.
+- `pnpm run lint` PASS (725 arquivos).
+- `pnpm run check:foundation` PASS.
+- `pnpm run check:prisma-context` PASS.
+- `pnpm run check:matching-runtime` PASS.
+- Node direcionado: 115/115 PASS.
+- Deno Edge direcionado: 28/28 PASS.
+- `pnpm run check:supabase-ledger`: PASS como diagnóstico; migration M8.6 aparece pendente local e o CLI de banco não está instalado neste ambiente.
+- `pnpm run release:plan`: PASS; superfícies detectadas: database, matching-trajectory Edge, web/VPS, Context Pack, documentação e testes.
+
+## Evidência remota de migration e Edge
+
+- Migration aplicada pelo conector Supabase no projeto configurado: registro remoto `20260928023716` com nome `20260927130000_m86_universal_professional_matching`.
+- Consulta SQL somente leitura confirmou `experience_policy`, `knowledge_relation_learning_requests`, `enqueue_position_relation_learning(...)` e uma policy tenant-scoped na fila.
+- Edge Function `matching-trajectory`: ACTIVE, versão 7, `verify_jwt=true`, hash de bundle `8563aac2a3238a409d0b6f503843760144918b99b2e37a76042da81b55d00167`.
+- POST anônimo sem token ao endpoint retornou HTTP 401 `UNAUTHORIZED_NO_AUTH_HEADER`; nenhuma Pessoa, relação ou proposta foi criada em produção.
+
+## Git / QA / ambiente
+
+Implementação isolada na branch `codex/m86-universal-professional-matching`, com commit local validado. Migration e Edge já estão publicados com a evidência acima; integração em `main` e publicação web/VPS ainda dependem do fechamento seletivo deste SHA. Produção não foi usada como ambiente de teste.
+
+## Conclusão
+
+`PARTIAL`: implementação, validação local direcionada, migration remota e Edge aprovados; integração em `main`, publicação web/VPS, smoke autenticado e confirmação conectada do fluxo Knowledge Inbox ainda permanecem para concluir M8.6.
 
 ---
 
@@ -19746,6 +19952,20 @@ Implemente D-01 a D-08. As proibições P-01 a P-03 não podem ocorrer. F-01 per
 Entregue um score versionado novo, com seis dimensões e máximos 10/25/35/10/10/10. Use experiências relacionadas já reconhecidas pela regra determinística e, no piloto semântico, apenas execução backend/software explicitamente classificada. Una intervalos mensais sobrepostos, use data civil de referência explícita e falhe de modo neutro quando a precisão temporal não for suficiente. Integre o breakdown progressivo existente, sem alterar grupos, ordenação, desempate, triagem, requisitos ou autoridade humana.
 
 Atualize o runtime gerado da Edge, a guarda persistida do snapshot e a documentação proprietária. Valide CA-01 a CA-06 com testes dirigidos, typecheck/build web, lint, runtime gerado, release plan e smoke proporcional. Não execute a suíte integral. Não crie dados humanos ou decisões de curadoria em produção.
+
+---
+
+## Source: `docs/qa/execution-m86-universal-professional-matching.md`
+
+# Prompt de Execução — M8.6 Matching profissional universal
+
+Executar integralmente `docs/qa/agreement-m86-universal-professional-matching.md` versão `1.0.0` nesta revisão. O acordo está congelado pelo Product Owner nesta conversa. Implementar somente seus D-*, P-*, F-* e A-*; reutilizar o pipeline, Knowledge, cache, snapshots, server-side authority e runtime gerado existentes.
+
+Entregar em uma mudança coerente: generalização do interpretador e do prompt; fallback Knowledge-first/IA-last; descoberta sem veto lexical com exclusão apenas de Perfil sem conteúdo profissional utilizável; grupos e cálculo determinísticos; híbridos; política de duração/recência e senioridade; proposta tenant-scoped de aprendizado pelo fluxo existente; documentação, testes e evidências.
+
+Não criar taxonomia paralela, não reprocessar históricos, não pesquisar Pessoas externamente, não publicar aprendizado automaticamente e não tratar falha/ausência como incapacidade ou zero.
+
+Validar antes de liberar: corpus sintético separado da calibração; positivos/negativos e invariância de nomenclatura; testes de autoridade/tenant/cache/snapshot/citações; build, typecheck, lint, runtime gerado, release plan e smoke proporcional. Atualizar Context Pack e AoT com PASS/PARTIAL/BLOCKED real. Se qualquer CA crítica falhar, não declarar M8.6 concluído nem publicar a ativação como validada.
 
 ---
 

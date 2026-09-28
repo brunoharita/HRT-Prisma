@@ -87,6 +87,8 @@ export interface MatchingScoreInput {
   requirements: VacancyRequirementMatch[];
   unclassifiedRequirementCount: number;
   competitiveEligibility?: "eligible" | "contextual_only";
+  /** Explicit policy from the immutable Position version. Legacy callers default to applicable. */
+  temporalApplicable?: boolean;
   materialDependencies?: string[];
   relatedExperiences: MatchingScoreExperience[];
   referenceDate: string;
@@ -106,7 +108,8 @@ export function calculateMatchingScore(input: MatchingScoreInput): MatchingScore
   const position = scoreFunction(input.functionApplicable, input.functionAssessment);
   const required = scoreRequirements("required", input.requirements, input.unclassifiedRequirementCount);
   const desired = scoreRequirements("desired", input.requirements, input.unclassifiedRequirementCount);
-  const temporal = scoreTemporal(input.relatedExperiences, input.referenceDate, input.competitiveEligibility !== "contextual_only");
+  const temporal = scoreTemporal(input.relatedExperiences, input.referenceDate,
+    (input.temporalApplicable ?? true) && input.competitiveEligibility !== "contextual_only");
   const dimensions = [area, position, required, desired, temporal.duration, temporal.recency];
   const earnedPoints = sum(dimensions.map((item) => item.earnedPoints));
   const applicablePoints = sum(dimensions.map((item) => item.applicablePoints));
@@ -145,6 +148,7 @@ export function calculateMatchingScore(input: MatchingScoreInput): MatchingScore
     })),
     unclassifiedRequirementCount: input.unclassifiedRequirementCount,
     competitiveEligibility: input.competitiveEligibility ?? "eligible",
+    temporalApplicable: input.temporalApplicable ?? true,
     materialDependencies: input.materialDependencies ?? [],
     relatedExperiences: input.relatedExperiences.map((item) => ({ id: item.id, period: item.period, evidence: item.evidence.map(compactEvidence) })),
     referenceDate: input.referenceDate,
@@ -273,8 +277,8 @@ function scoreTemporal(experiences: MatchingScoreExperience[], referenceDate: st
     undetermined: [reason],
   });
   if (!applicable) return {
-    duration: emptyDimension("duration", "A trajetória está no Grupo C; os 10 pontos de duração ficam fora do denominador."),
-    recency: emptyDimension("recency", "A trajetória está no Grupo C; os 10 pontos de recência ficam fora do denominador."),
+    duration: emptyDimension("duration", "Duração não aplicável para esta Posição ou Grupo C; os pontos ficam fora do denominador."),
+    recency: emptyDimension("recency", "Recência não aplicável para esta Posição ou Grupo C; os pontos ficam fora do denominador."),
     undetermined: [],
   };
   if (!experiences.length || reference === null) return unknown(!experiences.length
@@ -373,7 +377,7 @@ function compactRelation(relation: VacancyAreaRelation): object {
 function validateVersions(input: MatchingScoreInput, scoreContractVersion: string): string | null {
   if (!input.positionVersion.trim() || !Number.isSafeInteger(input.positionVersionNumber) || input.positionVersionNumber < 1) return "A versão da Posição é desconhecida; o score não foi calculado.";
   if (!input.profileVersion.trim() || !Number.isSafeInteger(input.profileVersionNumber) || input.profileVersionNumber < 1) return "A versão do Perfil é desconhecida; o score não foi calculado.";
-  const semantic = input.matchingContractVersion === "vacancy-matching-semantic-6.0.0";
+  const semantic = ["vacancy-matching-semantic-6.0.0", "vacancy-matching-semantic-7.0.0"].includes(input.matchingContractVersion);
   if (!semantic && input.matchingContractVersion !== "vacancy-matching-explainable-5.0.0") return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
   if (scoreContractVersion !== MATCHING_SCORE_CONTRACT_VERSION) return "A versão do contrato de score não é reconhecida; o score não foi calculado.";
   if (semantic && !input.interpretationReference?.trim()) return "A interpretação versionada da trajetória não está disponível; o score não foi calculado.";

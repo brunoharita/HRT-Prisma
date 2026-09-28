@@ -1,8 +1,7 @@
 import type { PostgrestError } from "@supabase/supabase-js";
-import { isSemanticPilot, type SemanticAssessment } from "../../../../src/domain/semanticTrajectory.js";
+import { type SemanticAssessment } from "../../../../src/domain/semanticTrajectory.js";
 import { applySemanticAssessment, isSemanticTriageEligible, unavailableSemantic } from "../../domain/semanticMatching.js";
 import {
-  isVacancyDiscoveryCandidate,
   matchVacancyCandidate,
   sortVacancyMatches,
   type VacancyCandidateMatch,
@@ -147,6 +146,7 @@ export const vacancyService = {
       occupantPersonId: positionResult.data?.occupant_person_id ?? null,
       occupantName: occupantResult.data?.full_name ?? null,
       mission: version.mission ?? "",
+      experiencePolicy: isExperiencePolicy((version as unknown as { experience_policy?: unknown }).experience_policy) ? (version as unknown as { experience_policy: VacancyDetail["experiencePolicy"] }).experience_policy : "unspecified",
       responsibilities: readStringArray(version.responsibilities),
       expectedOutcomes: readStringArray(version.expected_outcomes),
       requirements: requirements.map((item) => ({
@@ -419,8 +419,8 @@ export const vacancyService = {
       ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate),
       positionDecision: decisions.get(candidate.personId) ?? null,
     }));
-    const interpreted = await interpretMatches(vacancy, baseMatches.filter(isVacancyDiscoveryCandidate), onProgress, signal);
-    const matches = sortVacancyMatches(interpreted.filter(match => Boolean(match.semanticAssessment) || isVacancyDiscoveryCandidate(match)));
+    const interpreted = await interpretMatches(vacancy, baseMatches.filter(match => isSemanticTriageEligible(match)), onProgress, signal);
+    const matches = sortVacancyMatches(interpreted.filter(match => isSemanticTriageEligible(match)));
     return {
       matches,
       analyzedProfileCount: collection.analyzedProfileCount,
@@ -444,7 +444,7 @@ export const vacancyService = {
       const candidate = candidates.find((item) => item.personId === id);
       return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
     });
-    return interpretMatches(vacancy, matches.filter(isVacancyDiscoveryCandidate), undefined, signal);
+    return interpretMatches(vacancy, matches.filter(match => isSemanticTriageEligible(match)), undefined, signal);
   },
 
   async recordPositionRelationDecision(vacancy: VacancyDetail, match: VacancyCandidateMatch, decision: Exclude<VacancyPositionRelationDecision, null>): Promise<void> {
@@ -466,6 +466,19 @@ export const vacancyService = {
       model_version: match.semanticAssessment?.modelVersion ?? "deterministic-local-3.0.0",
     });
     throwIfError(result.error, "Não foi possível registrar sua decisão sobre esta relação. O resultado permanece disponível.");
+  },
+
+  async proposePositionRelationToKnowledge(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<void> {
+    if (match.positionDecision !== "confirmed" || !match.positionRelation.evidence.length) throw new Error("Confirme a relação e preserve evidência antes de propor aprendizado à Knowledge.");
+    const relationType = match.functionAssessment.relation === "same_function" ? "direct" : match.functionAssessment.relation === "equivalent_function" ? "equivalent" : "related";
+    const observedTerm = match.positionRelation.evidence[0]?.label ?? match.candidate.profileData.professionalTitle ?? match.candidate.profileData.experiences.find((item) => item.role)?.role ?? "Relação profissional";
+    const { error } = await supabase.rpc("enqueue_position_relation_learning" as never, {
+      p_organization_id: vacancy.organizationId, p_position_version_id: vacancy.versionId, p_profile_id: match.candidate.profileId,
+      p_observed_term: observedTerm, p_relation_type: relationType, p_human_decision: "confirmed",
+      p_evidence_snapshot: { vacancyTitle: vacancy.title, positionRelation: match.positionRelation, functionRelation: match.functionAssessment.relation,
+        profileVersion: match.candidate.profileVersion, matchingVersion: match.score.matchingContractVersion },
+    } as never);
+    throwIfError(error, "Não foi possível enviar esta relação para revisão na Knowledge. A decisão do caso foi preservada.");
   },
 
   async recordEvaluation(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<string> {
@@ -523,8 +536,10 @@ export const vacancyService = {
 const POSITION_DECISION_PAGE_SIZE = 200;
 
 async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidateMatch[], onProgress?: (completed: number, total: number) => void, signal?: AbortSignal): Promise<VacancyCandidateMatch[]> {
-  if (!isSemanticPilot(vacancy.title)) return matches;
-  const eligible = matches.flatMap((match, index) => isSemanticTriageEligible(match) ? [index] : []);
+  if (!vacancy.title.trim()) return matches;
+  const eligible = matches.flatMap((match, index) => isSemanticTriageEligible(match)
+    && match.positionDecision !== "confirmed"
+    && !["same_reference", "equivalent_reference", "related_reference"].includes(match.positionRelation.status) ? [index] : []);
   const result = [...matches];
   let next = 0, completed = 0;
   onProgress?.(0, eligible.length);
@@ -558,6 +573,10 @@ async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidat
   }
   await Promise.all([worker(), worker()]);
   return result;
+}
+
+function isExperiencePolicy(value: unknown): value is VacancyDetail["experiencePolicy"] {
+  return value === "not_required" || value === "required" || value === "unspecified";
 }
 const OCCUPATION_RELATION_TYPES = ["equivalent_to", "related_to", "is_a", "broader_than", "narrower_than"] as const;
 

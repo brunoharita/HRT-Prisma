@@ -6,6 +6,14 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 
 ## Registry atual
 
+### Interpretação universal M8.6
+
+`trajectory-evidence-2.0.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. O fluxo recebe somente contexto profissional publicado minimizado e uma Posição versionada de qualquer profissão. Antes de chamar este prompt, o runtime consulta relações autorizadas da Knowledge Global/Empresa e decisões humanas persistidas; resposta segura interna encerra o fluxo. A IA é último recurso para uma relação ainda não resolvida e nunca publica relação global, altera Perfil ou decide contratação.
+
+Saída fechada por trecho: `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` ou `unclear`, com ID e citação literal. A interpretação preserva evidência, origem, versão e tenant; não atribui score, senioridade ou decisão. Perfis sem conteúdo profissional utilizável são filtrados antes da chamada. `store:false`, sem Web/tools, concorrência limitada, cache/lease existentes e falha explícita mantêm a revisão humana.
+
+Rubrica `trajectory-position-2.0.0`, matching `vacancy-matching-semantic-7.0.0`, score `matching-score-1.4.0`. A interpretação é universal; categorias antigas permanecem apenas para ler snapshots históricos. A proposta de aprendizado reutiliza a Inbox da Knowledge e exige confirmação humana; não é publicação automática. Acordo e execução: `docs/qa/agreement-m86-universal-professional-matching.md` e `docs/qa/execution-m86-universal-professional-matching.md`.
+
 ### Trajetória M8.3
 
 `trajectory-evidence-1.2.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. Modelo lógico `KNOWLEDGE_RESEARCH_MODEL`, sem troca silenciosa. Entrada: cargo/descrição de experiências e declarações de título/área, com contexto da Posição. Proibidos campos de identidade, contatos, empregadores, instituições, datas, currículo integral, evidências privadas e decisões humanas. Texto livre é minimizado, não garantidamente anônimo.

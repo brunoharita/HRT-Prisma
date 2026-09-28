@@ -4,6 +4,14 @@
 
 Uma avaliação compara uma pessoa com uma vaga específica. Ela não altera o perfil permanente e não decide contratação ou rejeição.
 
+## Interpretação universal M8.6
+
+Toda Posição com título pode usar a mesma leitura profissional, independentemente da profissão. O servidor preserva a ordem `Knowledge Global/Empresa e decisões humanas autorizadas -> IA somente como último recurso -> revisão humana`; uma resposta interna segura não é substituída por pesquisa. Título incompatível não é veto lexical. Perfis publicados sem conteúdo profissional utilizável não entram no fluxo e não consomem IA, sem que isso seja tratado como incapacidade.
+
+As relações semânticas são `direct`, `equivalent`, `related`, `entry_potential`, `context`, `other` e `unclear`, projetadas respectivamente nos Grupos A, B ou C sem confundir ausência de prova com prova negativa. Híbridos exigem evidência dos dois componentes centrais para relação integral; uma só parte permanece parcial/relacionada. Senioridade só é comparada quando os níveis estão explicitamente marcados, com penalização simétrica por subqualificação e sobrequalificação. A Posição versiona `experiencePolicy` como `not_required`, `required` ou `unspecified`; somente a primeira remove duração/recência do denominador.
+
+Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox existente da Knowledge com termo original, relação, evidência e versões. A proposta não publica alias ou relação global automaticamente.
+
 ## Saída por requisito
 
 | Estado | Regra |

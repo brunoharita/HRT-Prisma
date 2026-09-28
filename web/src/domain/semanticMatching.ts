@@ -1,23 +1,30 @@
 import { readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION, type SemanticAssessment, type TrajectoryActivity } from "../../../src/domain/semanticTrajectory.js";
 import { calculateMatchingScore, type MatchingScoreExperience, type VacancyFunctionAssessment } from "./matchingScore.js";
 import type { VacancyAreaRelation, VacancyCandidateMatch, VacancyDetail, VacancyMatchEvidence } from "./vacancy.js";
-import { assessVacancyEvidence, isVacancyDiscoveryCandidate } from "./vacancy.js";
+import { assessVacancyEvidence, assessVacancySeniority, hasUsableProfessionalContent } from "./vacancy.js";
 
 /** Activation policy only: apply to the deterministic match, never the interpreted result. */
 export function isSemanticTriageEligible(match: VacancyCandidateMatch): boolean {
-  return isVacancyDiscoveryCandidate(match)
-    && (match.discoveryGroup === "main_area" || match.discoveryGroup === "related_area");
+  return match.positionDecision !== "dismissed" && hasUsableProfessionalContent(match.candidate);
 }
 
-const POINTS = { backend_execution: 20, software_execution: 17, software_analysis: 12, software_leadership: 8, software_context: 0, other: 0, unclear: 0 } as const;
+const POINTS: Record<TrajectoryActivity, number> = {
+  direct_function: 20, equivalent_function: 17, related_function: 12, entry_potential: 8, context: 0, other: 0, unclear: 0,
+  backend_execution: 20, software_execution: 17, software_analysis: 12, software_leadership: 8, software_context: 0,
+};
 const LABELS: Record<TrajectoryActivity, string> = {
+  direct_function: "Atuação direta no núcleo de trabalho da Posição.",
+  equivalent_function: "Atuação funcionalmente equivalente, apesar da nomenclatura diferente.",
+  related_function: "Atuação relacionada ou transferível, sem equivalência integral comprovada.",
+  entry_potential: "Formação, prática ou conhecimento que pode sustentar entrada; não equivale a experiência profissional.",
+  context: "Sinal contextual sem atividade atribuível suficiente para equivalência.",
+  other: "A atuação descrita pertence a outro domínio. Isso não significa incapacidade.",
+  unclear: "A trajetória não traz evidência suficiente para determinar a natureza da relação.",
   backend_execution: "Execução de desenvolvimento backend explicitamente descrita.",
   software_execution: "Execução de desenvolvimento de software; especialização backend e ferramentas específicas ainda não comprovadas por esta classificação.",
   software_analysis: "Análise de sistemas de software; execução de programação backend não comprovada por esta classificação.",
   software_leadership: "Liderança técnica relacionada; gerir uma equipe não comprova execução pessoal de desenvolvimento backend.",
   software_context: "Menção contextual a software, sem atuação técnica suficiente para comparação competitiva.",
-  other: "A atuação descrita não demonstra relação com desenvolvimento de software. Isso não significa incapacidade.",
-  unclear: "A trajetória não traz evidência suficiente para determinar a natureza da atuação.",
 };
 
 export function unavailableSemantic(vacancy: VacancyDetail, match: VacancyCandidateMatch): SemanticAssessment {
@@ -54,36 +61,35 @@ export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCa
   const sources = reading.items.map(item => ({ ...item, source: context.entries.find(entry => entry.id === item.id)! }));
   const experience = sources.filter(item => item.source.kind === "experience")
     .sort((a, b) => POINTS[b.activity] - POINTS[a.activity] || a.id.localeCompare(b.id));
-  const best = experience[0];
-  const activity = best?.activity ?? "unclear";
-  const points = POINTS[activity];
-  const declared = sources.find(item => item.source.kind === "declaration" && POINTS[item.activity] > 0);
+  const positiveExperience = experience.filter(item => POINTS[item.activity] > 0);
+  const declared = sources.find(item => item.source.kind !== "experience" && POINTS[item.activity] > 0);
+  const selected = positiveExperience[0] ?? declared;
+  const activity = selected?.activity ?? "unclear";
+  const points = (positiveExperience[0]
+    ? POINTS[activity]
+    : vacancy.experiencePolicy === "not_required" && declared?.activity === "entry_potential"
+      ? POINTS.entry_potential : 0) as VacancyFunctionAssessment["basePoints"];
   if (!points && ((!experience.length && !declared) || experience.some(item => item.activity === "unclear"))) {
     return applySemanticAssessment(vacancy, match, { ...assessment, status: "indeterminate", reasonCode: "INSUFFICIENT_EVIDENCE" });
   }
-  const evidence: VacancyMatchEvidence[] = experience.filter(item => points > 0 && POINTS[item.activity] === points).map(item => {
-    const index = Number(item.source.fieldPath.match(/^experiences\.(\d+)$/)?.[1]);
-    const original = match.candidate.profileData.experiences[index];
-    const field = original?.role?.includes(item.quote) ? "role" : original?.description?.includes(item.quote) ? "description" : null;
-    return { label: item.quote, source: "Experiência publicada · interpretação de trajetória",
-      sourceId: original ? `experience:${original.id}${field ? `:${field}` : ""}` : item.source.fieldPath,
-      fieldPath: original ? `experiences.${original.id}${field ? `.${field}` : ""}` : item.source.fieldPath,
-      sourceVersion: `Perfil ${match.candidate.profileVersion}; ${assessment.methodVersion}; ${assessment.analysisId}` };
-  });
+  const selectedSources = points > 0 ? experience.filter(item => POINTS[item.activity] === points) : [];
+  const evidence: VacancyMatchEvidence[] = selectedSources.map(item => semanticEvidence(match, item.source, item.quote, assessment));
   const explanation = `${LABELS[activity]} A classificação considera evidência publicada, inclusive histórica, sem presumir senioridade.`;
   const areaRelation: VacancyAreaRelation = {
     status: points ? "experience_area" : declared ? "profile_area" : "none",
     coverageState: points || declared ? "evaluated_relation" : "insufficient_evidence",
     evidence: points ? evidence : declared ? [{ label: declared.quote, source: "Declaração do Perfil", fieldPath: declared.source.fieldPath, sourceVersion: `Perfil ${match.candidate.profileVersion}` }] : [],
-    explanation: points ? "Atuação em software sustentada por experiência publicada, não apenas pela palavra Tecnologia."
-      : declared ? "Área de software declarada, sem experiência suficiente para elegibilidade competitiva." : "Área de desenvolvimento não demonstrada pelas evidências disponíveis; não é conclusão de incapacidade.",
+    explanation: points ? "Atuação profissional relacionada ao núcleo da Posição, sustentada por experiência publicada."
+      : declared ? "A formação ou declaração publicada sugere potencial, sem provar experiência profissional realizada." : "A relação profissional não foi demonstrada pelas evidências disponíveis; não é conclusão de incapacidade.",
   };
+  const relation = points > 0 ? semanticFunctionRelation(activity) : semanticFunctionRelation("unclear");
+  const seniority = assessVacancySeniority(vacancy.title, semanticObservedTitle(match, selectedSources), points);
   const functionAssessment: VacancyFunctionAssessment = {
-    relation: points === 20 ? "same_function" : points === 17 ? "equivalent_function" : points === 12 ? "related_function" : points === 8 ? "contextual_relation" : "no_relation",
-    basePoints: points, seniorityAdjustment: 0, seniorityRelation: "not_available", evidence,
-    coverageState: points ? "evaluated_relation" : "insufficient_evidence", explanation,
+    relation: relation.functionRelation,
+    basePoints: points, seniorityAdjustment: seniority.adjustment, seniorityRelation: seniority.relation, evidence,
+    coverageState: points ? "evaluated_relation" : "insufficient_evidence", explanation: `${explanation}${seniority.explanation ? ` ${seniority.explanation}` : ""}`,
   };
-  const discoveryGroup = points === 20 ? "main_area" : points ? "related_area" : "contextual_signals";
+  const discoveryGroup = relation.discoveryGroup;
   const dependencies = [...match.score.provisionalReasons.filter(reason => !reason.startsWith("Cobertura das evidências")),
     ...(experience.some(item => item.activity === "unclear") ? ["Há experiência cuja natureza permanece indeterminada; diferenças de score não estabelecem prioridade segura."] : [])];
   const score = calculateMatchingScore({
@@ -91,6 +97,7 @@ export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCa
     requirements: match.requirements, unclassifiedRequirementCount: match.unclassifiedRequirementCount,
     relatedExperiences: semanticTemporalExperiences(match, experience), referenceDate: match.score.referenceDate,
     competitiveEligibility: points ? "eligible" : "contextual_only", materialDependencies: dependencies,
+    temporalApplicable: vacancy.experiencePolicy !== "not_required",
     positionVersion: vacancy.versionId, positionVersionNumber: vacancy.version, profileVersion: match.candidate.profileId, profileVersionNumber: match.candidate.profileVersion,
     matchingContractVersion: SEMANTIC_MATCHING_VERSION, scoreContractVersion: SEMANTIC_SCORE_VERSION,
     interpretationReference: `${assessment.methodVersion}:${assessment.promptVersion}:${assessment.modelVersion}:${assessment.inputHash}:${assessment.analysisId}`,
@@ -98,10 +105,48 @@ export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCa
   const positionRelation = { status: points ? "interpreted_function" as const : "none" as const, explanation, evidence };
   return { ...match, semanticAssessment: assessment, areaRelation, functionAssessment, discoveryGroup, score,
     evidenceAssessment: semanticEvidenceAssessment(match, areaRelation, positionRelation),
-    trajectoryAssessment: { relation: points === 20 ? "direct" : points ? "related" : "contextual_only", entryLevelVacancy: false, evidence, explanation },
+    trajectoryAssessment: { relation: relation.trajectoryRelation, entryLevelVacancy: vacancy.experiencePolicy === "not_required", evidence, explanation },
     positionRelation,
     reasons: [explanation, ...match.reasons.filter(reason => reason.includes("requisito"))],
   };
+}
+
+function semanticFunctionRelation(activity: TrajectoryActivity): {
+  functionRelation: VacancyFunctionAssessment["relation"];
+  discoveryGroup: VacancyCandidateMatch["discoveryGroup"];
+  trajectoryRelation: VacancyCandidateMatch["trajectoryAssessment"]["relation"];
+} {
+  if (["direct_function", "backend_execution"].includes(activity)) return { functionRelation: "same_function", discoveryGroup: "main_area", trajectoryRelation: "direct" };
+  if (activity === "equivalent_function") return { functionRelation: "equivalent_function", discoveryGroup: "main_area", trajectoryRelation: "related" };
+  if (["related_function", "entry_potential", "software_execution", "software_analysis", "software_leadership"].includes(activity)) return { functionRelation: "related_function", discoveryGroup: "related_area", trajectoryRelation: activity === "entry_potential" ? "entry_potential" : "related" };
+  if (["context", "software_context"].includes(activity)) return { functionRelation: "contextual_relation", discoveryGroup: "contextual_signals", trajectoryRelation: "contextual_only" };
+  return { functionRelation: "no_relation", discoveryGroup: "contextual_signals", trajectoryRelation: "none" };
+}
+
+function semanticEvidence(match: VacancyCandidateMatch, source: { kind: string; fieldPath: string }, quote: string, assessment: SemanticAssessment): VacancyMatchEvidence {
+  const experienceMatch = source.fieldPath.match(/^experiences\.(\d+)$/);
+  if (experienceMatch) {
+    const original = match.candidate.profileData.experiences[Number(experienceMatch[1])];
+    const field = original?.role?.includes(quote) ? "role" : original?.description?.includes(quote) ? "description" : null;
+    return { label: quote, source: "Experiência publicada · interpretação de trajetória",
+      sourceId: original ? `experience:${original.id}${field ? `:${field}` : ""}` : source.fieldPath,
+      fieldPath: original ? `experiences.${original.id}${field ? `.${field}` : ""}` : source.fieldPath,
+      sourceVersion: `Perfil ${match.candidate.profileVersion}; ${assessment.methodVersion}; ${assessment.analysisId}` };
+  }
+  const educationMatch = source.fieldPath.match(/^education\.(\d+)$/);
+  if (educationMatch) {
+    const original = match.candidate.profileData.education[Number(educationMatch[1])];
+    return { label: quote, source: "Formação publicada · potencial de entrada", sourceId: original ? `education:${original.id}` : source.fieldPath,
+      fieldPath: source.fieldPath, sourceVersion: `Perfil ${match.candidate.profileVersion}; ${assessment.methodVersion}; ${assessment.analysisId}` };
+  }
+  return { label: quote, source: "Declaração publicada · interpretação de trajetória", sourceId: `profile:${match.candidate.profileId}:${source.fieldPath}`,
+    fieldPath: source.fieldPath, sourceVersion: `Perfil ${match.candidate.profileVersion}; ${assessment.methodVersion}; ${assessment.analysisId}` };
+}
+
+function semanticObservedTitle(match: VacancyCandidateMatch, sources: Array<{ source: { kind: string; fieldPath: string } }>): string | undefined {
+  const experience = sources.find((item) => item.source.kind === "experience");
+  const index = Number(experience?.source.fieldPath.match(/^experiences\.(\d+)$/)?.[1]);
+  return Number.isInteger(index) ? match.candidate.profileData.experiences[index]?.role ?? undefined : match.candidate.profileData.professionalTitle ?? undefined;
 }
 
 function semanticTemporalExperiences(
@@ -109,7 +154,7 @@ function semanticTemporalExperiences(
   experiences: Array<{ id: string; activity: TrajectoryActivity; quote: string; source: { kind: string; fieldPath: string } }>,
 ): MatchingScoreExperience[] {
   return experiences.flatMap((item) => {
-    if (!(["backend_execution", "software_execution"] as TrajectoryActivity[]).includes(item.activity)) return [];
+    if (!(["direct_function", "equivalent_function", "related_function", "backend_execution", "software_execution", "software_analysis"] as TrajectoryActivity[]).includes(item.activity)) return [];
     const index = Number(item.source.fieldPath.match(/^experiences\.(\d+)$/)?.[1]);
     const original = match.candidate.profileData.experiences[index];
     if (!original) return [];

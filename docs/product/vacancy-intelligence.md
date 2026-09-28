@@ -1,5 +1,11 @@
 # Vagas como necessidade profissional estruturada
 
+## M8.6 — Interpretação profissional universal
+
+Toda Posição com título pode ser comparada com qualquer profissão usando o mesmo contrato de evidência. A busca aproveita primeiro Knowledge Global/Empresa e decisões humanas autorizadas; a IA só interpreta relações não resolvidas. Títulos não eliminam Perfis por veto lexical. Um Perfil sem conteúdo profissional utilizável fica fora daquela Posição e não consome IA, sem conclusão de incapacidade.
+
+A relação distingue atuação direta, equivalente, relacionada/transferível, potencial de entrada, contexto, outro domínio e indeterminação. Híbridos exigem prova dos dois componentes para equivalência integral. A Posição registra se experiência anterior não é necessária, necessária ou não especificada. A decisão humana continua necessária para confirmar, descartar ou propor aprendizado à Inbox da Knowledge; nenhuma relação global é publicada automaticamente.
+
 ## M7.1 — Taxonomia Profissional e Inteligência de Posições
 
 Ativo no frontend/backend único desde o rollout autorizado de 2026-09-18: o nome da empresa permanece separado do conceito profissional Prisma e das referências CBO/ESCO/O*NET sustentadas. Correspondência aprovada inequívoca é automática, visível e corrigível; ambiguidade exige escolha e insuficiência preserva o preenchimento manual, sem inventar referência.
