@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 296
-source_manifest_sha256: 6f925ccbef501a0c1cb77f603410110d0850e21a249e2cb2efdb4cceb8c27d12
+source_manifest_sha256: 88ea0bd8d2ee67e05a530854763f94563d65e0638c047480e0ae59e086b3ddc4
 -->
 
 # Tudo sobre o Prisma
@@ -2630,9 +2630,11 @@ last_verified: 2026-09-28
 
 # Estado atual do Prisma
 
-## Reconhecimento profissional determinístico — implementação em validação
+## Reconhecimento profissional determinístico — publicado em produção
 
-O ajuste autorizado de 2026-09-28 avança o cálculo pré-IA para `vacancy-matching-explainable-5.1.0`: ocupação relacionada à referência publicada pode sustentar área/função relacionada, sem comprovar especialização; área ampla sozinha não promove Grupo A quando o núcleo da Posição é mais específico; tempo privilegia períodos ocupacionais relacionados. Pesos e faixas de `matching-score-1.4.0` não mudam. A interface distingue fallback pré-IA da interpretação semântica anterior. A migration aditiva compatibiliza M6.2 com o novo contrato e o semântico 7.0.0. Este parágrafo descreve o código local até o AoT confirmar ou limitar a publicação; não prova implantação.
+O ajuste autorizado de 2026-09-28 avança o cálculo pré-IA para `vacancy-matching-explainable-5.1.0`: ocupação relacionada à referência publicada pode sustentar área/função relacionada, sem comprovar especialização; área ampla sozinha não promove Grupo A quando o núcleo da Posição é mais específico; tempo privilegia períodos ocupacionais relacionados. Pesos e faixas de `matching-score-1.4.0` não mudam. A interface distingue fallback pré-IA da interpretação semântica anterior. A migration aditiva compatibiliza M6.2 com o novo contrato e o semântico 7.0.0.
+
+O SHA funcional `cb284f7c577168f1d715699cb7945a64e6849378` passou no CI `36509941408`, foi integrado em `main` e publicado na VPS. A migration está registrada remotamente como `20260929015407_matching_recognition_consistency`; a função M6.2 contém o novo guard, conservando `SECURITY DEFINER` e grants. `matching-trajectory` v10 está ACTIVE, JWT obrigatório, com os módulos gerados idênticos aos locais. O smoke pós-troca confirmou `/`, `/login` e asset HTTP 200, versão 5.1.0 e aviso pré-IA no bundle; chamada anônima à Edge retornou 401. O 404 do smoke imediato foi transitório. Não houve smoke autenticado em Perfis reais para evitar nova chamada de IA; os resultados de Diego/Bruno nesta Posição não foram reprocessados nem comprovados em produção. Evidência e limites: `docs/qa/aot-matching-recognition-consistency.md`.
 
 ## Diagnóstico seguro das duas leituras de trajetória (publicado em produção)
 
@@ -2758,7 +2760,7 @@ Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor p
 
 Prisma v1.8.1 é a versão de produto registrada e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; o matching determinístico em implantação é `vacancy-matching-explainable-5.1.0` e `matching-score-1.4.0` mantém pesos/faixas para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis; a extensão 5.1.0/semântica 7.0.0 requer prova de implantação no AoT e não reescreve avaliações antigas.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; o matching determinístico publicado é `vacancy-matching-explainable-5.1.0` e `matching-score-1.4.0` mantém pesos/faixas para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis; a extensão 5.1.0/semântica 7.0.0 foi verificada remotamente e não reescreve avaliações antigas.
 
 ## Frontend hospedado — 2026-09-15
 
@@ -5237,7 +5239,7 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 # Versionamento
 
-Consistência do reconhecimento profissional (2026-09-28, implementação autorizada): `vacancy-matching-explainable-5.1.0` distingue relação ocupacional publicada de especialização da Posição, impede promoção por área ampla isolada e seleciona períodos da função relacionada antes de períodos contextuais. O `matching-score-1.4.0` conserva pesos/faixas e passa a reconhecer a área relacionada via Knowledge com 8 pontos; o fingerprint registra a nova versão de matching. A migration `20260928190000_matching_recognition_consistency.sql` acrescenta 5.1.0 e o contrato semântico 7.0.0 ao guard M6.2, mantendo snapshots antigos e versões desconhecidas rejeitadas. A interface identifica a origem pré-IA no fallback. Não há nova versão pública numerada de produto neste ajuste; o rollout e seus limites são registrados no AoT próprio.
+Consistência do reconhecimento profissional (2026-09-28, publicada): `vacancy-matching-explainable-5.1.0` distingue relação ocupacional publicada de especialização da Posição, impede promoção por área ampla isolada e seleciona períodos da função relacionada antes de períodos contextuais. O `matching-score-1.4.0` conserva pesos/faixas e passa a reconhecer a área relacionada via Knowledge com 8 pontos; o fingerprint registra a nova versão de matching. A migration `20260928190000_matching_recognition_consistency.sql` acrescenta 5.1.0 e o contrato semântico 7.0.0 ao guard M6.2, mantendo snapshots antigos e versões desconhecidas rejeitadas. A interface identifica a origem pré-IA no fallback. Não há nova versão pública numerada de produto neste ajuste; o rollout e seus limites são registrados no AoT próprio.
 
 M8.6 (2026-09-27, implementação autorizada): a interpretação de trajetória avança para `trajectory-position-2.0.0` e `trajectory-evidence-2.0.0`, com `vacancy-matching-semantic-7.0.0`. A mesma leitura vale para qualquer profissão e consulta Knowledge/decisões humanas antes da IA. Perfis sem conteúdo profissional utilizável são excluídos antes do provider; títulos não são veto lexical. `vacancy_versions.experience_policy` registra `not_required`, `required` ou `unspecified`, e `matching-score-1.4.0` omite duração/recência apenas no primeiro caso. A migration `20260927130000_m86_universal_professional_matching.sql` aceita snapshots sem reescrever históricos e cria fila tenant-scoped de propostas para a Inbox, sem publicação automática. Acordo, execução e AoT: `docs/qa/agreement-m86-universal-professional-matching.md`, `docs/qa/execution-m86-universal-professional-matching.md` e `docs/qa/aot-m86-universal-professional-matching.md`.
 
@@ -16290,8 +16292,8 @@ Contrato: `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0, preser
 | D-01 | Relação ocupacional alimenta área, função, trajetória e seleção de períodos com nível relacionado, mantendo referência/alias publicado e origem. | `matchingScore.test.ts`: programador/desenvolvedor, referência genérica e casos negativos. | PASS sintético; não valida o conjunto real de aliases da Posição. |
 | D-02 | Área ampla isolada não promove A quando o título define núcleo mais específico. Relação publicada genérica não comprova backend. | Testes de backend sintético, Marketing e Gerente de Tecnologia. | PASS sintético. |
 | D-03 | Períodos de função relacionada prevalecem sobre liderança/área contextual; nenhuma alteração nas faixas temporais. | Contraste sintético com programação histórica e liderança atual; `m84ScoreTemporal.test.ts`. | PASS sintético. |
-| D-04 | Avisos de busca/comparação e tag de detalhe nomeiam cálculo pré-IA vigente e versão; fallback mantém objeto calculado. | `matchingScore.test.ts` verifica textos; `semanticTriage.test.ts` verifica falha e resposta válida. | PASS local; tela autenticada real não exercida para evitar IA sobre Pessoas. |
-| D-05 | Matching 5.1.0 versionado; score 1.4.0 sem novos pesos; runtime web/Edge gerado; M6.2 amplia allowlist sem reescrever registros. | Teste estático e PostgreSQL 17 descartável, baseline remoto lido, verificador de runtime, testes de snapshot. | PARTIAL até aplicação e leitura remota da migration; validação SQL local PASS. |
+| D-04 | Avisos de busca/comparação e tag de detalhe nomeiam cálculo pré-IA vigente e versão; fallback mantém objeto calculado. | `matchingScore.test.ts` verifica textos; `semanticTriage.test.ts` verifica falha e resposta válida; bundle publicado contém versão/aviso. | PASS no contrato implementado; tela autenticada real não exercida para evitar IA sobre Pessoas. |
+| D-05 | Matching 5.1.0 versionado; score 1.4.0 sem novos pesos; runtime web/Edge gerado; M6.2 amplia allowlist sem reescrever registros. | PostgreSQL 17 descartável, baseline e definição remotos, Edge v10, CI e smoke HTTPS. | PASS; snapshots históricos não reescritos. |
 
 ## Proibições
 
@@ -16306,8 +16308,8 @@ Contrato: `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0, preser
 | Área | Relação | Baseline protegido | Regressão e estado |
 | --- | --- | --- | --- |
 | Matching/score | direct | 5.0.0, score 1.4.0, A/B/C e pesos existentes | 81 testes dirigidos PASS após correção de regressões; contraste 5.1.0. |
-| Busca, comparação e detalhe | direct | Falha de IA não elimina resultado | Teste de fallback e textos PASS; render autenticado não testado. |
-| Edge e M6.2 | critical_transversal | Snapshot servidor, tenant, autoridade, histórico e guard de versão | 32 testes Deno PASS; migration em PostgreSQL 17 descartável PASS, com versions, desconhecida, ACL e SECURITY DEFINER. |
+| Busca, comparação e detalhe | direct | Falha de IA não elimina resultado | Teste de fallback e textos PASS; bundle ativo confirmado, render autenticado não testado. |
+| Edge e M6.2 | critical_transversal | Snapshot servidor, tenant, autoridade, histórico e guard de versão | 32 testes Deno PASS; migration em PostgreSQL 17 descartável PASS; guard/grants verificados remotamente, Edge v10 JWT obrigatório e anônimo 401. |
 | Outras profissões/Knowledge | plausible_indirect | Equivalência publicada específica, sem inferência por setor/ferramenta | Regressão de Marketing/Sistemas/Tecnologia e negativos PASS; corpus real não reprocessado. |
 | Parser, requisitos e curadoria | no_impact_identified | Fontes e decisões humanas intactas | Diff sem alterações nessas superfícies; testes de requisito existentes PASS. |
 
@@ -16326,11 +16328,13 @@ F-01/F-02 preservados no diff: sem mudança de prompt/modelo/acionamento da IA, 
 - 32 testes Deno de handler/snapshot Edge: PASS.
 - Teste estático e execução da migration em PostgreSQL descartável: PASS.
 - `pnpm run check:matching-runtime` e `pnpm run check:prisma-context`: PASS após geração.
-- Publicação, CI e smoke: pendentes nesta etapa do AoT. Não declarar produção até confirmação remota.
+- CI `36509941408`: PASS; SHA funcional `cb284f7c577168f1d715699cb7945a64e6849378` em `main` local/GitHub/VPS.
+- Supabase: migration registrada como `20260929015407_matching_recognition_consistency`, novo predicado presente, anterior ausente, `SECURITY DEFINER` e grants idênticos. Edge `matching-trajectory` v10 ACTIVE, `verify_jwt=true`, 12 arquivos; os módulos gerados alterados coincidem exatamente com os locais.
+- VPS: `prisma-web` recriado, imagem anterior preservada pelo script de deploy; contêiner `running`, zero reinícios. Smoke imediato do script recebeu 404, seguido de `/`, `/login` e asset principal HTTP 200; bundle contém matching 5.1.0 e texto pré-IA. Edge anônima HTTP 401. `release:verify` confirmou local/`origin/main` alinhados e site 200.
 
 ## Desvios e conclusão
 
-Nenhum desvio funcional intencional do contrato. Regressões intermediárias nos testes de equivalência Knowledge e Posição sem título foram corrigidas antes deste fechamento; os testes respectivos voltaram a passar. Resultado local ainda PARTIAL pelo rollout; atualizar este AoT com SHA e evidência remota após a publicação.
+Nenhum desvio funcional intencional do contrato. Regressões intermediárias nos testes de equivalência Knowledge e Posição sem título foram corrigidas antes deste fechamento; os testes respectivos voltaram a passar. O smoke autenticado do caso real não foi feito para não consumir IA nem alterar registros; a nova ordenação de Diego/Bruno não está comprovada em produção. A prova sintética contrasta as mesmas classes profissionais, sem fixar pontos para Pessoas reais. O Context Pack foi gerado e verificado sem incluir um documento não rastreado preexistente do usuário em `docs/qa`; ele foi restaurado sem alteração após a geração. A integração deste fechamento documental em `main` não muda o runtime funcional.
 
 ---
 

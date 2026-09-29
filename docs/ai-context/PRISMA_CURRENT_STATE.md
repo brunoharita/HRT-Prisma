@@ -8,9 +8,11 @@ last_verified: 2026-09-28
 
 # Estado atual do Prisma
 
-## Reconhecimento profissional determinístico — implementação em validação
+## Reconhecimento profissional determinístico — publicado em produção
 
-O ajuste autorizado de 2026-09-28 avança o cálculo pré-IA para `vacancy-matching-explainable-5.1.0`: ocupação relacionada à referência publicada pode sustentar área/função relacionada, sem comprovar especialização; área ampla sozinha não promove Grupo A quando o núcleo da Posição é mais específico; tempo privilegia períodos ocupacionais relacionados. Pesos e faixas de `matching-score-1.4.0` não mudam. A interface distingue fallback pré-IA da interpretação semântica anterior. A migration aditiva compatibiliza M6.2 com o novo contrato e o semântico 7.0.0. Este parágrafo descreve o código local até o AoT confirmar ou limitar a publicação; não prova implantação.
+O ajuste autorizado de 2026-09-28 avança o cálculo pré-IA para `vacancy-matching-explainable-5.1.0`: ocupação relacionada à referência publicada pode sustentar área/função relacionada, sem comprovar especialização; área ampla sozinha não promove Grupo A quando o núcleo da Posição é mais específico; tempo privilegia períodos ocupacionais relacionados. Pesos e faixas de `matching-score-1.4.0` não mudam. A interface distingue fallback pré-IA da interpretação semântica anterior. A migration aditiva compatibiliza M6.2 com o novo contrato e o semântico 7.0.0.
+
+O SHA funcional `cb284f7c577168f1d715699cb7945a64e6849378` passou no CI `36509941408`, foi integrado em `main` e publicado na VPS. A migration está registrada remotamente como `20260929015407_matching_recognition_consistency`; a função M6.2 contém o novo guard, conservando `SECURITY DEFINER` e grants. `matching-trajectory` v10 está ACTIVE, JWT obrigatório, com os módulos gerados idênticos aos locais. O smoke pós-troca confirmou `/`, `/login` e asset HTTP 200, versão 5.1.0 e aviso pré-IA no bundle; chamada anônima à Edge retornou 401. O 404 do smoke imediato foi transitório. Não houve smoke autenticado em Perfis reais para evitar nova chamada de IA; os resultados de Diego/Bruno nesta Posição não foram reprocessados nem comprovados em produção. Evidência e limites: `docs/qa/aot-matching-recognition-consistency.md`.
 
 ## Diagnóstico seguro das duas leituras de trajetória (publicado em produção)
 
@@ -136,7 +138,7 @@ Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor p
 
 Prisma v1.8.1 é a versão de produto registrada e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; o matching determinístico em implantação é `vacancy-matching-explainable-5.1.0` e `matching-score-1.4.0` mantém pesos/faixas para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis; a extensão 5.1.0/semântica 7.0.0 requer prova de implantação no AoT e não reescreve avaliações antigas.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; o matching determinístico publicado é `vacancy-matching-explainable-5.1.0` e `matching-score-1.4.0` mantém pesos/faixas para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis; a extensão 5.1.0/semântica 7.0.0 foi verificada remotamente e não reescreve avaliações antigas.
 
 ## Frontend hospedado — 2026-09-15
 

@@ -9,8 +9,8 @@ Contrato: `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0, preser
 | D-01 | Relação ocupacional alimenta área, função, trajetória e seleção de períodos com nível relacionado, mantendo referência/alias publicado e origem. | `matchingScore.test.ts`: programador/desenvolvedor, referência genérica e casos negativos. | PASS sintético; não valida o conjunto real de aliases da Posição. |
 | D-02 | Área ampla isolada não promove A quando o título define núcleo mais específico. Relação publicada genérica não comprova backend. | Testes de backend sintético, Marketing e Gerente de Tecnologia. | PASS sintético. |
 | D-03 | Períodos de função relacionada prevalecem sobre liderança/área contextual; nenhuma alteração nas faixas temporais. | Contraste sintético com programação histórica e liderança atual; `m84ScoreTemporal.test.ts`. | PASS sintético. |
-| D-04 | Avisos de busca/comparação e tag de detalhe nomeiam cálculo pré-IA vigente e versão; fallback mantém objeto calculado. | `matchingScore.test.ts` verifica textos; `semanticTriage.test.ts` verifica falha e resposta válida. | PASS local; tela autenticada real não exercida para evitar IA sobre Pessoas. |
-| D-05 | Matching 5.1.0 versionado; score 1.4.0 sem novos pesos; runtime web/Edge gerado; M6.2 amplia allowlist sem reescrever registros. | Teste estático e PostgreSQL 17 descartável, baseline remoto lido, verificador de runtime, testes de snapshot. | PARTIAL até aplicação e leitura remota da migration; validação SQL local PASS. |
+| D-04 | Avisos de busca/comparação e tag de detalhe nomeiam cálculo pré-IA vigente e versão; fallback mantém objeto calculado. | `matchingScore.test.ts` verifica textos; `semanticTriage.test.ts` verifica falha e resposta válida; bundle publicado contém versão/aviso. | PASS no contrato implementado; tela autenticada real não exercida para evitar IA sobre Pessoas. |
+| D-05 | Matching 5.1.0 versionado; score 1.4.0 sem novos pesos; runtime web/Edge gerado; M6.2 amplia allowlist sem reescrever registros. | PostgreSQL 17 descartável, baseline e definição remotos, Edge v10, CI e smoke HTTPS. | PASS; snapshots históricos não reescritos. |
 
 ## Proibições
 
@@ -25,8 +25,8 @@ Contrato: `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0, preser
 | Área | Relação | Baseline protegido | Regressão e estado |
 | --- | --- | --- | --- |
 | Matching/score | direct | 5.0.0, score 1.4.0, A/B/C e pesos existentes | 81 testes dirigidos PASS após correção de regressões; contraste 5.1.0. |
-| Busca, comparação e detalhe | direct | Falha de IA não elimina resultado | Teste de fallback e textos PASS; render autenticado não testado. |
-| Edge e M6.2 | critical_transversal | Snapshot servidor, tenant, autoridade, histórico e guard de versão | 32 testes Deno PASS; migration em PostgreSQL 17 descartável PASS, com versions, desconhecida, ACL e SECURITY DEFINER. |
+| Busca, comparação e detalhe | direct | Falha de IA não elimina resultado | Teste de fallback e textos PASS; bundle ativo confirmado, render autenticado não testado. |
+| Edge e M6.2 | critical_transversal | Snapshot servidor, tenant, autoridade, histórico e guard de versão | 32 testes Deno PASS; migration em PostgreSQL 17 descartável PASS; guard/grants verificados remotamente, Edge v10 JWT obrigatório e anônimo 401. |
 | Outras profissões/Knowledge | plausible_indirect | Equivalência publicada específica, sem inferência por setor/ferramenta | Regressão de Marketing/Sistemas/Tecnologia e negativos PASS; corpus real não reprocessado. |
 | Parser, requisitos e curadoria | no_impact_identified | Fontes e decisões humanas intactas | Diff sem alterações nessas superfícies; testes de requisito existentes PASS. |
 
@@ -45,8 +45,10 @@ F-01/F-02 preservados no diff: sem mudança de prompt/modelo/acionamento da IA, 
 - 32 testes Deno de handler/snapshot Edge: PASS.
 - Teste estático e execução da migration em PostgreSQL descartável: PASS.
 - `pnpm run check:matching-runtime` e `pnpm run check:prisma-context`: PASS após geração.
-- Publicação, CI e smoke: pendentes nesta etapa do AoT. Não declarar produção até confirmação remota.
+- CI `36509941408`: PASS; SHA funcional `cb284f7c577168f1d715699cb7945a64e6849378` em `main` local/GitHub/VPS.
+- Supabase: migration registrada como `20260929015407_matching_recognition_consistency`, novo predicado presente, anterior ausente, `SECURITY DEFINER` e grants idênticos. Edge `matching-trajectory` v10 ACTIVE, `verify_jwt=true`, 12 arquivos; os módulos gerados alterados coincidem exatamente com os locais.
+- VPS: `prisma-web` recriado, imagem anterior preservada pelo script de deploy; contêiner `running`, zero reinícios. Smoke imediato do script recebeu 404, seguido de `/`, `/login` e asset principal HTTP 200; bundle contém matching 5.1.0 e texto pré-IA. Edge anônima HTTP 401. `release:verify` confirmou local/`origin/main` alinhados e site 200.
 
 ## Desvios e conclusão
 
-Nenhum desvio funcional intencional do contrato. Regressões intermediárias nos testes de equivalência Knowledge e Posição sem título foram corrigidas antes deste fechamento; os testes respectivos voltaram a passar. Resultado local ainda PARTIAL pelo rollout; atualizar este AoT com SHA e evidência remota após a publicação.
+Nenhum desvio funcional intencional do contrato. Regressões intermediárias nos testes de equivalência Knowledge e Posição sem título foram corrigidas antes deste fechamento; os testes respectivos voltaram a passar. O smoke autenticado do caso real não foi feito para não consumir IA nem alterar registros; a nova ordenação de Diego/Bruno não está comprovada em produção. A prova sintética contrasta as mesmas classes profissionais, sem fixar pontos para Pessoas reais. O Context Pack foi gerado e verificado sem incluir um documento não rastreado preexistente do usuário em `docs/qa`; ele foi restaurado sem alteração após a geração. A integração deste fechamento documental em `main` não muda o runtime funcional.
