@@ -83,7 +83,7 @@ export function calculateMatchingScore(input) {
 function scoreArea(applicable, relation) {
     if (!applicable)
         return emptyDimension("area", "A Posição não definiu área profissional; os 10 pontos ficam fora do denominador.");
-    const earnedPoints = relation.status === "experience_area" ? 10 : relation.status === "profile_area" ? 8 : 0;
+    const earnedPoints = relation.status === "experience_area" ? 10 : relation.status === "profile_area" || relation.status === "occupation_area" ? 8 : 0;
     return {
         key: "area",
         earnedPoints,
@@ -275,7 +275,7 @@ function validateVersions(input, scoreContractVersion) {
     if (!input.profileVersion.trim() || !Number.isSafeInteger(input.profileVersionNumber) || input.profileVersionNumber < 1)
         return "A versão do Perfil é desconhecida; o score não foi calculado.";
     const semantic = ["vacancy-matching-semantic-6.0.0", "vacancy-matching-semantic-7.0.0"].includes(input.matchingContractVersion);
-    if (!semantic && input.matchingContractVersion !== "vacancy-matching-explainable-5.0.0")
+    if (!semantic && !["vacancy-matching-explainable-5.0.0", "vacancy-matching-explainable-5.1.0"].includes(input.matchingContractVersion))
         return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
     if (scoreContractVersion !== MATCHING_SCORE_CONTRACT_VERSION)
         return "A versão do contrato de score não é reconhecida; o score não foi calculado.";

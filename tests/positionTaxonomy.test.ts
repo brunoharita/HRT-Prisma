@@ -60,7 +60,7 @@ test("M7.1 SQL is additive, recomputes provenance and preserves authorization ow
   assert.match(sql, /v\.import_status='published' and v\.is_current/);
   assert.doesNotMatch(sql, /create table|disable row level|grant .* to anon|insert into public\.people|update public\.professional_profiles/i);
   assert.doesNotMatch(sql, /target_level\s*=|criticality\s*=/);
-  assert.equal(VACANCY_MATCHING_VERSION, "vacancy-matching-explainable-5.0.0");
+  assert.equal(VACANCY_MATCHING_VERSION, "vacancy-matching-explainable-5.1.0");
 });
 test("M7.1 UI provides recovery, progressive provenance, human correction, shared responsive surfaces", async () => {
   const ui = await readFile("web/src/components/PositionTaxonomyPanel.tsx", "utf8");

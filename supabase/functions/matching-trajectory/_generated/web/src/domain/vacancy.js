@@ -1,7 +1,7 @@
 // Generated from web/src/domain/vacancy.ts; run node scripts/generate-matching-runtime.mjs. DO NOT EDIT.
 import { calculateMatchingScore, MATCHING_SCORE_CONTRACT_VERSION, } from "./matchingScore.js";
 export const VACANCY_DEFINITION_VERSION = "1.3.0";
-export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-5.0.0";
+export const VACANCY_MATCHING_VERSION = "vacancy-matching-explainable-5.1.0";
 export const VACANCY_ASSISTANT_VERSION = "vacancy-assistant-contextual-1.3.0";
 export const OCCUPATION_RESOLUTION_CONTRACT = "occupation-resolution-on-demand-2.0.0";
 export const VACANCY_STRUCTURE_CONTRACT = "vacancy-structure-profile-aligned-2.1.0";
@@ -144,8 +144,8 @@ export function validateVacancyReady(draft) {
         : [];
 }
 export function matchVacancyCandidate(vacancy, candidate, occupationReference = null, demonstratedEvidence = [], materialDependencies = [], referenceDate = new Date().toISOString().slice(0, 10)) {
-    const areaRelation = matchVacancyArea(vacancy, candidate);
     const positionRelation = matchVacancyPosition(vacancy, candidate, occupationReference);
+    const areaRelation = matchVacancyArea(vacancy, candidate, positionRelation, occupationReference);
     const professionalEvidence = allProfessionalProfileEvidence(candidate);
     const requirements = vacancy.requirements.map((requirement) => {
         const directLabels = unique([requirement.label, requirement.observedTerm ?? "", requirement.conceptLabel ?? ""]);
@@ -235,7 +235,7 @@ export function matchVacancyCandidate(vacancy, candidate, occupationReference = 
             explanation: `O Prisma não possui evidência suficiente para ${requirement.label} no Perfil atual. Isso não significa que a Pessoa não possua essa experiência ou conhecimento.`,
         };
     });
-    const functionAssessment = assessVacancyFunction(vacancy, candidate, areaRelation, positionRelation);
+    const functionAssessment = assessVacancyFunction(vacancy, candidate, areaRelation, positionRelation, occupationReference);
     const trajectoryAssessment = assessVacancyTrajectory(vacancy, candidate, areaRelation, positionRelation, functionAssessment, requirements);
     const directCount = requirements.filter((item) => item.status === "met").length;
     const partialCount = requirements.filter((item) => item.status === "partially_met").length;
@@ -266,7 +266,7 @@ export function matchVacancyCandidate(vacancy, candidate, occupationReference = 
         competitiveEligibility: discoveryGroup === "contextual_signals" ? "contextual_only" : "eligible",
         temporalApplicable: vacancy.experiencePolicy !== "not_required",
         materialDependencies,
-        relatedExperiences: deterministicTemporalExperiences(vacancy, candidate, areaRelation, positionRelation, functionAssessment),
+        relatedExperiences: deterministicTemporalExperiences(vacancy, candidate, areaRelation, positionRelation),
         referenceDate,
         positionVersion: vacancy.versionId,
         positionVersionNumber: vacancy.version,
@@ -658,7 +658,7 @@ function evidenceProvesTargetLevel(value, requirementLabels, level) {
         return new RegExp(`(?:^| )${target}(?: [a-z0-9+#.]+){0,2} ${requirement}(?= |$)|(?:^| )${requirement}(?: [a-z0-9+#.]+){0,2} ${target}(?= |$)`).test(normalizedValue);
     }));
 }
-function matchVacancyArea(vacancy, candidate) {
+function matchVacancyArea(vacancy, candidate, position, reference) {
     const area = vacancy.area.trim();
     if (!area)
         return { status: "none", explanation: "A Posição não informa uma área profissional para comparação.", evidence: [], coverageState: "not_applicable" };
@@ -699,6 +699,17 @@ function matchVacancyArea(vacancy, candidate) {
             status: "profile_area",
             explanation: `Atuação na área de ${area} identificada em “${publishedArea.label}” no Perfil publicado, sem experiência vinculada suficiente para a pontuação máxima da dimensão.`,
             evidence: [evidence(publishedArea.label, "Área de atuação publicada", `areasOfExpertise:${publishedArea.index}`, `areasOfExpertise.${publishedArea.index}`, "professionalArea")],
+            coverageState: "evaluated_relation",
+        };
+    const occupationEvidence = position.evidence[0];
+    const approvedReferenceMatch = reference && occupationEvidence && (position.status === "same_reference" || position.status === "equivalent_reference" || position.status === "related_reference"
+        || (position.status === "possible_title_relation" && [reference.canonicalLabel, ...reference.aliases]
+            .some((label) => occupationalTitleRelationStrength(label, occupationEvidence.label) >= 60)));
+    if (approvedReferenceMatch)
+        return {
+            status: "occupation_area",
+            explanation: `Relação possível com a área de ${area} a partir de “${occupationEvidence.label}” e da referência ocupacional publicada “${reference.canonicalLabel}”. Isso não comprova a especialização da Posição.`,
+            evidence: [{ ...occupationEvidence, source: `Cargo ou ocupação relacionado à Knowledge publicada (${reference.conceptId})`, canonicalLabel: reference.canonicalLabel }],
             coverageState: "evaluated_relation",
         };
     const hasProfessionalAreaEvidence = candidate.profileData.areasOfExpertise.some((item) => item.trim())
@@ -808,26 +819,28 @@ function occupationalTokens(value) {
         tecnica: "tecnico", tecnicas: "tecnico", tecnicos: "tecnico", desenvolvedora: "desenvolvedor", desenvolvedoras: "desenvolvedor", desenvolvedores: "desenvolvedor", designers: "designer", vendedora: "vendedor", vendedoras: "vendedor", vendedores: "vendedor", operadora: "operador", operadoras: "operador", operadores: "operador",
         projeto: "projeto", projetos: "projeto", project: "projeto", pm: "projeto", pmo: "projeto",
         ti: "tecnologia", it: "tecnologia", tecnologia: "tecnologia", tecnologias: "tecnologia", informacao: "tecnologia", informatica: "tecnologia",
+        desenvolvimento: "desenvolvedor", desenvolvimentos: "desenvolvedor", programadora: "programador", programadoras: "programador", programadores: "programador",
     };
     return new Set(value.split(" ").filter((token) => token.length > 1 && !stopWords.has(token)).map((token) => aliases[token] ?? token));
 }
 const OCCUPATIONAL_ROLE_MARKERS = new Set([
     "lideranca", "analista", "assistente", "auxiliar", "estagiario", "especialista", "consultor", "engenheiro",
-    "diretor", "executivo", "supervisor", "tecnico", "desenvolvedor", "designer", "vendedor", "operador",
+    "diretor", "executivo", "supervisor", "tecnico", "desenvolvedor", "programador", "designer", "vendedor", "operador",
 ]);
-function deterministicTemporalExperiences(vacancy, candidate, area, position, functionAssessment) {
+function deterministicTemporalExperiences(vacancy, candidate, area, position) {
     const ids = new Set();
     const add = (item) => { if (item.id)
         ids.add(item.id); };
-    const experienceEvidenceIds = new Set([...position.evidence, ...functionAssessment.evidence]
-        .map((item) => item.sourceId?.match(/^experience:([^:]+)/)?.[1])
+    const positionExperienceIds = new Set(position.evidence
+        .map((item) => item.sourceId?.match(/^experience:([^:]+)/)?.[1] ?? item.fieldPath?.match(/^experiences\.([^.]+)\./)?.[1])
         .filter((value) => Boolean(value)));
+    const hasPositionExperience = positionExperienceIds.size > 0;
     candidate.profileData.experiences.forEach((item) => {
-        const areaRelated = area.status === "experience_area" && Boolean(vacancy.area.trim())
+        const areaRelated = !hasPositionExperience && area.status === "experience_area" && Boolean(vacancy.area.trim())
             && [item.role, item.description, item.evidenceText].filter(Boolean).some((value) => phrasesOverlap(value, vacancy.area)
                 && (value === item.role || supportsProfessionalAreaPractice(value, vacancy.area)));
         const titleRelated = Boolean(item.role) && occupationalTitleRelationStrength(vacancy.title, item.role) >= 60;
-        if (areaRelated || titleRelated || experienceEvidenceIds.has(item.id))
+        if (areaRelated || titleRelated || positionExperienceIds.has(item.id))
             add(item);
     });
     return candidate.profileData.experiences.filter((item) => ids.has(item.id)).map((item) => ({
@@ -862,22 +875,26 @@ export function assessVacancyEvidence(area, position, requirements) {
         ],
     };
 }
-function assessVacancyFunction(vacancy, candidate, area, position) {
+function assessVacancyFunction(vacancy, candidate, area, position, reference) {
     const areaRoleEvidence = area.evidence.find((item) => item.source === "Cargo em experiência profissional");
     const fallbackTitleEvidence = candidate.profileData.professionalTitle
         ? evidence(candidate.profileData.professionalTitle, "Título profissional", "professionalTitle", "professionalTitle", "professionalTitle")
         : candidate.profileData.experiences.flatMap((item) => item.role ? [evidence(item.role, "Experiência profissional", `experience:${item.id}:role`, `experiences.${item.id}.role`, "professionalTitle")] : [])[0];
     const selectedEvidence = position.evidence[0] ?? areaRoleEvidence ?? fallbackTitleEvidence;
     const textualStrength = selectedEvidence ? occupationalTitleRelationStrength(vacancy.title, selectedEvidence.label) : 0;
+    const positionTitleTokens = occupationalTokens(normalize(vacancy.title));
+    const referenceTitleTokens = occupationalTokens(normalize(reference?.canonicalLabel ?? ""));
+    const referenceCoversPositionTitle = Boolean(position.status === "same_reference" || position.status === "equivalent_reference")
+        && positionTitleTokens.size > 0 && [...positionTitleTokens].every((token) => referenceTitleTokens.has(token));
     const directMapping = position.status === "possible_title_relation" && textualStrength === 100
         ? ["same_function", 20]
-        : position.status === "possible_title_relation" && textualStrength >= 80
-            ? ["equivalent_function", 17]
+        : referenceCoversPositionTitle
+            ? [position.status === "same_reference" ? "same_function" : "equivalent_function", position.status === "same_reference" ? 20 : 17]
             : {
-                same_reference: ["same_function", 20],
-                equivalent_reference: ["equivalent_function", 17],
+                same_reference: ["related_function", 12],
+                equivalent_reference: ["related_function", 12],
                 related_reference: ["related_function", 12],
-                possible_title_relation: ["contextual_relation", 8],
+                possible_title_relation: ["related_function", 12],
             }[position.status];
     let relation = "no_relation";
     let basePoints = 0;
@@ -885,12 +902,6 @@ function assessVacancyFunction(vacancy, candidate, area, position) {
     let relationEvidence = position.evidence;
     if (directMapping) {
         [relation, basePoints] = directMapping;
-    }
-    else if (area.status === "experience_area" && areaRoleEvidence && seniorityRank(vacancy.title) !== null && seniorityRank(areaRoleEvidence.label) !== null) {
-        relation = "equivalent_function";
-        basePoints = 17;
-        relationEvidence = [areaRoleEvidence];
-        explanation = `A função observada em “${areaRoleEvidence.label}” pertence à mesma área profissional e possui natureza equivalente para o cálculo; a descoberta continua sustentada pela área.`;
     }
     else if (area.status === "experience_area") {
         relation = "contextual_relation";
@@ -912,7 +923,9 @@ function assessVacancyFunction(vacancy, candidate, area, position) {
 function assessVacancyTrajectory(vacancy, candidate, area, position, functionAssessment, requirements) {
     const entryLevelVacancy = isEntryLevelVacancy(vacancy.title);
     const professionalHistory = candidate.profileData.experiences.some((item) => Boolean(item.role?.trim() || item.description?.trim() || item.evidenceText?.trim()));
-    const directAreaEvidence = area.evidence.filter((item) => item.source === "Cargo em experiência profissional");
+    const areaIsInPositionTitle = Boolean(vacancy.area.trim() && (!vacancy.title.trim() || phrasesOverlap(vacancy.title, vacancy.area)));
+    const directAreaEvidence = areaIsInPositionTitle && area.status === "experience_area"
+        ? area.evidence.filter((item) => item.source === "Cargo em experiência profissional") : [];
     const directFunctionEvidence = professionalHistory && (functionAssessment.relation === "same_function" || functionAssessment.relation === "equivalent_function")
         ? functionAssessment.evidence
         : [];
@@ -925,7 +938,7 @@ function assessVacancyTrajectory(vacancy, candidate, area, position, functionAss
             explanation: "A trajetória profissional possui experiência direta na área ou em função equivalente à Posição.",
         };
     const relatedEvidence = uniqueEvidence([
-        ...(area.status === "profile_area" ? area.evidence : []),
+        ...(["profile_area", "occupation_area"].includes(area.status) ? area.evidence : []),
         ...(["related_reference", "possible_title_relation"].includes(position.status) ? position.evidence : []),
     ]);
     if (relatedEvidence.length)

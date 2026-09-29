@@ -263,6 +263,55 @@ test("menção isolada a marketing em Tecnologia não cria área nem pontos", ()
   assert.equal(match.score.dimensions.find((item) => item.key === "area")?.earnedPoints, 0);
 });
 
+test("referência ocupacional sustenta relação transferível sem inventar especialização ou recência", () => {
+  const need = vacancy({ title: "Desenvolvedor backend", area: "Tecnologia", referenceConceptId: "occupation-software",
+    requirements: [requirement("APIs REST", "required", "technology"), requirement("Kubernetes", "desired", "technology")] });
+  const reference = { conceptId: "occupation-software", canonicalLabel: "Desenvolvedor de sistemas de tecnologia da informação",
+    aliases: ["Programador de sistemas de computador", "Técnico de desenvolvimento de software"], relations: [] };
+  const programmer = matchVacancyCandidate(need, candidate("systems-programmer", profile({
+    experiences: [
+      { ...experience("Analista de sistema"), id: "analysis-current", period: "01/2021 - Atual" },
+      { ...experience("Programador de sistemas"), id: "programming-history", period: "10/2010 - 10/2020" },
+    ], competencies: ["ABAP", "SQL"],
+  })), reference, [], [], "2026-09-28");
+  const broadTechnology = matchVacancyCandidate(need, candidate("technology-leadership", profile({
+    experiences: [
+      { ...experience("Liderança de Tecnologia"), id: "current-leadership", period: "01/2021 - Atual" },
+      { ...experience("Desenvolvedor de Software"), id: "historical-development", period: "06/2008 - 11/2012" },
+    ],
+  })), reference, [], [], "2026-09-28");
+
+  assert.equal(programmer.positionRelation.status, "possible_title_relation");
+  assert.equal(programmer.areaRelation.status, "occupation_area");
+  assert.equal(programmer.functionAssessment.relation, "related_function");
+  assert.equal(programmer.discoveryGroup, "related_area");
+  assert.equal(broadTechnology.positionRelation.status, "possible_title_relation");
+  assert.equal(broadTechnology.discoveryGroup, "related_area");
+  assert.deepEqual(programmer.score.dimensions.filter(item => ["area", "position", "duration", "recency"].includes(item.key)).map(item => item.earnedPoints), [8, 15, 10, 0]);
+  assert.deepEqual(broadTechnology.score.dimensions.filter(item => ["area", "position", "duration", "recency"].includes(item.key)).map(item => item.earnedPoints), [10, 15, 7, 0]);
+  assert.equal(programmer.requirements.every(item => item.status === "no_evidence"), true);
+  assert.equal(broadTechnology.requirements.every(item => item.status === "no_evidence"), true);
+  assert.ok(programmer.score.score !== null && broadTechnology.score.score !== null && programmer.score.score > broadTechnology.score.score);
+
+  const genericDeveloper = matchVacancyCandidate(need, candidate("generic-developer", profile({ experiences: [experience("Desenvolvedor")] })), reference);
+  assert.equal(genericDeveloper.positionRelation.status, "possible_title_relation");
+  assert.equal(genericDeveloper.functionAssessment.relation, "related_function");
+  assert.equal(genericDeveloper.discoveryGroup, "related_area");
+  const genericKnowledge = matchVacancyCandidate(need, candidate("generic-knowledge", profile({ experiences: [experience("Desenvolvedor de sistemas")]}), {
+    knowledge: [{ state: "resolved", conceptType: "occupation", conceptId: "occupation-software", originalTerm: "Desenvolvedor de sistemas", canonicalLabel: reference.canonicalLabel }],
+  }), reference);
+  assert.equal(genericKnowledge.positionRelation.status, "same_reference");
+  assert.equal(genericKnowledge.functionAssessment.relation, "related_function");
+  assert.equal(genericKnowledge.discoveryGroup, "related_area");
+
+  for (const role of ["Programador de produção", "Vendedor de software", "Vendedor de Tecnologia", "Analista Financeiro"]) {
+    const unrelated = matchVacancyCandidate(need, candidate(role, profile({ experiences: [experience(role)] })), reference);
+    assert.equal(unrelated.positionRelation.status, "none", role);
+    assert.equal(unrelated.discoveryGroup, "contextual_signals", role);
+    assert.equal(unrelated.score.score, null, role);
+  }
+});
+
 test("trajetória separa A, B e C e a exceção de entrada promove potencial ao Grupo B", () => {
   const technologyManager = vacancy({ title: "Gerente de Tecnologia", area: "Tecnologia", requirements: [requirement("SAP", "required", "technology")] });
   const direct = matchVacancyCandidate(technologyManager, candidate("technology-manager", profile({
@@ -377,6 +426,9 @@ test("UI expõe score, cobertura, grupos, explicação, versões e proteção mo
   assert.match(page, /Há requisitos aguardando classificação/);
   assert.doesNotMatch(page, /não participa da ordenação/);
   assert.match(page, /matchingContractVersion/);
+  assert.ok((page.match(/cálculo pré-IA desta consulta/g) ?? []).length >= 2);
+  assert.match(page, /IA não concluiu · cálculo pré-IA \{match\.score\.matchingContractVersion\}/);
+  assert.match(page, /Área relacionada via Knowledge/);
   assert.match(styles, /prisma-score-dimensions \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);
   assert.match(styles, /prisma-match-reasons \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);
   assert.match(styles, /prisma-vacancy-match-card article > header > \.ant-space \.ant-space-item[^}]*min-width: 0/);

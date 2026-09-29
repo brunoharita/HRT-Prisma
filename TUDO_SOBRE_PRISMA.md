@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 293
-source_manifest_sha256: 44f5e4a8278d236b2b8c6659b27fba2f965d7778d72e9d2ef1ced4018a0e5fdd
+documentation_source_count: 296
+source_manifest_sha256: 6f925ccbef501a0c1cb77f603410110d0850e21a249e2cb2efdb4cceb8c27d12
 -->
 
 # Tudo sobre o Prisma
@@ -2630,6 +2630,10 @@ last_verified: 2026-09-28
 
 # Estado atual do Prisma
 
+## Reconhecimento profissional determinístico — implementação em validação
+
+O ajuste autorizado de 2026-09-28 avança o cálculo pré-IA para `vacancy-matching-explainable-5.1.0`: ocupação relacionada à referência publicada pode sustentar área/função relacionada, sem comprovar especialização; área ampla sozinha não promove Grupo A quando o núcleo da Posição é mais específico; tempo privilegia períodos ocupacionais relacionados. Pesos e faixas de `matching-score-1.4.0` não mudam. A interface distingue fallback pré-IA da interpretação semântica anterior. A migration aditiva compatibiliza M6.2 com o novo contrato e o semântico 7.0.0. Este parágrafo descreve o código local até o AoT confirmar ou limitar a publicação; não prova implantação.
+
 ## Diagnóstico seguro das duas leituras de trajetória (publicado em produção)
 
 A Edge `matching-trajectory` v9 está ACTIVE com JWT obrigatório e bundle idêntico ao SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` em `main`/GitHub. Emite um evento sanitizado `matching_trajectory_readings` v1 quando uma leitura falha ou as leituras divergem. O evento identifica a análise/tentativa e as etapas de cada leitura, incluindo metadados permitidos do provedor e uso de tokens quando disponíveis. Não contém conteúdo do Perfil, Posição, prompt ou resposta da IA e sua gravação não interfere no matching. CI `36377229062` PASS; POST anônimo retornou 401. Nenhuma migration, UI, prompt, modelo, score ou versão persistida mudou. Falhas anteriores à publicação, inclusive as duas tentativas da Beatriz em 2026-09-28, não ganham diagnóstico retroativo. Contrato e evidência: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0 e `docs/qa/aot-matching-trajectory-diagnostics.md`.
@@ -2754,7 +2758,7 @@ Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor p
 
 Prisma v1.8.1 é a versão de produto registrada e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` permanece e `matching-score-1.4.0` é o contrato atual para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis, com migration M8.4 explicitando 1.3.0 e 1.4.0, sem delivery automático ou nova autorização para uso com Pessoas reais.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; o matching determinístico em implantação é `vacancy-matching-explainable-5.1.0` e `matching-score-1.4.0` mantém pesos/faixas para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis; a extensão 5.1.0/semântica 7.0.0 requer prova de implantação no AoT e não reescreve avaliações antigas.
 
 ## Frontend hospedado — 2026-09-15
 
@@ -3906,7 +3910,7 @@ A descoberta separa três leituras: trajetória profissional, proximidade do car
 
 A proximidade do cargo usa, nesta ordem, a mesma referência oficial, referência equivalente publicada, relação ocupacional publicada e possível relação textual entre o título da Posição, o título profissional e cargos das experiências. A relação textual exige igualdade, inclusão ou dois ou mais termos ocupacionais comuns. Um termo de área isolado, como `marketing`, não transforma `Analista de Marketing` e `Assistente de Marketing` em cargos equivalentes. O operador pode confirmar ou descartar a relação; essa decisão fica auditada, funciona como desempate depois do score e nunca muda o Perfil, a Posição ou a Knowledge.
 
-Todos os Perfis publicados acessíveis são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. `vacancy-matching-explainable-5.0.0` classifica a descoberta antes do score:
+Todos os Perfis publicados acessíveis e com conteúdo profissional utilizável são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. `vacancy-matching-explainable-5.1.0` classifica a descoberta antes do score:
 
 - Grupo A: experiência direta na área ou função equivalente, sustentada por cargo/ocupação e histórico profissional;
 - Grupo B: trajetória adjacente ou transferível; em Posição explicitamente de entrada, formação, projetos ou conhecimentos podem sustentar potencial de entrada;
@@ -3914,13 +3918,15 @@ Todos os Perfis publicados acessíveis são analisados, inclusive quando não h�
 
 Somente A e B recebem Prisma Score comparável. C permanece visível e recolhido por padrão para não apagar conexões úteis, mas não concorre no ranking principal. Zero sinal não é convertido em ausência profissional e não gera resultado. A classificação não decide contratação e a confirmação humana permanece auditada.
 
+Na versão 5.1.0, uma ocupação observada pode sustentar área relacionada quando vinculada a referência/alias publicado da Knowledge. Essa ponte rende 8 pontos de área e relação funcional relacionada, não equivalência nem especialização da Posição. O vínculo textual aproximado continua apenas possível; mesma referência ou equivalência publicada só define função direta quando a referência canônica corresponde ao título específico da Posição. Área ampla, por si só, fica contextual quando não descreve o núcleo do título; Posições sem título usam a área como núcleo disponível. A experiência que sustentou a relação ocupacional prevalece sobre atuação apenas na área ampla ao selecionar períodos. Falha de IA exibe explicitamente o cálculo pré-IA e sua versão, sem chamá-lo de última leitura semântica.
+
 ## Score Prisma de matching
 
 `matching-score-1.4.0` é uma projeção determinística do matching resolvido, disponível somente para os Grupos A e B. Os pesos são área 10, função 25, obrigatórios 35, desejáveis 10, duração da experiência relacionada 10 e recência da experiência relacionada 10. As dimensões são independentes: não há multiplicador, bônus cruzado, veto, prioridade automática ou desempate novo. Dimensão não definida pela Posição fica fora do denominador; os requisitos de cada categoria dividem seu peso igualmente e creditam 100%, 50%, 25% ou 0% para `met`, `partially_met`, `related_signal` ou `no_evidence`. No Grupo C, a conexão por requisito continua rastreável, mas o número agregado retorna indisponível por falta de elegibilidade competitiva da trajetória.
 
 Desde `vacancy-definition-1.2.0`, `unclassified` existe somente durante a preparação de um rascunho assistido. Um requisito incluído manualmente nasce de forma coerente como `required`; qualquer rascunho com requisito ainda não classificado deve exigir a decisão entre obrigatório e desejável antes de salvar. A RPC rejeita novas versões com `unclassified`. Versões históricas permanecem legíveis, e o matching continua explicando suas pendências sem inventar importância.
 
-Área por experiência explícita vale 10; declaração de área sem experiência vinculada suficiente vale 8. Função vale 25/21,25/15/10/0 para mesma função, equivalente, relacionada, contexto profissional corroborado ou nenhuma relação, com ajuste explícito de senioridade escalado na mesma proporção. Senioridade desconhecida nunca é inventada.
+Área por experiência explícita vale 10; declaração ou relação ocupacional de área sem experiência diretamente vinculada suficiente vale 8. Função vale 25/21,25/15/10/0 para mesma função, equivalente, relacionada, contexto profissional corroborado ou nenhuma relação, com ajuste explícito de senioridade escalado na mesma proporção. Senioridade desconhecida nunca é inventada.
 
 As dimensões temporais usam somente experiências já reconhecidas como relacionadas pela avaliação determinística ou, no fluxo semântico, como `backend_execution` ou `software_execution`. Liderança, análise de sistemas, familiaridade com ferramenta, título isolado e contexto comercial não provam execução de programação. Duração soma meses ocupados depois de unir sobreposições, sem dupla contagem: 0 ponto para menos de 12 meses, 3 para 12–<24, 5 para 24–<36, 7 para 36–<60 e 10 para 60 ou mais. Recência vale 10 para atuação atual ou encerrada há menos de 6 meses, 7 para 6–<12, 5 para 12–<18, 3 para 18–<24 e 0 para 24 meses ou mais.
 
@@ -3966,7 +3972,7 @@ Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM tamb
 
 A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avançou o score para `matching-score-1.1.0`, conforme ADR-055. O ADR-057 avança para `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`: trajetória define A/B/C e sinais sem trajetória deixam de produzir score comparável. O M8.4, em `matching-score-1.4.0` e ADR-074, adiciona duração e recência como dimensões independentes, com referência civil explícita, sem reescrever snapshots históricos.
 
-O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. A fronteira aceita snapshots históricos 4.0.0 e atuais 5.0.0, rejeitando qualquer versão desconhecida. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
+O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. A fronteira aceita snapshots determinísticos 4.0.0, 5.0.0 e 5.1.0, além dos semânticos 6.0.0 e 7.0.0; rejeita versão desconhecida. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
 
 ## Normalização conceitual M5.2
 
@@ -5230,6 +5236,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Consistência do reconhecimento profissional (2026-09-28, implementação autorizada): `vacancy-matching-explainable-5.1.0` distingue relação ocupacional publicada de especialização da Posição, impede promoção por área ampla isolada e seleciona períodos da função relacionada antes de períodos contextuais. O `matching-score-1.4.0` conserva pesos/faixas e passa a reconhecer a área relacionada via Knowledge com 8 pontos; o fingerprint registra a nova versão de matching. A migration `20260928190000_matching_recognition_consistency.sql` acrescenta 5.1.0 e o contrato semântico 7.0.0 ao guard M6.2, mantendo snapshots antigos e versões desconhecidas rejeitadas. A interface identifica a origem pré-IA no fallback. Não há nova versão pública numerada de produto neste ajuste; o rollout e seus limites são registrados no AoT próprio.
 
 M8.6 (2026-09-27, implementação autorizada): a interpretação de trajetória avança para `trajectory-position-2.0.0` e `trajectory-evidence-2.0.0`, com `vacancy-matching-semantic-7.0.0`. A mesma leitura vale para qualquer profissão e consulta Knowledge/decisões humanas antes da IA. Perfis sem conteúdo profissional utilizável são excluídos antes do provider; títulos não são veto lexical. `vacancy_versions.experience_policy` registra `not_required`, `required` ou `unspecified`, e `matching-score-1.4.0` omite duração/recência apenas no primeiro caso. A migration `20260927130000_m86_universal_professional_matching.sql` aceita snapshots sem reescrever históricos e cria fila tenant-scoped de propostas para a Inbox, sem publicação automática. Acordo, execução e AoT: `docs/qa/agreement-m86-universal-professional-matching.md`, `docs/qa/execution-m86-universal-professional-matching.md` e `docs/qa/aot-m86-universal-professional-matching.md`.
 
@@ -13329,6 +13337,56 @@ Decisão de versão: sem bump dos contratos persistidos `vacancy-matching-semant
 
 ---
 
+## Source: `docs/qa/agreement-matching-recognition-consistency.md`
+
+# Acordo — consistência do reconhecimento profissional no matching
+
+Versão 1.0.0. Decisão de Bruno em 2026-09-28: corrigir de forma geral para o Prisma SaaS o reconhecimento ocupacional e a apresentação do resultado pré-IA, conforme o diagnóstico da Posição backend. Complementa M8.6 v1.0.0 e o acordo de preservação após falha v1.0.0; não os substitui.
+
+## DEVE
+
+- D-01 — Uma relação ocupacional rastreável deve manter o mesmo grau de segurança ao informar área, função, grupo e períodos usados no score. Referência/alias Knowledge aprovado pode apoiar relação relacionada; título aproximado sozinho não comprova equivalência nem especialização.
+- D-02 — Área profissional ampla, sem relação suficiente com o núcleo da Posição, não promove uma trajetória ao Grupo A. Experiência direta ou funcionalmente equivalente continua em A; relacionada em B; somente contexto em C.
+- D-03 — Duração e recência usam períodos das experiências realmente relacionadas à função quando elas existem. Evidência de área ampla não deve substituir uma experiência ocupacional mais específica para pontuar tempo.
+- D-04 — Após falha da IA, preservar integralmente o cálculo pré-IA da consulta, identificando-o como tal e mostrando sua versão. Não apresentá-lo como a última interpretação semântica válida de outra versão.
+- D-05 — Versionar a mudança no matching determinístico; snapshots históricos permanecem legíveis e não são reescritos. O score mantém seus pesos e faixas aprovados.
+
+## PROIBIDO
+
+- P-01 — Inferir especialização backend, ferramentas, requisitos, atividade atual, senioridade ou equivalência global a partir de título, família, palavra ou área genérica.
+- P-02 — Alvo personalizado de pontos ou ordenação para Pessoas reais; mutação de Perfil, Posição, Knowledge, decisão humana ou snapshot anterior.
+- P-03 — Aceitar cache incompatível, enfraquecer tenant/autoridade, transformar falha de IA em zero ou ocultar a limitação do cálculo pré-IA.
+
+## FORA DE ESCOPO
+
+- F-01 — Alterar prompt/modelo, política de acionamento/custo da IA, pesos/faixas, requisitos da Posição ou curadoria da Knowledge.
+- F-02 — Reprocessar registros reais ou criar novas relações globais automaticamente.
+
+## AUTONOMIA
+
+- A-01 — Engenharia escolhe as heurísticas conservadoras, estados explicáveis, versão aditiva, testes sintéticos contrastados e publicação seletiva dentro dos limites acima.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 / D-01–D-03 — Casos sintéticos de programador/desenvolvedor de software versus backend preservam relação profissional sem inventar backend; área ampla isolada não vira A. Casos negativos de programador de produção, venda de software, outro domínio e ferramenta isolada não viram equivalência.
+- CA-02 / D-03 — Períodos de função relacionada determinam duração/recência; atuação atual somente contextual não torna programação histórica recente. Datas indeterminadas não viram zero factual.
+- CA-03 / D-04 — Busca, comparação e detalhe distinguem explicitamente cálculo pré-IA vigente de interpretação semântica anterior; falha preserva todos os campos e resposta válida permanece inalterada.
+- CA-04 / D-05 — Versões históricas e nova versão são aceitas onde necessário; runtime web/Edge concorda; testes negativos de contrato, tenant e snapshot continuam passando. QA proporcional, release seletivo e smoke seguro precedem a declaração de produção.
+
+## Mapa de impacto inicial
+
+Baseline: `main` em `75b3dc52fbb11d5ae2e1e1308ad6e29eadf74896`; Posição backend v3, Perfis v5/v1; snapshots semânticos de 25/09 B/47 para ambos e snapshots pré-IA de 28/09 A/40 e B/20. Quatro itens não rastreados do usuário preservados.
+
+| Área | Relação | Capacidade a preservar e prova |
+| --- | --- | --- |
+| Matching determinístico e score | direct | Grupos, evidência, tempo e pesos; casos contrastados e negativos |
+| Busca, comparação e detalhe | direct | Aviso fiel à origem/versão; resposta válida e falha |
+| Runtime gerado Edge e snapshots M6.2 | critical_transversal | Mesma regra, versão aceita, histórico, autorização e tenant |
+| Outras profissões e Knowledge publicada | plausible_indirect | Sem equivalência por setor, título ou ferramenta; corpus sintético |
+| Perfis, Parser, requisitos e curadoria | no_impact_identified | Nenhuma escrita ou alteração de fonte; revisão do diff |
+
+---
+
 ## Source: `docs/qa/agreement-matching-trajectory-diagnostics.md`
 
 # Acordo — diagnóstico seguro da interpretação de trajetória v1.0.0
@@ -16216,6 +16274,63 @@ SHA funcional `a20bd84dd1f25eacb9e216f5dcbb230626fdbb8a` na branch `codex/matchi
 ## Conclusão
 
 `PARTIAL`: correção implementada e publicada com testes e verificações de infraestrutura aprovados; o resultado visual autenticado com os Perfis reais não foi exercitado para evitar reanálise e custo de IA.
+
+---
+
+## Source: `docs/qa/aot-matching-recognition-consistency.md`
+
+# AoT — consistência do reconhecimento profissional
+
+Contrato: `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0, preservando M8.6 v1.0.0 e fallback v1.0.0. Baseline: `75b3dc52fbb11d5ae2e1e1308ad6e29eadf74896` em `main`/`origin/main` antes do movimento. Esta evidência é sintética; não mede nem altera Pessoas reais.
+
+## Matriz de Acordos
+
+| ID | Implementação | Prova | Status / limite |
+| --- | --- | --- | --- |
+| D-01 | Relação ocupacional alimenta área, função, trajetória e seleção de períodos com nível relacionado, mantendo referência/alias publicado e origem. | `matchingScore.test.ts`: programador/desenvolvedor, referência genérica e casos negativos. | PASS sintético; não valida o conjunto real de aliases da Posição. |
+| D-02 | Área ampla isolada não promove A quando o título define núcleo mais específico. Relação publicada genérica não comprova backend. | Testes de backend sintético, Marketing e Gerente de Tecnologia. | PASS sintético. |
+| D-03 | Períodos de função relacionada prevalecem sobre liderança/área contextual; nenhuma alteração nas faixas temporais. | Contraste sintético com programação histórica e liderança atual; `m84ScoreTemporal.test.ts`. | PASS sintético. |
+| D-04 | Avisos de busca/comparação e tag de detalhe nomeiam cálculo pré-IA vigente e versão; fallback mantém objeto calculado. | `matchingScore.test.ts` verifica textos; `semanticTriage.test.ts` verifica falha e resposta válida. | PASS local; tela autenticada real não exercida para evitar IA sobre Pessoas. |
+| D-05 | Matching 5.1.0 versionado; score 1.4.0 sem novos pesos; runtime web/Edge gerado; M6.2 amplia allowlist sem reescrever registros. | Teste estático e PostgreSQL 17 descartável, baseline remoto lido, verificador de runtime, testes de snapshot. | PARTIAL até aplicação e leitura remota da migration; validação SQL local PASS. |
+
+## Proibições
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | Negativos: programador de produção, venda de software/Tecnologia, outro domínio, desenvolvedor genérico e Knowledge genérica não viram backend direto; requisitos sem evidência. | PASS sintético. |
+| P-02 | Diff sem escrita de Perfil, Posição, Knowledge, decisão humana ou snapshot; pontuação não usa nome/identidade. | PASS no diff local. |
+| P-03 | Testes de versão desconhecida, tenant/autoridade/caches da Edge e falha de IA; guard SQL conserva rejeição de versões desconhecidas. | PASS local, com stub isolado da função M6.2. |
+
+## Mapa de Impacto e Preservação
+
+| Área | Relação | Baseline protegido | Regressão e estado |
+| --- | --- | --- | --- |
+| Matching/score | direct | 5.0.0, score 1.4.0, A/B/C e pesos existentes | 81 testes dirigidos PASS após correção de regressões; contraste 5.1.0. |
+| Busca, comparação e detalhe | direct | Falha de IA não elimina resultado | Teste de fallback e textos PASS; render autenticado não testado. |
+| Edge e M6.2 | critical_transversal | Snapshot servidor, tenant, autoridade, histórico e guard de versão | 32 testes Deno PASS; migration em PostgreSQL 17 descartável PASS, com versions, desconhecida, ACL e SECURITY DEFINER. |
+| Outras profissões/Knowledge | plausible_indirect | Equivalência publicada específica, sem inferência por setor/ferramenta | Regressão de Marketing/Sistemas/Tecnologia e negativos PASS; corpus real não reprocessado. |
+| Parser, requisitos e curadoria | no_impact_identified | Fontes e decisões humanas intactas | Diff sem alterações nessas superfícies; testes de requisito existentes PASS. |
+
+Dependência descoberta após o mapa inicial: M6.2 ainda não aceitava `vacancy-matching-semantic-7.0.0`; a migration inclui essa versão já publicada, além de 5.1.0. Nenhuma nova autoridade/tenant foi criada. Não há referência visual normativa para a alteração de texto do aviso; as imagens do incidente são contraexemplos de classificação.
+
+## Fora de escopo e limitações
+
+F-01/F-02 preservados no diff: sem mudança de prompt/modelo/acionamento da IA, pesos/faixas, requisitos, Knowledge, Perfis ou reprocessamento real. Os quatro itens não rastreados do usuário identificados no início ficaram intocados.
+
+`initdb` falhou inicialmente sob o sandbox do Windows; em execução autorizada fora dele, criou-se PostgreSQL 17 descartável em `localhost`. A migration foi aplicada a uma função M6.2 mínima com o predicado original e testada para 4.0.0, 5.0.0, 5.1.0, semântica 6.0.0/7.0.0 e versão desconhecida; grants e `SECURITY DEFINER` permaneceram. A primeira asserção de ACL confundiu o grant do dono com o público; a asserção foi corrigida e passou sem mudar a migration. O teste não reconstrói todas as dependências da função real. A definição de produção foi consultada somente para leitura e continha o guard esperado. O cluster foi parado e as duas pastas temporárias criadas nesta tentativa foram removidas.
+
+## Validação e publicação
+
+- `pnpm run build`, `pnpm run typecheck:web`, `pnpm run build:web`: PASS.
+- 81 testes de matching, taxonomia, triagem semântica, score temporal, migration estática e inteligência da Posição: PASS.
+- 32 testes Deno de handler/snapshot Edge: PASS.
+- Teste estático e execução da migration em PostgreSQL descartável: PASS.
+- `pnpm run check:matching-runtime` e `pnpm run check:prisma-context`: PASS após geração.
+- Publicação, CI e smoke: pendentes nesta etapa do AoT. Não declarar produção até confirmação remota.
+
+## Desvios e conclusão
+
+Nenhum desvio funcional intencional do contrato. Regressões intermediárias nos testes de equivalência Knowledge e Posição sem título foram corrigidas antes deste fechamento; os testes respectivos voltaram a passar. Resultado local ainda PARTIAL pelo rollout; atualizar este AoT com SHA e evidência remota após a publicação.
 
 ---
 
@@ -20201,6 +20316,14 @@ Validar antes de liberar: corpus sintético separado da calibração; positivos/
 # Execução — preservação do matching após falha da IA
 
 Fonte obrigatória: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler integralmente antes da implementação. O resultado pré-IA deve sobreviver a qualquer tentativa sem resposta válida (D-01/P-01/P-02/P-03); a tela informa a falha e identifica o Perfil (D-02); leitura válida continua versionada (D-03). A política de chamadas, o provedor, Knowledge, score, dados persistidos e schema ficam fora do movimento (F-01/F-02). A implementação da anotação transitória é delegada (A-01). Comprovar CA-01 a CA-03 e registrar AoT com evidência local e de release.
+
+---
+
+## Source: `docs/qa/execution-matching-recognition-consistency.md`
+
+# Execução — consistência do reconhecimento profissional
+
+Implementar integralmente `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0 e preservar `docs/qa/agreement-m86-universal-professional-matching.md` v1.0.0 e `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler os contratos completos antes de atuar. Aplicar D-01–D-05 e P-01–P-03; respeitar F-01–F-02 e autonomia A-01. Fechar CA-01–CA-04 com AoT rastreável, revisão do diff, testes dirigidos, Context Pack e release somente das superfícies exigidas pelo plano. Não usar dados reais como fixture nem produção como ambiente de teste.
 
 ---
 

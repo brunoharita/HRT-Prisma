@@ -185,7 +185,7 @@ export function calculateMatchingScore(input: MatchingScoreInput): MatchingScore
 
 function scoreArea(applicable: boolean, relation: VacancyAreaRelation): MatchingScoreDimension {
   if (!applicable) return emptyDimension("area", "A Posição não definiu área profissional; os 10 pontos ficam fora do denominador.");
-  const earnedPoints = relation.status === "experience_area" ? 10 : relation.status === "profile_area" ? 8 : 0;
+  const earnedPoints = relation.status === "experience_area" ? 10 : relation.status === "profile_area" || relation.status === "occupation_area" ? 8 : 0;
   return {
     key: "area",
     earnedPoints,
@@ -378,7 +378,7 @@ function validateVersions(input: MatchingScoreInput, scoreContractVersion: strin
   if (!input.positionVersion.trim() || !Number.isSafeInteger(input.positionVersionNumber) || input.positionVersionNumber < 1) return "A versão da Posição é desconhecida; o score não foi calculado.";
   if (!input.profileVersion.trim() || !Number.isSafeInteger(input.profileVersionNumber) || input.profileVersionNumber < 1) return "A versão do Perfil é desconhecida; o score não foi calculado.";
   const semantic = ["vacancy-matching-semantic-6.0.0", "vacancy-matching-semantic-7.0.0"].includes(input.matchingContractVersion);
-  if (!semantic && input.matchingContractVersion !== "vacancy-matching-explainable-5.0.0") return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
+  if (!semantic && !["vacancy-matching-explainable-5.0.0", "vacancy-matching-explainable-5.1.0"].includes(input.matchingContractVersion)) return "A versão do contrato de matching não é reconhecida; o score não foi calculado.";
   if (scoreContractVersion !== MATCHING_SCORE_CONTRACT_VERSION) return "A versão do contrato de score não é reconhecida; o score não foi calculado.";
   if (semantic && !input.interpretationReference?.trim()) return "A interpretação versionada da trajetória não está disponível; o score não foi calculado.";
   if (parseReferenceMonth(input.referenceDate) === null) return "A data de referência do score é desconhecida ou inválida; o score não foi calculado.";

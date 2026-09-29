@@ -1,0 +1,3 @@
+# Execução — consistência do reconhecimento profissional
+
+Implementar integralmente `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0 e preservar `docs/qa/agreement-m86-universal-professional-matching.md` v1.0.0 e `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler os contratos completos antes de atuar. Aplicar D-01–D-05 e P-01–P-03; respeitar F-01–F-02 e autonomia A-01. Fechar CA-01–CA-04 com AoT rastreável, revisão do diff, testes dirigidos, Context Pack e release somente das superfícies exigidas pelo plano. Não usar dados reais como fixture nem produção como ambiente de teste.

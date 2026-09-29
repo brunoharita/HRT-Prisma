@@ -8,6 +8,10 @@ last_verified: 2026-09-28
 
 # Estado atual do Prisma
 
+## Reconhecimento profissional determinístico — implementação em validação
+
+O ajuste autorizado de 2026-09-28 avança o cálculo pré-IA para `vacancy-matching-explainable-5.1.0`: ocupação relacionada à referência publicada pode sustentar área/função relacionada, sem comprovar especialização; área ampla sozinha não promove Grupo A quando o núcleo da Posição é mais específico; tempo privilegia períodos ocupacionais relacionados. Pesos e faixas de `matching-score-1.4.0` não mudam. A interface distingue fallback pré-IA da interpretação semântica anterior. A migration aditiva compatibiliza M6.2 com o novo contrato e o semântico 7.0.0. Este parágrafo descreve o código local até o AoT confirmar ou limitar a publicação; não prova implantação.
+
 ## Diagnóstico seguro das duas leituras de trajetória (publicado em produção)
 
 A Edge `matching-trajectory` v9 está ACTIVE com JWT obrigatório e bundle idêntico ao SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` em `main`/GitHub. Emite um evento sanitizado `matching_trajectory_readings` v1 quando uma leitura falha ou as leituras divergem. O evento identifica a análise/tentativa e as etapas de cada leitura, incluindo metadados permitidos do provedor e uso de tokens quando disponíveis. Não contém conteúdo do Perfil, Posição, prompt ou resposta da IA e sua gravação não interfere no matching. CI `36377229062` PASS; POST anônimo retornou 401. Nenhuma migration, UI, prompt, modelo, score ou versão persistida mudou. Falhas anteriores à publicação, inclusive as duas tentativas da Beatriz em 2026-09-28, não ganham diagnóstico retroativo. Contrato e evidência: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0 e `docs/qa/aot-matching-trajectory-diagnostics.md`.
@@ -132,7 +136,7 @@ Alternativa intermediária no mesmo diagnóstico: trocar apenas o reconhecedor p
 
 Prisma v1.8.1 é a versão de produto registrada e publicada. O frontend está hospedado em `https://prisma.hrtsolutions.com.br` e usa o único backend remoto de produção, projeto Prisma `ioldpnqqvobprjiontre` (Prisma-QA é nome legado); não existe homologação remota separada. CBO `CBO 2002-2025-06-06`, ESCO 1.2.1 e O*NET 31.0 estão publicados e correntes, com monitoramento separado da publicação. Knowledge research está ativa pela fronteira server-side; o Parser IA M5.7 permanece experimental, com worker loopback acessível somente pela ponte hospedada autenticada; geração externa de itens de avaliação continua desativada; embeddings vetoriais não existem.
 
-Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; `vacancy-matching-explainable-5.0.0` permanece e `matching-score-1.4.0` é o contrato atual para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis, com migration M8.4 explicitando 1.3.0 e 1.4.0, sem delivery automático ou nova autorização para uso com Pessoas reais.
+Posições usam `vacancy-definition-1.3.0` no novo fluxo M7.1, preservando versões históricas; o matching determinístico em implantação é `vacancy-matching-explainable-5.1.0` e `matching-score-1.4.0` mantém pesos/faixas para novas avaliações. A trajetória profissional define A/B/C antes dos requisitos: A é direta, B é relacionada/transferível e C contém somente sinais contextuais. Somente A e B recebem score comparável; C permanece recolhido e rastreável. A jornada M6.2 aceita snapshots históricos compatíveis; a extensão 5.1.0/semântica 7.0.0 requer prova de implantação no AoT e não reescreve avaliações antigas.
 
 ## Frontend hospedado — 2026-09-15
 
