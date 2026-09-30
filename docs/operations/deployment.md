@@ -1,5 +1,7 @@
 # Deployment
 
+Triagem seletiva antes da IA publicada em 29/09: SHA funcional `3fd1a8703bcd717f5b597515785ededd32281b75` em `main`/GitHub/VPS, CI `36652901031` PASS. Plano 1.0.1 sem banco: somente Edge `matching-trajectory` v11 ACTIVE/JWT (12 arquivos idênticos ao bundle local, hash `c8679df77e97fb90dccd9c1a3e5670061953276bbacad1728d19c51237a01b04`) e `prisma-web`. POST anônimo da Edge 401. Web imagem `sha256:d7b5d6d13b38b4ea13f81e1e1cbbcde95d912c3a68eda5ec4ad27494bfc21805`, `running`, zero reinícios; `/`, `/login` e `/index.html` 200 após 404 transitório no smoke imediato. Rollback web `prisma-web:rollback-before-3fd1a8703bcd`. Sem chamada autenticada a IA em Perfil real; não há medida de latência para 100 currículos reais. Evidência: `docs/qa/aot-matching-selective-semantic-triage.md`.
+
 Diagnóstico da IA no matching publicado em 28/09: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` no `main`/GitHub, CI `36377229062` PASS. Plano seletivo publicou somente Edge `matching-trajectory` v9, ACTIVE/JWT obrigatório, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`; 12 arquivos conferidos com a origem. POST anônimo retornou 401. Sem migration, web/VPS ou chamada autenticada a IA em Perfil real. Logs anteriores não contêm a nova etapa. Evidência: `docs/qa/aot-matching-trajectory-diagnostics.md`.
 
 ## Estado

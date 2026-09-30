@@ -28,15 +28,15 @@ Contrato: `docs/qa/agreement-matching-selective-semantic-triage.md` v1.0.0; exec
 | Capacidade / área | Relação | Baseline | Regressão executada | Status |
 | --- | --- | --- | --- | --- |
 | Descoberta e triagem | direct | Lista aguardava IA; gate aceitava todo conteúdo utilizável | 72 testes Node dirigidos, sete trilhas e 100 Perfis sintéticos | PASS |
-| Lista, progresso, comparação e decisão | direct | Resposta única após IA; seleção e decisão humanas presentes | Callback inicial/por Perfil, build web, inspeção da UI e preservação de decisões | PARTIAL |
-| Edge, auth, tenant, cache e snapshot | critical_transversal | Edge v9/JWT; reconstituição server-side | 32 testes Deno, incluindo negativos antes de cache/provedor; smoke remoto pendente | PARTIAL |
+| Lista, progresso, comparação e decisão | direct | Resposta única após IA; seleção e decisão humanas presentes | Callback inicial/por Perfil, build web, inspeção da UI, preservação de decisões, bundle publicado e HTTP 200 | PASS |
+| Edge, auth, tenant, cache e snapshot | critical_transversal | Edge v10/JWT; reconstituição server-side | 32 testes Deno, negativos antes de cache/provedor, v11 ACTIVE/JWT, 12 arquivos idênticos e POST anônimo 401 | PASS |
 | Score, requisitos, Knowledge | plausible_indirect | Fórmula e Knowledge publicadas | Score dirigido, 1.205 linhas paginadas e falha fechada | PASS |
 | Parser e publicação de Perfil | no_impact_identified | Fontes publicadas somente lidas | Diff sem escrita nesses fluxos; apenas leitura autorizada | PASS |
-| Release web/Edge | direct | Produção em SHA anterior | Plano e publicação pendentes | NOT TESTED |
+| Release web/Edge | direct | Produção em `77068e9` e Edge v10 | Plano 1.0.1: sem banco, só `matching-trajectory` e `prisma-web`; CI PASS, main/GitHub/VPS no SHA funcional, HTTP 200 e zero reinícios | PASS |
 
 ### Novidade e preservação
 
-- Entrega local comprovada: descoberta ampla, gate seletivo também na Edge e resultados iniciais/progressivos com falha preservada.
+- Entrega comprovada por testes e publicação: descoberta ampla, gate seletivo na Edge e resultados iniciais/progressivos com falha preservada.
 - Capacidades preservadas: pesos e versões do Prisma Score, separação das evidências, decisões humanas e proteção tenant/versionamento nos testes dirigidos.
 - Dependência descoberta durante o movimento: paginação de observações da Knowledge e Evidências Demonstradas para não truncar silenciosamente um lote de 100. Incorporada ao mapa como dependência direta da triagem confiável.
 - Limitações: o corpus é sintético e não mede tempo de Supabase, provedor ou navegador com 100 currículos reais; nomenclaturas profissionais inéditas podem precisar de curadoria. Não foi feita avaliação paga em Pessoas reais.
@@ -54,7 +54,7 @@ Não aplicável: não foi fornecida referência visual normativa; a mudança ada
 
 ## Desvios do contrato
 
-Nenhum desvio identificado na implementação local. Evidência de implantação e smoke ainda pendentes; não declarar movimento concluído enquanto o mapa tiver `PARTIAL` ou `NOT TESTED`.
+Nenhum desvio de regra identificado. O smoke HTTP automático do script recebeu 404 imediatamente após a recriação, mas verificação subsequente confirmou `/`, `/login` e `/index.html` com 200, contêiner `running` e zero reinícios. O procedimento não testou a lista autenticada com Pessoas reais para evitar gasto de IA; isso é limitação de evidência, não prova de falha ou de latência real.
 
 ## Mudanças autorizadas durante a execução
 
@@ -62,12 +62,12 @@ Nenhuma mudança adicional de decisão do Product Owner após a aprovação da t
 
 ## Validação local
 
-`pnpm run typecheck`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint`, `pnpm run check:matching-runtime`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`; 72 testes Node dirigidos e 32 testes Deno de `matching-trajectory`. Registrar os resultados finais e o SHA no fechamento.
+`pnpm run typecheck`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint`, `pnpm run check:matching-runtime`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`; 72 testes Node dirigidos e 32 testes Deno de `matching-trajectory`. O CI `36652901031` executou a fundação completa, ledger, script seletivo e auditoria de dependências com resultado PASS. Duas tentativas anteriores de CI detectaram Context Pack gerado com documento não rastreado da pasta local; os exports foram regenerados num checkout isolado e limpo, sem tocar naquele documento, antes do CI aprovado.
 
 ## Git / QA / ambiente
 
-Branch `codex/occupational-ai-triage`. Sem ambiente remoto QA separado: Supabase e VPS existentes são produção, apesar do rótulo legado Prisma-QA. Gate QA executado com fixtures sintéticas locais; verificação remota deve ser proporcional e sem IA paga em Perfis reais.
+SHA funcional `3fd1a8703bcd717f5b597515785ededd32281b75` integrado por fast-forward em `main`, `origin/main` e `/opt/prisma` da VPS. Sem ambiente remoto QA separado: Supabase e VPS existentes são produção, apesar do rótulo legado Prisma-QA. Gate QA com fixtures sintéticas locais, sem LLM ou banco real. Edge `matching-trajectory` v11 ACTIVE, `verify_jwt=true`, bundle `c8679df77e97fb90dccd9c1a3e5670061953276bbacad1728d19c51237a01b04`; os 12 arquivos remotos são idênticos ao bundle local e POST anônimo retornou 401. Web `prisma-web` imagem `sha256:d7b5d6d13b38b4ea13f81e1e1cbbcde95d912c3a68eda5ec4ad27494bfc21805`, `running`, zero reinícios; rollback `prisma-web:rollback-before-3fd1a8703bcd` preservado. `models/` não rastreado na VPS e os quatro itens não rastreados do checkout principal permaneceram intactos.
 
 ## Conclusão
 
-Entrega local em validação; release e smoke ainda pendentes.
+Implementação, integração e publicação concluídas nas superfícies planejadas, com smoke técnico proporcional. A busca autenticada com Perfis reais, o tempo com 100 currículos e a taxa de falsos negativos ocupacionais não foram medidos; não há promessa de SLA ou recall universal.
