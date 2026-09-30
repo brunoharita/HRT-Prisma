@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 304
-source_manifest_sha256: fe12770e880401aea4ae3b7919eef288cafdd6f9e6be21442221e312d9c8fb00
+documentation_source_count: 308
+source_manifest_sha256: a70c3eb8b251553789cc5fa6ed20c94c15f0167958691017d0fdbf21fb2923e3
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.14
-last_verified: 2026-09-29
+version: 2.51.15
+last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
+
+## Último par de leituras da interpretação — implementação local, publicação pendente
+
+O novo contrato `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 guarda no cache da análise somente o último par estruturado de uma tentativa por Perfil/versão da Posição/chave de fontes. Leitura validada guarda categorias e IDs de evidência, não a resposta bruta; leitura falha guarda etapa e motivo tipificados. Um retry substitui o par anterior. Uma nova RPC de conclusão grava resultado e par na mesma transação, preservando o contrato legado, RLS, grants, fallback e ausência do par na resposta ao navegador. Testes locais Deno (28), typecheck Deno/TypeScript e SQL transacional do M83 nos prompts 1.1/1.2 passaram; o baseline da função claim foi conferido em leitura remota. Não há backfill de tentativas antigas, nova consulta à IA, mudança de grupo/score/modelo/prompt ou tela de auditoria. Produção ainda não foi atualizada por este movimento; confirmar release e smoke antes de declarar ativo.
 
 ## Avisos causais da interpretação — publicados em produção
 
@@ -3906,6 +3910,8 @@ As relações semânticas são `direct`, `equivalent`, `related`, `entry_potenti
 Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox existente da Knowledge com termo original, relação, evidência e versões. A proposta não publica alias ou relação global automaticamente.
 
 Quando uma tentativa de interpretação por IA não produz leitura válida, a busca conserva integralmente o matching determinístico calculado antes da tentativa. Busca e comparação identificam os Perfis afetados e explicam a causa pública efetivamente conhecida, o efeito nos resultados e a ação disponível, sem chamar toda indeterminação de discordância nem atribuir falha interna ao provedor. Causa desconhecida é declarada desconhecida. Grupo, score, relações e evidências anteriores permanecem; a falha não constitui classificação semântica ou fato negativo sobre a Pessoa. O ajuste original de fallback não alterou o contrato persistido nem a rubrica de uma resposta válida; a política de acionamento posterior é a triagem seletiva descrita acima. Acordos específicos: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0 e `docs/qa/agreement-matching-causal-notices.md` v1.0.0.
+
+O cache da interpretação conserva o último par de leituras estruturadas por Perfil, versão da Posição e chave de fontes/método/prompt/modelo. Cada leitura validada retém apenas categoria por trecho e ID da evidência, com modelo resolvido; uma leitura inválida retém somente etapa e motivo tipificados. Uma nova tentativa dessa chave substitui o par anterior. A gravação é atômica com a conclusão, não altera o consenso nem o cálculo pré-IA e não expõe o par ao navegador. Registros anteriores não recebem backfill; este campo não é a resposta bruta do provedor nem um histórico permanente de tentativas. Contrato específico: `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0.
 
 ## Saída por requisito
 
@@ -9858,6 +9864,8 @@ O M5.6 adiciona `document_intelligence_runs` para rota selecionada/efetiva, modo
 
 Na Edge `matching-trajectory`, tentativas com falha ou discordância emitem um único evento JSON `matching_trajectory_readings` v1 após as duas leituras terminarem. `analysisId` e `attempt` correlacionam o evento com o cache; cada leitura informa `outcome`, `stage`, motivo limitado, HTTP status, provider status, incomplete reason e contagens de tokens quando disponíveis. Valores vindos do provedor são reduzidos a listas fechadas ou números limitados. Não se registra nome/ID da pessoa, conteúdo profissional, posição, prompt, citação, resposta bruta ou mensagem livre de erro. A falha do logger não modifica o resultado; leituras bem-sucedidas sem discordância e respostas vindas somente do cache não geram evento. O evento fica apenas no log operacional da Edge, não no banco nem na resposta ao navegador. Logs antigos `RESPONSE_INVALID` continuam sem etapa recuperável. Versões de prompt, método e score permanecem as mesmas.
 
+Separadamente do evento de log, `matching_trajectory_assessments.last_reading_pair` v1 conserva apenas o último par estruturado por chave de cache, com IDs de trecho/evidência e categorias válidas ou etapa/motivo de falha. O cache já guarda organização, Perfil, versão da Posição, fontes, modelo, tentativa e horário; o novo campo não duplica texto profissional nem resposta bruta. A escrita é transacional com a conclusão da análise; novos retries substituem o par. A tabela continua sem SELECT para `anon`, `authenticated` e `service_role`, com RLS; a Edge não inclui o par na resposta pública. Auditoria histórica de pares e tela de consulta permanecem fora do escopo. Exclusão do Perfil ou da versão da Posição continua a remover o cache em cascata.
+
 ## Alertas planejados
 
 Cross-tenant denial anômalo, pico de exportação, falhas de Auth, custo por tenant, timeout, regressão, revisão manual crescente, parser failure e indisponibilidade de provider.
@@ -13369,6 +13377,257 @@ Decisão de versão: sem bump dos contratos persistidos `vacancy-matching-semant
 
 ---
 
+## Source: `docs/qa/agreement-matching-all-positions.md`
+
+# Proposta — Interpretação de trajetória aplicável a qualquer Posição
+
+## Objetivo, autoridade e estado
+
+Versão 0.3.0. Estado: `draft`, com premissa fundamental D-12 aprovada explicitamente. Bruno solicitou a ampliação além do piloto backend, a revisão para universalidade e, depois, determinou: «minha preocupação é uma premissa fundamental. Essa melhoria só faz sentido se o Prisma conseguir isso — pode considerar o auxílio de IA também para solucionar essa premissa».
+
+Esta revisão substitui a proposta 0.2.0, não os contratos de runtime vigentes. A aprovação da premissa D-12 não aprova por extensão todas as demais mudanças propostas, especialmente política temporal, senioridade e alcance/custo da descoberta. Não foi produzido prompt final de execução nem alterado runtime ou ambiente remoto.
+
+Objetivo: interpretar a relação entre evidências publicadas de uma Pessoa e o trabalho descrito em uma Posição, qualquer que seja a profissão. Disponibilidade ampla não significa qualidade universal comprovada. Ambiguidade, ausência de dados e falhas continuam explícitas.
+
+Premissa central de valor: reconhecer relações profissionais sustentadas mesmo com cargos, nomenclaturas e descrições diferentes. Apenas habilitar novas profissões, repetir correspondência textual ou depender de um dicionário exaustivo de sinônimos não atende ao objetivo. A IA está autorizada como recurso de interpretação semântica para resolver essa premissa, mantendo evidência, rastreabilidade e os limites das conclusões.
+
+## Diagnóstico verificado
+
+- Categorias, prompt e explicações atuais são específicos de software/backend. O motor semântico seleciona a experiência de maior pontuação, o que não representa adequadamente uma Posição híbrida.
+- A triagem A/B anterior à IA pode excluir uma trajetória reconhecível apenas semanticamente. Essa é uma limitação estrutural possível; sua taxa de perdas em produção não foi medida nesta revisão.
+- Duração/recência hoje são aplicadas a todos os elegíveis; ausência de experiência com período determinável torna o score indisponível. Isso conflita com Posições que dispensam experiência anterior.
+- A identificação de entrada usa palavras do título, incluindo assistente e júnior. Título isolado não define dispensa de experiência.
+- Liderar software é relação indireta com programação no piloto. Para uma Posição de liderança, gerir pode ser a própria atuação direta.
+- Manter backend sob exceção permanente conservaria significados diferentes entre profissões. Preservar histórico e evidências é obrigatório; congelar resultados numéricos do piloto para sempre não é o objetivo.
+
+Fontes: `src/domain/semanticTrajectory.ts`, `web/src/domain/semanticMatching.ts`, `web/src/domain/vacancy.ts`, `web/src/domain/matchingScore.ts`, contrato de matching e ADR-060.
+
+## Recomendação e alternativas
+
+Adotar um contrato comum orientado ao trabalho da Posição. Reutilizar o pipeline, fontes, motor determinístico, cache, telas e Knowledge existentes. CBO/ESCO/O*NET publicados, aliases e relações aprovadas auxiliam a nomenclatura; não criar outra taxonomia ou equivalência global produzida pela IA.
+
+Separar função, domínio/setor, responsabilidade/autonomia, requisitos específicos, natureza da evidência e condições da Posição. São eixos descritivos, não novos pesos nem hierarquia entre profissões.
+
+Retirar somente o gate é inadequado porque conserva a rubrica backend. Manter um catálogo manual de rubricas por profissão implica liberações e manutenção contínuas. O contrato comum permite novas profissões e nomes incomuns, com contexto específico e avaliação por domínios, sem lista fechada de cargos.
+
+## DEVE — comportamento proposto
+
+### D-01 — Entender o trabalho solicitado
+
+Usar título, missão, responsabilidades, resultados, contexto e requisitos da versão publicada da Posição, sem exigir um segundo cadastro integral.
+
+O título informa a função, mas não vence uma descrição explicitamente contraditória. Cargo inequívoco sustenta a atividade que nomeia, não todas as ferramentas, tarefas, credenciais ou níveis associados à profissão. Cargo genérico sem domínio necessita contexto para concluir.
+
+Atividades operacionais, técnicas, analíticas, criativas, comerciais, de atendimento, ensino, pesquisa e gestão não têm superioridade automática. Gestão é atuação direta quando a Posição pede gestão; dirigir quem executa não prova execução pessoal, e executar não prova gestão.
+
+### D-02 — Reutilizar taxonomia sem inventar evidência
+
+Mesmo setor, mesma família ocupacional e função equivalente são relações distintas. Referências e aliases aprovados auxiliam a interpretação, sem transformar um vínculo Pessoa/Posição em alias global.
+
+Competência típica de uma ocupação não prova que a Pessoa a possui. Referência ocupacional não acrescenta exigência não adotada pelo operador. Ausência de referência taxonômica não impede análise de trabalho suficientemente descrito.
+
+### D-03 — Preservar natureza e proveniência da evidência
+
+Cada relação liga uma atividade da Posição a trechos literais do Perfil, com fonte/versão, participação atribuível quando disponível e incertezas. Citação apenas da Pessoa, sem ligação com a Posição, não basta para justificar a relação.
+
+Separar atuação realizada, formação, prática/projeto, conhecimento declarado e evidência demonstrada/validada. Perfil publicado não equivale a verificação externa automática. Campos repetidos do mesmo Perfil não são fontes independentes.
+
+Experiência profissional não se limita a emprego formal: atuação autônoma, serviço, empreendimento, estágio e voluntariado podem demonstrar trabalho pertinente. Titularidade/participação nominal não basta sem atividade atribuível. Projeto acadêmico/pessoal pode provar prática específica; não vira automaticamente vínculo profissional, tempo de emprego ou domínio de todo o contexto da Posição.
+
+### D-04 — Classificar relações, preservando grupos e cálculo separados
+
+A IA produz categorias de relação e evidências, sem nota livre: direta, equivalência funcional sustentada, transferível/adjacente, contextual, nenhuma relação identificada e indeterminada. Natureza da atividade e tipo de evidência continuam separados da relação.
+
+Transferência deve mostrar o que foi realizado, qual demanda da Posição isso ajuda a atender e o que não foi comprovado. Prestígio, hierarquia, repetição, tamanho do texto e conhecimento genérico da profissão não substituem evidência.
+
+| Saída | Regra proposta |
+| --- | --- |
+| A — trajetória diretamente compatível | Atuação realizada sustenta o núcleo funcional, diretamente ou por equivalência contextual demonstrada. Mesmo setor/nome parecido não bastam. A não significa todos os requisitos atendidos ou aprovação para contratação. |
+| B — trajetória relacionada ou potencial de entrada | Há atividade transferível/adjacente ou formação/prática/conhecimento que sustenta entrada conforme a Posição. Explicitar o fundamento. |
+| C — sinais contextuais | Conexão rastreável sem trajetória ou potencial de entrada suficiente para comparação competitiva. Consultável e sem score comparável. |
+| Sem relação identificada | Fontes avaliadas não sustentaram conexão; não significa incapacidade e permanece auditável no universo consultado. |
+| Indeterminado | Informação material insuficiente, contradição ou divergência. Não converter automaticamente em B, C ou última posição. |
+| Não avaliado/falha | Estado operacional separado: análise não ocorreu ou não foi concluída. Não é conclusão profissional. |
+
+A nota é calculada deterministicamente, não expressa probabilidade de sucesso ou empregabilidade. Requisito faltante não muda sozinho a natureza da trajetória.
+
+### D-05 — Representar funções híbridas e trajetórias múltiplas
+
+Preservar todos os componentes centrais explicitamente definidos na Posição. A IA pode organizar o conteúdo, mas não eleger silenciosamente essencialidades nem reduzir o cargo à parte mais fácil de comparar. Ambiguidade material do núcleo deve ser esclarecida.
+
+Quando dois componentes forem centrais, A exige atuação direta/equivalente sustentada em ambos. Evidência de apenas um sustenta relação parcial/B quando determinável; ambiguidade da composição permanece indeterminada. Isso não transforma cada requisito específico em condição para A.
+
+Experiências distintas podem sustentar componentes distintos, mas não comprovam atuação simultânea, mesma escala ou responsabilidade integrada. Contradições não são apagadas selecionando a melhor experiência. Experiências históricas e transições de carreira permanecem consideradas.
+
+### D-06 — Separar entrada, experiência e senioridade
+
+A política de experiência deriva da Posição: aceita primeira experiência, exige experiência anterior ou não definida. Assistente/júnior não significam dispensa automática. Sugestão derivada deve ser rastreável; inconsistência material exige decisão na Posição, sem inventar exigências.
+
+Formação/prática em projeto, isoladamente, pode sustentar potencial de entrada/B. Trabalho profissional real em estágio, serviço ou voluntariado pode sustentar A quando o núcleo estiver demonstrado, sem exigir vínculo formal. A natureza da fonte permanece explícita.
+
+Senioridade/autonomia não se deduzem de idade, anos de carreira ou prestígio. Recomenda-se retirar penalidade automática por suposta sobrequalificação ou distância entre títulos. Exigência explícita de nível/autonomia continua examinada com evidência. Esse ponto modifica a regra legada e depende de aprovação/versionamento.
+
+### D-07 — Tornar a aplicabilidade temporal uma propriedade da Posição
+
+Preservar pesos nominais 10/25/35/10/10/10 como baseline. A aplicabilidade de duração/recência pertence à versão da Posição e é idêntica para todas as Pessoas comparadas; não depende de quem tem mais dados.
+
+Recomendação: quando a Posição dispensa experiência anterior, duração e recência não entram na comparação. Quando exige experiência, duração aplica-se à atuação pertinente; recência só se aplica com critério explícito de atualidade da prática. Versões legadas conservam a política anterior até revisão/versionamento, sem migração semântica silenciosa.
+
+Dimensão não aplicável sai do denominador com normalização e explicação. Informação ausente em dimensão aplicável não sai para melhorar a nota. Ausência de períodos publicados não prova zero meses. Faixa temporal aplicável indeterminável conserva indisponibilidade do agregado e exibe dimensões determinadas; retirar essa restrição exigiria outro acordo.
+
+Unir intervalos sobrepostos sem dupla contagem. Duração de calendário não é carga horária/intensidade. Sazonalidade/intermitência não vira intervalo contínuo usando apenas anos extremos. Uma atividade iniciada dentro de um vínculo longo não herda todo o vínculo. Preservar originais, precisão, leitor de anos abreviados e data de referência.
+
+Não misturar scores de políticas/versões diferentes como comparáveis. A aplicabilidade muda o cálculo e requer contrato novo; não é apenas uma troca de prompt.
+
+### D-08 — Manter requisitos, habilitações e condições explícitos
+
+Reutilizar o método atual de requisitos. A relação profissional não confirma automaticamente tecnologia, licença, certificação, idioma ou habilitação. Exigências obrigatórias e pendências permanecem visíveis com qualquer score. Título/declaração não comprovam validade ou vigência de credencial.
+
+Condição da Posição, como local, modalidade e jornada, não prova disponibilidade da Pessoa. O que não foi avaliado permanece não avaliado. Não inferir personalidade, saúde, idade, origem ou outros atributos sensíveis. Não decidir contratação, rejeição ou elegibilidade legal automaticamente.
+
+### D-09 — Retirar A/B como veto prévio à interpretação
+
+Recomenda-se avaliar os Perfis publicados/autorizados no escopo explícito da busca sem corte silencioso pelo grupo, título ou score do método anterior.
+
+Heurísticas, taxonomia e aliases podem organizar o processamento, mas ausência de correspondência lexical não demonstra irrelevância. Perfil sem conteúdo profissional utilizável recebe insuficiência de dados registrada, sem chamada inútil; isso não significa ausência de relação.
+
+Usar lotes, concorrência limitada, cache compatível e retomada; não iniciar reprocessamento global independente da busca. Mais Perfis poderão exigir análise que no gate A/B atual, com aumento potencial de custo/latência a aprovar e medir. Cobertura parcial não pode ser apresentada como consulta integral. A política financeira existente continua, sem novo contador paralelo.
+
+Esse ponto supersederia o gate ocupacional de D-01/D-02 e P-02 do acordo de triagem M8.3, mantendo autorização, fontes e isolamento.
+
+### D-10 — Preservar segurança, estabilidade e história
+
+Reutilizar função/motor existentes, contexto mínimo, cache por tenant/Perfil/Posição/método/prompt/modelo, validação literal, duas leituras com concordância exigida e snapshot autoritativo servidor. Concordância não prova correção nem constitui fonte independente.
+
+Contexto de formação/prática, quando necessário, mantém origem e minimização; não enviar currículo integral nem pesquisar externamente Pessoas.
+
+Novas avaliações usam contrato comum, inclusive backend quando validado. Snapshots anteriores conservam métodos/valores. Mudanças de classificação/score precisam ser explicadas e verificadas; nunca impor resultado por nome de Pessoa. O corpus backend segue obrigatório, com diferenças esperadas somente após aprovação explícita da nova regra.
+
+### D-11 — Explicar e validar o resultado
+
+Reutilizar lista/comparação/detalhe. Apresentar atividade da Posição ligada à evidência da Pessoa, relação, fonte, limites, períodos e critérios aplicáveis. Ordenar por grupo/score apenas resultados comparáveis. Pendência operacional não é baixo desempenho. Preservar a retirada dos avisos redundantes já aprovada; incompletude real de consulta deve continuar identificável.
+
+Testar casos contrastados e um conjunto separado dos usados na calibração do prompt. Separar cálculo determinístico, qualidade semântica, estabilidade, cobertura da descoberta e segurança. Nem abstenção universal nem promoção genérica de toda conexão a A são sucesso.
+
+### D-12 — Reconhecer significado profissional além da nomenclatura — premissa aprovada
+
+Reconhecer o trabalho e a relação entre funções mesmo quando a Posição e o Perfil usam palavras, títulos ou descrições diferentes. O caso desenvolvedor/programador, dentro do mesmo domínio e com atividades equivalentes, é um critério obrigatório; não apenas um exemplo opcional ou ajuste cosmético.
+
+Reutilizar aliases/relações aprovados quando disponíveis. Quando não forem suficientes, permitir que a IA interprete as atividades, responsabilidades, domínio e contexto, ligando evidências dos dois lados. Não depender da criação manual de um alias para cada forma de descrever o mesmo trabalho. A classificação resultante é uma interpretação contextual deste par Pessoa/Posição, não uma equivalência global automaticamente gravada na Knowledge.
+
+A interpretação deve distinguir: mesma função sob nomenclatura diferente; funções relacionadas dentro de uma família; especializações distintas; e semelhança apenas verbal. Reconhecer uma família não confirma automaticamente todas as especializações, ferramentas, habilitações ou requisitos.
+
+Se somente a nomenclatura/paráfrase mudar, preservando significado profissional, contexto, atividade atribuível, períodos e demais evidências relevantes, a relação, o grupo e o score devem permanecer equivalentes. A decisão deve apoiar-se no significado sustentado, e não no tamanho/interseção de palavras. Contradições ou mudanças reais de escopo podem e devem alterar o resultado quando justificadas.
+
+Quando há evidência suficiente para reconhecer a relação, classificá-la como indeterminada, sem relação ou apenas contextual por falta de correspondência lexical constitui falha. Abstenção permanece correta para casos realmente ambíguos/insuficientes, mas não pode ser usada como estratégia para passar a validação dos casos positivos.
+
+Liberação condicionada a prova funcional e semântica dessa capacidade, incluindo conjunto de aceitação previamente definido, exemplos separados da calibração, invariância de nomenclatura e negativos de falsa equivalência. Se os casos obrigatórios dessa premissa falharem, a expansão permanece não aceita. Concordância entre duas leituras ou disponibilidade de endpoint não substitui essa prova, nem representa garantia de acerto em todo caso futuro.
+
+## Exemplos propostos para validação
+
+| Posição e evidência | Resultado a demonstrar |
+| --- | --- |
+| Desenvolvedor de sistemas / Programador de sistemas, com mesmo trabalho e contexto | Reconhecer a equivalência funcional e não reduzir grupo/score pela nomenclatura. |
+| Desenvolvedor backend / Programador backend, com atividades equivalentes descritas por paráfrases | Mesma conclusão profissional e pontuação com as demais evidências mantidas, inclusive sem alias pré-cadastrado. |
+| Programador ABAP / Desenvolvedor backend | Reconhecer atuação relacionada em software sem inventar especialização backend, APIs ou ferramentas não demonstradas. |
+| Programador de produção / Desenvolvedor de software | Não presumir equivalência pela palavra compartilhada; distinguir atividades/domínios presentes nas fontes. |
+| Gerência logística / gestão explícita de armazenagem, equipes e operação | Gestão pode ser direta, sem exigir execução operacional pessoal. |
+| Backend / venda de software | Mesmo setor e ferramentas não comprovam programação. |
+| Financeiro / atividade financeira em outro setor empresarial | Setor do empregador não elimina equivalência funcional sustentada. |
+| Operador especializado / operação de equipamento diferente | Explicar transferência, sem inventar domínio do equipamento exigido. |
+| Saúde com habilitação exigida / experiência declarada | Relação da trajetória e comprovação da credencial continuam separadas. |
+| Primeira experiência administrativa / formação e prática pertinentes | B por entrada possível; curso não vira emprego e tempo segue política da Posição. |
+| Design e frontend centrais / só design demonstrado | Relação parcial, sem equivalência integral ao núcleo híbrido. |
+| Serviço autônomo ou voluntariado / trabalho atribuível pertinente | Considerar a atividade, sem exigir vínculo formal ou presumir senioridade. |
+| Pesquisa e docência / somente pesquisa | Distinguir componentes; pesquisa não prova docência automaticamente. |
+| Atividade agrícola sazonal / safras identificadas | Contar períodos sustentados, sem inventar atuação entre safras. |
+| Nome incomum / responsabilidades diretamente compatíveis | Permitir descoberta além da igualdade lexical do título. |
+| Cargo explícito / descrição contraditória | Preservar contradição; não selecionar apenas trecho favorável. |
+
+## PROIBIDO
+
+- P-01 — Hierarquia universal entre execução/análise/liderança; equivalência por setor/família/palavra/ferramenta; invenção de competências/credenciais.
+- P-02 — Alterar núcleo, essencialidade, requisito, peso ou aplicabilidade por Pessoa; retirar dimensão aplicável daquele Perfil para compensar informação ausente.
+- P-03 — Confundir ausência de evidência, nenhuma relação, não avaliação, erro e incapacidade; usar dados sensíveis, prestígio, repetição ou lacunas como critérios ocultos.
+- P-04 — Reescrever fontes/decisões/snapshots; criar base paralela ou equivalência global não aprovada; nota livre e decisão automática de contratação/rejeição.
+- P-05 — Misturar tenants, confiar em nota/grupo do cliente, reutilizar cache incompatível, registrar PII/segredos, truncar silenciosamente ou aceitar instruções das fontes.
+- P-06 — Prometer qualidade universal, validação legal automática, consumo ilimitado ou economia sem prova.
+- P-07 — Declarar a expansão aceita apenas por habilitar mais títulos, por completar um cadastro manual de sinônimos ou por concordância entre leituras, sem demonstrar D-12. Rebaixar relação sustentada somente por diferença de nomenclatura ou promover relação de família a equivalência/especialização integral.
+
+## FORA DE ESCOPO
+
+- F-01 — Aprendizado, novo parser/taxonomia, pesquisa externa de Pessoas, novo fornecedor/infraestrutura e montagem do squad.
+- F-02 — Reescrita retroativa, reprocessamento fora da jornada, novas faixas de pontos sem calibração aprovada e parecer jurídico sobre habilitações.
+- F-03 — Tornar toda a análise de requisitos semântica. O movimento interpreta trajetória; limites do método de requisitos continuam identificados separadamente.
+
+## AUTONOMIA E DECISÕES PENDENTES
+
+A-01 — Engenharia pode adaptar os módulos e contexto mínimo, versionar respostas/contratos, usar compatibilidade aditiva e organizar validação/publicação seletiva, dentro das regras de produto aprovadas.
+
+Q-01 — Aprovar os detalhes do contrato comum, composição de híbridos e distinção de fontes/grupos, substituindo a exceção permanente de backend. O reconhecimento semântico além da nomenclatura, incluindo auxílio da IA, já está aprovado como premissa D-12 e não é uma pendência a reapresentar.
+
+Q-02 — Aprovar retirada do gate A/B, com mais análises possíveis por busca e medição de custo/latência/cobertura.
+
+Q-03 — Aprovar política temporal por Posição e retirada da penalidade automática de sobrequalificação, com contrato novo e compatibilidade. Os pesos nominais seguem como baseline; aplicabilidade muda a nota.
+
+As decisões podem ser aprovadas como pacote ou separadamente. Se alguma for recusada, explicitar o limite resultante. Detalhes técnicos e limiares de avaliação serão concretizados após decisão e antes de liberar; não são resultados validados neste rascunho.
+
+## Critérios de aceite
+
+- CA-01 / D-01–D-06 — Corpus contrastado operacional, artesanal, técnico, comercial, administrativo, criativo, científico, gerencial, de entrada e híbrido; transição de carreira e trabalho não formal incluídos. Resultados esperados/proibições definidos por caso.
+- CA-02 / D-04–D-06 — Variação linguística do mesmo trabalho preserva relação; mudança factual pode alterá-la. Negativos impedem equivalência por setor, hierarquia ou ferramenta.
+- CA-03 / D-05 — Uma parte não comprova todo o híbrido; experiências separadas não comprovam simultaneidade; requisito faltante não muda sozinho a natureza da trajetória.
+- CA-04 / D-07 — Mesma política por versão da Posição; entrada, desconhecido, ausência explícita, sobreposição, sazonalidade, anos abreviados e mudança de função são casos distintos.
+- CA-05 / D-08 — Requisito/habilitação sem evidência continua explícito com qualquer score; condição da vaga não vira disponibilidade comprovada.
+- CA-06 / D-09 — Casos antes C/fora por nomenclatura alcançam interpretação com contexto suficiente; medir cobertura, chamadas, latência, cache e retomada.
+- CA-07 / D-10 — Negativos de tenant/autoridade, fonte alterada, versão desconhecida, citações inválidas, discordância, concorrência e injeção; snapshot e aplicação compartilham regra; histórico legível.
+- CA-08 / D-11 — Avaliação separada da calibração mede erros de grupo, falsas equivalências, perdas de descoberta, abstenções e citações; critérios de liberação e resultados documentados antes do rollout.
+- CA-09 — Checks dirigidos, Context Pack depois do acordo/implementação material, CI, SHA coerente, smoke e rollback. Sem dados reais adulterados/criados só para teste.
+- CA-10 / D-12 — Pares críticos desenvolvedor/programador no mesmo domínio, títulos pouco usuais e descrições parafraseadas, com relações esperadas fixadas antes da avaliação, devem ser reconhecidos mesmo sem correspondência literal ou alias cadastrado. Indeterminação nos casos positivos suficientemente descritos não conta como sucesso.
+- CA-11 / D-12 — Testes de invariância alteram somente nomenclatura e redação semanticamente equivalente, mantendo atividades, períodos e demais evidências: relação/grupo/score permanecem equivalentes. Negativos mudam domínio, autoria da atividade, especialização ou incluem contradição e verificam distinção, sem vincular sucesso a nomes reais de Pessoas.
+- CA-12 / D-12 e P-07 — Medir separadamente relações legítimas reconhecidas/perdidas, equivalências indevidas, abstenções e citações válidas no conjunto de avaliação separado da calibração; comparar com o método anterior. Critérios quantitativos adicionais devem ser fixados antes da avaliação final e não relaxados depois de falhas. Todos os casos críticos obrigatórios devem satisfazer os resultados definidos; percentual global não pode ocultar uma falha dessa premissa.
+- CA-13 / D-12 — Exercitar a jornada completa de descoberta, interpretação, cálculo, comparação e reabertura para os casos críticos. Acerto isolado do prompt não basta se o Perfil for excluído antes da análise ou se a tela/snapshot perder a relação encontrada.
+
+## Mapa de impacto e preservação preliminar
+
+Baseline local: `98bb6cc919d1c90dac04a0bf7e2cf1d6cc1674d2`, matching semântico 6.0.0, score 1.4.0 e prompt 1.2.0. Estado remoto não revalidado nesta revisão documental. Arquivos locais preexistentes não rastreados preservados.
+
+| Área | Relação | Impacto/prova prevista |
+| --- | --- | --- |
+| Posição/versionamento | direct | Núcleo/política temporal; mesma regra para todos e versões preservadas |
+| Descoberta | direct | Universo autorizado além de A/B; cobertura, custo e retomada |
+| Interpretação/grupos | direct | Relações e múltiplas evidências; premissa D-12, invariância de nomenclatura, casos fora da calibração e negativos de falsa equivalência |
+| Score/tempo/senioridade | direct | Política por Posição; determinismo, nova versão e comparabilidade |
+| Lista/comparação/detalhe | direct | Explicações/aplicabilidade/cobertura; jornada desktop/mobile |
+| Auth/RLS/PII/cache/snapshot | critical_transversal | Contexto mínimo ampliado; negativos, contratos e smoke |
+| Knowledge/M7.1 | plausible_indirect | Leitura/proveniência; nenhuma equivalência ou escrita global nova |
+| Requisitos/verificações | plausible_indirect | Mesmo método e vínculo de evidência; nenhuma confirmação por score |
+| Parser/publicação de Perfil | no_impact_identified | Consumo de versões publicadas, sem escrita; revisar fluxo/minimização |
+| Release | direct | Web, função e compatibilidade; plano seletivo e rollback |
+
+Sem referência visual normativa nova. Preservar composição atual, alterando apenas o necessário para explicar o método e sua aplicabilidade.
+
+## Custo, limites e sequência
+
+É uma evolução de matching/score, não um toggle. Reutiliza fundações, mas alcança descoberta, fontes de evidência, grupos, política da Posição, tempo, servidor e apresentação. Não há estimativa quantitativa confiável de esforço/chamadas sem dimensionar o universo e avaliar o corpus.
+
+Depois de aprovado: congelar acordo/aceite; implementar em branch isolada; validar em ambiente local/de testes disponível; comparar casos sem reescrever fontes; liberar uma versão coerente com evidência e rollback. Todas as profissões podem ficar disponíveis sem alegar que todas foram empiricamente validadas.
+
+## Referências
+
+- Prisma: contrato de matching, ADR-060, ADR-073, acordos M8.3 e código inspecionado.
+- [OIT/ISCO](https://isco.ilo.org/en/isco-08/): ocupação definida pela semelhança de tarefas/responsabilidades.
+- [ESCO](https://esco.ec.europa.eu/en/about-esco/escopedia/escopedia/two-pillar-structure-esco): ocupações e competências/conhecimentos relacionados, com conceitos distintos.
+- [O*NET](https://www.onetcenter.org/content.html): atividades, contexto e requisitos relacionados ao trabalho.
+
+Fontes externas apoiam a estrutura conceitual; não validam score, grupos, política temporal ou qualidade do Prisma. Essas são propostas próprias para aprovação e teste.
+
+## Aprovação e execução
+
+D-12 aprovado como premissa fundamental pelo Product Owner, incluindo o uso de IA como recurso de interpretação. A capacidade ainda não está comprovada para a expansão. Q-01–Q-03 permanecem abertos nas partes não resolvidas por essa decisão. Apenas este rascunho foi revisado. Nenhuma implementação de runtime, teste de modelo, alteração remota, commit, push ou deploy foi executado.
+
+---
+
 ## Source: `docs/qa/agreement-matching-causal-notices.md`
 
 # Acordo — avisos causais da interpretação no matching v1.0.0
@@ -13412,6 +13671,52 @@ Decisão explícita de Bruno em 2026-09-29: os avisos devem dizer o que ocorreu,
 | Edge, banco, Knowledge, parser e dados reais | no_impact_identified | Sem mudança nessas superfícies | Revisão de diff e plano de release |
 
 Decisão de versão: redação transitória da UI, sem alteração de contrato persistido ou prompt/modelo; o próprio acordo é v1.0.0.
+
+---
+
+## Source: `docs/qa/agreement-matching-last-reading-pair.md`
+
+# Acordo — último par de leituras da interpretação por IA v1.0.0
+
+Decisão de Bruno em 2026-09-30: registrar somente o último par de uma checagem de Perfil para uma versão da Posição, para auditoria posterior. Este movimento estende o cache sem mudar a interpretação ou a interface.
+
+## DEVE
+
+- D-01 — Após cada tentativa concluída, conservar no registro tenant-scoped da análise o último par ordenado de leituras. Uma tentativa posterior da mesma chave substitui o par, sem histórico adicional de pares.
+- D-02 — Para leitura validada, conservar apenas classificação por trecho e referência de evidência, modelo resolvido e índice da leitura; para leitura inválida, apenas etapa e motivo tipificados. Conservar versões, tentativa e horário já presentes no registro da análise.
+- D-03 — A gravação acompanha a conclusão autorizada da análise na mesma transação; falha de gravação não pode confirmar leitura sem seu par. A classificação consensual, fallback pré-IA, triagem, score e decisões humanas não mudam.
+
+## PROIBIDO
+
+- P-01 — Não guardar resposta bruta, prompt, currículo integral, erro livre do provedor, segredo ou texto de evidência duplicado no novo campo.
+- P-02 — Não expor o par em respostas ao navegador ou a papéis sem autoridade; não usar o par para mudar grupo, score ou resultado.
+- P-03 — Não reinterpretar registros anteriores nem gerar chamadas de IA só para preencher auditoria.
+
+## FORA DE ESCOPO
+
+- F-01 — Tela de auditoria, política de retenção de histórico por tentativa, alteração de modelo/prompt/retry, reprocessamento de Perfis reais e mudança de regras de matching.
+
+## AUTONOMIA
+
+- A-01 — Formato compacto e caminho interno de gravação, reutilizando cache e autorização existentes.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — Par concordante e divergente, resposta inválida e modelo divergente são gravados sem texto bruto; o navegador só recebe o resultado anterior.
+- CA-02 — Nova tentativa substitui o último par, tentativas/cache antigos seguem sem backfill; deleção de Perfil ou versão da Posição remove o par com o cache.
+- CA-03 — Chamada sem lease, usuário sem acesso, par malformado e leitura não sustentada são recusados; RLS e privilégios continuam restritos.
+
+## Mapa de impacto inicial
+
+| Área | Relação | Baseline | Preservação/validação |
+| --- | --- | --- | --- |
+| Edge de duas leituras e conclusão | direct | `main` antes deste movimento, duas leituras sem par persistido | Testes Deno de acordo/divergência/falha e resposta pública |
+| Cache PostgreSQL, RPC, grants e ciclo de vida | direct | M8.3/M8.6, RLS e lease; apenas leitura acordada persistida | SQL de forma, lease, tenant, substituição e cascade |
+| Privacidade e autoridade | critical_transversal | Conteúdo profissional minimizado no cache, sem acesso direto de cliente | Testes negativos, revisão de campos e grants |
+| Fallback, snapshot, Knowledge, score | plausible_indirect | Resultado pré-IA preservado em falha | Regressão focada do handler e snapshot |
+| UI, prompt, modelo, dados de produção | no_impact_identified | Sem alteração pretendida | Inspeção do diff e plano de release |
+
+Estado: aprovado para implementação por pedido explícito de Bruno; nenhuma nova decisão material pendente neste escopo.
 
 ---
 
@@ -16524,6 +16829,56 @@ Branch `codex/matching-causal-notices` a partir de `main` `81743ad`; SHA funcion
 ## Conclusão
 
 Regras de aviso entregues e publicadas. Disponibilidade pública comprovada; apresentação autenticada com Perfis reais não foi verificada para evitar custo e reprocessamento.
+
+---
+
+## Source: `docs/qa/aot-matching-last-reading-pair.md`
+
+# AoT — último par de leituras da interpretação por IA
+
+Contrato: `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0. Baseline: `main` em `a7009e3` antes deste movimento; cache M8.3/M8.6 com leitura consensual única, motivo `READINGS_DISAGREE` sem categorias de cada lado. Escopo de dados: Perfil/versão da Posição/chave de fontes; sem reprocessamento de Pessoas.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | `last_reading_pair` no cache versionado; retry substitui somente o par da mesma chave | SQL transacional local: primeira/segunda tentativa, par divergente e completo | PASS |
+| D-02 | Edge envia categorias e IDs de evidência validados ou etapa/motivo tipificados; banco guarda modelo, par e tentativa | 28 testes Deno, typecheck Deno; SQL local rejeita campo de resposta livre/IDs inválidos | PASS |
+| D-03 | RPC `complete_matching_trajectory_audited` chama a conclusão existente e grava par na mesma transação; resultado continua próprio | SQL transacional local, testes de fallback/snapshot Edge, grants e versão corrente | PASS |
+
+## Proibições verificadas
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | Testes Deno não encontram marcadores de nome, empregador, email, citação ou texto privado no par; SQL rejeita campo extra | PASS |
+| P-02 | RPC sem `EXECUTE` para `anon`/`authenticated`; tabela sem SELECT para eles ou `service_role`; claim exclui o par; Edge retorna campos explícitos | PASS |
+| P-03 | Nenhum backfill/IA adicional no diff; registros antigos mantêm campo nulo | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade | Relação | Baseline | Regressão | Status |
+| --- | --- | --- | --- | --- |
+| Duas leituras, consenso e fallback | direct | Edge usava duas leituras e descartava o par | 28 testes Deno; divergência mantém `reading=null` | PASS |
+| Cache, lease, retry, grants e cascade | direct | Cache M83, três tentativas, RLS | SQL M83 prompts 1.1/1.2 e cadeia local M83→M86→2.1, com rollback | PASS |
+| Privacidade e autoridade | critical_transversal | Dados minimizados, RPC service-only | Rejeição de role/lease/par malformado/ator revogado, sem texto bruto | PASS |
+| Snapshot, Knowledge, score | plausible_indirect | Snapshot dependente da leitura consensual | Regressão do handler e SQL M83; sem alteração de cálculo | PASS |
+| UI, prompt/modelo, dados reais | no_impact_identified | Sem mudança pedida | Diff não altera tais superfícies; sem chamadas pagas | PASS |
+
+## Fora de escopo
+
+F-01: sem tela, política nova de retenção, histórico de pares, backfill, ajuste de prompt/modelo/retry ou reprocessamento. PASS.
+
+## Validação e limites
+
+`deno test` (28/28), `deno check` da Edge/testes, `pnpm run typecheck` e SQL PostgreSQL 17 local transacional passaram. O SQL exercitou M83 nos prompts 1.1/1.2 e a cadeia posterior M84/M86/reconhecimento/2.1. A produção foi consultada apenas para conferir identidade da função claim e ausência de `EXECUTE` autenticado; nenhum registro de Pessoa foi lido ou alterado. O campo novo fica nulo em caches anteriores. Evidência de modelo real e consulta futura da auditoria por UI não integram este movimento.
+
+## Git / QA / ambiente
+
+Pendente: checks de fechamento, commit/CI, publicação seletiva, verificação remota e sincronização.
+
+## Desvios
+
+Nenhum identificado no escopo local. Estado de produção ainda pendente.
 
 ---
 
@@ -20708,6 +21063,14 @@ Validar antes de liberar: corpus sintético separado da calibração; positivos/
 # Execução — preservação do matching após falha da IA
 
 Fonte obrigatória: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler integralmente antes da implementação. O resultado pré-IA deve sobreviver a qualquer tentativa sem resposta válida (D-01/P-01/P-02/P-03); a tela informa a falha e identifica o Perfil (D-02); leitura válida continua versionada (D-03). A política de chamadas, o provedor, Knowledge, score, dados persistidos e schema ficam fora do movimento (F-01/F-02). A implementação da anotação transitória é delegada (A-01). Comprovar CA-01 a CA-03 e registrar AoT com evidência local e de release.
+
+---
+
+## Source: `docs/qa/execution-matching-last-reading-pair.md`
+
+# Execução — último par de leituras
+
+Implementar integralmente `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 (D-01..03, P-01..03, F-01, A-01, CA-01..03). Reutilizar o cache tenant-scoped, preservar o contrato anterior de conclusão e não publicar os dados de auditoria para o navegador. Validar no domínio Edge e na fronteira SQL com casos negativos. Registrar a rastreabilidade e limites no AoT correspondente antes do fechamento.
 
 ---
 

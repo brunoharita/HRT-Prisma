@@ -16,6 +16,8 @@ Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox ex
 
 Quando uma tentativa de interpretação por IA não produz leitura válida, a busca conserva integralmente o matching determinístico calculado antes da tentativa. Busca e comparação identificam os Perfis afetados e explicam a causa pública efetivamente conhecida, o efeito nos resultados e a ação disponível, sem chamar toda indeterminação de discordância nem atribuir falha interna ao provedor. Causa desconhecida é declarada desconhecida. Grupo, score, relações e evidências anteriores permanecem; a falha não constitui classificação semântica ou fato negativo sobre a Pessoa. O ajuste original de fallback não alterou o contrato persistido nem a rubrica de uma resposta válida; a política de acionamento posterior é a triagem seletiva descrita acima. Acordos específicos: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0 e `docs/qa/agreement-matching-causal-notices.md` v1.0.0.
 
+O cache da interpretação conserva o último par de leituras estruturadas por Perfil, versão da Posição e chave de fontes/método/prompt/modelo. Cada leitura validada retém apenas categoria por trecho e ID da evidência, com modelo resolvido; uma leitura inválida retém somente etapa e motivo tipificados. Uma nova tentativa dessa chave substitui o par anterior. A gravação é atômica com a conclusão, não altera o consenso nem o cálculo pré-IA e não expõe o par ao navegador. Registros anteriores não recebem backfill; este campo não é a resposta bruta do provedor nem um histórico permanente de tentativas. Contrato específico: `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0.
+
 ## Saída por requisito
 
 | Estado | Regra |

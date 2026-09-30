@@ -30,6 +30,8 @@ type ReadingDiagnostic = {
   outcome: "validated" | "failed"; stage: ReadingStage; reasonCode?: string; httpStatus?: number;
   providerStatus?: string; incompleteReason?: string; inputTokens?: number; outputTokens?: number;
 };
+type AuditedReading = { outcome: "validated"; model: string; items: Array<{ id: string; activity: string; evidenceId: string }> }
+  | { outcome: "failed"; stage: ReadingStage; reasonCode: string };
 type TrajectoryDiagnosticEvent = {
   event: "matching_trajectory_readings"; version: 1; analysisId: string; attempt: number | null;
   stage: "reading_failure" | "model_disagreement" | "readings_disagree";
@@ -81,12 +83,17 @@ function evidenceFailure(value: unknown, context: SemanticContext): boolean {
       ? row.evidenceId !== "" : !entry.segments.some(segment => segment.id === row.evidenceId));
   });
 }
-function readingDiagnostic(result: PromiseSettledResult<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic }>): ReadingDiagnostic {
+function readingDiagnostic(result: PromiseSettledResult<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic; audit: AuditedReading }>): ReadingDiagnostic {
   if (result.status === "fulfilled") return result.value.diagnostic;
   const error = result.reason;
   return error instanceof ReadingError
     ? { outcome: "failed", reasonCode: error.message, ...error.diagnostic }
     : { outcome: "failed", reasonCode: "RESPONSE_INVALID", stage: "internal" };
+}
+function auditedReading(result: PromiseSettledResult<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic; audit: AuditedReading }>): AuditedReading {
+  if (result.status === "fulfilled") return result.value.audit;
+  const diagnostic = readingDiagnostic(result);
+  return { outcome: "failed", stage: diagnostic.stage, reasonCode: diagnostic.reasonCode ?? "RESPONSE_INVALID" };
 }
 function emitDiagnostic(deps: Dependencies, event: TrajectoryDiagnosticEvent): void {
   try {
@@ -94,7 +101,7 @@ function emitDiagnostic(deps: Dependencies, event: TrajectoryDiagnosticEvent): v
     else console.warn(JSON.stringify(event));
   } catch { /* Optional telemetry must never affect the assessment. */ }
 }
-async function reading(context: SemanticContext, model: string, key: string, deps: Dependencies): Promise<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic }> {
+async function reading(context: SemanticContext, model: string, key: string, deps: Dependencies): Promise<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic; audit: AuditedReading }> {
   let response: Response;
   try {
     response = await deps.fetch("https://api.openai.com/v1/responses", {
@@ -131,7 +138,12 @@ async function reading(context: SemanticContext, model: string, key: string, dep
     try { return readTrajectoryEvidenceResponse(parsed, context); }
     catch { return fail(evidenceFailure(parsed, context) ? "reading_evidence" : "reading_contract"); }
   })();
-  return { reading: validReading, model: resolvedModel, diagnostic: { outcome: "validated", ...diagnostic, stage: "validated" } };
+  const items = (record(parsed).items as unknown[]).map(item => {
+    const row = record(item);
+    return { id: row.id as string, activity: row.activity as string, evidenceId: row.evidenceId as string };
+  });
+  return { reading: validReading, model: resolvedModel, diagnostic: { outcome: "validated", ...diagnostic, stage: "validated" },
+    audit: { outcome: "validated", model: resolvedModel, items } };
 }
 
 export async function handleMatchingTrajectory(request: Request, deps: Dependencies): Promise<Response> {
@@ -216,6 +228,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     if (result.acquired === true) {
       if (!allowCompute || !key) return unavailable("AI_DISABLED");
       let status = "unavailable", reason: string | null = null, agreed: SemanticReading | null = null, actualModel: string | null = null;
+      let lastReadingPair: [AuditedReading, AuditedReading] | null = null;
       try {
         // Both independent requests settle before releasing the lease, including a failed sibling.
         const settled = await Promise.allSettled([
@@ -223,6 +236,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
           reading({ ...context, entries: [...context.entries].reverse() }, model, key, deps),
         ]);
         const [a, b] = settled;
+        lastReadingPair = [auditedReading(a), auditedReading(b)];
         const diagnostics: [ReadingDiagnostic, ReadingDiagnostic] = [readingDiagnostic(a), readingDiagnostic(b)];
         const diagnosticStage = a.status === "rejected" || b.status === "rejected" ? "reading_failure"
           : a.value.model !== b.value.model ? "model_disagreement"
@@ -243,8 +257,9 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
         const code = error instanceof Error ? error.message : "";
         reason = ["PROVIDER_UNAVAILABLE", "RESPONSE_INVALID", "PROVIDER_TIMEOUT"].includes(code) ? code : "RESPONSE_INVALID";
       }
-      const completion = await service.rpc("complete_matching_trajectory", { p_actor_id: actor.id, p_analysis_id: result.id,
-        p_lease: result.lease, p_status: status, p_reading: agreed, p_reason_code: reason, p_actual_model_version: actualModel });
+      const completion = await service.rpc("complete_matching_trajectory_audited", { p_actor_id: actor.id, p_analysis_id: result.id,
+        p_lease: result.lease, p_status: status, p_reading: agreed, p_reason_code: reason, p_actual_model_version: actualModel,
+        p_reading_pair: lastReadingPair });
       if (completion.error || !completion.data) return unavailable("COMPLETION_UNAVAILABLE");
       result = record(completion.data);
     }

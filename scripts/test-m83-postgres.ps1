@@ -4,10 +4,12 @@ if ($Database -notmatch '^m72_semantic_trajectory_[a-z0-9_]+$') { throw 'Only th
 # Existing baseline only. Never resets a database or replays the historical migration ledger.
 # M72 fixture rolls back; M83 supplies its own synthetic fixture inside this transaction.
 $migrations = (Get-Content -Raw supabase/migrations/20260925150000_m83_semantic_trajectory.sql) + "`n" +
-  (Get-Content -Raw supabase/migrations/20260925190000_m83_prompt_compatibility.sql)
+  (Get-Content -Raw supabase/migrations/20260925190000_m83_prompt_compatibility.sql) + "`n" +
+  (Get-Content -Raw supabase/migrations/20260930111000_matching_last_reading_pair.sql)
 foreach ($promptVersion in @('trajectory-evidence-1.1.0','trajectory-evidence-1.2.0')) {
   $sql = "begin;`n" + $migrations + "`nselect set_config('m83_test.prompt_version','$promptVersion',true);`n" +
-    (Get-Content -Raw supabase/qa/m83_semantic_trajectory_verification.sql) + "`nrollback;"
+    (Get-Content -Raw supabase/qa/m83_semantic_trajectory_verification.sql) + "`n" +
+    (Get-Content -Raw supabase/qa/matching_last_reading_pair_verification.sql) + "`nrollback;"
   $sql | & 'C:/Program Files/PostgreSQL/17/bin/psql.exe' -X -h 127.0.0.1 -p $Port -U m71_test -d $Database -v ON_ERROR_STOP=1
   if ($LASTEXITCODE -ne 0) { throw "M83 verification failed ($promptVersion); connection close rolls back the transaction" }
   Write-Output "PASS: full M83 SQL suite for $promptVersion on $Database (rolled back)"

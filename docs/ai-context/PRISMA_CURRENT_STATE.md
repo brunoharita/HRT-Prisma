@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.14
-last_verified: 2026-09-29
+version: 2.51.15
+last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
+
+## Último par de leituras da interpretação — implementação local, publicação pendente
+
+O novo contrato `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 guarda no cache da análise somente o último par estruturado de uma tentativa por Perfil/versão da Posição/chave de fontes. Leitura validada guarda categorias e IDs de evidência, não a resposta bruta; leitura falha guarda etapa e motivo tipificados. Um retry substitui o par anterior. Uma nova RPC de conclusão grava resultado e par na mesma transação, preservando o contrato legado, RLS, grants, fallback e ausência do par na resposta ao navegador. Testes locais Deno (28), typecheck Deno/TypeScript e SQL transacional do M83 nos prompts 1.1/1.2 passaram; o baseline da função claim foi conferido em leitura remota. Não há backfill de tentativas antigas, nova consulta à IA, mudança de grupo/score/modelo/prompt ou tela de auditoria. Produção ainda não foi atualizada por este movimento; confirmar release e smoke antes de declarar ativo.
 
 ## Avisos causais da interpretação — publicados em produção
 
