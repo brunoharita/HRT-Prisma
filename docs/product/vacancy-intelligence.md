@@ -4,6 +4,8 @@
 
 Toda Posição com título pode ser comparada com qualquer profissão usando o mesmo contrato de evidência. A busca aproveita primeiro Knowledge Global/Empresa e decisões humanas autorizadas; a IA só interpreta relações não resolvidas. Títulos não eliminam Perfis por veto lexical. Um Perfil sem conteúdo profissional utilizável fica fora daquela Posição e não consome IA, sem conclusão de incapacidade.
 
+A triagem ocupacional seletiva `semantic-triage-2.0.0` preserva a análise interna de todos esses Perfis, incluindo experiências históricas. Relação publicada suficiente fica interna; apenas relação profissional atribuível, plausível e ainda indefinida aciona a IA. Área ampla, venda no setor, requisito ou ferramenta isolada não bastam. Uma pendência plausível não é tratada como Grupo C definitivo só porque a classificação inicial foi incompleta. C somente contextual permanece consultável sem IA automática. A lista interna aparece antes da conclusão das interpretações e cada resultado é atualizado isoladamente; falha mantém o cálculo anterior integralmente. A política de acionamento substitui somente a cobertura automática irrestrita da IA do M8.6, conforme `docs/qa/agreement-matching-selective-semantic-triage.md` v1.0.0.
+
 A relação distingue atuação direta, equivalente, relacionada/transferível, potencial de entrada, contexto, outro domínio e indeterminação. Híbridos exigem prova dos dois componentes para equivalência integral. A Posição registra se experiência anterior não é necessária, necessária ou não especificada. A decisão humana continua necessária para confirmar, descartar ou propor aprendizado à Inbox da Knowledge; nenhuma relação global é publicada automaticamente.
 
 ## M7.1 — Taxonomia Profissional e Inteligência de Posições

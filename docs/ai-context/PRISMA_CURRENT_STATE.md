@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.8
-last_verified: 2026-09-28
+version: 2.51.9
+last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
+
+## Triagem ocupacional seletiva antes da IA — implementação local em validação
+
+A decisão de 2026-09-29 substitui somente a cobertura automática de IA para todo Perfil utilizável do M8.6: a busca interna permanece ampla, mas `semantic-triage-2.0.0` envia à Edge apenas relações profissionais atribuíveis e plausíveis que continuem indefinidas. Referência Knowledge suficiente, decisão humana confirmada, área/contexto isolado e Perfil sem conteúdo profissional utilizável não acionam IA. A Edge recompõe a mesma triagem em fontes autenticadas antes do cache/provedor/snapshot. A lista interna chega antes das interpretações, que atualizam cada Perfil separadamente; falha preserva integralmente o cálculo pré-IA. Observações Knowledge e Evidência Demonstrada passam a ser paginadas para não truncar uma busca de 100 Perfis. Não há nova migration, taxonomia ou alteração de score/prompt/modelo. Validação local e rollout ainda precisam ser registrados no AoT `docs/qa/aot-matching-selective-semantic-triage.md`; não considerar esta seção prova de publicação.
 
 ## Reconhecimento profissional determinístico — publicado em produção
 

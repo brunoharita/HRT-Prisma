@@ -15,7 +15,10 @@ export function buildDeterministicMatch(sources: Record<string, unknown>, assess
     || rawCandidate.profileId !== assessment.profileId || !Array.isArray(vacancy.requirements)
     || !Array.isArray(rawCandidate.knowledge) || !Array.isArray(sources.demonstratedEvidence)) throw new Error("SNAPSHOT_SOURCE_INVALID");
   const candidate = { ...rawCandidate, profileData: decodeProfileDataForPresentation(rawCandidate.profileData) };
-  return matchVacancyCandidate(vacancy, candidate, sources.occupationReference as never, sources.demonstratedEvidence as never, [], referenceDate);
+  const match = matchVacancyCandidate(vacancy, candidate, sources.occupationReference as never, sources.demonstratedEvidence as never, [], referenceDate);
+  const decision = sources.positionDecision;
+  if (decision !== null && decision !== undefined && decision !== "confirmed" && decision !== "dismissed") throw new Error("SNAPSHOT_SOURCE_INVALID");
+  return { ...match, positionDecision: decision === "confirmed" || decision === "dismissed" ? decision : null };
 }
 
 /** Database-to-engine adapter only. All score and evidence rules live in generated source modules. */
@@ -24,7 +27,7 @@ export function buildSnapshotEvaluation(sources: Record<string, unknown>, assess
   const base = buildDeterministicMatch(sources, assessment, referenceDate);
   if (!isSemanticTriageEligible(base)) return null;
   const vacancy = record(sources.vacancy);
-  const match = applySemanticAssessment(vacancy, { ...base, positionDecision: sources.positionDecision ?? null }, assessment);
+  const match = applySemanticAssessment(vacancy, base, assessment);
   if (match.semanticAssessment?.status !== "complete" || match.score.status === "unavailable" || match.score.score == null) return null;
   return {
     vacancyVersion: vacancy.version,

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 296
-source_manifest_sha256: 88ea0bd8d2ee67e05a530854763f94563d65e0638c047480e0ae59e086b3ddc4
+documentation_source_count: 299
+source_manifest_sha256: e3e26524143536cafa9d853ed2493a27e5a18e37fdfdf246049d952828a4b417
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.8
-last_verified: 2026-09-28
+version: 2.51.9
+last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
+
+## Triagem ocupacional seletiva antes da IA — implementação local em validação
+
+A decisão de 2026-09-29 substitui somente a cobertura automática de IA para todo Perfil utilizável do M8.6: a busca interna permanece ampla, mas `semantic-triage-2.0.0` envia à Edge apenas relações profissionais atribuíveis e plausíveis que continuem indefinidas. Referência Knowledge suficiente, decisão humana confirmada, área/contexto isolado e Perfil sem conteúdo profissional utilizável não acionam IA. A Edge recompõe a mesma triagem em fontes autenticadas antes do cache/provedor/snapshot. A lista interna chega antes das interpretações, que atualizam cada Perfil separadamente; falha preserva integralmente o cálculo pré-IA. Observações Knowledge e Evidência Demonstrada passam a ser paginadas para não truncar uma busca de 100 Perfis. Não há nova migration, taxonomia ou alteração de score/prompt/modelo. Validação local e rollout ainda precisam ser registrados no AoT `docs/qa/aot-matching-selective-semantic-triage.md`; não considerar esta seção prova de publicação.
 
 ## Reconhecimento profissional determinístico — publicado em produção
 
@@ -3887,11 +3891,13 @@ Uma avaliação compara uma pessoa com uma vaga específica. Ela não altera o p
 
 Toda Posição com título pode usar a mesma leitura profissional, independentemente da profissão. O servidor preserva a ordem `Knowledge Global/Empresa e decisões humanas autorizadas -> IA somente como último recurso -> revisão humana`; uma resposta interna segura não é substituída por pesquisa. Título incompatível não é veto lexical. Perfis publicados sem conteúdo profissional utilizável não entram no fluxo e não consomem IA, sem que isso seja tratado como incapacidade.
 
+`semantic-triage-2.0.0` altera somente a ativação da IA, não o contrato de uma resposta válida: a descoberta interna examina todos os Perfis utilizáveis e todas as experiências; a IA é reservada a relações ocupacionais plausíveis ainda indefinidas, independentemente do grupo preliminar. Mesma/equivalente/relacionada referência aprovada e decisão humana confirmada são respostas internas suficientes para esta triagem. Possível relação entre títulos profissionais ou experiência direta na área nomeada da Posição sem resolução ocupacional permanece pendente para interpretação. Área declarada, setor, ferramenta e requisito isolados não acionam IA. O servidor recompõe essa decisão em fontes autorizadas antes de cache/provedor/snapshot; a falha conserva o match pré-IA. Esta política substitui a cobertura automática anterior do D-03 M8.6, não a descoberta ampla. Positivos fora desse detector conservador exigem medição de falsos negativos e curadoria, não conclusão de irrelevância.
+
 As relações semânticas são `direct`, `equivalent`, `related`, `entry_potential`, `context`, `other` e `unclear`, projetadas respectivamente nos Grupos A, B ou C sem confundir ausência de prova com prova negativa. Híbridos exigem evidência dos dois componentes centrais para relação integral; uma só parte permanece parcial/relacionada. Senioridade só é comparada quando os níveis estão explicitamente marcados, com penalização simétrica por subqualificação e sobrequalificação. A Posição versiona `experiencePolicy` como `not_required`, `required` ou `unspecified`; somente a primeira remove duração/recência do denominador.
 
 Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox existente da Knowledge com termo original, relação, evidência e versões. A proposta não publica alias ou relação global automaticamente.
 
-Quando uma tentativa de interpretação por IA não produz leitura válida, a busca conserva integralmente o matching determinístico calculado antes da tentativa. A interface avisa que a IA não concluiu, identifica os Perfis afetados e mantém grupo, score, relações e evidências anteriores; a falha não constitui classificação semântica ou fato negativo sobre a Pessoa. Este ajuste de fallback transitório não altera o contrato persistido, a rubrica de uma resposta válida nem a política de acionamento da IA. Acordo específico: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0.
+Quando uma tentativa de interpretação por IA não produz leitura válida, a busca conserva integralmente o matching determinístico calculado antes da tentativa. A interface avisa que a IA não concluiu, identifica os Perfis afetados e mantém grupo, score, relações e evidências anteriores; a falha não constitui classificação semântica ou fato negativo sobre a Pessoa. O ajuste original de fallback não alterou o contrato persistido nem a rubrica de uma resposta válida; a política de acionamento posterior é a triagem seletiva descrita acima. Acordo específico: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0.
 
 ## Saída por requisito
 
@@ -5191,6 +5197,8 @@ A implementação reutiliza `job_roles`, `positions`, `vacancies`, `vacancy_requ
 
 O cliente pagina todos os Perfis publicados do tenant por meio da fundação de profile-discovery, em ordem estável, e informa quantos foram analisados do total acessível. Não existe teto silencioso. A descoberta ocupacional é separada da aderência detalhada: referência oficial, alias/relação Knowledge aprovada, título profissional e cargos de experiências podem explicar por que uma Pessoa apareceu. Aproximação textual permanece possível relação até confirmação humana, auditada no `match_evaluations` existente.
 
+Na ativação seletiva da IA, a coleção interna é emitida à UI antes da fila semântica e os resultados chegam por Perfil. A regra pura `semantic-triage-2.0.0` separa descoberta ampla de interpretação externa; a Edge usa o mesmo módulo gerado sobre a projeção da RPC autenticada, verifica tenant/versões/decisão antes de cache ou provedor e não confia no cliente. Observações da Knowledge e Evidência Demonstrada são paginadas em lotes de 500 para não truncar uma busca de 100 Perfis com muitas evidências; falha de observação bloqueia conclusão parcial e falha da evidência opcional deixa o score provisório. Nenhum dado de Perfil, Knowledge, requisito ou snapshot histórico é reescrito.
+
 No matching 5.0.0, a trajetória define A (direta), B (relacionada/transferível) e C (sinais contextuais) antes dos requisitos (ADR-057). Cada requisito continua consultando conteúdo profissional publicado, independentemente da categoria: termo explícito, delimitado e não negado ou equivalência aprovada pode sustentar requisito genérico. Correspondência parcial/nível não comprovado exige revisão; relação confirmada permanece sinal relacionado. Descrição e taxonomia da Posição nunca são evidência da Pessoa. Item unclassified histórico não bloqueia descoberta, mas mantém a leitura incompleta; novos salvamentos exigem classificação conforme M6.1.
 
 O score 1.2.0 é derivado em memória somente para A/B; C conserva score null e não é compatibilidade competitiva. A ordenação respeita grupo, score decrescente (inclusive provisório identificado), decisão humana e desempate por nome/ID. O domínio puro não busca dados, chama IA ou muta fontes. M7.1 preserva fórmula, pesos e entrada de Pessoas; seus metadados são proveniência, não features adicionais de score.
@@ -5238,6 +5246,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Triagem ocupacional seletiva (2026-09-29, em validação): `semantic-triage-2.0.0` versiona apenas a ativação da interpretação externa. O matching determinístico 5.1.0, a resposta semântica válida 7.0.0, score 1.4.0, prompt/modelo, schemas e snapshots persistidos não mudam; cache anterior permanece legível somente se a nova triagem server-side permitir interpretação para o par atual. O resultado interno progressivo não persiste novo estado. Sem migration ou nova versão pública numerada de produto neste movimento; publicação e limites são comprovados pelo AoT específico, não por esta decisão de versão.
 
 Consistência do reconhecimento profissional (2026-09-28, publicada): `vacancy-matching-explainable-5.1.0` distingue relação ocupacional publicada de especialização da Posição, impede promoção por área ampla isolada e seleciona períodos da função relacionada antes de períodos contextuais. O `matching-score-1.4.0` conserva pesos/faixas e passa a reconhecer a área relacionada via Knowledge com 8 pontos; o fingerprint registra a nova versão de matching. A migration `20260928190000_matching_recognition_consistency.sql` acrescenta 5.1.0 e o contrato semântico 7.0.0 ao guard M6.2, mantendo snapshots antigos e versões desconhecidas rejeitadas. A interface identifica a origem pré-IA no fallback. Não há nova versão pública numerada de produto neste ajuste; o rollout e seus limites são registrados no AoT próprio.
 
@@ -11353,6 +11363,8 @@ Sem referência normativa, engenharia escolhe medidas, espaçamento, tipografia,
 
 Toda Posição com título pode ser comparada com qualquer profissão usando o mesmo contrato de evidência. A busca aproveita primeiro Knowledge Global/Empresa e decisões humanas autorizadas; a IA só interpreta relações não resolvidas. Títulos não eliminam Perfis por veto lexical. Um Perfil sem conteúdo profissional utilizável fica fora daquela Posição e não consome IA, sem conclusão de incapacidade.
 
+A triagem ocupacional seletiva `semantic-triage-2.0.0` preserva a análise interna de todos esses Perfis, incluindo experiências históricas. Relação publicada suficiente fica interna; apenas relação profissional atribuível, plausível e ainda indefinida aciona a IA. Área ampla, venda no setor, requisito ou ferramenta isolada não bastam. Uma pendência plausível não é tratada como Grupo C definitivo só porque a classificação inicial foi incompleta. C somente contextual permanece consultável sem IA automática. A lista interna aparece antes da conclusão das interpretações e cada resultado é atualizado isoladamente; falha mantém o cálculo anterior integralmente. A política de acionamento substitui somente a cobertura automática irrestrita da IA do M8.6, conforme `docs/qa/agreement-matching-selective-semantic-triage.md` v1.0.0.
+
 A relação distingue atuação direta, equivalente, relacionada/transferível, potencial de entrada, contexto, outro domínio e indeterminação. Híbridos exigem prova dos dois componentes para equivalência integral. A Posição registra se experiência anterior não é necessária, necessária ou não especificada. A decisão humana continua necessária para confirmar, descartar ou propor aprendizado à Inbox da Knowledge; nenhuma relação global é publicada automaticamente.
 
 ## M7.1 — Taxonomia Profissional e Inteligência de Posições
@@ -13339,6 +13351,257 @@ Decisão de versão: sem bump dos contratos persistidos `vacancy-matching-semant
 
 ---
 
+## Source: `docs/qa/agreement-matching-all-positions.md`
+
+# Proposta — Interpretação de trajetória aplicável a qualquer Posição
+
+## Objetivo, autoridade e estado
+
+Versão 0.3.0. Estado: `draft`, com premissa fundamental D-12 aprovada explicitamente. Bruno solicitou a ampliação além do piloto backend, a revisão para universalidade e, depois, determinou: «minha preocupação é uma premissa fundamental. Essa melhoria só faz sentido se o Prisma conseguir isso — pode considerar o auxílio de IA também para solucionar essa premissa».
+
+Esta revisão substitui a proposta 0.2.0, não os contratos de runtime vigentes. A aprovação da premissa D-12 não aprova por extensão todas as demais mudanças propostas, especialmente política temporal, senioridade e alcance/custo da descoberta. Não foi produzido prompt final de execução nem alterado runtime ou ambiente remoto.
+
+Objetivo: interpretar a relação entre evidências publicadas de uma Pessoa e o trabalho descrito em uma Posição, qualquer que seja a profissão. Disponibilidade ampla não significa qualidade universal comprovada. Ambiguidade, ausência de dados e falhas continuam explícitas.
+
+Premissa central de valor: reconhecer relações profissionais sustentadas mesmo com cargos, nomenclaturas e descrições diferentes. Apenas habilitar novas profissões, repetir correspondência textual ou depender de um dicionário exaustivo de sinônimos não atende ao objetivo. A IA está autorizada como recurso de interpretação semântica para resolver essa premissa, mantendo evidência, rastreabilidade e os limites das conclusões.
+
+## Diagnóstico verificado
+
+- Categorias, prompt e explicações atuais são específicos de software/backend. O motor semântico seleciona a experiência de maior pontuação, o que não representa adequadamente uma Posição híbrida.
+- A triagem A/B anterior à IA pode excluir uma trajetória reconhecível apenas semanticamente. Essa é uma limitação estrutural possível; sua taxa de perdas em produção não foi medida nesta revisão.
+- Duração/recência hoje são aplicadas a todos os elegíveis; ausência de experiência com período determinável torna o score indisponível. Isso conflita com Posições que dispensam experiência anterior.
+- A identificação de entrada usa palavras do título, incluindo assistente e júnior. Título isolado não define dispensa de experiência.
+- Liderar software é relação indireta com programação no piloto. Para uma Posição de liderança, gerir pode ser a própria atuação direta.
+- Manter backend sob exceção permanente conservaria significados diferentes entre profissões. Preservar histórico e evidências é obrigatório; congelar resultados numéricos do piloto para sempre não é o objetivo.
+
+Fontes: `src/domain/semanticTrajectory.ts`, `web/src/domain/semanticMatching.ts`, `web/src/domain/vacancy.ts`, `web/src/domain/matchingScore.ts`, contrato de matching e ADR-060.
+
+## Recomendação e alternativas
+
+Adotar um contrato comum orientado ao trabalho da Posição. Reutilizar o pipeline, fontes, motor determinístico, cache, telas e Knowledge existentes. CBO/ESCO/O*NET publicados, aliases e relações aprovadas auxiliam a nomenclatura; não criar outra taxonomia ou equivalência global produzida pela IA.
+
+Separar função, domínio/setor, responsabilidade/autonomia, requisitos específicos, natureza da evidência e condições da Posição. São eixos descritivos, não novos pesos nem hierarquia entre profissões.
+
+Retirar somente o gate é inadequado porque conserva a rubrica backend. Manter um catálogo manual de rubricas por profissão implica liberações e manutenção contínuas. O contrato comum permite novas profissões e nomes incomuns, com contexto específico e avaliação por domínios, sem lista fechada de cargos.
+
+## DEVE — comportamento proposto
+
+### D-01 — Entender o trabalho solicitado
+
+Usar título, missão, responsabilidades, resultados, contexto e requisitos da versão publicada da Posição, sem exigir um segundo cadastro integral.
+
+O título informa a função, mas não vence uma descrição explicitamente contraditória. Cargo inequívoco sustenta a atividade que nomeia, não todas as ferramentas, tarefas, credenciais ou níveis associados à profissão. Cargo genérico sem domínio necessita contexto para concluir.
+
+Atividades operacionais, técnicas, analíticas, criativas, comerciais, de atendimento, ensino, pesquisa e gestão não têm superioridade automática. Gestão é atuação direta quando a Posição pede gestão; dirigir quem executa não prova execução pessoal, e executar não prova gestão.
+
+### D-02 — Reutilizar taxonomia sem inventar evidência
+
+Mesmo setor, mesma família ocupacional e função equivalente são relações distintas. Referências e aliases aprovados auxiliam a interpretação, sem transformar um vínculo Pessoa/Posição em alias global.
+
+Competência típica de uma ocupação não prova que a Pessoa a possui. Referência ocupacional não acrescenta exigência não adotada pelo operador. Ausência de referência taxonômica não impede análise de trabalho suficientemente descrito.
+
+### D-03 — Preservar natureza e proveniência da evidência
+
+Cada relação liga uma atividade da Posição a trechos literais do Perfil, com fonte/versão, participação atribuível quando disponível e incertezas. Citação apenas da Pessoa, sem ligação com a Posição, não basta para justificar a relação.
+
+Separar atuação realizada, formação, prática/projeto, conhecimento declarado e evidência demonstrada/validada. Perfil publicado não equivale a verificação externa automática. Campos repetidos do mesmo Perfil não são fontes independentes.
+
+Experiência profissional não se limita a emprego formal: atuação autônoma, serviço, empreendimento, estágio e voluntariado podem demonstrar trabalho pertinente. Titularidade/participação nominal não basta sem atividade atribuível. Projeto acadêmico/pessoal pode provar prática específica; não vira automaticamente vínculo profissional, tempo de emprego ou domínio de todo o contexto da Posição.
+
+### D-04 — Classificar relações, preservando grupos e cálculo separados
+
+A IA produz categorias de relação e evidências, sem nota livre: direta, equivalência funcional sustentada, transferível/adjacente, contextual, nenhuma relação identificada e indeterminada. Natureza da atividade e tipo de evidência continuam separados da relação.
+
+Transferência deve mostrar o que foi realizado, qual demanda da Posição isso ajuda a atender e o que não foi comprovado. Prestígio, hierarquia, repetição, tamanho do texto e conhecimento genérico da profissão não substituem evidência.
+
+| Saída | Regra proposta |
+| --- | --- |
+| A — trajetória diretamente compatível | Atuação realizada sustenta o núcleo funcional, diretamente ou por equivalência contextual demonstrada. Mesmo setor/nome parecido não bastam. A não significa todos os requisitos atendidos ou aprovação para contratação. |
+| B — trajetória relacionada ou potencial de entrada | Há atividade transferível/adjacente ou formação/prática/conhecimento que sustenta entrada conforme a Posição. Explicitar o fundamento. |
+| C — sinais contextuais | Conexão rastreável sem trajetória ou potencial de entrada suficiente para comparação competitiva. Consultável e sem score comparável. |
+| Sem relação identificada | Fontes avaliadas não sustentaram conexão; não significa incapacidade e permanece auditável no universo consultado. |
+| Indeterminado | Informação material insuficiente, contradição ou divergência. Não converter automaticamente em B, C ou última posição. |
+| Não avaliado/falha | Estado operacional separado: análise não ocorreu ou não foi concluída. Não é conclusão profissional. |
+
+A nota é calculada deterministicamente, não expressa probabilidade de sucesso ou empregabilidade. Requisito faltante não muda sozinho a natureza da trajetória.
+
+### D-05 — Representar funções híbridas e trajetórias múltiplas
+
+Preservar todos os componentes centrais explicitamente definidos na Posição. A IA pode organizar o conteúdo, mas não eleger silenciosamente essencialidades nem reduzir o cargo à parte mais fácil de comparar. Ambiguidade material do núcleo deve ser esclarecida.
+
+Quando dois componentes forem centrais, A exige atuação direta/equivalente sustentada em ambos. Evidência de apenas um sustenta relação parcial/B quando determinável; ambiguidade da composição permanece indeterminada. Isso não transforma cada requisito específico em condição para A.
+
+Experiências distintas podem sustentar componentes distintos, mas não comprovam atuação simultânea, mesma escala ou responsabilidade integrada. Contradições não são apagadas selecionando a melhor experiência. Experiências históricas e transições de carreira permanecem consideradas.
+
+### D-06 — Separar entrada, experiência e senioridade
+
+A política de experiência deriva da Posição: aceita primeira experiência, exige experiência anterior ou não definida. Assistente/júnior não significam dispensa automática. Sugestão derivada deve ser rastreável; inconsistência material exige decisão na Posição, sem inventar exigências.
+
+Formação/prática em projeto, isoladamente, pode sustentar potencial de entrada/B. Trabalho profissional real em estágio, serviço ou voluntariado pode sustentar A quando o núcleo estiver demonstrado, sem exigir vínculo formal. A natureza da fonte permanece explícita.
+
+Senioridade/autonomia não se deduzem de idade, anos de carreira ou prestígio. Recomenda-se retirar penalidade automática por suposta sobrequalificação ou distância entre títulos. Exigência explícita de nível/autonomia continua examinada com evidência. Esse ponto modifica a regra legada e depende de aprovação/versionamento.
+
+### D-07 — Tornar a aplicabilidade temporal uma propriedade da Posição
+
+Preservar pesos nominais 10/25/35/10/10/10 como baseline. A aplicabilidade de duração/recência pertence à versão da Posição e é idêntica para todas as Pessoas comparadas; não depende de quem tem mais dados.
+
+Recomendação: quando a Posição dispensa experiência anterior, duração e recência não entram na comparação. Quando exige experiência, duração aplica-se à atuação pertinente; recência só se aplica com critério explícito de atualidade da prática. Versões legadas conservam a política anterior até revisão/versionamento, sem migração semântica silenciosa.
+
+Dimensão não aplicável sai do denominador com normalização e explicação. Informação ausente em dimensão aplicável não sai para melhorar a nota. Ausência de períodos publicados não prova zero meses. Faixa temporal aplicável indeterminável conserva indisponibilidade do agregado e exibe dimensões determinadas; retirar essa restrição exigiria outro acordo.
+
+Unir intervalos sobrepostos sem dupla contagem. Duração de calendário não é carga horária/intensidade. Sazonalidade/intermitência não vira intervalo contínuo usando apenas anos extremos. Uma atividade iniciada dentro de um vínculo longo não herda todo o vínculo. Preservar originais, precisão, leitor de anos abreviados e data de referência.
+
+Não misturar scores de políticas/versões diferentes como comparáveis. A aplicabilidade muda o cálculo e requer contrato novo; não é apenas uma troca de prompt.
+
+### D-08 — Manter requisitos, habilitações e condições explícitos
+
+Reutilizar o método atual de requisitos. A relação profissional não confirma automaticamente tecnologia, licença, certificação, idioma ou habilitação. Exigências obrigatórias e pendências permanecem visíveis com qualquer score. Título/declaração não comprovam validade ou vigência de credencial.
+
+Condição da Posição, como local, modalidade e jornada, não prova disponibilidade da Pessoa. O que não foi avaliado permanece não avaliado. Não inferir personalidade, saúde, idade, origem ou outros atributos sensíveis. Não decidir contratação, rejeição ou elegibilidade legal automaticamente.
+
+### D-09 — Retirar A/B como veto prévio à interpretação
+
+Recomenda-se avaliar os Perfis publicados/autorizados no escopo explícito da busca sem corte silencioso pelo grupo, título ou score do método anterior.
+
+Heurísticas, taxonomia e aliases podem organizar o processamento, mas ausência de correspondência lexical não demonstra irrelevância. Perfil sem conteúdo profissional utilizável recebe insuficiência de dados registrada, sem chamada inútil; isso não significa ausência de relação.
+
+Usar lotes, concorrência limitada, cache compatível e retomada; não iniciar reprocessamento global independente da busca. Mais Perfis poderão exigir análise que no gate A/B atual, com aumento potencial de custo/latência a aprovar e medir. Cobertura parcial não pode ser apresentada como consulta integral. A política financeira existente continua, sem novo contador paralelo.
+
+Esse ponto supersederia o gate ocupacional de D-01/D-02 e P-02 do acordo de triagem M8.3, mantendo autorização, fontes e isolamento.
+
+### D-10 — Preservar segurança, estabilidade e história
+
+Reutilizar função/motor existentes, contexto mínimo, cache por tenant/Perfil/Posição/método/prompt/modelo, validação literal, duas leituras com concordância exigida e snapshot autoritativo servidor. Concordância não prova correção nem constitui fonte independente.
+
+Contexto de formação/prática, quando necessário, mantém origem e minimização; não enviar currículo integral nem pesquisar externamente Pessoas.
+
+Novas avaliações usam contrato comum, inclusive backend quando validado. Snapshots anteriores conservam métodos/valores. Mudanças de classificação/score precisam ser explicadas e verificadas; nunca impor resultado por nome de Pessoa. O corpus backend segue obrigatório, com diferenças esperadas somente após aprovação explícita da nova regra.
+
+### D-11 — Explicar e validar o resultado
+
+Reutilizar lista/comparação/detalhe. Apresentar atividade da Posição ligada à evidência da Pessoa, relação, fonte, limites, períodos e critérios aplicáveis. Ordenar por grupo/score apenas resultados comparáveis. Pendência operacional não é baixo desempenho. Preservar a retirada dos avisos redundantes já aprovada; incompletude real de consulta deve continuar identificável.
+
+Testar casos contrastados e um conjunto separado dos usados na calibração do prompt. Separar cálculo determinístico, qualidade semântica, estabilidade, cobertura da descoberta e segurança. Nem abstenção universal nem promoção genérica de toda conexão a A são sucesso.
+
+### D-12 — Reconhecer significado profissional além da nomenclatura — premissa aprovada
+
+Reconhecer o trabalho e a relação entre funções mesmo quando a Posição e o Perfil usam palavras, títulos ou descrições diferentes. O caso desenvolvedor/programador, dentro do mesmo domínio e com atividades equivalentes, é um critério obrigatório; não apenas um exemplo opcional ou ajuste cosmético.
+
+Reutilizar aliases/relações aprovados quando disponíveis. Quando não forem suficientes, permitir que a IA interprete as atividades, responsabilidades, domínio e contexto, ligando evidências dos dois lados. Não depender da criação manual de um alias para cada forma de descrever o mesmo trabalho. A classificação resultante é uma interpretação contextual deste par Pessoa/Posição, não uma equivalência global automaticamente gravada na Knowledge.
+
+A interpretação deve distinguir: mesma função sob nomenclatura diferente; funções relacionadas dentro de uma família; especializações distintas; e semelhança apenas verbal. Reconhecer uma família não confirma automaticamente todas as especializações, ferramentas, habilitações ou requisitos.
+
+Se somente a nomenclatura/paráfrase mudar, preservando significado profissional, contexto, atividade atribuível, períodos e demais evidências relevantes, a relação, o grupo e o score devem permanecer equivalentes. A decisão deve apoiar-se no significado sustentado, e não no tamanho/interseção de palavras. Contradições ou mudanças reais de escopo podem e devem alterar o resultado quando justificadas.
+
+Quando há evidência suficiente para reconhecer a relação, classificá-la como indeterminada, sem relação ou apenas contextual por falta de correspondência lexical constitui falha. Abstenção permanece correta para casos realmente ambíguos/insuficientes, mas não pode ser usada como estratégia para passar a validação dos casos positivos.
+
+Liberação condicionada a prova funcional e semântica dessa capacidade, incluindo conjunto de aceitação previamente definido, exemplos separados da calibração, invariância de nomenclatura e negativos de falsa equivalência. Se os casos obrigatórios dessa premissa falharem, a expansão permanece não aceita. Concordância entre duas leituras ou disponibilidade de endpoint não substitui essa prova, nem representa garantia de acerto em todo caso futuro.
+
+## Exemplos propostos para validação
+
+| Posição e evidência | Resultado a demonstrar |
+| --- | --- |
+| Desenvolvedor de sistemas / Programador de sistemas, com mesmo trabalho e contexto | Reconhecer a equivalência funcional e não reduzir grupo/score pela nomenclatura. |
+| Desenvolvedor backend / Programador backend, com atividades equivalentes descritas por paráfrases | Mesma conclusão profissional e pontuação com as demais evidências mantidas, inclusive sem alias pré-cadastrado. |
+| Programador ABAP / Desenvolvedor backend | Reconhecer atuação relacionada em software sem inventar especialização backend, APIs ou ferramentas não demonstradas. |
+| Programador de produção / Desenvolvedor de software | Não presumir equivalência pela palavra compartilhada; distinguir atividades/domínios presentes nas fontes. |
+| Gerência logística / gestão explícita de armazenagem, equipes e operação | Gestão pode ser direta, sem exigir execução operacional pessoal. |
+| Backend / venda de software | Mesmo setor e ferramentas não comprovam programação. |
+| Financeiro / atividade financeira em outro setor empresarial | Setor do empregador não elimina equivalência funcional sustentada. |
+| Operador especializado / operação de equipamento diferente | Explicar transferência, sem inventar domínio do equipamento exigido. |
+| Saúde com habilitação exigida / experiência declarada | Relação da trajetória e comprovação da credencial continuam separadas. |
+| Primeira experiência administrativa / formação e prática pertinentes | B por entrada possível; curso não vira emprego e tempo segue política da Posição. |
+| Design e frontend centrais / só design demonstrado | Relação parcial, sem equivalência integral ao núcleo híbrido. |
+| Serviço autônomo ou voluntariado / trabalho atribuível pertinente | Considerar a atividade, sem exigir vínculo formal ou presumir senioridade. |
+| Pesquisa e docência / somente pesquisa | Distinguir componentes; pesquisa não prova docência automaticamente. |
+| Atividade agrícola sazonal / safras identificadas | Contar períodos sustentados, sem inventar atuação entre safras. |
+| Nome incomum / responsabilidades diretamente compatíveis | Permitir descoberta além da igualdade lexical do título. |
+| Cargo explícito / descrição contraditória | Preservar contradição; não selecionar apenas trecho favorável. |
+
+## PROIBIDO
+
+- P-01 — Hierarquia universal entre execução/análise/liderança; equivalência por setor/família/palavra/ferramenta; invenção de competências/credenciais.
+- P-02 — Alterar núcleo, essencialidade, requisito, peso ou aplicabilidade por Pessoa; retirar dimensão aplicável daquele Perfil para compensar informação ausente.
+- P-03 — Confundir ausência de evidência, nenhuma relação, não avaliação, erro e incapacidade; usar dados sensíveis, prestígio, repetição ou lacunas como critérios ocultos.
+- P-04 — Reescrever fontes/decisões/snapshots; criar base paralela ou equivalência global não aprovada; nota livre e decisão automática de contratação/rejeição.
+- P-05 — Misturar tenants, confiar em nota/grupo do cliente, reutilizar cache incompatível, registrar PII/segredos, truncar silenciosamente ou aceitar instruções das fontes.
+- P-06 — Prometer qualidade universal, validação legal automática, consumo ilimitado ou economia sem prova.
+- P-07 — Declarar a expansão aceita apenas por habilitar mais títulos, por completar um cadastro manual de sinônimos ou por concordância entre leituras, sem demonstrar D-12. Rebaixar relação sustentada somente por diferença de nomenclatura ou promover relação de família a equivalência/especialização integral.
+
+## FORA DE ESCOPO
+
+- F-01 — Aprendizado, novo parser/taxonomia, pesquisa externa de Pessoas, novo fornecedor/infraestrutura e montagem do squad.
+- F-02 — Reescrita retroativa, reprocessamento fora da jornada, novas faixas de pontos sem calibração aprovada e parecer jurídico sobre habilitações.
+- F-03 — Tornar toda a análise de requisitos semântica. O movimento interpreta trajetória; limites do método de requisitos continuam identificados separadamente.
+
+## AUTONOMIA E DECISÕES PENDENTES
+
+A-01 — Engenharia pode adaptar os módulos e contexto mínimo, versionar respostas/contratos, usar compatibilidade aditiva e organizar validação/publicação seletiva, dentro das regras de produto aprovadas.
+
+Q-01 — Aprovar os detalhes do contrato comum, composição de híbridos e distinção de fontes/grupos, substituindo a exceção permanente de backend. O reconhecimento semântico além da nomenclatura, incluindo auxílio da IA, já está aprovado como premissa D-12 e não é uma pendência a reapresentar.
+
+Q-02 — Aprovar retirada do gate A/B, com mais análises possíveis por busca e medição de custo/latência/cobertura.
+
+Q-03 — Aprovar política temporal por Posição e retirada da penalidade automática de sobrequalificação, com contrato novo e compatibilidade. Os pesos nominais seguem como baseline; aplicabilidade muda a nota.
+
+As decisões podem ser aprovadas como pacote ou separadamente. Se alguma for recusada, explicitar o limite resultante. Detalhes técnicos e limiares de avaliação serão concretizados após decisão e antes de liberar; não são resultados validados neste rascunho.
+
+## Critérios de aceite
+
+- CA-01 / D-01–D-06 — Corpus contrastado operacional, artesanal, técnico, comercial, administrativo, criativo, científico, gerencial, de entrada e híbrido; transição de carreira e trabalho não formal incluídos. Resultados esperados/proibições definidos por caso.
+- CA-02 / D-04–D-06 — Variação linguística do mesmo trabalho preserva relação; mudança factual pode alterá-la. Negativos impedem equivalência por setor, hierarquia ou ferramenta.
+- CA-03 / D-05 — Uma parte não comprova todo o híbrido; experiências separadas não comprovam simultaneidade; requisito faltante não muda sozinho a natureza da trajetória.
+- CA-04 / D-07 — Mesma política por versão da Posição; entrada, desconhecido, ausência explícita, sobreposição, sazonalidade, anos abreviados e mudança de função são casos distintos.
+- CA-05 / D-08 — Requisito/habilitação sem evidência continua explícito com qualquer score; condição da vaga não vira disponibilidade comprovada.
+- CA-06 / D-09 — Casos antes C/fora por nomenclatura alcançam interpretação com contexto suficiente; medir cobertura, chamadas, latência, cache e retomada.
+- CA-07 / D-10 — Negativos de tenant/autoridade, fonte alterada, versão desconhecida, citações inválidas, discordância, concorrência e injeção; snapshot e aplicação compartilham regra; histórico legível.
+- CA-08 / D-11 — Avaliação separada da calibração mede erros de grupo, falsas equivalências, perdas de descoberta, abstenções e citações; critérios de liberação e resultados documentados antes do rollout.
+- CA-09 — Checks dirigidos, Context Pack depois do acordo/implementação material, CI, SHA coerente, smoke e rollback. Sem dados reais adulterados/criados só para teste.
+- CA-10 / D-12 — Pares críticos desenvolvedor/programador no mesmo domínio, títulos pouco usuais e descrições parafraseadas, com relações esperadas fixadas antes da avaliação, devem ser reconhecidos mesmo sem correspondência literal ou alias cadastrado. Indeterminação nos casos positivos suficientemente descritos não conta como sucesso.
+- CA-11 / D-12 — Testes de invariância alteram somente nomenclatura e redação semanticamente equivalente, mantendo atividades, períodos e demais evidências: relação/grupo/score permanecem equivalentes. Negativos mudam domínio, autoria da atividade, especialização ou incluem contradição e verificam distinção, sem vincular sucesso a nomes reais de Pessoas.
+- CA-12 / D-12 e P-07 — Medir separadamente relações legítimas reconhecidas/perdidas, equivalências indevidas, abstenções e citações válidas no conjunto de avaliação separado da calibração; comparar com o método anterior. Critérios quantitativos adicionais devem ser fixados antes da avaliação final e não relaxados depois de falhas. Todos os casos críticos obrigatórios devem satisfazer os resultados definidos; percentual global não pode ocultar uma falha dessa premissa.
+- CA-13 / D-12 — Exercitar a jornada completa de descoberta, interpretação, cálculo, comparação e reabertura para os casos críticos. Acerto isolado do prompt não basta se o Perfil for excluído antes da análise ou se a tela/snapshot perder a relação encontrada.
+
+## Mapa de impacto e preservação preliminar
+
+Baseline local: `98bb6cc919d1c90dac04a0bf7e2cf1d6cc1674d2`, matching semântico 6.0.0, score 1.4.0 e prompt 1.2.0. Estado remoto não revalidado nesta revisão documental. Arquivos locais preexistentes não rastreados preservados.
+
+| Área | Relação | Impacto/prova prevista |
+| --- | --- | --- |
+| Posição/versionamento | direct | Núcleo/política temporal; mesma regra para todos e versões preservadas |
+| Descoberta | direct | Universo autorizado além de A/B; cobertura, custo e retomada |
+| Interpretação/grupos | direct | Relações e múltiplas evidências; premissa D-12, invariância de nomenclatura, casos fora da calibração e negativos de falsa equivalência |
+| Score/tempo/senioridade | direct | Política por Posição; determinismo, nova versão e comparabilidade |
+| Lista/comparação/detalhe | direct | Explicações/aplicabilidade/cobertura; jornada desktop/mobile |
+| Auth/RLS/PII/cache/snapshot | critical_transversal | Contexto mínimo ampliado; negativos, contratos e smoke |
+| Knowledge/M7.1 | plausible_indirect | Leitura/proveniência; nenhuma equivalência ou escrita global nova |
+| Requisitos/verificações | plausible_indirect | Mesmo método e vínculo de evidência; nenhuma confirmação por score |
+| Parser/publicação de Perfil | no_impact_identified | Consumo de versões publicadas, sem escrita; revisar fluxo/minimização |
+| Release | direct | Web, função e compatibilidade; plano seletivo e rollback |
+
+Sem referência visual normativa nova. Preservar composição atual, alterando apenas o necessário para explicar o método e sua aplicabilidade.
+
+## Custo, limites e sequência
+
+É uma evolução de matching/score, não um toggle. Reutiliza fundações, mas alcança descoberta, fontes de evidência, grupos, política da Posição, tempo, servidor e apresentação. Não há estimativa quantitativa confiável de esforço/chamadas sem dimensionar o universo e avaliar o corpus.
+
+Depois de aprovado: congelar acordo/aceite; implementar em branch isolada; validar em ambiente local/de testes disponível; comparar casos sem reescrever fontes; liberar uma versão coerente com evidência e rollback. Todas as profissões podem ficar disponíveis sem alegar que todas foram empiricamente validadas.
+
+## Referências
+
+- Prisma: contrato de matching, ADR-060, ADR-073, acordos M8.3 e código inspecionado.
+- [OIT/ISCO](https://isco.ilo.org/en/isco-08/): ocupação definida pela semelhança de tarefas/responsabilidades.
+- [ESCO](https://esco.ec.europa.eu/en/about-esco/escopedia/escopedia/two-pillar-structure-esco): ocupações e competências/conhecimentos relacionados, com conceitos distintos.
+- [O*NET](https://www.onetcenter.org/content.html): atividades, contexto e requisitos relacionados ao trabalho.
+
+Fontes externas apoiam a estrutura conceitual; não validam score, grupos, política temporal ou qualidade do Prisma. Essas são propostas próprias para aprovação e teste.
+
+## Aprovação e execução
+
+D-12 aprovado como premissa fundamental pelo Product Owner, incluindo o uso de IA como recurso de interpretação. A capacidade ainda não está comprovada para a expansão. Q-01–Q-03 permanecem abertos nas partes não resolvidas por essa decisão. Apenas este rascunho foi revisado. Nenhuma implementação de runtime, teste de modelo, alteração remota, commit, push ou deploy foi executado.
+
+---
+
 ## Source: `docs/qa/agreement-matching-recognition-consistency.md`
 
 # Acordo — consistência do reconhecimento profissional no matching
@@ -13386,6 +13649,62 @@ Baseline: `main` em `75b3dc52fbb11d5ae2e1e1308ad6e29eadf74896`; Posição backen
 | Runtime gerado Edge e snapshots M6.2 | critical_transversal | Mesma regra, versão aceita, histórico, autorização e tenant |
 | Outras profissões e Knowledge publicada | plausible_indirect | Sem equivalência por setor, título ou ferramenta; corpus sintético |
 | Perfis, Parser, requisitos e curadoria | no_impact_identified | Nenhuma escrita ou alteração de fonte; revisão do diff |
+
+---
+
+## Source: `docs/qa/agreement-matching-selective-semantic-triage.md`
+
+# Acordo — triagem ocupacional seletiva antes da IA
+
+Versão: 1.0.0. Estado: `agreed` pela decisão de Bruno nesta conversa, após a explicação do fluxo com os sete Perfis e a escala de 100. Este acordo substitui **somente** a cobertura automática de IA para todo Perfil utilizável em D-03/CA-03 de `agreement-m86-universal-professional-matching.md`; preserva a descoberta interna ampla e os demais D/P/CA daquele acordo. Substitui o gate estrito A/B de `agreement-m83-triage-before-ai.md` pela pendência ocupacional plausível independente do grupo preliminar. Mantém integralmente os acordos de preservação após falha e de consistência do reconhecimento.
+
+## DEVE
+
+- **D-01 — Busca interna ampla.** Examinar todas as experiências e demais evidências profissionais publicadas dos Perfis autorizados da empresa para a versão da Posição. Perfil sem conteúdo profissional utilizável fica fora da Posição e não consome IA, sem conclusão de incapacidade.
+- **D-02 — Knowledge primeiro.** Reutilizar referência, alias, relações e decisões humanas aprovadas, com origem/versão/tenant. Relação ocupacional suficiente é resolvida internamente sem IA; requisitos, área ampla e ferramentas isoladas não viram equivalência ocupacional.
+- **D-03 — Fila seletiva.** Somente uma relação **profissional plausível e ainda indefinida** pode acionar IA. A elegibilidade considera evidência atribuível de qualquer experiência, não só cargo atual, grupo preliminar, score ou nome. C somente contextual e relação internamente resolvida não acionam IA. Sinal profissional plausível não resolvido permanece identificado como pendente, mesmo se a classificação preliminar fosse C.
+- **D-04 — Autoridade no servidor.** A Edge recompõe a triagem a partir das fontes autorizadas e versões consistentes antes de ler cache ou acionar provedor. O cliente não escolhe grupo, elegibilidade, texto, versão ou Pessoa arbitrária.
+- **D-05 — Resultado progressivo.** A busca mostra a classificação interna e suas evidências assim que prontas; as interpretações atualizam apenas os respectivos Perfis, sem esperar pelo mais lento. Progresso, pendência e falha são explícitos; navegação, comparação e ações humanas continuam disponíveis.
+- **D-06 — Preservação.** Falha, divergência, timeout, resposta inválida ou abortamento não apagam grupo, score, relações, requisitos, evidências ou decisão humana calculados antes da IA. Resposta válida mantém a interpretação versionada existente.
+- **D-07 — Escala verificável.** Uma amostra sintética de pelo menos 100 Perfis demonstra que todos passam pela etapa interna, apenas pendências plausíveis chegam à IA, a primeira lista aparece antes de sua conclusão, e a quantidade de chamadas é contada sem alegar prazo/qualidade universal não medidos.
+
+## PROIBIDO
+
+- **P-01.** Veto lexical, top-K, corte de score ou uma única família fixa como critério de exclusão de Pessoa; ausência de correspondência não é incapacidade.
+- **P-02.** Enviar à IA Perfis somente contextuais ou resolvidos internamente, inclusive por chamada direta, cache ou snapshot na Edge; aceitar grupo enviado pelo browser como autoridade.
+- **P-03.** Converter falha em zero/C, inventar equivalência, especialização, senioridade, requisito ou decisão humana; alterar pesos ou critérios do Prisma Score.
+- **P-04.** Misturar tenants/versões, enviar currículo integral, expor PII/segredos em telemetria, publicar regra global ou reescrever snapshots históricos.
+
+## FORA DE ESCOPO
+
+- **F-01.** Exigir classificação manual na publicação do Perfil, criar múltiplos Perfis cadastrais, nova taxonomia/base, embeddings ou reprocessamento retroativo.
+- **F-02.** Alterar o prompt/modelo/número de leituras, requisitos da Posição, pesos, curadoria, decisão automática de contratação ou dados reais de Pessoas.
+
+## AUTONOMIA
+
+- **A-01.** Engenharia define o detector conservador de pendência ocupacional, o estado transitório de UI, controle de concorrência e versão de ativação, reutilizando domínio, Knowledge, RPC autenticada e runtime gerado.
+- **A-02.** Engenharia escolhe fixtures sintéticas e regressão proporcional, mas não pode apresentar o corpus limitado como prova de cobertura universal.
+
+## CRITÉRIOS DE ACEITE
+
+- **CA-01 / D-01–D-03.** Desenvolvedor/programador e trajetórias mistas entram na triagem por experiência histórica; venda de tecnologia, marketing, ferramenta isolada, área ampla isolada e domínio distinto não acionam IA. Relação Knowledge suficiente também não chama provedor.
+- **CA-02 / D-03–D-04.** Uma pendência ocupacional plausível não fica escondida como C definitivo; Edge rejeita no servidor C/contextual/resolvido antes de service/cache/provedor e ignora tentativa de forjar grupo, tenant ou versão.
+- **CA-03 / D-05–D-06.** Primeira lista e resumo chegam antes da conclusão semântica; cada resultado atualiza isoladamente; falha preserva integralmente o match inicial e aviso visível. Comparação e decisões humanas permanecem funcionais.
+- **CA-04 / D-07.** Corpus sintético de 100 Perfis mede universos, elegíveis, chamadas, progresso e tempo local até a lista inicial, com positivos críticos e negativos não mascarados por média; execução sem LLM ou banco real.
+- **CA-05.** Testes dirigidos web/Edge, runtime gerado, tipos/build, segurança/versões/snapshots, Context Pack, AoT, release plan e smoke proporcional. QA antes de produção; produção não é ambiente de teste.
+
+## Mapa de impacto inicial
+
+Baseline: `main` em `77068e969cf73bb01ee45f3c91e69b318b920b67`; quatro itens não rastreados preexistentes preservados. A busca atual só entrega a lista após toda a IA; Edge admite qualquer Perfil com conteúdo profissional utilizável. Nenhum SLA medido para 100 Perfis.
+
+| Área | Relação | Capacidade a preservar / regressão |
+| --- | --- | --- |
+| Descoberta e triagem compartilhada | direct | Todos os Perfis utilizáveis examinados; Knowledge-first; positivos/negativos ocupacionais |
+| Busca, progresso e comparação | direct | Baseline inicial, atualização isolada, aviso de falha, seleção/decisões |
+| Edge, auth, cache e snapshot | critical_transversal | Recomputar elegibilidade com fontes autorizadas; tenant, versões, nenhuma chamada para fora da fila |
+| Score, requisitos e grupos | plausible_indirect | Mesmos pesos, evidências e resultado em falha; nenhuma promoção por ferramenta/área genérica |
+| Parser, publicação de Perfil e Knowledge | no_impact_identified | Nenhuma escrita ou alteração de fonte; diff sem reprocessamento |
+| Release | direct | Somente superfícies do diff, QA/smoke, SHA único e rollback |
 
 ---
 
@@ -20328,6 +20647,16 @@ Fonte obrigatória: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. 
 # Execução — consistência do reconhecimento profissional
 
 Implementar integralmente `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0 e preservar `docs/qa/agreement-m86-universal-professional-matching.md` v1.0.0 e `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler os contratos completos antes de atuar. Aplicar D-01–D-05 e P-01–P-03; respeitar F-01–F-02 e autonomia A-01. Fechar CA-01–CA-04 com AoT rastreável, revisão do diff, testes dirigidos, Context Pack e release somente das superfícies exigidas pelo plano. Não usar dados reais como fixture nem produção como ambiente de teste.
+
+---
+
+## Source: `docs/qa/execution-matching-selective-semantic-triage.md`
+
+# Execução — triagem ocupacional seletiva antes da IA
+
+Implementar o acordo `docs/qa/agreement-matching-selective-semantic-triage.md` versão `1.0.0` integralmente, preservando os demais acordos citados na sua introdução. Ler o acordo completo antes de editar. A decisão mais recente do Product Owner é buscar internamente todos os Perfis utilizáveis, mostrar o resultado inicial rapidamente e enviar à IA apenas relações profissionais plausíveis que continuem indefinidas, sem depender rigidamente de A/B preliminar.
+
+Entregar uma mudança coerente em domínio compartilhado, orquestração web, guarda da Edge, testes e documentação. Reutilizar Knowledge/RPC/cache/snapshot existentes. Não criar classificação obrigatória no cadastro, taxonomia paralela, pesos novos, decisão humana fictícia ou exclusão automática por ausência de evidência. A falha de IA preserva o match anterior integralmente. Validar os casos profissionais positivos e negativos, escala sintética de 100, segurança de chamada direta e apresentação progressiva antes da publicação. Encerrar com AoT real, Context Pack atualizado, release seletivo e estados verificados de Git/QA/produção.
 
 ---
 

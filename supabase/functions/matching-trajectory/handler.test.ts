@@ -76,15 +76,24 @@ Deno.test("auth/session/source authorization precedes all service and provider a
     assert(f.diagnostics.length === 0);
   }
 });
-Deno.test("server triage admits usable professional content before cache, service or provider, even on snapshot", async () => {
-  for (const contextual of [false, true]) for (const snapshot of [false, true]) {
-    const f = fixture(), s = f.snapshotSources();
-    const candidate = s.candidate as Record<string, unknown>;
-    f.setSnapshotSources({ ...s, candidate: { ...candidate, profileData: { experiences: [{ role: "Vendedor" }], competencies: contextual ? ["APIs"] : [] } } });
+Deno.test("server triage rejects contextual, resolved and human-decided profiles before cache or provider", async () => {
+  for (const kind of ["contextual", "tool_only", "resolved", "related", "confirmed", "dismissed"] as const) for (const snapshot of [false, true]) {
+    const f = fixture(), s = f.snapshotSources(), candidate = s.candidate as Record<string, unknown>;
+    f.setSnapshotSources({ ...s,
+      candidate: { ...candidate, profileData: kind === "contextual" || kind === "tool_only"
+        ? { experiences: [{ role: "Vendedor de tecnologia" }], competencies: kind === "tool_only" ? ["APIs"] : [] }
+        : candidate.profileData },
+      occupationReference: kind === "resolved" || kind === "related" ? { conceptId: "occupation-backend", canonicalLabel: "Backend developer", aliases: [],
+        relations: kind === "related" ? [{ conceptId: "occupation-software", label: "Software developer", relationType: "related_to" }] : [] } : null,
+      positionDecision: kind === "dismissed" ? "dismissed" : kind === "confirmed" ? "confirmed" : null,
+      ...(kind === "resolved" || kind === "related" ? { vacancy: { ...(s.vacancy as Record<string, unknown>), referenceConceptId: "occupation-backend" },
+        candidate: { ...candidate, knowledge: [{ state: "resolved", conceptType: "occupation", conceptId: kind === "related" ? "occupation-software" : "occupation-backend",
+          originalTerm: "Software developer", canonicalLabel: "Software developer" }] } } : {}),
+    });
     const data = await (await handleMatchingTrajectory(f.request(snapshot ? { ...ids, operation: "snapshot" } : ids), f.deps)).json();
-    assert(data.reasonCode !== "OUTSIDE_SEMANTIC_TRIAGE");
-    assert(f.serviceCreated() > 0);
-    assert(f.calls.some(c => c.name === "claim_matching_trajectory"));
+    assert(data.reasonCode === "OUTSIDE_SEMANTIC_TRIAGE", `${kind}: ${JSON.stringify(data)}`);
+    assert(f.serviceCreated() === 0 && f.requests.length === 0);
+    assert(!f.calls.some(c => c.name === "claim_matching_trajectory"));
   }
 });
 Deno.test("server triage uses source identity and revisions, never browser approval", async () => {

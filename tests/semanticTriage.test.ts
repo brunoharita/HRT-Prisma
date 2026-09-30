@@ -2,8 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import ts from "typescript";
-import { isSemanticPilot } from "../src/domain/semanticTrajectory.js";
-import { applySemanticAssessment, isSemanticTriageEligible, unavailableSemantic } from "../web/src/domain/semanticMatching.js";
+import { applySemanticAssessment, isSemanticDiscoveryEligible, isSemanticTriageEligible, semanticTriageDisposition, unavailableSemantic } from "../web/src/domain/semanticMatching.js";
 import { assessVacancySeniority, emptyVacancyDraft, matchVacancyCandidate, newVacancyRequirement, type VacancyDetail } from "../web/src/domain/vacancy.js";
 import type { StructuredDraft } from "../web/src/domain/personIngestion.js";
 
@@ -16,17 +15,23 @@ function match(id: string, role: string, competencies: string[] = [], areasOfExp
     experiences: [{ id: "experience", role, description: null, organization: null, period: null, evidenceText: "", page: null, source: "human" }],
     education: [], competencies, languages: [], certifications: [], customSections: [], uncertainties: [], notIdentified: [] };
   return matchVacancyCandidate(vacancy, { personId: id, fullName: "Synthetic", lifecycle: "candidate", operationalStatus: "active",
-    profileId: id, profileVersion: 1, profileData: profile, knowledge: [], location: null, publishedAt: "" });
+    profileId: id, profileVersion: 1, profileData: profile, knowledge: [], location: null, publishedAt: "" },
+  { conceptId: "software", canonicalLabel: "Desenvolvedor de sistemas de tecnologia da informação", aliases: ["Programador de sistemas", "Desenvolvedor de software"], relations: [] });
 }
 const a = match("a", "Desenvolvedor backend"), b = match("b", "Programador de sistemas", [], ["Tecnologia"]),
   c = match("c", "Vendedor", ["Node.js"]), outside = match("outside", "Vendedor");
 
-test("universal triage admits every published profile with usable professional content", () => {
+test("discovery remains broad while only unresolved occupational relations reach AI", () => {
   assert.equal(a.discoveryGroup, "main_area"); assert.equal(b.discoveryGroup, "related_area");
   assert.equal(c.discoveryGroup, "contextual_signals");
-  assert.deepEqual([a, b, c, outside].map(isSemanticTriageEligible), [true, true, true, true]);
+  assert.deepEqual([a, b, c, outside].map(isSemanticDiscoveryEligible), [true, true, true, true]);
+  assert.deepEqual([a, b, c, outside].map(isSemanticTriageEligible), [true, true, false, false]);
+  assert.deepEqual([a, b, c, outside].map(semanticTriageDisposition), ["needs_interpretation", "needs_interpretation", "contextual_only", "contextual_only"]);
   assert.equal(isSemanticTriageEligible({ ...b, score: { ...b.score, score: 0 } }), true);
   assert.equal(isSemanticTriageEligible({ ...c, positionDecision: "dismissed" }), false);
+  assert.equal(isSemanticTriageEligible({ ...b, discoveryGroup: "contextual_signals" }), true);
+  assert.equal(semanticTriageDisposition({ ...b, positionRelation: { ...b.positionRelation, status: "same_reference" } }), "resolved_internal");
+  assert.equal(semanticTriageDisposition({ ...b, positionDecision: "confirmed" }), "resolved_internal");
 });
 
 // Execute the production orchestration declaration with injected infrastructure, not a second implementation.
@@ -36,32 +41,37 @@ const declaration = ast.statements.find(node => ts.isFunctionDeclaration(node) &
 assert.ok(declaration);
 const compiled = ts.transpileModule(declaration.getText(ast), { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
 function orchestrator(calls: string[]) {
-  return new Function("isSemanticPilot", "isSemanticTriageEligible", "applySemanticAssessment", "unavailableSemantic", "supabase", `${compiled}; return interpretMatches;`)(
-    isSemanticPilot, isSemanticTriageEligible, applySemanticAssessment, unavailableSemantic,
+  return new Function("isSemanticTriageEligible", "applySemanticAssessment", "unavailableSemantic", "supabase", `${compiled}; return interpretMatches;`)(
+    isSemanticTriageEligible, applySemanticAssessment, unavailableSemantic,
     { functions: { invoke: async (_name: string, options: { body: { profileId: string } }) => {
       calls.push(options.body.profileId); return { data: null, error: { message: "synthetic unavailable" } };
     } } },
   );
 }
-test("production batch calls every usable profile and counts eligible progress", async () => {
-  const calls: string[] = [], progress: number[][] = [];
-  const results = await orchestrator(calls)(vacancy, [a, b, c, outside], (done: number, total: number) => progress.push([done, total]));
-  assert.deepEqual(calls.sort(), ["a", "b", "c", "outside"]);
-  assert.deepEqual(progress, [[0, 4], [1, 4], [2, 4], [3, 4], [4, 4]]);
+test("production batch sends only plausible unresolved relations and counts progress", async () => {
+  const calls: string[] = [], progress: number[][] = [], updates: string[] = [];
+  const results = await orchestrator(calls)(vacancy, [a, b, c, outside], (done: number, total: number) => progress.push([done, total]), undefined,
+    (updated: typeof a) => updates.push(updated.candidate.personId));
+  assert.deepEqual(calls.sort(), ["a", "b"]);
+  assert.deepEqual(progress, [[0, 2], [1, 2], [2, 2]]);
+  assert.deepEqual(updates.sort(), ["a", "b"]);
   for (const [index, result] of results.entries()) {
     const { semanticFallback, ...priorResult } = result;
-    assert.equal(semanticFallback?.status, "unavailable");
+    assert.equal(Boolean(semanticFallback), index < 2);
     assert.deepEqual(priorResult, [a, b, c, outside][index]);
   }
   assert.deepEqual(results.map((m: typeof a) => m.candidate.personId), ["a", "b", "c", "outside"]);
 });
-test("dismissed profiles and empty positions never call AI", async () => {
+test("dismissed, contextual and internally resolved profiles never call AI", async () => {
   const calls: string[] = [];
-  await orchestrator(calls)(vacancy, [{ ...c, positionDecision: "dismissed" }]);
-  const original = [a, b];
-  const interpreted = await orchestrator(calls)({ ...vacancy, title: "Gerente de projetos" }, original);
+  const original = [a, b, c];
+  const interpreted = await orchestrator(calls)(vacancy, [{ ...a, positionDecision: "dismissed" },
+    { ...b, positionRelation: { ...b.positionRelation, status: "related_reference" } }, c]);
+  assert.deepEqual(calls, []);
+  const attempted = await orchestrator(calls)({ ...vacancy, title: "Gerente de projetos" }, original);
   assert.deepEqual(calls, ["a", "b"]);
-  assert.equal(interpreted.every((item: typeof a) => item.semanticFallback?.status === "unavailable" && !item.semanticAssessment), true);
+  assert.equal(interpreted.every((item: typeof a) => !item.semanticFallback && !item.semanticAssessment), true);
+  assert.equal(attempted[2].semanticFallback, undefined);
 });
 
 test("profiles without usable professional content are excluded before interpretation", () => {
@@ -70,6 +80,7 @@ test("profiles without usable professional content are excluded before interpret
     ...empty.candidate.profileData,
     professionalTitle: null, summary: null, professionalObjective: null, areasOfExpertise: [], keyResults: [], experiences: [],
   };
+  assert.equal(isSemanticDiscoveryEligible(empty), false);
   assert.equal(isSemanticTriageEligible(empty), false);
 });
 
@@ -94,7 +105,73 @@ test("seniority penalty is symmetric and only uses explicit level markers", () =
   assert.equal(assessVacancySeniority("Diretor de operações", "Júnior de operações", 20).adjustment, -4);
   assert.equal(assessVacancySeniority("Desenvolvedor de operações", "Programador de operações", 20).adjustment, 0);
 });
-test("discovery and direct comparison filter only profiles without usable content before orchestration", () => {
-  assert.match(source, /interpretMatches\(vacancy, baseMatches\.filter\(match => isSemanticTriageEligible\(match\)\)/);
-  assert.match(source, /interpretMatches\(vacancy, matches\.filter\(match => isSemanticTriageEligible\(match\)\)/);
+test("discovery emits baseline before AI and direct comparison preserves broad discovery", () => {
+  assert.match(source, /onInitial\?\.\(\{ matches: sortVacancyMatches\(discovered\), \.\.\.summary \}\);[\s\S]*?await interpretMatches\(vacancy, discovered/);
+  assert.match(source, /matches\.filter\(isSemanticDiscoveryEligible\)/);
+});
+
+test("actual discovery orchestration emits 100 internal matches before a slow AI batch completes", async () => {
+  const variable = ast.statements.find((item) => ts.isVariableStatement(item) && item.declarationList.declarations.some((declaration) =>
+    ts.isIdentifier(declaration.name) && declaration.name.text === "vacancyService"));
+  assert.ok(variable && ts.isVariableStatement(variable));
+  const object = variable.declarationList.declarations.find((item) => ts.isIdentifier(item.name) && item.name.text === "vacancyService")?.initializer;
+  assert.ok(object && ts.isObjectLiteralExpression(object));
+  const method = object.properties.find((item) => ts.isMethodDeclaration(item) && item.name.getText(ast) === "findPeople");
+  assert.ok(method);
+  const code = ts.transpileModule(`const service = { ${method.getText(ast)} };`, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const candidates = Array.from({ length: 100 }, (_, index) => ({ ...a.candidate, personId: `person-${index}`, profileId: `profile-${index}` }));
+  let finish!: (matches: typeof a[]) => void;
+  const delayed = new Promise<typeof a[]>((resolve) => { finish = resolve; });
+  const findPeople = new Function("loadPublishedProfileCandidateCollection", "loadVacancyOccupationReference", "loadPositionRelationDecisions",
+    "loadDemonstratedEvidence", "matchVacancyCandidate", "isSemanticDiscoveryEligible", "sortVacancyMatches", "interpretMatches", `${code}; return service.findPeople;`)(
+    async () => ({ candidates, analyzedProfileCount: 100, publishedProfileCount: 100, queriedProfileRecordCount: 100, expectedProfileRecordCount: 100, complete: true }),
+    async () => null, async () => new Map(), async () => ({ byPerson: new Map(), dependency: null }),
+    (_vacancy: unknown, candidate: typeof a.candidate) => ({ ...a, candidate }), isSemanticDiscoveryEligible,
+    (matches: typeof a[]) => matches, async () => delayed);
+  const initialHolder: { current?: { matches: typeof a[]; analyzedProfileCount: number } } = {};
+  let completed = false;
+  const start = performance.now();
+  const operation = findPeople("org", vacancy, true, undefined, undefined, (value: { matches: typeof a[]; analyzedProfileCount: number }) => { initialHolder.current = value; });
+  void operation.then(() => { completed = true; });
+  await new Promise<void>((resolve) => setImmediate(resolve));
+  const initial = initialHolder.current;
+  assert.ok(initial);
+  assert.equal(initial.matches.length, 100);
+  assert.equal(initial.analyzedProfileCount, 100);
+  assert.equal(completed, false);
+  assert.ok(performance.now() - start < 5000, "mocked internal first list must not wait for delayed AI");
+  finish(initial.matches);
+  assert.equal((await operation).matches.length, 100);
+});
+
+test("100 synthetic profiles pass internal triage while only ambiguous occupations consume AI", async () => {
+  const start = performance.now();
+  const profiles = Array.from({ length: 100 }, (_, index) => index < 8
+    ? match(`plausible-${index}`, "Programador de sistemas")
+    : index < 20
+      ? { ...match(`internal-${index}`, "Desenvolvedor backend"), positionRelation: { ...a.positionRelation, status: "same_reference" as const } }
+      : match(`context-${index}`, "Vendedor de tecnologia", ["Node.js"]));
+  const internalElapsedMs = performance.now() - start;
+  assert.ok(internalElapsedMs < 5000, `synthetic internal 100-profile pass took ${internalElapsedMs.toFixed(0)} ms`);
+  const calls: string[] = [], progress: number[][] = [];
+  const results = await orchestrator(calls)(vacancy, profiles, (done: number, total: number) => progress.push([done, total]));
+  assert.equal(results.length, 100);
+  assert.equal(calls.length, 8);
+  assert.deepEqual(progress[0], [0, 8]);
+  assert.deepEqual(progress.at(-1), [8, 8]);
+  assert.equal(results.filter((item: typeof a) => item.semanticFallback).length, 8);
+});
+
+test("seven contrasted career tracks route programming and historical development but not adjacent business domains", () => {
+  const tracks = [
+    match("software-history", "Desenvolvedor de software"),
+    match("systems-programming", "Programador de sistemas"),
+    match("marketing", "Assistente de Marketing & Business Development"),
+    match("content", "Produtor de conteúdo audiovisual"),
+    match("tech-sales", "Consultor comercial de tecnologia", ["Node.js"]),
+    match("customer-success", "Customer Success"),
+    match("logistics", "Operador de logística"),
+  ];
+  assert.deepEqual(tracks.map(isSemanticDiscoveryEligible), [true, true, true, true, true, true, true]);
+  assert.deepEqual(tracks.map(isSemanticTriageEligible), [true, true, false, false, false, false, false]);
 });

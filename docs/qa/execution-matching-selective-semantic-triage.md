@@ -1,0 +1,5 @@
+# Execução — triagem ocupacional seletiva antes da IA
+
+Implementar o acordo `docs/qa/agreement-matching-selective-semantic-triage.md` versão `1.0.0` integralmente, preservando os demais acordos citados na sua introdução. Ler o acordo completo antes de editar. A decisão mais recente do Product Owner é buscar internamente todos os Perfis utilizáveis, mostrar o resultado inicial rapidamente e enviar à IA apenas relações profissionais plausíveis que continuem indefinidas, sem depender rigidamente de A/B preliminar.
+
+Entregar uma mudança coerente em domínio compartilhado, orquestração web, guarda da Edge, testes e documentação. Reutilizar Knowledge/RPC/cache/snapshot existentes. Não criar classificação obrigatória no cadastro, taxonomia paralela, pesos novos, decisão humana fictícia ou exclusão automática por ausência de evidência. A falha de IA preserva o match anterior integralmente. Validar os casos profissionais positivos e negativos, escala sintética de 100, segurança de chamada direta e apresentação progressiva antes da publicação. Encerrar com AoT real, Context Pack atualizado, release seletivo e estados verificados de Git/QA/produção.

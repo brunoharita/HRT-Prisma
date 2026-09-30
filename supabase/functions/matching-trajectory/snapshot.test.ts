@@ -43,14 +43,14 @@ Deno.test("snapshot uses active demonstrated evidence and exact stable requireme
     vacancy: { id: "vacancy", organizationId: "org", versionId: "version", version: 2, title: "Backend developer", area: "Software",
       requirements: [{ id: "requirement", stableId: "stable-api", label: "APIs", category: "technology", importance: "required", targetLevel: "advanced", relatedSignals: [] }] },
     candidate: { personId: "person", profileId: "profile", profileVersion: 3, profileData: raw, knowledge: [] },
-    occupationReference: null, positionDecision: "confirmed",
+    occupationReference: null, positionDecision: null,
     demonstratedEvidence: [{ id: "verified", competencyKey: "APIs", demonstratedLevel: "advanced", confidenceState: "high",
       verificationDefinitionVersion: "m51a-verification-definition-1.0.0", evaluationVersion: "m51b-assessment-evaluation-1.0.0", integrityRuleVersion: "m51b-integrity-ruleset-1.0.0", verifiedAt: "2026-09-25" }],
   };
   const evaluation = buildSnapshotEvaluation(sources, assessment)!;
   const requirements = evaluation.requirements as { stableId: string; status: string; evidence: { sourceId: string }[] }[];
   assert(requirements[0].stableId === "stable-api" && requirements[0].status === "met" && requirements[0].evidence[0].sourceId === "verified");
-  assert(evaluation.positionDecision === "confirmed" && (evaluation.score as { score: number }).score === 100);
+  assert(evaluation.positionDecision === null && (evaluation.score as { score: number }).score === 100);
   const changed = buildSnapshotEvaluation({ ...sources, demonstratedEvidence: sources.demonstratedEvidence.map(e => ({ ...e, confidenceState: "reduced" })) }, assessment)!;
   assert((changed.score as { inputFingerprint: string }).inputFingerprint !== (evaluation.score as { inputFingerprint: string }).inputFingerprint,
     "changed demonstrated evidence must change the authoritative score fingerprint");
@@ -70,7 +70,8 @@ Deno.test("server snapshot accepts abbreviated historical execution and excludes
     const sources = {
       vacancy: { id: "vacancy", organizationId: "org", versionId: "version", version: 1, title: "Desenvolvedor backend", area: "Software", requirements: [] },
       candidate: { personId: "person", profileId: "profile", profileVersion: 1, profileData: raw, knowledge: [] },
-      occupationReference: null, positionDecision: null, demonstratedEvidence: [],
+      occupationReference: { conceptId: "software", canonicalLabel: "Desenvolvedor de sistemas de tecnologia da informação",
+        aliases: ["Desenvolvedor de software"], relations: [] }, positionDecision: null, demonstratedEvidence: [],
     };
     const before = JSON.stringify(sources);
     const evaluation = buildSnapshotEvaluation(sources, assessment, "2026-09-27");

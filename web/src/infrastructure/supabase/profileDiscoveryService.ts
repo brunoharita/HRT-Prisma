@@ -10,6 +10,7 @@ import { supabase } from "./client";
 import { decodeProfileDataForPresentation } from "./personIngestionService";
 
 const PROFILE_DISCOVERY_PAGE_SIZE = 200;
+const KNOWLEDGE_OBSERVATION_PAGE_SIZE = 500;
 
 export interface PublishedProfileCandidateCollection {
   candidates: PublishedProfileCandidate[];
@@ -103,7 +104,7 @@ async function materializePublishedProfileCandidates(
   profiles: Array<{ id: string; person_id: string; profile_version: number; profile_data: import("./database.types.js").Json; approved_at: string | null; created_at: string }>,
 ): Promise<PublishedProfileCandidate[]> {
   const ids = profiles.map((profile) => profile.person_id);
-  const [peopleResult, privateResult, observationsResult] = await Promise.all([
+  const [peopleResult, privateResult, observations] = await Promise.all([
     supabase.from("people")
       .select("id, full_name, lifecycle, operational_status")
       .eq("organization_id", organizationId)
@@ -112,24 +113,20 @@ async function materializePublishedProfileCandidates(
     includePrivateLocation
       ? supabase.from("person_private_data").select("person_id, city, country_code").eq("organization_id", organizationId).in("person_id", ids)
       : Promise.resolve({ data: [], error: null }),
-    supabase.from("knowledge_observations")
-      .select("profile_id, original_term, resolution_state, concept_id, source_field_path, knowledge_global_version, knowledge_organization_version, resolution_source_version_id, resolution_method_version")
-      .eq("organization_id", organizationId)
-      .in("profile_id", profiles.map((profile) => profile.id)).order("id"),
+    loadPublishedKnowledgeObservations(organizationId, profiles.map((profile) => profile.id)),
   ]);
   throwIfError(peopleResult.error, "Não foi possível confirmar as Pessoas dos Perfis encontrados.");
   throwIfError(privateResult.error, "Não foi possível consultar as localizações permitidas.");
-  throwIfError(observationsResult.error, "Não foi possível consultar a normalização profissional dos Perfis.");
 
-  const conceptIds = [...new Set((observationsResult.data ?? []).flatMap((item) => item.concept_id ? [item.concept_id] : []))];
-  const conceptResult = conceptIds.length
-    ? await supabase.from("knowledge_concepts").select("id, canonical_label, concept_type").in("id", conceptIds).eq("status", "approved").or(`scope.eq.global,organization_id.eq.${organizationId}`)
-    : { data: [], error: null };
-  throwIfError(conceptResult.error, "Não foi possível resolver os conceitos profissionais encontrados.");
+  const conceptIds = [...new Set(observations.flatMap((item) => item.concept_id ? [item.concept_id] : []))];
+  const conceptResults = await Promise.all(Array.from({ length: Math.ceil(conceptIds.length / PROFILE_DISCOVERY_PAGE_SIZE) }, (_, index) =>
+    supabase.from("knowledge_concepts").select("id, canonical_label, concept_type")
+      .in("id", conceptIds.slice(index * PROFILE_DISCOVERY_PAGE_SIZE, (index + 1) * PROFILE_DISCOVERY_PAGE_SIZE))
+      .eq("status", "approved").or(`scope.eq.global,organization_id.eq.${organizationId}`)));
+  for (const result of conceptResults) throwIfError(result.error, "Não foi possível resolver os conceitos profissionais encontrados.");
   const people = new Map((peopleResult.data ?? []).map((person) => [person.id, person]));
   const locations = new Map((privateResult.data ?? []).map((item) => [item.person_id, [item.city, item.country_code].filter(Boolean).join(", ") || null]));
-  const concepts = new Map((conceptResult.data ?? []).map((item) => [item.id, item]));
-  const observations = observationsResult.data ?? [];
+  const concepts = new Map(conceptResults.flatMap((result) => result.data ?? []).map((item) => [item.id, item]));
 
   return profiles.flatMap((profile): PublishedProfileCandidate[] => {
     const person = people.get(profile.person_id);
@@ -155,6 +152,26 @@ async function materializePublishedProfileCandidates(
       })),
     }];
   });
+}
+
+async function loadPublishedKnowledgeObservations(organizationId: string, profileIds: string[]) {
+  const query = (from: number) => supabase.from("knowledge_observations")
+    .select("profile_id, original_term, resolution_state, concept_id, source_field_path, knowledge_global_version, knowledge_organization_version, resolution_source_version_id, resolution_method_version", { count: "exact" })
+    .eq("organization_id", organizationId).in("profile_id", profileIds).order("id")
+    .range(from, from + KNOWLEDGE_OBSERVATION_PAGE_SIZE - 1);
+  const first = await query(0);
+  throwIfError(first.error, "Não foi possível consultar a normalização profissional dos Perfis.");
+  const observations = [...(first.data ?? [])];
+  let page = 1, batch = first.data ?? [];
+  while (batch.length === KNOWLEDGE_OBSERVATION_PAGE_SIZE) {
+    const next = await query(page * KNOWLEDGE_OBSERVATION_PAGE_SIZE);
+    throwIfError(next.error, "Não foi possível consultar a normalização profissional dos Perfis.");
+    batch = next.data ?? [];
+    observations.push(...batch);
+    page += 1;
+  }
+  if (typeof first.count === "number" && first.count !== observations.length) throw new Error("A normalização profissional dos Perfis ficou incompleta; tente novamente.");
+  return observations;
 }
 
 async function loadKnowledgeMatches(organizationId: string, competencies: string[]): Promise<KnowledgeSearchMatches> {

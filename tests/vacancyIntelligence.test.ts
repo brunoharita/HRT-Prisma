@@ -314,8 +314,8 @@ test("descoberta pagina todos os Perfis e persiste confirmação ou descarte sem
   assert.doesNotMatch(profileService, /MAX_PILOT_PROFILES/);
   assert.match(vacancyServiceSource, /type: "position_relation_decision"/);
   assert.match(vacancyServiceSource, /recordPositionRelationDecision/);
-  assert.match(vacancyServiceSource, /baseMatches\.filter\(match => isSemanticTriageEligible\(match\)\)/);
-  assert.match(vacancyServiceSource, /matches\.filter\(match => isSemanticTriageEligible\(match\)\)/);
+  assert.match(vacancyServiceSource, /baseMatches\.filter\(isSemanticDiscoveryEligible\)/);
+  assert.match(vacancyServiceSource, /matches\.filter\(isSemanticDiscoveryEligible\)/);
   assert.match(page, /Confirmar relação/);
   assert.match(page, /Não considerar/);
   assert.match(page, /discovery && !discovery.complete/);

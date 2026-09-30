@@ -3,9 +3,32 @@ import { calculateMatchingScore, type MatchingScoreExperience, type VacancyFunct
 import type { VacancyAreaRelation, VacancyCandidateMatch, VacancyDetail, VacancyMatchEvidence } from "./vacancy.js";
 import { assessVacancyEvidence, assessVacancySeniority, hasUsableProfessionalContent } from "./vacancy.js";
 
-/** Activation policy only: apply to the deterministic match, never the interpreted result. */
-export function isSemanticTriageEligible(match: VacancyCandidateMatch): boolean {
+/** Activation policy only; semantic output and persisted score contracts are unchanged. */
+export const SEMANTIC_TRIAGE_VERSION = "semantic-triage-2.0.0";
+export type SemanticTriageDisposition = "excluded" | "resolved_internal" | "needs_interpretation" | "contextual_only";
+
+/** Discovery remains broad; only the external interpretation is selective. */
+export function isSemanticDiscoveryEligible(match: VacancyCandidateMatch): boolean {
   return match.positionDecision !== "dismissed" && hasUsableProfessionalContent(match.candidate);
+}
+
+/** Apply only to the deterministic match, on both browser and authenticated server sources. */
+export function semanticTriageDisposition(match: VacancyCandidateMatch): SemanticTriageDisposition {
+  if (!isSemanticDiscoveryEligible(match)) return "excluded";
+  if (["same_reference", "equivalent_reference", "related_reference"].includes(match.positionRelation.status)
+    || match.positionDecision === "confirmed") return "resolved_internal";
+  // A possible occupational title relation is attributable to an actual title/experience,
+  // unlike a shared area, isolated technology or requirement. It can start in any group.
+  if (match.positionRelation.status === "possible_title_relation") return "needs_interpretation";
+  // Direct professional experience in the position's named area is a plausible functional
+  // relation even when title wording differs. A declared area alone is not.
+  if (match.trajectoryAssessment.relation === "direct"
+    && match.trajectoryAssessment.evidence.some(item => item.source === "Cargo em experiência profissional")) return "needs_interpretation";
+  return "contextual_only";
+}
+
+export function isSemanticTriageEligible(match: VacancyCandidateMatch): boolean {
+  return semanticTriageDisposition(match) === "needs_interpretation";
 }
 
 const POINTS: Record<TrajectoryActivity, number> = {

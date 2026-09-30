@@ -1,5 +1,5 @@
 import { PositionTaxonomyPanel, TaxonomyOriginDetails } from "../components/PositionTaxonomyPanel";
-import { semanticComparisonPending } from "../domain/semanticMatching.js";
+import { isSemanticTriageEligible, semanticComparisonPending } from "../domain/semanticMatching.js";
 import { positionTaxonomyService } from "../infrastructure/supabase/positionTaxonomyService";
 import { changeTaxonomyTitle } from "../domain/positionTaxonomy";
 import { toggleComparisonSelection } from "../shared/uxFoundation";
@@ -550,19 +550,41 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
   const [decidingPersonId, setDecidingPersonId] = useState<string | null>(null);
   const [learningPersonId, setLearningPersonId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [interpreting, setInterpreting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     let current = true;
     generation.current += 1; evaluationRequest.current += 1;
     const controller = new AbortController();
-    setLoading(true); setError(null); setMatches([]); setDiscovery(null); setProgress(null); setVacancy(null); setActiveMatch(null); setActiveEvaluationId(null); setDecidingPersonId(null);
+    setLoading(true); setInterpreting(false); setError(null); setMatches([]); setDiscovery(null); setProgress(null); setVacancy(null); setActiveMatch(null); setActiveEvaluationId(null); setDecidingPersonId(null);
     void vacancyService.load(activeMembership.organizationId, vacancyId).then(async (detail) => {
       if (!detail) throw new Error("A Posição não foi encontrada.");
       if (!current) return;
       setVacancy(detail);
-      const result = await vacancyService.findPeople(activeMembership.organizationId, detail, true, (completed, total) => { if (current) setProgress({ completed, total }); }, controller.signal);
-      if (current) { const { matches: found, ...summary } = result; setVacancy(detail); setMatches(found); setDiscovery(summary); }
-    }).catch((caught) => { if (current) setError(errorMessage(caught, "Não foi possível encontrar Pessoas.")); })
+      const result = await vacancyService.findPeople(activeMembership.organizationId, detail, true,
+        (completed, total) => { if (current) setProgress({ completed, total }); }, controller.signal,
+        (initial) => {
+          if (!current) return;
+          const { matches: found, ...summary } = initial;
+          setMatches(found); setDiscovery(summary); setLoading(false);
+          setInterpreting(found.some(isSemanticTriageEligible));
+        },
+        (updated) => {
+          if (!current) return;
+          // A pre-IA evaluation ID cannot authorize actions against a newly interpreted score.
+          setActiveEvaluationId(null);
+          setMatches((previous) => sortVacancyMatches(previous.map((item) => item.candidate.personId === updated.candidate.personId
+            ? { ...updated, positionDecision: item.positionDecision } : item)));
+          setActiveMatch((previous) => previous?.candidate.personId === updated.candidate.personId
+            ? { ...updated, positionDecision: previous.positionDecision } : previous);
+        });
+      if (current) {
+        const { matches: found, ...summary } = result;
+        setMatches((previous) => sortVacancyMatches(found.map((item) => ({ ...item,
+          positionDecision: previous.find((prior) => prior.candidate.personId === item.candidate.personId)?.positionDecision ?? item.positionDecision }))));
+        setDiscovery(summary); setInterpreting(false);
+      }
+    }).catch((caught) => { if (current) { setError(errorMessage(caught, "Não foi possível encontrar Pessoas.")); setInterpreting(false); } })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; generation.current += 1; evaluationRequest.current += 1; controller.abort(); };
   }, [activeMembership.organizationId, vacancyId, attempt]);
@@ -606,20 +628,25 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
   const comparisonPending = semanticComparisonPending(matches);
   const fallbackCount = matches.filter(match => match.semanticFallback).length;
   const pendingMatches = matches.filter(match => match.semanticAssessment && match.semanticAssessment.status !== "complete");
+  const occupationalPending = interpreting ? matches.filter(match => match.discoveryGroup === "contextual_signals"
+    && isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback) : [];
   return <PrismaPage className="prisma-vacancy-people-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}`)} type="text">Voltar para a Posição</Button>
     <PrismaPageHeader title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="A trajetória e os requisitos são apresentados separadamente. O score organiza evidências, não decide contratação. Consulte cobertura e pendências antes de comparar." actions={<Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
+    {interpreting && progress?.total ? <Alert showIcon type="info" title="Resultados internos disponíveis · interpretação em andamento" description={`${progress.completed} de ${progress.total} relações ocupacionais pendentes interpretadas. Cada Perfil é atualizado quando sua resposta chega; os demais resultados já podem ser consultados.`} /> : null}
     {!loading && fallbackCount ? <Alert showIcon type="warning" title="A interpretação por IA não foi concluída" description={`Para ${fallbackCount} Perfil${fallbackCount === 1 ? "" : "is"}, a busca mostra o cálculo pré-IA desta consulta, não uma interpretação semântica concluída anteriormente. Relações, grupos, pontos e evidências desse cálculo foram preservados. Confira a versão e as evidências no detalhe.`} action={<Button onClick={() => setAttempt(value => value + 1)}>Atualizar análise disponível</Button>} /> : null}
     {discovery && !discovery.complete ? <Alert showIcon type="warning" title="A consulta de Perfis publicados ficou incompleta." description={`${discovery.queriedProfileRecordCount} de ${discovery.expectedProfileRecordCount} registros de Perfil foram consultados; a lista pode estar incompleta.`} /> : null}
     {discovery?.unclassifiedRequirementCount ? <Alert showIcon type="warning" title="Há requisitos aguardando classificação." description={`${discovery.unclassifiedRequirementCount} requisito${discovery.unclassifiedRequirementCount === 1 ? " aguarda" : "s aguardam"} classificação. A descoberta ocupacional continua disponível; conclua a classificação para fechar a aderência detalhada.`} action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Classificar requisitos</Button>} /> : null}
-    {loading ? <PrismaCard><div role="status" aria-live="polite">{progress ? `Interpretando trajetórias: ${progress.completed} de ${progress.total}. O conjunto será exibido sem reordenações parciais.` : "Carregando Perfis publicados…"}</div><Skeleton active avatar paragraph={{ rows: 14 }} /></PrismaCard> : null}
-    {vacancy && !loading && !comparisonPending && !fallbackCount ? <Alert showIcon type="info" title="Trajetória interpretada com critérios versionados" description="A IA classifica evidências publicadas de qualquer profissão; regras fixas calculam os grupos e pontos. Ferramentas, especializações e habilitações exigem evidência própria." /> : null}
+    {loading ? <PrismaCard><div role="status" aria-live="polite">Carregando Perfis publicados e calculando a triagem interna…</div><Skeleton active avatar paragraph={{ rows: 14 }} /></PrismaCard> : null}
+    {vacancy && !loading && !interpreting && !comparisonPending && !fallbackCount ? <Alert showIcon type="info" title="Triagem profissional concluída" description="A Knowledge resolveu relações internas; somente relações ocupacionais plausíveis ainda indefinidas foram enviadas à IA. Ferramentas, especializações e habilitações exigem evidência própria." /> : null}
+    {occupationalPending.length ? <section className="prisma-vacancy-match-group"><header><Typography.Title level={2}>Relação ocupacional plausível · interpretação pendente</Typography.Title><Typography.Text type="secondary">A classificação inicial não é uma conclusão de Grupo C; consulte as evidências enquanto a interpretação termina.</Typography.Text></header><div className="prisma-vacancy-match-list">{occupationalPending.map(match => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} match={match} onDecision={decision => void decidePosition(match, decision)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div></section> : null}
     {pendingMatches.length ? <Button disabled={loading} onClick={() => setAttempt(value => value + 1)}>Atualizar análise disponível</Button> : null}
     {pendingMatches.length ? <section className="prisma-vacancy-match-group"><Typography.Title level={2}>Análise pendente · sem classificação</Typography.Title><Typography.Paragraph>Estas Pessoas não foram colocadas em último lugar nem receberam zero. Consulta do Perfil e comparação de requisitos continuam disponíveis.</Typography.Paragraph><div className="prisma-vacancy-match-list">{pendingMatches.map(match => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} match={match} onDecision={decision => void decidePosition(match, decision)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div></section> : null}
     {!loading && !error && !matches.length ? <PrismaCard><Empty description={discovery?.publishedProfileCount ? "Nenhum Perfil apresentou experiência na área, relação ocupacional ou outra evidência rastreável para esta Posição." : "Não há Perfis publicados acessíveis para esta empresa."}><Button onClick={() => onNavigate(discovery?.publishedProfileCount ? `/vacancies/${vacancyId}/edit` : "/profiles/search")}>{discovery?.publishedProfileCount ? "Revisar Posição" : "Consultar Pessoas"}</Button></Empty></PrismaCard> : null}
     <div className="prisma-vacancy-match-groups">{(["main_area", "related_area", "contextual_signals"] as const).map((group) => {
-      const grouped = matches.filter((match) => match.discoveryGroup === group && (!match.semanticAssessment || match.semanticAssessment.status === "complete"));
+      const grouped = matches.filter((match) => match.discoveryGroup === group && (!match.semanticAssessment || match.semanticAssessment.status === "complete")
+        && !occupationalPending.includes(match));
       if (!grouped.length) return null;
       const title = group === "main_area" ? "Grupo A · trajetória diretamente compatível" : group === "related_area" ? "Grupo B · trajetória relacionada ou potencial de entrada" : `Grupo C · somente sinais contextuais (${grouped.length})`;
       const description = group === "main_area" ? "Atuação direta ou funcionalmente equivalente ao núcleo da Posição. Ordem: maior Prisma Score primeiro." : group === "related_area" ? "Atuação adjacente ou transferível; em Posições de entrada, formação, projetos e conhecimentos também podem sustentar este grupo. Ordem: maior Prisma Score primeiro." : "Contexto, declarações ou sinais sem atuação comparável suficiente; isso não é conclusão de incapacidade.";
@@ -768,7 +795,7 @@ function ScoreItemTag({ status }: { status: MatchingScoreItemStatus }) {
 
 function MatchRelationTags({ match }: { match: VacancyCandidateMatch }) {
   if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <Tag>Análise pendente</Tag>;
-  return <><DiscoveryGroupTag group={match.discoveryGroup} /><AreaRelationTag status={match.areaRelation.status} /><PositionRelationTag status={match.positionRelation.status} />{match.semanticFallback ? <Tag color="warning">IA não concluiu · cálculo pré-IA {match.score.matchingContractVersion}</Tag> : null}</>;
+  return <><DiscoveryGroupTag group={match.discoveryGroup} /><AreaRelationTag status={match.areaRelation.status} /><PositionRelationTag status={match.positionRelation.status} />{isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback ? <Tag color="processing">Relação plausível · interpretação pendente</Tag> : null}{match.semanticFallback ? <Tag color="warning">IA não concluiu · cálculo pré-IA {match.score.matchingContractVersion}</Tag> : null}</>;
 }
 
 function DiscoveryGroupTag({ group }: { group: VacancyCandidateMatch["discoveryGroup"] }) { const values = { main_area: ["blue", "Trajetória direta"], related_area: ["purple", "Trajetória relacionada"], contextual_signals: ["default", "Somente sinais"] } as const; return <Tag color={values[group][0]}>{values[group][1]}</Tag>; }

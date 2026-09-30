@@ -1,6 +1,6 @@
 import type { PostgrestError } from "@supabase/supabase-js";
 import { type SemanticAssessment } from "../../../../src/domain/semanticTrajectory.js";
-import { applySemanticAssessment, isSemanticTriageEligible, unavailableSemantic } from "../../domain/semanticMatching.js";
+import { applySemanticAssessment, isSemanticDiscoveryEligible, isSemanticTriageEligible, unavailableSemantic } from "../../domain/semanticMatching.js";
 import {
   matchVacancyCandidate,
   sortVacancyMatches,
@@ -406,7 +406,8 @@ export const vacancyService = {
     return data;
   },
 
-  async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true, onProgress?: (completed: number, total: number) => void, signal?: AbortSignal): Promise<VacancyPeopleDiscovery> {
+  async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true, onProgress?: (completed: number, total: number) => void, signal?: AbortSignal,
+    onInitial?: (discovery: VacancyPeopleDiscovery) => void, onMatch?: (match: VacancyCandidateMatch, completed: number, total: number) => void): Promise<VacancyPeopleDiscovery> {
     if (!vacancy.title.trim()) throw new Error("Informe o título da Vaga antes de buscar Pessoas.");
     const [collection, occupationReference, decisions] = await Promise.all([
       loadPublishedProfileCandidateCollection(organizationId, includePrivateLocation),
@@ -419,10 +420,8 @@ export const vacancyService = {
       ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate),
       positionDecision: decisions.get(candidate.personId) ?? null,
     }));
-    const interpreted = await interpretMatches(vacancy, baseMatches.filter(match => isSemanticTriageEligible(match)), onProgress, signal);
-    const matches = sortVacancyMatches(interpreted.filter(match => isSemanticTriageEligible(match)));
-    return {
-      matches,
+    const discovered = baseMatches.filter(isSemanticDiscoveryEligible);
+    const summary = {
       analyzedProfileCount: collection.analyzedProfileCount,
       publishedProfileCount: collection.publishedProfileCount,
       queriedProfileRecordCount: collection.queriedProfileRecordCount,
@@ -430,6 +429,9 @@ export const vacancyService = {
       complete: collection.complete,
       unclassifiedRequirementCount: vacancy.requirements.filter((item) => item.importance === "unclassified").length,
     };
+    onInitial?.({ matches: sortVacancyMatches(discovered), ...summary });
+    const interpreted = await interpretMatches(vacancy, discovered, onProgress, signal, onMatch);
+    return { matches: sortVacancyMatches(interpreted), ...summary };
   },
 
   async loadPeopleByIds(organizationId: string, vacancy: VacancyDetail, personIds: string[], includePrivateLocation = true, signal?: AbortSignal): Promise<VacancyCandidateMatch[]> {
@@ -444,7 +446,7 @@ export const vacancyService = {
       const candidate = candidates.find((item) => item.personId === id);
       return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
     });
-    return interpretMatches(vacancy, matches.filter(match => isSemanticTriageEligible(match)), undefined, signal);
+    return interpretMatches(vacancy, matches.filter(isSemanticDiscoveryEligible), undefined, signal);
   },
 
   async recordPositionRelationDecision(vacancy: VacancyDetail, match: VacancyCandidateMatch, decision: Exclude<VacancyPositionRelationDecision, null>): Promise<void> {
@@ -535,11 +537,10 @@ export const vacancyService = {
 
 const POSITION_DECISION_PAGE_SIZE = 200;
 
-async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidateMatch[], onProgress?: (completed: number, total: number) => void, signal?: AbortSignal): Promise<VacancyCandidateMatch[]> {
+async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidateMatch[], onProgress?: (completed: number, total: number) => void, signal?: AbortSignal,
+  onMatch?: (match: VacancyCandidateMatch, completed: number, total: number) => void): Promise<VacancyCandidateMatch[]> {
   if (!vacancy.title.trim()) return matches;
-  const eligible = matches.flatMap((match, index) => isSemanticTriageEligible(match)
-    && match.positionDecision !== "confirmed"
-    && !["same_reference", "equivalent_reference", "related_reference"].includes(match.positionRelation.status) ? [index] : []);
+  const eligible = matches.flatMap((match, index) => isSemanticTriageEligible(match) ? [index] : []);
   const result = [...matches];
   let next = 0, completed = 0;
   onProgress?.(0, eligible.length);
@@ -568,6 +569,7 @@ async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidat
       } catch { /* Backend outage is not candidate evidence; never convert to zero. */ }
       result[index] = applySemanticAssessment(vacancy, match, assessment);
       completed += 1;
+      onMatch?.(result[index], completed, eligible.length);
       onProgress?.(completed, eligible.length);
     }
   }
@@ -619,15 +621,26 @@ async function loadDemonstratedEvidence(organizationId: string, personIds: strin
   const byPerson = new Map<string, VacancyDemonstratedEvidence[]>();
   const ids = [...new Set(personIds.filter(Boolean))];
   if (!ids.length) return { byPerson, dependency: null };
-  const result = await supabase.from("competency_demonstrated_evidence")
-    .select("id, person_id, competency_key, demonstrated_level, confidence_state, verification_definition_version, evaluation_version, integrity_rule_version, verified_at, valid_until, status")
-    .eq("organization_id", organizationId)
-    .in("person_id", ids)
-    .eq("status", "active")
-    .order("verified_at", { ascending: false }).order("id");
-  if (result.error) return { byPerson, dependency: "As Evidências Demonstradas não estavam disponíveis; o score permanece provisório até nova avaliação." };
+  const pageSize = 500;
+  const query = (from: number) => supabase.from("competency_demonstrated_evidence")
+    .select("id, person_id, competency_key, demonstrated_level, confidence_state, verification_definition_version, evaluation_version, integrity_rule_version, verified_at, valid_until, status", { count: "exact" })
+    .eq("organization_id", organizationId).in("person_id", ids).eq("status", "active")
+    .order("verified_at", { ascending: false }).order("id").range(from, from + pageSize - 1);
+  const result = await query(0);
+  const unavailable = { byPerson, dependency: "As Evidências Demonstradas não estavam disponíveis integralmente; o score permanece provisório até nova avaliação." };
+  if (result.error) return unavailable;
+  const rows = [...(result.data ?? [])];
+  let page = 1, batch = result.data ?? [];
+  while (batch.length === pageSize) {
+    const next = await query(page * pageSize);
+    if (next.error) return unavailable;
+    batch = next.data ?? [];
+    rows.push(...batch);
+    page += 1;
+  }
+  if (typeof result.count === "number" && result.count !== rows.length) return unavailable;
   const now = Date.now();
-  for (const item of result.data ?? []) {
+  for (const item of rows) {
     if ((item.valid_until && Date.parse(item.valid_until) <= now)
       || item.demonstrated_level === "insufficient_evidence"
       || item.demonstrated_level === "inconclusive"
