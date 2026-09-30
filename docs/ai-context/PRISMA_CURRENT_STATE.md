@@ -2,17 +2,19 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.15
+version: 2.51.16
 last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
 
+## Revisão humana de divergências da trajetória — publicada com limite de validação
+
+O acordo `docs/qa/agreement-matching-human-conflicts.md` v1.0.0 está implementado: até cinco categorias divergentes de duas leituras validadas podem ser vistas e tratadas por operador autorizado no cartão da Pessoa, sem tirá-la do grupo pré-IA. Uma escolha íntegra fica auditada por Perfil/versão da Posição/fontes/revisor e recalcula o score/snapshot pelo motor existente; item não determinado ou mais de cinco conflitos conserva o cálculo interno. Par original, Knowledge, pesos, prompt e modelo não foram alterados. PostgreSQL local sintético passou nos prompts 1.1/1.2, limite 1/5/6, grants/RLS, fonte obsoleta e proveniência do snapshot; domínio 91/91, Edge 35/35 e notificação 7/7. O CI inicial falhou apenas no texto esperado da notificação; após correção, branch `36756588104` e main `36756887575` passaram para o SHA funcional `998d25ae5253f4a1534ffa39a0b878bb69d517c4`. Migration remota `20260930181341_matching_human_conflict_review` ativa com RLS/grants verificados; Edge `matching-trajectory` v14 ACTIVE/JWT, 12 arquivos idênticos ao código publicado e POST anônimo 401. VPS com esse código funcional, `prisma-web` running/zero reinícios, imagem de rollback preservada; `/`, `/login`, `/index.html` e bundle novo 200 após 404 transitório no smoke imediato. Nenhum Perfil real foi reanalisado; o fluxo visual autenticado de escolher e salvar decisão continua **NOT TESTED**, não deve ser inferido do smoke público. Evidência: `docs/qa/aot-matching-human-conflicts.md`.
+
 ## Último par de leituras da interpretação — publicado em produção
 
 O novo contrato `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 guarda no cache da análise somente o último par estruturado de uma tentativa por Perfil/versão da Posição/chave de fontes. Leitura validada guarda categorias e IDs de evidência, não a resposta bruta; leitura falha guarda etapa e motivo tipificados. Um retry substitui o par anterior. Uma nova RPC de conclusão grava resultado e par na mesma transação, preservando o contrato legado, RLS, grants, fallback e ausência do par na resposta ao navegador. Testes locais Deno (28), typecheck Deno/TypeScript, SQL transacional do M83 nos prompts 1.1/1.2 e cadeia corrente, além de 715 testes do projeto, passaram. O primeiro CI falhou porque um documento não rastreado local entrou na exportação gerada; o Context Pack foi regenerado em checkout limpo sem tocar nesse documento. Os CIs da branch `36711245604` e de main `36711343697` passaram, e o SHA `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` foi integrado em `main` local/GitHub. A migration remota `20260930115417_matching_last_reading_pair` criou o campo e RPC service-only; Edge `matching-trajectory` v13 está ACTIVE/JWT, 12 arquivos publicados coincidem com o checkout e POST anônimo retornou 401. O plano não exigiu frontend/VPS. Não houve backfill, nova consulta à IA com Perfil real, mudança de grupo/score/modelo/prompt ou tela de auditoria. A leitura real posterior ainda não foi exercitada; confirmar persistência para uma nova tentativa somente quando ela ocorrer, sem reprocessar Perfis apenas para smoke. Evidência: `docs/qa/aot-matching-last-reading-pair.md`.
-
-Movimento em implementação local em 2026-09-30: `docs/qa/agreement-matching-human-conflicts.md` v1.0.0 estende a discordância auditada para revisão humana de até cinco itens por Perfil/versão da Posição. A migração nova cria auditoria contextual e RPCs service-only com revalidação de papel, fontes, par e escolhas; a Edge projeta apenas trechos conflitantes, e a UI mostra evidências e decisões. Uma revisão íntegra gera leitura versionada e score/snapshot recalculados pelo motor existente; item não determinado ou mais de cinco conflitos conserva o cálculo interno. Sem alteração de prompt, modelo, pesos, Knowledge ou Perfis publicados. Testes locais de domínio, Edge, build e PostgreSQL sintético passaram até este registro; QA e produção ainda não estão comprovados e só serão descritos no AoT de fechamento.
 
 ## Avisos causais da interpretação — publicados em produção
 
