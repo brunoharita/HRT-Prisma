@@ -52,7 +52,7 @@ begin
     and public.mhr_audit(analysis)->>'reviewStatus'='resolved',
     'human choice records actor and preserves the original pair while completing reading');
   perform m83_reject(format('select public.save_matching_trajectory_review(%L,%L,%L,%L,%L,%L,%L)',
-    m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),analysis,expected_choices,expected_reading),'40001');
+    m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),analysis,expected_choices,expected_reading),'P0001');
 end $$;
 reset role;
 insert into mhr_state select 'current-snapshot',private.m83_snapshot_sources(m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'));
@@ -101,10 +101,10 @@ begin
     update public.professional_profiles set profile_data=jsonb_set(profile_data,'{professionalTitle}','"New role"')
       where id=m83_id('profile');
     perform m83_reject(format('select public.load_matching_trajectory_review(%L,%L,%L,%L,%L)',
-      m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),analysis),'40001');
+      m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),analysis),'P0001');
     perform m83_reject(format('select public.save_matching_trajectory_review(%L,%L,%L,%L,%L,%L,null)',
       m83_id('recruiter'),m83_id('a'),m83_id('profile'),m83_id('v2'),analysis,
-      '[{"id":"e0","choice":"cannot_determine"}]'::jsonb),'40001');
+      '[{"id":"e0","choice":"cannot_determine"}]'::jsonb),'P0001');
     raise exception 'rollback stale fixture' using errcode='ZX001';
   exception when sqlstate 'ZX001' then null; end;
 end $$;

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.16
+version: 2.51.17
 last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
+
+## Checagem explícita para discordância antiga — implementação local
+
+O aditivo `docs/qa/agreement-matching-legacy-review-refresh.md` v1.0.0 corrige a abertura de discordâncias anteriores ao registro do último par. Diego e Bruno na Posição backend tinham cache `READINGS_DISAGREE` sem as duas leituras; a função de carga recusava o par ausente e a chamada observada expirou com HTTP 504. A nova resposta tipificada informa que as respostas não foram armazenadas e oferece, apenas a responsável autorizado e por clique, uma checagem com duas leituras para o mesmo Perfil/versão/fontes. O servidor revalida papel, tenant, identidade do cache, método/prompt/modelo/contexto, registra solicitante/horário e permite no máximo uma tentativa extra desse tipo; busca normal não a inicia nem repete após falha. Um par novo pode entrar na revisão humana existente; concordância segue o cálculo semântico normal e falha conserva o cálculo interno. Prompt, modelo, pesos, Knowledge, Perfil e Posição não mudam. Evidência e rollout: `docs/qa/aot-matching-legacy-review-refresh.md`; não confundir validação local com publicação.
 
 ## Revisão humana de divergências da trajetória — publicada com limite de validação
 

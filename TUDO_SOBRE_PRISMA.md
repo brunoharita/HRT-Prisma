@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 310
-source_manifest_sha256: 7bcfb95e9c054f38fcb8a87cbf1d4fca286c7c0f4a1aaf709bba734a6bf9c303
+documentation_source_count: 313
+source_manifest_sha256: df3a6841e09807cc92aa4712a239886a835fba27b6c9b1fc6871291ef0285d55
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.16
+version: 2.51.17
 last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
+
+## Checagem explícita para discordância antiga — implementação local
+
+O aditivo `docs/qa/agreement-matching-legacy-review-refresh.md` v1.0.0 corrige a abertura de discordâncias anteriores ao registro do último par. Diego e Bruno na Posição backend tinham cache `READINGS_DISAGREE` sem as duas leituras; a função de carga recusava o par ausente e a chamada observada expirou com HTTP 504. A nova resposta tipificada informa que as respostas não foram armazenadas e oferece, apenas a responsável autorizado e por clique, uma checagem com duas leituras para o mesmo Perfil/versão/fontes. O servidor revalida papel, tenant, identidade do cache, método/prompt/modelo/contexto, registra solicitante/horário e permite no máximo uma tentativa extra desse tipo; busca normal não a inicia nem repete após falha. Um par novo pode entrar na revisão humana existente; concordância segue o cálculo semântico normal e falha conserva o cálculo interno. Prompt, modelo, pesos, Knowledge, Perfil e Posição não mudam. Evidência e rollout: `docs/qa/aot-matching-legacy-review-refresh.md`; não confundir validação local com publicação.
 
 ## Revisão humana de divergências da trajetória — publicada com limite de validação
 
@@ -13531,6 +13535,54 @@ Estado: aprovado para implementação por pedido explícito de Bruno; nenhuma no
 
 ---
 
+## Source: `docs/qa/agreement-matching-legacy-review-refresh.md`
+
+# Acordo — checagem explícita de discordância antiga v1.0.0
+
+Decisão de Bruno em 2026-09-30: para uma discordância antiga sem o par das duas respostas armazenado, permitir uma nova checagem por IA somente quando a pessoa autorizada clicar para solicitá-la. Este aditivo **substitui apenas a restrição F-01** do acordo `agreement-matching-human-conflicts.md` v1.0.0 no caso de cache legado sem par; não altera as demais regras desse acordo nem transforma uma repetição automática da mesma versão em política geral.
+
+## DEVE
+
+- D-01 — A abertura da revisão de um registro legado sem par responder prontamente e explicar que as respostas antigas não foram guardadas. Não alegar falha de preenchimento, nem apresentar itens inventados.
+- D-02 — Oferecer uma ação explícita apenas ao operador autorizado para pedir duas novas leituras de IA para o Perfil e a versão da Posição em tela. Antes de adquirir o trabalho pago, o servidor deve revalidar tenant, papel, fontes, contexto, modelo/prompt/método e identidade do cache. Registrar solicitante e horário. Uma linha legada pode receber no máximo uma checagem adicional por esta exceção.
+- D-03 — Processar a nova tentativa pelo contrato auditado existente, preservando a contagem real de tentativas. Se as leituras discordarem, oferecer revisão humana de um a cinco itens; acima de cinco, conservar o cálculo interno. Se concordarem, usar o fluxo normal de interpretação e recálculo. Se a IA falhar, manter o cálculo interno e impedir outra chamada automática decorrente desse registro.
+- D-04 — Mostrar mensagens causais para indisponibilidade, fontes alteradas e concorrência, sem alterar grupo ou score antes de uma leitura válida ou decisão humana íntegra.
+
+## PROIBIDO
+
+- P-01 — Reprocessar automaticamente caches antigos durante busca, atualização da página, abertura do cartão ou carga da revisão.
+- P-02 — Burlar os limites de papel/tenant, reusar o par de outra posição, inventar as respostas antigas, expor o par bruto ao navegador ou salvar revisão sem evidência.
+- P-03 — Apagar o fallback, alterar Knowledge, Perfil, Posição, pesos, prompt ou modelo para fazer a checagem passar.
+
+## FORA DE ESCOPO
+
+- F-01 — Reprocessamento em massa, backfill de respostas antigas, reanálises de registros já auditados, mudança da política normal de retries e chamadas pagas para smoke em Pessoas reais.
+
+## AUTONOMIA
+
+- A-01 — Reusar o cache, lease e conclusão auditada existentes; escolher a apresentação na tela atual e o mecanismo restrito de solicitação.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — Cache antigo sem par retorna causa própria; somente clique autorizado inicia duas leituras, sem chamada ao provedor na carga ou em clique repetido.
+- CA-02 — Tentativa anterior número três pode ganhar uma quarta tentativa explicitamente solicitada, com auditoria real; par novo diverge e abre os itens ou concorda e atualiza o resultado.
+- CA-03 — Negativos para member/outro tenant, análise/versão/fonte alterada, concorrência, resposta inválida e falha do provedor. Falha não aciona retry automático nem muda o resultado interno.
+- CA-04 — Busca, comparação, snapshot e Knowledge preservados; produção só declarada após migrations, Edge, web, CI e smoke proporcionais.
+
+## Mapa de impacto e preservação
+
+| Área | Relação | Capacidade protegida e baseline | Prova proporcional |
+| --- | --- | --- | --- |
+| Cache, lease, par auditado, revisão | direct | Cache legado não tem par; novo cache tem auditoria | SQL sintético 1/3/4 tentativas, recusa, par novo, falha |
+| Edge de matching | direct | Duas leituras em ordem inversa; nenhuma chamada em review_load | Deno com provedor simulado, carga sem custo, clique explícito |
+| Cartão e mensagens | direct | Resultado pré-IA visível e preservado | Typecheck/build e inspeção visual proporcional |
+| Autorização, tenant e dados profissionais | critical_transversal | RPC service-only, papel de revisão e contexto minimizado | Negativos SQL/Edge, grants/RLS, sem PII em logs |
+| Score/snapshot, Knowledge e requisitos | plausible_indirect | Motor e bases existentes | Testes de matching afetados e inspeção do diff |
+
+Estado: aprovado pela resposta explícita de Bruno em 2026-09-30. Nenhuma decisão material pendente para este aditivo.
+
+---
+
 ## Source: `docs/qa/agreement-matching-recognition-consistency.md`
 
 # Acordo — consistência do reconhecimento profissional no matching
@@ -16738,6 +16790,46 @@ Plano de release: somente migration nova e Edge `matching-trajectory`; web/VPS n
 ## Desvios
 
 Nenhum desvio do comportamento aprovado identificado. O CI inicial falhou por contaminação do gerador com arquivo não rastreado e foi corrigido antes da integração. A ausência de smoke autenticado com Perfil real é limite declarado, não conclusão de qualidade semântica ou persistência observada em produção.
+
+---
+
+## Source: `docs/qa/aot-matching-legacy-review-refresh.md`
+
+# AoT — checagem explícita de discordância antiga
+
+Contrato: `docs/qa/agreement-matching-legacy-review-refresh.md` v1.0.0. Baseline: `main` `2663c5e165c42b97bfb42838d1b173f7143f7fa7`, Edge v14 e web em produção. Observação remota em 2026-09-30: na Posição backend, Diego e Bruno tinham cache `READINGS_DISAGREE` sem último par; a carga de revisão do Diego retornou HTTP 504, enquanto fontes/claim responderam 200. O par não pode ser reconstruído das respostas antigas.
+
+## Acordos -> implementação -> teste -> evidência
+
+| ID | Implementação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Carga de par legado devolve `PAIR_NOT_STORED`; tela explica ausência sem inventar itens | SQL sintético e Deno; smoke remoto pendente | PARTIAL |
+| D-02 | Botão explícito chama RPC service-only com papel, tenant, versões, contexto, chave, solicitante e horário | SQL negativo/positivo, Deno sem provedor na carga; smoke autenticado pendente | PARTIAL |
+| D-03 | Lease existente, conclusão auditada, tentativa 4 real e bloqueio de retry automático após falha | SQL nos prompts 1.1/1.2; Deno com duas leituras simuladas | PASS |
+| D-04 | Fallback e score só mudam após resultado íntegro; erros de configuração/fonte/concorrência têm causa | Teste de domínio, UI compilada; smoke autenticado pendente | PARTIAL |
+| P-01 | Busca/carga não acionam nova IA | Testes Deno e guarda SQL | PASS |
+| P-02 | Sem acesso por member/anon/tenant alheio; par não vai ao navegador | Negativos SQL/Deno, RLS/grants | PASS |
+| P-03 | Sem diff em pesos, prompt/modelo, Knowledge, Perfil ou Posição | Inspeção do diff | PASS |
+
+F-01 preservado: sem reprocessamento em massa, backfill ou IA real para smoke. A-01: reuso do cache, lease e auditoria; sem base paralela.
+
+## Impacto e preservação
+
+| Área | Relação | Baseline/risco | Regressão |
+| --- | --- | --- | --- |
+| Cache, par, revisão, migration | direct | Legados sem par; retry normal não pode cobrar novamente | PostgreSQL sintético com rollback, 1/3/4 tentativas, falha e autoridade |
+| Edge e provedor | direct | Duas leituras independentes só após claim | Deno 33 testes; sem chamadas reais |
+| Busca, tela, score | direct | Cálculo interno e mensagem causal | Typecheck/build; visual autenticado pendente |
+| Auth/tenant/RLS/PII | critical_transversal | Service-only e fontes minimizadas | Negativos SQL/Deno; grants remotos pendentes |
+| Snapshot/Knowledge/requisitos | plausible_indirect | Nenhuma regra modificada | Domínio 112 testes, diff e smoke seletivo pendente |
+
+## Validação e rollout
+
+Local: PostgreSQL 17 descartável, migração aplicada e quatro scripts SQL de regressão rodados em transação com rollback para prompts 1.1 e 1.2. Deno handler 33/33, domínio 112/112, TypeScript raiz/web, build web, lint, runtime gerado e ledger checker passaram. Não houve IA real nem mutação de Perfil real. QA remoto separado não existe; produção, CI, deploy e smoke serão registrados somente após execução. O fluxo visual autenticado de decisão sobre Pessoa real permanece não testado sem consulta paga explícita do operador.
+
+## Desvios
+
+Nenhum desvio funcional conhecido na validação local. A entrega ainda não deve ser declarada concluída antes do rollout e evidência proporcional.
 
 ---
 
@@ -20940,6 +21032,14 @@ Sequência: (1) projetar revisão auditável e controle de autoridade reutilizan
 # Execução — último par de leituras
 
 Implementar integralmente `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 (D-01..03, P-01..03, F-01, A-01, CA-01..03). Reutilizar o cache tenant-scoped, preservar o contrato anterior de conclusão e não publicar os dados de auditoria para o navegador. Validar no domínio Edge e na fronteira SQL com casos negativos. Registrar a rastreabilidade e limites no AoT correspondente antes do fechamento.
+
+---
+
+## Source: `docs/qa/execution-matching-legacy-review-refresh.md`
+
+# Execução — checagem explícita de discordância antiga
+
+Fonte congelada: `docs/qa/agreement-matching-legacy-review-refresh.md` v1.0.0. Implementar D-01 a D-04 e testar CA-01 a CA-04, preservando P-01 a P-03 e F-01. A autonomia A-01 cobre somente mecanismo e apresentação. A leitura completa do acordo é obrigatória; IDs isolados não substituem o contrato. Entregar migrations versionadas, função e web na `main`, validar localmente com fontes sintéticas, seguir o plano seletivo de release, publicar as superfícies necessárias e fechar o AoT com evidência e limitações reais.
 
 ---
 

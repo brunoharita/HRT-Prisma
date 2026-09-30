@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, Select, Space, Typography } from "antd";
 import type { TrajectoryActivity, TrajectoryReviewChoice } from "../../../src/domain/semanticTrajectory.js";
 import type { VacancyCandidateMatch, VacancyDetail } from "../domain/vacancy.js";
@@ -20,11 +20,17 @@ export function TrajectoryConflictReview({ vacancy, match, canReview, onResolved
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedUnresolved, setSavedUnresolved] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshAttempted, setRefreshAttempted] = useState(false);
+
+  useEffect(() => {
+    setView(null); setChoices({}); setError(null); setRefreshAttempted(false);
+  }, [vacancy.versionId, match.candidate.profileId, match.candidate.profileVersion, match.score.inputFingerprint]);
 
   if (match.semanticFallback?.status !== "indeterminate" || match.semanticFallback.reasonCode !== "READINGS_DISAGREE") return null;
 
   async function open() {
-    setLoading(true); setError(null); setSavedUnresolved(false);
+    setLoading(true); setError(null); setSavedUnresolved(false); setChoices({});
     try { setView(await vacancyService.loadTrajectoryReview(vacancy, match)); }
     catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível abrir a revisão."); }
     finally { setLoading(false); }
@@ -42,14 +48,28 @@ export function TrajectoryConflictReview({ vacancy, match, canReview, onResolved
     finally { setSaving(false); }
   }
 
+  async function refreshLegacyPair(analysisId: string) {
+    setRefreshing(true); setError(null); setRefreshAttempted(true);
+    try {
+      const status = await vacancyService.refreshLegacyTrajectoryReview(vacancy, match, analysisId);
+      if (status === "complete") { onResolved(); return; }
+      setView(await vacancyService.loadTrajectoryReview(vacancy, match));
+    } catch (caught) { setError(caught instanceof Error ? caught.message : "A nova checagem não foi concluída."); }
+    finally { setRefreshing(false); }
+  }
+
   return <section className="prisma-trajectory-conflict-review" aria-label="Revisão das leituras de IA">
     <Typography.Title level={5}>Leituras divergentes da trajetória</Typography.Title>
     <Typography.Paragraph>O cálculo interno continua válido. As duas respostas da IA não são decisões sobre a Pessoa.</Typography.Paragraph>
-    {canReview ? <Button loading={loading} onClick={() => void open()}>{view ? "Atualizar divergências" : "Ver se há itens para revisão"}</Button>
+    {canReview ? <Button disabled={refreshing || saving} loading={loading} onClick={() => void open()}>{view ? "Atualizar divergências" : "Ver se há itens para revisão"}</Button>
       : <Alert showIcon type="info" title="Revisão humana restrita" description="Um responsável pela análise desta empresa poderá avaliar os trechos divergentes. O cálculo interno foi mantido." />}
     {error ? <Alert showIcon type="error" title={error} /> : null}
-    {view?.status === "review_unavailable" ? <Alert showIcon type="warning" title={`${view.conflictCount} itens divergentes`}
-      description="O limite de cinco itens para revisão nesta análise foi excedido. Nenhuma resposta da IA foi aplicada; grupo, pontos e evidências continuam os do cálculo interno." /> : null}
+    {view?.status === "review_unavailable" ? <Alert showIcon type="warning" title={view.reasonCode === "PAIR_NOT_STORED" ? "Respostas antigas não registradas" : `${view.conflictCount} itens divergentes`}
+      description={view.reasonCode === "TOO_MANY_CONFLICTS"
+        ? "O limite de cinco itens para revisão nesta análise foi excedido. Nenhuma resposta da IA foi aplicada; grupo, pontos e evidências continuam os do cálculo interno."
+        : "Esta discordância é de uma checagem anterior ao registro das duas respostas. Os itens antigos não podem ser recuperados. Se você pedir uma nova checagem, serão feitas duas leituras de IA somente para este Perfil; até lá, grupo, pontos e evidências continuam os do cálculo interno."} /> : null}
+    {view?.status === "review_unavailable" && view.reasonCode === "PAIR_NOT_STORED" && (!refreshAttempted || refreshing)
+      ? <Button loading={refreshing} onClick={() => void refreshLegacyPair(view.analysisId)}>Fazer nova checagem com IA para revisão</Button> : null}
     {view?.status === "review_pending" ? <>
       <Typography.Paragraph>{view.conflictCount} {view.conflictCount === 1 ? "item precisa" : "itens precisam"} de decisão. Escolha a classificação sustentada pelo trecho ou indique que não é possível determinar.</Typography.Paragraph>
       {view.conflicts.map((conflict, index) => <div className="prisma-trajectory-conflict-item" key={conflict.id}>

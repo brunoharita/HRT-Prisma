@@ -29,6 +29,8 @@ function fixture() {
   let commitError: { code: string } | null = null;
   let reviewData: Record<string, unknown> | null = null;
   let reviewError: { code: string } | null = null;
+  let legacyClaim: Record<string, unknown> = { acquired: true, id: "40000000-0000-0000-0000-000000000001",
+    lease: "legacy-lease", status: "processing", attempts: 4 };
   const env: Record<string, string> = { KNOWLEDGE_AGENT_ENABLED: "true", KNOWLEDGE_RESEARCH_MODEL: "configured-model", OPENAI_API_KEY: "test-key" };
   let provider: (context: TrajectoryEvidenceInput, index: number) => Record<string, unknown> = context => ({
     status: "completed", model: "provider-model-revision", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: context.entries.map(entry => ({ id: entry.id, activity: "backend_execution", evidenceId: entry.segments[0]?.id })) }) }] }],
@@ -48,6 +50,7 @@ function fixture() {
         if (name === "load_matching_trajectory_review") return Promise.resolve({ data: reviewData, error: reviewError });
         if (name === "save_matching_trajectory_review") return Promise.resolve({ data: { reviewId: "50000000-0000-0000-0000-000000000001",
           status: params.p_reading ? "resolved" : "unresolved" }, error: reviewError });
+        if (name === "claim_matching_legacy_review_refresh") return Promise.resolve({ data: legacyClaim, error: reviewError });
         if (name === "claim_matching_trajectory") return Promise.resolve({ data: cached ?? (params.p_allow_compute === false
           ? { acquired: false, status: "unavailable", reason_code: "AI_DISABLED" }
           : { acquired: true, id: "analysis", lease: "private-lease", status: "processing" }), error: null });
@@ -70,6 +73,7 @@ function fixture() {
     setCommitError: (value: { code: string } | null) => commitError = value,
     setReviewData: (value: Record<string, unknown> | null) => reviewData = value,
     setReviewError: (value: { code: string } | null) => reviewError = value,
+    setLegacyClaim: (value: Record<string, unknown>) => legacyClaim = value,
     setProvider: (value: typeof provider) => provider = value };
 }
 
@@ -452,4 +456,46 @@ Deno.test("six conflicts stay on internal fallback, and unauthorized or malforme
   f.setReviewError({ code: "42501" });
   const denied = await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps);
   assert(denied.status === 403 && f.requests.length === 0);
+});
+
+Deno.test("a legacy disagreement without stored readings is reported promptly without a provider call", async () => {
+  const f = fixture(); f.setCache({ status: "indeterminate", reason_code: "READINGS_DISAGREE", acquired: false,
+    id: "40000000-0000-0000-0000-000000000001" });
+  f.setReviewData({ reviewable: false, reasonCode: "PAIR_NOT_STORED", conflictCount: 0,
+    analysisId: "40000000-0000-0000-0000-000000000001" });
+  const response = await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps);
+  const data = await response.json();
+  assert(response.status === 200 && data.status === "review_unavailable" && data.reasonCode === "PAIR_NOT_STORED");
+  assert(data.analysisId === "40000000-0000-0000-0000-000000000001" && f.requests.length === 0);
+  assert(!f.calls.some(call => call.name === "claim_matching_legacy_review_refresh"));
+});
+
+Deno.test("only an explicit legacy refresh claims the old cache and requests two new readings", async () => {
+  const f = fixture();
+  f.setProvider((ctx, index) => ({ status: "completed", model: "resolved", output: [{ type: "message", role: "assistant",
+    status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(entry => ({
+      id: entry.id, activity: index ? "software_leadership" : "backend_execution", evidenceId: entry.segments[0]?.id,
+    })) }) }] }] }));
+  const data = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_refresh",
+    analysisId: "40000000-0000-0000-0000-000000000001" }), f.deps)).json();
+  assert(data.status === "indeterminate" && data.reasonCode === "READINGS_DISAGREE");
+  assert(data.analysisId === "40000000-0000-0000-0000-000000000001");
+  assert(f.calls.some(call => call.name === "claim_matching_legacy_review_refresh"));
+  assert(!f.calls.some(call => call.name === "claim_matching_trajectory"));
+  assert(f.requests.length === 2);
+  const completion = f.calls.find(call => call.name === "complete_matching_trajectory_audited");
+  assert(completion?.params.p_lease === "legacy-lease");
+  assert((completion?.params.p_reading_pair as unknown[]).length === 2);
+});
+
+Deno.test("legacy refresh does not pay for a second request when unclaimed, malformed or unauthorized", async () => {
+  const f = fixture(); f.setLegacyClaim({ acquired: false, status: "unavailable", reason_code: "REVIEW_NOT_READY" });
+  const body = { ...ids, operation: "review_refresh", analysisId: "40000000-0000-0000-0000-000000000001" };
+  const unavailable = await (await handleMatchingTrajectory(f.request(body), f.deps)).json();
+  assert(unavailable.status === "unavailable" && unavailable.reasonCode === "REVIEW_NOT_READY" && f.requests.length === 0);
+  const malformed = await handleMatchingTrajectory(f.request({ ...body, extra: true }), f.deps);
+  assert(malformed.status === 400 && f.requests.length === 0);
+  const denied = fixture(); denied.setAuthorized(false);
+  const forbidden = await handleMatchingTrajectory(denied.request(body), denied.deps);
+  assert(forbidden.status === 403 && denied.requests.length === 0 && denied.serviceCreated() === 0);
 });

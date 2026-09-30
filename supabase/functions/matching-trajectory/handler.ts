@@ -185,12 +185,14 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     const snapshot = body.operation === "snapshot";
     const reviewLoad = body.operation === "review_load";
     const reviewSave = body.operation === "review_save";
+    const reviewRefresh = body.operation === "review_refresh";
     const expectedKeys = reviewSave ? "analysisId,choices,operation,organizationId,positionVersionId,profileId,referenceDate"
+      : reviewRefresh ? "analysisId,operation,organizationId,positionVersionId,profileId,referenceDate"
       : snapshot || reviewLoad ? "operation,organizationId,positionVersionId,profileId,referenceDate"
       : "organizationId,positionVersionId,profileId,referenceDate";
     if (Object.keys(body).sort().join() !== expectedKeys
       || ![body.organizationId, body.profileId, body.positionVersionId].every(value => typeof value === "string" && uuid.test(value))
-      || (reviewSave && (typeof body.analysisId !== "string" || !uuid.test(body.analysisId)))
+      || ((reviewSave || reviewRefresh) && (typeof body.analysisId !== "string" || !uuid.test(body.analysisId)))
       || typeof body.referenceDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(body.referenceDate)
       || Number.isNaN(Date.parse(`${body.referenceDate}T00:00:00.000Z`))
       || new Date(`${body.referenceDate}T00:00:00.000Z`).toISOString().slice(0, 10) !== body.referenceDate) {
@@ -223,15 +225,24 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     } catch { return unavailable("TRIAGE_SOURCE_INVALID"); }
     const key = deps.env("OPENAI_API_KEY");
     if (!model) return unavailable("AI_DISABLED");
-    const allowCompute = !snapshot && !reviewLoad && !reviewSave && deps.env("KNOWLEDGE_AGENT_ENABLED") === "true" && Boolean(key);
+    const providerEnabled = deps.env("KNOWLEDGE_AGENT_ENABLED") === "true" && Boolean(key);
+    const allowCompute = !snapshot && !reviewLoad && !reviewSave && providerEnabled;
+    if (reviewRefresh && !providerEnabled) return unavailable("AI_DISABLED");
     base.inputHash = await inputHash(context, sources.sourceVersions);
     const service = deps.service();
-    const claimed = await service.rpc("claim_matching_trajectory", { ...sourceArgs(ids), p_actor_id: actor.id,
+    const claimArgs = { ...sourceArgs(ids), p_actor_id: actor.id,
       p_input_hash: base.inputHash, p_method_version: SEMANTIC_METHOD_VERSION, p_prompt_version: SEMANTIC_PROMPT_VERSION,
-      p_model_version: model, p_source_versions: sources.sourceVersions, p_context: context, p_allow_compute: allowCompute });
-    if (claimed.error || !claimed.data) return unavailable("CACHE_UNAVAILABLE");
+      p_model_version: model, p_source_versions: sources.sourceVersions, p_context: context };
+    const claimed = reviewRefresh
+      ? await service.rpc("claim_matching_legacy_review_refresh", { ...claimArgs, p_analysis_id: body.analysisId })
+      : await service.rpc("claim_matching_trajectory", { ...claimArgs, p_allow_compute: allowCompute });
+    if (claimed.error || !claimed.data) return unavailable(claimed.error?.code === "42501" ? "NOT_AUTHORIZED" : "CACHE_UNAVAILABLE",
+      claimed.error?.code === "42501" ? 403 : 200);
     let result = record(claimed.data);
     base.analysisId = typeof result.id === "string" ? result.id : "";
+    if (reviewRefresh && result.acquired !== true) {
+      return unavailable(typeof result.reason_code === "string" ? result.reason_code : "REVIEW_NOT_READY");
+    }
     if (reviewLoad || reviewSave) {
       if (reviewSave && body.analysisId !== base.analysisId) return unavailable("REVIEW_NOT_READY", 409);
       if (result.status !== "indeterminate" || result.reason_code !== "READINGS_DISAGREE" || !uuid.test(base.analysisId)) {
@@ -242,6 +253,11 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
       if (loaded.error || !loaded.data) return unavailable(loaded.error?.code === "42501" ? "NOT_AUTHORIZED" : "REVIEW_NOT_READY",
         loaded.error?.code === "42501" ? 403 : 409);
       const review = record(loaded.data);
+      if (review.reviewable === false && review.reasonCode === "PAIR_NOT_STORED"
+        && review.analysisId === base.analysisId && review.conflictCount === 0) {
+        return json({ status: "review_unavailable", reasonCode: "PAIR_NOT_STORED", conflictCount: 0,
+          analysisId: base.analysisId });
+      }
       const conflictCount = review.conflictCount;
       if (!Number.isInteger(conflictCount) || Number(conflictCount) < 1) return unavailable("REVIEW_NOT_READY", 409);
       if (review.reviewable === false) return json({ status: "review_unavailable", reasonCode: "TOO_MANY_CONFLICTS", conflictCount });
@@ -286,7 +302,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
         const diagnosticStage = a.status === "rejected" || b.status === "rejected" ? "reading_failure"
           : a.value.model !== b.value.model ? "model_disagreement"
           : !agreeTrajectoryReadings(a.value.reading, b.value.reading) ? "readings_disagree" : null;
-        const attempt = typeof result.attempts === "number" && Number.isInteger(result.attempts) && result.attempts >= 1 && result.attempts <= 3
+        const attempt = typeof result.attempts === "number" && Number.isInteger(result.attempts) && result.attempts >= 1 && result.attempts <= 4
           ? result.attempts : null;
         if (diagnosticStage) emitDiagnostic(deps, { event: "matching_trajectory_readings", version: 1,
           analysisId: base.analysisId, attempt,
@@ -345,7 +361,8 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
       const attempts = typeof result.attempts === "number" && Number.isInteger(result.attempts) ? result.attempts : 3;
       const retryAfter = typeof result.retry_after === "string" && !Number.isNaN(Date.parse(result.retry_after)) ? result.retry_after : undefined;
       return json({ ...base, status: result.status, ...(typeof result.reason_code === "string" ? { reasonCode: result.reason_code } : {}),
-        retryAvailable: result.status === "unavailable" && allowCompute && attempts < 3 && (!retryAfter || Date.parse(retryAfter) <= Date.now()),
+        retryAvailable: result.status === "unavailable" && allowCompute && result.legacy_refresh_requested_at == null
+          && attempts < 3 && (!retryAfter || Date.parse(retryAfter) <= Date.now()),
         retryExhausted: result.status === "unavailable" && attempts >= 3,
         ...(result.status === "unavailable" && retryAfter ? { retryAfter } : {}) });
     }

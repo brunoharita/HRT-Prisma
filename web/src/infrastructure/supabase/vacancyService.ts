@@ -61,7 +61,8 @@ type OccupationResolutionRow = {
 };
 
 export type TrajectoryReviewView = { status: "review_pending"; analysisId: string; conflictCount: number; conflicts: TrajectoryConflict[] }
-  | { status: "review_unavailable"; reasonCode: "TOO_MANY_CONFLICTS"; conflictCount: number };
+  | { status: "review_unavailable"; reasonCode: "TOO_MANY_CONFLICTS"; conflictCount: number }
+  | { status: "review_unavailable"; reasonCode: "PAIR_NOT_STORED"; conflictCount: 0; analysisId: string };
 
 function isTrajectoryConflict(value: unknown): value is TrajectoryConflict {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
@@ -475,11 +476,34 @@ export const vacancyService = {
     if (error) throw await supabaseFunctionOperationError(error, "Não foi possível abrir a revisão. Atualize a análise e tente novamente.");
     if (data?.status === "review_unavailable" && data.reasonCode === "TOO_MANY_CONFLICTS"
       && Number.isInteger(data.conflictCount) && data.conflictCount > 5) return data as TrajectoryReviewView;
+    if (data?.status === "review_unavailable" && data.reasonCode === "PAIR_NOT_STORED"
+      && data.conflictCount === 0 && typeof data.analysisId === "string") return data as TrajectoryReviewView;
     if (data?.status !== "review_pending" || typeof data.analysisId !== "string"
       || !Number.isInteger(data.conflictCount) || data.conflictCount < 1 || data.conflictCount > 5
       || !Array.isArray(data.conflicts) || data.conflicts.length !== data.conflictCount
       || !data.conflicts.every(isTrajectoryConflict)) throw new Error("Os itens divergentes não puderam ser validados. Nenhuma decisão foi registrada.");
     return data as TrajectoryReviewView;
+  },
+
+  async refreshLegacyTrajectoryReview(vacancy: VacancyDetail, match: VacancyCandidateMatch, analysisId: string): Promise<"complete" | "indeterminate"> {
+    if (match.semanticFallback?.status !== "indeterminate" || match.semanticFallback.reasonCode !== "READINGS_DISAGREE") {
+      throw new Error("Esta análise não está disponível para uma nova checagem.");
+    }
+    const { data, error } = await supabase.functions.invoke("matching-trajectory", { body: {
+      operation: "review_refresh", organizationId: vacancy.organizationId, profileId: match.candidate.profileId,
+      positionVersionId: vacancy.versionId, referenceDate: match.score.referenceDate, analysisId,
+    }, signal: AbortSignal.timeout(110_000) });
+    if (error) throw await supabaseFunctionOperationError(error, "A nova checagem não foi concluída. O cálculo interno foi preservado.");
+    if (data?.status === "complete" || (data?.status === "indeterminate" && data.reasonCode === "READINGS_DISAGREE")) {
+      if (data.analysisId !== analysisId) throw new Error("A análise mudou durante a checagem. Atualize a página antes de continuar.");
+      return data.status;
+    }
+    const reason = data?.reasonCode;
+    if (reason === "AI_DISABLED") throw new Error("A análise por IA está indisponível agora. O cálculo interno foi mantido.");
+    if (reason === "SOURCE_STALE") throw new Error("O Perfil ou a Posição mudou desde a análise anterior. Atualize a página para consultar a versão atual.");
+    if (reason === "CONCURRENCY_LIMIT") throw new Error("A análise por IA está ocupada. Nenhuma nova consulta foi iniciada; tente novamente mais tarde.");
+    if (reason === "REVIEW_NOT_READY") throw new Error("Esta checagem já foi iniciada ou deixou de estar disponível. Atualize a página para ver o resultado.");
+    throw new Error("A nova checagem não produziu duas leituras utilizáveis. O cálculo interno foi mantido.");
   },
 
   async saveTrajectoryReview(vacancy: VacancyDetail, match: VacancyCandidateMatch, analysisId: string, choices: TrajectoryReviewChoice[]): Promise<"resolved" | "unresolved"> {
