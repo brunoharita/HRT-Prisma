@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import test from "node:test";
 import {
   activities, agreeTrajectoryReadings, isSemanticPilot, prepareTrajectoryContext, readTrajectoryResponse,
+  readTrajectoryEvidenceResponse, trajectoryEvidenceInput,
   trajectoryResponseSchema, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_MATCHING_VERSION, SEMANTIC_SCORE_VERSION,
   type SemanticAssessment, type SemanticContext, type SemanticReading,
 } from "../src/domain/semanticTrajectory.js";
@@ -32,8 +33,11 @@ function oracleReading(item: SemanticPilotCase, context = prepared(item)): Seman
     id: entry.id, activity: semanticPilotExpectations[item.baseId]!.classes[entry.id]!, quote: entry.text,
   })) };
 }
-function providerBody(reading: SemanticReading) {
-  return { status: "completed", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify(reading) }] }] };
+function providerBody(reading: SemanticReading, context: SemanticContext) {
+  const input = trajectoryEvidenceInput(context);
+  const items = reading.items.map(item => ({ id: item.id, activity: item.activity,
+    evidenceId: item.activity === "unclear" ? "" : input.entries.find(entry => entry.id === item.id)!.segments[0]!.id }));
+  return { status: "completed", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items }) }] }] };
 }
 
 test("M8.3 pilot has 12 contrasted bases, five realizations each and 120 later calls/model", () => {
@@ -67,9 +71,29 @@ test("response schema is closed, finite and has no score or free explanation", (
   assert.deepEqual(Object.keys(trajectoryResponseSchema.properties), ["items"]);
   const row = trajectoryResponseSchema.properties.items.items;
   assert.equal(row.additionalProperties, false);
-  assert.deepEqual(row.required, ["id", "activity", "quote"]);
-  assert.deepEqual(Object.keys(row.properties).sort(), ["activity", "id", "quote"]);
+  assert.deepEqual(row.required, ["id", "activity", "evidenceId"]);
+  assert.deepEqual(Object.keys(row.properties).sort(), ["activity", "evidenceId", "id"]);
   assert.deepEqual(row.properties.activity.enum, [...activities]);
+});
+
+test("model evidence IDs resolve to exact source substrings and reject invented or cross-entry references", () => {
+  const context: SemanticContext = { position: "Desenvolvedor backend", entries: [
+    { id: "e0", kind: "experience", fieldPath: "experiences.0", text: "Programador de sistemas. Desenvolveu APIs REST para clientes internos." },
+    { id: "e1", kind: "experience", fieldPath: "experiences.1", text: "Atendimento comercial em varejo." },
+  ] };
+  const input = trajectoryEvidenceInput(context);
+  const items = input.entries.map((entry, index) => ({ id: entry.id, activity: index ? "other" : "direct_function", evidenceId: entry.segments[0]!.id }));
+  const reading = readTrajectoryEvidenceResponse({ items }, context);
+  for (const item of reading.items) assert.ok(context.entries.find(entry => entry.id === item.id)!.text.includes(item.quote));
+  assert.throws(() => readTrajectoryEvidenceResponse({ items: [{ ...items[0], evidenceId: items[1]!.evidenceId }, items[1]] }, context), /TRAJECTORY_EVIDENCE_INVALID/);
+  assert.throws(() => readTrajectoryEvidenceResponse({ items: [{ ...items[0], evidenceId: "e0:999" }, items[1]] }, context), /TRAJECTORY_EVIDENCE_INVALID/);
+  assert.throws(() => readTrajectoryEvidenceResponse({ items: [{ ...items[0], evidenceId: "invented text" }, items[1]] }, context), /TRAJECTORY_EVIDENCE_INVALID/);
+  assert.throws(() => readTrajectoryEvidenceResponse({ items: [{ ...items[0], activity: "unclear" }, items[1]] }, context), /TRAJECTORY_EVIDENCE_INVALID/);
+  assert.deepEqual(readTrajectoryEvidenceResponse({ items: [{ ...items[0], activity: "unclear", evidenceId: "" }, items[1]] }, context).items[0]?.quote, "");
+  const long = { position: context.position, entries: [{ ...context.entries[0]!, text: "Planejou e construiu serviços de backend. ".repeat(20) }] };
+  const segments = trajectoryEvidenceInput(long).entries[0]!.segments;
+  assert.ok(segments.length > 1);
+  assert.ok(segments.every(segment => long.entries[0]!.text.includes(segment.text) && segment.text.length <= 240));
 });
 
 test("response accepts each source once in any order and only an exact quote from its own source", () => {
@@ -438,7 +462,7 @@ test("request uses shared strict schema, no storage/history/oracle, and prepared
     assert.equal(body.store, false); assert.equal(body.model, "synthetic-model");
     assert.equal(body.text.format.strict, true);
     assert.deepEqual(body.text.format.schema, trajectoryResponseSchema);
-    assert.deepEqual(JSON.parse(body.input[0].content[0].text), prepared(item));
+    assert.deepEqual(JSON.parse(body.input[0].content[0].text), trajectoryEvidenceInput(prepared(item)));
     assert.equal(body.max_output_tokens, 6000);
     assert.deepEqual(body.reasoning, { effort: "low" });
     assert.deepEqual(Object.keys(body).sort(), ["input", "instructions", "max_output_tokens", "model", "reasoning", "store", "text"]);
@@ -447,8 +471,8 @@ test("request uses shared strict schema, no storage/history/oracle, and prepared
 });
 
 test("provider parser refuses refusals, partial/malformed envelopes and extra answer messages", () => {
-  const item = fixture("backend"), context = prepared(item), valid = providerBody(oracleReading(item));
-  assert.deepEqual(runner.parseTrajectoryProviderResponse(valid, context), oracleReading(item));
+  const item = fixture("backend"), context = prepared(item), valid = providerBody(oracleReading(item), context);
+  assert.deepEqual(runner.parseTrajectoryProviderResponse(valid, context), readTrajectoryEvidenceResponse(JSON.parse(valid.output[0]!.content[0]!.text), context));
   const malformed = [null, {}, { ...valid, status: "incomplete" },
     { ...valid, status: "incomplete", incomplete_details: { reason: "max_output_tokens" } },
     { ...valid, error: { message: "secret" } },
@@ -472,11 +496,13 @@ test("runner makes 120 fresh requests with concurrency two and 90s timeout; stdo
       calls++; active++; peak = Math.max(peak, active);
       const body = JSON.parse(String(options.body)); requests.push({ url, options, body });
       await new Promise<void>(done => setImmediate(done)); active--;
-      const context = JSON.parse(body.input[0].content[0].text) as SemanticContext;
-      const normalize = (value: SemanticContext) => JSON.stringify({ ...value, entries: [...value.entries].sort((a, b) => a.id.localeCompare(b.id)) });
-      const item = semanticPilotCases.find(candidate => normalize(prepared(candidate)) === normalize(context));
+      const input = JSON.parse(body.input[0].content[0].text) as ReturnType<typeof trajectoryEvidenceInput>;
+      const normalize = (value: ReturnType<typeof trajectoryEvidenceInput>) => JSON.stringify({ ...value, entries: [...value.entries].sort((a, b) => a.id.localeCompare(b.id)) });
+      const item = semanticPilotCases.find(candidate => normalize(trajectoryEvidenceInput(prepared(candidate))) === normalize(input));
       assert.ok(item);
-      return { ok: true, json: async () => providerBody(oracleReading(item, context)) };
+      const context = prepared(item);
+      context.entries.sort((a, b) => input.entries.findIndex(entry => entry.id === a.id) - input.entries.findIndex(entry => entry.id === b.id));
+      return { ok: true, json: async () => providerBody(oracleReading(item, context), context) };
     },
   });
   assert.equal(calls, 120); assert.equal(peak, 2); assert.equal(runner.CONCURRENCY, 2); assert.equal(runner.TIMEOUT_MS, 90_000);
@@ -484,8 +510,8 @@ test("runner makes 120 fresh requests with concurrency two and 90s timeout; stdo
   for (let index = 0; index < requests.length; index += 2) {
     const firstBody = requests[index]!.body as { input: Array<{ content: Array<{ text: string }> }> };
     const secondBody = requests[index + 1]!.body as typeof firstBody;
-    const firstContext = JSON.parse(firstBody.input[0]!.content[0]!.text) as SemanticContext;
-    const secondContext = JSON.parse(secondBody.input[0]!.content[0]!.text) as SemanticContext;
+    const firstContext = JSON.parse(firstBody.input[0]!.content[0]!.text) as ReturnType<typeof trajectoryEvidenceInput>;
+    const secondContext = JSON.parse(secondBody.input[0]!.content[0]!.text) as ReturnType<typeof trajectoryEvidenceInput>;
     assert.deepEqual(secondContext, { ...firstContext, entries: [...firstContext.entries].reverse() });
   }
   for (const { url, options } of requests) {
@@ -506,11 +532,13 @@ test("runner reports repeat disagreement separately from stable-but-wrong readin
     env: { OPENAI_API_KEY: "SYNTHETIC_SECRET", KNOWLEDGE_RESEARCH_MODEL: "synthetic-model" },
     fetchImpl: async (_url: string, options: RequestInit) => {
       const index = call++, item = semanticPilotCases[Math.floor(index / 2)]!;
-      const context = JSON.parse(JSON.parse(String(options.body)).input[0].content[0].text) as SemanticContext;
+      const input = JSON.parse(JSON.parse(String(options.body)).input[0].content[0].text) as ReturnType<typeof trajectoryEvidenceInput>;
+      const context = prepared(item);
+      context.entries.sort((a, b) => input.entries.findIndex(entry => entry.id === a.id) - input.entries.findIndex(entry => entry.id === b.id));
       const reading = oracleReading(item, context);
       if (item.baseId === "backend" && index % 2 === 1) reading.items[0]!.activity = "software_leadership";
       if (item.baseId === "abap") reading.items[0]!.activity = "backend_execution";
-      return { ok: true, json: async () => providerBody(reading) };
+      return { ok: true, json: async () => providerBody(reading, context) };
     },
   });
   assert.equal(report.result, "FAIL"); assert.equal(report.validReadings, 120);

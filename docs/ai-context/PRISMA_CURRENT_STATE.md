@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.10
+version: 2.51.11
 last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
+
+## Recuperação da interpretação por IA — validada localmente, publicação pendente
+
+Em 2026-09-29, a falha `reading_quote` foi tratada de modo geral: o prompt `trajectory-evidence-2.1.0` pede identificadores de segmentos da mesma entry e a Edge deriva a citação literal do contexto minimizado. Referência inventada, cruzada, ausente ou saída inválida continua falhando fechada; duas leituras divergentes não viram classificação. A nova versão tem chave de cache separada, sem reescrever resultados antigos. A interface conserva o cálculo pré-IA e não oferece nova tentativa quando o cache informa cooldown, esgotamento ou divergência. Knowledge-first, triagem seletiva, modelo, pesos e score não mudaram. A migration forward-only autoriza o prompt novo em claim/commit, sem alterar caches antigos. Testes sintéticos de domínio, Edge, snapshot e build passaram; validação do modelo real e publicação ainda pendentes. Acordo: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0.
 
 ## Triagem ocupacional seletiva antes da IA — publicada em produção
 

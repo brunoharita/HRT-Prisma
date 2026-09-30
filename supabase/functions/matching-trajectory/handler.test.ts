@@ -1,5 +1,5 @@
 import { handleMatchingTrajectory, canonical, inputHash, type Dependencies, type RpcClient } from "./handler.ts";
-import { prepareTrajectoryContext, SEMANTIC_PROMPT_VERSION } from "../../../src/domain/semanticTrajectory.ts";
+import { prepareTrajectoryContext, SEMANTIC_PROMPT_VERSION, type TrajectoryEvidenceInput } from "../../../src/domain/semanticTrajectory.ts";
 
 function assert(condition: unknown, message = "assertion failed"): asserts condition {
   if (!condition) throw new Error(message);
@@ -28,8 +28,8 @@ function fixture() {
   };
   let commitError: { code: string } | null = null;
   const env: Record<string, string> = { KNOWLEDGE_AGENT_ENABLED: "true", KNOWLEDGE_RESEARCH_MODEL: "configured-model", OPENAI_API_KEY: "test-key" };
-  let provider: (context: ReturnType<typeof prepareTrajectoryContext>, index: number) => Record<string, unknown> = context => ({
-    status: "completed", model: "provider-model-revision", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: context.entries.map(entry => ({ id: entry.id, activity: "backend_execution", quote: entry.text })) }) }] }],
+  let provider: (context: TrajectoryEvidenceInput, index: number) => Record<string, unknown> = context => ({
+    status: "completed", model: "provider-model-revision", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: context.entries.map(entry => ({ id: entry.id, activity: "backend_execution", evidenceId: entry.segments[0]?.id })) }) }] }],
   });
   const user: RpcClient = { rpc: (name, params) => {
     if (name === "load_matching_snapshot_sources") { calls.push({ name, params }); return Promise.resolve({ data: snapshotSources, error: null }); }
@@ -127,8 +127,8 @@ Deno.test("snapshot returns committed ID and server-computed score fingerprint",
   assert(evaluation.requirements[0].stableId === "stable" && evaluation.requirements[0].status === "met");
   assert(call.params.p_source_fingerprint === "db-fingerprint" && call.params.p_analysis_id === "analysis");
 });
-Deno.test("prompt 2.0 binds cached assessment and server snapshot without provider replay", async () => {
-  assert(SEMANTIC_PROMPT_VERSION === "trajectory-evidence-2.0.0");
+Deno.test("prompt 2.1 binds cached assessment and server snapshot without provider replay", async () => {
+  assert(SEMANTIC_PROMPT_VERSION === "trajectory-evidence-2.1.0");
   for (const snapshot of [false, true]) {
     const f = fixture();
     delete f.env.OPENAI_API_KEY;
@@ -222,7 +222,7 @@ Deno.test("two independent reverse-order reads, strict/store false, minimized co
 });
 Deno.test("disagreement persists indeterminate without a reading", async () => {
   const f = fixture();
-  f.setProvider((ctx, index) => ({ status: "completed", model: "resolved", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: index ? "software_leadership" : "backend_execution", quote: e.text })) }) }] }] }));
+  f.setProvider((ctx, index) => ({ status: "completed", model: "resolved", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: index ? "software_leadership" : "backend_execution", evidenceId: e.segments[0]?.id })) }) }] }] }));
   const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
   assert(data.status === "indeterminate" && data.reasonCode === "READINGS_DISAGREE" && !data.reading);
   assert(f.calls.find(c => c.name === "complete_matching_trajectory")?.params.p_reading === null);
@@ -235,7 +235,7 @@ Deno.test("diagnostic isolates both readings, incomplete reason and bounded usag
     ? { status: "incomplete", model: "resolved", incomplete_details: { reason: "max_output_tokens", detail: "private provider text" },
       usage: { input_tokens: 123, output_tokens: 6000 }, output: [{ type: "message", content: [{ text: "secret response" }] }] }
     : { status: "completed", model: "resolved", output: [{ type: "message", role: "assistant", status: "completed",
-      content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "unclear", quote: "" })) }) }] }] });
+      content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "unclear", evidenceId: "" })) }) }] }] });
   const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
   assert(data.status === "unavailable" && data.reasonCode === "RESPONSE_INVALID");
   assert(f.diagnostics.length === 1);
@@ -250,13 +250,13 @@ Deno.test("diagnostic isolates both readings, incomplete reason and bounded usag
   }
 });
 Deno.test("diagnostic distinguishes malformed JSON, invalid quote and model mismatch without changing public reason", async () => {
-  for (const stage of ["output_json", "reading_quote", "model_disagreement"] as const) {
+  for (const stage of ["output_json", "reading_evidence", "model_disagreement"] as const) {
     const f = fixture();
     f.setProvider((ctx, index) => ({ status: "completed", model: stage === "model_disagreement" ? `model-${index}` : "resolved",
       output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text",
         text: stage === "output_json" && index === 0 ? "private malformed JSON"
           : JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "backend_execution",
-            quote: stage === "reading_quote" && index === 0 ? "invented private quote" : e.text })) }) }] }] }));
+            evidenceId: stage === "reading_evidence" && index === 0 ? "invented private reference" : e.segments[0]?.id })) }) }] }] }));
     const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
     assert(data.status === "unavailable" && data.reasonCode === "RESPONSE_INVALID", stage);
     assert(f.diagnostics.length === 1 && f.diagnostics[0].readings.length === 2, stage);
@@ -289,13 +289,30 @@ Deno.test("diagnostic sanitizes unknown provider metadata and does not record ca
   assert((await (await handleMatchingTrajectory(cached.request(), cached.deps)).json()).reasonCode === "RESPONSE_INVALID");
   assert(cached.requests.length === 0 && cached.diagnostics.length === 0);
 });
-Deno.test("refusal, incomplete, missing model, invented quotes and malformed JSON remain unavailable", async () => {
+Deno.test("cached failure exposes only truthful bounded retry state without calling the provider", async () => {
+  const cases = [
+    { status: "unavailable", attempts: 1, retry_after: "2026-01-01T00:00:00Z", retryAvailable: true, retryExhausted: false },
+    { status: "unavailable", attempts: 1, retry_after: "2099-01-01T00:00:00Z", retryAvailable: false, retryExhausted: false },
+    { status: "unavailable", attempts: 3, retry_after: "2026-01-01T00:00:00Z", retryAvailable: false, retryExhausted: true },
+    { status: "indeterminate", attempts: 1, retry_after: undefined, retryAvailable: false, retryExhausted: false },
+  ];
+  for (const item of cases) {
+    const f = fixture();
+    f.setCache({ acquired: false, status: item.status, id: "analysis", attempts: item.attempts,
+      reason_code: item.status === "indeterminate" ? "READINGS_DISAGREE" : "RESPONSE_INVALID", retry_after: item.retry_after });
+    const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
+    assert(data.retryAvailable === item.retryAvailable && data.retryExhausted === item.retryExhausted);
+    assert(data.retryAfter === (item.status === "unavailable" ? item.retry_after : undefined));
+    assert(f.requests.length === 0);
+  }
+});
+Deno.test("refusal, incomplete, missing model, invented evidence IDs and malformed JSON remain unavailable", async () => {
   for (const output of [
     { status: "incomplete", model: "resolved", output: [] },
     { status: "completed", model: "resolved", output: [{ content: [{ type: "refusal", refusal: "private provider detail" }] }] },
     { status: "completed", output: [] },
     { status: "completed", model: "resolved", output: [{ content: [{ type: "output_text", text: "invalid secret details" }] }] },
-    { status: "completed", model: "resolved", output: [{ content: [{ type: "output_text", text: '{"items":[{"id":"e0","activity":"backend_execution","quote":"invented"}]}' }] }] },
+    { status: "completed", model: "resolved", output: [{ content: [{ type: "output_text", text: '{"items":[{"id":"e0","activity":"backend_execution","evidenceId":"invented"}]}' }] }] },
   ]) {
     const f = fixture(); f.setProvider(() => output);
     const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
@@ -304,7 +321,7 @@ Deno.test("refusal, incomplete, missing model, invented quotes and malformed JSO
   }
 });
 Deno.test("model resolution disagreement cannot produce a complete assessment", async () => {
-  const f = fixture(); f.setProvider((ctx, index) => ({ status: "completed", model: `model-${index}`, output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "unclear", quote: "" })) }) }] }] }));
+  const f = fixture(); f.setProvider((ctx, index) => ({ status: "completed", model: `model-${index}`, output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "unclear", evidenceId: "" })) }) }] }] }));
   const data = await (await handleMatchingTrajectory(f.request(), f.deps)).json();
   assert(data.status === "unavailable" && data.reasonCode === "RESPONSE_INVALID");
 });
@@ -353,7 +370,7 @@ Deno.test("strict provider envelope rejects tools, duplicate messages, extra con
   for (const mode of ["tool", "duplicate", "extra", "error", "incomplete", "wrongrole", "pending"]) {
     const f = fixture(); f.setProvider(ctx => {
       const message = { type: "message", role: mode === "wrongrole" ? "user" : "assistant", status: mode === "pending" ? "in_progress" : "completed",
-        content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "unclear", quote: "" })) }) }] };
+        content: [{ type: "output_text", text: JSON.stringify({ items: ctx.entries.map(e => ({ id: e.id, activity: "unclear", evidenceId: "" })) }) }] };
       if (mode === "extra") message.content.push({ type: "output_text", text: "extra" });
       return { status: "completed", model: "resolved", error: mode === "error" ? { message: "private" } : null,
         incomplete_details: mode === "incomplete" ? { reason: "max_output_tokens" } : null,

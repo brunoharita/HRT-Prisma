@@ -1,0 +1,5 @@
+# Execução — recuperação da evidência semântica
+
+Contrato vinculante integral: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0. Ler o acordo completo antes de executar; D-01 a D-04, P-01 a P-03, F-01/F-02, A-01 e CA-01 a CA-04 aplicam-se sem substituição. Decisão do Product Owner: “pode corrigir”, após o diagnóstico de `reading_quote`, cache esgotado/divergente e botão de atualização enganoso. Este prompt não autoriza custo inesperado, mudança de modelo, backfill, alteração de dados reais, novo provedor ou score.
+
+Implementar a referência de evidência e sua validação estrita no domínio compartilhado e na Edge; versionar prompt e compatibilidade SQL por migration nova; manter cache, duas leituras, cooldown, autorização e fallback; comunicar na busca e comparação a disponibilidade real de retry. Regerar o runtime compartilhado, executar testes negativos e de preservação, atualizar documentação owner e Context Pack, fechar AoT com ambiente e limitações verificáveis. Aplicar release seletivo em migration → Edge → web somente após validação proporcional e guardas de operação, preservando rollback e o mesmo SHA.

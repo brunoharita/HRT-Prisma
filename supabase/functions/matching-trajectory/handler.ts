@@ -1,5 +1,5 @@
 import {
-  agreeTrajectoryReadings, isSemanticPilot, prepareTrajectoryContext, readTrajectoryResponse,
+  agreeTrajectoryReadings, isSemanticPilot, prepareTrajectoryContext, readTrajectoryEvidenceResponse, readTrajectoryResponse, trajectoryEvidenceInput,
   SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, trajectoryInstructions, trajectoryResponseSchema,
 } from "./_generated/src/domain/semanticTrajectory.js";
 import { buildDeterministicMatch, buildSnapshotEvaluation } from "./snapshot.ts";
@@ -25,7 +25,7 @@ export interface Dependencies {
 }
 type RequestIds = Pick<SemanticAssessment, "organizationId" | "profileId" | "positionVersionId">;
 type ReadingStage = "provider_transport" | "provider_http" | "provider_json" | "provider_status" | "provider_model"
-  | "provider_output" | "provider_content" | "output_json" | "reading_quote" | "reading_contract" | "validated" | "internal";
+  | "provider_output" | "provider_content" | "output_json" | "reading_evidence" | "reading_contract" | "validated" | "internal";
 type ReadingDiagnostic = {
   outcome: "validated" | "failed"; stage: ReadingStage; reasonCode?: string; httpStatus?: number;
   providerStatus?: string; incompleteReason?: string; inputTokens?: number; outputTokens?: number;
@@ -72,12 +72,13 @@ function providerDiagnostic(provider: Record<string, unknown>, httpStatus: numbe
     incompleteReason: allowed(incomplete.reason, ["max_output_tokens", "content_filter"]),
     inputTokens: tokenCount(usage.input_tokens), outputTokens: tokenCount(usage.output_tokens) };
 }
-function quoteFailure(value: unknown, context: SemanticContext): boolean {
+function evidenceFailure(value: unknown, context: SemanticContext): boolean {
   const items = record(value).items;
+  const input = trajectoryEvidenceInput(context) as { entries: Array<{ id: string; segments: Array<{ id: string }> }> };
   return Array.isArray(items) && items.some(item => {
-    const row = record(item), entry = context.entries.find(source => source.id === row.id);
-    return entry && typeof row.quote === "string" &&
-      (!entry.text.includes(row.quote) || (row.activity !== "unclear" && row.quote.trim().length < Math.min(6, entry.text.length)));
+    const row = record(item), entry = input.entries.find(source => source.id === row.id);
+    return entry && typeof row.evidenceId === "string" && (row.activity === "unclear"
+      ? row.evidenceId !== "" : !entry.segments.some(segment => segment.id === row.evidenceId));
   });
 }
 function readingDiagnostic(result: PromiseSettledResult<{ reading: SemanticReading; model: string; diagnostic: ReadingDiagnostic }>): ReadingDiagnostic {
@@ -100,7 +101,7 @@ async function reading(context: SemanticContext, model: string, key: string, dep
       method: "POST", redirect: "error", signal: AbortSignal.timeout(45_000),
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({ model, store: false, max_output_tokens: 6000, reasoning: { effort: "low" },
-        instructions: trajectoryInstructions, input: JSON.stringify(context),
+        instructions: trajectoryInstructions, input: JSON.stringify(trajectoryEvidenceInput(context)),
         text: { format: { type: "json_schema", name: "trajectory_reading", strict: true, schema: trajectoryResponseSchema } },
       }),
     });
@@ -127,8 +128,8 @@ async function reading(context: SemanticContext, model: string, key: string, dep
   try { parsed = JSON.parse(texts[0].text as string); }
   catch { fail("output_json"); }
   const validReading = (() => {
-    try { return readTrajectoryResponse(parsed, context); }
-    catch { return fail(quoteFailure(parsed, context) ? "reading_quote" : "reading_contract"); }
+    try { return readTrajectoryEvidenceResponse(parsed, context); }
+    catch { return fail(evidenceFailure(parsed, context) ? "reading_evidence" : "reading_contract"); }
   })();
   return { reading: validReading, model: resolvedModel, diagnostic: { outcome: "validated", ...diagnostic, stage: "validated" } };
 }
@@ -276,7 +277,12 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
       } catch { return unavailable(snapshot ? "SNAPSHOT_SOURCE_INVALID" : "CACHE_INVALID"); }
     }
     if (result.status === "processing" || result.status === "indeterminate" || result.status === "unavailable") {
-      return json({ ...base, status: result.status, ...(typeof result.reason_code === "string" ? { reasonCode: result.reason_code } : {}) });
+      const attempts = typeof result.attempts === "number" && Number.isInteger(result.attempts) ? result.attempts : 3;
+      const retryAfter = typeof result.retry_after === "string" && !Number.isNaN(Date.parse(result.retry_after)) ? result.retry_after : undefined;
+      return json({ ...base, status: result.status, ...(typeof result.reason_code === "string" ? { reasonCode: result.reason_code } : {}),
+        retryAvailable: result.status === "unavailable" && allowCompute && attempts < 3 && (!retryAfter || Date.parse(retryAfter) <= Date.now()),
+        retryExhausted: result.status === "unavailable" && attempts >= 3,
+        ...(result.status === "unavailable" && retryAfter ? { retryAfter } : {}) });
     }
     return unavailable("CACHE_INVALID");
   } catch {

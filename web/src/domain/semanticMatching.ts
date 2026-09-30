@@ -67,6 +67,8 @@ export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCa
     return { ...match, semanticFallback: {
       status: assessment.status,
       reasonCode: assessment.reasonCode ?? (!valid ? "INVALID_ASSESSMENT" : assessment.status === "complete" ? "INVALID_READING" : "NO_SEMANTIC_RESULT"),
+      ...(valid ? { retryAvailable: assessment.retryAvailable === true, retryExhausted: assessment.retryExhausted === true,
+        ...(typeof assessment.retryAfter === "string" ? { retryAfter: assessment.retryAfter } : {}) } : {}),
     } };
   }
   const context = assessment.context;

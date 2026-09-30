@@ -4,7 +4,7 @@
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
-  activities, prepareTrajectoryContext, readTrajectoryResponse, agreeTrajectoryReadings,
+  activities, prepareTrajectoryContext, readTrajectoryEvidenceResponse, trajectoryEvidenceInput, agreeTrajectoryReadings,
   trajectoryInstructions, trajectoryResponseSchema,
 } from "../dist/src/domain/semanticTrajectory.js";
 import {
@@ -19,7 +19,7 @@ export function buildTrajectoryRequest(context, model) {
   return {
     model, store: false, max_output_tokens: 6000, reasoning: { effort: "low" }, instructions: trajectoryInstructions,
     // Only the shared prepared source context. No oracle, case rationale, prior response or scores.
-    input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(context) }] }],
+    input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(trajectoryEvidenceInput(context)) }] }],
     text: { format: { type: "json_schema", name: "semantic_trajectory", strict: true, schema: trajectoryResponseSchema } },
   };
 }
@@ -30,7 +30,7 @@ export function parseTrajectoryProviderResponse(body, context) {
   if (messages.length !== 1 || messages[0].role !== "assistant" || messages[0].status !== "completed" || !Array.isArray(messages[0].content)) throw new Error("TRAJECTORY_PROVIDER_INVALID");
   const contents = messages[0].content;
   if (contents.length !== 1 || contents[0]?.type !== "output_text" || typeof contents[0].text !== "string") throw new Error("TRAJECTORY_PROVIDER_INVALID");
-  return readTrajectoryResponse(JSON.parse(contents[0].text), context);
+  return readTrajectoryEvidenceResponse(JSON.parse(contents[0].text), context);
 }
 
 function emptyReport(mode) {
