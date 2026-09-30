@@ -1,6 +1,7 @@
 import {
-  agreeTrajectoryReadings, isSemanticPilot, prepareTrajectoryContext, readTrajectoryEvidenceResponse, readTrajectoryResponse, trajectoryEvidenceInput,
-  SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, trajectoryInstructions, trajectoryResponseSchema,
+  agreeTrajectoryReadings, composeReviewedTrajectoryReading, inspectTrajectoryReadingPair, isSemanticPilot,
+  prepareTrajectoryContext, readTrajectoryEvidenceResponse, readTrajectoryResponse, trajectoryEvidenceInput,
+  HUMAN_REVIEW_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, trajectoryInstructions, trajectoryResponseSchema,
 } from "./_generated/src/domain/semanticTrajectory.js";
 import { buildDeterministicMatch, buildSnapshotEvaluation } from "./snapshot.ts";
 import { isSemanticTriageEligible } from "./_generated/web/src/domain/semanticMatching.js";
@@ -12,6 +13,7 @@ export type SemanticAssessment = {
   organizationId: string; profileId: string; positionVersionId: string; status: string;
   methodVersion: string; promptVersion: string; modelVersion: string; inputHash: string; analysisId: string;
   context?: SemanticContext; reading?: SemanticReading;
+  resolutionSource?: "human_review"; reviewId?: string; reviewVersion?: string;
 };
 
 type RpcResult = { data: unknown; error: { code?: string } | null };
@@ -181,9 +183,14 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     let body: Record<string, unknown>;
     try { body = record(JSON.parse(new TextDecoder().decode(bytes))); } catch { return unavailable("REQUEST_INVALID", 400); }
     const snapshot = body.operation === "snapshot";
-    const expectedKeys = snapshot ? "operation,organizationId,positionVersionId,profileId,referenceDate" : "organizationId,positionVersionId,profileId,referenceDate";
+    const reviewLoad = body.operation === "review_load";
+    const reviewSave = body.operation === "review_save";
+    const expectedKeys = reviewSave ? "analysisId,choices,operation,organizationId,positionVersionId,profileId,referenceDate"
+      : snapshot || reviewLoad ? "operation,organizationId,positionVersionId,profileId,referenceDate"
+      : "organizationId,positionVersionId,profileId,referenceDate";
     if (Object.keys(body).sort().join() !== expectedKeys
       || ![body.organizationId, body.profileId, body.positionVersionId].every(value => typeof value === "string" && uuid.test(value))
+      || (reviewSave && (typeof body.analysisId !== "string" || !uuid.test(body.analysisId)))
       || typeof body.referenceDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(body.referenceDate)
       || Number.isNaN(Date.parse(`${body.referenceDate}T00:00:00.000Z`))
       || new Date(`${body.referenceDate}T00:00:00.000Z`).toISOString().slice(0, 10) !== body.referenceDate) {
@@ -216,7 +223,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     } catch { return unavailable("TRIAGE_SOURCE_INVALID"); }
     const key = deps.env("OPENAI_API_KEY");
     if (!model) return unavailable("AI_DISABLED");
-    const allowCompute = !snapshot && deps.env("KNOWLEDGE_AGENT_ENABLED") === "true" && Boolean(key);
+    const allowCompute = !snapshot && !reviewLoad && !reviewSave && deps.env("KNOWLEDGE_AGENT_ENABLED") === "true" && Boolean(key);
     base.inputHash = await inputHash(context, sources.sourceVersions);
     const service = deps.service();
     const claimed = await service.rpc("claim_matching_trajectory", { ...sourceArgs(ids), p_actor_id: actor.id,
@@ -225,6 +232,44 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     if (claimed.error || !claimed.data) return unavailable("CACHE_UNAVAILABLE");
     let result = record(claimed.data);
     base.analysisId = typeof result.id === "string" ? result.id : "";
+    if (reviewLoad || reviewSave) {
+      if (reviewSave && body.analysisId !== base.analysisId) return unavailable("REVIEW_NOT_READY", 409);
+      if (result.status !== "indeterminate" || result.reason_code !== "READINGS_DISAGREE" || !uuid.test(base.analysisId)) {
+        return unavailable("REVIEW_NOT_READY", 409);
+      }
+      const loaded = await service.rpc("load_matching_trajectory_review", { ...sourceArgs(ids), p_actor_id: actor.id,
+        p_analysis_id: base.analysisId });
+      if (loaded.error || !loaded.data) return unavailable(loaded.error?.code === "42501" ? "NOT_AUTHORIZED" : "REVIEW_NOT_READY",
+        loaded.error?.code === "42501" ? 403 : 409);
+      const review = record(loaded.data);
+      const conflictCount = review.conflictCount;
+      if (!Number.isInteger(conflictCount) || Number(conflictCount) < 1) return unavailable("REVIEW_NOT_READY", 409);
+      if (review.reviewable === false) return json({ status: "review_unavailable", reasonCode: "TOO_MANY_CONFLICTS", conflictCount });
+      try {
+        if (canonical(review.context) !== canonical(context)) return unavailable("SOURCE_STALE", 409);
+        const inspected = inspectTrajectoryReadingPair(review.pair, context);
+        if (inspected.conflicts.length !== conflictCount || inspected.conflicts.length > 5) return unavailable("REVIEW_NOT_READY", 409);
+        if (reviewLoad) return json({ status: "review_pending", analysisId: base.analysisId, conflictCount,
+          conflicts: inspected.conflicts });
+        const choices = body.choices;
+        if (!Array.isArray(choices) || choices.length !== conflictCount || choices.some(item => {
+          const row = record(item);
+          return Object.keys(row).sort().join() !== "choice,id" || typeof row.id !== "string"
+            || !["first", "second", "cannot_determine"].includes(String(row.choice));
+        })) return unavailable("REVIEW_INPUT_INVALID", 400);
+        const reading = composeReviewedTrajectoryReading(review.pair, context, choices as never);
+        const saved = await service.rpc("save_matching_trajectory_review", { ...sourceArgs(ids), p_actor_id: actor.id,
+          p_analysis_id: base.analysisId, p_choices: choices, p_reading: reading });
+        if (saved.error || !saved.data) return unavailable(saved.error?.code === "42501" ? "NOT_AUTHORIZED"
+          : saved.error?.code === "22023" ? "REVIEW_INPUT_INVALID" : "REVIEW_NOT_READY",
+          saved.error?.code === "42501" ? 403 : saved.error?.code === "22023" ? 400 : 409);
+        const value = record(saved.data);
+        if (!uuid.test(String(value.reviewId)) || !["resolved", "unresolved"].includes(String(value.status))) {
+          return unavailable("REVIEW_NOT_READY", 409);
+        }
+        return json({ status: value.status, reviewId: value.reviewId });
+      } catch { return unavailable("REVIEW_INPUT_INVALID", 400); }
+    }
     if (result.acquired === true) {
       if (!allowCompute || !key) return unavailable("AI_DISABLED");
       let status = "unavailable", reason: string | null = null, agreed: SemanticReading | null = null, actualModel: string | null = null;
@@ -273,12 +318,17 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     if (result.status === "complete") {
       try {
         const validReading = readTrajectoryResponse(result.reading, context);
+        const reviewId = typeof result.human_review_id === "string" && uuid.test(result.human_review_id)
+          ? result.human_review_id : undefined;
+        const resolution = reviewId ? { resolutionSource: "human_review" as const, reviewId,
+          reviewVersion: HUMAN_REVIEW_VERSION } : {};
         if (snapshot) {
           const loaded = await actor.client.rpc("load_matching_snapshot_sources", sourceArgs(ids));
           if (loaded.error || !loaded.data) return unavailable(loaded.error?.code === "42501" ? "AUTH_REVOKED" : "SNAPSHOT_SOURCE_UNAVAILABLE");
           const snapshotSources = record(loaded.data);
           if (canonical(snapshotSources.sourceVersions) !== canonical(sources.sourceVersions)) return unavailable("SOURCE_STALE");
-          const evaluation = buildSnapshotEvaluation(snapshotSources, { ...base, status: "complete", reading: validReading, context }, referenceDate);
+          const evaluation = buildSnapshotEvaluation(snapshotSources, { ...base, status: "complete", reading: validReading, context,
+            ...resolution }, referenceDate);
           if (!evaluation) return unavailable("SNAPSHOT_NOT_READY");
           const committed = await service.rpc("commit_matching_snapshot", { ...sourceArgs(ids), p_actor_id: actor.id,
             p_analysis_id: base.analysisId, p_source_fingerprint: snapshotSources.fingerprint, p_evaluation: evaluation });
@@ -288,7 +338,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
           if (typeof response.evaluationId !== "string" || !uuid.test(response.evaluationId)) return unavailable("SNAPSHOT_UNAVAILABLE");
           return json({ evaluationId: response.evaluationId, inputFingerprint: record(evaluation.score).inputFingerprint });
         }
-        return json({ ...base, status: "complete", reading: validReading, context });
+        return json({ ...base, status: "complete", reading: validReading, context, ...resolution });
       } catch { return unavailable(snapshot ? "SNAPSHOT_SOURCE_INVALID" : "CACHE_INVALID"); }
     }
     if (result.status === "processing" || result.status === "indeterminate" || result.status === "unavailable") {

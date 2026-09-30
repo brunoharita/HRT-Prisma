@@ -3,6 +3,7 @@ export const SEMANTIC_METHOD_VERSION = "trajectory-position-2.0.0";
 export const SEMANTIC_PROMPT_VERSION = "trajectory-evidence-2.1.0";
 export const SEMANTIC_MATCHING_VERSION = "vacancy-matching-semantic-7.0.0";
 export const SEMANTIC_SCORE_VERSION = "matching-score-1.4.0";
+export const HUMAN_REVIEW_VERSION = "trajectory-human-review-1.0.0";
 
 export const activities = [
   "direct_function", "equivalent_function", "related_function", "entry_potential", "context", "other", "unclear",
@@ -19,7 +20,15 @@ export interface SemanticAssessment {
   inputHash: string; analysisId: string;
   reading?: SemanticReading; context?: SemanticContext; reasonCode?: string;
   retryAvailable?: boolean; retryAfter?: string; retryExhausted?: boolean;
+  resolutionSource?: "human_review"; reviewId?: string; reviewVersion?: string;
 }
+
+export type TrajectoryReviewChoice = { id: string; choice: "first" | "second" | "cannot_determine" };
+export type TrajectoryConflict = {
+  id: string; fieldPath: string; kind: SemanticEntry["kind"]; text: string;
+  first: { activity: TrajectoryActivity; quote: string };
+  second: { activity: TrajectoryActivity; quote: string };
+};
 
 export function isSemanticPilot(title: string): boolean {
   // Kept under the established name for callers; activation is now position-wide.
@@ -170,6 +179,46 @@ export function readTrajectoryResponse(value: unknown, context: SemanticContext)
 export function agreeTrajectoryReadings(a: SemanticReading, b: SemanticReading): boolean {
   const key = (reading: SemanticReading) => JSON.stringify(reading.items.map(({ id, activity }) => ({ id, activity })).sort((x, y) => x.id.localeCompare(y.id)));
   return key(a) === key(b);
+}
+
+/** Only activity disagreements count; input order and differing valid citations do not. */
+export function inspectTrajectoryReadingPair(value: unknown, context: SemanticContext): {
+  first: SemanticReading; second: SemanticReading; conflicts: TrajectoryConflict[]; model: string;
+} {
+  const pair = record(value), sides = array(pair.readings);
+  if (!Number.isInteger(pair.attempt) || Number(pair.attempt) < 1 || Number(pair.attempt) > 3 || sides.length !== 2) {
+    throw new Error("TRAJECTORY_REVIEW_PAIR_INVALID");
+  }
+  const left = record(sides[0]), right = record(sides[1]);
+  if (left.outcome !== "validated" || right.outcome !== "validated"
+    || typeof left.model !== "string" || !left.model || left.model !== right.model) {
+    throw new Error("TRAJECTORY_REVIEW_PAIR_INVALID");
+  }
+  const first = readTrajectoryEvidenceResponse({ items: left.items }, context);
+  const second = readTrajectoryEvidenceResponse({ items: right.items }, context);
+  const conflicts = first.items.flatMap(item => {
+    const other = second.items.find(candidate => candidate.id === item.id)!;
+    const entry = context.entries.find(candidate => candidate.id === item.id)!;
+    return item.activity === other.activity ? [] : [{ id: item.id, fieldPath: entry.fieldPath, kind: entry.kind,
+      text: entry.text, first: { activity: item.activity, quote: item.quote },
+      second: { activity: other.activity, quote: other.quote } }];
+  });
+  return { first, second, conflicts, model: left.model };
+}
+
+/** A human may choose one supported classification or leave the whole interpretation pending. */
+export function composeReviewedTrajectoryReading(value: unknown, context: SemanticContext, choices: TrajectoryReviewChoice[]): SemanticReading | null {
+  const { first, second, conflicts } = inspectTrajectoryReadingPair(value, context);
+  if (conflicts.length < 1 || conflicts.length > 5 || choices.length !== conflicts.length
+    || new Set(choices.map(item => item.id)).size !== choices.length
+    || choices.some(item => !conflicts.some(conflict => conflict.id === item.id)
+      || !["first", "second", "cannot_determine"].includes(item.choice))) {
+    throw new Error("TRAJECTORY_REVIEW_CHOICE_INVALID");
+  }
+  if (choices.some(item => item.choice === "cannot_determine")) return null;
+  const selected = new Map(choices.map(item => [item.id, item.choice]));
+  return readTrajectoryResponse({ items: first.items.map(item => selected.get(item.id) === "second"
+    ? second.items.find(other => other.id === item.id)! : item) }, context);
 }
 
 function record(value: unknown): Record<string, unknown> { return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }

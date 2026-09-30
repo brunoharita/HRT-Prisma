@@ -27,6 +27,8 @@ function fixture() {
     occupationReference: null, demonstratedEvidence: [], positionDecision: null,
   };
   let commitError: { code: string } | null = null;
+  let reviewData: Record<string, unknown> | null = null;
+  let reviewError: { code: string } | null = null;
   const env: Record<string, string> = { KNOWLEDGE_AGENT_ENABLED: "true", KNOWLEDGE_RESEARCH_MODEL: "configured-model", OPENAI_API_KEY: "test-key" };
   let provider: (context: TrajectoryEvidenceInput, index: number) => Record<string, unknown> = context => ({
     status: "completed", model: "provider-model-revision", output: [{ type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text: JSON.stringify({ items: context.entries.map(entry => ({ id: entry.id, activity: "backend_execution", evidenceId: entry.segments[0]?.id })) }) }] }],
@@ -43,6 +45,9 @@ function fixture() {
       return { rpc: (name, params) => {
         calls.push({ name, params });
         if (name === "commit_matching_snapshot") return Promise.resolve({ data: { evaluationId: "40000000-0000-0000-0000-000000000001" }, error: commitError });
+        if (name === "load_matching_trajectory_review") return Promise.resolve({ data: reviewData, error: reviewError });
+        if (name === "save_matching_trajectory_review") return Promise.resolve({ data: { reviewId: "50000000-0000-0000-0000-000000000001",
+          status: params.p_reading ? "resolved" : "unresolved" }, error: reviewError });
         if (name === "claim_matching_trajectory") return Promise.resolve({ data: cached ?? (params.p_allow_compute === false
           ? { acquired: false, status: "unavailable", reason_code: "AI_DISABLED" }
           : { acquired: true, id: "analysis", lease: "private-lease", status: "processing" }), error: null });
@@ -63,6 +68,8 @@ function fixture() {
     setSnapshotSources: (value: Record<string, unknown>) => snapshotSources = value,
     snapshotSources: () => snapshotSources,
     setCommitError: (value: { code: string } | null) => commitError = value,
+    setReviewData: (value: Record<string, unknown> | null) => reviewData = value,
+    setReviewError: (value: { code: string } | null) => reviewError = value,
     setProvider: (value: typeof provider) => provider = value };
 }
 
@@ -403,4 +410,46 @@ Deno.test("hash is canonical and changes with Knowledge revision or minimized te
   assert(a === await inputHash(context, { b: 2, a: 1 }));
   assert(a !== await inputHash(context, { a: 2, b: 2 }));
   assert(a !== await inputHash({ ...context, position: "Changed" }, { a: 1, b: 2 }));
+});
+
+Deno.test("one verified conflict is reviewable without a provider call, and human choice is assembled from evidence", async () => {
+  const f = fixture(), context = prepareTrajectoryContext(source.profileData, source.position, source.redactions);
+  const sourceItems = context.entries.map(entry => ({ id: entry.id, activity: "direct_function", evidenceId: `${entry.id}:0` }));
+  const pair = { attempt: 1, readings: [
+    { outcome: "validated", model: "resolved", items: sourceItems },
+    { outcome: "validated", model: "resolved", items: sourceItems.map(item => item.id === "e0" ? { ...item, activity: "related_function" } : item).reverse() },
+  ] };
+  f.setCache({ status: "indeterminate", reason_code: "READINGS_DISAGREE", acquired: false,
+    id: "40000000-0000-0000-0000-000000000001" });
+  f.setReviewData({ reviewable: true, conflictCount: 1, pair, context });
+  const loaded = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps)).json();
+  assert(loaded.status === "review_pending" && loaded.conflicts.length === 1 && loaded.conflicts[0].id === "e0");
+  assert(!("pair" in loaded) && !("context" in loaded) && f.requests.length === 0);
+  const saved = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save", analysisId: loaded.analysisId,
+    choices: [{ id: "e0", choice: "second" }] }), f.deps)).json();
+  assert(saved.status === "resolved" && f.requests.length === 0);
+  const save = f.calls.find(call => call.name === "save_matching_trajectory_review");
+  const reviewed = save?.params.p_reading as { items: Array<{ id: string; activity: string }> } | undefined;
+  assert(reviewed?.items.find(item => item.id === "e0")?.activity === "related_function");
+  const unresolved = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save", analysisId: loaded.analysisId,
+    choices: [{ id: "e0", choice: "cannot_determine" }] }), f.deps)).json();
+  assert(unresolved.status === "unresolved");
+  assert(f.calls.filter(call => call.name === "save_matching_trajectory_review").at(-1)?.params.p_reading === null);
+  const beforeStale = f.calls.filter(call => call.name === "save_matching_trajectory_review").length;
+  const stale = await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save",
+    analysisId: "40000000-0000-0000-0000-000000000002", choices: [{ id: "e0", choice: "first" }] }), f.deps);
+  assert(stale.status === 409 && f.calls.filter(call => call.name === "save_matching_trajectory_review").length === beforeStale);
+});
+
+Deno.test("six conflicts stay on internal fallback, and unauthorized or malformed reviews cannot save", async () => {
+  const f = fixture(); f.setCache({ status: "indeterminate", reason_code: "READINGS_DISAGREE", acquired: false,
+    id: "40000000-0000-0000-0000-000000000001" });
+  f.setReviewData({ reviewable: false, conflictCount: 6 });
+  const overLimit = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps)).json();
+  assert(overLimit.status === "review_unavailable" && overLimit.reasonCode === "TOO_MANY_CONFLICTS" && f.requests.length === 0);
+  const malformed = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save", analysisId: "40000000-0000-0000-0000-000000000001", choices: [{ id: "bad", choice: "first" }] }), f.deps)).json();
+  assert(malformed.status === "review_unavailable" && !f.calls.some(call => call.name === "save_matching_trajectory_review"));
+  f.setReviewError({ code: "42501" });
+  const denied = await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps);
+  assert(denied.status === 403 && f.requests.length === 0);
 });

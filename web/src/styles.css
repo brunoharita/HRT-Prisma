@@ -6343,7 +6343,12 @@ textarea {
   .prisma-score-summary { grid-template-columns: 1fr; }
   .prisma-score-summary strong { grid-row: auto; }
   .prisma-score-versions > div { grid-template-columns: 1fr; gap: 2px; }
-  .prisma-matching-score-drawer .ant-drawer-body { min-width: 0; }
+.prisma-matching-score-drawer .ant-drawer-body { min-width: 0; }
+.prisma-trajectory-conflict-review { margin: 16px 0; padding: 16px; border: 1px solid #d6c7a3; border-radius: 8px; background: #fffcf4; }
+.prisma-trajectory-conflict-review > .ant-btn { margin-bottom: 12px; }
+.prisma-trajectory-conflict-item { margin: 12px 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+.prisma-trajectory-conflict-item details { margin: 8px 0; overflow-wrap: anywhere; }
+.prisma-trajectory-conflict-item details summary { cursor: pointer; color: #345579; }
 }
 
 .prisma-person-data-shell {

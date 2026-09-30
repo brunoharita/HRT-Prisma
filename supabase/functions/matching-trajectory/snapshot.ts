@@ -37,7 +37,9 @@ export function buildSnapshotEvaluation(sources: Record<string, unknown>, assess
     areaRelation: match.areaRelation, positionRelation: match.positionRelation, positionDecision: match.positionDecision,
     trajectoryAssessment: match.trajectoryAssessment, discoveryGroup: match.discoveryGroup, functionAssessment: match.functionAssessment,
     semanticInterpretation: { analysisId: assessment.analysisId, inputHash: assessment.inputHash, methodVersion: assessment.methodVersion,
-      promptVersion: assessment.promptVersion, modelVersion: assessment.modelVersion, status: assessment.status },
+      promptVersion: assessment.promptVersion, modelVersion: assessment.modelVersion, status: assessment.status,
+      ...(assessment.resolutionSource === "human_review" ? { resolutionSource: assessment.resolutionSource,
+        reviewId: assessment.reviewId, reviewVersion: assessment.reviewVersion } : {}) },
     score: match.score, detailedStatus: match.detailedStatus, evidenceAssessment: match.evidenceAssessment,
     sufficiency: match.detailedStatus !== "ready" ? "pending_classification" : match.missingRequiredCount ? "insufficient_evidence" : "sufficient_evidence",
   };

@@ -1,5 +1,5 @@
 import type { PostgrestError } from "@supabase/supabase-js";
-import { type SemanticAssessment } from "../../../../src/domain/semanticTrajectory.js";
+import { activities, type SemanticAssessment, type TrajectoryConflict, type TrajectoryReviewChoice } from "../../../../src/domain/semanticTrajectory.js";
 import { applySemanticAssessment, isSemanticDiscoveryEligible, isSemanticTriageEligible, unavailableSemantic } from "../../domain/semanticMatching.js";
 import {
   matchVacancyCandidate,
@@ -59,6 +59,21 @@ type OccupationResolutionRow = {
   canonical_concept_id: string | null; canonical_label: string | null; normalized_term: string;
   candidates: unknown; ambiguity_reason: string | null; reused: boolean;
 };
+
+export type TrajectoryReviewView = { status: "review_pending"; analysisId: string; conflictCount: number; conflicts: TrajectoryConflict[] }
+  | { status: "review_unavailable"; reasonCode: "TOO_MANY_CONFLICTS"; conflictCount: number };
+
+function isTrajectoryConflict(value: unknown): value is TrajectoryConflict {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const item = value as Record<string, unknown>;
+  if (typeof item.id !== "string" || typeof item.fieldPath !== "string" || typeof item.text !== "string"
+    || !["experience", "education", "declaration"].includes(String(item.kind))) return false;
+  return [item.first, item.second].every(side => {
+    if (!side || typeof side !== "object" || Array.isArray(side)) return false;
+    const row = side as Record<string, unknown>;
+    return activities.includes(row.activity as (typeof activities)[number]) && typeof row.quote === "string";
+  });
+}
 
 export const vacancyService = {
   async list(organizationId: string): Promise<VacancySummary[]> {
@@ -447,6 +462,36 @@ export const vacancyService = {
       return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
     });
     return interpretMatches(vacancy, matches.filter(isSemanticDiscoveryEligible), undefined, signal);
+  },
+
+  async loadTrajectoryReview(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<TrajectoryReviewView> {
+    if (match.semanticFallback?.status !== "indeterminate" || match.semanticFallback.reasonCode !== "READINGS_DISAGREE") {
+      throw new Error("Não há duas leituras divergentes disponíveis para este Perfil.");
+    }
+    const { data, error } = await supabase.functions.invoke("matching-trajectory", { body: {
+      operation: "review_load", organizationId: vacancy.organizationId, profileId: match.candidate.profileId,
+      positionVersionId: vacancy.versionId, referenceDate: match.score.referenceDate,
+    }, signal: AbortSignal.timeout(30_000) });
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível abrir a revisão. Atualize a análise e tente novamente.");
+    if (data?.status === "review_unavailable" && data.reasonCode === "TOO_MANY_CONFLICTS"
+      && Number.isInteger(data.conflictCount) && data.conflictCount > 5) return data as TrajectoryReviewView;
+    if (data?.status !== "review_pending" || typeof data.analysisId !== "string"
+      || !Number.isInteger(data.conflictCount) || data.conflictCount < 1 || data.conflictCount > 5
+      || !Array.isArray(data.conflicts) || data.conflicts.length !== data.conflictCount
+      || !data.conflicts.every(isTrajectoryConflict)) throw new Error("Os itens divergentes não puderam ser validados. Nenhuma decisão foi registrada.");
+    return data as TrajectoryReviewView;
+  },
+
+  async saveTrajectoryReview(vacancy: VacancyDetail, match: VacancyCandidateMatch, analysisId: string, choices: TrajectoryReviewChoice[]): Promise<"resolved" | "unresolved"> {
+    const { data, error } = await supabase.functions.invoke("matching-trajectory", { body: {
+      operation: "review_save", organizationId: vacancy.organizationId, profileId: match.candidate.profileId,
+      positionVersionId: vacancy.versionId, referenceDate: match.score.referenceDate, analysisId, choices,
+    }, signal: AbortSignal.timeout(30_000) });
+    if (error) throw await supabaseFunctionOperationError(error, "Não foi possível salvar a revisão. O cálculo anterior foi preservado.");
+    if ((data?.status !== "resolved" && data?.status !== "unresolved") || typeof data.reviewId !== "string") {
+      throw new Error("A revisão não foi confirmada pelo servidor. O cálculo anterior foi preservado.");
+    }
+    return data.status;
   },
 
   async recordPositionRelationDecision(vacancy: VacancyDetail, match: VacancyCandidateMatch, decision: Exclude<VacancyPositionRelationDecision, null>): Promise<void> {

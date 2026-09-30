@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 307
-source_manifest_sha256: f1b1cbb2642e26177c4ee88c39f53412b39e93dd7cc2425863ca1f2bc3d0415a
+documentation_source_count: 310
+source_manifest_sha256: 470cb51ee4a7a3f2432eb22a12cc8cc0886dea5a7761196c1508ae4d21d89040
 -->
 
 # Tudo sobre o Prisma
@@ -2634,6 +2634,8 @@ last_verified: 2026-09-30
 
 O novo contrato `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 guarda no cache da análise somente o último par estruturado de uma tentativa por Perfil/versão da Posição/chave de fontes. Leitura validada guarda categorias e IDs de evidência, não a resposta bruta; leitura falha guarda etapa e motivo tipificados. Um retry substitui o par anterior. Uma nova RPC de conclusão grava resultado e par na mesma transação, preservando o contrato legado, RLS, grants, fallback e ausência do par na resposta ao navegador. Testes locais Deno (28), typecheck Deno/TypeScript, SQL transacional do M83 nos prompts 1.1/1.2 e cadeia corrente, além de 715 testes do projeto, passaram. O primeiro CI falhou porque um documento não rastreado local entrou na exportação gerada; o Context Pack foi regenerado em checkout limpo sem tocar nesse documento. Os CIs da branch `36711245604` e de main `36711343697` passaram, e o SHA `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` foi integrado em `main` local/GitHub. A migration remota `20260930115417_matching_last_reading_pair` criou o campo e RPC service-only; Edge `matching-trajectory` v13 está ACTIVE/JWT, 12 arquivos publicados coincidem com o checkout e POST anônimo retornou 401. O plano não exigiu frontend/VPS. Não houve backfill, nova consulta à IA com Perfil real, mudança de grupo/score/modelo/prompt ou tela de auditoria. A leitura real posterior ainda não foi exercitada; confirmar persistência para uma nova tentativa somente quando ela ocorrer, sem reprocessar Perfis apenas para smoke. Evidência: `docs/qa/aot-matching-last-reading-pair.md`.
 
+Movimento em implementação local em 2026-09-30: `docs/qa/agreement-matching-human-conflicts.md` v1.0.0 estende a discordância auditada para revisão humana de até cinco itens por Perfil/versão da Posição. A migração nova cria auditoria contextual e RPCs service-only com revalidação de papel, fontes, par e escolhas; a Edge projeta apenas trechos conflitantes, e a UI mostra evidências e decisões. Uma revisão íntegra gera leitura versionada e score/snapshot recalculados pelo motor existente; item não determinado ou mais de cinco conflitos conserva o cálculo interno. Sem alteração de prompt, modelo, pesos, Knowledge ou Perfis publicados. Testes locais de domínio, Edge, build e PostgreSQL sintético passaram até este registro; QA e produção ainda não estão comprovados e só serão descritos no AoT de fechamento.
+
 ## Avisos causais da interpretação — publicados em produção
 
 O aviso de busca e comparação de Pessoas por Posição agora deriva a mensagem do estado e motivo público de cada tentativa. Discordância entre duas respostas válidas, evidência insuficiente, tempo esgotado, serviço sem análise utilizável, resultado não validado, dados alterados, acesso, conteúdo não utilizável, andamento e motivo desconhecido têm textos distintos. O aviso declara que grupo, nota e evidências exibidos são do cálculo interno desta consulta e não foram substituídos pela interpretação inconclusiva. Etiquetas dos Perfis afetados seguem a mesma causa; só há botão quando o estado permite atualização ou nova tentativa. Não há mudança de matching, score, Edge, banco, modelo ou cache. SHA funcional `d5aa806e662994e3a7ef981ec2de35af2a825bde` em `main` local/GitHub/VPS; CI de branch `36662702395` e de main `36662801204` PASS. Somente o `prisma-web` foi recriado, com imagem `sha256:a20b817629afc87665498542f5102e7e132b0a9356b4cf9d1ef78d3b8e97dec8`, running e zero reinícios; rollback anterior confirmado. Após 404 transitório no smoke imediato, `/`, `/login` e `/index.html` retornaram 200; o bundle público contém os avisos novos. Sem smoke autenticado para não reabrir chamadas pagas em Perfis reais. Contrato e evidência: `docs/qa/agreement-matching-causal-notices.md` v1.0.0 e `docs/qa/aot-matching-causal-notices.md`.
@@ -3912,6 +3914,8 @@ Uma decisão humana confirmada pode gerar uma proposta tenant-scoped na Inbox ex
 Quando uma tentativa de interpretação por IA não produz leitura válida, a busca conserva integralmente o matching determinístico calculado antes da tentativa. Busca e comparação identificam os Perfis afetados e explicam a causa pública efetivamente conhecida, o efeito nos resultados e a ação disponível, sem chamar toda indeterminação de discordância nem atribuir falha interna ao provedor. Causa desconhecida é declarada desconhecida. Grupo, score, relações e evidências anteriores permanecem; a falha não constitui classificação semântica ou fato negativo sobre a Pessoa. O ajuste original de fallback não alterou o contrato persistido nem a rubrica de uma resposta válida; a política de acionamento posterior é a triagem seletiva descrita acima. Acordos específicos: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0 e `docs/qa/agreement-matching-causal-notices.md` v1.0.0.
 
 O cache da interpretação conserva o último par de leituras estruturadas por Perfil, versão da Posição e chave de fontes/método/prompt/modelo. Cada leitura validada retém apenas categoria por trecho e ID da evidência, com modelo resolvido; uma leitura inválida retém somente etapa e motivo tipificados. Uma nova tentativa dessa chave substitui o par anterior. A gravação é atômica com a conclusão, não altera o consenso nem o cálculo pré-IA e não expõe o par ao navegador. Registros anteriores não recebem backfill; este campo não é a resposta bruta do provedor nem um histórico permanente de tentativas. Contrato específico: `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0.
+
+Revisão de divergências `trajectory-human-review-1.0.0`: quando as duas leituras validadas divergem em uma a cinco categorias de trechos profissionais, o Prisma mostra a um `owner`, `admin`, `recruiter` ou Super Admin o trecho, as duas categorias e suas evidências. O operador decide por item, podendo indicar que não é possível determinar. A leitura composta só é concluída se todas as divergências forem resolvidas; caso contrário, o cálculo interno pré-IA permanece, sem escolher um lado automaticamente. Uma revisão concluída recalcula grupo, score e evidências pelo mesmo motor versionado e identifica o ID/versão da revisão no fingerprint e no snapshot. A decisão é contextual ao Perfil, versão da Posição e fontes vigentes, com revisor, horário e par original preservados; não publica regra na Knowledge. Com mais de cinco conflitos, ou par inválido/obsoleto, não há tratamento item a item nem redução da avaliação interna. `docs/qa/agreement-matching-human-conflicts.md` v1.0.0.
 
 ## Saída por requisito
 
@@ -9357,6 +9361,8 @@ Contexto mínimo é construído no backend a partir de versões publicadas. Expe
 
 Duas leituras independentes classificam cada trecho em sete categorias fechadas, sem nota nem justificativa livre. Citações são validadas como substrings da fonte. Discordância produz estado indeterminado, não média. Concordância tampouco prova correção: fixtures contrastadas e variantes são requisito separado.
 
+Extensão aprovada em 2026-09-30 (`docs/qa/agreement-matching-human-conflicts.md` v1.0.0): até cinco categorias divergentes podem ser resolvidas por operador autorizado com evidência e auditoria contextual. A escolha humana não é consenso da IA nem regra global; só a leitura íntegra revisada entra no mesmo score/snapshot, com proveniência própria. Acima de cinco divergências ou com item não determinado, conserva-se o cálculo pré-IA. Esta extensão substitui apenas a frase anterior que descartava toda discordância, não a exigência de duas leituras verificadas nem a rubrica de pontos.
+
 A rubrica mantém faixas preexistentes: execução backend 20 (direta), desenvolvimento de software sem especialização backend 17 (mesma família de execução, transferência ainda não comprova ferramentas), análise de software 12 (adjacente), liderança técnica 8 (contexto profissional), menção sem atuação técnica não produz elegibilidade. Só execução backend forma grupo A; execução genérica/análise/liderança formam B; menção/declarativo forma C. Área de software demonstrada por experiência vale 30; declaração isolada pode explicar 24, mas não torna um Perfil elegível sozinha. O melhor nível sustentado em experiência é preservado, inclusive histórico, sem bônus por quantidade/repetição/duração. Não se presume senioridade. Requisitos mantêm método existente; o significado dos pontos fica explicitamente versionado.
 
 Não se força que Diego vença Bruno: se ambos possuem execução histórica comprovada, podem receber a mesma classificação de função. Prioridade requer evidência discriminante da Posição, não uma preferência por pessoa.
@@ -13425,6 +13431,56 @@ Decisão de versão: redação transitória da UI, sem alteração de contrato p
 
 ---
 
+## Source: `docs/qa/agreement-matching-human-conflicts.md`
+
+# Acordo — revisão humana de divergências da trajetória v1.0.0
+
+Decisão de Bruno em 2026-09-30: no máximo cinco itens divergentes por Perfil e versão da Posição podem ser apresentados para tratamento humano; depois de concluído o tratamento, o Prisma recalcula o score. Acima de cinco, permanece o cálculo interno anterior à IA. Este acordo substitui apenas a rejeição integral de toda discordância no ADR-073; o par de leituras original permanece auditável.
+
+## DEVE
+
+- D-01 — Contar divergências por `entry.id` e categoria profissional, ignorando a ordem de retorno e diferenças isoladas no segmento de citação. Somente duas leituras completas e validadas da mesma tentativa são elegíveis.
+- D-02 — Entre uma e cinco divergências, exibir ao operador autorizado cada item, o trecho profissional, as duas categorias e a referência de evidência, sem tratar nenhuma resposta como verdade. Permitir escolher uma das classificações sustentadas ou `não é possível determinar` para cada item.
+- D-03 — Salvar a decisão humana apenas para o par Perfil–versão da Posição, vinculada ao cache, fontes, tentativa, revisor e horário. Revalidar servidor, tenant, papel, versões, quantidade e opções antes da gravação. Não alterar Perfil, Posição ou Knowledge.
+- D-04 — Após salvar todas as decisões que permitam uma leitura íntegra, compor uma interpretação versionada com os itens concordantes e as decisões humanas, recalcular grupo, score e evidências pelo motor compartilhado, e identificar claramente a origem humana. Se alguma decisão decisiva continuar indeterminada, preservar o cálculo interno pré-IA sem conclusão semântica.
+- D-05 — Acima de cinco divergências, não oferecer tratamento item a item neste fluxo: conservar integralmente o cálculo interno e explicar que a IA não concluiu; nem a divergência nem o excesso reduzem pontuação ou excluem a Pessoa.
+
+## PROIBIDO
+
+- P-01 — Escolher automaticamente um dos lados, converter discordância em fato negativo, zero ou Grupo C, ou declarar score final quando houver decisão material pendente.
+- P-02 — Permitir escrita de revisão por `member`, outro tenant, fonte/versão obsoleta, avaliação sem par válido, item não conflitante ou opção sem evidência.
+- P-03 — Publicar correção contextual na Knowledge global/empresa, substituir o par original, guardar currículo bruto, confiar em score enviado pelo navegador ou alterar pesos/prompt/modelo.
+
+## FORA DE ESCOPO
+
+- F-01 — Nova política de modelo ou de acionamento da IA, múltiplas rodadas de revisão, alteração de requisitos, reaplicação em Perfis/Posições diferentes e reprocessamento pago de dados reais.
+
+## AUTONOMIA
+
+- A-01 — Engenharia escolhe o armazenamento e a apresentação na tela existente, reutilizando a leitura auditada, autoridade de decisões de matching (`owner`, `admin`, `recruiter`) e motor de score.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — Um a cinco conflitos, inclusive o caso observado de três: tela mostra os itens, revisão autorizada produz leitura composta e score reproduzível; um conflito não decidido mantém fallback.
+- CA-02 — Seis ou mais conflitos: nenhuma opção de salvar revisão e resultado pré-IA intacto. Diferença de ordem ou de `evidenceId` com mesma categoria não conta.
+- CA-03 — Testes negativos de tenant/papel, versão e cache, opções malformadas, par inválido e concorrência; revisão não divulga par para papéis sem acesso nem altera Knowledge.
+- CA-04 — Busca e comparação exibem origem, pendências e score recalculado de modo causal; snapshots persistidos só aceitam a leitura revisada autenticada e o fingerprint vigente.
+
+## Mapa de impacto e preservação
+
+| Área | Relação | Baseline | Regressão |
+| --- | --- | --- | --- |
+| Par auditado, cache, RPC de revisão | direct | `main` e0e8289, par completo apenas interno, status indeterminado | SQL local, tenant/papel, imutabilidade do par |
+| Edge de matching e snapshot | direct | Duas leituras; divergência integral descartada | Deno de 0/1/5/6 conflitos, fonte obsoleta, snapshot |
+| Motor compartilhado, score e versões | direct | Interpretação apenas consensual | Testes de grupo/score/fingerprint e fallback |
+| Busca, comparação e detalhe | direct | Aviso genérico e pré-IA preservado | Testes de UI e comparação, visual no mesmo estado |
+| Auth, privacidade e auditoria | critical_transversal | RLS/cache fechado, papéis de matching | Negativos e smoke QA |
+| Knowledge, parser e requisitos | no_impact_identified | Sem escrita prevista | Inspeção de diff e smoke de preservação |
+
+Estado: agreed. Aprovação: pedido explícito de implementação em main e produção por Bruno em 2026-09-30, após discussão dos limites e do fallback.
+
+---
+
 ## Source: `docs/qa/agreement-matching-last-reading-pair.md`
 
 # Acordo — último par de leituras da interpretação por IA v1.0.0
@@ -16580,6 +16636,50 @@ Branch `codex/matching-causal-notices` a partir de `main` `81743ad`; SHA funcion
 ## Conclusão
 
 Regras de aviso entregues e publicadas. Disponibilidade pública comprovada; apresentação autenticada com Perfis reais não foi verificada para evitar custo e reprocessamento.
+
+---
+
+## Source: `docs/qa/aot-matching-human-conflicts.md`
+
+# AoT — revisão humana de divergências da trajetória
+
+Contrato: `docs/qa/agreement-matching-human-conflicts.md` v1.0.0. Baseline: `main` e0e8289; divergência entre duas leituras validadas conservava o matching interno, sem tratamento de itens. Nenhum Perfil real foi reprocessado para esta validação.
+
+## Acordos e proibições
+
+| ID | Implementação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Comparação por ID/categoria no domínio compartilhado; par validado | 91 testes de domínio, incluindo ordem/citação e limites | PASS |
+| D-02 | Edge projeta até cinco conflitos para operador autorizado; tela mostra trecho/categorias/evidências | Testes Edge/SQL e build web; visual autenticado ainda não verificado | PARTIAL |
+| D-03 | RPC de revisão verifica fontes, tenant, papel, cache, escolhas; auditoria com ator/horário | PostgreSQL local transacional e casos negativos | PASS |
+| D-04 | Leitura composta versionada, mesmo score e snapshot com proveniência; não determinado conserva pré-IA | Testes de domínio, Edge e snapshot SQL | PASS |
+| D-05 | Mais de cinco conflitos sem salvamento e sem substituir cálculo interno | Testes domínio, Edge e PostgreSQL | PASS |
+| P-01 | Sem escolha automática, zero ou Grupo C por discordância | Testes de fallback | PASS |
+| P-02 | Sem revisão por membro, tenant alheio, versão obsoleta ou item inválido | PostgreSQL e Edge | PASS |
+| P-03 | Nenhuma escrita na Knowledge/Perfil/Posição, currículo bruto ou score do cliente | Inspeção do diff, RPC service-only, snapshot compartilhado | PASS |
+
+F-01 preservado: sem mudança de modelo, prompt, pesos, triagem, Knowledge, requisitos ou reprocessamento pago. A-01: tabela auditável nova e componente na busca existente; não foi criada base paralela.
+
+## Mapa de preservação
+
+| Capacidade | Relação | Baseline e regressão | Estado |
+| --- | --- | --- | --- |
+| Cache, último par, lease, retry | direct | M83/M84/M86/2.1 + par auditado no PostgreSQL local; par original conservado | PASS |
+| Matching, score, fingerprint | direct | 91 testes de domínio; leitura revisada muda score/fingerprint, fallback não muda | PASS |
+| Edge, snapshot, autorização | direct/critical_transversal | 35 testes Deno; SQL local aceita somente revisão com ID/versão autenticados | PASS |
+| Busca/comparação e tela | direct | Typecheck/build; smoke visual autenticado pendente | PARTIAL |
+| Privacidade e isolamento | critical_transversal | Negativos de grants, RLS, role, tenant, fontes obsoletas e evidência inventada | PASS |
+| Knowledge, parser, requisitos | no_impact_identified | Sem diff funcional nem escrita nessas fontes; comparação preserva motor existente | PASS |
+
+## Validação, rollout e limites
+
+Local: `pnpm run typecheck`, `pnpm run build`, `node --test dist/tests/semanticTrajectory.test.js` (91/91), `deno check` e `deno test` focados (35/35) passaram. PostgreSQL 17 isolado em loopback, banco descartável, aplicou as migrações relevantes e executou transação com rollback: M83, último par e revisão humana, incluindo aceitação/rejeição do snapshot, seis conflitos, decisão não determinada, grants/RLS e fonte obsoleta. Nenhuma chamada ao provedor de IA nem dado pessoal real.
+
+QA, CI, main, VPS e produção: **NOT TESTED** neste registro inicial; atualizar somente após evidência. Smoke autenticado com Perfil real não é parte do teste, pois exigiria mutação desnecessária. Falha do provedor continua usando fallback causal. A revisão de até cinco conflitos melhora a utilidade do resultado, mas não garante que uma das respostas da IA esteja correta; o operador continua responsável por fundamentar a escolha.
+
+## Desvios
+
+Nenhum desvio funcional conhecido neste estágio. Evidência visual e rollout ainda pendentes; não declarar entrega final antes deles.
 
 ---
 
@@ -20816,6 +20916,16 @@ Validar antes de liberar: corpus sintético separado da calibração; positivos/
 # Execução — preservação do matching após falha da IA
 
 Fonte obrigatória: `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler integralmente antes da implementação. O resultado pré-IA deve sobreviver a qualquer tentativa sem resposta válida (D-01/P-01/P-02/P-03); a tela informa a falha e identifica o Perfil (D-02); leitura válida continua versionada (D-03). A política de chamadas, o provedor, Knowledge, score, dados persistidos e schema ficam fora do movimento (F-01/F-02). A implementação da anotação transitória é delegada (A-01). Comprovar CA-01 a CA-03 e registrar AoT com evidência local e de release.
+
+---
+
+## Source: `docs/qa/execution-matching-human-conflicts.md`
+
+# Execução — revisão humana de divergências v1.0.0
+
+Fonte integral: `docs/qa/agreement-matching-human-conflicts.md` v1.0.0, aprovado por Bruno em 2026-09-30. Ler o acordo completo antes da implementação. Implementar D-01 a D-05, provar P-01 a P-03 e CA-01 a CA-04. Preservar F-01; A-01 delega somente armazenamento e apresentação compatíveis com o repositório.
+
+Sequência: (1) projetar revisão auditável e controle de autoridade reutilizando o cache/Edge; (2) expor no detalhe de matching até cinco conflitos com suas evidências e ação humana; (3) recalcular pelo motor compartilhado após decisão íntegra; (4) testes negativos, QA, publicação seletiva e AoT. Nenhuma chamada paga a dados reais é necessária como teste.
 
 ---
 

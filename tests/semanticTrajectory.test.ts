@@ -3,9 +3,11 @@ import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import test from "node:test";
 import {
-  activities, agreeTrajectoryReadings, isSemanticPilot, prepareTrajectoryContext, readTrajectoryResponse,
+  activities, agreeTrajectoryReadings, composeReviewedTrajectoryReading, inspectTrajectoryReadingPair,
+  isSemanticPilot, prepareTrajectoryContext, readTrajectoryResponse,
   readTrajectoryEvidenceResponse, trajectoryEvidenceInput,
   trajectoryResponseSchema, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_MATCHING_VERSION, SEMANTIC_SCORE_VERSION,
+  HUMAN_REVIEW_VERSION,
   type SemanticAssessment, type SemanticContext, type SemanticReading,
 } from "../src/domain/semanticTrajectory.js";
 import {
@@ -94,6 +96,38 @@ test("model evidence IDs resolve to exact source substrings and reject invented 
   const segments = trajectoryEvidenceInput(long).entries[0]!.segments;
   assert.ok(segments.length > 1);
   assert.ok(segments.every(segment => long.entries[0]!.text.includes(segment.text) && segment.text.length <= 240));
+});
+
+test("human review counts only classification conflicts, reorders safely and keeps cited evidence", () => {
+  const context: SemanticContext = { position: "Gerente de projetos de TI", entries: Array.from({ length: 6 }, (_, index) => ({
+    id: `e${index}`, kind: "experience" as const, fieldPath: `experiences.${index}`,
+    text: `Gerenciou projetos de tecnologia com equipes e entregas ${index}.`,
+  })) };
+  const references = trajectoryEvidenceInput(context).entries.map(entry => entry.segments[0]!.id);
+  const side = (activity: (index: number) => "direct_function" | "related_function", reverse = false) => ({
+    outcome: "validated", model: "test-model", items: context.entries.map((entry, index) => ({
+      id: entry.id, activity: activity(index), evidenceId: references[index]!,
+    }))[reverse ? "reverse" : "slice"](),
+  });
+  const pair = { attempt: 1, readings: [side(() => "direct_function"), side(index => index < 5 ? "related_function" : "direct_function", true)] };
+  const inspected = inspectTrajectoryReadingPair(pair, context);
+  assert.equal(inspected.conflicts.length, 5);
+  assert.deepEqual(inspected.conflicts.map(item => item.id), ["e0", "e1", "e2", "e3", "e4"]);
+  const choices = inspected.conflicts.map(item => ({ id: item.id, choice: "second" as const }));
+  const reviewed = composeReviewedTrajectoryReading(pair, context, choices);
+  assert.ok(reviewed);
+  assert.equal(reviewed.items[0]?.activity, "related_function");
+  assert.equal(reviewed.items[5]?.activity, "direct_function");
+  assert.ok(context.entries[0]!.text.includes(reviewed.items[0]!.quote));
+  assert.equal(composeReviewedTrajectoryReading(pair, context, [{ ...choices[0]!, choice: "cannot_determine" }, ...choices.slice(1)]), null);
+  assert.throws(() => composeReviewedTrajectoryReading(pair, context, choices.slice(1)), /TRAJECTORY_REVIEW_CHOICE_INVALID/);
+  assert.throws(() => composeReviewedTrajectoryReading(pair, context, [{ id: "other", choice: "first" }, ...choices.slice(1)]), /TRAJECTORY_REVIEW_CHOICE_INVALID/);
+  const six = { attempt: 1, readings: [side(() => "direct_function"), side(() => "related_function", true)] };
+  assert.equal(inspectTrajectoryReadingPair(six, context).conflicts.length, 6);
+  assert.throws(() => composeReviewedTrajectoryReading(six, context, context.entries.map(item => ({ id: item.id, choice: "first" }))), /TRAJECTORY_REVIEW_CHOICE_INVALID/);
+  const same = { attempt: 1, readings: [side(() => "direct_function"), side(() => "direct_function", true)] };
+  assert.equal(inspectTrajectoryReadingPair(same, context).conflicts.length, 0);
+  assert.throws(() => inspectTrajectoryReadingPair({ attempt: 1, readings: [{ outcome: "failed" }, same.readings[1]] }, context), /TRAJECTORY_REVIEW_PAIR_INVALID/);
 });
 
 test("response accepts each source once in any order and only an exact quote from its own source", () => {
@@ -424,6 +458,29 @@ test("fingerprint is deterministic, changes with interpretation identity and nev
     assert.equal(updated.score.score, original.score.score);
   }
   assert.deepEqual(original, snapshot);
+});
+
+test("a human-reviewed reading recalculates matching with a distinct auditable fingerprint", () => {
+  const { need, legacy, assessment } = setup();
+  const automatic = applySemanticAssessment(need, legacy, assessment);
+  const reviewed = applySemanticAssessment(need, legacy, {
+    ...assessment, resolutionSource: "human_review", reviewId: "c74a48c0-188a-4786-8b8e-bd46282ab99a",
+    reviewVersion: HUMAN_REVIEW_VERSION,
+    reading: { items: assessment.reading!.items.map(item => ({ ...item, activity: "software_analysis" as const })) },
+  });
+  assert.equal(reviewed.semanticAssessment?.resolutionSource, "human_review");
+  assert.notEqual(reviewed.score.inputFingerprint, automatic.score.inputFingerprint);
+  assert.notEqual(reviewed.score.score, automatic.score.score);
+  assert.equal(automatic.semanticAssessment?.resolutionSource, undefined);
+  for (const invalidReview of [
+    { ...assessment, resolutionSource: "human_review" as const, reviewVersion: HUMAN_REVIEW_VERSION },
+    { ...assessment, resolutionSource: "human_review" as const,
+      reviewId: "c74a48c0-188a-4786-8b8e-bd46282ab99a", reviewVersion: "unknown" },
+  ]) {
+    const invalid = applySemanticAssessment(need, legacy, invalidReview);
+    assert.equal(invalid.semanticFallback?.reasonCode, "INVALID_ASSESSMENT");
+    assert.deepEqual(invalid.score, legacy.score);
+  }
 });
 
 test("a failed interpretation keeps its prior group and score ordering", () => {

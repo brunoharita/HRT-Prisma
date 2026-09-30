@@ -1,4 +1,4 @@
-import { readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION, type SemanticAssessment, type TrajectoryActivity } from "../../../src/domain/semanticTrajectory.js";
+import { HUMAN_REVIEW_VERSION, readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION, type SemanticAssessment, type TrajectoryActivity } from "../../../src/domain/semanticTrajectory.js";
 import { calculateMatchingScore, type MatchingScoreExperience, type VacancyFunctionAssessment } from "./matchingScore.js";
 import type { VacancyAreaRelation, VacancyCandidateMatch, VacancyDetail, VacancyMatchEvidence } from "./vacancy.js";
 import { assessVacancyEvidence, assessVacancySeniority, hasUsableProfessionalContent } from "./vacancy.js";
@@ -58,7 +58,10 @@ export function unavailableSemantic(vacancy: VacancyDetail, match: VacancyCandid
 export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCandidateMatch, assessment: SemanticAssessment): VacancyCandidateMatch {
   const valid = assessment.organizationId === vacancy.organizationId && assessment.profileId === match.candidate.profileId
     && assessment.positionVersionId === vacancy.versionId && assessment.methodVersion === SEMANTIC_METHOD_VERSION
-    && assessment.promptVersion === SEMANTIC_PROMPT_VERSION && Boolean(assessment.modelVersion && assessment.analysisId && assessment.inputHash);
+    && assessment.promptVersion === SEMANTIC_PROMPT_VERSION && Boolean(assessment.modelVersion && assessment.analysisId && assessment.inputHash)
+    && (assessment.resolutionSource === undefined ? !assessment.reviewId && !assessment.reviewVersion
+      : assessment.resolutionSource === "human_review" && assessment.reviewVersion === HUMAN_REVIEW_VERSION
+        && typeof assessment.reviewId === "string" && /^[0-9a-f-]{36}$/i.test(assessment.reviewId));
   let reading = null;
   if (valid && assessment.status === "complete" && assessment.context && assessment.reading) {
     try { reading = readTrajectoryResponse(assessment.reading, assessment.context); } catch { /* Fail closed, preserve manual access. */ }
@@ -114,7 +117,8 @@ export function applySemanticAssessment(vacancy: VacancyDetail, match: VacancyCa
     temporalApplicable: vacancy.experiencePolicy !== "not_required",
     positionVersion: vacancy.versionId, positionVersionNumber: vacancy.version, profileVersion: match.candidate.profileId, profileVersionNumber: match.candidate.profileVersion,
     matchingContractVersion: SEMANTIC_MATCHING_VERSION, scoreContractVersion: SEMANTIC_SCORE_VERSION,
-    interpretationReference: `${assessment.methodVersion}:${assessment.promptVersion}:${assessment.modelVersion}:${assessment.inputHash}:${assessment.analysisId}`,
+    interpretationReference: `${assessment.methodVersion}:${assessment.promptVersion}:${assessment.modelVersion}:${assessment.inputHash}:${assessment.analysisId}`
+      + (assessment.resolutionSource === "human_review" ? `:${assessment.reviewVersion}:${assessment.reviewId}` : ""),
   });
   const positionRelation = { status: points ? "interpreted_function" as const : "none" as const, explanation, evidence };
   return { ...match, semanticAssessment: assessment, semanticFallback: undefined, areaRelation, functionAssessment, discoveryGroup, score,

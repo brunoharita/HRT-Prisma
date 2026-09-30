@@ -17,7 +17,7 @@ const CAUSES: Record<Cause, { title: (count: number) => string; detail: string; 
   },
   disagreement: {
     title: count => `A IA deu duas respostas diferentes para ${profiles(count)}`,
-    detail: "As duas respostas foram recebidas e verificadas, mas classificaram a trajetória de formas diferentes. Por segurança, nenhuma foi aplicada; esses casos precisam de revisão humana.",
+    detail: "As duas respostas foram recebidas e verificadas, mas classificaram trechos da trajetória de formas diferentes. Nenhuma foi aplicada automaticamente. Até cinco itens podem ser tratados por uma pessoa autorizada; acima desse limite, permanece o cálculo interno.",
     badge: "IA: respostas diferentes · resultado anterior mantido",
   },
   insufficient: {
@@ -135,7 +135,7 @@ export function semanticFallbackNotice(items: SemanticFallbackNoticeInput[], now
     && (!item.retryAfter || Date.parse(item.retryAfter) <= now) && causeOf(item) !== "disagreement");
   const processing = items.some(item => item.status === "processing");
   const guidance = [
-    ...(counts.has("disagreement") ? ["Repetir a mesma versão não cria uma nova leitura; revise as evidências do perfil."] : []),
+    ...(counts.has("disagreement") ? ["Repetir a mesma versão não cria uma nova leitura; abra a revisão no Perfil para ver os itens disponíveis."] : []),
     ...(items.some(item => item.retryExhausted) ? ["O limite de tentativas foi atingido; atualizar não repetirá essa análise."] : []),
     ...(waiting.length ? [`Uma nova tentativa poderá ser feita após ${new Date(Math.min(...waiting)).toLocaleString("pt-BR")}.`] : []),
     ...(retryable ? ["Há uma nova tentativa disponível para os perfis indicados."] : []),

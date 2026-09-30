@@ -1,5 +1,5 @@
 // Generated from web/src/domain/semanticMatching.ts; run node scripts/generate-matching-runtime.mjs. DO NOT EDIT.
-import { readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION } from "../../../src/domain/semanticTrajectory.js";
+import { HUMAN_REVIEW_VERSION, readTrajectoryResponse, SEMANTIC_MATCHING_VERSION, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION, SEMANTIC_SCORE_VERSION } from "../../../src/domain/semanticTrajectory.js";
 import { calculateMatchingScore } from "./matchingScore.js";
 import { assessVacancyEvidence, assessVacancySeniority, hasUsableProfessionalContent } from "./vacancy.js";
 /** Activation policy only; semantic output and persisted score contracts are unchanged. */
@@ -54,7 +54,10 @@ export function unavailableSemantic(vacancy, match) {
 export function applySemanticAssessment(vacancy, match, assessment) {
     const valid = assessment.organizationId === vacancy.organizationId && assessment.profileId === match.candidate.profileId
         && assessment.positionVersionId === vacancy.versionId && assessment.methodVersion === SEMANTIC_METHOD_VERSION
-        && assessment.promptVersion === SEMANTIC_PROMPT_VERSION && Boolean(assessment.modelVersion && assessment.analysisId && assessment.inputHash);
+        && assessment.promptVersion === SEMANTIC_PROMPT_VERSION && Boolean(assessment.modelVersion && assessment.analysisId && assessment.inputHash)
+        && (assessment.resolutionSource === undefined ? !assessment.reviewId && !assessment.reviewVersion
+            : assessment.resolutionSource === "human_review" && assessment.reviewVersion === HUMAN_REVIEW_VERSION
+                && typeof assessment.reviewId === "string" && /^[0-9a-f-]{36}$/i.test(assessment.reviewId));
     let reading = null;
     if (valid && assessment.status === "complete" && assessment.context && assessment.reading) {
         try {
@@ -113,7 +116,8 @@ export function applySemanticAssessment(vacancy, match, assessment) {
         temporalApplicable: vacancy.experiencePolicy !== "not_required",
         positionVersion: vacancy.versionId, positionVersionNumber: vacancy.version, profileVersion: match.candidate.profileId, profileVersionNumber: match.candidate.profileVersion,
         matchingContractVersion: SEMANTIC_MATCHING_VERSION, scoreContractVersion: SEMANTIC_SCORE_VERSION,
-        interpretationReference: `${assessment.methodVersion}:${assessment.promptVersion}:${assessment.modelVersion}:${assessment.inputHash}:${assessment.analysisId}`,
+        interpretationReference: `${assessment.methodVersion}:${assessment.promptVersion}:${assessment.modelVersion}:${assessment.inputHash}:${assessment.analysisId}`
+            + (assessment.resolutionSource === "human_review" ? `:${assessment.reviewVersion}:${assessment.reviewId}` : ""),
     });
     const positionRelation = { status: points ? "interpreted_function" : "none", explanation, evidence };
     return { ...match, semanticAssessment: assessment, semanticFallback: undefined, areaRelation, functionAssessment, discoveryGroup, score,
