@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 299
-source_manifest_sha256: c7bca3029a880d1cf49622f5b211cbe9cec0f4d7cd26c67aad1c3bf59c5669e2
+documentation_source_count: 302
+source_manifest_sha256: e8c850b48f78c7fb249eb5e60b4b3cc8ef14f239cb769fcef8e6be861ab3651e
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.10
+version: 2.51.11
 last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
+
+## Recuperação da interpretação por IA — validada localmente, publicação pendente
+
+Em 2026-09-29, a falha `reading_quote` foi tratada de modo geral: o prompt `trajectory-evidence-2.1.0` pede identificadores de segmentos da mesma entry e a Edge deriva a citação literal do contexto minimizado. Referência inventada, cruzada, ausente ou saída inválida continua falhando fechada; duas leituras divergentes não viram classificação. A nova versão tem chave de cache separada, sem reescrever resultados antigos. A interface conserva o cálculo pré-IA e não oferece nova tentativa quando o cache informa cooldown, esgotamento ou divergência. Knowledge-first, triagem seletiva, modelo, pesos e score não mudaram. A migration forward-only autoriza o prompt novo em claim/commit, sem alterar caches antigos. Testes sintéticos de domínio, Edge, snapshot e build passaram; validação do modelo real e publicação ainda pendentes. Acordo: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0.
 
 ## Triagem ocupacional seletiva antes da IA — publicada em produção
 
@@ -4037,7 +4041,7 @@ Para a pergunta contextual de Vagas foi selecionado `gpt-5.6-luna`, indicado no 
 
 ## Troca de modelo
 
-M8.6 reutiliza `KNOWLEDGE_RESEARCH_MODEL` para a interpretação fechada de qualquer profissão, com `trajectory-position-2.0.0` e `trajectory-evidence-2.0.0`. A Knowledge Global/Empresa e as decisões humanas autorizadas são consultadas antes; somente uma relação não resolvida pode chamar IA. Perfis sem conteúdo profissional utilizável não consomem IA. O input permanece minimizado, `store:false`, sem Web/tools e sem autoridade para publicar, pontuar, contratar ou rejeitar. O modelo retornado e a identidade da análise entram na proveniência do snapshot; concorrência, lease e cache controlam custo sem transformar falha em equivalência.
+M8.6 reutiliza `KNOWLEDGE_RESEARCH_MODEL` para a interpretação fechada de qualquer profissão, com `trajectory-position-2.0.0` e `trajectory-evidence-2.1.0`. A Knowledge Global/Empresa e as decisões humanas autorizadas são consultadas antes; somente uma relação não resolvida pode chamar IA. Perfis sem conteúdo profissional utilizável não consomem IA. O input permanece minimizado, `store:false`, sem Web/tools e sem autoridade para publicar, pontuar, contratar ou rejeitar. O modelo retornado e a identidade da análise entram na proveniência do snapshot; concorrência, lease e cache controlam custo sem transformar falha em equivalência.
 
 M8.3 reutiliza o modelo server-side `KNOWLEDGE_RESEARCH_MODEL` para interpretação fechada de trajetória, com registry próprio `trajectory-evidence-1.2.0`. Não reutiliza pesquisa Web nem budgets do Knowledge. A decisão do PO em 25/09 («siga o parser») torna limites da conta/projeto OpenAI a autoridade financeira, sem teto monetário paralelo; concorrência, timeout, lease e cooldown de falhas são operacionais. O modelo configurado entra na chave e o modelo retornado é registrado; alias mutável continua uma limitação para futuras chamadas, não motivo para reescrever avaliações persistidas. Ativação depende da evidência do piloto no AoT M8.3, sem alegar validação para todas as ocupações.
 
@@ -4258,9 +4262,9 @@ Prompt controlado possui nome, owner, versão, propósito, entrada, saída, sche
 
 ### Interpretação universal M8.6
 
-`trajectory-evidence-2.0.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. O fluxo recebe somente contexto profissional publicado minimizado e uma Posição versionada de qualquer profissão. Antes de chamar este prompt, o runtime consulta relações autorizadas da Knowledge Global/Empresa e decisões humanas persistidas; resposta segura interna encerra o fluxo. A IA é último recurso para uma relação ainda não resolvida e nunca publica relação global, altera Perfil ou decide contratação.
+`trajectory-evidence-2.1.0`, owner AI engineering, implementação em `src/domain/semanticTrajectory.ts`, consumidor Edge `matching-trajectory`. O fluxo recebe somente contexto profissional publicado minimizado e uma Posição versionada de qualquer profissão. Antes de chamar este prompt, o runtime consulta relações autorizadas da Knowledge Global/Empresa e decisões humanas persistidas; resposta segura interna encerra o fluxo. A IA é último recurso para uma relação ainda não resolvida e nunca publica relação global, altera Perfil ou decide contratação.
 
-Saída fechada por trecho: `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` ou `unclear`, com ID e citação literal. A interpretação preserva evidência, origem, versão e tenant; não atribui score, senioridade ou decisão. Perfis sem conteúdo profissional utilizável são filtrados antes da chamada. `store:false`, sem Web/tools, concorrência limitada, cache/lease existentes e falha explícita mantêm a revisão humana.
+Saída fechada por trecho: `direct_function`, `equivalent_function`, `related_function`, `entry_potential`, `context`, `other` ou `unclear`, com ID da entry e de um segmento pertencente a ela. O servidor resolve o segmento para citação literal da fonte; referência inexistente, cruzada ou ausente é inválida e nunca vira evidência. A interpretação preserva evidência, origem, versão e tenant; não atribui score, senioridade ou decisão. Perfis sem conteúdo profissional utilizável são filtrados antes da chamada. `store:false`, sem Web/tools, concorrência limitada, cache/lease existentes e falha explícita mantêm a revisão humana. O prompt 2.0.0 continua válido apenas para caches/snapshots históricos; a nova chave de versão abre tentativa sem reescrevê-los.
 
 Rubrica `trajectory-position-2.0.0`, matching `vacancy-matching-semantic-7.0.0`, score `matching-score-1.4.0`. A interpretação é universal; categorias antigas permanecem apenas para ler snapshots históricos. A proposta de aprendizado reutiliza a Inbox da Knowledge e exige confirmação humana; não é publicação automática. Acordo e execução: `docs/qa/agreement-m86-universal-professional-matching.md` e `docs/qa/execution-m86-universal-professional-matching.md`.
 
@@ -9349,6 +9353,8 @@ Não se força que Diego vença Bruno: se ambos possuem execução histórica co
 
 Cache derivado pertence ao tenant e vincula fontes/método/prompt/modelo. Lease atômico e timeout reduzem duplicação e travamento; erro não cria score e não sobrescreve fatos. Não há orçamento monetário paralelo: política do Parser/provedor. Chamadas não ficam dentro de transações SQL.
 
+Revisão operacional de 2026-09-29 (`trajectory-evidence-2.1.0`): para evitar que a cópia imperfeita de uma citação pelo modelo invalide leituras concluídas, o contexto minimizado é dividido em segmentos literais identificados. O modelo devolve a categoria e o ID de um segmento da mesma entry; o servidor resolve esse ID para o texto literal e aplica o validador de citação já existente antes do cache/snapshot. ID inexistente, cruzado ou ausente continua em erro; não há relaxamento para paráfrase nem aceitação de evidência inventada. Duas leituras, cache por versão e score permanecem. Falhas em cooldown, divergência e limite de tentativas são apresentadas sem promessa de nova chamada imediata. Esta é adaptação do mesmo contrato, não uma nova fonte de autoridade.
+
 O snapshot semântico persistido é recalculado no backend, que recebe somente IDs, lê as fontes autorizadas e reutiliza o mesmo motor puro de matching da aplicação. O bundle da Edge é gerado desses módulos e verificado contra a fonte; não há segundo algoritmo de pontuação. INSERT/UPDATE de avaliações semânticas concluídas pelo cliente é bloqueado. Revogação do solicitante não esgota o cache compartilhado de outros operadores autorizados. A interpretação e outro campo do mesmo Perfil não constituem fontes independentes.
 
 O decoder puro já existente também é extraído por AST para preservar IDs legados, listas e defaults, sem levar SDK ou código de navegador à Edge. A leitura web/SQL de conceitos só considera aprovados no escopo global/empresa. O commit revalida o fingerprint das fontes com bloqueios curtos sem espera, inclusive contra alterações concorrentes; contenção retorna indisponibilidade recuperável. O fingerprint autoritativo do score é comparado ao exibido antes de habilitar verificações M6.2. Uma evidência que mudou exige atualização da análise, não associação silenciosa de tela antiga a snapshot novo.
@@ -13807,6 +13813,58 @@ Nenhuma. O estado expandido e colapsado usa um único toggle contextual; o modo 
 
 ---
 
+## Source: `docs/qa/agreement-trajectory-evidence-recovery.md`
+
+# Acordo — recuperação da interpretação semântica com evidência literal
+
+Versão 1.0.0. Decisão de Bruno em 2026-09-29: corrigir a falha recorrente da IA na análise de Perfis, sem intervenção específica em Diego ou Bruno. Execução do contrato M8.6, especialmente D-01, D-02, D-11, P-02 e P-03, e do acordo de preservação após falha.
+
+## DEVE
+
+- D-01: a IA seleciona uma referência estável de trecho da própria entry; o servidor deriva a citação literalmente da fonte publicada minimizada. Referência inexistente, de outra entry ou sem sustentação estrutural não é interpretação válida.
+- D-02: manter duas leituras independentes e a concordância de categoria; falha ou divergência conserva integralmente o matching pré-IA e o aviso.
+- D-03: nova versão de prompt abre uma chave de cache distinta sem editar avaliações históricas; a UI só oferece atualização como tentativa disponível quando o backend confirma possibilidade ou há processamento a consultar. Espera, limite esgotado e divergência são identificados sem prometer nova chamada.
+- D-04: preservar a triagem Knowledge-first, o gate A/B plausível, as decisões humanas, tenant, versões, snapshot e a ordem de publicação de resultados internos antes da IA.
+
+## PROIBIDO
+
+- P-01: aceitar texto inventado, citação de outra entry, saída malformada ou resposta incompleta como evidência.
+- P-02: transformar erro ou divergência em zero, Grupo C, alteração de score/requisitos, ou perda de vínculo/evidência anterior.
+- P-03: forçar nova chamada pagável a cada refresh, remover limite/cooldown, reescrever cache histórico, vazar PII ou afrouxar autorização.
+
+## FORA DE ESCOPO
+
+- F-01: mudar pesos, critérios de A/B/C, equivalência ocupacional, regras globais da Knowledge ou decisões de curadoria.
+- F-02: novo modelo/fornecedor, avaliação ao vivo de todo o corpus, backfill de Pessoas e reprocessamento automático de históricos.
+
+## AUTONOMIA
+
+- A-01: engenharia escolhe a forma de segmentação e validação da referência, migration aditiva de compatibilidade e apresentação resumida do estado de retry, preservando a fonte literal e a política de custo já aprovada.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01: referência válida produz citação que é substring exata da mesma fonte; referências inventada, cruzada, ausente e `unclear` com referência são rejeitadas.
+- CA-02: falha da IA preserva grupo, score, relações e evidências anteriores; dois outputs discordantes não viram conclusão.
+- CA-03: prompt 2.1.0 é aceito no claim/commit server-side; cache 2.0.0 permanece separado; UI não oferece retry para divergência, cooldown ou tentativas esgotadas.
+- CA-04: testes direcionados de domínio/Edge/web, runtime compartilhado, migration, validação de release, QA e smoke proporcional de produção; qualidade semântica real é reportada apenas onde houver prova.
+
+## Mapa inicial de impacto e preservação
+
+| Área | Relação | Baseline / capacidade a preservar |
+| --- | --- | --- |
+| Contexto, schema, interpretação e leitura da Edge | direct | `main` anterior: cópia literal frequentemente falha em `reading_quote`; preservar citação estrita e duas leituras |
+| Cache, migration e snapshot | direct | Prompt 2.0.0, chave tenant/fonte/modelo e limite de três tentativas; preservar histórico, autorização e rollback |
+| Busca e comparação | direct | Aviso e resultado pré-IA intactos; não prometer retry quando indisponível |
+| Matching determinístico, Knowledge e triagem | critical_transversal | Mesmo motor e gate anteriores; sem mudança de pesos ou curadoria |
+| Parser, publicação de Perfil, requisitos e dados de Pessoa | no_impact_identified | Somente leitura da versão publicada; sem mutação de dados reais |
+| Operação e custo | plausible_indirect | Mesmo modelo e duas leituras por tentativa; novo prompt 2.1.0 exige uma nova tentativa somente para pares elegíveis |
+
+## Decisão de versão
+
+Prompt `trajectory-evidence-2.1.0`; método `trajectory-position-2.0.0`, matching `vacancy-matching-semantic-7.0.0` e score `matching-score-1.4.0` permanecem. Nova migration aceita o prompt no claim/commit, sem alterar significado de snapshots antigos.
+
+---
+
 ## Source: `docs/qa/agreement-ux-foundation.md`
 
 # Contrato de Acordos — Base transversal de UX
@@ -17080,6 +17138,64 @@ A verificar. Referenciar a decisão do Product Owner ou confirmar ausência apó
 ## Git / QA / ambiente
 
 ## Conclusão
+
+---
+
+## Source: `docs/qa/aot-trajectory-evidence-recovery.md`
+
+# AoT — recuperação da evidência semântica
+
+Contrato: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0; acordos M8.6 e fallback vigentes. Baseline: `main` SHA `77ff4d92f2d9b9be697ddcd2a41ad33313d254b0` (código funcional `3fd1a8703bcd717f5b597515785ededd32281b75`).
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | `trajectoryEvidenceInput` e `readTrajectoryEvidenceResponse`; Edge converte ID em citação literal | `semanticTrajectory.test.ts` e `handler.test.ts` com referências válidas/inválidas, ambiente local | PASS |
+| D-02 | Duas leituras e fallback pré-IA preservados | 33 testes Edge/snapshot; 99 testes de domínio/triagem, ambiente local | PASS |
+| D-03 | Prompt 2.1.0, migration de guard e metadados de retry; busca/comparação sem botão falso | Testes de cache no handler; typecheck/build web; banco/UX autenticada ainda pendentes | PARTIAL |
+| D-04 | Mesmo gate Knowledge-first, fontes autorizadas e snapshot | Negativos de triagem, tenant, revisão e snapshot Edge, ambiente local | PASS |
+
+## Proibições verificadas
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | Referências cruzadas/inventadas e envelope malformado são rejeitados localmente | PASS |
+| P-02 | Fallback conserva resultado anterior; testes de Marketing e scores prévios | PASS |
+| P-03 | Mesmo limite/cooldown em SQL; sem conteúdo de Perfil nos logs ou resposta de erro | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade | Relação | Baseline | Regressão | Status |
+| --- | --- | --- | --- | --- |
+| Citação e interpretação Edge | direct | Prompt 2.0.0 gerava `reading_quote` | Parser de ID, 33 testes Deno | PASS |
+| Cache, migration e snapshot | direct | Prompt 2.0.0, três tentativas, cooldown | Guard remoto 2.0.0 conferido; migration/smoke pendentes | PARTIAL |
+| Busca e comparação | direct | Aviso com atualização enganosa | Typecheck/build; smoke autenticado pendente | PARTIAL |
+| Knowledge, triagem, autorização e score | critical_transversal | M8.6, gate 2.0.0, fallback | 99 testes de domínio/triagem e negativos Edge | PASS |
+| Parser/publicação/requisitos/dados reais | no_impact_identified | Somente leitura | Diff não altera estes fluxos; nenhuma mutação de Pessoa | PASS |
+| Custo/modelo | plausible_indirect | Duas leituras por tentativa, modelo único | Sem nova chamada por Perfil fora do gate; custo real não medido | PARTIAL |
+
+Entrega nova: referência de segmento com citação literal derivada; UI informa retry real. Capacidades preservadas: gate seletivo, decisões humanas, tenant, score e fallback. Relação reclassificada: script de avaliação M8.3 compartilha o prompt e precisou adaptar entrada/decoder. Limite: corpus sintético não prova qualidade universal nem desempenho do modelo real.
+
+## Fora de escopo preservado
+
+F-01/F-02: diff sem pesos, taxonomia, curadoria, troca de fornecedor, backfill ou alteração de dados reais. PASS.
+
+## Referência visual
+
+A captura do erro é diagnóstico/contraexemplo, não alvo normativo de composição. Não há redesenho da tela.
+
+## Desvios e mudanças
+
+Nenhum desvio do comportamento aprovado identificado localmente. Não houve nova decisão do Product Owner durante a execução.
+
+## Validação final, Git e ambientes
+
+Pendente: checagens finais, commit/push, CI, migration, Edge, web, smoke e sincronização.
+
+## Conclusão
+
+PARTIAL até publicação e evidência operacional.
 
 ---
 
@@ -20571,6 +20687,16 @@ O conector confirmou um único projeto remoto de produção. A auditoria encontr
 Versão 1.0.0. Ler integralmente `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0, `docs/product/ux-foundation.md` 1.2.0 e `docs/architecture/versioning.md`. Preservar todos os D/P/F/A/CA.
 
 Diagnosticar a shell atual, reutilizar os assets oficiais de login e a fonte executável de release, implementar os dois estados e validar estrutura, funcionalidade, acessibilidade e responsividade. Produzir comparação visual no mesmo estado e viewport; registrar no AoT toda divergência. Não alterar backend, Supabase ou produção.
+
+---
+
+## Source: `docs/qa/execution-trajectory-evidence-recovery.md`
+
+# Execução — recuperação da evidência semântica
+
+Contrato vinculante integral: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0. Ler o acordo completo antes de executar; D-01 a D-04, P-01 a P-03, F-01/F-02, A-01 e CA-01 a CA-04 aplicam-se sem substituição. Decisão do Product Owner: “pode corrigir”, após o diagnóstico de `reading_quote`, cache esgotado/divergente e botão de atualização enganoso. Este prompt não autoriza custo inesperado, mudança de modelo, backfill, alteração de dados reais, novo provedor ou score.
+
+Implementar a referência de evidência e sua validação estrita no domínio compartilhado e na Edge; versionar prompt e compatibilidade SQL por migration nova; manter cache, duas leituras, cooldown, autorização e fallback; comunicar na busca e comparação a disponibilidade real de retry. Regerar o runtime compartilhado, executar testes negativos e de preservação, atualizar documentação owner e Context Pack, fechar AoT com ambiente e limitações verificáveis. Aplicar release seletivo em migration → Edge → web somente após validação proporcional e guardas de operação, preservando rollback e o mesmo SHA.
 
 ---
 
