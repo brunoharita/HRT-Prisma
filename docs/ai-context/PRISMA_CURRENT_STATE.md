@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.17
+version: 2.51.18
 last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
 
-## Checagem explícita para discordância antiga — implementação local
+## Checagem explícita para discordância antiga — publicada em produção
 
-O aditivo `docs/qa/agreement-matching-legacy-review-refresh.md` v1.0.0 corrige a abertura de discordâncias anteriores ao registro do último par. Diego e Bruno na Posição backend tinham cache `READINGS_DISAGREE` sem as duas leituras; a função de carga recusava o par ausente e a chamada observada expirou com HTTP 504. A nova resposta tipificada informa que as respostas não foram armazenadas e oferece, apenas a responsável autorizado e por clique, uma checagem com duas leituras para o mesmo Perfil/versão/fontes. O servidor revalida papel, tenant, identidade do cache, método/prompt/modelo/contexto, registra solicitante/horário e permite no máximo uma tentativa extra desse tipo; busca normal não a inicia nem repete após falha. Um par novo pode entrar na revisão humana existente; concordância segue o cálculo semântico normal e falha conserva o cálculo interno. Prompt, modelo, pesos, Knowledge, Perfil e Posição não mudam. Evidência e rollout: `docs/qa/aot-matching-legacy-review-refresh.md`; não confundir validação local com publicação.
+O aditivo `docs/qa/agreement-matching-legacy-review-refresh.md` v1.0.0 corrige a abertura de discordâncias anteriores ao registro do último par. Diego e Bruno na Posição backend tinham cache `READINGS_DISAGREE` sem as duas leituras; a função de carga recusava o par ausente e a chamada observada expirou com HTTP 504, sem nexo exclusivo entre esses dois fatos demonstrado. A nova resposta tipificada informa que as respostas não foram armazenadas e oferece, apenas a responsável autorizado e por clique, uma checagem com duas leituras para o mesmo Perfil/versão/fontes. O servidor revalida papel, tenant, identidade do cache, método/prompt/modelo/contexto, registra solicitante/horário e permite no máximo uma tentativa extra desse tipo; busca normal não a inicia nem repete após falha. Um par novo pode entrar na revisão humana existente; concordância segue o cálculo semântico normal e falha conserva o cálculo interno. Prompt, modelo, pesos, Knowledge, Perfil e Posição não mudam. SHA funcional `487bb27d0b714ce18baf59c6d977f6cb0b0afa00` em main/GitHub/VPS; CI de branch `36774775442` e main `36775030973` PASS. Migration remota `20260930204823_matching_legacy_review_refresh` ativa: RPC service-only, acesso `authenticated` revogado e os 24 registros legados preservados. Carga remota de um registro antigo retornou `PAIR_NOT_STORED`. Edge `matching-trajectory` v15 ACTIVE/JWT; POST anônimo 401. Somente `prisma-web` foi recriado na VPS, imagem `sha256:668091fb1267488e26c1dca121bf2ea98a1609a93c60bbf7d24aca8b5d6ea080`, zero reinícios, rollback anterior preservado e HTTP 200 em `/`, `/login` e `/index.html` após 404 transitório. Nenhuma nova checagem paga de Pessoa real foi disparada; clique autenticado e revisão humana posterior ainda não foram testados em produção. Evidência: `docs/qa/aot-matching-legacy-review-refresh.md`.
 
 ## Revisão humana de divergências da trajetória — publicada com limite de validação
 
