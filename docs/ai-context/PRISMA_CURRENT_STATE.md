@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.13
+version: 2.51.14
 last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
 
-## Avisos causais da interpretação — implementação local
+## Avisos causais da interpretação — publicados em produção
 
-O aviso de busca e comparação de Pessoas por Posição agora deriva a mensagem do estado e motivo público de cada tentativa. Discordância entre duas respostas válidas, evidência insuficiente, tempo esgotado, serviço sem análise utilizável, resultado não validado, dados alterados, acesso, conteúdo não utilizável, andamento e motivo desconhecido têm textos distintos. O aviso declara que grupo, nota e evidências exibidos são do cálculo interno desta consulta e não foram substituídos pela interpretação inconclusiva. Etiquetas dos Perfis afetados seguem a mesma causa; só há botão quando o estado permite atualização ou nova tentativa. Não há mudança de matching, score, Edge, banco, modelo ou cache. Contrato: `docs/qa/agreement-matching-causal-notices.md` v1.0.0. Validação local e publicação constam do AoT correspondente.
+O aviso de busca e comparação de Pessoas por Posição agora deriva a mensagem do estado e motivo público de cada tentativa. Discordância entre duas respostas válidas, evidência insuficiente, tempo esgotado, serviço sem análise utilizável, resultado não validado, dados alterados, acesso, conteúdo não utilizável, andamento e motivo desconhecido têm textos distintos. O aviso declara que grupo, nota e evidências exibidos são do cálculo interno desta consulta e não foram substituídos pela interpretação inconclusiva. Etiquetas dos Perfis afetados seguem a mesma causa; só há botão quando o estado permite atualização ou nova tentativa. Não há mudança de matching, score, Edge, banco, modelo ou cache. SHA funcional `d5aa806e662994e3a7ef981ec2de35af2a825bde` em `main` local/GitHub/VPS; CI de branch `36662702395` e de main `36662801204` PASS. Somente o `prisma-web` foi recriado, com imagem `sha256:a20b817629afc87665498542f5102e7e132b0a9356b4cf9d1ef78d3b8e97dec8`, running e zero reinícios; rollback anterior confirmado. Após 404 transitório no smoke imediato, `/`, `/login` e `/index.html` retornaram 200; o bundle público contém os avisos novos. Sem smoke autenticado para não reabrir chamadas pagas em Perfis reais. Contrato e evidência: `docs/qa/agreement-matching-causal-notices.md` v1.0.0 e `docs/qa/aot-matching-causal-notices.md`.
 
 ## Recuperação da interpretação por IA — publicada, modelo real ainda não reavaliado
 

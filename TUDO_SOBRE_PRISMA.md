@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 304
-source_manifest_sha256: 1a0130c61f192ce364a43926e2870a5c14c0e42400f1c0f17064acc7feec1c90
+source_manifest_sha256: fe12770e880401aea4ae3b7919eef288cafdd6f9e6be21442221e312d9c8fb00
 -->
 
 # Tudo sobre o Prisma
@@ -2624,15 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.13
+version: 2.51.14
 last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
 
-## Avisos causais da interpretação — implementação local
+## Avisos causais da interpretação — publicados em produção
 
-O aviso de busca e comparação de Pessoas por Posição agora deriva a mensagem do estado e motivo público de cada tentativa. Discordância entre duas respostas válidas, evidência insuficiente, tempo esgotado, serviço sem análise utilizável, resultado não validado, dados alterados, acesso, conteúdo não utilizável, andamento e motivo desconhecido têm textos distintos. O aviso declara que grupo, nota e evidências exibidos são do cálculo interno desta consulta e não foram substituídos pela interpretação inconclusiva. Etiquetas dos Perfis afetados seguem a mesma causa; só há botão quando o estado permite atualização ou nova tentativa. Não há mudança de matching, score, Edge, banco, modelo ou cache. Contrato: `docs/qa/agreement-matching-causal-notices.md` v1.0.0. Validação local e publicação constam do AoT correspondente.
+O aviso de busca e comparação de Pessoas por Posição agora deriva a mensagem do estado e motivo público de cada tentativa. Discordância entre duas respostas válidas, evidência insuficiente, tempo esgotado, serviço sem análise utilizável, resultado não validado, dados alterados, acesso, conteúdo não utilizável, andamento e motivo desconhecido têm textos distintos. O aviso declara que grupo, nota e evidências exibidos são do cálculo interno desta consulta e não foram substituídos pela interpretação inconclusiva. Etiquetas dos Perfis afetados seguem a mesma causa; só há botão quando o estado permite atualização ou nova tentativa. Não há mudança de matching, score, Edge, banco, modelo ou cache. SHA funcional `d5aa806e662994e3a7ef981ec2de35af2a825bde` em `main` local/GitHub/VPS; CI de branch `36662702395` e de main `36662801204` PASS. Somente o `prisma-web` foi recriado, com imagem `sha256:a20b817629afc87665498542f5102e7e132b0a9356b4cf9d1ef78d3b8e97dec8`, running e zero reinícios; rollback anterior confirmado. Após 404 transitório no smoke imediato, `/`, `/login` e `/index.html` retornaram 200; o bundle público contém os avisos novos. Sem smoke autenticado para não reabrir chamadas pagas em Perfis reais. Contrato e evidência: `docs/qa/agreement-matching-causal-notices.md` v1.0.0 e `docs/qa/aot-matching-causal-notices.md`.
 
 ## Recuperação da interpretação por IA — publicada, modelo real ainda não reavaliado
 
@@ -9502,6 +9502,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Source: `docs/operations/deployment.md`
 
 # Deployment
+
+Avisos causais do matching publicados em 30/09: SHA funcional `d5aa806e662994e3a7ef981ec2de35af2a825bde` em `main` local/GitHub/VPS, CI de branch `36662702395` e main `36662801204` PASS. Plano seletivo sem banco/Edge: somente `prisma-web` recriado. O smoke HTTPS imediato recebeu 404 transitório e fez o script sair com código 22; a verificação seguinte confirmou contêiner `running`, zero reinícios, imagem `sha256:a20b817629afc87665498542f5102e7e132b0a9356b4cf9d1ef78d3b8e97dec8`, `/`, `/login`, `/index.html` e asset 200. O bundle servido contém o texto causal. Sem sessão autenticada ou chamada paga a IA em Perfil real. Rollback web `prisma-web:rollback-before-d5aa806e6629` confirmado com a imagem anterior `sha256:14c69b71dd2d39b6ea909023260e7ac3ab5752a8b0c78752842d0675a12df75b`; evidência: `docs/qa/aot-matching-causal-notices.md`.
 
 Recuperação da evidência semântica em 29/30-09: SHA funcional `73aa57e0fd40d28b8718dbba14a1b8eada6966d6` integrado em main/GitHub/VPS, CI de branch `36657861902` e main `36658386278` PASS. Migration remota `20260930020256_trajectory_evidence_references` acrescentou prompt 2.1.0 ao claim/commit e manteve 2.0.0, `SECURITY DEFINER` e grants (`service_role` apenas). Edge `matching-trajectory` v12 ACTIVE/JWT, 12 arquivos idênticos ao bundle local; POST anônimo 401. Só `prisma-web` foi recriado na VPS; imagem ativa `sha256:14c69b71dd2d39b6ea909023260e7ac3ab5752a8b0c78752842d0675a12df75b`, rollback `prisma-web:rollback-before-73aa57e0fd40` preservado. O smoke imediato retornou 404 transitório e fez o script sair com código 22; verificação posterior confirmou SHA remoto, container Up/zero reinícios e `/`, `/login`, `/index.html` HTTP 200, com bundle contendo prompt e aviso novos. Sem chamada autenticada/consumo de IA ou reprocessamento de Pessoa: prova paga sintética bloqueada pelo revisor até autorização específica. Evidência: `docs/qa/aot-trajectory-evidence-recovery.md`.
 
@@ -16490,7 +16492,7 @@ Contrato: `docs/qa/agreement-matching-causal-notices.md` v1.0.0. Movimento restr
 | Aviso na busca e comparação, etiqueta | direct | `main` em `81743ad`: erro genérico e toda indeterminação descrita como divergência | Testes causais e estático de uso nas duas telas; build web | PASS |
 | Grupo, nota, evidência e decisões | plausible_indirect | Fallback transitório preserva objeto determinístico | `matchingScore.test.ts` e `semanticTriage.test.ts`, 35 testes focados aprovados | PASS |
 | Privacidade e autoridade | critical_transversal | Sem payload cru no aviso; backend autoritativo existente | Inspeção do tradutor e diff; nenhuma mudança de Edge/segredo/autorização | PASS |
-| Edge, banco, Knowledge e parser | no_impact_identified | Nenhuma superfície afetada pela redação | Diff e plano seletivo de release | NOT TESTED |
+| Edge, banco, Knowledge e parser | no_impact_identified | Nenhuma superfície afetada pela redação | Diff e plano seletivo 1.0.1: apenas web, documentação e testes; CI passou | PASS |
 
 ### Novidade e preservação
 
@@ -16513,15 +16515,15 @@ Nenhum identificado na revisão local.
 
 ## Validação final
 
-`pnpm run typecheck`, `pnpm run typecheck:web`, `pnpm run build`, `pnpm run lint` e `pnpm run build:web` passaram. Testes direcionados: 35/35. Context Pack e estado de release: a completar após fechamento.
+`pnpm run typecheck`, `pnpm run typecheck:web`, `pnpm run build`, `pnpm run lint` e `pnpm run build:web` passaram. Testes direcionados: 36/36. Context Pack gerado a partir das fontes rastreadas e conferido em checkout isolado. Primeiro CI `36662393572` falhou porque a geração local havia incorporado um documento não rastreado e ausente no runner; os artefatos foram regenerados sem mover/editar esse documento. CI final `36662702395` passou, inclusive validação completa, ledger, script seletivo e auditoria de dependências.
 
 ## Git / QA / ambiente
 
-Branch `codex/matching-causal-notices` a partir de `main` `81743ad`. Arquivos alheios não rastreados preservados. QA/produção: pendentes neste registro inicial.
+Branch `codex/matching-causal-notices` a partir de `main` `81743ad`; SHA funcional `d5aa806e662994e3a7ef981ec2de35af2a825bde` em `main` local/GitHub/VPS. CI branch `36662702395` e main `36662801204` PASS. Arquivos alheios não rastreados preservados. Plano de release publicou só `prisma-web`: imagem `sha256:a20b817629afc87665498542f5102e7e132b0a9356b4cf9d1ef78d3b8e97dec8`, contêiner running, zero reinícios. Rollback `prisma-web:rollback-before-d5aa806e6629` conferido na imagem anterior `sha256:14c69b71dd2d39b6ea909023260e7ac3ab5752a8b0c78752842d0675a12df75b`. O 404 do teste imediato foi transitório; `/`, `/login`, `/index.html` e o asset público retornaram 200 na verificação seguinte. O bundle contém os avisos causais. Sem smoke autenticado ou análise paga em Perfil real.
 
 ## Conclusão
 
-Implementação local validada; publicação e smoke ainda não comprovados neste estado.
+Regras de aviso entregues e publicadas. Disponibilidade pública comprovada; apresentação autenticada com Perfis reais não foi verificada para evitar custo e reprocessamento.
 
 ---
 
