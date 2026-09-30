@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.11
+version: 2.51.12
 last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
 
-## Recuperação da interpretação por IA — validada localmente, publicação pendente
+## Recuperação da interpretação por IA — publicada, modelo real ainda não reavaliado
 
-Em 2026-09-29, a falha `reading_quote` foi tratada de modo geral: o prompt `trajectory-evidence-2.1.0` pede identificadores de segmentos da mesma entry e a Edge deriva a citação literal do contexto minimizado. Referência inventada, cruzada, ausente ou saída inválida continua falhando fechada; duas leituras divergentes não viram classificação. A nova versão tem chave de cache separada, sem reescrever resultados antigos. A interface conserva o cálculo pré-IA e não oferece nova tentativa quando o cache informa cooldown, esgotamento ou divergência. Knowledge-first, triagem seletiva, modelo, pesos e score não mudaram. A migration forward-only autoriza o prompt novo em claim/commit, sem alterar caches antigos. Testes sintéticos de domínio, Edge, snapshot e build passaram; validação do modelo real e publicação ainda pendentes. Acordo: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0.
+Em 2026-09-29/30, a falha `reading_quote` foi tratada de modo geral: o prompt `trajectory-evidence-2.1.0` pede identificadores de segmentos da mesma entry e a Edge deriva a citação literal do contexto minimizado. Referência inventada, cruzada, ausente ou saída inválida continua falhando fechada; duas leituras divergentes não viram classificação. A nova versão tem chave de cache separada, sem reescrever resultados antigos. A interface conserva o cálculo pré-IA e não oferece nova tentativa quando o cache informa cooldown, esgotamento ou divergência. Knowledge-first, triagem seletiva, modelo, pesos e score não mudaram. A migration forward-only autoriza o prompt novo em claim/commit, sem alterar caches antigos. O SHA funcional `73aa57e0fd40d28b8718dbba14a1b8eada6966d6` está em `main`/GitHub/VPS; CI de branch `36657861902` e de main `36658386278` passaram. Migration remota `20260930020256_trajectory_evidence_references` preservou `SECURITY DEFINER`, grants e prompt 2.0.0; Edge `matching-trajectory` v12 ACTIVE/JWT teve 12 arquivos conferidos, POST anônimo 401. Frontend ativo, zero reinícios; `/`, `/login` e `/index.html` 200 após 404 transitório do smoke imediato. Testes sintéticos de domínio/Edge/snapshot e build passaram. O revisor bloqueou a prova paga com o modelo real até autorização específica; portanto não há confirmação de que Diego/Bruno obtiveram uma interpretação concluída com 2.1.0. Acordo e limites: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0 e `docs/qa/aot-trajectory-evidence-recovery.md`.
 
 ## Triagem ocupacional seletiva antes da IA — publicada em produção
 
