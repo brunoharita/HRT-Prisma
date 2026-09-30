@@ -3,6 +3,7 @@ import { isSemanticTriageEligible, semanticComparisonPending } from "../domain/s
 import { positionTaxonomyService } from "../infrastructure/supabase/positionTaxonomyService";
 import { changeTaxonomyTitle } from "../domain/positionTaxonomy";
 import { toggleComparisonSelection } from "../shared/uxFoundation";
+import { semanticFallbackBadge, semanticFallbackNotice } from "../shared/semanticFallbackNotice";
 import { usePrismaScope, useUnsavedChanges, useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import {
@@ -97,19 +98,6 @@ import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage.js";
 
 const PAGE_SIZE = 8;
 const DRAFT_KEY = "prisma.vacancy-draft.1";
-
-function semanticFallbackGuidance(matches: VacancyCandidateMatch[]): string {
-  const failed = matches.flatMap(match => match.semanticFallback ? [match.semanticFallback] : []);
-  const messages: string[] = [];
-  if (failed.some(item => item.status === "processing")) messages.push("Há interpretação em andamento; atualizar consulta apenas acompanha o estado.");
-  if (failed.some(item => item.status === "indeterminate")) messages.push("Leituras divergentes exigem revisão humana; repetir a mesma versão não produz nova leitura.");
-  if (failed.some(item => item.retryExhausted)) messages.push("O limite de tentativas desta versão foi atingido; atualizar a tela não aciona a IA novamente.");
-  const waiting = failed.filter(item => !item.retryExhausted).map(item => item.retryAfter).filter((value): value is string => Boolean(value && Date.parse(value) > Date.now()));
-  if (waiting.length) messages.push(`Nova tentativa para falhas transitórias só após ${new Date(Math.min(...waiting.map(Date.parse))).toLocaleString("pt-BR")}; recarregue a página depois.`);
-  if (failed.some(item => item.retryAvailable)) messages.push("Há nova tentativa disponível para os Perfis indicados.");
-  if (!messages.length) messages.push("Não há nova tentativa confirmada neste momento; consulte as evidências e atualize a página mais tarde.");
-  return messages.join(" ");
-}
 
 interface CommonProps { activeMembership: OrganizationMembership; onNavigate: (path: string) => void; }
 
@@ -639,9 +627,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     setSelected((current) => toggleComparisonSelection(current, personId));
   }
   const comparisonPending = semanticComparisonPending(matches);
-  const fallbackCount = matches.filter(match => match.semanticFallback).length;
-  const retryAvailable = matches.some(match => match.semanticFallback?.retryAvailable || match.semanticFallback?.status === "processing");
-  const retryGuidance = semanticFallbackGuidance(matches);
+  const fallbackNotice = semanticFallbackNotice(matches.flatMap(match => match.semanticFallback ? [match.semanticFallback] : []));
   const pendingMatches = matches.filter(match => match.semanticAssessment && match.semanticAssessment.status !== "complete");
   const occupationalPending = interpreting ? matches.filter(match => match.discoveryGroup === "contextual_signals"
     && isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback) : [];
@@ -650,11 +636,11 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     <PrismaPageHeader title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="A trajetória e os requisitos são apresentados separadamente. O score organiza evidências, não decide contratação. Consulte cobertura e pendências antes de comparar." actions={<Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
     {interpreting && progress?.total ? <Alert showIcon type="info" title="Resultados internos disponíveis · interpretação em andamento" description={`${progress.completed} de ${progress.total} relações ocupacionais pendentes interpretadas. Cada Perfil é atualizado quando sua resposta chega; os demais resultados já podem ser consultados.`} /> : null}
-    {!loading && fallbackCount ? <Alert showIcon type="warning" title="A interpretação por IA não foi concluída" description={`Para ${fallbackCount} Perfil${fallbackCount === 1 ? "" : "is"}, a busca mostra o cálculo pré-IA desta consulta, não uma interpretação semântica concluída anteriormente. Relações, grupos, pontos e evidências desse cálculo foram preservados. ${retryGuidance}`} action={retryAvailable ? <Button onClick={() => setAttempt(value => value + 1)}>Atualizar análise disponível</Button> : undefined} /> : null}
+    {!loading && fallbackNotice ? <Alert showIcon type="warning" title={fallbackNotice.title} description={fallbackNotice.description} action={fallbackNotice.canRefresh ? <Button onClick={() => setAttempt(value => value + 1)}>{fallbackNotice.actionLabel}</Button> : undefined} /> : null}
     {discovery && !discovery.complete ? <Alert showIcon type="warning" title="A consulta de Perfis publicados ficou incompleta." description={`${discovery.queriedProfileRecordCount} de ${discovery.expectedProfileRecordCount} registros de Perfil foram consultados; a lista pode estar incompleta.`} /> : null}
     {discovery?.unclassifiedRequirementCount ? <Alert showIcon type="warning" title="Há requisitos aguardando classificação." description={`${discovery.unclassifiedRequirementCount} requisito${discovery.unclassifiedRequirementCount === 1 ? " aguarda" : "s aguardam"} classificação. A descoberta ocupacional continua disponível; conclua a classificação para fechar a aderência detalhada.`} action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Classificar requisitos</Button>} /> : null}
     {loading ? <PrismaCard><div role="status" aria-live="polite">Carregando Perfis publicados e calculando a triagem interna…</div><Skeleton active avatar paragraph={{ rows: 14 }} /></PrismaCard> : null}
-    {vacancy && !loading && !interpreting && !comparisonPending && !fallbackCount ? <Alert showIcon type="info" title="Triagem profissional concluída" description="A Knowledge resolveu relações internas; somente relações ocupacionais plausíveis ainda indefinidas foram enviadas à IA. Ferramentas, especializações e habilitações exigem evidência própria." /> : null}
+    {vacancy && !loading && !interpreting && !comparisonPending && !fallbackNotice ? <Alert showIcon type="info" title="Triagem profissional concluída" description="A Knowledge resolveu relações internas; somente relações ocupacionais plausíveis ainda indefinidas foram enviadas à IA. Ferramentas, especializações e habilitações exigem evidência própria." /> : null}
     {occupationalPending.length ? <section className="prisma-vacancy-match-group"><header><Typography.Title level={2}>Relação ocupacional plausível · interpretação pendente</Typography.Title><Typography.Text type="secondary">A classificação inicial não é uma conclusão de Grupo C; consulte as evidências enquanto a interpretação termina.</Typography.Text></header><div className="prisma-vacancy-match-list">{occupationalPending.map(match => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} match={match} onDecision={decision => void decidePosition(match, decision)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div></section> : null}
     {pendingMatches.some(match => match.semanticAssessment?.status === "processing") ? <Button disabled={loading} onClick={() => setAttempt(value => value + 1)}>Atualizar estado da análise</Button> : null}
     {pendingMatches.length ? <section className="prisma-vacancy-match-group"><Typography.Title level={2}>Análise pendente · sem classificação</Typography.Title><Typography.Paragraph>Estas Pessoas não foram colocadas em último lugar nem receberam zero. Consulta do Perfil e comparação de requisitos continuam disponíveis.</Typography.Paragraph><div className="prisma-vacancy-match-list">{pendingMatches.map(match => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} match={match} onDecision={decision => void decidePosition(match, decision)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div></section> : null}
@@ -695,11 +681,12 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
   }, [activeMembership.organizationId, vacancyId, personIds[0], personIds[1], attempt]);
   const rows = vacancy?.requirements.map((requirement) => ({ key: requirement.stableId, label: requirement.label,
     left: matches[0]?.requirements.find((item) => item.requirement.stableId === requirement.stableId), right: matches[1]?.requirements.find((item) => item.requirement.stableId === requirement.stableId) })) ?? [];
+  const fallbackNotice = semanticFallbackNotice(matches.flatMap(match => match.semanticFallback ? [match.semanticFallback] : []));
   return <PrismaPage className="prisma-vacancy-compare-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/people`)} type="text">Voltar aos resultados</Button>
     <PrismaPageHeader title="Comparar pessoas" description={vacancy ? `Evidências para ${vacancy.title}. Interpretação versionada, sem decisão automática.` : "Aderência por requisito da Posição."} />
     {error ? <Alert showIcon title={error} type="error" /> : null}
-    {!loading && matches.some(match => match.semanticFallback) ? <Alert showIcon type="warning" title="A interpretação por IA não foi concluída" description={`Os Perfis sinalizados mostram o cálculo pré-IA desta consulta, não uma interpretação semântica anterior. ${semanticFallbackGuidance(matches)}`} action={matches.some(match => match.semanticFallback?.retryAvailable || match.semanticFallback?.status === "processing") ? <Button onClick={() => setAttempt(value => value + 1)}>Atualizar análise disponível</Button> : undefined} /> : null}
+    {!loading && fallbackNotice ? <Alert showIcon type="warning" title={fallbackNotice.title} description={fallbackNotice.description} action={fallbackNotice.canRefresh ? <Button onClick={() => setAttempt(value => value + 1)}>{fallbackNotice.actionLabel}</Button> : undefined} /> : null}
     {loading ? <PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard> : null}
     {!loading && matches.length !== 2 ? <PrismaCard><Empty description="Selecione exatamente duas Pessoas com Perfil publicado." /></PrismaCard> : null}
     {matches.some(match => match.semanticAssessment?.status === "processing") ? <Button disabled={loading} onClick={() => setAttempt(value => value + 1)}>Atualizar estado da análise</Button> : null}
@@ -810,7 +797,7 @@ function ScoreItemTag({ status }: { status: MatchingScoreItemStatus }) {
 
 function MatchRelationTags({ match }: { match: VacancyCandidateMatch }) {
   if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <Tag>Análise pendente</Tag>;
-  return <><DiscoveryGroupTag group={match.discoveryGroup} /><AreaRelationTag status={match.areaRelation.status} /><PositionRelationTag status={match.positionRelation.status} />{isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback ? <Tag color="processing">Relação plausível · interpretação pendente</Tag> : null}{match.semanticFallback ? <Tag color="warning">IA não concluiu · cálculo pré-IA {match.score.matchingContractVersion}</Tag> : null}</>;
+  return <><DiscoveryGroupTag group={match.discoveryGroup} /><AreaRelationTag status={match.areaRelation.status} /><PositionRelationTag status={match.positionRelation.status} />{isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback ? <Tag color="processing">Relação plausível · interpretação pendente</Tag> : null}{match.semanticFallback ? <Tag color="warning">{semanticFallbackBadge(match.semanticFallback)}</Tag> : null}</>;
 }
 
 function DiscoveryGroupTag({ group }: { group: VacancyCandidateMatch["discoveryGroup"] }) { const values = { main_area: ["blue", "Trajetória direta"], related_area: ["purple", "Trajetória relacionada"], contextual_signals: ["default", "Somente sinais"] } as const; return <Tag color={values[group][0]}>{values[group][1]}</Tag>; }

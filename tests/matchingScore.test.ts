@@ -426,8 +426,8 @@ test("UI expõe score, cobertura, grupos, explicação, versões e proteção mo
   assert.match(page, /Há requisitos aguardando classificação/);
   assert.doesNotMatch(page, /não participa da ordenação/);
   assert.match(page, /matchingContractVersion/);
-  assert.ok((page.match(/cálculo pré-IA desta consulta/g) ?? []).length >= 2);
-  assert.match(page, /IA não concluiu · cálculo pré-IA \{match\.score\.matchingContractVersion\}/);
+  assert.ok((page.match(/fallbackNotice\.description/g) ?? []).length >= 2);
+  assert.match(page, /semanticFallbackBadge\(match\.semanticFallback\)/);
   assert.match(page, /Área relacionada via Knowledge/);
   assert.match(styles, /prisma-score-dimensions \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);
   assert.match(styles, /prisma-match-reasons \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);
