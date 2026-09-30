@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 302
-source_manifest_sha256: 3e7067da129f092b6365fcfba9cd45c44de98803439a82bb5ccfc420b4ac5f96
+source_manifest_sha256: e5a5e7d32ebddadcd1e6131daa7dbff900442ad8f2cb442bd18adbcd01537dd7
 -->
 
 # Tudo sobre o Prisma
@@ -2624,15 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.11
+version: 2.51.12
 last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
 
-## Recuperação da interpretação por IA — validada localmente, publicação pendente
+## Recuperação da interpretação por IA — publicada, modelo real ainda não reavaliado
 
-Em 2026-09-29, a falha `reading_quote` foi tratada de modo geral: o prompt `trajectory-evidence-2.1.0` pede identificadores de segmentos da mesma entry e a Edge deriva a citação literal do contexto minimizado. Referência inventada, cruzada, ausente ou saída inválida continua falhando fechada; duas leituras divergentes não viram classificação. A nova versão tem chave de cache separada, sem reescrever resultados antigos. A interface conserva o cálculo pré-IA e não oferece nova tentativa quando o cache informa cooldown, esgotamento ou divergência. Knowledge-first, triagem seletiva, modelo, pesos e score não mudaram. A migration forward-only autoriza o prompt novo em claim/commit, sem alterar caches antigos. Testes sintéticos de domínio, Edge, snapshot e build passaram; validação do modelo real e publicação ainda pendentes. Acordo: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0.
+Em 2026-09-29/30, a falha `reading_quote` foi tratada de modo geral: o prompt `trajectory-evidence-2.1.0` pede identificadores de segmentos da mesma entry e a Edge deriva a citação literal do contexto minimizado. Referência inventada, cruzada, ausente ou saída inválida continua falhando fechada; duas leituras divergentes não viram classificação. A nova versão tem chave de cache separada, sem reescrever resultados antigos. A interface conserva o cálculo pré-IA e não oferece nova tentativa quando o cache informa cooldown, esgotamento ou divergência. Knowledge-first, triagem seletiva, modelo, pesos e score não mudaram. A migration forward-only autoriza o prompt novo em claim/commit, sem alterar caches antigos. O SHA funcional `73aa57e0fd40d28b8718dbba14a1b8eada6966d6` está em `main`/GitHub/VPS; CI de branch `36657861902` e de main `36658386278` passaram. Migration remota `20260930020256_trajectory_evidence_references` preservou `SECURITY DEFINER`, grants e prompt 2.0.0; Edge `matching-trajectory` v12 ACTIVE/JWT teve 12 arquivos conferidos, POST anônimo 401. Frontend ativo, zero reinícios; `/`, `/login` e `/index.html` 200 após 404 transitório do smoke imediato. Testes sintéticos de domínio/Edge/snapshot e build passaram. O revisor bloqueou a prova paga com o modelo real até autorização específica; portanto não há confirmação de que Diego/Bruno obtiveram uma interpretação concluída com 2.1.0. Acordo e limites: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0 e `docs/qa/aot-trajectory-evidence-recovery.md`.
 
 ## Triagem ocupacional seletiva antes da IA — publicada em produção
 
@@ -9498,6 +9498,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Source: `docs/operations/deployment.md`
 
 # Deployment
+
+Recuperação da evidência semântica em 29/30-09: SHA funcional `73aa57e0fd40d28b8718dbba14a1b8eada6966d6` integrado em main/GitHub/VPS, CI de branch `36657861902` e main `36658386278` PASS. Migration remota `20260930020256_trajectory_evidence_references` acrescentou prompt 2.1.0 ao claim/commit e manteve 2.0.0, `SECURITY DEFINER` e grants (`service_role` apenas). Edge `matching-trajectory` v12 ACTIVE/JWT, 12 arquivos idênticos ao bundle local; POST anônimo 401. Só `prisma-web` foi recriado na VPS; imagem ativa `sha256:14c69b71dd2d39b6ea909023260e7ac3ab5752a8b0c78752842d0675a12df75b`, rollback `prisma-web:rollback-before-73aa57e0fd40` preservado. O smoke imediato retornou 404 transitório e fez o script sair com código 22; verificação posterior confirmou SHA remoto, container Up/zero reinícios e `/`, `/login`, `/index.html` HTTP 200, com bundle contendo prompt e aviso novos. Sem chamada autenticada/consumo de IA ou reprocessamento de Pessoa: prova paga sintética bloqueada pelo revisor até autorização específica. Evidência: `docs/qa/aot-trajectory-evidence-recovery.md`.
 
 Triagem seletiva antes da IA publicada em 29/09: SHA funcional `3fd1a8703bcd717f5b597515785ededd32281b75` em `main`/GitHub/VPS, CI `36652901031` PASS. Plano 1.0.1 sem banco: somente Edge `matching-trajectory` v11 ACTIVE/JWT (12 arquivos idênticos ao bundle local, hash `c8679df77e97fb90dccd9c1a3e5670061953276bbacad1728d19c51237a01b04`) e `prisma-web`. POST anônimo da Edge 401. Web imagem `sha256:d7b5d6d13b38b4ea13f81e1e1cbbcde95d912c3a68eda5ec4ad27494bfc21805`, `running`, zero reinícios; `/`, `/login` e `/index.html` 200 após 404 transitório no smoke imediato. Rollback web `prisma-web:rollback-before-3fd1a8703bcd`. Sem chamada autenticada a IA em Perfil real; não há medida de latência para 100 currículos reais. Evidência: `docs/qa/aot-matching-selective-semantic-triage.md`.
 
@@ -17153,7 +17155,7 @@ Contrato: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0; acordos M8
 | --- | --- | --- | --- |
 | D-01 | `trajectoryEvidenceInput` e `readTrajectoryEvidenceResponse`; Edge converte ID em citação literal | `semanticTrajectory.test.ts` e `handler.test.ts` com referências válidas/inválidas, ambiente local | PASS |
 | D-02 | Duas leituras e fallback pré-IA preservados | 33 testes Edge/snapshot; 99 testes de domínio/triagem, ambiente local | PASS |
-| D-03 | Prompt 2.1.0, migration de guard e metadados de retry; busca/comparação sem botão falso | Testes de cache no handler; typecheck/build web; banco/UX autenticada ainda pendentes | PARTIAL |
+| D-03 | Prompt 2.1.0, migration de guard e metadados de retry; busca/comparação sem botão falso | Testes de cache no handler; typecheck/build web; guard remoto e bundle público 2.1.0 conferidos. UX autenticada não exercitada | PASS |
 | D-04 | Mesmo gate Knowledge-first, fontes autorizadas e snapshot | Negativos de triagem, tenant, revisão e snapshot Edge, ambiente local | PASS |
 
 ## Proibições verificadas
@@ -17169,8 +17171,8 @@ Contrato: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0; acordos M8
 | Capacidade | Relação | Baseline | Regressão | Status |
 | --- | --- | --- | --- | --- |
 | Citação e interpretação Edge | direct | Prompt 2.0.0 gerava `reading_quote` | Parser de ID, 33 testes Deno | PASS |
-| Cache, migration e snapshot | direct | Prompt 2.0.0, três tentativas, cooldown | Guard remoto 2.0.0 conferido; migration/smoke pendentes | PARTIAL |
-| Busca e comparação | direct | Aviso com atualização enganosa | Typecheck/build; smoke autenticado pendente | PARTIAL |
+| Cache, migration e snapshot | direct | Prompt 2.0.0, três tentativas, cooldown | Migration `20260930020256`, guards 2.0.0/2.1.0 e grants verificados; 33 testes Deno | PASS |
+| Busca e comparação | direct | Aviso com atualização enganosa | Typecheck/build, condicionais de retry no diff, bundle público e rotas HTTPS 200; smoke autenticado não executado | PASS |
 | Knowledge, triagem, autorização e score | critical_transversal | M8.6, gate 2.0.0, fallback | 99 testes de domínio/triagem e negativos Edge | PASS |
 | Parser/publicação/requisitos/dados reais | no_impact_identified | Somente leitura | Diff não altera estes fluxos; nenhuma mutação de Pessoa | PASS |
 | Custo/modelo | plausible_indirect | Duas leituras por tentativa, modelo único | Sem nova chamada por Perfil fora do gate; custo real não medido | PARTIAL |
@@ -17187,15 +17189,19 @@ A captura do erro é diagnóstico/contraexemplo, não alvo normativo de composi�
 
 ## Desvios e mudanças
 
-Nenhum desvio do comportamento aprovado identificado localmente. Não houve nova decisão do Product Owner durante a execução.
+Nenhum desvio do comportamento aprovado identificado no código ou no rollout. Não houve nova decisão do Product Owner durante a execução. O smoke imediato do script web retornou 404 durante a troca e exit 22; a verificação posterior confirmou o runtime ativo e as três rotas HTTP 200. A prova paga com modelo real permanece não autorizada, não foi contornada e não integra a evidência de qualidade.
 
 ## Validação final, Git e ambientes
 
-Pendente: checagens finais, commit/push, CI, migration, Edge, web, smoke e sincronização.
+Checks locais: `lint`, `typecheck`, `typecheck:web`, `build:web`, `check:foundation`, `check:matching-runtime`, `check:supabase-ledger`, 99 testes de domínio/triagem, três testes do avaliador complexo, 33 testes Deno Edge/snapshot e 15 testes de release. Context Pack gerado e verificado em worktree limpo para preservar arquivo alheio não rastreado. CI inicial `36657349492` FAIL por dois testes do avaliador complexo que simulavam o formato antigo; correção dirigida e CI `36657861902` PASS na branch e `36658386278` PASS em main, ambos no SHA `73aa57e0fd40d28b8718dbba14a1b8eada6966d6`.
+
+Release seletivo: migration única registrada como `20260930020256_trajectory_evidence_references`; `claim_matching_trajectory` e `commit_matching_snapshot` aceitam 2.1.0 e preservam 2.0.0, `SECURITY DEFINER`, `authenticated` sem EXECUTE, `service_role` com EXECUTE. Edge `matching-trajectory` v12 ACTIVE/JWT, 12 arquivos iguais aos locais, chamada anônima 401. Main/GitHub/VPS no mesmo SHA. `prisma-web` ativo, zero reinícios, imagem `sha256:14c69b71dd2d39b6ea909023260e7ac3ab5752a8b0c78752842d0675a12df75b`, rollback `prisma-web:rollback-before-73aa57e0fd40` verificado; `/`, `/login` e `/index.html` 200, bundle contém prompt 2.1.0 e orientação de retry. Nenhuma Pessoa ou avaliação histórica foi reprocessada.
+
+Limites: sem segunda instância Supabase QA, a validação pré-produção foi sintética/local + CI; sem smoke autenticado da tela para não provocar nova chamada paga em Perfis reais. O revisor bloqueou as duas chamadas pagas com texto sintético e foi solicitada autorização específica. Não há evidência de sucesso semântico do modelo real nesta versão nem medição de latência/custo em 100 Perfis.
 
 ## Conclusão
 
-PARTIAL até publicação e evidência operacional.
+PASS para implementação, compatibilidade, release e smoke não autenticado. Qualidade da interpretação com modelo real: NOT TESTED. Não apresentar Diego/Bruno como corrigidos empiricamente até nova evidência autorizada.
 
 ---
 
