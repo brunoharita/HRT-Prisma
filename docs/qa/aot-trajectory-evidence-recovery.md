@@ -30,7 +30,7 @@ Contrato: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0; acordos M8
 | Parser/publicação/requisitos/dados reais | no_impact_identified | Somente leitura | Diff não altera estes fluxos; nenhuma mutação de Pessoa | PASS |
 | Custo/modelo | plausible_indirect | Duas leituras por tentativa, modelo único | Sem nova chamada por Perfil fora do gate; custo real não medido | PARTIAL |
 
-Entrega nova: referência de segmento com citação literal derivada; UI informa retry real. Capacidades preservadas: gate seletivo, decisões humanas, tenant, score e fallback. Relação reclassificada: script de avaliação M8.3 compartilha o prompt e precisou adaptar entrada/decoder. Limite: corpus sintético não prova qualidade universal nem desempenho do modelo real.
+Entrega nova: referência de segmento com citação literal derivada; UI informa retry real. Capacidades preservadas: gate seletivo, decisões humanas, tenant, score e fallback. Relação reclassificada: os scripts de avaliação simples e complexo compartilham o prompt e precisaram adaptar entrada/decoder e diagnóstico sanitizado. O CI inicial apontou dois testes do avaliador complexo ainda no formato antigo; ambos passaram após a correção direcionada. Limite: corpus sintético não prova qualidade universal nem desempenho do modelo real. A prova paga com dados sintéticos foi bloqueada pelo revisor de segurança até autorização específica do usuário; não foi contornada.
 
 ## Fora de escopo preservado
 

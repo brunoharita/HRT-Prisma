@@ -3,7 +3,7 @@
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildTrajectoryRequest, parseTrajectoryProviderResponse, CONCURRENCY, TIMEOUT_MS } from "./evaluate-semantic-trajectory.mjs";
-import { activities, prepareTrajectoryContext, agreeTrajectoryReadings, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION } from "../dist/src/domain/semanticTrajectory.js";
+import { activities, prepareTrajectoryContext, trajectoryEvidenceInput, agreeTrajectoryReadings, SEMANTIC_METHOD_VERSION, SEMANTIC_PROMPT_VERSION } from "../dist/src/domain/semanticTrajectory.js";
 import { semanticComplexPilotCases as cases, semanticComplexPilotExpectations as expectations,
   semanticComplexPilotLimitation, semanticComplexPilotPosition } from "../dist/src/fixtures/semanticTrajectoryComplexPilot.js";
 
@@ -35,21 +35,18 @@ export function prepareComplexPilot() {
   });
 }
 
-// Diagnostic only: never repair a quote, relax the shared parser or print provider/source text.
+// Diagnostic only: never repair a reference, relax the shared parser or print provider/source text.
 function invalidReadingDetails(body, context) {
   try {
     const message = body.output?.find(item => item?.type === "message");
     const decoded = JSON.parse(message?.content?.[0]?.text);
     if (!Array.isArray(decoded?.items)) return [];
     return decoded.items.flatMap(item => {
-      const entry = context.entries.find(source => source.id === item?.id);
+      const entry = trajectoryEvidenceInput(context).entries.find(source => source.id === item?.id);
       if (!entry) return [];
-      if (typeof item.quote !== "string") return [{ entryId: entry.id, reason: "QUOTE_NOT_STRING" }];
-      const quoteLength = item.quote.length, sourceLength = entry.text.length;
-      if (!entry.text.includes(item.quote)) return [{ entryId: entry.id, reason: "QUOTE_NOT_LITERAL", quoteLength, sourceLength }];
-      if (item.activity !== "unclear" && item.quote.trim().length < Math.min(6, sourceLength)) {
-        return [{ entryId: entry.id, reason: "QUOTE_TOO_SHORT", quoteLength, sourceLength }];
-      }
+      if (typeof item.evidenceId !== "string") return [{ entryId: entry.id, reason: "EVIDENCE_ID_NOT_STRING" }];
+      if (item.activity === "unclear" ? item.evidenceId !== "" : !entry.segments.some(segment => segment.id === item.evidenceId))
+        return [{ entryId: entry.id, reason: "EVIDENCE_ID_INVALID" }];
       return [];
     });
   } catch { return []; }
