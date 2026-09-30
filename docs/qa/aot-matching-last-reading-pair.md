@@ -34,12 +34,14 @@ F-01: sem tela, política nova de retenção, histórico de pares, backfill, aju
 
 ## Validação e limites
 
-`deno test` (28/28), `deno check` da Edge/testes, `pnpm run typecheck` e SQL PostgreSQL 17 local transacional passaram. O SQL exercitou M83 nos prompts 1.1/1.2 e a cadeia posterior M84/M86/reconhecimento/2.1. A produção foi consultada apenas para conferir identidade da função claim e ausência de `EXECUTE` autenticado; nenhum registro de Pessoa foi lido ou alterado. O campo novo fica nulo em caches anteriores. Evidência de modelo real e consulta futura da auditoria por UI não integram este movimento.
+`deno test` (28/28), `deno check` da Edge/testes, `pnpm run typecheck` e SQL PostgreSQL 17 local transacional passaram. O SQL exercitou M83 nos prompts 1.1/1.2 e a cadeia posterior M84/M86/reconhecimento/2.1. Antes da publicação, a produção foi consultada somente para conferir identidade da função claim e ausência de `EXECUTE` autenticado. Nenhum registro de Pessoa foi lido ou alterado; a publicação modificou apenas schema/RPC e Edge. O campo novo fica nulo em caches anteriores. Evidência de modelo real e consulta futura da auditoria por UI não integram este movimento.
 
 ## Git / QA / ambiente
 
-Pendente: checks de fechamento, commit/CI, publicação seletiva, verificação remota e sincronização.
+O SHA funcional `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` está em `main` local/GitHub. CIs de branch `36711245604` e main `36711343697` PASS; o CI inicial `36710595824` falhou somente no `check:prisma-context`, pois o gerador local incluíra `docs/qa/agreement-matching-all-positions.md` não rastreado, ausente no runner. Artefatos foram regenerados em checkout limpo sem apagar ou incluir o arquivo do usuário. `pnpm run lint`, `pnpm run check:supabase-ledger`, `pnpm run test:release-tooling` (15), `pnpm run test` (715), `deno test` (28), `deno check`, SQL local e `check:prisma-context` no checkout limpo passaram. O verificador local de Context Pack no checkout principal continua sensível àquele documento não rastreado; isto é uma limitação do ambiente local, não um falso PASS.
+
+Plano de release: somente migration nova e Edge `matching-trajectory`; web/VPS não requeridos. Migration remota `20260930115417_matching_last_reading_pair`: campo confirmado, `service_role` pode executar a RPC auditada, `anon` e `authenticated` não; SELECT da tabela continua negado a `authenticated` e `service_role`. Edge v13 ACTIVE/JWT, 12 arquivos comparados sem divergência e POST anônimo 401. Nenhum Perfil real foi reanalisado para smoke. A prova de persistência de um par real em produção permanece NOT TESTED até ocorrer nova tentativa natural; os testes SQL locais cobrem a gravação e substituição.
 
 ## Desvios
 
-Nenhum identificado no escopo local. Estado de produção ainda pendente.
+Nenhum desvio do comportamento aprovado identificado. O CI inicial falhou por contaminação do gerador com arquivo não rastreado e foi corrigido antes da integração. A ausência de smoke autenticado com Perfil real é limite declarado, não conclusão de qualidade semântica ou persistência observada em produção.

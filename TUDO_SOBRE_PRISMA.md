@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 307
-source_manifest_sha256: 16a8dd85363d9ad519e3e85a43f0f3f0e534eda25cf0ec9560812dd8505a06bc
+source_manifest_sha256: f1b1cbb2642e26177c4ee88c39f53412b39e93dd7cc2425863ca1f2bc3d0415a
 -->
 
 # Tudo sobre o Prisma
@@ -2630,9 +2630,9 @@ last_verified: 2026-09-30
 
 # Estado atual do Prisma
 
-## Último par de leituras da interpretação — implementação local, publicação pendente
+## Último par de leituras da interpretação — publicado em produção
 
-O novo contrato `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 guarda no cache da análise somente o último par estruturado de uma tentativa por Perfil/versão da Posição/chave de fontes. Leitura validada guarda categorias e IDs de evidência, não a resposta bruta; leitura falha guarda etapa e motivo tipificados. Um retry substitui o par anterior. Uma nova RPC de conclusão grava resultado e par na mesma transação, preservando o contrato legado, RLS, grants, fallback e ausência do par na resposta ao navegador. Testes locais Deno (28), typecheck Deno/TypeScript e SQL transacional do M83 nos prompts 1.1/1.2 passaram; o baseline da função claim foi conferido em leitura remota. Não há backfill de tentativas antigas, nova consulta à IA, mudança de grupo/score/modelo/prompt ou tela de auditoria. Produção ainda não foi atualizada por este movimento; confirmar release e smoke antes de declarar ativo.
+O novo contrato `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 guarda no cache da análise somente o último par estruturado de uma tentativa por Perfil/versão da Posição/chave de fontes. Leitura validada guarda categorias e IDs de evidência, não a resposta bruta; leitura falha guarda etapa e motivo tipificados. Um retry substitui o par anterior. Uma nova RPC de conclusão grava resultado e par na mesma transação, preservando o contrato legado, RLS, grants, fallback e ausência do par na resposta ao navegador. Testes locais Deno (28), typecheck Deno/TypeScript, SQL transacional do M83 nos prompts 1.1/1.2 e cadeia corrente, além de 715 testes do projeto, passaram. O primeiro CI falhou porque um documento não rastreado local entrou na exportação gerada; o Context Pack foi regenerado em checkout limpo sem tocar nesse documento. Os CIs da branch `36711245604` e de main `36711343697` passaram, e o SHA `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` foi integrado em `main` local/GitHub. A migration remota `20260930115417_matching_last_reading_pair` criou o campo e RPC service-only; Edge `matching-trajectory` v13 está ACTIVE/JWT, 12 arquivos publicados coincidem com o checkout e POST anônimo retornou 401. O plano não exigiu frontend/VPS. Não houve backfill, nova consulta à IA com Perfil real, mudança de grupo/score/modelo/prompt ou tela de auditoria. A leitura real posterior ainda não foi exercitada; confirmar persistência para uma nova tentativa somente quando ela ocorrer, sem reprocessar Perfis apenas para smoke. Evidência: `docs/qa/aot-matching-last-reading-pair.md`.
 
 ## Avisos causais da interpretação — publicados em produção
 
@@ -9508,6 +9508,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Source: `docs/operations/deployment.md`
 
 # Deployment
+
+Auditoria do último par de leituras em 2026-09-30: SHA funcional `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` integrado em `main` local/GitHub após CIs de branch `36711245604` e main `36711343697` PASS. Migration remota `20260930115417_matching_last_reading_pair`: coluna e RPC auditada verificadas; `service_role` executa a RPC, `anon`/`authenticated` não, e a tabela mantém SELECT revogado. Edge `matching-trajectory` v13 ACTIVE/JWT com 12 arquivos idênticos ao checkout e POST anônimo 401. Sem publicação do frontend/VPS, pois o plano de impacto os dispensou. Sem reprocessamento de Pessoas nem chamada paga com dados reais; a persistência de um par real dependerá de uma nova tentativa natural. O primeiro CI falhou por Context Pack gerado com documento não rastreado e foi corrigido em checkout limpo, preservando o arquivo local. Evidência: `docs/qa/aot-matching-last-reading-pair.md`.
 
 Avisos causais do matching publicados em 30/09: SHA funcional `d5aa806e662994e3a7ef981ec2de35af2a825bde` em `main` local/GitHub/VPS, CI de branch `36662702395` e main `36662801204` PASS. Plano seletivo sem banco/Edge: somente `prisma-web` recriado. O smoke HTTPS imediato recebeu 404 transitório e fez o script sair com código 22; a verificação seguinte confirmou contêiner `running`, zero reinícios, imagem `sha256:a20b817629afc87665498542f5102e7e132b0a9356b4cf9d1ef78d3b8e97dec8`, `/`, `/login`, `/index.html` e asset 200. O bundle servido contém o texto causal. Sem sessão autenticada ou chamada paga a IA em Perfil real. Rollback web `prisma-web:rollback-before-d5aa806e6629` confirmado com a imagem anterior `sha256:14c69b71dd2d39b6ea909023260e7ac3ab5752a8b0c78752842d0675a12df75b`; evidência: `docs/qa/aot-matching-causal-notices.md`.
 
@@ -16619,15 +16621,17 @@ F-01: sem tela, política nova de retenção, histórico de pares, backfill, aju
 
 ## Validação e limites
 
-`deno test` (28/28), `deno check` da Edge/testes, `pnpm run typecheck` e SQL PostgreSQL 17 local transacional passaram. O SQL exercitou M83 nos prompts 1.1/1.2 e a cadeia posterior M84/M86/reconhecimento/2.1. A produção foi consultada apenas para conferir identidade da função claim e ausência de `EXECUTE` autenticado; nenhum registro de Pessoa foi lido ou alterado. O campo novo fica nulo em caches anteriores. Evidência de modelo real e consulta futura da auditoria por UI não integram este movimento.
+`deno test` (28/28), `deno check` da Edge/testes, `pnpm run typecheck` e SQL PostgreSQL 17 local transacional passaram. O SQL exercitou M83 nos prompts 1.1/1.2 e a cadeia posterior M84/M86/reconhecimento/2.1. Antes da publicação, a produção foi consultada somente para conferir identidade da função claim e ausência de `EXECUTE` autenticado. Nenhum registro de Pessoa foi lido ou alterado; a publicação modificou apenas schema/RPC e Edge. O campo novo fica nulo em caches anteriores. Evidência de modelo real e consulta futura da auditoria por UI não integram este movimento.
 
 ## Git / QA / ambiente
 
-Pendente: checks de fechamento, commit/CI, publicação seletiva, verificação remota e sincronização.
+O SHA funcional `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` está em `main` local/GitHub. CIs de branch `36711245604` e main `36711343697` PASS; o CI inicial `36710595824` falhou somente no `check:prisma-context`, pois o gerador local incluíra `docs/qa/agreement-matching-all-positions.md` não rastreado, ausente no runner. Artefatos foram regenerados em checkout limpo sem apagar ou incluir o arquivo do usuário. `pnpm run lint`, `pnpm run check:supabase-ledger`, `pnpm run test:release-tooling` (15), `pnpm run test` (715), `deno test` (28), `deno check`, SQL local e `check:prisma-context` no checkout limpo passaram. O verificador local de Context Pack no checkout principal continua sensível àquele documento não rastreado; isto é uma limitação do ambiente local, não um falso PASS.
+
+Plano de release: somente migration nova e Edge `matching-trajectory`; web/VPS não requeridos. Migration remota `20260930115417_matching_last_reading_pair`: campo confirmado, `service_role` pode executar a RPC auditada, `anon` e `authenticated` não; SELECT da tabela continua negado a `authenticated` e `service_role`. Edge v13 ACTIVE/JWT, 12 arquivos comparados sem divergência e POST anônimo 401. Nenhum Perfil real foi reanalisado para smoke. A prova de persistência de um par real em produção permanece NOT TESTED até ocorrer nova tentativa natural; os testes SQL locais cobrem a gravação e substituição.
 
 ## Desvios
 
-Nenhum identificado no escopo local. Estado de produção ainda pendente.
+Nenhum desvio do comportamento aprovado identificado. O CI inicial falhou por contaminação do gerador com arquivo não rastreado e foi corrigido antes da integração. A ausência de smoke autenticado com Perfil real é limite declarado, não conclusão de qualidade semântica ou persistência observada em produção.
 
 ---
 
