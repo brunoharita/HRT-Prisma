@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 299
-source_manifest_sha256: 7e21e7bcadb2f92cbda07f3f5ff5197f0a557eed99efc4bfe1af673e1f12bb7a
+source_manifest_sha256: c7bca3029a880d1cf49622f5b211cbe9cec0f4d7cd26c67aad1c3bf59c5669e2
 -->
 
 # Tudo sobre o Prisma
@@ -2624,15 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.9
+version: 2.51.10
 last_verified: 2026-09-29
 ---
 
 # Estado atual do Prisma
 
-## Triagem ocupacional seletiva antes da IA — implementação local em validação
+## Triagem ocupacional seletiva antes da IA — publicada em produção
 
-A decisão de 2026-09-29 substitui somente a cobertura automática de IA para todo Perfil utilizável do M8.6: a busca interna permanece ampla, mas `semantic-triage-2.0.0` envia à Edge apenas relações profissionais atribuíveis e plausíveis que continuem indefinidas. Referência Knowledge suficiente, decisão humana confirmada, área/contexto isolado e Perfil sem conteúdo profissional utilizável não acionam IA. A Edge recompõe a mesma triagem em fontes autenticadas antes do cache/provedor/snapshot. A lista interna chega antes das interpretações, que atualizam cada Perfil separadamente; falha preserva integralmente o cálculo pré-IA. Observações Knowledge e Evidência Demonstrada passam a ser paginadas para não truncar uma busca de 100 Perfis. Não há nova migration, taxonomia ou alteração de score/prompt/modelo. Validação local e rollout ainda precisam ser registrados no AoT `docs/qa/aot-matching-selective-semantic-triage.md`; não considerar esta seção prova de publicação.
+A decisão de 2026-09-29 substitui somente a cobertura automática de IA para todo Perfil utilizável do M8.6: a busca interna permanece ampla, mas `semantic-triage-2.0.0` envia à Edge apenas relações profissionais atribuíveis e plausíveis que continuem indefinidas. Referência Knowledge suficiente, decisão humana confirmada, área/contexto isolado e Perfil sem conteúdo profissional utilizável não acionam IA. A Edge recompõe a mesma triagem em fontes autenticadas antes do cache/provedor/snapshot. A lista interna chega antes das interpretações, que atualizam cada Perfil separadamente; falha preserva integralmente o cálculo pré-IA. Observações Knowledge e Evidência Demonstrada são paginadas para não truncar uma busca de 100 Perfis. Sem nova migration, taxonomia ou alteração de score/prompt/modelo. SHA funcional `3fd1a8703bcd717f5b597515785ededd32281b75` em main/GitHub/VPS, CI `36652901031` PASS, Edge `matching-trajectory` v11 ACTIVE/JWT, 12 arquivos comparados, POST anônimo 401; frontend `prisma-web` ativo, zero reinícios e HTTPS 200 após 404 transitório na troca. Não houve smoke autenticado da lista nem medição real de 100 currículos para evitar chamadas pagas a IA. Evidência e limites: `docs/qa/aot-matching-selective-semantic-triage.md`.
 
 ## Reconhecimento profissional determinístico — publicado em produção
 
@@ -5247,7 +5247,7 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 
 # Versionamento
 
-Triagem ocupacional seletiva (2026-09-29, em validação): `semantic-triage-2.0.0` versiona apenas a ativação da interpretação externa. O matching determinístico 5.1.0, a resposta semântica válida 7.0.0, score 1.4.0, prompt/modelo, schemas e snapshots persistidos não mudam; cache anterior permanece legível somente se a nova triagem server-side permitir interpretação para o par atual. O resultado interno progressivo não persiste novo estado. Sem migration ou nova versão pública numerada de produto neste movimento; publicação e limites são comprovados pelo AoT específico, não por esta decisão de versão.
+Triagem ocupacional seletiva (2026-09-29, publicada): `semantic-triage-2.0.0` versiona apenas a ativação da interpretação externa. O matching determinístico 5.1.0, a resposta semântica válida 7.0.0, score 1.4.0, prompt/modelo, schemas e snapshots persistidos não mudam; cache anterior permanece legível somente se a nova triagem server-side permitir interpretação para o par atual. O resultado interno progressivo não persiste novo estado. Sem migration ou nova versão pública numerada de produto neste movimento; publicação e limites são comprovados pelo AoT específico, não por esta decisão de versão.
 
 Consistência do reconhecimento profissional (2026-09-28, publicada): `vacancy-matching-explainable-5.1.0` distingue relação ocupacional publicada de especialização da Posição, impede promoção por área ampla isolada e seleciona períodos da função relacionada antes de períodos contextuais. O `matching-score-1.4.0` conserva pesos/faixas e passa a reconhecer a área relacionada via Knowledge com 8 pontos; o fingerprint registra a nova versão de matching. A migration `20260928190000_matching_recognition_consistency.sql` acrescenta 5.1.0 e o contrato semântico 7.0.0 ao guard M6.2, mantendo snapshots antigos e versões desconhecidas rejeitadas. A interface identifica a origem pré-IA no fallback. Não há nova versão pública numerada de produto neste ajuste; o rollout e seus limites são registrados no AoT próprio.
 
@@ -9492,6 +9492,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Source: `docs/operations/deployment.md`
 
 # Deployment
+
+Triagem seletiva antes da IA publicada em 29/09: SHA funcional `3fd1a8703bcd717f5b597515785ededd32281b75` em `main`/GitHub/VPS, CI `36652901031` PASS. Plano 1.0.1 sem banco: somente Edge `matching-trajectory` v11 ACTIVE/JWT (12 arquivos idênticos ao bundle local, hash `c8679df77e97fb90dccd9c1a3e5670061953276bbacad1728d19c51237a01b04`) e `prisma-web`. POST anônimo da Edge 401. Web imagem `sha256:d7b5d6d13b38b4ea13f81e1e1cbbcde95d912c3a68eda5ec4ad27494bfc21805`, `running`, zero reinícios; `/`, `/login` e `/index.html` 200 após 404 transitório no smoke imediato. Rollback web `prisma-web:rollback-before-3fd1a8703bcd`. Sem chamada autenticada a IA em Perfil real; não há medida de latência para 100 currículos reais. Evidência: `docs/qa/aot-matching-selective-semantic-triage.md`.
 
 Diagnóstico da IA no matching publicado em 28/09: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` no `main`/GitHub, CI `36377229062` PASS. Plano seletivo publicou somente Edge `matching-trajectory` v9, ACTIVE/JWT obrigatório, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`; 12 arquivos conferidos com a origem. POST anônimo retornou 401. Sem migration, web/VPS ou chamada autenticada a IA em Perfil real. Logs anteriores não contêm a nova etapa. Evidência: `docs/qa/aot-matching-trajectory-diagnostics.md`.
 
@@ -16438,15 +16440,15 @@ Contrato: `docs/qa/agreement-matching-selective-semantic-triage.md` v1.0.0; exec
 | Capacidade / área | Relação | Baseline | Regressão executada | Status |
 | --- | --- | --- | --- | --- |
 | Descoberta e triagem | direct | Lista aguardava IA; gate aceitava todo conteúdo utilizável | 72 testes Node dirigidos, sete trilhas e 100 Perfis sintéticos | PASS |
-| Lista, progresso, comparação e decisão | direct | Resposta única após IA; seleção e decisão humanas presentes | Callback inicial/por Perfil, build web, inspeção da UI e preservação de decisões | PARTIAL |
-| Edge, auth, tenant, cache e snapshot | critical_transversal | Edge v9/JWT; reconstituição server-side | 32 testes Deno, incluindo negativos antes de cache/provedor; smoke remoto pendente | PARTIAL |
+| Lista, progresso, comparação e decisão | direct | Resposta única após IA; seleção e decisão humanas presentes | Callback inicial/por Perfil, build web, inspeção da UI, preservação de decisões, bundle publicado e HTTP 200 | PASS |
+| Edge, auth, tenant, cache e snapshot | critical_transversal | Edge v10/JWT; reconstituição server-side | 32 testes Deno, negativos antes de cache/provedor, v11 ACTIVE/JWT, 12 arquivos idênticos e POST anônimo 401 | PASS |
 | Score, requisitos, Knowledge | plausible_indirect | Fórmula e Knowledge publicadas | Score dirigido, 1.205 linhas paginadas e falha fechada | PASS |
 | Parser e publicação de Perfil | no_impact_identified | Fontes publicadas somente lidas | Diff sem escrita nesses fluxos; apenas leitura autorizada | PASS |
-| Release web/Edge | direct | Produção em SHA anterior | Plano e publicação pendentes | NOT TESTED |
+| Release web/Edge | direct | Produção em `77068e9` e Edge v10 | Plano 1.0.1: sem banco, só `matching-trajectory` e `prisma-web`; CI PASS, main/GitHub/VPS no SHA funcional, HTTP 200 e zero reinícios | PASS |
 
 ### Novidade e preservação
 
-- Entrega local comprovada: descoberta ampla, gate seletivo também na Edge e resultados iniciais/progressivos com falha preservada.
+- Entrega comprovada por testes e publicação: descoberta ampla, gate seletivo na Edge e resultados iniciais/progressivos com falha preservada.
 - Capacidades preservadas: pesos e versões do Prisma Score, separação das evidências, decisões humanas e proteção tenant/versionamento nos testes dirigidos.
 - Dependência descoberta durante o movimento: paginação de observações da Knowledge e Evidências Demonstradas para não truncar silenciosamente um lote de 100. Incorporada ao mapa como dependência direta da triagem confiável.
 - Limitações: o corpus é sintético e não mede tempo de Supabase, provedor ou navegador com 100 currículos reais; nomenclaturas profissionais inéditas podem precisar de curadoria. Não foi feita avaliação paga em Pessoas reais.
@@ -16464,7 +16466,7 @@ Não aplicável: não foi fornecida referência visual normativa; a mudança ada
 
 ## Desvios do contrato
 
-Nenhum desvio identificado na implementação local. Evidência de implantação e smoke ainda pendentes; não declarar movimento concluído enquanto o mapa tiver `PARTIAL` ou `NOT TESTED`.
+Nenhum desvio de regra identificado. O smoke HTTP automático do script recebeu 404 imediatamente após a recriação, mas verificação subsequente confirmou `/`, `/login` e `/index.html` com 200, contêiner `running` e zero reinícios. O procedimento não testou a lista autenticada com Pessoas reais para evitar gasto de IA; isso é limitação de evidência, não prova de falha ou de latência real.
 
 ## Mudanças autorizadas durante a execução
 
@@ -16472,15 +16474,15 @@ Nenhuma mudança adicional de decisão do Product Owner após a aprovação da t
 
 ## Validação local
 
-`pnpm run typecheck`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint`, `pnpm run check:matching-runtime`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`; 72 testes Node dirigidos e 32 testes Deno de `matching-trajectory`. Registrar os resultados finais e o SHA no fechamento.
+`pnpm run typecheck`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint`, `pnpm run check:matching-runtime`, `pnpm run generate:prisma-context`, `pnpm run check:prisma-context`; 72 testes Node dirigidos e 32 testes Deno de `matching-trajectory`. O CI `36652901031` executou a fundação completa, ledger, script seletivo e auditoria de dependências com resultado PASS. Duas tentativas anteriores de CI detectaram Context Pack gerado com documento não rastreado da pasta local; os exports foram regenerados num checkout isolado e limpo, sem tocar naquele documento, antes do CI aprovado.
 
 ## Git / QA / ambiente
 
-Branch `codex/occupational-ai-triage`. Sem ambiente remoto QA separado: Supabase e VPS existentes são produção, apesar do rótulo legado Prisma-QA. Gate QA executado com fixtures sintéticas locais; verificação remota deve ser proporcional e sem IA paga em Perfis reais.
+SHA funcional `3fd1a8703bcd717f5b597515785ededd32281b75` integrado por fast-forward em `main`, `origin/main` e `/opt/prisma` da VPS. Sem ambiente remoto QA separado: Supabase e VPS existentes são produção, apesar do rótulo legado Prisma-QA. Gate QA com fixtures sintéticas locais, sem LLM ou banco real. Edge `matching-trajectory` v11 ACTIVE, `verify_jwt=true`, bundle `c8679df77e97fb90dccd9c1a3e5670061953276bbacad1728d19c51237a01b04`; os 12 arquivos remotos são idênticos ao bundle local e POST anônimo retornou 401. Web `prisma-web` imagem `sha256:d7b5d6d13b38b4ea13f81e1e1cbbcde95d912c3a68eda5ec4ad27494bfc21805`, `running`, zero reinícios; rollback `prisma-web:rollback-before-3fd1a8703bcd` preservado. `models/` não rastreado na VPS e os quatro itens não rastreados do checkout principal permaneceram intactos.
 
 ## Conclusão
 
-Entrega local em validação; release e smoke ainda pendentes.
+Implementação, integração e publicação concluídas nas superfícies planejadas, com smoke técnico proporcional. A busca autenticada com Perfis reais, o tempo com 100 currículos e a taxa de falsos negativos ocupacionais não foram medidos; não há promessa de SLA ou recall universal.
 
 ---
 
