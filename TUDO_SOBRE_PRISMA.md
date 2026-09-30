@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 310
-source_manifest_sha256: 470cb51ee4a7a3f2432eb22a12cc8cc0886dea5a7761196c1508ae4d21d89040
+source_manifest_sha256: 7bcfb95e9c054f38fcb8a87cbf1d4fca286c7c0f4a1aaf709bba734a6bf9c303
 -->
 
 # Tudo sobre o Prisma
@@ -2624,17 +2624,19 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.15
+version: 2.51.16
 last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
 
+## Revisão humana de divergências da trajetória — publicada com limite de validação
+
+O acordo `docs/qa/agreement-matching-human-conflicts.md` v1.0.0 está implementado: até cinco categorias divergentes de duas leituras validadas podem ser vistas e tratadas por operador autorizado no cartão da Pessoa, sem tirá-la do grupo pré-IA. Uma escolha íntegra fica auditada por Perfil/versão da Posição/fontes/revisor e recalcula o score/snapshot pelo motor existente; item não determinado ou mais de cinco conflitos conserva o cálculo interno. Par original, Knowledge, pesos, prompt e modelo não foram alterados. PostgreSQL local sintético passou nos prompts 1.1/1.2, limite 1/5/6, grants/RLS, fonte obsoleta e proveniência do snapshot; domínio 91/91, Edge 35/35 e notificação 7/7. O CI inicial falhou apenas no texto esperado da notificação; após correção, branch `36756588104` e main `36756887575` passaram para o SHA funcional `998d25ae5253f4a1534ffa39a0b878bb69d517c4`. Migration remota `20260930181341_matching_human_conflict_review` ativa com RLS/grants verificados; Edge `matching-trajectory` v14 ACTIVE/JWT, 12 arquivos idênticos ao código publicado e POST anônimo 401. VPS com esse código funcional, `prisma-web` running/zero reinícios, imagem de rollback preservada; `/`, `/login`, `/index.html` e bundle novo 200 após 404 transitório no smoke imediato. Nenhum Perfil real foi reanalisado; o fluxo visual autenticado de escolher e salvar decisão continua **NOT TESTED**, não deve ser inferido do smoke público. Evidência: `docs/qa/aot-matching-human-conflicts.md`.
+
 ## Último par de leituras da interpretação — publicado em produção
 
 O novo contrato `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0 guarda no cache da análise somente o último par estruturado de uma tentativa por Perfil/versão da Posição/chave de fontes. Leitura validada guarda categorias e IDs de evidência, não a resposta bruta; leitura falha guarda etapa e motivo tipificados. Um retry substitui o par anterior. Uma nova RPC de conclusão grava resultado e par na mesma transação, preservando o contrato legado, RLS, grants, fallback e ausência do par na resposta ao navegador. Testes locais Deno (28), typecheck Deno/TypeScript, SQL transacional do M83 nos prompts 1.1/1.2 e cadeia corrente, além de 715 testes do projeto, passaram. O primeiro CI falhou porque um documento não rastreado local entrou na exportação gerada; o Context Pack foi regenerado em checkout limpo sem tocar nesse documento. Os CIs da branch `36711245604` e de main `36711343697` passaram, e o SHA `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` foi integrado em `main` local/GitHub. A migration remota `20260930115417_matching_last_reading_pair` criou o campo e RPC service-only; Edge `matching-trajectory` v13 está ACTIVE/JWT, 12 arquivos publicados coincidem com o checkout e POST anônimo retornou 401. O plano não exigiu frontend/VPS. Não houve backfill, nova consulta à IA com Perfil real, mudança de grupo/score/modelo/prompt ou tela de auditoria. A leitura real posterior ainda não foi exercitada; confirmar persistência para uma nova tentativa somente quando ela ocorrer, sem reprocessar Perfis apenas para smoke. Evidência: `docs/qa/aot-matching-last-reading-pair.md`.
-
-Movimento em implementação local em 2026-09-30: `docs/qa/agreement-matching-human-conflicts.md` v1.0.0 estende a discordância auditada para revisão humana de até cinco itens por Perfil/versão da Posição. A migração nova cria auditoria contextual e RPCs service-only com revalidação de papel, fontes, par e escolhas; a Edge projeta apenas trechos conflitantes, e a UI mostra evidências e decisões. Uma revisão íntegra gera leitura versionada e score/snapshot recalculados pelo motor existente; item não determinado ou mais de cinco conflitos conserva o cálculo interno. Sem alteração de prompt, modelo, pesos, Knowledge ou Perfis publicados. Testes locais de domínio, Edge, build e PostgreSQL sintético passaram até este registro; QA e produção ainda não estão comprovados e só serão descritos no AoT de fechamento.
 
 ## Avisos causais da interpretação — publicados em produção
 
@@ -9514,6 +9516,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Source: `docs/operations/deployment.md`
 
 # Deployment
+
+Revisão humana de divergências publicada em 30/09: código funcional no SHA `998d25ae5253f4a1534ffa39a0b878bb69d517c4`, CIs de branch `36756588104` e main `36756887575` PASS. Migration remota `20260930181341_matching_human_conflict_review`: tabela de auditoria com RLS, RPCs apenas para `service_role`, snapshot com proveniência, tudo conferido sem leitura de Perfil real. Edge `matching-trajectory` v14 ACTIVE/JWT e 12 arquivos conferidos; POST anônimo 401. Apenas `prisma-web` foi reconstruído/recriado, imagem ativa `sha256:c304e0dce254e99cf154096fe9ed9dff24230caded6835f5655ae7a5150062ef`, zero reinícios; rollback `prisma-web:rollback-before-998d25ae5253` preservado. O smoke imediato retornou 404 e o script saiu com código 1; inspeção posterior confirmou `/`, `/login`, `/index.html` e novo bundle 200. Não houve chamada paga à IA nem revisão de Pessoa real para smoke. O fluxo visual autenticado de decisão e recálculo continua não testado em produção. Evidência: `docs/qa/aot-matching-human-conflicts.md`.
 
 Auditoria do último par de leituras em 2026-09-30: SHA funcional `b6f1da1452fa0de1d5d53af8d7faa3f470ed91a4` integrado em `main` local/GitHub após CIs de branch `36711245604` e main `36711343697` PASS. Migration remota `20260930115417_matching_last_reading_pair`: coluna e RPC auditada verificadas; `service_role` executa a RPC, `anon`/`authenticated` não, e a tabela mantém SELECT revogado. Edge `matching-trajectory` v13 ACTIVE/JWT com 12 arquivos idênticos ao checkout e POST anônimo 401. Sem publicação do frontend/VPS, pois o plano de impacto os dispensou. Sem reprocessamento de Pessoas nem chamada paga com dados reais; a persistência de um par real dependerá de uma nova tentativa natural. O primeiro CI falhou por Context Pack gerado com documento não rastreado e foi corrigido em checkout limpo, preservando o arquivo local. Evidência: `docs/qa/aot-matching-last-reading-pair.md`.
 
@@ -16650,7 +16654,7 @@ Contrato: `docs/qa/agreement-matching-human-conflicts.md` v1.0.0. Baseline: `mai
 | ID | Implementação | Evidência | Estado |
 | --- | --- | --- | --- |
 | D-01 | Comparação por ID/categoria no domínio compartilhado; par validado | 91 testes de domínio, incluindo ordem/citação e limites | PASS |
-| D-02 | Edge projeta até cinco conflitos para operador autorizado; tela mostra trecho/categorias/evidências | Testes Edge/SQL e build web; visual autenticado ainda não verificado | PARTIAL |
+| D-02 | Edge projeta até cinco conflitos para operador autorizado; componente no cartão do grupo pré-IA mostra trecho/categorias/evidências | Testes Edge/SQL, typecheck/build, bundle público contém o componente; visual autenticado ainda não verificado | PARTIAL |
 | D-03 | RPC de revisão verifica fontes, tenant, papel, cache, escolhas; auditoria com ator/horário | PostgreSQL local transacional e casos negativos | PASS |
 | D-04 | Leitura composta versionada, mesmo score e snapshot com proveniência; não determinado conserva pré-IA | Testes de domínio, Edge e snapshot SQL | PASS |
 | D-05 | Mais de cinco conflitos sem salvamento e sem substituir cálculo interno | Testes domínio, Edge e PostgreSQL | PASS |
@@ -16667,7 +16671,7 @@ F-01 preservado: sem mudança de modelo, prompt, pesos, triagem, Knowledge, requ
 | Cache, último par, lease, retry | direct | M83/M84/M86/2.1 + par auditado no PostgreSQL local; par original conservado | PASS |
 | Matching, score, fingerprint | direct | 91 testes de domínio; leitura revisada muda score/fingerprint, fallback não muda | PASS |
 | Edge, snapshot, autorização | direct/critical_transversal | 35 testes Deno; SQL local aceita somente revisão com ID/versão autenticados | PASS |
-| Busca/comparação e tela | direct | Typecheck/build; smoke visual autenticado pendente | PARTIAL |
+| Busca/comparação e tela | direct | Typecheck/build e bundle público 200; cartão mantém grupo e score internos; smoke visual autenticado pendente | PARTIAL |
 | Privacidade e isolamento | critical_transversal | Negativos de grants, RLS, role, tenant, fontes obsoletas e evidência inventada | PASS |
 | Knowledge, parser, requisitos | no_impact_identified | Sem diff funcional nem escrita nessas fontes; comparação preserva motor existente | PASS |
 
@@ -16675,11 +16679,13 @@ F-01 preservado: sem mudança de modelo, prompt, pesos, triagem, Knowledge, requ
 
 Local: `pnpm run typecheck`, `pnpm run build`, `node --test dist/tests/semanticTrajectory.test.js` (91/91), `deno check` e `deno test` focados (35/35) passaram. PostgreSQL 17 isolado em loopback, banco descartável, aplicou as migrações relevantes e executou transação com rollback: M83, último par e revisão humana, incluindo aceitação/rejeição do snapshot, seis conflitos, decisão não determinada, grants/RLS e fonte obsoleta. Nenhuma chamada ao provedor de IA nem dado pessoal real.
 
-QA, CI, main, VPS e produção: **NOT TESTED** neste registro inicial; atualizar somente após evidência. Smoke autenticado com Perfil real não é parte do teste, pois exigiria mutação desnecessária. Falha do provedor continua usando fallback causal. A revisão de até cinco conflitos melhora a utilidade do resultado, mas não garante que uma das respostas da IA esteja correta; o operador continua responsável por fundamentar a escolha.
+Não há QA remoto separado; o gate foi local com fixtures sintéticas. CI inicial de branch `36756152129` falhou em um teste de texto causal da notificação; correção dirigida passou localmente (7/7), e os CIs de branch `36756588104` e main `36756887575` aprovaram o SHA funcional `998d25ae5253f4a1534ffa39a0b878bb69d517c4` (incluindo 716 testes no pipeline). Esse código funcional está publicado em `main` local/GitHub e VPS `/opt/prisma`. Migration remota `20260930181341_matching_human_conflict_review` presente, RLS ativo, `authenticated` sem SELECT/EXECUTE de revisão e `service_role` com RPC; Edge `matching-trajectory` v14 ACTIVE/JWT com 12 arquivos idênticos e POST anônimo 401. Web `prisma-web` na imagem `sha256:c304e0dce254e99cf154096fe9ed9dff24230caded6835f5655ae7a5150062ef`, `running` e zero reinícios; rollback `prisma-web:rollback-before-998d25ae5253` aponta à imagem anterior `sha256:a20b817629afc87665498542f5102e7e132b0a9356b4cf9d1ef78d3b8e97dec8`. Smoke do script recebeu 404 imediatamente após a troca e saiu com erro; checagem posterior de `/`, `/login`, `/index.html` e asset novo retornou 200, inclusive texto da revisão. A recusa anônima da Edge e o smoke público não provam a jornada autenticada.
+
+Nenhum Perfil real foi reanalisado, nenhuma chamada paga foi feita e nenhuma escolha humana foi inventada para teste. A experiência autenticada de abrir, escolher e salvar uma divergência real, com recálculo visto na tela, permanece **NOT TESTED**; por isso D-02 e a preservação visual continuam PARTIAL, embora backend, Edge e frontend estejam publicados. A revisão não garante que uma das respostas da IA esteja correta: a Pessoa autorizada deve fundamentar a escolha.
 
 ## Desvios
 
-Nenhum desvio funcional conhecido neste estágio. Evidência visual e rollout ainda pendentes; não declarar entrega final antes deles.
+Nenhum desvio funcional conhecido. O primeiro CI e o smoke HTTP imediato falharam pelos motivos descritos e foram resolvidos/verificados sem alterar outros serviços; não os registrar como PASS. A ausência de prova visual autenticada limita o aceite integral do D-02.
 
 ---
 
