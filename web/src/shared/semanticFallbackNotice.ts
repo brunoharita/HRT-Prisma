@@ -17,7 +17,7 @@ const CAUSES: Record<Cause, { title: (count: number) => string; detail: string; 
   },
   disagreement: {
     title: count => `A IA deu duas respostas diferentes para ${profiles(count)}`,
-    detail: "As duas respostas foram recebidas e verificadas, mas classificaram trechos da trajetória de formas diferentes. Nenhuma foi aplicada automaticamente. Até cinco itens podem ser tratados por uma pessoa autorizada; acima desse limite, permanece o cálculo interno.",
+    detail: "As duas respostas foram recebidas e verificadas, mas classificaram trechos da trajetória de formas diferentes. Nenhuma foi aplicada automaticamente. Até cinco itens podem seguir para revisão humana por pessoa autorizada; acima desse limite, permanece o cálculo interno.",
     badge: "IA: respostas diferentes · resultado anterior mantido",
   },
   insufficient: {
