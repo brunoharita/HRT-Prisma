@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 319
-source_manifest_sha256: eff8bd673bc25739387484a2f5aa4b12769a77c6f52d3139532f5807cd5d85b3
+source_manifest_sha256: 1c0921df0f3a0272534dcff8adeb0707def8097acd24b00a0c814e2beeffc5d6
 -->
 
 # Tudo sobre o Prisma
@@ -2632,7 +2632,7 @@ last_verified: 2026-10-01
 
 ## Modal de revisão de divergências
 
-O cartão conserva o agrupamento visual existente, mas a ação `Revisar divergências` abre um modal responsivo. Para cada um dos até cinco conflitos retornados ao operador autorizado, o modal mostra uma pergunta explicativa de revisão, trecho profissional, as duas categorias fechadas e as respectivas referências de evidência. A decisão humana usa opções visíveis e sem pré-seleção: primeira categoria, segunda categoria ou `Não é possível determinar`; o salvamento continua restrito à revisão completa e ao serviço existente. Pares antigos sem respostas registradas mostram causa própria e exigem clique explícito para uma nova checagem; acima de cinco itens ou em falha não há decisão aplicável. O modal não guarda texto livre, não expõe prompt/resposta bruta e não altera matching, score, IA, autorização, banco ou Knowledge. Contrato: `docs/qa/agreement-matching-review-modal.md` v1.0.0. A publicação e a jornada visual autenticada exigem evidência própria no AoT; a existência do código não as comprova.
+O cartão conserva o agrupamento visual existente, mas a ação `Revisar divergências` abre um modal responsivo. Para cada um dos até cinco conflitos retornados ao operador autorizado, o modal mostra uma pergunta explicativa de revisão, trecho profissional, as duas categorias fechadas e as respectivas referências de evidência. A decisão humana usa opções visíveis e sem pré-seleção: primeira categoria, segunda categoria ou `Não é possível determinar`; o salvamento continua restrito à revisão completa e ao serviço existente. Pares antigos sem respostas registradas mostram causa própria e exigem clique explícito para uma nova checagem; acima de cinco itens ou em falha não há decisão aplicável. O modal não guarda texto livre, não expõe prompt/resposta bruta e não altera matching, score, IA, autorização, banco ou Knowledge. Contrato: `docs/qa/agreement-matching-review-modal.md` v1.0.0. SHA funcional `f0418f7e9ff58ac31e056a88b8661c8af87e2c2b` em main/GitHub/VPS; CI de branch `36870374243` PASS, somente `prisma-web` recriado, imagem `sha256:85a0abe1a47a69e4fdde2545ee509fd11c4528e16d8ef13dbdd387fb3f360ae8`, running/zero reinícios. Após 404 transitório, `/`, `/login`, `/index.html` e asset novo responderam 200. A jornada visual autenticada de revisar e salvar permanece não testada; detalhes e limites em `docs/qa/aot-matching-review-modal.md`.
 
 ## Composição visual da lista de Pessoas por Posição
 
@@ -9530,6 +9530,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 ## Source: `docs/operations/deployment.md`
 
 # Deployment
+
+Modal de revisão de divergências publicado em 01/10: SHA funcional `f0418f7e9ff58ac31e056a88b8661c8af87e2c2b`, CI de branch `36870374243` PASS. O plano dispensou banco e Edge; somente `prisma-web` foi reconstruído/recriado. Imagem ativa `sha256:85a0abe1a47a69e4fdde2545ee509fd11c4528e16d8ef13dbdd387fb3f360ae8`, `running` e zero reinícios. Rollback `prisma-web:rollback-before-f0418f7e9ff5` preserva a imagem anterior `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`. O smoke imediato do script recebeu 404 transitório; checagem posterior confirmou `/`, `/login`, `/index.html` e assets novos em 200. Bundle contém o modal e as opções fechadas; abertura/salvamento autenticados não foram executados em Pessoa real, nem houve chamada paga à IA. Evidência e limites: `docs/qa/aot-matching-review-modal.md`.
 
 Composição visual da lista de Pessoas por Posição publicada em 30/09: SHA funcional `342ff9aa75896dcf09f306fa42d4df4fb82fb43f`, CIs branch `36803529139` e main `36803703626` PASS. Plano seletivo sem banco/Edge; somente `prisma-web` recriado. Imagem ativa `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`, running/zero reinícios, rollback `prisma-web:rollback-before-342ff9aa7589` com imagem anterior `sha256:668091fb1267488e26c1dca121bf2ea98a1609a93c60bbf7d24aca8b5d6ea080`. Smoke imediato do script saiu com 404 transitório; checagem posterior confirmou `/`, `/login`, `/index.html` e assets JS/CSS novos em 200. Prévia visual local validou B com divergência em 1670 px, revisão aberta, 760/390 px e estados A/B/C/pendente/sem permissão/decidido/sem score. Nenhum Perfil real foi reanalisado ou recebeu decisão. Smoke autenticado de produção não executado para evitar IA paga e mutações; evidência em `docs/qa/aot-candidate-card-visual.md`.
 
@@ -17038,13 +17040,17 @@ Contrato: `docs/qa/agreement-matching-review-modal.md` v1.0.0. Baseline: `main` 
 | D-04 | Estado legado separado, checagem somente por clique; excesso e erro preservam cálculo | Teste direcionado e inspeção do fluxo; smoke autenticado pendente | PARTIAL |
 | P-01 | Pergunta rotulada como revisão, sem prompt/saída bruta nem respostas inventadas | Inspeção do diff e teste direcionado | PASS |
 | P-02 | Sem campo aberto, sem escolha automática ou chamada IA na abertura | Teste direcionado e inspeção do diff | PASS |
-| P-03 | Sem alteração funcional em Edge, banco, score, prompt, Knowledge ou papéis | Inspeção do diff e plano de release pendente | PARTIAL |
+| P-03 | Sem alteração funcional em Edge, banco, score, prompt, Knowledge ou papéis | Inspeção do diff e plano seletivo de release, que marcou banco/Edge como `skip` | PASS |
 
 F-01 preservado: sem novas categorias, justificativa persistida ou reprocessamento de Perfil real. A-01: componentes Modal/Radio/Skeleton existentes e estilos locais, sem dependência nova.
 
 ## Validação e limites
 
-`pnpm run typecheck:web`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint` e `node --test dist/tests/trajectoryReviewModal.test.js dist/tests/matchingScore.test.js` passaram localmente (21/21 no teste direcionado). Esses checks provam compilação, contratos estáticos e preservação do matching exercitado; não provam a aparência real nem a interação autenticada. Build web emitiu apenas avisos preexistentes de chunks grandes/import dinâmico ineficaz. Context Pack, commit, CI, publicação web, smoke e comparação visual permanecem pendentes neste registro inicial.
+`pnpm run typecheck:web`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint`, `pnpm run check:prisma-context` e `node --test dist/tests/trajectoryReviewModal.test.js dist/tests/matchingScore.test.js` passaram localmente (21/21 no teste direcionado). O Context Pack foi regenerado em worktree isolado para não incluir um documento não rastreado alheio ao movimento. Esses checks provam compilação, contratos estáticos e preservação do matching exercitado; não provam a aparência real nem a interação autenticada. Build web emitiu avisos não bloqueantes de chunks grandes/import dinâmico ineficaz.
+
+SHA funcional `f0418f7e9ff58ac31e056a88b8661c8af87e2c2b` integrado por fast-forward em `main` local/GitHub/VPS. CI da branch `36870374243` PASS. O plano seletivo indicou somente web, documentação e Context Pack; banco e Edge não foram acessados. Apenas `prisma-web` foi construído e recriado, imagem `sha256:85a0abe1a47a69e4fdde2545ee509fd11c4528e16d8ef13dbdd387fb3f360ae8`, contêiner `running` e zero reinícios. Rollback `prisma-web:rollback-before-f0418f7e9ff5` preserva a imagem anterior `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`. O smoke imediato do script saiu com HTTP 404; verificação posterior confirmou `/`, `/login`, `/index.html` e o asset JS novo em 200, com marcadores do modal nos bundles JS/CSS. A consulta `release:verify` confirmou SHA local/origin e HEAD HTTP 200.
+
+Não houve chamada paga à IA nem revisão/decisão sobre Pessoa real. A abertura visual autenticada do modal, sua comparação em desktop/mobile e o salvamento com recálculo continuam **NOT TESTED** em produção; por isso D-01 a D-04 permanecem `PARTIAL`, apesar de publicação e checagens locais concluídas. Não há desvio funcional conhecido nos caminhos exercitados. O 404 inicial foi resolvido sem alterar código ou outros serviços.
 
 ---
 
