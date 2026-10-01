@@ -722,16 +722,108 @@ function StringListEditor({ label, onChange, placeholder, values }: { label: str
 }
 
 function CandidateMatchCard({ deciding, learning = false, match, onDecision, onLearn, onEvaluate, onNavigate, onToggle, selected, vacancy, canReview = false, onReviewed }: { deciding: boolean; learning?: boolean; match: VacancyCandidateMatch; onDecision: (decision: Exclude<VacancyPositionRelationDecision, null>) => void; onLearn?: () => void; onEvaluate: () => void; onNavigate: (path: string) => void; onToggle: () => void; selected: boolean; vacancy?: VacancyDetail | null; canReview?: boolean; onReviewed?: () => void }) {
-  if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <PrismaCard className={`prisma-vacancy-match-card${selected ? " is-selected" : ""}`}><article>
-    <header><Checkbox checked={selected} onChange={onToggle} /><AvatarInitials name={match.candidate.fullName} /><div><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title><Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil publicado"}</Typography.Text></div><Space orientation="vertical"><Button onClick={() => onNavigate(`/profiles/${match.candidate.personId}/profile`)} type="primary">Ver perfil</Button><Button onClick={onEvaluate}>Ver análise disponível</Button></Space></header>
-    <MatchingScoreSummary match={match} /><Typography.Text type="secondary">Requisitos consultados: {match.directCount} com evidência direta, {match.partialCount} parciais. Compare as evidências sem atribuir prioridade pela pendência.</Typography.Text>
+  const cardClass = "prisma-vacancy-match-card" + (selected ? " is-selected" : "")
+    + (match.positionDecision === "dismissed" ? " is-dismissed" : "");
+  const profileButton = <Button onClick={() => onNavigate("/profiles/" + match.candidate.personId + "/profile")}>Ver perfil</Button>;
+  const analysisButton = <Button onClick={onEvaluate}>{match.semanticAssessment && match.semanticAssessment.status !== "complete"
+    ? "Ver análise disponível" : match.discoveryGroup === "contextual_signals"
+      ? "Ver sinais encontrados" : "Ver como o score foi calculado"}</Button>;
+
+  if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <PrismaCard className={cardClass}><article className="prisma-vacancy-match-layout">
+    <header className="prisma-vacancy-match-identity"><Checkbox checked={selected} onChange={onToggle} />
+      <AvatarInitials name={match.candidate.fullName} />
+      <div className="prisma-vacancy-match-person"><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title>
+        <Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil publicado"}</Typography.Text></div>
+      <MatchingScoreSummary match={match} />
+    </header>
+    <div className="prisma-vacancy-action-hub is-pending">
+      <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
+        <strong>Consultar</strong><Typography.Text type="secondary">Explore o Perfil e a análise disponível.</Typography.Text>
+        <Space wrap>{profileButton}{analysisButton}</Space>
+      </section>
+    </div>
+    <Typography.Text type="secondary">Requisitos consultados: {match.directCount} com evidência direta, {match.partialCount} parciais. Compare as evidências sem atribuir prioridade pela pendência.</Typography.Text>
   </article></PrismaCard>;
+
   const met = match.requirements.filter((item) => item.status === "met");
   const partial = match.requirements.filter((item) => item.status === "partially_met");
   const related = match.requirements.filter((item) => item.status === "related_signal");
   const missing = match.requirements.filter((item) => item.status === "no_evidence");
   const contextualSignals = Array.from(new Set([...met, ...partial, ...related].map((item) => item.requirement.label).concat(match.trajectoryAssessment.evidence.map((item) => item.label))));
-  return <PrismaCard className={`prisma-vacancy-match-card${selected ? " is-selected" : ""}${match.positionDecision === "dismissed" ? " is-dismissed" : ""}`}><article><header><Checkbox checked={selected} onChange={onToggle} /><AvatarInitials name={match.candidate.fullName} /><div><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title><Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small><Space className="prisma-position-relation-tags" wrap><MatchRelationTags match={match} />{match.positionDecision === "confirmed" ? <Tag color="green">Relação confirmada por você</Tag> : match.positionDecision === "dismissed" ? <Tag>Não considerar</Tag> : null}<DetailedStatusTag match={match} /></Space></div><Space orientation="vertical"><Button onClick={() => onNavigate(`/profiles/${match.candidate.personId}/profile`)} type="primary">Ver perfil</Button><Button onClick={onEvaluate}>{match.semanticAssessment && match.semanticAssessment.status !== "complete" ? "Ver análise disponível" : match.discoveryGroup === "contextual_signals" ? "Ver sinais encontrados" : "Ver como o score foi calculado"}</Button></Space></header><MatchingScoreSummary match={match} />{match.candidate.profileData.summary ? <Typography.Paragraph ellipsis={{ rows: 2 }}>{match.candidate.profileData.summary}</Typography.Paragraph> : null}<section className="prisma-position-relation"><strong>Por que esta Pessoa aparece</strong><Typography.Text strong>Relação da trajetória</Typography.Text><Typography.Paragraph>{match.trajectoryAssessment.explanation}</Typography.Paragraph>{match.areaRelation.status !== "none" ? <><Typography.Text strong>Área profissional observada</Typography.Text><Typography.Paragraph>{match.areaRelation.explanation}</Typography.Paragraph></> : null}<Typography.Text strong>Proximidade do cargo</Typography.Text><Typography.Paragraph>{match.positionRelation.explanation}</Typography.Paragraph><Space wrap><Button disabled={(Boolean(match.semanticAssessment) && match.semanticAssessment?.status !== "complete") || match.positionDecision === "confirmed"} loading={deciding} onClick={() => onDecision("confirmed")} size="small" type={match.positionDecision === "confirmed" ? "default" : "primary"}>Confirmar relação</Button><Button disabled={(Boolean(match.semanticAssessment) && match.semanticAssessment?.status !== "complete") || match.positionDecision === "dismissed"} loading={deciding} onClick={() => onDecision("dismissed")} size="small">Não considerar</Button>{onLearn ? <Button disabled={match.positionDecision !== "confirmed" || !match.positionRelation.evidence.length} loading={learning} onClick={onLearn} size="small">Propor relação à Knowledge</Button> : null}</Space></section><section className="prisma-match-reasons"><strong><FileSearchOutlined /> Evidências que trouxeram o Perfil</strong><Space wrap>{match.reasons.slice(0, 5).map((reason) => <Tag key={reason}>{reason}</Tag>)}</Space></section>{match.discoveryGroup === "contextual_signals" ? <div className="prisma-match-evidence-grid"><MatchBucket color="warning" items={contextualSignals} title={`Sinais encontrados (${contextualSignals.length})`} /></div> : <div className="prisma-match-evidence-grid"><MatchBucket color="success" items={met.map((item) => item.requirement.label)} title={`Atendidos (${met.length})`} /><MatchBucket color="warning" items={partial.map((item) => item.requirement.label)} title={`Parciais para revisão (${partial.length})`} /><MatchBucket color="warning" items={related.map((item) => `${item.relatedSignal}: sinal relacionado`)} title={`Sinais relacionados (${related.length})`} /><MatchBucket color="error" items={missing.map((item) => item.requirement.label)} title={`Requisitos sem evidência encontrada (${missing.length})`} description="Requisitos da posição para os quais não foi encontrada evidência no Perfil publicado." /></div>}{vacancy && onReviewed ? <TrajectoryConflictReview canReview={canReview} match={match} onResolved={onReviewed} vacancy={vacancy} /> : null}</article></PrismaCard>;
+  const hasReview = Boolean(vacancy && onReviewed && match.semanticFallback?.status === "indeterminate"
+    && match.semanticFallback.reasonCode === "READINGS_DISAGREE");
+
+  return <PrismaCard className={cardClass}><article className="prisma-vacancy-match-layout">
+    <header className="prisma-vacancy-match-identity">
+      <Checkbox checked={selected} onChange={onToggle} />
+      <AvatarInitials name={match.candidate.fullName} />
+      <div className="prisma-vacancy-match-person">
+        <Typography.Title level={3}>{match.candidate.fullName}</Typography.Title>
+        <Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text>
+        <small><EnvironmentOutlined aria-hidden="true" /> {match.candidate.location || "Localização não informada"}</small>
+        <Space className="prisma-position-relation-tags" wrap>
+          <MatchRelationTags match={match} />
+          {match.positionDecision === "confirmed" ? <Tag color="green">Relação confirmada por você</Tag>
+            : match.positionDecision === "dismissed" ? <Tag>Não considerar</Tag> : null}
+          <DetailedStatusTag match={match} />
+        </Space>
+      </div>
+      <MatchingScoreSummary match={match} />
+    </header>
+
+    <div className={"prisma-vacancy-action-hub" + (hasReview ? " has-review" : "")}>
+      <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
+        <strong className="prisma-vacancy-action-title"><SearchOutlined aria-hidden="true" /> Consultar</strong>
+        <Typography.Text type="secondary">Explore o Perfil e entenda como o score foi calculado.</Typography.Text>
+        <Space wrap>{profileButton}{analysisButton}</Space>
+      </section>
+      {hasReview && vacancy && onReviewed ? <TrajectoryConflictReview canReview={canReview} match={match} onResolved={onReviewed} vacancy={vacancy} /> : null}
+      <section className="prisma-vacancy-action-group is-decision" aria-label="Decisão humana">
+        <strong className="prisma-vacancy-action-title"><UserOutlined aria-hidden="true" /> Decisão humana</strong>
+        <Typography.Text type="secondary">Com base nas evidências, defina o próximo passo.</Typography.Text>
+        <Space wrap>
+          <Button disabled={(Boolean(match.semanticAssessment) && match.semanticAssessment?.status !== "complete") || match.positionDecision === "confirmed"}
+            loading={deciding} onClick={() => onDecision("confirmed")} size="small"
+            type={match.positionDecision === "confirmed" ? "default" : "primary"}>Confirmar relação</Button>
+          <Button disabled={(Boolean(match.semanticAssessment) && match.semanticAssessment?.status !== "complete") || match.positionDecision === "dismissed"}
+            loading={deciding} onClick={() => onDecision("dismissed")} size="small">Não considerar</Button>
+          {onLearn ? <Button disabled={match.positionDecision !== "confirmed" || !match.positionRelation.evidence.length}
+            loading={learning} onClick={onLearn} size="small">Propor relação à Knowledge</Button> : null}
+        </Space>
+      </section>
+    </div>
+
+    <div className="prisma-vacancy-evidence-layout">
+      <section className="prisma-vacancy-evidence-panel is-trajectory">
+        <strong className="prisma-vacancy-evidence-title"><FileSearchOutlined /> Por que esta Pessoa aparece</strong>
+        <div className="prisma-position-relation">
+          <Typography.Text strong>Relação da trajetória</Typography.Text><Typography.Paragraph>{match.trajectoryAssessment.explanation}</Typography.Paragraph>
+          {match.areaRelation.status !== "none" ? <><Typography.Text strong>Área profissional observada</Typography.Text><Typography.Paragraph>{match.areaRelation.explanation}</Typography.Paragraph></> : null}
+          <Typography.Text strong>Proximidade do cargo</Typography.Text><Typography.Paragraph>{match.positionRelation.explanation}</Typography.Paragraph>
+        </div>
+        {match.candidate.profileData.summary ? <div className="prisma-vacancy-professional-summary">
+          <strong><UserOutlined aria-hidden="true" /> Resumo profissional</strong><Typography.Paragraph ellipsis={{ rows: 2 }}>{match.candidate.profileData.summary}</Typography.Paragraph>
+        </div> : null}
+        <div className="prisma-match-reasons"><strong>Evidências que trouxeram o Perfil</strong>
+          <Space wrap>{match.reasons.slice(0, 5).map((reason) => <Tag key={reason}>{reason}</Tag>)}</Space>
+        </div>
+      </section>
+      <section className="prisma-vacancy-evidence-panel is-requirements">
+        <strong className="prisma-vacancy-evidence-title"><FileSearchOutlined aria-hidden="true" /> Requisitos da Posição</strong>
+        <Typography.Text type="secondary">Síntese dos requisitos e da cobertura de evidências neste Perfil.</Typography.Text>
+        {match.discoveryGroup === "contextual_signals" ? <div className="prisma-match-evidence-grid is-contextual">
+          <MatchBucket color="warning" items={contextualSignals} title={"Sinais encontrados (" + contextualSignals.length + ")"} />
+        </div> : <div className="prisma-match-evidence-grid">
+          <MatchBucket color="success" items={met.map((item) => item.requirement.label)} title={"Atendidos (" + met.length + ")"} />
+          <MatchBucket color="warning" items={partial.map((item) => item.requirement.label)} title={"Parciais para revisão (" + partial.length + ")"} />
+          <MatchBucket color="warning" items={related.map((item) => item.relatedSignal + ": sinal relacionado")} title={"Sinais relacionados (" + related.length + ")"} />
+          <MatchBucket color="error" items={missing.map((item) => item.requirement.label)}
+            title={"Requisitos sem evidência encontrada (" + missing.length + ")"}
+            description="Requisitos da posição para os quais não foi encontrada evidência no Perfil publicado." />
+        </div>}
+      </section>
+    </div>
+  </article></PrismaCard>;
 }
 
 function MatchDrawer({ evaluationId, match, onClose, onNavigate, open, vacancy }: { evaluationId: string | null; match: VacancyCandidateMatch | null; onClose: () => void; onNavigate: (path: string) => void; open: boolean; vacancy: VacancyDetail | null }) {

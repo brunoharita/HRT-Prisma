@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.18
+version: 2.51.19
 last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
+
+## Composição visual da lista de Pessoas por Posição
+
+O cartão da lista foi reorganizado conforme a referência aprovada em `docs/qa/assets/candidate-match-card-action-hub-reference.png`: identidade e score lado a lado; ações `Consultar`, `Revisão da IA` quando aplicável e `Decisão humana` agrupadas; trajetória e requisitos em duas colunas, com empilhamento responsivo. Os mesmos controles, condições, autorização, handlers, evidências e regras de Grupo A/B/C permanecem. Não há mudança de matching, IA, score, Knowledge, banco, Edge ou autorização. Contrato e comparação local: `docs/qa/agreement-candidate-card-visual.md` v1.0.0 e `docs/qa/aot-candidate-card-visual.md`. A prévia visual foi isolada, usou dados demonstrativos e não acionou IA nem alterou Pessoa real.
 
 ## Checagem explícita para discordância antiga — publicada em produção
 

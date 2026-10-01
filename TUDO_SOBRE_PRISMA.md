@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 313
-source_manifest_sha256: 222de8753e56a2e1b2df0287a696e0240c033b700aa6d24c79d14fa2176d214c
+documentation_source_count: 316
+source_manifest_sha256: f751b3cdc2b73786616870e4a8ac45c7f86cfc083d9b90f0caaf1626222dc87e
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.18
+version: 2.51.19
 last_verified: 2026-09-30
 ---
 
 # Estado atual do Prisma
+
+## Composição visual da lista de Pessoas por Posição
+
+O cartão da lista foi reorganizado conforme a referência aprovada em `docs/qa/assets/candidate-match-card-action-hub-reference.png`: identidade e score lado a lado; ações `Consultar`, `Revisão da IA` quando aplicável e `Decisão humana` agrupadas; trajetória e requisitos em duas colunas, com empilhamento responsivo. Os mesmos controles, condições, autorização, handlers, evidências e regras de Grupo A/B/C permanecem. Não há mudança de matching, IA, score, Knowledge, banco, Edge ou autorização. Contrato e comparação local: `docs/qa/agreement-candidate-card-visual.md` v1.0.0 e `docs/qa/aot-candidate-card-visual.md`. A prévia visual foi isolada, usou dados demonstrativos e não acionou IA nem alterou Pessoa real.
 
 ## Checagem explícita para discordância antiga — publicada em produção
 
@@ -11537,6 +11541,55 @@ O build mantém o aviso já conhecido de chunk Ant Design acima de 900 kB. Não 
 
 ---
 
+## Source: `docs/qa/agreement-candidate-card-visual.md`
+
+# Acordo — cartão de Pessoas por Posição, composição visual v1.0.0
+
+Decisão de Bruno: implementar na lista de Pessoas por Posição a proposta visual 2, preservando integralmente o funcionamento atual. Referência normativa de estrutura: `docs/qa/assets/candidate-match-card-action-hub-reference.png` (SHA-256 `de50e17478d3a65a60c0dfc876660d1296f7bba57fe711ad7db81f4f0ace5385`). Nomes, contagens, score e textos de exemplo da imagem são ilustrativos; o runtime sempre usa dados e estados reais.
+
+## DEVE
+
+- D-01 — No cartão completo, exibir identidade, localização e etiquetas à esquerda e o mesmo resumo do Score Prisma em painel compacto à direita. Seleção para comparação permanece disponível.
+- D-02 — Abaixo do cabeçalho, reunir as ações em uma faixa horizontal com grupos `Consultar`, `Revisão da IA` quando houver divergência revisável, e `Decisão humana`. Cada controle aparece uma vez, conserva seu handler, condição de exibição, autorização, estado desabilitado e loading. A revisão expandida permanece no mesmo cartão, com espaço suficiente para trechos e decisões.
+- D-03 — Sob a faixa de ações, usar duas colunas: à esquerda explicação da trajetória, área, proximidade, resumo profissional e evidências que trouxeram o Perfil; à direita requisitos e cobertura, mantendo os quatro grupos existentes e o tratamento contextual do Grupo C. Preservar os mesmos dados, textos de evidência, limites de lista e versões.
+- D-04 — Em larguras menores, empilhar progressivamente painel de score, ações e colunas de conteúdo, sem overflow horizontal nem ocultar controles, evidência ou estado de revisão.
+- D-05 — Estados de IA pendente, falha, discordância, revisão aberta, decisão confirmada/descartada, ausência de score e Grupo C mantêm as mesmas regras e ações atuais. A referência não autoriza inferir uma decisão da IA nem inventar quantidade de conflitos.
+
+## PROIBIDO
+
+- P-01 — Alterar matching, score, pesos, ordem dos grupos, chamadas de IA, cache, Knowledge, fonte de dados, autorização ou efeitos das decisões.
+- P-02 — Duplicar ações, transformar revisão em aprovação obrigatória, ocultar lacunas ou trocar ausência de evidência por incapacidade.
+- P-03 — Copiar literalmente da imagem os dados demonstrativos de Bruno ou o score 32/100 para outros Perfis.
+
+## FORA DE ESCOPO
+
+- F-01 — Tela de comparação, painel de score em Drawer, perfil da Pessoa, fluxos de edição, banco, Edge, backend e mudanças de produto fora da lista.
+
+## AUTONOMIA
+
+- A-01 — Ajustar composição React/CSS, ícones existentes, espaçamento e rótulos auxiliares sem mudar a semântica dos controles. Pode preservar textos de botões atuais quando forem mais precisos que a ilustração.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — No mesmo estado de Grupo B com divergência, comparar render desktop de viewport similar à referência: cabeçalho identidade/score, faixa de três grupos, conteúdo em duas colunas e destaque correto.
+- CA-02 — Testar estados representativos A/B/C, análise pendente, revisão da IA aberta, papel sem autorização e decisão anterior; comparar presença, unicidade e handlers dos controles com o baseline.
+- CA-03 — Comprovar composição responsiva e navegação por teclado/foco; typecheck, build e regressão funcional proporcional da lista.
+- CA-04 — Publicar somente a superfície web se o plano de release confirmar; smoke em produção sem acionar IA paga ou mutar Pessoas reais.
+
+## Mapa de impacto e preservação
+
+| Área | Relação | Baseline/capacidade protegida | Prova |
+| --- | --- | --- | --- |
+| Cartão da lista e CSS responsivo | direct | Todos os dados/controles no cartão atual; captura fornecida mostra ações dispersas | Comparação visual e testes dos estados |
+| Revisão humana dentro do cartão | direct | Abertura, checagem legada, escolhas e salvamento atuais | Teste de botão único e fluxo local sem provedor |
+| Comparação e Drawer de score | plausible_indirect | Mesmos componentes de resumo/score podem ser compartilhados | Seletores CSS escopados e regressão de render |
+| Autorização, IA, tenant, score e Knowledge | critical_transversal | Nenhum contrato de runtime alterado | Diff restrito, negativos de controles e smoke sem mutação |
+| Banco, Edge e ingestão | no_impact_identified | Nenhum arquivo/contrato compartilhado modificado | Inspeção do diff e plano de release |
+
+Não há pendência material para implementar a composição aprovada. A ausência de ambiente autenticado para screenshot real deve ser declarada como limite, não substituída por afirmação de fidelidade visual não observada.
+
+---
+
 ## Source: `docs/qa/agreement-contract-template.md`
 
 # Contrato de Acordos — <Movimento>
@@ -14211,6 +14264,35 @@ Nenhuma pendência material no escopo autorizado.
 - Data: 2026-09-18.
 - Evidência de aprovação: mensagem “faça isso para garantir que o gpt internalize a regra ao criar prompts que demandem criação ou alteração de telas ou elementos visuais”.
 - Referência para o prompt: este contrato versão 1.0.0 e ADR-061.
+
+---
+
+## Source: `docs/qa/aot-candidate-card-visual.md`
+
+# AoT — cartão de Pessoas por Posição
+
+Contrato: `docs/qa/agreement-candidate-card-visual.md` v1.0.0. Referência normativa: `docs/qa/assets/candidate-match-card-action-hub-reference.png`. Baseline funcional: `main` `fe01775da1d8a08624342a26ec70a4b2b573762f`; cartão atual em `web/src/pages/VacancyPages.tsx`, revisão em `web/src/components/TrajectoryConflictReview.tsx` e estilos em `web/src/styles.css`.
+
+## Acordos -> implementação -> teste -> evidência
+
+| ID | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Pendente | Pendente | NOT TESTED |
+| D-02 | Pendente | Pendente | NOT TESTED |
+| D-03 | Pendente | Pendente | NOT TESTED |
+| D-04 | Pendente | Pendente | NOT TESTED |
+| D-05 | Pendente | Pendente | NOT TESTED |
+| P-01 | Pendente | Diff e regressão | NOT TESTED |
+| P-02 | Pendente | Controles e estados | NOT TESTED |
+| P-03 | Pendente | Dados dinâmicos | NOT TESTED |
+
+## Comparação visual e preservação
+
+Pendente: mesmo estado de Grupo B, mesmas informações e viewport equivalente; registrar capturas, diferenças materiais e responsividade. Não declarar PASS de fidelidade sem render observado.
+
+## Release e limites
+
+Pendente.
 
 ---
 
@@ -18094,6 +18176,14 @@ Validar M5, Central da Pessoa e Documentos em `1920x1080`, `1600x900`, `1440x900
 - Smoke autenticado: M5, Central da Pessoa e Documentos aprovados em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, sem overflow horizontal. O M5 apresentou três seletores em colunas no desktop e uma coluna no mobile; a seleção de `Nível acadêmico` atualizou o caminho ativo de evidência. Nenhum descarte, salvamento ou publicação foi acionado.
 - Casos deliberadamente não classificados: quatro formações do Perfil v1 e cinco registros da importação histórica de Bruno Harita permanecem `legacy-unclassified` até revisão humana, porque foram extraídos antes deste classificador. Nenhum backfill sem evidência foi executado.
 - Resíduo externo ao movimento: `supabase db lint` continua apontando o erro histórico de cast do enum `knowledge_inbox_status` em `public.enqueue_knowledge_observation`. Não foi alterado porque pertence ao domínio Knowledge.
+
+---
+
+## Source: `docs/qa/execution-candidate-card-visual.md`
+
+# Execução — cartão de Pessoas por Posição
+
+Fonte congelada: `docs/qa/agreement-candidate-card-visual.md` v1.0.0 e imagem normativa `docs/qa/assets/candidate-match-card-action-hub-reference.png`. Implementar D-01 a D-05, preservar P-01 a P-03 e F-01, exercer A-01, comprovar CA-01 a CA-04, registrar AoT e publicar apenas as superfícies do plano seletivo. A referência fixa topologia, hierarquia, agrupamentos e posição relativa; os registros exibidos nela não são dados a reproduzir.
 
 ---
 

@@ -6245,15 +6245,57 @@ textarea {
 .prisma-vacancy-match-card { transition: border-color 160ms ease, box-shadow 160ms ease; }
 .prisma-vacancy-match-card.is-selected { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.11); }
 .prisma-vacancy-match-card.is-dismissed { opacity: 0.72; background: #f8fafc; }
-.prisma-vacancy-match-card article > header { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
-.prisma-vacancy-match-card article > header h3.ant-typography { margin: 0; }
-.prisma-vacancy-match-card article > header small,
+.prisma-vacancy-match-layout { display: grid; gap: 16px; min-width: 0; }
+.prisma-vacancy-match-identity { display: grid; grid-template-columns: auto auto minmax(0, 1fr) minmax(250px, 350px); gap: 14px; align-items: center; min-width: 0; }
+.prisma-vacancy-match-identity h3.ant-typography { margin: 0 0 2px; font-size: 1.4rem; }
+.prisma-vacancy-match-person { min-width: 0; }
+.prisma-vacancy-match-identity small,
 .prisma-match-person small { display: block; color: var(--prisma-text-muted); }
-.prisma-vacancy-avatar { display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px; border-radius: 50%; color: #2b1a68; background: #ede9fe; font-weight: 800; }
+.prisma-vacancy-avatar { display: grid; place-items: center; width: 52px; height: 52px; flex: 0 0 52px; border-radius: 50%; color: #2b1a68; background: #ede9fe; font-weight: 800; }
 .prisma-position-relation-tags { display: flex; margin-top: 7px; }
+.prisma-vacancy-match-card .prisma-position-relation-tags .ant-tag { margin-inline-end: 0; white-space: normal; }
+.prisma-vacancy-match-identity .prisma-score-summary { grid-template-columns: 1fr; gap: 6px; align-content: center; min-width: 0; min-height: 118px; margin: 0; padding: 18px 22px; border: 0; border-radius: 12px; }
+.prisma-vacancy-match-identity .prisma-score-summary strong { grid-row: auto; font-size: 2rem; }
+.prisma-vacancy-action-hub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; min-width: 0; padding: 16px 18px; border: 1px solid #dce7f4; border-radius: 10px; background: #f8fbff; }
+.prisma-vacancy-action-hub.has-review { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1.2fr); }
+.prisma-vacancy-action-hub.is-pending { grid-template-columns: 1fr; }
+.prisma-vacancy-action-group { display: grid; align-content: start; gap: 10px; min-width: 0; padding: 3px 22px; }
+.prisma-vacancy-action-group.is-consult { grid-column: 1; padding-left: 0; }
+.prisma-vacancy-action-group.is-review { grid-column: 2; border-left: 1px solid #d5dfed; }
+.prisma-vacancy-action-group.is-decision { grid-column: 2; border-left: 1px solid #d5dfed; padding-right: 0; }
+.prisma-vacancy-action-hub.has-review .is-decision { grid-column: 3; }
+.prisma-vacancy-action-group > strong { color: var(--prisma-text); font-size: 1.08rem; }
+.prisma-vacancy-action-title { display: inline-flex; align-items: center; gap: 10px; }
+.prisma-vacancy-action-title .anticon { color: #1767e8; font-size: 1.25rem; }
+.prisma-vacancy-action-group.is-review .prisma-vacancy-action-title .anticon { color: #d28b00; }
+.prisma-vacancy-action-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.prisma-vacancy-action-heading strong { color: var(--prisma-text); font-size: 1.08rem; }
+.prisma-vacancy-action-heading .ant-tag { margin-inline-end: 0; }
+.prisma-vacancy-action-group .ant-typography { min-width: 0; line-height: 1.45; }
+.prisma-vacancy-action-group > .ant-space { align-self: end; margin-top: 2px; }
+.prisma-vacancy-action-group .ant-btn { min-height: 36px; white-space: normal; height: auto; }
+.prisma-vacancy-action-group.is-review > .ant-btn { justify-self: start; margin-top: 2px; color: #5b3900; border-color: #e7b65c; background: #ffd580; font-weight: 700; }
+.prisma-vacancy-action-group.is-review > .ant-btn:hover { color: #4b2c00; border-color: #ce952d; background: #ffcb67; }
+.prisma-vacancy-action-group.is-review .ant-alert { margin-top: 2px; }
+.prisma-trajectory-conflict-details { grid-column: 1 / -1; grid-row: 2; display: grid; justify-items: start; gap: 10px; min-width: 0; margin-top: 16px; padding: 16px; border-top: 1px solid #d5dfed; background: #fffcf5; border-radius: 8px; }
+.prisma-trajectory-conflict-details > .ant-typography { margin: 0; }
+.prisma-trajectory-conflict-details .ant-alert { width: 100%; }
+.prisma-trajectory-conflict-item { width: 100%; margin: 4px 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+.prisma-trajectory-conflict-item details { margin: 8px 0; overflow-wrap: anywhere; }
+.prisma-trajectory-conflict-item details summary { cursor: pointer; color: #345579; }
+.prisma-vacancy-evidence-layout { display: grid; grid-template-columns: minmax(0, 1.17fr) minmax(0, 1fr); gap: 16px; min-width: 0; }
+.prisma-vacancy-evidence-panel { display: grid; align-content: start; gap: 14px; min-width: 0; padding: 18px 20px; border: 1px solid #dce7f4; border-radius: 10px; background: #fff; }
+.prisma-vacancy-evidence-title { color: var(--prisma-text); font-size: 1.08rem; }
+.prisma-vacancy-evidence-title .anticon { margin-right: 7px; color: #526c96; }
+.prisma-vacancy-evidence-panel > .ant-typography { margin: -7px 0 0; }
 .prisma-position-relation { display: grid; gap: 7px; margin-top: 14px; padding: 12px; border: 1px solid #cfe0ff; border-radius: 10px; background: #f6f9ff; }
 .prisma-position-relation .ant-typography { margin: 0; }
+.prisma-vacancy-evidence-panel .prisma-position-relation { gap: 8px; margin: 0; padding: 0; border: 0; background: transparent; }
+.prisma-vacancy-professional-summary { padding-top: 14px; border-top: 1px solid #e2e8f0; }
+.prisma-vacancy-professional-summary .anticon { margin-right: 7px; color: #526c96; }
+.prisma-vacancy-professional-summary .ant-typography { margin: 6px 0 0; }
 .prisma-match-reasons { display: grid; gap: 8px; margin: 12px 0; }
+.prisma-vacancy-evidence-panel .prisma-match-reasons { margin: 0; padding-top: 14px; border-top: 1px solid #e2e8f0; }
 .prisma-match-reasons .ant-space,
 .prisma-match-reasons .ant-space-item { min-width: 0; max-width: 100%; }
 .prisma-match-reasons .ant-tag { max-width: 100%; margin-inline-end: 0; white-space: normal; overflow-wrap: anywhere; }
@@ -6275,7 +6317,9 @@ textarea {
 .prisma-score-versions > div { display: grid; grid-template-columns: minmax(90px, 0.25fr) minmax(0, 1fr); gap: 10px; }
 .prisma-score-versions dt { font-weight: 700; }
 .prisma-score-versions dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
-.prisma-match-evidence-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.prisma-match-evidence-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.prisma-match-evidence-grid:not(.is-contextual) > :last-child { grid-column: 1 / -1; }
+.prisma-match-evidence-grid.is-contextual { grid-template-columns: 1fr; }
 .prisma-match-bucket { display: grid; align-content: start; gap: 8px; min-height: 92px; padding: 11px; border: 1px solid; border-radius: 10px; }
 .prisma-match-bucket.is-success { border-color: #b7ebc6; background: #f2fff6; }
 .prisma-match-bucket.is-warning { border-color: #ffe0a3; background: #fffaf0; }
@@ -6294,7 +6338,10 @@ textarea {
 @media (max-width: 1100px) {
   .prisma-vacancy-start-card > .ant-card-body { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .prisma-requirement-editor { grid-template-columns: minmax(180px, 1fr) minmax(150px, 0.55fr) minmax(240px, auto) auto; }
-  .prisma-match-evidence-grid { grid-template-columns: 1fr; }
+  .prisma-vacancy-evidence-layout { grid-template-columns: 1fr; }
+  .prisma-vacancy-action-hub.has-review { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prisma-vacancy-action-hub.has-review .is-decision { grid-column: 1 / -1; padding: 16px 0 0; margin-top: 14px; border-left: 0; border-top: 1px solid #d5dfed; }
+  .prisma-vacancy-action-hub.has-review .prisma-trajectory-conflict-details { grid-row: auto; }
 }
 
 @media (max-width: 760px) {
@@ -6321,10 +6368,19 @@ textarea {
   .prisma-vacancy-advisor-submit .ant-btn { width: 100%; }
   .prisma-vacancy-advisor-answer footer { align-items: stretch; flex-direction: column; }
   .prisma-vacancy-advisor-answer footer .ant-btn { width: 100%; }
-  .prisma-vacancy-match-card article > header { grid-template-columns: auto auto 1fr; }
-  .prisma-vacancy-match-card article > header > .ant-space { grid-column: 1 / -1; width: 100%; flex-direction: row; }
-  .prisma-vacancy-match-card article > header > .ant-space .ant-space-item { min-width: 0; flex: 1; }
-  .prisma-vacancy-match-card article > header > .ant-space .ant-btn { width: 100%; min-height: 32px; height: auto; white-space: normal; }
+  .prisma-vacancy-match-identity { grid-template-columns: auto auto minmax(0, 1fr); }
+  .prisma-vacancy-match-identity .prisma-score-summary { grid-column: 1 / -1; min-height: 0; }
+  .prisma-vacancy-action-hub,
+  .prisma-vacancy-action-hub.has-review { grid-template-columns: 1fr; }
+  .prisma-vacancy-action-group.is-consult,
+  .prisma-vacancy-action-group.is-review,
+  .prisma-vacancy-action-group.is-decision,
+  .prisma-vacancy-action-hub.has-review .is-decision { grid-column: 1; padding: 12px 0; border-left: 0; }
+  .prisma-vacancy-action-group.is-consult { padding-top: 0; }
+  .prisma-vacancy-action-group.is-review,
+  .prisma-vacancy-action-group.is-decision,
+  .prisma-vacancy-action-hub.has-review .is-decision { margin-top: 10px; border-top: 1px solid #d5dfed; }
+  .prisma-vacancy-action-hub .prisma-trajectory-conflict-details { grid-column: 1; grid-row: auto; }
   .prisma-vacancy-table-wrap { overflow-x: auto; }
   .prisma-vacancy-table-wrap .ant-table { min-width: 540px; }
   .prisma-vacancy-assist-actions { flex-direction: column-reverse; }
@@ -6335,20 +6391,23 @@ textarea {
   .prisma-comparison-mobile .ant-card-body .ant-typography { margin: 0; }
 }
 
+@media (max-width: 600px) {
+  .prisma-vacancy-evidence-panel .prisma-match-evidence-grid { grid-template-columns: 1fr; }
+  .prisma-vacancy-evidence-panel .prisma-match-evidence-grid > :last-child { grid-column: 1; }
+}
+
 @media (max-width: 420px) {
   .prisma-vacancy-table-wrap .ant-table { min-width: 480px; }
-  .prisma-vacancy-match-card article > header { grid-template-columns: auto 1fr; }
-  .prisma-vacancy-match-card article > header > .ant-checkbox-wrapper { grid-row: 1; }
+  .prisma-vacancy-match-identity { grid-template-columns: auto minmax(0, 1fr); }
+  .prisma-vacancy-match-identity > .ant-checkbox-wrapper { grid-row: 1; }
   .prisma-vacancy-match-card .prisma-vacancy-avatar { display: none; }
+  .prisma-vacancy-action-group .ant-space { width: 100%; }
+  .prisma-vacancy-action-group .ant-space-item,
+  .prisma-vacancy-action-group .ant-btn { width: 100%; }
   .prisma-score-summary { grid-template-columns: 1fr; }
   .prisma-score-summary strong { grid-row: auto; }
   .prisma-score-versions > div { grid-template-columns: 1fr; gap: 2px; }
 .prisma-matching-score-drawer .ant-drawer-body { min-width: 0; }
-.prisma-trajectory-conflict-review { margin: 16px 0; padding: 16px; border: 1px solid #d6c7a3; border-radius: 8px; background: #fffcf4; }
-.prisma-trajectory-conflict-review > .ant-btn { margin-bottom: 12px; }
-.prisma-trajectory-conflict-item { margin: 12px 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
-.prisma-trajectory-conflict-item details { margin: 8px 0; overflow-wrap: anywhere; }
-.prisma-trajectory-conflict-item details summary { cursor: pointer; color: #345579; }
 }
 
 .prisma-person-data-shell {
