@@ -6273,6 +6273,7 @@ textarea {
 .prisma-vacancy-action-heading .ant-tag { margin-inline-end: 0; }
 .prisma-vacancy-action-group .ant-typography { min-width: 0; line-height: 1.45; }
 .prisma-vacancy-action-group > .ant-space { align-self: end; margin-top: 2px; }
+.prisma-vacancy-action-group .ant-space-item { min-width: 0; }
 .prisma-vacancy-action-group .ant-btn { min-height: 36px; white-space: normal; height: auto; }
 .prisma-vacancy-action-group.is-review > .ant-btn { justify-self: start; margin-top: 2px; color: #5b3900; border-color: #e7b65c; background: #ffd580; font-weight: 700; }
 .prisma-vacancy-action-group.is-review > .ant-btn:hover { color: #4b2c00; border-color: #ce952d; background: #ffcb67; }

@@ -431,7 +431,8 @@ test("UI expõe score, cobertura, grupos, explicação, versões e proteção mo
   assert.match(page, /Área relacionada via Knowledge/);
   assert.match(styles, /prisma-score-dimensions \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);
   assert.match(styles, /prisma-match-reasons \.ant-tag[^}]*white-space: normal[^}]*overflow-wrap: anywhere/);
-  assert.match(styles, /prisma-vacancy-match-card article > header > \.ant-space \.ant-space-item[^}]*min-width: 0/);
+  assert.match(styles, /prisma-vacancy-action-group \.ant-space-item[^}]*min-width: 0/);
+  assert.match(styles, /prisma-vacancy-match-identity \.prisma-score-summary[^}]*min-width: 0/);
   assert.doesNotMatch(styles, /prisma-matching-score-drawer[^}]*overflow-x: hidden/);
   assert.match(service, /competency_demonstrated_evidence/);
   assert.match(service, /score: match\.score/);

@@ -21,4 +21,4 @@ Referência: PNG com SHA-256 `de50e17478d3a65a60c0dfc876660d1296f7bba57fe711ad7d
 
 ## Release e limites
 
-Lint, typecheck web, build web, gerador/verificador do Context Pack e `git diff --check` passaram no worktree. O build apresentou somente avisos existentes de chunks grandes/importação dinâmica. Pendente registrar SHA, CI, plano, QA, VPS e smoke após publicação; nenhum resultado remoto é presumido aqui.
+Lint, typecheck web, build web, gerador/verificador do Context Pack e `git diff --check` passaram no worktree. Dois testes estruturais que buscavam a marcação antiga foram atualizados para verificar o mesmo conteúdo e a proteção responsiva no novo agrupamento; os 22 testes direcionados de `matchingEvidenceLabel` e `matchingScore` passaram. O build apresentou somente avisos existentes de chunks grandes/importação dinâmica. O primeiro CI falhou por export de contexto defasado; o segundo alcançou 716 testes e falhou em três asserções estáticas da composição antiga, corrigidas neste mesmo movimento. Pendente registrar novo SHA, CI, plano, VPS e smoke após publicação; nenhum resultado remoto é presumido aqui.

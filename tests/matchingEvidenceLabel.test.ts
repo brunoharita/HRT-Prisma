@@ -6,7 +6,10 @@ const source = readFileSync("web/src/pages/VacancyPages.tsx", "utf8");
 const description = "Requisitos da posição para os quais não foi encontrada evidência no Perfil publicado.";
 
 test("missing requirements bucket uses the agreed title and description with dynamic count", () => {
-  assert.ok(source.includes('items={missing.map((item) => item.requirement.label)} title={`Requisitos sem evidência encontrada (${missing.length})`} description="' + description + '"'));
+  const missingBucket = source.split('<MatchBucket color="error"')[1]?.split("/>")[0] ?? "";
+  assert.ok(missingBucket.includes('items={missing.map((item) => item.requirement.label)}'));
+  assert.ok(missingBucket.includes('title={"Requisitos sem evidência encontrada (" + missing.length + ")"}'));
+  assert.ok(missingBucket.includes('description="' + description + '"'));
   assert.ok(source.includes('const missing = match.requirements.filter((item) => item.status === "no_evidence")'));
   assert.ok(!source.includes('title={`Sem evidência suficiente (${missing.length})`}'));
 });
@@ -21,8 +24,8 @@ test("description is optional and supplied only to the missing requirements buck
 });
 
 test("other categories and the context-only branch retain their presentation", () => {
-  for (const label of ["Atendidos (${met.length})", "Parciais para revisão (${partial.length})", "Sinais relacionados (${related.length})", "Sinais encontrados (${contextualSignals.length})"]) {
+  for (const label of ['"Atendidos (" + met.length', '"Parciais para revisão (" + partial.length', '"Sinais relacionados (" + related.length', '"Sinais encontrados (" + contextualSignals.length']) {
     assert.ok(source.includes(label));
   }
-  assert.ok(source.includes('match.discoveryGroup === "contextual_signals" ? <div className="prisma-match-evidence-grid">'));
+  assert.ok(source.includes('match.discoveryGroup === "contextual_signals" ? <div className="prisma-match-evidence-grid is-contextual">'));
 });
