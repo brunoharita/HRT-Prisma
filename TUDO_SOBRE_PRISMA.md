@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 316
-source_manifest_sha256: 1efb34502919b12b19405237ef9001dcc1ce9da01defed0dde5d368c01b9201e
+documentation_source_count: 319
+source_manifest_sha256: eff8bd673bc25739387484a2f5aa4b12769a77c6f52d3139532f5807cd5d85b3
 -->
 
 # Tudo sobre o Prisma
@@ -2624,11 +2624,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.19
-last_verified: 2026-09-30
+version: 2.51.20
+last_verified: 2026-10-01
 ---
 
 # Estado atual do Prisma
+
+## Modal de revisão de divergências
+
+O cartão conserva o agrupamento visual existente, mas a ação `Revisar divergências` abre um modal responsivo. Para cada um dos até cinco conflitos retornados ao operador autorizado, o modal mostra uma pergunta explicativa de revisão, trecho profissional, as duas categorias fechadas e as respectivas referências de evidência. A decisão humana usa opções visíveis e sem pré-seleção: primeira categoria, segunda categoria ou `Não é possível determinar`; o salvamento continua restrito à revisão completa e ao serviço existente. Pares antigos sem respostas registradas mostram causa própria e exigem clique explícito para uma nova checagem; acima de cinco itens ou em falha não há decisão aplicável. O modal não guarda texto livre, não expõe prompt/resposta bruta e não altera matching, score, IA, autorização, banco ou Knowledge. Contrato: `docs/qa/agreement-matching-review-modal.md` v1.0.0. A publicação e a jornada visual autenticada exigem evidência própria no AoT; a existência do código não as comprova.
 
 ## Composição visual da lista de Pessoas por Posição
 
@@ -3926,6 +3930,8 @@ Quando uma tentativa de interpretação por IA não produz leitura válida, a bu
 O cache da interpretação conserva o último par de leituras estruturadas por Perfil, versão da Posição e chave de fontes/método/prompt/modelo. Cada leitura validada retém apenas categoria por trecho e ID da evidência, com modelo resolvido; uma leitura inválida retém somente etapa e motivo tipificados. Uma nova tentativa dessa chave substitui o par anterior. A gravação é atômica com a conclusão, não altera o consenso nem o cálculo pré-IA e não expõe o par ao navegador. Registros anteriores não recebem backfill; este campo não é a resposta bruta do provedor nem um histórico permanente de tentativas. Contrato específico: `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0.
 
 Revisão de divergências `trajectory-human-review-1.0.0`: quando as duas leituras validadas divergem em uma a cinco categorias de trechos profissionais, o Prisma mostra a um `owner`, `admin`, `recruiter` ou Super Admin o trecho, as duas categorias e suas evidências. O operador decide por item, podendo indicar que não é possível determinar. A leitura composta só é concluída se todas as divergências forem resolvidas; caso contrário, o cálculo interno pré-IA permanece, sem escolher um lado automaticamente. Uma revisão concluída recalcula grupo, score e evidências pelo mesmo motor versionado e identifica o ID/versão da revisão no fingerprint e no snapshot. A decisão é contextual ao Perfil, versão da Posição e fontes vigentes, com revisor, horário e par original preservados; não publica regra na Knowledge. Com mais de cinco conflitos, ou par inválido/obsoleto, não há tratamento item a item nem redução da avaliação interna. `docs/qa/agreement-matching-human-conflicts.md` v1.0.0.
+
+A apresentação `matching-review-modal-1.0.0` abre essas divergências em um modal na lista de Pessoas. A pergunta legível é uma orientação para a revisão humana, não o prompt original da IA. Cada item alinha trecho, categoria e referência de evidência das duas leituras; a classificação humana fica restrita às duas categorias retornadas ou `Não é possível determinar`, sem escolha prévia nem texto livre. A abertura do modal apenas carrega a revisão; a checagem de par antigo sem respostas armazenadas exige ação separada e explícita. A apresentação não altera o contrato de análise, autoridade, score ou persistência. `docs/qa/agreement-matching-review-modal.md` v1.0.0.
 
 ## Saída por requisito
 
@@ -13690,6 +13696,44 @@ Baseline: `main` em `75b3dc52fbb11d5ae2e1e1308ad6e29eadf74896`; Posição backen
 
 ---
 
+## Source: `docs/qa/agreement-matching-review-modal.md`
+
+# Acordo — modal de revisão de divergências v1.0.0
+
+Decisão de Bruno em 2026-10-01: apresentar a pergunta de revisão, o trecho profissional, as duas classificações divergentes e suas evidências em um modal na lista de Pessoas por Posição. A resposta humana é uma seleção fechada. Este acordo altera somente a apresentação do fluxo já aprovado em `agreement-matching-human-conflicts.md` e `agreement-matching-legacy-review-refresh.md`.
+
+## DEVE
+
+- D-01 — Abrir a revisão em um modal responsivo a partir do cartão, sem expandir a lista nem sair da Posição; identificar a Pessoa e manter o cálculo interno visível ao fundo.
+- D-02 — Para cada um dos até cinco itens retornados pelo serviço autorizado, mostrar uma pergunta legível de revisão, o trecho publicado, as classificações da primeira e da segunda leitura e as respectivas referências de evidência, alinhadas por item.
+- D-03 — Oferecer exatamente as duas classificações recebidas e `Não é possível determinar` como escolhas humanas por item, sem pré-seleção. Salvar e recalcular somente após escolha para todos os itens; conservar a semântica atual quando alguma escolha for indeterminada.
+- D-04 — Para um par antigo indisponível, dizer que as respostas não podem ser recuperadas e oferecer nova checagem apenas por clique explícito; manter erros, excesso de cinco itens e carregamento causalmente distintos.
+
+## PROIBIDO
+
+- P-01 — Inventar a pergunta literal ou as respostas antigas da IA, apresentar a pergunta explicativa da revisão como prompt original, ou expor resposta bruta do provedor.
+- P-02 — Campo aberto como classificação, seleção automática, mudança no limite de cinco itens, score ou grupo antes de uma revisão íntegra, ou reprocessamento ao abrir o modal.
+- P-03 — Alterar papéis, isolamento de tenant, motor de score, prompt/modelo, cache, Knowledge ou dados profissionais neste movimento.
+
+## FORA DE ESCOPO
+
+- F-01 — Novas categorias, justificativa textual persistida, outra política de IA, nova página e reprocessamento de Pessoas reais para teste.
+
+## AUTONOMIA
+
+- A-01 — Engenharia escolhe componentes e detalhes visuais acessíveis, reutilizando o modal, a carga, a checagem explícita, as opções tipadas e o salvamento existentes.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 — Cartão mantém as três zonas de ação e o botão abre modal; até cinco itens mostram pares alinhados, trecho, pergunta de revisão e três opções visíveis; mobile empilha as leituras.
+- CA-02 — Nenhuma opção nasce selecionada; salvar está indisponível enquanto faltar escolha; `Não é possível determinar` preserva o cálculo interno; conclusão usa o serviço atual.
+- CA-03 — Par antigo, excesso de cinco, erro e carregamento não mostram respostas inventadas nem habilitam salvamento; nova IA só começa após clique específico.
+- CA-04 — O operador sem papel de revisão não recebe o modal; backend, banco, Edge, matching, score e Knowledge permanecem sem diff funcional.
+
+Estado: aprovado pelo pedido explícito de implementação de Bruno em 2026-10-01.
+
+---
+
 ## Source: `docs/qa/agreement-matching-selective-semantic-triage.md`
 
 # Acordo — triagem ocupacional seletiva antes da IA
@@ -16977,6 +17021,30 @@ F-01/F-02 preservados no diff: sem mudança de prompt/modelo/acionamento da IA, 
 ## Desvios e conclusão
 
 Nenhum desvio funcional intencional do contrato. Regressões intermediárias nos testes de equivalência Knowledge e Posição sem título foram corrigidas antes deste fechamento; os testes respectivos voltaram a passar. O smoke autenticado do caso real não foi feito para não consumir IA nem alterar registros; a nova ordenação de Diego/Bruno não está comprovada em produção. A prova sintética contrasta as mesmas classes profissionais, sem fixar pontos para Pessoas reais. O Context Pack foi gerado e verificado sem incluir um documento não rastreado preexistente do usuário em `docs/qa`; ele foi restaurado sem alteração após a geração. A integração deste fechamento documental em `main` não muda o runtime funcional.
+
+---
+
+## Source: `docs/qa/aot-matching-review-modal.md`
+
+# AoT — modal de revisão de divergências
+
+Contrato: `docs/qa/agreement-matching-review-modal.md` v1.0.0. Baseline: `main` anterior ao movimento, revisão expandida no cartão, seleção em lista suspensa, mesma API de carga/checagem/salvamento. Mapa de impacto: cartão e estilos (`direct`), carga e salvamento da revisão (`plausible_indirect`), autorização/PII (`critical_transversal`), IA, banco, Knowledge e score (`no_impact_identified`, sem diff funcional previsto).
+
+| ID | Implementação e preservação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Botão do cartão abre modal existente da biblioteca, sem navegação; score fica no cartão | Typecheck, build web e inspeção do diff; visual autenticado pendente | PARTIAL |
+| D-02 | Pergunta explicativa, trecho, duas categorias e evidências alinhadas por item no modal | Teste direcionado e inspeção do componente; renderização autenticada pendente | PARTIAL |
+| D-03 | Três opções visíveis por item, nenhuma pré-selecionada, botão indisponível até concluir todas; gravação e recálculo continuam no serviço anterior | Teste direcionado, typecheck, inspeção da chamada existente; gravação autenticada não executada | PARTIAL |
+| D-04 | Estado legado separado, checagem somente por clique; excesso e erro preservam cálculo | Teste direcionado e inspeção do fluxo; smoke autenticado pendente | PARTIAL |
+| P-01 | Pergunta rotulada como revisão, sem prompt/saída bruta nem respostas inventadas | Inspeção do diff e teste direcionado | PASS |
+| P-02 | Sem campo aberto, sem escolha automática ou chamada IA na abertura | Teste direcionado e inspeção do diff | PASS |
+| P-03 | Sem alteração funcional em Edge, banco, score, prompt, Knowledge ou papéis | Inspeção do diff e plano de release pendente | PARTIAL |
+
+F-01 preservado: sem novas categorias, justificativa persistida ou reprocessamento de Perfil real. A-01: componentes Modal/Radio/Skeleton existentes e estilos locais, sem dependência nova.
+
+## Validação e limites
+
+`pnpm run typecheck:web`, `pnpm run build`, `pnpm run build:web`, `pnpm run lint` e `node --test dist/tests/trajectoryReviewModal.test.js dist/tests/matchingScore.test.js` passaram localmente (21/21 no teste direcionado). Esses checks provam compilação, contratos estáticos e preservação do matching exercitado; não provam a aparência real nem a interação autenticada. Build web emitiu apenas avisos preexistentes de chunks grandes/import dinâmico ineficaz. Context Pack, commit, CI, publicação web, smoke e comparação visual permanecem pendentes neste registro inicial.
 
 ---
 
@@ -21144,6 +21212,16 @@ Fonte congelada: `docs/qa/agreement-matching-legacy-review-refresh.md` v1.0.0. I
 # Execução — consistência do reconhecimento profissional
 
 Implementar integralmente `docs/qa/agreement-matching-recognition-consistency.md` v1.0.0 e preservar `docs/qa/agreement-m86-universal-professional-matching.md` v1.0.0 e `docs/qa/agreement-matching-ai-failure-fallback.md` v1.0.0. Ler os contratos completos antes de atuar. Aplicar D-01–D-05 e P-01–P-03; respeitar F-01–F-02 e autonomia A-01. Fechar CA-01–CA-04 com AoT rastreável, revisão do diff, testes dirigidos, Context Pack e release somente das superfícies exigidas pelo plano. Não usar dados reais como fixture nem produção como ambiente de teste.
+
+---
+
+## Source: `docs/qa/execution-matching-review-modal.md`
+
+# Execução — modal de revisão de divergências v1.0.0
+
+Fonte integral: `docs/qa/agreement-matching-review-modal.md` v1.0.0, aprovado por Bruno em 2026-10-01. Implementar D-01 a D-04 e demonstrar P-01 a P-03 e CA-01 a CA-04, preservando F-01. A-01 delega somente componentes e apresentação.
+
+Reutilizar `TrajectoryConflictReview`, a API de revisão e as categorias estruturadas existentes. Substituir a expansão no cartão por modal responsivo, mostrar as duas leituras e a pergunta humana por item, tornar as três escolhas fechadas visíveis, manter os estados antigos e a checagem explícita. Validar somente a superfície afetada, registrar AoT e publicar as superfícies indicadas pelo plano de release. Não usar IA ou dados pessoais reais para smoke.
 
 ---
 

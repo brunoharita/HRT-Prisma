@@ -8,9 +8,9 @@ last_verified: 2026-10-01
 
 # Estado atual do Prisma
 
-## Modal de revisão de divergências — implementação local
+## Modal de revisão de divergências
 
-O cartão conserva o agrupamento visual existente, mas a ação `Revisar divergências` abre um modal responsivo. Para cada um dos até cinco conflitos retornados ao operador autorizado, o modal mostra uma pergunta explicativa de revisão, trecho profissional, as duas categorias fechadas e as respectivas referências de evidência. A decisão humana usa opções visíveis e sem pré-seleção: primeira categoria, segunda categoria ou `Não é possível determinar`; o salvamento continua restrito à revisão completa e ao serviço existente. Pares antigos sem respostas registradas mostram causa própria e exigem clique explícito para uma nova checagem; acima de cinco itens ou em falha não há decisão aplicável. O modal não guarda texto livre, não expõe prompt/resposta bruta e não altera matching, score, IA, autorização, banco ou Knowledge. Contrato: `docs/qa/agreement-matching-review-modal.md` v1.0.0. A publicação e a jornada visual autenticada ainda precisam de evidência no AoT deste movimento; implementação local não comprova produção.
+O cartão conserva o agrupamento visual existente, mas a ação `Revisar divergências` abre um modal responsivo. Para cada um dos até cinco conflitos retornados ao operador autorizado, o modal mostra uma pergunta explicativa de revisão, trecho profissional, as duas categorias fechadas e as respectivas referências de evidência. A decisão humana usa opções visíveis e sem pré-seleção: primeira categoria, segunda categoria ou `Não é possível determinar`; o salvamento continua restrito à revisão completa e ao serviço existente. Pares antigos sem respostas registradas mostram causa própria e exigem clique explícito para uma nova checagem; acima de cinco itens ou em falha não há decisão aplicável. O modal não guarda texto livre, não expõe prompt/resposta bruta e não altera matching, score, IA, autorização, banco ou Knowledge. Contrato: `docs/qa/agreement-matching-review-modal.md` v1.0.0. A publicação e a jornada visual autenticada exigem evidência própria no AoT; a existência do código não as comprova.
 
 ## Composição visual da lista de Pessoas por Posição
 
