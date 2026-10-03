@@ -1256,6 +1256,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-03"
+    },
+    {
+      "name": "import_text_unicode_contract",
+      "localVersion": "20261003210000",
+      "remoteVersion": "20261003212042",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-03"
     }
   ],
   "localOnly": [

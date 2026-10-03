@@ -6,7 +6,7 @@ product_version: 2.0.2
 current_state_version: 2.51.25
 current_state_last_verified: 2026-10-03
 documentation_source_count: 329
-source_manifest_sha256: 7fb889b68940780d147d2caec1dea42124bafec86cad0c11d794f8bf3bf4838a
+source_manifest_sha256: 5db2394f1de2b3c0bc60ed919c7f9c6deadffcd6096cc8f119ee4f286323154d
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,9 +268,9 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Prisma v2.0.2 recebe complemento Unicode autorizado, ainda em fechamento de rollout: unicode-text-1.0.0, import-evidence-1.1.0 e evidence-adapter-1.0.1. NUL/substitutos isolados têm representação explícita para revisão; PDF/hash/cache/listas/boxes/Unicode válido e revisão humana preservados. QA local/43 dirigidos/243 person-flow PASS. Autorização permanente de transferências necessárias à VPS do Prisma registrada em AGENTS 1.3.2. AoT `docs/qa/aot-import-unicode-v202.md` separa replay e retomada autenticada; não inferir que a tentativa já foi recuperada.
+Prisma v2.0.2 tem complemento Unicode publicado no SHA funcional 96e3ecb: unicode-text-1.0.0, import-evidence-1.1.0 e evidence-adapter-1.0.1. NUL/substitutos isolados têm representação explícita para revisão; PDF/hash/cache/listas/boxes/Unicode válido e revisão humana preservados. QA local/43 dirigidos/48 worker/243 person-flow, CI branch/main, migration, Parser/web, replay dos dois PDFs e smoke HTTPS PASS. Autorização permanente de transferências necessárias à VPS do Prisma registrada em AGENTS 1.3.2. AoT `docs/qa/aot-import-unicode-v202.md` separa replay e retomada autenticada; a tentativa original ainda aguarda retomada humana na Central da Pessoa.
 
-Prisma v2.0.2 está publicado em main/origin/VPS com SHA funcional `6a63605`. `evidence-adapter-1.0.0` e `import-evidence-1.0.0` preservam títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL com rollback, 71 testes dirigidos, 243 person-flow, CI, renders desktop/mobile, migration ativa, Parser/readiness e HTTPS/versão PASS. Replay do PDF/cache real preservou 31 fatos/39 evidências/dois títulos sem IA/rede ou alteração do cache. AoT `docs/qa/aot-import-evidence-v202.md`. Prompt/modelo/cache/revisão humana preservados; a tentativa antiga ainda aguarda retomada pelo operador, cujo fluxo autenticado em produção permanece NOT TESTED.
+A publicação inicial da v2.0.2 ocorreu no SHA funcional `6a63605`, com `evidence-adapter-1.0.0` e `import-evidence-1.0.0` (agora sucedidos pelo complemento acima). Preservou títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL com rollback, 71 testes dirigidos, 243 person-flow, CI, renders desktop/mobile, migration ativa, Parser/readiness e HTTPS/versão PASS. Replay do PDF/cache real preservou 31 fatos/39 evidências/dois títulos sem IA/rede ou alteração do cache. AoT `docs/qa/aot-import-evidence-v202.md`. Prompt/modelo/cache/revisão humana preservados; o fluxo autenticado de retomada em produção permanece NOT TESTED.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
