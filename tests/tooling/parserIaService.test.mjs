@@ -168,7 +168,7 @@ test("M5.7 provider model survives transport, frontend validation and intake pro
     const parsed = structureParserIa({ status: received.status === "partial" ? "partial" : "complete", facts: received.acceptedFacts, uncertainties: received.draft.uncertainties }, output.pages, { sourceSha256: input.sourceSha256, organizationId: input.organizationId, provenance: received.provenance });
     const prepared = preparedParserIa({ sha256: input.sourceSha256, parserIa: parsed }, input.organizationId);
     assert.equal(prepared.provenance.model, PARSER_MODEL);
-    assert.equal(parserIaMethodVersion(prepared), `parser-ia-1.0.0/${PARSER_MODEL}/${received.provenance.promptSha256}/evidence-adapter-1.0.0`);
+    assert.equal(parserIaMethodVersion(prepared), `parser-ia-1.0.0/${PARSER_MODEL}/${received.provenance.promptSha256}/evidence-adapter-1.0.1`);
     assert.equal(output.cached, attempt === 1);
     for (const model of ["", "a/b", "bad model", "a".repeat(81), ".hidden", "model\n"]) {
       assert.throws(() => preparedParserIa({ sha256: input.sourceSha256, parserIa: { ...parsed, provenance: { ...parsed.provenance, model } } }, input.organizationId), /PROVENANCE_INVALID/);
