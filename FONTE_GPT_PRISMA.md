@@ -6,7 +6,7 @@ product_version: 2.0.2
 current_state_version: 2.51.24
 current_state_last_verified: 2026-10-03
 documentation_source_count: 327
-source_manifest_sha256: e6c6facdcab2d7361ea831e40cd9c17cf9704ecb6b4ce85b29c1f7072cec5422
+source_manifest_sha256: fea7231b2c452d4b90fb21de6830e630b5dad58aa29e446a162bf81f3f69b551
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,7 +268,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Prisma v2.0.2 tem a correção de evidências implementada e validada localmente; publicação pendente. `evidence-adapter-1.0.0` e `import-evidence-1.0.0` preservam títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL sintética com rollback, cache/fonte, 71 testes dirigidos e renders desktop/mobile PASS. AoT `docs/qa/aot-import-evidence-v202.md`. Baseline remoto v2.0.1 na KVM2 (`4ccfbf1`) permanece online sem PC/túnel, com prompt/modelo/cache/revisão preservados; a importação do incidente ainda aguarda retomada.
+Prisma v2.0.2 está publicado em main/origin/VPS com SHA funcional `6a63605`. `evidence-adapter-1.0.0` e `import-evidence-1.0.0` preservam títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL com rollback, 71 testes dirigidos, 243 person-flow, CI, renders desktop/mobile, migration ativa, Parser/readiness e HTTPS/versão PASS. Replay do PDF/cache real preservou 31 fatos/39 evidências/dois títulos sem IA/rede ou alteração do cache. AoT `docs/qa/aot-import-evidence-v202.md`. Prompt/modelo/cache/revisão humana preservados; a tentativa antiga ainda aguarda retomada pelo operador, cujo fluxo autenticado em produção permanece NOT TESTED.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 

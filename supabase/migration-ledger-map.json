@@ -1248,6 +1248,14 @@
       "remoteVersion": "20260927162056",
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified"
+    },
+    {
+      "name": "import_evidence_persistence_contract",
+      "localVersion": "20261003193000",
+      "remoteVersion": "20261003195747",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-03"
     }
   ],
   "localOnly": [
