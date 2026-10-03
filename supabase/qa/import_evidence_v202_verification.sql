@@ -68,10 +68,12 @@ begin
   select * into reopened from public.persist_person_extraction(v202_id('org'),resolved.person_id,resolved.document_id,pages,d,1,0,'pdfjs-5.4.296/parser-ia-spans-v1',null,method,'synthetic','v202-persist-corrected-data',null);
   perform v202_assert(reopened.reused and reopened.processing_attempt_id=attempt.processing_attempt_id,'corrected persistence is idempotent');
   perform v202_assert((select field_evidence=pages#>'{0,field_evidence}' and layout_blocks=pages#>'{0,layout_blocks}' from public.document_page_extractions where processing_attempt_id=attempt.processing_attempt_id),'every region and separate descriptor preserved');
-  select * into review from public.start_profile_review(v202_id('org'),resolved.person_id,resolved.document_id,attempt.processing_attempt_id,'v202-start-human-review');
-  select * into reopened from public.start_profile_review(v202_id('org'),resolved.person_id,resolved.document_id,attempt.processing_attempt_id,'v202-start-human-review');
+  select * into review from public.start_document_revision(v202_id('org'),resolved.person_id,resolved.document_id,attempt.processing_attempt_id,'v202-start-human-review');
+  select * into reopened from public.start_document_revision(v202_id('org'),resolved.person_id,resolved.document_id,attempt.processing_attempt_id,'v202-start-human-review');
   perform v202_assert(reopened.reused and reopened.review_id=review.review_id,'review can be opened and reopened without duplicate');
   perform v202_assert((select extracted_data=d and reviewed_data=d and state='draft' from public.profile_reviews where id=review.review_id),'review retains sections/results/tools/contexts without approval');
+  perform v202_assert((select count(*)=(select value::integer from v202_state where key='evidence_count') from public.profile_review_evidence_links where review_id=review.review_id and spatial_region_id is not null),'actual UI revision RPC links every original region');
+  perform v202_assert((select count(*)=4 from public.profile_review_evidence_links where review_id=review.review_id and (field_path in ('toolsAndTechnologies','professionalContexts') or field_path like 'customSections.%.name')),'titles/tools/contexts remain selectable original evidence');
   select * into reopened from public.save_profile_review(v202_id('org'),review.review_id,review.lock_version,d||'{"toolsAndTechnologies":["Synthetic edited tool"],"professionalContexts":["Synthetic edited context"]}',null,'v202-save-category-review');
   perform v202_assert((select count(*)=2 from public.profile_review_changes where review_id=review.review_id and field_path in ('toolsAndTechnologies','professionalContexts')),'category edits have their own review history');
   perform v202_assert((select count(*)=1 and bool_and(profile_data='{"syntheticApprovedBaseline":true}'::jsonb and superseded_at is null) from public.professional_profiles where person_id=resolved.person_id),'existing profile never published/replaced');

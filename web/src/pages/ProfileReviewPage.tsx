@@ -998,8 +998,12 @@ function reviewFieldLabel(fieldPath: string): string {
     areasOfExpertise: "Áreas de atuação",
     professionalObjective: "Objetivo profissional",
     summary: "Resumo profissional",
+    toolsAndTechnologies: "Ferramentas e tecnologias",
+    professionalContexts: "Contextos profissionais",
   };
   if (labels[fieldPath]) return labels[fieldPath];
+  if (/^customSections\.[^.]+\.name$/.test(fieldPath)) return "Título da seção adicional";
+  if (/^customSections\.[^.]+\.items\.[^.]+\.value$/.test(fieldPath)) return "Item da seção adicional";
   if (/^keyResults\.[a-z0-9_]+\.value$/.test(fieldPath)) return "Principal resultado";
   const field = fieldPath.split(".").at(-1);
   return ({ role: "Cargo", organization: "Empresa", period: "Período", description: "Descrição", course: "Curso", institution: "Instituição" })[field ?? ""] ?? fieldPath;
