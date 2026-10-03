@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 324
-source_manifest_sha256: 3f0829e2ef7b5af1132238c23a96a092275ea4c49ae3d0c0516ddf63898d3b19
+source_manifest_sha256: ea043d48b9263cae73d667d5f03afd77539b9f4b523879ecd543e7905a3a6087
 -->
 
 # Tudo sobre o Prisma
@@ -2624,13 +2624,13 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.22
+version: 2.51.23
 last_verified: 2026-10-03
 ---
 
 # Estado atual do Prisma
 
-Prisma v2.0.1 registra a entrega autorizada de importação totalmente online na KVM2, geração 2, movimento 0, entrega 1. Login e menu usam o registro único; publicação e evidência operacional serão registradas no AoT deste movimento.
+Prisma v2.0.1 registra a entrega publicada de importação totalmente online na KVM2, geração 2, movimento 0, entrega 1. Login e menu usam o registro único. SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0` em main/GitHub/VPS; evidência operacional e limites no AoT deste movimento.
 
 ## Modal de revisão de divergências
 
@@ -2710,9 +2710,9 @@ Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendend
 
 Baseline semântico anterior `60c642f`, Edge v2, publicado em 25/09; CI e smoke autenticado PASS. Prompt 1.2.0 mantém rubrica/guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências. São conjuntos de desenvolvimento, não holdout ou prova de justiça universal. Smoke anterior: quatro interpretações completas e três abstenções por divergência, sem nota/prioridade para pendências; agora somente elegíveis A/B consomem essa camada. Bruno e Diego: 47/100 provisório, cobertura 50%, Grupo B, programação reconhecida mas requisitos backend ainda sem evidência suficiente. Comparação/reabertura mantiveram análises, uma tentativa cada; snapshots servidor confirmados. Baseline: 177 testes Node direcionados, 25 Deno, 15 tooling e SQL concorrente/negativo PASS; desktop/mobile inspecionados. Aprendizado, outras profissões e redução adicional da abstenção não estão validados por este piloto.
 
-## Parser IA totalmente online na KVM2 — publicação autorizada
+## Parser IA totalmente online na KVM2 — publicada em produção
 
-Decisão explícita de Bruno em 03/10: eliminar PC/túnel da importação automática. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway em Docker na KVM2, loopback privado 18787, secret somente no backend, cache persistente segregado e lock volátil. PDF.js → Parser IA → revisão, prompt/modelo, contratos e auth/tenant preservados; OCR automático continua inativo. Substitui a dependência temporária/F-04 anterior sem reprocessar Pessoas. SHA inicial `57b306d308b5df40d28c5b3366d79b62500fbf7a` em main/GitHub; CIs branch `37137776343` e main `37138060686` PASS. 86 testes dirigidos, build TS, compilação específica, lint e Context Pack PASS. QA na KVM2 sem rede/credencial real comprovou HTTP/cache/permissões e restart Docker real. Após a rejeição inicial da transferência pela revisão automática, Bruno autorizou especificamente chave/origem/destino, teste sintético pago e publicação v2.0.1. Secret provisionado somente no backend, modo 400/UID 1000; ativação e smoke real em andamento. Acordo 1.1.0, ADR-075/runbook e `docs/qa/aot-parser-ia-kvm2.md` registram estado e limites.
+Decisão explícita de Bruno em 03/10: eliminar PC/túnel da importação automática e publicar Prisma v2.0.1. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway em Docker na KVM2, loopback privado 18787, secret somente no backend 400/UID 1000, cache persistente segregado e lock volátil. PDF.js → Parser IA → revisão, prompt/modelo, contratos e auth/tenant preservados; OCR automático continua inativo. Substitui a dependência temporária/F-04 anterior sem reprocessar Pessoas. SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0` em main/GitHub/VPS, CIs branch `37140745879` e main `37140809170` SUCCESS. Parser running/healthy e web v2.0.1 publicados; gateway/Traefik/experimento preservados. 86 testes dirigidos e regressão incremental de versão/histórico, build/typecheck/lint/Context Pack PASS. Parse sintético real HTTP 200, 1 fato validado, replay e replay após restart cached=true sem nova inferência; nenhuma Pessoa/Perfil/DB no smoke. HTTPS/assets 200 após 404 transitório no smoke imediato; readiness anônima 401 e tela autenticada de importação disponível/menu v2.0.1. PC sem worker/túnel. A autorização específica posterior resolveu a rejeição inicial de transferência da chave, sem contorno. Importação humana até revisão/publicação e qualidade ampliada permanecem NOT TESTED. Acordo 1.1.0, ADR-075/runbook e `docs/qa/aot-parser-ia-kvm2.md` registram evidência e limites.
 
 ## Disponibilidade antecipada da importação (publicada)
 
@@ -2748,7 +2748,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-Prisma v2.0.1 é a versão autorizada para a importação totalmente online na KVM2, geração 2/movimento 0/entrega 1. Reutiliza Parser e gateway, preserva dados/prompt/modelo/revisão e elimina PC/túnel. Acordo Parser KVM2 1.1.0; publicação e limites no AoT correspondente, sem presumir rollout pelo número da versão.
+Prisma v2.0.1 está publicada na KVM2, geração 2/movimento 0/entrega 1, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Parser e gateway preservam dados/prompt/modelo/revisão e eliminam PC/túnel; parse sintético real, cache, restart e importação autenticada disponível PASS. Acordo Parser KVM2 1.1.0; evidência e limites no AoT correspondente. Importação real até revisão/publicação não testada neste smoke.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
@@ -10198,6 +10198,8 @@ Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, pre
 
 Versão de implantação `parser-ia-kvm2-1.0.0`; acordo `../qa/agreement-parser-ia-kvm2.md` 1.1.0 e ADR-075. A importação automática usa PDF.js → Parser IA → revisão. Paddle/Tesseract não são reativados. A versão dos dados, prompt, modelo e transporte continuam iguais; versão pública v2.0.1 autorizada pelo PO.
 
+Publicado em 2026-10-03 no SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`: Parser running/healthy, parse real sintético e replay após restart PASS, tela autenticada de importação disponível e menu v2.0.1. Web publicada separadamente para a versão; gateway/Traefik/experimentos preservados. Nenhuma importação humana completa foi executada como teste. Detalhes, imagens/rollback e limites no AoT.
+
 ## Caminho e proteção
 
 `Browser → HTTPS/Traefik → Nginx → socket Unix do gateway → 127.0.0.1:18787 na KVM2 → OpenAI`.
@@ -17319,80 +17321,78 @@ Git/CI/produção: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` inte
 
 ## Source: `docs/qa/aot-parser-ia-kvm2.md`
 
-# AoT — Parser IA totalmente online na KVM2
+# AoT — Prisma v2.0.1: Parser IA totalmente online na KVM2
 
-## Aditivo autorizado em publicação
-
-Bruno aprovou transferência exata da chave, teste sintético pago e publicação Prisma v2.0.1 em main/produção. Acordo/execução 1.1.0 acrescentam D-06/CA-D06: registro único, histórico preservado e web como superfície direta. Secret já provisionado em `/etc/prisma/parser-ia.env`, modo 400/UID 1000, sem exposição do valor. Bloqueios do checkpoint abaixo foram resolvidos por essa autorização; ativação, parse real, reinício e versão hospedada ainda aguardam prova. Regressão incremental: registro/histórico, typecheck/build web, contexto e smoke. O checkpoint abaixo permanece histórico até o fechamento operacional.
-
-Contrato `docs/qa/agreement-parser-ia-kvm2.md` 1.0.0, execução correspondente, ADR-075. Baseline `efdadeb64fbe8399d718018cf6080cb9737774e6`; branch `codex/parser-ia-kvm2`; risco D/E por localização/secret/ciclo de vida de PII. Evidência parcial até publicação.
+Acordo e execução `parser-ia-kvm2` 1.1.0, ADR-075; decisão explícita de Bruno em 2026-10-03, incluindo credencial exata/origem/destino, teste sintético pago, main e produção. Baseline `efdadeb64fbe8399d718018cf6080cb9737774e6`; implementação em `codex/parser-ia-kvm2`; risco D/E. SHA funcional publicado `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Este fechamento documental não muda o runtime ou a versão pública.
 
 ## Matriz de Acordos
 
 | ID | Acordo | Implementação | Teste/evidência | Status | Ambiente / limite |
 | --- | --- | --- | --- | --- | --- |
-| D-01 | Sem PC/túnel | singleton KVM2/18787, gateway existente | imagem/HTTP sintético na KVM2 PASS | BLOCKED | credencial real ainda não autorizada pela revisão automática |
-| D-02 | Autoridade e interpretação preservadas | gateway inalterado, somente diretório do lock | auth/tenant/hash/limites/cache/evidência, 86/86 | PASS | QA local sintético |
-| D-03 | Secret/cache/endpoint privados | Compose secret/node/loopback/hardening/volume | QA real UID 1000, pasta 700/arquivos 600 PASS | BLOCKED | secret real não transferido |
-| D-04 | Restart sem lock antigo ou retry | tmpfs separado/cache persistente/healthcheck | novos testes + restart Docker real/cache sem rede PASS | PARTIAL | prova na instância de produção pendente |
-| D-05 | Publicar/provar no servidor | script específico e rollback | main/GitHub e CIs PASS; imagem QA pronta | BLOCKED | ativação/parse real e sincronização VPS pendentes |
+| D-01 | Sem PC/túnel | Parser singleton na KVM2/127.0.0.1:18787, gateway existente | parse real HTTP 200; PC sem listener 8787/processo SSH após comandos | PASS | produção, PDF sintético sem banco |
+| D-02 | Autoridade e interpretação preservadas | gateway inalterado, somente diretório do lock alterado no Parser | auth/tenant/origem/hash/limites/cache/evidência, 86/86; readiness autenticada na UI | PASS | QA sintético e produção |
+| D-03 | Secret/cache/endpoint privados | Compose secret/node/loopback/hardening/volume | secret 400 UID 1000/read-only; cache/lock 700, arquivos 600; sem chave em env/imagem | PASS | inspeção Docker/host |
+| D-04 | Restart sem lock antigo ou retry | tmpfs separado/cache persistente/healthcheck | restart Docker real, lock ausente, replay HTTP 200 cached=true | PASS | produção, sem nova inferência no replay |
+| D-05 | Publicar/provar no servidor | script específico e rollback | main/GitHub/VPS no SHA funcional, CIs branch/main PASS; containers ativos | PASS | UI autenticada disponível; importação real até revisão não testada |
+| D-06 | Prisma v2.0.1 / histórico e contratos preservados | registro único, geração 2/movimento 0/entrega 1 | 4 testes do registro, typecheck/build; menu hospedado v2.0.1; login usa o mesmo objeto no mesmo bundle publicado | PASS | binding do login verificado no código; footer após logout não inspecionado separadamente |
 
 ## Proibições verificadas
 
 | ID | Guardrail | Teste negativo / evidência | Status |
 | --- | --- | --- | --- |
-| P-01 | Sem exposição/redução de proteção | auth/tenant/origem/loopback/sanitização PASS; inspeção pendente | PARTIAL |
-| P-02 | Prompt/modelo/dados/revisão/no retry | referência inventada/zero fatos/partial/cache; diff | PASS |
-| P-03 | Sem mutação humana/material alheio | QA sintético sem banco e Git status preservado | PASS |
+| P-01 | Sem exposição/redução de proteção | auth/tenant/origem/loopback/sanitização; anônimo HTTP 401/session_required; mounts/UID/permissões | PASS |
+| P-02 | Prompt/modelo/dados/revisão/no retry | referência inventada/zero fatos/partial/cache; mesmo prompt SHA/modelo/contratos; replay antes/depois de restart | PASS |
+| P-03 | Sem mutação humana/material alheio | sintético sem DB/Pessoa/Perfil; serviços e material alheio preservados | PASS |
 
 ## Mapa de Impacto e Preservação
 
-Mapa inicial no acordo; sem expansão de domínio. Dependências operacionais novas: secret protegido e volume privado na KVM2.
+Mapa inicial e aditivo no acordo 1.1.0. A decisão adicional do PO fez versão/web uma superfície direta; não ampliou domínio ou interpretação.
 
 | Capacidade / área | Relação | Baseline | Regressão / evidência | Status |
 | --- | --- | --- | --- | --- |
-| Parser/readiness | direct | PC/18787 VPS ausentes | HTTP/cache/lock/health, 45 tooling PASS | PARTIAL |
-| Gateway/auth/tenant | critical_transversal | gateway ativo/zero restart | negativos/HTTP PASS; público anônimo 401 | PASS |
-| Importação/revisão | plausible_indirect | parser-ia 1.0.0, mesma UI/saída | 26 domínio/recuperação/readiness PASS | PASS |
-| Web/gateway/Traefik | plausible_indirect | IDs/imagens/restarts coletados | mesmos IDs após QA, HTTPS 200 | PASS |
-| Dados/matching/Knowledge | no_impact_identified | sem SQL/Edge/banco no smoke | diff/plano/binding/cache | PASS |
-| Paddle/experimento | no_impact_identified | fora da rota automática | mesmo ID d991a574e45e, estado pré-existente preservado | PASS |
+| Parser/readiness | direct | PC/18787 VPS ausentes | HTTP/cache/lock/health, 45 tooling; inferência remota e restart | PASS |
+| Versão pública/web | direct | v1.8.4, mesma fonte no login/menu | registro/histórico, typecheck/build, menu v2.0.1 real e binding do login | PASS |
+| Gateway/auth/tenant | critical_transversal | gateway ativo/zero restart | negativos; UI autenticada disponível; anônimo 401; mesmo ID/imagem | PASS |
+| Importação/revisão | plausible_indirect | parser-ia 1.0.0, mesma UI/saída | 26 domínio/recuperação/readiness; UI disponível | PASS |
+| Site/Traefik/outros serviços | plausible_indirect | IDs/imagens/restarts coletados | somente web recriada e Parser criado; gateway/Traefik/experimento iguais; assets/HTTPS 200 | PASS |
+| Dados/matching/Knowledge | no_impact_identified | sem SQL/Edge/banco no smoke | diff/plano/binding/cache; nenhuma mutação humana | PASS |
+| Paddle/experimento | no_impact_identified | fora da rota automática | ID d991a574e45e/estado pré-existente preservados | PASS |
 
-### Novidade e preservação
+PASS de preservação da revisão refere-se à regressão determinística do contrato; não equivale a uma publicação humana real. O baseline não tinha Parser disponível, portanto o smoke real comprova restauração da capacidade online, não comparação de qualidade de currículos reais.
 
-Quatro testes novos; preservação por 41 gateway/Parser existentes, 26 domínio e 15 release/contexto: 86/86 PASS. Build TS raiz e compilação específica PASS. Sem suíte integral local; CI existente executou seus gates automaticamente. Baseline real não tinha Parser disponível; sintéticos não medem qualidade de currículos reais.
+## Implementação e validação
 
-Imagem `prisma-parser-ia:qa-57b306d`, ID `sha256:225afd6a2f211a3451b6f3a81e62700032bb63d7945f458de29136f587bd6f2a`, construída de archive do SHA funcional. QA descartável sem rede, chave fictícia, UID 1000, read-only/cap_drop/no-new-privileges/768 MiB/1 CPU: parse HTTP 200, rejeição de origem/hash, cache replay e permissões 700/600 PASS. Segundo QA usou diretório cache sintético persistente; restart real removeu lock sintético e devolveu HTTP 200 cached=true, nenhuma chamada paga/banco. O stdin PowerShell acrescentou CRLF final e causou erro shell após o resultado PASS e cleanup; verificação posterior confirmou ausência do container de QA. Não é erro de restart ou Parser. Imagem/diretório de build/cache sintético preservados para concluir o movimento.
+Reutilizados Parser Node/PDF.js, gateway autenticado e Docker/Compose. Cache privado persistente separado do lock em tmpfs, serviço não privilegiado, healthcheck sem IA e restart unless-stopped. Limites: 768 MiB/1 CPU/64 PIDs, concorrência unitária; mesma OpenAI/modelo/prompt, sem retry. Nenhuma migration/Edge ou novo fornecedor/dependência. Histórico 1.x preservado; versão dos dados não renumerada.
 
-## Fora de escopo preservado
+Quatro testes novos de hosted/restart/auth/health; preservação por 41 gateway/Parser existentes, 26 domínio e 15 release/contexto: 86/86 PASS. Build TS raiz, compilação específica e lint (787 arquivos) PASS. QA Docker na KVM2 sem rede/chave real: HTTP 200, origem/hash recusados, cache, UID 1000, permissões e restart com lock volátil/cache persistente PASS. Imagem QA `prisma-parser-ia:qa-57b306d`, ID `sha256:225afd6a2f211a3451b6f3a81e62700032bb63d7945f458de29136f587bd6f2a`. Container QA removido; build/cache sintético e imagem QA preservados.
 
-F-01/F-02: nenhum OCR, container/modelo histórico removido, Pessoa/Perfil/Knowledge alterado ou schema/Edge/UX/matching modificado; IDs reais conferidos após QA. Instância de produção ainda não ativada.
+Incremento v2.0.1: registro/histórico 4/4 PASS; release/contexto 15/15 PASS; typecheck/build web e lint PASS. Uma primeira prova de contexto falhou por não projetar v2.0.1 no resumo selecionado pelo gerador; corrigida a fonte canônica, regenerado/check e teste passaram. Exports nunca editados manualmente. Build web mantém avisos existentes de chunks grandes/import dinâmico, sem falha. Nenhuma suíte integral local executada; CI existente rodou seus gates automaticamente.
 
-## Fidelidade visual
+Context Pack gerado/check em cópia do índice Git, excluindo acordo alheio não rastreado. pnpm 11 tentou reinstalar módulos numa cópia ligada por junction e abortou sem TTY; não houve purge ou mudança de dependências. Reexecução com `--config.verify-deps-before-run=false` PASS. O QA anterior recebeu CRLF extra via stdin e acusou erro shell após PASS/cleanup; inspeção posterior confirmou container ausente. Probes de produção toleram/removem somente CR do script transportado, não do segredo.
 
-Não aplicável: captura é incidente, tela não alterada. Smoke autenticado depende de sessão; não implica envio de currículo.
+Dispatcher 1.0.1: docs/context/hosting/infrastructure/tests/tooling/web; migrations e Edge skip, nenhum path desconhecido. Roteamento genérico de testes substituído pela regressão afetada; Parser publicado pelo script próprio e web pelo script existente. Recibo Git em `tmp/parser-ia-v201-git-release.json` registra GIT_PUBLISHED e web pendente por configuração SSH do dispatcher; as publicações manuais verificadas abaixo concluem essa superfície.
 
-## Desvios do contrato
+## Evidência operacional de produção
 
-Nenhum desvio de produto identificado. A revisão automática rejeitou a transferência da chave da `.env.local` para `/etc/prisma/parser-ia.env` por exigir autorização suficientemente específica de payload/origem/destino. Não houve transferência ou contorno. O pedido específico foi apresentado ao PO; ativação/validação real aguardam resposta. A-02 não sobrepõe a aprovação exigida pela plataforma.
+- SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0` em main local/origin/VPS, branch publicada. CIs `37140745879` (branch) e `37140809170` (main): SUCCESS. Commits anteriores 57b306d/07af391 integrados, incluindo evidência e autorização superveniente.
+- Parser `b160ce0f591d`, running/healthy, imagem `sha256:116fe4fbb904dd08005b5edbfbe27c358dbc12c1a4eb0493e0d626136de6bac8`. Loopback 127.0.0.1:18787; UID 1000, read-only, cap_drop ALL, no-new-privileges, memória 805306368, nanoCPUs 1000000000, PIDs 64, restart unless-stopped.
+- Secret `/etc/prisma/parser-ia.env`: diretório host root 700, arquivo 400 UID 1000, mount somente leitura em `/run/secrets/parser_ia_env`; apenas OPENAI_API_KEY autorizada, sem arquivo completo, PDF/cache do PC ou service role. Chave ausente do env do processo; Dockerfile/context excluem secrets. Cache `deploy_parser-ia-cache` privado, pasta/lock 700 e arquivos 600; não houve exposição de conteúdos pessoais.
+- Parse real: organização técnica sintética `synthetic-online-probe`, PDF mínimo SHA `14a3dc19b62d44c7550b72d20e7fc7e0dcd27edc141675b92f997b175f973a09`, nenhum DB/Pessoa. HTTP 200, cached=false, 1 fato de identidade validado com fonte; modelo `gpt-5.6-luna`, prompt SHA `d8a86ce90512fa5bb12f9605fb860b0cbad0df5139e9e1e3fe5d1cd54febd09b`. 703 tokens entrada/44 saída, custo contábil estimado US$ 0.00022855, duração 3372 ms. Não é medição de qualidade de currículo real ou fatura definitiva.
+- Replay imediato cached=true. Readiness available antes de restart administrativo; depois running/healthy, nenhum lock residual, mesmo cache validado antes de POST e cached=true em dois replays. A proveniência/custo retornados no replay são da inferência original, não nova cobrança. RestartCount=0 após restart manual é comportamento do Docker, não ausência de reinício.
+- Web nova `8ca85a5569d2`, running/zero reinícios, imagem `sha256:974d6f4036d472ad2bd2952078475b320b07344b3b496533ac8600893f38a0ed`. Rollback `prisma-web:rollback-before-4ccfbf1e7453` preserva imagem `sha256:85a0abe1a47a69e4fdde2545ee509fd11c4528e16d8ef13dbdd387fb3f360ae8`; assets anteriores copiados para manter abas existentes. Primeiro curl imediato retornou 404 transitório, sem rebuild repetido; depois `/`, `/sign-in`, `/index.html`, JS index-C2XmZklw, CSS index-NtLZfLyW e PDF chunk-DGyYHl6d retornaram 200.
+- Gateway `2eed2dd379ea`, Traefik `5e25fdc6d2e6`, experimento `d991a574e45e`: IDs/imagens preservados, zero restart. Experimento já unhealthy antes, não foi tratado. Gateway imagem `sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99`; rota readiness pública anônima HTTP 401/session_required.
+- Navegador: login com campos já preenchidos pelo usuário, sem ler/revelar valores; após autenticação/reload, menu v2.0.1. `/profiles/import` mostrou `Serviço de importação disponível`, checagem autenticada às 14:39:17–14:39:47 BRT, sem PDF selecionado. Captura inline da sessão registra cartão verde/menu v2.0.1 (1059x1244). Login e menu consomem PRISMA_RELEASE; footer do login sem sessão após publicação não foi inspecionado separadamente. Aba temporária fechada; aba autenticada de importação preservada.
+- PC sem worker/listener 8787 e sem processo SSH após comandos administrativos. SSH usado para publicar/inspecionar, não túnel ou dependência de execução.
 
-## Validação final
+## Fora de escopo, desvios e resíduos
 
-`pnpm run build` PASS. `node --test tests/tooling/parserIaHosted.test.mjs tests/tooling/parserIaService.test.mjs tests/tooling/paddleGateway.test.mjs` 45/45 PASS. `node --test dist/tests/parserIa.test.js dist/tests/parserIaRecovery.test.js dist/tests/parserReadiness.test.js tests/tooling/releaseDispatcher.test.mjs tests/tooling/prismaContext.test.mjs` 41/41 PASS. Sem IA paga/banco nessas provas.
+F-01/F-02 preservados: sem OCR automático, remoção de modelos/containers históricos, reprocessamento humano, banco, Edge, matching ou redesenho de UX. Apenas versão pública alterada por decisão expressa. Dados e contratos preservados. Primeira implantação tem rollback por parar somente Parser e conservar secret/volume, explicitando indisponibilidade; não voltar ao PC.
 
-`node node_modules/typescript/bin/tsc -p services/parser-ia/tsconfig.json --noEmit` PASS, além da compilação Linux no Docker. A primeira compilação específica revelou declarações Vite ausentes; reutilizada `src/vite-assets.d.ts`, recompilação PASS. Lint PASS (787 arquivos). Geração/check Context Pack em cópia do índice Git excluindo acordo não rastreado alheio: PASS. O pnpm 11 tentou reinstalar módulos na cópia ligada por junction e abortou sem TTY; nenhum purge foi autorizado. Reexecução com `--config.verify-deps-before-run=false` usou os scripts existentes e passou. Não houve mudança de dependências.
-
-Dispatcher 1.0.1: docs/context/hosting/infrastructure/tests/tooling, sem migration/Edge/paths desconhecidos. Recomendações genéricas `pnpm run test` e publish web foram substituídas por 86 testes afetados e publicação específica do Parser conforme mapa; não há código/UI web alterado, nem rebuild web necessário.
-
-## Git / QA / ambiente
-
-Baseline local/origin/VPS alinhado. KVM2 2 CPUs, 7.940 MiB RAM/5.287 MiB disponíveis, 81 GiB livres. Web/gateway zero restart; experimento não saudável existente preservado. `.tmp.driveupload/`, acordo M8 alheio, Dockerfile.gpu, teste duplicado não rastreado e `models/` remoto preservados. Context Pack usa fontes versionadas para excluir o acordo alheio não rastreado.
-
-SHA funcional `57b306d308b5df40d28c5b3366d79b62500fbf7a`: main local/origin e branch, CI branch `37137776343` PASS e main `37138060686` PASS. Publicação Git pelo dispatcher com SHA explícito; recibo ignorado em `tmp/parser-ia-git-release.json`. VPS produção checkout ainda `efdadeb64fbe8399d718018cf6080cb9737774e6`; somente build/QA isolado executados na KVM2. IDs preservados: web `8fb20f65ddb6`, gateway `2eed2dd379ea`, Traefik `5e25fdc6d2e6`, experimento `d991a574e45e`. HTTPS 200, readiness anônima 401/session_required. Secret real ausente, PC sem listener 8787/processo SSH. Aba de importação redirecionou a sign-in com campos vazios; login humano solicitado, nenhum dado enviado. Não houve chamada paga ou mutação de Pessoa.
+Sem desvio de produto. Rejeição inicial da revisão automática exigiu autorização específica do segredo/origem/destino; a ação ficou parada, e Bruno autorizou explicitamente antes da transferência. Bloqueio resolvido, sem contorno. `.tmp.driveupload/`, acordo matching alheio, Dockerfile.gpu, teste duplicado e `models/` remoto preservados. Volume contém apenas cache sintético desta validação além de eventuais operações humanas legítimas do serviço; nenhuma leitura de documentos alheios no smoke.
 
 ## Conclusão
 
-Implementação, CI e QA da imagem prontos. Ativação na KVM2 bloqueada por autorização específica de transferência de credencial; D-01/D-03/D-05 BLOCKED, D-04 PARTIAL. Operação totalmente online em produção ainda não comprovada ou concluída.
+D-01 a D-06 e P-01 a P-03 PASS com os limites de observação descritos. Importação automática online ativada na KVM2, Prisma v2.0.1 publicada em main/produção, frontend autenticado disponível. Jornada com currículo real até revisão/publicação e avaliação ampliada de qualidade: NOT TESTED, fora deste smoke, sem criação de Pessoa ou Perfil de teste. Fechamento documental deve ser sincronizado por fast-forward sem rebuild do runtime funcional validado.
 
 ---
 

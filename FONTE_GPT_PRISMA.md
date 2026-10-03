@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 2.0.1
-current_state_version: 2.51.22
+current_state_version: 2.51.23
 current_state_last_verified: 2026-10-03
 documentation_source_count: 324
-source_manifest_sha256: 3f0829e2ef7b5af1132238c23a96a092275ea4c49ae3d0c0516ddf63898d3b19
+source_manifest_sha256: ea043d48b9263cae73d667d5f03afd77539b9f4b523879ecd543e7905a3a6087
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,7 +268,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Prisma v2.0.1 é a versão autorizada para a importação totalmente online na KVM2, geração 2/movimento 0/entrega 1. Reutiliza Parser e gateway, preserva dados/prompt/modelo/revisão e elimina PC/túnel. Acordo Parser KVM2 1.1.0; publicação e limites no AoT correspondente, sem presumir rollout pelo número da versão.
+Prisma v2.0.1 está publicada na KVM2, geração 2/movimento 0/entrega 1, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Parser e gateway preservam dados/prompt/modelo/revisão e eliminam PC/túnel; parse sintético real, cache, restart e importação autenticada disponível PASS. Acordo Parser KVM2 1.1.0; evidência e limites no AoT correspondente. Importação real até revisão/publicação não testada neste smoke.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 

@@ -2,13 +2,13 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.22
+version: 2.51.23
 last_verified: 2026-10-03
 ---
 
 # Estado atual do Prisma
 
-Prisma v2.0.1 registra a entrega autorizada de importação totalmente online na KVM2, geração 2, movimento 0, entrega 1. Login e menu usam o registro único; publicação e evidência operacional serão registradas no AoT deste movimento.
+Prisma v2.0.1 registra a entrega publicada de importação totalmente online na KVM2, geração 2, movimento 0, entrega 1. Login e menu usam o registro único. SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0` em main/GitHub/VPS; evidência operacional e limites no AoT deste movimento.
 
 ## Modal de revisão de divergências
 
@@ -88,9 +88,9 @@ Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendend
 
 Baseline semântico anterior `60c642f`, Edge v2, publicado em 25/09; CI e smoke autenticado PASS. Prompt 1.2.0 mantém rubrica/guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências. São conjuntos de desenvolvimento, não holdout ou prova de justiça universal. Smoke anterior: quatro interpretações completas e três abstenções por divergência, sem nota/prioridade para pendências; agora somente elegíveis A/B consomem essa camada. Bruno e Diego: 47/100 provisório, cobertura 50%, Grupo B, programação reconhecida mas requisitos backend ainda sem evidência suficiente. Comparação/reabertura mantiveram análises, uma tentativa cada; snapshots servidor confirmados. Baseline: 177 testes Node direcionados, 25 Deno, 15 tooling e SQL concorrente/negativo PASS; desktop/mobile inspecionados. Aprendizado, outras profissões e redução adicional da abstenção não estão validados por este piloto.
 
-## Parser IA totalmente online na KVM2 — publicação autorizada
+## Parser IA totalmente online na KVM2 — publicada em produção
 
-Decisão explícita de Bruno em 03/10: eliminar PC/túnel da importação automática. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway em Docker na KVM2, loopback privado 18787, secret somente no backend, cache persistente segregado e lock volátil. PDF.js → Parser IA → revisão, prompt/modelo, contratos e auth/tenant preservados; OCR automático continua inativo. Substitui a dependência temporária/F-04 anterior sem reprocessar Pessoas. SHA inicial `57b306d308b5df40d28c5b3366d79b62500fbf7a` em main/GitHub; CIs branch `37137776343` e main `37138060686` PASS. 86 testes dirigidos, build TS, compilação específica, lint e Context Pack PASS. QA na KVM2 sem rede/credencial real comprovou HTTP/cache/permissões e restart Docker real. Após a rejeição inicial da transferência pela revisão automática, Bruno autorizou especificamente chave/origem/destino, teste sintético pago e publicação v2.0.1. Secret provisionado somente no backend, modo 400/UID 1000; ativação e smoke real em andamento. Acordo 1.1.0, ADR-075/runbook e `docs/qa/aot-parser-ia-kvm2.md` registram estado e limites.
+Decisão explícita de Bruno em 03/10: eliminar PC/túnel da importação automática e publicar Prisma v2.0.1. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway em Docker na KVM2, loopback privado 18787, secret somente no backend 400/UID 1000, cache persistente segregado e lock volátil. PDF.js → Parser IA → revisão, prompt/modelo, contratos e auth/tenant preservados; OCR automático continua inativo. Substitui a dependência temporária/F-04 anterior sem reprocessar Pessoas. SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0` em main/GitHub/VPS, CIs branch `37140745879` e main `37140809170` SUCCESS. Parser running/healthy e web v2.0.1 publicados; gateway/Traefik/experimento preservados. 86 testes dirigidos e regressão incremental de versão/histórico, build/typecheck/lint/Context Pack PASS. Parse sintético real HTTP 200, 1 fato validado, replay e replay após restart cached=true sem nova inferência; nenhuma Pessoa/Perfil/DB no smoke. HTTPS/assets 200 após 404 transitório no smoke imediato; readiness anônima 401 e tela autenticada de importação disponível/menu v2.0.1. PC sem worker/túnel. A autorização específica posterior resolveu a rejeição inicial de transferência da chave, sem contorno. Importação humana até revisão/publicação e qualidade ampliada permanecem NOT TESTED. Acordo 1.1.0, ADR-075/runbook e `docs/qa/aot-parser-ia-kvm2.md` registram evidência e limites.
 
 ## Disponibilidade antecipada da importação (publicada)
 
@@ -126,7 +126,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-Prisma v2.0.1 é a versão autorizada para a importação totalmente online na KVM2, geração 2/movimento 0/entrega 1. Reutiliza Parser e gateway, preserva dados/prompt/modelo/revisão e elimina PC/túnel. Acordo Parser KVM2 1.1.0; publicação e limites no AoT correspondente, sem presumir rollout pelo número da versão.
+Prisma v2.0.1 está publicada na KVM2, geração 2/movimento 0/entrega 1, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Parser e gateway preservam dados/prompt/modelo/revisão e eliminam PC/túnel; parse sintético real, cache, restart e importação autenticada disponível PASS. Acordo Parser KVM2 1.1.0; evidência e limites no AoT correspondente. Importação real até revisão/publicação não testada neste smoke.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 

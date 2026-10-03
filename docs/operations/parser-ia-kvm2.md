@@ -2,6 +2,8 @@
 
 Versão de implantação `parser-ia-kvm2-1.0.0`; acordo `../qa/agreement-parser-ia-kvm2.md` 1.1.0 e ADR-075. A importação automática usa PDF.js → Parser IA → revisão. Paddle/Tesseract não são reativados. A versão dos dados, prompt, modelo e transporte continuam iguais; versão pública v2.0.1 autorizada pelo PO.
 
+Publicado em 2026-10-03 no SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`: Parser running/healthy, parse real sintético e replay após restart PASS, tela autenticada de importação disponível e menu v2.0.1. Web publicada separadamente para a versão; gateway/Traefik/experimentos preservados. Nenhuma importação humana completa foi executada como teste. Detalhes, imagens/rollback e limites no AoT.
+
 ## Caminho e proteção
 
 `Browser → HTTPS/Traefik → Nginx → socket Unix do gateway → 127.0.0.1:18787 na KVM2 → OpenAI`.
