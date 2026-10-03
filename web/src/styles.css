@@ -4042,6 +4042,12 @@ textarea {
   gap: 16px;
 }
 
+@media (max-width: 600px) {
+  .prisma-import-processing-error { flex-wrap: wrap; }
+  .prisma-import-processing-error .ant-alert-content { min-width: 0; flex: 1; }
+  .prisma-import-processing-error .ant-alert-actions { margin: 12px 0 0; width: 100%; }
+}
+
 .prisma-journey-upload-card {
   max-width: 920px;
   margin-inline: auto;

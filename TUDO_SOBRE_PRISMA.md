@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 324
-source_manifest_sha256: ea043d48b9263cae73d667d5f03afd77539b9f4b523879ecd543e7905a3a6087
+documentation_source_count: 327
+source_manifest_sha256: e6c6facdcab2d7361ea831e40cd9c17cf9704ecb6b4ce85b29c1f7072cec5422
 -->
 
 # Tudo sobre o Prisma
@@ -2624,13 +2624,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.23
+version: 2.51.24
 last_verified: 2026-10-03
 ---
 
 # Estado atual do Prisma
 
-Prisma v2.0.1 registra a entrega publicada de importação totalmente online na KVM2, geração 2, movimento 0, entrega 1. Login e menu usam o registro único. SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0` em main/GitHub/VPS; evidência operacional e limites no AoT deste movimento.
+Prisma v2.0.2 registra a correção autorizada da compatibilidade das evidências de importação, geração 2, movimento 0, entrega 2. Implementação e QA local verificadas; publicação ainda pendente neste registro. A v2.0.1 online na KVM2 permanece o baseline remoto, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Login e menu usam o registro único.
+
+## Compatibilidade das evidências de importação — v2.0.2
+
+O incidente de 03/10/2026 ocorreu após a leitura de um PDF nativo válido: duas evidências de títulos de seções adicionais foram rejeitadas pelo contrato da persistência. `evidence-adapter-1.0.0` normaliza IDs incompatíveis de resultados/seções/itens e os endereços das listas, mantendo fatos/fontes/regiões. `import-evidence-1.0.0` valida caminho/alvo, arrays/limites, página e geometria/método/origem no cliente e no PostgreSQL. Ferramentas/contextos existentes continuam distintos e disponíveis na revisão. Diagnóstico sanitizado, tenant-scoped, transacional e idempotente substitui o erro genérico; falha permanente orienta aguardar correção, sem repetição imediata/troca do PDF. A persistência permanece na etapa de estruturação até confirmar revisão disponível. A QA local real passou com fixtures sintéticas/rollback, sem publicar ou substituir o Perfil vigente. Prompt/modelo, cache bruto/chave, auth/tenant e publicação humana são preservados. Contrato e limites: `docs/qa/agreement-import-evidence-v202.md` e `docs/qa/aot-import-evidence-v202.md`. DOC/DOCX/TXT permanecem fora deste movimento.
 
 ## Modal de revisão de divergências
 
@@ -2748,7 +2752,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-Prisma v2.0.1 está publicada na KVM2, geração 2/movimento 0/entrega 1, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Parser e gateway preservam dados/prompt/modelo/revisão e eliminam PC/túnel; parse sintético real, cache, restart e importação autenticada disponível PASS. Acordo Parser KVM2 1.1.0; evidência e limites no AoT correspondente. Importação real até revisão/publicação não testada neste smoke.
+Prisma v2.0.2 tem a correção de evidências implementada e validada localmente; publicação pendente. `evidence-adapter-1.0.0` e `import-evidence-1.0.0` preservam títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL sintética com rollback, cache/fonte, 71 testes dirigidos e renders desktop/mobile PASS. AoT `docs/qa/aot-import-evidence-v202.md`. Baseline remoto v2.0.1 na KVM2 (`4ccfbf1`) permanece online sem PC/túnel, com prompt/modelo/cache/revisão preservados; a importação do incidente ainda aguarda retomada.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
@@ -4103,6 +4107,10 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 
 # M5.7 Parser IA
 
+Correção aprovada v2.0.2 (2026-10-03): `evidence-adapter-1.0.0` compatibiliza todas as categorias já aceitas com `import-evidence-1.0.0`. IDs livres de resultados/seções/itens são convertidos deterministamente quando incompatíveis; títulos e regiões separados são preservados, listas usam seu campo raiz. Ferramentas/tecnologias e contextos continuam categorias distintas existentes, visíveis na revisão quando extraídas. A proveniência de estruturação recebe o sufixo do adaptador; prompt/modelo, chave/cache bruto e contratos de publicação não mudam. `preparedParserIa` adapta respostas antigas somente depois de validar organização/hash/versão.
+
+A persistência faz preflight e validação autoritativa de caminho/alvo, páginas, arrays/limites e geometria/método/origem. Erro tipificado contém somente razões fixas e caminhos com IDs ocultados. `record_resume_import_failure` registra tentativa, intake e diagnóstico sanitizado no evento existente em uma transação tenant-scoped/idempotente. Incompatibilidade permanente bloqueia repetição imediata; indisponibilidade/sessão permitem recuperação humana. Revisão só fica disponível após gravação. Contrato/QA/limites: [acordo](../qa/agreement-import-evidence-v202.md) e [AoT](../qa/aot-import-evidence-v202.md).
+
 Decisão operacional de 2026-10-03: o Parser deve operar na KVM2 sem PC/túnel, reutilizando gateway/validador e preservando dados, prompt/modelo e revisão. Implantação `parser-ia-kvm2-1.0.0`, ADR-075 e [runbook](../operations/parser-ia-kvm2.md). Evidência/estado de publicação ficam no [AoT](../qa/aot-parser-ia-kvm2.md); descrições de loopback local e túnel abaixo registram o piloto e a opção de desenvolvimento.
 
 Atualização de datas em 2026-09-27: após validar fatos, o normalizador passa a `resume-dates-1.1.0`: anos de dois ou quatro dígitos, `00–50 → 2000–2050` e `51–99 → 1951–1999`, regra fixa a revisar em 2050. Originais e cache bruto permanecem; a expansão do século gera nota de inferência, sem nova chamada ao modelo. Contrato do delta: `../qa/aot-resume-two-digit-years.md`.
@@ -4125,7 +4133,7 @@ Quando um texto narrativo reproduz marcadores explícitos de item, como `•`, `
 
 Rascunhos de revisão persistidos antes desta regra também passam pela mesma normalização ao serem decodificados para a tela. O carregamento não reescreve o banco nem altera a evidência; a nova formatação só é persistida quando o operador salvar a revisão.
 
-O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa e retomada de intake interrompido também recebem a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do túnel loopback. Falha na importação é explícita e oferece somente nova tentativa; não existe continuação automática pela leitura local. Resultado parcial mostra aviso e pendências.
+O resultado alimenta a identificação antes do intake e é reutilizado para preencher o mesmo StructuredDraft na importação. Upload pela Central da Pessoa e retomada de intake interrompido também recebem a preparação. Reprocessamento histórico geral continua fora do escopo. O modo `local` permanece disponível somente em DEV/loopback; o modo `hosted` usa sessão e organização no gateway autenticado antes do worker loopback. Falha na importação é explícita e orienta recuperação conforme a causa; não existe continuação automática pela leitura local. Resultado parcial mostra aviso e pendências.
 
 Decisão temporária de 2026-09-17: o fluxo automático valida o PDF, executa somente a leitura nativa PDF.js e chama diretamente o Parser IA com o PDF original e os spans disponíveis. Paddle e Tesseract ficam desativados nessa rota, inclusive quando uma página possui pouco ou nenhum texto nativo. O modelo usa a imagem do PDF para contexto; fatos persistidos continuam limitados às referências aceitas pelo validador. Resultado ausente, inválido ou sem suporte falha explicitamente e nunca vira perfil completo.
 
@@ -10196,6 +10204,14 @@ Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, pre
 
 # Operação do Parser IA na KVM2
 
+## Correção das evidências — v2.0.2
+
+O delta `import-evidence-1.0.0` exige somente a migration `20261003193000_import_evidence_persistence_contract.sql`, Parser e web; gateway/Traefik não recebem rebuild. Aplicar a migration específica antes dos consumidores, publicar `release-parser-ia.sh` e `release-web.sh` com o mesmo SHA aprovado e preservar os rollbacks e o volume privado. Não executar `db push` geral. O adaptador `evidence-adapter-1.0.0` mantém prompt/modelo/chave do cache; a migration é aditiva e permite rollback dos consumidores sem apagar títulos/evidências/histórico.
+
+Para diagnóstico, consultar somente `person_ingestion_events.metadata.diagnostic` da organização/documento afetados: contrato, etapa, razão fixa, campo sem IDs, página/índice, código e versões. A RPC exige revisor da organização e valida o vínculo intake/Pessoa/documento; texto/erro bruto não é aceito. Não copiar caches privados para QA nem imprimir currículos. Validar SQL com `node scripts/verify-import-evidence.mjs 55479` em banco local descartável `import_evidence_v202`, já preparado pelas migrations; o script usa somente dados sintéticos e rollback.
+
+Uma falha `import_evidence_contract_invalid` na versão corrente orienta aguardar correção. Depois de atualizar o adaptador, tentativas elegíveis podem ser retomadas por ação humana na Central, com hash/origem revalidados e cache existente. A falha legada `resume_intake_processing_failed` do incidente permanece no histórico. Não publicar Perfil para comprovar recuperação. Evidência e estado de rollout: [AoT v2.0.2](../qa/aot-import-evidence-v202.md).
+
 Versão de implantação `parser-ia-kvm2-1.0.0`; acordo `../qa/agreement-parser-ia-kvm2.md` 1.1.0 e ADR-075. A importação automática usa PDF.js → Parser IA → revisão. Paddle/Tesseract não são reativados. A versão dos dados, prompt, modelo e transporte continuam iguais; versão pública v2.0.1 autorizada pelo PO.
 
 Publicado em 2026-10-03 no SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`: Parser running/healthy, parse real sintético e replay após restart PASS, tela autenticada de importação disponível e menu v2.0.1. Web publicada separadamente para a versão; gateway/Traefik/experimentos preservados. Nenhuma importação humana completa foi executada como teste. Detalhes, imagens/rollback e limites no AoT.
@@ -11888,6 +11904,69 @@ Sem escolha arquitetural pendente para a ponte aprovada. Sessão autenticada e j
 - CA-D06: teste dirigido da integração ao callback existente e, na interface, correção/cancelamento, bloqueio de criação durante edição, confirmação server-side e identidade correta antes de prosseguir. Nome sem contato continua insuficiente para criar; vínculo name-only já permitido não é removido.
 
 Ativação enabled é limitada ao teste/piloto hospedado solicitado; não declara concluído o benchmark/cutover geral M5.6. Publicação de Perfil permanece humana.
+
+---
+
+## Source: `docs/qa/agreement-import-evidence-v202.md`
+
+# Contrato de Acordos — Prisma v2.0.2: evidências da importação
+
+Versão 1.0.0, `agreed`, 2026-10-03. Autoridade: Bruno aprovou as cinco melhorias propostas no diagnóstico e autorizou “será a versão 2.0.2”, “implementar tudo em main e publicar”. Este contrato registra esse escopo sem nova decisão de produto. Correção classe D do adaptador existente, com migration aditiva; reutiliza ADR-049, ADR-075 e a revisão humana existente.
+
+## DEVE
+
+- D-01 — Compatibilizar a saída do Parser com a persistência e a abertura da revisão para todas as categorias já aceitas: campos simples, listas, experiências, formações, resultados, ferramentas/tecnologias, contextos profissionais e títulos/itens de seções adicionais. Preservar valores, fontes e regiões separadas; IDs do modelo são convertidos deterministamente para os contratos existentes quando necessário.
+- D-02 — Validar caminhos, existência do alvo, arrays, limites e geometria antes de enviar a extração, mantendo validação autoritativa equivalente no banco. Falha não pode descartar evidência silenciosamente, criar Perfil ou aprovar dados.
+- D-03 — Registrar a falha da importação com diagnóstico estruturado sanitizado: contrato, etapa, motivo, campo quando permitido, página/índice, código e versões. Reutilizar evento transacional existente com autorização tenant-scoped; não registrar texto do currículo, respostas/prompt ou segredo. Distinguir falha transitória de incompatibilidade interna.
+- D-04 — Corrigir mensagens, ações e progresso: persistência faz parte da estruturação; revisão só é alcançada depois da gravação. Falha permanente orienta atualização/correção do sistema, sem recomendar repetição imediata ou troca de PDF válido; falha temporária permite nova tentativa humana. Conteúdo parcial continua explícito, sem ser apresentado como Perfil completo.
+- D-05 — Preservar e recuperar tentativas interrompidas pelo original e cache já vinculados a organização/hash/versões, sem nova IA automática, duplicação de Pessoa, descarte do histórico ou publicação. Revalidar o cache com o adaptador corrigido; a importação do incidente só pode avançar até revisão, sem inventar decisões humanas.
+- D-06 — Publicar v2.0.2 na fonte única de versão, integrar o SHA validado em main/origin/VPS e aplicar somente as superfícies exigidas: migration, Parser e web. Preservar rollback, gateway e serviços alheios.
+
+## PROIBIDO
+
+- P-01 — Relaxar auth, papel, tenant, vínculo de fonte/hash, método/origem, geometria ou limites para aceitar dados inválidos; usar produção como banco descartável de testes.
+- P-02 — Alterar prompt/modelo, fazer inferência paga para validar a correção, publicar Perfil, confirmar classificação ou criar decisão humana; apagar cache/histórico ou repetir IA automaticamente.
+- P-03 — Colapsar listas/regiões, descartar títulos/evidências, substituir categorias por equivalências semânticas inventadas, alterar Pessoas/Perfis alheios ou trabalho local não relacionado.
+
+## FORA DE ESCOPO
+
+- F-01 — DOC/DOCX/TXT, OCR/Paddle, matching/score, taxonomias/Knowledge, concorrência/fila, arquitetura nova e reprocessamento em lote.
+- F-02 — Redesenho das telas ou ampliação do esquema de Perfil. Ferramentas/contextos continuam categorias existentes; revisão e apresentação só recebem o necessário à compatibilidade e preservação.
+
+## AUTONOMIA
+
+- A-01 — Engenharia escolhe normalização determinística de IDs, organização de validadores, metadados seguros, testes e migration forward-only compatíveis com as estruturas existentes, sem dependência nova.
+- A-02 — Branch isolada `codex/`, commit/push/CI, fast-forward para main, QA descartável, deploy seletivo e smoke. Reaproveitar cache do incidente para prova sem custo; nenhuma aprovação/publicação humana é fabricada.
+
+## PENDÊNCIAS
+
+Nenhuma decisão material aberta no escopo aprovado. Se surgir alternativa que mude significado, autoridade ou custo, interromper somente essa parte e consultar o PO.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01 — Matriz de todos os caminhos do Parser, IDs curtos/maiúsculos/máximos e listas; persistência e abertura/reabertura da revisão em PostgreSQL com seções e evidências preservadas. Replay do incidente sem inferência deve manter as 39 evidências e as duas seções.
+- CA-D02 — Negativos de alvo inexistente, array inválido, limite, geometria/método/origem, tenant/papel/hash; nenhum dado inválido é persistido. Prova de rollback atômico.
+- CA-D03 — Falha de contrato versus indisponibilidade tem motivo/recuperação distintos; diagnóstico só contém metadados permitidos. Evento, permissões e ausência de texto/PII comprovados.
+- CA-D04 — Testes dos estados e ações, render de falha permanente/transitória e revisão; mesma topologia existente em desktop/mobile. Imagem do incidente é contraexemplo de estado, não referência para redesenho.
+- CA-D05 — Cache antigo revalidado, identidade e idempotência preservadas; retry humano sem nova IA quando cache existe. Perfil aprovado permanece intacto; recuperação termina em revisão sem publicação.
+- CA-D06 — Registro/histórico v2.0.2, testes dirigidos, SQL QA, typecheck/build/lint/Context Pack, CI; migration ativa e SHA/imagens/HTTPS/versão/readiness verificados. Limitações do smoke ficam explícitas.
+
+## Mapa de Impacto e Preservação
+
+Baseline: main local/origin/VPS `e55c2b7` documental, runtime v2.0.1 `4ccfbf1`; Parser running/healthy e banco único `ioldpnqqvobprjiontre` em produção. Diagnóstico read-only por hash: uma página, 31 fatos aceitos pelo Parser, 39 evidências com geometria válida, 3 experiências/2 formações/2 seções; títulos rejeitados pela RPC ativa. Outros caminhos incompatíveis comprovados por fixture sintética. Não existe ambiente remoto QA separado; QA será PostgreSQL local descartável, nunca reset/fixture persistida na produção.
+
+| Capacidade | Relação | Preservação / baseline | Regressão proporcional |
+| --- | --- | --- | --- |
+| Parser/adaptador/cache | direct | prompt/modelo/cache key e suporte textual existentes | matriz, replay antigo, cache sem rede, IDs e negativos |
+| Persistência/abertura da revisão | direct | RPC tenant-scoped, transação, fontes/39 evidências | SQL QA real, negativos, rollback, carga/reabertura |
+| Mensagens/progresso/recuperação | direct | jornada e original preservado; erro interrompe gravação | teste funcional e renders desktop/mobile |
+| Diagnóstico/auditoria | direct | evento existente; sem PII; erro original não chega bruto à UI | allowlist, autorização e prova transacional |
+| Auth/tenant/publicação | critical_transversal | nenhuma decisão de aprovação automática | negativos de papel/tenant, Perfil vigente preservado, sem publicação |
+| Versão/Parser/web/hosting | direct | deploy seletivo, rollback, gateway saudável | plano, CI, IDs/imagens, assets e readiness |
+| Gateway/Traefik | plausible_indirect | transporte e configuração inalterados | regressão dirigida auth/readiness e smoke anônimo |
+| Matching/score/Knowledge/OCR | no_impact_identified | sem consumidor novo/reclassificação; contratos e deploy excluídos | revisão do diff e plano; nenhuma Edge/LLM/reprocessamento alheio |
+
+O AoT distingue novidade e preservação; não declara PASS quando falta prova obrigatória.
 
 ---
 
@@ -14653,6 +14732,73 @@ Qualidade: inspeção visual do PDF original na revisão confirmou nome, título
 ## Conclusão
 
 PARTIAL. Correção de identidade entregue e validada; jornada hospedada chegou à revisão sem publicar Perfil. Runtime ativo `55733a0`; túnel e workers dependem do PC ligado, sem retomada automática. Qualidade do rascunho insuficiente, telemetria não persistida e inferência Paddle não exercitada pela rota nativa escolhida. Não há conclusão de cutover nem evidência de viabilidade CPU para este PDF. Parser/roteamento e disponibilização da telemetria exigem movimento separado autorizado.
+
+---
+
+## Source: `docs/qa/aot-import-evidence-v202.md`
+
+# AoT — Prisma v2.0.2: compatibilidade das evidências de importação
+
+Contrato: `agreement-import-evidence-v202.md` 1.0.0, execução 1.0.0, autorização de Bruno em 2026-10-03. Risco D, baseline `e55c2b7`, branch `codex/fix-import-evidence-v202`. Este registro separa QA local comprovada de rollout ainda pendente; o fechamento operacional será acrescentado após publicação.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste/evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- | --- |
+| D-01 | Categorias e fontes compatíveis | adaptador determinístico, caminhos SQL/revisão alinhados | 71 testes dirigidos; SQL categorias/IDs curtos e máximos/reabertura | PARTIAL | sintético local; replay do incidente no servidor pendente |
+| D-02 | Preflight e autoridade equivalente | validador TS/SQL, alvo/página/arrays/limites/box | negativos, rollback sem páginas/tentativas, método/origem | PASS | PostgreSQL 17 descartável e domínio |
+| D-03 | Diagnóstico seguro e transacional | RPC reviewer tenant-scoped, evento existente/idempotência | SQL auth/papel/tenant/PII e serviço com falha da auditoria | PASS | falha de sincronização explícita sem erro bruto |
+| D-04 | Estado e recuperação coerentes | progresso em estruturação, mensagens/ações próprias | testes de estado; renders desktop 1440 px e mobile 390 px PASS | PASS | composição existente; aviso mobile recebe quebra da ação |
+| D-05 | Recuperação original/cache sem publicação | preparação revalida vínculo e adapta resposta antiga | cache/modelo/prompt/hash; recuperação com fonte sintética; Perfil vigente SQL intacto | PARTIAL | incidente real ainda não retomado; nenhum modelo externo chamado |
+| D-06 | v2.0.2/main/produção | registro único, migration/Parser/web seletivos | verificações locais e Context Pack/CI/rollout em fechamento | PARTIAL | produção ainda no baseline |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Auth/tenant/fonte/geometria/limites | negativos domínio, serviço e SQL/RLS; QA localhost distinta | PASS |
+| P-02 | Sem IA paga/Perfil aprovado/cache apagado | provider mock, cache mock, fixture SQL aprovado intacto, diff | PASS |
+| P-03 | Sem colapso/reclassificação/trabalho alheio | descriptors preservados integralmente; categorias separadas; Git status | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade / área | Relação | Baseline | Regressão/evidência | Status |
+| --- | --- | --- | --- | --- |
+| Parser/adaptador/cache | direct | parser-ia-1.0.0, prompt/hash originais | IDs/raízes, cache antigo sem mutação, provider mock/cache/binding | PASS |
+| Persistência/revisão | direct | RPC privada/migrations reais | PostgreSQL synthetic + rollback, idempotência, abertura/reabertura, histórico categorias | PASS |
+| Diagnóstico/auditoria | direct | evento processing_failed | metadata allowlist, função privada inacessível, RPC sem anon, transação | PASS |
+| Auth/tenant/Perfil | critical_transversal | gates existentes | recruiter/member/outsider/no session/RLS, Perfil baseline intacto | PASS |
+| UX/processamento | direct | screenshot do incidente, contraexemplo de estado | estados testes, quatro renders e sem overflow a 390 px | PASS |
+| Versão/hosting | direct | runtime v2.0.1/4ccfbf1 | version tests, rollout pendente | PARTIAL |
+| Gateway/Traefik | plausible_indirect | containers existentes preservados | transporte/loopback tests PASS, smoke remoto pendente | PARTIAL |
+| Matching/Knowledge/OCR | no_impact_identified | não consomem adaptador novo; deploy excluído | análise do diff: sem regras/matching/score/taxonomia/OCR | PASS |
+
+### Novidade e preservação
+
+- Novidade: adaptador aditivo, títulos/fontes compatíveis, diagnóstico sanitizado e recuperação causal.
+- Preservação: prompt/modelo/chave/cache, fatos/evidências/listas, isolamento, gates, Perfil vigente, publicação humana e material não rastreado.
+- Dependência descoberta: duas constraints e RPC de evidência manual/histórico precisaram acompanhar as raízes existentes; revisão SQL real incluída. Estilos do aviso mobile são necessários para o texto e ação caberem sem overflow.
+- Limites: PostgreSQL local reproduz as migrations/persistência reais com bootstrap mínimo auth/storage; não representa todos os serviços remotos. Produção não foi usada para fixtures.
+
+## Fora de escopo preservado
+
+F-01/F-02 PASS no diff: sem novos formatos, OCR, fila, matching, Knowledge, schema de Perfil ou redesenho da jornada. Ferramentas/contextos são categorias preexistentes; apenas sua evidência/revisão é compatibilizada.
+
+## Fidelidade visual
+
+A imagem fornecida é contraexemplo de estado, não target de redesenho. Quatro renders locais conferidos: permanent/transient/ready a 1440×900 e permanent a 390×844, sem erro JS ou overflow horizontal; captures sintéticas ficam em `assets/import-evidence-v202/`. Estado de persistência/falha permanece em Estruturando e não apresenta Revisão como concluída.
+
+## Desvios e limitações
+
+Sem alteração do escopo aprovado. A revisão automática rejeitou exportar o cache privado de produção para QA local por PII sem autorização específica; não houve cópia nem contorno. A alternativa é validação sintética e inspeção/replay no próprio servidor, imprimindo apenas contagens/metadados. O mecanismo CUA não iniciou por erro de caminho dos assets; a renderização local usa Chromium headless independente, sem acessar abas/sessões do usuário.
+
+## Validação final / Git / ambiente
+
+71/71 testes dirigidos, 243/243 da regressão person-flow e 4/4 de versão PASS. `node scripts/verify-import-evidence.mjs` PASS: todas as gravações em localhost:55479/import_evidence_v202 foram revertidas por ROLLBACK. Typecheck web, build TypeScript, build web e lint PASS. Context Pack regenerado/verificado e 3/3 testes PASS em snapshot do índice sem documento alheio não rastreado; exports copiados pelo gerador, nunca editados manualmente. Migration final aplicada em clone QA com gates anteriores restaurados e smoke SQL PASS/rollback. CI e Git/main/rollout pendentes. Arquivos não relacionados preservados: `.tmp.driveupload/`, acordo matching, Dockerfile GPU e teste duplicado.
+
+## Conclusão
+
+Implementação local validada nas fronteiras de persistência. D-01/D-05/D-06 ainda PARTIAL até completar replay/smoke e publicação; não constitui declaração de entrega em produção.
 
 ---
 
@@ -18515,6 +18661,18 @@ Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.
 Aditivo: reutilizar IdentityForm e identifyResumeIntake para expor correção explícita antes da criação; revalidar correspondências, bloquear resolução durante a edição e preservar o formulário em erro. Não corrigir o algoritmo extrator neste escopo. Implantar o ajuste e repetir a jornada real autorizada sem publicar Perfil.
 
 Sequência: diagnóstico existente -> branch isolada do deploy f1cc983 -> gateway de transporte reutilizando Auth/RLS -> SSH reverso -> negativos/adapter/build -> implantação reversível -> jornada real hospedada -> AoT e contexto gerado. Gateway não contém parser, modelo nem regra de extração; usa Node já adotado pelo repositório e nenhuma biblioteca nova. Não executar validação integral sem autorização adicional. Não publicar Perfil nem ativar Parser IA M5.7. Se acesso autenticado/qualidade/tempo impedir prova, registrar PARTIAL/BLOCKED no AoT, sem declarar encerramento.
+
+---
+
+## Source: `docs/qa/execution-import-evidence-v202.md`
+
+# Execução — Prisma v2.0.2: evidências da importação
+
+Versão 1.0.0. Fonte integral congelada: `docs/qa/agreement-import-evidence-v202.md` 1.0.0, aprovado pela instrução de Bruno em 2026-10-03. Ler o contrato completo: todos os D-01 a D-06, P-01 a P-03, F-01/F-02, A-01/A-02 e CA-D01 a CA-D06 são obrigatórios, sem substituição.
+
+Executar no baseline isolado `codex/fix-import-evidence-v202`, preservando material não rastreado. Reutilizar Parser/cache, RPC privada de persistência e auditoria existentes. Corrigir a compatibilidade no adaptador e servidor antes de expor a web; versionar o adaptador aditivo sem invalidar o cache/prompt/modelo. Validar em PostgreSQL local descartável as RPCs reais com fixtures sintéticas e rollback; nenhuma aprovação humana fabricada. Validar estados/render da tela de importação, proteção de dados e recuperação da fonte/cache.
+
+Atualizar owner docs, v2.0.2 e Context Pack; obter plano do diff committed, deduplicar verificações, revisar diff e fechar AoT pelo template. Commit/push/CI, promoção fast-forward para main, migration pelo conector autorizado, Parser/web seletivos, smoke e sincronização estão autorizados. Não executar `db push` geral, suíte local integral, nova inferência paga ou reprocessamento alheio. Uma nova decisão material interrompe somente a parte afetada.
 
 ---
 

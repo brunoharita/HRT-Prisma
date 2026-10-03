@@ -5,6 +5,8 @@ import { stableReviewEntityId } from "./reviewFieldLifecycle.js";
 import { normalizeResumeEmail, normalizeResumePhone, type ResumeIdentity } from "../../../src/domain/resumeIdentity.js";
 import { normalizeDraftPeriods } from "./resumeDates.js";
 import { preserveExplicitItemLineBreaks } from "./narrativeText.js";
+import { PARSER_EVIDENCE_ADAPTER_VERSION } from "./importEvidencePersistence.js";
+import { CUSTOM_PROFILE_SECTION_ID_PATTERN } from "./customProfileSections.js";
 
 export const PARSER_IA_VERSION = "parser-ia-1.0.0";
 export const PARSER_IA_SOURCE_VERSION = "pdfjs-5.4.296/parser-ia-spans-v1";
@@ -29,7 +31,10 @@ export function canResumeFailedAiIntake(document: PersonDocumentTimelineItem | n
   return Boolean(document && document.sourceType === "resume_pdf" && !document.isLegacyUnstored
     && document.extractionVersion === PARSER_IA_SOURCE_VERSION && document.status === "failed" && document.reviewState === "not_ready"
     && document.latestAttempt?.state === "failed_structuring"
-    && document.latestAttempt.failureCode === "resume_intake_processing_failed"
+    && (document.latestAttempt.failureCode === "resume_intake_processing_failed"
+      || (document.latestAttempt.failureCode === "import_evidence_contract_invalid"
+        && Boolean(document.latestAttempt.structuringVersion)
+        && !document.latestAttempt.structuringVersion!.endsWith(`/${PARSER_EVIDENCE_ADAPTER_VERSION}`)))
     && document.latestAttempt.usefulCharacterCount === 0 && !document.reviewAttempt);
 }
 export interface ParserSourceLine { id: string; pageNumber: number; text: string; x: number; y: number; width: number; height: number; }
@@ -37,6 +42,7 @@ export interface ParserFact { path: string; value: string; sources: string[]; }
 export interface ParserPayload { status: "complete" | "partial"; facts: ParserFact[]; uncertainties: string[]; }
 export interface ParserIaResult {
   version: typeof PARSER_IA_VERSION;
+  evidenceAdapterVersion?: typeof PARSER_EVIDENCE_ADAPTER_VERSION;
   sourceSha256: string;
   organizationId: string;
   status: "structured_for_review" | "partial";
@@ -58,7 +64,7 @@ const clean = (s: string) => {
   return preserveExplicitItemLineBreaks(normalized);
 };
 const compact = (s: string) => clean(s).replace(/[•▪●]/g, "").replace(/\s/g, "");
-const reviewListFieldPath = (path: string) => path.replace(/^(competencies|languages|certifications|areasOfExpertise)\.(0|[1-9][0-9]{0,2})$/, "$1");
+const reviewListFieldPath = (path: string) => path.replace(/^(competencies|languages|certifications|areasOfExpertise|toolsAndTechnologies|professionalContexts)\.(0|[1-9][0-9]{0,2})$/, "$1");
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 
 export function parserIaSource(pages: readonly ExtractedPage[]): ParserSourceLine[] {
@@ -196,7 +202,44 @@ export function structureParserIa(raw: unknown, pages: ExtractedPage[], binding:
   if (duplicates.length) draft.uncertainties.push("Há formações possivelmente duplicadas; confirmar a consolidação na revisão.");
   for (const [name, present] of [["nome", draft.identity.fullName], ["e-mail", draft.contact.email], ["telefone", draft.contact.phone], ["experiências", draft.experiences.length], ["formação", draft.education.length], ["idiomas", draft.languages.length]] as const) if (!present) draft.notIdentified.push(name);
   const normalizedDraft = normalizeDraftPeriods(draft);
-  return { version: PARSER_IA_VERSION, sourceSha256: binding.sourceSha256, organizationId: binding.organizationId, status: payload.status === "partial" || normalizedDraft.uncertainties.length > 0 ? "partial" : "structured_for_review", draft: normalizedDraft, fieldEvidence: evidence, acceptedFacts, rejected, provenance: binding.provenance };
+  return normalizeParserEvidenceResult({ version: PARSER_IA_VERSION, sourceSha256: binding.sourceSha256, organizationId: binding.organizationId, status: payload.status === "partial" || normalizedDraft.uncertainties.length > 0 ? "partial" : "structured_for_review", draft: normalizedDraft, fieldEvidence: evidence, acceptedFacts, rejected, provenance: binding.provenance });
+}
+
+export function importRecoveryNeedsSystemUpdate(document: PersonDocumentTimelineItem | null | undefined): boolean {
+  return document?.latestAttempt?.failureCode === "import_evidence_contract_invalid" && !canResumeFailedAiIntake(document);
+}
+
+// Adapt only identifiers/addresses; source values, references and geometry are immutable.
+function normalizeParserEvidenceResult(result: ParserIaResult): ParserIaResult {
+  const canonicalId = (kind: "result" | "section" | "item", id: string, seed: string) => {
+    const valid = kind === "result" ? /^result_[a-z0-9]{8,64}$/.test(id) : CUSTOM_PROFILE_SECTION_ID_PATTERN.test(id);
+    return valid ? id : `${kind}_${stableReviewEntityId("experience", `${result.sourceSha256}:${seed}`).slice("experience_".length)}`;
+  };
+  const pathChanges = new Map<string, string>();
+  const keyResults = result.draft.keyResults.map((item) => {
+    const id = canonicalId("result", item.id, `result:${item.id}`);
+    pathChanges.set(`keyResults.${item.id}.value`, `keyResults.${id}.value`);
+    return id === item.id ? item : { ...item, id };
+  });
+  const customSections = result.draft.customSections.map((section) => {
+    const id = canonicalId("section", section.id, `section:${section.id}`);
+    pathChanges.set(`customSections.${section.id}.name`, `customSections.${id}.name`);
+    const items = section.items.map((item) => {
+      const itemId = canonicalId("item", item.id, `section:${section.id}:item:${item.id}`);
+      pathChanges.set(`customSections.${section.id}.items.${item.id}.value`, `customSections.${id}.items.${itemId}.value`);
+      return itemId === item.id ? item : { ...item, id: itemId };
+    });
+    return id === section.id && items.every((item, index) => item === section.items[index]) ? section : { ...section, id, items };
+  });
+  const fieldEvidence = result.fieldEvidence.map((item) => {
+    const fieldPath = pathChanges.get(item.fieldPath) ?? reviewListFieldPath(item.fieldPath);
+    return fieldPath === item.fieldPath ? item : { ...item, fieldPath };
+  });
+  const draftUnchanged = keyResults.every((item, index) => item === result.draft.keyResults[index])
+    && customSections.every((item, index) => item === result.draft.customSections[index]);
+  if (result.evidenceAdapterVersion === PARSER_EVIDENCE_ADAPTER_VERSION && draftUnchanged
+    && fieldEvidence.every((item, index) => item === result.fieldEvidence[index])) return result;
+  return { ...result, evidenceAdapterVersion: PARSER_EVIDENCE_ADAPTER_VERSION, draft: draftUnchanged ? result.draft : { ...result.draft, keyResults, customSections }, fieldEvidence };
 }
 
 export function parserIaIdentity(result: ParserIaResult): ResumeIdentity {
@@ -206,13 +249,14 @@ export function parserIaIdentity(result: ParserIaResult): ResumeIdentity {
 
 export function parserIaMethodVersion(result: ParserIaResult): string {
   if (result.version !== PARSER_IA_VERSION || !/^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$/.test(result.provenance?.model ?? "") || !/^[a-f0-9]{64}$/.test(result.provenance?.promptSha256 ?? "")) throw new Error("PARSER_PROVENANCE_INVALID");
-  return `${PARSER_IA_VERSION}/${result.provenance.model}/${result.provenance.promptSha256}`;
+  return `${PARSER_IA_VERSION}/${result.provenance.model}/${result.provenance.promptSha256}/${PARSER_EVIDENCE_ADAPTER_VERSION}`;
 }
 
 export function preparedParserIa(input: Pick<ProcessedDocumentInput, "sha256" | "parserIa">, organizationId: string): ParserIaResult | null {
-  const result = input.parserIa;
-  if (!result) return null;
-  if (result.version !== PARSER_IA_VERSION || result.organizationId !== organizationId || result.sourceSha256 !== input.sha256) throw new Error("PARSER_BINDING_INVALID");
+  const originalResult = input.parserIa;
+  if (!originalResult) return null;
+  if (originalResult.version !== PARSER_IA_VERSION || originalResult.organizationId !== organizationId || originalResult.sourceSha256 !== input.sha256) throw new Error("PARSER_BINDING_INVALID");
+  const result = normalizeParserEvidenceResult(originalResult);
   parserIaMethodVersion(result);
   const linkedin = result.draft.contact.linkedin ? canonicalLinkedinUrl(result.draft.contact.linkedin) : null;
   const uncertainties = result.draft.contact.linkedin && !linkedin && !result.draft.uncertainties.includes(LINKEDIN_REVIEW_UNCERTAINTY)

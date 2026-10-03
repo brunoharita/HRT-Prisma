@@ -25,6 +25,7 @@ import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 import { useParserReadiness } from "../ui/useParserReadiness";
 import { parserReadinessBlocksImport, parserReadinessTitles, type ParserReadiness } from "../domain/parserReadiness";
+import { importProcessingPresentation } from "../domain/importProcessingPresentation";
 
 interface ResumeImportPageProps { activeMembership: OrganizationMembership; onNavigate: (path: string) => void; }
 interface IdentityFormValue { fullName: string; email: string; phone: string; }
@@ -166,9 +167,9 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
 
   return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase}`}>
     {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} readiness={readiness} onCheck={() => void refreshReadiness()} /> : null}
-    {phase !== "upload" && processed?.parserIa?.status === "partial" ? <Alert type="warning" showIcon message="Interpretação parcial: há informações que precisam de conferência na revisão." /> : null}
+    {phase !== "upload" && !(phase === "processing" && error) && processed?.parserIa?.status === "partial" ? <Alert type="warning" showIcon message="Interpretação parcial: há informações que precisam de conferência na revisão." /> : null}
     {phase === "identity" && intake ? <IdentityScreen busy={busy} error={error} identity={identity} intake={intake} onBack={() => setPhase("upload")} onCreate={handleCreateDespiteMatch} onIdentityReview={handleIdentityReview} onLink={(candidate) => void resolveIntake("link_existing_person", candidate.personId)} processed={processed} /> : null}
-    {phase === "processing" ? <ProcessingScreen busy={busy} error={error} onBack={() => onNavigate("/profiles")} onReplace={restartImport} onRetry={processingRecovery === "retry" && lastResolution ? () => void resolveIntake(lastResolution.action, lastResolution.personId) : null} processed={processed} progress={processingProgress} recovery={processingRecovery} /> : null}
+    {phase === "processing" ? <ProcessingScreen busy={busy} error={error} onBack={() => onNavigate("/profiles")} onWorkspace={processingProgress?.personId ? () => onNavigate(`/profiles/${processingProgress.personId}`) : null} onReplace={restartImport} onRetry={processingRecovery === "retry" && lastResolution ? () => void resolveIntake(lastResolution.action, lastResolution.personId) : null} processed={processed} progress={processingProgress} recovery={processingRecovery} /> : null}
     {phase === "analysis" && result && analysis ? <AnalysisScreen analysis={analysis} busy={busy} error={error} onBack={() => onNavigate(`/profiles/${result.personId}`)} onReview={() => void startReview()} processed={processed} reused={result.reused} /> : null}
   </PrismaPage>;
 }
@@ -240,21 +241,21 @@ function IdentityForm({ busy, identity, onSubmit, onCancel }: { busy: boolean; i
   return <Form<IdentityFormValue> disabled={busy} initialValues={{ fullName: identity?.fullName ?? "", email: identity?.email ?? "", phone: identity?.phone ?? "" }} layout="vertical" onFinish={onSubmit}><div className="prisma-identity-fields"><Form.Item label="Nome" name="fullName" rules={[{ required: true, whitespace: true, message: "Informe o nome da Pessoa." }]}><Input autoComplete="name" /></Form.Item><Form.Item label="E-mail" name="email"><Input autoComplete="email" /></Form.Item><Form.Item label="Telefone" name="phone"><Input autoComplete="tel" /></Form.Item></div><Button disabled={busy} htmlType="submit" loading={busy} type="primary">Confirmar identificação</Button>{onCancel ? <Button disabled={busy} onClick={onCancel}>Cancelar correção</Button> : null}</Form>;
 }
 
-function ProcessingScreen({ busy, error, onBack, onReplace, onRetry, processed, progress, recovery }: { busy: boolean; error: string | null; onBack: () => void; onReplace: () => void; onRetry: (() => void) | null; processed: ProcessedDocumentInput | null; progress: ResumeProcessingProgress | null; recovery: OperationRecovery }) {
-  const current = progress?.stage === "structuring" ? 2 : progress?.stage === "persisting" ? 3 : 4;
+export function ProcessingScreen({ busy, error, onBack, onWorkspace, onReplace, onRetry, processed, progress, recovery }: { busy: boolean; error: string | null; onBack: () => void; onWorkspace: (() => void) | null; onReplace: () => void; onRetry: (() => void) | null; processed: ProcessedDocumentInput | null; progress: ResumeProcessingProgress | null; recovery: OperationRecovery }) {
+  const presentation = importProcessingPresentation(progress, error, recovery);
   const recoveryAction = onRetry
     ? <Button disabled={busy} onClick={onRetry} type="primary">Tentar novamente</Button>
     : recovery === "sign-in"
       ? <Button onClick={onBack}>Entrar novamente</Button>
-      : recovery === "reload" || recovery === "return-to-review"
-        ? <Button onClick={onBack}>Abrir Central da Pessoa</Button>
+      : recovery === "reload" || recovery === "return-to-review" || recovery === "await-system-update"
+        ? <Button onClick={onWorkspace ?? onBack}>{onWorkspace ? "Abrir Central da Pessoa" : "Voltar para Pessoas"}</Button>
         : <Button onClick={onReplace}>Substituir arquivo</Button>;
   return <>
     <PrismaPageHeader title="Processamento do documento" description="Acompanhe o processamento do currículo enviado." actions={<FileCard file={processed?.file ?? null} />} />
     <Button disabled={busy} icon={<ArrowLeftOutlined />} onClick={onBack} type="text">Voltar para Pessoas</Button>
-    <PrismaCard className="prisma-journey-processing-timeline"><Steps current={current} items={[{ title: "Recebido" }, { title: "Extraindo texto" }, { title: "Estruturando" }, { title: "Revisão" }, { title: "Pronto" }]} responsive /></PrismaCard>
-    {error ? <Alert action={recoveryAction} description={onRetry ? "O documento foi preservado com o progresso concluído. Você pode repetir a etapa interrompida sem reenviar o currículo." : "O documento foi preservado e nenhum perfil foi publicado. Use a ação indicada para continuar por um caminho seguro."} showIcon title={error} type="error" /> : null}
-    <div className="prisma-journey-processing-grid"><PrismaCard title="Status atual"><Progress percent={progress?.stage === "ready_for_review" ? 100 : 70} showInfo={false} status={error ? "exception" : "active"} /><Typography.Title level={4}>{progress?.message ?? "Preparando processamento..."}</Typography.Title><Typography.Text type="secondary">Isso pode levar alguns instantes.</Typography.Text></PrismaCard><PrismaCard title="Detalhes"><Descriptions column={1} size="small"><Descriptions.Item label="Páginas detectadas">{processed?.pages.length ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{processingMethodLabel(processed)}</Descriptions.Item><Descriptions.Item label="OCR necessário">{processed?.ocrPageCount ? "Sim" : "Não"}</Descriptions.Item><Descriptions.Item label="Arquivo recebido">Preservado</Descriptions.Item></Descriptions></PrismaCard></div>
+    <PrismaCard className="prisma-journey-processing-timeline"><Steps current={presentation.currentStep} status={presentation.status} items={[{ title: "Recebido" }, { title: "Extraindo texto" }, { title: "Estruturando" }, { title: "Revisão" }, { title: "Pronto" }]} responsive /></PrismaCard>
+    {error ? <Alert className="prisma-import-processing-error" action={recoveryAction} description={onRetry ? "O documento foi preservado. Você pode repetir a etapa interrompida sem reenviar o currículo; nenhuma nova chamada à IA será iniciada nesta tela." : presentation.preservedMessage} showIcon title={error} type="error" /> : null}
+    <div className="prisma-journey-processing-grid"><PrismaCard title="Status atual"><Progress percent={presentation.percent} showInfo={false} status={error ? "exception" : "active"} /><Typography.Title level={4}>{presentation.title}</Typography.Title><Typography.Text type="secondary">{presentation.detail}</Typography.Text></PrismaCard><PrismaCard title="Detalhes"><Descriptions column={1} size="small"><Descriptions.Item label="Páginas detectadas">{processed?.pages.length ?? "Aguardando"}</Descriptions.Item><Descriptions.Item label="Método atual">{processingMethodLabel(processed)}</Descriptions.Item><Descriptions.Item label="OCR necessário">{processed?.ocrPageCount ? "Sim" : "Não"}</Descriptions.Item><Descriptions.Item label="Arquivo recebido">Preservado</Descriptions.Item></Descriptions></PrismaCard></div>
     {!error ? <Alert showIcon title="Mantenha esta página aberta durante o processamento" description="O arquivo já foi recebido, mas a extração e a estruturação ainda são concluídas por esta sessão. Ao final, a revisão será aberta automaticamente." type="info" /> : null}
   </>;
 }

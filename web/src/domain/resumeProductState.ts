@@ -48,16 +48,19 @@ export interface ResumeProductStateView {
   publicationPossible: boolean;
 }
 
-export type ProcessingFailureRecovery = "reprocess" | "replace_file";
+export type ProcessingFailureRecovery = "reprocess" | "replace_file" | "await-system-update";
 
 export function processingFailureRecovery(attempt: ProcessingAttemptView | null | undefined): ProcessingFailureRecovery {
   if (!attempt) return "replace_file";
+  if (attempt.failureCode === "import_evidence_contract_invalid") return "await-system-update";
   return attempt.pagesNative + attempt.pagesOcr > 0 && attempt.usefulCharacterCount > 0 ? "reprocess" : "replace_file";
 }
 
 export function processingFailureMessage(attempt: ProcessingAttemptView | null | undefined): string {
   if (!attempt) return "O processamento não foi concluído. Envie novamente o currículo para continuar.";
   const code = (attempt.failureCode ?? "").toLowerCase();
+  if (code === "import_evidence_contract_invalid") return "O documento foi lido, mas a gravação encontrou uma incompatibilidade interna. Aguarde a correção do sistema; o documento e o Perfil vigente permanecem preservados.";
+  if (code === "resume_intake_processing_failed") return "A importação foi interrompida depois da leitura. O PDF original foi preservado; confira a conexão e a sessão antes de retomar pela Central da Pessoa.";
   if (/unsupported|invalid_pdf|encrypted|password/.test(code)) return "Este arquivo não pôde ser lido com segurança. Envie outra cópia em PDF, sem senha e com texto selecionável.";
   if (/empty|no_text|insufficient_text|unreadable/.test(code)) return "Não encontramos conteúdo legível suficiente neste arquivo. Envie outra cópia, preferencialmente em PDF com texto selecionável.";
   if (processingFailureRecovery(attempt) === "reprocess") return "A leitura foi preservada, mas a estruturação não terminou. Você pode reprocessar sem reenviar o arquivo.";
@@ -135,8 +138,8 @@ export function deriveResumeProductState(input: ResumeProductStateInput): Resume
     state: "technical_failure",
     label: "Falha técnica",
     message: "O Prisma não conseguiu continuar tecnicamente. O documento recebido permaneceu preservado.",
-    nextAction: recoverable ? "reprocess" : "replace_file",
-    nextActionLabel: recoverable ? "Reprocessar" : "Substituir arquivo",
+    nextAction: processingFailureRecovery(input.latestAttempt) === "await-system-update" ? "none" : recoverable ? "reprocess" : "replace_file",
+    nextActionLabel: processingFailureRecovery(input.latestAttempt) === "await-system-update" ? "Aguardar correção do sistema" : recoverable ? "Reprocessar" : "Substituir arquivo",
     severity: "error",
     reviewPossible: false,
     publicationPossible: false,

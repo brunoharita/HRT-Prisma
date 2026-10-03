@@ -35,10 +35,10 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
     { path: 'education.a.course', value: 'MBA in Management', sources: ['p1l8'] },
     { path: 'education.a.period', value: '2018 - 2019', sources: ['p1l9'] },
   ], uncertainties: [] }, pages, { organizationId: 'org', sourceSha256: checksum, provenance: { model: 'gpt-5.6-luna', promptSha256: 'b'.repeat(64), responseId: 'resp_fake', inputTokens: 0, outputTokens: 0, costUsd: 0, durationMs: 1 } });
-  const pattern = new RegExp((await readFile('supabase/migrations/20260910104122_allow_ocr_spatial_field_evidence.sql', 'utf8')).match(/!~ '([^']+)'/)[1]);
+  const pattern = new RegExp((await readFile('supabase/migrations/20261003193000_import_evidence_persistence_contract.sql', 'utf8')).match(/select path ~ '([^']+)'/)[1]);
   const vite = await createServer({ configFile: 'web/vite.config.ts', server: { middlewareMode: true, watch: null }, logLevel: 'silent' });
   globalThis.window = { location: { hostname: 'localhost', href: 'http://localhost:5555' }, setTimeout, clearTimeout, addEventListener() {}, removeEventListener() {} };
-  let client; let aiCalls = 0; let download = bytes; let storagePath = 'org/source.pdf'; let version = 'pdfjs-5.4.296/parser-ia-spans-v1'; const mutations = [];
+  let client; let aiCalls = 0; let download = bytes; let storagePath = 'org/source.pdf'; let version = 'pdfjs-5.4.296/parser-ia-spans-v1'; let persistFailure = false; let diagnosticFailure = false; const mutations = [];
   try {
     const { personIngestionService: service } = await vite.ssrLoadModule('/src/infrastructure/supabase/personIngestionService.ts');
     client = (await vite.ssrLoadModule('/src/infrastructure/supabase/client.ts')).supabase;
@@ -55,6 +55,14 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
     client.storage.from = () => ({ download: async path => { assert.equal(path, 'org/source.pdf'); return { data: new Blob([download]), error: null }; } });
     client.rpc = async (name, args) => {
       mutations.push(name);
+      if (name === 'record_resume_import_failure') {
+        assert.equal(args.p_organization_id, 'org'); assert.equal(args.p_intake_id, 'intake');
+        assert.equal(args.p_diagnostic.reason, 'field_path_invalid'); assert.equal(args.p_diagnostic.stage, 'persisting');
+        assert.equal(args.p_diagnostic.technicalCode, '22023'); assert.equal(args.p_diagnostic.fieldPath, null);
+        assert.ok(args.p_diagnostic.structuringVersion.endsWith('/evidence-adapter-1.0.0'));
+        assert.ok(!JSON.stringify(args.p_diagnostic).includes('Synthetic Person'));
+        return { data: null, error: diagnosticFailure ? { code: '503', message: 'DO NOT EXPOSE PRIVATE BACKEND DATA' } : null };
+      }
       if (name === 'persist_person_extraction') {
         assert.equal(args.p_person_id, 'person'); assert.equal(args.p_document_id, 'doc'); assert.equal(args.p_idempotency_key, 'resume-intake-extraction:intake');
         assert.equal(args.p_draft.experiences.length, 1);
@@ -67,7 +75,7 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
         assert.equal(args.p_draft.contact.linkedin, 'https://www.linkedin.com/in/synthetic-profile');
         assert.deepEqual(validateReviewDraftForSave(args.p_draft), []);
         for (const page of args.p_pages) for (const evidence of page.field_evidence) assert.ok(pattern.test(evidence.fieldPath), evidence.fieldPath);
-        return { data: [{ processing_attempt_id: 'attempt', structured: true }], error: null };
+        return persistFailure ? { data: null, error: { code: '22023', message: 'prisma_import_evidence_invalid', details: JSON.stringify({ contract: 'import-evidence-1.0.0', reason: 'field_path_invalid', fieldPath: null, pageNumber: 1, evidenceIndex: 0 }) } } : { data: [{ processing_attempt_id: 'attempt', structured: true }], error: null };
       }
       assert.equal(name, 'complete_resume_intake'); assert.equal(args.p_intake_id, 'intake'); return { data: 'ready_for_review', error: null };
     };
@@ -75,10 +83,16 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
     await service.resumeFailedAiIntake('org', 'person', 'doc');
     assert.deepEqual(mutations, ['persist_person_extraction', 'complete_resume_intake']);
     assert.equal(aiCalls, 1);
+    persistFailure = true;
+    await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), error => error.recovery === 'await-system-update');
+    assert.deepEqual(mutations.slice(2), ['persist_person_extraction', 'record_resume_import_failure']);
+    diagnosticFailure = true;
+    await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), error => error.recovery === 'await-system-update' && error.message.includes('diagnóstico não pôde ser sincronizado') && !error.message.includes('PRIVATE BACKEND'));
+    persistFailure = false; diagnosticFailure = false;
     storagePath = 'other/source.pdf'; await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), /origem/); storagePath = 'org/source.pdf';
     download = sourcePdf('Changed source'); await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), /não corresponde/); download = bytes;
     version = 'unknown'; await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), /não está disponível/);
-    assert.equal(aiCalls, 1); assert.equal(mutations.length, 2);
+    assert.equal(aiCalls, 3); assert.equal(mutations.length, 6);
   } finally {
     await client?.auth.stopAutoRefresh(); await vite.close(); globalThis.fetch = originalFetch;
     if (originalWindow === undefined) delete globalThis.window; else globalThis.window = originalWindow;

@@ -82,7 +82,7 @@ import {
   type PersonPendingAction,
 } from "../domain/personActionCenter";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
-import { canResumeFailedAiIntake } from "../domain/parserIa";
+import { canResumeFailedAiIntake, importRecoveryNeedsSystemUpdate } from "../domain/parserIa";
 import { parserIaEnabled, prepareParserIa } from "../infrastructure/parserIaClient";
 import { personDeletionService } from "../infrastructure/supabase/personDeletionService";
 import type { OrganizationMembership } from "../shared/access";
@@ -261,6 +261,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
   }
 
   async function handleReprocess(document = workspace?.selectedDocument) {
+    if (importRecoveryNeedsSystemUpdate(document)) { setError("Esta falha exige uma correção do sistema antes da retomada. O documento e o Perfil vigente permanecem preservados."); return; }
     if (!document) {
       setError("Selecione um documento com falha recuperável antes de reprocessar.");
       return;
@@ -801,7 +802,7 @@ function DocumentContextPanel({ document, draft, busy, onAction, onDiscard, onDe
         <div className="prisma-person-document-context__header"><FilePdfOutlined /><div><small>Documento selecionado</small><Typography.Title level={3}>{document.filename}</Typography.Title><span>Importado em {formatDate(document.createdAt)}</span></div><PrismaStatusTag label={presentation.label} tone={statusTone(presentation.tone)} /></div>
         <div className="prisma-person-document-context__summary"><article><small>Campos recuperados</small><strong>{metrics.recovered}</strong><span>Informações estruturadas nesta fonte</span></article><article><small>Pontos pendentes</small><strong>{metrics.pending}</strong><span>Campos não identificados ou que exigem validação</span></article><article><small>Resultado no Perfil</small><strong>{document.profileVersion ? `v${document.profileVersion}` : "Sem nova versão"}</strong><span>{document.profileVersion ? "Perfil publicado" : "Perfil atual preservado"}</span></article></div>
         {draft?.education.length ? <DocumentEducationSummary education={draft.education} /> : null}
-        <section className="prisma-person-document-context__next"><small>Próxima ação</small><strong>{presentation.nextAction}</strong><p>{presentation.description}</p>{reviewable ? <Button block icon={<ArrowRightOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Continuar revisão</Button> : document.reviewAttempt ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Revisar novamente</Button> : presentation.state === "technical_failure" && document.latestAttempt && document.latestAttempt.pagesNative + document.latestAttempt.pagesOcr > 0 ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("reprocess", document)} type="primary">Reabrir importação</Button> : null}</section>
+        <section className="prisma-person-document-context__next"><small>Próxima ação</small><strong>{presentation.nextAction}</strong><p>{presentation.description}</p>{reviewable ? <Button block icon={<ArrowRightOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Continuar revisão</Button> : document.reviewAttempt ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("review", document)} type="primary">Revisar novamente</Button> : presentation.state === "technical_failure" && !importRecoveryNeedsSystemUpdate(document) && document.latestAttempt && document.latestAttempt.pagesNative + document.latestAttempt.pagesOcr > 0 ? <Button block icon={<ReloadOutlined />} loading={busy} onClick={() => onAction("reprocess", document)} type="primary">Reabrir importação</Button> : null}</section>
         <div className="prisma-person-document-context__actions"><Button icon={<EyeOutlined />} onClick={() => onAction(document.verificationReviewId ? "open_document" : "open_details", document)}>{document.verificationReviewId ? "Abrir currículo" : "Detalhes técnicos"}</Button><Button icon={<UserSwitchOutlined />} onClick={() => onMove(document)}>Corrigir Pessoa vinculada</Button>{canDiscard ? <Popconfirm cancelText="Manter pendência" description="Documento, histórico e Perfil atual permanecerão preservados." okText="Arquivar importação" onConfirm={() => onDiscard(document)} title="Descartar esta importação do fluxo ativo?"><Button disabled={busy}>Arquivar revisão</Button></Popconfirm> : null}<Button danger disabled={busy} icon={<DeleteOutlined />} onClick={() => onDelete(document)}>Excluir documento</Button></div>
       </PrismaCard>
     </aside>

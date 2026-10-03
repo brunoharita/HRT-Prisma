@@ -1,3 +1,5 @@
+import { IMPORT_EVIDENCE_CONTRACT_VERSION, IMPORT_FAILURE_REASONS, PARSER_EVIDENCE_ADAPTER_VERSION, type ImportEvidenceIssue, type ImportFailureDiagnostic } from "./importEvidencePersistence.js";
+
 export interface ReviewOperationError {
   code?: string;
   message: string;
@@ -6,7 +8,7 @@ export interface ReviewOperationError {
 }
 
 export type OperationErrorCategory = "authentication" | "authorization" | "conflict" | "validation" | "stale-state" | "unavailable" | "internal";
-export type OperationRecovery = "sign-in" | "reload" | "review-fields" | "retry" | "return-to-review" | "none";
+export type OperationRecovery = "sign-in" | "reload" | "review-fields" | "retry" | "return-to-review" | "await-system-update" | "none";
 export const OPERATION_ERROR_CONTRACT_VERSION = "2.0.0";
 
 interface ActionableOperationFeedback {
@@ -21,15 +23,41 @@ export class PrismaOperationError extends Error {
   readonly recovery: OperationRecovery;
   readonly technicalCode: string | null;
   readonly fieldPath: string | null;
+  readonly importIssue: ImportEvidenceIssue | null;
 
-  constructor(message: string, options: { category: OperationErrorCategory; recovery: OperationRecovery; technicalCode?: string | null; fieldPath?: string | null }) {
+  constructor(message: string, options: { category: OperationErrorCategory; recovery: OperationRecovery; technicalCode?: string | null; fieldPath?: string | null; importIssue?: ImportEvidenceIssue | null }) {
     super(message);
     this.name = "PrismaOperationError";
     this.category = options.category;
     this.recovery = options.recovery;
     this.technicalCode = options.technicalCode ?? null;
     this.fieldPath = options.fieldPath ?? null;
+    this.importIssue = options.importIssue ?? null;
   }
+}
+
+export function importEvidenceOperationError(issue: ImportEvidenceIssue): PrismaOperationError {
+  return new PrismaOperationError("O currículo foi lido, mas a gravação encontrou uma incompatibilidade interna. O documento foi preservado e nenhum Perfil foi publicado. Aguarde a correção do sistema antes de retomar pela Central da Pessoa.", { category: "internal", recovery: "await-system-update", technicalCode: "22023", importIssue: issue });
+}
+
+export function importFailureDiagnostic(error: unknown, stage: ImportFailureDiagnostic["stage"], structuringVersion: string): ImportFailureDiagnostic {
+  const typed = error instanceof PrismaOperationError ? error : null;
+  const issue: ImportEvidenceIssue = typed?.importIssue ?? {
+    reason: typed?.category === "unavailable" ? "unavailable" : typed?.category === "authentication" ? "session_required" : typed?.recovery === "reload" || typed?.recovery === "await-system-update" ? "environment_mismatch" : "operation_failed",
+    fieldPath: null, pageNumber: null, evidenceIndex: null,
+  };
+  return { ...issue, contract: IMPORT_EVIDENCE_CONTRACT_VERSION, stage, technicalCode: /^[A-Z0-9]{5,8}$/.test(typed?.technicalCode ?? "") ? typed!.technicalCode : null, adapterVersion: PARSER_EVIDENCE_ADAPTER_VERSION, structuringVersion };
+}
+
+function parseImportIssue(details: string | null | undefined): ImportEvidenceIssue | null {
+  try {
+    const raw: unknown = JSON.parse(details ?? "null");
+    if (!raw || typeof raw !== "object") return null;
+    const value = raw as Record<string, unknown>;
+    if (value.contract !== IMPORT_EVIDENCE_CONTRACT_VERSION || !IMPORT_FAILURE_REASONS.includes(value.reason as ImportEvidenceIssue["reason"])) return null;
+    const fieldPath = typeof value.fieldPath === "string" && /^(identity\.fullName|contact\.(city|state|phone|email|linkedin)|professionalTitle|areasOfExpertise|professionalObjective|summary|certifications|languages|competencies|toolsAndTechnologies|professionalContexts|uncertainties|notIdentified|experiences\.\*(\.(role|organization|period|description))?|education\.\*(\.(course|institution|period|description|level|qualification|status|classificationOrigin))?|keyResults\.\*\.value|customSections\.\*\.(name|items\.\*\.value))$/.test(value.fieldPath) ? value.fieldPath : null;
+    return { reason: value.reason as ImportEvidenceIssue["reason"], fieldPath, pageNumber: Number.isInteger(value.pageNumber) && Number(value.pageNumber) > 0 && Number(value.pageNumber) <= 200 ? Number(value.pageNumber) : null, evidenceIndex: Number.isInteger(value.evidenceIndex) && Number(value.evidenceIndex) >= 0 && Number(value.evidenceIndex) <= 1000 ? Number(value.evidenceIndex) : null };
+  } catch { return null; }
 }
 
 function asOperationError(error: ReviewOperationError, message: string, category: OperationErrorCategory, recovery: OperationRecovery, fieldPath?: string | null): PrismaOperationError {
@@ -204,6 +232,7 @@ export function reviewOperationErrorMessage(error: ReviewOperationError, fallbac
 
 export function supabaseOperationError(error: ReviewOperationError, fallback: string): PrismaOperationError {
   const technicalMessage = error.message.toLowerCase();
+  if (/prisma_import_evidence_invalid/.test(technicalMessage)) return importEvidenceOperationError(parseImportIssue(error.details) ?? { reason: "field_path_invalid", fieldPath: null, pageNumber: null, evidenceIndex: null });
   const domainError = knownDomainOperationError(error, technicalMessage);
   if (domainError) return domainError;
   if (/unsupported file type|file type is not supported/.test(technicalMessage)) {
@@ -240,7 +269,7 @@ export function supabaseOperationError(error: ReviewOperationError, fallback: st
     return asOperationError(error, "O conteúdo foi lido, mas não pôde ser estruturado com segurança. O arquivo permanece preservado; tente reprocessar pela Central da Pessoa.", "internal", "return-to-review");
   }
   if (/adaptive field evidence is invalid|adaptive extraction payload exceeds safe limits|layout blocks and field evidence must be arrays/.test(technicalMessage)) {
-    return asOperationError(error, "O currículo foi lido, mas suas evidências não puderam ser preservadas com segurança. Nenhum Perfil foi gerado. Atualize a página e processe o arquivo novamente.", "internal", "retry");
+    return importEvidenceOperationError({ reason: /safe limits/.test(technicalMessage) ? "payload_limit" : /must be arrays/.test(technicalMessage) ? "arrays_invalid" : "field_path_invalid", fieldPath: null, pageNumber: null, evidenceIndex: null });
   }
   if (/invalid sha256 checksum|invalid document size|invalid page count|invalid idempotency key|invalid failure (?:state|code)|invalid intake failure code|invalid identity resolution action|only validated pdf intake is supported|filename is required/.test(technicalMessage)) {
     return asOperationError(error, "A importação contém metadados inválidos e foi interrompida antes de alterar o perfil. Volte ao envio, selecione o arquivo novamente e tente outra vez.", "validation", "none");

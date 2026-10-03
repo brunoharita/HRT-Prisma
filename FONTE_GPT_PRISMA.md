@@ -2,11 +2,11 @@
 artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
-product_version: 2.0.1
-current_state_version: 2.51.23
+product_version: 2.0.2
+current_state_version: 2.51.24
 current_state_last_verified: 2026-10-03
-documentation_source_count: 324
-source_manifest_sha256: ea043d48b9263cae73d667d5f03afd77539b9f4b523879ecd543e7905a3a6087
+documentation_source_count: 327
+source_manifest_sha256: e6c6facdcab2d7361ea831e40cd9c17cf9704ecb6b4ce85b29c1f7072cec5422
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,7 +268,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Prisma v2.0.1 está publicada na KVM2, geração 2/movimento 0/entrega 1, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Parser e gateway preservam dados/prompt/modelo/revisão e eliminam PC/túnel; parse sintético real, cache, restart e importação autenticada disponível PASS. Acordo Parser KVM2 1.1.0; evidência e limites no AoT correspondente. Importação real até revisão/publicação não testada neste smoke.
+Prisma v2.0.2 tem a correção de evidências implementada e validada localmente; publicação pendente. `evidence-adapter-1.0.0` e `import-evidence-1.0.0` preservam títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL sintética com rollback, cache/fonte, 71 testes dirigidos e renders desktop/mobile PASS. AoT `docs/qa/aot-import-evidence-v202.md`. Baseline remoto v2.0.1 na KVM2 (`4ccfbf1`) permanece online sem PC/túnel, com prompt/modelo/cache/revisão preservados; a importação do incidente ainda aguarda retomada.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 

@@ -54,6 +54,8 @@ import {
 import { legacyReviewEntityIdFromValue, reviewDraftNeedsContractUpgrade } from "../../domain/reviewFieldLifecycle";
 import { reviewOperationError, supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import { PARSER_IA_VERSION, PARSER_IA_SOURCE_VERSION, parserIaMethodVersion, preparedParserIa } from "../../domain/parserIa";
+import { importEvidenceIssue } from "../../domain/importEvidencePersistence";
+import { importEvidenceOperationError, importFailureDiagnostic, PrismaOperationError } from "../../domain/reviewOperationErrors";
 import { parserIaEnabled, prepareParserIa } from "../parserIaClient";
 
 const DOCUMENT_BUCKET = "person-documents";
@@ -222,7 +224,7 @@ export const personIngestionService = {
     const { data: attemptRows, error: attemptError } = documentIds.length === 0
       ? { data: [], error: null }
       : await supabase.from("document_processing_attempts")
-        .select("id, document_id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
+        .select("id, document_id, attempt_number, state, current_method, structuring_version, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
         .eq("organization_id", organizationId).in("document_id", documentIds).order("attempt_number", { ascending: false });
     throwIfError(attemptError, "Não foi possível carregar as tentativas das importações.");
     const privateByPerson = new Map((privateRows ?? []).map((row) => [row.person_id, row]));
@@ -292,7 +294,7 @@ export const personIngestionService = {
     const { data: attemptRows, error: attemptError } = documentIds.length === 0
       ? { data: [], error: null }
       : await supabase.from("document_processing_attempts")
-        .select("id, document_id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
+        .select("id, document_id, attempt_number, state, current_method, structuring_version, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
         .eq("organization_id", organizationId).in("document_id", documentIds).order("attempt_number", { ascending: false });
     throwIfError(attemptError, "Não foi possível carregar as tentativas de processamento.");
     const latestAttemptByDocument = latestAttemptsByDocument(attemptRows ?? []);
@@ -764,7 +766,7 @@ export const personIngestionService = {
     const { data: attempts, error: attemptError } = documentIds.length === 0
       ? { data: [], error: null }
       : await supabase.from("document_processing_attempts")
-        .select("id, document_id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
+        .select("id, document_id, attempt_number, state, current_method, structuring_version, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
         .eq("organization_id", organizationId).in("document_id", documentIds)
         .order("attempt_number", { ascending: false });
     throwIfError(attemptError, "Não foi possível carregar as tentativas da central.");
@@ -910,7 +912,7 @@ export const personIngestionService = {
 
   async listDocumentAttempts(organizationId: string, documentId: string): Promise<ProcessingAttemptView[]> {
     const { data, error } = await supabase.from("document_processing_attempts")
-      .select("id, attempt_number, state, current_method, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
+      .select("id, attempt_number, state, current_method, structuring_version, pages_native, pages_ocr, useful_character_count, failure_code, failure_message, started_at, completed_at")
       .eq("organization_id", organizationId).eq("document_id", documentId).order("attempt_number", { ascending: false });
     throwIfError(error, "Não foi possível carregar o histórico de tentativas.");
     return (data ?? []).map(toAttemptView);
@@ -1188,6 +1190,8 @@ async function persistExtraction(
   retryOfAttemptId: string | null,
   structuringVersion: string = STRUCTURING_VERSION,
 ) {
+  const issue = importEvidenceIssue(pages, draft);
+  if (issue) throw importEvidenceOperationError(issue);
   const pagePayload = pages.map((page) => ({
     page_number: page.pageNumber,
     text_content: page.text,
@@ -1304,10 +1308,13 @@ async function processResolvedIntake(
   result: ResumeIntakeResolutionResult,
   onProgress?: (progress: ResumeProcessingProgress) => void,
 ): Promise<ResumeIntakeResolutionResult> {
+  let stage: "structuring" | "persisting" | "completing" = "structuring";
+  const methodVersion = input.parserIa ? parserIaMethodVersion(input.parserIa) : STRUCTURING_VERSION;
   try {
-    onProgress?.({ stage: "structuring", message: "Estruturando as informações profissionais recuperadas." });
+    onProgress?.({ stage: "structuring", personId: result.personId, message: "Estruturando as informações profissionais recuperadas." });
     const extraction = await buildPreparedExtraction(organizationId, input);
-    onProgress?.({ stage: "persisting", message: "Preservando páginas, campos extraídos e evidências para revisão." });
+    stage = "persisting";
+    onProgress?.({ stage: "persisting", personId: result.personId, message: "Preservando páginas, campos extraídos e evidências para revisão." });
     await persistExtraction(
       organizationId,
       result.personId,
@@ -1318,29 +1325,27 @@ async function processResolvedIntake(
       input.ocrPageCount,
       `resume-intake-extraction:${result.intakeId}`,
       null,
-      input.parserIa ? parserIaMethodVersion(input.parserIa) : STRUCTURING_VERSION,
+      methodVersion,
     );
     await recordDocumentIntelligenceRun(organizationId, result.personId, result.documentId, input).catch(() => undefined);
+    stage = "completing";
     const { error: completeError } = await supabase.rpc("complete_resume_intake", {
       p_organization_id: organizationId,
       p_intake_id: result.intakeId,
       p_document_id: result.documentId,
     });
     throwIfError(completeError, "O currículo foi processado, mas o intake não pôde ser concluído.");
-    onProgress?.({ stage: "ready_for_review", message: input.parserIa?.status === "partial" ? "Interpretação parcial preservada. Confira as pendências na revisão." : "Análise concluída. O documento está pronto para revisão." });
+    onProgress?.({ stage: "ready_for_review", personId: result.personId, message: input.parserIa?.status === "partial" ? "Interpretação parcial preservada. Confira as pendências na revisão." : "Análise concluída. O documento está pronto para revisão." });
     return result;
   } catch (caught) {
-    const message = caught instanceof Error ? caught.message : "Falha no processamento posterior à resolução de identidade.";
-    await recordFailure(
-      organizationId,
-      result.personId,
-      result.documentId,
-      "failed_structuring",
-      "resume_intake_processing_failed",
-      message,
-      `resume-intake-failure:${result.intakeId}`,
-    ).catch(() => undefined);
-    await failResumeIntake(organizationId, result.intakeId, "resume_intake_processing_failed", message).catch(() => undefined);
+    const diagnostic = importFailureDiagnostic(caught, stage, methodVersion);
+    const { error: diagnosticError } = await Promise.resolve(supabase.rpc("record_resume_import_failure", {
+      p_organization_id: organizationId, p_person_id: result.personId, p_document_id: result.documentId,
+      p_intake_id: result.intakeId, p_diagnostic: diagnostic as unknown as Json,
+      p_idempotency_key: `resume-intake-failure:${result.intakeId}:${diagnostic.reason}:${diagnostic.adapterVersion}`,
+    })).catch(() => ({ error: { message: "diagnostic_unavailable" } }));
+    // Audit failure cannot overwrite the original failure or falsely claim success.
+    if (diagnosticError) throw new PrismaOperationError(`${caught instanceof PrismaOperationError ? caught.message : "A importação foi interrompida."} O diagnóstico não pôde ser sincronizado; confira o resultado desta etapa na Central da Pessoa.`, { category: caught instanceof PrismaOperationError ? caught.category : "internal", recovery: caught instanceof PrismaOperationError ? caught.recovery : "reload", technicalCode: caught instanceof PrismaOperationError ? caught.technicalCode : null, importIssue: caught instanceof PrismaOperationError ? caught.importIssue : null });
     throw caught;
   }
 }
@@ -1496,6 +1501,7 @@ function toCurrentProfileSummary(profile: {
 }
 
 type ProcessingAttemptRow = {
+  structuring_version?: string;
   id: string;
   document_id: string;
   attempt_number: number;
@@ -1573,6 +1579,7 @@ function toTimelineItem(document: {
 }
 
 function toAttemptView(attempt: {
+  structuring_version?: string;
   id: string;
   attempt_number: number;
   state: ProcessingAttemptView["state"];
@@ -1586,6 +1593,7 @@ function toAttemptView(attempt: {
   completed_at: string | null;
 }): ProcessingAttemptView {
   return {
+    structuringVersion: attempt.structuring_version ?? "not_completed",
     id: attempt.id,
     attemptNumber: attempt.attempt_number,
     state: attempt.state,

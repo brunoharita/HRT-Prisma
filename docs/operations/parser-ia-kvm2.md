@@ -1,5 +1,13 @@
 # Operação do Parser IA na KVM2
 
+## Correção das evidências — v2.0.2
+
+O delta `import-evidence-1.0.0` exige somente a migration `20261003193000_import_evidence_persistence_contract.sql`, Parser e web; gateway/Traefik não recebem rebuild. Aplicar a migration específica antes dos consumidores, publicar `release-parser-ia.sh` e `release-web.sh` com o mesmo SHA aprovado e preservar os rollbacks e o volume privado. Não executar `db push` geral. O adaptador `evidence-adapter-1.0.0` mantém prompt/modelo/chave do cache; a migration é aditiva e permite rollback dos consumidores sem apagar títulos/evidências/histórico.
+
+Para diagnóstico, consultar somente `person_ingestion_events.metadata.diagnostic` da organização/documento afetados: contrato, etapa, razão fixa, campo sem IDs, página/índice, código e versões. A RPC exige revisor da organização e valida o vínculo intake/Pessoa/documento; texto/erro bruto não é aceito. Não copiar caches privados para QA nem imprimir currículos. Validar SQL com `node scripts/verify-import-evidence.mjs 55479` em banco local descartável `import_evidence_v202`, já preparado pelas migrations; o script usa somente dados sintéticos e rollback.
+
+Uma falha `import_evidence_contract_invalid` na versão corrente orienta aguardar correção. Depois de atualizar o adaptador, tentativas elegíveis podem ser retomadas por ação humana na Central, com hash/origem revalidados e cache existente. A falha legada `resume_intake_processing_failed` do incidente permanece no histórico. Não publicar Perfil para comprovar recuperação. Evidência e estado de rollout: [AoT v2.0.2](../qa/aot-import-evidence-v202.md).
+
 Versão de implantação `parser-ia-kvm2-1.0.0`; acordo `../qa/agreement-parser-ia-kvm2.md` 1.1.0 e ADR-075. A importação automática usa PDF.js → Parser IA → revisão. Paddle/Tesseract não são reativados. A versão dos dados, prompt, modelo e transporte continuam iguais; versão pública v2.0.1 autorizada pelo PO.
 
 Publicado em 2026-10-03 no SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`: Parser running/healthy, parse real sintético e replay após restart PASS, tela autenticada de importação disponível e menu v2.0.1. Web publicada separadamente para a versão; gateway/Traefik/experimentos preservados. Nenhuma importação humana completa foi executada como teste. Detalhes, imagens/rollback e limites no AoT.

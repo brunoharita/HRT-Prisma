@@ -160,6 +160,7 @@ export function reviewDraftChangeState(
 }
 
 export function reviewFieldPathExists(draft: StructuredDraft, fieldPath: string): boolean {
+  if (!draft || typeof draft !== "object") return false;
   if ([
     "identity.fullName",
     "contact.city",
@@ -174,18 +175,31 @@ export function reviewFieldPathExists(draft: StructuredDraft, fieldPath: string)
     "certifications",
     "languages",
     "competencies",
+    "toolsAndTechnologies",
+    "professionalContexts",
     "uncertainties",
     "notIdentified",
-  ].includes(fieldPath)) return true;
+  ].includes(fieldPath)) {
+    const [root, child] = fieldPath.split(".");
+    const value = draft[root as keyof StructuredDraft];
+    return child ? Boolean(value && typeof value === "object" && child in value) : root! in draft;
+  }
 
   const segments = fieldPath.split(".");
+  if (segments[0] === "customSections" && segments.length === 3 && segments[2] === "name") {
+    return draft.customSections.some((section) => section.id === segments[1]);
+  }
+  if (["experiences", "education"].includes(segments[0] ?? "") && segments.length === 2) {
+    const kind = segments[0] === "experiences" ? "experience" : "education";
+    return draft[segments[0] as "experiences" | "education"].some((item, index) => item.id === segments[1] || String(index) === segments[1] || reviewEntityPathSegment(kind, item.id) === segments[1]);
+  }
   if (segments[0] === "experiences" && segments.length === 3) {
     return ["role", "organization", "period", "description"].includes(segments[2] ?? "")
-      && draft.experiences.some((item) => item.id === segments[1] || reviewEntityPathSegment("experience", item.id) === segments[1]);
+      && draft.experiences.some((item, index) => item.id === segments[1] || String(index) === segments[1] || reviewEntityPathSegment("experience", item.id) === segments[1]);
   }
   if (segments[0] === "education" && segments.length === 3) {
     return ["course", "institution", "period", "description", "level", "qualification", "status", "classificationOrigin"].includes(segments[2] ?? "")
-      && draft.education.some((item) => item.id === segments[1] || reviewEntityPathSegment("education", item.id) === segments[1]);
+      && draft.education.some((item, index) => item.id === segments[1] || String(index) === segments[1] || reviewEntityPathSegment("education", item.id) === segments[1]);
   }
   if (segments[0] === "keyResults" && segments.length === 3 && segments[2] === "value") {
     return draft.keyResults.some((item) => item.id === segments[1]);

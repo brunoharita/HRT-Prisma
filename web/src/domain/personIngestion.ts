@@ -175,6 +175,7 @@ export interface CustomProfileSectionItem {
 export interface ResumeProcessingProgress {
   stage: "structuring" | "persisting" | "ready_for_review";
   message: string;
+  personId?: string;
 }
 
 export interface PublicationRemovalDecision {
@@ -394,6 +395,7 @@ export interface ProfileVersionView {
 }
 
 export interface ProcessingAttemptView {
+  structuringVersion?: string;
   id: string;
   attemptNumber: number;
   state: ProcessingState;

@@ -438,14 +438,14 @@ export function StructuredReviewPanel({
     );
   }
 
-  function TagField({ fieldPath, label }: { fieldPath: "certifications" | "languages" | "competencies" | "uncertainties" | "notIdentified"; label: string }) {
+  function TagField({ fieldPath, label }: { fieldPath: "certifications" | "languages" | "competencies" | "toolsAndTechnologies" | "professionalContexts" | "uncertainties" | "notIdentified"; label: string }) {
     const message = validationMessage(fieldPath);
     return (
       <div className={["prisma-review-field", selectedFieldPath === fieldPath ? "is-selected" : "", message ? "has-validation-error" : ""].filter(Boolean).join(" ")} data-review-field-path={fieldPath} onClick={() => onFieldSelect(fieldPath)}>
         <Typography.Text strong>{label}</Typography.Text>
         <div className="prisma-review-value-grid">
-          <ValueSurface label="Extraído pelo Prisma" onSelect={() => onFieldSelect(fieldPath, "original")} value={workspace.extractedData[fieldPath].join(", ") || "Não identificado"} />
-          <EditableTagSurface editable={editable} fieldPath={fieldPath} onChange={(values) => onDraftChange({ ...draft, [fieldPath]: values })} onSelect={onFieldSelect} value={draft[fieldPath]} />
+          <ValueSurface label="Extraído pelo Prisma" onSelect={() => onFieldSelect(fieldPath, "original")} value={(workspace.extractedData[fieldPath] ?? []).join(", ") || "Não identificado"} />
+          <EditableTagSurface editable={editable} fieldPath={fieldPath} onChange={(values) => onDraftChange({ ...draft, [fieldPath]: values })} onSelect={onFieldSelect} value={draft[fieldPath] ?? []} />
         </div>
         {message ? <Typography.Text type="danger">{message}</Typography.Text> : null}
       </div>
@@ -467,6 +467,8 @@ export function StructuredReviewPanel({
           ) : null}
         </div>
         {TagField({ fieldPath: "certifications", label: "Certificações" })}
+        {(draft.toolsAndTechnologies?.length || workspace.extractedData.toolsAndTechnologies?.length) ? TagField({ fieldPath: "toolsAndTechnologies", label: "Ferramentas e tecnologias" }) : null}
+        {(draft.professionalContexts?.length || workspace.extractedData.professionalContexts?.length) ? TagField({ fieldPath: "professionalContexts", label: "Contextos profissionais" }) : null}
         {draft.customSections.map((section) => {
           const extractedSection = workspace.extractedData.customSections.find((candidate) => candidate.id === section.id);
           const sectionIndex = draft.customSections.findIndex((candidate) => candidate.id === section.id);
@@ -492,7 +494,7 @@ export function StructuredReviewPanel({
             <section className="prisma-custom-profile-section" key={section.id}>
               <div className="prisma-review-section-title">
                 <div>
-                  <Typography.Text className="prisma-custom-profile-section__name" strong>{section.name}</Typography.Text>
+                  <Typography.Text className="prisma-custom-profile-section__name" data-review-field-path={`customSections.${section.id}.name`} onClick={() => onFieldSelect(`customSections.${section.id}.name`, "original")} strong>{section.name}</Typography.Text>
                   <Typography.Text type="secondary">Área personalizada · {section.format === "list" ? "lista" : "texto"} · origem {section.source === "human" ? "humana" : "extraída"}</Typography.Text>
                 </div>
                 {editable ? <Space wrap>{section.format === "list" ? <Button icon={<PlusOutlined />} onClick={addItem} size="small">Adicionar item</Button> : null}<Popconfirm onConfirm={removeSection} title={sectionPersisted ? "Remover esta área personalizada do perfil?" : "Cancelar a inclusão desta área?"}><Button danger={sectionPersisted} icon={<DeleteOutlined />} size="small">{sectionPersisted ? "Remover área" : "Cancelar inclusão"}</Button></Popconfirm></Space> : null}
@@ -761,7 +763,7 @@ function tabForField(fieldPath: string): string {
   if (fieldPath === "education" || fieldPath.startsWith("education.")) return "education";
   if (fieldPath === "competencies") return "skills";
   if (fieldPath === "languages") return "languages";
-  if (["certifications", "uncertainties", "notIdentified"].includes(fieldPath) || fieldPath.startsWith("customSections.")) return "other";
+  if (["certifications", "toolsAndTechnologies", "professionalContexts", "uncertainties", "notIdentified"].includes(fieldPath) || fieldPath.startsWith("customSections.")) return "other";
   return "summary";
 }
 

@@ -175,7 +175,7 @@ test("M5.7 prepared draft is reused only for the exact source and organization",
   assert.equal(preparedParserIa({ sha256: input.sha256 }, binding.organizationId), null);
   assert.throws(() => preparedParserIa(input, "other-org"), /BINDING_INVALID/);
   assert.throws(() => preparedParserIa({ ...input, sha256: "c".repeat(64) }, binding.organizationId), /BINDING_INVALID/);
-  assert.equal(parserIaMethodVersion(result), `parser-ia-1.0.0/synthetic/${"b".repeat(64)}`);
+  assert.equal(parserIaMethodVersion(result), `parser-ia-1.0.0/synthetic/${"b".repeat(64)}/evidence-adapter-1.0.0`);
   assert.throws(() => parserIaMethodVersion({ ...result, provenance: { ...result.provenance, promptSha256: "unknown" } }), /PROVENANCE_INVALID/);
 });
 

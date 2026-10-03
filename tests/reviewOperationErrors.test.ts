@@ -74,7 +74,7 @@ test("Supabase transport and intake failures expose safe recovery without raw ba
   assert.doesNotMatch(unsupportedFile.message, /DOCX/);
 
   const invalidOcrEvidence = supabaseOperationError({ code: "22023", message: "adaptive field evidence is invalid" }, "Falha.");
-  assert.equal(invalidOcrEvidence.recovery, "retry");
+  assert.equal(invalidOcrEvidence.recovery, "await-system-update");
   assert.match(invalidOcrEvidence.message, /currículo foi lido/);
   assert.doesNotMatch(invalidOcrEvidence.message, /adaptive|field evidence|22023/);
 

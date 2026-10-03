@@ -1021,9 +1021,10 @@ function applyValueAtFieldPath(draft: StructuredDraft, fieldPath: string, value:
     const resultId = segments[1];
     return { ...next, keyResults: next.keyResults.map((result) => result.id === resultId ? { ...result, value } : result) };
   }
+  if (root === "customSections" && segments.length === 3 && segments[2] === "name") return { ...next, customSections: next.customSections.map((section) => section.id === segments[1] ? { ...section, name: value } : section) };
   if (root === "customSections") return updateCustomSectionItemValue(next, fieldPath, value);
-  if (["certifications", "languages", "competencies", "uncertainties", "notIdentified"].includes(root ?? "")) {
-    const key = root as "certifications" | "languages" | "competencies" | "uncertainties" | "notIdentified";
+  if (["certifications", "languages", "competencies", "toolsAndTechnologies", "professionalContexts", "uncertainties", "notIdentified"].includes(root ?? "")) {
+    const key = root as "certifications" | "languages" | "competencies" | "toolsAndTechnologies" | "professionalContexts" | "uncertainties" | "notIdentified";
     return { ...next, [key]: key === "competencies" && resolvedListValues?.length ? resolvedListValues : splitExplicitListValues(value) };
   }
   const entitySegment = segments[1] ?? "";

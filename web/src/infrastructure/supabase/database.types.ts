@@ -1408,6 +1408,10 @@ export interface Database {
         };
         Returns: Array<{ processing_attempt_id: string; attempt_number: number; reused: boolean }>;
       };
+      record_resume_import_failure: {
+        Args: { p_organization_id: string; p_person_id: string; p_document_id: string; p_intake_id: string; p_diagnostic: Json; p_idempotency_key: string };
+        Returns: undefined;
+      };
       start_profile_review: {
         Args: { p_organization_id: string; p_person_id: string; p_document_id: string; p_processing_attempt_id: string; p_idempotency_key: string };
         Returns: Array<{ review_id: string; lock_version: number; reused: boolean }>;

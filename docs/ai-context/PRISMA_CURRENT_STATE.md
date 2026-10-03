@@ -2,13 +2,17 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.23
+version: 2.51.24
 last_verified: 2026-10-03
 ---
 
 # Estado atual do Prisma
 
-Prisma v2.0.1 registra a entrega publicada de importação totalmente online na KVM2, geração 2, movimento 0, entrega 1. Login e menu usam o registro único. SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0` em main/GitHub/VPS; evidência operacional e limites no AoT deste movimento.
+Prisma v2.0.2 registra a correção autorizada da compatibilidade das evidências de importação, geração 2, movimento 0, entrega 2. Implementação e QA local verificadas; publicação ainda pendente neste registro. A v2.0.1 online na KVM2 permanece o baseline remoto, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Login e menu usam o registro único.
+
+## Compatibilidade das evidências de importação — v2.0.2
+
+O incidente de 03/10/2026 ocorreu após a leitura de um PDF nativo válido: duas evidências de títulos de seções adicionais foram rejeitadas pelo contrato da persistência. `evidence-adapter-1.0.0` normaliza IDs incompatíveis de resultados/seções/itens e os endereços das listas, mantendo fatos/fontes/regiões. `import-evidence-1.0.0` valida caminho/alvo, arrays/limites, página e geometria/método/origem no cliente e no PostgreSQL. Ferramentas/contextos existentes continuam distintos e disponíveis na revisão. Diagnóstico sanitizado, tenant-scoped, transacional e idempotente substitui o erro genérico; falha permanente orienta aguardar correção, sem repetição imediata/troca do PDF. A persistência permanece na etapa de estruturação até confirmar revisão disponível. A QA local real passou com fixtures sintéticas/rollback, sem publicar ou substituir o Perfil vigente. Prompt/modelo, cache bruto/chave, auth/tenant e publicação humana são preservados. Contrato e limites: `docs/qa/agreement-import-evidence-v202.md` e `docs/qa/aot-import-evidence-v202.md`. DOC/DOCX/TXT permanecem fora deste movimento.
 
 ## Modal de revisão de divergências
 
@@ -126,7 +130,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-Prisma v2.0.1 está publicada na KVM2, geração 2/movimento 0/entrega 1, SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16c0`. Parser e gateway preservam dados/prompt/modelo/revisão e eliminam PC/túnel; parse sintético real, cache, restart e importação autenticada disponível PASS. Acordo Parser KVM2 1.1.0; evidência e limites no AoT correspondente. Importação real até revisão/publicação não testada neste smoke.
+Prisma v2.0.2 tem a correção de evidências implementada e validada localmente; publicação pendente. `evidence-adapter-1.0.0` e `import-evidence-1.0.0` preservam títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL sintética com rollback, cache/fonte, 71 testes dirigidos e renders desktop/mobile PASS. AoT `docs/qa/aot-import-evidence-v202.md`. Baseline remoto v2.0.1 na KVM2 (`4ccfbf1`) permanece online sem PC/túnel, com prompt/modelo/cache/revisão preservados; a importação do incidente ainda aguarda retomada.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
