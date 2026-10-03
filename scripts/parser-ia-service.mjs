@@ -115,7 +115,7 @@ export function providerFailureCode(status, rawBody = "") {
   return "PARSER_PROVIDER_FAILED";
 }
 
-export function createParserService({ directory = resolve("tmp/m57-parser-ia"), fetchImpl = fetch, keyProvider = loadParserSecret, timeoutMs = 120000, allowNetwork = true } = {}) {
+export function createParserService({ directory = resolve("tmp/m57-parser-ia"), lockDirectory = directory, fetchImpl = fetch, keyProvider = loadParserSecret, timeoutMs = 120000, allowNetwork = true } = {}) {
   let busy = false;
   const parse = async function parse({ bytes, organizationId, sourceSha256 }) {
     if (busy) throw new Error("PARSER_BUSY");
@@ -123,9 +123,10 @@ export function createParserService({ directory = resolve("tmp/m57-parser-ia"), 
     if (createHash("sha256").update(bytes).digest("hex") !== sourceSha256) throw new Error("PARSER_SOURCE_MISMATCH");
     busy = true;
     let lock;
-    const lockPath = join(directory, "operation.lock");
+    const lockPath = join(lockDirectory, "operation.lock");
     try {
       await mkdir(directory, { recursive: true });
+      if (lockDirectory !== directory) await mkdir(lockDirectory, { recursive: true });
       try { lock = await open(lockPath, "wx"); } catch { throw new Error("PARSER_BUSY"); }
       const pages = await readParserPdf(bytes);
       const cacheKey = createHash("sha256").update([organizationId, sourceSha256, PARSER_IA_VERSION, PARSER_MODEL, PARSER_PROMPT_SHA].join(":")).digest("hex");
@@ -168,7 +169,7 @@ export function createParserService({ directory = resolve("tmp/m57-parser-ia"), 
   parse.readiness = async () => {
     if (busy) return { state: "busy", reason: "worker_busy" };
     try {
-      await stat(join(directory, "operation.lock"));
+      await stat(join(lockDirectory, "operation.lock"));
       return { state: "busy", reason: "worker_busy" };
     } catch (error) {
       if (error.code !== "ENOENT") return { state: "unknown", reason: "check_failed" };

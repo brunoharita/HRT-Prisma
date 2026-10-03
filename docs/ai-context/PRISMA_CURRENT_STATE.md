@@ -2,8 +2,8 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.20
-last_verified: 2026-10-01
+version: 2.51.21
+last_verified: 2026-10-03
 ---
 
 # Estado atual do Prisma
@@ -85,6 +85,10 @@ Correção de acionamento publicada em 27/09: runtime `a5ddd5a`, Edge v3 e web, 
 Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendendo área/função/grupos com interpretação derivada no piloto de desenvolvimento backend. Duas leituras independentes classificam evidências em categorias fechadas, com citações e sem nota livre. Cache isolado por empresa e versões evita nova opinião em cada reabertura. Divergência/falha vira pendência, não zero; comparação incompleta não indica prioridade segura. Perfis, Posições, Knowledge e decisões humanas não são reescritos. Modelo/configuração de fornecedor existente, política financeira do Parser (decisão «siga o parser»); nenhum teto monetário paralelo. Aprendizado por correções humanas fica fora. Situação real de testes, publicação e limitações no AoT `docs/qa/aot-m83-semantic-trajectory.md`; código local não é evidência de rollout.
 
 Baseline semântico anterior `60c642f`, Edge v2, publicado em 25/09; CI e smoke autenticado PASS. Prompt 1.2.0 mantém rubrica/guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências. São conjuntos de desenvolvimento, não holdout ou prova de justiça universal. Smoke anterior: quatro interpretações completas e três abstenções por divergência, sem nota/prioridade para pendências; agora somente elegíveis A/B consomem essa camada. Bruno e Diego: 47/100 provisório, cobertura 50%, Grupo B, programação reconhecida mas requisitos backend ainda sem evidência suficiente. Comparação/reabertura mantiveram análises, uma tentativa cada; snapshots servidor confirmados. Baseline: 177 testes Node direcionados, 25 Deno, 15 tooling e SQL concorrente/negativo PASS; desktop/mobile inspecionados. Aprendizado, outras profissões e redução adicional da abstenção não estão validados por este piloto.
+
+## Parser IA totalmente online na KVM2 — implementação em validação
+
+Decisão explícita de Bruno em 03/10: eliminar PC e túnel da importação automática. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway existentes em Docker na KVM2, loopback privado 18787, secret montado somente no backend, cache persistente segregado e lock volátil para restart. PDF.js → Parser IA → revisão, prompt/modelo, transporte/readiness, contratos e auth/tenant preservados. Paddle/Tesseract fora do fluxo automático. Substitui a dependência temporária e F-04 anterior, sem reprocessar Pessoas. Baseline local/origin/VPS `efdadeb64fbe8399d718018cf6080cb9737774e6`, PC sem worker/túnel. Testes 86/86 e build TS PASS; publicação ainda pendente. ADR-075, `docs/operations/parser-ia-kvm2.md`, acordo/execução e `docs/qa/aot-parser-ia-kvm2.md` registram estado/evidência.
 
 ## Disponibilidade antecipada da importação (publicada)
 

@@ -1,5 +1,7 @@
 # M5.7 Parser IA
 
+Decisão operacional de 2026-10-03: o Parser deve operar na KVM2 sem PC/túnel, reutilizando gateway/validador e preservando dados, prompt/modelo e revisão. Implantação `parser-ia-kvm2-1.0.0`, ADR-075 e [runbook](../operations/parser-ia-kvm2.md). Evidência/estado de publicação ficam no [AoT](../qa/aot-parser-ia-kvm2.md); descrições de loopback local e túnel abaixo registram o piloto e a opção de desenvolvimento.
+
 Atualização de datas em 2026-09-27: após validar fatos, o normalizador passa a `resume-dates-1.1.0`: anos de dois ou quatro dígitos, `00–50 → 2000–2050` e `51–99 → 1951–1999`, regra fixa a revisar em 2050. Originais e cache bruto permanecem; a expansão do século gera nota de inferência, sem nova chamada ao modelo. Contrato do delta: `../qa/aot-resume-two-digit-years.md`.
 
 Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Classificação acadêmica: `education-academic-classification-1.2.0`, incluindo o nível `complementary` / Formação complementar. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.3.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites operacionais.

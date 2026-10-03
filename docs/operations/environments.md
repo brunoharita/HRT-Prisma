@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-Existe ambiente local de desenvolvimento e um único ambiente remoto de produção, formado pelo projeto Supabase `ioldpnqqvobprjiontre` e pelo frontend público hospedado em VPS Hostinger. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel do Supabase, mas não representa um segundo ambiente. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse backend único. Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora do runtime hospedado.
+Existe ambiente local de desenvolvimento e um único ambiente remoto de produção, formado pelo projeto Supabase `ioldpnqqvobprjiontre` e pelo frontend público hospedado em VPS Hostinger. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel do Supabase, mas não representa um segundo ambiente. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse backend único. A migração de 03/10 (ADR-075) leva o Parser IA à própria KVM2, eliminando PC/túnel da importação automática; estado de publicação no [AoT](../qa/aot-parser-ia-kvm2.md). Experimentos Paddle fora do fluxo ativo continuam preservados, sem alegar sua migração ou ativação.
 
 ## Local
 

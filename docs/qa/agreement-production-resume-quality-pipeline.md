@@ -1,5 +1,7 @@
 # Contrato de Acordos — Qualidade da importação de currículos em produção
 
+Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui somente F-04 e a dependência de PC/túnel pelo Parser privado na KVM2, conforme ADR-075. As demais regras deste contrato permanecem. O texto abaixo preserva o acordo histórico 1.3.0.
+
 ## Objetivo
 
 - Versão do contrato: `1.3.0`

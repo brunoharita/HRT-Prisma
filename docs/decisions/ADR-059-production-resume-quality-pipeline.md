@@ -1,5 +1,7 @@
 # ADR-059 — Pipeline serial de qualidade para currículos em produção
 
+Atualização de autoridade em 2026-10-03: ADR-075 e acordo `docs/qa/agreement-parser-ia-kvm2.md` 1.0.0 substituem a dependência de PC/túnel para a importação automática. O conteúdo abaixo registra a decisão histórica do piloto; não define mais a localização pretendida do Parser.
+
 - Estado: aceito
 - Data: 2026-09-16
 - Contrato: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.0.0

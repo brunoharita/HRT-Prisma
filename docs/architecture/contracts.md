@@ -1,5 +1,7 @@
 # Catálogo de contratos
 
+Delta operacional de 03/10/2026: ADR-075 e `parser-ia-kvm2-1.0.0` hospedam o Parser privado na KVM2; os contratos de Parser, transporte e readiness preservam versões. Referências a PC/túnel abaixo são históricas do piloto. Estado efetivo no AoT `docs/qa/aot-parser-ia-kvm2.md`.
+
 M8.2 em validação: a estrutura `competency-taxonomy-2.0.0` permanece; `knowledge_competency_classifications.method` admite `ai_assisted` com proveniência obrigatória de fonte, versão, classificador e razão. O backfill ESCO/O*NET acrescenta classificação global a identidades Knowledge já aprovadas, sem novo contrato Pessoa × conceito ou alteração da projeção `person-professional-evidence-4.0.0`. Classificação humana posterior continua versionada e prevalece. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 são os owners.
 
 M8.1 em implementação local: `competency-taxonomy-2.0.0` acrescenta classificação principal versionada sobre conceitos Knowledge existentes; `person-professional-evidence-4.0.0` separa Declaração, Contexto, Certificado, Verificação por Assessment e Habilidade Evidenciada, com fontes cumulativas; `profile-competency-curation-5.0.0` exige subagrupador para proposta nova. Migrations aditivas e RPCs `_v2`/`_v5`/`_v6` preservam contratos históricos. Fonte curricular não qualifica Assessment nem habilidade prática. ADR-070 e AoT M8.1 são as referências; ativação remota não é presumida.

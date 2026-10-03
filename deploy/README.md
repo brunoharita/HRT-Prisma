@@ -1,5 +1,7 @@
 # Deploy web do Prisma
 
+Parser online na KVM2 (ADR-075): serviço `parser-ia`, publicado por `deploy/release-parser-ia.sh` com SHA validado; esta migração não exige rebuild de web/gateway. Secret/cache/lock, validação e rollback: [runbook](../docs/operations/parser-ia-kvm2.md); estado: [AoT](../docs/qa/aot-parser-ia-kvm2.md). Não iniciar ponte PC/SSH para a importação automática.
+
 ## Estado atual
 
 M7.2 v2 publicado em 2026-09-18: Prisma v1.7.5, runtime `a6a0bc5`, migrations remotas `20260918163719`, `20260918163736` e `20260918164009`. Main/GitHub/VPS sincronizados; somente `prisma-web` foi reconstruído com baseline + Parser IA hosted. Imagem ativa `sha256:e7280c2e28419cb62a8109ce807815b48fe749de872d0d1b382cec63bf0a8c01`; rollback `prisma-web:rollback-before-m72v2-20260918`. HTTPS e smoke autenticado read-only nas três superfícies PASS; detalhes e limites no AoT M7.2 v2.

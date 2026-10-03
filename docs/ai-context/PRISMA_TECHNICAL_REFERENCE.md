@@ -10,7 +10,7 @@ last_verified: 2026-09-16
 
 ## Transporte Paddle hospedado temporário
 
-ADR-058 / `paddle-hosted-transport-1.0.0`: Nginx encaminha as duas rotas existentes a um gateway Node por socket Unix compartilhado. Gateway valida Auth/RLS e escopo, mantém payload PaddleX e encaminha apenas a 127.0.0.1:18080/18081 da VPS; SSH reverso chega a 8080/8081 no PC. Nenhuma porta do worker/gateway é publicada. Não há migration, chave privilegiada nem parser novo. Status de rollout e aceite em `docs/qa/aot-hosted-paddle-bridge.md`.
+ADR-058 / `paddle-hosted-transport-1.0.0`: ponte histórica do piloto Paddle, fora da importação automática corrente; rotas/containers continuam preservados. ADR-075 / `parser-ia-kvm2-1.0.0` substitui PC/SSH somente no Parser ativo: gateway autenticado → loopback 18787 da KVM2 → OpenAI, secret montado, cache privado persistente e lock em tmpfs. Contratos de dados/transporte mantidos. Estado/evidência no `docs/qa/aot-parser-ia-kvm2.md`.
 
 ## M6.1.2 Matching por trajetória antes dos requisitos
 

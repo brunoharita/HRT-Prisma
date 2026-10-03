@@ -9,7 +9,7 @@ services:
         VITE_DOCUMENT_INTELLIGENCE_MODE: ${VITE_DOCUMENT_INTELLIGENCE_MODE:-baseline}
         VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS: ${VITE_DOCUMENT_INTELLIGENCE_TIMEOUT_MS:-240000}
         VITE_PARSER_IA_LOCAL: ${VITE_PARSER_IA_LOCAL:-false}
-        # Produção usa o gateway autenticado + worker loopback. Rollback deve
+        # Produção usa o gateway autenticado + Parser privado na própria KVM2. Rollback deve
         # definir VITE_PARSER_IA_MODE=disabled explicitamente no .env.production.
         VITE_PARSER_IA_MODE: ${VITE_PARSER_IA_MODE:-hosted}
         VITE_PRISMA_GIT_COMMIT: ${PRISMA_DEPLOY_COMMIT:-unknown}
@@ -47,5 +47,41 @@ services:
     mem_limit: 384m
     cpus: 0.5
 
+  parser-ia:
+    build:
+      context: ..
+      dockerfile: services/parser-ia/Dockerfile
+    image: prisma-parser-ia:1.0.0
+    container_name: prisma-parser-ia
+    network_mode: host
+    restart: unless-stopped
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    volumes:
+      - parser-ia-cache:/var/lib/prisma/parser-ia
+    tmpfs:
+      - /run/parser-ia:rw,noexec,nosuid,size=8m,uid=1000,gid=1000,mode=0700
+      - /tmp:rw,noexec,nosuid,size=32m,uid=1000,gid=1000,mode=0700
+    secrets:
+      - parser_ia_env
+    healthcheck:
+      test: ["CMD", "node", "scripts/check-parser-ia-hosted.mjs"]
+      interval: 30s
+      timeout: 4s
+      retries: 3
+      start_period: 30s
+    mem_limit: 768m
+    cpus: 1.0
+    pids_limit: 64
+    labels:
+      - "traefik.enable=false"
+
+secrets:
+  parser_ia_env:
+    file: ${PRISMA_PARSER_SECRET_FILE:-/etc/prisma/parser-ia.env}
+
 volumes:
   paddle-gateway-socket:
+  parser-ia-cache:

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 319
-source_manifest_sha256: 1c0921df0f3a0272534dcff8adeb0707def8097acd24b00a0c814e2beeffc5d6
+documentation_source_count: 324
+source_manifest_sha256: 1a07482690cd9135bf80e829f3bafda23a77f8befd21302c5e3b745233c6f875
 -->
 
 # Tudo sobre o Prisma
@@ -2624,8 +2624,8 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.20
-last_verified: 2026-10-01
+version: 2.51.21
+last_verified: 2026-10-03
 ---
 
 # Estado atual do Prisma
@@ -2707,6 +2707,10 @@ Correção de acionamento publicada em 27/09: runtime `a5ddd5a`, Edge v3 e web, 
 Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendendo área/função/grupos com interpretação derivada no piloto de desenvolvimento backend. Duas leituras independentes classificam evidências em categorias fechadas, com citações e sem nota livre. Cache isolado por empresa e versões evita nova opinião em cada reabertura. Divergência/falha vira pendência, não zero; comparação incompleta não indica prioridade segura. Perfis, Posições, Knowledge e decisões humanas não são reescritos. Modelo/configuração de fornecedor existente, política financeira do Parser (decisão «siga o parser»); nenhum teto monetário paralelo. Aprendizado por correções humanas fica fora. Situação real de testes, publicação e limitações no AoT `docs/qa/aot-m83-semantic-trajectory.md`; código local não é evidência de rollout.
 
 Baseline semântico anterior `60c642f`, Edge v2, publicado em 25/09; CI e smoke autenticado PASS. Prompt 1.2.0 mantém rubrica/guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências. São conjuntos de desenvolvimento, não holdout ou prova de justiça universal. Smoke anterior: quatro interpretações completas e três abstenções por divergência, sem nota/prioridade para pendências; agora somente elegíveis A/B consomem essa camada. Bruno e Diego: 47/100 provisório, cobertura 50%, Grupo B, programação reconhecida mas requisitos backend ainda sem evidência suficiente. Comparação/reabertura mantiveram análises, uma tentativa cada; snapshots servidor confirmados. Baseline: 177 testes Node direcionados, 25 Deno, 15 tooling e SQL concorrente/negativo PASS; desktop/mobile inspecionados. Aprendizado, outras profissões e redução adicional da abstenção não estão validados por este piloto.
+
+## Parser IA totalmente online na KVM2 — implementação em validação
+
+Decisão explícita de Bruno em 03/10: eliminar PC e túnel da importação automática. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway existentes em Docker na KVM2, loopback privado 18787, secret montado somente no backend, cache persistente segregado e lock volátil para restart. PDF.js → Parser IA → revisão, prompt/modelo, transporte/readiness, contratos e auth/tenant preservados. Paddle/Tesseract fora do fluxo automático. Substitui a dependência temporária e F-04 anterior, sem reprocessar Pessoas. Baseline local/origin/VPS `efdadeb64fbe8399d718018cf6080cb9737774e6`, PC sem worker/túnel. Testes 86/86 e build TS PASS; publicação ainda pendente. ADR-075, `docs/operations/parser-ia-kvm2.md`, acordo/execução e `docs/qa/aot-parser-ia-kvm2.md` registram estado/evidência.
 
 ## Disponibilidade antecipada da importação (publicada)
 
@@ -3139,7 +3143,7 @@ last_verified: 2026-09-16
 
 ## Transporte Paddle hospedado temporário
 
-ADR-058 / `paddle-hosted-transport-1.0.0`: Nginx encaminha as duas rotas existentes a um gateway Node por socket Unix compartilhado. Gateway valida Auth/RLS e escopo, mantém payload PaddleX e encaminha apenas a 127.0.0.1:18080/18081 da VPS; SSH reverso chega a 8080/8081 no PC. Nenhuma porta do worker/gateway é publicada. Não há migration, chave privilegiada nem parser novo. Status de rollout e aceite em `docs/qa/aot-hosted-paddle-bridge.md`.
+ADR-058 / `paddle-hosted-transport-1.0.0`: ponte histórica do piloto Paddle, fora da importação automática corrente; rotas/containers continuam preservados. ADR-075 / `parser-ia-kvm2-1.0.0` substitui PC/SSH somente no Parser ativo: gateway autenticado → loopback 18787 da KVM2 → OpenAI, secret montado, cache privado persistente e lock em tmpfs. Contratos de dados/transporte mantidos. Estado/evidência no `docs/qa/aot-parser-ia-kvm2.md`.
 
 ## M6.1.2 Matching por trajetória antes dos requisitos
 
@@ -4095,6 +4099,8 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 
 # M5.7 Parser IA
 
+Decisão operacional de 2026-10-03: o Parser deve operar na KVM2 sem PC/túnel, reutilizando gateway/validador e preservando dados, prompt/modelo e revisão. Implantação `parser-ia-kvm2-1.0.0`, ADR-075 e [runbook](../operations/parser-ia-kvm2.md). Evidência/estado de publicação ficam no [AoT](../qa/aot-parser-ia-kvm2.md); descrições de loopback local e túnel abaixo registram o piloto e a opção de desenvolvimento.
+
 Atualização de datas em 2026-09-27: após validar fatos, o normalizador passa a `resume-dates-1.1.0`: anos de dois ou quatro dígitos, `00–50 → 2000–2050` e `51–99 → 1951–1999`, regra fixa a revisar em 2050. Originais e cache bruto permanecem; a expansão do século gera nota de inferência, sem nova chamada ao modelo. Contrato do delta: `../qa/aot-resume-two-digit-years.md`.
 
 Contrato de estruturação: `parser-ia-1.0.0`. Transporte hospedado: `parser-ia-hosted-transport-1.0.0`. Classificação acadêmica: `education-academic-classification-1.2.0`, incluindo o nível `complementary` / Formação complementar. Acordo/execução corrente: `../qa/agreement-production-resume-quality-pipeline.md` e `../qa/execution-production-resume-quality-pipeline.md` 1.3.0. Decisões: ADR-049 e ADR-059. Estado: integrado ao pipeline serial do único ambiente remoto, preservando revisão humana e limites operacionais.
@@ -4656,6 +4662,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 ## Source: `docs/architecture/contracts.md`
 
 # Catálogo de contratos
+
+Delta operacional de 03/10/2026: ADR-075 e `parser-ia-kvm2-1.0.0` hospedam o Parser privado na KVM2; os contratos de Parser, transporte e readiness preservam versões. Referências a PC/túnel abaixo são históricas do piloto. Estado efetivo no AoT `docs/qa/aot-parser-ia-kvm2.md`.
 
 M8.2 em validação: a estrutura `competency-taxonomy-2.0.0` permanece; `knowledge_competency_classifications.method` admite `ai_assisted` com proveniência obrigatória de fonte, versão, classificador e razão. O backfill ESCO/O*NET acrescenta classificação global a identidades Knowledge já aprovadas, sem novo contrato Pessoa × conceito ou alteração da projeção `person-professional-evidence-4.0.0`. Classificação humana posterior continua versionada e prevalece. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 são os owners.
 
@@ -5280,6 +5288,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Parser totalmente online (2026-10-03): versão de implantação `parser-ia-kvm2-1.0.0`, ADR-075. A localização/ciclo de vida mudam para a KVM2; `parser-ia-1.0.0`, `parser-ia-hosted-transport-1.0.0`, `parser-ia-readiness-1.0.0`, prompt/modelo, contratos persistidos e versão pública do produto permanecem. Publicação e limites no AoT `docs/qa/aot-parser-ia-kvm2.md`.
 
 Triagem ocupacional seletiva (2026-09-29, publicada): `semantic-triage-2.0.0` versiona apenas a ativação da interpretação externa. O matching determinístico 5.1.0, a resposta semântica válida 7.0.0, score 1.4.0, prompt/modelo, schemas e snapshots persistidos não mudam; cache anterior permanece legível somente se a nova triagem server-side permitir interpretação para o par atual. O resultado interno progressivo não persiste novo estado. Sem migration ou nova versão pública numerada de produto neste movimento; publicação e limites são comprovados pelo AoT específico, não por esta decisão de versão.
 
@@ -8901,6 +8911,8 @@ Negativos de transporte/Auth/tenant com fixtures sintéticas, regressão do prov
 
 # ADR-059 — Pipeline serial de qualidade para currículos em produção
 
+Atualização de autoridade em 2026-10-03: ADR-075 e acordo `docs/qa/agreement-parser-ia-kvm2.md` 1.0.0 substituem a dependência de PC/túnel para a importação automática. O conteúdo abaixo registra a decisão histórica do piloto; não define mais a localização pretendida do Parser.
+
 - Estado: aceito
 - Data: 2026-09-16
 - Contrato: `docs/qa/agreement-production-resume-quality-pipeline.md` 1.0.0
@@ -9434,6 +9446,38 @@ O runtime web e o runtime Edge são gerados do mesmo módulo. O snapshot continu
 
 ---
 
+## Source: `docs/decisions/ADR-075-online-parser-ia-kvm2.md`
+
+# ADR-075 — Parser IA online na KVM2
+
+Estado: aceito pela decisão explícita de Bruno em 2026-10-03. Owner: operations/security. Acordo: `docs/qa/agreement-parser-ia-kvm2.md` 1.0.0. Versão de implantação: `parser-ia-kvm2-1.0.0`; contratos de dados/transporte/readiness, prompt e modelo preservados.
+
+## Problema e decisão
+
+A ponte do ADR-059 deixou a importação dependente do PC e SSH. Em 03/10 worker/túnel ausentes bloquearam o envio. A operação deve ser totalmente online. F-04 do acordo de qualidade 1.3.0 e a dependência de PC/túnel do ADR-059 estão substituídos para a importação automática; históricos continuam válidos como evidência do piloto.
+
+Reutilizar o Parser Node em container na KVM2, com Compose, usuário node, filesystem read-only, capabilities removidas, no-new-privileges e limites de CPU/RAM/PIDs. Reutilizar gateway sem alterar código: escuta HTTP somente `127.0.0.1:18787`, valida o Host lógico `127.0.0.1:8787` já enviado pelo gateway. A rede host existente permite o caminho privado; nenhuma porta Docker pública ou Traefik para o worker. A credencial é arquivo Compose secret montado somente no Parser, vindo de `/etc/prisma/parser-ia.env`, protegido fora do checkout.
+
+Cache persistente em volume privado; lock em tmpfs separado. O singleton por nome de container e porta fixa mantém serialização. O tmpfs desaparece ao parar/recriar o container, permitindo restart sem lock obsoleto; cache continua validado por organização/fonte/prompt/modelo/contrato. Não reexecutar automaticamente documento interrompido, remover cache ou alterar o lock de processo ainda ativo. Readiness/healthcheck não chamam OpenAI.
+
+## Reutilização e alternativas
+
+- Reutilizar Parser e Docker existentes na KVM2: escolhido; 2 CPUs, memória/disco suficientes para adapter PDF.js e HTTP. O modelo é executado pela OpenAI, não exige GPU na KVM2.
+- Continuar ponte PC/SSH: falha no objetivo de operação online.
+- Nova Edge, fila ou fornecedor: acrescenta plataforma e reimplementação sem necessidade para o escopo unitário atual.
+
+Nenhuma nova dependência npm. Limitação unitária e limites do Parser continuam. Cache antigo do PC não é transferido; primeira importação nessa instalação pode chamar o provedor quando não houver cache. Dados privados novos ficam no volume de produção; backup/retenção gerais não são redesenhados aqui.
+
+## Compatibilidade, validação e rollback
+
+Teste HTTP negativo de auth/tenant/origem/contrato e binding/hash; regressão Parser/readiness/cache; smoke sintético remoto sem Pessoa; restart/replay; IDs/imagens de web/gateway/Traefik comparados. Somente o novo Parser precisa ser publicado. Uma importação real até revisão é evidência separada e requer fluxo humano autorizado.
+
+Rollback imediato: parar somente `parser-ia`, preservar volume/credencial e imagem. O aviso de indisponibilidade protege importações. Reversão do código por imagem anterior é possível em futuras revisões; retornar à ponte PC é recuperação histórica, não atendimento ao objetivo online e exige decisão explícita. Não apagar volumes ou dados.
+
+Fontes oficiais consultadas em 03/10: [Compose secrets](https://docs.docker.com/compose/how-tos/use-secrets/) e [host networking](https://docs.docker.com/engine/network/drivers/host/). Secrets do Compose são bind mounts: permissões reais do arquivo de origem precisam ser verificadas; `uid/mode` declarativos não substituem essa verificação.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -9678,7 +9722,7 @@ Branches de trabalho usam `codex/`. Commits são coerentes e não misturam mudan
 
 ## Estado atual
 
-Existe ambiente local de desenvolvimento e um único ambiente remoto de produção, formado pelo projeto Supabase `ioldpnqqvobprjiontre` e pelo frontend público hospedado em VPS Hostinger. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel do Supabase, mas não representa um segundo ambiente. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse backend único. Parser IA M5.7 e serviços de Document Intelligence ainda dependentes de loopback permanecem fora do runtime hospedado.
+Existe ambiente local de desenvolvimento e um único ambiente remoto de produção, formado pelo projeto Supabase `ioldpnqqvobprjiontre` e pelo frontend público hospedado em VPS Hostinger. O nome `Prisma-QA` ainda pode aparecer como rótulo legado no painel do Supabase, mas não representa um segundo ambiente. O frontend está disponível em `https://prisma.hrtsolutions.com.br` e usa esse backend único. A migração de 03/10 (ADR-075) leva o Parser IA à própria KVM2, eliminando PC/túnel da importação automática; estado de publicação no [AoT](../qa/aot-parser-ia-kvm2.md). Experimentos Paddle fora do fluxo ativo continuam preservados, sem alegar sua migração ou ativação.
 
 ## Local
 
@@ -10139,6 +10183,42 @@ O volume exclusivo com os três modelos candidatos foi preservado para reproduç
 | Aprovar qualidade semântica ou liberar produção | Não era o escopo autorizado; não houve publicação, IA ou banco | NOT TESTED |
 
 Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, preservação do gerador, ausência de conteúdo textual no resumo e serialização de coordenadas sem persistência. Sintaxe PowerShell validada. Não foi executado `pnpm run validate` nem uma suíte transversal: não houve alteração do aplicativo ou do contrato de ingestão. O Context Pack é atualizado como evidência documental, não como aprovação do candidato.
+
+---
+
+## Source: `docs/operations/parser-ia-kvm2.md`
+
+# Operação do Parser IA na KVM2
+
+Versão de implantação `parser-ia-kvm2-1.0.0`; acordo `../qa/agreement-parser-ia-kvm2.md` 1.0.0 e ADR-075. A importação automática usa PDF.js → Parser IA → revisão. Paddle/Tesseract não são reativados. A versão dos dados, prompt, modelo e transporte continuam iguais.
+
+## Caminho e proteção
+
+`Browser → HTTPS/Traefik → Nginx → socket Unix do gateway → 127.0.0.1:18787 na KVM2 → OpenAI`.
+
+O container `prisma-parser-ia` é singleton, Node 22, usuário `node` UID 1000, rede host Linux, escuta somente loopback. O gateway mantém auth/tenant/papel/origem/contrato e usa o Host lógico 8787 previamente validado pelo Parser. O worker não tem rota Traefik ou portas públicas. Cache novo fica em `deploy_parser-ia-cache`, com pasta 700 e arquivos 600; não é importado do PC. Lock em tmpfs privado é volátil, cache é persistente. Uma única inferência por vez, sem retry automático.
+
+O secret é um arquivo contendo somente `OPENAI_API_KEY=...`, em `/etc/prisma/parser-ia.env`; diretório host root 700, arquivo UID 1000/mode 400. Compose monta esse arquivo somente em `/run/secrets/parser_ia_env`. Nunca copiar `.env.local` inteiro, chave para build/env do container, PDF ou cache do PC. Nunca exibir valor por `cat`, `docker inspect` completo, logs ou shell tracing. Compose faz bind mount; ownership/permissões reais da origem precisam permitir leitura pelo UID 1000. Nenhum service role é necessário.
+
+## Publicar e verificar
+
+Após promover o SHA validado e avançar `/opt/prisma` por fast-forward, executar na KVM2:
+
+```bash
+bash deploy/release-parser-ia.sh SHA_VALIDADO_COMPLETO
+docker inspect --format '{{.State.Status}} {{.State.Health.Status}} {{.RestartCount}}' prisma-parser-ia
+docker exec prisma-parser-ia node scripts/check-parser-ia-hosted.mjs
+```
+
+O script constrói/inicia somente `parser-ia`, preserva imagem anterior quando existente e não recria web/gateway/Traefik. Healthcheck permite `available/ready` ou `busy/worker_busy`; não chama a OpenAI, não cria cache nem reserva capacidade. Um resultado disponível não prova saldo/validade remota da chave, qualidade de resposta futura ou sucesso de um currículo.
+
+Docker reinicia o container após falha e na inicialização do daemon (`unless-stopped`); depois de parada/recriação, tmpfs novo evita lock residual. Nenhum PDF interrompido é reexecutado. Fazer restart somente sem operação ativa. Cache inválido continua falhando fechado; não apagar cache para liberar uma tentativa. Conferir HTTPS e os mesmos IDs/imagens dos serviços preservados.
+
+## Rollback e limites
+
+Primeira implantação: parar somente `parser-ia` se houver risco; gateway informa indisponibilidade. Preservar volume e secret. Revisões posteriores mantêm tag `prisma-parser-ia:rollback-before-SHA12`. Não remover volumes/modelos alheios ou voltar silenciosamente ao PC. Ponte SSH é histórico do piloto e não atende ao objetivo online.
+
+Limites iniciais: 768 MiB RAM, 1 CPU, 64 PIDs; concorrência unitária e todos os limites do Parser existentes. Sem GPU: a inferência do modelo ocorre na OpenAI. A persistência/revisão permanecem no Supabase autorizado. Smoke sintético pode validar o processamento sem banco; uma importação humana até revisão continua evidência distinta. Histórico de implantação e resultados ficam em `../qa/aot-parser-ia-kvm2.md`.
 
 ---
 
@@ -13840,6 +13920,65 @@ Estado: agreed. Aprovação: pedido explícito de implementação de Bruno nesta
 
 ---
 
+## Source: `docs/qa/agreement-parser-ia-kvm2.md`
+
+# Contrato de Acordos — Parser IA totalmente online na KVM2
+
+Versão 1.0.0, `agreed`, 2026-10-03. Bruno confirmou nesta conversa: “é exatamente o que precisamos fazer, precisa operar totalmente online”, após a recomendação de hospedar o Parser IA na KVM2 existente. Autoriza implementação, validação proporcional e publicação pelo AGENTS.md §7. Esta decisão substitui F-04 do acordo de qualidade 1.3.0 e a dependência temporária de PC/túnel do ADR-059 somente no fluxo automático ativo. Nenhuma decisão humana sobre Pessoa é fabricada.
+
+## DEVE
+
+- D-01 — O fluxo automático PDF.js → Parser IA → revisão deve operar no ambiente online existente, sem worker no PC ou túnel SSH.
+- D-02 — Reutilizar o gateway e o Parser existentes; preservar sessão, operador, papel, empresa, origem, contrato, hash, limites, serialização, ausência de retry e falha explícita.
+- D-03 — Chave OpenAI somente no backend, montada por arquivo protegido; cache privado persistente e segregado por empresa/fonte/versões; usuário sem privilégios e endpoint somente loopback.
+- D-04 — Serviço com reinício automático, verificação de disponibilidade sem IA e recuperação após reinício sem lock antigo bloquear permanentemente novas operações. Reinício não repete inferência de execução incerta.
+- D-05 — Publicar um SHA validado no GitHub/main/KVM2, preservar rollback e demonstrar disponibilidade e processamento no servidor enquanto worker/túnel do PC estão ausentes.
+
+## PROIBIDO
+
+- P-01 — Expor worker, credencial, cache ou currículo em porta pública, bundle, imagem ou logs; reduzir auth/tenant/validação para viabilizar a migração.
+- P-02 — Mudar prompt/modelo, versão dos dados, score, interpretação ou regras de revisão/publicação; repetir IA automaticamente; transformar falha em perfil completo.
+- P-03 — Migrar documentos/cache pessoais do PC, criar Pessoa fictícia em produção, publicar Perfil ou alterar containers/modelos alheios como parte do smoke.
+
+## FORA DE ESCOPO
+
+- F-01 — Reativar ou migrar Paddle/Tesseract da importação automática, migrar experimentos inativos, remover modelos/containers históricos, monitor externo, nova plataforma, concorrência múltipla ou arquitetura de fila.
+- F-02 — Reprocessar Pessoas reais ou alterar banco, Edge Functions, matching, taxonomia, UX e contratos persistidos.
+
+## AUTONOMIA
+
+- A-01 — Docker/Compose e Node existentes; layout interno de cache/lock, limites do container, healthcheck, roteiro de publicação e escolha de testes negativos proporcionais.
+- A-02 — Montar somente a credencial de Parser já autorizada no backend da KVM2, sem copiar `.env.local`, PDFs ou caches. Fonte protegida fora do checkout e sem exibir valores.
+
+## PENDÊNCIAS
+
+Nenhuma decisão material aberta para esta migração. Uma importação real com persistência pela interface depende de documento e ação humana autorizados; o smoke técnico usa somente PDF sintético, sem banco, sem Pessoa e sem publicação. Não equivale a aceite de qualidade de currículos reais.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01 — Disponibilidade e parse sintético reais na KVM2, com ausência comprovada de listener 8787/processo SSH no PC; mostrar o caminho de rede e o resultado validado.
+- CA-D02 — Regressão dirigida de gateway, Parser, readiness, validação de evidência e recuperação; negativos de sessão/origem/tenant/hash/tamanho/concorrência.
+- CA-D03 — Inspeção Docker/host: loopback, usuário sem privilégios, filesystem read-only, limites e arquivo/volume privados; nenhuma chave em env/imagem; segregação de cache comprovada na regressão.
+- CA-D04 — Healthcheck disponível após restart e replay de cache no servidor; lock volátil e nenhuma nova chamada paga no replay; erro continua explícito.
+- CA-D05 — CI, SHA local/remoto/VPS e serviço ativo registrados; rollback preservado; smoke público anônimo recusado e frontend acessível. Limite do smoke autenticado fica explícito se sessão não estiver disponível.
+
+## Mapa de Impacto e Preservação
+
+Baseline verificado: SHA `efdadeb64fbe8399d718018cf6080cb9737774e6` local/origin/main/VPS; `prisma-web` e gateway ativos, zero restart; PC sem listener 8787 nem SSH e VPS sem 18787. KVM2: 2 CPUs, 7.940 MiB RAM/5.287 MiB disponíveis, 81 GiB disco livre. Modelos remotos não rastreados e material local alheio preservados.
+
+| Área / capacidade | Relação | Dependência e preservação | Regressão proporcional |
+| --- | --- | --- | --- |
+| Parser e disponibilidade | direct | trocar somente localização e ciclo de vida; mesmo prompt/modelo/validador | HTTP/lock/cache, build TS, parse sintético remoto e restart |
+| Gateway e autorização | critical_transversal | mesmo endpoint privado 18787 e Host 8787; mesmo autorizador vivo | negativos existentes e rota pública anônima recusada |
+| Importação/revisão | plausible_indirect | mesmos payloads/páginas/fatos; nenhuma alteração da UI ou persistência | Parser domínio/recuperação/readiness, web HTTP; limite de importação real explícito |
+| Site/Traefik e outros serviços | plausible_indirect | recursos limitados, publicação apenas Parser; site continua ativo | comparar IDs/imagens/restarts e HTTPS antes/depois |
+| Dados/Supabase/matching/Knowledge | no_impact_identified | nenhuma migration/Edge/SQL nem chamada de persistência no smoke; saída do Parser mantém contrato | diff/plano e negativos de binding/cache; nenhuma mutação humana |
+| Paddle/experimento inativo | no_impact_identified | ausentes da rota automática; containers/modelos/portas existentes não alterados | inspeção antes/depois |
+
+Imagem anexada é evidência de incidente, não alvo de redesenho. Fidelidade visual não aplicável: nenhuma alteração de tela.
+
+---
+
 ## Source: `docs/qa/agreement-person-flow-validation.md`
 
 # Contrato de Acordos: validação reproduzível do fluxo da Pessoa
@@ -13949,6 +14088,8 @@ Nenhuma decisão material pendente. Automação futura de upload exige decisão 
 ## Source: `docs/qa/agreement-production-resume-quality-pipeline.md`
 
 # Contrato de Acordos — Qualidade da importação de currículos em produção
+
+Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui somente F-04 e a dependência de PC/túnel pelo Parser privado na KVM2, conforme ADR-075. As demais regras deste contrato permanecem. O texto abaixo preserva o acordo histórico 1.3.0.
 
 ## Objetivo
 
@@ -17164,6 +17305,73 @@ Fora de escopo F-01: sem alteração de prompt/modelo/limites/retry/banco/UI e s
 Validação local: `deno check` do handler e testes; `deno test --no-check` do handler/snapshot: 32/32 PASS; `pnpm run lint` PASS; `pnpm run check:matching-runtime` PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` PASS. O typecheck Deno exigiu tipagem explícita do retorno já usado de `prepareTrajectoryContext`, sem mudança de dado.
 
 Git/CI/produção: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` integrado por fast-forward em `main` e `origin/main`. CI `36377229062` PASS. Plano 1.0.1: nove arquivos; documentação/Context Pack e somente Edge `matching-trajectory`; database e web/VPS `skip`. Edge v9 ACTIVE, `verify_jwt=true`, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`, os 12 arquivos publicados comparados ao bundle local. POST sem autenticação recebeu 401; não houve chamada autenticada com Perfil real nem custo de IA de smoke. Git local no worktree de release e GitHub alinhados no SHA funcional. O checkout principal mantém quatro itens não rastreados do usuário e exports gerados temporários fora do commit; não foram sobrescritos. Logs históricos não são recuperáveis. Conclusão: D-01..D-03 e P-01..P-02 PASS, sem desvio; efeito operacional de telemetria em erro real ainda não observado, por decisão de não provocar uma falha paga em produção.
+
+---
+
+## Source: `docs/qa/aot-parser-ia-kvm2.md`
+
+# AoT — Parser IA totalmente online na KVM2
+
+Contrato `docs/qa/agreement-parser-ia-kvm2.md` 1.0.0, execução correspondente, ADR-075. Baseline `efdadeb64fbe8399d718018cf6080cb9737774e6`; branch `codex/parser-ia-kvm2`; risco D/E por localização/secret/ciclo de vida de PII. Evidência parcial até publicação.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste/evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- | --- |
+| D-01 | Sem PC/túnel | singleton KVM2/18787, gateway existente | HTTP com Host lógico PASS | PARTIAL | produção pendente |
+| D-02 | Autoridade e interpretação preservadas | gateway inalterado, somente diretório do lock | auth/tenant/hash/limites/cache/evidência, 86/86 | PASS | QA local sintético |
+| D-03 | Secret/cache/endpoint privados | Compose secret/node/loopback/hardening/volume | negativos/cache PASS, inspeção Docker pendente | PARTIAL | produção pendente |
+| D-04 | Restart sem lock antigo ou retry | tmpfs separado/cache persistente/healthcheck | quatro novos testes PASS | PARTIAL | restart real pendente |
+| D-05 | Publicar/provar no servidor | script específico e rollback | baseline remoto verificado | NOT TESTED | CI/publicação pendentes |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo / evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem exposição/redução de proteção | auth/tenant/origem/loopback/sanitização PASS; inspeção pendente | PARTIAL |
+| P-02 | Prompt/modelo/dados/revisão/no retry | referência inventada/zero fatos/partial/cache; diff | PASS |
+| P-03 | Sem mutação humana/material alheio | QA sintético sem banco e Git status preservado | PASS |
+
+## Mapa de Impacto e Preservação
+
+Mapa inicial no acordo; sem expansão de domínio. Dependências operacionais novas: secret protegido e volume privado na KVM2.
+
+| Capacidade / área | Relação | Baseline | Regressão / evidência | Status |
+| --- | --- | --- | --- | --- |
+| Parser/readiness | direct | PC/18787 VPS ausentes | HTTP/cache/lock/health, 45 tooling PASS | PARTIAL |
+| Gateway/auth/tenant | critical_transversal | gateway ativo/zero restart | negativos/HTTP PASS; smoke público pendente | PARTIAL |
+| Importação/revisão | plausible_indirect | parser-ia 1.0.0, mesma UI/saída | 26 domínio/recuperação/readiness PASS | PASS |
+| Web/gateway/Traefik | plausible_indirect | IDs/imagens/restarts coletados | pós-rollout/HTTPS pendentes | NOT TESTED |
+| Dados/matching/Knowledge | no_impact_identified | sem SQL/Edge/banco no smoke | diff/plano/binding/cache | PASS |
+| Paddle/experimento | no_impact_identified | fora da rota automática | comparar IDs após rollout | NOT TESTED |
+
+### Novidade e preservação
+
+Quatro testes novos; preservação por 41 gateway/Parser existentes, 26 domínio e 15 release/contexto: 86/86 PASS. Build TS raiz PASS. Compilação específica do container em validação. Sem suíte integral. Baseline real não tinha Parser disponível; provas locais sintéticas não medem qualidade de currículos reais.
+
+## Fora de escopo preservado
+
+F-01/F-02: nenhum OCR, container/modelo histórico removido, Pessoa/Perfil/Knowledge alterado ou schema/Edge/UX/matching modificado. Verificação operacional pós-rollout pendente.
+
+## Fidelidade visual
+
+Não aplicável: captura é incidente, tela não alterada. Smoke autenticado depende de sessão; não implica envio de currículo.
+
+## Desvios do contrato
+
+Nenhum desvio identificado na revisão local; conclusão depende de evidência operacional.
+
+## Validação final
+
+`pnpm run build` PASS. `node --test tests/tooling/parserIaHosted.test.mjs tests/tooling/parserIaService.test.mjs tests/tooling/paddleGateway.test.mjs` 45/45 PASS. `node --test dist/tests/parserIa.test.js dist/tests/parserIaRecovery.test.js dist/tests/parserReadiness.test.js tests/tooling/releaseDispatcher.test.mjs tests/tooling/prismaContext.test.mjs` 41/41 PASS. Sem IA paga/banco nessas provas.
+
+## Git / QA / ambiente
+
+Baseline local/origin/VPS alinhado. KVM2 2 CPUs, 7.940 MiB RAM/5.287 MiB disponíveis, 81 GiB livres. Web/gateway zero restart; experimento não saudável existente preservado. `.tmp.driveupload/`, acordo M8 alheio, Dockerfile.gpu, teste duplicado não rastreado e `models/` remoto preservados. Context Pack usa fontes versionadas para excluir o acordo alheio não rastreado.
+
+## Conclusão
+
+Implementação local em validação. D-01/D-03/D-04/D-05 ainda não PASS; entrega e produção não concluídas neste estado.
 
 ---
 
@@ -21246,6 +21454,16 @@ Entregar uma mudança coerente em domínio compartilhado, orquestração web, gu
 # Execução — diagnóstico seguro da interpretação de trajetória
 
 Fonte integral e imutável por versão: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0. Aplicar todos os D-01..D-03, P-01..P-02, F-01 e A-01. Implementar somente na Edge e testes pertinentes. Preservar os contratos públicos e o fallback anterior. Validar CA-D01..CA-D03 com fixtures sem provedor real, revisar payloads dos logs e registrar AoT e mapa final. Regenerar Context Pack por ser mudança material. Publicar somente destinos indicados pelo plano do diff validado.
+
+---
+
+## Source: `docs/qa/execution-parser-ia-kvm2.md`
+
+# Execução — Parser IA totalmente online na KVM2
+
+Implementar integralmente `docs/qa/agreement-parser-ia-kvm2.md` v1.0.0, lido na íntegra nesta execução: D-01 a D-05, P-01 a P-03, F-01/F-02, A-01/A-02 e CA-D01 a CA-D05. A autorização explícita de Bruno é a fonte do acordo. Reutilizar Docker/Compose/Node e o Parser/gateway existentes. Não reabrir decisões de prompt/modelo ou reativar OCR.
+
+Registrar ADR sobre a implantação, separando cache persistente de lock volátil. Construir em branch isolada a partir do baseline, validar por mapa e publicar somente superfícies efetivamente necessárias. Transferir apenas credencial backend autorizada por SSH sem revelar valor ou colocar segredo no Git/imagem. Validar com sintético sem persistir Pessoa. Manter evidência de QA local, CI, produção, restart, preservação e rollback no AoT; nenhuma limitação vira PASS fictício.
 
 ---
 
