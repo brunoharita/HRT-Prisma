@@ -10,10 +10,21 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe M8.4 como quarta entrega do Movimento 8", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v1.8.4");
-  assert.equal(PRISMA_RELEASE.movement, 8);
-  assert.equal(PRISMA_RELEASE.delivery, 4);
+test("registro oficial expõe a geração 2, movimento 0, primeira entrega online autorizada", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v2.0.1");
+  assert.equal(PRISMA_RELEASE.productGeneration, 2);
+  assert.equal(PRISMA_RELEASE.movement, 0);
+  assert.equal(PRISMA_RELEASE.delivery, 1);
+});
+
+test("nova geração aceita movimento zero sem alterar contadores anteriores e rejeita movimento inválido", () => {
+  const previous = { productGeneration: 1, movement: 8, deliveries: ["A", "B", "C", "D"] };
+  assert.equal(calculateProductRelease([previous]).version, "1.8.4");
+  assert.equal(calculateProductRelease([previous, { productGeneration: 2, movement: 0, deliveries: ["Online"] }]).version, "2.0.1");
+  for (const movement of [-1, 0.5, NaN]) {
+    assert.throws(() => calculateProductRelease([{ productGeneration: 2, movement, deliveries: ["Online"] }]), /Invalid official/);
+  }
+  assert.equal(previous.deliveries.length, 4);
 });
 
 test("an incomplete or duplicated release registry does not invent a product version", () => {

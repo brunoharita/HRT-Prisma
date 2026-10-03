@@ -2,11 +2,11 @@
 artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
-product_version: 1.8.1
-current_state_version: 2.51.21
+product_version: 2.0.1
+current_state_version: 2.51.22
 current_state_last_verified: 2026-10-03
 documentation_source_count: 324
-source_manifest_sha256: 89ed8291504f7cfbeaa06531eed52a1145bd1a1f8c0c5f0c0b2e0e965b89fb4b
+source_manifest_sha256: 3f0829e2ef7b5af1132238c23a96a092275ea4c49ae3d0c0516ddf63898d3b19
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,6 +268,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
+Prisma v2.0.1 é a versão autorizada para a importação totalmente online na KVM2, geração 2/movimento 0/entrega 1. Reutiliza Parser e gateway, preserva dados/prompt/modelo/revisão e elimina PC/túnel. Acordo Parser KVM2 1.1.0; publicação e limites no AoT correspondente, sem presumir rollout pelo número da versão.
+
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
@@ -277,8 +279,6 @@ M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v
 A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
 Publicado em produção no SHA `0815b9429e7bcdb26face7f18132671a8754e0f5`: a aba Resumo da leitura do Perfil usa a projeção M7 vigente para destacar pendências reais da curadoria, indicadores factuais, agrupamentos e evidências recentes em composição principal/lateral. Nenhuma migration, IA, persistência, permissão ou versão pública foi alterada. CI da branch e da main passou; o smoke autenticado confirmou o Resumo e a navegação à lista de pendências sem escrita. Validação, divergência transitória do primeiro smoke HTTP e limites constam no AoT M7 Resumo operacional.
-
-Release roteia pelo diff Git, banco, funções e web; escrita exige SHA e o ledger bloqueia `db push` geral. No Projeto do ChatGPT, usar a fonte compacta, um chat por movimento e só os owners necessários; ampliação exige sugestão, valor, custo e decisão. Agreement antecede Execution Prompt. Owner: `docs/operations/release-dispatcher.md`; ADR-068.
 
 ---
 

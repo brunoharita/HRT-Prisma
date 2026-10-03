@@ -1,5 +1,9 @@
 # AoT — Parser IA totalmente online na KVM2
 
+## Aditivo autorizado em publicação
+
+Bruno aprovou transferência exata da chave, teste sintético pago e publicação Prisma v2.0.1 em main/produção. Acordo/execução 1.1.0 acrescentam D-06/CA-D06: registro único, histórico preservado e web como superfície direta. Secret já provisionado em `/etc/prisma/parser-ia.env`, modo 400/UID 1000, sem exposição do valor. Bloqueios do checkpoint abaixo foram resolvidos por essa autorização; ativação, parse real, reinício e versão hospedada ainda aguardam prova. Regressão incremental: registro/histórico, typecheck/build web, contexto e smoke. O checkpoint abaixo permanece histórico até o fechamento operacional.
+
 Contrato `docs/qa/agreement-parser-ia-kvm2.md` 1.0.0, execução correspondente, ADR-075. Baseline `efdadeb64fbe8399d718018cf6080cb9737774e6`; branch `codex/parser-ia-kvm2`; risco D/E por localização/secret/ciclo de vida de PII. Evidência parcial até publicação.
 
 ## Matriz de Acordos

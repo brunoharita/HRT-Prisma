@@ -50,12 +50,18 @@ export const PRISMA_RELEASE_HISTORY = [{
     "M8.3: interpretação versionada da trajetória no Score Prisma",
     "M8.4: dimensões temporais do Score Prisma",
   ],
+}, {
+  productGeneration: 2,
+  movement: 0,
+  deliveries: [
+    "2.0.1: importação totalmente online na KVM2",
+  ],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {
   const current = history.at(-1);
   if (!current || !Number.isSafeInteger(current.productGeneration) || current.productGeneration < 1
-    || !Number.isSafeInteger(current.movement) || current.movement < 1 || current.deliveries.length === 0
+    || !Number.isSafeInteger(current.movement) || current.movement < 0 || current.deliveries.length === 0
     || current.deliveries.some((name) => !name.trim()) || new Set(current.deliveries).size !== current.deliveries.length) {
     throw new Error("Invalid official product release registry");
   }

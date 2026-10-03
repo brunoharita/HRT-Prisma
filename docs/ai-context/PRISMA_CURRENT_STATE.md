@@ -2,11 +2,13 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.21
+version: 2.51.22
 last_verified: 2026-10-03
 ---
 
 # Estado atual do Prisma
+
+Prisma v2.0.1 registra a entrega autorizada de importação totalmente online na KVM2, geração 2, movimento 0, entrega 1. Login e menu usam o registro único; publicação e evidência operacional serão registradas no AoT deste movimento.
 
 ## Modal de revisão de divergências
 
@@ -86,9 +88,9 @@ Acordo M8.3 v1.0.0 e ADR-073 preservam pesos 30/20/35/15 e requisitos, estendend
 
 Baseline semântico anterior `60c642f`, Edge v2, publicado em 25/09; CI e smoke autenticado PASS. Prompt 1.2.0 mantém rubrica/guardrails: 120 leituras do corpus inicial e 30 de trajetórias longas/mistas passaram, sem divergências. São conjuntos de desenvolvimento, não holdout ou prova de justiça universal. Smoke anterior: quatro interpretações completas e três abstenções por divergência, sem nota/prioridade para pendências; agora somente elegíveis A/B consomem essa camada. Bruno e Diego: 47/100 provisório, cobertura 50%, Grupo B, programação reconhecida mas requisitos backend ainda sem evidência suficiente. Comparação/reabertura mantiveram análises, uma tentativa cada; snapshots servidor confirmados. Baseline: 177 testes Node direcionados, 25 Deno, 15 tooling e SQL concorrente/negativo PASS; desktop/mobile inspecionados. Aprendizado, outras profissões e redução adicional da abstenção não estão validados por este piloto.
 
-## Parser IA totalmente online na KVM2 — pronto, ativação bloqueada por autorização de credencial
+## Parser IA totalmente online na KVM2 — publicação autorizada
 
-Decisão explícita de Bruno em 03/10: eliminar PC/túnel da importação automática. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway em Docker na KVM2, loopback privado 18787, secret somente no backend, cache persistente segregado e lock volátil. PDF.js → Parser IA → revisão, prompt/modelo, contratos e auth/tenant preservados; OCR automático continua inativo. Substitui a dependência temporária/F-04 anterior sem reprocessar Pessoas. SHA funcional `57b306d308b5df40d28c5b3366d79b62500fbf7a` integrado em main/GitHub, CIs branch `37137776343` e main `37138060686` PASS. 86 testes dirigidos, build TS, compilação específica, lint e Context Pack PASS. Imagem construída na KVM2 e QA sem rede/credencial real comprovou HTTP parse/cache/permissões e restart Docker real com lock volátil/cache persistente. Serviços reais preservados, HTTPS 200, readiness anônima 401. A revisão automática rejeitou transferir a chave específica de `.env.local` para `/etc/prisma/parser-ia.env` sem autorização humana mais específica; chave não transferida e Parser de produção ainda não iniciado. VPS checkout permanece no baseline `efdadeb6`; PC continua sem worker/túnel. Smoke pago real e tela autenticada pendentes. ADR-075/runbook e `docs/qa/aot-parser-ia-kvm2.md` registram evidências e bloqueio; não é entrega concluída.
+Decisão explícita de Bruno em 03/10: eliminar PC/túnel da importação automática. `parser-ia-kvm2-1.0.0` reutiliza Parser/gateway em Docker na KVM2, loopback privado 18787, secret somente no backend, cache persistente segregado e lock volátil. PDF.js → Parser IA → revisão, prompt/modelo, contratos e auth/tenant preservados; OCR automático continua inativo. Substitui a dependência temporária/F-04 anterior sem reprocessar Pessoas. SHA inicial `57b306d308b5df40d28c5b3366d79b62500fbf7a` em main/GitHub; CIs branch `37137776343` e main `37138060686` PASS. 86 testes dirigidos, build TS, compilação específica, lint e Context Pack PASS. QA na KVM2 sem rede/credencial real comprovou HTTP/cache/permissões e restart Docker real. Após a rejeição inicial da transferência pela revisão automática, Bruno autorizou especificamente chave/origem/destino, teste sintético pago e publicação v2.0.1. Secret provisionado somente no backend, modo 400/UID 1000; ativação e smoke real em andamento. Acordo 1.1.0, ADR-075/runbook e `docs/qa/aot-parser-ia-kvm2.md` registram estado e limites.
 
 ## Disponibilidade antecipada da importação (publicada)
 
@@ -123,6 +125,8 @@ Prisma v1.8.1 registra M8.1 como primeira entrega do Movimento 8, após o Produc
 O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. Dos nove alvos autorizados, três foram excluídos pela saga M5.5; após orientação do Product Owner, os seis restantes serão preservados nesta execução. Consulta SQL confirmou 7 Pessoas, 11 objetos Storage, 7 Auth, 7 usuários da plataforma e 8 Vagas. A outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. O CI do SHA `11ff0ab` passou, `main` foi promovida, a web foi publicada na VPS nesse SHA, o contêiner está ativo e HTTPS respondeu 200. A limpeza remota é parcial; smoke funcional autenticado hospedado e novo ciclo intake → revisão → publicação permanecem pendentes. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
+
+Prisma v2.0.1 é a versão autorizada para a importação totalmente online na KVM2, geração 2/movimento 0/entrega 1. Reutiliza Parser e gateway, preserva dados/prompt/modelo/revisão e elimina PC/túnel. Acordo Parser KVM2 1.1.0; publicação e limites no AoT correspondente, sem presumir rollout pelo número da versão.
 
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
@@ -242,7 +246,7 @@ O aceite cobre este caso e o funcionamento local, sem declarar 100% de acerto, g
 
 ## Versão exibida no login
 
-Prisma v1.7.5 registra o M7.2 v2 como quinta entrega aceita do Movimento 7. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; metadados técnicos continuam internos. Correções, commits e carregamentos da página não incrementam a versão. A versão está publicada desde o rollout autorizado de 2026-09-18. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
+Prisma v2.0.1 registra a primeira entrega aceita da geração 2, movimento 0, conforme decisão explícita de Bruno em 2026-10-03. O contador e a apresentação são calculados pelo registro executável `web/src/config/releaseRegistry.ts`. Login e sidebar consomem a mesma fonte; histórico 1.x e metadados técnicos são preservados. Correções, commits e carregamentos da página não incrementam a versão. Publicação e limites no AoT Parser IA KVM2. Owner e procedimento em `docs/architecture/versioning.md` e `docs/qa/release-checklist.md`.
 
 ## Repositório
 

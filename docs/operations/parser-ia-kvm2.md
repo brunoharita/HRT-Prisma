@@ -1,6 +1,6 @@
 # Operação do Parser IA na KVM2
 
-Versão de implantação `parser-ia-kvm2-1.0.0`; acordo `../qa/agreement-parser-ia-kvm2.md` 1.0.0 e ADR-075. A importação automática usa PDF.js → Parser IA → revisão. Paddle/Tesseract não são reativados. A versão dos dados, prompt, modelo e transporte continuam iguais.
+Versão de implantação `parser-ia-kvm2-1.0.0`; acordo `../qa/agreement-parser-ia-kvm2.md` 1.1.0 e ADR-075. A importação automática usa PDF.js → Parser IA → revisão. Paddle/Tesseract não são reativados. A versão dos dados, prompt, modelo e transporte continuam iguais; versão pública v2.0.1 autorizada pelo PO.
 
 ## Caminho e proteção
 

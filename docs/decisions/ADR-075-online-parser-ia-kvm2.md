@@ -1,6 +1,6 @@
 # ADR-075 — Parser IA online na KVM2
 
-Estado: aceito pela decisão explícita de Bruno em 2026-10-03. Owner: operations/security. Acordo: `docs/qa/agreement-parser-ia-kvm2.md` 1.0.0. Versão de implantação: `parser-ia-kvm2-1.0.0`; contratos de dados/transporte/readiness, prompt e modelo preservados.
+Estado: aceito pela decisão explícita de Bruno em 2026-10-03. Owner: operations/security. Acordo: `docs/qa/agreement-parser-ia-kvm2.md` 1.1.0. Versão de implantação: `parser-ia-kvm2-1.0.0`; contratos de dados/transporte/readiness, prompt e modelo preservados. Versão pública v2.0.1 autorizada no aditivo do acordo.
 
 ## Problema e decisão
 

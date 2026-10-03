@@ -1,6 +1,8 @@
 # Versionamento
 
-Parser totalmente online (2026-10-03): versão de implantação `parser-ia-kvm2-1.0.0`, ADR-075. A localização/ciclo de vida mudam para a KVM2; `parser-ia-1.0.0`, `parser-ia-hosted-transport-1.0.0`, `parser-ia-readiness-1.0.0`, prompt/modelo, contratos persistidos e versão pública do produto permanecem. Publicação e limites no AoT `docs/qa/aot-parser-ia-kvm2.md`.
+Decisão explícita de Bruno em 03/10/2026: este movimento de importação totalmente online será publicado como **Prisma v2.0.1**, geração 2, movimento 0, entrega 1, por meio do registro existente. Movimento zero passa a ser aceito para iniciar a geração; negativos/fracionários continuam inválidos. Histórico 1.x preservado. Login/menu/Context Pack devem refletir o mesmo registro. O contrato de implantação `parser-ia-kvm2-1.0.0` e os contratos dos dados não são renumerados pela versão pública.
+
+Parser totalmente online (2026-10-03): versão de implantação `parser-ia-kvm2-1.0.0`, ADR-075. A localização/ciclo de vida mudam para a KVM2; `parser-ia-1.0.0`, `parser-ia-hosted-transport-1.0.0`, `parser-ia-readiness-1.0.0`, prompt/modelo e contratos persistidos permanecem. A versão pública avança para v2.0.1 por decisão explícita acima. Publicação e limites no AoT `docs/qa/aot-parser-ia-kvm2.md`.
 
 Triagem ocupacional seletiva (2026-09-29, publicada): `semantic-triage-2.0.0` versiona apenas a ativação da interpretação externa. O matching determinístico 5.1.0, a resposta semântica válida 7.0.0, score 1.4.0, prompt/modelo, schemas e snapshots persistidos não mudam; cache anterior permanece legível somente se a nova triagem server-side permitir interpretação para o par atual. O resultado interno progressivo não persiste novo estado. Sem migration ou nova versão pública numerada de produto neste movimento; publicação e limites são comprovados pelo AoT específico, não por esta decisão de versão.
 
@@ -70,11 +72,11 @@ O Prisma usa uma versão de produto própria, separada das versões semânticas 
 
 `Prisma v<geração>.<movimento>.<entrega>`
 
-- `geração`: geração principal do produto, atualmente `1`;
-- `movimento`: movimento de produto em execução, atualmente `7`;
+- `geração`: geração principal do produto, `2` na entrega autorizada de 03/10/2026;
+- `movimento`: movimento de produto em execução, `0` no início da geração 2;
 - `entrega`: contador sequencial das entregas oficiais concluídas dentro do movimento, sem zeros à esquerda.
 
-A versão de produto aceita e publicada é **Prisma v1.7.2**, correspondente à segunda entrega oficial do Movimento 7. Correções, commits e builds não incrementam o contador.
+A versão autorizada para publicação neste movimento é **Prisma v2.0.1**, primeira entrega do movimento 0 da geração 2. Estado operacional e evidência de publicação no AoT do Parser KVM2; o número no código não prova rollout. Correções, commits e builds não incrementam o contador.
 
 ### Registro oficial do Movimento 5
 
