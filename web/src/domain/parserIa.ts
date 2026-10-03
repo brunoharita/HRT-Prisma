@@ -7,6 +7,7 @@ import { normalizeDraftPeriods } from "./resumeDates.js";
 import { preserveExplicitItemLineBreaks } from "./narrativeText.js";
 import { PARSER_EVIDENCE_ADAPTER_VERSION } from "./importEvidencePersistence.js";
 import { CUSTOM_PROFILE_SECTION_ID_PATTERN } from "./customProfileSections.js";
+import { prepareImportText } from "./importTextUnicode.js";
 
 export const PARSER_IA_VERSION = "parser-ia-1.0.0";
 export const PARSER_IA_SOURCE_VERSION = "pdfjs-5.4.296/parser-ia-spans-v1";
@@ -42,7 +43,7 @@ export interface ParserFact { path: string; value: string; sources: string[]; }
 export interface ParserPayload { status: "complete" | "partial"; facts: ParserFact[]; uncertainties: string[]; }
 export interface ParserIaResult {
   version: typeof PARSER_IA_VERSION;
-  evidenceAdapterVersion?: typeof PARSER_EVIDENCE_ADAPTER_VERSION;
+  evidenceAdapterVersion?: "evidence-adapter-1.0.0" | typeof PARSER_EVIDENCE_ADAPTER_VERSION;
   sourceSha256: string;
   organizationId: string;
   status: "structured_for_review" | "partial";
@@ -209,7 +210,8 @@ export function importRecoveryNeedsSystemUpdate(document: PersonDocumentTimeline
   return document?.latestAttempt?.failureCode === "import_evidence_contract_invalid" && !canResumeFailedAiIntake(document);
 }
 
-// Adapt only identifiers/addresses; source values, references and geometry are immutable.
+// Source facts/references/geometry are immutable. Invalid units in derived fields
+// receive the explicitly approved representation before even the identity RPC.
 function normalizeParserEvidenceResult(result: ParserIaResult): ParserIaResult {
   const canonicalId = (kind: "result" | "section" | "item", id: string, seed: string) => {
     const valid = kind === "result" ? /^result_[a-z0-9]{8,64}$/.test(id) : CUSTOM_PROFILE_SECTION_ID_PATTERN.test(id);
@@ -235,11 +237,14 @@ function normalizeParserEvidenceResult(result: ParserIaResult): ParserIaResult {
     const fieldPath = pathChanges.get(item.fieldPath) ?? reviewListFieldPath(item.fieldPath);
     return fieldPath === item.fieldPath ? item : { ...item, fieldPath };
   });
-  const draftUnchanged = keyResults.every((item, index) => item === result.draft.keyResults[index])
+  const identifiersUnchanged = keyResults.every((item, index) => item === result.draft.keyResults[index])
     && customSections.every((item, index) => item === result.draft.customSections[index]);
+  const canonicalDraft = identifiersUnchanged ? result.draft : { ...result.draft, keyResults, customSections };
+  const representedDraft = prepareImportText([], canonicalDraft).draft;
+  const draftUnchanged = representedDraft === result.draft;
   if (result.evidenceAdapterVersion === PARSER_EVIDENCE_ADAPTER_VERSION && draftUnchanged
     && fieldEvidence.every((item, index) => item === result.fieldEvidence[index])) return result;
-  return { ...result, evidenceAdapterVersion: PARSER_EVIDENCE_ADAPTER_VERSION, draft: draftUnchanged ? result.draft : { ...result.draft, keyResults, customSections }, fieldEvidence };
+  return { ...result, evidenceAdapterVersion: PARSER_EVIDENCE_ADAPTER_VERSION, draft: representedDraft, status: representedDraft.uncertainties.length > result.draft.uncertainties.length ? "partial" : result.status, fieldEvidence };
 }
 
 export function parserIaIdentity(result: ParserIaResult): ResumeIdentity {

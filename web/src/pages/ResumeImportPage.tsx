@@ -20,6 +20,7 @@ import { operationRecovery, type OperationRecovery } from "../domain/reviewOpera
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import { prepareParserIa, parserIaEnabled } from "../infrastructure/parserIaClient";
 import { parserIaIdentity } from "../domain/parserIa";
+import { containsInvalidImportUnicode } from "../domain/importTextUnicode";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -167,7 +168,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
 
   return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase}`}>
     {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} readiness={readiness} onCheck={() => void refreshReadiness()} /> : null}
-    {phase !== "upload" && !(phase === "processing" && error) && processed?.parserIa?.status === "partial" ? <Alert type="warning" showIcon message="Interpretação parcial: há informações que precisam de conferência na revisão." /> : null}
+    {phase !== "upload" && !(phase === "processing" && error) && (processed?.parserIa?.status === "partial" || (processed && containsInvalidImportUnicode(processed.pages))) ? <Alert type="warning" showIcon message="Interpretação parcial: há informações ou símbolos não identificados que precisam de conferência na revisão." /> : null}
     {phase === "identity" && intake ? <IdentityScreen busy={busy} error={error} identity={identity} intake={intake} onBack={() => setPhase("upload")} onCreate={handleCreateDespiteMatch} onIdentityReview={handleIdentityReview} onLink={(candidate) => void resolveIntake("link_existing_person", candidate.personId)} processed={processed} /> : null}
     {phase === "processing" ? <ProcessingScreen busy={busy} error={error} onBack={() => onNavigate("/profiles")} onWorkspace={processingProgress?.personId ? () => onNavigate(`/profiles/${processingProgress.personId}`) : null} onReplace={restartImport} onRetry={processingRecovery === "retry" && lastResolution ? () => void resolveIntake(lastResolution.action, lastResolution.personId) : null} processed={processed} progress={processingProgress} recovery={processingRecovery} /> : null}
     {phase === "analysis" && result && analysis ? <AnalysisScreen analysis={analysis} busy={busy} error={error} onBack={() => onNavigate(`/profiles/${result.personId}`)} onReview={() => void startReview()} processed={processed} reused={result.reused} /> : null}

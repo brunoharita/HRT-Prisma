@@ -55,6 +55,7 @@ import { legacyReviewEntityIdFromValue, reviewDraftNeedsContractUpgrade } from "
 import { reviewOperationError, supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import { PARSER_IA_VERSION, PARSER_IA_SOURCE_VERSION, parserIaMethodVersion, preparedParserIa } from "../../domain/parserIa";
 import { importEvidenceIssue } from "../../domain/importEvidencePersistence";
+import { containsInvalidImportUnicode, prepareImportText } from "../../domain/importTextUnicode";
 import { importEvidenceOperationError, importFailureDiagnostic, PrismaOperationError } from "../../domain/reviewOperationErrors";
 import { parserIaEnabled, prepareParserIa } from "../parserIaClient";
 
@@ -1190,6 +1191,10 @@ async function persistExtraction(
   retryOfAttemptId: string | null,
   structuringVersion: string = STRUCTURING_VERSION,
 ) {
+  if (containsInvalidImportUnicode(pages, true) || containsInvalidImportUnicode(draft, true)) throw importEvidenceOperationError({ reason: "unicode_invalid", fieldPath: null, pageNumber: null, evidenceIndex: null });
+  const prepared = prepareImportText(pages, normalizeDraftPeriods(draft));
+  pages = prepared.pages;
+  draft = prepared.draft;
   const issue = importEvidenceIssue(pages, draft);
   if (issue) throw importEvidenceOperationError(issue);
   const pagePayload = pages.map((page) => ({
@@ -1207,7 +1212,7 @@ async function persistExtraction(
     p_person_id: personId,
     p_document_id: documentId,
     p_pages: pagePayload,
-    p_draft: normalizeDraftPeriods(draft) as unknown as Json,
+    p_draft: draft as unknown as Json,
     p_pages_native: pagesNative,
     p_pages_ocr: pagesOcr,
     p_native_extraction_version: structuringVersion.startsWith(`${PARSER_IA_VERSION}/`) ? PARSER_IA_SOURCE_VERSION : NATIVE_EXTRACTION_VERSION,
@@ -1335,7 +1340,7 @@ async function processResolvedIntake(
       p_document_id: result.documentId,
     });
     throwIfError(completeError, "O currículo foi processado, mas o intake não pôde ser concluído.");
-    onProgress?.({ stage: "ready_for_review", personId: result.personId, message: input.parserIa?.status === "partial" ? "Interpretação parcial preservada. Confira as pendências na revisão." : "Análise concluída. O documento está pronto para revisão." });
+    onProgress?.({ stage: "ready_for_review", personId: result.personId, message: input.parserIa?.status === "partial" || containsInvalidImportUnicode(input.pages) || containsInvalidImportUnicode(extraction.draft) ? "Interpretação parcial preservada. Confira as pendências e símbolos não identificados na revisão." : "Análise concluída. O documento está pronto para revisão." });
     return result;
   } catch (caught) {
     const diagnostic = importFailureDiagnostic(caught, stage, methodVersion);

@@ -59,7 +59,7 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
         assert.equal(args.p_organization_id, 'org'); assert.equal(args.p_intake_id, 'intake');
         assert.equal(args.p_diagnostic.reason, 'field_path_invalid'); assert.equal(args.p_diagnostic.stage, 'persisting');
         assert.equal(args.p_diagnostic.technicalCode, '22023'); assert.equal(args.p_diagnostic.fieldPath, null);
-        assert.ok(args.p_diagnostic.structuringVersion.endsWith('/evidence-adapter-1.0.0'));
+        assert.ok(args.p_diagnostic.structuringVersion.endsWith('/evidence-adapter-1.0.1'));
         assert.ok(!JSON.stringify(args.p_diagnostic).includes('Synthetic Person'));
         return { data: null, error: diagnosticFailure ? { code: '503', message: 'DO NOT EXPOSE PRIVATE BACKEND DATA' } : null };
       }
@@ -74,12 +74,17 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
         assert.ok(args.p_draft.uncertainties.some(value => value.includes('2020 - Present') && value.includes('assumidos')));
         assert.equal(args.p_draft.contact.linkedin, 'https://www.linkedin.com/in/synthetic-profile');
         assert.deepEqual(validateReviewDraftForSave(args.p_draft), []);
+        assert.ok(args.p_pages[0].text_content.includes('�'));
+        assert.ok(args.p_pages[0].method_version.includes('unicode-text-1.0.0'));
+        assert.ok(args.p_draft.uncertainties.some(value => value.includes('símbolo não identificado')));
+        assert.ok(!JSON.stringify(args.p_pages).includes('\\u0000'));
         for (const page of args.p_pages) for (const evidence of page.field_evidence) assert.ok(pattern.test(evidence.fieldPath), evidence.fieldPath);
         return persistFailure ? { data: null, error: { code: '22023', message: 'prisma_import_evidence_invalid', details: JSON.stringify({ contract: 'import-evidence-1.0.0', reason: 'field_path_invalid', fieldPath: null, pageNumber: 1, evidenceIndex: 0 }) } } : { data: [{ processing_attempt_id: 'attempt', structured: true }], error: null };
       }
       assert.equal(name, 'complete_resume_intake'); assert.equal(args.p_intake_id, 'intake'); return { data: 'ready_for_review', error: null };
     };
-    globalThis.fetch = async (url, options) => { assert.equal(url, '/parser-ia-local/parse'); assert.equal(JSON.parse(options.body).sourceSha256, checksum); aiCalls++; return new Response(JSON.stringify({ pages, result, cached: true }), { status: 200 }); };
+    const invalidPages = pages.map(page => ({ ...page, text: page.text + '\n\0', layoutLines: [...page.layoutLines, { ...page.layoutLines[0], text: '\0', y: 0.9 }] }));
+    globalThis.fetch = async (url, options) => { assert.equal(url, '/parser-ia-local/parse'); assert.equal(JSON.parse(options.body).sourceSha256, checksum); aiCalls++; return new Response(JSON.stringify({ pages: invalidPages, result, cached: true }), { status: 200 }); };
     await service.resumeFailedAiIntake('org', 'person', 'doc');
     assert.deepEqual(mutations, ['persist_person_extraction', 'complete_resume_intake']);
     assert.equal(aiCalls, 1);

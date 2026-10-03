@@ -43,7 +43,7 @@ export function importEvidenceOperationError(issue: ImportEvidenceIssue): Prisma
 export function importFailureDiagnostic(error: unknown, stage: ImportFailureDiagnostic["stage"], structuringVersion: string): ImportFailureDiagnostic {
   const typed = error instanceof PrismaOperationError ? error : null;
   const issue: ImportEvidenceIssue = typed?.importIssue ?? {
-    reason: typed?.category === "unavailable" ? "unavailable" : typed?.category === "authentication" ? "session_required" : typed?.recovery === "reload" || typed?.recovery === "await-system-update" ? "environment_mismatch" : "operation_failed",
+    reason: typed?.technicalCode === "22P05" ? "unicode_invalid" : typed?.category === "unavailable" ? "unavailable" : typed?.category === "authentication" ? "session_required" : typed?.recovery === "reload" || typed?.recovery === "await-system-update" ? "environment_mismatch" : "operation_failed",
     fieldPath: null, pageNumber: null, evidenceIndex: null,
   };
   return { ...issue, contract: IMPORT_EVIDENCE_CONTRACT_VERSION, stage, technicalCode: /^[A-Z0-9]{5,8}$/.test(typed?.technicalCode ?? "") ? typed!.technicalCode : null, adapterVersion: PARSER_EVIDENCE_ADAPTER_VERSION, structuringVersion };
@@ -54,7 +54,7 @@ function parseImportIssue(details: string | null | undefined): ImportEvidenceIss
     const raw: unknown = JSON.parse(details ?? "null");
     if (!raw || typeof raw !== "object") return null;
     const value = raw as Record<string, unknown>;
-    if (value.contract !== IMPORT_EVIDENCE_CONTRACT_VERSION || !IMPORT_FAILURE_REASONS.includes(value.reason as ImportEvidenceIssue["reason"])) return null;
+    if (![IMPORT_EVIDENCE_CONTRACT_VERSION, "import-evidence-1.0.0"].includes(String(value.contract)) || !IMPORT_FAILURE_REASONS.includes(value.reason as ImportEvidenceIssue["reason"])) return null;
     const fieldPath = typeof value.fieldPath === "string" && /^(identity\.fullName|contact\.(city|state|phone|email|linkedin)|professionalTitle|areasOfExpertise|professionalObjective|summary|certifications|languages|competencies|toolsAndTechnologies|professionalContexts|uncertainties|notIdentified|experiences\.\*(\.(role|organization|period|description))?|education\.\*(\.(course|institution|period|description|level|qualification|status|classificationOrigin))?|keyResults\.\*\.value|customSections\.\*\.(name|items\.\*\.value))$/.test(value.fieldPath) ? value.fieldPath : null;
     return { reason: value.reason as ImportEvidenceIssue["reason"], fieldPath, pageNumber: Number.isInteger(value.pageNumber) && Number(value.pageNumber) > 0 && Number(value.pageNumber) <= 200 ? Number(value.pageNumber) : null, evidenceIndex: Number.isInteger(value.evidenceIndex) && Number(value.evidenceIndex) >= 0 && Number(value.evidenceIndex) <= 1000 ? Number(value.evidenceIndex) : null };
   } catch { return null; }
@@ -67,6 +67,8 @@ function asOperationError(error: ReviewOperationError, message: string, category
 export function reviewOperationError(error: ReviewOperationError, fallback: string): PrismaOperationError {
   const technicalMessage = error.message.toLowerCase();
   const actionable = parseActionableFeedback(error.details);
+
+  if (error.code === "22P05") return new PrismaOperationError("O Prisma encontrou um caractere não identificado que não pôde ser representado antes da gravação. O documento foi preservado e nenhum Perfil foi publicado. Aguarde a correção do sistema antes de retomar.", { category: "internal", recovery: "await-system-update", technicalCode: "22P05", importIssue: { reason: "unicode_invalid", fieldPath: null, pageNumber: null, evidenceIndex: null } });
 
   if (actionable) {
     const item = actionable.itemNumber ? `Formação ${actionable.itemNumber}` : "A formação indicada";

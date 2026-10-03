@@ -1,6 +1,6 @@
 # Prisma agent contract
 
-Instruction contract version: 1.3.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.2. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18; necessary personal-data transfer to the existing Prisma VPS authorization 2026-10-03. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -158,6 +158,8 @@ For the development agent, prefer the least costly available capability that can
 An explicit request to implement, fix, develop, or execute authorizes, within that scope: diagnosis, implementation, own-diff review, directly related tests, evidence, documentation, context regeneration, coherent commit, push, integration according to the repository flow, and QA deployment or validation when the environment exists.
 
 Standing authorization from Bruno (2026-09-18), superseding the push-only rule: after proportionally validating an authorized Prisma improvement, commit/push to existing `origin` (`git@github.com:brunoharita/HRT-Prisma.git` or equivalent HTTPS), integrate into main, deploy required migrations/backend/frontend to existing production, smoke-test and synchronize local/GitHub/VPS. No repeated approval is needed unless Bruno explicitly says not to publish yet (for example, "Não é para colocar em produção ainda"). This complete delivery is his "estilo AoT"; agreement/test/evidence obligations remain. Preserve unrelated work, secrets and human data. This does not authorize force-push, ref deletion, new destinations, destructive operations, unexpected cost or unresolved security risk. Tool approvals/denials still apply; never bypass them.
+
+Standing authorization from Bruno (2026-10-03): when necessary for an authorized Prisma task, personal data, including supplied resumes, may be sent to the existing Prisma VPS through its secure SSH/HTTPS flow without a repeated confirmation. Limit the transfer to the task's purpose and necessary data; preserve tenant isolation, originals and restricted access, and never expose personal data in public logs. This does not authorize new destinations, unrelated processing, exporting private production cache elsewhere, publishing Profiles or fabricating human decisions. Platform/tool approval review still applies.
 
 Managerial discussion, comparison, audit or a request for advice authorizes the requested analysis, not implementation or changes to governance. Present proposals and wait for the Product Owner's decision. Once implementation is explicitly approved, continue within that scope without repeating approval checkpoints. One-step-at-a-time guidance applies when the user is operating the tools manually, not to already authorized agent execution.
 

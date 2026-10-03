@@ -11,6 +11,8 @@ begin
   end;
   raise exception 'V202 FAIL: expected rejection';
 end $$;
+select v202_reject($test$select '{"value":"\u0000"}'::jsonb$test$, '22P05');
+select v202_assert('{"value":"�😀á\nItem composto"}'::jsonb ->> 'value' like '�😀á%', 'represented Unicode and valid emoji are JSONB-compatible');
 create temp table v202_state(key text primary key,value jsonb);
 grant all on v202_state to authenticated;
 insert into v202_state values ('draft', :'draft'::jsonb), ('pages', :'pages'::jsonb), ('method',to_jsonb(:'method'::text)), ('evidence_count',to_jsonb(:evidence_count::integer));
@@ -55,7 +57,7 @@ begin
     raise exception 'Invalid evidence was persisted';
   exception when sqlstate '22023' then denied:=true; end;
   perform v202_assert(denied and (select count(*)=before_count from public.document_processing_attempts) and (select count(*)=0 from public.document_page_extractions),'invalid evidence rolls back without attempt/pages');
-  diag:=jsonb_build_object('contract','import-evidence-1.0.0','stage','persisting','reason','field_path_invalid','fieldPath',null,'pageNumber',1,'evidenceIndex',0,'technicalCode','22023','adapterVersion','evidence-adapter-1.0.0','structuringVersion',method);
+  diag:=jsonb_build_object('contract','import-evidence-1.1.0','stage','persisting','reason','unicode_invalid','fieldPath',null,'pageNumber',1,'evidenceIndex',0,'technicalCode','22P05','adapterVersion','evidence-adapter-1.0.1','structuringVersion',method);
   perform v202_reject(format('select public.record_resume_import_failure(%L,%L,%L,%L,%L::jsonb,%L)',v202_id('org'),resolved.person_id,resolved.document_id,intake.intake_id,diag||'{"resumeText":"FORBIDDEN"}','v202-denied-raw-diagnostic'),'22023');
   perform public.record_resume_import_failure(v202_id('org'),resolved.person_id,resolved.document_id,intake.intake_id,diag,'v202-record-failure-contract');
   perform public.record_resume_import_failure(v202_id('org'),resolved.person_id,resolved.document_id,intake.intake_id,diag,'v202-record-failure-contract');
@@ -64,6 +66,11 @@ begin
   perform v202_assert((select count(*)=1 from public.person_ingestion_events where document_id=resolved.document_id and event_type='resume_intake_failed'),'intake failure event also idempotent');
   perform v202_assert((select not can_reprocess from public.documents where id=resolved.document_id),'permanent retry unavailable until corrected adapter');
   perform v202_assert((select metadata->'diagnostic'=diag from public.person_ingestion_events where document_id=resolved.document_id and event_type='processing_failed'),'safe diagnostic persisted without raw error/PII');
+  perform v202_reject(format('select public.record_resume_import_failure(%L,%L,%L,%L,%L::jsonb,%L)',v202_id('org'),resolved.person_id,resolved.document_id,intake.intake_id,diag||'{"adapterVersion":"evidence-adapter-1.0.0"}'::jsonb,'v202-mismatched-contract-pair'),'22023');
+  begin
+    perform public.record_resume_import_failure(v202_id('org'),resolved.person_id,resolved.document_id,intake.intake_id,diag||'{"contract":"import-evidence-1.0.0","adapterVersion":"evidence-adapter-1.0.0","reason":"field_path_invalid","technicalCode":"22023"}'::jsonb,'v202-legacy-client-diagnostic');
+    raise exception using errcode='ZX001',message='rollback successful legacy compatibility proof';
+  exception when sqlstate 'ZX001' then raise notice 'PASS: legacy diagnostic client remains supported, subtransaction rolled back'; end;
   select * into attempt from public.persist_person_extraction(v202_id('org'),resolved.person_id,resolved.document_id,pages,d,1,0,'pdfjs-5.4.296/parser-ia-spans-v1',null,method,'synthetic','v202-persist-corrected-data',null);
   select * into reopened from public.persist_person_extraction(v202_id('org'),resolved.person_id,resolved.document_id,pages,d,1,0,'pdfjs-5.4.296/parser-ia-spans-v1',null,method,'synthetic','v202-persist-corrected-data',null);
   perform v202_assert(reopened.reused and reopened.processing_attempt_id=attempt.processing_attempt_id,'corrected persistence is idempotent');

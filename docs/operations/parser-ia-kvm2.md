@@ -1,5 +1,9 @@
 # Operação do Parser IA na KVM2
 
+## Complemento Unicode — v2.0.2
+
+Aplicar somente `20261003210000_import_text_unicode_contract.sql` antes de reconstruir Parser/web com o mesmo SHA validado. `import-evidence-1.1.0`/`evidence-adapter-1.0.1` aceitam diagnóstico antigo explicitamente, preservando auth/tenant e retomada somente após correção de versão. `unicode-text-1.0.0` ocorre na representação derivada antes da gravação; original, linhas/boxes e cache privados não são apagados. Conferir replay dos dois PDFs sem IA, readiness, versão/assets/rollback e containers gateway/Traefik inalterados. Operador atualiza a página e retoma a tentativa antiga na Central da Pessoa; nunca publicar Perfil durante smoke. Autorização permanente de envio necessário à VPS: AGENTS 1.3.2, sem liberação de dados em logs ou outros destinos. AoT `../qa/aot-import-unicode-v202.md` registra limites de validação autenticada.
+
 ## Correção das evidências — v2.0.2
 
 O delta `import-evidence-1.0.0` exige somente a migration `20261003193000_import_evidence_persistence_contract.sql`, Parser e web; gateway/Traefik não recebem rebuild. Aplicar a migration específica antes dos consumidores, publicar `release-parser-ia.sh` e `release-web.sh` com o mesmo SHA aprovado e preservar os rollbacks e o volume privado. Não executar `db push` geral. O adaptador `evidence-adapter-1.0.0` mantém prompt/modelo/chave do cache; a migration é aditiva e permite rollback dos consumidores sem apagar títulos/evidências/histórico.

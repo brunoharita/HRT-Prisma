@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 327
-source_manifest_sha256: fea7231b2c452d4b90fb21de6830e630b5dad58aa29e446a162bf81f3f69b551
+documentation_source_count: 329
+source_manifest_sha256: 7fb889b68940780d147d2caec1dea42124bafec86cad0c11d794f8bf3bf4838a
 -->
 
 # Tudo sobre o Prisma
@@ -17,7 +17,7 @@ Para interpretar esta exportação, comece pelo índice e pelo estado atual. Dep
 
 # Prisma agent contract
 
-Instruction contract version: 1.3.1. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.2. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18; necessary personal-data transfer to the existing Prisma VPS authorization 2026-10-03. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -175,6 +175,8 @@ For the development agent, prefer the least costly available capability that can
 An explicit request to implement, fix, develop, or execute authorizes, within that scope: diagnosis, implementation, own-diff review, directly related tests, evidence, documentation, context regeneration, coherent commit, push, integration according to the repository flow, and QA deployment or validation when the environment exists.
 
 Standing authorization from Bruno (2026-09-18), superseding the push-only rule: after proportionally validating an authorized Prisma improvement, commit/push to existing `origin` (`git@github.com:brunoharita/HRT-Prisma.git` or equivalent HTTPS), integrate into main, deploy required migrations/backend/frontend to existing production, smoke-test and synchronize local/GitHub/VPS. No repeated approval is needed unless Bruno explicitly says not to publish yet (for example, "Não é para colocar em produção ainda"). This complete delivery is his "estilo AoT"; agreement/test/evidence obligations remain. Preserve unrelated work, secrets and human data. This does not authorize force-push, ref deletion, new destinations, destructive operations, unexpected cost or unresolved security risk. Tool approvals/denials still apply; never bypass them.
+
+Standing authorization from Bruno (2026-10-03): when necessary for an authorized Prisma task, personal data, including supplied resumes, may be sent to the existing Prisma VPS through its secure SSH/HTTPS flow without a repeated confirmation. Limit the transfer to the task's purpose and necessary data; preserve tenant isolation, originals and restricted access, and never expose personal data in public logs. This does not authorize new destinations, unrelated processing, exporting private production cache elsewhere, publishing Profiles or fabricating human decisions. Platform/tool approval review still applies.
 
 Managerial discussion, comparison, audit or a request for advice authorizes the requested analysis, not implementation or changes to governance. Present proposals and wait for the Product Owner's decision. Once implementation is explicitly approved, continue within that scope without repeating approval checkpoints. One-step-at-a-time guidance applies when the user is operating the tools manually, not to already authorized agent execution.
 
@@ -2624,7 +2626,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.24
+version: 2.51.25
 last_verified: 2026-10-03
 ---
 
@@ -2633,6 +2635,8 @@ last_verified: 2026-10-03
 Prisma v2.0.2 registra a correção autorizada da compatibilidade das evidências de importação, geração 2, movimento 0, entrega 2, publicada na KVM2 com SHA funcional `6a636059dcec30e3febe77a375bffdde4163f94f` integrado em main/origin/VPS. Migration ativa, Parser saudável, web/HTTPS/versão e rollback verificados. Login e menu usam o registro único. A retomada autenticada da tentativa antiga em produção permanece NOT TESTED; nenhum Perfil foi publicado automaticamente.
 
 ## Compatibilidade das evidências de importação — v2.0.2
+
+Complemento Unicode autorizado em 03/10/2026, implementação/QA local verificadas e rollout pendente: o PDF 3 expôs nove NUL nos marcadores, erro SQL 22P05 antes da RPC. `unicode-text-1.0.0` representa somente NUL/substitutos isolados como U+FFFD no texto derivado, com avisos/contagens para revisão e preservação de original/hash/cache, posições/ordem/linhas/listas e Unicode válido. `import-evidence-1.1.0` valida todo o JSON antes do transporte e identifica `unicode_invalid`; `evidence-adapter-1.0.1` permite retomada da falha 1.0.0 após atualização. Produto permanece v2.0.2. SQL QA real, pares antigos/novos de diagnóstico/grants/rollback, 43 testes dirigidos e 243 person-flow PASS. Autorização permanente solicitada de enviar dados pessoais necessários à VPS existente registrada em AGENTS 1.3.2 e nota de memória; não autoriza outros destinos/cache exportado. Acordo/AoT: `docs/qa/agreement-import-unicode-v202.md`, `docs/qa/aot-import-unicode-v202.md`.
 
 O incidente de 03/10/2026 ocorreu após a leitura de um PDF nativo válido: duas evidências de títulos de seções adicionais foram rejeitadas pelo contrato da persistência. `evidence-adapter-1.0.0` normaliza IDs incompatíveis de resultados/seções/itens e os endereços das listas, mantendo fatos/fontes/regiões. `import-evidence-1.0.0` valida caminho/alvo, arrays/limites, página e geometria/método/origem no cliente e no PostgreSQL. Ferramentas/contextos existentes continuam distintos e disponíveis na revisão. Diagnóstico sanitizado, tenant-scoped, transacional e idempotente substitui o erro genérico; falha permanente orienta aguardar correção, sem repetição imediata/troca do PDF. A persistência permanece na etapa de estruturação até confirmar revisão disponível. A QA local real passou com fixtures sintéticas/rollback, sem publicar ou substituir o Perfil vigente. Prompt/modelo, cache bruto/chave, auth/tenant e publicação humana são preservados. Contrato e limites: `docs/qa/agreement-import-evidence-v202.md` e `docs/qa/aot-import-evidence-v202.md`. DOC/DOCX/TXT permanecem fora deste movimento.
 
@@ -2753,6 +2757,8 @@ Prisma v1.8.1 registra M8.1 como primeira entrega do Movimento 8, após o Produc
 O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. Dos nove alvos autorizados, três foram excluídos pela saga M5.5; após orientação do Product Owner, os seis restantes serão preservados nesta execução. Consulta SQL confirmou 7 Pessoas, 11 objetos Storage, 7 Auth, 7 usuários da plataforma e 8 Vagas. A outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. O CI do SHA `11ff0ab` passou, `main` foi promovida, a web foi publicada na VPS nesse SHA, o contêiner está ativo e HTTPS respondeu 200. A limpeza remota é parcial; smoke funcional autenticado hospedado e novo ciclo intake → revisão → publicação permanecem pendentes. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
+
+Prisma v2.0.2 recebe complemento Unicode autorizado, ainda em fechamento de rollout: unicode-text-1.0.0, import-evidence-1.1.0 e evidence-adapter-1.0.1. NUL/substitutos isolados têm representação explícita para revisão; PDF/hash/cache/listas/boxes/Unicode válido e revisão humana preservados. QA local/43 dirigidos/243 person-flow PASS. Autorização permanente de transferências necessárias à VPS do Prisma registrada em AGENTS 1.3.2. AoT `docs/qa/aot-import-unicode-v202.md` separa replay e retomada autenticada; não inferir que a tentativa já foi recuperada.
 
 Prisma v2.0.2 está publicado em main/origin/VPS com SHA funcional `6a63605`. `evidence-adapter-1.0.0` e `import-evidence-1.0.0` preservam títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL com rollback, 71 testes dirigidos, 243 person-flow, CI, renders desktop/mobile, migration ativa, Parser/readiness e HTTPS/versão PASS. Replay do PDF/cache real preservou 31 fatos/39 evidências/dois títulos sem IA/rede ou alteração do cache. AoT `docs/qa/aot-import-evidence-v202.md`. Prompt/modelo/cache/revisão humana preservados; a tentativa antiga ainda aguarda retomada pelo operador, cujo fluxo autenticado em produção permanece NOT TESTED.
 
@@ -2914,7 +2920,7 @@ Prisma v2.0.1 registra a primeira entrega aceita da geração 2, movimento 0, co
 - Central da Pessoa 1.0 redesenhada localmente: `person-action-center` 1.0.0 compõe um view model tipado e deriva todas as pendências documentais reais sem estado paralelo. Cabeçalho profissional, pendências acionáveis, Perfil vigente, resumo contextual, conhecimento editorial, documentos com painel contextual e atividade recente foram organizados nas perspectivas Visão geral, Documentos e versões e Nova importação. O CTA `Revisar documento agora` resolve diretamente documento e tentativa revisável; Member continua fora da superfície operacional. Nenhum schema, RLS, score, IA ou estado persistido mudou. O smoke autenticado foi aprovado nas cinco resoluções de referência.
 - Classificação acadêmica 1.0.0 implementada localmente e no Prisma-QA: o array canônico `education` separa curso, nível, qualificação, situação e origem, preserva texto original, razões, versão e snapshot do classificador determinístico. Inferências e desconhecidos exigem confirmação humana; combinações incompatíveis falham fechadas; perfis históricos continuam legíveis como `legacy-unclassified`, sem backfill inventado. A revisão M5 permite ajuste, confirmação e evidência por dimensão; Central e Documentos mostram a estrutura e as pendências; o Delta enriquece uma formação estável sem duplicá-la. O runtime local usa `ExtractionDraft` 8.0.0 e extração adaptativa 7.0.0; QA permanece na versão anterior até promoção comprovada.
 - Jornada de ingestão 2.0.0 implementada em seis etapas: Importar, Identificar, Processar, Analisar, Revisar e Comparar. `profile-publication-delta` 2.0.0 está ativo no Prisma-QA: Atualizar preserva fatos aprovados omitidos; Substituir trata a revisão como Perfil completo; decisões por bloco registram ação, origem, alvo e resolução determinística. Remoção explícita de fato aprovado continua exigindo uma decisão humana, sem exigir texto livre nas correções comuns.
-- Correção compatível da publicação Delta implementada localmente: contato permanece visível como atualização do cadastro privado, sem seletor enganoso, e itens `contact.*` não são enviados em `p_block_decisions`. A aprovação continua atualizando `person_private_data` pela fronteira existente; decisões profissionais, schema, RPC, RLS, grants e versões de contrato não mudaram. O gate completo aprovou lint de 310 arquivos, fundação, Context Pack, dois typechecks, build web, 242 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`.
+- Correção compatível da publicação Delta implementada localmente: contato permanece visível como atualização do cadastro privado, sem seletor enganoso, e itens `contact.*` não são enviados em `p_block_decisions`. A aprovação continua atualizando `person_private_data` pela fronteira existente; decisões profissionais, schema, RPC, RLS, grants e versões de contrato não mudaram. O gate completo aprovou lint de 310 arquivos, fundação, Context Pack, dois typechecks, build web, 243 testes técnicos, 19 casos golden e `VERTICAL_SLICE_OK`.
 - `operation-feedback` 2.1.0 implementado localmente: impedimentos corrigíveis informam motivo, item e caminho do campo em envelope estável; a interface traduz para linguagem natural, lista as pendências, retorna ao campo exato, rola e destaca. A criação de Vagas aplica o mesmo padrão à referência ocupacional, título, ocupante e requisito inválido. Todo novo formulário deve destacar localmente o campo ou bloco acionável, inclusive em conflitos, e remover o estado após a correção válida. O mesmo tradutor protege todas as fronteiras Supabase de ingestão, revisão, Verificações, Item Bank e Conhecimento, inclusive respostas de Edge Functions; regressão arquitetural impede `throw` direto da mensagem remota. Falhas internas declaram que não há campo a corrigir e nunca expõem SQL, função, tabela, payload ou código técnico.
 - `decision-centered-interaction` 1.0.0 implementado localmente no descarte adaptativo e normativo para o produto: cliques e teclas obrigatórios representam julgamento, autoridade ou risco material; coordenação determinística, avisos sem proposta, auditoria factual e falhas de telemetria opcional não interrompem o operador. Relatórios sem assinatura registrável usam `Fechar aviso` sem RPC; sugestões válidas fecham imediatamente e registram descarte em segundo plano.
 - Ciclo de vida de Perfil e documentos 1.0.0 implementado localmente e ativo no Prisma-QA: `Atualizar Perfil` preserva omissões, `Substituir Perfil` usa a revisão como versão completa, decisões por bloco mantêm identidade e alvo explícitos, restauração cria uma nova versão vigente, reinício remove somente o vigente e exclusão física usa saga retomável com Storage API. Dependências exclusivas são removidas apenas dentro da operação `delete_document` autoritativa; Knowledge, Evidência Demonstrada, avaliações, Pessoa, demais documentos e histórico independente permanecem. A prova conectada com rollback validou composição, idempotência, recomposição, ausência de órfãos e negações de autoridade. O smoke autenticado aprovou as superfícies de comparação, versões e documento em 1920x1080, 1600x900, 1440x900, 1366x768 e 390x844; no mobile, diferenças são cartões rotulados sem rolagem horizontal global ou interna.
@@ -3111,7 +3117,7 @@ Em 2026-09-01, a fatia M5.1A foi implementada localmente na branch `codex/m5-1a-
 
 Em 2026-09-01, o M5.1B foi implementado na branch `codex/m5-1b-verification-execution`, aplicado ao Prisma-QA e publicado como Edge Function `assessment-access`. `CI=true pnpm run validate` aprovou lint de 225 arquivos, foundation, Context Pack, dois typechecks, build web, 133 testes técnicos, 19 golden tests e demonstração `VERTICAL_SLICE_OK`. O smoke conectado sintético percorreu convite, 15 respostas, 52 eventos, 15 métricas, avaliação, integridade, Evidência Demonstrada, Need e matching. O smoke visual público passou em desktop e `390x844`, confirmou autosave, pausa, retomada e resposta preservada; a primeira execução revelou overflow móvel, corrigido e revalidado sem overflow. O convite incompleto do smoke visual foi revogado sem apagar o ledger. A segunda porta local `5556` foi removida do Vite, Auth, CORS e documentação; `assessment-access` foi republicada no QA, onde o preflight `5555` passou com HTTP 200 e o `5556` foi recusado com HTTP 403. A sessão autenticada em `5555` foi então reutilizada para aprovar o monitoramento do operador em desktop e `390x844`, incluindo a abertura do resultado concluído. Esse passe também corrigiu a exposição dos enums técnicos de confiança e integridade para rótulos em português.
 
-Em 2026-09-01, o M5.1C foi implementado na branch `codex/m5-1c-item-bank-governance` e aplicado somente ao Prisma-QA. O estado conectado inclui um item Global sintético publicado, uma proposal duplicada rejeitada, um item Organization sintético publicado, reviews/audits e um snapshot `synthetic_qa`. Testes negativos provaram autoridade Global, papel insuficiente, DML direto negado, item privado invisível em outro tenant, publicação sem review bloqueada e proposal publicada imutável. Budget em transação revertida reservou e liberou 100 centavos com saldo zero, sem provider. A primeira execução expôs um enum inválido no audit de falha; o rollback foi integral e a migration forward `20260901153011` corrigiu o contrato. `CI=true pnpm run validate` aprovou lint de 237 arquivos, foundation, Context Pack, dois typechecks, build web, 142 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. A UI contém as 12 superfícies do storyboard; a evidência visual foi ampliada no movimento transversal de UX descrito abaixo.
+Em 2026-09-01, o M5.1C foi implementado na branch `codex/m5-1c-item-bank-governance` e aplicado somente ao Prisma-QA. O estado conectado inclui um item Global sintético publicado, uma proposal duplicada rejeitada, um item Organization sintético publicado, reviews/audits e um snapshot `synthetic_qa`. Testes negativos provaram autoridade Global, papel insuficiente, DML direto negado, item privado invisível em outro tenant, publicação sem review bloqueada e proposal publicada imutável. Budget em transação revertida reservou e liberou 100 centavos com saldo zero, sem provider. A primeira execução expôs um enum inválido no audit de falha; o rollback foi integral e a migration forward `20260901153011` corrigiu o contrato. `CI=true pnpm run validate` aprovou lint de 237 arquivos, foundation, Context Pack, dois typechecks, build web, 143 testes técnicos, 19 golden tests e `VERTICAL_SLICE_OK`. A UI contém as 12 superfícies do storyboard; a evidência visual foi ampliada no movimento transversal de UX descrito abaixo.
 
 Em 2026-09-01, a branch `codex/m5-1-ux-polish` consolidou uma revisão transversal das superfícies existentes, sem criar nova capacidade. O Home deixou de expor infraestrutura; Matching removeu o percentual fixo e passou a resumir evidências e suficiência; Verificações passou a diferenciar encerramento de progresso; Banco de Itens recebeu navegação agrupada e linguagem operacional; o Perfil passou a separar título, contexto e descrição com expansão progressiva; estados passaram a compartilhar rótulos, cores e ícones. A inspeção autenticada local aprovou Home, Matching, Verificações, Banco de Itens e Perfil em desktop, além de Home, Matching, Verificações e Banco de Itens em 390 px sem rolagem horizontal. O passe móvel revelou e corrigiu compressão do Matching e corte de status em Verificações.
 
@@ -4108,6 +4114,8 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 ## Source: `docs/ai/parser-ia.md`
 
 # M5.7 Parser IA
+
+Complemento autorizado v2.0.2: `unicode-text-1.0.0` representa NUL e substitutos UTF-16 isolados como U+FFFD no texto derivado antes da RPC, mantendo Unicode válido, ordem/IDs de linhas e geometria. O original/hash/cache, prompt/modelo e chave não são alterados; o tratamento tem contagens no método das páginas e avisos explícitos no draft para revisão. `import-evidence-1.1.0` verifica todos os valores/chaves JSON de páginas/layout/evidência/draft, rejeitando chaves incompatíveis sem reescrevê-las. `22P05` recebe motivo `unicode_invalid`. `evidence-adapter-1.0.1` libera retomada humana de falha antiga 1.0.0, bloqueando repetir a mesma versão. SQL aceita explicitamente os pares antigos/novos de contrato/adaptador; a rejeição JSONB bruta ocorre antes da RPC. [Acordo](../qa/agreement-import-unicode-v202.md), [AoT](../qa/aot-import-unicode-v202.md).
 
 Correção aprovada v2.0.2 (2026-10-03): `evidence-adapter-1.0.0` compatibiliza todas as categorias já aceitas com `import-evidence-1.0.0`. IDs livres de resultados/seções/itens são convertidos deterministamente quando incompatíveis; títulos e regiões separados são preservados, listas usam seu campo raiz. Ferramentas/tecnologias e contextos continuam categorias distintas existentes, visíveis na revisão quando extraídas. A proveniência de estruturação recebe o sufixo do adaptador; prompt/modelo, chave/cache bruto e contratos de publicação não mudam. `preparedParserIa` adapta respostas antigas somente depois de validar organização/hash/versão.
 
@@ -10206,6 +10214,10 @@ Seis testes sintéticos aprovados, incluindo interrupção efetiva, sucesso, pre
 
 # Operação do Parser IA na KVM2
 
+## Complemento Unicode — v2.0.2
+
+Aplicar somente `20261003210000_import_text_unicode_contract.sql` antes de reconstruir Parser/web com o mesmo SHA validado. `import-evidence-1.1.0`/`evidence-adapter-1.0.1` aceitam diagnóstico antigo explicitamente, preservando auth/tenant e retomada somente após correção de versão. `unicode-text-1.0.0` ocorre na representação derivada antes da gravação; original, linhas/boxes e cache privados não são apagados. Conferir replay dos dois PDFs sem IA, readiness, versão/assets/rollback e containers gateway/Traefik inalterados. Operador atualiza a página e retoma a tentativa antiga na Central da Pessoa; nunca publicar Perfil durante smoke. Autorização permanente de envio necessário à VPS: AGENTS 1.3.2, sem liberação de dados em logs ou outros destinos. AoT `../qa/aot-import-unicode-v202.md` registra limites de validação autenticada.
+
 ## Correção das evidências — v2.0.2
 
 O delta `import-evidence-1.0.0` exige somente a migration `20261003193000_import_evidence_persistence_contract.sql`, Parser e web; gateway/Traefik não recebem rebuild. Aplicar a migration específica antes dos consumidores, publicar `release-parser-ia.sh` e `release-web.sh` com o mesmo SHA aprovado e preservar os rollbacks e o volume privado. Não executar `db push` geral. O adaptador `evidence-adapter-1.0.0` mantém prompt/modelo/chave do cache; a migration é aditiva e permite rollback dos consumidores sem apagar títulos/evidências/histórico.
@@ -12014,6 +12026,42 @@ Versão 1.0.0, 2026-09-25. Aprovado pelo PO nesta tarefa: “pode construir isso
 | Dados, matching, Knowledge | no_impact_identified | checagem sem persistência e anterior ao intake | inspeção do contrato e diff; sem acessos a dados de Pessoas |
 
 Limite do baseline: falha da captura não correlacionada com logs atuais. Checagem não valida saldo/crédito nem disponibilidade futura da OpenAI.
+
+---
+
+## Source: `docs/qa/agreement-import-unicode-v202.md`
+
+# Complemento autorizado — Prisma v2.0.2: Unicode na importação
+
+Versão 1.0.0, agreed, 2026-10-03. Bruno aprovou representar caracteres não identificados explicitamente e implementar/publicar o complemento. Baseline `ec41808` documental/`6a63605` funcional. Este acordo complementa o acordo de evidências 1.0.0 e supera D-01 somente quanto à representação derivada dos caracteres incompatíveis, D-02 quanto ao texto, D-03 quanto ao motivo Unicode e D-05 quanto à versão de recuperação. Risco D; produto continua v2.0.2, contrato de importação evolui aditivamente para 1.1.0 e adaptador para 1.0.1. Sem nova dependência.
+
+## Contrato e aceite
+
+- D-U01: NUL e substitutos UTF-16 isolados ganham U+FFFD (símbolo não identificado) no conteúdo derivado; ocorrência explícita para revisão, método/versionamento e contagens, sem inventar o símbolo original. PDF/hash/cache brutos, coordenadas, ordem, limites de lista e IDs de linha permanecem intactos. Unicode válido, acentos, emojis, TAB e quebras não mudam. CA: testes de NUL/pares/substitutos/combinações e replay do PDF 3 mantendo 29 fatos/33 evidências e nove símbolos representados; PDF anterior mantém 31/39 sem alteração.
+- D-U02: validar todo o texto/JSON derivado antes da RPC, incluindo páginas, layout, evidências e draft; impedir chave inválida/colisão em vez de modificá-la. CA: preflight e transporte reais com Unicode inválido, persistência/reabertura SQL com JSON compatível; NUL bruto reproduz 22P05 em QA local e payload normalizado não reproduz.
+- D-U03: Unicode inválido recebe diagnóstico específico e seguro, incluindo fallback 22P05; versões anteriores continuam legíveis e RPC aceita os clientes antigos de forma explícita. CA: diagnósticos sem texto/PII, auth/papel/tenant/idempotência/rollback intactos.
+- D-U04: tentativa antiga pode ser retomada pelo operador depois da atualização do adaptador, reutilizando original/cache sem IA automática, duplicação ou publicação de Perfil. CA: recuperação do erro com adaptador 1.0.0 para 1.0.1, bloqueio da mesma versão/fonte inválida, replay exato sem rede/cache alterado. Smoke autenticado real permanece limite explícito quando indisponível.
+- D-U05: publicar o complemento em main/origin/VPS, somente migration/Parser/web exigidos, preservando rollback e outros containers. CA: testes dirigidos, SQL QA local, types/build/lint/Context Pack/CI e smoke SHA/imagens/readiness/HTTPS.
+- P-U01: sem descarte silencioso, alteração de Unicode válido, renumeração de linhas, IA paga, Perfil aprovado automaticamente, afrouxamento de auth/tenant ou fixtures em produção.
+- F-U01: formatos novos, OCR engine, matching, Knowledge, redesenho de telas e reprocessamento em lote.
+- A-U01: reutilizar extração/adapter/preflight existentes; implementar normalização na representação derivada antes do transporte, com testes proporcionais e migration forward-only. Autorização permanente de transferência necessária à VPS fica registrada em AGENTS 1.3.2 e nota de memória solicitada; não autoriza exportação de cache para outros destinos.
+- Q-U01: nenhuma decisão material pendente no escopo autorizado.
+
+## Mapa de impacto e preservação
+
+| Área | Relação | Baseline e preservação | Prova |
+| --- | --- | --- | --- |
+| Texto/páginas/layout/draft/transporte | direct | fontes originais, listas/boxes/cache/prompt/modelo | matriz Unicode, ambos PDFs e serviço dirigido |
+| Persistência/abertura/diagnóstico | direct | import-evidence-1.0.0/RPC e grants existentes | SQL local real, 22P05 sintético, versões antigas/novas |
+| Recuperação | direct | tentativa failed/not_ready/adapter 1.0.0 | avanço de versão sem publicar/duplicar/IA |
+| Auth/tenant/publicação | critical_transversal | gates e Perfil vigente | negativos SQL/serviço e rollback |
+| Parser/web/VPS | direct | imagens funcionais 6a63605 | deploy seletivo, readiness/assets/rollback |
+| Gateway/Traefik | plausible_indirect | IDs/imagens do AoT v2.0.2 | mesmos containers/health |
+| Matching/Knowledge/OCR | no_impact_identified | nenhum consumidor/motor alterado | diff e plano excluem essas regras/superfícies |
+
+## Execução congelada
+
+Implementar D-U01 a D-U05; P-U01 não pode ocorrer; F-U01 fica excluído e A-U01 delega o mecanismo. Este documento é o acordo e incorpora integralmente o prompt de execução desse complemento. O AoT separa implementação, preservação, replay e limites reais de produção.
 
 ---
 
@@ -14882,6 +14930,41 @@ QA local sintético. Produção única. Arquivos alheios `.tmp.driveupload/`, `s
 ## Limites
 
 Não houve nova importação paga ponta a ponta nem validação financeira da OpenAI. Disponibilidade é um retrato do transporte/configuração, não garantia do processamento seguinte. Dependência do PC/túnel e monitor externo permanecem fora de escopo.
+
+---
+
+## Source: `docs/qa/aot-import-unicode-v202.md`
+
+# AoT — complemento Unicode da v2.0.2
+
+Acordo/prompt `agreement-import-unicode-v202.md` 1.0.0, autorização de Bruno em 2026-10-03. Baseline documental `ec41808`, funcional `6a63605`, risco D, branch `codex/fix-import-unicode-v202`. Produto permanece 2.0.2; import-evidence 1.1.0, evidence-adapter 1.0.1 e unicode-text 1.0.0 são versões explícitas do complemento.
+
+## Acordos, implementação, testes e evidência
+
+| ID | Implementação | Evidência | Status |
+| --- | --- | --- | --- |
+| D-U01 | representação U+FFFD somente para NUL/substitutos isolados, versão/contagens/avisos para revisão | matriz Unicode, imutabilidade/geometria/idempotência; replay exato após deploy pendente | PARTIAL |
+| D-U02 | normalização após datas e antes do transporte, preflight de todas as chaves/valores, sem reescrever chaves | 43 testes dirigidos/serviço de retomada; SQL real reproduz 22P05 bruto e grava/abre/reabre derivado compatível | PASS |
+| D-U03 | motivo unicode_invalid, fallback seguro 22P05, pares antigos/novos de diagnóstico explícitos | SQL auth/tenant/idempotência/rollback/pair mismatch/cliente legado e testes sem PII | PASS |
+| D-U04 | versão 1.0.1 libera falhas 1.0.0 sem publicar/duplicar/IA | retry dirigido com cache, guard de mesma versão/hash; recuperação humana real em produção NOT TESTED | PASS |
+| D-U05 | migration forward-only e rebuild somente Parser/web | QA local PASS; CI/deploy/smoke pendentes | PARTIAL |
+| P-U01 | originais/cache/listas/Unicode válido/grants/Perfil aprovados preservados | testes dirigidos, SQL real com rollback; produção sem fixtures | PASS |
+
+## Mapa de impacto e preservação
+
+Mapa do acordo mantido: texto/páginas/layout/draft/transporte, diagnóstico/persistência, recuperação e Parser/web direct; auth/tenant/publicação critical_transversal; gateway/Traefik plausible_indirect; matching/Knowledge/OCR no_impact_identified. O mecanismo ocorre na representação derivada depois da estruturação: não renumera fonte, não altera prompt/modelo/chave do cache nem implementa outra extração. Chaves inválidas falham em vez de criar colisões. Avisos tornam a ocorrência explícita para a revisão humana. SQLB rejeita NUL/substitutos inválidos durante a conversão JSONB, antes da função; a migration versiona diagnóstico/compatibilidade, preservando autorização.
+
+## Validação local
+
+42/43 testes de Unicode/contrato/Parser/erros/serviço com transporte real mockado PASS. 243/243 regressão person-flow PASS, incluindo segurança/revisão/publicação; probe de falha intencional do runner é esperado. Types/build TypeScript/web PASS; verificação SQL em PostgreSQL 17 localhost:55479/import_evidence_v202_final PASS, cada escrita de fixture revertida. SQL reproduz 22P05 com NUL sintético, aceita U+FFFD/emoji/acentos, grava/reabre todas as regiões/categorias, preserva Perfil aprovado, nega anon/member/outsider/no session e par contrato/adaptador incorreto. Diagnóstico legado comprovado em subtransação com rollback. Lint/Context Pack e fechamento operacional em curso.
+
+## Autorização permanente e limites
+
+AGENTS 1.3.2 registra a autorização permanente solicitada para enviar dados pessoais necessários à VPS existente do Prisma com transporte seguro, propósito e isolamento. Nota de memória criada mediante pedido explícito; isso não autoriza cache privado para outros destinos, logs públicos, publicação de Perfil ou decisões humanas inventadas. A rejeição anterior do envio do PDF ocorreu antes desta autorização: nenhum envio aconteceu naquela tentativa. Replay autorizado deste complemento ocorrerá em memória no servidor, sem guardar arquivo extra, imprimir conteúdo do currículo, fazer IA ou alterar cache. O uso de browser autenticado continua indisponível; não inferir sucesso do clique humano a partir do replay/QA.
+
+## Publicação / conclusão
+
+Pendente até CI, migration ativa, Parser/web, replay de ambos PDFs, rollback/readiness/HTTPS/versão e sincronização. Não declarar entrega de produção antes dessas provas. A tentativa real permanece aguardando retomada humana; nenhum Perfil será publicado automaticamente.
 
 ---
 

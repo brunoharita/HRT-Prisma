@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { structureParserIa, parserIaMethodVersion } from "../dist/web/src/domain/parserIa.js";
 import { attachFieldEvidence } from "../dist/web/src/domain/adaptiveResumeExtraction.js";
 import { importEvidenceIssue } from "../dist/web/src/domain/importEvidencePersistence.js";
+import { prepareImportText } from "../dist/web/src/domain/importTextUnicode.js";
 
 const port = process.argv[2] ?? "55479";
 if (!/^55[0-9]{3}$/.test(port)) throw Error("Disposable QA port required");
@@ -23,14 +24,19 @@ const entries = [
 ];
 const pages = [{ pageNumber: 1, text: entries.map((entry) => entry[1]).join("\n"), origin: "native_pdf", usefulCharacterCount: 900, method: "pdfjs", methodVersion: "synthetic", layoutLines: entries.map((entry, i) => ({ text: entry[1], x: 0.1, y: 0.01 + i * 0.025, width: 0.5, height: 0.02, fontSize: 10, emphasis: "regular" })) }];
 const result = structureParserIa({ status: "complete", facts: entries.map(([path, value], i) => ({ path, value, sources: [`p1l${i + 1}`] })), uncertainties: [] }, pages, { sourceSha256: "a".repeat(64), organizationId: "synthetic", provenance: { model: "synthetic", promptSha256: "b".repeat(64), responseId: "synthetic", inputTokens: 0, outputTokens: 0, costUsd: 0, durationMs: 0 } });
-const attached = attachFieldEvidence(pages, result.fieldEvidence);
-if (importEvidenceIssue(attached, result.draft)) throw Error("Synthetic fixture failed preflight");
+const rawAttached = attachFieldEvidence(pages, result.fieldEvidence);
+rawAttached[0].text += '\n\0\uD800';
+rawAttached[0].layoutLines.push({ ...rawAttached[0].layoutLines[0], text: '\0', y: 0.9 });
+if (importEvidenceIssue(rawAttached, result.draft)?.reason !== 'unicode_invalid') throw Error('Unicode raw payload was not detected');
+const prepared = prepareImportText(rawAttached, result.draft);
+const attached = prepared.pages;
+if (importEvidenceIssue(attached, prepared.draft)) throw Error("Synthetic fixture failed preflight");
 const payload = attached.map((page) => ({ page_number: page.pageNumber, text_content: page.text, origin: page.origin, useful_character_count: page.usefulCharacterCount, method: page.method, method_version: page.methodVersion, layout_blocks: page.layoutLines, field_evidence: page.fieldEvidence }));
 const directory = resolve("tmp/import-evidence-v202-qa");
 await mkdir(directory, { recursive: true });
 const literal = (value) => `'${JSON.stringify(value).replaceAll("'", "''")}'`;
 const sql = (await readFile("supabase/qa/import_evidence_v202_verification.sql", "utf8"))
-  .replaceAll(":'draft'", literal(result.draft)).replaceAll(":'pages'", literal(payload))
+  .replaceAll(":'draft'", literal(prepared.draft)).replaceAll(":'pages'", literal(payload))
   .replaceAll(":evidence_count", String(result.fieldEvidence.length)).replaceAll(":'method'", `'${parserIaMethodVersion(result)}'`);
 const path = resolve(directory, "verification.sql");
 await writeFile(path, sql);
