@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 333
-source_manifest_sha256: b5dedf64eb2468f87a6bc2c747cc3927400abb6535df43ae4aea0b4175bf868c
+documentation_source_count: 335
+source_manifest_sha256: c8e9275ec56534bd683d65f443309d32e741d39b63ed8ffbdc43655f51e2eed0
 -->
 
 # Tudo sobre o Prisma
@@ -2626,13 +2626,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.27
+version: 2.51.28
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
 Prisma v2.0.3 publicado em 04/10/2026 no SHA funcional `cacc388d16aea712e57249547e8191247b4a0c30`, integrado em main/origin e implantado na web da VPS. CI branch/main, tipos/build, regressão dirigida, Context Pack e smoke HTTPS/assets PASS. Parser mantém a imagem/build v2.0.2 `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`, available/ready; banco e funções não tiveram novo rollout. As correções SQL anteriores permanecem ativas. Nenhum Perfil real foi publicado para testar; smoke autenticado de revisão continua NOT TESTED.
+
+## Validação antecipada de formatos — complemento v2.0.3
+
+Implementação local `review-field-format-1.0.0`: campos inválidos vermelhos ao carregar/editar, explicação em português, resumo com navegação para aba/registro/campo, datas impossíveis e fim anterior ao início. Períodos ambíguos/Atual sem início recebem aviso amarelo não bloqueante; opcionais vazios e precisão parcial aceita permanecem. Normalizador compartilhado preserva ISO impossível antes de interpretar hífens como intervalo; modelo/prompt, parser raiz, cache bruto e métodos de datas válidas não mudam. SQL selecionado protege somente salvar/aprovar após auth/tenant/replay/lock; ingestão de texto defeituoso permanece revisável, sem alteração de histórico. Rollout de migration/web/Parser em validação, sem publicação de Perfil real. Acordo/AoT: `docs/qa/agreement-review-format-preflight.md`, `docs/qa/aot-review-format-preflight.md`.
 
 ## Orientação para erros corrigíveis — v2.0.3
 
@@ -4723,6 +4727,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `document-processing-state` | application | 2.3.0 | importer, repository, operations, review | schema e recuperação parcial ativos em QA; apresentação web local | estados técnicos alimentam um estado de produto único | local/QA | bloquear sem páginas preservadas |
 | `document-presentation` | application/UI | 2.1.0 | Pessoas, processamento, Central da Pessoa, revisão | implementado localmente | jornada de seis etapas, tentativa revisável, perfil atual e ação de recuperação coerente | local | falhar fechado sem tentativa recuperável |
 | `resume-product-state` | product/application | 1.1.0 | importação, análise, Pessoas, Central da Pessoa | implementado localmente | sete estados canônicos e recuperação derivados sem contaminar a Pessoa | local | falhar fechado como falha técnica |
+| `review-field-format` | domain/application/UI/SQL | 1.0.0 | importação normalizada, revisão e aprovação | implementação local; rollout em validação | datas impossíveis/invertidas impedem salvar/aprovar; ambiguidade apenas avisa; texto/fonte preservados e foco por ID | local | mensagem natural no campo, gates e tenant preservados |
 | `operation-feedback` | application/UI | 2.1.0 | fronteiras Supabase, ingestão, revisão, evidência, Delta, verificações, Item Bank, Conhecimento e formulários | envelope ativo em QA; tradutor e apresentação web locais | motivo, campo, item, mensagem natural, recuperação segura, proibição testada de mensagem técnica bruta e destaque acionável no campo ou bloco que bloqueia a ação | local/QA | distinguir pendência humana de falha interna e apontar seu destino |
 | `decision-centered-interaction` | product/application/UI | 1.0.0 | todos os fluxos operacionais | implementado no descarte adaptativo; normativo para novas mudanças | eliminar confirmações e coordenação redundantes; navegação, busca e exploração voluntárias continuam válidas; autoridade e risco mantêm gates explícitos (clarificação ADR-048) | local | preservar dados e não criar bloqueio auxiliar |
 | `competency-list-segmentation` | application/domain/UI | 1.0.0 | seleção M5 e editor de competências | implementado localmente | `competency-list-spatial-v1`, prévia por chip, delimitadores explícitos e geometria canônica | local | não aplicar múltiplos blocos como um valor único |
@@ -4919,6 +4924,14 @@ A política jurídica temporal, legal hold, backups, exportação e anonimizaç�
 
 A revisão antecipa a validação de telefone vigente no servidor: um número nacional de 10/11 dígitos ou internacional de 12–15 dígitos, com normalização já existente. Dois telefones juntos não passam como um único número. A orientação pede um telefone com DDD, permite ao operador escolher qual usar no campo atual, ou deixá-lo vazio quando há e-mail. Não é suporte a múltiplos telefones nem validação de existência/posse da linha. Nenhum contato é escolhido automaticamente; fonte e evidências não são reescritas. Limites de texto nomeiam o campo. Acordo e limites: [v2.0.3](../qa/agreement-actionable-feedback-v203.md), [AoT](../qa/aot-actionable-feedback-v203.md).
 
+## Validação de formatos antes de salvar — complemento v2.0.3
+
+`review-field-format-1.0.0` valida ao carregar e a cada edição os formatos obrigatórios dos campos existentes. Erros objetivos ficam vermelhos e associados ao input por `aria-invalid`/`aria-describedby`, com explicação em português. O resumo abre a aba, o registro por ID estável e o campo correspondente, inclusive no segundo/terceiro item. Telefone, e-mail, LinkedIn, limites e classificação mantêm regras vigentes; a confirmação acadêmica continua um gate de publicação, não um novo bloqueio do rascunho.
+
+Experiências/formações rejeitam datas impossíveis e fim anterior ao início. Ano, mês/ano, dia completo, dois dígitos pela política fixa e intervalos com Atual continuam aceitos, sem exigir precisão ausente. Texto não interpretável e Atual sem início recebem aviso amarelo não bloqueante; opcional vazio não recebe erro. O diagnóstico não inventa datas nem reescreve evidências. A normalização compartilhada conserva datas objetivamente inválidas antes de tentar interpretar hífens como intervalo, inclusive no Parser hospedado; método raiz/modelo/prompt/cache bruto permanecem. Ensino médio mantém seus campos habituais; havendo período preservado com problema, o campo existente fica disponível para correção.
+
+`save_profile_review` e `approve_profile_review` usam o mesmo impedimento objetivo após autorização, escopo, replay e locks, antes de gravações. Retornam `review_period_invalid_date` ou `review_period_reversed` no envelope 2.0.0, com caminho estável/legado compatível. Ingestão inicial de dados defeituosos continua revisável; nenhum histórico é saneado automaticamente. Acordo e evidência: [validação antecipada](../qa/agreement-review-format-preflight.md), [AoT](../qa/aot-review-format-preflight.md).
+
 ## Contratos vigentes
 
 | Contrato | Versão | Regra material |
@@ -4937,6 +4950,7 @@ A revisão antecipa a validação de telefone vigente no servidor: um número na
 | `professional-profile` | 5.1.0 | perfil aprovado preserva proveniência, IDs estáveis, classificação acadêmica confirmada e fatos históricos compatibilizados, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
 | `structured-resume-summary` | 1.1.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; o resumo termina na próxima seção e PII nunca é promovida ao perfil profissional |
+| `review-field-format` | 1.0.0 | erro objetivo de formato ao carregar/editar; avisos não bloqueantes, foco por registro e proteção SQL de salvar/aprovar |
 | `review-field-lifecycle` | 1.0.0 | vazios opcionais são normalizados; nome, contato e conteúdo profissional mínimo bloqueiam salvamento inválido; caminhos antigos continuam legíveis |
 
 ## Datas e períodos de currículo
@@ -14422,6 +14436,42 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 
 ---
 
+## Source: `docs/qa/agreement-review-format-preflight.md`
+
+# Validação antecipada de formatos na revisão
+
+Versão 1.0.0, agreed, 2026-10-04. Bruno aprovou a proposta e autorizou implementação/main/publicação. Baseline `d207e114412893037021d9697426fe697a3f2f72`, risco D (revisão, gate de salvamento/publicação e UI). Complemento da v2.0.3, sem nova entrega no registro público; `review-field-format-1.0.0` versiona esta validação, sem alterar envelope de erro ou formato dos fatos.
+
+- D-01: ao carregar e editar, destacar em vermelho campos que violem regras objetivas, com explicação em português e correção concreta; incluir telefone/e-mail/LinkedIn/limites existentes e datas impossíveis/período invertido nas experiências/formações. CA: erros presentes antes de salvar e desaparecem ao corrigir, sem reload ou alteração de outros dados.
+- D-02: preservar formatos válidos, incluindo anos, mês/ano, data completa, anos com dois dígitos pela política vigente, períodos abertos e Atual. Não exigir precisão ausente. Período não reconhecido recebe aviso amarelo não bloqueante; opcional vazio não é erro. CA: exemplos válidos/ambíguos/ausentes, sem invenção ou mutação do draft/fonte.
+- D-03: resumo de pendências/avisos com acesso ao campo, tab e registro corretos, inclusive segundo/terceiro item; reusar estrutura/componentes atuais. Diferenciar avisos de impedimentos; somente erros obrigatórios bloqueiam salvar/comparar/publicar. CA: navegação por ID estável, edição e classes/aria/mensagem acessíveis, desktop/mobile.
+- D-04: servidor preserva os mesmos impedimentos objetivos sem bloquear ingestão inicial de texto defeituoso. Auth/tenant/locks/idempotência/auditoria continuam antes do novo gate, histórico não é reescrito, erro retorna motivo/campo no envelope vigente. CA: SQL QA local, paridade TS/SQL, save/publicação reais sintéticos com rollback e negativos.
+- D-05: owner docs, Context Pack, AoT, commit/main/origin/VPS, migration seletiva, web e atualização do runtime Parser quando exigida pela dependência compartilhada. CA: testes dirigidos/person-flow/tipos/build/CI, verificação da função/grants e HTTPS/assets/rollback. Separar smoke sintético de confirmação humana real.
+- P-01: não inventar datas, contatos ou fatos, não inferir fato negativo da ausência, não tornar dúvida obrigatória, não normalizar silenciosamente a fonte, não enfraquecer gates/tenant/histórico, não publicar Perfil real para testar.
+- F-01: novos campos ou modelos de contato, alteração dos cálculos de matching/score, novas regras de data futura/posse do telefone, modelos/prompts/infraestrutura Parser/OCR/IA, saneamento histórico, redesenho ou novas bibliotecas.
+- A-01: reusar parser/normalização de datas, validação de campos, envelope de feedback, navegação e padrões SQL; implementação/fixtures/entrega delegadas à engenharia.
+- Q-01: nenhuma decisão pendente; formatos incompletos/ambíguos são avisos, não bloqueios. A validação não interpreta ausência como atual ou zero.
+
+## Mapa de impacto inicial
+
+| Capacidade | Relação | Baseline / prova proporcional |
+| --- | --- | --- |
+| Revisão/pendências/edição/navegação | direct | v2.0.3 já valida ao carregar; faltam datas/avisos/resumo; testes dirigidos e render sintético |
+| Salvar/comparar/publicar | direct | RPCs instaladas conferidas, gates após auth/lock/replay; QA SQL real local e person-flow |
+| Auth/tenant/auditoria/histórico/evidências | critical_transversal | SECURITY DEFINER existente e grants preservados; negativos SQL e rollback |
+| Datas/educação/normalização | plausible_indirect | parser 1.1.0 e precisão preservados; casos aceitos e paridade SQL |
+| Web/versão/runtime | direct | imagem web 8d578d5, Parser dc3fd80; rollout web/HTTPS/rollback e Parser preservado |
+| Ingestão/Parser hospedado | direct | Dependência descoberta no render: normalizador compartilhado podia interpretar ISO impossível como intervalo. Guard preserva texto inválido antes da normalização; parser raiz, modelo/prompt e cache bruto não mudam; regressão Parser/worker/cache/hosted e rollout seletivo |
+| Matching/Knowledge | plausible_indirect | Parser de datas/cálculo/método vigente não mudam; datas válidas preservadas e data impossível permanece ausente de cálculo útil, conforme contrato; testes resumeDates e diff |
+
+## Execução congelada
+
+Implementar D-01 a D-05 sob P-01/F-01, com A-01. Este acordo incorpora o prompt autorizado. Não há nova referência visual normativa: reutilizar o destaque vermelho existente, acrescentar avisos e resumo sem substituir composição aprovada. AoT registra qualquer limite de render/smoke autenticado real.
+
+Revisão técnica do mapa em 04/10: o render expôs `2024-02-30` interpretado pelo normalizador como intervalo pelos hífens internos. Preservar datas objetivamente inválidas antes da normalização é necessário para D-01/D-02/D-04; a dependência compartilhada exige atualização de Parser e web, sem novo produto/modelo/prompt, sem mudança de interpretação válida ou infraestrutura. Ensino médio mantém a composição vigente; um período preservado com erro/aviso abre o campo existente para correção.
+
+---
+
 ## Source: `docs/qa/agreement-section-publication-v202.md`
 
 # Complemento v2.0.2 — publicação e títulos personalizados
@@ -18223,6 +18273,70 @@ SHA funcional: `e84497e4a5a6ce05e202e7b9dcc138dca2dc4305`, integrado por fast-fo
 Preservação: períodos explícitos, fonte original, grupos/requisitos, exclusão de gestão como programação, guardas de auth/tenant e snapshots históricos cobertos pelas provas locais/operacionais acima. Conhecimento, curadoria e banco não foram modificados. Não houve importação real para teste; essa fronteira foi validada com fixtures locais.
 
 Arquivos não rastreados preexistentes preservados e excluídos do commit: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `tests/matchingRuntime (1).test.ts`. Desvios funcionais identificados: nenhum. Este fechamento documental não muda o SHA do runtime nem exige novo deploy. A regra de século requer revisão de produto em 2050.
+
+---
+
+## Source: `docs/qa/aot-review-format-preflight.md`
+
+# AoT — Validação antecipada de formatos, complemento v2.0.3
+
+Contrato: [agreement-review-format-preflight.md](agreement-review-format-preflight.md), 1.0.0, decisão de Bruno em 04/10/2026. Baseline main/origin/VPS `d207e114412893037021d9697426fe697a3f2f72`, web `cacc388d16aea712e57249547e8191247b4a0c30`, Parser `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`. Risco D; validação proporcional, sem suíte integral local.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Diagnóstico inicial/reativo e Input vermelho com mensagem/aria; resumo e campo de conteúdo personalizado respeitam limite existente | 61 testes dirigidos; navegador local, segunda experiência e segunda/terceira formação, correção sem reload | PASS | Dados sintéticos; inclui ISO impossível antes da normalização |
+| D-02 | Formatos parciais aceitos, aviso amarelo para ambiguidade/Atual sem início; vazio opcional preservado | 52 golden cases TS/SQL; normalização/importação preservam texto inválido, fato/evidência e política de século | PASS | Sem exigir ou inventar precisão |
+| D-03 | Resumo com links, tab/registro por ID estável e foco; ajuda ligada ao input; destaque removido ao corrigir | Edge headless: 16 verificações no viewport 1416 e 390; fonte preservada e sem overflow horizontal; renders vermelho/amarelo | PASS | Fixture local sem API/gravação, não smoke autenticado |
+| D-04 | Helpers privados, gate somente save/approve após auth/replay/lock; ingestion e histórico intactos | 117 verificações PostgreSQL local, cinco publicações sintéticas/replay/rollback, auth/tenant/stale, erro/caminho/ordinal e grants | PASS | PostgreSQL descartável, não banco produtivo |
+| D-05 | Docs/contexto, migração seletiva e rollout web/Parser no mesmo SHA | CI/main/origin/VPS/remote SQL/HTTPS a concluir | NOT TESTED | Não afirmar produção antes do smoke |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem invenção/fato negativo, dúvida bloqueante, reescrita de evidência, enfraquecimento de auth/tenant/replay, decisão humana real fictícia | Golden/SQL/navegador e negativos; apenas dados sintéticos em QA local, DDL produtivo ainda pendente | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade | Relação | Baseline / regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Revisão, foco, save/compare/publish | direct | Campos já tinham validação inicial; agora datas/avisos/resumo e navegação correta. 61 dirigidos, navegador e SQL real local | PASS |
+| Auth/tenant/locks/replay/auditoria/histórico/evidência | critical_transversal | RPCs SECURITY DEFINER e grants existentes preservados; negativos/rollback/pub/replay na fixture local | PASS |
+| Normalizador e ingestão/Parser hospedado | direct | Descoberta: ISO impossível podia virar intervalo. Guard anterior à normalização mantém texto revisável; 26 worker/cache/recovery/hosted/benchmark e teste Parser sem provider | PASS |
+| Datas/educação/cálculo válido | plausible_indirect | `resume-dates-1.1.0`, política 2050, precisão/origem e método raiz preservados; testes datas/educação e 52 exemplos de paridade | PASS |
+| Matching/Knowledge e gateway | plausible_indirect / no_impact_identified | Nenhuma fórmula/taxonomia/curadoria/prompt/infra alterados; proteção de data inválida não cria fato útil, cálculo válido coberto; gateway baseline running/0, imagem d061cea | PASS |
+| Web/Parser na VPS | direct | Baseline web 8d578d5, Parser dc3fd80, gateway d061cea running/0; rollout e rollback a verificar | NOT TESTED |
+
+### Novidade e preservação
+
+- Nova: diagnóstico explícito de datas impossíveis/invertidas, aviso não bloqueante, resumo/foco no item correto, ajuda acessível e gate SQL selecionado.
+- Preservada: campos obrigatórios atuais, confirmação acadêmica antes de publicar, precisão parcial, fonte/listas/evidências, isolamento e operação transacional, composição da revisão e escolha humana.
+- Mapa revisado: normalizador compartilhado participa de importação/Parser, portanto precisa de atualização do runtime hospedado; não muda parser raiz, modelo, prompt, método de datas válidas ou cache bruto. Campo existente de período em ensino médio com problema fica disponível para correção, sem torná-lo obrigatório.
+- Limite: baseline não prova comportamento autenticado de Pessoa real; esse smoke permanece NOT TESTED. QA de banco e navegador são sintéticos.
+
+## Fora de escopo e desvios
+
+F-01 preservado: sem novos campos/modelo de contato, pontuação/cálculo válido, regra de data futura, modelo/prompt/OCR/infra, saneamento histórico, biblioteca ou redesenho. Ajuste técnico necessário registrado no mapa: normalizador compartilhado e rollout de Parser. Não há nova decisão de produto nem publicação real de Perfil.
+
+## Evidência visual
+
+Não há nova referência normativa a copiar. Reuso do destaque e da composição existentes, com resumo antes das abas e ajuda abaixo do campo. Fixture: `tests/ui/review-format.html`, config correspondente e mobile iframe com viewport real 390. Evidências locais ignoradas: `tmp/review-format-run-1416.json` e `tmp/review-format-run-390.json` (16 verificações cada, PASS), `tmp/review-format-error-1416.json`, `tmp/review-format-error-390.json`, `tmp/review-format-warning-1416.json`. Renders inspecionados: `tmp/review-format-desktop.png`, `tmp/review-format-red-mobile390.png`; wrapper vermelho/input vermelho/explicação/fonte preservada, colunas empilhadas no mobile. Iframe é apenas o harness para contornar largura mínima de janela headless, sem alterar viewport interno. Helpers CUA/sky falharam no carregamento de assets; Edge já instalado permitiu render/teste local sem autenticação ou alteração de segurança.
+
+## Validação e segurança
+
+254 testes person-flow PASS; 61 testes dirigidos PASS (`reviewFieldLifecycle`, `reviewOperationErrors`, `resumeDates`, `parserIa`); 26 testes de worker/cache/recovery/hosted/benchmark PASS. SQL `node scripts/verify-import-evidence.mjs 55479 import_evidence_v202_final --formats`: 117 verificações PASS com ROLLBACK, incluindo 52 exemplos de paridade, caminhos de formação 2 e legado 3, conteúdo importado inválido ainda revisável, rejeição de save/pub sem mutação, correção, save permitido de aviso, replay, stale e tenant. Chaves de operações rejeitadas não persistem. Helpers sem EXECUTE para anon/authenticated; RPCs conservam SECURITY DEFINER/search_path/grants. Originais/cache não são exportados ou saneados. Body MD5 baseline remoto: save `a84454eac23697744733e38ed55570a5`, approve `c69dd4ac889e5281feefc8292010243a`.
+
+Tipos web e harness, build TypeScript/web e compilação do Parser PASS. Lint no índice limpo (807 arquivos), foundation (18 tabelas/6 versões), Context Pack e 15 testes de tooling PASS. Avisos de chunk/importação dinâmica já existentes não impedem build. Ledger passa com migração nova pendente; histórico não será reaplicado.
+
+## Git / QA / ambiente
+
+Implementação em `codex/review-format-preflight`; preservados `.tmp.driveupload`, acordo de matching alheio, Dockerfile GPU e cópia de teste de matching. PostgreSQL local descartável 127.0.0.1:55479; escrita somente sintética com rollback. Sem mutation/publicação de Perfil real em produção. Release direcionada: database + hosting/web; Parser é dependência runtime compartilhada na mesma hospedagem, explicitada no mapa. Nenhuma Edge Function, gateway, migration histórica ou serviço não afetado será publicado.
+
+## Conclusão
+
+Funcional local PASS. Publicação/sincronização e fechamento de D-05 pendentes de evidência.
 
 ---
 

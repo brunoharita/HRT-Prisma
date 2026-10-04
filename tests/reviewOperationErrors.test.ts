@@ -5,6 +5,20 @@ import test from "node:test";
 import { operationRecovery, reviewOperationError, reviewOperationErrorMessage, supabaseFunctionOperationError, supabaseOperationError } from "../web/src/domain/reviewOperationErrors.js";
 import { OPERATOR_FEEDBACK, PHONE_CORRECTION_MESSAGE } from "../web/src/domain/operatorFeedback.js";
 
+test("calendar/order errors name the correct review field without overriding authorization", () => {
+  for (const reason of ["review_period_invalid_date", "review_period_reversed"]) {
+    const details = JSON.stringify({ contract: "operation-feedback-2.0.0", reason, fieldPath: "experiences.experience_12345678.period", itemNumber: 2 });
+    const error = reviewOperationError({ code: "22023", message: "prisma_action_required", details }, "Falha.");
+    assert.equal(error.fieldPath, "experiences.experience_12345678.period");
+    assert.equal(error.category, "validation");
+    assert.equal(error.recovery, "review-fields");
+    assert.match(error.message, reason === "review_period_reversed" ? /final está antes/ : /não existe no calendário/);
+    const denied = reviewOperationError({ code: "42501", message: "prisma_action_required", details }, "Falha.");
+    assert.equal(denied.category, "authorization");
+    assert.equal(denied.fieldPath, null);
+  }
+});
+
 test("review operations turn approval gates into actionable messages", () => {
   assert.match(reviewOperationErrorMessage({ code: "23514", message: "material evidence is required before approval" }, "Falha."), /Vincule ao menos uma evidência/);
   assert.match(reviewOperationErrorMessage({ code: "23514", message: "full name is required to save a resume" }, "Falha."), /Nome completo/);

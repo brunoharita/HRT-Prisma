@@ -6,6 +6,8 @@ import { structureParserIa, parserIaMethodVersion } from "../dist/web/src/domain
 import { attachFieldEvidence } from "../dist/web/src/domain/adaptiveResumeExtraction.js";
 import { importEvidenceIssue } from "../dist/web/src/domain/importEvidencePersistence.js";
 import { prepareImportText } from "../dist/web/src/domain/importTextUnicode.js";
+import { reviewPeriodProblem } from "../dist/web/src/domain/reviewPeriodFormat.js";
+import { reviewPeriodFormats } from "../dist/tests/fixtures/reviewPeriodFormats.js";
 
 const port = process.argv[2] ?? "55479";
 if (!/^55[0-9]{3}$/.test(port)) throw Error("Disposable QA port required");
@@ -35,11 +37,39 @@ const payload = attached.map((page) => ({ page_number: page.pageNumber, text_con
 const directory = resolve("tmp/import-evidence-v202-qa");
 await mkdir(directory, { recursive: true });
 const literal = (value) => `'${JSON.stringify(value).replaceAll("'", "''")}'`;
-if (process.argv[4] && process.argv[4] !== "--publication") throw Error("Unknown local verification scenario");
-const verificationSource = process.argv[4] === "--publication" ? "supabase/qa/custom_section_publication_verification.sql" : "supabase/qa/import_evidence_v202_verification.sql";
-const sql = (await readFile(verificationSource, "utf8"))
+if (process.argv[4] && !["--publication", "--formats"].includes(process.argv[4])) throw Error("Unknown local verification scenario");
+const verificationSource = process.argv[4] ? "supabase/qa/custom_section_publication_verification.sql" : "supabase/qa/import_evidence_v202_verification.sql";
+let sql = (await readFile(verificationSource, "utf8"))
   .replaceAll(":'draft'", literal(prepared.draft)).replaceAll(":'pages'", literal(payload))
   .replaceAll(":evidence_count", String(result.fieldEvidence.length)).replaceAll(":'method'", `'${parserIaMethodVersion(result)}'`);
+if (process.argv[4] === "--formats") {
+  const textLiteral = (value) => value === null ? "null" : `'${value.replaceAll("'", "''")}'`;
+  const parity = reviewPeriodFormats.map(([value, expected]) => {
+    if (reviewPeriodProblem(value) !== expected) throw Error(`Unexpected TS diagnostic for ${value}`);
+    const reason = expected === "invalid_date" ? "review_period_invalid_date" : expected === "reversed" ? "review_period_reversed" : null;
+    return `select s202_assert(private.review_period_format_error(${textLiteral(value)}) is not distinct from ${textLiteral(reason)},'TS/SQL parity: ${value?.replaceAll("'", "''") ?? "null"}');`;
+  }).join("\n");
+  const helper = `create function public.s203_period_reject(command text,reason text,field text) returns void language plpgsql as $$
+declare detail text; begin
+  begin execute command; exception when others then
+    get stacked diagnostics detail=pg_exception_detail;
+    if sqlstate='22023' and detail::jsonb->>'contract'='operation-feedback-2.0.0' and detail::jsonb->>'reason'=reason and detail::jsonb->>'fieldPath'=field then raise notice 'PASS: actionable % (%)',reason,field; return; end if;
+    raise exception 'Unexpected format rejection %: % / %',sqlstate,sqlerrm,detail;
+  end;
+  raise exception 'Expected format rejection';
+end $$;`;
+  const privateTargets = `
+select public.s203_period_reject('select private.assert_review_period_formats(''{"education":[{"id":"education_valid123","period":"2019"},{"id":"education_second12","period":"2024 - 2020"}]}''::jsonb)','review_period_reversed','education.education_second12.period');
+select public.s203_period_reject('select private.assert_review_period_formats(''{"experiences":[{"id":"experience_valid123","period":"2019"},{"id":"experience_valid456","period":"2020"},{"id":"experience_legacy00000002abcdefgh","period":"2024-02-30"}]}''::jsonb)','review_period_invalid_date','experiences.2.period');
+select s202_assert(not has_function_privilege('anon','private.review_period_format_error(text)','execute') and not has_function_privilege('authenticated','private.assert_review_period_formats(jsonb)','execute'),'format helpers stay private');
+`;
+  sql = sql.replace("set local role authenticated;", () => `${parity}\n${helper}\n${privateTargets}\nset local role authenticated;`);
+  const intakeMarker = "    select * into intake from public.start_resume_intake";
+  sql = sql.replace(intakeMarker, () => `    if i=1 then d:=jsonb_set(d,'{experiences,0,period}',to_jsonb('31/02/2024'::text)); end if;\n${intakeMarker}`);
+  const publishMarker = "    select * into published from public.publish_profile_review";
+  const formatChecks = await readFile("supabase/qa/review_period_format_checks.sql", "utf8");
+  sql = sql.replace(publishMarker, () => `${formatChecks}\n${publishMarker}`);
+}
 const path = resolve(directory, "verification.sql");
 await writeFile(path, sql);
 const command = process.platform === "win32" ? "C:/Program Files/PostgreSQL/17/bin/psql.exe" : "psql";

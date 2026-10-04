@@ -1,5 +1,6 @@
 import { IMPORT_EVIDENCE_CONTRACT_VERSION, IMPORT_FAILURE_REASONS, PARSER_EVIDENCE_ADAPTER_VERSION, type ImportEvidenceIssue, type ImportFailureDiagnostic } from "./importEvidencePersistence.js";
 import { operatorFeedback } from "./operatorFeedback.js";
+import { PERIOD_FORMAT_MESSAGES } from "./reviewPeriodFormat.js";
 
 export interface ReviewOperationError {
   code?: string;
@@ -77,6 +78,10 @@ export function reviewOperationError(error: ReviewOperationError, fallback: stri
   }
   if (error.code === "42501" && technicalMessage !== "original extraction evidence cannot be retired") {
     return asOperationError(error, "Seu perfil não possui autorização para concluir esta operação na organização ativa.", "authorization", "none");
+  }
+
+  if (actionable?.reason === "review_period_invalid_date" || actionable?.reason === "review_period_reversed") {
+    return asOperationError(error, PERIOD_FORMAT_MESSAGES[actionable.reason === "review_period_reversed" ? "reversed" : "invalid_date"], "validation", "review-fields", actionable.fieldPath);
   }
 
   const known = operatorFeedback(actionable?.reason ?? "") ?? operatorFeedback(technicalMessage.trim());

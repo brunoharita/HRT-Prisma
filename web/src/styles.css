@@ -6785,3 +6785,10 @@ textarea {
 .prisma-m81-publication-field strong { color: #27374e; }
 .prisma-m81-publication-field span { color: #526276; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
 @media (max-width: 760px) { .prisma-m81-publication-columns { grid-template-columns: 1fr; } }
+
+.prisma-review-field.has-validation-warning { background: #fffbe6; border-color: #ffe58f; }
+.prisma-review-format-summary { display: grid; gap: 12px; margin-bottom: 16px; min-width: 0; }
+.prisma-review-format-summary ul { margin: 0; padding-left: 20px; }
+.prisma-review-format-summary li { margin: 8px 0; overflow-wrap: anywhere; }
+.prisma-review-format-summary button { background: none; border: 0; padding: 0; color: #0958d9; text-decoration: underline; cursor: pointer; font: inherit; text-align: left; }
+.prisma-review-format-summary li span { display: block; }

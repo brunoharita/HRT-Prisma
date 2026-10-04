@@ -6,6 +6,14 @@
 
 A revisão antecipa a validação de telefone vigente no servidor: um número nacional de 10/11 dígitos ou internacional de 12–15 dígitos, com normalização já existente. Dois telefones juntos não passam como um único número. A orientação pede um telefone com DDD, permite ao operador escolher qual usar no campo atual, ou deixá-lo vazio quando há e-mail. Não é suporte a múltiplos telefones nem validação de existência/posse da linha. Nenhum contato é escolhido automaticamente; fonte e evidências não são reescritas. Limites de texto nomeiam o campo. Acordo e limites: [v2.0.3](../qa/agreement-actionable-feedback-v203.md), [AoT](../qa/aot-actionable-feedback-v203.md).
 
+## Validação de formatos antes de salvar — complemento v2.0.3
+
+`review-field-format-1.0.0` valida ao carregar e a cada edição os formatos obrigatórios dos campos existentes. Erros objetivos ficam vermelhos e associados ao input por `aria-invalid`/`aria-describedby`, com explicação em português. O resumo abre a aba, o registro por ID estável e o campo correspondente, inclusive no segundo/terceiro item. Telefone, e-mail, LinkedIn, limites e classificação mantêm regras vigentes; a confirmação acadêmica continua um gate de publicação, não um novo bloqueio do rascunho.
+
+Experiências/formações rejeitam datas impossíveis e fim anterior ao início. Ano, mês/ano, dia completo, dois dígitos pela política fixa e intervalos com Atual continuam aceitos, sem exigir precisão ausente. Texto não interpretável e Atual sem início recebem aviso amarelo não bloqueante; opcional vazio não recebe erro. O diagnóstico não inventa datas nem reescreve evidências. A normalização compartilhada conserva datas objetivamente inválidas antes de tentar interpretar hífens como intervalo, inclusive no Parser hospedado; método raiz/modelo/prompt/cache bruto permanecem. Ensino médio mantém seus campos habituais; havendo período preservado com problema, o campo existente fica disponível para correção.
+
+`save_profile_review` e `approve_profile_review` usam o mesmo impedimento objetivo após autorização, escopo, replay e locks, antes de gravações. Retornam `review_period_invalid_date` ou `review_period_reversed` no envelope 2.0.0, com caminho estável/legado compatível. Ingestão inicial de dados defeituosos continua revisável; nenhum histórico é saneado automaticamente. Acordo e evidência: [validação antecipada](../qa/agreement-review-format-preflight.md), [AoT](../qa/aot-review-format-preflight.md).
+
 ## Contratos vigentes
 
 | Contrato | Versão | Regra material |
@@ -24,6 +32,7 @@ A revisão antecipa a validação de telefone vigente no servidor: um número na
 | `professional-profile` | 5.1.0 | perfil aprovado preserva proveniência, IDs estáveis, classificação acadêmica confirmada e fatos históricos compatibilizados, sem contato privado |
 | `custom-profile-section` | 1.0.0 | extensão limitada do perfil; item possui caminho estável de evidência e não cria chave JSON arbitrária |
 | `structured-resume-summary` | 1.1.0 | identificação, contato, posicionamento, objetivo, resumo e resultados são campos explícitos; o resumo termina na próxima seção e PII nunca é promovida ao perfil profissional |
+| `review-field-format` | 1.0.0 | erro objetivo de formato ao carregar/editar; avisos não bloqueantes, foco por registro e proteção SQL de salvar/aprovar |
 | `review-field-lifecycle` | 1.0.0 | vazios opcionais são normalizados; nome, contato e conteúdo profissional mínimo bloqueiam salvamento inválido; caminhos antigos continuam legíveis |
 
 ## Datas e períodos de currículo

@@ -2,13 +2,17 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.27
+version: 2.51.28
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
 Prisma v2.0.3 publicado em 04/10/2026 no SHA funcional `cacc388d16aea712e57249547e8191247b4a0c30`, integrado em main/origin e implantado na web da VPS. CI branch/main, tipos/build, regressão dirigida, Context Pack e smoke HTTPS/assets PASS. Parser mantém a imagem/build v2.0.2 `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`, available/ready; banco e funções não tiveram novo rollout. As correções SQL anteriores permanecem ativas. Nenhum Perfil real foi publicado para testar; smoke autenticado de revisão continua NOT TESTED.
+
+## Validação antecipada de formatos — complemento v2.0.3
+
+Implementação local `review-field-format-1.0.0`: campos inválidos vermelhos ao carregar/editar, explicação em português, resumo com navegação para aba/registro/campo, datas impossíveis e fim anterior ao início. Períodos ambíguos/Atual sem início recebem aviso amarelo não bloqueante; opcionais vazios e precisão parcial aceita permanecem. Normalizador compartilhado preserva ISO impossível antes de interpretar hífens como intervalo; modelo/prompt, parser raiz, cache bruto e métodos de datas válidas não mudam. SQL selecionado protege somente salvar/aprovar após auth/tenant/replay/lock; ingestão de texto defeituoso permanece revisável, sem alteração de histórico. Rollout de migration/web/Parser em validação, sem publicação de Perfil real. Acordo/AoT: `docs/qa/agreement-review-format-preflight.md`, `docs/qa/aot-review-format-preflight.md`.
 
 ## Orientação para erros corrigíveis — v2.0.3
 

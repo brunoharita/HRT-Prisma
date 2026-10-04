@@ -6,6 +6,7 @@ import type {
 import { normalizeDraftPeriods } from "./resumeDates.js";
 import { normalizeResumePhone } from "../../../src/domain/resumeIdentity.js";
 import { PHONE_CORRECTION_MESSAGE } from "./operatorFeedback.js";
+import { PERIOD_FORMAT_MESSAGES, reviewPeriodProblem } from "./reviewPeriodFormat.js";
 import {
   educationClassificationNeedsReview,
   isEducationLevelQualificationCompatible,
@@ -245,10 +246,10 @@ export function validateReviewDraftForSave(
     if (value && value.trim().length > limit) issues.push({ fieldPath, message: `${label}: reduza o texto para no máximo ${limit.toLocaleString("pt-BR")} caracteres.` });
   }
   if (draft.contact.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.contact.email.trim())) {
-    issues.push({ fieldPath: "contact.email", message: "Informe um e-mail válido." });
+    issues.push({ fieldPath: "contact.email", message: "Informe um e-mail com nome, @ e domínio, por exemplo nome@empresa.com." });
   }
   if (draft.contact.linkedin && !/^https:\/\/(?:[a-z0-9-]+\.)?linkedin\.com\/in\/[a-z0-9%_.-]+\/?$/i.test(draft.contact.linkedin.trim())) {
-    issues.push({ fieldPath: "contact.linkedin", message: "Informe a URL completa do perfil do LinkedIn." });
+    issues.push({ fieldPath: "contact.linkedin", message: "Informe o endereço completo do perfil pessoal do LinkedIn, por exemplo https://www.linkedin.com/in/seu-perfil." });
   }
 
   if (draft.areasOfExpertise.length > 30 || draft.areasOfExpertise.some((item) => !item.trim() || item.trim().length > 120)) {
@@ -273,6 +274,8 @@ export function validateReviewDraftForSave(
     if (item.role && item.role.trim().length > 240) issues.push({ fieldPath: `${base}.role`, message: "Cargo deve ter no máximo 240 caracteres." });
     if (item.organization && item.organization.trim().length > 240) issues.push({ fieldPath: `${base}.organization`, message: "Empresa deve ter no máximo 240 caracteres." });
     if (item.period && item.period.trim().length > 160) issues.push({ fieldPath: `${base}.period`, message: "Período deve ter no máximo 160 caracteres." });
+    const periodProblem = reviewPeriodProblem(item.period);
+    if (periodProblem === "invalid_date" || periodProblem === "reversed") issues.push({ fieldPath: `${base}.period`, message: PERIOD_FORMAT_MESSAGES[periodProblem] });
     if (item.description && item.description.trim().length > 12_000) issues.push({ fieldPath: `${base}.description`, message: "Descrição deve ter no máximo 12.000 caracteres." });
   });
   if (hasDuplicateIds(draft.experiences)) issues.push({ fieldPath: "experiences", message: "Experiências possui identificadores duplicados." });
@@ -285,14 +288,49 @@ export function validateReviewDraftForSave(
     if (item.course && item.course.trim().length > 500) issues.push({ fieldPath: `${base}.course`, message: "Curso deve ter no máximo 500 caracteres." });
     if (item.institution && item.institution.trim().length > 240) issues.push({ fieldPath: `${base}.institution`, message: "Instituição deve ter no máximo 240 caracteres." });
     if (item.period && item.period.trim().length > 160) issues.push({ fieldPath: `${base}.period`, message: "Período deve ter no máximo 160 caracteres." });
+    const periodProblem = reviewPeriodProblem(item.period);
+    if (periodProblem === "invalid_date" || periodProblem === "reversed") issues.push({ fieldPath: `${base}.period`, message: PERIOD_FORMAT_MESSAGES[periodProblem] });
     if (!isEducationLevelQualificationCompatible(classification.level, classification.qualification)) issues.push({ fieldPath: `${base}.qualification`, message: "A qualificação não é compatível com o nível acadêmico selecionado." });
   });
   if (hasDuplicateIds(draft.education)) issues.push({ fieldPath: "education", message: "Formações possui identificadores duplicados." });
+
+  draft.customSections.forEach((section) => section.items.forEach((item) => {
+    if (item.value.trim().length > 4_000) issues.push({ fieldPath: `customSections.${section.id}.items.${item.id}.value`, message: "Conteúdo deve ter no máximo 4.000 caracteres. Reduza o texto deste item antes de salvar." });
+  }));
 
   if (!hasMaterialProfessionalInformation(draft)) {
     issues.push({ fieldPath: "professionalTitle", message: "Informe ao menos um conteúdo profissional, como resumo, objetivo, experiência, formação ou competência, antes de salvar." });
   }
   return issues;
+}
+
+export function reviewDraftFormatWarnings(draft: StructuredDraft): ReviewDraftIssue[] {
+  return (["experiences", "education"] as const).flatMap((group) => draft[group].flatMap((item) => {
+    const problem = reviewPeriodProblem(item.period);
+    if (problem !== "unrecognized" && problem !== "missing_start") return [];
+    return [{ fieldPath: `${reviewEntityFieldPath(group === "experiences" ? "experience" : "education", item)}.period`, message: PERIOD_FORMAT_MESSAGES[problem] }];
+  }));
+}
+
+export function reviewIssueLabel(draft: StructuredDraft, path: string): string {
+  const labels: Record<string, string> = { "identity.fullName": "Nome completo", "contact.phone": "Telefone", "contact.email": "E-mail", "contact.linkedin": "Perfil do LinkedIn", "contact.city": "Cidade", "contact.state": "Estado", professionalTitle: "Cargo ou título profissional", professionalObjective: "Objetivo profissional", summary: "Resumo profissional", areasOfExpertise: "Áreas de atuação", keyResults: "Principais resultados", experiences: "Experiências", education: "Formações", certifications: "Certificações", languages: "Idiomas", competencies: "Competências", customSections: "Informações do currículo" };
+  if (labels[path]) return labels[path];
+  for (const [group, kind, label] of [["experiences", "experience", "Experiência"], ["education", "education", "Formação"]] as const) {
+    const index = draft[group].findIndex((item) => path === reviewEntityFieldPath(kind, item) || path.startsWith(`${reviewEntityFieldPath(kind, item)}.`));
+    if (index >= 0) {
+      const fields: Record<string, string> = { period: "Período", role: "Cargo", organization: "Empresa", course: "Curso", institution: "Instituição", qualification: "Qualificação", classificationOrigin: "Confirmação acadêmica", description: "Descrição" };
+      return `${label} ${index + 1}${fields[path.split(".").at(-1) ?? ""] ? ` — ${fields[path.split(".").at(-1)!]}` : ""}`;
+    }
+  }
+  const resultIndex = draft.keyResults.findIndex((item) => path.startsWith(`keyResults.${item.id}.`));
+  if (resultIndex >= 0) return `Resultado ${resultIndex + 1}`;
+  const sectionIndex = draft.customSections.findIndex((item) => path === `customSections.${item.id}` || path.startsWith(`customSections.${item.id}.`));
+  if (sectionIndex >= 0) {
+    const section = draft.customSections[sectionIndex]!;
+    const itemIndex = section.items.findIndex((item) => path.startsWith(`customSections.${section.id}.items.${item.id}.`));
+    return `Seção personalizada ${sectionIndex + 1}${itemIndex >= 0 ? ` — Item ${itemIndex + 1}` : ""}`;
+  }
+  return "Campo da revisão";
 }
 
 export function validateEducationClassificationsForApproval(draft: StructuredDraft): ReviewDraftIssue[] {

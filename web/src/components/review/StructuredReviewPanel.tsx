@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -37,6 +37,7 @@ import {
   isExperienceEmpty,
   reviewEntityFieldPath,
   reviewFieldPathExists,
+  reviewIssueLabel,
   type ReviewDraftIssue,
 } from "../../domain/reviewFieldLifecycle";
 
@@ -52,6 +53,7 @@ interface StructuredReviewPanelProps {
   selectedFieldPath: string;
   activeLinkId: string | null;
   validationIssues: ReviewDraftIssue[];
+  validationWarnings?: ReviewDraftIssue[];
   onSaveAndContinue: () => void;
   onDiscardAndContinue: () => void;
   onDraftChange: (draft: StructuredDraft) => void;
@@ -81,6 +83,7 @@ export function StructuredReviewPanel({
   selectedFieldPath,
   activeLinkId,
   validationIssues,
+  validationWarnings = [],
   onSaveAndContinue,
   onDiscardAndContinue,
   onDraftChange,
@@ -104,6 +107,25 @@ export function StructuredReviewPanel({
     return counts;
   }, [validationIssues]);
   useEffect(() => setRemovedEntries([]), [workspace.lockVersion]);
+  useEffect(() => {
+    const experience = draft.experiences.findIndex((item) => selectedFieldPath.startsWith(`${reviewEntityFieldPath("experience", item)}.`));
+    const education = draft.education.findIndex((item) => selectedFieldPath.startsWith(`${reviewEntityFieldPath("education", item)}.`));
+    if (experience >= 0) setExperienceIndex(experience);
+    if (education >= 0) setEducationIndex(education);
+  }, [selectedFieldPath, draft.experiences, draft.education]);
+
+  function navigateIssue(fieldPath: string) {
+    onFieldSelect(fieldPath, "reviewer");
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const field = [...document.querySelectorAll<HTMLElement>("[data-review-field-path]")].find((element) => element.dataset.reviewFieldPath === fieldPath);
+      field?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      field?.querySelector<HTMLElement>("input, textarea, button, [tabindex]")?.focus({ preventScroll: true });
+    }));
+  }
+
+  function warningMessage(fieldPath: string): string | null {
+    return validationWarnings.find((issue) => fieldPathMatches(issue.fieldPath, fieldPath))?.message ?? null;
+  }
 
   function validationMessage(fieldPath: string): string | null {
     return validationIssues.find((issue) => fieldPathMatches(issue.fieldPath, fieldPath))?.message ?? null;
@@ -204,6 +226,21 @@ export function StructuredReviewPanel({
         <Typography.Text type="secondary">{viewOnly ? "Modo de visualização" : "Modo de edição"}</Typography.Text>
         <Tag color="blue"><FileSearchOutlined /> {viewOnly ? "Somente leitura" : "Assistida por evidência"}</Tag>
       </div>
+      {editable && (validationIssues.length > 0 || validationWarnings.length > 0) ? (
+        <div className="prisma-review-format-summary" aria-label="Campos para conferir">
+          {[
+            { issues: validationIssues, type: "error" as const, title: "Corrija ou confirme estes campos antes de concluir a revisão" },
+            { issues: validationWarnings, type: "warning" as const, title: "Confira estes campos; os avisos não impedem salvar" },
+          ].filter((group) => group.issues.length > 0).map((group) => (
+            <Alert key={group.type} showIcon type={group.type} title={`${group.title} (${group.issues.length})`} description={
+              <ul>{group.issues.map((issue) => <li key={`${issue.fieldPath}:${issue.message}`}>
+                <button type="button" onClick={() => navigateIssue(issue.fieldPath)}>{reviewIssueLabel(draft, issue.fieldPath)}</button>
+                <span>{issue.message}</span>
+              </li>)}</ul>
+            } />
+          ))}
+        </div>
+      ) : null}
       {editable && hasUnsavedChanges ? (
         <Alert
           action={<Space wrap>
@@ -365,7 +402,7 @@ export function StructuredReviewPanel({
         <Typography.Text type="secondary">{persisted ? `Origem ${reviewed.source === "human" ? "humana" : "extraída"}. Informe ao menos Empresa ou Cargo.` : "Nova experiência. Preencha Empresa ou Cargo manualmente, ou selecione uma área no documento sem salvar antes."}</Typography.Text>
         <ReviewField editable={editable} extracted={extracted?.organization ?? "Não identificado"} fieldPath={organizationPath} label="Empresa" onChange={(value) => update({ organization: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, organizationPath)} validationMessage={validationMessage(organizationPath)} value={reviewed.organization ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.role ?? "Não identificado"} fieldPath={rolePath} label="Cargo" onChange={(value) => update({ role: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, rolePath)} validationMessage={validationMessage(rolePath)} value={reviewed.role ?? ""} />
-        <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} value={reviewed.period ?? ""} />
+        <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} warningMessage={warningMessage(periodPath)} value={reviewed.period ?? ""} />
         <ReviewField editable={editable} extracted={extracted?.description ?? "Não identificado"} fieldPath={descriptionPath} label="Descrição / Principais atividades" multiline onChange={(value) => update({ description: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, descriptionPath)} validationMessage={validationMessage(descriptionPath)} value={reviewed.description ?? ""} />
         {removedEntries.filter((entry) => entry.kind === "experience").map(removalNotice)}
       </div>
@@ -425,7 +462,7 @@ export function StructuredReviewPanel({
           <Typography.Text type="secondary">O Prisma separa curso, nível, qualificação e situação acadêmica. Inferências e campos não identificados precisam da sua confirmação.</Typography.Text>
           <ReviewField editable={editable} extracted={extracted?.course ?? "Não identificado"} fieldPath={coursePath} label="Curso" onChange={(value) => update({ course: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, coursePath)} validationMessage={validationMessage(coursePath)} value={reviewed.course ?? ""} />
            {fieldVisibility.showInstitution ? <ReviewField editable={editable} extracted={extracted?.institution ?? "Não identificado"} fieldPath={institutionPath} label="Instituição" onChange={(value) => update({ institution: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, institutionPath)} validationMessage={validationMessage(institutionPath)} value={reviewed.institution ?? ""} /> : null}
-           {fieldVisibility.showPeriod ? <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} value={reviewed.period ?? ""} /> : null}
+           {fieldVisibility.showPeriod || validationMessage(periodPath) || warningMessage(periodPath) ? <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} warningMessage={warningMessage(periodPath)} value={reviewed.period ?? ""} /> : null}
           <div className="prisma-education-classification-grid">
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.status`} label="Situação" onChange={(value) => updateClassification({ status: value as EducationStatus })} onSelect={onFieldSelect} options={EDUCATION_STATUSES.map((value) => ({ value, label: EDUCATION_STATUS_LABELS[value] }))} origin={classification.classificationSources.status} selectedFieldPath={selectedFieldPath} value={classification.status} />
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.level`} label="Nível de formação" onChange={(value) => updateClassification({ level: value as EducationLevel })} onSelect={onFieldSelect} options={educationLevelOptions} origin={classification.classificationSources.level} selectedFieldPath={selectedFieldPath} value={classification.level} />
@@ -654,7 +691,7 @@ function EditableTagSurface({ fieldPath, value, editable, onSelect, onChange }: 
   return <div className="prisma-reviewed-surface prisma-tag-editor" onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>{editable ? "Revisado por você" : "Valor aprovado"}</small><Select disabled={!editable} mode="tags" onChange={(values) => onChange(values.flatMap(splitExplicitListValues))} open={false} ref={selectRef} tokenSeparators={[",", ";", "\n", "\t", "|"]} value={value} />{editable ? <><Button icon={<PlusOutlined />} onClick={() => selectRef.current?.focus()} size="small">Adicionar</Button><Typography.Text type="secondary">Digite ou cole uma lista; vírgulas, linhas e colunas criam itens separados.</Typography.Text></> : null}</div>;
 }
 
-function ReviewField({ label, fieldPath, extracted, value, editable, multiline = false, required = false, selected, validationMessage = null, onSelect, onChange }: {
+function ReviewField({ label, fieldPath, extracted, value, editable, multiline = false, required = false, selected, validationMessage = null, warningMessage = null, onSelect, onChange }: {
   label: string;
   fieldPath: string;
   extracted: string;
@@ -664,17 +701,21 @@ function ReviewField({ label, fieldPath, extracted, value, editable, multiline =
   required?: boolean;
   selected: boolean;
   validationMessage?: string | null;
+  warningMessage?: string | null;
   onSelect: (fieldPath: string, preferredKind?: "original" | "reviewer") => void;
   onChange: (value: string) => void;
 }) {
+  const helpId = useId();
+  const help = validationMessage ?? warningMessage;
+  const status = validationMessage ? "error" : warningMessage ? "warning" : "";
   return (
-    <div className={["prisma-review-field", selected ? "is-selected" : "", validationMessage ? "has-validation-error" : ""].filter(Boolean).join(" ")} data-review-field-path={fieldPath} onClick={() => onSelect(fieldPath)}>
+    <div className={["prisma-review-field", selected ? "is-selected" : "", validationMessage ? "has-validation-error" : warningMessage ? "has-validation-warning" : ""].filter(Boolean).join(" ")} data-review-field-path={fieldPath} onClick={() => onSelect(fieldPath)}>
       <Typography.Text strong>{label}{required ? <span aria-label="obrigatório" className="prisma-required-marker"> *</span> : null}</Typography.Text>
       <div className="prisma-review-value-grid">
         <ValueSurface label="Extraído pelo Prisma" onSelect={() => onSelect(fieldPath, "original")} value={extracted} />
-        <div className={["prisma-reviewed-surface", multiline ? "prisma-reviewed-surface--multiline" : ""].filter(Boolean).join(" ")} onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>{editable ? "Revisado por você" : "Valor aprovado"}</small>{multiline ? <Input.TextArea aria-invalid={Boolean(validationMessage)} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input aria-invalid={Boolean(validationMessage)} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
+        <div className={["prisma-reviewed-surface", multiline ? "prisma-reviewed-surface--multiline" : ""].filter(Boolean).join(" ")} onClick={(event) => { event.stopPropagation(); onSelect(fieldPath, "reviewer"); }}><small>{editable ? "Revisado por você" : "Valor aprovado"}</small>{multiline ? <Input.TextArea aria-label={label} aria-describedby={help ? helpId : undefined} aria-invalid={Boolean(validationMessage)} status={status} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} rows={4} value={value} /> : <Input aria-label={label} aria-describedby={help ? helpId : undefined} aria-invalid={Boolean(validationMessage)} status={status} disabled={!editable} onFocus={() => onSelect(fieldPath, "reviewer")} onChange={(event) => onChange(event.target.value)} value={value} />}</div>
       </div>
-      {validationMessage ? <Typography.Text type="danger">{validationMessage}</Typography.Text> : null}
+      {help ? <Typography.Text id={helpId} type={validationMessage ? "danger" : "warning"}>{help}</Typography.Text> : null}
     </div>
   );
 }

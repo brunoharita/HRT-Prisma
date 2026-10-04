@@ -29,6 +29,13 @@ const binding = { sourceSha256: "a".repeat(64), organizationId: "local-test", pr
 const fact = (path: string, value: string, ...sources: string[]): ParserFact => ({ path, value, sources });
 const run = (pages: ExtractedPage[], facts: ParserFact[], status: "partial" | "complete" = "complete") => structureParserIa({ status, facts, uncertainties: [] }, pages, binding);
 
+test("impossible ISO periods remain raw and reviewable without altering Parser facts/evidence", () => {
+  const result = run([page(1, ["Analista", "Organização sintética", "2024-02-30"])], [fact("experiences.x.role", "Analista", "p1l1"), fact("experiences.x.organization", "Organização sintética", "p1l2"), fact("experiences.x.period", "2024-02-30", "p1l3")]);
+  assert.equal(result.draft.experiences[0]!.period, "2024-02-30");
+  assert.equal(result.acceptedFacts.find((item) => item.path === "experiences.x.period")!.value, "2024-02-30");
+  assert.ok(result.fieldEvidence.some((item) => item.fieldPath.endsWith(".period") && item.text === "2024-02-30"));
+});
+
 test("M5.7 normalizes LinkedIn transport format while preserving source value and evidence", () => {
   for (const url of ["www.linkedin.com/in/synthetic-profile", "linkedin.com/in/synthetic-profile/", "http://www.linkedin.com/in/synthetic-profile", "https://www.linkedin.com/in/synthetic-profile"]) {
     const result = run([page(1, [url])], [fact("contact.linkedin", url, "p1l1")]);

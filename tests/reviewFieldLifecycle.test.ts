@@ -7,10 +7,62 @@ import {
   normalizeReviewDraft,
   reviewDraftNeedsContractUpgrade,
   reviewDraftChangeState,
+  reviewDraftFormatWarnings,
+  reviewIssueLabel,
   reviewEntityFieldPath,
   reviewFieldPathExists,
   validateReviewDraftForSave,
 } from "../web/src/domain/reviewFieldLifecycle.js";
+import { reviewPeriodProblem } from "../web/src/domain/reviewPeriodFormat.js";
+import { reviewPeriodFormats } from "./fixtures/reviewPeriodFormats.js";
+
+test("review period diagnostics reject objective errors and preserve valid or incomplete precision", () => {
+  for (const [value, expected] of reviewPeriodFormats) assert.equal(reviewPeriodProblem(value), expected, String(value));
+});
+
+test("initial/recomputed draft validation locates invalid dates, corrects reactively, and never mutates source", () => {
+  const input = draft();
+  input.experiences = ["2019–2023", "31/02/2024", "2024 - 2020"].map((period, index) => ({ id: `experience_test${index}12345678`, source: "extracted", role: "Analista", organization: null, period, description: null, evidenceText: period, page: 1 }));
+  const before = structuredClone(input);
+  const issues = validateReviewDraftForSave(input);
+  assert.deepEqual(issues.map((issue) => issue.fieldPath), ["experiences.experience_test112345678.period", "experiences.experience_test212345678.period"]);
+  assert.equal(reviewIssueLabel(input, issues[1]!.fieldPath), "Experiência 3 — Período");
+  assert.deepEqual(input, before);
+  input.experiences[1]!.period = "29/02/2024";
+  input.experiences[2]!.period = "2020 - 2024";
+  assert.deepEqual(validateReviewDraftForSave(input), []);
+});
+
+test("known impossible full dates never become ranges during import/review normalization", () => {
+  const input = draft();
+  input.experiences = [{ id: "experience_12345678", source: "extracted", role: "Analista", organization: null, period: "2024-02-30", description: null, evidenceText: "2024-02-30", page: 1 }];
+  const normalized = normalizeReviewDraft(input);
+  assert.equal(normalized.experiences[0]!.period, "2024-02-30");
+  assert.equal(normalized.experiences[0]!.evidenceText, "2024-02-30");
+  assert.ok(validateReviewDraftForSave(normalized).some((issue) => issue.fieldPath === "experiences.experience_12345678.period"));
+});
+
+test("ambiguous and missing-start period warnings are advisory with no invented date or error", () => {
+  const input = draft();
+  input.education = [null, "Durante o curso", "Atual"].map((period, index) => ({ id: `education_test${index}12345678`, source: "extracted", course: "Curso", institution: null, period, description: null, evidenceText: "Curso", page: 1 }));
+  const before = structuredClone(input);
+  const warnings = reviewDraftFormatWarnings(input);
+  assert.equal(warnings.length, 2);
+  assert.equal(reviewIssueLabel(input, warnings[1]!.fieldPath), "Formação 3 — Período");
+  assert.ok(warnings.every((issue) => /não impede salvar/.test(issue.message)));
+  assert.deepEqual(validateReviewDraftForSave(input), []);
+  assert.deepEqual(input, before);
+});
+
+test("review preflight identifies the existing custom-content size limit at the editable item", () => {
+  const input = draft();
+  input.customSections = [{ id: "custom_12345678", name: "Projetos", format: "list", source: "human", items: [{ id: "item_12345678", value: "x".repeat(4001) }] }];
+  const issues = validateReviewDraftForSave(input);
+  assert.equal(issues[0]?.fieldPath, "customSections.custom_12345678.items.item_12345678.value");
+  assert.equal(reviewIssueLabel(input, issues[0]!.fieldPath), "Seção personalizada 1 — Item 1");
+  input.customSections[0]!.items[0]!.value = "x".repeat(4000);
+  assert.deepEqual(validateReviewDraftForSave(input), []);
+});
 
 function draft(): StructuredDraft {
   return {

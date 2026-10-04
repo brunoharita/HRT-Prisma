@@ -38,6 +38,7 @@ import {
   createReviewEntityId,
   normalizeReviewDraft,
   reviewDraftChangeState,
+  reviewDraftFormatWarnings,
   reviewEntityFieldPath,
   reviewEntityPathSegment,
   reviewFieldPathExists,
@@ -187,6 +188,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     });
   }, [mandatoryValidationIssues, validationIssues]);
   const comparisonIssueCount = visibleValidationIssues.length;
+  const formatWarnings = useMemo(() => editable && draft ? reviewDraftFormatWarnings(draft) : [], [draft, editable]);
   const markSaved = useUnsavedChanges(Boolean(editable && (changeState.rawChanged || pendingSelection)));
   const replacementLinkId = useMemo(() => workspace?.evidenceLinks.find((link) => link.state === "active" && link.linkKind === "reviewer" && fieldsOverlap(link.fieldPath, selectedFieldPath))?.id ?? null, [selectedFieldPath, workspace]);
   const fallbackOriginalEvidence = useMemo(() => {
@@ -792,7 +794,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             onFieldSelect={handleFieldSelect}
             onSaveAndContinue={() => void handleSave()}
             onStartSelection={(fieldPath) => { if (dirty) { deferReviewAction({ type: "start_evidence_selection", fieldPath }); return; } startEvidenceSelection(fieldPath); }}
-            selectedFieldPath={selectedFieldPath} validationIssues={visibleValidationIssues} viewOnly={viewOnly} workspace={workspace}
+            selectedFieldPath={selectedFieldPath} validationIssues={visibleValidationIssues} validationWarnings={formatWarnings} viewOnly={viewOnly} workspace={workspace}
           />
         </div>
       </div>
