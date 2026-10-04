@@ -10,11 +10,11 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe a geração 2, movimento 0, terceira entrega autorizada", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v2.0.3");
+test("registro oficial expõe a geração 2, movimento 0, quarta entrega autorizada", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v2.0.4");
   assert.equal(PRISMA_RELEASE.productGeneration, 2);
   assert.equal(PRISMA_RELEASE.movement, 0);
-  assert.equal(PRISMA_RELEASE.delivery, 3);
+  assert.equal(PRISMA_RELEASE.delivery, 4);
 });
 
 test("nova geração aceita movimento zero sem alterar contadores anteriores e rejeita movimento inválido", () => {

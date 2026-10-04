@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 335
-source_manifest_sha256: 7398d29edb7c845a290c192d19d91760469ed9dbeb355872bf8e574edc012750
+documentation_source_count: 337
+source_manifest_sha256: 6af3b3390816bc4eff8a16feebd7ce160f7872cbd10ce9a824dfcdd4f637f940
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,13 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.28
+version: 2.51.29
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
+
+Prisma v2.0.4: corrigida a permanência do período de formação na revisão, inclusive ensino médio. O campo permanece ao apagar/corrigir, perder foco, trocar de formação/aba e salvar/reabrir rascunho sintético; um período preservado é visível sem depender do aviso. Estado local de abertura é restrito à revisão e ao ID da formação. Validadores, fonte/classificação, RPCs/tenant, Parser e matching não mudam. 70 testes dirigidos e 28 verificações no navegador em cada viewport 1416/390 PASS; o mesmo cenário falha no componente anterior ao limpar o campo. Tipos/build PASS. Publicação web seletiva em andamento; evidência final no `docs/qa/aot-education-period-v204.md`. Jornada autenticada de Pessoa real não foi executada para teste.
 
 Prisma v2.0.3 com validação antecipada de formatos publicado em 04/10/2026 no SHA funcional `d88fbff5bdb3e61f10129bdd74924de3b7227715`, integrado em main/origin e implantado na web e no Parser da VPS. CI branch/main, tipos/build, regressão dirigida, Context Pack, SQL QA local, render sintético e smoke HTTPS/assets/readiness PASS. Migração remota `20261004132949` protege salvar/aprovar; grants/ordem de auth/replay e diagnóstico conferidos. Web/Parser running sem reinícios, Parser healthy/available/ready e gateway preservado. Nenhum Perfil real foi publicado para testar; smoke autenticado de revisão real continua NOT TESTED.
 
@@ -4928,7 +4930,7 @@ A revisão antecipa a validação de telefone vigente no servidor: um número na
 
 `review-field-format-1.0.0` valida ao carregar e a cada edição os formatos obrigatórios dos campos existentes. Erros objetivos ficam vermelhos e associados ao input por `aria-invalid`/`aria-describedby`, com explicação em português. O resumo abre a aba, o registro por ID estável e o campo correspondente, inclusive no segundo/terceiro item. Telefone, e-mail, LinkedIn, limites e classificação mantêm regras vigentes; a confirmação acadêmica continua um gate de publicação, não um novo bloqueio do rascunho.
 
-Experiências/formações rejeitam datas impossíveis e fim anterior ao início. Ano, mês/ano, dia completo, dois dígitos pela política fixa e intervalos com Atual continuam aceitos, sem exigir precisão ausente. Texto não interpretável e Atual sem início recebem aviso amarelo não bloqueante; opcional vazio não recebe erro. O diagnóstico não inventa datas nem reescreve evidências. A normalização compartilhada conserva datas objetivamente inválidas antes de tentar interpretar hífens como intervalo, inclusive no Parser hospedado; método raiz/modelo/prompt/cache bruto permanecem. Ensino médio mantém seus campos habituais; havendo período preservado com problema, o campo existente fica disponível para correção.
+Experiências/formações rejeitam datas impossíveis e fim anterior ao início. Ano, mês/ano, dia completo, dois dígitos pela política fixa e intervalos com Atual continuam aceitos, sem exigir precisão ausente. Texto não interpretável e Atual sem início recebem aviso amarelo não bloqueante; opcional vazio não recebe erro. O diagnóstico não inventa datas nem reescreve evidências. A normalização compartilhada conserva datas objetivamente inválidas antes de tentar interpretar hífens como intervalo, inclusive no Parser hospedado; método raiz/modelo/prompt/cache bruto permanecem. Na v2.0.4, ensino médio exibe o período quando existe no original, no rascunho persistido ou no conteúdo atual, quando há erro/aviso ou quando o operador acessa o campo. Uma vez aberto nesta revisão, o campo permanece disponível ao limpar, corrigir, sair do foco, trocar de registro/aba e salvar o rascunho; sua visibilidade não depende da permanência do erro. O estado de abertura usa revisão e caminho com ID estável, sem passar para outra revisão. Um período preservado continua acessível ao reabrir o rascunho; ausência sem abertura mantém a composição habitual. Fonte, classificação, precisão e regras de validação não mudam. Acordo/AoT: `docs/qa/agreement-education-period-v204.md`, `docs/qa/aot-education-period-v204.md`.
 
 `save_profile_review` e `approve_profile_review` usam o mesmo impedimento objetivo após autorização, escopo, replay e locks, antes de gravações. Retornam `review_period_invalid_date` ou `review_period_reversed` no envelope 2.0.0, com caminho estável/legado compatível. Ingestão inicial de dados defeituosos continua revisável; nenhum histórico é saneado automaticamente. Acordo e evidência: [validação antecipada](../qa/agreement-review-format-preflight.md), [AoT](../qa/aot-review-format-preflight.md).
 
@@ -5029,7 +5031,7 @@ Experiências e formações novas usam caminhos `experiences.<experienceId>.<cam
 
 Ao corrigir `competencies` por seleção espacial, separadores explícitos e fronteiras geométricas reais entre linhas ou células são resolvidos antes da escrita. Espaços comuns e `/` não separam itens; assim, competências compostas e nomes como `BPM/BPMN` permanecem íntegros. A interface apresenta cada valor resultante antes da confirmação. Se a região indicar múltiplos blocos sem fronteira confiável, aplicar permanece indisponível até o operador ajustar a seleção ou explicitar os separadores; o sistema nunca consolida silenciosamente esses blocos em uma única competência. Todas as competências confirmadas permanecem ligadas à mesma evidência espacial e são auditadas como array anterior/novo pela operação existente.
 
-Formações novas também aceitam caminhos `level`, `qualification`, `status` e `classificationOrigin`. Salvar permite uma classificação ainda pendente para continuidade do trabalho; comparar/publicar exige confirmação humana quando houver inferência ou `unknown`. A revisão adapta os campos ao nível: Ensino Fundamental/Médio não exibe instituição, período ou qualificação; Técnico deriva `technical_course` e não exibe qualificação; níveis superiores mantêm os campos acadêmicos aplicáveis. Trocar o nível limpa ou deriva uma qualificação compatível. O texto original, os motivos, a versão e o snapshot do classificador permanecem auditáveis, inclusive quando um campo deixa de ser exibido.
+Formações novas também aceitam caminhos `level`, `qualification`, `status` e `classificationOrigin`. Salvar permite uma classificação ainda pendente para continuidade do trabalho; comparar/publicar exige confirmação humana quando houver inferência ou `unknown`. A revisão adapta os campos ao nível: Ensino Fundamental/Médio não exibe instituição ou qualificação e conserva a regra de visibilidade do período descrita na correção v2.0.4; Técnico deriva `technical_course` e não exibe qualificação; níveis superiores mantêm os campos acadêmicos aplicáveis. Trocar o nível limpa ou deriva uma qualificação compatível. O texto original, os motivos, a versão e o snapshot do classificador permanecem auditáveis, inclusive quando um campo deixa de ser exibido.
 
 O estado de edição é comparado semanticamente após a mesma normalização usada na persistência. Diferença apenas transitória não cria revisão vazia. Ao remover ou cancelar o item atualmente selecionado, a interface escolhe um campo irmão válido ou a raiz da mesma aba; ações de evidência falham fechadas para caminhos inexistentes. Sair da revisão com qualquer diferença local, inclusive transitória, exige confirmação explícita para evitar perda acidental.
 
@@ -11858,6 +11860,38 @@ Separar funcionalidades novas das capacidades preservadas. `no_impact_identified
 
 ---
 
+## Source: `docs/qa/agreement-education-period-v204.md`
+
+# Correção da permanência do período na revisão — v2.0.4
+
+Versão 1.0.0, agreed, 2026-10-04. Bruno autorizou corrigir o campo que desaparece na formação e publicar v2.0.4 em main/produção. Baseline `03044b41fb66c53d9348293e460b9d96213add55`; risco B, UI delimitada, sem banco/Parser. Este acordo incorpora o prompt de execução autorizado, restaurando a correção humana prevista por D-01/D-03 do acordo de formatos 1.0.0.
+
+- D-01: período aberto para revisão permanece acessível ao apagar, digitar, corrigir, perder foco, navegar entre registros/abas e salvar rascunho. Um período presente no original ou rascunho persistido continua acessível após recarregar, inclusive ensino médio. Campos sem período mantêm a composição acadêmica quando nunca abertos. CA: reproduzir falha anterior e testar sequência no componente real, com identidade estável por formação.
+- D-02: erros/avisos desaparecem ao corrigir, sem remover o campo, perder foco ou descartar valor/fonte. CA: input mantém identidade/foco ao limpar e digitar, fonte preservada, segunda/terceira formação independente, dados anteriores preservados.
+- D-03: registrar v2.0.4, owner docs/Context Pack/AoT e publicar SHA validado em main/GitHub/VPS, somente web. CA: tipos/build, testes dirigidos, render desktop/mobile, CI, HTTPS/assets/versão, rollback e imagens dos serviços não afetados.
+- P-01: não inventar datas, alterar validadores/calendário/classificação/evidências, salvar dados de Pessoas reais para teste ou enfraquecer salvamento/publicação/tenant.
+- F-01: banco, migrations, Parser/OCR/IA, matching/Knowledge, novos campos/bibliotecas ou redesenho da revisão.
+- A-01: engenharia escolhe estado local por revisão/ID estável e reaproveita navegação, inputs e fixture existentes.
+- Q-01: nenhuma decisão material pendente.
+
+## Mapa de impacto inicial
+
+| Capacidade | Relação | Baseline / preservação / prova |
+| --- | --- | --- |
+| Período/Formação e navegação | direct | v2.0.3 condiciona ensino médio ao aviso; render sintético com foco, digitação, ida/volta, rascunho recarregado e duas larguras |
+| Revisão/validação/rascunho/evidência | plausible_indirect | mesmos dados/handlers/validadores; testes lifecycle/datas e fonte original no render |
+| Web/versão/Context Pack/release | direct | main 03044b4, web 4111e554; tipos/build/registro/contextos/CI e smoke/rollback |
+| Auth/tenant/RPC/publicação | no_impact_identified | sem alteração de serviço/payload/gate; análise do diff e testes existentes de lifecycle/erros, nenhuma operação real |
+| Parser/OCR/IA/matching/Knowledge | no_impact_identified | apenas componente web/registro; dispatcher deve excluir Parser, banco e Edge, imagens remotas preservadas |
+
+Referência fornecida: contraexemplo de desaparecimento, não novo layout normativo. Preservar abas, navegação, cartões extraído/revisado, classificação e evidências; recolocar apenas o campo existente. Teste sintético é evidência do componente, não jornada autenticada de currículo real.
+
+## Execução congelada
+
+Implementar D-01 a D-03 sob P-01/F-01, com A-01. AoT registra comportamento novo, preservação e limites. Sem mudança de contratos persistidos.
+
+---
+
 ## Source: `docs/qa/agreement-gov-01-impact-mapping-regression-preservation.md`
 
 # Agreement Contract GOV-01 — Mapa de Impacto e Preservação de Funcionalidades
@@ -14838,6 +14872,57 @@ Referência: PNG com SHA-256 `de50e17478d3a65a60c0dfc876660d1296f7bba57fe711ad7d
 Lint, typecheck web, build web, gerador/verificador do Context Pack e `git diff --check` passaram no worktree. Dois testes estruturais que buscavam a marcação antiga foram atualizados para verificar o mesmo conteúdo e a proteção responsiva no novo agrupamento; os 22 testes direcionados de `matchingEvidenceLabel` e `matchingScore` passaram. O build apresentou somente avisos existentes de chunks grandes/importação dinâmica. O primeiro CI falhou por export de contexto defasado; o segundo alcançou 716 testes e falhou em três asserções estáticas da composição antiga, corrigidas neste mesmo movimento. CIs do SHA funcional `342ff9aa75896dcf09f306fa42d4df4fb82fb43f`: branch `36803529139` e main `36803703626` PASS. Plano seletivo: web e documentação; banco e Edge `skip`.
 
 `main` local/GitHub e checkout da VPS chegaram ao SHA funcional. Apenas `prisma-web` foi reconstruído/recriado, imagem ativa `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`, running/zero reinícios. Rollback `prisma-web:rollback-before-342ff9aa7589` preserva `sha256:668091fb1267488e26c1dca121bf2ea98a1609a93c60bbf7d24aca8b5d6ea080`. O smoke imediato do script recebeu 404 transitório e saiu com código 1; a verificação posterior confirmou `/`, `/login`, `/index.html` e os assets JS/CSS novos com HTTP 200, incluindo marcadores do novo layout. Não houve acesso autenticado a Perfis reais em produção, clique de revisão, decisão humana nem chamada à IA; o smoke funcional autenticado permanece NOT TESTED. Esse limite não reduz os testes locais com dados sintéticos.
+
+---
+
+## Source: `docs/qa/aot-education-period-v204.md`
+
+# AoT — Período de formação permanece acessível, v2.0.4
+
+Contrato: [agreement-education-period-v204.md](agreement-education-period-v204.md), 1.0.0; autorização de Bruno em 04/10/2026. Baseline `03044b41fb66c53d9348293e460b9d96213add55`, web `4111e554f74b1fab0448d2be7899aa4671715d24b4f05353bb7bbd457d0d0958`. Risco B, correção de apresentação, sem suíte integral local.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste/evidência | Status | Limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Visibilidade do período usa fonte/rascunho atual e persistido, seleção e campos abertos por revisão/caminho estável, independente do erro transitório | Edge: limpar, digitar 2/20/200/2004, blur, segunda/terceira formação, abas e remount do rascunho sintético | PASS | Componente real local, sem persistência remota |
+| D-02 | Feedback continua reativo; Input conserva identidade/foco/valor; fonte e outros registros preservados; nova revisão não herda campos abertos | 28 verificações em cada viewport 1416/390; baseline falha exatamente ao limpar o campo; 70 testes lifecycle/feedback/datas/classificação/versão | PASS | Nenhuma Pessoa real editada |
+| D-03 | Registro de release v2.0.4 e docs/Context Pack; plano somente web | Tipos/build PASS, entrega/CI/smoke ainda em andamento | PARTIAL | Concluir após publicação |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem invenção/alteração de validadores/classificador/evidências/tenant ou publicação de Pessoa real | Diff restrito a UI/registro/fixture/documentação; testes dirigidos e fixture sem API/auth/gravação remota | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade | Relação | Baseline / regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Formação/período/navegação | direct | Baseline 03044b4: ensino médio perde Input ao apagar; cenário negativo detecta a desconexão/foco perdido. Correção passa em 1416/390 | PASS |
+| Validação/evidência/rascunho/classificação | plausible_indirect | Mesmos handlers/modelo/validadores; fonte antiga e segunda formação preservadas, feedback removido após correção; 70 dirigidos | PASS |
+| Web/versão/Context Pack | direct | Tipos/build e registro v2.0.4 PASS; restante em andamento | PARTIAL |
+| Auth/tenant/RPC/publicação | no_impact_identified | Análise do diff: nenhum código de RPC/serviço/payload/gate mudou; lifecycle/feedback preservados | PASS |
+| Parser/OCR/IA/matching/Knowledge | no_impact_identified | Nenhum consumidor/domínio compartilhado mudou; plano seletivo e imagens remotas a conferir | PARTIAL |
+
+Novidade: o campo corrigível permanece acessível; não há novo campo nem mudança de formato. Preservação: fonte, regras objetivas e classificação, cartões extraído/revisado, abas/IDs/navegação, confirmação humana. Sem nova dependência ou reclassificação do mapa.
+
+## Fora de escopo e desvios
+
+F-01 preservado no diff. Nenhum desvio do contrato. Referência enviada é contraexemplo do bug, não redesenho normativo. Renders locais `tmp/education-period-v204-desktop.png` e `tmp/education-period-v204-mobile.png` mostram o campo presente após edição/blur, mesma estrutura em colunas/empilhamento; sem overflow em 390. Textos/pessoas sintéticos, não réplica de dados pessoais.
+
+## Validação final
+
+- `tmp/education-period-v204-baseline.json`: FAIL esperado no componente 03044b4, `clearing retains input identity and focus`.
+- `tmp/education-period-v204-desktop.json` e `tmp/education-period-v204-mobile.json`: 28/28 PASS por viewport; identidade/foco durante digitação, navegação, reabertura e ausência de vazamento entre revisões.
+- `tmp/education-period-v204-directed.log`: 70/70 PASS.
+- Typecheck web/root e build web PASS; build com avisos prévios de tamanho/importação de chunks. Typecheck separado do harness PASS com tipos `vite/client`; invocação inicial sem estes tipos não resolvia imports `?url`, corrigida no comando sem alteração de produto. Lint/foundation e Context Pack em snapshot do índice PASS, sem incluir documentos alheios não rastreados.
+- CUA e inicialização Computer Use indisponíveis por erro de assets do kernel; Edge headless já instalado executou fixture local sem alterar proteções nem instalar software.
+- Salvamento/reabertura do rascunho é simulado localmente com o componente real; jornada autenticada com currículo/Pessoa real continua NOT TESTED. Não confundir esse limite com falha do teste do componente.
+
+## Git / produção
+
+Publicação em andamento. Atualizar SHA, CI, web/imagens preservadas, HTTPS/assets/rollback e sincronização ao concluir.
 
 ---
 

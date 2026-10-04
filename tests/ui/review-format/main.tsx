@@ -24,9 +24,14 @@ const workspace: ProfileReviewWorkspace = {
 function Harness() {
   const [draft, setDraft] = useState(initial);
   const [selected, select] = useState("identity.fullName");
+  const [savedWorkspace, setSavedWorkspace] = useState(workspace);
+  const [mount, setMount] = useState(0);
   return <ConfigProvider locale={ptBR} theme={prismaTheme}><main style={{ padding: 24, maxWidth: 1100, margin: "auto" }}>
     <h1>Revisão de formatos — dados sintéticos</h1>
-    <StructuredReviewPanel workspace={workspace} draft={draft} editable busy={false} hasUnsavedChanges={false} hasTransientChanges={false} deferredActionLabel={null} selectedFieldPath={selected} activeLinkId={null}
+    <button onClick={() => { setSavedWorkspace({ ...savedWorkspace, reviewedData: structuredClone(draft), lockVersion: savedWorkspace.lockVersion + 1 }); setMount((value) => value + 1); }}>Salvar e reabrir rascunho sintético</button>
+    <button onClick={() => select("education.education_synthetic2.period")}>Reabrir período sintético</button>
+    <button onClick={() => { const empty = { ...initial, education: initial.education.map((item) => ({ ...item, period: null, level: "secondary" as const })) }; setDraft(empty); setSavedWorkspace({ ...workspace, id: "synthetic-other", extractedData: structuredClone(empty), reviewedData: structuredClone(empty) }); select("education.education_synthetic2.course"); }}>Abrir outra revisão sintética</button>
+    <StructuredReviewPanel key={mount} workspace={savedWorkspace} draft={draft} editable busy={false} hasUnsavedChanges={false} hasTransientChanges={false} deferredActionLabel={null} selectedFieldPath={selected} activeLinkId={null}
       validationIssues={validateReviewDraftForSave(normalizeReviewDraft(draft))} validationWarnings={reviewDraftFormatWarnings(draft)} onDraftChange={setDraft} onFieldSelect={select}
       onSaveAndContinue={() => undefined} onDiscardAndContinue={() => undefined} onStartSelection={() => undefined} onCreateCustomSection={() => undefined} onEvidenceNavigate={() => undefined} onEvidenceDelete={() => undefined}/>
   </main></ConfigProvider>;
@@ -56,6 +61,39 @@ if (scenario) setTimeout(async () => {
     const second = "experiences.experience_synthetic1.period";
     check("second record red and focused", field(second)?.classList.contains("has-validation-error") === true && document.activeElement === input(second));
     check("accessible explanation", input(second)?.getAttribute("aria-invalid") === "true" && Boolean(input(second)?.getAttribute("aria-describedby")));
+    if (scenario === "period") {
+      await navigate("Formação 3 — Período");
+      const path = "education.education_synthetic2.period";
+      const target = input(path)!;
+      check("secondary period initially shown and focused", Boolean(target) && document.activeElement === target);
+      await update(path, "");
+      check("clearing retains input identity and focus", target.isConnected && input(path) === target && document.activeElement === target && target.value === "");
+      for (const value of ["2", "20", "200", "2004"]) {
+        await update(path, value);
+        check(`typing ${value} retains input identity and focus`, target.isConnected && input(path) === target && document.activeElement === target && target.value === value);
+      }
+      check("valid correction removes feedback without hiding field", input(path)?.getAttribute("aria-invalid") === "false" && !field(path)?.classList.contains("has-validation-warning"));
+      check("secondary original evidence preserved", field(path)?.textContent?.includes("2024-02-30") === true);
+      input("education.education_synthetic2.course")!.focus(); await wait();
+      check("blur keeps period visible", input(path)?.value === "2004");
+      await navigate("Formação 2 — Período");
+      check("other education value preserved", input("education.education_synthetic1.period")?.value === "2024 - 2020");
+      const click = async (text: string) => { const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((item) => item.textContent === text); check(`control: ${text}`, Boolean(button)); button!.click(); await wait(); };
+      await click("Reabrir período sintético");
+      check("return to secondary keeps corrected period", input(path)?.value === "2004");
+      const summaryTab = [...document.querySelectorAll<HTMLElement>("[role=tab]")].find((item) => item.textContent?.includes("Resumo"));
+      summaryTab!.click(); await wait();
+      await click("Reabrir período sintético");
+      check("tab return keeps corrected period", input(path)?.value === "2004");
+      await click("Salvar e reabrir rascunho sintético");
+      check("remounted saved draft keeps period editable", input(path)?.value === "2004" && !input(path)?.disabled);
+      await click("Abrir outra revisão sintética");
+      check("new review does not inherit revealed optional fields", !input(path));
+      await click("Reabrir período sintético");
+      check("explicit field navigation opens empty period", input(path)?.value === "");
+      input("education.education_synthetic2.course")!.focus(); await wait();
+      check("opened empty period remains after blur", input(path)?.value === "");
+    }
     if (scenario === "run") {
       await update(second, "29/02/2024");
       check("correction removes error immediately", !field(second)?.classList.contains("has-validation-error") && input(second)?.getAttribute("aria-invalid") === "false");

@@ -97,6 +97,7 @@ export function StructuredReviewPanel({
   const [educationIndex, setEducationIndex] = useState(0);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [removedEntries, setRemovedEntries] = useState<RemovedDraftEntry[]>([]);
+  const [revealedEducationPeriods, setRevealedEducationPeriods] = useState<{ reviewId: string; paths: string[] }>({ reviewId: workspace.id, paths: [] });
   const activeTab = tabForField(selectedFieldPath);
   const issueCountByTab = useMemo(() => {
     const counts = new Map<string, number>();
@@ -107,6 +108,25 @@ export function StructuredReviewPanel({
     return counts;
   }, [validationIssues]);
   useEffect(() => setRemovedEntries([]), [workspace.lockVersion]);
+  // Visibility belongs to this review and record, not to the transient error.
+  // Keep an opened optional field available even while its value is cleared.
+  useEffect(() => {
+    const visiblePaths = draft.education.flatMap((item) => {
+      const path = reviewEntityFieldPath("education", item, "period");
+      const original = workspace.extractedData.education.find((entry) => entry.id === item.id);
+      const saved = workspace.reviewedData.education.find((entry) => entry.id === item.id);
+      const visible = educationFieldVisibility(resolveEducationClassification(item).level).showPeriod
+        || Boolean(item.period || original?.period || saved?.period)
+        || fieldPathMatches(selectedFieldPath, path)
+        || [...validationIssues, ...validationWarnings].some((issue) => fieldPathMatches(issue.fieldPath, path));
+      return visible ? [path] : [];
+    });
+    setRevealedEducationPeriods((current) => {
+      const previous = current.reviewId === workspace.id ? current.paths : [];
+      const paths = [...new Set([...previous, ...visiblePaths])];
+      return current.reviewId === workspace.id && paths.length === previous.length ? current : { reviewId: workspace.id, paths };
+    });
+  }, [workspace.id, workspace.extractedData.education, workspace.reviewedData.education, draft.education, selectedFieldPath, validationIssues, validationWarnings]);
   useEffect(() => {
     const experience = draft.experiences.findIndex((item) => selectedFieldPath.startsWith(`${reviewEntityFieldPath("experience", item)}.`));
     const education = draft.education.findIndex((item) => selectedFieldPath.startsWith(`${reviewEntityFieldPath("education", item)}.`));
@@ -443,6 +463,11 @@ export function StructuredReviewPanel({
     const coursePath = reviewEntityFieldPath("education", reviewed, "course");
     const institutionPath = reviewEntityFieldPath("education", reviewed, "institution");
     const periodPath = reviewEntityFieldPath("education", reviewed, "period");
+    const saved = workspace.reviewedData.education.find((item) => item.id === reviewed.id);
+    const showPeriod = fieldVisibility.showPeriod || Boolean(reviewed.period || extracted?.period || saved?.period)
+      || fieldPathMatches(selectedFieldPath, periodPath)
+      || (revealedEducationPeriods.reviewId === workspace.id && revealedEducationPeriods.paths.includes(periodPath))
+      || Boolean(validationMessage(periodPath) || warningMessage(periodPath));
     const persisted = workspace.reviewedData.education.some((item) => item.id === reviewed.id);
     const removeEducation = () => {
       if (persisted) rememberRemoval({ key: `education:${reviewed.id}`, kind: "education", index, item: reviewed, label: `A formação ${index + 1} será removida` });
@@ -462,7 +487,7 @@ export function StructuredReviewPanel({
           <Typography.Text type="secondary">O Prisma separa curso, nível, qualificação e situação acadêmica. Inferências e campos não identificados precisam da sua confirmação.</Typography.Text>
           <ReviewField editable={editable} extracted={extracted?.course ?? "Não identificado"} fieldPath={coursePath} label="Curso" onChange={(value) => update({ course: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, coursePath)} validationMessage={validationMessage(coursePath)} value={reviewed.course ?? ""} />
            {fieldVisibility.showInstitution ? <ReviewField editable={editable} extracted={extracted?.institution ?? "Não identificado"} fieldPath={institutionPath} label="Instituição" onChange={(value) => update({ institution: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, institutionPath)} validationMessage={validationMessage(institutionPath)} value={reviewed.institution ?? ""} /> : null}
-           {fieldVisibility.showPeriod || validationMessage(periodPath) || warningMessage(periodPath) ? <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} warningMessage={warningMessage(periodPath)} value={reviewed.period ?? ""} /> : null}
+           {showPeriod ? <ReviewField editable={editable} extracted={extracted?.period ?? "Não identificado"} fieldPath={periodPath} label="Período" onChange={(value) => update({ period: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, periodPath)} validationMessage={validationMessage(periodPath)} warningMessage={warningMessage(periodPath)} value={reviewed.period ?? ""} /> : null}
           <div className="prisma-education-classification-grid">
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.status`} label="Situação" onChange={(value) => updateClassification({ status: value as EducationStatus })} onSelect={onFieldSelect} options={EDUCATION_STATUSES.map((value) => ({ value, label: EDUCATION_STATUS_LABELS[value] }))} origin={classification.classificationSources.status} selectedFieldPath={selectedFieldPath} value={classification.status} />
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.level`} label="Nível de formação" onChange={(value) => updateClassification({ level: value as EducationLevel })} onSelect={onFieldSelect} options={educationLevelOptions} origin={classification.classificationSources.level} selectedFieldPath={selectedFieldPath} value={classification.level} />
