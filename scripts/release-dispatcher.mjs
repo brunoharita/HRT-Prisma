@@ -67,6 +67,7 @@ function printPlan(plan, options) {
   console.log(`Database: ${plan.deployments.database.join(", ") || "skip"}`);
   console.log(`Functions: ${plan.deployments.edgeFunctions.join(", ") || "skip"}`);
   console.log(`Web/VPS: ${plan.deployments.web ? "publish prisma-web only" : "skip"}`);
+  console.log(`Parser/VPS: ${plan.deployments.parserIa ? "publish prisma-parser-ia only" : "skip"}`);
   console.log(`Validations: ${plan.validationCommands.join(" -> ")}`);
   if (plan.blockedReasons.length) console.log(`BLOCKED: ${plan.blockedReasons.join("; ")}`);
 }
@@ -138,6 +139,14 @@ async function publish(plan, options) {
     const promoted = run("git", ["rev-parse", "HEAD"], { capture: true });
     if (promoted !== sha) throw new Error(`Promoted SHA ${promoted} differs from validated SHA ${sha}`);
   }
+  let parserIa = plan.deployments.parserIa ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
+  if (plan.deployments.parserIa && options.promoteMain && options.vpsHost) {
+    if (!/^[A-Za-z0-9_.@:-]+$/.test(options.vpsHost)) throw new Error("Invalid VPS SSH host");
+    if (!/^\/[A-Za-z0-9_./-]+$/.test(options.vpsPath)) throw new Error("Invalid VPS path");
+    const remote = `cd -- '${options.vpsPath}' && bash deploy/release-parser-ia.sh '${sha}'`;
+    runCommand("ssh", [options.vpsHost, remote]);
+    parserIa = "PUBLISHED";
+  }
   let web = plan.deployments.web ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
   if (plan.deployments.web && options.promoteMain && options.vpsHost) {
     if (!/^[A-Za-z0-9_.@:-]+$/.test(options.vpsHost)) throw new Error("Invalid VPS SSH host");
@@ -151,10 +160,12 @@ async function publish(plan, options) {
     sha,
     branch,
     web,
+    parserIa,
     remaining: {
       database: plan.deployments.database,
       edgeFunctions: plan.deployments.edgeFunctions,
       web: web === "PENDING_VPS_CONFIGURATION",
+      parserIa: parserIa === "PENDING_VPS_CONFIGURATION",
     },
   };
 }

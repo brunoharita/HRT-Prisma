@@ -48,12 +48,14 @@ Não há nova referência normativa a copiar. Reuso do destaque e da composiçã
 
 254 testes person-flow PASS; 61 testes dirigidos PASS (`reviewFieldLifecycle`, `reviewOperationErrors`, `resumeDates`, `parserIa`); 26 testes de worker/cache/recovery/hosted/benchmark PASS. SQL `node scripts/verify-import-evidence.mjs 55479 import_evidence_v202_final --formats`: 117 verificações PASS com ROLLBACK, incluindo 52 exemplos de paridade, caminhos de formação 2 e legado 3, conteúdo importado inválido ainda revisável, rejeição de save/pub sem mutação, correção, save permitido de aviso, replay, stale e tenant. Chaves de operações rejeitadas não persistem. Helpers sem EXECUTE para anon/authenticated; RPCs conservam SECURITY DEFINER/search_path/grants. Originais/cache não são exportados ou saneados. Body MD5 baseline remoto: save `a84454eac23697744733e38ed55570a5`, approve `c69dd4ac889e5281feefc8292010243a`.
 
-Tipos web e harness, build TypeScript/web e compilação do Parser PASS. Lint no índice limpo (807 arquivos), foundation (18 tabelas/6 versões), Context Pack e 15 testes de tooling PASS. Avisos de chunk/importação dinâmica já existentes não impedem build. Ledger passa com migração nova pendente; histórico não será reaplicado.
+Tipos web e harness, build TypeScript/web e compilação do Parser PASS. Lint no índice limpo (807 arquivos), foundation (18 tabelas/6 versões), Context Pack e 18 testes de tooling PASS (inclui roteamento seletivo do Parser). Avisos de chunk/importação dinâmica já existentes não impedem build. Ledger passa com migração nova pendente; histórico não será reaplicado.
 
 ## Git / QA / ambiente
 
-Implementação em `codex/review-format-preflight`; preservados `.tmp.driveupload`, acordo de matching alheio, Dockerfile GPU e cópia de teste de matching. PostgreSQL local descartável 127.0.0.1:55479; escrita somente sintética com rollback. Sem mutation/publicação de Perfil real em produção. Release direcionada: database + hosting/web; Parser é dependência runtime compartilhada na mesma hospedagem, explicitada no mapa. Nenhuma Edge Function, gateway, migration histórica ou serviço não afetado será publicado.
+Implementação em `codex/review-format-preflight`; preservados `.tmp.driveupload`, acordo de matching alheio, Dockerfile GPU e cópia de teste de matching. PostgreSQL local descartável 127.0.0.1:55479; escrita somente sintética com rollback. Sem mutation/publicação de Perfil real em produção. Release direcionada pelo dispatcher 1.0.2: database + web + Parser; Parser é dependência runtime compartilhada na mesma hospedagem, explicitada no mapa. Nenhuma Edge Function, gateway, migration histórica ou serviço não afetado será publicado.
 
 ## Conclusão
 
 Funcional local PASS. Publicação/sincronização e fechamento de D-05 pendentes de evidência.
+
+A CI do commit funcional inicial `b34bdd4ef07ee2bcefd56cd746f7192b9e5c3ef4` passou nas execuções branch `37205219082` e main `37205297648`. Antes de qualquer implantação, o plano 1.0.1 foi insuficiente para o consumidor Parser compartilhado. O roteamento 1.0.2 adiciona somente esse destino com testes negativos: componente web comum, docs, script de deploy e gateway não acendem Parser; runtime Parser isolado não acende web/banco/Edge. A integração Git inicial não foi tratada como prova de rollout. Produção aguarda o SHA conjunto validado.

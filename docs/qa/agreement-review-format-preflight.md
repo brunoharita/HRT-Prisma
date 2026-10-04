@@ -29,3 +29,5 @@ Versão 1.0.0, agreed, 2026-10-04. Bruno aprovou a proposta e autorizou implemen
 Implementar D-01 a D-05 sob P-01/F-01, com A-01. Este acordo incorpora o prompt autorizado. Não há nova referência visual normativa: reutilizar o destaque vermelho existente, acrescentar avisos e resumo sem substituir composição aprovada. AoT registra qualquer limite de render/smoke autenticado real.
 
 Revisão técnica do mapa em 04/10: o render expôs `2024-02-30` interpretado pelo normalizador como intervalo pelos hífens internos. Preservar datas objetivamente inválidas antes da normalização é necessário para D-01/D-02/D-04; a dependência compartilhada exige atualização de Parser e web, sem novo produto/modelo/prompt, sem mudança de interpretação válida ou infraestrutura. Ensino médio mantém a composição vigente; um período preservado com erro/aviso abre o campo existente para correção.
+
+O roteamento seletivo do dispatcher passa a declarar Parser explicitamente para o normalizador compartilhado; é requisito operacional de D-05 para publicar todos os consumidores afetados e manter web/gateway não afetados fora do destino. Não amplia comportamento do produto.

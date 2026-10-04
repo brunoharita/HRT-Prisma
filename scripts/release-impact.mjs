@@ -1,6 +1,6 @@
 import { basename } from "node:path";
 
-export const RELEASE_PLAN_VERSION = "1.0.1";
+export const RELEASE_PLAN_VERSION = "1.0.2";
 
 const contextSource = (path) => path === "AGENTS.md" || path === "README.md" || path.startsWith("docs/");
 
@@ -39,6 +39,17 @@ export function classifyChanges(changes) {
     if (path.startsWith("web/")) {
       surfaces.add("web");
       surfaces.add("hosting");
+      classified = true;
+    }
+    // These sources are executed by the hosted Parser, as well as its web consumer.
+    // A web-only rollout can leave imported periods on the old normalization rule.
+    if (["web/src/domain/parserIa.ts", "web/src/domain/resumeDates.ts", "web/src/domain/reviewPeriodFormat.ts", "src/domain/resumeDates.ts", "scripts/parser-ia-service.mjs", "scripts/start-parser-ia-hosted.mjs", "scripts/check-parser-ia-hosted.mjs"].includes(path)
+      || path.startsWith("services/parser-ia/")) {
+      surfaces.add("parser-ia");
+      if (path === "src/domain/resumeDates.ts") {
+        surfaces.add("web");
+        surfaces.add("hosting");
+      }
       classified = true;
     }
     if (path.startsWith("src/")) {
@@ -137,8 +148,12 @@ export function buildReleasePlan(changes) {
     add("pnpm run typecheck:web");
     add("pnpm run build:web");
   }
-  if (["backend", "web", "database", "database-tests", "edge-functions", "tests"].some((surface) => impact.surfaces.includes(surface))) {
+  if (["backend", "web", "database", "database-tests", "edge-functions", "tests", "parser-ia"].some((surface) => impact.surfaces.includes(surface))) {
     add("pnpm run test");
+  }
+  if (impact.surfaces.includes("parser-ia")) {
+    add("node node_modules/typescript/bin/tsc -p services/parser-ia/tsconfig.json --noEmit");
+    add("node --test tests/tooling/parserIaService.test.mjs tests/tooling/parserIaRecovery.test.mjs tests/tooling/parserIaHosted.test.mjs tests/tooling/parserIaBenchmark.test.mjs");
   }
   if (["database", "database-ledger", "supabase-config"].some((surface) => impact.surfaces.includes(surface))) {
     add("pnpm run check:supabase-ledger");
@@ -154,6 +169,7 @@ export function buildReleasePlan(changes) {
     database: impact.migrations.filter((path) => !impact.modifiedMigrations.includes(path)),
     edgeFunctions: impact.edgeFunctions,
     web: impact.surfaces.includes("web") || impact.surfaces.includes("hosting"),
+    parserIa: impact.surfaces.includes("parser-ia"),
   };
   return {
     version: RELEASE_PLAN_VERSION,

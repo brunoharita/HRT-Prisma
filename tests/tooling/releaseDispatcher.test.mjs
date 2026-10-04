@@ -41,6 +41,39 @@ test("routes web changes only to web and hosting", () => {
   assert.ok(impact.surfaces.includes("web"));
   assert.ok(impact.surfaces.includes("hosting"));
   assert.equal(impact.surfaces.includes("database"), false);
+  assert.equal(impact.surfaces.includes("parser-ia"), false);
+});
+
+test("shared resume normalization explicitly routes web and hosted Parser", () => {
+  for (const file of ["web/src/domain/resumeDates.ts", "web/src/domain/reviewPeriodFormat.ts", "web/src/domain/parserIa.ts", "src/domain/resumeDates.ts"]) {
+    const plan = buildReleasePlan([change("M", file)]);
+    assert.equal(plan.deployments.web, true);
+    assert.equal(plan.deployments.parserIa, true);
+    assert.deepEqual(plan.deployments.database, []);
+    assert.deepEqual(plan.deployments.edgeFunctions, []);
+    assert.ok(plan.validationCommands.some((command) => command.includes("parserIaHosted.test.mjs")));
+  }
+  assert.equal(buildReleasePlan([change("M", "web/src/components/review/StructuredReviewPanel.tsx")]).deployments.parserIa, false);
+});
+
+test("Parser-only changes do not rebuild frontend, gateway or other destinations", () => {
+  for (const file of ["scripts/parser-ia-service.mjs", "services/parser-ia/Dockerfile"]) {
+    const plan = buildReleasePlan([change("M", file)]);
+    assert.equal(plan.deployments.parserIa, true);
+    assert.equal(plan.deployments.web, false);
+    assert.deepEqual(plan.deployments.edgeFunctions, []);
+    assert.deepEqual(plan.deployments.database, []);
+  }
+  for (const file of ["docs/operations/parser-ia-kvm2.md", "deploy/release-parser-ia.sh", "services/paddle-gateway/gateway.mjs"]) {
+    assert.equal(buildReleasePlan([change("M", file)]).deployments.parserIa, false);
+  }
+});
+
+test("publication applies only the planned Parser and records its pending destination", async () => {
+  const dispatcher = await readFile(new URL("../../scripts/release-dispatcher.mjs", import.meta.url), "utf8");
+  assert.match(dispatcher, /plan\.deployments\.parserIa && options\.promoteMain && options\.vpsHost/);
+  assert.match(dispatcher, /bash deploy\/release-parser-ia\.sh '\$\{sha\}'/);
+  assert.match(dispatcher, /parserIa: parserIa === "PENDING_VPS_CONFIGURATION"/);
 });
 
 test("routes only the named Edge Function", () => {

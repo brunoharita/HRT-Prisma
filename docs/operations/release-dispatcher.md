@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions e web são destinos independentes.
+Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions, web e Parser hospedado são destinos independentes.
 
 ## Comandos
 
@@ -17,6 +17,8 @@ pnpm run release:verify -- --base=origin/main --head=HEAD --json
 
 Quando o plano contém web, `--vps-host=<alias>` ou `PRISMA_VPS_SSH_HOST` aciona `deploy/release-web.sh` após a promoção. O script avança `/opt/prisma` por fast-forward, exige o mesmo SHA, preserva a imagem anterior, constrói e recria somente `prisma-web` e executa o smoke HTTP. `PRISMA_VPS_PATH` altera o caminho sem gravar host, usuário ou chave no Git. Banco e funções permanecem no conector Supabase autorizado, porque o CLI geral está bloqueado pelo ledger; o recibo os mantém pendentes até a verificação remota.
 
+Dispatcher 1.0.2 reconhece explicitamente o consumidor `parserIa` do normalizador de currículo (`web/src/domain/resumeDates.ts`, diagnóstico `reviewPeriodFormat.ts`, Parser/data raiz) e seus arquivos de runtime. Alteração comum de componente web não publica o Parser; alteração somente de runtime Parser não publica web/gateway. A compilação especializada e os testes worker/cache/hosted acompanham esse destino. Com host configurado e promoção, `release-parser-ia.sh` usa o mesmo SHA antes do web; sem configuração, o recibo mantém `parserIa` pendente para o rollout manual autorizado. Rollbacks, cache privado e readiness são conferidos no AoT; banco compatível deve ser aplicado antes dos consumidores. Essa classificação foi necessária ao complemento de formatos v2.0.3, não autoriza reconstruir outros serviços por proximidade.
+
 Um comprovante único pode ser gravado em caminho ignorado:
 
 ```powershell
@@ -28,7 +30,9 @@ pnpm run release:plan -- --receipt=tmp/release/plan.json
 | Diff | Validação | Supabase | VPS |
 | --- | --- | --- | --- |
 | somente docs | Context Pack afetado | não acessar | não acessar |
-| web | typecheck, build e testes afetados | não acessar | somente `prisma-web` |
+| componente web | typecheck, build e testes afetados | não acessar | somente `prisma-web` |
+| normalizador compartilhado com Parser | tipos/build, datas, worker/cache/hosted | somente se também houver migration | `prisma-parser-ia` e web |
+| runtime Parser somente | compilação especializada e worker/cache/hosted | não acessar | somente `prisma-parser-ia` |
 | migration nova | testes/contratos de banco e negativos aplicáveis | somente o arquivo novo | apenas se houver consumidor web |
 | Edge Function | testes afetados | somente a função nomeada | não acessar |
 | combinação | união sem duplicar comandos | banco → funções | web por último |

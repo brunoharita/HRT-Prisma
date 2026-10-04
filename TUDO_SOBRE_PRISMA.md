@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 335
-source_manifest_sha256: c8e9275ec56534bd683d65f443309d32e741d39b63ed8ffbdc43655f51e2eed0
+source_manifest_sha256: a3631c1d75082079ef431251220b904b1b5ff8ccf635b4f44ad85b6e4f67ec5e
 -->
 
 # Tudo sobre o Prisma
@@ -2636,7 +2636,7 @@ Prisma v2.0.3 publicado em 04/10/2026 no SHA funcional `cacc388d16aea712e5724954
 
 ## Validação antecipada de formatos — complemento v2.0.3
 
-Implementação local `review-field-format-1.0.0`: campos inválidos vermelhos ao carregar/editar, explicação em português, resumo com navegação para aba/registro/campo, datas impossíveis e fim anterior ao início. Períodos ambíguos/Atual sem início recebem aviso amarelo não bloqueante; opcionais vazios e precisão parcial aceita permanecem. Normalizador compartilhado preserva ISO impossível antes de interpretar hífens como intervalo; modelo/prompt, parser raiz, cache bruto e métodos de datas válidas não mudam. SQL selecionado protege somente salvar/aprovar após auth/tenant/replay/lock; ingestão de texto defeituoso permanece revisável, sem alteração de histórico. Rollout de migration/web/Parser em validação, sem publicação de Perfil real. Acordo/AoT: `docs/qa/agreement-review-format-preflight.md`, `docs/qa/aot-review-format-preflight.md`.
+Implementação local `review-field-format-1.0.0`: campos inválidos vermelhos ao carregar/editar, explicação em português, resumo com navegação para aba/registro/campo, datas impossíveis e fim anterior ao início. Períodos ambíguos/Atual sem início recebem aviso amarelo não bloqueante; opcionais vazios e precisão parcial aceita permanecem. Normalizador compartilhado preserva ISO impossível antes de interpretar hífens como intervalo; modelo/prompt, parser raiz, cache bruto e métodos de datas válidas não mudam. SQL selecionado protege somente salvar/aprovar após auth/tenant/replay/lock; ingestão de texto defeituoso permanece revisável, sem alteração de histórico. Dispatcher 1.0.2 declara o consumidor Parser compartilhado com negativos de seleção. Rollout de migration/web/Parser em validação, sem publicação de Perfil real. Acordo/AoT: `docs/qa/agreement-review-format-preflight.md`, `docs/qa/aot-review-format-preflight.md`.
 
 ## Orientação para erros corrigíveis — v2.0.3
 
@@ -10336,7 +10336,7 @@ O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocor
 
 ## Objetivo
 
-Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions e web são destinos independentes.
+Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions, web e Parser hospedado são destinos independentes.
 
 ## Comandos
 
@@ -10351,6 +10351,8 @@ pnpm run release:verify -- --base=origin/main --head=HEAD --json
 
 Quando o plano contém web, `--vps-host=<alias>` ou `PRISMA_VPS_SSH_HOST` aciona `deploy/release-web.sh` após a promoção. O script avança `/opt/prisma` por fast-forward, exige o mesmo SHA, preserva a imagem anterior, constrói e recria somente `prisma-web` e executa o smoke HTTP. `PRISMA_VPS_PATH` altera o caminho sem gravar host, usuário ou chave no Git. Banco e funções permanecem no conector Supabase autorizado, porque o CLI geral está bloqueado pelo ledger; o recibo os mantém pendentes até a verificação remota.
 
+Dispatcher 1.0.2 reconhece explicitamente o consumidor `parserIa` do normalizador de currículo (`web/src/domain/resumeDates.ts`, diagnóstico `reviewPeriodFormat.ts`, Parser/data raiz) e seus arquivos de runtime. Alteração comum de componente web não publica o Parser; alteração somente de runtime Parser não publica web/gateway. A compilação especializada e os testes worker/cache/hosted acompanham esse destino. Com host configurado e promoção, `release-parser-ia.sh` usa o mesmo SHA antes do web; sem configuração, o recibo mantém `parserIa` pendente para o rollout manual autorizado. Rollbacks, cache privado e readiness são conferidos no AoT; banco compatível deve ser aplicado antes dos consumidores. Essa classificação foi necessária ao complemento de formatos v2.0.3, não autoriza reconstruir outros serviços por proximidade.
+
 Um comprovante único pode ser gravado em caminho ignorado:
 
 ```powershell
@@ -10362,7 +10364,9 @@ pnpm run release:plan -- --receipt=tmp/release/plan.json
 | Diff | Validação | Supabase | VPS |
 | --- | --- | --- | --- |
 | somente docs | Context Pack afetado | não acessar | não acessar |
-| web | typecheck, build e testes afetados | não acessar | somente `prisma-web` |
+| componente web | typecheck, build e testes afetados | não acessar | somente `prisma-web` |
+| normalizador compartilhado com Parser | tipos/build, datas, worker/cache/hosted | somente se também houver migration | `prisma-parser-ia` e web |
+| runtime Parser somente | compilação especializada e worker/cache/hosted | não acessar | somente `prisma-parser-ia` |
 | migration nova | testes/contratos de banco e negativos aplicáveis | somente o arquivo novo | apenas se houver consumidor web |
 | Edge Function | testes afetados | somente a função nomeada | não acessar |
 | combinação | união sem duplicar comandos | banco → funções | web por último |
@@ -14470,6 +14474,8 @@ Implementar D-01 a D-05 sob P-01/F-01, com A-01. Este acordo incorpora o prompt 
 
 Revisão técnica do mapa em 04/10: o render expôs `2024-02-30` interpretado pelo normalizador como intervalo pelos hífens internos. Preservar datas objetivamente inválidas antes da normalização é necessário para D-01/D-02/D-04; a dependência compartilhada exige atualização de Parser e web, sem novo produto/modelo/prompt, sem mudança de interpretação válida ou infraestrutura. Ensino médio mantém a composição vigente; um período preservado com erro/aviso abre o campo existente para correção.
 
+O roteamento seletivo do dispatcher passa a declarar Parser explicitamente para o normalizador compartilhado; é requisito operacional de D-05 para publicar todos os consumidores afetados e manter web/gateway não afetados fora do destino. Não amplia comportamento do produto.
+
 ---
 
 ## Source: `docs/qa/agreement-section-publication-v202.md`
@@ -18328,15 +18334,17 @@ Não há nova referência normativa a copiar. Reuso do destaque e da composiçã
 
 254 testes person-flow PASS; 61 testes dirigidos PASS (`reviewFieldLifecycle`, `reviewOperationErrors`, `resumeDates`, `parserIa`); 26 testes de worker/cache/recovery/hosted/benchmark PASS. SQL `node scripts/verify-import-evidence.mjs 55479 import_evidence_v202_final --formats`: 117 verificações PASS com ROLLBACK, incluindo 52 exemplos de paridade, caminhos de formação 2 e legado 3, conteúdo importado inválido ainda revisável, rejeição de save/pub sem mutação, correção, save permitido de aviso, replay, stale e tenant. Chaves de operações rejeitadas não persistem. Helpers sem EXECUTE para anon/authenticated; RPCs conservam SECURITY DEFINER/search_path/grants. Originais/cache não são exportados ou saneados. Body MD5 baseline remoto: save `a84454eac23697744733e38ed55570a5`, approve `c69dd4ac889e5281feefc8292010243a`.
 
-Tipos web e harness, build TypeScript/web e compilação do Parser PASS. Lint no índice limpo (807 arquivos), foundation (18 tabelas/6 versões), Context Pack e 15 testes de tooling PASS. Avisos de chunk/importação dinâmica já existentes não impedem build. Ledger passa com migração nova pendente; histórico não será reaplicado.
+Tipos web e harness, build TypeScript/web e compilação do Parser PASS. Lint no índice limpo (807 arquivos), foundation (18 tabelas/6 versões), Context Pack e 18 testes de tooling PASS (inclui roteamento seletivo do Parser). Avisos de chunk/importação dinâmica já existentes não impedem build. Ledger passa com migração nova pendente; histórico não será reaplicado.
 
 ## Git / QA / ambiente
 
-Implementação em `codex/review-format-preflight`; preservados `.tmp.driveupload`, acordo de matching alheio, Dockerfile GPU e cópia de teste de matching. PostgreSQL local descartável 127.0.0.1:55479; escrita somente sintética com rollback. Sem mutation/publicação de Perfil real em produção. Release direcionada: database + hosting/web; Parser é dependência runtime compartilhada na mesma hospedagem, explicitada no mapa. Nenhuma Edge Function, gateway, migration histórica ou serviço não afetado será publicado.
+Implementação em `codex/review-format-preflight`; preservados `.tmp.driveupload`, acordo de matching alheio, Dockerfile GPU e cópia de teste de matching. PostgreSQL local descartável 127.0.0.1:55479; escrita somente sintética com rollback. Sem mutation/publicação de Perfil real em produção. Release direcionada pelo dispatcher 1.0.2: database + web + Parser; Parser é dependência runtime compartilhada na mesma hospedagem, explicitada no mapa. Nenhuma Edge Function, gateway, migration histórica ou serviço não afetado será publicado.
 
 ## Conclusão
 
 Funcional local PASS. Publicação/sincronização e fechamento de D-05 pendentes de evidência.
+
+A CI do commit funcional inicial `b34bdd4ef07ee2bcefd56cd746f7192b9e5c3ef4` passou nas execuções branch `37205219082` e main `37205297648`. Antes de qualquer implantação, o plano 1.0.1 foi insuficiente para o consumidor Parser compartilhado. O roteamento 1.0.2 adiciona somente esse destino com testes negativos: componente web comum, docs, script de deploy e gateway não acendem Parser; runtime Parser isolado não acende web/banco/Edge. A integração Git inicial não foi tratada como prova de rollout. Produção aguarda o SHA conjunto validado.
 
 ---
 
