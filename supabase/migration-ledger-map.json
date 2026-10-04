@@ -1264,6 +1264,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-03"
+    },
+    {
+      "name": "custom_section_publication_identity",
+      "localVersion": "20261004023000",
+      "remoteVersion": "20261004022925",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-03"
     }
   ],
   "localOnly": [

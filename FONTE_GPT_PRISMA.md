@@ -6,7 +6,7 @@ product_version: 2.0.2
 current_state_version: 2.51.26
 current_state_last_verified: 2026-10-03
 documentation_source_count: 331
-source_manifest_sha256: 894d4910852d3b68f57d91126b368c8f77083649278b27e25785e5ebb11a6b17
+source_manifest_sha256: 79deaf3e177c873d5693e54531d6f20ab9ad6772264041e04ca820154fa9de24
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,7 +268,9 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Prisma v2.0.2 tem complemento Unicode publicado no SHA funcional 96e3ecb: unicode-text-1.0.0, import-evidence-1.1.0 e evidence-adapter-1.0.1. NUL/substitutos isolados têm representação explícita para revisão; PDF/hash/cache/listas/boxes/Unicode válido e revisão humana preservados. QA local/43 dirigidos/48 worker/243 person-flow, CI branch/main, migration, Parser/web, replay dos dois PDFs e smoke HTTPS PASS. Autorização permanente de transferências necessárias à VPS do Prisma registrada em AGENTS 1.3.2. AoT `docs/qa/aot-import-unicode-v202.md` separa replay e retomada autenticada; a tentativa original ainda aguarda retomada humana na Central da Pessoa.
+Complemento de publicação da v2.0.2 ativo no SHA SQL a9fa4da: títulos personalizados com nome normalizado idêntico reutilizam definição da organização sem trocar IDs de fonte/Perfil. Migration 20261004022925, 52 verificações SQL/cinco primeiras publicações e replays/concorrência, 14 testes dirigidos/243 person-flow/CI PASS; grants/RLS e HTTPS/readiness preservados. Sem rebuild web/Parser (build 96e3ecb mantido). Revisão real permanece draft/lock 1/zero Perfil para confirmação do operador; não afirmar publicação automática ou smoke autenticado executado. AoT `docs/qa/aot-section-publication-v202.md`.
+
+Prisma v2.0.2 tem complemento Unicode publicado no build 96e3ecb: unicode-text-1.0.0, import-evidence-1.1.0 e evidence-adapter-1.0.1. NUL/substitutos isolados têm representação explícita para revisão; PDF/hash/cache/listas/boxes/Unicode válido e revisão humana preservados. QA local/43 dirigidos/48 worker/243 person-flow, CI branch/main, migration, Parser/web, replay dos dois PDFs e smoke HTTPS PASS. Autorização permanente de transferências necessárias à VPS do Prisma registrada em AGENTS 1.3.2. AoT `docs/qa/aot-import-unicode-v202.md` separa replay e retomada autenticada: no fechamento aguardava retomada humana; consulta posterior confirmou revisão draft do PDF 3. A publicação continua dependente da decisão do operador.
 
 A publicação inicial da v2.0.2 ocorreu no SHA funcional `6a63605`, com `evidence-adapter-1.0.0` e `import-evidence-1.0.0` (agora sucedidos pelo complemento acima). Preservou títulos, fontes, listas e categorias existentes, com diagnóstico seguro e recuperação causal. QA PostgreSQL com rollback, 71 testes dirigidos, 243 person-flow, CI, renders desktop/mobile, migration ativa, Parser/readiness e HTTPS/versão PASS. Replay do PDF/cache real preservou 31 fatos/39 evidências/dois títulos sem IA/rede ou alteração do cache. AoT `docs/qa/aot-import-evidence-v202.md`. Prompt/modelo/cache/revisão humana preservados; o fluxo autenticado de retomada em produção permanece NOT TESTED.
 
@@ -277,8 +279,6 @@ M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, f
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
 
 M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. Prisma v1.8.1 aparece no login hospedado; o menu consome o mesmo registro, ainda sem inspeção hospedada autenticada. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e não pediu retomada. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O AoT permanece parcial por critérios funcionais ainda sem evidência. ADR-070 e AoT M8.1.
-
-A regularização M7.7 de propostas organizacionais anteriores ao fluxo atual mantém Prisma v1.7.6. A migration local `20260919164100_m77_legacy_company_proposal_transition` foi aplicada em produção sob a versão remota `20260919170313`; a publicação de termos ignora aliases equivalentes ao canônico sem alterar o payload. Em ação explícita de `bruno.harita`/Super Admin, a proposta real “Transformação operacional” foi aprovada na organização Prisma e criou uma contribuição Global separada ainda pendente, sem conceito Global publicado. A tela apresenta a pendência com rótulo legível. IDs, auditoria, CI e limites no AoT específico.
 
 ---
 
