@@ -1272,6 +1272,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-03"
+    },
+    {
+      "name": "review_period_format_preflight",
+      "localVersion": "20261004040000",
+      "remoteVersion": "20261004132949",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-04"
     }
   ],
   "localOnly": [

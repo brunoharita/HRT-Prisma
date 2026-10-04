@@ -10,13 +10,13 @@ Contrato: [agreement-review-format-preflight.md](agreement-review-format-preflig
 | D-02 | Formatos parciais aceitos, aviso amarelo para ambiguidade/Atual sem início; vazio opcional preservado | 52 golden cases TS/SQL; normalização/importação preservam texto inválido, fato/evidência e política de século | PASS | Sem exigir ou inventar precisão |
 | D-03 | Resumo com links, tab/registro por ID estável e foco; ajuda ligada ao input; destaque removido ao corrigir | Edge headless: 16 verificações no viewport 1416 e 390; fonte preservada e sem overflow horizontal; renders vermelho/amarelo | PASS | Fixture local sem API/gravação, não smoke autenticado |
 | D-04 | Helpers privados, gate somente save/approve após auth/replay/lock; ingestion e histórico intactos | 117 verificações PostgreSQL local, cinco publicações sintéticas/replay/rollback, auth/tenant/stale, erro/caminho/ordinal e grants | PASS | PostgreSQL descartável, não banco produtivo |
-| D-05 | Docs/contexto, migração seletiva e rollout web/Parser no mesmo SHA | CI/main/origin/VPS/remote SQL/HTTPS a concluir | NOT TESTED | Não afirmar produção antes do smoke |
+| D-05 | Docs/contexto, migração seletiva e rollout web/Parser no mesmo SHA | CI branch/main, SQL remoto/grants, HTTPS/assets/readiness/rollbacks e smoke sintético no container PASS | PASS | SHA funcional d88fbff, real autenticado NOT TESTED |
 
 ## Proibições verificadas
 
 | ID | Guardrail | Evidência | Status |
 | --- | --- | --- | --- |
-| P-01 | Sem invenção/fato negativo, dúvida bloqueante, reescrita de evidência, enfraquecimento de auth/tenant/replay, decisão humana real fictícia | Golden/SQL/navegador e negativos; apenas dados sintéticos em QA local, DDL produtivo ainda pendente | PASS |
+| P-01 | Sem invenção/fato negativo, dúvida bloqueante, reescrita de evidência, enfraquecimento de auth/tenant/replay, decisão humana real fictícia | Golden/SQL/navegador e negativos; apenas dados sintéticos em QA local, DDL produtivo revisado, sem mutação de dados pessoais | PASS |
 
 ## Mapa de Impacto e Preservação
 
@@ -27,7 +27,7 @@ Contrato: [agreement-review-format-preflight.md](agreement-review-format-preflig
 | Normalizador e ingestão/Parser hospedado | direct | Descoberta: ISO impossível podia virar intervalo. Guard anterior à normalização mantém texto revisável; 26 worker/cache/recovery/hosted/benchmark e teste Parser sem provider | PASS |
 | Datas/educação/cálculo válido | plausible_indirect | `resume-dates-1.1.0`, política 2050, precisão/origem e método raiz preservados; testes datas/educação e 52 exemplos de paridade | PASS |
 | Matching/Knowledge e gateway | plausible_indirect / no_impact_identified | Nenhuma fórmula/taxonomia/curadoria/prompt/infra alterados; proteção de data inválida não cria fato útil, cálculo válido coberto; gateway baseline running/0, imagem d061cea | PASS |
-| Web/Parser na VPS | direct | Baseline web 8d578d5, Parser dc3fd80, gateway d061cea running/0; rollout e rollback a verificar | NOT TESTED |
+| Web/Parser na VPS | direct | Rollout d88fbff; web 4111e55, Parser 8682af7 running/0 e Parser healthy; gateway d061cea preservado; HTTPS/assets/readiness e rollbacks PASS | PASS |
 
 ### Novidade e preservação
 
@@ -52,10 +52,19 @@ Tipos web e harness, build TypeScript/web e compilação do Parser PASS. Lint no
 
 ## Git / QA / ambiente
 
-Implementação em `codex/review-format-preflight`; preservados `.tmp.driveupload`, acordo de matching alheio, Dockerfile GPU e cópia de teste de matching. PostgreSQL local descartável 127.0.0.1:55479; escrita somente sintética com rollback. Sem mutation/publicação de Perfil real em produção. Release direcionada pelo dispatcher 1.0.2: database + web + Parser; Parser é dependência runtime compartilhada na mesma hospedagem, explicitada no mapa. Nenhuma Edge Function, gateway, migration histórica ou serviço não afetado será publicado.
+Implementação em `codex/review-format-preflight`; preservados `.tmp.driveupload`, acordo de matching alheio, Dockerfile GPU e cópia de teste de matching. PostgreSQL local descartável 127.0.0.1:55479; escrita somente sintética com rollback. Sem mutation/publicação de Perfil real em produção. Release direcionada pelo dispatcher 1.0.2: database + web + Parser; Parser é dependência runtime compartilhada na mesma hospedagem, explicitada no mapa. Nenhuma Edge Function, gateway, migration histórica ou serviço não afetado foi publicado.
 
 ## Conclusão
 
-Funcional local PASS. Publicação/sincronização e fechamento de D-05 pendentes de evidência.
+D-01 a D-05 e P-01 PASS. Funcional local e publicação do SHA conjunto comprovadas; registro de fechamento acompanha as mesmas mudanças, sem novo rebuild. Smoke autenticado de Pessoa real permanece NOT TESTED, fora da evidência afirmada.
 
-A CI do commit funcional inicial `b34bdd4ef07ee2bcefd56cd746f7192b9e5c3ef4` passou nas execuções branch `37205219082` e main `37205297648`. Antes de qualquer implantação, o plano 1.0.1 foi insuficiente para o consumidor Parser compartilhado. O roteamento 1.0.2 adiciona somente esse destino com testes negativos: componente web comum, docs, script de deploy e gateway não acendem Parser; runtime Parser isolado não acende web/banco/Edge. A integração Git inicial não foi tratada como prova de rollout. Produção aguarda o SHA conjunto validado.
+A CI do commit funcional inicial `b34bdd4ef07ee2bcefd56cd746f7192b9e5c3ef4` passou nas execuções branch `37205219082` e main `37205297648`. Antes de qualquer implantação, o plano 1.0.1 foi insuficiente para o consumidor Parser compartilhado. O roteamento 1.0.2 adiciona somente esse destino com testes negativos: componente web comum, docs, script de deploy e gateway não acendem Parser; runtime Parser isolado não acende web/banco/Edge. A integração Git inicial não foi tratada como prova de rollout. Produção recebeu somente o SHA conjunto validado d88fbff.
+
+## Publicação verificada
+
+- SHA funcional conjunto `d88fbff5bdb3e61f10129bdd74924de3b7227715`; CI branch `37205655796` e main `37205732467` SUCCESS; main/origin/VPS alinhados no rollout. Recibos locais `tmp/review-formats-release-plan.json`, `tmp/review-formats-publish.json`, log `tmp/review-formats-vps-release.log`.
+- Migração aplicada no projeto existente: `review_period_format_preflight`, remoto `20261004132949`. MD5 pós-gate save `a55889f9ab1791480d14d79d44f87c45`, approve `c00140d64817249442ddeef25d74f62d`. SECURITY DEFINER/search_path/grants anteriores preservados; anon=false, authenticated=true; auth e operação precedem gate. Helper não é executável por authenticated. Diagnósticos puros remotos: ISO inválido/reverso retornam motivos esperados; anos válidos/texto ambíguo não bloqueiam.
+- Parser imagem `8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616`, web `4111e554f74b1fab0448d2be7899aa4671715d24b4f05353bb7bbd457d0d0958`; ambos running/0, Parser healthy e available/ready. Gateway mantém `d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99`, running/0. Smoke JS sintético no container confirma guard/calendário/ordem/formato válido sem API, cache, provider ou dados pessoais.
+- HTTPS `/`, `/sign-in`, `/profiles`, entry `/assets/index-BuKOGLjh.js`, PDF `/assets/pdf-Du5hpUXa.js` e quatro chunks anteriores retornaram 200. Bundle contém v2.0.3, resumo, aviso e mensagem do calendário. Primeiro curl retornou 404 durante recriação; conferência estabilizada passou sem repetir build.
+- Rollbacks `prisma-web:rollback-before-d88fbff5bdb3` → imagem 8d578d5 e `prisma-parser-ia:rollback-before-d88fbff5bdb3` → dc3fd80 preservados. SQL é aditivo; helpers privados permanecem e não alteram dados históricos. Retirada do gate, se necessária, exige migration nova revisada, nunca reedição da aplicada.
+- A confirmação do frontend usa fixture sintética; produção tem smoke de código/saúde/arquivos e metadata SQL. Isso não prova publicação autenticada de um currículo real. Nenhuma decisão humana foi fabricada.

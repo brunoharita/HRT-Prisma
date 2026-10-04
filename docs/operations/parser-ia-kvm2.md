@@ -1,5 +1,11 @@
 # Operação do Parser IA na KVM2
 
+## Validação antecipada de formatos — complemento v2.0.3
+
+Runtime `d88fbff5bdb3e61f10129bdd74924de3b7227715` publicado em 04/10/2026 com a web. `review-field-format-1.0.0` impede o normalizador de transformar data ISO impossível em intervalo; texto/fatos/evidências continuam revisáveis, sem mudar prompt/modelo, parser raiz, política de século ou cache bruto. Aplicada somente a migration local `20261004040000_review_period_format_preflight.sql`, alias remoto `20261004132949`, antes dos consumidores; ela não bloqueia staging nem reescreve histórico. Dispatcher 1.0.2 declara Parser para o normalizador compartilhado e mantém destinos não afetados fora do rollout.
+
+Parser healthy/available/ready, web/Parser running/0 e gateway imagem d061cea preservada. Smoke sintético executado no container confirma data impossível preservada e formato válido aceito, sem provider, segredo, cache ou dados pessoais. Rollbacks anteriores de web/Parser estão em `rollback-before-d88fbff5bdb3`. HTTPS/assets 200 após 404 transitório durante recriação. Acordo/AoT `../qa/agreement-review-format-preflight.md` e `../qa/aot-review-format-preflight.md`; navegação real autenticada/publicação de Perfil real não foi testada nem simulada como decisão humana.
+
 ## Complemento Unicode — v2.0.2
 
 Aplicar somente `20261003210000_import_text_unicode_contract.sql` antes de reconstruir Parser/web com o mesmo SHA validado. `import-evidence-1.1.0`/`evidence-adapter-1.0.1` aceitam diagnóstico antigo explicitamente, preservando auth/tenant e retomada somente após correção de versão. `unicode-text-1.0.0` ocorre na representação derivada antes da gravação; original, linhas/boxes e cache privados não são apagados. Conferir replay dos dois PDFs sem IA, readiness, versão/assets/rollback e containers gateway/Traefik inalterados. Operador atualiza a página e retoma a tentativa antiga na Central da Pessoa; nunca publicar Perfil durante smoke. Autorização permanente de envio necessário à VPS: AGENTS 1.3.2, sem liberação de dados em logs ou outros destinos. AoT `../qa/aot-import-unicode-v202.md` registra limites de validação autenticada.
