@@ -14,7 +14,45 @@ import {
   withHumanEducationClassification,
 } from "../src/domain/educationClassification.js";
 import type { StructuredDraft } from "../web/src/domain/personIngestion.js";
-import { normalizeReviewDraft, validateEducationClassificationsForApproval } from "../web/src/domain/reviewFieldLifecycle.js";
+import { normalizeReviewDraft, resolveEducationReviewClassification, reviewDraftChangeState, reviewEducationAcceptanceNeedsSync, validateEducationClassificationsForApproval } from "../web/src/domain/reviewFieldLifecycle.js";
+
+test("intact explicit extraction restores system acceptance without human confirmation", () => {
+  const original = classifyEducationRecord({ course: "Ensino Médio", status: "Concluído", period: "2004" });
+  const item = { id: "education_explicit123", source: "extracted" as const, institution: null, description: null, page: 1, evidenceText: original.originalText, ...original, period: "2002 - 2004", classificationReviewed: false };
+  const before = structuredClone(item);
+  const accepted = resolveEducationReviewClassification(item);
+  assert.equal(accepted.classificationReviewed, true);
+  assert.equal(accepted.classificationOrigin, "explicit");
+  assert.deepEqual(item, before);
+  assert.deepEqual(accepted.classifierSnapshot, original.classifierSnapshot);
+  assert.equal(accepted.classificationReasons.includes("human_classification_confirmed"), false);
+  const draft = { education: [item] } as StructuredDraft;
+  assert.equal(reviewEducationAcceptanceNeedsSync(draft), true);
+  assert.equal(reviewEducationAcceptanceNeedsSync({ education: [{ ...item, ...accepted }] } as StructuredDraft), false);
+  assert.deepEqual(validateEducationClassificationsForApproval(draft), []);
+  for (const patch of [
+    { course: "Técnico em Administração" }, { level: "technical" as const },
+    { status: "in_progress" as const }, { qualification: "unknown" as const },
+    { classificationOrigin: "inferred" as const }, { classificationOrigin: "human" as const },
+    { classificationSources: { ...item.classificationSources, status: "inferred" as const } },
+    { classifierSnapshot: undefined },
+    { classificationMethodVersion: "unrecognized", classifierSnapshot: { ...item.classifierSnapshot, classificationMethodVersion: "unrecognized" } },
+  ]) {
+    const changed = { ...item, ...patch } as typeof item;
+    assert.equal(resolveEducationReviewClassification(changed).classificationReviewed, false);
+    assert.equal(validateEducationClassificationsForApproval({ education: [changed] } as StructuredDraft).length, 1);
+  }
+});
+
+test("derived acceptance is not a transient human edit and empty new forms remain protected", () => {
+  const original = classifyEducationRecord({ course: "Ensino Médio", status: "Concluído", period: "2004" });
+  const item = { id: "education_explicit123", source: "extracted" as const, institution: null, description: null, page: 1, evidenceText: original.originalText, ...original, period: "2004" };
+  const baseline: StructuredDraft = { identity: { fullName: "Pessoa sintética" }, contact: { phone: null, email: "qa@example.invalid", linkedin: null, city: null, state: null }, professionalTitle: null, professionalObjective: null, summary: null, areasOfExpertise: [], keyResults: [], experiences: [], education: [item], certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [] };
+  const draft = { ...baseline, education: [{ ...item, classificationReviewed: false }] };
+  assert.deepEqual(reviewDraftChangeState(baseline, draft), { rawChanged: false, meaningfulChanged: false, transientOnly: false });
+  const empty = { id: "education_blank123", source: "human" as const, course: null, institution: null, period: null, description: null, page: null, evidenceText: "" };
+  assert.equal(reviewDraftChangeState(baseline, { ...draft, education: [...draft.education, empty] }).transientOnly, true);
+});
 
 const cases = [
   ["Bacharelado em Sistemas de Informação", "undergraduate", "bachelor", "Sistemas de Informação"],

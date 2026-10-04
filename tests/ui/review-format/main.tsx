@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { classifyEducationRecord } from "../../../src/domain/educationClassification";
 import { createRoot } from "react-dom/client";
 import { ConfigProvider } from "antd";
 import ptBR from "antd/locale/pt_BR";
@@ -8,6 +9,7 @@ import type { ProfileReviewWorkspace, StructuredDraft } from "../../../web/src/d
 import { prismaTheme } from "../../../web/src/ui/theme";
 import "../../../web/src/styles.css";
 import "../../../web/src/ui/foundation.css";
+const confirmationScenario = new URLSearchParams(location.search).get("case") === "confirmation";
 const initial: StructuredDraft = {
   identity: { fullName: "Pessoa sintética" }, contact: { phone: "(11) 99999-0000 / (21) 99999-0000", email: "qa@example.invalid", linkedin: null, city: null, state: null },
   professionalTitle: "Analista", professionalObjective: null, summary: null, areasOfExpertise: [], keyResults: [],
@@ -15,6 +17,7 @@ const initial: StructuredDraft = {
   education: ["2019", "2024 - 2020", "2024-02-30"].map((period, i) => ({ id: `education_synthetic${i}`, source: "extracted", course: "Curso sintético", institution: "Instituição sintética", period, evidenceText: period, page: 1, level: i === 2 ? "secondary" : "complementary" })),
   certifications: [], languages: [], competencies: [], customSections: [], uncertainties: [], notIdentified: [],
 };
+if (confirmationScenario) initial.education = initial.education.map((item, index) => ({ ...item, ...classifyEducationRecord({ course: "Ensino Médio", status: "Concluído", period: "2004" }), period: "2004", classificationOrigin: index === 2 ? "inferred" : "explicit", classificationReviewed: index === 1 }));
 const workspace: ProfileReviewWorkspace = {
   id: "synthetic", personId: "synthetic", personName: "Pessoa sintética", personPrivateContact: { phone: null, email: null }, sourceKind: "document", sourceProfileId: null, sourceProfileVersion: null,
   documentId: "synthetic", documentName: "Sintético.pdf", documentVersion: 1, documentPageCount: 1, documentStoragePath: null, documentSourceType: "resume_pdf", processingAttemptId: "synthetic", state: "draft", lockVersion: 1, requiresContractUpgrade: false,
@@ -28,8 +31,10 @@ function Harness() {
   const [mount, setMount] = useState(0);
   return <ConfigProvider locale={ptBR} theme={prismaTheme}><main style={{ padding: 24, maxWidth: 1100, margin: "auto" }}>
     <h1>Revisão de formatos — dados sintéticos</h1>
-    <button onClick={() => { setSavedWorkspace({ ...savedWorkspace, reviewedData: structuredClone(draft), lockVersion: savedWorkspace.lockVersion + 1 }); setMount((value) => value + 1); }}>Salvar e reabrir rascunho sintético</button>
+    <button onClick={() => { const normalized = normalizeReviewDraft(draft); setDraft(normalized); setSavedWorkspace({ ...savedWorkspace, reviewedData: structuredClone(normalized), lockVersion: savedWorkspace.lockVersion + 1 }); setMount((value) => value + 1); }}>Salvar e reabrir rascunho sintético</button>
+    <output hidden id="synthetic-acceptance" data-review-state={JSON.stringify(savedWorkspace.reviewedData.education.map(({ id, classificationReviewed, classificationOrigin }) => ({ id, classificationReviewed, classificationOrigin })))} />
     <button onClick={() => select("education.education_synthetic2.period")}>Reabrir período sintético</button>
+    {confirmationScenario ? <><button onClick={() => select("education.education_synthetic0.course")}>Reabrir formação 1</button><button onClick={() => select("education.education_synthetic1.course")}>Reabrir formação 2</button></> : null}
     <button onClick={() => { const empty = { ...initial, education: initial.education.map((item) => ({ ...item, period: null, level: "secondary" as const })) }; setDraft(empty); setSavedWorkspace({ ...workspace, id: "synthetic-other", extractedData: structuredClone(empty), reviewedData: structuredClone(empty) }); select("education.education_synthetic2.course"); }}>Abrir outra revisão sintética</button>
     <StructuredReviewPanel key={mount} workspace={savedWorkspace} draft={draft} editable busy={false} hasUnsavedChanges={false} hasTransientChanges={false} deferredActionLabel={null} selectedFieldPath={selected} activeLinkId={null}
       validationIssues={validateReviewDraftForSave(normalizeReviewDraft(draft))} validationWarnings={reviewDraftFormatWarnings(draft)} onDraftChange={setDraft} onFieldSelect={select}
@@ -56,11 +61,50 @@ if (scenario) setTimeout(async () => {
     target.dispatchEvent(new Event("input", { bubbles: true })); await wait();
   };
   try {
-    check("initial errors before save", document.querySelectorAll(".prisma-review-format-summary .ant-alert-error li").length === 4);
+    check("initial errors before save", document.querySelectorAll(".prisma-review-format-summary .ant-alert-error li").length === (confirmationScenario ? 2 : 4));
     await navigate("Experiência 2 — Período");
     const second = "experiences.experience_synthetic1.period";
     check("second record red and focused", field(second)?.classList.contains("has-validation-error") === true && document.activeElement === input(second));
     check("accessible explanation", input(second)?.getAttribute("aria-invalid") === "true" && Boolean(input(second)?.getAttribute("aria-describedby")));
+    if (scenario === "confirmation") {
+      const click = async (text: string) => { const target = [...document.querySelectorAll<HTMLButtonElement>("button")].find((item) => item.textContent === text); check(`control: ${text}`, Boolean(target)); target!.click(); await wait(); };
+      const button = () => document.querySelector<HTMLButtonElement>(".prisma-education-classification-confirm");
+      const card = () => document.querySelector<HTMLElement>(".prisma-education-classification-card");
+      const pending = () => button()?.textContent === "Confirmar classificação" && !button()?.disabled && !card()?.classList.contains("is-confirmed");
+      const confirmed = () => button()?.textContent === "Confirmada por você" && button()?.disabled === true && card()?.classList.contains("is-confirmed") === true;
+      const automatic = () => button()?.textContent === "Classificação válida" && button()?.disabled === true && card()?.classList.contains("is-confirmed") === true;
+      await click("Reabrir formação 1");
+      check("intact explicit classification needs no confirmation click", automatic());
+      check("automatic acceptance keeps explicit provenance", card()?.textContent?.includes("Explícita") === true && !card()?.textContent?.includes("Confirmada por você"));
+      const firstPath = "education.education_synthetic0.period";
+      input(firstPath)!.focus(); await wait(); await update(firstPath, "2002 - 2004");
+      check("unrelated period edit keeps valid explicit classification", automatic() && input(firstPath)?.value === "2002 - 2004");
+      await click("Salvar e reabrir rascunho sintético");
+      check("saved automatic acceptance needs no extra click", automatic());
+      const persisted = JSON.parse(document.getElementById("synthetic-acceptance")!.dataset.reviewState!)[0];
+      check("saved system acceptance carries reviewed flag without human origin", persisted.classificationReviewed === true && persisted.classificationOrigin === "explicit");
+      await click("Reabrir formação 2");
+      check("automatic acceptance is not human confirmation", automatic() && !card()?.textContent?.includes("Confirmada por você"));
+      await click("Reabrir período sintético");
+      check("inferred classification requires human review", pending() && card()?.classList.contains("requires-review") === true);
+      const pendingLabel = [...button()!.querySelectorAll("span")].find((span) => span.textContent === "Confirmar classificação" && span.children.length === 0)!;
+      const pendingColor = getComputedStyle(pendingLabel).color;
+      check(`pending action has readable white text: ${pendingColor}`, pendingColor === "rgb(255, 255, 255)");
+      check("pending action does not show completed icon", !button()?.querySelector("[aria-label=check-circle]"));
+      await click("Confirmar classificação");
+      check("human confirmation updates card and disables action", confirmed());
+      const path = "education.education_synthetic2.period";
+      input(path)!.focus(); await wait(); await update(path, "2003 - 2004");
+      check("unresolved human classification edit revokes confirmation", pending() && card()?.classList.contains("requires-review") === true && input(path)?.value === "2003 - 2004");
+      check("period original remains preserved", field(path)?.textContent?.includes("2004") === true);
+      await click("Reabrir formação 2");
+      check("editing another record preserves automatic acceptance", automatic());
+      await click("Reabrir período sintético");
+      check("pending state follows edited record", pending());
+      await click("Confirmar classificação");
+      await click("Salvar e reabrir rascunho sintético");
+      check("remounted saved human confirmation remains true", confirmed());
+    }
     if (scenario === "period") {
       await navigate("Formação 3 — Período");
       const path = "education.education_synthetic2.period";
@@ -119,7 +163,8 @@ if (scenario) setTimeout(async () => {
     }
     check("no horizontal overflow", document.documentElement.scrollWidth <= innerWidth + 1);
   } catch (error) { checks.push({ name: error instanceof Error ? error.message : "browser error", pass: false }); }
-  (document.activeElement as HTMLElement | null)?.scrollIntoView({ block: "center", behavior: "instant" });
+  const captureTarget = scenario === "confirmation" ? document.querySelector<HTMLElement>(".prisma-education-classification-confirm") : document.activeElement as HTMLElement | null;
+  captureTarget?.scrollIntoView({ block: "center", behavior: "instant" });
   await wait();
   const report = { scenario, width: innerWidth, height: innerHeight, checks, pass: checks.every((item) => item.pass) };
   await fetch("/qa-report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(report) });

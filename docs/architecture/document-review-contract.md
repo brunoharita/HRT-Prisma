@@ -120,3 +120,8 @@ No modal de seleção, aplicar, corrigir ou complementar conteúdo não exige ju
 ## Compatibilidade
 
 Consumidores M2-B que não conhecem revisão não podem gravar diretamente nas tabelas críticas. Leitura histórica permanece válida; novas mutações devem usar as RPCs M2-C/M5. Evidência original anterior ao M5 permanece válida sem coordenadas e nunca recebe região inventada. Importação de currículo sem Pessoa prévia deve começar pelo contrato `resume-intake`; os fluxos manuais existentes continuam compatíveis.
+
+
+## Confirmação visual da classificação — complemento v2.0.4
+
+Classificação aceita pelo sistema aparece como “Classificação válida”, sem clique obrigatório; confirmação humana aparece como “Confirmada por você”; pendência exige “Confirmar classificação”. A normalização reaproveita aceitação explícita quando curso, nível, qualificação, situação, origem/fontes e método vigente conhecido continuam iguais ao snapshot válido, sem desconhecidos. Uma alteração do período preserva essa classificação explícita intacta. O payload usa o reviewed vigente sem inventar origem ou motivo humano; o preflight antecipa reviewed=false antes da publicação, alinhado ao gate existente. Inferência, falta de snapshot, método legado/desconhecido ou mudança da classificação não recebem nova aceitação automática. Gates/RPCs e dados/evidência originais permanecem. Textos do botão herdam a cor da ação, não dos metadados. Acordo 1.1.0/AoT: `docs/qa/agreement-education-confirmation-visual.md`, `docs/qa/aot-education-confirmation-visual.md`.

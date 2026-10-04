@@ -8,10 +8,12 @@ import { normalizeResumePhone } from "../../../src/domain/resumeIdentity.js";
 import { PHONE_CORRECTION_MESSAGE } from "./operatorFeedback.js";
 import { PERIOD_FORMAT_MESSAGES, reviewPeriodProblem } from "./reviewPeriodFormat.js";
 import {
-  educationClassificationNeedsReview,
+  EDUCATION_CLASSIFIER_VERSION,
   isEducationLevelQualificationCompatible,
   repairEducationClassificationCompatibility,
   resolveEducationClassification,
+  normalizeEducationText,
+  type EducationClassificationFields,
 } from "../../../src/domain/educationClassification.js";
 
 export type ReviewEntityKind = "experience" | "education";
@@ -136,7 +138,7 @@ export function normalizeReviewDraft(draft: StructuredDraft): StructuredDraft {
         institution: nullableText(item.institution),
         period: nullableText(item.period),
         description: nullableText(item.description),
-        ...repairEducationClassificationCompatibility(item),
+        ...resolveEducationReviewClassification(item),
       }))
       .filter((item) => !isEducationEmpty(item)),
     certifications: normalizeTags(draft.certifications),
@@ -153,11 +155,37 @@ export function normalizeReviewDraft(draft: StructuredDraft): StructuredDraft {
   });
 }
 
+// Reuse the accepted extraction only when its explicit classification is intact.
+// This is system acceptance, never a fabricated human confirmation.
+export function resolveEducationReviewClassification(item: StructuredEducation): EducationClassificationFields {
+  const current = repairEducationClassificationCompatibility(item);
+  const snapshot = current.classifierSnapshot;
+  const explicit = current.classificationOrigin === "explicit" && snapshot?.classificationOrigin === "explicit"
+    && current.classificationMethodVersion === EDUCATION_CLASSIFIER_VERSION && current.classificationMethodVersion === snapshot.classificationMethodVersion
+    && current.level !== "unknown" && current.qualification !== "unknown" && current.status !== "unknown"
+    && ["level", "qualification", "status"].every((field) => {
+      const key = field as "level" | "qualification" | "status";
+      return current.classificationSources[key] === "explicit" && snapshot.classificationSources[key] === "explicit" && current[key] === snapshot[key];
+    })
+    && Boolean(item.course?.trim() && snapshot.course?.trim())
+    && normalizeEducationText(item.course ?? "") === normalizeEducationText(snapshot.course ?? "");
+  return explicit && !current.classificationReviewed ? { ...current, classificationReviewed: true } : current;
+}
+
+export function reviewEducationAcceptanceNeedsSync(draft: StructuredDraft): boolean {
+  return draft.education.some((item) => item.classificationReviewed !== true && resolveEducationReviewClassification(item).classificationReviewed);
+}
+
 export function reviewDraftChangeState(
   baseline: StructuredDraft,
   draft: StructuredDraft,
 ): ReviewDraftChangeState {
-  const rawChanged = JSON.stringify(baseline) !== JSON.stringify(draft);
+  const comparable = (value: StructuredDraft) => ({ ...value, education: value.education.map((item) => {
+    const accepted = resolveEducationReviewClassification(item);
+    return item.classificationReviewed !== true && accepted.classificationReviewed && accepted.classificationOrigin === "explicit"
+      ? { ...item, classificationReviewed: true } : item;
+  }) });
+  const rawChanged = JSON.stringify(comparable(baseline)) !== JSON.stringify(comparable(draft));
   const meaningfulChanged = JSON.stringify(normalizeReviewDraft(baseline)) !== JSON.stringify(normalizeReviewDraft(draft));
   return { rawChanged, meaningfulChanged, transientOnly: rawChanged && !meaningfulChanged };
 }
@@ -335,11 +363,11 @@ export function reviewIssueLabel(draft: StructuredDraft, path: string): string {
 
 export function validateEducationClassificationsForApproval(draft: StructuredDraft): ReviewDraftIssue[] {
   return draft.education.flatMap((item, index) => {
-    const classification = resolveEducationClassification(item);
+    const classification = resolveEducationReviewClassification(item);
     if (!isEducationLevelQualificationCompatible(classification.level, classification.qualification)) {
       return [{ fieldPath: `${reviewEntityFieldPath("education", item)}.qualification`, message: `Formação ${index + 1}: selecione uma qualificação compatível com o nível acadêmico informado.` }];
     }
-    if (educationClassificationNeedsReview(classification)) {
+    if (!classification.classificationReviewed) {
       const missing = [
         classification.level === "unknown" ? "Nível acadêmico" : null,
         classification.qualification === "unknown" ? "Qualificação" : null,

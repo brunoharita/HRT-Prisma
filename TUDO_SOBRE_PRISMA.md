@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 337
-source_manifest_sha256: ebdb7331db0bf460fa5d83ac405fb00d1bd74cc4fcb792da9c07da22208d12ec
+documentation_source_count: 339
+source_manifest_sha256: e3527685820254c189103cc2268635fd1ffe9e018a0f0d5e118fe7201dd8b766
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,13 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.29
+version: 2.51.30
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
+
+Complemento v2.0.4 em execução: classificação válida pelo sistema dispensa clique e difere de Confirmada por você. Aceitação explícita preservada é reutilizada somente com curso/classificação/fontes/método vigente conhecido iguais ao snapshot válido, sem desconhecidos; alteração do período não retira essa aceitação. Inferência, incompatibilidade, método legado/desconhecido, snapshot ausente ou mudança da classificação exigem revisão. Normalização/preflight usam reviewed vigente, preservando fonte/decisão humana; banco/Parser/matching permanecem. Evidência final: `docs/qa/aot-education-confirmation-visual.md`.
 
 Prisma v2.0.4: corrigida a permanência do período de formação na revisão, inclusive ensino médio. O campo permanece ao apagar/corrigir, perder foco, trocar de formação/aba e salvar/reabrir rascunho sintético; um período preservado é visível sem depender do aviso. Estado local de abertura é restrito à revisão e ao ID da formação. Validadores, fonte/classificação, RPCs/tenant, Parser e matching não mudam. 70 testes dirigidos e 28 verificações no navegador em cada viewport 1416/390 PASS; o mesmo cenário falha no componente anterior ao limpar o campo. Tipos/build PASS. Publicado em main/origin/VPS no SHA funcional `0d19bc5f413967c0d04fa459dc2147e11d4ec6d9`; CI branch/main PASS, web running/zero reinícios, versão/bundle/assets HTTPS e rollback conferidos; Parser/gateway preservados nas mesmas imagens. Evidência final no `docs/qa/aot-education-period-v204.md`. Jornada autenticada de Pessoa real não foi executada para teste.
 
@@ -5040,6 +5042,11 @@ No modal de seleção, aplicar, corrigir ou complementar conteúdo não exige ju
 ## Compatibilidade
 
 Consumidores M2-B que não conhecem revisão não podem gravar diretamente nas tabelas críticas. Leitura histórica permanece válida; novas mutações devem usar as RPCs M2-C/M5. Evidência original anterior ao M5 permanece válida sem coordenadas e nunca recebe região inventada. Importação de currículo sem Pessoa prévia deve começar pelo contrato `resume-intake`; os fluxos manuais existentes continuam compatíveis.
+
+
+## Confirmação visual da classificação — complemento v2.0.4
+
+Classificação aceita pelo sistema aparece como “Classificação válida”, sem clique obrigatório; confirmação humana aparece como “Confirmada por você”; pendência exige “Confirmar classificação”. A normalização reaproveita aceitação explícita quando curso, nível, qualificação, situação, origem/fontes e método vigente conhecido continuam iguais ao snapshot válido, sem desconhecidos. Uma alteração do período preserva essa classificação explícita intacta. O payload usa o reviewed vigente sem inventar origem ou motivo humano; o preflight antecipa reviewed=false antes da publicação, alinhado ao gate existente. Inferência, falta de snapshot, método legado/desconhecido ou mudança da classificação não recebem nova aceitação automática. Gates/RPCs e dados/evidência originais permanecem. Textos do botão herdam a cor da ação, não dos metadados. Acordo 1.1.0/AoT: `docs/qa/agreement-education-confirmation-visual.md`, `docs/qa/aot-education-confirmation-visual.md`.
 
 ---
 
@@ -11860,6 +11867,34 @@ Separar funcionalidades novas das capacidades preservadas. `no_impact_identified
 
 ---
 
+## Source: `docs/qa/agreement-education-confirmation-visual.md`
+
+# Estado visual e aceitação da classificação acadêmica
+
+Versão 1.1.0, agreed, 2026-10-04. Bruno autorizou corrigir o status e esclareceu que informação suficiente não exige clique redundante. Baseline `0f23bafbea0fedc6d594f366b5d0ef6cc0e7dc5d`; risco C, UI/normalização/preflight de revisão, complemento v2.0.4. Este aditivo substitui D-01/D-02/P-01/F-01 e o mapa da versão 1.0.0; incorpora o prompt autorizado.
+
+- D-01: aceitação automática existente aparece como Classificação válida e dispensa clique; decisão humana efetivamente registrada aparece como Confirmada por você; pendência aparece como Requer revisão/Confirmar classificação. Botão desabilitado nos estados aceitos, ativo nas pendências e bloqueado quando busy. CA: estados automático/humano/pendente e legenda legível em desktop/mobile.
+- D-02: reaproveitar aceitação de extração explícita preservada quando curso, nível, qualificação, situação, origem/fontes explícitas e método vigente conhecido continuam iguais ao snapshot válido, sem desconhecidos. Ajustar período não exige confirmar de novo essa classificação intacta. Salvar/comparar transportam reviewed=true sem transformar origem em human ou inventar motivo de confirmação humana. Inferência, incompatibilidade, mudança de curso/classificação, método legado/desconhecido ou falta de snapshot não recebem nova aceitação automática. Edição de classificação humana/inferida volta à pendência. CA: negativos de origem/fontes/snapshot/curso/nível/situação, imutabilidade, origem/fonte/evidência preservadas e save/reopen sintético sem clique automático.
+- D-03: owner docs/contextos/AoT e main/origin/VPS somente web; CI/smoke/rollback. CA: tipos/build, testes dirigidos/person-flow, render e plano seletivo, HTTPS/assets e imagens preservadas.
+- P-01: não inventar decisão humana/datas/confiança numérica, afirmar aceitação sem os critérios, enfraquecer auth/tenant/compatibilidade/gate obrigatório do servidor ou editar/publicar Pessoa real para testar.
+- F-01: banco/migrations/Parser/IA/Knowledge/matching, novos campos/bibliotecas, reclassificação histórica, redesenho ou nova versão pública. Normalização da revisão e antecipação do gate reviewed vigente estão expressamente no escopo D-02.
+- A-01: reutilizar snapshot/validadores/classificador aceitos; textos/cores acessíveis, testes e implementação delegados à engenharia.
+- Q-01: nenhuma decisão material pendente. Segurança adequada nesta correção é o conjunto determinístico de critérios acima, não índice ou limiar de confiança novo.
+
+## Mapa de impacto e execução congelada
+
+| Capacidade | Relação | Baseline / prova proporcional |
+| --- | --- | --- |
+| Botão/tag/cartão e navegação | direct | baseline confunde ausência de gate com confirmação; render automático/humano/pendente, IDs e cores em 1416/390 |
+| Normalização/save/compare e preflight de publicação | direct | servidor exige reviewed=true; restaurar somente aceitação explícita comprovada e antecipar false antes de comparar; negativos, testes lifecycle/classificação/person-flow e save/reopen sintético |
+| Evidência/classificador/precisão/período | plausible_indirect | fatos/snapshot/helper de decisão humana preservados; imutabilidade, fonte/método e período no render |
+| Web/Context Pack/release | direct | web 233af6d, main 0f23baf; tipos/build/contextos/CI/HTTPS/rollback |
+| RPC/auth/tenant/Parser/matching | no_impact_identified | nenhum serviço/gate de servidor muda; payload de aceitação usa flag existente, sem origem humana fabricada; diff, testes e imagens remotas iguais |
+
+Implementar D-01 a D-03 sob P-01/F-01, com A-01. Screenshot é contraexemplo do status incorreto, sem novo layout: preservar posição do botão, cartões, ordem, abas/evidências. Risco revisado de B para C após descoberta de flag desatualizada/preflight incompatível com o gate obrigatório já existente. Não há novo contrato persistido. Testes sintéticos não comprovam jornada autenticada real.
+
+---
+
 ## Source: `docs/qa/agreement-education-period-v204.md`
 
 # Correção da permanência do período na revisão — v2.0.4
@@ -14872,6 +14907,50 @@ Referência: PNG com SHA-256 `de50e17478d3a65a60c0dfc876660d1296f7bba57fe711ad7d
 Lint, typecheck web, build web, gerador/verificador do Context Pack e `git diff --check` passaram no worktree. Dois testes estruturais que buscavam a marcação antiga foram atualizados para verificar o mesmo conteúdo e a proteção responsiva no novo agrupamento; os 22 testes direcionados de `matchingEvidenceLabel` e `matchingScore` passaram. O build apresentou somente avisos existentes de chunks grandes/importação dinâmica. O primeiro CI falhou por export de contexto defasado; o segundo alcançou 716 testes e falhou em três asserções estáticas da composição antiga, corrigidas neste mesmo movimento. CIs do SHA funcional `342ff9aa75896dcf09f306fa42d4df4fb82fb43f`: branch `36803529139` e main `36803703626` PASS. Plano seletivo: web e documentação; banco e Edge `skip`.
 
 `main` local/GitHub e checkout da VPS chegaram ao SHA funcional. Apenas `prisma-web` foi reconstruído/recriado, imagem ativa `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`, running/zero reinícios. Rollback `prisma-web:rollback-before-342ff9aa7589` preserva `sha256:668091fb1267488e26c1dca121bf2ea98a1609a93c60bbf7d24aca8b5d6ea080`. O smoke imediato do script recebeu 404 transitório e saiu com código 1; a verificação posterior confirmou `/`, `/login`, `/index.html` e os assets JS/CSS novos com HTTP 200, incluindo marcadores do novo layout. Não houve acesso autenticado a Perfis reais em produção, clique de revisão, decisão humana nem chamada à IA; o smoke funcional autenticado permanece NOT TESTED. Esse limite não reduz os testes locais com dados sintéticos.
+
+---
+
+## Source: `docs/qa/aot-education-confirmation-visual.md`
+
+# AoT — Estado visual e aceitação acadêmica, complemento v2.0.4
+
+Contrato: [agreement-education-confirmation-visual.md](agreement-education-confirmation-visual.md), 1.1.0; autorização de Bruno em 04/10/2026 e esclarecimento de que informação suficiente dispensa clique redundante. Baseline main/origin/VPS `0f23bafbea0fedc6d594f366b5d0ef6cc0e7dc5d`, web `233af6da318de7caffbbf4dd7413b2ffc27b32b6a2a526262d4df16f5f645615`. Risco revisado B -> C, UI/normalização/preflight, sem mudança de servidor.
+
+## Matriz de acordos
+
+| ID | Implementação | Evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Automática = Classificação válida, humana = Confirmada por você, pendência = Confirmar classificação; tag/cartão/button coerentes, sem clique redundante nos estados aceitos | 29 verificações por viewport 1416/390 PASS: automático sem clique, humano, pendente, legenda branca e flag persistida sem origem humana | PASS |
+| D-02 | `resolveEducationReviewClassification` restaura apenas aceitação explícita intacta com fontes/método/curso/nível/qualificação/situação iguais ao snapshot, sem desconhecidos. Normalização usa reviewed vigente sem origem/motivo humano inventado; preflight antecipa false. `acceptanceNeedsSync` permite salvar/comparar sem descartar atualização técnica quando normalizações dos dois drafts são iguais | 70 dirigidos e 256 person-flow PASS; negativos de snapshot/classificação, sync pendente/idempotente, imutabilidade e ausência de alteração transitória falsa (proteção de formulário vazio preservada); render save/reopen PASS | PASS |
+| D-03 | Owner docs/Context Pack e release seletivo somente web, produto v2.0.4 | Entrega em andamento | PARTIAL |
+
+## Proibições e fora de escopo
+
+P-01/F-01 preservados: nenhum classificador raiz/RPC/schema/gate de servidor/Parser/matching é alterado, nem nova biblioteca, campo, score ou confiança numérica. Snapshot/fonte são preservados, original não é mutado e aceitação automática conserva origem explícita/ausência de motivo humano. Casos sem garantia continuam pendentes. Nenhuma Pessoa/Perfil real usado em testes. Nova flag reviewed usa semântica existente de aceitação, não afirma decisão humana.
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Prova proporcional | Status |
+| --- | --- | --- | --- |
+| Botão/tag/cartão/navegação | direct | Três estados reais, ação desabilitada nos aceitos e branca/legível na pendência, desktop/mobile PASS | PASS |
+| Normalização/save/compare/publicação | direct | Flag false podia parecer válida e ainda ser recusada pelo trigger existente; restauração conservadora e sync antes de comparar, sem clique humano extra. Negativos de curso/nível/status/qualificação/origem/fontes/snapshot e imutabilidade PASS; 70 dirigidos/256 person-flow | PASS |
+| Evidência/classificação/precisão/período | plausible_indirect | Mesmo classificador/snapshot, helper humano e dados; navegação/save/reopen sintéticos, fonte preservada e período acessível PASS | PASS |
+| Web/contextos/release | direct | Tipos/build/contextos/CI/HTTPS/assets/rollback | PARTIAL |
+| RPC/auth/tenant/Parser/IA/matching | no_impact_identified | Servidor mantém gate reviewed; payload automático tem mesmo shape da aceitação explícita original, sem claims humanos. Gerador de matching extrai somente funções de ID não alteradas; plano e imagens preservadas | PARTIAL |
+
+Screenshot é contraexemplo, não layout novo: posição do botão, cartões, abas e evidências preservados. Descoberta proporcional: span de metadados contaminava a cor da legenda; seletores foram restritos e legenda do botão primário tem cor explícita, verificada por estilo calculado. Falha inicial de contraste motivou esse reparo. Sem nova dependência.
+
+## Validação / limites
+
+Tipos web/root/harness e build PASS, com avisos preexistentes de chunks/importações. 70 dirigidos, 256 person-flow e gerador de matching (7 módulos + 2 extratos de IDs/decoder) PASS. Render: 29 verificações por viewport 1416/390, incluindo transporte de flag true com origem explicit, cores, independência dos registros e save/reopen. Evidência: `tmp/education-confirmation-directed.log`, `tmp/education-confirmation-person-flow.log`, `tmp/review-format-confirmation-1416.json`, `tmp/review-format-confirmation-390.json`, `tmp/education-confirmation-desktop.png`, `tmp/education-confirmation-mobile.png`. Render do componente real usa dados sintéticos locais, sem API/auth/gravação remota. Save/reopen simula normalização e estado persistido localmente; jornada autenticada desse currículo real continua NOT TESTED. Nenhum dado de Pessoa real alterado para teste. CUA/Computer Use indisponíveis por assets do kernel já constatados; Edge headless existente reutilizado, sem instalação/alteração de proteções.
+
+## Decisões durante execução / desvios
+
+A versão 1.1.0 substitui explicitamente o rótulo pendente obrigatório da proposta inicial: Bruno determinou que informação suficiente não exige clique apenas para confirmar. Critério conservador reutiliza classificação explícita preservada; não se cria novo limiar de confiança. O mapa incorporou normalização/coordenação de save/compare e preflight; banco e Parser continuam excluídos. Nenhum desvio em relação ao acordo vigente.
+
+## Git / produção
+
+Em andamento; registrar SHA funcional, CI, imagens, HTTPS/assets/rollback e sincronização antes de encerrar.
 
 ---
 

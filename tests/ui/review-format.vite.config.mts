@@ -10,7 +10,7 @@ export default defineConfig({ root: "tests/ui", cacheDir: "../../tmp/vite-review
       request.on("end", async () => {
         try {
           const report = JSON.parse(body);
-          if (!["run", "error", "warning", "period"].includes(report.scenario) || !Number.isInteger(report.width)) throw Error("Invalid synthetic report");
+          if (!["run", "error", "warning", "period", "confirmation"].includes(report.scenario) || !Number.isInteger(report.width)) throw Error("Invalid synthetic report");
           await writeFile(`tmp/review-format-${report.scenario}-${report.width}.json`, JSON.stringify(report, null, 2));
           response.end("ok");
         } catch { response.statusCode = 400; response.end(); }

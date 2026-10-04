@@ -2896,12 +2896,15 @@ textarea {
 .prisma-education-classification-card__header > div,
 .prisma-education-classification-card__footer > div { display: grid; min-width: 0; gap: 2px; }
 .prisma-education-classification-card__header strong { color: #142b49; font-size: .9rem; }
-.prisma-education-classification-card__header span,
-.prisma-education-classification-card__footer span { color: #526078; font-size: .69rem; line-height: 1.45; }
+.prisma-education-classification-card__header > div span,
+.prisma-education-classification-card__footer > div span { color: #526078; font-size: .69rem; line-height: 1.45; }
 .prisma-education-classification-card__footer { padding: 11px 12px; background: rgb(255 255 255 / 68%); border: 1px solid rgb(205 218 237 / 78%); border-radius: 9px; }
 .prisma-education-classification-card__footer.has-validation-error { background: #fff4f2; border-color: #ff9c91; box-shadow: 0 0 0 3px rgb(207 19 34 / 8%); }
 .prisma-education-classification-card__footer small { color: #526078; font-size: .65rem; }
 .prisma-education-classification-card__footer strong { color: #17375f; font-size: .78rem; }
+.prisma-education-classification-card__footer .prisma-education-classification-confirm > span { color: inherit !important; font-size: inherit; }
+.prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary span { color: #fff !important; }
+.prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary:disabled span { color: #244267 !important; }
 .prisma-education-classification-card__footer .prisma-education-classification-confirm.ant-btn-primary {
   color: #fff !important;
   background: #155eef !important;

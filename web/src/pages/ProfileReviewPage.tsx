@@ -39,6 +39,7 @@ import {
   normalizeReviewDraft,
   reviewDraftChangeState,
   reviewDraftFormatWarnings,
+  reviewEducationAcceptanceNeedsSync,
   reviewEntityFieldPath,
   reviewEntityPathSegment,
   reviewFieldPathExists,
@@ -164,6 +165,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     [draft, workspace],
   );
   const dirty = changeState.meaningfulChanged;
+  const acceptanceNeedsSync = Boolean(workspace && reviewEducationAcceptanceNeedsSync(workspace.reviewedData));
   const transientOnly = changeState.transientOnly;
   const viewOnly = mode === "view";
   const editable = !viewOnly && workspace?.state === "draft";
@@ -223,7 +225,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     const normalizedBaseline = normalizeReviewDraft(workspace.reviewedData);
     const technicalSynchronizationOnly = workspace.requiresContractUpgrade
       && JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline);
-    if (!workspace.requiresContractUpgrade && JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline)) {
+    if (!workspace.requiresContractUpgrade && !acceptanceNeedsSync && JSON.stringify(normalizedDraft) === JSON.stringify(normalizedBaseline)) {
       setDraft(cloneDraft(workspace.reviewedData));
       setValidationIssues([]);
       setError(null);
@@ -327,7 +329,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       window.requestAnimationFrame(() => focusReviewField(issues[0]!.fieldPath));
       return;
     }
-    if (dirty || workspace.requiresContractUpgrade) {
+    if (dirty || workspace.requiresContractUpgrade || acceptanceNeedsSync) {
       await handleSave({ type: "continue_to_delta" });
       return;
     }
@@ -705,7 +707,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
     ? "Esta revisão não está mais disponível para edição."
     : pendingSelection
       ? "Conclua ou cancele a seleção atual antes de salvar."
-      : !dirty
+      : !dirty && !acceptanceNeedsSync
         ? transientOnly
           ? "Preencha o novo campo ou selecione uma área no documento. Formulários vazios não precisam ser salvos."
           : "Não há alterações para salvar."

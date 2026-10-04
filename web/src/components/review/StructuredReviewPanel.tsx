@@ -21,7 +21,6 @@ import {
   EDUCATION_STATUS_LABELS,
   confirmEducationClassification,
   educationFieldVisibility,
-  educationClassificationNeedsReview,
   qualificationOptionsForLevel,
   resolveEducationClassification,
   withHumanEducationClassification,
@@ -38,6 +37,7 @@ import {
   reviewEntityFieldPath,
   reviewFieldPathExists,
   reviewIssueLabel,
+  resolveEducationReviewClassification,
   type ReviewDraftIssue,
 } from "../../domain/reviewFieldLifecycle";
 
@@ -452,14 +452,16 @@ export function StructuredReviewPanel({
     if (draft.education.length === 0) return <div className="prisma-entity-review"><Empty description="Nenhuma formação mantida neste perfil." />{editable ? <Button icon={<PlusOutlined />} onClick={addEducation} type="dashed">Adicionar formação</Button> : null}{removedEntries.filter((entry) => entry.kind === "education").map(removalNotice)}</div>;
     const index = Math.min(educationIndex, draft.education.length - 1);
     const reviewed = draft.education[index]!;
-    const classification = resolveEducationClassification(reviewed);
+    const classification = resolveEducationReviewClassification(reviewed);
     const fieldVisibility = educationFieldVisibility(classification.level);
     const classificationPath = `${reviewEntityFieldPath("education", reviewed)}.classificationOrigin`;
     const classificationMessage = validationMessage(classificationPath);
     const extracted = workspace.extractedData.education.find((item) => item.id === reviewed.id);
     const update = (patch: Partial<typeof reviewed>) => onDraftChange({ ...draft, education: draft.education.map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item) });
     const updateClassification = (patch: Partial<{ level: EducationLevel; qualification: EducationQualification; status: EducationStatus }>) => update(withHumanEducationClassification(reviewed, patch));
-    const requiresClassificationReview = educationClassificationNeedsReview(classification);
+    const confirmedByReviewer = classification.classificationReviewed && classification.classificationOrigin === "human";
+    const classificationAccepted = classification.classificationReviewed;
+    const confirmationRequired = !classificationAccepted;
     const coursePath = reviewEntityFieldPath("education", reviewed, "course");
     const institutionPath = reviewEntityFieldPath("education", reviewed, "institution");
     const periodPath = reviewEntityFieldPath("education", reviewed, "period");
@@ -482,8 +484,8 @@ export function StructuredReviewPanel({
       <div className="prisma-entity-review">
         <Alert description="Revise o nível, a qualificação e a situação sugeridos. O texto original e a regra aplicada permanecem preservados para auditoria." showIcon title="Classificação acadêmica estruturada" type="info" />
         <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.education.length} index={index} label="Formação" onChange={(next) => { setEducationIndex(next); const item = draft.education[next]; if (item) onFieldSelect(reviewEntityFieldPath("education", item, "course")); }} />{editable ? <Space wrap><Button icon={<PlusOutlined />} onClick={addEducation} size="small">Adicionar formação</Button><Popconfirm onConfirm={removeEducation} title={persisted ? "Não incluir esta formação no perfil?" : "Cancelar a inclusão desta formação?"}><Button danger={persisted} icon={<DeleteOutlined />} size="small">{persisted ? "Remover formação" : "Cancelar inclusão"}</Button></Popconfirm></Space> : null}</div>
-        <div className={["prisma-education-classification-card", requiresClassificationReview ? "requires-review" : "is-confirmed"].join(" ")}>
-          <div className="prisma-education-classification-card__header"><div><strong>{reviewed.course || (classification.level === "secondary" ? "Ensino médio" : `Formação ${index + 1}`)}</strong>{fieldVisibility.showInstitution ? <span>{reviewed.institution || "Instituição não identificada"}{fieldVisibility.showPeriod && reviewed.period ? ` · ${reviewed.period}` : ""}</span> : null}</div><Tag color={requiresClassificationReview ? "gold" : "green"}>{requiresClassificationReview ? "Requer revisão" : "Classificação confirmada"}</Tag></div>
+        <div className={["prisma-education-classification-card", classificationAccepted ? "is-confirmed" : "requires-review"].join(" ")}>
+          <div className="prisma-education-classification-card__header"><div><strong>{reviewed.course || (classification.level === "secondary" ? "Ensino médio" : `Formação ${index + 1}`)}</strong>{fieldVisibility.showInstitution ? <span>{reviewed.institution || "Instituição não identificada"}{fieldVisibility.showPeriod && reviewed.period ? ` · ${reviewed.period}` : ""}</span> : null}</div><Tag color={classificationAccepted ? "green" : "gold"}>{confirmedByReviewer ? "Confirmada por você" : classificationAccepted ? "Classificação válida" : "Requer revisão"}</Tag></div>
           <Typography.Text type="secondary">O Prisma separa curso, nível, qualificação e situação acadêmica. Inferências e campos não identificados precisam da sua confirmação.</Typography.Text>
           <ReviewField editable={editable} extracted={extracted?.course ?? "Não identificado"} fieldPath={coursePath} label="Curso" onChange={(value) => update({ course: value || null, classificationReviewed: false })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, coursePath)} validationMessage={validationMessage(coursePath)} value={reviewed.course ?? ""} />
            {fieldVisibility.showInstitution ? <ReviewField editable={editable} extracted={extracted?.institution ?? "Não identificado"} fieldPath={institutionPath} label="Instituição" onChange={(value) => update({ institution: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, institutionPath)} validationMessage={validationMessage(institutionPath)} value={reviewed.institution ?? ""} /> : null}
@@ -493,7 +495,7 @@ export function StructuredReviewPanel({
             <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.level`} label="Nível de formação" onChange={(value) => updateClassification({ level: value as EducationLevel })} onSelect={onFieldSelect} options={educationLevelOptions} origin={classification.classificationSources.level} selectedFieldPath={selectedFieldPath} value={classification.level} />
              {fieldVisibility.showQualification ? <AcademicSelect editable={editable} fieldPath={`${reviewEntityFieldPath("education", reviewed)}.qualification`} label="Qualificação" onChange={(value) => updateClassification({ qualification: value as EducationQualification })} onSelect={onFieldSelect} options={qualificationOptionsForLevel(classification.level).map((value) => ({ value, label: educationQualificationLabel(classification.level, value) }))} origin={classification.classificationSources.qualification} selectedFieldPath={selectedFieldPath} value={classification.qualification} /> : null}
           </div>
-          <div className={["prisma-education-classification-card__footer", classificationMessage ? "has-validation-error" : ""].filter(Boolean).join(" ")} data-review-field-path={classificationPath}><div><small>Origem da classificação</small><strong>{EDUCATION_ORIGIN_LABELS[classification.classificationOrigin]}</strong><span>{classification.classificationMethodVersion === "legacy-unclassified" ? "Registro histórico preservado sem reclassificação retroativa." : classification.classificationReasons.map(classificationReasonLabel).join(" · ")}</span>{classificationMessage ? <Typography.Text type="danger">{classificationMessage}</Typography.Text> : null}</div>{editable ? <Button className="prisma-education-classification-confirm" icon={<CheckCircleOutlined />} onClick={() => update(confirmEducationClassification(reviewed))} type={requiresClassificationReview ? "primary" : "default"}>{requiresClassificationReview ? "Confirmar classificação" : "Confirmada"}</Button> : null}</div>
+          <div className={["prisma-education-classification-card__footer", classificationMessage ? "has-validation-error" : ""].filter(Boolean).join(" ")} data-review-field-path={classificationPath}><div><small>Origem da classificação</small><strong>{EDUCATION_ORIGIN_LABELS[classification.classificationOrigin]}</strong><span>{classification.classificationMethodVersion === "legacy-unclassified" ? "Registro histórico preservado sem reclassificação retroativa." : classification.classificationReasons.map(classificationReasonLabel).join(" · ")}</span>{classificationMessage ? <Typography.Text type="danger">{classificationMessage}</Typography.Text> : null}</div>{editable ? <Button className="prisma-education-classification-confirm" disabled={classificationAccepted || busy} icon={classificationAccepted ? <CheckCircleOutlined /> : undefined} onClick={() => update(confirmEducationClassification(reviewed))} type={confirmationRequired ? "primary" : "default"}>{confirmedByReviewer ? "Confirmada por você" : classificationAccepted ? "Classificação válida" : "Confirmar classificação"}</Button> : null}</div>
         </div>
         {removedEntries.filter((entry) => entry.kind === "education").map(removalNotice)}
       </div>
