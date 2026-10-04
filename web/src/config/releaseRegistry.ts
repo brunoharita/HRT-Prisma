@@ -56,6 +56,7 @@ export const PRISMA_RELEASE_HISTORY = [{
   deliveries: [
     "2.0.1: importação totalmente online na KVM2",
     "2.0.2: compatibilidade e recuperação das evidências de importação",
+    "2.0.3: orientação clara para corrigir erros recuperáveis",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 

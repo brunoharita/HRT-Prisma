@@ -63,6 +63,29 @@ test("existing private contact satisfies the contact gate without copying it int
   assert.equal(input.contact.phone, null);
 });
 
+test("phone guidance anticipates the server rejection without choosing a contact or mutating evidence", () => {
+  for (const phone of ["(11) 98888-7777 / (11) 97777-6666", "98888-7777", "123", "+55119888877778888"]) {
+    const input = draft(); input.contact.phone = phone;
+    const original = structuredClone(input);
+    const issue = validateReviewDraftForSave(input).find((item) => item.fieldPath === "contact.phone");
+    assert.ok(issue, phone);
+    assert.match(issue.message, /Telefone: informe apenas um número com DDD/);
+    assert.match(issue.message, /escolha qual usar/);
+    assert.deepEqual(input, original);
+  }
+  for (const phone of ["(11) 98888-7777", "(11) 3888-7777", "+55 11 98888-7777", "+44 20 7946 0958", null, " "]) {
+    const input = draft(); input.contact.phone = phone;
+    assert.equal(validateReviewDraftForSave(input).some((item) => item.fieldPath === "contact.phone"), false, String(phone));
+  }
+});
+
+test("length guidance names the field and professional minimum gives concrete examples", () => {
+  const input = draft(); input.contact.city = "x".repeat(121);
+  assert.equal(validateReviewDraftForSave(input).find((item) => item.fieldPath === "contact.city")?.message, "Cidade: reduza o texto para no máximo 120 caracteres.");
+  input.professionalTitle = null;
+  assert.match(validateReviewDraftForSave(input).find((item) => item.fieldPath === "professionalTitle")!.message, /resumo, objetivo, experiência, formação ou competência/);
+});
+
 test("stable entity paths survive array reordering while legacy paths remain compatible", () => {
   const first = { id: "experience_abcdefgh", source: "human" as const, role: "Diretor", organization: null, period: null, description: null, evidenceText: "", page: null };
   const second = { ...first, id: "experience_ijklmnop", role: "Gerente" };

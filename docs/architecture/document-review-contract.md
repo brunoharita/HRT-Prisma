@@ -1,5 +1,11 @@
 # Contrato de documentos, operações e revisão humana
 
+## Orientação ao operador — v2.0.3
+
+`operator-feedback-1.0.0` é o catálogo de apresentação do cliente; o envelope persistido `operation-feedback-2.0.0` permanece. Motivos conhecidos de recusa, inclusive códigos legados, informam em português o que alterar ou qual etapa reabrir. Quando o campo é conhecido, a recuperação usa o foco existente. Detalhes brutos do banco, dados privados e identificadores técnicos não são exibidos. Erros desconhecidos continuam sem correção de campo inventada; falhas de sessão/permissão têm precedência sobre orientação de preenchimento.
+
+A revisão antecipa a validação de telefone vigente no servidor: um número nacional de 10/11 dígitos ou internacional de 12–15 dígitos, com normalização já existente. Dois telefones juntos não passam como um único número. A orientação pede um telefone com DDD, permite ao operador escolher qual usar no campo atual, ou deixá-lo vazio quando há e-mail. Não é suporte a múltiplos telefones nem validação de existência/posse da linha. Nenhum contato é escolhido automaticamente; fonte e evidências não são reescritas. Limites de texto nomeiam o campo. Acordo e limites: [v2.0.3](../qa/agreement-actionable-feedback-v203.md), [AoT](../qa/aot-actionable-feedback-v203.md).
+
 ## Contratos vigentes
 
 | Contrato | Versão | Regra material |

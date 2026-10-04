@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 331
-source_manifest_sha256: 79deaf3e177c873d5693e54531d6f20ab9ad6772264041e04ca820154fa9de24
+documentation_source_count: 333
+source_manifest_sha256: 667cb053b27683fce6b77768f7a34c5ba7370070d6dd9d9fbc7c6ca0505d627b
 -->
 
 # Tudo sobre o Prisma
@@ -2626,13 +2626,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.26
-last_verified: 2026-10-03
+version: 2.51.27
+last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
-Prisma v2.0.2 registra a correção autorizada da compatibilidade das evidências de importação, seu complemento Unicode e a correção de publicação de títulos personalizados, geração 2, movimento 0, entrega 2. Main/origin/VPS incorporam o complemento SQL `a9fa4da67c6b8594c867fa201f4cf9b2be19f94e`; web/Parser mantêm o build `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`. Migrations ativas, Parser saudável, web/HTTPS/versão e rollback verificados. Login e menu usam o registro único. O agente não executou retomada/publicação autenticada real; consultas posteriores confirmaram revisões draft, sem Perfil publicado automaticamente.
+Prisma v2.0.3 foi autorizado para orientar em português claro erros que o operador pode resolver. Implementação local em validação; publicação ainda pendente. Baseline hospedado confirmado: main/VPS `6401d72d34b1133a9d9d328c68ae3ffeb5dd2eb6`, web/Parser build v2.0.2 `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`. As correções SQL anteriores permanecem ativas; nenhum Perfil real é publicado para testar.
+
+## Orientação para erros corrigíveis — v2.0.3
+
+`operator-feedback-1.0.0` apresenta motivos conhecidos e códigos legados de validação/recuperação sem linguagem de banco ou detalhes pessoais. Revisão antecipa a regra existente de telefone; dois números concatenados causavam SQL 22023 `reviewed_phone_invalid`, apresentado incorretamente como erro interno. A orientação identifica Telefone e leva à correção; o operador decide qual usar no campo único ou deixa vazio se há e-mail. Não altera fonte/evidências nem adiciona suporte a múltiplos telefones. Limites nomeiam o campo; sessão/permissão prevalecem e falhas desconhecidas não inventam correções. Produto no registro único v2.0.3, envelope `operation-feedback-2.0.0` e persistência inalterados; nenhuma migration/IA/Parser exigida. Acordo/AoT: `docs/qa/agreement-actionable-feedback-v203.md`, `docs/qa/aot-actionable-feedback-v203.md`.
 
 ## Compatibilidade das evidências de importação — v2.0.2
 
@@ -4909,6 +4913,12 @@ A política jurídica temporal, legal hold, backups, exportação e anonimizaç�
 
 # Contrato de documentos, operações e revisão humana
 
+## Orientação ao operador — v2.0.3
+
+`operator-feedback-1.0.0` é o catálogo de apresentação do cliente; o envelope persistido `operation-feedback-2.0.0` permanece. Motivos conhecidos de recusa, inclusive códigos legados, informam em português o que alterar ou qual etapa reabrir. Quando o campo é conhecido, a recuperação usa o foco existente. Detalhes brutos do banco, dados privados e identificadores técnicos não são exibidos. Erros desconhecidos continuam sem correção de campo inventada; falhas de sessão/permissão têm precedência sobre orientação de preenchimento.
+
+A revisão antecipa a validação de telefone vigente no servidor: um número nacional de 10/11 dígitos ou internacional de 12–15 dígitos, com normalização já existente. Dois telefones juntos não passam como um único número. A orientação pede um telefone com DDD, permite ao operador escolher qual usar no campo atual, ou deixá-lo vazio quando há e-mail. Não é suporte a múltiplos telefones nem validação de existência/posse da linha. Nenhum contato é escolhido automaticamente; fonte e evidências não são reescritas. Limites de texto nomeiam o campo. Acordo e limites: [v2.0.3](../qa/agreement-actionable-feedback-v203.md), [AoT](../qa/aot-actionable-feedback-v203.md).
+
 ## Contratos vigentes
 
 | Contrato | Versão | Regra material |
@@ -5316,6 +5326,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão explícita de Bruno em 04/10/2026: publicar a orientação para erros corrigíveis como **Prisma v2.0.3**, terceira entrega da geração 2/movimento 0 no registro único. `operator-feedback-1.0.0` versiona somente o catálogo de apresentação e a antecipação da regra de telefone já vigente. Envelope `operation-feedback-2.0.0`, contratos persistidos, gates de aprovação, Parser e modelo de contato não mudam. Não requer migration; rollout somente web. Acordo: `docs/qa/agreement-actionable-feedback-v203.md`.
 
 Decisão explícita de Bruno em 03/10/2026: este movimento de importação totalmente online será publicado como **Prisma v2.0.1**, geração 2, movimento 0, entrega 1, por meio do registro existente. Movimento zero passa a ser aceito para iniciar a geração; negativos/fracionários continuam inválidos. Histórico 1.x preservado. Login/menu/Context Pack devem refletir o mesmo registro. O contrato de implantação `parser-ia-kvm2-1.0.0` e os contratos dos dados não são renumerados pela versão pública.
 
@@ -11675,6 +11687,38 @@ O build mantém o aviso já conhecido de chunk Ant Design acima de 900 kB. Não 
 
 ---
 
+## Source: `docs/qa/agreement-actionable-feedback-v203.md`
+
+# Prisma v2.0.3 — orientação para erros corrigíveis
+
+Versão 1.0.0, agreed, 2026-10-04. Autoridade: Bruno pediu mensagens em português claro, indicando o que alterar sempre que o usuário puder resolver sozinho, e publicação como v2.0.3. Baseline `6401d72d34b1133a9d9d328c68ae3ffeb5dd2eb6`. Risco C: tradutor compartilhado e validação de revisão; não altera persistência, permissões ou regras de publicação do banco.
+
+- D-01: traduzir recusas conhecidas e corrigíveis em orientação concreta, com campo/ação quando identificável. Cobrir telefone, contatos mínimos, justificativas, comparação/publicação, evidências, mesclagem e estados recuperáveis, preservando os demais tradutores existentes. CA: catálogo dirigido, respostas legadas e `operation-feedback-2.0.0`, categorias e recuperação corretas.
+- D-02: antecipar na revisão a validação de telefone já imposta pelo servidor e indicar como corrigir antes de publicar. Campo atual aceita um número; vários números não são concatenados, selecionados ou modificados automaticamente. Operador escolhe o contato no campo ou deixa vazio se há e-mail. Original/evidências permanecem. CA: dois números, incompleto, internacional, nacional, vazio com e-mail/contato existente, sem mutação do draft.
+- D-03: reusar navegação/foco do campo e listas de pendências existentes. Mensagens de limites devem nomear o campo; nenhuma orientação técnica ou detalhe bruto de SQL/dados privados. Falha interna desconhecida não é transformada em erro humano. Auth/tenant têm precedência. CA: negativos de autorização, detalhe malformado/injetado, erro desconhecido e preservação do fluxo.
+- D-04: registro único v2.0.3, documentação/Context Pack, validação proporcional, main/origin/VPS e implantação somente web. CA: tipos/build, testes afetados, CI, SHA/versão/HTTPS/assets e rollback; separar limite de smoke autenticado.
+- P-01: sem relaxar gates, inventar motivo/decisão humana, escolher/remover contatos automaticamente, expor respostas técnicas/PII ou transformar falha do sistema em obrigação de corrigir campo.
+- F-01: suporte a múltiplos telefones no modelo/cadastro, migrações, Parser/OCR/IA, matching/Knowledge, mudança de composição visual, saneamento histórico e publicação real para testar.
+- A-01: catálogo determinístico, reutilização dos validadores e navegação, fixtures sintéticas, detalhes de execução e entrega delegados à engenharia. Sem nova biblioteca.
+- Q-01: nenhuma decisão pendente neste escopo. A escolha sobre modelo com vários telefones da discussão anterior não é implementada; o pedido atual autoriza orientação para o campo existente.
+
+## Mapa de impacto inicial
+
+| Capacidade | Relação | Baseline / regressão proporcional |
+| --- | --- | --- |
+| Tradução compartilhada de erros | direct | alguns motivos legados caem em genérico; catálogo e regressão reviewOperationErrors, serviços e verificações |
+| Revisão/comparação/publicação | direct | PDF 3 draft/lock 2, zero Perfil; SQL 22023 reviewed_phone_invalid, dois telefones; validação e person-flow |
+| Auth/tenant/privacidade | critical_transversal | tradutor não autoriza operação; negativos e fronteiras de serviços, sem mudança de grants/RLS |
+| Navegação/foco e pendências | plausible_indirect | botão/foco já existem; regressão e inspeção consumidores, sem redesenho |
+| Versão/login/sidebar e web | direct | v2.0.2/build 96e3ecb; registro único, build e smoke publicação v2.0.3 |
+| Banco/Parser/cache/Unicode/Knowledge/matching | no_impact_identified | nenhum produtor persistido ou cálculo alterado; diff/plano e person-flow, Parser preservado no rollout |
+
+## Execução congelada
+
+Implementar D-01 a D-04 sob P-01 e F-01, com A-01. Este acordo incorpora o prompt de execução autorizado. Capturas do incidente são contraexemplos de mensagem, não referência de redesenho; manter estrutura e ações existentes. AoT registra novidade, preservação e limites de prova.
+
+---
+
 ## Source: `docs/qa/agreement-candidate-card-visual.md`
 
 # Acordo — cartão de Pessoas por Posição, composição visual v1.0.0
@@ -14631,6 +14675,66 @@ Nenhuma pendência material no escopo autorizado.
 - Data: 2026-09-18.
 - Evidência de aprovação: mensagem “faça isso para garantir que o gpt internalize a regra ao criar prompts que demandem criação ou alteração de telas ou elementos visuais”.
 - Referência para o prompt: este contrato versão 1.0.0 e ADR-061.
+
+---
+
+## Source: `docs/qa/aot-actionable-feedback-v203.md`
+
+# AoT — Prisma v2.0.3, erros corrigíveis
+
+Contrato: [agreement-actionable-feedback-v203.md](agreement-actionable-feedback-v203.md), versão 1.0.0, decisão explícita de Bruno em 04/10/2026. Baseline Git/main/VPS `6401d72d34b1133a9d9d328c68ae3ffeb5dd2eb6`, runtime web/Parser `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Catálogo de orientação integrado ao tradutor compartilhado, preserva tradutores de evidências/educação/verificação | 37 testes dirigidos PASS, catálogo em motivos legados/envelope vigente e mensagens controladas | PASS |
+| D-02 | Normalizador existente antecipa rejeição de telefone na revisão | Dois números/incompleto/nacional/internacional/vazio/contato prévio/sem mutação; 248 person-flow PASS | PASS |
+| D-03 | Campos/ação conhecidos, limites nomeados, prioridade de sessão/permissão e detalhe seguro | Negativos de autorização, detalhe inválido/injetado/erro desconhecido PASS; inspeção da navegação existente | PASS |
+| D-04 | Registro único v2.0.3, documentação e rollout web | Tipos/build/testes PASS; contexto/CI/SHA/HTTPS/assets/rollback pendentes | PARTIAL |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem mutação automática/relaxamento de gates/PII/resposta técnica/decisão humana fictícia | Testes negativos e fixtures sintéticas; nenhum produtor de dados alterado | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade | Relação | Baseline / prova proporcional | Status |
+| --- | --- | --- | --- |
+| Tradução compartilhada | direct | 37 dirigidos e 248 person-flow PASS, fronteiras de serviços não expõem mensagem bruta | PASS |
+| Revisão/comparação/publicação | direct | Sem mudança de RPC; validação usa regra já vigente, person-flow PASS | PASS |
+| Auth/tenant/privacidade | critical_transversal | Sem nova leitura/grants; negativos de precedência PASS; teste não é nova prova de RLS real | PASS |
+| Navegação/foco | plausible_indirect | `errorAction`, `returnToReview`, storage/foco existentes; campos exatos testados, consumidores inspecionados | PASS |
+| Versão/web | direct | Registro único/build PASS; implantação pendente | PARTIAL |
+| Banco/Parser/Unicode/Knowledge/matching | no_impact_identified | Diff e person-flow preservam, nenhuma mudança de produtores persistidos; conferência pós-rollout pendente | PARTIAL |
+
+### Novidade e preservação
+
+- Nova orientação e antecipação de validação comprovadas localmente; nenhuma escolha automática de telefone.
+- Não há nova dependência ou alteração de contratos persistidos.
+- Testes locais não provam publicação autenticada real; esta ação permanece humana.
+
+## Fora de escopo preservado
+
+F-01 PASS: múltiplos telefones, banco/Parser/IA, matching/Knowledge, redesenho, correção histórica e publicação real para testar permanecem excluídos.
+
+## Fidelidade visual
+
+Capturas são contraexemplos de mensagem de erro, sem composição visual nova. Layout/ações existentes reutilizados; nenhuma alegação de comparação pixel a pixel. Smoke autenticado real NOT TESTED.
+
+## Desvios do contrato
+
+Nenhum desvio identificado; preservado o modelo atual com um telefone, como autorizado no escopo de mensagens. Não há nova decisão de produto durante a execução.
+
+## Validação final / Git / QA / ambiente
+
+Tipos do projeto e web/build web PASS. 37 testes dirigidos e 248 person-flow PASS (sem IA/banco remoto ou currículos reais). Warnings de chunk e importação dinâmica já existentes não impedem build. Baseline VPS verificado antes da implantação: checkout 6401d72, web/Parser/gateway running sem reinícios; Parser imagem `dc3fd8022d202ea893fb55547a9c97907fd5d9ac595966307d3b3cf385470bf3`, web imagem `4d0e0f81faa56a70145a7e799d86904b91686af419c6dcedbf46825d3f149b2c`. Nenhuma nova consulta/mutação de banco exigida. Logs locais ignorados: `tmp/actionable-feedback-v203-person-flow.log`.
+
+## Conclusão
+
+Movimento em execução; publicação pendente.
 
 ---
 

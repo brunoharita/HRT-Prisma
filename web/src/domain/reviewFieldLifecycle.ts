@@ -4,6 +4,8 @@ import type {
   StructuredExperience,
 } from "./personIngestion.js";
 import { normalizeDraftPeriods } from "./resumeDates.js";
+import { normalizeResumePhone } from "../../../src/domain/resumeIdentity.js";
+import { PHONE_CORRECTION_MESSAGE } from "./operatorFeedback.js";
 import {
   educationClassificationNeedsReview,
   isEducationLevelQualificationCompatible,
@@ -225,19 +227,22 @@ export function validateReviewDraftForSave(
     issues.push({ fieldPath: "contact.phone", message: "Informe telefone ou e-mail para salvar este currículo." });
     issues.push({ fieldPath: "contact.email", message: "Informe telefone ou e-mail para salvar este currículo." });
   }
+  if (draft.contact.phone?.trim() && !normalizeResumePhone(draft.contact.phone)) {
+    issues.push({ fieldPath: "contact.phone", message: PHONE_CORRECTION_MESSAGE });
+  }
 
-  const fields: Array<[string, string | null, number]> = [
-    ["contact.city", draft.contact.city, 120],
-    ["contact.state", draft.contact.state, 80],
-    ["contact.phone", draft.contact.phone, 40],
-    ["contact.email", draft.contact.email, 320],
-    ["contact.linkedin", draft.contact.linkedin, 500],
-    ["professionalTitle", draft.professionalTitle, 240],
-    ["professionalObjective", draft.professionalObjective, 4_000],
-    ["summary", draft.summary, 12_000],
+  const fields: Array<[string, string, string | null, number]> = [
+    ["contact.city", "Cidade", draft.contact.city, 120],
+    ["contact.state", "Estado", draft.contact.state, 80],
+    ["contact.phone", "Telefone", draft.contact.phone, 40],
+    ["contact.email", "E-mail", draft.contact.email, 320],
+    ["contact.linkedin", "Perfil do LinkedIn", draft.contact.linkedin, 500],
+    ["professionalTitle", "Cargo ou título profissional", draft.professionalTitle, 240],
+    ["professionalObjective", "Objetivo profissional", draft.professionalObjective, 4_000],
+    ["summary", "Resumo profissional", draft.summary, 12_000],
   ];
-  for (const [fieldPath, value, limit] of fields) {
-    if (value && value.trim().length > limit) issues.push({ fieldPath, message: `O campo excede o limite de ${limit} caracteres.` });
+  for (const [fieldPath, label, value, limit] of fields) {
+    if (value && value.trim().length > limit) issues.push({ fieldPath, message: `${label}: reduza o texto para no máximo ${limit.toLocaleString("pt-BR")} caracteres.` });
   }
   if (draft.contact.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.contact.email.trim())) {
     issues.push({ fieldPath: "contact.email", message: "Informe um e-mail válido." });
@@ -285,7 +290,7 @@ export function validateReviewDraftForSave(
   if (hasDuplicateIds(draft.education)) issues.push({ fieldPath: "education", message: "Formações possui identificadores duplicados." });
 
   if (!hasMaterialProfessionalInformation(draft)) {
-    issues.push({ fieldPath: "professionalTitle", message: "Informe ao menos uma informação profissional material antes de salvar." });
+    issues.push({ fieldPath: "professionalTitle", message: "Informe ao menos um conteúdo profissional, como resumo, objetivo, experiência, formação ou competência, antes de salvar." });
   }
   return issues;
 }

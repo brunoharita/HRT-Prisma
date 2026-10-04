@@ -1,4 +1,5 @@
 import { IMPORT_EVIDENCE_CONTRACT_VERSION, IMPORT_FAILURE_REASONS, PARSER_EVIDENCE_ADAPTER_VERSION, type ImportEvidenceIssue, type ImportFailureDiagnostic } from "./importEvidencePersistence.js";
+import { operatorFeedback } from "./operatorFeedback.js";
 
 export interface ReviewOperationError {
   code?: string;
@@ -69,6 +70,20 @@ export function reviewOperationError(error: ReviewOperationError, fallback: stri
   const actionable = parseActionableFeedback(error.details);
 
   if (error.code === "22P05") return new PrismaOperationError("O Prisma encontrou um caractere não identificado que não pôde ser representado antes da gravação. O documento foi preservado e nenhum Perfil foi publicado. Aguarde a correção do sistema antes de retomar.", { category: "internal", recovery: "await-system-update", technicalCode: "22P05", importIssue: { reason: "unicode_invalid", fieldPath: null, pageNumber: null, evidenceIndex: null } });
+
+  // Permission/session failures must never become a request to change a field.
+  if (["28000", "PGRST301"].includes(error.code ?? "")) {
+    return asOperationError(error, "Sua sessão expirou. Entre novamente e reabra esta revisão para continuar.", "authentication", "sign-in");
+  }
+  if (error.code === "42501" && technicalMessage !== "original extraction evidence cannot be retired") {
+    return asOperationError(error, "Seu perfil não possui autorização para concluir esta operação na organização ativa.", "authorization", "none");
+  }
+
+  const known = operatorFeedback(actionable?.reason ?? "") ?? operatorFeedback(technicalMessage.trim());
+  if (known) {
+    return asOperationError(error, known.message, known.category, known.recovery, known.fieldPath
+      ?? (known.category === "validation" && known.recovery === "review-fields" ? actionable?.fieldPath : null));
+  }
 
   if (actionable) {
     const item = actionable.itemNumber ? `Formação ${actionable.itemNumber}` : "A formação indicada";
@@ -197,7 +212,7 @@ export function reviewOperationError(error: ReviewOperationError, fallback: stri
   if (/retirement reason.+(?:invalid|required)/.test(technicalMessage)) {
     return asOperationError(error, "Informe o motivo da substituição da evidência antes de continuar.", "validation", "review-fields");
   }
-  if (/reviewed data has an invalid current contract|reviewed data (?:must be|object is) an? object|structured resume summary is invalid|invalid field lifecycle|reviewed data has an invalid field lifecycle contract|reviewed phone is invalid|education classification contract is invalid/.test(technicalMessage)) {
+  if (/reviewed data has an invalid current contract|reviewed data (?:must be|object is) an? object|structured resume summary is invalid|invalid field lifecycle|reviewed data has an invalid field lifecycle contract|education classification contract is invalid/.test(technicalMessage)) {
     return asOperationError(error, "O Prisma não conseguiu atualizar automaticamente esta revisão antiga. Nenhum campo precisa ser corrigido manualmente e nenhuma alteração foi perdida. Recarregue a revisão e tente novamente.", "internal", "reload");
   }
   if (/refinement link is not an active overlapping sibling field/.test(technicalMessage)) {
@@ -219,13 +234,13 @@ export function reviewOperationError(error: ReviewOperationError, fallback: stri
     return asOperationError(error, "A operação já foi processada ou entrou em conflito com outra tentativa. Reabra a revisão para carregar o resultado atual.", "conflict", "reload");
   }
   if (error.code === "22023") {
-    return asOperationError(error, "O Prisma encontrou uma falha interna antes de concluir a operação. Nenhum campo precisa ser corrigido manualmente, nenhuma alteração foi aplicada e os dados desta tela permanecem preservados. Atualize a página e tente novamente.", "internal", "reload");
+    return asOperationError(error, "Não foi possível concluir a operação. O Prisma não identificou um campo que você possa corrigir para resolver esta falha. Suas informações permanecem nesta tela. Atualize a página e tente novamente; se o problema continuar, informe o responsável pelo Prisma.", "internal", "reload");
   }
   if (["22P02", "23502", "23503", "23514"].includes(error.code ?? "")) {
     return asOperationError(error, "A operação encontrou dados incompletos ou incompatíveis com o estado atual. Nenhuma alteração foi aplicada. Reabra o fluxo para revisar os campos antes de continuar.", "validation", "return-to-review");
   }
 
-  return asOperationError(error, `${fallback} O Prisma encontrou uma falha interna, não um campo preenchido incorretamente. Suas informações permanecem nesta tela. Atualize a página e tente novamente.`, "internal", "reload");
+  return asOperationError(error, `${fallback} O Prisma não identificou uma correção que você possa fazer nesta tela. Suas informações permanecem nesta tela. Atualize a página e tente novamente; se o problema continuar, informe o responsável pelo Prisma.`, "internal", "reload");
 }
 
 export function reviewOperationErrorMessage(error: ReviewOperationError, fallback: string): string {
@@ -234,6 +249,7 @@ export function reviewOperationErrorMessage(error: ReviewOperationError, fallbac
 
 export function supabaseOperationError(error: ReviewOperationError, fallback: string): PrismaOperationError {
   const technicalMessage = error.message.toLowerCase();
+  if (["28000", "PGRST301", "42501", "22P05"].includes(error.code ?? "")) return reviewOperationError(error, fallback);
   if (/prisma_import_evidence_invalid/.test(technicalMessage)) return importEvidenceOperationError(parseImportIssue(error.details) ?? { reason: "field_path_invalid", fieldPath: null, pageNumber: null, evidenceIndex: null });
   const domainError = knownDomainOperationError(error, technicalMessage);
   if (domainError) return domainError;
@@ -403,7 +419,7 @@ function knownDomainOperationError(error: ReviewOperationError, technicalMessage
     return asOperationError(error, "Revise a quantidade, o domínio e o destino dos itens antes de solicitar a geração.", "validation", "review-fields");
   }
   if (/m51c_blueprint_not_found|m51c_dimension_not_in_blueprint/.test(technicalMessage)) {
-    return asOperationError(error, "O blueprint ou a dimensão selecionada não está mais disponível. Atualize a página e faça uma nova seleção.", "stale-state", "reload");
+    return asOperationError(error, "O plano de avaliação ou a dimensão selecionada não está mais disponível. Atualize a página e faça uma nova seleção.", "stale-state", "reload");
   }
   if (/m51c_no_gap_to_generate/.test(technicalMessage)) {
     return asOperationError(error, "Este recorte já possui a quantidade de itens necessária; não há lacuna para gerar agora.", "validation", "none");
@@ -495,8 +511,8 @@ function parseActionableFeedback(details: string | null | undefined): Actionable
     return {
       contract: parsed.contract,
       reason: parsed.reason,
-      fieldPath: typeof parsed.fieldPath === "string" ? parsed.fieldPath : null,
-      itemNumber: typeof parsed.itemNumber === "number" && Number.isInteger(parsed.itemNumber) && parsed.itemNumber > 0 ? parsed.itemNumber : null,
+      fieldPath: typeof parsed.fieldPath === "string" && /^[a-zA-Z][a-zA-Z0-9_.-]{0,239}$/.test(parsed.fieldPath) ? parsed.fieldPath : null,
+      itemNumber: typeof parsed.itemNumber === "number" && Number.isInteger(parsed.itemNumber) && parsed.itemNumber > 0 && parsed.itemNumber <= 1000 ? parsed.itemNumber : null,
     };
   } catch {
     return null;

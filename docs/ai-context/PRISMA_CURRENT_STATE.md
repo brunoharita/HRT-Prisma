@@ -2,13 +2,17 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.26
-last_verified: 2026-10-03
+version: 2.51.27
+last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
-Prisma v2.0.2 registra a correção autorizada da compatibilidade das evidências de importação, seu complemento Unicode e a correção de publicação de títulos personalizados, geração 2, movimento 0, entrega 2. Main/origin/VPS incorporam o complemento SQL `a9fa4da67c6b8594c867fa201f4cf9b2be19f94e`; web/Parser mantêm o build `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`. Migrations ativas, Parser saudável, web/HTTPS/versão e rollback verificados. Login e menu usam o registro único. O agente não executou retomada/publicação autenticada real; consultas posteriores confirmaram revisões draft, sem Perfil publicado automaticamente.
+Prisma v2.0.3 foi autorizado para orientar em português claro erros que o operador pode resolver. Implementação local em validação; publicação ainda pendente. Baseline hospedado confirmado: main/VPS `6401d72d34b1133a9d9d328c68ae3ffeb5dd2eb6`, web/Parser build v2.0.2 `96e3ecba4696994993e9b661ec37ae0ff49a3c5f`. As correções SQL anteriores permanecem ativas; nenhum Perfil real é publicado para testar.
+
+## Orientação para erros corrigíveis — v2.0.3
+
+`operator-feedback-1.0.0` apresenta motivos conhecidos e códigos legados de validação/recuperação sem linguagem de banco ou detalhes pessoais. Revisão antecipa a regra existente de telefone; dois números concatenados causavam SQL 22023 `reviewed_phone_invalid`, apresentado incorretamente como erro interno. A orientação identifica Telefone e leva à correção; o operador decide qual usar no campo único ou deixa vazio se há e-mail. Não altera fonte/evidências nem adiciona suporte a múltiplos telefones. Limites nomeiam o campo; sessão/permissão prevalecem e falhas desconhecidas não inventam correções. Produto no registro único v2.0.3, envelope `operation-feedback-2.0.0` e persistência inalterados; nenhuma migration/IA/Parser exigida. Acordo/AoT: `docs/qa/agreement-actionable-feedback-v203.md`, `docs/qa/aot-actionable-feedback-v203.md`.
 
 ## Compatibilidade das evidências de importação — v2.0.2
 

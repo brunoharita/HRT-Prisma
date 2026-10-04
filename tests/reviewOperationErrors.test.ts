@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { operationRecovery, reviewOperationError, reviewOperationErrorMessage, supabaseFunctionOperationError, supabaseOperationError } from "../web/src/domain/reviewOperationErrors.js";
+import { OPERATOR_FEEDBACK, PHONE_CORRECTION_MESSAGE } from "../web/src/domain/operatorFeedback.js";
 
 test("review operations turn approval gates into actionable messages", () => {
   assert.match(reviewOperationErrorMessage({ code: "23514", message: "material evidence is required before approval" }, "Falha."), /Vincule ao menos uma evidência/);
@@ -79,8 +80,56 @@ test("Supabase transport and intake failures expose safe recovery without raw ba
   assert.doesNotMatch(invalidOcrEvidence.message, /adaptive|field evidence|22023/);
 
   const genericInvalid = reviewOperationError({ code: "22023", message: "unknown_private_contract leaked" }, "Falha.");
-  assert.match(genericInvalid.message, /falha interna/);
+  assert.match(genericInvalid.message, /não identificou um campo/);
   assert.doesNotMatch(genericInvalid.message, /unknown_private_contract/);
+});
+
+test("known operator-correctible reasons use clear guidance through legacy and structured responses", () => {
+  for (const [reason, expected] of Object.entries(OPERATOR_FEEDBACK)) {
+    for (const error of [
+      { code: "22023", message: reason },
+      { code: "22023", message: "prisma_action_required", details: JSON.stringify({ contract: "operation-feedback-2.0.0", reason }) },
+    ]) {
+      const actual = supabaseOperationError(error, "Falha.");
+      assert.equal(actual.message, expected.message, reason);
+      assert.equal(actual.category, expected.category, reason);
+      assert.equal(actual.recovery, expected.recovery, reason);
+      assert.equal(actual.fieldPath, expected.fieldPath ?? null, reason);
+      assert.doesNotMatch(actual.message, /SQL|SQLSTATE|22023|P0002|JSON|E164|blueprint|identificador|contrato inválido/);
+    }
+  }
+  const phone = reviewOperationError({ code: "22023", message: "reviewed_phone_invalid", details: '{"reason":"private data must never be shown"}' }, "Falha.");
+  assert.equal(phone.message, PHONE_CORRECTION_MESSAGE);
+  assert.equal(phone.fieldPath, "contact.phone");
+  assert.equal(phone.recovery, "review-fields");
+});
+
+test("known field guidance cannot override authorization, authentication or Unicode system failure", () => {
+  const details = JSON.stringify({ contract: "operation-feedback-2.0.0", reason: "reviewed_phone_invalid", fieldPath: "contact.phone" });
+  for (const translate of [reviewOperationError, supabaseOperationError]) {
+    for (const [code, category] of [["42501", "authorization"], ["28000", "authentication"], ["PGRST301", "authentication"], ["22P05", "internal"]] as const) {
+      const error = translate({ code, message: "reviewed_phone_invalid", details }, "Falha.");
+      assert.equal(error.category, category);
+      assert.equal(error.fieldPath, null);
+      assert.doesNotMatch(error.message, /informe apenas um número/);
+    }
+  }
+});
+
+test("unknown and malformed details never invent a field correction or expose backend input", () => {
+  for (const details of ["{", "null", JSON.stringify({ contract: "untrusted", reason: "education_classification_required", fieldPath: "contact.phone" }), JSON.stringify({ contract: "operation-feedback-2.0.0", reason: "private_unknown_reason", fieldPath: "secret_table" })]) {
+    const error = reviewOperationError({ code: "22023", message: "private_unknown_reason", details }, "Falha.");
+    assert.equal(error.category, "internal");
+    assert.equal(error.fieldPath, null);
+    assert.doesNotMatch(error.message, /secret_table|private_unknown_reason/);
+  }
+  const fieldPath = 'education.x"] [data-secret]';
+  const malicious = reviewOperationError({ code: "22023", message: "prisma_action_required", details: JSON.stringify({ contract: "operation-feedback-2.0.0", reason: "education_classification_required", fieldPath, itemNumber: 9000000 }) }, "Falha.");
+  assert.equal(malicious.fieldPath, null);
+  assert.doesNotMatch(malicious.message, /9000000|data-secret/);
+  const validPath = "experiences.experience_12345678";
+  const target = reviewOperationError({ code: "22023", message: "prisma_action_required", details: JSON.stringify({ contract: "operation-feedback-2.0.0", reason: "profile_block_target_required", fieldPath: validPath }) }, "Falha.");
+  assert.equal(target.fieldPath, validPath);
 });
 
 test("operation-feedback 2.0 identifies the exact field in natural language", () => {
