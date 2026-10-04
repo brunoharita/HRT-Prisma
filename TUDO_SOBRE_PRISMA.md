@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 339
-source_manifest_sha256: e3527685820254c189103cc2268635fd1ffe9e018a0f0d5e118fe7201dd8b766
+source_manifest_sha256: 78e959e80e767e385bd88b232a36330fd1dea844a9f7683aa499a6fbb297d5ba
 -->
 
 # Tudo sobre o Prisma
@@ -2632,7 +2632,7 @@ last_verified: 2026-10-04
 
 # Estado atual do Prisma
 
-Complemento v2.0.4 em execução: classificação válida pelo sistema dispensa clique e difere de Confirmada por você. Aceitação explícita preservada é reutilizada somente com curso/classificação/fontes/método vigente conhecido iguais ao snapshot válido, sem desconhecidos; alteração do período não retira essa aceitação. Inferência, incompatibilidade, método legado/desconhecido, snapshot ausente ou mudança da classificação exigem revisão. Normalização/preflight usam reviewed vigente, preservando fonte/decisão humana; banco/Parser/matching permanecem. Evidência final: `docs/qa/aot-education-confirmation-visual.md`.
+Complemento v2.0.4 publicado no SHA funcional `bd52c1af99a1f0f201d250f19770355c93e114eb`: Classificação válida pelo sistema dispensa clique e difere de Confirmada por você. Aceitação explícita preservada é reutilizada somente com curso/classificação/fontes/método vigente conhecido iguais ao snapshot válido, sem desconhecidos; alteração do período não retira essa aceitação. Inferência, incompatibilidade, método legado/desconhecido, snapshot ausente ou mudança da classificação exigem revisão. Normalização/preflight/save/compare sincronizam reviewed sem decisão humana inventada nem alteração transitória falsa; formulário vazio permanece protegido. 70 testes dirigidos/256 person-flow, 29 verificações de render por viewport 1416/390, tipos/build/contextos/lint e CI branch/main PASS. Somente web publicada: imagem 66503ec, entry `/assets/index-S0Dgydwu.js`, versão/HTTPS/assets novos/anteriores/rollback conferidos; Parser/gateway preservados. Banco/matching inalterados. Jornada autenticada de Pessoa real NOT TESTED. Evidência final: `docs/qa/aot-education-confirmation-visual.md`.
 
 Prisma v2.0.4: corrigida a permanência do período de formação na revisão, inclusive ensino médio. O campo permanece ao apagar/corrigir, perder foco, trocar de formação/aba e salvar/reabrir rascunho sintético; um período preservado é visível sem depender do aviso. Estado local de abertura é restrito à revisão e ao ID da formação. Validadores, fonte/classificação, RPCs/tenant, Parser e matching não mudam. 70 testes dirigidos e 28 verificações no navegador em cada viewport 1416/390 PASS; o mesmo cenário falha no componente anterior ao limpar o campo. Tipos/build PASS. Publicado em main/origin/VPS no SHA funcional `0d19bc5f413967c0d04fa459dc2147e11d4ec6d9`; CI branch/main PASS, web running/zero reinícios, versão/bundle/assets HTTPS e rollback conferidos; Parser/gateway preservados nas mesmas imagens. Evidência final no `docs/qa/aot-education-period-v204.md`. Jornada autenticada de Pessoa real não foi executada para teste.
 
@@ -14922,7 +14922,7 @@ Contrato: [agreement-education-confirmation-visual.md](agreement-education-confi
 | --- | --- | --- | --- |
 | D-01 | Automática = Classificação válida, humana = Confirmada por você, pendência = Confirmar classificação; tag/cartão/button coerentes, sem clique redundante nos estados aceitos | 29 verificações por viewport 1416/390 PASS: automático sem clique, humano, pendente, legenda branca e flag persistida sem origem humana | PASS |
 | D-02 | `resolveEducationReviewClassification` restaura apenas aceitação explícita intacta com fontes/método/curso/nível/qualificação/situação iguais ao snapshot, sem desconhecidos. Normalização usa reviewed vigente sem origem/motivo humano inventado; preflight antecipa false. `acceptanceNeedsSync` permite salvar/comparar sem descartar atualização técnica quando normalizações dos dois drafts são iguais | 70 dirigidos e 256 person-flow PASS; negativos de snapshot/classificação, sync pendente/idempotente, imutabilidade e ausência de alteração transitória falsa (proteção de formulário vazio preservada); render save/reopen PASS | PASS |
-| D-03 | Owner docs/Context Pack e release seletivo somente web, produto v2.0.4 | Entrega em andamento | PARTIAL |
+| D-03 | Owner docs/Context Pack e release seletivo somente web, produto v2.0.4 | SHA funcional bd52c1a, CI branch/main PASS, web/HTTPS/assets/rollback e Parser/gateway preservados | PASS |
 
 ## Proibições e fora de escopo
 
@@ -14935,8 +14935,8 @@ P-01/F-01 preservados: nenhum classificador raiz/RPC/schema/gate de servidor/Par
 | Botão/tag/cartão/navegação | direct | Três estados reais, ação desabilitada nos aceitos e branca/legível na pendência, desktop/mobile PASS | PASS |
 | Normalização/save/compare/publicação | direct | Flag false podia parecer válida e ainda ser recusada pelo trigger existente; restauração conservadora e sync antes de comparar, sem clique humano extra. Negativos de curso/nível/status/qualificação/origem/fontes/snapshot e imutabilidade PASS; 70 dirigidos/256 person-flow | PASS |
 | Evidência/classificação/precisão/período | plausible_indirect | Mesmo classificador/snapshot, helper humano e dados; navegação/save/reopen sintéticos, fonte preservada e período acessível PASS | PASS |
-| Web/contextos/release | direct | Tipos/build/contextos/CI/HTTPS/assets/rollback | PARTIAL |
-| RPC/auth/tenant/Parser/IA/matching | no_impact_identified | Servidor mantém gate reviewed; payload automático tem mesmo shape da aceitação explícita original, sem claims humanos. Gerador de matching extrai somente funções de ID não alteradas; plano e imagens preservadas | PARTIAL |
+| Web/contextos/release | direct | Tipos/build/contextos/lint/foundation PASS; CI branch/main PASS, HTTPS/assets/rollback conferidos | PASS |
+| RPC/auth/tenant/Parser/IA/matching | no_impact_identified | Servidor mantém gate reviewed; payload automático tem mesmo shape da aceitação explícita original, sem claims humanos. Gerador de matching extrai somente funções de ID não alteradas; plano web-only, imagens de Parser/gateway preservadas | PASS |
 
 Screenshot é contraexemplo, não layout novo: posição do botão, cartões, abas e evidências preservados. Descoberta proporcional: span de metadados contaminava a cor da legenda; seletores foram restritos e legenda do botão primário tem cor explícita, verificada por estilo calculado. Falha inicial de contraste motivou esse reparo. Sem nova dependência.
 
@@ -14950,7 +14950,11 @@ A versão 1.1.0 substitui explicitamente o rótulo pendente obrigatório da prop
 
 ## Git / produção
 
-Em andamento; registrar SHA funcional, CI, imagens, HTTPS/assets/rollback e sincronização antes de encerrar.
+SHA funcional `bd52c1af99a1f0f201d250f19770355c93e114eb`, integrado em main/origin e implantado na VPS existente. CI `37229910086` (branch) e `37230002047` (main) success. Dispatcher 1.0.2: 14 arquivos, somente web; database/functions/Parser skip, unknown vazio. Receipts/logs locais: `tmp/education-confirmation-plan.json`, `tmp/education-confirmation-publish.json`, `tmp/education-confirmation-deploy.log`, `tmp/education-confirmation-smoke.log`. Publicação VPS executada pelo script existente via SSH depois do dispatcher Git; pending_vps_configuration no receipt Git foi resolvido por essa execução e smoke.
+
+Web running/zero reinícios, imagem `66503eced73233fb4151917f4df57d7117d2c3e993506829e134a2f70de3fda5`; novo entry `/assets/index-S0Dgydwu.js`, marcadores v2.0.4/Classificação válida/Confirmada por você conferidos. `/`, `/sign-in`, `/profiles`, entry novo, entry anterior `/assets/index-CKGo3_Dp.js` e PDF `/assets/pdf-Du5hpUXa.js`: HTTPS 200. Primeiro curl retornou 404 durante recriação do container e estabilizou sem rebuild. Rollback `prisma-web:rollback-before-bd52c1af99a1` aponta baseline `233af6da318de7caffbbf4dd7413b2ffc27b32b6a2a526262d4df16f5f645615`. Parser healthy/running/zero reinícios, mesma imagem `8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616`; gateway running/zero reinícios, mesma imagem `d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99`. Fechamento documental sincroniza Git sem rebuild dessas imagens.
+
+Trabalho alheio não rastreado preservado: `.tmp.driveupload/`, `docs/qa/agreement-matching-all-positions.md`, `services/paddle/Dockerfile.gpu` e `tests/matchingRuntime (1).test.ts`. Aviso preexistente de Git gc sem permissão para remover metadados de worktrees permanece, sem limpeza destrutiva. Testes sintéticos e smoke público não comprovam jornada autenticada de publicação real.
 
 ---
 
