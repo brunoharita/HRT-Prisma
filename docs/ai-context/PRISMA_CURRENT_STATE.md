@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.25
+version: 2.51.26
 last_verified: 2026-10-03
 ---
 
@@ -11,6 +11,8 @@ last_verified: 2026-10-03
 Prisma v2.0.2 registra a correção autorizada da compatibilidade das evidências de importação e seu complemento Unicode, geração 2, movimento 0, entrega 2, publicados na KVM2 com SHA funcional `96e3ecba4696994993e9b661ec37ae0ff49a3c5f` integrado em main/origin/VPS. Migrations ativas, Parser saudável, web/HTTPS/versão e rollback verificados. Login e menu usam o registro único. A retomada autenticada da tentativa antiga em produção permanece NOT TESTED; nenhum Perfil foi publicado automaticamente.
 
 ## Compatibilidade das evidências de importação — v2.0.2
+
+Complemento de publicação de seções personalizadas autorizado em 03/10/2026, com implementação/QA local e rollout em conclusão: erro 23505 era duplicação de nome normalizado no aprendizado após aprovação, com IDs de fonte diferentes. A definição tenant-scoped passa a ser reaproveitada por coincidência exata do título antes da chave, preservando IDs/evidências/itens do Perfil e a chave canônica do catálogo; confirmação append-only referencia a chave de origem. Contagem/replay e serialização por organização preservam publicação transacional sem publicar Perfil real pelo agente. Produto continua v2.0.2; formatos persistidos não mudam. Acordo/AoT: `docs/qa/agreement-section-publication-v202.md`, `docs/qa/aot-section-publication-v202.md`.
 
 Complemento Unicode autorizado e publicado em 03/10/2026: o PDF 3 expôs nove NUL nos marcadores, erro SQL 22P05 antes da RPC. `unicode-text-1.0.0` representa somente NUL/substitutos isolados como U+FFFD no texto derivado, com avisos/contagens para revisão e preservação de original/hash/cache, posições/ordem/linhas/listas e Unicode válido. `import-evidence-1.1.0` valida todo o JSON antes do transporte e identifica `unicode_invalid`; `evidence-adapter-1.0.1` permite retomada da falha 1.0.0 após atualização. Produto permanece v2.0.2. SQL QA real, pares antigos/novos de diagnóstico/grants/rollback, 43 testes dirigidos, 48 worker/cache/gateway/hosted/benchmark e 243 person-flow PASS. CI branch/main PASS, migration remota 20261003212042 ativa, Parser/web e HTTPS/readiness/rollback verificados. Replay dos dois PDFs no Parser publicado preservou 29 fatos/33 evidências no novo e 31/39 no anterior, com nove/zero NUL, sem IA/rede ou alteração dos caches; não recupera por si a tentativa em produção. Autorização permanente solicitada de enviar dados pessoais necessários à VPS existente registrada em AGENTS 1.3.2 e nota de memória; não autoriza outros destinos/cache exportado. Acordo/AoT: `docs/qa/agreement-import-unicode-v202.md`, `docs/qa/aot-import-unicode-v202.md`.
 

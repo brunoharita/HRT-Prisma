@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 329
-source_manifest_sha256: 5db2394f1de2b3c0bc60ed919c7f9c6deadffcd6096cc8f119ee4f286323154d
+documentation_source_count: 331
+source_manifest_sha256: 894d4910852d3b68f57d91126b368c8f77083649278b27e25785e5ebb11a6b17
 -->
 
 # Tudo sobre o Prisma
@@ -2626,7 +2626,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.25
+version: 2.51.26
 last_verified: 2026-10-03
 ---
 
@@ -2635,6 +2635,8 @@ last_verified: 2026-10-03
 Prisma v2.0.2 registra a correção autorizada da compatibilidade das evidências de importação e seu complemento Unicode, geração 2, movimento 0, entrega 2, publicados na KVM2 com SHA funcional `96e3ecba4696994993e9b661ec37ae0ff49a3c5f` integrado em main/origin/VPS. Migrations ativas, Parser saudável, web/HTTPS/versão e rollback verificados. Login e menu usam o registro único. A retomada autenticada da tentativa antiga em produção permanece NOT TESTED; nenhum Perfil foi publicado automaticamente.
 
 ## Compatibilidade das evidências de importação — v2.0.2
+
+Complemento de publicação de seções personalizadas autorizado em 03/10/2026, com implementação/QA local e rollout em conclusão: erro 23505 era duplicação de nome normalizado no aprendizado após aprovação, com IDs de fonte diferentes. A definição tenant-scoped passa a ser reaproveitada por coincidência exata do título antes da chave, preservando IDs/evidências/itens do Perfil e a chave canônica do catálogo; confirmação append-only referencia a chave de origem. Contagem/replay e serialização por organização preservam publicação transacional sem publicar Perfil real pelo agente. Produto continua v2.0.2; formatos persistidos não mudam. Acordo/AoT: `docs/qa/agreement-section-publication-v202.md`, `docs/qa/aot-section-publication-v202.md`.
 
 Complemento Unicode autorizado e publicado em 03/10/2026: o PDF 3 expôs nove NUL nos marcadores, erro SQL 22P05 antes da RPC. `unicode-text-1.0.0` representa somente NUL/substitutos isolados como U+FFFD no texto derivado, com avisos/contagens para revisão e preservação de original/hash/cache, posições/ordem/linhas/listas e Unicode válido. `import-evidence-1.1.0` valida todo o JSON antes do transporte e identifica `unicode_invalid`; `evidence-adapter-1.0.1` permite retomada da falha 1.0.0 após atualização. Produto permanece v2.0.2. SQL QA real, pares antigos/novos de diagnóstico/grants/rollback, 43 testes dirigidos, 48 worker/cache/gateway/hosted/benchmark e 243 person-flow PASS. CI branch/main PASS, migration remota 20261003212042 ativa, Parser/web e HTTPS/readiness/rollback verificados. Replay dos dois PDFs no Parser publicado preservou 29 fatos/33 evidências no novo e 31/39 no anterior, com nove/zero NUL, sem IA/rede ou alteração dos caches; não recupera por si a tentativa em produção. Autorização permanente solicitada de enviar dados pessoais necessários à VPS existente registrada em AGENTS 1.3.2 e nota de memória; não autoriza outros destinos/cache exportado. Acordo/AoT: `docs/qa/agreement-import-unicode-v202.md`, `docs/qa/aot-import-unicode-v202.md`.
 
@@ -4994,6 +4996,8 @@ No refinamento 1.2.0, o retângulo bruto permanece em `raw_selected_text` e o re
 Operações espaciais e aprovação permanecem indisponíveis enquanto uma edição manual material existir somente no estado local. A interface deve explicar essa dependência no contexto da ação, permitir que o operador registre a intenção mesmo com o bloqueio visível e retomar adicionar evidência ou criar área personalizada somente depois de salvar ou descartar explicitamente as mudanças. Um formulário repetível recém-aberto e ainda vazio é transitório, não constitui alteração material, não habilita salvamento e pode receber sua primeira evidência sem persistência prévia: campo e evidência são então validados e persistidos atomicamente. Repetir a ação Adicionar deve focalizar o formulário transitório existente, nunca criar duplicatas vazias. Cancelar uma inclusão transitória restaura o estado sincronizado sem criar remoção ou histórico. O salvamento de uma correção comum não solicita justificativa textual: a auditoria registra automaticamente ator, instante, versão, campo, valor anterior, valor novo e evidência aplicável. A exigência de motivo humano permanece somente na remoção explícita de um fato já aprovado durante o Delta. O bloqueio nunca pode depender apenas de cor, opacidade ou conhecimento prévio do fluxo.
 
 Uma área personalizada usa o caminho `customSections.<sectionId>.items.<itemId>.value`. Sua criação começa por seleção explícita no documento. A aprovação pode promover somente título normalizado, formato, versão e contagem de confirmação ao catálogo estrutural da organização; um ledger append-only referencia a revisão confirmadora. O valor do item e o trecho de evidência não são copiados para nenhum dos dois. `uncertainties` e `notIdentified` são pendências diagnósticas da extração, não fatos do perfil.
+
+Na aprovação, um título exatamente coincidente após normalização reutiliza a definição da organização antes de consultar a chave de origem. IDs/chaves do Perfil e da definição canônica não são trocados: a confirmação registra a chave da seção que foi aprovada. Quando só a chave já existe, a atualização de título/formato mantém o comportamento anterior. A transação serializa esse catálogo por organização e incrementa a contagem somente quando insere nova confirmação; repetição da publicação reutiliza o resultado sem duplicar confirmação, contagem, Perfil ou eventos. Esta correção da v2.0.2 não muda os formatos dos contratos 1.0.0 nem autoriza equivalências aproximadas ou reparo de histórico. Verificação SQL local: `supabase/qa/custom_section_publication_verification.sql`, usando `node scripts/verify-import-evidence.mjs 55479 import_evidence_v202_final --publication`; concorrência: `node scripts/verify-custom-section-concurrency.mjs` após gerar o cenário de publicação.
 
 Experiências e formações novas usam caminhos `experiences.<experienceId>.<campo>` e `education.<educationId>.<campo>`. Caminhos numéricos históricos permanecem aceitos. O salvamento converte escalares opcionais vazios em `null`, remove itens repetíveis inteiramente vazios e mantém listas como arrays, sem fabricar “Não identificado”. Nome completo, telefone ou e-mail e ao menos uma informação profissional material são gates explícitos. Experiência exige Empresa ou Cargo; formação exige Curso ou Instituição. Inclusão e remoção são decisões humanas reversíveis antes do salvamento.
 
@@ -14372,6 +14376,38 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 
 ---
 
+## Source: `docs/qa/agreement-section-publication-v202.md`
+
+# Complemento v2.0.2 — publicação e títulos personalizados
+
+Versão 1.0.0, agreed, 2026-10-03. Continuidade da correção/publicação autorizada por Bruno; baseline `39e72b9`, risco D. Restaura ADR-019 e o contrato de revisão, sem nova dependência ou formato persistido. Produto permanece v2.0.2.
+
+- D-S01: título que coincide exatamente após normalização dentro da organização reutiliza a definição estrutural existente, mesmo com ID de seção diferente. Preservar ID/chave da definição e IDs, itens, ordem, valores e evidências do Perfil. CA: publicação SQL completa de duas Pessoas com mesmo título/IDs diferentes; uma definição e duas confirmações com suas chaves de origem.
+- D-S02: aprendizado continua apenas na transição humana draft → approved, com metadados e ledger append-only, sem conteúdo pessoal. Repetição da publicação não duplica Perfil, confirmação, contagem ou eventos. Resolver por nome antes de chave; quando somente a chave existe, manter o comportamento de atualização de título/formato. Serializar o catálogo por organização com o padrão de advisory transaction lock já existente no Prisma. CA: SQL de nova definição, nome repetido, mesma chave, renomeação, repetição, concorrência e tenant distinto.
+- D-S03: manter gates de contrato/evidências, permissão/tenant, locking, idempotência, auditoria e rollback atômico. CA: negativos SQL e regressão person-flow. Não publicar ou alterar a revisão real para testar.
+- D-S04: migration forward-only, main/origin/VPS sincronizados e verificação da função instalada. CA: QA local, testes dirigidos/CI, Context Pack e rollout seletivo. Smoke autenticado real permanece explicitamente NOT TESTED quando indisponível.
+- P-S01: nenhuma equivalência aproximada, troca de IDs de fonte, remoção de histórico, cópia de itens para catálogo, relaxamento de autorização ou confirmação humana fictícia.
+- F-S01: parser/OCR/Unicode, matching, Knowledge, mudança visual, publicação automática ou saneamento histórico em lote.
+- A-S01: mecanismo SQL, fixtures sintéticas locais, documentação e entrega seletiva delegados à engenharia.
+- Q-S01: nenhuma decisão material pendente; reutilizar a identidade por nome normalizado já definida no ADR-019/unique existente.
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline / prova proporcional |
+| --- | --- | --- |
+| Aprovação/publicação e aprendizado estrutural | direct | revisão real draft/lock 1, zero Perfis/operações de aprovação; logs 23505 no trigger; SQL completo sintético e replay |
+| IDs/evidências/listas, contratos e histórico de revisão | critical_transversal | fonte intocada e auditoria transacional; SQL de persistência/publicação e person-flow |
+| Auth/tenant/privacidade | critical_transversal | SECURITY DEFINER privado, grants/RLS e gates existentes; negativos e inspeção |
+| Extração futura de títulos aprendidos | plausible_indirect | ADR-019, chave canônica preservada; testes customProfileSections |
+| Web/Parser/VPS runtime | no_impact_identified | nenhuma alteração consumida pelo runtime; plano não exige rebuild, smoke HTTPS/readiness preservado |
+| Matching/Knowledge/OCR/Unicode | no_impact_identified | nenhum motor/consumidor ou contrato alterado; diff, plano e regressão de importação |
+
+## Execução congelada
+
+Implementar D-S01 a D-S04 sob P-S01, excluindo F-S01, com autonomia A-S01. Este acordo incorpora o prompt do complemento; AoT registra implementação, testes, produção e limites, sem afirmar que a revisão real já foi publicada.
+
+---
+
 ## Source: `docs/qa/agreement-sidebar-branding-v171.md`
 
 # Contrato de Acordos — Sidebar institucional e Prisma v1.7.1
@@ -18071,6 +18107,38 @@ SHA funcional: `e84497e4a5a6ce05e202e7b9dcc138dca2dc4305`, integrado por fast-fo
 Preservação: períodos explícitos, fonte original, grupos/requisitos, exclusão de gestão como programação, guardas de auth/tenant e snapshots históricos cobertos pelas provas locais/operacionais acima. Conhecimento, curadoria e banco não foram modificados. Não houve importação real para teste; essa fronteira foi validada com fixtures locais.
 
 Arquivos não rastreados preexistentes preservados e excluídos do commit: `.tmp.driveupload/`, `services/paddle/Dockerfile.gpu` e `tests/matchingRuntime (1).test.ts`. Desvios funcionais identificados: nenhum. Este fechamento documental não muda o SHA do runtime nem exige novo deploy. A regra de século requer revisão de produto em 2050.
+
+---
+
+## Source: `docs/qa/aot-section-publication-v202.md`
+
+# AoT — publicação de seções personalizadas v2.0.2
+
+Acordo/prompt `agreement-section-publication-v202.md` 1.0.0. Baseline `39e72b9`, risco D; branch `codex/fix-section-publication-v202`. Produto mantém v2.0.2 e formatos persistidos 1.0.0. Mapa do acordo: publicação/trigger direct; evidências/IDs/histórico/auth/tenant critical_transversal; extração de títulos aprendidos plausible_indirect; web/Parser/matching/Knowledge/OCR/Unicode no_impact_identified.
+
+## Diagnóstico e acordos
+
+Logs de 2026-10-04 01:55:48/01:56:03 UTC: SQLSTATE 23505 em `private.learn_approved_custom_profile_sections`, no INSERT de definição, rollback durante `approve_profile_review` chamado por `publish_profile_review`. Consulta tenant-scoped confirmou revisão draft/lock 1, zero Perfis/operações de aprovação; título coincidente/mesmo formato, IDs diferentes. Reprodução local com duas Pessoas sintéticas confirmou mesma constraint de nome normalizado. A mensagem genérica de conflito não era prova de publicação anterior.
+
+| ID | Implementação / evidência | Status |
+| --- | --- | --- |
+| D-S01 | nome normalizado exato antes de chave; SQL primeira/segunda publicação com IDs diferentes mantém uma definição e proveniência por fonte | PASS |
+| D-S02 | advisory lock transacional por organização reutiliza padrão existente; confirmações idempotentes; SQL formato/renomeação/replay e duas conexões com lock até rollback | PASS |
+| D-S03 | grants/gates/RLS/histórico e IDs de fontes preservados; negativos SQL; 243/243 person-flow PASS | PASS |
+| D-S04 | migration forward-only; CI/produção/contexto/sincronização pendentes | PARTIAL |
+| P-S01 | apenas metadados, coincidência exata, fonte/histórico/autoridade preservados; nenhum Perfil real publicado pelo agente | PASS |
+
+## Validação e limites
+
+14 testes dirigidos customProfileSections/lifecycle/Delta PASS; TypeScript build PASS. SQL real PostgreSQL 17 local: cinco primeiras publicações e seus replays, chaves distintas/memo título, mesma chave/formato/renomeação, catálogo canônico, contagem, ledger, negativas member/outsider/no session/anon/DML, isolamento entre tenants e imutabilidade PASS com rollback. Duas conexões comprovam que uma publicação detém o lock do catálogo até rollback e outra não consegue adquiri-lo; após rollback o lock fica disponível. Regressão SQL original import/Unicode/evidências PASS com rollback. A fixture de ator outsider foi alinhada à validação vigente de membership; assert SQL ganhou qualificação explícita de coluna; no session esperado 42501, sem alterar gates do produto.
+
+Person-flow teve falhas ENOTEMPTY na limpeza do Temp Windows; execução com Temp dentro do repositório resolveu limpeza mas invalidou a expectativa do runner de pasta sem Git. Verificação final com acesso normal ao Temp PASS: 243/243, mesmos testes/assertions e runner, sem mudança no produto. Os probes intencionais de relatório de falha passaram. Lint 805 arquivos e foundation 18 tabelas públicas/seis versões PASS.
+
+Publicação autenticada da revisão real não executada; nenhum dado pessoal foi exportado e nenhuma decisão humana simulada em produção. Browser autenticado indisponível no ambiente permanece limite NOT TESTED; consulta read-only após rollout deve confirmar preservação da revisão. A captura fornecida é exemplo da falha, não alvo de redesenho visual.
+
+## Produção
+
+Pendente: somente migration, nenhuma reconstrução web/Parser. O AoT será fechado com migration/ledger, função instalada/grants, CI, HTTPS/readiness e main/origin/VPS alinhados.
 
 ---
 

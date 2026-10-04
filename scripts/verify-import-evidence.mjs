@@ -35,7 +35,9 @@ const payload = attached.map((page) => ({ page_number: page.pageNumber, text_con
 const directory = resolve("tmp/import-evidence-v202-qa");
 await mkdir(directory, { recursive: true });
 const literal = (value) => `'${JSON.stringify(value).replaceAll("'", "''")}'`;
-const sql = (await readFile("supabase/qa/import_evidence_v202_verification.sql", "utf8"))
+if (process.argv[4] && process.argv[4] !== "--publication") throw Error("Unknown local verification scenario");
+const verificationSource = process.argv[4] === "--publication" ? "supabase/qa/custom_section_publication_verification.sql" : "supabase/qa/import_evidence_v202_verification.sql";
+const sql = (await readFile(verificationSource, "utf8"))
   .replaceAll(":'draft'", literal(prepared.draft)).replaceAll(":'pages'", literal(payload))
   .replaceAll(":evidence_count", String(result.fieldEvidence.length)).replaceAll(":'method'", `'${parserIaMethodVersion(result)}'`);
 const path = resolve(directory, "verification.sql");
