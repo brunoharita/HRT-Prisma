@@ -1296,6 +1296,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-04"
+    },
+    {
+      "name": "profile_synthesis_sections",
+      "localVersion": "20261005034000",
+      "remoteVersion": "20261005032036",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-05"
     }
   ],
   "localOnly": [

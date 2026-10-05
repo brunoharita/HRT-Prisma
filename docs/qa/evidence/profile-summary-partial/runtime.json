@@ -1,0 +1,60 @@
+{
+  "productVersion": "2.0.6",
+  "functionalSha": "dbd5b08ffa48eca2b4b9e0e07d9f24e0f357c161",
+  "ci": {
+    "branch": 37258829924,
+    "main": 37258898781,
+    "status": "success"
+  },
+  "database": {
+    "projectRef": "ioldpnqqvobprjiontre",
+    "sectionsMigration": "20261005032036",
+    "contractDefault": "profile-synthesis-1.1.0",
+    "anonLoad": false,
+    "authenticatedInternalValidator": false,
+    "authenticatedDirectSelect": false,
+    "legacyAttempts": 3,
+    "recoveryActivation": "pending"
+  },
+  "web": {
+    "image": "sha256:cfa50e09996b2090e64ec1d567866eec6e82fa883a44d7fa5e9556b44ea2a493",
+    "entry": "index-Bx4s26MG.js",
+    "state": "running",
+    "restarts": 0
+  },
+  "worker": {
+    "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+    "state": "healthy",
+    "restarts": 0
+  },
+  "preserved": {
+    "parser": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+    "gateway": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+    "restarts": 0
+  },
+  "http": {
+    "routes": [
+      "/",
+      "/login",
+      "/people"
+    ],
+    "currentAndPreviousAssets": 200,
+    "stabilizedWithoutRebuild": true
+  },
+  "compiledWorkerMock": {
+    "validOverviewStatements": 1,
+    "answers": 8,
+    "isolatedSection": "clarifications",
+    "isolatedReason": "REFERENCES_INVALID",
+    "providerCalls": 0
+  },
+  "validation": {
+    "domainWorkerTests": 40,
+    "releaseToolingTests": 19,
+    "personFlowTests": 256,
+    "sqlAssertions": 44,
+    "renderReports": 36,
+    "authenticatedRealJourney": "NOT TESTED",
+    "realAiQuality": "NOT TESTED"
+  }
+}

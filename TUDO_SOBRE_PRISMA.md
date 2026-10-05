@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 350
-source_manifest_sha256: 14a55d07f50afc688f274b7d6f3c88677bcf095d638fa3bc67c92763903d879a
+source_manifest_sha256: 83a033ce5f70ab09e75aebd1aaa04a0ae9b4a5206a6ebc85bd3e7219a7b7db83
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-05
 
 ## Resumo preservado por seção v2.0.6
 
-Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,39asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build PASS. Nenhuma chamada real adicional de IA/Pessoa. Legadofailed3/histórico intacto, sem reset/backfill. Migração/web/worker e publicação em andamento; produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/report locais em `docs/qa/evidence/profile-summary-partial`.
+Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,44asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build/19tooling/contextos/lint/foundation PASS. SHA funcionaldbd5b08ffa48eca2b4b9e0e07d9f24e0f357c161 publicado; CI branch37258829924/main37258898781 PASS, migração remota20261005032036. Webcfa50e0 running0/entryindex-Bx4s26MG.js; worker8526717 healthy0, probe compilado sintético preserva respostas válidas e isola referência inválida com zero chamadas reais. Rotas/assets novos e anteriores200 após estabilização404semrebuild; rollbacks retidos. Parser8682af7/gatewayd061cea preservados. Nenhuma chamada real adicional de IA/Pessoa; jornada autenticada real NOT TESTED. Legadofailed3/histórico intacto, sem reset/backfill. Complemento SQL de recuperação explícita na chave corrigida em andamento; produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/reports/probe em `docs/qa/evidence/profile-summary-partial`.
 
 ## Recuperação controlada e identificação v2.0.6
 
@@ -4388,6 +4388,8 @@ Contrato1.1.0 permite overview vazio com motivo, preserva oito respostas e adici
 Structured Outputs usa enum fechado de IDs existentes em `$defs` compartilhado, com1..5referências por afirmação/pergunta. Não há fonte inventada por escolha de texto livre; validação TS e SQL continuam necessárias e não provam sustentação semântica. [Documentação oficial](https://developers.openai.com/api/docs/guides/structured-outputs). Mesmo com falha total de IA/consulta, a tela exibe seções com dados profissionais do Perfil aprovado já carregado, explicitamente identificados como informações publicadas. Ausências/indisponibilidade têm explicação local em português; códigos técnicos não aparecem ao operador. Esses dados não são marcados como resposta de IA.
 
 Não há backfill/reset/chamada em refresh. Migração aditiva mantém histórico antigo e seleciona contrato novo quando existir; novas solicitações/publicações usam1.1.0. Joblegado já queued migra para nova chave preservando tentativa antiga; legado failed/attempt3 não é reenfileirado automaticamente. Respostas descartadas antes da correção não são reconstruídas. Nenhuma chamada real para a Pessoa do incidente é necessária para restabelecer a tela com fatos publicados.
+
+Recuperação explícita do legado: o botão de nova geração pode solicitar o contrato corrigido quando a falha antiga foi de resposta e já passou o cooldown. O RPC mantém o job1.0.0 e suas três tentativas, cria ou reutiliza somente a chave1.1.0 da mesma base autorizada e não muda o Perfil. Repetir a ação não cria novos jobs ou reinicia contadores. Configuração, recusa, fonte/base/autoridade inválida e falhas persistentes de banco não são convertidas em permissão para reprocessar. O contrato atual mantém seu limite de três tentativas; nenhuma visita gera esse upgrade automaticamente.
 
 ---
 
@@ -10459,7 +10461,7 @@ RPCs de processamento exigem token, job e lease reais; não oferecem SQL/acesso 
 
 Monitorar idade/estado da fila, tentativas/modelo/tokens, duração/falhas e health/restarts sem exportar textos/fontes/prompts. Três tentativas por base; resposta inválida/configuração não faz retry automático. Reconciliação de até dez novas publicações por rodada desde instalação, sem lote histórico. Falha de enqueue opcional não bloqueia auditoria/publicação. Eventos de evidências relevantes invalidam apenas Perfis já analisados.
 
-Rollback: parar somente o worker, restaurar web rollback e worker `rollback-before-<SHA12>` quando disponível. Preservar tabelas, credenciais e resultados; filas podem aguardar retomada. QA somente em PostgreSQL local descartável: `supabase/qa/profile_synthesis_verification.sql`, rollback. Não executar fixture em produção nem replay do ledger. Bootstrap do hash administrativo não contém dado de Pessoa. Evidência em `docs/qa/aot-profile-synthesis-v205.md`.
+Rollback: parar somente o worker e preservar a web compatível com1.1.0, tabelas, credenciais e resultados; filas podem aguardar retomada. As imagens `rollback-before-<SHA12>` permanecem disponíveis, mas o worker antigo não deve consumir a fila1.1.0 e o leitor antigo pode recusar resultados parciais. Não restaurar componentes incompatíveis sem adaptação validada. A tela com dados publicados continua acessível enquanto a geração está pausada. QA somente em PostgreSQL local descartável: `supabase/qa/profile_synthesis_verification.sql`, rollback. Não executar fixture em produção nem replay do ledger. Bootstrap do hash administrativo não contém dado de Pessoa. Evidência em `docs/qa/aot-profile-synthesis-v205.md`.
 
 
 ## Diagnóstico e recuperação
@@ -10477,6 +10479,8 @@ Em 04/10/2026 Bruno autorizou uma única chamada adicional do job existente. Gua
 ## Preservação por seção v2.0.6
 
 Resultado/prompt1.1.0 e migração incremental das funções/defaults, sem tabelas públicas/permissões novas. Resultados parciais guardam somente trechos válidos e issues fixos por seção; não logar corpo rejeitado. Compatibilidade1.0.0 na leitura; legacyfailed3 fica intacto, somente novas solicitações/publicações usam1.1.0. Pausar somente worker durante ativação da migração e promover worker/web do mesmo SHA validado. Rollback preserva migração e históricos; leitor antigo pode recusar novo resultado, por isso rollback compatível mantém a tela com informações publicadas. Sem reset/backfill.
+
+Migração complementar `profile_synthesis_retry_upgrade` habilita ação explícita para respostas inválidas antigas: chave nova do contrato corrigido, base/tenant/Perfil vigente conferidos, lock/cooldown/idempotência, job e tentativas legadas intactos. Não chamar o RPC real como smoke: ele solicita geração e pode causar custo. Verificar elegibilidade/histórico por metadados administrativos, sem textos pessoais; exercitar mutação/replay apenas em QA sintética com rollback. Esta ativação exige apenas banco e documentação; web/worker já compatíveis permanecem nas imagens validadas.
 
 ---
 
@@ -14600,6 +14604,8 @@ Versão 1.0.0, agreed, 2026-10-05. Autoridade: decisão explícita de Bruno: a t
 - A-S01: versionamento aditivo/SQL/RPCs/normalização defensiva/enum/UI/testes sob os padrões atuais; preservar a versão pública2.0.6.
 - Q-S01: nenhuma decisão material pendente; falhas antigas descartaram respostas e não permitem reconstruir conteúdo gerado. Exibir dados publicados atuais preservados, sem fabricar aquela análise.
 
+Delta de execução de D-S02, sob a mesma autoridade: uma ação explícita de recuperação pode criar a chave do contrato corrigido para falha de resposta do legado1.0.0, inclusive após três tentativas. Não reinicia aquele job, não apaga tentativas e não gera ao consultar. Reutiliza leitor autorizado, tenant/Pessoa/Perfil vigente/hash, lock, cooldown e chave idempotente; o contrato1.1.0 conserva seu próprio limite de três tentativas. Validação negativa e prova de replay/histórico obrigatórias. Não autoriza reprocessamento administrativo de uma Pessoa real nesta execução.
+
 ## Mapa de impacto / aceite
 
 | Capacidade | Relação | Baseline / regressão mínima |
@@ -18628,10 +18634,10 @@ Acordo `agreement-profile-summary-partial.md` v1.0.0, decisão explícita de Bru
 | ID | Implementação | Teste/evidência | Estado |
 | --- | --- | --- | --- |
 | D-S01 | Normalização por unidade, descarte somente trecho inválido, preservação de irmãos/motivo local | 40 testes TS/worker, simultâneos/refs/texto/comprovação/ausência/metadata/histórico/Unicode/limites | PASS |
-| D-S02 | Enum compartilhado, result1.1.0/issues, SQL parcial/compatibilidade/keys/leases/tenant |39asserts SQL local rollback, origem inválida/diagnóstico livre/segredo/anon/intertenant/replay/budget/legado/proveniência rejeitados | PASS local; ativação pendente |
-| D-S03 | Oito eixos, cards preservados, dados publicados próprios, nenhum código técnico, boundary local |36reports1416/390 PASS; sucesso/falha total/consulta/retry/fonte/snapshot/múltiplos/overview vazio/erro render local | PASS local |
-| D-S04 | Owner/ADR/contexto/release seletivo/rollback |Tipos/build PASS, person-flow256PASS, contextos/CI/release/smoke pendentes | PARTIAL |
-| P-S01 | Nenhum fato inventado/canônico, nenhuma referência desconhecida exibida, sem reset/chamada por refresh | Negativos40/39, query-only2viewports zero request em refresh e um somente ação explícita, histórico existente preservado | PASS |
+| D-S02 | Enum compartilhado, result1.1.0/issues, SQL parcial/compatibilidade/keys/leases/tenant; recuperação explícita na chave corrigida |44asserts SQL local rollback: negativos de fonte/diagnóstico/segredo/anon/intertenant/proveniência, recuperação do legado/replay/histórico/budget. Migração principal ativada; complemento pendente | PARTIAL |
+| D-S03 | Oito eixos, cards preservados, dados publicados próprios, nenhum código técnico, boundary local |36reports1416/390 PASS; sucesso/falha total/consulta/retry/fonte/snapshot/múltiplos/overview vazio/erro render local; bundle novo publicado e HTTP200 | PASS |
+| D-S04 | Owner/ADR/contexto/release seletivo/rollback |Tipos/build PASS, person-flow256PASS, 19tooling/contextos/lint/foundation/CI/publicação principal PASS; complemento de banco pendente | PARTIAL |
+| P-S01 | Nenhum fato inventado/canônico, nenhuma referência desconhecida exibida, sem reset/chamada por refresh | Negativos40/44, query-only2viewports zero request em refresh e um somente ação explícita, histórico existente preservado | PASS |
 
 ## Evidência e preservação
 
@@ -18640,6 +18646,16 @@ PostgreSQL17.5 em127.0.0.1:55479, DBdescartávelimport_evidence_v202, fixtures c
 Screenshot do usuário é contraexemplo: grande bloco de erro escondia Resumo. Referências originais70/30 e60/40 preservadas; oito eixos agora abertos inicialmente por decisão explícita de preservação. `evidence/profile-summary-partial/multiple-errors-1416.png` mostra narrativa válida após erro de overview e dois eixos; `failed-390.png` mostra dados publicados em falha total. Todos36reports emui-results.json verificam seções/navegação/origem/sem overflow/códigos. Conferência visual desses dois estados realizada; mudança de densidade é diretamente exigida pela premissa, sem redesign do shell. Dados sintéticos, jornada autenticada real NOT TESTED.
 
 Regressão do Perfil/publicação:256person-flow PASS; nenhuma escrita canônica nova. Enum fechado reutiliza Structured Outputs oficial com `$defs`, sem repetir lista em três locais. Contrato diferente explicita decisão superveniente, não muda silenciosamente significado persistido. Nenhuma chamada real adicional de IA; qualidade semântica universal não provada. Imagens operacionais/rollout abaixo.
+
+## Publicação e recuperação
+
+SHA funcional `dbd5b08ffa48eca2b4b9e0e07d9f24e0f357c161`, CI branch37258829924/main37258898781 PASS. Migração `profile_synthesis_sections` remota20261005032036 aplicada; default1.1.0, anon/load e cliente/validador interno e SELECT direto negados. Incidente permaneceu failed/attempt3. Worker parado somente durante migração, depois worker/web exatos publicados. Nenhuma chamada real adicional nem escrita canônica.
+
+Web `sha256:cfa50e09996b2090e64ec1d567866eec6e82fa883a44d7fa5e9556b44ea2a493`, running/0reinícios, entry `index-Bx4s26MG.js`; worker `sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5`, healthy/0reinícios. Rotas /, /login, /people, asset novo e anteriores200 após estabilização de404semrebuild. Rollbacks web/worker `rollback-before-dbd5b08ffa48` retidos; rollback compatível pausa geração e mantém leitor1.1.0/dados. Parser8682af7 healthy/0 e gatewayd061cea running/0 preservados.
+
+Probe sintética no worker compilado publicado: overview válido e oito eixos preservados, referência desconhecida em pergunta complementar retirada, motivo REFERENCES_INVALID localizado; providerCalls0, sem banco/credenciais/LLM. Prova de runtime do normalizador, não prova de qualidade real de IA. Evidência segura em `evidence/profile-summary-partial/runtime.json`.
+
+Complemento de recuperação exige apenas SQL/documentação. Solicitação explícita cria chave1.1.0 para falha de resposta legada esgotada, sem alterar failed/attempt3 antigo; replay não duplica chave e versão nova começa com orçamento próprio.44asserts locais PASS com rollback; ativação remota e sincronização finais pendentes.
 
 ---
 

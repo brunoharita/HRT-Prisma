@@ -11,6 +11,8 @@ Versão 1.0.0, agreed, 2026-10-05. Autoridade: decisão explícita de Bruno: a t
 - A-S01: versionamento aditivo/SQL/RPCs/normalização defensiva/enum/UI/testes sob os padrões atuais; preservar a versão pública2.0.6.
 - Q-S01: nenhuma decisão material pendente; falhas antigas descartaram respostas e não permitem reconstruir conteúdo gerado. Exibir dados publicados atuais preservados, sem fabricar aquela análise.
 
+Delta de execução de D-S02, sob a mesma autoridade: uma ação explícita de recuperação pode criar a chave do contrato corrigido para falha de resposta do legado1.0.0, inclusive após três tentativas. Não reinicia aquele job, não apaga tentativas e não gera ao consultar. Reutiliza leitor autorizado, tenant/Pessoa/Perfil vigente/hash, lock, cooldown e chave idempotente; o contrato1.1.0 conserva seu próprio limite de três tentativas. Validação negativa e prova de replay/histórico obrigatórias. Não autoriza reprocessamento administrativo de uma Pessoa real nesta execução.
+
 ## Mapa de impacto / aceite
 
 | Capacidade | Relação | Baseline / regressão mínima |

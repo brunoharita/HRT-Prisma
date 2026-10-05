@@ -121,6 +121,22 @@ set local role anon;
 select pg_temp.reject(format('select public.retry_profile_synthesis(%L,%L)',pg_temp.sid('a'),pg_temp.sid('pa')),'42501');
 reset role;
 
+
+insert into public.people(id,organization_id,full_name) values(pg_temp.sid('legacy-person'),pg_temp.sid('a'),'Pessoa legada sintética');
+insert into public.professional_profiles(id,organization_id,person_id,profile_data,extraction_version,inference_version,embedding_version,prompt_version,model_version,profile_version,review_status,approved_at)
+values(pg_temp.sid('legacy-profile'),pg_temp.sid('a'),pg_temp.sid('legacy-person'),'{"professionalObjective":"Atuar na área financeira"}','fixture','fixture','none','fixture','fixture',1,'approved',now());
+insert into public.profile_synthesis_jobs(organization_id,person_id,profile_id,basis_hash,state,attempts,error_code,contract_version,prompt_version)
+values(pg_temp.sid('a'),pg_temp.sid('legacy-person'),pg_temp.sid('legacy-profile'),encode(extensions.digest(private.profile_synthesis_sources(pg_temp.sid('legacy-profile'))::text,'sha256'),'hex'),'failed',3,'RESPONSE_INVALID','profile-synthesis-1.0.0','profile-synthesis-prompt-1.0.0');
+select set_config('request.jwt.claim.sub',pg_temp.sid('member')::text,true);
+set local role authenticated;
+select pg_temp.assert((public.load_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('legacy-person'))->>'canRetry')::boolean,'old exhausted response can explicitly request corrected contract');
+select pg_temp.assert(public.retry_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('legacy-person'))->>'state'='queued','explicit recovery queues corrected contract');
+select public.retry_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('legacy-person'));
+reset role;
+select pg_temp.assert((select count(*)=2 from public.profile_synthesis_jobs where person_id=pg_temp.sid('legacy-person')),'recovery replay creates only one new versioned job');
+select pg_temp.assert((select attempts=3 and state='failed' from public.profile_synthesis_jobs where person_id=pg_temp.sid('legacy-person') and contract_version='profile-synthesis-1.0.0'),'legacy budget and failure preserved');
+select pg_temp.assert((select attempts=0 and contract_version='profile-synthesis-1.1.0' from public.profile_synthesis_jobs where person_id=pg_temp.sid('legacy-person') and contract_version='profile-synthesis-1.1.0'),'corrected contract owns distinct bounded budget');
+
 delete from public.people where id=pg_temp.sid('pa');
 select pg_temp.assert(not exists(select 1 from public.profile_syntheses where person_id=pg_temp.sid('pa')) and not exists(select 1 from public.profile_synthesis_jobs where person_id=pg_temp.sid('pa')) and not exists(select 1 from public.profile_synthesis_attempts where person_id=pg_temp.sid('pa')),'person deletion cascades derived data and attempts');
 rollback;
