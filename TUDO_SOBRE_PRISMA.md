@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 344
-source_manifest_sha256: c5fac226a2e29f793a68cd3528be57a882286e57c83b50206b3ad89f3333d0d1
+source_manifest_sha256: 9e89096263621ca6da863553cd38e13e5976ebb68eff2077fc6d1f55a4da7318
 -->
 
 # Tudo sobre o Prisma
@@ -2626,7 +2626,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.33
+version: 2.51.34
 last_verified: 2026-10-04
 ---
 
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-04
 
 ## Síntese profissional v2.0.5
 
-Complemento de rastreabilidade D-03: seleção de fonte vinculada ao analysisId, fechada ao terminar uma nova análise; fonte atual somente após novo clique. Caso reproduziu falha no componente anterior e passou em1416/390; regressão total de14 reports. Validado localmente, publicação web final pendente. A fila, o banco e o modelo permanecem na versão funcional publicada abaixo.
+Complemento de rastreabilidade D-03 publicado no SHA `ed4e328403e394f7c64cef143475580a88c4532e`: seleção de fonte vinculada ao analysisId, fechada ao terminar uma nova análise; fonte atual somente após novo clique. Caso reproduziu falha no componente anterior e passou em1416/390; regressão total de14 reports, tipos/build/contextos e CI branch37249189433/main37249281571 PASS. Web running/zero reinícios, imagemd59809c, entry `index-BjB3jE2B.js`, versão/HTTPS/assets novos e antigos/rollback PASS após estabilização. Worker1f233fe continua healthy/idle sem reinícios; Parser/gateway/banco/modelo preservados na versão funcional abaixo. Nenhuma jornada autenticada de Pessoa real foi executada para testar.
 
 Publicada em main/origin/VPS no SHA funcional `497b2ee6927c781dfe4bc21ac9f393944f89e766`, CI branch/main PASS: síntese persistida por Perfil/base, oito eixos profundos fixos, relato/interpretação/lacunas separados, referências com fontes sob demanda, resumo original preservado. Worker independente healthy/idle, sem service_role/porta pública/PC; fila/lease/retries limitados, estados explícitos e publicação humana não bloqueada. Migração remota `20261005003404_profile_synthesis`, RLS/grants/triggers conferidos e probes anônimos/token inválido negados. PostgreSQL local: isolamento de empresas, auth/role inativa/anon, idempotência, stale base, resposta inválida e fonte tardia PASS. Benchmark sintético OpenAI gpt-5.6-luna: três casos, 7–14s, 2933/2956 tokens input/output; sem invenção de atribuições no caso pobre e sem obedecer injeção. UI 1416/390, seis estados, sem overflow e sem IA por visita. 256 testes person-flow/40 dirigidos PASS. Web running/zero reinícios, entry `index-rtOypyJ0.js`, HTTPS/versão/assets novos e antigos/rollback PASS após estabilização; Parser/gateway preservados. Contrato/ADR/owner: `docs/qa/agreement-profile-synthesis-v205.md`, `docs/decisions/ADR-076-profile-synthesis.md`, `docs/ai/profile-synthesis.md`; evidência `docs/qa/aot-profile-synthesis-v205.md`. Amostra sintética não prova qualidade universal ou jornada autenticada de Pessoa real, que permanece NOT TESTED.
 
@@ -18515,7 +18515,9 @@ Evidência compacta: `evidence/profile-synthesis/production-verification.json`. 
 
 ## Proteção da transição de base (D-03 / D-UX-01)
 
-Na conferência final, fonte aberta da análise anterior poderia continuar selecionada após terminar a análise atual. Cenário dirigido reproduziu a mistura em1416/390 (`refresh-before-*.json`, FAIL esperado). Seleção agora inclui analysisId e é ignorada na troca; cache por análise preservado, fonte atual somente após novo clique. Advertência de análise anterior distingue falha/insuficiência de preparação. Regressão dos seis estados anteriores mais transição: 14 reports/renders PASS, tipos/build dirigidos; nenhuma alteração ao worker, SQL ou matching. Publicação desse ajuste visual segue a mesma entrega2.0.5; evidência operacional final será registrada após smoke.
+Na conferência final, fonte aberta da análise anterior poderia continuar selecionada após terminar a análise atual. Cenário dirigido reproduziu a mistura em1416/390 (`refresh-before-*.json`, FAIL esperado). Seleção agora inclui analysisId e é ignorada na troca; cache por análise preservado, fonte atual somente após novo clique. Advertência de análise anterior distingue falha/insuficiência de preparação. Regressão dos seis estados anteriores mais transição: 14 reports/renders PASS, tipos/build dirigidos; nenhuma alteração ao worker, SQL ou matching.
+
+Publicado no SHA `ed4e328403e394f7c64cef143475580a88c4532e`, CI branch37249189433/main37249281571 PASS. Somente web reconstruída: imagemd59809c/entry `index-BjB3jE2B.js`, running/zero reinícios. Worker1f233fe healthy/idle/zero reinícios, Parser/gateway iguais ao baseline. `/`, `/login`, `/people`, entry novo, entry inicial2.0.5 e assets2.0.4 HTTP200; rollbackb8d9138 preservado. O404 imediato foi transitório e smoke após estabilização passou sem novo build. Evidência `evidence/profile-synthesis/production-ui-final.json`. D-03/D-UX-01/D-06 e preservação P-03 PASS; demais provas/limites acima permanecem. Trabalho alheio preservado, QA temporário encerrado, fechamento documental não altera runtime.
 
 ---
 

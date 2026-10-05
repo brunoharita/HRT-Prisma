@@ -1,0 +1,12 @@
+{
+  "functionalSha": "ed4e328403e394f7c64cef143475580a88c4532e",
+  "ci": { "branch": 37249189433, "main": 37249281571, "status": "PASS" },
+  "ui": { "originalStates": 6, "transitionScenarios": 2, "reports": 14, "status": "PASS", "beforeGuard": "EXPECTED FAIL" },
+  "webImage": "sha256:d59809c8d8241a518b3dd57fffed853c0b4c57f3c529b4842a5ce7750427d7b5",
+  "entry": "/assets/index-BjB3jE2B.js",
+  "restarts": 0,
+  "smoke": { "root": 200, "login": 200, "people": 200, "entry": 200, "initial205Entry": 200, "previous204Entry": 200, "previousPdfChunk": 200, "version205": true },
+  "rollback": "sha256:b8d913860d8f4cf703bbb5ba64bfddfa324e9782ef790c9307c9c9c98e2ab91d",
+  "preserved": { "worker": "healthy/idle/zero restarts", "workerImage": "sha256:1f233fe274f1aa45bb217b3b7877f97bdb8c2492e243015bfb8d6c4723537f5b", "parserImage": "8682af7", "gatewayImage": "d061cea", "database": "unchanged" },
+  "realPersonPublication": "NOT TESTED"
+}
