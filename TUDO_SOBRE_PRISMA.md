@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 344
-source_manifest_sha256: 9999c2fbe9b089125e18845492af186b21a1ea825d1099cc940e960a614a1672
+source_manifest_sha256: c5fac226a2e29f793a68cd3528be57a882286e57c83b50206b3ad89f3333d0d1
 -->
 
 # Tudo sobre o Prisma
@@ -2626,13 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.32
+version: 2.51.33
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
 ## Síntese profissional v2.0.5
+
+Complemento de rastreabilidade D-03: seleção de fonte vinculada ao analysisId, fechada ao terminar uma nova análise; fonte atual somente após novo clique. Caso reproduziu falha no componente anterior e passou em1416/390; regressão total de14 reports. Validado localmente, publicação web final pendente. A fila, o banco e o modelo permanecem na versão funcional publicada abaixo.
 
 Publicada em main/origin/VPS no SHA funcional `497b2ee6927c781dfe4bc21ac9f393944f89e766`, CI branch/main PASS: síntese persistida por Perfil/base, oito eixos profundos fixos, relato/interpretação/lacunas separados, referências com fontes sob demanda, resumo original preservado. Worker independente healthy/idle, sem service_role/porta pública/PC; fila/lease/retries limitados, estados explícitos e publicação humana não bloqueada. Migração remota `20261005003404_profile_synthesis`, RLS/grants/triggers conferidos e probes anônimos/token inválido negados. PostgreSQL local: isolamento de empresas, auth/role inativa/anon, idempotência, stale base, resposta inválida e fonte tardia PASS. Benchmark sintético OpenAI gpt-5.6-luna: três casos, 7–14s, 2933/2956 tokens input/output; sem invenção de atribuições no caso pobre e sem obedecer injeção. UI 1416/390, seis estados, sem overflow e sem IA por visita. 256 testes person-flow/40 dirigidos PASS. Web running/zero reinícios, entry `index-rtOypyJ0.js`, HTTPS/versão/assets novos e antigos/rollback PASS após estabilização; Parser/gateway preservados. Contrato/ADR/owner: `docs/qa/agreement-profile-synthesis-v205.md`, `docs/decisions/ADR-076-profile-synthesis.md`, `docs/ai/profile-synthesis.md`; evidência `docs/qa/aot-profile-synthesis-v205.md`. Amostra sintética não prova qualidade universal ou jornada autenticada de Pessoa real, que permanece NOT TESTED.
 
@@ -4350,7 +4352,7 @@ Publicação enfileira; worker independente processa fora da transação, sem bl
 
 Resultados/jobs/tentativas são tabelas distintas, com RLS, RPCs autenticadas por tenant e credencial restrita de worker. Lease3min, SKIP LOCKED, três tentativas por base, retry espaçado só para indisponibilidade/rate limit. Sem fonte suficiente: zero IA. Exclusão da Pessoa/Perfil remove registros derivados por FK cascade. Não se promete cobrança externa exatamente uma vez diante de pane/retry.
 
-Consultas comuns recebem JSON compacto e metadados das fontes; clique carrega trecho do snapshot autorizado, com cache apenas durante a tela. Worker inicial único, seleção pela empresa menos recentemente atendida e índices; aumentar consumidores exige medição, não novo broker. Métricas de duração/tokens/modelo/falha não incluem PII integral.
+Consultas comuns recebem JSON compacto e metadados das fontes; clique carrega trecho do snapshot autorizado, com cache apenas durante a tela. A seleção pertence ao ID da análise: quando uma base nova termina enquanto uma fonte antiga está aberta, a seleção é fechada e a fonte atual só é consultada mediante novo clique. Nunca associar afirmação anterior ao snapshot novo. Falha/insuficiência de atualização mantém a análise anterior identificada, sem alegar processamento em andamento. Worker inicial único, seleção pela empresa menos recentemente atendida e índices; aumentar consumidores exige medição, não novo broker. Métricas de duração/tokens/modelo/falha não incluem PII integral.
 
 ---
 
@@ -18510,6 +18512,10 @@ SHA funcional `497b2ee6927c781dfe4bc21ac9f393944f89e766`: CI branch `37247895726
 VPS `/opt/prisma`: worker imagem `1f233fe274f1aa45bb217b3b7877f97bdb8c2492e243015bfb8d6c4723537f5b`, healthy/idle/zero reinícios/sem porta; config400 UID1000, sem service_role. Web imagem `b8d913860d8f4cf703bbb5ba64bfddfa324e9782ef790c9307c9c9c98e2ab91d`, running/zero reinícios, entry `/assets/index-rtOypyJ0.js`, versão2.0.5/síntese no bundle. `/`, `/login`, `/people`, entry novo e assets anteriores `index-S0Dgydwu.js`/`pdf-Du5hpUXa.js` HTTP200. Rollback web `66503ec` preservado; primeiro worker pode ser parado sem apagar fila/resultados. O smoke imediato do script web retornou404 durante recriação; repetição após estabilização passou sem rebuild. Parser/gateway continuam nas imagens baseline. RPCs load/source anônimas e claim com token inválido HTTP401; nenhuma Pessoa real foi acessada/mutada por esses probes.
 
 Evidência compacta: `evidence/profile-synthesis/production-verification.json`. Desvios do contrato: nenhum desvio material identificado. Fechamento documental sincronizado separadamente, sem reconstruir runtime funcional.
+
+## Proteção da transição de base (D-03 / D-UX-01)
+
+Na conferência final, fonte aberta da análise anterior poderia continuar selecionada após terminar a análise atual. Cenário dirigido reproduziu a mistura em1416/390 (`refresh-before-*.json`, FAIL esperado). Seleção agora inclui analysisId e é ignorada na troca; cache por análise preservado, fonte atual somente após novo clique. Advertência de análise anterior distingue falha/insuficiência de preparação. Regressão dos seis estados anteriores mais transição: 14 reports/renders PASS, tipos/build dirigidos; nenhuma alteração ao worker, SQL ou matching. Publicação desse ajuste visual segue a mesma entrega2.0.5; evidência operacional final será registrada após smoke.
 
 ---
 

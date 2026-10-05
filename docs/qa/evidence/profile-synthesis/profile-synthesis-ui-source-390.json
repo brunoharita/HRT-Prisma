@@ -5,7 +5,7 @@
     "sourceFetchedOnce": true,
     "quotedSource": true,
     "queueRequestMatchesState": true,
-    "singleRead": true,
+    "boundedReads": true,
     "noOverflow": true
   },
   "pass": true

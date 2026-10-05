@@ -1,0 +1,15 @@
+{
+  "scenario": "refresh",
+  "width": 1416,
+  "checks": {
+    "oldSourceOpened": true,
+    "oldSelectionClosed": true,
+    "newSourceNotFetchedBeforeClick": true,
+    "currentAnalysisVisible": true,
+    "currentSnapshotAfterClick": true,
+    "queueRequestMatchesState": true,
+    "boundedReads": true,
+    "noOverflow": true
+  },
+  "pass": true
+}

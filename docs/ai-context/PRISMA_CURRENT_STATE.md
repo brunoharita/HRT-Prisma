@@ -2,13 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.32
+version: 2.51.33
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
 ## Síntese profissional v2.0.5
+
+Complemento de rastreabilidade D-03: seleção de fonte vinculada ao analysisId, fechada ao terminar uma nova análise; fonte atual somente após novo clique. Caso reproduziu falha no componente anterior e passou em1416/390; regressão total de14 reports. Validado localmente, publicação web final pendente. A fila, o banco e o modelo permanecem na versão funcional publicada abaixo.
 
 Publicada em main/origin/VPS no SHA funcional `497b2ee6927c781dfe4bc21ac9f393944f89e766`, CI branch/main PASS: síntese persistida por Perfil/base, oito eixos profundos fixos, relato/interpretação/lacunas separados, referências com fontes sob demanda, resumo original preservado. Worker independente healthy/idle, sem service_role/porta pública/PC; fila/lease/retries limitados, estados explícitos e publicação humana não bloqueada. Migração remota `20261005003404_profile_synthesis`, RLS/grants/triggers conferidos e probes anônimos/token inválido negados. PostgreSQL local: isolamento de empresas, auth/role inativa/anon, idempotência, stale base, resposta inválida e fonte tardia PASS. Benchmark sintético OpenAI gpt-5.6-luna: três casos, 7–14s, 2933/2956 tokens input/output; sem invenção de atribuições no caso pobre e sem obedecer injeção. UI 1416/390, seis estados, sem overflow e sem IA por visita. 256 testes person-flow/40 dirigidos PASS. Web running/zero reinícios, entry `index-rtOypyJ0.js`, HTTPS/versão/assets novos e antigos/rollback PASS após estabilização; Parser/gateway preservados. Contrato/ADR/owner: `docs/qa/agreement-profile-synthesis-v205.md`, `docs/decisions/ADR-076-profile-synthesis.md`, `docs/ai/profile-synthesis.md`; evidência `docs/qa/aot-profile-synthesis-v205.md`. Amostra sintética não prova qualidade universal ou jornada autenticada de Pessoa real, que permanece NOT TESTED.
 
