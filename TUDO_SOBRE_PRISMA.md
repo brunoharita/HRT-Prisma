@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 346
-source_manifest_sha256: ef0adf6450fb33286c49bd787e1e3d7b0a1c21130b2047f435bf3fded9c9856f
+source_manifest_sha256: 5fb90114e7faa739f77fa3d83f0d3ecb524571ee10ebf3e6c60292cf42b3efb4
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-04
 
 ## Síntese profissional v2.0.5
 
-Complemento D-E03 em validação local: Atualizar consulta usa apenas load, mesmo após primeira leitura falhar e sem job; estado Síntese ainda não solicitada oferece geração explícita. Nova fixture query-only demonstra zero request no refresh e um somente na ação humana em1416/390; oito reports afetados e conjunto28PASS, tipos/build PASS. Primeira visita mantém comportamento aprovado. Publicação do complemento ainda em execução; worker/banco/modelo/fatos não mudam.
+Complemento D-E03 publicado no SHA funcional `e162d367b24e66c2663a83f22cc982d9b096d395`, CI branch37254700232/main37254784205 PASS: Atualizar consulta usa somente load, mesmo após primeira leitura falhar e sem job; estado Síntese ainda não solicitada oferece geração explícita. Fixture query-only demonstra zero request no refresh e um somente na ação explícita em1416/390; oito reports afetados e conjunto28PASS, tipos/build/contextos PASS. Primeira visita mantém comportamento aprovado. Somenteweb publicada: imagemd3b30ec running0reinícios, entryindex-g0DDLxX2.js e rotas/assets atuais/anteriores HTTP200 após estabilização sem rebuild; rollback59958fe presente. Worker49cbf2c saudável0reinícios, Parser8682af7/gatewayd061cea e banco/modelo/fatos preservados. Reprocessamento real continua bloqueado pela revisão automática, aguardando autorização explícita; nenhum contorno foi executado.
 
 Correção de exceções publicada no SHA funcional `a89bc451e0135930db83f2f08a32f43e3a6d246a`, CI branch37253116222/main37253193994 PASS: diagnóstico `synthesis-diagnostic-1.0.0` de entrada/provedor/resposta/contrato/gravação, métricas em rejeições, motivos em português, recovery RPC autenticado/cooldown/três tentativas, resumo publicado e boundary isolado. Migração remota20261005015407, RLS/grants/probes negativos conferidos. Web59958fe running0reinícios, entryindex-CR5aA1Nt.js; worker49cbf2c healthy/idle0reinícios. Rotas/assets novos/anteriores HTTP200 após estabilização, rollbackd59809c/1f233fe presente. Parser8682af7/gatewayd061cea preservados. SQL QA incremental/33asserts/negativos,31worker/contratos,256person-flow,26renders1416/390,19tooling/contextos e tipos/build PASS. Resultado/perguntas/prompt/modelo preservados. Incidente real continua failed/RESPONSE_INVALID/attempt1, sem subcausa original armazenada; reprocessamento específico rejeitado pela revisão automática, aguardando autorização explícita adicional, sem contorno. Nenhum Perfil real foi publicado. AoT `docs/qa/aot-profile-synthesis-exceptions.md`; jornada autenticada real permanece NOT TESTED.
 
@@ -18578,7 +18578,7 @@ Conclusão: implementação e publicação da correção PASS. Não se afirma qu
 
 ## Complemento D-E03: consulta estritamente separada de geração
 
-Na revisão final, o mesmo efeito de primeira consulta era reaplicado pelo botão Atualizar consulta. Em caso de primeira leitura interrompida e base sem job, isso poderia solicitar uma análise. Ajuste: primeira visita mantém o comportamento aprovado; consulta manual usa somente load. Se não há job após recuperar a consulta, estado Síntese ainda não solicitada oferece Gerar síntese como ação separada e explícita. Não gera resultado nem custo em refresh. Fixture query-only antes do ajuste faria request indevido; após: requests0 no refresh, requests1 somente após ação explícita, 1416/390 PASS. Rerun somente query-only/pending/retry/read-error, oito reports afetados; conjunto final28reportsPASS. Tipos/build PASS. Sem mudanças no worker, SQL, modelo ou fatos. Publicação desse complemento ainda pendente nesta revisão.
+Na revisão final, o mesmo efeito de primeira consulta era reaplicado pelo botão Atualizar consulta. Em caso de primeira leitura interrompida e base sem job, isso poderia solicitar uma análise. Ajuste: primeira visita mantém o comportamento aprovado; consulta manual usa somente load. Se não há job após recuperar a consulta, estado Síntese ainda não solicitada oferece Gerar síntese como ação separada e explícita. Não gera resultado nem custo em refresh. Fixture query-only antes do ajuste faria request indevido; após: requests0 no refresh, requests1 somente após ação explícita, 1416/390 PASS. Rerun somente query-only/pending/retry/read-error, oito reports afetados; conjunto final28reportsPASS. Tipos/build PASS. Sem mudanças no worker, SQL, modelo ou fatos. Complemento publicado em main/origin/VPS no SHA funcional `e162d367b24e66c2663a83f22cc982d9b096d395`, CI branch37254700232/main37254784205 PASS. Somenteweb: imagemd3b30ec, entryindex-g0DDLxX2.js, rotas/novoentry/anterioresCR5aA1Nt eBjB3jE2B HTTP200 após estabilização sem rebuild; label de estado explícito no bundle conferido. Rollback59958fe disponível. Worker49cbf2c saudável0reinícios, Parser8682af7/gatewayd061cea preservados. Metadados/documentação posteriores não requerem redeploy.
 
 ---
 
