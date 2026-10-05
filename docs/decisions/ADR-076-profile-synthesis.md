@@ -9,3 +9,7 @@ Worker acessa exclusivamente RPCs limitadas por token aleatório server-only, va
 Alternativas: síncrono por visita desperdiça custo/latência; alterar o Parser mistura extração e análise e cria disputa de capacidade; broker externo introduz operação desnecessária antes de medir gargalo. PostgreSQL já fornece o padrão necessário. Escalar consumidores após medir fila/provider/DB; não declarar capacidade ilimitada. Uma resposta aceita por chave, não promessa de exatamente uma cobrança externa após falhas.
 
 Rollback: desativar worker e recurso de síntese; manter Perfil/resumo original e tabelas/histórico protegidos. Migrations aditivas, exclusão segue a Pessoa; jobs obsoletos não sobrescrevem base nova. Sem backfill automático do acervo.
+
+## Aditivo aceito 05/10/2026 — Isolamento por resposta
+
+Decisão explícita de Bruno torna obrigatória a preservação das respostas válidas. Reutilizar contrato/fila/worker/UI com resultado1.1.0, motivos fixos por seção e enum compartilhado de fontes; PostgreSQL valida unidades já normalizadas, sem aceitar referência desconhecida. Tela mantém dados publicados identificados quando a IA inteira falha. Autorização/base permanecem gates; falha opcional não é análise completa. Sem novo fornecedor/broker/biblioteca e sem backfill. Acordo/AoT de resumo parcial documentam regressão e rollout compatível.

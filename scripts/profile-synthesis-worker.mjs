@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
-import { PROFILE_SYNTHESIS_INSTRUCTIONS, PROFILE_SYNTHESIS_SCHEMA, readProfileSynthesisResult, readSynthesisSource, SynthesisFailure, synthesisDiagnostic } from "../dist/src/domain/profileSynthesis.js";
+import { PROFILE_SYNTHESIS_INSTRUCTIONS, profileSynthesisSchemaForSources, preserveProfileSynthesisSections, readSynthesisSource, SynthesisFailure, synthesisDiagnostic } from "../dist/src/domain/profileSynthesis.js";
 
 export function minimizeSources(sources) {
   return sources.map(readSynthesisSource).map(({ id, text, nature }) => ({ id, nature, text: text
@@ -14,7 +14,7 @@ export function providerRequest(sources, model) {
   if (Buffer.byteLength(JSON.stringify(minimal)) > 48000 || sources.length > 240) throw Error("INPUT_TOO_LARGE");
   return { model, store: false, instructions: PROFILE_SYNTHESIS_INSTRUCTIONS,
     input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify({ sources: minimal }) }] }],
-    text: { format: { type: "json_schema", name: "prisma_profile_synthesis", strict: true, schema: PROFILE_SYNTHESIS_SCHEMA } }, reasoning: { effort: "low" }, max_output_tokens: 6000 };
+    text: { format: { type: "json_schema", name: "prisma_profile_synthesis", strict: true, schema: profileSynthesisSchemaForSources(minimal) } }, reasoning: { effort: "low" }, max_output_tokens: 6000 };
 }
 export async function generateSynthesis(sources, config, fetcher = fetch) {
   let input;
@@ -47,7 +47,7 @@ export async function generateSynthesis(sources, config, fetcher = fetch) {
   if (output.length !== 1 || typeof output[0].text !== "string") reject("OUTPUT_MISSING", inputTokens, outputTokens);
   let result;
   try { result = JSON.parse(output[0].text); } catch { reject("JSON_INVALID", inputTokens, outputTokens); }
-  try { return { result: readProfileSynthesisResult(result, sources), model: raw.model, inputTokens, outputTokens }; }
+  try { return { result: preserveProfileSynthesisSections(result, sources), model: raw.model, inputTokens, outputTokens }; }
   catch (cause) { throw new SynthesisFailure(cause instanceof SynthesisFailure ? cause.diagnostic : synthesisDiagnostic("contract", "STRUCTURE_INVALID"), inputTokens, outputTokens); }
 }
 export async function rpc(config, name, args, fetcher = fetch) {

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.37
-last_verified: 2026-10-04
+version: 2.51.38
+last_verified: 2026-10-05
 ---
 
 # Estado atual do Prisma
+
+## Resumo preservado por seção v2.0.6
+
+Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,39asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build PASS. Nenhuma chamada real adicional de IA/Pessoa. Legadofailed3/histórico intacto, sem reset/backfill. Migração/web/worker e publicação em andamento; produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/report locais em `docs/qa/evidence/profile-summary-partial`.
 
 ## Recuperação controlada e identificação v2.0.6
 

@@ -273,3 +273,7 @@ Diagnóstico opcional da síntese: `synthesis-diagnostic-1.0.0` adiciona etapa/m
 ## Recuperação e diagnóstico v2.0.6
 
 Decisão explícita de Bruno em 04/10/2026 registra a sexta entrega da geração2/movimento0: Prisma v2.0.6. Supersede somente a decisão anterior de manter2.0.5 nas correções de síntese. Registro central alimenta login/sidebar. Resultado/prompt/perguntas/modelo e diagnóstico persistidos não mudam. Recuperação autorizada identifica a falha real de referências e preserva histórico/fatos; número de versão não prova rollout. Acordo/AoT `agreement-profile-synthesis-v206.md` e `aot-profile-synthesis-v206.md`.
+
+## Resumo por seção — correção v2.0.6
+
+A premissa explícita de 05/10/2026 avança resultado para `profile-synthesis-1.1.0` e prompt para `profile-synthesis-prompt-1.1.0`, preservando leitor1.0.0, perguntas/modelo/histórico. Issues por seção são aditivos e fontes válidas permanecem obrigatórias. Produto permanece2.0.6; correção do comportamento de Resumo. Jobs novos usam a chave versionada; legado exaurido não reseta orçamento nem cria geração em visita. Migração incremental `20261005034000_profile_synthesis_sections.sql`.

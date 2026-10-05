@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 348
-source_manifest_sha256: e4e1049c977166c689c4a56b87fb030b9b645d959208872ab64b141e5925af88
+documentation_source_count: 350
+source_manifest_sha256: 14a55d07f50afc688f274b7d6f3c88677bcf095d638fa3bc67c92763903d879a
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.37
-last_verified: 2026-10-04
+version: 2.51.38
+last_verified: 2026-10-05
 ---
 
 # Estado atual do Prisma
+
+## Resumo preservado por seção v2.0.6
+
+Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,39asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build PASS. Nenhuma chamada real adicional de IA/Pessoa. Legadofailed3/histórico intacto, sem reset/backfill. Migração/web/worker e publicação em andamento; produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/report locais em `docs/qa/evidence/profile-summary-partial`.
 
 ## Recuperação controlada e identificação v2.0.6
 
@@ -4346,7 +4350,7 @@ Os golden tests revelaram e corrigiram flexão verbal em "analisou dados" e o ca
 
 # Síntese profissional do Perfil
 
-Produto v2.0.5. Acordo `docs/qa/agreement-profile-synthesis-v205.md` v1.0.0; ADR-076. Contrato `profile-synthesis-1.0.0`, prompt `profile-synthesis-prompt-1.0.0`. As oito perguntas profundas e o schema fechado pertencem a `src/domain/profileSynthesis.ts`, não ao modelo.
+Produto v2.0.6. Acordo `docs/qa/agreement-profile-synthesis-v205.md` v1.0.0; ADR-076. Contrato atual `profile-synthesis-1.1.0`, prompt `profile-synthesis-prompt-1.1.0`; leitura de histórico1.0.0 preservada. As oito perguntas profundas e o schema fechado pertencem a `src/domain/profileSynthesis.ts`, não ao modelo.
 
 Trajetória, contribuições, contextos/autonomia, competências em contexto, resultados, formação/aplicação, direção e investigação complementar são sempre respondidos na mesma ordem. Até 120 palavras na síntese/por eixo e três perguntas contextuais. Texto proporcional: lacunas explícitas não viram fatos nem avaliações negativas. Resumo original permanece no Perfil completo. Afirmações distinguem relato publicado de interpretação, com refs de fonte obrigatórias. `published_fact` significa informação publicada, sem verificação externa. Apenas fonte elegível pelo contrato vigente de Assessment autoriza mencionar verificação. Sem personalidade, senioridade, proficiência, score, ranking ou contratação inferidos.
 
@@ -4374,6 +4378,16 @@ O incidente original registrou apenas RESPONSE_INVALID; não há evidência para
 Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.
 
 Primeira visita pode solicitar síntese antiga conforme acordo; Atualizar consulta executa somente load, inclusive após primeira leitura falhar. Sem job, a tela declara Síntese ainda não solicitada e oferece Gerar síntese explícito. Não dispara provider por refresh.
+
+## Premissa obrigatória: preservar respostas válidas
+
+Decisão superveniente de Bruno em 05/10/2026: nenhum erro de resposta pode ocultar outras informações boas do Resumo. Acordo `docs/qa/agreement-profile-summary-partial.md` v1.0.0 supersede a validação global antiga; oito eixos e fontes permanecem. Cada afirmação recebe validação independente: texto, natureza, fontes existentes, comprovação elegível e orçamento120palavras por seção. Apenas unidade inválida é retirada; motivo fixo por seção é persistido em `issues`, sem texto rejeitado ou ID desconhecido. Falhas simultâneas mantêm irmãos válidos. Duplicata exata de referência é reduzida ao mesmo vínculo, sem criar nova fonte; referência desconhecida nunca é corrigida por aproximação. Resultado partial não prova completude ou veracidade universal.
+
+Contrato1.1.0 permite overview vazio com motivo, preserva oito respostas e adiciona até nove motivos únicos por seção. Jobcomplete significa processamento finalizado: interface declara respostas parcialmente disponíveis quando há issues, nunca análise integral. JSON impossível de ler, modelo/contrato desconhecido, base/autoridade incorreta e persistência negada permanecem protegidos; não se inventa uma análise. Fontes inválidas opcionais e data/histórico malformados não escondem respostas atuais válidas; autorização/identidade/versionamento permanecem obrigatórios.
+
+Structured Outputs usa enum fechado de IDs existentes em `$defs` compartilhado, com1..5referências por afirmação/pergunta. Não há fonte inventada por escolha de texto livre; validação TS e SQL continuam necessárias e não provam sustentação semântica. [Documentação oficial](https://developers.openai.com/api/docs/guides/structured-outputs). Mesmo com falha total de IA/consulta, a tela exibe seções com dados profissionais do Perfil aprovado já carregado, explicitamente identificados como informações publicadas. Ausências/indisponibilidade têm explicação local em português; códigos técnicos não aparecem ao operador. Esses dados não são marcados como resposta de IA.
+
+Não há backfill/reset/chamada em refresh. Migração aditiva mantém histórico antigo e seleciona contrato novo quando existir; novas solicitações/publicações usam1.1.0. Joblegado já queued migra para nova chave preservando tentativa antiga; legado failed/attempt3 não é reenfileirado automaticamente. Respostas descartadas antes da correção não são reconstruídas. Nenhuma chamada real para a Pessoa do incidente é necessária para restabelecer a tela com fatos publicados.
 
 ---
 
@@ -5676,6 +5690,10 @@ Diagnóstico opcional da síntese: `synthesis-diagnostic-1.0.0` adiciona etapa/m
 ## Recuperação e diagnóstico v2.0.6
 
 Decisão explícita de Bruno em 04/10/2026 registra a sexta entrega da geração2/movimento0: Prisma v2.0.6. Supersede somente a decisão anterior de manter2.0.5 nas correções de síntese. Registro central alimenta login/sidebar. Resultado/prompt/perguntas/modelo e diagnóstico persistidos não mudam. Recuperação autorizada identifica a falha real de referências e preserva histórico/fatos; número de versão não prova rollout. Acordo/AoT `agreement-profile-synthesis-v206.md` e `aot-profile-synthesis-v206.md`.
+
+## Resumo por seção — correção v2.0.6
+
+A premissa explícita de 05/10/2026 avança resultado para `profile-synthesis-1.1.0` e prompt para `profile-synthesis-prompt-1.1.0`, preservando leitor1.0.0, perguntas/modelo/histórico. Issues por seção são aditivos e fontes válidas permanecem obrigatórias. Produto permanece2.0.6; correção do comportamento de Resumo. Jobs novos usam a chave versionada; legado exaurido não reseta orçamento nem cria geração em visita. Migração incremental `20261005034000_profile_synthesis_sections.sql`.
 
 ---
 
@@ -9621,6 +9639,10 @@ Alternativas: síncrono por visita desperdiça custo/latência; alterar o Parser
 
 Rollback: desativar worker e recurso de síntese; manter Perfil/resumo original e tabelas/histórico protegidos. Migrations aditivas, exclusão segue a Pessoa; jobs obsoletos não sobrescrevem base nova. Sem backfill automático do acervo.
 
+## Aditivo aceito 05/10/2026 — Isolamento por resposta
+
+Decisão explícita de Bruno torna obrigatória a preservação das respostas válidas. Reutilizar contrato/fila/worker/UI com resultado1.1.0, motivos fixos por seção e enum compartilhado de fontes; PostgreSQL valida unidades já normalizadas, sem aceitar referência desconhecida. Tela mantém dados publicados identificados quando a IA inteira falha. Autorização/base permanecem gates; falha opcional não é análise completa. Sem novo fornecedor/broker/biblioteca e sem backfill. Acordo/AoT de resumo parcial documentam regressão e rollout compatível.
+
 ---
 
 ## Source: `docs/decisions/README.md`
@@ -10451,6 +10473,10 @@ Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são muta
 ## Incidente autorizado na v2.0.6
 
 Em 04/10/2026 Bruno autorizou uma única chamada adicional do job existente. Guardas de estado/attempt1/código/diagnóstico ausente, Perfil aprovado/vigente, tenant/pessoa e hash igual foram verificadas. Tentativa2 failed por contract/REFERENCES_INVALID na seção competencies/item0,24890ms,5211/2990tokens. Tentativa1 sem diagnóstico permanece histórica; nenhuma terceira chamada nem alteração canônica. A resposta inválida não é persistida como síntese válida. Evidência segura no AoT v2.0.6. A release de identificação requer somente web; worker/Parser/gateway e schema permanecem.
+
+## Preservação por seção v2.0.6
+
+Resultado/prompt1.1.0 e migração incremental das funções/defaults, sem tabelas públicas/permissões novas. Resultados parciais guardam somente trechos válidos e issues fixos por seção; não logar corpo rejeitado. Compatibilidade1.0.0 na leitura; legacyfailed3 fica intacto, somente novas solicitações/publicações usam1.1.0. Pausar somente worker durante ativação da migração e promover worker/web do mesmo SHA validado. Rollback preserva migração e históricos; leitor antigo pode recusar novo resultado, por isso rollback compatível mantém a tela com informações publicadas. Sem reset/backfill.
 
 ---
 
@@ -14559,6 +14585,38 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 
 ---
 
+## Source: `docs/qa/agreement-profile-summary-partial.md`
+
+# Acordo e execução — Resumo preservado por resposta
+
+Versão 1.0.0, agreed, 2026-10-05. Autoridade: decisão explícita de Bruno: a tela de resumo deve ser exibida, somente respostas indisponíveis recebem motivo em português claro, e nenhum erro oculta informações válidas. Supersede a rejeição global de D-02 do acordo v205 e D-E01/E02 do acordo de exceções somente quanto à granularidade de resposta. Perguntas, fonte, autoridade, limites por texto e isolamento permanecem. Produto2.0.6. Baseline main/origin/VPS `f4c327f9e7175905b7985ef23f002d1895d735cf`; incidente legado failed/attempt3. RiscoD/C: contrato aditivo, worker/persistência/leitura/UI. Reutilizar capacidades atuais; sem biblioteca/fornecedor/arquitetura nova.
+
+- D-S01: validar cada afirmação e resposta separadamente; preservar as válidas e representar apenas itens indisponíveis com motivo fixo convertido em português. Referência inválida/texto inseguro/verificação inventada nunca é exibido; falha em overview/eixo/pergunta não invalida outros.
+- D-S02: persistir resultado parcial e motivos por seção com snapshot/proveniência; contrato1.1.0 compatível na leitura com1.0.0. Estrutura não decodificável, autenticação/base inválida e falha de persistência não viram análise concluída. Seleção de referências fechada na geração; idempotência/histórico/tentativas mantidos, sem backfill ou reset.
+- D-S03: tela e oito eixos presentes em sucesso/parcial/falha/consulta indisponível; conteúdo disponível prevalece sobre aviso. Dados publicados já carregados ficam acessíveis quando não há análise utilizável e são identificados como dados publicados, nunca como síntese de IA. Cada seção explica indisponibilidade em português sem códigos; detalhes técnicos permanecem internos.
+- D-S04: validar fluxo completo local, negativos SQL/auth/tenant/proveniência, falhas múltiplas/legado/mobile, publicar seletivamente e registrar AoT. Nenhuma chamada real adicional de IA é necessária para provar preservação da tela.
+- P-S01: não inventar fatos, aceitar referências desconhecidas, confundir relato com verificação/IA, ocultar conteúdo válido por outro erro, expor segredo/PII em logs, alterar Perfil humano, resetar tentativas ou gerar a cada visita.
+- F-S01: Parser/matching/Knowledge, modelos/perguntas novos, backfill, redesign global e publicação humana.
+- A-S01: versionamento aditivo/SQL/RPCs/normalização defensiva/enum/UI/testes sob os padrões atuais; preservar a versão pública2.0.6.
+- Q-S01: nenhuma decisão material pendente; falhas antigas descartaram respostas e não permitem reconstruir conteúdo gerado. Exibir dados publicados atuais preservados, sem fabricar aquela análise.
+
+## Mapa de impacto / aceite
+
+| Capacidade | Relação | Baseline / regressão mínima |
+| --- | --- | --- |
+| D-S01/02, domínio/worker | direct | rejeição global31testes; defeitos localizados preservam irmãos, enum fontes, métricas/segredos/limites/injeção |
+| D-S02, SQL/RPC/tenant | critical_transversal | Pg17 local, RLS/grants/lease/base aprovados; aceitação parcial, legado, negativos/rollback, sem replay de ledger |
+| D-S03, Resumo/fontes | direct | screenshot atual é contraexemplo, referência70/30 e60/40 preservada; sucesso/parcial/global/source/render/legado1416/390 e oito seções visíveis, sem overflow/códigos |
+| Perfil/publicação humana | plausible_indirect | person-flow256PASS anterior; tipos e regressão dirigida, nenhuma escrita canônica |
+| Parser/matching | no_impact_identified | APIs/worker separados; conferir imagens operacionais e espelho matching preservado |
+| D-S04, release | direct | webdb837df/worker49cbf2c; tipos/build/QA/context/CI/plan, somente migração/web/worker e smoke/rollback |
+
+## Prompt congelado
+
+Implementar D-S01..04 sob P-S01/F-S01/A-S01. Cada requisito exige implementação/teste/evidência no AoT. Isolamento por resposta é obrigatório; não concluir entrega que apenas troque a mensagem de falha global. Layout mantém cabeçalho/abas, narrativa principal/lateral e fonte selecionada, com seções e avisos locais. Estado aguardando sem resposta não inventa análise; dados publicados continuam identificados.
+
+---
+
 ## Source: `docs/qa/agreement-profile-synthesis-exceptions.md`
 
 # Acordo e execução — Exceções da síntese v2.0.5
@@ -18558,6 +18616,30 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 | `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
 
 A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
+
+---
+
+## Source: `docs/qa/aot-profile-summary-partial.md`
+
+# AoT — Resumo preservado por resposta
+
+Acordo `agreement-profile-summary-partial.md` v1.0.0, decisão explícita de Bruno05/10/2026, supersede rejeição global e exige isolamento de falhas. Baseline main/origin/VPSf4c327f, webdb837df/worker49cbf2c/Parser8682af7/gatewayd061cea. RiscoD/C. Produto2.0.6; resultado/prompt1.1.0, legado1.0.0 preservado. Sem subagentes/bibliotecas/modelos novos.
+
+| ID | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-S01 | Normalização por unidade, descarte somente trecho inválido, preservação de irmãos/motivo local | 40 testes TS/worker, simultâneos/refs/texto/comprovação/ausência/metadata/histórico/Unicode/limites | PASS |
+| D-S02 | Enum compartilhado, result1.1.0/issues, SQL parcial/compatibilidade/keys/leases/tenant |39asserts SQL local rollback, origem inválida/diagnóstico livre/segredo/anon/intertenant/replay/budget/legado/proveniência rejeitados | PASS local; ativação pendente |
+| D-S03 | Oito eixos, cards preservados, dados publicados próprios, nenhum código técnico, boundary local |36reports1416/390 PASS; sucesso/falha total/consulta/retry/fonte/snapshot/múltiplos/overview vazio/erro render local | PASS local |
+| D-S04 | Owner/ADR/contexto/release seletivo/rollback |Tipos/build PASS, person-flow256PASS, contextos/CI/release/smoke pendentes | PARTIAL |
+| P-S01 | Nenhum fato inventado/canônico, nenhuma referência desconhecida exibida, sem reset/chamada por refresh | Negativos40/39, query-only2viewports zero request em refresh e um somente ação explícita, histórico existente preservado | PASS |
+
+## Evidência e preservação
+
+PostgreSQL17.5 em127.0.0.1:55479, DBdescartávelimport_evidence_v202, fixtures com rollback integral; nenhum SQLQA em produção. Fontes e resultados inválidos continuam negados no servidor mesmo que cliente tente contornar. Como resposta inválida antiga foi descartada, o incidente não tem conteúdo gerado recuperável; a tela usa somente fatos publicados já autorizados/carregados, nunca análise fabricada. Nova resposta parcial tem snapshot/base/método versão próprios. JSON não decodificável/modelo desconhecido/persistência/tenant continuam falhando fechados, enquanto tela preserva dados canônicos disponíveis.
+
+Screenshot do usuário é contraexemplo: grande bloco de erro escondia Resumo. Referências originais70/30 e60/40 preservadas; oito eixos agora abertos inicialmente por decisão explícita de preservação. `evidence/profile-summary-partial/multiple-errors-1416.png` mostra narrativa válida após erro de overview e dois eixos; `failed-390.png` mostra dados publicados em falha total. Todos36reports emui-results.json verificam seções/navegação/origem/sem overflow/códigos. Conferência visual desses dois estados realizada; mudança de densidade é diretamente exigida pela premissa, sem redesign do shell. Dados sintéticos, jornada autenticada real NOT TESTED.
+
+Regressão do Perfil/publicação:256person-flow PASS; nenhuma escrita canônica nova. Enum fechado reutiliza Structured Outputs oficial com `$defs`, sem repetir lista em três locais. Contrato diferente explicita decisão superveniente, não muda silenciosamente significado persistido. Nenhuma chamada real adicional de IA; qualidade semântica universal não provada. Imagens operacionais/rollout abaixo.
 
 ---
 

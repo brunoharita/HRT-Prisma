@@ -22,3 +22,7 @@ Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são muta
 ## Incidente autorizado na v2.0.6
 
 Em 04/10/2026 Bruno autorizou uma única chamada adicional do job existente. Guardas de estado/attempt1/código/diagnóstico ausente, Perfil aprovado/vigente, tenant/pessoa e hash igual foram verificadas. Tentativa2 failed por contract/REFERENCES_INVALID na seção competencies/item0,24890ms,5211/2990tokens. Tentativa1 sem diagnóstico permanece histórica; nenhuma terceira chamada nem alteração canônica. A resposta inválida não é persistida como síntese válida. Evidência segura no AoT v2.0.6. A release de identificação requer somente web; worker/Parser/gateway e schema permanecem.
+
+## Preservação por seção v2.0.6
+
+Resultado/prompt1.1.0 e migração incremental das funções/defaults, sem tabelas públicas/permissões novas. Resultados parciais guardam somente trechos válidos e issues fixos por seção; não logar corpo rejeitado. Compatibilidade1.0.0 na leitura; legacyfailed3 fica intacto, somente novas solicitações/publicações usam1.1.0. Pausar somente worker durante ativação da migração e promover worker/web do mesmo SHA validado. Rollback preserva migração e históricos; leitor antigo pode recusar novo resultado, por isso rollback compatível mantém a tela com informações publicadas. Sem reset/backfill.
