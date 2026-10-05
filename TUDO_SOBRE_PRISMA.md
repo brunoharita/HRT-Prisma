@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 350
-source_manifest_sha256: 83a033ce5f70ab09e75aebd1aaa04a0ae9b4a5206a6ebc85bd3e7219a7b7db83
+source_manifest_sha256: 2c5eb0adf87ac3f6f7d9f8a282fb142c7d66f189b97301cbc771b8fd4c1ed13f
 -->
 
 # Tudo sobre o Prisma
@@ -2626,7 +2626,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.38
+version: 2.51.39
 last_verified: 2026-10-05
 ---
 
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-05
 
 ## Resumo preservado por seção v2.0.6
 
-Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,44asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build/19tooling/contextos/lint/foundation PASS. SHA funcionaldbd5b08ffa48eca2b4b9e0e07d9f24e0f357c161 publicado; CI branch37258829924/main37258898781 PASS, migração remota20261005032036. Webcfa50e0 running0/entryindex-Bx4s26MG.js; worker8526717 healthy0, probe compilado sintético preserva respostas válidas e isola referência inválida com zero chamadas reais. Rotas/assets novos e anteriores200 após estabilização404semrebuild; rollbacks retidos. Parser8682af7/gatewayd061cea preservados. Nenhuma chamada real adicional de IA/Pessoa; jornada autenticada real NOT TESTED. Legadofailed3/histórico intacto, sem reset/backfill. Complemento SQL de recuperação explícita na chave corrigida em andamento; produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/reports/probe em `docs/qa/evidence/profile-summary-partial`.
+Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,44asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build/19tooling/contextos/lint/foundation PASS. SHA funcionaldbd5b08ffa48eca2b4b9e0e07d9f24e0f357c161 publicado; CI branch37258829924/main37258898781 PASS, migração remota20261005032036. Webcfa50e0 running0/entryindex-Bx4s26MG.js; worker8526717 healthy0, probe compilado sintético preserva respostas válidas e isola referência inválida com zero chamadas reais. Rotas/assets novos e anteriores200 após estabilização404semrebuild; rollbacks retidos. Parser8682af7/gatewayd061cea preservados. Complemento3e0959aacb0beeb2bd903c4e5ce6e285a5275cd6 integrado/sincronizado; CI branch37259824264/main37259910228 PASS, migração20261005033507 ativa. Recuperação explícita solicita chave corrigida com tenant/base/lock/cooldown/idempotência; antigofailed3/histórico intacto, canRetrytrue e zero jobs novos naquele Perfil, sem reset/backfill ou geração nesta execução. Permissões negativas conferidas. Nenhuma chamada real adicional de IA/Pessoa; jornada autenticada real NOT TESTED. Produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/reports/probe em `docs/qa/evidence/profile-summary-partial`.
 
 ## Recuperação controlada e identificação v2.0.6
 
@@ -18634,9 +18634,9 @@ Acordo `agreement-profile-summary-partial.md` v1.0.0, decisão explícita de Bru
 | ID | Implementação | Teste/evidência | Estado |
 | --- | --- | --- | --- |
 | D-S01 | Normalização por unidade, descarte somente trecho inválido, preservação de irmãos/motivo local | 40 testes TS/worker, simultâneos/refs/texto/comprovação/ausência/metadata/histórico/Unicode/limites | PASS |
-| D-S02 | Enum compartilhado, result1.1.0/issues, SQL parcial/compatibilidade/keys/leases/tenant; recuperação explícita na chave corrigida |44asserts SQL local rollback: negativos de fonte/diagnóstico/segredo/anon/intertenant/proveniência, recuperação do legado/replay/histórico/budget. Migração principal ativada; complemento pendente | PARTIAL |
+| D-S02 | Enum compartilhado, result1.1.0/issues, SQL parcial/compatibilidade/keys/leases/tenant; recuperação explícita na chave corrigida |44asserts SQL local rollback: negativos de fonte/diagnóstico/segredo/anon/intertenant/proveniência, recuperação do legado/replay/histórico/budget. Ambas as migrações ativadas; grants e legado intactos conferidos | PASS |
 | D-S03 | Oito eixos, cards preservados, dados publicados próprios, nenhum código técnico, boundary local |36reports1416/390 PASS; sucesso/falha total/consulta/retry/fonte/snapshot/múltiplos/overview vazio/erro render local; bundle novo publicado e HTTP200 | PASS |
-| D-S04 | Owner/ADR/contexto/release seletivo/rollback |Tipos/build PASS, person-flow256PASS, 19tooling/contextos/lint/foundation/CI/publicação principal PASS; complemento de banco pendente | PARTIAL |
+| D-S04 | Owner/ADR/contexto/release seletivo/rollback |Tipos/build PASS, person-flow256PASS, 19tooling/contextos/lint/foundation/CI/publicação principal e complemento de banco PASS; smoke rotas/imagens/rollback/ledger e sincronização funcional PASS | PASS |
 | P-S01 | Nenhum fato inventado/canônico, nenhuma referência desconhecida exibida, sem reset/chamada por refresh | Negativos40/44, query-only2viewports zero request em refresh e um somente ação explícita, histórico existente preservado | PASS |
 
 ## Evidência e preservação
@@ -18655,7 +18655,9 @@ Web `sha256:cfa50e09996b2090e64ec1d567866eec6e82fa883a44d7fa5e9556b44ea2a493`, r
 
 Probe sintética no worker compilado publicado: overview válido e oito eixos preservados, referência desconhecida em pergunta complementar retirada, motivo REFERENCES_INVALID localizado; providerCalls0, sem banco/credenciais/LLM. Prova de runtime do normalizador, não prova de qualidade real de IA. Evidência segura em `evidence/profile-summary-partial/runtime.json`.
 
-Complemento de recuperação exige apenas SQL/documentação. Solicitação explícita cria chave1.1.0 para falha de resposta legada esgotada, sem alterar failed/attempt3 antigo; replay não duplica chave e versão nova começa com orçamento próprio.44asserts locais PASS com rollback; ativação remota e sincronização finais pendentes.
+Complemento de recuperação exige apenas SQL/documentação. Solicitação explícita cria chave1.1.0 para falha de resposta legada esgotada, sem alterar failed/attempt3 antigo; replay não duplica chave e versão nova começa com orçamento próprio.44asserts locais PASS com rollback. SHA `3e0959aacb0beeb2bd903c4e5ce6e285a5275cd6`, CI branch37259824264/main37259910228 PASS; migração remota20261005033507 aplicada e ledger mapeado. Legado real permanece failed/attempt3, canRetrytrue e zero jobs1.1.0 daquele Perfil: nenhuma geração foi disparada. Retry anon negado, autenticado permitido, helper privado e SELECT direto negados. Main/local/origin/VPS funcionais sincronizados; imagens/restarts originais preservados, rotas/assets200 e rollback conferidos após complemento. Metadados de encerramento não exigem reconstruir containers.
+
+Desvios de contrato: nenhum. Limites: chamadas reais de IA e jornada autenticada real não executadas nesta correção; não há prova de qualidade semântica universal. Respostas descartadas pela versão anterior não são recuperáveis. Operador pode consultar dados publicados imediatamente e solicitar explicitamente nova leitura; preservar uma resposta válida não equivale a verificar externamente sua verdade.
 
 ---
 

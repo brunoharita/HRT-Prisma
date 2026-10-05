@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.38
+version: 2.51.39
 last_verified: 2026-10-05
 ---
 
@@ -10,7 +10,7 @@ last_verified: 2026-10-05
 
 ## Resumo preservado por seção v2.0.6
 
-Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,44asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build/19tooling/contextos/lint/foundation PASS. SHA funcionaldbd5b08ffa48eca2b4b9e0e07d9f24e0f357c161 publicado; CI branch37258829924/main37258898781 PASS, migração remota20261005032036. Webcfa50e0 running0/entryindex-Bx4s26MG.js; worker8526717 healthy0, probe compilado sintético preserva respostas válidas e isola referência inválida com zero chamadas reais. Rotas/assets novos e anteriores200 após estabilização404semrebuild; rollbacks retidos. Parser8682af7/gatewayd061cea preservados. Nenhuma chamada real adicional de IA/Pessoa; jornada autenticada real NOT TESTED. Legadofailed3/histórico intacto, sem reset/backfill. Complemento SQL de recuperação explícita na chave corrigida em andamento; produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/reports/probe em `docs/qa/evidence/profile-summary-partial`.
+Premissa explícita de Bruno em 05/10/2026: cada resposta válida deve continuar visível e somente trechos indisponíveis recebem explicação em português. Contrato/prompt1.1.0, compatibilidade1.0.0, normalização por afirmação, motivos fixos por seção, enum compartilhado de fontes e validação SQL; sem referência inventada/comprovação indevida. UI mantém oito seções, erros locais e dados publicados identificados em falha total/consulta, sem códigos técnicos.40testes domínio/worker,44asserts SQL local com rollback/negativos,256person-flow e36renders1416/390 PASS; tipos/build/19tooling/contextos/lint/foundation PASS. SHA funcionaldbd5b08ffa48eca2b4b9e0e07d9f24e0f357c161 publicado; CI branch37258829924/main37258898781 PASS, migração remota20261005032036. Webcfa50e0 running0/entryindex-Bx4s26MG.js; worker8526717 healthy0, probe compilado sintético preserva respostas válidas e isola referência inválida com zero chamadas reais. Rotas/assets novos e anteriores200 após estabilização404semrebuild; rollbacks retidos. Parser8682af7/gatewayd061cea preservados. Complemento3e0959aacb0beeb2bd903c4e5ce6e285a5275cd6 integrado/sincronizado; CI branch37259824264/main37259910228 PASS, migração20261005033507 ativa. Recuperação explícita solicita chave corrigida com tenant/base/lock/cooldown/idempotência; antigofailed3/histórico intacto, canRetrytrue e zero jobs novos naquele Perfil, sem reset/backfill ou geração nesta execução. Permissões negativas conferidas. Nenhuma chamada real adicional de IA/Pessoa; jornada autenticada real NOT TESTED. Produto permanece2.0.6. Acordo/AoT `docs/qa/agreement-profile-summary-partial.md`, `docs/qa/aot-profile-summary-partial.md`; imagens/reports/probe em `docs/qa/evidence/profile-summary-partial`.
 
 ## Recuperação controlada e identificação v2.0.6
 

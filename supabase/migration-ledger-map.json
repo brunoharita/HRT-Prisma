@@ -1304,6 +1304,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-05"
+    },
+    {
+      "name": "profile_synthesis_retry_upgrade",
+      "localVersion": "20261005034500",
+      "remoteVersion": "20261005033507",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-05"
     }
   ],
   "localOnly": [

@@ -14,23 +14,26 @@
     "authenticatedInternalValidator": false,
     "authenticatedDirectSelect": false,
     "legacyAttempts": 3,
-    "recoveryActivation": "pending"
+    "recoveryActivation": "active"
   },
   "web": {
     "image": "sha256:cfa50e09996b2090e64ec1d567866eec6e82fa883a44d7fa5e9556b44ea2a493",
     "entry": "index-Bx4s26MG.js",
     "state": "running",
-    "restarts": 0
+    "restarts": 0,
+    "container": "prisma-web"
   },
   "worker": {
     "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
     "state": "healthy",
-    "restarts": 0
+    "restarts": 0,
+    "container": "prisma-profile-synthesis"
   },
   "preserved": {
     "parser": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
     "gateway": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
-    "restarts": 0
+    "restarts": 0,
+    "gatewayContainer": "prisma-paddle-gateway"
   },
   "http": {
     "routes": [
@@ -56,5 +59,25 @@
     "renderReports": 36,
     "authenticatedRealJourney": "NOT TESTED",
     "realAiQuality": "NOT TESTED"
+  },
+  "recovery": {
+    "sha": "3e0959aacb0beeb2bd903c4e5ce6e285a5275cd6",
+    "ci": {
+      "branch": 37259824264,
+      "main": 37259910228,
+      "status": "success"
+    },
+    "migration": "20261005033507",
+    "legacyState": "failed",
+    "legacyAttempts": 3,
+    "legacyCanRetry": true,
+    "newJobsForIncident": 0,
+    "anonRetry": false,
+    "authenticatedRetry": true,
+    "authenticatedInternal": false,
+    "authenticatedDirectSelect": false,
+    "localOriginVpsShaVerified": true,
+    "imagesAndRestartsPreserved": true,
+    "httpSmoke": 200
   }
 }
