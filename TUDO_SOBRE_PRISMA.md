@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 346
-source_manifest_sha256: 5fb90114e7faa739f77fa3d83f0d3ecb524571ee10ebf3e6c60292cf42b3efb4
+documentation_source_count: 348
+source_manifest_sha256: ddf5397da2fb234003bebc536abd4ad9f490b648122725a67b652c740204dfb4
 -->
 
 # Tudo sobre o Prisma
@@ -2626,17 +2626,21 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.36
+version: 2.51.37
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
+## Recuperação controlada e identificação v2.0.6
+
+Autorização explícita de Bruno em 04/10/2026 supersede a decisão de manter v2.0.5 e autoriza uma única nova tentativa do incidente. Job/base aprovados e vigentes conferidos antes do reenfileiramento guardado. Tentativa2 concluída em 05/10/2026 02:33:29UTC, failed/RESPONSE_INVALID: diagnóstico contract/REFERENCES_INVALID, seção competencies, item0. Duração24890ms, input5211/output2990tokens. Resposta não aceita por referências inválidas; nenhuma síntese recuperada nem fato humano alterado. Tentativa1 permanece sem diagnóstico; não se inventa causa antiga nem se executa tentativa3. Histórico/contador e guardas tenant/base preservados. Acordo/AoT: `docs/qa/agreement-profile-synthesis-v206.md`, `docs/qa/aot-profile-synthesis-v206.md`. Versão central v2.0.6; release web e validação em andamento, sem novo banco/worker/modelo/prompt. Qualidade da análise real não aceita e jornada autenticada real não testada.
+
 ## Síntese profissional v2.0.5
 
-Complemento D-E03 publicado no SHA funcional `e162d367b24e66c2663a83f22cc982d9b096d395`, CI branch37254700232/main37254784205 PASS: Atualizar consulta usa somente load, mesmo após primeira leitura falhar e sem job; estado Síntese ainda não solicitada oferece geração explícita. Fixture query-only demonstra zero request no refresh e um somente na ação explícita em1416/390; oito reports afetados e conjunto28PASS, tipos/build/contextos PASS. Primeira visita mantém comportamento aprovado. Somenteweb publicada: imagemd3b30ec running0reinícios, entryindex-g0DDLxX2.js e rotas/assets atuais/anteriores HTTP200 após estabilização sem rebuild; rollback59958fe presente. Worker49cbf2c saudável0reinícios, Parser8682af7/gatewayd061cea e banco/modelo/fatos preservados. Reprocessamento real continua bloqueado pela revisão automática, aguardando autorização explícita; nenhum contorno foi executado.
+Complemento D-E03 publicado no SHA funcional `e162d367b24e66c2663a83f22cc982d9b096d395`, CI branch37254700232/main37254784205 PASS: Atualizar consulta usa somente load, mesmo após primeira leitura falhar e sem job; estado Síntese ainda não solicitada oferece geração explícita. Fixture query-only demonstra zero request no refresh e um somente na ação explícita em1416/390; oito reports afetados e conjunto28PASS, tipos/build/contextos PASS. Primeira visita mantém comportamento aprovado. Somenteweb publicada: imagemd3b30ec running0reinícios, entryindex-g0DDLxX2.js e rotas/assets atuais/anteriores HTTP200 após estabilização sem rebuild; rollback59958fe presente. Worker49cbf2c saudável0reinícios, Parser8682af7/gatewayd061cea e banco/modelo/fatos preservados. Reprocessamento anteriormente bloqueado foi autorizado explicitamente e executado uma vez no movimento v2.0.6 abaixo; não houve contorno da revisão.
 
-Correção de exceções publicada no SHA funcional `a89bc451e0135930db83f2f08a32f43e3a6d246a`, CI branch37253116222/main37253193994 PASS: diagnóstico `synthesis-diagnostic-1.0.0` de entrada/provedor/resposta/contrato/gravação, métricas em rejeições, motivos em português, recovery RPC autenticado/cooldown/três tentativas, resumo publicado e boundary isolado. Migração remota20261005015407, RLS/grants/probes negativos conferidos. Web59958fe running0reinícios, entryindex-CR5aA1Nt.js; worker49cbf2c healthy/idle0reinícios. Rotas/assets novos/anteriores HTTP200 após estabilização, rollbackd59809c/1f233fe presente. Parser8682af7/gatewayd061cea preservados. SQL QA incremental/33asserts/negativos,31worker/contratos,256person-flow,26renders1416/390,19tooling/contextos e tipos/build PASS. Resultado/perguntas/prompt/modelo preservados. Incidente real continua failed/RESPONSE_INVALID/attempt1, sem subcausa original armazenada; reprocessamento específico rejeitado pela revisão automática, aguardando autorização explícita adicional, sem contorno. Nenhum Perfil real foi publicado. AoT `docs/qa/aot-profile-synthesis-exceptions.md`; jornada autenticada real permanece NOT TESTED.
+Correção de exceções publicada no SHA funcional `a89bc451e0135930db83f2f08a32f43e3a6d246a`, CI branch37253116222/main37253193994 PASS: diagnóstico `synthesis-diagnostic-1.0.0` de entrada/provedor/resposta/contrato/gravação, métricas em rejeições, motivos em português, recovery RPC autenticado/cooldown/três tentativas, resumo publicado e boundary isolado. Migração remota20261005015407, RLS/grants/probes negativos conferidos. Web59958fe running0reinícios, entryindex-CR5aA1Nt.js; worker49cbf2c healthy/idle0reinícios. Rotas/assets novos/anteriores HTTP200 após estabilização, rollbackd59809c/1f233fe presente. Parser8682af7/gatewayd061cea preservados. SQL QA incremental/33asserts/negativos,31worker/contratos,256person-flow,26renders1416/390,19tooling/contextos e tipos/build PASS. Resultado/perguntas/prompt/modelo preservados. Incidente original failed/RESPONSE_INVALID/attempt1 não armazenou subcausa; o bloqueio histórico do reprocessamento foi resolvido por autorização explícita no movimento v2.0.6 abaixo. Nenhum Perfil real foi publicado. AoT `docs/qa/aot-profile-synthesis-exceptions.md`; jornada autenticada real permanece NOT TESTED.
 
 Complemento de rastreabilidade D-03 publicado no SHA `ed4e328403e394f7c64cef143475580a88c4532e`: seleção de fonte vinculada ao analysisId, fechada ao terminar uma nova análise; fonte atual somente após novo clique. Caso reproduziu falha no componente anterior e passou em1416/390; regressão total de14 reports, tipos/build/contextos e CI branch37249189433/main37249281571 PASS. Web running/zero reinícios, imagemd59809c, entry `index-BjB3jE2B.js`, versão/HTTPS/assets novos e antigos/rollback PASS após estabilização. Worker1f233fe continua healthy/idle sem reinícios; Parser/gateway/banco/modelo preservados na versão funcional abaixo. Nenhuma jornada autenticada de Pessoa real foi executada para testar.
 
@@ -5668,6 +5672,10 @@ A base transversal de UX de 2026-09-13 introduz `prisma-ux-foundation-1.0.0` (AD
 
 
 Diagnóstico opcional da síntese: `synthesis-diagnostic-1.0.0` adiciona etapa/motivo fixos e contagens sem alterar `profile-synthesis-1.0.0` ou o prompt1.0.0. Leitores toleram metadados legados sem diagnóstico. Migração incremental estende RPC de conclusão com argumento opcional; retorna estado efetivamente gravado, mantendo chamada anterior compatível. Produto permanece2.0.5 como correção do comportamento aprovado.
+
+## Recuperação e diagnóstico v2.0.6
+
+Decisão explícita de Bruno em 04/10/2026 registra a sexta entrega da geração2/movimento0: Prisma v2.0.6. Supersede somente a decisão anterior de manter2.0.5 nas correções de síntese. Registro central alimenta login/sidebar. Resultado/prompt/perguntas/modelo e diagnóstico persistidos não mudam. Recuperação autorizada identifica a falha real de referências e preserva histórico/fatos; número de versão não prova rollout. Acordo/AoT `agreement-profile-synthesis-v206.md` e `aot-profile-synthesis-v206.md`.
 
 ---
 
@@ -10440,6 +10448,10 @@ A recuperação explícita de síntese failed ocorre pelo RPC autenticado `retry
 
 Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.
 
+## Incidente autorizado na v2.0.6
+
+Em 04/10/2026 Bruno autorizou uma única chamada adicional do job existente. Guardas de estado/attempt1/código/diagnóstico ausente, Perfil aprovado/vigente, tenant/pessoa e hash igual foram verificadas. Tentativa2 failed por contract/REFERENCES_INVALID na seção competencies/item0,24890ms,5211/2990tokens. Tentativa1 sem diagnóstico permanece histórica; nenhuma terceira chamada nem alteração canônica. A resposta inválida não é persistida como síntese válida. Evidência segura no AoT v2.0.6. A release de identificação requer somente web; worker/Parser/gateway e schema permanecem.
+
 ---
 
 ## Source: `docs/operations/release-dispatcher.md`
@@ -14631,6 +14643,35 @@ Implementar integralmente D-01 a D-06 e D-UX-01, sob P-01 a P-03 e F-01, com A-0
 
 ---
 
+## Source: `docs/qa/agreement-profile-synthesis-v206.md`
+
+# Acordo e execução — Recuperação autorizada e versão 2.0.6
+
+Versão 1.0.0, agreed, 2026-10-04. Autoridade: Bruno autoriza a única nova tentativa explicitamente solicitada após o bloqueio de revisão automática e determina a versão 2.0.6. Baseline main/origin/VPS `64e1d54c1749bd6c050a0d4c3d175ac93f5fbdfa`. Risco D/C na recuperação operacional, B na identificação de release. O acordo `agreement-profile-synthesis-exceptions.md` v1.0.0 foi lido integralmente e permanece vigente; apenas a decisão de manter produto2.0.5 é supersedida por D-R02. Nenhum contrato de resultado, prompt, modelo ou pergunta muda.
+
+- D-R01: reenfileirar somente o job do incidente ainda failed, tentativa1, RESPONSE_INVALID sem diagnóstico, Perfil aprovado/vigente e mesma base. Executar uma única nova tentativa pelo worker normal, preservando contador/histórico e identificar o resultado com diagnóstico/métricas seguros. Se já recuperado, consultar sem duplicar. Falha nova não autoriza outra chamada cega.
+- D-R02: registrar e publicar Prisma v2.0.6 na fonte central, login/sidebar, documentação e Context Pack; publicação seletiva de web, CI, smoke e sincronização.
+- P-R01: não alterar fatos/publicar Perfil humano, zerar tentativas, expor fontes pessoais ou segredos, inventar subcausa antiga ou mudar tenant/modelo/prompt.
+- F-R01: novas funcionalidades, redesenho, backfill, Parser, matching, migração e novo worker sem necessidade demonstrada.
+- A-R01: reutilizar fila/diagnóstico/release existentes; consultas guardadas, testes e registro de evidência são escolhas de engenharia.
+- Q-R01: nenhuma decisão material pendente. Sucesso da IA não é presumido; eventual falha deve ser identificada e declarada.
+
+## Mapa de impacto e critérios de aceite
+
+| IDs / capacidade | Relação | Baseline / prova mínima |
+| --- | --- | --- |
+| D-R01, job/diagnóstico/histórico | direct | failed/attempt1/diagnosticnull, base igual; leitura prévia, único reenfileiramento guardado, resultado e histórico sem PII |
+| P-R01, Perfil/tenant | critical_transversal | Perfil aprovado/vigente, fontes com hash igual; guardas de organização/pessoa/Perfil/base, nenhuma gravação canônica |
+| D-R02, registro/consumidores web | direct | v2.0.5 central, webd3b30ec; teste de versão, tipos/build, CI, bundle servido e HTTP/rollback |
+| Exceções/consulta/fontes | plausible_indirect | 31 testes contratos/worker, 256 person-flow, 33 asserts SQL, 28 renders anteriores PASS; código funcional preservado, testes focados de contrato |
+| Parser/gateway/banco/modelo | no_impact_identified | release somente registro/docs/web; conferir imagens e saúde, sem rollout dessas superfícies |
+
+## Prompt congelado
+
+Implementar D-R01/R02 sob P-R01/F-R01/A-R01 e registrar implementação, testes e evidência no AoT. Resultado failed explicitamente diagnosticado atende à recuperação controlada, mas nunca pode ser declarado síntese recuperada. A autorização é para uma chamada adicional, não repetição ilimitada. Preservar a evidência histórica do bloqueio anterior.
+
+---
+
 ## Source: `docs/qa/agreement-release-efficiency.md`
 
 # Contrato de Acordos — Publicação eficiente por impacto
@@ -18580,6 +18621,10 @@ Conclusão: implementação e publicação da correção PASS. Não se afirma qu
 
 Na revisão final, o mesmo efeito de primeira consulta era reaplicado pelo botão Atualizar consulta. Em caso de primeira leitura interrompida e base sem job, isso poderia solicitar uma análise. Ajuste: primeira visita mantém o comportamento aprovado; consulta manual usa somente load. Se não há job após recuperar a consulta, estado Síntese ainda não solicitada oferece Gerar síntese como ação separada e explícita. Não gera resultado nem custo em refresh. Fixture query-only antes do ajuste faria request indevido; após: requests0 no refresh, requests1 somente após ação explícita, 1416/390 PASS. Rerun somente query-only/pending/retry/read-error, oito reports afetados; conjunto final28reportsPASS. Tipos/build PASS. Sem mudanças no worker, SQL, modelo ou fatos. Complemento publicado em main/origin/VPS no SHA funcional `e162d367b24e66c2663a83f22cc982d9b096d395`, CI branch37254700232/main37254784205 PASS. Somenteweb: imagemd3b30ec, entryindex-g0DDLxX2.js, rotas/novoentry/anterioresCR5aA1Nt eBjB3jE2B HTTP200 após estabilização sem rebuild; label de estado explícito no bundle conferido. Rollback59958fe disponível. Worker49cbf2c saudável0reinícios, Parser8682af7/gatewayd061cea preservados. Metadados/documentação posteriores não requerem redeploy.
 
+## Autorização superveniente v2.0.6
+
+Em 04/10/2026 Bruno autorizou explicitamente a única nova tentativa anteriormente bloqueada e determinou produto2.0.6. Bloqueio histórico não foi contornado: execução apenas após resposta humana. Resultado novo e publicação registrados no AoT `aot-profile-synthesis-v206.md`; a causa antiga continua desconhecida.
+
 ---
 
 ## Source: `docs/qa/aot-profile-synthesis-v205.md`
@@ -18644,6 +18689,34 @@ Na conferência final, fonte aberta da análise anterior poderia continuar selec
 Publicado no SHA `ed4e328403e394f7c64cef143475580a88c4532e`, CI branch37249189433/main37249281571 PASS. Somente web reconstruída: imagemd59809c/entry `index-BjB3jE2B.js`, running/zero reinícios. Worker1f233fe healthy/idle/zero reinícios, Parser/gateway iguais ao baseline. `/`, `/login`, `/people`, entry novo, entry inicial2.0.5 e assets2.0.4 HTTP200; rollbackb8d9138 preservado. O404 imediato foi transitório e smoke após estabilização passou sem novo build. Evidência `evidence/profile-synthesis/production-ui-final.json`. D-03/D-UX-01/D-06 e preservação P-03 PASS; demais provas/limites acima permanecem. Trabalho alheio preservado, QA temporário encerrado, fechamento documental não altera runtime.
 
 Prova complementar D-05: uma chamada sintética diretamente do container na VPS ao provedor confirmou o modelo e a configuração implantados, sem PC/túnel nem gravação no banco. Schema/ref validação e oito respostas PASS,11895ms,936 tokens input/931 output. `evidence/profile-synthesis/provider-vps.json`. É prova de conectividade/configuração e contrato do runtime, não de publicação/leitura autenticada de Pessoa real. Fechamento documental77441c9 passou nas CIs branch37249682567/main37249759951; runtime permanece ed4e328/worker497b2ee.
+
+---
+
+## Source: `docs/qa/aot-profile-synthesis-v206.md`
+
+# AoT — Recuperação controlada e release v2.0.6
+
+Contrato `agreement-profile-synthesis-v206.md` v1.0.0 e acordo de exceções v1.0.0, lidos integralmente. Baseline main/origin/VPS64e1d54, webd3b30ec/worker49cbf2c/Parser8682af7/gatewayd061cea, zero reinícios. Autorização explícita de Bruno em 04/10/2026 para uma chamada adicional e versão2.0.6; publicação permanente AGENTS7. RiscoD/C operacional e B no registro de release.
+
+| IDs | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-R01 | Reenfileiramento único guardado, worker normal, histórico e métricas | Prévia failed/attempt1/diagnosticnull, Perfil approved/current e hash igual; UPDATE retornou uma linha queued/attempt1; worker iniciou attempt2 e finalizou failed | PASS |
+| P-R01 | Nenhum write canônico/tenant/modelo/prompt ou reset | Query limitada ao UUID, estado/código/contador, tenant/pessoa/Perfil/base; histórico1/2 preservado; resposta inválida rejeitada | PASS |
+| D-R02 | Registro central sexta entrega, login/sidebar e contexto | 35 testes dirigidos (4 release +31 síntese/worker) PASS; build TypeScript/tiposweb/buildweb PASS; CI/release/smoke pendentes | PARTIAL |
+
+## Resultado operacional real
+
+Job `4877d6e8-f550-4fd3-93db-133634916b04`, tentativa2 concluída2026-10-05T02:33:29.531758Z, duração24890ms, input5211/output2990tokens. Estado failed, RESPONSE_INVALID, diagnóstico `synthesis-diagnostic-1.0.0`, etapa contract, motivo REFERENCES_INVALID, seção competencies, item0. Identificada rejeição de referências da resposta da IA; não se afirma a subregra específica dentro dessa validação nem se reconstrói a tentativa1 sem diagnóstico. Nenhuma terceira chamada feita. Síntese real não recuperada; não aceitar resposta sem sustentação é a proteção esperada, não evidência de qualidade da IA.
+
+Consulta operacional autorizada; nenhum texto de fonte/resposta, segredo ou prompt foi exportado na evidência. Atualizar consulta permanece leitura sem nova IA. Nenhum Perfil humano publicado. O bloqueio anterior consta no AoT de exceções e foi resolvido pela autorização explícita, sem contorno.
+
+## Preservação e limites
+
+Mapa/critério no acordo: release somente registro/docs/web. UI funcional de exceções, SQL, worker e contratos não mudam. Baseline anterior:31contrato/worker,256person-flow,33asserts SQL/negativos e28renders1416/390 PASS; evidência histórica não é apresentada como rerun. Sem mudança visual estrutural, não exige nova comparação de layout. Jornada autenticada real/qualidade de análise aceita NOT TESTED. Regressão dirigida e smoke dos serviços preservados serão registrados abaixo. Não executar suíte integral local para bump de identificação.
+
+## Validação local
+
+Build TypeScript, typecheck:web e build:web PASS; 35 testes dirigidos executados após recompilar o registro (sexta entrega), incluindo fontes inválidas, metadados/métricas, ausência de PII e zero chamada na fila vazia. Nenhuma IA real adicional nesses testes. Avisos de bundle/import dinâmico preexistentes permanecem, fora de escopo. Geração/check do Context Pack em snapshot Git exclui arquivos não rastreados alheios; lint855arquivos PASS.
 
 ---
 

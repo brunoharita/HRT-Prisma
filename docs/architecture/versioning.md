@@ -269,3 +269,7 @@ A base transversal de UX de 2026-09-13 introduz `prisma-ux-foundation-1.0.0` (AD
 
 
 Diagnóstico opcional da síntese: `synthesis-diagnostic-1.0.0` adiciona etapa/motivo fixos e contagens sem alterar `profile-synthesis-1.0.0` ou o prompt1.0.0. Leitores toleram metadados legados sem diagnóstico. Migração incremental estende RPC de conclusão com argumento opcional; retorna estado efetivamente gravado, mantendo chamada anterior compatível. Produto permanece2.0.5 como correção do comportamento aprovado.
+
+## Recuperação e diagnóstico v2.0.6
+
+Decisão explícita de Bruno em 04/10/2026 registra a sexta entrega da geração2/movimento0: Prisma v2.0.6. Supersede somente a decisão anterior de manter2.0.5 nas correções de síntese. Registro central alimenta login/sidebar. Resultado/prompt/perguntas/modelo e diagnóstico persistidos não mudam. Recuperação autorizada identifica a falha real de referências e preserva histórico/fatos; número de versão não prova rollout. Acordo/AoT `agreement-profile-synthesis-v206.md` e `aot-profile-synthesis-v206.md`.

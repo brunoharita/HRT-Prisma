@@ -18,3 +18,7 @@ Falhas novas incluem `diagnostic` em jobs e attempts: versão, etapa, motivo fix
 A recuperação explícita de síntese failed ocorre pelo RPC autenticado `retry_profile_synthesis`, nunca por reset de attempts. Abrir/atualizar o Perfil não recupera automaticamente uma resposta inválida. Migração incremental mantém argumentos do worker anterior; rollback deve preservar tabelas/diagnósticos. Não executar migração original novamente. Recuperação administrativa do incidente limita-se ao job já existente, base aprovada e primeiro erro, com contador/histórico preservados; nenhuma publicação humana é feita.
 
 Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.
+
+## Incidente autorizado na v2.0.6
+
+Em 04/10/2026 Bruno autorizou uma única chamada adicional do job existente. Guardas de estado/attempt1/código/diagnóstico ausente, Perfil aprovado/vigente, tenant/pessoa e hash igual foram verificadas. Tentativa2 failed por contract/REFERENCES_INVALID na seção competencies/item0,24890ms,5211/2990tokens. Tentativa1 sem diagnóstico permanece histórica; nenhuma terceira chamada nem alteração canônica. A resposta inválida não é persistida como síntese válida. Evidência segura no AoT v2.0.6. A release de identificação requer somente web; worker/Parser/gateway e schema permanecem.

@@ -59,6 +59,7 @@ export const PRISMA_RELEASE_HISTORY = [{
     "2.0.3: orientação clara para corrigir erros recuperáveis",
     "2.0.4: período de formação permanece acessível durante a revisão",
     "2.0.5: síntese profissional por IA, persistida e rastreável às fontes",
+    "2.0.6: síntese resiliente com diagnóstico e recuperação controlada",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 
