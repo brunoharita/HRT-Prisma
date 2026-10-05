@@ -1,0 +1,12 @@
+{
+  "probe": "synthetic_provider_from_vps",
+  "status": "PASS",
+  "model": "gpt-5.6-luna",
+  "durationMs": 11895,
+  "inputTokens": 936,
+  "outputTokens": 931,
+  "answers": 8,
+  "databaseWrites": false,
+  "input": "Two synthetic professional records; no real Person data",
+  "limitations": "Provider/configuration/contract proof; not an authenticated real-Person publication journey"
+}

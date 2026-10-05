@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 344
-source_manifest_sha256: 9e89096263621ca6da863553cd38e13e5976ebb68eff2077fc6d1f55a4da7318
+source_manifest_sha256: 495b712b69100dfbae260894aa1fac29cc1ead4ff4a633040f98f163386b96eb
 -->
 
 # Tudo sobre o Prisma
@@ -18518,6 +18518,8 @@ Evidência compacta: `evidence/profile-synthesis/production-verification.json`. 
 Na conferência final, fonte aberta da análise anterior poderia continuar selecionada após terminar a análise atual. Cenário dirigido reproduziu a mistura em1416/390 (`refresh-before-*.json`, FAIL esperado). Seleção agora inclui analysisId e é ignorada na troca; cache por análise preservado, fonte atual somente após novo clique. Advertência de análise anterior distingue falha/insuficiência de preparação. Regressão dos seis estados anteriores mais transição: 14 reports/renders PASS, tipos/build dirigidos; nenhuma alteração ao worker, SQL ou matching.
 
 Publicado no SHA `ed4e328403e394f7c64cef143475580a88c4532e`, CI branch37249189433/main37249281571 PASS. Somente web reconstruída: imagemd59809c/entry `index-BjB3jE2B.js`, running/zero reinícios. Worker1f233fe healthy/idle/zero reinícios, Parser/gateway iguais ao baseline. `/`, `/login`, `/people`, entry novo, entry inicial2.0.5 e assets2.0.4 HTTP200; rollbackb8d9138 preservado. O404 imediato foi transitório e smoke após estabilização passou sem novo build. Evidência `evidence/profile-synthesis/production-ui-final.json`. D-03/D-UX-01/D-06 e preservação P-03 PASS; demais provas/limites acima permanecem. Trabalho alheio preservado, QA temporário encerrado, fechamento documental não altera runtime.
+
+Prova complementar D-05: uma chamada sintética diretamente do container na VPS ao provedor confirmou o modelo e a configuração implantados, sem PC/túnel nem gravação no banco. Schema/ref validação e oito respostas PASS,11895ms,936 tokens input/931 output. `evidence/profile-synthesis/provider-vps.json`. É prova de conectividade/configuração e contrato do runtime, não de publicação/leitura autenticada de Pessoa real. Fechamento documental77441c9 passou nas CIs branch37249682567/main37249759951; runtime permanece ed4e328/worker497b2ee.
 
 ---
 
