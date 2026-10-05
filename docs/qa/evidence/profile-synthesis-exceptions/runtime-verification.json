@@ -1,0 +1,23 @@
+{
+  "functionalSha": "a89bc451e0135930db83f2f08a32f43e3a6d246a",
+  "ci": [
+    37253116222,
+    37253193994
+  ],
+  "migration": "20261005015407",
+  "webImage": "59958fe84f14ee3f6721a9ee21a529c7c0e03c7cfd90eda9bb7d3d4f20a42de1",
+  "workerImage": "49cbf2c66c601474db4a46e4d6e99db46ea90b48d6104e70b38727b02fb3f129",
+  "health": "healthy/idle",
+  "restarts": 0,
+  "parserAndGatewayPreserved": true,
+  "httpRoutesAndAssets": 200,
+  "invalidWorkerTokenAndAnonymousRetry": 401,
+  "syntheticRuntimeDiagnostic": {
+    "reason": "OUTPUT_INCOMPLETE",
+    "inputTokens": 50,
+    "outputTokens": 80,
+    "providerCalls": 0
+  },
+  "realRecovery": "BLOCKED_AUTO_REVIEW",
+  "realProfilePublication": false
+}
