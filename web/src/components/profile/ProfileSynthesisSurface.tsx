@@ -37,7 +37,8 @@ function ProfileSynthesisBody({ adapter, onOriginal, onOpenSource, originalSumma
   const detailRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let active = true; let timer: ReturnType<typeof setTimeout> | undefined; let polls = 0;
-    if (currentAdapter.current !== adapter) { setView(null); setSelected(null); cache.current.clear(); currentAdapter.current = adapter; }
+    const firstVisit = currentAdapter.current !== adapter;
+    if (firstVisit) { setView(null); setSelected(null); cache.current.clear(); currentAdapter.current = adapter; }
     setError(null);
     const update = async (initial = false) => {
       if (!active) return;
@@ -54,13 +55,14 @@ function ProfileSynthesisBody({ adapter, onOriginal, onOpenSource, originalSumma
         else if (["queued", "processing"].includes(next.state)) setError("WAIT_EXCEEDED");
       } catch (cause) { if (active) setError(cause instanceof SynthesisFailure ? cause.diagnostic.reason : "READ_UNAVAILABLE"); }
     };
-    void update(true);
+    void update(firstVisit);
     return () => { active = false; if (timer) clearTimeout(timer); };
   }, [adapter, queryAttempt]);
   const retry = async () => {
-    if (!adapter.retry || retryLock.current) return;
+    const operation = view?.state === "not_requested" ? () => adapter.request() : adapter.retry ? () => adapter.retry!() : null;
+    if (!operation || retryLock.current) return;
     retryLock.current = true; setRetrying(true);
-    try { const next = await adapter.retry(); if (currentAdapter.current === adapter) { setView(next); setQueryAttempt(value => value + 1); } }
+    try { const next = await operation(); if (currentAdapter.current === adapter) { setView(next); setQueryAttempt(value => value + 1); } }
     catch (cause) { if (currentAdapter.current === adapter) setError(cause instanceof SynthesisFailure ? cause.diagnostic.reason : "READ_UNAVAILABLE"); }
     finally { retryLock.current = false; setRetrying(false); }
   };
@@ -88,9 +90,10 @@ function ProfileSynthesisBody({ adapter, onOriginal, onOpenSource, originalSumma
     {error ? <Alert showIcon type="warning" title={explainSynthesisFailure(error).explanation} description={explainSynthesisFailure(error).action} action={<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button>} /> : null}
     {showingPrevious ? <Alert showIcon type="info" title="As informações de base mudaram" description={`A síntese anterior está identificada abaixo e pode conter informações que mudaram. ${view?.state === "failed" ? "A nova leitura não pôde ser concluída; o Perfil aprovado permanece disponível." : view?.state === "insufficient" ? "A base atual precisa de mais informações profissionais para uma nova síntese." : "A nova leitura está sendo preparada."}`} /> : null}
     {effective && view?.state === "failed" ? <PrismaCard title="A nova síntese não foi concluída"><p>{explainSynthesisFailure(view.diagnostic?.reason ?? view.errorCode).explanation}</p><p>{view.attempts === 3 ? "O limite de três tentativas desta versão foi atingido. Informe a referência de atendimento ao suporte." : explainSynthesisFailure(view.diagnostic?.reason ?? view.errorCode).action}</p><Space wrap>{view.canRetry && adapter.retry ? <Button loading={retrying} onClick={() => void retry()}>Gerar síntese novamente</Button> : null}<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button></Space><p>Referência de atendimento: {view.jobId ?? "consulta da síntese"} · Tentativa {view.attempts ?? 0} de 3.</p></PrismaCard> : null}
-    {!effective ? <PrismaCard title={error ? "Síntese indisponível" : view?.state === "failed" ? "Síntese não concluída" : view?.state === "insufficient" ? "Precisamos de informações profissionais" : "Preparando a síntese do perfil"}>
-      {!view && !error ? <Skeleton active paragraph={{ rows: 3 }} /> : view?.state === "failed" ? <><p>{explainSynthesisFailure(view.diagnostic?.reason ?? view.errorCode).explanation}</p><p>{view.attempts === 3 ? "O limite de três tentativas desta versão foi atingido. Informe a referência de atendimento ao suporte." : explainSynthesisFailure(view.diagnostic?.reason ?? view.errorCode).action}</p><Space wrap>{view.canRetry && adapter.retry ? <Button loading={retrying} onClick={() => void retry()}>Gerar síntese novamente</Button> : null}<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button></Space></> : <p>{error ? "Nenhum dado aprovado foi alterado." : view?.state === "insufficient" ? "Esta versão não contém registros profissionais suficientes para uma síntese. Complemente o Perfil pela revisão com as informações disponíveis." : "A análise será gravada para as próximas consultas. Você pode consultar o Perfil completo enquanto ela é preparada."}</p>}
-      {error || view?.state === "failed" ? <PublishedFallback originalSummary={originalSummary} /> : null}
+    {!effective ? <PrismaCard title={error ? "Síntese indisponível" : view?.state === "failed" ? "Síntese não concluída" : view?.state === "insufficient" ? "Precisamos de informações profissionais" : view?.state === "not_requested" ? "Síntese ainda não solicitada" : "Preparando a síntese do perfil"}>
+      {!view && !error ? <Skeleton active paragraph={{ rows: 3 }} /> : view?.state === "failed" ? <><p>{explainSynthesisFailure(view.diagnostic?.reason ?? view.errorCode).explanation}</p><p>{view.attempts === 3 ? "O limite de três tentativas desta versão foi atingido. Informe a referência de atendimento ao suporte." : explainSynthesisFailure(view.diagnostic?.reason ?? view.errorCode).action}</p><Space wrap>{view.canRetry && adapter.retry ? <Button loading={retrying} onClick={() => void retry()}>Gerar síntese novamente</Button> : null}<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button></Space></> : <p>{error ? "Nenhum dado aprovado foi alterado." : view?.state === "insufficient" ? "Esta versão não contém registros profissionais suficientes para uma síntese. Complemente o Perfil pela revisão com as informações disponíveis." : view?.state === "not_requested" ? "Nenhuma análise foi iniciada nesta consulta." : "A análise será gravada para as próximas consultas. Você pode consultar o Perfil completo enquanto ela é preparada."}</p>}
+      {view?.state === "not_requested" ? <><p>Esta versão ainda não tem uma síntese gravada. Para iniciar a análise, escolha Gerar síntese. Atualizar consulta apenas verifica o andamento.</p><Button loading={retrying} onClick={() => void retry()}>Gerar síntese</Button></> : null}
+      {error || view?.state === "failed" || view?.state === "not_requested" ? <PublishedFallback originalSummary={originalSummary} /> : null}
       <Button onClick={onOriginal}>Consultar Perfil completo</Button>
       {view?.jobId ? <Collapse ghost items={[{ key: "diagnostic", label: "Detalhes para atendimento", children: <><p>Referência: {view.jobId} · Tentativa {view.attempts ?? 0} de 3.</p>{view.diagnostic?.section ? <p>Seção: {view.diagnostic.section === "overview" ? "Síntese principal" : PROFILE_SYNTHESIS_QUESTIONS.find(([id]) => id === view.diagnostic?.section)?.[1]}</p> : null}<p>Identificação: {view.diagnostic?.reason ?? view.errorCode ?? "Em processamento"}</p></> }]} /> : null}
     </PrismaCard> : selected ? <>

@@ -26,3 +26,5 @@ Consulta/novo processamento/fonte são ações distintas. `retry_profile_synthes
 O incidente original registrou apenas RESPONSE_INVALID; não há evidência para afirmar qual subregra falhou naquela tentativa. Uma nova tentativa diagnostica seu próprio resultado, não reconstitui automaticamente o anterior.
 
 Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.
+
+Primeira visita pode solicitar síntese antiga conforme acordo; Atualizar consulta executa somente load, inclusive após primeira leitura falhar. Sem job, a tela declara Síntese ainda não solicitada e oferece Gerar síntese explícito. Não dispara provider por refresh.

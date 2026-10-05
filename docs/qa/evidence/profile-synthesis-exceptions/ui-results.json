@@ -114,6 +114,34 @@
     "pass": true
   },
   {
+    "scenario": "query-only",
+    "width": 1416,
+    "checks": {
+      "initialReadFailure": true,
+      "refreshNeverRequestsAnalysis": true,
+      "explicitGenerationOnly": true,
+      "queuedAfterExplicitAction": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "query-only",
+    "width": 390,
+    "checks": {
+      "initialReadFailure": true,
+      "refreshNeverRequestsAnalysis": true,
+      "explicitGenerationOnly": true,
+      "queuedAfterExplicitAction": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
     "scenario": "read-error",
     "width": 1416,
     "checks": {
