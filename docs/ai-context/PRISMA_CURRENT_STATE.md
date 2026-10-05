@@ -2,13 +2,16 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.34
+version: 2.51.35
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
 ## Síntese profissional v2.0.5
+
+Correção de exceções em validação local: diagnóstico versionado de entrada/provedor/resposta/contrato/gravação; métricas preservadas em rejeições, motivos em português, recovery RPC autenticado/cooldown/três tentativas, resumo publicado e boundary isolado. Resultado/perguntas/prompt/modelo/Parser/matching preservados. Incidente reportado: failed/RESPONSE_INVALID, tentativa1; subcausa original não armazenada. Publicação e evidência finais em `docs/qa/aot-profile-synthesis-exceptions.md`; estado operacional ainda em verificação nesta revisão.
+
 
 Complemento de rastreabilidade D-03 publicado no SHA `ed4e328403e394f7c64cef143475580a88c4532e`: seleção de fonte vinculada ao analysisId, fechada ao terminar uma nova análise; fonte atual somente após novo clique. Caso reproduziu falha no componente anterior e passou em1416/390; regressão total de14 reports, tipos/build/contextos e CI branch37249189433/main37249281571 PASS. Web running/zero reinícios, imagemd59809c, entry `index-BjB3jE2B.js`, versão/HTTPS/assets novos e antigos/rollback PASS após estabilização. Worker1f233fe continua healthy/idle sem reinícios; Parser/gateway/banco/modelo preservados na versão funcional abaixo. Nenhuma jornada autenticada de Pessoa real foi executada para testar.
 

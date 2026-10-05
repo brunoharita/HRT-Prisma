@@ -15,3 +15,14 @@ Publicação enfileira; worker independente processa fora da transação, sem bl
 Resultados/jobs/tentativas são tabelas distintas, com RLS, RPCs autenticadas por tenant e credencial restrita de worker. Lease3min, SKIP LOCKED, três tentativas por base, retry espaçado só para indisponibilidade/rate limit. Sem fonte suficiente: zero IA. Exclusão da Pessoa/Perfil remove registros derivados por FK cascade. Não se promete cobrança externa exatamente uma vez diante de pane/retry.
 
 Consultas comuns recebem JSON compacto e metadados das fontes; clique carrega trecho do snapshot autorizado, com cache apenas durante a tela. A seleção pertence ao ID da análise: quando uma base nova termina enquanto uma fonte antiga está aberta, a seleção é fechada e a fonte atual só é consultada mediante novo clique. Nunca associar afirmação anterior ao snapshot novo. Falha/insuficiência de atualização mantém a análise anterior identificada, sem alegar processamento em andamento. Worker inicial único, seleção pela empresa menos recentemente atendida e índices; aumentar consumidores exige medição, não novo broker. Métricas de duração/tokens/modelo/falha não incluem PII integral.
+
+
+## Exceções isoladas (correção 2.0.5)
+
+Contrato adicional `synthesis-diagnostic-1.0.0`: stage/reason fixos, section/item e contagens limitadas, nunca corpo, mensagem livre ou identificador de fonte privado. Resultado/prompt/perguntas/modelo continuam 1.0.0. Rejeição de IA conserva tokens válidos, duração e tentativa. JSON inválido, resposta incompleta, recusa, fontes, texto, limite de palavras e validação SQL têm motivos separados. Migração incremental mantém versão anterior da transação privada e oferece wrapper compatível com worker anterior; rejeição SQL de resultado termina a tentativa com DATABASE_CONTRACT sem persistir resposta insegura.
+
+Consulta/novo processamento/fonte são ações distintas. `retry_profile_synthesis` exige leitor autorizado do tenant, base e versão aprovadas, lock, cooldown e attempts<3. Não zera contador; não oferece retry para configuração, entrada excessiva, fonte inválida, verificação indevida ou incompatibilidade persistente. Falhas transitórias mantêm espaçamento automático existente. Render boundary só engloba síntese: cabeçalho/abas, original e navegação permanecem. Poll automático termina após 24 consultas; atualizar consulta retoma leitura sem reprocessar base.
+
+O incidente original registrou apenas RESPONSE_INVALID; não há evidência para afirmar qual subregra falhou naquela tentativa. Uma nova tentativa diagnostica seu próprio resultado, não reconstitui automaticamente o anterior.
+
+Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.

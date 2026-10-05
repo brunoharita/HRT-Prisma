@@ -11,7 +11,7 @@ socket.onmessage=event=>{const value=JSON.parse(event.data);if(value.id){const p
 const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++next;pending.set(id,{resolve,reject});socket.send(JSON.stringify({id,method,params}));});
 await send('Page.enable');
 await mkdir('tmp/profile-synthesis-render',{recursive:true});
-for(const width of [1416,390])for(const scenario of process.argv.includes('--refresh-only')?['refresh']:['summary','source','pending','failed','previous','insufficient','refresh']){
+for(const width of [1416,390])for(const scenario of process.argv.includes('--refresh-only')?['refresh']:['summary','source','pending','failed','previous','insufficient','refresh','read-error','render-error','source-error','word-limit','retry','previous-failed']){
  await send('Emulation.setDeviceMetricsOverride',{width,height:1060,deviceScaleFactor:1,mobile:false});
  await send('Page.navigate',{url:`http://127.0.0.1:5585/profile-synthesis.html?case=${scenario}`});
  let complete=false;

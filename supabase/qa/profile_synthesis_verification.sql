@@ -72,6 +72,46 @@ do $$ declare j jsonb; r jsonb; sources jsonb; id text; a jsonb; begin
  perform public.claim_profile_synthesis(repeat('a',64));
  perform pg_temp.assert((select state='failed' from public.profile_synthesis_jobs jobs where jobs.id=(j->>'id')::uuid),'exhausted expired lease ends instead of hanging');
 end $$;
+-- Diagnostic/recovery delta; published facts and prior analyses remain authoritative.
+do $$ declare j jsonb; v jsonb; d jsonb; begin
+ perform set_config('request.jwt.claim.sub',pg_temp.sid('member')::text,true);
+ v:=public.load_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ perform pg_temp.assert(v->>'attempts'='3' and not (v->>'canRetry')::boolean,'exhausted job cannot restart its budget');
+ perform public.retry_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ perform pg_temp.assert((public.load_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'))->>'attempts')::integer=3,'retry does not reset exhausted attempts');
+ update public.professional_profiles set profile_data=jsonb_set(profile_data,'{professionalObjective}','"Atuação com controles e relatórios"') where id=pg_temp.sid('profile');
+ perform public.request_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ j:=public.claim_profile_synthesis(repeat('a',64));
+ d:=jsonb_build_object('version','synthesis-diagnostic-1.0.0','stage','contract','reason','WORD_LIMIT','section','overview','observed',121,'limit',120);
+ perform pg_temp.reject(format('select public.complete_profile_synthesis(%L,%L,%L,null,%L,100,200,300,%L,%L)',repeat('a',64),j->>'id',j->>'lease','gpt-5.6-luna','RESPONSE_INVALID',d||'{"private":"personal content"}'::jsonb),'22023');
+ perform pg_temp.reject(format('select public.complete_profile_synthesis(%L,%L,%L,null,%L,100,200,300,%L,%L)',repeat('a',64),j->>'id',j->>'lease','gpt-5.6-luna','RESPONSE_INVALID',jsonb_set(d,'{reason}','"personal content"')),'22023');
+ perform public.complete_profile_synthesis(repeat('a',64),(j->>'id')::uuid,(j->>'lease')::uuid,null,'gpt-5.6-luna',100,200,300,'RESPONSE_INVALID',d);
+ perform pg_temp.assert((select input_tokens=100 and output_tokens=200 and diagnostic=d from public.profile_synthesis_attempts where job_id=(j->>'id')::uuid and attempt=1),'rejected response keeps metrics and safe diagnostic');
+ v:=public.load_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ perform pg_temp.assert(v->>'state'='failed' and v->>'jobId'=j->>'id' and v->'diagnostic'=d and v->'previous'<>'null'::jsonb,'failed current synthesis returns reason and preserves prior');
+ perform public.retry_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ perform pg_temp.assert(public.claim_profile_synthesis(repeat('a',64)) is null,'retry honors cooldown');
+ update public.profile_synthesis_jobs set available_at=now()-interval '1 minute' where id=(j->>'id')::uuid;
+ perform set_config('request.jwt.claim.sub',pg_temp.sid('outsider')::text,true);
+ perform pg_temp.reject(format('select public.retry_profile_synthesis(%L,%L)',pg_temp.sid('a'),pg_temp.sid('pa')),'42501');
+ perform set_config('request.jwt.claim.sub',pg_temp.sid('inactive')::text,true);
+ perform pg_temp.reject(format('select public.retry_profile_synthesis(%L,%L)',pg_temp.sid('a'),pg_temp.sid('pa')),'42501');
+ perform set_config('request.jwt.claim.sub',pg_temp.sid('member')::text,true);
+ perform public.retry_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ perform public.retry_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ perform pg_temp.assert((select state='queued' and attempts=1 from public.profile_synthesis_jobs where id=(j->>'id')::uuid),'repeat recovery preserves one job and attempt count');
+ j:=public.claim_profile_synthesis(repeat('a',64));
+ perform pg_temp.assert((select attempts=2 from public.profile_synthesis_jobs where id=(j->>'id')::uuid),'recovery claims exactly next attempt');
+ perform public.complete_profile_synthesis(repeat('a',64),(j->>'id')::uuid,(j->>'lease')::uuid,'{}','gpt-5.6-luna',100,200,300);
+ v:=public.load_profile_synthesis(pg_temp.sid('a'),pg_temp.sid('pa'));
+ perform pg_temp.assert(v->>'state'='failed' and v#>>'{diagnostic,reason}'='DATABASE_CONTRACT','database validation failure recorded instead of leaving a hanging lease');
+ perform pg_temp.assert(not (v->>'canRetry')::boolean,'internal persistence problem does not offer useless recovery');
+ perform pg_temp.assert((select count(*)=2 from public.profile_synthesis_attempts where job_id=(j->>'id')::uuid),'old attempt history preserved');
+end $$;
+set local role anon;
+select pg_temp.reject(format('select public.retry_profile_synthesis(%L,%L)',pg_temp.sid('a'),pg_temp.sid('pa')),'42501');
+reset role;
+
 delete from public.people where id=pg_temp.sid('pa');
 select pg_temp.assert(not exists(select 1 from public.profile_syntheses where person_id=pg_temp.sid('pa')) and not exists(select 1 from public.profile_synthesis_jobs where person_id=pg_temp.sid('pa')) and not exists(select 1 from public.profile_synthesis_attempts where person_id=pg_temp.sid('pa')),'person deletion cascades derived data and attempts');
 rollback;

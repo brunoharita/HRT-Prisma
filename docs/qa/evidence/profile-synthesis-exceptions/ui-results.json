@@ -1,0 +1,340 @@
+[
+  {
+    "scenario": "failed",
+    "width": 1416,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "failed",
+    "width": 390,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "insufficient",
+    "width": 1416,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "insufficient",
+    "width": 390,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "pending",
+    "width": 1416,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "pending",
+    "width": 390,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous",
+    "width": 1416,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous",
+    "width": 390,
+    "checks": {
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous-failed",
+    "width": 1416,
+    "checks": {
+      "reasonClear": true,
+      "noManualFixDemand": true,
+      "previousPreserved": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous-failed",
+    "width": 390,
+    "checks": {
+      "reasonClear": true,
+      "noManualFixDemand": true,
+      "previousPreserved": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "read-error",
+    "width": 1416,
+    "checks": {
+      "failureExplicit": true,
+      "publishedFallback": true,
+      "headerAndTabsPreserved": true,
+      "navigationAvailable": true,
+      "noPrivateErrorDisclosure": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "read-error",
+    "width": 390,
+    "checks": {
+      "failureExplicit": true,
+      "publishedFallback": true,
+      "headerAndTabsPreserved": true,
+      "navigationAvailable": true,
+      "noPrivateErrorDisclosure": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "refresh",
+    "width": 1416,
+    "checks": {
+      "oldSourceOpened": true,
+      "oldSelectionClosed": true,
+      "newSourceNotFetchedBeforeClick": true,
+      "currentAnalysisVisible": true,
+      "currentSnapshotAfterClick": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "refresh",
+    "width": 390,
+    "checks": {
+      "oldSourceOpened": true,
+      "oldSelectionClosed": true,
+      "newSourceNotFetchedBeforeClick": true,
+      "currentAnalysisVisible": true,
+      "currentSnapshotAfterClick": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "render-error",
+    "width": 1416,
+    "checks": {
+      "failureExplicit": true,
+      "publishedFallback": true,
+      "headerAndTabsPreserved": true,
+      "navigationAvailable": true,
+      "noPrivateErrorDisclosure": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "render-error",
+    "width": 390,
+    "checks": {
+      "failureExplicit": true,
+      "publishedFallback": true,
+      "headerAndTabsPreserved": true,
+      "navigationAvailable": true,
+      "noPrivateErrorDisclosure": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "retry",
+    "width": 1416,
+    "checks": {
+      "reasonClear": true,
+      "noManualFixDemand": true,
+      "originalPreserved": true,
+      "oneExplicitRetry": true,
+      "processingStateVisible": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "retry",
+    "width": 390,
+    "checks": {
+      "reasonClear": true,
+      "noManualFixDemand": true,
+      "originalPreserved": true,
+      "oneExplicitRetry": true,
+      "processingStateVisible": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source",
+    "width": 1416,
+    "checks": {
+      "sourceFetchedOnce": true,
+      "quotedSource": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source",
+    "width": 390,
+    "checks": {
+      "sourceFetchedOnce": true,
+      "quotedSource": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source-error",
+    "width": 1416,
+    "checks": {
+      "sourceFailureExplicit": true,
+      "analysisPreserved": true,
+      "sourceOnlyRetry": true,
+      "quotedSource": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source-error",
+    "width": 390,
+    "checks": {
+      "sourceFailureExplicit": true,
+      "analysisPreserved": true,
+      "sourceOnlyRetry": true,
+      "quotedSource": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "summary",
+    "width": 1416,
+    "checks": {
+      "narrative": true,
+      "noEagerSource": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "summary",
+    "width": 390,
+    "checks": {
+      "narrative": true,
+      "noEagerSource": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "word-limit",
+    "width": 1416,
+    "checks": {
+      "reasonClear": true,
+      "noManualFixDemand": true,
+      "originalPreserved": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "word-limit",
+    "width": 390,
+    "checks": {
+      "reasonClear": true,
+      "noManualFixDemand": true,
+      "originalPreserved": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  }
+]

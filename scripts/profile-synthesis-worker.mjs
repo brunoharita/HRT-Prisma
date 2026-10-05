@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
-import { PROFILE_SYNTHESIS_INSTRUCTIONS, PROFILE_SYNTHESIS_SCHEMA, readProfileSynthesisResult, readSynthesisSource } from "../dist/src/domain/profileSynthesis.js";
+import { PROFILE_SYNTHESIS_INSTRUCTIONS, PROFILE_SYNTHESIS_SCHEMA, readProfileSynthesisResult, readSynthesisSource, SynthesisFailure, synthesisDiagnostic } from "../dist/src/domain/profileSynthesis.js";
 
 export function minimizeSources(sources) {
   return sources.map(readSynthesisSource).map(({ id, text, nature }) => ({ id, nature, text: text
@@ -17,36 +17,65 @@ export function providerRequest(sources, model) {
     text: { format: { type: "json_schema", name: "prisma_profile_synthesis", strict: true, schema: PROFILE_SYNTHESIS_SCHEMA } }, reasoning: { effort: "low" }, max_output_tokens: 6000 };
 }
 export async function generateSynthesis(sources, config, fetcher = fetch) {
-  const response = await fetcher("https://api.openai.com/v1/responses", { method: "POST",
+  let input;
+  try { input = providerRequest(sources, config.model); }
+  catch (cause) { throw new SynthesisFailure(synthesisDiagnostic("input", cause?.message === "INPUT_TOO_LARGE" ? "INPUT_TOO_LARGE" : "SOURCE_INVALID")); }
+  let response;
+  try { response = await fetcher("https://api.openai.com/v1/responses", { method: "POST",
     headers: { Authorization: `Bearer ${config.openaiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify(providerRequest(sources, config.model)), signal: AbortSignal.timeout(90000) });
-  if (!response.ok) throw Error(response.status === 429 ? "RATE_LIMITED" : response.status >= 500 ? "PROVIDER_UNAVAILABLE" : "CONFIGURATION_UNAVAILABLE");
-  const reader = response.body?.getReader(); if (!reader) throw Error("RESPONSE_INVALID");
+    body: JSON.stringify(input), signal: AbortSignal.timeout(90000) }); }
+  catch { throw new SynthesisFailure(synthesisDiagnostic("provider", "REQUEST_INTERRUPTED")); }
+  if (!response.ok) throw new SynthesisFailure(synthesisDiagnostic("provider", response.status === 429 ? "RATE_LIMITED" : response.status >= 500 ? "PROVIDER_UNAVAILABLE" : "CONFIGURATION_UNAVAILABLE", { httpStatus: response.status }));
+  const reject = (reason, inputTokens = 0, outputTokens = 0) => { throw new SynthesisFailure(synthesisDiagnostic("response", reason), inputTokens, outputTokens); };
+  const reader = response.body?.getReader(); if (!reader) reject("BODY_MISSING");
   let size = 0; const chunks = [];
-  try { while (true) { const { done, value } = await reader.read(); if (done) break; size += value.byteLength; if (size > 512000) { await reader.cancel(); throw Error("RESPONSE_INVALID"); } chunks.push(Buffer.from(value)); } }
+  try { while (true) { const { done, value } = await reader.read(); if (done) break; size += value.byteLength; if (size > 512000) { await reader.cancel(); reject("BODY_TOO_LARGE"); } chunks.push(Buffer.from(value)); } }
+  catch (cause) { if (cause instanceof SynthesisFailure) throw cause; reject("REQUEST_INTERRUPTED"); }
   finally { reader.releaseLock(); }
-  const raw = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-  if (raw.status !== "completed" || raw.model !== config.model || !Number.isInteger(raw.usage?.input_tokens) || raw.usage.input_tokens < 0 || raw.usage.input_tokens > 50000 || !Number.isInteger(raw.usage?.output_tokens) || raw.usage.output_tokens < 0 || raw.usage.output_tokens > 6000) throw Error("RESPONSE_INVALID");
-  const messages = (raw.output ?? []).filter(x => x.type === "message").flatMap(x => x.content ?? []);
-  if (messages.some(x => x.type === "refusal") || messages.filter(x => x.type === "output_text").length !== 1) throw Error("RESPONSE_INVALID");
-  try { return { result: readProfileSynthesisResult(JSON.parse(messages.filter(x => x.type === "output_text").map(x => x.text).join("")), sources), model: raw.model,
-    inputTokens: raw.usage?.input_tokens ?? 0, outputTokens: raw.usage?.output_tokens ?? 0 }; }
-  catch { throw Error("RESPONSE_INVALID"); }
+  let raw;
+  try { raw = JSON.parse(Buffer.concat(chunks).toString("utf8")); } catch { reject("JSON_INVALID"); }
+  if (!raw || typeof raw !== "object") reject("STRUCTURE_INVALID");
+  const tokens = [raw.usage?.input_tokens, raw.usage?.output_tokens];
+  if (!tokens.every((n,i) => Number.isInteger(n) && n >= 0 && n <= (i === 0 ? 50000 : 6000))) reject("USAGE_INVALID");
+  const [inputTokens, outputTokens] = tokens;
+  if (raw.status !== "completed") reject("OUTPUT_INCOMPLETE", inputTokens, outputTokens);
+  if (raw.model !== config.model) reject("MODEL_MISMATCH", inputTokens, outputTokens);
+  if (!Array.isArray(raw.output) || raw.output.some(x => !x || typeof x !== "object" || x.type === "message" && !Array.isArray(x.content))) reject("STRUCTURE_INVALID", inputTokens, outputTokens);
+  const messages = raw.output.filter(x => x.type === "message").flatMap(x => x.content);
+  if (messages.some(x => x?.type === "refusal")) reject("REFUSAL", inputTokens, outputTokens);
+  const output = messages.filter(x => x?.type === "output_text");
+  if (output.length !== 1 || typeof output[0].text !== "string") reject("OUTPUT_MISSING", inputTokens, outputTokens);
+  let result;
+  try { result = JSON.parse(output[0].text); } catch { reject("JSON_INVALID", inputTokens, outputTokens); }
+  try { return { result: readProfileSynthesisResult(result, sources), model: raw.model, inputTokens, outputTokens }; }
+  catch (cause) { throw new SynthesisFailure(cause instanceof SynthesisFailure ? cause.diagnostic : synthesisDiagnostic("contract", "STRUCTURE_INVALID"), inputTokens, outputTokens); }
 }
 export async function rpc(config, name, args, fetcher = fetch) {
-  const response = await fetcher(`${config.supabaseUrl}/rest/v1/rpc/${name}`, { method: "POST", headers: { apikey: config.publishableKey, "Content-Type": "application/json" }, body: JSON.stringify({ p_secret: config.workerSecret, ...args }), signal: AbortSignal.timeout(20000) });
-  if (!response.ok) throw Error("QUEUE_UNAVAILABLE");
-  return response.status === 204 ? null : response.json();
+  try {
+    const response = await fetcher(`${config.supabaseUrl}/rest/v1/rpc/${name}`, { method: "POST", headers: { apikey: config.publishableKey, "Content-Type": "application/json" }, body: JSON.stringify({ p_secret: config.workerSecret, ...args }), signal: AbortSignal.timeout(20000) });
+    if (!response.ok) throw new SynthesisFailure(synthesisDiagnostic("persistence", response.status === 409 ? "LEASE_INVALID" : "DATABASE_UNAVAILABLE", { httpStatus: response.status }));
+    return response.status === 204 ? null : await response.json();
+  } catch (cause) { if (cause instanceof SynthesisFailure) throw cause; throw new SynthesisFailure(synthesisDiagnostic("persistence", "DATABASE_UNAVAILABLE")); }
 }
 export async function runOnce(config, fetcher = fetch) {
   const job = await rpc(config, "claim_profile_synthesis", {}, fetcher);
   if (!job) return { state: "idle" };
-  const started = Date.now(); let output; let error = null;
+  const started = Date.now(); let output; let error = null; let diagnostic = null; let inputTokens = 0; let outputTokens = 0;
   try { output = await generateSynthesis(job.sources, { ...config, model: job.model }, fetcher); }
-  catch (cause) { const code = cause?.message; error = ["INPUT_TOO_LARGE", "RATE_LIMITED", "PROVIDER_UNAVAILABLE", "CONFIGURATION_UNAVAILABLE", "RESPONSE_INVALID"].includes(code) ? code : "REQUEST_INTERRUPTED"; }
-  await rpc(config, "complete_profile_synthesis", { p_job_id: job.id, p_lease: job.lease, p_result: output?.result ?? null, p_model: output?.model ?? job.model,
-    p_input_tokens: output?.inputTokens ?? 0, p_output_tokens: output?.outputTokens ?? 0, p_duration_ms: Date.now() - started, p_error: error }, fetcher);
-  return { state: error ? "failed" : "complete", error, durationMs: Date.now() - started, inputTokens: output?.inputTokens ?? 0, outputTokens: output?.outputTokens ?? 0 };
+  catch (cause) {
+    diagnostic = cause instanceof SynthesisFailure ? cause.diagnostic : synthesisDiagnostic("provider", "REQUEST_INTERRUPTED");
+    inputTokens = cause instanceof SynthesisFailure ? cause.inputTokens : 0; outputTokens = cause instanceof SynthesisFailure ? cause.outputTokens : 0;
+    error = ["INPUT_TOO_LARGE", "RATE_LIMITED", "PROVIDER_UNAVAILABLE", "CONFIGURATION_UNAVAILABLE", "REQUEST_INTERRUPTED"].includes(diagnostic.reason) ? diagnostic.reason : "RESPONSE_INVALID";
+  }
+  inputTokens = output?.inputTokens ?? inputTokens; outputTokens = output?.outputTokens ?? outputTokens;
+  let completion;
+  try { completion = await rpc(config, "complete_profile_synthesis", { p_job_id: job.id, p_lease: job.lease, p_result: output?.result ?? null, p_model: output?.model ?? job.model,
+    p_input_tokens: inputTokens, p_output_tokens: outputTokens, p_duration_ms: Date.now() - started, p_error: error, p_diagnostic: diagnostic }, fetcher); }
+  catch (cause) {
+    if (cause instanceof SynthesisFailure) Object.assign(cause, { jobId: /^[a-f0-9-]{36}$/i.test(job.id) ? job.id : null, durationMs: Date.now() - started, inputTokens, outputTokens });
+    throw cause;
+  }
+  return { state: completion?.state ?? (error ? "failed" : "complete"), jobId: job.id, error: completion?.errorCode ?? error, diagnostic: completion?.diagnostic ?? diagnostic, durationMs: Date.now() - started, inputTokens, outputTokens };
 }
 async function readEnvironmentFile(path) {
   const result = {};
@@ -69,7 +98,7 @@ async function main() {
       const state = await runOnce(config);
       await writeFile("/tmp/profile-synthesis-health.json", JSON.stringify({ at: Date.now(), state: state.state }));
       if (state.state !== "idle") console.log(JSON.stringify(state));
-    } catch { console.error('{"state":"queue_unavailable"}'); }
+    } catch (cause) { console.error(JSON.stringify({ state: "queue_unavailable", diagnostic: cause instanceof SynthesisFailure ? cause.diagnostic : synthesisDiagnostic("persistence", "DATABASE_UNAVAILABLE"), ...(cause instanceof SynthesisFailure && cause.jobId ? { jobId: cause.jobId, durationMs: cause.durationMs, inputTokens: cause.inputTokens, outputTokens: cause.outputTokens } : {}) })); }
     if (process.argv.includes("--once")) break;
     for (let i = 0; i < 10 && !stopping; i++) await new Promise(resolve => setTimeout(resolve, 1000));
   }

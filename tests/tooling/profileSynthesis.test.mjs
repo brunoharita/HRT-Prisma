@@ -15,3 +15,41 @@ const response={status:'completed',model:config.model,usage:{input_tokens:100,ou
 test('provider parser accepts grounded output and rejects incomplete/refusal/unknown model',async()=>{assert.deepEqual((await generateSynthesis(sources,config,async()=>Response.json(response))).result,result);for(const raw of [{...response,status:'incomplete'},{...response,model:'unapproved'}, {...response,output:[{type:'message',content:[{type:'refusal'}]}]}])await assert.rejects(generateSynthesis(sources,config,async()=>Response.json(raw)));});
 test('one claim, one call, one completion; no PII or secret in operational result',async()=>{const calls=[];const state=await runOnce(config,async(url,options)=>{calls.push({url,body:JSON.parse(options.body)});if(url.includes('claim_'))return Response.json({id:'job',lease:'lease',model:config.model,sources});if(url.includes('complete_'))return new Response(null,{status:204});return Response.json(response);});assert.equal(calls.length,3);assert.equal(state.state,'complete');assert(!JSON.stringify(state).includes('secret'));assert.equal(calls[2].body.p_result.contractVersion,result.contractVersion);});
 test('empty queue makes zero provider calls; transient failure completed with fixed code',async()=>{let calls=0;assert.equal((await runOnce(config,async()=>{calls++;return Response.json(null);})).state,'idle');assert.equal(calls,1);const bodies=[];await runOnce(config,async(url,options)=>{if(url.includes('claim_'))return Response.json({id:'job',lease:'lease',model:config.model,sources});if(url.includes('complete_')){bodies.push(JSON.parse(options.body));return new Response(null,{status:204});}return new Response('private error content',{status:429});});assert.equal(bodies[0].p_error,'RATE_LIMITED');assert.equal(bodies[0].p_result,null);});
+
+for (const [name,raw,reason] of [
+ ['truncated',{...response,status:'incomplete'},'OUTPUT_INCOMPLETE'],
+ ['refusal',{...response,output:[{type:'message',content:[{type:'refusal',refusal:'private'}]}]},'REFUSAL'],
+ ['model',{...response,model:'unapproved'},'MODEL_MISMATCH'],
+ ['json',{...response,output:[{type:'message',content:[{type:'output_text',text:'private broken json'}]}]},'JSON_INVALID'],
+ ['reference',{...response,output:[{type:'message',content:[{type:'output_text',text:JSON.stringify({...result,overview:[{...result.overview[0],sourceIds:['private-secret-source']}]})}]}]},'REFERENCES_INVALID'],
+ ['word-limit',{...response,output:[{type:'message',content:[{type:'output_text',text:JSON.stringify({...result,overview:[{...result.overview[0],text:'word '.repeat(121)}]})}]}]},'WORD_LIMIT']
+]) test(`diagnostic ${name} preserves metrics without response body`,async()=>{
+ let failure; try {await generateSynthesis(sources,config,async()=>Response.json(raw));}catch(cause){failure=cause;}
+ assert.equal(failure.diagnostic.reason,reason);assert.equal(failure.inputTokens,100);assert.equal(failure.outputTokens,200);
+ assert(!JSON.stringify(failure).includes('private'));if(reason==='WORD_LIMIT'){assert.equal(failure.diagnostic.section,'overview');assert.equal(failure.diagnostic.observed,121);}
+});
+test('rejected result completes attempt with diagnosis and actual token usage',async()=>{
+ let completion;const raw={...response,status:'incomplete'};
+ const state=await runOnce(config,async(url,o)=>{if(url.includes('claim_'))return Response.json({id:'job',lease:'lease',model:config.model,sources});if(url.includes('complete_')){completion=JSON.parse(o.body);return Response.json({state:'failed',errorCode:'RESPONSE_INVALID',diagnostic:completion.p_diagnostic});}return Response.json(raw);});
+ assert.equal(completion.p_input_tokens,100);assert.equal(completion.p_output_tokens,200);assert.equal(completion.p_diagnostic.reason,'OUTPUT_INCOMPLETE');assert.equal(state.jobId,'job');assert.equal(state.state,'failed');
+});
+test('database rejection is returned as failed, never falsely logged complete',async()=>{
+ const state=await runOnce(config,async(url)=>url.includes('claim_')?Response.json({id:'job',lease:'lease',model:config.model,sources}):url.includes('complete_')?Response.json({state:'failed',errorCode:'RESPONSE_INVALID',diagnostic:{stage:'persistence',reason:'DATABASE_CONTRACT'}}):Response.json(response));assert.equal(state.state,'failed');assert.equal(state.diagnostic.reason,'DATABASE_CONTRACT');
+});
+test('109 long source identifiers and sparse content retain strict provenance',async()=>{
+ const rich=Array.from({length:109},(_,i)=>({...sources[0],id:`experience_${String(i).padStart(3,'0')}_${'x'.repeat(51)}`,text:'Atividades profissionais publicadas '.repeat(4)}));
+ const grounded=structuredClone(result);for(const s of [...grounded.overview,...grounded.answers.flatMap(a=>a.statements),...grounded.clarifications])s.sourceIds=[rich[0].id];
+ assert(Buffer.byteLength(providerRequest(rich,config.model).input[0].content[0].text)<48000);
+ assert.deepEqual((await generateSynthesis(rich,config,async()=>Response.json({...response,output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(grounded)}]}]}))).result,grounded);
+});
+test('bad source detected before provider and no raw exception data exposed',async()=>{
+ let calls=0;await assert.rejects(generateSynthesis([{...sources[0],text:'bad\u0000private'}],config,async()=>{calls++;throw Error('private');}),e=>e.diagnostic.stage==='input'&&e.diagnostic.reason==='SOURCE_INVALID');assert.equal(calls,0);
+ await assert.rejects(generateSynthesis(sources,config,async()=>{throw Error('private connection details');}),e=>e.diagnostic.reason==='REQUEST_INTERRUPTED'&&!JSON.stringify(e).includes('private'));
+});
+
+test('invalid dates rejected before rendering and optional diagnostic metadata minimized',()=>{
+ const raw={organizationId:'a',personId:'p',profileId:'v',profileVersion:1,state:'complete',analysisId:'id',generatedAt:'invalid',model:'gpt-5.6-luna',result,previous:null,sources:sources.map(({text,...x})=>x),errorCode:null,basisHash:'a'.repeat(64)};
+ assert.throws(()=>readProfileSynthesisView(raw,'a','p'));raw.generatedAt='2026-10-04T12:00:00Z';
+ raw.diagnostic={version:'synthesis-diagnostic-1.0.0',stage:'contract',reason:'WORD_LIMIT',section:'personal contents',secret:'never retain',observed:121};
+ const value=readProfileSynthesisView(raw,'a','p');assert.equal(value.diagnostic.reason,'WORD_LIMIT');assert.equal(value.diagnostic.section,undefined);assert(!JSON.stringify(value.diagnostic).includes('secret'));
+});

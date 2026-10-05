@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 344
-source_manifest_sha256: 495b712b69100dfbae260894aa1fac29cc1ead4ff4a633040f98f163386b96eb
+documentation_source_count: 346
+source_manifest_sha256: e817fbb4cdae0d3834d564fa52a9c9878abb78d54e54077cee5d47bfed141123
 -->
 
 # Tudo sobre o Prisma
@@ -2626,13 +2626,16 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.34
+version: 2.51.35
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
 
 ## Síntese profissional v2.0.5
+
+Correção de exceções em validação local: diagnóstico versionado de entrada/provedor/resposta/contrato/gravação; métricas preservadas em rejeições, motivos em português, recovery RPC autenticado/cooldown/três tentativas, resumo publicado e boundary isolado. Resultado/perguntas/prompt/modelo/Parser/matching preservados. Incidente reportado: failed/RESPONSE_INVALID, tentativa1; subcausa original não armazenada. Publicação e evidência finais em `docs/qa/aot-profile-synthesis-exceptions.md`; estado operacional ainda em verificação nesta revisão.
+
 
 Complemento de rastreabilidade D-03 publicado no SHA `ed4e328403e394f7c64cef143475580a88c4532e`: seleção de fonte vinculada ao analysisId, fechada ao terminar uma nova análise; fonte atual somente após novo clique. Caso reproduziu falha no componente anterior e passou em1416/390; regressão total de14 reports, tipos/build/contextos e CI branch37249189433/main37249281571 PASS. Web running/zero reinícios, imagemd59809c, entry `index-BjB3jE2B.js`, versão/HTTPS/assets novos e antigos/rollback PASS após estabilização. Worker1f233fe continua healthy/idle sem reinícios; Parser/gateway/banco/modelo preservados na versão funcional abaixo. Nenhuma jornada autenticada de Pessoa real foi executada para testar.
 
@@ -4354,6 +4357,17 @@ Resultados/jobs/tentativas são tabelas distintas, com RLS, RPCs autenticadas po
 
 Consultas comuns recebem JSON compacto e metadados das fontes; clique carrega trecho do snapshot autorizado, com cache apenas durante a tela. A seleção pertence ao ID da análise: quando uma base nova termina enquanto uma fonte antiga está aberta, a seleção é fechada e a fonte atual só é consultada mediante novo clique. Nunca associar afirmação anterior ao snapshot novo. Falha/insuficiência de atualização mantém a análise anterior identificada, sem alegar processamento em andamento. Worker inicial único, seleção pela empresa menos recentemente atendida e índices; aumentar consumidores exige medição, não novo broker. Métricas de duração/tokens/modelo/falha não incluem PII integral.
 
+
+## Exceções isoladas (correção 2.0.5)
+
+Contrato adicional `synthesis-diagnostic-1.0.0`: stage/reason fixos, section/item e contagens limitadas, nunca corpo, mensagem livre ou identificador de fonte privado. Resultado/prompt/perguntas/modelo continuam 1.0.0. Rejeição de IA conserva tokens válidos, duração e tentativa. JSON inválido, resposta incompleta, recusa, fontes, texto, limite de palavras e validação SQL têm motivos separados. Migração incremental mantém versão anterior da transação privada e oferece wrapper compatível com worker anterior; rejeição SQL de resultado termina a tentativa com DATABASE_CONTRACT sem persistir resposta insegura.
+
+Consulta/novo processamento/fonte são ações distintas. `retry_profile_synthesis` exige leitor autorizado do tenant, base e versão aprovadas, lock, cooldown e attempts<3. Não zera contador; não oferece retry para configuração, entrada excessiva, fonte inválida, verificação indevida ou incompatibilidade persistente. Falhas transitórias mantêm espaçamento automático existente. Render boundary só engloba síntese: cabeçalho/abas, original e navegação permanecem. Poll automático termina após 24 consultas; atualizar consulta retoma leitura sem reprocessar base.
+
+O incidente original registrou apenas RESPONSE_INVALID; não há evidência para afirmar qual subregra falhou naquela tentativa. Uma nova tentativa diagnostica seu próprio resultado, não reconstitui automaticamente o anterior.
+
+Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.
+
 ---
 
 ## Source: `docs/ai/prompt-registry.md`
@@ -5648,6 +5662,9 @@ A base transversal de UX de 2026-09-13 introduz `prisma-ux-foundation-1.0.0` (AD
 ## Síntese do Perfil v2.0.5
 
 `profile-synthesis-1.0.0` / `profile-synthesis-prompt-1.0.0`: oito eixos fixos, JSONB com natureza e fontes, separado dos fatos publicados. Chave de geração combina tenant, Perfil, hash da base, contrato, prompt e modelo. Trocas criam chave nova sob decisão/benchmark, sem backfill de histórico nem substituir o resumo original. `docs/ai/profile-synthesis.md` e ADR-076 definem persistência/limites.
+
+
+Diagnóstico opcional da síntese: `synthesis-diagnostic-1.0.0` adiciona etapa/motivo fixos e contagens sem alterar `profile-synthesis-1.0.0` ou o prompt1.0.0. Leitores toleram metadados legados sem diagnóstico. Migração incremental estende RPC de conclusão com argumento opcional; retorna estado efetivamente gravado, mantendo chamada anterior compatível. Produto permanece2.0.5 como correção do comportamento aprovado.
 
 ---
 
@@ -10411,6 +10428,15 @@ Monitorar idade/estado da fila, tentativas/modelo/tokens, duração/falhas e hea
 
 Rollback: parar somente o worker, restaurar web rollback e worker `rollback-before-<SHA12>` quando disponível. Preservar tabelas, credenciais e resultados; filas podem aguardar retomada. QA somente em PostgreSQL local descartável: `supabase/qa/profile_synthesis_verification.sql`, rollback. Não executar fixture em produção nem replay do ledger. Bootstrap do hash administrativo não contém dado de Pessoa. Evidência em `docs/qa/aot-profile-synthesis-v205.md`.
 
+
+## Diagnóstico e recuperação
+
+Falhas novas incluem `diagnostic` em jobs e attempts: versão, etapa, motivo fixo e localização/contagens técnicas limitadas. Logs incluem jobId, duração/tokens disponíveis; corpo do provedor e mensagens livres nunca são registrados. Completar lease rejeitado preserva registro de tentativa e motivo; indisponibilidade do banco fica no log com etapa/preservação de métricas, e lease expirado permanece limitado às três tentativas. Detalhes de atendimento na tela permitem relacionar job/tentativa aos registros; render/read/source locais usam identificações fixas e não atribuem ao usuário correção interna.
+
+A recuperação explícita de síntese failed ocorre pelo RPC autenticado `retry_profile_synthesis`, nunca por reset de attempts. Abrir/atualizar o Perfil não recupera automaticamente uma resposta inválida. Migração incremental mantém argumentos do worker anterior; rollback deve preservar tabelas/diagnósticos. Não executar migração original novamente. Recuperação administrativa do incidente limita-se ao job já existente, base aprovada e primeiro erro, com contador/histórico preservados; nenhuma publicação humana é feita.
+
+Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.
+
 ---
 
 ## Source: `docs/operations/release-dispatcher.md`
@@ -14518,6 +14544,39 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 
 ---
 
+## Source: `docs/qa/agreement-profile-synthesis-exceptions.md`
+
+# Acordo e execução — Exceções da síntese v2.0.5
+
+Versão 1.0.0, agreed, 2026-10-04. Autoridade: pedido explícito de Bruno para identificar, declarar, tratar e explicar exceções sem impedir o carregamento do Perfil. Complemento corretivo do acordo `agreement-profile-synthesis-v205.md` v1.0.0, integralmente preservado. Baseline main/origin/VPS `080249e7c26b2b32b582a260a8cd8ccd2e56ed9f`; worker saudável, único job observado failed/RESPONSE_INVALID, tentativa1, sem motivo detalhado armazenado. Risco D/C; mesma versão de produto 2.0.5, contrato de resultado/prompt/modelo preservados.
+
+- D-E01: falha de consulta, fonte ou renderização da síntese é isolada; cabeçalho, abas, fatos publicados e navegação continuam acessíveis. Resumo original aparece como informação publicada, nunca como análise substituta de IA.
+- D-E02: identificar entrada, provedor, leitura JSON, validação do contrato e gravação com motivos fixos e localização limitada, referência do job/tentativa e métricas disponíveis inclusive em respostas rejeitadas. Persistir diagnóstico limitado sem texto pessoal, corpo do provedor, prompt ou segredo. Falha anterior sem detalhe permanece explicitamente sem causa fina conhecida.
+- D-E03: explicar em português a falha e a ação adequada; separar indisponibilidade, resposta interrompida, limite, referência inconsistente e erro interno. Atualizar consulta não chama IA; nova tentativa é explícita, idempotente, espaçada, autorizada por tenant e limitada às três tentativas já aprovadas. Configuração/entrada excessiva não oferecem retry inútil. Histórico preservado.
+- D-E04: validação negativa local/SQL, injeção de exceções na interface desktop/mobile, documentação, Context Pack, publicação seletiva e smoke. Recuperação do job afetado pode gerar somente análise derivada, nunca alterar/publicar fatos humanos.
+- D-UX-E01: imagem do incidente é contraexemplo da mensagem genérica; preservar cabeçalho/abas e arquitetura narrativa70/30 e fonte60/40 do acordo original. Diagnóstico fica no bloco de síntese; detalhes de atendimento em disclosure. Mobile empilha sem overflow.
+- P-E01: não relaxar evidência/limites, inventar causa anterior, expor conteúdo/segredos, atravessar tenant, zerar tentativas ou gerar IA a cada abertura.
+- F-E01: Parser, matching, curadoria, publicação humana, fornecedores/modelos/perguntas novos, backfill, plataforma genérica de observabilidade.
+- A-E01: reutilizar React/Ant Design/Supabase, fila e tabelas existentes; nomes técnicos, motivos fixos, proteção local e testes são escolhas de engenharia.
+- Q-E01: nenhuma decisão material pendente; causa detalhada da tentativa anterior não foi armazenada e não pode ser inventada.
+
+## Mapa de impacto / critérios de aceite
+
+| Capacidade/IDs | Relação | Baseline e regressão mínima |
+| --- | --- | --- |
+| D-E01/E03/UX-E01, tela/fontes | direct | web ed4e328, seis estados sintéticos anteriores; erros async/render/fonte e anterior, 1416/390, resumo original/navegação/sem overflow |
+| D-E02/E03, worker/contrato | direct | worker497b2ee, RESPONSE_INVALID sem detalhe; erro JSON/incompleto/refusal/schema/fontes/limites, métricas sem texto, 109 fontes longas |
+| D-E02/E03, RPC/auth/tenant/fila | critical_transversal | PostgreSQL17 + migração anterior; SQL QA rollback, segredo/leitura intertenant/lease/replay/retry concorrente/orçamento/diagnóstico rejeitado |
+| Perfil canônico/publicação | plausible_indirect | person-flow anterior256PASS; regressão dirigida e proteção de síntese, nenhum write canônico |
+| Parser/gateway/matching | no_impact_identified | não compartilham worker/RPC/UI derivada; check matching e preservação de imagens operacionais |
+| D-E04, release | direct | main080249e, serviços saudáveis; tipos/build/CI/contextos, migração incremental, worker/web e smoke/rollback |
+
+## Prompt congelado
+
+Implementar D-E01..04 e D-UX-E01 sob P-E01/F-E01/A-E01, preservando integralmente o acordo v2.0.5. Cada linha exige implementação, teste/evidência e AoT. Não atribuir ao incidente uma subcausa que o diagnóstico antigo não registrou. Não ampliar validação para a suíte integral local por padrão.
+
+---
+
 ## Source: `docs/qa/agreement-profile-synthesis-v205.md`
 
 # Acordo — Síntese do Perfil v2.0.5
@@ -18455,6 +18514,56 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 | `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
 
 A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
+
+---
+
+## Source: `docs/qa/aot-profile-synthesis-exceptions.md`
+
+# AoT — Exceções isoladas da síntese v2.0.5
+
+Contrato: `agreement-profile-synthesis-exceptions.md` v1.0.0 e acordo original v2.0.5 v1.0.0, lidos integralmente. Baseline main/origin/VPS080249e; imagemwebd59809c, worker1f233fe; riscoD/C. Autorização explícita de implementação e permanente de publicação AGENTS7. Produto2.0.5 mantido: correção do comportamento aprovado, diagnóstico1.0.0 separado do resultado/prompt1.0.0.
+
+## Matriz de acordos
+
+| ID | Acordo/implementação | Teste/evidência | Status/limite |
+| --- | --- | --- | --- |
+| D-E01 | Boundary só na síntese, resumo publicado/navegação preservados | Read/render/source failures 1416/390, `evidence/profile-synthesis-exceptions/ui-results.json` | PASS sintético |
+| D-E02 | Motivos fixos/etapas/localização; tokens rejeitados; job/attempt JSONB; wrapper valida persistência | 31 contratos/worker, SQL privado/lease/diag sem PII, fixture109 fontes longas | PASS local; incidente antigo sem subcausa armazenada |
+| D-E03 | Orientação específica; read/source não chamam IA; retry autenticado/espaçado<=3 sem reset | SQL auth/outsider/inativo/anon/cooldown/duplicidade/histórico/budget; UI duplo clique gera1retry | PASS local |
+| D-UX-E01 | Bloco de diagnóstico com detalhes recolhidos; fallback original; layouts aprovados mantidos | 26 reports13 estadosx2 viewports, renders de erro no diretório de evidência | PASS sintético |
+| D-E04 | QA/docs/contextos/release/smoke/recuperação controlada | Tipos/build/person-flow256; SQL em transação com rollback; publicação ainda pendente | PARTIAL |
+
+## Proibições verificadas
+
+| ID | Guardrail | Evidência | Status |
+| --- | --- | --- | --- |
+| P-E01 | Evidência/limites/auth/tenant/history/custo preservados; nenhum corpo livre/segredo nos diagnósticos | Referências inventadas,121palavras,verificação semassessment,extraPII nos motivos,token/lease/outsider negados; falha anterior explicitamente desconhecida | PASS local |
+| F-E01 | Parser/matching/fatos/modelo/perguntas fora do escopo | Diff dirigido, checker matching e person-flow256PASS; nenhum novo fornecedor/dependência | PASS local |
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline | Regressão/evidência | Status |
+| --- | --- | --- | --- | --- |
+| Síntese/fonte/Resumo | direct | webed4e328, seis estados |26reports, fonte isolada eanterior preservada, original/header/nav | PASS |
+| Worker/contrato | direct | worker497b2ee |31testes, oitoeixos/120palavras/refs permanecem | PASS |
+| Auth/tenant/fila | critical_transversal | PostgreSQL17/migração inicial |migração inteira +incremental +QA rollback, oldworker argumentos compatíveis | PASS local |
+| Perfil/publicação | plausible_indirect |256person-flow anterior |256person-flowPASS; optionalrender sóchild, transação legada preservada | PASS local |
+| Parser/gateway/matching | no_impact_identified | imagens8682af7/d061cea |sem imports/contratos desses domínios no diff; checkmatchingPASS; runtime ainda a conferir | PARTIAL |
+| Release/contextos | direct |080249e |deploy seletivo e smoke pendentes | PARTIAL |
+
+Novidade: diagnóstico fechado e recuperação segura; preservação: fato publicado, controle humano, snapshots e limites. Reuso da infraestrutura existente, classificação de auth em `supabaseOperationError` sem mensagens livres; sem observabilidade genérica nova. Migração antiga não é reescrita.
+
+## Fidelidade visual
+
+Imagem do incidente é contraexemplo da mensagem genérica. Referências normativas1/3 originais permanecem: composição70/30 e fonte60/40, informação/proveniência/ações nos grupos anteriores; screenshot1416 `word-limit-1416.png` e390 `render-error-390.png` documentam exceção isolada e original. Comparação visual conferida, sem mudança estrutural não autorizada; dados inteiramente sintéticos. Cabeçalho/abas reais em fixture; smoke autenticado de Pessoa real ainda NOT TESTED.
+
+## Desvios / mudanças de escopo
+
+Nenhum desvio de produto observado. Nenhuma ampliação material; versão permanece2.0.5. A causa específica original não era armazenada; não se declara que nova tentativa reconstrói o passado. UI local apresenta identificações fixas; tentativa remota persiste diagnóstico restrito. Não publicar Perfil real para testar.
+
+## Validação final / Git / ambiente
+
+Em fechamento: SQL local rollback, tipos/build,31worker/contrato,256person-flow,26renders PASS. CI, migração remota, worker/web, smoke/rollback e recuperação específica pendentes. Não há QA Supabase separado verificado; PostgreSQL local descartável é usado para negativos de segurança.
 
 ---
 

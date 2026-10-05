@@ -9,3 +9,12 @@ RPCs de processamento exigem token, job e lease reais; não oferecem SQL/acesso 
 Monitorar idade/estado da fila, tentativas/modelo/tokens, duração/falhas e health/restarts sem exportar textos/fontes/prompts. Três tentativas por base; resposta inválida/configuração não faz retry automático. Reconciliação de até dez novas publicações por rodada desde instalação, sem lote histórico. Falha de enqueue opcional não bloqueia auditoria/publicação. Eventos de evidências relevantes invalidam apenas Perfis já analisados.
 
 Rollback: parar somente o worker, restaurar web rollback e worker `rollback-before-<SHA12>` quando disponível. Preservar tabelas, credenciais e resultados; filas podem aguardar retomada. QA somente em PostgreSQL local descartável: `supabase/qa/profile_synthesis_verification.sql`, rollback. Não executar fixture em produção nem replay do ledger. Bootstrap do hash administrativo não contém dado de Pessoa. Evidência em `docs/qa/aot-profile-synthesis-v205.md`.
+
+
+## Diagnóstico e recuperação
+
+Falhas novas incluem `diagnostic` em jobs e attempts: versão, etapa, motivo fixo e localização/contagens técnicas limitadas. Logs incluem jobId, duração/tokens disponíveis; corpo do provedor e mensagens livres nunca são registrados. Completar lease rejeitado preserva registro de tentativa e motivo; indisponibilidade do banco fica no log com etapa/preservação de métricas, e lease expirado permanece limitado às três tentativas. Detalhes de atendimento na tela permitem relacionar job/tentativa aos registros; render/read/source locais usam identificações fixas e não atribuem ao usuário correção interna.
+
+A recuperação explícita de síntese failed ocorre pelo RPC autenticado `retry_profile_synthesis`, nunca por reset de attempts. Abrir/atualizar o Perfil não recupera automaticamente uma resposta inválida. Migração incremental mantém argumentos do worker anterior; rollback deve preservar tabelas/diagnósticos. Não executar migração original novamente. Recuperação administrativa do incidente limita-se ao job já existente, base aprovada e primeiro erro, com contador/histórico preservados; nenhuma publicação humana é feita.
+
+Reuso: os erros de revisão/publicação em `reviewOperationErrors.ts` são mutacionais e incluem decisões humanas. A síntese não reutiliza seus fluxos de retorno à revisão; adota o mesmo padrão de códigos fechados/explicação segura com contrato derivado independente e boundary React local.

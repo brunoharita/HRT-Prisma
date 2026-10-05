@@ -266,3 +266,6 @@ A base transversal de UX de 2026-09-13 introduz `prisma-ux-foundation-1.0.0` (AD
 ## Síntese do Perfil v2.0.5
 
 `profile-synthesis-1.0.0` / `profile-synthesis-prompt-1.0.0`: oito eixos fixos, JSONB com natureza e fontes, separado dos fatos publicados. Chave de geração combina tenant, Perfil, hash da base, contrato, prompt e modelo. Trocas criam chave nova sob decisão/benchmark, sem backfill de histórico nem substituir o resumo original. `docs/ai/profile-synthesis.md` e ADR-076 definem persistência/limites.
+
+
+Diagnóstico opcional da síntese: `synthesis-diagnostic-1.0.0` adiciona etapa/motivo fixos e contagens sem alterar `profile-synthesis-1.0.0` ou o prompt1.0.0. Leitores toleram metadados legados sem diagnóstico. Migração incremental estende RPC de conclusão com argumento opcional; retorna estado efetivamente gravado, mantendo chamada anterior compatível. Produto permanece2.0.5 como correção do comportamento aprovado.
