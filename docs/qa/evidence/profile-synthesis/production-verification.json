@@ -1,0 +1,17 @@
+{
+  "functionalSha": "497b2ee6927c781dfe4bc21ac9f393944f89e766",
+  "ci": { "branch": 37247895726, "main": 37247963476, "status": "PASS" },
+  "migration": { "local": "20261004190000", "remote": "20261005003404", "name": "profile_synthesis", "rlsTables": 3, "directAnonAuthenticatedSelect": false, "triggers": 3 },
+  "runtime": {
+    "webImage": "sha256:b8d913860d8f4cf703bbb5ba64bfddfa324e9782ef790c9307c9c9c98e2ab91d",
+    "workerImage": "sha256:1f233fe274f1aa45bb217b3b7877f97bdb8c2492e243015bfb8d6c4723537f5b",
+    "workerHealth": "healthy", "workerQueueState": "idle", "workerPublicPorts": false, "restarts": 0,
+    "parserImagePreserved": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+    "gatewayImagePreserved": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+    "webRollback": "sha256:66503eced73233fb4151917f4df57d7117d2c3e993506829e134a2f70de3fda5"
+  },
+  "smoke": { "root": 200, "login": 200, "people": 200, "entry": "/assets/index-rtOypyJ0.js", "entryStatus": 200, "version205": true, "previousEntry": 200, "previousPdfChunk": 200 },
+  "negativeRpc": { "invalidWorkerToken": 401, "anonymousLoad": 401, "anonymousSource": 401 },
+  "realPersonPublication": "NOT TESTED",
+  "limits": "Synthetic quality benchmark and local authenticated SQL fixtures; production health/public smoke do not prove authenticated real-Person behavior."
+}

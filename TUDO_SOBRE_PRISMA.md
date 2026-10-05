@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 344
-source_manifest_sha256: 0d0fc55ef8b1ff4756a9dff49527b2d43a72d41c8e8525b006b89da49bf8bfe8
+source_manifest_sha256: 9999c2fbe9b089125e18845492af186b21a1ea825d1099cc940e960a614a1672
 -->
 
 # Tudo sobre o Prisma
@@ -2626,7 +2626,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.31
+version: 2.51.32
 last_verified: 2026-10-04
 ---
 
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-04
 
 ## Síntese profissional v2.0.5
 
-Implementada e validada localmente: síntese persistida por Perfil/base, oito eixos profundos fixos, relato/interpretação/lacunas separados, referências com fontes sob demanda, resumo original preservado. Worker independente na VPS, sem service_role; fila/lease/retries limitados, estados explícitos e publicação humana não bloqueada. PostgreSQL local: isolamento de empresas, auth/role inativa/anon, idempotência, stale base, resposta inválida e fonte tardia PASS. Benchmark sintético OpenAI gpt-5.6-luna: três casos, 7–14s, 2933/2956 tokens input/output; sem invenção de atribuições no caso pobre e sem obedecer injeção. UI 1416/390, seis estados, sem overflow e sem IA por visita. Produção ainda pendente de publicação do SHA validado. Contrato/ADR/owner: `docs/qa/agreement-profile-synthesis-v205.md`, `docs/decisions/ADR-076-profile-synthesis.md`, `docs/ai/profile-synthesis.md`; evidência `docs/qa/aot-profile-synthesis-v205.md`. Amostra sintética não prova qualidade universal ou jornada de Pessoa real.
+Publicada em main/origin/VPS no SHA funcional `497b2ee6927c781dfe4bc21ac9f393944f89e766`, CI branch/main PASS: síntese persistida por Perfil/base, oito eixos profundos fixos, relato/interpretação/lacunas separados, referências com fontes sob demanda, resumo original preservado. Worker independente healthy/idle, sem service_role/porta pública/PC; fila/lease/retries limitados, estados explícitos e publicação humana não bloqueada. Migração remota `20261005003404_profile_synthesis`, RLS/grants/triggers conferidos e probes anônimos/token inválido negados. PostgreSQL local: isolamento de empresas, auth/role inativa/anon, idempotência, stale base, resposta inválida e fonte tardia PASS. Benchmark sintético OpenAI gpt-5.6-luna: três casos, 7–14s, 2933/2956 tokens input/output; sem invenção de atribuições no caso pobre e sem obedecer injeção. UI 1416/390, seis estados, sem overflow e sem IA por visita. 256 testes person-flow/40 dirigidos PASS. Web running/zero reinícios, entry `index-rtOypyJ0.js`, HTTPS/versão/assets novos e antigos/rollback PASS após estabilização; Parser/gateway preservados. Contrato/ADR/owner: `docs/qa/agreement-profile-synthesis-v205.md`, `docs/decisions/ADR-076-profile-synthesis.md`, `docs/ai/profile-synthesis.md`; evidência `docs/qa/aot-profile-synthesis-v205.md`. Amostra sintética não prova qualidade universal ou jornada autenticada de Pessoa real, que permanece NOT TESTED.
 
 Complemento v2.0.4 publicado no SHA funcional `bd52c1af99a1f0f201d250f19770355c93e114eb`: Classificação válida pelo sistema dispensa clique e difere de Confirmada por você. Aceitação explícita preservada é reutilizada somente com curso/classificação/fontes/método vigente conhecido iguais ao snapshot válido, sem desconhecidos; alteração do período não retira essa aceitação. Inferência, incompatibilidade, método legado/desconhecido, snapshot ausente ou mudança da classificação exigem revisão. Normalização/preflight/save/compare sincronizam reviewed sem decisão humana inventada nem alteração transitória falsa; formulário vazio permanece protegido. 70 testes dirigidos/256 person-flow, 29 verificações de render por viewport 1416/390, tipos/build/contextos/lint e CI branch/main PASS. Somente web publicada: imagem 66503ec, entry `/assets/index-S0Dgydwu.js`, versão/HTTPS/assets novos/anteriores/rollback conferidos; Parser/gateway preservados. Banco/matching inalterados. Jornada autenticada de Pessoa real NOT TESTED. Evidência final: `docs/qa/aot-education-confirmation-visual.md`.
 
@@ -18470,9 +18470,9 @@ Acordo integral: `agreement-profile-synthesis-v205.md` v1.0.0, incluindo prompt 
 | D-02 | Leitores TS e validatorSQL; fonte por afirmação; vazio=zeroIA | 20 testes worker/contrato; SQL rejeita missing/null/refs inventadas/replay; benchmark injeção | PASS |
 | D-03 | Base/hash/snapshot/versão; resumo original; fonte sob demanda | SQL stale base + snapshot anterior + fonte autorizada; UI não faz eager fetch; identidade/contato omitidos | PASS |
 | D-04 | Três tabelas/RLS/tenant/RPC, audit optional, lease/retry | Migração inteira aplicada novamente em transação QA, fixture rollback: auth/outsider/inativo/anon, duplicidade, fila vazia, falha optional/audit, lease, retry, exclusão | PASS |
-| D-05 | Worker independente sem service_role; hash privado/segredoVPS; Responses | HTTP fake claim/provider/complete, bounded attempts, benchmark três chamadas, registry; runtime aguarda publicação | PARTIAL |
+| D-05 | Worker independente sem service_role; hash privado/segredoVPS; Responses | HTTP fake claim/provider/complete, bounded attempts, benchmark três chamadas; VPS running/healthy/idle, zero reinícios, sem portas; RPC/token inválido HTTP401 | PASS |
 | D-UX-01 | Narrativa70/30, cartões contextuais, fonte60/40, disclosure/mobile | Seis estados x1416/390, fontes após clique/8 eixos/no overflow; renders no caminho abaixo | PASS |
-| D-06 | v2.0.5, docs/ADR/contexto/release seletivo | Tipos/build/localQA dirigidos; CI/main/VPS/health/smoke pendentes | PARTIAL |
+| D-06 | v2.0.5, docs/ADR/contexto/release seletivo | Tipos/build/localQA dirigidos; CI branch37247895726/main37247963476 PASS; main/VPS497b2ee, migração/worker/web e smoke HTTPS PASS | PASS |
 
 ## Proibições
 
@@ -18490,8 +18490,8 @@ Acordo integral: `agreement-profile-synthesis-v205.md` v1.0.0, incluindo prompt 
 | Síntese/IA/tela/dados | direct | Baseline sem sínteseIA; schema/worker/SQL/benchmark/renders | PASS local |
 | Auth/tenant/persistência | critical_transversal | Leitor M72 reutilizado; roles negativas, fonte de outro tenant, grants, token/lease/replay, cascade no banco real local | PASS local |
 | Publicação humana/resumo canônico | plausible_indirect | Eventos audit existentes; enqueue malformado não interrompe audit; person-flow proporcional | PASS local |
-| Parser/matching | plausible_indirect | Nenhum arquivo funcional alterado; checker matching e imagens runtime na publicação | em validação |
-| Release/docs | direct | Tipos/build/docs/Context Pack; publicação seletiva/migração/worker/web | em validação |
+| Parser/matching | plausible_indirect | Nenhum arquivo funcional alterado; checker matching PASS; Parser8682af7/gatewayd061cea preservados em runtime | PASS |
+| Release/docs | direct | Tipos/build/docs/Context Pack; CI, publicação seletiva/migração/worker/web e smoke | PASS |
 
 ## Evidência visual
 
@@ -18503,7 +18503,13 @@ Comparação manual: hierarquia narrativa antes das perguntas, principal70%/late
 
 Benchmark: 13.817/7.127/8.189ms; 1041/920/972 tokens de entrada; 1376/740/840 de saída. Schema/refs e revisão qualitativa local não estabelecem qualidade universal nem fairness. Nenhuma Pessoa real publicada/alterada para testar; jornada autenticada de Pessoa real NOT TESTED. Auth/RLS foram executados em PostgreSQL local, não apenas mocks. Health e smoke público não equivalem a leitura autenticada real. Relação opcional de vínculos exige tabela instalada; produção foi verificada somente por schema, sem exportar dados humanos.
 
-Desvios do contrato: nenhum desvio material identificado no escopo local validado. Produção permanece pendente, sem declarar entrega concluída antes de CI/runtime/smoke/sincronização.
+## Publicação e preservação
+
+SHA funcional `497b2ee6927c781dfe4bc21ac9f393944f89e766`: CI branch `37247895726` e main `37247963476` PASS. Migração remota `20261005003404_profile_synthesis`, aplicada a partir do SQL desse commit; três tabelas com RLS e SELECT direto negado a anon/authenticated; três triggers existentes conferidos. Bootstrap somente do hash administrativo de worker, sem dado de Pessoa. Banco remoto não recebeu fixtures.
+
+VPS `/opt/prisma`: worker imagem `1f233fe274f1aa45bb217b3b7877f97bdb8c2492e243015bfb8d6c4723537f5b`, healthy/idle/zero reinícios/sem porta; config400 UID1000, sem service_role. Web imagem `b8d913860d8f4cf703bbb5ba64bfddfa324e9782ef790c9307c9c9c98e2ab91d`, running/zero reinícios, entry `/assets/index-rtOypyJ0.js`, versão2.0.5/síntese no bundle. `/`, `/login`, `/people`, entry novo e assets anteriores `index-S0Dgydwu.js`/`pdf-Du5hpUXa.js` HTTP200. Rollback web `66503ec` preservado; primeiro worker pode ser parado sem apagar fila/resultados. O smoke imediato do script web retornou404 durante recriação; repetição após estabilização passou sem rebuild. Parser/gateway continuam nas imagens baseline. RPCs load/source anônimas e claim com token inválido HTTP401; nenhuma Pessoa real foi acessada/mutada por esses probes.
+
+Evidência compacta: `evidence/profile-synthesis/production-verification.json`. Desvios do contrato: nenhum desvio material identificado. Fechamento documental sincronizado separadamente, sem reconstruir runtime funcional.
 
 ---
 
