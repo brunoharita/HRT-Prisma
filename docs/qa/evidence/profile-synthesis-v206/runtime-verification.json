@@ -1,0 +1,98 @@
+{
+  "version": "1.0.0",
+  "productVersion": "2.0.6",
+  "baselineSha": "64e1d54c1749bd6c050a0d4c3d175ac93f5fbdfa",
+  "functionalSha": "7354b46383b488fd54622572b54396b2ab5494df",
+  "authorization": "explicit user authorization for one additional attempt, 2026-10-04",
+  "recovery": {
+    "jobId": "4877d6e8-f550-4fd3-93db-133634916b04",
+    "precondition": {
+      "state": "failed",
+      "attempts": 1,
+      "errorCode": "RESPONSE_INVALID",
+      "diagnostic": null,
+      "approved": true,
+      "current": true,
+      "sameBasis": true
+    },
+    "queuedRows": 1,
+    "attempts": 2,
+    "state": "failed",
+    "errorCode": "RESPONSE_INVALID",
+    "diagnostic": {
+      "version": "synthesis-diagnostic-1.0.0",
+      "stage": "contract",
+      "reason": "REFERENCES_INVALID",
+      "section": "competencies",
+      "item": 0
+    },
+    "durationMs": 24890,
+    "inputTokens": 5211,
+    "outputTokens": 2990,
+    "completedAt": "2026-10-05T02:33:29.531758Z",
+    "additionalCalls": 1,
+    "oldAttemptPreserved": true,
+    "canonicalWrites": 0,
+    "acceptedSynthesis": false,
+    "oldSubcause": "not recorded"
+  },
+  "tests": {
+    "release": 4,
+    "synthesisWorkerContract": 31,
+    "result": "PASS",
+    "build": "PASS",
+    "webTypes": "PASS",
+    "webBuild": "PASS",
+    "context": "PASS",
+    "lint": "PASS",
+    "foundation": "PASS"
+  },
+  "runtime": {
+    "status": "PASS",
+    "webImage": "sha256:db837df753fee6fe0775ccfab2249de1e3549795e3cdcafeb19a8111b05c5f39",
+    "entry": "/assets/index-BiucK513.js",
+    "bundle206": true,
+    "http": [
+      {
+        "path": "/",
+        "status": 200
+      },
+      {
+        "path": "/login",
+        "status": 200
+      },
+      {
+        "path": "/people",
+        "status": 200
+      },
+      {
+        "path": "/assets/index-BiucK513.js",
+        "status": 200
+      },
+      {
+        "path": "/assets/index-g0DDLxX2.js",
+        "status": 200
+      },
+      {
+        "path": "/assets/index-CR5aA1Nt.js",
+        "status": 200
+      }
+    ],
+    "rollbackImage": "sha256:d3b30ecf3e207a6d0610a8751ebfd525b88bbbb5191f9444f5999a9aadcb6fc3",
+    "workerImage": "sha256:49cbf2c66c601474db4a46e4d6e99db46ea90b48d6104e70b38727b02fb3f129",
+    "parserImage": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+    "gatewayImage": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+    "allRestarts": 0,
+    "initialSmoke404": "stabilized without rebuild"
+  },
+  "limits": [
+    "real synthesis not recovered",
+    "no authenticated real-Person UI smoke",
+    "old attempt cannot be reconstructed"
+  ],
+  "ci": {
+    "branch": 37256203748,
+    "main": 37256286892,
+    "status": "PASS"
+  }
+}

@@ -6,7 +6,7 @@ Contrato `agreement-profile-synthesis-v206.md` v1.0.0 e acordo de exceções v1.
 | --- | --- | --- | --- |
 | D-R01 | Reenfileiramento único guardado, worker normal, histórico e métricas | Prévia failed/attempt1/diagnosticnull, Perfil approved/current e hash igual; UPDATE retornou uma linha queued/attempt1; worker iniciou attempt2 e finalizou failed | PASS |
 | P-R01 | Nenhum write canônico/tenant/modelo/prompt ou reset | Query limitada ao UUID, estado/código/contador, tenant/pessoa/Perfil/base; histórico1/2 preservado; resposta inválida rejeitada | PASS |
-| D-R02 | Registro central sexta entrega, login/sidebar e contexto | 35 testes dirigidos (4 release +31 síntese/worker) PASS; build TypeScript/tiposweb/buildweb PASS; CI/release/smoke pendentes | PARTIAL |
+| D-R02 | Registro central sexta entrega, login/sidebar e contexto | 35 testes dirigidos (4 release +31 síntese/worker) PASS; build TypeScript/tiposweb/buildweb PASS; CI branch37256203748/main37256286892 PASS, web2.0.6 e HTTP/rollback/serviços PASS | PASS |
 
 ## Resultado operacional real
 
@@ -21,3 +21,9 @@ Mapa/critério no acordo: release somente registro/docs/web. UI funcional de exc
 ## Validação local
 
 Build TypeScript, typecheck:web e build:web PASS; 35 testes dirigidos executados após recompilar o registro (sexta entrega), incluindo fontes inválidas, metadados/métricas, ausência de PII e zero chamada na fila vazia. Nenhuma IA real adicional nesses testes. Avisos de bundle/import dinâmico preexistentes permanecem, fora de escopo. Geração/check do Context Pack em snapshot Git exclui arquivos não rastreados alheios; lint855arquivos PASS.
+
+## Publicação / smoke
+
+SHA funcional `7354b46383b488fd54622572b54396b2ab5494df` integrado em main/origin/VPS, CI branch37256203748/main37256286892 PASS. Plano comprometido confirmou somente web/documentação/contextos/testes; nenhuma migração/Edge/worker/Parser. Release web recriou o container e retornou HTTP404 no smoke imediato; aguardada estabilização e verificado sem rebuild. Web `sha256:db837df753fee6fe0775ccfab2249de1e3549795e3cdcafeb19a8111b05c5f39`, running/zero reinícios, entry `/assets/index-BiucK513.js`, registro2.0.6 no bundle. HTTPS /,/login,/people,entry e chunks anterioresg0DDLxX2/CR5aA1Nt HTTP200. Rollback `prisma-web:rollback-before-7354b46383b4` conserva imagemd3b30ec. Worker49cbf2c/Parser8682af7 saudáveis e gatewayd061cea running, todos zero reinícios e mesmas imagens. Preservação operacional PASS; código funcional além do registro de versão não foi alterado.
+
+Evidência segura `docs/qa/evidence/profile-synthesis-v206/runtime-verification.json`. Fato observado é rejeição de resposta com referências inválidas: a síntese real continua failed, não é declarada recuperada. Entrega dos requisitos de diagnóstico/proteção/identificação/release PASS; qualidade de resposta aceita não provada. Nenhum desvio do acordo. Metadados finais serão sincronizados sem reconstruir serviços.
