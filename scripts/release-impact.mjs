@@ -1,6 +1,6 @@
 import { basename } from "node:path";
 
-export const RELEASE_PLAN_VERSION = "1.0.2";
+export const RELEASE_PLAN_VERSION = "1.0.3";
 
 const contextSource = (path) => path === "AGENTS.md" || path === "README.md" || path.startsWith("docs/");
 
@@ -31,6 +31,9 @@ export function classifyChanges(changes) {
   for (const change of changes) {
     const path = normalizeRepositoryPath(change.path);
     let classified = false;
+    if (["src/domain/profileSynthesis.ts", "scripts/profile-synthesis-worker.mjs", "deploy/release-profile-synthesis.sh", "deploy/profile-synthesis.compose.yml"].includes(path) || path.startsWith("services/profile-synthesis/")) {
+      surfaces.add("profile-synthesis"); classified = true;
+    }
     if (contextSource(path)) {
       surfaces.add("documentation");
       surfaces.add("context-pack");
@@ -74,7 +77,7 @@ export function classifyChanges(changes) {
     if (path === "deploy/release-web.sh") {
       surfaces.add("tooling");
       classified = true;
-    } else if (path.startsWith("deploy/")) {
+    } else if (path.startsWith("deploy/") && !path.includes("profile-synthesis")) {
       surfaces.add("hosting");
       classified = true;
     }
@@ -155,6 +158,7 @@ export function buildReleasePlan(changes) {
     add("node node_modules/typescript/bin/tsc -p services/parser-ia/tsconfig.json --noEmit");
     add("node --test tests/tooling/parserIaService.test.mjs tests/tooling/parserIaRecovery.test.mjs tests/tooling/parserIaHosted.test.mjs tests/tooling/parserIaBenchmark.test.mjs");
   }
+  if (impact.surfaces.includes("profile-synthesis")) add("node --test tests/tooling/profileSynthesis.test.mjs");
   if (["database", "database-ledger", "supabase-config"].some((surface) => impact.surfaces.includes(surface))) {
     add("pnpm run check:supabase-ledger");
   }
@@ -170,6 +174,7 @@ export function buildReleasePlan(changes) {
     edgeFunctions: impact.edgeFunctions,
     web: impact.surfaces.includes("web") || impact.surfaces.includes("hosting"),
     parserIa: impact.surfaces.includes("parser-ia"),
+    profileSynthesis: impact.surfaces.includes("profile-synthesis"),
   };
   return {
     version: RELEASE_PLAN_VERSION,

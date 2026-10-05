@@ -7,6 +7,13 @@ import { buildReleasePlan, classifyChanges, migrationIdentity, parseNameStatus }
 import { assertPublishPreconditions, parseArguments, writeReceipt } from "../../scripts/release-dispatcher.mjs";
 
 const change = (status, path) => ({ status, path, previousPath: null });
+test("synthesis worker has an independent destination and preserves the Parser", () => {
+  const plan = buildReleasePlan([change("A", "deploy/profile-synthesis.compose.yml"), change("A", "scripts/profile-synthesis-worker.mjs")]);
+  assert.equal(plan.deployments.profileSynthesis, true);
+  assert.equal(plan.deployments.parserIa, false);
+  assert.equal(plan.deployments.web, false);
+  assert.deepEqual(plan.deployments.edgeFunctions, []);
+});
 
 test("parses git name-status including renames", () => {
   assert.deepEqual(parseNameStatus("A\tweb/src/a.tsx\nR100\told.md\tdocs/new.md"), [

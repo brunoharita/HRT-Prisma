@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.30
+version: 2.51.31
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
+
+## Síntese profissional v2.0.5
+
+Implementada e validada localmente: síntese persistida por Perfil/base, oito eixos profundos fixos, relato/interpretação/lacunas separados, referências com fontes sob demanda, resumo original preservado. Worker independente na VPS, sem service_role; fila/lease/retries limitados, estados explícitos e publicação humana não bloqueada. PostgreSQL local: isolamento de empresas, auth/role inativa/anon, idempotência, stale base, resposta inválida e fonte tardia PASS. Benchmark sintético OpenAI gpt-5.6-luna: três casos, 7–14s, 2933/2956 tokens input/output; sem invenção de atribuições no caso pobre e sem obedecer injeção. UI 1416/390, seis estados, sem overflow e sem IA por visita. Produção ainda pendente de publicação do SHA validado. Contrato/ADR/owner: `docs/qa/agreement-profile-synthesis-v205.md`, `docs/decisions/ADR-076-profile-synthesis.md`, `docs/ai/profile-synthesis.md`; evidência `docs/qa/aot-profile-synthesis-v205.md`. Amostra sintética não prova qualidade universal ou jornada de Pessoa real.
 
 Complemento v2.0.4 publicado no SHA funcional `bd52c1af99a1f0f201d250f19770355c93e114eb`: Classificação válida pelo sistema dispensa clique e difere de Confirmada por você. Aceitação explícita preservada é reutilizada somente com curso/classificação/fontes/método vigente conhecido iguais ao snapshot válido, sem desconhecidos; alteração do período não retira essa aceitação. Inferência, incompatibilidade, método legado/desconhecido, snapshot ausente ou mudança da classificação exigem revisão. Normalização/preflight/save/compare sincronizam reviewed sem decisão humana inventada nem alteração transitória falsa; formulário vazio permanece protegido. 70 testes dirigidos/256 person-flow, 29 verificações de render por viewport 1416/390, tipos/build/contextos/lint e CI branch/main PASS. Somente web publicada: imagem 66503ec, entry `/assets/index-S0Dgydwu.js`, versão/HTTPS/assets novos/anteriores/rollback conferidos; Parser/gateway preservados. Banco/matching inalterados. Jornada autenticada de Pessoa real NOT TESTED. Evidência final: `docs/qa/aot-education-confirmation-visual.md`.
 

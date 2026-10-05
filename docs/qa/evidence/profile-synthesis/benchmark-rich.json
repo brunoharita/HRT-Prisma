@@ -1,0 +1,245 @@
+{
+  "result": {
+    "contractVersion": "profile-synthesis-1.0.0",
+    "overview": [
+      {
+        "text": "Atuação registrada em assistência financeira entre fevereiro de 2020 e agosto de 2024, com atividades de acompanhamento bancário, conciliação, fechamento de fluxo de caixa, relatórios em Excel e apoio à composição da DRE.",
+        "nature": "published_fact",
+        "sourceIds": [
+          "experience.finance.role",
+          "experience.finance.period",
+          "experience.finance.description"
+        ]
+      },
+      {
+        "text": "O objetivo declarado mantém relação direta com a experiência descrita e indica interesse em ampliar a atuação em controles financeiros.",
+        "nature": "interpretation",
+        "sourceIds": [
+          "experience.finance.description",
+          "objective"
+        ]
+      }
+    ],
+    "answers": [
+      {
+        "questionId": "trajectory",
+        "status": "answered",
+        "statements": [
+          {
+            "text": "Há um período contínuo registrado como Assistente de Departamento Financeiro, de fevereiro de 2020 a agosto de 2024.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "experience.finance.role",
+              "experience.finance.period"
+            ]
+          },
+          {
+            "text": "A trajetória documentada reúne atividades de acompanhamento, conciliação, apoio a fechamento e elaboração de relatórios, mas não registra mudanças de cargo ou ampliação formal de responsabilidades.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não foram informadas transições internas, cargos anteriores ou posteriores.",
+          "Não há detalhamento sobre evolução de autonomia ou escopo ao longo do período."
+        ]
+      },
+      {
+        "questionId": "activities",
+        "status": "answered",
+        "statements": [
+          {
+            "text": "A pessoa acompanhava extratos bancários, realizava conciliação e apoiava o fechamento do fluxo de caixa.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          },
+          {
+            "text": "Também utilizava Excel para consolidar relatórios mensais e apoiava a equipe na composição da DRE.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          },
+          {
+            "text": "O relato descreve contribuição de apoio à equipe financeira, sem especificar destinatários individuais das entregas ou a participação em cada etapa.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não foi informado quem utilizava os relatórios nem quais decisões ou processos eles subsidiavam.",
+          "Não foi detalhado o escopo individual em cada atividade."
+        ]
+      },
+      {
+        "questionId": "contexts",
+        "status": "partial",
+        "statements": [
+          {
+            "text": "O contexto registrado é o de um departamento financeiro, envolvendo controles bancários, fluxo de caixa, relatórios mensais e DRE.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "experience.finance.role",
+              "experience.finance.description"
+            ]
+          },
+          {
+            "text": "As expressões “apoio ao fechamento” e “apoio à equipe” indicam participação colaborativa, mas o relato não distingue execução, revisão, decisão, coordenação ou gestão.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não há informação sobre porte, segmento ou estrutura da organização.",
+          "Não foram descritos níveis de responsabilidade, aprovação ou interação com outras áreas."
+        ]
+      },
+      {
+        "questionId": "competencies",
+        "status": "answered",
+        "statements": [
+          {
+            "text": "A experiência publicada associa o uso de Excel à consolidação de relatórios mensais.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          },
+          {
+            "text": "Também aparecem conhecimentos práticos relacionados a acompanhamento de extratos, conciliação, fluxo de caixa e composição da DRE, conforme as atividades relatadas.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não foram informados recursos ou funcionalidades específicas do Excel.",
+          "Não há indicação do nível de autonomia, complexidade ou qualidade dos controles realizados."
+        ]
+      },
+      {
+        "questionId": "results",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "O relato descreve tarefas e entregas, mas não apresenta resultados mensurados ou efeitos observados.",
+          "Não foram informados valores, volumes, prazos, melhorias, redução de divergências ou impactos da contribuição individual.",
+          "Não é possível distinguir resultados individuais de resultados da equipe com os registros disponíveis."
+        ]
+      },
+      {
+        "questionId": "education",
+        "status": "partial",
+        "statements": [
+          {
+            "text": "Há registro de Bacharelado em Administração em andamento.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "education.course"
+            ]
+          },
+          {
+            "text": "A formação é compatível, em termos temáticos, com as atividades financeiras descritas, mas não há evidência publicada de aplicação direta de conteúdos do curso nessas atividades.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "education.course",
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não foi informada a instituição real, a previsão de conclusão ou a etapa atual do curso.",
+          "Não foram registrados cursos complementares ou certificações."
+        ]
+      },
+      {
+        "questionId": "objective",
+        "status": "answered",
+        "statements": [
+          {
+            "text": "O objetivo declarado é atuar em assistência financeira e ampliar a experiência em controles financeiros.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "objective"
+            ]
+          },
+          {
+            "text": "Esse objetivo se relaciona diretamente às atividades já registradas de conciliação, fluxo de caixa, relatórios e apoio à DRE.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "objective",
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não foi especificado quais controles financeiros deseja aprofundar.",
+          "Não há detalhamento sobre o tipo de atividade ou contexto profissional pretendido."
+        ]
+      },
+      {
+        "questionId": "clarifications",
+        "status": "answered",
+        "statements": [
+          {
+            "text": "Quais eram o volume e a frequência das conciliações e quais tipos de divergência eram tratados? Isso esclareceria a extensão da atividade descrita. [Registro motivador: acompanhamento de extratos e conciliação]",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          },
+          {
+            "text": "Quais partes do fechamento do fluxo de caixa e da composição da DRE eram executadas diretamente e quais eram revisadas pela equipe? Isso distinguiria apoio, execução e revisão. [Registro motivador: apoio ao fechamento e à composição da DRE]",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          },
+          {
+            "text": "Que resultados ou melhorias decorreram dos relatórios mensais em Excel e qual era seu público de uso? Isso ajudaria a compreender a entrega e seu impacto. [Registro motivador: consolidação de relatórios mensais]",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": []
+      }
+    ],
+    "clarifications": [
+      {
+        "text": "Quais eram o volume e a frequência das conciliações e quais tipos de divergência eram tratados?",
+        "questionId": "activities",
+        "sourceIds": [
+          "experience.finance.description"
+        ]
+      },
+      {
+        "text": "Quais partes do fechamento do fluxo de caixa e da composição da DRE eram executadas diretamente e quais eram revisadas pela equipe?",
+        "questionId": "contexts",
+        "sourceIds": [
+          "experience.finance.description"
+        ]
+      },
+      {
+        "text": "Que resultados ou melhorias decorreram dos relatórios mensais em Excel e qual era seu público de uso?",
+        "questionId": "results",
+        "sourceIds": [
+          "experience.finance.description"
+        ]
+      }
+    ]
+  },
+  "model": "gpt-5.6-luna",
+  "inputTokens": 1041,
+  "outputTokens": 1376
+}

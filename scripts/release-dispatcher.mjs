@@ -148,6 +148,12 @@ async function publish(plan, options) {
     parserIa = "PUBLISHED";
   }
   let web = plan.deployments.web ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
+  let profileSynthesis = plan.deployments.profileSynthesis ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
+  if (plan.deployments.profileSynthesis && options.promoteMain && options.vpsHost) {
+    if (!/^[A-Za-z0-9_.@:-]+$/.test(options.vpsHost) || !/^\/[A-Za-z0-9_./-]+$/.test(options.vpsPath)) throw new Error("Invalid VPS configuration");
+    runCommand("ssh", [options.vpsHost, `cd -- '${options.vpsPath}' && bash deploy/release-profile-synthesis.sh '${sha}'`]);
+    profileSynthesis = "PUBLISHED";
+  }
   if (plan.deployments.web && options.promoteMain && options.vpsHost) {
     if (!/^[A-Za-z0-9_.@:-]+$/.test(options.vpsHost)) throw new Error("Invalid VPS SSH host");
     if (!/^\/[A-Za-z0-9_./-]+$/.test(options.vpsPath)) throw new Error("Invalid VPS path");
@@ -161,11 +167,13 @@ async function publish(plan, options) {
     branch,
     web,
     parserIa,
+    profileSynthesis,
     remaining: {
       database: plan.deployments.database,
       edgeFunctions: plan.deployments.edgeFunctions,
       web: web === "PENDING_VPS_CONFIGURATION",
       parserIa: parserIa === "PENDING_VPS_CONFIGURATION",
+      profileSynthesis: profileSynthesis === "PENDING_VPS_CONFIGURATION",
     },
   };
 }

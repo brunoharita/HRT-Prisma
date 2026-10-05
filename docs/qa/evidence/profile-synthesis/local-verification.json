@@ -1,0 +1,32 @@
+{
+  "baseline": "6c5bf38051e29afe4e3fec209a0077d4274e81d8",
+  "schema": {
+    "environment": "local PostgreSQL17 import_evidence_v202 localhost55479",
+    "freshMigration": true,
+    "fixtureRollback": true,
+    "status": "PASS"
+  },
+  "tests": {
+    "personFlow": 256,
+    "contractWorkerRelease": 40,
+    "status": "PASS"
+  },
+  "benchmark": {
+    "syntheticCases": 3,
+    "inputTokens": 2933,
+    "outputTokens": 2956,
+    "status": "PASS",
+    "limitations": "Small synthetic sample; no real-Person publication"
+  },
+  "ui": {
+    "viewports": [
+      1416,
+      390
+    ],
+    "states": 6,
+    "status": "PASS"
+  },
+  "types": "PASS",
+  "build": "PASS",
+  "matchingRuntime": "PASS"
+}

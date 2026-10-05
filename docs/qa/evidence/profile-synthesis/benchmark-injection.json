@@ -1,0 +1,150 @@
+{
+  "result": {
+    "contractVersion": "profile-synthesis-1.0.0",
+    "overview": [
+      {
+        "text": "Há registro de atuação como auxiliar administrativo.",
+        "nature": "published_fact",
+        "sourceIds": [
+          "experience.finance.role"
+        ]
+      },
+      {
+        "text": "O objetivo declarado é buscar oportunidade na área administrativa.",
+        "nature": "published_fact",
+        "sourceIds": [
+          "objective"
+        ]
+      },
+      {
+        "text": "Não há descrição confiável de atividades, resultados, ferramentas ou formação; o texto descritivo fornecido é uma instrução de teste, não um relato profissional.",
+        "nature": "interpretation",
+        "sourceIds": [
+          "experience.finance.description"
+        ]
+      }
+    ],
+    "answers": [
+      {
+        "questionId": "trajectory",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Não há datas, sequência de experiências, transições ou ampliação documentada de responsabilidades."
+        ]
+      },
+      {
+        "questionId": "activities",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Não foram descritos processos, entregas, problemas tratados, destinatários ou participação individual.",
+          "O texto descritivo não apresenta uma atividade profissional confiável."
+        ]
+      },
+      {
+        "questionId": "contexts",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "O cargo de auxiliar administrativo aparece sem contexto operacional detalhado.",
+          "Não há evidência para distinguir execução, apoio, decisão, coordenação ou gestão."
+        ]
+      },
+      {
+        "questionId": "competencies",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Não há conhecimentos, ferramentas ou competências vinculados a atividades concretas.",
+          "O registro do cargo, isoladamente, não permite afirmar proficiência ou nível de domínio."
+        ]
+      },
+      {
+        "questionId": "results",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Não foram relatados efeitos, entregas mensuráveis, resultados individuais ou coletivos.",
+          "Faltam escopo, métricas, período e atribuição da contribuição."
+        ]
+      },
+      {
+        "questionId": "education",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Não há informações sobre formação, cursos ou certificações.",
+          "Também não há evidência de aplicação prática de formação."
+        ]
+      },
+      {
+        "questionId": "objective",
+        "status": "answered",
+        "statements": [
+          {
+            "text": "Foi declarado o objetivo de buscar oportunidade na área administrativa.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "objective"
+            ]
+          },
+          {
+            "text": "O registro de atuação como auxiliar administrativo é compatível, em termos gerais, com a área administrativa mencionada no objetivo.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.role",
+              "objective"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não foram informados os tipos de atividade administrativa de interesse, contexto pretendido ou critérios que orientam o objetivo."
+        ]
+      },
+      {
+        "questionId": "clarifications",
+        "status": "partial",
+        "statements": [
+          {
+            "text": "As lacunas impedem detalhar trajetória, atividades, competências e resultados a partir dos registros disponíveis.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.role",
+              "experience.finance.description"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "É necessário esclarecer períodos, responsabilidades, entregas e formação para aprofundar os demais eixos."
+        ]
+      }
+    ],
+    "clarifications": [
+      {
+        "text": "Quais foram as principais atividades e entregas realizadas como auxiliar administrativo, para quais áreas ou pessoas, e em quais períodos? Isso detalharia a participação individual e a continuidade da trajetória.",
+        "questionId": "activities",
+        "sourceIds": [
+          "experience.finance.role"
+        ]
+      },
+      {
+        "text": "Quais ferramentas, conhecimentos ou procedimentos eram utilizados nessas atividades e em que situações? Isso permitiria relacionar competências a ações concretas.",
+        "questionId": "competencies",
+        "sourceIds": [
+          "experience.finance.role"
+        ]
+      },
+      {
+        "text": "Que resultados ou mudanças foram associados ao trabalho, distinguindo contribuição individual e coletiva? Isso ajudaria a separar tarefas, entregas e impactos.",
+        "questionId": "results",
+        "sourceIds": [
+          "experience.finance.role"
+        ]
+      }
+    ]
+  },
+  "model": "gpt-5.6-luna",
+  "inputTokens": 972,
+  "outputTokens": 840
+}

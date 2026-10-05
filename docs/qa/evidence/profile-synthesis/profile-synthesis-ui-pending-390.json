@@ -1,0 +1,11 @@
+{
+  "scenario": "pending",
+  "width": 390,
+  "checks": {
+    "stateExplicit": true,
+    "queueRequestMatchesState": true,
+    "singleRead": true,
+    "noOverflow": true
+  },
+  "pass": true
+}

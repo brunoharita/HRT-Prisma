@@ -1,0 +1,24 @@
+services:
+  profile-synthesis:
+    image: prisma-profile-synthesis:${PRISMA_SYNTHESIS_SHA:?validated SHA required}
+    build:
+      context: ..
+      dockerfile: services/profile-synthesis/Dockerfile
+    container_name: prisma-profile-synthesis
+    restart: unless-stopped
+    environment:
+      SYNTHESIS_CONFIG_FILE: /run/secrets/profile-synthesis.env
+      OPENAI_ENV_FILE: /run/secrets/openai.env
+    volumes:
+      - /etc/prisma/profile-synthesis.env:/run/secrets/profile-synthesis.env:ro
+      - /etc/prisma/parser-ia.env:/run/secrets/openai.env:ro
+    read_only: true
+    tmpfs:
+      - /tmp:size=8m,mode=1777
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 192m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options: { max-size: 5m, max-file: "2" }

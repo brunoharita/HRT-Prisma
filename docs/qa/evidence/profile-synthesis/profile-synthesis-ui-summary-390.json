@@ -1,0 +1,13 @@
+{
+  "scenario": "summary",
+  "width": 390,
+  "checks": {
+    "narrative": true,
+    "noEagerSource": true,
+    "eightAxes": true,
+    "queueRequestMatchesState": true,
+    "singleRead": true,
+    "noOverflow": true
+  },
+  "pass": true
+}

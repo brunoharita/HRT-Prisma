@@ -262,3 +262,7 @@ O M5.1B avança o plano para 0.3.0 e introduz os contratos executáveis `assessm
 Correção do login (2026-09-12): o registro inclui o M5.7 aceito; contador e displayVersion são derivados, e o build deixa de aparecer no rodapé. Regressão verifica incremento por entrega, reinício por movimento e rejeição de registros incompletos/duplicados. Gate local pnpm run validate aprovado: 394 testes técnicos e 19 golden, tipos, build, lint, foundation e Context Pack. Sem alteração de Auth, Supabase ou contratos persistidos.
 
 A base transversal de UX de 2026-09-13 introduz `prisma-ux-foundation-1.0.0` (ADR-050). Ela versiona apresentação, linguagem e continuidade de navegação. Posições substitui Vagas apenas na interface; contratos de domínio, URLs e estruturas persistidas mantêm versões e significados. A versão pública permanece v1.5.11: este movimento não adiciona automaticamente uma entrega aceita ao registro de releases. Evidência e escopo em `docs/qa/aot-ux-foundation.md`.
+
+## Síntese do Perfil v2.0.5
+
+`profile-synthesis-1.0.0` / `profile-synthesis-prompt-1.0.0`: oito eixos fixos, JSONB com natureza e fontes, separado dos fatos publicados. Chave de geração combina tenant, Perfil, hash da base, contrato, prompt e modelo. Trocas criam chave nova sob decisão/benchmark, sem backfill de histórico nem substituir o resumo original. `docs/ai/profile-synthesis.md` e ADR-076 definem persistência/limites.

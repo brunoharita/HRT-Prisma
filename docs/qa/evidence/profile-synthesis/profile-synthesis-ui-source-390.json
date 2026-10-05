@@ -1,0 +1,12 @@
+{
+  "scenario": "source",
+  "width": 390,
+  "checks": {
+    "sourceFetchedOnce": true,
+    "quotedSource": true,
+    "queueRequestMatchesState": true,
+    "singleRead": true,
+    "noOverflow": true
+  },
+  "pass": true
+}

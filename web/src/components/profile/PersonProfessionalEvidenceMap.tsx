@@ -32,7 +32,13 @@ import { CanonicalProfileView } from "./CanonicalProfileView";
 import { CompetencyCuration } from "./CompetencyCuration";
 import type { CompetencyCurationAdapter } from "../../domain/profileCompetencyCuration";
 
+import type { ProfileSynthesisAdapter } from "../../infrastructure/supabase/profileSynthesisService";
+import type { SynthesisSource } from "../../../../src/domain/profileSynthesis";
+import { ProfileSynthesisSurface } from "./ProfileSynthesisSurface";
+
 interface PersonProfessionalEvidenceMapProps {
+  synthesis?: ProfileSynthesisAdapter | undefined;
+  onOpenSynthesisSource?: ((source: SynthesisSource) => void) | undefined;
   profile: PrismaProfileView;
   projection: ProfessionalEvidenceProjection | null;
   projectionError: string | null;
@@ -52,7 +58,7 @@ const natureColors: Record<ProfessionalEvidenceNature, string> = {
   assessment_result: "default",
 };
 
-export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation, onOpenVersions }: PersonProfessionalEvidenceMapProps) {
+export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation, onOpenVersions, synthesis, onOpenSynthesisSource }: PersonProfessionalEvidenceMapProps) {
   const [projection, setProjection] = useState(incomingProjection);
   const [curationOpen, setCurationOpen] = useState(false);
   useEffect(() => { setProjection(incomingProjection); }, [incomingProjection]);
@@ -82,8 +88,9 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
     </nav>
     {projection && surface !== "summary" ? <NormalizationStatus projection={projection} disabled={curationOpen} /> : null}
     {projectionError ? <Alert action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>} description="O Perfil publicado continua disponível abaixo." title={projectionError} showIcon type="warning" /> : null}
-    {!projection && !projectionError ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
-    {surface === "summary" ? <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} /> : null}
+    {!projection && !projectionError && (surface !== "summary" || !synthesis) ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
+    {surface === "summary" && synthesis && onOpenSynthesisSource ? <ProfileSynthesisSurface adapter={synthesis} onOriginal={() => setSurface("profile")} onOpenSource={onOpenSynthesisSource} /> : null}
+    {surface === "summary" ? synthesis ? <Collapse items={[{ key: "operational", label: "Competências, evidências e pendências do Perfil", children: <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} /> }]} /> : <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} /> : null}
     {surface === "competencies" && selectedConcept ? <ConceptDetailSurface concept={selectedConcept} onBack={() => setSelectedConcept(null)} onEvidence={setSelectedEvidence} onOpenSource={onOpenSource} /> : null}
     {surface === "competencies" && !selectedConcept && selectedGroup ? <SubgroupDetailSurface group={selectedGroup} onBack={() => setSelectedGroupKey(null)} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} /> : null}
     {surface === "competencies" && !selectedConcept && !selectedGroup ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onGroup={setSelectedGroupKey} onEvidence={setSelectedEvidence} onLink={setLinkConcept} curation={curation} onProjection={setProjection} onCurationOpen={setCurationOpen} /> : null}

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 339
-source_manifest_sha256: 78e959e80e767e385bd88b232a36330fd1dea844a9f7683aa499a6fbb297d5ba
+documentation_source_count: 344
+source_manifest_sha256: 0d0fc55ef8b1ff4756a9dff49527b2d43a72d41c8e8525b006b89da49bf8bfe8
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.30
+version: 2.51.31
 last_verified: 2026-10-04
 ---
 
 # Estado atual do Prisma
+
+## Síntese profissional v2.0.5
+
+Implementada e validada localmente: síntese persistida por Perfil/base, oito eixos profundos fixos, relato/interpretação/lacunas separados, referências com fontes sob demanda, resumo original preservado. Worker independente na VPS, sem service_role; fila/lease/retries limitados, estados explícitos e publicação humana não bloqueada. PostgreSQL local: isolamento de empresas, auth/role inativa/anon, idempotência, stale base, resposta inválida e fonte tardia PASS. Benchmark sintético OpenAI gpt-5.6-luna: três casos, 7–14s, 2933/2956 tokens input/output; sem invenção de atribuições no caso pobre e sem obedecer injeção. UI 1416/390, seis estados, sem overflow e sem IA por visita. Produção ainda pendente de publicação do SHA validado. Contrato/ADR/owner: `docs/qa/agreement-profile-synthesis-v205.md`, `docs/decisions/ADR-076-profile-synthesis.md`, `docs/ai/profile-synthesis.md`; evidência `docs/qa/aot-profile-synthesis-v205.md`. Amostra sintética não prova qualidade universal ou jornada de Pessoa real.
 
 Complemento v2.0.4 publicado no SHA funcional `bd52c1af99a1f0f201d250f19770355c93e114eb`: Classificação válida pelo sistema dispensa clique e difere de Confirmada por você. Aceitação explícita preservada é reutilizada somente com curso/classificação/fontes/método vigente conhecido iguais ao snapshot válido, sem desconhecidos; alteração do período não retira essa aceitação. Inferência, incompatibilidade, método legado/desconhecido, snapshot ausente ou mudança da classificação exigem revisão. Normalização/preflight/save/compare sincronizam reviewed sem decisão humana inventada nem alteração transitória falsa; formulário vazio permanece protegido. 70 testes dirigidos/256 person-flow, 29 verificações de render por viewport 1416/390, tipos/build/contextos/lint e CI branch/main PASS. Somente web publicada: imagem 66503ec, entry `/assets/index-S0Dgydwu.js`, versão/HTTPS/assets novos/anteriores/rollback conferidos; Parser/gateway preservados. Banco/matching inalterados. Jornada autenticada de Pessoa real NOT TESTED. Evidência final: `docs/qa/aot-education-confirmation-visual.md`.
 
@@ -4125,6 +4129,10 @@ Enviar somente campos mínimos. Documentar região, retenção, treinamento, sub
 
 A política geral de custo versus capacidade deve ser revalidada no catálogo oficial do fornecedor. Para OpenAI, consultar `https://developers.openai.com/api/docs/models` no momento da seleção; esse link não aprova um modelo para o Prisma.
 
+## Profile synthesis v2.0.5
+
+Função lógica Profile synthesis: OpenAI `gpt-5.6-luna`, reasoning low, contrato `profile-synthesis-1.0.0`, sem fallback. Reaproveitamento condicionado ao benchmark sintético detalhado/pobre/injeção (três chamadas, 7–14s), conferido antes da ativação. Não substitui Extraction, Matching ou humano. Schema/proveniência, limites e reavaliação em `profile-synthesis.md`.
+
 ---
 
 ## Source: `docs/ai/parser-ia.md`
@@ -4321,6 +4329,28 @@ Patch corrige representação sem alterar semântica. Minor adiciona campo opcio
 ## Evidência de validação
 
 Os golden tests revelaram e corrigiram flexão verbal em "analisou dados" e o cabeçalho inglês "Experience". O contrato foi mantido; o parser foi ampliado. Dados reais ainda não validaram este schema.
+
+---
+
+## Source: `docs/ai/profile-synthesis.md`
+
+# Síntese profissional do Perfil
+
+Produto v2.0.5. Acordo `docs/qa/agreement-profile-synthesis-v205.md` v1.0.0; ADR-076. Contrato `profile-synthesis-1.0.0`, prompt `profile-synthesis-prompt-1.0.0`. As oito perguntas profundas e o schema fechado pertencem a `src/domain/profileSynthesis.ts`, não ao modelo.
+
+Trajetória, contribuições, contextos/autonomia, competências em contexto, resultados, formação/aplicação, direção e investigação complementar são sempre respondidos na mesma ordem. Até 120 palavras na síntese/por eixo e três perguntas contextuais. Texto proporcional: lacunas explícitas não viram fatos nem avaliações negativas. Resumo original permanece no Perfil completo. Afirmações distinguem relato publicado de interpretação, com refs de fonte obrigatórias. `published_fact` significa informação publicada, sem verificação externa. Apenas fonte elegível pelo contrato vigente de Assessment autoriza mencionar verificação. Sem personalidade, senioridade, proficiência, score, ranking ou contratação inferidos.
+
+Base: campos profissionais do Perfil publicado, vínculos contextuais/certificados autorizados quando instalados e Assessment ativo/suficiente/não expirado. Identidade e contatos ficam fora da seleção; o worker remove contatos/identificadores incidentais. Seções livres só entram com título profissional reconhecido (projetos, publicações, pesquisa, voluntariado, produção, portfólio, premiações/realizações profissionais). Seções não reconhecidas são excluídas para minimizar dados, sem inventar seu significado. Currículo PDF, respostas de Assessment e dados privados desnecessários não são enviados. IA recebe ID/texto/natureza, sem Web ou ferramentas. Fonte conserva snapshot/proveniência no banco; corpo do trecho é carregado apenas ao clicar.
+
+Responses API, schema estrito, `store:false`, modelo reutilizado `gpt-5.6-luna`, reasoning low, máximo6000 tokens, input48KB/240 fontes. Sem fallback silencioso. [Documentação oficial](https://developers.openai.com/api/docs/guides/migrate-to-responses). `store:false` não equivale a promessa de zero retenção do fornecedor. Estrutura/refs válidas não provam a verdade do conteúdo.
+
+Benchmark inicial, três chamadas sintéticas: currículo detalhado/pobre/injeção, 7–14s, 2933 tokens de entrada/2956 de saída no total. Conferência qualitativa: atividades/Excel ancorados; nenhum preenchimento por cargo no caso pobre; injeção não produziu gerente, verificação ou ganho de80%. Amostra pequena não estabelece qualidade universal, fairness ou comportamento de Pessoa real. Valores financeiros seguem a conta/projeto existente; não foi criada franquia paralela. Mudança de prompt/modelo exige reavaliar antes de ativar.
+
+Publicação enfileira; worker independente processa fora da transação, sem bloquear publicação humana. Histórico sem análise é solicitado na primeira abertura, sem backfill em massa. Chave tenant/Perfil/hash das fontes/contrato/prompt/modelo guarda um resultado aceito. Visita, aba e rascunho não chamam IA. Evidência nova/invalidação enfileira nova base para Perfil já analisado; expiração é percebida na consulta. Base anterior fica identificada durante atualização; resultado que chega com base alterada é obsoleto. Histórico não é sobrescrito. Contato não muda o hash.
+
+Resultados/jobs/tentativas são tabelas distintas, com RLS, RPCs autenticadas por tenant e credencial restrita de worker. Lease3min, SKIP LOCKED, três tentativas por base, retry espaçado só para indisponibilidade/rate limit. Sem fonte suficiente: zero IA. Exclusão da Pessoa/Perfil remove registros derivados por FK cascade. Não se promete cobrança externa exatamente uma vez diante de pane/retry.
+
+Consultas comuns recebem JSON compacto e metadados das fontes; clique carrega trecho do snapshot autorizado, com cache apenas durante a tela. Worker inicial único, seleção pela empresa menos recentemente atendida e índices; aumentar consumidores exige medição, não novo broker. Métricas de duração/tokens/modelo/falha não incluem PII integral.
 
 ---
 
@@ -5612,6 +5642,10 @@ O M5.1B avança o plano para 0.3.0 e introduz os contratos executáveis `assessm
 Correção do login (2026-09-12): o registro inclui o M5.7 aceito; contador e displayVersion são derivados, e o build deixa de aparecer no rodapé. Regressão verifica incremento por entrega, reinício por movimento e rejeição de registros incompletos/duplicados. Gate local pnpm run validate aprovado: 394 testes técnicos e 19 golden, tipos, build, lint, foundation e Context Pack. Sem alteração de Auth, Supabase ou contratos persistidos.
 
 A base transversal de UX de 2026-09-13 introduz `prisma-ux-foundation-1.0.0` (ADR-050). Ela versiona apresentação, linguagem e continuidade de navegação. Posições substitui Vagas apenas na interface; contratos de domínio, URLs e estruturas persistidas mantêm versões e significados. A versão pública permanece v1.5.11: este movimento não adiciona automaticamente uma entrega aceita ao registro de releases. Evidência e escopo em `docs/qa/aot-ux-foundation.md`.
+
+## Síntese do Perfil v2.0.5
+
+`profile-synthesis-1.0.0` / `profile-synthesis-prompt-1.0.0`: oito eixos fixos, JSONB com natureza e fontes, separado dos fatos publicados. Chave de geração combina tenant, Perfil, hash da base, contrato, prompt e modelo. Trocas criam chave nova sob decisão/benchmark, sem backfill de histórico nem substituir o resumo original. `docs/ai/profile-synthesis.md` e ADR-076 definem persistência/limites.
 
 ---
 
@@ -9543,6 +9577,22 @@ Fontes oficiais consultadas em 03/10: [Compose secrets](https://docs.docker.com/
 
 ---
 
+## Source: `docs/decisions/ADR-076-profile-synthesis.md`
+
+# ADR-076 — Síntese derivada, persistida e assíncrona do Perfil
+
+Estado: aceito pela autorização de Bruno em 04/10/2026; acordo `../qa/agreement-profile-synthesis-v205.md` 1.0.0.
+
+Reutilizar PostgreSQL/Supabase para fila/resultados/tentativas e o padrão de lease/skip locked da normalização. Worker Node privado independente na VPS existente: não disputa o lock do Parser, não depende do PC e não tem porta pública. Reaproveitar Responses/Structured Outputs/provider aprovado; sem nova dependência. Dados publicados minimizados e fontes por ID, resultado separado dos fatos e por tenant/versão/base. Falha da análise nunca impede publicação ou leitura dos fatos.
+
+Worker acessa exclusivamente RPCs limitadas por token aleatório server-only, validado por hash privado no banco; sem service role na VPS e sem credencial no navegador. Arquivo secreto protegido no host, volume read-only, hash de registro configurado administrativamente. A chave publishable não autoriza sozinha essas RPCs. Rotação substitui registro e arquivo, testes negativos obrigatórios. Leitura humana reutiliza autorização de Perfil e RPC tenant-scoped. Não armazenar tokens/prompts integrais nos resultados.
+
+Alternativas: síncrono por visita desperdiça custo/latência; alterar o Parser mistura extração e análise e cria disputa de capacidade; broker externo introduz operação desnecessária antes de medir gargalo. PostgreSQL já fornece o padrão necessário. Escalar consumidores após medir fila/provider/DB; não declarar capacidade ilimitada. Uma resposta aceita por chave, não promessa de exatamente uma cobrança externa após falhas.
+
+Rollback: desativar worker e recurso de síntese; manter Perfil/resumo original e tabelas/histórico protegidos. Migrations aditivas, exclusão segue a Pessoa; jobs obsoletos não sobrescrevem base nova. Sem backfill automático do acervo.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10342,6 +10392,22 @@ Se a conexão for pelo session pooler, informar `-DatabaseHost` com o host forne
 Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra o estado no instante do backup; sua marca `isolated-restore-pending` não é atualizada retroativamente. Em 2026-09-20, o `database.dump` foi restaurado com `pg_restore --clean --if-exists --exit-on-error` em PostgreSQL Supabase 17.6.1.155, sem porta exposta nem volume persistente. O contêiner precisou de `cron.database_name` apontado ao banco de teste, dos papéis locais sem login `supabase_realtime_admin` e `supabase_functions_admin`, e de `postgres` superusuário local para o gatilho de DDL do dump. A restauração terminou sem erro: `auth.users` 7, `people` 10, `resume_intakes` 15, `storage.buckets` 1 e `storage.objects` 15. Os 15 caminhos/tamanhos e os fingerprints de objetos e buckets coincidiram com o manifesto; os hashes dos bytes copiados passaram. Em uma rede Docker interna, PostgREST 14.15 e Storage API 1.71.0 receberam os 15 PDFs copiados pelo backup, com o MIME permitido pelo bucket; a leitura de volta pela API confirmou 2.118.277 bytes e SHA-256 de cada objeto. Ao fim, os contêineres e a rede foram removidos e a cópia privada original permaneceu intacta. Nunca testar restauração sobre produção.
 
 O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocorre depois. Suspender novas importações durante o corte da limpeza ou revalidar fingerprints imediatamente antes de excluir; nenhum backup manual substitui recuperação ponto a ponto. Para operação recorrente, agendar apenas após o primeiro backup e teste de restauração, com armazenamento seguro das credenciais no mesmo usuário que executará a tarefa e alerta para falhas. Ainda não há tarefa agendada, política de retenção nem cópia externa configuradas; essas decisões dependem do destino e da autenticação do operador.
+
+---
+
+## Source: `docs/operations/profile-synthesis.md`
+
+# Worker da síntese do Perfil
+
+Container `prisma-profile-synthesis`, Node22, sem porta pública/PC/túnel/broker/GPU. Compose dedicado `deploy/profile-synthesis.compose.yml`; release seletivo `bash deploy/release-profile-synthesis.sh <SHA validado>`. Web/migração independentes; Parser e gateway preservados. Health é conexão/fila, não prova conceitual de currículos reais.
+
+Segredo32bytes gerado na VPS, `/etc/prisma/profile-synthesis.env`, modo400 UID1000, mount read-only; banco guarda apenas SHA256 em `private.profile_synthesis_worker_config`. Contém URL/chave pública Supabase e segredo de worker. OpenAI reaproveita `/etc/prisma/parser-ia.env` read-only. Não há service_role no worker. Nunca imprimir segredo ou corpo de erro do provedor. Rotação substitui hash/arquivo administrativo e reinicia somente o worker.
+
+RPCs de processamento exigem token, job e lease reais; não oferecem SQL/acesso arbitrário. RPCs de usuário reutilizam leitor autorizado do Perfil por tenant; tabelas RLS com DML/SELECT direto revogados a anon/authenticated. Segredo em HTTPS POST, nunca URL/querystring. FS read-only, tmpfs8MB,192MB RAM/0.5CPU, capabilities removidas/no-new-privileges, logrotation. Logs só estado/duração/tokens/código fixo.
+
+Monitorar idade/estado da fila, tentativas/modelo/tokens, duração/falhas e health/restarts sem exportar textos/fontes/prompts. Três tentativas por base; resposta inválida/configuração não faz retry automático. Reconciliação de até dez novas publicações por rodada desde instalação, sem lote histórico. Falha de enqueue opcional não bloqueia auditoria/publicação. Eventos de evidências relevantes invalidam apenas Perfis já analisados.
+
+Rollback: parar somente o worker, restaurar web rollback e worker `rollback-before-<SHA12>` quando disponível. Preservar tabelas, credenciais e resultados; filas podem aguardar retomada. QA somente em PostgreSQL local descartável: `supabase/qa/profile_synthesis_verification.sql`, rollback. Não executar fixture em produção nem replay do ledger. Bootstrap do hash administrativo não contém dado de Pessoa. Evidência em `docs/qa/aot-profile-synthesis-v205.md`.
 
 ---
 
@@ -14450,6 +14516,57 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 
 ---
 
+## Source: `docs/qa/agreement-profile-synthesis-v205.md`
+
+# Acordo — Síntese do Perfil v2.0.5
+
+Versão 1.0.0, agreed, 2026-10-04. Autoridade: Bruno aprovou perguntas aprofundadas, constância, telas 1 + 3, geração persistida assíncrona e autorizou implementar/publicar v2.0.5. Baseline main/origin/VPS `6c5bf38051e29afe4e3fec209a0077d4274e81d8`. Risco E: novo resultado derivado, worker e limite de confiança; D: dados/tenant/auth/IA. Este acordo incorpora o prompt de execução integral.
+
+## DEVE — Inegociável
+
+- D-01: oito eixos fixos, nessa ordem: trajetória; atividades/contribuição; contextos/responsabilidade/autonomia; competências em contexto; resultados; formação/aplicação; direção profissional; investigação complementar. Perguntas aprofundadas e títulos ficam no contrato, não sob autoridade do modelo. Resposta por eixo distingue registrado, interpretação e lacunas. Síntese até 120 palavras, respostas proporcionais até 120 palavras/eixo, até três perguntas complementares. Informação prevalece sobre questionário, sem preencher lacunas artificialmente.
+- D-02: contrato `profile-synthesis-1.0.0`, schema estrito, fontes por afirmação, versões de prompt/modelo/base/hash. Validar oito eixos, refs, limites, rejeição/incompleto, informação mínima e textos não confiáveis. Sem conteúdo suficiente: mensagem determinística e zero IA. Não apresentar afirmação de verificação sem fonte verificada.
+- D-03: fonte é Perfil publicado e evidências autorizadas, excluindo identidade/contato desnecessários. Resumo extraído/humano permanece separado e intacto. Snapshot/base versionado; mudanças profissionais/evidências relevantes invalidam base, visita/rascunho/aba não. Histórico preserva análise própria. Fontes são resolvidas pelo servidor e carregadas sob demanda.
+- D-04: PostgreSQL/Supabase: resultados, jobs e tentativas separados, JSONB compacto, índices, organização em TS/SQL e RLS/RPC/grants. Chave idempotente por tenant/Pessoa/Perfil/base/contrato/prompt/modelo. Geração após publicação, assíncrona, sem bloquear publicação humana; Perfis antigos somente na primeira consulta. Evento/fila/reconciliação durável; nenhuma chamada IA em transação SQL. Fonte nova relevante provoca nova revisão da síntese sem reescrever anterior.
+- D-05: worker independente na VPS existente, sem PC/túnel, fila reutiliza lease/skip locked, concorrência inicialmente limitada, retries limitados/espaçados, métricas de duração/tokens/modelo/falha sem PII integral. Credencial de worker server-only com autoridade restrita a RPCs de processamento; não distribuir service role. Modelo aprovado já usado no Parser é candidato de reaproveitamento, ativação condicionada a benchmark sintético de qualidade/custo. Nenhum novo fornecedor/GPU/broker/limite financeiro paralelo.
+- D-UX-01: referência 1 normativa para entrada: cabeçalho/abas existentes; principal ~70% com narrativa, três contextos compactos e sustentação; lateral ~30% com proveniência e pontos a esclarecer. Ações/fontes no local da referência. Referência 3 normativa para fonte aberta: principal texto/afirmações ~60%, fonte selecionada ~40%, destaque correspondente e acesso ao documento. Navegação global/logos inventados pelo gerador são ilustrativos, preservar shell real do Prisma. Dados Marina Costa são sintéticos. Mobile empilha conteúdo/fonte, sem overflow; perguntas completas em disclosure. Resumo original acessível separado. Estados preparando/sem informação/falha/base anterior identificados, sem confirmação humana redundante.
+- D-06: contratos owner/ADR/Context Pack/AoT, release seletivo com v2.0.5 em main/origin/VPS. Testes dirigidos, SQL QA descartável, negativos auth/tenant/lease/replay/exclusão, fixtures ricos/pobres/injeção, benchmark sem Pessoa real e comparação visual 1416/390 mesmos dados/estados. Smoke/runtime/rollback. Não confundir sintético com jornada autenticada real.
+
+## PROIBIDO
+
+- P-01: inventar fatos, números, datas, personalidade, proficiência, senioridade, contratação/ranking/confiança; ocupação típica não vira evidência pessoal. Não substituir fontes por inferência.
+- P-02: IA alterar fatos/Knowledge, publicar Pessoa ou decidir confirmação humana. Não publicar Perfil real para testar; não incluir PII integral/secrets em logs/cache público; não atravessar tenant.
+- P-03: gerar em cada abertura, repetir chamadas ilimitadamente, reprocessar histórico/massa por troca de prompt/modelo, bloquear operador por falha opcional da análise ou mudar Parser/matching.
+
+## FORA DE ESCOPO
+
+- F-01: parser/importação, matching, Knowledge/assessment como domínio, novos dados de entrevista, backfill em massa, novos fornecedores e alterações de fatos históricos. Síntese usa somente fontes realmente existentes.
+
+## AUTONOMIA DE ENGENHARIA
+
+- A-01: reutilizar cliente/provider/fila/validadores, nomes de arquivos/RPCs, tokens acessíveis, índices e credencial limitada; ajustar limites operacionais via benchmark sem alterar perguntas/produto. Segurança/retentativa/exclusão e versionamento fazem parte do escopo.
+
+## PENDÊNCIAS
+
+- Q-01: nenhuma decisão de produto pendente. Capacidade/latência/custo devem ser medidos; não prometer cobrança externa exatamente uma vez. Registra-se um resultado aceito por chave, tentativas externas são auditadas.
+
+## CRITÉRIOS DE ACEITE / Mapa de Impacto
+
+| IDs / capacidade | Relação | Baseline / prova proporcional |
+| --- | --- | --- |
+| D-01/02, perguntas/IA | direct | baseline sem síntese gerada; schema/8 IDs/negativos/fixtures/benchmark real sintético |
+| D-03/04, dados/versões | direct | Perfil canônico publicado e evidências existentes; imutabilidade, hash, leitura histórico, fontes tardias/exclusão |
+| D-04/05, auth/tenant/job | critical_transversal | base sem worker de síntese; SQL local roles/auth/tenant/token/lease/duplicidade/retry/concurrency |
+| D-UX-01, Resumo/fontes | direct | referências PNG 1/3; render mesmas fixtures 1416/390, preservar cabeçalho/abas/competências/evidências |
+| Parser/publicação/matching | plausible_indirect | publicação independente da análise; person-flow e checker de módulos matching, imagens runtime preservadas |
+| D-06, release/docs | direct | v2.0.4 e SHA 6c5bf38; tipos/build/contextos/CI/plan/migrations/web/worker/smoke/rollback |
+
+## Prompt de execução congelado
+
+Implementar integralmente D-01 a D-06 e D-UX-01, sob P-01 a P-03 e F-01, com A-01. Critérios da tabela são mínimos. Referências `docs/qa/references/profile-synthesis-01.png` e `profile-synthesis-03.png`, geradas nesta conversa e escolhidas pelo PO, são normativas para composição de conteúdo conforme D-UX-01. AoT tem PASS somente com evidência; limitações reais permanecem explícitas.
+
+---
+
 ## Source: `docs/qa/agreement-release-efficiency.md`
 
 # Contrato de Acordos — Publicação eficiente por impacto
@@ -18336,6 +18453,57 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 | `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
 
 A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
+
+---
+
+## Source: `docs/qa/aot-profile-synthesis-v205.md`
+
+# AoT — Síntese profissional v2.0.5
+
+Acordo integral: `agreement-profile-synthesis-v205.md` v1.0.0, incluindo prompt e referências1/3. Baseline main/origin/VPS `6c5bf38051e29afe4e3fec209a0077d4274e81d8`, web66503ec, Parser8682af7, gatewayd061cea. Risco E/D. Autorização explícita de Bruno para implementar/publicar v2.0.5 e autorização permanente AGENTS seção7.
+
+## Acordos -> implementação -> testes -> evidência
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Oito perguntas profundas fixas, schema, limites/naturezas | Contrato/fixtures/benchmark rich/sparse; `evidence/profile-synthesis/benchmark-*.json` | PASS |
+| D-02 | Leitores TS e validatorSQL; fonte por afirmação; vazio=zeroIA | 20 testes worker/contrato; SQL rejeita missing/null/refs inventadas/replay; benchmark injeção | PASS |
+| D-03 | Base/hash/snapshot/versão; resumo original; fonte sob demanda | SQL stale base + snapshot anterior + fonte autorizada; UI não faz eager fetch; identidade/contato omitidos | PASS |
+| D-04 | Três tabelas/RLS/tenant/RPC, audit optional, lease/retry | Migração inteira aplicada novamente em transação QA, fixture rollback: auth/outsider/inativo/anon, duplicidade, fila vazia, falha optional/audit, lease, retry, exclusão | PASS |
+| D-05 | Worker independente sem service_role; hash privado/segredoVPS; Responses | HTTP fake claim/provider/complete, bounded attempts, benchmark três chamadas, registry; runtime aguarda publicação | PARTIAL |
+| D-UX-01 | Narrativa70/30, cartões contextuais, fonte60/40, disclosure/mobile | Seis estados x1416/390, fontes após clique/8 eixos/no overflow; renders no caminho abaixo | PASS |
+| D-06 | v2.0.5, docs/ADR/contexto/release seletivo | Tipos/build/localQA dirigidos; CI/main/VPS/health/smoke pendentes | PARTIAL |
+
+## Proibições
+
+| ID | Evidência | Status |
+| --- | --- | --- |
+| P-01 | Rich/sparse/injection conferidos: sem score, contratação, personalidade, senioridade ou fato típico inventado; schema rejeita campo extra e verificação sem fonte | PASS |
+| P-02 | Resultado separado do Perfil; nenhum write de fatos/Knowledge pelo worker; SQL tenant/role/exclusão; não houve publicação de Pessoa real de teste; segredo só na VPS, sem logging de corpo de erro | PASS |
+| P-03 | Queue idempotente +3 tentativas; leitura/aba/rascunho fora do provider; Parser/matching sem mudança; falha opcional não bloqueia audit | PASS |
+| F-01 | Parser/matching/Knowledge/Assessment como domínios preservados; só leitura elegível de evidências existentes | PASS |
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline / regressão | Status |
+| --- | --- | --- | --- |
+| Síntese/IA/tela/dados | direct | Baseline sem sínteseIA; schema/worker/SQL/benchmark/renders | PASS local |
+| Auth/tenant/persistência | critical_transversal | Leitor M72 reutilizado; roles negativas, fonte de outro tenant, grants, token/lease/replay, cascade no banco real local | PASS local |
+| Publicação humana/resumo canônico | plausible_indirect | Eventos audit existentes; enqueue malformado não interrompe audit; person-flow proporcional | PASS local |
+| Parser/matching | plausible_indirect | Nenhum arquivo funcional alterado; checker matching e imagens runtime na publicação | em validação |
+| Release/docs | direct | Tipos/build/docs/Context Pack; publicação seletiva/migração/worker/web | em validação |
+
+## Evidência visual
+
+Renders: `evidence/profile-synthesis/summary-1416.png`, `source-1416.png`, `summary-390.png`, `source-390.png`; demais estados/relatórios na mesma pasta. Referências: `references/profile-synthesis-01.png` e `profile-synthesis-03.png`.
+
+Comparação manual: hierarquia narrativa antes das perguntas, principal70%/lateral30%, três contextos agrupados dentro da síntese, sustentação abaixo, perguntas na lateral; fonte aberta principal60%/fonte40%, afirmação selecionada azul, trecho com destaque e ação de origem quando documento existe. Mobile empilha, cabeçalho adapta e abas continuam roláveis sem overflow global. Textos/pessoas/contagens são ilustrativos. Preservar shell/componentes/tokens reais, conforme exceção explícita D-UX-01; não copiar navegação/logos inventados pelo gerador. Fonte é o snapshot do campo publicado, sem inventar coordenadas do PDF. Nenhum desvio material de composição identificado.
+
+## Limites e evidência nova/preservação
+
+Benchmark: 13.817/7.127/8.189ms; 1041/920/972 tokens de entrada; 1376/740/840 de saída. Schema/refs e revisão qualitativa local não estabelecem qualidade universal nem fairness. Nenhuma Pessoa real publicada/alterada para testar; jornada autenticada de Pessoa real NOT TESTED. Auth/RLS foram executados em PostgreSQL local, não apenas mocks. Health e smoke público não equivalem a leitura autenticada real. Relação opcional de vínculos exige tabela instalada; produção foi verificada somente por schema, sem exportar dados humanos.
+
+Desvios do contrato: nenhum desvio material identificado no escopo local validado. Produção permanece pendente, sem declarar entrega concluída antes de CI/runtime/smoke/sincronização.
 
 ---
 

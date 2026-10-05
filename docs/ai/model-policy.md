@@ -62,3 +62,7 @@ Enviar somente campos mínimos. Documentar região, retenção, treinamento, sub
 ## Referências oficiais
 
 A política geral de custo versus capacidade deve ser revalidada no catálogo oficial do fornecedor. Para OpenAI, consultar `https://developers.openai.com/api/docs/models` no momento da seleção; esse link não aprova um modelo para o Prisma.
+
+## Profile synthesis v2.0.5
+
+Função lógica Profile synthesis: OpenAI `gpt-5.6-luna`, reasoning low, contrato `profile-synthesis-1.0.0`, sem fallback. Reaproveitamento condicionado ao benchmark sintético detalhado/pobre/injeção (três chamadas, 7–14s), conferido antes da ativação. Não substitui Extraction, Matching ou humano. Schema/proveniência, limites e reavaliação em `profile-synthesis.md`.

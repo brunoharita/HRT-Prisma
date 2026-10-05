@@ -1,0 +1,159 @@
+{
+  "result": {
+    "contractVersion": "profile-synthesis-1.0.0",
+    "overview": [
+      {
+        "text": "O registro informa experiência como auxiliar administrativo e objetivo de buscar oportunidade na área administrativa.",
+        "nature": "published_fact",
+        "sourceIds": [
+          "experience.finance.role",
+          "objective"
+        ]
+      }
+    ],
+    "answers": [
+      {
+        "questionId": "trajectory",
+        "status": "partial",
+        "statements": [
+          {
+            "text": "Há registro de atuação como auxiliar administrativo, mas não foram informados período, sequência de experiências ou mudanças de responsabilidade.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "experience.finance.role"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Período e duração da atuação.",
+          "Experiências anteriores ou posteriores e eventuais transições de função."
+        ]
+      },
+      {
+        "questionId": "activities",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Processos, entregas ou problemas tratados.",
+          "Público ou áreas atendidas.",
+          "Participação individual nas atividades."
+        ]
+      },
+      {
+        "questionId": "contexts",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Contexto organizacional da atuação.",
+          "Ações que permitam distinguir execução, apoio, decisão, coordenação ou gestão.",
+          "Escopo de responsabilidade além do título informado."
+        ]
+      },
+      {
+        "questionId": "competencies",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Conhecimentos e ferramentas utilizados.",
+          "Situações concretas de aplicação.",
+          "Nível de autonomia ou complexidade das atividades."
+        ]
+      },
+      {
+        "questionId": "results",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Entregas ou resultados relatados.",
+          "Distinção entre contribuição individual e coletiva.",
+          "Indicadores, efeitos ou evidências de impacto."
+        ]
+      },
+      {
+        "questionId": "education",
+        "status": "insufficient",
+        "statements": [],
+        "missingInformation": [
+          "Formação, cursos ou certificações.",
+          "Relação entre a formação e as atividades administrativas.",
+          "Evidências de aplicação prática."
+        ]
+      },
+      {
+        "questionId": "objective",
+        "status": "answered",
+        "statements": [
+          {
+            "text": "Foi declarado o objetivo de buscar oportunidade na área administrativa.",
+            "nature": "published_fact",
+            "sourceIds": [
+              "objective"
+            ]
+          },
+          {
+            "text": "O objetivo se relaciona diretamente ao registro de atuação como auxiliar administrativo, embora não haja detalhes para esclarecer a continuidade ou o direcionamento pretendido.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.role",
+              "objective"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Tipo de atividade ou contexto administrativo pretendido.",
+          "Motivação e próximos passos associados ao objetivo."
+        ]
+      },
+      {
+        "questionId": "clarifications",
+        "status": "partial",
+        "statements": [
+          {
+            "text": "O registro da função de auxiliar administrativo motiva esclarecer quais atividades foram realizadas e quais entregas resultaram dessa atuação.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "experience.finance.role"
+            ]
+          },
+          {
+            "text": "O objetivo declarado motiva esclarecer que tipo de oportunidade administrativa é buscado e quais experiências pretende aprofundar.",
+            "nature": "interpretation",
+            "sourceIds": [
+              "objective"
+            ]
+          }
+        ],
+        "missingInformation": [
+          "Não foram informados detalhes adicionais para formular outras clarificações específicas."
+        ]
+      }
+    ],
+    "clarifications": [
+      {
+        "text": "Quais eram as principais atividades e entregas realizadas como auxiliar administrativo, para quais áreas ou públicos, e por quanto tempo? Isso ajudaria a compreender o escopo e a continuidade da experiência.",
+        "questionId": "activities",
+        "sourceIds": [
+          "experience.finance.role"
+        ]
+      },
+      {
+        "text": "Quais ferramentas, conhecimentos ou procedimentos administrativos eram utilizados nessa função e em quais situações? Isso ajudaria a relacionar competências a atividades concretas.",
+        "questionId": "competencies",
+        "sourceIds": [
+          "experience.finance.role"
+        ]
+      },
+      {
+        "text": "Que tipo de oportunidade na área administrativa é buscado e como essa experiência anterior se conecta ao objetivo? Isso ajudaria a esclarecer o direcionamento pretendido.",
+        "questionId": "objective",
+        "sourceIds": [
+          "objective",
+          "experience.finance.role"
+        ]
+      }
+    ]
+  },
+  "model": "gpt-5.6-luna",
+  "inputTokens": 920,
+  "outputTokens": 740
+}
