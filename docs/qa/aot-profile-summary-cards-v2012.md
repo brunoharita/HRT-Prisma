@@ -12,7 +12,7 @@ Contrato: `docs/qa/agreement-profile-summary-cards-v2012.md` v1.0.0 congelado, a
 | D-POS-01 | Andamento/recência, empates, anterior só sem sobreposição | Testes dois ativos, ordem invertida, sobreposição, período desconhecido; UI atual/anterior/empresa/período | PASS | Não verifica vínculo atual externamente |
 | D-EDU-01 | Nível concluído seguro, empates e organizações | Testes inferida/humana/qualificação desconhecida/MBA/especialização/clientes; UI instituições/empresas | PASS | Fonte é Perfil aprovado |
 | D-KEEP-01 | Conteúdo completo, fontes/cache/snapshot, fallback e falha local | 16 reports UI em1448/390: executive/source/failed/render/source-switch/refresh/multiple-errors/long-content; 40 testes contrato/síntese | PASS | Sem provider real; erro de render injetado apenas no servidor sintético |
-| D-REL-01 | Registry2.0.12, skips7/11, main/web/CI/smoke | 5 registry, tipos/build/contextos/lint/foundation PASS; entrega operacional pendente | PARTIAL | Atualizar após publicação |
+| D-REL-01 | Registry2.0.12, skips7/11, main/web/CI/smoke | 5 registry, tipos/build/contextos/lint/foundation PASS; CI branch/main success, web/SHA/versão/11HTTP200 e rollback | PASS | Atualizar após publicação |
 
 ## Proibições verificadas
 
@@ -29,8 +29,8 @@ Contrato: `docs/qa/agreement-profile-summary-cards-v2012.md` v1.0.0 congelado, a
 | Datas/área/formação / direct | parseResumePeriod/classificação existentes |10testes dirigidos, negativos/dedupe/union/unknown | PASS |
 | Fontes/cache/snapshot/fallback / plausible_indirect | Consulta lazy2.0.8 |source-switch/refresh/long-content/failed/render, providers0 e cache/foco preservados | PASS |
 | Perfil/leitura/abas / critical_transversal | Modelo aprovado já carregado e autorizado | Tipos/build, header/nav preservados, onOriginal funcional, nenhum fetch/auth novo | PASS |
-| Matching/schema/IA/Parser/worker / no_impact_identified | Fora do diff funcional | Helpers isolados; contratos persistidos intactos; estado VPS após release pendente | PARTIAL |
-| Registry/login/sidebar/web / direct |2.0.10/entryDxCL2PFY |5testes, única entrega12 com skips; CI/runtime/smoke pendentes | PARTIAL |
+| Matching/schema/IA/Parser/worker / no_impact_identified | Fora do diff funcional | Helpers isolados; contratos persistidos intactos; imagens/saúde/restarts dos serviços exatamente iguais após release | PASS |
+| Registry/login/sidebar/web / direct |2.0.10/entryDxCL2PFY |5testes, única entrega12 com skips; CI branch/main completed/success, bundle/SHA/versão/HTTP200 e rollback | PASS |
 
 Novidade: painel executivo enriquecido. Preservação: conteúdo integral, consulta leve, fonte lazy, erro parcial/fallback, autoridade e cache. Nenhuma relação material acrescentada ao mapa. Limites de baseline: não existe prova de qualidade universal/Person real autenticada; não se declara tal capacidade PASS. Nenhuma nova biblioteca.
 
@@ -52,9 +52,12 @@ Nenhum desvio do comportamento acordado identificado na revisão. Escolha conser
 
 ## Git / produção
 
-Pendente CI branch/main, plano seletivo, publicação web, smoke e sincronização. Não declarar operação concluída antes da evidência.
+SHA funcional7db478fd59053972e09ad008b7d981e1a1083398 promovido por fast-forward em main/origin/VPS. CI branch37505440790 e main37505685603 completed/success, workflow obrigatório preservado. Plano1.0.3 de26arquivos exige somente web; nenhuma migration/Edge/Parser/síntese. Dry-run com expectedSHA comprovou o plano e o comando existente release-web.sh executou a superfície autorizada.
+
+Web793e7465 running0, entryindex-7QXHjNYA.js, 11verificações HTTP200 e8checks do bundle (SHA/versão/cards/posição/área/formação/fontes/vínculo múltiplo). Primeiro HEAD404 coincidiu com a recriação e estabilizou sem novo build. O teste público inicial tentou procurar uma constante exportada mas removida por tree-shaking; assertion corrigida para o componente presente, nenhuma mudança funcional nem rebuild. Rollback prisma-web:rollback-before-7db478fd5905 preserva imagem24f90176. Assets antigosDxCL2PFY disponíveis.
+
+Worker8526717f e Parser8682af7d healthy0, gatewayd061cea3 running0, exatamente as mesmas imagens/restarts do baseline. Nenhuma chamada de IA nem mutação real usada na validação. Evidências sanitizadas public-smoke.json, release-receipt.json, production-baseline.txt e production-runtime.txt. Fechamento documental/contextos sincronizado sem reconstruir aplicação. Arquivos não relacionados e models/ não rastreado na VPS preservados. Dois finais de arquivo normalizados no fechamento (AoT e harness, sem mudança lógica); git diff --check sem resíduo.
 
 ## Conclusão
 
-Implementação e preservação local verificadas. Fechamento operacional em andamento.
-
+Todos os D e P aplicáveis PASS nas evidências declaradas. Prisma2.0.12 publicado na web, quatro cards completos e preservação comprovada. Não se afirma jornada autenticada de Pessoa real, verificação externa de emprego, taxonomia universal ou qualidade universal de IA.

@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-06T17:46:01.036Z",
+  "sha": "7db478fd59053972e09ad008b7d981e1a1083398",
+  "entry": "/assets/index-7QXHjNYA.js",
+  "checks": {
+    "deployedSha": true,
+    "release": true,
+    "highlightsComponent": true,
+    "enrichedPosition": true,
+    "areaDuration": true,
+    "formation": true,
+    "sourcesOnDemand": true,
+    "batchPreserved": true
+  },
+  "http": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "path": "/people",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-7QXHjNYA.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-DHbX9DCK.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DWUcWmLT.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DxCL2PFY.js",
+      "status": 200
+    }
+  ],
+  "pass": true,
+  "limitation": "Public smoke, no authenticated real-Person mutation or AI call."
+}

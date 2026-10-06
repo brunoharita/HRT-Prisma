@@ -1,0 +1,31 @@
+{
+  "sha": "7db478fd59053972e09ad008b7d981e1a1083398",
+  "branchCi": {
+    "run": 37505440790,
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "mainCi": {
+    "run": 37505685603,
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "web": {
+    "entry": "/assets/index-7QXHjNYA.js",
+    "image": "sha256:793e7465570d88a2f08d555c1e0e6f4e46e8ad3fbb8bec8d1f7b544300058dbc",
+    "status": "running",
+    "restarts": 0
+  },
+  "rollback": {
+    "tag": "prisma-web:rollback-before-7db478fd5905",
+    "image": "sha256:24f9017604034ec26e25a5764d3e38597e856a19842fd433e268cf2993464554"
+  },
+  "protectedServicesPreserved": true,
+  "database": "SKIPPED",
+  "edge": "SKIPPED",
+  "parserIa": "SKIPPED",
+  "profileSynthesis": "SKIPPED",
+  "publicSmoke": "PASS",
+  "realPersonMutation": "NOT TESTED",
+  "providerCalls": 0
+}

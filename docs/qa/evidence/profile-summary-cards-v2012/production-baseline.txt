@@ -1,0 +1,4 @@
+/prisma-web sha256:24f9017604034ec26e25a5764d3e38597e856a19842fd433e268cf2993464554 running  0
+/prisma-profile-synthesis sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5 running healthy 0
+/prisma-parser-ia sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616 running healthy 0
+/prisma-paddle-gateway sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99 running  0

@@ -1,0 +1,65 @@
+{
+  "version": "1.0.3",
+  "files": [
+    "FONTE_GPT_PRISMA.md",
+    "TUDO_SOBRE_PRISMA.md",
+    "docs/ai-context/PRISMA_CURRENT_STATE.md",
+    "docs/ai/profile-synthesis.md",
+    "docs/architecture/versioning.md",
+    "docs/product/ux-foundation.md",
+    "docs/qa/agreement-profile-summary-cards-v2012.md",
+    "docs/qa/aot-profile-summary-cards-v2012.md",
+    "docs/qa/evidence/profile-summary-cards-v2012/approved-reference.png",
+    "docs/qa/evidence/profile-summary-cards-v2012/cards-executive-1448-full.png",
+    "docs/qa/evidence/profile-summary-cards-v2012/cards-executive-1448.png",
+    "docs/qa/evidence/profile-summary-cards-v2012/cards-executive-390-full.png",
+    "docs/qa/evidence/profile-summary-cards-v2012/cards-executive-390.png",
+    "docs/qa/evidence/profile-summary-cards-v2012/cards-failed-1448.png",
+    "docs/qa/evidence/profile-summary-cards-v2012/cards-render-1448.png",
+    "docs/qa/evidence/profile-summary-cards-v2012/ui-results.json",
+    "scripts/render-profile-synthesis.mjs",
+    "tests/productRelease.test.ts",
+    "tests/profileHighlights.test.ts",
+    "tests/ui/profile-synthesis.vite.config.mts",
+    "tests/ui/profile-synthesis/main.tsx",
+    "web/src/components/profile/ProfileHighlightCards.tsx",
+    "web/src/components/profile/ProfileSynthesisSurface.tsx",
+    "web/src/config/releaseRegistry.ts",
+    "web/src/domain/profileHighlights.ts",
+    "web/src/styles.css"
+  ],
+  "impact": {
+    "surfaces": [
+      "context-pack",
+      "documentation",
+      "generated-context",
+      "hosting",
+      "tests",
+      "tooling",
+      "web"
+    ],
+    "edgeFunctions": [],
+    "migrations": [],
+    "modifiedMigrations": [],
+    "unknown": []
+  },
+  "validationCommands": [
+    "git diff --check",
+    "pnpm run test:release-tooling",
+    "pnpm run generate:prisma-context",
+    "pnpm run check:prisma-context",
+    "pnpm run typecheck:web",
+    "pnpm run build:web",
+    "pnpm run test"
+  ],
+  "deployments": {
+    "git": true,
+    "database": [],
+    "edgeFunctions": [],
+    "web": true,
+    "parserIa": false,
+    "profileSynthesis": false
+  },
+  "blockedReasons": [],
+  "publishable": true
+}
