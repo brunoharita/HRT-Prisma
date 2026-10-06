@@ -161,7 +161,7 @@ setTimeout(async()=>{
  }
  else if(scenario==='previous-failed'){check('previousPreserved',document.body.textContent!.includes('rotinas financeiras'));check('eightAxes',document.querySelectorAll('.prisma-synthesis-axes > *').length===8);}
  else check('stateExplicit',document.body.textContent!.includes('síntese anterior'));
- check('queueRequestMatchesState',requests===(['pending','query-only'].includes(scenario)?1:0));check('boundedReads',reads===(scenario==='query-only'?3:['refresh','retry'].includes(scenario)?2:1));check('noOverflow',document.documentElement.scrollWidth<=innerWidth);
+ check('queueRequestMatchesState',requests===(scenario==='query-only'?1:0));check('boundedReads',reads===(scenario==='query-only'?3:['refresh','retry'].includes(scenario)?2:1));check('noOverflow',document.documentElement.scrollWidth<=innerWidth);
  await fetch('/qa-synthesis-report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario,width:innerWidth,checks,pass:Object.values(checks).every(Boolean)})});
 window.__QA_SYNTHESIS_DONE=true;
 },800);

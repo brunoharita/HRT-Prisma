@@ -1,0 +1,285 @@
+[
+  {
+    "scenario": "reference",
+    "width": 2048,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "precisePendingDestination": true,
+      "responsiveHighlightColumns": true,
+      "readingRailRatio": true,
+      "narrowPendingBeforeReading": true,
+      "allNarrativeParagraphs": true,
+      "qualificationsPreserved": true,
+      "sourcesDoNotGenerate": true,
+      "sourceLazy": true,
+      "analysisPreservedWithSource": true,
+      "originalSummary": true,
+      "completeProfileRecords": true,
+      "documentContextPreserved": true,
+      "operationalAuditAccessible": true,
+      "reviewFieldContext": true,
+      "tabChangesDoNotGenerate": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "reference",
+    "width": 1024,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "precisePendingDestination": true,
+      "responsiveHighlightColumns": true,
+      "readingRailRatio": true,
+      "narrowPendingBeforeReading": true,
+      "allNarrativeParagraphs": true,
+      "qualificationsPreserved": true,
+      "sourcesDoNotGenerate": true,
+      "sourceLazy": true,
+      "analysisPreservedWithSource": true,
+      "originalSummary": true,
+      "completeProfileRecords": true,
+      "documentContextPreserved": true,
+      "operationalAuditAccessible": true,
+      "reviewFieldContext": true,
+      "tabChangesDoNotGenerate": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "reference",
+    "width": 390,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "precisePendingDestination": true,
+      "responsiveHighlightColumns": true,
+      "readingRailRatio": true,
+      "narrowPendingBeforeReading": true,
+      "allNarrativeParagraphs": true,
+      "qualificationsPreserved": true,
+      "sourcesDoNotGenerate": true,
+      "sourceLazy": true,
+      "analysisPreservedWithSource": true,
+      "originalSummary": true,
+      "completeProfileRecords": true,
+      "documentContextPreserved": true,
+      "operationalAuditAccessible": true,
+      "reviewFieldContext": true,
+      "tabChangesDoNotGenerate": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "long",
+    "width": 390,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "longTextComplete": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "member",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "noOperationalReads": true,
+      "noOperationalControls": true,
+      "noPrivateContact": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "recruiter",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "curationAuthorityPreserved": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "clean",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "noArtificialPending": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "operations-failure",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "profileSurvivesOperationsFailure": true,
+      "optionalFailureExplicit": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "analysis-failure",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "publishedFallback": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "document-failure",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "publishedProfileSurvivesDocumentFailure": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "not-requested",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "noAutomaticGeneration": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "no-profile",
+    "width": 390,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "honestEmptyState": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "source-failure",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "localizedSourceFailure": true,
+      "sanitizedFailure": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "archived",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "archivedOperationsDisabled": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "dirty",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "dirtyConfirmation": true,
+      "dirtyTextPreserved": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  }
+]

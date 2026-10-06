@@ -12,6 +12,7 @@ import {
 import { Button, Space, Tag, Typography } from "antd";
 import {
   EDUCATION_LEVEL_LABELS,
+  EDUCATION_ORIGIN_LABELS,
   EDUCATION_QUALIFICATION_LABELS,
   EDUCATION_STATUS_LABELS,
 } from "../../../../src/domain/educationClassification";
@@ -23,10 +24,11 @@ interface CanonicalProfileViewProps {
   compact?: boolean;
   showHeader?: boolean;
   showCompetencies?: boolean;
+  showEducationDetails?: boolean;
   onShowEvidence?: (section: "about" | "experience" | "education" | "competencies" | "credentials" | "other") => void;
 }
 
-export function CanonicalProfileView({ profile, compact = false, showHeader = true, showCompetencies = true, onShowEvidence }: CanonicalProfileViewProps) {
+export function CanonicalProfileView({ profile, compact = false, showHeader = true, showCompetencies = true, showEducationDetails = false, onShowEvidence }: CanonicalProfileViewProps) {
   if (!profileHasPublishedContent(profile)) {
     return <div className="prisma-canonical-empty"><FileTextOutlined /><strong>Ainda não há informações profissionais publicadas neste Perfil.</strong></div>;
   }
@@ -61,7 +63,9 @@ export function CanonicalProfileView({ profile, compact = false, showHeader = tr
                   {item.level && item.level !== "unknown" ? <Tag>{EDUCATION_LEVEL_LABELS[item.level]}</Tag> : null}
                   {item.qualification && item.qualification !== "unknown" ? <Tag>{EDUCATION_QUALIFICATION_LABELS[item.qualification]}</Tag> : null}
                   {item.status && item.status !== "unknown" ? <Tag color="green">{EDUCATION_STATUS_LABELS[item.status]}</Tag> : null}
+                  {showEducationDetails && item.classificationOrigin ? <Tag>{EDUCATION_ORIGIN_LABELS[item.classificationOrigin]}</Tag> : null}
                 </Space>
+                {showEducationDetails && (item.description || item.evidenceText) ? <Typography.Paragraph>{item.description || item.evidenceText}</Typography.Paragraph> : null}
               </div>
             </article>)}
           </div>

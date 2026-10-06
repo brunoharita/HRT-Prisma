@@ -130,7 +130,7 @@ test("the six product surfaces share the canonical Profile language and responsi
     readFile("web/src/pages/ProfileComparePage.tsx", "utf8"),
     readFile("web/src/styles.css", "utf8"),
   ]);
-  assert.match(center, /Ver perfil[\s\S]*Criar nova revisão/);
+  assert.match(center, /Nova importação[\s\S]*Criar revisão[\s\S]*Versões/);
   assert.match(profile, /CanonicalProfileView/);
   assert.match(versions, /StructuredProfileView/);
   assert.match(search, /Encontrar pessoas/);

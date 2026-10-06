@@ -36,9 +36,14 @@ import type { ProfileSynthesisAdapter } from "../../infrastructure/supabase/prof
 import type { SynthesisSource } from "../../../../src/domain/profileSynthesis";
 import { ProfileSynthesisSurface } from "./ProfileSynthesisSurface";
 import { CompetencyGroupModal } from "./CompetencyGroupModal";
+import { confirmPrismaNavigation, useViewState } from "../../ui/PrismaNavigation";
+import type { PersonWorkspaceParts } from "../../pages/PersonWorkspacePage";
 import { focusNoticeFields, focusNoticeTarget } from "../../ui/noticeActions";
 
 interface PersonProfessionalEvidenceMapProps {
+  activeSurface?: Surface;
+  onSurfaceChange?: (surface: Surface) => void;
+  workspace?: PersonWorkspaceParts | undefined;
   synthesis?: ProfileSynthesisAdapter | undefined;
   onOpenSynthesisSource?: ((source: SynthesisSource) => void) | undefined;
   profile: PrismaProfileView;
@@ -49,7 +54,9 @@ interface PersonProfessionalEvidenceMapProps {
   onOpenVersions?: (() => void) | undefined;
 }
 
-type Surface = "summary" | "competencies" | "evidence" | "profile";
+export const PERSON_SURFACES = [["summary", "Resumo"], ["competencies", "Competências"], ["evidence", "Evidências"], ["profile", "Perfil completo"], ["documents", "Documentos e revisões"], ["history", "Histórico"]] as const;
+
+export type Surface = "summary" | "competencies" | "evidence" | "profile" | "documents" | "history";
 
 const natureColors: Record<ProfessionalEvidenceNature, string> = {
   declared: "blue",
@@ -60,11 +67,14 @@ const natureColors: Record<ProfessionalEvidenceNature, string> = {
   assessment_result: "default",
 };
 
-export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation, onOpenVersions, synthesis, onOpenSynthesisSource }: PersonProfessionalEvidenceMapProps) {
+export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation, onOpenVersions, synthesis, onOpenSynthesisSource, workspace, activeSurface, onSurfaceChange }: PersonProfessionalEvidenceMapProps) {
   const [projection, setProjection] = useState(incomingProjection);
+  const [originalOpen, setOriginalOpen] = useState(false);
   const [curationOpen, setCurationOpen] = useState(false);
   useEffect(() => { setProjection(incomingProjection); }, [incomingProjection]);
-  const [surface, setSurface] = useState<Surface>("summary");
+  const [storedSurface, setStoredSurface] = useViewState<Surface>("professionalSurface", "summary");
+  const surface = activeSurface ?? storedSurface;
+  const setSurface = (next: Surface) => { if (onSurfaceChange) onSurfaceChange(next); else void confirmPrismaNavigation().then(ok => { if (ok) setStoredSurface(next); }); };
   const [selectedEvidence, setSelectedEvidence] = useState<ProfessionalEvidenceAssociation | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<ProfessionalConceptEvidenceView | null>(null);
   const [selectedGroupKey, setSelectedGroupKey] = useState<string | null>(null);
@@ -85,20 +95,30 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
 
   return <div className={`prisma-m72-profile${curationOpen ? " prisma-m74-open" : ""}`}>
     <nav aria-label="Áreas do Perfil profissional" className="prisma-m72-tabs">
-      {([
-        ["summary", "Resumo"], ["competencies", "Competências"], ["evidence", "Evidências"], ["profile", "Perfil completo"],
-      ] as const).map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => { setSurface(key); setSelectedConcept(null); setSelectedGroupKey(null); }} type="button">{label}</button>)}
+      {PERSON_SURFACES.map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => { setSurface(key); setSelectedConcept(null); setSelectedGroupKey(null); }} type="button">{label}</button>)}
     </nav>
-    {projection && surface !== "summary" ? <NormalizationStatus projection={projection} disabled={curationOpen} /> : null}
+    {projection && ["competencies", "evidence"].includes(surface) ? <NormalizationStatus projection={projection} disabled={curationOpen} /> : null}
     {projectionError ? <Alert action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>} description="O Perfil publicado continua disponível abaixo." title={projectionError} showIcon type="warning" /> : null}
     {!projection && !projectionError && (surface !== "summary" || !synthesis) ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
-    {surface === "summary" && synthesis && onOpenSynthesisSource ? <ProfileSynthesisSurface adapter={synthesis} publishedProfile={profile} originalSummary={profile.about?.summary} onOriginal={() => setSurface("profile")} onOpenSource={onOpenSynthesisSource} /> : null}
-    {surface === "summary" ? synthesis ? <Collapse items={[{ key: "operational", label: "Competências, evidências e pendências do Perfil", children: <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} /> }]} /> : <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} /> : null}
+    {surface === "summary" ? <div className={`prisma-person-reading-layout${workspace ? " has-operations" : ""}`}>
+      {workspace?.pending || (curation && summary && summary.pendingCount !== null && summary.pendingCount > 0) ? <div className="prisma-person-reading-pending"><section className="prisma-person-rail-pending"><h3>Ações pendentes <Tag color="gold">{(workspace?.pendingCount ?? 0) + (curation && summary?.pendingCount ? 1 : 0)}</Tag></h3>
+        {workspace?.pending}
+        {curation && summary && summary.pendingCount !== null && summary.pendingCount > 0 ? <article><strong>Competências sem classificação</strong><p>{summary.pendingCount} declarações ainda precisam ser associadas a uma competência. As declarações originais permanecem preservadas.</p><Button block onClick={openReview}>Revisar competências</Button></article> : null}
+      </section></div> : null}
+      <div className="prisma-person-reading-main">
+        {synthesis && onOpenSynthesisSource ? <ProfileSynthesisSurface canGenerate={Boolean(workspace?.header)} adapter={synthesis} publishedProfile={profile} originalSummary={profile.about?.summary} onOriginal={() => setOriginalOpen(true)} onProfile={() => setSurface("profile")} onOpenSource={onOpenSynthesisSource} /> : <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} />}
+        {summary ? <PrismaCard className="prisma-person-evidence-strip"><strong>Competências e evidências</strong><span><b>{summary.conceptCount}</b> conceitos associados</span><span><b>{summary.evidenceCount}</b> evidências vinculadas</span>{summary.pendingCount !== null ? <span><b>{summary.pendingCount}</b> declarações a revisar</span> : null}<div><Button type="link" onClick={() => setSurface("competencies")}>Consultar competências →</Button><Button type="link" onClick={() => setSurface("evidence")}>Explorar evidências →</Button></div></PrismaCard> : null}
+      </div>
+      {workspace ? <aside className="prisma-person-reading-rail" aria-label="Contexto operacional da Pessoa">{workspace.documentsPreview}<Button type="link" onClick={() => setSurface("documents")}>Ver todos os documentos →</Button>{workspace.activityPreview}<Button type="link" onClick={() => setSurface("history")}>Ver histórico →</Button>{workspace.quickActions}</aside> : null}
+    </div> : null}
+    {surface === "documents" ? workspace?.documents ?? <PrismaCard><Empty description="Documentos e revisões disponíveis somente para operadores autorizados." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
+    {surface === "history" ? workspace?.history ?? <PrismaCard><Empty description="O histórico operacional exige acesso autorizado." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
+    <Modal title="Resumo original do currículo" open={originalOpen} onCancel={() => setOriginalOpen(false)} footer={<Button onClick={() => setOriginalOpen(false)}>Voltar à leitura</Button>} width={760}><p className="prisma-person-original-summary">{profile.about?.summary || "O Perfil publicado não possui resumo original."}</p></Modal>
     {surface === "competencies" && selectedConcept ? <><ConceptDetailSurface concept={selectedConcept} onBack={() => setSelectedConcept(null)} onEvidence={setSelectedEvidence} onOpenSource={onOpenSource} />{!selectedConcept.classification ? <Button onClick={() => setClassifyConcept(selectedConcept)}>{curation && (selectedConcept.scope === "organization" || curation.canUseGlobal) ? "Definir grupo" : "Ver orientação"}</Button> : null}</> : null}
     {surface === "competencies" && !selectedConcept && selectedGroup ? <SubgroupDetailSurface group={selectedGroup} onBack={() => setSelectedGroupKey(null)} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} /> : null}
     {surface === "competencies" && !selectedConcept && !selectedGroup ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onGroup={setSelectedGroupKey} onEvidence={setSelectedEvidence} onLink={setLinkConcept} onClassify={setClassifyConcept} curation={curation} onProjection={setProjection} onCurationOpen={setCurationOpen} /> : null}
     {surface === "evidence" ? <EvidenceSurface groups={groups} projection={projection} onExplain={setSelectedEvidence} onOpenSource={onOpenSource} /> : null}
-    {surface === "profile" ? <CanonicalProfileView profile={profile} showCompetencies={false} showHeader={false} /> : null}
+    {surface === "profile" ? <CanonicalProfileView profile={profile} showEducationDetails showCompetencies={false} showHeader={false} /> : null}
     <ExplanationDrawer concept={surface === "competencies" ? null : selectedConcept} evidence={selectedEvidence} onClose={() => { if (surface !== "competencies") setSelectedConcept(null); setSelectedEvidence(null); }} onOpenSource={onOpenSource} />
     {projection && curation ? <EvidenceLinkModal adapter={curation} concept={linkConcept} profileId={projection.profile.id} onClose={() => setLinkConcept(null)} onProjection={setProjection} /> : null}
     <CompetencyGroupModal concept={classifyConcept} adapter={curation} onClose={() => setClassifyConcept(null)} onProjection={(value) => { setProjection(value); setSelectedConcept(null); setSelectedGroupKey(null); }} />
@@ -117,18 +137,6 @@ function SummarySurface({ facts, profile, projection, canReview, onReview, onEvi
   onOpenProfile: () => void;
   onOpenVersions: (() => void) | undefined;
 }) {
-  const [expandedSummary, setExpandedSummary] = useState(false);
-  const [summaryOverflow, setSummaryOverflow] = useState(false);
-  const summaryRef = useRef<HTMLParagraphElement>(null);
-  useEffect(() => {
-    const node = summaryRef.current;
-    if (!node || expandedSummary) return;
-    const update = () => setSummaryOverflow(node.scrollHeight > node.clientHeight + 1);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [profile.about?.summary, expandedSummary]);
   const publishedAt = profile.version?.publishedAt ? formatSummaryDate(profile.version.publishedAt) : null;
   const hasPending = facts?.pendingCount !== null && facts?.pendingCount !== undefined && facts.pendingCount > 0;
   return <>
@@ -140,7 +148,7 @@ function SummarySurface({ facts, profile, projection, canReview, onReview, onEvi
     <div className="prisma-m72-summary-layout">
     <main>
       <PrismaCard className="prisma-m72-summary-card" title="Resumo do perfil" extra={<Button onClick={onOpenProfile} type="link">Ver perfil completo <ArrowRightOutlined /></Button>}>
-        {profile.about?.summary ? <><Typography.Paragraph id="prisma-summary-professional-text" ref={summaryRef} className={expandedSummary ? "is-expanded" : "is-collapsed"}>{profile.about.summary}</Typography.Paragraph>{summaryOverflow ? <Button aria-controls="prisma-summary-professional-text" aria-expanded={expandedSummary} onClick={() => setExpandedSummary(!expandedSummary)} type="link">{expandedSummary ? "Recolher resumo" : "Ler resumo completo"}</Button> : null}</> : <Typography.Text type="secondary">O Perfil publicado não possui resumo narrativo.</Typography.Text>}
+        {profile.about?.summary ? <Typography.Paragraph className="prisma-person-original-summary">{profile.about.summary}</Typography.Paragraph> : <Typography.Text type="secondary">O Perfil publicado não possui resumo narrativo.</Typography.Text>}
         {profile.about?.areasOfExpertise.length ? <Space className="prisma-m72-summary-tags" wrap>{profile.about.areasOfExpertise.map((item) => <Tag color="blue" key={item}>{item}</Tag>)}</Space> : null}
       </PrismaCard>
       {facts ? <PrismaCard className="prisma-m72-quick-view" title="Visão rápida">

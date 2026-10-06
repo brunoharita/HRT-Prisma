@@ -110,7 +110,10 @@ test("people, operations, hub, and review source preserve navigation and entity 
   assert.match(structuredReview, /Valor aprovado/);
   assert.match(hub, /isReviewableDocument\(document\)/);
   assert.doesNotMatch(actionCenter, /experiences\.length[\s\S]{0,100}review_document/);
-  assert.match(application, /activeMembership\.role === "member"[\s\S]{0,160}<PersonProfilePage/);
+  assert.match(application, /<PersonProfilePage/);
+  const unified = await readFile("web/src/pages/PersonProfilePage.tsx", "utf8");
+  assert.match(unified, /const canReview = activeMembership\.role !== "member"/);
+  assert.match(unified, /return canReview \? <PersonWorkspacePage[\s\S]*: renderPage\(\)/);
   assert.match(hub, /className="prisma-person-competency-tags"/);
   assert.match(hub, /Competências/);
   assert.doesNotMatch(hub, /\{competency\} · explícita/);

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 361
-source_manifest_sha256: 50cec4831fe60e464663b1708c42087d2b9af31c7faa17b4960baed0516b3f46
+documentation_source_count: 364
+source_manifest_sha256: e7176c1d97632c2588672afa0b47f3f76512efd20d0dbd3216a0d9966be53815
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.44
+version: 2.51.45
 last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Página unificada da Pessoa — Prisma v2.1.0
+
+Implementação autorizada em06/10/2026: seleção de Pessoa abre Resumo diretamente, com seis abas, identidade única, quatro destaques e oito análises integrais, fontes sob demanda e painel operacional à direita. Reutiliza componentes/handlers/contratos existentes, separa carregamento profissional/operacional/síntese e protege Perfil vigente durante falhas novas. Pendências reais têm destino contextual; member não consulta operações/contato privado e curadoria mantém papéis atuais. Nenhuma geração de IA por visita/abas/fontes, alteração de matching/Posições/SQL/Parser/worker. Registry explícito2.1.0 com início do movimento em0, histórico anterior preservado. Acordo/execução `docs/qa/agreement-person-unified-v210.md`1.0.0 e `execution-person-unified-v210.md`; evidências/AoT em preparação local. Publicação e jornada autenticada real ainda não verificadas para este movimento; registros anteriores abaixo são baseline histórico.
 
 ## Correção acadêmica do painel v2.0.12
 
@@ -5460,6 +5464,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão explícita de Bruno em06/10/2026: publicar **Prisma v2.1.0**, página unificada da Pessoa. O movimento2.1 inicia em entrega0 por decisão expressa, registrada como `firstDeliveryNumber: 0`; o padrão histórico continua iniciar em1. A entrega seguinte deste movimento será2.1.1, sem alterar contadores/saltos anteriores ou inventar entrega. Nenhum contrato persistido de Perfil/IA/taxonomia muda. Rollout somente web; acordo `docs/qa/agreement-person-unified-v210.md`1.0.0.
 
 Decisão de Bruno em 06/10/2026: publicar **Prisma v2.0.12**, painel executivo com quatro destaques enriquecidos, preservando IA/perguntas/fontes persistidas. Registry único registra uma entrega e lacunas explícitas [7,11]; 2.0.11 ficou em rascunho, nenhuma entrega fictícia. Método de projeção local `published-profile-highlights-1.0.0`, sem nova taxonomia/banco/provider. Rollout somente web, acordo `docs/qa/agreement-profile-summary-cards-v2012.md`.
 
@@ -11340,84 +11346,45 @@ Exemplos foram consolidados em regras sem virar dados reais; etapas recomendadas
 
 ## Source: `docs/product/person-center.md`
 
-# Central da Pessoa
+# Página unificada da Pessoa
 
-## Propósito
+## Entrada e fronteira de produto
 
-A Central da Pessoa é o principal workspace de conhecimento, contexto e ações sobre uma Pessoa no Prisma. Ela deve responder, nesta ordem:
+Prisma v2.1.0 abre diretamente o Resumo profissional ao selecionar uma Pessoa. As rotas `/profiles/:personId` e o bookmark legado `/profiles/:personId/profile` apresentam a mesma página, sem Central → Ver perfil. Acordo normativo: `docs/qa/agreement-person-unified-v210.md` versão1.0.0; execução/AoT no mesmo diretório.
 
-1. quem é a Pessoa;
-2. se existe alguma ação humana pendente;
-3. qual Perfil permanece vigente;
-4. qual conhecimento profissional foi publicado;
-5. de quais documentos e versões esse conhecimento veio;
-6. o que mudou recentemente.
+Pessoa, Documento, Tentativa, Revisão e Perfil publicado continuam objetos distintos. Uma importação incompleta ou falha técnica nunca invalida a Pessoa ou seu Perfil vigente. Somente publicação transacional de nova versão substitui o Perfil atual.
 
-## Fronteira de produto
+## Hierarquia e abas
 
-```text
-Pessoa != Documento != Tentativa != Revisão != Perfil publicado
-```
+Cabeçalho único com identidade, título publicado, localização autorizada, vínculo/status reais, versão/data de publicação. Nova importação, Criar revisão, Versões e Mais ações reutilizam handlers existentes e respectivas permissões. Se não houver Perfil, a importação é a ação principal. Ciclo de vida, fusão, Meus dados e exclusão ficam protegidos no menu e nos fluxos especializados.
 
-Uma importação incompleta ou uma falha técnica nunca invalida a Pessoa nem o Perfil vigente. Nova importação é uma proposta. Somente a publicação transacional de outra versão substitui o Perfil atual.
+As seis abas locais são Resumo, Competências, Evidências, Perfil completo, Documentos e revisões e Histórico. A identidade permanece; documento e Perfil possuem versões independentes. Não há novo menu global, estado persistido, fonte de verdade, score ou decisão de contratação.
 
-Antes de criar uma Pessoa, a tela de identificação permite `Corrigir identificação`, mesmo quando o extrator já encontrou nome e contato. A correção reutiliza a identificação server-side e recalcula correspondências na organização; enquanto aberta, ações de criação/vínculo ficam ocultas. Cancelar preserva o valor confirmado anterior e falha de validação mantém o formulário. Nome e contato continuam necessários para criar, sem retirar o vínculo humano name-only já existente. A correção do intake não reescreve a extração original ou aprova o rascunho documental. Acordo e evidência: `docs/qa/agreement-hosted-paddle-bridge.md` 1.1.0 e respectivo AoT.
+Resumo usa aproximadamente72% para leitura e28% para contexto operacional em desktop largo. Ordem: quatro destaques profissionais em linha; síntese integral; oito análises abertas em duas colunas; indicadores factuais e acessos a competências/evidências. Pendências reais, documentos/revisões recentes, até cinco eventos recentes e ações rápidas formam a lateral. Histórico consulta todas as versões/documentos disponíveis e dá acesso à auditoria operacional existente.
 
-## Hierarquia
+Na largura intermediária os destaques passam a2x2; se a lateral comprometer a leitura, entra no fluxo. No celular, pendências precedem a leitura, cards/análises usam uma coluna e documentos/atividade/ações vêm depois. Sem truncamento, Leia mais, respostas escondidas, scroll interno da narrativa ou overflow horizontal de página.
 
-- Cabeçalho: identidade e posicionamento profissional existentes, localização autorizada, atualização e quantidade de documentos.
-- Pendências: ações reais derivadas dos estados documentais, com documento, data, explicação e CTA direto.
-- Perfil vigente: versão publicada e fonte preservadas em bloco estável, sem competir com a ação principal.
-- Resumo: documentos, pendências, experiências e competências explícitas com contexto.
-- Conhecimento profissional: resumo, experiências, formação acadêmica e complementar estruturada, competências e demais fatos publicados, sem logos ou métricas inventadas. Formação apresenta curso, instituição, período, situação, nível e qualificação; a origem permanece visível sem score arbitrário. Cursos livres, capacitações, treinamentos e extensões usam o nível `complementary` / Formação complementar; certificações continuam em Credenciais.
-- Documentos e versões: lista selecionável e painel contextual com estado, dados recuperados, pontos pendentes, resultado no Perfil e próxima ação.
-- Atividade recente: no máximo cinco eventos de produto; auditoria técnica permanece fora da visão geral.
+## Conteúdo profissional e fontes
 
-## Perspectivas
+Os destaques reutilizam `published-profile-highlights-1.0.1`: áreas explicitamente relacionadas à experiência mais recente e duração documentada, experiência recente e outra experiência com cronologia honesta, maior formação concluída com qualificações sustentadas e organizações distintas. Sobreposições contam uma vez; MBA/Especialização podem coexistir. Ausência/inconclusão não se transformam em fatos negativos ou conclusões.
 
-- `Visão geral`: ação, Perfil vigente, resumo, conhecimento, documentos recentes e atividade.
-- `Documentos e versões`: fontes, versões independentes e detalhe contextual.
-- `Nova importação`: entrada, processamento, extração, evidências e detalhes técnicos já existentes.
+Síntese e oito respostas/lacunas/perguntas permanecem integrais, provenientes da análise armazenada. Mostrar fontes fica no bloco da síntese e habilita referências sem ocultar o texto; o painel existente preserva origem, cache, snapshot, foco e posição. Resumo original abre em modal no mesmo contexto. Trocar abas/fontes ou visitar a Pessoa não gera IA. Gerar/repetir síntese permanece ação explícita de operador autorizado, sujeita à fronteira server-side existente.
 
-As perspectivas reorganizam capacidades existentes. Não criam novos estados persistidos, menus globais, scores, inferências ou decisões automáticas.
+Competências mantém naturezas, grupos/filtros, declarações, curadoria, classificação e vínculos múltiplos. Evidências mantém todas as associações/fontes/detalhes documentais. Vincular evidência não define classificação taxonômica. Perfil completo mantém todos os registros, formação detalhada/origem/situação/qualificação, experiências, credenciais, idiomas, seções extras e contato autorizado separado; não reescreve o snapshot.
 
-## Ações de ciclo de vida
+## Operação, falhas e preservação
 
-- A comparação oferece `Atualizar Perfil` como padrão e `Substituir Perfil` quando a revisão deve se tornar o perfil completo.
-- O histórico permite `Restaurar versão` criando uma nova versão vigente e `Reiniciar Perfil` sem apagar Pessoa, documentos ou versões.
-- O contexto documental oferece `Excluir documento` separado de `Arquivar revisão`. Exclusão física é destrutiva, recebe confirmação e preserva dados independentes.
-- O cabeçalho prioriza `Ver perfil`; `Criar nova revisão` permanece secundária e usa Perfil atual, versão anterior ou documento existente como origem. Quando a origem já é conhecida, a ação segue diretamente sem repetir perguntas.
-- `Processamento e revisões`, quando acionado dentro da Central da Pessoa, abre a central operacional já limitada à Pessoa selecionada. A interface explicita o contexto, oferece retorno direto à Pessoa e mantém `Ver toda a organização` como saída consciente para a visão global.
-- Cada documento mostra uma ação principal derivada do estado: `Continuar revisão`, `Revisar agora`, `Revisar novamente`, `Reabrir` ou `Abrir currículo`; `Corrigir Pessoa vinculada` e `Excluir documento` ficam entre as ações excepcionais.
-- `Mesclar com outra Pessoa`, `Arquivar Pessoa`, `Reativar Pessoa` e a troca imediata de vínculo permanecem no contexto da mesma Pessoa.
-- A busca normal omite Pessoas mescladas e arquivadas por padrão, mas o filtro recupera arquivadas e referências antigas à Pessoa absorvida conduzem ao cadastro principal.
+Pendências só aparecem quando derivadas dos estados atuais. Cada item informa objeto, problema conhecido e ação viável. Diagnóstico de período conhecido na formação usa o validador existente e abre a revisão no campo correspondente; ausência de dado, por si só, não cria obrigação artificial. Se o diagnóstico só conhece a revisão, o botão é Continuar revisão. Falha interna permanece técnica; Perfil vigente continua explicitamente disponível.
 
-## Linguagem
+Documentos e revisões incorpora lista/detalhe, importação manual/PDF, tentativas, extração, recuperação, auditoria, arquivamento de revisão, correção do vínculo e exclusão do documento. Versões/restauração/reinício e revisão por origem mantêm os fluxos existentes. Criar/importar/mesclar/arquivar/excluir não recebe permissão nova.
 
-Usar `Perfil atual`, `Nova importação`, `Requer revisão`, `Revisar documento agora`, `Documentos e versões` e `Atividade recente`. Vermelho é reservado a falha técnica real ou ação destrutiva; âmbar comunica revisão; verde comunica publicação atual; azul comunica ação.
+Carregamentos profissional, síntese e operacional são independentes: falha opcional não oculta fatos bons. Sem Perfil publicado, identidade, documentos e próxima ação real continuam acessíveis, sem síntese inventada. Pessoa mesclada mantém o destino principal e exclusão em andamento mantém bloqueios.
 
-## Autorização
-
-A Central operacional continua restrita aos papéis já autorizados. Member permanece na leitura de Perfil. Contato privado não é promovido ao cabeçalho e o frontend não assume autoridade de revisão.
+Member não monta/consulta o workspace operacional nem recebe contato privado/controles de gestão. Curadoria continua restrita a Super Admin/Owner/Admin; Recruiter conserva seu escopo. Tenant, RLS e RPCs existentes permanecem a autoridade. Tabs e navegação respeitam a proteção de alterações não salvas. Retorno à lista preserva busca/filtros/posição na sessão; retorno da fonte/revisão mantém a Pessoa e o contexto consultado.
 
 ## Limites
 
-- Não cria pendência persistida quando o estado pode ser derivado.
-- Não exibe confiança ou score sem contrato metodológico.
-- Não transforma ano final em conclusão nem apresenta inferência acadêmica como fato confirmado.
-- Não interpreta falta de evidência como característica negativa.
-- Não inventa título profissional, empresas, logos, datas, evidências ou competências.
-- Evidência Demonstrada do M5.1 permanece separada do Perfil factual e só aparece quando a consulta real correspondente existir.
-
-## Perfil e descoberta profissional
-
-A Central resume o Perfil vigente sem duplicá-lo: resumo profissional, no máximo duas experiências recentes e até seis competências principais conduzem à apresentação completa. O Perfil completo, versões históricas, busca e comparação compartilham o contrato `prisma-profile-view` 1.0.0 descrito em `professional-profile-standard.md`.
-
-O M7.2 organiza a apresentação completa em Resumo, Competências, Evidências e Perfil completo. Os três primeiros consomem a projeção versionada somente leitura e preservam múltiplas origens; o Perfil completo não reapresenta o agrupamento heurístico antigo de competências. O detalhe pode levar à fonte documental/região ou à área de Verificações, conforme a origem existente, sem fabricar destino.
-
-O Resumo dessa leitura ganha composição operacional no M7: pendências reais da curadoria ficam imediatamente visíveis após as abas, com CTA condicionado ao papel; métricas factuais, agrupamentos canônicos, evidências recentes e ações existentes são apresentados sem ranking ou novo estado. Esta mudança não altera a perspectiva documental `Visão geral` da Central nem os fluxos completos das demais abas.
-
-A busca avançada usa somente Perfis vigentes do tenant e o Knowledge já publicado. Os resultados explicam os critérios atendidos e a comparação reapresenta exatamente dois Perfis sem score, vencedor ou inferência de adequação.
+Nenhuma alteração de matching/Posições, taxonomia, Parser IA, serviço de síntese, Paddle, banco, prompts/modelos ou publicação automática de Perfil humano. Fixtures de Marina são fictícias e exclusivas de QA local. A evidência visual e sintética não prova jornada autenticada real ou qualidade universal de currículo.
 
 ---
 
@@ -11585,7 +11552,7 @@ O Perfil Profissional é a apresentação canônica do conhecimento profissional
 
 O mesmo contrato de apresentação é reutilizado em seis contextos:
 
-1. Central da Pessoa, com resumo profissional, experiência recente, competências principais e acesso ao Perfil completo;
+1. Página unificada da Pessoa, com Resumo profissional como entrada, leitura ampla e painel operacional condicionado ao papel;
 2. Perfil completo, em ordem estável: Sobre, Experiência, Formação, Competências, Credenciais e Outros;
 3. Formação, competências e credenciais dentro do Perfil, sem métricas inventadas;
 4. busca avançada de Pessoas por experiência, formação, competências, credenciais e contexto;
@@ -11648,6 +11615,10 @@ A comparação aceita exatamente duas Pessoas selecionadas na busca e reapresent
 - Não há foto profissional porque esse dado não possui contrato atual; a interface usa iniciais neutras.
 - Não há cargo preferido, senioridade, distância semântica numérica, comparação automática ou exportação do Perfil enquanto essas capacidades não possuírem contrato próprio.
 - Evidência Demonstrada continua separada do Perfil factual.
+
+## Página unificada v2.1.0
+
+A composição vigente substitui a passagem pela Central documental: seis abas locais, identidade única e Resumo direto. `person-center.md` descreve ordem/responsividade/ações. As descrições históricas M7 acima registram evolução; a topologia vigente é a referência normativa refinada do acordo `agreement-person-unified-v210.md`1.0.0. Todos os agrupamentos e detalhes continuam nas abas de Competências/Evidências; a síntese/oito análises/fontes são integrais e a navegação só consulta análise persistida. Na aba Perfil completo, formação mantém descrição/evidência disponível e origem de classificação; o contato só aparece quando autorizado. Versões/busca/comparação conservam o contrato canônico e sua composição existente.
 
 ---
 
@@ -14566,6 +14537,207 @@ Nenhuma para implementar e validar a estrutura local. Operações futuras de QA 
 ## Referência de execução
 
 Aplicar integralmente este contrato 1.0.0 com a seleção explícita em `scripts/test-suites.mjs`, cenários em `tests/personFlowScenarios.test.ts` e fechamento em `aot-person-flow-validation.md`. Não adicionar infraestrutura externa se um limite conectado aparecer.
+
+---
+
+## Source: `docs/qa/agreement-person-unified-v210.md`
+
+# Acordo — Página unificada da Pessoa v2.1.0
+
+Versão 1.0.0, aprovado/congelado em 06/10/2026 pela autorização explícita de Bruno nesta conversa. Os rótulos de proposta nos anexos são históricos e superados por esta autorização de implementar/integrar main/publicar v2.1.0. Baseline local/origin main df7b8403d23adefb0d8981f4391e757067e30551, produto2.0.12. Classe C, com validação negativa das fronteiras D existentes. Branch codex/person-unified-v210. Nenhuma nova arquitetura, dependência, schema ou decisão de produto.
+
+## Contrato
+
+- D-01: entrada direta na visão profissional/Resumo, cabeçalho único real, ações condicionadas e seis abas na mesma Pessoa. Rotas antigas/bookmarks e retorno à lista/busca/filtros/posição preservados.
+- D-UX-02: composição normativa da referência refinada: desktop 70–73% leitura/27–30% operações, quatro destaques em linha, síntese integral, oito análises abertas em duas colunas, indicadores factuais; lateral pendências/documentos/atividade/ações. Tipografia legível, altura natural. Intermediário2x2, celular uma coluna, pendências antes da leitura, sem overflow horizontal.
+- D-03: destaques reutilizam cálculos/classificação atuais de áreas/tempo, experiências recentes, maior formação concluída inclusive MBA/Especialização sustentados e organizações distintas. Não reduzir listas ou textos.
+- D-04: fontes ocultas por padrão, Mostrar fontes no bloco da síntese, narrativa sempre aberta, resumo original consultável e retorno ao ponto de leitura. Nenhuma geração IA por visita/troca de aba/fonte.
+- D-05: pendências reais, problema/objeto e destino viável; sem card amarelo artificial, distinção entre associação de evidência e classificação. Nova falha/revisão não oculta Perfil vigente. Carregamentos independentes e estados sem Perfil explícitos.
+- D-06: preservar integralmente cadastro/contato autorizado, importação manual/PDF, documentos/tentativas/extração/revisão/recuperação/auditoria, versões/restauração/reinício, competências/curadoria/vínculos múltiplos/evidências, formação/idiomas/credenciais/outros, ciclo/fusão/Meus dados/exclusão. Member não consulta workspace operacional nem contato privado; autorização server-side existente preservada. Edição não salva mantém proteção.
+- D-REL-07: versão explicitamente2.1.0, owners/current-state/contextos/AoT, validação proporcional/CI, commit/push/main, somente superfícies exigidas pelo release plan, rollback/saúde/assets/rotas/SHA/sincronização.
+- P-01: truncar respostas, esconder análises em acordeões, fabricar dados/pendências/duração/classificação/decisão humana, gerar IA por navegação, ampliar permissões, expor PII em fixtures/evidência pública, misturar versões documentais e profissionais.
+- F-01: Posições/matching/score, shell global/marca/nomenclatura, motor de taxonomia/banco/IA novo, dados reais publicados/curados, suíte integral local e testes pagos.
+- A-01: reutilizar componentes, adapters, Ant Design, CSS/tokens e fluxos especializados existentes; engenharia decide composição interna e fixtures determinísticas sem alterar os requisitos.
+- Q-01: nenhuma decisão material pendente. Autorização de publicação e título não ampliam escopo.
+
+CA-01..07: cada D correspondente exige teste/inspeção e evidência no AoT. UI sintética mesma Marina/estado/viewport2048 da referência e telas intermediária/celular, texto longo, ausência/falha, member/operador, navegação/fontes/zero geração automática; regressões dirigidas dos contratos reutilizados; release operacional e CI. Não declarar smoke público como jornada autenticada real.
+
+## Mapa de impacto inicial
+
+| Capacidade/área | Relação | Baseline e regressão |
+| --- | --- | --- |
+| Entrada/rotas/abas/cabeçalho/rail | direct | df7b8403: Central antes de Perfil; testes UI entradas antiga/nova e estados/ações |
+| Síntese/fontes/cards/conteúdo publicado | direct |2.0.12:8 respostas abertas/cálculos; testes dirigidos texto longo/fontes/fallback/datas/formação |
+| Documentos/revisões/versões/ciclo de vida | plausible_indirect | handlers/adapters existentes; UI destinos/actions/documentos e testes person-flow |
+| Tenant/papéis/contato/dirty/retorno lista | critical_transversal | fronteiras existentes; negativos member e contratos/rotas/navigation, smoke sintético |
+| Registry/sidebar/build/release web | direct |2.0.12; teste numeração histórica, tipos/build/CI/assets/SHA/rollback |
+| Parser/Synthesis/Paddle/SQL/matching/Posições | no_impact_identified | reorganização read-only web, sem backend/migrations/provider; diff/plan e containers preservados |
+
+## Especificação funcional integral aprovada
+
+# Página unificada da Pessoa: perfil e ações
+
+Revisão visual 2, 06/10/2026. Proposta ampliada solicitada por Bruno, ainda não autorizada para implementação ou publicação. Não atribui versão de produto. A composição original da opção 3 foi escolhida pelo usuário; os refinamentos deste documento são proposta para sua avaliação. Nenhum código, contrato persistido ou dado real foi alterado.
+
+## Referência e fidelidade
+
+- Referência escolhida: imagem enviada pelo usuário `codex-clipboard-7374853e-7bda-4bd8-81f8-583eb2f7424e.png`; arquitetura visual normativa para esta proposta, dados ilustrativos.
+- Nova imagem: `03-perfil-e-acoes-refinado-v2.png`, gerada com a ferramenta integrada image_gen. Prompt integral: `prompt-refinamento-v2.txt`.
+- Marina Costa, organizações, datas, quantidades e análises são fictícios, preparados para demonstrar a interface; não são uma consulta real sobre uma Pessoa.
+- A imagem representa uma captura da página inteira, com rolagem vertical natural. Não propõe reduzir o texto real para caber em uma única altura de monitor.
+- Mostra somente a área da Pessoa. Navegação global, marca, empresa ativa, conta e permissões institucionais existentes permanecem. Não propõe busca global ou notificações novas.
+
+## Composição implementável
+
+Cabeçalho de identidade único, seguido de seis abas locais. Na aba Resumo, leitura profissional à esquerda e tarefas operacionais à direita, na proporção aproximada 70–73% / 27–30% em desktop largo. Espaçamento regular de 20–24px, superfícies claras, texto azul-marinho, azul de ação, bordas discretas e cantos próximos de 10px. Ícones ajudam a localizar grupos; não competem com o texto. Âmbar apenas para pendência real, vermelho para falha real ou destruição. Sem medidor de mérito, score, ranking, fotos ou logos profissionais inventados.
+
+Ordem da coluna principal: título Resumo do perfil; quatro destaques em uma linha; síntese profissional integral; oito análises abertas em duas colunas; indicadores factuais de competências/evidências e acessos correspondentes. Ordem da lateral: ações pendentes; documentos e revisões; atividade recente; ações rápidas. Alinhamento superior das duas colunas. Não há segunda tela intermediária para abrir o Perfil.
+
+O conteúdo determina a altura. Não usar ellipsis, caixas de texto com rolagem própria, limite visual de linhas ou Leia mais para a síntese e as oito respostas. Na imagem os textos de exemplo são menores que alguns Perfis reais; isso não autoriza encurtá-los. Listas dos destaques preservam os dados existentes e podem aumentar a altura, sem inventar agrupamentos ou remover registros para igualar cards.
+
+## 1. Cabeçalho
+
+- Voltar para Pessoas: retorna à lista conservando busca, filtros e posição disponíveis.
+- Nome, iniciais neutras, título profissional publicado, localização autorizada, vínculo e estado operacional real. Dados ausentes não são inventados. Contato privado não é promovido ao cabeçalho.
+- Versão e data de publicação do Perfil vigente, separadas do estado do documento novo.
+- Criar revisão: ação principal para trabalhar sobre o Perfil publicado, reutilizando o fluxo existente e origem conhecida. Se não existe Perfil publicado, a ação principal passa a ser a próxima ação real, como Nova importação ou Continuar revisão.
+- Nova importação: abre o fluxo existente contextualizado nesta Pessoa; arquivo/manual conforme capacidades atuais, sem prometer formatos não suportados.
+- Versões: histórico de versões do Perfil, consulta e restauração segundo regras existentes.
+- Mais ações: vínculo Candidato/Colaborador/Banco de talentos, mesclar, arquivar/reativar, acesso a Meus dados e exclusão definitiva, conforme permissões e proteções atuais. Ações destrutivas não ganham destaque primário.
+
+## 2. Abas e inventário de preservação
+
+| Aba | Conteúdo e ações preservados |
+| --- | --- |
+| Resumo | Quatro destaques, síntese completa, oito análises abertas, indicação de IA/base/data, resumo original sob demanda, indicadores factuais e painel operacional. |
+| Competências | Naturezas, grupos/subgrupos, filtros, busca, termos declarados, classificação pendente, curadoria, associações, vínculo de uma ou mais evidências, explicação e verificação por Assessment distintas. |
+| Evidências | Explorador e filtros, fatos/trechos, fontes, múltiplas associações, documento/página/região quando disponível, contexto e natureza da evidência. |
+| Perfil completo | Texto aprovado e todos os registros: experiências, responsabilidades, períodos, formação acadêmica/complementar, curso, instituição, situação, nível, qualificação, credenciais, idiomas, contato autorizado e demais seções existentes. Não reescreve o snapshot. |
+| Documentos e revisões | Todos os documentos e suas versões independentes, seleção e detalhe contextual, importação, tentativas, processamento, extração, rascunho/revisão, recuperação, resultado no Perfil e próximas ações. Arquivar revisão, corrigir vínculo e excluir documento continuam nos respectivos contextos. |
+| Histórico | Atividade de produto e acesso aos detalhes operacionais/auditoria existentes; versões do Perfil, origem e restauração permanecem acessíveis por Versões. Não mistura Perfil v3 com Documento v2. |
+
+As abas trocam o contexto de consulta na mesma Pessoa. Os oito conteúdos analíticos do Resumo continuam todos abertos; abas não são um motivo para ocultá-los. Seções extensas e tarefas especializadas já existentes permanecem em suas abas ou fluxos adequados, sem serem removidas. Revisão/edição podem abrir os fluxos existentes; o retorno preserva Pessoa e contexto. O menu de navegação da organização não muda.
+
+## 3. Quatro destaques profissionais
+
+1. **Áreas da experiência mais recente:** áreas efetivamente identificadas na experiência recente, tempo aproximado documentado por área e, quando existente, demais áreas gerais separadas. Reutilizar a taxonomia e o cálculo atuais, sem confundir título do cargo com área. Períodos sobrepostos contam uma vez. Falta de período não produz duração inventada; Atual só aparece quando declarado.
+2. **Experiência mais recente:** cargo, empresa, período e duração; abaixo, em hierarquia secundária, outra experiência recente com cargo, empresa e período. Quando sobrepostas, não sugerir sequência falsa de carreira; usar Outra experiência recente. Rótulos atual/anterior dependem dos dados, não do exemplo.
+3. **Maior formação concluída:** nível/qualificação apoiados no registro, cursos, instituições e períodos. MBA e Especialização podem coexistir no mesmo nível. Exibir conclusão apenas quando sustentada pela classificação válida; ano final sozinho não confirma. Informação inconclusiva recebe explicação neutra e ação para o registro quando houver uma revisão humana pertinente.
+4. **Empresas da trajetória:** contagem de organizações distintas e respectivos nomes publicados, reutilizando normalização atual, sem inferir empresas ausentes ou fabricar logos.
+
+Os destaques são fatos/cálculos do Perfil vigente. A narrativa é análise de IA. Essa distinção permanece clara, sem transformar cartões em avaliação profissional.
+
+## 4. Síntese e fontes
+
+Título, identificação discreta de Análise de IA, narrativa integral e controle Mostrar fontes no canto superior direito do bloco. Resumo original do currículo abre o conteúdo aprovado correspondente, preservando o retorno. Base/versão/data aparecem uma vez em texto secundário.
+
+Mostrar fontes habilita referências associadas às afirmações, inclusive nas oito análises. Selecionar uma referência abre o painel existente com trecho, origem e acesso ao documento/região quando houver. Fechar retorna ao mesmo ponto. Ocultar fontes restaura a leitura limpa. A narrativa nunca fica escondida por esse controle. Fatos, interpretações e lacunas continuam diferenciados pelo contrato e por identificação acessível, sem empilhar selos e referências na leitura padrão.
+
+## 5. Oito análises abertas
+
+| Seção | Informação que a pessoa encontra |
+| --- | --- |
+| Trajetória profissional | Continuidade, transições, mudanças de atuação e ampliação de responsabilidades sustentadas pelos registros. |
+| Contribuições profissionais | Atividades, processos, problemas e entregas; participação individual quando descrita. |
+| Contextos, responsabilidade e autonomia | Contextos de atuação, execução/apoio/coordenação/decisão e limites do que está documentado. |
+| Competências em contexto | Conhecimentos e ferramentas ligados a atividades e situações concretas, preservando natureza declarada/contextual/verificada. |
+| Resultados e entregas | O que foi entregue, efeitos relatados, medidas existentes e limites de atribuição. |
+| Formação e aplicação | Relação entre formação e atividades; aplicação prática somente quando sustentada. |
+| Direção profissional | Objetivo declarado e conexão com a trajetória, sem recomendar contratação ou vaga. |
+| Investigação complementar | Perguntas específicas para esclarecer lacunas relevantes, sem tratar ausência como demérito. |
+
+Todas as respostas válidas aparecem integralmente. Informação desconhecida é declarada na própria seção. Uma falha localizada preserva os trechos válidos, explica o que não pôde ser apresentado em português claro e oferece a ação viável. Ausência de dado não gera obrigação de preenchimento desnecessária. Não prometer que o operador resolverá um problema interno editando um campo correto.
+
+## 6. Painel operacional
+
+**Ações pendentes:** mostrar apenas pendências reais, sem card amarelo permanente quando tudo está resolvido. Cada item informa objeto, problema e próximo passo. O exemplo tem duas ações distintas, uma delas abrangendo três declarações. Corrigir período abre a revisão do documento e o campo de formação correspondente, quando o diagnóstico conhece esse destino; quando conhece apenas a revisão, o rótulo honesto é Continuar revisão. Revisar competências abre a lista contextual, já filtrada para os itens pertinentes quando possível. Reutilizar os estados atuais, sem supor que vincular evidência resolve classificação taxonômica. Falha interna não se apresenta como erro humano. Preservação do Perfil vigente fica explícita quando uma nova importação falha/pende.
+
+**Documentos e revisões:** prévia das fontes recentes, nome, versão documental, data, situação em português e ação real por estado. Ver todos abre a aba com a lista completa. Utilizado no Perfil só quando existe esse vínculo; não equiparar documento lido a Perfil publicado.
+
+**Atividade recente:** até cinco eventos de produto, data e descrição curta; Ver histórico abre a lista correspondente. Auditoria técnica continua nos detalhes existentes.
+
+**Ações rápidas:** Editar dados cadastrais e Processamento e revisões, ambos no contexto desta Pessoa e segundo o papel. Manter a visibilidade/destino atuais de contatos, ciclo de vida, fusão e exclusão nos fluxos apropriados.
+
+O painel serve para agir sem procurar em outra central. Não se torna um segundo formulário nem uma lista de detalhes técnicos. Não ocupar a coluna com mensagens verdes repetitivas de Tudo certo.
+
+## 7. Comportamento responsivo e estados
+
+- Desktop largo: quatro destaques em uma linha e análises em duas colunas; lateral aproximadamente 27–30%. Uma rolagem de página. Cabeçalho compacto/abas podem acompanhar a rolagem sem duplicar identidade e botões.
+- Largura intermediária: quatro destaques passam a 2x2 quando necessário à legibilidade. Não reduzir fonte para manter quatro colunas. Lateral passa para o fluxo vertical quando retirar largura útil da leitura.
+- Celular: identidade compacta, ações com quebra controlada, abas acessíveis, cards e análises em uma coluna. Pendência acionável fica próxima ao cabeçalho; documentos/atividade/ações seguem após a leitura. Nenhuma resposta exige abrir acordeão.
+- Sem Perfil publicado: identidade e documentos continuam; mostrar Ainda não existe Perfil publicado e a próxima ação disponível. Não inventar síntese nem deixar uma página vazia.
+- Falha da análise ou de uma seção: dados publicados e demais respostas válidas continuam. Falha documental nova não invalida Perfil vigente.
+- Carregamento independente de Perfil, síntese e contexto operacional; falha opcional não bloqueia toda a página. Estados vazios são neutros e específicos.
+- Abas/ações respeitam o papel atual; member não recebe controles operacionais proibidos. Não consultar nem exibir contato privado sem autorização. A unificação visual não amplia acesso.
+- Preservar confirmação de descarte quando houver edição não salva. Voltar de revisão/fontes/documento mantém contexto de consulta.
+
+## 8. Velocidade e limites desta proposta
+
+Reutilizar componentes, leitura canônica, análise armazenada, projeções e fluxos existentes. Não gerar análise a cada visita, não chamar IA para trocar abas, abrir fonte ou mostrar os quatro destaques. Carregar detalhes extensos sob demanda, com identidade/tenant/versão corretos. Não criar novo banco, novo motor de classificação ou nova consulta a IA neste refinamento visual.
+
+O desenho registra o resultado pretendido; não prova comportamento implementado ou fidelidade de execução. Antes de desenvolvimento material, consolidar acordo/prompt, mapa de impacto, versão de produto e aceites, conforme AGENTS.md. A futura validação compara mesma Pessoa fictícia, estado e largura desta referência, além de dados extensos e tela estreita. Alterações materiais na composição escolhida exigem decisão de Bruno.
+
+## Base conferida nesta proposta
+
+Código: `web/src/pages/PersonWorkspacePage.tsx`, `web/src/pages/PersonProfilePage.tsx`, `web/src/components/profile/PersonProfessionalEvidenceMap.tsx`, `web/src/components/profile/ProfileSynthesisSurface.tsx`, `web/src/ui/PrismaAppShell.tsx` e `src/domain/profileSynthesis.ts`.
+
+Documentos: `docs/product/person-center.md` e `docs/product/professional-profile-standard.md`. A hierarquia de entrada proposta substitui a necessidade de Central -> Ver perfil; a separação dos objetos e suas permissões permanece.
+
+
+## Prompt visual integral aprovado
+
+```text
+Use case: ui-mockup.
+Create ONE extremely polished, production-realistic HIGH FIDELITY desktop full-page screenshot of the Prisma PERSON workspace, in Brazilian Portuguese. Use attached reference as the NORMATIVE composition: broad professional reading column LEFT approximately 73%, narrower operational column RIGHT approximately 27%; shared identity header, one row of six local tabs; 4 highlight cards on ONE row above narrative; eight open analysis cards in two columns, four rows. Evolve this exact selected design with richer readable real-looking content, precise hierarchy and thoughtful spacing. This is a long full-page capture, NOT an impossible screen squeezed into one viewport. Target 2048px wide by about 2304px high. No annotations, perspective, browser chrome, device frame, watermark, decorative charts, scores, photos, fabricated global search or notification bar. Render ONLY the person-page content area, without a global sidebar or global brand/header redesign. White surfaces, very pale blue-gray canvas, cobalt #165DFA, deep navy text, 10px corners, subtle hairline borders, very light shadows, Inter-like crisp generous body typography. Refined, useful, calm, impactful, accessible contrast. No gradient backgrounds. All visible content must be legible at native size.
+
+TOP AREA full width:
+Small back link "← Pessoas".
+Identity left: pale blue initials avatar MC, "Marina Costa" as largest heading; "Gerente de Operações"; location "São Paulo, SP", understated chips "Candidata" and "Ativa". Right aligned actions: secondary outlined "Nova importação", stronger blue "Criar revisão", outlined "Versões", text dropdown "Mais ações". Small quiet metadata below: "Perfil v3 · Publicado em 06/10/2026".
+Below: six tabs exactly "Resumo" (active blue underline), "Competências", "Evidências", "Perfil completo", "Documentos e revisões", "Histórico". No separate "Ver perfil" button.
+Start content grid with 24px gutters, top aligned columns.
+
+LEFT region:
+Heading "Resumo do perfil" with subtle helper "Uma leitura da trajetória, das contribuições e dos contextos de atuação."
+Section "Destaques profissionais" with 4 equal cards horizontally, simple blue outline icons, small label, bold value, secondary supporting details. Do NOT stack cards into2x2:
+1 "Áreas da experiência mais recente": bold "Gestão de operações", "Atuação documentada: aproximadamente 8 anos e 9 meses"; second smaller area "Logística", "Aproximadamente 3 anos". Footnote small "Períodos sobrepostos contados uma vez."
+2 "Experiência mais recente": bold "Gerente de Operações", "NovaVia Serviços", "Jan/2022 – Atual · 4 anos e 9 meses". Thin separator, small "Experiência anterior", medium "Coordenadora de Operações", "Grupo Aurora · Jan/2018 – Dez/2021".
+3 "Maior formação concluída": bold "MBA · Especialização". Two compact groups: "Gestão de Negócios" / "Instituto Horizonte · 2019–2020"; "Gestão de Projetos" / "Instituto Horizonte · 2017–2018". No unproven qualification or confidence percentage.
+4 "Empresas da trajetória": bold "3 organizações"; "NovaVia Serviços", "Grupo Aurora", "Rede Horizonte". Subtle "Organizações distintas nas experiências publicadas".
+
+Then large WHITE full-left-width narrative card, thin cobalt left accent, header "Síntese profissional", small quiet badge "Análise de IA" and outlined button "Mostrar fontes" aligned top RIGHT of this card. THREE open paragraphs:
+"Marina construiu sua trajetória em operações de serviços e distribuição. Os registros mostram a passagem da supervisão para a coordenação e, depois, para a gestão de operações, com ampliação das responsabilidades sobre equipes, rotinas e acompanhamento de indicadores."
+"Sua atuação conecta atendimento, organização da execução e melhoria de processos. As experiências publicadas descrevem participação na revisão de fluxos, no planejamento de escalas e na articulação entre a operação e as áreas de apoio."
+"Essa leitura indica continuidade na área de operações. Os registros ainda não detalham o tamanho das equipes, a autonomia sobre orçamento ou as medidas dos resultados relatados."
+Footer link with document icon "Ver resumo original do currículo"; quiet provenance one line "Base: Perfil publicado v3 · Análise de 06/10/2026". No citation pills or per-paragraph sources visible. No ellipses, expand buttons, read-more, hidden information.
+
+Then "Análises profissionais" header and helper "Respostas completas, organizadas para consulta."
+EXACTLY EIGHT open cards in 2columns4rows, roomy heights for these illustrative texts; each bold heading, discreet blue line icon, open paragraphs, never collapsible. Preserve all eight titles exactly:
+ROW1 LEFT "Trajetória profissional": "A trajetória mantém continuidade em operações, com passagem por supervisão, coordenação e gestão. Na NovaVia, o registro atual descreve organização da operação e acompanhamento de indicadores." second paragraph "As mudanças sugerem ampliação de responsabilidades; o relato não permite quantificar o aumento de equipe ou orçamento."
+ROW1 RIGHT "Contribuições profissionais": "As atividades incluem revisão de rotinas, planejamento de escalas e coordenação do atendimento. Também aparecem acompanhamento de indicadores e articulação com áreas de apoio." second paragraph "Os registros descrevem sua participação na execução, mas não separam todas as entregas individuais das realizadas pela equipe."
+ROW2 LEFT "Contextos, responsabilidade e autonomia": "Há atuação em serviços e distribuição, com coordenação de equipes e organização de rotinas. Os cargos estão acompanhados de atividades de gestão operacional." second paragraph "O tamanho das equipes, o orçamento e os limites de decisão não foram detalhados."
+ROW2 RIGHT "Competências em contexto": "Gestão de operações e melhoria de processos aparecem ligadas à revisão de fluxos e ao acompanhamento de indicadores. A coordenação de equipes está relacionada ao planejamento das rotinas de atendimento." second paragraph "Esses registros contextualizam o uso declarado; não equivalem a uma verificação prática."
+ROW3 LEFT "Resultados e entregas": "Foram relatadas iniciativas de organização de escalas e revisão de fluxos de atendimento. Os registros apresentam as entregas realizadas, mas não informam medidas anteriores e posteriores." second paragraph "Ainda não é possível quantificar efeitos em prazo, produtividade ou qualidade."
+ROW3 RIGHT "Formação e aplicação": "MBA em Gestão de Negócios e especialização em Gestão de Projetos constam como concluídos. Os temas se relacionam às atividades de planejamento e organização descritas." second paragraph "Não há relato suficiente para atribuir uma entrega específica à aplicação de um desses cursos."
+ROW4 LEFT "Direção profissional": "O objetivo publicado é continuar em gestão de operações, com foco em serviços. A experiência recente apresenta continuidade nessa área." second paragraph "O Perfil não informa preferência por porte de empresa ou modelo de trabalho."
+ROW4 RIGHT "Investigação complementar": "Qual fluxo de atendimento você redesenhou e qual foi sua participação?" then "Que indicadores acompanhava antes e depois da mudança?" then "Qual era o tamanho da equipe e quais decisões dependiam de aprovação?" Small quiet closing "Perguntas para aprofundar os registros, sem desqualificar a trajetória."
+
+Below8cards a compact white strip "Competências e evidências" with 3 factual illustrative metrics "18 conceitos associados", "42 evidências vinculadas", "3 declarações a revisar", simple links "Consultar competências →" and "Explorar evidências →". No score.
+Near bottom discreet "Dados ilustrativos para validação do layout".
+
+RIGHT operational rail aligned to TOP of the LEFT heading:
+One elegant amber-soft card "Ações pendentes" badge "2". Two vertically separated mini-items WITH precise human-readable issue + dedicated blue actionable button:
+item1 heading "Período de formação incompleto"; description "No Currículo v2, falta informar quando a formação começou." blue button "Corrigir período". quiet sentence "O Perfil v3 continua vigente."
+item2 heading "Competências sem classificação"; description "3 declarações ainda precisam ser associadas a uma competência." outlined button "Revisar competências".
+Do not turn these into a full-page blocking alert or mark person in error. No IDs or technical status names.
+Next white card "Documentos e revisões", header link "Ver todos →"; "2 documentos" subtle; list two generous rows:
+"curriculo_marina_v2.pdf", "Documento v2 · 05/10/2026", amber "Em revisão", action "Continuar revisão →".
+"curriculo_marina_v1.pdf", "Documento v1 · 01/10/2026", neutral/green "Utilizado no Perfil", action "Abrir documento →".
+Next white card "Atividade recente", link "Ver histórico →", compact vertical timeline with dates and 3 events "06/10 · Perfil v3 publicado" / "Nova versão disponível para consulta."; "05/10 · Currículo v2 recebido" / "Documento disponível para revisão."; "01/10 · Primeiro currículo recebido".
+Next white card "Ações rápidas", two simple full-width text-icon rows "Editar dados cadastrais →", "Processamento e revisões →". No destructive primary buttons.
+
+Important fidelity: rich open narrative and8answers not very abbreviated snippets. Plenty of white space, compact understandable operational side. Larger titles than labels, body ~16px equivalent. The screenshot is ONE coherent screen, no second dashboard, no phone inset or unrelated references. Exact source-control wording "Mostrar fontes". Preserve fundamental input reference topology while refining hierarchy and text clarity.
+
+```
 
 ---
 
@@ -18722,6 +18894,87 @@ Estrutura local entregue com evidência reproduzível e commit remoto confirmado
 ## Delta autorizado: confirmação permanente de push
 
 Em 2026-09-12, Bruno pediu retirar a necessidade de nova confirmação e autorizou push ao final das melhorias. O delta de instruções está em `AGENTS.md` 1.1.1: escopo de entrega já aprovado, validação proporcional, destino Prisma confirmado e preservação de trabalho alheio/segredos. O aceite é a regra explícita com esses limites, Context Pack atualizado e checks documentais; não representa alteração das configurações de segurança da plataforma nem autorização de merge/deploy. Nenhum requisito funcional de D-01..D-05 foi alterado.
+
+---
+
+## Source: `docs/qa/aot-person-unified-v210.md`
+
+# AoT — Página unificada da Pessoa v2.1.0
+
+Contrato: `docs/qa/agreement-person-unified-v210.md` versão 1.0.0, integralmente lido/congelado. Execução: `docs/qa/execution-person-unified-v210.md`. Baseline local/origin/VPS main `df7b8403d23adefb0d8981f4391e757067e30551`, produto v2.0.12; branch `codex/person-unified-v210`. Classe C com testes negativos das fronteiras D existentes. QA determinístico local, sem banco/LLM externo.
+
+## Matriz de Acordos
+
+| ID | Acordo / implementação | Teste / evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- |
+| D-01 | `PrismaApplication` unifica as duas entradas; `PersonProfilePage` mantém identidade e seis abas com estado por Pessoa | `personUnifiedRoutes.test.mjs`, `uxFoundation.test.ts`, browser: seis abas/identidade única/destinos | PASS | Navegação real em componentes, dados sintéticos; busca/filtros/retorno usam mecanismo existente |
+| D-UX-02 | CSS 72/28, quatro destaques, síntese inteira, oito análises abertas, rail e responsividade | Renders 2048/1024/390, medidas DOM, inspeção visual desktop/celular, texto longo | PASS | Referência normativa e fixture Marina equivalentes; adaptações abaixo |
+| D-03 | Reutilização `ProfileHighlightCards`/`profileHighlights`, decoder/classificação, sem cálculo novo | Testes highlights/educação/repositório, MBA+Especialização e dados íntegros nos renders | PASS | Snapshot publicado fictício; qualidade universal de currículo não avaliada |
+| D-04 | Nenhum `request` em visita; fontes lazy/cache, narrativa aberta; resumo original em modal | 15 cenários unificados e 11 regressões de síntese; zero IA automática; foco/scroll/fontes e geração só explícita | PASS | Contadores de adapters determinísticos, sem provedor externo |
+| D-05 | Carregamentos separados, Perfil vigente preservado, pendências de estados reais; diagnóstico existente de período com destino contextual | Sem Perfil, ausência de pendências, falhas operações/síntese/documento/fonte; `personReviewNotice` e destino `review-focus` | PASS | Sem ausência convertida em obrigação; apenas diagnóstico conhecido recebe campo |
+| D-06 | Handlers/adapters operacionais e páginas especializadas mantidos; contato autorizado separado; member não monta workspace; proteção dirty | Person-flow 256/256; contratos/negative routes; member/recruiter/archive/dirty/documentos/auditoria; regressão síntese | PASS | Prova dirigida sintética e revisão do diff; mutações autenticadas reais não executadas |
+| D-REL-07 | Registry v2.1.0, owners/current-state/Context Pack; release seletivo e publicação autorizada | Tipos/build/lint/foundation/contextos e publicação em andamento | PARTIAL | Git/CI/VPS/smoke serão registrados após verificação |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo / evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem truncamento/acordeão de análise/dados inventados/IA por navegação/permissão ampliada/PII real/mistura versões | Texto longo integral; 8 eixos abertos; zero requests ao visitar/abas/fontes; member sem workspace/version/contact/curadoria; períodos sem invenção; Documento v2 separado de Perfil v3; fixture fictícia | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade / área | Relação | Baseline / regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Entrada/abas/cabeçalho/rail | direct | df7b8403: Central e Perfil separados; novas entradas testadas, mesmas rotas operacionais; browser-results.json | PASS |
+| Síntese/fontes/cards/publicado | direct | v2.0.12: cálculo/card8 respostas/fontes existentes; 95 testes dirigidos e 11 regressões UI de síntese; texto longo, cache, foco/scroll, falha local | PASS |
+| Documentos/revisão/versões/ciclo de vida | plausible_indirect | Handlers, serviços, páginas/RPCs existentes sem mudança; 256 person-flow e controles/destinos sintéticos | PASS |
+| Tenant/papéis/contato/dirty/retorno | critical_transversal | Filtros de organização e autorização existentes preservados; negativos member/rotas e dirty cancel preserva texto; `uxFoundation` | PASS |
+| Registry/build/release web | direct | Histórico v2.0.12 mantido, v2.1.0 e próxima2.1.1 testados; tipos/build PASS; CI/rollout pendentes | PARTIAL |
+| SQL/Parser/Synthesis/Paddle/matching/Posições | no_impact_identified | Diff não muda schema/migrations/RPCs/serviço/provider/modelo/prompt/score. Novas leituras limitadas ao status já existente no SELECT de Pessoa. Serviços remotos baseline verificados, preservação pós-release pendente | PARTIAL |
+
+### Novidade e preservação
+
+- Nova entrega: composição profissional/operacional única, seis abas, resumo original contextual e pendência precisa quando o diagnóstico existente conhece o campo.
+- Preservação: cálculos/classificação/evidências, snapshot vigente, fronteiras de acesso, fontes/cache/foco/scroll, documentos/importação/revisão/versões e páginas especializadas existentes.
+- Dependência descoberta: Perfil completo precisava exibir detalhes/origem da formação e contato autorizado. Adicionados somente nesta superfície, com contrato/cálculo existentes; sem alterar outros consumidores canônicos.
+- Baseline limitado: não havia prova de todas as mutações em Pessoa real neste movimento. QA local testa fixtures determinísticas e fluxos/contratos existentes; smoke público não prova publicação/restauração/curadoria autenticada real. Sem sessão compartilhada QA ou produção humana usada.
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 | Sem matching/Posições/shell/marca/schema/motor/prompt/modelo/dependências novas; nenhuma Pessoa real publicada/curada, LLM ou suíte integral local | PASS |
+
+## Fidelidade visual
+
+| Referência / viewport | Estado e dados equivalentes / render | Comparação estrutural | Divergências | Status |
+| --- | --- | --- | --- | --- |
+| `evidence/person-unified-v210/approved-reference.png`, 2048 | Marina, Perfil v3, documento novo pendente, 3 organizações, MBA/especialização, narrativa3 parágrafos; `reference-2048.png` | Topologia, hierarquia,72/28,4cards,8eixos2colunas,rail/ordem/ações; DOM e inspeção do render | Tokens/componentes Prisma; períodos/durações reais calculados da fixture e textos operacionais existentes adaptados conforme A-01; sem desvio estrutural | PASS |
+| Transformação intermediária,1024 | Mesmo estado; `reference-1024.png` | 2x2 cards, pendências antes da leitura, rail no fluxo, sem overflow | Transformação prevista pelo contrato | PASS |
+| Transformação móvel,390 | Mesmo estado; `reference-390.png`; `long-390.png` | 1coluna, pendências prioritárias, abas/ações acessíveis, altura natural e texto inteiro | Transformação prevista pelo contrato | PASS |
+
+## Desvios e mudanças autorizadas
+
+Nenhum desvio material identificado na comparação integral com o acordo. Sem decisão nova de produto/arquitetura. Fontes/dados ilustrativos adaptados pelos cálculos e componentes aprovados; IA gerada por visita foi removida conforme D-04. Autorização explícita inclui main/produção e número v2.1.0; não inclui mutação de dados humanos para teste.
+
+## Validação final
+
+- `pnpm run build`, `typecheck:web`, `build:web`: PASS. Avisos conhecidos de chunk grande/importação dinâmica ineficaz; sem erro.
+- Person-flow: 256/256 PASS. Testes existentes de texto estático ajustados à nova entrada e permissão no host correto; negativos funcionais adicionados. Logs FAIL internos do teste do validationRunner são cenários deliberados de propagação de falha, não falha da suíte.
+- Dirigidos: 95/95 PASS (período, registry, highlights/formação/repositório, resumo/evidência/curadoria, UX, synthesis/advisory/routes).
+- Browser unificado: 15/15 cenários PASS, `evidence/person-unified-v210/browser-results.json`.
+- Síntese preservada: 11/11 cenários PASS, `evidence/person-unified-v210/synthesis-regression.json` (texto longo1448/390, fonte/cache, erros locais, análise anterior, consulta sem geração, pendente, falha de fonte, refresh e retry explícito).
+- `git diff --check`, lint e foundation: PASS. Contextos/CI/publicação serão complementados após verificação.
+
+## Git / QA / ambiente
+
+VPS existente verificada: `srv1038882`, `/opt/prisma`, remote oficial, main baseline df7b8403. Web ativo baseline; Parser/Synthesis saudáveis, Paddle ativo. Contêiner experimental `paddle-vl-llama-test` já estava unhealthy antes do movimento e está fora de escopo. Nenhuma alteração nele.
+
+Publicação, rollback/assets/rotas e sincronização ainda não verificadas neste registro inicial. Evidência será complementada sem reconstruir serviços fora do plano seletivo.
+
+## Conclusão
+
+Implementação e QA dirigido aprovados pelas evidências locais. Fechamento operacional pendente; D-REL-07 ainda não é PASS. Jornada autenticada real permanece NOT TESTED e não será inferida de smoke público.
 
 ---
 
@@ -23263,6 +23516,14 @@ Fonte integral e imutável por versão: `docs/qa/agreement-matching-trajectory-d
 Implementar integralmente `docs/qa/agreement-parser-ia-kvm2.md` v1.1.0: D-01 a D-06, P-01 a P-03, F-01/F-02, A-01/A-02 e CA-D01 a CA-D06. Decisão explícita de Bruno inclui chave exata/origem/destino, teste sintético e versão pública v2.0.1/main/produção. Reutilizar Parser/gateway; publicar também web para a versão no login/menu. Não mudar prompt/modelo, reativar OCR ou criar Pessoa de teste em produção.
 
 Registrar ADR sobre a implantação, separando cache persistente de lock volátil. Construir em branch isolada a partir do baseline, validar por mapa e publicar somente superfícies efetivamente necessárias. Transferir apenas credencial backend autorizada por SSH sem revelar valor ou colocar segredo no Git/imagem. Validar com sintético sem persistir Pessoa. Manter evidência de QA local, CI, produção, restart, preservação e rollback no AoT; nenhuma limitação vira PASS fictício.
+
+---
+
+## Source: `docs/qa/execution-person-unified-v210.md`
+
+# Execução — Pessoa unificada v2.1.0
+
+Contrato congelado: docs/qa/agreement-person-unified-v210.md versão1.0.0, lido integralmente, incluindo anexos funcionais/visuais. Implementar integralmente D-01,D-UX-02,D-03..06,D-REL-07 sob P-01,F-01,A-01 e CA-01..07. Referência normativa: docs/qa/evidence/person-unified-v210/approved-reference.png; referência original e inventário lidos do output aprovado. Textos e números de Marina são apenas fixtures sintéticas. Conservar capacidades existentes sem novo passo intermediário. Validar mesma Pessoa/estado/viewport, responsividade/textos longos/fontes/falhas/papéis/rotas e registrar AoT. Publicação autorizada no origin/VPS existentes, seguindo release plan.
 
 ---
 

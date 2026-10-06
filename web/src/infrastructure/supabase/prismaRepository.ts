@@ -233,7 +233,7 @@ export const prismaRepository: PrismaDataRepository = {
   async loadPersonProfile(organizationId, personId, role) {
     const { data: person, error } = await supabase
       .from("people")
-      .select("id, organization_id, full_name, lifecycle, created_at")
+      .select("id, organization_id, full_name, lifecycle, operational_status, created_at")
       .eq("organization_id", organizationId)
       .eq("id", personId)
       .maybeSingle();
@@ -265,6 +265,7 @@ export const prismaRepository: PrismaDataRepository = {
 
     return {
       person: toPersonListItem(person, Boolean(profile)),
+      operationalStatus: readString(person.operational_status),
       profile,
       evidence: (evidenceResult.data ?? []).map((item) => ({
         id: item.id,

@@ -8,7 +8,7 @@ O Perfil Profissional é a apresentação canônica do conhecimento profissional
 
 O mesmo contrato de apresentação é reutilizado em seis contextos:
 
-1. Central da Pessoa, com resumo profissional, experiência recente, competências principais e acesso ao Perfil completo;
+1. Página unificada da Pessoa, com Resumo profissional como entrada, leitura ampla e painel operacional condicionado ao papel;
 2. Perfil completo, em ordem estável: Sobre, Experiência, Formação, Competências, Credenciais e Outros;
 3. Formação, competências e credenciais dentro do Perfil, sem métricas inventadas;
 4. busca avançada de Pessoas por experiência, formação, competências, credenciais e contexto;
@@ -71,3 +71,7 @@ A comparação aceita exatamente duas Pessoas selecionadas na busca e reapresent
 - Não há foto profissional porque esse dado não possui contrato atual; a interface usa iniciais neutras.
 - Não há cargo preferido, senioridade, distância semântica numérica, comparação automática ou exportação do Perfil enquanto essas capacidades não possuírem contrato próprio.
 - Evidência Demonstrada continua separada do Perfil factual.
+
+## Página unificada v2.1.0
+
+A composição vigente substitui a passagem pela Central documental: seis abas locais, identidade única e Resumo direto. `person-center.md` descreve ordem/responsividade/ações. As descrições históricas M7 acima registram evolução; a topologia vigente é a referência normativa refinada do acordo `agreement-person-unified-v210.md`1.0.0. Todos os agrupamentos e detalhes continuam nas abas de Competências/Evidências; a síntese/oito análises/fontes são integrais e a navegação só consulta análise persistida. Na aba Perfil completo, formação mantém descrição/evidência disponível e origem de classificação; o contato só aparece quando autorizado. Versões/busca/comparação conservam o contrato canônico e sua composição existente.

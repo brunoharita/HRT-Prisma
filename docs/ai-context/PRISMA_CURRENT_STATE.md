@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.44
+version: 2.51.45
 last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Página unificada da Pessoa — Prisma v2.1.0
+
+Implementação autorizada em06/10/2026: seleção de Pessoa abre Resumo diretamente, com seis abas, identidade única, quatro destaques e oito análises integrais, fontes sob demanda e painel operacional à direita. Reutiliza componentes/handlers/contratos existentes, separa carregamento profissional/operacional/síntese e protege Perfil vigente durante falhas novas. Pendências reais têm destino contextual; member não consulta operações/contato privado e curadoria mantém papéis atuais. Nenhuma geração de IA por visita/abas/fontes, alteração de matching/Posições/SQL/Parser/worker. Registry explícito2.1.0 com início do movimento em0, histórico anterior preservado. Acordo/execução `docs/qa/agreement-person-unified-v210.md`1.0.0 e `execution-person-unified-v210.md`; evidências/AoT em preparação local. Publicação e jornada autenticada real ainda não verificadas para este movimento; registros anteriores abaixo são baseline histórico.
 
 ## Correção acadêmica do painel v2.0.12
 

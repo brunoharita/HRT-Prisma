@@ -112,7 +112,10 @@ test("M2-B routes members to profile-only UI instead of ingestion workspace", as
   const application = await readFile("web/src/app/PrismaApplication.tsx", "utf8");
   const peoplePage = await readFile("web/src/pages/PeoplePage.tsx", "utf8");
 
-  assert.match(application, /activeMembership\.role === "member"[\s\S]*?<PersonProfilePage/);
+  const profilePage = await readFile("web/src/pages/PersonProfilePage.tsx", "utf8");
+  assert.match(application, /<PersonProfilePage/);
+  assert.match(profilePage, /const canReview = activeMembership\.role !== "member"/);
+  assert.match(profilePage, /return canReview \? <PersonWorkspacePage[\s\S]*: renderPage\(\)/);
   assert.match(peoplePage, /activeMembership\.role !== "member"/);
   assert.match(peoplePage, /listPeople\(activeMembership\.organizationId, deferredSearch, canManagePeople\)/);
 });

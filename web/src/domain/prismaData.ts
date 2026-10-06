@@ -110,6 +110,8 @@ export interface PrivateContact {
 }
 
 export interface PersonProfileView {
+  /** Read-only identity state; absence is not assumed active. */
+  operationalStatus?: string | null;
   person: PersonListItem;
   profile: StructuredProfile | null;
   evidence: ProfileEvidence[];

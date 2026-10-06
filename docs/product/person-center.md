@@ -1,78 +1,39 @@
-# Central da Pessoa
+# Página unificada da Pessoa
 
-## Propósito
+## Entrada e fronteira de produto
 
-A Central da Pessoa é o principal workspace de conhecimento, contexto e ações sobre uma Pessoa no Prisma. Ela deve responder, nesta ordem:
+Prisma v2.1.0 abre diretamente o Resumo profissional ao selecionar uma Pessoa. As rotas `/profiles/:personId` e o bookmark legado `/profiles/:personId/profile` apresentam a mesma página, sem Central → Ver perfil. Acordo normativo: `docs/qa/agreement-person-unified-v210.md` versão1.0.0; execução/AoT no mesmo diretório.
 
-1. quem é a Pessoa;
-2. se existe alguma ação humana pendente;
-3. qual Perfil permanece vigente;
-4. qual conhecimento profissional foi publicado;
-5. de quais documentos e versões esse conhecimento veio;
-6. o que mudou recentemente.
+Pessoa, Documento, Tentativa, Revisão e Perfil publicado continuam objetos distintos. Uma importação incompleta ou falha técnica nunca invalida a Pessoa ou seu Perfil vigente. Somente publicação transacional de nova versão substitui o Perfil atual.
 
-## Fronteira de produto
+## Hierarquia e abas
 
-```text
-Pessoa != Documento != Tentativa != Revisão != Perfil publicado
-```
+Cabeçalho único com identidade, título publicado, localização autorizada, vínculo/status reais, versão/data de publicação. Nova importação, Criar revisão, Versões e Mais ações reutilizam handlers existentes e respectivas permissões. Se não houver Perfil, a importação é a ação principal. Ciclo de vida, fusão, Meus dados e exclusão ficam protegidos no menu e nos fluxos especializados.
 
-Uma importação incompleta ou uma falha técnica nunca invalida a Pessoa nem o Perfil vigente. Nova importação é uma proposta. Somente a publicação transacional de outra versão substitui o Perfil atual.
+As seis abas locais são Resumo, Competências, Evidências, Perfil completo, Documentos e revisões e Histórico. A identidade permanece; documento e Perfil possuem versões independentes. Não há novo menu global, estado persistido, fonte de verdade, score ou decisão de contratação.
 
-Antes de criar uma Pessoa, a tela de identificação permite `Corrigir identificação`, mesmo quando o extrator já encontrou nome e contato. A correção reutiliza a identificação server-side e recalcula correspondências na organização; enquanto aberta, ações de criação/vínculo ficam ocultas. Cancelar preserva o valor confirmado anterior e falha de validação mantém o formulário. Nome e contato continuam necessários para criar, sem retirar o vínculo humano name-only já existente. A correção do intake não reescreve a extração original ou aprova o rascunho documental. Acordo e evidência: `docs/qa/agreement-hosted-paddle-bridge.md` 1.1.0 e respectivo AoT.
+Resumo usa aproximadamente72% para leitura e28% para contexto operacional em desktop largo. Ordem: quatro destaques profissionais em linha; síntese integral; oito análises abertas em duas colunas; indicadores factuais e acessos a competências/evidências. Pendências reais, documentos/revisões recentes, até cinco eventos recentes e ações rápidas formam a lateral. Histórico consulta todas as versões/documentos disponíveis e dá acesso à auditoria operacional existente.
 
-## Hierarquia
+Na largura intermediária os destaques passam a2x2; se a lateral comprometer a leitura, entra no fluxo. No celular, pendências precedem a leitura, cards/análises usam uma coluna e documentos/atividade/ações vêm depois. Sem truncamento, Leia mais, respostas escondidas, scroll interno da narrativa ou overflow horizontal de página.
 
-- Cabeçalho: identidade e posicionamento profissional existentes, localização autorizada, atualização e quantidade de documentos.
-- Pendências: ações reais derivadas dos estados documentais, com documento, data, explicação e CTA direto.
-- Perfil vigente: versão publicada e fonte preservadas em bloco estável, sem competir com a ação principal.
-- Resumo: documentos, pendências, experiências e competências explícitas com contexto.
-- Conhecimento profissional: resumo, experiências, formação acadêmica e complementar estruturada, competências e demais fatos publicados, sem logos ou métricas inventadas. Formação apresenta curso, instituição, período, situação, nível e qualificação; a origem permanece visível sem score arbitrário. Cursos livres, capacitações, treinamentos e extensões usam o nível `complementary` / Formação complementar; certificações continuam em Credenciais.
-- Documentos e versões: lista selecionável e painel contextual com estado, dados recuperados, pontos pendentes, resultado no Perfil e próxima ação.
-- Atividade recente: no máximo cinco eventos de produto; auditoria técnica permanece fora da visão geral.
+## Conteúdo profissional e fontes
 
-## Perspectivas
+Os destaques reutilizam `published-profile-highlights-1.0.1`: áreas explicitamente relacionadas à experiência mais recente e duração documentada, experiência recente e outra experiência com cronologia honesta, maior formação concluída com qualificações sustentadas e organizações distintas. Sobreposições contam uma vez; MBA/Especialização podem coexistir. Ausência/inconclusão não se transformam em fatos negativos ou conclusões.
 
-- `Visão geral`: ação, Perfil vigente, resumo, conhecimento, documentos recentes e atividade.
-- `Documentos e versões`: fontes, versões independentes e detalhe contextual.
-- `Nova importação`: entrada, processamento, extração, evidências e detalhes técnicos já existentes.
+Síntese e oito respostas/lacunas/perguntas permanecem integrais, provenientes da análise armazenada. Mostrar fontes fica no bloco da síntese e habilita referências sem ocultar o texto; o painel existente preserva origem, cache, snapshot, foco e posição. Resumo original abre em modal no mesmo contexto. Trocar abas/fontes ou visitar a Pessoa não gera IA. Gerar/repetir síntese permanece ação explícita de operador autorizado, sujeita à fronteira server-side existente.
 
-As perspectivas reorganizam capacidades existentes. Não criam novos estados persistidos, menus globais, scores, inferências ou decisões automáticas.
+Competências mantém naturezas, grupos/filtros, declarações, curadoria, classificação e vínculos múltiplos. Evidências mantém todas as associações/fontes/detalhes documentais. Vincular evidência não define classificação taxonômica. Perfil completo mantém todos os registros, formação detalhada/origem/situação/qualificação, experiências, credenciais, idiomas, seções extras e contato autorizado separado; não reescreve o snapshot.
 
-## Ações de ciclo de vida
+## Operação, falhas e preservação
 
-- A comparação oferece `Atualizar Perfil` como padrão e `Substituir Perfil` quando a revisão deve se tornar o perfil completo.
-- O histórico permite `Restaurar versão` criando uma nova versão vigente e `Reiniciar Perfil` sem apagar Pessoa, documentos ou versões.
-- O contexto documental oferece `Excluir documento` separado de `Arquivar revisão`. Exclusão física é destrutiva, recebe confirmação e preserva dados independentes.
-- O cabeçalho prioriza `Ver perfil`; `Criar nova revisão` permanece secundária e usa Perfil atual, versão anterior ou documento existente como origem. Quando a origem já é conhecida, a ação segue diretamente sem repetir perguntas.
-- `Processamento e revisões`, quando acionado dentro da Central da Pessoa, abre a central operacional já limitada à Pessoa selecionada. A interface explicita o contexto, oferece retorno direto à Pessoa e mantém `Ver toda a organização` como saída consciente para a visão global.
-- Cada documento mostra uma ação principal derivada do estado: `Continuar revisão`, `Revisar agora`, `Revisar novamente`, `Reabrir` ou `Abrir currículo`; `Corrigir Pessoa vinculada` e `Excluir documento` ficam entre as ações excepcionais.
-- `Mesclar com outra Pessoa`, `Arquivar Pessoa`, `Reativar Pessoa` e a troca imediata de vínculo permanecem no contexto da mesma Pessoa.
-- A busca normal omite Pessoas mescladas e arquivadas por padrão, mas o filtro recupera arquivadas e referências antigas à Pessoa absorvida conduzem ao cadastro principal.
+Pendências só aparecem quando derivadas dos estados atuais. Cada item informa objeto, problema conhecido e ação viável. Diagnóstico de período conhecido na formação usa o validador existente e abre a revisão no campo correspondente; ausência de dado, por si só, não cria obrigação artificial. Se o diagnóstico só conhece a revisão, o botão é Continuar revisão. Falha interna permanece técnica; Perfil vigente continua explicitamente disponível.
 
-## Linguagem
+Documentos e revisões incorpora lista/detalhe, importação manual/PDF, tentativas, extração, recuperação, auditoria, arquivamento de revisão, correção do vínculo e exclusão do documento. Versões/restauração/reinício e revisão por origem mantêm os fluxos existentes. Criar/importar/mesclar/arquivar/excluir não recebe permissão nova.
 
-Usar `Perfil atual`, `Nova importação`, `Requer revisão`, `Revisar documento agora`, `Documentos e versões` e `Atividade recente`. Vermelho é reservado a falha técnica real ou ação destrutiva; âmbar comunica revisão; verde comunica publicação atual; azul comunica ação.
+Carregamentos profissional, síntese e operacional são independentes: falha opcional não oculta fatos bons. Sem Perfil publicado, identidade, documentos e próxima ação real continuam acessíveis, sem síntese inventada. Pessoa mesclada mantém o destino principal e exclusão em andamento mantém bloqueios.
 
-## Autorização
-
-A Central operacional continua restrita aos papéis já autorizados. Member permanece na leitura de Perfil. Contato privado não é promovido ao cabeçalho e o frontend não assume autoridade de revisão.
+Member não monta/consulta o workspace operacional nem recebe contato privado/controles de gestão. Curadoria continua restrita a Super Admin/Owner/Admin; Recruiter conserva seu escopo. Tenant, RLS e RPCs existentes permanecem a autoridade. Tabs e navegação respeitam a proteção de alterações não salvas. Retorno à lista preserva busca/filtros/posição na sessão; retorno da fonte/revisão mantém a Pessoa e o contexto consultado.
 
 ## Limites
 
-- Não cria pendência persistida quando o estado pode ser derivado.
-- Não exibe confiança ou score sem contrato metodológico.
-- Não transforma ano final em conclusão nem apresenta inferência acadêmica como fato confirmado.
-- Não interpreta falta de evidência como característica negativa.
-- Não inventa título profissional, empresas, logos, datas, evidências ou competências.
-- Evidência Demonstrada do M5.1 permanece separada do Perfil factual e só aparece quando a consulta real correspondente existir.
-
-## Perfil e descoberta profissional
-
-A Central resume o Perfil vigente sem duplicá-lo: resumo profissional, no máximo duas experiências recentes e até seis competências principais conduzem à apresentação completa. O Perfil completo, versões históricas, busca e comparação compartilham o contrato `prisma-profile-view` 1.0.0 descrito em `professional-profile-standard.md`.
-
-O M7.2 organiza a apresentação completa em Resumo, Competências, Evidências e Perfil completo. Os três primeiros consomem a projeção versionada somente leitura e preservam múltiplas origens; o Perfil completo não reapresenta o agrupamento heurístico antigo de competências. O detalhe pode levar à fonte documental/região ou à área de Verificações, conforme a origem existente, sem fabricar destino.
-
-O Resumo dessa leitura ganha composição operacional no M7: pendências reais da curadoria ficam imediatamente visíveis após as abas, com CTA condicionado ao papel; métricas factuais, agrupamentos canônicos, evidências recentes e ações existentes são apresentados sem ranking ou novo estado. Esta mudança não altera a perspectiva documental `Visão geral` da Central nem os fluxos completos das demais abas.
-
-A busca avançada usa somente Perfis vigentes do tenant e o Knowledge já publicado. Os resultados explicam os critérios atendidos e a comparação reapresenta exatamente dois Perfis sem score, vencedor ou inferência de adequação.
+Nenhuma alteração de matching/Posições, taxonomia, Parser IA, serviço de síntese, Paddle, banco, prompts/modelos ou publicação automática de Perfil humano. Fixtures de Marina são fictícias e exclusivas de QA local. A evidência visual e sintética não prova jornada autenticada real ou qualidade universal de currículo.

@@ -1,0 +1,12 @@
+import {createRoot} from "react-dom/client";
+import {ConfigProvider} from "antd";
+import ptBR from "antd/locale/pt_BR";
+import {PersonProfilePage} from "../../../web/src/pages/PersonProfilePage";
+import {PrismaViewStateProvider} from "../../../web/src/ui/PrismaNavigation";
+import {prismaTheme} from "../../../web/src/ui/theme";
+import type {PrismaDataRepository} from "../../../web/src/domain/prismaData";
+import {repository,calls,scenario} from "./fixture";
+import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
+Object.assign(window,{__PERSON_QA:{calls,scenario}});
+createRoot(document.getElementById("app")!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><PrismaViewStateProvider scope="org-fixture"><main style={{padding:24,background:"#f3f8fd",minHeight:"100vh"}}><PersonProfilePage activeMembership={{organizationId:"org-fixture",organizationName:"Empresa sintética",role:scenario==="member"?"member":scenario==="recruiter"?"recruiter":"admin",status:"active"} as never} personId="person-fixture" repository={repository as unknown as PrismaDataRepository} onNavigate={path=>{calls.navigations.push(path);}}/><p style={{fontSize:12,color:"#61728c"}}>Dados ilustrativos para validação do layout</p></main></PrismaViewStateProvider></ConfigProvider>);

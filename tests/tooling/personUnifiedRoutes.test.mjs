@@ -1,0 +1,15 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
+import ts from "typescript";
+import {evaluateRouteAccess} from "../../dist/web/src/shared/access.js";
+const file="web/src/app/PrismaApplication.tsx",source=readFileSync(file,"utf8");
+const ast=ts.createSourceFile(file,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+const functions=ast.statements.filter(node=>ts.isFunctionDeclaration(node)&&["findRoute","normalizePath"].includes(node.name?.text)).map(node=>node.getText(ast)).join("\n");
+const code=ts.transpileModule(functions,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+const findRoute=new Function("routes",code+";return findRoute;")([]);
+const membership=role=>({organizationId:"org-fixture",organizationName:"Fixture",groupId:"group-fixture",groupName:"Fixture",role});
+const access=(path,role,authenticated=true,org="org-fixture")=>evaluateRouteAccess({isAuthenticated:authenticated,memberships:[membership(role)],activeOrganizationId:org},findRoute(path).rule);
+test("current and historical Person entry preserve identity and the same authorized professional destination",()=>{for(const path of ["/profiles/person-fixture","/profiles/person-fixture/profile","/profiles/person-fixture/profile/"]){const route=findRoute(path);assert.equal(route.path,"/profiles");assert.equal(route.profileId,"person-fixture");assert.equal(route.profileMode,"view");assert.equal(access(path,"member").allowed,true);assert.equal(access(path,"admin",false).allowed,false);}});
+test("operational bookmarks retain reviewer restrictions, identity and origin",()=>{for(const path of ["/profiles/person-fixture/processes","/profiles/person-fixture/versions","/profiles/person-fixture/edit","/profiles/person-fixture/merge","/profiles/person-fixture/documents/doc/review/review","/profiles/person-fixture/reviews/review","/profiles/person-fixture/documents/doc/verification/review","/profiles/person-fixture/documents/doc"]){const route=findRoute(path);assert.equal(route.profileId,"person-fixture");assert.equal(access(path,"member").allowed,false);assert.equal(access(path,"recruiter").allowed,true);assert.equal(access(path,"admin",false).allowed,false);}});
+test("all entry paths mount the unified reader and never a separate mandatory workspace",()=>{const render=source.slice(source.indexOf('if (route.path === "/profiles" && route.profileId && route.profileView === "profile"'),source.indexOf('if (route.path === "/profiles" && activeMembership)'));assert.equal((render.match(/<PersonProfilePage/g)??[]).length,2);assert.ok(!render.includes("<PersonWorkspacePage"));});

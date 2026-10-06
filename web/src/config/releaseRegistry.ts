@@ -1,6 +1,8 @@
 export interface ProductMovementRelease {
   productGeneration: number;
   movement: number;
+  /** Explicit Product Owner convention for a movement launched at .0. */
+  firstDeliveryNumber?: 0 | 1;
   deliveries: readonly string[];
   /** Numbers explicitly skipped by the Product Owner, never fictitious deliveries. */
   skippedDeliveryNumbers?: readonly number[];
@@ -68,6 +70,11 @@ export const PRISMA_RELEASE_HISTORY = [{
     "2.0.12: painel executivo com trajetória e destaques enriquecidos",
   ],
   skippedDeliveryNumbers: [7, 11],
+}, {
+  productGeneration: 2,
+  movement: 1,
+  firstDeliveryNumber: 0,
+  deliveries: ["2.1.0: página unificada da Pessoa, leitura profissional e operações no mesmo contexto"],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {
@@ -78,7 +85,9 @@ export function calculateProductRelease(history: readonly ProductMovementRelease
     throw new Error("Invalid official product release registry");
   }
   const skipped = current.skippedDeliveryNumbers ?? [];
-  const delivery = current.deliveries.length + skipped.length;
+  const first = current.firstDeliveryNumber ?? 1;
+  if (first !== 0 && first !== 1) throw new Error("Invalid official product release number");
+  const delivery = current.deliveries.length + skipped.length - (first === 0 ? 1 : 0);
   if (new Set(skipped).size !== skipped.length || skipped.some(number => !Number.isSafeInteger(number) || number < 1 || number >= delivery)) {
     throw new Error("Invalid official product release number");
   }

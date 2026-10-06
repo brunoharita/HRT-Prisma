@@ -1,0 +1,3 @@
+# Execução — Pessoa unificada v2.1.0
+
+Contrato congelado: docs/qa/agreement-person-unified-v210.md versão1.0.0, lido integralmente, incluindo anexos funcionais/visuais. Implementar integralmente D-01,D-UX-02,D-03..06,D-REL-07 sob P-01,F-01,A-01 e CA-01..07. Referência normativa: docs/qa/evidence/person-unified-v210/approved-reference.png; referência original e inventário lidos do output aprovado. Textos e números de Marina são apenas fixtures sintéticas. Conservar capacidades existentes sem novo passo intermediário. Validar mesma Pessoa/estado/viewport, responsividade/textos longos/fontes/falhas/papéis/rotas e registrar AoT. Publicação autorizada no origin/VPS existentes, seguindo release plan.

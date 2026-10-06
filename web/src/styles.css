@@ -6875,3 +6875,98 @@ textarea {
   .prisma-synthesis-published .ant-card-head-wrapper { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px 0; }
   .prisma-synthesis-source-drawer .ant-drawer-body { padding: 20px; }
 }
+
+/* v2.1.0 — Pessoa: one identity, professional reading and contextual operations. */
+.prisma-profile-page { min-width: 0; }
+.prisma-person-reading-layout { display: grid; gap: 24px; min-width: 0; align-items: start; }
+.prisma-person-reading-layout.has-operations { grid-template-columns: minmax(0, 72fr) minmax(0, 28fr); grid-template-rows: min-content 1fr; }
+.prisma-person-reading-main { min-width: 0; grid-column: 1; grid-row: 1 / span 2; padding: 20px; background: #fff; border: 1px solid #e1e9f4; border-radius: 10px; }
+.prisma-person-reading-pending { min-width: 0; grid-column: 2; grid-row: 1; display: grid; gap: 12px; }
+.prisma-person-reading-rail { min-width: 0; grid-column: 2; grid-row: 2; display: grid; gap: 16px; }
+.prisma-person-reading-layout:not(:has(.prisma-person-reading-pending)) .prisma-person-reading-rail { grid-row: 1 / span 2; }
+.prisma-person-reading-rail .ant-card-head { min-height: 48px; padding: 0 20px; }
+.prisma-person-reading-rail .ant-card-head-title { white-space: normal; font-size: 17px; }
+.prisma-person-reading-rail .ant-card-body { padding: 20px; }
+.prisma-person-reading-rail .ant-btn-link { justify-self: end; white-space: normal; height: auto; text-align: left; }
+.prisma-person-rail-pending { padding: 22px; background: #fff9eb; border: 1px solid #f1cc78; border-radius: 10px; min-width: 0; }
+.prisma-person-rail-pending h3 { margin: 0 0 18px; font-size: 18px; color: #78520b; }
+.prisma-person-rail-pending article + article { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ecd8aa; }
+.prisma-person-rail-pending article.is-danger { border-left: 3px solid #c23636; padding-left: 12px; }
+.prisma-person-rail-pending strong { color: #152e54; font-size: 16px; }
+.prisma-person-rail-pending p { margin: 8px 0 14px; line-height: 1.65; }
+.prisma-person-rail-pending small, .prisma-person-rail-document small { display: block; color: #536885; margin: 10px 0; line-height: 1.6; overflow-wrap: anywhere; }
+.prisma-person-rail-pending .ant-btn { height: auto; min-height: 36px; white-space: normal; }
+.prisma-person-rail-document { padding: 8px 0 16px; overflow-wrap: anywhere; }
+.prisma-person-rail-document + article { padding-top: 16px; border-top: 1px solid #e5edf7; }
+.prisma-person-rail-document strong { display: block; }
+.prisma-person-evidence-strip .ant-card-body { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; padding: 16px; }
+.prisma-person-evidence-strip span { font-size: 13px; color: #536885; }
+.prisma-person-evidence-strip b { display: block; color: #102751; font-size: 19px; }
+.prisma-person-evidence-strip .ant-btn { padding: 0; font-size: 13px; }
+.prisma-person-evidence-strip .ant-card-body > div { margin-left: auto; display: grid; }
+.prisma-person-identity-name { display: flex; gap: 20px; align-items: center; }
+.prisma-person-identity-name .prisma-canonical-avatar { flex: 0 0 76px; width: 76px; height: 76px; font-size: 28px; }
+.prisma-person-center-header__identity:has(.prisma-person-identity-name) { display: grid; grid-template-columns: 76px minmax(0, 1fr); column-gap: 20px; }
+.prisma-person-identity-name { grid-column: 1 / span 2; }
+.prisma-person-center-header__identity:has(.prisma-person-identity-name) > p, .prisma-person-center-header__identity:has(.prisma-person-identity-name) > .prisma-person-center-header__metadata { grid-column: 2; }
+.prisma-profile-page .prisma-person-center-header { padding: 0 0 12px; background: transparent; border: 0; }
+.prisma-profile-page .prisma-person-center-header__actions { flex: 0 1 auto; }
+.prisma-person-profile-version { text-align: right; margin: 12px 0 0; color: #61728c; font-size: 12px; }
+.prisma-person-original-summary { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
+.prisma-person-reading-main .prisma-profile-highlight { background: #fff; display: block; padding: 16px; }
+.prisma-person-reading-main .prisma-profile-highlight-icon { float: left; margin: 0 10px 8px 0; background: transparent; width: 30px; height: 34px; }
+.prisma-person-reading-main .prisma-profile-highlight h3 { min-height: 38px; }
+.prisma-person-reading-main .prisma-profile-highlight-values { clear: both; }
+.prisma-person-reading-main .prisma-profile-highlight-values strong, .prisma-person-reading-main .prisma-profile-highlight-headline { font-size: 17px; }
+.prisma-person-reading-main .prisma-synthesis.is-source-open { padding-right: 0; }
+.prisma-synthesis-narrative-heading { display: flex; justify-content: space-between; gap: 12px; align-items: start; margin-bottom: 14px; }
+.prisma-synthesis-narrative-heading h3 { margin: 0; flex-wrap: wrap; }
+.prisma-synthesis-narrative-heading h3 small { color: #61728c; font-size: 12px; font-weight: 400; }
+.prisma-synthesis-narrative-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+.prisma-synthesis-narrative-footer .ant-btn { padding: 0; white-space: normal; height: auto; text-align: left; }
+.prisma-synthesis-analysis-heading h2 { margin: 0 0 4px; font-size: 21px; }
+.prisma-synthesis-analysis-heading p { color: #61728c; margin: 0; }
+.prisma-person-reading-main .prisma-synthesis-axes { gap: 16px; align-items: stretch; }
+.prisma-person-reading-main .prisma-synthesis-axis-card .ant-card-head { padding: 12px 18px; min-height: 52px; }
+.prisma-person-reading-main .prisma-synthesis-axis-card .ant-card-body { padding: 0 18px 18px; font-size: 16px; }
+.prisma-person-reading-main .prisma-synthesis-axis-title { font-size: 16px; }
+.prisma-person-reading-main .prisma-synthesis-axis-title > span { background: transparent; }
+.prisma-m72-tabs { flex-wrap: wrap; }
+@media (min-width: 1200px) and (max-width: 1499px) {
+  .prisma-person-reading-main .prisma-profile-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1199px) {
+  .prisma-person-reading-layout.has-operations, .prisma-person-reading-layout { display: flex; flex-direction: column; }
+  .prisma-person-reading-pending { order: 0; width: 100%; }
+  .prisma-person-reading-main { order: 1; width: 100%; box-sizing: border-box; }
+  .prisma-person-reading-rail { order: 2; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prisma-person-profile-version { text-align: left; }
+}
+@media (max-width: 767px) {
+  .prisma-person-reading-main { padding: 14px; }
+  .prisma-person-reading-rail { grid-template-columns: minmax(0, 1fr); }
+  .prisma-person-reading-main .prisma-profile-highlights { grid-template-columns: minmax(0, 1fr); }
+  .prisma-synthesis-narrative-heading { flex-direction: column; }
+  .prisma-profile-page .prisma-person-center-header__actions { display: flex; width: 100%; }
+  .prisma-profile-page .prisma-person-center-header__actions .ant-space-item { flex: 1 1 140px; }
+  .prisma-profile-page .prisma-person-center-header__actions .ant-btn { width: 100%; }
+  .prisma-person-center-header__identity:has(.prisma-person-identity-name) { grid-template-columns: 56px minmax(0, 1fr); column-gap: 12px; }
+  .prisma-person-identity-name { gap: 12px; }
+  .prisma-person-identity-name .prisma-canonical-avatar { width: 56px; height: 56px; flex-basis: 56px; font-size: 22px; }
+  .prisma-person-rail-pending { padding: 16px; }
+}
+
+.prisma-person-center-header__identity:has(.prisma-person-identity-name) { row-gap: 6px; align-items: start; }
+.prisma-person-center-header__identity .prisma-person-identity-name { display: contents; }
+.prisma-person-identity-name .prisma-canonical-avatar { grid-column: 1; grid-row: 1 / span 3; }
+.prisma-person-identity-name h1 { grid-column: 2; margin: 0 !important; }
+.prisma-person-center-header__identity > .prisma-person-center-header__title { grid-column: 2; margin: 0; }
+.prisma-person-center-header__identity > .prisma-person-center-header__metadata { grid-column: 2; }
+.prisma-profile-page .prisma-person-center-header__main { align-items: start; }
+.prisma-profile-page .prisma-person-center-header__metadata .ant-tag { padding: 2px 10px; }
+.prisma-person-reading-pending article + article, .prisma-person-reading-pending > section > article { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ecd8aa; }
+
+@media (max-width: 767px) {
+  .prisma-profile-page .prisma-person-center-header__metadata { display: flex; gap: 8px; margin-top: 4px; }
+  .prisma-profile-page .prisma-person-center-header__metadata .ant-tag { width: fit-content; }
+}

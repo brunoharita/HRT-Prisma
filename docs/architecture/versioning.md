@@ -1,5 +1,7 @@
 # Versionamento
 
+Decisão explícita de Bruno em06/10/2026: publicar **Prisma v2.1.0**, página unificada da Pessoa. O movimento2.1 inicia em entrega0 por decisão expressa, registrada como `firstDeliveryNumber: 0`; o padrão histórico continua iniciar em1. A entrega seguinte deste movimento será2.1.1, sem alterar contadores/saltos anteriores ou inventar entrega. Nenhum contrato persistido de Perfil/IA/taxonomia muda. Rollout somente web; acordo `docs/qa/agreement-person-unified-v210.md`1.0.0.
+
 Decisão de Bruno em 06/10/2026: publicar **Prisma v2.0.12**, painel executivo com quatro destaques enriquecidos, preservando IA/perguntas/fontes persistidas. Registry único registra uma entrega e lacunas explícitas [7,11]; 2.0.11 ficou em rascunho, nenhuma entrega fictícia. Método de projeção local `published-profile-highlights-1.0.0`, sem nova taxonomia/banco/provider. Rollout somente web, acordo `docs/qa/agreement-profile-summary-cards-v2012.md`.
 
 Decisão explícita de Bruno em 06/10/2026: publicar **Prisma v2.0.10** para avisos com problema e ação contextual, incluindo definição de grupo na tela de Competências. Reutiliza `classify_knowledge_competency`/taxonomia `competency-taxonomy-2.0.0` e os controles existentes; nenhum contrato persistido, migration, IA/modelo, Parser ou worker muda. Registry único avança para entrega10, preservando a lacuna histórica7. Rollout somente web; acordo `docs/qa/agreement-actionable-notices-v2010.md`.

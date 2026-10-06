@@ -1,6 +1,10 @@
+import type { ReactNode } from "react";
+import { PersonWorkspacePage, type PersonWorkspaceParts } from "./PersonWorkspacePage";
+import { confirmPrismaNavigation, useViewState } from "../ui/PrismaNavigation";
+import { PERSON_SURFACES, type Surface } from "../components/profile/PersonProfessionalEvidenceMap";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, EditOutlined, HistoryOutlined } from "@ant-design/icons";
-import { Alert, Button, Empty, Skeleton, Space } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { Alert, Button, Descriptions, Empty, Skeleton } from "antd";
 import { CanonicalProfileHeader } from "../components/profile/CanonicalProfileView";
 import { PersonProfessionalEvidenceMap } from "../components/profile/PersonProfessionalEvidenceMap";
 import { buildPrismaProfileView } from "../domain/canonicalProfile";
@@ -22,6 +26,8 @@ interface PersonProfilePageProps {
 }
 
 export function PersonProfilePage({ activeMembership, personId, repository, onNavigate }: PersonProfilePageProps) {
+  const [surface, setSurface] = useViewState<Surface>("personSurface", "summary", `/profiles/${personId}`);
+  const changeSurface = (next: Surface) => { void confirmPrismaNavigation().then(ok => { if (ok) setSurface(next); }); };
   const [view, setView] = useState<PersonProfileView | null>(null);
   const [loading, setLoading] = useState(true);
   const [noticeRetry, setNoticeRetry] = useState(0);
@@ -42,7 +48,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
     profile: view.profile,
     location: view.privateContact?.location ?? null,
     lifecycleLabel: describeLifecycle(view.person.lifecycle),
-    operationalStatusLabel: "Ativo",
+    operationalStatusLabel: ({active:"Ativa",archived:"Arquivada",merged:"Mesclada",deleting:"Exclusão em andamento"} as Record<string,string>)[view.operationalStatus ?? ""] ?? null,
     knowledge: view.normalizedKnowledge.map((item) => ({ originalTerm: item.originalTerm, canonicalLabel: item.canonicalLabel, state: item.state })),
     version: {
       profileId: view.profile.id,
@@ -81,17 +87,19 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
     if (evidence.nature === "verified_assessment" || evidence.nature === "assessment_result") onNavigate("/verifications");
   }
 
-  return (
+  const renderPage = (operations?: PersonWorkspaceParts): ReactNode => (
     <PrismaPage className="prisma-profile-page">
-      <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(canReview ? `/profiles/${personId}` : "/profiles")} type="text">{canReview ? "Voltar para a Central da Pessoa" : "Voltar para Pessoas"}</Button>
+      {operations?.header ?? <><Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>{canonical ? <><CanonicalProfileHeader profile={canonical} />{canonical.version ? <p className="prisma-person-profile-version">Perfil v{canonical.version.number} · Publicado em {new Date(canonical.version.publishedAt).toLocaleDateString("pt-BR")}</p> : null}</> : view ? <h1>{view.person.fullName}</h1> : null}</>}
+      {operations?.notices}
       {loading ? <ProfileSkeleton /> : null}
       {error ? <Alert message={error} showIcon type="error" action={<Button onClick={() => setNoticeRetry((value) => value + 1)}>Atualizar consulta</Button>} /> : null}
       {!loading && !error && !view ? <PrismaCard><Empty description="Pessoa inexistente ou indisponível para esta empresa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
-      {view && !canonical ? <PrismaCard><Empty description="Ainda não existe um Perfil publicado para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
-      {canonical ? <CanonicalProfileHeader actions={canReview ? <Space wrap><Button icon={<HistoryOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Versões do perfil</Button><Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)} type="primary">Criar nova revisão</Button></Space> : undefined} profile={canonical} /> : null}
-      {canonical ? <PersonProfessionalEvidenceMap key={`${activeMembership.organizationId}:${personId}`} synthesis={synthesis} onOpenSynthesisSource={openSynthesisSource} curation={curation} onOpenSource={openEvidenceSource} onOpenVersions={canReview ? () => onNavigate(`/profiles/${personId}/versions`) : undefined} profile={canonical} projection={view?.professionalEvidence ?? null} projectionError={view?.professionalEvidenceError ?? null} /> : null}
+      {view && !canonical ? <><nav aria-label="Áreas do Perfil profissional" className="prisma-m72-tabs">{PERSON_SURFACES.map(([key,label]) => <button key={key} aria-current={surface === key ? "page" : undefined} onClick={() => changeSurface(key)} type="button">{label}</button>)}</nav><PrismaCard><Empty description="Ainda não existe Perfil publicado para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} />{operations && surface === "summary" ? <Button onClick={() => changeSurface("documents")}>Consultar documentos e continuar revisão</Button> : null}</PrismaCard>{operations ? <div className="prisma-person-no-profile">{surface === "summary" && operations.pending ? <section className="prisma-person-rail-pending"><h3>Ações pendentes</h3>{operations.pending}</section> : null}{surface === "documents" ? operations.documents : surface === "history" ? operations.history : null}</div> : null}</> : null}
+      {canonical ? <PersonProfessionalEvidenceMap key={`${activeMembership.organizationId}:${personId}`} activeSurface={surface} onSurfaceChange={changeSurface} workspace={operations} synthesis={synthesis} onOpenSynthesisSource={openSynthesisSource} curation={curation} onOpenSource={openEvidenceSource} onOpenVersions={canReview ? () => onNavigate(`/profiles/${personId}/versions`) : undefined} profile={canonical} projection={view?.professionalEvidence ?? null} projectionError={view?.professionalEvidenceError ?? null} /> : null}
+      {surface === "profile" && canReview && view?.privateContact ? <PrismaCard title="Contato autorizado"><Descriptions column={1}><Descriptions.Item label="E-mail">{view.privateContact.email ?? "Não informado"}</Descriptions.Item><Descriptions.Item label="Telefone">{view.privateContact.phone ?? "Não informado"}</Descriptions.Item><Descriptions.Item label="Localização">{view.privateContact.location ?? "Não informada"}</Descriptions.Item></Descriptions></PrismaCard> : null}
     </PrismaPage>
   );
+  return canReview ? <PersonWorkspacePage activeMembership={activeMembership} personId={personId} onNavigate={onNavigate} renderWorkspace={renderPage} onOpenDocuments={() => changeSurface("documents")} /> : renderPage();
 }
 
 function ProfileSkeleton() {

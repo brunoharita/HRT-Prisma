@@ -28,7 +28,6 @@ import { PersonFormPage } from "../pages/PersonFormPage";
 import { PersonProfilePage } from "../pages/PersonProfilePage";
 import { ProfileSearchPage } from "../pages/ProfileSearchPage";
 import { ProfileComparePage } from "../pages/ProfileComparePage";
-import { PersonWorkspacePage } from "../pages/PersonWorkspacePage";
 import { ProfileReviewPage } from "../pages/ProfileReviewPage";
 import { ProfileDeltaPage } from "../pages/ProfileDeltaPage";
 import { ProfileVersionsPage } from "../pages/ProfileVersionsPage";
@@ -422,13 +421,10 @@ function renderRouteContent(
     return <PersonFormPage activeMembership={activeMembership} personId={route.profileId} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles" && route.profileId && route.profileView === "profile" && activeMembership) {
-    return <PersonProfilePage activeMembership={activeMembership} personId={route.profileId} repository={prismaRepository} onNavigate={onNavigate} />;
+    return <PersonProfilePage key={`${activeMembership.organizationId}:${route.profileId}`} activeMembership={activeMembership} personId={route.profileId} repository={prismaRepository} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles" && route.profileId && activeMembership) {
-    if (activeMembership.role === "member") {
-      return <PersonProfilePage activeMembership={activeMembership} personId={route.profileId} repository={prismaRepository} onNavigate={onNavigate} />;
-    }
-    return <PersonWorkspacePage activeMembership={activeMembership} personId={route.profileId} onNavigate={onNavigate} />;
+    return <PersonProfilePage key={`${activeMembership.organizationId}:${route.profileId}`} activeMembership={activeMembership} personId={route.profileId} repository={prismaRepository} onNavigate={onNavigate} />;
   }
   if (route.path === "/profiles" && activeMembership) {
     return <PeoplePage activeMembership={activeMembership} repository={prismaRepository} onNavigate={onNavigate} />;
