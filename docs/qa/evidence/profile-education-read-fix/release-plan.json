@@ -1,0 +1,59 @@
+{
+  "version": "1.0.3",
+  "files": [
+    "FONTE_GPT_PRISMA.md",
+    "TUDO_SOBRE_PRISMA.md",
+    "docs/ai-context/PRISMA_CURRENT_STATE.md",
+    "docs/ai/profile-synthesis.md",
+    "docs/architecture/versioning.md",
+    "docs/product/ux-foundation.md",
+    "docs/qa/agreement-profile-education-read-fix.md",
+    "docs/qa/aot-profile-education-read-fix.md",
+    "docs/qa/evidence/profile-education-read-fix/education-explicit-1448.json",
+    "docs/qa/evidence/profile-education-read-fix/education-explicit-1448.png",
+    "docs/qa/evidence/profile-education-read-fix/education-explicit-390.json",
+    "docs/qa/evidence/profile-education-read-fix/education-inferred-1448.json",
+    "docs/qa/evidence/profile-education-read-fix/education-inferred-390.json",
+    "docs/qa/evidence/profile-education-read-fix/education-reviewed-1448.json",
+    "docs/qa/evidence/profile-education-read-fix/education-reviewed-390-full.png",
+    "docs/qa/evidence/profile-education-read-fix/education-reviewed-390.json",
+    "tests/fixtures/profileEducationPublished.mjs",
+    "tests/profileEducationRepository.test.ts",
+    "tests/ui/profile-synthesis.vite.config.mts",
+    "tests/ui/profile-synthesis/main.tsx",
+    "web/src/domain/profileHighlights.ts",
+    "web/src/infrastructure/supabase/prismaRepository.ts"
+  ],
+  "impact": {
+    "surfaces": [
+      "context-pack",
+      "documentation",
+      "generated-context",
+      "hosting",
+      "tests",
+      "web"
+    ],
+    "edgeFunctions": [],
+    "migrations": [],
+    "modifiedMigrations": [],
+    "unknown": []
+  },
+  "validationCommands": [
+    "git diff --check",
+    "pnpm run generate:prisma-context",
+    "pnpm run check:prisma-context",
+    "pnpm run typecheck:web",
+    "pnpm run build:web",
+    "pnpm run test"
+  ],
+  "deployments": {
+    "git": true,
+    "database": [],
+    "edgeFunctions": [],
+    "web": true,
+    "parserIa": false,
+    "profileSynthesis": false
+  },
+  "blockedReasons": [],
+  "publishable": true
+}

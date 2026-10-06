@@ -1,0 +1,8 @@
+Verified 2026-10-06T18:57Z, root@72.60.241.90 /opt/prisma. origin git@github.com:brunoharita/HRT-Prisma.git.
+Functional Git83ee414956149de5bb22702d7532aa791f94927c. Web entry/assets/index-Btvjl667.js.
+prisma-web sha256:1cfa7dd7494822a921ebb9dcf413ab33e7dc53ed6d943eb169163f66296595bd running0.
+prisma-profile-synthesis sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5 running healthy0 unchanged.
+prisma-parser-ia sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616 running healthy0 unchanged.
+prisma-paddle-gateway sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99 running0 unchanged.
+Rollback prisma-web:rollback-before-83ee41495614 retains baseline sha256:793e7465570d88a2f08d555c1e0e6f4e46e8ad3fbb8bec8d1f7b544300058dbc.
+Public smoke12HTTP200/8bundlechecks PASS. First HEAD404duringrecreation stabilized without rebuild. VPS untracked models/ preserved.

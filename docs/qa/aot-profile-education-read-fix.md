@@ -9,7 +9,7 @@ Contrato congelado: `docs/qa/agreement-profile-education-read-fix.md` v1.0.0; ba
 | D-01 | readEducation passa metadados válidos ao resolvedor existente | profileEducationRepository.test percorre método real/decoder/canônica/card; baseline reproduz card vazio; snapshot/método/fontes/revisão preservados | PASS sintético sem rede |
 | D-02 | títulos de qualificação, empates e fallback genérico | MBA/spec explícitos/revisados; legado/andamento/inferido/string true/metadata inválida; profileHighlights | PASS |
 | D-03 | layout/4cards/8respostas/origens preservados |6UI1448/390 com loadPersonProfile real contra transporte sintético; identidade/experiências/versão; sem fetch IA | PASS no escopo, Pessoa real NOT TESTED |
-| D-04 | método1.0.1, produto2.0.12; docs/testes/build |49testes PASS; tipos raiz/web/build PASS; CI/main/web/smoke/contextos pendentes | PARTIAL até publicação |
+| D-04 | método1.0.1, produto2.0.12; docs/testes/build |49testes PASS; tipos raiz/web/build/contextos/lint/foundation PASS; CI branch/main success; web e smoke12HTTP200 | PASS |
 
 ## Proibições e fora de escopo
 
@@ -23,8 +23,8 @@ P-01 PASS: teste negativo impede string true e inferência não revisada; metada
 | View canônica/Perfil completo | plausible_indirect | Identidade, contato disponível, experiências, versão e metadados acadêmicos; testes do caminho real | PASS projeção; tela completa real NOT TESTED |
 | Tenant/escopo de leitura | critical_transversal | Mock exige org/person/profile; nenhum novo acesso, teste/diff | PASS na fronteira afetada; RLS inalterada |
 | Outros cards/seções/fontes | plausible_indirect |4cards/8seções/sem provider, origem da formação;6reports/render1448/390 | PASS |
-| Registry/main/web | direct |2.0.12 inalterado/teste registry; build; publicação pendente | PARTIAL |
-| SQL/IA/matching/Parser/worker | no_impact_identified | Diff reutiliza classificador somente para leitura; plano/saúde VPS pendentes | PARTIAL até prova operacional |
+| Registry/main/web | direct |2.0.12 inalterado/teste registry; CI37514722673/37514980809 success; web83ee414,12HTTP200/8checks | PASS |
+| SQL/IA/matching/Parser/worker | no_impact_identified | Diff reutiliza classificador somente para leitura; plano somenteweb; imagens/saúde/restarts dos serviços inalterados | PASS |
 
 Novidade: nenhuma metadata perdida; título explicita qualificação, mantendo nível genérico quando desconhecida. Preservação: confirmação humana/aceitação explícita já registradas, inferência não revisada indisponível; todos os cursos empatados, fontes e respostas. Nenhuma relação reclassificada. QA sintético não prova jornada autenticada real ou veracidade curricular universal.
 
@@ -34,8 +34,8 @@ Screenshot do incidente é contraexemplo. Referência normativa continua acordo2
 
 ## Validação / Git / ambientes
 
-49testes dirigidos: profileEducationRepository, profileHighlights, educationClassification, productRelease. Tipos raiz/web e buildweb PASS. Avisos preexistentes de chunk grande/import dinâmico sem mudança de divisão. Nenhuma suíte completa local. Contexto/CI/publicação/smoke/sincronização pendentes.
+49testes dirigidos: profileEducationRepository, profileHighlights, educationClassification, productRelease. Tipos raiz/web e buildweb PASS. Avisos preexistentes de chunk grande/import dinâmico sem mudança de divisão. Nenhuma suíte completa local. Contextos/lint/foundation PASS na árvore rastreada, sem incluir arquivos alheios. CI branch37514722673/main37514980809 success. SHA funcional83ee414956149de5bb22702d7532aa791f94927c integrado por fast-forward e publicado com deploy/release-web.sh seletivo. Web1cfa7dd7 running0,entryindex-Btvjl667.js; rollback793e7465 e assets antigos preservados.12HTTP200 e8checks PASS. Primeiro HEAD404 na recriação estabilizou sem rebuild. Síntese8526717f/Parser8682af7d healthy0/gatewayd061cea3 running0 preservados. Fechamento documental/contextos segue por Git, sem reconstruir app. Evidência operacional no mesmo diretório: release-plan.json/release-receipt.json/public-smoke.json/production-runtime.txt.
 
 ## Desvios / conclusão
 
-Nenhum desvio de produto identificado. Fonte do diagnóstico: código e leitura produtiva limitada ao Perfil vigente de Bruno no turno anterior; nenhum dado real versionado. Implementação comprovada sinteticamente; não declarar fechamento de D-04 antes da publicação.
+Nenhum desvio de produto identificado. Fonte do diagnóstico: código e leitura produtiva limitada ao Perfil vigente de Bruno no turno anterior; nenhum dado real versionado. D-01..04 e P/F PASS nas fronteiras requeridas. Publicação comprovada; comportamento autenticado de Pessoa real NOT TESTED e não usado para declarar a aceitação sintética. Fechamento Git documental mantém SHA funcional no bundle; verificação final local/origin/VPS registrada no retorno da execução.
