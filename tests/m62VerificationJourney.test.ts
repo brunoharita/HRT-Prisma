@@ -46,7 +46,8 @@ test("jornada visual preserva contexto e remove controles fictícios", () => {
 test("convite e acompanhamento não simulam delivery ou conclusão", () => {
   assert.match(operationsPage, /Como você pretende compartilhar o link\?/);
   assert.match(operationsPage, /O envio será manual/);
-  assert.match(operationsPage, /Não foi possível copiar automaticamente/);
+  assert.match(operationsPage, /Não foi possível copiar o link automaticamente/);
+  assert.match(operationsPage, /Selecionar link do convite/);
   assert.match(operationsPage, /Abrir página do convite/);
   assert.match(operationsPage, /key: "inconclusive"/);
   assert.match(operationsPage, /Nenhum ponto é acrescentado/);
