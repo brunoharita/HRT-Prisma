@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 364
-source_manifest_sha256: e7176c1d97632c2588672afa0b47f3f76512efd20d0dbd3216a0d9966be53815
+source_manifest_sha256: 8822951d3c054da732513d5e33cfffc4c9bce6f18713153381e6a4231c234fd4
 -->
 
 # Tudo sobre o Prisma
@@ -18937,6 +18937,7 @@ Contrato: `docs/qa/agreement-person-unified-v210.md` versão 1.0.0, integralment
 - Nova entrega: composição profissional/operacional única, seis abas, resumo original contextual e pendência precisa quando o diagnóstico existente conhece o campo.
 - Preservação: cálculos/classificação/evidências, snapshot vigente, fronteiras de acesso, fontes/cache/foco/scroll, documentos/importação/revisão/versões e páginas especializadas existentes.
 - Dependência descoberta: Perfil completo precisava exibir detalhes/origem da formação e contato autorizado. Adicionados somente nesta superfície, com contrato/cálculo existentes; sem alterar outros consumidores canônicos.
+- Revisão final de D-05: a indisponibilidade operacional passou a ser explícita também na lateral do Resumo e no Histórico, com skeleton independente durante a consulta. Regressão adicional `operations-regression.json` comprova as três superfícies e preservação das oito análises. Sem nova regra de negócio ou alteração de handler.
 - Baseline limitado: não havia prova de todas as mutações em Pessoa real neste movimento. QA local testa fixtures determinísticas e fluxos/contratos existentes; smoke público não prova publicação/restauração/curadoria autenticada real. Sem sessão compartilhada QA ou produção humana usada.
 
 ## Fora de escopo preservado
@@ -18965,6 +18966,7 @@ Nenhum desvio material identificado na comparação integral com o acordo. Sem d
 - Browser unificado: 15/15 cenários PASS, `evidence/person-unified-v210/browser-results.json`.
 - Síntese preservada: 11/11 cenários PASS, `evidence/person-unified-v210/synthesis-regression.json` (texto longo1448/390, fonte/cache, erros locais, análise anterior, consulta sem geração, pendente, falha de fonte, refresh e retry explícito).
 - `git diff --check`, lint e foundation: PASS. Contextos/CI/publicação serão complementados após verificação.
+- Context Pack gerado/conferido em cópia limpa do índice Git: PASS. O checker no diretório habitual detectou documentos locais alheios não rastreados; foram preservados e excluídos da cópia, evitando incluí-los na entrega. CI da primeira implementação6697f8a: branch37531196095/main37531413330 PASS. Primeiro web estabilizou200 após404 transitório; ajuste final do aviso operacional terá seu próprio SHA validado dentro deste mesmo movimento.
 
 ## Git / QA / ambiente
 

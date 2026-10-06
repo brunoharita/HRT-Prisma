@@ -440,8 +440,11 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
     [currentProfileVersion, workspace],
   );
 
-  if (loading && renderWorkspace) return renderWorkspace({ documents: <PersonCenterSkeleton /> });
-  if (!loading && (!workspace || !viewModel) && renderWorkspace) return renderWorkspace({ documents: <Alert type="warning" showIcon title="Não foi possível consultar documentos e operações." description="O Perfil publicado continua disponível. Atualize a consulta para tentar novamente." action={<Button onClick={() => window.location.reload()}>Atualizar consulta</Button>} /> });
+  if (loading && renderWorkspace) return renderWorkspace({ documents: <PersonCenterSkeleton />, history: <PersonCenterSkeleton />, documentsPreview: <PrismaCard title="Documentos e revisões"><Skeleton active paragraph={{ rows: 3 }} /></PrismaCard> });
+  if (!loading && (!workspace || !viewModel) && renderWorkspace) {
+    const unavailable = <Alert type="warning" showIcon title="Não foi possível consultar documentos e operações." description="O Perfil publicado continua disponível. Atualize a consulta para tentar novamente." action={<Button onClick={() => window.location.reload()}>Atualizar consulta</Button>} />;
+    return renderWorkspace({ documents: unavailable, history: unavailable, documentsPreview: unavailable });
+  }
   if (loading) return <PrismaPage className="prisma-person-center"><PersonCenterSkeleton /></PrismaPage>;
   if (!workspace || !viewModel) return <PrismaPage><Alert action={<Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="O Perfil atual, quando existente, permanece seguro. Volte à lista e abra a Central novamente." title={error ?? "Não foi possível carregar esta Pessoa."} showIcon type="error" /></PrismaPage>;
   if (workspace.person.operationalStatus === "merged") return <PrismaPage className="prisma-m53-page"><Alert action={workspace.person.mergedIntoPersonId ? <Button onClick={() => onNavigate(`/profiles/${workspace.person.mergedIntoPersonId}`)} type="primary">Abrir cadastro principal</Button> : <Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="Este cadastro foi incorporado a outra Pessoa. Seus documentos, versões e histórico permanecem preservados no cadastro principal." showIcon title={`${workspace.person.fullName} foi mesclado`} type="info" /></PrismaPage>;

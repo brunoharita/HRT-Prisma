@@ -1,0 +1,21 @@
+[
+  {
+    "scenario": "operations-failure",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "profileSurvivesOperationsFailure": true,
+      "railFailureExplicit": true,
+      "optionalFailureExplicit": true,
+      "historyFailureExplicit": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  }
+]
