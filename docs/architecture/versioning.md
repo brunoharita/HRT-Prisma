@@ -277,3 +277,7 @@ Decisão explícita de Bruno em 04/10/2026 registra a sexta entrega da geração
 ## Resumo por seção — correção v2.0.6
 
 A premissa explícita de 05/10/2026 avança resultado para `profile-synthesis-1.1.0` e prompt para `profile-synthesis-prompt-1.1.0`, preservando leitor1.0.0, perguntas/modelo/histórico. Issues por seção são aditivos e fontes válidas permanecem obrigatórias. Produto permanece2.0.6; correção do comportamento de Resumo. Jobs novos usam a chave versionada; legado exaurido não reseta orçamento nem cria geração em visita. Migração incremental `20261005034000_profile_synthesis_sections.sql`.
+
+## Leitura limpa do Resumo v2.0.8
+
+Decisão explícita de Bruno em05/10/2026: publicar2.0.8, preservando conteúdo e fontes persistidas1.1.0. A entrega aceita é registrada uma vez; a numeração7 é explicitamente pulada com `skippedDeliveryNumbers:[7]`, sem inventar entrega2.0.7. A versão continua derivada: quantidade de entregas aceitas mais números pulados. Novas entregas incrementam normalmente; movimentos históricos sem números pulados usam a contagem original. Registro valida números inteiros positivos/únicos/anteriores à versão atual e não altera versões contratuais/backend. Login/sidebar usam o mesmo registro central. Acordo/AoT `agreement-profile-summary-clean-v208.md` e `aot-profile-summary-clean-v208.md`.

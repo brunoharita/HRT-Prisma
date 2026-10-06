@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.39
+version: 2.51.40
 last_verified: 2026-10-05
 ---
 
 # Estado atual do Prisma
+
+## Leitura limpa do Resumo v2.0.8
+
+Prisma v2.0.8 registra a melhoria autorizada por Bruno em05/10/2026: síntese e oito seções completas abertas, sem destaques duplicados/corte de texto/citações por padrão; Mostrar fontes habilita investigação opcional em painel lateral, completo no celular. Interpretações/lacunas/falhas locais e fallback publicado preservados. Conteúdo/perguntas/resultado1.1.0/prompt/modelo/schema/worker/Parser/matching inalterados. Reuso de Drawer/cache/adapter; trechos só por clique, snapshot correto e nenhuma IA adicional ao ativar fontes. Registro central2.0.8 com salto7 explícito, sem entrega fictícia, próximo incremento normal.45testes domínio/worker/registry,256person-flow,19tooling e46reportsUI1416/390 PASS, incluindo conteúdo longo, cache/snapshot, origem, foco/scroll/Enter/Escape/falhas; conferência visual realizada. Tipos/build PASS; Context/CI/publicação em fechamento. Acordo/AoT `docs/qa/agreement-profile-summary-clean-v208.md`, `docs/qa/aot-profile-summary-clean-v208.md`.
 
 ## Resumo preservado por seção v2.0.6
 

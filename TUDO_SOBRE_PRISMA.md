@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 350
-source_manifest_sha256: 2c5eb0adf87ac3f6f7d9f8a282fb142c7d66f189b97301cbc771b8fd4c1ed13f
+documentation_source_count: 352
+source_manifest_sha256: 6d684e621b7bdf57bf55e0340952d9407c35b2d58f41ae6aa9bcf75478db7e14
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.39
+version: 2.51.40
 last_verified: 2026-10-05
 ---
 
 # Estado atual do Prisma
+
+## Leitura limpa do Resumo v2.0.8
+
+Prisma v2.0.8 registra a melhoria autorizada por Bruno em05/10/2026: síntese e oito seções completas abertas, sem destaques duplicados/corte de texto/citações por padrão; Mostrar fontes habilita investigação opcional em painel lateral, completo no celular. Interpretações/lacunas/falhas locais e fallback publicado preservados. Conteúdo/perguntas/resultado1.1.0/prompt/modelo/schema/worker/Parser/matching inalterados. Reuso de Drawer/cache/adapter; trechos só por clique, snapshot correto e nenhuma IA adicional ao ativar fontes. Registro central2.0.8 com salto7 explícito, sem entrega fictícia, próximo incremento normal.45testes domínio/worker/registry,256person-flow,19tooling e46reportsUI1416/390 PASS, incluindo conteúdo longo, cache/snapshot, origem, foco/scroll/Enter/Escape/falhas; conferência visual realizada. Tipos/build PASS; Context/CI/publicação em fechamento. Acordo/AoT `docs/qa/agreement-profile-summary-clean-v208.md`, `docs/qa/aot-profile-summary-clean-v208.md`.
 
 ## Resumo preservado por seção v2.0.6
 
@@ -4391,6 +4395,12 @@ Não há backfill/reset/chamada em refresh. Migração aditiva mantém históric
 
 Recuperação explícita do legado: o botão de nova geração pode solicitar o contrato corrigido quando a falha antiga foi de resposta e já passou o cooldown. O RPC mantém o job1.0.0 e suas três tentativas, cria ou reutiliza somente a chave1.1.0 da mesma base autorizada e não muda o Perfil. Repetir a ação não cria novos jobs ou reinicia contadores. Configuração, recusa, fonte/base/autoridade inválida e falhas persistentes de banco não são convertidas em permissão para reprocessar. O contrato atual mantém seu limite de três tentativas; nenhuma visita gera esse upgrade automaticamente.
 
+## Consulta limpa v2.0.8
+
+Acordo `docs/qa/agreement-profile-summary-clean-v208.md` v1.0.0: visão inicial exibe overview, oito respostas, lacunas e perguntas complementares integralmente, sem expandir ou cortar texto. Destaques duplicados da UI e sidebar explicativa permanente são retirados. Interpretações mantêm indicação discreta; falhas continuam locais. Dados publicados permanecem identificados quando IA/consulta indisponíveis. Não há alteração de resultado1.1.0, prompt, perguntas, modelo, limites ou conteúdo persistido.
+
+Mostrar fontes habilita somente acionadores de origem; não consulta trechos nem chama IA. Selecionar um trecho abre Drawer com fonte/snapshot/natureza e origem documental quando disponível. A síntese permanece montada e legível; grid de duas colunas com altura livre, uma no celular. Painel lateral em desktop, completo no celular; fechar restaura foco/ponto de leitura. Cache temporário por analysisId/sourceId, fonte e erro associados à mesma chave. Análise nova fecha seleção anterior; nenhum trecho novo é consultado sem clique. Falhas de consulta/abertura da origem não escondem outras informações. Leitor da análise anterior identifica sua própria versão, não a versão nova ainda sem resposta.
+
 ---
 
 ## Source: `docs/ai/prompt-registry.md`
@@ -5696,6 +5706,10 @@ Decisão explícita de Bruno em 04/10/2026 registra a sexta entrega da geração
 ## Resumo por seção — correção v2.0.6
 
 A premissa explícita de 05/10/2026 avança resultado para `profile-synthesis-1.1.0` e prompt para `profile-synthesis-prompt-1.1.0`, preservando leitor1.0.0, perguntas/modelo/histórico. Issues por seção são aditivos e fontes válidas permanecem obrigatórias. Produto permanece2.0.6; correção do comportamento de Resumo. Jobs novos usam a chave versionada; legado exaurido não reseta orçamento nem cria geração em visita. Migração incremental `20261005034000_profile_synthesis_sections.sql`.
+
+## Leitura limpa do Resumo v2.0.8
+
+Decisão explícita de Bruno em05/10/2026: publicar2.0.8, preservando conteúdo e fontes persistidas1.1.0. A entrega aceita é registrada uma vez; a numeração7 é explicitamente pulada com `skippedDeliveryNumbers:[7]`, sem inventar entrega2.0.7. A versão continua derivada: quantidade de entregas aceitas mais números pulados. Novas entregas incrementam normalmente; movimentos históricos sem números pulados usam a contagem original. Registro valida números inteiros positivos/únicos/anteriores à versão atual e não altera versões contratuais/backend. Login/sidebar usam o mesmo registro central. Acordo/AoT `agreement-profile-summary-clean-v208.md` e `aot-profile-summary-clean-v208.md`.
 
 ---
 
@@ -14589,6 +14603,45 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 
 ---
 
+## Source: `docs/qa/agreement-profile-summary-clean-v208.md`
+
+# Acordo e execução — Leitura limpa do Resumo v2.0.8
+
+Versão 1.0.0, agreed/frozen, 2026-10-05. Autoridade: Bruno aprovou a proposta com todas as respostas abertas, fontes sob demanda e conteúdo integral preservado, e autorizou implementar/integrar/publicar v2.0.8. Baseline main/local/origin/VPS `a0037fceb9d35838c19767cab46d2b1590044c99`, produto2.0.6, webcfa50e0, worker8526717, Parser8682af7/gatewayd061cea. Classes C/B: UI integrada de leitura/fontes e registro de versão; nenhuma migração/worker/prompt/modelo novo. Reuso de Drawer Ant Design e adapter/cache existentes suficiente, sem biblioteca nova.
+
+- D-UX01: ao abrir Resumo, síntese e oito seções completas já disponíveis, sem expandir/clicar/ver mais, sem cortar texto ou reduzir respostas. Remover somente duplicação criada pela UI nos destaques, preservando overview, cada afirmação/lacuna e perguntas complementares.
+- D-UX02: consulta simples inicial, botão Mostrar fontes/Ocultar fontes controla apenas origens. Ativar não consulta fontes nem gera IA; acionadores de origem surgem por trecho. Ao escolher, painel lateral mantém resumo/contexto e informa fonte/snapshot/natureza/documento/página quando disponíveis. Fechar volta ao mesmo ponto; teclado e celular acessíveis. Sem referências/códigos/links de fonte espalhados no modo simples.
+- D-UX03: preservar indicação discreta de interpretações da IA, distinção dos dados publicados, análise anterior identificada e motivos locais em português. Nenhuma falha de uma seção/fonte oculta respostas válidas das outras. Fonte selecionada pertence ao analysisId/snapshot; atualização invalida seleção antiga, fonte nova só após clique.
+- D-UX04: fidelidade ao modelo visual aprovado: cabeçalho/abas atuais preservados; toolbar com título/meta e ação de fontes; narrativa principal larga; oito seções abertas em duas colunas com altura livre, uma no celular. Painel de investigação à direita, completo no celular. Sem sidebar explicativa permanente, destaques duplicados, toggle de respostas ou truncamento. Conteúdo e navegação global da imagem são ilustrativos.
+- D-REL01: publicar v2.0.8 seletivamente, validar áreas afetadas, AoT/contextos/CI/smoke/rollback/sincronização. Número8 é decisão explícita do PO: salto de7 documentado, nenhum histórico/entrega fictícia.
+- P-01: não ocultar respostas por controle de fontes, inventar/resumir conteúdo, disparar IA/consultar trechos ao ligar fontes, misturar snapshot anterior/novo, expor códigos/PII integral, alterar Perfis humanos/autoridade/tenant/modelos/perguntas/schema.
+- F-01: conteúdo novo de IA, backend/migrações, matching/Parser/Knowledge, backfill, curadoria humana e navegação global.
+- A-01: implementação em componentes/tokens atuais; estado de fontes por abertura da tela, cache temporário; testes sintéticos sem LLM/produção mutacional. Numeração opcional explícita no registro mantém contagem derivada como padrão, sem inventar entrega7.
+- Q-01: nenhuma decisão material pendente.
+
+Supersede somente a topologia antiga70/30 e60/40 de D-S03/A-S01 do acordo anterior: nova apresentação não muda a preservação por seção D-S01/02. Supersede o número público2.0.6 para este movimento. Perguntas/resultado1.1.0/prompt/modelo/histórico continuam os mesmos.
+
+## Mapa de impacto e aceite
+
+| Área/capacidade | Relação | Baseline / prova proporcional |
+| --- | --- | --- |
+| Resumo UI/CSS | direct |36 renders anteriores1416/390; texto completo/oito eixos/sem overflow, falhas parciais/ausência/fallback, visual do mockup com mesma fixture/viewport |
+| Consulta de fontes/cache/snapshot | direct |lazy source por clique, refresh fecha origem anterior; ativação/fechamento/troca/erro/retry, texto não some, zero geração extra, teclado/foco/scroll |
+| Registry/login/sidebar | plausible_indirect |v2.0.6 no registry derivado; v2.0.8 com salto declarado, históricos/futuros sem override derivados normalmente, negativos de numeração |
+| Perfil/abas/publicação | critical_transversal |componentes de leitura compartilhados; person-flow dirigido, UI/header/abas e tipos/build; nenhuma mutation/auth nova |
+| SQL/worker/IA/Parser/matching | no_impact_identified |contratos/adapter inalterados; diff/release plan e imagens operacionais preservadas, testes domínio dirigidos sem LLM |
+| Produção web | direct |webcfa50e0; CI/SHA/HTTP assets novos/anteriores/rollback, versão e sincronização; sem rebuild de worker |
+
+CA-UX01..04: fixture longa compara todos os textos antes/depois da ação de fontes, oito seções sem clique e sem line-clamp; citações ausentes inicialmente; sourceReads/request contados; origem fecha após mudança de analysisId; motivos/interpretation/previous atuais visíveis. Desktop1416/mobile390, screenshots de consulta/investigação da mesma base e scroll mantido ao fechar. CA-REL01: registry8 sem entry7 inventada, tipos/build/context/lint/testes dirigidos/CI/plan/smoke PASS e AoT.
+
+## Prompt congelado
+
+Executar todos D-UX01..04/D-REL01 sob P-01/F-01/A-01 e os critérios acima. Imagem aprovada é alvo normativo de composição do Resumo, não prova de implementação nem limite de conteúdo: narrativa/toolbar/oito blocos abertos, fonte opcional ao lado. Dados da imagem e header global são demonstrativos; não redesenhar shell ou reduzir as perguntas. Validar mesmo estado/dados/viewport para composição e não declarar QA real autenticada sem executá-la.
+
+Identificação da referência discutida e aprovada: `docs/qa/evidence/profile-summary-clean-v208/approved-reference.png`, SHA256 `b14e8dac25dfe4a6e7411877717fc40fe188cb388b74b78ef0317b3558b4ff55`. Registro administrativo da mesma referência, sem alteração dos requisitos congelados.
+
+---
+
 ## Source: `docs/qa/agreement-profile-summary-partial.md`
 
 # Acordo e execução — Resumo preservado por resposta
@@ -18622,6 +18675,33 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 | `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
 
 A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
+
+---
+
+## Source: `docs/qa/aot-profile-summary-clean-v208.md`
+
+# AoT — Leitura limpa do Resumo v2.0.8
+
+Acordo `agreement-profile-summary-clean-v208.md` v1.0.0. Baseline a0037fc/webcfa50e0. Mapa/aceite no acordo; risco C/B. Movimento único: UI e versão pública, sem novas fontes/IA/schema/bibliotecas.
+
+| ID | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-UX01 | Overview e oito eixos abertos, todas afirmações/lacunas/perguntas, destaques duplicados retirados |46reports1416/390, fixture longa com quatro afirmações por eixo, texto integral antes/depois/fontes abertas/fechadas, sem clamp | PASS |
+| D-UX02 | Fontes inicialmente ocultas, acionadores/painel/cache por clique, foco e scroll restaurados |46reports; toggle zero source/request/retry, fonte selecionada só uma consulta, troca de referência/cache, Enter/Escape, desktop420px/mobile100%, fechar mantém scroll/foco | PASS |
+| D-UX03 | Interpretação discreta, motivos locais, fonte/erro por analysisId/sourceId, histórico próprio, fallback |45testes domínio/worker/registry; UI falhas múltiplas/overview/render/fonte/abertura, snapshot antigo fechado na atualização e novo só após clique, versão anterior2 versus atual3 identificada | PASS |
+| D-UX04 | Toolbar/meta/narrativa larga/grid aberto2col/1col, sem sidebar explicativa permanente |Screenshots mesma fixture1416/390, consulta/investigação e comparação do modelo abaixo | PASS |
+| D-REL01 | v2.0.8 e salto7 explícito, incremento futuro normal, release seletivo |5testes registry incluídos nos45, 256person-flow/19tooling PASS; Tipos/build PASS; Context/CI/publicação/smoke pendentes | PARTIAL |
+| P-01 | Sem ocultar resposta, chamada extra ou mutation humana |Negativos domínio; contadores da fixture, conteúdo integral e falhas locais em46reports; backend/contratos inalterados | PASS |
+
+Jornada autenticada real e qualidade da IA: NOT TESTED; testes sintéticos não as provam. Sem nova chamada paga necessária.
+
+## Evidência visual e preservação
+
+Referência aprovada: `evidence/profile-summary-clean-v208/approved-reference.png`, SHA256 `b14e8dac25dfe4a6e7411877717fc40fe188cb388b74b78ef0317b3558b4ff55`. Normativa para composição da aba; conteúdo curto/pessoa/header global ilustrativos. Implementação preserva shell/header reais, toolbar, narrativa ampla, oito seções abertas em duas colunas e investigação opcional à direita. Telas `summary-1416-full.png`/`source-1416.png` da mesma base, `summary-390-full.png`/`source-390.png`, `long-content-*-full.png` e `multiple-errors-1416.png`; conferência visual desktop/mobile realizada. Textos/títulos contratuais completos exigem mais altura que a imagem curta, sem truncamento. Drawer nativo ocupa altura da janela e celular; variação de posicionamento e tokens conforme componente acessível existente, mantendo a composição acordada. Nenhuma alteração de navegação global.
+
+46reports únicos em `ui-results.json`: 23 estados por viewport, com regressão dirigida das interações após ajuste de foco. O teste envia Enter completo (incluindo caractere) pelo protocolo do navegador e Escape; não substitui teclado por click. Primeiro ciclo encontrou disputa/ausência de callback ao fechar durante animação; retorno agora observa transição de seleção e fechamento nativo, guarda reabertura/unmount e restaura após commit. Origem/erro usam chave do snapshot para evitar trecho antigo durante troca. Problemas de sincronização da fixture foram corrigidos; relatórios finais todos PASS, sem diagnósticos de depuração no produto.
+
+Preservação:45testes domínio/worker/registry,256person-flow e19tooling PASS. Conteúdo/perguntas/contratos1.1.0/prompt/modelo/banco e imagens worker8526717/Parser8682af7/gatewayd061cea não alterados. Baseline VPS a0037fc e imagens conferidos antes de publicar. CSS modificado somente no bloco `.prisma-synthesis`; abas/curadoria/publicação não alteradas. Salto de versão7 explícito não cria entrega fictícia; próximo incremento e históricos originais testados. Tipos/build/Context/CI e rollout abaixo.
 
 ---
 

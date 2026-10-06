@@ -2,6 +2,8 @@ export interface ProductMovementRelease {
   productGeneration: number;
   movement: number;
   deliveries: readonly string[];
+  /** Numbers explicitly skipped by the Product Owner, never fictitious deliveries. */
+  skippedDeliveryNumbers?: readonly number[];
 }
 
 // Append only deliveries accepted by the Product Owner. Fixes do not add entries.
@@ -60,7 +62,9 @@ export const PRISMA_RELEASE_HISTORY = [{
     "2.0.4: período de formação permanece acessível durante a revisão",
     "2.0.5: síntese profissional por IA, persistida e rastreável às fontes",
     "2.0.6: síntese resiliente com diagnóstico e recuperação controlada",
+    "2.0.8: leitura integral do Resumo com fontes sob demanda",
   ],
+  skippedDeliveryNumbers: [7],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {
@@ -70,7 +74,11 @@ export function calculateProductRelease(history: readonly ProductMovementRelease
     || current.deliveries.some((name) => !name.trim()) || new Set(current.deliveries).size !== current.deliveries.length) {
     throw new Error("Invalid official product release registry");
   }
-  const delivery = current.deliveries.length;
+  const skipped = current.skippedDeliveryNumbers ?? [];
+  const delivery = current.deliveries.length + skipped.length;
+  if (new Set(skipped).size !== skipped.length || skipped.some(number => !Number.isSafeInteger(number) || number < 1 || number >= delivery)) {
+    throw new Error("Invalid official product release number");
+  }
   const version = `${current.productGeneration}.${current.movement}.${delivery}`;
   return { productGeneration: current.productGeneration, movement: current.movement, delivery, version, displayVersion: `v${version}` };
 }

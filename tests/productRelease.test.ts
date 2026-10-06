@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { calculateProductRelease, PRISMA_RELEASE } from "../web/src/config/releaseRegistry.js";
+import { calculateProductRelease, PRISMA_RELEASE, PRISMA_RELEASE_HISTORY } from "../web/src/config/releaseRegistry.js";
 
 test("accepted deliveries determine the displayed version and a new movement resets the count", () => {
   const current = { productGeneration: 1, movement: 5, deliveries: ["First", "Second"] };
@@ -10,11 +10,24 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe a geração 2, movimento 0, sexta entrega autorizada", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v2.0.6");
+test("registro oficial expõe v2.0.8 autorizada sem inventar entrega 2.0.7", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v2.0.8");
   assert.equal(PRISMA_RELEASE.productGeneration, 2);
   assert.equal(PRISMA_RELEASE.movement, 0);
-  assert.equal(PRISMA_RELEASE.delivery, 6);
+  assert.equal(PRISMA_RELEASE.delivery, 8);
+  assert.equal(PRISMA_RELEASE_HISTORY.at(-1)?.deliveries.length, 7);
+  assert.ok(!PRISMA_RELEASE_HISTORY.at(-1)?.deliveries.some(name => name.startsWith("2.0.7:")));
+});
+
+test("numeração explícita preserva histórico e rejeita contador insuficiente ou inválido", () => {
+  const current = { productGeneration: 2, movement: 0, deliveries: ["A", "B"], skippedDeliveryNumbers: [2] };
+  assert.equal(calculateProductRelease([current]).version, "2.0.3");
+  assert.equal(current.deliveries.length, 2);
+  assert.equal(calculateProductRelease([{ ...current, deliveries: [...current.deliveries, "Next"] }]).version, "2.0.4");
+  for (const skippedDeliveryNumbers of [[0], [-1], [2.5], [NaN], [Infinity], [99], [2, 2]]) {
+    assert.throws(() => calculateProductRelease([{ ...current, skippedDeliveryNumbers }]), /Invalid official/);
+  }
+  assert.equal(calculateProductRelease([current, { productGeneration: 2, movement: 1, deliveries: ["New"] }]).version, "2.1.1");
 });
 
 test("nova geração aceita movimento zero sem alterar contadores anteriores e rejeita movimento inválido", () => {

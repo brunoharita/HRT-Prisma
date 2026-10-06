@@ -1,0 +1,826 @@
+[
+  {
+    "scenario": "empty-overview",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "empty-overview",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "failed",
+    "width": 390,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "failed",
+    "width": 1416,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "insufficient",
+    "width": 390,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "insufficient",
+    "width": 1416,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "keyboard",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "fullContentInSourceMode": true,
+      "readingStillCompleteWithDrawer": true,
+      "mobileFullWidthDesktopSidePanel": true,
+      "closeKeepsReadingAndScroll": true,
+      "focusRestored": true,
+      "triggerStillMounted": true,
+      "drawerClosed": true,
+      "keyboardEnterOpensSource": true,
+      "keyboardEscapeClosesSource": true,
+      "keyboardRestoresFocus": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "keyboard",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "fullContentInSourceMode": true,
+      "readingStillCompleteWithDrawer": true,
+      "mobileFullWidthDesktopSidePanel": true,
+      "closeKeepsReadingAndScroll": true,
+      "focusRestored": true,
+      "triggerStillMounted": true,
+      "drawerClosed": true,
+      "keyboardEnterOpensSource": true,
+      "keyboardEscapeClosesSource": true,
+      "keyboardRestoresFocus": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "long-content",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "fullContentInSourceMode": true,
+      "readingStillCompleteWithDrawer": true,
+      "mobileFullWidthDesktopSidePanel": true,
+      "closeKeepsReadingAndScroll": true,
+      "focusRestored": true,
+      "triggerStillMounted": true,
+      "drawerClosed": true,
+      "fullTextAfterHideSources": true,
+      "originControlsRemoved": true,
+      "noClamping": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "long-content",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "fullContentInSourceMode": true,
+      "readingStillCompleteWithDrawer": true,
+      "mobileFullWidthDesktopSidePanel": true,
+      "closeKeepsReadingAndScroll": true,
+      "focusRestored": true,
+      "triggerStillMounted": true,
+      "drawerClosed": true,
+      "fullTextAfterHideSources": true,
+      "originControlsRemoved": true,
+      "noClamping": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "multiple-errors",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "multiple-errors",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "origin-error",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "sourceFetchedOnce": true,
+      "quotedSource": true,
+      "eightAxesRemainInReading": true,
+      "originErrorLocal": true,
+      "noPrivateMessage": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "origin-error",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "sourceFetchedOnce": true,
+      "quotedSource": true,
+      "eightAxesRemainInReading": true,
+      "originErrorLocal": true,
+      "noPrivateMessage": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "overview-render",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "overviewRenderFailureLocal": true,
+      "allOtherAnswersPreserved": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "overview-render",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "overviewRenderFailureLocal": true,
+      "allOtherAnswersPreserved": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "partial-reference",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "partial-reference",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "pending",
+    "width": 390,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "pending",
+    "width": 1416,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous",
+    "width": 390,
+    "checks": {
+      "previousSnapshotVersionIdentified": true,
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous",
+    "width": 1416,
+    "checks": {
+      "previousSnapshotVersionIdentified": true,
+      "stateExplicit": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous-failed",
+    "width": 390,
+    "checks": {
+      "previousSnapshotVersionIdentified": true,
+      "previousPreserved": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "previous-failed",
+    "width": 1416,
+    "checks": {
+      "previousSnapshotVersionIdentified": true,
+      "previousPreserved": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "query-only",
+    "width": 390,
+    "checks": {
+      "initialReadFailure": true,
+      "refreshNeverRequestsAnalysis": true,
+      "explicitGenerationOnly": true,
+      "queuedAfterExplicitAction": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "query-only",
+    "width": 1416,
+    "checks": {
+      "initialReadFailure": true,
+      "refreshNeverRequestsAnalysis": true,
+      "explicitGenerationOnly": true,
+      "queuedAfterExplicitAction": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "read-error",
+    "width": 390,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "read-error",
+    "width": 1416,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "refresh",
+    "width": 390,
+    "checks": {
+      "previousSnapshotVersionIdentified": true,
+      "oldSourceOpened": true,
+      "oldSelectionClosed": true,
+      "newSourceNotFetchedBeforeClick": true,
+      "currentAnalysisVisible": true,
+      "currentSnapshotAfterClick": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "refresh",
+    "width": 1416,
+    "checks": {
+      "previousSnapshotVersionIdentified": true,
+      "oldSourceOpened": true,
+      "oldSelectionClosed": true,
+      "newSourceNotFetchedBeforeClick": true,
+      "currentAnalysisVisible": true,
+      "currentSnapshotAfterClick": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "render-error",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "invalidDateDoesNotHideAnswers": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "render-error",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "invalidDateDoesNotHideAnswers": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "retry",
+    "width": 390,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "oneExplicitRetry": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "retry",
+    "width": 1416,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "oneExplicitRetry": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "section-render",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "section-render",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allEightSections": true,
+      "goodActivitiesPreserved": true,
+      "goodObjectivePreserved": true,
+      "noUnsafeContent": true,
+      "localReason": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "sourceFetchedOnce": true,
+      "quotedSource": true,
+      "eightAxesRemainInReading": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "sourceFetchedOnce": true,
+      "quotedSource": true,
+      "eightAxesRemainInReading": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source-error",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "sourceFailureExplicit": true,
+      "analysisPreserved": true,
+      "sourceOnlyRetry": true,
+      "quotedSource": true,
+      "eightAxesRemainInReading": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source-error",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "sourceFailureExplicit": true,
+      "analysisPreserved": true,
+      "sourceOnlyRetry": true,
+      "quotedSource": true,
+      "eightAxesRemainInReading": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source-switch",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "fullContentInSourceMode": true,
+      "readingStillCompleteWithDrawer": true,
+      "mobileFullWidthDesktopSidePanel": true,
+      "secondReferenceCorrect": true,
+      "onlySelectedSourcesFetched": true,
+      "firstReferenceReusedFromCache": true,
+      "closeKeepsReadingAndScroll": true,
+      "focusRestored": true,
+      "triggerStillMounted": true,
+      "drawerClosed": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "source-switch",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "toggleDoesNotFetchOrGenerate": true,
+      "fullContentInSourceMode": true,
+      "readingStillCompleteWithDrawer": true,
+      "mobileFullWidthDesktopSidePanel": true,
+      "secondReferenceCorrect": true,
+      "onlySelectedSourcesFetched": true,
+      "firstReferenceReusedFromCache": true,
+      "closeKeepsReadingAndScroll": true,
+      "focusRestored": true,
+      "triggerStillMounted": true,
+      "drawerClosed": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "summary",
+    "width": 390,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "narrative": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "summary",
+    "width": 1416,
+    "checks": {
+      "originsHiddenByDefault": true,
+      "noEagerSource": true,
+      "allSectionsInitiallyOpen": true,
+      "noCollapseOrDuplicateHighlights": true,
+      "allStoredTextImmediatelyAvailable": true,
+      "narrative": true,
+      "eightAxes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "word-limit",
+    "width": 390,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "word-limit",
+    "width": 1416,
+    "checks": {
+      "publishedSectionsPreserved": true,
+      "goodPublishedActivities": true,
+      "publishedOriginExplicit": true,
+      "noTechnicalCodes": true,
+      "queueRequestMatchesState": true,
+      "boundedReads": true,
+      "noOverflow": true
+    },
+    "pass": true
+  }
+]

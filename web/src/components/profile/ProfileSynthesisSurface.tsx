@@ -1,6 +1,6 @@
 import { Component, useEffect, useRef, useState } from "react";
-import { ArrowLeftOutlined, ArrowRightOutlined, FileTextOutlined, LinkOutlined } from "@ant-design/icons";
-import { Alert, Button, Collapse, Skeleton, Space, Tag } from "antd";
+import { FileSearchOutlined, FileTextOutlined, LinkOutlined } from "@ant-design/icons";
+import { Alert, Button, Drawer, Grid, Skeleton, Space, Tag } from "antd";
 import { PROFILE_SYNTHESIS_QUESTIONS, SynthesisFailure, explainSynthesisFailure, explainSynthesisSection, type ProfileSynthesisView, type SynthesisSource, type SynthesisStatement } from "../../../../src/domain/profileSynthesis";
 import type { ProfileSynthesisAdapter } from "../../infrastructure/supabase/profileSynthesisService";
 import type { PrismaProfileView } from "../../domain/canonicalProfile";
@@ -20,12 +20,18 @@ class SynthesisBoundary extends Component<SurfaceProps, { failed: boolean }> {
   }
 }
 export function ProfileSynthesisSurface(props: SurfaceProps) { return <SynthesisBoundary {...props} />; }
+
 function PublishedSummary({ publishedProfile, originalSummary, onOriginal }: Pick<SurfaceProps, "publishedProfile" | "originalSummary" | "onOriginal">) {
   const sections = publishedSummarySections(publishedProfile);
-  return <div className="prisma-synthesis-layout prisma-synthesis-published">
-    <main><PrismaCard title="Resumo do perfil"><Tag color="blue">Informações publicadas</Tag>{originalSummary ? <p>{originalSummary}</p> : <p>Ainda não há um resumo narrativo publicado. Os registros disponíveis aparecem abaixo.</p>}<p>Estas informações vêm do Perfil aprovado. Elas continuam disponíveis enquanto a leitura da IA não pode ser apresentada.</p></PrismaCard>
-    {PROFILE_SYNTHESIS_QUESTIONS.map(([id, label]) => <PrismaCard key={id} title={label} className="prisma-synthesis-published-section">{sections[id].map((text, index) => <p key={index}>{text}</p>)}<p className="prisma-synthesis-missing">{sections[id].length ? "A análise desta seção ainda não está disponível. Os dados publicados foram preservados acima." : id === "clarifications" ? "Ainda não foi possível preparar perguntas específicas para aprofundar este Perfil." : "Não há informações publicadas suficientes para responder a esta seção neste momento."}</p></PrismaCard>)}</main>
-    <aside><PrismaCard title="Como ler este resumo"><p>Dados publicados e leitura da IA são apresentados separadamente. A indisponibilidade da análise não altera os registros aprovados.</p><Button block onClick={onOriginal}>Consultar Perfil completo</Button></PrismaCard></aside>
+  return <div className="prisma-synthesis-reading prisma-synthesis-published">
+    <PrismaCard title="Resumo do perfil" extra={<Button onClick={onOriginal}>Consultar Perfil completo</Button>}>
+      <p className="prisma-synthesis-provenance">Informações publicadas no Perfil aprovado</p>
+      {originalSummary ? <p className="prisma-synthesis-narrative">{originalSummary}</p> : <p>Ainda não há um resumo narrativo publicado. Os registros disponíveis aparecem abaixo.</p>}
+    </PrismaCard>
+    <div className="prisma-synthesis-axes">{PROFILE_SYNTHESIS_QUESTIONS.map(([id, label]) => <SummarySectionBoundary key={id} title={label}><PrismaCard title={label} className="prisma-synthesis-published-section">
+      {sections[id].map((text, index) => <p key={index}>{text}</p>)}
+      <p className="prisma-synthesis-missing">{sections[id].length ? "A análise desta seção ainda não está disponível. Os dados publicados foram preservados acima." : id === "clarifications" ? "Ainda não foi possível preparar perguntas específicas para aprofundar este Perfil." : "Não há informações publicadas suficientes para responder a esta seção neste momento."}</p>
+    </PrismaCard></SummarySectionBoundary>)}</div>
   </div>;
 }
 class SummarySectionBoundary extends Component<{ children: React.ReactNode; title: string }, { failed: boolean }> {
@@ -41,17 +47,23 @@ function ProfileSynthesisBody({ adapter, onOriginal, onOpenSource, originalSumma
   const [retrying, setRetrying] = useState(false);
   const retryLock = useRef(false);
   const currentAdapter = useRef<ProfileSynthesisAdapter | null>(null);
+  const [showSources, setShowSources] = useState(false);
   const [selection, setSelected] = useState<{ statement: SynthesisStatement; sourceId: string; analysisId: string } | null>(null);
-  const [source, setSource] = useState<SynthesisSource | null>(null);
-  const [sourceError, setSourceError] = useState<string | null>(null);
+  const [sourceState, setSourceState] = useState<{ key: string; source: SynthesisSource | null; error: string | null } | null>(null);
   const [sourceAttempt, setSourceAttempt] = useState(0);
-  const [expanded, setExpanded] = useState(true);
   const cache = useRef(new Map<string, SynthesisSource>());
-  const detailRef = useRef<HTMLDivElement>(null);
+  const sourceToggle = useRef<HTMLButtonElement>(null);
+  const sourceTrigger = useRef<HTMLElement | null>(null);
+  const sourceScroll = useRef(0);
+  const sourceWasOpen = useRef(false);
+  const drawerOpen = useRef(false);
+  const screens = Grid.useBreakpoint();
+  const narrow = screens.md === false;
+
   useEffect(() => {
     let active = true; let timer: ReturnType<typeof setTimeout> | undefined; let polls = 0;
     const firstVisit = currentAdapter.current !== adapter;
-    if (firstVisit) { setView(null); setSelected(null); cache.current.clear(); currentAdapter.current = adapter; }
+    if (firstVisit) { setView(null); setSelected(null); setShowSources(false); sourceTrigger.current = null; cache.current.clear(); currentAdapter.current = adapter; }
     setError(null);
     const update = async (initial = false) => {
       if (!active) return;
@@ -71,6 +83,7 @@ function ProfileSynthesisBody({ adapter, onOriginal, onOpenSource, originalSumma
     void update(firstVisit);
     return () => { active = false; if (timer) clearTimeout(timer); };
   }, [adapter, queryAttempt]);
+
   const retry = async () => {
     const operation = view?.state === "not_requested" ? () => adapter.request() : adapter.retry ? () => adapter.retry!() : null;
     if (!operation || retryLock.current) return;
@@ -79,50 +92,112 @@ function ProfileSynthesisBody({ adapter, onOriginal, onOpenSource, originalSumma
     catch (cause) { if (currentAdapter.current === adapter) setError(cause instanceof SynthesisFailure ? cause.diagnostic.reason : "READ_UNAVAILABLE"); }
     finally { retryLock.current = false; setRetrying(false); }
   };
+
   const effective = view?.result ?? view?.previous?.result;
   const analysisId = view?.analysisId ?? view?.previous?.analysisId;
-  const selected = selection?.analysisId === analysisId ? selection : null;
+  const selected = showSources && selection?.analysisId === analysisId ? selection : null;
+  const sourceIsOpen = Boolean(selected);
+  drawerOpen.current = sourceIsOpen;
   const references = view?.result ? view.sources : view?.previous?.sources ?? [];
   const showingPrevious = Boolean(view?.previous && !view.result);
+  const profileVersion = showingPrevious ? view?.previous?.profileVersion : view?.profileVersion;
+  const generatedAt = showingPrevious ? view?.previous?.generatedAt : view?.generatedAt;
+  const generatedDate = generatedAt && Number.isFinite(Date.parse(generatedAt)) ? new Intl.DateTimeFormat("pt-BR").format(new Date(generatedAt)) : null;
+  const sourceKey = selected ? selected.analysisId + ":" + selected.sourceId : null;
+  const source = sourceState?.key === sourceKey ? sourceState.source : null;
+  const sourceError = sourceState?.key === sourceKey ? sourceState.error : null;
+
   useEffect(() => {
     let active = true;
-    setSource(null); setSourceError(null);
+    setSourceState(null);
     if (!selected || !analysisId) return;
-    const key = `${analysisId}:${selected.sourceId}`;
+    const key = analysisId + ":" + selected.sourceId;
     const cached = cache.current.get(key);
-    if (cached) { setSource(cached); return; }
-    void adapter.source(analysisId, selected.sourceId).then(next => { if (active) { cache.current.set(key, next); setSource(next); } }).catch((cause: unknown) => { if (active) { const info = explainSynthesisFailure(cause instanceof SynthesisFailure ? cause.diagnostic.reason : "SOURCE_UNAVAILABLE"); setSourceError(`${info.explanation} ${info.action}`); } });
+    if (cached) { setSourceState({ key, source: cached, error: null }); return; }
+    void adapter.source(analysisId, selected.sourceId).then(next => {
+      if (active) { cache.current.set(key, next); setSourceState({ key, source: next, error: null }); }
+    }).catch((cause: unknown) => {
+      if (active) { const info = explainSynthesisFailure(cause instanceof SynthesisFailure ? cause.diagnostic.reason : "SOURCE_UNAVAILABLE"); setSourceState({ key, source: null, error: info.explanation + " " + info.action }); }
+    });
     return () => { active = false; };
   }, [adapter, analysisId, selected?.sourceId, sourceAttempt]);
-  const open = (statement: SynthesisStatement, sourceId: string) => { if (!analysisId) return; setSelected({ statement, sourceId, analysisId }); setTimeout(() => { detailRef.current?.focus(); detailRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }); }, 0); };
-  const statements = (items: SynthesisStatement[], compact = false) => items.map((item, i) => <div className={`prisma-synthesis-statement${compact ? " is-compact" : ""}`} key={i}>
-    <p>{item.text}</p><div className="prisma-synthesis-citations"><Tag color={item.nature === "interpretation" ? "gold" : "blue"}>{item.nature === "interpretation" ? "Leitura da IA" : "Relato publicado"}</Tag>{item.sourceIds.map((id, index) => <Button key={id} aria-label={`Consultar fonte ${index + 1}: ${references.find(x => x.id === id)?.label ?? id}`} onClick={() => open(item, id)} type="link">Fonte {index + 1} <LinkOutlined /></Button>)}</div>
+
+  const restoreFocus = () => {
+    if (!sourceTrigger.current) return;
+    // The portal removes its focus guards after the close animation commits.
+    requestAnimationFrame(() => {
+      if (drawerOpen.current) return;
+      const trigger = sourceTrigger.current?.isConnected ? sourceTrigger.current : sourceToggle.current;
+      if (!trigger?.isConnected) return;
+      trigger?.focus({ preventScroll: true });
+      window.scrollTo({ top: sourceScroll.current, behavior: "instant" });
+    });
+  };
+  useEffect(() => {
+    if (sourceWasOpen.current && !sourceIsOpen) restoreFocus();
+    sourceWasOpen.current = sourceIsOpen;
+  }, [sourceIsOpen]);
+  const open = (statement: SynthesisStatement, trigger: HTMLElement) => {
+    if (!analysisId || !showSources) return;
+    sourceTrigger.current = trigger;
+    sourceScroll.current = window.scrollY;
+    setSelected({ statement, sourceId: statement.sourceIds[0]!, analysisId });
+  };
+  const toggleSources = () => { if (showSources) setSelected(null); setShowSources(value => !value); };
+  const statements = (items: SynthesisStatement[]) => items.map((item, i) => <div className={"prisma-synthesis-statement" + (selected?.statement === item ? " is-source-selected" : "")} key={i}>
+    {item.nature === "interpretation" ? <span className="prisma-synthesis-interpretation">Interpretação da IA</span> : null}
+    <p>{item.text}</p>
+    {showSources ? <Button className="prisma-synthesis-origin-action" type="link" icon={<FileSearchOutlined />} aria-label={"Consultar fonte: " + (references.find(x => x.id === item.sourceIds[0])?.label ?? "Informação publicada")} onClick={event => open(item, event.currentTarget)}>Ver origem</Button> : null}
   </div>);
-  return <section className="prisma-synthesis" aria-label="Síntese profissional por IA">
-    {!effective || selected ? <header className="prisma-synthesis-heading"><div><span className="prisma-synthesis-eyebrow">LEITURA PROFISSIONAL</span><h2>Resumo do perfil</h2><p>Uma síntese da trajetória, com as informações que sustentam cada leitura.</p></div><Button onClick={onOriginal} icon={<FileTextOutlined />}>Ver resumo do currículo</Button></header> : null}
+
+  return <section className={"prisma-synthesis" + (selected && !narrow ? " is-source-open" : "")} aria-label="Resumo profissional">
     {error ? <Alert showIcon type="warning" title={explainSynthesisFailure(error).explanation} description={explainSynthesisFailure(error).action} action={<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button>} /> : null}
-    {showingPrevious ? <Alert showIcon type="info" title="As informações de base mudaram" description={`A síntese anterior está identificada abaixo e pode conter informações que mudaram. ${view?.state === "failed" ? "A nova leitura não pôde ser concluída; o Perfil aprovado permanece disponível." : view?.state === "insufficient" ? "A base atual precisa de mais informações profissionais para uma nova síntese." : "A nova leitura está sendo preparada."}`} /> : null}
+    {showingPrevious ? <Alert showIcon type="info" title="As informações de base mudaram" description={"A síntese anterior está identificada abaixo e pode conter informações que mudaram. " + (view?.state === "failed" ? "A nova leitura não pôde ser concluída; o Perfil aprovado permanece disponível." : view?.state === "insufficient" ? "A base atual precisa de mais informações profissionais para uma nova síntese." : "A nova leitura está sendo preparada.")} /> : null}
     {!effective ? <>
       {!view && !error ? <Skeleton active paragraph={{ rows: 2 }} /> : null}
       {view?.state === "failed" ? <p>Não foi possível concluir a leitura da IA. Você pode consultar as informações publicadas em cada seção abaixo.</p> : view?.state === "queued" || view?.state === "processing" ? <p>A leitura da IA está sendo preparada. Os dados publicados permanecem disponíveis.</p> : null}
       <Space wrap>{view?.canRetry && adapter.retry ? <Button loading={retrying} onClick={() => void retry()}>Gerar leitura novamente</Button> : null}{view?.state === "not_requested" ? <Button loading={retrying} onClick={() => void retry()}>Gerar síntese</Button> : null}<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button></Space>
       <PublishedSummary publishedProfile={publishedProfile} originalSummary={originalSummary} onOriginal={onOriginal} />
-    </> : selected ? <>
-      <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => setSelected(null)}>Voltar para a síntese</Button>
-      <div className="prisma-synthesis-detail" tabIndex={-1} ref={detailRef}>
-        <PrismaCard title="Leitura profissional"><p className="prisma-synthesis-provenance">Perfil v{view?.profileVersion} · {showingPrevious ? "Síntese anterior" : "Síntese gravada"}</p>{statements(effective.overview)}<h3>Afirmação selecionada</h3><div className="prisma-synthesis-selected">{statements([selected.statement])}</div><h3>Informações que sustentam esta leitura</h3><div className="prisma-synthesis-source-choices">{selected.statement.sourceIds.map(id => <Button key={id} type={selected.sourceId === id ? "primary" : "default"} onClick={() => setSelected({ statement: selected.statement, sourceId: id, analysisId: selected.analysisId })}>{references.find(x => x.id === id)?.label ?? "Fonte publicada"}</Button>)}</div><p>O trecho ao lado é parte da base utilizada nesta análise. Conexões interpretativas continuam identificadas como leitura da IA.</p></PrismaCard>
-        <PrismaCard title="Fonte da informação" className="prisma-synthesis-source-panel">{sourceError ? <Alert title={sourceError} action={<Button onClick={() => setSourceAttempt(value => value + 1)}>Tentar novamente</Button>} type="warning" /> : source ? <><Tag color={source.nature === "verified_assessment" ? "green" : "blue"}>{source.nature === "verified_assessment" ? "Assessment vigente na geração" : "Informação do Perfil publicado"}</Tag><h3>{source.label}</h3><blockquote>{source.text}</blockquote><p>{source.pageNumber ? `Página ${source.pageNumber}` : "Campo publicado, sem posição de página disponível"}</p>{source.documentId || source.nature === "verified_assessment" ? <Button block onClick={() => { try { onOpenSource(source); } catch { setSourceError("Não foi possível abrir a origem. Tente novamente ou consulte o Perfil completo."); } }} icon={<LinkOutlined />}>Abrir origem</Button> : null}</> : <Skeleton active paragraph={{ rows: 4 }} />}</PrismaCard>
-      </div>
-      <Questions />
-    </> : <div className="prisma-synthesis-layout">
-      <main><PrismaCard className="prisma-synthesis-overview" extra={<Button type="link" onClick={onOriginal}>Ver resumo do currículo</Button>} title={<span>Síntese do Perfil <Tag color="blue">Gerado por IA</Tag>{effective.issues?.length ? <Tag color="gold">Respostas parcialmente disponíveis</Tag> : null}</span>}><p className="prisma-synthesis-provenance">Perfil publicado v{view?.profileVersion} · {showingPrevious ? "Análise anterior" : "Análise gravada"}{(view?.generatedAt ?? view?.previous?.generatedAt) ? ` em ${(Number.isFinite(Date.parse((view?.generatedAt ?? view?.previous?.generatedAt)!)) ? new Intl.DateTimeFormat("pt-BR").format(new Date((view?.generatedAt ?? view?.previous?.generatedAt)!)) : "data não disponível")}` : ""}</p>{effective.issues?.some(x => x.section === "overview") ? <p className="prisma-synthesis-missing">{explainSynthesisSection(effective.issues.find(x => x.section === "overview")?.reason)}</p> : null}<p className="prisma-synthesis-narrative">{effective.overview.map((item,i) => <span key={i}>{item.nature === "interpretation" ? <Tag color="gold">Leitura da IA</Tag> : null}{item.text} {item.sourceIds.map(id => <Button type="link" key={id} aria-label={`Consultar fonte: ${references.find(x => x.id === id)?.label ?? id}`} onClick={() => open(item,id)}>[{references.findIndex(x => x.id === id)+1}]</Button>)} </span>)}</p>
-      <div className="prisma-synthesis-highlights">{([['activities','Atuação'],['contexts','Contextos'],['objective','Objetivo declarado']] as const).map(([id,label]) => { const a = effective.answers.find(x => x.questionId === id)!; return <PrismaCard key={id} title={label}>{a.statements[0] ? statements([a.statements[0]], true) : <p>{a.missingInformation[0]}</p>}</PrismaCard>; })}</div>
-        <Button type="link" onClick={() => setExpanded(!expanded)} aria-expanded={expanded}>{expanded ? "Recolher análise" : "Explorar análise completa"} <ArrowRightOutlined /></Button>
-      </PrismaCard>
-      {expanded ? <div className="prisma-synthesis-axes">{effective.answers.map(a => { const title = PROFILE_SYNTHESIS_QUESTIONS.find(x => x[0] === a.questionId)![1]; const issue = effective.issues?.find(x => x.section === a.questionId); return <SummarySectionBoundary key={`${analysisId}:${a.questionId}`} title={title}><PrismaCard title={title}>{statements(a.statements)}{issue ? <p className="prisma-synthesis-missing">{explainSynthesisSection(issue.reason)}</p> : null}{a.missingInformation.length ? <div className="prisma-synthesis-missing"><strong>O que ainda precisa ser esclarecido</strong>{a.missingInformation.map((x, i) => <p key={i}>{x}</p>)}</div> : null}</PrismaCard></SummarySectionBoundary>; })}</div> : null}
-      <PrismaCard title="Informações que sustentam a síntese"><div className="prisma-synthesis-evidence-list">{[...new Set(effective.overview.flatMap(x => x.sourceIds))].map(id => <button type="button" key={id} onClick={() => open(effective.overview.find(x => x.sourceIds.includes(id))!, id)}><FileTextOutlined /><span>{references.find(x => x.id === id)?.label ?? "Fonte publicada"}</span><ArrowRightOutlined /></button>)}</div></PrismaCard>
-      </main><aside><PrismaCard title="Como ler esta síntese"><Tag color="blue">Base: Perfil publicado v{view?.profileVersion}</Tag><p>As informações do Perfil e a leitura da IA aparecem separadas. Cada afirmação permite consultar sua fonte.</p><p>Esta análise apoia a revisão humana. Ela não decide contratação nem comprova competências por si só.</p><Button block onClick={onOriginal}>Consultar informações originais</Button></PrismaCard><Questions /></aside>
+    </> : <div className="prisma-synthesis-reading">
+      <header className="prisma-synthesis-heading">
+        <div><h2>Resumo do perfil</h2><p className="prisma-synthesis-provenance">Síntese gerada por IA · Perfil publicado v{profileVersion} · {showingPrevious ? "Análise anterior" : "Análise gravada"}{generatedDate ? " em " + generatedDate : ""}{effective.issues?.length ? " · Algumas informações indisponíveis" : ""}</p></div>
+        <Button ref={sourceToggle} icon={<FileSearchOutlined />} onClick={toggleSources} aria-pressed={showSources}>{showSources ? "Ocultar fontes" : "Mostrar fontes"}</Button>
+      </header>
+      <SummarySectionBoundary key={(analysisId ?? "") + ":overview"} title="Síntese do perfil">
+        <div className="prisma-synthesis-narrative">{statements(effective.overview)}
+          {effective.issues?.some(x => x.section === "overview") ? <p className="prisma-synthesis-missing">{explainSynthesisSection(effective.issues.find(x => x.section === "overview")?.reason)}</p> : null}
+        </div>
+      </SummarySectionBoundary>
+      <div className="prisma-synthesis-axes">{effective.answers.map(a => {
+        const title = PROFILE_SYNTHESIS_QUESTIONS.find(x => x[0] === a.questionId)![1];
+        const issue = effective.issues?.find(x => x.section === a.questionId);
+        return <SummarySectionBoundary key={(analysisId ?? "") + ":" + a.questionId} title={title}><PrismaCard title={title}>
+          {statements(a.statements)}
+          {issue ? <p className="prisma-synthesis-missing">{explainSynthesisSection(issue.reason)}</p> : null}
+          {a.missingInformation.length ? <div className="prisma-synthesis-missing">{a.missingInformation.map((x, i) => <p key={i}>{x}</p>)}</div> : null}
+          {a.questionId === "clarifications" && effective.clarifications.length ? <div className="prisma-synthesis-questions"><h3>Pontos para aprofundar</h3>{effective.clarifications.map((item, index) => <div className="prisma-synthesis-question" key={index}>
+            <span>{index + 1}</span><div><p>{item.text}</p>{showSources ? <Button className="prisma-synthesis-origin-action" type="link" icon={<FileSearchOutlined />} onClick={event => open({ text: item.text, nature: "interpretation", sourceIds: item.sourceIds }, event.currentTarget)}>Ver origem da pergunta</Button> : null}</div>
+          </div>)}</div> : null}
+        </PrismaCard></SummarySectionBoundary>;
+      })}</div>
+      <Button className="prisma-synthesis-original" type="link" icon={<FileTextOutlined />} onClick={onOriginal}>Consultar Perfil completo</Button>
     </div>}
+    <Drawer title="Fontes e origens" open={Boolean(selected)} onClose={() => setSelected(null)} afterOpenChange={isOpen => { if (!isOpen) restoreFocus(); }} focusable={{ focusTriggerAfterClose: false, trap: narrow }} closable={{ "aria-label": "Fechar fontes" }} size={narrow ? "100%" : 420} mask={narrow} push={false} destroyOnHidden rootClassName="prisma-synthesis-source-drawer">
+      {selected ? <SummarySectionBoundary key={selected.analysisId + ":" + selected.sourceId} title="Origem da informação">
+        <div className="prisma-synthesis-source-panel">
+          <h3>Trecho selecionado</h3><p className="prisma-synthesis-selected">{selected.statement.text}</p>
+          <p className="prisma-synthesis-provenance">Perfil publicado v{profileVersion}{showingPrevious ? " · Análise anterior" : ""}</p>
+          <h3>Origem da informação</h3>
+          {selected.statement.sourceIds.length > 1 ? <div className="prisma-synthesis-source-choices">{selected.statement.sourceIds.map(id => <Button key={id} type={selected.sourceId === id ? "primary" : "default"} onClick={() => setSelected({ ...selected, sourceId: id })}>{references.find(x => x.id === id)?.label ?? "Fonte publicada"}</Button>)}</div> : null}
+          {sourceError ? <Alert title={sourceError} action={<Button onClick={() => setSourceAttempt(value => value + 1)}>Tentar novamente</Button>} type="warning" /> : source ? <>
+            <Tag color={source.nature === "verified_assessment" ? "green" : "blue"}>{source.nature === "verified_assessment" ? "Assessment vigente na geração" : "Relato publicado"}</Tag>
+            <h4>{source.label}</h4><blockquote>{source.text}</blockquote>
+            <p>{source.pageNumber ? "Página " + source.pageNumber : "Campo publicado, sem posição de página disponível"}</p>
+            {source.documentId || source.nature === "verified_assessment" ? <Button block onClick={() => { try { onOpenSource(source); } catch { setSourceState({ key: sourceKey!, source: null, error: "Não foi possível abrir a origem. Tente novamente ou consulte o Perfil completo." }); } }} icon={<LinkOutlined />}>Abrir origem</Button> : null}
+            <p className="prisma-synthesis-source-note">{source.nature === "verified_assessment" ? "A condição do Assessment corresponde à base utilizada nesta análise." : "Esta informação foi declarada no Perfil. Ela não representa uma verificação independente."}</p>
+          </> : <Skeleton active paragraph={{ rows: 4 }} />}
+        </div>
+      </SummarySectionBoundary> : null}
+    </Drawer>
   </section>;
-  function Questions() { return <PrismaCard title="Pontos para aprofundar">{effective?.issues?.some(x => x.section === "clarifications") ? <p className="prisma-synthesis-missing">{explainSynthesisSection(effective.issues.find(x => x.section === "clarifications")?.reason)}</p> : null}{effective?.clarifications.length ? effective.clarifications.map((item, index) => <div className="prisma-synthesis-question" key={index}><span>{index + 1}</span><div><p>{item.text}</p><Button type="link" onClick={() => open({ text: item.text, nature: "interpretation", sourceIds: item.sourceIds }, item.sourceIds[0]!)}>Ver contexto da pergunta</Button></div></div>) : <p>{effective ? "Nenhuma pergunta complementar foi priorizada nesta análise." : "As perguntas aparecerão após a análise dos registros disponíveis."}</p>}</PrismaCard>; }
 }
