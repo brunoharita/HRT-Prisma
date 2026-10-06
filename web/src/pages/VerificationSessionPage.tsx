@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaState } from "../ui/PrismaState";
 import { PrismaPublicShell } from "../ui/PrismaPublicShell";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -20,6 +21,7 @@ export function VerificationSessionPage({ token }: Props) {
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [noticeRetry, setNoticeRetry] = useState(0);
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -44,7 +46,7 @@ export function VerificationSessionPage({ token }: Props) {
       })
       .catch((loadError) => setError(loadError instanceof Error ? loadError.message : "Convite indisponível."))
       .finally(() => setLoading(false));
-  }, [token]);
+  }, [token, noticeRetry]);
 
   useEffect(() => {
     if (stage !== "running" || !workspace?.attempt) return;
@@ -185,7 +187,7 @@ export function VerificationSessionPage({ token }: Props) {
   };
 
   if (loading && !workspace) return <PublicShell><PrismaState kind="loading" title="Confirmando seu acesso à verificação…" /></PublicShell>;
-  if (error && !workspace) return <PublicShell><PrismaState kind="unavailable" title="Convite indisponível" description={error} /></PublicShell>;
+  if (error && !workspace) return <PublicShell><PrismaState kind="unavailable" title="Convite indisponível" description={error} action={{ label: "Verificar convite novamente", onClick: () => { setError(null); setLoading(true); setNoticeRetry((value) => value + 1); } }} /></PublicShell>;
   if (!workspace) return null;
 
   if (stage === "paused") return <PublicShell><Result icon={<PauseOutlined />} title="Sessão pausada" subTitle="Suas respostas foram salvas. Você pode retomar antes do prazo final." extra={<><Descriptions column={2} items={[{ key: "expires", label: "Prazo", children: new Date(workspace.expiresAt).toLocaleString("pt-BR") }, { key: "time", label: "Tempo utilizado", children: formatTime(elapsedSeconds) }]} /><Button onClick={() => void resume()} size="large" type="primary">Continuar de onde parou</Button></>} /></PublicShell>;
@@ -204,7 +206,7 @@ export function VerificationSessionPage({ token }: Props) {
     const answered = workspace.attempt.questions.filter((question) => question.response?.selectedOptionId).length;
     const marked = workspace.attempt.questions.filter((question) => question.response?.markedForReview).length;
     return <PublicShell compact>
-      {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => { setActiveIndex(Math.max(0, workspace.attempt?.questions.findIndex((question) => !question.response?.selectedOptionId) ?? 0)); setStage("running"); }}>Conferir respostas</Button>} /> : null}
       <header className="prisma-m51b-question-header"><Button icon={<PauseOutlined />} onClick={() => void pause()}>Pausar</Button><strong>Questão {activeIndex + 1} de {workspace.attempt.questions.length}</strong><span aria-label={`Tempo total decorrido ${formatTime(elapsedSeconds)}`}><ClockCircleOutlined /> {formatTime(elapsedSeconds)}</span></header>
       <section className="prisma-m51b-question-layout" aria-label="Questões">
         <Card className="prisma-m51b-question-card">
@@ -225,14 +227,14 @@ export function VerificationSessionPage({ token }: Props) {
       <Modal footer={<Button onClick={() => setNavigationOpen(false)}>Fechar</Button>} onCancel={() => setNavigationOpen(false)} open={navigationOpen} title="Ir para a questão"><QuestionGrid activeIndex={activeIndex} onSelect={(index) => void goToQuestion(index)} questions={workspace.attempt.questions} /></Modal>
       <Modal cancelText="Continuar revisão" okButtonProps={{ loading }} okText="Submeter definitivamente" onCancel={() => setSubmitOpen(false)} onOk={() => void submit()} open={submitOpen} title="Finalizar verificação">
         <Typography.Paragraph>Você respondeu {answered} de {workspace.attempt.questions.length} questões e marcou {marked} para revisão.</Typography.Paragraph>
-        {answered < workspace.attempt.questions.length ? <Alert message={`Ainda existem ${workspace.attempt.questions.length - answered} questões sem resposta.`} showIcon type="warning" /> : <Alert message="Todas as questões possuem resposta salva." showIcon type="success" />}
+        {answered < workspace.attempt.questions.length ? <Alert message={`Ainda existem ${workspace.attempt.questions.length - answered} questões sem resposta.`} showIcon type="warning" action={<Button onClick={() => { const next = workspace.attempt?.questions.findIndex((question) => !question.response?.selectedOptionId) ?? 0; setSubmitOpen(false); setActiveIndex(Math.max(0, next)); setStage("running"); }}>Responder próxima questão pendente</Button>} /> : <Alert message="Todas as questões possuem resposta salva." showIcon type="success" />}
       </Modal>
     </PublicShell>;
   }
 
   const step = stage === "welcome" ? 0 : stage === "instructions" ? 1 : 2;
   return <PublicShell>
-    {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+    {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => { setStage("confirmation"); window.requestAnimationFrame(() => focusNoticeTarget('.prisma-m51b-public-shell input[type="checkbox"]')); }}>Conferir confirmação</Button>} /> : null}
     <Steps current={step} items={[{ title: "Boas-vindas" }, { title: "Instruções" }, { title: "Confirmação" }, { title: "Iniciar" }]} responsive />
     {stage === "welcome" ? <Welcome workspace={workspace} onContinue={() => setStage("instructions")} /> : null}
     {stage === "instructions" ? <Instructions workspace={workspace} onBack={() => setStage("welcome")} onContinue={() => setStage("confirmation")} /> : null}

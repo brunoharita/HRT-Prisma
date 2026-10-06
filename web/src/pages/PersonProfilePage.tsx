@@ -24,6 +24,7 @@ interface PersonProfilePageProps {
 export function PersonProfilePage({ activeMembership, personId, repository, onNavigate }: PersonProfilePageProps) {
   const [view, setView] = useState<PersonProfileView | null>(null);
   const [loading, setLoading] = useState(true);
+  const [noticeRetry, setNoticeRetry] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
       .catch(() => { if (current) setError("O Perfil não pôde ser consultado. Verifique seu acesso e tente novamente."); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
-  }, [activeMembership.organizationId, activeMembership.role, personId, repository]);
+  }, [activeMembership.organizationId, activeMembership.role, personId, repository, noticeRetry]);
 
   const canonical = useMemo(() => view?.profile ? buildPrismaProfileView({
     fullName: view.person.fullName,
@@ -84,7 +85,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
     <PrismaPage className="prisma-profile-page">
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(canReview ? `/profiles/${personId}` : "/profiles")} type="text">{canReview ? "Voltar para a Central da Pessoa" : "Voltar para Pessoas"}</Button>
       {loading ? <ProfileSkeleton /> : null}
-      {error ? <Alert message={error} showIcon type="error" /> : null}
+      {error ? <Alert message={error} showIcon type="error" action={<Button onClick={() => setNoticeRetry((value) => value + 1)}>Atualizar consulta</Button>} /> : null}
       {!loading && !error && !view ? <PrismaCard><Empty description="Pessoa inexistente ou indisponível para esta empresa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
       {view && !canonical ? <PrismaCard><Empty description="Ainda não existe um Perfil publicado para esta Pessoa." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
       {canonical ? <CanonicalProfileHeader actions={canReview ? <Space wrap><Button icon={<HistoryOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Versões do perfil</Button><Button icon={<EditOutlined />} onClick={() => onNavigate(`/profiles/${personId}/versions`)} type="primary">Criar nova revisão</Button></Space> : undefined} profile={canonical} /> : null}

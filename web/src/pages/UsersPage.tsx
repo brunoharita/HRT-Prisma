@@ -34,6 +34,7 @@ export function UsersPage({ onNavigate }: UsersPageProps) {
   const [groups, setGroups] = useState<GroupScopeOption[]>([]);
   const [currentOperator, setCurrentOperator] = useState<PlatformOperator | null>(null);
   const [loading, setLoading] = useState(true);
+  const [noticeRetry, setNoticeRetry] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ export function UsersPage({ onNavigate }: UsersPageProps) {
     return () => {
       current = false;
     };
-  }, [query]);
+  }, [query, noticeRetry]);
 
   const organizationOptions = useMemo(
     () => groups.flatMap((group) => group.organizations),
@@ -135,7 +136,7 @@ export function UsersPage({ onNavigate }: UsersPageProps) {
         )}
         extras={currentOperator ? <Alert banner message={`Operador atual: ${currentOperator.fullName} (${describePlatformAccessProfile(currentOperator.profile)})`} type="info" /> : undefined}
       />
-      {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" /> : null}
+      {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" action={<Button onClick={() => setNoticeRetry((value) => value + 1)}>Atualizar consulta</Button>} /> : null}
       <PrismaCard className="prisma-users-toolbar">
         <Input
           allowClear

@@ -128,7 +128,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
         actions={<Space wrap>{canReprocess ? <Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>{canResumeSource ? "Retomar importação com IA" : "Reprocessar"}</Button> : null}{presentation.state === "technical_failure" && !canReprocess && !needsSystemUpdate ? <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Substituir arquivo</Button> : null}{canReview ? <Button loading={busy} onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações" : "Revisar perfil"}</Button> : null}<Button danger icon={<DeleteOutlined />} loading={busy} onClick={handleDelete}>Excluir documento</Button></Space>}
       />
       <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/processes")} type="text">Voltar para a central</Button>
-      {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => { void refresh().catch(() => setError("O documento não pôde ser consultado. Tente atualizar a consulta novamente.")); }}>Consultar documento</Button>} /> : null}
       <div className="prisma-document-summary-grid">
         <PrismaCard title="Informações do documento">
           <Descriptions column={1} size="small">

@@ -1,0 +1,148 @@
+[
+  {
+    "scenario": "save",
+    "width": 1416,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noPreselection": true,
+      "focusCorrectGroup": true,
+      "humanChoiceEnablesSave": true,
+      "oneCall": true,
+      "pendingRemoved": true,
+      "classifiedGroupVisible": true,
+      "evidencePreserved": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "error",
+    "width": 1416,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noPreselection": true,
+      "focusCorrectGroup": true,
+      "humanChoiceEnablesSave": true,
+      "oneCall": true,
+      "errorKeepsChoice": true,
+      "reloadGroupsPreservesChoice": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "global",
+    "width": 1416,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noAuthorityNoMutation": true,
+      "readOnlyExplanation": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "readonly",
+    "width": 1416,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noAuthorityNoMutation": true,
+      "readOnlyExplanation": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "focus",
+    "width": 1416,
+    "checks": {
+      "correctInvalidField": true,
+      "draftPreserved": true,
+      "actionableToast": true,
+      "toastActionTarget": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "save",
+    "width": 390,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noPreselection": true,
+      "focusCorrectGroup": true,
+      "humanChoiceEnablesSave": true,
+      "oneCall": true,
+      "pendingRemoved": true,
+      "classifiedGroupVisible": true,
+      "evidencePreserved": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "error",
+    "width": 390,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noPreselection": true,
+      "focusCorrectGroup": true,
+      "humanChoiceEnablesSave": true,
+      "oneCall": true,
+      "errorKeepsChoice": true,
+      "reloadGroupsPreservesChoice": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "global",
+    "width": 390,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noAuthorityNoMutation": true,
+      "readOnlyExplanation": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "readonly",
+    "width": 390,
+    "checks": {
+      "problemExplained": true,
+      "linkCountVisible": true,
+      "correctConceptDialog": true,
+      "noAuthorityNoMutation": true,
+      "readOnlyExplanation": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "focus",
+    "width": 390,
+    "checks": {
+      "correctInvalidField": true,
+      "draftPreserved": true,
+      "actionableToast": true,
+      "toastActionTarget": true,
+      "noHorizontalOverflow": true
+    },
+    "pass": true
+  }
+]

@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeftOutlined,
@@ -308,7 +309,7 @@ function PrepareFlow(props: {
         description="Defina como a verificação será construída."
         actions={<Button icon={<ArrowLeftOutlined />} onClick={props.onBack}>Voltar para detalhes</Button>}
       />
-      {props.error ? <Alert message={props.error} showIcon type="error" /> : null}
+      {props.error ? <Alert message={props.error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar preparação</Button>} /> : null}
       {props.info ? <Alert message={props.info} showIcon type="success" /> : null}
       <PrismaCard>
         <Steps

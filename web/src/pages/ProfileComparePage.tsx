@@ -30,7 +30,7 @@ export function ProfileComparePage({ activeMembership, personIds, onNavigate }: 
   return <PrismaPage className="prisma-profile-compare-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/search")} type="text">Voltar aos resultados</Button>
     <PrismaPageHeader title="Comparar perfis" description="Compare a mesma estrutura profissional lado a lado, sem notas, ranking ou decisão automática." actions={<Button icon={<CloseOutlined />} onClick={() => { setSelectedIds([]); onNavigate("/profiles/search"); }}>Limpar comparação</Button>} />
-    {error ? <Alert showIcon title={error} type="error" /> : null}
+    {error ? <Alert showIcon title={error} type="error" action={<Button onClick={() => onNavigate("/profiles/search")}>Rever seleção de pessoas</Button>} /> : null}
     {loading ? <div className="prisma-profile-compare-grid"><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard></div> : null}
     {!loading && profiles.length !== 2 ? <PrismaCard><Empty description="Selecione exatamente dois Perfis publicados para comparar." /></PrismaCard> : null}
     {profiles.length === 2 ? <>

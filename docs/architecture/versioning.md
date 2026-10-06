@@ -1,5 +1,7 @@
 # Versionamento
 
+Decisão explícita de Bruno em 06/10/2026: publicar **Prisma v2.0.10** para avisos com problema e ação contextual, incluindo definição de grupo na tela de Competências. Reutiliza `classify_knowledge_competency`/taxonomia `competency-taxonomy-2.0.0` e os controles existentes; nenhum contrato persistido, migration, IA/modelo, Parser ou worker muda. Registry único avança para entrega10, preservando a lacuna histórica7. Rollout somente web; acordo `docs/qa/agreement-actionable-notices-v2010.md`.
+
 Decisão explícita de Bruno em 04/10/2026: publicar a orientação para erros corrigíveis como **Prisma v2.0.3**, terceira entrega da geração 2/movimento 0 no registro único. `operator-feedback-1.0.0` versiona somente o catálogo de apresentação e a antecipação da regra de telefone já vigente. Envelope `operation-feedback-2.0.0`, contratos persistidos, gates de aprovação, Parser e modelo de contato não mudam. Não requer migration; rollout somente web. Acordo: `docs/qa/agreement-actionable-feedback-v203.md`.
 
 Decisão explícita de Bruno em 03/10/2026: este movimento de importação totalmente online será publicado como **Prisma v2.0.1**, geração 2, movimento 0, entrega 1, por meio do registro existente. Movimento zero passa a ser aceito para iniciar a geração; negativos/fracionários continuam inválidos. Histórico 1.x preservado. Login/menu/Context Pack devem refletir o mesmo registro. O contrato de implantação `parser-ia-kvm2-1.0.0` e os contratos dos dados não são renumerados pela versão pública.

@@ -290,7 +290,7 @@ export function StructuredReviewPanel({
           type="warning"
         />
       ) : null}
-      {editable && hasTransientChanges && !hasUnsavedChanges ? <Alert description="Preencha o campo manualmente ou selecione sua área no documento. Um formulário vazio pode ser cancelado e não exige salvamento nem justificativa." showIcon title="Novo campo aguardando conteúdo" type="info" /> : null}
+      {editable && hasTransientChanges && !hasUnsavedChanges ? <Alert description="Preencha o campo manualmente ou selecione sua área no documento. Um formulário vazio pode ser cancelado e não exige salvamento nem justificativa." showIcon title="Novo campo aguardando conteúdo" type="info" action={<Button onClick={() => navigateIssue(selectedFieldPath)}>Preencher novo campo</Button>} /> : null}
       <Tabs
         activeKey={activeTab}
         className="prisma-review-tabs"
@@ -482,7 +482,7 @@ export function StructuredReviewPanel({
     };
     return (
       <div className="prisma-entity-review">
-        <Alert description="Revise o nível, a qualificação e a situação sugeridos. O texto original e a regra aplicada permanecem preservados para auditoria." showIcon title="Classificação acadêmica estruturada" type="info" />
+        <Alert description="Revise o nível, a qualificação e a situação sugeridos. O texto original e a regra aplicada permanecem preservados para auditoria." showIcon title="Classificação acadêmica estruturada" type="info" action={editable ? <Button onClick={() => navigateIssue(reviewEntityFieldPath("education", draft.education[educationIndex]!, "course"))}>Conferir formação</Button> : undefined} />
         <div className="prisma-entity-review__toolbar"><EntityNavigator count={draft.education.length} index={index} label="Formação" onChange={(next) => { setEducationIndex(next); const item = draft.education[next]; if (item) onFieldSelect(reviewEntityFieldPath("education", item, "course")); }} />{editable ? <Space wrap><Button icon={<PlusOutlined />} onClick={addEducation} size="small">Adicionar formação</Button><Popconfirm onConfirm={removeEducation} title={persisted ? "Não incluir esta formação no perfil?" : "Cancelar a inclusão desta formação?"}><Button danger={persisted} icon={<DeleteOutlined />} size="small">{persisted ? "Remover formação" : "Cancelar inclusão"}</Button></Popconfirm></Space> : null}</div>
         <div className={["prisma-education-classification-card", classificationAccepted ? "is-confirmed" : "requires-review"].join(" ")}>
           <div className="prisma-education-classification-card__header"><div><strong>{reviewed.course || (classification.level === "secondary" ? "Ensino médio" : `Formação ${index + 1}`)}</strong>{fieldVisibility.showInstitution ? <span>{reviewed.institution || "Instituição não identificada"}{fieldVisibility.showPeriod && reviewed.period ? ` · ${reviewed.period}` : ""}</span> : null}</div><Tag color={classificationAccepted ? "green" : "gold"}>{confirmedByReviewer ? "Confirmada por você" : classificationAccepted ? "Classificação válida" : "Requer revisão"}</Tag></div>

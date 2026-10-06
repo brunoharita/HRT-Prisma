@@ -30,6 +30,22 @@ export function profileCompetencyCurationService(organizationId: string, personI
       if (error) throw new Error("Não foi possível atualizar a lista. Tente novamente.");
       return readProfessionalEvidenceProjection(data, organizationId, personId);
     },
+    async classify(input) {
+      const { error } = await supabase.rpc("classify_knowledge_competency" as never, {
+        p_concept_id: input.conceptId, p_subgroup_id: input.subgroupId,
+        p_reason: "Grupo selecionado e confirmado pelo operador na tela de Competências do Perfil.",
+      } as never);
+      if (error) {
+        if (["42501", "28000"].includes(error.code)) throw new Error("Seu acesso não permite definir este grupo. Um administrador autorizado da empresa ou da base global precisa realizar a alteração.");
+        if (error.code === "22023") throw new Error("A competência ou o grupo escolhido não está mais disponível. Atualize as opções e escolha um grupo ativo.");
+        throw new Error("Não foi possível confirmar a gravação do grupo. Sua escolha foi preservada; consulte a lista antes de tentar novamente.");
+      }
+      const { data, error: refreshError } = await supabase.rpc("load_person_professional_evidence_map_v6" as never, {
+        p_organization_id: organizationId, p_person_id: personId,
+      } as never);
+      if (refreshError) throw new Error("O grupo foi salvo, mas a lista não pôde ser atualizada. Consulte a lista para conferir o resultado.");
+      return readProfessionalEvidenceProjection(data, organizationId, personId);
+    },
     async loadEvidenceSources(profileId) {
       const { data, error } = await supabase.from("professional_profiles").select("profile_data")
         .eq("id", profileId).eq("organization_id", organizationId).eq("person_id", personId)

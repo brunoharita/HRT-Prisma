@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckOutlined, EyeOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
@@ -760,9 +761,14 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         <div className="prisma-review-statusbar prisma-review-statusbar--view"><Tag color="blue">{workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion}` : `Documento v${workspace.documentVersion}`}</Tag><Tag color={workspace.state === "approved" ? "green" : workspace.state === "invalidated" ? "default" : "gold"}>{workspace.state === "approved" ? "Perfil aprovado" : workspace.state === "invalidated" ? "Revisão arquivada" : "Revisão em andamento"}</Tag><Tag icon={<EyeOutlined />}>Somente leitura</Tag><Typography.Text type="secondary">Nenhuma informação pode ser alterada neste modo.</Typography.Text></div>
       ) : <div className="prisma-review-statusbar"><Tag color="blue">{workspace.sourceKind === "profile" ? `Base: Perfil v${workspace.sourceProfileVersion}` : `Base: Documento v${workspace.documentVersion}`}</Tag><Tag color="blue">Origem preservada</Tag><Tag color={dirty || transientOnly ? "gold" : "cyan"}>{dirty || transientOnly ? "Requer revisão" : "Pronto para comparação"}</Tag><Tag color="green">Perfil vigente preservado</Tag><Tag color={dirty || transientOnly ? "gold" : "green"}>{dirty ? "Alterações não salvas" : transientOnly ? "Novo campo aguardando conteúdo" : "Rascunho sincronizado"}</Tag><Typography.Text type="secondary">A nova versão será criada somente depois da comparação e publicação.</Typography.Text></div>}
       {workspace.state === "approved" ? <Alert title={`Revisão aprovada em ${formatDate(workspace.approvedAt)}.`} showIcon type="success" /> : null}
-      {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" action={<Space wrap><Button onClick={() => { const path = validationIssues[0]?.fieldPath ?? selectedFieldPath; setMobilePane("review"); setSelectedFieldPath(path); window.requestAnimationFrame(() => focusReviewField(path)); }}>Conferir campo na revisão</Button><Button onClick={() => onNavigate(documentId ?? workspace.documentId ? `/profiles/${personId}/documents/${documentId ?? workspace.documentId}` : `/profiles/${personId}`)}>Consultar documento</Button></Space>} /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
       {!viewOnly && adaptiveReport ? <AdaptiveSuggestionPanel
+        onReviewRecord={(kind, index) => {
+          const record = kind === "experience" ? draft.experiences[index] : kind === "education" ? draft.education[index] : null;
+          const path = record ? reviewEntityFieldPath(kind === "experience" ? "experience" : "education", record, kind === "experience" ? "role" : "course") : "certifications";
+          setSelectedFieldPath(path); setMobilePane("review"); window.requestAnimationFrame(() => focusReviewField(path));
+        }}
         busy={busy}
         onApply={(suggestions) => void handleApplyAdaptiveSuggestions(suggestions)}
         onDismiss={() => void dismissAdaptiveSuggestions()}
@@ -779,6 +785,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       <div className={["prisma-review-split", `mobile-pane-${mobilePane}`].join(" ")}>
         <div className="prisma-review-document-pane">
           {workspace.sourceKind === "document" && workspace.documentName ? <DocumentEvidenceViewer
+            onReviewFields={() => { setMobilePane("review"); window.requestAnimationFrame(() => focusReviewField(selectedFieldPath)); }}
             activeLinkId={activeLinkId} fileName={workspace.documentName} links={workspace.evidenceLinks} navigationTarget={navigationTarget}
             fallbackOriginalEvidence={fallbackOriginalEvidence}
             onEvidenceClick={(fieldPath, linkId) => { setSelectedFieldPath(fieldPath); setActiveLinkId(linkId); setMobilePane("review"); }}
@@ -803,7 +810,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
       <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy || Boolean(competencySelectionResolution?.ambiguous) }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={!viewOnly && Boolean(pendingSelection)} title="Usar região selecionada">
         {pendingSelection ? <div className="prisma-selection-dialog">
-          {selectionError ? <Alert title={selectionError} showIcon type="error" /> : null}
+          {selectionError ? <Alert title={selectionError} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar informação selecionada</Button>} /> : null}
           <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={selectedFieldIsTransient ? "Este é um novo campo. A seleção preencherá seu conteúdo e salvará a evidência em uma única operação." : pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. Informe o valor correto; a região, a autoria e a mudança ficarão registradas automaticamente." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />
           {pendingSelection.refinementCandidates.length ? <section className="prisma-selection-refinement" aria-labelledby="selection-refinement-title">
             <div>
@@ -855,7 +862,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           {pendingAction === "create_new_information" && newInformationType === "custom_item" ? <Select aria-label="Área personalizada de destino" onChange={setCustomTargetSectionId} options={draft.customSections.filter((section) => section.format === "list").map((section) => ({ label: section.name, value: section.id }))} placeholder="Selecione a área" value={customTargetSectionId || null} /> : null}
           {pendingAction === "correct_current_field" || pendingAction === "create_new_information" ? <Input.TextArea aria-label="Valor sugerido pela região" onChange={(event) => { setSelectionValue(event.target.value); setSelectionValueEdited(true); setSelectionError(null); }} placeholder="Valor revisado" rows={4} value={selectionValue} /> : null}
           {competencySelectionResolution ? competencySelectionResolution.ambiguous
-            ? <Alert description="Ajuste a seleção ou separe o texto por linha, vírgula ou ponto e vírgula. O Prisma não criará uma competência única a partir de vários blocos sem uma separação confiável." showIcon title="Separação das competências precisa de revisão" type="warning" />
+            ? <Alert description="Ajuste a seleção ou separe o texto por linha, vírgula ou ponto e vírgula. O Prisma não criará uma competência única a partir de vários blocos sem uma separação confiável." showIcon title="Separação das competências precisa de revisão" type="warning" action={<Button onClick={() => focusNoticeTarget('textarea[aria-label="Valor sugerido pela região"]')}>Corrigir separação do texto</Button>} />
             : <section className="prisma-competency-selection-preview" data-segmentation-version={COMPETENCY_LIST_SEGMENTATION_VERSION}>
               <div><Typography.Text strong>{competencySelectionResolution.values.length} {competencySelectionResolution.values.length === 1 ? "competência identificada" : "competências identificadas"}</Typography.Text><Tag color="green">Registros separados</Tag></div>
               <Space wrap>{competencySelectionResolution.values.map((value) => <Tag color="blue" key={value}>{value}</Tag>)}</Space>

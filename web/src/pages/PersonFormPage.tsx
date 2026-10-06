@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
@@ -105,7 +106,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
         description="Cadastre os dados básicos para organizar as informações e acompanhar o perfil profissional."
         actions={<Button icon={<SaveOutlined />} loading={saving} onClick={() => form.submit()} type="primary">Salvar</Button>}
       />
-      {error ? <Alert message={error} showIcon type="error" /> : null}
+      {error ? <Alert message={error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver campos do formulário</Button>} /> : null}
       <div className="prisma-person-form-layout">
         <PrismaCard className="prisma-person-form-card">
           <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>

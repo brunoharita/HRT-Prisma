@@ -85,6 +85,7 @@ interface DocumentEvidenceViewerProps {
   refinementExcludedLinkIds?: string[];
   navigationTarget: EvidenceNavigationTarget | null;
   onSelectionCancel: () => void;
+  onReviewFields?: (() => void) | undefined;
   onSelectionComplete: (selection: RegionSelectionResult) => void;
   onEvidenceClick: (fieldPath: string, linkId: string) => void;
 }
@@ -107,6 +108,7 @@ export function DocumentEvidenceViewer({
   refinementExcludedLinkIds = [],
   navigationTarget,
   onSelectionCancel,
+  onReviewFields,
   onSelectionComplete,
   onEvidenceClick,
 }: DocumentEvidenceViewerProps) {
@@ -116,6 +118,7 @@ export function DocumentEvidenceViewer({
   const [loading, setLoading] = useState(Boolean(pdfUrl));
   const [rendering, setRendering] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [noticeRetry, setNoticeRetry] = useState(0);
   const [selectionStatus, setSelectionStatus] = useState<string | null>(null);
   const [drag, setDrag] = useState<DragState | null>(null);
   const [pendingRegion, setPendingRegion] = useState<NormalizedPageRegion | null>(null);
@@ -158,7 +161,7 @@ export function DocumentEvidenceViewer({
       current = false;
       if (loaded) void loaded.destroy();
     };
-  }, [pdfUrl]);
+  }, [pdfUrl, noticeRetry]);
 
   useEffect(() => {
     if (!pdfDocument || !canvasRef.current || !pageRef.current || !textLayerRef.current) return;
@@ -494,7 +497,7 @@ export function DocumentEvidenceViewer({
   }
 
   if (!pdfUrl) {
-    return <div className="prisma-document-viewer-empty"><Alert title="O documento original não está disponível para visualização." description="A revisão continua acessível, mas nenhuma coordenada espacial será criada sem o PDF e sua versão." showIcon type="warning" /></div>;
+    return <div className="prisma-document-viewer-empty"><Alert title="O documento original não está disponível para visualização." description="Os campos da revisão continuam acessíveis. Sem o documento original, não é possível selecionar novas áreas como evidência." showIcon type="warning" action={onReviewFields ? <Button onClick={onReviewFields}>Consultar campos da revisão</Button> : undefined} /></div>;
   }
 
   const pendingCharacterRegions = pendingVisualSelection && pageRef.current
@@ -552,7 +555,7 @@ export function DocumentEvidenceViewer({
 
       <div className="prisma-pdf-scroll" ref={scrollRef}>
         {loading ? <Skeleton active paragraph={{ rows: 14 }} /> : null}
-        {error ? <Alert title="Erro ao renderizar o PDF" description={error} showIcon type="error" /> : null}
+        {error ? <Alert title="A página do documento não pôde ser exibida." description="Os campos da revisão continuam disponíveis. Tente abrir o documento novamente para conferir a origem." showIcon type="error" action={<Button onClick={() => setNoticeRetry((value) => value + 1)}>Tentar abrir documento</Button>} /> : null}
         {!loading && !error ? (
           <div className="prisma-pdf-page" ref={pageRef}>
             <canvas aria-label={`Página ${currentPage} do currículo`} ref={canvasRef} />

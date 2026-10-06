@@ -1,3 +1,5 @@
+import { actionableMessageError } from "../ui/ActionableMessage";
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
 import { CopyOutlined, LinkOutlined, PlusOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Alert, Button, Descriptions, Drawer, Empty, Form, Input, List, Popconfirm, Progress, Radio, Select, Space, Table, Tabs, Typography, message } from "antd";
@@ -94,14 +96,14 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   const expiryDate = new Date(Date.now() + Number(validDays) * 86400000);
   async function copyInvitationLink() {
     try { await navigator.clipboard.writeText(verificationUrl); setLinkHandled(true); markSaved(); message.success("Link copiado."); }
-    catch { message.error("Não foi possível copiar automaticamente. Selecione o endereço no campo e copie manualmente."); }
+    catch { actionableMessageError("Não foi possível copiar o link automaticamente. Selecione o endereço e copie manualmente.", { label: "Selecionar link do convite", onClick: () => { const field = document.querySelector<HTMLInputElement>('.prisma-invitation-link input, input[readonly]'); field?.focus(); field?.select(); } }); }
   }
   if (preparedAssessmentId) {
     return (
       <PrismaPage className="prisma-m51b-operator-page">
         <PrismaPageHeader title="Gerar link de convite" description="Gere um acesso pessoal para a verificação preparada. Nenhuma mensagem externa será enviada automaticamente." />
         <Button onClick={() => onNavigate("/verifications")} type="link">Voltar para verificações</Button>
-        {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+        {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => void load()}>Consultar situação dos convites</Button>} /> : null}
         {!prepared && !loading ? <PrismaCard><Empty description="Instrumento preparado não encontrado." /></PrismaCard> : null}
         {prepared ? (
           <>
@@ -161,7 +163,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
     <PrismaPage className="prisma-m51b-operator-page">
       <PrismaPageHeader title="Verificações" description="Acompanhe convites, andamento, resultados e qualidade das evidências." actions={<Button icon={<PlusOutlined />} onClick={() => onNavigate("/matching")} type="primary">Preparar verificação</Button>} />
       {workspace?.preparedAssessments.length ? <PrismaCard title="Preparações disponíveis"><Select aria-label="Escolher pessoa e verificação para gerar convite" placeholder="Escolha uma preparação para gerar o convite" style={{ width: "100%" }} options={workspace.preparedAssessments.map((item) => ({ value: item.id, label: `${item.personName} · ${item.competency} · ${labelLevel(item.targetLevel)}` }))} onChange={(id) => onNavigate(`/verifications/new/${id}`)} /></PrismaCard> : null}
-      {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => void load()}>Consultar situação dos convites</Button>} /> : null}
       <PrismaCard>
         <Tabs activeKey={tab} items={[{ key: "all", label: "Todas" }, { key: "pending", label: "Pendentes" }, { key: "in_progress", label: "Em andamento" }, { key: "completed", label: "Concluídas" }, { key: "inconclusive", label: "Inconclusivas" }, { key: "expired", label: "Encerradas" }]} onChange={setTab} />
         <Input.Search allowClear onChange={(event) => setSearch(event.target.value)} placeholder="Buscar por Pessoa, Posição, requisito, competência ou status" value={search} />

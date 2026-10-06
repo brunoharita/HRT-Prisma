@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Collapse, Descriptions, Drawer, Empty, Form, Input, List, Modal, Pagination, Select, Skeleton, Space, Tag, Typography } from "antd";
 import { ApartmentOutlined, EditOutlined, InfoCircleOutlined, PlusOutlined } from "@ant-design/icons";
@@ -25,6 +26,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
   const [history, setHistory] = useState<Array<{ version: number; snapshot: PositionTaxonomy | null }>>([]);
   const [historyPage, setHistoryPage] = useState(1);
   const [historyError, setHistoryError] = useState<string | null>(null);
+  const [historyRetry, setHistoryRetry] = useState(0);
   useEffect(() => {
     if (!why || !draft.id) return;
     let current = true; setHistoryError(null); setHistory([]);
@@ -32,7 +34,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
       .then((items) => { if (current) setHistory(items); })
       .catch(() => { if (current) setHistoryError("Histórico indisponível agora. Feche e abra a explicação para tentar novamente."); });
     return () => { current = false; };
-  }, [why, draft.id, membership.organizationId, historyPage]);
+  }, [why, draft.id, membership.organizationId, historyPage, historyRetry]);
   const latest = useRef({ draft, onChange }); latest.current = { draft, onChange };
   const decision = draft.taxonomyDecision ?? (draft.referenceConceptId ? "human" : "automatic");
   const selected = decision === "human" ? draft.referenceConceptId : null;
@@ -80,7 +82,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
       {snapshot && !loading ? <>
         <Typography.Paragraph type="secondary">{snapshot.decision === "automatic" && snapshot.state === "resolved" ? "Associada automaticamente por correspondência aprovada." : taxonomyMethodLabels[snapshot.method]}</Typography.Paragraph>
         <ReferenceList references={snapshot.references} />
-        {snapshot.state === "ambiguous" ? <Alert showIcon type="warning" title="Mais de uma interpretação pode representar este título." description="Use Corrigir associação para selecionar uma referência. Nenhuma foi escolhida automaticamente." /> : null}
+        {snapshot.state === "ambiguous" ? <Alert showIcon type="warning" title="Mais de uma interpretação pode representar este título." description="Escolha a referência que corresponde ao título. Nenhuma foi escolhida automaticamente." action={onChange || onEdit ? <Button onClick={correctAssociation}>Corrigir associação</Button> : undefined} /> : null}
         {snapshot.state === "unresolved" ? <Alert showIcon type="info" title="A Posição pode ser salva sem referência ocupacional." description="Busque uma referência aplicável ou preserve o termo para curadoria na Knowledge da empresa." /> : null}
       </> : null}
     </PrismaCard>
@@ -115,7 +117,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
         organizationId: snapshot.organizationId, positionVersionId: snapshot.positionVersionId, decisionRecordedAt: snapshot.decisionRecordedAt,
       } : { status: "historical_unrecorded" }, null, 2)}</pre> }]} />
       <h3>Histórico de interpretações</h3>
-      {historyError ? <Alert type="warning" title={historyError} /> : null}
+      {historyError ? <Alert type="warning" title={historyError} action={<Button onClick={() => setHistoryRetry((value) => value + 1)}>Consultar histórico novamente</Button>} /> : null}
       <List dataSource={history} locale={{ emptyText: "Nenhuma versão anterior carregada nesta edição." }} renderItem={(entry) => <List.Item>
         <Collapse className="prisma-taxonomy-history" items={[{ key: String(entry.version), label: `Definição v${entry.version} · ${entry.snapshot?.concept?.label ?? "Sem associação M7.1 registrada"}`,
           children: <><Typography.Paragraph>{entry.snapshot ? `${taxonomyMethodLabels[entry.snapshot.method] ?? entry.snapshot.method} · ${new Date(entry.snapshot.recordedAt).toLocaleString("pt-BR")}` : "Registro histórico preservado, sem reinterpretação."}</Typography.Paragraph>
@@ -229,7 +231,7 @@ function ComplementDialog({ open, organizationId, canCreate, onClose, onAdd }: {
       <Form.Item label="Nome do item" required><Input aria-label="Nome do item complementar" value={label} maxLength={240} onChange={(event) => setLabel(event.target.value)} /></Form.Item>
       <Form.Item label="Subagrupador principal" required><Select aria-label="Subagrupador principal do complemento" value={subgroupId} onChange={setSubgroupId} placeholder="Selecione a classificação" options={(["hard", "soft"] as const).map((macro) => ({ label: macro === "hard" ? "Hard Skills" : "Soft Skills", options: subgroups.filter((item) => item.macroGroupCode === macro).map((item) => ({ value: item.id, label: `${item.code} · ${item.label}` })) }))} /></Form.Item>
       <Form.Item label="Contexto ou descrição (opcional)"><Input.TextArea aria-label="Contexto ou descrição do complemento" maxLength={4000} value={description} onChange={(event) => setDescription(event.target.value)} /></Form.Item>
-      {error ? <Alert type="error" title={error} /> : null}<Space><Button onClick={onClose}>Cancelar</Button><Button type="primary" htmlType="submit" loading={busy} disabled={!label.trim() || !subgroupId}>Criar e associar complemento</Button></Space>
+      {error ? <Alert type="error" title={error} action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver dados do conceito</Button>} /> : null}<Space><Button onClick={onClose}>Cancelar</Button><Button type="primary" htmlType="submit" loading={busy} disabled={!label.trim() || !subgroupId}>Criar e associar complemento</Button></Space>
     </Form> : <Typography.Paragraph>A criação de Knowledge exige Owner, Admin ou Super Admin. Você pode reutilizar itens já publicados para sua empresa.</Typography.Paragraph>}
   </Modal><KnowledgePicker open={picker && open} kind="complement" organizationId={organizationId} onClose={() => setPicker(false)} onChoose={(candidate) => { setPicker(false); onAdd(candidate.id); }} /></>;
 }

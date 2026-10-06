@@ -12,6 +12,7 @@ interface AdaptiveSuggestionPanelProps {
   onApply: (suggestions: AdaptiveFieldSuggestion[]) => void;
   onDismiss: () => void;
   onNavigate: (suggestion: AdaptiveFieldSuggestion) => void;
+  onReviewRecord?: ((kind: AdaptiveSuggestionReport["recordKind"], index: number) => void) | undefined;
 }
 
 const FIELD_LABELS: Record<AdaptiveFieldSuggestion["field"], string> = {
@@ -36,7 +37,7 @@ const CRITERION_LABELS = {
   "reading-order": "ordem interna consistente",
 } as const;
 
-export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNavigate }: AdaptiveSuggestionPanelProps) {
+export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNavigate, onReviewRecord }: AdaptiveSuggestionPanelProps) {
   const allSuggestions = useMemo(() => report.suggestions.flatMap((suggestion) => suggestion.fields), [report]);
   const strongPaths = useMemo(() => report.suggestions.filter((item) => item.classification === "strong").flatMap((item) => item.fields.map((field) => field.fieldPath)), [report]);
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(() => new Set(strongPaths));
@@ -128,7 +129,7 @@ export function AdaptiveSuggestionPanel({ report, busy, onApply, onDismiss, onNa
             key: "unresolved",
             label: `${report.unresolved.length} ${report.unresolved.length === 1 ? "registro sem proposta segura" : "registros sem proposta segura"}`,
             children: report.unresolved.map((item) => (
-              <Alert key={`${item.experienceIndex}-${item.reasonCode}`} title={`${recordSingular.charAt(0).toUpperCase() + recordSingular.slice(1)} ${item.experienceIndex + 1}: ${item.label}`} description={item.explanation} showIcon type="warning" />
+              <Alert key={`${item.experienceIndex}-${item.reasonCode}`} title={`${recordSingular.charAt(0).toUpperCase() + recordSingular.slice(1)} ${item.experienceIndex + 1}: ${item.label}`} description={item.explanation} showIcon type="warning" action={onReviewRecord ? <Button disabled={busy} onClick={() => onReviewRecord(report.recordKind, item.experienceIndex)}>Conferir registro na revisão</Button> : undefined} />
             )),
           }]}
         />

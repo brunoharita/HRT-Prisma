@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useViewState, useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
@@ -491,7 +492,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
             <div className="prisma-section-heading"><Typography.Title id="resultado" level={3}>Resultado da extração</Typography.Title>{selectedDocument ? <Button onClick={() => onNavigate(`/profiles/${personId}/documents/${selectedDocument.id}`)}>Detalhes técnicos</Button> : null}</div>
             <PrismaCard><Tabs items={[
               { key: "text", label: "Texto extraído", children: workspace.pages.length > 0 ? <div className="prisma-extracted-layout"><div aria-label="Páginas extraídas" className="prisma-page-rail" role="navigation">{workspace.pages.map((page) => <Button block key={page.pageNumber} onClick={() => setSelectedPage(page.pageNumber)} type={page.pageNumber === selectedPage ? "primary" : "text"}>Página {page.pageNumber}</Button>)}</div><div className="prisma-page-text"><Space><Tag color={currentPage?.origin === "ocr" ? "gold" : "blue"}>{currentPage?.origin === "ocr" ? "Texto via OCR" : currentPage?.origin === "manual_text" ? "Fonte manual" : "Texto nativo"}</Tag><Typography.Text type="secondary">{currentPage?.methodVersion}</Typography.Text></Space><pre>{currentPage?.text}</pre></div></div> : <Empty description="O texto aparecerá após um processamento válido." image={Empty.PRESENTED_IMAGE_SIMPLE} /> },
-              { key: "structured", label: "Dados estruturados", children: workspace.draft ? <StructuredDraftView draft={workspace.draft} /> : <Empty description="Nenhum dado estruturado disponível." image={Empty.PRESENTED_IMAGE_SIMPLE} /> },
+              { key: "structured", label: "Dados estruturados", children: workspace.draft ? <StructuredDraftView draft={workspace.draft} onReview={() => { if (workspace.selectedDocument?.reviewAttempt) void handleStartReview(); else onNavigate(`/profiles/${personId}/documents`); }} /> : <Empty description="Nenhum dado estruturado disponível." image={Empty.PRESENTED_IMAGE_SIMPLE} /> },
               { key: "evidence", label: "Evidências", children: workspace.draft ? <List dataSource={[...workspace.draft.experiences, ...workspace.draft.education]} renderItem={(item) => <List.Item><SafetyCertificateOutlined /><div><strong>{"role" in item ? item.role : item.course}</strong><p>{item.evidenceText}</p><Tag>Página {item.page}</Tag></div></List.Item>} /> : <Empty description="Nenhuma evidência criada." image={Empty.PRESENTED_IMAGE_SIMPLE} /> },
               { key: "technical", label: "Detalhes técnicos", children: attempt && selectedDocument ? <TechnicalDetails document={selectedDocument} /> : <Empty description="Sem detalhes técnicos." /> },
             ]} /></PrismaCard>
@@ -519,7 +520,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate }: 
         onOpenProfile={() => onNavigate(`/profiles/${personId}/profile`)}
         onOpenOperations={() => onNavigate(`/profiles/${personId}/processes`)}
       />
-      {error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" action={<Button disabled={busy} onClick={() => { void refresh().catch(() => setError("A Central da Pessoa não pôde ser consultada. Tente atualizar a consulta novamente.")); }}>Consultar estado da pessoa</Button>} /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
       {workspace.person.operationalStatus === "archived" ? <Alert action={<Button onClick={toggleArchive}>Reativar Pessoa</Button>} description="Documentos, Perfis e histórico permanecem disponíveis para consulta. Reative a Pessoa antes de iniciar uma nova operação." showIcon title="Pessoa arquivada" type="warning" /> : null}
       {workspace.person.operationalStatus === "deleting" ? <Alert action={canDeletePerson ? <Button danger loading={busy} onClick={() => void handleDeletePerson()}>Retomar exclusão</Button> : undefined} description="Novas alterações estão bloqueadas. O Prisma retomará a mesma operação idempotente e só informará sucesso depois de verificar banco e arquivos." showIcon title="Exclusão definitiva em andamento" type="error" /> : null}
@@ -865,7 +866,7 @@ function MoveDocumentModal({ activeMembership, document, people, onClose, onComp
           value={targetPersonId}
         />
         <Alert description="O Perfil atual da Pessoa de origem não será apagado nem reescrito. Se ele tiver usado este documento, o Prisma apenas sinalizará que uma revisão pode ser necessária." showIcon title="Histórico e Perfis permanecem preservados" type="info" />
-        {moveError ? <Alert showIcon title={moveError} type="error" /> : null}
+        {moveError ? <Alert showIcon title={moveError} type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Conferir pessoa de destino</Button>} /> : null}
       </div>
     </Modal>
   );
@@ -893,7 +894,7 @@ function timelineColor(tone: ReturnType<typeof presentDocument>["tone"]): string
   return "#8793a7";
 }
 
-function StructuredDraftView({ draft }: { draft: NonNullable<PersonIngestionWorkspace["draft"]> }) {
+function StructuredDraftView({ draft, onReview }: { draft: NonNullable<PersonIngestionWorkspace["draft"]>; onReview: () => void }) {
   return (
     <div className="prisma-structured-layout">
       <div>
@@ -912,7 +913,7 @@ function StructuredDraftView({ draft }: { draft: NonNullable<PersonIngestionWork
         <Coverage label="Competências" complete={draft.competencies.length > 0} />
         <Coverage label="Idiomas" complete={draft.languages.length > 0} />
         <Typography.Text type="secondary">Sem score global arbitrário. Cada indicador possui regra binária e explicável.</Typography.Text>
-        {draft.notIdentified.length > 0 ? <Alert title="Campos não identificados" description={draft.notIdentified.join(", ")} showIcon type="warning" /> : null}
+        {draft.notIdentified.length > 0 ? <Alert title="Algumas informações não foram identificadas no documento." description={draft.notIdentified.join(", ")} showIcon type="warning" action={<Button onClick={onReview}>Conferir documento e revisão</Button>} /> : null}
       </PrismaCard>
     </div>
   );

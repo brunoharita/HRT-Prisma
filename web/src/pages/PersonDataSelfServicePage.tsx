@@ -11,6 +11,7 @@ interface Props { token: string; }
 export function PersonDataSelfServicePage({ token }: Props) {
   const [preview, setPreview] = useState<PersonSelfServicePreview | null>(null);
   const [loading, setLoading] = useState(true);
+  const [noticeRetry, setNoticeRetry] = useState(0);
   const [deleting, setDeleting] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +24,7 @@ export function PersonDataSelfServicePage({ token }: Props) {
       .catch(() => { if (current) setError("Acesso indisponível ou expirado."); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
-  }, [token]);
+  }, [token, noticeRetry]);
 
   function confirmDeletion() {
     if (!preview || deleting) return;
@@ -54,14 +55,14 @@ export function PersonDataSelfServicePage({ token }: Props) {
 
   if (loading) return <PublicDataShell><PrismaState kind="loading" title="Confirmando seu acesso…" /></PublicDataShell>;
   if (completed) return <PublicDataShell><Result status="success" title="Seus dados foram excluídos" subTitle="A exclusão definitiva foi concluída. Este acesso não pode mais ser utilizado." /></PublicDataShell>;
-  if (!preview) return <PublicDataShell><PrismaState kind="unavailable" title="Acesso indisponível" description={error ?? "Este acesso expirou, foi revogado ou já foi utilizado."} /></PublicDataShell>;
+  if (!preview) return <PublicDataShell><PrismaState kind="unavailable" title="Acesso indisponível" description={error ?? "Este acesso expirou, foi revogado ou já foi utilizado."} action={{ label: "Verificar acesso novamente", onClick: () => { setLoading(true); setError(null); setNoticeRetry((value) => value + 1); } }} /></PublicDataShell>;
 
   return <PublicDataShell>
     <Card className="prisma-person-data-card">
       <Typography.Text className="prisma-person-data-eyebrow">Privacidade e controle</Typography.Text>
       <Typography.Title level={1}>Seus dados no Prisma</Typography.Title>
       <Typography.Paragraph>Olá, {preview.personName}. Este acesso permite revisar o alcance da exclusão e, se desejar, remover definitivamente seu cadastro e seus dados individuais.</Typography.Paragraph>
-      {error ? <Alert closable description="Você pode tentar novamente. O Prisma só informa sucesso após verificar banco e arquivos." message={error} onClose={() => setError(null)} showIcon type="error" /> : null}
+      {error ? <Alert closable description="Você pode tentar novamente. O Prisma só informa sucesso após verificar banco e arquivos." message={error} onClose={() => setError(null)} showIcon type="error" action={<Button disabled={deleting} onClick={() => { setLoading(true); setError(null); setNoticeRetry((value) => value + 1); }}>Consultar estado dos dados</Button>} /> : null}
       <DeletionImpact preview={preview} compact />
       <Button danger icon={<DeleteOutlined />} loading={deleting} onClick={confirmDeletion} size="large" type="primary">Excluir meus dados</Button>
       <Typography.Paragraph className="prisma-person-data-expiry" type="secondary">Acesso válido até {new Date(preview.expiresAt).toLocaleString("pt-BR")}.</Typography.Paragraph>

@@ -266,7 +266,7 @@ function errorAction(recovery: OperationRecovery, fieldPath: string | null, retu
   if (recovery === "sign-in") return <Button onClick={() => onNavigate("/sign-in")}>Entrar novamente</Button>;
   if (recovery === "return-to-review" || recovery === "review-fields") return <Button onClick={() => returnToReview()}>Voltar para revisão</Button>;
   if (recovery === "reload" || recovery === "retry") return <Button onClick={() => window.location.reload()}>Atualizar e tentar novamente</Button>;
-  return null;
+  return <Button onClick={() => returnToReview()}>Consultar revisão</Button>;
 }
 
 function reviewPath(personId: string, reviewId: string, documentId?: string): string { return documentId ? `/profiles/${personId}/documents/${documentId}/review/${reviewId}` : `/profiles/${personId}/reviews/${reviewId}`; }

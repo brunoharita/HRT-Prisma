@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 354
-source_manifest_sha256: 564d5c0ae720487c5e87ceae2aa64457a46c57fdc6199ef12bd476fae5709d27
+documentation_source_count: 357
+source_manifest_sha256: db8d5e2c1178501bddf6d1b1df8cb605835356a150e4cde72c04e12c90975928
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.41
-last_verified: 2026-10-05
+version: 2.51.42
+last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Avisos com ação e grupo de competências v2.0.10
+
+Implementação autorizada em06/10/2026: o Perfil diferencia evidências vinculadas de grupo não definido; a área pendente mostra contagem/explicação e abre Definir grupo para a competência correta. Reutiliza classificação humana/RPC existente, alcance da empresa/global, permissões e histórico; sem preseleção, IA, justificativa humana fabricada ou alteração dos vínculos. Avisos de erro/revisão encontrados nas páginas operacionais, cadastros e administração recebem foco/destino/consulta contextual. Erros temporários permanecem com botão até fechamento/ação; informações puramente explicativas não recebem ações artificiais. Política transversal em `docs/product/ux-foundation.md`; acordo/AoT `docs/qa/agreement-actionable-notices-v2010.md` e `docs/qa/aot-actionable-notices-v2010.md`. Implementação local/validação em andamento; produção2.0.9 permanece baseline até evidência de publicação. Nenhuma migration/backend/Parser/worker requerida; não usar banco produtivo como teste nem declarar teste autenticado real com base em fixture.
 
 ## Vínculo múltiplo de evidências v2.0.9
 
@@ -5436,6 +5440,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão explícita de Bruno em 06/10/2026: publicar **Prisma v2.0.10** para avisos com problema e ação contextual, incluindo definição de grupo na tela de Competências. Reutiliza `classify_knowledge_competency`/taxonomia `competency-taxonomy-2.0.0` e os controles existentes; nenhum contrato persistido, migration, IA/modelo, Parser ou worker muda. Registry único avança para entrega10, preservando a lacuna histórica7. Rollout somente web; acordo `docs/qa/agreement-actionable-notices-v2010.md`.
 
 Decisão explícita de Bruno em 04/10/2026: publicar a orientação para erros corrigíveis como **Prisma v2.0.3**, terceira entrega da geração 2/movimento 0 no registro único. `operator-feedback-1.0.0` versiona somente o catálogo de apresentação e a antecipação da regra de telefone já vigente. Envelope `operation-feedback-2.0.0`, contratos persistidos, gates de aprovação, Parser e modelo de contato não mudam. Não requer migration; rollout somente web. Acordo: `docs/qa/agreement-actionable-feedback-v203.md`.
 
@@ -11729,7 +11735,9 @@ Nomear ações pelo efeito: salvar rascunho, publicar perfil, arquivar, excluir,
 
 Carregamento, vazio inicial, busca sem resultados, erro, sucesso e indisponibilidade têm apresentações distintas e acessíveis. Carregamento não apresenta zero provisório. Vazio inicial orienta a entrada permitida; resultado vazio oferece ajuste de filtros; erro oferece recuperação sem apagar informação vigente. URLs desconhecidas e entidades inexistentes não abrem outra entidade.
 
-Mensagens informativas e de erro devem partir da causa efetivamente conhecida, declarar o efeito sobre a operação e indicar somente uma ação que o sistema realmente permite. Quando a causa não puder ser determinada, isso deve ser dito sem atribuir culpa a um serviço externo ou à pessoa. Detalhes técnicos ficam fora do texto principal. Este princípio se aplica a novos avisos e às superfícies alteradas; não implica uma reescrita automática de todas as telas existentes.
+Decisão explícita de Bruno em 06/10/2026, aplicada na v2.0.10: toda mensagem de erro, atenção ou outra natureza que implique revisão/correção humana deve conter o problema/divergência em português claro e sucinto e um botão que leve ao campo, registro, painel ou recuperação correta. Não basta orientar por texto ou apontar um menu genérico. A ação preserva rascunhos e escolhas; não recarrega formulários para simular uma correção. Falha interna sem correção de campo oferece consulta do estado/recuperação permitida, nunca inventa trabalho manual. Mensagens informativas sem intervenção requerida permanecem informativas, sem botões artificiais. Aviso temporário de erro com ação permanece até ser fechado ou acionado. Esta decisão substitui a restrição anterior às superfícies novas/alteradas.
+
+Mensagens partem da causa efetivamente conhecida e indicam somente ações que o sistema realmente permite. Quando a causa não puder ser determinada, isso deve ser dito sem atribuir culpa a um serviço externo ou à pessoa. Detalhes técnicos ficam fora do texto principal. Permissões e estados continuam controlados no servidor; a interface não fabrica encaminhamento ao suporte nem envia mensagens automaticamente. Grupo/subgrupo de competência e vínculo factual são estados distintos: definir grupo reutiliza a classificação humana existente na Knowledge, com alcance explícito, sem preseleção e sem apagar evidências.
 
 Buscas remotas iniciadas durante digitação esperam uma pausa curta, cancelam solicitações superadas e podem reutilizar resultados somente na sessão corrente. Um limite de tempo interrompe esperas sem resposta e preserva o conteúdo preenchido; nova tentativa continua explícita.
 
@@ -11914,6 +11922,31 @@ Versão 1.0.0, agreed, 2026-10-04. Autoridade: Bruno pediu mensagens em portugu�
 ## Execução congelada
 
 Implementar D-01 a D-04 sob P-01 e F-01, com A-01. Este acordo incorpora o prompt de execução autorizado. Capturas do incidente são contraexemplos de mensagem, não referência de redesenho; manter estrutura e ações existentes. AoT registra novidade, preservação e limites de prova.
+
+---
+
+## Source: `docs/qa/agreement-actionable-notices-v2010.md`
+
+# Acordo e execução: avisos com ação v2.0.10
+
+v1.0.0, aprovado pelos pedidos explícitos de Bruno em 06/10/2026. Baseline main `bfbf2456921b38f7a55b9e029c8ea9cf5597a000`, produto 2.0.9. A imagem é contraexemplo de uma pendência sem explicação/ação, não autorização para classificar automaticamente. Preservar cabeçalho, abas, filtros, grupos Hard/Soft e pendências na mesma ordem; acrescentar explicação e ação na área pendente. Dados da imagem são ilustrativos.
+
+- D-01: distinguir vínculo factual de grupo/subgrupo. Mostrar quantidade de evidências mesmo na área recolhida; explicar que o grupo ainda não foi definido e oferecer botão que abra a classificação da competência correta na mesma tela.
+- D-02: reutilizar `classify_knowledge_competency`, subgrupos, papéis e histórico existentes. Escolha humana sem preseleção, empresa/global explícitos; nenhuma classificação automática nem justificativa inventada. Metadado do RPC descreve apenas seleção/confirmação. Atualizar projeção após sucesso; falha preserva escolha e informa recuperação correta.
+- D-03: procurar outros pontos do Prisma. Avisos encontrados que exigem intervenção devem dizer o problema e oferecer botão para o campo, registro, painel ou recuperação permitida. Não substituir destino contextual por recarregamento da página quando isso perderia edição. Registrar inventário das superfícies corrigidas e distinção de avisos informativos sem ação exigida.
+- D-04: publicar 2.0.10 em main/produção; documentação/contexto/rollback/smoke. Somente typecheck/build, validação focada de mensagens/destinos/classificação/autoridade e preservação do vínculo múltiplo; sem suíte completa local.
+- P-01: não transformar evidência em classificação/Assessment, escolher grupo automaticamente, ampliar autoridade, gravar decisões em Pessoas reais para QA, perder rascunho ou inventar causa da falha. Não criar botão sem destino real ou simular solicitação de suporte não implementada.
+- F-01: IA/Parser/matching e políticas de domínio; novas tabelas/RPCs, backfill, envio de mensagens e reformas visuais. Informações explicativas que não exigem ação não recebem botões artificiais.
+- A-01: reusar Alert/Button/Modal/Select e operação existente. Engenharia define redação, foco/acessibilidade, ações inline e agrupamento proporcional dos avisos; preserva contratos/rascunhos.
+- Q-01: nenhuma decisão material pendente.
+
+## Mapa de impacto e aceite
+
+Risco C, com fronteira D existente reutilizada para classificação. Direct: competências/curadoria, mensagens de recuperação das páginas/componentes identificados no inventário, registry. Plausible_indirect: navegação/foco, formulários/rascunhos, adapter Supabase e projeção; testar destinos/foco sem mutação real e atualização da classificação. Critical_transversal: autorização por papel/empresa/global e histórico existentes; negativos locais do RPC e UI sem preseleção, não substituir comportamento do backend. No_impact_identified: Parser, worker, gateway, IA e cálculo de matching (não alterar regras), schema/RLS/migrations. Baseline web `08ce658e`, worker `8526717f`, Parser `8682af7d`, gateway `d061cea3`; confirmar antes/depois da publicação.
+
+CA-01/02: tela sintética mesma topologia e viewport desktop/celular; pendência com 2 evidências leva ao editor correto; salvar move para grupo sem apagar vínculos; negativos de alcance/role; erro conserva seleção. CA-03: inventário de avisos, prova dirigida de foco/destino/retry e revisão do diff; controles já presentes no próprio aviso contam como ação, informações puramente explicativas não implicam ação. CA-04: registry10/contextos/CI/rotas/assets/SHA e rollback sincronizados.
+
+Prompt congelado: implementar D/P/F/A e critérios acima sem reinterpretar a exigência de problema claro e botão contextual. Usar UI existente, sem nova dependência e sem testes mutacionais de produção.
 
 ---
 
@@ -15252,6 +15285,65 @@ Publicação manual seletiva pelo script existente `deploy/release-web.sh`, apó
 ## Conclusão
 
 Implementação e publicação funcional PASS. Encerramento documental e sincronização final registrados no commit de fechamento deste AoT; não exigem reconstruir a web. Runtime funcional permanece cacc388, enquanto Parser mantém build 96e3ecb. Smoke autenticado real NOT TESTED; para este incidente, o operador deve atualizar a página e corrigir Telefone pela revisão antes de confirmar a publicação.
+
+---
+
+## Source: `docs/qa/aot-actionable-notices-v2010.md`
+
+# AoT — Avisos com ação v2.0.10
+
+Contrato: `docs/qa/agreement-actionable-notices-v2010.md` v1.0.0, aprovado no pedido explícito de Bruno de 06/10/2026. Baseline main `bfbf2456921b38f7a55b9e029c8ea9cf5597a000`, produto 2.0.9.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste / evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- | --- |
+| D-01 | Explicar grupo indefinido, contagem e ação exata | PersonProfessionalEvidenceMap, CompetencyGroupModal | UI desktop/celular: 2 vínculos, competência correta, classificação atualiza grupo e mantém evidências | PASS | Sintético local |
+| D-02 | Reusar classificação, autoridade e histórico | Adapter e RPC existente classify_knowledge_competency | 10 checks SQL, replay, grupos/empresa/global/papéis; UI sem preseleção e seleção preservada; grants remotos somente leitura | PASS | PostgreSQL local com rollback; sem mutação real |
+| D-03 | Outros avisos com problema e destino contextual | Inventário, noticeActions, ActionableMessage, páginas/componentes | 63 pontos AST, revisão de destinos/diff, foco de campo inválido e rascunho preservado em desktop/celular | PASS | Não equivale a testar todos os estados autenticados |
+| D-04 | Versão 2.0.10, main/produção e smoke seletivo | Registry, documentos/contextos; web somente | Types/build e registry locais PASS; publicação em andamento | PARTIAL | Fechar após CI, release e smoke |
+
+## Proibições verificadas
+
+| ID | Guardrail | Prova | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem grupo automático, justificativa fabricada, perda de edição, ampliação de acesso ou QA mutacional real | Select vazio, lock de duplo clique, erro mantém escolha, foco não grava; RPC existente com negativos/global/tenant/member/anon; evidências preservadas; diff sem novas permissões/schema/IA | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade / relação | Baseline | Regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Competências, grupo e avisos / direct | 2.0.9, imagem de pendência é contraexemplo | 10 cenários UI desktop/celular e inventário | PASS |
+| Vínculo unitário e múltiplo / plausible_indirect | Wrapper v2 ativo, UI 2.0.9 | 4 fluxos single/multiple em 1416/390; uma chamada, todas fontes, sem justificativa, projeção atualizada | PASS |
+| Rascunhos, foco, navegação / plausible_indirect | Formulários e escolhas existentes | Foco no campo inválido sem apagar rascunho; revisão evita recarga da página; destinos existentes conferidos | PASS |
+| Autorização/classificação/histórico / critical_transversal | RPC existente; authenticated permitido/anon negado | 10 checks SQL locais, ROLLBACK; leitura remota confirma guardas e RPC legado | PASS |
+| Parser/worker/gateway/matching/schema / no_impact_identified | Imagens indicadas no acordo; regras existentes | Sem mudanças em runtime de backend, schema, prompts, matching ou serviço; confirmar imagens após publicação | PARTIAL |
+
+Entrega nova: explicação do grupo indefinido com ação; mensagens persistentes e navegação contextual. Preservação: vínculo múltiplo e autoridade; sem nova dependência. Nenhuma relação material adicionada ao mapa. Limites: cenário real autenticado não executado; testes de foco não provam todos os formulários.
+
+## Fora de escopo
+
+F-01 PASS: nenhuma migration/Edge/Parser/worker/IA, nenhuma reforma do matching, backfill ou envio externo. Informações sem intervenção não recebem botão artificial.
+
+## Fidelidade visual
+
+A imagem do usuário é contraexemplo, não alvo de dados nem identidade de pixels. Cabeçalho, abas, filtros, cartões Hard/Soft e pendências mantidos. Renders sintéticos 1416 e390 em `docs/qa/evidence/actionable-notices-v2010/`: explicação e ação visíveis mesmo recolhido, modal responsivo, sem sobreposição/overflow. PASS para topologia preservada; dados reais da imagem não usados em QA.
+
+## Desvios e mudanças autorizadas
+
+Nenhum desvio de comportamento identificado na revisão do contrato/diff. Sem nova decisão de produto ou destino. O plano automático sugerirá teste geral pela presença de web/tests; a instrução explícita e o acordo usam somente validação local focada. CI remoto obrigatório permanece intacto.
+
+## Validação final
+
+Types root/web, build web: PASS. Registry:5 testes; avisos AST:3; UI:10 cenários; vínculo:4; SQL:10 checks, ROLLBACK. Warnings de chunk/dynamic import preexistentes não alterados. Contextos/lint/foundation pendentes do snapshot Git limpo. Evidências em `docs/qa/evidence/actionable-notices-v2010/inventory.md`.
+
+## Git / produção
+
+Em andamento. Somente web requerida; RPC existente ativo, sem publicação de banco. Rollback, SHA, imagens e smoke serão registrados após publicação. Trabalho não relacionado preservado.
+
+## Conclusão
+
+Implementação e validação funcional local concluídas; entrega ainda não encerrada enquanto D-04 e preservação operacional estiverem parciais.
 
 ---
 
@@ -19888,6 +19980,42 @@ Validar M5, Central da Pessoa e Documentos em `1920x1080`, `1600x900`, `1440x900
 - Smoke autenticado: M5, Central da Pessoa e Documentos aprovados em `1920x1080`, `1600x900`, `1440x900`, `1366x768` e `390x844`, sem overflow horizontal. O M5 apresentou três seletores em colunas no desktop e uma coluna no mobile; a seleção de `Nível acadêmico` atualizou o caminho ativo de evidência. Nenhum descarte, salvamento ou publicação foi acionado.
 - Casos deliberadamente não classificados: quatro formações do Perfil v1 e cinco registros da importação histórica de Bruno Harita permanecem `legacy-unclassified` até revisão humana, porque foram extraídos antes deste classificador. Nenhum backfill sem evidência foi executado.
 - Resíduo externo ao movimento: `supabase db lint` continua apontando o erro histórico de cast do enum `knowledge_inbox_status` em `public.enqueue_knowledge_observation`. Não foi alterado porque pertence ao domínio Knowledge.
+
+---
+
+## Source: `docs/qa/evidence/actionable-notices-v2010/inventory.md`
+
+# Inventário dos avisos com ação v2.0.10
+
+Revisão proporcional de `web/src` em 06/10/2026. O contrato é `docs/qa/agreement-actionable-notices-v2010.md` v1.0.0. Não alterar regras de contratação, matching, confirmação humana, exclusão ou acesso.
+
+| Superfície | Problema exposto | Destino da ação |
+| --- | --- | --- |
+| Perfil / Competências | Grupo indefinido, mesmo com evidências | Definir grupo da competência correta; sem autoridade, orientação sobre responsável |
+| Classificação | Opções indisponíveis ou gravação não confirmada | Consultar grupos/lista sem apagar escolha; manter vínculos |
+| Vínculo de evidências | Fontes ou gravação não confirmadas | Revisar fontes ou consultar vínculos atuais |
+| Curadoria do Perfil | Termo sem associação, falha na decisão/consulta | Escolhas do termo em revisão ou atualizar pendências |
+| Revisão do documento | Campo inválido, seleção ambígua, registro sem sugestão segura | Campo selecionado/primeiro inválido, texto da seleção ou registro específico; abrir painel no celular |
+| Visualizador de documento | Página não exibida/original indisponível | Tentar abrir o PDF ou consultar campos da revisão |
+| Importação | Arquivo, identificação ou leitura parcial | Seletor de arquivo, identificação ou revisão pronta; antes disso explica disponibilidade futura |
+| Central da Pessoa / Documento / Versões | Estado da operação não confirmado, campos não identificados | Consultar estado atual ou abrir documento/revisão existente |
+| Busca e comparação de Pessoas | Seleção/consulta inválida | Seleção na página correta, critérios ou consulta de resultados |
+| Cadastro de Pessoas / Usuários / senha | Formulário não concluído | Primeiro campo inválido ou controle editável, preservando rascunho |
+| Mesclagem / movimento de documento | Escolhas conflitantes | Escolhas ou pessoa de destino; sem executar decisão automaticamente |
+| Início / Usuários / processos | Falha de consulta | Repetir leitura mantendo filtros |
+| Knowledge | Falha em operação, candidatos ambíguos, proposta de credencial legada | Retornar à operação preservada, candidatos ou termo de origem |
+| Posições / taxonomia | Formulário, requisitos ou associação incompletos | Campos, classificação de requisitos ou associação; histórico permite nova consulta |
+| Matching / comparação | Consulta/análise incompleta | Atualizar consulta, requisitos da Posição ou resultados com evidências |
+| Revisão de trajetórias | Falha na consulta/gravação | Rever decisões sem substituí-las; consulta somente quando ainda não carregada |
+| Banco de itens / preparação | Consulta/preparação não concluída | Consultar banco ou rever preparação |
+| Convites / verificação | Estado não confirmado, cópia não realizada, respostas pendentes | Consultar convites, selecionar link ou questão pendente; nenhuma resposta automática |
+| Autoatendimento de dados | Acesso/estado indisponível | Verificar acesso/estado; não repetir exclusão nem dispensar confirmação |
+
+O teste AST verifica 63 ocorrências explícitas de erro/indisponibilidade com atributo de ação e ausência de `message.error` sem o componente persistente. Ele não prova todos os estados condicionais, permissões e destinos em runtime. A revisão do diff e os fluxos sintéticos complementam essa verificação. Não se afirma que todo cenário autenticado foi executado.
+
+Informações puramente explicativas não pedem ação: limites do autorrelato e Assessment, preservação de histórico, disponibilidade de processamento futuro, ausência de conclusão de incapacidade, condições de privacidade e consequências de publicação com botão já adjacente. Ações destrutivas e decisões humanas continuam explícitas; falhas não as repetem automaticamente.
+
+Evidência sintética: `ui-results.json`, quatro arquivos `evidence-*.json`, `classification-checks.json` (10 checks, ROLLBACK), renders `classification-desktop.png` e `classification-mobile.png`. Nenhuma Pessoa real modificada, nenhuma chamada de IA para QA, nenhuma suíte completa local. O pipeline remoto obrigatório continua independente.
 
 ---
 

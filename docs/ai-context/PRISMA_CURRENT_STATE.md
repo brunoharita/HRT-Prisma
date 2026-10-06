@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.41
-last_verified: 2026-10-05
+version: 2.51.42
+last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Avisos com ação e grupo de competências v2.0.10
+
+Implementação autorizada em06/10/2026: o Perfil diferencia evidências vinculadas de grupo não definido; a área pendente mostra contagem/explicação e abre Definir grupo para a competência correta. Reutiliza classificação humana/RPC existente, alcance da empresa/global, permissões e histórico; sem preseleção, IA, justificativa humana fabricada ou alteração dos vínculos. Avisos de erro/revisão encontrados nas páginas operacionais, cadastros e administração recebem foco/destino/consulta contextual. Erros temporários permanecem com botão até fechamento/ação; informações puramente explicativas não recebem ações artificiais. Política transversal em `docs/product/ux-foundation.md`; acordo/AoT `docs/qa/agreement-actionable-notices-v2010.md` e `docs/qa/aot-actionable-notices-v2010.md`. Implementação local/validação em andamento; produção2.0.9 permanece baseline até evidência de publicação. Nenhuma migration/backend/Parser/worker requerida; não usar banco produtivo como teste nem declarar teste autenticado real com base em fixture.
 
 ## Vínculo múltiplo de evidências v2.0.9
 

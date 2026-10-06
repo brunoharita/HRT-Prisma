@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../../ui/noticeActions";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Empty, Input, Modal, Pagination, Radio, Select, Space, Tag, Typography } from "antd";
 import { BulbOutlined, CloseOutlined, LeftOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
@@ -104,18 +105,20 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
     setSelected(next);
     if (!next) setFocusKey(target ?? "empty");
   }
+  async function refresh() {
+    if (!adapter || busy || selected) return;
+    setBusy(true); setRefreshError(null);
+    try { const next = await adapter.refresh(); onProjection(next); setPage(curationPage(filterItems(groupPendingCompetencies(pendingCompetencies(next))), null, page)); }
+    catch { setRefreshError("Não foi possível atualizar as pendências. Tente novamente."); }
+    finally { setBusy(false); }
+  }
   return <>
     <PrismaCard className="prisma-m74-pending" title={<div id="prisma-profile-pending" ref={headingRef} tabIndex={-1}>Declarações aguardando associação ({pendingItems.length || legacyIssues.length} itens{pendingItems.length ? ` · ${pending.length} termos únicos` : ""})</div>}
-      extra={adapter ? <Space wrap><Button disabled={busy || Boolean(selected)} type="text" onClick={async () => {
-        setBusy(true); setRefreshError(null);
-        try { const next = await adapter.refresh(); onProjection(next); setPage(curationPage(filterItems(groupPendingCompetencies(pendingCompetencies(next))), null, page)); }
-        catch { setRefreshError("Não foi possível atualizar as pendências. Tente novamente."); }
-        finally { setBusy(false); }
-      }}>Atualizar lista</Button><Button disabled={!shown.length || busy} onClick={() => shown[(actualPage - 1) * CURATION_PAGE_SIZE] && open(shown[(actualPage - 1) * CURATION_PAGE_SIZE]!)} type="link">Revisar pendências</Button></Space> : undefined}>
+      extra={adapter ? <Space wrap><Button disabled={busy || Boolean(selected)} type="text" onClick={() => void refresh()}>Atualizar lista</Button><Button disabled={!shown.length || busy} onClick={() => shown[(actualPage - 1) * CURATION_PAGE_SIZE] && open(shown[(actualPage - 1) * CURATION_PAGE_SIZE]!)} type="link">Revisar pendências</Button></Space> : undefined}>
       <Typography.Paragraph type="secondary">Selecione um item para revisar sem sair do perfil. A declaração original permanece preservada.</Typography.Paragraph>
       {!adapter ? <Alert type="info" showIcon title="Curadoria disponível para administradores autorizados da Knowledge." /> : null}
       {notice ? <Alert type="success" title={notice} closable onClose={() => setNotice(null)} /> : null}
-      {refreshError ? <Alert type="error" title={refreshError} /> : null}
+      {refreshError ? <Alert type="error" title={refreshError} action={<Button disabled={busy || Boolean(selected)} onClick={() => void refresh()}>Atualizar pendências</Button>} /> : null}
       {legacyIssues.length ? <Alert type="info" title="Estas declarações ainda precisam de normalização antes da curadoria contextual." description={<ul>{legacyIssues.map((issue, index) => <li key={index}>{issue.observedTerm}: {issue.explanation}</li>)}</ul>} /> : null}
       <div className="prisma-m74-list-filters">
         <Input aria-label="Buscar nas pendências" placeholder="Buscar nas pendências..." prefix={<SearchOutlined />} value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
@@ -253,8 +256,8 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
       <div className="prisma-m74-source"><small>Declaração original</small><strong>{item.originalTerm}</strong></div>
       <div className="prisma-m74-source"><small>Termo em revisão</small><strong>{item.normalizedTerm}</strong>{item.sourceText !== item.originalTerm ? <small>Trecho: {item.sourceText}</small> : null}</div>
       {(item.groupCount ?? 1) > 1 ? <Alert showIcon type="info" title={`${item.groupCount} ocorrências compartilham este termo`} description="Uma associação aprovada será reutilizada nas ocorrências compatíveis, preservando cada origem." /> : null}
-      <Alert showIcon type="warning" title={item.reason} />
-      {error ? <Alert role="alert" type="error" showIcon title={error} /> : null}
+      <Alert showIcon type="warning" title={item.reason} description="Escolha um conceito correspondente ou proponha um novo conceito para este termo." action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar associação</Button>} />
+      {error ? <Alert role="alert" type="error" showIcon title={error} action={<Button disabled={saving} onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver escolhas da associação</Button>} /> : null}
       {!proposal ? <><Typography.Title level={5}>Associar a um conceito existente</Typography.Title>
         <Input.Search aria-label="Buscar conceitos para associação" value={query} disabled={saving} onChange={(event) => { setQuery(event.target.value); scheduleSearch(event.target.value); }} onSearch={(value) => void search(value)} loading={searching} enterButton="Buscar" />
         <Typography.Text type="secondary">A busca é atualizada automaticamente após 400 ms sem digitação. Sugestões iniciais combinam as expressões versionadas do processamento; nenhuma opção é selecionada automaticamente.</Typography.Text>

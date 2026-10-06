@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "organization admin classifies concept with existing RPC",
+    "compatible repeat reuses classification",
+    "one current classification, no duplicates",
+    "denied 42501",
+    "denied 42501",
+    "denied 42501",
+    "denied 22023",
+    "denied 42501",
+    "denied 42501",
+    "denials preserve approved history"
+  ],
+  "transaction": "ROLLBACK",
+  "environment": "local PostgreSQL 17, import_evidence_v202, 127.0.0.1:55479",
+  "passed": 10
+}

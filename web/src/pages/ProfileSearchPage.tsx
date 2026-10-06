@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -55,6 +56,12 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
     if (!selectedIds.includes(personId) && selectedIds.length === 2) { setError("Você já selecionou duas pessoas. Remova uma antes de escolher outra."); return; }
     setSelectedIds((current) => toggleComparisonSelection(current, personId));
   }
+  function reviewSelection() {
+    const index = results?.findIndex((item) => selectedIds.includes(item.candidate.personId)) ?? -1;
+    if (index < 0) { focusNoticeTarget(".prisma-profile-search-workspace input"); return; }
+    setPage(Math.floor(index / PAGE_SIZE) + 1);
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => focusNoticeTarget(".prisma-search-result-card input[type=checkbox]:checked")));
+  }
 
   return <PrismaPage className="prisma-profile-search-page">
     <Button className="prisma-profile-search-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>
@@ -93,7 +100,7 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
     </PrismaCard>
 
     <section className="prisma-profile-search-results" aria-label="Resultados da busca">
-      {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
+      {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Space wrap>{selectedIds.length ? <Button onClick={reviewSelection}>Rever pessoas selecionadas</Button> : <Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Conferir critérios de busca</Button>}<Button onClick={() => void executeSearch(true)}>Atualizar resultados</Button></Space>} /> : null}
       {loading ? <PrismaCard><Skeleton active avatar paragraph={{ rows: 12 }} /></PrismaCard> : null}
       {!loading && !error && results === null ? <SearchWelcome count={activeFilterCount(query)} /> : null}
       {!loading && results?.length === 0 ? <PrismaCard><Empty description="Nenhum Perfil corresponde aos critérios informados. Ajuste somente os filtros que forem essenciais." /></PrismaCard> : null}

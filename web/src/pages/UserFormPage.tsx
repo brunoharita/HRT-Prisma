@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
@@ -286,7 +287,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
           </>
         )}
       />
-      {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" /> : null}
+      {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver campos do formulário</Button>} /> : null}
       {info ? <Alert className="prisma-shell-alert" message={info} showIcon type="success" /> : null}
       <Form<UserFormValues> onValuesChange={() => setDirty(true)} form={form} initialValues={defaultValues} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>
         <PrismaCard className="prisma-user-form-card">

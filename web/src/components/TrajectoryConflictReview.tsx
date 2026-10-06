@@ -1,3 +1,4 @@
+import { focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Modal, Radio, Skeleton, Tag, Typography } from "antd";
 import { BulbOutlined } from "@ant-design/icons";
@@ -95,7 +96,7 @@ export function TrajectoryConflictReview({ vacancy, match, canReview, onResolved
       <div className="prisma-trajectory-review-content">
         <Typography.Paragraph>Compare as duas leituras de cada trecho profissional. Elas não são decisões sobre a Pessoa; nenhuma será aplicada sem uma revisão íntegra.</Typography.Paragraph>
         {loading ? <Skeleton active paragraph={{ rows: 4 }} /> : null}
-        {error ? <Alert showIcon type="error" title={error} /> : null}
+        {error ? <Alert showIcon type="error" title={error} action={view ? <Button disabled={saving || refreshing} onClick={() => focusNoticeTarget(".prisma-trajectory-conflict-item input")}>Rever decisões</Button> : <Button disabled={saving || refreshing} onClick={() => void open()}>Consultar revisão atual</Button>} /> : null}
         {view?.status === "review_unavailable" ? <Alert showIcon type="warning"
           title={view.reasonCode === "PAIR_NOT_STORED" ? "Respostas anteriores indisponíveis" : `${view.conflictCount} itens divergentes`}
           description={view.reasonCode === "TOO_MANY_CONFLICTS"

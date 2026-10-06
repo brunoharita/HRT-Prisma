@@ -33,6 +33,7 @@ interface DocumentOperationsPageProps {
 export function DocumentOperationsPage({ activeMembership, personId, onNavigate }: DocumentOperationsPageProps) {
   const [documents, setDocuments] = useState<DocumentOperationSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [noticeRetry, setNoticeRetry] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useViewState("search", "");
   const [status, setStatus] = useViewState<"all" | DocumentOperationalState>("status", "all");
@@ -47,7 +48,7 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
       .catch((caught: unknown) => { if (current) setError(caught instanceof Error ? caught.message : "Não foi possível carregar a central."); })
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
-  }, [activeMembership.organizationId, personId]);
+  }, [activeMembership.organizationId, personId, noticeRetry]);
 
   const scopedPersonName = personId ? documents.find((document) => document.personId === personId)?.personName : null;
 
@@ -184,7 +185,7 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
           value={status}
         />
       </PrismaCard>
-      {error ? <Alert title={error} showIcon type="error" /> : null}
+      {error ? <Alert title={error} showIcon type="error" action={<Button onClick={() => setNoticeRetry((value) => value + 1)}>Atualizar consulta</Button>} /> : null}
       <PrismaCard className="prisma-operations-table">
         {loading ? <Skeleton active paragraph={{ rows: 8 }} /> : (
           <Table

@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useState } from "react";
 import { Alert, Button, Form, Input } from "antd";
 import type { PlatformOperator } from "../domain/platformUsersData";
@@ -66,7 +67,7 @@ export function PasswordChangePage({ currentOperator, onNavigate, onPasswordComp
         title="Trocar senha"
         description="Conclua o primeiro acesso para liberar a operação do Prisma."
       />
-      {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" /> : null}
+      {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver campos do formulário</Button>} /> : null}
       {info ? <Alert className="prisma-shell-alert" message={info} showIcon type="success" /> : null}
       <PrismaCard className="prisma-password-change-card">
         <Form<PasswordChangeValues> form={form} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>

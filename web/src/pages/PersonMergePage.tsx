@@ -1,3 +1,4 @@
+import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckCircleOutlined, FileTextOutlined, SafetyCertificateOutlined, TeamOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Modal, Radio, Select, Skeleton, Tag, Typography } from "antd";
@@ -85,7 +86,7 @@ export function PersonMergePage({ activeMembership, personId, onNavigate }: Pers
   return <PrismaPage className="prisma-m53-page prisma-person-merge-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>
     <PrismaPageHeader title="Mesclar Pessoas" description="Unifique cadastros duplicados com escolhas explícitas e preservação integral do histórico." />
-    {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" /> : null}
+    {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Button onClick={(event) => { if (!focusNoticeTarget(".prisma-merge-conflicts input, .prisma-merge-target-picker input")) focusNoticeFields(event.currentTarget); }}>Revisar escolhas</Button>} /> : null}
     {source ? <>
       <PrismaCard className="prisma-merge-target-picker">
         <div><Typography.Title level={3}>Escolha o cadastro principal</Typography.Title><Typography.Paragraph>O cadastro atual será absorvido pela Pessoa escolhida abaixo.</Typography.Paragraph></div>

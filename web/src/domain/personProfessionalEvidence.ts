@@ -183,7 +183,7 @@ export function groupProfessionalEvidence(
     const classification = concept.classification;
     const key = classification?.subgroupId ?? "pending";
     const group = groups.get(key) ?? {
-      key, label: classification?.subgroupLabel ?? "Classificação pendente",
+      key, label: classification?.subgroupLabel ?? "Grupo ainda não definido",
       macroGroupCode: classification?.macroGroupCode ?? "pending",
       macroGroupLabel: classification?.macroGroupLabel ?? "Aguardando curadoria",
       concepts: [],

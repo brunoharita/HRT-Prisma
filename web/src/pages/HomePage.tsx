@@ -16,6 +16,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
   const [summary, setSummary] = useState<HomeSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [noticeRetry, setNoticeRetry] = useState(0);
   const [checkingSourceId, setCheckingSourceId] = useState<string | null>(null);
   const [resolutionSource, setResolutionSource] = useState<KnowledgeSourceHealth | null>(null);
 
@@ -37,7 +38,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
     return () => {
       current = false;
     };
-  }, [activeMembership.organizationId, repository]);
+  }, [activeMembership.organizationId, repository, noticeRetry]);
 
   return (
     <PrismaPage className="prisma-m81-home">
@@ -45,7 +46,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
         title="Olá!"
         description={`Bem-vindo ao Prisma · ${activeMembership.organizationName}`}
       />
-      {error ? <Alert message={error} showIcon type="error" /> : null}
+      {error ? <Alert message={error} showIcon type="error" action={<Button onClick={() => setNoticeRetry((value) => value + 1)}>Atualizar consulta</Button>} /> : null}
       <section className="prisma-dashboard-grid" aria-label="Resumo da organização">
         {loading ? <HomeSkeleton /> : summary ? <HomeMetrics summary={summary} /> : null}
       </section>

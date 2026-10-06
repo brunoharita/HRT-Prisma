@@ -1,0 +1,18 @@
+{
+  "scenario": "multiple",
+  "width": 390,
+  "checks": {
+    "loaded": true,
+    "noRationaleField": true,
+    "noPreselection": true,
+    "correctSourceCards": true,
+    "enabledWithoutJustification": true,
+    "oneBatchCall": true,
+    "allSelectedSent": true,
+    "noClientRationale": true,
+    "closedOnSave": true,
+    "projectionUpdated": true,
+    "noOverflow": true
+  },
+  "pass": true
+}
