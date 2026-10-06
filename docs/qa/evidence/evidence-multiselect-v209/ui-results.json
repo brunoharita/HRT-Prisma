@@ -1,0 +1,184 @@
+[
+  {
+    "scenario": "single",
+    "width": 1416,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "single",
+    "width": 390,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "multiple",
+    "width": 1416,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "multiple",
+    "width": 390,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "remove",
+    "width": 1416,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "removed": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "remove",
+    "width": 390,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "removed": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "failure",
+    "width": 1416,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "failurePreservesDraft": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "failure",
+    "width": 390,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "failurePreservesDraft": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "credential",
+    "width": 1416,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "credentialStillRequiresFacts": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  },
+  {
+    "scenario": "credential",
+    "width": 390,
+    "checks": {
+      "loaded": true,
+      "noRationaleField": true,
+      "noPreselection": true,
+      "credentialStillRequiresFacts": true,
+      "correctSourceCards": true,
+      "enabledWithoutJustification": true,
+      "oneBatchCall": true,
+      "allSelectedSent": true,
+      "noClientRationale": true,
+      "closedOnSave": true,
+      "projectionUpdated": true,
+      "noOverflow": true
+    },
+    "pass": true
+  }
+]

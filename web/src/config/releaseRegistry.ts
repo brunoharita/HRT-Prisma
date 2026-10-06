@@ -63,6 +63,7 @@ export const PRISMA_RELEASE_HISTORY = [{
     "2.0.5: síntese profissional por IA, persistida e rastreável às fontes",
     "2.0.6: síntese resiliente com diagnóstico e recuperação controlada",
     "2.0.8: leitura integral do Resumo com fontes sob demanda",
+    "2.0.9: vínculo de uma ou mais evidências sem justificativa obrigatória",
   ],
   skippedDeliveryNumbers: [7],
 }] as const satisfies readonly ProductMovementRelease[];

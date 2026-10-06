@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.40
+version: 2.51.41
 last_verified: 2026-10-05
 ---
 
 # Estado atual do Prisma
+
+## Vínculo múltiplo de evidências v2.0.9
+
+Prisma v2.0.9 registra a melhoria autorizada por Bruno em05/10/2026: selecionar uma ou mais fontes do Perfil publicado sem justificativa; trechos/credenciais separados, confirmação humana, gravação atômica pelo wrapper `link_person_competency_evidence_batch_v2` sobre RPC unitário preservado. Tenant/role/Perfil/conceito/fonte e auditoria continuam obrigatórios; motivo é somente confirmação factual no servidor, sem rationale fabricado. Replay mantém decisão anterior, falha mantém edição e não grava subset.10fluxos sintéticos1416/390 e15checks SQL local rollback,5testes registry/types/build PASS; contexto/CI/publicação em fechamento. Validação focada, nenhuma suíte completa local, teste mutacional de Pessoa real ou IA. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.
 
 ## Leitura limpa do Resumo v2.0.8
 

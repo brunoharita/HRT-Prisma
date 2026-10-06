@@ -54,22 +54,21 @@ export function profileCompetencyCurationService(organizationId: string, personI
       ];
     },
     async linkEvidence(input) {
-      const { error } = await supabase.rpc("link_person_competency_evidence" as never, {
+      const { error } = await supabase.rpc("link_person_competency_evidence_batch_v2" as never, {
         p_organization_id: organizationId, p_person_id: personId, p_profile_id: input.profileId,
-        p_concept_id: input.conceptId, p_nature: input.nature, p_source_index: input.sourceIndex,
-        p_source_quote: input.sourceQuote, p_credential_name: input.credentialName,
-        p_credential_issuer: input.credentialIssuer, p_reason: input.reason,
+        p_concept_id: input.conceptId, p_sources: input.sources,
       } as never);
       if (error) {
         if (["42501", "28000"].includes(error.code)) throw new Error("Sem permissão para associar esta fonte ou conceito.");
         if (error.code === "40001") throw new Error("O Perfil publicado mudou. Atualize antes de associar a evidência.");
-        if (error.code === "23505") throw new Error("Esta fonte já foi vinculada ao conceito com outra decisão. O vínculo anterior foi preservado.");
-        throw new Error("A fonte não comprova este vínculo ou os dados estão incompletos. Confira a seleção e tente novamente.");
+        if (error.code === "23505") throw new Error("Uma das fontes já está vinculada com outro trecho ou outros dados. Os vínculos anteriores foram preservados; nenhum novo vínculo desta tentativa foi gravado.");
+        if (["22023", "23514", "22001", "22P02"].includes(error.code)) throw new Error("Não foi possível vincular as fontes selecionadas. Confira os trechos e os dados das credenciais. Nenhum vínculo desta tentativa foi gravado.");
+        throw new Error("Não foi possível confirmar a gravação. Suas escolhas foram preservadas. Atualize a lista para conferir o resultado antes de tentar novamente.");
       }
       const { data, error: refreshError } = await supabase.rpc("load_person_professional_evidence_map_v6" as never, {
         p_organization_id: organizationId, p_person_id: personId,
       } as never);
-      if (refreshError) throw new Error("O vínculo foi gravado, mas a visão não pôde ser atualizada. Reabra o Perfil.");
+      if (refreshError) throw new Error("Os vínculos foram gravados, mas a lista não pôde ser atualizada. Reabra o Perfil para consultar o resultado.");
       return readProfessionalEvidenceProjection(data, organizationId, personId);
     },
     async save(decision) {

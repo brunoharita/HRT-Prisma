@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 352
-source_manifest_sha256: a47873be1431314accb237d03e345f2f9e5728ac26e7cded1c6375487ea3ec17
+documentation_source_count: 354
+source_manifest_sha256: 37a5cf9b647d73fd9eb1f529e7db8d347f32b3879959654cc4c8f46182a2e795
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.40
+version: 2.51.41
 last_verified: 2026-10-05
 ---
 
 # Estado atual do Prisma
+
+## Vínculo múltiplo de evidências v2.0.9
+
+Prisma v2.0.9 registra a melhoria autorizada por Bruno em05/10/2026: selecionar uma ou mais fontes do Perfil publicado sem justificativa; trechos/credenciais separados, confirmação humana, gravação atômica pelo wrapper `link_person_competency_evidence_batch_v2` sobre RPC unitário preservado. Tenant/role/Perfil/conceito/fonte e auditoria continuam obrigatórios; motivo é somente confirmação factual no servidor, sem rationale fabricado. Replay mantém decisão anterior, falha mantém edição e não grava subset.10fluxos sintéticos1416/390 e15checks SQL local rollback,5testes registry/types/build PASS; contexto/CI/publicação em fechamento. Validação focada, nenhuma suíte completa local, teste mutacional de Pessoa real ou IA. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.
 
 ## Leitura limpa do Resumo v2.0.8
 
@@ -4900,6 +4904,10 @@ O M5.1B autoriza somente execução sintética local/QA pela fronteira tokenizad
 ## Source: `docs/architecture/data-model.md`
 
 # Modelo de dados
+
+## Vínculos de evidências v2.0.9
+
+`link_person_competency_evidence_batch_v2` recebe de1a100 fontes selecionadas e mantém um registro separado por fonte em `person_competency_evidence_links`. Chama o RPC unitário vigente dentro da mesma transação: tenant/role/Perfil aprovado/conceito/fonte/credencial/quote e triggers existentes permanecem. A seleção não envia justificativa; `decision_reason` registra somente a confirmação factual pelo operador, gerada pelo servidor, sem alegar motivo humano ou comprovação. Autor/data continuam obrigatórios. Replay compatível usa o motivo histórico existente, sem substituição. Um item inválido reverte todo o lote; conflito de trecho/dados não sobrescreve vínculo. RPC anterior e schema/projeção permanecem compatíveis; banco precisa receber a migration aditiva antes da web. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.
 
 ## Estado
 
@@ -12080,6 +12088,31 @@ Implementar D-01 a D-03 sob P-01/F-01, com A-01. AoT registra comportamento novo
 
 ---
 
+## Source: `docs/qa/agreement-evidence-multiselect-v209.md`
+
+# Acordo e execução: vínculo múltiplo v2.0.9
+
+v1.0.0, aprovado pelo pedido explícito de Bruno em 05/10/2026. Baseline `bbe6c5df9a408350f384ed08e004869c66edaa75`, produto2.0.8. Imagem do usuário é contraexemplo do modal de seleção única e justificativa obrigatória; preservar cabeçalho, competência-alvo, seleção no topo, trechos abaixo e ações Confirmar/Cancelar no rodapé. Nenhuma escolha previamente marcada.
+
+- D-01: selecionar uma ou mais fontes do Perfil publicado na mesma lista; preservar experiências e credenciais disponíveis, trechos e dados factuais das credenciais por registro. Confirmação humana explícita.
+- D-02: retirar justificativa da tela e da entrada do cliente. Auditoria registra somente a seleção/confirmação, autor e data, sem inventar uma justificativa humana ou promover verificação por Assessment.
+- D-03: gravar todos os vínculos selecionados atomicamente, mantendo fontes separadas, tenant/role/Perfil vigente/conceito/fonte e idempotência. Falha preserva seleção/trechos; não gravar subset silenciosamente; duplicata compatível não exige repetir decisão antiga nem a substitui.
+- D-04: v2.0.9 em main/produção, documentação/contextos/rollback/smoke. Validação focada na tela e fluxos de um/múltiplos registros, mais negativos obrigatórios do RPC alterado; sem suíte completa local.
+- P-01: nenhuma fonte preselecionada, decisão automatizada, justificativa fabricada, perda de vínculos anteriores, escrita fora da empresa/Perfil, aumento de autoridade, gravação parcial ou transformação de vínculo contextual em comprovação independente.
+- F-01: resumo/IA/matching/taxonomia, backfill e mutações de Pessoas reais para QA.
+- A-01: reusar Select múltiplo/modal e RPC unitário validado dentro de wrapper transacional; mensagem factual de auditoria gerada no servidor distingue confirmação de justificativa. Campos opcionais adicionais não serão introduzidos.
+- Q-01: nenhuma decisão pendente.
+
+## Mapa de impacto e aceite
+
+Risco D limitado à entrada de vínculos. Direct: modal/adapter/RPC lote; testar desktop/celular, seleção1/2, remoção, falha e repetição; SQL descartável comprova atomicidade/replay/tenant/anon/fonte inválida. Plausible_indirect: leitura/projeção/auditoria e versão login/sidebar; retorno do reader existente e registry9/types/build. Critical_transversal: atualização da síntese via trigger existente e histórico dos vínculos; manter funções legadas/trigger e testar sem chamar IA. No_impact_identified: Parser, worker, publicações canônicas/curadoria/taxonomia; diff/plan e imagens antes/depois suficientes. Baseline serviços webf22a01f, worker8526717, Parser8682af7, gatewayd061cea.
+
+CA-01..03: modal carregado permite confirmar sem justificativa, envia todos registros, atualiza contagem/projeção, um clique sem duplicação, erro mantém edição; SQL grava1/2 e rollback completo quando segundo inválido, replay preserva auditoria anterior, autoridade negada. CA-04: registry9/CI/contextos/SHA/ledger/rotas/assets/rollback e sincronização. Imagem serve para mesma topologia do modal, não para dados da Pessoa. Comparação usa fixture sintética de mesma tela/viewport.
+
+Prompt congelado: implementar todos D/P/F/A acima; nenhuma suíte integral local, nenhum teste mutacional em produção. Migrar backend compatível antes da web e preservar RPC anterior.
+
+---
+
 ## Source: `docs/qa/agreement-gov-01-impact-mapping-regression-preservation.md`
 
 # Agreement Contract GOV-01 — Mapa de Impacto e Preservação de Funcionalidades
@@ -15350,6 +15383,29 @@ F-01 preservado no diff. Nenhum desvio do contrato. Referência enviada é contr
 - HTTP 200 em `/`, `/sign-in`, `/profiles`, novo `/assets/index-CKGo3_Dp.js` e anteriores `/assets/index-BuKOGLjh.js`, `/assets/pdf-Du5hpUXa.js`. Bundle público confirma 2.0.4 e descrição desta entrega. Smoke imediato retornou 404 durante recriação; nova conferência após estabilização passou sem repetir build.
 - Evidências locais ignoradas: `tmp/education-period-v204-plan.json`, `tmp/education-period-v204-publish.json`, `tmp/education-period-v204-publish.log`, `tmp/education-period-v204-vps-release.log`. Avisos preexistentes de limpeza de worktrees sem permissão não impediram commit/promoção; nenhuma limpeza executada. Quatro arquivos/diretórios não rastreados anteriores foram preservados.
 - Fechamento documental sincroniza Git sem rebuild de runtime. Nenhuma pendência funcional; limites de teste autenticado real permanecem explícitos.
+
+---
+
+## Source: `docs/qa/aot-evidence-multiselect-v209.md`
+
+# AoT: vínculo múltiplo v2.0.9
+
+Acordo `agreement-evidence-multiselect-v209.md` v1.0.0. Baseline bbe6c5d; mapa/CA no acordo. Movimento limitado ao modal/adapter/RPC lote/versão, com reuso do RPC unitário e Select Ant Design.
+
+| ID | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Select múltiplo, trechos por registro e credenciais preservadas |10fluxosUI:1/2seleções, remoção, falha, credencial1416/390; gravação/projeção atualizada | PASS |
+| D-02 | Sem campo/input de justificativa, servidor registra somente confirmação/autor/data |UI ausência e payload sem reason; SQL confirma gravação, motivo histórico preservado | PASS |
+| D-03/P-01 | Uma transação, funções legadas/fontes/autoridade reutilizadas, lock UI sem escolha prévia |SQL local rollback:1/2, replay, segunda fonte inválida reverte, fonte/conceito/tenant/member/anon negados, credenciais; UI doubleclick1chamada/erro preserva edição | PASS |
+| D-04 | Registry2.0.9, release seletivo |5testes registry/types/build PASS; Context/CI/migration/web/smoke em fechamento | PARTIAL |
+
+## Preservação e limites
+
+Nenhuma suíte integral local. Somente tipos/build,5testes registry,10fluxos de tela e15checks SQL negativos/positivos da fronteira alterada. PostgreSQL17.5 local127.0.0.1:55479/DBdescartávelimport_evidence_v202, migrations/fixture em ROLLBACK. Nenhum teste mutacional em produção nem chamada de IA. UI com adapter sintético; SQL real comprova persistência/atomicidade e checks legados, não uma jornada autenticada real na aplicação hospedada. Essa jornada permanece NOT TESTED.
+
+Conferência visual das capturas `evidence/evidence-multiselect-v209/multiple-1416.png` e `multiple-390.png` realizada. Imagem enviada pelo usuário é contraexemplo de cardinalidade/justificativa; mesma topologia preservada: competência-alvo e seleção no topo, trechos abaixo, confirmação/cancelamento no rodapé. Modal agora640px e blocos factuais separados, ajuste necessário à multiplicidade; sem redesign de navegação/Perfil. Texto das opções abreviado pelo Select no celular, com nome integral visível em cada bloco abaixo. Dados sintéticos não usam Pessoa real da imagem.
+
+Funções de projeção/trigger/síntese/curadoria não foram substituídas; RPC legado preservado. Nenhum library/model/prompt/Parser/matching/backfill novo. Obrigatoriedade de nome/emissor de credenciais permanece factual. Erro mantém seleção e trechos; cliente não declara gravação quando o RPC falha. Arquivos alheios não incorporados. Registro da publicação e rollback abaixo.
 
 ---
 

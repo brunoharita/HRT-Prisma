@@ -284,49 +284,53 @@ function EvidenceLinkModal({ adapter, concept, profileId, onClose, onProjection 
   onClose: () => void; onProjection: (value: ProfessionalEvidenceProjection) => void;
 }) {
   const [sources, setSources] = useState<Awaited<ReturnType<CompetencyCurationAdapter["loadEvidenceSources"]>>>([]);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [quote, setQuote] = useState("");
-  const [credentialName, setCredentialName] = useState("");
-  const [credentialIssuer, setCredentialIssuer] = useState("");
-  const [reason, setReason] = useState("");
+  const [selected, setSelected] = useState<string[]>([]);
+  const [drafts, setDrafts] = useState<Record<string, { quote: string; credentialName: string; credentialIssuer: string }>>({});
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const saveLock = useRef(false);
   useEffect(() => {
     if (!concept) return;
     let current = true;
-    setSources([]); setSelected(null); setQuote(""); setCredentialName(""); setCredentialIssuer(""); setReason(""); setError(null);
+    setSources([]); setSelected([]); setDrafts({}); setError(null);
     void adapter.loadEvidenceSources(profileId).then((items) => { if (current) setSources(items); })
       .catch((cause: unknown) => { if (current) setError(cause instanceof Error ? cause.message : "Fontes indisponíveis."); });
     return () => { current = false; };
   }, [adapter, concept?.id, profileId]);
-  const source = sources.find((item) => `${item.nature}:${item.index}` === selected);
-  const valid = Boolean(source && quote.trim().length >= (source.nature === "contextual" ? 15 : 5)
-    && quote.trim().length <= 2000 && reason.trim().length >= 10 && reason.trim().length <= 2000
-    && (source.nature === "contextual" || (credentialName.trim().length >= 2 && credentialIssuer.trim().length >= 2)));
+  const chosen = selected.flatMap(key => { const source = sources.find(item => `${item.nature}:${item.index}` === key); return source ? [{ key, source, draft: drafts[key]! }] : []; });
+  const valid = chosen.length > 0 && chosen.length === selected.length && chosen.every(({ source, draft }) => draft
+    && draft.quote.trim().length >= (source.nature === "contextual" ? 15 : 5) && draft.quote.trim().length <= 2000
+    && (source.nature === "contextual" || (draft.credentialName.trim().length >= 2 && draft.credentialIssuer.trim().length >= 2)));
+  const edit = (key: string, field: "quote" | "credentialName" | "credentialIssuer", value: string) => setDrafts(previous => ({ ...previous, [key]: { ...previous[key]!, [field]: value } }));
   const save = async () => {
-    if (!concept || !source || !valid) return;
+    if (!concept || !valid || saveLock.current) return;
+    saveLock.current = true;
     setBusy(true); setError(null);
     try {
-      const next = await adapter.linkEvidence({ profileId, conceptId: concept.id, nature: source.nature,
-        sourceIndex: source.index, sourceQuote: quote.trim(), credentialName: source.nature === "certified" ? credentialName.trim() : null,
-        credentialIssuer: source.nature === "certified" ? credentialIssuer.trim() : null, reason: reason.trim() });
+      const next = await adapter.linkEvidence({ profileId, conceptId: concept.id, sources: chosen.map(({ source, draft }) => ({ nature: source.nature,
+        sourceIndex: source.index, sourceQuote: draft.quote.trim(), credentialName: source.nature === "certified" ? draft.credentialName.trim() : null,
+        credentialIssuer: source.nature === "certified" ? draft.credentialIssuer.trim() : null })) });
       onProjection(next); onClose();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Não foi possível gravar o vínculo."); }
-    finally { setBusy(false); }
+    finally { saveLock.current = false; setBusy(false); }
   };
-  return <Modal title={`Vincular evidência a ${concept?.label ?? "competência"}`} open={Boolean(concept)} onCancel={onClose}
-    okText="Confirmar vínculo" okButtonProps={{ disabled: !valid, loading: busy }} onOk={() => void save()} cancelButtonProps={{ disabled: busy }}>
-    <Typography.Paragraph type="secondary">Escolha uma fonte factual do Perfil publicado. A confirmação registra uma decisão humana; currículo e credencial não verificam Assessment nem habilidade prática.</Typography.Paragraph>
+  return <Modal title={`Vincular evidência a ${concept?.label ?? "competência"}`} open={Boolean(concept)} onCancel={() => { if (!saveLock.current) onClose(); }} width={640} closable={!busy}
+    okText={selected.length > 1 ? `Confirmar ${selected.length} vínculos` : "Confirmar vínculo"} okButtonProps={{ disabled: !valid, loading: busy }} onOk={() => void save()} cancelButtonProps={{ disabled: busy }}>
+    <Typography.Paragraph type="secondary">Selecione uma ou mais fontes do Perfil publicado. Você não precisa escrever uma justificativa. Esses vínculos não equivalem a uma verificação por Assessment.</Typography.Paragraph>
     {error ? <Alert type="error" showIcon title={error} /> : null}
-    <label>Fonte do Perfil<Select aria-label="Fonte do Perfil" style={{ width: "100%" }} value={selected} placeholder="Selecione uma experiência ou credencial"
+    <label>Fontes do Perfil<Select mode="multiple" aria-label="Fontes do Perfil" disabled={busy} style={{ width: "100%" }} value={selected} placeholder="Selecione uma ou mais experiências ou credenciais" optionFilterProp="label"
       options={sources.map((item) => ({ value: `${item.nature}:${item.index}`, label: item.label }))} onChange={(value) => {
-        setSelected(value); const item = sources.find((candidate) => `${candidate.nature}:${candidate.index}` === value);
-        setQuote(item?.quote ?? ""); setCredentialName(""); setCredentialIssuer("");
+        setSelected(value); setDrafts(previous => { const next = { ...previous }; for (const key of value) {
+          const item = sources.find(candidate => `${candidate.nature}:${candidate.index}` === key);
+          if (item && !next[key]) next[key] = { quote: item.quote.slice(0, 2000).replace(/[\uD800-\uDBFF]$/, ""), credentialName: "", credentialIssuer: "" };
+        } return next; });
       }} /></label>
-    {source ? <><label>Trecho da fonte<Input.TextArea value={quote} onChange={(event) => setQuote(event.target.value)} rows={3} maxLength={2000} /></label>
-      {source.nature === "certified" ? <><label>Nome da credencial<Input value={credentialName} onChange={(event) => setCredentialName(event.target.value)} /></label>
-        <label>Emissor informado<Input value={credentialIssuer} onChange={(event) => setCredentialIssuer(event.target.value)} /></label></> : null}
-      <label>Justificativa da associação<Input.TextArea value={reason} onChange={(event) => setReason(event.target.value)} rows={2} maxLength={2000} /></label></> : null}
+    {chosen.map(({ key, source, draft }) => <div key={key} className="prisma-evidence-link-source">
+      <Typography.Text strong>{source.label}</Typography.Text>
+      <label>Trecho da fonte<Input.TextArea aria-label={`Trecho: ${source.label}`} disabled={busy} value={draft.quote} onChange={(event) => edit(key, "quote", event.target.value)} rows={3} maxLength={2000} /></label>
+      {source.nature === "certified" ? <><label>Nome da credencial<Input disabled={busy} value={draft.credentialName} onChange={(event) => edit(key, "credentialName", event.target.value)} /></label>
+        <label>Emissor informado<Input disabled={busy} value={draft.credentialIssuer} onChange={(event) => edit(key, "credentialIssuer", event.target.value)} /></label></> : null}
+    </div>)}
   </Modal>;
 }
 

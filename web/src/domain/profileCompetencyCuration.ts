@@ -73,6 +73,6 @@ export interface CompetencyCurationAdapter {
   save(decision: CurationDecision): Promise<{ projection: ProfessionalEvidenceProjection; outcome: "alias" | "proposal" }>;
   refresh(): Promise<ProfessionalEvidenceProjection>;
   loadEvidenceSources(profileId: string): Promise<Array<{ nature: "contextual" | "certified"; index: number; label: string; quote: string }>>;
-  linkEvidence(input: { profileId: string; conceptId: string; nature: "contextual" | "certified"; sourceIndex: number;
-    sourceQuote: string; credentialName: string | null; credentialIssuer: string | null; reason: string }): Promise<ProfessionalEvidenceProjection>;
+  linkEvidence(input: { profileId: string; conceptId: string; sources: Array<{ nature: "contextual" | "certified"; sourceIndex: number;
+    sourceQuote: string; credentialName: string | null; credentialIssuer: string | null }> }): Promise<ProfessionalEvidenceProjection>;
 }

@@ -6796,6 +6796,8 @@ textarea {
 .prisma-review-format-summary button { background: none; border: 0; padding: 0; color: #0958d9; text-decoration: underline; cursor: pointer; font: inherit; text-align: left; }
 .prisma-review-format-summary li span { display: block; }
 /* Published Profile synthesis: narrative first, source panel on demand. */
+.prisma-evidence-link-source { margin-top: 16px; padding: 14px; border: 1px solid #e1e9f4; border-radius: 8px; }
+.prisma-evidence-link-source label { display: block; margin-top: 8px; }
 .prisma-synthesis { display: grid; gap: 18px; margin: 4px 0 20px; min-width: 0; }
 .prisma-synthesis.is-source-open { padding-right: 440px; }
 .prisma-synthesis-reading { display: grid; gap: 20px; min-width: 0; background: #fff; border: 1px solid #e1e9f4; border-radius: 12px; padding: 24px; }

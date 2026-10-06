@@ -1,5 +1,9 @@
 # Modelo de dados
 
+## Vínculos de evidências v2.0.9
+
+`link_person_competency_evidence_batch_v2` recebe de1a100 fontes selecionadas e mantém um registro separado por fonte em `person_competency_evidence_links`. Chama o RPC unitário vigente dentro da mesma transação: tenant/role/Perfil aprovado/conceito/fonte/credencial/quote e triggers existentes permanecem. A seleção não envia justificativa; `decision_reason` registra somente a confirmação factual pelo operador, gerada pelo servidor, sem alegar motivo humano ou comprovação. Autor/data continuam obrigatórios. Replay compatível usa o motivo histórico existente, sem substituição. Um item inválido reverte todo o lote; conflito de trecho/dados não sobrescreve vínculo. RPC anterior e schema/projeção permanecem compatíveis; banco precisa receber a migration aditiva antes da web. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.
+
 ## Estado
 
 O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M2-A, M2-B, M2-C, M5, M5.1, M5.2, M5.3 e M5.4 estão ativos no Prisma-QA. Não existe schema de produção separado provisionado.
