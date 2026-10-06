@@ -1,0 +1,57 @@
+{
+  "recorded_at_utc": "2026-10-05T23:09:32.493166-03:00",
+  "version": "2.0.8",
+  "deployed_sha": "e50250f0131a0c24f0d2996ccc961a5827ddbf11",
+  "entry": "/assets/index-B1nbqs-I.js",
+  "containers": {
+    "prisma-web": {
+      "image": "sha256:f22a01f8f955488947625614395c946664a44abb20a303ba0d09e778695e84c9",
+      "state": "running",
+      "health": null,
+      "restarts": 0
+    },
+    "prisma-profile-synthesis": {
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "state": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    "prisma-parser-ia": {
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "state": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    "prisma-paddle-gateway": {
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "state": "running",
+      "health": null,
+      "restarts": 0
+    }
+  },
+  "rollback_web": "sha256:cfa50e09996b2090e64ec1d567866eec6e82fa883a44d7fa5e9556b44ea2a493",
+  "http": {
+    "/": 200,
+    "/login": 200,
+    "/people": 200,
+    "/assets/index-B1nbqs-I.js": 200,
+    "/assets/antd-vendor-B5BXDqMa.css": 200,
+    "/assets/index-B_LpCj8z.css": 200,
+    "/assets/index-Bx4s26MG.js": 200,
+    "/assets/index-BiucK513.js": 200
+  },
+  "bundle_checks": {
+    "commit_embedded": true,
+    "version_delivery": true,
+    "source_toggle": true,
+    "skip_number_supported": true
+  },
+  "authenticated_person_flow": "NOT TESTED",
+  "live_llm_generation": "NOT TESTED",
+  "status": "PASS",
+  "ci": {
+    "branch_run": 37402418043,
+    "main_run": 37402528218,
+    "conclusion": "success"
+  }
+}
