@@ -1,0 +1,83 @@
+{
+  "command": "publish",
+  "status": "DRY_RUN",
+  "sha": "6b823584c49776b7799cec5bb243a19b5be50e3d",
+  "branch": "codex/person-unified-v210",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/architecture/versioning.md",
+      "docs/product/person-center.md",
+      "docs/product/professional-profile-standard.md",
+      "docs/qa/agreement-person-unified-v210.md",
+      "docs/qa/aot-person-unified-v210.md",
+      "docs/qa/evidence/person-unified-v210/approved-reference.png",
+      "docs/qa/evidence/person-unified-v210/browser-results.json",
+      "docs/qa/evidence/person-unified-v210/long-390.png",
+      "docs/qa/evidence/person-unified-v210/operations-regression.json",
+      "docs/qa/evidence/person-unified-v210/reference-1024.png",
+      "docs/qa/evidence/person-unified-v210/reference-2048.png",
+      "docs/qa/evidence/person-unified-v210/reference-390.png",
+      "docs/qa/evidence/person-unified-v210/synthesis-regression.json",
+      "docs/qa/execution-person-unified-v210.md",
+      "tests/documentPresentation.test.ts",
+      "tests/m2PeopleIngestion.test.ts",
+      "tests/personReviewNotice.test.ts",
+      "tests/productRelease.test.ts",
+      "tests/profileProfessionalStandard.test.ts",
+      "tests/tooling/personUnified.browser.mjs",
+      "tests/tooling/personUnifiedRoutes.test.mjs",
+      "tests/ui/person-unified.html",
+      "tests/ui/person-unified.vite.config.mts",
+      "tests/ui/person-unified/fixture.ts",
+      "tests/ui/person-unified/main.tsx",
+      "tests/ui/profile-synthesis/main.tsx",
+      "web/src/app/PrismaApplication.tsx",
+      "web/src/components/profile/CanonicalProfileView.tsx",
+      "web/src/components/profile/PersonProfessionalEvidenceMap.tsx",
+      "web/src/components/profile/ProfileSynthesisSurface.tsx",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/domain/personReviewNotice.ts",
+      "web/src/domain/prismaData.ts",
+      "web/src/infrastructure/supabase/prismaRepository.ts",
+      "web/src/pages/PersonProfilePage.tsx",
+      "web/src/pages/PersonWorkspacePage.tsx",
+      "web/src/styles.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

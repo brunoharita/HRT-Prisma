@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-06T21:15:16.132Z",
+  "baselineSha": "df7b8403d23adefb0d8981f4391e757067e30551",
+  "runtimeSha": "6b823584c49776b7799cec5bb243a19b5be50e3d",
+  "baseline": [
+    {
+      "name": "prisma-web",
+      "id": "df620e3278927d80d06b5562a973a60fd9184dcd8a78b8e10a6dd095418d5de4",
+      "image": "sha256:1cfa7dd7494822a921ebb9dcf413ab33e7dc53ed6d943eb169163f66296595bd",
+      "state": "running",
+      "restarts": 0
+    },
+    {
+      "name": "prisma-parser-ia",
+      "id": "ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "state": "running",
+      "restarts": 0
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "state": "running",
+      "restarts": 0
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "state": "running",
+      "restarts": 0
+    }
+  ],
+  "deployed": [
+    {
+      "name": "prisma-web",
+      "id": "9f005310dc68396280453ba61ec11773e2b2bbc3afd58616f2675d28d73782bd",
+      "image": "sha256:cc9ad878fa9e0fa925cfd0c7a5982928b83dd193967240b655eb44863db4b071",
+      "state": "running",
+      "restarts": 0
+    },
+    {
+      "name": "prisma-parser-ia",
+      "id": "ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "state": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "state": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "state": "running",
+      "restarts": 0
+    }
+  ],
+  "rollbackOriginal": {
+    "tag": "prisma-web:rollback-before-6697f8a0f258",
+    "image": "sha256:1cfa7dd7494822a921ebb9dcf413ab33e7dc53ed6d943eb169163f66296595bd"
+  },
+  "checks": {
+    "prisma-parser-iaPreserved": true,
+    "prisma-profile-synthesisPreserved": true,
+    "prisma-paddle-gatewayPreserved": true,
+    "workerHealth": true,
+    "webRunning": true,
+    "checkoutSha": true,
+    "originalRollback": true
+  }
+}

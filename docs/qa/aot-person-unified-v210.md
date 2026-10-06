@@ -12,7 +12,7 @@ Contrato: `docs/qa/agreement-person-unified-v210.md` versão 1.0.0, integralment
 | D-04 | Nenhum `request` em visita; fontes lazy/cache, narrativa aberta; resumo original em modal | 15 cenários unificados e 11 regressões de síntese; zero IA automática; foco/scroll/fontes e geração só explícita | PASS | Contadores de adapters determinísticos, sem provedor externo |
 | D-05 | Carregamentos separados, Perfil vigente preservado, pendências de estados reais; diagnóstico existente de período com destino contextual | Sem Perfil, ausência de pendências, falhas operações/síntese/documento/fonte; `personReviewNotice` e destino `review-focus` | PASS | Sem ausência convertida em obrigação; apenas diagnóstico conhecido recebe campo |
 | D-06 | Handlers/adapters operacionais e páginas especializadas mantidos; contato autorizado separado; member não monta workspace; proteção dirty | Person-flow 256/256; contratos/negative routes; member/recruiter/archive/dirty/documentos/auditoria; regressão síntese | PASS | Prova dirigida sintética e revisão do diff; mutações autenticadas reais não executadas |
-| D-REL-07 | Registry v2.1.0, owners/current-state/Context Pack; release seletivo e publicação autorizada | Tipos/build/lint/foundation/contextos e publicação em andamento | PARTIAL | Git/CI/VPS/smoke serão registrados após verificação |
+| D-REL-07 | Registry v2.1.0, owners/current-state/Context Pack; release seletivo e publicação autorizada | Tipos/build/lint/foundation/contextos/CI PASS; SHA6b82358, infra e15HTTP200 em produção | PASS | Somente web; runtime validado e fechamento documental separados abaixo |
 
 ## Proibições verificadas
 
@@ -28,8 +28,8 @@ Contrato: `docs/qa/agreement-person-unified-v210.md` versão 1.0.0, integralment
 | Síntese/fontes/cards/publicado | direct | v2.0.12: cálculo/card8 respostas/fontes existentes; 95 testes dirigidos e 11 regressões UI de síntese; texto longo, cache, foco/scroll, falha local | PASS |
 | Documentos/revisão/versões/ciclo de vida | plausible_indirect | Handlers, serviços, páginas/RPCs existentes sem mudança; 256 person-flow e controles/destinos sintéticos | PASS |
 | Tenant/papéis/contato/dirty/retorno | critical_transversal | Filtros de organização e autorização existentes preservados; negativos member/rotas e dirty cancel preserva texto; `uxFoundation` | PASS |
-| Registry/build/release web | direct | Histórico v2.0.12 mantido, v2.1.0 e próxima2.1.1 testados; tipos/build PASS; CI/rollout pendentes | PARTIAL |
-| SQL/Parser/Synthesis/Paddle/matching/Posições | no_impact_identified | Diff não muda schema/migrations/RPCs/serviço/provider/modelo/prompt/score. Novas leituras limitadas ao status já existente no SELECT de Pessoa. Serviços remotos baseline verificados, preservação pós-release pendente | PARTIAL |
+| Registry/build/release web | direct | Histórico v2.0.12 mantido, v2.1.0 e próxima2.1.1 testados; tipos/build/CI PASS; SHA/versão no bundle, web running0,15HTTP200/rollback | PASS |
+| SQL/Parser/Synthesis/Paddle/matching/Posições | no_impact_identified | Diff/plan sem schema/migrations/RPCs/serviço/provider/modelo/prompt/score. SELECT inclui status já existente. Mesmos IDs/imagens/reinícios de Parser/Synthesis/Paddle; workers healthy | PASS |
 
 ### Novidade e preservação
 
@@ -64,15 +64,23 @@ Nenhum desvio material identificado na comparação integral com o acordo. Sem d
 - Dirigidos: 95/95 PASS (período, registry, highlights/formação/repositório, resumo/evidência/curadoria, UX, synthesis/advisory/routes).
 - Browser unificado: 15/15 cenários PASS, `evidence/person-unified-v210/browser-results.json`.
 - Síntese preservada: 11/11 cenários PASS, `evidence/person-unified-v210/synthesis-regression.json` (texto longo1448/390, fonte/cache, erros locais, análise anterior, consulta sem geração, pendente, falha de fonte, refresh e retry explícito).
-- `git diff --check`, lint e foundation: PASS. Contextos/CI/publicação serão complementados após verificação.
-- Context Pack gerado/conferido em cópia limpa do índice Git: PASS. O checker no diretório habitual detectou documentos locais alheios não rastreados; foram preservados e excluídos da cópia, evitando incluí-los na entrega. CI da primeira implementação6697f8a: branch37531196095/main37531413330 PASS. Primeiro web estabilizou200 após404 transitório; ajuste final do aviso operacional terá seu próprio SHA validado dentro deste mesmo movimento.
+- `git diff --check`, lint e foundation: PASS. Context Pack gerado/conferido em cópia limpa do índice Git: PASS. O checker no diretório habitual detectou documentos locais alheios não rastreados; foram preservados e excluídos da cópia, evitando incluí-los na entrega.
+- Primeira implementação6697f8a: CI branch37531196095/main37531413330 PASS. Ajuste final6b82358: tipo/build e regressão operacional adicional PASS, CI branch37532031009/main37532222790 PASS. CI executa os gates integrais obrigatórios; local permaneceu proporcional.
+- Dispatcher1.0.3,40 arquivos, sem bloqueios: somente web; banco/Edge/Parser/Synthesis dispensados. `release-plan.json` e `release-dry-run.json`. Comandos deduplicados; `pnpm run test` geral sugerido pelo dispatcher foi substituído localmente pela regressão afetada conforme AGENTS, sem retirar gates integrais da CI.
+- Smoke público:15HTTP200 e5 verificações de bundle/versão/SHA/textos/assets anteriores, `production-smoke.json`. Infra:7 checks PASS, `infrastructure.json`. Sem token, Pessoa real ou decisão humana.
+- Render do site público em browser de teste: NOT TESTED. O processo escalado não pôde iniciar Chrome (EACCES), e o processo local iniciou mas o acesso HTTPS foi negado (ERR_NETWORK_ACCESS_DENIED). Não foi usada sessão humana nem removida restrição; HTTP/assets foram conferidos pelo fluxo de rede autorizado. As27 verificações de cenários UI são locais/sintéticas, não captura de Pessoa em produção.
+- Reprodução UI unificada: `pnpm run dev:web -- --config tests/ui/person-unified.vite.config.mts`, depois `node tests/tooling/personUnified.browser.mjs`, com Playwright disponível (`PRISMA_PLAYWRIGHT_PATH`) e navegador (`PRISMA_BROWSER_PATH`). O fixture antigo de síntese permanece em `tests/ui/profile-synthesis.html`; sua autoavaliação registra os cenários descritos acima.
 
 ## Git / QA / ambiente
 
 VPS existente verificada: `srv1038882`, `/opt/prisma`, remote oficial, main baseline df7b8403. Web ativo baseline; Parser/Synthesis saudáveis, Paddle ativo. Contêiner experimental `paddle-vl-llama-test` já estava unhealthy antes do movimento e está fora de escopo. Nenhuma alteração nele.
 
-Publicação, rollback/assets/rotas e sincronização ainda não verificadas neste registro inicial. Evidência será complementada sem reconstruir serviços fora do plano seletivo.
+Runtime definitivo `6b823584c49776b7799cec5bb243a19b5be50e3d` integrado por fast-forward e publicado via `deploy/release-web.sh` em06/10/2026. Somente `prisma-web` reconstruído/recriado: imagem `sha256:cc9ad878fa9e0fa925cfd0c7a5982928b83dd193967240b655eb44863db4b071`, running/zero reinícios. Entry servido `index-DjiZ1bdV.js`. Os dois smokes imediatos do script terminaram22 por404 durante recriação; checagens posteriores estabilizaram200 sem rebuild por causa desse404. A segunda construção foi exclusivamente para o ajuste necessário de D-05.
+
+Rollback anterior a todo o movimento: `prisma-web:rollback-before-6697f8a0f258`, imagem `sha256:1cfa7dd7494822a921ebb9dcf413ab33e7dc53ed6d943eb169163f66296595bd`. Rollback intermediário `rollback-before-6b823584c497` também disponível. Assets v2.0.12 mantidos e servidos200. Parser/Synthesis/Paddle preservam exatamente ID/imagem/reinícios do baseline; workers healthy. Nenhuma migration, Edge, mutação de Pessoa ou IA paga.
+
+O fechamento documental posterior ao runtime atualiza apenas AoT/current-state/owner operacional/contextos/evidências. Seu plano dispensa deploy web: sincronizar main local/origin/checkout VPS por fast-forward, mantendo a imagem construída a partir do SHA funcional6b82358. Não apresentar o SHA documental como build novo. Arquivos alheios não rastreados permanecem intactos.
 
 ## Conclusão
 
-Implementação e QA dirigido aprovados pelas evidências locais. Fechamento operacional pendente; D-REL-07 ainda não é PASS. Jornada autenticada real permanece NOT TESTED e não será inferida de smoke público.
+v2.1.0 implementada, validada e publicada. Todos os D e P aplicáveis PASS nas fronteiras evidenciadas; sem desvio material. Jornada autenticada real permanece NOT TESTED e não é inferida de smoke público. O estado unhealthy experimental preexistente é resíduo alheio ao release, não uma capacidade protegida aprovada neste AoT.
