@@ -7,6 +7,8 @@ import { CanonicalProfileHeader } from "../../../web/src/components/profile/Cano
 import { prismaTheme } from "../../../web/src/ui/theme";
 import type { ProfileSynthesisView } from "../../../src/domain/profileSynthesis";
 import type { PrismaProfileView } from "../../../web/src/domain/canonicalProfile";
+import {buildPrismaProfileView} from "../../../web/src/domain/canonicalProfile";
+import {prismaRepository} from "../../../web/src/infrastructure/supabase/prismaRepository";
 import "../../../web/src/styles.css";
 import "../../../web/src/ui/foundation.css";
 // @ts-expect-error The fixture is intentionally reused by the Node benchmark and browser.
@@ -39,7 +41,7 @@ if(['partial-reference','multiple-errors','empty-overview','section-render'].inc
  if(scenario==='section-render')view.result.answers[3]!.statements=[{text:{} as unknown as string,nature:'published_fact',sourceIds:[resolvedSources[0]!.id]}];
 }
 const adapter={load:async()=>{reads++;if(scenario==='read-error' || scenario==='query-only' && reads===1)throw Error('private transport content');return structuredClone(view);},retry:async()=>{retries++;view.state='queued';view.canRetry=false;return structuredClone(view);},request:async()=>{requests++;view.state="queued";return structuredClone(view);},source:async (analysis:string,id:string)=>{sourceReads++;if(scenario==='source-error' && sourceReads===1)throw Error('private source contents');const source=resolvedSources.find((x: {id:string})=>x.id===id);return analysis==='new' && source?{...source,text:'Descrição profissional atualizada nesta base.'}:source;}};
-const profile:PrismaProfileView={identity:{fullName:'Marina Costa',professionalTitle:'Assistente de Departamento Financeiro',location:'Rio de Janeiro, RJ',lifecycleLabel:'Candidata',operationalStatusLabel:'Ativo'},about:{summary:'Resumo original preservado.',professionalObjective:null,areasOfExpertise:[],keyResults:[]},experiences:[{id:"experience_ui",role:"Assistente financeiro",organization:"Empresa sintética",period:"2020 - 2024",description:"Conciliação de extratos e relatórios publicados.",page:1}],education:[],competencyGroups:[],credentials:{certifications:[],languages:[]},customSections:[],version:{profileId:'synthetic',number:3,publishedAt:view.generatedAt!,current:true}};
+let profile:PrismaProfileView={identity:{fullName:'Marina Costa',professionalTitle:'Assistente de Departamento Financeiro',location:'Rio de Janeiro, RJ',lifecycleLabel:'Candidata',operationalStatusLabel:'Ativo'},about:{summary:'Resumo original preservado.',professionalObjective:null,areasOfExpertise:[],keyResults:[]},experiences:[{id:"experience_ui",role:"Assistente financeiro",organization:"Empresa sintética",period:"2020 - 2024",description:"Conciliação de extratos e relatórios publicados.",page:1}],education:[],competencyGroups:[],credentials:{certifications:[],languages:[]},customSections:[],version:{profileId:'synthetic',number:3,publishedAt:view.generatedAt!,current:true}};
 if (scenario.startsWith('cards-')) {
  profile.identity.professionalTitle='Gestora de Operações';profile.identity.location='São Paulo, SP';
  profile.about!.areasOfExpertise=['Gestão de operações','Logística'];
@@ -66,6 +68,11 @@ if (scenario.startsWith('cards-')) {
   view.result!.answers.forEach((answer,i)=>{answer.statements=[{text:sections[i]!,nature:'published_fact',sourceIds:['experience.finance.description']}];answer.missingInformation=[];});
   view.result!.clarifications=view.result!.clarifications.slice(0,1).map(x=>({...x,text:'Qual foi uma melhoria de processo que você conduziu e qual resultado foi observado?'}));
  }
+}
+if(scenario.startsWith('education-')) {
+ const loaded=await prismaRepository.loadPersonProfile('synthetic-org','synthetic-person','member');
+ if(!loaded?.profile)throw Error('Synthetic published profile missing');
+ profile=buildPrismaProfileView({fullName:loaded.person.fullName,profile:loaded.profile,version:{profileId:loaded.profile.id,number:loaded.profile.profileVersion,publishedAt:loaded.profile.approvedAt,current:true}});
 }
 createRoot(document.getElementById('app')!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><main style={{padding:24,maxWidth:1460,margin:'auto'}}><CanonicalProfileHeader profile={profile}/><nav className="prisma-m72-tabs" aria-label="Áreas do Perfil profissional"><button aria-current="page">Resumo</button><button>Competências</button><button>Evidências</button><button>Perfil completo</button></nav><ProfileSynthesisSurface originalSummary={profile.about.summary} publishedProfile={profile} adapter={adapter} onOriginal={()=>{document.body.dataset.original='opened';}} onOpenSource={()=>{if(scenario==='origin-error')throw Error('private origin content');document.body.dataset.origin='opened';}}/></main></ConfigProvider>);
 setTimeout(async()=>{
@@ -101,6 +108,15 @@ setTimeout(async()=>{
   check('focusRestored',document.activeElement===button);check('triggerStillMounted',button?.isConnected ?? false);check('drawerClosed',!document.querySelector('.ant-drawer-open'));
   if(scenario==='keyboard') {button?.focus();document.body.dataset.keyboard='pending';for(let i=0;i<60 && document.body.dataset.keyboard==='pending';i++)await pause(100);await pause(400);check('keyboardEnterOpensSource',(document.body.dataset.keyboard as string)==='passed');check('keyboardEscapeClosesSource',!document.querySelector('.ant-drawer-open'));check('keyboardRestoresFocus',document.activeElement===button);}
   if(scenario==='long-content'){toggle()?.click();await pause();check('fullTextAfterHideSources',expectedTexts.every(text=>reading().includes(text)));check('originControlsRemoved',!document.querySelector('.prisma-synthesis-origin-action'));check('noClamping',![...document.querySelectorAll('.prisma-synthesis-statement p')].some(x=>getComputedStyle(x).overflow==='hidden' || parseInt(getComputedStyle(x).webkitLineClamp)>0));}
+ }
+ else if(scenario.startsWith('education-')) {
+  const cards=[...document.querySelectorAll<HTMLElement>('.prisma-profile-highlight')];
+  check('fourCardsVisible',cards.length===4);
+  check('desktopRowMobileColumn',innerWidth>1200?cards.every(x=>Math.abs(x.getBoundingClientRect().top-cards[0]!.getBoundingClientRect().top)<1):cards.every((x,i)=>i===0||x.getBoundingClientRect().top>cards[i-1]!.getBoundingClientRect().top));
+  check('realReadKeepsGoodSections',expectedTexts.every(text=>reading().includes(text)) && cards[1]?.textContent?.includes('Gerente de Operações')===true);
+  check('reviewedOrExplicitOnly',scenario==='education-inferred'?!cards[2]?.textContent?.includes('Gestão de Negócios'):cards[2]?.textContent?.includes('MBA · Especialização')===true && cards[2]?.textContent?.includes('Gestão de Negócios')===true && cards[2]?.textContent?.includes('Gestão de Projetos')===true);
+  check('noProviderOrFetchAdded',requests===0 && retries===0 && sourceReads===0);
+  if(scenario==='education-reviewed'){await enable();document.querySelector<HTMLButtonElement>('.is-education .prisma-profile-highlight-source')?.click();await pause(400);check('educationSourcesPreserved',document.querySelector('.ant-drawer-open')?.textContent?.includes('Instituto Sintético')===true);}
  }
  else if(scenario==='cards-render') {
   check('onlyFaultedCardReplaced',document.querySelectorAll('.prisma-profile-highlight').length===4 && !document.querySelector('.prisma-profile-highlight.is-areas') && document.querySelectorAll('.prisma-profile-highlight.is-position,.prisma-profile-highlight.is-education,.prisma-profile-highlight.is-organizations').length===3);

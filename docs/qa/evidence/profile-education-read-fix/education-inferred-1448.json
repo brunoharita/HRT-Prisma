@@ -1,0 +1,20 @@
+{
+  "scenario": "education-inferred",
+  "width": 1448,
+  "checks": {
+    "originsHiddenByDefault": true,
+    "noEagerSource": true,
+    "allSectionsInitiallyOpen": true,
+    "noCollapseOrDuplicateHighlights": true,
+    "allStoredTextImmediatelyAvailable": true,
+    "fourCardsVisible": true,
+    "desktopRowMobileColumn": true,
+    "realReadKeepsGoodSections": true,
+    "reviewedOrExplicitOnly": true,
+    "noProviderOrFetchAdded": true,
+    "queueRequestMatchesState": true,
+    "boundedReads": true,
+    "noOverflow": true
+  },
+  "pass": true
+}

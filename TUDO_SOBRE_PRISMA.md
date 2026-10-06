@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 359
-source_manifest_sha256: 40f089b0a4ee478c9b1a18bf7c664496eddac7d659731555369b75d23751c2aa
+documentation_source_count: 361
+source_manifest_sha256: 20b40a23365f6215c574d62e6fe2ffe0dfcb5712c6dd905558a0974c3da122b2
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.43
+version: 2.51.44
 last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Correção acadêmica do painel v2.0.12
+
+Correção autorizada em06/10/2026 preserva metadados acadêmicos já publicados no caminho loadPersonProfile/readEducation, usando resolvedor existente. Card explicita qualificação sustentada; MBA e especialização empatados aparecem juntos. Nenhuma nova confirmação, mutação/backfill/IA/schema. Método `published-profile-highlights-1.0.1`, registry continua2.0.12. 49testes dirigidos incluindo caminho real do repositório e reprodução do bug anterior,6UI1448/390 PASS; tipos/build PASS. Acordo/AoT `docs/qa/agreement-profile-education-read-fix.md`, `docs/qa/aot-profile-education-read-fix.md`. Publicação/smoke ainda pendentes neste snapshot, estado operacional anterior abaixo preservado como baseline. Jornada autenticada de Pessoa real NOT TESTED.
 
 ## Painel executivo do Resumo v2.0.12
 
@@ -4421,6 +4425,10 @@ Duração da posição e tempo documentado na área são distintos. União mensa
 
 Nenhuma consulta/provider, tabela, hash, prompt/modelo, backfill, contrato persistido, matching ou fonte de IA muda. A análise anterior continua com sua versão; cards mostram Perfil vigente identificado. Fontes dos cards usam somente campos já carregados e não entram no cache de trechos da IA. Conteúdo das oito perguntas, falhas locais e fallback aprovado preservados.
 
+## Correção da leitura acadêmica, 06/10/2026
+
+Produto permanece v2.0.12. A projeção `published-profile-highlights-1.0.1` lê pelo repositório os metadados acadêmicos válidos já publicados: fontes por dimensão, revisão booleana, motivos, método e snapshot. O resolvedor existente valida o conteúdo sem reclassificar, gravar ou inventar confirmação. Antes, readEducation perdia esses metadados e o card desconhecia conclusões já revisadas. Título apresenta qualificação sustentada (MBA, Especialização, Mestrado etc.), nível genérico quando desconhecida; MBA e especialização de mesmo nível aparecem juntos. Nenhuma geração/backfill/consulta adicional. Evidência passa pelo loadPersonProfile real, não somente view construída diretamente. Acordo/AoT `docs/qa/agreement-profile-education-read-fix.md` e `docs/qa/aot-profile-education-read-fix.md`.
+
 ---
 
 ## Source: `docs/ai/prompt-registry.md`
@@ -5742,6 +5750,10 @@ Decisão explícita de Bruno em05/10/2026: publicar2.0.8, preservando conteúdo 
 ## Vínculos múltiplos v2.0.9
 
 Entrega explicitamente aprovada por Bruno em05/10/2026: uma ou mais fontes selecionadas para uma competência, sem justificativa obrigatória. Registro central deriva2.0.9 pelo próximo incremento normal (salto7 existente preservado). RPC `link_person_competency_evidence_batch_v2` é aditivo; operação unitária/schema/projeção permanecem compatíveis, seleção gravada atomicamente com auditoria factual no servidor. Backend antes da web, rollback da web compatível com o RPC legado. Acordo/AoT `agreement-evidence-multiselect-v209.md`/`aot-evidence-multiselect-v209.md`.
+
+## Correção acadêmica do painel v2.0.12
+
+`published-profile-highlights-1.0.1` corrige perda de metadados acadêmicos em readEducation e explicita qualificações sustentadas no título. Produto continua2.0.12, registro de entregas inalterado. Contrato persistido, revisão humana, dados/snapshots, síntese/IA e SQL inalterados; sem migração nem reprocessamento. Acordo/AoT `agreement-profile-education-read-fix.md` / `aot-profile-education-read-fix.md`.
 
 ---
 
@@ -11771,6 +11783,8 @@ Sem referência normativa, engenharia escolhe medidas, espaçamento, tipografia,
 
 Acordo congelado docs/qa/agreement-profile-summary-cards-v2012.md v1.0.0: quatro cards inicialmente abertos (áreas da experiência mais recente, posição mais recente e outra experiência recente, maior formação concluída, empresas). Desktop: uma linha de quatro cards, síntese larga com acento azul, oito eixos completos em duas colunas; intermediário: duas colunas de destaques; celular: uma coluna. Altura livre, sem corte de listas/textos, fontes desligadas inicialmente. Posição/empresa/período/duração e complemento visíveis; sobreposição nunca vira posição anterior. Cards não substituem respostas, lacunas ou perguntas. Ausência de vínculo seguro da área tem explicação local e preserva o relato publicado e as áreas gerais. Mostrar fontes abre origem opcional dos destaques já carregados, identificando Perfil vigente, separadamente do snapshot de IA. Falha de render de um card preserva outros cards e respostas, com ação Consultar Perfil completo. Ref. visual normativa e renders sintéticos no diretório de evidência do movimento.
 
+Correção autorizada em06/10/2026: maior formação concluída apresenta a qualificação conhecida e sustentada, inclusive MBA. Quando MBA e especialização empatam, ambos permanecem visíveis; não se cria hierarquia entre eles. Sem qualificação conhecida mantém nível genérico. Confirmação publicada deve chegar intacta à tela, sem exigir nova ação humana. Layout, fontes sob demanda e conteúdo dos demais cards/seções permanecem. Acordo `docs/qa/agreement-profile-education-read-fix.md`.
+
 ---
 
 ## Source: `docs/product/vacancy-intelligence.md`
@@ -14688,6 +14702,42 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 - Evidência de aprovação do delta 1.2.0: “vamos fazer pular toda a parte que é local [...] desativar o Tesseract [...] direto da extração mais simples do PDF direto pro Parser IA”.
 - Evidência de aprovação do delta 1.3.0: “remova esse bloqueio do prisma. O unico bloqueio deve ser o saldo real disponível na tela de billing”.
 - Referência imutável para o prompt: versão `1.3.0` deste contrato.
+
+---
+
+## Source: `docs/qa/agreement-profile-education-read-fix.md`
+
+# Acordo e execução — Correção da leitura acadêmica v2.0.12
+
+Versão1.0.0 agreed/frozen, 2026-10-06. Bruno autorizou corrigir o diagnóstico do card: banco v5 conserva MBA concluído, fontes humanas e revisão, mas readEducation do prismaRepository descartava metadados. Escopo de correção/main/produção sob autorização permanente; sem nova entrega pública, produto permanece2.0.12. Baseline2ad6afa85418d76d2f77c8c43d50cde970b45511; web7db478f/image793e7465. Branchcodex/profile-education-read-fix, riscoC/B. Screenshot do usuário é contraexemplo; topologia quatro cards e conteúdos/fontes do acordo profile-summary-cards-v2012 v1.0.0 preservados.
+
+## DEVE / PROIBIDO / FORA / AUTONOMIA / PENDENTE
+
+- D-01: transportar classificação/revisão/fontes/método/motivos/snapshot válidos já publicados, via resolvedor existente, do carregamento real loadPersonProfile à view canônica e ao card. Nenhuma confirmação nova fabricada; metadado desconhecido continua desconhecido.
+- D-02: título de formação explicita qualificação conhecida/sustentada (MBA, Especialização, Mestrado etc.); qualificação ausente mantém nível genérico. Empates preservados, MBA/especialização coexistem, andamento/inferência não confirmada não vira conclusão.
+- D-03: preservar layout, demais cards, oito respostas completas, fontes sob demanda, status de revisão e histórico. Corrigir leitura beneficia consumidores da mesma projeção, sem editar perfis/snapshots persistidos.
+- D-04: produto2.0.12 continua, método de projeção1.0.1 identifica a correção de apresentação. Tests dirigidos/tipos/build/contextos/CI/main/web seletiva/smoke/rollback/sync/AoT.
+- P-01: inventar conclusão/confirmação, aceitar string true como booleano revisado, reclassificar ao ler, apagar histórico, alterar perfil/tenant/grants/schema/IA/matching/Parser/worker.
+- F-01: backfill, nova taxonomia/contrato persistido/IA, dados reais como fixture, outras melhorias, suíte integral local.
+- A-01: reusar resolveEducationClassification e rótulos oficiais existentes, sem nova biblioteca. Teste integrado chama método e decodificadores reais contra transporte Supabase sintético sem rede. UI usa essa projeção, não objeto final preenchido à mão.
+- Q-01: nenhuma decisão material pendente; autorização explícita à correção discutida.
+
+## Mapa de impacto / baseline / aceite
+
+| Capacidade | Relação | Baseline / regressão |
+| --- | --- | --- |
+| loadPersonProfile/readEducation e card | direct | MBA sintético revisado sumia; teste integração antes falha/depois preserva, curso/instituição/período/revisão/snapshot, título e empates |
+| Perfil completo/consumidores compartilhados | plausible_indirect | View canônica recebia metadados perdidos; assert identidade/contato/experiência/dados e metadados acadêmicos |
+| Leitura tenant-scoped | critical_transversal | Queries existentes eq organization_id/person_id e RPCread; mock valida escopo, nenhuma mutation/API nova; diff/tipos/build |
+| Outros cards/síntese/fontes | plausible_indirect |v2.0.12 ativo; UI desktop/mobile, fonte sem chamada adicional, oito respostas/4cards, origem da formação |
+| SQL/IA/matching/Parser/worker | no_impact_identified | Nenhuma mudança nestas superfícies; plano+diff+imagens/saúde VPS preservadas |
+| Registry/web/main | direct |2.0.12/793e7465; registry inalterado, CI/SHA/assets atuais e anteriores/rollback/HTTP200 |
+
+CA-01: integração usa código real repository.loadPersonProfile → decodeProfile/readEducation → buildPrismaProfileView → profileHighlights; transporte sintetizado, nenhuma chave/provider/banco real. Negativos metadata inválida/legado/andamento/inferido e empates. CA-02: screenshot1448/390 de fixture fictícia MBA+especialização chega ao card por este fluxo, ambos inicialmente visíveis; origem correta com fontes. CA-03: tipos/build/checks/context/CI/publicação/smoke evidenciados, nenhuma mutação real. CA-04: diff somente escopo e capacidades compartilhadas preservadas.
+
+## Prompt congelado
+
+Executar D-01..04, P-01 e F-01 com A-01 e CA-01..04, preservando todos os acordos2.0.12 salvo explicitação autorizada das qualificações e correção dos metadados descartados. Não marcar declaração antiga desconhecida como confirmada. Registro de versão pública não recebe entrega fictícia. Não reabrir produto/taxonomia/infra; fechamento no AoT do movimento.
 
 ---
 
@@ -18906,6 +18956,52 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 | `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
 
 A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
+
+---
+
+## Source: `docs/qa/aot-profile-education-read-fix.md`
+
+# AoT — Correção acadêmica v2.0.12
+
+Contrato congelado: `docs/qa/agreement-profile-education-read-fix.md` v1.0.0; baseline2ad6afa85418d76d2f77c8c43d50cde970b45511, aplicação7db478f. Correção autorizada em06/10/2026; branchcodex/profile-education-read-fix.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status / limitação |
+| --- | --- | --- | --- |
+| D-01 | readEducation passa metadados válidos ao resolvedor existente | profileEducationRepository.test percorre método real/decoder/canônica/card; baseline reproduz card vazio; snapshot/método/fontes/revisão preservados | PASS sintético sem rede |
+| D-02 | títulos de qualificação, empates e fallback genérico | MBA/spec explícitos/revisados; legado/andamento/inferido/string true/metadata inválida; profileHighlights | PASS |
+| D-03 | layout/4cards/8respostas/origens preservados |6UI1448/390 com loadPersonProfile real contra transporte sintético; identidade/experiências/versão; sem fetch IA | PASS no escopo, Pessoa real NOT TESTED |
+| D-04 | método1.0.1, produto2.0.12; docs/testes/build |49testes PASS; tipos raiz/web/build PASS; CI/main/web/smoke/contextos pendentes | PARTIAL até publicação |
+
+## Proibições e fora de escopo
+
+P-01 PASS: teste negativo impede string true e inferência não revisada; metadata inválida continua desconhecida. Transporte rejeita leitura sem tenant/subject, conta as mesmas7operações; nenhuma operação de escrita. Diff não altera RLS/SQL/IA/matching/Parser/worker nem snapshots persistidos. F-01 PASS: sem backfill/taxonomia/dependência/PII real/suíte integral local. Snapshot acadêmico válido preservado, conteúdo malformado descartado pelo resolvedor existente.
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline / regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Repositório/card | direct | Baseline reproduz vazio; caminho real corrigido preserva metadata e títulos; testes | PASS |
+| View canônica/Perfil completo | plausible_indirect | Identidade, contato disponível, experiências, versão e metadados acadêmicos; testes do caminho real | PASS projeção; tela completa real NOT TESTED |
+| Tenant/escopo de leitura | critical_transversal | Mock exige org/person/profile; nenhum novo acesso, teste/diff | PASS na fronteira afetada; RLS inalterada |
+| Outros cards/seções/fontes | plausible_indirect |4cards/8seções/sem provider, origem da formação;6reports/render1448/390 | PASS |
+| Registry/main/web | direct |2.0.12 inalterado/teste registry; build; publicação pendente | PARTIAL |
+| SQL/IA/matching/Parser/worker | no_impact_identified | Diff reutiliza classificador somente para leitura; plano/saúde VPS pendentes | PARTIAL até prova operacional |
+
+Novidade: nenhuma metadata perdida; título explicita qualificação, mantendo nível genérico quando desconhecida. Preservação: confirmação humana/aceitação explícita já registradas, inferência não revisada indisponível; todos os cursos empatados, fontes e respostas. Nenhuma relação reclassificada. QA sintético não prova jornada autenticada real ou veracidade curricular universal.
+
+## Fidelidade visual
+
+Screenshot do incidente é contraexemplo. Referência normativa continua acordo2.0.12: quatro cards desktop, coluna mobile e respostas completas. Mesmo viewport1448/390 e dados fictícios no caminho real, renders `docs/qa/evidence/profile-education-read-fix/education-explicit-1448.png` e `education-reviewed-390-full.png`. Comparação visual direta confirma hierarquia/topologia/alinhamento/ordem/ações; única mudança autorizada é qualificação no título e conteúdos corretos antes ausentes. Reports seis cenários no mesmo diretório. Dados reais do screenshot não são fixtures.
+
+## Validação / Git / ambientes
+
+49testes dirigidos: profileEducationRepository, profileHighlights, educationClassification, productRelease. Tipos raiz/web e buildweb PASS. Avisos preexistentes de chunk grande/import dinâmico sem mudança de divisão. Nenhuma suíte completa local. Contexto/CI/publicação/smoke/sincronização pendentes.
+
+## Desvios / conclusão
+
+Nenhum desvio de produto identificado. Fonte do diagnóstico: código e leitura produtiva limitada ao Perfil vigente de Bruno no turno anterior; nenhum dado real versionado. Implementação comprovada sinteticamente; não declarar fechamento de D-04 antes da publicação.
 
 ---
 

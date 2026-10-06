@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.43
+version: 2.51.44
 last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Correção acadêmica do painel v2.0.12
+
+Correção autorizada em06/10/2026 preserva metadados acadêmicos já publicados no caminho loadPersonProfile/readEducation, usando resolvedor existente. Card explicita qualificação sustentada; MBA e especialização empatados aparecem juntos. Nenhuma nova confirmação, mutação/backfill/IA/schema. Método `published-profile-highlights-1.0.1`, registry continua2.0.12. 49testes dirigidos incluindo caminho real do repositório e reprodução do bug anterior,6UI1448/390 PASS; tipos/build PASS. Acordo/AoT `docs/qa/agreement-profile-education-read-fix.md`, `docs/qa/aot-profile-education-read-fix.md`. Publicação/smoke ainda pendentes neste snapshot, estado operacional anterior abaixo preservado como baseline. Jornada autenticada de Pessoa real NOT TESTED.
 
 ## Painel executivo do Resumo v2.0.12
 

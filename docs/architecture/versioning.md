@@ -289,3 +289,7 @@ Decisão explícita de Bruno em05/10/2026: publicar2.0.8, preservando conteúdo 
 ## Vínculos múltiplos v2.0.9
 
 Entrega explicitamente aprovada por Bruno em05/10/2026: uma ou mais fontes selecionadas para uma competência, sem justificativa obrigatória. Registro central deriva2.0.9 pelo próximo incremento normal (salto7 existente preservado). RPC `link_person_competency_evidence_batch_v2` é aditivo; operação unitária/schema/projeção permanecem compatíveis, seleção gravada atomicamente com auditoria factual no servidor. Backend antes da web, rollback da web compatível com o RPC legado. Acordo/AoT `agreement-evidence-multiselect-v209.md`/`aot-evidence-multiselect-v209.md`.
+
+## Correção acadêmica do painel v2.0.12
+
+`published-profile-highlights-1.0.1` corrige perda de metadados acadêmicos em readEducation e explicita qualificações sustentadas no título. Produto continua2.0.12, registro de entregas inalterado. Contrato persistido, revisão humana, dados/snapshots, síntese/IA e SQL inalterados; sem migração nem reprocessamento. Acordo/AoT `agreement-profile-education-read-fix.md` / `aot-profile-education-read-fix.md`.

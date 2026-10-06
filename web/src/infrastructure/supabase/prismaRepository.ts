@@ -560,7 +560,8 @@ function readEducation(value: Json | undefined): StructuredDraft["education"] {
       description: candidate.description,
       evidenceText: candidate.evidenceText ?? "",
       page: typeof record.page === "number" ? record.page : null,
-      ...resolveEducationClassification(candidate),
+      // Preserve approved metadata; the existing resolver validates unknown input.
+      ...resolveEducationClassification({ ...record, ...candidate } as unknown as StructuredDraft["education"][number]),
     }];
   });
 }
