@@ -7,6 +7,7 @@ interface PrismaPageProps {
 
 interface PrismaPageHeaderProps {
   title: string;
+  icon?: ReactNode;
   description?: string;
   breadcrumbs?: ReactNode;
   actions?: ReactNode;
@@ -19,6 +20,7 @@ export function PrismaPage({ children, className }: PrismaPageProps) {
 
 export function PrismaPageHeader({
   title,
+  icon,
   description,
   breadcrumbs,
   actions,
@@ -29,6 +31,7 @@ export function PrismaPageHeader({
       {breadcrumbs ? <div className="prisma-page-breadcrumbs">{breadcrumbs}</div> : null}
       <div className="prisma-page-header-row">
         <div className="prisma-page-heading">
+          {icon ? <span className="prisma-page-icon" aria-hidden="true">{icon}</span> : null}
           <h1>{title}</h1>
           {description ? <p>{description}</p> : null}
         </div>

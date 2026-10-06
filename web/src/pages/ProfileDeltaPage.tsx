@@ -1,3 +1,4 @@
+import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, Empty, Radio, Select, Skeleton, Statistic, Steps, Tabs, Tag, Typography } from "antd";
@@ -153,7 +154,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
   const nextVersion = (currentProfile?.profileVersion ?? 0) + 1;
   return (
     <PrismaPage className="prisma-delta-page">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title={delta.firstPublication ? "Revisão da primeira versão do perfil" : "Comparação com o perfil atual"}
         description={delta.firstPublication ? "Revise o conhecimento que formará o primeiro Perfil Prisma antes de publicar." : "Veja exatamente o que a nova versão altera e o que permanece preservado antes de publicar."}
         actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion ?? workspace.baseProfileVersion}` : workspace.documentName}</strong><small>{workspace.sourceKind === "profile" ? "Versão usada como base" : `Documento v${workspace.documentVersion}`}</small></span></Card>}

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 364
-source_manifest_sha256: 24a7fe634d8ee7720fa314026606ffbe700e1dd4962994682c808fcfddf71cf6
+documentation_source_count: 367
+source_manifest_sha256: 565b83de3942d71838a8bfa3f4c43603b088649782d6d3a7124ff3eb2d08e574
 -->
 
 # Tudo sobre o Prisma
@@ -2631,6 +2631,10 @@ last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Comunicação visual — Prisma v2.1.1
+
+Implementação autorizada por Bruno em06/10/2026 com base na opção4: hierarquia tipográfica compartilhada, cabeçalhos com ícones semânticos, destaques tonais azul-claro, fatos maiores e metadados legíveis. Pessoa preserva72/28, seis abas, quatro destaques, síntese e oito análises integrais/fontes sob demanda; capelo/maleta SVG simples, sem nova dependência. Foundation de apresentação1.3.0; registry2.1.1. Sem alteração de domínio, tenant, papéis, SQL, matching, Parser ou Synthesis. Acordo1.0.0 e execução/AoT em docs/qa/agreement-visual-option4-v211.md, execution-visual-option4-v211.md, aot-visual-option4-v211.md. Local:27cenários visuais,15Pessoa,32checks revisão,46dirigidos,tipos/build/lint/foundation PASS. Contextos PASS em cópia limpa dos rastreados; CI/publicação em andamento; não implica rollout até o fechamento operacional abaixo. Baseline main/local/VPS b781870c, webcc9ad878; demais serviços preservados e saudáveis no baseline.
 
 ## Página unificada da Pessoa — Prisma v2.1.0
 
@@ -11676,7 +11680,15 @@ Depois da confirmação, a Pessoa entra em `deleting`, novas mutações incompat
 
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.2.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0 e `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.2.0 preserva a base anterior, restringe a autonomia visual quando existe uma referência normativa e consolida a arquitetura institucional da sidebar.
+Contrato de apresentação: `prisma-ux-foundation-1.3.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+
+## Hierarquia e iconografia v2.1.1
+
+Títulos de página30–36px, seções20–24px, fatos principais24–26px, leitura16px, rótulos14–15px e metadados14px. Ícones de área32–36px em suporte56–64px; destaques32px em56px. Controles mantêm escala e foco próprios. Metadados compactos e selos auxiliares podem usar13px, sem promover instrução essencial a texto minúsculo.
+
+Cards de destaques usam fundo azul-claro #edf4ff, borda #b9d2ff, suporte de ícone #dceaff, acento #155eef e cantos16px. Conteúdo e superfícies de leitura permanecem claros; peso tipográfico e separação distinguem fato, complemento e origem. Não aplicar tonalidade a todos os painéis indistintamente. Ícones semânticos reutilizam Ant Design; capelo e maleta SVG simples seguem currentColor e ficam ocultos de leitores de tela quando acompanham rótulo textual.
+
+Pessoa mantém seis abas, leitura72/28, quatro destaques em desktop,2x2 intermediário/uma coluna no celular, síntese e oito análises integrais, fontes opcionais e estados reais. Dados ilustrativos da imagem não substituem fatos/cálculos do Perfil. Home, Pessoas, Posições, Conhecimento, Verificações e Administração compartilham cabeçalhos, cartões e escala. Nenhuma faixa escura da opção2 foi aprovada neste movimento.
 
 ## Organização e jornadas
 
@@ -15448,6 +15460,59 @@ Referência de produto: `docs/product/ux-foundation.md`, `prisma-ux-foundation-1
 ## PENDÊNCIAS
 
 Nenhuma decisão de produto pendente no escopo autorizado. O item 3.3 anterior que recomendava manter Vagas está expressamente supersedido por D-3.3: **Posições**.
+
+---
+
+## Source: `docs/qa/agreement-visual-option4-v211.md`
+
+# Acordo — Comunicação visual Prisma v2.1.1
+
+Versão 1.0.0. Congelado pela decisão explícita de Bruno em06/10/2026: “gostei da opção 4 também. pode alterar a comunicação visual da plataforma baseada nessa escolha. implementar e publicar na versão 2.1.1”. Registra a escolha já aprovada, sem propor decisão adicional.
+
+## Referência e modelo visual
+
+Normativa: `evidence/visual-option4-v211/approved-option4.png`, cópia integral da opção4 apresentada. Dados/pessoas/textos exemplificativos. Screenshot anterior é contraexemplo de hierarquia fraca. As demais opções não são alvo; nenhuma faixa escura da opção2 é introduzida.
+
+Pessoa: identidade e ações no topo, seis abas, leitura principal aproximadamente72% e lateral operacional28% no desktop largo; quatro destaques alinhados, síntese inteira abaixo e oito análises abertas em duas colunas. Cards tonais azul-claro com borda azul perceptível, cantos16px, pequeno acento superior, símbolos32px sobre suporte56px; valores24–26px fortes, rótulos14–15px, detalhes14px, leitura16px, títulos de seção20–24px, identidade30–36px. Conteúdo define altura, sem cortes. Intermediário2x2; celular uma coluna, pendência antes da leitura, controles e abas acessíveis. Ícones semânticos consistentes, sem fotos/logos inventados.
+
+Plataforma: a mesma escala, títulos reconhecíveis, símbolos de abertura de área e cards de indicadores/destaques tonais. Painéis de leitura/formulários continuam claros; azul identifica organização/ação, âmbar pendência, vermelho falha/destruição, verde confirmação. Sidebar institucional e identidade da marca preservadas, sem novas áreas ou funções.
+
+## Requisitos
+
+- D-UX-01: aplicar tipografia hierárquica e iconografia com presença aos componentes compartilhados e aberturas de áreas existentes da plataforma.
+- D-UX-02: reproduzir a direção4 nos quatro destaques da Pessoa, preservando topologia, proporções, conteúdo integral, ordem e ações existentes; manter os oito eixos e fontes sob demanda.
+- D-UX-03: usar superfícies tonais nos indicadores/destaques de Home/Pessoas e padrões equivalentes existentes, com painéis de leitura claros e estados semânticos distinguíveis.
+- D-UX-04: preservar responsividade, zoom/reflow, nomes acessíveis, foco, controles, listas, formulários, diálogos e geometria das evidências/PDF.
+- D-REL-05: registrar v2.1.1, validar proporcionalmente, integrar main, publicar somente destinos indicados no dispatcher e verificar produção/rollback/sincronização.
+- P-01: proibido alterar fatos/cálculos, classificação, síntese/IA, matching, papéis, tenant, schemas, navegação/handlers ou dados humanos. Sem novo score, IA por visita, seleção humana automática, textos cortados ou dependência nova.
+- F-01: redesign estrutural das jornadas, marca/login ilustrado, backend/SQL/Parser/Synthesis/Paddle, mudanças de regra e teste mutacional em Pessoas reais.
+- A-UX-01: engenharia escolhe ícones da biblioteca já instalada, SVG simples quando necessário, tokens, CSS e pequenos ajustes de espaçamento coerentes com a referência. Conteúdo ilustrativo usa os cálculos existentes, sem alterar fatos para reproduzir números do bitmap.
+- Q-01: nenhuma decisão material pendente; aprovação e publicação explícitas.
+
+## Aceite
+
+CA-01/D-UX-01,03: renders de páginas reais com adapters sintéticos (Home, Pessoas, Posições, Conhecimento, Configurações), títulos/indicadores legíveis, controles funcionais e sem erro/overflow em desktop/celular.
+
+CA-02/D-UX-02: comparação visual identificada contra opção4, viewport/dados/estado equivalentes para a direção visual, quatro cards, escala e ícones medidos; render adicional com conteúdo longo. Textos exatos e durações da imagem são ilustrativos; diferença causada por cálculo real deve ser registrada.
+
+CA-03/D-UX-04,P-01: regressão browser Pessoa, fontes/lazy/cache/zero geração, member/recruiter, dirty, erros locais, navegação/shell, formulário/revisão/evidência e teclado; tipos/build e testes dirigidos dos contratos afetados.
+
+CA-04/D-REL-05: registry, Context Pack, CI, SHA/versão/assets servidos, saúde de web e preservação dos serviços; nenhum deploy sem indicação no plano.
+
+## Mapa inicial de impacto e preservação
+
+Baseline: main local b781870c5b4df0fe71ac6e1035290da2c620929e, v2.1.0; estado operacional será verificado antes do release. Classe C, apresentação transversal.
+
+| Área/capacidade | Relação | Preservar / regressão prevista |
+| --- | --- | --- |
+| Tokens, CSS foundation, headings/cards/indicadores, páginas consumidoras | direct | Hierarquia nova; renders desktop/móvel, medidas/overflow e ações reais sintéticas |
+| Pessoa, destaques, síntese e fontes | direct | Mesmos dados/ordem/4cards/8eixos; browser15cenários + comparação visual |
+| Formulários/listas/revisão/diálogos/public surfaces | plausible_indirect | Controles, texto longo, foco, menus, estados; smoke sintético proporcional |
+| Tenant/papéis/dirty/geom. evidência e seleções humanas | critical_transversal | Negativos existentes, fluxo Pessoa, revisão/evidência sem geometria CSS alterada |
+| Registro/release web | direct |2.1.1, build/CI/rollback/assets/SHA/HTTP |
+| SQL/IA/Parser/matching/Paddle | no_impact_identified | Apresentação apenas; diff/plano, testes contratuais existentes e serviços preservados |
+
+Trabalho alheio não rastreado identificado no baseline permanece fora do movimento.
 
 ---
 
@@ -20165,6 +20230,75 @@ Os dois primeiros CI da branch apontaram, respectivamente, exports do Context Pa
 
 ---
 
+## Source: `docs/qa/aot-visual-option4-v211.md`
+
+# AoT — Comunicação visual Prisma v2.1.1
+
+Contrato integral: `agreement-visual-option4-v211.md`1.0.0, execução `execution-visual-option4-v211.md`. Aprovação explícita de Bruno inclui a opção4 e publicação2.1.1. Classe C, branch codex/visual-option4-v211, baseline main/local/VPS b781870c5b4df0fe71ac6e1035290da2c620929e.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status / limite |
+| --- | --- | --- | --- |
+| D-UX-01 | Theme16px, títulos30–36, cabeçalhos de áreas com ícones56–64px, cards compartilhados20px | Tipos/build;6páginas reais com adapters sintéticos em1516/768/390/320 | PASS:27cenários visuais e medidas DOM |
+| D-UX-02 | Destaques tonais16px de raio, ícones32 em56, valores25px/rótulos14; síntese/8eixos preservados | Browser Pessoa15cenários PASS; renders1516/390/320 e medidas DOM PASS | PASS |
+| D-UX-03 | Home/indicadores/fontes e padrões de entrada tonais, leitura branca | Capturas/valores factuais e medidas DOM, Home32px/rótulo15px | PASS |
+| D-UX-04 | Componentes acessíveis e handlers existentes, foco/reflow | Pessoa15cenários PASS,46dirigidos PASS; revisão32checks PASS,menu/teclado/reflow PASS | PASS |
+| D-REL-05 | Registry2.1.1, owner/current-state/contextos e release web seletivo | Produção/CI ainda pendentes | NOT TESTED |
+
+## Proibições verificadas
+
+| ID | Evidência | Status |
+| --- | --- | --- |
+| P-01 | Diff de apresentação apenas;15cenários Pessoa e46testes dirigidos incluindo member/recruiter/dirty/fontes/rotas/classificação/cálculos; nenhum banco/LLM real | PASS nas fronteiras sintéticas e diff revisado |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade / área | Relação | Baseline / regressão | Status |
+| --- | --- | --- | --- |
+| Theme/foundation/headers/cards e consumidores | direct | v2.1.0;6páginas reais,4larguras,DOM/capturas/ações | PASS |
+| Pessoa/destaques/síntese/fontes | direct |4cards/8eixos,72/28 e cálculos existentes;15cenários/46dirigidos | PASS |
+| Listas/formulários/diálogos/revisão | plausible_indirect | Sem novo handler;reflow/teclado/foco/revisão32checks | PASS |
+| Tenant/papéis/dirty/seleção/geometria | critical_transversal | Negativos member/recruiter e dirty PASS;CSS não seleciona canvas/regiões/evidence highlights;revisão32checks/46dirigidos; nenhum seletor novo de geometria | PASS |
+| Registry/release web | direct | webcc9ad878 em baseline;rollback/SHA/assets/CI | NOT TESTED |
+| SQL/IA/Parser/matching/Paddle | no_impact_identified | Sem arquivos de runtime/domínio alterados, containers baseline registrados | PASS local/plano; preservação operacional final pendente |
+
+### Novidade e preservação
+
+Nova entrega: linguagem visual4 transversal, sem mudança estrutural. Preservação: funções, informação integral, cores de estado, marca e navegação existentes. Nenhuma dependência nova. SVG semântico simples para capelo/maleta porque a biblioteca instalada não oferece esses símbolos com a silhueta desejada.
+
+Baseline limitado: fixtures determinísticas; não há autorização/necessidade de alterar Pessoas humanas para teste. Smoke público não estabelece jornada autenticada real ou qualidade universal de currículo. Arquivos alheios não rastreados foram preservados.
+
+## Fora de escopo preservado
+
+F-01: sem redesign estrutural, marca/login ilustrado, schema, IA, matching ou dados reais. PASS por diff/plano: somente web,zero migrations/Edge/Parser/Synthesis.
+
+## Fidelidade visual
+
+Referência normativa `evidence/visual-option4-v211/approved-option4.png`,1516x1037. Mesmo viewport no render `person-same-viewport.png`, dados ilustrativos Marina/4organizações/MBA/graduação e textos equivalentes. Duracões, rótulos, pendências, proveniência e fontes usam contratos/cálculos existentes, conforme A-UX-01; não são copiados como fatos do bitmap.8eixos mantidos abaixo da dobra;capturas integrais e390/320 identificam transformação. Inspeção visual desktop/celular concluída. Hierarquia25/14px, ícones32/56px, tons, proporção e agrupamento reconhecíveis. Conteúdo real mais longo amplia altura dos cards, conforme D-UX-02/A-UX-01, sem truncamento; nenhuma alteração estrutural material.
+
+## Desvios do contrato
+
+Inspeção visual desktop/celular concluída. Hierarquia25/14px, ícones32/56px, tons, proporção e agrupamento reconhecíveis. Conteúdo real mais longo amplia altura dos cards, conforme D-UX-02/A-UX-01, sem truncamento; nenhuma alteração estrutural material. Sem decisão material nova de produto.
+
+## Validação final
+
+Tipos raiz/web,build web,lint/foundation,diff-check PASS.46testes dirigidos PASS.27cenários visuais (24áreas+3Pessoa),15regressões Pessoa,32checks revisão PASS; sem banco/LLM externo. UI de áreas: run integral e rerun das larguras1516/390 após correção da precedência antiga de Home;768/320 inalterados preservados da execução integral. Evidências agregadas sem reapresentar medição antiga como nova. Dispatcher1.0.3 sem bloqueios,web=true,demais destinos=false; comandos deduplicados e teste geral substituído localmente por regressão proporcional conforme AGENTS. CI mantém gates obrigatórios integrais.
+
+Primeira falha do smoke de áreas foi um locator exato que incluía nome acessível do ícone; corrigido para o botão correto. Primeira verificação de Escape ocorreu antes do foco/animação; corrigida espera/foco do teste, sem alterar navegação do produto. O smoke de revisão150ms observava foco antes dos dois animation frames; o teste passou a aguardar o foco efetivo mantendo a mesma asserção. A fixture visual passou a usar meses explícitos na experiência antiga, preservando o contrato que rejeita cronologia ambígua. Nenhum cálculo de domínio foi alterado.
+
+Context Pack gerado/conferido em cópia dos arquivos rastreados PASS; documentos locais alheios excluídos da cópia e preservados. CI e publicação pendentes.
+
+## Git / QA / ambiente
+
+Baseline operacional em production-baseline.txt. Somente VPS/remote oficiais. Release e sincronização ainda pendentes.
+
+## Conclusão
+
+Entrega em validação; não declarar publicada até CI, rollout e smoke finais.
+
+---
+
 ## Source: `docs/qa/aot-visual-reference-fidelity.md`
 
 # AoT — Fidelidade a referências visuais em prompts
@@ -23637,6 +23771,16 @@ Sequência: formalizar padrões aprovados → implementar base compartilhada →
 Entrega exige todos os D-* e P-* aplicáveis PASS com evidência proporcional e limites reais. Criar `docs/qa/aot-ux-foundation.md` usando o template do repositório. Testar especialmente navegação normal/cancelada, histórico, indisponibilidade, isolamento do estado temporário, nomes dos módulos, papéis e ausência versus zero. Validar build/typecheck, testes dirigidos e visual de lista/detalhe/formulário/área pública nas larguras aplicáveis. Não rodar `pnpm run validate` sem autorização específica; reutilizar checkers de Context Pack após atualizar owners.
 
 Preservar `.tmp.driveupload/` e qualquer material não relacionado. Não modificar regras de domínio, enviar mensagens, publicar perfis, gerar convites reais ou alterar produção. A aprovação anterior é suficiente para todas as etapas administrativas deste escopo.
+
+---
+
+## Source: `docs/qa/execution-visual-option4-v211.md`
+
+# Execução — Comunicação visual v2.1.1
+
+Fonte integral: `docs/qa/agreement-visual-option4-v211.md` v1.0.0, lida integralmente antes da implementação. A aprovação explícita de Bruno congela o escopo, incluindo publicação2.1.1. Todos D/P/F/A/CA do acordo vinculam esta execução, sem reinterpretação.
+
+Aplicar D-UX-01–04 pela foundation/theme/componentes existentes; D-REL-05 pelo release seletivo. P-01 não pode ocorrer; F-01 permanece excluído. A-UX-01 cobre detalhes de CSS/ícones e dados ilustrativos adaptados aos cálculos atuais. Comparar referência e renders; fechar usando AoT e evidências, sem apresentar smoke público como jornada autenticada real.
 
 ---
 

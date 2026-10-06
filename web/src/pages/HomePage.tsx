@@ -1,3 +1,4 @@
+import { HomeFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { ApartmentOutlined, CheckCircleOutlined, ClockCircleOutlined, DatabaseOutlined, FileAddOutlined, SafetyCertificateOutlined, SyncOutlined, TeamOutlined } from "@ant-design/icons";
 import { Alert, Button, Collapse, Drawer, Skeleton, Statistic, Steps, Tag, Typography } from "antd";
@@ -42,7 +43,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
 
   return (
     <PrismaPage className="prisma-m81-home">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title="Olá!"
         description={`Bem-vindo ao Prisma · ${activeMembership.organizationName}`}
       />

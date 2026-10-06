@@ -1,3 +1,4 @@
+import { AppstoreFilled as PrismaPageIcon } from "@ant-design/icons";
 import { PrismaMetric } from "../ui/PrismaState";
 import { observedMetric } from "../shared/uxFoundation";
 import { useEffect, useMemo, useState } from "react";
@@ -93,7 +94,7 @@ export function AssessmentItemBankPage({ activeMembership }: Props) {
   }
 
   if (loading && !workspace) return <PrismaPage className="prisma-m51c-page"><Skeleton active paragraph={{ rows: 12 }} /></PrismaPage>;
-  if (!workspace) return <PrismaPage className="prisma-m51c-page"><PrismaPageHeader title="Banco de Itens" description="Governança, escala e calibração." />{error ? <Alert message={error} type="error" showIcon action={<Button onClick={() => void refresh()}>Consultar banco de itens</Button>} /> : <Empty />}</PrismaPage>;
+  if (!workspace) return <PrismaPage className="prisma-m51c-page"><PrismaPageHeader icon={<PrismaPageIcon />} title="Banco de Itens" description="Governança, escala e calibração." />{error ? <Alert message={error} type="error" showIcon action={<Button onClick={() => void refresh()}>Consultar banco de itens</Button>} /> : <Empty />}</PrismaPage>;
 
   const surfaceGroups: Array<{ label: string; items: Array<{ key: Surface; label: string; icon: ReactNode }> }> = [{
     label: "Operação",
@@ -115,7 +116,7 @@ export function AssessmentItemBankPage({ activeMembership }: Props) {
   }];
   return (
     <PrismaPage className="prisma-m51c-page">
-      <PrismaPageHeader title="Banco de Itens" description="IA, escala, governança e calibração com revisão humana obrigatória." actions={<Button onClick={() => void refresh()}>Atualizar</Button>} />
+      <PrismaPageHeader icon={<PrismaPageIcon />} title="Banco de Itens" description="IA, escala, governança e calibração com revisão humana obrigatória." actions={<Button onClick={() => void refresh()}>Atualizar</Button>} />
       {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => void refresh()}>Consultar banco de itens</Button>} /> : null}
       {info ? <Alert closable message={info} onClose={() => setInfo(null)} showIcon type="success" /> : null}
       <PrismaCard className="prisma-m51c-navigation">

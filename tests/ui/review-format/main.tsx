@@ -54,6 +54,8 @@ if (scenario) setTimeout(async () => {
   const navigate = async (label: string) => {
     const button = [...document.querySelectorAll<HTMLButtonElement>(".prisma-review-format-summary button")].find((item) => item.textContent === label);
     check(`summary link: ${label}`, Boolean(button)); button!.click(); await wait();
+    // Selection renders a record, then focuses it after two animation frames.
+    for (let attempt = 0; attempt < 30 && !document.activeElement?.closest(".prisma-review-field.is-selected"); attempt++) await wait();
   };
   const update = async (path: string, value: string) => {
     const target = input(path)!;

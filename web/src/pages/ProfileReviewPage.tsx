@@ -1,3 +1,4 @@
+import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
@@ -732,7 +733,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
 
   return (
     <PrismaPage className="prisma-m2c-page prisma-review-page prisma-review-page--workspace">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title={viewOnly ? "Verificação do currículo" : workspace.sourceKind === "profile" ? "Nova revisão do Perfil" : "Revisão do documento"}
         description={viewOnly
           ? `Consulte o currículo original de ${workspace.personName} e os campos extraídos, sem alterar a versão aprovada.`

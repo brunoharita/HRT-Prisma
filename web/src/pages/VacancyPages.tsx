@@ -1,3 +1,4 @@
+import { PrismaBriefcaseIcon as PrismaPageIcon } from "../ui/PrismaBriefcaseIcon";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PositionTaxonomyPanel, TaxonomyOriginDetails } from "../components/PositionTaxonomyPanel";
 import { TrajectoryConflictReview } from "../components/TrajectoryConflictReview";
@@ -146,7 +147,7 @@ export function VacanciesPage({ activeMembership, onNavigate }: CommonProps) {
   }
 
   return <PrismaPage className="prisma-vacancies-page">
-    <PrismaPageHeader title="Posições" description="Gerencie as necessidades profissionais da sua empresa." actions={<Button icon={<PlusOutlined />} onClick={() => { clearDraft(draftScope); onNavigate("/vacancies/new"); }} type="primary">Nova posição</Button>} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Posições" description="Gerencie as necessidades profissionais da sua empresa." actions={<Button icon={<PlusOutlined />} onClick={() => { clearDraft(draftScope); onNavigate("/vacancies/new"); }} type="primary">Nova posição</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Button onClick={() => onNavigate("/vacancies")}>Consultar posições</Button>} /> : null}
     <PrismaCard className="prisma-vacancy-toolbar">
       <Input allowClear aria-label="Buscar Posições" onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Buscar por título, área, localidade ou Pessoa..." prefix={<SearchOutlined />} value={search} />
@@ -372,7 +373,7 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   if (loading) return <PrismaPage><PrismaCard><Skeleton active paragraph={{ rows: 18 }} /></PrismaCard></PrismaPage>;
   return <PrismaPage className="prisma-vacancy-editor-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(vacancyId ? `/vacancies/${vacancyId}` : "/vacancies")} type="text">Voltar</Button>
-    <PrismaPageHeader title={vacancyId ? "Editar posição" : "Nova posição"} description="Explique a necessidade em blocos simples. O Prisma preserva a estrutura e a versão usadas nas avaliações." actions={<Space>{vacancyId && draft.structureSource ? <Button onClick={() => { setRestructureDescription(draft.structureSource?.originalDescription ?? ""); setRestructureOpen(true); }}>Editar descrição e reestruturar</Button> : null}{savedLocally ? <Tag icon={<CheckCircleOutlined />} color="success">Rascunho salvo neste navegador</Tag> : null}</Space>} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title={vacancyId ? "Editar posição" : "Nova posição"} description="Explique a necessidade em blocos simples. O Prisma preserva a estrutura e a versão usadas nas avaliações." actions={<Space>{vacancyId && draft.structureSource ? <Button onClick={() => { setRestructureDescription(draft.structureSource?.originalDescription ?? ""); setRestructureOpen(true); }}>Editar descrição e reestruturar</Button> : null}{savedLocally ? <Tag icon={<CheckCircleOutlined />} color="success">Rascunho salvo neste navegador</Tag> : null}</Space>} />
     {error ? <Alert closable onClose={() => { setError(null); setValidationTarget(null); }} showIcon title={error} type="error" action={<Button onClick={(event) => { if (validationTarget === "occupation") focusNoticeTarget(".prisma-vacancy-reference-field input"); else focusNoticeFields(event.currentTarget); }}>Conferir campos da posição</Button>} /> : null}
     {!vacancyId ? <PrismaCard className={`prisma-vacancy-start-card ${validationTarget === "occupation" ? "has-validation-error" : ""}`} title="Escolha como começar">
       <div className="prisma-start-description">
@@ -483,7 +484,7 @@ export function VacancyAssistPage({ onNavigate }: CommonProps) {
   }
   return <PrismaPage className="prisma-vacancy-assist-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/vacancies/new")} type="text">Voltar para Nova posição</Button>
-    <PrismaPageHeader title="Estruturar posição com ajuda do Prisma" description="Descrição da posição é a fonte original. A estrutura sugerida é uma interpretação revisável, sem enriquecimento externo." />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Estruturar posição com ajuda do Prisma" description="Descrição da posição é a fonte original. A estrutura sugerida é uma interpretação revisável, sem enriquecimento externo." />
     <Alert icon={<RobotOutlined />} message="A assistência externa permanece desativada. Esta preparação é determinística, não envia dados a terceiros e não salva nada antes da sua revisão." showIcon type="info" />
     <div className="prisma-vacancy-assist-grid">
       <PrismaCard title="1. Descrição da posição · fonte original"><Input.TextArea maxLength={5000} onChange={(event) => setDescription(event.target.value)} placeholder="Cole aqui a descrição profissional..." rows={23} showCount value={description} /><div className="prisma-vacancy-assist-actions"><Button icon={<DeleteOutlined />} onClick={() => { setDescription(""); setSuggestions([]); }}>Limpar texto</Button><Button disabled={!description.trim()} icon={<BulbOutlined />} onClick={analyze} type="primary">Estruturar descrição</Button></div></PrismaCard>
@@ -634,7 +635,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     && isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback) : [];
   return <PrismaPage className="prisma-vacancy-people-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}`)} type="text">Voltar para a Posição</Button>
-    <PrismaPageHeader title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="A trajetória e os requisitos são apresentados separadamente. O score organiza evidências, não decide contratação. Consulte cobertura e pendências antes de comparar." actions={<Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button>} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="A trajetória e os requisitos são apresentados separadamente. O score organiza evidências, não decide contratação. Consulte cobertura e pendências antes de comparar." actions={<Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Button onClick={() => setAttempt((value) => value + 1)}>Atualizar análise</Button>} /> : null}
     {interpreting && progress?.total ? <Alert showIcon type="info" title="Resultados internos disponíveis · interpretação em andamento" description={`${progress.completed} de ${progress.total} relações ocupacionais pendentes interpretadas. Cada Perfil é atualizado quando sua resposta chega; os demais resultados já podem ser consultados.`} /> : null}
     {!loading && fallbackNotice ? <Alert showIcon type="warning" title={fallbackNotice.title} description={fallbackNotice.description} action={fallbackNotice.canRefresh ? <Button onClick={() => setAttempt(value => value + 1)}>{fallbackNotice.actionLabel}</Button> : undefined} /> : null}
@@ -683,7 +684,7 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
   const fallbackNotice = semanticFallbackNotice(matches.flatMap(match => match.semanticFallback ? [match.semanticFallback] : []));
   return <PrismaPage className="prisma-vacancy-compare-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/people`)} type="text">Voltar aos resultados</Button>
-    <PrismaPageHeader title="Comparar pessoas" description={vacancy ? `Evidências para ${vacancy.title}. Interpretação versionada, sem decisão automática.` : "Aderência por requisito da Posição."} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Comparar pessoas" description={vacancy ? `Evidências para ${vacancy.title}. Interpretação versionada, sem decisão automática.` : "Aderência por requisito da Posição."} />
     {error ? <Alert showIcon title={error} type="error" action={<Button onClick={() => setAttempt((value) => value + 1)}>Atualizar comparação</Button>} /> : null}
     {!loading && fallbackNotice ? <Alert showIcon type="warning" title={fallbackNotice.title} description={fallbackNotice.description} action={fallbackNotice.canRefresh ? <Button onClick={() => setAttempt(value => value + 1)}>{fallbackNotice.actionLabel}</Button> : undefined} /> : null}
     {loading ? <PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard> : null}

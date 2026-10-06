@@ -1,0 +1,148 @@
+[
+  {
+    "scenario": "run",
+    "width": 1448,
+    "height": 1000,
+    "checks": [
+      {
+        "name": "initial errors before save",
+        "pass": true
+      },
+      {
+        "name": "summary link: Experiência 2 — Período",
+        "pass": true
+      },
+      {
+        "name": "second record red and focused",
+        "pass": true
+      },
+      {
+        "name": "accessible explanation",
+        "pass": true
+      },
+      {
+        "name": "correction removes error immediately",
+        "pass": true
+      },
+      {
+        "name": "source retained",
+        "pass": true
+      },
+      {
+        "name": "summary link: Experiência 3 — Período",
+        "pass": true
+      },
+      {
+        "name": "third record advisory and focused",
+        "pass": true
+      },
+      {
+        "name": "corrected warning disappears",
+        "pass": true
+      },
+      {
+        "name": "summary link: Formação 2 — Período",
+        "pass": true
+      },
+      {
+        "name": "education second selected",
+        "pass": true
+      },
+      {
+        "name": "summary link: Formação 3 — Período",
+        "pass": true
+      },
+      {
+        "name": "invalid secondary period remains correctible",
+        "pass": true
+      },
+      {
+        "name": "summary link: Telefone",
+        "pass": true
+      },
+      {
+        "name": "all objective errors disappear reactively",
+        "pass": true
+      },
+      {
+        "name": "no horizontal overflow",
+        "pass": true
+      }
+    ],
+    "pass": true,
+    "errors": []
+  },
+  {
+    "scenario": "run",
+    "width": 390,
+    "height": 1000,
+    "checks": [
+      {
+        "name": "initial errors before save",
+        "pass": true
+      },
+      {
+        "name": "summary link: Experiência 2 — Período",
+        "pass": true
+      },
+      {
+        "name": "second record red and focused",
+        "pass": true
+      },
+      {
+        "name": "accessible explanation",
+        "pass": true
+      },
+      {
+        "name": "correction removes error immediately",
+        "pass": true
+      },
+      {
+        "name": "source retained",
+        "pass": true
+      },
+      {
+        "name": "summary link: Experiência 3 — Período",
+        "pass": true
+      },
+      {
+        "name": "third record advisory and focused",
+        "pass": true
+      },
+      {
+        "name": "corrected warning disappears",
+        "pass": true
+      },
+      {
+        "name": "summary link: Formação 2 — Período",
+        "pass": true
+      },
+      {
+        "name": "education second selected",
+        "pass": true
+      },
+      {
+        "name": "summary link: Formação 3 — Período",
+        "pass": true
+      },
+      {
+        "name": "invalid secondary period remains correctible",
+        "pass": true
+      },
+      {
+        "name": "summary link: Telefone",
+        "pass": true
+      },
+      {
+        "name": "all objective errors disappear reactively",
+        "pass": true
+      },
+      {
+        "name": "no horizontal overflow",
+        "pass": true
+      }
+    ],
+    "pass": true,
+    "errors": []
+  }
+]

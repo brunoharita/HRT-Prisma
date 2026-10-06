@@ -1,3 +1,4 @@
+import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useMemo, useState } from "react";
@@ -65,7 +66,7 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
 
   return <PrismaPage className="prisma-profile-search-page">
     <Button className="prisma-profile-search-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>
-    <PrismaPageHeader title="Encontrar pessoas" description="Use os mesmos blocos do Perfil para encontrar as pessoas adequadas." />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Encontrar pessoas" description="Use os mesmos blocos do Perfil para encontrar as pessoas adequadas." />
     <PrismaCard
       className="prisma-profile-search-workspace"
       extra={activeFilterCount(query) ? <Tag color="blue">{activeFilterCount(query)} filtros ativos</Tag> : <Typography.Text type="secondary">Comece pelos critérios essenciais</Typography.Text>}

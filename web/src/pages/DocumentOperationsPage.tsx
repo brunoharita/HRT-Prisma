@@ -1,3 +1,4 @@
+import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useViewState } from "../ui/PrismaNavigation";
 import { useDeferredValue, useEffect, useState } from "react";
 import {
@@ -142,7 +143,7 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
 
   return (
     <PrismaPage className="prisma-m2c-page prisma-document-operations-page">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title={personId ? "Processamento e revisões da Pessoa" : "Processamento e revisões"}
         description={personId
           ? `${scopedPersonName ?? "Pessoa selecionada"}: acompanhe somente seus documentos, tentativas e revisões.`

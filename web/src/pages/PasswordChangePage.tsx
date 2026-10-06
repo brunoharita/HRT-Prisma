@@ -1,3 +1,4 @@
+import { LockFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useState } from "react";
 import { Alert, Button, Form, Input } from "antd";
@@ -63,7 +64,7 @@ export function PasswordChangePage({ currentOperator, onNavigate, onPasswordComp
 
   return (
     <PrismaPage>
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title="Trocar senha"
         description="Conclua o primeiro acesso para liberar a operação do Prisma."
       />

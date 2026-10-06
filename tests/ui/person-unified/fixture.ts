@@ -47,3 +47,27 @@ export const adapter={load:async()=>{calls.load++;return structuredClone(synthes
 export const curation:CompetencyCurationAdapter={canUseGlobal:false,loadSubgroups:async()=>[],search:async()=>[],suggestDescription:async()=>"",save:async()=>({projection,outcome:"alias"}),refresh:async()=>projection,classify:async()=>projection,loadEvidenceSources:async()=>[],linkEvidence:async()=>projection};
 export const ingestion={loadWorkspace:async(_org:string,_person:string,doc?:string)=>{calls.workspace++;if(scenario==="operations-failure")throw Error("private operation");return {...workspace,selectedDocument:workspace.documents.find(x=>x.id===doc)??workspace.selectedDocument};},listProfileVersions:async()=>{calls.versions++;return versions;},startProfileReview:async()=>{calls.review++;return "review-fixture";},startProfileVersionReview:async()=>{calls.review++;return "new-review";}};
 export const repository={loadPersonProfile:async()=>{calls.profile++;return {operationalStatus:workspace.person.operationalStatus,person:{id:"person-fixture",organizationId:"org-fixture",fullName:"Marina Costa",lifecycle:"candidate",createdAt:"2026-10-01T12:00:00Z",hasStructuredProfile:scenario!=="no-profile"},profile:scenario==="no-profile"?null:{...draft,...profileSummary,current:true,extractionVersion:"synthetic",inferenceVersion:"synthetic"},evidence:[],inferences:[],competencies:[],normalizedKnowledge:[],professionalEvidence:projection,professionalEvidenceError:null,privateContact:null};}};
+
+// Equivalent illustrative content for the approved option4 comparison; other scenarios are unchanged.
+if(scenario==="visual-option4") {
+ draft.areasOfExpertise=["Operações","Processos","Dados","Produtos digitais"];
+ draft.experiences=[
+  {...draft.experiences[0]!,organization:"Empresa Horizonte",description:"Operações e Processos."},
+  {...draft.experiences[1]!,role:"Coordenadora de Processos",organization:"Empresa Aurora",description:"Operações e Processos."},
+  {...draft.experiences[2]!,organization:"Grupo Norte",description:"Operações."},
+  {...draft.experiences[2]!,id:"fourth",organization:"Empresa Ponte",period:"Jan/2012 - Dez/2014",description:"Operações."}
+ ];
+ draft.education=[
+  {...draft.education[0]!,institution:"Instituto Alfa",period:"2020 - 2021"},
+  {...draft.education[1]!,qualification:"bachelor",level:"undergraduate",course:"Administração",institution:"Universidade Beta",period:"2012 - 2016"}
+ ];
+ workspace.documents=[{...doc1,filename:"Currículo de Marina Costa.pdf"}];
+ workspace.person.documentCount=1;workspace.person.pendingReviewCount=0;
+ workspace.person.latestDocument=workspace.documents[0]!;
+ workspace.draft=null;workspace.selectedDocument=workspace.documents[0]!;
+ analysis.overview=[
+  "Trajetória em operações e melhoria de processos, com atuação em empresas de serviços e produtos digitais.",
+  "As experiências publicadas descrevem coordenação de equipes, organização de rotinas e integração entre áreas.",
+  "A trajetória sugere conexão entre operação e transformação de processos. Consulte as fontes para avaliar o contexto."
+ ].map(statement);
+}

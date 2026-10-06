@@ -1,3 +1,4 @@
+import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
@@ -125,7 +126,7 @@ export function UsersPage({ onNavigate }: UsersPageProps) {
 
   return (
     <PrismaPage>
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title="Usuários"
         description="Gestão de operadores da plataforma dentro da autoridade efetiva do perfil atual."
         breadcrumbs={<Breadcrumb items={[{ title: "Usuários" }, { title: "Gestão" }]} />}

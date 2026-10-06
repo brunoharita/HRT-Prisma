@@ -1,5 +1,7 @@
 import { Component, useEffect, useState, type ReactNode } from "react";
-import { ApartmentOutlined, BankOutlined, BookOutlined, FileSearchOutlined, SolutionOutlined } from "@ant-design/icons";
+import { ApartmentOutlined, BankFilled, FileSearchOutlined } from "@ant-design/icons";
+import { PrismaBriefcaseIcon } from "../../ui/PrismaBriefcaseIcon";
+import { PrismaEducationIcon } from "../../ui/PrismaEducationIcon";
 import { Alert, Button, Drawer, Grid } from "antd";
 import { profileHighlights, type ProfileHighlight } from "../../domain/profileHighlights";
 import type { PrismaProfileView } from "../../domain/canonicalProfile";
@@ -11,7 +13,7 @@ class HighlightBoundary extends Component<{ title: string; onOriginal: () => voi
   override componentDidCatch() { console.error("PRISMA_HIGHLIGHT_RENDER_FAILED"); }
   override render() { return this.state.failed ? <article className="prisma-profile-highlight"><div><Alert type="warning" title={`Não foi possível apresentar ${this.props.title.toLocaleLowerCase("pt-BR")} agora.`} description="As demais informações continuam disponíveis." /><Button style={{ marginTop: 12 }} onClick={this.props.onOriginal}>Consultar Perfil completo</Button></div></article> : this.props.children; }
 }
-const icons = { areas: <ApartmentOutlined />, position: <SolutionOutlined />, education: <BookOutlined />, organizations: <BankOutlined /> };
+const icons = { areas: <ApartmentOutlined />, position: <PrismaBriefcaseIcon />, education: <PrismaEducationIcon />, organizations: <BankFilled /> };
 export function ProfileHighlightCards({ profile, showSources = false, onOriginal, today }: Props) {
   const [source, setSource] = useState<ProfileHighlight | null>(null);
   const screens = Grid.useBreakpoint();

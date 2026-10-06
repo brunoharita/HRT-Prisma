@@ -1,3 +1,4 @@
+import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useRef, useState } from "react";
@@ -178,7 +179,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
 
 function UploadScreen(props: { busy: boolean; error: string | null; fileList: UploadFile[]; progress: PdfProcessingProgress | null; onBack: () => void; onChange: (files: UploadFile[]) => void; onImport: () => void; readiness: ParserReadiness; onCheck: () => void }) {
   return <>
-    <PrismaPageHeader title="Importar currículo" description="Envie o currículo para iniciarmos a análise e a construção do Perfil Prisma." />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Importar currículo" description="Envie o currículo para iniciarmos a análise e a construção do Perfil Prisma." />
     <Button icon={<ArrowLeftOutlined />} onClick={props.onBack} type="text">Voltar para Pessoas</Button>
     <Steps className="prisma-m81-import-steps" current={0} size="small" responsive items={[
       { title: "Upload" }, { title: "Processamento" }, { title: "Revisão" }, { title: "Publicação" },
@@ -223,7 +224,7 @@ function IdentityScreen(props: { busy: boolean; error: string | null; identity: 
     if (await props.onIdentityReview(value)) setEditingIdentity(false);
   }
   return <>
-    <PrismaPageHeader title="Identificação da pessoa" description="Encontramos possíveis correspondências para este currículo." actions={<FileCard file={props.processed?.file ?? null} />} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Identificação da pessoa" description="Encontramos possíveis correspondências para este currículo." actions={<FileCard file={props.processed?.file ?? null} />} />
     <Button disabled={props.busy} icon={<ArrowLeftOutlined />} onClick={props.onBack} type="text">Voltar para importação</Button>
     {props.error ? <Alert showIcon title={props.error} type="error" action={<Button disabled={props.busy} onClick={() => setEditingIdentity(true)}>Conferir identificação</Button>} /> : null}
     <Alert description="Informações profissionais não são usadas para decidir identidade." showIcon title={state.message} type="info" />
@@ -253,7 +254,7 @@ export function ProcessingScreen({ busy, error, onBack, onWorkspace, onReplace, 
         ? <Button onClick={onWorkspace ?? onBack}>{onWorkspace ? "Abrir Central da Pessoa" : "Voltar para Pessoas"}</Button>
         : <Button onClick={onReplace}>Substituir arquivo</Button>;
   return <>
-    <PrismaPageHeader title="Processamento do documento" description="Acompanhe o processamento do currículo enviado." actions={<FileCard file={processed?.file ?? null} />} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Processamento do documento" description="Acompanhe o processamento do currículo enviado." actions={<FileCard file={processed?.file ?? null} />} />
     <Button disabled={busy} icon={<ArrowLeftOutlined />} onClick={onBack} type="text">Voltar para Pessoas</Button>
     <PrismaCard className="prisma-journey-processing-timeline"><Steps current={presentation.currentStep} status={presentation.status} items={[{ title: "Recebido" }, { title: "Extraindo texto" }, { title: "Estruturando" }, { title: "Revisão" }, { title: "Pronto" }]} responsive /></PrismaCard>
     {error ? <Alert className="prisma-import-processing-error" action={recoveryAction} description={onRetry ? "O documento foi preservado. Você pode repetir a etapa interrompida sem reenviar o currículo; nenhuma nova chamada à IA será iniciada nesta tela." : presentation.preservedMessage} showIcon title={error} type="error" /> : null}
@@ -268,7 +269,7 @@ function AnalysisScreen({ analysis, busy, error, onBack, onReview, processed, re
   const state = deriveResumeProductState({ documentStatus: document?.status ?? null, reviewState: document?.reviewState ?? null, latestAttempt: document?.latestAttempt ?? null, reviewAttempt: document?.reviewAttempt ?? null, profilePreserved: Boolean(analysis.person.currentProfile) });
   const detectedSections = draft ? [draft.summary, draft.experiences.length, draft.education.length, draft.competencies.length, draft.certifications.length, draft.languages.length].filter(Boolean).length : 0;
   return <>
-    <PrismaPageHeader title="Análise do documento" description="Resumo da análise automática do currículo." actions={<FileCard file={processed?.file ?? null} />} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Análise do documento" description="Resumo da análise automática do currículo." actions={<FileCard file={processed?.file ?? null} />} />
     <Button icon={<ArrowLeftOutlined />} onClick={onBack} type="text">Voltar para a Central da Pessoa</Button>
     {error ? <Alert showIcon title={error} type="error" action={<Button onClick={onReview}>Abrir revisão do documento</Button>} /> : null}{reused ? <Alert action={<Button onClick={onBack}>Abrir importação existente</Button>} showIcon title="Este documento já foi importado." type="info" /> : null}
     <div className="prisma-journey-analysis-grid"><PrismaCard title="Resumo da análise"><Descriptions column={1} size="small"><Descriptions.Item label="Páginas analisadas">{analysis.pages.length}</Descriptions.Item><Descriptions.Item label="Texto extraído">{analysis.pages.reduce((sum, page) => sum + page.usefulCharacterCount, 0)} caracteres úteis</Descriptions.Item><Descriptions.Item label="Método utilizado">{processingMethodLabel(processed)}</Descriptions.Item><Descriptions.Item label="Seções identificadas">{detectedSections}</Descriptions.Item><Descriptions.Item label="Sinais de experiência">{draft?.experiences.length ?? 0}</Descriptions.Item><Descriptions.Item label="Competências identificadas">{draft?.competencies.length ?? 0}</Descriptions.Item><Descriptions.Item label="Pontos que precisam revisão">{(draft?.uncertainties.length ?? 0) + (draft?.notIdentified.length ?? 0)}</Descriptions.Item></Descriptions></PrismaCard><PrismaCard title="Classificação do resultado"><Tag color={state.state === "requires_review" ? "gold" : "green"}>{state.label}</Tag><Typography.Paragraph>{state.message}</Typography.Paragraph><Typography.Text strong>Próximo passo</Typography.Text><Typography.Paragraph type="secondary">Revise e complemente as informações extraídas antes de publicar.</Typography.Paragraph><Button disabled={!state.reviewPossible} icon={<SafetyCertificateOutlined />} loading={busy} onClick={onReview} type="primary">Iniciar revisão</Button></PrismaCard></div>

@@ -1,3 +1,4 @@
+import { SafetyCertificateFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -120,7 +121,7 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
   if (error && !workspace) {
     return (
       <PrismaPage className="prisma-m51a-page">
-        <PrismaPageHeader title="Necessidades de verificação" description="Verificação recomendada por evidência e política." />
+        <PrismaPageHeader icon={<PrismaPageIcon />} title="Necessidades de verificação" description="Verificação recomendada por evidência e política." />
         <PrismaState kind="error" description="Não foi possível consultar as necessidades desta empresa. Volte ao acompanhamento de verificações para continuar." action={{ label: "Voltar para verificações", onClick: () => onNavigate("/verifications") }} />
         <PrismaDisclosure title="Detalhes do impedimento">{interfaceText(error)}</PrismaDisclosure>
       </PrismaPage>
@@ -131,7 +132,7 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
   if (!workspace || !selectedNeed) {
     return (
       <PrismaPage className="prisma-m51a-page">
-        <PrismaPageHeader title="Necessidades de verificação" description="Verificação recomendada por evidência e política." />
+        <PrismaPageHeader icon={<PrismaPageIcon />} title="Necessidades de verificação" description="Verificação recomendada por evidência e política." />
         <PrismaCard><PrismaState kind="unavailable" description="A necessidade solicitada não está disponível nesta empresa." action={{ label: "Ver necessidades disponíveis", onClick: () => onNavigate("/matching") }} /></PrismaCard>
       </PrismaPage>
     );
@@ -217,7 +218,7 @@ function renderMatching(needs: VerificationNeedView[], onNavigate: (path: string
   ];
   return (
     <PrismaPage className="prisma-m51a-page">
-      <PrismaPageHeader title="Necessidades de verificação" description="Requisitos com suficiência de evidência e necessidade de verificação." />
+      <PrismaPageHeader icon={<PrismaPageIcon />} title="Necessidades de verificação" description="Requisitos com suficiência de evidência e necessidade de verificação." />
       <PrismaCard className="prisma-m51a-profile-card">
         <div className="prisma-m51a-profile-context">
           <Typography.Title level={3}>Necessidades da empresa</Typography.Title>
@@ -251,7 +252,7 @@ function renderDetail(
 ) {
   return (
     <PrismaPage className="prisma-m51a-page">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title={`${need.competencyLabel} - ${labelLevel(need.targetLevel)}`}
         description="Detalhes da necessidade de verificação."
         actions={<Button icon={<FileProtectOutlined />} onClick={() => onNavigate(`/matching/verification-needs/${need.id}/prepare`)} type="primary">Preparar verificação</Button>}
@@ -304,7 +305,7 @@ function PrepareFlow(props: {
 }) {
   return (
     <PrismaPage className="prisma-m51a-page">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title="Preparar Verificação"
         description="Defina como a verificação será construída."
         actions={<Button icon={<ArrowLeftOutlined />} onClick={props.onBack}>Voltar para detalhes</Button>}

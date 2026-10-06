@@ -1,3 +1,4 @@
+import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import {
   CheckCircleOutlined,
@@ -135,7 +136,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
 
   return (
     <PrismaPage className="prisma-m2b-page prisma-people-page">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title="Pessoas"
         description="Gerencie as pessoas e acompanhe, separadamente, o Perfil atual e as importações recentes."
         actions={<Space wrap>

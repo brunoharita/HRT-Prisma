@@ -1,0 +1,701 @@
+[
+  {
+    "area": "/",
+    "width": 768,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "factualMetrics": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 64,
+      "values": [
+        {
+          "text": "24",
+          "size": 32
+        },
+        {
+          "text": "6",
+          "size": 32
+        },
+        {
+          "text": "18",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/profiles",
+    "width": 768,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "actionWorks": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 64,
+      "values": [
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies",
+    "width": 768,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies/new",
+    "width": 768,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/knowledge",
+    "width": 768,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/settings",
+    "width": 768,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "tabWorks": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/",
+    "width": 320,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "factualMetrics": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": [
+        {
+          "text": "24",
+          "size": 32
+        },
+        {
+          "text": "6",
+          "size": 32
+        },
+        {
+          "text": "18",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/profiles",
+    "width": 320,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "actionWorks": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": [
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies",
+    "width": 320,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies/new",
+    "width": 320,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/knowledge",
+    "width": 320,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/settings",
+    "width": 320,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "tabWorks": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/",
+    "width": 1516,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "factualMetrics": true,
+      "metricHierarchy": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 36,
+      "iconWidth": 64,
+      "values": [
+        {
+          "text": "24",
+          "size": 32
+        },
+        {
+          "text": "6",
+          "size": 32
+        },
+        {
+          "text": "18",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/profiles",
+    "width": 1516,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "actionWorks": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 36,
+      "iconWidth": 64,
+      "values": [
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies",
+    "width": 1516,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 36,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies/new",
+    "width": 1516,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 36,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/knowledge",
+    "width": 1516,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 36,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/settings",
+    "width": 1516,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "tabWorks": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 36,
+      "iconWidth": 64,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/",
+    "width": 390,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "factualMetrics": true,
+      "metricHierarchy": true,
+      "mobileMenu": true,
+      "menuEscape": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": [
+        {
+          "text": "24",
+          "size": 32
+        },
+        {
+          "text": "6",
+          "size": 32
+        },
+        {
+          "text": "18",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/profiles",
+    "width": 390,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "actionWorks": true,
+      "mobileMenu": true,
+      "menuEscape": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": [
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "1",
+          "size": 32
+        },
+        {
+          "text": "0",
+          "size": 32
+        }
+      ]
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies",
+    "width": 390,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "mobileMenu": true,
+      "menuEscape": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/vacancies/new",
+    "width": 390,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "mobileMenu": true,
+      "menuEscape": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/knowledge",
+    "width": 390,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "mobileMenu": true,
+      "menuEscape": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "/settings",
+    "width": 390,
+    "checks": {
+      "noRuntimeErrors": true,
+      "noExternalCalls": true,
+      "noHorizontalOverflow": true,
+      "pageTitleAtLeast30": true,
+      "substantialPageIcon": true,
+      "tabWorks": true,
+      "mobileMenu": true,
+      "menuEscape": true
+    },
+    "measures": {
+      "overflow": false,
+      "titleSize": 30,
+      "iconWidth": 56,
+      "values": []
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "area": "person",
+    "width": 1516,
+    "checks": {
+      "tonalCards": true,
+      "icon56": true,
+      "icon32": true,
+      "primaryValue25": true,
+      "label14": true,
+      "hierarchy": true,
+      "radius16": true,
+      "noOverflow": true,
+      "contentPreserved": true
+    },
+    "measures": {
+      "background": "rgb(237, 244, 255)",
+      "iconWidth": 56,
+      "iconHeight": 56,
+      "iconSize": 32,
+      "valueSize": 25,
+      "labelSize": 14,
+      "radius": "16px",
+      "overflow": false,
+      "cards": 4,
+      "axes": 8
+    }
+  },
+  {
+    "area": "person",
+    "width": 390,
+    "checks": {
+      "tonalCards": true,
+      "icon56": true,
+      "icon32": true,
+      "primaryValue25": true,
+      "label14": true,
+      "hierarchy": true,
+      "radius16": true,
+      "noOverflow": true,
+      "contentPreserved": true
+    },
+    "measures": {
+      "background": "rgb(237, 244, 255)",
+      "iconWidth": 56,
+      "iconHeight": 56,
+      "iconSize": 32,
+      "valueSize": 25,
+      "labelSize": 14,
+      "radius": "16px",
+      "overflow": false,
+      "cards": 4,
+      "axes": 8
+    }
+  },
+  {
+    "area": "person",
+    "width": 320,
+    "checks": {
+      "tonalCards": true,
+      "icon56": true,
+      "icon32": true,
+      "primaryValue25": true,
+      "label14": true,
+      "hierarchy": true,
+      "radius16": true,
+      "noOverflow": true,
+      "contentPreserved": true
+    },
+    "measures": {
+      "background": "rgb(237, 244, 255)",
+      "iconWidth": 56,
+      "iconHeight": 56,
+      "iconSize": 32,
+      "valueSize": 25,
+      "labelSize": 14,
+      "radius": "16px",
+      "overflow": false,
+      "cards": 4,
+      "axes": 8
+    }
+  }
+]

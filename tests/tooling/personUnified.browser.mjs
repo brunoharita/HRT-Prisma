@@ -5,7 +5,7 @@ import {mkdir,writeFile} from "node:fs/promises";
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH ?? "playwright");
 const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
 const url=process.env.PRISMA_PERSON_QA_URL ?? "http://127.0.0.1:5586/person-unified.html";
-const evidence="docs/qa/evidence/person-unified-v210";
+const evidence=process.env.PRISMA_PERSON_QA_EVIDENCE ?? "docs/qa/evidence/person-unified-v210";
 await mkdir(evidence,{recursive:true});
 const reports=[];
 try {

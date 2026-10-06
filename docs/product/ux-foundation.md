@@ -1,6 +1,14 @@
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.2.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0 e `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0. Fontes: decisões de Bruno em 2026-09-13 e 2026-09-18. A versão 1.2.0 preserva a base anterior, restringe a autonomia visual quando existe uma referência normativa e consolida a arquitetura institucional da sidebar.
+Contrato de apresentação: `prisma-ux-foundation-1.3.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+
+## Hierarquia e iconografia v2.1.1
+
+Títulos de página30–36px, seções20–24px, fatos principais24–26px, leitura16px, rótulos14–15px e metadados14px. Ícones de área32–36px em suporte56–64px; destaques32px em56px. Controles mantêm escala e foco próprios. Metadados compactos e selos auxiliares podem usar13px, sem promover instrução essencial a texto minúsculo.
+
+Cards de destaques usam fundo azul-claro #edf4ff, borda #b9d2ff, suporte de ícone #dceaff, acento #155eef e cantos16px. Conteúdo e superfícies de leitura permanecem claros; peso tipográfico e separação distinguem fato, complemento e origem. Não aplicar tonalidade a todos os painéis indistintamente. Ícones semânticos reutilizam Ant Design; capelo e maleta SVG simples seguem currentColor e ficam ocultos de leitores de tela quando acompanham rótulo textual.
+
+Pessoa mantém seis abas, leitura72/28, quatro destaques em desktop,2x2 intermediário/uma coluna no celular, síntese e oito análises integrais, fontes opcionais e estados reais. Dados ilustrativos da imagem não substituem fatos/cálculos do Perfil. Home, Pessoas, Posições, Conhecimento, Verificações e Administração compartilham cabeçalhos, cartões e escala. Nenhuma faixa escura da opção2 foi aprovada neste movimento.
 
 ## Organização e jornadas
 

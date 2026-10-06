@@ -1,3 +1,4 @@
+import { IdcardFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -97,11 +98,11 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
   }
 
   if (loading) return <PrismaPage><PrismaState kind="loading" /></PrismaPage>;
-  if (personId && !person) return <PrismaPage><PrismaPageHeader title="Pessoa indisponível" /><PrismaState kind="unavailable" description={error ?? "Esta pessoa não está disponível nesta empresa."} action={{ label: "Voltar para Pessoas", onClick: () => onNavigate("/profiles") }} /></PrismaPage>;
+  if (personId && !person) return <PrismaPage><PrismaPageHeader icon={<PrismaPageIcon />} title="Pessoa indisponível" /><PrismaState kind="unavailable" description={error ?? "Esta pessoa não está disponível nesta empresa."} action={{ label: "Voltar para Pessoas", onClick: () => onNavigate("/profiles") }} /></PrismaPage>;
 
   return (
     <PrismaPage className="prisma-m2b-page">
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title={personId ? "Editar Pessoa" : "Nova Pessoa"}
         description="Cadastre os dados básicos para organizar as informações e acompanhar o perfil profissional."
         actions={<Button icon={<SaveOutlined />} loading={saving} onClick={() => form.submit()} type="primary">Salvar</Button>}

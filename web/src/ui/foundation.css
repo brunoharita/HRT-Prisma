@@ -132,3 +132,72 @@ body { background: var(--prisma-canvas); }
 @container (max-width: 480px) { .prisma-people-filters { grid-template-columns: minmax(0, 1fr); } }
 
 .prisma-public-brand h1 { margin: 0; color: white; font-size: 15px; font-weight: 500; line-height: 1.4; }
+
+/* Prisma v2.1.1 — approved option4: expressive anchors, calm reading surfaces. */
+:root {
+  --prisma-highlight: #edf4ff;
+  --prisma-highlight-border: #b9d2ff;
+  --prisma-icon-surface: #dceaff;
+}
+.prisma-page-heading:has(.prisma-page-icon) { display: grid; grid-template-columns: 64px minmax(0, 1fr); column-gap: 18px; align-content: start; align-items: center; }
+.prisma-page-heading:has(.prisma-page-icon) h1 { grid-column: 2; margin: 0; }
+.prisma-page-heading:has(.prisma-page-icon) p { grid-column: 2; margin: 6px 0 0; }
+.prisma-page-heading h1 { font-size: clamp(30px, 2.4vw, 36px); font-weight: 750; line-height: 1.18; }
+.prisma-page-icon { grid-column: 1; grid-row: 1 / span 2; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 18px; background: var(--prisma-icon-surface); color: #155eef; font-size: 36px; }
+.prisma-card .ant-card-head-title { font-size: 20px; font-weight: 700; line-height: 1.4; }
+.prisma-card .ant-card-head { min-height: 64px; border-bottom-color: #e2e8f2; }
+.prisma-card .ant-card-body { line-height: 1.65; }
+.prisma-status-card.ant-card, .prisma-people-metric.ant-card { position: relative; background: var(--prisma-highlight); border: 1px solid var(--prisma-highlight-border); border-radius: 16px; box-shadow: none; }
+.prisma-status-card::before, .prisma-people-metric::before { content: ""; position: absolute; left: 20px; top: -1px; width: 64px; height: 4px; background: #155eef; border-radius: 0 0 4px 4px; }
+.prisma-status-card .ant-statistic-title, .prisma-metric .ant-statistic-title, .prisma-m81-home .prisma-status-card .ant-statistic-title { color: #455d80; font-size: 15px; font-weight: 600; line-height: 1.5; }
+.prisma-status-card .ant-statistic-content, .prisma-metric .ant-statistic-content, .prisma-m81-home .prisma-status-card .ant-statistic-content { color: #031531; font-size: 32px; font-weight: 750; line-height: 1.25; }
+.prisma-status-card .ant-statistic-content-prefix { display: inline-grid; place-items: center; width: 56px; height: 56px; margin-right: 14px; border-radius: 50%; color: #155eef; background: var(--prisma-icon-surface); font-size: 32px; vertical-align: middle; }
+.prisma-m81-home .prisma-status-card .ant-statistic-content-prefix { color: #155eef; }
+.prisma-status-card .ant-typography, .prisma-m81-home .prisma-status-card .ant-typography { color: #455d80; font-size: 14px; }
+.prisma-people-metric-icon { width: 56px; height: 56px; flex: 0 0 56px; border-radius: 50%; font-size: 32px; color: #155eef; background: var(--prisma-icon-surface); }
+.prisma-route-icon { width: 56px; height: 56px; flex: 0 0 56px; font-size: 30px; border-radius: 14px; color: #155eef; background: var(--prisma-icon-surface); }
+.prisma-route-link strong { font-size: 18px; }
+.prisma-route-link small { font-size: 14px; line-height: 1.6; }
+.prisma-start-choice { background: var(--prisma-highlight); border-color: var(--prisma-highlight-border); padding: 22px; border-radius: 16px; }
+.prisma-start-choice-heading strong, .prisma-start-assist-choice strong { font-size: 18px; }
+.prisma-start-choice-heading small, .prisma-start-assist-choice span { font-size: 14px; }
+.prisma-start-choice-number { width: 40px; height: 40px; flex-basis: 40px; font-size: 18px; background: var(--prisma-icon-surface); }
+.prisma-profile-highlight, .prisma-person-reading-main .prisma-profile-highlight { position: relative; display: block; background: var(--prisma-highlight); border: 1px solid var(--prisma-highlight-border); border-radius: 16px; padding: 22px 20px; }
+.prisma-profile-highlight::before { content: ""; position: absolute; left: 20px; top: -1px; width: 64px; height: 4px; background: #155eef; border-radius: 0 0 4px 4px; }
+.prisma-profile-highlight-icon, .prisma-person-reading-main .prisma-profile-highlight-icon { float: left; display: grid; place-items: center; width: 56px; height: 56px; margin: 0 14px 18px 0; border-radius: 50%; background: var(--prisma-icon-surface); color: #155eef; font-size: 32px; }
+.prisma-profile-highlight h3, .prisma-person-reading-main .prisma-profile-highlight h3 { display: flex; align-items: center; min-height: 56px; margin: 0 0 18px; font-size: 14px; font-weight: 600; line-height: 1.5; color: #455d80; }
+.prisma-profile-highlight-values { clear: both; gap: 18px; }
+.prisma-profile-highlight-values strong, .prisma-profile-highlight-headline, .prisma-person-reading-main .prisma-profile-highlight-values strong, .prisma-person-reading-main .prisma-profile-highlight-headline { font-size: 25px; font-weight: 750; color: #031531; line-height: 1.3; margin: 0 0 8px; }
+.prisma-profile-highlight.has-headline .prisma-profile-highlight-values strong, .prisma-person-reading-main .prisma-profile-highlight.has-headline .prisma-profile-highlight-values strong { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.prisma-profile-highlight-values p, .prisma-profile-highlight-secondary-values p { font-size: 14px; line-height: 1.65; color: #455d80; }
+.prisma-profile-highlight-secondary { clear: both; border-color: #c6d9f6; padding-top: 18px; margin-top: 22px; }
+.prisma-profile-highlight-secondary h4 { font-size: 14px; font-weight: 600; color: #455d80; }
+.prisma-profile-highlight-secondary-values strong { font-size: 16px; font-weight: 600; }
+.prisma-profile-highlight-note, .prisma-profile-highlight-empty, .prisma-profile-highlight-source.ant-btn { font-size: 14px; line-height: 1.65; color: #455d80; }
+.prisma-profile-highlight-source.ant-btn { color: #155eef; }
+.prisma-person-reading-main { border-radius: 16px; }
+.prisma-synthesis-heading h2, .prisma-synthesis-analysis-heading h2 { font-size: 24px; font-weight: 750; color: #031531; }
+.prisma-synthesis-narrative { border-radius: 16px; border-left-width: 1px; font-size: 16px; line-height: 1.8; }
+.prisma-synthesis-narrative h3 { font-size: 22px; font-weight: 700; color: #031531; }
+.prisma-synthesis-narrative h3 .anticon { font-size: 30px; }
+.prisma-synthesis-narrative-heading h3 small, .prisma-synthesis-provenance, .prisma-person-profile-version { font-size: 14px; color: #53637d; }
+.prisma-synthesis-interpretation, .prisma-synthesis-origin-action.ant-btn, .prisma-synthesis-source-note { font-size: 13px; }
+.prisma-synthesis-axis-title, .prisma-person-reading-main .prisma-synthesis-axis-title { font-size: 19px; font-weight: 700; line-height: 1.4; }
+.prisma-synthesis-axis-title > span, .prisma-person-reading-main .prisma-synthesis-axis-title > span { display: grid; place-items: center; flex: 0 0 48px; width: 48px; height: 48px; border-radius: 50%; background: var(--prisma-icon-surface); color: #155eef; font-size: 28px; }
+.prisma-synthesis-axis-card.ant-card { border-radius: 16px; }
+.prisma-person-reading-main .prisma-synthesis-axis-card .ant-card-head { padding: 18px; }
+.prisma-person-reading-rail .ant-card-head-title { font-size: 19px; }
+.prisma-person-rail-pending { border-radius: 16px; }
+.prisma-person-rail-pending h3 { font-size: 20px; }
+.prisma-person-evidence-strip b { font-size: 26px; }
+.prisma-person-evidence-strip span { font-size: 14px; }
+.prisma-person-center-header__identity h1 { font-size: clamp(30px, 2.4vw, 36px); font-weight: 750; line-height: 1.2; }
+.prisma-navigation .ant-menu-item .ant-menu-item-icon { font-size: 22px; }
+@media (max-width: 767px) {
+  .prisma-page-icon { width: 56px; height: 56px; font-size: 32px; border-radius: 16px; }
+  .prisma-page-heading:has(.prisma-page-icon) { grid-template-columns: 56px minmax(0, 1fr); gap: 6px 14px; }
+  .prisma-page-heading:has(.prisma-page-icon) p { grid-column: 1 / -1; }
+  .prisma-page-heading h1, .prisma-person-center-header__identity h1 { font-size: 30px; }
+  .prisma-profile-highlight, .prisma-person-reading-main .prisma-profile-highlight { padding: 22px 20px; }
+  .prisma-synthesis-axis-title, .prisma-person-reading-main .prisma-synthesis-axis-title { font-size: 18px; }
+}

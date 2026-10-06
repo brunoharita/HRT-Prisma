@@ -1,3 +1,4 @@
+import { BulbFilled as PrismaPageIcon } from "@ant-design/icons";
 import { actionableMessageError } from "../ui/ActionableMessage";
 import { focusNoticeTarget } from "../ui/noticeActions";
 import { useViewState } from "../ui/PrismaNavigation";
@@ -84,7 +85,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   ];
 
   return <PrismaPage>
-    <PrismaPageHeader title="Conhecimento" description={isGlobal ? "Consulte a base de conhecimento, revise propostas e acompanhe fontes e atualizações." : "Organize o conhecimento da empresa a partir da base Prisma e acompanhe suas contribuições."}
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Conhecimento" description={isGlobal ? "Consulte a base de conhecimento, revise propostas e acompanhe fontes e atualizações." : "Organize o conhecimento da empresa a partir da base Prisma e acompanhe suas contribuições."}
       actions={<Button icon={<ReloadOutlined />} loading={loading} onClick={() => void load()}>Atualizar</Button>} />
     {error ? <Alert message={error} type="error" showIcon closable onClose={() => setError(null)} action={<Button onClick={() => void load()}>Atualizar consulta</Button>} /> : null}
     <PrismaCard><Tabs activeKey={activeTab} onChange={setActiveTab} items={tabs} /></PrismaCard>

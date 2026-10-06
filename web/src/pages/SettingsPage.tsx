@@ -1,3 +1,4 @@
+import { SettingFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Alert, Button, Empty, Tabs, Tag, Typography } from "antd";
 import { DatabaseOutlined, SettingOutlined } from "@ant-design/icons";
@@ -27,7 +28,7 @@ export function SettingsPage({ organizationId }: { organizationId: string | null
   }, [organizationId, retry]);
 
   return <PrismaPage className="prisma-m81-settings">
-    <PrismaPageHeader title="Configurações" description="Gerencie taxonomias e parâmetros do sistema." />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Configurações" description="Gerencie taxonomias e parâmetros do sistema." />
     <Tabs defaultActiveKey="competencies" items={[
       { key: "general", label: "Geral", children: <Empty description="Configurações gerais ainda não estão disponíveis nesta área." /> },
       { key: "competencies", label: "Competências", children: <>

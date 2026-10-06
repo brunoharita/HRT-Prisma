@@ -1,3 +1,4 @@
+import { IdcardFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -266,7 +267,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
 
   return (
     <PrismaPage>
-      <PrismaPageHeader
+      <PrismaPageHeader icon={<PrismaPageIcon />}
         title={mode === "create" ? "Novo usuário" : "Editar usuário"}
         description="Cadastre um operador do Prisma. Usuário e Pessoa são registros distintos."
         breadcrumbs={(
