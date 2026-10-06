@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 354
-source_manifest_sha256: 37a5cf9b647d73fd9eb1f529e7db8d347f32b3879959654cc4c8f46182a2e795
+source_manifest_sha256: 564d5c0ae720487c5e87ceae2aa64457a46c57fdc6199ef12bd476fae5709d27
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-05
 
 ## Vínculo múltiplo de evidências v2.0.9
 
-Prisma v2.0.9 registra a melhoria autorizada por Bruno em05/10/2026: selecionar uma ou mais fontes do Perfil publicado sem justificativa; trechos/credenciais separados, confirmação humana, gravação atômica pelo wrapper `link_person_competency_evidence_batch_v2` sobre RPC unitário preservado. Tenant/role/Perfil/conceito/fonte e auditoria continuam obrigatórios; motivo é somente confirmação factual no servidor, sem rationale fabricado. Replay mantém decisão anterior, falha mantém edição e não grava subset.10fluxos sintéticos1416/390 e15checks SQL local rollback,5testes registry/types/build PASS; contexto/CI/publicação em fechamento. Validação focada, nenhuma suíte completa local, teste mutacional de Pessoa real ou IA. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.
+Prisma v2.0.9 registra a melhoria autorizada por Bruno em05/10/2026: selecionar uma ou mais fontes do Perfil publicado sem justificativa; trechos/credenciais separados, confirmação humana, gravação atômica pelo wrapper `link_person_competency_evidence_batch_v2` sobre RPC unitário preservado. Tenant/role/Perfil/conceito/fonte e auditoria continuam obrigatórios; motivo é somente confirmação factual no servidor, sem rationale fabricado. Replay mantém decisão anterior, falha mantém edição e não grava subset.10fluxos sintéticos1416/390 e15checks SQL local rollback,5testes registry/types/build PASS; contextos/lint/foundation PASS. SHA funcional83869c676cde721b438ea94857eca1273f17fa69 publicado; CI branch37404841333/main37404931808 success. Migration remota20261006023840 ativa antes da web, grants/guard/RPC legado/trigger preservados, ledger alias exato. VPS web08ce658 running0/entryindex-Beiv2NZm.js, HTTP200 rotas/assets novos e antigos após estabilização404semrebuild; rollbackf22a01f retido. Worker8526717/Parser8682af7 healthy0/gatewayd061cea running0 preservados. Sincronização main/local/origin/VPS; fechamento documental/ledger sem rebuild. Jornada autenticada real NOT TESTED. Validação focada, nenhuma suíte completa local, teste mutacional de Pessoa real ou IA. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.
 
 ## Leitura limpa do Resumo v2.0.8
 
@@ -5718,6 +5718,10 @@ A premissa explícita de 05/10/2026 avança resultado para `profile-synthesis-1.
 ## Leitura limpa do Resumo v2.0.8
 
 Decisão explícita de Bruno em05/10/2026: publicar2.0.8, preservando conteúdo e fontes persistidas1.1.0. A entrega aceita é registrada uma vez; a numeração7 é explicitamente pulada com `skippedDeliveryNumbers:[7]`, sem inventar entrega2.0.7. A versão continua derivada: quantidade de entregas aceitas mais números pulados. Novas entregas incrementam normalmente; movimentos históricos sem números pulados usam a contagem original. Registro valida números inteiros positivos/únicos/anteriores à versão atual e não altera versões contratuais/backend. Login/sidebar usam o mesmo registro central. Acordo/AoT `agreement-profile-summary-clean-v208.md` e `aot-profile-summary-clean-v208.md`.
+
+## Vínculos múltiplos v2.0.9
+
+Entrega explicitamente aprovada por Bruno em05/10/2026: uma ou mais fontes selecionadas para uma competência, sem justificativa obrigatória. Registro central deriva2.0.9 pelo próximo incremento normal (salto7 existente preservado). RPC `link_person_competency_evidence_batch_v2` é aditivo; operação unitária/schema/projeção permanecem compatíveis, seleção gravada atomicamente com auditoria factual no servidor. Backend antes da web, rollback da web compatível com o RPC legado. Acordo/AoT `agreement-evidence-multiselect-v209.md`/`aot-evidence-multiselect-v209.md`.
 
 ---
 
@@ -15397,7 +15401,7 @@ Acordo `agreement-evidence-multiselect-v209.md` v1.0.0. Baseline bbe6c5d; mapa/C
 | D-01 | Select múltiplo, trechos por registro e credenciais preservadas |10fluxosUI:1/2seleções, remoção, falha, credencial1416/390; gravação/projeção atualizada | PASS |
 | D-02 | Sem campo/input de justificativa, servidor registra somente confirmação/autor/data |UI ausência e payload sem reason; SQL confirma gravação, motivo histórico preservado | PASS |
 | D-03/P-01 | Uma transação, funções legadas/fontes/autoridade reutilizadas, lock UI sem escolha prévia |SQL local rollback:1/2, replay, segunda fonte inválida reverte, fonte/conceito/tenant/member/anon negados, credenciais; UI doubleclick1chamada/erro preserva edição | PASS |
-| D-04 | Registry2.0.9, release seletivo |5testes registry/types/build PASS; Context/CI/migration/web/smoke em fechamento | PARTIAL |
+| D-04 | Registry2.0.9, release seletivo |5testes registry/types/build/contextos/lint/foundation PASS; CI branch37404841333/main37404931808 PASS; migration20261006023840/web/HTTP/rollback emruntime.json | PASS |
 
 ## Preservação e limites
 
@@ -15406,6 +15410,16 @@ Nenhuma suíte integral local. Somente tipos/build,5testes registry,10fluxos de 
 Conferência visual das capturas `evidence/evidence-multiselect-v209/multiple-1416.png` e `multiple-390.png` realizada. Imagem enviada pelo usuário é contraexemplo de cardinalidade/justificativa; mesma topologia preservada: competência-alvo e seleção no topo, trechos abaixo, confirmação/cancelamento no rodapé. Modal agora640px e blocos factuais separados, ajuste necessário à multiplicidade; sem redesign de navegação/Perfil. Texto das opções abreviado pelo Select no celular, com nome integral visível em cada bloco abaixo. Dados sintéticos não usam Pessoa real da imagem.
 
 Funções de projeção/trigger/síntese/curadoria não foram substituídas; RPC legado preservado. Nenhum library/model/prompt/Parser/matching/backfill novo. Obrigatoriedade de nome/emissor de credenciais permanece factual. Erro mantém seleção e trechos; cliente não declara gravação quando o RPC falha. Arquivos alheios não incorporados. Registro da publicação e rollback abaixo.
+
+## Publicação e sincronização
+
+SHA funcional `83869c676cde721b438ea94857eca1273f17fa69`, CI branch37404841333/main37404931808 success. Plano seletivo: uma migration e web, sem Edge/worker/Parser. Migration aditiva `competency_evidence_batch`, remota20261006023840 no Prisma ioldpnqqvobprjiontre, aplicada antes da web; anon/INSERT direto negados, authenticated permitido sob require_knowledge_admin, RPC legado e trigger síntese preservados. Ledger registra alias exato sem reparar divergências históricas; cliDbPushAllowed=false. Nenhuma Pessoa real foi usada para testar gravação.
+
+Web `08ce658e93da605dcb6b03f3393d4856ca0807379cdfdac59c6c483d1c879511`, running0/entryindex-Beiv2NZm.js, SHA/entrega2.0.9/RPCbatch/lista múltipla/ausência da justificativa conferidos no bundle. Rotas `/`, `/login`, `/people`, assets novos e anterioresindex-B1nbqs-I.js/index-Bx4s26MG.js HTTP200.404 imediato durante recriação estabilizou sem rebuild. Rollback antes de83869c676cde retém webf22a01f; rollback da web pode reutilizar o RPC legado sem retirar dados/migration. Worker8526717/Parser8682af7 healthy0/gatewayd061cea running0 e imagens preservadas. Evidência `evidence/evidence-multiselect-v209/runtime.json`.
+
+Contextos gerados em snapshot dos arquivos autorizados (875files no gate inicial), checker/lint/foundation PASS. Suite completa local não executada; CI obrigatório do repositório executou seus gates automaticamente. Dez fluxos finais de tela e15checks SQL PASS; ajustes de seletores da fixture para navegação nativa e Select Ant Design atual foram corrigidos, sem alterar o produto para acomodar teste. Nenhum diagnóstico temporário no produto. Servidor/navegador QA próprios encerrados; PostgreSQL previamente ativo preservado.
+
+D-01..04/P-01 PASS, sem desvio material. Jornada autenticada hospedada real NOT TESTED; fixture UI + PostgreSQL local não a substituem. Sem chamada real de IA. Complemento documental/ledger pertence ao mesmo movimento, sincronizado em main/VPS sem reconstruir a aplicação.
 
 ---
 

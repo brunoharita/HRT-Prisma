@@ -281,3 +281,7 @@ A premissa explícita de 05/10/2026 avança resultado para `profile-synthesis-1.
 ## Leitura limpa do Resumo v2.0.8
 
 Decisão explícita de Bruno em05/10/2026: publicar2.0.8, preservando conteúdo e fontes persistidas1.1.0. A entrega aceita é registrada uma vez; a numeração7 é explicitamente pulada com `skippedDeliveryNumbers:[7]`, sem inventar entrega2.0.7. A versão continua derivada: quantidade de entregas aceitas mais números pulados. Novas entregas incrementam normalmente; movimentos históricos sem números pulados usam a contagem original. Registro valida números inteiros positivos/únicos/anteriores à versão atual e não altera versões contratuais/backend. Login/sidebar usam o mesmo registro central. Acordo/AoT `agreement-profile-summary-clean-v208.md` e `aot-profile-summary-clean-v208.md`.
+
+## Vínculos múltiplos v2.0.9
+
+Entrega explicitamente aprovada por Bruno em05/10/2026: uma ou mais fontes selecionadas para uma competência, sem justificativa obrigatória. Registro central deriva2.0.9 pelo próximo incremento normal (salto7 existente preservado). RPC `link_person_competency_evidence_batch_v2` é aditivo; operação unitária/schema/projeção permanecem compatíveis, seleção gravada atomicamente com auditoria factual no servidor. Backend antes da web, rollback da web compatível com o RPC legado. Acordo/AoT `agreement-evidence-multiselect-v209.md`/`aot-evidence-multiselect-v209.md`.

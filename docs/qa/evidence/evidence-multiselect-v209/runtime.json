@@ -1,0 +1,78 @@
+{
+  "recorded_at_utc": "2026-10-05T23:39:57.904089-03:00",
+  "version": "2.0.9",
+  "deployed_sha": "83869c676cde721b438ea94857eca1273f17fa69",
+  "entry": "/assets/index-Beiv2NZm.js",
+  "containers": {
+    "prisma-web": {
+      "image": "sha256:08ce658e93da605dcb6b03f3393d4856ca0807379cdfdac59c6c483d1c879511",
+      "state": "running",
+      "health": null,
+      "restarts": 0
+    },
+    "prisma-profile-synthesis": {
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "state": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    "prisma-parser-ia": {
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "state": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    "prisma-paddle-gateway": {
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "state": "running",
+      "health": null,
+      "restarts": 0
+    }
+  },
+  "rollback_web": "sha256:f22a01f8f955488947625614395c946664a44abb20a303ba0d09e778695e84c9",
+  "http": {
+    "/": 200,
+    "/login": 200,
+    "/people": 200,
+    "/assets/index-Beiv2NZm.js": 200,
+    "/assets/antd-vendor-B5BXDqMa.css": 200,
+    "/assets/index-DnkjVj4R.css": 200,
+    "/assets/index-B1nbqs-I.js": 200,
+    "/assets/index-Bx4s26MG.js": 200
+  },
+  "bundle_checks": {
+    "commit_embedded": true,
+    "version_delivery": true,
+    "summary_preserved": true,
+    "batch_rpc": true,
+    "multiple_label": true,
+    "rationale_removed": true,
+    "skip_number_supported": true
+  },
+  "authenticated_person_flow": "NOT TESTED",
+  "live_llm_generation": "NOT TESTED",
+  "status": "PASS",
+  "database": {
+    "project": "ioldpnqqvobprjiontre",
+    "migration": "20261006023840",
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "direct_insert": false,
+    "legacy_preserved": true,
+    "role_guard": true,
+    "synthesis_trigger": 1
+  },
+  "ci": {
+    "branch_run": 37404841333,
+    "main_run": 37404931808,
+    "conclusion": "success"
+  },
+  "local_checks": {
+    "ui_flows": 10,
+    "sql_checks": 15,
+    "registry_tests": 5,
+    "all_passed": true,
+    "sql_rollback": true,
+    "full_local_suite": false
+  }
+}

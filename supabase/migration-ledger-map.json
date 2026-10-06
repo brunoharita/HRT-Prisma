@@ -1312,6 +1312,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-05"
+    },
+    {
+      "name": "competency_evidence_batch",
+      "localVersion": "20261006023000",
+      "remoteVersion": "20261006023840",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-06"
     }
   ],
   "localOnly": [
