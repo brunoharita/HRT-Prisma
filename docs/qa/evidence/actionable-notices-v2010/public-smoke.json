@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-06T04:14:10.373Z",
+  "sha": "42308e72e49ffcc28af632a7700a3c5451137f4e",
+  "entry": "/assets/index-DxCL2PFY.js",
+  "checks": {
+    "deployedSha": true,
+    "release": true,
+    "classificationAction": true,
+    "pendingProblem": true,
+    "batchPreserved": true,
+    "sourcesOnDemand": true
+  },
+  "http": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "path": "/people",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DxCL2PFY.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-CXZT2PR9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DnkjVj4R.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-Beiv2NZm.js",
+      "status": 200
+    }
+  ],
+  "pass": true,
+  "limitation": "Public smoke; no authenticated real-Person mutation or AI call."
+}
