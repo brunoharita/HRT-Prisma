@@ -1,0 +1,353 @@
+{
+  "at": "2026-10-06T17:37:23.479Z",
+  "synthetic": true,
+  "pass": true,
+  "reports": [
+    {
+      "scenario": "cards-executive",
+      "width": 1448,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "fourCardsVisible": true,
+        "desktopRowMobileColumn": true,
+        "currentAndPreviousVisible": true,
+        "areaDurationSeparate": true,
+        "educationAndAllOrganizations": true,
+        "noOriginsByDefault": true,
+        "noProviderOrFetchAdded": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "cards-source",
+      "width": 1448,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "fourCardsVisible": true,
+        "desktopRowMobileColumn": true,
+        "currentAndPreviousVisible": true,
+        "areaDurationSeparate": true,
+        "educationAndAllOrganizations": true,
+        "noOriginsByDefault": true,
+        "noProviderOrFetchAdded": true,
+        "cardOriginsFromPublishedSnapshot": true,
+        "cardOriginNoFetch": true,
+        "hideClosesCardOrigin": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "cards-failed",
+      "width": 1448,
+      "checks": {
+        "fourCardsVisible": true,
+        "desktopRowMobileColumn": true,
+        "currentAndPreviousVisible": true,
+        "areaDurationSeparate": true,
+        "educationAndAllOrganizations": true,
+        "noOriginsByDefault": true,
+        "noProviderOrFetchAdded": true,
+        "failurePreservesCardsAndPublishedSections": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "cards-render",
+      "width": 1448,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "onlyFaultedCardReplaced": true,
+        "allGoodAnswersPreserved": true,
+        "plainLocalRecovery": true,
+        "recoveryOpensApprovedProfile": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "source-switch",
+      "width": 1448,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "toggleDoesNotFetchOrGenerate": true,
+        "fullContentInSourceMode": true,
+        "readingStillCompleteWithDrawer": true,
+        "mobileFullWidthDesktopSidePanel": true,
+        "secondReferenceCorrect": true,
+        "onlySelectedSourcesFetched": true,
+        "firstReferenceReusedFromCache": true,
+        "closeKeepsReadingAndScroll": true,
+        "focusRestored": true,
+        "triggerStillMounted": true,
+        "drawerClosed": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "refresh",
+      "width": 1448,
+      "checks": {
+        "previousSnapshotVersionIdentified": true,
+        "oldSourceOpened": true,
+        "oldSelectionClosed": true,
+        "newSourceNotFetchedBeforeClick": true,
+        "currentAnalysisVisible": true,
+        "currentSnapshotAfterClick": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "multiple-errors",
+      "width": 1448,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "allEightSections": true,
+        "goodActivitiesPreserved": true,
+        "goodObjectivePreserved": true,
+        "noUnsafeContent": true,
+        "localReason": true,
+        "noTechnicalCodes": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "long-content",
+      "width": 1448,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "toggleDoesNotFetchOrGenerate": true,
+        "fullContentInSourceMode": true,
+        "readingStillCompleteWithDrawer": true,
+        "mobileFullWidthDesktopSidePanel": true,
+        "closeKeepsReadingAndScroll": true,
+        "focusRestored": true,
+        "triggerStillMounted": true,
+        "drawerClosed": true,
+        "fullTextAfterHideSources": true,
+        "originControlsRemoved": true,
+        "noClamping": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "cards-executive",
+      "width": 390,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "fourCardsVisible": true,
+        "desktopRowMobileColumn": true,
+        "currentAndPreviousVisible": true,
+        "areaDurationSeparate": true,
+        "educationAndAllOrganizations": true,
+        "noOriginsByDefault": true,
+        "noProviderOrFetchAdded": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "cards-source",
+      "width": 390,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "fourCardsVisible": true,
+        "desktopRowMobileColumn": true,
+        "currentAndPreviousVisible": true,
+        "areaDurationSeparate": true,
+        "educationAndAllOrganizations": true,
+        "noOriginsByDefault": true,
+        "noProviderOrFetchAdded": true,
+        "cardOriginsFromPublishedSnapshot": true,
+        "cardOriginNoFetch": true,
+        "hideClosesCardOrigin": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "cards-failed",
+      "width": 390,
+      "checks": {
+        "fourCardsVisible": true,
+        "desktopRowMobileColumn": true,
+        "currentAndPreviousVisible": true,
+        "areaDurationSeparate": true,
+        "educationAndAllOrganizations": true,
+        "noOriginsByDefault": true,
+        "noProviderOrFetchAdded": true,
+        "failurePreservesCardsAndPublishedSections": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "cards-render",
+      "width": 390,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "onlyFaultedCardReplaced": true,
+        "allGoodAnswersPreserved": true,
+        "plainLocalRecovery": true,
+        "recoveryOpensApprovedProfile": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "source-switch",
+      "width": 390,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "toggleDoesNotFetchOrGenerate": true,
+        "fullContentInSourceMode": true,
+        "readingStillCompleteWithDrawer": true,
+        "mobileFullWidthDesktopSidePanel": true,
+        "secondReferenceCorrect": true,
+        "onlySelectedSourcesFetched": true,
+        "firstReferenceReusedFromCache": true,
+        "closeKeepsReadingAndScroll": true,
+        "focusRestored": true,
+        "triggerStillMounted": true,
+        "drawerClosed": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "refresh",
+      "width": 390,
+      "checks": {
+        "previousSnapshotVersionIdentified": true,
+        "oldSourceOpened": true,
+        "oldSelectionClosed": true,
+        "newSourceNotFetchedBeforeClick": true,
+        "currentAnalysisVisible": true,
+        "currentSnapshotAfterClick": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "multiple-errors",
+      "width": 390,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "allEightSections": true,
+        "goodActivitiesPreserved": true,
+        "goodObjectivePreserved": true,
+        "noUnsafeContent": true,
+        "localReason": true,
+        "noTechnicalCodes": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "scenario": "long-content",
+      "width": 390,
+      "checks": {
+        "originsHiddenByDefault": true,
+        "noEagerSource": true,
+        "allSectionsInitiallyOpen": true,
+        "noCollapseOrDuplicateHighlights": true,
+        "allStoredTextImmediatelyAvailable": true,
+        "toggleDoesNotFetchOrGenerate": true,
+        "fullContentInSourceMode": true,
+        "readingStillCompleteWithDrawer": true,
+        "mobileFullWidthDesktopSidePanel": true,
+        "closeKeepsReadingAndScroll": true,
+        "focusRestored": true,
+        "triggerStillMounted": true,
+        "drawerClosed": true,
+        "fullTextAfterHideSources": true,
+        "originControlsRemoved": true,
+        "noClamping": true,
+        "queueRequestMatchesState": true,
+        "boundedReads": true,
+        "noOverflow": true
+      },
+      "pass": true
+    }
+  ]
+}

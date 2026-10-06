@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.42
+version: 2.51.43
 last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Painel executivo do Resumo v2.0.12
+
+Implementação local autorizada em 06/10/2026: quatro cards com área da experiência mais recente/tempo documentado, cargo/empresa/período/duração e outra experiência recente, maior formação concluída e empresas distintas. Desktop quatro cards e oito seções abertas em duas colunas; celular uma coluna. Sem cortes, fonte sob demanda, dados aprovados presentes em falha de IA. Menção explícita das áreas livres, sem taxonomia inventada; sem vínculo/data suficiente, motivo local e relato publicado preservados. União mensal sem sobreposição/gaps, conclusão acadêmica segura, simultaneidade sem anterior fictícia. Projeção `published-profile-highlights-1.0.0`, sem provider/backfill/SQL/matching/Parser/worker. Registry2.0.12 com saltos7/11. Acordo/AoT `docs/qa/agreement-profile-summary-cards-v2012.md`, `docs/qa/aot-profile-summary-cards-v2012.md`. Rollout e fechamento operacional pendentes de CI/main/web/smoke; não se declara publicação antes da evidência.
 
 ## Avisos com ação e grupo de competências v2.0.10
 

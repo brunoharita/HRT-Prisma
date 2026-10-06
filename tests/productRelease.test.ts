@@ -10,13 +10,14 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe v2.0.10 autorizada sem inventar entrega 2.0.7", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v2.0.10");
+test("registro oficial expõe v2.0.12 autorizada sem inventar entregas 2.0.7 e 2.0.11", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v2.0.12");
   assert.equal(PRISMA_RELEASE.productGeneration, 2);
   assert.equal(PRISMA_RELEASE.movement, 0);
-  assert.equal(PRISMA_RELEASE.delivery, 10);
-  assert.equal(PRISMA_RELEASE_HISTORY.at(-1)?.deliveries.length, 9);
+  assert.equal(PRISMA_RELEASE.delivery, 12);
+  assert.equal(PRISMA_RELEASE_HISTORY.at(-1)?.deliveries.length, 10);
   assert.ok(!PRISMA_RELEASE_HISTORY.at(-1)?.deliveries.some(name => name.startsWith("2.0.7:")));
+  assert.ok(!PRISMA_RELEASE_HISTORY.at(-1)?.deliveries.some(name => name.startsWith("2.0.11:")));
 });
 
 test("numeração explícita preserva histórico e rejeita contador insuficiente ou inválido", () => {

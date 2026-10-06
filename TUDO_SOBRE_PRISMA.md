@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 357
-source_manifest_sha256: 7b47bf0086bbe0ef154f44e1700a46d879aa328a73bd9200657ce2eca312619d
+documentation_source_count: 359
+source_manifest_sha256: 659dbeeae6df74640a878fa69a34d34e3de5865beb5267884bb48b54e43175eb
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.42
+version: 2.51.43
 last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Painel executivo do Resumo v2.0.12
+
+Implementação local autorizada em 06/10/2026: quatro cards com área da experiência mais recente/tempo documentado, cargo/empresa/período/duração e outra experiência recente, maior formação concluída e empresas distintas. Desktop quatro cards e oito seções abertas em duas colunas; celular uma coluna. Sem cortes, fonte sob demanda, dados aprovados presentes em falha de IA. Menção explícita das áreas livres, sem taxonomia inventada; sem vínculo/data suficiente, motivo local e relato publicado preservados. União mensal sem sobreposição/gaps, conclusão acadêmica segura, simultaneidade sem anterior fictícia. Projeção `published-profile-highlights-1.0.0`, sem provider/backfill/SQL/matching/Parser/worker. Registry2.0.12 com saltos7/11. Acordo/AoT `docs/qa/agreement-profile-summary-cards-v2012.md`, `docs/qa/aot-profile-summary-cards-v2012.md`. Rollout e fechamento operacional pendentes de CI/main/web/smoke; não se declara publicação antes da evidência.
 
 ## Avisos com ação e grupo de competências v2.0.10
 
@@ -4409,6 +4413,14 @@ Acordo `docs/qa/agreement-profile-summary-clean-v208.md` v1.0.0: visão inicial 
 
 Mostrar fontes habilita somente acionadores de origem; não consulta trechos nem chama IA. Selecionar um trecho abre Drawer com fonte/snapshot/natureza e origem documental quando disponível. A síntese permanece montada e legível; grid de duas colunas com altura livre, uma no celular. Painel lateral em desktop, completo no celular; fechar restaura foco/ponto de leitura. Cache temporário por analysisId/sourceId, fonte e erro associados à mesma chave. Análise nova fecha seleção anterior; nenhum trecho novo é consultado sem clique. Falhas de consulta/abertura da origem não escondem outras informações. Leitor da análise anterior identifica sua própria versão, não a versão nova ainda sem resposta.
 
+## Destaques publicados v2.0.12
+
+Os quatro destaques são uma projeção local read-only do Perfil aprovado já autorizado/carregado, não nova resposta de IA. Método published-profile-highlights-1.0.0 reusa parseResumePeriod e classificação acadêmica. Áreas declaradas permanecem lista livre, sem taxonomia normalizada ou vínculo persistido com experiência. Uma área acompanha a experiência mais recente somente por menção completa explícita em cargo/descrição, sem aliases, stems ou equivalência semântica. Frases com negação não sustentam associação. Sem vínculo, mostrar relato contextual publicado, áreas gerais separadas e tempo não determinado. Essa regra conservadora pode deixar associações semanticamente possíveis indisponíveis; não as inventa.
+
+Duração da posição e tempo documentado na área são distintos. União mensal de todos os períodos relacionados evita sobreposição e exclui lacunas; período fechado inclui último mês informado e Atual termina no mês de consulta. Datas futuras explícitas são recusadas, ano sem mês não fornece aproximação mensal/ordem segura. Registros em andamento têm prioridade, início mais recente entre eles; sem andamento, fim mais recente. Empates preservados e datas insuficientes mostram experiências sem sequência inferida. Outra experiência só é anterior se terminou antes do início da destacada. Maior formação exige status/nível explícitos ou confirmados por revisão; qualificações desconhecidas não excluem cursos do mesmo nível e MBA/especialização empatam. Empresas são organizações das experiências, não clientes citados no texto.
+
+Nenhuma consulta/provider, tabela, hash, prompt/modelo, backfill, contrato persistido, matching ou fonte de IA muda. A análise anterior continua com sua versão; cards mostram Perfil vigente identificado. Fontes dos cards usam somente campos já carregados e não entram no cache de trechos da IA. Conteúdo das oito perguntas, falhas locais e fallback aprovado preservados.
+
 ---
 
 ## Source: `docs/ai/prompt-registry.md`
@@ -5440,6 +5452,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em 06/10/2026: publicar **Prisma v2.0.12**, painel executivo com quatro destaques enriquecidos, preservando IA/perguntas/fontes persistidas. Registry único registra uma entrega e lacunas explícitas [7,11]; 2.0.11 ficou em rascunho, nenhuma entrega fictícia. Método de projeção local `published-profile-highlights-1.0.0`, sem nova taxonomia/banco/provider. Rollout somente web, acordo `docs/qa/agreement-profile-summary-cards-v2012.md`.
 
 Decisão explícita de Bruno em 06/10/2026: publicar **Prisma v2.0.10** para avisos com problema e ação contextual, incluindo definição de grupo na tela de Competências. Reutiliza `classify_knowledge_competency`/taxonomia `competency-taxonomy-2.0.0` e os controles existentes; nenhum contrato persistido, migration, IA/modelo, Parser ou worker muda. Registry único avança para entrega10, preservando a lacuna histórica7. Rollout somente web; acordo `docs/qa/agreement-actionable-notices-v2010.md`.
 
@@ -11753,6 +11767,10 @@ Conferir leitura, contraste e ampliação nas superfícies alteradas, com refer�
 
 Sem referência normativa, engenharia escolhe medidas, espaçamento, tipografia, distribuição dos componentes e redação coerente com este contrato. Com referência normativa, a autonomia cobre acabamento e implementação dentro da arquitetura visual acordada; mudança estrutural exige decisão explícita. Esta aprovação não muda autorização, isolamento, obrigatoriedade de dados de domínio, matching, parser, fontes externas, custo ou produção. Os grupos específicos 4–14 ainda serão trabalhados nos próprios escopos; a base transversal vale imediatamente para novas alterações. Critérios de aceite e limitações ficam no AoT da entrega aplicável.
 
+## Painel executivo do Resumo v2.0.12
+
+Acordo congelado docs/qa/agreement-profile-summary-cards-v2012.md v1.0.0: quatro cards inicialmente abertos (áreas da experiência mais recente, posição mais recente e outra experiência recente, maior formação concluída, empresas). Desktop: uma linha de quatro cards, síntese larga com acento azul, oito eixos completos em duas colunas; intermediário: duas colunas de destaques; celular: uma coluna. Altura livre, sem corte de listas/textos, fontes desligadas inicialmente. Posição/empresa/período/duração e complemento visíveis; sobreposição nunca vira posição anterior. Cards não substituem respostas, lacunas ou perguntas. Ausência de vínculo seguro da área tem explicação local e preserva o relato publicado e as áreas gerais. Mostrar fontes abre origem opcional dos destaques já carregados, identificando Perfil vigente, separadamente do snapshot de IA. Falha de render de um card preserva outros cards e respostas, com ação Consultar Perfil completo. Ref. visual normativa e renders sintéticos no diretório de evidência do movimento.
+
 ---
 
 ## Source: `docs/product/vacancy-intelligence.md`
@@ -14670,6 +14688,51 @@ Delta aprovado em 2026-10-03: `agreement-parser-ia-kvm2.md` 1.0.0 substitui some
 - Evidência de aprovação do delta 1.2.0: “vamos fazer pular toda a parte que é local [...] desativar o Tesseract [...] direto da extração mais simples do PDF direto pro Parser IA”.
 - Evidência de aprovação do delta 1.3.0: “remova esse bloqueio do prisma. O unico bloqueio deve ser o saldo real disponível na tela de billing”.
 - Referência imutável para o prompt: versão `1.3.0` deste contrato.
+
+---
+
+## Source: `docs/qa/agreement-profile-summary-cards-v2012.md`
+
+# Acordo e execução — Resumo executivo enriquecido v2.0.12
+
+Versão1.0.0, agreed/frozen, 2026-10-06. Autoridade: Bruno escolheu Painel executivo (opção1), aprovou áreas junto da posição mais recente e os quatro cards enriquecidos; autorizou implementar/main/produção2.0.12. Supersede o rascunho não executado2.0.11 e o número público pretendido. Baseline main/origin/VPS `b2f8bdb629fd04c68aa358fc5eea6f4f4ce16ba9`, web42308e72, produto2.0.10. Branch codex/profile-summary-cards-v2012, Classes C/B, sem decisão de taxonomia/IA/schema nova. Dados de Bruno/Beatriz lidos anteriormente não serão versionados como fixtures ou usados para mutação.
+
+## DEVE
+
+- D-UX-01: topologia Painel executivo: toolbar, quatro destaques em linha (área/posição/formação/empresas), síntese larga com acento azul, oito seções abertas em duas colunas. Uma coluna no celular, duas de cards em largura intermediária, altura livre. Ícones azuis suaves, rótulos discretos, informação forte e complementos legíveis. Shell/cabeçalho/abas existentes preservados. Referência normativa de topologia: imagem1 da proposta, textos/navegação global ilustrativos; enriquecimento autorizado por texto.
+- D-DATA-01: área acompanha a posição mais recente, não o último item da lista geral. Reusar áreas declaradas somente com menção explícita em cargo/descrição da experiência. Sem associação suficiente, apresentar relato publicado da experiência e explicar que área/tempo ainda não foram determinados; áreas gerais continuam identificadas como gerais. Nenhuma equivalência/taxonomia/área principal inferida silenciosamente.
+- D-TIME-01: duração aproximada da posição, período publicado e tempo documentado por área quando relação e precisão mensal suficientes. União de intervalos elimina sobreposições e não inclui lacunas. Datas inválidas, futuras ou sem meses suficientes não viram zero/duração inventada. “Atual” significa declaração publicada, não vínculo conferido hoje. Método local identificado, sem persistência paralela ou provider adicional.
+- D-POS-01: priorizar registros em andamento; entre eles, início mais recente com empates preservados. Sem registros em andamento, fim mais recente. Períodos desconhecidos impedem declarar sequência segura. Complemento de outra experiência recente traz cargo/empresa/período/duração. Chamar anterior somente quando terminou antes do início da destacada; sobreposição ou simultaneidade usa Outra experiência recente/Outra posição em andamento. Informação secundária permanece visível.
+- D-EDU-01: maior nível concluído, curso/instituição/período disponível, empates preservados. Andamento/legado/conclusão inferida não confirmada não vira concluído. MBA e especialização sem precedência arbitrária; qualificações desconhecidas não excluem cursos do mesmo nível. Empresas distintas com quantidade e nomes completos; clientes citados em descrições não contam como empregadores.
+- D-KEEP-01: síntese/oito respostas/lacunas/perguntas integrais, fontes desligadas por padrão e sob demanda, cache/snapshot/foco preservados. Fallback mantém dados aprovados e cards durante falha/espera de IA. Falha de card não oculta demais cards/respostas; aviso de falha com recuperação real e português claro. Análise anterior identificada, cards explicitamente do Perfil vigente.
+- D-REL-01: registry único2.0.12, salto11 declarado sem entrega fictícia; tipos/build/testes dirigidos/visual/contextos/CI/main/web seletiva/smoke/rollback/sincronização/AoT.
+
+## PROIBIDO / FORA DE ESCOPO / AUTONOMIA / PENDÊNCIAS
+
+- P-01: truncar respostas/listas, colocar conteúdo profissional atrás de expansão/fontes, confundir área com cargo/empresa/setor, inventar tempo/área/diploma/emprego atual/decisão humana, somar sobreposições, inferir ausência negativa, geração IA adicional, mistura de snapshots, scores/ranking/contratação.
+- P-02: alterar Perfis/PII humanos, tenant/auth, matching/Score/Parser/prompt/modelo/contratos persistidos; registrar dados reais integrais em evidência pública.
+- F-01: nova taxonomia de áreas/setores, novos campos de IA/banco, backfill, chamadas pagas, curadoria/publicação humana, outras abas/navegação global, suíte integral local.
+- A-01: reuso PrismaCard/Ant Design/ícones/parseResumePeriod/classificação acadêmica; derivação read-only e aproximação mensal explícita, componentes/CSS e fixtures sintéticas. Relato contextual é texto publicado, não resposta de IA nem área normalizada. Sem nova biblioteca.
+- Q-01: nenhuma pendência material. A autorização do PO aceita tempo não determinado quando o vínculo não estiver estabelecido. A engenharia não preencherá esse caso por suposição.
+
+Supersede somente a exclusão de destaques de D-UX04 do acordo2.0.8; conteúdo integral/fontes/falhas isoladas continuam. Nenhuma entrega2.0.11 é inventada. Rascunho anterior preservado fora do commit como referência histórica não normativa.
+
+## Mapa de impacto inicial / critérios de aceite
+
+| Capacidade | Relação | Baseline / regressão proporcional |
+| --- | --- | --- |
+| Resumo/cards/CSS | direct |2.0.10 sem cards; mesma fixture1448 da imagem/390mobile, composição/textos completos/longos/ausência |
+| Datas/área/formação | direct |parseResumePeriod/classificações publicados; união/gaps/meses/empates/futuro/inválidos/área geral sem vínculo/conclusão segura |
+| Fontes/cache/snapshot/fallback | plausible_indirect |consulta lazy v208; UI fonte/refresh/foco/erro parcial/fallback, sem provider extra |
+| Perfil/abas/leitura autorizada | critical_transversal |projeção existente tenant-scoped; UI/tipos/build, nenhuma mutation/API nova |
+| Matching/SQL/IA/Parser/worker | no_impact_identified |helpers de leitura isolados, sem editar matching/Score, nenhuma migration/provider; diff/plan e imagens VPS preservadas |
+| Registry/login/sidebar/produção web | direct |registry2.0.10/DxCL2PFY; teste skip11/CI/SHA/assets atuais e anteriores/rollback/HTTP |
+
+CA-01..07: testes sintéticos de cada D e negativos P, capture desktop1448/mobile390 com todos os cards/textos/ações, comparação estrutural da referência, requests/sourceReads sem aumento, falha local não derruba seções. Datas dos cenários fixadas para assert determinístico. Types/build/contextos/lint/foundation e releaseplan, CI e web operacional. Sem promessa de jornada autenticada real ou qualidade universal.
+
+## Prompt congelado
+
+Executar integralmente D-UX-01/D-DATA-01/D-TIME-01/D-POS-01/D-EDU-01/D-KEEP-01/D-REL-01 sob P/F/A e CA acima. Referência escolhida `exec-9df601fc-6f84-404f-85e4-fa7246c19f7e.png` será copiada a `docs/qa/evidence/profile-summary-cards-v2012/approved-reference.png`. Topologia/hierarquia/grupo/ordem normativa; exemplos e shell global ilustrativos. Validar mesma fixture/estado/viewport e registrar adaptações autorizadas, limites e AoT.
 
 ---
 
@@ -18843,6 +18906,70 @@ Status deste adendo: configuração e proteção `P-02` em `PASS`; `D-03` perman
 | `CA-SAVE-01` | teste dirigido e autoteste SQL | build TypeScript e 5 testes da suíte Delta passaram; migration atômica e histórico remoto `20260917164000` confirmados | PASS |
 
 A revisão foi reaberta pela interface como `Rascunho sincronizado`. O botão de salvar permaneceu desabilitado na nova aba porque não havia alteração local nova; não foi fabricada uma edição apenas para habilitá-lo. O teste do gatilho usou o rascunho real dentro de transação com rollback, comprovando o limite de persistência sem modificar dados pessoais ou gerar histórico artificial. Não houve chamada OpenAI, OCR, publicação ou exclusão.
+
+---
+
+## Source: `docs/qa/aot-profile-summary-cards-v2012.md`
+
+# AoT — Painel executivo enriquecido v2.0.12
+
+Contrato: `docs/qa/agreement-profile-summary-cards-v2012.md` v1.0.0 congelado, autorização de Bruno em 06/10/2026. Baseline main/origin/VPS b2f8bdb629fd04c68aa358fc5eea6f4f4ce16ba9, aplicação42308e72, produto2.0.10. Sem dados pessoais reais em fixtures/evidência. Registro2.0.11 permaneceu rascunho, salto declarado.
+
+## Matriz de Acordos
+
+| ID | Acordo / implementação | Teste / evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- |
+| D-UX-01 | Quatro cards, narrativa larga, oito eixos abertos / ProfileHighlightCards, Surface, CSS | Desktop1448/mobile390, mesma Marina fictícia da referência; ui-results.json e renders completos | PASS | Sintético local |
+| D-DATA-01 | Área ligada à experiência por menção explícita; contexto/áreas gerais separados | Testes domínio menções, negação, relação ausente, fontes; UI área/posição distinta | PASS | Não é taxonomia nem equivalência semântica universal |
+| D-TIME-01 | União mensal, posição e área separadas, precisão suficiente / profileHighlights | Sobreposição, lacunas, duplicatas, futura no mesmo mês, data inválida, ano sem mês, mês atual | PASS | Aproximação mensal de relato aprovado |
+| D-POS-01 | Andamento/recência, empates, anterior só sem sobreposição | Testes dois ativos, ordem invertida, sobreposição, período desconhecido; UI atual/anterior/empresa/período | PASS | Não verifica vínculo atual externamente |
+| D-EDU-01 | Nível concluído seguro, empates e organizações | Testes inferida/humana/qualificação desconhecida/MBA/especialização/clientes; UI instituições/empresas | PASS | Fonte é Perfil aprovado |
+| D-KEEP-01 | Conteúdo completo, fontes/cache/snapshot, fallback e falha local | 16 reports UI em1448/390: executive/source/failed/render/source-switch/refresh/multiple-errors/long-content; 40 testes contrato/síntese | PASS | Sem provider real; erro de render injetado apenas no servidor sintético |
+| D-REL-01 | Registry2.0.12, skips7/11, main/web/CI/smoke | 5 registry, tipos/build/contextos/lint/foundation PASS; entrega operacional pendente | PARTIAL | Atualizar após publicação |
+
+## Proibições verificadas
+
+| ID | Guardrail | Prova negativa | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem corte/invenção/overlap/snapshot incorreto/provider novo | Datas/área/conclusão negativos; texto longo integral e não clamped; cache/foco/scroll/versionamento/fontes sem geração | PASS |
+| P-02 | Sem perfil humano/auth/schema/matching/Parser modificado | Diff restrito a projeção/UI/testes/docs/registry, zero chamada mutacional/provider | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade / relação | Baseline | Regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Cards/Resumo/CSS / direct | 2.0.10 sem cards; referência escolhida1 |16UI, captura1448 e390, oito eixos completos | PASS |
+| Datas/área/formação / direct | parseResumePeriod/classificação existentes |10testes dirigidos, negativos/dedupe/union/unknown | PASS |
+| Fontes/cache/snapshot/fallback / plausible_indirect | Consulta lazy2.0.8 |source-switch/refresh/long-content/failed/render, providers0 e cache/foco preservados | PASS |
+| Perfil/leitura/abas / critical_transversal | Modelo aprovado já carregado e autorizado | Tipos/build, header/nav preservados, onOriginal funcional, nenhum fetch/auth novo | PASS |
+| Matching/schema/IA/Parser/worker / no_impact_identified | Fora do diff funcional | Helpers isolados; contratos persistidos intactos; estado VPS após release pendente | PARTIAL |
+| Registry/login/sidebar/web / direct |2.0.10/entryDxCL2PFY |5testes, única entrega12 com skips; CI/runtime/smoke pendentes | PARTIAL |
+
+Novidade: painel executivo enriquecido. Preservação: conteúdo integral, consulta leve, fonte lazy, erro parcial/fallback, autoridade e cache. Nenhuma relação material acrescentada ao mapa. Limites de baseline: não existe prova de qualidade universal/Person real autenticada; não se declara tal capacidade PASS. Nenhuma nova biblioteca.
+
+## Fora de escopo
+
+F-01 PASS: taxonomia, IA/perguntas/prompt/modelo/banco/backfill/curadoria/perfil humano/matching/Parser/worker e suíte integral local não alterados. CI obrigatório permanece intacto.
+
+## Fidelidade visual
+
+Referência normativa `evidence/profile-summary-cards-v2012/approved-reference.png`, SHA2567D9A3B16E7048D8B34D86866E38A3F338626873053771BB8FCC61034E2E0119D. Imagem aprovada1, conteúdo fictício ilustrativo, shell global ilustrativo. Render `cards-executive-1448-full.png`: quatro destaques na mesma linha, ícones azuis suaves, rótulos discretos e conteúdo forte; síntese larga com acento azul; oito eixos abertos em duas colunas. `cards-executive-390-full.png`: uma coluna, texto integral/altura livre, fontes sob demanda. Comparação visual manual feita nos mesmos dados fictícios Marina/estado publicado/viewport1448. Enriquecimento torna cards mais altos, mantém topologia/hierarquia; autorizado por Bruno para períodos/duração e experiência anterior. Shell existente e texto das oito perguntas preservados, sem copiar navigation ilustrativa. Sem desvio estrutural não autorizado. Falha injetada revelou overflow do aviso no celular: ação movida para linha própria e cenário revalidado PASS; outros conteúdos continuaram intactos.
+
+## Desvios e decisões
+
+Nenhum desvio do comportamento acordado identificado na revisão. Escolha conservadora de vínculo por menção explícita documentada antes da implementação, conforme autonomia e ausência aceita. Área livre não ganhou taxonomia implícita. Data sem mês também impede ordenação segura; não se usa mês inventado. Mês atual em andamento pode gerar Menos de1mês, distinto de informação inexistente. Rascunho2.0.11 e arquivos de outras tarefas preservados fora do commit. Plano amplo de testes será substituído pela regressão proporcional autorizada; dispatcher/CI não serão enfraquecidos.
+
+## Validação final
+
+15testes domínio/registry e40contrato/worker sintéticos PASS; 16UI PASS. Tipos root/web PASS; build web PASS com avisos preexistentes de chunks/dynamic import. Contextos/lint/foundation PASS no snapshot Git rastreado: 896 arquivos, 18 tabelas públicas/6 versões de processamento. Geração isolada preserva arquivos não relacionados. Nenhum teste pago, provider real ou banco produtivo como teste. Jornada autenticada de Bruno/Beatriz NOT TESTED. Evidência em `docs/qa/evidence/profile-summary-cards-v2012/`.
+
+## Git / produção
+
+Pendente CI branch/main, plano seletivo, publicação web, smoke e sincronização. Não declarar operação concluída antes da evidência.
+
+## Conclusão
+
+Implementação e preservação local verificadas. Fechamento operacional em andamento.
 
 ---
 

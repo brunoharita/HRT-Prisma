@@ -1,11 +1,14 @@
 import { Component, useEffect, useRef, useState } from "react";
-import { FileSearchOutlined, FileTextOutlined, LinkOutlined } from "@ant-design/icons";
+import { ApartmentOutlined, BulbOutlined, CompassOutlined, FileSearchOutlined, FileTextOutlined, LinkOutlined, ReadOutlined, SearchOutlined, TeamOutlined, TrophyOutlined, RiseOutlined } from "@ant-design/icons";
 import { Alert, Button, Drawer, Grid, Skeleton, Space, Tag } from "antd";
 import { PROFILE_SYNTHESIS_QUESTIONS, SynthesisFailure, explainSynthesisFailure, explainSynthesisSection, type ProfileSynthesisView, type SynthesisSource, type SynthesisStatement } from "../../../../src/domain/profileSynthesis";
 import type { ProfileSynthesisAdapter } from "../../infrastructure/supabase/profileSynthesisService";
 import type { PrismaProfileView } from "../../domain/canonicalProfile";
 import { publishedSummarySections } from "../../domain/profileSummaryPublished";
 import { PrismaCard } from "../../ui/PrismaCard";
+import { ProfileHighlightCards } from "./ProfileHighlightCards";
+
+const sectionIcons = { trajectory: <RiseOutlined />, activities: <TeamOutlined />, contexts: <ApartmentOutlined />, competencies: <BulbOutlined />, results: <TrophyOutlined />, education: <ReadOutlined />, objective: <CompassOutlined />, clarifications: <SearchOutlined /> };
 
 type SurfaceProps = { adapter: ProfileSynthesisAdapter; onOriginal: () => void; onOpenSource: (source: SynthesisSource) => void; originalSummary?: string | null | undefined; publishedProfile?: PrismaProfileView | undefined };
 class SynthesisBoundary extends Component<SurfaceProps, { failed: boolean }> {
@@ -24,6 +27,7 @@ export function ProfileSynthesisSurface(props: SurfaceProps) { return <Synthesis
 function PublishedSummary({ publishedProfile, originalSummary, onOriginal }: Pick<SurfaceProps, "publishedProfile" | "originalSummary" | "onOriginal">) {
   const sections = publishedSummarySections(publishedProfile);
   return <div className="prisma-synthesis-reading prisma-synthesis-published">
+    <ProfileHighlightCards profile={publishedProfile} onOriginal={onOriginal} />
     <PrismaCard title="Resumo do perfil" extra={<Button onClick={onOriginal}>Consultar Perfil completo</Button>}>
       <p className="prisma-synthesis-provenance">Informações publicadas no Perfil aprovado</p>
       {originalSummary ? <p className="prisma-synthesis-narrative">{originalSummary}</p> : <p>Ainda não há um resumo narrativo publicado. Os registros disponíveis aparecem abaixo.</p>}
@@ -160,18 +164,19 @@ function ProfileSynthesisBody({ adapter, onOriginal, onOpenSource, originalSumma
       <PublishedSummary publishedProfile={publishedProfile} originalSummary={originalSummary} onOriginal={onOriginal} />
     </> : <div className="prisma-synthesis-reading">
       <header className="prisma-synthesis-heading">
-        <div><h2>Resumo do perfil</h2><p className="prisma-synthesis-provenance">Síntese gerada por IA · Perfil publicado v{profileVersion} · {showingPrevious ? "Análise anterior" : "Análise gravada"}{generatedDate ? " em " + generatedDate : ""}{effective.issues?.length ? " · Algumas informações indisponíveis" : ""}</p></div>
+        <div><h2>Resumo do perfil</h2><p className="prisma-synthesis-subtitle">Uma leitura da trajetória, das contribuições e dos contextos de atuação.</p><p className="prisma-synthesis-provenance">Síntese gerada por IA · Perfil publicado v{profileVersion} · {showingPrevious ? "Análise anterior" : "Análise gravada"}{generatedDate ? " em " + generatedDate : ""}{effective.issues?.length ? " · Algumas informações indisponíveis" : ""} · Destaques do Perfil vigente</p></div>
         <Button ref={sourceToggle} icon={<FileSearchOutlined />} onClick={toggleSources} aria-pressed={showSources}>{showSources ? "Ocultar fontes" : "Mostrar fontes"}</Button>
       </header>
+      <ProfileHighlightCards profile={publishedProfile} showSources={showSources} onOriginal={onOriginal} />
       <SummarySectionBoundary key={(analysisId ?? "") + ":overview"} title="Síntese do perfil">
-        <div className="prisma-synthesis-narrative">{statements(effective.overview)}
+        <div className="prisma-synthesis-narrative"><h3><FileTextOutlined aria-hidden="true" /> Síntese profissional</h3>{statements(effective.overview)}
           {effective.issues?.some(x => x.section === "overview") ? <p className="prisma-synthesis-missing">{explainSynthesisSection(effective.issues.find(x => x.section === "overview")?.reason)}</p> : null}
         </div>
       </SummarySectionBoundary>
       <div className="prisma-synthesis-axes">{effective.answers.map(a => {
         const title = PROFILE_SYNTHESIS_QUESTIONS.find(x => x[0] === a.questionId)![1];
         const issue = effective.issues?.find(x => x.section === a.questionId);
-        return <SummarySectionBoundary key={(analysisId ?? "") + ":" + a.questionId} title={title}><PrismaCard title={title}>
+        return <SummarySectionBoundary key={(analysisId ?? "") + ":" + a.questionId} title={title}><PrismaCard className="prisma-synthesis-axis-card" title={<span className="prisma-synthesis-axis-title"><span aria-hidden="true">{sectionIcons[a.questionId]}</span>{title}</span>}>
           {statements(a.statements)}
           {issue ? <p className="prisma-synthesis-missing">{explainSynthesisSection(issue.reason)}</p> : null}
           {a.missingInformation.length ? <div className="prisma-synthesis-missing">{a.missingInformation.map((x, i) => <p key={i}>{x}</p>)}</div> : null}

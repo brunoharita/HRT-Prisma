@@ -6800,7 +6800,31 @@ textarea {
 .prisma-evidence-link-source label { display: block; margin-top: 8px; }
 .prisma-synthesis { display: grid; gap: 18px; margin: 4px 0 20px; min-width: 0; }
 .prisma-synthesis.is-source-open { padding-right: 440px; }
-.prisma-synthesis-reading { display: grid; gap: 20px; min-width: 0; background: #fff; border: 1px solid #e1e9f4; border-radius: 12px; padding: 24px; }
+.prisma-synthesis-reading { display: grid; gap: 18px; min-width: 0; padding: 8px 0; }
+.prisma-synthesis-subtitle { margin: 0 0 7px; color: #536885; line-height: 1.65; }
+.prisma-profile-highlights { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+.prisma-profile-highlight { display: flex; align-items: flex-start; gap: 12px; min-width: 0; background: linear-gradient(135deg, #fff, #f9fbff); border: 1px solid #dce6f5; border-radius: 10px; padding: 20px 16px; }
+.prisma-profile-highlight-icon { flex: 0 0 38px; display: grid; place-items: center; height: 44px; border-radius: 8px; background: #eaf2ff; color: #155af0; font-size: 21px; }
+.prisma-profile-highlight-content { flex: 1; min-width: 0; }
+.prisma-profile-highlight h3 { margin: 0 0 12px; color: #536885; font-size: 12px; font-weight: 500; line-height: 1.5; }
+.prisma-profile-highlight-values, .prisma-profile-highlight-secondary-values { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.prisma-profile-highlight-values strong, .prisma-profile-highlight-headline { display: block; font-size: 19px; color: #102751; line-height: 1.45; font-weight: 650; overflow-wrap: anywhere; margin: 0 0 6px; }
+.prisma-profile-highlight-values p, .prisma-profile-highlight-secondary-values p { color: #536885; margin: 0; font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+.prisma-profile-highlight.has-headline .prisma-profile-highlight-values strong { font-size: 13px; font-weight: 550; margin: 0; }
+.prisma-profile-highlight-secondary { border-top: 1px solid #e1e9f4; padding-top: 14px; margin-top: 18px; }
+.prisma-profile-highlight-secondary h4 { margin: 0 0 10px; color: #536885; font-size: 12px; font-weight: 500; }
+.prisma-profile-highlight-secondary-values { gap: 10px; }
+.prisma-profile-highlight-secondary-values strong { font-size: 13px; font-weight: 550; line-height: 1.55; display: block; overflow-wrap: anywhere; }
+.prisma-profile-highlight-note, .prisma-profile-highlight-empty { font-size: 12px; line-height: 1.65; color: #61728c; margin: 14px 0 0; overflow-wrap: anywhere; }
+.prisma-profile-highlight-empty { margin-top: 0; }
+.prisma-profile-highlight-context { font-size: 14px; line-height: 1.7; color: #253e63; margin: 8px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+.prisma-profile-highlight-source.ant-btn { white-space: normal; height: auto; font-size: 12px; padding: 0; margin-top: 12px; text-align: left; }
+.prisma-synthesis-narrative { background: #fff; border: 1px solid #dce6f5; border-left: 4px solid #165dff; border-radius: 8px; padding: 22px 24px; }
+.prisma-synthesis-narrative h3 { display: flex; align-items: center; gap: 12px; font-size: 18px; color: #102751; margin: 0 0 14px; }
+.prisma-synthesis-narrative h3 .anticon { color: #165dff; font-size: 22px; }
+.prisma-synthesis-axis-title { display: flex; gap: 12px; align-items: center; }
+.prisma-synthesis-axis-title > span { flex: 0 0 32px; color: #155af0; background: #eaf2ff; border-radius: 6px; height: 32px; display: grid; place-items: center; font-size: 18px; }
+.prisma-synthesis-axis-card.ant-card { border-color: #dce6f5; border-radius: 9px; }
 .prisma-synthesis-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .prisma-synthesis-heading h2 { margin: 0 0 7px; font-size: 25px; }
 .prisma-synthesis-heading .ant-btn { flex: 0 0 auto; }
@@ -6812,7 +6836,7 @@ textarea {
 .prisma-synthesis-statement:last-child { margin-bottom: 0; }
 .prisma-synthesis-statement p, .prisma-synthesis-published-section p { margin: 0 0 8px; line-height: 1.75; overflow-wrap: anywhere; }
 .prisma-synthesis-narrative { font-size: 17px; line-height: 1.8; max-width: 100%; }
-.prisma-synthesis-narrative p { max-width: 90ch; }
+.prisma-synthesis-narrative p { max-width: 100%; }
 .prisma-synthesis-interpretation { display: block; width: fit-content; font-size: 11px; color: #706340; background: #fff7df; padding: 2px 6px; border-radius: 4px; margin: 0 0 6px; }
 .prisma-synthesis-origin-action.ant-btn { height: auto; min-height: 28px; padding: 0; font-size: 12px; white-space: normal; text-align: left; }
 .prisma-synthesis-statement.is-source-selected { background: #f0f6ff; outline: 1px solid #86acf3; border-radius: 6px; padding: 12px; }
@@ -6837,12 +6861,16 @@ textarea {
 .prisma-synthesis-selected { background: #f3f7ff; border: 1px solid #dbe6f7; border-radius: 7px; padding: 14px; margin: 0 0 12px; overflow-wrap: anywhere; }
 .prisma-synthesis-source-note { color: #61728c; font-size: 12px; margin-top: 18px; }
 @media (max-width: 1100px) { .prisma-synthesis.is-source-open .prisma-synthesis-axes { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 1199px) { .prisma-profile-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.prisma-synthesis.is-source-open .prisma-profile-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 767px) {
   .prisma-synthesis.is-source-open { padding-right: 0; }
   .prisma-synthesis-axes { grid-template-columns: minmax(0, 1fr); }
   .prisma-synthesis-heading { flex-direction: column; align-items: flex-start; }
   .prisma-synthesis-heading h2 { font-size: 22px; }
-  .prisma-synthesis-reading { padding: 18px; }
+  .prisma-synthesis-reading { padding: 6px 0; }
+  .prisma-profile-highlights, .prisma-synthesis.is-source-open .prisma-profile-highlights { grid-template-columns: minmax(0, 1fr); }
+  .prisma-profile-highlight { padding: 18px; }
   .prisma-synthesis-narrative { font-size: 16px; }
   .prisma-synthesis-published .ant-card-head-wrapper { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px 0; }
   .prisma-synthesis-source-drawer .ant-drawer-body { padding: 20px; }

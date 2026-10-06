@@ -65,8 +65,9 @@ export const PRISMA_RELEASE_HISTORY = [{
     "2.0.8: leitura integral do Resumo com fontes sob demanda",
     "2.0.9: vínculo de uma ou mais evidências sem justificativa obrigatória",
     "2.0.10: avisos com orientação e ação direta para corrigir pendências",
+    "2.0.12: painel executivo com trajetória e destaques enriquecidos",
   ],
-  skippedDeliveryNumbers: [7],
+  skippedDeliveryNumbers: [7, 11],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {
