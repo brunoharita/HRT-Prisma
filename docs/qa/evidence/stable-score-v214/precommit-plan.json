@@ -1,0 +1,83 @@
+{
+  "version": "1.0.3",
+  "files": [
+    "docs/ai-context/PRISMA_CURRENT_STATE.md",
+    "docs/ai/matching-contract.md",
+    "docs/architecture/data-model.md",
+    "docs/architecture/versioning.md",
+    "docs/decisions/ADR-078-stable-matching-results.md",
+    "docs/qa/agreement-stable-score-v214.md",
+    "docs/qa/aot-stable-score-v214.md",
+    "docs/qa/evidence/stable-score-v214/browser-results.json",
+    "docs/qa/evidence/stable-score-v214/member-1280.png",
+    "docs/qa/evidence/stable-score-v214/member-390.png",
+    "docs/qa/evidence/stable-score-v214/normal-1280.png",
+    "docs/qa/evidence/stable-score-v214/normal-390.png",
+    "docs/qa/evidence/stable-score-v214/partial-1280.png",
+    "docs/qa/evidence/stable-score-v214/partial-390.png",
+    "docs/qa/execution-stable-score-v214.md",
+    "supabase/functions/matching-trajectory/handler.ts",
+    "supabase/functions/matching-trajectory/stable.test.ts",
+    "supabase/functions/matching-trajectory/stable.ts",
+    "supabase/migrations/20261007150000_stable_matching_scores.sql",
+    "supabase/qa/stable_matching_score_verification.sql",
+    "tests/productRelease.test.ts",
+    "tests/semanticTriage.test.ts",
+    "tests/stableMatching.test.ts",
+    "tests/stableScoreOrchestration.test.ts",
+    "tests/tooling/stableScore.browser.mjs",
+    "tests/ui/stable-score.html",
+    "tests/ui/stable-score.vite.config.mts",
+    "tests/ui/stable-score/fixture.ts",
+    "tests/ui/stable-score/main.tsx",
+    "tests/vacancyIntelligence.test.ts",
+    "web/src/config/releaseRegistry.ts",
+    "web/src/domain/stableMatching.ts",
+    "web/src/domain/vacancy.ts",
+    "web/src/infrastructure/supabase/vacancyService.ts",
+    "web/src/pages/VacancyPages.tsx"
+  ],
+  "impact": {
+    "surfaces": [
+      "context-pack",
+      "database",
+      "database-tests",
+      "documentation",
+      "edge-functions",
+      "hosting",
+      "tests",
+      "web"
+    ],
+    "edgeFunctions": [
+      "matching-trajectory"
+    ],
+    "migrations": [
+      "supabase/migrations/20261007150000_stable_matching_scores.sql"
+    ],
+    "modifiedMigrations": [],
+    "unknown": []
+  },
+  "validationCommands": [
+    "git diff --check",
+    "pnpm run generate:prisma-context",
+    "pnpm run check:prisma-context",
+    "pnpm run typecheck:web",
+    "pnpm run build:web",
+    "pnpm run test",
+    "pnpm run check:supabase-ledger"
+  ],
+  "deployments": {
+    "git": true,
+    "database": [
+      "supabase/migrations/20261007150000_stable_matching_scores.sql"
+    ],
+    "edgeFunctions": [
+      "matching-trajectory"
+    ],
+    "web": true,
+    "parserIa": false,
+    "profileSynthesis": false
+  },
+  "blockedReasons": [],
+  "publishable": true
+}

@@ -105,43 +105,26 @@ test("seniority penalty is symmetric and only uses explicit level markers", () =
   assert.equal(assessVacancySeniority("Diretor de operações", "Júnior de operações", 20).adjustment, -4);
   assert.equal(assessVacancySeniority("Desenvolvedor de operações", "Programador de operações", 20).adjustment, 0);
 });
-test("discovery emits baseline before AI and direct comparison preserves broad discovery", () => {
-  assert.match(source, /onInitial\?\.\(\{ matches: sortVacancyMatches\(discovered\), \.\.\.summary \}\);[\s\S]*?await interpretMatches\(vacancy, discovered/);
-  assert.match(source, /matches\.filter\(isSemanticDiscoveryEligible\)/);
-});
-
-test("actual discovery orchestration emits 100 internal matches before a slow AI batch completes", async () => {
-  const variable = ast.statements.find((item) => ts.isVariableStatement(item) && item.declarationList.declarations.some((declaration) =>
-    ts.isIdentifier(declaration.name) && declaration.name.text === "vacancyService"));
+test("discovery exposes saved results only after stable server resolution", async () => {
+  const variable = ast.statements.find((item) => ts.isVariableStatement(item) && item.declarationList.declarations.some((d) => ts.isIdentifier(d.name) && d.name.text === "vacancyService"));
   assert.ok(variable && ts.isVariableStatement(variable));
-  const object = variable.declarationList.declarations.find((item) => ts.isIdentifier(item.name) && item.name.text === "vacancyService")?.initializer;
+  const object = variable.declarationList.declarations[0]?.initializer;
   assert.ok(object && ts.isObjectLiteralExpression(object));
   const method = object.properties.find((item) => ts.isMethodDeclaration(item) && item.name.getText(ast) === "findPeople");
   assert.ok(method);
   const code = ts.transpileModule(`const service = { ${method.getText(ast)} };`, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
-  const candidates = Array.from({ length: 100 }, (_, index) => ({ ...a.candidate, personId: `person-${index}`, profileId: `profile-${index}` }));
   let finish!: (matches: typeof a[]) => void;
   const delayed = new Promise<typeof a[]>((resolve) => { finish = resolve; });
-  const findPeople = new Function("loadPublishedProfileCandidateCollection", "loadVacancyOccupationReference", "loadPositionRelationDecisions",
-    "loadDemonstratedEvidence", "matchVacancyCandidate", "isSemanticDiscoveryEligible", "sortVacancyMatches", "interpretMatches", `${code}; return service.findPeople;`)(
-    async () => ({ candidates, analyzedProfileCount: 100, publishedProfileCount: 100, queriedProfileRecordCount: 100, expectedProfileRecordCount: 100, complete: true }),
-    async () => null, async () => new Map(), async () => ({ byPerson: new Map(), dependency: null }),
-    (_vacancy: unknown, candidate: typeof a.candidate) => ({ ...a, candidate }), isSemanticDiscoveryEligible,
-    (matches: typeof a[]) => matches, async () => delayed);
-  const initialHolder: { current?: { matches: typeof a[]; analyzedProfileCount: number } } = {};
-  let completed = false;
-  const start = performance.now();
-  const operation = findPeople("org", vacancy, true, undefined, undefined, (value: { matches: typeof a[]; analyzedProfileCount: number }) => { initialHolder.current = value; });
-  void operation.then(() => { completed = true; });
+  const findPeople = new Function("loadPublishedProfileCandidateCollection", "hasUsableProfessionalContent", "sortVacancyMatches", "loadStableCandidates", `${code}; return service.findPeople;`)(
+    async () => ({ candidates: [a.candidate, b.candidate], analyzedProfileCount: 2, publishedProfileCount: 2, complete: true }),
+    () => true, (matches: typeof a[]) => matches, async () => delayed);
+  let initial: unknown;
+  const operation = findPeople("org", vacancy, true, undefined, undefined, (value: unknown) => { initial = value; });
   await new Promise<void>((resolve) => setImmediate(resolve));
-  const initial = initialHolder.current;
+  assert.deepEqual((initial as {matches: unknown[]}).matches, [], "initial disclosure has no transient pre-AI score");
+  finish([a, b]);
+  assert.deepEqual((await operation).matches, [a, b]);
   assert.ok(initial);
-  assert.equal(initial.matches.length, 100);
-  assert.equal(initial.analyzedProfileCount, 100);
-  assert.equal(completed, false);
-  assert.ok(performance.now() - start < 5000, "mocked internal first list must not wait for delayed AI");
-  finish(initial.matches);
-  assert.equal((await operation).matches.length, 100);
 });
 
 test("100 synthetic profiles pass internal triage while only ambiguous occupations consume AI", async () => {

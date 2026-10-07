@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.46
+version: 2.51.47
 last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Estabilidade do Score — v2.1.4
+
+Implementação autorizada em 07/10/2026: resultado persistido por organização/Pessoa/Posição com ciclo `matching-stable-result-1.0.0`. Acesso, comparação e passagem do dia preservam score, grupo, detalhamento e referência. Primeira avaliação, alteração concreta de Perfil/Posição/Knowledge consumida/evidência/decisão contextual ou recálculo explícito autorizado produzem novo histórico. Revisão de outra Pessoa e contador global não invalidam. Atualização atômica e lease preservam anterior em falhas e rejeitam fontes obsoletas; navegador não fornece pontuação. Busca/comparação/detalhe compartilham snapshot, revisão atualiza só o card; indisponibilidade individual mantém demais resultados e consulta ao Perfil. Fórmula, pesos, prompt e modelo preservados. Migration/Edge/web em validação; publicação ainda não confirmada. Acordo, execução, ADR-078 e AoT `docs/qa/aot-stable-score-v214.md`. Testes usam pessoas sintéticas, sem mutação de Pessoa real/IA paga; jornada autenticada real ainda NOT TESTED.
 
 ## Ajuda na revisão de divergências — v2.1.3
 

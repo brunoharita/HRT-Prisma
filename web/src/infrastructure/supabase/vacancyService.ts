@@ -3,6 +3,7 @@ import { activities, type SemanticAssessment, type TrajectoryConflict, type Traj
 import { applySemanticAssessment, isSemanticDiscoveryEligible, isSemanticTriageEligible, unavailableSemantic } from "../../domain/semanticMatching.js";
 import {
   matchVacancyCandidate,
+  hasUsableProfessionalContent,
   sortVacancyMatches,
   type VacancyCandidateMatch,
   type VacancyDemonstratedEvidence,
@@ -22,6 +23,8 @@ import type { Json } from "./database.types.js";
 import { supabase } from "./client.js";
 import { readPositionTaxonomy, readTaxonomyItem } from "../../domain/positionTaxonomy.js";
 import { positionTaxonomyService } from "./positionTaxonomyService.js";
+import { restoreStableMatch } from "../../domain/stableMatching.js";
+import type { PublishedProfileCandidate } from "../../domain/profileDiscovery.js";
 import { loadPublishedProfileCandidateCollection, loadPublishedProfileCandidates } from "./profileDiscoveryService.js";
 
 export interface OrganizationRoleTemplate {
@@ -425,18 +428,7 @@ export const vacancyService = {
   async findPeople(organizationId: string, vacancy: VacancyDetail, includePrivateLocation = true, onProgress?: (completed: number, total: number) => void, signal?: AbortSignal,
     onInitial?: (discovery: VacancyPeopleDiscovery) => void, onMatch?: (match: VacancyCandidateMatch, completed: number, total: number) => void): Promise<VacancyPeopleDiscovery> {
     if (!vacancy.title.trim()) throw new Error("Informe o título da Vaga antes de buscar Pessoas.");
-    const [collection, occupationReference, decisions] = await Promise.all([
-      loadPublishedProfileCandidateCollection(organizationId, includePrivateLocation),
-      loadVacancyOccupationReference(organizationId, vacancy),
-      loadPositionRelationDecisions(organizationId, vacancy.id!),
-    ]);
-    const demonstratedEvidence = await loadDemonstratedEvidence(organizationId, collection.candidates.map((candidate) => candidate.personId));
-    const referenceDate = new Date().toISOString().slice(0, 10);
-    const baseMatches = collection.candidates.map((candidate) => ({
-      ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate),
-      positionDecision: decisions.get(candidate.personId) ?? null,
-    }));
-    const discovered = baseMatches.filter(isSemanticDiscoveryEligible);
+    const collection = await loadPublishedProfileCandidateCollection(organizationId, includePrivateLocation);
     const summary = {
       analyzedProfileCount: collection.analyzedProfileCount,
       publishedProfileCount: collection.publishedProfileCount,
@@ -445,24 +437,21 @@ export const vacancyService = {
       complete: collection.complete,
       unclassifiedRequirementCount: vacancy.requirements.filter((item) => item.importance === "unclassified").length,
     };
-    onInitial?.({ matches: sortVacancyMatches(discovered), ...summary });
-    const interpreted = await interpretMatches(vacancy, discovered, onProgress, signal, onMatch);
-    return { matches: sortVacancyMatches(interpreted), ...summary };
+    const unavailablePeople: NonNullable<VacancyPeopleDiscovery["unavailablePeople"]> = [];
+    // Progressive disclosure starts empty: only intact server snapshots enter cards.
+    onInitial?.({ matches: [], unavailablePeople: [], ...summary });
+    const interpreted = await loadStableCandidates(vacancy, collection.candidates.filter(hasUsableProfessionalContent), false, signal, onProgress, onMatch,
+      (candidate, message) => unavailablePeople.push({ personId: candidate.personId, fullName: candidate.fullName, message }));
+    return { matches: sortVacancyMatches(interpreted), unavailablePeople, ...summary };
   },
 
-  async loadPeopleByIds(organizationId: string, vacancy: VacancyDetail, personIds: string[], includePrivateLocation = true, signal?: AbortSignal): Promise<VacancyCandidateMatch[]> {
-    const [candidates, occupationReference, decisions] = await Promise.all([
-      loadPublishedProfileCandidates(organizationId, includePrivateLocation, personIds.slice(0, 2)),
-      loadVacancyOccupationReference(organizationId, vacancy),
-      loadPositionRelationDecisions(organizationId, vacancy.id!),
-    ]);
-    const demonstratedEvidence = await loadDemonstratedEvidence(organizationId, candidates.map((candidate) => candidate.personId));
-    const referenceDate = new Date().toISOString().slice(0, 10);
-    const matches = personIds.flatMap((id) => {
+  async loadPeopleByIds(organizationId: string, vacancy: VacancyDetail, personIds: string[], includePrivateLocation = true, signal?: AbortSignal, recalculate = false): Promise<VacancyCandidateMatch[]> {
+    const candidates = await loadPublishedProfileCandidates(organizationId, includePrivateLocation, personIds.slice(0, 2));
+    const ordered = personIds.flatMap((id) => {
       const candidate = candidates.find((item) => item.personId === id);
-      return candidate ? [{ ...matchVacancyCandidate(vacancy, candidate, occupationReference, demonstratedEvidence.byPerson.get(candidate.personId) ?? [], demonstratedEvidence.dependency ? [demonstratedEvidence.dependency] : [], referenceDate), positionDecision: decisions.get(candidate.personId) ?? null }] : [];
+      return candidate ? [candidate] : [];
     });
-    return interpretMatches(vacancy, matches.filter(isSemanticDiscoveryEligible), undefined, signal);
+    return loadStableCandidates(vacancy, ordered, recalculate, signal);
   },
 
   async loadTrajectoryReview(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<TrajectoryReviewView> {
@@ -553,6 +542,16 @@ export const vacancyService = {
   },
 
   async recordEvaluation(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<string> {
+    if (match.stableResult) {
+      if (match.stableResult.state !== "current" || !match.stableResult.evaluationId) throw new Error("A atualização ainda não foi concluída. O score anterior foi preservado.");
+      const { data, error } = await supabase.functions.invoke("matching-trajectory", { body: {
+        operation: "stable_load", organizationId: vacancy.organizationId, profileId: match.candidate.profileId,
+        positionVersionId: vacancy.versionId, referenceDate: match.score.referenceDate,
+      }, signal: AbortSignal.timeout(120_000) });
+      if (error || data?.state !== "current" || data.evaluationId !== match.stableResult.evaluationId)
+        throw new Error("As fontes da avaliação mudaram ou a atualização não foi concluída. Atualize este resultado antes de preparar uma verificação.");
+      return data.evaluationId;
+    }
     if (match.semanticAssessment) {
       if (match.semanticAssessment.status !== "complete") throw new Error("A interpretação ainda está pendente. O Perfil e seus requisitos continuam disponíveis para consulta.");
       const { data, error } = await supabase.functions.invoke("matching-trajectory", {
@@ -605,6 +604,36 @@ export const vacancyService = {
 };
 
 const POSITION_DECISION_PAGE_SIZE = 200;
+
+async function loadStableCandidates(vacancy: VacancyDetail, candidates: PublishedProfileCandidate[], recalculate = false, signal?: AbortSignal,
+  onProgress?: (completed: number, total: number) => void, onMatch?: (match: VacancyCandidateMatch, completed: number, total: number) => void,
+  onUnavailable?: (candidate: PublishedProfileCandidate, message: string) => void): Promise<VacancyCandidateMatch[]> {
+  const results: VacancyCandidateMatch[] = [];
+  let next = 0, completed = 0;
+  onProgress?.(0, candidates.length);
+  async function worker() {
+    while (next < candidates.length && !signal?.aborted) {
+      const candidate = candidates[next++]!;
+      try {
+      const { data, error } = await supabase.functions.invoke("matching-trajectory", { body: {
+        operation: recalculate ? "recalculate" : "stable_load", organizationId: vacancy.organizationId,
+        profileId: candidate.profileId, positionVersionId: vacancy.versionId, referenceDate: new Date().toISOString().slice(0, 10),
+      }, signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(120_000)]) : AbortSignal.timeout(120_000) });
+      if (error) throw await supabaseFunctionOperationError(error, "Não foi possível consultar o resultado salvo. Nenhum score substituto foi calculado.");
+      const match = restoreStableMatch(vacancy, candidate, data);
+      completed += 1;
+      if (isSemanticDiscoveryEligible(match)) { results.push(match); onMatch?.(match, completed, candidates.length); }
+      onProgress?.(completed, candidates.length);
+      } catch (caught) {
+        if (signal?.aborted || !onUnavailable) throw caught;
+        onUnavailable(candidate, caught instanceof Error ? caught.message : "Resultado salvo indisponível. Consulte o Perfil ou tente novamente.");
+        completed += 1; onProgress?.(completed, candidates.length);
+      }
+    }
+  }
+  await Promise.all([worker(), worker()]);
+  return candidates.flatMap(candidate => results.filter(match => match.candidate.personId === candidate.personId));
+}
 
 async function interpretMatches(vacancy: VacancyDetail, matches: VacancyCandidateMatch[], onProgress?: (completed: number, total: number) => void, signal?: AbortSignal,
   onMatch?: (match: VacancyCandidateMatch, completed: number, total: number) => void): Promise<VacancyCandidateMatch[]> {

@@ -1,5 +1,9 @@
 # Contrato de matching
 
+## Resultado estável v2.1.4
+
+`matching-stable-result-1.0.0` persiste a projeção completa do resultado por organização/Pessoa/Posição. Consultas e passagem do tempo preservam score, grupo, referência e evidências. Primeira avaliação, mudanças concretas nas fontes consumidas ou recálculo explícito por papel de revisão permitem novo cálculo; não se invalida por versão global da Knowledge, acesso, software ou revisão de outra Pessoa. Uma mudança compartilhada de Posição/Knowledge pode afetar todas as avaliações que a consomem. Atualização preserva o anterior até commit validado, sem score transitório; falha não repete provedor por acesso quando há resultado anterior. Sem resultado inicial, indisponibilidade é explícita e mantém acesso manual ao Perfil. Histórico causal append-only e comparação usam o mesmo resultado. Fórmula e contratos numéricos permanecem; acordo v2.1.4 e ADR-078 regem este ciclo e substituem a exposição progressiva de pontuação pré-IA. A entrega progressiva apresenta somente snapshots íntegros.
+
 ## Escopo
 
 Uma avaliação compara uma pessoa com uma vaga específica. Ela não altera o perfil permanente e não decide contratação ou rejeição.

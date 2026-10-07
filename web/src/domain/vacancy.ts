@@ -183,6 +183,8 @@ export interface VacancyRequirementMatch {
 }
 
 export interface VacancyCandidateMatch {
+  stableResult?: { evaluationId: string | null; state: "current" | "updating" | "update_failed"; calculatedAt: string | null;
+    audit?: { reason: string; changedDependencies: string[]; previousScore: number | null; newScore: number | null } };
   semanticAssessment?: SemanticAssessment;
   semanticFallback?: { status: SemanticAssessment["status"]; reasonCode: string; retryAvailable?: boolean; retryAfter?: string; retryExhausted?: boolean } | undefined;
   candidate: PublishedProfileCandidate;
@@ -206,6 +208,7 @@ export interface VacancyCandidateMatch {
 
 export interface VacancyPeopleDiscovery {
   matches: VacancyCandidateMatch[];
+  unavailablePeople?: { personId: string; fullName: string; message: string }[];
   analyzedProfileCount: number;
   publishedProfileCount: number;
   queriedProfileRecordCount: number;

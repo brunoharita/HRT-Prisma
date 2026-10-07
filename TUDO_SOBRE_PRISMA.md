@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 374
-source_manifest_sha256: b6e7ae876a3b187f996a59bb6df4f1e608d8729f607207424c0fae6214267d85
+documentation_source_count: 378
+source_manifest_sha256: 59972d4e86eb483e833fcb8ae801b9dd91ba4e2a1395fad7a57f487ba50bdd63
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.46
+version: 2.51.47
 last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Estabilidade do Score — v2.1.4
+
+Implementação autorizada em 07/10/2026: resultado persistido por organização/Pessoa/Posição com ciclo `matching-stable-result-1.0.0`. Acesso, comparação e passagem do dia preservam score, grupo, detalhamento e referência. Primeira avaliação, alteração concreta de Perfil/Posição/Knowledge consumida/evidência/decisão contextual ou recálculo explícito autorizado produzem novo histórico. Revisão de outra Pessoa e contador global não invalidam. Atualização atômica e lease preservam anterior em falhas e rejeitam fontes obsoletas; navegador não fornece pontuação. Busca/comparação/detalhe compartilham snapshot, revisão atualiza só o card; indisponibilidade individual mantém demais resultados e consulta ao Perfil. Fórmula, pesos, prompt e modelo preservados. Migration/Edge/web em validação; publicação ainda não confirmada. Acordo, execução, ADR-078 e AoT `docs/qa/aot-stable-score-v214.md`. Testes usam pessoas sintéticas, sem mutação de Pessoa real/IA paga; jornada autenticada real ainda NOT TESTED.
 
 ## Ajuda na revisão de divergências — v2.1.3
 
@@ -4001,6 +4005,10 @@ A primeira rodada dos quatro PDFs foi independente. Depois de observar defeitos 
 
 # Contrato de matching
 
+## Resultado estável v2.1.4
+
+`matching-stable-result-1.0.0` persiste a projeção completa do resultado por organização/Pessoa/Posição. Consultas e passagem do tempo preservam score, grupo, referência e evidências. Primeira avaliação, mudanças concretas nas fontes consumidas ou recálculo explícito por papel de revisão permitem novo cálculo; não se invalida por versão global da Knowledge, acesso, software ou revisão de outra Pessoa. Uma mudança compartilhada de Posição/Knowledge pode afetar todas as avaliações que a consomem. Atualização preserva o anterior até commit validado, sem score transitório; falha não repete provedor por acesso quando há resultado anterior. Sem resultado inicial, indisponibilidade é explícita e mantém acesso manual ao Perfil. Histórico causal append-only e comparação usam o mesmo resultado. Fórmula e contratos numéricos permanecem; acordo v2.1.4 e ADR-078 regem este ciclo e substituem a exposição progressiva de pontuação pré-IA. A entrega progressiva apresenta somente snapshots íntegros.
+
 ## Escopo
 
 Uma avaliação compara uma pessoa com uma vaga específica. Ela não altera o perfil permanente e não decide contratação ou rejeição.
@@ -4945,6 +4953,10 @@ O M5.1B autoriza somente execução sintética local/QA pela fronteira tokenizad
 
 # Modelo de dados
 
+## Resultados estáveis de matching v2.1.4
+
+`matching_score_states` mantém ponte tenant/Pessoa/Posição para uma avaliação imutável em `match_evaluations`, hashes das dependências concretas, última tentativa e lease. Não contém currículo. A tabela tem RLS e DML/leitura diretos revogados, inclusive ao serviço; RPCs de serviço autenticam/revalidam ator, fontes, identidade, versões e lease antes do commit. `stableMatch` contém projeção sem identidade/currículo integral e `stableAudit` registra predecessor, autor, motivo, componentes alterados e score anterior/novo; criado em histórico existente, nunca atualizado. Exclusão definitiva autorizada de Pessoa continua sujeita ao contrato próprio, não é uma operação de recálculo. Migration `20261007150000_stable_matching_scores.sql`, ADR-078 e AoT específico distinguem código de rollout.
+
 ## Vínculos de evidências v2.0.9
 
 `link_person_competency_evidence_batch_v2` recebe de1a100 fontes selecionadas e mantém um registro separado por fonte em `person_competency_evidence_links`. Chama o RPC unitário vigente dentro da mesma transação: tenant/role/Perfil aprovado/conceito/fonte/credencial/quote e triggers existentes permanecem. A seleção não envia justificativa; `decision_reason` registra somente a confirmação factual pelo operador, gerada pelo servidor, sem alegar motivo humano ou comprovação. Autor/data continuam obrigatórios. Replay compatível usa o motivo histórico existente, sem substituição. Um item inválido reverte todo o lote; conflito de trecho/dados não sobrescreve vínculo. RPC anterior e schema/projeção permanecem compatíveis; banco precisa receber a migration aditiva antes da web. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.
@@ -5476,6 +5488,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em 07/10/2026: publicar **Prisma v2.1.4**. `matching-stable-result-1.0.0` versiona persistência por tenant/Pessoa/Posição, dependências concretas e histórico causal. Fórmula, pesos, matching 5.1.0/7.0.0, score 1.4.0, prompt e modelo permanecem. A data pertence ao cálculo salvo; acesso e contador global não invalidam resultados. Migration `20261007150000_stable_matching_scores.sql`, Edge `matching-trajectory` e web são os destinos diretos. ADR-078 e acordo `docs/qa/agreement-stable-score-v214.md` 1.0.0.
 
 Decisão explícita de Bruno em06/10/2026: publicar **Prisma v2.1.0**, página unificada da Pessoa. O movimento2.1 inicia em entrega0 por decisão expressa, registrada como `firstDeliveryNumber: 0`; o padrão histórico continua iniciar em1. A entrega seguinte deste movimento será2.1.1, sem alterar contadores/saltos anteriores ou inventar entrega. Nenhum contrato persistido de Perfil/IA/taxonomia muda. Rollout somente web; acordo `docs/qa/agreement-person-unified-v210.md`1.0.0.
 
@@ -9746,6 +9760,20 @@ Recuperação inicial usa somente itens fundamentados no último resultado compl
 ## Consequências e rollback
 
 Uma pequena tabela e índice são necessários para preservar a identidade que os contratos anteriores não representam. Forma das RPCs e projeções permanece compatível. Reversão operacional restaura funções anteriores, preservando a tabela e o histórico; nunca remover decisões para reverter a apresentação.
+
+---
+
+## Source: `docs/decisions/ADR-078-stable-matching-results.md`
+
+# ADR-078 — Resultados persistidos de matching
+
+Aceito em 07/10/2026 pelo acordo v2.1.4. Fórmula e contratos de score permanecem; `matching-stable-result-1.0.0` versiona ciclo de vida e persistência.
+
+Reutilizar `match_evaluations` para histórico imutável e acrescentar `matching_score_states`, ponte tenant/Pessoa/Posição para resultado corrente e lease. RPC server-only verifica acesso, fontes e dependências concretas. Hashes de componentes usados substituem invalidação por contador global ou data; revisão vinculada a outro Perfil não entra. Uma consulta sem alteração retorna exatamente o resultado persistido. Primeira avaliação, alteração pertinente ou recálculo explícito materializam um novo resultado pelo motor compartilhado. Falhas preservam anterior e exigem nova mudança pertinente ou repetição explícita, evitando retries pagos por acesso.
+
+Lease evita disputa; commit revalida fontes, identidade e papel; o cliente nunca fornece pontuação. Data de referência pertence ao cálculo, não à consulta. Versões/fingerprint e predecessor registram causalidade; versões antigas continuam auditáveis. A proteção depende de RLS/grants e RPCs autenticadas/serviço, não do frontend.
+
+Alternativas rejeitadas: estado local/cache de browser não sobrevive a dispositivos e sessões; congelar somente número mistura evidências novas com score antigo; invalidação por versão global afeta Pessoas sem dependência. Nenhuma dependência externa nova. Rollback: retornar web/Edge anteriores sem remover tabelas ou histórico.
 
 ---
 
@@ -15413,6 +15441,40 @@ Nenhuma. O estado expandido e colapsado usa um único toggle contextual; o modo 
 
 ---
 
+## Source: `docs/qa/agreement-stable-score-v214.md`
+
+# Acordo — estabilidade do Score v2.1.4 (1.0.0)
+
+Estado: agreed. Autoridade: Bruno aprovou o contrato discutido e sua implementação/publicação em main, v2.1.4, em 07/10/2026. A correção de Bruno substitui a exigência de botão para toda atualização: alterações concretas nas dependências da avaliação também autorizam novo cálculo.
+
+- D-01: resultado persistido por organização, Pessoa e Posição; recarregar, navegar, comparar ou passar o dia preserva número, grupo, detalhamento, data e evidências. A primeira avaliação pode ser materializada quando ainda não existe resultado.
+- D-02: mudança relevante no Perfil publicado, definição da Posição, Knowledge consumida, evidência demonstrada ou decisão/revisão contextual permite nova avaliação. Revisar Bruno não altera Diego. Contador genérico da Knowledge, data do acesso e mudança de software não invalidam o resultado.
+- D-03: atualização mantém o resultado anterior identificado até conclusão atômica. Falha preserva anterior; não apresenta score intermediário como novo. Fontes alteradas durante cálculo e concorrência não podem substituir resultado válido.
+- D-04: histórico append-only registra autor, motivo/dependências alteradas, avaliação anterior/nova e versões/data. Ação explícita de recálculo é permitida aos papéis de revisão existentes, sem escolha humana fabricada ou alteração da fórmula.
+- D-05: busca, comparação, detalhe e revisão usam o mesmo resultado persistido; revisão atualiza apenas o card afetado. Publicar v2.1.4 com validação proporcional, main/origin/VPS e destinos necessários sincronizados.
+- P-01: proibido recalcular por acesso/relógio, reaplicar decisão entre Pessoas/tenants, confiar em score do navegador, apagar histórico, promover decisões contextuais à Knowledge ou alterar pesos/prompt/modelo.
+- F-01: redesenho visual global, treinamento de IA, contratação automática, novas fontes externas, backfill pago e curadoria real de pessoas.
+- A-01: reutilizar motor/snapshots/autorização existentes; lease e armazenamento são escolhas técnicas. Verificação de dependências na consulta pode detectar mudança já realizada, mas consulta isolada não é motivo de recálculo.
+- CA-01: repetição e mudança de dia retornam o mesmo ID/score/fingerprint, sem provedor nem commit adicional; duas Pessoas permanecem isoladas.
+- CA-02: Perfil/Posição/Knowledge pertinente/revisão/evidência geram histórico causal; Knowledge alheia não gera; concorrência/falha/fonte obsoleta preservam anterior.
+- CA-03: negativos tenant/papel/identidade/lease e score forjado; busca/comparação sem flash pré-IA, atualização parcial e publicação comprovadas. Limites autenticados reais explícitos.
+
+## Mapa de impacto e baseline
+
+Baseline main `330e0d559e430c8ccd4d79e1ae2afb2d390d124a`, runtime v2.1.3 `30d4f79`. Leitura atual recalcula e usa data de acesso; snapshots só são criados ao abrir detalhe. A reprodução causal e inspeção de produção anteriores não provam valores visuais antes/depois.
+
+| Área | Relação | Preservação / regressão |
+| --- | --- | --- |
+| Persistência/Edge/motor compartilhado | direct | Rubrica, fallback e revisão; SQL/Edge, fontes/concorrência/histórico |
+| Busca/comparação/detalhe/cards | direct | Navegação, seleção, evidências, ausência de flash; browser e tipos |
+| Tenant/Auth/papéis/PII | critical_transversal | RPCs server-only, revalidação, negativos; sem currículo em logs |
+| Knowledge/requisitos/Perfil | plausible_indirect | Somente leitura das dependências; nenhuma curadoria/publicação inventada |
+| Parser/Synthesis/gateway | no_impact_identified | Sem código ou destino; IDs/imagens/saúde preservados no deploy web |
+
+Reuso escolhido: `match_evaluations` append-only e motor gerado, acrescentando ponte de resultado corrente/lease. Cache só de navegador não satisfaz persistência entre dispositivos; contador global invalidaria pessoas sem dependência concreta. Nenhuma biblioteca nova.
+
+---
+
 ## Source: `docs/qa/agreement-trajectory-evidence-recovery.md`
 
 # Acordo — recuperação da interpretação semântica com evidência literal
@@ -20107,6 +20169,48 @@ Status da correção: `PASS` local e produção.
 
 ---
 
+## Source: `docs/qa/aot-stable-score-v214.md`
+
+# AoT — estabilidade do Score v2.1.4
+
+Contrato integral `agreement-stable-score-v214.md` 1.0.0, execução correspondente e ADR-078. Baseline main `330e0d559e430c8ccd4d79e1ae2afb2d390d124a`, produção web v2.1.3 `30d4f79`. Autoridade: implementar/publicar main v2.1.4, com a correção explícita de Bruno sobre dependências concretas.
+
+| ID | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Ponte persistida e projeção completa, data fixa do cálculo | SQL: mesmo ID/score/referência/timestamp; Edge: datas diferentes sem motor/provedor/commit; browser: reabrir/comparar | PASS |
+| D-02 | Hashes de Perfil, Posição, Knowledge consumida, evidência, decisão/revisão do par | SQL: A não altera B, conceito alheio não invalida, conceito vinculado/Posição/revisão/evidência invalidam somente suas dependências | PASS |
+| D-03 | Lease, revalidação e publicação atômica; anterior preservado | SQL: lease ativo/expirado, fonte alterada, contrato/identidade inválidos; Edge: falha/commit obsoleto; browser: anterior durante atualização/falha | PASS |
+| D-04 | Histórico existente imutável, predecessor/autor/motivo/dependências/valores; botão com papéis existentes | SQL: histórico, imutabilidade, papel/tenant/grants/RLS; browser: membro sem botão e recálculo isolado | PASS |
+| D-05 | Busca progressiva só de resultados salvos, comparação/detalhe, refresh de uma Pessoa | Browser/componente e transporte reais com adaptador sintético; publicação pendente | PARTIAL |
+| P-01 | Nenhuma pontuação do navegador; acesso/relógio não recalculam; sem decisões inventadas/Knowledge escrita ou fórmula alterada | Edge/SQL negativos; diff e runtime compartilhado; browser sem tráfego externo | PASS |
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline / regressão | Estado |
+| --- | --- | --- | --- |
+| Motor/semântica/revisão | direct | Runtime gerado, fórmula/pesos/prompts/modelos preservados; testes de score/runtime/triagem/revisão e Edge existente | PASS |
+| Persistência/concorrência | direct | Antes snapshots por ação; agora ponte+histórico causal. PostgreSQL 17 local, transação rollback, leases/fonte obsoleta/negativos | PASS |
+| Busca/comparação/detalhe | direct | Componentes reais, tema/CSS real; transporte real com adaptador sintético, entrega progressiva sem pontuação intermediária e falha individual | PASS |
+| Auth/tenant/PII | critical_transversal | Autorização antes de RPC privilegiada e no commit, tabela sem acesso direto; isolamento/forjado/papel, projeção sem currículo integral | PASS |
+| Knowledge/Perfil/Posição/evidência | plausible_indirect | Somente leitura das fontes; testes de invalidação concreta, nenhuma curadoria real | PASS |
+| Parser/Synthesis/gateway | no_impact_identified | Sem diff/destino; identidade/imagem/saúde serão comparadas no smoke de publicação web | NOT TESTED |
+
+Novidade: persistência do ciclo de vida, não fórmula nova. Preservação: descoberta, decisões humanas fechadas, proveniência, seleção, consulta manual e histórico. Dependência descoberta: preparar verificação precisa reconfirmar a identidade salva; implementado/testado para rejeitar resultado antigo após mudança. Nenhuma ampliação de curadoria/IA/ingestão. F-01 preservado no diff.
+
+## Evidências e limites
+
+`docs/qa/evidence/stable-score-v214/`: resultados SQL/Edge/testes dirigidos/browser, imagens desktop1280/mobile390 e recibos de publicação. Browser usa componentes reais, `vacancyService`/restauração reais e transporte/candidatos sintéticos; sem usuário real, banco externo ou IA paga. Testes do motor e Edge complementam o adaptador, que não pretende provar pontuação profissional real. Referências anteriores são contexto do problema, não alvo de redesenho neste movimento. Layout/tema preservados, acrescentando estado salvo/ação no card e aviso individual. Sem referência normativa nova; imagens documentam os estados renderizados.
+
+QA PostgreSQL usa base local descartável vazia `import_evidence_v202`, porta55479, com migrations diretamente necessárias e definições atuais verificadas de `m83_sources`/`m83_snapshot_sources` para complementar o baseline histórico local. Fixtures inteiramente sintéticas e rollback. Os testes de lease representam uma segunda chamada encontrando lease ativo/expirado; não se alega stress de múltiplas conexões em produção. Nenhum teste cria avaliação/decisão humana real. Jornada autenticada de Bruno/Diego em produção NOT TESTED.
+
+Validação local: 108 testes Node dirigidos, 40 testes Edge e 39 assertivas SQL PASS; tipos web/build web, lint/foundation/ledger e Context Pack PASS. O plano preliminar classifica apenas migration nova, Edge matching-trajectory e web. A recomendação genérica de pnpm test foi substituída por módulos diretamente afetados; CI obrigatório segue seu fluxo existente. Chrome retornou EACCES; o mesmo teste passou no Edge instalado, sem alterar permissões.
+
+## Publicação e conclusão
+
+Em andamento. D-05 permanece PARTIAL até CI, migration/Edge/frontend, smoke, rollback e sincronização. Nenhum desvio material do contrato identificado na revisão local. Não confundir testes locais com rollout ativo.
+
+---
+
 ## Source: `docs/qa/aot-template.md`
 
 # AoT — <Movimento>
@@ -23947,6 +24051,14 @@ O conector confirmou um único projeto remoto de produção. A auditoria encontr
 Versão 1.0.0. Ler integralmente `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0, `docs/product/ux-foundation.md` 1.2.0 e `docs/architecture/versioning.md`. Preservar todos os D/P/F/A/CA.
 
 Diagnosticar a shell atual, reutilizar os assets oficiais de login e a fonte executável de release, implementar os dois estados e validar estrutura, funcionalidade, acessibilidade e responsividade. Produzir comparação visual no mesmo estado e viewport; registrar no AoT toda divergência. Não alterar backend, Supabase ou produção.
+
+---
+
+## Source: `docs/qa/execution-stable-score-v214.md`
+
+# Execução — estabilidade do Score v2.1.4
+
+Implementar integralmente `agreement-stable-score-v214.md` 1.0.0, aprovado em 07/10/2026, sem reinterpretar D-01–D-05/P-01/F-01/A-01/CA-01–CA-03. Reutilizar motor e snapshots; persistência com autoridade server-side e dependências concretas. Validar em PostgreSQL local descartável e Edge sintético antes de migration/Edge/web de produção. Context Pack e AoT obrigatórios; não alegar jornada autenticada real sem prova.
 
 ---
 

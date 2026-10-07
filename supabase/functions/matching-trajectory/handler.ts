@@ -5,6 +5,7 @@ import {
 } from "./_generated/src/domain/semanticTrajectory.js";
 import { buildDeterministicMatch, buildSnapshotEvaluation } from "./snapshot.ts";
 import { isSemanticTriageEligible } from "./_generated/web/src/domain/semanticMatching.js";
+import { stableMatching } from "./stable.ts";
 
 export type SemanticEntry = { id: string; fieldPath: string; text: string; kind: "experience" | "education" | "declaration" };
 export type SemanticContext = { position: string; entries: SemanticEntry[] };
@@ -186,9 +187,10 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     const reviewLoad = body.operation === "review_load";
     const reviewSave = body.operation === "review_save";
     const reviewRefresh = body.operation === "review_refresh";
+    const stable = body.operation === "stable_load" || body.operation === "recalculate";
     const expectedKeys = reviewSave ? "analysisId,choices,operation,organizationId,positionVersionId,profileId,referenceDate"
       : reviewRefresh ? "analysisId,operation,organizationId,positionVersionId,profileId,referenceDate"
-      : snapshot || reviewLoad ? "operation,organizationId,positionVersionId,profileId,referenceDate"
+      : snapshot || reviewLoad || stable ? "operation,organizationId,positionVersionId,profileId,referenceDate"
       : "organizationId,positionVersionId,profileId,referenceDate";
     if (Object.keys(body).sort().join() !== expectedKeys
       || ![body.organizationId, body.profileId, body.positionVersionId].every(value => typeof value === "string" && uuid.test(value))
@@ -200,6 +202,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
     }
     const referenceDate = body.referenceDate;
     const ids: RequestIds = { organizationId: body.organizationId as string, profileId: body.profileId as string, positionVersionId: body.positionVersionId as string };
+    if (stable) return stableMatching(body, bearer, actor, deps, inner => handleMatchingTrajectory(inner, deps));
     const model = deps.env("KNOWLEDGE_RESEARCH_MODEL")?.trim() ?? "";
     base = { ...ids, status: "unavailable", methodVersion: SEMANTIC_METHOD_VERSION, promptVersion: SEMANTIC_PROMPT_VERSION,
       modelVersion: model, inputHash: "", analysisId: "" };

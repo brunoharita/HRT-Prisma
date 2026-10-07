@@ -1,0 +1,26 @@
+330e0d559e430c8ccd4d79e1ae2afb2d390d124a
+/prisma-web|5e6dd518b0f7c3775379e4128a9004cf09473c8cca846dbd5e6811de6ce7fe84|sha256:c1d54ee059f7970a61d19fb15da45ee8777c390549cc2ef53d47dcd865833d38|running|0
+/prisma-parser-ia|ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0|sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616|running|0
+/prisma-profile-synthesis|9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6|sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5|running|0
+/prisma-paddle-gateway|2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983|sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99|running|0
+health|/prisma-parser-ia|healthy
+health|/prisma-profile-synthesis|healthy
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prisma</title>
+    <script type="module" crossorigin src="/assets/index-cFAsS5C0.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-C0FnF6B9.js">
+    <link rel="modulepreload" crossorigin href="/assets/antd-vendor-ByE9Q9KR.js">
+    <link rel="modulepreload" crossorigin href="/assets/supabase-vendor-DoXvCMLf.js">
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-BdxMnOeJ.js">
+    <link rel="stylesheet" crossorigin href="/assets/antd-vendor-B5BXDqMa.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CYOKCXBz.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
+

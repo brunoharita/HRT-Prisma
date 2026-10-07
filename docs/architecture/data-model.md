@@ -1,5 +1,9 @@
 # Modelo de dados
 
+## Resultados estáveis de matching v2.1.4
+
+`matching_score_states` mantém ponte tenant/Pessoa/Posição para uma avaliação imutável em `match_evaluations`, hashes das dependências concretas, última tentativa e lease. Não contém currículo. A tabela tem RLS e DML/leitura diretos revogados, inclusive ao serviço; RPCs de serviço autenticam/revalidam ator, fontes, identidade, versões e lease antes do commit. `stableMatch` contém projeção sem identidade/currículo integral e `stableAudit` registra predecessor, autor, motivo, componentes alterados e score anterior/novo; criado em histórico existente, nunca atualizado. Exclusão definitiva autorizada de Pessoa continua sujeita ao contrato próprio, não é uma operação de recálculo. Migration `20261007150000_stable_matching_scores.sql`, ADR-078 e AoT específico distinguem código de rollout.
+
 ## Vínculos de evidências v2.0.9
 
 `link_person_competency_evidence_batch_v2` recebe de1a100 fontes selecionadas e mantém um registro separado por fonte em `person_competency_evidence_links`. Chama o RPC unitário vigente dentro da mesma transação: tenant/role/Perfil aprovado/conceito/fonte/credencial/quote e triggers existentes permanecem. A seleção não envia justificativa; `decision_reason` registra somente a confirmação factual pelo operador, gerada pelo servidor, sem alegar motivo humano ou comprovação. Autor/data continuam obrigatórios. Replay compatível usa o motivo histórico existente, sem substituição. Um item inválido reverte todo o lote; conflito de trecho/dados não sobrescreve vínculo. RPC anterior e schema/projeção permanecem compatíveis; banco precisa receber a migration aditiva antes da web. Acordo/AoT `docs/qa/agreement-evidence-multiselect-v209.md`, `docs/qa/aot-evidence-multiselect-v209.md`.

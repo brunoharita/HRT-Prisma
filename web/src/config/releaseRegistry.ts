@@ -79,6 +79,7 @@ export const PRISMA_RELEASE_HISTORY = [{
     "2.1.1: hierarquia visual, iconografia e destaques tonais em toda a plataforma",
     "2.1.2: curadoria de competências preservada por declaração e trecho original",
     "2.1.3: explicações e ajuda acessível nas opções de revisão de divergências",
+    "2.1.4: Score persistido por Pessoa e Posição, com atualização causal e histórico",
   ],
 }] as const satisfies readonly ProductMovementRelease[];
 

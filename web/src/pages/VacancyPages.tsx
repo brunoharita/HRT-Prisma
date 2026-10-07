@@ -571,21 +571,17 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
           if (!current) return;
           const { matches: found, ...summary } = initial;
           setMatches(found); setDiscovery(summary); setLoading(false);
-          setInterpreting(found.some(isSemanticTriageEligible));
+          setInterpreting(summary.analyzedProfileCount > 0);
         },
         (updated) => {
           if (!current) return;
-          // A pre-IA evaluation ID cannot authorize actions against a newly interpreted score.
-          setActiveEvaluationId(null);
-          setMatches((previous) => sortVacancyMatches(previous.map((item) => item.candidate.personId === updated.candidate.personId
-            ? { ...updated, positionDecision: item.positionDecision } : item)));
+          setMatches(previous => sortVacancyMatches([...previous.filter(item => item.candidate.personId !== updated.candidate.personId), updated]));
           setActiveMatch((previous) => previous?.candidate.personId === updated.candidate.personId
             ? { ...updated, positionDecision: previous.positionDecision } : previous);
         });
       if (current) {
         const { matches: found, ...summary } = result;
-        setMatches((previous) => sortVacancyMatches(found.map((item) => ({ ...item,
-          positionDecision: previous.find((prior) => prior.candidate.personId === item.candidate.personId)?.positionDecision ?? item.positionDecision }))));
+        setMatches(sortVacancyMatches(found));
         setDiscovery(summary); setInterpreting(false);
       }
     }).catch((caught) => { if (current) { setError(errorMessage(caught, "Não foi possível encontrar Pessoas.")); setInterpreting(false); } })
@@ -615,6 +611,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
       await vacancyService.recordPositionRelationDecision(vacancy, match, decision);
       if (scope !== generation.current) return;
       setMatches((current) => sortVacancyMatches(current.map((item) => item.candidate.personId === match.candidate.personId ? { ...item, positionDecision: decision } : item)));
+      await refreshPerson(match);
     } catch (caught) { if (scope === generation.current) setError(errorMessage(caught, "Não foi possível registrar sua decisão sobre esta relação.")); }
     finally { if (scope === generation.current) setDecidingPersonId(null); }
   }
@@ -624,6 +621,24 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     try { await vacancyService.proposePositionRelationToKnowledge(vacancy, match); setError(null); }
     catch (caught) { setError(errorMessage(caught, "Não foi possível propor a relação à Knowledge.")); }
     finally { setLearningPersonId(null); }
+  }
+  async function refreshPerson(match: VacancyCandidateMatch, recalculate = false) {
+    if (!vacancy) return;
+    const scope = generation.current;
+    setError(null);
+    setMatches(current => current.map(item => item.candidate.personId === match.candidate.personId && item.stableResult
+      ? { ...item, stableResult: { ...item.stableResult, state: "updating" } } : item));
+    try {
+      const [updated] = await vacancyService.loadPeopleByIds(activeMembership.organizationId, vacancy, [match.candidate.personId], true, undefined, recalculate);
+      if (scope !== generation.current || !updated) return;
+      setMatches(current => sortVacancyMatches(current.map(item => item.candidate.personId === updated.candidate.personId ? updated : item)));
+      if (activeMatch?.candidate.personId === updated.candidate.personId) { setActiveMatch(updated); setActiveEvaluationId(null); }
+    } catch (caught) {
+      if (scope !== generation.current) return;
+      setMatches(current => current.map(item => item.candidate.personId === match.candidate.personId && item.stableResult
+        ? { ...item, stableResult: { ...item.stableResult, state: "update_failed" } } : item));
+      setError(errorMessage(caught, "A atualização falhou. O resultado anterior foi preservado."));
+    }
   }
   function toggle(personId: string) {
     if (!selected.includes(personId) && selected.length === 2) { setError("Você já selecionou duas pessoas. Remova uma antes de escolher outra."); return; }
@@ -637,21 +652,22 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}`)} type="text">Voltar para a Posição</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="A trajetória e os requisitos são apresentados separadamente. O score organiza evidências, não decide contratação. Consulte cobertura e pendências antes de comparar." actions={<Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Button onClick={() => setAttempt((value) => value + 1)}>Atualizar análise</Button>} /> : null}
-    {interpreting && progress?.total ? <Alert showIcon type="info" title="Resultados internos disponíveis · interpretação em andamento" description={`${progress.completed} de ${progress.total} relações ocupacionais pendentes interpretadas. Cada Perfil é atualizado quando sua resposta chega; os demais resultados já podem ser consultados.`} /> : null}
+    {interpreting && progress?.total ? <Alert showIcon type="info" title="Consultando resultados salvos" description={`${progress.completed} de ${progress.total} avaliações consultadas. Cada resultado salvo é disponibilizado quando chega; os demais já podem ser consultados.`} /> : null}
     {!loading && fallbackNotice ? <Alert showIcon type="warning" title={fallbackNotice.title} description={fallbackNotice.description} action={fallbackNotice.canRefresh ? <Button onClick={() => setAttempt(value => value + 1)}>{fallbackNotice.actionLabel}</Button> : undefined} /> : null}
     {discovery && !discovery.complete ? <Alert showIcon type="warning" title="A consulta de Perfis publicados ficou incompleta." description={`${discovery.queriedProfileRecordCount} de ${discovery.expectedProfileRecordCount} registros de Perfil foram consultados; a lista pode estar incompleta.`} action={<Button onClick={() => setAttempt((value) => value + 1)}>Atualizar lista de pessoas</Button>} /> : null}
+    {discovery?.unavailablePeople?.length ? <Alert showIcon type="warning" title="Há Pessoas com avaliação indisponível" description={<><Typography.Paragraph>Nenhum score substituto foi calculado. Os outros resultados permanecem disponíveis.</Typography.Paragraph><Space wrap>{discovery.unavailablePeople.map(person => <Button key={person.personId} onClick={() => onNavigate(`/profiles/${person.personId}`)}>Consultar {person.fullName}</Button>)}</Space></>} action={<Button onClick={() => setAttempt(value => value + 1)}>Consultar novamente</Button>} /> : null}
     {discovery?.unclassifiedRequirementCount ? <Alert showIcon type="warning" title="Há requisitos aguardando classificação." description={`${discovery.unclassifiedRequirementCount} requisito${discovery.unclassifiedRequirementCount === 1 ? " aguarda" : "s aguardam"} classificação. A descoberta ocupacional continua disponível; conclua a classificação para fechar a aderência detalhada.`} action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Classificar requisitos</Button>} /> : null}
-    {loading ? <PrismaCard><div role="status" aria-live="polite">Carregando Perfis publicados e calculando a triagem interna…</div><Skeleton active avatar paragraph={{ rows: 14 }} /></PrismaCard> : null}
-    {vacancy && !loading && !interpreting && !comparisonPending && !fallbackNotice ? <Alert showIcon type="info" title="Triagem profissional concluída" description="A Knowledge resolveu relações internas; somente relações ocupacionais plausíveis ainda indefinidas foram enviadas à IA. Ferramentas, especializações e habilitações exigem evidência própria." /> : null}
+    {loading ? <PrismaCard><div role="status" aria-live="polite">Consultando Perfis e resultados salvos…</div><Skeleton active avatar paragraph={{ rows: 14 }} /></PrismaCard> : null}
+    {vacancy && !loading && !interpreting && !comparisonPending && !fallbackNotice && !discovery?.unavailablePeople?.length ? <Alert showIcon type="info" title="Triagem profissional concluída" description="A Knowledge resolveu relações internas; somente relações ocupacionais plausíveis ainda indefinidas foram enviadas à IA. Ferramentas, especializações e habilitações exigem evidência própria." /> : null}
     {occupationalPending.length ? <section className="prisma-vacancy-match-group"><header><Typography.Title level={2}>Relação ocupacional plausível · interpretação pendente</Typography.Title><Typography.Text type="secondary">A classificação inicial não é uma conclusão de Grupo C; consulte as evidências enquanto a interpretação termina.</Typography.Text></header><div className="prisma-vacancy-match-list">{occupationalPending.map(match => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} match={match} onDecision={decision => void decidePosition(match, decision)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div></section> : null}
-    {!loading && !error && !matches.length ? <PrismaCard><Empty description={discovery?.publishedProfileCount ? "Nenhum Perfil apresentou experiência na área, relação ocupacional ou outra evidência rastreável para esta Posição." : "Não há Perfis publicados acessíveis para esta empresa."}><Button onClick={() => onNavigate(discovery?.publishedProfileCount ? `/vacancies/${vacancyId}/edit` : "/profiles/search")}>{discovery?.publishedProfileCount ? "Revisar Posição" : "Consultar Pessoas"}</Button></Empty></PrismaCard> : null}
+    {!loading && !interpreting && !error && !matches.length && !discovery?.unavailablePeople?.length ? <PrismaCard><Empty description={discovery?.publishedProfileCount ? "Nenhum Perfil apresentou experiência na área, relação ocupacional ou outra evidência rastreável para esta Posição." : "Não há Perfis publicados acessíveis para esta empresa."}><Button onClick={() => onNavigate(discovery?.publishedProfileCount ? `/vacancies/${vacancyId}/edit` : "/profiles/search")}>{discovery?.publishedProfileCount ? "Revisar Posição" : "Consultar Pessoas"}</Button></Empty></PrismaCard> : null}
     <div className="prisma-vacancy-match-groups">{(["main_area", "related_area", "contextual_signals"] as const).map((group) => {
       const grouped = matches.filter((match) => match.discoveryGroup === group && (!match.semanticAssessment || match.semanticAssessment.status === "complete")
         && !occupationalPending.includes(match));
       if (!grouped.length) return null;
       const title = group === "main_area" ? "Grupo A · trajetória diretamente compatível" : group === "related_area" ? "Grupo B · trajetória relacionada ou potencial de entrada" : `Grupo C · somente sinais contextuais (${grouped.length})`;
       const description = group === "main_area" ? "Atuação direta ou funcionalmente equivalente ao núcleo da Posição. Ordem: maior Prisma Score primeiro." : group === "related_area" ? "Atuação adjacente ou transferível; em Posições de entrada, formação, projetos e conhecimentos também podem sustentar este grupo. Ordem: maior Prisma Score primeiro." : "Contexto, declarações ou sinais sem atuação comparável suficiente; isso não é conclusão de incapacidade.";
-      const cards = <div className="prisma-vacancy-match-list">{grouped.map((match) => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} learning={learningPersonId === match.candidate.personId} match={match} vacancy={vacancy} canReview={["super_admin", "owner", "admin", "recruiter"].includes(activeMembership.role)} onReviewed={() => setAttempt(value => value + 1)} onDecision={(decision) => void decidePosition(match, decision)} onLearn={() => void proposeLearning(match)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div>;
+      const cards = <div className="prisma-vacancy-match-list">{grouped.map((match) => <CandidateMatchCard deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} learning={learningPersonId === match.candidate.personId} match={match} vacancy={vacancy} canReview={["super_admin", "owner", "admin", "recruiter"].includes(activeMembership.role)} onReviewed={() => void refreshPerson(match)} onRecalculate={() => void refreshPerson(match, true)} onDecision={(decision) => void decidePosition(match, decision)} onLearn={() => void proposeLearning(match)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div>;
       return group === "contextual_signals"
         ? <details className="prisma-vacancy-match-group prisma-contextual-signals-group" key={group}><summary><strong>{title}</strong><span>{description}</span></summary>{cards}</details>
         : <section className="prisma-vacancy-match-group" key={group}><header><Typography.Title level={2}>{title}</Typography.Title><Typography.Text type="secondary">{description}</Typography.Text></header>{cards}</section>;
@@ -697,7 +713,7 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
         <Typography.Title level={3}>{match.candidate.fullName}</Typography.Title>
         <Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small>
         {!match.semanticAssessment || match.semanticAssessment.status === "complete" ? <><Space wrap><MatchRelationTags match={match} />{match.positionDecision === "confirmed" ? <Tag color="green">Relação confirmada</Tag> : match.positionDecision === "dismissed" ? <Tag>Não considerar</Tag> : null}</Space><Typography.Paragraph>{match.areaRelation.explanation}</Typography.Paragraph><Typography.Paragraph>{match.functionAssessment.explanation}</Typography.Paragraph></> : null}
-        {match.semanticAssessment ? <MatchingScoreSummary match={match} /> : null}
+        {match.semanticAssessment || match.stableResult ? <MatchingScoreSummary match={match} /> : null}
       </div></div></PrismaCard>)}</div>
       <PrismaCard className="prisma-comparison-table"><Table columns={comparisonColumns(matches)} dataSource={rows} pagination={false} scroll={{ x: 620 }} /></PrismaCard>
       <div className="prisma-comparison-mobile">{rows.map((row) => <PrismaCard key={row.key} title={row.label}><div><strong>{matches[0]!.candidate.fullName}</strong>{row.left ? <MatchStatusTag status={row.left.status} /> : <Tag>Não avaliado</Tag>}<Typography.Paragraph>{row.left?.explanation}</Typography.Paragraph></div><div><strong>{matches[1]!.candidate.fullName}</strong>{row.right ? <MatchStatusTag status={row.right.status} /> : <Tag>Não avaliado</Tag>}<Typography.Paragraph>{row.right?.explanation}</Typography.Paragraph></div></PrismaCard>)}</div>
@@ -723,7 +739,7 @@ function StringListEditor({ label, onChange, placeholder, values }: { label: str
   return <PrismaCard className="prisma-vacancy-form-section" title={label}><div className="prisma-string-list">{values.map((value, index) => <div key={`${value}-${index}`}><Input onChange={(event) => onChange(values.map((item, currentIndex) => currentIndex === index ? event.target.value : item))} value={value} /><Button aria-label={`Remover ${value}`} danger icon={<DeleteOutlined />} onClick={() => onChange(values.filter((_, currentIndex) => currentIndex !== index))} type="text" /></div>)}</div><Input onChange={(event) => setInput(event.target.value)} onPressEnter={addFromEnter} placeholder={placeholder} ref={inputRef} suffix={<Button icon={<PlusOutlined />} onClick={add} size="small" type="text" />} value={input} /></PrismaCard>;
 }
 
-function CandidateMatchCard({ deciding, learning = false, match, onDecision, onLearn, onEvaluate, onNavigate, onToggle, selected, vacancy, canReview = false, onReviewed }: { deciding: boolean; learning?: boolean; match: VacancyCandidateMatch; onDecision: (decision: Exclude<VacancyPositionRelationDecision, null>) => void; onLearn?: () => void; onEvaluate: () => void; onNavigate: (path: string) => void; onToggle: () => void; selected: boolean; vacancy?: VacancyDetail | null; canReview?: boolean; onReviewed?: () => void }) {
+function CandidateMatchCard({ deciding, learning = false, match, onDecision, onLearn, onEvaluate, onNavigate, onToggle, selected, vacancy, canReview = false, onReviewed, onRecalculate }: { deciding: boolean; learning?: boolean; match: VacancyCandidateMatch; onDecision: (decision: Exclude<VacancyPositionRelationDecision, null>) => void; onLearn?: () => void; onEvaluate: () => void; onNavigate: (path: string) => void; onToggle: () => void; selected: boolean; vacancy?: VacancyDetail | null; canReview?: boolean; onReviewed?: () => void; onRecalculate?: () => void }) {
   const cardClass = "prisma-vacancy-match-card" + (selected ? " is-selected" : "")
     + (match.positionDecision === "dismissed" ? " is-dismissed" : "");
   const profileButton = <Button onClick={() => onNavigate("/profiles/" + match.candidate.personId + "/profile")}>Ver perfil</Button>;
@@ -741,7 +757,7 @@ function CandidateMatchCard({ deciding, learning = false, match, onDecision, onL
     <div className="prisma-vacancy-action-hub is-pending">
       <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
         <strong>Consultar</strong><Typography.Text type="secondary">Explore o Perfil e a análise disponível.</Typography.Text>
-        <Space wrap>{profileButton}{analysisButton}</Space>
+        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
       </section>
     </div>
     <Typography.Text type="secondary">Requisitos consultados: {match.directCount} com evidência direta, {match.partialCount} parciais. Compare as evidências sem atribuir prioridade pela pendência.</Typography.Text>
@@ -777,7 +793,7 @@ function CandidateMatchCard({ deciding, learning = false, match, onDecision, onL
       <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
         <strong className="prisma-vacancy-action-title"><SearchOutlined aria-hidden="true" /> Consultar</strong>
         <Typography.Text type="secondary">Explore o Perfil e entenda como o score foi calculado.</Typography.Text>
-        <Space wrap>{profileButton}{analysisButton}</Space>
+        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
       </section>
       {hasReview && vacancy && onReviewed ? <TrajectoryConflictReview canReview={canReview} match={match} onResolved={onReviewed} vacancy={vacancy} /> : null}
       <section className="prisma-vacancy-action-group is-decision" aria-label="Decisão humana">
@@ -874,7 +890,7 @@ function MatchingScoreSummary({ expanded = false, match }: { expanded?: boolean;
     ]).size;
     return <section className={`prisma-score-summary${expanded ? " is-expanded" : ""}`}><strong>{signalCount} sinal(is)</strong><span>Sem trajetória profissional relacionada</span><small>Não participa do Prisma Score comparável.</small></section>;
   }
-  return <section className={`prisma-score-summary${expanded ? " is-expanded" : ""}`}><strong>{score.score === null ? "Score indisponível" : `${score.score}/100`}</strong><span>{score.status === "provisional" ? "Compatibilidade observada provisória" : score.status === "definitive" ? "Compatibilidade observada" : "Critérios insuficientes ou versão desconhecida"}</span><small>Cobertura das evidências: {score.coveragePercent}%</small></section>;
+  return <section className={`prisma-score-summary${expanded ? " is-expanded" : ""}`}><strong>{score.score === null ? "Score indisponível" : `${score.score}/100`}</strong><span>{score.status === "provisional" ? "Compatibilidade observada provisória" : score.status === "definitive" ? "Compatibilidade observada" : "Critérios insuficientes ou versão desconhecida"}</span><small>Cobertura das evidências: {score.coveragePercent}%</small>{match.stableResult ? <small>{match.stableResult.state === "updating" ? "Atualização em andamento · resultado anterior preservado" : match.stableResult.state === "update_failed" ? "Atualização não concluída · resultado anterior preservado" : `Resultado salvo · referência ${score.referenceDate}`}</small> : null}</section>;
 }
 
 function ScoreDimension({ dimension }: { dimension: MatchingScoreDimension }) {
