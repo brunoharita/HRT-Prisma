@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 374
-source_manifest_sha256: 6d2de0ee2c644ccbb64db070a22262aa64f48b2e9d1368bcba997afcce620988
+source_manifest_sha256: b6e7ae876a3b187f996a59bb6df4f1e608d8729f607207424c0fae6214267d85
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-07
 
 ## Ajuda na revisão de divergências — v2.1.3
 
-Implementação autorizada em07/10/2026: três opções dinâmicas mantidas sem seleção inicial, descrição sempre visível e ajuda por ícone separado, mouse/foco/clique/teclado;Escape/Fechar ajuda preservam modal. Significado/impacto acompanha todas as categorias válidas; sem promessa de pontos fixos, declaração não vira experiência. Aviso de aplicação ao salvar, alcance exclusivo deste Perfil/versão da Posição e ausência de regra na Knowledge. Modal mantém pergunta/trecho/pares, rodapé, gate integral, indeterminação, legado, excesso, erro e autorização. Apenas apresentação/registry web2.1.3; sem SQL/Edge/matching/IA/Parser/Synthesis ou novas chamadas. Tipos/build e138testes dirigidos PASS;browser real sintético13cenários/140checks969/390/320 PASS,tema real e imagens antes/depois. Lint/foundation/Context Pack/diff-check PASS;rollout em andamento. Acordo1.0.0/executado/AoT `docs/qa/agreement-trajectory-review-help-v213.md`, `execution-trajectory-review-help-v213.md`, `aot-trajectory-review-help-v213.md`.
+Implementação autorizada em07/10/2026: três opções dinâmicas mantidas sem seleção inicial, descrição sempre visível e ajuda por ícone separado, mouse/foco/clique/teclado;Escape/Fechar ajuda preservam modal. Significado/impacto acompanha todas as categorias válidas; sem promessa de pontos fixos, declaração não vira experiência. Aviso de aplicação ao salvar, alcance exclusivo deste Perfil/versão da Posição e ausência de regra na Knowledge. Modal mantém pergunta/trecho/pares, rodapé, gate integral, indeterminação, legado, excesso, erro e autorização. Apenas apresentação/registry web2.1.3; sem SQL/Edge/matching/IA/Parser/Synthesis ou novas chamadas. Tipos/build e138testes dirigidos PASS;browser real sintético13cenários/140checks969/390/320 PASS,tema real e imagens antes/depois. Lint/foundation/Context Pack/diff-check PASS. Publicada em07/10/2026:runtime30d4f792615b2beaf96f641ca757cded394a1547,CI branch37614002658/main37614117438 success. Webc1d54ee0 running0,entryindex-cFAsS5C0.js/CSSindex-CYOKCXBz.css;19HTTP200,7checks bundle/ajuda/visual/assets e7infra PASS.404 transitório estabilizou sem rebuild. Rollback-before-30d4f792615b conserva imagem931e15b9;Parser/Synthesis/gateway preservam IDs/imagens/reinícios,workers healthy. Fechamento documental sincroniza Git sem reconstruir runtime. Jornada autenticada real NOT TESTED;componente real sintético PASS,zero mutação real/IA paga. Acordo1.0.0/executado/AoT `docs/qa/agreement-trajectory-review-help-v213.md`, `execution-trajectory-review-help-v213.md`, `aot-trajectory-review-help-v213.md`.
 
 ## Persistência da curadoria de competências — v2.1.2
 
@@ -20240,11 +20240,11 @@ Contrato integral `agreement-trajectory-review-help-v213.md` 1.0.0 e execução 
 
 | ID | Implementação | Evidência | Estado |
 | --- | --- | --- | --- |
-| D-01 | Descrição sempre visível e Popover por hover/foco, clique/Enter explícito, Escape e Fechar ajuda | Browser real: 969/390/320, descrição associada ao rádio, Tab/Enter/Escape/toque; imagens antes/depois | PASS local |
-| D-02 | Ajuda das 12 categorias válidas e da indeterminação, impacto condicionado à evidência | Browser cobre todas as categorias; 138 testes dirigidos de revisão/semântica/score/registry | PASS local |
-| D-03 | Aviso ao salvar e fluxo existente preservado | Browser: gate parcial/integral, payload exato, indeterminação/conclusão, não autorizado/legado/excesso/erro | PASS local |
-| D-04 | Registry v2.1.3, main/produção seletiva | CI/smoke/sincronização pendentes | NOT TESTED |
-| P-01 | Ajuda não escolhe/salva/reprocessa; sem mudança no matching/score/serviço/banco/IA | Browser registra zero chamadas novas ao abrir ajuda; diff/revisão e testes dirigidos | PASS local |
+| D-01 | Descrição sempre visível e Popover por hover/foco, clique/Enter explícito, Escape e Fechar ajuda | Browser real: 969/390/320, descrição associada ao rádio, Tab/Enter/Escape/toque; imagens antes/depois | PASS |
+| D-02 | Ajuda das 12 categorias válidas e da indeterminação, impacto condicionado à evidência | Browser cobre todas as categorias; 138 testes dirigidos de revisão/semântica/score/registry | PASS |
+| D-03 | Aviso ao salvar e fluxo existente preservado | Browser: gate parcial/integral, payload exato, indeterminação/conclusão, não autorizado/legado/excesso/erro | PASS |
+| D-04 | Registry v2.1.3, main/produção seletiva | CI branch/main, HTTP/assets/SHA/infra e produção verificados | PASS |
+| P-01 | Ajuda não escolhe/salva/reprocessa; sem mudança no matching/score/serviço/banco/IA | Browser registra zero chamadas novas ao abrir ajuda; diff/revisão e testes dirigidos | PASS |
 
 ## Validação e limites
 
@@ -20252,7 +20252,17 @@ Somente dados sintéticos para gravação/revisão nos testes. Nenhuma IA paga o
 
 Referência é baseline da arquitetura visual. Imagens `before-top/choice-969/390.png` usam componente/CSS do Git `98830fd`; `after-top/choice-969/390.png` usam o componente alterado com o mesmo cenário, tema, dados e viewport. `help-open-969/390/320.png` mostra a ajuda, e `after-*-320.png` documenta reflow estreito. Inspeção visual confirmou pergunta/trecho/pares, corpo rolável e rodapé persistente; a classificação ganha três linhas para acomodar descrições, conforme a proposta aprovada. Sem desvio material identificado. Não se alega identidade de texto/Pessoa com a captura privada fornecida. Evidências em `docs/qa/evidence/trajectory-review-help-v213/`.
 
-A validação detectou interferência entre foco e toggle de clique no Popover: foco/clique simultâneos podiam fechar a ajuda. Corrigido com hover/foco no Popover e abertura explícita no botão; Escape e Fechar ajuda encerram. O teste aguarda conteúdo e animação antes de medir/capturar. Comparação foi refeita com o tema real do Prisma. Tipos/build e 138 testes dirigidos PASS; lint (974 arquivos), foundation, Context Pack e diff-check PASS. CI/produção em andamento. Produção será verificada por smoke público/infra, sem alegar jornada autenticada real.
+A validação detectou interferência entre foco e toggle de clique no Popover: foco/clique simultâneos podiam fechar a ajuda. Corrigido com hover/foco no Popover e abertura explícita no botão; Escape e Fechar ajuda encerram. O teste aguarda conteúdo e animação antes de medir/capturar. Comparação foi refeita com o tema real do Prisma. Tipos/build e 138 testes dirigidos PASS; lint (974 arquivos), foundation, Context Pack e diff-check PASS. CI/produção verificados por smoke público/infra; jornada autenticada real NOT TESTED.
+
+## Publicação, preservação e fechamento
+
+D-01 a D-04 e P-01 PASS, sem desvio de contrato. CI branch37614002658 e main37614117438 success. SHA funcional 30d4f792615b2beaf96f641ca757cded394a1547 em main/origin/VPS, somente web publicada. Imagem sha256:c1d54ee059f7970a61d19fb15da45ee8777c390549cc2ef53d47dcd865833d38, running/0, entry /assets/index-cFAsS5C0.js, CSS /assets/index-CYOKCXBz.css.
+
+19 HTTP200, 7 checks de SHA/versão/ajuda/visual/assets e 7 de infraestrutura PASS. Parser/Synthesis/gateway mantêm IDs/imagens/reinícios; workers healthy. Rollback prisma-web:rollback-before-30d4f792615b conserva imagem sha256:931e15b9f40ce8ba7b7e52950d3723ded3ba794d32c5708e4847be9e44ab5991. Banco/Edge/IA permanecem fora dos destinos do plano.
+
+Smoke imediato do deploy retornou HTTP404 durante a recriação, fazendo dispatcher sair1/SSH22. Estabilização e smoke independente PASS sem reconstrução adicional. Evidências release-plan.json, release.json, production-smoke.json, infrastructure.json e imagens/browser-results.json neste diretório. Não confundir HTML200 com interação autenticada: esta continua NOT TESTED em produção, enquanto componente real/fluxos sintéticos e publicação dos marcadores de ajuda foram verificados.
+
+Context Pack gerado/conferido em espelho dos rastreados mais documentos próprios, sem incorporar arquivos locais alheios. Referências históricas do CurrentState preservadas integralmente ao baseline anterior, conferidas na revisão final antes do push. Servidores de teste desta tarefa encerrados. Fechamento documental sincroniza Git por fast-forward sem reconstruir o runtime validado; arquivos locais alheios permanecem fora dos commits.
 
 ---
 

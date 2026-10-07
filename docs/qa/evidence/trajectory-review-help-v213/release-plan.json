@@ -1,0 +1,73 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/agreement-trajectory-review-help-v213.md",
+      "docs/qa/aot-trajectory-review-help-v213.md",
+      "docs/qa/evidence/trajectory-review-help-v213/after-choice-320.png",
+      "docs/qa/evidence/trajectory-review-help-v213/after-choice-390.png",
+      "docs/qa/evidence/trajectory-review-help-v213/after-choice-969.png",
+      "docs/qa/evidence/trajectory-review-help-v213/after-top-320.png",
+      "docs/qa/evidence/trajectory-review-help-v213/after-top-390.png",
+      "docs/qa/evidence/trajectory-review-help-v213/after-top-969.png",
+      "docs/qa/evidence/trajectory-review-help-v213/before-choice-390.png",
+      "docs/qa/evidence/trajectory-review-help-v213/before-choice-969.png",
+      "docs/qa/evidence/trajectory-review-help-v213/before-top-390.png",
+      "docs/qa/evidence/trajectory-review-help-v213/before-top-969.png",
+      "docs/qa/evidence/trajectory-review-help-v213/browser-results.json",
+      "docs/qa/evidence/trajectory-review-help-v213/help-open-320.png",
+      "docs/qa/evidence/trajectory-review-help-v213/help-open-390.png",
+      "docs/qa/evidence/trajectory-review-help-v213/help-open-969.png",
+      "docs/qa/evidence/trajectory-review-help-v213/local-validation.json",
+      "docs/qa/evidence/trajectory-review-help-v213/production-baseline.txt",
+      "docs/qa/execution-trajectory-review-help-v213.md",
+      "tests/productRelease.test.ts",
+      "tests/tooling/trajectoryReviewHelp.browser.mjs",
+      "tests/trajectoryReviewModal.test.ts",
+      "tests/ui/trajectory-review-help.html",
+      "tests/ui/trajectory-review-help.vite.config.mts",
+      "tests/ui/trajectory-review-help/fixture.ts",
+      "tests/ui/trajectory-review-help/main.tsx",
+      "web/src/components/TrajectoryConflictReview.tsx",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/styles.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}
