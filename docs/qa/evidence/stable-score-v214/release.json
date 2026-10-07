@@ -1,0 +1,32 @@
+{
+  "status": "PUBLISHED_VERIFIED",
+  "runtimeSha": "d980fc6d0e55015c016b53d23c4cf6264cf638dc",
+  "version": "v2.1.4",
+  "surfaces": {
+    "database": "20261007142155",
+    "edgeFunction": {
+      "name": "matching-trajectory",
+      "version": 16,
+      "verifyJwt": true
+    },
+    "web": "PUBLISHED_VERIFIED",
+    "parserIa": "PRESERVED",
+    "profileSynthesis": "PRESERVED"
+  },
+  "dispatcher": {
+    "exitCode": 1,
+    "reason": "Transient HTTP404 immediately after container recreation; independent stabilized smoke passed; no rebuild."
+  },
+  "ci": {
+    "branch": 37636644222,
+    "main": 37636831992,
+    "conclusion": "success"
+  },
+  "smoke": {
+    "http200": 17,
+    "checks": 8,
+    "infrastructureChecks": 7,
+    "pass": true
+  },
+  "limits": "No authenticated real Person flow, human decision, paid AI or real-data mutation in validation."
+}

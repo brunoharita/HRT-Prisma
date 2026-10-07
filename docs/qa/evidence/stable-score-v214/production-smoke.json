@@ -1,0 +1,86 @@
+{
+  "at": "2026-10-07T14:28:37.524Z",
+  "sha": "d980fc6d0e55015c016b53d23c4cf6264cf638dc",
+  "version": "2.1.4",
+  "requests": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "path": "/index.html",
+      "status": 200
+    },
+    {
+      "path": "/profiles",
+      "status": 200
+    },
+    {
+      "path": "/profiles/person-smoke",
+      "status": 200
+    },
+    {
+      "path": "/profiles/person-smoke/profile",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "path": "/knowledge",
+      "status": 200
+    },
+    {
+      "path": "/settings",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-ByP4lZJ1.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-ByE9Q9KR.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-CYOKCXBz.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-cFAsS5C0.js",
+      "status": 200
+    }
+  ],
+  "checks": {
+    "runtimeSha": true,
+    "version": true,
+    "stableScores": true,
+    "tonalPalette": true,
+    "expressiveScale": true,
+    "oldAssetsRetained": true,
+    "reviewHelp": true,
+    "reviewHelpStyles": true
+  },
+  "limits": "Smoke público/infra; sem Pessoa real, autenticação ou mutação."
+}
