@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 367
-source_manifest_sha256: 565b83de3942d71838a8bfa3f4c43603b088649782d6d3a7124ff3eb2d08e574
+source_manifest_sha256: cc4aa44ff1773596f3bb5dde0fc5ffe9cae827fdd99abf55162c2f3d87e4542f
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-06
 
 ## Comunicação visual — Prisma v2.1.1
 
-Implementação autorizada por Bruno em06/10/2026 com base na opção4: hierarquia tipográfica compartilhada, cabeçalhos com ícones semânticos, destaques tonais azul-claro, fatos maiores e metadados legíveis. Pessoa preserva72/28, seis abas, quatro destaques, síntese e oito análises integrais/fontes sob demanda; capelo/maleta SVG simples, sem nova dependência. Foundation de apresentação1.3.0; registry2.1.1. Sem alteração de domínio, tenant, papéis, SQL, matching, Parser ou Synthesis. Acordo1.0.0 e execução/AoT em docs/qa/agreement-visual-option4-v211.md, execution-visual-option4-v211.md, aot-visual-option4-v211.md. Local:27cenários visuais,15Pessoa,32checks revisão,46dirigidos,tipos/build/lint/foundation PASS. Contextos PASS em cópia limpa dos rastreados; CI/publicação em andamento; não implica rollout até o fechamento operacional abaixo. Baseline main/local/VPS b781870c, webcc9ad878; demais serviços preservados e saudáveis no baseline.
+Implementação autorizada por Bruno em06/10/2026 com base na opção4: hierarquia tipográfica compartilhada, cabeçalhos com ícones semânticos, destaques tonais azul-claro, fatos maiores e metadados legíveis. Pessoa preserva72/28, seis abas, quatro destaques, síntese e oito análises integrais/fontes sob demanda; capelo/maleta SVG simples, sem nova dependência. Foundation de apresentação1.3.0; registry2.1.1. Sem alteração de domínio, tenant, papéis, SQL, matching, Parser ou Synthesis. Acordo1.0.0 e execução/AoT em docs/qa/agreement-visual-option4-v211.md, execution-visual-option4-v211.md, aot-visual-option4-v211.md. Local:27cenários visuais,15Pessoa,32checks revisão,46dirigidos,tipos/build/lint/foundation PASS. Contextos PASS em cópia limpa dos rastreados. Publicada em06/10/2026:runtime0e6c5456c8898252f83e4d7c74ca2bcec836cdd0,CI branch37548995182/main37549102449 success;somente web imagem2cfc671e running0,entryindex-CevH3Gd0.js/CSSindex-CA9shKY5.css.19HTTP200,5checks bundle/escala/assets e7infra PASS.404 transitório do smoke imediato estabilizou sem rebuild. Rollback-before-0e6c5456c889 conserva imagemcc9ad878;Parser/Synthesis/gateway preservam IDs/imagens/reinícios,workers healthy. Fechamento documental sincroniza Git sem reconstruir runtime. Jornada autenticada real NOT TESTED;zero mutações humanas/IA paga.
 
 ## Página unificada da Pessoa — Prisma v2.1.0
 
@@ -20244,7 +20244,7 @@ Contrato integral: `agreement-visual-option4-v211.md`1.0.0, execução `executio
 | D-UX-02 | Destaques tonais16px de raio, ícones32 em56, valores25px/rótulos14; síntese/8eixos preservados | Browser Pessoa15cenários PASS; renders1516/390/320 e medidas DOM PASS | PASS |
 | D-UX-03 | Home/indicadores/fontes e padrões de entrada tonais, leitura branca | Capturas/valores factuais e medidas DOM, Home32px/rótulo15px | PASS |
 | D-UX-04 | Componentes acessíveis e handlers existentes, foco/reflow | Pessoa15cenários PASS,46dirigidos PASS; revisão32checks PASS,menu/teclado/reflow PASS | PASS |
-| D-REL-05 | Registry2.1.1, owner/current-state/contextos e release web seletivo | Produção/CI ainda pendentes | NOT TESTED |
+| D-REL-05 | Registry2.1.1, owner/current-state/contextos e release web seletivo | CI branch37548995182/main37549102449 success;19HTTP200,5checks bundle/escala/assets,7checks infra | PASS |
 
 ## Proibições verificadas
 
@@ -20260,8 +20260,8 @@ Contrato integral: `agreement-visual-option4-v211.md`1.0.0, execução `executio
 | Pessoa/destaques/síntese/fontes | direct |4cards/8eixos,72/28 e cálculos existentes;15cenários/46dirigidos | PASS |
 | Listas/formulários/diálogos/revisão | plausible_indirect | Sem novo handler;reflow/teclado/foco/revisão32checks | PASS |
 | Tenant/papéis/dirty/seleção/geometria | critical_transversal | Negativos member/recruiter e dirty PASS;CSS não seleciona canvas/regiões/evidence highlights;revisão32checks/46dirigidos; nenhum seletor novo de geometria | PASS |
-| Registry/release web | direct | webcc9ad878 em baseline;rollback/SHA/assets/CI | NOT TESTED |
-| SQL/IA/Parser/matching/Paddle | no_impact_identified | Sem arquivos de runtime/domínio alterados, containers baseline registrados | PASS local/plano; preservação operacional final pendente |
+| Registry/release web | direct | webcc9ad878 em baseline;runtime0e6c545 publicado,rollback/SHA/assets/CI comprovados | PASS |
+| SQL/IA/Parser/matching/Paddle | no_impact_identified | Sem arquivos de runtime/domínio alterados, containers baseline registrados | PASS:diff/plano e mesmos IDs/imagens/reinícios;workers healthy |
 
 ### Novidade e preservação
 
@@ -20287,15 +20287,19 @@ Tipos raiz/web,build web,lint/foundation,diff-check PASS.46testes dirigidos PASS
 
 Primeira falha do smoke de áreas foi um locator exato que incluía nome acessível do ícone; corrigido para o botão correto. Primeira verificação de Escape ocorreu antes do foco/animação; corrigida espera/foco do teste, sem alterar navegação do produto. O smoke de revisão150ms observava foco antes dos dois animation frames; o teste passou a aguardar o foco efetivo mantendo a mesma asserção. A fixture visual passou a usar meses explícitos na experiência antiga, preservando o contrato que rejeita cronologia ambígua. Nenhum cálculo de domínio foi alterado.
 
-Context Pack gerado/conferido em cópia dos arquivos rastreados PASS; documentos locais alheios excluídos da cópia e preservados. CI e publicação pendentes.
+Context Pack gerado/conferido em cópia dos arquivos rastreados PASS; documentos locais alheios excluídos da cópia e preservados. CI branch37548995182/main37549102449 success, incluindo gates integrais obrigatórios do workflow. Nenhuma suíte integral local adicional.
+
+Produção:19HTTP200 e5checks de SHA/versão/tons/escala/assets anteriores PASS;7checks de infraestrutura PASS, incluindo workers healthy, web running/zero reinícios, checkout e rollback. Verificação do dispatcher confirma main/origin alinhados e HTTP200. O smoke imediato do deploy retornou22/404 durante recriação; verificações posteriores estabilizaram200, sem rebuild. Não ocultar essa saída não-zero do script; evidências posteriores comprovam o runtime. Jornada autenticada real permanece NOT TESTED; sem Pessoa humana ou chamada real de IA.
 
 ## Git / QA / ambiente
 
-Baseline operacional em production-baseline.txt. Somente VPS/remote oficiais. Release e sincronização ainda pendentes.
+Baseline operacional em production-baseline.txt. Somente VPS/remote oficiais. Runtime0e6c5456c8898252f83e4d7c74ca2bcec836cdd0 integrado por fast-forward e publicado em06/10/2026;web imagemsha256:2cfc671e9d50f9d4c56fb378fbd22bd04e59a7badbdc5dfb19b356bb6795ea3f,entryindex-CevH3Gd0.js/CSSindex-CA9shKY5.css. Rollback prisma-web:rollback-before-0e6c5456c889 conserva imagemcc9ad878. Parser8682af7d/Synthesis8526717f/gatewayd061cea3 preservam IDs/imagens/reinícios do baseline. Contêiner experimental paddle-vl-llama-test estava unhealthy antes e continua fora de escopo.
+
+O fechamento documental atualiza somente AoT/current-state/contextos/evidências, com plano sem deploy web. Checkout local/origin/VPS é sincronizado por fast-forward;imagem continua construída do SHA funcional0e6c545. Não atribuir o SHA documental ao bundle. Arquivos alheios não rastreados preservados. Vites temporários próprios encerrados ao final; nenhum serviço humano anterior é encerrado.
 
 ## Conclusão
 
-Entrega em validação; não declarar publicada até CI, rollout e smoke finais.
+v2.1.1 implementada, validada e publicada, seguindo opção4. D/P aplicáveis PASS nas fronteiras demonstradas, sem desvio material. Limite: testes funcionais/visuais sintéticos e smoke público/infra; jornada autenticada real NOT TESTED.
 
 ---
 
