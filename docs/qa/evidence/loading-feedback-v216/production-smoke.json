@@ -1,0 +1,120 @@
+{
+  "at": "2026-10-07T20:48:53.412Z",
+  "sha": "20ebdd70f891f1677f893369c865f57071b7d54e",
+  "version": "2.1.6",
+  "requests": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-ByE9Q9KR.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-SNTMzHER.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-pEv3u2f-.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/profiles/import",
+      "status": 200
+    },
+    {
+      "path": "/sign-in",
+      "status": 200
+    },
+    {
+      "path": "/profiles/new",
+      "status": 200
+    },
+    {
+      "path": "/profiles",
+      "status": 200
+    },
+    {
+      "path": "/profiles/person-smoke/profile",
+      "status": 200
+    },
+    {
+      "path": "/profiles/person-smoke/versions",
+      "status": 200
+    },
+    {
+      "path": "/profiles/person-smoke",
+      "status": 200
+    },
+    {
+      "path": "/knowledge",
+      "status": 200
+    },
+    {
+      "path": "/settings",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-CYOKCXBz.css",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/new",
+      "status": 200
+    },
+    {
+      "path": "/users",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-cFAsS5C0.js",
+      "status": 200
+    },
+    {
+      "path": "/item-bank",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-ByP4lZJ1.js",
+      "status": 200
+    },
+    {
+      "path": "/verifications",
+      "status": 200
+    },
+    {
+      "path": "/assets/login/prisma-logo-light.png",
+      "status": 200
+    }
+  ],
+  "checks": {
+    "validatedSha": true,
+    "version": true,
+    "loadingLabels": true,
+    "accessibleStatus": true,
+    "loadingStyles": true,
+    "stableScore": true
+  },
+  "limits": "Public HTTP/bundle smoke; no authenticated user flow or real data mutation."
+}

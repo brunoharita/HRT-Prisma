@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 382
-source_manifest_sha256: 241d0fdd813da7d24e6508335268f7b840ea82ef2b9876a23b158d6093e394c4
+source_manifest_sha256: e9f158c236b1371aa820815c7eb9b713eadbe741f331aeff188fadff5c5cafb0
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-07
 
 ## Carregamento visível — v2.1.6
 
-Diretriz permanente aprovada por Bruno em07/10/2026: toda operação que ainda possa alterar a visualização deve indicar carregamento/processamento até concluir, falhar ou cancelar. Revisão transversal de páginas autenticadas/públicas, modais e consultas auxiliares reutiliza estados de UI, skeletons/controles e aviso acessível não bloqueante. Preserva conteúdo, rascunhos e score salvo; nenhuma consulta, geração ou recálculo novo pelo indicador. Operações concorrentes têm donos independentes e tarefas contadas; desmontagem/fechamento remove sua indicação. Lacunas corrigidas em opções de Posição, histórico de taxonomia, classificações, fontes, análise persistida e operações de Conhecimento/verificação. Nenhuma mudança de banco/Edge/Parser/Synthesis. Acordo1.0.0, execução e AoT `docs/qa/aot-loading-feedback-v216.md`; owner `docs/product/ux-foundation.md`. Implementação local em validação; publicação ainda não confirmada. Registro oficial2.1.6 com número5 omitido por escolha do PO, sem entrega fictícia.
+Diretriz permanente aprovada por Bruno em07/10/2026: toda operação que ainda possa alterar a visualização deve indicar carregamento/processamento até concluir, falhar ou cancelar. Revisão transversal de páginas autenticadas/públicas, modais e consultas auxiliares reutiliza estados de UI, skeletons/controles e aviso acessível não bloqueante. Preserva conteúdo, rascunhos e score salvo; nenhuma consulta, geração ou recálculo novo pelo indicador. Operações concorrentes têm donos independentes e tarefas contadas; desmontagem/fechamento remove sua indicação. Lacunas corrigidas em opções de Posição, histórico de taxonomia, classificações, fontes, análise persistida e operações de Conhecimento/verificação. Nenhuma mudança de banco/Edge/Parser/Synthesis. Acordo1.0.0, execução e AoT `docs/qa/aot-loading-feedback-v216.md`; owner `docs/product/ux-foundation.md`. Publicada em07/10/2026: SHA funcional20ebdd70f891f1677f893369c865f57071b7d54e, CI branch37684298802/main37684449584 success; somente web, imagem28aacc1c running0 e rollback13e5dd5a. Smoke HTTP/bundle PASS após404 transitório durante recriação, sem rebuild adicional; Parser/Synthesis/gateway preservados. Local:45 testes dirigidos,21 tooling e40 cenários browser (30 páginas, concorrência/acesso/score) PASS, tipos/build/lint/foundation/contextos PASS. Diretriz gravada na memória por solicitação explícita. Jornada autenticada real NOT TESTED; fechamento documental sincroniza Git sem reconstruir runtime. Registro oficial2.1.6 com número5 omitido por escolha do PO, sem entrega fictícia.
 
 ## Estabilidade do Score — v2.1.4
 
@@ -16629,7 +16629,7 @@ Acordo integral `agreement-loading-feedback-v216.md` 1.0.0 e execução correspo
 | D-02 | Skeletons e controles anteriores + aviso sem captura de input, conteúdo anterior preservado | Browser: edição durante espera, conteúdo/score anterior, atualização/falha/reabertura | PASS |
 | D-03 | Donos independentes, tarefas com tokens, finally/desmontagem/visibilidade | Unitários3 e browser: concorrência mesma/diferente operação, falha, fechamento de modal e desmontagem | PASS |
 | D-04 | Português, role/status/live/busy, layout320/390/1280, progresso sem percentual inventado | Browser e renders320/390/1280, sem overflow; estados reais, percentuais anteriores preservados | PASS |
-| D-05 | Owner UX, nota de memória gravada, registry2.1.6, entrega web planejada | Memória confirmada; publicação pendente | PARTIAL |
+| D-05 | Owner UX, nota de memória gravada, registry2.1.6, entrega web publicada | Memória confirmada; CI branch/main, smoke público e infraestrutura conferidos | PASS |
 | P-01–02 | Observação explícita de UI; sem rede/cálculo/IA no indicador, sem bloqueio global | Revisão diff, cobertura de fonte e browser score6 cenários: leitura/revisão/recálculo/falha/comparação sem alterar outra Pessoa | PASS |
 
 ## Mapa de impacto e preservação
@@ -16646,7 +16646,13 @@ Local: tipos/build web, build raiz,45 testes Node dirigidos,21 testes tooling (i
 
 Suíte integral não executada; o comando genérico pnpm test sugerido pelo dispatcher foi substituído pelos módulos diretamente afetados e regressão comprovadamente necessária. CI obrigatório continua seu fluxo normal. Context Pack gerado/conferido em cópia dos rastreados e arquivos próprios preparados: arquivos alheios não rastreados não entram no export. Plano preliminar: somente web+documentação/testes, banco/Edge/Parser/Synthesis excluídos.45 testes dirigidos e21 tooling registrados em arquivos de evidência. Avisos de chunk/dynamic import existentes no build não impedem compilação.
 
-Falhas iniciais do harness (lançamento Vite, factory sintética e fechamento do modal sem vínculo de visibilidade) foram diagnosticadas e corrigidas antes da evidência final; não contadas como PASS. Revisão descobriu guarda necessária em modais mantidos montados: classificação, fontes e busca associam indicador à visibilidade. Falha excepcional de acesso/senha e término da criação de revisão também encerram feedback, preservando regras anteriores. Publicação pendente. Desvios materiais: nenhum identificado; fechar somente após smoke e sincronização.
+Falhas iniciais do harness (lançamento Vite, factory sintética e fechamento do modal sem vínculo de visibilidade) foram diagnosticadas e corrigidas antes da evidência final; não contadas como PASS. Revisão descobriu guarda necessária em modais mantidos montados: classificação, fontes e busca associam indicador à visibilidade. Falha excepcional de acesso/senha e término da criação de revisão também encerram feedback, preservando regras anteriores.
+
+Publicada em 07/10/2026, SHA funcional `20ebdd70f891f1677f893369c865f57071b7d54e`, integrado main/origin/VPS. CI branch37684298802 e main37684449584 success. Web imagem `sha256:28aacc1cd344854ed6c66a946be3b7476ba6bd23734e7e1e9c165d34f157cc1c`, running/0; entry `index-pEv3u2f-.js`, CSS `index-SNTMzHER.css`. Rollback `prisma-web:rollback-before-20ebdd70f891` conserva imagem anterior13e5dd5a. Parser/Synthesis/gateway mantêm IDs, imagens e zero reinícios; workers healthy. Banco/Edge/Parser/Synthesis não publicados.
+
+O dispatcher saiu1/SSH22 porque o primeiro smoke recebeu404 durante a troca do contêiner. O comando que falhou não é contado como PASS. A estabilização foi confirmada por smoke independente, sem reconstrução adicional:26 HTTP200 e6 checks de rotas/assets/SHA/versão/labels/acessibilidade/estilos/controle de score PASS, incluindo assets anteriores preservados para abas abertas. Recibo consolidado registra a falha transitória e a verificação posterior. Evidência HTTP pública não prova jornada autenticada real, que permanece NOT TESTED; os40 cenários locais utilizam serviços sintéticos controlados.
+
+Diretriz memorizada em `C:/Users/Bruno/.codex/memories/extensions/ad_hoc/notes/2026-10-07-loading-feedback-prisma.md`, sem editar registros históricos. D-01–05/P-01–02 PASS; desvios materiais: nenhum identificado. Fechamento documental sincroniza Git/VPS sem reconstruir o runtime funcional acima. Arquivos alheios não rastreados preservados e excluídos da entrega e dos exports.
 
 ---
 

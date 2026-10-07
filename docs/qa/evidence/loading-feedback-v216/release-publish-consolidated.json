@@ -1,0 +1,26 @@
+{
+  "sha": "20ebdd70f891f1677f893369c865f57071b7d54e",
+  "version": "2.1.6",
+  "status": "PUBLISHED_VERIFIED",
+  "destinations": {
+    "git": true,
+    "web": true,
+    "database": false,
+    "edgeFunctions": false,
+    "parserIa": false,
+    "profileSynthesis": false
+  },
+  "dispatcher": {
+    "exitCode": 1,
+    "sshExitCode": 22,
+    "reason": "Immediate public curl returned HTTP404 during container recreation; command itself did not pass."
+  },
+  "recovery": {
+    "rebuild": false,
+    "method": "Independent public smoke and read-only runtime/rollback/service verification after stabilization",
+    "smoke": "production-smoke.json",
+    "infrastructure": "production-infrastructure.json",
+    "ci": "production-ci.json"
+  },
+  "limits": "No authenticated production user flow or real data mutation."
+}

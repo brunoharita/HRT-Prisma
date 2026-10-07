@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-07T20:48:52.659Z",
+  "method": "Read-only SSH prisma-vps; git rev-parse/docker inspect/image inspect",
+  "sha": "20ebdd70f891f1677f893369c865f57071b7d54e",
+  "web": {
+    "container": "79bffd110aaa08414c86a310e567729ab088646bd93ab838126d2ff5ad7b1f4e",
+    "image": "sha256:28aacc1cd344854ed6c66a946be3b7476ba6bd23734e7e1e9c165d34f157cc1c",
+    "status": "running",
+    "restarts": 0
+  },
+  "rollback": {
+    "tag": "prisma-web:rollback-before-20ebdd70f891",
+    "image": "sha256:13e5dd5a20601a91f83060f711f11a405849a750a811352b58162551ddb31e4d"
+  },
+  "preserved": [
+    {
+      "name": "prisma-parser-ia",
+      "container": "ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "container": "9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "container": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "status": "running",
+      "restarts": 0
+    }
+  ],
+  "checks": {
+    "runtimeSha": true,
+    "webRunningZeroRestarts": true,
+    "rollback": true,
+    "workerHealth": true,
+    "preservedIdsImagesRestarts": true
+  }
+}
