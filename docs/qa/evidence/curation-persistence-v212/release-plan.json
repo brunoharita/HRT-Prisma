@@ -1,0 +1,68 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/decisions/ADR-077-stable-competency-curation.md",
+      "docs/product/person-center.md",
+      "docs/qa/agreement-competency-curation-persistence.md",
+      "docs/qa/aot-competency-curation-persistence.md",
+      "docs/qa/evidence/curation-persistence-v212/local-sql.json",
+      "docs/qa/evidence/curation-persistence-v212/production-baseline.txt",
+      "docs/qa/evidence/curation-persistence-v212/production-projection.json",
+      "docs/qa/evidence/curation-persistence-v212/production-security.json",
+      "docs/qa/execution-competency-curation-persistence.md",
+      "scripts/verify-curation-persistence.mjs",
+      "supabase/migration-ledger-map.json",
+      "supabase/migrations/20261007020000_stable_competency_curation.sql",
+      "supabase/qa/stable_competency_curation_verification.sql",
+      "tests/productRelease.test.ts",
+      "web/src/config/releaseRegistry.ts"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "database",
+        "database-ledger",
+        "database-tests",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "tooling",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [
+        "supabase/migrations/20261007020000_stable_competency_curation.sql"
+      ],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run test:release-tooling",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test",
+      "pnpm run check:supabase-ledger"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [
+        "supabase/migrations/20261007020000_stable_competency_curation.sql"
+      ],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

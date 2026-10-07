@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 371
-source_manifest_sha256: b2d4cc36cbd17c0df065721ffbfc286942a73adb9086bd61b5d1c92535cec46c
+source_manifest_sha256: af66715fb2f70fd0143b254ae17ad78c77c7bbf3133ca3431ef4bd958005a292
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-06
 
 ## Persistência da curadoria de competências — v2.1.2
 
-Correção autorizada em 06/10/2026: decisão humana por Pessoa, declaração original e trecho, preservada após refresh, novo nome normalizado e Perfil posterior com a mesma declaração/trecho. Reutiliza Knowledge, RPCs e projeções; persistência interna com RLS, sem edição direta, e precedência no processamento/leitura. Criação local/associação conferem resolução atomicamente; proposta global só se torna decisão após aprovação efetiva. Recuperação anterior exige prova humana inequívoca, sem nova escolha, alias ou conceito. Snapshot, fragmentos vizinhos, tenant/papéis, visual v2.1.1, matching, Parser/Synthesis e IA preservados. SQL local sintético: 35 checks PASS/ROLLBACK, incluindo reprodução do defeito, recuperação, reprocessamento, isolamento e rollback por falha. Tipos/build raiz e web, lint/foundation e 36 testes dirigidos PASS. Backend aplicado como migration remota20261007013453:10decisões existentes recuperadas em4Perfis, RLS/grants conferidos. Projeção real somente leitura confirma BPMhuman_preserved e pendências54/52→53/51; Excelência operacional/BPMN/PMO preservados e run original não reescrito. Publicação web/CI/smoke em andamento. Acordo 1.0.0 e AoT `docs/qa/agreement-competency-curation-persistence.md`, `aot-competency-curation-persistence.md`; ADR-077.
+Correção autorizada em 06/10/2026: decisão humana por Pessoa, declaração original e trecho, preservada após refresh, novo nome normalizado e Perfil posterior com a mesma declaração/trecho. Reutiliza Knowledge, RPCs e projeções; persistência interna com RLS, sem edição direta, e precedência no processamento/leitura. Criação local/associação conferem resolução atomicamente; proposta global só se torna decisão após aprovação efetiva. Recuperação anterior exige prova humana inequívoca, sem nova escolha, alias ou conceito. Snapshot, fragmentos vizinhos, tenant/papéis, visual v2.1.1, matching, Parser/Synthesis e IA preservados. SQL local sintético: 35 checks PASS/ROLLBACK, incluindo reprodução do defeito, recuperação, reprocessamento, isolamento e rollback por falha. Tipos/build raiz e web, lint/foundation e 36 testes dirigidos PASS. Backend aplicado como migration remota20261007013453:10decisões existentes recuperadas em4Perfis, RLS/grants conferidos. Projeção real somente leitura confirma BPMhuman_preserved e pendências54/52→53/51; Excelência operacional/BPMN/PMO preservados e run original não reescrito. Publicada em06/10/2026: runtime58f8bd7fd97543dd7249002b8e0e035868c610b4, CI branch37558377478/main37558476862 success. Web931e15b9 running0, entryindex-DU5ijjcH.js/CSSindex-CA9shKY5.css;17HTTP200,5checks bundle/visual/assets e7infra PASS.404 transitório imediato estabilizou sem rebuild. Rollback-before-58f8bd7fd975 conserva imagem2cfc671e;Parser/Synthesis/gateway preservam IDs/imagens/reinícios,workers healthy.19testes release/contextos PASS;fechamento documental sincroniza Git sem reconstruir runtime. Jornada humana mutacional real NOT TESTED;projeção autenticada real de leitura PASS,zero publicação/IA paga. Acordo 1.0.0 e AoT `docs/qa/agreement-competency-curation-persistence.md`, `aot-competency-curation-persistence.md`; ADR-077.
 
 ## Comunicação visual — Prisma v2.1.1
 
@@ -15811,12 +15811,12 @@ Acordo integral `agreement-competency-curation-persistence.md` 1.0.0; execução
 
 | Requisito | Implementação | Evidência | Estado |
 | --- | --- | --- | --- |
-| D-01 | Decisão por organização/Pessoa/Perfil/declaração/trecho; precedência na projeção V3 e conclusão da normalização | SQL: rename/ambiguidade automática, refresh e Perfil posterior | PASS local |
-| D-02 | Core compartilhado grava decisão e confere resolução na mesma transação; aprovação global efetiva registra seu alvo por trigger privado | SQL: criação/alias; falha injetada impede falso sucesso e desfaz conceito/proposta/alias | PASS local |
-| D-03 | Trecho exato e mesma Pessoa/tenant; autorização existente; sem grants diretos | SQL: BPMN, outra Pessoa, tenant, papéis, anon, conflito e fonte forjada | PASS local |
-| D-04 | Recuperação inicial de termos humanos aprovados, resultado completo vigente e fonte fundamentada; prova de alias/change set ou proposta aprovada | Baseline reproduz criação aprovada com pendência; migração recupera exatamente o BPM sintético | PASS local e produção |
-| D-05 | Registry v2.1.2, migration forward-only e destinos seletivos | CI/rollout/smoke/sincronização pendentes | NOT TESTED |
-| P-01/P-02 | Snapshots e resultados antigos preservados; sem mudança em frontend/domain matching/IA, sem modelo pago | SQL: snapshot, zero requests, só declaração, proposta global pendente e conceito indisponível explícito | PASS local |
+| D-01 | Decisão por organização/Pessoa/Perfil/declaração/trecho; precedência na projeção V3 e conclusão da normalização | SQL: rename/ambiguidade automática, refresh e Perfil posterior | PASS |
+| D-02 | Core compartilhado grava decisão e confere resolução na mesma transação; aprovação global efetiva registra seu alvo por trigger privado | SQL: criação/alias; falha injetada impede falso sucesso e desfaz conceito/proposta/alias | PASS |
+| D-03 | Trecho exato e mesma Pessoa/tenant; autorização existente; sem grants diretos | SQL: BPMN, outra Pessoa, tenant, papéis, anon, conflito e fonte forjada | PASS |
+| D-04 | Recuperação inicial de termos humanos aprovados, resultado completo vigente e fonte fundamentada; prova de alias/change set ou proposta aprovada | Baseline reproduz criação aprovada com pendência; migração recupera exatamente o BPM sintético | PASS |
+| D-05 | Registry v2.1.2, migration forward-only e destinos seletivos | CI branch/main e produção verificadas; fechamento documental por Git | PASS |
+| P-01/P-02 | Snapshots e resultados antigos preservados; sem mudança em frontend/domain matching/IA, sem modelo pago | SQL: snapshot, zero requests, só declaração, proposta global pendente e conceito indisponível explícito | PASS |
 
 ## Impacto e preservação
 
@@ -15830,7 +15830,7 @@ V2–V6 mantêm sua forma pública. V1/observações humanas antigas não são r
 
 O runner recompõe somente dependências de curadoria/normalização necessárias na transação. A montagem inicial descobriu dependências históricas (aliases canônicos duplicados sem M7.7 de transição); corrigida a montagem, sem alterar migrations históricas ou produção. Um teste usava revisão 2 quando a mudança de versão Knowledge gera uma nova revisão 1; corrigido para a sequência mais recente, mantendo o cenário.
 
-Tipos/build raiz e web, lint (959 arquivos), foundation e 36 testes dirigidos PASS. Context Pack gerado/conferido em espelho dos rastreados mais arquivos próprios, excluindo documentos locais alheios, PASS. Diff-check PASS. Nenhuma suíte integral local. Jornada humana autenticada mutacional não é usada como teste.
+Tipos/build raiz e web, lint (964 arquivos), foundation e 36 testes dirigidos PASS; mais 19 testes de release/contexto PASS. Context Pack gerado/conferido em espelho dos rastreados mais arquivos próprios, excluindo documentos locais alheios, PASS. Diff-check PASS. Nenhuma suíte integral local. Jornada humana autenticada mutacional não é usada como teste.
 
 ## Produção, rollback e limites
 
@@ -15842,7 +15842,9 @@ Projeção V5 real, sob o operador da aprovação existente em transação de le
 
 ## Fechamento
 
-Em andamento. Não declarar concluído antes da prova operacional de D-04/D-05 e sincronização.
+D-01 a D-05 e P-01/P-02 PASS, sem desvio de contrato. CI branch `37558377478` e main `37558476862` success. Runtime funcional `58f8bd7fd97543dd7249002b8e0e035868c610b4` publicado em main/origin/VPS: web imagem `931e15b9f40ce8ba7b7e52950d3723ded3ba794d32c5708e4847be9e44ab5991`, running/0, entry `index-DU5ijjcH.js`, CSS `index-CA9shKY5.css`. 17 HTTP200, cinco checks de SHA/versão/visual/assets e sete de infraestrutura PASS. Parser/Synthesis/gateway mantêm IDs/imagens/reinícios e workers healthy. Rollback `prisma-web:rollback-before-58f8bd7fd975` conserva imagem anterior `2cfc671e9d50f9d4c56fb378fbd22bd04e59a7badbdc5dfb19b356bb6795ea3f`.
+
+O smoke imediato do script de deploy recebeu HTTP404 durante a recriação, fazendo o dispatcher sair1/SSH22. Após estabilização, todos os checks independentes passaram sem rebuild/redeploy. Registrar o erro transitório não equivale a omitir a verificação final. Plano exige apenas esta migration (já aplicada e mapeada) e web; nenhum serviço/Edge Function adicional. Evidências `release-plan.json`, `release.json`, `production-smoke.json`, `infrastructure.json`. Fechamento documental sincroniza Git por fast-forward sem reconstruir o runtime validado. Arquivos locais alheios permanecem fora dos commits. Jornada humana mutacional real NOT TESTED; projeção autenticada real somente leitura PASS.
 
 ---
 

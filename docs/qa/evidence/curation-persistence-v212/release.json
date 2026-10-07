@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-07T01:44:54.624Z",
+  "version": "2.1.2",
+  "runtimeSha": "58f8bd7fd97543dd7249002b8e0e035868c610b4",
+  "ci": {
+    "branch": {
+      "id": 37558377478,
+      "conclusion": "success"
+    },
+    "main": {
+      "id": 37558476862,
+      "conclusion": "success"
+    }
+  },
+  "migration": {
+    "local": "20261007020000",
+    "remote": "20261007013453",
+    "status": "APPLIED_VERIFIED"
+  },
+  "web": "PUBLISHED_VERIFIED",
+  "parser": "SKIPPED_PRESERVED",
+  "synthesis": "SKIPPED_PRESERVED",
+  "edgeFunctions": "SKIPPED",
+  "dispatcher": {
+    "exitCode": 1,
+    "cause": "Immediate curl smoke got transient HTTP404 after container recreation; stabilized and independently verified without rebuild."
+  },
+  "limits": "Synthetic SQL and public smoke plus authorized read-only production RPC. No real human curation mutation or Profile publication used as test. Documentation closure sync uses Git only."
+}
