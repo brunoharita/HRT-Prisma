@@ -4,7 +4,7 @@ import {createRequire} from "node:module";
 import {mkdir,writeFile} from "node:fs/promises";
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??"playwright");
 const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
-const dir="docs/qa/evidence/trajectory-review-help-v213",base="http://127.0.0.1:5693";
+const dir=process.env.PRISMA_REVIEW_HELP_EVIDENCE??"docs/qa/evidence/trajectory-review-help-v213",base=process.env.PRISMA_REVIEW_BASE??"http://127.0.0.1:5693";
 await mkdir(dir,{recursive:true});
 const results=[];
 async function pageFor(width,query="") {

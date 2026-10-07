@@ -1,0 +1,625 @@
+BEGIN
+DO
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE TABLE
+ALTER TABLE
+REVOKE
+CREATE INDEX
+CREATE INDEX
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+CREATE FUNCTION
+REVOKE
+GRANT
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+DO
+DO
+DO
+ALTER TABLE
+CREATE FUNCTION
+REVOKE
+GRANT
+DO
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+REVOKE
+ALTER TABLE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+DO
+DO
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+DO
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+DO
+        set_config
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+UPDATE 1
+CREATE TABLE
+GRANT
+INSERT 0 2
+CREATE FUNCTION
+SET
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 1c84eaeb-a2c3-d1ec-df63-34dd2093d9a2
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ set_config
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+DO
+RESET
+UPDATE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+UPDATE 1
+RESET
+UPDATE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+UPDATE 1
+RESET
+UPDATE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+UPDATE 1
+RESET
+DELETE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+DO
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+SET
+INSERT 0 1
+SET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+CREATE FUNCTION
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+DO
+DO
+DO
+CREATE POLICY
+SET
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+CREATE FUNCTION
+REVOKE
+GRANT
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ m83_reject
+------------
+
+(1 row)
+
+DO
+RESET
+UPDATE 1
+SET
+DO
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+CREATE TABLE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+INSERT 0 1
+SET
+INSERT 0 1
+   ?column?
+---------------
+ indeterminate
+(1 row)
+
+DO
+RESET
+INSERT 0 1
+SET
+DO
+RESET
+SET
+INSERT 0 1
+   ?column?
+---------------
+ indeterminate
+(1 row)
+
+DO
+RESET
+DO
+SET
+INSERT 0 1
+RESET
+DO
+SET
+DO
+RESET
+UPDATE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ALTER TABLE
+ALTER TABLE
+DO
+REVOKE
+REVOKE
+GRANT
+GRANT
+ m83_assert
+------------
+
+(1 row)
+
+DO
+ROLLBACK
+
+psql:tmp/extended-review-local.sql:891: NOTICE:  PASS: member can read current approved profile
+psql:tmp/extended-review-local.sql:892: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:893: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:894: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:895: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:896: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:897: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:899: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:901: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:903: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:906: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:907: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:908: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:910: NOTICE:  PASS: RLS enabled
+psql:tmp/extended-review-local.sql:912: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:914: NOTICE:  PASS: service acquires lease
+psql:tmp/extended-review-local.sql:915: NOTICE:  PASS: duplicate cannot acquire active lease
+psql:tmp/extended-review-local.sql:916: NOTICE:  PASS: reused cache never exposes lease
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: complete persists valid evidence
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: complete reused without provider replay
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: resolved model and configured key recorded separately
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: disabled AI still returns compatible completed cache
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: disabled AI cannot acquire a new lease
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: disagreement cached without retry
+psql:tmp/extended-review-local.sql:940: NOTICE:  PASS: provider error cooldown blocks replay
+psql:tmp/extended-review-local.sql:945: NOTICE:  PASS: attempt limit blocks endless provider failures
+psql:tmp/extended-review-local.sql:948: NOTICE:  PASS: tenant concurrency bounded
+psql:tmp/extended-review-local.sql:952: NOTICE:  PASS: expired lease enters cooldown before retry
+psql:tmp/extended-review-local.sql:957: NOTICE:  PASS: Knowledge revision invalidates completed cache
+psql:tmp/extended-review-local.sql:959: NOTICE:  PASS: completion rechecks Knowledge revision
+psql:tmp/extended-review-local.sql:969: NOTICE:  PASS: completion rejects profile edits during provider call
+psql:tmp/extended-review-local.sql:978: NOTICE:  PASS: completion rejects changed current position version
+psql:tmp/extended-review-local.sql:987: NOTICE:  PASS: completion distinguishes revoked membership from stale tenant data
+psql:tmp/extended-review-local.sql:989: NOTICE:  PASS: revoked actor does not exhaust shared cache attempts
+psql:tmp/extended-review-local.sql:993: NOTICE:  PASS: another authorized actor retries after revocation
+psql:tmp/extended-review-local.sql:1008: NOTICE:  PASS: M62 accepts vacancy-matching-explainable-4.0.0
+psql:tmp/extended-review-local.sql:1008: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1008: NOTICE:  PASS: M62 accepts vacancy-matching-explainable-5.0.0
+psql:tmp/extended-review-local.sql:1008: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1008: NOTICE:  PASS: M62 accepts vacancy-matching-semantic-6.0.0
+psql:tmp/extended-review-local.sql:1008: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1013: NOTICE:  PASS: snapshot fixture completes through service contract
+psql:tmp/extended-review-local.sql:1031: NOTICE:  PASS: snapshot loads active demonstrated evidence and published Knowledge
+psql:tmp/extended-review-local.sql:1044: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1046: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1048: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1051: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1055: NOTICE:  PASS: same authoritative snapshot reused
+psql:tmp/extended-review-local.sql:1057: NOTICE:  PASS: M62 consumes backend snapshot with exact requirement
+psql:tmp/extended-review-local.sql:1076: NOTICE:  PASS: unapproved concept preserves requirement link but cannot supply canonical evidence
+psql:tmp/extended-review-local.sql:1076: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1108: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: forward migration preserves service-only RPC privileges
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: other allowed prompt has a separate cache entry with identical source/hash
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: other allowed prompt reuses complete cache with computation disabled
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: other allowed prompt commits separate version-bound snapshot
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: M62 accepts exact requirement for both prompt generations
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1156: NOTICE:  PASS: prior compatible cache and snapshot remain byte-for-byte unchanged
+psql:tmp/extended-review-local.sql:1160: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1165: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1167: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1182: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1184: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1188: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1191: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: agreed pair completed atomically
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: only compact agreed pair persisted
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: cache claim excludes audit data
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: divergent pair completed without agreed reading
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: divergence preserved without changing result
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: invalid response stores only typed failure
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: failed pair stored without provider text
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: different models do not complete
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: revoked actor cannot commit audit
+psql:tmp/extended-review-local.sql:1238: NOTICE:  PASS: revoked actor leaves no pair
+psql:tmp/extended-review-local.sql:1251: NOTICE:  PASS: new retry obtains second attempt
+psql:tmp/extended-review-local.sql:1251: NOTICE:  PASS: second attempt replaces previous pair
+psql:tmp/extended-review-local.sql:1256: NOTICE:  PASS: human review audit has RLS
+psql:tmp/extended-review-local.sql:1261: NOTICE:  PASS: pair and audit remain service RPC only
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: one divergence exposes only its scoped evidence to reviewer
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: human choice records actor and preserves the original pair while completing reading
+psql:tmp/extended-review-local.sql:1309: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1331: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1331: NOTICE:  PASS: snapshot accepts only provenance-bound human reading
+psql:tmp/extended-review-local.sql:1348: NOTICE:  PASS: undetermined choice is audited and preserves pre-AI result
+psql:tmp/extended-review-local.sql:1363: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1363: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1384: NOTICE:  PASS: six-entry synthetic fixture prepared
+psql:tmp/extended-review-local.sql:1395: NOTICE:  PASS: above five retains internal result without disclosing pair for review
+psql:tmp/extended-review-local.sql:1395: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1405: NOTICE:  PASS: exactly five conflicts are reviewable
+psql:tmp/extended-review-local.sql:1441: NOTICE:  PASS: extended review retains RLS and service-only checked RPC authority
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: all extended conflicts available without truncation: 6
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: uncertain extended choice preserves internal calculation: 6
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: complete extended save preserves every choice and original evidence: 6
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: only the two intentional complete saves create audit rows: 6
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: all extended conflicts available without truncation: 21
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (42501)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (40001)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (22023)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: uncertain extended choice preserves internal calculation: 21
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: complete extended save preserves every choice and original evidence: 21
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: denied (P0001)
+psql:tmp/extended-review-local.sql:1489: NOTICE:  PASS: only the two intentional complete saves create audit rows: 21

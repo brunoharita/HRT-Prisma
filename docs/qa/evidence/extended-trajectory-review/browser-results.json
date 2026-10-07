@@ -1,0 +1,283 @@
+[
+  {
+    "width": 1280,
+    "count": 1,
+    "checks": {
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 1280,
+    "count": 5,
+    "checks": {
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 1280,
+    "count": 6,
+    "checks": {
+      "promptBeforeChoices": true,
+      "declineNoMutation": true,
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "backPreservesChoice": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 1280,
+    "count": 21,
+    "checks": {
+      "promptBeforeChoices": true,
+      "declineNoMutation": true,
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "backPreservesChoice": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 390,
+    "count": 1,
+    "checks": {
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 390,
+    "count": 5,
+    "checks": {
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 390,
+    "count": 6,
+    "checks": {
+      "promptBeforeChoices": true,
+      "declineNoMutation": true,
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "backPreservesChoice": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 390,
+    "count": 21,
+    "checks": {
+      "promptBeforeChoices": true,
+      "declineNoMutation": true,
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "backPreservesChoice": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 320,
+    "count": 1,
+    "checks": {
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 320,
+    "count": 5,
+    "checks": {
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 320,
+    "count": 6,
+    "checks": {
+      "promptBeforeChoices": true,
+      "declineNoMutation": true,
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "backPreservesChoice": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 320,
+    "count": 21,
+    "checks": {
+      "promptBeforeChoices": true,
+      "declineNoMutation": true,
+      "expectedPageSize": true,
+      "noneSelected": true,
+      "saveDisabled": true,
+      "backPreservesChoice": true,
+      "partialDisabled": true,
+      "noSaveFromNavigation": true,
+      "allCanSave": true,
+      "noOverflow": true,
+      "completePayload": true,
+      "oneResolvedCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "uncertain",
+    "width": 390,
+    "count": 6,
+    "checks": {
+      "savingVisible": true,
+      "choicesDisabled": true,
+      "paginationDisabled": true,
+      "keepsDialog": true,
+      "keepsCalculation": true,
+      "noResolvedCallback": true,
+      "choicePreserved": true,
+      "retryEnabled": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "saveError",
+    "width": 390,
+    "count": 6,
+    "checks": {
+      "savingVisible": true,
+      "choicesDisabled": true,
+      "paginationDisabled": true,
+      "keepsDialog": true,
+      "keepsCalculation": true,
+      "noResolvedCallback": true,
+      "choicePreserved": true,
+      "retryEnabled": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  }
+]

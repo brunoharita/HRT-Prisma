@@ -263,11 +263,11 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
       }
       const conflictCount = review.conflictCount;
       if (!Number.isInteger(conflictCount) || Number(conflictCount) < 1) return unavailable("REVIEW_NOT_READY", 409);
-      if (review.reviewable === false) return json({ status: "review_unavailable", reasonCode: "TOO_MANY_CONFLICTS", conflictCount });
+      if (review.reviewable !== true) return unavailable("REVIEW_NOT_READY", 409);
       try {
         if (canonical(review.context) !== canonical(context)) return unavailable("SOURCE_STALE", 409);
         const inspected = inspectTrajectoryReadingPair(review.pair, context);
-        if (inspected.conflicts.length !== conflictCount || inspected.conflicts.length > 5) return unavailable("REVIEW_NOT_READY", 409);
+        if (inspected.conflicts.length !== conflictCount) return unavailable("REVIEW_NOT_READY", 409);
         if (reviewLoad) return json({ status: "review_pending", analysisId: base.analysisId, conflictCount,
           conflicts: inspected.conflicts });
         const choices = body.choices;

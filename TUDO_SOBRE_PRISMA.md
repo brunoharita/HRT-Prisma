@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 382
-source_manifest_sha256: e9f158c236b1371aa820815c7eb9b713eadbe741f331aeff188fadff5c5cafb0
+documentation_source_count: 385
+source_manifest_sha256: 59ab5a9bf481e4ffd46399a3f3c9f8299833a69079bf087ff326e6283f69b0d0
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.48
+version: 2.51.49
 last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Revisão extensa opcional — v2.1.7
+
+Decisão explícita de Bruno em07/10/2026 substitui bloqueio acima de cinco divergências: até5 abre diretamente; mais de5 pergunta se deseja revisar. Aceitar abre o mesmo modal com um item por página e preserva escolhas na navegação; recusar preserva cálculo sem gravação/recálculo. Salvar exige todos os itens, com incerteza e autoridade contextual anteriores preservadas. Motor/Edge/RPCs/constraint usam total real das divergências, sem truncar nem inventar evidências. Sem fórmula/prompt/modelo/IA por abertura ou mudança na Knowledge. Acordo1.0.0 e AoT docs/qa/aot-extended-trajectory-review.md; validação local em andamento, publicação ainda não confirmada.
 
 ## Carregamento visível — v2.1.6
 
@@ -4031,7 +4035,7 @@ Quando uma tentativa de interpretação por IA não produz leitura válida, a bu
 
 O cache da interpretação conserva o último par de leituras estruturadas por Perfil, versão da Posição e chave de fontes/método/prompt/modelo. Cada leitura validada retém apenas categoria por trecho e ID da evidência, com modelo resolvido; uma leitura inválida retém somente etapa e motivo tipificados. Uma nova tentativa dessa chave substitui o par anterior. A gravação é atômica com a conclusão, não altera o consenso nem o cálculo pré-IA e não expõe o par ao navegador. Registros anteriores não recebem backfill; este campo não é a resposta bruta do provedor nem um histórico permanente de tentativas. Contrato específico: `docs/qa/agreement-matching-last-reading-pair.md` v1.0.0.
 
-Revisão de divergências `trajectory-human-review-1.0.0`: quando as duas leituras validadas divergem em uma a cinco categorias de trechos profissionais, o Prisma mostra a um `owner`, `admin`, `recruiter` ou Super Admin o trecho, as duas categorias e suas evidências. O operador decide por item, podendo indicar que não é possível determinar. A leitura composta só é concluída se todas as divergências forem resolvidas; caso contrário, o cálculo interno pré-IA permanece, sem escolher um lado automaticamente. Uma revisão concluída recalcula grupo, score e evidências pelo mesmo motor versionado e identifica o ID/versão da revisão no fingerprint e no snapshot. A decisão é contextual ao Perfil, versão da Posição e fontes vigentes, com revisor, horário e par original preservados; não publica regra na Knowledge. Com mais de cinco conflitos, ou par inválido/obsoleto, não há tratamento item a item nem redução da avaliação interna. `docs/qa/agreement-matching-human-conflicts.md` v1.0.0.
+Revisão de divergências: quando as duas leituras validadas divergem, o Prisma mostra a um `owner`, `admin`, `recruiter` ou Super Admin o trecho, as duas categorias e suas evidências. Até cinco itens, clicar em revisar abre diretamente. Acima de cinco, a decisão é do operador: confirmar abre o mesmo modal com um item por página, preservando escolhas na navegação; recusar mantém o cálculo atual sem gravação ou recálculo. Não há truncamento por quantidade. O operador decide por item, podendo indicar que não é possível determinar. A leitura composta só é concluída se todas as divergências forem resolvidas; caso contrário, o cálculo interno pré-IA permanece, sem escolher um lado automaticamente. Uma revisão concluída recalcula grupo, score e evidências pelo mesmo motor versionado e identifica o ID/versão da revisão no fingerprint e no snapshot. A decisão é contextual ao Perfil, versão da Posição e fontes vigentes, com revisor, horário e par original preservados; não publica regra na Knowledge. Par inválido/obsoleto continua indisponível. O acordo `docs/qa/agreement-extended-trajectory-review.md` 1.0.0 substitui a restrição de cinco do acordo histórico `agreement-matching-human-conflicts.md`. O formato persistido das escolhas/evidências `trajectory-human-review-1.0.0` é preservado; muda somente a elegibilidade e apresentação, sem reinterpretar registros anteriores.
 
 A apresentação `matching-review-modal-1.0.0` abre essas divergências em um modal na lista de Pessoas. A pergunta legível é uma orientação para a revisão humana, não o prompt original da IA. Cada item alinha trecho, categoria e referência de evidência das duas leituras; a classificação humana fica restrita às duas categorias retornadas ou `Não é possível determinar`, sem escolha prévia nem texto livre. A abertura do modal apenas carrega a revisão; a checagem de par antigo sem respostas armazenadas exige ação separada e explícita. A apresentação não altera o contrato de análise, autoridade, score ou persistência. `docs/qa/agreement-matching-review-modal.md` v1.0.0.
 
@@ -12278,6 +12282,26 @@ Prompt congelado: implementar todos D/P/F/A acima; nenhuma suíte integral local
 
 ---
 
+## Source: `docs/qa/agreement-extended-trajectory-review.md`
+
+# Acordo — revisão extensa opcional (1.0.0)
+
+Estado: agreed por solicitação explícita de Bruno em 07/10/2026. Substitui a regra anterior de impossibilidade de revisão acima de cinco divergências, inclusive nos contratos históricos M8.6. O formato persistido `trajectory-human-review-1.0.0` e as escolhas permanecem; muda a elegibilidade por quantidade, não o significado das classificações. Entrega incremental v2.1.7.
+
+- D-01: ao clicar em Revisar divergências, até cinco itens abrem automaticamente a revisão existente.
+- D-02: acima de cinco, perguntar se o usuário quer revisar, informando a quantidade. Aceitar abre o mesmo modal com um item por página, navegação de ida/volta e escolhas preservadas. Nenhuma escolha automática.
+- D-03: recusar/fechar preserva cálculo, evidências e ausência de nova decisão. Abrir, confirmar e paginar não gravam nem recalculam; salvar exige todos os itens classificados e mantém a transação íntegra existente.
+- D-04: backend, motor e banco permitem revisão completa com mais de cinco, mantendo autenticação, papéis, tenant, fontes/versionamento, citações, negativos e concorrência. Incerteza mantém cálculo anterior; decisão contextual não altera outra Pessoa ou Knowledge.
+- D-05: sinalizar carregamento/salvamento conforme diretriz v2.1.6; manter ajuda e acessibilidade/responsividade. Integrar/publicar conforme autorização permanente, com evidências e rollback.
+- P-01: proibido truncar itens, aplicar decisões parciais, inventar escolhas/evidências, disparar IA/recálculo por abrir/paginar/recusar, afrouxar permissões ou reescrever históricos.
+- F-01: fórmula/prompt/modelo, novas leituras automáticas, redesign global e curadoria real.
+- A-01: reutilizar modal/Ant Design, pares existentes e RPCs; engenharia define paginação/posição das ações e migração compatível.
+- Q: nenhum.
+
+CA-01–05: testes 1/5/6/quantidade maior; aceitar/recusar, navegação e preservação; salvar completo e negativos de duplicação/ausência/ID/tenant/papel/stale/citação/concorrência; renders desktop/mobile; tipos/build/runtime gerado/SQL/Edge/smoke e destinos proporcionais. Sem afirmação de jornada autenticada real quando não testada.
+
+---
+
 ## Source: `docs/qa/agreement-gov-01-impact-mapping-regression-preservation.md`
 
 # Agreement Contract GOV-01 — Mapa de Impacto e Preservação de Funcionalidades
@@ -16117,6 +16141,33 @@ Web `08ce658e93da605dcb6b03f3393d4856ca0807379cdfdac59c6c483d1c879511`, running0
 Contextos gerados em snapshot dos arquivos autorizados (875files no gate inicial), checker/lint/foundation PASS. Suite completa local não executada; CI obrigatório do repositório executou seus gates automaticamente. Dez fluxos finais de tela e15checks SQL PASS; ajustes de seletores da fixture para navegação nativa e Select Ant Design atual foram corrigidos, sem alterar o produto para acomodar teste. Nenhum diagnóstico temporário no produto. Servidor/navegador QA próprios encerrados; PostgreSQL previamente ativo preservado.
 
 D-01..04/P-01 PASS, sem desvio material. Jornada autenticada hospedada real NOT TESTED; fixture UI + PostgreSQL local não a substituem. Sem chamada real de IA. Complemento documental/ledger pertence ao mesmo movimento, sincronizado em main/VPS sem reconstruir a aplicação.
+
+---
+
+## Source: `docs/qa/aot-extended-trajectory-review.md`
+
+# AoT — revisão extensa opcional v2.1.7
+
+Acordo integral `agreement-extended-trajectory-review.md` 1.0.0 e prompt/mapa `execution-extended-trajectory-review.md`. Autoridade: pedido explícito de Bruno em07/10/2026, implementação/publicação pela autorização permanente AGENTS7. Baseline main/origin/VPS1a1c254 e runtime20ebdd70 v2.1.6; projeto Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY, Edge matching-trajectory16/JWT ativo. Limite cinco confirmado ao vivo nas duas funções e constraint, sem ler Pessoas.
+
+| Regra | Implementação | Evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Abertura direta até5, mesmo modal/ajuda | Browser1/5,3 viewports; regressão ajuda | PASS |
+| D-02 | Confirmação explícita acima5; paginação1 e escolhas porID | Browser6/21, aceitar/recusar/ida/volta desktop/mobile; renders | PASS |
+| D-03 | Recusa/abertura/páginas não gravam; salvar todos | Browser/Edge/SQL: ausência de efeitos, completo/ausente/duplicado, incerteza | PASS |
+| D-04 | Guards preservados; migração aditiva amplia somente elegibilidade | SQL sintético com rollback, Edge e105 Node dirigidos; fonte/RLS/tenant/papel/proveniência/stale/concorrência | PASS |
+| D-05 | Estados v2.1.6, owner/versão/main/rollout | Local tipos/build/runtime/ledger; publicação pendente | PARTIAL |
+| P-01 | Sem truncamento/decisão parcial/IA automática; histórico preservado | Browser/SQL/Edge e regressão estabilidade | PASS |
+
+## Preservação e limites
+
+Mapa prévio permanece vigente. Mudanças somente na elegibilidade/apresentação da revisão, com autorização server-side mantida. O formato persistido1.0.0 continua idêntico, incluindo revisão sem conclusão; contrato de UX/eligibilidade novo explicitamente substitui a regra antiga. Não altera fórmula, prompt/modelo, parâmetros de recálculo, Perfil/Knowledge nem serviços de processamento. Browser usa componentes reais com serviço sintético e bloqueia rede externa; SQL usa banco local vazio import_evidence_v202/127.0.0.1:55479 e rollback. Sem IA paga, dados reais ou decisão humana fabricada.
+
+O baseline local tem arquivo físico ausente na tabela preexistente profile_synthesis_jobs. Apenas o bloco histórico de teste de exclusão de Perfil/Posição foi excluído da preparação sintética, por não pertencer ao movimento; não se afirma preservação dessa capacidade pelo SQL desta execução. Colunas auxiliares de taxonomia ausentes no baseline são acrescentadas somente dentro da transação de teste. Os144 checks executados incluem reprodução da barreira histórica antes da migração e negativos/positivos da revisão após a migração. Nenhum teste alvo foi removido. Harness/projeção inicial de fontes do teste Edge e código esperado do negativo cross-tenant foram corrigidos antes do PASS final; falhas iniciais não são contadas como sucesso.
+
+Renders em `evidence/extended-trajectory-review`: confirmação e revisão paginada, em1280/390/320; estrutura original do modal e ajuda mantida, sem novo alvo visual normativo. Comparação com baseline v2.1.6; nenhum desvio material de topologia além da confirmação/paginação explicitamente solicitadas. Jornada autenticada real em produção NOT TESTED. Rollback da aplicação preserva schema ampliado/histórico; não recolocar constraint<=5 após possíveis revisões maiores. Plano prévio confirma migração nova, matching-trajectory e web, sem Parser/Synthesis. O comando genérico pnpm test foi substituído por105 testes Node diretamente afetados,46 Edge e144 checks SQL, mais navegador/19 tooling. CI obrigatório mantém o fluxo existente. Tipos/build raiz e web, lint/foundation/runtime gerado/ledger/Context Pack PASS; avisos anteriores de chunk/dynamic import permanecem. Confirmar plano commitado antes do rollout.
+
+Navegador final:14 cenários novos e13 de preservação da ajuda/legado/papéis PASS, sem chamadas externas/erros de runtime. Cobre falha e incerteza em revisão extensa com carregamento contínuo e bloqueio funcional de navegação durante salvamento. Capturas aguardam fim da animação. A verificação inicial de atributo disabled no botão decorativo de paginação foi substituída pelo teste funcional de que a página não muda; a implementação já respeitava disabled. Execuções intermediárias do harness não contam como PASS.
 
 ---
 
@@ -21097,6 +21148,26 @@ Fonte congelada: `docs/qa/agreement-candidate-card-visual.md` v1.0.0 e imagem no
 Contrato integral: `docs/qa/agreement-competency-curation-persistence.md`, versão 1.0.0. Ler integralmente; todos D/P/F/A/CA são vinculantes. Implementar D-01 a D-05 e impedir P-01/P-02. F-01 permanece excluído; A-01 delega a persistência e os testes, sem mudar a decisão humana.
 
 Usar baseline 07b79f6 e branch `codex/competency-curation-persistence`. Migração forward-only, teste em PostgreSQL local descartável com rollback, documentação do proprietário e Context Pack. Recuperação remota somente por evidência exata de aprovações existentes. Publicar destinos derivados pelo dispatcher e fechar AoT distinguindo testes sintéticos, recuperação operacional real e jornada humana não executada.
+
+---
+
+## Source: `docs/qa/execution-extended-trajectory-review.md`
+
+# Execução — revisão extensa opcional
+
+Aplicar integralmente `agreement-extended-trajectory-review.md` 1.0.0, sem reinterpretar D-01–05/P-01/F-01/A-01. A solicitação explícita aprova o acordo; não é necessária confirmação de detalhes mecânicos. Classe D: gravação de interpretação contextual/matching. Baseline local/main/origin `1a1c254455e0b354cae67d728fa4c564a25f5a3a`; runtime web v2.1.6 `20ebdd70`, backend matching-trajectory16 conforme evidência anterior, a verificar antes do rollout.
+
+## Mapa prévio de impacto e preservação
+
+| Área | Relação | Baseline/cenário/evidência e regressão |
+| --- | --- | --- |
+| Modal, serviço, domínio, Edge e RPCs/tabela de revisão | direct | Limite cinco confirmado em código/SQL; ampliar apenas elegibilidade, testar 1/5/6/maior, revisão completa e incerteza |
+| Autorização/tenant/fontes/concorrência/citações | critical_transversal | Guards RPC/Edge existentes; negativos e SQL sintético com rollback, grants/RLS remotos |
+| Score persistido, busca/detalhe/comparação | plausible_indirect | Contrato v2.1.4; abrir/recusar/paginar sem efeitos, salvar isolado e regressão estabilidade |
+| Ajuda, navegação, rascunhos, estados v2.1.6 | direct | Modal/Ant Design existentes; renders e browser desktop/mobile, escolha preservada/sem pré-seleção |
+| Parser, síntese, gateway, publicação de Perfil/Knowledge | no_impact_identified | Nenhum consumidor executável dessas capacidades mudou; preservar IDs/imagens/saúde no rollout |
+
+Reuso escolhido: componentes e RPCs já existentes. Nenhuma biblioteca nova; não há lacuna que justifique construção externa. Migração nova, sem reescrever as anteriores; proteção de revisão completa passa a usar o total real das divergências. O formato das decisões/evidências permanece compatível. Sem aumento de custo de IA: a revisão usa o par já armazenado. Rollback de aplicação preserva registros/histórico e schema ampliado; não estreitar novamente a constraint se houver revisões extensas.
 
 ---
 

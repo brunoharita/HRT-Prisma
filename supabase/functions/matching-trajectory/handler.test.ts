@@ -445,14 +445,40 @@ Deno.test("one verified conflict is reviewable without a provider call, and huma
   assert(stale.status === 409 && f.calls.filter(call => call.name === "save_matching_trajectory_review").length === beforeStale);
 });
 
-Deno.test("six conflicts stay on internal fallback, and unauthorized or malformed reviews cannot save", async () => {
+Deno.test("large reviews load every verified conflict and save atomically without provider calls", async () => {
+  for (const count of [5, 6, 21]) {
+    const f = fixture(), expanded = { ...source, profileData: { ...source.profileData, experiences: Array.from({ length: count }, (_, i) => ({ role: "Backend developer", description: `Built APIs for project ${i}` })) } };
+    f.deps.authenticate = () => Promise.resolve({ id: "actor", client: { rpc: name => Promise.resolve({ error: null, data: name === "load_matching_snapshot_sources" ? { ...f.snapshotSources(), candidate: { ...(f.snapshotSources().candidate as Record<string, unknown>), profileData: expanded.profileData } } : expanded }) } });
+    const context = prepareTrajectoryContext(expanded.profileData, expanded.position, expanded.redactions);
+    const sides = ["direct_function", "related_function"].map(activity => ({ outcome: "validated", model: "resolved", items: context.entries.map(entry => ({ id: entry.id, activity, evidenceId: `${entry.id}:0` })) }));
+    const total = context.entries.length;
+    f.setCache({ status: "indeterminate", reason_code: "READINGS_DISAGREE", acquired: false, id: "40000000-0000-0000-0000-000000000001" });
+    f.setReviewData({ reviewable: true, conflictCount: total, pair: { attempt: 1, readings: sides }, context });
+    const loaded = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps)).json();
+    assert(loaded.status === "review_pending" && loaded.conflicts.length === total && total >= count, JSON.stringify({ count, total, loaded }));
+    assert(!("pair" in loaded) && !("context" in loaded));
+    const choices = context.entries.map(entry => ({ id: entry.id, choice: "first" }));
+    for (const invalid of [choices.slice(1), [{ ...choices[0], id: "unknown" }, ...choices.slice(1)], [choices[0], ...choices.slice(0, -1)]]) {
+      const result = await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save", analysisId: loaded.analysisId, choices: invalid }), f.deps);
+      assert(result.status === 400 && !f.calls.some(call => call.name === "save_matching_trajectory_review"));
+    }
+    const result = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save", analysisId: loaded.analysisId, choices }), f.deps)).json();
+    assert(result.status === "resolved" && f.requests.length === 0);
+    const saved = f.calls.filter(call => call.name === "save_matching_trajectory_review");
+    assert(saved.length === 1 && (saved[0].params.p_choices as unknown[]).length === total);
+    const uncertain = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save", analysisId: loaded.analysisId, choices: [{ ...choices[0], choice: "cannot_determine" }, ...choices.slice(1)] }), f.deps)).json();
+    assert(uncertain.status === "unresolved" && f.calls.filter(call => call.name === "save_matching_trajectory_review").at(-1)?.params.p_reading === null);
+  }
+});
+
+Deno.test("unready, unauthorized or malformed reviews cannot save", async () => {
   const f = fixture(); f.setCache({ status: "indeterminate", reason_code: "READINGS_DISAGREE", acquired: false,
     id: "40000000-0000-0000-0000-000000000001" });
   f.setReviewData({ reviewable: false, conflictCount: 6 });
   const overLimit = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps)).json();
-  assert(overLimit.status === "review_unavailable" && overLimit.reasonCode === "TOO_MANY_CONFLICTS" && f.requests.length === 0);
+  assert(overLimit.status === "unavailable" && overLimit.reasonCode === "REVIEW_NOT_READY" && f.requests.length === 0);
   const malformed = await (await handleMatchingTrajectory(f.request({ ...ids, operation: "review_save", analysisId: "40000000-0000-0000-0000-000000000001", choices: [{ id: "bad", choice: "first" }] }), f.deps)).json();
-  assert(malformed.status === "review_unavailable" && !f.calls.some(call => call.name === "save_matching_trajectory_review"));
+  assert(malformed.status === "unavailable" && !f.calls.some(call => call.name === "save_matching_trajectory_review"));
   f.setReviewError({ code: "42501" });
   const denied = await handleMatchingTrajectory(f.request({ ...ids, operation: "review_load" }), f.deps);
   assert(denied.status === 403 && f.requests.length === 0);

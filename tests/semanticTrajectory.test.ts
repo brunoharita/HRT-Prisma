@@ -124,7 +124,16 @@ test("human review counts only classification conflicts, reorders safely and kee
   assert.throws(() => composeReviewedTrajectoryReading(pair, context, [{ id: "other", choice: "first" }, ...choices.slice(1)]), /TRAJECTORY_REVIEW_CHOICE_INVALID/);
   const six = { attempt: 1, readings: [side(() => "direct_function"), side(() => "related_function", true)] };
   assert.equal(inspectTrajectoryReadingPair(six, context).conflicts.length, 6);
-  assert.throws(() => composeReviewedTrajectoryReading(six, context, context.entries.map(item => ({ id: item.id, choice: "first" }))), /TRAJECTORY_REVIEW_CHOICE_INVALID/);
+  assert.equal(composeReviewedTrajectoryReading(six, context, context.entries.map(item => ({ id: item.id, choice: "first" })))?.items.length, 6);
+  for (const count of [1, 5, 6, 23]) {
+    const manyContext = { position: context.position, entries: Array.from({ length: count }, (_, index) => ({ ...context.entries[0]!, id: `entry${index}` })) };
+    const sides = ["direct_function", "related_function"].map(activity => ({ outcome: "validated", model: "test-model", items: trajectoryEvidenceInput(manyContext).entries.map(entry => ({ id: entry.id, activity, evidenceId: entry.segments[0]!.id })) }));
+    const manyPair = { attempt: 1, readings: sides }, manyChoices = manyContext.entries.map(item => ({ id: item.id, choice: "first" as const }));
+    assert.equal(composeReviewedTrajectoryReading(manyPair, manyContext, manyChoices)?.items.length, count);
+    assert.equal(composeReviewedTrajectoryReading(manyPair, manyContext, [{ ...manyChoices[0]!, choice: "cannot_determine" }, ...manyChoices.slice(1)]), null);
+    assert.throws(() => composeReviewedTrajectoryReading(manyPair, manyContext, manyChoices.slice(1)), /TRAJECTORY_REVIEW_CHOICE_INVALID/);
+    if (count > 1) assert.throws(() => composeReviewedTrajectoryReading(manyPair, manyContext, [manyChoices[0]!, ...manyChoices.slice(0, -1)]), /TRAJECTORY_REVIEW_CHOICE_INVALID/);
+  }
   const same = { attempt: 1, readings: [side(() => "direct_function"), side(() => "direct_function", true)] };
   assert.equal(inspectTrajectoryReadingPair(same, context).conflicts.length, 0);
   assert.throws(() => inspectTrajectoryReadingPair({ attempt: 1, readings: [{ outcome: "failed" }, same.readings[1]] }, context), /TRAJECTORY_REVIEW_PAIR_INVALID/);

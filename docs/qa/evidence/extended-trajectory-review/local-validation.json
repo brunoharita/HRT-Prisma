@@ -1,0 +1,37 @@
+{
+  "node": {
+    "tests": 105,
+    "passed": 105,
+    "command": "node --test dist/tests/semanticTrajectory.test.js dist/tests/trajectoryReviewModal.test.js dist/tests/stableMatching.test.js dist/tests/stableScoreOrchestration.test.js dist/tests/productRelease.test.js"
+  },
+  "edge": {
+    "tests": 46,
+    "passed": 46,
+    "commands": [
+      "deno test --allow-env --allow-read supabase/functions/matching-trajectory/handler.test.ts",
+      "deno test --allow-env --allow-read supabase/functions/matching-trajectory/stable.test.ts supabase/functions/matching-trajectory/snapshot.test.ts"
+    ]
+  },
+  "postgres": {
+    "checks": 144,
+    "passed": 144,
+    "command": "node tests/tooling/extendedTrajectoryReview.postgres.mjs",
+    "rollback": true,
+    "excluded": "Historical unrelated deletion-cascade block due pre-existing corrupt local synthesis table; target review checks intact."
+  },
+  "tooling": {
+    "tests": 19,
+    "passed": 19
+  },
+  "checks": [
+    "typecheck:web",
+    "build",
+    "build:web",
+    "lint",
+    "check:foundation",
+    "check:matching-runtime",
+    "check:supabase-ledger",
+    "clean tracked-only generate/check Context Pack"
+  ],
+  "limits": "Synthetic fixtures, no authenticated production mutation or paid AI; complete local repository suite not run."
+}

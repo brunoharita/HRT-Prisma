@@ -31,5 +31,16 @@ test("par antigo só inicia nova checagem por ação explícita e não cria resp
   assert.match(component, /view\.reasonCode === "PAIR_NOT_STORED"/);
   assert.match(component, /onClick=\{\(\) => void refreshLegacyPair\(view\.analysisId\)\}/);
   assert.doesNotMatch(component.match(/async function open\(\)[\s\S]*?async function save/)?.[0] ?? "", /refreshLegacyTrajectoryReview/);
-  assert.match(component, /view\.reasonCode === "TOO_MANY_CONFLICTS"/);
+  assert.doesNotMatch(component, /TOO_MANY_CONFLICTS/);
+});
+
+test("revisão extensa requer escolha explícita e preserva revisão completa", async () => {
+  const component = await readFile(componentPath, "utf8");
+  assert.match(component, /result.conflictCount > 5/);
+  assert.match(component, /Não, manter cálculo/);
+  assert.match(component, /Sim, revisar itens/);
+  assert.match(component, /<Pagination simple[\s\S]*pageSize=\{1\}/);
+  assert.match(component, /view.conflicts.slice\(currentPage - 1, currentPage\)/);
+  assert.match(component, /view.conflicts.map\(item => \(\{ id: item.id, choice: choices\[item.id\]! \}\)\)/);
+  assert.match(component, /confirmExtended \|\| view.conflicts.some/);
 });

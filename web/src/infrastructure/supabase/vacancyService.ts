@@ -64,7 +64,6 @@ type OccupationResolutionRow = {
 };
 
 export type TrajectoryReviewView = { status: "review_pending"; analysisId: string; conflictCount: number; conflicts: TrajectoryConflict[] }
-  | { status: "review_unavailable"; reasonCode: "TOO_MANY_CONFLICTS"; conflictCount: number }
   | { status: "review_unavailable"; reasonCode: "PAIR_NOT_STORED"; conflictCount: 0; analysisId: string };
 
 function isTrajectoryConflict(value: unknown): value is TrajectoryConflict {
@@ -463,12 +462,10 @@ export const vacancyService = {
       positionVersionId: vacancy.versionId, referenceDate: match.score.referenceDate,
     }, signal: AbortSignal.timeout(30_000) });
     if (error) throw await supabaseFunctionOperationError(error, "Não foi possível abrir a revisão. Atualize a análise e tente novamente.");
-    if (data?.status === "review_unavailable" && data.reasonCode === "TOO_MANY_CONFLICTS"
-      && Number.isInteger(data.conflictCount) && data.conflictCount > 5) return data as TrajectoryReviewView;
     if (data?.status === "review_unavailable" && data.reasonCode === "PAIR_NOT_STORED"
       && data.conflictCount === 0 && typeof data.analysisId === "string") return data as TrajectoryReviewView;
     if (data?.status !== "review_pending" || typeof data.analysisId !== "string"
-      || !Number.isInteger(data.conflictCount) || data.conflictCount < 1 || data.conflictCount > 5
+      || !Number.isSafeInteger(data.conflictCount) || data.conflictCount < 1
       || !Array.isArray(data.conflicts) || data.conflicts.length !== data.conflictCount
       || !data.conflicts.every(isTrajectoryConflict)) throw new Error("Os itens divergentes não puderam ser validados. Nenhuma decisão foi registrada.");
     return data as TrajectoryReviewView;

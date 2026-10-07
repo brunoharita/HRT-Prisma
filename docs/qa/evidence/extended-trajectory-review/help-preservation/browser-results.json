@@ -1,0 +1,246 @@
+[
+  {
+    "scenario": "help-and-save",
+    "width": 969,
+    "checks": {
+      "threeChoicesEach": true,
+      "noneSelected": true,
+      "saveInitiallyDisabled": true,
+      "visibleDescriptions": true,
+      "describedRadios": true,
+      "scopeAndSaveNotice": true,
+      "declarationIsNotExperience": true,
+      "hoverHelp": true,
+      "hoverEscapeKeepsModal": true,
+      "tabReachesHelp": true,
+      "focusHelp": true,
+      "escapeKeepsModal": true,
+      "enterHelp": true,
+      "clickOrTouchHelp": true,
+      "popoverFits": true,
+      "closeHelpKeepsModal": true,
+      "helpDoesNotChoose": true,
+      "helpDoesNotSaveOrRefresh": true,
+      "noOverflow": true,
+      "readingTopology": true,
+      "footerAccessible": true,
+      "partialCannotSave": true,
+      "completeCanSave": true,
+      "uncertainKeepsModal": true,
+      "exactUncertainPayload": true,
+      "resolvedUsesExistingCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "help-and-save",
+    "width": 390,
+    "checks": {
+      "threeChoicesEach": true,
+      "noneSelected": true,
+      "saveInitiallyDisabled": true,
+      "visibleDescriptions": true,
+      "describedRadios": true,
+      "scopeAndSaveNotice": true,
+      "declarationIsNotExperience": true,
+      "tabReachesHelp": true,
+      "focusHelp": true,
+      "escapeKeepsModal": true,
+      "enterHelp": true,
+      "clickOrTouchHelp": true,
+      "popoverFits": true,
+      "closeHelpKeepsModal": true,
+      "helpDoesNotChoose": true,
+      "helpDoesNotSaveOrRefresh": true,
+      "noOverflow": true,
+      "readingTopology": true,
+      "footerAccessible": true,
+      "partialCannotSave": true,
+      "completeCanSave": true,
+      "uncertainKeepsModal": true,
+      "exactUncertainPayload": true,
+      "resolvedUsesExistingCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "help-and-save",
+    "width": 320,
+    "checks": {
+      "threeChoicesEach": true,
+      "noneSelected": true,
+      "saveInitiallyDisabled": true,
+      "visibleDescriptions": true,
+      "describedRadios": true,
+      "scopeAndSaveNotice": true,
+      "declarationIsNotExperience": true,
+      "tabReachesHelp": true,
+      "focusHelp": true,
+      "escapeKeepsModal": true,
+      "enterHelp": true,
+      "clickOrTouchHelp": true,
+      "popoverFits": true,
+      "closeHelpKeepsModal": true,
+      "helpDoesNotChoose": true,
+      "helpDoesNotSaveOrRefresh": true,
+      "noOverflow": true,
+      "readingTopology": true,
+      "footerAccessible": true,
+      "partialCannotSave": true,
+      "completeCanSave": true,
+      "uncertainKeepsModal": true,
+      "exactUncertainPayload": true,
+      "resolvedUsesExistingCallback": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "unauthorized",
+    "width": 390,
+    "checks": {
+      "noReviewButton": true,
+      "noAutomaticSaveOrRefresh": true,
+      "loadAuthority": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "legacy",
+    "width": 390,
+    "checks": {
+      "noChoices": true,
+      "noSave": true,
+      "noAutomaticSaveOrRefresh": true,
+      "loadAuthority": true,
+      "legacyOnlyExplicitRefresh": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "excess",
+    "width": 390,
+    "checks": {
+      "noChoices": true,
+      "noSave": true,
+      "noAutomaticSaveOrRefresh": true,
+      "loadAuthority": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "error",
+    "width": 390,
+    "checks": {
+      "noChoices": true,
+      "noSave": true,
+      "noAutomaticSaveOrRefresh": true,
+      "loadAuthority": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "categories-0",
+    "width": 969,
+    "checks": {
+      "allThreeDescribed": true,
+      "noneSelected": true,
+      "category0": true,
+      "category1": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "categories-1",
+    "width": 969,
+    "checks": {
+      "allThreeDescribed": true,
+      "noneSelected": true,
+      "category0": true,
+      "category1": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "categories-2",
+    "width": 969,
+    "checks": {
+      "allThreeDescribed": true,
+      "noneSelected": true,
+      "category0": true,
+      "category1": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "categories-3",
+    "width": 969,
+    "checks": {
+      "allThreeDescribed": true,
+      "noneSelected": true,
+      "category0": true,
+      "category1": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "categories-4",
+    "width": 969,
+    "checks": {
+      "allThreeDescribed": true,
+      "noneSelected": true,
+      "category0": true,
+      "category1": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "scenario": "categories-5",
+    "width": 969,
+    "checks": {
+      "allThreeDescribed": true,
+      "noneSelected": true,
+      "category0": true,
+      "category1": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  }
+]

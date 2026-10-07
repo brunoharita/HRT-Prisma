@@ -209,7 +209,7 @@ export function inspectTrajectoryReadingPair(value: unknown, context: SemanticCo
 /** A human may choose one supported classification or leave the whole interpretation pending. */
 export function composeReviewedTrajectoryReading(value: unknown, context: SemanticContext, choices: TrajectoryReviewChoice[]): SemanticReading | null {
   const { first, second, conflicts } = inspectTrajectoryReadingPair(value, context);
-  if (conflicts.length < 1 || conflicts.length > 5 || choices.length !== conflicts.length
+  if (conflicts.length < 1 || choices.length !== conflicts.length
     || new Set(choices.map(item => item.id)).size !== choices.length
     || choices.some(item => !conflicts.some(conflict => conflict.id === item.id)
       || !["first", "second", "cannot_determine"].includes(item.choice))) {

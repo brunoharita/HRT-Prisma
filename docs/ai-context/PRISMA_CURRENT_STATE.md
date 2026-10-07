@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.48
+version: 2.51.49
 last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Revisão extensa opcional — v2.1.7
+
+Decisão explícita de Bruno em07/10/2026 substitui bloqueio acima de cinco divergências: até5 abre diretamente; mais de5 pergunta se deseja revisar. Aceitar abre o mesmo modal com um item por página e preserva escolhas na navegação; recusar preserva cálculo sem gravação/recálculo. Salvar exige todos os itens, com incerteza e autoridade contextual anteriores preservadas. Motor/Edge/RPCs/constraint usam total real das divergências, sem truncar nem inventar evidências. Sem fórmula/prompt/modelo/IA por abertura ou mudança na Knowledge. Acordo1.0.0 e AoT docs/qa/aot-extended-trajectory-review.md; validação local em andamento, publicação ainda não confirmada.
 
 ## Carregamento visível — v2.1.6
 
