@@ -1,0 +1,20 @@
+{
+  "command": "publish",
+  "status": "GIT_PUBLISHED",
+  "sha": "191de3dfd8cd743d46aecc0cf643e74a4b3e72d0",
+  "branch": "codex/optional-extended-review",
+  "web": "PENDING_VPS_CONFIGURATION",
+  "parserIa": "SKIPPED",
+  "profileSynthesis": "SKIPPED",
+  "remaining": {
+    "database": [
+      "supabase/migrations/20261007220000_optional_extended_trajectory_review.sql"
+    ],
+    "edgeFunctions": [
+      "matching-trajectory"
+    ],
+    "web": true,
+    "parserIa": false,
+    "profileSynthesis": false
+  }
+}

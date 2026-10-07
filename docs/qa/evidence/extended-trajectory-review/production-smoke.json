@@ -1,0 +1,76 @@
+{
+  "at": "2026-10-07T22:02:02.828Z",
+  "sha": "191de3dfd8cd743d46aecc0cf643e74a4b3e72d0",
+  "version": "2.1.7",
+  "requests": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-sVw5w6Ck.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-ByE9Q9KR.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-SNTMzHER.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-smoke/people",
+      "status": 200
+    },
+    {
+      "path": "/profiles",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-pEv3u2f-.js",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "path": "/sign-in",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-SNTMzHER.css",
+      "status": 200
+    }
+  ],
+  "checks": {
+    "sha": true,
+    "version": true,
+    "confirm": true,
+    "onePerPage": true,
+    "noOldBlock": true,
+    "help": true,
+    "loading": true,
+    "scoreAction": true,
+    "anonymousDenied": true
+  },
+  "edgeAnonymousStatus": 401,
+  "limits": "Public HTTP/bundle and anonymous denial only; no real authenticated review or AI call."
+}

@@ -1,0 +1,104 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/ai/matching-contract.md",
+      "docs/qa/agreement-extended-trajectory-review.md",
+      "docs/qa/aot-extended-trajectory-review.md",
+      "docs/qa/evidence/extended-trajectory-review/browser-results.json",
+      "docs/qa/evidence/extended-trajectory-review/confirm-21-1280.png",
+      "docs/qa/evidence/extended-trajectory-review/confirm-21-320.png",
+      "docs/qa/evidence/extended-trajectory-review/confirm-21-390.png",
+      "docs/qa/evidence/extended-trajectory-review/confirm-6-1280.png",
+      "docs/qa/evidence/extended-trajectory-review/confirm-6-320.png",
+      "docs/qa/evidence/extended-trajectory-review/confirm-6-390.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/after-choice-320.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/after-choice-390.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/after-choice-969.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/after-top-320.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/after-top-390.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/after-top-969.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/browser-results.json",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/help-open-320.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/help-open-390.png",
+      "docs/qa/evidence/extended-trajectory-review/help-preservation/help-open-969.png",
+      "docs/qa/evidence/extended-trajectory-review/last-21-1280.png",
+      "docs/qa/evidence/extended-trajectory-review/last-21-320.png",
+      "docs/qa/evidence/extended-trajectory-review/last-21-390.png",
+      "docs/qa/evidence/extended-trajectory-review/last-6-1280.png",
+      "docs/qa/evidence/extended-trajectory-review/last-6-320.png",
+      "docs/qa/evidence/extended-trajectory-review/last-6-390.png",
+      "docs/qa/evidence/extended-trajectory-review/local-validation.json",
+      "docs/qa/evidence/extended-trajectory-review/production-before.txt",
+      "docs/qa/evidence/extended-trajectory-review/sql.txt",
+      "docs/qa/execution-extended-trajectory-review.md",
+      "src/domain/semanticTrajectory.ts",
+      "supabase/functions/matching-trajectory/_generated/src/domain/semanticTrajectory.js",
+      "supabase/functions/matching-trajectory/handler.test.ts",
+      "supabase/functions/matching-trajectory/handler.ts",
+      "supabase/migrations/20261007220000_optional_extended_trajectory_review.sql",
+      "supabase/qa/extended_trajectory_review_verification.sql",
+      "tests/productRelease.test.ts",
+      "tests/semanticTrajectory.test.ts",
+      "tests/tooling/extendedTrajectoryReview.browser.mjs",
+      "tests/tooling/extendedTrajectoryReview.postgres.mjs",
+      "tests/tooling/trajectoryReviewHelp.browser.mjs",
+      "tests/trajectoryReviewModal.test.ts",
+      "tests/ui/trajectory-review-help/fixture.ts",
+      "tests/ui/trajectory-review-help/main.tsx",
+      "web/src/components/TrajectoryConflictReview.tsx",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/infrastructure/supabase/vacancyService.ts"
+    ],
+    "impact": {
+      "surfaces": [
+        "backend",
+        "context-pack",
+        "database",
+        "database-tests",
+        "documentation",
+        "edge-functions",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [
+        "matching-trajectory"
+      ],
+      "migrations": [
+        "supabase/migrations/20261007220000_optional_extended_trajectory_review.sql"
+      ],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test",
+      "pnpm run check:supabase-ledger"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [
+        "supabase/migrations/20261007220000_optional_extended_trajectory_review.sql"
+      ],
+      "edgeFunctions": [
+        "matching-trajectory"
+      ],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "sha": "191de3dfd8cd743d46aecc0cf643e74a4b3e72d0",
+  "version": "2.1.7",
+  "status": "PUBLISHED_VERIFIED",
+  "destinations": {
+    "git": true,
+    "migration": "20261007220005",
+    "edgeFunction": "matching-trajectory",
+    "edgeVersion": 17,
+    "web": true,
+    "parserIa": false,
+    "profileSynthesis": false
+  },
+  "ci": {
+    "branch": 37693061025,
+    "main": 37693203350,
+    "conclusion": "success"
+  },
+  "web": {
+    "image": "sha256:0d6a7664b61990ff5ce5a171764f40928139b83f6e21dcfb50e19ab91c706d37",
+    "status": "running",
+    "restarts": 0,
+    "entry": "index-sVw5w6Ck.js"
+  },
+  "rollback": {
+    "tag": "prisma-web:rollback-before-191de3dfd8cd",
+    "image": "sha256:28aacc1cd344854ed6c66a946be3b7476ba6bd23734e7e1e9c165d34f157cc1c"
+  },
+  "initialWebCommand": {
+    "exitCode": 22,
+    "reason": "Immediate curl HTTP404 during container recreation; command itself failed."
+  },
+  "verifiedRecovery": {
+    "rebuild": false,
+    "publicHttp200": 14,
+    "checks": 9,
+    "smoke": "production-smoke.json",
+    "infrastructure": "production-after.txt",
+    "backend": "backend-publication.json"
+  },
+  "limits": "No real authenticated review save, no paid AI, no real decision fabricated."
+}

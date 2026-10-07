@@ -1,0 +1,33 @@
+{
+  "project": "ioldpnqqvobprjiontre",
+  "sha": "191de3dfd8cd743d46aecc0cf643e74a4b3e72d0",
+  "migration": {
+    "name": "optional_extended_trajectory_review",
+    "localVersion": "20261007220000",
+    "remoteVersion": "20261007220005",
+    "applied": true
+  },
+  "edge": {
+    "name": "matching-trajectory",
+    "beforeVersion": 16,
+    "version": 17,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "files": 13,
+    "exactLocalContent": true,
+    "changedFiles": [
+      "handler.ts",
+      "_generated/src/domain/semanticTrajectory.js"
+    ]
+  },
+  "schemaChecks": {
+    "loadCapRemoved": true,
+    "saveCapRemoved": true,
+    "choicesNonempty": true,
+    "rls": true,
+    "noClientExecute": true,
+    "noDirectTableWrite": true,
+    "serviceExecute": true
+  },
+  "limits": "Schema/code verification only; no real review choice written or AI call."
+}

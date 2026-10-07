@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 385
-source_manifest_sha256: 59ab5a9bf481e4ffd46399a3f3c9f8299833a69079bf087ff326e6283f69b0d0
+source_manifest_sha256: 22ed933e2878b619f88912cb51cc0491b1b509b6520560dff61f13cd1ec8a996
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-07
 
 ## Revisão extensa opcional — v2.1.7
 
-Decisão explícita de Bruno em07/10/2026 substitui bloqueio acima de cinco divergências: até5 abre diretamente; mais de5 pergunta se deseja revisar. Aceitar abre o mesmo modal com um item por página e preserva escolhas na navegação; recusar preserva cálculo sem gravação/recálculo. Salvar exige todos os itens, com incerteza e autoridade contextual anteriores preservadas. Motor/Edge/RPCs/constraint usam total real das divergências, sem truncar nem inventar evidências. Sem fórmula/prompt/modelo/IA por abertura ou mudança na Knowledge. Acordo1.0.0 e AoT docs/qa/aot-extended-trajectory-review.md; validação local em andamento, publicação ainda não confirmada.
+Decisão explícita de Bruno em07/10/2026 substitui bloqueio acima de cinco divergências: até5 abre diretamente; mais de5 pergunta se deseja revisar. Aceitar abre o mesmo modal com um item por página e preserva escolhas na navegação; recusar preserva cálculo sem gravação/recálculo. Salvar exige todos os itens, com incerteza e autoridade contextual anteriores preservadas. Motor/Edge/RPCs/constraint usam total real das divergências, sem truncar nem inventar evidências. Sem fórmula/prompt/modelo/IA por abertura ou mudança na Knowledge. Acordo1.0.0 e AoT docs/qa/aot-extended-trajectory-review.md; publicada em07/10/2026 no SHA funcional191de3dfd8cd743d46aecc0cf643e74a4b3e72d0, CI branch37693061025/main37693203350 success. Migração remota20261007220005 e Edge17/JWT ativo (13 arquivos idênticos) conferidos; web0d6a7664 running0, rollback28aacc1c e serviços preservados.14HTTP200/9checks PASS após404 transitório, sem rebuild adicional. Local:105 Node/46 Edge/144 SQL/19 tooling/27 cenários browser PASS, tipos/build/lint/foundation/runtime/ledger/contextos PASS. Jornada autenticada real NOT TESTED; fechamento documental sincroniza Git sem reconstruir runtime.
 
 ## Carregamento visível — v2.1.6
 
@@ -16156,7 +16156,7 @@ Acordo integral `agreement-extended-trajectory-review.md` 1.0.0 e prompt/mapa `e
 | D-02 | Confirmação explícita acima5; paginação1 e escolhas porID | Browser6/21, aceitar/recusar/ida/volta desktop/mobile; renders | PASS |
 | D-03 | Recusa/abertura/páginas não gravam; salvar todos | Browser/Edge/SQL: ausência de efeitos, completo/ausente/duplicado, incerteza | PASS |
 | D-04 | Guards preservados; migração aditiva amplia somente elegibilidade | SQL sintético com rollback, Edge e105 Node dirigidos; fonte/RLS/tenant/papel/proveniência/stale/concorrência | PASS |
-| D-05 | Estados v2.1.6, owner/versão/main/rollout | Local tipos/build/runtime/ledger; publicação pendente | PARTIAL |
+| D-05 | Estados v2.1.6, owner/versão/main/rollout | CI branch/main, migração/Edge/web e smoke/rollback conferidos | PASS |
 | P-01 | Sem truncamento/decisão parcial/IA automática; histórico preservado | Browser/SQL/Edge e regressão estabilidade | PASS |
 
 ## Preservação e limites
@@ -16168,6 +16168,14 @@ O baseline local tem arquivo físico ausente na tabela preexistente profile_synt
 Renders em `evidence/extended-trajectory-review`: confirmação e revisão paginada, em1280/390/320; estrutura original do modal e ajuda mantida, sem novo alvo visual normativo. Comparação com baseline v2.1.6; nenhum desvio material de topologia além da confirmação/paginação explicitamente solicitadas. Jornada autenticada real em produção NOT TESTED. Rollback da aplicação preserva schema ampliado/histórico; não recolocar constraint<=5 após possíveis revisões maiores. Plano prévio confirma migração nova, matching-trajectory e web, sem Parser/Synthesis. O comando genérico pnpm test foi substituído por105 testes Node diretamente afetados,46 Edge e144 checks SQL, mais navegador/19 tooling. CI obrigatório mantém o fluxo existente. Tipos/build raiz e web, lint/foundation/runtime gerado/ledger/Context Pack PASS; avisos anteriores de chunk/dynamic import permanecem. Confirmar plano commitado antes do rollout.
 
 Navegador final:14 cenários novos e13 de preservação da ajuda/legado/papéis PASS, sem chamadas externas/erros de runtime. Cobre falha e incerteza em revisão extensa com carregamento contínuo e bloqueio funcional de navegação durante salvamento. Capturas aguardam fim da animação. A verificação inicial de atributo disabled no botão decorativo de paginação foi substituída pelo teste funcional de que a página não muda; a implementação já respeitava disabled. Execuções intermediárias do harness não contam como PASS.
+
+## Publicação e fechamento
+
+Publicado em07/10/2026, SHA funcional `191de3dfd8cd743d46aecc0cf643e74a4b3e72d0`, integrado main/origin/VPS. CI branch37693061025/main37693203350 success. Migração remota `20261007220005` aplicada por MCP, somente a migration nova; alias local20261007220000 registrado sem reparar o histórico. Verificação remota confirma retirada do teto nas duas funções e constraint não vazia, RLS/grants intactos. Edge matching-trajectory17 ACTIVE/verify_jwt true,13 arquivos conferidos iguais ao commit; somente handler e compositor gerado mudaram frente à16. Nenhuma revisão real foi salva e nenhuma IA chamada.
+
+Web imagem `sha256:0d6a7664b61990ff5ce5a171764f40928139b83f6e21dcfb50e19ab91c706d37`, running/0, entry `index-sVw5w6Ck.js` e CSS `index-SNTMzHER.css`. Rollback `prisma-web:rollback-before-191de3dfd8cd` preserva imagem28aacc1c/v2.1.6. Parser/Synthesis/gateway preservam IDs/imagens/reinícios; workers healthy. O comando SSH de release saiu22 por404 do curl imediato durante recriação; não é contado como PASS. Smoke posterior independente:14 HTTP200 e9 checks de SHA/versão/confirmar/paginar/ajuda/carregamento/score/negação anônima401 PASS, incluindo assets anteriores. Sem rebuild adicional. Recibo consolidado distingue a falha transitória da verificação posterior.
+
+D-01–05/P-01 PASS; desvios materiais: nenhum identificado. Jornada autenticada real em produção permanece NOT TESTED; evidência sintética não comprova escolha/revisão de Pessoa real. Fechamento documental e ledger sincronizam Git/VPS sem reconstruir o runtime funcional acima. Servidor Vite próprio5697 encerrado; servidor anterior5693 e arquivos alheios preservados. Context Pack usa somente rastreados/arquivos próprios, sem documentos alheios não rastreados.
 
 ---
 
