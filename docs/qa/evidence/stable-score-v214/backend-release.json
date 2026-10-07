@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-07",
+  "project": "ioldpnqqvobprjiontre",
+  "migration": {
+    "name": "stable_matching_scores",
+    "localVersion": "20261007150000",
+    "remoteVersion": "20261007142155",
+    "success": true
+  },
+  "edge": {
+    "name": "matching-trajectory",
+    "version": 16,
+    "verifyJwt": true,
+    "files": 13,
+    "allPublishedContentsMatchCommittedSource": true,
+    "sourceCommit": "a7ee67d0e84f8050935264b6ffe9327fbb61c7ba",
+    "bundleSha256": "cce75e4507e5ac042371fb70ba23a074e77c8d04d4f677a61b9041883995b938",
+    "rollbackVersion": 15
+  },
+  "databaseChecks": {
+    "rls": true,
+    "authenticatedTableRead": false,
+    "serviceTableRead": false,
+    "authenticatedClaim": false,
+    "serviceClaim": true,
+    "stateCountBeforeWeb": 0
+  },
+  "limits": "Schema/grants/byte verification; no real Person mutation, paid AI or authenticated UI flow."
+}

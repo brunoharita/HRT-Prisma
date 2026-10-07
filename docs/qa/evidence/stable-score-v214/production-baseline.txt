@@ -23,4 +23,3 @@ health|/prisma-profile-synthesis|healthy
     <div id="app"></div>
   </body>
 </html>
-

@@ -42,4 +42,3 @@ only an explicit legacy refresh claims the old cache and requests two new readin
 legacy refresh does not pay for a second request when unclaimed, malformed or unauthorized ... ok (2ms)
 
 ok | 40 passed | 0 failed (734ms)
-

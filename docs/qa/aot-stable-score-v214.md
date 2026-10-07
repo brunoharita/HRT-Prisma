@@ -34,4 +34,4 @@ Validação local: 108 testes Node dirigidos, 40 testes Edge e 39 assertivas SQL
 
 ## Publicação e conclusão
 
-Em andamento. D-05 permanece PARTIAL até CI, migration/Edge/frontend, smoke, rollback e sincronização. Nenhum desvio material do contrato identificado na revisão local. Não confundir testes locais com rollout ativo.
+Migration remota `20261007142155` aplicada, Edge16 ACTIVE/verify_jwt true, 13 arquivos idênticos à fonte commitada `a7ee67d`. Grants/RLS conferidos e tabela ainda vazia antes do frontend. Ledger alias registrado sem reparar histórico. Web/CI em andamento. D-05 permanece PARTIAL até CI, migration/Edge/frontend, smoke, rollback e sincronização. Nenhum desvio material do contrato identificado na revisão local. Não confundir testes locais com rollout ativo.

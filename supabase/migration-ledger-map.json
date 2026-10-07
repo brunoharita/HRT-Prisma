@@ -1328,6 +1328,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-07"
+    },
+    {
+      "name": "stable_matching_scores",
+      "localVersion": "20261007150000",
+      "remoteVersion": "20261007142155",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-07"
     }
   ],
   "localOnly": [
