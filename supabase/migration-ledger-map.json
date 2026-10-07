@@ -1320,6 +1320,14 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-06"
+    },
+    {
+      "name": "stable_competency_curation",
+      "localVersion": "20261007020000",
+      "remoteVersion": "20261007013453",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "verifiedAt": "2026-10-07"
     }
   ],
   "localOnly": [

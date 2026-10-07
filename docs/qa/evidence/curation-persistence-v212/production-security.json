@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-07T01:38:15.915Z",
+  "project": "ioldpnqqvobprjiontre",
+  "rls": true,
+  "ledger": [
+    {
+      "name": "stable_competency_curation",
+      "version": "20261007013453"
+    }
+  ],
+  "workerOnly": true,
+  "noDirectAccess": true,
+  "noPrivateExecution": true,
+  "recoveredDecisions": 10,
+  "advisory": {
+    "level": "INFO",
+    "code": "rls_enabled_no_policy",
+    "intentional": "Internal persistence; no direct API grants or policies. Existing guarded definers only.",
+    "reference": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+  }
+}

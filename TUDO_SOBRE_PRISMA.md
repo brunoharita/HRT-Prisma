@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 367
-source_manifest_sha256: cc4aa44ff1773596f3bb5dde0fc5ffe9cae827fdd99abf55162c2f3d87e4542f
+documentation_source_count: 371
+source_manifest_sha256: b2d4cc36cbd17c0df065721ffbfc286942a73adb9086bd61b5d1c92535cec46c
 -->
 
 # Tudo sobre o Prisma
@@ -2631,6 +2631,10 @@ last_verified: 2026-10-06
 ---
 
 # Estado atual do Prisma
+
+## Persistência da curadoria de competências — v2.1.2
+
+Correção autorizada em 06/10/2026: decisão humana por Pessoa, declaração original e trecho, preservada após refresh, novo nome normalizado e Perfil posterior com a mesma declaração/trecho. Reutiliza Knowledge, RPCs e projeções; persistência interna com RLS, sem edição direta, e precedência no processamento/leitura. Criação local/associação conferem resolução atomicamente; proposta global só se torna decisão após aprovação efetiva. Recuperação anterior exige prova humana inequívoca, sem nova escolha, alias ou conceito. Snapshot, fragmentos vizinhos, tenant/papéis, visual v2.1.1, matching, Parser/Synthesis e IA preservados. SQL local sintético: 35 checks PASS/ROLLBACK, incluindo reprodução do defeito, recuperação, reprocessamento, isolamento e rollback por falha. Tipos/build raiz e web, lint/foundation e 36 testes dirigidos PASS. Backend aplicado como migration remota20261007013453:10decisões existentes recuperadas em4Perfis, RLS/grants conferidos. Projeção real somente leitura confirma BPMhuman_preserved e pendências54/52→53/51; Excelência operacional/BPMN/PMO preservados e run original não reescrito. Publicação web/CI/smoke em andamento. Acordo 1.0.0 e AoT `docs/qa/agreement-competency-curation-persistence.md`, `aot-competency-curation-persistence.md`; ADR-077.
 
 ## Comunicação visual — Prisma v2.1.1
 
@@ -9715,6 +9719,32 @@ Decisão explícita de Bruno torna obrigatória a preservação das respostas v�
 
 ---
 
+## Source: `docs/decisions/ADR-077-stable-competency-curation.md`
+
+# ADR-077: identidade estável da decisão de curadoria
+
+Estado: aceito para o comportamento explicitamente autorizado no acordo de persistência 1.0.0, 06/10/2026.
+
+## Problema e alternativas
+
+A normalização pode separar uma declaração e mudar o nome de seus fragmentos. Knowledge registra aprovação do termo, mas Inbox de fragmento pode não ter observações. `knowledge_observations` tem unicidade por Perfil/termo normalizado e representa também decisões sobre declarações integrais. Reutilizá-la como decisão de átomo faria a preservação legada aplicar uma escolha a todos os fragmentos. Alterar aliases não registra o alvo exato da decisão nem sobrevive à renomeação.
+
+## Decisão
+
+Reutilizar Knowledge, autorização e RPCs; acrescentar um registro interno mínimo por organização/Perfil/declaração original/trecho, com conceito e operador/prova existentes. Não editar normalizações antigas nem snapshots. A projeção e o processamento consultam esse registro antes de sugestões automáticas, inclusive em Perfil posterior da mesma Pessoa com a mesma declaração/trecho. Gravação e confirmação de resolução pertencem à transação existente. Nenhum novo endpoint público ou biblioteca.
+
+RLS e ausência de grants de escrita direta protegem o registro. Helpers privados executam sob a autorização já estabelecida pelas RPCs. Conceito indisponível ou fora do alcance não produz associação válida; decisão permanece registrada e limitação explícita. Propostas globais pendentes não são decisões concluídas.
+
+A proposta global recebe uma referência server-side à declaração/trecho original. Somente sua aprovação efetiva pela governança existente persiste a decisão, por trigger privado na mesma transação. A contribuição global automática de uma criação local não recebe esse alvo e não substitui a escolha local.
+
+Recuperação inicial usa somente itens fundamentados no último resultado completo do Perfil vigente e termos humanos aprovados inequívocos, com prova de alias ou criação aprovada. Não inferir equivalência nem selecionar conceitos novos.
+
+## Consequências e rollback
+
+Uma pequena tabela e índice são necessários para preservar a identidade que os contratos anteriores não representam. Forma das RPCs e projeções permanece compatível. Reversão operacional restaura funções anteriores, preservando a tabela e o histórico; nunca remover decisões para reverter a apresentação.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -11378,6 +11408,8 @@ Síntese e oito respostas/lacunas/perguntas permanecem integrais, provenientes d
 
 Competências mantém naturezas, grupos/filtros, declarações, curadoria, classificação e vínculos múltiplos. Evidências mantém todas as associações/fontes/detalhes documentais. Vincular evidência não define classificação taxonômica. Perfil completo mantém todos os registros, formação detalhada/origem/situação/qualificação, experiências, credenciais, idiomas, seções extras e contato autorizado separado; não reescreve o snapshot.
 
+Desde v2.1.2, uma associação humana concluída fica registrada por Pessoa, declaração original e trecho. Atualização, renomeação automática e novo Perfil com a mesma declaração/trecho preservam a escolha. Declarações compostas mantêm decisões separadas; aprovação de BPM não aprova BPMN. Associação/criação local só retorna sucesso após conferir a resolução na mesma transação. Proposta global não aprovada continua pendente. Aprovações anteriores só são recuperadas com prova humana inequívoca. Conceito realmente indisponível ou fora do alcance continua explicitamente indisponível; não é substituído automaticamente. Contrato: `agreement-competency-curation-persistence.md` 1.0.0; ADR-077.
+
 ## Operação, falhas e preservação
 
 Pendências só aparecem quando derivadas dos estados atuais. Cada item informa objeto, problema conhecido e ação viável. Diagnóstico de período conhecido na formação usa o validador existente e abre a revisão no campo correspondente; ausência de dado, por si só, não cria obrigação artificial. Se o diagnóstico só conhece a revisão, o botão é Continuar revisão. Falha interna permanece técnica; Perfil vigente continua explicitamente disponível.
@@ -12013,6 +12045,39 @@ Decisão de Bruno: implementar na lista de Pessoas por Posição a proposta visu
 | Banco, Edge e ingestão | no_impact_identified | Nenhum arquivo/contrato compartilhado modificado | Inspeção do diff e plano de release |
 
 Não há pendência material para implementar a composição aprovada. A ausência de ambiente autenticado para screenshot real deve ser declarada como limite, não substituída por afirmação de fidelidade visual não observada.
+
+---
+
+## Source: `docs/qa/agreement-competency-curation-persistence.md`
+
+# Acordo: persistência da curadoria de competências
+
+Versão 1.0.0, congelada pela instrução de Bruno em 06/10/2026: “garanta que uma competência que tenha sido devidamente revisada não volte para a lista de pendências”. Execução autorizada, incluindo publicação conforme AGENTS.md §7. Baseline `07b79f69eaeb594b68bf2e738bcd394b949f1c5c`, Prisma v2.1.1.
+
+- D-01: uma associação humana concluída deve permanecer vinculada à Pessoa, declaração original e trecho revisado, independentemente do nome normalizado, atualização, nova normalização ou nova versão do Perfil que preserve a mesma declaração/trecho.
+- D-02: salvar associação ou criação local deve conferir atomicamente a resolução do item selecionado antes de informar sucesso. Uma proposta global ainda não aprovada permanece proposta; não representa associação concluída.
+- D-03: preservar separadamente itens de declarações compostas, como BPM/BPMN; revisar BPM não revisa BPMN. Decisões não podem atravessar Pessoas ou organizações, substituir outra decisão humana nem produzir evidência demonstrada.
+- D-04: recuperar associações anteriores somente de aprovações humanas inequívocas, com termo aprovado, conceito acessível e proveniência existente, para itens fundamentados no último resultado completo do Perfil vigente. Não criar nova escolha humana, alias ou conceito para reparar o estado.
+- D-05: publicar a correção como v2.1.2, com migração seletiva, CI, smoke, rollback e sincronização; preservar v2.1.1 visual e serviços não afetados.
+- P-01: proibido esconder pendências apenas no frontend, alterar snapshots/experiências, resolver outros termos por semelhança, reclassificar conceitos ou executar IA paga para esta correção.
+- P-02: proibido apagar histórico, aceitar conceito de outro tenant/inválido ou substituir decisões. Mudança real de declaração ou indisponibilidade do conceito deve continuar explícita e falhar de modo seguro.
+- F-01: fora de escopo redesenho visual, taxonomia, consolidação dos conceitos BPM/gestão de processos, matching/Score, Parser/Synthesis e publicação de Perfil humano.
+- A-01: engenharia pode definir a persistência mínima, índices e helpers internos, reutilizando governança, RPCs e projeções existentes. Sem nova biblioteca ou nova autoridade pública.
+- CA-01: SQL local comprova associação e criação, refresh/reprocessamento com nome diferente, Perfil posterior com mesma declaração, isolamento de fragmentos/Pessoas/tenants, conflito, propostas e rollback. Provar falha do caso de regressão no baseline.
+- CA-02: produção comprova migração/grants/contratos, recuperação fundamentada do BPM e preservação de Excelência operacional e PMO, sem curadoria humana fabricada. Smoke HTTP/infra e CI aprovados.
+
+## Mapa de impacto antes da implementação
+
+| Área | Relação | Baseline e preservação | Regressão |
+| --- | --- | --- | --- |
+| Curadoria V5 e wrappers legados | direct | Criação local pode retornar pendente; alias tem guarda; papéis/alcance e auditoria existentes | SQL positivo/negativo e rollback |
+| Normalização/projeções V2–V6 | direct | Resultado completo preservado, quatro estados e proveniência declarada | Reprocessamento/renomeação, separação dos átomos e cobertura |
+| Persistência tenant e leitura autorizada | critical_transversal | Novos registros não são editáveis diretamente; autorização existente na entrada | RLS/grants/tenant/Pessoa/inativo/anon |
+| Pessoa/contagens/lista | plausible_indirect | Consome a mesma forma de projeção; visual v2.1.1 | Testes dirigidos e projeção real somente leitura |
+| Registry/web/release | direct | v2.1.1, SHA baseline acima; imagem web e rollback registrados no AoT | Tipos/build/CI/HTTP/assets |
+| SQL alheio, matching/IA/Parser/Synthesis | no_impact_identified | Helpers só de curadoria/normalização; sem alteração de prompts, cálculo ou workers | Diff/plano e IDs/imagens/reinícios preservados |
+
+Sem Q material: comportamento definido pelo pedido e pelos contratos existentes. Proposta global não aprovada mantém a regra vigente; indisponibilidade real não é ocultada.
 
 ---
 
@@ -15733,6 +15798,51 @@ Referência: PNG com SHA-256 `de50e17478d3a65a60c0dfc876660d1296f7bba57fe711ad7d
 Lint, typecheck web, build web, gerador/verificador do Context Pack e `git diff --check` passaram no worktree. Dois testes estruturais que buscavam a marcação antiga foram atualizados para verificar o mesmo conteúdo e a proteção responsiva no novo agrupamento; os 22 testes direcionados de `matchingEvidenceLabel` e `matchingScore` passaram. O build apresentou somente avisos existentes de chunks grandes/importação dinâmica. O primeiro CI falhou por export de contexto defasado; o segundo alcançou 716 testes e falhou em três asserções estáticas da composição antiga, corrigidas neste mesmo movimento. CIs do SHA funcional `342ff9aa75896dcf09f306fa42d4df4fb82fb43f`: branch `36803529139` e main `36803703626` PASS. Plano seletivo: web e documentação; banco e Edge `skip`.
 
 `main` local/GitHub e checkout da VPS chegaram ao SHA funcional. Apenas `prisma-web` foi reconstruído/recriado, imagem ativa `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`, running/zero reinícios. Rollback `prisma-web:rollback-before-342ff9aa7589` preserva `sha256:668091fb1267488e26c1dca121bf2ea98a1609a93c60bbf7d24aca8b5d6ea080`. O smoke imediato do script recebeu 404 transitório e saiu com código 1; a verificação posterior confirmou `/`, `/login`, `/index.html` e os assets JS/CSS novos com HTTP 200, incluindo marcadores do novo layout. Não houve acesso autenticado a Perfis reais em produção, clique de revisão, decisão humana nem chamada à IA; o smoke funcional autenticado permanece NOT TESTED. Esse limite não reduz os testes locais com dados sintéticos.
+
+---
+
+## Source: `docs/qa/aot-competency-curation-persistence.md`
+
+# AoT: curadoria de competências persistente, v2.1.2
+
+Acordo integral `agreement-competency-curation-persistence.md` 1.0.0; execução no arquivo correspondente. Pedido explícito de Bruno autoriza implementação e publicação. Baseline `07b79f6`, runtime visual v2.1.1. Classe D, ADR-077.
+
+## Acordos → implementação → teste → evidência
+
+| Requisito | Implementação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Decisão por organização/Pessoa/Perfil/declaração/trecho; precedência na projeção V3 e conclusão da normalização | SQL: rename/ambiguidade automática, refresh e Perfil posterior | PASS local |
+| D-02 | Core compartilhado grava decisão e confere resolução na mesma transação; aprovação global efetiva registra seu alvo por trigger privado | SQL: criação/alias; falha injetada impede falso sucesso e desfaz conceito/proposta/alias | PASS local |
+| D-03 | Trecho exato e mesma Pessoa/tenant; autorização existente; sem grants diretos | SQL: BPMN, outra Pessoa, tenant, papéis, anon, conflito e fonte forjada | PASS local |
+| D-04 | Recuperação inicial de termos humanos aprovados, resultado completo vigente e fonte fundamentada; prova de alias/change set ou proposta aprovada | Baseline reproduz criação aprovada com pendência; migração recupera exatamente o BPM sintético | PASS local e produção |
+| D-05 | Registry v2.1.2, migration forward-only e destinos seletivos | CI/rollout/smoke/sincronização pendentes | NOT TESTED |
+| P-01/P-02 | Snapshots e resultados antigos preservados; sem mudança em frontend/domain matching/IA, sem modelo pago | SQL: snapshot, zero requests, só declaração, proposta global pendente e conceito indisponível explícito | PASS local |
+
+## Impacto e preservação
+
+Mapa integral no acordo, registrado antes da implementação. Curadoria/normalização/projeções são diretas; tenant/papéis são transversais críticos. Pessoa/lista consome o mesmo contrato, apenas o estado correto. Registro de versão exige web. Nenhum arquivo de Parser, Synthesis, matching, Score ou extração é alterado.
+
+V2–V6 mantêm sua forma pública. V1/observações humanas antigas não são reescritas. Nova persistência é interna, com RLS e sem SELECT/INSERT/UPDATE/DELETE para anon/authenticated. Helpers privados não recebem EXECUTE dessas roles. Nova decisão não invalida ou substitui outra; indisponibilidade real permanece explícita.
+
+## Validação local
+
+`node scripts/verify-curation-persistence.mjs`: 35 checks PASS no PostgreSQL local descartável `import_evidence_v202`, porta 55479, transação ROLLBACK. Fixture exclusivamente sintética e sem rede/LLM. O primeiro check reproduz o defeito com funções anteriores; a mesma aprovação é recuperada após a migração. Inclui aprovação global posterior, sem antecipar uma decisão pendente.
+
+O runner recompõe somente dependências de curadoria/normalização necessárias na transação. A montagem inicial descobriu dependências históricas (aliases canônicos duplicados sem M7.7 de transição); corrigida a montagem, sem alterar migrations históricas ou produção. Um teste usava revisão 2 quando a mudança de versão Knowledge gera uma nova revisão 1; corrigido para a sequência mais recente, mantendo o cenário.
+
+Tipos/build raiz e web, lint (959 arquivos), foundation e 36 testes dirigidos PASS. Context Pack gerado/conferido em espelho dos rastreados mais arquivos próprios, excluindo documentos locais alheios, PASS. Diff-check PASS. Nenhuma suíte integral local. Jornada humana autenticada mutacional não é usada como teste.
+
+## Produção, rollback e limites
+
+Projeto alvo confirmado: Supabase `ioldpnqqvobprjiontre`, Prisma ACTIVE_HEALTHY. Migration local `20261007020000` aplicada pelo fluxo versionado como ledger remoto `20261007013453` (`stable_competency_curation`), sem db push/replay histórico. Baseline dos três corpos de função conferido por hash antes da aplicação e protegido pela própria migration. Recuperadas 10 decisões humanas existentes em quatro Perfis, sem nova escolha/alias/conceito. Restaurar funções anteriores preservando a tabela em eventual rollback; imagem web anterior retida pelo deploy.
+
+A ausência de curadoria de Excelência operacional foi esclarecida por Bruno; PMO é outro termo. A recuperação não escolhe qualquer um deles por semelhança. Limite operacional: verificações remotas de leitura e prova de recuperação de decisões existentes; não publicar Perfil nem criar decisão humana para testar.
+
+Projeção V5 real, sob o operador da aprovação existente em transação de leitura/ROLLBACK: BPM `unresolved` → `human_preserved`, uma associação declarada com proveniência estável. Cobertura 54 itens/52 termos pendentes → 53/51; 13 → 14 associados. Excelência operacional permanece `unresolved`, BPMN mantém seu conceito e PMO mantém decisão humana. Run original completo sequência 41 conserva BPM `unresolved`; a correção está na projeção, sem reescrever histórico. RLS, ausência de acesso direto/EXECUTE privado e worker somente service_role conferidos em produção. Evidências em `evidence/curation-persistence-v212/`. Advisor INFO de tabela com RLS sem policies é intencional: acesso exclusivamente pelos definers já autorizados.
+
+## Fechamento
+
+Em andamento. Não declarar concluído antes da prova operacional de D-04/D-05 e sincronização.
 
 ---
 
@@ -20660,6 +20770,16 @@ Evidência sintética: `ui-results.json`, quatro arquivos `evidence-*.json`, `cl
 # Execução — cartão de Pessoas por Posição
 
 Fonte congelada: `docs/qa/agreement-candidate-card-visual.md` v1.0.0 e imagem normativa `docs/qa/assets/candidate-match-card-action-hub-reference.png`. Implementar D-01 a D-05, preservar P-01 a P-03 e F-01, exercer A-01, comprovar CA-01 a CA-04, registrar AoT e publicar apenas as superfícies do plano seletivo. A referência fixa topologia, hierarquia, agrupamentos e posição relativa; os registros exibidos nela não são dados a reproduzir.
+
+---
+
+## Source: `docs/qa/execution-competency-curation-persistence.md`
+
+# Execução da persistência de curadoria
+
+Contrato integral: `docs/qa/agreement-competency-curation-persistence.md`, versão 1.0.0. Ler integralmente; todos D/P/F/A/CA são vinculantes. Implementar D-01 a D-05 e impedir P-01/P-02. F-01 permanece excluído; A-01 delega a persistência e os testes, sem mudar a decisão humana.
+
+Usar baseline 07b79f6 e branch `codex/competency-curation-persistence`. Migração forward-only, teste em PostgreSQL local descartável com rollback, documentação do proprietário e Context Pack. Recuperação remota somente por evidência exata de aprovações existentes. Publicar destinos derivados pelo dispatcher e fechar AoT distinguindo testes sintéticos, recuperação operacional real e jornada humana não executada.
 
 ---
 

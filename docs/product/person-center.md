@@ -24,6 +24,8 @@ Síntese e oito respostas/lacunas/perguntas permanecem integrais, provenientes d
 
 Competências mantém naturezas, grupos/filtros, declarações, curadoria, classificação e vínculos múltiplos. Evidências mantém todas as associações/fontes/detalhes documentais. Vincular evidência não define classificação taxonômica. Perfil completo mantém todos os registros, formação detalhada/origem/situação/qualificação, experiências, credenciais, idiomas, seções extras e contato autorizado separado; não reescreve o snapshot.
 
+Desde v2.1.2, uma associação humana concluída fica registrada por Pessoa, declaração original e trecho. Atualização, renomeação automática e novo Perfil com a mesma declaração/trecho preservam a escolha. Declarações compostas mantêm decisões separadas; aprovação de BPM não aprova BPMN. Associação/criação local só retorna sucesso após conferir a resolução na mesma transação. Proposta global não aprovada continua pendente. Aprovações anteriores só são recuperadas com prova humana inequívoca. Conceito realmente indisponível ou fora do alcance continua explicitamente indisponível; não é substituído automaticamente. Contrato: `agreement-competency-curation-persistence.md` 1.0.0; ADR-077.
+
 ## Operação, falhas e preservação
 
 Pendências só aparecem quando derivadas dos estados atuais. Cada item informa objeto, problema conhecido e ação viável. Diagnóstico de período conhecido na formação usa o validador existente e abre a revisão no campo correspondente; ausência de dado, por si só, não cria obrigação artificial. Se o diagnóstico só conhece a revisão, o botão é Continuar revisão. Falha interna permanece técnica; Perfil vigente continua explicitamente disponível.

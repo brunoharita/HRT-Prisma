@@ -1,0 +1,56 @@
+{
+  "checkedAt": "2026-10-07T01:38:15.908Z",
+  "method": "Existing authorized operator; guarded V5 RPC in read-only transaction/ROLLBACK",
+  "before": {
+    "totalItemCount": 67,
+    "associatedItemCount": 13,
+    "pendingItemCount": 54,
+    "uniquePendingTermCount": 52,
+    "uniqueConceptCount": 10
+  },
+  "after": {
+    "targets": [
+      {
+        "label": "Excelência operacional",
+        "state": "unresolved",
+        "source": "excelência operacional",
+        "conceptId": null
+      },
+      {
+        "label": "Business Process Management (BPM)",
+        "state": "human_preserved",
+        "source": "BPM",
+        "conceptId": "4316b4e4-89e5-49bf-8016-315d102cf0da"
+      },
+      {
+        "label": "Business Process Model and Notation (BPMN)",
+        "state": "resolved",
+        "source": "BPMN",
+        "conceptId": "6b9213c6-2501-48e9-bac6-b96f89f9c287"
+      },
+      {
+        "label": "PMO",
+        "state": "human_preserved",
+        "source": "PMO",
+        "conceptId": "7163ad18-4fdf-4d3a-ad72-c7e91bde7fd9"
+      }
+    ],
+    "coverage": {
+      "totalItemCount": 67,
+      "pendingItemCount": 53,
+      "uniqueConceptCount": 11,
+      "associatedItemCount": 14,
+      "uniquePendingTermCount": 51
+    },
+    "stableHumanTrace": true,
+    "bpmAssociationCount": 1
+  },
+  "originalRun": {
+    "status": "complete",
+    "sequence": 41,
+    "bpmOriginalState": "unresolved",
+    "recoveredProfiles": 4,
+    "recoveredDecisions": 10
+  },
+  "limits": "No human mutation or Profile publication used as test."
+}
