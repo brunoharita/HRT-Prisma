@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 371
-source_manifest_sha256: af66715fb2f70fd0143b254ae17ad78c77c7bbf3133ca3431ef4bd958005a292
+documentation_source_count: 374
+source_manifest_sha256: 6d2de0ee2c644ccbb64db070a22262aa64f48b2e9d1368bcba997afcce620988
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.45
-last_verified: 2026-10-06
+version: 2.51.46
+last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Ajuda na revisão de divergências — v2.1.3
+
+Implementação autorizada em07/10/2026: três opções dinâmicas mantidas sem seleção inicial, descrição sempre visível e ajuda por ícone separado, mouse/foco/clique/teclado;Escape/Fechar ajuda preservam modal. Significado/impacto acompanha todas as categorias válidas; sem promessa de pontos fixos, declaração não vira experiência. Aviso de aplicação ao salvar, alcance exclusivo deste Perfil/versão da Posição e ausência de regra na Knowledge. Modal mantém pergunta/trecho/pares, rodapé, gate integral, indeterminação, legado, excesso, erro e autorização. Apenas apresentação/registry web2.1.3; sem SQL/Edge/matching/IA/Parser/Synthesis ou novas chamadas. Tipos/build e138testes dirigidos PASS;browser real sintético13cenários/140checks969/390/320 PASS,tema real e imagens antes/depois. Lint/foundation/Context Pack/diff-check PASS;rollout em andamento. Acordo1.0.0/executado/AoT `docs/qa/agreement-trajectory-review-help-v213.md`, `execution-trajectory-review-help-v213.md`, `aot-trajectory-review-help-v213.md`.
 
 ## Persistência da curadoria de competências — v2.1.2
 
@@ -11790,6 +11794,8 @@ Navegação preserva filtros, seleção, paginação, aba e rolagem nos contexto
 
 Toda alteração verifica critérios aplicáveis: operação por teclado, nomes acessíveis, foco visível e retorno após diálogo, hierarquia de títulos, erros associados a campos e anúncios de estado. Não depender somente de cor. Reutilizar comportamento acessível do Ant Design e sua localização pt-BR.
 
+Na revisão de divergências da trajetória (v2.1.3), cada opção tem descrição sempre visível e ajuda de significado/impacto por botão de informação, clique, mouse e teclado. A ajuda acompanha a categoria efetivamente recebida, não preseleciona nem salva. Escape fecha a ajuda sem fechar o modal. O impacto é condicionado às evidências: declaração não vira experiência, e não se promete pontuação fixa. Aviso informa aplicação ao salvar, alcance deste Perfil/versão da Posição e ausência de regra na Knowledge. Qualquer item não determinável mantém o cálculo anterior e a revisão sem conclusão. Preservar três escolhas e conclusão integral, pares/citações e ações anteriores. Acordo `docs/qa/agreement-trajectory-review-help-v213.md` 1.0.0.
+
 Conferir leitura, contraste e ampliação nas superfícies alteradas, com referências de 390 px, 768 px e desktop; considerar reflow em 320 CSS px. Avaliar conteúdo longo, vazio, erro e menu aberto/recolhido. Inspeção dirigida não equivale a certificação WCAG de todo o produto.
 
 ## Autonomia e evolução
@@ -15456,6 +15462,40 @@ Versão 1.0.0. Decisão de Bruno em 2026-09-29: corrigir a falha recorrente da I
 ## Decisão de versão
 
 Prompt `trajectory-evidence-2.1.0`; método `trajectory-position-2.0.0`, matching `vacancy-matching-semantic-7.0.0` e score `matching-score-1.4.0` permanecem. Nova migration aceita o prompt no claim/commit, sem alterar significado de snapshots antigos.
+
+---
+
+## Source: `docs/qa/agreement-trajectory-review-help-v213.md`
+
+# Acordo: ajuda na revisão de divergências, v2.1.3
+
+Versão 1.0.0, aprovada pelo pedido explícito de Bruno em 07/10/2026 para implementar a proposta nesta tela, integrar em main e publicar v2.1.3. Baseline `98830fd42f5671ccc2a91140b839976a9fb284e8`, runtime v2.1.2 `58f8bd7`. Reutiliza integralmente os acordos de revisão humana, modal e checagem legada existentes; altera somente apresentação explicativa. Classe B, preservação proporcional das fronteiras sensíveis adjacentes.
+
+- D-01: cada uma das três opções recebe explicação curta sempre visível e ícone de informação separado do rádio, com significado/impacto disponíveis por clique, mouse e teclado, inclusive celular. O conteúdo corresponde à categoria efetivamente recebida; nenhuma opção nasce selecionada.
+- D-02: explicar função relacionada, contexto e indeterminação, além das demais categorias válidas quando retornadas. Impacto depende das evidências, da origem do trecho e da Posição; declaração não vira experiência. Não prometer pontuação fixa por escolha. Se qualquer item for `cannot_determine`, registrar sem conclusão e preservar o cálculo anterior.
+- D-03: aviso visível informa aplicação ao salvar, alcance exclusivo deste Perfil/versão da Posição e ausência de regra nova na Knowledge. Preservar até cinco conflitos, gate de todas as escolhas, pares/citações/pergunta, carregamento, erro, legado, autorização e APIs existentes.
+- D-04: publicar v2.1.3 em main/produção, com CI, smoke, rollback e sincronização seletivos.
+- P-01: não selecionar/salvar/reprocessar ao abrir ajuda; não criar categorias, campo aberto, pontos, decisão humana ou equivalências; não alterar matching, score, IA, banco, papéis, Knowledge ou dados profissionais.
+- F-01: mudanças no backend, algoritmos, taxonomia, outras telas, bibliotecas e teste com mutação/IA sobre Pessoa real.
+- A-01: engenharia usa Ant Design existente, organização das linhas, estilos locais e testes sintéticos. Ícone de ajuda é controle próprio; Escape fecha ajuda sem fechar a revisão.
+- CA-01: componente real renderizado em desktop e celular com três opções, descrições legíveis, sem overflow, ajuda por hover/focus/clique/Enter/Escape, sem escolha/salvamento incidental; evidência renderizada identificada.
+- CA-02: salvar exige todos os itens; payload preserva as escolhas; indeterminação mantém fluxo anterior; operador sem permissão, legado, excesso e erro preservados. Testes dirigidos de matching/revisão permanecem aprovados.
+- CA-03: tipos/build, validações proporcionais, Context Pack, CI, publicação/HTTP/assets e preservação dos serviços, com limites explícitos.
+
+## Referência visual e impacto antes da implementação
+
+A captura fornecida é baseline normativo da tela a preservar, não um novo desenho: modal com Pessoa/título, corpo rolável, pergunta, trecho, duas leituras lado a lado, classificação abaixo e rodapé persistente com contador/Fechar/Salvar. A proposta aprovada acrescenta ajuda na região de classificação; três linhas legíveis acomodam o texto. Celular empilha pares e opções. Textos/Pessoa ilustrativos, dados reais permanecem do serviço. Comparação renderizada usa o mesmo componente, cenário sintético, dados e viewports antes/depois; não alegar identidade com dados privados da captura.
+
+| Área | Relação | Baseline/capacidade protegida | Prova proporcional |
+| --- | --- | --- | --- |
+| Modal e ajuda | direct | Três opções dinâmicas sem seleção, pares/citações, corpo/rodapé | Browser real desktop/celular, teclado/toque, screenshots antes/depois |
+| CSS compartilhado | plausible_indirect | Regras limitadas ao modal; demais componentes e leitura dos pares | Escopo do diff, browser e build |
+| Fluxo de revisão e matching | plausible_indirect | Mesmas APIs/handlers e cálculo, gate integral e cannot_determine | Browser com adaptador sintético + testes semânticos/score |
+| Permissão e dados profissionais | critical_transversal | canReview impede modal; nenhuma chamada nova | Browser negativo, isolamento do adaptador, diff sem backend |
+| Registry/web/release | direct | v2.1.2; infraestrutura registrada antes do deploy | Tipos/build/CI, HTTP/assets/SHA/rollback |
+| Banco, Edge, Parser/Synthesis, Knowledge/IA | no_impact_identified | Nenhum arquivo funcional nesses destinos; ajuda é conteúdo local | Plano seletivo e IDs/imagens/reinícios preservados |
+
+Sem Q material; proposta explicitamente autorizada. Não reabre decisões de matching.
 
 ---
 
@@ -20192,6 +20232,30 @@ PASS para implementação, compatibilidade, release e smoke não autenticado. Qu
 
 ---
 
+## Source: `docs/qa/aot-trajectory-review-help-v213.md`
+
+# AoT: ajuda na revisão de divergências v2.1.3
+
+Contrato integral `agreement-trajectory-review-help-v213.md` 1.0.0 e execução correspondente. Baseline `98830fd`, produção v2.1.2. Mapa e capacidades protegidas registrados no acordo antes da implementação.
+
+| ID | Implementação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | Descrição sempre visível e Popover por hover/foco, clique/Enter explícito, Escape e Fechar ajuda | Browser real: 969/390/320, descrição associada ao rádio, Tab/Enter/Escape/toque; imagens antes/depois | PASS local |
+| D-02 | Ajuda das 12 categorias válidas e da indeterminação, impacto condicionado à evidência | Browser cobre todas as categorias; 138 testes dirigidos de revisão/semântica/score/registry | PASS local |
+| D-03 | Aviso ao salvar e fluxo existente preservado | Browser: gate parcial/integral, payload exato, indeterminação/conclusão, não autorizado/legado/excesso/erro | PASS local |
+| D-04 | Registry v2.1.3, main/produção seletiva | CI/smoke/sincronização pendentes | NOT TESTED |
+| P-01 | Ajuda não escolhe/salva/reprocessa; sem mudança no matching/score/serviço/banco/IA | Browser registra zero chamadas novas ao abrir ajuda; diff/revisão e testes dirigidos | PASS local |
+
+## Validação e limites
+
+Somente dados sintéticos para gravação/revisão nos testes. Nenhuma IA paga ou teste mutacional sobre Pessoa real. Browser usa o componente real, Ant Design, tema/reset/foundation de produção e adaptador de serviço sintético, bloqueando tráfego externo. 13 cenários/140 verificações PASS, sem erro runtime nem chamada externa. Abrir ajuda não altera escolhas, payload, contador ou callbacks; Fechar ajuda/Escape preservam o modal. Indeterminação chama o mesmo salvamento, mantém a tela e não aciona resolução. Conclusão íntegra mantém payload/callback existentes. Testes semânticos comprovam preservação real do cálculo; o stub de browser não pretende recalcular score.
+
+Referência é baseline da arquitetura visual. Imagens `before-top/choice-969/390.png` usam componente/CSS do Git `98830fd`; `after-top/choice-969/390.png` usam o componente alterado com o mesmo cenário, tema, dados e viewport. `help-open-969/390/320.png` mostra a ajuda, e `after-*-320.png` documenta reflow estreito. Inspeção visual confirmou pergunta/trecho/pares, corpo rolável e rodapé persistente; a classificação ganha três linhas para acomodar descrições, conforme a proposta aprovada. Sem desvio material identificado. Não se alega identidade de texto/Pessoa com a captura privada fornecida. Evidências em `docs/qa/evidence/trajectory-review-help-v213/`.
+
+A validação detectou interferência entre foco e toggle de clique no Popover: foco/clique simultâneos podiam fechar a ajuda. Corrigido com hover/foco no Popover e abertura explícita no botão; Escape e Fechar ajuda encerram. O teste aguarda conteúdo e animação antes de medir/capturar. Comparação foi refeita com o tema real do Prisma. Tipos/build e 138 testes dirigidos PASS; lint (974 arquivos), foundation, Context Pack e diff-check PASS. CI/produção em andamento. Produção será verificada por smoke público/infra, sem alegar jornada autenticada real.
+
+---
+
 ## Source: `docs/qa/aot-ux-foundation.md`
 
 # AoT — Base compartilhada de UX
@@ -23883,6 +23947,14 @@ Diagnosticar a shell atual, reutilizar os assets oficiais de login e a fonte exe
 Contrato vinculante integral: `docs/qa/agreement-trajectory-evidence-recovery.md` v1.0.0. Ler o acordo completo antes de executar; D-01 a D-04, P-01 a P-03, F-01/F-02, A-01 e CA-01 a CA-04 aplicam-se sem substituição. Decisão do Product Owner: “pode corrigir”, após o diagnóstico de `reading_quote`, cache esgotado/divergente e botão de atualização enganoso. Este prompt não autoriza custo inesperado, mudança de modelo, backfill, alteração de dados reais, novo provedor ou score.
 
 Implementar a referência de evidência e sua validação estrita no domínio compartilhado e na Edge; versionar prompt e compatibilidade SQL por migration nova; manter cache, duas leituras, cooldown, autorização e fallback; comunicar na busca e comparação a disponibilidade real de retry. Regerar o runtime compartilhado, executar testes negativos e de preservação, atualizar documentação owner e Context Pack, fechar AoT com ambiente e limitações verificáveis. Aplicar release seletivo em migration → Edge → web somente após validação proporcional e guardas de operação, preservando rollback e o mesmo SHA.
+
+---
+
+## Source: `docs/qa/execution-trajectory-review-help-v213.md`
+
+# Execução: ajuda da revisão v2.1.3
+
+Contrato integral `docs/qa/agreement-trajectory-review-help-v213.md`, versão 1.0.0. D-01 a D-04 e CA-01 a CA-03 vinculantes; impedir P-01, manter F-01 e usar A-01. Branch `codex/trajectory-review-help-v213`, baseline `98830fd`. Reutilizar Modal/Radio/Popover/Button do Ant Design e serviços existentes. Implementar explicação visível e ajuda acessível das categorias dinâmicas, sem alterar regras. Validar componente real com dados sintéticos no mesmo estado/viewport antes/depois, tipos/build e regressão dirigida; atualizar proprietário, Context Pack e AoT. Publicar somente destinos do dispatcher, integrar main e sincronizar, preservando serviços alheios.
 
 ---
 

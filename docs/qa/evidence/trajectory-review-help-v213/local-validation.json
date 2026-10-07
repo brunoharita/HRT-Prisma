@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-07T11:23:01.063Z",
+  "browser": {
+    "scenarios": 13,
+    "checks": 140,
+    "pass": true,
+    "widths": [
+      969,
+      390,
+      320
+    ],
+    "component": "TrajectoryConflictReview",
+    "data": "Synthetic only",
+    "externalCalls": 0
+  },
+  "directedTests": {
+    "pass": 138,
+    "fail": 0,
+    "files": [
+      "trajectoryReviewModal",
+      "semanticTrajectoryReview",
+      "semanticTrajectory",
+      "matchingScore",
+      "productRelease"
+    ]
+  },
+  "checks": [
+    "build root",
+    "typecheck:web",
+    "build:web",
+    "lint (974 files)",
+    "check:foundation",
+    "Context Pack mirror generate/check",
+    "git diff --check"
+  ],
+  "limits": "No full local suite, real user mutation or paid AI. Browser adapter checks payload/callbacks; directed domain tests check the calculation."
+}

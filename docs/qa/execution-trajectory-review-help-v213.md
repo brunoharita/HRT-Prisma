@@ -1,0 +1,3 @@
+# Execução: ajuda da revisão v2.1.3
+
+Contrato integral `docs/qa/agreement-trajectory-review-help-v213.md`, versão 1.0.0. D-01 a D-04 e CA-01 a CA-03 vinculantes; impedir P-01, manter F-01 e usar A-01. Branch `codex/trajectory-review-help-v213`, baseline `98830fd`. Reutilizar Modal/Radio/Popover/Button do Ant Design e serviços existentes. Implementar explicação visível e ajuda acessível das categorias dinâmicas, sem alterar regras. Validar componente real com dados sintéticos no mesmo estado/viewport antes/depois, tipos/build e regressão dirigida; atualizar proprietário, Context Pack e AoT. Publicar somente destinos do dispatcher, integrar main e sincronizar, preservando serviços alheios.

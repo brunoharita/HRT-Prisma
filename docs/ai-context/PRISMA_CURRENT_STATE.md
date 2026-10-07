@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.45
-last_verified: 2026-10-06
+version: 2.51.46
+last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Ajuda na revisão de divergências — v2.1.3
+
+Implementação autorizada em07/10/2026: três opções dinâmicas mantidas sem seleção inicial, descrição sempre visível e ajuda por ícone separado, mouse/foco/clique/teclado;Escape/Fechar ajuda preservam modal. Significado/impacto acompanha todas as categorias válidas; sem promessa de pontos fixos, declaração não vira experiência. Aviso de aplicação ao salvar, alcance exclusivo deste Perfil/versão da Posição e ausência de regra na Knowledge. Modal mantém pergunta/trecho/pares, rodapé, gate integral, indeterminação, legado, excesso, erro e autorização. Apenas apresentação/registry web2.1.3; sem SQL/Edge/matching/IA/Parser/Synthesis ou novas chamadas. Tipos/build e138testes dirigidos PASS;browser real sintético13cenários/140checks969/390/320 PASS,tema real e imagens antes/depois. Lint/foundation/Context Pack/diff-check PASS;rollout em andamento. Acordo1.0.0/executado/AoT `docs/qa/agreement-trajectory-review-help-v213.md`, `execution-trajectory-review-help-v213.md`, `aot-trajectory-review-help-v213.md`.
 
 ## Persistência da curadoria de competências — v2.1.2
 

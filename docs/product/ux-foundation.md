@@ -78,6 +78,8 @@ Navegação preserva filtros, seleção, paginação, aba e rolagem nos contexto
 
 Toda alteração verifica critérios aplicáveis: operação por teclado, nomes acessíveis, foco visível e retorno após diálogo, hierarquia de títulos, erros associados a campos e anúncios de estado. Não depender somente de cor. Reutilizar comportamento acessível do Ant Design e sua localização pt-BR.
 
+Na revisão de divergências da trajetória (v2.1.3), cada opção tem descrição sempre visível e ajuda de significado/impacto por botão de informação, clique, mouse e teclado. A ajuda acompanha a categoria efetivamente recebida, não preseleciona nem salva. Escape fecha a ajuda sem fechar o modal. O impacto é condicionado às evidências: declaração não vira experiência, e não se promete pontuação fixa. Aviso informa aplicação ao salvar, alcance deste Perfil/versão da Posição e ausência de regra na Knowledge. Qualquer item não determinável mantém o cálculo anterior e a revisão sem conclusão. Preservar três escolhas e conclusão integral, pares/citações e ações anteriores. Acordo `docs/qa/agreement-trajectory-review-help-v213.md` 1.0.0.
+
 Conferir leitura, contraste e ampliação nas superfícies alteradas, com referências de 390 px, 768 px e desktop; considerar reflow em 320 CSS px. Avaliar conteúdo longo, vazio, erro e menu aberto/recolhido. Inspeção dirigida não equivale a certificação WCAG de todo o produto.
 
 ## Autonomia e evolução

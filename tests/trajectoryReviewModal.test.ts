@@ -16,7 +16,7 @@ test("revisão da trajetória usa modal e mantém a escolha humana fechada", asy
   assert.match(component, /Leitura 2/);
   assert.match(component, /conflict\.first\.quote/);
   assert.match(component, /conflict\.second\.quote/);
-  assert.match(component, /<Radio\.Group[\s\S]*?<Radio value="first">[\s\S]*?<Radio value="second">[\s\S]*?<Radio value="cannot_determine">/);
+  assert.match(component, /<Radio\.Group[\s\S]*?<Radio value="first"[^>]*>[\s\S]*?<Radio value="second"[^>]*>[\s\S]*?<Radio value="cannot_determine"[^>]*>/);
   assert.match(component, /disabled=\{decided !== view\.conflictCount\}/);
   assert.doesNotMatch(component, /<Input|<TextArea|<Select/);
   assert.doesNotMatch(component, /prisma-trajectory-conflict-details/);
