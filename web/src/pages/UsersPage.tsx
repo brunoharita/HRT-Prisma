@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
@@ -37,6 +38,7 @@ export function UsersPage({ onNavigate }: UsersPageProps) {
   const [loading, setLoading] = useState(true);
   const [noticeRetry, setNoticeRetry] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando Usuários…": loading });
 
   useEffect(() => {
     let current = true;

@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { IdcardFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
@@ -91,6 +92,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
   const [groupId, setGroupId] = useState<string | null>(defaultValues.groupId);
   const [credentialMode, setCredentialMode] = useState<CredentialDeliveryMode>(defaultValues.credentialMode);
   const [status, setStatus] = useState<"active" | "inactive">(defaultValues.status);
+  useLoadingFeedback({ "Carregando cadastro de Usuário…": loading, "Salvando cadastro de Usuário…": submitting, "Solicitando recuperação de acesso…": resettingPassword });
   const watchedPassword = Form.useWatch("password", form) ?? "";
   const watchedPasswordConfirmation = Form.useWatch("passwordConfirmation", form) ?? "";
   const watchedUsername = Form.useWatch("username", form) ?? "";

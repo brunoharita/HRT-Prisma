@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { IdcardFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
@@ -50,6 +51,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
   const [loading, setLoading] = useState(Boolean(personId));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando cadastro da Pessoa…": loading, "Salvando cadastro da Pessoa…": saving });
 
   useEffect(() => {
     if (!personId) {

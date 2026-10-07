@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { SafetyCertificateFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
@@ -53,6 +54,7 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
   const [definitionId, setDefinitionId] = useState<string | null>(null);
   const [saving, setSaving] = useState<PreparedAssessmentStatus | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando verificação de competências…": loading, "Salvando verificação de competências…": saving });
 
   useEffect(() => {
     let active = true;

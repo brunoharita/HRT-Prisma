@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
@@ -40,6 +41,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
   const [error, setError] = useState<string | null>(null);
   const [errorFieldPath, setErrorFieldPath] = useState<string | null>(null);
   const [errorRecovery, setErrorRecovery] = useState<OperationRecovery>("retry");
+  useLoadingFeedback({ "Carregando alterações do Perfil…": loading, "Processando alterações do Perfil…": busy });
 
   useEffect(() => {
     let active = true;

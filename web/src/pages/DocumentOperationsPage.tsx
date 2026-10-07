@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useViewState } from "../ui/PrismaNavigation";
 import { useDeferredValue, useEffect, useState } from "react";
@@ -36,6 +37,7 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
   const [loading, setLoading] = useState(true);
   const [noticeRetry, setNoticeRetry] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando documentos…": loading });
   const [search, setSearch] = useViewState("search", "");
   const [status, setStatus] = useViewState<"all" | DocumentOperationalState>("status", "all");
   const deferredSearch = useDeferredValue(search.trim().toLocaleLowerCase("pt-BR"));

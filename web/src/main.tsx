@@ -4,6 +4,7 @@ import { App as AntApp, ConfigProvider } from "antd";
 import { PrismaApplication } from "./app/PrismaApplication";
 import ptBR from "antd/locale/pt_BR";
 import { prismaTheme } from "./ui/theme";
+import { PrismaLoadingFeedback } from "./ui/PrismaLoadingFeedback";
 import "antd/dist/reset.css";
 import "./styles.css";
 import "./ui/foundation.css";
@@ -18,6 +19,7 @@ createRoot(appElement).render(
   <StrictMode>
     <ConfigProvider theme={prismaTheme} locale={ptBR} form={{ validateMessages: { required: "Preencha este campo.", types: { email: "Informe um e-mail válido.", number: "Informe um número válido." } } }}>
       <AntApp>
+        <PrismaLoadingFeedback />
         <PrismaApplication />
       </AntApp>
     </ConfigProvider>

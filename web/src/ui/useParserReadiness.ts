@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { currentParserReadiness, type ParserReadiness } from "../domain/parserReadiness";
 import { checkParserIaReadiness } from "../infrastructure/parserIaClient";
+import { useLoadingFeedback } from "./PrismaLoadingFeedback";
 
 export function useParserReadiness(organizationId: string, active: boolean) {
   const [value, setValue] = useState<ParserReadiness>({ state: "checking", reason: "checking", organizationId, observedAt: Date.now() });
   const sequence = useRef(0);
   const pending = useRef<AbortController | null>(null);
+  useLoadingFeedback({ "Verificando disponibilidade da importação…": active && value.state === "checking" });
   const refresh = useCallback(async () => {
     const request = ++sequence.current;
     pending.current?.abort();

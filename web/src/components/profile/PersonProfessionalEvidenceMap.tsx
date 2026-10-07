@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../../ui/PrismaLoadingFeedback";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   ApartmentOutlined,
@@ -296,17 +297,19 @@ function EvidenceLinkModal({ adapter, concept, profileId, onClose, onProjection 
   adapter: CompetencyCurationAdapter; concept: ProfessionalConceptEvidenceView | null; profileId: string;
   onClose: () => void; onProjection: (value: ProfessionalEvidenceProjection) => void;
 }) {
+  const sourceActivity = useLoadingTask("Carregando fontes da evidência…", Boolean(concept));
   const [sources, setSources] = useState<Awaited<ReturnType<CompetencyCurationAdapter["loadEvidenceSources"]>>>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [drafts, setDrafts] = useState<Record<string, { quote: string; credentialName: string; credentialIssuer: string }>>({});
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  useLoadingFeedback({ "Processando informações…": Boolean(concept) && busy });
   const saveLock = useRef(false);
   useEffect(() => {
     if (!concept) return;
     let current = true;
     setSources([]); setSelected([]); setDrafts({}); setError(null);
-    void adapter.loadEvidenceSources(profileId).then((items) => { if (current) setSources(items); })
+    void sourceActivity.run(() => adapter.loadEvidenceSources(profileId)).then((items) => { if (current) setSources(items); })
       .catch((cause: unknown) => { if (current) setError(cause instanceof Error ? cause.message : "Fontes indisponíveis."); });
     return () => { current = false; };
   }, [adapter, concept?.id, profileId]);
@@ -330,8 +333,8 @@ function EvidenceLinkModal({ adapter, concept, profileId, onClose, onProjection 
   return <Modal title={`Vincular evidência a ${concept?.label ?? "competência"}`} open={Boolean(concept)} onCancel={() => { if (!saveLock.current) onClose(); }} width={640} closable={!busy}
     okText={selected.length > 1 ? `Confirmar ${selected.length} vínculos` : "Confirmar vínculo"} okButtonProps={{ disabled: !valid, loading: busy }} onOk={() => void save()} cancelButtonProps={{ disabled: busy }}>
     <Typography.Paragraph type="secondary">Selecione uma ou mais fontes do Perfil publicado. Você não precisa escrever uma justificativa. Esses vínculos não equivalem a uma verificação por Assessment.</Typography.Paragraph>
-    {error ? <Alert type="error" showIcon title={error} action={<Space wrap><Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar fontes</Button><Button onClick={() => { void adapter.refresh().then((value) => { onProjection(value); onClose(); }).catch(() => setError("A lista não pôde ser consultada. Sua seleção foi preservada. Tente consultar novamente.")); }}>Consultar vínculos</Button></Space>} /> : null}
-    <label>Fontes do Perfil<Select mode="multiple" aria-label="Fontes do Perfil" disabled={busy} style={{ width: "100%" }} value={selected} placeholder="Selecione uma ou mais experiências ou credenciais" optionFilterProp="label"
+    {error ? <Alert type="error" showIcon title={error} action={<Space wrap><Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar fontes</Button><Button onClick={() => { void sourceActivity.run(() => adapter.refresh()).then((value) => { onProjection(value); onClose(); }).catch(() => setError("A lista não pôde ser consultada. Sua seleção foi preservada. Tente consultar novamente.")); }}>Consultar vínculos</Button></Space>} /> : null}
+    <label>Fontes do Perfil<Select mode="multiple" aria-label="Fontes do Perfil" loading={sourceActivity.pending} disabled={busy} style={{ width: "100%" }} value={selected} placeholder="Selecione uma ou mais experiências ou credenciais" optionFilterProp="label"
       options={sources.map((item) => ({ value: `${item.nature}:${item.index}`, label: item.label }))} onChange={(value) => {
         setSelected(value); setDrafts(previous => { const next = { ...previous }; for (const key of value) {
           const item = sources.find(candidate => `${candidate.nature}:${candidate.index}` === key);
@@ -418,6 +421,7 @@ function MetricCard({ label, value }: { label: string; value: number }) { return
 function NormalizationStatus({ projection, disabled }: { projection: ProfessionalEvidenceProjection; disabled: boolean }) {
   const [requesting, setRequesting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  useLoadingFeedback({ "Solicitando atualização das evidências…": requesting });
   const status = projection.normalization.status;
   const latestAttempt = projection.normalization.latestAttempt;
   // Queue processing is server-side and survives navigation. Do not reload unsaved browser state.

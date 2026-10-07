@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { AppstoreFilled as PrismaPageIcon } from "@ant-design/icons";
 import { PrismaMetric } from "../ui/PrismaState";
 import { observedMetric } from "../shared/uxFoundation";
@@ -35,6 +36,7 @@ export function AssessmentItemBankPage({ activeMembership }: Props) {
   const [reviewRationale, setReviewRationale] = useState("Aderente ao modelo de avaliação e pronto para uso sintético controlado.");
   const [selectedProposalIds, setSelectedProposalIds] = useState<string[]>([]);
   const [selectedItem, setSelectedItem] = useState<GovernedItemView | null>(null);
+  useLoadingFeedback({ "Carregando Banco de Itens…": loading, "Salvando Banco de Itens…": saving });
 
   async function refresh() {
     setLoading(true); setError(null);

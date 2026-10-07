@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { personReviewNotice } from "../domain/personReviewNotice";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useViewState, useUnsavedChanges } from "../ui/PrismaNavigation";
@@ -133,6 +134,7 @@ const competencyClassificationGuide = [
 ] as const;
 
 export function PersonWorkspacePage({ activeMembership, personId, onNavigate, renderWorkspace, onOpenDocuments }: PersonWorkspacePageProps) {
+  const operationActivity = useLoadingTask("Atualizando informações da Pessoa…");
   const [workspace, setWorkspace] = useState<PersonIngestionWorkspace | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -153,19 +155,22 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
   const [revisionDocumentId, setRevisionDocumentId] = useState<string | null>(null);
   const [moveDocument, setMoveDocument] = useState<PersonDocumentTimelineItem | null>(null);
   const [peopleOptions, setPeopleOptions] = useState<PersonWorkspaceSummary[]>([]);
+  useLoadingFeedback({ "Carregando Pessoa…": loading, "Processando Pessoa…": busy });
   const canDeletePerson = ["super_admin", "owner", "admin"].includes(activeMembership.role);
 
   async function refresh(documentId = selectedDocumentId) {
-    const [result, versions] = await Promise.all([
-      personIngestionService.loadWorkspace(activeMembership.organizationId, personId, documentId),
-      personIngestionService.listProfileVersions(activeMembership.organizationId, personId),
-    ]);
-    if (!result) throw new Error("Pessoa não encontrada nesta empresa.");
-    setWorkspace(result);
-    setCurrentProfileVersion(versions.find((version) => version.supersededAt === null) ?? null);
-    setProfileVersions(versions);
-    setSelectedDocumentId(result.selectedDocument?.id);
-    setSelectedPage(result.pages[0]?.pageNumber ?? 1);
+    return operationActivity.run(async () => {
+      const [result, versions] = await Promise.all([
+        personIngestionService.loadWorkspace(activeMembership.organizationId, personId, documentId),
+        personIngestionService.listProfileVersions(activeMembership.organizationId, personId),
+      ]);
+      if (!result) throw new Error("Pessoa não encontrada nesta empresa.");
+      setWorkspace(result);
+      setCurrentProfileVersion(versions.find((version) => version.supersededAt === null) ?? null);
+      setProfileVersions(versions);
+      setSelectedDocumentId(result.selectedDocument?.id);
+      setSelectedPage(result.pages[0]?.pageNumber ?? 1);
+    });
   }
 
   useEffect(() => {
@@ -272,7 +277,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
       try {
         const reviewId = await personIngestionService.startProfileVersionReview(activeMembership.organizationId, personId, versionId);
         setRevisionOpen(false); onNavigate(`/profiles/${personId}/reviews/${reviewId}`);
-      } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível criar a revisão."); setBusy(false); }
+      } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível criar a revisão."); }
+      finally { setBusy(false); }
       return;
     }
     if (document) { setRevisionOpen(false); await handleStartReview(document); return; }
@@ -854,6 +860,7 @@ function MoveDocumentModal({ activeMembership, document, people, onClose, onComp
   const [targetPersonId, setTargetPersonId] = useState<string | null>(null);
   const [moving, setMoving] = useState(false);
   const [moveError, setMoveError] = useState<string | null>(null);
+  useLoadingFeedback({ "Movendo informações…": moving });
 
   useEffect(() => {
     setTargetPersonId(null);

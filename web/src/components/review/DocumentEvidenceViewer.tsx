@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../../ui/PrismaLoadingFeedback";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AimOutlined,
@@ -126,6 +127,7 @@ export function DocumentEvidenceViewer({
   const [fallbackOriginalRegion, setFallbackOriginalRegion] = useState<NormalizedPageRegion | null>(null);
   const [pageTextUnits, setPageTextUnits] = useState<PositionedTextUnit[]>([]);
   const [ocrBusy, setOcrBusy] = useState(false);
+  useLoadingFeedback({ "Carregando evidência documental…": loading, "Preparando página do documento…": rendering, "Lendo texto da evidência…": ocrBusy });
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pageRef = useRef<HTMLDivElement | null>(null);
   const textLayerRef = useRef<HTMLDivElement | null>(null);

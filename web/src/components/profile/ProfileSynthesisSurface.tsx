@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../../ui/PrismaLoadingFeedback";
 import { Component, useEffect, useRef, useState } from "react";
 import { ApartmentOutlined, BulbOutlined, CompassOutlined, FileSearchOutlined, FileTextOutlined, LinkOutlined, ReadOutlined, SearchOutlined, TeamOutlined, TrophyOutlined, RiseOutlined } from "@ant-design/icons";
 import { Alert, Button, Drawer, Grid, Skeleton, Space, Tag } from "antd";
@@ -45,6 +46,7 @@ class SummarySectionBoundary extends Component<{ children: React.ReactNode; titl
   override render() { return this.state.failed ? <PrismaCard title={this.props.title}><p>Não foi possível apresentar esta seção agora. As outras informações continuam disponíveis.</p></PrismaCard> : this.props.children; }
 }
 function ProfileSynthesisBody({ adapter, onOriginal, onProfile, onOpenSource, originalSummary, publishedProfile, canGenerate = true }: SurfaceProps) {
+  const queryActivity = useLoadingTask("Consultando análise do Perfil…");
   const [view, setView] = useState<ProfileSynthesisView | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [queryAttempt, setQueryAttempt] = useState(0);
@@ -55,6 +57,7 @@ function ProfileSynthesisBody({ adapter, onOriginal, onProfile, onOpenSource, or
   const [selection, setSelected] = useState<{ statement: SynthesisStatement; sourceId: string; analysisId: string } | null>(null);
   const [sourceState, setSourceState] = useState<{ key: string; source: SynthesisSource | null; error: string | null } | null>(null);
   const [sourceAttempt, setSourceAttempt] = useState(0);
+  useLoadingFeedback({ "Solicitando análise…": retrying });
   const cache = useRef(new Map<string, SynthesisSource>());
   const sourceToggle = useRef<HTMLButtonElement>(null);
   const sourceTrigger = useRef<HTMLElement | null>(null);
@@ -73,7 +76,7 @@ function ProfileSynthesisBody({ adapter, onOriginal, onProfile, onOpenSource, or
       if (!active) return;
       if (document.visibilityState !== "visible") { timer = setTimeout(() => void update(initial), 15000); return; }
       try {
-        let next = await adapter.load();
+        let next = await queryActivity.run(() => adapter.load());
         // Navigation only reads persisted analysis; generation requires an explicit action.
         if (!active) return;
         setView(next); setError(null);
@@ -107,9 +110,11 @@ function ProfileSynthesisBody({ adapter, onOriginal, onProfile, onOpenSource, or
   const profileVersion = showingPrevious ? view?.previous?.profileVersion : view?.profileVersion;
   const generatedAt = showingPrevious ? view?.previous?.generatedAt : view?.generatedAt;
   const generatedDate = generatedAt && Number.isFinite(Date.parse(generatedAt)) ? new Intl.DateTimeFormat("pt-BR").format(new Date(generatedAt)) : null;
+  useLoadingFeedback({ "Análise do Perfil em processamento…": !error && (view?.state === "queued" || view?.state === "processing") });
   const sourceKey = selected ? selected.analysisId + ":" + selected.sourceId : null;
   const source = sourceState?.key === sourceKey ? sourceState.source : null;
   const sourceError = sourceState?.key === sourceKey ? sourceState.error : null;
+  useLoadingFeedback({ "Carregando fonte da análise…": Boolean(selected && !source && !sourceError) });
 
   useEffect(() => {
     let active = true;

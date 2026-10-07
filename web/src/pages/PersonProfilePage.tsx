@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import type { ReactNode } from "react";
 import { PersonWorkspacePage, type PersonWorkspaceParts } from "./PersonWorkspacePage";
 import { confirmPrismaNavigation, useViewState } from "../ui/PrismaNavigation";
@@ -32,6 +33,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
   const [loading, setLoading] = useState(true);
   const [noticeRetry, setNoticeRetry] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando Perfil…": loading });
 
   useEffect(() => {
     let current = true;

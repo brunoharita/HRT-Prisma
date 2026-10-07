@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { useEffect, useState } from "react";
 import { ArrowLeftOutlined, AuditOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Alert, Button, Descriptions, Empty, Modal, Skeleton, Space, Table, Tag, Timeline } from "antd";
@@ -21,22 +22,26 @@ interface DocumentDetailPageProps {
 }
 
 export function DocumentDetailPage({ activeMembership, personId, documentId, onNavigate }: DocumentDetailPageProps) {
+  const operationActivity = useLoadingTask("Atualizando informações do documento…");
   const [workspace, setWorkspace] = useState<PersonIngestionWorkspace | null>(null);
   const [attempts, setAttempts] = useState<ProcessingAttemptView[]>([]);
   const [events, setEvents] = useState<ProcessingAuditEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando documento…": loading, "Processando documento…": busy });
 
   async function refresh() {
-    const [nextWorkspace, nextAttempts, nextEvents] = await Promise.all([
-      personIngestionService.loadWorkspace(activeMembership.organizationId, personId, documentId),
-      personIngestionService.listDocumentAttempts(activeMembership.organizationId, documentId),
-      personIngestionService.listAuditEvents(activeMembership.organizationId, documentId),
-    ]);
-    setWorkspace(nextWorkspace);
-    setAttempts(nextAttempts);
-    setEvents(nextEvents);
+    return operationActivity.run(async () => {
+      const [nextWorkspace, nextAttempts, nextEvents] = await Promise.all([
+        personIngestionService.loadWorkspace(activeMembership.organizationId, personId, documentId),
+        personIngestionService.listDocumentAttempts(activeMembership.organizationId, documentId),
+        personIngestionService.listAuditEvents(activeMembership.organizationId, documentId),
+      ]);
+      setWorkspace(nextWorkspace);
+      setAttempts(nextAttempts);
+      setEvents(nextEvents);
+    });
   }
 
   useEffect(() => {

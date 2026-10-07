@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { HomeFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { ApartmentOutlined, CheckCircleOutlined, ClockCircleOutlined, DatabaseOutlined, FileAddOutlined, SafetyCertificateOutlined, SyncOutlined, TeamOutlined } from "@ant-design/icons";
@@ -20,6 +21,7 @@ export function HomePage({ activeMembership, repository, onNavigate }: HomePageP
   const [noticeRetry, setNoticeRetry] = useState(0);
   const [checkingSourceId, setCheckingSourceId] = useState<string | null>(null);
   const [resolutionSource, setResolutionSource] = useState<KnowledgeSourceHealth | null>(null);
+  useLoadingFeedback({ "Carregando resumo inicial…": loading, "Verificando base de conhecimento…": checkingSourceId });
 
   useEffect(() => {
     let current = true;

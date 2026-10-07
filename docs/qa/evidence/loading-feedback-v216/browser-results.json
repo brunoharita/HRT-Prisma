@@ -1,0 +1,267 @@
+[
+  {
+    "name": "HomePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "PeoplePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "PersonWorkspacePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "PersonProfilePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "PersonFormPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "PersonMergePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "DocumentDetailPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "DocumentOperationsPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "ProfileComparePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "ProfileDeltaPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "ProfileReviewPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "ProfileVersionsPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "SettingsPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "KnowledgePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "UsersPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "UserFormPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "AssessmentItemBankPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "CompetencyVerificationPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VerificationOperationsPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VerificationSessionPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "PersonDataSelfServicePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VacanciesPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VacancyEditorPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VacancyDetailPage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VacancyPeoplePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VacancyComparePage",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "ResumeImportPage",
+    "idleNoFalseLoading": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "ProfileSearchPage",
+    "idleNoFalseLoading": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "PasswordChangePage",
+    "idleNoFalseLoading": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "VacancyAssistPage",
+    "idleNoFalseLoading": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "Core",
+    "width": 1280,
+    "concurrentTasks": true,
+    "previousContentAndDraftPreserved": true,
+    "errorRecovery": true,
+    "modalCloseAndUnmount": true,
+    "noOverflow": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "Core",
+    "width": 390,
+    "concurrentTasks": true,
+    "previousContentAndDraftPreserved": true,
+    "errorRecovery": true,
+    "modalCloseAndUnmount": true,
+    "noOverflow": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "Core",
+    "width": 320,
+    "concurrentTasks": true,
+    "previousContentAndDraftPreserved": true,
+    "errorRecovery": true,
+    "modalCloseAndUnmount": true,
+    "noOverflow": true,
+    "errors": [],
+    "external": []
+  }
+]

@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { PrismaState } from "../ui/PrismaState";
 import { PrismaPublicShell } from "../ui/PrismaPublicShell";
 import { useEffect, useMemo, useState } from "react";
@@ -15,6 +16,7 @@ export function PersonDataSelfServicePage({ token }: Props) {
   const [deleting, setDeleting] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando solicitação de dados…": loading, "Excluindo solicitação de dados…": deleting });
   const idempotencyKey = useMemo(() => `person-self-delete:${crypto.randomUUID()}`, []);
 
   useEffect(() => {

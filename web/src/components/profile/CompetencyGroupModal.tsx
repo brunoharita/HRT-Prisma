@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../../ui/PrismaLoadingFeedback";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Modal, Select, Space } from "antd";
 import type { ProfessionalConceptEvidenceView, ProfessionalEvidenceProjection } from "../../domain/personProfessionalEvidence";
@@ -10,10 +11,12 @@ export function CompetencyGroupModal({ concept, adapter, onClose, onProjection }
 }) {
   const [options, setOptions] = useState<CompetencySubgroupOption[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  const refreshActivity = useLoadingTask("Atualizando classificação de competências…", Boolean(concept));
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
+  useLoadingFeedback({ "Carregando grupo de competência…": Boolean(concept) && loading, "Processando grupo de competência…": Boolean(concept) && busy });
   const lock = useRef(false);
   const canClassify = Boolean(adapter && (concept?.scope === "organization" || adapter.canUseGlobal));
   useEffect(() => { setSelected(null); setOptions([]); setError(null); }, [concept?.id]);
@@ -37,7 +40,7 @@ export function CompetencyGroupModal({ concept, adapter, onClose, onProjection }
     footer={<Space><Button disabled={busy} onClick={onClose}>{canClassify ? "Cancelar" : "Voltar às competências"}</Button>{canClassify ? <Button type="primary" loading={busy} disabled={loading || !selected || !options.some((item) => item.id === selected)} onClick={() => void save()}>Salvar grupo</Button> : null}</Space>}>
     <p>As evidências já vinculadas serão preservadas. Falta definir o grupo que organiza esta competência.</p>
     {canClassify ? <><p>{concept?.scope === "global" ? "Esta alteração vale para a base global e pode aparecer em outras empresas." : "Esta alteração vale para a Knowledge da empresa e pode aparecer em outros perfis dela."}</p>
-      {error ? <Alert showIcon type="error" title={error} action={<Space wrap><Button disabled={busy} onClick={() => { setError(null); setAttempt((value) => value + 1); }}>Atualizar opções</Button><Button disabled={busy} onClick={() => { void adapter?.refresh().then((value) => { onProjection(value); onClose(); }).catch(() => setError("A lista não respondeu. Seus vínculos e sua escolha foram preservados. Tente consultar novamente.")); }}>Consultar lista</Button></Space>} /> : null}
+      {error ? <Alert showIcon type="error" title={error} action={<Space wrap><Button disabled={busy} onClick={() => { setError(null); setAttempt((value) => value + 1); }}>Atualizar opções</Button><Button disabled={busy} onClick={() => { void refreshActivity.run(() => adapter!.refresh()).then((value) => { onProjection(value); onClose(); }).catch(() => setError("A lista não respondeu. Seus vínculos e sua escolha foram preservados. Tente consultar novamente.")); }}>Consultar lista</Button></Space>} /> : null}
       <label htmlFor="prisma-competency-group">Grupo da competência</label>
       <Select id="prisma-competency-group" aria-label="Grupo da competência" style={{ width: "100%" }} value={selected} loading={loading} disabled={busy || loading} showSearch optionFilterProp="label" placeholder="Escolha o grupo" onChange={setSelected}
         options={(["hard", "soft"] as const).map((macro) => ({ label: macro === "hard" ? "Hard Skills" : "Soft Skills", options: options.filter((item) => item.macroGroupCode === macro).map((item) => ({ value: item.id, label: `${item.label}${item.scope === "organization" ? " (empresa)" : ""}` })) }))} />

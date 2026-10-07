@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
@@ -35,6 +36,7 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
   const [page, setPage] = useViewState("page", 1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando busca de Pessoas…": loading });
   const canReadLocation = activeMembership.role !== "member";
   const pageResults = useMemo(() => (results ?? []).slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [page, results]);
 

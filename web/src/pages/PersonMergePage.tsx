@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
@@ -25,6 +26,7 @@ export function PersonMergePage({ activeMembership, personId, onNavigate }: Pers
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando mesclagem de Pessoas…": loading, "Processando mesclagem de Pessoas…": busy });
 
   useEffect(() => {
     let current = true;
@@ -47,7 +49,7 @@ export function PersonMergePage({ activeMembership, personId, onNavigate }: Pers
   useEffect(() => {
     let current = true;
     setTarget(null); setTargetVersions([]); setChoices({}); setProfileChoice(null);
-    if (!targetId) return () => { current = false; };
+    if (!targetId) { setBusy(false); return () => { current = false; }; }
     setBusy(true); setError(null);
     void Promise.all([
       personIngestionService.loadWorkspace(activeMembership.organizationId, targetId),

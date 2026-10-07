@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Collapse, Descriptions, Drawer, Empty, Form, Input, List, Modal, Pagination, Select, Skeleton, Space, Tag, Typography } from "antd";
@@ -27,10 +28,12 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
   const [historyPage, setHistoryPage] = useState(1);
   const [historyError, setHistoryError] = useState<string | null>(null);
   const [historyRetry, setHistoryRetry] = useState(0);
+  const historyActivity = useLoadingTask("Carregando histórico da taxonomia…", why);
+  useLoadingFeedback({ "Carregando taxonomia da Posição…": loading });
   useEffect(() => {
     if (!why || !draft.id) return;
     let current = true; setHistoryError(null); setHistory([]);
-    void positionTaxonomyService.history(membership.organizationId, draft.id, (historyPage - 1) * 20)
+    void historyActivity.run(() => positionTaxonomyService.history(membership.organizationId, draft.id!, (historyPage - 1) * 20))
       .then((items) => { if (current) setHistory(items); })
       .catch(() => { if (current) setHistoryError("Histórico indisponível agora. Feche e abra a explicação para tentar novamente."); });
     return () => { current = false; };
@@ -181,6 +184,7 @@ function KnowledgePicker({ open, kind, organizationId, initialQuery = "", candid
   const [query, setQuery] = useState(initialQuery); const [page, setPage] = useState(1);
   const [items, setItems] = useState<TaxonomyCandidate[]>([]); const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false); const [error, setError] = useState<string | null>(null); const [retry, setRetry] = useState(0);
+  useLoadingFeedback({ "Carregando busca de conceitos…": open && loading });
   useEffect(() => { if (open) { setQuery(initialQuery); setPage(1); } }, [open, initialQuery]);
   useEffect(() => {
     if (!open) return;
@@ -206,14 +210,16 @@ function KnowledgePicker({ open, kind, organizationId, initialQuery = "", candid
   </Drawer>;
 }
 function ComplementDialog({ open, organizationId, canCreate, onClose, onAdd }: { open: boolean; organizationId: string; canCreate: boolean; onClose: () => void; onAdd: (id: string) => void }) {
+  const subgroupActivity = useLoadingTask("Carregando classificações do complemento…", open);
   const [picker, setPicker] = useState(false); const [label, setLabel] = useState("");
   const [subgroups, setSubgroups] = useState<CompetencySubgroupOption[]>([]);
   const [subgroupId, setSubgroupId] = useState<string | null>(null);
   const [description, setDescription] = useState(""); const [busy, setBusy] = useState(false); const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Processando complemento…": open && busy });
   useEffect(() => {
     if (!open || !canCreate) return;
     let active = true;
-    void knowledgeService.listCompetencySubgroups(organizationId).then((rows) => { if (active) setSubgroups(rows); })
+    void subgroupActivity.run(() => knowledgeService.listCompetencySubgroups(organizationId)).then((rows) => { if (active) setSubgroups(rows); })
       .catch(() => { if (active) setError("Não foi possível carregar os subagrupadores."); });
     return () => { active = false; };
   }, [open, canCreate, organizationId]);

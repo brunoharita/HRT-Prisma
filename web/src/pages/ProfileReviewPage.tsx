@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
@@ -69,6 +70,7 @@ type DeferredReviewAction =
   | { type: "continue_to_delta" };
 
 export function ProfileReviewPage({ activeMembership, personId, documentId, reviewId, mode = "review", onNavigate }: ProfileReviewPageProps) {
+  const operationActivity = useLoadingTask("Atualizando revisão do Perfil…");
   const [workspace, setWorkspace] = useState<ProfileReviewWorkspace | null>(null);
   const [draft, setDraft] = useState<StructuredDraft | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -95,6 +97,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   const [adaptiveReport, setAdaptiveReport] = useState<AdaptiveSuggestionReport | null>(null);
   const [deferredReviewAction, setDeferredReviewAction] = useState<DeferredReviewAction | null>(null);
   const [validationIssues, setValidationIssues] = useState<ReviewDraftIssue[]>([]);
+  useLoadingFeedback({ "Carregando revisão do Perfil…": loading, "Processando revisão do Perfil…": busy });
   const competencySelectionTarget = pendingAction === "correct_current_field" && selectedFieldPath === "competencies"
     || pendingAction === "create_new_information" && newInformationType === "competency";
   const competencySelectionResolution = useMemo<SpatialListResolution | null>(() => {
@@ -108,13 +111,15 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }, [competencySelectionTarget, excludedRefinementLinkIds, pendingSelection, selectionValue, selectionValueEdited]);
 
   async function refresh() {
-    const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
-    if (!result) throw new Error("Revisão não encontrada nesta empresa.");
-    if (result.personId !== personId || (documentId && result.documentId !== documentId)) throw new Error("A revisão não pertence à origem informada.");
-    setWorkspace(result);
-    setDraft(cloneDraft(result.reviewedData));
-    setValidationIssues([]);
-    return result;
+    return operationActivity.run(async () => {
+      const result = await personIngestionService.loadProfileReview(activeMembership.organizationId, reviewId);
+      if (!result) throw new Error("Revisão não encontrada nesta empresa.");
+      if (result.personId !== personId || (documentId && result.documentId !== documentId)) throw new Error("A revisão não pertence à origem informada.");
+      setWorkspace(result);
+      setDraft(cloneDraft(result.reviewedData));
+      setValidationIssues([]);
+      return result;
+    });
   }
 
   useEffect(() => {

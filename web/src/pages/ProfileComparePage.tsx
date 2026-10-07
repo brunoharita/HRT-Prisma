@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
@@ -18,6 +19,7 @@ export function ProfileComparePage({ activeMembership, personIds, onNavigate }: 
   const [candidates, setCandidates] = useState<PublishedProfileCandidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando comparação de Perfis…": loading });
   useEffect(() => {
     let current = true; setLoading(true); setError(null);
     void profileDiscoveryService.loadByIds(activeMembership.organizationId, personIds, activeMembership.role !== "member")

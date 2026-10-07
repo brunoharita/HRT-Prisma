@@ -1,0 +1,10 @@
+[
+  {
+    "name": "PrismaApplication",
+    "initialVisible": true,
+    "errorSettles": true,
+    "unmountSettles": true,
+    "errors": [],
+    "external": []
+  }
+]

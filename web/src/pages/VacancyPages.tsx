@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { PrismaBriefcaseIcon as PrismaPageIcon } from "../ui/PrismaBriefcaseIcon";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PositionTaxonomyPanel, TaxonomyOriginDetails } from "../components/PositionTaxonomyPanel";
@@ -114,6 +115,7 @@ export function VacanciesPage({ activeMembership, onNavigate }: CommonProps) {
   const [area, setArea] = useViewState<string | null>("area", null);
   const [page, setPage] = useViewState("page", 1);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando Posições…": loading, "Excluindo Posições…": deletingId });
 
   useEffect(() => {
     let current = true;
@@ -168,6 +170,7 @@ export function VacanciesPage({ activeMembership, onNavigate }: CommonProps) {
 export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: CommonProps & { vacancyId?: string }) {
   const draftScope = usePrismaScope();
   const [draft, setDraft] = useState<VacancyDraft>(() => vacancyId ? emptyVacancyDraft() : readDraft(draftScope));
+  const auxiliaryActivity = useLoadingTask("Carregando opções da Posição…");
   const baseline = useRef(JSON.stringify(draft));
   const markSaved = useUnsavedChanges(JSON.stringify(draft) !== baseline.current);
   const [roles, setRoles] = useState<OrganizationRoleTemplate[]>([]);
@@ -194,16 +197,17 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
   const [restructureDescription, setRestructureDescription] = useState("");
   const [restructureDelta, setRestructureDelta] = useState<ReturnType<typeof compareVacancyRequirements>>([]);
   const [validationTarget, setValidationTarget] = useState<"occupation" | "title" | "occupant" | "requirement" | null>(null);
+  useLoadingFeedback({ "Carregando edição da Posição…": loading, "Salvando edição da Posição…": saving, "Preparando orientação da Posição…": advisorLoading, "Buscando referências profissionais…": referenceSearchLoading });
   const occupationReferenceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let current = true;
-    void Promise.all([
+    void auxiliaryActivity.run(() => Promise.all([
       vacancyService.listRoleTemplates(activeMembership.organizationId),
       vacancyService.list(activeMembership.organizationId),
       vacancyService.listOccupants(activeMembership.organizationId),
       vacancyId ? vacancyService.load(activeMembership.organizationId, vacancyId) : Promise.resolve(null),
-    ]).then(([roleItems, vacancyItems, people, detail]) => {
+    ])).then(([roleItems, vacancyItems, people, detail]) => {
       if (!current) return;
       setRoles(roleItems); setPrevious(vacancyItems.filter((item) => item.id !== vacancyId)); setOccupants(people);
       if (detail) { baseline.current = JSON.stringify(detail); setDraft(detail); }
@@ -231,7 +235,9 @@ export function VacancyEditorPage({ activeMembership, onNavigate, vacancyId }: C
     if (target === "occupation") window.requestAnimationFrame(() => occupationReferenceRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
   }
   async function usePrevious(id: string) {
-    const detail = await vacancyService.load(activeMembership.organizationId, id);
+    let detail;
+    try { detail = await auxiliaryActivity.run(() => vacancyService.load(activeMembership.organizationId, id)); }
+    catch (caught) { setError(errorMessage(caught, "Não foi possível carregar a Posição escolhida. Seu rascunho foi preservado.")); return; }
     if (!detail) return;
     // The source definition keeps its assisted-description trace; this copy is
     // derived from that position, not a new assisted-description extraction.
@@ -502,6 +508,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  useLoadingFeedback({ "Carregando Posição…": loading, "Excluindo Posição…": deleting });
   useEffect(() => {
     let current = true;
     void Promise.all([vacancyService.load(activeMembership.organizationId, vacancyId), vacancyService.history(activeMembership.organizationId, vacancyId)])
@@ -541,6 +548,8 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId }: C
 }
 
 export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: CommonProps & { vacancyId: string }) {
+  const evaluationActivity = useLoadingTask("Preparando detalhes da avaliação…");
+  const scoreActivity = useLoadingTask("Atualizando avaliação da Pessoa…");
   const generation = useRef(0);
   const evaluationRequest = useRef(0);
   const [attempt, setAttempt] = useState(0);
@@ -556,6 +565,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
   const [loading, setLoading] = useState(true);
   const [interpreting, setInterpreting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Salvando decisão contextual…": decidingPersonId, "Registrando proposta de aprendizado…": learningPersonId, "Carregando Pessoas para a Posição…": loading, "Consultando avaliações salvas…": interpreting });
   useEffect(() => {
     let current = true;
     generation.current += 1; evaluationRequest.current += 1;
@@ -596,7 +606,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
       if (match.semanticAssessment.status !== "complete" || match.score.score === null) return;
     }
     try {
-      const evaluationId = vacancy ? await vacancyService.recordEvaluation(vacancy, match) : null;
+      const evaluationId = vacancy ? await evaluationActivity.run(() => vacancyService.recordEvaluation(vacancy, match)) : null;
       if (scope !== generation.current || request !== evaluationRequest.current) return;
       setActiveEvaluationId(evaluationId);
       setActiveMatch(match);
@@ -629,7 +639,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     setMatches(current => current.map(item => item.candidate.personId === match.candidate.personId && item.stableResult
       ? { ...item, stableResult: { ...item.stableResult, state: "updating" } } : item));
     try {
-      const [updated] = await vacancyService.loadPeopleByIds(activeMembership.organizationId, vacancy, [match.candidate.personId], true, undefined, recalculate);
+      const [updated] = await scoreActivity.run(() => vacancyService.loadPeopleByIds(activeMembership.organizationId, vacancy, [match.candidate.personId], true, undefined, recalculate));
       if (scope !== generation.current || !updated) return;
       setMatches(current => sortVacancyMatches(current.map(item => item.candidate.personId === updated.candidate.personId ? updated : item)));
       if (activeMatch?.candidate.personId === updated.candidate.personId) { setActiveMatch(updated); setActiveEvaluationId(null); }
@@ -682,6 +692,7 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
   const [matches, setMatches] = useState<VacancyCandidateMatch[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando comparação para a Posição…": loading });
   useEffect(() => {
     let current = true;
     const controller = new AbortController();
@@ -854,6 +865,7 @@ function VerificationRequirementActions({ evaluationId, match, onNavigate, vacan
   const [actionError, setActionError] = useState<string | null>(null);
   const [levels, setLevels] = useState<Record<string, "basic" | "intermediate" | "advanced">>({});
   const [criticalities, setCriticalities] = useState<Record<string, "low" | "medium" | "high" | "critical">>({});
+  useLoadingFeedback({ "Preparando verificação…": creatingId });
   const candidates = match.requirements.filter((item) => item.status !== "met");
   if (match.semanticAssessment && !evaluationId) return <PrismaCard title="Reduzir incerteza"><PrismaState compact kind="info" description="A consulta manual permanece disponível. Para iniciar uma verificação vinculada a esta avaliação, é necessário confirmar sua análise e suas fontes no servidor. Se a pendência continuar, feche este painel e atualize a análise." /></PrismaCard>;
   if (!candidates.length) return <PrismaCard title="Reduzir incerteza"><PrismaState compact kind="success" description="Todos os requisitos comparáveis já têm evidência direta no Perfil publicado. Uma verificação complementar pode ser preparada futuramente pela central de Verificações." /></PrismaCard>;

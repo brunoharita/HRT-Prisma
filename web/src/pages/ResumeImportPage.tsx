@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
@@ -49,6 +50,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   const [error, setError] = useState<string | null>(null);
   const [processingRecovery, setProcessingRecovery] = useState<OperationRecovery>("none");
   const [lastResolution, setLastResolution] = useState<ResolutionAttempt | null>(null);
+  useLoadingFeedback({ "Processando importação…": busy });
   const checkingImport = useRef(false);
   const importSelection = useRef(fileList[0]?.originFileObj);
   importSelection.current = fileList[0]?.originFileObj;

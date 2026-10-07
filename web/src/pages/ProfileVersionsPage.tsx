@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, EyeOutlined, HistoryOutlined, SwapOutlined } from "@ant-design/icons";
@@ -20,6 +21,7 @@ export function ProfileVersionsPage({ activeMembership, personId, onNavigate }: 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando versões do Perfil…": loading, "Processando versões do Perfil…": busy });
 
   async function refresh(preferredId?: string) {
     const result = await personIngestionService.listProfileVersions(activeMembership.organizationId, personId);

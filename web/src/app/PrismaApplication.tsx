@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import {
   ApartmentOutlined,
   BankOutlined,
@@ -178,10 +179,20 @@ const initialState: AppState = {
 
 export function PrismaApplication() {
   const [state, setState] = useState<AppState>(initialState);
+  const authActivity = useLoadingTask("Confirmando acesso e permissões…");
+  const signOutActivity = useLoadingTask("Encerrando sessão…");
+  useLoadingFeedback({ "Iniciando sessão…": state.signingIn, "Solicitando recuperação de acesso…": state.recoveringAccess });
   const viewScope = `${state.claims?.session_id ?? "no-session"}:${state.claims?.sub ?? "anonymous"}:${state.currentOperator?.profile ?? "none"}:${state.activeOrganizationId ?? "none"}:${resolveActiveMembership(state.memberships, state.activeOrganizationId)?.role ?? "none"}`;
   const { pathname, navigate } = usePrismaNavigation(viewScope);
 
   async function refreshAuthState() {
+    try { return await authActivity.run(refreshAuthStateData); }
+    catch {
+      clearStoredActiveOrganizationId();
+      setState({ ...initialState, initialized: true, errorMessage: "Não foi possível confirmar seu acesso. Entre novamente." });
+    }
+  }
+  async function refreshAuthStateData() {
     const { data, error } = await supabase.auth.getClaims();
     if (error) {
       clearStoredActiveOrganizationId();
@@ -293,7 +304,7 @@ export function PrismaApplication() {
 
   const handleSignOut = async () => {
     if (!await confirmPrismaNavigation()) return;
-    const { error } = await supabase.auth.signOut();
+    const { error } = await signOutActivity.run(() => supabase.auth.signOut());
     if (error) {
       setState((current) => ({ ...current, errorMessage: "Não foi possível encerrar a sessão com segurança." }));
       return;

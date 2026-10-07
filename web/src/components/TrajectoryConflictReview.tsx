@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useId, useRef, useState } from "react";
 import { Alert, Button, Modal, Popover, Radio, Skeleton, Tag, Typography } from "antd";
@@ -79,6 +80,7 @@ export function TrajectoryConflictReview({ vacancy, match, canReview, onResolved
   const [savedUnresolved, setSavedUnresolved] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshAttempted, setRefreshAttempted] = useState(false);
+  useLoadingFeedback({ "Carregando revisão de divergências…": loading, "Salvando revisão de divergências…": saving, "Atualizando avaliação…": refreshing });
   const loadEpoch = useRef(0);
   const helpPrefix = useId();
 

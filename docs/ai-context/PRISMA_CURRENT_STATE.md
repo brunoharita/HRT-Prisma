@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.47
+version: 2.51.48
 last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Carregamento visível — v2.1.6
+
+Diretriz permanente aprovada por Bruno em07/10/2026: toda operação que ainda possa alterar a visualização deve indicar carregamento/processamento até concluir, falhar ou cancelar. Revisão transversal de páginas autenticadas/públicas, modais e consultas auxiliares reutiliza estados de UI, skeletons/controles e aviso acessível não bloqueante. Preserva conteúdo, rascunhos e score salvo; nenhuma consulta, geração ou recálculo novo pelo indicador. Operações concorrentes têm donos independentes e tarefas contadas; desmontagem/fechamento remove sua indicação. Lacunas corrigidas em opções de Posição, histórico de taxonomia, classificações, fontes, análise persistida e operações de Conhecimento/verificação. Nenhuma mudança de banco/Edge/Parser/Synthesis. Acordo1.0.0, execução e AoT `docs/qa/aot-loading-feedback-v216.md`; owner `docs/product/ux-foundation.md`. Implementação local em validação; publicação ainda não confirmada. Registro oficial2.1.6 com número5 omitido por escolha do PO, sem entrega fictícia.
 
 ## Estabilidade do Score — v2.1.4
 

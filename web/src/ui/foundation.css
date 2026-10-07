@@ -201,3 +201,12 @@ body { background: var(--prisma-canvas); }
   .prisma-profile-highlight, .prisma-person-reading-main .prisma-profile-highlight { padding: 22px 20px; }
   .prisma-synthesis-axis-title, .prisma-person-reading-main .prisma-synthesis-axis-title { font-size: 18px; }
 }
+/* Loading feedback remains visible while independent operations settle; it never captures input. */
+.prisma-loading-feedback { position: fixed; right: 20px; bottom: 20px; z-index: 2100; display: flex; align-items: center; gap: 12px; max-width: min(440px, calc(100vw - 32px)); padding: 14px 18px; border: 1px solid #b9d2ff; border-radius: 12px; background: #edf4ff; color: #163b79; box-shadow: 0 4px 16px #163b791a; pointer-events: none; }
+.prisma-loading-feedback[hidden] { display: none; }
+.prisma-loading-feedback > div { min-width: 0; }
+.prisma-loading-feedback strong, .prisma-loading-feedback span { display: block; overflow-wrap: anywhere; }
+.prisma-loading-feedback strong { font-size: 15px; line-height: 1.5; }
+.prisma-loading-feedback span { margin-top: 2px; font-size: 14px; line-height: 1.5; }
+@media (max-width: 600px) { .prisma-loading-feedback { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); padding: 12px; } }
+@media (prefers-reduced-motion: reduce) { .prisma-loading-feedback .ant-spin-dot { animation: none !important; } }

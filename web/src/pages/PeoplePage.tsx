@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import {
@@ -53,6 +54,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   const [people, setPeople] = useState<PersonWorkspaceSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Carregando Pessoas…": loading });
 
   useEffect(() => {
     let current = true;

@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../../ui/PrismaLoadingFeedback";
 import { focusNoticeFields, focusNoticeTarget } from "../../ui/noticeActions";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Empty, Input, Modal, Pagination, Radio, Select, Space, Tag, Typography } from "antd";
@@ -33,6 +34,7 @@ export function CompetencyCuration({ projection, adapter, onProjection, onOpenCh
   const dirty = useRef(false);
   const [hasEdits, setHasEdits] = useState(false);
   const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 1200px)").matches);
+  useLoadingFeedback({ "Processando curadoria de competências…": busy });
   useUnsavedChanges(hasEdits || busy);
   const markDirty = (value: boolean) => { dirty.current = value; setHasEdits(value); };
   const rowRefs = useRef(new Map<string, HTMLButtonElement>());
@@ -161,6 +163,7 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   const [proposal, setProposal] = useState(false);
   const [label, setLabel] = useState(item.normalizedTerm);
   const [description, setDescription] = useState("");
+  const subgroupActivity = useLoadingTask("Carregando classificações de competências…");
   const [subgroups, setSubgroups] = useState<CompetencySubgroupOption[]>([]);
   const [subgroupId, setSubgroupId] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
@@ -168,6 +171,7 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   const [descriptionSuggested, setDescriptionSuggested] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useLoadingFeedback({ "Buscando competências…": searching, "Preparando sugestão de descrição…": suggestingDescription, "Salvando informações…": saving });
   const request = useRef(0);
   const searchTimer = useRef<number | null>(null);
   const savingLock = useRef(false);
@@ -177,7 +181,7 @@ function CurationForm({ item, profileId, adapter, onDirty, onBusy, onCancel, onS
   useEffect(() => { void searchSuggested(item.searchTerms); return () => { request.current++; clearSearchTimer(); }; }, []);
   useEffect(() => {
     let active = true;
-    void adapter.loadSubgroups().then((rows) => { if (active) setSubgroups(rows); })
+    void subgroupActivity.run(() => adapter.loadSubgroups()).then((rows) => { if (active) setSubgroups(rows); })
       .catch(() => { if (active) setError("Não foi possível carregar os subagrupadores. Atualize a curadoria antes de propor um conceito."); });
     return () => { active = false; };
   }, [adapter]);

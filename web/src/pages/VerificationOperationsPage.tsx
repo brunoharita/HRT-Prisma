@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { SafetyCertificateFilled as PrismaPageIcon } from "@ant-design/icons";
 import { actionableMessageError } from "../ui/ActionableMessage";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
@@ -35,6 +36,7 @@ interface InviteFormValues {
 }
 
 export function VerificationOperationsPage({ activeMembership, preparedAssessmentId, onNavigate }: Props) {
+  const operationActivity = useLoadingTask("Copiando link do convite…");
   const [workspace, setWorkspace] = useState<VerificationOperatorWorkspace | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,6 +48,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   const [form] = Form.useForm<InviteFormValues>();
   const [dirty, setDirty] = useState(false);
   const [linkHandled, setLinkHandled] = useState(false);
+  useLoadingFeedback({ "Carregando verificações…": loading, "Salvando verificações…": issuing });
   const markSaved = useUnsavedChanges((dirty && !issued) || Boolean(issued && !linkHandled));
 
   const load = async () => {
@@ -96,8 +99,10 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
   const validDays = Form.useWatch("validDays", form) ?? 7;
   const expiryDate = new Date(Date.now() + Number(validDays) * 86400000);
   async function copyInvitationLink() {
-    try { await navigator.clipboard.writeText(verificationUrl); setLinkHandled(true); markSaved(); message.success("Link copiado."); }
-    catch { actionableMessageError("Não foi possível copiar o link automaticamente. Selecione o endereço e copie manualmente.", { label: "Selecionar link do convite", onClick: () => { const field = document.querySelector<HTMLInputElement>('.prisma-invitation-link input, input[readonly]'); field?.focus(); field?.select(); } }); }
+    return operationActivity.run(async () => {
+      try { await navigator.clipboard.writeText(verificationUrl); setLinkHandled(true); markSaved(); message.success("Link copiado."); }
+      catch { actionableMessageError("Não foi possível copiar o link automaticamente. Selecione o endereço e copie manualmente.", { label: "Selecionar link do convite", onClick: () => { const field = document.querySelector<HTMLInputElement>('.prisma-invitation-link input, input[readonly]'); field?.focus(); field?.select(); } }); }
+    });
   }
   if (preparedAssessmentId) {
     return (
@@ -217,8 +222,9 @@ function labelIntegrity(value: VerificationMonitoringRow["integrityState"]) {
 }
 
 function VerificationDetail({ onNavigate, onRefresh, value }: { onNavigate: (path: string) => void; onRefresh: () => Promise<void>; value: VerificationMonitoringRow }) {
+  const managementActivity = useLoadingTask("Atualizando convite de verificação…");
   const terminal = ["completed", "inconclusive", "expired", "cancelled", "revoked"].includes(value.status);
-  async function manage(action: "cancel" | "revoke") { await competencyVerificationService.manageInvitation(value.invitationId, action); await onRefresh(); }
+  async function manage(action: "cancel" | "revoke") { await managementActivity.run(async () => { await competencyVerificationService.manageInvitation(value.invitationId, action); await onRefresh(); }); }
   return (
     <Space direction="vertical" size="large" style={{ width: "100%" }}>
       <Descriptions bordered column={1} size="small" items={[

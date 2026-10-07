@@ -1,0 +1,29 @@
+✔ every page declares loading feedback; synchronous assisted description has no artificial wait (722.9422ms)
+✔ loading companion has no network, polling, score recalculation or pointer blocking (8.3985ms)
+✔ gera fonte compacta e exportação completa com o mesmo manifesto (631.2273ms)
+✔ fonte compacta contém contexto vigente e encaminha aprofundamento ao Codex (246.919ms)
+✔ comparação normalizada distingue conteúdo e aceita LF ou CRLF (5.2869ms)
+✔ synthesis worker has an independent destination and preserves the Parser (7.4711ms)
+✔ parses git name-status including renames (2.4035ms)
+✔ routes documentation without Supabase or VPS (0.6063ms)
+✔ release tooling does not redeploy the application (0.773ms)
+✔ dispatcher resolves pnpm through the Windows command shim (27.6469ms)
+✔ routes web changes only to web and hosting (0.5365ms)
+✔ shared resume normalization explicitly routes web and hosted Parser (1.1918ms)
+✔ Parser-only changes do not rebuild frontend, gateway or other destinations (0.6933ms)
+✔ publication applies only the planned Parser and records its pending destination (8.8259ms)
+✔ routes only the named Edge Function (0.9428ms)
+✔ shared trajectory source routes both consumers without publishing unrelated services (0.4401ms)
+✔ new migrations are publishable and historical edits fail closed (3.1218ms)
+✔ unknown paths block publication (0.2977ms)
+✔ validates migration identity and publish guard arguments (1.8209ms)
+✔ publication guards fail closed before external mutation (0.862ms)
+✔ writes one structured release receipt (34.0262ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1903.7659

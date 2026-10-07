@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Core",
+    "width": 1280,
+    "concurrentTasks": true,
+    "previousContentAndDraftPreserved": true,
+    "errorRecovery": true,
+    "modalCloseAndUnmount": true,
+    "noOverflow": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "Core",
+    "width": 390,
+    "concurrentTasks": true,
+    "previousContentAndDraftPreserved": true,
+    "errorRecovery": true,
+    "modalCloseAndUnmount": true,
+    "noOverflow": true,
+    "errors": [],
+    "external": []
+  },
+  {
+    "name": "Core",
+    "width": 320,
+    "concurrentTasks": true,
+    "previousContentAndDraftPreserved": true,
+    "errorRecovery": true,
+    "modalCloseAndUnmount": true,
+    "noOverflow": true,
+    "errors": [],
+    "external": []
+  }
+]

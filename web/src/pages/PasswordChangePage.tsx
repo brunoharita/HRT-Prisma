@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { LockFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useState } from "react";
@@ -28,6 +29,7 @@ export function PasswordChangePage({ currentOperator, onNavigate, onPasswordComp
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  useLoadingFeedback({ "Salvando senha…": submitting });
   const password = Form.useWatch("password", form) ?? "";
   const passwordConfirmation = Form.useWatch("passwordConfirmation", form) ?? "";
   const rules = buildPasswordRequirementState(password, passwordConfirmation, currentOperator.username);
@@ -43,7 +45,7 @@ export function PasswordChangePage({ currentOperator, onNavigate, onPasswordComp
       return;
     }
 
-    const { error: updateError } = await supabase.auth.updateUser({ password: values.password });
+    const { error: updateError } = await supabase.auth.updateUser({ password: values.password }).catch(() => ({ error: true }));
     if (updateError) {
       setSubmitting(false);
       setError("Não foi possível atualizar a senha nesta sessão.");

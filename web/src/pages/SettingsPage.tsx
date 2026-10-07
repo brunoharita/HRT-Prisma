@@ -1,3 +1,4 @@
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { SettingFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Alert, Button, Empty, Tabs, Tag, Typography } from "antd";
@@ -15,6 +16,7 @@ export function SettingsPage({ organizationId }: { organizationId: string | null
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
+  useLoadingFeedback({ "Carregando configurações…": loading });
 
   useEffect(() => {
     let active = true;

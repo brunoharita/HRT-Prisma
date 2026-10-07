@@ -1,3 +1,4 @@
+import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaState } from "../ui/PrismaState";
 import { PrismaPublicShell } from "../ui/PrismaPublicShell";
@@ -13,6 +14,7 @@ type Stage = "welcome" | "instructions" | "confirmation" | "running" | "paused" 
 interface Props { token: string; }
 
 export function VerificationSessionPage({ token }: Props) {
+  const operationActivity = useLoadingTask("Atualizando sessão da verificação…");
   const [workspace, setWorkspace] = useState<ParticipantVerificationWorkspace | null>(null);
   const [stage, setStage] = useState<Stage>("welcome");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -25,6 +27,7 @@ export function VerificationSessionPage({ token }: Props) {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  useLoadingFeedback({ "Carregando verificação…": loading, "Salvando verificação…": saving });
   const sessionId = useMemo(() => crypto.randomUUID(), []);
   const sequence = useRef(10);
   const questionOpenedAt = useRef(Date.now());
@@ -142,33 +145,39 @@ export function VerificationSessionPage({ token }: Props) {
   };
 
   const goToQuestion = async (index: number) => {
-    if (!workspace?.attempt || !activeQuestion) return;
-    const next = workspace.attempt.questions[index];
-    if (!next) return;
-    const duration = Math.max(0, Math.round((Date.now() - questionOpenedAt.current) / 1000));
-    await recordEvent("question_elapsed", activeQuestion.id, duration).catch(() => undefined);
-    await recordEvent("question_opened", next.id).catch(() => undefined);
-    questionOpenedAt.current = Date.now();
-    setActiveIndex(index);
-    setNavigationOpen(false);
+    return operationActivity.run(async () => {
+      if (!workspace?.attempt || !activeQuestion) return;
+      const next = workspace.attempt.questions[index];
+      if (!next) return;
+      const duration = Math.max(0, Math.round((Date.now() - questionOpenedAt.current) / 1000));
+      await recordEvent("question_elapsed", activeQuestion.id, duration).catch(() => undefined);
+      await recordEvent("question_opened", next.id).catch(() => undefined);
+      questionOpenedAt.current = Date.now();
+      setActiveIndex(index);
+      setNavigationOpen(false);
+    });
   };
 
   const pause = async () => {
-    if (!workspace?.attempt || !activeQuestion) return;
-    try {
-      const duration = Math.max(0, Math.round((Date.now() - questionOpenedAt.current) / 1000));
-      await recordEvent("question_elapsed", activeQuestion.id, duration);
-      const next = await competencyVerificationService.participantAction(token, "pause", actionPayload({ attemptId: workspace.attempt.id, questionInstanceId: activeQuestion.id }));
-      refreshFrom(next); setStage("paused");
-    } catch (pauseError) { setError(pauseError instanceof Error ? pauseError.message : "Não foi possível pausar."); }
+    return operationActivity.run(async () => {
+      if (!workspace?.attempt || !activeQuestion) return;
+      try {
+        const duration = Math.max(0, Math.round((Date.now() - questionOpenedAt.current) / 1000));
+        await recordEvent("question_elapsed", activeQuestion.id, duration);
+        const next = await competencyVerificationService.participantAction(token, "pause", actionPayload({ attemptId: workspace.attempt.id, questionInstanceId: activeQuestion.id }));
+        refreshFrom(next); setStage("paused");
+      } catch (pauseError) { setError(pauseError instanceof Error ? pauseError.message : "Não foi possível pausar."); }
+    });
   };
 
   const resume = async () => {
-    if (!workspace?.attempt || !activeQuestion) return;
-    try {
-      const next = await competencyVerificationService.participantAction(token, "resume", actionPayload({ attemptId: workspace.attempt.id, questionInstanceId: activeQuestion.id }));
-      refreshFrom(next); setStage("running"); questionOpenedAt.current = Date.now();
-    } catch (resumeError) { setError(resumeError instanceof Error ? resumeError.message : "Não foi possível retomar."); }
+    return operationActivity.run(async () => {
+      if (!workspace?.attempt || !activeQuestion) return;
+      try {
+        const next = await competencyVerificationService.participantAction(token, "resume", actionPayload({ attemptId: workspace.attempt.id, questionInstanceId: activeQuestion.id }));
+        refreshFrom(next); setStage("running"); questionOpenedAt.current = Date.now();
+      } catch (resumeError) { setError(resumeError instanceof Error ? resumeError.message : "Não foi possível retomar."); }
+    });
   };
 
   const submit = async () => {

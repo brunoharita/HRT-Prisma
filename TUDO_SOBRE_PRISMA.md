@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 378
-source_manifest_sha256: ba0ac3273e10dbde8a1752dc10df132e8fda01823edfc6936985640edbc01bf1
+documentation_source_count: 382
+source_manifest_sha256: 241d0fdd813da7d24e6508335268f7b840ea82ef2b9876a23b158d6093e394c4
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.47
+version: 2.51.48
 last_verified: 2026-10-07
 ---
 
 # Estado atual do Prisma
+
+## Carregamento visível — v2.1.6
+
+Diretriz permanente aprovada por Bruno em07/10/2026: toda operação que ainda possa alterar a visualização deve indicar carregamento/processamento até concluir, falhar ou cancelar. Revisão transversal de páginas autenticadas/públicas, modais e consultas auxiliares reutiliza estados de UI, skeletons/controles e aviso acessível não bloqueante. Preserva conteúdo, rascunhos e score salvo; nenhuma consulta, geração ou recálculo novo pelo indicador. Operações concorrentes têm donos independentes e tarefas contadas; desmontagem/fechamento remove sua indicação. Lacunas corrigidas em opções de Posição, histórico de taxonomia, classificações, fontes, análise persistida e operações de Conhecimento/verificação. Nenhuma mudança de banco/Edge/Parser/Synthesis. Acordo1.0.0, execução e AoT `docs/qa/aot-loading-feedback-v216.md`; owner `docs/product/ux-foundation.md`. Implementação local em validação; publicação ainda não confirmada. Registro oficial2.1.6 com número5 omitido por escolha do PO, sem entrega fictícia.
 
 ## Estabilidade do Score — v2.1.4
 
@@ -11808,6 +11812,14 @@ Nomear ações pelo efeito: salvar rascunho, publicar perfil, arquivar, excluir,
 
 ## Estados e continuidade
 
+### Diretriz permanente de carregamento visível (Bruno, 07/10/2026, v2.1.6)
+
+Sempre que uma operação pendente puder alterar o conteúdo que a pessoa está vendo, sinalizar visualmente até terminar, falhar ou ser cancelada. Vale para todas as páginas autenticadas e públicas, blocos, tabelas, modais, consultas auxiliares, processamento e cálculos. O responsável por UX define a granularidade: primeiro carregamento essencial pode usar skeleton de página; operações independentes usam indicador local e aviso contínuo não bloqueante. Preservar conteúdo disponível durante atualizações, rascunhos e escolhas. Um botão ocupado sozinho pode sair da área visível: o aviso compartilhado acompanha operações pendentes sem interceptar cliques.
+
+Comunicar a operação em português, com anúncio acessível e sem depender apenas de cor. Operações simultâneas continuam sinalizadas até terminar a última operação relevante. Ao fechar/desmontar a superfície, remover seus indicadores; falha encerra espera e mantém recuperação disponível. Percentual só quando mensurável; carregamento não é vazio nem zero provisório. A sinalização acompanha estados reais de UI, não toda chamada de rede; atividade técnica incapaz de alterar a visualização não produz aviso artificial. Não disparar consultas, geração de IA ou recálculo de score para alimentar indicadores. Manter a estabilidade e atualização causal da v2.1.4. Novas telas e alterações futuras devem seguir a diretriz e incluir validação dos estados pendentes.
+
+Implementação/aceite: acordo `docs/qa/agreement-loading-feedback-v216.md` 1.0.0 e AoT correspondente. Esta regra complementa a versão de apresentação1.3.0 sem mudar sua arquitetura visual.
+
 Carregamento, vazio inicial, busca sem resultados, erro, sucesso e indisponibilidade têm apresentações distintas e acessíveis. Carregamento não apresenta zero provisório. Vazio inicial orienta a entrada permitida; resultado vazio oferece ajuste de filtros; erro oferece recuperação sem apagar informação vigente. URLs desconhecidas e entidades inexistentes não abrem outra entidade.
 
 Decisão explícita de Bruno em 06/10/2026, aplicada na v2.0.10: toda mensagem de erro, atenção ou outra natureza que implique revisão/correção humana deve conter o problema/divergência em português claro e sucinto e um botão que leve ao campo, registro, painel ou recuperação correta. Não basta orientar por texto ou apontar um menu genérico. A ação preserva rascunhos e escolhas; não recarrega formulários para simular uma correção. Falha interna sem correção de campo oferece consulta do estado/recuperação permitida, nunca inventa trabalho manual. Mensagens informativas sem intervenção requerida permanecem informativas, sem botões artificiais. Aviso temporário de erro com ação permanece até ser fechado ou acionado. Esta decisão substitui a restrição anterior às superfícies novas/alteradas.
@@ -12664,6 +12676,27 @@ Referência humana e medição do esforço de revisão ainda precisam ser produz
 - CA-D07: fixtures de colunas, PT/EN e layout desconhecido; evidência rastreável sem ativação no produto.
 - CA-D08: relatório distingue ajuste/avaliação, registra denominadores, rota e versão; métricas sem referência humana permanecem indisponíveis, nunca zero ou PASS presumidos.
 - CA-D09: AoT com PASS/FAIL/PARTIAL/BLOCKED/NOT TESTED; nenhum resultado local implica GPT, QA ou produção.
+
+---
+
+## Source: `docs/qa/agreement-loading-feedback-v216.md`
+
+# Acordo — carregamento visível v2.1.6
+
+Versão 1.0.0, aprovado pela solicitação de Bruno em 07/10/2026 para revisar todas as páginas, implementar em main, publicar 2.1.6 e memorizar a diretriz. A solicitação aprova o comportamento proposto na conversa; não há nova decisão material pendente.
+
+- D-01: toda operação pendente que possa alterar a visualização atual deve ter sinalização visual contínua, inclusive páginas públicas, blocos, consultas parciais, modais, atualização e cálculo.
+- D-02: primeiro carregamento essencial usa estado de página; operações independentes usam área/controle e aviso não bloqueante visível. Conteúdo disponível permanece utilizável, salvo bloqueio obrigatório já existente.
+- D-03: operações simultâneas permanecem sinalizadas até a última terminar; conclusão, erro, cancelamento e desmontagem encerram sua sinalização. Erros e recuperação existentes permanecem.
+- D-04: comunicar a operação em português, acessível e responsivo; percentual apenas mensurável. Não mostrar vazio/zero como resultado de algo ainda carregando.
+- D-05: registrar diretriz permanente no owner de UX e memória; publicar somente destinos requeridos pelo diff, integrar main e versão 2.1.6. Número 2.1.5 omitido por escolha explícita de versão do PO, sem entrega fictícia.
+- P-01: sinalização nunca dispara consulta, recálculo de score, IA, gravação ou decisão humana. Preservar contratos v2.1.4, permissões, tenant, originais, evidências e rascunhos.
+- P-02: não interceptar toda rede indiscriminadamente, inventar progresso ou bloquear a página inteira por uma operação independente.
+- F-01: mudar fórmulas, backend, schema, política de atualização, parser, síntese ou aparência estrutural aprovada.
+- A-01: engenharia escolhe redação, indicador local versus página e acabamento, reutilizando React/Ant Design e estados existentes, sem biblioteca nova.
+- Q: nenhum.
+
+Aceite CA-01–05: inventário de todas as páginas/componentes assíncronos; regressão dirigida de estados e operações concorrentes, limpeza/erro e preservação; renders desktop/mobile; tipos/build e checks documentais; recibo e smoke da publicação, com limites de evidência explícitos. Cada D e P deve ser rastreado no AoT.
 
 ---
 
@@ -16579,6 +16612,41 @@ O desenvolvimento local foi autorizado expressamente após a fase de planejament
 Há evidência suficiente para continuar avaliando a adaptação local, não para eleger uma arquitetura vencedora ou ativá-la. O principal ganho observado é recuperação estrutural; a taxa de fidelidade depende da referência humana. Próximos requisitos ainda abertos: aprovação da referência factual, medição humana de correção e pacote/credencial/condições de dados para a comparação externa. Os cinco PDFs permanecem locais, fora de Git.
 
 Branch de entrega: `codex/linkedin-pdf-evaluation`, baseline `22b41f7`; hash de commit e resultado do push registrados no encerramento da tarefa. QA e produção não acionados. O worktree da tarefa contém somente mudanças desta avaliação; a raiz oficial permanece na branch anterior, com `.tmp.driveupload/` alheio preservado.
+
+---
+
+## Source: `docs/qa/aot-loading-feedback-v216.md`
+
+# AoT — carregamento visível v2.1.6
+
+Acordo integral `agreement-loading-feedback-v216.md` 1.0.0 e execução correspondente. Baseline main/origin/VPS `bb223ce6`, web v2.1.4 `d980fc6` imagem13e5dd5a. Autoridade: solicitação explícita de Bruno em07/10/2026 para revisar todas as páginas, implementar main, publicar2.1.6 e memorizar. Sem referência visual nova normativa; preservada arquitetura visual v2.1.1.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / Evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Estados de páginas/componentes e consultas auxiliares, aviso compartilhado | Inventário30 páginas; browser30 páginas + acesso e consultas reais com adapters sintéticos | PASS |
+| D-02 | Skeletons e controles anteriores + aviso sem captura de input, conteúdo anterior preservado | Browser: edição durante espera, conteúdo/score anterior, atualização/falha/reabertura | PASS |
+| D-03 | Donos independentes, tarefas com tokens, finally/desmontagem/visibilidade | Unitários3 e browser: concorrência mesma/diferente operação, falha, fechamento de modal e desmontagem | PASS |
+| D-04 | Português, role/status/live/busy, layout320/390/1280, progresso sem percentual inventado | Browser e renders320/390/1280, sem overflow; estados reais, percentuais anteriores preservados | PASS |
+| D-05 | Owner UX, nota de memória gravada, registry2.1.6, entrega web planejada | Memória confirmada; publicação pendente | PARTIAL |
+| P-01–02 | Observação explícita de UI; sem rede/cálculo/IA no indicador, sem bloqueio global | Revisão diff, cobertura de fonte e browser score6 cenários: leitura/revisão/recálculo/falha/comparação sem alterar outra Pessoa | PASS |
+
+## Mapa de impacto e preservação
+
+Mapa integral prévio em `execution-loading-feedback-v216.md`; permanece vigente. Novidade: feedback contínuo de operações existentes. Preservação: conteúdo, rascunhos, escolha humana, score persistido, navegação, autorização e evidência. Mudanças diretas: componentes de apresentação e registro de tarefas; owner docs, testes e versão. Sem mudança de fonte/serviço, fórmula, SQL, Edge ou infraestrutura. Baseline verificado via SSH somente leitura: repositório/remoto corretos, containers running0 e imagem web13e5dd5a; Parser/Synthesis/gateway IDs/imagens anteriores preservados.
+
+## Evidência de fidelidade visual e limites
+
+Renders em `docs/qa/evidence/loading-feedback-v216/`, componentes reais com serviços sintéticos controlados. Não representam jornada autenticada real nem mutação de Pessoa; nenhuma IA paga. Sem novo alvo normativo: comparação estrutural mantém tela aprovada, acrescenta aviso pequeno e não bloqueante. Teste funcional não substitui render. Cobertura de fonte é guarda futura, não prova isolada de comportamento.
+
+## Validação e publicação
+
+Local: tipos/build web, build raiz,45 testes Node dirigidos,21 testes tooling (incluindo guarda de cobertura), lint/foundation e Context Pack PASS.40 cenários browser distintos:30 páginas,3 cenários de concorrência/continuidade320/390/1280,1 acesso com falha sintética e6 de preservação do score. Nenhuma chamada externa, erro de runtime ou overflow nos cenários aplicáveis. Rodada adicional3 cenários de concorrência repetida para ajuste de limpeza, sem contagem duplicada. Testes executam componentes/transporte de score reais com adapters sintéticos; não provam jornada de usuário real ou qualidade profissional de pontuação. Sem banco/IA pagos ou mutação real.
+
+Suíte integral não executada; o comando genérico pnpm test sugerido pelo dispatcher foi substituído pelos módulos diretamente afetados e regressão comprovadamente necessária. CI obrigatório continua seu fluxo normal. Context Pack gerado/conferido em cópia dos rastreados e arquivos próprios preparados: arquivos alheios não rastreados não entram no export. Plano preliminar: somente web+documentação/testes, banco/Edge/Parser/Synthesis excluídos.45 testes dirigidos e21 tooling registrados em arquivos de evidência. Avisos de chunk/dynamic import existentes no build não impedem compilação.
+
+Falhas iniciais do harness (lançamento Vite, factory sintética e fechamento do modal sem vínculo de visibilidade) foram diagnosticadas e corrigidas antes da evidência final; não contadas como PASS. Revisão descobriu guarda necessária em modais mantidos montados: classificação, fontes e busca associam indicador à visibilidade. Falha excepcional de acesso/senha e término da criação de revisão também encerram feedback, preservando regras anteriores. Publicação pendente. Desvios materiais: nenhum identificado; fechar somente após smoke e sincronização.
 
 ---
 
@@ -20951,6 +21019,63 @@ Evidência sintética: `ui-results.json`, quatro arquivos `evidence-*.json`, `cl
 
 ---
 
+## Source: `docs/qa/evidence/loading-feedback-v216/inventory.md`
+
+# Inventário de carregamento — v2.1.6
+
+Revisão de fonte e estados: 30 páginas, componentes assíncronos e autenticação. Todos os labels abaixo são textos fixos, sem dados de registros. Browser separado prova comportamento; inventário não equivale a jornada real autenticada.
+
+| Superfície | Arquivo | Estados observados |
+| --- | --- | --- |
+| AssessmentItemBankPage | web/src/pages/AssessmentItemBankPage.tsx | loading, saving |
+| CompetencyVerificationPage | web/src/pages/CompetencyVerificationPage.tsx | loading, saving |
+| DocumentDetailPage | web/src/pages/DocumentDetailPage.tsx | loading, busy |
+| DocumentOperationsPage | web/src/pages/DocumentOperationsPage.tsx | loading |
+| HomePage | web/src/pages/HomePage.tsx | loading, checkingSourceId |
+| KnowledgePage | web/src/pages/KnowledgePage.tsx | decisionLoading, loading |
+| PasswordChangePage | web/src/pages/PasswordChangePage.tsx | submitting |
+| PeoplePage | web/src/pages/PeoplePage.tsx | loading |
+| PersonDataSelfServicePage | web/src/pages/PersonDataSelfServicePage.tsx | loading, deleting |
+| PersonFormPage | web/src/pages/PersonFormPage.tsx | loading, saving |
+| PersonMergePage | web/src/pages/PersonMergePage.tsx | loading, busy |
+| PersonProfilePage | web/src/pages/PersonProfilePage.tsx | loading |
+| PersonWorkspacePage | web/src/pages/PersonWorkspacePage.tsx | loading, busy |
+| MoveDocumentModal | web/src/pages/PersonWorkspacePage.tsx | moving |
+| ProfileComparePage | web/src/pages/ProfileComparePage.tsx | loading |
+| ProfileDeltaPage | web/src/pages/ProfileDeltaPage.tsx | loading, busy |
+| ProfileReviewPage | web/src/pages/ProfileReviewPage.tsx | loading, busy |
+| ProfileSearchPage | web/src/pages/ProfileSearchPage.tsx | loading |
+| ProfileVersionsPage | web/src/pages/ProfileVersionsPage.tsx | loading, busy |
+| ResumeImportPage | web/src/pages/ResumeImportPage.tsx | busy |
+| SettingsPage | web/src/pages/SettingsPage.tsx | loading |
+| UserFormPage | web/src/pages/UserFormPage.tsx | loading, submitting, resettingPassword |
+| UsersPage | web/src/pages/UsersPage.tsx | loading |
+| VacanciesPage | web/src/pages/VacancyPages.tsx | loading, deletingId |
+| VacancyEditorPage | web/src/pages/VacancyPages.tsx | loading, saving, advisorLoading, referenceSearchLoading |
+| VacancyDetailPage | web/src/pages/VacancyPages.tsx | loading, deleting |
+| VacancyPeoplePage | web/src/pages/VacancyPages.tsx | decidingPersonId, learningPersonId, loading, interpreting |
+| VacancyComparePage | web/src/pages/VacancyPages.tsx | loading |
+| VerificationRequirementActions | web/src/pages/VacancyPages.tsx | creatingId |
+| VerificationOperationsPage | web/src/pages/VerificationOperationsPage.tsx | loading, issuing |
+| VerificationSessionPage | web/src/pages/VerificationSessionPage.tsx | loading, saving |
+| PositionTaxonomyPanel | web/src/components/PositionTaxonomyPanel.tsx | loading |
+| KnowledgePicker | web/src/components/PositionTaxonomyPanel.tsx | loading |
+| ComplementDialog | web/src/components/PositionTaxonomyPanel.tsx | busy |
+| TrajectoryConflictReview | web/src/components/TrajectoryConflictReview.tsx | loading, saving, refreshing |
+| CompetencyCuration | web/src/components/profile/CompetencyCuration.tsx | busy |
+| CurationForm | web/src/components/profile/CompetencyCuration.tsx | searching, suggestingDescription, saving |
+| CompetencyGroupModal | web/src/components/profile/CompetencyGroupModal.tsx | loading, busy |
+| EvidenceLinkModal | web/src/components/profile/PersonProfessionalEvidenceMap.tsx | busy |
+| NormalizationStatus | web/src/components/profile/PersonProfessionalEvidenceMap.tsx | requesting |
+| ProfileSynthesisBody | web/src/components/profile/ProfileSynthesisSurface.tsx | retrying |
+| DocumentEvidenceViewer | web/src/components/review/DocumentEvidenceViewer.tsx | loading, rendering, ocrBusy |
+
+Complementos necessários: refresh de Pessoa/Documento/Revisão; opções e reutilização de Posição; detalhes e atualização de avaliação; histórico/seleção da taxonomia; classificações; fontes de evidência; consulta e estado queued/processing da análise persistida; ações de Conhecimento; navegação/pausa/retomada da verificação; cópia/gestão de convite; acesso/saída da sessão e readiness visível da importação. Tarefas usam tokens independentes e encerramento em finally. Modais que ficam montados vinculam feedback ao estado aberto.
+
+VacancyAssistPage é síncrona, sem espera artificial. ResumeImport, ProfileSearch e PasswordChange não carregam dados essenciais ao abrir: feedback inicia na operação real. Rotas de placeholder/negação/404 são estáticas. Troca de empresa navega/atualiza escopo local e os carregamentos das páginas subsequentes são sinalizados. Telemetria de foco e registros técnicos que não mudam a visualização não geram aviso artificial.
+
+---
+
 ## Source: `docs/qa/execution-candidate-card-visual.md`
 
 # Execução — cartão de Pessoas por Posição
@@ -21052,6 +21177,29 @@ Executar o bloco local autorizado por Bruno em 2026-09-12: protótipo reutilizan
 5. Preparar um contrato de avaliação com comparação campo a campo e aprovação humana da referência, sem chamar resultados do agente de verdade humana. Nenhuma métrica sem denominador/referência.
 6. Documentar alternativas GPT e preflight concreto, sem chamadas enquanto condições materiais/credencial estiverem abertas.
 7. Validar código afetado e regressões pertinentes; atualizar owner e Context Pack, gerar export/check. Revisar diff, commit/push scoped conforme autorização atual. Fechar AoT sem marcar requisitos não demonstrados como concluídos.
+
+---
+
+## Source: `docs/qa/execution-loading-feedback-v216.md`
+
+# Execução — carregamento visível v2.1.6
+
+Implementar integralmente `docs/qa/agreement-loading-feedback-v216.md` versão 1.0.0 (D-01–05, P-01–02, F-01, A-01, CA-01–05), lido na íntegra. Sem Q pendente. Reutilizar PrismaState e estados explícitos de operação; inventariar páginas e componentes, corrigir lacunas, validar e publicar web/owner docs. Não introduzir observador genérico de rede nem alterar regras de negócio.
+
+## Mapa de impacto e preservação anterior à implementação
+
+Baseline main/origin `bb223ce6e5c079139db2a52a6138838a21eea69a`, runtime web v2.1.4 `d980fc6`. Estados acessíveis e skeleton já existem, cobertura incompleta; essa limitação integra o baseline, não é PASS de cobertura universal.
+
+| Área/capacidade | Relação | Preservação e regressão |
+| --- | --- | --- |
+| Todas as páginas e componentes assíncronos, autenticação e superfícies públicas | direct | Inventário completo; feedback por operação, carregamento/atualização/erro/desmontagem, renders desktop/mobile |
+| Componentes compartilhados, tema, modais, navegação | critical_transversal | Conteúdo e interação disponíveis, sobreposição não captura cliques, limpeza por desmontagem, responsividade e acessibilidade |
+| Score persistido e revisão de divergências | plausible_indirect | Sem novas chamadas/efeitos de domínio; regressão dirigida score persistido e atualização somente causal |
+| Rascunhos, seleção, publicação, evidência PDF e curadoria | plausible_indirect | Estados originais preservados; nenhum remount/limpeza por feedback; operações existentes com feedback |
+| Auth/tenant/autorização | critical_transversal | Nenhuma mudança de regras/serviços ou exposição de dados; aviso não inclui nomes, termos, tokens ou PII |
+| Banco, Edge, Parser, Synthesis, gateway | no_impact_identified | Indicadores consomem estados de UI, nenhuma mudança de consumidor/contrato/runtime destes serviços; plano deve excluir destinos |
+
+Risco C: apresentação integrada com dependências sensíveis preservadas, sem alteração destas fronteiras. Validação dirigida, não suíte integral. Referências anteriores são contexto, não novo alvo estrutural. Rollback: imagem web anterior preservada pelo release existente.
 
 ---
 
