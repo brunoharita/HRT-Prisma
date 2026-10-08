@@ -1,0 +1,16 @@
+import { createRoot } from "react-dom/client";
+import { ConfigProvider } from "antd";
+import ptBR from "antd/locale/pt_BR";
+import { VacancyDetailPage } from "../../../web/src/pages/VacancyPages";
+import { PrismaViewStateProvider } from "../../../web/src/ui/PrismaNavigation";
+import { PrismaLoadingFeedback } from "../../../web/src/ui/PrismaLoadingFeedback";
+import { PrismaAppShell } from "../../../web/src/ui/PrismaAppShell";
+import { prismaTheme } from "../../../web/src/ui/theme";
+import { fixture } from "./fixture";
+import "antd/dist/reset.css";
+import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
+const membership = { organizationId: "org-fixture", organizationName: "Empresa sintética", role: "recruiter" } as never;
+const onNavigate = (path: string) => fixture.navigations.push(path);
+const content = <><VacancyDetailPage activeMembership={membership} vacancyId="position-fixture" onNavigate={onNavigate} /><p style={{ fontSize: 12, color: "#61728c" }}>Dados ilustrativos para validação do layout</p></>;
+createRoot(document.getElementById("app")!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><PrismaViewStateProvider scope="org-fixture"><PrismaLoadingFeedback />{new URLSearchParams(location.search).has("shell") ? <PrismaAppShell navigationItems={[{ path: "/vacancies", label: "Posições", icon: null }]} selectedPath="/vacancies" memberships={[membership]} activeMembership={membership} profileName="Operador sintético" profileSubtitle="Validação" onNavigate={onNavigate} onOrganizationChange={() => {}} onSignOut={() => {}}>{content}</PrismaAppShell> : <main style={{ padding: 24, minHeight: "100vh" }}>{content}</main>}</PrismaViewStateProvider></ConfigProvider>);

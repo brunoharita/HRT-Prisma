@@ -1,0 +1,2958 @@
+[
+  {
+    "name": "normal/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "normal/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "normal/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "normal/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "normal/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry normal/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "empty/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "empty/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "empty/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "empty/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "empty/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "empty/1813: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry empty/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "long/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "long/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "long/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "long/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "long/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry long/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 386.046875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 386.046875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "occupied/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "occupied/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "occupied/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "occupied/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "occupied/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "occupied/1813: occupancy preserved",
+    "pass": true
+  },
+  {
+    "name": "geometry occupied/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "pending/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "pending/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "pending/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "pending/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "pending/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "pending/1813: pending visible and actionable",
+    "pass": true
+  },
+  {
+    "name": "geometry pending/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "ambiguous/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1813: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry ambiguous/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unresolved/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1813: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry unresolved/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "foreign/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "foreign/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "foreign/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "foreign/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "foreign/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "foreign/1813: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry foreign/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "stale/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "stale/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "stale/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "stale/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "stale/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "stale/1813: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry stale/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unknown/1813: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unknown/1813: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unknown/1813: reference style",
+    "pass": true
+  },
+  {
+    "name": "unknown/1813: composition",
+    "pass": true
+  },
+  {
+    "name": "unknown/1813: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unknown/1813: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry unknown/1813",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1253.515625
+      },
+      "side": {
+        "x": 1301.515625,
+        "y": 299.671875,
+        "width": 487.484375
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "normal/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "normal/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "normal/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "normal/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "normal/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry normal/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "empty/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "empty/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "empty/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "empty/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "empty/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "empty/1537: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry empty/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "long/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "long/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "long/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "long/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "long/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry long/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 429.234375,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 429.234375,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "occupied/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "occupied/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "occupied/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "occupied/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "occupied/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "occupied/1537: occupancy preserved",
+    "pass": true
+  },
+  {
+    "name": "geometry occupied/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "pending/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "pending/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "pending/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "pending/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "pending/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "pending/1537: pending visible and actionable",
+    "pass": true
+  },
+  {
+    "name": "geometry pending/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "ambiguous/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/1537: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry ambiguous/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unresolved/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unresolved/1537: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry unresolved/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "foreign/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "foreign/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "foreign/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "foreign/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "foreign/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "foreign/1537: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry foreign/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "stale/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "stale/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "stale/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "stale/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "stale/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "stale/1537: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry stale/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unknown/1537: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unknown/1537: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unknown/1537: reference style",
+    "pass": true
+  },
+  {
+    "name": "unknown/1537: composition",
+    "pass": true
+  },
+  {
+    "name": "unknown/1537: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unknown/1537: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry unknown/1537",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 299.671875,
+        "width": 1054.796875
+      },
+      "side": {
+        "x": 1102.796875,
+        "y": 299.671875,
+        "width": 410.1875
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "normal/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "normal/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "normal/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "normal/768: composition",
+    "pass": true
+  },
+  {
+    "name": "normal/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry normal/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1183.84375,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "empty/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "empty/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "empty/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "empty/768: composition",
+    "pass": true
+  },
+  {
+    "name": "empty/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "empty/768: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry empty/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 920.71875,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "long/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "long/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "long/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "long/768: composition",
+    "pass": true
+  },
+  {
+    "name": "long/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry long/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 494.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1601.75,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "occupied/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "occupied/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "occupied/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "occupied/768: composition",
+    "pass": true
+  },
+  {
+    "name": "occupied/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "occupied/768: occupancy preserved",
+    "pass": true
+  },
+  {
+    "name": "geometry occupied/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1183.84375,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "pending/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "pending/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "pending/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "pending/768: composition",
+    "pass": true
+  },
+  {
+    "name": "pending/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "pending/768: pending visible and actionable",
+    "pass": true
+  },
+  {
+    "name": "geometry pending/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1425.828125,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "ambiguous/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/768: composition",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/768: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry ambiguous/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1183.84375,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unresolved/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unresolved/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unresolved/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "unresolved/768: composition",
+    "pass": true
+  },
+  {
+    "name": "unresolved/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unresolved/768: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry unresolved/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1183.84375,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "foreign/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "foreign/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "foreign/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "foreign/768: composition",
+    "pass": true
+  },
+  {
+    "name": "foreign/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "foreign/768: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry foreign/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1183.84375,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "stale/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "stale/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "stale/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "stale/768: composition",
+    "pass": true
+  },
+  {
+    "name": "stale/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "stale/768: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry stale/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1183.84375,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unknown/768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unknown/768: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unknown/768: reference style",
+    "pass": true
+  },
+  {
+    "name": "unknown/768: composition",
+    "pass": true
+  },
+  {
+    "name": "unknown/768: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unknown/768: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry unknown/768",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 350.484375,
+        "width": 720
+      },
+      "side": {
+        "x": 24,
+        "y": 1183.84375,
+        "width": 720
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "normal/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "normal/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "normal/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "normal/390: composition",
+    "pass": true
+  },
+  {
+    "name": "normal/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry normal/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 432.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1784.9375,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "empty/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "empty/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "empty/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "empty/390: composition",
+    "pass": true
+  },
+  {
+    "name": "empty/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "empty/390: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry empty/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 458.578125,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1356.96875,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "long/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "long/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "long/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "long/390: composition",
+    "pass": true
+  },
+  {
+    "name": "long/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry long/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 864.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 2817.53125,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "occupied/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "occupied/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "occupied/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "occupied/390: composition",
+    "pass": true
+  },
+  {
+    "name": "occupied/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "occupied/390: occupancy preserved",
+    "pass": true
+  },
+  {
+    "name": "geometry occupied/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 504.578125,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1857.03125,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "pending/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "pending/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "pending/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "pending/390: composition",
+    "pass": true
+  },
+  {
+    "name": "pending/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "pending/390: pending visible and actionable",
+    "pass": true
+  },
+  {
+    "name": "geometry pending/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 432.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 2617.921875,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "ambiguous/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/390: composition",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/390: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry ambiguous/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 432.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1784.9375,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unresolved/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unresolved/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unresolved/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "unresolved/390: composition",
+    "pass": true
+  },
+  {
+    "name": "unresolved/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unresolved/390: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry unresolved/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 432.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1784.9375,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "foreign/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "foreign/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "foreign/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "foreign/390: composition",
+    "pass": true
+  },
+  {
+    "name": "foreign/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "foreign/390: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry foreign/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 432.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1784.9375,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "stale/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "stale/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "stale/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "stale/390: composition",
+    "pass": true
+  },
+  {
+    "name": "stale/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "stale/390: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry stale/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 432.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1784.9375,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unknown/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unknown/390: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unknown/390: reference style",
+    "pass": true
+  },
+  {
+    "name": "unknown/390: composition",
+    "pass": true
+  },
+  {
+    "name": "unknown/390: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unknown/390: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry unknown/390",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 432.484375,
+        "width": 342
+      },
+      "side": {
+        "x": 24,
+        "y": 1784.9375,
+        "width": 342
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "normal/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "normal/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "normal/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "normal/320: composition",
+    "pass": true
+  },
+  {
+    "name": "normal/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry normal/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 478.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 1989.28125,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "empty/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "empty/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "empty/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "empty/320: composition",
+    "pass": true
+  },
+  {
+    "name": "empty/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "empty/320: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry empty/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 504.578125,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 1495.34375,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "long/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "long/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "long/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "long/320: composition",
+    "pass": true
+  },
+  {
+    "name": "long/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "geometry long/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 910.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 3233,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "occupied/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "occupied/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "occupied/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "occupied/320: composition",
+    "pass": true
+  },
+  {
+    "name": "occupied/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "occupied/320: occupancy preserved",
+    "pass": true
+  },
+  {
+    "name": "geometry occupied/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 504.578125,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 2015.375,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "pending/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "pending/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "pending/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "pending/320: composition",
+    "pass": true
+  },
+  {
+    "name": "pending/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "pending/320: pending visible and actionable",
+    "pass": true
+  },
+  {
+    "name": "geometry pending/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 478.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 2388.265625,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "ambiguous/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/320: composition",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "ambiguous/320: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry ambiguous/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 478.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 1989.28125,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unresolved/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unresolved/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unresolved/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "unresolved/320: composition",
+    "pass": true
+  },
+  {
+    "name": "unresolved/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unresolved/320: review action visible",
+    "pass": true
+  },
+  {
+    "name": "geometry unresolved/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 478.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 1989.28125,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "foreign/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "foreign/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "foreign/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "foreign/320: composition",
+    "pass": true
+  },
+  {
+    "name": "foreign/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "foreign/320: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry foreign/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 478.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 1989.28125,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "stale/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "stale/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "stale/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "stale/320: composition",
+    "pass": true
+  },
+  {
+    "name": "stale/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "stale/320: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry stale/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 478.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 1989.28125,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "unknown/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "unknown/320: centered icons",
+    "pass": true
+  },
+  {
+    "name": "unknown/320: reference style",
+    "pass": true
+  },
+  {
+    "name": "unknown/320: composition",
+    "pass": true
+  },
+  {
+    "name": "unknown/320: only initial reads",
+    "pass": true
+  },
+  {
+    "name": "unknown/320: no valid reference invented",
+    "pass": true
+  },
+  {
+    "name": "geometry unknown/320",
+    "pass": true,
+    "geometry": {
+      "main": {
+        "x": 24,
+        "y": 478.484375,
+        "width": 272
+      },
+      "side": {
+        "x": 24,
+        "y": 1989.28125,
+        "width": 272
+      },
+      "icons": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "overflow": false,
+      "accentWidth": "64px",
+      "background": "rgb(237, 244, 255)",
+      "tabsBackground": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "origin/1537: retained",
+    "pass": true
+  },
+  {
+    "name": "drawer/1537: complete taxonomy",
+    "pass": true
+  },
+  {
+    "name": "drawer/1537: read only",
+    "pass": true
+  },
+  {
+    "name": "explanation/1537: history on demand",
+    "pass": true
+  },
+  {
+    "name": "drawer/1537: focus restored",
+    "pass": true
+  },
+  {
+    "name": "correction/1537: edit route",
+    "pass": true
+  },
+  {
+    "name": "people/1537: direct route",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1537: route",
+    "pass": true
+  },
+  {
+    "name": "history/1537: version",
+    "pass": true
+  },
+  {
+    "name": "delete/1537: cancellation",
+    "pass": true
+  },
+  {
+    "name": "delete/1537: existing cancel service",
+    "pass": true
+  },
+  {
+    "name": "origin/390: retained",
+    "pass": true
+  },
+  {
+    "name": "drawer/390: complete taxonomy",
+    "pass": true
+  },
+  {
+    "name": "drawer/390: read only",
+    "pass": true
+  },
+  {
+    "name": "explanation/390: history on demand",
+    "pass": true
+  },
+  {
+    "name": "drawer/390: focus restored",
+    "pass": true
+  },
+  {
+    "name": "correction/390: edit route",
+    "pass": true
+  },
+  {
+    "name": "people/390: direct route",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: route",
+    "pass": true
+  },
+  {
+    "name": "history/390: version",
+    "pass": true
+  },
+  {
+    "name": "delete/390: cancellation",
+    "pass": true
+  },
+  {
+    "name": "delete/390: existing cancel service",
+    "pass": true
+  },
+  {
+    "name": "foreign reference: no disclosure",
+    "pass": true
+  },
+  {
+    "name": "delete failure retains content/modal",
+    "pass": true
+  }
+]

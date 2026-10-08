@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.52.0
+version: 2.53.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Detalhes da Posição alinhados ao Perfil — v2.2.1
+
+Implementação autorizada em08/10/2026: cabeçalho compacto, quatro abas imediatamente abaixo, resumo branco72/28 com dois destaques azul-claro e sidebar de contexto, referência ocupacional e acompanhamento. Fontes/associação/conhecimentos/complementos completos em drawer reutilizado, sem preview ou IA por consulta; categorias/origens, pendências reais, ocupação, edição, histórico e cancelamento auditável preservados. Pessoas encontradas abre a rota diretamente; exclusão em Mais ações exige confirmação e conserva conteúdo/tentativa após falha. Layout responsivo, ícones centrados e loading existentes. Registry2.2.1, sem mudança de banco/Edge/Parser/Synthesis/matching. Evidência local e limites no acordo1.0.0, execução e `docs/qa/aot-position-overview-v221.md`. Publicação operacional ainda pendente nesta revisão; não confundir implementação com rollout.
 
 ## Centralização dos ícones — correção na v2.2.0
 

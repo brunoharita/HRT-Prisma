@@ -1,0 +1,56 @@
+/* Position detail only: reuse the Profile's visual tokens without changing its selectors. */
+.prisma-vacancy-detail-page .prisma-position-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; margin: 12px 0 20px; }
+.prisma-position-identity { display: flex; align-items: flex-start; gap: 18px; min-width: 0; }
+.prisma-position-page-icon { display: grid; place-items: center; flex: 0 0 64px; height: 64px; border: 1px solid var(--prisma-highlight-border); border-radius: 50%; background: var(--prisma-highlight); color: #155eef; font-size: 32px; }
+.prisma-position-identity h1.ant-typography { margin: 0 0 6px; font-size: clamp(30px, 2.5vw, 36px); line-height: 1.2; overflow-wrap: anywhere; }
+.prisma-position-identity-copy { min-width: 0; }
+.prisma-position-area { margin: 0 0 12px; color: var(--prisma-text-secondary); }
+.prisma-position-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; color: var(--prisma-text-secondary); font-size: 14px; overflow-wrap: anywhere; }
+.prisma-position-version { grid-column: 1 / -1; text-align: right; color: var(--prisma-text-secondary); font-size: 14px; }
+.prisma-position-header-actions { align-self: start; }
+.prisma-vacancy-detail-page .prisma-position-tabs > .ant-tabs-nav { background: #fff; border: 1px solid var(--prisma-border); border-radius: 12px; padding: 0 16px; margin-bottom: 16px; }
+.prisma-position-overview { display: grid; grid-template-columns: minmax(0, 72fr) minmax(280px, 28fr); align-items: start; gap: 24px; }
+.prisma-position-reading, .prisma-position-context { min-width: 0; }
+.prisma-position-reading h2 { font-size: 24px; font-weight: 700; margin: 0 0 8px; line-height: 1.35; color: var(--prisma-text); }
+.prisma-position-description { margin: 0 0 24px; color: var(--prisma-text-secondary); }
+.prisma-position-mission { padding: 22px 0; border-top: 1px solid var(--prisma-border); }
+.prisma-position-mission h3 { margin: 0 0 10px; font-size: 22px; font-weight: 700; color: var(--prisma-text); }
+.prisma-position-mission p { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
+.prisma-position-highlights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.prisma-position-highlight { position: relative; min-width: 0; padding: 22px 20px; border: 1px solid var(--prisma-highlight-border); border-radius: 16px; background: var(--prisma-highlight); overflow-wrap: anywhere; }
+.prisma-position-highlight::before { content: ""; position: absolute; left: 20px; top: -1px; width: 64px; height: 4px; background: #155eef; border-radius: 0 0 4px 4px; }
+.prisma-position-highlight > header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.prisma-position-highlight-icon { display: grid; place-items: center; flex: 0 0 52px; height: 52px; border-radius: 50%; background: var(--prisma-icon-surface); color: #155eef; font-size: 28px; }
+.prisma-position-highlight h3 { color: #455d80; font-size: 14px; font-weight: 600; line-height: 1.5; margin: 0; }
+.prisma-position-highlight h4 { color: var(--prisma-text); font-size: 22px; font-weight: 700; line-height: 1.35; margin: 0 0 14px; }
+.prisma-position-highlight-secondary { border-top: 1px solid #c6d9f6; padding-top: 20px; margin-top: 24px; }
+.prisma-position-highlight-secondary h4 { color: #455d80; font-size: 14px; font-weight: 600; }
+.prisma-position-text-list { padding-left: 20px; margin: 0; display: grid; gap: 10px; font-size: 16px; line-height: 1.65; }
+.prisma-position-text-list li { min-width: 0; white-space: pre-line; overflow-wrap: anywhere; }
+.prisma-position-requirement-category { color: #455d80; font-size: 14px; margin: 12px 0 8px; }
+.prisma-position-requirement-groups > section:first-child .prisma-position-requirement-category { margin-top: 0; }
+.prisma-position-empty, .prisma-position-note { color: var(--prisma-text-secondary); font-size: 14px; line-height: 1.65; }
+.prisma-position-context { display: grid; gap: 24px; }
+.prisma-position-context p { margin: 12px 0 16px; overflow-wrap: anywhere; }
+.prisma-position-context .ant-card-head-title { white-space: normal; }
+.prisma-position-context .ant-btn, .prisma-position-pending .ant-btn { height: auto; min-height: 34px; white-space: normal; }
+.prisma-position-context .prisma-position-note { margin-bottom: 0; }
+.prisma-position-reference.is-pending { border-color: #ffd079; background: #fff9ec; }
+.prisma-position-reference-review { margin-top: 10px; }
+.prisma-position-pending { margin-bottom: 18px; }
+.prisma-position-reference-drawer .ant-drawer-body { background: var(--prisma-canvas); }
+.prisma-position-reference-drawer .prisma-position-taxonomy { min-width: 0; }
+@media (max-width: 1199px) {
+  .prisma-position-overview { grid-template-columns: minmax(0, 1fr); }
+  .prisma-position-context { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .prisma-vacancy-detail-page .prisma-position-header { grid-template-columns: minmax(0, 1fr); }
+  .prisma-position-version { grid-column: 1; }
+}
+@media (max-width: 767px) {
+  .prisma-position-highlights, .prisma-position-context { grid-template-columns: minmax(0, 1fr); }
+  .prisma-position-identity { gap: 12px; }
+  .prisma-position-page-icon { flex-basis: 56px; height: 56px; font-size: 28px; }
+  .prisma-position-highlight { padding: 22px 18px; }
+  .prisma-position-overview { gap: 16px; }
+  .prisma-position-pending { flex-wrap: wrap; }
+}

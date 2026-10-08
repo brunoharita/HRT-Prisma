@@ -1,8 +1,9 @@
 import { AddToPositionFollowUp } from "../components/AddToPositionFollowUp";
+import { PositionOverview } from "../components/PositionOverview";
 import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { PrismaBriefcaseIcon as PrismaPageIcon } from "../ui/PrismaBriefcaseIcon";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
-import { PositionTaxonomyPanel, TaxonomyOriginDetails } from "../components/PositionTaxonomyPanel";
+import { PositionTaxonomyPanel } from "../components/PositionTaxonomyPanel";
 import { TrajectoryConflictReview } from "../components/TrajectoryConflictReview";
 import { isSemanticTriageEligible, semanticComparisonPending } from "../domain/semanticMatching.js";
 import { positionTaxonomyService } from "../infrastructure/supabase/positionTaxonomyService";
@@ -12,7 +13,6 @@ import { semanticFallbackBadge, semanticFallbackNotice } from "../shared/semanti
 import { usePrismaScope, useUnsavedChanges, useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import {
-  AimOutlined,
   ApartmentOutlined,
   ArrowLeftOutlined,
   BulbOutlined,
@@ -26,11 +26,11 @@ import {
   HistoryOutlined,
   InfoCircleOutlined,
   LinkOutlined,
+  MoreOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
   RobotOutlined,
   SearchOutlined,
-  StarOutlined,
   SwapOutlined,
   TeamOutlined,
   UserOutlined,
@@ -40,6 +40,7 @@ import {
   Button,
   Checkbox,
   Drawer,
+  Dropdown,
   Empty,
   Form,
   Input,
@@ -509,6 +510,7 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId, ini
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   useLoadingFeedback({ "Carregando Posição…": loading, "Excluindo Posição…": deleting });
   useEffect(() => {
     let current = true;
@@ -521,28 +523,36 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId, ini
   if (loading) return <PrismaPage><PrismaCard><Skeleton active paragraph={{ rows: 18 }} /></PrismaCard></PrismaPage>;
   if (!detail) return <PrismaPage><Alert showIcon title={error ?? "Posição não encontrada."} type="error" action={<Button onClick={() => onNavigate("/vacancies")}>Voltar às posições</Button>} /></PrismaPage>;
   const detailId = detail.id!;
-  const required = detail.requirements.filter((item) => item.importance === "required");
-  const desired = detail.requirements.filter((item) => item.importance === "desired");
-  const pending = detail.requirements.filter((item) => item.importance === "unclassified");
   async function removeVacancy() {
     setDeleting(true); setError(null);
     try {
       await vacancyService.cancel(activeMembership.organizationId, detailId);
       onNavigate("/vacancies");
+      return true;
     } catch (caught) {
       setError(errorMessage(caught, "Não foi possível excluir a Posição."));
+      return false;
     } finally {
       setDeleting(false);
     }
   }
   return <PrismaPage className="prisma-vacancy-detail-page">
     <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/vacancies")} type="text">Voltar para Posições</Button>
-    <div className="prisma-vacancy-detail-header"><div><Space wrap><Typography.Title level={1}>{detail.title}</Typography.Title><OccupancyTag occupancy={detail.occupancy} /></Space><div className="prisma-vacancy-meta"><span><ApartmentOutlined /> {detail.area || "Área não informada"}</span><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span>{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}<span>Definição v{detail.version}</span></div></div><Space wrap><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar posição</Button><Popconfirm cancelText="Cancelar" description="Esta necessidade sairá da lista. O histórico de definições e avaliações será preservado." okButtonProps={{ danger: true, loading: deleting }} okText="Excluir posição" onConfirm={() => void removeVacancy()} title="Excluir esta Posição?"><Button danger icon={<DeleteOutlined />} loading={deleting}>Excluir</Button></Popconfirm><Button icon={<TeamOutlined />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button></Space></div>
-    {error ? <Alert showIcon title={error} type="error" action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Abrir posição</Button>} /> : null}
-    <PositionTaxonomyPanel draft={detail} membership={activeMembership} onEdit={() => onNavigate(`/vacancies/${detail.id}/edit`)} />
-    <Tabs defaultActiveKey={initialTab} onChange={key => { if (key === "follow-up") onNavigate(`/vacancies/${vacancyId}/follow-up`); }} items={[
-      { key: "overview", label: "Visão geral", children: <div className="prisma-vacancy-detail-stack">{[detail.mission, ...detail.contextItems].some((item) => item.trim()) ? <DetailSection icon={<AimOutlined />} title="Sobre a posição"><Typography.Paragraph>{[detail.mission, ...detail.contextItems].filter(Boolean).join(" ")}</Typography.Paragraph></DetailSection> : null}{detail.responsibilities.length ? <DetailList icon={<TeamOutlined />} items={detail.responsibilities} title="Responsabilidades" /> : null}{pending.length ? <RequirementDimensionGroups icon={<ClockCircleOutlined />} items={pending} title="Requisitos para classificar" /> : null}{required.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={required} title="Requisitos obrigatórios" /> : null}{desired.length ? <RequirementDimensionGroups icon={<StarOutlined />} items={desired} title="Requisitos desejáveis" /> : null}{detail.expectedOutcomes.length ? <DetailList icon={<CheckCircleOutlined />} items={detail.expectedOutcomes} title="Resultados esperados" /> : null}</div> },
-      { key: "people", label: "Pessoas encontradas", children: <Empty description="A descoberta é calculada sob demanda para não carregar todos os Perfis na abertura."><Button onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">Encontrar pessoas</Button></Empty> },
+    <header className="prisma-position-header">
+      <div className="prisma-position-identity"><span className="prisma-position-page-icon" aria-hidden><PrismaPageIcon /></span><div className="prisma-position-identity-copy">
+        <Typography.Title level={1}>{detail.title}</Typography.Title><p className="prisma-position-area">{detail.area || "Área não informada"}</p>
+        <div className="prisma-position-meta"><span><EnvironmentOutlined /> {detail.location || "Localidade não informada"}</span><OccupancyTag occupancy={detail.occupancy} />{detail.employmentType ? <span>{detail.employmentType}</span> : null}{detail.occupantName ? <span><UserOutlined /> Ocupada por {detail.occupantName}</span> : null}</div>
+      </div></div>
+      <Space wrap className="prisma-position-header-actions"><Button icon={<EditOutlined aria-hidden />} onClick={() => onNavigate(`/vacancies/${detail.id}/edit`)}>Editar posição</Button>
+        <Button icon={<TeamOutlined aria-hidden />} onClick={() => onNavigate(`/vacancies/${detail.id}/people`)} type="primary">{detail.occupancy === "occupied" ? "Avaliar Pessoa atual" : "Encontrar pessoas"}</Button>
+        <Dropdown trigger={["click"]} menu={{ items: [{ key: "delete", label: "Excluir posição", danger: true, icon: <DeleteOutlined aria-hidden /> }], onClick: () => setConfirmDeleteOpen(true) }}><Button icon={<MoreOutlined aria-hidden />} loading={deleting}>Mais ações</Button></Dropdown>
+      </Space><div className="prisma-position-version">Definição v{detail.version}</div>
+    </header>
+    <Modal title="Excluir esta Posição?" open={confirmDeleteOpen} confirmLoading={deleting} onCancel={() => { if (!deleting) setConfirmDeleteOpen(false); }} cancelText="Cancelar" okText="Excluir posição" okButtonProps={{ danger: true }} cancelButtonProps={{ disabled: deleting }} onOk={async () => { if (await removeVacancy()) setConfirmDeleteOpen(false); }}><p>Esta necessidade sairá da lista. O histórico de definições e avaliações será preservado.</p>{error ? <Alert showIcon title={error} type="error" /> : null}</Modal>
+    {error && !confirmDeleteOpen ? <Alert showIcon title={error} type="error" action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Abrir posição</Button>} /> : null}
+    <Tabs className="prisma-position-tabs" defaultActiveKey={initialTab} onChange={key => { if (key === "follow-up") onNavigate(`/vacancies/${vacancyId}/follow-up`); if (key === "people") onNavigate(`/vacancies/${vacancyId}/people`); }} items={[
+      { key: "overview", label: "Visão geral", children: <PositionOverview detail={detail} membership={activeMembership} onEdit={() => onNavigate(`/vacancies/${detail.id}/edit`)} onFollowUp={() => onNavigate(`/vacancies/${detail.id}/follow-up`)} /> },
+      { key: "people", label: "Pessoas encontradas", children: null },
       { key: "follow-up", label: "Acompanhamento", children: null },
       { key: "history", label: "Histórico", children: <PrismaCard><List dataSource={history} locale={{ emptyText: "Nenhuma alteração registrada." }} renderItem={(item) => <List.Item><List.Item.Meta avatar={<HistoryOutlined />} title={historyLabel(item.type)} description={`${item.version ? `Definição v${item.version} · ` : ""}${formatDate(item.createdAt)}`} /></List.Item>} /></PrismaCard> },
     ]} />
@@ -739,11 +749,6 @@ function RequirementEditor({ invalid, item, onChange, onRemove }: { invalid: boo
   return <div className={`prisma-requirement-editor ${invalid ? "has-validation-error" : ""}`}><label><span>Requisito</span><Input {...(invalid && !item.label.trim() ? { status: "error" as const } : {})} aria-invalid={invalid && !item.label.trim()} aria-label="Requisito" onChange={(event) => { const category = inferRequirementCategory(event.target.value); onChange({ ...item, label: event.target.value, observedTerm: event.target.value, category, proposedCategory: category, categoryConfirmed: false, conceptId: null, conceptLabel: null, relatedSignals: [] }); }} placeholder="Ex.: Gestão de pipeline" value={item.label} /></label><label><span>Dimensão profissional</span><Select aria-label="Dimensão profissional" onChange={(category) => onChange({ ...item, category, categoryConfirmed: true })} options={vacancyRequirementCategories} value={item.category} /></label><label><span>Importância</span><Segmented block className="prisma-requirement-importance" onChange={(value) => onChange({ ...item, importance: value as VacancyRequirementDraft["importance"], importanceConfirmed: true })} options={[{ label: "Obrigatório", value: "required" }, { label: "Desejável", value: "desired" }]} value={item.importance} />{item.importance === "unclassified" ? <small>Escolha Obrigatório ou Desejável antes de salvar.</small> : null}</label><Popconfirm description="Remover este requisito da definição atual?" onConfirm={onRemove} title="Remover requisito"><Button aria-label="Remover requisito" danger icon={<DeleteOutlined />} type="text" /></Popconfirm></div>;
 }
 
-function RequirementDimensionGroups({ icon, items, title }: { icon: ReactNode; items: VacancyRequirementDraft[]; title: string }) {
-  const groups = vacancyRequirementCategories.map((category) => ({ ...category, items: items.filter((item) => item.category === category.value) })).filter((group) => group.items.length);
-  return <PrismaCard title={<span>{icon} {title}</span>}><div className="prisma-vacancy-dimension-groups">{groups.map((group) => <section key={group.value}><strong>{group.label}</strong><ul>{group.items.map((item) => <li key={item.stableId}>{item.label}{item.taxonomyOrigin ? <TaxonomyOriginDetails item={item.taxonomyOrigin} /> : null}</li>)}</ul></section>)}</div></PrismaCard>;
-}
-
 function StringListEditor({ label, onChange, placeholder, values }: { label: string; onChange: (values: string[]) => void; placeholder: string; values: string[] }) {
   const [input, setInput] = useState("");
   const inputRef = useRef<InputRef>(null);
@@ -929,6 +934,7 @@ function formatPoints(value: number): string { return new Intl.NumberFormat("pt-
 function MatchBucket({ color, description, items, title }: { color: "success" | "warning" | "error"; description?: string; items: string[]; title: string }) { return <section className={`prisma-match-bucket is-${color}`}><strong>{title}</strong>{description ? <Typography.Text type="secondary">{description}</Typography.Text> : null}{items.length ? <Space wrap>{items.map((item) => <Tag color={color} key={item}>{item}</Tag>)}</Space> : <Typography.Text type="secondary">Nenhum item nesta categoria.</Typography.Text>}</section>; }
 function AvatarInitials({ name }: { name: string }) { return <div aria-hidden="true" className="prisma-vacancy-avatar">{name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>; }
 function OccupancyTag({ occupancy }: { occupancy: VacancyDraft["occupancy"] }) { return occupancy === "occupied" ? <Tag color="blue">Ocupada</Tag> : <Tag color="green">Não ocupada</Tag>; }
+
 function MatchStatusTag({ status }: { status: VacancyMatchStatus }) { const map = { met: ["success", "Atendido"], partially_met: ["warning", "Parcial"], related_signal: ["purple", "Sinal relacionado"], no_evidence: ["error", "Sem evidência suficiente"] } as const; return <Tag color={map[status][0]}>{map[status][1]}</Tag>; }
 function AreaRelationTag({ status }: { status: VacancyAreaRelationStatus }) { const map = { profile_area: ["green", "Área declarada no Perfil"], experience_area: ["blue", "Área citada na experiência"], occupation_area: ["cyan", "Área relacionada via Knowledge"], none: ["default", "Área não identificada"] } as const; return <Tag color={map[status][0]}>{map[status][1]}</Tag>; }
 function PositionRelationTag({ status }: { status: VacancyPositionRelationStatus }) { const map = { interpreted_function: ["blue", "Relação funcional interpretada"], same_reference: ["green", "Mesma referência ocupacional"], equivalent_reference: ["cyan", "Ocupação equivalente"], related_reference: ["blue", "Ocupação relacionada"], possible_title_relation: ["gold", "Possível relação de posição"], none: ["default", "Sem relação automática"] } as const; return <Tag color={map[status][0]}>{map[status][1]}</Tag>; }
@@ -936,7 +942,6 @@ function DetailedStatusTag({ match }: { match: VacancyCandidateMatch }) { return
 function EvidenceLevelTag({ level }: { level: VacancyCandidateMatch["evidenceAssessment"]["level"] }) { return <Tag color={level === "corroborated" ? "green" : level === "supported" ? "blue" : "default"}>{level === "corroborated" ? "Evidência corroborada" : level === "supported" ? "Evidência sustentada" : "Evidência limitada"}</Tag>; }
 function StatusIcon({ status }: { status: VacancyMatchStatus }) { return status === "met" ? <CheckCircleOutlined className="is-success" /> : status === "no_evidence" ? <ExclamationCircleOutlined className="is-error" /> : <ClockCircleOutlined className="is-warning" />; }
 function DetailSection({ children, icon, title }: { children: React.ReactNode; icon: React.ReactNode; title: string }) { return <PrismaCard title={<span>{icon} {title}</span>}>{children}</PrismaCard>; }
-function DetailList({ icon, items, title }: { icon: React.ReactNode; items: string[]; title: string }) { return <DetailSection icon={icon} title={title}>{items.length ? <ul className="prisma-vacancy-editorial-list">{items.map((item) => <li key={item}>{item}</li>)}</ul> : <Typography.Text type="secondary">Não informado.</Typography.Text>}</DetailSection>; }
 function DetailText({ icon, items, title }: { icon: React.ReactNode; items: string[]; title: string }) { return <DetailSection icon={icon} title={title}>{items.length ? <Typography.Paragraph className="prisma-vacancy-context-text">{items.join("\n\n")}</Typography.Paragraph> : <Typography.Text type="secondary">Não informado.</Typography.Text>}</DetailSection>; }
 function RequirementTags({ items, label }: { items: VacancyRequirementDraft[]; label: string }) { return <section><strong>{label}</strong><Space wrap>{items.length ? items.map((item) => <Tag color={label === "Obrigatório" ? "purple" : "blue"} key={item.stableId}>{item.label}</Tag>) : <Typography.Text type="secondary">Nenhum</Typography.Text>}</Space></section>; }
 

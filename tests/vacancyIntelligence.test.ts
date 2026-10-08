@@ -409,14 +409,15 @@ test("M5.4.6 não promove stack isolada a responsabilidade e preserva decisão h
 });
 
 test("M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organizacional", async () => {
-  const [page, migration, service] = await Promise.all([
+  const [page, migration, service, overview] = await Promise.all([
     readFile("web/src/pages/VacancyPages.tsx", "utf8"),
     readFile("supabase/migrations/20260907130000_m546_vacancy_canonical_review.sql", "utf8"),
     readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("web/src/components/PositionOverview.tsx", "utf8"),
   ]);
-  assert.match(page, /title="Sobre a posição"/);
-  assert.match(page, /title="Requisitos obrigatórios"/);
-  assert.match(page, /title="Requisitos desejáveis"/);
+  assert.match(overview, />Sobre a posição<\/h3>/);
+  assert.match(overview, /importance === "required"/);
+  assert.match(overview, /importance === "desired"/);
   assert.match(page, /Todos obrigatórios/);
   assert.match(page, /Todos desejáveis/);
   assert.match(page, /Quero classificar/);
@@ -430,7 +431,7 @@ test("M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organ
   assert.match(migration, /scope.*organization/);
   assert.match(migration, /revoke all on function public\.save_vacancy_definition/);
   assert.doesNotMatch(service.match(/async findPeople[\s\S]*?async loadPeopleByIds/)?.[0] ?? "", /Classifique cada requisito ativo/);
-  assert.match(page, /Requisitos para classificar/);
+  assert.match(overview, /Requisitos para classificar/);
 });
 
 test("referência ocupacional complementa a descrição estruturada sem substituir sua origem", async () => {

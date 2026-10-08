@@ -12,6 +12,12 @@ Cards de destaques usam fundo azul-claro #edf4ff, borda #b9d2ff, suporte de íco
 
 Pessoa mantém seis abas, leitura72/28, quatro destaques em desktop,2x2 intermediário/uma coluna no celular, síntese e oito análises integrais, fontes opcionais e estados reais. Dados ilustrativos da imagem não substituem fatos/cálculos do Perfil. Home, Pessoas, Posições, Conhecimento, Verificações e Administração compartilham cabeçalhos, cartões e escala. Nenhuma faixa escura da opção2 foi aprovada neste movimento.
 
+## Detalhes da Posição — v2.2.1
+
+A proposta revisada aprovada por Bruno em08/10/2026 adapta a linguagem do Perfil à leitura da Posição: cabeçalho compacto, quatro abas em faixa branca, painel principal aproximadamente72% e sidebar contextual28%. A missão abre o resumo; dois destaques azul-claro mostram responsabilidades/resultados e requisitos obrigatórios/desejáveis, preservando categorias e origens. A lateral reúne contexto de trabalho, estado real da referência e acesso ao acompanhamento. Associação, fontes, conhecimentos relacionados e complementos permanecem completos em drawer sob demanda, com explicação e correção existentes.
+
+Pessoas encontradas abre diretamente a descoberta; Acompanhamento conserva Lista/Kanban. Editar e Encontrar pessoas permanecem no cabeçalho, com Avaliar Pessoa atual para posição ocupada; exclusão fica em Mais ações com confirmação, carregamento, cancelamento e tentativa explícita após falha. Ausências são indicadas sem conteúdo fictício; pendências reais de classificação/associação permanecem visíveis. Tablet/celular refluem para uma coluna, preservando navegação por teclado e fontes. Consulta não dispara IA, descoberta, preview ou recálculo. Acordo1.0.0, referência visual retida e prova em `docs/qa/agreement-position-overview-v221.md` e `docs/qa/aot-position-overview-v221.md`.
+
 ## Organização e jornadas
 
 O menu agrupa Operação (Início, Pessoas, Posições, Verificações), Curadoria (Conhecimento, Banco de Itens) e Administração (Usuários e capacidades administrativas entregues), conforme a autoridade já existente. Páginas sem capacidade utilizável não são anunciadas no menu. Rotas antigas continuam compatíveis: a mudança de linguagem não renomeia URLs, contratos, entidades, tabelas, payloads ou snapshots históricos.

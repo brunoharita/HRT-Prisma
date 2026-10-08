@@ -1,0 +1,61 @@
+{
+  "site": "https://prisma.hrtsolutions.com.br",
+  "host": "srv1038882",
+  "checkout": "0684d086ec820bf99ac961123223dca99e38e45d",
+  "containers": [
+    {
+      "name": "prisma-web",
+      "id": "03359d9e96b514d228884c1d7443ab9040195886d379d7aab0432bd6cfd808b4",
+      "image": "sha256:f8349547f6dc8c3f6eef350e8115542c5b711077bdca02c2f62e6dc5d05f319e",
+      "status": "running",
+      "restarts": 0,
+      "health": "none"
+    },
+    {
+      "name": "prisma-parser-ia",
+      "id": "ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "status": "running",
+      "restarts": 0,
+      "health": "none"
+    }
+  ],
+  "rollback": null,
+  "entries": [
+    {
+      "path": "/",
+      "status": 200
+    }
+  ],
+  "assets": [
+    "/assets/index-BnkTz1MZ.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-DlIGisEt.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-EOT1QpDk.css"
+  ],
+  "checks": {
+    "host": true,
+    "checkout": true,
+    "running": true,
+    "healthy": true
+  }
+}

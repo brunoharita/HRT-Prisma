@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 393
-source_manifest_sha256: d794481309efe4020c62df625948c316aa468794ba6bd49e04e4e23e4255db00
+documentation_source_count: 396
+source_manifest_sha256: c927ce2a84c1618a1105c5087b34b7fee8c9cdc95afc55fba403463f5ac79365
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.52.0
+version: 2.53.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Detalhes da Posição alinhados ao Perfil — v2.2.1
+
+Implementação autorizada em08/10/2026: cabeçalho compacto, quatro abas imediatamente abaixo, resumo branco72/28 com dois destaques azul-claro e sidebar de contexto, referência ocupacional e acompanhamento. Fontes/associação/conhecimentos/complementos completos em drawer reutilizado, sem preview ou IA por consulta; categorias/origens, pendências reais, ocupação, edição, histórico e cancelamento auditável preservados. Pessoas encontradas abre a rota diretamente; exclusão em Mais ações exige confirmação e conserva conteúdo/tentativa após falha. Layout responsivo, ícones centrados e loading existentes. Registry2.2.1, sem mudança de banco/Edge/Parser/Synthesis/matching. Evidência local e limites no acordo1.0.0, execução e `docs/qa/aot-position-overview-v221.md`. Publicação operacional ainda pendente nesta revisão; não confundir implementação com rollout.
 
 ## Centralização dos ícones — correção na v2.2.0
 
@@ -11843,6 +11847,12 @@ Cards de destaques usam fundo azul-claro #edf4ff, borda #b9d2ff, suporte de íco
 
 Pessoa mantém seis abas, leitura72/28, quatro destaques em desktop,2x2 intermediário/uma coluna no celular, síntese e oito análises integrais, fontes opcionais e estados reais. Dados ilustrativos da imagem não substituem fatos/cálculos do Perfil. Home, Pessoas, Posições, Conhecimento, Verificações e Administração compartilham cabeçalhos, cartões e escala. Nenhuma faixa escura da opção2 foi aprovada neste movimento.
 
+## Detalhes da Posição — v2.2.1
+
+A proposta revisada aprovada por Bruno em08/10/2026 adapta a linguagem do Perfil à leitura da Posição: cabeçalho compacto, quatro abas em faixa branca, painel principal aproximadamente72% e sidebar contextual28%. A missão abre o resumo; dois destaques azul-claro mostram responsabilidades/resultados e requisitos obrigatórios/desejáveis, preservando categorias e origens. A lateral reúne contexto de trabalho, estado real da referência e acesso ao acompanhamento. Associação, fontes, conhecimentos relacionados e complementos permanecem completos em drawer sob demanda, com explicação e correção existentes.
+
+Pessoas encontradas abre diretamente a descoberta; Acompanhamento conserva Lista/Kanban. Editar e Encontrar pessoas permanecem no cabeçalho, com Avaliar Pessoa atual para posição ocupada; exclusão fica em Mais ações com confirmação, carregamento, cancelamento e tentativa explícita após falha. Ausências são indicadas sem conteúdo fictício; pendências reais de classificação/associação permanecem visíveis. Tablet/celular refluem para uma coluna, preservando navegação por teclado e fontes. Consulta não dispara IA, descoberta, preview ou recálculo. Acordo1.0.0, referência visual retida e prova em `docs/qa/agreement-position-overview-v221.md` e `docs/qa/aot-position-overview-v221.md`.
+
 ## Organização e jornadas
 
 O menu agrupa Operação (Início, Pessoas, Posições, Verificações), Curadoria (Conhecimento, Banco de Itens) e Administração (Usuários e capacidades administrativas entregues), conforme a autoridade já existente. Páginas sem capacidade utilizável não são anunciadas no menu. Rotas antigas continuam compatíveis: a mudança de linguagem não renomeia URLs, contratos, entidades, tabelas, payloads ou snapshots históricos.
@@ -15109,6 +15119,48 @@ Alvos normativos: docs/qa/references/position-follow-up-v220/kanban.png e drag.p
 D-UX-01: shell navy, ícone/título destacados, abas locais, três indicadores, toolbar/busca/filtros/Lista-Kanban; quadro quatro colunas, cartões compactos score azul, alça superior, ações inferiores. Lista operacional do mesmo conjunto.
 D-UX-02: painel detalhe lateral; mobile menu recolhido, cartões legíveis, seletor de fase e detalhe de tela completa; estilo aprovado da Pessoa com ícones e superfícies tonais.
 CA-UX: render com mesmos dados sintéticos e viewport equivalente, registro de diferenças técnicas e sem ocultação de conteúdo.
+
+---
+
+## Source: `docs/qa/agreement-position-overview-v221.md`
+
+# Acordo — Detalhes da Posição alinhados ao Perfil
+
+v1.0.0, agreed, 08/10/2026. Bruno aprovou a proposta revisada e autorizou implementar em main e publicar v2.2.1. Baseline0684d086ec820bf99ac961123223dca99e38e45d. Classe C: composição de leitura/navegação existente, sem persistência nova.
+
+- D-01/D-UX-01: cabeçalho compacto com ícone centralizado, título, área, localização, ocupação, metadados existentes e versão discreta; Editar posição secundário, Encontrar pessoas primário (preservar Avaliar Pessoa atual quando ocupada), Excluir em Mais ações com confirmação e cancelamento auditável anteriores.
+- D-02/D-UX-02: quatro abas em faixa branca imediatamente sob cabeçalho: Visão geral, Pessoas encontradas, Acompanhamento, Histórico. Pessoas encontradas abre a rota correspondente diretamente, sem intermediário vazio. Histórico e acompanhamento existentes preservados.
+- D-03/D-UX-03: Visão geral com painel branco principal aproximadamente72% e sidebar28%, alinhados ao topo. Painel Resumo da posição, missão em Sobre a posição e dois cartões azul-claro lado a lado: responsabilidades/resultados esperados e obrigatórios/desejáveis. Acento azul curto, rótulos discretos, conteúdo legível, ícones menores centralizados, divisórias e listas. Sem pílulas artificiais, faixa azul inteira ou ícones adicionais nas subseções/sidebar.
+- D-04: sidebar com Contexto de trabalho, Referência ocupacional e Acompanhamento. Referências completas em drawer sob demanda: associação, fontes, conhecimentos relacionados e complementos reutilizam componentes existentes. Corrigir associação e explicações/histórico da taxonomia continuam acessíveis.
+- D-05: preservar listas completas, categorias/dimensões e origens dos requisitos, employmentType, occupantName, estado de ocupação e campos existentes. Conteúdo ausente é explicitamente não informado, nunca texto demonstrativo. Pendências reais de classificação/associação e ações de correção permanecem visíveis na Visão geral, sem exigir abertura do drawer. Nenhuma pendência fictícia.
+- D-06/D-UX-04: desktop72/28; intermediário/baixo uma coluna com sidebar após leitura, cartões empilhados quando necessário; conteúdo longo não corta nem gera overflow da página. Teclado/foco/Escape, loading visível e navegação anteriores preservados.
+- D-07: versão oficial2.2.1, ownerUX/current-state/contexto/AoT atualizados; CI, publicação seletiva, smoke, rollback e sincronização.
+- P-01/P-UX-01: não substituir topologia aprovada por composição integral em largura ou esconder requisitos no sidebar; não copiar nomes/dados de Perfil ou requisitos ilustrativos para produção; não apresentar ausências como fatos/zero.
+- P-02: sem mudar matching, IA, backend, banco, permissões, fontes ou contrato persistido; sem recalcular/interpretar por abrir detalhe, aba ou drawer; sem referências virarem requisitos automaticamente.
+- P-03: sem remover funcionalidades/proveniência nem alterar o Perfil ou Kanban para acomodar este movimento; sem biblioteca nova ou reset global de estilos.
+- F-01: redesign de resultados/Perfil/Kanban/editor, novas métricas, decisões automáticas e dados reais de teste.
+- A-01/A-UX-01: engenharia reutiliza Ant Design, tokens/ícones e componentes existentes; adapta acabamento, estados reais e semântica acessível. Conteúdo/contagens do mock são ilustrativos.
+- Q-01: nenhuma pendência material.
+
+## Referências e aceites
+
+Alvo normativo: `evidence/position-overview-v221/approved-mock.png` (proposta04 aprovada). Perfil fornecido é referência de estilo e escala; o conteúdo da Posição vem dos dados vigentes. No render controlado usar os mesmos dados/estado e viewport do mock, comparar estrutura/hierarquia/proporções/grupos/alinhamento/ordem/ações; registrar adaptações necessárias (categorias/origens e avisos reais).
+
+CA-01..07: prova por requisito no AoT. Browser: leitura, abas/rotas, drawer/origens/correção/fechar/foco, Mais ações/confirmar/cancelar/falha, estados vazios/longos/ocupada/pendências/erro/loading,1813/1536/768/390/320. Confirmar zero chamadas de descoberta/IA na consulta; baseline Perfil/Kanban/ícones preservados por smoke sintético dirigido. Tipos/build e testes dirigidos de posições/taxonomia/release, lint/foundation/contexto, CI e smoke operacional.
+
+## Mapa de impacto inicial
+
+| Área / capacidade | Relação | Baseline e prova proporcional |
+| --- | --- | --- |
+| Detalhes da Posição | direct | layout antigo antes de tabs,3blocos técnicos; novo mock + fixture mesmos dados |
+| Taxonomia, fontes, categorias/origens | direct | componente atual completo, drawer/explicação/correção; negativos snapshot ausente/divergente |
+| Navegação/editar/excluir/histórico | direct | rotas e cancelamento auditável existentes; mouse/teclado/erro/cancelar/confirmar |
+| Perfil/Kanban/indicadores | plausible_indirect | arquivo de páginas compartilhado, CSS escopado; renders/centros e navegação dirigidos |
+| Loading/acessibilidade | critical_transversal | estados reais e controles Ant Design; pending/erro/drawer/foco/reflow |
+| IA/dados/tenant/backend | no_impact_identified | nenhum contrato/serviço modificado; origem tenant validada como no componente existente, chamadas externas bloqueadas nos fixtures |
+| Release/contexto/web | direct |2.2.0/runtimead55395; plano somente destinos requeridos e rollback |
+
+Sem decisão arquitetural nova: reutilização de Ant Design Drawer/Dropdown/Modal e componentes Prisma já aprovados. Sem ADR novo.
 
 ---
 
@@ -19772,6 +19824,70 @@ Limites: concorrência coberta por negativos de revisão, locks transacionais e 
 ## Conclusão
 
 PASS para os D/P e critérios aplicáveis: v2.2.0 publicada com frontend e persistência operacional. Jornada autenticada com Pessoas reais em produção permanece NOT TESTED; fixtures, HTTP/bundle e metadata não comprovam essa jornada nem qualidade universal dos Perfis ou justiça de decisões humanas. Nenhuma decisão real foi fabricada.
+
+---
+
+## Source: `docs/qa/aot-position-overview-v221.md`
+
+# AoT — Detalhes da Posição alinhados ao Perfil, v2.2.1
+
+Contrato `agreement-position-overview-v221.md` v1.0.0; execução `execution-position-overview-v221.md`. Autorização explícita de Bruno: implementar a proposta revisada em main e publicar2.2.1. Baseline0684d086ec820bf99ac961123223dca99e38e45d, runtime anteriorad55395ab95db8ee5cda824835705f5ac43e7ac1. Classe C, frontend integrado limitado. Evidência retida em `evidence/position-overview-v221/`.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste / evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Cabeçalho, metadados existentes, ações e exclusão confirmada com loading/erro/tentativa | browser-results.json, preservation-results.json, estados occupied/delete-error | PASS | Componentes reais com serviços sintéticos |
+| D-02 | Quatro abas em faixa branca; Pessoas/Acompanhamento abrem rotas existentes; histórico mantido | Mouse/teclado1537/390, versão6 no histórico, rotas registradas | PASS | Sem mutar Pessoa real |
+| D-03 | PositionOverview: painel branco72/28, missão e dois destaques com ícones centrados/acento curto |50cenários1813/1537/768/390/320, renders e geometria | PASS | Categorias/origens preservadas acrescentam altura necessária |
+| D-04 | Sidebar com contexto, referência e acompanhamento; componente completo em drawer | Origem, três blocos completos, explicação/histórico sob demanda, correção, Escape/foco | PASS | Snapshot estrangeiro/obsoleto/desconhecido não divulgado |
+| D-05 | Listas/categorias/origens/ocupação/metadados preservados, ausências explícitas, pendências acionáveis | empty/long/occupied/pending/ambiguous/unresolved, testes domínio/taxonomia | PASS | Conteúdo de exemplo restrito à fixture |
+| D-06 | Reflow, fontes, teclado, foco, loading e erro preservados | Shell real1813/1280/1024/768/390/320, pending/load-error/delete-error | PASS | Sem overflow da página; abas pequenas usam menu existente |
+| D-07 | Registry2.2.1, ownerUX/current-state/AoT, publicação seletiva e sincronização | Tipos/build/testes/contextos e produção a completar | PARTIAL | Publicação/CI/smoke ainda pendentes |
+
+## Proibições verificadas
+
+| ID | Guardrail / prova negativa | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Topologia preservada; fixtures isoladas; vazio explícito | Renders, empty/long, diff | PASS |
+| P-02 | Sem SQL/backend/IA/matching/permissões; somente load/history na consulta; drawer não chama preview; taxonomia não vira requisito | Diff, serviços sintéticos com chamadas externas bloqueadas e métodos inesperados que falham | PASS |
+| P-03 | Sem biblioteca/reset global; Perfil/Kanban completos preservados | CSS restrito à Posição,4destaques/6áreas Perfil,25checksKanban | PASS |
+
+## Mapa de impacto e preservação
+
+| Capacidade / área | Relação | Baseline | Regressão / evidência | Status |
+| --- | --- | --- | --- | --- |
+| Detalhe da Posição | direct |0684d086, mesma fixture/v6/1537x1023 | before-1537.png, approved-mock.png, overview-reference-1537.png e50cenários | PASS |
+| Referências/fontes/categorias/origens | direct | Componente existente e snapshotsM7.1 | Drawer reutilizado, origem, explicação/histórico, correção, tenant/título/versão inválidos | PASS |
+| Navegação/edição/exclusão/histórico | direct | Rotas/cancelamento auditável existentes | Mouse/teclado, confirmar/cancelar/erro/retry, metadados ocupados e histórico | PASS |
+| Perfil/Kanban/indicadores | plausible_indirect | Mesmo arquivo de páginas; CSS de Perfil/foundation inalterado | Perfil1537/390,4ícones centrados/6áreas;25checksKanban/descoberta/score/entrevista/decisão/erro; CSS novo escopado | PASS |
+| Loading/acessibilidade | critical_transversal | useLoadingFeedback e controles AntD | Skeleton sem ações provisórias, feedback até conclusão/erro, foco/Escape/teclado/reflow | PASS |
+| IA/dados/tenant/backend | no_impact_identified | Contratos/serviços inalterados | Zero chamadas externas/IA, snapshot inválido sem divulgação; diff e plano de release | PASS |
+| Release/contexto/web | direct |2.2.0, VPSsrv1038882, baseline remoto conferido | production-before.json; publicação, CI e smoke a completar | PARTIAL |
+
+Novidade: hierarquia e divulgação progressiva da Posição. Preservação: todos os dados/funções existentes, sem mudança de contratos persistidos. Nenhuma dependência arquitetural nova; Modal controlado preserva confirmação e recuperação após falha sem rejeição não tratada. Referência do título/tenant/contrato validada como no painel existente. Não há QA remota separada usada; testes locais determinísticos não provam jornada autenticada real, que permanece NOT TESTED.
+
+## Fora de escopo
+
+F-01 PASS: resultados/Perfil/Kanban/editor não redesenhados; nenhuma métrica ou decisão automática, nenhuma mutação real para teste. Reutilização de componentes/AntD/tokens sob A-01. Sem dependência nova.
+
+## Fidelidade visual
+
+| Referência / viewport | Estado/dados | Render | Comparação | Adaptação | Status |
+| --- | --- | --- | --- | --- | --- |
+| approved-mock.png1537x1023 | Desenvolvedor backend, v6, não ocupada, mesmos textos/listas | overview-reference-1537.png; overview-1537.png completo | Cabeçalho/ações, abas superiores, painel branco principal, missão, dois destaques azuis, sidebar contextual alinhada e ícones centrados preservados | Tokens/componentes reais do Perfil, títulos de cards com divisória AntD, categorias de requisitos e lista de contexto preservadas; altura cresce sem truncar | PASS |
+| Perfil fornecido pelo PO | Estilo/escala; conteúdo próprio da Posição | profile-preserved-1537.png, shell-1813.png | Azul claro, acento curto, suportes pequenos centrados, pesos e ordem de informação | Dados ilustrativos não copiados para produto | PASS |
+| Transformação responsiva | Mesmo estado / telas390/320 e shell real | overview-390.png, shell-390.png, empty/long/pending-390.png | Leitura antes do contexto, cartões empilhados, ações acessíveis, sem overflow | Navegação lateral existente e menu das abas permanecem | PASS |
+
+Sem desvio material do contrato. Nenhuma alteração adicional de produto solicitada durante a execução. As adaptações listadas preservam dados e componentes sob A-01; identidade de pixels não é requisito.
+
+## Validação local
+
+64testes dirigidos (release, inteligência de vagas, taxonomia, acompanhamento, UX) PASS;19tooling PASS. Browser:50cenários responsivos e interações com364registros (314checks +50geometrias),29checks preservação/erros/shell/Perfil,25checksKanban PASS. Tipos/build web e raiz, lint/foundation/Context Pack/diff-check PASS. Contextos gerados/verificados em cópia limpa dos arquivos rastreados para preservar documentos alheios não rastreados. Avisos preexistentes de chunks/importação dinâmica não impedem build. Testes sem banco produtivo, IA paga ou publicação de Perfil real.
+
+## Git / produção / conclusão
+
+Branch `codex/position-overview-v221`, origem oficial GitHubHRT-Prisma. Baseline local/origin/main/VPS0684d086 conferido. production-before.json registra webf8349547 running0 e Parser/Synthesis/gateway existentes preservados antes da mudança. Publicação seletiva, CI, smoke, rollback e sincronização ainda pendentes; movimento ainda não encerrado nesta revisão.
 
 ---
 
@@ -24616,6 +24732,14 @@ Referência integral congelada: docs/qa/agreement-position-follow-up-v220.md ver
 Implementar todos D-01–D-12, D-UX-01/02; preservar P-01–P-04/P-UX-01; F-01/02 excluídos; A-01–A-03 delegados; atender todos CA incluindo visuais/negativos. Nenhuma reinterpretação autorizada.
 Sequência: baseline/contrato/mapa -> implementação local -> negativos SQL e regressão dirigida/browser/visual -> plano committed diff -> commit/push/CI -> banco remoto único necessário -> main/frontend -> smoke/sincronização -> AoT.
 Branch técnica isolada integra main conforme contrato. Não rodar suíte integral local; dispatcher deduplicado e validações afetadas.
+
+---
+
+## Source: `docs/qa/execution-position-overview-v221.md`
+
+# Execução — Posição v2.2.1
+
+Contrato congelado `docs/qa/agreement-position-overview-v221.md` v1.0.0, lido integralmente. Implementar D-01..07 e todos D-UX/CA; impedir P-01..03/P-UX; preservar F-01 e usar somente A-01/A-UX para acabamento e reutilização. Referência normativa imutável: approved-mock.png copiado da proposta04 antes da implementação. A aprovação explícita cobre main/produção. Validação local proporcional, fixtures sem IA/dados reais, CI e publicação conforme plano, AoT com limites de evidência.
 
 ---
 

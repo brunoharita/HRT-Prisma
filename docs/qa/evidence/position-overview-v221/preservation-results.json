@@ -1,0 +1,118 @@
+[
+  {
+    "name": "shell/1813: no page overflow",
+    "pass": true
+  },
+  {
+    "name": "shell/1813: all primary actions visible",
+    "pass": true
+  },
+  {
+    "name": "shell/1280: no page overflow",
+    "pass": true
+  },
+  {
+    "name": "shell/1280: all primary actions visible",
+    "pass": true
+  },
+  {
+    "name": "shell/1024: no page overflow",
+    "pass": true
+  },
+  {
+    "name": "shell/1024: all primary actions visible",
+    "pass": true
+  },
+  {
+    "name": "shell/768: no page overflow",
+    "pass": true
+  },
+  {
+    "name": "shell/768: all primary actions visible",
+    "pass": true
+  },
+  {
+    "name": "shell/390: no page overflow",
+    "pass": true
+  },
+  {
+    "name": "shell/390: all primary actions visible",
+    "pass": true
+  },
+  {
+    "name": "shell/320: no page overflow",
+    "pass": true
+  },
+  {
+    "name": "shell/320: all primary actions visible",
+    "pass": true
+  },
+  {
+    "name": "Profile/1537: four original centered highlights",
+    "pass": true
+  },
+  {
+    "name": "Profile/1537: six original navigation areas preserved",
+    "pass": true
+  },
+  {
+    "name": "Profile/390: four original centered highlights",
+    "pass": true
+  },
+  {
+    "name": "Profile/390: six original navigation areas preserved",
+    "pass": true
+  },
+  {
+    "name": "baseline: old references precede tabs",
+    "pass": true
+  },
+  {
+    "name": "pending load: skeleton and no provisional actions",
+    "pass": true
+  },
+  {
+    "name": "load settlement: feedback clears",
+    "pass": true
+  },
+  {
+    "name": "Editar posição: existing route",
+    "pass": true
+  },
+  {
+    "name": "Encontrar pessoas: existing route",
+    "pass": true
+  },
+  {
+    "name": "Abrir acompanhamento: existing route",
+    "pass": true
+  },
+  {
+    "name": "navigation never triggers interpretation",
+    "pass": true
+  },
+  {
+    "name": "load error: no false empty data and recovery",
+    "pass": true
+  },
+  {
+    "name": "foreign: drawer does not expose invalid snapshot",
+    "pass": true
+  },
+  {
+    "name": "stale: drawer does not expose invalid snapshot",
+    "pass": true
+  },
+  {
+    "name": "unknown: drawer does not expose invalid snapshot",
+    "pass": true
+  },
+  {
+    "name": "failed deletion retains confirmation and position",
+    "pass": true
+  },
+  {
+    "name": "failed deletion can retry explicitly",
+    "pass": true
+  }
+]
