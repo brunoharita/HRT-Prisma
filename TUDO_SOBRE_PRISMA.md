@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 396
-source_manifest_sha256: c927ce2a84c1618a1105c5087b34b7fee8c9cdc95afc55fba403463f5ac79365
+source_manifest_sha256: a66bde4277325ab0ca5627bf543d8d0a3a760522375642f0d34406f1e927a141
 -->
 
 # Tudo sobre o Prisma
@@ -19884,6 +19884,8 @@ Sem desvio material do contrato. Nenhuma alteração adicional de produto solici
 ## Validação local
 
 64testes dirigidos (release, inteligência de vagas, taxonomia, acompanhamento, UX) PASS;19tooling PASS. Browser:50cenários responsivos e interações com364registros (314checks +50geometrias),29checks preservação/erros/shell/Perfil,25checksKanban PASS. Tipos/build web e raiz, lint/foundation/Context Pack/diff-check PASS. Contextos gerados/verificados em cópia limpa dos arquivos rastreados para preservar documentos alheios não rastreados. Avisos preexistentes de chunks/importação dinâmica não impedem build. Testes sem banco produtivo, IA paga ou publicação de Perfil real.
+
+CI inicial37842206736 interrompeu publicação antes de main/produção: o novo aviso de falha da exclusão não continha ação própria exigida pelo contrato de avisos acionáveis. Incluído Voltar à posição no aviso, preservando retry explícito na confirmação. Regressão dirigida adicional `tests/tooling/actionableNotices.test.mjs` (3checks) cobre69avisos. Sem redução do teste ou mudança de escopo.
 
 ## Git / produção / conclusão
 

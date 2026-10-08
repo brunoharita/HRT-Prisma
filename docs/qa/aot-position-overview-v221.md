@@ -54,6 +54,8 @@ Sem desvio material do contrato. Nenhuma alteração adicional de produto solici
 
 64testes dirigidos (release, inteligência de vagas, taxonomia, acompanhamento, UX) PASS;19tooling PASS. Browser:50cenários responsivos e interações com364registros (314checks +50geometrias),29checks preservação/erros/shell/Perfil,25checksKanban PASS. Tipos/build web e raiz, lint/foundation/Context Pack/diff-check PASS. Contextos gerados/verificados em cópia limpa dos arquivos rastreados para preservar documentos alheios não rastreados. Avisos preexistentes de chunks/importação dinâmica não impedem build. Testes sem banco produtivo, IA paga ou publicação de Perfil real.
 
+CI inicial37842206736 interrompeu publicação antes de main/produção: o novo aviso de falha da exclusão não continha ação própria exigida pelo contrato de avisos acionáveis. Incluído Voltar à posição no aviso, preservando retry explícito na confirmação. Regressão dirigida adicional `tests/tooling/actionableNotices.test.mjs` (3checks) cobre69avisos. Sem redução do teste ou mudança de escopo.
+
 ## Git / produção / conclusão
 
 Branch `codex/position-overview-v221`, origem oficial GitHubHRT-Prisma. Baseline local/origin/main/VPS0684d086 conferido. production-before.json registra webf8349547 running0 e Parser/Synthesis/gateway existentes preservados antes da mudança. Publicação seletiva, CI, smoke, rollback e sincronização ainda pendentes; movimento ainda não encerrado nesta revisão.
