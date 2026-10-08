@@ -1,0 +1,165 @@
+{
+  "project": "ioldpnqqvobprjiontre",
+  "localMigration": "20261008120000_position_follow_up.sql",
+  "remote": {
+    "counts": {
+      "entries": 0,
+      "history": 0,
+      "processes": 0
+    },
+    "ledger": [
+      {
+        "name": "position_follow_up",
+        "version": "20261008181745"
+      }
+    ],
+    "tables": [
+      {
+        "rls": true,
+        "name": "position_evaluation_entries",
+        "anon_select": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "name": "position_evaluation_history",
+        "anon_select": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "name": "position_evaluation_processes",
+        "anon_select": false,
+        "service_any": false,
+        "authenticated_any": false
+      }
+    ],
+    "functions": [
+      {
+        "name": "authorize_position_follow_up",
+        "config": [
+          "search_path=\"\""
+        ],
+        "source_md5": "5c5672c514f1e5793f66e24e43bdd262",
+        "anon_execute": false,
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false
+      },
+      {
+        "name": "get_position_follow_up",
+        "config": [
+          "search_path=\"\""
+        ],
+        "source_md5": "d6313a447252f359d74735da8b66503b",
+        "anon_execute": false,
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": true
+      },
+      {
+        "name": "mutate_position_follow_up",
+        "config": [
+          "search_path=\"\"",
+          "lock_timeout=3s"
+        ],
+        "source_md5": "dbed3bab192fd168748121ecd72507ad",
+        "anon_execute": false,
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": true
+      }
+    ]
+  },
+  "advisorsDelta": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "before": 14,
+      "after": 17,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy",
+      "newFindings": [
+        {
+          "detail": "Table \\`public.position_evaluation_entries\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "position_evaluation_entries",
+            "type": "table",
+            "schema": "public"
+          },
+          "observed_at": "2026-10-08T18:18:07.464Z"
+        },
+        {
+          "detail": "Table \\`public.position_evaluation_history\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "position_evaluation_history",
+            "type": "table",
+            "schema": "public"
+          },
+          "observed_at": "2026-10-08T18:18:07.464Z"
+        },
+        {
+          "detail": "Table \\`public.position_evaluation_processes\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "position_evaluation_processes",
+            "type": "table",
+            "schema": "public"
+          },
+          "observed_at": "2026-10-08T18:18:07.464Z"
+        }
+      ]
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "level": "WARN",
+      "before": 2,
+      "after": 2,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable",
+      "newFindings": []
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "before": 101,
+      "after": 103,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable",
+      "newFindings": [
+        {
+          "detail": "Function `public.get_position_follow_up(p_organization_id uuid, p_vacancy_id uuid, p_person_id uuid)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_position_follow_up`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+          "metadata": {
+            "name": "get_position_follow_up",
+            "schema": "public",
+            "language": "plpgsql",
+            "arguments": "p_organization_id uuid, p_vacancy_id uuid, p_person_id uuid",
+            "security_definer": true
+          },
+          "observed_at": "2026-10-08T18:18:07.464Z"
+        },
+        {
+          "detail": "Function `public.mutate_position_follow_up(p_organization_id uuid, p_vacancy_id uuid, p_action text, p_person_id uuid, p_expected_revision integer, p_payload jsonb)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/mutate_position_follow_up`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+          "metadata": {
+            "name": "mutate_position_follow_up",
+            "schema": "public",
+            "language": "plpgsql",
+            "arguments": "p_organization_id uuid, p_vacancy_id uuid, p_action text, p_person_id uuid, p_expected_revision integer, p_payload jsonb",
+            "security_definer": true
+          },
+          "observed_at": "2026-10-08T18:18:07.464Z"
+        }
+      ]
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "before": 1,
+      "after": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection",
+      "newFindings": []
+    }
+  ],
+  "interpretation": "Three tables intentionally have RLS without direct-access policies and revoked grants. Two authenticated-only security-definer RPCs intentionally enforce live user, role and tenant inside the server. No new anonymous functions. Existing other findings preserved. No production test records or human decisions created.",
+  "limits": "Local 44-assertion SQL verifies negative behavior. Remote checks verify installed bodies/grants/RLS and empty new tables; no authenticated real-Person mutation.",
+  "recordedAt": "2026-10-08T18:23:50.364Z",
+  "reviewedFunctionBodiesEqual": true
+}

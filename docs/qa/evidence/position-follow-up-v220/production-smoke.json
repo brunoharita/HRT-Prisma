@@ -1,0 +1,114 @@
+{
+  "at": "2026-10-08T18:20:17.022Z",
+  "sha": "87a18653f136750cd777978352e4d6d5de9bdfab",
+  "version": "2.2.0",
+  "requests": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-DlIGisEt.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DkpVtkOZ.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-CNZ6sVmM.js",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-smoke/people",
+      "status": 200
+    },
+    {
+      "path": "/profiles",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-smoke/follow-up",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-sVw5w6Ck.js",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-smoke/follow-up/person-smoke",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "path": "/sign-in",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-ByE9Q9KR.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-SNTMzHER.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    }
+  ],
+  "checks": {
+    "sha": true,
+    "version": true,
+    "inclusion": true,
+    "fourPhases": true,
+    "keyboardAlternative": true,
+    "explicitDecision": true,
+    "followUpRpc": true,
+    "visual": true,
+    "loading": true,
+    "anonymousDenied": true
+  },
+  "denials": [
+    {
+      "rpc": "get_position_follow_up",
+      "status": 401
+    },
+    {
+      "rpc": "mutate_position_follow_up",
+      "status": 401
+    }
+  ],
+  "limits": "Public HTTP/bundle and anonymous denial only; authenticated production human journey NOT TESTED. No private records, real decisions or AI calls."
+}

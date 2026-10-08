@@ -1344,6 +1344,16 @@
       "versionStatus": "alias",
       "statementFingerprintStatus": "unverified",
       "verifiedAt": "2026-10-07"
+    },
+    {
+      "name": "position_follow_up",
+      "localVersion": "20261008120000",
+      "remoteVersion": "20261008181745",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "functionBodiesFingerprintStatus": "equal",
+      "verifiedAt": "2026-10-08",
+      "verificationEvidence": "docs/qa/evidence/position-follow-up-v220/backend-release.json"
     }
   ],
   "localOnly": [

@@ -1,0 +1,99 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/architecture/contracts.md",
+      "docs/architecture/data-model.md",
+      "docs/decisions/ADR-079-position-follow-up.md",
+      "docs/decisions/README.md",
+      "docs/product/product-scope.md",
+      "docs/product/vacancy-intelligence.md",
+      "docs/qa/agreement-position-follow-up-v220.md",
+      "docs/qa/aot-position-follow-up-v220.md",
+      "docs/qa/evidence/position-follow-up-v220/browser-results.json",
+      "docs/qa/evidence/position-follow-up-v220/detail-mobile.png",
+      "docs/qa/evidence/position-follow-up-v220/drag-desktop.png",
+      "docs/qa/evidence/position-follow-up-v220/kanban-desktop.png",
+      "docs/qa/evidence/position-follow-up-v220/kanban-mobile.png",
+      "docs/qa/evidence/position-follow-up-v220/list-desktop.png",
+      "docs/qa/evidence/position-follow-up-v220/regression-person/browser-results.json",
+      "docs/qa/evidence/position-follow-up-v220/regression-person/reference-2048.png",
+      "docs/qa/evidence/position-follow-up-v220/regression-person/reference-390.png",
+      "docs/qa/evidence/position-follow-up-v220/regression-stable-score/browser-results.json",
+      "docs/qa/evidence/position-follow-up-v220/regression-stable-score/normal-1280.png",
+      "docs/qa/evidence/position-follow-up-v220/regression-stable-score/normal-390.png",
+      "docs/qa/evidence/position-follow-up-v220/sql.txt",
+      "docs/qa/execution-position-follow-up-v220.md",
+      "docs/qa/references/position-follow-up-v220/drag.png",
+      "docs/qa/references/position-follow-up-v220/kanban.png",
+      "docs/security/authorization-model.md",
+      "scripts/test-position-follow-up-sql.mjs",
+      "supabase/migrations/20261008120000_position_follow_up.sql",
+      "supabase/qa/position_follow_up_verification.sql",
+      "tests/positionFollowUp.test.ts",
+      "tests/productRelease.test.ts",
+      "tests/tooling/positionFollowUp.browser.mjs",
+      "tests/tooling/positionFollowUpRoutes.test.mjs",
+      "tests/ui/position-follow-up.html",
+      "tests/ui/position-follow-up.vite.config.mts",
+      "tests/ui/position-follow-up/fixture.ts",
+      "tests/ui/position-follow-up/main.tsx",
+      "web/src/app/PrismaApplication.tsx",
+      "web/src/components/AddToPositionFollowUp.tsx",
+      "web/src/components/PersonFollowUps.tsx",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/domain/positionFollowUp.ts",
+      "web/src/infrastructure/supabase/database.types.ts",
+      "web/src/infrastructure/supabase/positionFollowUpService.ts",
+      "web/src/pages/PersonWorkspacePage.tsx",
+      "web/src/pages/PositionFollowUpPage.tsx",
+      "web/src/pages/VacancyPages.tsx",
+      "web/src/pages/positionFollowUp.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "database",
+        "database-tests",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "tooling",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [
+        "supabase/migrations/20261008120000_position_follow_up.sql"
+      ],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run test:release-tooling",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test",
+      "pnpm run check:supabase-ledger"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [
+        "supabase/migrations/20261008120000_position_follow_up.sql"
+      ],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

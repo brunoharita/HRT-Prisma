@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-10-08T18:24:46.442Z",
+  "host": "srv1038882",
+  "workspace": "/opt/prisma",
+  "runtimeSha": "87a18653f136750cd777978352e4d6d5de9bdfab",
+  "containers": [
+    {
+      "name": "/prisma-web",
+      "containerId": "2ea49f6b8de51bd2c0647e4a863d486690969952cf5b1d618b07d8839a038df7",
+      "image": "sha256:58b326d654a5f00b8769652538fdb5ab07e85caeea7b5f610a78a11c2ce4796c",
+      "status": "running",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-parser-ia",
+      "containerId": "ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "status": "running",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-profile-synthesis",
+      "containerId": "9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "status": "running",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-paddle-gateway",
+      "containerId": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "status": "running",
+      "restarts": 0
+    }
+  ],
+  "preservedBackendIdentities": true,
+  "rollback": {
+    "tag": "prisma-web:rollback-before-87a18653f136",
+    "image": "sha256:0d6a7664b61990ff5ce5a171764f40928139b83f6e21dcfb50e19ab91c706d37"
+  },
+  "existingExperimentalState": "paddle-vl-llama-test was unhealthy before rollout and remains untouched."
+}
