@@ -1,0 +1,78 @@
+{
+  "command": "publish",
+  "status": "DRY_RUN",
+  "sha": "eac1a9dbfa1db0448a039c6d76b52da0440a5d7f",
+  "branch": "codex/position-overview-v221",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/agreement-position-overview-v221.md",
+      "docs/qa/aot-position-overview-v221.md",
+      "docs/qa/evidence/position-overview-v221/approved-mock.png",
+      "docs/qa/evidence/position-overview-v221/before-1537.png",
+      "docs/qa/evidence/position-overview-v221/browser-results.json",
+      "docs/qa/evidence/position-overview-v221/empty-390.png",
+      "docs/qa/evidence/position-overview-v221/kanban-preservation.json",
+      "docs/qa/evidence/position-overview-v221/long-390.png",
+      "docs/qa/evidence/position-overview-v221/overview-1537.png",
+      "docs/qa/evidence/position-overview-v221/overview-390.png",
+      "docs/qa/evidence/position-overview-v221/overview-reference-1537.png",
+      "docs/qa/evidence/position-overview-v221/pending-390.png",
+      "docs/qa/evidence/position-overview-v221/preservation-results.json",
+      "docs/qa/evidence/position-overview-v221/production-before.json",
+      "docs/qa/evidence/position-overview-v221/profile-preserved-1537.png",
+      "docs/qa/evidence/position-overview-v221/profile-preserved-390.png",
+      "docs/qa/evidence/position-overview-v221/shell-1813.png",
+      "docs/qa/evidence/position-overview-v221/shell-390.png",
+      "docs/qa/execution-position-overview-v221.md",
+      "tests/productRelease.test.ts",
+      "tests/tooling/positionOverview.browser.mjs",
+      "tests/tooling/positionOverview.preservation.browser.mjs",
+      "tests/ui/position-overview.html",
+      "tests/ui/position-overview.vite.config.mts",
+      "tests/ui/position-overview/fixture.ts",
+      "tests/ui/position-overview/main.tsx",
+      "tests/vacancyIntelligence.test.ts",
+      "web/src/components/PositionOverview.tsx",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/pages/VacancyPages.tsx",
+      "web/src/pages/positionOverview.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

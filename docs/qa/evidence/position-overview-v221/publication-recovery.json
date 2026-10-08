@@ -1,0 +1,30 @@
+{
+  "status": "PUBLISHED_VERIFIED_AFTER_TRANSIENT_SMOKE_404",
+  "functionalSha": "eac1a9dbfa1db0448a039c6d76b52da0440a5d7f",
+  "site": "https://prisma.hrtsolutions.com.br",
+  "dispatcher": {
+    "exitCode": 22,
+    "lastCompletedStep": "prisma-web recreated and started",
+    "failure": "Immediate curl returned HTTP 404 during recreation",
+    "rerun": false
+  },
+  "verification": {
+    "evidence": "production-after.json",
+    "http200": 17,
+    "checksPassed": 13,
+    "branchCi": 37842890634,
+    "mainCi": 37843025560,
+    "ciConclusion": "success",
+    "backendPreserved": true,
+    "rollbackVerified": true
+  },
+  "destinations": {
+    "gitMain": "published",
+    "web": "published and independently verified",
+    "database": "skipped",
+    "edgeFunctions": "skipped",
+    "parserIa": "skipped",
+    "profileSynthesis": "skipped"
+  },
+  "authenticatedRealPersonJourney": "NOT TESTED"
+}

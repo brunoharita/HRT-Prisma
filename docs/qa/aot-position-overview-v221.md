@@ -12,7 +12,7 @@ Contrato `agreement-position-overview-v221.md` v1.0.0; execução `execution-pos
 | D-04 | Sidebar com contexto, referência e acompanhamento; componente completo em drawer | Origem, três blocos completos, explicação/histórico sob demanda, correção, Escape/foco | PASS | Snapshot estrangeiro/obsoleto/desconhecido não divulgado |
 | D-05 | Listas/categorias/origens/ocupação/metadados preservados, ausências explícitas, pendências acionáveis | empty/long/occupied/pending/ambiguous/unresolved, testes domínio/taxonomia | PASS | Conteúdo de exemplo restrito à fixture |
 | D-06 | Reflow, fontes, teclado, foco, loading e erro preservados | Shell real1813/1280/1024/768/390/320, pending/load-error/delete-error | PASS | Sem overflow da página; abas pequenas usam menu existente |
-| D-07 | Registry2.2.1, ownerUX/current-state/AoT, publicação seletiva e sincronização | Tipos/build/testes/contextos e produção a completar | PARTIAL | Publicação/CI/smoke ainda pendentes |
+| D-07 | Registry2.2.1, ownerUX/current-state/AoT, publicação seletiva e sincronização | Tipos/build/testes/contextos, CI branch/main, plano/recibos/production-after.json | PASS | Somente web; fechamento documental sem rebuild |
 
 ## Proibições verificadas
 
@@ -32,7 +32,7 @@ Contrato `agreement-position-overview-v221.md` v1.0.0; execução `execution-pos
 | Perfil/Kanban/indicadores | plausible_indirect | Mesmo arquivo de páginas; CSS de Perfil/foundation inalterado | Perfil1537/390,4ícones centrados/6áreas;25checksKanban/descoberta/score/entrevista/decisão/erro; CSS novo escopado | PASS |
 | Loading/acessibilidade | critical_transversal | useLoadingFeedback e controles AntD | Skeleton sem ações provisórias, feedback até conclusão/erro, foco/Escape/teclado/reflow | PASS |
 | IA/dados/tenant/backend | no_impact_identified | Contratos/serviços inalterados | Zero chamadas externas/IA, snapshot inválido sem divulgação; diff e plano de release | PASS |
-| Release/contexto/web | direct |2.2.0, VPSsrv1038882, baseline remoto conferido | production-before.json; publicação, CI e smoke a completar | PARTIAL |
+| Release/contexto/web | direct |2.2.0, VPSsrv1038882, baseline remoto conferido | production-before/after.json, CI branch/main, plano seletivo/rollback | PASS |
 
 Novidade: hierarquia e divulgação progressiva da Posição. Preservação: todos os dados/funções existentes, sem mudança de contratos persistidos. Nenhuma dependência arquitetural nova; Modal controlado preserva confirmação e recuperação após falha sem rejeição não tratada. Referência do título/tenant/contrato validada como no painel existente. Não há QA remota separada usada; testes locais determinísticos não provam jornada autenticada real, que permanece NOT TESTED.
 
@@ -58,4 +58,12 @@ CI inicial37842206736 interrompeu publicação antes de main/produção: o novo 
 
 ## Git / produção / conclusão
 
-Branch `codex/position-overview-v221`, origem oficial GitHubHRT-Prisma. Baseline local/origin/main/VPS0684d086 conferido. production-before.json registra webf8349547 running0 e Parser/Synthesis/gateway existentes preservados antes da mudança. Publicação seletiva, CI, smoke, rollback e sincronização ainda pendentes; movimento ainda não encerrado nesta revisão.
+Branch de implementação `codex/position-overview-v221`; entrega integrada por fast-forward na main da origem oficial GitHubHRT-Prisma. SHA funcional publicado `eac1a9dbfa1db0448a039c6d76b52da0440a5d7f`. CI branch37842890634 e main37843025560 success;831testes/golden/demo/ledger/scriptseletivo/auditoria PASS. CI inicial falhou antes de produção e foi corrigida como registrado acima; nenhuma proteção removida.
+
+Plano/ensaio derivam35arquivos: web/hosting/documentação/contextos/testes, sem banco, Edge, Parser ou Synthesis. Dispatcher executou push/CI/integração main/build/recriação somenteweb. O curl imediato recebeu404 durante recriação e encerrou com22; não foi repetido o deploy. Smoke posterior independente confirmou estabilização:17HTTP200 e13checks PASS, SHA e2.2.1 no bundle, layout/centralização no CSS, assets antigos/novos disponíveis. Recibo `publication-recovery.json` distingue a falha transitória do resultado operacional verificado.
+
+Web novo container22fe0573, imagem5300ddffa5b81c6faa535ee4fa6bb4d0a5a944f427d059f1ba0361a9c48f58c6 running/zero reinícios. Rollback `prisma-web:rollback-before-eac1a9dbfa1d` preserva imagemf8349547 anterior. Parser/Synthesis/gateway conservam exatamente IDs/imagens/reinícios; Parser/Synthesis healthy. Nenhuma mutation/IA/dado real de teste. Baseline e conclusão em production-before.json/production-after.json.
+
+Fechamento documental/evidências/contextos em main, com push/pullff da VPS e sem novo build. Registros locais/origin/main/VPS sincronizados na verificação final; runtime conserva SHA funcional acima. Arquivos alheios não rastreados e worktrees preexistentes preservados. Avisos de manutenção automática de worktrees durante o dispatcher não impediram integração; nenhum worktree removido pelo movimento. Servidores temporários de testes encerrados.
+
+Todos os D-* e P-* aplicáveis PASS, F-01 preservado; sem desvio material. Entrega funcional/visual comprovada com componentes reais e dados sintéticos. Jornada autenticada real permanece NOT TESTED e não é inferida do smoke público.
