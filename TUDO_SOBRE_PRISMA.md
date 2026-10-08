@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 389
-source_manifest_sha256: abbdc9ad2386bf2ee39dee3c297f9a82e8c07c22c42130d3c45687bf42aedc05
+source_manifest_sha256: e5ec9d8306a25cd9330025f2a283c172a9bd2798a3b03308349e50ac5142f281
 -->
 
 # Tudo sobre o Prisma
@@ -19593,7 +19593,7 @@ Baseline main8b34391ca904bcac8f66283cf3b91a95f06a462c, v2.1.7; rastreados inicia
 
 | Capacidade / área | Relação | Impacto previsto | Baseline / regressão / evidência | Status |
 | --- | --- | --- | --- | --- |
-| Posição/descoberta/comparação | direct | ação humana independente + aba |105testes Node,6cenários stable browser, routes,23checks browser novo | PASS |
+| Posição/descoberta/comparação | direct | ação humana independente + aba |105testes Node,6cenários stable browser, routes,25checks browser novo | PASS |
 | Banco/RPC/histórico | direct | tabelas/RPCs novas | PostgreSQL17 localhost55479 vazio, rollback; sql.txt | PASS |
 | Auth/tenant/PII | critical_transversal | mesmo acesso de Posições | negativos SQL/rotas/sem contato/DOB/currículo integral | PASS |
 | Score/Perfil/fontes | plausible_indirect | apenas referências/leitura | SQL snapshot78 inalterado;96Node +6browser estável | PASS |
@@ -19626,12 +19626,14 @@ Nenhuma mudança material de comportamento proposta. Comparação visual desktop
 
 - SQL local transacional com fixtures sintéticas, rollback e 44assertivas/negativos: PASS.
 - Node dirigido:105/105 PASS (96 de matching/loading/versão/acompanhamento +9 de exclusão definitiva) (score, estabilidade/orquestração, Posições, revisão, loading, versão, filtros/fuso).
-- Tooling de rotas/feedback:7/7 PASS.
+- Tooling de rotas/feedback:7/7 PASS; avisos com recuperação contextual:3/3 PASS; release tooling:19/19 PASS.
 - Browser Score:6/6cenários PASS,1280/390, sem chamadas externas/erros. Nova evidência em regression-stable-score; evidências históricas originais preservadas.
 - Browser Pessoa:15/15cenários PASS,2048/1024/390/1448, incluindo falhas/rascunho/member/recruiter; regression-person.
 - Tipos web e build raiz: PASS. Build web final: PASS, com avisos de chunk/import dinâmico conhecidos.
-- Browser novo:23/23 checks PASS, mouse/teclado/escape/falha/conflito/entrevista/decisão/rascunho/filtros/descoberta/mobile/sem acesso. Sem chamadas externas ou IA.
+- Browser novo:25/25 checks PASS, mouse/teclado/escape/falha/conflito/entrevista/decisão/rascunho/filtros/descoberta/mobile/sem acesso. Sem chamadas externas ou IA.
 - Lint/foundation/contexto PASS em cópia dos rastreados, excluindo arquivos alheios não rastreados. Plano preliminar: somente migration nova e web, sem Edge/Parser/Synthesis. CI/rollout/smoke em fechamento.
+
+A primeira CI (37822369879) detectou três avisos novos sem ação inline. Corrigidos com retry explícito na inclusão, navegação em acesso negado e foco contextual no formulário de validação, preservando o rascunho. Browser acrescenta provas de foco/retry; CI final deve passar antes de publicar.
 
 ## Git / QA / ambiente
 

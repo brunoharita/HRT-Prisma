@@ -57,7 +57,7 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
     }catch(e){if(scope===generation.current)setError(message(e));return false;}
     finally{if(scope===generation.current){locks.current.delete(key);setPending([...locks.current]);}}
   }
-  if(!reviewerRoles.includes(activeMembership.role))return <PrismaPage><Alert type="error" showIcon title="Você não tem acesso ao acompanhamento desta Posição." /></PrismaPage>;
+  if(!reviewerRoles.includes(activeMembership.role))return <PrismaPage><Alert type="error" showIcon title="Você não tem acesso ao acompanhamento desta Posição." action={<Button onClick={()=>onNavigate("/")}>Ir para Visão geral</Button>} /></PrismaPage>;
   const rows=data?filterFollowUp(data.entries,filters,new Date().toLocaleDateString("en-CA")):[];
   const selected=data?.entries.find(e=>e.personId===personId)??null;
   const disabled=data?.process?.status==="closed";
@@ -144,12 +144,15 @@ function FollowUpDetail({entry,data,vacancy,disabled,saving,error,refreshing,onR
   const [outcome,setOutcome]=useState<string|null>(null),[rationale,setRationale]=useState("");
   const [interviewAt,setInterviewAt]=useState(""),[timezone,setTimezone]=useState(Intl.DateTimeFormat().resolvedOptions().timeZone),[participants,setParticipants]=useState("");
   const [localError,setLocalError]=useState<string|null>(null);
+  const detailsForm=useRef<HTMLFormElement>(null),interviewForm=useRef<HTMLFormElement>(null),decisionForm=useRef<HTMLFormElement>(null);
+  const errorForm=useRef<"details"|"interview"|"decision">("details");
   const initial=useRef(JSON.stringify(entry.details));
   const dirty=JSON.stringify(draft)!==initial.current||Boolean(outcome||rationale||interviewAt||participants);
   const markSaved=useUnsavedChanges(dirty);
   const conflict=entry.revision!==draftRevision;
   async function save(action:string,payload?:object){
     setLocalError(null);
+    errorForm.current=action==="schedule"?"interview":action==="decision"?"decision":"details";
     if(conflict){setLocalError("Os dados mudaram enquanto o detalhe estava aberto. Preserve suas anotações e carregue o estado atual antes de salvar.");return;}
     if(await onMutate(action,payload)){
       if(action==="details"){initial.current=JSON.stringify(draft);}
@@ -163,7 +166,7 @@ function FollowUpDetail({entry,data,vacancy,disabled,saving,error,refreshing,onR
   return <Drawer open className="pf-drawer" size="large" title={entry.fullName} onClose={close} maskClosable={false}>
     <p>{entry.title||"Título não informado"}{entry.age!==null?` · ${entry.age} anos`:""}</p><Space wrap><Tag>{followUpStages[entry.stage]}</Tag><Button onClick={()=>onNavigate(`/profiles/${entry.personId}/profile`)}>Abrir Perfil e fontes</Button></Space>
     {error?<Alert type="error" showIcon title={error} action={<Button loading={refreshing} onClick={onRefresh}>Atualizar dados</Button>} />:null}
-    {localError?<Alert type="error" showIcon title={localError} />:null}
+    {localError?<Alert type="error" showIcon title={localError} action={<Button onClick={()=>{const form=({details:detailsForm,interview:interviewForm,decision:decisionForm})[errorForm.current].current;form?.scrollIntoView({block:"center"});form?.querySelector<HTMLElement>("input:not([disabled]),textarea:not([disabled]),button:not([disabled])")?.focus();}}>Revisar campos</Button>} />:null}
     {conflict?<Alert showIcon type="warning" title="Há uma versão mais recente deste acompanhamento" description="Seu rascunho foi preservado. Ao carregar o estado atual, as alterações locais serão substituídas." action={<Button onClick={()=>Modal.confirm({title:"Substituir o rascunho pelos dados atuais?",okText:"Carregar estado atual",cancelText:"Manter rascunho",onOk:()=>{setDraft(structuredClone(entry.details));initial.current=JSON.stringify(entry.details);setDraftRevision(entry.revision);setOutcome(null);setRationale("");setInterviewAt("");setParticipants("");markSaved();}})}>Carregar estado atual</Button>} />:null}
     <PrismaCard title="Score, cobertura e versões"><div className="pf-detail-score"><span>Score Prisma</span><strong>{entry.score??"Indisponível"}</strong><span>{scoreNotice(entry)}</span></div>
       {match?.score?<><p>Cobertura das evidências: {match.score.coveragePercent}% · referência {match.score.referenceDate}</p><p>Score consultado: Perfil v{match.score.profileVersionNumber} · Definição v{match.score.positionVersionNumber}</p>
@@ -173,7 +176,7 @@ function FollowUpDetail({entry,data,vacancy,disabled,saving,error,refreshing,onR
       {(entry.sourceProfileId!==entry.profileId||entry.sourcePositionId!==vacancy?.versionId)?<p>As versões atuais diferem das consultadas na inclusão. As referências anteriores foram preservadas no acompanhamento.</p>:null}
       <details><summary>Referências preservadas na inclusão</summary><p>Perfil: {entry.sourceProfileId??"Indisponível"}</p><p>Definição: {entry.sourcePositionId??"Indisponível"}</p></details>
     </PrismaCard>
-    <PrismaCard title="Próximos passos"><form onSubmit={e=>{e.preventDefault();void save("details",{nextAction:draft.nextAction??"",assignee:draft.assignee||null,dueDate:draft.dueDate||null,notes:draft.notes??""});}}>
+    <PrismaCard title="Próximos passos"><form ref={detailsForm} onSubmit={e=>{e.preventDefault();void save("details",{nextAction:draft.nextAction??"",assignee:draft.assignee||null,dueDate:draft.dueDate||null,notes:draft.notes??""});}}>
       <label>Próxima ação<Input maxLength={1000} disabled={disabled} value={draft.nextAction??""} onChange={e=>setDraft({...draft,nextAction:e.target.value})} /></label>
       <label>Responsável<Select allowClear aria-label="Responsável pelo acompanhamento" disabled={disabled} value={draft.assignee??null} onChange={value=>setDraft({...draft,assignee:value??null})} options={data.operators.map(o=>({value:o.id,label:o.name}))} placeholder="Sem responsável" /></label>
       <label>Prazo<Input type="date" disabled={disabled} value={draft.dueDate??""} onChange={e=>setDraft({...draft,dueDate:e.target.value||null})} /></label>
@@ -181,7 +184,7 @@ function FollowUpDetail({entry,data,vacancy,disabled,saving,error,refreshing,onR
       <Button htmlType="submit" type="primary" loading={saving} disabled={disabled||conflict}>Salvar acompanhamento</Button>
     </form></PrismaCard>
     <PrismaCard title="Entrevista opcional">{entry.details.interview?<p>{entry.details.interview.status==="scheduled"?"Agendada":"Cancelada"} · {new Date(entry.details.interview.at).toLocaleString("pt-BR",{timeZone:entry.details.interview.timezone})} · {entry.details.interview.timezone}<br />Participantes: {entry.details.interview.participants}</p>:<p>Nenhuma entrevista agendada.</p>}
-      <form onSubmit={e=>{e.preventDefault();if(!interviewAt||!participants.trim()){setLocalError("Informe data, hora, fuso e participantes.");return;}try{void save("schedule",{at:interviewInstant(interviewAt,timezone),timezone,participants});}catch(error){setLocalError(message(error));}}}>
+      <form ref={interviewForm} onSubmit={e=>{e.preventDefault();errorForm.current="interview";if(!interviewAt||!participants.trim()){setLocalError("Informe data, hora, fuso e participantes.");return;}try{void save("schedule",{at:interviewInstant(interviewAt,timezone),timezone,participants});}catch(error){setLocalError(message(error));}}}>
         <label>Data e hora<Input type="datetime-local" aria-label="Data e hora da entrevista" value={interviewAt} disabled={disabled} onChange={e=>setInterviewAt(e.target.value)} /></label>
         <label>Fuso horário<Input value={timezone} disabled={disabled} onChange={e=>setTimezone(e.target.value)} /></label>
         <label>Participantes<Input value={participants} maxLength={2000} disabled={disabled} onChange={e=>setParticipants(e.target.value)} /></label>
@@ -189,7 +192,7 @@ function FollowUpDetail({entry,data,vacancy,disabled,saving,error,refreshing,onR
       </form><p className="pf-help">O registro não envia convites ou mensagens.</p>
     </PrismaCard>
     <PrismaCard title="Decisão neste processo">{entry.details.decision?<p>Decisão registrada: <strong>{entry.details.decision.outcome==="proceed"?"Prosseguir":"Não prosseguir neste processo"}</strong><br />Justificativa: {entry.details.decision.rationale}</p>:<p>Aguardando decisão humana.</p>}
-      <form onSubmit={e=>{e.preventDefault();if(!outcome||!rationale.trim()){setLocalError("Escolha a decisão e informe sua justificativa.");return;}void save("decision",{outcome,rationale});}}>
+      <form ref={decisionForm} onSubmit={e=>{e.preventDefault();errorForm.current="decision";if(!outcome||!rationale.trim()){setLocalError("Escolha a decisão e informe sua justificativa.");return;}void save("decision",{outcome,rationale});}}>
         <Radio.Group aria-label="Decisão humana" disabled={disabled} value={outcome} onChange={e=>setOutcome(e.target.value)} options={[{value:"proceed",label:"Prosseguir"},{value:"do_not_proceed",label:"Não prosseguir neste processo"}]} />
         <label>Justificativa obrigatória<Input.TextArea value={rationale} rows={3} maxLength={8000} disabled={disabled} onChange={e=>setRationale(e.target.value)} /></label>
         <Button htmlType="submit" type="primary" disabled={disabled||conflict} loading={saving}>Registrar decisão</Button>
