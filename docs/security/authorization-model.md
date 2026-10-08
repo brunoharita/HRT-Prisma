@@ -1,5 +1,9 @@
 # Modelo de autorização
 
+## Acompanhamento Pessoa–Posição v2.2.0
+
+Papéis existentes de Posições: super_admin ativo autorizado ou owner/admin/recruiter da organização, confirmados no servidor por auth.uid(), platform_users e organization_memberships. Member não recebe acesso. Responsável deve ser operador ativo autorizado da organização; atribuição não concede papel. As três tabelas têm organização, FKs compostas, RLS e nenhum grant direto a anon/authenticated/service_role. Somente RPCs SECURITY DEFINER com search_path vazio e checagem viva. Payload aceita campos da ação, nunca score. Revisões/versões obsoletas são recusadas; histórico obrigatório atômico. Só idade derivada sai do servidor, sem nascimento/contato/currículo integral. Notas não são publicadas no Perfil/Knowledge. Negativos e evidência de ambiente no AoT2.2.0.
+
 ## Estado
 
 Foundation, M2-A, M2-B, M2-C e M5 estão ativos no Prisma-QA. `platform_users`, hierarquia `Grupo -> Empresa`, username, recuperação, gestão de usuários, ingestão, revisão com evidência espacial e Storage privado são aplicados no boundary correspondente e negam acesso quando sessão, status, papel ou tenant não são confirmados.

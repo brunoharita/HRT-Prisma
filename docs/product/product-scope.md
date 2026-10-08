@@ -31,8 +31,11 @@
 
 ## Fora de escopo atual
 
-ATS completo, upload em lote, DOC/DOCX, merge genérico de Pessoas, entrevistas, calendário, onboarding, folha, performance management, LMS, assessment psicológico, inferência de personalidade, análise facial, análise de voz, ranking eliminatório, senioridade automática, proctoring invasivo, microserviços, data lake, feature store, billing completo e integrações extensivas.
+ATS completo, upload em lote, DOC/DOCX, merge genérico de Pessoas, calendário externo, onboarding, folha, performance management, LMS, assessment psicológico, inferência de personalidade, análise facial, análise de voz, ranking eliminatório, senioridade automática, proctoring invasivo, microserviços, data lake, feature store, billing completo e integrações extensivas.
 
 ## Regra de expansão
 
 Uma nova capacidade só entra quando responder a uma decisão ou ação operacional clara, possuir contrato, owner, status, segurança, avaliação e critério de aceite. Estrutura futura não deve ser descrita como comportamento ativo.
+
+
+Acompanhamento interno2.2.0 inclui Lista/Kanban por Pessoa/Posição, entrevistas opcionais e decisões explícitas com histórico. Não implica ATS completo, convites ou contratação automática. Contrato/limites: `docs/product/vacancy-intelligence.md` e acordo2.2.0.

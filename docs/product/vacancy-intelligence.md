@@ -64,8 +64,24 @@ A ordenação vigente é determinística: grupo de trajetória, Prisma Score dec
 
 ## Limites do piloto
 
-- sem candidatura, pipeline, entrevista, proposta, contratação, página pública ou integração externa;
+- sem candidatura pública, proposta, contratação automática, página pública ou integração externa;
+- acompanhamento interno por Pessoa/Posição, entrevistas e decisões explícitas seguem o contrato2.2.0 abaixo;
 - sem publicação automática na Knowledge;
 - sem provedor externo para estruturar descrições; Web Search existe somente na pergunta contextual e não altera a definição;
 - sem avaliação automática M5.1;
 - sem decisão de contratação.
+
+
+## Acompanhamento Pessoa–Posição v2.2.0
+
+A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar à avaliação` é uma ação humana independente: inicia `Avaliação 01` na primeira inclusão e reutiliza a Pessoa publicada. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições.
+
+A aba Acompanhamento alterna Lista/Kanban do mesmo conjunto. Lista oferece etapa, próxima ação, responsável e prazo; busca nome/ação, filtros etapa/responsável/prazo inclusive ausentes e ordenação nome/prazo. Indicadores consideram o processo inteiro, com contagem filtrada separada. Kanban agrupa aguardando avaliação, em avaliação, entrevistas e decisão. Concluídos permanece consultável.
+
+Cartões exibem nome completo, título publicado, idade autorizada quando disponível e numeral azul do Score Prisma, sem denominador ou porcentagem. Não há idade inventada, corte nem faixa de mérito. Score indisponível/provisório mantém seu estado; score/cobertura, evidências e versões são consultáveis no detalhe. Arraste pela alça com placeholder/realce/Escape; Mover etapa atende teclado e mobile. Mobile usa uma coluna selecionada e detalhe de tela completa.
+
+Detalhe reúne anotações internas/perguntas, ação/responsável/prazo, entrevista opcional, decisão e histórico autor/data. Agendar/reagendar/cancelar são explícitos, com data/hora/fuso/participantes e sem envio de convite. Decisão começa sem escolha, exige justificativa e vale apenas neste processo. Mover para Entrevistas ou Decisão não agenda nem decide. Concluir sem decisão difere de não prosseguir. Encerrar/reabrir processo preserva etapas e decisões individuais. Ocupação, Perfil e outras Pessoas não são modificados.
+
+Essas operações só leem o resultado persistido, sem recalcular score. Novas versões são sinalizadas; descoberta e recálculo autorizado continuam seguindo a estabilidade vigente. Notas e decisões operacionais não são evidência profissional nem curadoria Knowledge. Acesso reutiliza os papéis existentes de Posições, validado no servidor: super_admin autorizado, owner/admin/recruiter da organização. Atribuição não concede acesso; member não é ampliado. Não existem automações de candidatura/contratação, mensagens, novas fontes ou nova IA.
+
+Contrato aprovado: `docs/qa/agreement-position-follow-up-v220.md`1.0.0. Implementação/aceite/limites de ambiente: `docs/qa/aot-position-follow-up-v220.md`. ADR-079 registra persistência e interação.

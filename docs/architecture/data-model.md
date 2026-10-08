@@ -1,5 +1,9 @@
 # Modelo de dados
 
+## Acompanhamento Pessoa–Posição v2.2.0
+
+`position_evaluation_processes`: identidade/estado/revisão de um processo por organização/Posição. `position_evaluation_entries`: Pessoa existente, etapa/revisão, referências originais de Perfil/definição e dados operacionais validados por RPC (ação/responsável/prazo/notas/entrevista/decisão). `position_evaluation_history`: autor/data/antes/depois transacionais. FKs compostas impedem tenant cruzado. RLS e revogação de grants diretos restringem às RPCs com autoridade viva. Histórico não é apagável pelo processo; exclusão definitiva autorizada da Pessoa limpa seus dados por cascade. Snapshots profissionais são somente lidos. Migration20261008120000, ADR-079, contrato1.0.0 e AoT2.2.0.
+
 ## Resultados estáveis de matching v2.1.4
 
 `matching_score_states` mantém ponte tenant/Pessoa/Posição para uma avaliação imutável em `match_evaluations`, hashes das dependências concretas, última tentativa e lease. Não contém currículo. A tabela tem RLS e DML/leitura diretos revogados, inclusive ao serviço; RPCs de serviço autenticam/revalidam ator, fontes, identidade, versões e lease antes do commit. `stableMatch` contém projeção sem identidade/currículo integral e `stableAudit` registra predecessor, autor, motivo, componentes alterados e score anterior/novo; criado em histórico existente, nunca atualizado. Exclusão definitiva autorizada de Pessoa continua sujeita ao contrato próprio, não é uma operação de recálculo. Migration `20261007150000_stable_matching_scores.sql`, ADR-078 e AoT específico distinguem código de rollout.

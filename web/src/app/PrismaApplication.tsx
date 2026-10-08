@@ -1,3 +1,4 @@
+import { PositionFollowUpPage } from "../pages/PositionFollowUpPage";
 import { useEffect, useState, type ReactNode } from "react";
 import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import {
@@ -97,7 +98,9 @@ interface AppRoute {
   participantToken?: string;
   selfDataToken?: string;
   vacancyId?: string;
-  vacancyView?: "list" | "create" | "assist" | "detail" | "edit" | "people" | "compare";
+  vacancyView?: "list" | "create" | "assist" | "detail" | "edit" | "people" | "compare" | "follow-up";
+  vacancyFollowUpPersonId?: string;
+  vacancyHistory?: boolean;
   vacancyComparePersonIds?: [string, string];
 }
 
@@ -468,9 +471,10 @@ function renderRouteContent(
     if (route.vacancyView === "create") return <VacancyEditorPage activeMembership={activeMembership} onNavigate={onNavigate} />;
     if (route.vacancyView === "assist") return <VacancyAssistPage activeMembership={activeMembership} onNavigate={onNavigate} />;
     if (route.vacancyView === "edit" && route.vacancyId) return <VacancyEditorPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
+    if (route.vacancyView === "follow-up" && route.vacancyId) return <PositionFollowUpPage key={route.vacancyId} activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} {...(route.vacancyFollowUpPersonId ? { personId: route.vacancyFollowUpPersonId } : {})} />;
     if (route.vacancyView === "people" && route.vacancyId) return <VacancyPeoplePage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
     if (route.vacancyView === "compare" && route.vacancyId && route.vacancyComparePersonIds) return <VacancyComparePage activeMembership={activeMembership} onNavigate={onNavigate} personIds={route.vacancyComparePersonIds} vacancyId={route.vacancyId} />;
-    if (route.vacancyId) return <VacancyDetailPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
+    if (route.vacancyId) return <VacancyDetailPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} initialTab={route.vacancyHistory ? "history" : "overview"} />;
     return <VacanciesPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
   if (route.path === "/organizations") {
@@ -617,6 +621,10 @@ function findRoute(pathname: string): AppRoute {
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };
   if (normalized === "/vacancies/new") return { path: "/vacancies", vacancyView: "create", rule: reviewerRule };
   if (normalized === "/vacancies/assist") return { path: "/vacancies", vacancyView: "assist", rule: reviewerRule };
+  const followUpMatch = /^\/vacancies\/([^/]+)\/follow-up(?:\/([^/]+))?$/.exec(normalized);
+  if (followUpMatch?.[1]) return { path: "/vacancies", vacancyId: followUpMatch[1], vacancyView: "follow-up", ...(followUpMatch[2] ? { vacancyFollowUpPersonId: followUpMatch[2] } : {}), rule: reviewerRule };
+  const vacancyHistoryMatch = /^\/vacancies\/([^/]+)\/history$/.exec(normalized);
+  if (vacancyHistoryMatch?.[1]) return { path: "/vacancies", vacancyId: vacancyHistoryMatch[1], vacancyView: "detail", vacancyHistory: true, rule: reviewerRule };
   const vacancyCompareMatch = /^\/vacancies\/([^/]+)\/compare\/([^/]+)\/([^/]+)$/.exec(normalized);
   if (vacancyCompareMatch?.[1] && vacancyCompareMatch[2] && vacancyCompareMatch[3]) return { path: "/vacancies", vacancyId: vacancyCompareMatch[1], vacancyView: "compare", vacancyComparePersonIds: [vacancyCompareMatch[2], vacancyCompareMatch[3]], rule: reviewerRule };
   const vacancyPeopleMatch = /^\/vacancies\/([^/]+)\/people$/.exec(normalized);

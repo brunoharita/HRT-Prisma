@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.49
-last_verified: 2026-10-07
+version: 2.52.0
+last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Acompanhamento Pessoa–Posição — v2.2.0
+
+Implementação local autorizada em08/10/2026: inclusão humana na descoberta, Lista/Kanban por Posição, quatro colunas, arraste/teclado/mobile, cartões nome/título/idade disponível/Score numeral sem denominador. Detalhe com notas internas, próximos passos, entrevistas opcionais explícitas, decisão justificada sem preseleção e histórico autor/data. Processos/etapas independentes de ocupação e matching. RPCs transacionais com tenant/papéis existentes e revisão otimista; somente leitura dos snapshots estáveis, sem nova IA. Acordo1.0.0, execução, ADR-079 e AoT `docs/qa/aot-position-follow-up-v220.md`. Publicação e evidências finais ainda pendentes nesta revisão local; não inferir ativação remota.
 
 ## Revisão extensa opcional — v2.1.7
 

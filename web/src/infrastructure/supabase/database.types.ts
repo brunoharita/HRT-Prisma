@@ -1294,6 +1294,14 @@ export interface Database {
       }
     Views: Record<string, never>;
     Functions: {
+      get_position_follow_up: {
+        Args: { p_organization_id: string; p_vacancy_id?: string | null; p_person_id?: string | null };
+        Returns: Json;
+      };
+      mutate_position_follow_up: {
+        Args: { p_organization_id: string; p_vacancy_id: string; p_action: string; p_person_id?: string | null; p_expected_revision?: number | null; p_payload?: Json };
+        Returns: Json;
+      };
       cancel_vacancy: {
         Args: { p_organization_id: string; p_vacancy_id: string; p_reason: string };
         Returns: Array<{ vacancy_id: string; status: string }>;

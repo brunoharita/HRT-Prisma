@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 385
-source_manifest_sha256: 22ed933e2878b619f88912cb51cc0491b1b509b6520560dff61f13cd1ec8a996
+documentation_source_count: 389
+source_manifest_sha256: abbdc9ad2386bf2ee39dee3c297f9a82e8c07c22c42130d3c45687bf42aedc05
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.51.49
-last_verified: 2026-10-07
+version: 2.52.0
+last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Acompanhamento Pessoa–Posição — v2.2.0
+
+Implementação local autorizada em08/10/2026: inclusão humana na descoberta, Lista/Kanban por Posição, quatro colunas, arraste/teclado/mobile, cartões nome/título/idade disponível/Score numeral sem denominador. Detalhe com notas internas, próximos passos, entrevistas opcionais explícitas, decisão justificada sem preseleção e histórico autor/data. Processos/etapas independentes de ocupação e matching. RPCs transacionais com tenant/papéis existentes e revisão otimista; somente leitura dos snapshots estáveis, sem nova IA. Acordo1.0.0, execução, ADR-079 e AoT `docs/qa/aot-position-follow-up-v220.md`. Publicação e evidências finais ainda pendentes nesta revisão local; não inferir ativação remota.
 
 ## Revisão extensa opcional — v2.1.7
 
@@ -4840,6 +4844,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+`position-follow-up-1.0.0` (v2.2.0): processo/entrada/histórico por organização e Posição, independente do resultado profissional. Duas RPCs autenticadas, campos operacionais validados, revisão otimista, inclusão vinculada às versões consultadas e histórico atômico. Score vem exclusivamente do snapshot estável; notas/decisões/entrevistas não recalculam. ADR-079, acordo1.0.0 e AoT2.2.0 especificam autoridade/UX/limites; contratos de matching preservados.
+
 Delta operacional de 03/10/2026: ADR-075 e `parser-ia-kvm2-1.0.0` hospedam o Parser privado na KVM2; os contratos de Parser, transporte e readiness preservam versões. Referências a PC/túnel abaixo são históricas do piloto. Estado efetivo no AoT `docs/qa/aot-parser-ia-kvm2.md`.
 
 M8.2 em validação: a estrutura `competency-taxonomy-2.0.0` permanece; `knowledge_competency_classifications.method` admite `ai_assisted` com proveniência obrigatória de fonte, versão, classificador e razão. O backfill ESCO/O*NET acrescenta classificação global a identidades Knowledge já aprovadas, sem novo contrato Pessoa × conceito ou alteração da projeção `person-professional-evidence-4.0.0`. Classificação humana posterior continua versionada e prevalece. Agreement M8.2 v1.0.0, ADR-071 e AoT M8.2 são os owners.
@@ -4960,6 +4966,10 @@ O M5.1B autoriza somente execução sintética local/QA pela fronteira tokenizad
 ## Source: `docs/architecture/data-model.md`
 
 # Modelo de dados
+
+## Acompanhamento Pessoa–Posição v2.2.0
+
+`position_evaluation_processes`: identidade/estado/revisão de um processo por organização/Posição. `position_evaluation_entries`: Pessoa existente, etapa/revisão, referências originais de Perfil/definição e dados operacionais validados por RPC (ação/responsável/prazo/notas/entrevista/decisão). `position_evaluation_history`: autor/data/antes/depois transacionais. FKs compostas impedem tenant cruzado. RLS e revogação de grants diretos restringem às RPCs com autoridade viva. Histórico não é apagável pelo processo; exclusão definitiva autorizada da Pessoa limpa seus dados por cascade. Snapshots profissionais são somente lidos. Migration20261008120000, ADR-079, contrato1.0.0 e AoT2.2.0.
 
 ## Resultados estáveis de matching v2.1.4
 
@@ -9785,6 +9795,58 @@ Alternativas rejeitadas: estado local/cache de browser não sobrevive a disposit
 
 ---
 
+## Source: `docs/decisions/ADR-079-position-follow-up.md`
+
+# ADR-079: Acompanhamento operacional por Pessoa e Posição
+
+- Status: accepted pelo acordo v2.2.0 1.0.0
+- Date: 2026-10-08
+- Owners: Product Owner / engineering / security
+
+## Context / Problem
+
+A descoberta e comparação organizam evidências profissionais, mas não representam o andamento humano de Pessoas selecionadas. Usar decisões contextuais como etapas misturaria evidência e operação e provocaria recálculo indevido. O PO aprovou Lista/Kanban integrado à Posição, arraste e detalhe seguindo o visual do Perfil.
+
+## Decision
+
+Contrato `position-follow-up-1.0.0`: tabelas tenant-owned para processo único por Posição, entradas únicas por Pessoa/processo e histórico transacional. Processo começa somente por inclusão explícita. RPCs autenticadas leem snapshots estáveis e operam somente essas tabelas. Etapa, notas, entrevista e decisão humana não modificam Perfil, Knowledge, ocupação ou score. Revisões otimistas e bloqueio por Posição serializam encerramento/inclusão/alterações. Inclusão exige as versões de Perfil/Posição consultadas.
+
+Reutilizar shell/tokens, Table, Drawer, Select, loading e navegação existentes. HTML Drag and Drop nativo atende desktop; Mover etapa atende teclado/mobile. Sem dependência nova. Lista e quadro usam uma projeção e filtros compartilhados. Mobile seleciona uma coluna e usa detalhe integral.
+
+## Alternatives / Reasons
+
+- Reutilizar matching/decisão contextual: rejeitado por significado, autoridade e invalidação diferentes.
+- ATS externo: ampliaria transferência de PII, custo e sincronização sem necessidade neste escopo.
+- Biblioteca DnD: útil para futuras necessidades de toque/reordenação; o escopo atual tem quatro destinos e alternativa acessível/mobile, sem reordenação interna. API nativa atende sem dependência.
+
+## Consequences / Risks / Mitigation
+
+Histórico/concurrency exigem persistência nova. Notas podem conter PII e ficam no boundary restrito de Posições; não são publicadas no Perfil. Score indisponível não impede acompanhamento manual nem cria zero. Resultado anterior e referências originais permanecem consultáveis. Leitura não invalida/calcula score; descoberta segue ADR-078.
+
+## Technical / Data / Security and LGPD impact
+
+Migration aditiva20261008120000. PostgreSQL é persistência de produção; JSON é somente fixture determinístico. Chaves compostas impedem relações entre tenants. RLS, grants diretos revogados inclusive service_role; duas RPCs autenticadas com auth.uid(), status ativo e papéis existentes super_admin/owner/admin/recruiter. Assignment não concede acesso. Só idade derivada sai do servidor, sem nascimento/contato/currículo integral. Exclusão definitiva já autorizada de Pessoa limpa entradas/histórico por FK; operações normais não apagam histórico. Encerramento preserva etapas individuais.
+
+## AI / Compatibility
+
+Sem IA nova, alteração de motor/prompt/modelo/fórmula ou custo externo. Snapshots são somente consultados. Contrato desconhecido falha fechado; capacidades/rotas anteriores permanecem.
+
+## Validation / Rollback
+
+SQL sintético local em rollback: permissões/tenant/versões/tipos/conflito/histórico/entrevista/decisão/encerramento e invariância de score/Perfil/Posição. Browser real sintético: arraste/Escape/teclado/falha/conflito/rascunho, Lista/Kanban/mobile e visual. Tipos/build/regressões dirigidas. Backend precede frontend. Rollback web para imagem preservada mantendo tabelas/dados. Não existe QA remoto separado; smoke não grava decisões fictícias.
+
+## Review / Replacement criterion
+
+Reavaliar se o PO aprovar múltiplos processos, arraste por toque, automações, integrações, escala que exija paginação de histórico ou nova autoridade.
+
+## References / Change history
+
+- Acordo `docs/qa/agreement-position-follow-up-v220.md`1.0.0, execução e AoT associados; ADR-078.
+- [HTML Drag and Drop API, MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API) e [Database Functions, Supabase](https://supabase.com/docs/guides/database/functions), consultados08/10/2026.
+- 2026-10-08: decisão consolidada no escopo autorizado; estado de rollout no AoT.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -9863,6 +9925,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 | [ADR-074](ADR-074-m84-temporal-prisma-score.md) | accepted | Duração e recência como dimensões independentes e determinísticas do Prisma Score |
 
 ## Rules
+
+- [ADR-079: Acompanhamento Pessoa–Posição](ADR-079-position-follow-up.md) — accepted; Lista/Kanban, persistência operacional isolada e arraste nativo com alternativa acessível. Rollout no AoT2.2.0.
 
 - [ADR-060: Taxonomia de Posições](ADR-060-position-taxonomy-projection.md) — accepted; projeção sob demanda da Knowledge existente, proveniência por versão, seleção humana de requisitos; prova local, sem rollout remoto.
 
@@ -11549,11 +11613,14 @@ A amostra atual é sintética e representativa. Ela permite comprovar a mecânic
 
 ## Fora de escopo atual
 
-ATS completo, upload em lote, DOC/DOCX, merge genérico de Pessoas, entrevistas, calendário, onboarding, folha, performance management, LMS, assessment psicológico, inferência de personalidade, análise facial, análise de voz, ranking eliminatório, senioridade automática, proctoring invasivo, microserviços, data lake, feature store, billing completo e integrações extensivas.
+ATS completo, upload em lote, DOC/DOCX, merge genérico de Pessoas, calendário externo, onboarding, folha, performance management, LMS, assessment psicológico, inferência de personalidade, análise facial, análise de voz, ranking eliminatório, senioridade automática, proctoring invasivo, microserviços, data lake, feature store, billing completo e integrações extensivas.
 
 ## Regra de expansão
 
 Uma nova capacidade só entra quando responder a uma decisão ou ação operacional clara, possuir contrato, owner, status, segurança, avaliação e critério de aceite. Estrutura futura não deve ser descrita como comportamento ativo.
+
+
+Acompanhamento interno2.2.0 inclui Lista/Kanban por Pessoa/Posição, entrevistas opcionais e decisões explícitas com histórico. Não implica ATS completo, convites ou contratação automática. Contrato/limites: `docs/product/vacancy-intelligence.md` e acordo2.2.0.
 
 ---
 
@@ -11922,11 +11989,27 @@ A ordenação vigente é determinística: grupo de trajetória, Prisma Score dec
 
 ## Limites do piloto
 
-- sem candidatura, pipeline, entrevista, proposta, contratação, página pública ou integração externa;
+- sem candidatura pública, proposta, contratação automática, página pública ou integração externa;
+- acompanhamento interno por Pessoa/Posição, entrevistas e decisões explícitas seguem o contrato2.2.0 abaixo;
 - sem publicação automática na Knowledge;
 - sem provedor externo para estruturar descrições; Web Search existe somente na pergunta contextual e não altera a definição;
 - sem avaliação automática M5.1;
 - sem decisão de contratação.
+
+
+## Acompanhamento Pessoa–Posição v2.2.0
+
+A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar à avaliação` é uma ação humana independente: inicia `Avaliação 01` na primeira inclusão e reutiliza a Pessoa publicada. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições.
+
+A aba Acompanhamento alterna Lista/Kanban do mesmo conjunto. Lista oferece etapa, próxima ação, responsável e prazo; busca nome/ação, filtros etapa/responsável/prazo inclusive ausentes e ordenação nome/prazo. Indicadores consideram o processo inteiro, com contagem filtrada separada. Kanban agrupa aguardando avaliação, em avaliação, entrevistas e decisão. Concluídos permanece consultável.
+
+Cartões exibem nome completo, título publicado, idade autorizada quando disponível e numeral azul do Score Prisma, sem denominador ou porcentagem. Não há idade inventada, corte nem faixa de mérito. Score indisponível/provisório mantém seu estado; score/cobertura, evidências e versões são consultáveis no detalhe. Arraste pela alça com placeholder/realce/Escape; Mover etapa atende teclado e mobile. Mobile usa uma coluna selecionada e detalhe de tela completa.
+
+Detalhe reúne anotações internas/perguntas, ação/responsável/prazo, entrevista opcional, decisão e histórico autor/data. Agendar/reagendar/cancelar são explícitos, com data/hora/fuso/participantes e sem envio de convite. Decisão começa sem escolha, exige justificativa e vale apenas neste processo. Mover para Entrevistas ou Decisão não agenda nem decide. Concluir sem decisão difere de não prosseguir. Encerrar/reabrir processo preserva etapas e decisões individuais. Ocupação, Perfil e outras Pessoas não são modificados.
+
+Essas operações só leem o resultado persistido, sem recalcular score. Novas versões são sinalizadas; descoberta e recálculo autorizado continuam seguindo a estabilidade vigente. Notas e decisões operacionais não são evidência profissional nem curadoria Knowledge. Acesso reutiliza os papéis existentes de Posições, validado no servidor: super_admin autorizado, owner/admin/recruiter da organização. Atribuição não concede acesso; member não é ampliado. Não existem automações de candidatura/contratação, mensagens, novas fontes ou nova IA.
+
+Contrato aprovado: `docs/qa/agreement-position-follow-up-v220.md`1.0.0. Implementação/aceite/limites de ambiente: `docs/qa/aot-position-follow-up-v220.md`. ADR-079 registra persistência e interação.
 
 ---
 
@@ -14908,6 +14991,76 @@ Next white card "Ações rápidas", two simple full-width text-icon rows "Editar
 Important fidelity: rich open narrative and8answers not very abbreviated snippets. Plenty of white space, compact understandable operational side. Larger titles than labels, body ~16px equivalent. The screenshot is ONE coherent screen, no second dashboard, no phone inset or unrelated references. Exact source-control wording "Mostrar fontes". Preserve fundamental input reference topology while refining hierarchy and text clarity.
 
 ```
+
+---
+
+## Source: `docs/qa/agreement-position-follow-up-v220.md`
+
+# Acordo — Acompanhamento Pessoa–Posição v2.2.0
+Versão 1.0.0. Estado: agreed. Product Owner Bruno, 08/10/2026.
+Autoridade: decisão nesta conversa de implementar exatamente a proposta Lista/Kanban e refinamentos de arraste/cartões/score sem denominador, integrar main e publicar v2.2.0.
+Este contrato consolida a conversa e substitui rótulos de proposta e trechos superados dos artefatos ilustrativos.
+
+## DEVE
+- D-01: Posições > Posição > Acompanhamento, alternância Lista/Kanban do mesmo conjunto, preservando busca/filtros/contexto; manter Visão geral, Pessoas encontradas e Histórico. Sem módulo global novo.
+- D-02: inclusão humana explícita na descoberta por Adicionar à avaliação, independente da seleção de comparação; repetir inclusão não duplica. Cadastro da Pessoa reutilizado, identidade do processo e etapas por Pessoa/Posição, sem transformar cadastro de Posição automaticamente em recrutamento. Entradas/retornos na Posição, descoberta e Pessoa.
+- D-03: Lista com Pessoa, etapa, próxima ação, responsável, prazo e detalhe; busca por nome/ação, filtros etapa/responsável/prazo inclusive ausentes, ordem nome/prazo; indicadores factuais com escopo explícito.
+- D-04: Kanban com Aguardando avaliação, Em avaliação, Entrevistas (aguardando/agendada), Decisão (aguardando/registrada), Concluídos consultável. Descoberta não é fase.
+- D-05: arraste pela alça, placeholder/origem e realce de destino, Escape cancela, Mover etapa por botão/teclado, salvamento visível por cartão, falha preserva confirmado e concorrência não sobrescreve. Movimentos comuns sem confirmação redundante.
+- D-06: cartões com nome completo, título publicado, idade apenas de dado disponível/autorizado e Score Prisma destacado em azul, somente numeral sem /100 ou porcentagem. Provisório/indisponível identificado, sem substituir por zero; acesso a score/cobertura. Ação/prazo/responsável ficam no detalhe/Lista, não na frente compacta.
+- D-07: detalhe lateral desktop/tela completa mobile com evidências/fontes/Perfil, versões, próxima ação, responsável, prazo, anotações internas, entrevista, decisão e histórico autor/data; rascunho protegido e retorno contextual.
+- D-08: entrevista opcional; mover para Entrevistas significa aguardando, nunca agendamento inventado. Agendar/reagendar/cancelar explicitamente com data/hora/fuso/participantes e histórico, sem convites/mensagens.
+- D-09: decisão humana separada sem preseleção, justificativa obrigatória, prosseguir/não prosseguir neste processo; mover a Decisão só aguarda. Encerramento sem conclusão distinto de decisão negativa; encerramento/reabertura explícitos por Pessoa/processo, sem mudar ocupação ou outras Pessoas.
+- D-10: acesso/Lista/Kanban/andamento/anotação/entrevista/decisão operacional não recalculam score. Dependências relevantes seguem acordo stable-score-v214 1.0.0, sem política nova. Versões consultadas e alterações posteriores identificadas; anterior e histórico preservados.
+- D-11: autorização servidor e tenant em cada registro. Reutilizar acesso de Posições: super_admin autorizado existente, owner/admin/recruiter da organização; member não ganha acesso pela funcionalidade. Atribuição de responsável não concede permissão. Leituras minimizadas, sem gravar score do navegador, histórico transacional obrigatório.
+- D-12: estados vazio/filtro/carregamento/erro e concorrência proporcionais; acessibilidade teclado/foco/texto; Lista mobile em cartões, Kanban mobile seletor de fase, detalhe full-screen. Context Pack/documentação/AoT, versão2.2.0, main/origin/produção/smoke/sincronização e rollback.
+
+## PROIBIDO
+- P-01: inclusão/candidatura/interesse/contratação/rejeição automática, corte por score, data/score/idade inventados.
+- P-02: promover notas/decisões de processo a Perfil/Knowledge, duplicar Pessoa, propagar decisão entre tenants/Posições, mudar ocupação.
+- P-03: recalcular por movimento/acesso/relógio, alterar fórmula/prompt/modelo, descartar resultado válido em falha, aceitar pontuação do cliente.
+- P-04: sobrescrever concorrência, apagar histórico, expor PII desnecessária ou ampliar acesso pelo frontend/responsável.
+- P-UX-01: alterar topologia aprovada, remover arraste, reduzir texto/nomes para caber, acrescentar denominador do score, substituir mobile por quadro miniaturizado.
+
+## FORA DE ESCOPO
+- F-01: notificações, mensagens/convites, candidatura pública, integração calendário, contratação automática, nova IA/fonte externa, curadoria real, backfill histórico.
+- F-02: alterações em Parser/Synthesis/Knowledge/fórmula ou redesign global da Pessoa.
+
+## AUTONOMIA
+- A-01: componentes existentes, API nativa HTML Drag and Drop com alternativa acessível/mobile, sem dependência nova; RPCs transacionais/optimistic concurrency, tabelas próprias de acompanhamento, reutilização de snapshots estáveis.
+- A-02: tokens/componentes da comunicação visual v2.1.1, acabamento responsivo, nomes internos, detalhes técnicos/testes; sem mudança dos comportamentos acima.
+- A-03: iniciar processo por primeira inclusão explícita, identificá-lo; encerrado preserva leitura e reabertura explícita. Responsável opcional deve ser operador ativo autorizado da organização. Datas/versões validadas.
+
+## PENDÊNCIAS
+Nenhuma para o escopo aprovado. Matriz reaproveita autorização já existente de Posições; não introduz papel novo.
+
+## ACEITE
+Cada D-01–D-12 exige implementação, teste dirigido e evidência identificada no AoT; prova negativa para P-01–P-04.
+- CA-01/02: navegar descoberta/inclusão/lista/quadro/Pessoa/retorno, seleção comparação independente e inclusão idempotente; mesma Pessoa em duas Posições.
+- CA-03/04: filtros/ordem/contadores, quatro colunas, fases específicas e concluídos; nenhuma descoberta automática no quadro.
+- CA-05/06: browser arraste real/Escape/teclado/falha/conflito, numeral/idade opcional/título/nome íntegros, score intacto.
+- CA-07/08: detalhe/fonte/versão/rascunho; agendar/reagendar/cancelar com validação/histórico e ausência de envio.
+- CA-09/10: decisão sem preseleção, negativos de justificativa/autoridade, encerramento/reabertura sem colaterais, snapshots antes/depois inalterados por operações de processo.
+- CA-11: SQL local sintético RLS/grants/auth/tenant/papel/versão/conflito/rollback atômico, sem produção como alvo de teste.
+- CA-12: tipos/build/testes dirigidos, comparação visual equivalente desktop/mobile, smoke pós-publicação e AoT com limites.
+
+## Mapa de impacto inicial
+Baseline local main 8b34391ca904bcac8f66283cf3b91a95f06a462c, v2.1.7. Rastreados limpos; arquivos alheios não rastreados preservados.
+| Área | Relação | Capacidade protegida / evidência proporcional |
+| --- | --- | --- |
+| Posição/descoberta/acompanhamento | direct | descoberta/comparação atuais; novos UI/fluxos com browser real sintético |
+| Banco/RPCs/histórico | direct | processos/entradas isolados, SQL transacional negativo e concorrência local |
+| Auth/tenant/PII | critical_transversal | papéis existentes e mínimo de idade; negativos/RLS/grants, smoke não destrutivo |
+| Score estável/Perfil/fontes | plausible_indirect | somente leitura/referências, nenhuma mutação no motor; regressão score + SQL snapshot invariance |
+| Pessoa/navigation/visual | plausible_indirect | perfil vigente/ações/72-28 preservados, retorno e smoke dirigido |
+| Parser/Synthesis/Knowledge | no_impact_identified | acompanhamento não toca insumos/serviços; diff/plano e identidade/saúde no deploy |
+| Versão/release/contexto | direct | registry2.2.0, generator/checker/CI/publicação dos destinos classificados |
+
+## Fidelidade visual
+Alvos normativos: docs/qa/references/position-follow-up-v220/kanban.png e drag.png (cópias dos mockups finais sem denominador). Conteúdo fictício é ilustrativo.
+D-UX-01: shell navy, ícone/título destacados, abas locais, três indicadores, toolbar/busca/filtros/Lista-Kanban; quadro quatro colunas, cartões compactos score azul, alça superior, ações inferiores. Lista operacional do mesmo conjunto.
+D-UX-02: painel detalhe lateral; mobile menu recolhido, cartões legíveis, seletor de fase e detalhe de tela completa; estilo aprovado da Pessoa com ícones e superfícies tonais.
+CA-UX: render com mesmos dados sintéticos e viewport equivalente, registro de diferenças técnicas e sem ocultação de conteúdo.
 
 ---
 
@@ -19399,6 +19552,96 @@ O fechamento documental posterior ao runtime atualiza apenas AoT/current-state/o
 ## Conclusão
 
 v2.1.0 implementada, validada e publicada. Todos os D e P aplicáveis PASS nas fronteiras evidenciadas; sem desvio material. Jornada autenticada real permanece NOT TESTED e não é inferida de smoke público. O estado unhealthy experimental preexistente é resíduo alheio ao release, não uma capacidade protegida aprovada neste AoT.
+
+---
+
+## Source: `docs/qa/aot-position-follow-up-v220.md`
+
+# AoT — Acompanhamento Pessoa–Posição v2.2.0
+
+Contrato de referência: `docs/qa/agreement-position-follow-up-v220.md`1.0.0; execução associada. PO Bruno autorizou implementação/main/publicação em08/10/2026. Fechamento ainda em validação local; não inferir rollout deste registro parcial.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste / Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- |
+| D-01 | Contexto Posição, Lista/Kanban | PositionFollowUpPage, rotas/abas | browser-results + routes | PASS | Browser sintético dirigido |
+| D-02 | Inclusão explícita e independente | AddToPositionFollowUp + RPC add | SQL idempotência/duas Posições, browser descoberta | PASS | Browser sintético dirigido |
+| D-03 | Lista/filtros/indicadores | projeção filterFollowUp e Table/mobile | testes Node + browser | PASS | Local sintético |
+| D-04 | Quatro colunas e concluídos | followUpColumns, estados RPC | Node/SQL/browser | PASS | Local sintético |
+| D-05 | Arraste/Escape/alternativa/concorrência | alça nativa, Select, revisão RPC | mouse real/Escape/teclado/falha/conflito | PASS | Browser sintético dirigido |
+| D-06 | Cartão aprovado sem denominador | identidade/título/idade/score azul | browser e visual | PASS | Local sintético |
+| D-07 | Detalhe/fontes/versões/rascunho | Drawer, Profile, score snapshot, guard | browser e regressão Pessoa | PASS | Local sintético |
+| D-08 | Entrevista explícita opcional | RPC schedule/cancel, fuso validado | SQL e interviewInstant Node | PASS | Sintético, nenhum convite |
+| D-09 | Decisão/encerramento/reabertura | RPCs separadas, justificativa | SQL, sem preseleção browser | PASS | Browser sintético dirigido |
+| D-10 | Score independente | read-only matching states/evaluations | SQL invariância +96Node +6browser estável | PASS | Sem IA/Pessoa real |
+| D-11 | Autorização/tenant/PII/audit | RLS/revokes/definer auth.uid + payload/revisões | SQL negativo/rotas | PASS | Remoto ainda pendente |
+| D-12 | Estados/mobile/versionamento/release | skeletons, loading escopado, registry/context | testes dirigidos, publicação pendente | PARTIAL | Ainda não publicado |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| P-01 | Sem decisão/score/idade inventados | arraste não agenda/decide, score salvo/indisponível | sql.txt/browser | PASS |
+| P-02 | Sem contaminação Perfil/ocupação/Knowledge | invariância e independência por Posição | sql.txt + diff | PASS |
+| P-03 | Sem recálculo operacional/client score | payload forged recusado e invariância | SQL + stable regression | PASS |
+| P-04 | Sem sobrescrever/PII/acesso ampliado | SQL auth/tenant/revision/grants/minimização | sql.txt | PASS |
+
+## Mapa de Impacto e Preservação
+
+Baseline main8b34391ca904bcac8f66283cf3b91a95f06a462c, v2.1.7; rastreados inicialmente limpos. Arquivos alheios não rastreados preservados. Mapa inicial no acordo.
+
+| Capacidade / área | Relação | Impacto previsto | Baseline / regressão / evidência | Status |
+| --- | --- | --- | --- | --- |
+| Posição/descoberta/comparação | direct | ação humana independente + aba |105testes Node,6cenários stable browser, routes,23checks browser novo | PASS |
+| Banco/RPC/histórico | direct | tabelas/RPCs novas | PostgreSQL17 localhost55479 vazio, rollback; sql.txt | PASS |
+| Auth/tenant/PII | critical_transversal | mesmo acesso de Posições | negativos SQL/rotas/sem contato/DOB/currículo integral | PASS |
+| Score/Perfil/fontes | plausible_indirect | apenas referências/leitura | SQL snapshot78 inalterado;96Node +6browser estável | PASS |
+| Pessoa/navigation/visual | plausible_indirect | links na rail existente |15cenários browser Pessoa e7tooling, preserva72/28 | PASS |
+| Parser/Synthesis/Knowledge | no_impact_identified | nenhum runtime/dado/prompt alterado | diff/plan a concluir; baseline VPS IDs/imagens/restarts conferidos | PARTIAL |
+| Versão/contexto/release | direct | geração2/movimento2/entrega0 | registry test, publicação/contexto pendentes | PARTIAL |
+
+### Novidade e preservação
+
+Persistência operacional própria; decisões contextuais de matching permanecem distintas. Nova consulta auxiliar minimizada no Perfil, extraída em componente próprio para não importar a página de Posição nem suas dependências. QA remoto separado inexiste: fixtures locais precedem a aplicação aditiva autorizada no remoto único. Produção não é alvo de testes que criem decisões fictícias.
+
+## Fora de escopo preservado
+
+F-01/F-02: nenhuma integração/calendário/mensagem/candidatura pública/backfill/IA/Parser/Synthesis/Knowledge/fórmula/redesign global. Diff/plano e invariância devem confirmar no fechamento.
+
+## Evidência de fidelidade visual
+
+Referências `references/position-follow-up-v220/kanban.png` e `drag.png`. Mesmo conjunto fictício: Rafael64 sem idade; Marina78/32; Joana81/38 entrevista agendada; Pedro76/41 decisão aguardando; Posição Coordenação de Operações v3, Avaliação01 ativa, não ocupada, indicadores4/1/0.
+
+| Referência / viewport | Render | Comparação estrutural | Divergências | Status |
+| --- | --- | --- | --- | --- |
+| Desktop /1448x980 | kanban-desktop.png, drag-desktop.png, list-desktop.png | shell navy, header/abas/indicadores/toolbar/quatrocolunas, cartão compacto, score tonal azul, alça/ações | tokens/shell reais, ícones/textos adaptados; topologia e hierarquia preservadas | PASS |
+| Mobile /390x844 | kanban-mobile.png, detail-mobile.png | coluna selecionada, cartão inteiro, detalhe full-screen | filtros recolhíveis, menu/abas responsivos; conteúdo sem corte/rolagem horizontal | PASS |
+
+## Desvios do contrato / mudanças autorizadas
+
+Nenhuma mudança material de comportamento proposta. Comparação visual desktop/mobile conferida nos renders sintéticos. Fechar processo preserva etapas individuais, conforme D-09; não cria rejeições. Arraste por toque é coberto pela alternativa mobile aprovada, não prometido como interação nativa.
+
+## Validação final
+
+- SQL local transacional com fixtures sintéticas, rollback e 44assertivas/negativos: PASS.
+- Node dirigido:105/105 PASS (96 de matching/loading/versão/acompanhamento +9 de exclusão definitiva) (score, estabilidade/orquestração, Posições, revisão, loading, versão, filtros/fuso).
+- Tooling de rotas/feedback:7/7 PASS.
+- Browser Score:6/6cenários PASS,1280/390, sem chamadas externas/erros. Nova evidência em regression-stable-score; evidências históricas originais preservadas.
+- Browser Pessoa:15/15cenários PASS,2048/1024/390/1448, incluindo falhas/rascunho/member/recruiter; regression-person.
+- Tipos web e build raiz: PASS. Build web final: PASS, com avisos de chunk/import dinâmico conhecidos.
+- Browser novo:23/23 checks PASS, mouse/teclado/escape/falha/conflito/entrevista/decisão/rascunho/filtros/descoberta/mobile/sem acesso. Sem chamadas externas ou IA.
+- Lint/foundation/contexto PASS em cópia dos rastreados, excluindo arquivos alheios não rastreados. Plano preliminar: somente migration nova e web, sem Edge/Parser/Synthesis. CI/rollout/smoke em fechamento.
+
+## Git / QA / ambiente
+
+Branch técnica `codex/v2-m2-position-evaluation-v220`, baseline8b34391. Remote oficial e VPSsrv1038882 /opt/prisma conferidos. Supabaseioldpnqqvobprjiontre ACTIVE_HEALTHY/PG17.6.1.155. Não existe QA remoto separado.
+
+Baseline VPS: web imagem0d6a7664, container6b2f1e20; Parser imagem8682af7d/containered00303a; Synthesis imagem8526717f/container9c0944d4, todos running/0reinícios. Nome prisma-paddle não existe; demais serviços serão identificados proporcionalmente sem inferir falha. Nenhuma alteração publicada ainda.
+
+## Conclusão
+
+PARTIAL: implementação local, validação/rollout em andamento. Não declarar entrega concluída até todos D e P aplicáveis PASS, visual e publicação comprovados. Jornada autenticada real permanece NOT TESTED.
 
 ---
 
@@ -24216,6 +24459,16 @@ Contrato congelado: docs/qa/agreement-person-unified-v210.md versão1.0.0, lido 
 
 ---
 
+## Source: `docs/qa/execution-position-follow-up-v220.md`
+
+# Execução — Acompanhamento Pessoa–Posição v2.2.0
+Referência integral congelada: docs/qa/agreement-position-follow-up-v220.md versão1.0.0. Ler integralmente. Autoridade Bruno 08/10/2026, implementação/main/publicação2.2.0.
+Implementar todos D-01–D-12, D-UX-01/02; preservar P-01–P-04/P-UX-01; F-01/02 excluídos; A-01–A-03 delegados; atender todos CA incluindo visuais/negativos. Nenhuma reinterpretação autorizada.
+Sequência: baseline/contrato/mapa -> implementação local -> negativos SQL e regressão dirigida/browser/visual -> plano committed diff -> commit/push/CI -> banco remoto único necessário -> main/frontend -> smoke/sincronização -> AoT.
+Branch técnica isolada integra main conforme contrato. Não rodar suíte integral local; dispatcher deduplicado e validações afetadas.
+
+---
+
 ## Source: `docs/qa/execution-prisma-context-pack-v2.md`
 
 # Prompt de Execução — Context Pack Prisma 2.0
@@ -26177,6 +26430,10 @@ Movimentos materiais usam o [Contrato de Acordos](agreement-contract-template.md
 ## Source: `docs/security/authorization-model.md`
 
 # Modelo de autorização
+
+## Acompanhamento Pessoa–Posição v2.2.0
+
+Papéis existentes de Posições: super_admin ativo autorizado ou owner/admin/recruiter da organização, confirmados no servidor por auth.uid(), platform_users e organization_memberships. Member não recebe acesso. Responsável deve ser operador ativo autorizado da organização; atribuição não concede papel. As três tabelas têm organização, FKs compostas, RLS e nenhum grant direto a anon/authenticated/service_role. Somente RPCs SECURITY DEFINER com search_path vazio e checagem viva. Payload aceita campos da ação, nunca score. Revisões/versões obsoletas são recusadas; histórico obrigatório atômico. Só idade derivada sai do servidor, sem nascimento/contato/currículo integral. Notas não são publicadas no Perfil/Knowledge. Negativos e evidência de ambiente no AoT2.2.0.
 
 ## Estado
 
