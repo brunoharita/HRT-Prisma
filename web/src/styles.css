@@ -6284,6 +6284,13 @@ textarea {
 .prisma-vacancy-action-group > .ant-space { align-self: end; margin-top: 2px; }
 .prisma-vacancy-action-group .ant-space-item { min-width: 0; }
 .prisma-vacancy-action-group .ant-btn { min-height: 36px; white-space: normal; height: auto; }
+.prisma-position-relation-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; min-width: 0; }
+.prisma-position-relation-actions > div { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.prisma-position-relation-actions .ant-btn { width: 100%; }
+.prisma-position-relation-actions .ant-typography { font-size: 14px; }
+.prisma-position-decision-tag.ant-tag { max-width: 100%; white-space: normal; }
+.prisma-vacancy-compare-page .prisma-match-person > div:last-child { flex: 1; min-width: 0; }
+.prisma-vacancy-action-group .prisma-position-relation-guidance { margin: 4px 0 0; padding-top: 12px; border-top: 1px solid #d5dfed; font-size: 14px; }
 .prisma-vacancy-action-group.is-review > .ant-btn { justify-self: start; margin-top: 2px; color: #5b3900; border-color: #e7b65c; background: #ffd580; font-weight: 700; }
 .prisma-vacancy-action-group.is-review > .ant-btn:hover { color: #4b2c00; border-color: #ce952d; background: #ffcb67; }
 .prisma-vacancy-action-group.is-review .ant-alert { margin-top: 2px; }

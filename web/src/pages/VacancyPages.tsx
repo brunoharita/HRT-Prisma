@@ -735,7 +735,7 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
       <div className="prisma-vacancy-compare-people">{matches.map((match) => <PrismaCard key={match.candidate.personId}><div className="prisma-match-person"><AvatarInitials name={match.candidate.fullName} /><div>
         <Typography.Title level={3}>{match.candidate.fullName}</Typography.Title>
         <Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small>
-        {!match.semanticAssessment || match.semanticAssessment.status === "complete" ? <><Space wrap><MatchRelationTags match={match} />{match.positionDecision === "confirmed" ? <Tag color="green">Relação confirmada</Tag> : match.positionDecision === "dismissed" ? <Tag>Não considerar</Tag> : null}</Space><Typography.Paragraph>{match.areaRelation.explanation}</Typography.Paragraph><Typography.Paragraph>{match.functionAssessment.explanation}</Typography.Paragraph></> : null}
+        {!match.semanticAssessment || match.semanticAssessment.status === "complete" ? <><Space wrap><MatchRelationTags match={match} />{match.positionDecision === "confirmed" ? <Tag className="prisma-position-decision-tag" color="green">Relação com a Posição confirmada por você</Tag> : match.positionDecision === "dismissed" ? <Tag className="prisma-position-decision-tag">Relação com a Posição desconsiderada por você</Tag> : null}</Space><Typography.Paragraph>{match.areaRelation.explanation}</Typography.Paragraph><Typography.Paragraph>{match.functionAssessment.explanation}</Typography.Paragraph></> : null}
         {match.semanticAssessment || match.stableResult ? <MatchingScoreSummary match={match} /> : null}
       </div></div></PrismaCard>)}</div>
       <PrismaCard className="prisma-comparison-table"><Table columns={comparisonColumns(matches)} dataSource={rows} pagination={false} scroll={{ x: 620 }} /></PrismaCard>
@@ -799,8 +799,8 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
         <small><EnvironmentOutlined aria-hidden="true" /> {match.candidate.location || "Localização não informada"}</small>
         <Space className="prisma-position-relation-tags" wrap>
           <MatchRelationTags match={match} />
-          {match.positionDecision === "confirmed" ? <Tag color="green">Relação confirmada por você</Tag>
-            : match.positionDecision === "dismissed" ? <Tag>Não considerar</Tag> : null}
+          {match.positionDecision === "confirmed" ? <Tag className="prisma-position-decision-tag" color="green">Relação com a Posição confirmada por você</Tag>
+            : match.positionDecision === "dismissed" ? <Tag className="prisma-position-decision-tag">Relação com a Posição desconsiderada por você</Tag> : null}
           <DetailedStatusTag match={match} />
         </Space>
       </div>
@@ -814,18 +814,27 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
         <Space wrap>{profileButton}{analysisButton}{followUp}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
       </section>
       {hasReview && vacancy && onReviewed ? <TrajectoryConflictReview canReview={canReview} match={match} onResolved={onReviewed} vacancy={vacancy} /> : null}
-      <section className="prisma-vacancy-action-group is-decision" aria-label="Decisão humana">
-        <strong className="prisma-vacancy-action-title"><UserOutlined aria-hidden="true" /> Decisão humana</strong>
-        <Typography.Text type="secondary">Com base nas evidências, defina o próximo passo.</Typography.Text>
-        <Space wrap>
+      <section className="prisma-vacancy-action-group is-decision" aria-label="Relação da trajetória com a Posição">
+        <strong className="prisma-vacancy-action-title"><UserOutlined aria-hidden="true" /> Relação da trajetória com a Posição</strong>
+        <Typography.Text type="secondary">A experiência profissional desta Pessoa tem relação com o trabalho {vacancy?.title ? `de ${vacancy.title}` : "desta Posição"}? Revise as evidências e registre sua avaliação.</Typography.Text>
+        <div className="prisma-position-relation-actions">
+          <div>
           <Button disabled={(Boolean(match.semanticAssessment) && match.semanticAssessment?.status !== "complete") || match.positionDecision === "confirmed"}
             loading={deciding} onClick={() => onDecision("confirmed")} size="small"
-            type={match.positionDecision === "confirmed" ? "default" : "primary"}>Confirmar relação</Button>
+            type={match.positionDecision === "confirmed" ? "default" : "primary"}>Confirmar relação com a Posição</Button>
+            <Typography.Text type="secondary">Considero essa trajetória relacionada ao trabalho previsto.</Typography.Text>
+          </div>
+          <div>
           <Button disabled={(Boolean(match.semanticAssessment) && match.semanticAssessment?.status !== "complete") || match.positionDecision === "dismissed"}
-            loading={deciding} onClick={() => onDecision("dismissed")} size="small">Não considerar</Button>
-          {onLearn ? <Button disabled={match.positionDecision !== "confirmed" || !match.positionRelation.evidence.length}
-            loading={learning} onClick={onLearn} size="small">Propor relação à Knowledge</Button> : null}
-        </Space>
+            loading={deciding} onClick={() => onDecision("dismissed")} size="small">Desconsiderar esta relação</Button>
+            <Typography.Text type="secondary">Não considero pertinente a associação apresentada neste caso.</Typography.Text>
+          </div>
+          {onLearn ? <div><Button disabled={match.positionDecision !== "confirmed" || !match.positionRelation.evidence.length}
+            loading={learning} onClick={onLearn} size="small">Enviar relação à curadoria</Button>
+            <Typography.Text type="secondary">Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.</Typography.Text>
+          </div> : null}
+        </div>
+        <Typography.Paragraph className="prisma-position-relation-guidance">Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo. Para acompanhá-la no Kanban, use <strong>“Adicionar à avaliação”</strong>.</Typography.Paragraph>
       </section>
     </div>
 

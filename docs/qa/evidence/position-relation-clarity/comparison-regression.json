@@ -1,0 +1,38 @@
+[
+  {
+    "name": "1537: contextual labels also clear in comparison",
+    "pass": true
+  },
+  {
+    "name": "1537: comparison labels readable without overflow",
+    "pass": true
+  },
+  {
+    "name": "1537: comparison relation tags fit viewport and show complete text",
+    "pass": true
+  },
+  {
+    "name": "1537: comparison avatars preserve circular shape",
+    "pass": true
+  },
+  {
+    "name": "390: contextual labels also clear in comparison",
+    "pass": true
+  },
+  {
+    "name": "390: comparison labels readable without overflow",
+    "pass": true
+  },
+  {
+    "name": "390: comparison relation tags fit viewport and show complete text",
+    "pass": true
+  },
+  {
+    "name": "390: comparison avatars preserve circular shape",
+    "pass": true
+  },
+  {
+    "name": "no runtime errors or external calls",
+    "pass": true
+  }
+]

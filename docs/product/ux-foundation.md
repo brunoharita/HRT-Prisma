@@ -18,6 +18,10 @@ A proposta revisada aprovada por Bruno em08/10/2026 adapta a linguagem do Perfil
 
 Pessoas encontradas abre diretamente a descoberta; Acompanhamento conserva Lista/Kanban. Editar e Encontrar pessoas permanecem no cabeçalho, com Avaliar Pessoa atual para posição ocupada; exclusão fica em Mais ações com confirmação, carregamento, cancelamento e tentativa explícita após falha. Ausências são indicadas sem conteúdo fictício; pendências reais de classificação/associação permanecem visíveis. Tablet/celular refluem para uma coluna, preservando navegação por teclado e fontes. Consulta não dispara IA, descoberta, preview ou recálculo. Acordo1.0.0, referência visual retida e prova em `docs/qa/agreement-position-overview-v221.md` e `docs/qa/aot-position-overview-v221.md`.
 
+## Avaliação da relação da trajetória com a Posição
+
+Na descoberta de Pessoas, o bloco explicita a pergunta sobre a experiência profissional e o trabalho da Posição selecionada. Confirmar relação com a Posição, Desconsiderar esta relação e Enviar relação à curadoria têm explicações permanentes, seguidas da orientação de que confirmar não comprova requisitos nem aprova no processo seletivo. Adicionar à avaliação permanece a ação independente para o Kanban. Selos descrevem a relação contextual confirmada/desconsiderada, inclusive na comparação; proposta à Knowledge continua sujeita à curadoria e aos gates atuais. Ajuste de clareza na2.2.1, sem mudança de matching, persistência, autoridade ou cálculo. Acordo `docs/qa/agreement-position-relation-clarity.md` v1.0.0 e AoT correspondente.
+
 ## Organização e jornadas
 
 O menu agrupa Operação (Início, Pessoas, Posições, Verificações), Curadoria (Conhecimento, Banco de Itens) e Administração (Usuários e capacidades administrativas entregues), conforme a autoridade já existente. Páginas sem capacidade utilizável não são anunciadas no menu. Rotas antigas continuam compatíveis: a mudança de linguagem não renomeia URLs, contratos, entidades, tabelas, payloads ou snapshots históricos.

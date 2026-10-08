@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.53.0
+version: 2.54.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Clareza da relação da trajetória com a Posição — correção na2.2.1
+
+Implementação autorizada em08/10/2026: o antigo bloco Decisão humana na descoberta passa a Relação da trajetória com a Posição, pergunta pelo trabalho da Posição selecionada e explica permanentemente confirmar, desconsiderar e enviar à curadoria. Orientação distingue relação, requisitos, aprovação seletiva e inclusão independente no Kanban; selos contextualizados também na comparação. Handlers/gates/loading/refresh existentes preservados, sem mudança de matching, persistência, tenant, IA ou versão. Acordo1.0.0/execução/AoT `docs/qa/agreement-position-relation-clarity.md`, `execution-position-relation-clarity.md`, `aot-position-relation-clarity.md`. Local43testes+5tooling,75browser+9regressão da comparação,tipos/build/contextos/lint/foundation PASS. Publicação pendente; não inferir rollout deste texto. Jornada autenticada real não testada.
 
 ## Detalhes da Posição alinhados ao Perfil — v2.2.1
 

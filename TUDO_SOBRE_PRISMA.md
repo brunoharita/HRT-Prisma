@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 396
-source_manifest_sha256: 0d2e6c00ba7d79d60fd471c29da9eb9abc433df5ac26c5f06a9995bbf6f9e404
+documentation_source_count: 399
+source_manifest_sha256: f6ca36a362cab6759645c94f387fe5c96959def32285e48b0fe037271a3f7f1c
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.53.0
+version: 2.54.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Clareza da relação da trajetória com a Posição — correção na2.2.1
+
+Implementação autorizada em08/10/2026: o antigo bloco Decisão humana na descoberta passa a Relação da trajetória com a Posição, pergunta pelo trabalho da Posição selecionada e explica permanentemente confirmar, desconsiderar e enviar à curadoria. Orientação distingue relação, requisitos, aprovação seletiva e inclusão independente no Kanban; selos contextualizados também na comparação. Handlers/gates/loading/refresh existentes preservados, sem mudança de matching, persistência, tenant, IA ou versão. Acordo1.0.0/execução/AoT `docs/qa/agreement-position-relation-clarity.md`, `execution-position-relation-clarity.md`, `aot-position-relation-clarity.md`. Local43testes+5tooling,75browser+9regressão da comparação,tipos/build/contextos/lint/foundation PASS. Publicação pendente; não inferir rollout deste texto. Jornada autenticada real não testada.
 
 ## Detalhes da Posição alinhados ao Perfil — v2.2.1
 
@@ -11853,6 +11857,10 @@ A proposta revisada aprovada por Bruno em08/10/2026 adapta a linguagem do Perfil
 
 Pessoas encontradas abre diretamente a descoberta; Acompanhamento conserva Lista/Kanban. Editar e Encontrar pessoas permanecem no cabeçalho, com Avaliar Pessoa atual para posição ocupada; exclusão fica em Mais ações com confirmação, carregamento, cancelamento e tentativa explícita após falha. Ausências são indicadas sem conteúdo fictício; pendências reais de classificação/associação permanecem visíveis. Tablet/celular refluem para uma coluna, preservando navegação por teclado e fontes. Consulta não dispara IA, descoberta, preview ou recálculo. Acordo1.0.0, referência visual retida e prova em `docs/qa/agreement-position-overview-v221.md` e `docs/qa/aot-position-overview-v221.md`.
 
+## Avaliação da relação da trajetória com a Posição
+
+Na descoberta de Pessoas, o bloco explicita a pergunta sobre a experiência profissional e o trabalho da Posição selecionada. Confirmar relação com a Posição, Desconsiderar esta relação e Enviar relação à curadoria têm explicações permanentes, seguidas da orientação de que confirmar não comprova requisitos nem aprova no processo seletivo. Adicionar à avaliação permanece a ação independente para o Kanban. Selos descrevem a relação contextual confirmada/desconsiderada, inclusive na comparação; proposta à Knowledge continua sujeita à curadoria e aos gates atuais. Ajuste de clareza na2.2.1, sem mudança de matching, persistência, autoridade ou cálculo. Acordo `docs/qa/agreement-position-relation-clarity.md` v1.0.0 e AoT correspondente.
+
 ## Organização e jornadas
 
 O menu agrupa Operação (Início, Pessoas, Posições, Verificações), Curadoria (Conhecimento, Banco de Itens) e Administração (Usuários e capacidades administrativas entregues), conforme a autoridade já existente. Páginas sem capacidade utilizável não são anunciadas no menu. Rotas antigas continuam compatíveis: a mudança de linguagem não renomeia URLs, contratos, entidades, tabelas, payloads ou snapshots históricos.
@@ -15161,6 +15169,41 @@ CA-01..07: prova por requisito no AoT. Browser: leitura, abas/rotas, drawer/orig
 | Release/contexto/web | direct |2.2.0/runtimead55395; plano somente destinos requeridos e rollback |
 
 Sem decisão arquitetural nova: reutilização de Ant Design Drawer/Dropdown/Modal e componentes Prisma já aprovados. Sem ADR novo.
+
+---
+
+## Source: `docs/qa/agreement-position-relation-clarity.md`
+
+# Acordo — Clareza da avaliação de relação com a Posição
+
+v1.0.0, agreed/frozen, 08/10/2026. Autoridade: proposta textual aprovada por Bruno com “pode implementar isso”. Baseline main `3b0fcbafe5f0e18bc9050f86a826ca9e792309d9`, produto2.2.1. Classe B, apresentação delimitada, publicação autorizada pelo AGENTS.md seção7. Decisão de versão: manter2.2.1, pois explicita o significado existente sem modificar contratos ou funcionalidades.
+
+- D-01: substituir “Decisão humana” por “Relação da trajetória com a Posição”; perguntar “A experiência profissional desta Pessoa tem relação com o trabalho de {título da Posição}? Revise as evidências e registre sua avaliação.” Título real, fallback “desta Posição” quando indisponível.
+- D-02: botões “Confirmar relação com a Posição”, “Desconsiderar esta relação”, “Enviar relação à curadoria”, com explicações visíveis: “Considero essa trajetória relacionada ao trabalho previsto.”; “Não considero pertinente a associação apresentada neste caso.”; “Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.” Selos de resultado indicam explicitamente relação confirmada/desconsiderada com a Posição, também na comparação.
+- D-03: abaixo das ações, orientação permanente: “Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo. Para acompanhá-la no Kanban, use ‘Adicionar à avaliação’.”
+- D-UX-01: preservar Consultar à esquerda e relação à direita, com eventual revisão de divergências na posição existente; título, pergunta, ações/explicações e orientação nessa ordem. Celular empilha sem corte/overflow, texto essencial legível. Screenshot destacado é contraexemplo de clareza e referência de contexto, sem novo mockup normativo.
+- D-04: preservar handlers, argumentos confirmed/dismissed, gates de evidência/confirmação/pendência, loading/erro, refresh explícito existente e inclusão no Kanban independente. Publicar somente web e comprovar SHA/versão/assets/rollback/sincronização.
+- P-01: não transformar decisão contextual em aprovação/rejeição seletiva, confirmação de requisitos, relação global automática ou promessa de score invariável.
+- P-02/P-UX-01: não alterar matching, serviços, persistência, tenant/papéis, dados reais, IA, dependências ou demais telas; sem nova confirmação/preseleção e sem esconder explicação essencial em tooltip.
+- F-01: redesign da descoberta, mudanças de score/denominador, Kanban, taxonomy/curadoria e incremento de versão.
+- A-01/A-UX-01: reutilizar componentes Ant Design, classes/fixtures e ações atuais; engenharia decide quebra de linhas, espaçamento e testes proporcionais.
+- Q-01: nenhuma pendência material.
+
+## Aceite e mapa inicial
+
+CA-01/02/03: render com título dinâmico, três ações/explicações e orientação permanente; nenhum rótulo genérico de descarte. CA-UX-01: comparação antes/depois mesmos dados/viewport1537 e390, limites320/768, estados confirmada/desconsiderada e título longo. CA-04: teste funcional das chamadas, gates, loading/erro/retry, navegação Kanban independente; tipos/build/checks direcionados, publicação web/smoke e limitação de jornada real.
+
+| Área | Relação | Baseline / proteção / evidência prevista |
+| --- | --- | --- |
+| CandidateMatchCard e selos na comparação | direct | SHA baseline; render desktop/mobile, textos e decisões sintéticas |
+| CSS compartilhado de ações | plausible_indirect | seletor restrito ao grupo de relação; Consultar/revisão sem deslocamento arbitrário, responsivo |
+| Confirmação/descarte/proposta | direct | handlers/payloads/gates existentes; mocks de serviço, atraso/falha/retry, sem mutação produtiva |
+| Inclusão/navegação Kanban e comparação | plausible_indirect | ações separadas; teste de inclusão e navegação, seleção permanece independente |
+| Score/requisitos/backend/tenant/IA | no_impact_identified | apenas apresentação, serviços intocados; diff e plano de destinos, testes atuais de vaga |
+| Perfil/overview da Posição | no_impact_identified | nenhuma classe nova alcança essas superfícies; tipos/build e revisão seletor |
+| Release/contexto | direct | registry2.2.1 inalterado, web/smoke/rollback/documentação |
+
+Não há nova jornada transversal crítica: não são alterados auth, navegação global ou serviços. Limite: fixture sintética não prova persistência autenticada real, nem qualidade de matching.
 
 ---
 
@@ -19898,6 +19941,69 @@ Web novo container22fe0573, imagem5300ddffa5b81c6faa535ee4fa6bb4d0a5a944f427d059
 Fechamento documental/evidências/contextos em main, com push/pullff da VPS e sem novo build. Registros locais/origin/main/VPS sincronizados na verificação final; runtime conserva SHA funcional acima. Arquivos alheios não rastreados e worktrees preexistentes preservados. Avisos de manutenção automática de worktrees durante o dispatcher não impediram integração; nenhum worktree removido pelo movimento. Servidores temporários de testes encerrados.
 
 Todos os D-* e P-* aplicáveis PASS, F-01 preservado; sem desvio material. Entrega funcional/visual comprovada com componentes reais e dados sintéticos. Jornada autenticada real permanece NOT TESTED e não é inferida do smoke público.
+
+---
+
+## Source: `docs/qa/aot-position-relation-clarity.md`
+
+# AoT — Clareza da avaliação de relação com a Posição
+
+Contrato `docs/qa/agreement-position-relation-clarity.md` v1.0.0, execução correspondente, autoridade explícita em08/10/2026. Baseline `3b0fcbafe5f0e18bc9050f86a826ca9e792309d9`, produto2.2.1. Evidência em `docs/qa/evidence/position-relation-clarity/`.
+
+## Matriz de Acordos
+
+| ID | Acordo / implementação | Teste / evidência | Status | Ambiente / limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Título/pergunta dinâmica em CandidateMatchCard | browser-results.json; desktop/mobile/título longo | PASS | sintético |
+| D-02 | Três ações com descrições visíveis e selos contextuais no card/comparação | browser-results.json; vacancyIntelligence/own-diff | PASS | sintético; comparação renderizada |
+| D-03 | Orientação permanente abaixo das ações | renders e browser-results.json | PASS | sintético |
+| D-UX-01 | Consultar/revisão/relação preservados e textos responsivos | before/after1537/390, limites768/320, review | PASS | sintético |
+| D-04 | Handlers/gates/loading/erros/refresh/inclusão independente; web e versão2.2.1 | browser/43dirigidos+5tooling; publicação pendente | PARTIAL | local PASS; produção pendente |
+
+## Proibições verificadas
+
+| ID | Guardrail | Prova | Status |
+| --- | --- | --- | --- |
+| P-01 | Sem aprovação seletiva, confirmação de requisitos, regra global ou promessa de score | texto/handlers/diff/testes atuais | PASS |
+| P-02/P-UX-01 | Sem mudanças de serviços/dados/IA/permissões e sem explicação apenas em tooltip | diff/plano/browser sem chamada externa | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Área / capacidade | Relação | Baseline / regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Card e selos da comparação | direct | baseline SHA; render/textos/estados/botões reais, comparação renderizada | PASS |
+| CSS de ações compartilhado | plausible_indirect | apenas classes novas de relação; Consultar e review1537/768/390/320 | PASS |
+| Decisão/proposta | direct | mocks dos métodos atuais, confirmed/dismissed, gates, loading/falha/retry | PASS |
+| Inclusão Kanban/comparação | plausible_indirect | add RPC sintética separada/navegação/zero seleção implícita | PASS |
+| Matching/requisitos/backend/tenant/IA | no_impact_identified | serviços/contratos intocados,43testes atuais/plano | PASS |
+| Perfil/overview | no_impact_identified | novos seletores só no grupo de relação; tipos/build | PASS |
+| Release/contexto | direct | registry2.2.1; contexto PASS; CI/smoke/sincronização pendentes | PARTIAL |
+
+Novidade: clareza textual e significado permanente das ações. Preservação: mesmas decisões e serviços. Selos repetidos identificados na comparação, com quebra de texto delimitada necessária: essa apresentação passa a direct; sem mudança funcional de comparação. Demais relações preservadas; sem jornada transversal crítica alterada. Baseline sintético usa mesmos dados/estado/viewport antes/depois; não comprova qualidade de matching ou persistência autenticada real.
+
+## Fora de escopo preservado
+
+F-01: sem redesign amplo, mudança de score/denominador, Kanban, curadoria, dados ou versão. PASS por diff dirigido; registry inalterado.
+
+## Evidência de fidelidade visual
+
+Screenshot anexado é contraexemplo de clareza; não há novo mockup normativo. Comparação equivalente: before/after1537 e390, mesmas pessoas/Posição sintéticas, card e ações existentes. Ordem de título/pergunta/ações+descrições/orientação prevista; review e estados separados. Descrições tornam o bloco mais alto, consequência direta autorizada da explicação permanente. Inspeção visual antes/depois PASS: mesmas superfícies, agrupamentos, cores, hierarquia e ordem; apenas textos e altura necessária mudam. Comparação390 inspecionada após corrigir quebra do selo e preservar dimensão circular do avatar; comparison-regression.json confere limites/forma.
+
+## Desvios e mudanças durante execução
+
+Nenhuma mudança material autorizada adicional. Nenhum desvio material no resultado final, após revisão do diff e renders. Testes ajustaram limiar760px conforme CSS existente e usam operação sintética controlada para observar loading sem corrida de tempo, com seletor de texto estável porque ícone loading integra o nome acessível; sem mudança do produto por esses ajustes.
+
+## Validação final
+
+Tipos/build web/root PASS;43testes vacancyIntelligence/trajectoryReviewModal e5tooling de rotas/avisos PASS. 75checks browser +9checks de regressão delimitada da comparação PASS (quatro larguras normais, seis estados mobile, review desktop/tablet, comparação desktop/mobile e handlers). Contextos/lint/foundation/diff PASS; CI/publicação pendentes. Avisos de chunks/import dinâmico preexistentes não impedem build. Sem IA paga ou banco produtivo como teste.
+
+## Git / QA / ambiente
+
+Branch `codex/position-relation-clarity`; baseline main/origin/VPS confirmado no SHA acima. Web baseline5300ddff running0; Parser/Synthesis healthy0/gateway running0. Dados pessoais e arquivos alheios preservados. QA autenticado real NOT TESTED; produção ainda pendente.
+
+## Conclusão
+
+Em execução; não declarar entrega antes do smoke e fechamento dos D-*.
 
 ---
 
@@ -24750,6 +24856,16 @@ Branch técnica isolada integra main conforme contrato. Não rodar suíte integr
 # Execução — Posição v2.2.1
 
 Contrato congelado `docs/qa/agreement-position-overview-v221.md` v1.0.0, lido integralmente. Implementar D-01..07 e todos D-UX/CA; impedir P-01..03/P-UX; preservar F-01 e usar somente A-01/A-UX para acabamento e reutilização. Referência normativa imutável: approved-mock.png copiado da proposta04 antes da implementação. A aprovação explícita cobre main/produção. Validação local proporcional, fixtures sem IA/dados reais, CI e publicação conforme plano, AoT com limites de evidência.
+
+---
+
+## Source: `docs/qa/execution-position-relation-clarity.md`
+
+# Execução — Clareza da avaliação de relação
+
+08/10/2026. Aplicar integralmente `docs/qa/agreement-position-relation-clarity.md` v1.0.0, lido antes da implementação. D-01 a D-04/D-UX-01, P-01/P-02/P-UX-01, F-01, A-01/A-UX-01 e CA-01 a CA-04/CA-UX-01 são o contrato completo; nenhuma pendência Q material.
+
+Reutilizar CandidateMatchCard e selos existentes em VacancyPages, mantendo callbacks e gates. Acrescentar somente apresentação delimitada das descrições, preservar ordem visual e comportamento responsivo. Capturar baseline sintético antes de editar; testar mesmas pessoas/Posição em1537/390 e limites768/320, ações confirm/dismiss/curadoria, loading/falha, inclusão independente. Sem banco real ou IA. Atualizar UX/contexto e AoT, validar proporcionalmente, commit/push, plano/ensaio/publish do SHA explícito, smoke e sincronização. Produto permanece2.2.1. Nenhuma nova biblioteca/ADR ou pesquisa externa necessária: componentes/serviços existentes atendem ao escopo.
 
 ---
 

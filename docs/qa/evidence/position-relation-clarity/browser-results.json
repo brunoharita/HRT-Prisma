@@ -1,0 +1,302 @@
+[
+  {
+    "name": "1537: question uses real Position",
+    "pass": true
+  },
+  {
+    "name": "1537: visible explanation: Considero essa trajetória relacionada ao trabalho previsto.",
+    "pass": true
+  },
+  {
+    "name": "1537: visible explanation: Não considero pertinente a associação apresentada neste caso.",
+    "pass": true
+  },
+  {
+    "name": "1537: visible explanation: Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.",
+    "pass": true
+  },
+  {
+    "name": "1537: visible explanation: Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo.",
+    "pass": true
+  },
+  {
+    "name": "1537: visible explanation: Adicionar à avaliação",
+    "pass": true
+  },
+  {
+    "name": "1537: curation requires confirmation",
+    "pass": true
+  },
+  {
+    "name": "1537: no passive mutations",
+    "pass": true
+  },
+  {
+    "name": "1537: no page overflow or clipped actions",
+    "pass": true
+  },
+  {
+    "name": "1537: original action topology preserved",
+    "pass": true
+  },
+  {
+    "name": "768: question uses real Position",
+    "pass": true
+  },
+  {
+    "name": "768: visible explanation: Considero essa trajetória relacionada ao trabalho previsto.",
+    "pass": true
+  },
+  {
+    "name": "768: visible explanation: Não considero pertinente a associação apresentada neste caso.",
+    "pass": true
+  },
+  {
+    "name": "768: visible explanation: Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.",
+    "pass": true
+  },
+  {
+    "name": "768: visible explanation: Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo.",
+    "pass": true
+  },
+  {
+    "name": "768: visible explanation: Adicionar à avaliação",
+    "pass": true
+  },
+  {
+    "name": "768: curation requires confirmation",
+    "pass": true
+  },
+  {
+    "name": "768: no passive mutations",
+    "pass": true
+  },
+  {
+    "name": "768: no page overflow or clipped actions",
+    "pass": true
+  },
+  {
+    "name": "768: original action topology preserved",
+    "pass": true
+  },
+  {
+    "name": "390: question uses real Position",
+    "pass": true
+  },
+  {
+    "name": "390: visible explanation: Considero essa trajetória relacionada ao trabalho previsto.",
+    "pass": true
+  },
+  {
+    "name": "390: visible explanation: Não considero pertinente a associação apresentada neste caso.",
+    "pass": true
+  },
+  {
+    "name": "390: visible explanation: Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.",
+    "pass": true
+  },
+  {
+    "name": "390: visible explanation: Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo.",
+    "pass": true
+  },
+  {
+    "name": "390: visible explanation: Adicionar à avaliação",
+    "pass": true
+  },
+  {
+    "name": "390: curation requires confirmation",
+    "pass": true
+  },
+  {
+    "name": "390: no passive mutations",
+    "pass": true
+  },
+  {
+    "name": "390: no page overflow or clipped actions",
+    "pass": true
+  },
+  {
+    "name": "390: original action topology preserved",
+    "pass": true
+  },
+  {
+    "name": "320: question uses real Position",
+    "pass": true
+  },
+  {
+    "name": "320: visible explanation: Considero essa trajetória relacionada ao trabalho previsto.",
+    "pass": true
+  },
+  {
+    "name": "320: visible explanation: Não considero pertinente a associação apresentada neste caso.",
+    "pass": true
+  },
+  {
+    "name": "320: visible explanation: Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.",
+    "pass": true
+  },
+  {
+    "name": "320: visible explanation: Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo.",
+    "pass": true
+  },
+  {
+    "name": "320: visible explanation: Adicionar à avaliação",
+    "pass": true
+  },
+  {
+    "name": "320: curation requires confirmation",
+    "pass": true
+  },
+  {
+    "name": "320: no passive mutations",
+    "pass": true
+  },
+  {
+    "name": "320: no page overflow or clipped actions",
+    "pass": true
+  },
+  {
+    "name": "320: original action topology preserved",
+    "pass": true
+  },
+  {
+    "name": "confirmed: readable mobile",
+    "pass": true
+  },
+  {
+    "name": "confirmed: explicit relation status",
+    "pass": true
+  },
+  {
+    "name": "confirmed: confirmation disabled, curation available",
+    "pass": true
+  },
+  {
+    "name": "dismissed: readable mobile",
+    "pass": true
+  },
+  {
+    "name": "dismissed: explicit relation status",
+    "pass": true
+  },
+  {
+    "name": "dismissed: can reconsider, cannot curate",
+    "pass": true
+  },
+  {
+    "name": "no-evidence: readable mobile",
+    "pass": true
+  },
+  {
+    "name": "no-evidence: curation remains disabled after confirmation",
+    "pass": true
+  },
+  {
+    "name": "long: readable mobile",
+    "pass": true
+  },
+  {
+    "name": "long: dynamic title preserved",
+    "pass": true
+  },
+  {
+    "name": "pending: decision unavailable",
+    "pass": true
+  },
+  {
+    "name": "review: readable mobile",
+    "pass": true
+  },
+  {
+    "name": "review: separate review action preserved",
+    "pass": true
+  },
+  {
+    "name": "1537: conflict review and contextual relation coexist",
+    "pass": true
+  },
+  {
+    "name": "1537: review layout has no overflow",
+    "pass": true
+  },
+  {
+    "name": "768: conflict review and contextual relation coexist",
+    "pass": true
+  },
+  {
+    "name": "768: review layout has no overflow",
+    "pass": true
+  },
+  {
+    "name": "decision: loading stays visible",
+    "pass": true
+  },
+  {
+    "name": "decision: explicit confirmed payload and refresh",
+    "pass": true
+  },
+  {
+    "name": "decision: no Kanban mutation",
+    "pass": true
+  },
+  {
+    "name": "curation: loading",
+    "pass": true
+  },
+  {
+    "name": "curation: reuses separate proposal handler",
+    "pass": true
+  },
+  {
+    "name": "dismiss: unchanged contextual payload",
+    "pass": true
+  },
+  {
+    "name": "failure: relation and content preserved",
+    "pass": true
+  },
+  {
+    "name": "failure: explicit retry succeeds",
+    "pass": true
+  },
+  {
+    "name": "Kanban: separate human inclusion",
+    "pass": true
+  },
+  {
+    "name": "comparison: no implicit selection",
+    "pass": true
+  },
+  {
+    "name": "Kanban: navigation preserved",
+    "pass": true
+  },
+  {
+    "name": "1537: contextual labels also clear in comparison",
+    "pass": true
+  },
+  {
+    "name": "1537: comparison labels readable without overflow",
+    "pass": true
+  },
+  {
+    "name": "1537: comparison relation tags fit viewport and show complete text",
+    "pass": true
+  },
+  {
+    "name": "390: contextual labels also clear in comparison",
+    "pass": true
+  },
+  {
+    "name": "390: comparison labels readable without overflow",
+    "pass": true
+  },
+  {
+    "name": "390: comparison relation tags fit viewport and show complete text",
+    "pass": true
+  },
+  {
+    "name": "no runtime errors or external calls",
+    "pass": true
+  }
+]

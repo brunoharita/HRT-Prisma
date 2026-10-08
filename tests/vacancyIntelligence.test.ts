@@ -316,8 +316,11 @@ test("descoberta pagina todos os Perfis e persiste confirmação ou descarte sem
   assert.match(vacancyServiceSource, /recordPositionRelationDecision/);
   assert.match(vacancyServiceSource, /collection\.candidates\.filter\(hasUsableProfessionalContent\)/);
   assert.match(vacancyServiceSource, /isSemanticDiscoveryEligible\(match\)/);
-  assert.match(page, /Confirmar relação/);
-  assert.match(page, /Não considerar/);
+  assert.match(page, /Confirmar relação com a Posição/);
+  assert.match(page, /Desconsiderar esta relação/);
+  assert.match(page, /Relação da trajetória com a Posição/);
+  assert.match(page, /Enviar relação à curadoria/);
+  assert.match(page, /Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa/);
   assert.match(page, /discovery && !discovery.complete/);
   assert.match(page, /queriedProfileRecordCount/);
   assert.match(page, /expectedProfileRecordCount/);
