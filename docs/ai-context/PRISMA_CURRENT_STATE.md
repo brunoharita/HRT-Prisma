@@ -8,9 +8,9 @@ last_verified: 2026-10-08
 
 # Estado atual do Prisma
 
-## Inclusão na avaliação destacada no cabeçalho — correção na2.2.1
+## Inclusão na avaliação destacada no cabeçalho — correção na 2.2.1
 
-Implementação aprovada em08/10/2026: botão azul Adicionar à avaliação com ícone de adicionar em região própria no cabeçalho de cada cartão da descoberta, à direita do Score no desktop; celular abaixo da identificação/Score e em largura total, antes de Consultar. Componente/handlers/gates/loading/falha/retry/sucesso/navegação preservados, inclusão independente de comparação/relação. Sem mudança de backend, IA, score ou versão2.2.1. Acordo1.0.0, execução e AoT `docs/qa/agreement-discovery-header-evaluation.md`, `execution-discovery-header-evaluation.md`, `aot-discovery-header-evaluation.md`. Local48dirigidos/45checks browser PASS; tipos/build/contextos/lint/foundation PASS; publicação pendente. Não inferir rollout deste texto; jornada autenticada real NOT TESTED.
+Publicada em 08/10/2026 mantendo 2.2.1: botão azul Adicionar à avaliação com ícone de adicionar em região própria no cabeçalho de cada cartão da descoberta, à direita do Score no desktop; celular abaixo da identificação/Score e em largura total, antes de Consultar. Componente/handlers/gates/loading/falha/retry/sucesso/navegação preservados, inclusão independente de comparação/relação. Sem mudança de backend, IA ou score. Acordo 1.0.0, execução e AoT `docs/qa/agreement-discovery-header-evaluation.md`, `execution-discovery-header-evaluation.md`, `aot-discovery-header-evaluation.md`. Local: 48 testes dirigidos e 45 checks browser PASS; tipos/build/contextos/lint/foundation PASS. SHA funcional `f4a1ef89c8bc197bd481d39e70cbddb117420133`, CI branch 37862033038/main 37862156702 success. Somente web, imagem 9233290e running/zero reinícios; rollback 25f949ba e serviços Parser/Synthesis/gateway preservados. Smoke: 16 HTTP 200 e 14 checks de SHA/versão/layout/textos/assets/infra PASS após 404 transitório na recriação, sem repetir deploy. Fechamento documental/contexto sincroniza Git sem reconstruir runtime. Jornada autenticada real NOT TESTED.
 
 ## Clareza da relação da trajetória com a Posição — correção na2.2.1
 

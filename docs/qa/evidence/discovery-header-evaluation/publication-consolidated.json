@@ -1,0 +1,37 @@
+{
+  "functionalSha": "f4a1ef89c8bc197bd481d39e70cbddb117420133",
+  "version": "2.2.1",
+  "branch": "codex/discovery-header-evaluation",
+  "mainIntegrated": true,
+  "ci": [
+    {
+      "databaseId": 37862033038,
+      "conclusion": "success",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37862033038"
+    },
+    {
+      "databaseId": 37862156702,
+      "conclusion": "success",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37862156702"
+    }
+  ],
+  "dispatcher": {
+    "exitCode": 1,
+    "sshExitCode": 22,
+    "probeStatus": 404,
+    "phase": "immediately after web container recreation",
+    "repeatDeploy": false,
+    "receiptProduced": false
+  },
+  "independentVerification": {
+    "file": "production-after.json",
+    "status": "PASS",
+    "http200": 16,
+    "checks": 14,
+    "webImage": "sha256:9233290e63599d62e560618f94aad53c741922d2ffa1b8f7592d9fd43f105bbd",
+    "rollbackImage": "sha256:25f949ba8dad826bfa3ab6797fb861d6bfaebc807f92973e78164680b314de42",
+    "backendPreserved": true
+  },
+  "closure": "Documentation-only follow-up synchronizes checkout without web rebuild",
+  "authenticatedRealJourney": "NOT TESTED"
+}

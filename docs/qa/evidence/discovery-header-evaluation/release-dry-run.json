@@ -1,0 +1,74 @@
+{
+  "command": "publish",
+  "status": "DRY_RUN",
+  "sha": "f4a1ef89c8bc197bd481d39e70cbddb117420133",
+  "branch": "codex/discovery-header-evaluation",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/agreement-discovery-header-evaluation.md",
+      "docs/qa/aot-discovery-header-evaluation.md",
+      "docs/qa/evidence/discovery-header-evaluation/added-1537.png",
+      "docs/qa/evidence/discovery-header-evaluation/after-1024.png",
+      "docs/qa/evidence/discovery-header-evaluation/after-1537.png",
+      "docs/qa/evidence/discovery-header-evaluation/after-1813.png",
+      "docs/qa/evidence/discovery-header-evaluation/after-320.png",
+      "docs/qa/evidence/discovery-header-evaluation/after-390.png",
+      "docs/qa/evidence/discovery-header-evaluation/after-768.png",
+      "docs/qa/evidence/discovery-header-evaluation/baseline.json",
+      "docs/qa/evidence/discovery-header-evaluation/before-1537.png",
+      "docs/qa/evidence/discovery-header-evaluation/before-390.png",
+      "docs/qa/evidence/discovery-header-evaluation/browser-results.json",
+      "docs/qa/evidence/discovery-header-evaluation/header-1537.png",
+      "docs/qa/evidence/discovery-header-evaluation/long-390.png",
+      "docs/qa/evidence/discovery-header-evaluation/member-390.png",
+      "docs/qa/evidence/discovery-header-evaluation/missing-390.png",
+      "docs/qa/evidence/discovery-header-evaluation/production-before.json",
+      "docs/qa/evidence/discovery-header-evaluation/review-390.png",
+      "docs/qa/evidence/discovery-header-evaluation/streaming-390.png",
+      "docs/qa/execution-discovery-header-evaluation.md",
+      "tests/tooling/discoveryHeaderEvaluation.browser.mjs",
+      "tests/ui/position-follow-up/fixture.ts",
+      "tests/ui/position-relation/main.tsx",
+      "web/src/components/AddToPositionFollowUp.tsx",
+      "web/src/pages/VacancyPages.tsx",
+      "web/src/styles.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}
