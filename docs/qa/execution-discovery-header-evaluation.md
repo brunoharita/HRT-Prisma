@@ -1,0 +1,3 @@
+# Execução — Ação de avaliação no cabeçalho
+
+Aplicar integralmente `docs/qa/agreement-discovery-header-evaluation.md` v1.0.0, lido antes da implementação: D-01–04/D-UX-01–02, P-01–02/P-UX-01, F-01, A-01/A-UX-01 e CA-01–04, sem pendência material. Reutilizar AddToPositionFollowUp, mover ambos os ramos do CandidateMatchCard e estilizar apenas cabeçalho/CTA. Preservar handlers, papéis, score, relação e comparação. Registrar antes/depois sintético1537/390, geometria responsiva/estados, regressão dirigida e AoT. Produto2.2.1, sem nova biblioteca ou backend. Commit/plano/ensaio/push/CI/main/deploy web/smoke/sincronização conforme autorização permanente; nenhuma mutação humana produtiva como teste.

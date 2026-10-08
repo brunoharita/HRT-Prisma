@@ -15,10 +15,10 @@ export const matches=candidates.map(c=>{const m=matchVacancyCandidate(vacancy,c,
 const data:FollowUpData={contract:"position-follow-up-1.0.0",process:{id:uuid(5),name:"Avaliação 01",status:"active",revision:1},operators:[{id:uuid(6),name:"Bruno"}],history:[],entries:candidates.map((c,i)=>({id:uuid(30+i),personId:c.personId,fullName:c.fullName,title:c.profileData.professionalTitle,age:c._age,stage:c._stage,revision:1,details:i===2?{interview:{at:"2026-10-15T17:00:00Z",timezone:"America/Sao_Paulo",participants:"Joana e recrutador",status:"scheduled"}}:{},profileId:c.profileId,profileVersion:2,sourceProfileId:c.profileId,sourcePositionId:vacancy.versionId!,score:c._score,scoreState:"saved",scoreProfileId:c.profileId,scorePositionId:vacancy.versionId!,match:matches[i],evaluationId:uuid(40+i),profileData:c.profileData}))};
 if(scenario==="empty"){data.entries=[];data.process=null;}
 if(scenario==="missing"){data.entries[0]!.score=null;data.entries[0]!.scoreState="unavailable";data.entries[0]!.title=null;data.entries[0]!.match=null;}
-export const fixture={data,calls:[] as {name:string;args:Record<string,unknown>}[],fail:false,conflict:false,delay:140,navigations:[] as string[]};
+export const fixture={data,calls:[] as {name:string;args:Record<string,unknown>}[],fail:false,hold:false,conflict:false,delay:140,navigations:[] as string[]};
 Object.assign(window,{__followUpFixture:fixture});
 export const transport={async rpc(name:string,args:Record<string,any>){
- fixture.calls.push({name,args});await new Promise(r=>setTimeout(r,fixture.delay));
+ fixture.calls.push({name,args});while(fixture.hold)await new Promise(r=>setTimeout(r,30));await new Promise(r=>setTimeout(r,fixture.delay));
  if(scenario==="member")return {data:null,error:{code:"42501",message:"Denied"}};
  if(name==="get_position_follow_up")return {data:structuredClone(data),error:null};
  if(fixture.fail)return {data:null,error:{code:"50000",message:"Synthetic failure"}};

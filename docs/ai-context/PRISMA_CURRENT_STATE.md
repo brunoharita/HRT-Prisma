@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.54.0
+version: 2.55.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Inclusão na avaliação destacada no cabeçalho — correção na2.2.1
+
+Implementação aprovada em08/10/2026: botão azul Adicionar à avaliação com ícone de adicionar em região própria no cabeçalho de cada cartão da descoberta, à direita do Score no desktop; celular abaixo da identificação/Score e em largura total, antes de Consultar. Componente/handlers/gates/loading/falha/retry/sucesso/navegação preservados, inclusão independente de comparação/relação. Sem mudança de backend, IA, score ou versão2.2.1. Acordo1.0.0, execução e AoT `docs/qa/agreement-discovery-header-evaluation.md`, `execution-discovery-header-evaluation.md`, `aot-discovery-header-evaluation.md`. Local48dirigidos/45checks browser PASS; tipos/build/contextos/lint/foundation PASS; publicação pendente. Não inferir rollout deste texto; jornada autenticada real NOT TESTED.
 
 ## Clareza da relação da trajetória com a Posição — correção na2.2.1
 

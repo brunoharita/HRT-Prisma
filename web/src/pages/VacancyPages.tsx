@@ -764,18 +764,21 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
   const analysisButton = <Button onClick={onEvaluate}>{match.semanticAssessment && match.semanticAssessment.status !== "complete"
     ? "Ver análise disponível" : match.discoveryGroup === "contextual_signals"
       ? "Ver sinais encontrados" : "Ver como o score foi calculado"}</Button>;
+  const identityClass = "prisma-vacancy-match-identity" + (followUp ? " has-follow-up" : "");
+  const followUpAction = followUp ? <div className="prisma-vacancy-match-action">{followUp}</div> : null;
 
   if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <PrismaCard className={cardClass}><article className="prisma-vacancy-match-layout">
-    <header className="prisma-vacancy-match-identity"><Checkbox checked={selected} onChange={onToggle} />
+    <header className={identityClass}><Checkbox checked={selected} onChange={onToggle} />
       <AvatarInitials name={match.candidate.fullName} />
       <div className="prisma-vacancy-match-person"><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title>
         <Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil publicado"}</Typography.Text></div>
       <MatchingScoreSummary match={match} />
+      {followUpAction}
     </header>
     <div className="prisma-vacancy-action-hub is-pending">
       <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
         <strong>Consultar</strong><Typography.Text type="secondary">Explore o Perfil e a análise disponível.</Typography.Text>
-        <Space wrap>{profileButton}{analysisButton}{followUp}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
+        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
       </section>
     </div>
     <Typography.Text type="secondary">Requisitos consultados: {match.directCount} com evidência direta, {match.partialCount} parciais. Compare as evidências sem atribuir prioridade pela pendência.</Typography.Text>
@@ -790,7 +793,7 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
     && match.semanticFallback.reasonCode === "READINGS_DISAGREE");
 
   return <PrismaCard className={cardClass}><article className="prisma-vacancy-match-layout">
-    <header className="prisma-vacancy-match-identity">
+    <header className={identityClass}>
       <Checkbox checked={selected} onChange={onToggle} />
       <AvatarInitials name={match.candidate.fullName} />
       <div className="prisma-vacancy-match-person">
@@ -805,13 +808,14 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
         </Space>
       </div>
       <MatchingScoreSummary match={match} />
+      {followUpAction}
     </header>
 
     <div className={"prisma-vacancy-action-hub" + (hasReview ? " has-review" : "")}>
       <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
         <strong className="prisma-vacancy-action-title"><SearchOutlined aria-hidden="true" /> Consultar</strong>
         <Typography.Text type="secondary">Explore o Perfil e entenda como o score foi calculado.</Typography.Text>
-        <Space wrap>{profileButton}{analysisButton}{followUp}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
+        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
       </section>
       {hasReview && vacancy && onReviewed ? <TrajectoryConflictReview canReview={canReview} match={match} onResolved={onReviewed} vacancy={vacancy} /> : null}
       <section className="prisma-vacancy-action-group is-decision" aria-label="Relação da trajetória com a Posição">

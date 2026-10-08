@@ -1,0 +1,182 @@
+[
+  {
+    "name": "1813: one blue action in header",
+    "pass": true
+  },
+  {
+    "name": "1813: absent from Consultar",
+    "pass": true
+  },
+  {
+    "name": "1813: no overflow or cut, comfortable size and centered icon",
+    "pass": true
+  },
+  {
+    "name": "1813: CTA right beside Score",
+    "pass": true
+  },
+  {
+    "name": "1813: no passive inclusion",
+    "pass": true
+  },
+  {
+    "name": "1537: one blue action in header",
+    "pass": true
+  },
+  {
+    "name": "1537: absent from Consultar",
+    "pass": true
+  },
+  {
+    "name": "1537: no overflow or cut, comfortable size and centered icon",
+    "pass": true
+  },
+  {
+    "name": "1537: CTA right beside Score",
+    "pass": true
+  },
+  {
+    "name": "1537: no passive inclusion",
+    "pass": true
+  },
+  {
+    "name": "1024: one blue action in header",
+    "pass": true
+  },
+  {
+    "name": "1024: absent from Consultar",
+    "pass": true
+  },
+  {
+    "name": "1024: no overflow or cut, comfortable size and centered icon",
+    "pass": true
+  },
+  {
+    "name": "1024: no passive inclusion",
+    "pass": true
+  },
+  {
+    "name": "768: one blue action in header",
+    "pass": true
+  },
+  {
+    "name": "768: absent from Consultar",
+    "pass": true
+  },
+  {
+    "name": "768: no overflow or cut, comfortable size and centered icon",
+    "pass": true
+  },
+  {
+    "name": "768: no passive inclusion",
+    "pass": true
+  },
+  {
+    "name": "390: one blue action in header",
+    "pass": true
+  },
+  {
+    "name": "390: absent from Consultar",
+    "pass": true
+  },
+  {
+    "name": "390: no overflow or cut, comfortable size and centered icon",
+    "pass": true
+  },
+  {
+    "name": "390: CTA below Score and full width",
+    "pass": true
+  },
+  {
+    "name": "390: no passive inclusion",
+    "pass": true
+  },
+  {
+    "name": "320: one blue action in header",
+    "pass": true
+  },
+  {
+    "name": "320: absent from Consultar",
+    "pass": true
+  },
+  {
+    "name": "320: no overflow or cut, comfortable size and centered icon",
+    "pass": true
+  },
+  {
+    "name": "320: CTA below Score and full width",
+    "pass": true
+  },
+  {
+    "name": "320: no passive inclusion",
+    "pass": true
+  },
+  {
+    "name": "long: no overflow",
+    "pass": true
+  },
+  {
+    "name": "long: action availability unchanged",
+    "pass": true
+  },
+  {
+    "name": "review: no overflow",
+    "pass": true
+  },
+  {
+    "name": "review: action availability unchanged",
+    "pass": true
+  },
+  {
+    "name": "review: existing action preserved",
+    "pass": true
+  },
+  {
+    "name": "member: no overflow",
+    "pass": true
+  },
+  {
+    "name": "member: action availability unchanged",
+    "pass": true
+  },
+  {
+    "name": "missing: no overflow",
+    "pass": true
+  },
+  {
+    "name": "missing: action availability unchanged",
+    "pass": true
+  },
+  {
+    "name": "streaming: no overflow",
+    "pass": true
+  },
+  {
+    "name": "streaming: action availability unchanged",
+    "pass": true
+  },
+  {
+    "name": "loading: continuous feedback in header",
+    "pass": true
+  },
+  {
+    "name": "failure: header/action/content retained",
+    "pass": true
+  },
+  {
+    "name": "success: disabled confirmation and same add payload",
+    "pass": true
+  },
+  {
+    "name": "preservation: score, relation and comparison unchanged",
+    "pass": true
+  },
+  {
+    "name": "navigation: current person in current Position",
+    "pass": true
+  },
+  {
+    "name": "no runtime errors or external calls",
+    "pass": true
+  }
+]

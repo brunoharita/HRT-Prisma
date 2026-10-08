@@ -21,6 +21,9 @@ if (scenario === "no-evidence") match.positionRelation.evidence = [];
 if (scenario === "pending") match.semanticAssessment = { status: "pending" } as never;
 if (scenario === "review") match.semanticFallback = { status: "indeterminate", reasonCode: "READINGS_DISAGREE" };
 if (scenario === "compare") { match.positionDecision = "confirmed"; matches[1]!.positionDecision = "dismissed"; }
+if (scenario === "long") { match.candidate.fullName = "Rafael Lima de Albuquerque e Vasconcelos"; match.candidate.profileData.professionalTitle = "Especialista em desenvolvimento e integração de sistemas corporativos e plataformas distribuídas"; }
+if (scenario === "missing") { match.candidate.profileData.professionalTitle = ""; match.score.score = null; }
+if (scenario === "streaming") match.discoveryGroup = "contextual_signals";
 const calls: { name: string; decision?: string }[] = [];
 const state = { calls, fail: false, hold: false, delay: 180, navigations: fixture.navigations };
 Object.assign(window, { __relationFixture: state });
@@ -31,9 +34,13 @@ async function operation(name: string, decision?: string) {
   if (state.fail) throw new Error("Falha sintética ao registrar a relação.");
 }
 vacancyService.load = async () => vacancy;
-vacancyService.findPeople = async () => ({ matches: [match], analyzedProfileCount: 1, publishedProfileCount: 1, queriedProfileRecordCount: 1, expectedProfileRecordCount: 1, complete: true, unclassifiedRequirementCount: 0, unavailablePeople: [] });
+vacancyService.findPeople = async (_org, _vacancy, _force, _progress, _signal, onInitial) => {
+  const discovery = { matches: [match], analyzedProfileCount: 1, publishedProfileCount: 1, queriedProfileRecordCount: 1, expectedProfileRecordCount: 1, complete: true, unclassifiedRequirementCount: 0, unavailablePeople: [] };
+  if (scenario === "streaming") { onInitial?.(discovery); return new Promise(() => {}); }
+  return discovery;
+};
 vacancyService.recordPositionRelationDecision = async (_vacancy, _match, decision) => { await operation("decision", decision); match.positionDecision = decision; };
 vacancyService.loadPeopleByIds = async () => { await operation("refresh"); return scenario === "compare" ? structuredClone(matches.slice(0, 2)) : [structuredClone(match)]; };
 vacancyService.proposePositionRelationToKnowledge = async () => { await operation("curation"); };
-const props = { activeMembership: { organizationId: vacancy.organizationId, organizationName: "Empresa exemplo", role: "recruiter" as const, groupId: null, groupName: null }, vacancyId: vacancy.id!, onNavigate: (path: string) => fixture.navigations.push(path) };
+const props = { activeMembership: { organizationId: vacancy.organizationId, organizationName: "Empresa exemplo", role: scenario === "member" ? "member" as const : "recruiter" as const, groupId: null, groupName: null }, vacancyId: vacancy.id!, onNavigate: (path: string) => fixture.navigations.push(path) };
 createRoot(document.getElementById("root")!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><PrismaViewStateProvider scope="synthetic-relation"><PrismaLoadingFeedback />{scenario === "compare" ? <VacancyComparePage {...props} personIds={[match.candidate.personId, matches[1]!.candidate.personId]} /> : <VacancyPeoplePage {...props} />}</PrismaViewStateProvider></ConfigProvider>);
