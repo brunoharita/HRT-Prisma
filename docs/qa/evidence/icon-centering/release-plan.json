@@ -1,0 +1,62 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/agreement-icon-centering.md",
+      "docs/qa/aot-icon-centering.md",
+      "docs/qa/evidence/icon-centering/README.md",
+      "docs/qa/evidence/icon-centering/baseline.json",
+      "docs/qa/evidence/icon-centering/browser-results.json",
+      "docs/qa/evidence/icon-centering/home-1813.png",
+      "docs/qa/evidence/icon-centering/home-390.png",
+      "docs/qa/evidence/icon-centering/home-before-1813.png",
+      "docs/qa/evidence/icon-centering/home-before-390.png",
+      "docs/qa/evidence/icon-centering/kanban-1813.png",
+      "docs/qa/evidence/icon-centering/kanban-390.png",
+      "docs/qa/evidence/icon-centering/profile-1813.png",
+      "docs/qa/evidence/icon-centering/profile-390.png",
+      "docs/qa/evidence/icon-centering/profiles-1813.png",
+      "docs/qa/evidence/icon-centering/profiles-390.png",
+      "docs/qa/execution-icon-centering.md",
+      "tests/tooling/iconCentering.browser.mjs",
+      "web/src/ui/foundation.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

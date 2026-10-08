@@ -1,0 +1,11 @@
+{
+  "status": "PUBLISHED_VERIFIED_AFTER_TRANSIENT_404",
+  "sha": "ad55395ab95db8ee5cda824835705f5ac43e7ac1",
+  "version": "2.2.0",
+  "branchCi": { "run": 37831599237, "conclusion": "success" },
+  "mainCi": { "run": 37831737267, "conclusion": "success" },
+  "dispatcher": "Push, CI, fast-forward main and web deployment executed. Final immediate curl returned 404 and command exited 22; no successful dispatcher receipt was written.",
+  "recovery": "Subsequent HTTPS/assets/SHA/CSS and infrastructure checks passed after stabilization. No rebuild or repeated deployment.",
+  "evidence": ["production-smoke.json", "infrastructure.json", "release-plan.json", "dry-run.json"],
+  "unchangedDestinations": ["database", "edgeFunctions", "parserIa", "profileSynthesis", "gateway"]
+}

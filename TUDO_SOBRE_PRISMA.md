@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 393
-source_manifest_sha256: b6255589f5f31cd90b863ed9723654d69ec08615a3377f3ddefc3944d4a596f0
+source_manifest_sha256: d794481309efe4020c62df625948c316aa468794ba6bd49e04e4e23e4255db00
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-08
 
 ## Centralização dos ícones — correção na v2.2.0
 
-Diretriz de Bruno em08/10/2026: ícones sempre centralizados nos dois eixos de seu destaque, mantendo a versão2.2.0. Reproduzido desvio(-12,-7)CSSpx nos quatro indicadores de Início: regra injetada do Ant Design sobrepunha display do prefixo. Correção limitada à especificidade do seletor existente, sem offsets, alterações de tamanho ou reset global. Conferência de oito páginas sintéticas e27variantes CSS em1813/768/390/320; dados/AI/backend preservados. Acordo/execução/AoT `docs/qa/agreement-icon-centering.md`, `docs/qa/execution-icon-centering.md`, `docs/qa/aot-icon-centering.md`. Publicação e evidências finais em andamento; jornada autenticada real não testada.
+Diretriz de Bruno em08/10/2026: ícones sempre centralizados nos dois eixos de seu destaque, mantendo a versão2.2.0. Reproduzido desvio(-12,-7)CSSpx nos quatro indicadores de Início: regra injetada do Ant Design sobrepunha display do prefixo. Correção limitada à especificidade do seletor existente, sem offsets, alterações de tamanho ou reset global. Oito páginas sintéticas e27variantes CSS em1813/768/390/320:36cenários/254medições PASS, tipos/build/19tooling/contextos/lint/foundation PASS. Publicada somenteweb no SHA funcionalad55395ab95db8ee5cda824835705f5ac43e7ac1 em main/origin/VPS; CI branch37831599237/main37831737267 success,831testes/auditoria PASS. Webf8349547 running0, rollback58b326d6; Parser/Synthesis/gateway preservados.15HTTP200/9checks SHA/2.2.0/CSS/assets novos e antigos PASS após404transitório, sem rebuild adicional. Dados/IA/backend preservados. Acordo/execução/AoT `docs/qa/agreement-icon-centering.md`, `docs/qa/execution-icon-centering.md`, `docs/qa/aot-icon-centering.md`. Fechamento documental sincroniza Git sem reconstruir runtime; jornada autenticada real não testada.
 
 ## Acompanhamento Pessoa–Posição — v2.2.0
 
@@ -16548,17 +16548,17 @@ Contrato: `agreement-icon-centering.md` v1.0.0; execução `execution-icon-cente
 
 | ID | Implementação | Teste / evidência | Status / limite |
 | --- | --- | --- | --- |
-| D-01/D-UX-01 | Seletor do prefixo Statistic ganha especificidade contra a regra Ant Design | Antes(-12,-7), depois(0,0);36cenários/254medições, `evidence/icon-centering/browser-results.json` | PASS local |
-| D-02/D-UX-02 | Declarações existentes de tamanho/cor/raio/layout preservadas |4prefixos56/SVG32; flex fracionário55.78125 em768 preservado; valores24/6/18/0, Perfil4cards/8eixos, sem overflow | PASS local |
-| D-03 | Somente seletor existente em foundation.css, sem reset global |8páginas e27variantes em1813/768/390/320; menu móvel abre/fecha | PASS local |
-| D-04 | Registro2.2.0 inalterado; ownerUX/contexto/AoT | Publicação seletiva/CI/smoke/rollback a concluir | PARTIAL |
+| D-01/D-UX-01 | Seletor do prefixo Statistic ganha especificidade contra a regra Ant Design | Antes(-12,-7), depois(0,0);36cenários/254medições, `evidence/icon-centering/browser-results.json` | PASS |
+| D-02/D-UX-02 | Declarações existentes de tamanho/cor/raio/layout preservadas |4prefixos56/SVG32; flex fracionário55.78125 em768 preservado; valores24/6/18/0, Perfil4cards/8eixos, sem overflow | PASS |
+| D-03 | Somente seletor existente em foundation.css, sem reset global |8páginas e27variantes em1813/768/390/320; menu móvel abre/fecha | PASS |
+| D-04 | Registro2.2.0 inalterado; ownerUX/contexto/AoT | CI branch/main PASS, web publicada,15HTTP200/9checks, rollback e serviços preservados; recibos abaixo | PASS |
 
 ## Proibições verificadas
 
 | ID | Prova | Status |
 | --- | --- | --- |
 | P-01/P-UX-01 | Diff CSS somente seletor e comentário; nenhum offset, resize, hide ou reset global | PASS |
-| P-02 | Sem diff de banco/serviços/IA/matching/releaseRegistry; dados sintéticos e rede externa bloqueada no browser | PASS local; plano operacional pendente |
+| P-02 | Sem diff de banco/serviços/IA/matching/releaseRegistry; dados sintéticos e rede externa bloqueada no browser; plano web-only, IDs dos serviços preservados | PASS |
 
 ## Mapa de Impacto e Preservação
 
@@ -16568,7 +16568,7 @@ Contrato: `agreement-icon-centering.md` v1.0.0; execução `execution-icon-cente
 | Títulos/Pessoas/Perfil/Posições/Knowledge/Settings/Kanban / plausible_indirect | Outros destaques medidos já centralizados |8páginas +27topologias CSS nas4larguras, sem overflow | PASS no escopo sintético |
 | Controles/navegação / plausible_indirect | CSS existente; seletor restrito | Sidebar/cabeçalhos medidos, menu móvel/Escape operável; botões preservados nos renders | PASS dirigido |
 | Tenant/dados/backend/IA / no_impact_identified | Contratos e serviços vigentes | Não atingidos pelo seletor; diff sem consumidores de dados, sem destino backend | PASS por análise de alcance; sem acesso ao banco |
-| Versão/contexto/publicação / direct |2.2.0, web58b326d6 | Checks/plano/smoke a concluir | PARTIAL |
+| Versão/contexto/publicação / direct |2.2.0, web58b326d6 | Plano somenteweb, CI branch/main,15HTTP200/9checks, rollback58b326d6 | PASS |
 
 Nova entrega: centralização resistente à injeção CSS do Ant Design. Preservação: mesmos ícones, dimensões, superfícies, conteúdo e responsividade. Sem reclassificações nem novas dependências. Inventário dos três CSS: styles.css/foundation.css/positionFollowUp.css; destaque já utiliza contêiner grid/flex centralizado nas demais variantes. Galeria testa topologias CSS existentes; não substitui navegação autenticada por todos os estados ocultos.
 
@@ -16581,15 +16581,22 @@ F-01 PASS: sem redesign, troca de ícones ou novas funções. Referência anexad
 - 36cenários/254medições no navegador: PASS;8páginas e galeria27variantes em1813/768/390/320, sem runtime errors ou chamadas externas.
 - Tipos web/build web: PASS; avisos preexistentes de chunk/import dinâmico.
 - 19testes release-tooling/contexto: PASS.
-- Lint/foundation/Context Pack/diff check: PASS em cópia dos rastreados, preservando arquivos alheios não rastreados. CI pendente.
+- Lint/foundation/Context Pack/diff check: PASS em cópia dos rastreados, preservando arquivos alheios não rastreados.
+- CI branch37831599237/main37831737267 success:831testes, golden/demo, ledger/script e auditoria de dependências PASS. Sem suíte completa local adicional.
 
 ## Git / QA / produção
 
-Branch `codex/fix-highlight-icon-centering`, origin oficial. Não há QA remoto separado; fixtures determinísticas locais, sem IA ou registros reais. Publicação somente web em andamento. Jornada autenticada real NOT TESTED; geometria sintética e smoke de assets não comprovam todos os estados de dados reais.
+Branch `codex/fix-highlight-icon-centering`, origin oficial `git@github.com:brunoharita/HRT-Prisma.git`, integrada por fast-forward em main. SHA funcional `ad55395ab95db8ee5cda824835705f5ac43e7ac1` publicado no GitHub e VPSsrv1038882 /opt/prisma. Fechamento documental posterior sincroniza os checkouts sem reconstruir runtime. Não há QA remoto separado; fixtures determinísticas locais, sem IA ou registros reais.
+
+Plano oficial e dry-run em `evidence/icon-centering/release-plan.json`/`dry-run.json`: somenteweb, sem banco/Edge/Parser/Synthesis. Dispatcher aguardou CI e promoveu main; deploy recriou apenas prisma-web. O curl final coincidiu com troca do container e retornou404; conferência posterior estabilizou sem rebuild/reexecução do deploy. Recuperação explícita em `publication-recovery.json`, sem fabricar recibo de sucesso do comando encerrado com22.
+
+Web container03359d9e96b5, imagemf8349547f6dc, running/zero reinícios. Rollback `prisma-web:rollback-before-ad55395ab95d` aponta à imagem anterior58b326d6. Parser/Synthesis/gateway preservam exatamente IDs/imagens/restarts do baseline; Parser/Synthesis healthy. `infrastructure.json` contém identidade, metadata e verificações. Nenhum acesso ao banco ou mutação de dados humanos.
+
+Smoke `https://prisma.hrtsolutions.com.br`:15HTTP200 e9checks PASS, entryindex-BnkTz1MZ.js com SHA e2.2.0, CSSindex-EOT1QpDk.css com seletor/grid/center/dimensões originais; assets anteriores continuam200. `production-smoke.json`. Jornada autenticada real NOT TESTED; geometria sintética e smoke de assets não comprovam todos os estados de dados reais. Warnings preexistentes de componentes Ant Design nos fixtures permanecem fora de escopo.
 
 ## Conclusão
 
-Aceites visuais locais PASS. Fechamento operacional pendente; não declarar entrega concluída até D-04 PASS.
+Todos D/P e critérios aplicáveis PASS: correção publicada, versão2.2.0 mantida e diretriz permanente documentada. Cobertura e limitações acima permanecem explícitas.
 
 ---
 

@@ -1,0 +1,87 @@
+{
+  "site": "https://prisma.hrtsolutions.com.br",
+  "sha": "ad55395ab95db8ee5cda824835705f5ac43e7ac1",
+  "entries": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-BnkTz1MZ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-DlIGisEt.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-EOT1QpDk.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-CNZ6sVmM.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DkpVtkOZ.css",
+      "status": 200
+    },
+    {
+      "path": "/profiles",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "path": "/knowledge",
+      "status": 200
+    },
+    {
+      "path": "/settings",
+      "status": 200
+    },
+    {
+      "path": "/signin",
+      "status": 200
+    }
+  ],
+  "assets": [
+    "/assets/index-BnkTz1MZ.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-DlIGisEt.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-EOT1QpDk.css"
+  ],
+  "checks": {
+    "sha": true,
+    "version220": true,
+    "specificSelector": true,
+    "grid": true,
+    "center": true,
+    "shape": true,
+    "svgScale": true,
+    "radius": true,
+    "oldAssetsRetained": true
+  },
+  "rule": ".prisma-status-card .ant-statistic .ant-statistic-content .ant-statistic-content-prefix{color:#155eef;background:var(--prisma-icon-surface);vertical-align:middle;border-radius:50%;place-items:center;width:56px;height:56px;margin-right:14px;font-size:32px;display:inline-grid}"
+}
