@@ -1,0 +1,7 @@
+# Evidência de centralização
+
+Fixtures reais de páginas com dados sintéticos. Em terminais separados, executar `node node_modules/vite/bin/vite.js --config tests/ui/visual-foundation.vite.config.mts`, `node node_modules/vite/bin/vite.js --config tests/ui/person-unified.vite.config.mts` e `node node_modules/vite/bin/vite.js --config tests/ui/position-follow-up.vite.config.mts`. Depois `node tests/tooling/iconCentering.browser.mjs`. O script permite caminhos de Playwright/Chrome nas variáveis `PRISMA_PLAYWRIGHT_PATH` e `PRISMA_BROWSER_PATH`, sem instalar dependência de produção.
+
+`baseline.json` captura a geometria anterior à edição em1813px. `browser-results.json` registra36cenários/254medições depois, com4larguras e27variantes adicionais de CSS existentes. Renders `home-before-*` repetem o CSS original com a mesma fixture/viewport dos renders entregues. O desvio original foi reproduzido emdesktop/mobile: display block, centro(-12,-7). Após a correção: grid, centro(0,0). Os demais destaques conferidos permanecem centralizados. A galeria é prova de CSS; não é navegação autenticada por cada estado oculto da aplicação.
+
+Dados e conteúdo dos renders são ilustrativos. O aviso de acompanhamento incompatível no Perfil é limitação preexistente do mock auxiliar dessa fixture; o Kanban usa sua própria fixture válida. Não se modificaram os mocks nem regras do acompanhamento neste movimento.

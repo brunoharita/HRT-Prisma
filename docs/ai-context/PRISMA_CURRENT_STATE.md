@@ -8,6 +8,10 @@ last_verified: 2026-10-08
 
 # Estado atual do Prisma
 
+## Centralização dos ícones — correção na v2.2.0
+
+Diretriz de Bruno em08/10/2026: ícones sempre centralizados nos dois eixos de seu destaque, mantendo a versão2.2.0. Reproduzido desvio(-12,-7)CSSpx nos quatro indicadores de Início: regra injetada do Ant Design sobrepunha display do prefixo. Correção limitada à especificidade do seletor existente, sem offsets, alterações de tamanho ou reset global. Conferência de oito páginas sintéticas e27variantes CSS em1813/768/390/320; dados/AI/backend preservados. Acordo/execução/AoT `docs/qa/agreement-icon-centering.md`, `docs/qa/execution-icon-centering.md`, `docs/qa/aot-icon-centering.md`. Publicação e evidências finais em andamento; jornada autenticada real não testada.
+
 ## Acompanhamento Pessoa–Posição — v2.2.0
 
 Implementação autorizada e publicada em08/10/2026: inclusão humana na descoberta, Lista/Kanban por Posição, quatro colunas, arraste/teclado/mobile, cartões nome/título/idade disponível/Score numeral sem denominador. Detalhe com notas internas, próximos passos, entrevistas opcionais explícitas, decisão justificada sem preseleção e histórico autor/data. Processos/etapas independentes de ocupação e matching. RPCs transacionais com tenant/papéis existentes e revisão otimista; somente leitura dos snapshots estáveis, sem nova IA. Acordo1.0.0, execução, ADR-079 e AoT `docs/qa/aot-position-follow-up-v220.md`. SHA funcional87a18653f136750cd777978352e4d6d5de9bdfab em main/origin/VPS; CI branch37822940856/main37823360589 success,831 testes/golden/demo/auditoria PASS. Local:44SQL rollback,105Node,29tooling e25checks browser novo,6cenários stable e15Pessoa PASS, tipos/build/lint/foundation/contextos PASS. Migration remota20261008181745,3corpos iguais/RLS/grants conferidos, sem registros fictícios produtivos. Somente web publicada, imagem58b326d6 running0, rollback0d6a7664; Parser/Synthesis/gateway preservados. Smoke21HTTP200/10checks/SHA/versão/assets antigos/novos/negação anônima PASS. Jornada autenticada real NOT TESTED; fechamento documental/contextos sem rebuild do runtime.

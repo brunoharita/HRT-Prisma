@@ -151,7 +151,8 @@ body { background: var(--prisma-canvas); }
 .prisma-status-card::before, .prisma-people-metric::before { content: ""; position: absolute; left: 20px; top: -1px; width: 64px; height: 4px; background: #155eef; border-radius: 0 0 4px 4px; }
 .prisma-status-card .ant-statistic-title, .prisma-metric .ant-statistic-title, .prisma-m81-home .prisma-status-card .ant-statistic-title { color: #455d80; font-size: 15px; font-weight: 600; line-height: 1.5; }
 .prisma-status-card .ant-statistic-content, .prisma-metric .ant-statistic-content, .prisma-m81-home .prisma-status-card .ant-statistic-content { color: #031531; font-size: 32px; font-weight: 750; line-height: 1.25; }
-.prisma-status-card .ant-statistic-content-prefix { display: inline-grid; place-items: center; width: 56px; height: 56px; margin-right: 14px; border-radius: 50%; color: #155eef; background: var(--prisma-icon-surface); font-size: 32px; vertical-align: middle; }
+/* Outrank Ant Design's nested Statistic prefix rule so centering survives runtime style injection. */
+.prisma-status-card .ant-statistic .ant-statistic-content .ant-statistic-content-prefix { display: inline-grid; place-items: center; width: 56px; height: 56px; margin-right: 14px; border-radius: 50%; color: #155eef; background: var(--prisma-icon-surface); font-size: 32px; vertical-align: middle; }
 .prisma-m81-home .prisma-status-card .ant-statistic-content-prefix { color: #155eef; }
 .prisma-status-card .ant-typography, .prisma-m81-home .prisma-status-card .ant-typography { color: #455d80; font-size: 14px; }
 .prisma-people-metric-icon { width: 56px; height: 56px; flex: 0 0 56px; border-radius: 50%; font-size: 32px; color: #155eef; background: var(--prisma-icon-surface); }

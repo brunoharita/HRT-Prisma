@@ -1,0 +1,412 @@
+[
+  {
+    "area": "/",
+    "icons": [
+      {
+        "className": "ant-btn css-dev-only-do-not-override-ihx0ue css-var-_r_0_ ant-btn-circle ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-sm ant-btn-icon-only prisma-sidebar-collapse",
+        "display": "flex",
+        "placeItems": "center normal",
+        "container": [
+          239,
+          39,
+          36,
+          36
+        ],
+        "svg": [
+          247,
+          47,
+          20,
+          20
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-page-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          327.875,
+          31.03125,
+          64,
+          64
+        ],
+        "svg": [
+          341.875,
+          45.03125,
+          36,
+          36
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "ant-statistic-content-prefix",
+        "display": "block",
+        "placeItems": "center",
+        "container": [
+          346.875,
+          175.5625,
+          56,
+          56
+        ],
+        "svg": [
+          346.875,
+          180.5625,
+          32,
+          32
+        ],
+        "dx": -12,
+        "dy": -7
+      },
+      {
+        "className": "ant-statistic-content-prefix",
+        "display": "block",
+        "placeItems": "center",
+        "container": [
+          711.1875,
+          175.5625,
+          56,
+          56
+        ],
+        "svg": [
+          711.1875,
+          180.5625,
+          32,
+          32
+        ],
+        "dx": -12,
+        "dy": -7
+      },
+      {
+        "className": "ant-statistic-content-prefix",
+        "display": "block",
+        "placeItems": "center",
+        "container": [
+          1075.5,
+          175.5625,
+          56,
+          56
+        ],
+        "svg": [
+          1075.5,
+          180.5625,
+          32,
+          32
+        ],
+        "dx": -12,
+        "dy": -7
+      },
+      {
+        "className": "ant-statistic-content-prefix",
+        "display": "block",
+        "placeItems": "center",
+        "container": [
+          1439.8125,
+          175.5625,
+          56,
+          56
+        ],
+        "svg": [
+          1439.8125,
+          180.5625,
+          32,
+          32
+        ],
+        "dx": -12,
+        "dy": -7
+      }
+    ]
+  },
+  {
+    "area": "/profiles",
+    "icons": [
+      {
+        "className": "ant-btn css-dev-only-do-not-override-ihx0ue css-var-_r_0_ ant-btn-circle ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-sm ant-btn-icon-only prisma-sidebar-collapse",
+        "display": "flex",
+        "placeItems": "center normal",
+        "container": [
+          239,
+          39,
+          36,
+          36
+        ],
+        "svg": [
+          247,
+          47,
+          20,
+          20
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-page-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          327.875,
+          31.03125,
+          64,
+          64
+        ],
+        "svg": [
+          341.875,
+          45.03125,
+          36,
+          36
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-people-metric-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          346.875,
+          474.9375,
+          56,
+          56
+        ],
+        "svg": [
+          358.875,
+          486.9375,
+          32,
+          32
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-people-metric-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          711.1875,
+          474.9375,
+          56,
+          56
+        ],
+        "svg": [
+          723.1875,
+          486.9375,
+          32,
+          32
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-people-metric-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          1075.5,
+          474.9375,
+          56,
+          56
+        ],
+        "svg": [
+          1087.5,
+          486.9375,
+          32,
+          32
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-people-metric-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          1439.8125,
+          474.9375,
+          56,
+          56
+        ],
+        "svg": [
+          1451.8125,
+          486.9375,
+          32,
+          32
+        ],
+        "dx": 0,
+        "dy": 0
+      }
+    ]
+  },
+  {
+    "area": "/vacancies",
+    "icons": [
+      {
+        "className": "ant-btn css-dev-only-do-not-override-ihx0ue css-var-_r_0_ ant-btn-circle ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-sm ant-btn-icon-only prisma-sidebar-collapse",
+        "display": "flex",
+        "placeItems": "center normal",
+        "container": [
+          239,
+          39,
+          36,
+          36
+        ],
+        "svg": [
+          247,
+          47,
+          20,
+          20
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-page-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          327.875,
+          31.03125,
+          64,
+          64
+        ],
+        "svg": [
+          341.875,
+          45.03125,
+          36,
+          36
+        ],
+        "dx": 0,
+        "dy": 0
+      }
+    ]
+  },
+  {
+    "area": "/vacancies/new",
+    "icons": [
+      {
+        "className": "ant-btn css-dev-only-do-not-override-ihx0ue css-var-_r_0_ ant-btn-circle ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-sm ant-btn-icon-only prisma-sidebar-collapse",
+        "display": "flex",
+        "placeItems": "center normal",
+        "container": [
+          239,
+          39,
+          36,
+          36
+        ],
+        "svg": [
+          247,
+          47,
+          20,
+          20
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-page-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          327.875,
+          81.828125,
+          64,
+          64
+        ],
+        "svg": [
+          341.875,
+          95.828125,
+          36,
+          36
+        ],
+        "dx": 0,
+        "dy": 0
+      }
+    ]
+  },
+  {
+    "area": "/knowledge",
+    "icons": [
+      {
+        "className": "ant-btn css-dev-only-do-not-override-ihx0ue css-var-_r_0_ ant-btn-circle ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-sm ant-btn-icon-only prisma-sidebar-collapse",
+        "display": "flex",
+        "placeItems": "center normal",
+        "container": [
+          239,
+          39,
+          36,
+          36
+        ],
+        "svg": [
+          247,
+          47,
+          20,
+          20
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-page-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          327.875,
+          31.03125,
+          64,
+          64
+        ],
+        "svg": [
+          341.875,
+          45.03125,
+          36,
+          36
+        ],
+        "dx": 0,
+        "dy": 0
+      }
+    ]
+  },
+  {
+    "area": "/settings",
+    "icons": [
+      {
+        "className": "ant-btn css-dev-only-do-not-override-ihx0ue css-var-_r_0_ ant-btn-circle ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-sm ant-btn-icon-only prisma-sidebar-collapse",
+        "display": "flex",
+        "placeItems": "center normal",
+        "container": [
+          239,
+          39,
+          36,
+          36
+        ],
+        "svg": [
+          247,
+          47,
+          20,
+          20
+        ],
+        "dx": 0,
+        "dy": 0
+      },
+      {
+        "className": "prisma-page-icon",
+        "display": "grid",
+        "placeItems": "center",
+        "container": [
+          327.875,
+          31.03125,
+          64,
+          64
+        ],
+        "svg": [
+          341.875,
+          45.03125,
+          36,
+          36
+        ],
+        "dx": 0,
+        "dy": 0
+      }
+    ]
+  }
+]

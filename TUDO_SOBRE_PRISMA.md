@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 389
-source_manifest_sha256: 5972155ea9a0d9eb42ec31bdf68c964c1dfd6ef534b0692eaf4c72bb2f9d3189
+documentation_source_count: 393
+source_manifest_sha256: b6255589f5f31cd90b863ed9723654d69ec08615a3377f3ddefc3944d4a596f0
 -->
 
 # Tudo sobre o Prisma
@@ -2631,6 +2631,10 @@ last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Centralização dos ícones — correção na v2.2.0
+
+Diretriz de Bruno em08/10/2026: ícones sempre centralizados nos dois eixos de seu destaque, mantendo a versão2.2.0. Reproduzido desvio(-12,-7)CSSpx nos quatro indicadores de Início: regra injetada do Ant Design sobrepunha display do prefixo. Correção limitada à especificidade do seletor existente, sem offsets, alterações de tamanho ou reset global. Conferência de oito páginas sintéticas e27variantes CSS em1813/768/390/320; dados/AI/backend preservados. Acordo/execução/AoT `docs/qa/agreement-icon-centering.md`, `docs/qa/execution-icon-centering.md`, `docs/qa/aot-icon-centering.md`. Publicação e evidências finais em andamento; jornada autenticada real não testada.
 
 ## Acompanhamento Pessoa–Posição — v2.2.0
 
@@ -11833,6 +11837,8 @@ Contrato de apresentação: `prisma-ux-foundation-1.3.0`. Acordos aprovados: `do
 
 Títulos de página30–36px, seções20–24px, fatos principais24–26px, leitura16px, rótulos14–15px e metadados14px. Ícones de área32–36px em suporte56–64px; destaques32px em56px. Controles mantêm escala e foco próprios. Metadados compactos e selos auxiliares podem usar13px, sem promover instrução essencial a texto minúsculo.
 
+Diretriz permanente de Bruno em08/10/2026: todo ícone em uma superfície de destaque deve ficar centralizado horizontal e verticalmente. A centralização pertence ao contêiner e deve resistir às regras de componentes carregadas em runtime, preservando dimensões, cores, raios e responsividade. Não compensar com deslocamentos arbitrários do SVG. Correção dos quatro indicadores de Início mantém v2.2.0; inspeção e limites de cobertura no acordo/AoT `docs/qa/agreement-icon-centering.md` e `docs/qa/aot-icon-centering.md`.
+
 Cards de destaques usam fundo azul-claro #edf4ff, borda #b9d2ff, suporte de ícone #dceaff, acento #155eef e cantos16px. Conteúdo e superfícies de leitura permanecem claros; peso tipográfico e separação distinguem fato, complemento e origem. Não aplicar tonalidade a todos os painéis indistintamente. Ícones semânticos reutilizam Ant Design; capelo e maleta SVG simples seguem currentColor e ficam ocultos de leitores de tela quando acompanham rótulo textual.
 
 Pessoa mantém seis abas, leitura72/28, quatro destaques em desktop,2x2 intermediário/uma coluna no celular, síntese e oito análises integrais, fontes opcionais e estados reais. Dados ilustrativos da imagem não substituem fatos/cálculos do Perfil. Home, Pessoas, Posições, Conhecimento, Verificações e Administração compartilham cabeçalhos, cartões e escala. Nenhuma faixa escura da opção2 foi aprovada neste movimento.
@@ -12527,6 +12533,40 @@ Sem escolha arquitetural pendente para a ponte aprovada. Sessão autenticada e j
 - CA-D06: teste dirigido da integração ao callback existente e, na interface, correção/cancelamento, bloqueio de criação durante edição, confirmação server-side e identidade correta antes de prosseguir. Nome sem contato continua insuficiente para criar; vínculo name-only já permitido não é removido.
 
 Ativação enabled é limitada ao teste/piloto hospedado solicitado; não declara concluído o benchmark/cutover geral M5.6. Publicação de Perfil permanece humana.
+
+---
+
+## Source: `docs/qa/agreement-icon-centering.md`
+
+# Acordo — Ícones centralizados nos destaques
+
+v1.0.0, agreed, 08/10/2026. Autoridade: Bruno pediu corrigir os ícones destacados em toda a plataforma, usando a imagem anexada como contraexemplo, sem alterar a versão do produto. Baseline main `aaa289458676556de000b651539bbeb3ee07354f`, v2.2.0. A instrução já autoriza implementação e publicação conforme AGENTS.md.
+
+- D-01/D-UX-01: ícones dentro de círculos ou superfícies de destaque ficam centralizados nos dois eixos, inclusive nas quatro métricas da página inicial; verificar componentes compartilhados e variantes existentes.
+- D-02/D-UX-02: preservar ícones, dimensões, cores, raios, números, textos, agrupamentos, ordem, ações, responsividade e funções. A imagem é contraexemplo do desalinhamento, não autorização para redesenhar a página nem usar seus números como dados reais de teste.
+- D-03: corrigir a causa na regra existente, com seletores limitados aos destaques afetados; preservar os destaques já corretos e ícones em controles/textos.
+- D-04: manter v2.2.0, registrar a diretriz em UX, Context Pack e AoT, publicar somente o destino necessário e comprovar CI/smoke/rollback/sincronização.
+- P-01/P-UX-01: sem compensação por deslocamento arbitrário, sem aumentar SVG para esconder o desalinhamento, esconder ícone ou alterar globalmente todos os anticon/controles.
+- P-02: sem mudança de dados, permissões, banco, backend, IA, matching ou incremento de versão.
+- F-01: redesign, troca de ícones, novas funcionalidades e correções adjacentes.
+- A-01/A-UX-01: reutilizar CSS/componentes/fixtures existentes; engenharia decide especificidade, medições e validação proporcional. Nenhuma dependência nova.
+- Q-01: nenhuma pendência material.
+
+## Aceite e fidelidade visual
+
+CA-01/CA-UX-01: reproduzir o desvio, medir centro do SVG contra seu destaque antes/depois (tolerância de1CSSpx por eixo), comparar renders equivalentes desktop/mobile e conferir variantes compartilhadas. CA-02: mesmos tamanhos, cores, raios e conteúdo; nenhum overflow introduzido. CA-03: controles comuns e destaques não afetados preservados. CA-04: tipos/build, checks dirigidos/contexto/CI, publicação web e smoke público com SHA e v2.2.0; registrar limites de cobertura e jornada autenticada real.
+
+## Mapa de impacto inicial
+
+| Área | Relação | Baseline / preservação / regressão |
+| --- | --- | --- |
+| CSS de indicadores iniciais | direct | prefix56/SVG32; desvio(-12,-7) reproduzido;4centros pós-correção e renders |
+| Destaques compartilhados: títulos/Pessoas/Perfil/Knowledge/Posições/Kanban | plausible_indirect | inventário dos3CSS e DOM sintético; centros, tamanhos, ausência de overflow em1813/768/390/320 |
+| Controles/navegação | plausible_indirect | seletor não global; menu desktop/mobile e botão com ícone preservados |
+| Dados/tenant/backend/IA | no_impact_identified | CSS não toca fluxos/serviços/contratos; diff/plano sem esses destinos |
+| Versão/release/contexto | direct | registro2.2.0 inalterado; Context Pack/CI/smoke/rollback |
+
+Classe B: correção visual delimitada na base compartilhada. Não requer nova arquitetura, biblioteca ou ADR. Screenshot `codex-clipboard-36d5c979-fafd-4fd8-b29a-7edea04a625b.png` é o contraexemplo fornecido; topologia e hierarquia permanecem iguais, somente alinhamento corrigido.
 
 ---
 
@@ -16495,6 +16535,61 @@ Qualidade: inspeção visual do PDF original na revisão confirmou nome, título
 ## Conclusão
 
 PARTIAL. Correção de identidade entregue e validada; jornada hospedada chegou à revisão sem publicar Perfil. Runtime ativo `55733a0`; túnel e workers dependem do PC ligado, sem retomada automática. Qualidade do rascunho insuficiente, telemetria não persistida e inferência Paddle não exercitada pela rota nativa escolhida. Não há conclusão de cutover nem evidência de viabilidade CPU para este PDF. Parser/roteamento e disponibilização da telemetria exigem movimento separado autorizado.
+
+---
+
+## Source: `docs/qa/aot-icon-centering.md`
+
+# AoT — Centralização de ícones, versão 2.2.0 mantida
+
+Contrato: `agreement-icon-centering.md` v1.0.0; execução `execution-icon-centering.md`. Baseline main/origin `aaa289458676556de000b651539bbeb3ee07354f`. Pedido direto de Bruno em08/10/2026, sem incremento de versão.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status / limite |
+| --- | --- | --- | --- |
+| D-01/D-UX-01 | Seletor do prefixo Statistic ganha especificidade contra a regra Ant Design | Antes(-12,-7), depois(0,0);36cenários/254medições, `evidence/icon-centering/browser-results.json` | PASS local |
+| D-02/D-UX-02 | Declarações existentes de tamanho/cor/raio/layout preservadas |4prefixos56/SVG32; flex fracionário55.78125 em768 preservado; valores24/6/18/0, Perfil4cards/8eixos, sem overflow | PASS local |
+| D-03 | Somente seletor existente em foundation.css, sem reset global |8páginas e27variantes em1813/768/390/320; menu móvel abre/fecha | PASS local |
+| D-04 | Registro2.2.0 inalterado; ownerUX/contexto/AoT | Publicação seletiva/CI/smoke/rollback a concluir | PARTIAL |
+
+## Proibições verificadas
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01/P-UX-01 | Diff CSS somente seletor e comentário; nenhum offset, resize, hide ou reset global | PASS |
+| P-02 | Sem diff de banco/serviços/IA/matching/releaseRegistry; dados sintéticos e rede externa bloqueada no browser | PASS local; plano operacional pendente |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade / relação | Baseline | Regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Indicadores Início / direct |4ícones com desvio(-12,-7);56/SVG32 | Centros0/0, mesma dimensão/cor/raio, quatro números; baseline.json e renders antes/depois | PASS |
+| Títulos/Pessoas/Perfil/Posições/Knowledge/Settings/Kanban / plausible_indirect | Outros destaques medidos já centralizados |8páginas +27topologias CSS nas4larguras, sem overflow | PASS no escopo sintético |
+| Controles/navegação / plausible_indirect | CSS existente; seletor restrito | Sidebar/cabeçalhos medidos, menu móvel/Escape operável; botões preservados nos renders | PASS dirigido |
+| Tenant/dados/backend/IA / no_impact_identified | Contratos e serviços vigentes | Não atingidos pelo seletor; diff sem consumidores de dados, sem destino backend | PASS por análise de alcance; sem acesso ao banco |
+| Versão/contexto/publicação / direct |2.2.0, web58b326d6 | Checks/plano/smoke a concluir | PARTIAL |
+
+Nova entrega: centralização resistente à injeção CSS do Ant Design. Preservação: mesmos ícones, dimensões, superfícies, conteúdo e responsividade. Sem reclassificações nem novas dependências. Inventário dos três CSS: styles.css/foundation.css/positionFollowUp.css; destaque já utiliza contêiner grid/flex centralizado nas demais variantes. Galeria testa topologias CSS existentes; não substitui navegação autenticada por todos os estados ocultos.
+
+## Fora de escopo e fidelidade visual
+
+F-01 PASS: sem redesign, troca de ícones ou novas funções. Referência anexada é contraexemplo do desalinhamento. Renders `home-before-1813.png`, `home-1813.png`, `home-before-390.png`, `home-390.png` usam os mesmos dados/estado/viewport de fixture. Baseline original foi capturado antes da mudança; renders antes reproduzem a regra original, não um deslocamento fabricado. Valores sintéticos24/6/18/0 diferem das contagens reais ilustradas pelo usuário. Topologia, hierarquia, proporções, agrupamentos, informação e ações preservadas; somente centralização muda. Renders de Pessoas, Perfil e Kanban em1813/390 também revisados. Nenhum desvio material do contrato ou mudança de escopo.
+
+## Validação final
+
+- 36cenários/254medições no navegador: PASS;8páginas e galeria27variantes em1813/768/390/320, sem runtime errors ou chamadas externas.
+- Tipos web/build web: PASS; avisos preexistentes de chunk/import dinâmico.
+- 19testes release-tooling/contexto: PASS.
+- Lint/foundation/Context Pack/diff check: PASS em cópia dos rastreados, preservando arquivos alheios não rastreados. CI pendente.
+
+## Git / QA / produção
+
+Branch `codex/fix-highlight-icon-centering`, origin oficial. Não há QA remoto separado; fixtures determinísticas locais, sem IA ou registros reais. Publicação somente web em andamento. Jornada autenticada real NOT TESTED; geometria sintética e smoke de assets não comprovam todos os estados de dados reais.
+
+## Conclusão
+
+Aceites visuais locais PASS. Fechamento operacional pendente; não declarar entrega concluída até D-04 PASS.
 
 ---
 
@@ -21355,6 +21450,18 @@ Evidência sintética: `ui-results.json`, quatro arquivos `evidence-*.json`, `cl
 
 ---
 
+## Source: `docs/qa/evidence/icon-centering/README.md`
+
+# Evidência de centralização
+
+Fixtures reais de páginas com dados sintéticos. Em terminais separados, executar `node node_modules/vite/bin/vite.js --config tests/ui/visual-foundation.vite.config.mts`, `node node_modules/vite/bin/vite.js --config tests/ui/person-unified.vite.config.mts` e `node node_modules/vite/bin/vite.js --config tests/ui/position-follow-up.vite.config.mts`. Depois `node tests/tooling/iconCentering.browser.mjs`. O script permite caminhos de Playwright/Chrome nas variáveis `PRISMA_PLAYWRIGHT_PATH` e `PRISMA_BROWSER_PATH`, sem instalar dependência de produção.
+
+`baseline.json` captura a geometria anterior à edição em1813px. `browser-results.json` registra36cenários/254medições depois, com4larguras e27variantes adicionais de CSS existentes. Renders `home-before-*` repetem o CSS original com a mesma fixture/viewport dos renders entregues. O desvio original foi reproduzido emdesktop/mobile: display block, centro(-12,-7). Após a correção: grid, centro(0,0). Os demais destaques conferidos permanecem centralizados. A galeria é prova de CSS; não é navegação autenticada por cada estado oculto da aplicação.
+
+Dados e conteúdo dos renders são ilustrativos. O aviso de acompanhamento incompatível no Perfil é limitação preexistente do mock auxiliar dessa fixture; o Kanban usa sua própria fixture válida. Não se modificaram os mocks nem regras do acompanhamento neste movimento.
+
+---
+
 ## Source: `docs/qa/evidence/loading-feedback-v216/inventory.md`
 
 # Inventário de carregamento — v2.1.6
@@ -21471,6 +21578,14 @@ Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.
 Aditivo: reutilizar IdentityForm e identifyResumeIntake para expor correção explícita antes da criação; revalidar correspondências, bloquear resolução durante a edição e preservar o formulário em erro. Não corrigir o algoritmo extrator neste escopo. Implantar o ajuste e repetir a jornada real autorizada sem publicar Perfil.
 
 Sequência: diagnóstico existente -> branch isolada do deploy f1cc983 -> gateway de transporte reutilizando Auth/RLS -> SSH reverso -> negativos/adapter/build -> implantação reversível -> jornada real hospedada -> AoT e contexto gerado. Gateway não contém parser, modelo nem regra de extração; usa Node já adotado pelo repositório e nenhuma biblioteca nova. Não executar validação integral sem autorização adicional. Não publicar Perfil nem ativar Parser IA M5.7. Se acesso autenticado/qualidade/tempo impedir prova, registrar PARTIAL/BLOCKED no AoT, sem declarar encerramento.
+
+---
+
+## Source: `docs/qa/execution-icon-centering.md`
+
+# Execução — Centralização de ícones
+
+Contrato congelado: `docs/qa/agreement-icon-centering.md` v1.0.0, lido integralmente. Implementar todos D/P/F/A e critérios, incluindo D-UX/P-UX/A-UX, sem reinterpretar. Corrigir apenas desalinhamentos demonstrados na inspeção da plataforma, preservar destaques corretos e controles comuns. Manter2.2.0 por decisão explícita do PO. Validar geometria e comparação visual desktop/mobile, documentar cobertura/limites e publicar conforme plano seletivo; sem banco/backend/IA ou suíte completa local.
 
 ---
 
