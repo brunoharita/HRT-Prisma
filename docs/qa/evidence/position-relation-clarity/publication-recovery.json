@@ -1,0 +1,12 @@
+{
+  "functionalSha": "c87ad10a4fca2429918bcb17be074aa7e584e0cd",
+  "dispatcherExit": 1,
+  "sshDeployExit": 22,
+  "immediateProbeHttp": 404,
+  "phase": "web container recreation",
+  "deployRepeated": false,
+  "independentVerification": "production-after.json",
+  "http200Count": 16,
+  "checksPassed": 14,
+  "conclusion": "stable after recreation; independent smoke passed"
+}

@@ -1,0 +1,74 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/agreement-position-relation-clarity.md",
+      "docs/qa/aot-position-relation-clarity.md",
+      "docs/qa/evidence/position-relation-clarity/after-1537.png",
+      "docs/qa/evidence/position-relation-clarity/after-320.png",
+      "docs/qa/evidence/position-relation-clarity/after-390.png",
+      "docs/qa/evidence/position-relation-clarity/after-768.png",
+      "docs/qa/evidence/position-relation-clarity/baseline.json",
+      "docs/qa/evidence/position-relation-clarity/before-1537.png",
+      "docs/qa/evidence/position-relation-clarity/before-390.png",
+      "docs/qa/evidence/position-relation-clarity/browser-results.json",
+      "docs/qa/evidence/position-relation-clarity/comparison-1537.png",
+      "docs/qa/evidence/position-relation-clarity/comparison-390.png",
+      "docs/qa/evidence/position-relation-clarity/comparison-regression.json",
+      "docs/qa/evidence/position-relation-clarity/confirmed-390.png",
+      "docs/qa/evidence/position-relation-clarity/dismissed-390.png",
+      "docs/qa/evidence/position-relation-clarity/long-390.png",
+      "docs/qa/evidence/position-relation-clarity/no-evidence-390.png",
+      "docs/qa/evidence/position-relation-clarity/pending-390.png",
+      "docs/qa/evidence/position-relation-clarity/production-before.json",
+      "docs/qa/evidence/position-relation-clarity/review-1537.png",
+      "docs/qa/evidence/position-relation-clarity/review-390.png",
+      "docs/qa/evidence/position-relation-clarity/review-768.png",
+      "docs/qa/execution-position-relation-clarity.md",
+      "tests/tooling/positionRelation.browser.mjs",
+      "tests/ui/position-relation.html",
+      "tests/ui/position-relation.vite.config.mts",
+      "tests/ui/position-relation/main.tsx",
+      "tests/vacancyIntelligence.test.ts",
+      "web/src/pages/VacancyPages.tsx",
+      "web/src/styles.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

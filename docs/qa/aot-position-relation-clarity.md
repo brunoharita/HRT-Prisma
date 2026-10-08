@@ -10,7 +10,7 @@ Contrato `docs/qa/agreement-position-relation-clarity.md` v1.0.0, execução cor
 | D-02 | Três ações com descrições visíveis e selos contextuais no card/comparação | browser-results.json; vacancyIntelligence/own-diff | PASS | sintético; comparação renderizada |
 | D-03 | Orientação permanente abaixo das ações | renders e browser-results.json | PASS | sintético |
 | D-UX-01 | Consultar/revisão/relação preservados e textos responsivos | before/after1537/390, limites768/320, review | PASS | sintético |
-| D-04 | Handlers/gates/loading/erros/refresh/inclusão independente; web e versão2.2.1 | browser/43dirigidos+5tooling; publicação pendente | PARTIAL | local PASS; produção pendente |
+| D-04 | Handlers/gates/loading/erros/refresh/inclusão independente; web e versão2.2.1 | browser/43dirigidos+5tooling; CI/plano/smoke/rollback | PASS | sintético + rollout público |
 
 ## Proibições verificadas
 
@@ -29,7 +29,7 @@ Contrato `docs/qa/agreement-position-relation-clarity.md` v1.0.0, execução cor
 | Inclusão Kanban/comparação | plausible_indirect | add RPC sintética separada/navegação/zero seleção implícita | PASS |
 | Matching/requisitos/backend/tenant/IA | no_impact_identified | serviços/contratos intocados,43testes atuais/plano | PASS |
 | Perfil/overview | no_impact_identified | novos seletores só no grupo de relação; tipos/build | PASS |
-| Release/contexto | direct | registry2.2.1; contexto PASS; CI/smoke/sincronização pendentes | PARTIAL |
+| Release/contexto | direct | registry2.2.1; contextos/CI/plano/smoke/rollback/sincronização | PASS |
 
 Novidade: clareza textual e significado permanente das ações. Preservação: mesmas decisões e serviços. Selos repetidos identificados na comparação, com quebra de texto delimitada necessária: essa apresentação passa a direct; sem mudança funcional de comparação. Demais relações preservadas; sem jornada transversal crítica alterada. Baseline sintético usa mesmos dados/estado/viewport antes/depois; não comprova qualidade de matching ou persistência autenticada real.
 
@@ -47,12 +47,18 @@ Nenhuma mudança material autorizada adicional. Nenhum desvio material no result
 
 ## Validação final
 
-Tipos/build web/root PASS;43testes vacancyIntelligence/trajectoryReviewModal e5tooling de rotas/avisos PASS. 75checks browser +9checks de regressão delimitada da comparação PASS (quatro larguras normais, seis estados mobile, review desktop/tablet, comparação desktop/mobile e handlers). Contextos/lint/foundation/diff PASS; CI/publicação pendentes. Avisos de chunks/import dinâmico preexistentes não impedem build. Sem IA paga ou banco produtivo como teste.
+Tipos/build web/root PASS;43testes vacancyIntelligence/trajectoryReviewModal e5tooling de rotas/avisos PASS. 75checks browser +9checks de regressão delimitada da comparação PASS (quatro larguras normais, seis estados mobile, review desktop/tablet, comparação desktop/mobile e handlers). Contextos/lint/foundation/diff PASS; CI/publicação/smoke PASS. Avisos de chunks/import dinâmico e depreciação maskClosable preexistentes não impedem execução. Sem IA paga ou banco produtivo como teste.
 
 ## Git / QA / ambiente
 
-Branch `codex/position-relation-clarity`; baseline main/origin/VPS confirmado no SHA acima. Web baseline5300ddff running0; Parser/Synthesis healthy0/gateway running0. Dados pessoais e arquivos alheios preservados. QA autenticado real NOT TESTED; produção ainda pendente.
+Branch `codex/position-relation-clarity`, integrada por fast-forward em main na origem oficial HRT-Prisma. SHA funcional `c87ad10a4fca2429918bcb17be074aa7e584e0cd`, CI branch37858859651/main37858998861 success. Pipeline existente verificou831testes/golden/demo/ledger/script seletivo/auditoria (sem vulnerabilidades conhecidas). Local não repetiu suíte integral. Recibos ci-branch.json/ci-main.json e release-plan.json/release-dry-run.json.
+
+Plano de34arquivos: web/hosting/documentação/contextos/testes, sem banco/Edge/Parser/Synthesis. Dispatcher fez push/CI/integração/build/recriação apenasweb; curl imediato404 encerrou SSH com22/dispatcher com1 durante recriação. Não houve novo deploy: verificação posterior independente confirmou16HTTP200/14checks PASS, SHA/2.2.1/novos textos/orientação/CSS/assets novos e antigos, estado dos serviços e rollback. `publication-recovery.json` mantém essa distinção; `production-before.json`/`production-after.json` registram baseline e resultado.
+
+Web `e40c0f1ceccbe71a94ed0474d3b54ec0398ebabdb99d55bc2311f1e1d4ada3c1`, imagem `sha256:25f949ba8dad826bfa3ab6797fb861d6bfaebc807f92973e78164680b314de42`, running/zero reinícios. Rollback `prisma-web:rollback-before-c87ad10a4fca` preserva imagem5300ddffa5b81c6faa535ee4fa6bb4d0a5a944f427d059f1ba0361a9c48f58c6. Bundle index-DwEGF6pC.js e CSS index-BJ2-6jFV.css. Parser/Synthesis conservam IDs/imagens/healthy0; gateway conserva ID/imagem/running0. Dados e arquivos alheios preservados. Aviso de orphan/maintenance de worktrees não autoriza limpeza e nenhum desses recursos foi removido.
+
+Fechamento documental/evidências/contextos sincroniza local/origin/main/checkout da VPS sem reconstruir runtime, que conserva o SHA funcional acima. Servidor temporário5703 encerrado. QA/jornada autenticada real NOT TESTED: smoke público e fixtures não provam persistência de decisão real nem qualidade de matching.
 
 ## Conclusão
 
-Em execução; não declarar entrega antes do smoke e fechamento dos D-*.
+Todos os D-* e P-* aplicáveis PASS, F-01 preservado, sem desvio material no resultado final. Entrega textual/visual e preservação funcional comprovadas com componentes reais e dados sintéticos; rollout web verificado. Limite autenticado real permanece explícito.
