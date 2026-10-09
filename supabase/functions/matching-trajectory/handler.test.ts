@@ -46,6 +46,7 @@ function fixture() {
       serviceCreated++;
       return { rpc: (name, params) => {
         calls.push({ name, params });
+        if(name==="record_ai_history_v1")return Promise.resolve({data:params.p_action==="open_request"?{request:{id:"fixture-history"}}:{acquired:true},error:null});
         if (name === "commit_matching_snapshot") return Promise.resolve({ data: { evaluationId: "40000000-0000-0000-0000-000000000001" }, error: commitError });
         if (name === "load_matching_trajectory_review") return Promise.resolve({ data: reviewData, error: reviewError });
         if (name === "save_matching_trajectory_review") return Promise.resolve({ data: { reviewId: "50000000-0000-0000-0000-000000000001",
@@ -524,4 +525,13 @@ Deno.test("legacy refresh does not pay for a second request when unclaimed, malf
   const denied = fixture(); denied.setAuthorized(false);
   const forbidden = await handleMatchingTrajectory(denied.request(body), denied.deps);
   assert(forbidden.status === 403 && denied.requests.length === 0 && denied.serviceCreated() === 0);
+});
+
+Deno.test("generic history records both independent reads and cache without implicit provider replay",async()=>{
+ const f=fixture();f.deps.historyEnabled=true;const response=await handleMatchingTrajectory(f.request(),f.deps);assert(response.status===200,"matching complete");
+ const history=f.calls.filter(c=>c.name==="record_ai_history_v1").map(c=>c.params as {p_action:string;p_data:Record<string,unknown>});
+ assert(history.filter(c=>c.p_action==="begin_attempt").length===2,"two attempts");assert(history.filter(c=>c.p_action==="complete_attempt").length===2,"both receipts");
+ assert(history[0]?.p_data.organizationId===ids.organizationId,"tenant from authorized source");assert(!JSON.stringify(history).includes("SecretEmployer"),"no raw evidence in history");
+ const cached=fixture();cached.deps.historyEnabled=true;const context=prepareTrajectoryContext(source.profileData,source.position,source.redactions);cached.setCache({acquired:false,status:"complete",reading:{items:context.entries.map(e=>({id:e.id,activity:"backend_execution",quote:e.text}))}});
+ await handleMatchingTrajectory(cached.request(),cached.deps);assert(cached.requests.length===0,"cache no provider");assert(cached.calls.some(c=>c.name==="record_ai_history_v1"&&(c.params.p_data as Record<string,unknown>)?.usageKind==="cache"),"cache tracked");
 });

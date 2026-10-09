@@ -92,6 +92,11 @@ export const PRISMA_RELEASE_HISTORY = [{
     "2.2.0: acompanhamento Pessoa–Posição em Lista e Kanban, com arraste e histórico",
     "2.2.1: detalhes da Posição alinhados ao Perfil, com leitura principal e sidebar contextual",
   ],
+}, {
+  productGeneration: 2,
+  movement: 3,
+  firstDeliveryNumber: 0,
+  deliveries: ["2.3.0: Avaliação para Posição, convites e histórico genérico de IA"],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {

@@ -19,6 +19,6 @@ RUN pnpm install --prod --frozen-lockfile \
     && chown node:node /var/lib/prisma/parser-ia /run/parser-ia \
     && chmod 700 /var/lib/prisma/parser-ia /run/parser-ia
 COPY --from=build /app/dist ./dist
-COPY scripts/parser-ia-service.mjs scripts/start-parser-ia-hosted.mjs scripts/check-parser-ia-hosted.mjs ./scripts/
+COPY scripts/parser-ia-service.mjs scripts/start-parser-ia-hosted.mjs scripts/check-parser-ia-hosted.mjs scripts/ai-history-client.mjs ./scripts/
 USER node
 CMD ["node", "scripts/start-parser-ia-hosted.mjs"]

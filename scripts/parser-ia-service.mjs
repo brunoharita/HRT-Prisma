@@ -1,4 +1,5 @@
 // Loopback-only inference worker. Never import this module into a browser bundle.
+import { createWorkerHistory, withAiHistory, recordAiCacheHit } from "./ai-history-client.mjs";
 import { readFile, writeFile, mkdir, open, unlink, stat } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
@@ -115,7 +116,7 @@ export function providerFailureCode(status, rawBody = "") {
   return "PARSER_PROVIDER_FAILED";
 }
 
-export function createParserService({ directory = resolve("tmp/m57-parser-ia"), lockDirectory = directory, fetchImpl = fetch, keyProvider = loadParserSecret, timeoutMs = 120000, allowNetwork = true } = {}) {
+export function createParserService({ directory = resolve("tmp/m57-parser-ia"), lockDirectory = directory, fetchImpl = fetch, keyProvider = loadParserSecret, timeoutMs = 120000, allowNetwork = true, historyClient = null } = {}) {
   let busy = false;
   const parse = async function parse({ bytes, organizationId, sourceSha256 }) {
     if (busy) throw new Error("PARSER_BUSY");
@@ -131,11 +132,14 @@ export function createParserService({ directory = resolve("tmp/m57-parser-ia"), 
       const pages = await readParserPdf(bytes);
       const cacheKey = createHash("sha256").update([organizationId, sourceSha256, PARSER_IA_VERSION, PARSER_MODEL, PARSER_PROMPT_SHA].join(":")).digest("hex");
       const cachePath = join(directory, `${cacheKey}.private.json`);
+      const historyScope={organizationId,functionName:"parser_ia",operationId:crypto.randomUUID(),sourceVersion:PARSER_IA_VERSION,inputFingerprint:cacheKey};
+      const historyStart=Date.now();
       let cache;
       try { cache = JSON.parse(await readFile(cachePath, "utf8")); } catch (error) { if (error.code !== "ENOENT") throw new Error("PARSER_CACHE_INVALID"); }
       if (cache) {
         if (cache.organizationId !== organizationId || cache.sourceSha256 !== sourceSha256 || cache.result?.version !== PARSER_IA_VERSION || cache.result?.provenance?.promptSha256 !== PARSER_PROMPT_SHA) throw new Error("PARSER_CACHE_INVALID");
         const result = structureParserIa(cache.payload, pages, { organizationId, sourceSha256, provenance: cache.result.provenance });
+        if(historyClient)await recordAiCacheHit(historyClient,historyScope,Date.now()-historyStart);
         return { pages, result, cached: true };
       }
       if (!allowNetwork) throw new Error("PARSER_LIVE_DISABLED");
@@ -144,7 +148,8 @@ export function createParserService({ directory = resolve("tmp/m57-parser-ia"), 
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeoutMs);
       try {
-        const response = await fetchImpl("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify(parserRequest(bytes, pages)), signal: controller.signal });
+        const perform=async(tracked)=>{
+        const response = await tracked("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify(parserRequest(bytes, pages)), signal: controller.signal });
         if (!response.ok) {
           const rawError = await readLimitedProviderBody(response, 64 * 1024).catch(() => "");
           throw new Error(providerFailureCode(response.status, rawError));
@@ -156,6 +161,8 @@ export function createParserService({ directory = resolve("tmp/m57-parser-ia"), 
         const result = structureParserIa(parsed.payload, pages, { organizationId, sourceSha256, provenance: { model: parsed.model, promptSha256: PARSER_PROMPT_SHA, responseId: parsed.responseId, inputTokens: parsed.inputTokens, outputTokens: parsed.outputTokens, costUsd: parsed.costUsd, durationMs: Math.round(performance.now() - started) } });
         await writeFile(cachePath, JSON.stringify({ organizationId, sourceSha256, payload: parsed.payload, result }, null, 2), { flag: "wx" });
         return { pages, result, cached: false };
+        };
+        return historyClient?await withAiHistory(historyClient,historyScope,perform,fetchImpl):await perform(fetchImpl);
       } catch (error) {
         if (controller.signal.aborted) throw new Error("PARSER_TIMEOUT");
         throw new Error(safeParserError(error));

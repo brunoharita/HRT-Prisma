@@ -1,0 +1,2 @@
+import {defineConfig} from "vite";import react from "@vitejs/plugin-react";
+export default defineConfig({root:"tests/ui",cacheDir:"../../tmp/vite-position-assessment",publicDir:"../../web/public",plugins:[{name:"assessment-fixture",enforce:"pre",transform(_code,id){if(id.replaceAll("\\","/").endsWith("/infrastructure/supabase/client.ts"))return 'export const supabase={};';}},react()],server:{host:"127.0.0.1",port:5698,strictPort:true,fs:{allow:["../.."]}}});

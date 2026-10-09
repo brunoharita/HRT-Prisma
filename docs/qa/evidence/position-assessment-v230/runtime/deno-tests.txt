@@ -1,0 +1,61 @@
+running 1 test from ./supabase/functions/assessment-item-generator/history.test.ts
+legacy item generation remains gated and records actual attempts without enabling legacy production policy ... ok (105ms)
+running 35 tests from ./supabase/functions/matching-trajectory/handler.test.ts
+auth/session/source authorization precedes all service and provider access ... ok (96ms)
+server triage rejects contextual, resolved and human-decided profiles before cache or provider ... ok (105ms)
+server triage uses source identity and revisions, never browser approval ... ok (11ms)
+snapshot returns committed ID and server-computed score fingerprint ... ok (13ms)
+prompt 2.1 binds cached assessment and server snapshot without provider replay ... ok (39ms)
+snapshot ignores no client fields: forged points, sources or analysis ID rejected ... ok (1ms)
+snapshot cannot compute a missing cache or persist indeterminate/processing/unclear results ... ok (14ms)
+snapshot rejects cross-tenant source projection and changed semantic source version ... ok (2ms)
+atomic commit rejects stale source/revoked actor without exposing backend errors ... ok (15ms)
+browser cannot inject text, model, source revisions or actor ... ok (1ms)
+chunked/oversized body is bounded ... ok (2ms)
+disabled provider/missing model has no fallback and no calls ... ok (7ms)
+two independent reverse-order reads, strict/store false, minimized context, actual model persisted ... ok (7ms)
+disagreement persists indeterminate without a reading ... ok (3ms)
+diagnostic isolates both readings, incomplete reason and bounded usage without provider content ... ok (2ms)
+diagnostic distinguishes malformed JSON, invalid quote and model mismatch without changing public reason ... ok (11ms)
+diagnostic logger failure cannot alter a completed assessment or public error ... ok (6ms)
+diagnostic sanitizes unknown provider metadata and does not record cached failures ... ok (5ms)
+cached failure exposes only truthful bounded retry state without calling the provider ... ok (11ms)
+refusal, incomplete, missing model, invented evidence IDs and malformed JSON remain unavailable ... ok (15ms)
+model resolution disagreement cannot produce a complete assessment ... ok (4ms)
+provider error and timeout produce bounded reason codes ... ok (7ms)
+completed, disagreement, processing and cooldown cache paths do not call provider ... ok (9ms)
+source change after provider/cache returns stale without releasing evidence ... ok (5ms)
+compatible cache remains readable with flag off or API key missing ... ok (6ms)
+sensitive professional clause returns review required without cache or provider ... ok (2ms)
+strict provider envelope rejects tools, duplicate messages, extra content, errors and incomplete details ... ok (20ms)
+hash is canonical and changes with Knowledge revision or minimized text ... ok (1ms)
+one verified conflict is reviewable without a provider call, and human choice is assembled from evidence ... ok (13ms)
+large reviews load every verified conflict and save atomically without provider calls ... ok (83ms)
+unready, unauthorized or malformed reviews cannot save ... ok (7ms)
+a legacy disagreement without stored readings is reported promptly without a provider call ... ok (3ms)
+only an explicit legacy refresh claims the old cache and requests two new readings ... ok (3ms)
+legacy refresh does not pay for a second request when unclaimed, malformed or unauthorized ... ok (5ms)
+generic history records both independent reads and cache without implicit provider replay ... ok (10ms)
+running 3 tests from ./supabase/functions/position-assessment/index.test.ts
+oversized input and unsupported origins stop before any backend or provider call ... ok (124ms)
+explicit assessment generation uses minimized requirements, records cost and persists pending human proposals; invalid output records failure ... ok (40ms)
+human email action persists claim before transport, personal token stays in fragment and escaped email; backend receipt is confirmed ... ok (36ms)
+running 3 tests from ./supabase/functions/knowledge-agent/competencyNormalization.test.ts
+M73 worker: scoped input, grounded result, no CV, exactly one call and usage metadata ... ok (141ms)
+M73 worker: malformed/omitted AI output preserves every deterministic declaration and records failure ...
+------- post-test output -------
+{"event":"competency_normalization_rejected","code":"COMPETENCY_RESPONSE_INCOMPLETE_INDEX_0"}
+----- post-test output end -----
+M73 worker: malformed/omitted AI output preserves every deterministic declaration and records failure ... ok (3ms)
+M73 worker: external opt-out and existing human decisions never call provider ... ok (0ms)
+running 1 test from ./supabase/functions/knowledge-agent/history.test.ts
+Knowledge history covers research, description, occupation and vacancy with original gates and no payload retention ... ok (234ms)
+
+ok | 43 passed | 0 failed (3s)
+
+
+Check supabase/functions/assessment-item-generator/history.test.ts
+Check supabase/functions/matching-trajectory/handler.test.ts
+Check supabase/functions/position-assessment/index.test.ts
+Check supabase/functions/knowledge-agent/competencyNormalization.test.ts
+Check supabase/functions/knowledge-agent/history.test.ts

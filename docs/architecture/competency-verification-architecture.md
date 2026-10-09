@@ -1,11 +1,25 @@
 ---
 owner: architecture
 status: implemented_for_internal_qa
-version: 1.0.0
-last_verified: 2026-09-01
+version: 1.1.0
+last_verified: 2026-10-09
 ---
 
 # Arquitetura do M5.1 - Verificação de Competências
+
+## Avaliação contextual para Posição — v2.3.0
+
+Agreement/Execution v0.5.0 congelados e publicação autorizada pelo PO. Jornada contextual após entrada no acompanhamento: configuração multirrequisito → Banco/IA/Misto → revisão humana → convite por e-mail → portal → resultado/atividade privados. Implementação local integral validada; rollout/evidências em docs/qa/aot-position-assessment-v230.md, sem presumir ativação pela existência do código.
+
+Migration20261009150000 cria seis tabelas tenant-consistentes: configuração/snapshots, tentativas/respostas/resultados, eventos, entregas, reservas de geração e auditoria. RPCs de operador reutilizam authorize_position_follow_up; sem DML direto. Snapshot emitido é imutável, correção objetiva transacional não escreve Score/Perfil/Knowledge/etapa. Exclusão explícita da Pessoa remove dados dependentes e preserva catálogo geral. Itens antigos de quatro alternativas permanecem históricos e inelegíveis.
+
+Contrato position-assessment-distribution-1.0.0: quantidade múltipla de10, proporções exatas1–5, cobertura de todos os requisitos, cinco alternativas distintas/uma correta/justificativa. Banco privado somente versões aprovadas compatíveis; edição contextual cria nova versão sem sobrescrever item compartilhado. IA explícita OpenAI Responses gpt-5.6-luna, store:false, sem tools, contexto só dos requisitos, máximo20questões/US$0,25pedido/US$10mês por empresa. Reserva serializada antes da chamada; replay não chama provider novamente; propostas sempre pendentes de aprovação humana.
+
+Convites persistidos antes do transporte Resend, remetente suporte@hrtsolutions.com.br, override limitado ao convite, hash de token para acesso e ciphertext AES256 recuperável exclusivamente pelo backend. URL /assessment/#token evita segredo no caminho HTTP/Referer; Nginx desativa access_log do portal e aplica no-store/no-referrer. Claim/lease e idempotência estável impedem duplo envio; janela conservadora24h exige reconciliação quando aceite é desconhecido. Aceito pelo provider não prova entrega/abertura. Dispatcher de propósito restrito reutiliza o worker Synthesis e processa apenas pedidos humanos já na fila; não gera questões ou convites implicitamente.
+
+Portal sem shell administrativo, início humano/instruções, uma questão por vez, cinco opções sem gabarito, buffer por tentativa, autosave com revisão otimista, replay/retomada e comprovante sem nota. Foco deduplicado por instância/versão; mouse amostrado100ms até primeira escolha, somente janela/questão ativas, lacunas acima1000ms explícitas; sem mouse é indisponível/não aplicável. Zoom somente escala observável, captura somente atalhos recebidos; nenhuma imagem, coordenada, clipboard ou histórico de teclas. Eventos têm método/suporte, sequência, timestamps cliente/servidor e deduplicação. Resultado privado tem tabela/timeline e limites, sem inferência de fraude.
+
+Histórico genérico conforme ADR-080: ai_requests + ai_usage_events v2 com chamadas atuais Parser/Synthesis/matching/Knowledge/gerador legado e novo gerador. Custo de plataforma separado de empresa; desconhecido não vira zero; cache tem custo externo zero e tokens nulos. Workers usam credencial dedicada restrita a parser_ia/profile_synthesis, sem chave de serviço. Não existe cobrança/backfill. Aviso final e expurgo temporal adiados pelo PO; direitos/exclusão explícita preservados.
 
 ## Integração contextual M6.2
 
@@ -13,7 +27,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Este documento descreve a arquitetura do M5.1. O M5.1A prepara o instrumento; o M5.1B executa a verificação; o M5.1C governa expansão, custo, revisão, analytics e calibração progressiva do Banco de Itens. Produção separada, provider de delivery, uso com Pessoas reais e geração externa ativa não existem.
+Este documento descreve a arquitetura do M5.1. O M5.1A prepara o instrumento; o M5.1B executa a verificação; o M5.1C governa expansão, custo, revisão, analytics e calibração progressiva do Banco de Itens. O legado M5.1 mantém seus contratos; a disponibilidade da extensão contextual2.3.0 depende dos recibos operacionais do AoT. Não existe QA remoto separado.
 
 ## Bounded context
 

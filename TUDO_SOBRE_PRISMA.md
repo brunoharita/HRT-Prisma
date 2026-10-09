@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 411
-source_manifest_sha256: 21ebad28f5e05131b6427d8bc47821d557d7d01a32dbcee07a2a9a0c4b324c7d
+documentation_source_count: 418
+source_manifest_sha256: fb953ef8e9b2a3850b098521983ba9423f84e2b9f0b7171170e09867d940097c
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.58.0
-last_verified: 2026-10-08
+version: 2.61.0
+last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
+
+## Avaliação para Posição — v2.3.0, implementação local concluída
+
+Publicação integral autorizada pelo PO em09/10/2026; Agreement/Execution v0.5.0 congelados. Implementação local cobre configuração/requisitos/distribuição exata, Banco/IA/Misto, revisão humana/cópia contextual, convites Resend com fila/claim/idempotência, portal resiliente com cinco alternativas, correção objetiva e resultado/atividade privados. Nada altera automaticamente Score/Perfil/Posição/etapa. Aviso final e expurgo temporal adiados, sem inventar base legal; exclusão explícita/direitos preservados. Resend domínio Verified, TLS oportunista e remetente suporte@hrtsolutions.com.br aprovados; credencial DPAPI protegida presente, instalação operacional ainda pendente. OpenAI Responses gpt-5.6-luna: máximo20questões/US$0,25pedido/US$10mês por empresa, reserva serializada e aprovação humana obrigatória.
+
+Histórico genérico implementado conforme ADR-080: ai_requests + ai_usage_events v2, pedidos/tentativas/cache/custos desconhecidos, empresa/plataforma separados; instrumentados Parser/Synthesis/matching/Knowledge/gerador legado/novo, sem backfill/cobrança. Workers com credencial de propósito restrito, dispatcher reutiliza Synthesis só para convites já solicitados. Quatro migrations aditivas, quatro Edge Functions, Parser/Synthesis/web afetados; gateway/Paddle/Traefik preservados. Há um único Supabase remoto de produção, sem QA remoto separado. Testes dirigidos local/SQL/browser/conexões simultâneas passaram; AoT contém limites e evidências, sem afirmar jornada de candidatos reais. Rollout/benchmark/smoke/sincronização ainda devem ser registrados; produto remoto permanece2.2.1 até implantação verificada.
 
 ## Cards compactos do acompanhamento — ajuste na 2.2.1
 
@@ -4646,11 +4652,25 @@ Alteração de capability é material e exige teste, documentação, Context Pac
 ---
 owner: architecture
 status: implemented_for_internal_qa
-version: 1.0.0
-last_verified: 2026-09-01
+version: 1.1.0
+last_verified: 2026-10-09
 ---
 
 # Arquitetura do M5.1 - Verificação de Competências
+
+## Avaliação contextual para Posição — v2.3.0
+
+Agreement/Execution v0.5.0 congelados e publicação autorizada pelo PO. Jornada contextual após entrada no acompanhamento: configuração multirrequisito → Banco/IA/Misto → revisão humana → convite por e-mail → portal → resultado/atividade privados. Implementação local integral validada; rollout/evidências em docs/qa/aot-position-assessment-v230.md, sem presumir ativação pela existência do código.
+
+Migration20261009150000 cria seis tabelas tenant-consistentes: configuração/snapshots, tentativas/respostas/resultados, eventos, entregas, reservas de geração e auditoria. RPCs de operador reutilizam authorize_position_follow_up; sem DML direto. Snapshot emitido é imutável, correção objetiva transacional não escreve Score/Perfil/Knowledge/etapa. Exclusão explícita da Pessoa remove dados dependentes e preserva catálogo geral. Itens antigos de quatro alternativas permanecem históricos e inelegíveis.
+
+Contrato position-assessment-distribution-1.0.0: quantidade múltipla de10, proporções exatas1–5, cobertura de todos os requisitos, cinco alternativas distintas/uma correta/justificativa. Banco privado somente versões aprovadas compatíveis; edição contextual cria nova versão sem sobrescrever item compartilhado. IA explícita OpenAI Responses gpt-5.6-luna, store:false, sem tools, contexto só dos requisitos, máximo20questões/US$0,25pedido/US$10mês por empresa. Reserva serializada antes da chamada; replay não chama provider novamente; propostas sempre pendentes de aprovação humana.
+
+Convites persistidos antes do transporte Resend, remetente suporte@hrtsolutions.com.br, override limitado ao convite, hash de token para acesso e ciphertext AES256 recuperável exclusivamente pelo backend. URL /assessment/#token evita segredo no caminho HTTP/Referer; Nginx desativa access_log do portal e aplica no-store/no-referrer. Claim/lease e idempotência estável impedem duplo envio; janela conservadora24h exige reconciliação quando aceite é desconhecido. Aceito pelo provider não prova entrega/abertura. Dispatcher de propósito restrito reutiliza o worker Synthesis e processa apenas pedidos humanos já na fila; não gera questões ou convites implicitamente.
+
+Portal sem shell administrativo, início humano/instruções, uma questão por vez, cinco opções sem gabarito, buffer por tentativa, autosave com revisão otimista, replay/retomada e comprovante sem nota. Foco deduplicado por instância/versão; mouse amostrado100ms até primeira escolha, somente janela/questão ativas, lacunas acima1000ms explícitas; sem mouse é indisponível/não aplicável. Zoom somente escala observável, captura somente atalhos recebidos; nenhuma imagem, coordenada, clipboard ou histórico de teclas. Eventos têm método/suporte, sequência, timestamps cliente/servidor e deduplicação. Resultado privado tem tabela/timeline e limites, sem inferência de fraude.
+
+Histórico genérico conforme ADR-080: ai_requests + ai_usage_events v2 com chamadas atuais Parser/Synthesis/matching/Knowledge/gerador legado e novo gerador. Custo de plataforma separado de empresa; desconhecido não vira zero; cache tem custo externo zero e tokens nulos. Workers usam credencial dedicada restrita a parser_ia/profile_synthesis, sem chave de serviço. Não existe cobrança/backfill. Aviso final e expurgo temporal adiados pelo PO; direitos/exclusão explícita preservados.
 
 ## Integração contextual M6.2
 
@@ -4658,7 +4678,7 @@ last_verified: 2026-09-01
 
 ## Estado
 
-Este documento descreve a arquitetura do M5.1. O M5.1A prepara o instrumento; o M5.1B executa a verificação; o M5.1C governa expansão, custo, revisão, analytics e calibração progressiva do Banco de Itens. Produção separada, provider de delivery, uso com Pessoas reais e geração externa ativa não existem.
+Este documento descreve a arquitetura do M5.1. O M5.1A prepara o instrumento; o M5.1B executa a verificação; o M5.1C governa expansão, custo, revisão, analytics e calibração progressiva do Banco de Itens. O legado M5.1 mantém seus contratos; a disponibilidade da extensão contextual2.3.0 depende dos recibos operacionais do AoT. Não existe QA remoto separado.
 
 ## Bounded context
 
@@ -9875,6 +9895,75 @@ Reavaliar se o PO aprovar múltiplos processos, arraste por toque, automações,
 
 ---
 
+## Source: `docs/decisions/ADR-080-generic-ai-request-history.md`
+
+# ADR-080 — Histórico genérico de solicitações de IA
+
+Status: **Aceito pelo PO em09/10/2026; implementado localmente; rollout no AoT**. Data: 09/10/2026. Movimento: Avaliação para Posição v2.3.0, Agreement v0.5.0 D-14. Resposta explícita “OK” do PO à recomendação: decisão aceita; consumidores runtime instrumentados e testados.
+
+## Problema e autoridade
+
+O PO solicitou uma estrutura para registrar solicitações das funcionalidades atuais e futuras, pensando em consumo/pacotes de IA por empresa. Há `public.ai_usage_events`, porém a tabela observada em produção está vazia e não tem consumidores encontrados. Ela registra um resultado terminal, duração, organização, provider/model/version, tokens opcionais e `estimated_cost_usd` obrigatório com default zero. Falta distinguir solicitação lógica, tentativas, cache, andamento, falha com gasto, custo desconhecido e funções globais sem empresa.
+
+Zero registros no ledger não prova zero consumo da plataforma. Chamadas atuais têm logs e estados específicos, que não devem ser confundidos com um histórico genérico completo. Não fazer backfill com custos ou estados inventados.
+
+## Alternativas proporcionais
+
+| Alternativa | Adequação | Custo / limite |
+| --- | --- | --- |
+| Ampliar `ai_usage_events` e adicionar `ai_requests` | Reutiliza tabela/indexação/RLS existentes; pedido pai reúne tentativas e resultado; consumo fica na tabela existente | Migration aditiva/versionada, registro de plataforma e custo desconhecido exigem ajuste explícito de contrato e permissões; instrumentar consumidores atuais |
+| Novo ledger isolado, manter a tabela antiga como legado | Permite novo schema sem alterar tipos anteriores | Dois registros de consumo potencialmente concorrentes, fonte de verdade e migração de leitores exigem mais manutenção; pouco benefício sem consumidores legados identificados |
+| Somente logs específicos atuais | Menor mudança imediata | Não satisfaz D-14: cobertura por empresa, consulta e idempotência continuam fragmentadas |
+
+Recomendação apresentada: primeira alternativa. Não requer fornecedor, biblioteca, gateway de IA ou serviço externo novo. A infraestrutura Postgres/Supabase já atende persistência transacional, RLS e RPC do Prisma. Descoberta externa adicional não resolve a lacuna de contrato interno identificada.
+
+## Desenho aprovado pelo PO
+
+- `ai_requests`: identificador lógico, função/etapa, escopo organization ou platform, empresa obrigatória no primeiro, referência opaca à operação, autor/método/versionamento, chave de idempotência e estado. Chamadas globais do Knowledge são custo da plataforma, nunca de empresa escolhida arbitrariamente.
+- `ai_usage_events`: tentativas do pedido com relação tenant-consistente, provider e modelo resolvido, tempos, tokens observados, custo estimado distinto de custo observado/reconciliado, versão de preço/moeda e resultado. Campos de custo/tokens ausentes são desconhecidos; não converter null em zero. Tentativas externas que falham podem consumir tokens e não desaparecem do total.
+- Retry mantém o pedido e cria tentativa distinta; replay do mesmo evento não duplica consumo. Cache hit é resultado servido sem nova chamada externa, não tentativa paga fictícia. Um pedido pode ter duas leituras/etapas/modelos, como matching, sem colapsar em uma chamada.
+- Registro não armazena prompt, documento, resposta de candidato, texto do perfil ou contato. Referências a dados individuais são mínimas e devem respeitar exclusão; identificador opaco não elimina necessidade de controles de privacidade.
+- Backend registra e valida contexto; frontend não pode escrever custos, autorizações, empresa, estado final ou créditos. Escopo platform é reservado à autoridade de backend; consultas de empresa não revelam registros globais nem de outras empresas.
+- Custos do provider e futura cobrança do cliente são conceitos distintos. Nenhum preço, desconto, pacote, fatura, débito ou cobrança será definido nesta entrega. Não substituir limites de IA das funcionalidades existentes pelo teto específico das questões.
+
+Esse desenho foi aprovado em Q-05 pelo PO; a aprovação autoriza implementação e validação dentro desses limites. Nomes físicos de colunas, índices, RPCs e adaptadores compatíveis são detalhes de engenharia; alterar escopo, fronteira de confiança, dados guardados ou semântica comercial exige nova decisão.
+
+## Inventário e evidência necessária
+
+| Consumidor atual encontrado | Fonte | Particularidade a preservar |
+| --- | --- | --- |
+| Parser IA | `scripts/parser-ia-service.mjs` | Cache/processamento de documento privado, identidade de organização validada no gateway, sem duplicar evento no cache/retry |
+| Synthesis | `scripts/profile-synthesis-worker.mjs` | Claim/lease/job e resultado/auditoria existentes; falha após chamada pode conter consumo |
+| Trajetória semântica | `supabase/functions/matching-trajectory/handler.ts` | Leituras múltiplas e desacordo/revisão humana, contratos e Score preservados |
+| Knowledge | `supabase/functions/knowledge-agent/index.ts`, `competencyNormalization.ts` | Etapas e chamadas globais; nenhuma empresa arbitrária, sem incorporar dados de curação no ledger |
+| Banco de questões legado / contextual | `supabase/functions/assessment-item-generator/index.ts` e extensão futura | Reserva e política específicas preservadas; cinco opções só no contrato contextual novo; revisão humana |
+
+Inventário inicial de código, não prova de cobertura runtime. Scripts administrativos/offline de fontes taxonômicas exigem classificação de execução antes de declarar cobertura total; não ativar ou gastar para preencher histórico. Novos consumidores devem usar a interface genérica e ter teste que prove o registro; não basta adicionar nome ao inventário.
+
+## Aceite, implantação e compatibilidade
+
+Negativos de tenant/role/anon/platform, idempotência e concorrência, lifecycle/cache/falhas/consumo desconhecido e granularidade de duas leituras. Testar cada consumidor integrado com provider sintético e preservar contratos, revisão, cache, limites e disponibilidade conforme o acordo aprovado. Histórico de custo não certifica cobrança conciliada com fatura do provider.
+
+Migration e RPC revisadas em PostgreSQL local descartável, seguidas de release:plan do diff validado para os destinos realmente afetados. Novos campos/versionamento devem ser compatíveis com registros antigos; não reescrever migrations. Serviços Parser/Synthesis e Edge não permanecem automaticamente fora do release ao ampliar D-14: o plano deve refletir instrumentação efetiva. Definir rollback das integrações sem apagar histórico e sem remover dados transacionais existentes.
+
+## Persistência local implementada, ainda não implantada
+
+`20261009140000_generic_ai_request_history.sql` adiciona `ai_requests` com contrato `ai-request-1.0.0` e estende `ai_usage_events` para `ai-usage-events-2.0.0`. Registros v1 mantêm valores e defaults originais, marcados `legacy_unverified`; não recebem pedido fictício. Novas tentativas em andamento têm resultado, duração, tokens e custo nulos. Custos externos podem ser desconhecidos, estimados com versão de preço e tokens observados, ou observados com hash da evidência. Valores monetários são USD, com precisão de oito casas; custo externo do cache é zero conhecido, sem tokens inventados. Consumo conhecido deve ser acompanhado da contagem de eventos com custo desconhecido, nunca interpretado como total completo.
+
+FK composta vincula pedido e tentativa ao mesmo escopo/empresa. RLS permite leitura organizacional para owner/admin/recruiter ativos; escopo platform não aparece nessas consultas. DML direto e execução pública/anon/authenticated da RPC são revogados. `public.record_ai_history_v1` é uma fronteira SECURITY DEFINER de propósito restrito, executável somente pelo backend autorizado, com search_path vazio e campos permitidos por ação; o núcleo privado não recebe grants adicionais. Não confiar em claims editáveis do cliente. Cada consumidor deve preservar sua autorização original antes de registrar, sem expor segredo privilegiado. Autor ausente permanece explícito para trabalhos de backend; quando informado, deve ser ativo e pertencer ao escopo autorizado.
+
+Pedidos/tentativas são persistidos antes de chamar o provider. A RPC serializa mudanças do pedido com bloqueio de linha, oferece replay sem nova aquisição e rejeita mudança do payload ou do resultado final. Isso não é lease de worker nem garantia de execução externa exatamente uma vez; conciliação de tentativas interrompidas continua na integração do consumidor.
+
+QA: `node scripts/test-generic-ai-history-sql.mjs`, PostgreSQL17 em localhost55479, banco descartável vazio, 56 asserções/negativos PASS, ROLLBACK. Evidência: `docs/qa/evidence/position-assessment-v230/generic-ai-history/sql.txt`. O teste cobre grants, claims forjados, isolamento empresa/plataforma, estados, retry/replay, cache, falha com consumo, arredondamento monetário e preservação dos campos legados. Concorrência real entre conexões, consumidores, exclusão de referências individuais na integração e rollout remoto permanecem NOT TESTED. Nenhuma chamada paga, expurgo automático, cobrança ou migração remota foi executada.
+
+## Instrumentação e fronteiras operacionais implementadas
+
+Wrapper backend abre pedido e tentativa antes do provider, registra validação/falha e consumo observado quando disponível; resultado lógico não certifica publicação humana. Dois passes de matching são tentativas separadas. Parser/Synthesis usam RPC tokenizada de propósito restrito (somente suas funções/empresa), credencial protegida já conforme padrão hosted, sem chave de serviço. Knowledge global vai para platform; cache registra custo externo zero/tokens nulos. Gerador legado mantém sua política desabilitada quando desabilitada. Scripts offline de benchmark/curadoria não são runtime da plataforma; benchmark de aceite é registrado como custo de plataforma explícito. Nenhum backfill de operações anteriores.
+
+Testes:56asserções SQL, três disputas com conexões independentes, consumidores reais com transporte injetado, negativos de roles/tenant/custo/modelo/falha/replay. Migrations20261009140000 e20261009160000; evidências e recibos em docs/qa/aot-position-assessment-v230.md.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10649,6 +10738,46 @@ Primeira implantação: parar somente `parser-ia` se houver risco; gateway infor
 
 Limites iniciais: 768 MiB RAM, 1 CPU, 64 PIDs; concorrência unitária e todos os limites do Parser existentes. Sem GPU: a inferência do modelo ocorre na OpenAI. A persistência/revisão permanecem no Supabase autorizado. Smoke sintético pode validar o processamento sem banco; uma importação humana até revisão continua evidência distinta. Histórico de implantação e resultados ficam em `../qa/aot-parser-ia-kvm2.md`.
 
+## Histórico de IA e convites —2.3.0
+
+Runtime depende das migrations generic_ai_request_history/ai_history_worker_boundary e credencial AI_HISTORY_WORKER_SECRET protegida em modo400 UID1000, com SUPABASE_URL/chave pública. Token dedicado restrito às funções parser_ia/profile_synthesis e escopo empresa, sem chave de serviço. Provider só depois de ledger persistido; cache explícito registra custo externo zero/tokens nulos; falha/consumo desconhecido não desaparecem. Prompt/cache/fontes/autoridade existentes preservados.
+
+Synthesis recebe ASSESSMENT_DISPATCHER_SECRET distinto para drenar somente convites humanos já persistidos na fila, no máximo10por rodada com lease/backoff; falha de e-mail isolada não altera geração de síntese. Não cria candidatos/convites/IA implicitamente. Parser não recebe capacidade de envio. Instalação protegida usa bootstrap descartável do banco para registrar ciphertext Resend e hash dispatcher, sem segredo em SQL/logs/argumentos. Rollback mantém schema/ciphertext/filas/resultados; worker antigo perde só nova instrumentação/envio e requer retomada do worker validado. Imagens rollback-before-SHA12 e backups protegidos antes-v230 preservados; não apagar cache privado ou histórico. Evidências/AoT position-assessment-v230.
+
+---
+
+## Source: `docs/operations/position-assessment-email-setup.md`
+
+# Configuração de e-mail da Avaliação para Posição
+
+09/10/2026. Domínio verificado, backend de envio ainda em preparação. Conta Resend criada pelo PO e confirmada na UI; domínio adicionado pelo agente dentro do escopo autorizado. Remetente indicado: `suporte@hrtsolutions.com.br`. Região observada: São Paulo (`sa-east-1`). Plano pago não autorizado. Nenhum e-mail foi enviado.
+
+Domínio Resend: `hrtsolutions.com.br`, ID `34e39e21-8e1a-47fb-82c4-fdba3d23ebf7`. [Página de configuração](https://resend.com/domains/add/34e39e21-8e1a-47fb-82c4-fdba3d23ebf7). Cadastro não equivale a verificação nem a envio operacional.
+
+DNS público consultado com Resolve-DnsName: NS `a.sec.dns.br` / `b.sec.dns.br`. Os três nomes abaixo não existiam na consulta inicial. Após confirmação explícita do PO e autenticação feita por ele, os três registros foram adicionados e salvos na zona avançada do Registro.br. Reabertura do painel confirmou oito registros persistidos, com os cinco anteriores preservados (A horus/prisma, CNAME www e TXT de verificação www). Primeira consulta autoritativa após gravação ainda retornou NXDOMAIN: propagação não comprovada. Consulta autoritativa posterior confirmou os três valores; UI do Resend confirmou **Verified**, com evento Domain verified em09/10/2026 às07:52 locais. Nenhum envio foi feito.
+
+| Tipo | Nome relativo | Conteúdo público solicitado pelo Resend | TTL |
+| --- | --- | --- | --- |
+| TXT | `resend._domainkey` | `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7nlQ1gIuVrSMY4pgUfJPLp3ZN9uDA76aNLlIqiop2NFs8ClpBjRPp0kAto55Q+WRItgnVl6zykWbmEwJ0tQGmXQechNqkG1EbNK3viNjskLo7sXq2bTOIjn3e27vq4mT/7VoG+sXpRSX2xax3kJGbUQPu75B1ual0F+aCmPRjxwIDAQAB` | padrão do painel |
+| CNAME | `rsend` | `rsend-sae1.forge.rmta.net` | padrão do painel |
+| CNAME | `send` | `send.forge.rmta.net` | padrão do painel |
+
+Fonte dos conteúdos: UI autenticada do Resend para este domínio, não inferidos de exemplos antigos da API. A chave DKIM acima é pública, não uma credencial. Conferir novamente antes de gravar. Não substituir MX do domínio principal ou TXT SPF/DMARC atuais. DMARC sugerido na UI é opcional e não entra nesta configuração; não enfraquecer política existente. Recebimento no Resend está desativado e deve permanecer assim. Nenhum subdomínio de tracking foi configurado; abertura/cliques não devem ser inferidos ou necessários ao convite. TLS **Opportunistic** mantido por decisão explícita do PO após apresentação do risco de envio sem TLS quando o destinatário não o suporta. A revisão automática rejeitou a alteração para Enforced por não estar autorizada na decisão de DNS; não houve retry ou contorno. A decisão posterior do PO foi manter a configuração atual.
+
+O PO confirmou a criação/cópia da chave preparada como “Prisma - Convites de avaliação”. Consulta somente aos metadados pelo conector Resend confirmou a chave com esse nome; o valor não foi consultado. O mesmo conector confirmou domínio verified, região sa-east-1, envio habilitado, recebimento desabilitado e tracking de abertura/cliques desabilitado. A credencial do conector não é uma chave disponível para o backend da plataforma.
+
+`src/infrastructure/positionAssessmentEmailTransport.ts` implementa o adapter HTTPS isolado, com fetch/relógio injetados e nenhum consumidor ativo. Nove testes dirigidos com respostas falsas confirmam recibo de aceitação separado de entrega, replay com mesma chave/payload, rejeição de escopo/headers/configuração inválidos, falhas categorizadas sem PII, rate limit/concorrência e reconciliação após conflito ou perto da expiração de idempotência. Nenhum envio real nem teste de entrega foi realizado. Fontes do protocolo: [API de envio](https://resend.com/docs/api-reference/emails/send-email) e [idempotência](https://resend.com/docs/dashboard/emails/idempotency-keys).
+
+O worker futuro deve obter autorização e claim transacional, persistir mensagem/remetente imutáveis e firstAttemptAtMs antes da primeira chamada e gravar o recibo com auditoria. O adapter faz uma chamada por invocação, timeout de15s, endpoint fixo HTTPS sem redirects e sem retries internos. A chave é derivada da empresa/job, sem e-mail/token. Recibo persistido impede novo envio; após24h menos30s de margem, a ausência de recibo exige reconciliação, sem trocar a chave. Conflito de payload nunca autoriza reenvio com nova chave. Isso não prova fila, exclusão mútua, autorização integrada ou persistência: são pendências explícitas.
+
+Pendências operacionais: salvar a chave por entrada mascarada usando `tmp/save-position-assessment-resend-key.ps1`, que grava somente ciphertext DPAPI em arquivo ignorado pelo Git; instalar pelo fluxo protegido no backend aprovado; integrar fila/idempotência/reconciliação e smoke sem convites de teste a candidatos reais. O arquivo protegido estava ausente na continuação anterior; em09/10/2026, durante a análise de retenção, a presença foi confirmada por metadados do filesystem. Conteúdo/valor não lidos nem validado envio; instalação ainda pendente. Nunca colocar credencial em documentação, frontend, argumentos de comandos ou saída de ferramenta. Domínio verificado e chave não substituem os gates de tenant/revisão/envio explícito.
+
+## Backend integrado2.3.0
+
+Implementação local validada: position_assessment_invite exige ator humano/tenant/revisão, fixa mensagem/destinatário/prazo/token e gera fila. position_assessment_delivery claim/lease guarda firstAttempt antes da API; adapter envia uma vez por invocação com idempotência permanente do job, 24h menos30s e reconciliação quando aceite é desconhecido. Estado sent significa aceito pelo provider; entrega/abertura não verificadas. Nove testes de transporte, SQL/replay/conexões simultâneas e Deno consumer. Link /assessment/#token, hash backend e ciphertextAES256; sem secret no frontend/HTTPpath/Referer. Dispatcher de propósito restrito reutiliza Synthesis, sem disparos ou IA automáticos além da fila humana existente.
+
+Entrada protegida DPAPI confirmada, instalação operacional a registrar no AoT. Bootstrap de uso único/credential ciphertext backend-only evita exigir PAT da conta ou service-role na VPS. Dados/secrets nunca em ferramentas/logs/Git; somente metadados de instalação. Nenhum candidato real será usado como teste, e aceite do provider não será alegado por fake.
+
 ---
 
 ## Source: `docs/operations/prisma-production-backup.md`
@@ -10721,6 +10850,12 @@ Em 04/10/2026 Bruno autorizou uma única chamada adicional do job existente. Gua
 Resultado/prompt1.1.0 e migração incremental das funções/defaults, sem tabelas públicas/permissões novas. Resultados parciais guardam somente trechos válidos e issues fixos por seção; não logar corpo rejeitado. Compatibilidade1.0.0 na leitura; legacyfailed3 fica intacto, somente novas solicitações/publicações usam1.1.0. Pausar somente worker durante ativação da migração e promover worker/web do mesmo SHA validado. Rollback preserva migração e históricos; leitor antigo pode recusar novo resultado, por isso rollback compatível mantém a tela com informações publicadas. Sem reset/backfill.
 
 Migração complementar `profile_synthesis_retry_upgrade` habilita ação explícita para respostas inválidas antigas: chave nova do contrato corrigido, base/tenant/Perfil vigente conferidos, lock/cooldown/idempotência, job e tentativas legadas intactos. Não chamar o RPC real como smoke: ele solicita geração e pode causar custo. Verificar elegibilidade/histórico por metadados administrativos, sem textos pessoais; exercitar mutação/replay apenas em QA sintética com rollback. Esta ativação exige apenas banco e documentação; web/worker já compatíveis permanecem nas imagens validadas.
+
+## Histórico de IA e convites —2.3.0
+
+Runtime depende das migrations generic_ai_request_history/ai_history_worker_boundary e credencial AI_HISTORY_WORKER_SECRET protegida em modo400 UID1000, com SUPABASE_URL/chave pública. Token dedicado restrito às funções parser_ia/profile_synthesis e escopo empresa, sem chave de serviço. Provider só depois de ledger persistido; cache explícito registra custo externo zero/tokens nulos; falha/consumo desconhecido não desaparecem. Prompt/cache/fontes/autoridade existentes preservados.
+
+Synthesis recebe ASSESSMENT_DISPATCHER_SECRET distinto para drenar somente convites humanos já persistidos na fila, no máximo10por rodada com lease/backoff; falha de e-mail isolada não altera geração de síntese. Não cria candidatos/convites/IA implicitamente. Parser não recebe capacidade de envio. Instalação protegida usa bootstrap descartável do banco para registrar ciphertext Resend e hash dispatcher, sem segredo em SQL/logs/argumentos. Rollback mantém schema/ciphertext/filas/resultados; worker antigo perde só nova instrumentação/envio e requer retomada do worker validado. Imagens rollback-before-SHA12 e backups protegidos antes-v230 preservados; não apagar cache privado ou histórico. Evidências/AoT position-assessment-v230.
 
 ---
 
@@ -11848,6 +11983,86 @@ Na revisão documental, a aba `Resumo` é a abertura padrão e a navegação seg
 Arquivar continua reversível e preserva todo o agregado. `Excluir definitivamente` é uma ação crítica separada, disponível somente a Super Admin, Owner ou Admin no escopo autorizado, ou ao próprio titular por uma capability exclusiva de Meus dados. Uma única confirmação explica a irreversibilidade e as categorias removidas, sem decisões técnicas item a item.
 
 Depois da confirmação, a Pessoa entra em `deleting`, novas mutações incompatíveis falham fechadas e uma única saga retomável remove documentos e Storage, Perfis, revisões, evidências, matching, verificações e demais dependências individuais. Vagas, Knowledge, Item Bank e usuários da plataforma permanecem. A conclusão exige zero resíduo e preserva somente auditoria mínima desacoplada com nome, organização, ator, data, operação e resultado. Um cadastro futuro usa novo ID e histórico vazio.
+
+---
+
+## Source: `docs/product/proposta-avaliacoes-contextuais-2026-10-09.md`
+
+# Proposta — Avaliações contextuais a partir do acompanhamento
+
+Data: 09/10/2026. Estado: decisões expressas registradas e proposta visual para discussão; não é execução, publicação ou liberação para candidatos reais. Referência visual: Perfil recente do Prisma e sidebar vigente. Telas propostas, dados ilustrativos de Ana Martins/Desenvolvedor backend. A geração das imagens usa image_gen integrado. Prompts integrais e imagens ficam na pasta de mesmo nome, junto deste documento.
+
+## Imagens salvas
+
+- [Configuração e questões](proposta-avaliacoes-contextuais-2026-10-09/01-configuracao-e-questoes.png): configuração do teste e composição banco/IA/misto.
+- [Revisão e convite](proposta-avaliacoes-contextuais-2026-10-09/02-revisao-e-convite.png): aprovação humana e convite por e-mail.
+- [Realização e resultados](proposta-avaliacoes-contextuais-2026-10-09/03-realizacao-e-resultados.png): portal do candidato e consulta por questão.
+
+Cada imagem reúne dois estados da jornada, com dados fictícios. Os prompts iniciais e os refinamentos estão em `prompts.json` e `refinamentos.json` na mesma pasta das imagens. Não constituem evidência de funcionalidade implementada.
+
+## Definições expressas de Bruno
+
+- D-01: avaliação opcional, iniciada por humano para candidato e Posição, com requisitos selecionados, preservando o contexto e as versões.
+- D-02: três modos de composição: questões do banco, novas questões por IA, ou misto. No misto o usuário seleciona no banco e pede IA para completar as lacunas; no modo banco insuficiente, oferecer mudança explícita para misto, nunca chamar IA sem solicitação.
+- D-03: toda questão é múltipla escolha, exatamente cinco alternativas e exatamente uma correta. Questões incompatíveis não entram na avaliação. Gabarito nunca é exposto ao candidato durante a tentativa.
+- D-04: dificuldade do teste escolhida pelo usuário de 1 a 5; categorias das questões são fácil/média/difícil, independentes do nível de competência e do Score Prisma.
+
+| Nível do teste | Nome proposto | Fáceis | Médias | Difíceis |
+| --- | --- | --- | --- | --- |
+| 1 | Muito fácil | 60% | 30% | 10% |
+| 2 | Fácil | 40% | 40% | 20% |
+| 3 | Moderado | 30% | 40% | 30% |
+| 4 | Difícil | 20% | 40% | 40% |
+| 5 | Muito difícil | 10% | 30% | 60% |
+
+- D-05: distribuições parametrizadas e versionadas no sistema, sem tela de edição agora. Instrumento/tentativa preservam o snapshot dos parâmetros usados; alterações futuras não reescrevem avaliações anteriores.
+- D-06: convite por e-mail. Preencher endereço cadastrado por padrão; permitir endereço específico para o convite sem atualizar cadastro. Gravar destinatário efetivamente utilizado e autor da alteração no escopo autorizado do convite. Envio somente após ação humana explícita.
+- D-07: registrar por questão saídas de foco, tempo de mouse parado antes de responder, ajustes observáveis de zoom e sinais de captura disponibilizados pelo navegador; consulta posterior pelo usuário Prisma autorizado. Não atribuir evento a outra questão, nem distribuir apenas totais globais.
+
+## Proposta prática de telas e sequência (pontos 3 a 10)
+
+1. Configuração: abrir Criar avaliação no detalhe do acompanhamento; mostrar candidato/Posição e versão, selecionar requisitos, quantidade, duração e dificuldade. Exemplo ilustrativo: 20 questões, 40 minutos, nível3, 6 fáceis/8 médias/6 difíceis. Ler não cria avaliação; salvar rascunho ou avançar explicitamente cria contexto tenant-scoped e registra escolhas.
+2. Questões: selecionar Banco/IA/Misto. Banco lista perguntas elegíveis com busca e filtros. Misto mostra seleção e déficit por assunto e dificuldade: 12 do banco (4/5/3) +8 novas (2/3/3) completam6/8/6. Nada é completado silenciosamente. Carregar banco não consome LLM; geração explícita registra pedido, quantidade, custo/consumo, versões do método e propostas. Não enviar currículo integral ou respostas privadas para gerar perguntas gerais.
+3. Revisão: humano confere questão, cinco opções, uma correta, explicação, assunto, dificuldade e origem. Editar/substituir e aprovar antes de disponibilizar. Itens novos aprovados podem ser salvos no banco privado para reutilização; itens globais exigem autoridade própria. Sugestão visual: seleção explícita para salvar no banco da empresa; não presumir promoção global.
+4. Revisão final: conferir todos os itens, cobertura, distribuição, duração e regras. Não avançar com gabarito inválido, item pendente ou distribuição incompatível. Gravar composição, versões e autoria; instância imutável por tentativa preserva enunciados/opções/gabarito da aplicação.
+5. Convite: preencher e-mail cadastrado, permitir alteração local, revisar mensagem/prazo e clicar Enviar convite por e-mail. Preparar convite seguro, enfileirar envio com proteção contra duplicidade e registrar estados separados de solicitado/na fila/enviado/falhou; entrega/abertura somente com evidência disponível. Exemplo de7dias é ilustrativo. Transporte/provedor existente deve ser descoberto antes de escolher integração nova; nenhum e-mail enviado nesta proposta.
+6. Candidato: link pessoal com validade, sem conta de usuário Prisma; instruções e ciência da coleta antes de iniciar. Uma questão por vez, cinco alternativas sem gabarito, autosave e sinal de sincronização; revisão/navegação conforme regra. Permanecer na janela é instrução; navegador não garante impedir troca de janela nem observar outro aparelho.
+7. Envio: candidato confirma submissão; backend transacional corrige objetivas sem LLM, preserva respostas/tentativa e gera resultado e evidência demonstrada por requisito. Falha/duplicidade não perdem respostas nem produzem resultado parcial como completo. Resposta correta e explicação só aparecem a quem tiver permissão e conforme política de divulgação.
+8. Resultado do recrutador: resumo, perguntas/respostas, gabaritos e Atividade por questão. Tabela mostra contagem/duração fora de foco, mouse parado, sinais de zoom e atalhos de captura; detalhe traz timeline da questão e qualidade/limites da observação. Humano escolhe o próximo passo no acompanhamento. Não alterar etapa automaticamente nem converter acertos em bônus genérico no Score.
+
+## Persistência e reutilização propostas
+
+- Banco: pergunta, cinco alternativas, identificador da correta, justificativa, requisito/competência/dimensão, dificuldade, idioma, autoria/origem, versão, status de revisão, família/fingerprint para duplicatas, escopo empresa/global. IA: pedido/proposta/revisão, modelo/método/prompt/schema, consumo e custo quando disponível. Reuso somente de versões aprovadas e elegíveis, sem duplicar a pergunta por cada vaga.
+- Instrumento: candidato/Posição/requisitos e versões, configuração, distribuição1–5 e parâmetros versionados, composição e versões dos itens/rubrica, revisores e histórico. Adequação ao requisito exato, sem identidade apenas por palavra/assunto.
+- Aplicação: convite/destinatário efetivo/prazo/estado de envio, token protegido, tentativa, respostas versionadas, submissão/correção, evidência demonstrada e eventos por questão. Respostas individuais são privadas e separadas do gabarito reutilizável.
+- Métricas de uso podem subsidiar revisão de qualidade; calibração real depende de política e dados adequados. Eventos de comportamento não alteram gabarito, resultado bruto, contratação ou Score automaticamente.
+
+## Telemetria: requisito desejado e capacidade técnica
+
+Todo evento precisa de organização, aplicação/tentativa, instância e versão da questão, tipo, sequência/idempotência, instante do cliente e recebimento no servidor, valores mínimos pertinentes, origem/método e versão, suporte/limitação. Consultas autorizadas por organização; sem histórico geral de teclas, coordenadas completas de mouse, clipboard ou imagens da tela. Buffer com reenvio/deduplicação e períodos sem coleta/sincronização explicitamente marcados; ausência de evento não vira zero confirmado.
+
+| Informação | Registro proposto | Limite obrigatório |
+| --- | --- | --- |
+| Saídas de foco | episódios de janela inativa/aba oculta, início/fim/duração, questão ativa; deduplicar blur+visibilitychange para não contar duas vezes | não identifica qual app/site foi aberto nem comprova pesquisa; foco de campo não é saída da janela |
+| Mouse parado | total e maior intervalo sem movimento, antes da primeira alternativa marcada, somente enquanto questão/janela ativas; reaberturas e mudanças de resposta separadas | janela fora de foco separada; leitura, teclado e tecnologias assistivas podem produzir imobilidade legítima; sem mouse/touch exclusivo é não aplicável |
+| Zoom | mudança observável, estado anterior/posterior, questão ativa, método e suporte | zoom de página, pinch e mudança de monitor/escala exigem diferenciação; não somar resize genérico como zoom nem punir acessibilidade |
+| Captura | eventos de atalhos reconhecidos efetivamente entregues pelo navegador, identificados como sinais e não capturas confirmadas | navegador não observa universalmente Ferramenta de Captura, software do SO, gravação externa ou câmera; não afirmar total de prints nem captura bem-sucedida |
+
+Fontes técnicas: [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API), [devicePixelRatio](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio), [VisualViewport](https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport), [UI Events](https://www.w3.org/TR/uievents/), [KeyboardEvent code values](https://www.w3.org/TR/uievents-code/). Inferência de engenharia: essas APIs dão sinais da página, não uma auditoria de todas as operações de captura do sistema operacional.
+
+## Pendências antes de contrato congelado e implementação
+
+- Q-01: captura universal solicitada não é tecnicamente garantível na aplicação web comum. A proposta oferece sinais parciais com indicação de suporte. Qualquer agente nativo/extensão/proctoring seria decisão nova, fora desta proposta.
+- Q-02: quando a quantidade de questões não permitir percentuais exatos, a proposta é apresentar ajuste explícito de quantidade para múltiplo de10, sem arredondar silenciosamente. Os mockups usam20 e não decidem arredondamento. Regra final depende de decisão do produto.
+- Q-03: definição precisa de mouse parado proposta acima (total/maior intervalo, até primeira resposta e apenas foco ativo) precisa de aceite; não presumir que “parado” equivale a pesquisa.
+- Q-04: provedor e identidade remetente, retenção/base de tratamento, política de resultado ao candidato, limites/custo/modelo da IA, cancelamento/retomada/reaplicação e integração ao Score vigente precisam ser confirmados antes de uso real. Catálogo atual é interno/sintético; geração real por IA desativada. Não escolher novos fornecedores nem liberar candidatos reais neste registro.
+
+P-01: não usar telemetria como prova automática de fraude, incapacidade ou motivo automático de rejeição; não inventar ausência de evento/percentual/progresso nem apagar divergências.
+F-01: implementação, produção, envio efetivo de e-mails, chamadas de geração de avaliações do produto, edição de cadastro de Pessoas e tela de administração das distribuições. Os mockups solicitados usam a ferramenta de imagens, separada da IA futura do produto.
+
+## Fidelidade visual proposta
+
+Referências do Perfil/sidebar são normativas para linguagem visual, não conteúdo pessoal. Fluxo proposto usa cabeçalho com contexto, etapas Configuração/Questões/Revisão/Convite, formulário principal2/3 e sidebar contextual1/3; card branco, borda fina, destaques azul-claro, ícones centrados. Portal do candidato remove navegação administrativa; resultado volta ao shell e oferece tabela/timeline por questão. Propostas ainda aguardam validação visual do Product Owner. Não há prompt final de implementação enquanto Qs materiais estiverem abertas.
 
 ---
 
@@ -15216,6 +15431,95 @@ Next white card "Ações rápidas", two simple full-width text-icon rows "Editar
 Important fidelity: rich open narrative and8answers not very abbreviated snippets. Plenty of white space, compact understandable operational side. Larger titles than labels, body ~16px equivalent. The screenshot is ONE coherent screen, no second dashboard, no phone inset or unrelated references. Exact source-control wording "Mostrar fontes". Preserve fundamental input reference topology while refining hierarchy and text clarity.
 
 ```
+
+---
+
+## Source: `docs/qa/agreement-position-assessment-v230.md`
+
+# Agreement Contract — Avaliação para Posição v2.3.0
+
+Versão 0.5.0, CONGELADO em09/10/2026. Objetivo autorizado: implementar, integrar em main e publicar integralmente2.3.0. Q-04a é instalação operacional autorizada; aviso final e prazo de expurgo foram adiados pelo PO. O contrato não certifica conformidade jurídica nem prova implementação.
+
+## Decisão superveniente do PO e congelamento
+
+Em09/10/2026 o PO determinou expressamente: “faz tudo até estar implementado em main e publicado na nova versão 2.3.0”, após adiar o aviso final e a exclusão automática por prazo. Esta decisão supersede a limitação anterior de Q-04c ao desenvolvimento sintético e a condição documental de congelamento/publicação por esse aviso. Contrato v0.5.0 congelado para implementação/publicação integral autorizada, mantendo D-01..D-14, P-01..P-06, F/A/UX/CA. Aviso final e definição de prazo ficam adiados; não ativar expurgo temporal nem inventar base legal, consentimento ou certificação jurídica. Instruções operacionais e limites da observação de D-08/D-10 continuam obrigatórios; exclusão explícita, direitos e segurança permanecem. Credenciais/instalação de Q-04a são execução operacional já autorizada, não nova decisão material. As pendências históricas de Q-04c foram supersedidas nos termos desta decisão.
+
+## Autoridade e fontes
+
+Solicitação transferida da conversa `01a11b35-4266-7ab3-ac31-9d596d7816d2`: implementação, validação proporcional, integração em main, publicação no destino existente, smoke e sincronização autorizados. Esta autorização supera F-01 da etapa de proposta somente quanto a implementar/publicar a funcionalidade; não autoriza mensagens de teste para candidatos reais, decisões humanas fictícias ou alteração do cadastro de Pessoas.
+
+Registro integral preservado: `docs/product/proposta-avaliacoes-contextuais-2026-10-09.md`, `prompts.json`, `refinamentos.json` e três imagens da pasta homônima, lidos/inspecionados nesta execução. O registro permanece histórico. Q-01 foi resolvida pela solicitação atual: somente sinais observáveis da web, sem proctoring. Q-02 e Q-03 foram aprovadas explicitamente nesta conversa: múltiplos de 10 e mouse conforme D-09.
+
+## DEVE e critérios de aceite
+
+| ID | Comportamento autorizado | Critério objetivo de aceite |
+| --- | --- | --- |
+| D-01 | Avaliação opcional por ação humana para organização/Pessoa/Posição após entrada no acompanhamento. Preservar Encontrar pessoas → Adicionar ao acompanhamento → Kanban → detalhe contextual → Criar avaliação → retorno. | CA-01: jornada renderizada e teste backend negando criação fora do acompanhamento/tenant; leitura não cria registros. Etapa e Score anteriores preservados. |
+| D-02 | Selecionar requisitos específicos, quantidade, duração e nível 1–5, com versões e autoria. Configurar/ver rascunho não chama IA ou envia e-mail. | CA-02: persistência/reabertura tenant-scoped com snapshots e testes negativos de efeitos implícitos. |
+| D-03 | Modos banco, IA e misto. No misto, seleção manual do banco e pedido explícito para completar déficit por requisito/dificuldade; banco insuficiente oferece mudança explícita de modo. | CA-03: teste dos três modos, sem geração no modo banco nem complementação silenciosa. |
+| D-04 | Exatamente cinco alternativas distintas e uma correta. Guardar pergunta, opções, correta, justificativa, requisito/competência, dificuldade, idioma, origem/autoria, versões e revisão. Reuso aprovado no escopo correto, sem duplicação por Posição ou promoção privada a global. | CA-04: inválidos recusados pelo backend; negativos de tenant e revisão; versões aprovadas reutilizadas, respostas individuais separadas do catálogo. |
+| D-05 | Distribuição obrigatória fácil/média/difícil: 1=60/30/10; 2=40/40/20; 3=30/40/30; 4=20/40/40; 5=10/30/60. Parâmetros versionados, snapshot por aplicação, sem tela administrativa. Quantidades somente múltiplas de 10, sem arredondamento silencioso. | CA-05: paridade domínio/backend para todos os níveis; 20 nível 3=6/8/6; 12 banco 4/5/3 deixa 8 IA 2/3/3; versão histórica não muda. |
+| D-06 | Revisão humana permite editar/substituir/aprovar e exige cobertura, cinco opções, correta única e distribuição antes da revisão final/convite. Snapshot imutável da aplicação. | CA-06: bloqueio de pendências; edição posterior do banco não altera questão entregue; comparação renderizada de revisão e revisão final. |
+| D-07 | E-mail cadastrado como padrão, alteração só no convite; destinatário efetivo/autoria auditados. Envio humano explícito, prazo, link pessoal protegido, solicitado/na fila/enviado/falhou, idempotência. Reutilizar transporte existente antes de fornecedor novo. | CA-07: transporte sintético controlado, retry/replay/falha; cadastro imutável; envio/abertura/entrega só com sua evidência própria. Transporte e remetente dependem de Q-04a. |
+| D-08 | Portal sem navegação administrativa; validade, instruções e ciência antes de iniciar, uma questão por vez, cinco opções sem gabarito, autosave com sincronização, revisão, confirmação de envio; respostas preservadas em falha/retry. Correção objetiva transacional no backend, sem LLM. | CA-08: token inválido/expirado/revogado/cruzado, ausência de gabarito, falha de rede e concorrência/replay de autosave/submissão, correção determinística e sem resultado parcial completo. |
+| D-09 | Atividade por questão com tentativa/instância/versão, timestamps cliente/servidor, método/suporte/limites, sequência/deduplicação/reenvio. Foco: episódios/duração, deduplicar blur+visibilitychange, sem inferir destino. Mouse: total e maior intervalo até primeira alternativa marcada, somente questão/janela ativas; reaberturas e mudanças separadas, sem mouse é não aplicável. Zoom: somente alterações observáveis, sem tratar resize genérico como zoom. Captura: somente atalhos entregues pelo navegador, com não observável quando pertinente. | CA-09: testes de relógio/eventos, mudança de questão durante perda de foco, blur+hidden, retry/duplicação, movimento/primeira resposta, suporte e lacunas; tabela/timeline renderizadas. |
+| D-10 | Limites da observação visíveis. Mouse/foco/zoom/atalhos não comprovam pesquisa ou fraude. Nenhuma imagem, histórico de teclas ou clipboard coletado. | CA-10: inspeção do payload e testes negativos; ausência de sinal não vira ausência de captura; sem punição, Score ou mudança de etapa automática. |
+| D-11 | Resultado privado para usuário autorizado: resumo, questões/respostas/gabarito e Atividade por questão em tabela/timeline. Humano decide próximos passos no acompanhamento. | CA-11: consulta tenant/role e auditoria; vínculo de eventos à questão correta; retorno contextual; nenhum bônus no Score ou contratação/rejeição automática. |
+| D-12 | Backend aplica tenant/autoridade, gabarito secreto, auditoria obrigatória, proveniência/versões/custo de IA; não enviar currículo integral ou respostas privadas para perguntas gerais. Operações pendentes comunicam carregamento sem perder escolhas/conteúdo. | CA-12: negativos de permissões, cross-tenant, versão, gabarito, dados da geração e auditoria; loading/erro/retry renderizados com escolhas preservadas. |
+| D-13 | Entrega integral 2.3.0 com own-diff review, testes dirigidos, evidência visual e SQL local, Context Pack, SHA coerente, release:plan, implantação seletiva, rollback/smoke/sincronização. | CA-13: AoT individual por D/P, recibos verificáveis; não afirmar QA remoto separado ou entrega final sem prova. |
+| D-14 | Estrutura genérica de histórico de solicitações de IA, reutilizando o que for compatível, para funcionalidades atuais e futuras e consumo por empresa. Preparar rastreabilidade para futuros pacotes/cobrança, sem inventar cobrança efetiva, preços ou consumo histórico. | CA-14: pedido/função/empresa/versões/modelo, tentativas/resultado e consumo/custo rastreáveis; idempotência e negativos de tenant; dados sensíveis fora do histórico; cobertura real de cada consumidor integrada e testada, sem alegar cobertura só por existir tabela. Desenho aprovado em Q-05: ampliar ai_usage_events e adicionar ai_requests, com pedidos/tentativas, custo desconhecido explícito, isolamento por empresa e chamadas globais como custo da plataforma; sem cobrança efetiva. |
+
+## PROIBIDO
+
+- P-01: recriar etapas visíveis ambíguas Aguardando avaliação/Em avaliação ou misturar Score prévio com teste respondido.
+- P-02: IA implícita, aprovação automática, pergunta incompatível, gabarito no portal em curso, reescrita de aplicação histórica, promoção privada a global.
+- P-03: alterar e-mail cadastrado, enviar teste a candidato real, inventar solicitado/enviado/entregue/aberto ou perder respostas por retry.
+- P-04: captura universal prometida, ausência de sinais como inocência confirmada, telemetria como prova de fraude ou decisão automática, agente nativo/extensão, screen capture, clipboard ou keylogging.
+- P-05: score/bônus genérico, contratação/rejeição ou etapa automáticas; dados entre tenants, currículo integral na geração, secrets/PII em logs.
+- P-06: publicar parcialmente como conclusão, alterar migrations históricas, db push geral, inventar decisões Q-04 ou afirmar testes não executados.
+
+## FORA DE ESCOPO
+
+- F-01: administração visual das distribuições, proctoring nativo/extensão, captura de tela, novos canais de convite além de e-mail.
+- F-02: alteração de cadastro da Pessoa, automação de decisão/Score/etapa, calibração empírica alegada, promoção automática global.
+- F-03: testes com candidatos reais, provisionamento de novo ambiente/fornecedor sem decisão ou custo externo inesperado.
+- F-04: definir preços de pacotes, emitir faturas, contratar plano pago de e-mail ou efetuar cobrança. D-14 prepara histórico, sem autorizar essas decisões comerciais.
+
+## AUTONOMIA
+
+- A-01: componentes acessíveis/tokens vigentes, organização interna e nomes técnicos, testes/fixtures sintéticos e detalhes decorativos menores.
+- A-02: reutilizar contratos M5.1/M6.2 compatíveis; estender versionadamente o necessário, preservando históricos e fronteiras de segurança. Conflito material exige decisão.
+- A-03: validação econômica e proporcional, migrações aditivas revisadas, release seletivo e evidências, sem suíte integral local por padrão.
+
+## Referências normativas e modelo visual
+
+As três imagens aprovadas são normativas para arquitetura visual; nomes/quantidades/pessoas são exemplos. Inspecionadas com view_image, dimensões 1536×1024. Cada imagem contém dois estados; comparação deve considerar o retângulo de cada estado e usar dados/viewport equivalentes, sem tratar os rótulos externos de proposta como UI do produto.
+
+- D-UX-01: shell atual com sidebar escura, canvas claro, cartões brancos/borda fina, ações azuis, ícones centrados. Cabeçalho com contexto e voltar; etapas Configuração/Questões/Revisão/Convite. Principal aproximadamente 2/3 e resumo 1/3. Em viewport estreito, empilhar principal e resumo mantendo a ordem e ações acessíveis.
+- D-UX-02: configuração agrupa requisitos antes de quantidade/duração/nível; distribuição em destaque e tabela somente leitura à direita. Questões: três modos lado a lado, filtros/tabela abaixo, composição/deficits/geração e rascunho à direita.
+- D-UX-03: revisão com questão/alternativas/gabarito/justificativa e editar/substituir, opção explícita de salvar no banco privado; contagens/aprovar/concluir à direita. Convite: destinatário/assunto/prévia/prazo à esquerda, resumo/enviar/retorno/estado à direita.
+- D-UX-04: portal com topo compacto Prisma/contexto/Pessoa/tempo, navegação numerada à esquerda, instrução e questão central, informações à direita, anterior/marcar/salvar abaixo, sincronização visível. Sem sidebar administrativa. No mobile, navegação recolhível e conteúdo central primeiro, preservando acesso às questões e revisão.
+- D-UX-05: resultado no shell, cabeçalho/contexto/status, abas Resumo/Questões e respostas/Atividade por questão; contagens acima da tabela; timeline e ações contextuais à direita, limites legíveis abaixo.
+- P-UX-01: substituir topologia/hierarquia/ordem/ações aprovadas, adicionar menu Avaliações/Relatórios ou funcionalidades ilustrativas removidas nos refinamentos.
+- A-UX-01: tokens/componentes existentes, conteúdo real, refinamentos acessíveis e decorativos que preservem estrutura.
+- CA-UX-01 a CA-UX-05: render de cada estado com comparação lado a lado, mesma janela/dados, desktop e mobile; registrar divergências/aceite no AoT. Teste funcional não prova fidelidade visual.
+
+## Decisões aprovadas e pendências
+
+- Q-04a parcialmente resolvida: Bruno autorizou Resend, plano gratuito e criação da conta; posteriormente confirmou que criou a conta. Endereço indicado para remetente: `suporte@hrtsolutions.com.br`. Domínio `hrtsolutions.com.br` cadastrado em São Paulo, DNS gravado/preservado e domínio Verified na UI do Resend, sem envio. Chave preparada criada/copiada pelo PO e confirmada somente por metadados no conector; arquivo DPAPI protegido agora presente, sem leitura do valor; instalação operacional ainda pendente; não pedir secrets em chat. Domínio verificado não prova transporte integrado. TLS oportunista mantido por decisão explícita do PO. Valores DNS e limites em `docs/operations/position-assessment-email-setup.md`.
+- Q-04b resolvida: Bruno aprovou OpenAI/Responses, `gpt-5.6-luna`, até20 questões por pedido, US$0,25 por pedido e US$10/mês por organização. Esses limites são exclusivos desta geração; não substituem políticas de Parser/Knowledge/Synthesis/matching. Reserva, concorrência, custo real e benchmark/revisão humana continuam obrigatórios; aprovação não prova ativação.
+- Q-04c resolvida para este movimento pela decisão superveniente de publicação: comprovante ao candidato, retomada da mesma tentativa até prazo, cancelamento explícito, reaplicação humana e nenhum efeito automático no Score. Aviso final e definição temporal de retenção adiados; não ativar expurgo automático, nem inventar base legal/consentimento. Os prazos30/180dias não foram aprovados. Exclusão explícita, direitos do titular, instruções e limites de D-08/D-10 preservados.
+- Q-05: Bruno ampliou explicitamente o escopo para histórico genérico de IA (D-14). Descoberta em leitura: `ai_usage_events` existe, tem zero registros e nenhum consumidor identificado; pedidos/budgets M5.1C são específicos. Recomendação apresentada ao PO: ampliar a tabela existente e adicionar `ai_requests`, distinguindo pedidos/tentativas, custo desconhecido e chamadas globais da plataforma. Resolvida pela resposta explícita “OK” do PO à recomendação em09/10/2026. Ampliar ai_usage_events e adicionar ai_requests; registrar pedidos/tentativas e consumo por empresa; chamadas globais são custo da plataforma; custo desconhecido não vira zero. ADR-080 aceito, implementação e validação autorizadas no mesmo movimento, sem preço/fatura/cobrança, consumo histórico inventado ou alegação de cobertura só pela tabela.
+
+Não há Q material de produto aberta neste movimento. A instalação protegida de Q-04a e as evidências de Q-04b são obrigações de execução, sem reabrir decisões aprovadas.
+
+### Fundamento da descoberta e propostas aprovadas
+
+Os parágrafos abaixo preservam os detalhes da comparação apresentada. A resposta posterior do PO aprova Resend gratuito/criação da conta e a recomendação de Q-04b; supera somente as frases que os descreviam como pendentes. Não autoriza plano pago. Q-04a operacional continua até instalação verificada; Q-04c foi supersedida pela publicação autorizada com aviso/expurgo adiados; Q-05 aprovada nos limites registrados acima.
+
+Q-04a: comparação inicial considerou SMTP/transacional contratado; sem serviço identificado, Resend foi recomendado e aprovado pelo PO. Integração por API HTTPS e chave idempotente, sem biblioteca adicional obrigatória. Plano Free observado em 09/10/2026: 3.000 e-mails/mês, 100/dia; exige domínio/remetente verificados e nova credencial protegida. Conta criada pelo PO; não contratar plano pago. Pro: US$20/mês/50.000 mensagens, fora da recomendação inicial. SMTP contratado reduz novos fornecedores/custo, mas confirmação ambígua de envio requer reconciliação específica. Resend mantém idempotência por 24 horas; ledger interno permanente, limite de retry e reconciliação continuam necessários. Aceitação do provedor significa enviado, não entregue. Permanecem internos: fila, token protegido recuperável apenas pelo worker, autorização, auditoria, UI e reconciliação. Referências: [preços](https://resend.com/pricing), [idempotência](https://resend.com/docs/dashboard/emails/idempotency-keys), [domínios](https://resend.com/docs/dashboard/domains/introduction). Maturidade operacional/privacidade da conta e identidade remetente ainda precisam ser verificadas; não se alega contratação ou ativação.
+
+Q-04b: reutilizar OpenAI/Responses e `gpt-5.6-luna`, já configurado para outras funções do Prisma, sem tools/Web, `store:false`, contexto somente dos requisitos e sem identidade da Pessoa. Proposta inicial de limite: 20 questões por pedido, US$0,25 por pedido e US$10/mês por organização; reserva conservadora antes da chamada, custo efetivo auditado, concorrência controlada e sem retry externo automático. Benchmark sintético inicial também dentro desse teto e somente depois de autorização. Esses tetos foram aprovados pelo PO; ainda não são política ativada no runtime. Preços standard observados em 09/10/2026: US$0,20/1M entrada e US$1,20/1M saída; exemplo calculado de 5.000 entrada+10.000 saída = US$0,013, sem garantir consumo real. Menor preço isoladamente não comprova qualidade; o benchmark e a revisão humana são obrigatórios. Modelo `gpt-6-luna` disponível é alternativa nova que exigiria avaliação própria; reutilizar a configuração existente reduz mudanças simultâneas. Fonte oficial: [GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna), [preços](https://developers.openai.com/api/docs/pricing). Não houve chamada paga de geração nesta descoberta.
 
 ---
 
@@ -20056,6 +20360,97 @@ O fechamento documental posterior ao runtime atualiza apenas AoT/current-state/o
 ## Conclusão
 
 v2.1.0 implementada, validada e publicada. Todos os D e P aplicáveis PASS nas fronteiras evidenciadas; sem desvio material. Jornada autenticada real permanece NOT TESTED e não é inferida de smoke público. O estado unhealthy experimental preexistente é resíduo alheio ao release, não uma capacidade protegida aprovada neste AoT.
+
+---
+
+## Source: `docs/qa/aot-position-assessment-v230.md`
+
+# AoT — Avaliação para Posição v2.3.0
+
+09/10/2026. Agreement/Execution v0.5.0 congelados pela ordem explícita do PO de implementar, integrar main e publicar2.3.0. Baseline31d5965ade8f834da538561972bc5a5fc9d76e90; branch codex/position-assessment-v230. Implementação local integral comprovada; rollout ainda pendente. Template docs/qa/aot-template.md.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- |
+| D-01 | Ação contextual após acompanhamento, workspace não cria registros | assessment-sql/sql.txt; browser/checks.json; baseline-follow-up/sql.txt | PASS | Sintético local, sem criar candidato em produção |
+| D-02 | Configuração/requisitos/versão/snapshot/revisão otimista persistidos | SQL, domínio, browser/configuration-*.png | PASS | Imutabilidade/versionamento negativos |
+| D-03 | Banco/IA/Misto explícitos, déficit por requisito/dificuldade, geração manual | Deno/runtime e SQL/budgets; browser/composition-*.png | PARTIAL | Benchmark vivo/ativação pendentes |
+| D-04 | Cinco alternativas distintas/uma correta/justificativa; catálogo privado compatível | SQL inválidos/tenant/cópia contextual; domínio | PASS | Itens antigos de quatro opções intactos/inelegíveis |
+| D-05 | Registry e distribuição exata1–5, múltiplos10, snapshot | Domínio, SQL20nível3=6/8/6, composition12+8 | PASS | Sem arredondamento/admin novo |
+| D-06 | Editar/substituir/aprovar, revisão final, snapshot imutável | SQL pendências/cópia banco; browser/review-*.png | PASS | Aprovação humana não fabricada |
+| D-07 | Fila/claim/lease/token/override e Resend idempotente, dispatcher no Synthesis | email-transport.txt; Deno; SQL configuração/fila; disputa lease | PARTIAL | Configuração protegida/deploy pendentes; sem envio real de teste |
+| D-08 | Portal/instruções, buffer/autosave/retomada/revisão/comprovante, correção backend | SQL tokens/prazo/revogação/replay/submit; browser/portal-*.png; disputa autosave | PASS | Sem gabarito/nota no portal, sem LLM para corrigir |
+| D-09 | Foco/mouse/zoom/atalhos por instância/versão, sequência/tempo/método/dedup | Domínio/atividade, SQL events/replay, browser/result-*.png | PASS | Sinais parciais/lacunas/suporte explícitos |
+| D-10 | Limites antes/durante/depois, sem fraude/decisão/captura universal | Negativos payload/keylogging/clipboard, render portal/resultado | PASS | Sem destino de janela/coordenadas/imagens |
+| D-11 | Resumo/respostas/gabarito/atividade privados, consulta auditada | SQL roles/tenant/auditoria; browser/result-*.png | PASS | Humano decide no acompanhamento |
+| D-12 | Auth/RLS/tenant/versão/secret/PII/auditoria; loading/erro/retry preservam escolha | SQL/grants,43Deno, browser rede falha/retry38checks | PASS | Testes reais de Pessoas NOT TESTED |
+| D-13 | Metadados2.3.0, plano seletivo, docs/contexto, main/produção/smoke | Implementação e validação local; recibos operacionais a registrar | PARTIAL | Ainda sem entrega remota |
+| D-14 | ai_requests + ai_usage_events v2 e todos os consumidores runtime | SQL56, consumidores Node/Deno, disputa do mesmo attempt | PASS | Cobertura local; ativação remota a registrar; sem backfill/cobrança |
+
+## Proibições verificadas
+
+| ID | Implementação / teste negativo | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Nova submissão preserva Score/Perfil/Posição/etapas; sem etapas ambíguas | SQL snapshots e baseline48 | PASS |
+| P-02 | Sem IA/aprovação implícitas, gabarito público, reescrita histórica/promoção global | SQL e browser leituras sem generate/send | PASS |
+| P-03 | Override só convite, fila não é envio, aceitação não é entrega; nenhuma mensagem a candidato real | Deno/email/SQL e execução | PASS |
+| P-04 | Só sinais limitados, nenhuma imagem/clipboard/keylog/coordenada/decisão | Domínio/coletor/SQL/render | PASS |
+| P-05 | Tenant fail-closed, mínimo contexto, ledger sem prompts/PII/secrets, nenhuma automação de Score/etapa | SQL56+63, consumidores e source review | PASS |
+| P-06 | Quatro migrations aditivas, sem db push geral; não alegar rollout até recibos | Plano/diff e este AoT | PASS |
+
+## Mapa de Impacto e Preservação
+
+Mapa docs/qa/impact-position-assessment-v230.md revisado antes da integração D-14: Parser/Synthesis/matching/Knowledge/gerador legado e novo são consumidores diretos; shell/portal/auth são transversais críticos. Baseline live do VPS srv1038882 e Supabase ioldpnqqvobprjiontre conferidos. Novo fluxo não reutiliza mutação legada de matching na submissão. Original catálogo quatro opções/política desabilitada preservados.
+
+| Capacidade protegida | Baseline | Regressão / Evidência | Status |
+| --- | --- | --- | --- |
+| Acompanhamento/Score/Perfil/Posição | main31d5965, QA local vazio |48baseline e SQL novo antes/depois submit | PASS |
+| Banco histórico/catálogo compartilhado | Itens legados intactos |28testes legados prévios; SQL copy-on-edit/erasure | PASS |
+| Parser/ingestão/cache/recovery | Runtime hosted existente | Testes serviço/hosted/recovery e consumer ledger | PASS |
+| Synthesis/fontes/revisão/diagnóstico | Worker existente1.1 | Testes worker e ledger, fila de convites isolada | PASS |
+| Matching duas leituras/cache/conflito | Handler atual |35Deno incluindo provider/cache/tenant/revisão/ledger | PASS |
+| Knowledge políticas/opt-in/globais | Handler atual e3normalização | Teste quatro consumidores e normalização, custo platform | PASS |
+| Auth/portal/loading/shell | Tokens/componentes atuais |38browser sem exceções/IO externo +SQLnegativos | PASS |
+| Gateway/Traefik/Paddle | IDs/imagens live antes | Fora do plano; comparar metadados após rollout | NOT TESTED |
+
+### Novidade e preservação
+
+Nova jornada contextual completa, portal/correção/atividade, fila de e-mail e ledger genérico instrumentado. Preservação comprovada pelos testes dirigidos, sem transformar baseline ou smoke público em prova de candidato real. Não há QA remoto separado. QA local teve arquivo físico legado profile_synthesis_jobs ausente; baseline vazio e guardado permitiu TRUNCATE transacional local com ROLLBACK para recriar a relação somente na fixture. Não houve reparo/limpeza de produção ou uso de dados pessoais reais.
+
+## Fora de escopo preservado
+
+F-01..F-04 PASS: sem admin distribuição/proctoring/canais extras, automação de decisão/cadastro/Score/global, candidato real fictício, novo fornecedor/ambiente/plano pago, preço/fatura/pacote/cobrança. Aviso final/expurgo temporal adiados explicitamente pelo PO; exclusão explícita/direitos permanecem.
+
+## Evidência de fidelidade visual
+
+Referências normativas: três imagens1536×1024 com dois estados cada, inspecionadas diretamente. Dados sintéticos equivalentes Ana Martins/Desenvolvedor backend/20questões/40min/nível3 e12+8; renders1448×980 e390×980 fullPage, sem rótulos externos de proposta. Comparação de regiões normalizada ao retângulo de cada estado (referência tem dois painéis numa imagem), não identidade pixel.
+
+| Critério | Render / Comparação estrutural | Divergências e autonomia | Status |
+| --- | --- | --- | --- |
+| D-UX-01/02 | configuration/composition-*.png: shell/contexto/4etapas/principal2:1/resumo; requisitos antes parâmetros; modos/filtros/tabela e déficit/IA lateral | Sidebar/componentes/tokens atuais; Select nível em vez de cartões, decoração A-01; quantidades reais têm paginação | PASS |
+| D-UX-03 | review/invitation-*.png: questão/5opções/gabarito/justificativa/editar/substituir/banco; revisão e envio laterais | Textos/contagens reais, campos acessíveis e prazo datetime A-01; ordem/ações preservadas | PASS |
+| D-UX-04 | portal-*.png: topo compacto/contexto/tempo; navegação esquerda/questão central/info direita; mobile centro primeiro/nav recolhível | Tokens atuais, aviso parcial explícito; sem sidebar admin | PASS |
+| D-UX-05 | result-*.png: resultado privado/abas/contagens/tabela/timeline/limites/volta | Tabela paginada cinco para densidade/mobile, A-01; dados ilustrativos não viram fatos | PASS |
+| P-UX-01 | Nenhum menu novo Avaliações/Relatórios; topologia e ordem aprovadas reconhecíveis | Sem desvio material identificado | PASS |
+
+## Desvios do contrato
+
+Nenhum desvio material de comportamento identificado. Adaptações menores A-01 acima. Decisão superveniente do PO supersede Q-04c e congelou v0.5.0 com aviso/expurgo adiados; não é parecer jurídico nem base legal inventada. Operacional ainda não concluído, sem declaração de release integral.
+
+## Validação final
+
+SQL local: 63asserções novas,56histórico e48baseline, sempre ROLLBACK;95testes Node dirigidos,43Deno,20tooling,38checks browser e3disputas reais por conexões independentes. Tipos/build PASS. Sem suíte integral local. Evidências na pasta evidence/position-assessment-v230.
+
+Context/lint/foundation no snapshot exato preparado para commit, excluindo untracked alheios sem apagá-los. Root lint anterior varreu dumps alheios em output e falhou por whitespace; não constitui defeito corrigido nem autorização para alterar esses arquivos. Gerador/checker e own-diff devem ser registrados após estágio final.
+
+## Git / QA / ambiente
+
+Baseline31d5965; codex/position-assessment-v230. Main/origin/VPS e Supabase remoto ainda no baseline; publicação integral pendente. Arquivos alheios preservados. Nenhum envio real de e-mail ou candidato/Perfil/decisão fabricado em produção. Benchmark sintético vivo e metadados operacionais serão anexados, sem conteúdo privado ou secrets.
+
+## Conclusão
+
+Implementação local validada; D-03/D-07/D-13 PARTIAL até evidência operacional. Continuar até main/produção2.3.0/smoke/sincronização autorizados.
 
 ---
 
@@ -25178,6 +25573,57 @@ Contrato congelado: docs/qa/agreement-person-unified-v210.md versão1.0.0, lido 
 
 ---
 
+## Source: `docs/qa/execution-position-assessment-v230.md`
+
+# Execution Prompt — Avaliação para Posição v2.3.0
+
+Versão 0.5.0, CONGELADO em09/10/2026. Movimento único na branch `codex/position-assessment-v230`, baseline `31d5965ade8f834da538561972bc5a5fc9d76e90`. Instalação protegida de Q-04a e evidências de Q-04b fazem parte da entrega integral autorizada.
+
+## Decisão superveniente do PO e congelamento
+
+Em09/10/2026 o PO determinou expressamente: “faz tudo até estar implementado em main e publicado na nova versão 2.3.0”, após adiar o aviso final e a exclusão automática por prazo. Esta decisão supersede a limitação anterior de Q-04c ao desenvolvimento sintético e a condição documental de congelamento/publicação por esse aviso. Contrato v0.5.0 congelado para implementação/publicação integral autorizada, mantendo D-01..D-14, P-01..P-06, F/A/UX/CA. Aviso final e definição de prazo ficam adiados; não ativar expurgo temporal nem inventar base legal, consentimento ou certificação jurídica. Instruções operacionais e limites da observação de D-08/D-10 continuam obrigatórios; exclusão explícita, direitos e segurança permanecem. Credenciais/instalação de Q-04a são execução operacional já autorizada, não nova decisão material. As expressões anteriores de pendência ou proibição de congelamento por Q-04c abaixo são históricas e supersedidas por esta decisão.
+
+## Contrato incorporado
+
+Ler integralmente `docs/qa/agreement-position-assessment-v230.md` v0.5.0 e `docs/qa/impact-position-assessment-v230.md`, além do registro integral `docs/product/proposta-avaliacoes-contextuais-2026-10-09.md`, prompts/refinamentos e três imagens da pasta homônima. D-01 a D-14, P-01 a P-06, F-01 a F-04, A-01 a A-03, D-UX-01 a D-UX-05/P-UX-01/A-UX-01 e todos os CA são incorporados integralmente, não reinterpretados. Este apontamento incorpora o contrato integral congelado v0.5.0, sem perder requisitos.
+
+A autorização atual permite implementação/publicação integral e supera a antiga exclusão da etapa de proposta. Q-01 da proposta foi resolvida pela instrução atual (sinais web limitados); Q-02/Q-03 foram aprovadas expressamente nesta conversa. Resend gratuito/criação da conta e OpenAI/Responses com gpt-5.6-luna, até20 questões/US$0,25 por pedido/US$10 por mês por empresa foram aprovados posteriormente, assim como comprovante/retomada/cancelamento/reaplicação humanos. D-14 amplia o movimento ao histórico genérico de IA; Q-05 e ADR-080 aprovados pelo PO em09/10/2026: reutilizar ai_usage_events + ai_requests, pedidos/tentativas/empresa, custo desconhecido e plataforma separados. Não inferir retenção/base legal, cobrança comercial, credencial configurada ou domínio verificado. Não substituir e-mail por cópia manual de link para alegar entrega integral.
+
+## Entendimento do trabalho independente já autorizado
+
+Implementar primeiro os contratos puros de D-04/D-05 e a deduplicação/atribuição de foco e mouse de D-09, com negativos de D-12, sem IO, envio, geração real, migração ou integração na jornada pública. Não pode haver questão de quatro opções elegível, preenchimento silencioso, aprovação humana fabricada ou evento atribuído à instância errada. Interfaces decorativas e organização interna são A-01; domínio e métodos permanecem versionados. Essa etapa inicial já foi concluída; a ordem integral abaixo governa a continuação.
+
+Continuação independente de D-07: implementar o adapter HTTPS do Resend já aprovado, isolado e sem consumidor ativo. Testar somente fetch injetado, aceitação distinta de entrega, mesma chave/payload em retry, limite conservador da janela de 24 horas, conflitos e erros sem dados do provedor em logs. P-03/P-05 impedem envio real de teste, alteração da Pessoa e exposição de credenciais/destinatários/tokens. O worker futuro deve obter autoridade/claim transacional, persistir primeiro início e mensagem imutável antes da chamada, cancelar/reconciliar e auditar; o adapter não substitui esses gates. A-01/A-02 permitem sua organização interna, sem dependência adicional. Aviso/expurgo adiados pelo PO; desenho Q-05 aprovado. Não publicar o adapter isolado como entrega integral.
+
+Continuação independente D-14 autorizada: implementar a persistência genérica conforme ADR-080 aprovado, com testes locais transacionais de autorização, tenant/plataforma, lifecycle, tentativas/cache, replay e custo desconhecido. P-05/P-06 proíbem PII/secrets no histórico, custos inventados, escrita por cliente, backfill e ativação indevida. A-02/A-03 permitem detalhes compatíveis de schema/RPC/indexação; não mudar limites/output/decisões dos consumidores. Banco/RPC isolados não comprovam instrumentação de toda a plataforma. Aviso final/expurgo adiados pelo PO e publicação integral autorizada; não inventar base legal ou aprovação humana.
+
+## Sequência integral a executar após congelamento
+
+1. Revalidar Git/origin/baseline, preservar untracked alheios e os artefatos aprovados. Usar branch isolada. Conferir mapa e owner docs atuais; operacional remoto é um único projeto de produção, não QA separado.
+2. Reutilizar Item Bank/governança M5.1C, contratos e capability M5.1B/M6.2 naquilo que satisfaz os novos requisitos. O catálogo observado de quatro alternativas é inelegível e deve permanecer histórico; não fabricar quinta opção. A correção legada escreve matching: a nova execução deve preservar Score/etapa por contrato explícito, sem alterar significado de tentativas antigas.
+3. Desenhar e revisar extensões versionadas e aditivas de organização/Pessoa/Posição/requisitos, rascunho, configuração/snapshot, composição e revisão, aplicação, respostas/eventos, convite/fila/auditoria e políticas aprovadas. FKs/purga devem preservar a exclusão da Pessoa e o catálogo reutilizável. ADR apenas para decisões duráveis novas, com alternativas e aprovação material registrada.
+4. Testar schema/RPCs em PostgreSQL local descartável, com autorização/tenant/versão, DML/grants/RLS, idempotência/concorrência/rollback, snapshots e gabarito secreto. Sem produzir dados reais fictícios em produção.
+5. Implementar ação contextual Criar avaliação no acompanhamento e etapas Configuração → Questões → Revisão → Convite segundo as imagens, incluindo reabertura de rascunho, filtros/banco, pedido explícito IA/misto por déficit, editar/substituir/aprovar e revisão final. Preservar contexto e volta; nenhuma leitura cria avaliação/convite ou chama IA.
+6. Aplicar distribuição exata e quantidade múltipla de 10 no backend e UI; guardar snapshot em cada aplicação. Todos os itens aprovados devem ter cinco opções e uma correta, com justificativa e proveniência. Revisar versão imutável antes de emitir convite; edições posteriores do banco não alteram aplicação.
+7. Integrar transporte/remetente aprovados, override local de e-mail, mensagem/prazo, fila com requested/queued/sent/failed, token seguro, idempotência e reconciliação. Separar aceitação pelo transporte, entrega e abertura. Testar com transporte falso/destino sintético autorizado, sem disparo para candidatos reais.
+8. Integrar geração externa com modelo/limites aprovados, schema estrito, cinco opções, contexto minimizado, revisão humana, custos/versões e testes contra injeção/PII. Fake continua identificado como sintético. D-14 exige histórico genérico integrado às funções atuais e extensível às futuras, segundo Q-05 e ADR-080 já aprovados; não basta criar tabela. Registrar tentativas/cache/consumo/falhas, preservar os contratos e limites existentes e testar cada consumidor, sem backfill inventado ou cobrança efetiva. Não converter cache/Perfil/currículo/respostas da Pessoa em input para perguntas gerais.
+9. Portal sem shell administrativo: instruções/ciência antes de início, uma questão por vez, cinco opções sem gabarito, autosave/buffer/retry/feedback, marcação/revisão e confirmação de submissão. Backend corrige objetivamente e transacionalmente, sem LLM, bônus no Score ou mudança de etapa. Testar falhas e replays sem perda/conclusão parcial.
+10. Coletar atividade limitada por instância/versão da questão e tentativa com timestamps cliente/recebimento, método/suporte/limites, sequência, buffer/deduplicação/reenvio. Foco deduplicado; mouse somente antes da primeira alternativa e com janela ativa; zoom como sinal observável e captura como atalho recebido. Sem keylogging/clipboard/imagens/proctoring, nem alegação de captura universal/ausência confirmada/fraude.
+11. Resultado autorizado com resumo, questões/respostas/gabarito e atividade em tabela/timeline, limites visíveis e retorno ao acompanhamento. Respostas privadas separadas do banco. Humano decide próximos passos; não inventar avaliação/decisão para smoke.
+12. Comparar cada um dos seis estados com as imagens aprovadas no mesmo estado/dados/viewport. Registrar desktop/mobile, estados loading/erro/retry e divergências. Não alegar fidelidade por testes textuais. Preservar tokens/sidebar/ícones centrados/topologia/ordem/ações.
+13. Own-diff review e testes dirigidos de todas as fronteiras diretas e preservação. Atualizar docs proprietários, AoT e Context Pack; gerar/verificar exports a partir apenas dos arquivos destinados ao commit, preservando docs alheios não rastreados. Atualizar metadados 2.3.0 somente para a entrega integral validada.
+14. Derivar destinos pelo release:plan do diff committed. Migration específica → funções afetadas → web no SHA validado; nunca db push geral. CI/main/origin/VPS sincronizados, rollback antes de consumidores, smoke público e autorizado, sem reconstruir serviços fora do plano. Nenhum PASS sem evidência necessária; limitações autenticadas/IA/visual permanecem explícitas.
+
+## Passo a passo de aceite
+
+Encontrar pessoas na Posição → selecionar/adicionar ao acompanhamento → abrir Pessoa no contexto da Posição → Criar avaliação → selecionar requisitos, quantidade, duração, nível → escolher Banco/IA/Misto → selecionar questões e/ou solicitar geração do déficit → revisar/aprovar → revisão final → conferir e-mail/mensagem/prazo → enviar convite → candidato acessa/inicia/responde/revisa/submete → correção e persistência → recrutador consulta resultado/atividade por questão → decide próximo passo no acompanhamento.
+
+## Estado da execução
+
+Implementação local integral e testes dirigidos concluídos; AoT registra as evidências e as obrigações operacionais remanescentes. Publicação integral ainda exige migrations, configuração protegida, benchmark, funções/workers/web, smoke e sincronização.
+
+---
+
 ## Source: `docs/qa/execution-position-follow-up-v220.md`
 
 # Execução — Acompanhamento Pessoa–Posição v2.2.0
@@ -25342,6 +25788,47 @@ Versão 1.0.0. Autorizada por Bruno em 2026-09-18. Ler integralmente `docs/qa/ag
 Implementar a regra no contrato do agente, owner de UX, templates de acordo/AoT, protocolo de rastreabilidade, ADR e roteamento do Context Pack. Projetar a seção canônica de fidelidade visual diretamente na fonte compacta do GPT, protegê-la com checker e teste e regenerar os dois artefatos derivados. Não editar artefatos gerados manualmente.
 
 Validar `check:foundation`, o teste de tooling do Context Pack, geração e verificação dos artefatos. Revisar diff e manifesto. Este movimento não altera telas, código de produto, banco, Supabase, IA de runtime, QA ou produção.
+
+---
+
+## Source: `docs/qa/impact-position-assessment-v230.md`
+
+# Mapa de Impacto — Avaliação para Posição v2.3.0
+
+09/10/2026. Risco D, integração de schema/tenant/token/PII/IA/convites/respostas; ADR-080 aprovado e implementado. Agreement v0.5.0 congelado pela ordem de publicação integral. Aviso final/expurgo temporal adiados pelo PO, exclusão explícita/direitos preservados.
+
+Baseline verificado: main `31d5965ade8f834da538561972bc5a5fc9d76e90`; branch isolada `codex/position-assessment-v230`. Tracked tree inicialmente limpo, proposta e arquivos não relacionados não rastreados preservados. Versão pública de partida 2.2.1 conforme metadados, publicação anterior não reverificada nesta descoberta. Origin `git@github.com:brunoharita/HRT-Prisma.git`.
+
+Ambiente remoto confirmado por conector: único projeto Prisma `ioldpnqqvobprjiontre`, ACTIVE_HEALTHY, PostgreSQL17.6. Docs atuais de ambientes confirmam que Prisma-QA é nome histórico, não homologação remota separada. Edge assessment-access v6 ACTIVE, verify_jwt=false; assessment-item-generator v6 ACTIVE, verify_jwt=true. Duas políticas de IA desabilitadas, provider/model/budget nulos. Banco observado: 17 itens ativos (16 globais/1 organização), TODOS com quatro alternativas. Portanto zero itens elegíveis ao novo contrato de cinco alternativas, sem inferir cobertura por requisito e sem converter sintéticos em conteúdo real. Não corrigir históricos ou fabricar quinta opção.
+
+QA local confirmado: PostgreSQL localhost55479, database `import_evidence_v202`, ator `prisma_v202_qa`, people=0, assessment_items existe. Reusar fixtures e rollback local; verificar novamente antes de cada escrita. Plano dispatcher baseline HEAD..HEAD sem destinos, somente diff check; plano final será derivado do diff committed.
+
+| Capacidade/área | Relação | Impacto esperado e proteção | Baseline / evidência | Regressão mínima |
+| --- | --- | --- | --- | --- |
+| Configuração/composição/revisão contextual | direct | Novo fluxo multirrequisito, snapshots e cinco alternativas | M5.1 prepara por definição/requisito; não atende novo fluxo integral | Validação de quantidade/nível/coverage, modos/deficits, revisão e imutabilidade, render seis estados |
+| Acompanhamento Pessoa–Posição | direct | Ação Criar avaliação e volta, sem mudança automática de fase | positionFollowUpService/PositionFollowUpPage e migrations vigentes | SQL/API com vínculo/tenant, Kanban/detalhe/retorno e preservar histórico/decisão |
+| Item Bank e governança M5.1C | direct | Reuso aprovado por escopo/versão, questões novas sem promoção global | 17 itens ativos inelegíveis (quatro opções), origem histórica sintética | Cinco opções, unicidade/fingerprint, revisão, item privado, versão imutável, histórico intacto |
+| Token/portal/autosave/correção M5.1B | direct | Capability pública sem conta, snapshots e retry | assessment-access ativa; fonte local CORS somente localhost; portal existente | Negativos token/expiração/revogação/cross-attempt, sem gabarito, idempotência/autosave/retry/submit/conflito |
+| E-mail e fila | direct | Resend gratuito/remetente suporte@hrtsolutions.com.br aprovados; DNS preservado e Verified; chave criada pelo PO/metadata confirmado, entrada protegida e instalação pendentes; estados verificáveis, sem alterar Pessoa | Sem implementação encontrada em repo e sem nomes smtp/mail/m51/assessment no Vault consultado | Nove testes do adapter isolado: replay estável, conflitos/24h, receipt distinto de entrega, falhas sem PII; integração futura deve provar fila/claim/auditoria, sem envio real de teste |
+| Atividade por questão | direct | Foco deduplicado, mouse ativo até primeira marca, zoom/atalhos como sinais limitados | Portal atual grava blur e visibility separadamente e ignora falhas de eventos | Relógio/eventos/buffer/reenvio/troca de questão/suporte/lacunas; consulta/timeline autorizadas |
+| IA/proveniência/budget | direct | Pedido humano e contexto só dos requisitos; modelo5.6-luna/tetos20questões/US$0,25pedido/US$10mês aprovados, ainda não ativados | Adapter Responses existente desativado, schema antigo aceita 2–6 opções | Schema cinco opções, prompt injection/PII, metadata/custo, budgets/concorrência, provider fake separado; live só autorizado |
+| Auth/RLS/tenant/auditoria | critical_transversal | Sem DML direto; falha fechada; auditoria obrigatória transacional | Padrões require_document_reviewer e authorize_position_follow_up | anon/member/outsider/sem sessão, cross-tenant, gabarito/secret, auditoria, grants/RLS e smoke público |
+| Exclusão da Pessoa | plausible_indirect | Novas FKs/dados individuais entram na purga sem afetar catálogo compartilhado | M5.5 existente; mapear dependências ao desenhar schema | Exclusão sintética transacional com resíduo zero e banco aprovado preservado |
+| Matching/Score/Perfil/Knowledge | plausible_indirect | Proibir bônus/reavaliação/alteração por submissão nova; legado M5.1B escreve match_evaluations, exigindo fronteira distinta/versionada | Fonte m51b_public_access demonstra reavaliação legada | Snapshot antes/depois de submissão; sem update matching/stage/profile/knowledge; testes dirigidos de preservação |
+| Shell/navegação/loading | critical_transversal | Rotas novas, seleção Verificações, operações com feedback até conclusão/erro | Shell/tokens/loading existentes | Smoke navegação autenticada sintética, mobile, erro/retry e conteúdo preservado |
+| Histórico genérico de IA (D-14) | direct | Reutilizar ai_usage_events, pedido/tentativas/consumo por empresa; desenho Q-05 aprovado, sem cobrança nem conteúdo pessoal | Remoto: zero eventos, SELECT RLS, nenhum consumidor identificado; grants de escrita não equivalem a policy de escrita | Negativos tenant/global/role, idempotência, custo desconhecido, falha/cache/retry e cobertura de cada consumidor |
+| Parser/Synthesis/matching/Knowledge | critical_transversal | Ampliação D-14 deverá instrumentar chamadas atuais, preservando outputs, cache, revisão, limites e disponibilidade conforme desenho aprovado | Responses em workers Parser/Synthesis, matching-trajectory e knowledge-agent; logs específicos não são histórico genérico | Testes dirigidos por consumidor, registros/consumo/falhas, preservação dos contratos e release:plan após diff; não presumir web-only |
+| Paddle/OCR sem LLM | no_impact_identified | Não faz chamada de IA generativa faturada por provider no inventário; preservar serviço existente | D-14 não altera extração/Paddle; sem diff do serviço previsto | Reavaliar pelo diff e plano final, preservar IDs/imagens/reinícios quando fora do plano |
+
+Descobertas materiais devem atualizar este mapa e os testes antes do encerramento. Persistência genérica local comprovada por56asserções/negativos transacionais, incluindo isolamento/RLS/grants/replay/custos/cache e campos legados. Concorrência real, instrumentação dos consumidores e exclusão de suas referências individuais continuam pendentes; integração pode ampliar o mapa antes do fechamento. Sem deploy e sem QA real autenticado. AoT final separará novidade e preservação; limitações não viram PASS.
+
+## Revisão do mapa antes da integração/rollout
+
+Relações diretas confirmadas: seis tabelas/RPCs de avaliação, ledger/rpcs de consumo, ação no acompanhamento, novas rotas/portal/UI, Edge position-assessment/matching-trajectory/knowledge-agent/assessment-item-generator, workers Parser/Synthesis e Dockerfiles. Dependência compartilhada aiHistory.ts justifica destinos explícitos no dispatcher1.0.4. Synthesis processa fila existente de convite com segredo distinto, sem broker/serviço novo. Transversais críticos: auth/RLS/auditoria, shell/loading/portal e contexto. Exclusão da Pessoa plausible_indirect testada com cascata e banco privado preservado. Matching/Score/Perfil/etapa plausible_indirect protegidos por snapshots antes/depois; instrumentação dos consumidores é direct, não mudança de semântica. Gateway/Traefik/Paddle no_impact_identified após análise dos imports, compose, configurações e plano: nenhum consumidor novo dessas APIs, volume ou imagem; comparar IDs/restarts live antes/depois. Parser normalização/prompt/cache e Synthesis fontes/revisão/diagnósticos preservados por testes dirigidos. Scripts offline de benchmark/curadoria não são consumidores runtime de plataforma.
+
+SQL local: 63asserções novas,56histórico e48baseline, sempre ROLLBACK;95testes Node dirigidos,42Deno,20tooling,38checks browser e3disputas reais por conexões independentes. Tipos/build PASS. Sem suíte integral local. Evidências na pasta evidence/position-assessment-v230.
+
+Baseline VPS: srv1038882, /opt/prisma SHA31d5965, web prisma-web:1.6.4, Parser prisma-parser-ia:1.0.0 healthy, Synthesis healthy, gateway1.1.0/Traefik preservados. Supabase único produção ioldpnqqvobprjiontre PG17.6; QA local isolada com rollback. Estado inicial acima é histórico de descoberta, não pendência de produto atual. Limitação física da fixture legada vazia e adaptações visuais explicitadas no AoT. Rollout segue migrations específicas → instalação protegida → quatro funções/workers/web mesmo SHA → smoke/sincronização; sem db push geral.
 
 ---
 
@@ -27246,8 +27733,8 @@ No M5.2, somente `service_role` executa staging, validação, diff e publicaçã
 ---
 owner: security
 status: verified_in_prisma_qa
-version: 0.4.0
-last_verified: 2026-09-01
+version: 0.6.0
+last_verified: 2026-10-09
 ---
 
 # Segurança e Privacidade no M5.1 - Verificação de Competências
@@ -27255,6 +27742,18 @@ last_verified: 2026-09-01
 ## Estado
 
 Este documento descreve os controles aplicados no M5.1A, M5.1B e M5.1C ativos no Prisma-QA. O uso com Pessoas reais e qualquer provider externo continuam condicionados a privacidade, retenção, base legal, modelo, orçamento e aprovação específica.
+
+## Extensão Avaliação para Posição / histórico de IA
+
+Agreement v0.5.0 congelado e publicação integral autorizada em09/10/2026. Aviso final e expurgo automático por prazo adiados; não há prazos30/180dias aprovados ou certificação de base legal. Controles de acesso, exclusão explícita e direitos preservados; instruções operacionais/limites permanecem visíveis antes de iniciar. Código não prova rollout; recibos no AoT.
+
+Todas as seis tabelas novas têm RLS, FKs compostas e DML direto revogado inclusive service_role. Operador passa pela autoridade ativa owner/admin/recruiter e vínculo Pessoa–Posição; leitura não cria avaliação e consulta é auditada. Gabarito fica no backend e em consultas privadas autorizadas; portal recebe só alternativas durante execução e comprovante ao terminar. Tokens256bits, hash para validação, ciphertext AES256 para envio, prazo/revogação/limite por tentativa, autosave otimista e submit transacional. Chave pessoal vai no fragmento da URL, fora do caminho HTTP e Referer; portal no-store/no-referrer e sem access_log no Nginx.
+
+Resend exclusivamente por backend, endpoint fixo HTTPS, sem redirects, chave protegida/escopo de envio pelo domínio; instalação única por segredo temporário cujo hash é removido após sucesso. Dispatcher usa segredo distinto e só processa fila humana, sem acesso a IA/criação de convites. Workers IA usam token de propósito restrito às suas funções/organizações, sem chave service-role. Núcleos/configuração privados sem grants; RPCs SECURITY DEFINER com search_path vazio e allowlists. TLS oportunista escolhido pelo PO; tracking/recebimento desativados.
+
+Histórico armazena somente códigos/IDs/hashes/versões/método/modelo/estado/duração/consumo, sem prompts, documentos, contatos, respostas ou credenciais. organization obrigatório para empresa, platform sem empresa e invisível a consultas organizacionais; FK do pedido/tentativa e RLS mantêm isolamento. Autoridade do consumidor precede o registro. Identificadores opacos não são alegação de anonimização. Custos estimados/observados/desconhecidos distintos, cache separado, sem backfill/cobrança. Resultado lógico refere-se à chamada e validação de IA, não prova publicação humana do seu conteúdo.
+
+Telemetria limitada e advisory: nenhuma imagem/clipboard/tecla geral/coordenada/destino de janela, sem prova de fraude/punição. Coletor, backend e UI explicitam suporte/lacunas; eventos deduplicados e ligados à instância/versão. Falha de telemetria preserva respostas e a conclusão transacional autorizada. SQL local cobre roles/tenant/gabarito/prazo/revogação/segredos/replay/cascata; testes de consumidores, concorrência por conexões e browser complementam, sem teste em candidatos reais.
 
 ## Ativos
 

@@ -1,0 +1,570 @@
+BEGIN
+DO
+TRUNCATE TABLE
+CREATE TABLE
+ALTER TABLE
+REVOKE
+        set_config
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+UPDATE 1
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+DROP POLICY
+CREATE POLICY
+CREATE POLICY
+REVOKE
+GRANT
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE TABLE
+INSERT 0 1
+REVOKE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+DO
+REVOKE
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+REVOKE
+GRANT
+REVOKE
+GRANT
+CREATE TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER TABLE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+CREATE TABLE
+GRANT
+INSERT 0 1
+SELECT 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           mutate_position_follow_up
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "21007556-8ae6-49d9-8713-ccc01410bcc8", "age": null, "match": null, "score": null, "stage": "awaiting_evaluation", "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-09T19:38:44.391294-03:00", "id": "99bf77e4-9ff0-4f88-a663-652c85e351cf", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "21007556-8ae6-49d9-8713-ccc01410bcc8"}], "process": {"id": "ce8179a3-37da-4afc-bb35-d48c60355735", "name": "Avaliação 01", "status": "active", "revision": 2}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}]}
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+SET
+ position_assessment_generation_finish
+---------------------------------------
+ {"status": "succeeded"}
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+UPDATE 1
+ m83_reject
+------------
+
+(1 row)
+
+DO
+UPDATE 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+DO
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+INSERT 0 1
+RESET
+UPDATE 1
+SET
+UPDATE 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+DO
+INSERT 0 1
+INSERT 0 1
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+SET
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+DELETE 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ROLLBACK
+
+psql:output/position-assessment-local.sql:2: NOTICE:  truncate cascades to table "profile_synthesis_attempts"
+psql:output/position-assessment-local.sql:954: NOTICE:  PASS: distribution exact 20 level3
+psql:output/position-assessment-local.sql:955: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:956: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:958: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:959: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:963: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:965: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:967: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:968: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:970: NOTICE:  PASS: read does not create assessments
+psql:output/position-assessment-local.sql:972: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:973: NOTICE:  PASS: denied (40001)
+psql:output/position-assessment-local.sql:975: NOTICE:  PASS: same generation request replays without new reservation
+psql:output/position-assessment-local.sql:976: NOTICE:  PASS: denied (40001)
+psql:output/position-assessment-local.sql:981: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:986: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:990: NOTICE:  PASS: invite is queued, never invented sent
+psql:output/position-assessment-local.sql:991: NOTICE:  PASS: operator does not receive raw personal token
+psql:output/position-assessment-local.sql:993: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:997: NOTICE:  PASS: backend acquires persisted first attempt and lease
+psql:output/position-assessment-local.sql:998: NOTICE:  PASS: duplicate dispatch does not acquire lease
+psql:output/position-assessment-local.sql:1001: NOTICE:  PASS: questions absent before explicit start
+psql:output/position-assessment-local.sql:1003: NOTICE:  PASS: start exposes exactly five alternatives per question
+psql:output/position-assessment-local.sql:1004: NOTICE:  PASS: portal exposes no answer key or explanation
+psql:output/position-assessment-local.sql:1005: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1008: NOTICE:  PASS: autosave replay idempotent after lost response
+psql:output/position-assessment-local.sql:1010: NOTICE:  PASS: candidate receives completion receipt only
+psql:output/position-assessment-local.sql:1011: NOTICE:  PASS: submission replay preserves receipt
+psql:output/position-assessment-local.sql:1013: NOTICE:  PASS: backend deterministic correction
+psql:output/position-assessment-local.sql:1014: NOTICE:  PASS: profiles preserved
+psql:output/position-assessment-local.sql:1015: NOTICE:  PASS: matching and score preserved
+psql:output/position-assessment-local.sql:1016: NOTICE:  PASS: position status and definition preserved
+psql:output/position-assessment-local.sql:1017: NOTICE:  PASS: all assessment tables have RLS
+psql:output/position-assessment-local.sql:1019: NOTICE:  PASS: authorized consultation audited
+psql:output/position-assessment-local.sql:1023: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1024: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1025: NOTICE:  PASS: one-time protected setup succeeds
+psql:output/position-assessment-local.sql:1026: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1027: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1028: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1029: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1032: NOTICE:  PASS: credential available exclusively to sending backend
+psql:output/position-assessment-local.sql:1033: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1034: NOTICE:  PASS: active delivery lease excludes background drain
+psql:output/position-assessment-local.sql:1035: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1039: NOTICE:  PASS: activity replay deduplicates even after submission
+psql:output/position-assessment-local.sql:1041: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1042: NOTICE:  PASS: denied (40001)
+psql:output/position-assessment-local.sql:1043: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1054: NOTICE:  PASS: private bank reusable but application review explicit
+psql:output/position-assessment-local.sql:1056: NOTICE:  PASS: bank edit creates pending contextual version
+psql:output/position-assessment-local.sql:1058: NOTICE:  PASS: shared approved bank item never overwritten by contextual edit
+psql:output/position-assessment-local.sql:1060: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1068: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1068: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1068: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1068: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1072: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1073: NOTICE:  PASS: denied (42501)
+psql:output/position-assessment-local.sql:1080: NOTICE:  PASS: denied (22023)
+psql:output/position-assessment-local.sql:1083: NOTICE:  PASS: purpose credential records authorized worker metadata
+psql:output/position-assessment-local.sql:1086: NOTICE:  PASS: explicit person erasure removes dependent assessment data
+psql:output/position-assessment-local.sql:1087: NOTICE:  PASS: general private question catalog remains independent of individual answers

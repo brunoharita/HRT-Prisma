@@ -23,7 +23,8 @@ async function setup() {
   const root = await mkdtemp(join(tmpdir(), "prisma-hosted-"));
   const secretPath = join(root, "parser.env");
   await writeFile(secretPath, "OPENAI_API_KEY=sk-synthetic\n", { mode: 0o400 });
-  return { directory: join(root, "cache"), lockDirectory: join(root, "locks"), secretPath, root };
+  const historyClient={rpc:async(_name,args)=>({data:args.p_action==="open_request"?{request:{id:"11111111-1111-4111-8111-111111111111"}}:args.p_action==="begin_attempt"?{acquired:true}:{recorded:true},error:null})};
+  return { directory: join(root, "cache"), lockDirectory: join(root, "locks"), secretPath, root,historyClient };
 }
 
 test("hosted restart separates volatile locks from persistent validated cache and does not replay IA", async () => {
@@ -35,13 +36,19 @@ test("hosted restart separates volatile locks from persistent validated cache an
     return Response.json({ status: "completed", model: PARSER_MODEL, id: "resp_synthetic", usage: { input_tokens: 100, output_tokens: 30 }, output: [{ type: "message", role: "assistant", content: [{ type: "output_text", text: JSON.stringify({ status: "complete", facts: [{ path: "identity.fullName", value: "Synthetic Person", sources: ["p1l1"] }], uncertainties: [] }) }] }] });
   };
   const first = await createHostedParser({ ...settings, fetchImpl });
-  assert.equal((await first(input)).cached, false);
+  const history=[];settings.historyClient={rpc:async(_name,args)=>{history.push(args);return {data:args.p_action==="open_request"?{request:{id:"synthetic-request"}}:{acquired:true},error:null};}};
+  const tracked = await createHostedParser({ ...settings, fetchImpl });
+  assert.equal((await tracked(input)).cached, false);
   await writeFile(join(settings.lockDirectory, "operation.lock"), "interrupted-container");
   assert.deepEqual(await first.readiness(), { state: "busy", reason: "worker_busy" });
   const restarted = await createHostedParser({ ...settings, lockDirectory: join(settings.root, "new-tmpfs"), fetchImpl });
   assert.deepEqual(await restarted.readiness(), { state: "available", reason: "ready" });
   const replay = await restarted(input);
   assert.equal(replay.cached, true);
+  assert.equal(history.filter(x=>x.p_action==="open_request").length,2);
+  assert.equal(history.find(x=>x.p_action==="begin_attempt").p_data.usageKind,"external");
+  assert.equal(history.filter(x=>x.p_action==="begin_attempt")[1].p_data.usageKind,"cache");
+  assert.equal(history.filter(x=>x.p_action==="complete_attempt")[1].p_data.estimatedCostUsd,0);
   assert.equal(replay.result.acceptedFacts[0].value, "Synthetic Person");
   assert.equal(calls, 1);
   assert.deepEqual(await readdir(join(settings.root, "new-tmpfs")), []);

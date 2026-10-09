@@ -10,7 +10,7 @@ Deno.test("M73 worker: scoped input, grounded result, no CV, exactly one call an
     calls.push({ name, args });
     return Promise.resolve({ error: null, data: name === "claim_profile_competency_normalization"
       ? { id: "run", lease: "lease", organizationId: "org", terms: ["Excel e Word", "negociação", "person@example.com"], humanTerms: [], externalEnabled: true }
-      : name === "reserve_competency_normalization_call_v2" ? true : null });
+      : name === "reserve_competency_normalization_call_v2" ? true : name === "record_ai_history_v1" ? (args.p_action === "open_request" ? {request:{id:"history"}} : {acquired:true}) : null });
   } };
   let requests = 0;
   globalThis.fetch = async (_url, init) => {
@@ -36,7 +36,7 @@ Deno.test("M73 worker: malformed/omitted AI output preserves every deterministic
   const client = { rpc(name: string, args: any) {
     if (name === "complete_profile_competency_normalization") saved = args;
     return Promise.resolve({ error: null, data: name === "claim_profile_competency_normalization"
-      ? { id: "run", lease: "lease", terms: ["Excel e Word", "gestão de projetos e programas"], humanTerms: [], externalEnabled: true } : true });
+      ? { id: "run", lease: "lease", organizationId:"org", terms: ["Excel e Word", "gestão de projetos e programas"], humanTerms: [], externalEnabled: true } : name === "record_ai_history_v1" ? (args.p_action === "open_request" ? {request:{id:"history"}} : {acquired:true}) : true });
   } };
   globalThis.fetch = async () => new Response(JSON.stringify({ output_text: '{"items":[]}' }));
   try {

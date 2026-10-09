@@ -1,0 +1,172 @@
+{
+  "date": "2026-10-09",
+  "status": "IN_PROGRESS_NOT_RELEASED",
+  "baselineSha": "31d5965ade8f834da538561972bc5a5fc9d76e90",
+  "branch": "codex/position-assessment-v230",
+  "typescriptBuild": {
+    "command": "pnpm run build",
+    "exitCode": 0
+  },
+  "contextPack": {
+    "generationCommand": "pnpm --dir tmp/position-assessment-v230-context run generate:prisma-context",
+    "checkCommand": "pnpm --dir tmp/position-assessment-v230-context run check:prisma-context",
+    "exitCode": 0,
+    "scope": "Snapshot of tracked/staged documentation only; unrelated untracked user documents preserved and excluded."
+  },
+  "targetedTests": {
+    "command": "node --test dist/tests/positionAssessment.test.js dist/tests/positionAssessmentActivity.test.js dist/tests/competencyVerification.test.js dist/tests/competencyVerificationExecution.test.js dist/tests/assessmentItemGovernance.test.js dist/tests/m62VerificationJourney.test.js",
+    "tests": 43,
+    "passed": 43,
+    "failed": 0,
+    "newDomainTests": 15,
+    "rawOutput": "targeted.txt",
+    "existingBaselineTests": 28,
+    "limitation": "Pure/local contracts; no new integrated UI, RPC, portal, email or live AI proof."
+  },
+  "followUpBaseline": {
+    "command": "node scripts/test-position-follow-up-sql.mjs",
+    "database": "import_evidence_v202",
+    "host": "127.0.0.1",
+    "port": 55479,
+    "role": "prisma_v202_qa",
+    "exitCode": 0,
+    "assertions": 48,
+    "transaction": "ROLLBACK",
+    "peopleAfterRollback": 0,
+    "newFollowUpTablesAfterRollback": false,
+    "evidence": "baseline-follow-up/sql.txt",
+    "limitation": "Existing follow-up baseline before future assessment integration."
+  },
+  "remoteReadOnlyDiscovery": {
+    "projectId": "ioldpnqqvobprjiontre",
+    "separateRemoteQA": false,
+    "activeBankItems": 17,
+    "fiveOptionItemsObserved": 0,
+    "allObservedItemsHaveFourOptions": true,
+    "assessmentAccess": {
+      "version": 6,
+      "status": "ACTIVE",
+      "verifyJwt": false
+    },
+    "assessmentItemGenerator": {
+      "version": 6,
+      "status": "ACTIVE",
+      "verifyJwt": true
+    },
+    "assessmentAiPoliciesObserved": 2,
+    "allGenerationPoliciesDisabled": true,
+    "configuredAssessmentModel": false,
+    "configuredAssessmentBudget": false,
+    "smtpMailNamesFoundInVault": false,
+    "limitation": "No secret values queried; absence of names does not establish absence of a service contracted elsewhere.",
+    "genericAiUsageEvents": 0,
+    "genericAiUsageConsumersFound": false
+  },
+  "visualReferencesInspected": [
+    "docs/product/proposta-avaliacoes-contextuais-2026-10-09/01-configuracao-e-questoes.png",
+    "docs/product/proposta-avaliacoes-contextuais-2026-10-09/02-revisao-e-convite.png",
+    "docs/product/proposta-avaliacoes-contextuais-2026-10-09/03-realizacao-e-resultados.png"
+  ],
+  "newVisualComparison": "NOT_TESTED",
+  "paidAssessmentCalls": 0,
+  "emailsSent": 0,
+  "remoteMutations": 0,
+  "releasedVersion": "UNCHANGED_2.2.1",
+  "release230": "PENDING_FULL_IMPLEMENTATION_AND_REAL_USE_PRIVACY_POLICY",
+  "emailSetup": {
+    "provider": "Resend",
+    "accountCreatedBy": "Product Owner",
+    "sender": "suporte@hrtsolutions.com.br",
+    "domain": "hrtsolutions.com.br",
+    "domainId": "34e39e21-8e1a-47fb-82c4-fdba3d23ebf7",
+    "region": "sa-east-1",
+    "dnsProvider": "Registro.br",
+    "dnsChangesAuthorizedBy": "Explicit Product Owner confirmation before editing authenticated DNS zone",
+    "addedRecords": [
+      "TXT resend._domainkey",
+      "CNAME rsend",
+      "CNAME send"
+    ],
+    "persistedDnsRecords": 8,
+    "existingDnsRecordsPreserved": 5,
+    "evidence": "Reopened advanced DNS zone after Save: all eight records present; five original records unchanged.",
+    "resendLastObservedStatus": "Verified",
+    "tlsLastObserved": "Opportunistic",
+    "tlsEnforcedChange": "Automatic review rejected the attempted change. No change or workaround; subsequent Product Owner decision keeps Opportunistic.",
+    "credentialFormPrepared": {
+      "name": "Prisma - Convites de avaliação",
+      "permission": "Sending access",
+      "domain": "hrtsolutions.com.br"
+    },
+    "apiKeyCreatedByAgent": false,
+    "apiKeyValueObserved": false,
+    "backendIntegration": "ISOLATED_ADAPTER_ONLY_NO_ACTIVE_CONSUMER",
+    "emailsSent": 0,
+    "limitation": "Metadata and domain verified. No raw key observed or protected backend credential installed. Adapter has synthetic tests only; queue/worker/audit not integrated, no email sent.",
+    "domainVerifiedEventLocal": "2026-10-09 07:52 America/Sao_Paulo",
+    "authoritativeDnsValuesMatched": true,
+    "tlsProductOwnerDecision": "Keep Opportunistic, explicitly approved after presentation of Enforced delivery limitation.",
+    "apiKeyCreatedBy": "Product Owner",
+    "apiKeyMetadataConfirmed": true,
+    "apiKeyMetadataEvidence": "Read-only Resend connector list: expected key name present; no raw key returned.",
+    "connectorDomainReadback": {
+      "status": "verified",
+      "sending": "enabled",
+      "receiving": "disabled",
+      "openTracking": false,
+      "clickTracking": false
+    },
+    "protectedKeyFilePresent": true,
+    "protectedKeyEvidence": "Filesystem metadata only; file present, value not read or backend installed."
+  },
+  "emailTransportTests": {
+    "command": "node --test dist/tests/positionAssessmentEmailTransport.test.js",
+    "tests": 9,
+    "passed": 9,
+    "failed": 0,
+    "exitCode": 0,
+    "evidence": "email-transport.txt",
+    "network": "Injected synthetic fetch only",
+    "limitation": "Does not prove persistent queue, integrated authorization, delivery, or production."
+  },
+  "totalDirectedTests": {
+    "passed": 52,
+    "newTests": 24,
+    "legacyTests": 28,
+    "note": "43 previously verified tests unaffected; 9 additional transport tests. No unrelated suite rerun."
+  },
+  "genericAiHistoryDecision": {
+    "status": "LOCAL_PERSISTENCE_PARTIAL_NOT_RELEASED",
+    "date": "2026-10-09",
+    "agreementVersion": "0.4.0",
+    "adr": "ADR-080",
+    "approvedBy": "Product Owner",
+    "evidence": "Explicit OK to reuse existing usage table, add requests with attempts, organization consumption and platform costs separated.",
+    "limitation": "Local migration/RPC only; no integrated consumer, real concurrency proof, remote deployment or billing activated."
+  },
+  "genericAiHistorySql": {
+    "command": "node scripts/test-generic-ai-history-sql.mjs",
+    "database": "import_evidence_v202",
+    "host": "127.0.0.1",
+    "port": 55479,
+    "role": "prisma_v202_qa",
+    "exitCode": 0,
+    "assertions": 56,
+    "transaction": "ROLLBACK",
+    "peopleAfterRollback": 0,
+    "usageAfterRollback": 0,
+    "newRequestTableAfterRollback": false,
+    "evidence": "generic-ai-history/sql.txt",
+    "realConcurrency": "NOT_TESTED",
+    "consumers": "NOT_INTEGRATED",
+    "remoteDeployment": false
+  },
+  "privacyDecision": {
+    "agreementVersion": "0.4.0",
+    "finalNotice": "DEFERRED_BY_PRODUCT_OWNER",
+    "automaticTemporalPurge": "NOT_IMPLEMENTED_OR_ACTIVATED_THIS_STAGE",
+    "proposed30And180DayPeriods": "NOT_APPROVED",
+    "existingExplicitDeletion": "PRESERVED",
+    "realCandidateUse": "PENDING_POLICY_BASIS_AND_NOTICE"
+  }
+}

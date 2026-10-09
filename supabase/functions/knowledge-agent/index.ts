@@ -1,3 +1,4 @@
+import {withAiHistory,recordAiCacheHit} from "../../../src/infrastructure/aiHistory.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
 import { processCompetencyNormalization } from "./competencyNormalization.ts";
 
@@ -139,10 +140,7 @@ Deno.serve(async (request) => {
 
     const sanitizedTerm = sanitizeTerm(inbox.normalized_search_term);
     rejectObviousPii(sanitizedTerm);
-    const providerResponse = await callOpenAi({
-      term: sanitizedTerm, language: inbox.language, scope: inbox.scope,
-    }, allowedDomains, model);
-    const proposal = parseAndValidateProposal(providerResponse.output_text, inbox, sources, providerResponse.cited_urls);
+    const {providerResponse,proposal}=await withAiHistory(serviceClient,{organizationId:inbox.scope==="global"?null:inbox.organization_id,functionName:"knowledge_research",operationId:runId!,sourceVersion:promptVersion,inputFingerprint:requestFingerprint,actorId:authUser.id},async fetcher=>{const providerResponse=await callOpenAi({term:sanitizedTerm,language:inbox.language,scope:inbox.scope},allowedDomains,model,fetcher);return {providerResponse,proposal:parseAndValidateProposal(providerResponse.output_text,inbox,sources,providerResponse.cited_urls)};});
     const sourceRows = proposal.sources.map((source) => ({
       research_run_id: runId, knowledge_source_id: findSource(source.url, sources).id,
       url: source.url, title: source.title, publisher: source.publisher, source_class: source.source_class,
@@ -199,8 +197,8 @@ async function handleConceptDescription(
   await requireDescriptionSuggestionAuthority(serviceClient, authUserId, input.organizationId);
   await enforceBudgets(serviceClient);
   const model = readRequiredEnv("KNOWLEDGE_RESEARCH_MODEL");
-  const providerResponse = await callOpenAiForConceptDescription(input, model, await sha256(authUserId));
-  const description = parseAndValidateConceptDescription(providerResponse.output_text);
+  const safety=await sha256(authUserId);
+  const description=await withAiHistory(serviceClient,{organizationId:input.organizationId,functionName:"knowledge_concept_description",operationId:crypto.randomUUID(),sourceVersion:conceptDescriptionPromptVersion,inputFingerprint:await sha256(input.competencyName),actorId:authUserId},async fetcher=>parseAndValidateConceptDescription((await callOpenAiForConceptDescription(input,model,safety,fetcher)).output_text));
   return jsonResponse(200, {
     description,
     provider: "openai",
@@ -211,8 +209,8 @@ async function handleConceptDescription(
   });
 }
 
-async function callOpenAiForConceptDescription(input: ConceptDescriptionRequest, model: string, safetyIdentifier: string) {
-  const response = await fetch("https://api.openai.com/v1/responses", {
+async function callOpenAiForConceptDescription(input: ConceptDescriptionRequest, model: string, safetyIdentifier: string, fetcher:typeof fetch=fetch) {
+  const response = await fetcher("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: { Authorization: `Bearer ${readRequiredEnv("OPENAI_API_KEY")}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -260,8 +258,9 @@ async function handleOccupationResolution(
     return jsonResponse(200, serializeOccupationResolution(data?.[0]));
   }
   await enforceBudgets(serviceClient);
+  return await withAiHistory(serviceClient,{organizationId:input.organizationId,functionName:"occupation_resolution",operationId:input.attemptId,sourceVersion:occupationResolutionPromptVersion,inputFingerprint:await sha256(JSON.stringify({term:attempt.normalized_term,candidates})),actorId:authUserId},async fetcher=>{
   // No web_search tool is present here. Only the stored ESCO/O*NET snapshot is sent.
-  const response = await fetch("https://api.openai.com/v1/responses", {
+  const response = await fetcher("https://api.openai.com/v1/responses", {
     method: "POST", headers: { Authorization: `Bearer ${readRequiredEnv("OPENAI_API_KEY")}`, "Content-Type": "application/json" },
     body: JSON.stringify({ model: readRequiredEnv("KNOWLEDGE_RESEARCH_MODEL"), store: false, max_output_tokens: 400,
       safety_identifier: await sha256(authUserId),
@@ -279,6 +278,7 @@ async function handleOccupationResolution(
   const { data, error: completionError } = await serviceClient.rpc("complete_occupation_resolution_agent", { p_attempt_id: input.attemptId, p_selected_external_id: answer.selected_external_id, p_safe: answer.safe, p_reason: answer.reason.slice(0, 500) });
   if (completionError) throw new HttpError(500, "Falha ao registrar a resolução ocupacional.");
   return jsonResponse(200, { ...serializeOccupationResolution(data?.[0]), promptVersion: occupationResolutionPromptVersion, outputSchemaVersion: occupationResolutionOutputSchemaVersion, durationMs: Date.now() - startedAt });
+  });
 }
 
 function serializeOccupationResolution(row: any) {
@@ -322,7 +322,7 @@ async function handleVacancyAdvisor(
     .gte("created_at", cacheStart)
     .order("created_at", { ascending: false })
     .limit(1));
-  if (cached) return jsonResponse(200, serializeVacancyAdvisorResponse(readCachedVacancyAnswer(cached.response_data), cached.provider, cached.model, true));
+  if (cached) {await recordAiCacheHit(serviceClient,{organizationId:input.organizationId,functionName:"vacancy_advisor",operationId:crypto.randomUUID(),sourceVersion:vacancyAdvisorPromptVersion,inputFingerprint:requestFingerprint,actorId:authUserId},Date.now()-startedAt);return jsonResponse(200, serializeVacancyAdvisorResponse(readCachedVacancyAnswer(cached.response_data), cached.provider, cached.model, true));}
 
   const { data: insertedRun, error: runError } = await serviceClient.from("vacancy_advisor_research_runs").insert({
     organization_id: input.organizationId,
@@ -340,8 +340,8 @@ async function handleVacancyAdvisor(
   if (runError || !insertedRun) throw new HttpError(500, "Falha ao registrar a pesquisa de mercado.");
 
   try {
-    const providerResponse = await callOpenAiForVacancy(input, allowedDomains, model, await sha256(authUserId));
-    const answer = parseAndValidateVacancyMarketAnswer(providerResponse.output_text, sources, providerResponse.cited_urls);
+    const safety=await sha256(authUserId);
+    const {providerResponse,answer}=await withAiHistory(serviceClient,{organizationId:input.organizationId,functionName:"vacancy_advisor",operationId:insertedRun.id,sourceVersion:vacancyAdvisorPromptVersion,inputFingerprint:requestFingerprint,actorId:authUserId},async fetcher=>{const providerResponse=await callOpenAiForVacancy(input,allowedDomains,model,safety,fetcher);return {providerResponse,answer:parseAndValidateVacancyMarketAnswer(providerResponse.output_text,sources,providerResponse.cited_urls)};});
     const usage = providerResponse.usage ?? {};
     const responseData = serializeVacancyAdvisorResponse(answer, "openai", model, false);
     const { error: updateError } = await serviceClient.from("vacancy_advisor_research_runs").update({
@@ -366,8 +366,8 @@ async function handleVacancyAdvisor(
   }
 }
 
-async function callOpenAiForVacancy(input: VacancyAdvisorRequest, allowedDomains: string[], model: string, safetyIdentifier: string) {
-  const response = await fetch("https://api.openai.com/v1/responses", {
+async function callOpenAiForVacancy(input: VacancyAdvisorRequest, allowedDomains: string[], model: string, safetyIdentifier: string, fetcher:typeof fetch=fetch) {
+  const response = await fetcher("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: { Authorization: `Bearer ${readRequiredEnv("OPENAI_API_KEY")}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -470,8 +470,8 @@ function readCachedVacancyAnswer(value: unknown): ReturnType<typeof parseAndVali
   };
 }
 
-async function callOpenAi(input: { term: string; language: string; scope: Scope }, allowedDomains: string[], model: string) {
-  const response = await fetch("https://api.openai.com/v1/responses", {
+async function callOpenAi(input: { term: string; language: string; scope: Scope }, allowedDomains: string[], model: string, fetcher:typeof fetch=fetch) {
+  const response = await fetcher("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: { Authorization: `Bearer ${readRequiredEnv("OPENAI_API_KEY")}`, "Content-Type": "application/json" },
     body: JSON.stringify({

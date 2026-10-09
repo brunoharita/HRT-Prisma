@@ -2,11 +2,17 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.58.0
-last_verified: 2026-10-08
+version: 2.61.0
+last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
+
+## Avaliação para Posição — v2.3.0, implementação local concluída
+
+Publicação integral autorizada pelo PO em09/10/2026; Agreement/Execution v0.5.0 congelados. Implementação local cobre configuração/requisitos/distribuição exata, Banco/IA/Misto, revisão humana/cópia contextual, convites Resend com fila/claim/idempotência, portal resiliente com cinco alternativas, correção objetiva e resultado/atividade privados. Nada altera automaticamente Score/Perfil/Posição/etapa. Aviso final e expurgo temporal adiados, sem inventar base legal; exclusão explícita/direitos preservados. Resend domínio Verified, TLS oportunista e remetente suporte@hrtsolutions.com.br aprovados; credencial DPAPI protegida presente, instalação operacional ainda pendente. OpenAI Responses gpt-5.6-luna: máximo20questões/US$0,25pedido/US$10mês por empresa, reserva serializada e aprovação humana obrigatória.
+
+Histórico genérico implementado conforme ADR-080: ai_requests + ai_usage_events v2, pedidos/tentativas/cache/custos desconhecidos, empresa/plataforma separados; instrumentados Parser/Synthesis/matching/Knowledge/gerador legado/novo, sem backfill/cobrança. Workers com credencial de propósito restrito, dispatcher reutiliza Synthesis só para convites já solicitados. Quatro migrations aditivas, quatro Edge Functions, Parser/Synthesis/web afetados; gateway/Paddle/Traefik preservados. Há um único Supabase remoto de produção, sem QA remoto separado. Testes dirigidos local/SQL/browser/conexões simultâneas passaram; AoT contém limites e evidências, sem afirmar jornada de candidatos reais. Rollout/benchmark/smoke/sincronização ainda devem ser registrados; produto remoto permanece2.2.1 até implantação verificada.
 
 ## Cards compactos do acompanhamento — ajuste na 2.2.1
 

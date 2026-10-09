@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["../../src/vite-assets.d.ts", "../../web/src/domain/parserIa.ts", "../../web/src/domain/personIngestion.ts"],
+  "include": ["../../src/vite-assets.d.ts", "../../src/infrastructure/aiHistory.ts", "../../web/src/domain/parserIa.ts", "../../web/src/domain/personIngestion.ts"],
   "exclude": ["../../dist", "../../node_modules", "../../tests"]
 }

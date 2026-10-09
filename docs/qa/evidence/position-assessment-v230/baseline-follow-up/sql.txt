@@ -1,0 +1,384 @@
+BEGIN
+DO
+CREATE TABLE
+ALTER TABLE
+REVOKE
+        set_config
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+UPDATE 1
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+UPDATE 1
+INSERT 0 1
+INSERT 0 1
+SELECT 1
+GRANT
+CREATE TABLE
+GRANT
+SET
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 1c84eaeb-a2c3-d1ec-df63-34dd2093d9a2
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ set_config
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+SAVEPOINT
+UPDATE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ROLLBACK
+SET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ROLLBACK
+
+psql:output/position-follow-up-local.sql:278: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:279: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:281: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:283: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:285: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:287: NOTICE:  PASS: opening a position never creates a process
+psql:output/position-follow-up-local.sql:288: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:289: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:291: NOTICE:  PASS: explicit entry, persisted score, authorized derived age
+psql:output/position-follow-up-local.sql:292: NOTICE:  PASS: birth date not exposed
+psql:output/position-follow-up-local.sql:293: NOTICE:  PASS: current registered location exposed without full profile
+psql:output/position-follow-up-local.sql:294: NOTICE:  PASS: contact email not exposed
+psql:output/position-follow-up-local.sql:299: NOTICE:  PASS: missing state does not infer state from registered city
+psql:output/position-follow-up-local.sql:303: NOTICE:  PASS: missing city stays unavailable
+psql:output/position-follow-up-local.sql:307: NOTICE:  PASS: duplicate inclusion idempotent
+psql:output/position-follow-up-local.sql:308: NOTICE:  PASS: idempotence preserves audit
+psql:output/position-follow-up-local.sql:309: NOTICE:  PASS: denied (40001)
+psql:output/position-follow-up-local.sql:310: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:311: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:312: NOTICE:  PASS: denied (40001)
+psql:output/position-follow-up-local.sql:313: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:314: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:315: NOTICE:  PASS: drag to interview does not schedule
+psql:output/position-follow-up-local.sql:316: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:317: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:318: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:319: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:320: NOTICE:  PASS: explicit interview schedules
+psql:output/position-follow-up-local.sql:321: NOTICE:  PASS: explicit reschedule audited
+psql:output/position-follow-up-local.sql:322: NOTICE:  PASS: cancellation restores awaiting interview
+psql:output/position-follow-up-local.sql:323: NOTICE:  PASS: moving to decision does not decide
+psql:output/position-follow-up-local.sql:324: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:325: NOTICE:  PASS: explicit decision with rationale
+psql:output/position-follow-up-local.sql:326: NOTICE:  PASS: closing preserves decision
+psql:output/position-follow-up-local.sql:327: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:328: NOTICE:  PASS: explicit reopening preserves phase
+psql:output/position-follow-up-local.sql:329: NOTICE:  PASS: same person independent position
+psql:output/position-follow-up-local.sql:330: NOTICE:  PASS: closure without conclusion is not rejection
+psql:output/position-follow-up-local.sql:331: NOTICE:  PASS: profile links to both processes
+psql:output/position-follow-up-local.sql:332: NOTICE:  PASS: process close preserves individual stage
+psql:output/position-follow-up-local.sql:333: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:334: NOTICE:  PASS: process explicit reopening
+psql:output/position-follow-up-local.sql:336: NOTICE:  PASS: all operational mutations preserve score, profile and position
+psql:output/position-follow-up-local.sql:337: NOTICE:  PASS: all new tables enforce RLS
+psql:output/position-follow-up-local.sql:338: NOTICE:  PASS: no direct write or service read grants
+psql:output/position-follow-up-local.sql:339: NOTICE:  PASS: failed operations do not leave partial audit
+psql:output/position-follow-up-local.sql:340: NOTICE:  PASS: board does not expose integral profile data
+psql:output/position-follow-up-local.sql:342: NOTICE:  PASS: denied (42501)

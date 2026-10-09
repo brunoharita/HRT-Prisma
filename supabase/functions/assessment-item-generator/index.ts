@@ -1,3 +1,4 @@
+import {withAiHistory} from "../../../src/infrastructure/aiHistory.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
 
 const BOUNDARY_VERSION = "m51c-assessment-item-generator-1.0.0";
@@ -54,7 +55,8 @@ Deno.serve(async (request) => {
     const serviceClient = createServiceClient();
     try {
       const context = await readGenerationContext(serviceClient, requestId, organizationId);
-      const providerResult = await generateProposals(context, quantity);
+      const bytes=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify({need:context.need,directives:context.request.directives})));
+      const providerResult = await withAiHistory(serviceClient,{organizationId,functionName:"assessment_item_generation",operationId:requestId,sourceVersion:String(context.request.prompt_version),inputFingerprint:Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,"0")).join(""),actorId:user.id},fetcher=>generateProposals(context,quantity,fetcher));
       const { data, error } = await serviceClient.rpc("complete_m51c_external_generation", {
         p_request_id: requestId,
         p_proposals: providerResult.items,
@@ -86,8 +88,8 @@ async function readGenerationContext(serviceClient: ReturnType<typeof createServ
   return { request: requestRow, need: needRow };
 }
 
-async function generateProposals(context: Awaited<ReturnType<typeof readGenerationContext>>, quantity: number) {
-  const response = await fetch("https://api.openai.com/v1/responses", {
+async function generateProposals(context: Awaited<ReturnType<typeof readGenerationContext>>, quantity: number, fetcher:typeof fetch=fetch) {
+  const response = await fetcher("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: { Authorization: `Bearer ${readRequiredEnv("OPENAI_API_KEY")}`, "Content-Type": "application/json" },
     body: JSON.stringify({

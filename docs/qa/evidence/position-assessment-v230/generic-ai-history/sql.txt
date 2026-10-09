@@ -1,0 +1,493 @@
+BEGIN
+DO
+        set_config
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+UPDATE 1
+INSERT 0 1
+SELECT 1
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+DROP POLICY
+CREATE POLICY
+CREATE POLICY
+REVOKE
+GRANT
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE TABLE
+GRANT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+  set_config
+--------------
+ service_role
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+         ai_history_finish
+-----------------------------------
+ {"eventId": 23, "recorded": true}
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+                   ai_history_begin
+-------------------------------------------------------
+ {"eventId": 24, "acquired": true, "attemptNumber": 2}
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+         ai_history_finish
+-----------------------------------
+ {"eventId": 24, "recorded": true}
+(1 row)
+
+                   ai_history_begin
+-------------------------------------------------------
+ {"eventId": 25, "acquired": true, "attemptNumber": 3}
+(1 row)
+
+         ai_history_finish
+-----------------------------------
+ {"eventId": 25, "recorded": true}
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                        record_ai_history_v1
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"request": {"id": "0aa1441e-6e27-482c-b48d-786fbb0139e8", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-09T19:23:30.101219-03:00", "completed_at": "2026-10-09T19:23:30.177114-03:00", "operation_id": "899f4440-06df-6702-9c15-35bd45ee2448", "function_name": "assessment_items", "error_category": null, "source_version": "synthetic-1.0.0", "idempotency_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "contract_version": "ai-request-1.0.0", "input_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "recorded": true}
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+                   ai_history_begin
+-------------------------------------------------------
+ {"eventId": 26, "acquired": true, "attemptNumber": 1}
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+         ai_history_finish
+-----------------------------------
+ {"eventId": 26, "recorded": true}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                        record_ai_history_v1
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"request": {"id": "104a7a44-6bf7-43fb-ba40-49f81bad1046", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-09T19:23:30.110014-03:00", "completed_at": "2026-10-09T19:23:30.188321-03:00", "operation_id": "899f4440-06df-6702-9c15-35bd45ee2448", "function_name": "assessment_items", "error_category": null, "source_version": "synthetic-1.0.0", "idempotency_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "organization_id": "621b533d-b43f-1bb5-b2ed-466ce72189e7", "contract_version": "ai-request-1.0.0", "input_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "recorded": true}
+(1 row)
+
+                   ai_history_begin
+-------------------------------------------------------
+ {"eventId": 27, "acquired": true, "attemptNumber": 1}
+(1 row)
+
+         ai_history_finish
+-----------------------------------
+ {"eventId": 27, "recorded": true}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                 record_ai_history_v1
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"request": {"id": "30398e19-2678-4cef-b4e8-4e77b3db0683", "scope": "platform", "status": "succeeded", "actor_id": null, "created_at": "2026-10-09T19:23:30.111782-03:00", "completed_at": "2026-10-09T19:23:30.195435-03:00", "operation_id": "899f4440-06df-6702-9c15-35bd45ee2448", "function_name": "knowledge", "error_category": null, "source_version": "synthetic-1.0.0", "idempotency_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "organization_id": null, "contract_version": "ai-request-1.0.0", "input_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "recorded": true}
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 1c84eaeb-a2c3-d1ec-df63-34dd2093d9a2
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ set_config
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ROLLBACK
+
+psql:output/generic-ai-history-local.sql:288: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:289: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:294: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:295: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:296: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:300: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:301: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:302: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:307: NOTICE:  PASS: request created explicitly
+psql:output/generic-ai-history-local.sql:308: NOTICE:  PASS: logical request replay idempotent
+psql:output/generic-ai-history-local.sql:309: NOTICE:  PASS: replay preserves original ID
+psql:output/generic-ai-history-local.sql:310: NOTICE:  PASS: same key in different companies stays distinct
+psql:output/generic-ai-history-local.sql:311: NOTICE:  PASS: global request has no arbitrary company
+psql:output/generic-ai-history-local.sql:312: NOTICE:  PASS: denied (40001)
+psql:output/generic-ai-history-local.sql:313: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:314: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:315: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:316: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:317: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:318: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:319: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:320: NOTICE:  PASS: denied (42501)
+psql:output/generic-ai-history-local.sql:321: NOTICE:  PASS: denied (40001)
+psql:output/generic-ai-history-local.sql:324: NOTICE:  PASS: first attempt acquired before provider call
+psql:output/generic-ai-history-local.sql:325: NOTICE:  PASS: duplicate attempt does not acquire a second call
+psql:output/generic-ai-history-local.sql:326: NOTICE:  PASS: denied (40001)
+psql:output/generic-ai-history-local.sql:328: NOTICE:  PASS: running attempt does not invent result, duration or zero cost
+psql:output/generic-ai-history-local.sql:330: NOTICE:  PASS: completion replay does not duplicate usage
+psql:output/generic-ai-history-local.sql:331: NOTICE:  PASS: denied (40001)
+psql:output/generic-ai-history-local.sql:332: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:335: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:336: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:337: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:341: NOTICE:  PASS: float cost replays at persisted precision
+psql:output/generic-ai-history-local.sql:343: NOTICE:  PASS: request terminal replay is idempotent
+psql:output/generic-ai-history-local.sql:344: NOTICE:  PASS: denied (40001)
+psql:output/generic-ai-history-local.sql:345: NOTICE:  PASS: denied (40001)
+psql:output/generic-ai-history-local.sql:348: NOTICE:  PASS: denied (22023)
+psql:output/generic-ai-history-local.sql:356: NOTICE:  PASS: request count excludes retries
+psql:output/generic-ai-history-local.sql:357: NOTICE:  PASS: separate attempts preserve ordered readings/retries
+psql:output/generic-ai-history-local.sql:358: NOTICE:  PASS: failed paid attempt retained, unknown excluded from known sum but remains explicit
+psql:output/generic-ai-history-local.sql:359: NOTICE:  PASS: unknown failure cost and tokens remain null
+psql:output/generic-ai-history-local.sql:360: NOTICE:  PASS: cache hit is not a paid provider call or fabricated token usage
+psql:output/generic-ai-history-local.sql:361: NOTICE:  PASS: global cost attributed only to platform with evidence hash
+psql:output/generic-ai-history-local.sql:362: NOTICE:  PASS: denied (23503)
+psql:output/generic-ai-history-local.sql:365: NOTICE:  PASS: legacy shape/default preserved without fictional request/backfill
+psql:output/generic-ai-history-local.sql:366: NOTICE:  PASS: pre-migration legacy fields unchanged
+psql:output/generic-ai-history-local.sql:367: NOTICE:  PASS: both tables use RLS
+psql:output/generic-ai-history-local.sql:368: NOTICE:  PASS: write authority exists only through backend RPC
+psql:output/generic-ai-history-local.sql:372: NOTICE:  PASS: recruiter reads only own company requests, not global
+psql:output/generic-ai-history-local.sql:373: NOTICE:  PASS: recruiter reads only own company usage including legacy
+psql:output/generic-ai-history-local.sql:375: NOTICE:  PASS: member cannot read AI history
+psql:output/generic-ai-history-local.sql:376: NOTICE:  PASS: member cannot read costs
+psql:output/generic-ai-history-local.sql:378: NOTICE:  PASS: inactive operator cannot read AI history
+psql:output/generic-ai-history-local.sql:380: NOTICE:  PASS: outsider member cannot read another company or global requests
+psql:output/generic-ai-history-local.sql:382: NOTICE:  PASS: missing user identity reads no history

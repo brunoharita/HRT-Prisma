@@ -1,3 +1,4 @@
+import {withAiHistory,recordAiCacheHit} from "../../../src/infrastructure/aiHistory.ts";
 import {
   agreeTrajectoryReadings, composeReviewedTrajectoryReading, inspectTrajectoryReadingPair, isSemanticPilot,
   prepareTrajectoryContext, readTrajectoryEvidenceResponse, readTrajectoryResponse, trajectoryEvidenceInput,
@@ -24,6 +25,7 @@ export interface Dependencies {
   authenticate(bearer: string): Promise<{ id: string; client: RpcClient } | null>;
   service(): RpcClient;
   fetch: typeof fetch;
+  historyEnabled?: boolean;
   logDiagnostic?: (event: TrajectoryDiagnosticEvent) => void;
 }
 type RequestIds = Pick<SemanticAssessment, "organizationId" | "profileId" | "positionVersionId">;
@@ -295,9 +297,10 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
       let lastReadingPair: [AuditedReading, AuditedReading] | null = null;
       try {
         // Both independent requests settle before releasing the lease, including a failed sibling.
+        const compute = async (fetcher:typeof fetch) => {
         const settled = await Promise.allSettled([
-          reading(context, model, key, deps),
-          reading({ ...context, entries: [...context.entries].reverse() }, model, key, deps),
+          reading(context, model, key, {...deps,fetch:fetcher}),
+          reading({ ...context, entries: [...context.entries].reverse() }, model, key, {...deps,fetch:fetcher}),
         ]);
         const [a, b] = settled;
         lastReadingPair = [auditedReading(a), auditedReading(b)];
@@ -308,7 +311,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
         const attempt = typeof result.attempts === "number" && Number.isInteger(result.attempts) && result.attempts >= 1 && result.attempts <= 4
           ? result.attempts : null;
         if (diagnosticStage) emitDiagnostic(deps, { event: "matching_trajectory_readings", version: 1,
-          analysisId: base.analysisId, attempt,
+          analysisId: base!.analysisId, attempt,
           stage: diagnosticStage, readings: diagnostics });
         if (a.status === "rejected") throw a.reason;
         if (b.status === "rejected") throw b.reason;
@@ -317,6 +320,9 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
         actualModel = first.model;
         if (agreeTrajectoryReadings(first.reading, second.reading)) { status = "complete"; agreed = first.reading; }
         else { status = "indeterminate"; reason = "READINGS_DISAGREE"; }
+        };
+        if(deps.historyEnabled) await withAiHistory(service,{organizationId:ids.organizationId,functionName:"matching_trajectory",operationId:String(result.lease),sourceVersion:SEMANTIC_PROMPT_VERSION,inputFingerprint:base.inputHash,actorId:actor.id},compute,deps.fetch);
+        else await compute(deps.fetch);
       } catch (error) {
         const code = error instanceof Error ? error.message : "";
         reason = ["PROVIDER_UNAVAILABLE", "RESPONSE_INVALID", "PROVIDER_TIMEOUT"].includes(code) ? code : "RESPONSE_INVALID";
@@ -327,6 +333,7 @@ export async function handleMatchingTrajectory(request: Request, deps: Dependenc
       if (completion.error || !completion.data) return unavailable("COMPLETION_UNAVAILABLE");
       result = record(completion.data);
     }
+    else if(allowCompute&&deps.historyEnabled&&result.status==="complete") await recordAiCacheHit(service,{organizationId:ids.organizationId,functionName:"matching_trajectory",operationId:crypto.randomUUID(),sourceVersion:SEMANTIC_PROMPT_VERSION,inputFingerprint:base.inputHash,actorId:actor.id},0);
     if (typeof result.actual_model_version === "string") base.modelVersion = result.actual_model_version;
     // Recheck the user's authority and all source revisions before releasing a cached/new result.
     const finalSources = await actor.client.rpc("load_matching_trajectory_sources", sourceArgs(ids));

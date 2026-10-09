@@ -1,0 +1,70 @@
+-- Additional negative/privacy/reuse/outbox/metadata cases; synthetic, rollback only.
+select m83_assert((select count(*)>0 from public.verification_audit_events where action='position_assessment_consulted'),'authorized consultation audited');
+insert into private.position_assessment_operational_config(id,bootstrap_hash) values(true,encode(extensions.digest(repeat('s',64),'sha256'),'hex'));
+insert into private.ai_history_worker_config(id,token_hash) values(true,encode(extensions.digest(repeat('h',64),'sha256'),'hex'));
+set local role anon;
+select m83_reject('select public.position_assessment_email_configuration()','42501');
+select m83_reject('select public.install_position_assessment_configuration(repeat(''x'',64),''re_synthetic_not_a_real_credential'',repeat(''d'',64))','42501');
+select m83_assert(public.install_position_assessment_configuration(repeat('s',64),'re_synthetic_not_a_real_credential',repeat('d',64)),'one-time protected setup succeeds');
+select m83_reject('select public.install_position_assessment_configuration(repeat(''s'',64),''re_synthetic_not_a_real_credential'',repeat(''d'',64))','42501');
+select m83_reject('select public.record_ai_worker_history_v1(repeat(''x'',64),''open_request'',''{}'')','42501');
+select m83_reject('select public.record_ai_worker_history_v1(repeat(''h'',64),''open_request'',''{"scope":"platform","organizationId":null,"functionName":"parser_ia"}'')','42501');
+select m83_reject(format('select public.record_ai_worker_history_v1(repeat(''h'',64),''open_request'',%L)',jsonb_build_object('scope','organization','organizationId',m83_id('a'),'functionName','matching_trajectory')),'42501');
+reset role;
+set local role service_role;
+select m83_assert(public.position_assessment_email_configuration()='re_synthetic_not_a_real_credential','credential available exclusively to sending backend');
+select m83_reject('select public.position_assessment_pending_deliveries(repeat(''x'',64))','42501');
+select m83_assert(jsonb_array_length(public.position_assessment_pending_deliveries(repeat('d',64)))=0,'active delivery lease excludes background drain');
+select m83_reject('select public.position_assessment_public(''load'',repeat(''x'',64))','42501');
+insert into pa_state select 'event',jsonb_build_object('eventId',m83_id('event'),'questionInstanceId',m83_id('q1'),'questionVersion','pa-item-1.0.0','kind','capture_shortcut_observed','clientAtMs',1,'sequence',1,'method','position-assessment-browser-signals-1.0.0','values',jsonb_build_object('shortcut','PrintScreen','support','received_shortcut','limitation','capture_success_and_other_methods_not_observable'));
+do $$ begin perform public.position_assessment_public('events',(select value#>>'{}' from pa_state where key='tokenhash'),jsonb_build_object('events',jsonb_build_array((select value from pa_state where key='event')))); perform public.position_assessment_public('events',(select value#>>'{}' from pa_state where key='tokenhash'),jsonb_build_object('events',jsonb_build_array((select value from pa_state where key='event')))); end $$;
+reset role;
+select m83_assert((select count(*)=1 from public.position_assessment_events where event_id=m83_id('event')),'activity replay deduplicates even after submission');
+set local role service_role;
+select m83_reject(format('select public.position_assessment_public(''events'',%L,%L)',(select value#>>'{}' from pa_state where key='tokenhash'),jsonb_build_object('events',jsonb_build_array((select value||jsonb_build_object('values',jsonb_build_object('clipboard','private')) from pa_state where key='event')))),'22023');
+select m83_reject(format('select public.position_assessment_public(''events'',%L,%L)',(select value#>>'{}' from pa_state where key='tokenhash'),jsonb_build_object('events',jsonb_build_array((select value||jsonb_build_object('clientAtMs',2) from pa_state where key='event')))),'40001');
+select m83_reject(format('select public.position_assessment_public(''events'',%L,%L)',(select value#>>'{}' from pa_state where key='tokenhash'),jsonb_build_object('events',jsonb_build_array((select value||jsonb_build_object('questionVersion','foreign') from pa_state where key='event')))),'22023');
+reset role;
+-- Store an explicitly reviewed AI proposal in the private catalog, then edit a contextual copy.
+set local role authenticated;
+select set_config('request.jwt.claim.sub',m83_id('recruiter')::text,true);
+insert into pa_state values('new',public.position_assessment_mutate(m83_id('a'),m83_id('vacancy'),m83_id('person'),'configure',null,null,jsonb_build_object('config',jsonb_build_object('quantity',10,'level',1,'durationMinutes',40,'mode','mixed'),'requirementIds',jsonb_build_array(m83_id('req')))));
+reset role;
+update public.position_assessments set questions=jsonb_build_array((select value->0 from pa_state where key='questions')) where id=(select (value->>'id')::uuid from pa_state where key='new');
+set local role authenticated;
+update pa_state set value=public.position_assessment_mutate(m83_id('a'),m83_id('vacancy'),m83_id('person'),'approve',(value->>'id')::uuid,(value->>'revision')::integer,jsonb_build_object('questionId',m83_id('q1'),'saveToBank',true)) where key='new';
+insert into pa_state values('bank',public.position_assessment_bank(m83_id('a'),(select (value->>'id')::uuid from pa_state where key='new')));
+select m83_assert((select jsonb_array_length(value)=1 and value#>>'{0,review}'='pending' from pa_state where key='bank'),'private bank reusable but application review explicit');
+update pa_state set value=public.position_assessment_mutate(m83_id('a'),m83_id('vacancy'),m83_id('person'),'questions',(value->>'id')::uuid,(value->>'revision')::integer,jsonb_build_object('questions',jsonb_build_array((select value->0||jsonb_build_object('stem','Edited contextual copy') from pa_state where key='bank')))) where key='new';
+select m83_assert((select value#>>'{questions,0,stem}'='Edited contextual copy' and value#>>'{questions,0,provenance,method}'='human-edited-bank' and value#>>'{questions,0,review}'='pending' from pa_state where key='new'),'bank edit creates pending contextual version');
+reset role;
+select m83_assert((select stem='Synthetic question 1' from public.assessment_items where id=(select (value#>>'{0,id}')::uuid from pa_state where key='bank')),'shared approved bank item never overwritten by contextual edit');
+set local role authenticated;
+select m83_reject(format('select public.position_assessment_mutate(%L,%L,%L,''questions'',%L,%s,%L)',m83_id('a'),m83_id('vacancy'),m83_id('person'),(select value->>'id' from pa_state where key='new'),(select value->>'revision' from pa_state where key='new'),jsonb_build_object('questions',jsonb_build_array((select value#>'{questions,0}'||jsonb_build_object('source','ai') from pa_state where key='new')))),'42501');
+reset role;
+
+do $$ declare q jsonb; reqs jsonb; begin select value->0 into q from pa_state where key='questions';select requirements into reqs from public.position_assessments limit 1;
+ perform m83_reject(format('select private.pa_validate_question(%L,%L,%L)',q||jsonb_build_object('options',(q->'options')-4),m83_id('a'),reqs),'22023');
+ perform m83_reject(format('select private.pa_validate_question(%L,%L,%L)',q||jsonb_build_object('correctOptionId','Z'),m83_id('a'),reqs),'22023');
+ perform m83_reject(format('select private.pa_validate_question(%L,%L,%L)',q||jsonb_build_object('organizationId',m83_id('b')),m83_id('a'),reqs),'22023');
+ perform m83_reject(format('select private.pa_validate_question(%L,%L,%L)',q||jsonb_build_object('clipboard','not-collected'),m83_id('a'),reqs),'22023');
+end $$;
+insert into public.position_assessment_attempts(id,organization_id,assessment_id,token_hash,expires_at,status) select m83_id('expired-attempt'),organization_id,id,repeat('e',64),now()-interval '1 day','invited' from public.position_assessments where id=(select (value->>'id')::uuid from pa_state where key='a');
+insert into public.position_assessment_attempts(id,organization_id,assessment_id,token_hash,expires_at,status) select m83_id('cancelled-attempt'),organization_id,id,repeat('c',64),now()+interval '1 day','cancelled' from public.position_assessments where id=(select (value->>'id')::uuid from pa_state where key='a');
+set local role service_role;
+select m83_reject('select public.position_assessment_public(''start'',repeat(''e'',64))','22023');
+select m83_reject('select public.position_assessment_public(''load'',repeat(''c'',64))','42501');
+reset role;
+
+-- Existing explicit privacy erasure cascades all candidate-owned assessment data; no temporal purge enabled.
+insert into public.position_assessment_generation(id,organization_id,assessment_id,actor_id,revision,distribution,requirements,status,actual_usd,reserved_usd)
+select m83_id('budget-fixture'),organization_id,id,m83_id('recruiter'),revision,'[]','[]','succeeded',10,0.25 from public.position_assessments where id=(select (value->>'id')::uuid from pa_state where key='new');
+set local role authenticated;
+select m83_reject(format('select public.position_assessment_generation_request(%L,%L,%L,%L)',m83_id('a'),(select value->>'id' from pa_state where key='new'),m83_id('over-budget'),jsonb_build_array(jsonb_build_object('requirementId',m83_id('req'),'difficulty','medium','quantity',1))),'22023');
+reset role;
+set local role anon;
+select m83_assert(public.record_ai_worker_history_v1(repeat('h',64),'open_request',jsonb_build_object('scope','organization','organizationId',m83_id('a'),'functionName','parser_ia','operationId',m83_id('worker-operation'),'sourceVersion','synthetic-1.0.0','inputFingerprint',repeat('f',64),'idempotencyKey',repeat('f',64)))#>>'{request,function_name}'='parser_ia','purpose credential records authorized worker metadata');
+reset role;
+delete from public.people where id=m83_id('person') and organization_id=m83_id('a');
+select m83_assert(not exists(select 1 from public.position_assessments) and not exists(select 1 from public.position_assessment_attempts) and not exists(select 1 from public.position_assessment_events) and not exists(select 1 from public.position_assessment_deliveries) and not exists(select 1 from public.position_assessment_generation) and not exists(select 1 from public.position_assessment_audit),'explicit person erasure removes dependent assessment data');
+select m83_assert((select count(*)=1 from public.assessment_items where organization_id=m83_id('a')),'general private question catalog remains independent of individual answers');

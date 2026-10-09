@@ -1,6 +1,8 @@
+import {drainAssessmentEmails} from "./position-assessment-email-worker.mjs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
+import { createWorkerHistory, withAiHistory } from "./ai-history-client.mjs";
 import { PROFILE_SYNTHESIS_INSTRUCTIONS, profileSynthesisSchemaForSources, preserveProfileSynthesisSections, readSynthesisSource, SynthesisFailure, synthesisDiagnostic } from "../dist/src/domain/profileSynthesis.js";
 
 export function minimizeSources(sources) {
@@ -61,7 +63,11 @@ export async function runOnce(config, fetcher = fetch) {
   const job = await rpc(config, "claim_profile_synthesis", {}, fetcher);
   if (!job) return { state: "idle" };
   const started = Date.now(); let output; let error = null; let diagnostic = null; let inputTokens = 0; let outputTokens = 0;
-  try { output = await generateSynthesis(job.sources, { ...config, model: job.model }, fetcher); }
+  try {
+    output = config.historySecret
+      ? await withAiHistory(createWorkerHistory({ ...config, fetcher }), {organizationId:job.organizationId,functionName:"profile_synthesis",operationId:job.lease,sourceVersion:"profile-synthesis-2.0.0",inputFingerprint:job.basisHash}, tracked => generateSynthesis(job.sources,{...config,model:job.model},tracked),fetcher)
+      : await generateSynthesis(job.sources, { ...config, model: job.model }, fetcher);
+  }
   catch (cause) {
     diagnostic = cause instanceof SynthesisFailure ? cause.diagnostic : synthesisDiagnostic("provider", "REQUEST_INTERRUPTED");
     inputTokens = cause instanceof SynthesisFailure ? cause.inputTokens : 0; outputTokens = cause instanceof SynthesisFailure ? cause.outputTokens : 0;
@@ -86,8 +92,8 @@ async function readEnvironmentFile(path) {
 export async function loadConfig() {
   const env = { ...(process.env.SYNTHESIS_CONFIG_FILE ? await readEnvironmentFile(process.env.SYNTHESIS_CONFIG_FILE) : {}), ...process.env };
   if (env.OPENAI_ENV_FILE) Object.assign(env, await readEnvironmentFile(env.OPENAI_ENV_FILE));
-  const config = { supabaseUrl: env.SUPABASE_URL, publishableKey: env.SUPABASE_ANON_KEY, workerSecret: env.SYNTHESIS_WORKER_SECRET, openaiKey: env.OPENAI_API_KEY, model: "gpt-5.6-luna" };
-  if (!/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(config.supabaseUrl ?? "") || !config.publishableKey || (config.workerSecret?.length ?? 0) < 40 || !config.openaiKey) throw Error("CONFIGURATION_UNAVAILABLE");
+  const config = { supabaseUrl: env.SUPABASE_URL, publishableKey: env.SUPABASE_ANON_KEY, workerSecret: env.SYNTHESIS_WORKER_SECRET, openaiKey: env.OPENAI_API_KEY, model: "gpt-5.6-luna", dispatcherSecret:env.ASSESSMENT_DISPATCHER_SECRET, historySecret: env.AI_HISTORY_WORKER_SECRET };
+  if (!/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(config.supabaseUrl ?? "") || !config.publishableKey || (config.workerSecret?.length ?? 0) < 40 || !config.openaiKey || (config.historySecret?.length??0)<40) throw Error("CONFIGURATION_UNAVAILABLE");
   return config;
 }
 async function main() {
@@ -95,6 +101,7 @@ async function main() {
   let stopping = false; process.on("SIGTERM", () => { stopping = true; }); process.on("SIGINT", () => { stopping = true; });
   while (!stopping) {
     try {
+      try {await drainAssessmentEmails(config);} catch {console.error(JSON.stringify({event:"assessment_outbox_unavailable"}));}
       const state = await runOnce(config);
       await writeFile("/tmp/profile-synthesis-health.json", JSON.stringify({ at: Date.now(), state: state.state }));
       if (state.state !== "idle") console.log(JSON.stringify(state));

@@ -1,3 +1,4 @@
+import {withAiHistory} from "../../../src/infrastructure/aiHistory.ts";
 import type { SupabaseClient } from "npm:@supabase/supabase-js@2.112.3";
 import {
   canSendCompetencyTerm, competencyNormalizationInstructions, competencyNormalizationSchema,
@@ -35,7 +36,9 @@ export async function processCompetencyNormalization(client: Client) {
         if (budgetError) throw new Error("BUDGET_UNAVAILABLE");
         if (!reserved) errorCode = "BUDGET_LIMITED";
         else {
-          const response = await fetch("https://api.openai.com/v1/responses", {
+          const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(aiInputs)));
+          await withAiHistory(client,{organizationId:job.organizationId,functionName:"competency_normalization",operationId:job.lease,sourceVersion:"competency-normalization-1.0.0",inputFingerprint:Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,"0")).join("")},async fetcher=>{
+          const response = await fetcher("https://api.openai.com/v1/responses", {
             method: "POST", signal: AbortSignal.timeout(90_000),
             headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
             body: JSON.stringify({ model, store: false, max_output_tokens: 14000,
@@ -61,10 +64,12 @@ export async function processCompetencyNormalization(client: Client) {
               console.warn(JSON.stringify({ event: "competency_normalization_rejected", code }));
             }
           }
+          if(errorCode)throw Error(errorCode);
+          });
         }
       }
     }
-  } catch { errorCode = "PROVIDER_UNAVAILABLE"; }
+  } catch { errorCode ??= "PROVIDER_UNAVAILABLE"; }
   const { error: completionError } = await client.rpc("complete_profile_competency_normalization", {
     p_run_id: job.id, p_lease: job.lease, p_items: items, p_error: errorCode, p_model: model,
     p_input_tokens: usage.input_tokens ?? null, p_output_tokens: usage.output_tokens ?? null,

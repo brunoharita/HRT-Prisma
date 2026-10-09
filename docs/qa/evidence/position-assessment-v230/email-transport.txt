@@ -1,0 +1,20 @@
+Command: node --test dist/tests/positionAssessmentEmailTransport.test.js
+Exit code: 0
+Tool-observed output (synthetic injected fetch only; no real credential or network):
+✔ provider acceptance has a receipt, remains distinct from delivery and replays the same key/payload (63.0653ms)
+✔ durable receipt avoids another send even after deadline and provider idempotency expiry (0.9808ms)
+✔ cross-tenant, missing authority and invalid job do not invoke transport (0.9476ms)
+✔ missing credential or sender drift fails closed without exposing its value (0.5532ms)
+✔ expired invitations and retries near or beyond 24h never send with a fresh key (0.7058ms)
+✔ rate limits, unavailable provider and concurrent sends defer without automatic retry (2.3183ms)
+✔ payload conflict is unresolved, never overwritten by a new idempotency key (1.1904ms)
+✔ ambiguous and rejected responses expose categories only, never provider PII or credentials (3.8616ms)
+✔ retry hints accept HTTP dates, cap extremes and discard malformed values (5.2612ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 291.461

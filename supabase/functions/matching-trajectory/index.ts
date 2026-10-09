@@ -21,5 +21,6 @@ Deno.serve(request => handleMatchingTrajectory(request, {
   service: () => createClient(required("SUPABASE_URL"), required("SUPABASE_SERVICE_ROLE_KEY"), {
     auth: { persistSession: false, autoRefreshToken: false },
   }),
+  historyEnabled: true,
   fetch,
 }));

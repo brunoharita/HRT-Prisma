@@ -1,0 +1,17 @@
+{
+  "environment": "LOCAL PostgreSQL17 127.0.0.1:55479; dedicated schema-only clone; synthetic fixture; removed after run",
+  "checks": [
+    {
+      "name": "independent connections acquire the same external attempt only once",
+      "pass": true
+    },
+    {
+      "name": "two workers cannot acquire the same persisted delivery lease",
+      "pass": true
+    },
+    {
+      "name": "concurrent conflicting autosaves retain one revision and reject the stale draft",
+      "pass": true
+    }
+  ]
+}

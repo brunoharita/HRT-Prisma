@@ -7,6 +7,17 @@ import { buildReleasePlan, classifyChanges, migrationIdentity, parseNameStatus }
 import { assertPublishPreconditions, parseArguments, writeReceipt } from "../../scripts/release-dispatcher.mjs";
 
 const change = (status, path) => ({ status, path, previousPath: null });
+test("shared AI history routes its actual consumers and the portal preserves independent hosting", () => {
+  const shared = buildReleasePlan([change("A", "src/infrastructure/aiHistory.ts")]);
+  assert.equal(shared.deployments.parserIa, true);
+  assert.equal(shared.deployments.profileSynthesis, true);
+  assert.deepEqual(shared.deployments.edgeFunctions, ["assessment-item-generator", "knowledge-agent", "matching-trajectory", "position-assessment"]);
+  assert.equal(shared.deployments.web, false);
+  const portal = buildReleasePlan([change("M", "deploy/nginx.conf")]);
+  assert.equal(portal.deployments.web, true);
+  assert.equal(portal.deployments.parserIa, false);
+  assert.equal(portal.deployments.profileSynthesis, false);
+});
 test("synthesis worker has an independent destination and preserves the Parser", () => {
   const plan = buildReleasePlan([change("A", "deploy/profile-synthesis.compose.yml"), change("A", "scripts/profile-synthesis-worker.mjs")]);
   assert.equal(plan.deployments.profileSynthesis, true);

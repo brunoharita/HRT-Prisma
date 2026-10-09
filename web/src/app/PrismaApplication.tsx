@@ -1,4 +1,6 @@
 import { PositionFollowUpPage } from "../pages/PositionFollowUpPage";
+import { PositionAssessmentPage } from "../pages/PositionAssessmentPage";
+import { PositionAssessmentPortal } from "../pages/PositionAssessmentPortal";
 import { useEffect, useState, type ReactNode } from "react";
 import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import {
@@ -96,6 +98,8 @@ interface AppRoute {
   verificationMode?: "detail" | "prepare";
   verificationPreparedAssessmentId?: string;
   participantToken?: string;
+  positionAssessmentToken?: string;
+  positionAssessmentPersonId?: string;
   selfDataToken?: string;
   vacancyId?: string;
   vacancyView?: "list" | "create" | "assist" | "detail" | "edit" | "people" | "compare" | "follow-up";
@@ -331,6 +335,7 @@ export function PrismaApplication() {
     if (pathname.startsWith("/matching") || pathname.startsWith("/verifications/")) navigate("/verifications", false, true);
   };
 
+  if (route.positionAssessmentToken) return <PositionAssessmentPortal key={route.positionAssessmentToken} token={route.positionAssessmentToken} />;
   if (route.participantToken) return <VerificationSessionPage token={route.participantToken} />;
   if (route.selfDataToken) return <PersonDataSelfServicePage token={route.selfDataToken} />;
 
@@ -455,6 +460,7 @@ function renderRouteContent(
   if (route.path === "/matching" && activeMembership) {
     return <CompetencyVerificationPage activeMembership={activeMembership} mode={route.verificationMode ?? "matching"} {...(route.verificationNeedId ? { needId: route.verificationNeedId } : {})} onNavigate={onNavigate} />;
   }
+  if (route.positionAssessmentPersonId && route.vacancyId && activeMembership) return <PositionAssessmentPage key={`${route.vacancyId}:${route.positionAssessmentPersonId}`} activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} personId={route.positionAssessmentPersonId} />;
   if (route.path === "/verifications" && activeMembership) {
     return <VerificationOperationsPage activeMembership={activeMembership} {...(route.verificationPreparedAssessmentId ? { preparedAssessmentId: route.verificationPreparedAssessmentId } : {})} onNavigate={onNavigate} />;
   }
@@ -621,6 +627,11 @@ function findRoute(pathname: string): AppRoute {
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };
   if (normalized === "/vacancies/new") return { path: "/vacancies", vacancyView: "create", rule: reviewerRule };
   if (normalized === "/vacancies/assist") return { path: "/vacancies", vacancyView: "assist", rule: reviewerRule };
+  const assessmentToken = /^\/assessment\/([a-f0-9]{64})$/.exec(normalized);
+  if (normalized === "/assessment" && /^#[a-f0-9]{64}$/.test(window.location.hash)) return {path:"/assessment",positionAssessmentToken:window.location.hash.slice(1),rule:{requiresAuth:false,requiresMembership:false}};
+  if (assessmentToken?.[1]) return { path:"/assessment",positionAssessmentToken:assessmentToken[1],rule:{requiresAuth:false,requiresMembership:false} };
+  const assessmentContext = /^\/vacancies\/([^/]+)\/follow-up\/([^/]+)\/assessment$/.exec(normalized);
+  if (assessmentContext?.[1]&&assessmentContext[2]) return {path:"/verifications",vacancyId:assessmentContext[1],positionAssessmentPersonId:assessmentContext[2],vacancyView:"follow-up",rule:reviewerRule};
   const followUpMatch = /^\/vacancies\/([^/]+)\/follow-up(?:\/([^/]+))?$/.exec(normalized);
   if (followUpMatch?.[1]) return { path: "/vacancies", vacancyId: followUpMatch[1], vacancyView: "follow-up", ...(followUpMatch[2] ? { vacancyFollowUpPersonId: followUpMatch[2] } : {}), rule: reviewerRule };
   const vacancyHistoryMatch = /^\/vacancies\/([^/]+)\/history$/.exec(normalized);

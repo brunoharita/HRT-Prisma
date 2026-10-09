@@ -1,0 +1,14 @@
+{
+  "tool": "image_gen integrado",
+  "type": "proposta visual sem implementação",
+  "edit_prompts": [
+    "Edit this exact image with just two precise consistency fixes. Preserve ALL topology, sizing, spacing, colors, main content, math and data. The read-only difficulty table helper must say \"Distribuição obrigatória por nível.\" instead of \"Proporção sugerida de questões por nível.\" The ratios are mandatory, not suggestions. Keep exact rows1:60/30/10,2:40/40/20,3:30/40/30,4:20/40/40,5:10/30/60 unchanged. In BOTH dark navy sidebars add \"Verificações\" as existing navigation immediately below Posições, and show Verificações selected, with Posições neutral, using the same exact visual tokens; do not add Relatórios, Avaliações or Vagas. Everything else unchanged. Still two screens and outer label1.",
+    "Edit this exact image for precise functional consistency, preserving the entire layout and all question/gabarito content. In the BOTTOM message preview, REMOVE \"Você pode responder diretamente por este e-mail, dentro do prazo indicado.\" Replace with \"Acesse sua avaliação pelo link pessoal abaixo.\" and a blue text/button \"Acessar avaliação\". The email is an invitation to a website, never a reply-by-email test. Keep20questions40minutes. Change BOTH sidebar selected menu label \"Avaliações\" to \"Verificações\"; REMOVE \"Relatórios\" navigation, keep Visão geral, Pessoas, Posições, Verificações, no extra menus. Update top and bottom back link \"Voltar para Avaliações\" to \"Voltar para verificações\". At BOTTOM sidebar invitation status card show \"Prévia do convite\" and \"Envio ainda não solicitado\" (this is BEFORE clicking send); remove already-sent status to avoid claiming a delivery that hasn't happened in this screen. Keep blue \"Enviar convite por e-mail\" and existing editable email local override note. Preserve all other design/text.",
+    "Edit this exact image with precise corrections only, preserving entire composition, all telemetric limits,5question options and data. In TOP candidate information summary change \"Tempo total 60 minutos\" to \"Tempo total 40 minutos\", keep timer32:18. In BOTTOM dark admin sidebar replace \"Vagas\" label by \"Posições\", remove \"Relatórios\"; sidebar menu ordered Visão geral, Pessoas, Posições, Verificações with only Verificações selected. Change \"Recrutamento\" section label to \"Operação\". Remove top-right \"Exportar relatório\" button and the three-dot menu; no new functionality. Change summarycard \"5 a revisar\" to \"5 erros\" since20questions15correct5wrong and not5marked. Keep all per-question table values/notes and human-review warning, including \"Não observável\", and bottom context \"Ver resposta e gabarito\". Keep proposal/dadosilustrativos label."
+  ],
+  "artifacts": [
+    "01-configuracao-e-questoes.png",
+    "02-revisao-e-convite.png",
+    "03-realizacao-e-resultados.png"
+  ]
+}

@@ -1,6 +1,6 @@
 import { basename } from "node:path";
 
-export const RELEASE_PLAN_VERSION = "1.0.3";
+export const RELEASE_PLAN_VERSION = "1.0.4";
 
 const contextSource = (path) => path === "AGENTS.md" || path === "README.md" || path.startsWith("docs/");
 
@@ -31,7 +31,7 @@ export function classifyChanges(changes) {
   for (const change of changes) {
     const path = normalizeRepositoryPath(change.path);
     let classified = false;
-    if (["src/domain/profileSynthesis.ts", "scripts/profile-synthesis-worker.mjs", "deploy/release-profile-synthesis.sh", "deploy/profile-synthesis.compose.yml"].includes(path) || path.startsWith("services/profile-synthesis/")) {
+    if (["src/domain/profileSynthesis.ts", "scripts/profile-synthesis-worker.mjs", "scripts/position-assessment-email-worker.mjs", "deploy/release-profile-synthesis.sh", "deploy/profile-synthesis.compose.yml"].includes(path) || path.startsWith("services/profile-synthesis/")) {
       surfaces.add("profile-synthesis"); classified = true;
     }
     if (contextSource(path)) {
@@ -55,6 +55,7 @@ export function classifyChanges(changes) {
       }
       classified = true;
     }
+    if (["src/infrastructure/aiHistory.ts","scripts/ai-history-client.mjs"].includes(path)) {surfaces.add("parser-ia");surfaces.add("profile-synthesis");surfaces.add("edge-functions");["position-assessment","matching-trajectory","knowledge-agent","assessment-item-generator"].forEach(name=>edgeFunctions.add(name));}
     if (path.startsWith("src/")) {
       surfaces.add("backend");
       classified = true;

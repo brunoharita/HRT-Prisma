@@ -1,8 +1,8 @@
 ---
 owner: security
 status: verified_in_prisma_qa
-version: 0.4.0
-last_verified: 2026-09-01
+version: 0.6.0
+last_verified: 2026-10-09
 ---
 
 # Segurança e Privacidade no M5.1 - Verificação de Competências
@@ -10,6 +10,18 @@ last_verified: 2026-09-01
 ## Estado
 
 Este documento descreve os controles aplicados no M5.1A, M5.1B e M5.1C ativos no Prisma-QA. O uso com Pessoas reais e qualquer provider externo continuam condicionados a privacidade, retenção, base legal, modelo, orçamento e aprovação específica.
+
+## Extensão Avaliação para Posição / histórico de IA
+
+Agreement v0.5.0 congelado e publicação integral autorizada em09/10/2026. Aviso final e expurgo automático por prazo adiados; não há prazos30/180dias aprovados ou certificação de base legal. Controles de acesso, exclusão explícita e direitos preservados; instruções operacionais/limites permanecem visíveis antes de iniciar. Código não prova rollout; recibos no AoT.
+
+Todas as seis tabelas novas têm RLS, FKs compostas e DML direto revogado inclusive service_role. Operador passa pela autoridade ativa owner/admin/recruiter e vínculo Pessoa–Posição; leitura não cria avaliação e consulta é auditada. Gabarito fica no backend e em consultas privadas autorizadas; portal recebe só alternativas durante execução e comprovante ao terminar. Tokens256bits, hash para validação, ciphertext AES256 para envio, prazo/revogação/limite por tentativa, autosave otimista e submit transacional. Chave pessoal vai no fragmento da URL, fora do caminho HTTP e Referer; portal no-store/no-referrer e sem access_log no Nginx.
+
+Resend exclusivamente por backend, endpoint fixo HTTPS, sem redirects, chave protegida/escopo de envio pelo domínio; instalação única por segredo temporário cujo hash é removido após sucesso. Dispatcher usa segredo distinto e só processa fila humana, sem acesso a IA/criação de convites. Workers IA usam token de propósito restrito às suas funções/organizações, sem chave service-role. Núcleos/configuração privados sem grants; RPCs SECURITY DEFINER com search_path vazio e allowlists. TLS oportunista escolhido pelo PO; tracking/recebimento desativados.
+
+Histórico armazena somente códigos/IDs/hashes/versões/método/modelo/estado/duração/consumo, sem prompts, documentos, contatos, respostas ou credenciais. organization obrigatório para empresa, platform sem empresa e invisível a consultas organizacionais; FK do pedido/tentativa e RLS mantêm isolamento. Autoridade do consumidor precede o registro. Identificadores opacos não são alegação de anonimização. Custos estimados/observados/desconhecidos distintos, cache separado, sem backfill/cobrança. Resultado lógico refere-se à chamada e validação de IA, não prova publicação humana do seu conteúdo.
+
+Telemetria limitada e advisory: nenhuma imagem/clipboard/tecla geral/coordenada/destino de janela, sem prova de fraude/punição. Coletor, backend e UI explicitam suporte/lacunas; eventos deduplicados e ligados à instância/versão. Falha de telemetria preserva respostas e a conclusão transacional autorizada. SQL local cobre roles/tenant/gabarito/prazo/revogação/segredos/replay/cascata; testes de consumidores, concorrência por conexões e browser complementam, sem teste em candidatos reais.
 
 ## Ativos
 
