@@ -28,6 +28,7 @@ export interface FollowUpDetails {
 }
 export interface FollowUpEntry {
   id: string; personId: string; fullName: string; title: string | null; age: number | null;
+  city?: string | null; state?: string | null;
   stage: FollowUpStage; revision: number; details: FollowUpDetails;
   profileId: string | null; profileVersion: number | null;
   sourceProfileId: string | null; sourcePositionId: string | null;
@@ -43,6 +44,20 @@ export interface FollowUpData {
   history: { id: string; entryId: string | null; action: string; actor: string; at: string; before: unknown; after: unknown }[];
 }
 export interface FollowUpFilters { search: string; stage: string; assignee: string; due: string; order: string; closed: boolean; }
+const brazilStates: Record<string,string> = {
+  acre:"AC",alagoas:"AL",amapa:"AP",amazonas:"AM",bahia:"BA",ceara:"CE", "distrito federal":"DF",
+  "espirito santo":"ES",goias:"GO",maranhao:"MA","mato grosso":"MT","mato grosso do sul":"MS",
+  "minas gerais":"MG",para:"PA",paraiba:"PB",parana:"PR",pernambuco:"PE",piaui:"PI",
+  "rio de janeiro":"RJ","rio grande do norte":"RN","rio grande do sul":"RS",rondonia:"RO",
+  roraima:"RR","santa catarina":"SC","sao paulo":"SP",sergipe:"SE",tocantins:"TO",
+};
+export function followUpLocation(entry: Pick<FollowUpEntry,"city"|"state">): string {
+  const city=entry.city?.trim(),state=entry.state?.trim();
+  if(!city&&!state)return "Localização não informada";
+  const normalized=state?.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("pt-BR");
+  const uf=normalized?(brazilStates[normalized]??(Object.values(brazilStates).includes(state!.toUpperCase())?state!.toUpperCase():state)):null;
+  return city?(uf?`${city} - ${uf}`:`${city} · UF não informada`):`Cidade não informada - ${uf}`;
+}
 export function filterFollowUp(entries: FollowUpEntry[], filter: FollowUpFilters, today: string): FollowUpEntry[] {
   const q = filter.search.trim().toLocaleLowerCase("pt-BR");
   return entries.filter(e => (filter.closed ? e.stage === "closed" : e.stage !== "closed")

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {filterFollowUp,followUpColumn,followUpColumns,followUpStages,followUpStageAction,followUpProcessName,interviewInstant,type FollowUpEntry,type FollowUpFilters} from "../web/src/domain/positionFollowUp.js";
+import {filterFollowUp,followUpLocation,followUpColumn,followUpColumns,followUpStages,followUpStageAction,followUpProcessName,interviewInstant,type FollowUpEntry,type FollowUpFilters} from "../web/src/domain/positionFollowUp.js";
 const filters:FollowUpFilters={search:"",stage:"",assignee:"",due:"",order:"name",closed:false};
 const entries=[{id:"1",fullName:"Marina Costa",stage:"evaluating",details:{nextAction:"Conferir APIs",dueDate:"2026-10-07",assignee:"a"}},{id:"2",fullName:"Rafael Lima",stage:"awaiting_evaluation",details:{}},{id:"3",fullName:"Joana Alves",stage:"closed",details:{}}] as FollowUpEntry[];
 test("lista/quadro filtram o mesmo conjunto sem inventar prazo ou responsável",()=>{
@@ -37,4 +37,13 @@ test("agendamento interpreta fuso explícito e rejeita hora inexistente",()=>{
  assert.equal(interviewInstant("2026-10-15T14:00","UTC"),"2026-10-15T14:00:00.000Z");
  assert.throws(()=>interviewInstant("2026-03-08T02:30","America/New_York"),/não existe/);
  assert.throws(()=>interviewInstant("","UTC"),/Informe/);assert.throws(()=>interviewInstant("2026-10-15T14:00","invalid"));
+});
+
+test("localização atual exibe UF sem inferir ausências ou estados desconhecidos",()=>{
+ assert.equal(followUpLocation({city:" Bauru ",state:" São Paulo "}),"Bauru - SP");
+ assert.equal(followUpLocation({city:"Bauru",state:"sp"}),"Bauru - SP");
+ assert.equal(followUpLocation({city:"Bauru",state:null}),"Bauru · UF não informada");
+ assert.equal(followUpLocation({city:null,state:"Ceará"}),"Cidade não informada - CE");
+ assert.equal(followUpLocation({city:"Paris",state:"Île-de-France"}),"Paris - Île-de-France");
+ assert.equal(followUpLocation({city:" ",state:null}),"Localização não informada");
 });

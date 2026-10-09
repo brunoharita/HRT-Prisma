@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 408
-source_manifest_sha256: fe9758c74a5a4e673733b89ba04bafb9add34f286e99d5d648d6164e24ddce1a
+documentation_source_count: 411
+source_manifest_sha256: d0afa316fb8bf19abbb34b63acfad96ea92830c432883ae3400c74f33da5f310
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.57.0
+version: 2.58.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Cards compactos do acompanhamento — ajuste na 2.2.1
+
+Implementação local validada conforme acordo/execução compact-follow-up-cards. Avatar/nome/cargo/cidade–UF à esquerda, quadrado com somente numeral à direita, aviso fora e rodapé horizontal Ver detalhes/Mover etapa. Idade preservada no detalhe. Cidade/estado atuais vêm de person_private_data.city/state_code, projeção mínima pela RPC get_position_follow_up com gates/grants mantidos; sem contato integral ou snapshot antigo. Cinco etapas/colunas iguais, seleção mobile e drag preservados; sem questões ou recálculo. SQL local: 48 verificações transacionais com rollback, incluindo negativos e invariância de Score/Perfil/Posição. Migration 20261009023359_position_follow_up_location aplicada e corpo/grants verificados; web pendente. Local: 8 testes e 46 verificações browser PASS, tipos/build/contextos em fechamento. Produto 2.2.1 mantido. Evidência e limitações em docs/qa/aot-compact-follow-up-cards.md.
 
 ## Etapas claras de acompanhamento — ajuste na 2.2.1
 
@@ -11969,6 +11973,10 @@ Correção autorizada em06/10/2026: maior formação concluída apresenta a qual
 
 O acompanhamento usa cinco colunas concretas e de dimensões iguais: Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Desktop preserva largura legível dos cartões com rolagem local; mobile continua uma coluna selecionável. Arraste/Mover etapa para uma situação factual abre o formulário e exige salvamento válido. As duas etapas iniciais antigas e filtros/coluna mobile convergem na nova etapa inicial sem perda de histórico. Nomes automáticos Avaliação NN aparecem como Acompanhamento NN, preservando o valor original no banco e nomes personalizados. Acordo `docs/qa/agreement-follow-up-stages.md`1.0.0; sem questionários, mudança de Score ou versão.
 
+## Cards compactos do acompanhamento (2.2.1)
+
+Referência aprovada em docs/qa/agreement-compact-follow-up-cards.md: avatar/identificação/localização à esquerda; alça e quadrado numérico à direita; aviso de qualidade fora do quadrado; rodapé com Ver detalhes e Mover etapa lado a lado. Nome/cargo quebram linhas, sem corte. Cinco colunas iguais, mínimo desktop 320px com rolagem local; mobile mantém uma coluna selecionável. Numeral indisponível é travessão com nome acessível; zero persistido é exibido como zero. Idade e explicações completas continuam no detalhe.
+
 ---
 
 ## Source: `docs/product/vacancy-intelligence.md`
@@ -12053,7 +12061,7 @@ A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar ao ac
 
 A aba Acompanhamento alterna Lista/Kanban do mesmo conjunto. Lista oferece etapa, próxima ação, responsável e prazo; busca nome/ação, filtros etapa/responsável/prazo inclusive ausentes e ordenação nome/prazo. Indicadores consideram o processo inteiro, com contagem filtrada separada. Kanban mostra Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Os dois identificadores iniciais legados são projetados na primeira coluna; filtros e coluna mobile antigos continuam válidos, sem reescrever registros ou histórico. Concluídos permanece consultável.
 
-Cartões exibem nome completo, título publicado, idade autorizada quando disponível e numeral azul do Score Prisma, sem denominador ou porcentagem. Não há idade inventada, corte nem faixa de mérito. Score indisponível/provisório mantém seu estado; score/cobertura, evidências e versões são consultáveis no detalhe. Arraste pela alça com placeholder/realce/Escape; Mover etapa atende teclado e mobile. Mobile usa uma coluna selecionada e detalhe de tela completa.
+Cartões compactos exibem avatar pequeno, nome completo, cargo publicado e cidade–UF à esquerda, quadrado azul-claro com somente o numeral azul do Score à direita e Ver detalhes/Mover etapa lado a lado no rodapé. Idade autorizada permanece no detalhe. Cidade/estado vêm do cadastro privado atual (city/state_code), atualizado também na publicação aprovada; nomes conhecidos de estados viram siglas. Ausências e estados desconhecidos não são inferidos. Não há denominador, porcentagem, corte nem faixa de mérito. Score indisponível/provisório mantém seu estado; score/cobertura, evidências e versões são consultáveis no detalhe. Arraste pela alça com placeholder/realce/Escape; Mover etapa atende teclado e mobile. Mobile usa uma coluna selecionada e detalhe de tela completa.
 
 Detalhe reúne anotações internas/perguntas, ação/responsável/prazo, entrevista opcional, decisão e histórico autor/data. Agendar/reagendar/cancelar são explícitos, com data/hora/fuso/participantes e sem envio de convite. Decisão começa sem escolha, exige justificativa e vale apenas neste processo. Mover para Aguardando entrevista ou Aguardando decisão só organiza a etapa. Mover para Entrevista agendada ou Decisão registrada abre o formulário correspondente; somente salvar um registro válido muda a etapa. Esses estados aparecem em colunas próprias, sem tag redundante. Concluir sem decisão difere de não prosseguir. Encerrar/reabrir processo preserva etapas e decisões individuais. Ocupação, Perfil e outras Pessoas não são modificados.
 
@@ -12228,6 +12236,37 @@ Decisão de Bruno: implementar na lista de Pessoas por Posição a proposta visu
 | Banco, Edge e ingestão | no_impact_identified | Nenhum arquivo/contrato compartilhado modificado | Inspeção do diff e plano de release |
 
 Não há pendência material para implementar a composição aprovada. A ausência de ambiente autenticado para screenshot real deve ser declarada como limite, não substituída por afirmação de fidelidade visual não observada.
+
+---
+
+## Source: `docs/qa/agreement-compact-follow-up-cards.md`
+
+# Acordo — Cards compactos do acompanhamento
+
+v1.0.0, frozen, 09/10/2026. Bruno confirmou que o ajuste aprovado dos cards também integra a entrega. Baseline main `fe35d88a7a67a124bc542f2bc5799db746bdadb4`; produto 2.2.1 mantido. Este acordo substitui F-01/D-UX-01 do acordo follow-up-stages somente quanto à exclusão/preservação do layout antigo dos cards, e D-06 do acordo position-follow-up-v220 quanto aos campos visíveis no card. Classe D por leitura de cidade/UF; sem escrita de dados pessoais. Reuso: cards, Score persistido, RPC e formulários existentes. Sem biblioteca nova. Publicação coberta por AGENTS.md seção 7.
+
+- D-UX-01: aplicar o primeiro layout compacto refinado aprovado, referência normativa `reference.png`: avatar pequeno e identificação à esquerda; nome em negrito, cargo e cidade–UF abaixo; quadrado azul-claro com numeral azul à direita, alça acima; aviso de qualidade do Score fora do quadrado; divisor e Ver detalhes/Mover etapa lado a lado no rodapé. Preservar hierarquia/proporções/agrupamento e reduzir altura, sem recortar nome/cargo. Conteúdo/pessoas/números ilustrativos.
+- D-02: somente nome, cargo, cidade–UF e Score no resumo principal. Quadrado contém somente número, sem Prisma, /100, porcentagem ou link textual; nome acessível identifica Score/cobertura. Ausência tem apresentação honesta (travessão com nome acessível para Score; localização/cargo não informados), sem zero inventado. Idade permanece disponível no detalhe existente, sai do resumo compacto.
+- D-03: cidade/UF vêm do cadastro privado atual da Pessoa (city/state_code), atualizado também pela publicação aprovada do Perfil; esse é o contrato de persistência existente, pois o Perfil público não armazena contato. Nunca inferir estado por cidade ou aproveitar localização de snapshot antigo. Normalizar nome completo conhecido de estado para sigla; desconhecido permanece texto original. RPC retorna apenas dois campos opcionais adicionais, sem Perfil integral/contato/nascimento; mesmos gates, joins tenant e grants.
+- D-04: preservar cinco etapas atuais, dimensões iguais das colunas, Lista/filtros/seleção mobile, drag/Escape/Mover etapa, loading/falha/conflito/rascunhos, agendamento/decisão explícitos e consulta de Score/cobertura/fontes. Mobile mantém a mesma composição compacta com ajustes de espaçamento; ações acessíveis sem overflow.
+- P-01: nenhum recálculo/IA/questionário/convite, mudança de escolha humana, histórico, Perfil, Knowledge, ocupação ou permissões; sem dados reais sintéticos em produção.
+- F-01: questões, novas etapas, edição de dados pessoais, mudança de versão ou biblioteca.
+- A-01: CSS/React e normalização determinística de UF, migração aditiva da leitura existente, verificações proporcionais. Q: nenhuma pendência material.
+
+CA-01: comparação visual mesma fixture/dados/viewport antes/depois 1448/390, além de estado fiel à referência com Bruno56 provisório/Diego62, Bauru-SP ilustrativos; geometria de quadrado/colunas, ações e redução de altura. CA-02: testes de localização completa/parcial/ausente/desconhecida, zero válido/indisponível e conteúdo longo; browser desktop/mobile/320 sem overflow. CA-03: SQL transacional local com fixtures e rollback: campos atuais sem snapshot, gates anônimo/member/outsider/inativo, tenant/versions/histórico/Score preservados. CA-04: tipos/build/testes dirigidos/contextos/CI; somente migration revisada + web, verificação remota de corpo/grants/RLS, smoke/rollback/sincronização.
+
+## Mapa de impacto
+
+| Área | Relação | Baseline e preservação / regressão |
+| --- | --- | --- |
+| Card/Score/rodapé/arraste/mobile | direct | SHA baseline e fixture antes/depois; browser/geometria/referência normativa |
+| Leitura get_position_follow_up e campos city/state | direct | corpo remoto normalizado igual ao arquivo local original; SQL local e hash/grants/RLS remotos, sem PII real em logs |
+| Serviços de mutação/lista/filtros/drawer | plausible_indirect | RPC mutadora intocada, campos opcionais compatíveis; browser de etapas/falhas/decisão/Score |
+| Isolamento/permissões/estabilidade Score | critical_transversal | negativos SQL existentes e invariância de dados; rota e browser sintético |
+| Perfil/Knowledge/ocupação/IA/importação | no_impact_identified | apenas projeção de leitura e CSS local; diff sem escrita ou invalidadores/consulta de IA |
+| Release/contexto | direct | 2.2.1, plano migration+web, CI/smoke/rollback/serviços preservados |
+
+Sem QA remoto separado. SQL local usa PostgreSQL17 localhost55479/import_evidence_v202 vazio e rollback. Browser é sintético; smoke público não comprova operação autenticada real.
 
 ---
 
@@ -16373,6 +16412,28 @@ Referência: PNG com SHA-256 `de50e17478d3a65a60c0dfc876660d1296f7bba57fe711ad7d
 Lint, typecheck web, build web, gerador/verificador do Context Pack e `git diff --check` passaram no worktree. Dois testes estruturais que buscavam a marcação antiga foram atualizados para verificar o mesmo conteúdo e a proteção responsiva no novo agrupamento; os 22 testes direcionados de `matchingEvidenceLabel` e `matchingScore` passaram. O build apresentou somente avisos existentes de chunks grandes/importação dinâmica. O primeiro CI falhou por export de contexto defasado; o segundo alcançou 716 testes e falhou em três asserções estáticas da composição antiga, corrigidas neste mesmo movimento. CIs do SHA funcional `342ff9aa75896dcf09f306fa42d4df4fb82fb43f`: branch `36803529139` e main `36803703626` PASS. Plano seletivo: web e documentação; banco e Edge `skip`.
 
 `main` local/GitHub e checkout da VPS chegaram ao SHA funcional. Apenas `prisma-web` foi reconstruído/recriado, imagem ativa `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`, running/zero reinícios. Rollback `prisma-web:rollback-before-342ff9aa7589` preserva `sha256:668091fb1267488e26c1dca121bf2ea98a1609a93c60bbf7d24aca8b5d6ea080`. O smoke imediato do script recebeu 404 transitório e saiu com código 1; a verificação posterior confirmou `/`, `/login`, `/index.html` e os assets JS/CSS novos com HTTP 200, incluindo marcadores do novo layout. Não houve acesso autenticado a Perfis reais em produção, clique de revisão, decisão humana nem chamada à IA; o smoke funcional autenticado permanece NOT TESTED. Esse limite não reduz os testes locais com dados sintéticos.
+
+---
+
+## Source: `docs/qa/aot-compact-follow-up-cards.md`
+
+# AoT — Cards compactos do acompanhamento
+
+Acordo/execução compact-follow-up-cards v1.0.0; baseline fe35d88a7a67a124bc542f2bc5799db746bdadb4; 2.2.1 mantida. Evidências em evidence/compact-follow-up-cards.
+
+| Regra | Implementação e evidência | Status |
+| --- | --- | --- |
+| D-UX-01/CA-01 | Card compacto, referência aprovada, antes/depois mesma fixture e viewport, quadrado 50px, rodapé horizontal | PASS |
+| D-02/CA-02 | Nome/cargo/cidade-UF/Score; idade no detalhe, ausências honestas, zero e conteúdo longo; unitários e browser | PASS |
+| D-03/CA-03 | RPC retorna apenas city/state; fonte real privada atual que recebe contato publicado, sem PII integral. SQL 48 verificações, gates e tenant/version/score/history preservados | PASS |
+| D-04/P-01 | Cinco etapas/colunas iguais, drag/Escape/falha/conflito/rascunhos/formulários explícitos; browser proporcional; sem IA/mutação de Perfil/Knowledge | PASS |
+| CA-04 | CI/publicação migration+web/smoke/sincronização pendentes | PARTIAL |
+
+Mapa aplicado: direct layout e leitura RPC; plausible_indirect lista/drawer/ações, regressão browser; critical_transversal gates/tenant/Score, negativos SQL; no_impact_identified para IA/ingestão/ocupação/Knowledge, sem alteração de serviços ou escritores. A migração só adiciona projeção de leitura aos mesmos joins e gates. Descoberta do contrato de persistência confirmou que contato não fica no JSON público do Perfil: city/state_code do cadastro privado são a fonte existente, explicitada no D-03. Nenhuma permissão ampliada ou dado pessoal alterado.
+
+Referência antiga tem quatro etapas ilustrativas; somente card é normativo, as cinco atuais são preservadas. Largura mínima 320px desktop preserva leitura com rolagem local; mobile 390/320 usa uma coluna. Sem desvio funcional material. SQL executado no PostgreSQL17 local vazio, transação com rollback. Sem QA remoto separado; jornada autenticada real NOT TESTED. Browser sintético e smoke público não comprovam operação autenticada real. Versão permanece 2.2.1. Arquivos alheios preservados.
+
+Local: 8 testes de domínio/rotas, 34 checks de regressão browser e 12 cenários visuais desktop1448/mobile390/320 PASS. Cards comuns 179px contra baseline323–351px, redução44–49%; longos quebram linhas sem overflow. Referência Bruno56/Diego62 e mobile inspecionados. Migração aplicada como 20261009023359_position_follow_up_location no projeto confirmado ioldpnqqvobprjiontre. Corpo normalizado get_position_follow_up 2cb4301c6a74c7833154d2ddb337ad7b confere com arquivo; autorizador/mutador/grants/search_path preservados. Advisors mantêm exatamente os achados do baseline, sem ampliação; URLs em backend-release.json. Nenhuma leitura ou mutação de Pessoa real para prova. Ledger aditivo registrado; db push histórico continua proibido. Rollback backend: republicar corpo anterior de get_position_follow_up da migration 20261008120000, mantendo gates/grants; UI lida com campos opcionais ausentes.
 
 ---
 
@@ -22003,6 +22064,14 @@ VacancyAssistPage é síncrona, sem espera artificial. ResumeImport, ProfileSear
 # Execução — cartão de Pessoas por Posição
 
 Fonte congelada: `docs/qa/agreement-candidate-card-visual.md` v1.0.0 e imagem normativa `docs/qa/assets/candidate-match-card-action-hub-reference.png`. Implementar D-01 a D-05, preservar P-01 a P-03 e F-01, exercer A-01, comprovar CA-01 a CA-04, registrar AoT e publicar apenas as superfícies do plano seletivo. A referência fixa topologia, hierarquia, agrupamentos e posição relativa; os registros exibidos nela não são dados a reproduzir.
+
+---
+
+## Source: `docs/qa/execution-compact-follow-up-cards.md`
+
+# Execução — Cards compactos do acompanhamento
+
+Implementar integralmente `docs/qa/agreement-compact-follow-up-cards.md` v1.0.0, lido integralmente: D-UX-01, D-02/03/04, P-01, F-01, A-01 e CA-01/02/03/04 com mapa de impacto. Usar a imagem aprovada como referência normativa dos cards, preservando as cinco etapas publicadas. Campos de localização mínimos, atuais e autorizados; sem recálculo ou escrita de dados pessoais. Fechar com AoT, regressão proporcional, evidência visual/SQL e publicação migration+web na 2.2.1.
 
 ---
 

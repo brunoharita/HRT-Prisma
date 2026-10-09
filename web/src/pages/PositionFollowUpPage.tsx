@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type DragEvent } from "react";
 import { Alert, Button, Drawer, Empty, Input, Modal, Radio, Segmented, Select, Skeleton, Space, Table, Tabs, Tag, Typography } from "antd";
-import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, FilterOutlined, HolderOutlined, PlusOutlined, ReloadOutlined, RightOutlined, SearchOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, EnvironmentOutlined, FilterOutlined, HolderOutlined, PlusOutlined, ReloadOutlined, SearchOutlined, TeamOutlined } from "@ant-design/icons";
 import type { OrganizationMembership } from "../shared/access";
 import type { VacancyCandidateMatch, VacancyDetail } from "../domain/vacancy";
-import { filterFollowUp, followUpColumns, followUpColumn, followUpStages, followUpStageAction, followUpProcessName, followUpHistoryLabels, interviewInstant, type FollowUpData, type FollowUpDetails, type FollowUpEntry, type FollowUpFilters, type FollowUpStage } from "../domain/positionFollowUp";
+import { filterFollowUp, followUpColumns, followUpColumn, followUpStages, followUpStageAction, followUpProcessName, followUpLocation, followUpHistoryLabels, interviewInstant, type FollowUpData, type FollowUpDetails, type FollowUpEntry, type FollowUpFilters, type FollowUpStage } from "../domain/positionFollowUp";
 import { positionFollowUpService } from "../infrastructure/supabase/positionFollowUpService";
 import { vacancyService } from "../infrastructure/supabase/vacancyService";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -81,11 +81,9 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
     const entry=data?.entries.find(e=>e.id===id);if(entry)move(entry,stage);
   }
   function card(entry:FollowUpEntry){return <article key={entry.id} data-entry={entry.personId} className={`pf-card${dragging===entry.id?" is-dragging":""}`} aria-busy={pending.includes(entry.id)}>
-    <div className="pf-card-top"><span className="pf-avatar" aria-hidden="true">{entry.fullName.split(" ").map(n=>n[0]).slice(0,2).join("")}</span><div className="pf-card-identity"><button className="pf-person" onClick={()=>onNavigate(`${base}/${entry.personId}`)}>{entry.fullName}</button><p className="pf-title">{entry.title||"Título não informado"}</p></div>
-      {entry.stage!=="closed"?<button className="pf-handle" draggable={!disabled&&!pending.includes(entry.id)} aria-label={`Arrastar ${entry.fullName}`} title="Arraste pela alça. Use Mover etapa como alternativa." disabled={disabled||pending.includes(entry.id)} onDragStart={e=>startDrag(e,entry)} onDragEnd={stopDrag}><HolderOutlined /></button>:null}</div>
-    {entry.age!==null?<p className="pf-age"><UserOutlined /> {entry.age} anos</p>:null}
-    <button className={`pf-score${entry.score===null?" is-unavailable":""}`} aria-label={`Score e cobertura de ${entry.fullName}`} onClick={()=>onNavigate(`${base}/${entry.personId}`)}><span>Score Prisma</span><strong>{entry.score===null?"Indisponível":entry.score}</strong><span className="pf-score-link">Score e cobertura</span><RightOutlined /></button>
-    {scoreNotice(entry)?<small className="pf-score-notice">{scoreNotice(entry)}</small>:null}
+    <div className="pf-card-top"><span className="pf-avatar" aria-hidden="true">{entry.fullName.split(" ").map(n=>n[0]).slice(0,2).join("")}</span><div className="pf-card-identity"><button className="pf-person" onClick={()=>onNavigate(`${base}/${entry.personId}`)}>{entry.fullName}</button><p className="pf-title">{entry.title||"Cargo não informado"}</p><p className="pf-location"><EnvironmentOutlined aria-hidden="true" /> <span>{followUpLocation(entry)}</span></p>{scoreNotice(entry)?<small className="pf-score-notice" title={scoreNotice(entry)??undefined}>{scoreNotice(entry)?.startsWith("Provisório")?"Provisório":scoreNotice(entry)}</small>:null}</div>
+      <div className="pf-card-aside">{entry.stage!=="closed"?<button className="pf-handle" draggable={!disabled&&!pending.includes(entry.id)} aria-label={`Arrastar ${entry.fullName}`} title="Arraste pela alça. Use Mover etapa como alternativa." disabled={disabled||pending.includes(entry.id)} onDragStart={e=>startDrag(e,entry)} onDragEnd={stopDrag}><HolderOutlined aria-hidden="true" /></button>:null}
+      <button className={`pf-score${entry.score===null?" is-unavailable":""}`} aria-label={`Score e cobertura de ${entry.fullName}${entry.score===null?" · Indisponível":` · ${entry.score}`}`} title={entry.score===null?"Score indisponível · consultar detalhes":"Consultar score e cobertura"} onClick={()=>onNavigate(`${base}/${entry.personId}`)}><strong>{entry.score===null?"—":entry.score}</strong></button></div></div>
     {pending.includes(entry.id)?<div role="status" className="pf-saving">Salvando etapa…</div>:null}
     <div className="pf-card-bottom"><Button type="link" onClick={()=>onNavigate(`${base}/${entry.personId}`)}>Ver detalhes</Button>{entry.stage!=="closed"?<MoveStage entry={entry} disabled={disabled||pending.includes(entry.id)} onMove={stage=>move(entry,stage)} />:null}</div>
   </article>;}

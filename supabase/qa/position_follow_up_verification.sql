@@ -1,5 +1,5 @@
 -- Synthetic fixture in a mandatory rollback; no real human decisions.
-insert into public.person_private_data(organization_id,person_id,birth_date) values(m83_id('a'),m83_id('person'),'1994-01-01');
+insert into public.person_private_data(organization_id,person_id,birth_date,city,state_code,email) values(m83_id('a'),m83_id('person'),'1994-01-01','Bauru','São Paulo','private@example.invalid');
 insert into public.vacancies(id,organization_id,job_role_id,title,status,current_version_id) values(m83_id('vacancy2'),m83_id('a'),m83_id('role'),'Outra posição','open',null);
 insert into public.vacancy_versions(id,organization_id,vacancy_id,version,title,source_kind) values(m83_id('v3'),m83_id('a'),m83_id('vacancy2'),1,'Outra posição','manual');
 update public.vacancies set current_version_id=m83_id('v3') where id=m83_id('vacancy2');
@@ -25,6 +25,20 @@ select m83_reject('delete from public.position_evaluation_history','42501');
 insert into follow_up_result select public.mutate_position_follow_up(m83_id('a'),m83_id('vacancy'),'add',m83_id('person'),null,jsonb_build_object('profileId',m83_id('profile'),'positionId',m83_id('v2')));
 select m83_assert((select value#>>'{entries,0,stage}'='awaiting_evaluation' and value#>>'{entries,0,score}'='78' and value#>>'{entries,0,age}' is not null from follow_up_result),'explicit entry, persisted score, authorized derived age');
 select m83_assert(not(public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))::text like '%1994-01-01%'),'birth date not exposed');
+select m83_assert(public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))#>>'{entries,0,city}'='Bauru' and public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))#>>'{entries,0,state}'='São Paulo','current registered location exposed without full profile');
+select m83_assert(not(public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))::text like '%private@example.invalid%'),'contact email not exposed');
+reset role;
+savepoint location_check;
+update public.person_private_data set city='Cidade cadastral',state_code=null where person_id=m83_id('person');
+set local role authenticated;
+select m83_assert(public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))#>>'{entries,0,city}'='Cidade cadastral' and public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))#>'{entries,0,state}'='null','missing state does not infer state from registered city');
+reset role;
+update public.person_private_data set city=null where person_id=m83_id('person');
+set local role authenticated;
+select m83_assert(public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))#>'{entries,0,city}'='null','missing city stays unavailable');
+reset role;
+rollback to savepoint location_check;
+set local role authenticated;
 select m83_assert(jsonb_array_length(public.mutate_position_follow_up(m83_id('a'),m83_id('vacancy'),'add',m83_id('person'),null,jsonb_build_object('profileId',m83_id('profile'),'positionId',m83_id('v2')))->'entries')=1,'duplicate inclusion idempotent');
 select m83_assert(jsonb_array_length(public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))->'history')=1,'idempotence preserves audit');
 select m83_reject(format('select public.mutate_position_follow_up(%L,%L,''add'',%L,null,%L)',m83_id('a'),m83_id('vacancy'),m83_id('person'),jsonb_build_object('profileId',m83_id('old'),'positionId',m83_id('v2'))),'40001');

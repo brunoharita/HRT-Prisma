@@ -1354,6 +1354,16 @@
       "functionBodiesFingerprintStatus": "equal",
       "verifiedAt": "2026-10-08",
       "verificationEvidence": "docs/qa/evidence/position-follow-up-v220/backend-release.json"
+    },
+    {
+      "name": "position_follow_up_location",
+      "localVersion": "20261009024000",
+      "remoteVersion": "20261009023359",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "unverified",
+      "functionBodiesFingerprintStatus": "equal",
+      "verifiedAt": "2026-10-09",
+      "verificationEvidence": "docs/qa/evidence/compact-follow-up-cards/backend-release.json"
     }
   ],
   "localOnly": [

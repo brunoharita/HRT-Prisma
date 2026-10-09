@@ -117,3 +117,7 @@ Correção autorizada em06/10/2026: maior formação concluída apresenta a qual
 ## Etapas de acompanhamento
 
 O acompanhamento usa cinco colunas concretas e de dimensões iguais: Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Desktop preserva largura legível dos cartões com rolagem local; mobile continua uma coluna selecionável. Arraste/Mover etapa para uma situação factual abre o formulário e exige salvamento válido. As duas etapas iniciais antigas e filtros/coluna mobile convergem na nova etapa inicial sem perda de histórico. Nomes automáticos Avaliação NN aparecem como Acompanhamento NN, preservando o valor original no banco e nomes personalizados. Acordo `docs/qa/agreement-follow-up-stages.md`1.0.0; sem questionários, mudança de Score ou versão.
+
+## Cards compactos do acompanhamento (2.2.1)
+
+Referência aprovada em docs/qa/agreement-compact-follow-up-cards.md: avatar/identificação/localização à esquerda; alça e quadrado numérico à direita; aviso de qualidade fora do quadrado; rodapé com Ver detalhes e Mover etapa lado a lado. Nome/cargo quebram linhas, sem corte. Cinco colunas iguais, mínimo desktop 320px com rolagem local; mobile mantém uma coluna selecionável. Numeral indisponível é travessão com nome acessível; zero persistido é exibido como zero. Idade e explicações completas continuam no detalhe.

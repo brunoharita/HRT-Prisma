@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.57.0
+version: 2.58.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Cards compactos do acompanhamento — ajuste na 2.2.1
+
+Implementação local validada conforme acordo/execução compact-follow-up-cards. Avatar/nome/cargo/cidade–UF à esquerda, quadrado com somente numeral à direita, aviso fora e rodapé horizontal Ver detalhes/Mover etapa. Idade preservada no detalhe. Cidade/estado atuais vêm de person_private_data.city/state_code, projeção mínima pela RPC get_position_follow_up com gates/grants mantidos; sem contato integral ou snapshot antigo. Cinco etapas/colunas iguais, seleção mobile e drag preservados; sem questões ou recálculo. SQL local: 48 verificações transacionais com rollback, incluindo negativos e invariância de Score/Perfil/Posição. Migration 20261009023359_position_follow_up_location aplicada e corpo/grants verificados; web pendente. Local: 8 testes e 46 verificações browser PASS, tipos/build/contextos em fechamento. Produto 2.2.1 mantido. Evidência e limitações em docs/qa/aot-compact-follow-up-cards.md.
 
 ## Etapas claras de acompanhamento — ajuste na 2.2.1
 

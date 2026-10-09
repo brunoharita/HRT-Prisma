@@ -1,0 +1,1076 @@
+[
+  {
+    "width": 1448,
+    "scenario": "normal",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 332.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "card": {
+          "x": 332.84375,
+          "y": 833.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 886.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "64",
+        "label": "Score e cobertura de Rafael Lima · 64",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 959.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 962.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Joana Alves",
+        "card": {
+          "x": 1004.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 1233.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "81",
+        "label": "Score e cobertura de Joana Alves · 81",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 1019.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 1136.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Pedro Santos",
+        "card": {
+          "x": 1340.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 1569.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "76",
+        "label": "Score e cobertura de Pedro Santos · 76",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 1355.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 1472.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 1448,
+    "scenario": "reference",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "card": {
+          "x": 332.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 199.234375
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "56",
+        "label": "Score e cobertura de Bruno Harita Santos · 56",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 788.359375,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 791.359375,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "card": {
+          "x": 332.84375,
+          "y": 853.359375,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 906.359375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "62",
+        "label": "Score e cobertura de Diego Reis · 62",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 979.359375,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 982.359375,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 1448,
+    "scenario": "long",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "card": {
+          "x": 332.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 246.9375
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "0",
+        "label": "Score e cobertura de Maria da Silva Albuquerque de Vasconcelos e Souza · 0",
+        "location": " São José dos Campos - SP",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 836.0625,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 839.0625,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 332.84375,
+          "y": 901.0625,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 954.0625,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 1027.0625,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 1030.0625,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Joana Alves",
+        "card": {
+          "x": 1004.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 1233.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "81",
+        "label": "Score e cobertura de Joana Alves · 81",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 1019.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 1136.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Pedro Santos",
+        "card": {
+          "x": 1340.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 1569.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "76",
+        "label": "Score e cobertura de Pedro Santos · 76",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 1355.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 1472.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 1448,
+    "scenario": "missing",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 332.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "card": {
+          "x": 332.84375,
+          "y": 833.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 561.84375,
+          "y": 886.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "—",
+        "label": "Score e cobertura de Rafael Lima · Indisponível",
+        "location": " Localização não informada",
+        "footer": [
+          {
+            "x": 347.84375,
+            "y": 959.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 464.765625,
+            "y": 962.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Joana Alves",
+        "card": {
+          "x": 1004.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 1233.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "81",
+        "label": "Score e cobertura de Joana Alves · 81",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 1019.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 1136.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Pedro Santos",
+        "card": {
+          "x": 1340.84375,
+          "y": 642.125,
+          "width": 294,
+          "height": 179
+        },
+        "score": {
+          "x": 1569.84375,
+          "y": 695.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "76",
+        "label": "Score e cobertura de Pedro Santos · 76",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 1355.84375,
+            "y": 768.125,
+            "width": 108.921875,
+            "height": 38
+          },
+          {
+            "x": 1472.765625,
+            "y": 771.125,
+            "width": 147.078125,
+            "height": 32
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "scenario": "normal",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 29,
+          "y": 949.59375,
+          "width": 332,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 296,
+          "y": 967.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1054.03125,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1054.03125,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "card": {
+          "x": 29,
+          "y": 1119.03125,
+          "width": 332,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 296,
+          "y": 1137.03125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "64",
+        "label": "Score e cobertura de Rafael Lima · 64",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1223.46875,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1223.46875,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "scenario": "reference",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "card": {
+          "x": 29,
+          "y": 949.59375,
+          "width": 332,
+          "height": 202.015625
+        },
+        "score": {
+          "x": 296,
+          "y": 967.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "56",
+        "label": "Score e cobertura de Bruno Harita Santos · 56",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1098.609375,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1098.609375,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "card": {
+          "x": 29,
+          "y": 1163.609375,
+          "width": 332,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 296,
+          "y": 1181.609375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "62",
+        "label": "Score e cobertura de Diego Reis · 62",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1268.046875,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1268.046875,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "scenario": "long",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "card": {
+          "x": 29,
+          "y": 949.59375,
+          "width": 332,
+          "height": 232.25
+        },
+        "score": {
+          "x": 296,
+          "y": 967.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "0",
+        "label": "Score e cobertura de Maria da Silva Albuquerque de Vasconcelos e Souza · 0",
+        "location": " São José dos Campos - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1128.84375,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1128.84375,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 29,
+          "y": 1193.84375,
+          "width": 332,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 296,
+          "y": 1211.84375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1298.28125,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1298.28125,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "scenario": "missing",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 29,
+          "y": 949.59375,
+          "width": 332,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 296,
+          "y": 967.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1054.03125,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1054.03125,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "card": {
+          "x": 29,
+          "y": 1119.03125,
+          "width": 332,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 296,
+          "y": 1137.03125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "—",
+        "label": "Score e cobertura de Rafael Lima · Indisponível",
+        "location": " Localização não informada",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1223.46875,
+            "width": 125.09375,
+            "height": 38
+          },
+          {
+            "x": 177.09375,
+            "y": 1223.46875,
+            "width": 168.90625,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "scenario": "normal",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 29,
+          "y": 981.59375,
+          "width": 262,
+          "height": 175.625
+        },
+        "score": {
+          "x": 226,
+          "y": 999.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1104.21875,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1104.21875,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "card": {
+          "x": 29,
+          "y": 1169.21875,
+          "width": 262,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 226,
+          "y": 1187.21875,
+          "width": 50,
+          "height": 50
+        },
+        "text": "64",
+        "label": "Score e cobertura de Rafael Lima · 64",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1273.65625,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1273.65625,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "scenario": "reference",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "card": {
+          "x": 29,
+          "y": 981.59375,
+          "width": 262,
+          "height": 240.453125
+        },
+        "score": {
+          "x": 226,
+          "y": 999.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "56",
+        "label": "Score e cobertura de Bruno Harita Santos · 56",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1169.046875,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1169.046875,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "card": {
+          "x": 29,
+          "y": 1234.046875,
+          "width": 262,
+          "height": 157.4375
+        },
+        "score": {
+          "x": 226,
+          "y": 1252.046875,
+          "width": 50,
+          "height": 50
+        },
+        "text": "62",
+        "label": "Score e cobertura de Diego Reis · 62",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1338.484375,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1338.484375,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "scenario": "long",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "card": {
+          "x": 29,
+          "y": 981.59375,
+          "width": 262,
+          "height": 307.53125
+        },
+        "score": {
+          "x": 226,
+          "y": 999.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "0",
+        "label": "Score e cobertura de Maria da Silva Albuquerque de Vasconcelos e Souza · 0",
+        "location": " São José dos Campos - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1236.125,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1236.125,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 29,
+          "y": 1301.125,
+          "width": 262,
+          "height": 175.625
+        },
+        "score": {
+          "x": 226,
+          "y": 1319.125,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1423.75,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1423.75,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "scenario": "missing",
+    "pass": true,
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "card": {
+          "x": 29,
+          "y": 981.59375,
+          "width": 262,
+          "height": 175.625
+        },
+        "score": {
+          "x": 226,
+          "y": 999.59375,
+          "width": 50,
+          "height": 50
+        },
+        "text": "78",
+        "label": "Score e cobertura de Marina Costa · 78",
+        "location": " Bauru - SP",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1104.21875,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1104.21875,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "card": {
+          "x": 29,
+          "y": 1169.21875,
+          "width": 262,
+          "height": 174.03125
+        },
+        "score": {
+          "x": 226,
+          "y": 1187.21875,
+          "width": 50,
+          "height": 50
+        },
+        "text": "—",
+        "label": "Score e cobertura de Rafael Lima · Indisponível",
+        "location": " Localização não informada",
+        "footer": [
+          {
+            "x": 44,
+            "y": 1290.25,
+            "width": 95.3125,
+            "height": 38
+          },
+          {
+            "x": 147.3125,
+            "y": 1290.25,
+            "width": 128.6875,
+            "height": 38
+          }
+        ],
+        "overflow": false
+      }
+    ]
+  }
+]
