@@ -1,0 +1,17 @@
+{
+  "functionalSha": "3e271e32d6e9c7b7bd3b77571507ccd71d037956",
+  "initialRun": 38001052095,
+  "initialResult": "failure",
+  "cause": [
+    "Teste de versão esperava 2.2.1",
+    "Três avisos Alert sem ação contextual"
+  ],
+  "branchRun": 38001471365,
+  "mainRun": 38001581033,
+  "result": "success",
+  "tests": 868,
+  "passed": 868,
+  "failed": 0,
+  "fullLocalSuiteExecuted": false,
+  "mandatoryGithubWorkflow": true
+}

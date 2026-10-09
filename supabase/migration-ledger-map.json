@@ -5,11 +5,11 @@
   "cliDbPushAllowed": false,
   "rationale": "The production ledger contains historical timestamp aliases, split remote migrations, local-only files, and statement fingerprints that are not all byte-equivalent. The dispatcher must apply only explicitly reviewed new migrations and must not repair or replay history automatically.",
   "summary": {
-    "localMigrations": 167,
-    "remoteMigrations": 143,
-    "mappedByName": 138,
-    "versionAliases": 75,
-    "equalCanonicalFingerprints": 79,
+    "localMigrations": 191,
+    "remoteMigrations": 195,
+    "mappedByName": 156,
+    "versionAliases": 93,
+    "equalCanonicalFingerprints": 83,
     "differentCanonicalFingerprints": 57,
     "localOnly": 2,
     "remoteOnly": 6
@@ -1364,6 +1364,46 @@
       "functionBodiesFingerprintStatus": "equal",
       "verifiedAt": "2026-10-09",
       "verificationEvidence": "docs/qa/evidence/compact-follow-up-cards/backend-release.json"
+    },
+    {
+      "name": "generic_ai_request_history",
+      "localVersion": "20261009140000",
+      "remoteVersion": "20261009225307",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "c95e543b20e03d1da4e41e9cfd24f0d49868f92f23e434c4b7686a63f6b2be89",
+      "remoteStatementSha256": "c95e543b20e03d1da4e41e9cfd24f0d49868f92f23e434c4b7686a63f6b2be89",
+      "verifiedAt": "2026-10-09"
+    },
+    {
+      "name": "position_assessment",
+      "localVersion": "20261009150000",
+      "remoteVersion": "20261009225326",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "e60dffcea56e95ea670bc98341220691255b165c6e58bff4eb8cc4dd6edebac9",
+      "remoteStatementSha256": "e60dffcea56e95ea670bc98341220691255b165c6e58bff4eb8cc4dd6edebac9",
+      "verifiedAt": "2026-10-09"
+    },
+    {
+      "name": "ai_history_worker_boundary",
+      "localVersion": "20261009160000",
+      "remoteVersion": "20261009225332",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "fb2beb94cd1320f0a90f1c28d5b3f278cfcbfdbb7dbb6a45c2bc1f371f06c2c7",
+      "remoteStatementSha256": "fb2beb94cd1320f0a90f1c28d5b3f278cfcbfdbb7dbb6a45c2bc1f371f06c2c7",
+      "verifiedAt": "2026-10-09"
+    },
+    {
+      "name": "position_assessment_operational_boundary",
+      "localVersion": "20261009170000",
+      "remoteVersion": "20261009225337",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "b35a526ac39206e56193b91bbde31d2b8869b6f12f431790337245c1e07bc610",
+      "remoteStatementSha256": "b35a526ac39206e56193b91bbde31d2b8869b6f12f431790337245c1e07bc610",
+      "verifiedAt": "2026-10-09"
     }
   ],
   "localOnly": [
@@ -1401,5 +1441,17 @@
       "name": "m2a_04b_atomic_role_cutover_and_rls",
       "remoteVersion": "20260824153211"
     }
-  ]
+  ],
+  "lastIncrementalVerification": {
+    "date": "2026-10-09",
+    "movement": "position-assessment-v230",
+    "names": [
+      "generic_ai_request_history",
+      "position_assessment",
+      "ai_history_worker_boundary",
+      "position_assessment_operational_boundary"
+    ],
+    "evidence": "docs/qa/evidence/position-assessment-v230/production/migrations.json",
+    "historicalSnapshotVerifiedAtUnchanged": true
+  }
 }

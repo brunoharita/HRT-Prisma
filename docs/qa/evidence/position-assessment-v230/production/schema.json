@@ -1,0 +1,97 @@
+{
+  "counts": {
+    "attempts": 0,
+    "requests": 1,
+    "deliveries": 0,
+    "assessments": 0,
+    "usageEvents": 1
+  },
+  "tables": [
+    {
+      "rls": true,
+      "table": "ai_requests",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": true,
+      "serviceInsert": false
+    },
+    {
+      "rls": true,
+      "table": "ai_usage_events",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": true,
+      "serviceInsert": false
+    },
+    {
+      "rls": true,
+      "table": "position_assessments",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": false,
+      "serviceInsert": false
+    },
+    {
+      "rls": true,
+      "table": "position_assessment_attempts",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": false,
+      "serviceInsert": false
+    },
+    {
+      "rls": true,
+      "table": "position_assessment_events",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": false,
+      "serviceInsert": false
+    },
+    {
+      "rls": true,
+      "table": "position_assessment_deliveries",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": false,
+      "serviceInsert": false
+    },
+    {
+      "rls": true,
+      "table": "position_assessment_generation",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": false,
+      "serviceInsert": false
+    },
+    {
+      "rls": true,
+      "table": "position_assessment_audit",
+      "anonSelect": false,
+      "authInsert": false,
+      "authSelect": false,
+      "serviceInsert": false
+    }
+  ],
+  "benchmark": {
+    "id": "920758b4-8746-4a0e-a618-a5883ef5662d",
+    "scope": "platform",
+    "status": "succeeded",
+    "attempts": [
+      {
+        "result": "success",
+        "inputTokens": 377,
+        "outputTokens": 1907,
+        "observedCostUsd": null,
+        "estimatedCostUsd": 0.0023638
+      }
+    ],
+    "organizationId": null
+  },
+  "configuration": {
+    "installed": true,
+    "bootstrapConsumed": true,
+    "resendCipherPresent": true,
+    "dispatcherHashPresent": true
+  },
+  "historyCredentialInstalled": true
+}

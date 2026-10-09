@@ -43,4 +43,4 @@ Encontrar pessoas na Posição → selecionar/adicionar ao acompanhamento → ab
 
 ## Estado da execução
 
-Implementação local integral e testes dirigidos concluídos; AoT registra as evidências e as obrigações operacionais remanescentes. Publicação integral ainda exige migrations, configuração protegida, benchmark, funções/workers/web, smoke e sincronização.
+Execução integral publicada na versão2.3.0 em09/10/2026, SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956 em main/origin/VPS. Quatro migrations e funções aplicadas, instalação protegida concluída, benchmark sintético registrado no ledger, Parser/Synthesis saudáveis e web publicada. Smoke remoto50checks PASS; recibos e limites no AoT. Fechamento documental/contextos sincroniza Git sem reconstruir o runtime.

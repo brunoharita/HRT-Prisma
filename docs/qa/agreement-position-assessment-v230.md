@@ -75,6 +75,10 @@ As três imagens aprovadas são normativas para arquitetura visual; nomes/quanti
 
 Não há Q material de produto aberta neste movimento. A instalação protegida de Q-04a e as evidências de Q-04b são obrigações de execução, sem reabrir decisões aprovadas.
 
+### Recibo operacional, sem alteração do contrato congelado
+
+Em09/10/2026 Q-04a operacional concluída: ciphertext Resend instalado, bootstrap consumido, dispatcher protegido ativo, autenticação da chave verificada com payload vazio422 sem criar mensagem. Q-04b executada no runtime aprovado e benchmark sintético único10itens PASS, US$0,0023638estimados registrados como custo platform; dificuldade nominal não certifica calibração e conteúdo exige revisão humana. Publicada2.3.0 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956. Os estados de descoberta “pendente/não ativado” nos parágrafos anteriores e comparação histórica abaixo não representam estado operacional atual; recibos no AoT.
+
 ### Fundamento da descoberta e propostas aprovadas
 
 Os parágrafos abaixo preservam os detalhes da comparação apresentada. A resposta posterior do PO aprova Resend gratuito/criação da conta e a recomendação de Q-04b; supera somente as frases que os descreviam como pendentes. Não autoriza plano pago. Q-04a operacional continua até instalação verificada; Q-04c foi supersedida pela publicação autorizada com aviso/expurgo adiados; Q-05 aprovada nos limites registrados acima.

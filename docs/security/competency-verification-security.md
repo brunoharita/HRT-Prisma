@@ -1,6 +1,6 @@
 ---
 owner: security
-status: verified_in_prisma_qa
+status: position_assessment_deployed_and_boundary_verified
 version: 0.6.0
 last_verified: 2026-10-09
 ---
@@ -9,11 +9,11 @@ last_verified: 2026-10-09
 
 ## Estado
 
-Este documento descreve os controles aplicados no M5.1A, M5.1B e M5.1C ativos no Prisma-QA. O uso com Pessoas reais e qualquer provider externo continuam condicionados a privacidade, retenção, base legal, modelo, orçamento e aprovação específica.
+Este documento preserva os controles históricos do M5.1A, M5.1B e M5.1C. A extensão Avaliação para Posição2.3.0 foi publicada no Prisma em09/10/2026 conforme autorização e limites específicos abaixo; o nome histórico Prisma-QA não constitui ambiente remoto separado. A implantação não certifica base legal, equidade ou uso com candidatos reais.
 
 ## Extensão Avaliação para Posição / histórico de IA
 
-Agreement v0.5.0 congelado e publicação integral autorizada em09/10/2026. Aviso final e expurgo automático por prazo adiados; não há prazos30/180dias aprovados ou certificação de base legal. Controles de acesso, exclusão explícita e direitos preservados; instruções operacionais/limites permanecem visíveis antes de iniciar. Código não prova rollout; recibos no AoT.
+Agreement v0.5.0 congelado e publicação integral autorizada em09/10/2026. Aviso final e expurgo automático por prazo adiados; não há prazos30/180dias aprovados ou certificação de base legal. Controles de acesso, exclusão explícita e direitos preservados; instruções operacionais/limites permanecem visíveis antes de iniciar. Rollout confirmado por recibos no AoT: RLS/grants remotos, bootstrap consumido, acesso público ao segredo negado, token inválido/ator ausente/origem e versão indevidas recusados. Avisos Supabase SECURITY DEFINER de RPCs autorizadas e RLS sem policy de leitura nas tabelas privadas foram revisados: gates tenant/papel/segredo continuam obrigatórios, nenhum DML/SELECT público concedido.
 
 Todas as seis tabelas novas têm RLS, FKs compostas e DML direto revogado inclusive service_role. Operador passa pela autoridade ativa owner/admin/recruiter e vínculo Pessoa–Posição; leitura não cria avaliação e consulta é auditada. Gabarito fica no backend e em consultas privadas autorizadas; portal recebe só alternativas durante execução e comprovante ao terminar. Tokens256bits, hash para validação, ciphertext AES256 para envio, prazo/revogação/limite por tentativa, autosave otimista e submit transacional. Chave pessoal vai no fragmento da URL, fora do caminho HTTP e Referer; portal no-store/no-referrer e sem access_log no Nginx.
 

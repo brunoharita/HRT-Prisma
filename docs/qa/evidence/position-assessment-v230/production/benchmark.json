@@ -1,0 +1,53 @@
+{
+  "functionalSha": "3e271e32d6e9c7b7bd3b77571507ccd71d037956",
+  "model": "gpt-5.6-luna",
+  "endpoint": "https://api.openai.com/v1/responses",
+  "store": false,
+  "tools": false,
+  "technicalInputOnly": true,
+  "personalData": false,
+  "requestId": "920758b4-8746-4a0e-a618-a5883ef5662d",
+  "operationId": "beec4a86-a6aa-4d84-842d-9caf625e3208",
+  "attemptId": "4d6b268c-6c36-4597-9a76-10d2765d01c1",
+  "inputFingerprint": "b5ee9fd1d88d97ad0207136594728ef12f0256c75c2e85bf4317c70dfcc9d63e",
+  "scope": "platform",
+  "organizationId": null,
+  "status": "completed",
+  "items": 10,
+  "distribution": {
+    "easy": 6,
+    "medium": 3,
+    "hard": 1
+  },
+  "fiveDistinctOptionsPerItem": true,
+  "exactlyOneCorrectOption": true,
+  "explanationRequired": true,
+  "structuralValidation": "PASS",
+  "technicalKeyInspection": "PASS",
+  "inputTokens": 377,
+  "outputTokens": 1907,
+  "estimatedCostUsd": 0.0023638,
+  "observedCostUsd": null,
+  "durationMs": 17345,
+  "questionReview": "pending_human",
+  "insertedIntoItemBank": false,
+  "usedInCandidateAssessment": false,
+  "semanticReview": [
+    "GET para leitura",
+    "201 para criação",
+    "DELETE para remoção",
+    "400 para requisição inválida",
+    "Content-Type descreve representação",
+    "HTTPS protege transporte",
+    "page e limit paginam",
+    "PUT idempotente preserva estado final",
+    "401 indica autenticação ausente/inválida",
+    "Cursor e chave de idempotência preservam navegação/retry"
+  ],
+  "limitations": [
+    "Dificuldade nominal não calibrada empiricamente",
+    "Distratores de alguns itens são óbvios",
+    "Nenhuma aprovação humana de catálogo fabricada",
+    "Não certifica equidade ou qualidade de todas as questões futuras"
+  ]
+}

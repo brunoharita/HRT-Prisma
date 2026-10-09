@@ -31,6 +31,8 @@ Migração complementar `profile_synthesis_retry_upgrade` habilita ação explí
 
 ## Histórico de IA e convites —2.3.0
 
+Implantado em09/10/2026 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956, após migrations/configuração protegida. Parser/Synthesis healthy0restarts, cache privado e mounts preservados; imagem anterior em rollback-before-3e271e32d6e9. Dispatcher validado com fila vazia/processed0; sem convite fictício ou IA implícita no smoke. Recibos e limites no AoT position-assessment-v230.
+
 Runtime depende das migrations generic_ai_request_history/ai_history_worker_boundary e credencial AI_HISTORY_WORKER_SECRET protegida em modo400 UID1000, com SUPABASE_URL/chave pública. Token dedicado restrito às funções parser_ia/profile_synthesis e escopo empresa, sem chave de serviço. Provider só depois de ledger persistido; cache explícito registra custo externo zero/tokens nulos; falha/consumo desconhecido não desaparecem. Prompt/cache/fontes/autoridade existentes preservados.
 
 Synthesis recebe ASSESSMENT_DISPATCHER_SECRET distinto para drenar somente convites humanos já persistidos na fila, no máximo10por rodada com lease/backoff; falha de e-mail isolada não altera geração de síntese. Não cria candidatos/convites/IA implicitamente. Parser não recebe capacidade de envio. Instalação protegida usa bootstrap descartável do banco para registrar ciphertext Resend e hash dispatcher, sem segredo em SQL/logs/argumentos. Rollback mantém schema/ciphertext/filas/resultados; worker antigo perde só nova instrumentação/envio e requer retomada do worker validado. Imagens rollback-before-SHA12 e backups protegidos antes-v230 preservados; não apagar cache privado ou histórico. Evidências/AoT position-assessment-v230.

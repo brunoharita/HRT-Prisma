@@ -1,0 +1,39 @@
+{
+  "projectRef": "ioldpnqqvobprjiontre",
+  "functionalSha": "3e271e32d6e9c7b7bd3b77571507ccd71d037956",
+  "migrations": [
+    {
+      "version": "20261009225307",
+      "name": "generic_ai_request_history",
+      "localVersion": "20261009140000",
+      "statementSha256": "c95e543b20e03d1da4e41e9cfd24f0d49868f92f23e434c4b7686a63f6b2be89",
+      "statementsCount": 1,
+      "equalsReviewedPayload": true
+    },
+    {
+      "version": "20261009225326",
+      "name": "position_assessment",
+      "localVersion": "20261009150000",
+      "statementSha256": "e60dffcea56e95ea670bc98341220691255b165c6e58bff4eb8cc4dd6edebac9",
+      "statementsCount": 1,
+      "equalsReviewedPayload": true
+    },
+    {
+      "version": "20261009225332",
+      "name": "ai_history_worker_boundary",
+      "localVersion": "20261009160000",
+      "statementSha256": "fb2beb94cd1320f0a90f1c28d5b3f278cfcbfdbb7dbb6a45c2bc1f371f06c2c7",
+      "statementsCount": 1,
+      "equalsReviewedPayload": true
+    },
+    {
+      "version": "20261009225337",
+      "name": "position_assessment_operational_boundary",
+      "localVersion": "20261009170000",
+      "statementSha256": "b35a526ac39206e56193b91bbde31d2b8869b6f12f431790337245c1e07bc610",
+      "statementsCount": 1,
+      "equalsReviewedPayload": true
+    }
+  ],
+  "historicalLedgerReplayed": false
+}

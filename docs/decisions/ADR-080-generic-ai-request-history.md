@@ -1,10 +1,10 @@
 # ADR-080 — Histórico genérico de solicitações de IA
 
-Status: **Aceito pelo PO em09/10/2026; implementado localmente; rollout no AoT**. Data: 09/10/2026. Movimento: Avaliação para Posição v2.3.0, Agreement v0.5.0 D-14. Resposta explícita “OK” do PO à recomendação: decisão aceita; consumidores runtime instrumentados e testados.
+Status: **Aceito pelo PO e publicado em09/10/2026 na2.3.0**. Data: 09/10/2026. Movimento: Avaliação para Posição v2.3.0, Agreement v0.5.0 D-14. Resposta explícita “OK” do PO à recomendação: decisão aceita; consumidores runtime instrumentados, testados e implantados; recibos no AoT.
 
 ## Problema e autoridade
 
-O PO solicitou uma estrutura para registrar solicitações das funcionalidades atuais e futuras, pensando em consumo/pacotes de IA por empresa. Há `public.ai_usage_events`, porém a tabela observada em produção está vazia e não tem consumidores encontrados. Ela registra um resultado terminal, duração, organização, provider/model/version, tokens opcionais e `estimated_cost_usd` obrigatório com default zero. Falta distinguir solicitação lógica, tentativas, cache, andamento, falha com gasto, custo desconhecido e funções globais sem empresa.
+O PO solicitou uma estrutura para registrar solicitações das funcionalidades atuais e futuras, pensando em consumo/pacotes de IA por empresa. Na descoberta anterior à2.3.0, `public.ai_usage_events` estava vazia e nenhum consumidor foi identificado. O contrato legado registrava resultado terminal, duração, organização, provider/model/version, tokens opcionais e `estimated_cost_usd` obrigatório com default zero. Faltava distinguir solicitação lógica, tentativas, cache, andamento, falha com gasto, custo desconhecido e funções globais sem empresa.
 
 Zero registros no ledger não prova zero consumo da plataforma. Chamadas atuais têm logs e estados específicos, que não devem ser confundidos com um histórico genérico completo. Não fazer backfill com custos ou estados inventados.
 
@@ -47,7 +47,7 @@ Negativos de tenant/role/anon/platform, idempotência e concorrência, lifecycle
 
 Migration e RPC revisadas em PostgreSQL local descartável, seguidas de release:plan do diff validado para os destinos realmente afetados. Novos campos/versionamento devem ser compatíveis com registros antigos; não reescrever migrations. Serviços Parser/Synthesis e Edge não permanecem automaticamente fora do release ao ampliar D-14: o plano deve refletir instrumentação efetiva. Definir rollback das integrações sem apagar histórico e sem remover dados transacionais existentes.
 
-## Persistência local implementada, ainda não implantada
+## Persistência implementada e implantada
 
 `20261009140000_generic_ai_request_history.sql` adiciona `ai_requests` com contrato `ai-request-1.0.0` e estende `ai_usage_events` para `ai-usage-events-2.0.0`. Registros v1 mantêm valores e defaults originais, marcados `legacy_unverified`; não recebem pedido fictício. Novas tentativas em andamento têm resultado, duração, tokens e custo nulos. Custos externos podem ser desconhecidos, estimados com versão de preço e tokens observados, ou observados com hash da evidência. Valores monetários são USD, com precisão de oito casas; custo externo do cache é zero conhecido, sem tokens inventados. Consumo conhecido deve ser acompanhado da contagem de eventos com custo desconhecido, nunca interpretado como total completo.
 
@@ -55,7 +55,7 @@ FK composta vincula pedido e tentativa ao mesmo escopo/empresa. RLS permite leit
 
 Pedidos/tentativas são persistidos antes de chamar o provider. A RPC serializa mudanças do pedido com bloqueio de linha, oferece replay sem nova aquisição e rejeita mudança do payload ou do resultado final. Isso não é lease de worker nem garantia de execução externa exatamente uma vez; conciliação de tentativas interrompidas continua na integração do consumidor.
 
-QA: `node scripts/test-generic-ai-history-sql.mjs`, PostgreSQL17 em localhost55479, banco descartável vazio, 56 asserções/negativos PASS, ROLLBACK. Evidência: `docs/qa/evidence/position-assessment-v230/generic-ai-history/sql.txt`. O teste cobre grants, claims forjados, isolamento empresa/plataforma, estados, retry/replay, cache, falha com consumo, arredondamento monetário e preservação dos campos legados. Concorrência real entre conexões, consumidores, exclusão de referências individuais na integração e rollout remoto permanecem NOT TESTED. Nenhuma chamada paga, expurgo automático, cobrança ou migração remota foi executada.
+QA: `node scripts/test-generic-ai-history-sql.mjs`, PostgreSQL17 em localhost55479, banco descartável vazio, 56 asserções/negativos PASS, ROLLBACK. Evidência: `docs/qa/evidence/position-assessment-v230/generic-ai-history/sql.txt`. O teste cobre grants, claims forjados, isolamento empresa/plataforma, estados, retry/replay, cache, falha com consumo, arredondamento monetário e preservação dos campos legados. Complementos cobrem concorrência entre conexões, consumidores e exclusão contextual; rollout remoto confirmado. Benchmark sintético de plataforma registrado:377tokens de entrada/1907saída, US$0,0023638 estimados, custo observado desconhecido. Nenhum expurgo automático, backfill ou cobrança implementado.
 
 ## Instrumentação e fronteiras operacionais implementadas
 

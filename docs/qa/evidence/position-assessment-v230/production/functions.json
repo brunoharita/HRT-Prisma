@@ -1,0 +1,54 @@
+{
+  "position-assessment": {
+    "id": "69ab3e50-5e73-48f4-ba8b-e04871ede244",
+    "slug": "position-assessment",
+    "name": "position-assessment",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": 1791586661774,
+    "updated_at": 1791586661774,
+    "verify_jwt": false,
+    "import_map": false,
+    "entrypoint_path": "file:///tmp/user_fn_ioldpnqqvobprjiontre_69ab3e50-5e73-48f4-ba8b-e04871ede244_1/source/supabase/functions/position-assessment/index.ts",
+    "ezbr_sha256": "5bb897e1cc6eb0e32acfc02163bff6a780bbadee647f1991cfa1b2f21c87b488"
+  },
+  "matching-trajectory": {
+    "id": "bfc71fb4-1a57-421f-a2fc-44fba8558bf0",
+    "slug": "matching-trajectory",
+    "name": "matching-trajectory",
+    "status": "ACTIVE",
+    "version": 18,
+    "created_at": 1790358524784,
+    "updated_at": 1791586666151,
+    "verify_jwt": true,
+    "import_map": false,
+    "entrypoint_path": "file:///tmp/user_fn_ioldpnqqvobprjiontre_bfc71fb4-1a57-421f-a2fc-44fba8558bf0_18/source/supabase/functions/matching-trajectory/index.ts",
+    "ezbr_sha256": "72c56274834e92cf4409569ca2a2126bcaef3b0a3d88c817d068164c450e0b95"
+  },
+  "knowledge-agent": {
+    "id": "95851c31-65ca-4310-8941-f6a4e4dcdbe1",
+    "slug": "knowledge-agent",
+    "name": "knowledge-agent",
+    "status": "ACTIVE",
+    "version": 20,
+    "created_at": 1787777070537,
+    "updated_at": 1791586670960,
+    "verify_jwt": true,
+    "import_map": false,
+    "entrypoint_path": "file:///tmp/user_fn_ioldpnqqvobprjiontre_95851c31-65ca-4310-8941-f6a4e4dcdbe1_20/source/supabase/functions/knowledge-agent/index.ts",
+    "ezbr_sha256": "784ee7507ec34cfb818bc3db771c8824febc8804ee1c49446246b7b158191ba6"
+  },
+  "assessment-item-generator": {
+    "id": "bb93a946-a8c7-47f4-9484-d8aeb67549ba",
+    "slug": "assessment-item-generator",
+    "name": "assessment-item-generator",
+    "status": "ACTIVE",
+    "version": 7,
+    "created_at": 1788274497781,
+    "updated_at": 1791586675450,
+    "verify_jwt": true,
+    "import_map": false,
+    "entrypoint_path": "file:///tmp/user_fn_ioldpnqqvobprjiontre_bb93a946-a8c7-47f4-9484-d8aeb67549ba_7/source/supabase/functions/assessment-item-generator/index.ts",
+    "ezbr_sha256": "75c2892b0cd807df9f7e141b5c926473ac5fc523ce7ce2001021cec2f734a70f"
+  }
+}

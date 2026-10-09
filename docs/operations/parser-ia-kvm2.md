@@ -28,7 +28,7 @@ Publicado em 2026-10-03 no SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16
 
 O container `prisma-parser-ia` é singleton, Node 22, usuário `node` UID 1000, rede host Linux, escuta somente loopback. O gateway mantém auth/tenant/papel/origem/contrato e usa o Host lógico 8787 previamente validado pelo Parser. O worker não tem rota Traefik ou portas públicas. Cache novo fica em `deploy_parser-ia-cache`, com pasta 700 e arquivos 600; não é importado do PC. Lock em tmpfs privado é volátil, cache é persistente. Uma única inferência por vez, sem retry automático.
 
-O secret é um arquivo contendo somente `OPENAI_API_KEY=...`, em `/etc/prisma/parser-ia.env`; diretório host root 700, arquivo UID 1000/mode 400. Compose monta esse arquivo somente em `/run/secrets/parser_ia_env`. Nunca copiar `.env.local` inteiro, chave para build/env do container, PDF ou cache do PC. Nunca exibir valor por `cat`, `docker inspect` completo, logs ou shell tracing. Compose faz bind mount; ownership/permissões reais da origem precisam permitir leitura pelo UID 1000. Nenhum service role é necessário.
+O secret está em `/etc/prisma/parser-ia.env`; na implantação inicial continha somente `OPENAI_API_KEY=...` e na2.3.0 também recebe URL/chave pública e AI_HISTORY_WORKER_SECRET de propósito restrito. Diretório host root700, arquivo UID1000/mode400. Compose monta esse arquivo somente em `/run/secrets/parser_ia_env`. Nunca copiar `.env.local` inteiro, chave para build/env do container, PDF ou cache do PC. Nunca exibir valor por `cat`, `docker inspect` completo, logs ou shell tracing. Compose faz bind mount; ownership/permissões reais da origem precisam permitir leitura pelo UID1000. Nenhum service role é necessário.
 
 ## Publicar e verificar
 
@@ -51,6 +51,8 @@ Primeira implantação: parar somente `parser-ia` se houver risco; gateway infor
 Limites iniciais: 768 MiB RAM, 1 CPU, 64 PIDs; concorrência unitária e todos os limites do Parser existentes. Sem GPU: a inferência do modelo ocorre na OpenAI. A persistência/revisão permanecem no Supabase autorizado. Smoke sintético pode validar o processamento sem banco; uma importação humana até revisão continua evidência distinta. Histórico de implantação e resultados ficam em `../qa/aot-parser-ia-kvm2.md`.
 
 ## Histórico de IA e convites —2.3.0
+
+Implantado em09/10/2026 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956, após migrations/configuração protegida. Parser/Synthesis healthy0restarts, cache privado e mounts preservados; imagem anterior em rollback-before-3e271e32d6e9. Dispatcher validado com fila vazia/processed0; sem convite fictício ou IA implícita no smoke. Recibos e limites no AoT position-assessment-v230.
 
 Runtime depende das migrations generic_ai_request_history/ai_history_worker_boundary e credencial AI_HISTORY_WORKER_SECRET protegida em modo400 UID1000, com SUPABASE_URL/chave pública. Token dedicado restrito às funções parser_ia/profile_synthesis e escopo empresa, sem chave de serviço. Provider só depois de ledger persistido; cache explícito registra custo externo zero/tokens nulos; falha/consumo desconhecido não desaparecem. Prompt/cache/fontes/autoridade existentes preservados.
 

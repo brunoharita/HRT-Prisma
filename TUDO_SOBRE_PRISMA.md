@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 418
-source_manifest_sha256: 8954526dabb03ec66c6c7f460df06e85099109aba6cd8e2e6f2d26f6901bd4c7
+source_manifest_sha256: ebb408c1959737d6d2419551e842967221342a58498cc27c7f0018d0d8e47de4
 -->
 
 # Tudo sobre o Prisma
@@ -2626,17 +2626,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.61.0
+version: 2.62.0
 last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
 
-## Avaliação para Posição — v2.3.0, implementação local concluída
+## Avaliação para Posição — v2.3.0 publicada
 
-Publicação integral autorizada pelo PO em09/10/2026; Agreement/Execution v0.5.0 congelados. Implementação local cobre configuração/requisitos/distribuição exata, Banco/IA/Misto, revisão humana/cópia contextual, convites Resend com fila/claim/idempotência, portal resiliente com cinco alternativas, correção objetiva e resultado/atividade privados. Nada altera automaticamente Score/Perfil/Posição/etapa. Aviso final e expurgo temporal adiados, sem inventar base legal; exclusão explícita/direitos preservados. Resend domínio Verified, TLS oportunista e remetente suporte@hrtsolutions.com.br aprovados; credencial DPAPI protegida presente, instalação operacional ainda pendente. OpenAI Responses gpt-5.6-luna: máximo20questões/US$0,25pedido/US$10mês por empresa, reserva serializada e aprovação humana obrigatória.
+Publicação integral autorizada pelo PO em09/10/2026; Agreement/Execution v0.5.0 congelados. Publicada2.3.0 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956 em main/origin/VPS. Cobre configuração/requisitos/distribuição exata, Banco/IA/Misto, revisão humana/cópia contextual, convites Resend com fila/claim/idempotência, portal resiliente com cinco alternativas, correção objetiva e resultado/atividade privados. Nada altera automaticamente Score/Perfil/Posição/etapa. Aviso final e expurgo temporal adiados, sem inventar base legal; exclusão explícita/direitos preservados. Resend domínio Verified, TLS oportunista e remetente suporte@hrtsolutions.com.br aprovados; credencial instalada em ciphertext backend-only/bootstrapping consumido, autenticação conferida com payload vazio422 sem mensagem. OpenAI Responses gpt-5.6-luna: máximo20questões/US$0,25pedido/US$10mês por empresa, reserva serializada e aprovação humana obrigatória.
 
-Histórico genérico implementado conforme ADR-080: ai_requests + ai_usage_events v2, pedidos/tentativas/cache/custos desconhecidos, empresa/plataforma separados; instrumentados Parser/Synthesis/matching/Knowledge/gerador legado/novo, sem backfill/cobrança. Workers com credencial de propósito restrito, dispatcher reutiliza Synthesis só para convites já solicitados. Quatro migrations aditivas, quatro Edge Functions, Parser/Synthesis/web afetados; gateway/Paddle/Traefik preservados. Há um único Supabase remoto de produção, sem QA remoto separado. Testes dirigidos local/SQL/browser/conexões simultâneas passaram; AoT contém limites e evidências, sem afirmar jornada de candidatos reais. Rollout/benchmark/smoke/sincronização ainda devem ser registrados; produto remoto permanece2.2.1 até implantação verificada.
+Histórico genérico ativo conforme ADR-080: ai_requests + ai_usage_events v2, pedidos/tentativas/cache/custos desconhecidos, empresa/plataforma separados; instrumentados Parser/Synthesis/matching/Knowledge/gerador legado/novo, sem backfill/cobrança. Workers com credencial de propósito restrito, dispatcher reutiliza Synthesis só para convites já solicitados. Quatro migrations remotas20261009225307/26/32/37 verificadas por SHA256 dos statements; Edge position-assessment v1/custom auth, matching-trajectory v18, knowledge-agent v20, assessment-item-generator v7/JWT preservado. Parser/Synthesis healthy0restarts e web running0; gateway/Paddle/Traefik preservam IDs/imagens/restarts. Há um único Supabase remoto de produção, sem QA remoto separado. Local:63SQL novo/56histórico/48baseline,95Node/43Deno/20tooling/38browser/3disputas simultâneas PASS; tipos/build/contextos/lint/foundation PASS em snapshot sem arquivos alheios. CI branch38001471365/main38001581033 success,868testes PASS; smoke remoto50checks PASS após404 transitório da recriação, sem rebuild adicional. Benchmark único10questões sintéticas/6easy3medium1hard,377entrada+1907saída,US$0,0023638estimados/custo observadoNULL, registrado no ledger de plataforma; não inserido no catálogo nem aplicado a candidato. Rollbacks das três imagens e cache privado preservados. AoT/evidências em docs/qa/aot-position-assessment-v230.md. Jornada autenticada de Pessoa real/envio ou entrega real/calibração empírica NOT TESTED; aprovação humana nunca fabricada. Fechamento documental/contextos sincroniza Git sem reconstruir runtime.
 
 ## Cards compactos do acompanhamento — ajuste na 2.2.1
 
@@ -4651,7 +4651,7 @@ Alteração de capability é material e exige teste, documentação, Context Pac
 
 ---
 owner: architecture
-status: implemented_for_internal_qa
+status: implemented_and_deployed
 version: 1.1.0
 last_verified: 2026-10-09
 ---
@@ -4660,7 +4660,7 @@ last_verified: 2026-10-09
 
 ## Avaliação contextual para Posição — v2.3.0
 
-Agreement/Execution v0.5.0 congelados e publicação autorizada pelo PO. Jornada contextual após entrada no acompanhamento: configuração multirrequisito → Banco/IA/Misto → revisão humana → convite por e-mail → portal → resultado/atividade privados. Implementação local integral validada; rollout/evidências em docs/qa/aot-position-assessment-v230.md, sem presumir ativação pela existência do código.
+Agreement/Execution v0.5.0 congelados e publicação autorizada pelo PO. Jornada contextual após entrada no acompanhamento: configuração multirrequisito → Banco/IA/Misto → revisão humana → convite por e-mail → portal → resultado/atividade privados. Publicada2.3.0 em09/10/2026 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956; migrations/funções, configuração protegida, workers/web e smoke conferidos. Evidências e limitações em docs/qa/aot-position-assessment-v230.md; jornada autenticada de Pessoa real não exercitada.
 
 Migration20261009150000 cria seis tabelas tenant-consistentes: configuração/snapshots, tentativas/respostas/resultados, eventos, entregas, reservas de geração e auditoria. RPCs de operador reutilizam authorize_position_follow_up; sem DML direto. Snapshot emitido é imutável, correção objetiva transacional não escreve Score/Perfil/Knowledge/etapa. Exclusão explícita da Pessoa remove dados dependentes e preserva catálogo geral. Itens antigos de quatro alternativas permanecem históricos e inelegíveis.
 
@@ -9899,11 +9899,11 @@ Reavaliar se o PO aprovar múltiplos processos, arraste por toque, automações,
 
 # ADR-080 — Histórico genérico de solicitações de IA
 
-Status: **Aceito pelo PO em09/10/2026; implementado localmente; rollout no AoT**. Data: 09/10/2026. Movimento: Avaliação para Posição v2.3.0, Agreement v0.5.0 D-14. Resposta explícita “OK” do PO à recomendação: decisão aceita; consumidores runtime instrumentados e testados.
+Status: **Aceito pelo PO e publicado em09/10/2026 na2.3.0**. Data: 09/10/2026. Movimento: Avaliação para Posição v2.3.0, Agreement v0.5.0 D-14. Resposta explícita “OK” do PO à recomendação: decisão aceita; consumidores runtime instrumentados, testados e implantados; recibos no AoT.
 
 ## Problema e autoridade
 
-O PO solicitou uma estrutura para registrar solicitações das funcionalidades atuais e futuras, pensando em consumo/pacotes de IA por empresa. Há `public.ai_usage_events`, porém a tabela observada em produção está vazia e não tem consumidores encontrados. Ela registra um resultado terminal, duração, organização, provider/model/version, tokens opcionais e `estimated_cost_usd` obrigatório com default zero. Falta distinguir solicitação lógica, tentativas, cache, andamento, falha com gasto, custo desconhecido e funções globais sem empresa.
+O PO solicitou uma estrutura para registrar solicitações das funcionalidades atuais e futuras, pensando em consumo/pacotes de IA por empresa. Na descoberta anterior à2.3.0, `public.ai_usage_events` estava vazia e nenhum consumidor foi identificado. O contrato legado registrava resultado terminal, duração, organização, provider/model/version, tokens opcionais e `estimated_cost_usd` obrigatório com default zero. Faltava distinguir solicitação lógica, tentativas, cache, andamento, falha com gasto, custo desconhecido e funções globais sem empresa.
 
 Zero registros no ledger não prova zero consumo da plataforma. Chamadas atuais têm logs e estados específicos, que não devem ser confundidos com um histórico genérico completo. Não fazer backfill com custos ou estados inventados.
 
@@ -9946,7 +9946,7 @@ Negativos de tenant/role/anon/platform, idempotência e concorrência, lifecycle
 
 Migration e RPC revisadas em PostgreSQL local descartável, seguidas de release:plan do diff validado para os destinos realmente afetados. Novos campos/versionamento devem ser compatíveis com registros antigos; não reescrever migrations. Serviços Parser/Synthesis e Edge não permanecem automaticamente fora do release ao ampliar D-14: o plano deve refletir instrumentação efetiva. Definir rollback das integrações sem apagar histórico e sem remover dados transacionais existentes.
 
-## Persistência local implementada, ainda não implantada
+## Persistência implementada e implantada
 
 `20261009140000_generic_ai_request_history.sql` adiciona `ai_requests` com contrato `ai-request-1.0.0` e estende `ai_usage_events` para `ai-usage-events-2.0.0`. Registros v1 mantêm valores e defaults originais, marcados `legacy_unverified`; não recebem pedido fictício. Novas tentativas em andamento têm resultado, duração, tokens e custo nulos. Custos externos podem ser desconhecidos, estimados com versão de preço e tokens observados, ou observados com hash da evidência. Valores monetários são USD, com precisão de oito casas; custo externo do cache é zero conhecido, sem tokens inventados. Consumo conhecido deve ser acompanhado da contagem de eventos com custo desconhecido, nunca interpretado como total completo.
 
@@ -9954,7 +9954,7 @@ FK composta vincula pedido e tentativa ao mesmo escopo/empresa. RLS permite leit
 
 Pedidos/tentativas são persistidos antes de chamar o provider. A RPC serializa mudanças do pedido com bloqueio de linha, oferece replay sem nova aquisição e rejeita mudança do payload ou do resultado final. Isso não é lease de worker nem garantia de execução externa exatamente uma vez; conciliação de tentativas interrompidas continua na integração do consumidor.
 
-QA: `node scripts/test-generic-ai-history-sql.mjs`, PostgreSQL17 em localhost55479, banco descartável vazio, 56 asserções/negativos PASS, ROLLBACK. Evidência: `docs/qa/evidence/position-assessment-v230/generic-ai-history/sql.txt`. O teste cobre grants, claims forjados, isolamento empresa/plataforma, estados, retry/replay, cache, falha com consumo, arredondamento monetário e preservação dos campos legados. Concorrência real entre conexões, consumidores, exclusão de referências individuais na integração e rollout remoto permanecem NOT TESTED. Nenhuma chamada paga, expurgo automático, cobrança ou migração remota foi executada.
+QA: `node scripts/test-generic-ai-history-sql.mjs`, PostgreSQL17 em localhost55479, banco descartável vazio, 56 asserções/negativos PASS, ROLLBACK. Evidência: `docs/qa/evidence/position-assessment-v230/generic-ai-history/sql.txt`. O teste cobre grants, claims forjados, isolamento empresa/plataforma, estados, retry/replay, cache, falha com consumo, arredondamento monetário e preservação dos campos legados. Complementos cobrem concorrência entre conexões, consumidores e exclusão contextual; rollout remoto confirmado. Benchmark sintético de plataforma registrado:377tokens de entrada/1907saída, US$0,0023638 estimados, custo observado desconhecido. Nenhum expurgo automático, backfill ou cobrança implementado.
 
 ## Instrumentação e fronteiras operacionais implementadas
 
@@ -10716,7 +10716,7 @@ Publicado em 2026-10-03 no SHA funcional `4ccfbf1e74534f529db7bea04978d1ee2f9c16
 
 O container `prisma-parser-ia` é singleton, Node 22, usuário `node` UID 1000, rede host Linux, escuta somente loopback. O gateway mantém auth/tenant/papel/origem/contrato e usa o Host lógico 8787 previamente validado pelo Parser. O worker não tem rota Traefik ou portas públicas. Cache novo fica em `deploy_parser-ia-cache`, com pasta 700 e arquivos 600; não é importado do PC. Lock em tmpfs privado é volátil, cache é persistente. Uma única inferência por vez, sem retry automático.
 
-O secret é um arquivo contendo somente `OPENAI_API_KEY=...`, em `/etc/prisma/parser-ia.env`; diretório host root 700, arquivo UID 1000/mode 400. Compose monta esse arquivo somente em `/run/secrets/parser_ia_env`. Nunca copiar `.env.local` inteiro, chave para build/env do container, PDF ou cache do PC. Nunca exibir valor por `cat`, `docker inspect` completo, logs ou shell tracing. Compose faz bind mount; ownership/permissões reais da origem precisam permitir leitura pelo UID 1000. Nenhum service role é necessário.
+O secret está em `/etc/prisma/parser-ia.env`; na implantação inicial continha somente `OPENAI_API_KEY=...` e na2.3.0 também recebe URL/chave pública e AI_HISTORY_WORKER_SECRET de propósito restrito. Diretório host root700, arquivo UID1000/mode400. Compose monta esse arquivo somente em `/run/secrets/parser_ia_env`. Nunca copiar `.env.local` inteiro, chave para build/env do container, PDF ou cache do PC. Nunca exibir valor por `cat`, `docker inspect` completo, logs ou shell tracing. Compose faz bind mount; ownership/permissões reais da origem precisam permitir leitura pelo UID1000. Nenhum service role é necessário.
 
 ## Publicar e verificar
 
@@ -10740,6 +10740,8 @@ Limites iniciais: 768 MiB RAM, 1 CPU, 64 PIDs; concorrência unitária e todos o
 
 ## Histórico de IA e convites —2.3.0
 
+Implantado em09/10/2026 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956, após migrations/configuração protegida. Parser/Synthesis healthy0restarts, cache privado e mounts preservados; imagem anterior em rollback-before-3e271e32d6e9. Dispatcher validado com fila vazia/processed0; sem convite fictício ou IA implícita no smoke. Recibos e limites no AoT position-assessment-v230.
+
 Runtime depende das migrations generic_ai_request_history/ai_history_worker_boundary e credencial AI_HISTORY_WORKER_SECRET protegida em modo400 UID1000, com SUPABASE_URL/chave pública. Token dedicado restrito às funções parser_ia/profile_synthesis e escopo empresa, sem chave de serviço. Provider só depois de ledger persistido; cache explícito registra custo externo zero/tokens nulos; falha/consumo desconhecido não desaparecem. Prompt/cache/fontes/autoridade existentes preservados.
 
 Synthesis recebe ASSESSMENT_DISPATCHER_SECRET distinto para drenar somente convites humanos já persistidos na fila, no máximo10por rodada com lease/backoff; falha de e-mail isolada não altera geração de síntese. Não cria candidatos/convites/IA implicitamente. Parser não recebe capacidade de envio. Instalação protegida usa bootstrap descartável do banco para registrar ciphertext Resend e hash dispatcher, sem segredo em SQL/logs/argumentos. Rollback mantém schema/ciphertext/filas/resultados; worker antigo perde só nova instrumentação/envio e requer retomada do worker validado. Imagens rollback-before-SHA12 e backups protegidos antes-v230 preservados; não apagar cache privado ou histórico. Evidências/AoT position-assessment-v230.
@@ -10750,7 +10752,7 @@ Synthesis recebe ASSESSMENT_DISPATCHER_SECRET distinto para drenar somente convi
 
 # Configuração de e-mail da Avaliação para Posição
 
-09/10/2026. Domínio verificado, backend de envio ainda em preparação. Conta Resend criada pelo PO e confirmada na UI; domínio adicionado pelo agente dentro do escopo autorizado. Remetente indicado: `suporte@hrtsolutions.com.br`. Região observada: São Paulo (`sa-east-1`). Plano pago não autorizado. Nenhum e-mail foi enviado.
+09/10/2026. Domínio verificado e backend integrado publicado na2.3.0. Conta Resend criada pelo PO e confirmada na UI; domínio adicionado pelo agente dentro do escopo autorizado. Remetente: `suporte@hrtsolutions.com.br`. Região observada: São Paulo (`sa-east-1`). Plano pago não autorizado. Nenhum e-mail de teste enviado; autenticação da chave validada por payload vazio422 sem destinatário/mensagem.
 
 Domínio Resend: `hrtsolutions.com.br`, ID `34e39e21-8e1a-47fb-82c4-fdba3d23ebf7`. [Página de configuração](https://resend.com/domains/add/34e39e21-8e1a-47fb-82c4-fdba3d23ebf7). Cadastro não equivale a verificação nem a envio operacional.
 
@@ -10766,17 +10768,17 @@ Fonte dos conteúdos: UI autenticada do Resend para este domínio, não inferido
 
 O PO confirmou a criação/cópia da chave preparada como “Prisma - Convites de avaliação”. Consulta somente aos metadados pelo conector Resend confirmou a chave com esse nome; o valor não foi consultado. O mesmo conector confirmou domínio verified, região sa-east-1, envio habilitado, recebimento desabilitado e tracking de abertura/cliques desabilitado. A credencial do conector não é uma chave disponível para o backend da plataforma.
 
-`src/infrastructure/positionAssessmentEmailTransport.ts` implementa o adapter HTTPS isolado, com fetch/relógio injetados e nenhum consumidor ativo. Nove testes dirigidos com respostas falsas confirmam recibo de aceitação separado de entrega, replay com mesma chave/payload, rejeição de escopo/headers/configuração inválidos, falhas categorizadas sem PII, rate limit/concorrência e reconciliação após conflito ou perto da expiração de idempotência. Nenhum envio real nem teste de entrega foi realizado. Fontes do protocolo: [API de envio](https://resend.com/docs/api-reference/emails/send-email) e [idempotência](https://resend.com/docs/dashboard/emails/idempotency-keys).
+`src/infrastructure/positionAssessmentEmailTransport.ts` implementa o adapter HTTPS consumido pela Edge position-assessment. Nove testes dirigidos com respostas falsas confirmam recibo de aceitação separado de entrega, replay com mesma chave/payload, rejeição de escopo/headers/configuração inválidos, falhas categorizadas sem PII, rate limit/concorrência e reconciliação após conflito ou perto da expiração de idempotência. Nenhum envio real nem teste de entrega realizado. Fontes do protocolo: [API de envio](https://resend.com/docs/api-reference/emails/send-email) e [idempotência](https://resend.com/docs/dashboard/emails/idempotency-keys).
 
-O worker futuro deve obter autorização e claim transacional, persistir mensagem/remetente imutáveis e firstAttemptAtMs antes da primeira chamada e gravar o recibo com auditoria. O adapter faz uma chamada por invocação, timeout de15s, endpoint fixo HTTPS sem redirects e sem retries internos. A chave é derivada da empresa/job, sem e-mail/token. Recibo persistido impede novo envio; após24h menos30s de margem, a ausência de recibo exige reconciliação, sem trocar a chave. Conflito de payload nunca autoriza reenvio com nova chave. Isso não prova fila, exclusão mútua, autorização integrada ou persistência: são pendências explícitas.
+O consumidor exige autorização e claim transacional, persiste mensagem/remetente imutáveis e firstAttemptAtMs antes da primeira chamada e grava o recibo com auditoria. O adapter faz uma chamada por invocação, timeout de15s, endpoint fixo HTTPS sem redirects e sem retries internos. A chave é derivada da empresa/job, sem e-mail/token. Recibo persistido impede novo envio; após24h menos30s de margem, a ausência de recibo exige reconciliação, sem trocar a chave. Conflito de payload nunca autoriza reenvio com nova chave. Fila/exclusão mútua/autorização/persistência foram testadas em SQL local e conexões concorrentes; controles remotos e dispatcher conferidos nos recibos do AoT.
 
-Pendências operacionais: salvar a chave por entrada mascarada usando `tmp/save-position-assessment-resend-key.ps1`, que grava somente ciphertext DPAPI em arquivo ignorado pelo Git; instalar pelo fluxo protegido no backend aprovado; integrar fila/idempotência/reconciliação e smoke sem convites de teste a candidatos reais. O arquivo protegido estava ausente na continuação anterior; em09/10/2026, durante a análise de retenção, a presença foi confirmada por metadados do filesystem. Conteúdo/valor não lidos nem validado envio; instalação ainda pendente. Nunca colocar credencial em documentação, frontend, argumentos de comandos ou saída de ferramenta. Domínio verificado e chave não substituem os gates de tenant/revisão/envio explícito.
+Instalação operacional concluída: entrada mascarada DPAPI em arquivo ignorado pelo Git; transferência por SSH stdin ao backend aprovado, bootstrap único consumido e ciphertextAES256 privado. Ponte RSA4096/OAEP-SHA256 com chave privada DPAPI permitiu transferência entre sessões Windows sem texto claro no filesystem. Nenhum segredo em documentação/frontend/argumentos/saída de ferramenta. Domínio verificado e chave não substituem gates de tenant/revisão/envio explícito. Rotação futura usa novo fluxo protegido autorizado, nunca reabilita bootstrap consumido nem apaga fila/histórico.
 
 ## Backend integrado2.3.0
 
-Implementação local validada: position_assessment_invite exige ator humano/tenant/revisão, fixa mensagem/destinatário/prazo/token e gera fila. position_assessment_delivery claim/lease guarda firstAttempt antes da API; adapter envia uma vez por invocação com idempotência permanente do job, 24h menos30s e reconciliação quando aceite é desconhecido. Estado sent significa aceito pelo provider; entrega/abertura não verificadas. Nove testes de transporte, SQL/replay/conexões simultâneas e Deno consumer. Link /assessment/#token, hash backend e ciphertextAES256; sem secret no frontend/HTTPpath/Referer. Dispatcher de propósito restrito reutiliza Synthesis, sem disparos ou IA automáticos além da fila humana existente.
+Publicado no SHA funcional3e271e32: position_assessment_invite exige ator humano/tenant/revisão, fixa mensagem/destinatário/prazo/token e gera fila. position_assessment_delivery claim/lease guarda firstAttempt antes da API; adapter envia uma vez por invocação com idempotência permanente do job, 24h menos30s e reconciliação quando aceite é desconhecido. Estado sent significa aceito pelo provider; entrega/abertura não verificadas. Nove testes de transporte, SQL/replay/conexões simultâneas e Deno consumer. Link /assessment/#token, hash backend e ciphertextAES256; sem secret no frontend/HTTPpath/Referer. Dispatcher de propósito restrito reutiliza Synthesis, sem disparos ou IA automáticos além da fila humana existente.
 
-Entrada protegida DPAPI confirmada, instalação operacional a registrar no AoT. Bootstrap de uso único/credential ciphertext backend-only evita exigir PAT da conta ou service-role na VPS. Dados/secrets nunca em ferramentas/logs/Git; somente metadados de instalação. Nenhum candidato real será usado como teste, e aceite do provider não será alegado por fake.
+Recibos em docs/qa/evidence/position-assessment-v230/production: schema/config instalado, bootstrap consumido, segredo não consultável por browser, dispatcher200/processed0 e negação403 de segredo inválido, Resend422 após autenticação. Bootstrap/ciphertext evita PAT/service-role na VPS. Dados/secrets nunca em ferramentas/logs/Git; somente metadados. Nenhum candidato real usado como teste, nenhum aceite/entrega alegado por fake. Imagens/backups de secrets anteriores preservados; rollback mantém schema/filas/ciphertext/histórico e requer retomar dispatcher validado para continuar a fila.
 
 ---
 
@@ -10852,6 +10854,8 @@ Resultado/prompt1.1.0 e migração incremental das funções/defaults, sem tabel
 Migração complementar `profile_synthesis_retry_upgrade` habilita ação explícita para respostas inválidas antigas: chave nova do contrato corrigido, base/tenant/Perfil vigente conferidos, lock/cooldown/idempotência, job e tentativas legadas intactos. Não chamar o RPC real como smoke: ele solicita geração e pode causar custo. Verificar elegibilidade/histórico por metadados administrativos, sem textos pessoais; exercitar mutação/replay apenas em QA sintética com rollback. Esta ativação exige apenas banco e documentação; web/worker já compatíveis permanecem nas imagens validadas.
 
 ## Histórico de IA e convites —2.3.0
+
+Implantado em09/10/2026 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956, após migrations/configuração protegida. Parser/Synthesis healthy0restarts, cache privado e mounts preservados; imagem anterior em rollback-before-3e271e32d6e9. Dispatcher validado com fila vazia/processed0; sem convite fictício ou IA implícita no smoke. Recibos e limites no AoT position-assessment-v230.
 
 Runtime depende das migrations generic_ai_request_history/ai_history_worker_boundary e credencial AI_HISTORY_WORKER_SECRET protegida em modo400 UID1000, com SUPABASE_URL/chave pública. Token dedicado restrito às funções parser_ia/profile_synthesis e escopo empresa, sem chave de serviço. Provider só depois de ledger persistido; cache explícito registra custo externo zero/tokens nulos; falha/consumo desconhecido não desaparecem. Prompt/cache/fontes/autoridade existentes preservados.
 
@@ -15512,6 +15516,10 @@ As três imagens aprovadas são normativas para arquitetura visual; nomes/quanti
 - Q-05: Bruno ampliou explicitamente o escopo para histórico genérico de IA (D-14). Descoberta em leitura: `ai_usage_events` existe, tem zero registros e nenhum consumidor identificado; pedidos/budgets M5.1C são específicos. Recomendação apresentada ao PO: ampliar a tabela existente e adicionar `ai_requests`, distinguindo pedidos/tentativas, custo desconhecido e chamadas globais da plataforma. Resolvida pela resposta explícita “OK” do PO à recomendação em09/10/2026. Ampliar ai_usage_events e adicionar ai_requests; registrar pedidos/tentativas e consumo por empresa; chamadas globais são custo da plataforma; custo desconhecido não vira zero. ADR-080 aceito, implementação e validação autorizadas no mesmo movimento, sem preço/fatura/cobrança, consumo histórico inventado ou alegação de cobertura só pela tabela.
 
 Não há Q material de produto aberta neste movimento. A instalação protegida de Q-04a e as evidências de Q-04b são obrigações de execução, sem reabrir decisões aprovadas.
+
+### Recibo operacional, sem alteração do contrato congelado
+
+Em09/10/2026 Q-04a operacional concluída: ciphertext Resend instalado, bootstrap consumido, dispatcher protegido ativo, autenticação da chave verificada com payload vazio422 sem criar mensagem. Q-04b executada no runtime aprovado e benchmark sintético único10itens PASS, US$0,0023638estimados registrados como custo platform; dificuldade nominal não certifica calibração e conteúdo exige revisão humana. Publicada2.3.0 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956. Os estados de descoberta “pendente/não ativado” nos parágrafos anteriores e comparação histórica abaixo não representam estado operacional atual; recibos no AoT.
 
 ### Fundamento da descoberta e propostas aprovadas
 
@@ -20367,7 +20375,7 @@ v2.1.0 implementada, validada e publicada. Todos os D e P aplicáveis PASS nas f
 
 # AoT — Avaliação para Posição v2.3.0
 
-09/10/2026. Agreement/Execution v0.5.0 congelados pela ordem explícita do PO de implementar, integrar main e publicar2.3.0. Baseline31d5965ade8f834da538561972bc5a5fc9d76e90; branch codex/position-assessment-v230. Implementação local integral comprovada; rollout ainda pendente. Template docs/qa/aot-template.md.
+09/10/2026. Agreement/Execution v0.5.0 congelados pela ordem explícita do PO de implementar, integrar main e publicar2.3.0. Baseline31d5965ade8f834da538561972bc5a5fc9d76e90; branch codex/position-assessment-v230. Entrega integral publicada, SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956 em main/origin/VPS. Template docs/qa/aot-template.md.
 
 ## Matriz de Acordos
 
@@ -20375,18 +20383,18 @@ v2.1.0 implementada, validada e publicada. Todos os D e P aplicáveis PASS nas f
 | --- | --- | --- | --- | --- |
 | D-01 | Ação contextual após acompanhamento, workspace não cria registros | assessment-sql/sql.txt; browser/checks.json; baseline-follow-up/sql.txt | PASS | Sintético local, sem criar candidato em produção |
 | D-02 | Configuração/requisitos/versão/snapshot/revisão otimista persistidos | SQL, domínio, browser/configuration-*.png | PASS | Imutabilidade/versionamento negativos |
-| D-03 | Banco/IA/Misto explícitos, déficit por requisito/dificuldade, geração manual | Deno/runtime e SQL/budgets; browser/composition-*.png | PARTIAL | Benchmark vivo/ativação pendentes |
+| D-03 | Banco/IA/Misto explícitos, déficit por requisito/dificuldade, geração manual | Deno/runtime e SQL/budgets; browser/composition-*.png; production/benchmark.json/functions.json | PASS | Benchmark vivo sintético estrutural/técnico; dificuldade não calibrada; revisão humana obrigatória |
 | D-04 | Cinco alternativas distintas/uma correta/justificativa; catálogo privado compatível | SQL inválidos/tenant/cópia contextual; domínio | PASS | Itens antigos de quatro opções intactos/inelegíveis |
 | D-05 | Registry e distribuição exata1–5, múltiplos10, snapshot | Domínio, SQL20nível3=6/8/6, composition12+8 | PASS | Sem arredondamento/admin novo |
 | D-06 | Editar/substituir/aprovar, revisão final, snapshot imutável | SQL pendências/cópia banco; browser/review-*.png | PASS | Aprovação humana não fabricada |
-| D-07 | Fila/claim/lease/token/override e Resend idempotente, dispatcher no Synthesis | email-transport.txt; Deno; SQL configuração/fila; disputa lease | PARTIAL | Configuração protegida/deploy pendentes; sem envio real de teste |
+| D-07 | Fila/claim/lease/token/override e Resend idempotente, dispatcher no Synthesis | email-transport.txt; Deno; SQL configuração/fila; disputa lease; production/schema.json/resend-credential.json/smoke.json | PASS | Instalação protegida/chave autenticada e dispatcher conferidos; nenhum envio real nem entrega alegados |
 | D-08 | Portal/instruções, buffer/autosave/retomada/revisão/comprovante, correção backend | SQL tokens/prazo/revogação/replay/submit; browser/portal-*.png; disputa autosave | PASS | Sem gabarito/nota no portal, sem LLM para corrigir |
 | D-09 | Foco/mouse/zoom/atalhos por instância/versão, sequência/tempo/método/dedup | Domínio/atividade, SQL events/replay, browser/result-*.png | PASS | Sinais parciais/lacunas/suporte explícitos |
 | D-10 | Limites antes/durante/depois, sem fraude/decisão/captura universal | Negativos payload/keylogging/clipboard, render portal/resultado | PASS | Sem destino de janela/coordenadas/imagens |
 | D-11 | Resumo/respostas/gabarito/atividade privados, consulta auditada | SQL roles/tenant/auditoria; browser/result-*.png | PASS | Humano decide no acompanhamento |
 | D-12 | Auth/RLS/tenant/versão/secret/PII/auditoria; loading/erro/retry preservam escolha | SQL/grants,43Deno, browser rede falha/retry38checks | PASS | Testes reais de Pessoas NOT TESTED |
-| D-13 | Metadados2.3.0, plano seletivo, docs/contexto, main/produção/smoke | Implementação e validação local; recibos operacionais a registrar | PARTIAL | Ainda sem entrega remota |
-| D-14 | ai_requests + ai_usage_events v2 e todos os consumidores runtime | SQL56, consumidores Node/Deno, disputa do mesmo attempt | PASS | Cobertura local; ativação remota a registrar; sem backfill/cobrança |
+| D-13 | Metadados2.3.0, plano seletivo, docs/contexto, main/produção/smoke | production/ci.json/functions.json/migrations.json/smoke.json; Context Pack e sincronização | PASS | Mesmo SHA funcional; fechamento documental sem rebuild |
+| D-14 | ai_requests + ai_usage_events v2 e todos os consumidores runtime | SQL56, consumidores Node/Deno, disputa do mesmo attempt; production/schema.json/functions.json/smoke.json | PASS | Ativação remota e um pedido/tentativa de benchmark de plataforma; sem backfill/cobrança |
 
 ## Proibições verificadas
 
@@ -20412,7 +20420,7 @@ Mapa docs/qa/impact-position-assessment-v230.md revisado antes da integração D
 | Matching duas leituras/cache/conflito | Handler atual |35Deno incluindo provider/cache/tenant/revisão/ledger | PASS |
 | Knowledge políticas/opt-in/globais | Handler atual e3normalização | Teste quatro consumidores e normalização, custo platform | PASS |
 | Auth/portal/loading/shell | Tokens/componentes atuais |38browser sem exceções/IO externo +SQLnegativos | PASS |
-| Gateway/Traefik/Paddle | IDs/imagens live antes | Fora do plano; comparar metadados após rollout | NOT TESTED |
+| Gateway/Traefik/Paddle | IDs/imagens live antes | production/smoke.json: IDs/imagens/restarts preservados, controles HTTP mantidos | PASS |
 
 ### Novidade e preservação
 
@@ -20436,21 +20444,29 @@ Referências normativas: três imagens1536×1024 com dois estados cada, inspecio
 
 ## Desvios do contrato
 
-Nenhum desvio material de comportamento identificado. Adaptações menores A-01 acima. Decisão superveniente do PO supersede Q-04c e congelou v0.5.0 com aviso/expurgo adiados; não é parecer jurídico nem base legal inventada. Operacional ainda não concluído, sem declaração de release integral.
+Nenhum desvio material de comportamento identificado. Adaptações menores A-01 acima. Decisão superveniente do PO supersede Q-04c e congelou v0.5.0 com aviso/expurgo adiados; não é parecer jurídico nem base legal inventada. Obrigações operacionais concluídas nos recibos abaixo.
 
 ## Validação final
 
 SQL local: 63asserções novas,56histórico e48baseline, sempre ROLLBACK;95testes Node dirigidos,43Deno,20tooling,38checks browser e3disputas reais por conexões independentes. Tipos/build PASS. Sem suíte integral local. Evidências na pasta evidence/position-assessment-v230.
 
-Context/lint/foundation no snapshot exato preparado para commit, excluindo untracked alheios sem apagá-los. Root lint anterior varreu dumps alheios em output e falhou por whitespace; não constitui defeito corrigido nem autorização para alterar esses arquivos. Gerador/checker e own-diff devem ser registrados após estágio final.
+Context/lint/foundation PASS no snapshot exato preparado para commit, excluindo untracked alheios sem apagá-los:1180arquivos no lint/18tabelas e6contratos de versão na foundation. Root lint anterior varreu dumps alheios em output e falhou por whitespace; não constitui defeito corrigido nem autorização para alterar esses arquivos. Gerador/checker e own-diff PASS; fechamento documental repete apenas checks afetados. CI obrigatório GitHub branch38001471365/main38001581033 success,868testes/868pass/0fail; nenhuma suíte integral local executada.
 
 ## Git / QA / ambiente
 
-Baseline31d5965; codex/position-assessment-v230. Main/origin/VPS e Supabase remoto ainda no baseline; publicação integral pendente. Arquivos alheios preservados. Nenhum envio real de e-mail ou candidato/Perfil/decisão fabricado em produção. Benchmark sintético vivo e metadados operacionais serão anexados, sem conteúdo privado ou secrets.
+Baseline31d5965; codex/position-assessment-v230. SHA funcional3e271e32 em main/origin/VPS e runtime2.3.0. Quatro migrations remotas20261009225307/26/32/37 equivalentes aos payloads revisados dos arquivos locais20261009140000/150000/160000/170000, SHA256 de statements conferido; sem replay/db push histórico. position-assessment v1 ACTIVE/custom auth; matching-trajectory v18, knowledge-agent v20 e assessment-item-generator v7 ACTIVE/JWT preservado. Parser/Synthesis healthy0restarts; web running0restarts. Gateway/Traefik/Paddle mantêm exatamente IDs/imagens/restarts anteriores. Paddle piloto já unhealthy no baseline, fora do plano e não apresentado como recuperado.
+
+Bootstrap único consumido; Resend ciphertext backend-only, segredo dispatcher e token worker de propósito restrito instalados por SSH stdin/DPAPI, modo400 UID1000 nos arquivos de runtime. Valores nunca registrados em Git/SQL/logs/argumentos. Resend alcançou validação422 de payload vazio sem destinatário, comprovando autenticação sem produzir mensagem. Dispatcher200/processed0 e negação de segredo inválido; token worker válido recusou escopo platform com AI_HISTORY_WORKER_SCOPE_DENIED/42501. Browser não lê credencial e bootstrap consumido recusa reinstalação. Contagens remotas:0avaliações/0tentativas/0entregas,1pedido/1evento exclusivamente benchmark; nenhum candidato/Perfil/decisão fictício produtivo.
+
+Benchmark sintético único:10itens,6easy/3medium/1hard, cinco alternativas distintas/uma correta/justificativa; inspeção técnica dos gabaritos PASS. gpt-5.6-luna/Responses/store:false/sem tools/identidade,377entrada+1907saída,17.345ms, custo estimadoUS$0,0023638/custo observadoNULL. Pedido920758b4-8746-4a0e-a618-a5883ef5662d de platform concluído succeeded; não salvo no banco de questões nem aplicado a candidato. Dificuldade nominal/distratores não certificam calibração, equidade ou todas as gerações futuras; itens continuam pending_human.
+
+Smoke50checks PASS em production/smoke.json: versão/SHA no bundle,14assets atuais/anteriores, cinco rotas200, portal no-store/no-referrer, Nginx válido/readiness privado, gateway autenticado recusando chamadas anônimas, ações de operador401, convite inexistente403 sem gabarito, origem indevida403/contrato antigo409, controles secretos e serviços preservados. release-web.sh recebeu404 transitório imediatamente após recriação; aplicação estabilizou e passou sem reconstrução adicional. Imagens rollback-before-3e271e32d6e9 das três superfícies preservadas; schema aditivo/filas/histórico/cache permanecem no rollback, sem apagamento. Arquivos alheios preservados.
+
+Jornada autenticada de Pessoa real, envio/entrega real de e-mail, calibração/justiça empírica: NOT TESTED e não alegados como aceite. Smoke adicional em navegador contra produção ficou NOT TESTED por restrições locais de rede/execução do Chrome; não substitui os38checks visuais locais nem os50checks HTTP/runtime remotos. Aviso final/expurgo temporal: adiados por decisão explícita do PO. Nenhum parecer jurídico ou consentimento inventado.
 
 ## Conclusão
 
-Implementação local validada; D-03/D-07/D-13 PARTIAL até evidência operacional. Continuar até main/produção2.3.0/smoke/sincronização autorizados.
+Entrega integral2.3.0 publicada e verificada. Todos os D/P aplicáveis PASS nos ambientes/cenários acima. Fechamento documental/contextos sincroniza main/origin/VPS sem reconstruir o runtime funcional3e271e32.
 
 
 CI inicial38001052095 negou a integração: teste de versão ainda esperava2.2.1 e três avisos novos de erro não tinham ação no próprio Alert. Corrigidos o teste oficial de2.3.0 com histórico preservado e os avisos com retry contextual. Regressão dirigida productRelease/actionableNotices, tipos e38checks browser; nenhuma produção alterada durante a falha.
@@ -25623,7 +25639,7 @@ Encontrar pessoas na Posição → selecionar/adicionar ao acompanhamento → ab
 
 ## Estado da execução
 
-Implementação local integral e testes dirigidos concluídos; AoT registra as evidências e as obrigações operacionais remanescentes. Publicação integral ainda exige migrations, configuração protegida, benchmark, funções/workers/web, smoke e sincronização.
+Execução integral publicada na versão2.3.0 em09/10/2026, SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956 em main/origin/VPS. Quatro migrations e funções aplicadas, instalação protegida concluída, benchmark sintético registrado no ledger, Parser/Synthesis saudáveis e web publicada. Smoke remoto50checks PASS; recibos e limites no AoT. Fechamento documental/contextos sincroniza Git sem reconstruir o runtime.
 
 ---
 
@@ -25829,9 +25845,13 @@ Descobertas materiais devem atualizar este mapa e os testes antes do encerrament
 
 Relações diretas confirmadas: seis tabelas/RPCs de avaliação, ledger/rpcs de consumo, ação no acompanhamento, novas rotas/portal/UI, Edge position-assessment/matching-trajectory/knowledge-agent/assessment-item-generator, workers Parser/Synthesis e Dockerfiles. Dependência compartilhada aiHistory.ts justifica destinos explícitos no dispatcher1.0.4. Synthesis processa fila existente de convite com segredo distinto, sem broker/serviço novo. Transversais críticos: auth/RLS/auditoria, shell/loading/portal e contexto. Exclusão da Pessoa plausible_indirect testada com cascata e banco privado preservado. Matching/Score/Perfil/etapa plausible_indirect protegidos por snapshots antes/depois; instrumentação dos consumidores é direct, não mudança de semântica. Gateway/Traefik/Paddle no_impact_identified após análise dos imports, compose, configurações e plano: nenhum consumidor novo dessas APIs, volume ou imagem; comparar IDs/restarts live antes/depois. Parser normalização/prompt/cache e Synthesis fontes/revisão/diagnósticos preservados por testes dirigidos. Scripts offline de benchmark/curadoria não são consumidores runtime de plataforma.
 
-SQL local: 63asserções novas,56histórico e48baseline, sempre ROLLBACK;95testes Node dirigidos,42Deno,20tooling,38checks browser e3disputas reais por conexões independentes. Tipos/build PASS. Sem suíte integral local. Evidências na pasta evidence/position-assessment-v230.
+SQL local: 63asserções novas,56histórico e48baseline, sempre ROLLBACK;95testes Node dirigidos,43Deno,20tooling,38checks browser e3disputas reais por conexões independentes. Tipos/build PASS. Sem suíte integral local. Evidências na pasta evidence/position-assessment-v230.
 
 Baseline VPS: srv1038882, /opt/prisma SHA31d5965, web prisma-web:1.6.4, Parser prisma-parser-ia:1.0.0 healthy, Synthesis healthy, gateway1.1.0/Traefik preservados. Supabase único produção ioldpnqqvobprjiontre PG17.6; QA local isolada com rollback. Estado inicial acima é histórico de descoberta, não pendência de produto atual. Limitação física da fixture legada vazia e adaptações visuais explicitadas no AoT. Rollout segue migrations específicas → instalação protegida → quatro funções/workers/web mesmo SHA → smoke/sincronização; sem db push geral.
+
+## Fechamento do mapa
+
+Publicação2.3.0 no SHA funcional3e271e32 em main/origin/VPS, quatro migrations/funções e três runtimes conferidos;50checks remotos PASS. IDs/imagens/restarts de gateway/Traefik/Paddle exatamente preservados; cache Parser/secret mounts mantidos. Benchmark pago sintético de plataforma US$0,0023638estimados, sem candidato/conteúdo pessoal ou fixture de aplicação em produção. CI obrigatório868testes PASS e regressões dirigidas cobrem capacidades diretas/transversais acima. Nenhuma dependência adicional descoberta. Evidências/limites/AoT distinguem novidade, preservação e jornadas reais NOT TESTED; nenhuma declaração de calibração/equidade/entrega de e-mail. Estados iniciais de pendência são históricos, supersedidos pelo fechamento.
 
 ---
 
@@ -27735,7 +27755,7 @@ No M5.2, somente `service_role` executa staging, validação, diff e publicaçã
 
 ---
 owner: security
-status: verified_in_prisma_qa
+status: position_assessment_deployed_and_boundary_verified
 version: 0.6.0
 last_verified: 2026-10-09
 ---
@@ -27744,11 +27764,11 @@ last_verified: 2026-10-09
 
 ## Estado
 
-Este documento descreve os controles aplicados no M5.1A, M5.1B e M5.1C ativos no Prisma-QA. O uso com Pessoas reais e qualquer provider externo continuam condicionados a privacidade, retenção, base legal, modelo, orçamento e aprovação específica.
+Este documento preserva os controles históricos do M5.1A, M5.1B e M5.1C. A extensão Avaliação para Posição2.3.0 foi publicada no Prisma em09/10/2026 conforme autorização e limites específicos abaixo; o nome histórico Prisma-QA não constitui ambiente remoto separado. A implantação não certifica base legal, equidade ou uso com candidatos reais.
 
 ## Extensão Avaliação para Posição / histórico de IA
 
-Agreement v0.5.0 congelado e publicação integral autorizada em09/10/2026. Aviso final e expurgo automático por prazo adiados; não há prazos30/180dias aprovados ou certificação de base legal. Controles de acesso, exclusão explícita e direitos preservados; instruções operacionais/limites permanecem visíveis antes de iniciar. Código não prova rollout; recibos no AoT.
+Agreement v0.5.0 congelado e publicação integral autorizada em09/10/2026. Aviso final e expurgo automático por prazo adiados; não há prazos30/180dias aprovados ou certificação de base legal. Controles de acesso, exclusão explícita e direitos preservados; instruções operacionais/limites permanecem visíveis antes de iniciar. Rollout confirmado por recibos no AoT: RLS/grants remotos, bootstrap consumido, acesso público ao segredo negado, token inválido/ator ausente/origem e versão indevidas recusados. Avisos Supabase SECURITY DEFINER de RPCs autorizadas e RLS sem policy de leitura nas tabelas privadas foram revisados: gates tenant/papel/segredo continuam obrigatórios, nenhum DML/SELECT público concedido.
 
 Todas as seis tabelas novas têm RLS, FKs compostas e DML direto revogado inclusive service_role. Operador passa pela autoridade ativa owner/admin/recruiter e vínculo Pessoa–Posição; leitura não cria avaliação e consulta é auditada. Gabarito fica no backend e em consultas privadas autorizadas; portal recebe só alternativas durante execução e comprovante ao terminar. Tokens256bits, hash para validação, ciphertext AES256 para envio, prazo/revogação/limite por tentativa, autosave otimista e submit transacional. Chave pessoal vai no fragmento da URL, fora do caminho HTTP e Referer; portal no-store/no-referrer e sem access_log no Nginx.
 

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "position-assessment",
+    "version": 1,
+    "files": 2,
+    "exactReviewedSources": true,
+    "diffs": [],
+    "extra": []
+  },
+  {
+    "name": "matching-trajectory",
+    "version": 18,
+    "files": 14,
+    "exactReviewedSources": true,
+    "diffs": [],
+    "extra": []
+  },
+  {
+    "name": "knowledge-agent",
+    "version": 20,
+    "files": 4,
+    "exactReviewedSources": true,
+    "diffs": [],
+    "extra": []
+  },
+  {
+    "name": "assessment-item-generator",
+    "version": 7,
+    "files": 2,
+    "exactReviewedSources": true,
+    "diffs": [],
+    "extra": []
+  }
+]

@@ -1,6 +1,6 @@
 ---
 owner: architecture
-status: implemented_for_internal_qa
+status: implemented_and_deployed
 version: 1.1.0
 last_verified: 2026-10-09
 ---
@@ -9,7 +9,7 @@ last_verified: 2026-10-09
 
 ## Avaliação contextual para Posição — v2.3.0
 
-Agreement/Execution v0.5.0 congelados e publicação autorizada pelo PO. Jornada contextual após entrada no acompanhamento: configuração multirrequisito → Banco/IA/Misto → revisão humana → convite por e-mail → portal → resultado/atividade privados. Implementação local integral validada; rollout/evidências em docs/qa/aot-position-assessment-v230.md, sem presumir ativação pela existência do código.
+Agreement/Execution v0.5.0 congelados e publicação autorizada pelo PO. Jornada contextual após entrada no acompanhamento: configuração multirrequisito → Banco/IA/Misto → revisão humana → convite por e-mail → portal → resultado/atividade privados. Publicada2.3.0 em09/10/2026 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956; migrations/funções, configuração protegida, workers/web e smoke conferidos. Evidências e limitações em docs/qa/aot-position-assessment-v230.md; jornada autenticada de Pessoa real não exercitada.
 
 Migration20261009150000 cria seis tabelas tenant-consistentes: configuração/snapshots, tentativas/respostas/resultados, eventos, entregas, reservas de geração e auditoria. RPCs de operador reutilizam authorize_position_follow_up; sem DML direto. Snapshot emitido é imutável, correção objetiva transacional não escreve Score/Perfil/Knowledge/etapa. Exclusão explícita da Pessoa remove dados dependentes e preserva catálogo geral. Itens antigos de quatro alternativas permanecem históricos e inelegíveis.
 

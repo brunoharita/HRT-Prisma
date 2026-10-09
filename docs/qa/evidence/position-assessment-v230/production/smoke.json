@@ -1,0 +1,404 @@
+{
+  "functionalSha": "3e271e32d6e9c7b7bd3b77571507ccd71d037956",
+  "vpsHead": "3e271e32d6e9c7b7bd3b77571507ccd71d037956",
+  "checkedAt": "2026-10-09T23:07:23Z",
+  "checks": [
+    {
+      "name": "web_root",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "name": "current_asset",
+      "passed": true,
+      "status": 200,
+      "path": "/assets/index-BTwYoic1.js"
+    },
+    {
+      "name": "current_asset",
+      "passed": true,
+      "status": 200,
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js"
+    },
+    {
+      "name": "current_asset",
+      "passed": true,
+      "status": 200,
+      "path": "/assets/antd-vendor-Cv3JrkhW.js"
+    },
+    {
+      "name": "current_asset",
+      "passed": true,
+      "status": 200,
+      "path": "/assets/supabase-vendor-DoXvCMLf.js"
+    },
+    {
+      "name": "current_asset",
+      "passed": true,
+      "status": 200,
+      "path": "/assets/react-vendor-BdxMnOeJ.js"
+    },
+    {
+      "name": "current_asset",
+      "passed": true,
+      "status": 200,
+      "path": "/assets/antd-vendor-B5BXDqMa.css"
+    },
+    {
+      "name": "current_asset",
+      "passed": true,
+      "status": 200,
+      "path": "/assets/index-0nrX6U2B.css"
+    },
+    {
+      "name": "functional_sha_in_bundle",
+      "passed": true
+    },
+    {
+      "name": "version_230_in_bundle",
+      "passed": true
+    },
+    {
+      "name": "spa_route",
+      "passed": true,
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "name": "spa_route",
+      "passed": true,
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "name": "spa_route",
+      "passed": true,
+      "path": "/people",
+      "status": 200
+    },
+    {
+      "name": "spa_route",
+      "passed": true,
+      "path": "/assessment/",
+      "status": 200
+    },
+    {
+      "name": "portal_no_store",
+      "passed": true,
+      "header": "no-store"
+    },
+    {
+      "name": "portal_no_referrer",
+      "passed": true,
+      "header": "no-referrer"
+    },
+    {
+      "name": "previous_asset_preserved",
+      "passed": true,
+      "path": "/assets/index-CpKy076p.js",
+      "status": 200
+    },
+    {
+      "name": "previous_asset_preserved",
+      "passed": true,
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "name": "previous_asset_preserved",
+      "passed": true,
+      "path": "/assets/antd-vendor-Cv3JrkhW.js",
+      "status": 200
+    },
+    {
+      "name": "previous_asset_preserved",
+      "passed": true,
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "name": "previous_asset_preserved",
+      "passed": true,
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "name": "previous_asset_preserved",
+      "passed": true,
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "name": "previous_asset_preserved",
+      "passed": true,
+      "path": "/assets/index-DJw3yNX4.css",
+      "status": 200
+    },
+    {
+      "name": "nginx_valid",
+      "passed": true
+    },
+    {
+      "name": "parser_private_readiness",
+      "passed": true
+    },
+    {
+      "name": "unauthenticated_gateway_denied",
+      "passed": true,
+      "path": "/parser-ia-hosted/readiness",
+      "status": 401
+    },
+    {
+      "name": "unauthenticated_gateway_denied",
+      "passed": true,
+      "path": "/parser-ia-hosted/parse",
+      "status": 401
+    },
+    {
+      "name": "unauthenticated_gateway_denied",
+      "passed": true,
+      "path": "/document-intelligence/layout-parsing",
+      "status": 401
+    },
+    {
+      "name": "unauthenticated_gateway_denied",
+      "passed": true,
+      "path": "/document-intelligence-vl/layout-parsing",
+      "status": 401
+    },
+    {
+      "name": "operator_action_requires_identity",
+      "passed": true,
+      "action": "generate",
+      "status": 401
+    },
+    {
+      "name": "operator_action_requires_identity",
+      "passed": true,
+      "action": "send",
+      "status": 401
+    },
+    {
+      "name": "operator_action_requires_identity",
+      "passed": true,
+      "action": "dispatch",
+      "status": 401
+    },
+    {
+      "name": "unknown_invitation_denied",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "name": "unknown_invitation_no_key",
+      "passed": true
+    },
+    {
+      "name": "malformed_invitation_denied",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "name": "foreign_origin_denied",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "name": "obsolete_contract_denied",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "name": "invalid_dispatcher_denied",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "name": "configured_dispatcher_empty_queue",
+      "passed": true,
+      "status": 200,
+      "processed": 0
+    },
+    {
+      "name": "configured_worker_cannot_write_platform",
+      "passed": true,
+      "status": 401,
+      "errorCode": "42501",
+      "category": "AI_HISTORY_WORKER_SCOPE_DENIED"
+    },
+    {
+      "name": "consumed_bootstrap_denied",
+      "passed": true,
+      "status": 401,
+      "errorCode": "42501",
+      "category": "PA_SETUP_DENIED"
+    },
+    {
+      "name": "browser_cannot_read_email_secret",
+      "passed": true,
+      "status": 401
+    },
+    {
+      "name": "released_service_running",
+      "passed": true,
+      "nameOfService": "prisma-web"
+    },
+    {
+      "name": "released_service_running",
+      "passed": true,
+      "nameOfService": "prisma-parser-ia"
+    },
+    {
+      "name": "released_service_running",
+      "passed": true,
+      "nameOfService": "prisma-profile-synthesis"
+    },
+    {
+      "name": "released_worker_healthy",
+      "passed": true,
+      "nameOfService": "prisma-parser-ia"
+    },
+    {
+      "name": "released_worker_healthy",
+      "passed": true,
+      "nameOfService": "prisma-profile-synthesis"
+    },
+    {
+      "name": "out_of_scope_container_preserved",
+      "passed": true,
+      "nameOfService": "prisma-paddle-gateway"
+    },
+    {
+      "name": "out_of_scope_container_preserved",
+      "passed": true,
+      "nameOfService": "traefik"
+    },
+    {
+      "name": "out_of_scope_container_preserved",
+      "passed": true,
+      "nameOfService": "paddle-vl-llama-test"
+    }
+  ],
+  "containers": [
+    {
+      "name": "prisma-web",
+      "id": "df3bfcc3d5b6272583ecf162b66c4c77f6649cd4fed7c4c6dea07b30e1f4f9c6",
+      "image": "sha256:b53ee95bb7b8f5bf0e8acc7ede068a33c0390fc1a3674fb6dfb6b8bc4085f97e",
+      "status": "running",
+      "health": null,
+      "restarts": 0,
+      "mounts": [
+        {
+          "type": "volume",
+          "destination": "/run/paddle-gateway",
+          "source": "deploy_paddle-gateway-socket"
+        }
+      ]
+    },
+    {
+      "name": "prisma-parser-ia",
+      "id": "311f8e4f4d0f2c3e24c96bbbd098fcc0212561eb0862f4da3529792d1681c2f1",
+      "image": "sha256:786219d08845036060d99ca06e441c1fde98923228f60e5db7b29422f208e752",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0,
+      "mounts": [
+        {
+          "type": "bind",
+          "destination": "/run/secrets/parser_ia_env",
+          "source": "/etc/prisma/parser-ia.env"
+        },
+        {
+          "type": "volume",
+          "destination": "/var/lib/prisma/parser-ia",
+          "source": "deploy_parser-ia-cache"
+        }
+      ]
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+      "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0,
+      "mounts": [
+        {
+          "type": "bind",
+          "destination": "/run/secrets/profile-synthesis.env",
+          "source": "/etc/prisma/profile-synthesis.env"
+        },
+        {
+          "type": "bind",
+          "destination": "/run/secrets/openai.env",
+          "source": "/etc/prisma/parser-ia.env"
+        }
+      ]
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "status": "running",
+      "health": null,
+      "restarts": 0,
+      "mounts": [
+        {
+          "type": "volume",
+          "destination": "/run/paddle-gateway",
+          "source": "deploy_paddle-gateway-socket"
+        }
+      ]
+    },
+    {
+      "name": "traefik",
+      "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+      "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+      "status": "running",
+      "health": null,
+      "restarts": 0,
+      "mounts": [
+        {
+          "type": "volume",
+          "destination": "/letsencrypt",
+          "source": "traefik_traefik-letsencrypt"
+        },
+        {
+          "type": "bind",
+          "destination": "/var/run/docker.sock",
+          "source": "/var/run/docker.sock"
+        }
+      ]
+    },
+    {
+      "name": "paddle-vl-llama-test",
+      "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+      "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+      "status": "running",
+      "health": "unhealthy",
+      "restarts": 0,
+      "mounts": [
+        {
+          "type": "bind",
+          "destination": "/root/.cache",
+          "source": "/opt/prisma/models/llama-cache"
+        }
+      ]
+    }
+  ],
+  "rollback": [
+    {
+      "tag": "prisma-web:rollback-before-3e271e32d6e9",
+      "image": "sha256:51c85201a67fa4e4d1f3facacf267ecddafca040c01598641ccfafbba75befec"
+    },
+    {
+      "tag": "prisma-parser-ia:rollback-before-3e271e32d6e9",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616"
+    },
+    {
+      "tag": "prisma-profile-synthesis:rollback-before-3e271e32d6e9",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5"
+    }
+  ],
+  "passed": true
+}

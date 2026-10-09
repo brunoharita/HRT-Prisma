@@ -1,0 +1,8 @@
+{
+  "status": "NOT TESTED",
+  "scope": "Additional public production DOM smoke only",
+  "reason": "Isolated Chrome network denied in sandbox; normal-user process launch EACCES. No candidate session or private data used.",
+  "localVisualChecks": 38,
+  "remoteHttpRuntimeChecks": 50,
+  "localAndHttpEvidenceRemainValid": true
+}
