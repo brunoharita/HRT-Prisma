@@ -1,0 +1,31 @@
+{
+  "sha": "86c7397a87377de74c439285e9d6c518e606f8ce",
+  "version": "2.2.1",
+  "web": "PUBLISHED_AND_VERIFIED",
+  "database": "APPLIED_AND_VERIFIED",
+  "migration": "20261009023359_position_follow_up_location",
+  "edgeFunctions": "SKIPPED",
+  "parserIa": "SKIPPED",
+  "profileSynthesis": "SKIPPED",
+  "dispatcherExit": 1,
+  "immediateProbe": "HTTP404 during recreation",
+  "independentSmoke": "PASS, no redeploy",
+  "http200": 16,
+  "checks": 16,
+  "ci": [
+    {
+      "conclusion": "success",
+      "databaseId": 37875828019,
+      "headBranch": "main",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37875828019"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 37875709632,
+      "headBranch": "codex/compact-follow-up-cards",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37875709632"
+    }
+  ]
+}

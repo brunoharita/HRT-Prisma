@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 411
-source_manifest_sha256: d0afa316fb8bf19abbb34b63acfad96ea92830c432883ae3400c74f33da5f310
+source_manifest_sha256: 21ebad28f5e05131b6427d8bc47821d557d7d01a32dbcee07a2a9a0c4b324c7d
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-08
 
 ## Cards compactos do acompanhamento — ajuste na 2.2.1
 
-Implementação local validada conforme acordo/execução compact-follow-up-cards. Avatar/nome/cargo/cidade–UF à esquerda, quadrado com somente numeral à direita, aviso fora e rodapé horizontal Ver detalhes/Mover etapa. Idade preservada no detalhe. Cidade/estado atuais vêm de person_private_data.city/state_code, projeção mínima pela RPC get_position_follow_up com gates/grants mantidos; sem contato integral ou snapshot antigo. Cinco etapas/colunas iguais, seleção mobile e drag preservados; sem questões ou recálculo. SQL local: 48 verificações transacionais com rollback, incluindo negativos e invariância de Score/Perfil/Posição. Migration 20261009023359_position_follow_up_location aplicada e corpo/grants verificados; web pendente. Local: 8 testes e 46 verificações browser PASS, tipos/build/contextos em fechamento. Produto 2.2.1 mantido. Evidência e limitações em docs/qa/aot-compact-follow-up-cards.md.
+Publicada conforme acordo/execução compact-follow-up-cards. Avatar/nome/cargo/cidade–UF à esquerda, quadrado com somente numeral à direita, aviso fora e rodapé horizontal Ver detalhes/Mover etapa. Idade preservada no detalhe. Cidade/estado atuais vêm de person_private_data.city/state_code, projeção mínima pela RPC get_position_follow_up com gates/grants mantidos; sem contato integral ou snapshot antigo. Cinco etapas/colunas iguais, seleção mobile e drag preservados; sem questões ou recálculo. SQL local: 48 verificações transacionais com rollback, incluindo negativos e invariância de Score/Perfil/Posição. Migration 20261009023359_position_follow_up_location aplicada e corpo/grants verificados; frontend no SHA 86c7397a87377de74c439285e9d6c518e606f8ce, CI branch/main success e 16HTTP200/16checks PASS. Local: 8 testes, 48 SQL, 46 browser, 19 tooling, tipos/build/contextos/lint/foundation PASS. Produto 2.2.1 mantido; main/origin/VPS sincronizados no fechamento documental, sem rebuild. Jornada autenticada real NOT TESTED. Evidência e limitações em docs/qa/aot-compact-follow-up-cards.md.
 
 ## Etapas claras de acompanhamento — ajuste na 2.2.1
 
@@ -16427,13 +16427,17 @@ Acordo/execução compact-follow-up-cards v1.0.0; baseline fe35d88a7a67a124bc542
 | D-02/CA-02 | Nome/cargo/cidade-UF/Score; idade no detalhe, ausências honestas, zero e conteúdo longo; unitários e browser | PASS |
 | D-03/CA-03 | RPC retorna apenas city/state; fonte real privada atual que recebe contato publicado, sem PII integral. SQL 48 verificações, gates e tenant/version/score/history preservados | PASS |
 | D-04/P-01 | Cinco etapas/colunas iguais, drag/Escape/falha/conflito/rascunhos/formulários explícitos; browser proporcional; sem IA/mutação de Perfil/Knowledge | PASS |
-| CA-04 | CI/publicação migration+web/smoke/sincronização pendentes | PARTIAL |
+| CA-04 | tipos/build/contextos/lint/foundation/ledger/CI, migration+web/smoke/rollback/sincronização | PASS |
 
 Mapa aplicado: direct layout e leitura RPC; plausible_indirect lista/drawer/ações, regressão browser; critical_transversal gates/tenant/Score, negativos SQL; no_impact_identified para IA/ingestão/ocupação/Knowledge, sem alteração de serviços ou escritores. A migração só adiciona projeção de leitura aos mesmos joins e gates. Descoberta do contrato de persistência confirmou que contato não fica no JSON público do Perfil: city/state_code do cadastro privado são a fonte existente, explicitada no D-03. Nenhuma permissão ampliada ou dado pessoal alterado.
 
 Referência antiga tem quatro etapas ilustrativas; somente card é normativo, as cinco atuais são preservadas. Largura mínima 320px desktop preserva leitura com rolagem local; mobile 390/320 usa uma coluna. Sem desvio funcional material. SQL executado no PostgreSQL17 local vazio, transação com rollback. Sem QA remoto separado; jornada autenticada real NOT TESTED. Browser sintético e smoke público não comprovam operação autenticada real. Versão permanece 2.2.1. Arquivos alheios preservados.
 
 Local: 8 testes de domínio/rotas, 34 checks de regressão browser e 12 cenários visuais desktop1448/mobile390/320 PASS. Cards comuns 179px contra baseline323–351px, redução44–49%; longos quebram linhas sem overflow. Referência Bruno56/Diego62 e mobile inspecionados. Migração aplicada como 20261009023359_position_follow_up_location no projeto confirmado ioldpnqqvobprjiontre. Corpo normalizado get_position_follow_up 2cb4301c6a74c7833154d2ddb337ad7b confere com arquivo; autorizador/mutador/grants/search_path preservados. Advisors mantêm exatamente os achados do baseline, sem ampliação; URLs em backend-release.json. Nenhuma leitura ou mutação de Pessoa real para prova. Ledger aditivo registrado; db push histórico continua proibido. Rollback backend: republicar corpo anterior de get_position_follow_up da migration 20261008120000, mantendo gates/grants; UI lida com campos opcionais ausentes.
+
+Publicado no SHA funcional 86c7397a87377de74c439285e9d6c518e606f8ce, produto 2.2.1: migration de leitura mínima aplicada e frontend atualizado. CI branch 37875709632/main 37875828019 success. Host srv1038882; web sha256:51c85201a67fa4e4d1f3facacf267ecddafca040c01598641ccfafbba75befec, running/zero reinícios; 16HTTP200 e 16 checks de SHA/versão/layout/etapas/assets/infra PASS. Rollback sha256:033c370c167e5d52a77e7df148ebb89fe343ab31d1c455b41ead4cb814a925cc confirmado; Parser/Synthesis/gateway preservam IDs/imagens e workers healthy. Verificação de corpo/grants/RLS do banco em backend-release.json e rls-after.json. Fechamento documental sincroniza main/origin/VPS sem rebuild. Smoke público, jornada autenticada real NOT TESTED.
+
+Dispatcher derivou migration+web; migration foi aplicada pelo fluxo Supabase revisado e conferida antes do frontend. Validação genérica pnpm test do plano foi substituída localmente por 8 testes dirigidos +48 verificações SQL +46 browser, conforme impacto; 19 testes de tooling/contexto também PASS. CI existente executou seu gate completo. Executor SQL canônico atualizado para aplicar a projeção antes da fixture, reproduzido com rollback. Probe imediato do deploy retornou404/SSH22; verificação independente após estabilização passou sem reconstruir nem repetir deploy, consolidada em publication-consolidated.json. Nenhuma pendência de produto; limitações autenticadas permanecem explícitas.
 
 ---
 

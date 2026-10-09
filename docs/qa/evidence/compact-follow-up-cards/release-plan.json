@@ -1,0 +1,96 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/product/vacancy-intelligence.md",
+      "docs/qa/agreement-compact-follow-up-cards.md",
+      "docs/qa/aot-compact-follow-up-cards.md",
+      "docs/qa/evidence/compact-follow-up-cards/backend-release.json",
+      "docs/qa/evidence/compact-follow-up-cards/before-1448.json",
+      "docs/qa/evidence/compact-follow-up-cards/before-1448.png",
+      "docs/qa/evidence/compact-follow-up-cards/before-390.json",
+      "docs/qa/evidence/compact-follow-up-cards/before-390.png",
+      "docs/qa/evidence/compact-follow-up-cards/browser-results.json",
+      "docs/qa/evidence/compact-follow-up-cards/compact-browser.json",
+      "docs/qa/evidence/compact-follow-up-cards/detail-mobile.png",
+      "docs/qa/evidence/compact-follow-up-cards/drag-desktop.png",
+      "docs/qa/evidence/compact-follow-up-cards/kanban-desktop.png",
+      "docs/qa/evidence/compact-follow-up-cards/kanban-mobile.png",
+      "docs/qa/evidence/compact-follow-up-cards/list-desktop.png",
+      "docs/qa/evidence/compact-follow-up-cards/long-1448.png",
+      "docs/qa/evidence/compact-follow-up-cards/long-320.png",
+      "docs/qa/evidence/compact-follow-up-cards/long-390.png",
+      "docs/qa/evidence/compact-follow-up-cards/missing-1448.png",
+      "docs/qa/evidence/compact-follow-up-cards/missing-320.png",
+      "docs/qa/evidence/compact-follow-up-cards/missing-390.png",
+      "docs/qa/evidence/compact-follow-up-cards/normal-1448.png",
+      "docs/qa/evidence/compact-follow-up-cards/normal-320.png",
+      "docs/qa/evidence/compact-follow-up-cards/normal-390.png",
+      "docs/qa/evidence/compact-follow-up-cards/production-before.json",
+      "docs/qa/evidence/compact-follow-up-cards/reference-1448.png",
+      "docs/qa/evidence/compact-follow-up-cards/reference-320.png",
+      "docs/qa/evidence/compact-follow-up-cards/reference-390.png",
+      "docs/qa/evidence/compact-follow-up-cards/reference.png",
+      "docs/qa/evidence/compact-follow-up-cards/sql.txt",
+      "docs/qa/execution-compact-follow-up-cards.md",
+      "scripts/test-position-follow-up-sql.mjs",
+      "supabase/migration-ledger-map.json",
+      "supabase/migrations/20261009024000_position_follow_up_location.sql",
+      "supabase/qa/position_follow_up_verification.sql",
+      "tests/positionFollowUp.test.ts",
+      "tests/tooling/compactFollowUpCards.browser.mjs",
+      "tests/tooling/positionFollowUp.browser.mjs",
+      "tests/ui/position-follow-up/fixture.ts",
+      "web/src/domain/positionFollowUp.ts",
+      "web/src/pages/PositionFollowUpPage.tsx",
+      "web/src/pages/positionFollowUp.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "database",
+        "database-ledger",
+        "database-tests",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "tooling",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [
+        "supabase/migrations/20261009024000_position_follow_up_location.sql"
+      ],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run test:release-tooling",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test",
+      "pnpm run check:supabase-ledger"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [
+        "supabase/migrations/20261009024000_position_follow_up_location.sql"
+      ],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

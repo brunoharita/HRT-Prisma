@@ -1,0 +1,16 @@
+[
+  {
+    "conclusion": "success",
+    "databaseId": 37875828019,
+    "headBranch": "main",
+    "status": "completed",
+    "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37875828019"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 37875709632,
+    "headBranch": "codex/compact-follow-up-cards",
+    "status": "completed",
+    "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37875709632"
+  }
+]
