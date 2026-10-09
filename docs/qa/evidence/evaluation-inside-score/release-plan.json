@@ -1,0 +1,70 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.3",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/agreement-evaluation-inside-score.md",
+      "docs/qa/aot-evaluation-inside-score.md",
+      "docs/qa/evidence/evaluation-inside-score/added-1537.png",
+      "docs/qa/evidence/evaluation-inside-score/after-1024.png",
+      "docs/qa/evidence/evaluation-inside-score/after-1537.png",
+      "docs/qa/evidence/evaluation-inside-score/after-1813.png",
+      "docs/qa/evidence/evaluation-inside-score/after-320.png",
+      "docs/qa/evidence/evaluation-inside-score/after-390.png",
+      "docs/qa/evidence/evaluation-inside-score/after-768.png",
+      "docs/qa/evidence/evaluation-inside-score/baseline.json",
+      "docs/qa/evidence/evaluation-inside-score/before-1537.png",
+      "docs/qa/evidence/evaluation-inside-score/before-390.png",
+      "docs/qa/evidence/evaluation-inside-score/browser-results.json",
+      "docs/qa/evidence/evaluation-inside-score/header-1537.png",
+      "docs/qa/evidence/evaluation-inside-score/long-390.png",
+      "docs/qa/evidence/evaluation-inside-score/member-390.png",
+      "docs/qa/evidence/evaluation-inside-score/missing-390.png",
+      "docs/qa/evidence/evaluation-inside-score/production-before.json",
+      "docs/qa/evidence/evaluation-inside-score/reference.png",
+      "docs/qa/evidence/evaluation-inside-score/review-390.png",
+      "docs/qa/evidence/evaluation-inside-score/streaming-390.png",
+      "docs/qa/execution-evaluation-inside-score.md",
+      "tests/tooling/discoveryHeaderEvaluation.browser.mjs",
+      "web/src/components/AddToPositionFollowUp.tsx",
+      "web/src/pages/VacancyPages.tsx",
+      "web/src/styles.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "functionalSha": "4f68ed5421004da59f9219f4914b1614a2fe4d76",
+  "version": "2.2.1",
+  "ci": [
+    {
+      "conclusion": "success",
+      "databaseId": 37864083286,
+      "headBranch": "main",
+      "headSha": "4f68ed5421004da59f9219f4914b1614a2fe4d76",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37864083286"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 37863950098,
+      "headBranch": "codex/evaluation-inside-score",
+      "headSha": "4f68ed5421004da59f9219f4914b1614a2fe4d76",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37863950098"
+    }
+  ],
+  "dispatcher": {
+    "exitCode": 1,
+    "sshExitCode": 22,
+    "probeStatus": 404,
+    "phase": "immediate web recreation probe",
+    "repeatDeploy": false,
+    "receiptProduced": false
+  },
+  "independentSmoke": "PASS",
+  "http200": 16,
+  "checks": 14,
+  "closure": "Documentation-only checkout synchronization, no web rebuild",
+  "authenticatedRealJourney": "NOT TESTED"
+}

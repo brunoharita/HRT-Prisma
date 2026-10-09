@@ -10,7 +10,7 @@ last_verified: 2026-10-08
 
 ## Avaliação dentro do quadro do Score — correção na 2.2.1
 
-Nova localização aprovada em 08/10/2026: botão azul compacto dentro do fundo lilás do Score, abaixo das informações, preservando a largura desktop anterior (até 300px) e o agrupamento no celular. Mesmos handlers/IDs/papéis/loading/falha/retry/sucesso/navegação; sem alteração de matching, backend, IA ou versão. Acordo `docs/qa/agreement-evaluation-inside-score.md` v1.0.0 substitui D-01/D-02 da localização anterior. Regressão e publicação registradas no AoT `docs/qa/aot-evaluation-inside-score.md`; publicação pendente. Jornada autenticada real NOT TESTED.
+Nova localização aprovada em 08/10/2026: botão azul compacto dentro do fundo lilás do Score, abaixo das informações, preservando a largura desktop anterior (até 300px) e o agrupamento no celular. Mesmos handlers/IDs/papéis/loading/falha/retry/sucesso/navegação; sem alteração de matching, backend, IA ou versão. Acordo `docs/qa/agreement-evaluation-inside-score.md` v1.0.0 substitui D-01/D-02 da localização anterior. Regressão e publicação registradas no AoT `docs/qa/aot-evaluation-inside-score.md`: 51 checks browser/48 dirigidos/tipos/build/contextos/lint/foundation PASS. SHA funcional 4f68ed5421004da59f9219f4914b1614a2fe4d76, CI 37864083286/37863950098 success; somente web, imagem 10f4d781 running/zero reinícios, rollback e serviços preservados. Smoke 16 HTTP200/14 checks PASS após 404 transitório, sem repetir deploy. Fechamento documental sincroniza Git sem rebuild. Jornada autenticada real NOT TESTED.
 
 ## Localização anterior da avaliação no cabeçalho — histórico na 2.2.1
 

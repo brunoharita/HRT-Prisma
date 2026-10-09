@@ -1,0 +1,18 @@
+[
+  {
+    "conclusion": "success",
+    "databaseId": 37864083286,
+    "headBranch": "main",
+    "headSha": "4f68ed5421004da59f9219f4914b1614a2fe4d76",
+    "status": "completed",
+    "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37864083286"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 37863950098,
+    "headBranch": "codex/evaluation-inside-score",
+    "headSha": "4f68ed5421004da59f9219f4914b1614a2fe4d76",
+    "status": "completed",
+    "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/37863950098"
+  }
+]
