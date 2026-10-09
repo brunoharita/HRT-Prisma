@@ -10,19 +10,20 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe v2.2.1 autorizada e preserva histórico", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v2.2.1");
-  assert.equal(PRISMA_RELEASE.movement, 2);
-  assert.equal(PRISMA_RELEASE.delivery, 1);
-  const launch = PRISMA_RELEASE_HISTORY.at(-1)!;
+test("registro oficial expõe v2.3.0 autorizada e preserva histórico", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v2.3.0");
+  assert.equal(PRISMA_RELEASE.movement, 3);
+  assert.equal(PRISMA_RELEASE.delivery, 0);
+  const launch = PRISMA_RELEASE_HISTORY.at(-2)!;
   assert.equal(calculateProductRelease([{...launch,deliveries:launch.deliveries.slice(0,1)}]).version, "2.2.0");
-  const current = PRISMA_RELEASE_HISTORY.at(-2)!;
+  const current = PRISMA_RELEASE_HISTORY.at(-3)!;
   assert.equal(calculateProductRelease([{...current,skippedDeliveryNumbers:[],deliveries:current.deliveries.slice(0,1)}]).version, "2.1.0");
   assert.equal(calculateProductRelease([{...current,skippedDeliveryNumbers:[],deliveries:current.deliveries.slice(0,2)}]).version, "2.1.1");
   assert.equal(calculateProductRelease([{...current,skippedDeliveryNumbers:[],deliveries:current.deliveries.slice(0,3)}]).version, "2.1.2");
   assert.equal(calculateProductRelease([{...current,deliveries:[...current.deliveries,"Next"]}]).version, "2.1.8");
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -1)).version, "2.1.7");
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -2)).version, "2.0.12");
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -1)).version, "2.2.1");
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -2)).version, "2.1.7");
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -3)).version, "2.0.12");
   assert.equal(calculateProductRelease([{productGeneration:2,movement:1,firstDeliveryNumber:0,deliveries:["Launch","Next"]}]).version,"2.1.1");
   assert.throws(() => calculateProductRelease([{productGeneration:2,movement:1,firstDeliveryNumber:2 as 1,deliveries:["Invalid"]}]), /Invalid official/);
 });

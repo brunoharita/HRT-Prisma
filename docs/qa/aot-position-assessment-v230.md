@@ -84,3 +84,6 @@ Baseline31d5965; codex/position-assessment-v230. Main/origin/VPS e Supabase remo
 ## Conclusão
 
 Implementação local validada; D-03/D-07/D-13 PARTIAL até evidência operacional. Continuar até main/produção2.3.0/smoke/sincronização autorizados.
+
+
+CI inicial38001052095 negou a integração: teste de versão ainda esperava2.2.1 e três avisos novos de erro não tinham ação no próprio Alert. Corrigidos o teste oficial de2.3.0 com histórico preservado e os avisos com retry contextual. Regressão dirigida productRelease/actionableNotices, tipos e38checks browser; nenhuma produção alterada durante a falha.

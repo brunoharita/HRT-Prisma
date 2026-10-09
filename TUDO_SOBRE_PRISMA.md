@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 418
-source_manifest_sha256: fb953ef8e9b2a3850b098521983ba9423f84e2b9f0b7171170e09867d940097c
+source_manifest_sha256: 8954526dabb03ec66c6c7f460df06e85099109aba6cd8e2e6f2d26f6901bd4c7
 -->
 
 # Tudo sobre o Prisma
@@ -20451,6 +20451,9 @@ Baseline31d5965; codex/position-assessment-v230. Main/origin/VPS e Supabase remo
 ## Conclusão
 
 Implementação local validada; D-03/D-07/D-13 PARTIAL até evidência operacional. Continuar até main/produção2.3.0/smoke/sincronização autorizados.
+
+
+CI inicial38001052095 negou a integração: teste de versão ainda esperava2.2.1 e três avisos novos de erro não tinham ação no próprio Alert. Corrigidos o teste oficial de2.3.0 com histórico preservado e os avisos com retry contextual. Regressão dirigida productRelease/actionableNotices, tipos e38checks browser; nenhuma produção alterada durante a falha.
 
 ---
 
