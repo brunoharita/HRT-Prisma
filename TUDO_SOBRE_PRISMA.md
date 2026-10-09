@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 402
-source_manifest_sha256: d98def5a3681b3405ac9c65616c90dbe3f69867163a634a6e4e611462da54ef4
+documentation_source_count: 405
+source_manifest_sha256: 5a49e1d4e6b69a74d922f46d3517594f8e8a430b2e0e7279e782c84615928fef
 -->
 
 # Tudo sobre o Prisma
@@ -2626,13 +2626,17 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.55.0
+version: 2.56.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
 
-## Inclusão na avaliação destacada no cabeçalho — correção na 2.2.1
+## Avaliação dentro do quadro do Score — correção na 2.2.1
+
+Nova localização aprovada em 08/10/2026: botão azul compacto dentro do fundo lilás do Score, abaixo das informações, preservando a largura desktop anterior (até 300px) e o agrupamento no celular. Mesmos handlers/IDs/papéis/loading/falha/retry/sucesso/navegação; sem alteração de matching, backend, IA ou versão. Acordo `docs/qa/agreement-evaluation-inside-score.md` v1.0.0 substitui D-01/D-02 da localização anterior. Regressão e publicação registradas no AoT `docs/qa/aot-evaluation-inside-score.md`; publicação pendente. Jornada autenticada real NOT TESTED.
+
+## Localização anterior da avaliação no cabeçalho — histórico na 2.2.1
 
 Publicada em 08/10/2026 mantendo 2.2.1: botão azul Adicionar à avaliação com ícone de adicionar em região própria no cabeçalho de cada cartão da descoberta, à direita do Score no desktop; celular abaixo da identificação/Score e em largura total, antes de Consultar. Componente/handlers/gates/loading/falha/retry/sucesso/navegação preservados, inclusão independente de comparação/relação. Sem mudança de backend, IA ou score. Acordo 1.0.0, execução e AoT `docs/qa/agreement-discovery-header-evaluation.md`, `execution-discovery-header-evaluation.md`, `aot-discovery-header-evaluation.md`. Local: 48 testes dirigidos e 45 checks browser PASS; tipos/build/contextos/lint/foundation PASS. SHA funcional `f4a1ef89c8bc197bd481d39e70cbddb117420133`, CI branch 37862033038/main 37862156702 success. Somente web, imagem 9233290e running/zero reinícios; rollback 25f949ba e serviços Parser/Synthesis/gateway preservados. Smoke: 16 HTTP 200 e 14 checks de SHA/versão/layout/textos/assets/infra PASS após 404 transitório na recriação, sem repetir deploy. Fechamento documental/contexto sincroniza Git sem reconstruir runtime. Jornada autenticada real NOT TESTED.
 
@@ -11863,7 +11867,7 @@ Pessoas encontradas abre diretamente a descoberta; Acompanhamento conserva Lista
 
 ## Avaliação da relação da trajetória com a Posição
 
-Na descoberta, Adicionar à avaliação é uma ação azul preenchida com ícone de adicionar, no cabeçalho de cada cartão e ao lado direito do Prisma Score em desktop amplo. Em tablet pode ocupar uma segunda linha abaixo do Score; no celular fica em largura total após identificação/Score e antes de Consultar. O componente atual preserva loading, falha/retry, confirmação desabilitada e Abrir acompanhamento. Não duplicar a inclusão em Consultar nem exigir seleção de comparação/confirmação da relação. Papéis, cálculo e demais ações permanecem. Acordo `docs/qa/agreement-discovery-header-evaluation.md` v1.0.0 e AoT correspondente, ajuste na2.2.1.
+Na descoberta, Adicionar à avaliação é uma ação azul compacta com ícone de adicionar, dentro do quadro do Prisma Score, abaixo das informações e com margens iguais. O quadro preserva a largura desktop anterior (até 300px nos cartões com inclusão); tablet/celular mantêm a ação dentro dele, antes de Consultar. O componente preserva loading, falha/retry, confirmação desabilitada e Abrir acompanhamento. Não duplicar a inclusão nem exigir comparação/confirmação da relação. Papéis, cálculo e demais ações permanecem. Acordo `docs/qa/agreement-evaluation-inside-score.md` v1.0.0 substitui a localização do acordo discovery-header-evaluation; ajuste na 2.2.1.
 
 Na descoberta de Pessoas, o bloco explicita a pergunta sobre a experiência profissional e o trabalho da Posição selecionada. Confirmar relação com a Posição, Desconsiderar esta relação e Enviar relação à curadoria têm explicações permanentes, seguidas da orientação de que confirmar não comprova requisitos nem aprova no processo seletivo. Adicionar à avaliação permanece a ação independente para o Kanban. Selos descrevem a relação contextual confirmada/desconsiderada, inclusive na comparação; proposta à Knowledge continua sujeita à curadoria e aos gates atuais. Ajuste de clareza na2.2.1, sem mudança de matching, persistência, autoridade ou cálculo. Acordo `docs/qa/agreement-position-relation-clarity.md` v1.0.0 e AoT correspondente.
 
@@ -12413,6 +12417,36 @@ Referência fornecida: contraexemplo de desaparecimento, não novo layout normat
 ## Execução congelada
 
 Implementar D-01 a D-03 sob P-01/F-01, com A-01. AoT registra comportamento novo, preservação e limites. Sem mudança de contratos persistidos.
+
+---
+
+## Source: `docs/qa/agreement-evaluation-inside-score.md`
+
+# Acordo — Avaliação dentro do Score
+
+v1.0.0, frozen, 08/10/2026. Bruno aprovou a imagem compacta e pediu implementação rápida. Classe B; baseline main `9415f4180dad4d031ae02c94307fa1fed33a4187`, versão 2.2.1 mantida. Reutilização: MatchingScoreSummary e AddToPositionFollowUp existentes, sem biblioteca nova. Publicação autorizada pelo AGENTS.md seção 7.
+
+- D-01/D-UX-01: ação azul compacta dentro do fundo lilás do Score, abaixo das informações, com margens iguais e ícone centralizado. Largura desktop do Score permanece a anterior (máximo 300px para cartões com inclusão); altura acomoda a ação sem corte. Substitui D-01/D-UX-01 e CA-01 do acordo discovery-header-evaluation v1.0.0.
+- D-02/D-UX-02: ação permanece dentro do Score também em tablet/celular, acompanhando a largura responsiva do quadro e antes de Consultar. Substitui D-02/D-UX-02 e a posição da ação em CA-02 do acordo anterior. Manter leitura em 1813/1537/1024/768/390/320.
+- D-03: preservar inclusão explícita, mesmos IDs/handler/tenant/papéis, loading, falha/retry, sucesso desabilitado e navegação; Score, comparação, relação/revisão e demais ações preservados. Sem inclusão automática.
+- P-01: não duplicar ação, alargar o Score desktop para acomodá-la, cortar conteúdo ou fazer decisão humana/recálculo implícito. Sem backend/IA/permissões/dados reais/dependências novas.
+- F-01: versão, denominador/cálculo, novos fluxos e redesenho dos demais blocos.
+- A-01: engenharia decide implementação React/CSS, espaçamento/altura mínima e validação proporcional. Q: nenhuma pendência.
+
+CA-01/02: imagem aprovada `reference.png` é alvo normativo para topologia, largura relativa, agrupamento, posição da ação e estilo; pessoas/textos são ilustrativos. Comparar render antes/depois mesmos dados/viewport 1537/390, medir contenção/300px, responsividade e ícone. CA-03: reaproveitar teste browser de inclusão/falha/retry/sucesso/navegação e testes dirigidos. CA-04: tipos/build/contextos/diff, CI/publicação web/smoke/rollback/sincronização.
+
+## Mapa de impacto
+
+| Área | Relação | Baseline e preservação / regressão |
+| --- | --- | --- |
+| Score e CTA dos cabeçalhos normal/pendente | direct | SHA baseline, before1537/390; render/geometria e diff dos dois ramos |
+| AddToPositionFollowUp | direct | handler intocado; loading/falha/retry/sucesso/navegação sintéticos |
+| Score sem ação/drawer/comparação | plausible_indirect | prop opcional; texto/dados intactos, sem children conserva render; teste e diff |
+| Papéis/Consultar/relação/revisão | plausible_indirect | fixture member/review, handlers intocados |
+| Lista/Kanban/backend/tenant/IA/Perfil | no_impact_identified | nenhum serviço/contrato/consulta alterado; IDs e rotas preservados, CSS local |
+| Release/contexto | direct | web apenas, 2.2.1, CI/smoke/rollback |
+
+Sem jornada transversal crítica nova. Prova sintética não comprova inclusão autenticada real em produção.
 
 ---
 
@@ -16510,6 +16544,29 @@ F-01 preservado no diff. Nenhum desvio do contrato. Referência enviada é contr
 - HTTP 200 em `/`, `/sign-in`, `/profiles`, novo `/assets/index-CKGo3_Dp.js` e anteriores `/assets/index-BuKOGLjh.js`, `/assets/pdf-Du5hpUXa.js`. Bundle público confirma 2.0.4 e descrição desta entrega. Smoke imediato retornou 404 durante recriação; nova conferência após estabilização passou sem repetir build.
 - Evidências locais ignoradas: `tmp/education-period-v204-plan.json`, `tmp/education-period-v204-publish.json`, `tmp/education-period-v204-publish.log`, `tmp/education-period-v204-vps-release.log`. Avisos preexistentes de limpeza de worktrees sem permissão não impediram commit/promoção; nenhuma limpeza executada. Quatro arquivos/diretórios não rastreados anteriores foram preservados.
 - Fechamento documental sincroniza Git sem rebuild de runtime. Nenhuma pendência funcional; limites de teste autenticado real permanecem explícitos.
+
+---
+
+## Source: `docs/qa/aot-evaluation-inside-score.md`
+
+# AoT — Avaliação dentro do Score
+
+Acordo `agreement-evaluation-inside-score.md` v1.0.0 e execução correspondente; baseline `9415f4180dad4d031ae02c94307fa1fed33a4187`, 2.2.1. Evidências em `docs/qa/evidence/evaluation-inside-score/`.
+
+| Regra | Implementação / prova | Status |
+| --- | --- | --- |
+| D-01/02, CA-01/02 | children opcional em MatchingScoreSummary, nos cabeçalhos normal/pendente; quatro colunas e ação compacta de 36px dentro do fundo lilás. Reference normativa e before/after mesmos dados/viewport; seis larguras e estados | PARTIAL |
+| D-03, CA-03 | handler/IDs/gates intocados; browser loading/falha/retry/sucesso/navegação e 48 testes dirigidos | PARTIAL |
+| P-01/F-01 | sem duplicação/recálculo/decisão implícita; nenhum backend/IA/dado real/dependência/denominador/versão alterado | PASS |
+| CA-04 | tipos/build/contextos/diff, CI/web/smoke/rollback/sincronização | PARTIAL |
+
+## Impacto e preservação
+
+Direct: Score/CTA e componente de inclusão. Plausible_indirect: demais consumidores sem children, papéis/consultas/relação/revisão/comparação. No_impact_identified: lista/Kanban/backend/tenant/IA/Perfil; nenhum serviço/consulta alterado, CSS limitado ao cabeçalho/CTA. Baseline e regressão conforme mapa do acordo. Altura cresce apenas para acomodar a ação; largura desktop preservada. Sem nova dependência ou desvio material da imagem aprovada. Ramo semântico pendente preservado por diff idêntico; streaming/contextual coberto no browser. Jornada autenticada real NOT TESTED.
+
+## Validação e ambientes
+
+48 testes dirigidos PASS. Demais checks e publicação pendentes. Versão 2.2.1 mantida; arquivos alheios preservados. Fechar após evidência do render/CI/smoke, sem inferir prova real de persistência a partir de fixtures.
 
 ---
 
@@ -21893,6 +21950,14 @@ Usar baseline 07b79f6 e branch `codex/competency-curation-persistence`. Migraç�
 # Execução — Ação de avaliação no cabeçalho
 
 Aplicar integralmente `docs/qa/agreement-discovery-header-evaluation.md` v1.0.0, lido antes da implementação: D-01–04/D-UX-01–02, P-01–02/P-UX-01, F-01, A-01/A-UX-01 e CA-01–04, sem pendência material. Reutilizar AddToPositionFollowUp, mover ambos os ramos do CandidateMatchCard e estilizar apenas cabeçalho/CTA. Preservar handlers, papéis, score, relação e comparação. Registrar antes/depois sintético1537/390, geometria responsiva/estados, regressão dirigida e AoT. Produto2.2.1, sem nova biblioteca ou backend. Commit/plano/ensaio/push/CI/main/deploy web/smoke/sincronização conforme autorização permanente; nenhuma mutação humana produtiva como teste.
+
+---
+
+## Source: `docs/qa/execution-evaluation-inside-score.md`
+
+# Execução — Avaliação dentro do Score
+
+Implementar integralmente `docs/qa/agreement-evaluation-inside-score.md` v1.0.0: D-01/02/03, P-01, F-01, A-01 e CA-01/02/03/04, incluindo mapa de impacto e supersessão da localização anterior. Contrato lido integralmente; imagem compacta aprovada é normativa para agrupamento/largura/posição. Preservar estados e operações existentes. Fechar com AoT, regressão dirigida, contexto, release web e limites explícitos.
 
 ---
 

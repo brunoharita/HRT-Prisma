@@ -772,8 +772,7 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
       <AvatarInitials name={match.candidate.fullName} />
       <div className="prisma-vacancy-match-person"><Typography.Title level={3}>{match.candidate.fullName}</Typography.Title>
         <Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil publicado"}</Typography.Text></div>
-      <MatchingScoreSummary match={match} />
-      {followUpAction}
+      <MatchingScoreSummary match={match}>{followUpAction}</MatchingScoreSummary>
     </header>
     <div className="prisma-vacancy-action-hub is-pending">
       <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
@@ -807,8 +806,7 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
           <DetailedStatusTag match={match} />
         </Space>
       </div>
-      <MatchingScoreSummary match={match} />
-      {followUpAction}
+      <MatchingScoreSummary match={match}>{followUpAction}</MatchingScoreSummary>
     </header>
 
     <div className={"prisma-vacancy-action-hub" + (hasReview ? " has-review" : "")}>
@@ -912,17 +910,17 @@ function VerificationRequirementActions({ evaluationId, match, onNavigate, vacan
 function labelVacancyLevel(value: NonNullable<VacancyRequirementDraft["targetLevel"]>): string { return ({ basic: "Básico", intermediate: "Intermediário", advanced: "Avançado" } as const)[value]; }
 function labelVacancyCriticality(value: NonNullable<VacancyRequirementDraft["criticality"]>): string { return ({ low: "Baixa", medium: "Média", high: "Alta", critical: "Crítica" } as const)[value]; }
 
-function MatchingScoreSummary({ expanded = false, match }: { expanded?: boolean; match: VacancyCandidateMatch }) {
+function MatchingScoreSummary({ expanded = false, match, children }: { expanded?: boolean; match: VacancyCandidateMatch; children?: React.ReactNode }) {
   const score = match.score;
-  if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <section className="prisma-score-summary"><strong>Análise pendente</strong><span>{score.unavailableReason}</span><small>Sem nota ou prioridade automática. Consulta manual preservada.</small></section>;
+  if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <section className="prisma-score-summary"><strong>Análise pendente</strong><span>{score.unavailableReason}</span><small>Sem nota ou prioridade automática. Consulta manual preservada.</small>{children}</section>;
   if (match.discoveryGroup === "contextual_signals") {
     const signalCount = new Set([
       ...match.requirements.filter((item) => item.status !== "no_evidence").map((item) => item.requirement.label),
       ...match.trajectoryAssessment.evidence.map((item) => item.label),
     ]).size;
-    return <section className={`prisma-score-summary${expanded ? " is-expanded" : ""}`}><strong>{signalCount} sinal(is)</strong><span>Sem trajetória profissional relacionada</span><small>Não participa do Prisma Score comparável.</small></section>;
+    return <section className={`prisma-score-summary${expanded ? " is-expanded" : ""}`}><strong>{signalCount} sinal(is)</strong><span>Sem trajetória profissional relacionada</span><small>Não participa do Prisma Score comparável.</small>{children}</section>;
   }
-  return <section className={`prisma-score-summary${expanded ? " is-expanded" : ""}`}><strong>{score.score === null ? "Score indisponível" : `${score.score}/100`}</strong><span>{score.status === "provisional" ? "Compatibilidade observada provisória" : score.status === "definitive" ? "Compatibilidade observada" : "Critérios insuficientes ou versão desconhecida"}</span><small>Cobertura das evidências: {score.coveragePercent}%</small>{match.stableResult ? <small>{match.stableResult.state === "updating" ? "Atualização em andamento · resultado anterior preservado" : match.stableResult.state === "update_failed" ? "Atualização não concluída · resultado anterior preservado" : `Resultado salvo · referência ${score.referenceDate}`}</small> : null}</section>;
+  return <section className={`prisma-score-summary${expanded ? " is-expanded" : ""}`}><strong>{score.score === null ? "Score indisponível" : `${score.score}/100`}</strong><span>{score.status === "provisional" ? "Compatibilidade observada provisória" : score.status === "definitive" ? "Compatibilidade observada" : "Critérios insuficientes ou versão desconhecida"}</span><small>Cobertura das evidências: {score.coveragePercent}%</small>{match.stableResult ? <small>{match.stableResult.state === "updating" ? "Atualização em andamento · resultado anterior preservado" : match.stableResult.state === "update_failed" ? "Atualização não concluída · resultado anterior preservado" : `Resultado salvo · referência ${score.referenceDate}`}</small> : null}{children}</section>;
 }
 
 function ScoreDimension({ dimension }: { dimension: MatchingScoreDimension }) {

@@ -6256,11 +6256,11 @@ textarea {
 .prisma-vacancy-match-card.is-dismissed { opacity: 0.72; background: #f8fafc; }
 .prisma-vacancy-match-layout { display: grid; gap: 16px; min-width: 0; }
 .prisma-vacancy-match-identity { display: grid; grid-template-columns: auto auto minmax(0, 1fr) minmax(250px, 350px); gap: 14px; align-items: center; min-width: 0; }
-.prisma-vacancy-match-identity.has-follow-up { grid-template-columns: auto auto minmax(0, 1fr) minmax(210px, 300px) minmax(220px, 260px); }
-.prisma-vacancy-match-action { min-width: 0; }
+.prisma-vacancy-match-identity.has-follow-up { grid-template-columns: auto auto minmax(0, 1fr) minmax(210px, 300px); }
+.prisma-vacancy-match-action { min-width: 0; margin-top: 6px; }
 .prisma-add-to-evaluation { display: flex; width: 100%; min-width: 0; }
 .prisma-add-to-evaluation > .ant-space-item { width: 100%; min-width: 0; }
-.prisma-add-to-evaluation > .ant-space-item > .ant-btn { width: 100%; height: auto; min-height: 42px; white-space: normal; }
+.prisma-add-to-evaluation > .ant-space-item > .ant-btn { width: 100%; height: auto; min-height: 36px; white-space: normal; }
 .prisma-vacancy-match-identity h3.ant-typography { margin: 0 0 2px; font-size: 1.4rem; }
 .prisma-vacancy-match-person { min-width: 0; }
 .prisma-vacancy-match-identity small,
@@ -6380,8 +6380,6 @@ textarea {
 .prisma-match-highlight-card li { display: grid; grid-template-columns: auto 1fr; gap: 8px; }
 
 @media (max-width: 1100px) {
-  .prisma-vacancy-match-identity.has-follow-up { grid-template-columns: auto auto minmax(0, 1fr) minmax(210px, 300px); }
-  .prisma-vacancy-match-action { grid-column: 4; }
   .prisma-vacancy-start-card > .ant-card-body { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .prisma-requirement-editor { grid-template-columns: minmax(180px, 1fr) minmax(150px, 0.55fr) minmax(240px, auto) auto; }
   .prisma-vacancy-evidence-layout { grid-template-columns: 1fr; }
@@ -6391,7 +6389,6 @@ textarea {
 
 @media (max-width: 760px) {
   .prisma-vacancy-match-identity.has-follow-up { grid-template-columns: auto auto minmax(0, 1fr); }
-  .prisma-vacancy-match-action { grid-column: 1 / -1; }
   .prisma-vacancy-toolbar > .ant-card-body,
   .prisma-vacancy-start-card > .ant-card-body,
   .prisma-vacancy-form-grid,
