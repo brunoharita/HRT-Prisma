@@ -334,51 +334,51 @@ SET
 RESET
 ROLLBACK
 
-psql:output/compact-cards-local.sql:280: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:281: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:283: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:285: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:287: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:289: NOTICE:  PASS: opening a position never creates a process
-psql:output/compact-cards-local.sql:290: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:291: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:293: NOTICE:  PASS: explicit entry, persisted score, authorized derived age
-psql:output/compact-cards-local.sql:294: NOTICE:  PASS: birth date not exposed
-psql:output/compact-cards-local.sql:295: NOTICE:  PASS: current registered location exposed without full profile
-psql:output/compact-cards-local.sql:296: NOTICE:  PASS: contact email not exposed
-psql:output/compact-cards-local.sql:301: NOTICE:  PASS: missing state does not infer state from registered city
-psql:output/compact-cards-local.sql:305: NOTICE:  PASS: missing city stays unavailable
-psql:output/compact-cards-local.sql:309: NOTICE:  PASS: duplicate inclusion idempotent
-psql:output/compact-cards-local.sql:310: NOTICE:  PASS: idempotence preserves audit
-psql:output/compact-cards-local.sql:311: NOTICE:  PASS: denied (40001)
-psql:output/compact-cards-local.sql:312: NOTICE:  PASS: denied (42501)
-psql:output/compact-cards-local.sql:313: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:314: NOTICE:  PASS: denied (40001)
-psql:output/compact-cards-local.sql:315: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:316: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:317: NOTICE:  PASS: drag to interview does not schedule
-psql:output/compact-cards-local.sql:318: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:319: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:320: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:321: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:322: NOTICE:  PASS: explicit interview schedules
-psql:output/compact-cards-local.sql:323: NOTICE:  PASS: explicit reschedule audited
-psql:output/compact-cards-local.sql:324: NOTICE:  PASS: cancellation restores awaiting interview
-psql:output/compact-cards-local.sql:325: NOTICE:  PASS: moving to decision does not decide
-psql:output/compact-cards-local.sql:326: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:327: NOTICE:  PASS: explicit decision with rationale
-psql:output/compact-cards-local.sql:328: NOTICE:  PASS: closing preserves decision
-psql:output/compact-cards-local.sql:329: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:330: NOTICE:  PASS: explicit reopening preserves phase
-psql:output/compact-cards-local.sql:331: NOTICE:  PASS: same person independent position
-psql:output/compact-cards-local.sql:332: NOTICE:  PASS: closure without conclusion is not rejection
-psql:output/compact-cards-local.sql:333: NOTICE:  PASS: profile links to both processes
-psql:output/compact-cards-local.sql:334: NOTICE:  PASS: process close preserves individual stage
-psql:output/compact-cards-local.sql:335: NOTICE:  PASS: denied (22023)
-psql:output/compact-cards-local.sql:336: NOTICE:  PASS: process explicit reopening
-psql:output/compact-cards-local.sql:338: NOTICE:  PASS: all operational mutations preserve score, profile and position
-psql:output/compact-cards-local.sql:339: NOTICE:  PASS: all new tables enforce RLS
-psql:output/compact-cards-local.sql:340: NOTICE:  PASS: no direct write or service read grants
-psql:output/compact-cards-local.sql:341: NOTICE:  PASS: failed operations do not leave partial audit
-psql:output/compact-cards-local.sql:342: NOTICE:  PASS: board does not expose integral profile data
-psql:output/compact-cards-local.sql:344: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:278: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:279: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:281: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:283: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:285: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:287: NOTICE:  PASS: opening a position never creates a process
+psql:output/position-follow-up-local.sql:288: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:289: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:291: NOTICE:  PASS: explicit entry, persisted score, authorized derived age
+psql:output/position-follow-up-local.sql:292: NOTICE:  PASS: birth date not exposed
+psql:output/position-follow-up-local.sql:293: NOTICE:  PASS: current registered location exposed without full profile
+psql:output/position-follow-up-local.sql:294: NOTICE:  PASS: contact email not exposed
+psql:output/position-follow-up-local.sql:299: NOTICE:  PASS: missing state does not infer state from registered city
+psql:output/position-follow-up-local.sql:303: NOTICE:  PASS: missing city stays unavailable
+psql:output/position-follow-up-local.sql:307: NOTICE:  PASS: duplicate inclusion idempotent
+psql:output/position-follow-up-local.sql:308: NOTICE:  PASS: idempotence preserves audit
+psql:output/position-follow-up-local.sql:309: NOTICE:  PASS: denied (40001)
+psql:output/position-follow-up-local.sql:310: NOTICE:  PASS: denied (42501)
+psql:output/position-follow-up-local.sql:311: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:312: NOTICE:  PASS: denied (40001)
+psql:output/position-follow-up-local.sql:313: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:314: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:315: NOTICE:  PASS: drag to interview does not schedule
+psql:output/position-follow-up-local.sql:316: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:317: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:318: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:319: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:320: NOTICE:  PASS: explicit interview schedules
+psql:output/position-follow-up-local.sql:321: NOTICE:  PASS: explicit reschedule audited
+psql:output/position-follow-up-local.sql:322: NOTICE:  PASS: cancellation restores awaiting interview
+psql:output/position-follow-up-local.sql:323: NOTICE:  PASS: moving to decision does not decide
+psql:output/position-follow-up-local.sql:324: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:325: NOTICE:  PASS: explicit decision with rationale
+psql:output/position-follow-up-local.sql:326: NOTICE:  PASS: closing preserves decision
+psql:output/position-follow-up-local.sql:327: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:328: NOTICE:  PASS: explicit reopening preserves phase
+psql:output/position-follow-up-local.sql:329: NOTICE:  PASS: same person independent position
+psql:output/position-follow-up-local.sql:330: NOTICE:  PASS: closure without conclusion is not rejection
+psql:output/position-follow-up-local.sql:331: NOTICE:  PASS: profile links to both processes
+psql:output/position-follow-up-local.sql:332: NOTICE:  PASS: process close preserves individual stage
+psql:output/position-follow-up-local.sql:333: NOTICE:  PASS: denied (22023)
+psql:output/position-follow-up-local.sql:334: NOTICE:  PASS: process explicit reopening
+psql:output/position-follow-up-local.sql:336: NOTICE:  PASS: all operational mutations preserve score, profile and position
+psql:output/position-follow-up-local.sql:337: NOTICE:  PASS: all new tables enforce RLS
+psql:output/position-follow-up-local.sql:338: NOTICE:  PASS: no direct write or service read grants
+psql:output/position-follow-up-local.sql:339: NOTICE:  PASS: failed operations do not leave partial audit
+psql:output/position-follow-up-local.sql:340: NOTICE:  PASS: board does not expose integral profile data
+psql:output/position-follow-up-local.sql:342: NOTICE:  PASS: denied (42501)
