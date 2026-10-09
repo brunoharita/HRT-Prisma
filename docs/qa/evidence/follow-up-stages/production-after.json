@@ -1,0 +1,132 @@
+{
+  "site": "https://prisma.hrtsolutions.com.br",
+  "host": "srv1038882",
+  "checkout": "c2d7a072e4e1fd6e23eb0f2e27e14ab16162d5e5",
+  "containers": [
+    {
+      "name": "prisma-web",
+      "id": "bfc7c003a8eeb5e7156ee4f4c0f063c914278581ed63e0c34d34a49efe1117f3",
+      "image": "sha256:033c370c167e5d52a77e7df148ebb89fe343ab31d1c455b41ead4cb814a925cc",
+      "status": "running",
+      "restarts": 0,
+      "health": "none"
+    },
+    {
+      "name": "prisma-parser-ia",
+      "id": "ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "status": "running",
+      "restarts": 0,
+      "health": "none"
+    }
+  ],
+  "rollback": "sha256:10f4d7815d9fd7b863b738b1b30e38518b23b89ee20db874d903f859db38b05f",
+  "entries": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-PztwCX-I.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-Cv3JrkhW.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-BBuB0uPi.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-vRFh5Jq0.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-Bmf6zu4g.css",
+      "status": 200
+    },
+    {
+      "path": "/profiles",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-fixture",
+      "status": 200
+    },
+    {
+      "path": "/knowledge",
+      "status": 200
+    },
+    {
+      "path": "/settings",
+      "status": 200
+    },
+    {
+      "path": "/signin",
+      "status": 200
+    }
+  ],
+  "assets": [
+    "/assets/index-PztwCX-I.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-Cv3JrkhW.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-BBuB0uPi.css"
+  ],
+  "checks": {
+    "host": true,
+    "checkout": true,
+    "running": true,
+    "healthy": true,
+    "runtimeSha": true,
+    "version221": true,
+    "stages": true,
+    "headerAction": true,
+    "guidance": true,
+    "layout": true,
+    "centered": true,
+    "oldAssets": true,
+    "backendPreserved": true,
+    "webUpdated": true,
+    "rollback": true
+  }
+}

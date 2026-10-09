@@ -1,0 +1,12 @@
+{
+  "sha": "c2d7a072e4e1fd6e23eb0f2e27e14ab16162d5e5",
+  "dispatcherExit": 1,
+  "sshExit": 22,
+  "immediateProbe": 404,
+  "deployRepeated": false,
+  "independentSmoke": "production-after.json",
+  "result": "PASS after stabilization",
+  "surfaces": [
+    "web"
+  ]
+}
