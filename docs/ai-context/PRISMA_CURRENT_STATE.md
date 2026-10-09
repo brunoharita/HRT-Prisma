@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.56.0
+version: 2.57.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Etapas claras de acompanhamento — ajuste na 2.2.1
+
+Implementação local: uma etapa inicial Selecionadas para acompanhamento reúne as duas antigas; outras colunas são Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Etapas factuais abrem formulário e exigem registro válido antes de mover. Inclusão passa a Adicionar ao acompanhamento; nomes automáticos do processo acompanham essa nomenclatura. Aliases de etapas/filtros/mobile antigos são compatíveis, sem reescrever banco/histórico. Score/Perfil/Knowledge/ocupação/autoridade preservados. Colunas iguais e mobile selecionável; redesenho de cartões e questões fora deste escopo. Acordo/execução/AoT `docs/qa/agreement-follow-up-stages.md`, `execution-follow-up-stages.md`, `aot-follow-up-stages.md`. Validação e publicação em andamento; não inferir rollout deste texto.
 
 ## Avaliação dentro do quadro do Score — correção na 2.2.1
 

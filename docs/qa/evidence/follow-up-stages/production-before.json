@@ -1,0 +1,61 @@
+{
+  "site": "https://prisma.hrtsolutions.com.br",
+  "host": "srv1038882",
+  "checkout": "9bd6c79b048e3005cda78caaddcba083c6071eae",
+  "containers": [
+    {
+      "name": "prisma-web",
+      "id": "368f10c6ebf6d187d0599ecf729809c75704ff65963d532b4cc40f5ce5ce5c1e",
+      "image": "sha256:10f4d7815d9fd7b863b738b1b30e38518b23b89ee20db874d903f859db38b05f",
+      "status": "running",
+      "restarts": 0,
+      "health": "none"
+    },
+    {
+      "name": "prisma-parser-ia",
+      "id": "ed00303a5f6bb9d190fdf2e0851727ce78f395477a00ca7bcb95a563ffef4ce0",
+      "image": "sha256:8682af7d98e7f4704a3c465020dc62821a32e7ebccad97a3aad1178708044616",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "9c0944d404f33d27ac9a7803b014d41f0231027b309e54dabec23f343311b7c6",
+      "image": "sha256:8526717f51c4e4a45d15b31a7c5516df6f659155ed998f629da02bfe0e49b6a5",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "status": "running",
+      "restarts": 0,
+      "health": "none"
+    }
+  ],
+  "rollback": null,
+  "entries": [
+    {
+      "path": "/",
+      "status": 200
+    }
+  ],
+  "assets": [
+    "/assets/index-vRFh5Jq0.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-Cv3JrkhW.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-Bmf6zu4g.css"
+  ],
+  "checks": {
+    "host": true,
+    "checkout": true,
+    "running": true,
+    "healthy": true
+  }
+}

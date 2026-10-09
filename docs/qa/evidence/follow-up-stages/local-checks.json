@@ -1,0 +1,22 @@
+[
+  {
+    "name": "build",
+    "exit": 0,
+    "pass": true
+  },
+  {
+    "name": "web-types",
+    "exit": 0,
+    "pass": true
+  },
+  {
+    "name": "web-build",
+    "exit": 0,
+    "pass": true
+  },
+  {
+    "name": "targeted",
+    "exit": 0,
+    "pass": true
+  }
+]

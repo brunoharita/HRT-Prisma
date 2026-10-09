@@ -27,7 +27,7 @@ try {
     const page = await open(width);
     if (!baseline) {
       check(`${width}: question uses real Position`, (await group(page).innerText()).includes("trabalho de Desenvolvedor backend?"));
-      for (const text of ["Considero essa trajetória relacionada ao trabalho previsto.", "Não considero pertinente a associação apresentada neste caso.", "Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.", "Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo.", "Adicionar à avaliação"]) check(`${width}: visible explanation: ${text}`, (await group(page).innerText()).includes(text));
+      for (const text of ["Considero essa trajetória relacionada ao trabalho previsto.", "Não considero pertinente a associação apresentada neste caso.", "Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.", "Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo.", "Adicionar ao acompanhamento"]) check(`${width}: visible explanation: ${text}`, (await group(page).innerText()).includes(text));
       check(`${width}: curation requires confirmation`, await button(page, curate).isDisabled());
       check(`${width}: no passive mutations`, (await page.evaluate(() => window.__relationFixture.calls)).length === 0);
       const g = await page.evaluate(() => { const a = document.querySelector(".is-consult").getBoundingClientRect(), b = document.querySelector(".is-decision").getBoundingClientRect(); return { overflow: document.documentElement.scrollWidth > innerWidth + 1, consult: { x: a.x, y: a.y, right: a.right }, decision: { x: b.x, y: b.y }, clipped: [...document.querySelectorAll(".is-decision button")].some(el => el.scrollWidth > el.clientWidth + 2) }; });
@@ -83,7 +83,7 @@ try {
     check("failure: relation and content preserved", await page.getByText("Relação com a Posição desconsiderada por você", { exact: true }).isVisible());
     await page.evaluate(() => { window.__relationFixture.fail = false; }); await button(page, confirm).click(); await page.getByText("Relação com a Posição confirmada por você", { exact: true }).waitFor();
     check("failure: explicit retry succeeds", true);
-    await page.getByRole("button", { name: "Adicionar à avaliação", exact: true }).click(); await page.getByRole("button", { name: "Pessoa adicionada à avaliação", exact: true }).waitFor();
+    await page.getByRole("button", { name: "Adicionar ao acompanhamento", exact: true }).click(); await page.getByRole("button", { name: "Pessoa adicionada ao acompanhamento", exact: true }).waitFor();
     check("Kanban: separate human inclusion", (await page.evaluate(() => window.__followUpFixture.calls)).some(call => call.args.p_action === "add"));
     check("comparison: no implicit selection", await page.locator("button").filter({ hasText: "Comparar selecionadas (0/2)" }).isDisabled());
     await page.getByRole("button", { name: "Acompanhamento", exact: true }).click(); check("Kanban: navigation preserved", (await page.evaluate(() => window.__relationFixture.navigations)).at(-1).endsWith("/follow-up"));

@@ -12,7 +12,7 @@ async function open(width, state = "normal") {
   await page.route("**/*", route => route.request().url().startsWith(base + "/") ? route.continue() : (results.push({ name: "external", pass: false }), route.abort()));
   await page.goto(`${base}/position-relation.html?state=${state}`); await page.locator(".prisma-vacancy-match-card").waitFor(); return page;
 }
-const add = page => page.locator(".prisma-add-to-evaluation button").filter({ hasText: "Adicionar à avaliação" });
+const add = page => page.locator(".prisma-add-to-evaluation button").filter({ hasText: "Adicionar ao acompanhamento" });
 try {
   for (const width of baseline ? [1537, 390] : [1813, 1537, 1024, 768, 390, 320]) {
     const page = await open(width);
@@ -45,7 +45,7 @@ try {
     await page.getByRole("button", { name: "Tentar novamente", exact: true }).waitFor();
     check("failure: header/action/content retained", await add(page).isVisible() && await page.getByRole("heading", { name: "Rafael Lima", exact: true }).isVisible());
     await page.evaluate(() => { window.__followUpFixture.fail = false; }); await page.getByRole("button", { name: "Tentar novamente", exact: true }).click();
-    const added = page.locator(".prisma-add-to-evaluation button").filter({ hasText: "Pessoa adicionada à avaliação" }); await added.waitFor();
+    const added = page.locator(".prisma-add-to-evaluation button").filter({ hasText: "Pessoa adicionada ao acompanhamento" }); await added.waitFor();
     check("success: disabled confirmation and same add payload", await added.isDisabled() && await page.evaluate(() => window.__followUpFixture.calls.length === 2 && window.__followUpFixture.calls.every(c => c.args.p_action === "add" && c.args.p_payload.profileId && c.args.p_payload.positionId)));
     check("preservation: score, relation and comparison unchanged", before.score === await scoreText(page) && (await page.evaluate(() => window.__relationFixture.calls)).length === 0 && await page.locator("button").filter({ hasText: "Comparar selecionadas (0/2)" }).isDisabled());
     await page.getByRole("button", { name: "Abrir acompanhamento", exact: true }).click(); check("navigation: current person in current Position", (await page.evaluate(() => window.__relationFixture.navigations)).at(-1).includes("/follow-up/"));

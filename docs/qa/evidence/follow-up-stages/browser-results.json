@@ -1,0 +1,138 @@
+[
+  {
+    "name": "card numeric score and optional age, no denominator",
+    "pass": true
+  },
+  {
+    "name": "five columns merge both legacy stages without redundant status tags",
+    "pass": true
+  },
+  {
+    "name": "all columns have equal dimensions",
+    "pass": true
+  },
+  {
+    "name": "initial phase filter includes both legacy stages",
+    "pass": true
+  },
+  {
+    "name": "drag to scheduled opens interview form without mutation",
+    "pass": true
+  },
+  {
+    "name": "move to decision opens unselected form without mutation",
+    "pass": true
+  },
+  {
+    "name": "Escape cancels drag without mutation",
+    "pass": true
+  },
+  {
+    "name": "real mouse drag moves only chosen card",
+    "pass": true
+  },
+  {
+    "name": "drag never schedules an interview",
+    "pass": true
+  },
+  {
+    "name": "accessible move alternative saves stage",
+    "pass": true
+  },
+  {
+    "name": "failure keeps confirmed stage",
+    "pass": true
+  },
+  {
+    "name": "conflict keeps confirmed stage and informs operator",
+    "pass": true
+  },
+  {
+    "name": "decision starts with no selected outcome",
+    "pass": true
+  },
+  {
+    "name": "rationale and decision required",
+    "pass": true
+  },
+  {
+    "name": "validation notice focuses decision field without changing draft",
+    "pass": true
+  },
+  {
+    "name": "explicit interview persisted with zone",
+    "pass": true
+  },
+  {
+    "name": "saved interview appears in its own column",
+    "pass": true
+  },
+  {
+    "name": "human decision preserved separately",
+    "pass": true
+  },
+  {
+    "name": "saved decision appears in its own column",
+    "pass": true
+  },
+  {
+    "name": "drawer close protects unsaved draft",
+    "pass": true
+  },
+  {
+    "name": "list filter by next action",
+    "pass": true
+  },
+  {
+    "name": "view switch preserves filters",
+    "pass": true
+  },
+  {
+    "name": "all follow-up mutations preserve scores",
+    "pass": true
+  },
+  {
+    "name": "inclusion notice retries explicit action",
+    "pass": true
+  },
+  {
+    "name": "explicit inclusion independent of comparison",
+    "pass": true
+  },
+  {
+    "name": "no runtime errors or external calls",
+    "pass": true
+  },
+  {
+    "name": "normal: mobile single column, readable without horizontal scroll",
+    "pass": true
+  },
+  {
+    "name": "mobile drawer full viewport",
+    "pass": true
+  },
+  {
+    "name": "missing: mobile single column, readable without horizontal scroll",
+    "pass": true
+  },
+  {
+    "name": "missing data honest",
+    "pass": true
+  },
+  {
+    "name": "empty state retains explicit discovery entry",
+    "pass": true
+  },
+  {
+    "name": "member cannot render board",
+    "pass": true
+  },
+  {
+    "name": "legacy: mobile single column, readable without horizontal scroll",
+    "pass": true
+  },
+  {
+    "name": "legacy mobile column and filter remain visible",
+    "pass": true
+  }
+]

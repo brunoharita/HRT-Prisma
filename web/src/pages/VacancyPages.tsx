@@ -836,7 +836,7 @@ function CandidateMatchCard({ followUp, deciding, learning = false, match, onDec
             <Typography.Text type="secondary">Proponho que a relação confirmada seja revisada para possível inclusão na Knowledge.</Typography.Text>
           </div> : null}
         </div>
-        <Typography.Paragraph className="prisma-position-relation-guidance">Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo. Para acompanhá-la no Kanban, use <strong>“Adicionar à avaliação”</strong>.</Typography.Paragraph>
+        <Typography.Paragraph className="prisma-position-relation-guidance">Confirmar essa relação não significa atender aos requisitos nem aprovar a Pessoa no processo seletivo. Para acompanhá-la no Kanban, use <strong>“Adicionar ao acompanhamento”</strong>.</Typography.Paragraph>
       </section>
     </div>
 

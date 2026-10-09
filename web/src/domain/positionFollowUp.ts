@@ -1,17 +1,25 @@
 export const followUpStages = {
-  awaiting_evaluation: "Aguardando avaliação", evaluating: "Em avaliação",
+  awaiting_evaluation: "Selecionadas para acompanhamento", evaluating: "Selecionadas para acompanhamento",
   awaiting_interview: "Aguardando entrevista", interview_scheduled: "Entrevista agendada",
   awaiting_decision: "Aguardando decisão", decision_recorded: "Decisão registrada", closed: "Concluído",
 } as const;
 export type FollowUpStage = keyof typeof followUpStages;
 export const followUpColumns = [
-  { key: "awaiting_evaluation", title: "Aguardando avaliação" },
-  { key: "evaluating", title: "Em avaliação" },
-  { key: "awaiting_interview", title: "Entrevistas" },
-  { key: "awaiting_decision", title: "Decisão" },
+  { key: "awaiting_evaluation", title: "Selecionadas para acompanhamento" },
+  { key: "awaiting_interview", title: "Aguardando entrevista" },
+  { key: "interview_scheduled", title: "Entrevista agendada" },
+  { key: "awaiting_decision", title: "Aguardando decisão" },
+  { key: "decision_recorded", title: "Decisão registrada" },
 ] as const;
 export function followUpColumn(stage: FollowUpStage): string {
-  return stage === "interview_scheduled" ? "awaiting_interview" : stage === "decision_recorded" ? "awaiting_decision" : stage;
+  // Keep legacy rows and audit payloads intact; both old initial stages share one visible phase.
+  return stage === "evaluating" ? "awaiting_evaluation" : stage;
+}
+export function followUpStageAction(stage: string): "schedule" | "decision" | "stage" {
+  return stage === "interview_scheduled" ? "schedule" : stage === "decision_recorded" ? "decision" : "stage";
+}
+export function followUpProcessName(name: string): string {
+  return name.replace(/^Avaliação (\d+)$/, "Acompanhamento $1");
 }
 export interface FollowUpDetails {
   nextAction?: string; assignee?: string | null; dueDate?: string | null; notes?: string;
@@ -39,7 +47,7 @@ export function filterFollowUp(entries: FollowUpEntry[], filter: FollowUpFilters
   const q = filter.search.trim().toLocaleLowerCase("pt-BR");
   return entries.filter(e => (filter.closed ? e.stage === "closed" : e.stage !== "closed")
     && (!q || `${e.fullName} ${e.details.nextAction ?? ""}`.toLocaleLowerCase("pt-BR").includes(q))
-    && (!filter.stage || e.stage === filter.stage)
+    && (!filter.stage || followUpColumn(e.stage) === followUpColumn(filter.stage as FollowUpStage))
     && (!filter.assignee || (filter.assignee === "missing" ? !e.details.assignee : e.details.assignee === filter.assignee))
     && (!filter.due || (filter.due === "missing" ? !e.details.dueDate : filter.due === "overdue" ? Boolean(e.details.dueDate && e.details.dueDate < today) : e.details.dueDate === today)))
     .sort((a,b) => filter.order === "due" ? (a.details.dueDate ?? "9999").localeCompare(b.details.dueDate ?? "9999") || a.fullName.localeCompare(b.fullName,"pt-BR") : a.fullName.localeCompare(b.fullName,"pt-BR"));

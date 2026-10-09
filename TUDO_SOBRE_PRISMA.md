@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 405
-source_manifest_sha256: 2e068810eff99927bc6e29eb3fbef94e6c6d4169751a1ca050a1743b36cd10a2
+documentation_source_count: 408
+source_manifest_sha256: 67f27274207e836a080f979d519d8b5034112d3ff8c15e7e6b13492c86cb99f3
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.56.0
+version: 2.57.0
 last_verified: 2026-10-08
 ---
 
 # Estado atual do Prisma
+
+## Etapas claras de acompanhamento — ajuste na 2.2.1
+
+Implementação local: uma etapa inicial Selecionadas para acompanhamento reúne as duas antigas; outras colunas são Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Etapas factuais abrem formulário e exigem registro válido antes de mover. Inclusão passa a Adicionar ao acompanhamento; nomes automáticos do processo acompanham essa nomenclatura. Aliases de etapas/filtros/mobile antigos são compatíveis, sem reescrever banco/histórico. Score/Perfil/Knowledge/ocupação/autoridade preservados. Colunas iguais e mobile selecionável; redesenho de cartões e questões fora deste escopo. Acordo/execução/AoT `docs/qa/agreement-follow-up-stages.md`, `execution-follow-up-stages.md`, `aot-follow-up-stages.md`. Validação e publicação em andamento; não inferir rollout deste texto.
 
 ## Avaliação dentro do quadro do Score — correção na 2.2.1
 
@@ -11867,9 +11871,9 @@ Pessoas encontradas abre diretamente a descoberta; Acompanhamento conserva Lista
 
 ## Avaliação da relação da trajetória com a Posição
 
-Na descoberta, Adicionar à avaliação é uma ação azul compacta com ícone de adicionar, dentro do quadro do Prisma Score, abaixo das informações e com margens iguais. O quadro preserva a largura desktop anterior (até 300px nos cartões com inclusão); tablet/celular mantêm a ação dentro dele, antes de Consultar. O componente preserva loading, falha/retry, confirmação desabilitada e Abrir acompanhamento. Não duplicar a inclusão nem exigir comparação/confirmação da relação. Papéis, cálculo e demais ações permanecem. Acordo `docs/qa/agreement-evaluation-inside-score.md` v1.0.0 substitui a localização do acordo discovery-header-evaluation; ajuste na 2.2.1.
+Na descoberta, Adicionar ao acompanhamento é uma ação azul compacta com ícone de adicionar, dentro do quadro do Prisma Score, abaixo das informações e com margens iguais. O quadro preserva a largura desktop anterior (até 300px nos cartões com inclusão); tablet/celular mantêm a ação dentro dele, antes de Consultar. O componente preserva loading, falha/retry, confirmação desabilitada e Abrir acompanhamento. Não duplicar a inclusão nem exigir comparação/confirmação da relação. Papéis, cálculo e demais ações permanecem. Acordo `docs/qa/agreement-evaluation-inside-score.md` v1.0.0 substitui a localização do acordo discovery-header-evaluation; ajuste na 2.2.1.
 
-Na descoberta de Pessoas, o bloco explicita a pergunta sobre a experiência profissional e o trabalho da Posição selecionada. Confirmar relação com a Posição, Desconsiderar esta relação e Enviar relação à curadoria têm explicações permanentes, seguidas da orientação de que confirmar não comprova requisitos nem aprova no processo seletivo. Adicionar à avaliação permanece a ação independente para o Kanban. Selos descrevem a relação contextual confirmada/desconsiderada, inclusive na comparação; proposta à Knowledge continua sujeita à curadoria e aos gates atuais. Ajuste de clareza na2.2.1, sem mudança de matching, persistência, autoridade ou cálculo. Acordo `docs/qa/agreement-position-relation-clarity.md` v1.0.0 e AoT correspondente.
+Na descoberta de Pessoas, o bloco explicita a pergunta sobre a experiência profissional e o trabalho da Posição selecionada. Confirmar relação com a Posição, Desconsiderar esta relação e Enviar relação à curadoria têm explicações permanentes, seguidas da orientação de que confirmar não comprova requisitos nem aprova no processo seletivo. Adicionar ao acompanhamento permanece a ação independente para o Kanban. Selos descrevem a relação contextual confirmada/desconsiderada, inclusive na comparação; proposta à Knowledge continua sujeita à curadoria e aos gates atuais. Ajuste de clareza na2.2.1, sem mudança de matching, persistência, autoridade ou cálculo. Acordo `docs/qa/agreement-position-relation-clarity.md` v1.0.0 e AoT correspondente.
 
 ## Organização e jornadas
 
@@ -11961,6 +11965,10 @@ Acordo congelado docs/qa/agreement-profile-summary-cards-v2012.md v1.0.0: quatro
 
 Correção autorizada em06/10/2026: maior formação concluída apresenta a qualificação conhecida e sustentada, inclusive MBA. Quando MBA e especialização empatam, ambos permanecem visíveis; não se cria hierarquia entre eles. Sem qualificação conhecida mantém nível genérico. Confirmação publicada deve chegar intacta à tela, sem exigir nova ação humana. Layout, fontes sob demanda e conteúdo dos demais cards/seções permanecem. Acordo `docs/qa/agreement-profile-education-read-fix.md`.
 
+## Etapas de acompanhamento
+
+O acompanhamento usa cinco colunas concretas e de dimensões iguais: Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Desktop preserva largura legível dos cartões com rolagem local; mobile continua uma coluna selecionável. Arraste/Mover etapa para uma situação factual abre o formulário e exige salvamento válido. As duas etapas iniciais antigas e filtros/coluna mobile convergem na nova etapa inicial sem perda de histórico. Nomes automáticos Avaliação NN aparecem como Acompanhamento NN, preservando o valor original no banco e nomes personalizados. Acordo `docs/qa/agreement-follow-up-stages.md`1.0.0; sem questionários, mudança de Score ou versão.
+
 ---
 
 ## Source: `docs/product/vacancy-intelligence.md`
@@ -12041,17 +12049,17 @@ A ordenação vigente é determinística: grupo de trajetória, Prisma Score dec
 
 ## Acompanhamento Pessoa–Posição v2.2.0
 
-A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar à avaliação` é uma ação humana independente: inicia `Avaliação 01` na primeira inclusão e reutiliza a Pessoa publicada. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições.
+A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar ao acompanhamento` é uma ação humana independente: inicia `Acompanhamento 01` na primeira inclusão e reutiliza a Pessoa publicada. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições.
 
-A aba Acompanhamento alterna Lista/Kanban do mesmo conjunto. Lista oferece etapa, próxima ação, responsável e prazo; busca nome/ação, filtros etapa/responsável/prazo inclusive ausentes e ordenação nome/prazo. Indicadores consideram o processo inteiro, com contagem filtrada separada. Kanban agrupa aguardando avaliação, em avaliação, entrevistas e decisão. Concluídos permanece consultável.
+A aba Acompanhamento alterna Lista/Kanban do mesmo conjunto. Lista oferece etapa, próxima ação, responsável e prazo; busca nome/ação, filtros etapa/responsável/prazo inclusive ausentes e ordenação nome/prazo. Indicadores consideram o processo inteiro, com contagem filtrada separada. Kanban mostra Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Os dois identificadores iniciais legados são projetados na primeira coluna; filtros e coluna mobile antigos continuam válidos, sem reescrever registros ou histórico. Concluídos permanece consultável.
 
 Cartões exibem nome completo, título publicado, idade autorizada quando disponível e numeral azul do Score Prisma, sem denominador ou porcentagem. Não há idade inventada, corte nem faixa de mérito. Score indisponível/provisório mantém seu estado; score/cobertura, evidências e versões são consultáveis no detalhe. Arraste pela alça com placeholder/realce/Escape; Mover etapa atende teclado e mobile. Mobile usa uma coluna selecionada e detalhe de tela completa.
 
-Detalhe reúne anotações internas/perguntas, ação/responsável/prazo, entrevista opcional, decisão e histórico autor/data. Agendar/reagendar/cancelar são explícitos, com data/hora/fuso/participantes e sem envio de convite. Decisão começa sem escolha, exige justificativa e vale apenas neste processo. Mover para Entrevistas ou Decisão não agenda nem decide. Concluir sem decisão difere de não prosseguir. Encerrar/reabrir processo preserva etapas e decisões individuais. Ocupação, Perfil e outras Pessoas não são modificados.
+Detalhe reúne anotações internas/perguntas, ação/responsável/prazo, entrevista opcional, decisão e histórico autor/data. Agendar/reagendar/cancelar são explícitos, com data/hora/fuso/participantes e sem envio de convite. Decisão começa sem escolha, exige justificativa e vale apenas neste processo. Mover para Aguardando entrevista ou Aguardando decisão só organiza a etapa. Mover para Entrevista agendada ou Decisão registrada abre o formulário correspondente; somente salvar um registro válido muda a etapa. Esses estados aparecem em colunas próprias, sem tag redundante. Concluir sem decisão difere de não prosseguir. Encerrar/reabrir processo preserva etapas e decisões individuais. Ocupação, Perfil e outras Pessoas não são modificados.
 
 Essas operações só leem o resultado persistido, sem recalcular score. Novas versões são sinalizadas; descoberta e recálculo autorizado continuam seguindo a estabilidade vigente. Notas e decisões operacionais não são evidência profissional nem curadoria Knowledge. Acesso reutiliza os papéis existentes de Posições, validado no servidor: super_admin autorizado, owner/admin/recruiter da organização. Atribuição não concede acesso; member não é ampliado. Não existem automações de candidatura/contratação, mensagens, novas fontes ou nova IA.
 
-Contrato aprovado: `docs/qa/agreement-position-follow-up-v220.md`1.0.0. Implementação/aceite/limites de ambiente: `docs/qa/aot-position-follow-up-v220.md`. ADR-079 registra persistência e interação.
+Contrato aprovado: `docs/qa/agreement-position-follow-up-v220.md`1.0.0; nomenclatura/colunas/inclusão atualizadas por `docs/qa/agreement-follow-up-stages.md`1.0.0, mantendo 2.2.1. Implementação/aceite/limites de ambiente: `docs/qa/aot-position-follow-up-v220.md`. ADR-079 registra persistência e interação.
 
 ---
 
@@ -12492,6 +12500,40 @@ Estado: agreed por solicitação explícita de Bruno em 07/10/2026. Substitui a 
 - Q: nenhum.
 
 CA-01–05: testes 1/5/6/quantidade maior; aceitar/recusar, navegação e preservação; salvar completo e negativos de duplicação/ausência/ID/tenant/papel/stale/citação/concorrência; renders desktop/mobile; tipos/build/runtime gerado/SQL/Edge/smoke e destinos proporcionais. Sem afirmação de jornada autenticada real quando não testada.
+
+---
+
+## Source: `docs/qa/agreement-follow-up-stages.md`
+
+# Acordo — Etapas claras de acompanhamento
+
+v1.0.0, frozen, 08/10/2026. Solicitação explícita de Bruno: retirar as etapas ambíguas, ajustar o necessário e manter a versão 2.2.1. Baseline main `9bd6c79b048e3005cda78caaddcba083c6071eae`. Classe C, somente web. Reutilização: etapas persistidas, RPCs, formulários, filtros e navegação existentes; sem dependência nova. Publicação autorizada pelo AGENTS.md seção 7.
+
+- D-01: uma etapa inicial Selecionadas para acompanhamento reúne as Pessoas anteriormente em Aguardando avaliação e Em avaliação, sem perda de pessoas, referências, anotações ou histórico. Substitui a nomenclatura e agrupamento inicial de D-04 do acordo position-follow-up-v220 1.0.0.
+- D-02: cinco colunas concretas: Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão, Decisão registrada. Estados de entrevista/decisão deixam de ser tags redundantes. Concluídos continua separado. Lista, filtro, drawer, vínculos na Pessoa e seleção mobile usam os mesmos nomes. Filtros/coluna antigos continuam funcionando.
+- D-03: inclusão passa a Adicionar ao acompanhamento, com loading/sucesso/estado vazio/orientação coerentes. Nomes automáticos Avaliação NN aparecem como Acompanhamento NN, preservando nomes personalizados e persistidos. Preservar destaque azul dentro do Score e handler/IDs/gates. Substitui apenas o texto de D-02 do acordo position-follow-up-v220 e dos acordos posteriores de localização.
+- D-04: movimento para Selecionadas/Aguardando entrevista/Aguardando decisão salva a etapa; movimento para Entrevista agendada/Decisão registrada abre o formulário existente e só muda a etapa após registro válido. Abandonar formulário não altera etapa; decisão sem escolha predefinida e com justificativa, entrevista com data/hora/fuso/participantes. Falha/conflito/loading/rascunhos preservados.
+- D-UX-01: preservar cartões e linguagem visual atuais; cinco colunas com larguras e alturas iguais na mesma linha, rolagem local quando necessário para evitar comprimir cartões, uma coluna selecionável no mobile. Referência normativa para estrutura preservada: screenshot fornecido pelo usuário e before1448/390 na pasta de evidências. A mudança aprovada é de etapas, sem redesenho dos cartões.
+- P-01: nenhum recálculo, IA, avaliação/questionário, envio, escolha humana inventada, alteração de Perfil/Knowledge/ocupação/tenant/permissões ou reescrita de histórico. Não criar uma etapa factual sem seu registro explícito.
+- F-01: banco de questões/avaliações, layout compacto dos cartões e novos campos, mudança de versão, schema/RPC/backfill/dados reais.
+- A-01: engenharia decide projeção compatível dos identificadores legados, foco nos formulários, tokens e regressão proporcional. `awaiting_evaluation` continua identificador técnico da nova etapa inicial; `evaluating` é alias somente de leitura/visualização. Não alterar contrato persistido 1.0.0 nem histórico bruto.
+- Q: nenhuma decisão material pendente na recomendação adotada. Pergunta opcional sobre agrupamento foi apresentada; segue-se a proposta de situações em colunas individuais discutida com Bruno.
+
+CA-01: testes das duas etapas legadas, filtros e coluna mobile antiga; mesmas Pessoas/Score/detalhes/histórico. CA-02: browser drag/teclado/mobile, cinco destinos, formulários sem mutação ao abrir/cancelar, validações, salvamento explícito, falha/conflito, sem tags redundantes. CA-03: inclusão/loading/retry/sucesso/navegação e geometria desktop/mobile, sem corte. CA-04: tipos/build/testes dirigidos/contextos/diff/CI, release web, smoke/rollback/sincronização; 2.2.1.
+
+## Mapa de impacto
+
+| Área | Relação | Baseline, preservação e prova proporcional |
+| --- | --- | --- |
+| Projeção de etapas, filtros e Lista/Kanban/mobile | direct | SHA baseline, fixture com ambos legados; unitários/browser/antes e depois 1448/390 |
+| Agendamento/decisão/drawer/drag/teclado | direct | RPCs e formulários existentes; browser valida abertura sem gravação, dados obrigatórios, falha e decisão explícita |
+| CTA/estado vazio/orientação | direct | Score compacto publicado; browser inclusão/loading/retry/sucesso, contenção e seis larguras |
+| Vínculos no Perfil | plausible_indirect | mapa de nomes compartilhado; unitário de labels e tipos, render/handler intactos |
+| Autoridade/revisão concorrente/estabilidade Score | critical_transversal | serviço/RPC intactos; testes de rota, falha/conflito e snapshots invariantes sintéticos |
+| Banco/IA/ingestão/Knowledge/Perfil/ocupação | no_impact_identified | nenhum contrato persistido, consulta, handler de matching ou campo profissional alterado; revisão do diff/dispatcher web apenas |
+| Release/contexto | direct | 2.2.1 e runtime baseline 4f68ed54; CI/smoke/rollback/infra preservada |
+
+Limites: testes locais são sintéticos. Smoke público não comprova operação autenticada real. Não existe QA remoto separado neste fluxo.
 
 ---
 
@@ -16635,6 +16677,31 @@ Publicado em07/10/2026, SHA funcional `191de3dfd8cd743d46aecc0cf643e74a4b3e72d0`
 Web imagem `sha256:0d6a7664b61990ff5ce5a171764f40928139b83f6e21dcfb50e19ab91c706d37`, running/0, entry `index-sVw5w6Ck.js` e CSS `index-SNTMzHER.css`. Rollback `prisma-web:rollback-before-191de3dfd8cd` preserva imagem28aacc1c/v2.1.6. Parser/Synthesis/gateway preservam IDs/imagens/reinícios; workers healthy. O comando SSH de release saiu22 por404 do curl imediato durante recriação; não é contado como PASS. Smoke posterior independente:14 HTTP200 e9 checks de SHA/versão/confirmar/paginar/ajuda/carregamento/score/negação anônima401 PASS, incluindo assets anteriores. Sem rebuild adicional. Recibo consolidado distingue a falha transitória da verificação posterior.
 
 D-01–05/P-01 PASS; desvios materiais: nenhum identificado. Jornada autenticada real em produção permanece NOT TESTED; evidência sintética não comprova escolha/revisão de Pessoa real. Fechamento documental e ledger sincronizam Git/VPS sem reconstruir o runtime funcional acima. Servidor Vite próprio5697 encerrado; servidor anterior5693 e arquivos alheios preservados. Context Pack usa somente rastreados/arquivos próprios, sem documentos alheios não rastreados.
+
+---
+
+## Source: `docs/qa/aot-follow-up-stages.md`
+
+# AoT — Etapas claras de acompanhamento
+
+Acordo `agreement-follow-up-stages.md` v1.0.0 e execução correspondente. Baseline `9bd6c79b048e3005cda78caaddcba083c6071eae`, versão 2.2.1 mantida. Evidências em `docs/qa/evidence/follow-up-stages/`.
+
+| Regra | Implementação / prova | Status |
+| --- | --- | --- |
+| D-01/02, CA-01 | projeção dos dois legados, cinco colunas, nomes/filtros/seleção mobile/vínculos compartilhados; unitários e browser | PASS |
+| D-03, CA-03 | inclusão/loading/sucesso/vazio/orientação/processo com acompanhamento, preservando handlers; browser discovery | PASS |
+| D-04, CA-02 | etapas factuais abrem formulário existente sem mutação, validação e salvamento explícitos, falha/conflito/rascunho | PASS |
+| D-UX-01 | colunas iguais, rolagem local, seletor mobile; render sintético e geometria | PASS |
+| P-01/F-01 | sem backend, IA, banco/questões, Score/Perfil/Knowledge/ocupação ou escolhas implícitas; diff, snapshots, testes dirigidos | PASS |
+| CA-04 | tipos/build/contextos/diff/CI/publicação web/smoke/rollback/sincronização | PARTIAL |
+
+## Impacto e preservação
+
+Mapa do acordo aplicado: direct etapas/colunas/CTA/formulários e release; plausible_indirect vínculos na Pessoa; critical_transversal autoridade, revisão e estabilidade Score; no_impact_identified para persistência/IA/ingestão/Knowledge/Perfil/ocupação, com serviço e migrations intactos. Aliases são projeção de apresentação; audit payloads brutos e identificadores persistidos permanecem. Baseline visual reutiliza render validado da mesma fixture/viewport 1448/390 em position-follow-up-v220; diferenças recentes no baseline Git eram na descoberta. Render novo nos mesmos estados/dados/viewport. Sem redesign dos cartões.
+
+## Validação e ambientes
+
+Local: 34 checks browser Kanban e 51 checks de descoberta PASS, incluindo falha/conflito, formulários sem gravação, estados factuais e mobile legado. Render desktop/mobile inspecionado; colunas iguais e cartões originais preservados. 53 testes dirigidos, tipos/build root e web, contextos/lint/foundation/diff PASS. Publicação em andamento. Jornada autenticada real NOT TESTED; fixtures e smoke público não comprovam persistência real. Nenhum dado real ou decisão fictícia gravada. Sem QA remoto separado. Sem alteração de versão. Publicação limitada ao web conforme dispatcher; fechamento sincroniza Git sem reconstruir runtime.
 
 ---
 
@@ -21978,6 +22045,14 @@ Aplicar integralmente `agreement-extended-trajectory-review.md` 1.0.0, sem reint
 | Parser, síntese, gateway, publicação de Perfil/Knowledge | no_impact_identified | Nenhum consumidor executável dessas capacidades mudou; preservar IDs/imagens/saúde no rollout |
 
 Reuso escolhido: componentes e RPCs já existentes. Nenhuma biblioteca nova; não há lacuna que justifique construção externa. Migração nova, sem reescrever as anteriores; proteção de revisão completa passa a usar o total real das divergências. O formato das decisões/evidências permanece compatível. Sem aumento de custo de IA: a revisão usa o par já armazenado. Rollback de aplicação preserva registros/histórico e schema ampliado; não estreitar novamente a constraint se houver revisões extensas.
+
+---
+
+## Source: `docs/qa/execution-follow-up-stages.md`
+
+# Execução — Etapas claras de acompanhamento
+
+Implementar integralmente `docs/qa/agreement-follow-up-stages.md` v1.0.0, lido integralmente: D-01/02/03/04/D-UX-01, P-01, F-01, A-01 e CA-01/02/03/04, com mapa de impacto. Preservar persistência/histórico e autoridade; projetar aliases legados na nova etapa inicial. Registro explícito continua obrigatório nas etapas factuais. Sem versão nova ou questões. Fechar com AoT, testes proporcionais, evidências e publicação web/sincronização.
 
 ---
 

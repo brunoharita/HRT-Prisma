@@ -3,7 +3,7 @@ import { Alert, Button, Drawer, Empty, Input, Modal, Radio, Segmented, Select, S
 import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, FilterOutlined, HolderOutlined, PlusOutlined, ReloadOutlined, RightOutlined, SearchOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import type { OrganizationMembership } from "../shared/access";
 import type { VacancyCandidateMatch, VacancyDetail } from "../domain/vacancy";
-import { filterFollowUp, followUpColumns, followUpColumn, followUpStages, followUpHistoryLabels, interviewInstant, type FollowUpData, type FollowUpDetails, type FollowUpEntry, type FollowUpFilters } from "../domain/positionFollowUp";
+import { filterFollowUp, followUpColumns, followUpColumn, followUpStages, followUpStageAction, followUpProcessName, followUpHistoryLabels, interviewInstant, type FollowUpData, type FollowUpDetails, type FollowUpEntry, type FollowUpFilters, type FollowUpStage } from "../domain/positionFollowUp";
 import { positionFollowUpService } from "../infrastructure/supabase/positionFollowUpService";
 import { vacancyService } from "../infrastructure/supabase/vacancyService";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -33,6 +33,7 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
   const [showFilters,setShowFilters] = useState(false);
   const [dragging,setDragging] = useState<string|null>(null), [target,setTarget] = useState<string|null>(null);
   const dragRef = useRef<string|null>(null);
+  const [formIntent,setFormIntent] = useState<{personId:string;action:"schedule"|"decision"}|null>(null);
   useLoadingFeedback({ "Carregando acompanhamento…":loading, "Salvando acompanhamento…":pending.length>0 });
   async function load() {
     const scope = generation.current, request = ++responseSequence.current;
@@ -61,7 +62,14 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
   const rows=data?filterFollowUp(data.entries,filters,new Date().toLocaleDateString("en-CA")):[];
   const selected=data?.entries.find(e=>e.personId===personId)??null;
   const disabled=data?.process?.status==="closed";
+  const visibleMobileColumn=followUpColumn(mobileColumn as FollowUpStage);
   function update(patch:Partial<FollowUpFilters>){setFilters({...filters,...patch});}
+  function move(entry:FollowUpEntry,stage:string){
+    if(disabled||pending.includes(entry.id)||followUpColumn(entry.stage)===stage)return;
+    const action=followUpStageAction(stage);
+    if(action==="stage")void mutate("stage",entry,{stage});
+    else {setFormIntent({personId:entry.personId,action});onNavigate(`${base}/${entry.personId}`);}
+  }
   function stopDrag(){dragRef.current=null;setDragging(null);setTarget(null);}
   function startDrag(event:DragEvent,entry:FollowUpEntry){
     if(disabled||pending.includes(entry.id)){event.preventDefault();return;}
@@ -70,7 +78,7 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
   }
   function drop(event:DragEvent,stage:string){
     event.preventDefault();const id=dragRef.current;stopDrag();
-    const entry=data?.entries.find(e=>e.id===id);if(entry&&followUpColumn(entry.stage)!==stage)void mutate("stage",entry,{stage});
+    const entry=data?.entries.find(e=>e.id===id);if(entry)move(entry,stage);
   }
   function card(entry:FollowUpEntry){return <article key={entry.id} data-entry={entry.personId} className={`pf-card${dragging===entry.id?" is-dragging":""}`} aria-busy={pending.includes(entry.id)}>
     <div className="pf-card-top"><span className="pf-avatar" aria-hidden="true">{entry.fullName.split(" ").map(n=>n[0]).slice(0,2).join("")}</span><div className="pf-card-identity"><button className="pf-person" onClick={()=>onNavigate(`${base}/${entry.personId}`)}>{entry.fullName}</button><p className="pf-title">{entry.title||"Título não informado"}</p></div>
@@ -78,14 +86,13 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
     {entry.age!==null?<p className="pf-age"><UserOutlined /> {entry.age} anos</p>:null}
     <button className={`pf-score${entry.score===null?" is-unavailable":""}`} aria-label={`Score e cobertura de ${entry.fullName}`} onClick={()=>onNavigate(`${base}/${entry.personId}`)}><span>Score Prisma</span><strong>{entry.score===null?"Indisponível":entry.score}</strong><span className="pf-score-link">Score e cobertura</span><RightOutlined /></button>
     {scoreNotice(entry)?<small className="pf-score-notice">{scoreNotice(entry)}</small>:null}
-    {entry.stage==="interview_scheduled"||entry.stage==="decision_recorded"?<Tag>{followUpStages[entry.stage]}</Tag>:null}
     {pending.includes(entry.id)?<div role="status" className="pf-saving">Salvando etapa…</div>:null}
-    <div className="pf-card-bottom"><Button type="link" onClick={()=>onNavigate(`${base}/${entry.personId}`)}>Ver detalhes</Button>{entry.stage!=="closed"?<MoveStage entry={entry} disabled={disabled||pending.includes(entry.id)} onMove={stage=>void mutate("stage",entry,{stage})} />:null}</div>
+    <div className="pf-card-bottom"><Button type="link" onClick={()=>onNavigate(`${base}/${entry.personId}`)}>Ver detalhes</Button>{entry.stage!=="closed"?<MoveStage entry={entry} disabled={disabled||pending.includes(entry.id)} onMove={stage=>move(entry,stage)} />:null}</div>
   </article>;}
   return <PrismaPage className="pf-page">
     <Button type="text" icon={<ArrowLeftOutlined />} onClick={()=>onNavigate("/vacancies")}>Voltar para Posições</Button>
     <PrismaPageHeader icon={<PrismaBriefcaseIcon />} title={vacancy?.title??"Acompanhamento da Posição"} description={vacancy?.area||"Acompanhe as Pessoas selecionadas nesta Posição."}
-      extras={<Space wrap>{vacancy?<Tag>Definição v{vacancy.version}</Tag>:null}{data?.process?<Tag color="blue">{data.process.name} · {disabled?"Encerrada":"Em andamento"}</Tag>:null}{vacancy?<Tag>{vacancy.occupancy==="occupied"?"Ocupada":"Não ocupada"}</Tag>:null}</Space>}
+      extras={<Space wrap>{vacancy?<Tag>Definição v{vacancy.version}</Tag>:null}{data?.process?<Tag color="blue">{followUpProcessName(data.process.name)} · {disabled?"Encerrado":"Em andamento"}</Tag>:null}{vacancy?<Tag>{vacancy.occupancy==="occupied"?"Ocupada":"Não ocupada"}</Tag>:null}</Space>}
       actions={<Space wrap><Button className="pf-view-position" onClick={()=>onNavigate(`/vacancies/${vacancyId}`)}>Ver posição</Button><Button icon={<PlusOutlined aria-hidden />} type="primary" onClick={()=>onNavigate(`/vacancies/${vacancyId}/people`)}>Encontrar pessoas</Button></Space>} />
     <Tabs activeKey="follow-up" onChange={key=>onNavigate(key==="people"?`/vacancies/${vacancyId}/people`:`/vacancies/${vacancyId}${key==="history"?"/history":""}`)} items={[{key:"overview",label:"Visão geral"},{key:"people",label:"Pessoas encontradas"},{key:"follow-up",label:"Acompanhamento"},{key:"history",label:"Histórico"}]} />
     {error?<Alert type="error" showIcon title={error} action={<Button loading={loading} onClick={()=>void load()}>Atualizar dados</Button>} />:null}
@@ -96,16 +103,16 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
       <div className="pf-toolbar"><Input aria-label="Buscar Pessoa ou próxima ação" placeholder="Buscar Pessoa ou próxima ação" prefix={<SearchOutlined />} value={filters.search} onChange={e=>update({search:e.target.value})} />
         <Button className="pf-filter-toggle" aria-label="Filtros e ordenação" aria-expanded={showFilters} icon={<FilterOutlined aria-hidden />} onClick={()=>setShowFilters(v=>!v)} />
         <div className={`pf-filters${showFilters?" is-open":""}`}>
-        <Select aria-label="Filtrar etapa" value={filters.stage} onChange={stage=>update({stage})} options={[{value:"",label:"Todas as etapas"},...Object.entries(followUpStages).map(([value,label])=>({value,label}))]} />
+        <Select aria-label="Filtrar etapa" value={followUpColumn(filters.stage as FollowUpStage)} onChange={stage=>update({stage})} options={[{value:"",label:"Todas as etapas"},...followUpColumns.map(c=>({value:c.key,label:c.title})),{value:"closed",label:followUpStages.closed}]} />
         <Select aria-label="Filtrar responsável" value={filters.assignee} onChange={assignee=>update({assignee})} options={[{value:"",label:"Todos os responsáveis"},{value:"missing",label:"Sem responsável"},...data.operators.map(o=>({value:o.id,label:o.name}))]} />
         <Select aria-label="Filtrar prazo" value={filters.due} onChange={due=>update({due})} options={[{value:"",label:"Todos os prazos"},{value:"overdue",label:"Atrasados"},{value:"today",label:"Hoje"},{value:"missing",label:"Sem prazo"}]} />
         <Select aria-label="Ordenar acompanhamento" value={filters.order} onChange={order=>update({order})} options={[{value:"name",label:"Nome"},{value:"due",label:"Prazo"}]} />
         </div>
         <Segmented aria-label="Visualização" options={[{value:"list",label:"Lista"},{value:"kanban",label:"Kanban"}]} value={mode} onChange={v=>setMode(String(v))} />
       </div>
-      <p className="pf-drag-help">Arraste pela alça para mudar de fase ou use Mover etapa.</p>
+      <p className="pf-drag-help">Arraste pela alça ou use Mover etapa. Para Entrevista agendada ou Decisão registrada, preencha e salve o registro que será aberto.</p>
       <div className="pf-scope"><span>{rows.length} Pessoas nesta visualização · indicadores acima consideram todo o processo</span><Space wrap><Button type={filters.closed?"primary":"default"} onClick={()=>update({closed:!filters.closed,stage:""})}>{filters.closed?"Voltar ao acompanhamento":`Concluídos (${data.entries.filter(e=>e.stage==="closed").length})`}</Button><Button aria-label="Atualizar acompanhamento" icon={<ReloadOutlined />} loading={loading} onClick={()=>void load()} /></Space></div>
-      {!data.entries.length?<PrismaCard><Empty description="Nenhuma Pessoa foi adicionada à avaliação desta Posição."><Button type="primary" onClick={()=>onNavigate(`/vacancies/${vacancyId}/people`)}>Encontrar pessoas</Button></Empty></PrismaCard>
+      {!data.entries.length?<PrismaCard><Empty description="Nenhuma Pessoa foi adicionada ao acompanhamento desta Posição."><Button type="primary" onClick={()=>onNavigate(`/vacancies/${vacancyId}/people`)}>Encontrar pessoas</Button></Empty></PrismaCard>
       :!rows.length?<PrismaCard><Empty description={filters.closed?"Nenhum acompanhamento concluído corresponde aos filtros.":"Nenhuma Pessoa corresponde aos filtros."}><Button onClick={()=>setFilters(initialFilters)}>Limpar filtros</Button></Empty></PrismaCard>
       :mode==="list"?<><div className="pf-desktop-list"><Table pagination={{pageSize:20,hideOnSinglePage:true}} dataSource={rows} rowKey="id" columns={[
         {title:"Pessoa",render:(_,e:FollowUpEntry)=><><button className="pf-person" onClick={()=>onNavigate(`${base}/${e.personId}`)}>{e.fullName}</button><div>{e.title||"Título não informado"}</div></>},
@@ -116,15 +123,15 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
         {title:"",render:(_,e:FollowUpEntry)=><Button onClick={()=>onNavigate(`${base}/${e.personId}`)}>Ver detalhes</Button>},
       ]} /></div><div className="pf-mobile-list">{rows.map(e=><PrismaCard key={e.id}><button className="pf-person" onClick={()=>onNavigate(`${base}/${e.personId}`)}>{e.fullName}</button><p>{followUpStages[e.stage]}</p><p>Próxima ação: {e.details.nextAction||"Não informada"}</p><p>Responsável: {data.operators.find(o=>o.id===e.details.assignee)?.name||"Não atribuído"}</p><p>Prazo: {e.details.dueDate||"Sem prazo"}</p><Button onClick={()=>onNavigate(`${base}/${e.personId}`)}>Ver detalhes</Button></PrismaCard>)}</div></>
       :filters.closed?<div className="pf-closed">{rows.map(card)}</div>:<>
-        <Select className="pf-mobile-selector" aria-label="Coluna do Kanban" value={mobileColumn} onChange={setMobileColumn} options={followUpColumns.map(c=>({value:c.key,label:`${c.title} (${rows.filter(e=>followUpColumn(e.stage)===c.key).length})`}))} />
-        <div className="pf-board" aria-label="Kanban de Pessoas">{followUpColumns.map(col=><section key={col.key} data-column={col.key} className={`pf-column${mobileColumn===col.key?" is-mobile-active":""}${target===col.key?" is-target":""}`} onDragOver={e=>{if(dragRef.current&&!disabled){e.preventDefault();e.dataTransfer.dropEffect="move";setTarget(col.key);}}} onDrop={e=>drop(e,col.key)}>
+        <Select className="pf-mobile-selector" aria-label="Coluna do Kanban" value={visibleMobileColumn} onChange={setMobileColumn} options={followUpColumns.map(c=>({value:c.key,label:`${c.title} (${rows.filter(e=>followUpColumn(e.stage)===c.key).length})`}))} />
+        <div className="pf-board" aria-label="Kanban de Pessoas">{followUpColumns.map(col=><section key={col.key} data-column={col.key} className={`pf-column${visibleMobileColumn===col.key?" is-mobile-active":""}${target===col.key?" is-target":""}`} onDragOver={e=>{if(dragRef.current&&!disabled){e.preventDefault();e.dataTransfer.dropEffect="move";setTarget(col.key);}}} onDrop={e=>drop(e,col.key)}>
           <header><span className={`pf-dot pf-dot-${col.key}`} /><h2>{col.title}</h2><span className="pf-count">{rows.filter(e=>followUpColumn(e.stage)===col.key).length}</span></header>
           <div className="pf-column-cards">{rows.filter(e=>followUpColumn(e.stage)===col.key).map(card)}{!rows.some(e=>followUpColumn(e.stage)===col.key)?<p className="pf-column-empty">{dragging?"Solte o cartão aqui":"Nenhuma Pessoa nesta fase"}</p>:null}</div>
         </section>)}</div></>}
       <footer className="pf-footer"><span>As etapas organizam o acompanhamento. O score apoia a análise das evidências.</span>{data.process?<Button loading={pending.includes("process")} disabled={pending.length>0} onClick={()=>Modal.confirm({title:disabled?"Reabrir este processo?":"Encerrar este processo?",content:"As etapas, decisões e o histórico de cada Pessoa serão preservados. A ocupação da Posição permanece a mesma.",okText:disabled?"Reabrir processo":"Encerrar processo",cancelText:"Cancelar",onOk:async()=>{if(!await mutate(disabled?"reopen_process":"close_process",null))throw new Error("Falha ao salvar");}})}>{disabled?"Reabrir processo":"Encerrar processo"}</Button>:null}</footer>
     </>:null}
     {personId&&data&&!selected?<Alert type="warning" title="Esta Pessoa não está no acompanhamento desta Posição." action={<Button onClick={()=>onNavigate(base)}>Voltar ao acompanhamento</Button>} />:null}
-    {selected&&data?<FollowUpDetail key={selected.id} entry={selected} data={data} vacancy={vacancy} disabled={disabled||selected.stage==="closed"||pending.includes(selected.id)} saving={pending.includes(selected.id)} error={error} refreshing={loading} onRefresh={()=>void load()} onClose={()=>onNavigate(base)} onNavigate={onNavigate} onMutate={(action,payload)=>mutate(action,selected,payload)} />:null}
+    {selected&&data?<FollowUpDetail key={selected.id} entry={selected} data={data} vacancy={vacancy} requestedForm={formIntent?.personId===selected.personId?formIntent.action:null} disabled={disabled||selected.stage==="closed"||pending.includes(selected.id)} saving={pending.includes(selected.id)} error={error} refreshing={loading} onRefresh={()=>void load()} onClose={()=>{setFormIntent(null);onNavigate(base);}} onNavigate={onNavigate} onMutate={(action,payload)=>mutate(action,selected,payload)} />:null}
   </PrismaPage>;
 }
 
@@ -138,7 +145,7 @@ function MoveStage({entry,disabled,onMove}:{entry:FollowUpEntry;disabled:boolean
   return <Select className="pf-move" aria-label={`Mover etapa de ${entry.fullName}`} disabled={disabled} value={null} placeholder="Mover etapa" onChange={onMove} options={followUpColumns.filter(c=>c.key!==followUpColumn(entry.stage)).map(c=>({value:c.key,label:c.title}))} />;
 }
 
-function FollowUpDetail({entry,data,vacancy,disabled,saving,error,refreshing,onRefresh,onClose,onNavigate,onMutate}:{entry:FollowUpEntry;data:FollowUpData;vacancy:VacancyDetail|null;disabled:boolean;saving:boolean;error:string|null;refreshing:boolean;onRefresh:()=>void;onClose:()=>void;onNavigate:(path:string)=>void;onMutate:(action:string,payload?:object)=>Promise<boolean>}){
+function FollowUpDetail({entry,data,vacancy,requestedForm,disabled,saving,error,refreshing,onRefresh,onClose,onNavigate,onMutate}:{entry:FollowUpEntry;data:FollowUpData;vacancy:VacancyDetail|null;requestedForm:"schedule"|"decision"|null;disabled:boolean;saving:boolean;error:string|null;refreshing:boolean;onRefresh:()=>void;onClose:()=>void;onNavigate:(path:string)=>void;onMutate:(action:string,payload?:object)=>Promise<boolean>}){
   const [draft,setDraft]=useState<FollowUpDetails>(structuredClone(entry.details));
   const [draftRevision,setDraftRevision]=useState(entry.revision);
   const [outcome,setOutcome]=useState<string|null>(null),[rationale,setRationale]=useState("");
@@ -163,7 +170,7 @@ function FollowUpDetail({entry,data,vacancy,disabled,saving,error,refreshing,onR
   }
   function close(){if(!dirty){onClose();return;}let discard=false;Modal.confirm({title:"Descartar alterações não salvas?",content:"O rascunho deste acompanhamento ainda não foi salvo.",okText:"Descartar e fechar",cancelText:"Continuar editando",onOk:()=>{discard=true;},afterClose:()=>{if(discard){markSaved();onClose();}}});}
   const match=entry.match as VacancyCandidateMatch|null;
-  return <Drawer open className="pf-drawer" size="large" title={entry.fullName} onClose={close} maskClosable={false}>
+  return <Drawer open className="pf-drawer" size="large" title={entry.fullName} onClose={close} maskClosable={false} afterOpenChange={open=>{if(open&&requestedForm){const form=(requestedForm==="schedule"?interviewForm:decisionForm).current;form?.scrollIntoView({block:"center"});form?.querySelector<HTMLElement>("input:not([disabled])")?.focus();}}}>
     <p>{entry.title||"Título não informado"}{entry.age!==null?` · ${entry.age} anos`:""}</p><Space wrap><Tag>{followUpStages[entry.stage]}</Tag><Button onClick={()=>onNavigate(`/profiles/${entry.personId}/profile`)}>Abrir Perfil e fontes</Button></Space>
     {error?<Alert type="error" showIcon title={error} action={<Button loading={refreshing} onClick={onRefresh}>Atualizar dados</Button>} />:null}
     {localError?<Alert type="error" showIcon title={localError} action={<Button onClick={()=>{const form=({details:detailsForm,interview:interviewForm,decision:decisionForm})[errorForm.current].current;form?.scrollIntoView({block:"center"});form?.querySelector<HTMLElement>("input:not([disabled]),textarea:not([disabled]),button:not([disabled])")?.focus();}}>Revisar campos</Button>} />:null}
