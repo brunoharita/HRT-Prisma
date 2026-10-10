@@ -836,7 +836,7 @@ function CandidateMatchCard({ followUp, followUpStatus, initiallyExpanded = true
       {match.discoveryGroup === "contextual_signals" ? <div className="prisma-candidate-buckets is-contextual"><MatchBucket color="warning" items={contextualSignals} title={"Sinais encontrados (" + contextualSignals.length + ")"} limit={6} /></div>
         : <div className="prisma-candidate-buckets">
           <MatchBucket color="success" items={met.map(item => item.requirement.label)} title={"Atendidos (" + met.length + ")"} limit={6} />
-          <MatchBucket color="error" items={missing.map(item => item.requirement.label)} title={"Sem evidência (" + missing.length + ")"} limit={6} />
+          <MatchBucket color="error" items={missing.map((item) => item.requirement.label)} title={"Sem evidência (" + missing.length + ")"} description="Requisitos da posição para os quais não foi encontrada evidência no Perfil publicado." limit={6} />
           {partial.length ? <MatchBucket color="warning" items={partial.map(item => item.requirement.label)} title={"Parciais para revisão (" + partial.length + ")"} limit={6} /> : null}
           {related.length ? <MatchBucket color="warning" items={related.map(item => item.relatedSignal + ": sinal relacionado")} title={"Sinais relacionados (" + related.length + ")"} limit={6} /> : null}
         </div>}

@@ -7,17 +7,17 @@ Contrato `agreement-people-compact-v234.md` v1.0.0 e execução integral; mapa `
 | ID | Acordo / implementação | Teste | Evidência | Status | Ambiente / limitação |
 | --- | --- | --- | --- | --- | --- |
 | D-UX-01 | CandidateMatchCard compacto, toolbar, requisitos/expansões; primeiro aberto, demais recolhidos | geometria/topologia/conteúdo e renders equivalentes | baseline/browser/visual-results e after-* | PASS | UI real, dados sintéticos |
-| D-UX-02 | uma coluna mobile, avatar/ações/textos legíveis e detalhes completos |1536/1448/768/390/320, overflow/avatar/expansão |66checks visual-results | PASS | viewport e fixtures locais |
+| D-UX-02 | uma coluna mobile, avatar/ações/textos legíveis e detalhes completos |1536/1448/768/390/320, overflow/avatar/expansão |71checks visual-results | PASS | viewport e fixtures locais |
 | D-03 | usePositionFollowUpMemberships, consulta agregada do ciclo atual, selo/abertura | atual/arquivado/reentrada/focus/scope race; uma leitura |91checks browser-results | PASS | sem consulta a Pessoa real |
 | D-04 | desconhecido bloqueia inclusão, conteúdo preservado, retry/closed/add e IDs explícitos | loading/failure/retry/add failure/success, current ID/tenant | browser-results | PASS | mocks no lugar do transporte remoto |
-| D-05 | seleção/Perfil/cálculo/recalcular/relação/curadoria/divergências e navegação preservados |74Node dirigidos, callbacks/browser, comparação e drawer | browser-results/action-results, testes descritos abaixo | PASS | sem decisão ou recálculo produtivo |
+| D-05 | seleção/Perfil/cálculo/recalcular/relação/curadoria/divergências e navegação preservados |96Node dirigidos, callbacks/browser, comparação e drawer | browser-results/action-results, testes descritos abaixo | PASS | sem decisão ou recálculo produtivo |
 | D-06 | registry2.3.4,3pulado; web-only/CI/main/VPS/rollback | local versão/build; CI/rollout/smoke pendentes | production-before/plano a gerar | NOT TESTED | publicação ainda não executada |
 
 ## Proibições verificadas
 
 | ID | Negativo / evidência | Status |
 | --- | --- | --- |
-| P-01 | matching/score/domain/SQL sem alteração,74regressões; ausência permanece sem evidência; Pessoa acompanhada continua na lista | PASS |
+| P-01 | matching/score/domain/SQL sem alteração,96regressões; ausência permanece sem evidência; Pessoa acompanhada continua na lista | PASS |
 | P-02 | read agregado sem write/IA, role member sem RPC, outro tenant/Posição e retorno tardio ignorado, writer recebe ciclo atual | PASS |
 | P-UX-03 | cards em uma coluna, nenhuma grade/painel lateral, todos os requisitos acessíveis, overflow/avatar/controle em5larguras | PASS |
 
@@ -27,7 +27,7 @@ Mapa inicial lido antes da implementação. Descoberta: o novo Alert com retry l
 
 | Capacidade / área | Relação | Baseline / regressão | Evidência | Status |
 | --- | --- | --- | --- | --- |
-| Cards/score/requisitos/relação/loading/mobile | direct | UI real before/after, conteúdos completos e handlers;37%menos altura do primeiro card1448 e51%menos390 | PNGs/JSON e fonte | PASS |
+| Cards/score/requisitos/relação/loading/mobile | direct | UI real before/after, conteúdos completos e handlers;34%menos altura do primeiro card1448 e49%menos390 | PNGs/JSON e fonte | PASS |
 | Estado/inclusão por ciclo | direct | legado added local substituído por leitura persistida; negativos/closed/add/ID/focus | browser-results | PASS |
 | Tenant/papéis/concorrência | critical_transversal | guardas anteriores mantidas; member sem consulta, scope race e ID explícito | mocks/rotas/diff | PASS |
 | Perfil/comparação/navegação | plausible_indirect | CSS restrito ao card; comparação1448/390, handlers e20regressões compartilhadas | compare-PNG/JSON/action-results/Node | PASS |
@@ -51,11 +51,11 @@ F-01: nenhum backend/schema/Edge/modelo/billing/aviso de candidato novo, nenhum 
 | approved-reference.png, artboard1536x1024 desktop+mobile | Diego62/100, cobertura62%,2atendidos/11sem evidência e vínculo atual; exemplos adicionais | after-1536/1448-viewport, after-390-viewport e completos | Uma coluna, cabeçalho identidade/status/score, toolbar, resumo, explicação e revisão separadas. Demais cards recolhidos. Mesmos tokens e ordem; inspeção manual dos renders | PASS |
 | mobile390/320 e tablet768 | mesma fixture | after-* e visual-results | Reorganização sem corte, avatar/checkbox/score/status e ações preservados; lista completa expansível | PASS |
 
-Decoração, textos/menus ilustrativos da imagem e selos de revisão refletem os dados efetivamente fornecidos pela fixture, sem inventar revisão humana. A shell e a seta global pertencem à integração existente, não são substituídas pelo menu desenhado no mockup. Aviso de triagem anterior passa a expansão compacta com conteúdo preservado. Diferenças são adaptação de A-UX-01, sem mudança material de topologia. Altura medida do primeiro card:1448px viewport1106,5→698,55CSSpx;390viewport2604,69→1269CSSpx. Novidade/preservação não dependem de identidade de pixels.
+Decoração, textos/menus ilustrativos da imagem e selos de revisão refletem os dados efetivamente fornecidos pela fixture, sem inventar revisão humana. A shell e a seta global pertencem à integração existente, não são substituídas pelo menu desenhado no mockup. Aviso de triagem anterior passa a expansão compacta com conteúdo preservado. Diferenças são adaptação de A-UX-01, sem mudança material de topologia. Altura medida do primeiro card:1448px viewport1106,5→728,55CSSpx;390viewport2604,69→1323CSSpx. Novidade/preservação não dependem de identidade de pixels.
 
 ## Desvios do contrato
 
-Nenhum desvio material identificado na revisão local dos D/P/F/A. Publicação ainda pendente, portanto D-06 não recebe PASS antes de prova. D-UX-01/02 supersedem a antiga localização dentro do Score conforme acordo; dados/proveniência/gates preservados.
+CI inicial38073319429 falhou em4asserções de apresentação anterior e revelou a remoção indevida da descrição de ausência de evidência. Descrição restaurada; asserções de título/classe/botão atualizadas conforme D-UX-01/A-UX-01;22testes afetados e71checks de render PASS. Nenhum desvio material residual identificado na revisão local dos D/P/F/A. Publicação ainda pendente, portanto D-06 não recebe PASS antes de prova. D-UX-01/02 supersedem a antiga localização dentro do Score conforme acordo; dados/proveniência/gates preservados.
 
 ## Mudanças autorizadas durante a execução
 
@@ -63,7 +63,7 @@ Nenhuma decisão adicional do Product Owner. CSS scoped do Alert/avatares, uma c
 
 ## Validação final
 
-Local: build root, tipos web e build web PASS;74Node dirigidos (51vacancyIntelligence/positionFollowUp/productRelease,3rotas,20navigationHistory/stableMatching/trajectoryReviewModal/uxFoundation).91checks funcionais/negativos de navegador PASS;66checks de render/estrutura finais PASS após ajuste visual mobile. 5checks adicionais do drawer/comparação PASS em action-results. Nenhuma chamada IA, dado real ou email. Contextos gerados/checker, lint e foundation PASS em snapshot do index selecionado, sem arquivos particulares não rastreados. CI/publicação ainda pendentes. Avisos de bundle/import dinâmico preexistentes permanecem.
+Local: build root, tipos web e build web PASS;96Node dirigidos (51vacancyIntelligence/positionFollowUp/productRelease,3rotas,20navigationHistory/stableMatching/trajectoryReviewModal/uxFoundation,22matchingEvidenceLabel/matchingScore).91checks funcionais/negativos de navegador PASS;71checks de render/estrutura finais PASS após ajuste visual mobile. 5checks adicionais do drawer/comparação PASS em action-results. Nenhuma chamada IA, dado real ou email. Contextos gerados/checker, lint e foundation PASS em snapshot do index selecionado, sem arquivos particulares não rastreados. CI/publicação ainda pendentes. Avisos de bundle/import dinâmico preexistentes permanecem.
 
 ## Git / QA / ambiente
 

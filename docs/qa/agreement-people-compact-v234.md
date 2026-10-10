@@ -6,6 +6,8 @@ D-UX-01/02 deste acordo supersedem D-01/D-UX-01 e D-02/D-UX-02 do acordo `agreem
 
 ## DEVE
 
+D-UX-01 e A-UX-01 também supersedem o título longo de D-01 do acordo `agreement-m83-evidence-label.md` v1.0.0 pela apresentação compacta “Sem evidência (N)”. D-02 daquele acordo permanece integralmente: descrição junto ao título, limitada ao Perfil publicado. Itens, classificação e interpretação da ausência permanecem preservados.
+
 - D-UX-01: cards compactos em uma coluna; identidade/avatar/seleção à esquerda, estado do acompanhamento junto ao nome, score e cobertura à direita. Faixa compacta de ações abaixo, consulta à esquerda e acompanhamento à direita. Requisitos resumidos visíveis, explicação da descoberta e revisão humana em divulgações progressivas separadas. Sem duas grandes colunas Consultar/Decisão. Preservar agrupamentos A/B/C existentes.
 - D-UX-02: celular reorganiza os mesmos dados em uma coluna, sem overflow; estado/score e acompanhamento continuam visíveis, ações têm texto legível e evidências completas podem ser expandidas. Desktop preserva hierarquia, agrupamento e densidade reconhecíveis da primeira proposta.
 - D-03: consultar uma vez por Posição o acompanhamento persistido do processo atual. Pessoa incluída permanece na descoberta com “Já está no acompanhamento”, “Processo atual” e “Abrir acompanhamento”. Histórico arquivado não equivale a inclusão atual. Reentrada/reload/retorno à janela reconsultam o estado sem IA.

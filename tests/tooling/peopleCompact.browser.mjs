@@ -31,6 +31,7 @@ try {
       check(`${width}: single aggregated read and no passive writes`, (await calls(p)).length === 1 && (await calls(p))[0].name === "load-follow-up");
       check(`${width}: no overflow`, await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
       check(`${width}: avatar preserved on desktop and mobile`, await card(p).locator(".prisma-vacancy-avatar").isVisible());
+      check(`${width}: absence of evidence remains explicitly scoped to the published Profile`, await card(p).getByText("Requisitos da posição para os quais não foi encontrada evidência no Perfil publicado.", { exact: true }).isVisible());
       check(`${width}: human review is collapsed independently`, await card(p).locator(".prisma-candidate-review").evaluate(n => !n.open));
       await p.screenshot({ path: `${dir}/after-${width}.png`, fullPage: true });
       await p.screenshot({ path: `${dir}/after-${width}-viewport.png`, fullPage: false });

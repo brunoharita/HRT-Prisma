@@ -413,7 +413,7 @@ test("UI expõe score, cobertura, grupos, explicação, versões e proteção mo
   ]);
   assert.match(page, /Compatibilidade observada provisória/);
   assert.match(page, /Cobertura das evidências/);
-  assert.match(page, /Ver como o score foi calculado/);
+  assert.match(page, /Ver cálculo do score/);
   assert.match(page, /Grupo A · trajetória diretamente compatível/);
   assert.match(page, /Grupo B · trajetória relacionada ou potencial de entrada/);
   assert.match(page, /Grupo C · somente sinais contextuais/);

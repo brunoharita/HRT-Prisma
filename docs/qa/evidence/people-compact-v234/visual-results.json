@@ -24,6 +24,10 @@
     "pass": true
   },
   {
+    "name": "1536: absence of evidence remains explicitly scoped to the published Profile",
+    "pass": true
+  },
+  {
     "name": "1536: human review is collapsed independently",
     "pass": true
   },
@@ -42,7 +46,7 @@
         "x": 0,
         "y": 220.890625,
         "width": 1536,
-        "height": 698.546875
+        "height": 728.546875
       },
       "identity": {
         "x": 17,
@@ -66,17 +70,17 @@
         "x": 17,
         "y": 505,
         "width": 1502,
-        "height": 207.671875
+        "height": 237.671875
       },
       "trajectory": {
         "x": 17,
-        "y": 722.671875,
+        "y": 752.671875,
         "width": 1502,
         "height": 118.078125
       },
       "review": {
         "x": 17,
-        "y": 850.75,
+        "y": 880.75,
         "width": 1502,
         "height": 51.6875
       }
@@ -123,6 +127,10 @@
     "pass": true
   },
   {
+    "name": "1448: absence of evidence remains explicitly scoped to the published Profile",
+    "pass": true
+  },
+  {
     "name": "1448: human review is collapsed independently",
     "pass": true
   },
@@ -141,7 +149,7 @@
         "x": 0,
         "y": 219.421875,
         "width": 1448,
-        "height": 698.546875
+        "height": 728.546875
       },
       "identity": {
         "x": 17,
@@ -165,17 +173,17 @@
         "x": 17,
         "y": 503.53125,
         "width": 1414,
-        "height": 207.671875
+        "height": 237.671875
       },
       "trajectory": {
         "x": 17,
-        "y": 721.203125,
+        "y": 751.203125,
         "width": 1414,
         "height": 118.078125
       },
       "review": {
         "x": 17,
-        "y": 849.28125,
+        "y": 879.28125,
         "width": 1414,
         "height": 51.6875
       }
@@ -222,6 +230,10 @@
     "pass": true
   },
   {
+    "name": "768: absence of evidence remains explicitly scoped to the published Profile",
+    "pass": true
+  },
+  {
     "name": "768: human review is collapsed independently",
     "pass": true
   },
@@ -240,7 +252,7 @@
         "x": 0,
         "y": 271.8125,
         "width": 768,
-        "height": 825.71875
+        "height": 879.71875
       },
       "identity": {
         "x": 17,
@@ -264,17 +276,17 @@
         "x": 17,
         "y": 590.3125,
         "width": 734,
-        "height": 276.453125
+        "height": 330.453125
       },
       "trajectory": {
         "x": 17,
-        "y": 876.765625,
+        "y": 930.765625,
         "width": 734,
         "height": 142.078125
       },
       "review": {
         "x": 17,
-        "y": 1028.84375,
+        "y": 1082.84375,
         "width": 734,
         "height": 51.6875
       }
@@ -321,6 +333,10 @@
     "pass": true
   },
   {
+    "name": "390: absence of evidence remains explicitly scoped to the published Profile",
+    "pass": true
+  },
+  {
     "name": "390: human review is collapsed independently",
     "pass": true
   },
@@ -339,7 +355,7 @@
         "x": 0,
         "y": 428.890625,
         "width": 390,
-        "height": 1269
+        "height": 1323
       },
       "identity": {
         "x": 13,
@@ -363,17 +379,17 @@
         "x": 13,
         "y": 1033.78125,
         "width": 364,
-        "height": 413.34375
+        "height": 467.34375
       },
       "trajectory": {
         "x": 13,
-        "y": 1457.125,
+        "y": 1511.125,
         "width": 364,
         "height": 166.078125
       },
       "review": {
         "x": 13,
-        "y": 1633.203125,
+        "y": 1687.203125,
         "width": 364,
         "height": 51.6875
       }
@@ -420,6 +436,10 @@
     "pass": true
   },
   {
+    "name": "320: absence of evidence remains explicitly scoped to the published Profile",
+    "pass": true
+  },
+  {
     "name": "320: human review is collapsed independently",
     "pass": true
   },
@@ -438,7 +458,7 @@
         "x": 0,
         "y": 451.625,
         "width": 320,
-        "height": 1373.78125
+        "height": 1451.78125
       },
       "identity": {
         "x": 13,
@@ -462,17 +482,17 @@
         "x": 13,
         "y": 1076.515625,
         "width": 294,
-        "height": 447.734375
+        "height": 525.734375
       },
       "trajectory": {
         "x": 13,
-        "y": 1534.25,
+        "y": 1612.25,
         "width": 294,
         "height": 216.46875
       },
       "review": {
         "x": 13,
-        "y": 1760.71875,
+        "y": 1838.71875,
         "width": 294,
         "height": 51.6875
       }

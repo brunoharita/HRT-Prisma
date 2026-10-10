@@ -15,3 +15,5 @@ Inicial10/10/2026, antes da implementação. Baseline main/origin220b5034d951a83
 | Registry/contextos/releaseweb | direct | versão2.3.2 | versão2.3.4 com3pulado, generator/check/CI, smoke e rollback |
 
 Referência normativa: primeira proposta aprovada. Reutilização: Ant Design, details nativo, cards, serviços e RPCs Prisma atendem integralmente; não há lacuna que exija dependência externa. SQL será somente lido no repositório para conferir contrato; nenhuma consulta ou fixture de produção é necessária. Atualizar mapa se descoberta ampliar dependências.
+
+Descoberta na validação CI: testes estáticos de rótulos/layout anteriores são diretamente afetados. Regressão inclui matchingEvidenceLabel e matchingScore; preserva a descrição de ausência de evidência no Perfil publicado e atualiza apenas asserções de apresentação aprovadas.
