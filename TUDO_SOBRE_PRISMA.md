@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 426
-source_manifest_sha256: 934f99f228faa7eb495c165a125e6243162537555b6ff1212606f1438f78886f
+documentation_source_count: 434
+source_manifest_sha256: d89e08616a065e58201b360a395e02f2ba37b2eafd16d98ba420c2c8ec492ae6
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.66.0
+version: 2.67.0
 last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Prova comum por processo seletivo — v2.3.2 em validação
+
+Implementação autorizada por Bruno em10/10/2026: uma prova por organização/Posição/processo, com aplicações individuais e congelamento no primeiro envio. Seleção no acompanhamento, padrões20/Fácil2/Banco/60, montagem automática por catálogo aprovado com cobertura/cotas/unicidade, confirmação para completar somente déficit por IA, revisão do conjunto e lote transacional com convites/estados/replay individuais. Ciclos históricos consultáveis; novo processo após encerramento e reuso explícito de prova compatível. Backend recusa autoria individual nova e escritores antigos sem ID de ciclo, preservando consulta/portalv1 e dados históricos. Sem alteração de Score/Perfil/etapas/ocupação, modelo/preços/ledger/transportes; aviso final/expurgo continuam adiados e erasure explícita preservada. ADR-082, acordo/execution v1.0.0, AoT process-assessment-v232. SQL/concorrência locais e checks dirigidos passam; browser/CI/migração remota/Edge/main/VPS/smoke em conclusão, ainda sem alegação de rollout ou candidato real.
 
 ## Retorno à tela anterior — v2.3.1
 
@@ -4664,11 +4668,15 @@ Alteração de capability é material e exige teste, documentação, Context Pac
 ---
 owner: architecture
 status: implemented_and_deployed
-version: 1.1.0
-last_verified: 2026-10-09
+version: 1.2.0
+last_verified: 2026-10-10
 ---
 
 # Arquitetura do M5.1 - Verificação de Competências
+
+## Prova comum por processo — v2.3.2
+
+A decisão mais recente substitui a autoria individual nas novas avaliações: uma prova por organização/Posição/ciclo, congelada no primeiro envio, com convites, tentativas e resultados pessoais. Montagem automática do banco, geração explícita somente do déficit e aprovação humana do conjunto reutilizam os contratos existentes. Histórico v1 e portal público v1 permanecem compatíveis. Arquitetura e fronteiras estão em `docs/architecture/process-assessment.md`, decisão em ADR-082 e validação/publicação em `docs/qa/aot-process-assessment-v232.md`. A disponibilidade produtiva exige os recibos desse AoT; o texto abaixo registra o movimento anterior.
 
 ## Avaliação contextual para Posição — v2.3.0
 
@@ -5296,6 +5304,26 @@ Flags não substituem autorização, RLS, migration, contrato ou aprovação de 
 
 ---
 
+## Source: `docs/architecture/process-assessment.md`
+
+# Contratos da prova comum por processo
+
+ADR-082 e acordo process-assessment-v232 v1.0.0, entrega2.3.2. Migração aditiva20261010120000_process_assessment.
+
+`position_evaluation_processes` possui `sequence` e `is_current`; índices únicos asseguram um atual por organização/Posição e uma sequência por ciclo. O novo ciclo exige encerramento/revisão do atual, idempotência persistida e lock da Posição. Não copia entradas humanas. Leituras seguem `position-follow-up-1.0.0` com resumos/ciclo opcional aditivos; escritas operacionais usam `mutate_position_follow_up_process` com ID explícito, evitando que uma aba antiga altere o ciclo novo por coincidência de revisão. O RPC anterior aceita somente `add` da descoberta para o atual; outros escritores antigos falham fechados. Helpers privados não são executáveis pelos clientes.
+
+Snapshots históricos `position-assessment-1.0.0` têm `person_id` e nenhum `process_id`. Novos `position-assessment-2.0.0` têm `process_id` e nenhum `person_id`, restrição de shape e um por processo. `position_assessment_attempts.person_id` identifica participantes novos; forma antiga permanece. FK composta tenant e índice único impedem aplicação cruzada/duplicada. Nenhum backfill converte provas individuais.
+
+Workspace/envelope de operador `process-assessment-1.0.0`; portal `position-assessment-1.0.0` preservado, com nome do participante tomado da aplicação e questões sem gabarito/proveniência. Novos RPCs de workspace/reuso/lote/cancelamento usam autorização viva existente, RLS, grants execute-only. Bancos continuam privados ou globais aprovados, sem promoção automática. Conteúdo canonical aprovado é derivado no servidor; edição altera só cópia e invalida aprovação. O algoritmo puro usa fluxo máximo para cobertura com unicidade de item e cotas de dificuldade, depois preenche slots equilibrando requisitos; déficit é dado, nunca ação implícita.
+
+`process_assessment_issue` trava processo/prova, valida todos os destinatários, contexto, revisão, prazo e composição, registra aprovação humana do conjunto e fila individual numa transação. `position_assessment_batches` armazena fingerprint e recibos por requestId; tokens só no hash da aplicação/ciphertext privado do outbox. Nenhum token retorna ao operador. Primeira emissão torna a prova imutável; novos candidatos usam o mesmo snapshot. Replays preservam fila existente e campos; conflito não troca payload/chave. Envio externo permanece no worker/lease existente, evitando timeout e envio parcial durante a aprovação do lote.
+
+Reuso explícito exige mesma organização/Posição/versão de definição e prova anterior emitida/composição aprovada. Cria novo rascunho sem respostas/convites. Histórico do ciclo é consultável. Cancelamento individual revoga só aquele link; não cancela a prova comum nem permite recriar aplicação duplicada por replay. Uma futura segunda tentativa da mesma Pessoa no mesmo ciclo exigiria decisão específica de produto.
+
+IA e histórico/custos reutilizam geração/reserva/ledger/modelo atuais. Escrita durante reserva pendente é bloqueada; conclusão tardia verifica revisão, estado, processo atual e ativo. Orçamento e consumo desconhecido permanecem explícitos. Exclusão explícita de participante remove cascatas e recibos pessoais do lote, preservando prova do processo; nenhuma exclusão automática foi ativada.
+
+---
+
 ## Source: `docs/architecture/professional-concept-architecture.md`
 
 # Arquitetura da Fundação de Conhecimento
@@ -5566,6 +5594,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.2**, prova comum por processo seletivo, montagem automática e aprovação/envio em lote. Registry único acrescenta entrega2 ao movimento3, preservando2.3.0/1. Persistência nova `position-assessment-2.0.0`; envelope de operador `process-assessment-1.0.0`; portal público e dados históricos1.0.0 preservados. Ciclos atuais/históricos e escritores com ID de processo explícito. Migração aditiva, Edge position-assessment e web; demais serviços/modelos/Score preservados. ADR-082, acordo/execução/AoT process-assessment-v232. Rollout comprovado somente nos recibos finais.
 
 Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.1**, seta compartilhada que retorna à tela imediatamente anterior, com atalhos fixos coexistentes. Registry único acrescenta a entrega1 ao movimento3, preservando2.3.0 e histórico anterior. Contrato de apresentação `prisma-ux-foundation-1.4.0`; nenhum contrato persistido, serviço, modelo, fórmula ou migration muda. Rollout somente web, Agreement/Execution/AoT `navigation-back-v231`.
 
@@ -9994,6 +10024,24 @@ Delta operacional1.0.2 em09/10/2026: a API autenticada de recebimento retornou o
 
 ---
 
+## Source: `docs/decisions/ADR-082-process-assessment.md`
+
+# ADR-082 — Prova comum por processo seletivo
+
+Status: aceito para implementação v2.3.2 em10/10/2026, decisão explícita de Bruno nesta conversa e acordo process-assessment-v232 v1.0.0.
+
+## Decisão
+
+Reutilizar position_evaluation_processes, position_assessments, attempts/deliveries/generation/audit e o portal/gerador/transporte/ledger existentes. Evoluir o processo de único por Posição para ciclos com um atual e histórico; prova comum com person_id ausente e process_id obrigatório, aplicações com person_id próprio. Provas individuais anteriores conservam sua forma, conteúdo e acesso histórico. Nova prova usa contrato persistido2, portal mantém contrato público1 porque campos/semântica da aplicação individual não mudam.
+
+Uma prova por ciclo, congelada na primeira emissão; nenhuma promoção ou conversão de aprovação histórica. Reuso explicitamente solicitado cria rascunho do novo ciclo, somente com contexto compatível. Montagem determinística do catálogo aprovado e revisão humana de conteúdo novo/editado; geração só após confirmação. Lote autenticado valida integralmente e enfileira aplicações individuais em transação, com idempotência persistida, reutilizando worker/leases existentes.
+
+## Alternativas e consequências
+
+Prova distinta por Pessoa impediria equivalência do instrumento e repetiria custo/revisão. Tabela/plataforma externa separada duplicaria catálogo, tokens, outbox e ledger sem benefício funcional verificado. Ampliar estruturas próprias é a menor integração compatível; nenhuma nova biblioteca/fornecedor. Implica migration aditiva, atualização seletiva das RPCs e Edge, leitura de ciclos e cuidado com exclusão de uma Pessoa: apagar sua aplicação não apaga a prova comum. Histórico e schema ficam preservados em rollback; consumidores antigos continuam lendo aplicações existentes, mas novas provas individuais são recusadas pelo backend.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10877,6 +10925,24 @@ Se a conexão for pelo session pooler, informar `-DatabaseHost` com o host forne
 Executar `node scripts/backup-prisma-production.mjs verify 'D:\DestinoPrivado\Prisma\prisma-<data>'` para repetir hashes, tamanhos e leitura do archive. O manifesto registra o estado no instante do backup; sua marca `isolated-restore-pending` não é atualizada retroativamente. Em 2026-09-20, o `database.dump` foi restaurado com `pg_restore --clean --if-exists --exit-on-error` em PostgreSQL Supabase 17.6.1.155, sem porta exposta nem volume persistente. O contêiner precisou de `cron.database_name` apontado ao banco de teste, dos papéis locais sem login `supabase_realtime_admin` e `supabase_functions_admin`, e de `postgres` superusuário local para o gatilho de DDL do dump. A restauração terminou sem erro: `auth.users` 7, `people` 10, `resume_intakes` 15, `storage.buckets` 1 e `storage.objects` 15. Os 15 caminhos/tamanhos e os fingerprints de objetos e buckets coincidiram com o manifesto; os hashes dos bytes copiados passaram. Em uma rede Docker interna, PostgREST 14.15 e Storage API 1.71.0 receberam os 15 PDFs copiados pelo backup, com o MIME permitido pelo bucket; a leitura de volta pela API confirmou 2.118.277 bytes e SHA-256 de cada objeto. Ao fim, os contêineres e a rede foram removidos e a cópia privada original permaneceu intacta. Nunca testar restauração sobre produção.
 
 O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocorre depois. Suspender novas importações durante o corte da limpeza ou revalidar fingerprints imediatamente antes de excluir; nenhum backup manual substitui recuperação ponto a ponto. Para operação recorrente, agendar apenas após o primeiro backup e teste de restauração, com armazenamento seguro das credenciais no mesmo usuário que executará a tarefa e alerta para falhas. Ainda não há tarefa agendada, política de retenção nem cópia externa configuradas; essas decisões dependem do destino e da autenticação do operador.
+
+---
+
+## Source: `docs/operations/process-assessment-v232.md`
+
+# Operação seletiva da2.3.2
+
+Escopo aprovado: main/origin existente, Supabase Prisma ioldpnqqvobprjiontre, VPS srv1038882/alias prisma-vps/repositório /opt/prisma. Aplicar somente a migration aditiva de prova comum, Edge position-assessment e web requeridos pelo plano do SHA validado. Não usar db push geral: ledger remoto histórico difere de filenames locais.
+
+QA primeiro: PostgreSQL17 descartável local127.0.0.1:55479, base import_evidence_v202 verificada vazia, fixtures sintéticas/rollback. Runner `scripts/test-process-assessment-sql.mjs` estabelece v1 e prova preservação na migração; `test-process-assessment-concurrency.mjs` cria/remove somente seu clone dedicado protegido. Browser real/componentes com transportes sintéticos em5710, desktop/tablet/mobile, sem provedor pago ou candidatos produtivos. CI configurado permanece gate, sem suíte integral local indiscriminada.
+
+Antes de publicar, capturar counts/hashes de snapshots produtivos sem texto/contatos, identidade, schema/grants e Edge ativa; runtime VPS IDs/imagens/restarts/health dos sete serviços. Baseline10/10: HEADb4e0923c382eae518ac19cbf29c0d715d5f50aed, web81e1c9d0d53c, mailb257a83cbb37, parser311f8e4f4d0f, synthesisdb6c5c0ef238, gateway2eed2dd379ea, experimentod991a574e45e unhealthy histórico, Traefik5e25fdc6d2e6. Esse registro não substitui verificação no rollout.
+
+Aplicação remota por conector de migration com conteúdo local revisado; verificar função/grants/RLS/índices/shape e hashes sem consultar credenciais. Deploy Edge apenas position-assessment, verify_jwt=false com autenticação custom existente; origin/envelope/tokens/worker preservados. Não criar/restabelecer credenciais, nem enviar e-mail/gerar IA em produção para smoke. Dispatcher já consome o outbox; nenhum rebuild de Synthesis/Parser/mail requerido.
+
+Publicar web pelo dispatcher para SHA coerente, CI aprovado, promoção main e VPS. Smoke lê login/rotas públicas/assets, versão2.3.2/SHA no bundle, negativas públicas de backend e identidade/schema/Edge. 404 imediato durante recriação pode ser transitório; estabilizar e comprovar container/asset antes de repetir build. Não alegar jornada autenticada real, entrega de e-mail ou calibração a partir de smoke público.
+
+Rollback: preservar imagem web anterior e fonte Edge anterior para restauração seletiva. A migration é aditiva e não deve ser revertida apagando dados; portalv1 permanece compatível. Frontend anterior pode consultar histórico, mas autorias individuais e escritas sem ID de processo falham fechadas após a migração; rollback funcional de autoria requer correção forward ou UI compatível com contratos novos. Não reabilitar prova individual para contornar essa proteção. Recibos finais/SHA/CI/estado ficam no AoT.
 
 ---
 
@@ -11812,6 +11878,28 @@ Validar se uma base de currículos pode ser transformada em conhecimento profiss
 `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`
 
 A amostra atual é sintética e representativa. Ela permite comprovar a mecânica do Movimento 0, mas não congela o schema de perfil nem demonstra qualidade para dados reais de cliente.
+
+---
+
+## Source: `docs/product/process-assessment.md`
+
+# Avaliação comum por processo seletivo
+
+Decisão de Bruno em10/10/2026, acordo process-assessment-v232 v1.0.0. A avaliação é opcional e apoia a seleção humana. A prova pertence à organização, Posição e processo; os convites, respostas, resultados e observações pertencem a cada candidato.
+
+No **Acompanhamento**, selecione as Pessoas pelos controles dos cartões ou da Lista e clique em **Preparar avaliação**. Os padrões são **Quantidade de questões:20**, **Nível:Fácil**, **Fonte:Banco**, **Duração em minutos:60**. Os requisitos vêm da Posição; **Personalizar requisitos** permite ajustar o foco. Quantidades múltiplas de10 mantêm distribuição exata. Fácil usa40% fáceis/40% médias/20% difíceis, portanto20 questões são8/8/4.
+
+**Montar avaliação** busca versões aprovadas, compatíveis e distintas do catálogo, cobrindo os requisitos e as cotas de dificuldade. Havendo insuficiência, a modal informa montadas/faltantes e oferece **Cancelar** ou **Gerar X questões por IA**. Cancelar conserva seleção/configuração/rascunho. Somente a confirmação invoca a IA para o déficit, até20 por pedido e US$0,25/pedido, tetoUS$10/mês por empresa. Vários pedidos mostram o máximo autorizado. Erro mantém o conteúdo confirmado; não há retry pago automático. Repetir montagem preserva conteúdo contextual já revisado e completa vagas disponíveis no banco.
+
+Na segunda superfície, **Revisar avaliação**, confira questões, cinco alternativas, correta, justificativa e origem. **Editar questão** cria revisão da cópia contextual; **Substituir pelo banco** escolhe outra versão compatível disponível. Questões novas/alteradas são destacadas. Aprovação de banco idêntico conserva autor/versionamento; uma ação humana **Aprovar e enviar aos X candidatos** aprova o conjunto completo e registra os convites. Não exige20 aprovações individuais.
+
+Os contatos cadastrados são preenchidos. Alterar **E-mail do convite** não altera o cadastro. **Prazo de acesso** é explícito e separado da duração iniciada pelo participante. **Personalizar assunto e mensagem** contém ajustes opcionais. O backend valida o lote inteiro antes de gravar aprovação, tokens ou fila. Na fila/aceito pelo provedor/erro/conciliação são estados distintos; aceitação não comprova entrega/abertura. Repetição do pedido ou lote concorrente não cria nova aplicação para a mesma Pessoa.
+
+A prova fica fixada no primeiro envio: questões, versões, ordem, duração e correção permanecem comuns para candidatos adicionados depois. **Consultar avaliação do processo** abre a prova e **Ver resultado e atividade** consulta cada aplicação. Correção objetiva, respostas e sinais observados não modificam Score, Perfil, etapas, ocupação ou decisão humana. Sinais parciais não comprovam pesquisa, captura ou fraude.
+
+**Reabrir processo** mantém a prova existente. Depois de **Encerrar processo**, **Novo processo seletivo** cria um ciclo vazio, conservando o anterior em **Processo seletivo**. O novo ciclo pode montar outra prova ou **Reutilizar prova** compatível anterior, sem copiar aplicações/respostas/decisões. Ciclos anteriores são somente consulta. **Avaliações individuais anteriores** preserva o histórico anterior à2.3.2; não declara equivalência retroativa.
+
+Nenhum aviso final ou expurgo temporal foi introduzido. Exclusão explícita de uma Pessoa conserva a prova comum e remove suas aplicações, eventos, convites e referências pessoais dos recibos de lote. Uma prova comum facilita comparação do instrumento, mas não certifica justiça ou calibração empírica de dificuldade.
 
 ---
 
@@ -15907,6 +15995,48 @@ Versão 1.0.0. Estado: agreed para implementação local. PO: Bruno, 2026-09-14.
 ## PENDENTE
 
 Nenhuma decisão material pendente. Automação futura de upload exige decisão própria de integração, autenticação, custo e operação.
+
+---
+
+## Source: `docs/qa/agreement-process-assessment-v232.md`
+
+# Acordo — Prova comum por processo v2.3.2
+
+Versão 1.0.0, agreed/frozen. Bruno aprovou nesta conversa a proposta de prova comum por processo e preparação automática, e determinou implementar em main e publicar 2.3.2 em 10/10/2026. Supersede, para novas provas, D-01/02/03/06/07 e D-UX-01/02/03/P-UX-01 do acordo position-assessment-v230 v0.5.0 na unidade individual, seleção manual e quatro etapas. Os demais limites e contratos preservados continuam aplicáveis; provas/aplicações históricas não são convertidas ou apagadas.
+
+## DEVE
+
+- D-01: Uma prova compartilhada por organização/Posição/processo; cada candidato possui convite, token, tentativa, respostas, correção e observações separados. Mesmas questões, versões, ordem, duração e critérios. Não gerar prova individual ao entrar em uma Pessoa.
+- D-02: Congelar prova no primeiro envio. Novos participantes do mesmo processo recebem a mesma versão; nenhuma edição/substituição após emissão. Novo processo pode ter nova prova ou reutilizar explicitamente prova compatível anterior. Reabrir um processo existente mantém sua prova; ciclos e histórico permanecem consultáveis.
+- D-03: Selecionar candidatos no acompanhamento e Preparar avaliação. Configuração curta: quantidade20, nível Fácil2, origem banco, duração60 minutos como padrões editáveis; foco nos requisitos da Posição, personalização opcional. Distribuição existente Fácil=40/40/20 visível, múltiplos de10 sem arredondar.
+- D-04: Montar avaliação seleciona automaticamente versões aprovadas compatíveis do banco, com cobertura e distribuição exatas, sem escolha manual ou salvar rascunho adicional. Modos IA/misto existentes permanecem escolhas explícitas; jamais chamar IA ao consultar/configurar ou silenciosamente por insuficiência.
+- D-05: Insuficiência abre modal com disponíveis/faltantes, Gerar por IA e Cancelar. Cancelar mantém candidatos/configuração/rascunho. Confirmar gera somente déficit, até20 por pedido, limites existentes US$0,25/pedido e US$10/mês/empresa, histórico genérico existente. Exibir limite total autorizado quando precisar de vários pedidos. Falha/retry conserva estado confirmado e não repete cobrança automaticamente.
+- D-06: Revisar e enviar em uma segunda superfície. Cinco opções distintas/uma correta, justificativa, requisito, origem e versão; banco aprovado conserva aprovação da mesma versão, conteúdo novo/editado exige aprovação humana do conjunto no envio. Editar/substituir antes de congelar, sem obrigação de aprovar cada questão. Validações e autoridade no backend.
+- D-07: Destinatários cadastrados preenchidos, alteração só no convite; prazo de acesso explícito separado de duração; assunto/mensagem padrão editáveis sob personalização. Aprovar e enviar aos X candidatos é ação humana explícita. Lote valida integralmente, cria fila transacional/idempotente e preserva estados individuais/falhas/retomada sem duplicar convites. Nada é enviado ao montar/revisar/cancelar.
+- D-08: Resultados e atividade individuais continuam consultáveis; correção determinística/portal/privacidade/limites observáveis/retomada preservados. Sem alteração de Score, Perfil, ocupação, etapas, decisão de seleção ou autonomia da IA.
+- D-09: Preservar avaliações históricas sem migração inventada de aprovação/equivalência. Reutilizar tabelas/RPCs/gerador/transporte/ledger, adicionar somente os vínculos/limites necessários, RLS e grants RPC-only/tenant/roles; public portal v1 compatível. Release2.3.2 main/origin/VPS, migration nova seletiva e Edge afetada, rollback e smoke.
+
+## PROIBIDO
+
+- P-01: Provas novas individuais ou versões diferentes para candidatos do mesmo processo; mudar prova emitida ou interpretar prova idêntica como certificação de justiça.
+- P-02: IA/envio/aprovação por consulta, navegação, geração, cancelamento ou insuficiência sem a ação humana explícita correspondente; alterações no cadastro por override de convite.
+- P-03: Acesso cruzado de empresa/papel/processo, expor token/gabarito ao candidato ou segredos no cliente/log, apagar/converter histórico, promover banco privado a global, alterar Score/Perfil/seleção.
+- P-04: Replay concorrente cria segunda tentativa/cobrança/entrega; lote inválido envia parcialmente; geração tardia sobrescreve revisão, contexto fechado ou emitido.
+
+## FORA DE ESCOPO / AUTONOMIA / PENDÊNCIAS
+
+F-01: Aviso final/expurgo por prazo continuam adiados; nenhum fornecedor/modelo/cobrança/plano novo, proctoring ou decisão automática. Sem dados/candidatos/mensagens fictícios em produção.
+
+A-01: Ampliar contratos existentes com evolução aditiva e ADR; algoritmo determinístico de montagem, nomes/acabamento de controles no design system, limites técnicos de payload e mensagens de falha, testes sintéticos e operação seletiva delegados. Reuso de prova anterior somente com contexto de requisitos compatível; incompatibilidade explícita requer nova montagem.
+
+Q: Nenhuma decisão material pendente.
+
+## ACEITE
+
+- CA-01 D-01/02: SQL tenant/role, igualdade de snapshot em candidatos distintos, congelamento/concorrência, novo/reaberto/histórico/reuso/late candidate; interface acessível no acompanhamento.
+- CA-02 D-03/04/05: Banco completo e parcial, cobertura/dificuldade/sem duplicar, modal cancelar/sim, falha/replay/limites e zero IA/envio implícitos em QA controlado.
+- CA-03 D-06/07/08: Edição invalida aprovação somente na cópia, revisão em conjunto e lote/recipient inválido sem efeitos; tokens distintos, autosave/submit/atividade por candidato e retry/outbox/ledger preservados. Browser desktop/mobile com componentes reais/fixtures, sem custo externo.
+- CA-04 D-09/P: Tipos/build/contratos dirigidos/SQL negativo/concorrência/QA browser/CI; remote identity/schema/grants/Edge/versão/SHA/smoke/preservação/rollback registrados no AoT, com limites de jornada autenticada real explícitos.
 
 ---
 
@@ -21039,6 +21169,74 @@ PASS. D-001 a D-008 e P-001 a P-006 possuem implementação e prova proporcional
 
 ---
 
+## Source: `docs/qa/aot-process-assessment-v232.md`
+
+# AoT — Prova comum por processo v2.3.2
+
+10/10/2026. Acordo/execution process-assessment-v232 v1.0.0 congelados por decisão explícita de Bruno. Baseline mainb4e0923c382eae518ac19cbf29c0d715d5f50aed; branch codex/process-assessment-v232. Template docs/qa/aot-template.md. Implementação em validação; publicação ainda NOT TESTED.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / Evidência | Status | Limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Parent comum v2 e aplicações pessoais, snapshot compartilhado | SQL workspace/vínculos/late candidate, algoritmo | PASS | Fixtures sintéticas |
+| D-02 | Freeze no primeiro envio, ciclos/histórico/reuso compatível | SQL freeze/reuso/novo ciclo e browser | PASS | Fixtures sintéticas |
+| D-03 | Seleção acompanhamento, padrões20/Fácil/Banco/60, requisitos | UI real/fixtures em1448/768/390/320px | PASS | Sem Pessoa produtiva |
+| D-04 | Montagem por fluxo máximo/cotas/cobertura e rascunho preservado | Domínio/SQL banco, browser completo/parcial/cancelar | PASS | Qualidade empírica não medida |
+| D-05 | Modal explícita, déficit/custos/ledger/limites/retry | SQL/Deno/domínio, browser sem IA implícita | PASS | Sem chamada paga |
+| D-06 | Revisão do conjunto, editar/cópia/reaprovação/substituir | SQL canonical bank/edição, UI desktop/mobile | PASS | Sem revisão fabricada |
+| D-07 | Lote atômico/recibos/fila/replay/contacts | SQL lote inválido/replay, Edge,5disputas | PASS | Nenhum e-mail real |
+| D-08 | Portal v1/atividade/correção/isolamento/erasure | SQL antes/depois, domínio/transporte, browser atividade | PASS | Jornada real NOT TESTED |
+| D-09 | Migration aditiva/tenant/roles,2.3.2 rollout seletivo | Local SQL/typecheck/Deno; operação pendente | PARTIAL | CI/main/produção pendentes |
+
+## Proibições verificadas
+
+| ID | Negativo / Evidência | Status |
+| --- | --- | --- |
+| P-01 | Backend recusa nova prova individual/configuração emitida; late snapshot igual | PASS |
+| P-02 | Consulta sem IA/envio; confirmação explícita/override só outbox | PASS |
+| P-03 | SQL roles/tenant/helpers/token/public gabarito/erasure e snapshots | PASS |
+| P-04 | Replay/lote inválido/reserva/lease/5disputas e revisão otimista | PASS |
+
+## Mapa de Impacto e Preservação
+
+Mapa `impact-process-assessment-v232.md` antes da implementação. Descoberta adicional: escritores de acompanhamento precisam de ID de ciclo explícito, incluído no mesmo domínio/rollback; dados/estágios/fórmulas preservados. ADR-082 registra versão e consequência em rollback. Exclusão explícita remove também recibos pessoais do lote, não a prova comum.
+
+| Capacidade | Relação | Baseline / Regressão | Status |
+| --- | --- | --- | --- |
+| Histórico individual/portal/outbox | direct | v1 estabelecido e assert antes/depois migration/sharedsend | PASS |
+| Banco/IA/custos/revisão | direct | Domínio/SQL/Deno e ledger/transporte | PASS |
+| Tenant/auth/token/erasure/concorrência | critical_transversal | Negativos/5conexões independentes/rollback local | PASS |
+| Score/Perfil/Posição | plausible_indirect | Snapshots SQL idênticos, nenhum cálculo na UI/transportes | PASS |
+| Acompanhamento/navegação/loading/mobile | direct | 76 browser novo,78 navegação e34 acompanhamento | PASS |
+| Parser/Synthesis/Mail/Gateway/Traefik/Paddle | no_impact_identified | Baseline runtime verificado; comparação pós-release pendente | NOT TESTED |
+
+### Novidade e preservação
+
+Nova unidade de prova comum, montagem automática e aprovação/envio transacional do conjunto. Portal/outbox/IA/ledger existentes reaproveitados. QA local começa vazio e o runner usa rollback; clone de concorrência é guardado e removido. Nenhum dado privado produtivo exportado. Candidato real, entrega e calibração de dificuldade NOT TESTED.
+
+## Fora de escopo preservado
+
+F-01: Sem aviso final/expurgo/fornecedor/modelo/plano/cobrança novos. Nenhum dado fictício ou mensagem de teste em produção. Diff/revisão: PASS.
+
+## Fidelidade visual
+
+Não aplicável referência normativa: a proposta aprovada nesta conversa é fluxo textual com design system existente. Screenshots da UI real/fixtures em `evidence/process-assessment-v232/browser`, larguras1448/768/390/320px. Configuração320 e revisão390 inspecionadas visualmente, além dos asserts de overflow/acessibilidade. Não substituem comparação com referência futura.
+
+## Desvios / mudanças autorizadas
+
+Nenhum desvio após comparação integral D-01..09/P-01..04/F-01/A-01. ID de ciclo no writer, nomes/algoritmo/limites técnicos e helpers de erasure exercem A-01; não alteram o comportamento aprovado. Nenhuma decisão material adicional do PO.
+
+## Validação final / Git / QA / ambiente
+
+77 asserts SQL local,5disputas e52Node dirigidos PASS;4Deno PASS. Browser:76 novo fluxo,78 navegação,34 acompanhamento PASS. Root build PASS; tipos web e build web PASS (avisos anteriores de tamanho de bundle/import dinâmico). Contextos/lint/foundation PASS em snapshot apenas dos arquivos selecionados, preservando arquivos particulares não rastreados. CI/main/produção/smoke ainda pendentes. Evidência em docs/qa/evidence/process-assessment-v232.
+
+## Conclusão
+
+PARTIAL. Não declarar implementação publicada enquanto todos D-* e critérios verificáveis não forem PASS.
+
+---
+
 ## Source: `docs/qa/aot-production-resume-quality-pipeline.md`
 
 # AoT — Qualidade da importação de currículos em produção
@@ -25973,6 +26171,14 @@ Implementar D-001 a D-008 e provar P-001 a P-006. Preservar exatamente cinco fon
 
 ---
 
+## Source: `docs/qa/execution-process-assessment-v232.md`
+
+# Execução — Prova comum v2.3.2
+
+Implementar integralmente docs/qa/agreement-process-assessment-v232.md v1.0.0, lido integralmente, D-01..09/P-01..04/F-01/A-01/CA-01..04 e mapa docs/qa/impact-process-assessment-v232.md. Preservar histórico, portal e limites existentes; nova prova comum por processo, dois momentos, montagem automática, IA por confirmação, revisão humana e envio em lote idempotente. Publicar migration nova/Edge afetada/frontend2.3.2 segundo dispatcher, QA antes de produção e AoT completo. Sem apagar/converter prova ou aprovar conteúdo em nome do usuário.
+
+---
+
 ## Source: `docs/qa/execution-production-resume-quality-pipeline.md`
 
 # Prompt de Execução — Qualidade da importação de currículos em produção
@@ -26144,6 +26350,26 @@ Baseline VPS: srv1038882, /opt/prisma SHA31d5965, web prisma-web:1.6.4, Parser p
 ## Fechamento do mapa
 
 Publicação2.3.0 no SHA funcional3e271e32 em main/origin/VPS, quatro migrations/funções e três runtimes conferidos;50checks remotos PASS. IDs/imagens/restarts de gateway/Traefik/Paddle exatamente preservados; cache Parser/secret mounts mantidos. Benchmark pago sintético de plataforma US$0,0023638estimados, sem candidato/conteúdo pessoal ou fixture de aplicação em produção. CI obrigatório868testes PASS e regressões dirigidas cobrem capacidades diretas/transversais acima. Nenhuma dependência adicional descoberta. Evidências/limites/AoT distinguem novidade, preservação e jornadas reais NOT TESTED; nenhuma declaração de calibração/equidade/entrega de e-mail. Estados iniciais de pendência são históricos, supersedidos pelo fechamento.
+
+---
+
+## Source: `docs/qa/impact-process-assessment-v232.md`
+
+# Mapa de impacto e preservação — v2.3.2
+
+Risco D/E: unidade persistida de prova e ciclo de processo, confiança/tenant/PII/token/IA/e-mail. Baseline main b4e0923c382eae518ac19cbf29c0d715d5f50aed, frontend2.3.1 funcional96c912d8eeb6ebc40722fe5970dc4bf80082ac90. Supabase Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY/PostgreSQL17 verificado; um processo/uma avaliação/zero aplicações/entregas (consulta agregada10/10), sem ler PII. QA descartável local import_evidence_v202/127.0.0.1:55479/PostgreSQL17, people vazio, nenhuma position_assessments verificados. Não há QA remoto separado.
+
+| Área | Relação | Capacidades a preservar / regressão |
+| --- | --- | --- |
+| Processo/avaliação/shared snapshot/banco | direct | Histórico individual, versões/aprovação, cobertura/distribuição; SQL antes/depois e algoritmo dirigido |
+| UI acompanhamento/prova/config/revisão/envio/resultados | direct | Lista/Kanban/filtros/revisão/rascunho/seta/loading; QA sintético desktop/mobile |
+| Tenant/roles/concorrência/token/erasure | critical_transversal | RPC-only/RLS/live auth; negativos lote/processo/escopo, freeze/replay, cascatas pessoais sem apagar prova comum |
+| Portal/correção/atividade/outbox | direct | Token pessoal/autosave/submit/eventos/lease/idempotência/sem gabarito; SQL/Edge/transporte dirigidos |
+| IA/histórico/custo | direct | Reusar geração explícita e ledger; limite/reserva/replay/sem PII; negativos/fixtures sem provider pago |
+| Pessoa/Score/Posição/matching/revisão | plausible_indirect | Sem efeito por montar/enviar/submeter; SQL before/after e regressão dos consumidores efetivamente afetados |
+| Parser/Synthesis/Mail/Gateway/Traefik/Paddle | no_impact_identified | Sem mudança de runtime ou prompts próprios; plano seletivo, IDs/imagens/restarts/controles remotos antes/depois |
+
+Nova descoberta revisa mapa e prova antes do fechamento. Sem suíte integral local por padrão; CI configurado do repositório permanece obrigatório. Baseline operacional será capturado antes do rollout; nenhuma alegação de candidato real ou justiça empírica a partir de fixture.
 
 ---
 

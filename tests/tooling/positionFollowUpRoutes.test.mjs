@@ -16,3 +16,8 @@ test('follow-up transport uses only reviewed operational RPCs, never calculation
  assert.ok(!service.includes('functions.invoke'));assert.ok(!service.includes('recordEvaluation'));assert.ok(!service.includes('loadPeopleByIds'));
  assert.ok(service.includes('position-follow-up-1.0.0'));
 });
+test('common proof and historical cycles bind explicit process identity with reviewer authority',()=>{
+ const variants=[['/vacancies/p1/follow-up/assessment',undefined,true,undefined],['/vacancies/p1/follow-up/person1/assessment',undefined,undefined,'person1'],['/vacancies/p1/follow-up/processes/cycle1/assessment','cycle1',true,undefined],['/vacancies/p1/follow-up/processes/cycle1/person1','cycle1',undefined,undefined]];
+ for(const [path,cycle,common,person] of variants){const route=findRoute(path);assert.equal(route.vacancyId,'p1');assert.equal(route.selectionProcessId,cycle);assert.equal(route.processAssessment,common);assert.equal(route.positionAssessmentPersonId,person);for(const role of ['member','recruiter'])assert.equal(evaluateRouteAccess({isAuthenticated:true,activeOrganizationId:'a',memberships:[{organizationId:'a',organizationName:'A',groupId:null,groupName:null,role}]},route.rule).allowed,role==='recruiter');}
+ assert.equal(findRoute('/vacancies/p1/follow-up/processes/cycle1/person1').vacancyFollowUpPersonId,'person1');
+});

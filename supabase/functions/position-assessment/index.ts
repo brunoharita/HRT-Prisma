@@ -65,8 +65,10 @@ Deno.serve(async(request:Request)=>{
  if(request.method!=="POST"||origin&&!origins.has(origin))return reply(403,{error:"Acesso não autorizado."});
  try{
   const raw=await readRequest(request);
-  const body=object(JSON.parse(raw));if(body.contract!=="position-assessment-1.0.0")return reply(409,{error:"Atualize a página para usar a versão atual."});
+  const body=object(JSON.parse(raw));if(!["position-assessment-1.0.0","process-assessment-1.0.0"].includes(text(body.contract)))return reply(409,{error:"Atualize a página para usar a versão atual."});
   const action=text(body.action);
+  if(body.contract==="process-assessment-1.0.0"&&!["generate","send_batch","dispatch_batch"].includes(action))return reply(400,{error:"Operação inválida."});
+  if(["send_batch","dispatch_batch"].includes(action)&&body.contract!=="process-assessment-1.0.0")return reply(409,{error:"Contrato incompatível."});
   if(action==="drain"){
    if(origin)return reply(403,{error:"Acesso não autorizado."});
    const rows=await rpc(server,"position_assessment_pending_deliveries",{p_secret:text(body.workerSecret)});
@@ -83,6 +85,12 @@ Deno.serve(async(request:Request)=>{
   const user=createClient(Deno.env.get("SUPABASE_URL")!,Deno.env.get("SUPABASE_ANON_KEY")!,{global:{headers:{Authorization:authorization}},auth:{persistSession:false,autoRefreshToken:false}});
   const {data:identity,error}=await user.auth.getUser();if(error||!identity.user)return reply(401,{error:"Sessão inválida."});
   if(action==="generate")return reply(200,await generate(user,body));
+  if(action==="send_batch")return reply(200,await rpc(user,"process_assessment_issue",{p_organization_id:body.organizationId,p_assessment_id:body.assessmentId,p_revision:body.revision,p_request_id:body.requestId,p_recipients:body.recipients,p_subject:body.subject,p_message:body.message,p_expires_at:body.expiresAt}));
+  if(action==="dispatch_batch"){
+   const workspace=await rpc(user,"process_assessment_workspace",{p_organization_id:body.organizationId,p_vacancy_id:body.vacancyId,p_process_id:body.processId});
+   if(!workspace.attempts.some((t:any)=>t.deliveries.some((d:any)=>d.id===body.deliveryId)))return reply(403,{error:"Envio indisponível."});
+   return reply(200,await dispatch(body.deliveryId,body.organizationId));
+  }
   if(action==="send"){
    const invite=await rpc(user,"position_assessment_invite",{p_organization_id:body.organizationId,p_assessment_id:body.assessmentId,p_request_key:body.requestId,p_recipient:body.recipient,p_subject:body.subject,p_message:body.message,p_expires_at:body.expiresAt});
    return reply(200,{...invite,...await dispatch(invite.deliveryId,body.organizationId)});

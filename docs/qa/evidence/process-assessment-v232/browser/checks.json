@@ -1,0 +1,311 @@
+{
+  "checks": [
+    {
+      "name": "1448: configuration inherits two selected candidates without implicit writes",
+      "pass": true
+    },
+    {
+      "name": "1448: defaults 20 questions / 60 minutes / easy / bank",
+      "pass": true
+    },
+    {
+      "name": "1448: complete bank skips AI confirmation",
+      "pass": true
+    },
+    {
+      "name": "1448: candidate selection carried to review",
+      "pass": true
+    },
+    {
+      "name": "1448: changed content highlighted for review",
+      "pass": true
+    },
+    {
+      "name": "1448: review no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: failed send retains selected recipients and deadline",
+      "pass": true
+    },
+    {
+      "name": "1448: lost/failed response retry keeps batch id",
+      "pass": true
+    },
+    {
+      "name": "1448: batch only requested recipients",
+      "pass": true
+    },
+    {
+      "name": "1448: first send freezes common proof and exposes individual states",
+      "pass": true
+    },
+    {
+      "name": "1448: partial bank shows exact deficit",
+      "pass": true
+    },
+    {
+      "name": "1448: cancel performs zero AI/send and preserves bank draft",
+      "pass": true
+    },
+    {
+      "name": "1448: explicit AI generates only exact deficit",
+      "pass": true
+    },
+    {
+      "name": "1448: bank and generated proposals coexist with pending review",
+      "pass": true
+    },
+    {
+      "name": "1448: private individual activity retains method and limits",
+      "pass": true
+    },
+    {
+      "name": "1448: historical process remains read-only",
+      "pass": true
+    },
+    {
+      "name": "1448: reuse is explicit and excludes old applications",
+      "pass": true
+    },
+    {
+      "name": "1448: no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "1448: no external requests",
+      "pass": true
+    },
+    {
+      "name": "768: configuration inherits two selected candidates without implicit writes",
+      "pass": true
+    },
+    {
+      "name": "768: defaults 20 questions / 60 minutes / easy / bank",
+      "pass": true
+    },
+    {
+      "name": "768: complete bank skips AI confirmation",
+      "pass": true
+    },
+    {
+      "name": "768: candidate selection carried to review",
+      "pass": true
+    },
+    {
+      "name": "768: changed content highlighted for review",
+      "pass": true
+    },
+    {
+      "name": "768: review no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "768: failed send retains selected recipients and deadline",
+      "pass": true
+    },
+    {
+      "name": "768: lost/failed response retry keeps batch id",
+      "pass": true
+    },
+    {
+      "name": "768: batch only requested recipients",
+      "pass": true
+    },
+    {
+      "name": "768: first send freezes common proof and exposes individual states",
+      "pass": true
+    },
+    {
+      "name": "768: partial bank shows exact deficit",
+      "pass": true
+    },
+    {
+      "name": "768: cancel performs zero AI/send and preserves bank draft",
+      "pass": true
+    },
+    {
+      "name": "768: explicit AI generates only exact deficit",
+      "pass": true
+    },
+    {
+      "name": "768: bank and generated proposals coexist with pending review",
+      "pass": true
+    },
+    {
+      "name": "768: private individual activity retains method and limits",
+      "pass": true
+    },
+    {
+      "name": "768: historical process remains read-only",
+      "pass": true
+    },
+    {
+      "name": "768: reuse is explicit and excludes old applications",
+      "pass": true
+    },
+    {
+      "name": "768: no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "768: no external requests",
+      "pass": true
+    },
+    {
+      "name": "390: configuration inherits two selected candidates without implicit writes",
+      "pass": true
+    },
+    {
+      "name": "390: defaults 20 questions / 60 minutes / easy / bank",
+      "pass": true
+    },
+    {
+      "name": "390: complete bank skips AI confirmation",
+      "pass": true
+    },
+    {
+      "name": "390: candidate selection carried to review",
+      "pass": true
+    },
+    {
+      "name": "390: changed content highlighted for review",
+      "pass": true
+    },
+    {
+      "name": "390: review no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: failed send retains selected recipients and deadline",
+      "pass": true
+    },
+    {
+      "name": "390: lost/failed response retry keeps batch id",
+      "pass": true
+    },
+    {
+      "name": "390: batch only requested recipients",
+      "pass": true
+    },
+    {
+      "name": "390: first send freezes common proof and exposes individual states",
+      "pass": true
+    },
+    {
+      "name": "390: partial bank shows exact deficit",
+      "pass": true
+    },
+    {
+      "name": "390: cancel performs zero AI/send and preserves bank draft",
+      "pass": true
+    },
+    {
+      "name": "390: explicit AI generates only exact deficit",
+      "pass": true
+    },
+    {
+      "name": "390: bank and generated proposals coexist with pending review",
+      "pass": true
+    },
+    {
+      "name": "390: private individual activity retains method and limits",
+      "pass": true
+    },
+    {
+      "name": "390: historical process remains read-only",
+      "pass": true
+    },
+    {
+      "name": "390: reuse is explicit and excludes old applications",
+      "pass": true
+    },
+    {
+      "name": "390: no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "390: no external requests",
+      "pass": true
+    },
+    {
+      "name": "320: configuration inherits two selected candidates without implicit writes",
+      "pass": true
+    },
+    {
+      "name": "320: defaults 20 questions / 60 minutes / easy / bank",
+      "pass": true
+    },
+    {
+      "name": "320: complete bank skips AI confirmation",
+      "pass": true
+    },
+    {
+      "name": "320: candidate selection carried to review",
+      "pass": true
+    },
+    {
+      "name": "320: changed content highlighted for review",
+      "pass": true
+    },
+    {
+      "name": "320: review no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: failed send retains selected recipients and deadline",
+      "pass": true
+    },
+    {
+      "name": "320: lost/failed response retry keeps batch id",
+      "pass": true
+    },
+    {
+      "name": "320: batch only requested recipients",
+      "pass": true
+    },
+    {
+      "name": "320: first send freezes common proof and exposes individual states",
+      "pass": true
+    },
+    {
+      "name": "320: partial bank shows exact deficit",
+      "pass": true
+    },
+    {
+      "name": "320: cancel performs zero AI/send and preserves bank draft",
+      "pass": true
+    },
+    {
+      "name": "320: explicit AI generates only exact deficit",
+      "pass": true
+    },
+    {
+      "name": "320: bank and generated proposals coexist with pending review",
+      "pass": true
+    },
+    {
+      "name": "320: private individual activity retains method and limits",
+      "pass": true
+    },
+    {
+      "name": "320: historical process remains read-only",
+      "pass": true
+    },
+    {
+      "name": "320: reuse is explicit and excludes old applications",
+      "pass": true
+    },
+    {
+      "name": "320: no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "320: no external requests",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real components, synthetic services; no production candidate/AI/email call."
+  ]
+}

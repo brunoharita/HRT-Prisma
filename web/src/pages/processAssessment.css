@@ -1,0 +1,13 @@
+.process-assessment {display:flex;flex-direction:column;gap:16px;min-width:0;}
+.process-assessment .ant-card,.process-assessment .ant-table-wrapper,.process-assessment .ant-collapse {min-width:0;max-width:100%;}
+.process-assessment-fields {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px;}
+.process-assessment label {display:flex;flex-direction:column;gap:6px;margin:12px 0;}
+.process-assessment label .ant-input-number,.process-assessment label .ant-select {width:100%;}
+.process-assessment .ant-collapse-header-text {overflow-wrap:anywhere;}
+.process-assessment .ant-btn {max-width:100%;height:auto;min-height:32px;white-space:normal;}
+.process-assessment-option {display:flex;align-items:center;gap:8px;margin:12px 0;}
+.process-assessment-reuse {display:grid;grid-template-columns:minmax(0,1fr) auto;width:100%;}
+.process-assessment-reuse .ant-space-item {min-width:0;}
+.process-assessment-reuse .ant-select {width:100%;}
+@media(max-width:800px){.process-assessment-fields{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:480px){.process-assessment-fields,.process-assessment-reuse{grid-template-columns:minmax(0,1fr);} .process-assessment .ant-checkbox-group{display:flex;flex-direction:column;}}

@@ -38,7 +38,8 @@ export interface FollowUpEntry {
 }
 export interface FollowUpData {
   contract: "position-follow-up-1.0.0";
-  process: { id: string; name: string; status: "active" | "closed"; revision: number } | null;
+  process: { id: string; name: string; status: "active" | "closed"; revision: number; isCurrent?:boolean; sequence?:number } | null;
+  processes?: Array<{ id:string;name:string;status:"active"|"closed";revision:number;isCurrent:boolean;sequence:number }>;
   entries: FollowUpEntry[];
   operators: { id: string; name: string }[];
   history: { id: string; entryId: string | null; action: string; actor: string; at: string; before: unknown; after: unknown }[];

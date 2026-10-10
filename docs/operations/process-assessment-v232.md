@@ -1,0 +1,13 @@
+# Operação seletiva da2.3.2
+
+Escopo aprovado: main/origin existente, Supabase Prisma ioldpnqqvobprjiontre, VPS srv1038882/alias prisma-vps/repositório /opt/prisma. Aplicar somente a migration aditiva de prova comum, Edge position-assessment e web requeridos pelo plano do SHA validado. Não usar db push geral: ledger remoto histórico difere de filenames locais.
+
+QA primeiro: PostgreSQL17 descartável local127.0.0.1:55479, base import_evidence_v202 verificada vazia, fixtures sintéticas/rollback. Runner `scripts/test-process-assessment-sql.mjs` estabelece v1 e prova preservação na migração; `test-process-assessment-concurrency.mjs` cria/remove somente seu clone dedicado protegido. Browser real/componentes com transportes sintéticos em5710, desktop/tablet/mobile, sem provedor pago ou candidatos produtivos. CI configurado permanece gate, sem suíte integral local indiscriminada.
+
+Antes de publicar, capturar counts/hashes de snapshots produtivos sem texto/contatos, identidade, schema/grants e Edge ativa; runtime VPS IDs/imagens/restarts/health dos sete serviços. Baseline10/10: HEADb4e0923c382eae518ac19cbf29c0d715d5f50aed, web81e1c9d0d53c, mailb257a83cbb37, parser311f8e4f4d0f, synthesisdb6c5c0ef238, gateway2eed2dd379ea, experimentod991a574e45e unhealthy histórico, Traefik5e25fdc6d2e6. Esse registro não substitui verificação no rollout.
+
+Aplicação remota por conector de migration com conteúdo local revisado; verificar função/grants/RLS/índices/shape e hashes sem consultar credenciais. Deploy Edge apenas position-assessment, verify_jwt=false com autenticação custom existente; origin/envelope/tokens/worker preservados. Não criar/restabelecer credenciais, nem enviar e-mail/gerar IA em produção para smoke. Dispatcher já consome o outbox; nenhum rebuild de Synthesis/Parser/mail requerido.
+
+Publicar web pelo dispatcher para SHA coerente, CI aprovado, promoção main e VPS. Smoke lê login/rotas públicas/assets, versão2.3.2/SHA no bundle, negativas públicas de backend e identidade/schema/Edge. 404 imediato durante recriação pode ser transitório; estabilizar e comprovar container/asset antes de repetir build. Não alegar jornada autenticada real, entrega de e-mail ou calibração a partir de smoke público.
+
+Rollback: preservar imagem web anterior e fonte Edge anterior para restauração seletiva. A migration é aditiva e não deve ser revertida apagando dados; portalv1 permanece compatível. Frontend anterior pode consultar histórico, mas autorias individuais e escritas sem ID de processo falham fechadas após a migração; rollback funcional de autoria requer correção forward ou UI compatível com contratos novos. Não reabilitar prova individual para contornar essa proteção. Recibos finais/SHA/CI/estado ficam no AoT.

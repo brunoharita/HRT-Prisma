@@ -1,0 +1,25 @@
+{
+  "environment": "LOCAL PostgreSQL17 127.0.0.1:55479; owned synthetic schema-only clone removed after run",
+  "checks": [
+    {
+      "name": "two independent connections submit one batch: one queue and one replay",
+      "pass": true
+    },
+    {
+      "name": "distinct concurrent batches cannot duplicate an existing participant application",
+      "pass": true
+    },
+    {
+      "name": "two dispatcher workers acquire one persisted delivery lease",
+      "pass": true
+    },
+    {
+      "name": "shared portal simultaneous conflicting autosaves reject stale revision",
+      "pass": true
+    },
+    {
+      "name": "simultaneous closure respects process revision without duplicate transition",
+      "pass": true
+    }
+  ]
+}

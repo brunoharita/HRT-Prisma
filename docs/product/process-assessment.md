@@ -1,0 +1,17 @@
+# Avaliação comum por processo seletivo
+
+Decisão de Bruno em10/10/2026, acordo process-assessment-v232 v1.0.0. A avaliação é opcional e apoia a seleção humana. A prova pertence à organização, Posição e processo; os convites, respostas, resultados e observações pertencem a cada candidato.
+
+No **Acompanhamento**, selecione as Pessoas pelos controles dos cartões ou da Lista e clique em **Preparar avaliação**. Os padrões são **Quantidade de questões:20**, **Nível:Fácil**, **Fonte:Banco**, **Duração em minutos:60**. Os requisitos vêm da Posição; **Personalizar requisitos** permite ajustar o foco. Quantidades múltiplas de10 mantêm distribuição exata. Fácil usa40% fáceis/40% médias/20% difíceis, portanto20 questões são8/8/4.
+
+**Montar avaliação** busca versões aprovadas, compatíveis e distintas do catálogo, cobrindo os requisitos e as cotas de dificuldade. Havendo insuficiência, a modal informa montadas/faltantes e oferece **Cancelar** ou **Gerar X questões por IA**. Cancelar conserva seleção/configuração/rascunho. Somente a confirmação invoca a IA para o déficit, até20 por pedido e US$0,25/pedido, tetoUS$10/mês por empresa. Vários pedidos mostram o máximo autorizado. Erro mantém o conteúdo confirmado; não há retry pago automático. Repetir montagem preserva conteúdo contextual já revisado e completa vagas disponíveis no banco.
+
+Na segunda superfície, **Revisar avaliação**, confira questões, cinco alternativas, correta, justificativa e origem. **Editar questão** cria revisão da cópia contextual; **Substituir pelo banco** escolhe outra versão compatível disponível. Questões novas/alteradas são destacadas. Aprovação de banco idêntico conserva autor/versionamento; uma ação humana **Aprovar e enviar aos X candidatos** aprova o conjunto completo e registra os convites. Não exige20 aprovações individuais.
+
+Os contatos cadastrados são preenchidos. Alterar **E-mail do convite** não altera o cadastro. **Prazo de acesso** é explícito e separado da duração iniciada pelo participante. **Personalizar assunto e mensagem** contém ajustes opcionais. O backend valida o lote inteiro antes de gravar aprovação, tokens ou fila. Na fila/aceito pelo provedor/erro/conciliação são estados distintos; aceitação não comprova entrega/abertura. Repetição do pedido ou lote concorrente não cria nova aplicação para a mesma Pessoa.
+
+A prova fica fixada no primeiro envio: questões, versões, ordem, duração e correção permanecem comuns para candidatos adicionados depois. **Consultar avaliação do processo** abre a prova e **Ver resultado e atividade** consulta cada aplicação. Correção objetiva, respostas e sinais observados não modificam Score, Perfil, etapas, ocupação ou decisão humana. Sinais parciais não comprovam pesquisa, captura ou fraude.
+
+**Reabrir processo** mantém a prova existente. Depois de **Encerrar processo**, **Novo processo seletivo** cria um ciclo vazio, conservando o anterior em **Processo seletivo**. O novo ciclo pode montar outra prova ou **Reutilizar prova** compatível anterior, sem copiar aplicações/respostas/decisões. Ciclos anteriores são somente consulta. **Avaliações individuais anteriores** preserva o histórico anterior à2.3.2; não declara equivalência retroativa.
+
+Nenhum aviso final ou expurgo temporal foi introduzido. Exclusão explícita de uma Pessoa conserva a prova comum e remove suas aplicações, eventos, convites e referências pessoais dos recibos de lote. Uma prova comum facilita comparação do instrumento, mas não certifica justiça ou calibração empírica de dificuldade.

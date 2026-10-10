@@ -1,11 +1,15 @@
 ---
 owner: architecture
 status: implemented_and_deployed
-version: 1.1.0
-last_verified: 2026-10-09
+version: 1.2.0
+last_verified: 2026-10-10
 ---
 
 # Arquitetura do M5.1 - Verificação de Competências
+
+## Prova comum por processo — v2.3.2
+
+A decisão mais recente substitui a autoria individual nas novas avaliações: uma prova por organização/Posição/ciclo, congelada no primeiro envio, com convites, tentativas e resultados pessoais. Montagem automática do banco, geração explícita somente do déficit e aprovação humana do conjunto reutilizam os contratos existentes. Histórico v1 e portal público v1 permanecem compatíveis. Arquitetura e fronteiras estão em `docs/architecture/process-assessment.md`, decisão em ADR-082 e validação/publicação em `docs/qa/aot-process-assessment-v232.md`. A disponibilidade produtiva exige os recibos desse AoT; o texto abaixo registra o movimento anterior.
 
 ## Avaliação contextual para Posição — v2.3.0
 

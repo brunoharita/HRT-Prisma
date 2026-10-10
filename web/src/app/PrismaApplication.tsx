@@ -1,5 +1,5 @@
 import { PositionFollowUpPage } from "../pages/PositionFollowUpPage";
-import { PositionAssessmentPage } from "../pages/PositionAssessmentPage";
+import { ProcessAssessmentPage } from "../pages/ProcessAssessmentPage";
 import { PositionAssessmentPortal } from "../pages/PositionAssessmentPortal";
 import { useEffect, useState, type ReactNode } from "react";
 import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
@@ -100,6 +100,8 @@ interface AppRoute {
   participantToken?: string;
   positionAssessmentToken?: string;
   positionAssessmentPersonId?: string;
+  processAssessment?:boolean;
+  selectionProcessId?:string;
   selfDataToken?: string;
   vacancyId?: string;
   vacancyView?: "list" | "create" | "assist" | "detail" | "edit" | "people" | "compare" | "follow-up";
@@ -462,7 +464,7 @@ function renderRouteContent(
   if (route.path === "/matching" && activeMembership) {
     return <CompetencyVerificationPage activeMembership={activeMembership} mode={route.verificationMode ?? "matching"} {...(route.verificationNeedId ? { needId: route.verificationNeedId } : {})} onNavigate={onNavigate} />;
   }
-  if (route.positionAssessmentPersonId && route.vacancyId && activeMembership) return <PositionAssessmentPage key={`${route.vacancyId}:${route.positionAssessmentPersonId}`} activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} personId={route.positionAssessmentPersonId} />;
+  if ((route.processAssessment||route.positionAssessmentPersonId) && route.vacancyId && activeMembership) return <ProcessAssessmentPage key={`${route.vacancyId}:${route.selectionProcessId??"current"}:${route.positionAssessmentPersonId??"batch"}`} activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} {...(route.positionAssessmentPersonId?{initialPersonId:route.positionAssessmentPersonId}:{})} {...(route.selectionProcessId?{processId:route.selectionProcessId}:{})} />;
   if (route.path === "/verifications" && activeMembership) {
     return <VerificationOperationsPage activeMembership={activeMembership} {...(route.verificationPreparedAssessmentId ? { preparedAssessmentId: route.verificationPreparedAssessmentId } : {})} onNavigate={onNavigate} />;
   }
@@ -479,7 +481,7 @@ function renderRouteContent(
     if (route.vacancyView === "create") return <VacancyEditorPage activeMembership={activeMembership} onNavigate={onNavigate} />;
     if (route.vacancyView === "assist") return <VacancyAssistPage activeMembership={activeMembership} onNavigate={onNavigate} />;
     if (route.vacancyView === "edit" && route.vacancyId) return <VacancyEditorPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
-    if (route.vacancyView === "follow-up" && route.vacancyId) return <PositionFollowUpPage key={route.vacancyId} activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} {...(route.vacancyFollowUpPersonId ? { personId: route.vacancyFollowUpPersonId } : {})} />;
+    if (route.vacancyView === "follow-up" && route.vacancyId) return <PositionFollowUpPage key={`${route.vacancyId}:${route.selectionProcessId??"current"}`} activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} {...(route.selectionProcessId?{processId:route.selectionProcessId}:{})} {...(route.vacancyFollowUpPersonId ? { personId: route.vacancyFollowUpPersonId } : {})} />;
     if (route.vacancyView === "people" && route.vacancyId) return <VacancyPeoplePage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} />;
     if (route.vacancyView === "compare" && route.vacancyId && route.vacancyComparePersonIds) return <VacancyComparePage activeMembership={activeMembership} onNavigate={onNavigate} personIds={route.vacancyComparePersonIds} vacancyId={route.vacancyId} />;
     if (route.vacancyId) return <VacancyDetailPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} initialTab={route.vacancyHistory ? "history" : "overview"} />;
@@ -632,6 +634,10 @@ function findRoute(pathname: string): AppRoute {
   const assessmentToken = /^\/assessment\/([a-f0-9]{64})$/.exec(normalized);
   if (normalized === "/assessment" && /^#[a-f0-9]{64}$/.test(window.location.hash)) return {path:"/assessment",positionAssessmentToken:window.location.hash.slice(1),rule:{requiresAuth:false,requiresMembership:false}};
   if (assessmentToken?.[1]) return { path:"/assessment",positionAssessmentToken:assessmentToken[1],rule:{requiresAuth:false,requiresMembership:false} };
+  const processAssessment = /^\/vacancies\/([^/]+)\/follow-up(?:\/processes\/([^/]+))?\/assessment$/.exec(normalized);
+  if(processAssessment?.[1])return {path:"/verifications",vacancyId:processAssessment[1],processAssessment:true,...(processAssessment[2]?{selectionProcessId:processAssessment[2]}:{}),vacancyView:"follow-up",rule:reviewerRule};
+  const historicalFollowUp = /^\/vacancies\/([^/]+)\/follow-up\/processes\/([^/]+)(?:\/([^/]+))?$/.exec(normalized);
+  if(historicalFollowUp?.[1]&&historicalFollowUp[2])return {path:"/vacancies",vacancyId:historicalFollowUp[1],selectionProcessId:historicalFollowUp[2],vacancyView:"follow-up",...(historicalFollowUp[3]?{vacancyFollowUpPersonId:historicalFollowUp[3]}:{}),rule:reviewerRule};
   const assessmentContext = /^\/vacancies\/([^/]+)\/follow-up\/([^/]+)\/assessment$/.exec(normalized);
   if (assessmentContext?.[1]&&assessmentContext[2]) return {path:"/verifications",vacancyId:assessmentContext[1],positionAssessmentPersonId:assessmentContext[2],vacancyView:"follow-up",rule:reviewerRule};
   const followUpMatch = /^\/vacancies\/([^/]+)\/follow-up(?:\/([^/]+))?$/.exec(normalized);

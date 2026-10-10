@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.66.0
+version: 2.67.0
 last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Prova comum por processo seletivo — v2.3.2 em validação
+
+Implementação autorizada por Bruno em10/10/2026: uma prova por organização/Posição/processo, com aplicações individuais e congelamento no primeiro envio. Seleção no acompanhamento, padrões20/Fácil2/Banco/60, montagem automática por catálogo aprovado com cobertura/cotas/unicidade, confirmação para completar somente déficit por IA, revisão do conjunto e lote transacional com convites/estados/replay individuais. Ciclos históricos consultáveis; novo processo após encerramento e reuso explícito de prova compatível. Backend recusa autoria individual nova e escritores antigos sem ID de ciclo, preservando consulta/portalv1 e dados históricos. Sem alteração de Score/Perfil/etapas/ocupação, modelo/preços/ledger/transportes; aviso final/expurgo continuam adiados e erasure explícita preservada. ADR-082, acordo/execution v1.0.0, AoT process-assessment-v232. SQL/concorrência locais e checks dirigidos passam; browser/CI/migração remota/Edge/main/VPS/smoke em conclusão, ainda sem alegação de rollout ou candidato real.
 
 ## Retorno à tela anterior — v2.3.1
 
