@@ -1,6 +1,6 @@
 import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import { useEffect, useState } from "react";
-import { ArrowLeftOutlined, AuditOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
+import { AuditOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Alert, Button, Descriptions, Empty, Modal, Skeleton, Space, Table, Tag, Timeline } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { PersonIngestionWorkspace, ProcessingAttemptView, ProcessingAuditEvent } from "../domain/personIngestion";
@@ -132,7 +132,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
         description={`${workspace.person.fullName} · Documento v${document.documentVersion}`}
         actions={<Space wrap>{canReprocess ? <Button icon={<ReloadOutlined />} loading={busy} onClick={() => void handleRetry()}>{canResumeSource ? "Retomar importação com IA" : "Reprocessar"}</Button> : null}{presentation.state === "technical_failure" && !canReprocess && !needsSystemUpdate ? <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Substituir arquivo</Button> : null}{canReview ? <Button loading={busy} onClick={() => void handleReview()} type="primary">{recoveryMode ? "Recuperar informações" : "Revisar perfil"}</Button> : null}<Button danger icon={<DeleteOutlined />} loading={busy} onClick={handleDelete}>Excluir documento</Button></Space>}
       />
-      <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/processes")} type="text">Voltar para a central</Button>
+      <Button onClick={() => onNavigate("/profiles/processes")} type="text">Ir para Processamento e revisões</Button>
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => { void refresh().catch(() => setError("O documento não pôde ser consultado. Tente atualizar a consulta novamente.")); }}>Consultar documento</Button>} /> : null}
       <div className="prisma-document-summary-grid">
         <PrismaCard title="Informações do documento">

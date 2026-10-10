@@ -2,7 +2,7 @@ import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useViewState } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, CheckOutlined, CloseOutlined, SwapOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, SwapOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Skeleton, Typography } from "antd";
 import { CanonicalProfileView } from "../components/profile/CanonicalProfileView";
 import { buildPrismaProfileView, type PrismaProfileView } from "../domain/canonicalProfile";
@@ -31,7 +31,7 @@ export function ProfileComparePage({ activeMembership, personIds, onNavigate }: 
   const profiles = useMemo(() => candidates.map(toView), [candidates]);
 
   return <PrismaPage className="prisma-profile-compare-page">
-    <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles/search")} type="text">Voltar aos resultados</Button>
+    <Button onClick={() => onNavigate("/profiles/search")} type="text">Ir aos resultados</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Comparar perfis" description="Compare a mesma estrutura profissional lado a lado, sem notas, ranking ou decisão automática." actions={<Button icon={<CloseOutlined />} onClick={() => { setSelectedIds([]); onNavigate("/profiles/search"); }}>Limpar comparação</Button>} />
     {error ? <Alert showIcon title={error} type="error" action={<Button onClick={() => onNavigate("/profiles/search")}>Rever seleção de pessoas</Button>} /> : null}
     {loading ? <div className="prisma-profile-compare-grid"><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard></div> : null}

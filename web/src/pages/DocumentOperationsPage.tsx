@@ -152,10 +152,10 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
           : "Acompanhe documentos, tentativas, revisões humanas e o impacto no perfil atual."}
         actions={personId ? (
           <>
-            <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar para a Pessoa</Button>
+            <Button onClick={() => onNavigate(`/profiles/${personId}`)}>Ir para a Pessoa</Button>
             <Button onClick={() => onNavigate("/profiles/processes")}>Ver toda a organização</Button>
           </>
-        ) : <Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>}
+        ) : <Button onClick={() => onNavigate("/profiles")}>Ir para Pessoas</Button>}
       />
 
       <PrismaCard className="prisma-operation-legend">

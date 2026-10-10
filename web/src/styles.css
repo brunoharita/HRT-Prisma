@@ -482,6 +482,9 @@ textarea {
   margin: 0 auto;
 }
 
+.prisma-page-return { display: flex; justify-content: flex-start; margin-bottom: 12px; }
+.prisma-page-return .ant-btn { min-height: 40px; }
+
 .prisma-page-header {
   margin-bottom: 22px;
 }

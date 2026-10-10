@@ -3,7 +3,7 @@ import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, CheckOutlined, EyeOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
+import { CheckOutlined, EyeOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import { Alert, Button, Checkbox, Input, Modal, Popconfirm, Radio, Segmented, Select, Space, Tag, Tooltip, Typography } from "antd";
 import { DocumentEvidenceViewer, refinedSelectionText, refinedSelectionUnits, type EvidenceNavigationTarget, type RegionSelectionResult } from "../components/review/DocumentEvidenceViewer";
 import { StructuredReviewPanel } from "../components/review/StructuredReviewPanel";
@@ -752,7 +752,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
             <Tooltip title={approvalBlockedReason ?? (comparisonIssueCount ? `Conclua ${comparisonIssueCount === 1 ? "a pendência obrigatória" : `as ${comparisonIssueCount} pendências obrigatórias`} antes de comparar.` : undefined)}><span className="prisma-disabled-action-tooltip"><Button danger={comparisonIssueCount > 0} disabled={Boolean(approvalBlockedReason) || busy} icon={<CheckOutlined />} loading={busy} onClick={handleContinueToDelta} type="primary">Comparar com o perfil atual</Button></span></Tooltip>
           </Space>}
       />
-      <Button className="prisma-review-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>
+      <Button className="prisma-review-back" onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Ir para a Central da Pessoa</Button>
       {!viewOnly && workspace.state === "draft" && draft.experiences.length === 0 ? (
         <Alert
           action={<Space wrap><Button onClick={() => addMissingExperience(true)} type="primary">Selecionar área no currículo</Button><Button icon={<PlusOutlined />} onClick={() => addMissingExperience(false)}>Adicionar experiência manualmente</Button></Space>}

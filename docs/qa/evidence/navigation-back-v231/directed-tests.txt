@@ -1,0 +1,38 @@
+✔ immediate origin remains distinct from a hierarchical parent across the real route graph (2.7315ms)
+✔ replace preserves predecessor rather than creating a return cycle (0.5363ms)
+✔ scope change never creates an eligible previous entry (2.139ms)
+✔ public capability, auth, external, query and malformed URLs never enter operator history (1.5646ms)
+✔ accepted deliveries determine the displayed version and a new movement resets the count (2.3842ms)
+✔ registro oficial expõe v2.3.1 autorizada e preserva histórico (1.7866ms)
+✔ numeração explícita preserva histórico e rejeita contador insuficiente ou inválido (2.7756ms)
+✔ nova geração aceita movimento zero sem alterar contadores anteriores e rejeita movimento inválido (0.7701ms)
+✔ an incomplete or duplicated release registry does not invent a product version (0.7909ms)
+✔ resume review validates adaptive data before persistence and distinguishes saved operations from refresh failures (12.238ms)
+✔ publication preflight preserves the comparison after failure and points back to review (2.8192ms)
+✔ processing failures expose a concrete recovery and never display raw persisted backend failures (8.9921ms)
+✔ unknown observations remain distinct from observed zero (50.1244ms)
+✔ unknown or absent entity never resolves another entity (0.3302ms)
+✔ third selection preserves two deliberate choices; removing one permits replacement (2.1791ms)
+✔ temporary navigation values survive return but never cross session, role or company (0.9249ms)
+✔ clean navigation never asks; cancel preserves dirty state and disposal removes guard (0.873ms)
+✔ navigation rejects external/protocol-relative/backslash paths (0.6897ms)
+✔ navigation groups shipped capabilities and keeps positions in operation (0.9648ms)
+✔ shared text and action tokens reach 4.5:1; input boundary reaches 3:1 on white (2.002ms)
+✔ integration retains legacy routes, explicit missing states and scoped storage (3.0112ms)
+✔ sidebar preserves branding, utilities and centralized release in both states (0.7646ms)
+✔ redirects unauthenticated users to sign-in (3.52ms)
+✔ redirects authenticated users without membership to access-denied (0.5206ms)
+✔ redirects authenticated users without the required role to unauthorized (0.5405ms)
+✔ allows authenticated users with the required role (0.3692ms)
+✔ resolves the active membership from the current organization (0.2254ms)
+✔ rejects a persisted organization outside current memberships (0.2712ms)
+✔ keeps an allowed persisted organization and supports an explicit tenant change (0.1842ms)
+✔ keeps Supabase domain queries behind one repository boundary (14.1051ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 297.0709

@@ -2,11 +2,11 @@
 artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
-product_version: 2.0.9
-current_state_version: 2.65.0
-current_state_last_verified: 2026-10-09
-documentation_source_count: 423
-source_manifest_sha256: c391c85bcb170f0b2f8f07eae947679502c562c54197c9e33cde2958c41b0869
+product_version: 2.3.1
+current_state_version: 2.66.0
+current_state_last_verified: 2026-10-10
+documentation_source_count: 426
+source_manifest_sha256: d9b563cab1156536d38c994434b3070783edb79d4f6156997f81ced60b93d64d
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,6 +268,8 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
+Retorno v2.3.1 autorizado em10/10/2026: seta superior esquerda segue origem imediata e histórico da sessão; links de destino fixo coexistem sem seta. Reutiliza guardas/store/History API, com negativos de rascunho, escopo e URLs pessoais, e etapas internas integradas. Publicação ainda pendente neste checkpoint; AoT `docs/qa/aot-navigation-back-v231.md` separa QA sintético/produção/jornada real. Release somente web, preservando avaliação2.3.0/serviços/banco/Score/autoridade.
+
 Complemento de publicação da v2.0.2 ativo no SHA SQL a9fa4da: títulos personalizados com nome normalizado idêntico reutilizam definição da organização sem trocar IDs de fonte/Perfil. Migration 20261004022925, 52 verificações SQL/cinco primeiras publicações e replays/concorrência, 14 testes dirigidos/243 person-flow/CI PASS; grants/RLS e HTTPS/readiness preservados. Sem rebuild web/Parser (build 96e3ecb mantido). Revisão real permanece draft/lock 1/zero Perfil para confirmação do operador; não afirmar publicação automática ou smoke autenticado executado. AoT `docs/qa/aot-section-publication-v202.md`.
 
 Prisma v2.0.2 tem complemento Unicode publicado no build 96e3ecb: unicode-text-1.0.0, import-evidence-1.1.0 e evidence-adapter-1.0.1. NUL/substitutos isolados têm representação explícita para revisão; PDF/hash/cache/listas/boxes/Unicode válido e revisão humana preservados. QA local/43 dirigidos/48 worker/243 person-flow, CI branch/main, migration, Parser/web, replay dos dois PDFs e smoke HTTPS PASS. Autorização permanente de transferências necessárias à VPS do Prisma registrada em AGENTS 1.3.2. AoT `docs/qa/aot-import-unicode-v202.md` separa replay e retomada autenticada: no fechamento aguardava retomada humana; consulta posterior confirmou revisão draft do PDF 3. A publicação continua dependente da decisão do operador.
@@ -277,8 +279,6 @@ A publicação inicial da v2.0.2 ocorreu no SHA funcional `6a63605`, com `eviden
 M8.4 está publicado como Prisma v1.8.4. `matching-score-1.4.0` soma área 10, função 25, obrigatórios 35, desejáveis 10, duração 10 e recência 10; datas insuficientes permanecem não determinadas. A migration forward-only aceita snapshots 1.3.0/1.4.0. `resume-dates-1.1.0` corrige anos abreviados com limite 2050. Deno e smoke autenticado posteriores ao rollout inicial passaram; evidência em `docs/qa/aot-resume-two-digit-years.md`.
 
 M8.2 está publicado no único Supabase e na web hospedada como Prisma v1.8.2. A classificação assistida usa as identidades Knowledge e os nove subagrupadores M8.1; produção confirmou 22.876/22.885 conceitos ESCO/O*NET elegíveis classificados (99,96%), Comunicação ESCO em Soft/Interpessoais, sete nós O*NET amplos e dois conceitos ESCO pendentes. Método `ai_assisted` com fonte, versão e razão é distinto da curadoria humana. A RPC autenticada do Perfil real retornou Comunicação em Soft/S1; a tela autenticada ainda carece de inspeção visual. Agreement M8.2, ADR-071 e AoT M8.2.
-
-M8.1 está em `main` e na web de produção no SHA `4147a36`, sob Agreement M8 v1.0.0 e aditivo M8.1 v1.1.1. Prisma v1.8.1 aparece no login hospedado; o menu consome o mesmo registro, ainda sem inspeção hospedada autenticada. O schema e a proteção da saga de exclusão estão aplicados no Supabase de produção. Três dos nove alvos de limpeza foram excluídos; o Product Owner interrompeu a rotina individual e não pediu retomada. Os dois macrogrupos e nove subagrupadores globais residem em tabelas próprias; conceitos globais usam classificação global e subagrupadores organizacionais não cruzam tenant. Backup privado, restauração isolada, comparação visual local das nove telas, CI e HTTPS 200 passaram. O AoT permanece parcial por critérios funcionais ainda sem evidência. ADR-070 e AoT M8.1.
 
 ---
 

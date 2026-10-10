@@ -4,7 +4,6 @@ import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ArrowLeftOutlined,
   BankOutlined,
   BookOutlined,
   BulbOutlined,
@@ -67,7 +66,7 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
   }
 
   return <PrismaPage className="prisma-profile-search-page">
-    <Button className="prisma-profile-search-back" icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>
+    <Button className="prisma-profile-search-back" onClick={() => onNavigate("/profiles")} type="text">Ir para Pessoas</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Encontrar pessoas" description="Use os mesmos blocos do Perfil para encontrar as pessoas adequadas." />
     <PrismaCard
       className="prisma-profile-search-workspace"

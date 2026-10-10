@@ -66,7 +66,7 @@ import { describePlatformAccessProfile } from "../shared/platformUsers";
 import { PrismaAppShell, type PrismaNavigationItem } from "../ui/PrismaAppShell";
 import { isDeliveredNavigation } from "../shared/uxFoundation";
 import { PrismaState } from "../ui/PrismaState";
-import { confirmPrismaNavigation, PrismaViewStateProvider, usePrismaNavigation } from "../ui/PrismaNavigation";
+import { confirmPrismaNavigation, PrismaBackProvider, PrismaViewStateProvider, usePrismaNavigation } from "../ui/PrismaNavigation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 
@@ -190,7 +190,7 @@ export function PrismaApplication() {
   const signOutActivity = useLoadingTask("Encerrando sessão…");
   useLoadingFeedback({ "Iniciando sessão…": state.signingIn, "Solicitando recuperação de acesso…": state.recoveringAccess });
   const viewScope = `${state.claims?.session_id ?? "no-session"}:${state.claims?.sub ?? "anonymous"}:${state.currentOperator?.profile ?? "none"}:${state.activeOrganizationId ?? "none"}:${resolveActiveMembership(state.memberships, state.activeOrganizationId)?.role ?? "none"}`;
-  const { pathname, navigate } = usePrismaNavigation(viewScope);
+  const { pathname, navigate, goBack, canGoBack, goingBack } = usePrismaNavigation(viewScope);
 
   async function refreshAuthState() {
     try { return await authActivity.run(refreshAuthStateData); }
@@ -381,9 +381,11 @@ export function PrismaApplication() {
         />
       ) : null}
       <PrismaViewStateProvider key={viewScope} scope={viewScope}>
+      <PrismaBackProvider key={pathname} value={{ goBack, canGoBack, goingBack }}>
       <div key={pathname}>
         {renderRouteContent(route, state.currentOperator, activeMembership, navigationItems, handleNavigate, refreshAuthState)}
       </div>
+      </PrismaBackProvider>
       </PrismaViewStateProvider>
     </PrismaAppShell>
   );

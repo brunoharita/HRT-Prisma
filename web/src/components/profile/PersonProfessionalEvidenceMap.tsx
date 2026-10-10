@@ -37,7 +37,7 @@ import type { ProfileSynthesisAdapter } from "../../infrastructure/supabase/prof
 import type { SynthesisSource } from "../../../../src/domain/profileSynthesis";
 import { ProfileSynthesisSurface } from "./ProfileSynthesisSurface";
 import { CompetencyGroupModal } from "./CompetencyGroupModal";
-import { confirmPrismaNavigation, useViewState } from "../../ui/PrismaNavigation";
+import { confirmPrismaNavigation, usePrismaViewScreenState, usePrismaScreenBack } from "../../ui/PrismaNavigation";
 import type { PersonWorkspaceParts } from "../../pages/PersonWorkspacePage";
 import { focusNoticeFields, focusNoticeTarget } from "../../ui/noticeActions";
 
@@ -73,7 +73,7 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
   const [originalOpen, setOriginalOpen] = useState(false);
   const [curationOpen, setCurationOpen] = useState(false);
   useEffect(() => { setProjection(incomingProjection); }, [incomingProjection]);
-  const [storedSurface, setStoredSurface] = useViewState<Surface>("professionalSurface", "summary");
+  const [storedSurface, setStoredSurface] = usePrismaViewScreenState<Surface>("professionalSurface", "summary", window.location.pathname, activeSurface === undefined);
   const surface = activeSurface ?? storedSurface;
   const setSurface = (next: Surface) => { if (onSurfaceChange) onSurfaceChange(next); else void confirmPrismaNavigation().then(ok => { if (ok) setStoredSurface(next); }); };
   const [selectedEvidence, setSelectedEvidence] = useState<ProfessionalEvidenceAssociation | null>(null);
@@ -84,6 +84,9 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
   const [focusPending, setFocusPending] = useState(false);
   const groups = useMemo(() => projection ? groupProfessionalEvidence(projection) : [], [projection]);
   const selectedGroup = groups.find((item) => item.key === selectedGroupKey);
+  usePrismaScreenBack(surface === "competencies" && Boolean(selectedConcept || selectedGroup), () => {
+    if (selectedConcept) setSelectedConcept(null); else setSelectedGroupKey(null);
+  });
   const summary = useMemo(() => personProfileSummary(projection), [projection]);
   useEffect(() => {
     if (surface !== "competencies" || !focusPending) return;

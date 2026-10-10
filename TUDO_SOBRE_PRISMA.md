@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 423
-source_manifest_sha256: c391c85bcb170f0b2f8f07eae947679502c562c54197c9e33cde2958c41b0869
+documentation_source_count: 426
+source_manifest_sha256: d9b563cab1156536d38c994434b3070783edb79d4f6156997f81ced60b93d64d
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.65.0
-last_verified: 2026-10-09
+version: 2.66.0
+last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Retorno à tela anterior — v2.3.1
+
+Prisma v2.3.1 registra a entrega autorizada por Bruno em10/10/2026: seta compartilhada no alto à esquerda volta à origem imediata, mantendo atalhos de destino fixo sem seta. Estende History API/guardas/store existentes e integra etapas/áreas internas de avaliação, importação, preparação, banco e Perfil. Escopo de sessão/papel/empresa, reidratação autenticada, retorno sem origem indisponível e URLs de portais/autenticação excluídas dos metadados. Não altera domínio, dados, Score, backend ou serviços. Acordo/execução v1.0.0 e AoT `navigation-back-v231`; QA browser sintético78checks em1448/768/390/320px e30testes Node dirigidos PASS, tipos/build PASS. Publicação/CI ainda pendentes; não inferir produção desta descrição. Jornada autenticada real NOT TESTED.
 
 ## E-mail corporativo HRT: recebimento e encaminhamento operacionais
 
@@ -2881,6 +2885,8 @@ Prisma v1.8.1 registra M8.1 como primeira entrega do Movimento 8, após o Produc
 O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. Dos nove alvos autorizados, três foram excluídos pela saga M5.5; após orientação do Product Owner, os seis restantes serão preservados nesta execução. Consulta SQL confirmou 7 Pessoas, 11 objetos Storage, 7 Auth, 7 usuários da plataforma e 8 Vagas. A outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. O CI do SHA `11ff0ab` passou, `main` foi promovida, a web foi publicada na VPS nesse SHA, o contêiner está ativo e HTTPS respondeu 200. A limpeza remota é parcial; smoke funcional autenticado hospedado e novo ciclo intake → revisão → publicação permanecem pendentes. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
+
+Retorno v2.3.1 autorizado em10/10/2026: seta superior esquerda segue origem imediata e histórico da sessão; links de destino fixo coexistem sem seta. Reutiliza guardas/store/History API, com negativos de rascunho, escopo e URLs pessoais, e etapas internas integradas. Publicação ainda pendente neste checkpoint; AoT `docs/qa/aot-navigation-back-v231.md` separa QA sintético/produção/jornada real. Release somente web, preservando avaliação2.3.0/serviços/banco/Score/autoridade.
 
 Complemento de publicação da v2.0.2 ativo no SHA SQL a9fa4da: títulos personalizados com nome normalizado idêntico reutilizam definição da organização sem trocar IDs de fonte/Perfil. Migration 20261004022925, 52 verificações SQL/cinco primeiras publicações e replays/concorrência, 14 testes dirigidos/243 person-flow/CI PASS; grants/RLS e HTTPS/readiness preservados. Sem rebuild web/Parser (build 96e3ecb mantido). Revisão real permanece draft/lock 1/zero Perfil para confirmação do operador; não afirmar publicação automática ou smoke autenticado executado. AoT `docs/qa/aot-section-publication-v202.md`.
 
@@ -5560,6 +5566,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.1**, seta compartilhada que retorna à tela imediatamente anterior, com atalhos fixos coexistentes. Registry único acrescenta a entrega1 ao movimento3, preservando2.3.0 e histórico anterior. Contrato de apresentação `prisma-ux-foundation-1.4.0`; nenhum contrato persistido, serviço, modelo, fórmula ou migration muda. Rollout somente web, Agreement/Execution/AoT `navigation-back-v231`.
 
 Decisão de Bruno em 07/10/2026: publicar **Prisma v2.1.4**. `matching-stable-result-1.0.0` versiona persistência por tenant/Pessoa/Posição, dependências concretas e histórico causal. Fórmula, pesos, matching 5.1.0/7.0.0, score 1.4.0, prompt e modelo permanecem. A data pertence ao cálculo salvo; acesso e contador global não invalidam resultados. Migration `20261007150000_stable_matching_scores.sql`, Edge `matching-trajectory` e web são os destinos diretos. ADR-078 e acordo `docs/qa/agreement-stable-score-v214.md` 1.0.0.
 
@@ -12128,7 +12136,11 @@ Referências do Perfil/sidebar são normativas para linguagem visual, não conte
 
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.3.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+Contrato de apresentação atual: `prisma-ux-foundation-1.4.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+
+## Retorno imediato v2.3.1
+
+O contrato de apresentação passa a `prisma-ux-foundation-1.4.0`, por decisão de Bruno em10/10/2026; a direção visual1.3.0 acima permanece. A seta compartilhada no alto à esquerda retorna à tela imediatamente anterior registrada, inclusive etapas/áreas internas integradas. Links de destino fixo permanecem sem seta e usam nomes como Ir para Pessoas/Posições. Não usar o pai hierárquico como substituto de uma origem conhecida. Entrada direta sem origem elegível mostra a seta indisponível. O retorno usa history.back, não adiciona uma nova visita; confirma rascunho uma única vez e mantém as proteções do navegador. Origem restrita à mesma sessão, papel e empresa, sem armazenar URLs de autenticação ou portais com tokens. Histórico interno guarda apenas identificadores de apresentação em memória, até50estados. Modais/painéis continuam fechando sobre a tela de origem; portais públicos mantêm a navegação própria. Acordo `docs/qa/agreement-navigation-back-v231.md`1.0.0 e AoT correspondente. Sem nova dependência/roteador, contrato de domínio ou alteração de autorização.
 
 ## Hierarquia e iconografia v2.1.1
 
@@ -15231,6 +15243,61 @@ Decisão: Bruno autorizou em 2026-09-28 implementar o registro de falhas discuti
 | Banco, prompt, UI e VPS | no_impact_identified | Sem alteração de contrato persistido ou visual pretendida | Plano de release confirma destinos ignorados; smoke público da Edge após publicação |
 
 Estado: agreed. Aprovação: pedido explícito de implementação de Bruno nesta conversa em 2026-09-28.
+
+---
+
+## Source: `docs/qa/agreement-navigation-back-v231.md`
+
+# Acordo — Retorno à tela anterior v2.3.1
+
+Versão 1.0.0, agreed, aprovado por Bruno em 10/10/2026 nesta conversa: opções de destino fixo podem coexistir, mas a seta no alto à esquerda deve retornar à tela imediatamente anterior; implementar em main e publicar 2.3.1. Delta do contrato de apresentação, sem contrato persistido novo.
+
+## DEVE
+
+- D-01 — Uma seta compartilhada no alto à esquerda das páginas operacionais retorna à origem imediata registrada na navegação, independentemente da hierarquia do módulo. Etapas e subtelas internas integradas retornam ao estado anterior, sem criar navegação de domínio.
+- D-02 — Atalhos existentes a Pessoas, Posições, documentos, revisão e acompanhamento continuam disponíveis com destino fixo; não usam a seta reservada ao retorno imediato.
+- D-03 — Reutilizar confirmação de alterações não salvas, histórico do navegador, filtros/seleção/rolagem já integrados. Cancelar a saída preserva URL e rascunho; confirmar a seta exige uma única confirmação.
+- D-04 — Histórico de retorno restrito à sessão/papel/empresa atuais; entrada direta sem origem conhecida exibe seta indisponível, sem inventar origem ou sair para site externo. Não registrar URLs de credenciais ou portais pessoais nesse histórico.
+- D-05 — Publicar 2.3.1 pelo registry único, main/origin/VPS, somente web, com QA sintético, smoke e rollback.
+
+## PROIBIDO
+
+- P-01 — Retorno a destino hierárquico fixo pela seta quando houver origem imediata conhecida; ciclos causados por empilhar um novo retorno.
+- P-02 — Ignorar guardas, atravessar escopo de empresa/sessão/papel, persistir dados de domínio/segredos no histórico ou executar IA/envio/publicação por voltar.
+- P-03 — Alterar regras, autoridade, respostas, resultados, Score, Perfil, serviços, banco ou permissões.
+
+## FORA DE ESCOPO
+
+- F-01 — Redesenho de telas, fórmulas, dados, serviços de e-mail/IA, migrations e operações reais de candidatos. Portais públicos mantêm sua navegação própria, sem seta para área autenticada.
+
+## AUTONOMIA
+
+- A-01 — Estender os componentes/history API existentes, sem novo roteador/dependência. Nome acessível, acabamento responsivo, limites de memória e testes sintéticos delegados à engenharia.
+
+## PENDÊNCIAS
+
+Nenhuma decisão material pendente.
+
+## ACEITE
+
+- CA-01 — Caminhos Pessoa via busca/Posição/acompanhamento, edição por origens distintas, documento/revisão/versões e Posição/acompanhamento retornam ao endereço exato anterior, por teste de navegador com componentes reais e serviços substituídos por fixtures.
+- CA-02 — Setas presentes no alto à esquerda inclusive em telas antes sem retorno; destinos fixos preservados; etapas internas retornam à anterior. Desktop e mobile sem overflow/erros.
+- CA-03 — Voltar/avançar, recarregar, saída limpa, cancelar/confirmar rascunho e troca de escopo têm provas positivas e negativas; URLs pessoais e externas não são origens elegíveis.
+- CA-04 — Registry 2.3.1, Context Pack, tipos/build/testes dirigidos, CI, runtime SHA/version e smoke de preservação dos serviços sem reconstruí-los.
+
+## Mapa inicial de impacto e preservação
+
+Baseline local main 79f12a54eb727c42ab237304a7e1ce9c251a3ec2; levantamento de destinos nesta conversa confirmado no código. Runtime será conferido antes do rollout. Risco C com negativos no limite de navegação/escopo; nenhuma mudança de autorização.
+
+| Área/capacidade | Relação | Mecanismo e preservação | Regressão |
+| --- | --- | --- | --- |
+| Navegação, páginas e cabeçalhos operacionais | direct | Seta comum; atalhos fixos; URL anterior; etapas/subtelas | QA browser sintético em componentes reais, tipos/build |
+| Rascunhos, filtros/seleção/rolagem | direct | Guardas e store existentes, sem cópia de formulários | Cancelamento/aceite, histórico/back/forward, estado da origem |
+| Sessão/papel/empresa | critical_transversal | Sem retorno elegível entre escopos; autorização de rota preservada | Negativos de escopo e URL, troca de contexto |
+| Avaliação/ingestão/revisão/curadoria | plausible_indirect | Apresentação e transição interna; ações de domínio continuam explícitas | Fixture registra ausência de geração/envio/escrita implícitos |
+| Backend/Score/modelos/Resend/Parser/Synthesis/Mail | no_impact_identified | Nenhuma mudança de contrato, dados ou chamada de negócio; release web isolado | Revisão do diff/plano e IDs/imagens/restarts dos serviços |
+
+Sem referência visual normativa fornecida; posição superior esquerda é requisito explícito, demais detalhes seguem o design system.
 
 ---
 
@@ -20289,6 +20356,58 @@ Fora de escopo F-01: sem alteração de prompt/modelo/limites/retry/banco/UI e s
 Validação local: `deno check` do handler e testes; `deno test --no-check` do handler/snapshot: 32/32 PASS; `pnpm run lint` PASS; `pnpm run check:matching-runtime` PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` PASS. O typecheck Deno exigiu tipagem explícita do retorno já usado de `prepareTrajectoryContext`, sem mudança de dado.
 
 Git/CI/produção: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` integrado por fast-forward em `main` e `origin/main`. CI `36377229062` PASS. Plano 1.0.1: nove arquivos; documentação/Context Pack e somente Edge `matching-trajectory`; database e web/VPS `skip`. Edge v9 ACTIVE, `verify_jwt=true`, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`, os 12 arquivos publicados comparados ao bundle local. POST sem autenticação recebeu 401; não houve chamada autenticada com Perfil real nem custo de IA de smoke. Git local no worktree de release e GitHub alinhados no SHA funcional. O checkout principal mantém quatro itens não rastreados do usuário e exports gerados temporários fora do commit; não foram sobrescritos. Logs históricos não são recuperáveis. Conclusão: D-01..D-03 e P-01..P-02 PASS, sem desvio; efeito operacional de telemetria em erro real ainda não observado, por decisão de não provocar uma falha paga em produção.
+
+---
+
+## Source: `docs/qa/aot-navigation-back-v231.md`
+
+# AoT — Retorno imediato v2.3.1
+
+Agreement/Execution `navigation-back-v231` v1.0.0 aprovados por Bruno em10/10/2026. Baseline79f12a54eb727c42ab237304a7e1ce9c251a3ec2, branch codex/navigation-back-v231. Referências/evidência em docs/qa/evidence/navigation-back-v231/. Checkpoint antes de publicação; não representa fechamento.
+
+## Acordos
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | PrismaPage seta única; usePrismaNavigation/back; estados internos dos assistentes/Perfil/banco | browser-results.json78checks, navigationHistory19checks com uxFoundation/registry | PASS |
+| D-02 | Atalhos fixos mantêm destinos, sem ArrowLeftOutlined em páginas | Pessoa real em fixture + avaliação real em fixture + revisão do diff | PASS |
+| D-03 | Guardas antes de back e aprovação única em popstate; store/scroll atuais | Quatro viewports: cancelar/confirmar seta e navegador, filtro/rolagem, forward/reload | PASS |
+| D-04 | Metadados elegíveis operatorHistoryPath; escopo exato e reidratação assíncrona; entrada direta disabled | URLs externas/tokens/query/fragmento; sessão/papel/empresa; reload; testes negativos | PASS |
+| D-05 | Registry2.3.1; publicação web única com rollback | Tipos/build PASS; CI/publicação/smoke pendentes | PARTIAL |
+
+## Proibições
+
+| ID | Evidência | Status |
+| --- | --- | --- |
+| P-01 | Grafo de dez caminhos; history.back/forward não empilha novo retorno; etapas/áreas regressam | PASS |
+| P-02 | Cancelamento preserva URL/rascunho; escopos e URLs negativos; callbacks só apresentação; nenhuma generate/send/dispatch na fixture | PASS |
+| P-03 | Diff sem banco/Edge/runtime IA/Score; regras de domínio preservadas | PASS |
+
+## Mapa final de impacto e preservação
+
+| Área/capacidade | Relação | Baseline | Regressão/evidência | Status |
+| --- | --- | --- | --- | --- |
+| Navegação/páginas/cabeçalhos | direct | main79f12a5, destinos fixos do levantamento | 78checks browser; quatro viewports;19Node (history/UX/registry) | PASS |
+| Rascunhos/filtros/seleção/rolagem | direct | NavigationGuards/NavigationViewStore e scroll anteriores | Positivos/negativos no browser; uxFoundation;11Node de rotas/recovery | PASS |
+| Sessão/papel/empresa | critical_transversal | Autorização fora da UI e scope anterior | Negativos; webProtectedRoutes; reidratação confirmada só após Auth | PASS |
+| Avaliação/importação/revisão/curadoria | plausible_indirect | Domínio explícito e controles de origem | Pessoa15cenários reais em fixture PASS; avaliação38checks reais em fixture PASS; sem dados reais | PASS |
+| Serviços/banco/Score/IA | no_impact_identified | production-before.json7containers e14HTTP | Sem implementação/runtime fora de web; comparação remota pendente | PARTIAL |
+
+Nenhuma nova dependência/roteador. Estado interno limita memória a50valores de apresentação; metadados de rota usam History API existente e não local/sessionStorage. A reidratação Auth assíncrona foi incluída no mapa: metadata fica inerte até scope confirmado; não aceitar scope antigo como autoridade.
+
+## Limites e correções da validação
+
+QA browser usa navegação/PrismaPage reais e PersonForm/PositionAssessment reais com serviços substituídos; demais caminhos do grafo usam páginas sintéticas compartilhadas. Sem Pessoa real/autenticação de produção, escrita, IA ou e-mail. NOT TESTED para jornada autenticada real, não inferida de HTTP público.
+
+Primeiro teste de diálogo contou animação de fechamento como nova confirmação: ajustado para aguardar destruição do diálogo. Fixture de edição incompleta carecia updatedAt; corrigida sem mudar produto. Reidratação da fixture inicialmente aguardava metadata antiga, não Auth confirmado: corrigido readiness. Chrome local retornou EACCES; QA usa Edge headless existente. Falhas iniciais não eram fechamento PASS e não justificaram retirar guardas.
+
+Sem referência visual normativa; posição superior esquerda/ausência de overflow provadas nos quatro viewports; screenshots profile-1448/768/390/320.png. Não representa fidelidade de todas as telas de domínio nem certificação WCAG.
+
+F-01 preservado no diff; portais públicos mantêm seus controles. Documentos alheios não rastreados permanecem intocados. Context Pack gerado/verificado no snapshot somente de arquivos rastreados para não publicar acordos alheios locais. Lint1218arquivos, foundation e três testes de Context Pack PASS. Tipos/build após a alteração final PASS. Duplo clique na seta protegido antes da confirmação; reinício explícito de importação/avaliação/geração limpa somente histórico de etapas já descartadas pelo reinício existente.
+
+## Git, CI, publicação e conclusão
+
+Pendentes. D-05 ainda PARTIAL: não declarar movimento concluído até publicação e preservação remota comprovadas.
 
 ---
 
@@ -25732,6 +25851,14 @@ Entregar uma mudança coerente em domínio compartilhado, orquestração web, gu
 # Execução — diagnóstico seguro da interpretação de trajetória
 
 Fonte integral e imutável por versão: `docs/qa/agreement-matching-trajectory-diagnostics.md` v1.0.0. Aplicar todos os D-01..D-03, P-01..P-02, F-01 e A-01. Implementar somente na Edge e testes pertinentes. Preservar os contratos públicos e o fallback anterior. Validar CA-D01..CA-D03 com fixtures sem provedor real, revisar payloads dos logs e registrar AoT e mapa final. Regenerar Context Pack por ser mudança material. Publicar somente destinos indicados pelo plano do diff validado.
+
+---
+
+## Source: `docs/qa/execution-navigation-back-v231.md`
+
+# Execução — Retorno à tela anterior v2.3.1
+
+Implementar integralmente docs/qa/agreement-navigation-back-v231.md v1.0.0, lido integralmente, incluindo D-01/02/03/04/05, P-01/02/03, F-01, A-01, CA-01/02/03/04 e mapa de impacto. Reutilizar navegação e guardas existentes, seta compartilhada com origem imediata e atalhos fixos sem seta. Fazer QA sintético proporcional e negativos; publicar uma unidade coerente web 2.3.1 em main/origin/VPS, preservar serviços e fechar AoT com limites explícitos.
 
 ---
 

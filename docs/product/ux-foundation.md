@@ -1,6 +1,10 @@
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação: `prisma-ux-foundation-1.3.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+Contrato de apresentação atual: `prisma-ux-foundation-1.4.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+
+## Retorno imediato v2.3.1
+
+O contrato de apresentação passa a `prisma-ux-foundation-1.4.0`, por decisão de Bruno em10/10/2026; a direção visual1.3.0 acima permanece. A seta compartilhada no alto à esquerda retorna à tela imediatamente anterior registrada, inclusive etapas/áreas internas integradas. Links de destino fixo permanecem sem seta e usam nomes como Ir para Pessoas/Posições. Não usar o pai hierárquico como substituto de uma origem conhecida. Entrada direta sem origem elegível mostra a seta indisponível. O retorno usa history.back, não adiciona uma nova visita; confirma rascunho uma única vez e mantém as proteções do navegador. Origem restrita à mesma sessão, papel e empresa, sem armazenar URLs de autenticação ou portais com tokens. Histórico interno guarda apenas identificadores de apresentação em memória, até50estados. Modais/painéis continuam fechando sobre a tela de origem; portais públicos mantêm a navegação própria. Acordo `docs/qa/agreement-navigation-back-v231.md`1.0.0 e AoT correspondente. Sem nova dependência/roteador, contrato de domínio ou alteração de autorização.
 
 ## Hierarquia e iconografia v2.1.1
 

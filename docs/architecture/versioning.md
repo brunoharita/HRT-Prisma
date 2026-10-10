@@ -1,5 +1,7 @@
 # Versionamento
 
+Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.1**, seta compartilhada que retorna à tela imediatamente anterior, com atalhos fixos coexistentes. Registry único acrescenta a entrega1 ao movimento3, preservando2.3.0 e histórico anterior. Contrato de apresentação `prisma-ux-foundation-1.4.0`; nenhum contrato persistido, serviço, modelo, fórmula ou migration muda. Rollout somente web, Agreement/Execution/AoT `navigation-back-v231`.
+
 Decisão de Bruno em 07/10/2026: publicar **Prisma v2.1.4**. `matching-stable-result-1.0.0` versiona persistência por tenant/Pessoa/Posição, dependências concretas e histórico causal. Fórmula, pesos, matching 5.1.0/7.0.0, score 1.4.0, prompt e modelo permanecem. A data pertence ao cálculo salvo; acesso e contador global não invalidam resultados. Migration `20261007150000_stable_matching_scores.sql`, Edge `matching-trajectory` e web são os destinos diretos. ADR-078 e acordo `docs/qa/agreement-stable-score-v214.md` 1.0.0.
 
 Decisão explícita de Bruno em06/10/2026: publicar **Prisma v2.1.0**, página unificada da Pessoa. O movimento2.1 inicia em entrega0 por decisão expressa, registrada como `firstDeliveryNumber: 0`; o padrão histórico continua iniciar em1. A entrega seguinte deste movimento será2.1.1, sem alterar contadores/saltos anteriores ou inventar entrega. Nenhum contrato persistido de Perfil/IA/taxonomia muda. Rollout somente web; acordo `docs/qa/agreement-person-unified-v210.md`1.0.0.

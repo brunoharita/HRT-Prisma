@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.65.0
-last_verified: 2026-10-09
+version: 2.66.0
+last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Retorno à tela anterior — v2.3.1
+
+Prisma v2.3.1 registra a entrega autorizada por Bruno em10/10/2026: seta compartilhada no alto à esquerda volta à origem imediata, mantendo atalhos de destino fixo sem seta. Estende History API/guardas/store existentes e integra etapas/áreas internas de avaliação, importação, preparação, banco e Perfil. Escopo de sessão/papel/empresa, reidratação autenticada, retorno sem origem indisponível e URLs de portais/autenticação excluídas dos metadados. Não altera domínio, dados, Score, backend ou serviços. Acordo/execução v1.0.0 e AoT `navigation-back-v231`; QA browser sintético78checks em1448/768/390/320px e30testes Node dirigidos PASS, tipos/build PASS. Publicação/CI ainda pendentes; não inferir produção desta descrição. Jornada autenticada real NOT TESTED.
 
 ## E-mail corporativo HRT: recebimento e encaminhamento operacionais
 
@@ -257,6 +261,8 @@ Prisma v1.8.1 registra M8.1 como primeira entrega do Movimento 8, após o Produc
 O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas autorizam a migração de competências. As cinco migrations M8.1 foram aplicadas individualmente no único Supabase de produção: dois macrogrupos, nove subagrupadores globais, representação tenant-scoped para subagrupadores futuros, FK de classificação dos conceitos Knowledge e 8.908 classificações correntes de tecnologia com mapping oficial O*NET. Os demais conceitos aguardam decisão humana. A projeção M8 distingue declaração, contexto, certificado, Assessment e habilidade prática; vínculo factual exige operador autorizado. Matching, Score, taxonomia ocupacional e Knowledge institucional foram preservados. QA PostgreSQL sintético com rollback passou em classificação, escopo, aprovação, curadoria e naturezas de evidência. O backup privado de banco/Storage restaurou integralmente em ambiente isolado, incluindo 15 objetos conferidos por SHA-256. A migration de proteção da saga M5.5 contra exclusão ampla de Inbox também está no remoto. Dos nove alvos autorizados, três foram excluídos pela saga M5.5; após orientação do Product Owner, os seis restantes serão preservados nesta execução. Consulta SQL confirmou 7 Pessoas, 11 objetos Storage, 7 Auth, 7 usuários da plataforma e 8 Vagas. A outra Pessoa sem origem de currículo comprovada permanece preservada. As nove composições foram comparadas no app local autenticado e ajustadas. O CI do SHA `11ff0ab` passou, `main` foi promovida, a web foi publicada na VPS nesse SHA, o contêiner está ativo e HTTPS respondeu 200. A limpeza remota é parcial; smoke funcional autenticado hospedado e novo ciclo intake → revisão → publicação permanecem pendentes. ADR-070 e AoT M8.1 contêm evidências e limites.
 
 ## Resumo operacional para prompts
+
+Retorno v2.3.1 autorizado em10/10/2026: seta superior esquerda segue origem imediata e histórico da sessão; links de destino fixo coexistem sem seta. Reutiliza guardas/store/History API, com negativos de rascunho, escopo e URLs pessoais, e etapas internas integradas. Publicação ainda pendente neste checkpoint; AoT `docs/qa/aot-navigation-back-v231.md` separa QA sintético/produção/jornada real. Release somente web, preservando avaliação2.3.0/serviços/banco/Score/autoridade.
 
 Complemento de publicação da v2.0.2 ativo no SHA SQL a9fa4da: títulos personalizados com nome normalizado idêntico reutilizam definição da organização sem trocar IDs de fonte/Perfil. Migration 20261004022925, 52 verificações SQL/cinco primeiras publicações e replays/concorrência, 14 testes dirigidos/243 person-flow/CI PASS; grants/RLS e HTTPS/readiness preservados. Sem rebuild web/Parser (build 96e3ecb mantido). Revisão real permanece draft/lock 1/zero Perfil para confirmação do operador; não afirmar publicação automática ou smoke autenticado executado. AoT `docs/qa/aot-section-publication-v202.md`.
 

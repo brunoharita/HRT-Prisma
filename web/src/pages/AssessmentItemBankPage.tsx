@@ -1,4 +1,5 @@
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
+import { usePrismaScreenState } from "../ui/PrismaNavigation";
 import { AppstoreFilled as PrismaPageIcon } from "@ant-design/icons";
 import { PrismaMetric } from "../ui/PrismaState";
 import { observedMetric } from "../shared/uxFoundation";
@@ -27,9 +28,9 @@ export function AssessmentItemBankPage({ activeMembership }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
-  const [surface, setSurface] = useState<Surface>("gaps");
+  const [surface, setSurface] = usePrismaScreenState<Surface>("gaps");
   const [generationGap, setGenerationGap] = useState<ItemBankGapView | null>(null);
-  const [generationStep, setGenerationStep] = useState(0);
+  const [generationStep, setGenerationStep, replaceGenerationStep] = usePrismaScreenState(0, surface === "generation");
   const [quantity, setQuantity] = useState(1);
   const [targetScope, setTargetScope] = useState<"global" | "organization">("organization");
   const [reviewProposal, setReviewProposal] = useState<GenerationProposalView | null>(null);
@@ -124,7 +125,7 @@ export function AssessmentItemBankPage({ activeMembership }: Props) {
       <PrismaCard className="prisma-m51c-navigation">
         {surfaceGroups.map((group) => <div className="prisma-m51c-navigation__group" key={group.label}><span>{group.label}</span><div>{group.items.map((item) => <button aria-current={surface === item.key ? "page" : undefined} className={surface === item.key ? "is-active" : ""} key={item.key} onClick={() => setSurface(item.key)} type="button">{item.icon}{item.label}</button>)}</div></div>)}
       </PrismaCard>
-      {surface === "gaps" ? <GapSurface gaps={workspace.gaps} onGenerate={(gap) => { setGenerationGap(gap); setQuantity(Math.min(Math.max(gap.deficit, 1), 5)); setGenerationStep(0); setSurface("generation"); }} /> : null}
+      {surface === "gaps" ? <GapSurface gaps={workspace.gaps} onGenerate={(gap) => { setGenerationGap(gap); setQuantity(Math.min(Math.max(gap.deficit, 1), 5)); replaceGenerationStep(0, true); setSurface("generation"); }} /> : null}
       {surface === "generation" ? <GenerationSurface canPublishGlobal={activeMembership.role === "super_admin"} gap={generationGap ?? workspace.gaps.find((gap) => gap.deficit > 0) ?? null} onBack={() => setSurface("gaps")} onRun={runFakeGeneration} onStep={setGenerationStep} quantity={quantity} saving={saving} setQuantity={setQuantity} setTargetScope={setTargetScope} step={generationStep} targetScope={targetScope} policy={workspace.policy} requests={workspace.requests} /> : null}
       {surface === "proposals" ? <ProposalSurface proposals={workspace.proposals} selectedIds={selectedProposalIds} onReview={setReviewProposal} onSelection={setSelectedProposalIds} onPublish={() => void publishSelected()} saving={saving} /> : null}
       {surface === "global" ? <BankSurface items={workspace.items.filter((item) => item.scope === "global")} title="Banco de itens global" onSelect={setSelectedItem} /> : null}

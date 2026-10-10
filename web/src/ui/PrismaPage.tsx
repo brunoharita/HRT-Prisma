@@ -1,4 +1,7 @@
 import type { ReactNode } from "react";
+import { Button } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { usePrismaBack } from "./PrismaNavigation";
 
 interface PrismaPageProps {
   children: ReactNode;
@@ -15,7 +18,11 @@ interface PrismaPageHeaderProps {
 }
 
 export function PrismaPage({ children, className }: PrismaPageProps) {
-  return <div className={["prisma-page", className].filter(Boolean).join(" ")}>{children}</div>;
+  const back = usePrismaBack();
+  return <div className={["prisma-page", className].filter(Boolean).join(" ")}>
+    {back ? <nav className="prisma-page-return" aria-label="Retorno à tela anterior"><Button type="text" icon={<ArrowLeftOutlined />} aria-label="Voltar à tela anterior" title={back.canGoBack ? "Voltar à tela anterior" : "Nenhuma tela anterior nesta sessão"} disabled={!back.canGoBack} loading={back.goingBack} onClick={() => void back.goBack()}>Voltar</Button></nav> : null}
+    {children}
+  </div>;
 }
 
 export function PrismaPageHeader({

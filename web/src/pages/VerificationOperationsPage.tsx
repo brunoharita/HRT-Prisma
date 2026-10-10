@@ -108,7 +108,7 @@ export function VerificationOperationsPage({ activeMembership, preparedAssessmen
     return (
       <PrismaPage className="prisma-m51b-operator-page">
         <PrismaPageHeader icon={<PrismaPageIcon />} title="Gerar link de convite" description="Gere um acesso pessoal para a verificação preparada. Nenhuma mensagem externa será enviada automaticamente." />
-        <Button onClick={() => onNavigate("/verifications")} type="link">Voltar para verificações</Button>
+        <Button onClick={() => onNavigate("/verifications")} type="link">Ir para verificações</Button>
         {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => void load()}>Consultar situação dos convites</Button>} /> : null}
         {!prepared && !loading ? <PrismaCard><Empty description="Instrumento preparado não encontrado." /></PrismaCard> : null}
         {prepared ? (

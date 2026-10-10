@@ -1,10 +1,9 @@
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import type { ReactNode } from "react";
 import { PersonWorkspacePage, type PersonWorkspaceParts } from "./PersonWorkspacePage";
-import { confirmPrismaNavigation, useViewState } from "../ui/PrismaNavigation";
+import { confirmPrismaNavigation, usePrismaViewScreenState } from "../ui/PrismaNavigation";
 import { PERSON_SURFACES, type Surface } from "../components/profile/PersonProfessionalEvidenceMap";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Alert, Button, Descriptions, Empty, Skeleton } from "antd";
 import { CanonicalProfileHeader } from "../components/profile/CanonicalProfileView";
 import { PersonProfessionalEvidenceMap } from "../components/profile/PersonProfessionalEvidenceMap";
@@ -27,7 +26,7 @@ interface PersonProfilePageProps {
 }
 
 export function PersonProfilePage({ activeMembership, personId, repository, onNavigate }: PersonProfilePageProps) {
-  const [surface, setSurface] = useViewState<Surface>("personSurface", "summary", `/profiles/${personId}`);
+  const [surface, setSurface] = usePrismaViewScreenState<Surface>("personSurface", "summary", `/profiles/${personId}`);
   const changeSurface = (next: Surface) => { void confirmPrismaNavigation().then(ok => { if (ok) setSurface(next); }); };
   const [view, setView] = useState<PersonProfileView | null>(null);
   const [loading, setLoading] = useState(true);
@@ -91,7 +90,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
 
   const renderPage = (operations?: PersonWorkspaceParts): ReactNode => (
     <PrismaPage className="prisma-profile-page">
-      {operations?.header ?? <><Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>{canonical ? <><CanonicalProfileHeader profile={canonical} />{canonical.version ? <p className="prisma-person-profile-version">Perfil v{canonical.version.number} · Publicado em {new Date(canonical.version.publishedAt).toLocaleDateString("pt-BR")}</p> : null}</> : view ? <h1>{view.person.fullName}</h1> : null}</>}
+      {operations?.header ?? <><Button onClick={() => onNavigate("/profiles")} type="text">Ir para Pessoas</Button>{canonical ? <><CanonicalProfileHeader profile={canonical} />{canonical.version ? <p className="prisma-person-profile-version">Perfil v{canonical.version.number} · Publicado em {new Date(canonical.version.publishedAt).toLocaleDateString("pt-BR")}</p> : null}</> : view ? <h1>{view.person.fullName}</h1> : null}</>}
       {operations?.notices}
       {loading ? <ProfileSkeleton /> : null}
       {error ? <Alert message={error} showIcon type="error" action={<Button onClick={() => setNoticeRetry((value) => value + 1)}>Atualizar consulta</Button>} /> : null}

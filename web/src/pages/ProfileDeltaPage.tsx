@@ -1,7 +1,7 @@
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, Empty, Radio, Select, Skeleton, Statistic, Steps, Tabs, Tag, Typography } from "antd";
 import { deriveProfileDelta, isProfileBlockDecisionItem, type ProfileDeltaItem, type ProfileDeltaKind, type ProfileDeltaSection } from "../domain/profileDelta";
 import type { ProfileBlockAction, ProfileBlockDecision, ProfilePublicationMode, ProfileReviewWorkspace, ProfileVersionView } from "../domain/personIngestion";
@@ -161,7 +161,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         description={delta.firstPublication ? "Revise o conhecimento que formará o primeiro Perfil Prisma antes de publicar." : "Veja exatamente o que a nova versão altera e o que permanece preservado antes de publicar."}
         actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion ?? workspace.baseProfileVersion}` : workspace.documentName}</strong><small>{workspace.sourceKind === "profile" ? "Versão usada como base" : `Documento v${workspace.documentVersion}`}</small></span></Card>}
       />
-      <Button icon={<ArrowLeftOutlined />} onClick={() => returnToReview()} type="text">Voltar para revisão</Button>
+      <Button onClick={() => returnToReview()} type="text">Ir para revisão</Button>
       <Steps className="prisma-m81-publication-steps" current={2} items={[{ title: "Dados extraídos" }, { title: "Revisão" }, { title: "Comparação" }, { title: "Publicação" }]} size="small" />
       <Card className="prisma-delta-summary-card">
         {!delta.firstPublication ? <div className="prisma-publication-mode" aria-label="Escolha como o perfil será publicado">
@@ -216,7 +216,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
         type="info"
       />
       <div className="prisma-delta-footer">
-        <Button onClick={() => returnToReview()}>Voltar para revisão</Button>
+        <Button onClick={() => returnToReview()}>Ir para revisão</Button>
         <Button danger={publicationMode === "replace"} icon={<CheckCircleOutlined />} loading={busy} onClick={() => validationIssues.length ? returnToReview(validationIssues[0]!.fieldPath) : void publish()} type={publicationMode === "replace" ? "default" : "primary"}>
           {validationIssues.length ? "Revisar pendência" : delta.firstPublication ? `Publicar Perfil v${nextVersion}` : publicationMode === "merge" ? "Atualizar Perfil" : "Substituir Perfil"}
         </Button>
@@ -267,7 +267,7 @@ function reviewFocusStorageKey(reviewId: string): string { return `prisma.review
 function errorAction(recovery: OperationRecovery, fieldPath: string | null, returnToReview: (fieldPath?: string | null) => void, onNavigate: (path: string) => void) {
   if (fieldPath) return <Button onClick={() => returnToReview(fieldPath)}>Ir para a correção</Button>;
   if (recovery === "sign-in") return <Button onClick={() => onNavigate("/sign-in")}>Entrar novamente</Button>;
-  if (recovery === "return-to-review" || recovery === "review-fields") return <Button onClick={() => returnToReview()}>Voltar para revisão</Button>;
+  if (recovery === "return-to-review" || recovery === "review-fields") return <Button onClick={() => returnToReview()}>Ir para revisão</Button>;
   if (recovery === "reload" || recovery === "retry") return <Button onClick={() => window.location.reload()}>Atualizar e tentar novamente</Button>;
   return <Button onClick={() => returnToReview()}>Consultar revisão</Button>;
 }

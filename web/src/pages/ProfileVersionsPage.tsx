@@ -1,7 +1,7 @@
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, EyeOutlined, HistoryOutlined, SwapOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined, HistoryOutlined, SwapOutlined } from "@ant-design/icons";
 import { Alert, Button, Drawer, Empty, Modal, Skeleton, Space, Tag, Timeline, Typography } from "antd";
 import { StructuredProfileView } from "../components/profile/StructuredProfileView";
 import type { ProfileVersionView } from "../domain/personIngestion";
@@ -88,7 +88,7 @@ export function ProfileVersionsPage({ activeMembership, personId, onNavigate }: 
 
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 12 }} /></PrismaPage>;
   return <PrismaPage className="prisma-m53-page prisma-version-history-page">
-    <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>
+    <Button onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Ir para a Central da Pessoa</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Versões do Perfil" description="Consulte o conteúdo completo, compare versões ou recupere qualquer momento do histórico." actions={<Space wrap>{current ? <Button icon={<EditOutlined />} loading={busy} onClick={() => void createReview(current)} type="primary">Criar nova revisão</Button> : null}{current ? <Button danger icon={<DeleteOutlined />} loading={busy} onClick={confirmReset}>Reiniciar Perfil</Button> : null}</Space>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Button onClick={() => { void refresh().catch(() => setError("As versões não puderam ser consultadas. Tente atualizar a consulta novamente.")); }}>Consultar versões</Button>} /> : null}
     {notice ? <Alert closable onClose={() => setNotice(null)} showIcon title={notice} type="success" /> : null}

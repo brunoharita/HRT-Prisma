@@ -1,0 +1,320 @@
+{
+  "results": [
+    {
+      "name": "1448: direct entry has no fabricated origin",
+      "pass": true
+    },
+    {
+      "name": "1448: arrow at upper left before heading",
+      "pass": true
+    },
+    {
+      "name": "1448: no overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: original filter and scroll preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: reload retains confirmed same-scope predecessor",
+      "pass": true
+    },
+    {
+      "name": "1448: back after reload reaches exact predecessor",
+      "pass": true
+    },
+    {
+      "name": "1448: cancel arrow preserves URL and draft",
+      "pass": true
+    },
+    {
+      "name": "1448: confirmed arrow asks once and double click returns only once",
+      "pass": true
+    },
+    {
+      "name": "1448: cancelling browser back also preserves draft",
+      "pass": true
+    },
+    {
+      "name": "1448: internal steps return without pushing URL",
+      "pass": true
+    },
+    {
+      "name": "1448: second internal return reaches initial step",
+      "pass": true
+    },
+    {
+      "name": "1448: area returns to previous area",
+      "pass": true
+    },
+    {
+      "name": "1448: session:user:recruiter:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "1448: session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "1448: new-session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "1448: no exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "768: direct entry has no fabricated origin",
+      "pass": true
+    },
+    {
+      "name": "768: arrow at upper left before heading",
+      "pass": true
+    },
+    {
+      "name": "768: no overflow",
+      "pass": true
+    },
+    {
+      "name": "768: original filter and scroll preserved",
+      "pass": true
+    },
+    {
+      "name": "768: reload retains confirmed same-scope predecessor",
+      "pass": true
+    },
+    {
+      "name": "768: back after reload reaches exact predecessor",
+      "pass": true
+    },
+    {
+      "name": "768: cancel arrow preserves URL and draft",
+      "pass": true
+    },
+    {
+      "name": "768: confirmed arrow asks once and double click returns only once",
+      "pass": true
+    },
+    {
+      "name": "768: cancelling browser back also preserves draft",
+      "pass": true
+    },
+    {
+      "name": "768: internal steps return without pushing URL",
+      "pass": true
+    },
+    {
+      "name": "768: second internal return reaches initial step",
+      "pass": true
+    },
+    {
+      "name": "768: area returns to previous area",
+      "pass": true
+    },
+    {
+      "name": "768: session:user:recruiter:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "768: session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "768: new-session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "768: no exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "390: direct entry has no fabricated origin",
+      "pass": true
+    },
+    {
+      "name": "390: arrow at upper left before heading",
+      "pass": true
+    },
+    {
+      "name": "390: no overflow",
+      "pass": true
+    },
+    {
+      "name": "390: original filter and scroll preserved",
+      "pass": true
+    },
+    {
+      "name": "390: reload retains confirmed same-scope predecessor",
+      "pass": true
+    },
+    {
+      "name": "390: back after reload reaches exact predecessor",
+      "pass": true
+    },
+    {
+      "name": "390: cancel arrow preserves URL and draft",
+      "pass": true
+    },
+    {
+      "name": "390: confirmed arrow asks once and double click returns only once",
+      "pass": true
+    },
+    {
+      "name": "390: cancelling browser back also preserves draft",
+      "pass": true
+    },
+    {
+      "name": "390: internal steps return without pushing URL",
+      "pass": true
+    },
+    {
+      "name": "390: second internal return reaches initial step",
+      "pass": true
+    },
+    {
+      "name": "390: area returns to previous area",
+      "pass": true
+    },
+    {
+      "name": "390: session:user:recruiter:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "390: session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "390: new-session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "390: no exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "320: direct entry has no fabricated origin",
+      "pass": true
+    },
+    {
+      "name": "320: arrow at upper left before heading",
+      "pass": true
+    },
+    {
+      "name": "320: no overflow",
+      "pass": true
+    },
+    {
+      "name": "320: original filter and scroll preserved",
+      "pass": true
+    },
+    {
+      "name": "320: reload retains confirmed same-scope predecessor",
+      "pass": true
+    },
+    {
+      "name": "320: back after reload reaches exact predecessor",
+      "pass": true
+    },
+    {
+      "name": "320: cancel arrow preserves URL and draft",
+      "pass": true
+    },
+    {
+      "name": "320: confirmed arrow asks once and double click returns only once",
+      "pass": true
+    },
+    {
+      "name": "320: cancelling browser back also preserves draft",
+      "pass": true
+    },
+    {
+      "name": "320: internal steps return without pushing URL",
+      "pass": true
+    },
+    {
+      "name": "320: second internal return reaches initial step",
+      "pass": true
+    },
+    {
+      "name": "320: area returns to previous area",
+      "pass": true
+    },
+    {
+      "name": "320: session:user:recruiter:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "320: session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "320: new-session:user:member:company-b cannot return across scope",
+      "pass": true
+    },
+    {
+      "name": "320: no exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "route /profiles/a/profile: exact immediate origin /vacancies/p/people",
+      "pass": true
+    },
+    {
+      "name": "route /profiles/a/profile: exact immediate origin /profiles/search",
+      "pass": true
+    },
+    {
+      "name": "route /profiles/a/edit: exact immediate origin /profiles/a",
+      "pass": true
+    },
+    {
+      "name": "route /profiles/a/documents/d/review/r: exact immediate origin /profiles/a/documents/d",
+      "pass": true
+    },
+    {
+      "name": "route /profiles/a/reviews/r: exact immediate origin /profiles/a/versions",
+      "pass": true
+    },
+    {
+      "name": "route /vacancies/p/follow-up: exact immediate origin /vacancies/p",
+      "pass": true
+    },
+    {
+      "name": "route /vacancies/p/edit: exact immediate origin /vacancies",
+      "pass": true
+    },
+    {
+      "name": "route /vacancies/p/follow-up/a/assessment: exact immediate origin /vacancies/p/follow-up/a",
+      "pass": true
+    },
+    {
+      "name": "route /verifications/new/a: exact immediate origin /matching/verification-needs/n/prepare",
+      "pass": true
+    },
+    {
+      "name": "route /users/new: exact immediate origin /users",
+      "pass": true
+    },
+    {
+      "name": "actual PersonForm: fixed destination remains distinct",
+      "pass": true
+    },
+    {
+      "name": "actual assessment: arrow returns to configuration without leaving route",
+      "pass": true
+    },
+    {
+      "name": "actual assessment: next return reaches candidate context",
+      "pass": true
+    },
+    {
+      "name": "no implicit AI, invitation or dispatch",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Synthetic browser QA with real navigation/Page and PersonForm/PositionAssessment components; remaining route graph uses shared-page fixtures.",
+    "No authenticated production candidate or backend action; no AI/email calls."
+  ]
+}

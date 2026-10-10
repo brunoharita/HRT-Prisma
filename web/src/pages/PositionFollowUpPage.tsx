@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type DragEvent } from "react";
 import { Alert, Button, Drawer, Empty, Input, Modal, Radio, Segmented, Select, Skeleton, Space, Table, Tabs, Tag, Typography } from "antd";
-import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, EnvironmentOutlined, FilterOutlined, HolderOutlined, PlusOutlined, ReloadOutlined, SearchOutlined, TeamOutlined } from "@ant-design/icons";
+import { CalendarOutlined, CheckCircleOutlined, EnvironmentOutlined, FilterOutlined, HolderOutlined, PlusOutlined, ReloadOutlined, SearchOutlined, TeamOutlined } from "@ant-design/icons";
 import type { OrganizationMembership } from "../shared/access";
 import type { VacancyCandidateMatch, VacancyDetail } from "../domain/vacancy";
 import { filterFollowUp, followUpColumns, followUpColumn, followUpStages, followUpStageAction, followUpProcessName, followUpLocation, followUpHistoryLabels, interviewInstant, type FollowUpData, type FollowUpDetails, type FollowUpEntry, type FollowUpFilters, type FollowUpStage } from "../domain/positionFollowUp";
@@ -88,7 +88,7 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
     <div className="pf-card-bottom"><Button type="link" onClick={()=>onNavigate(`${base}/${entry.personId}`)}>Ver detalhes</Button>{entry.stage!=="closed"?<MoveStage entry={entry} disabled={disabled||pending.includes(entry.id)} onMove={stage=>move(entry,stage)} />:null}</div>
   </article>;}
   return <PrismaPage className="pf-page">
-    <Button type="text" icon={<ArrowLeftOutlined />} onClick={()=>onNavigate("/vacancies")}>Voltar para Posições</Button>
+    <Button type="text" onClick={()=>onNavigate("/vacancies")}>Ir para Posições</Button>
     <PrismaPageHeader icon={<PrismaBriefcaseIcon />} title={vacancy?.title??"Acompanhamento da Posição"} description={vacancy?.area||"Acompanhe as Pessoas selecionadas nesta Posição."}
       extras={<Space wrap>{vacancy?<Tag>Definição v{vacancy.version}</Tag>:null}{data?.process?<Tag color="blue">{followUpProcessName(data.process.name)} · {disabled?"Encerrado":"Em andamento"}</Tag>:null}{vacancy?<Tag>{vacancy.occupancy==="occupied"?"Ocupada":"Não ocupada"}</Tag>:null}</Space>}
       actions={<Space wrap><Button className="pf-view-position" onClick={()=>onNavigate(`/vacancies/${vacancyId}`)}>Ver posição</Button><Button icon={<PlusOutlined aria-hidden />} type="primary" onClick={()=>onNavigate(`/vacancies/${vacancyId}/people`)}>Encontrar pessoas</Button></Space>} />
@@ -128,7 +128,7 @@ export function PositionFollowUpPage({ activeMembership, vacancyId, personId, on
         </section>)}</div></>}
       <footer className="pf-footer"><span>As etapas organizam o acompanhamento. O score apoia a análise das evidências.</span>{data.process?<Button loading={pending.includes("process")} disabled={pending.length>0} onClick={()=>Modal.confirm({title:disabled?"Reabrir este processo?":"Encerrar este processo?",content:"As etapas, decisões e o histórico de cada Pessoa serão preservados. A ocupação da Posição permanece a mesma.",okText:disabled?"Reabrir processo":"Encerrar processo",cancelText:"Cancelar",onOk:async()=>{if(!await mutate(disabled?"reopen_process":"close_process",null))throw new Error("Falha ao salvar");}})}>{disabled?"Reabrir processo":"Encerrar processo"}</Button>:null}</footer>
     </>:null}
-    {personId&&data&&!selected?<Alert type="warning" title="Esta Pessoa não está no acompanhamento desta Posição." action={<Button onClick={()=>onNavigate(base)}>Voltar ao acompanhamento</Button>} />:null}
+    {personId&&data&&!selected?<Alert type="warning" title="Esta Pessoa não está no acompanhamento desta Posição." action={<Button onClick={()=>onNavigate(base)}>Ir ao acompanhamento</Button>} />:null}
     {selected&&data?<FollowUpDetail key={selected.id} entry={selected} data={data} vacancy={vacancy} requestedForm={formIntent?.personId===selected.personId?formIntent.action:null} disabled={disabled||selected.stage==="closed"||pending.includes(selected.id)} saving={pending.includes(selected.id)} error={error} refreshing={loading} onRefresh={()=>void load()} onClose={()=>{setFormIntent(null);onNavigate(base);}} onNavigate={onNavigate} onMutate={(action,payload)=>mutate(action,selected,payload)} />:null}
   </PrismaPage>;
 }

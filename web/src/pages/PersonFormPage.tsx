@@ -3,7 +3,7 @@ import { IdcardFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
+import { SaveOutlined } from "@ant-design/icons";
 import { Alert, Button, Form, Input, Select, Skeleton, Space, Typography } from "antd";
 import type { PersonEditorValue, PersonWorkspaceSummary } from "../domain/personIngestion";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
@@ -100,7 +100,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
   }
 
   if (loading) return <PrismaPage><PrismaState kind="loading" /></PrismaPage>;
-  if (personId && !person) return <PrismaPage><PrismaPageHeader icon={<PrismaPageIcon />} title="Pessoa indisponível" /><PrismaState kind="unavailable" description={error ?? "Esta pessoa não está disponível nesta empresa."} action={{ label: "Voltar para Pessoas", onClick: () => onNavigate("/profiles") }} /></PrismaPage>;
+  if (personId && !person) return <PrismaPage><PrismaPageHeader icon={<PrismaPageIcon />} title="Pessoa indisponível" /><PrismaState kind="unavailable" description={error ?? "Esta pessoa não está disponível nesta empresa."} action={{ label: "Ir para Pessoas", onClick: () => onNavigate("/profiles") }} /></PrismaPage>;
 
   return (
     <PrismaPage className="prisma-m2b-page">
@@ -112,7 +112,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
       {error ? <Alert message={error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver campos do formulário</Button>} /> : null}
       <div className="prisma-person-form-layout">
         <PrismaCard className="prisma-person-form-card">
-          <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate("/profiles")} type="text">Voltar para Pessoas</Button>
+          <Button onClick={() => onNavigate("/profiles")} type="text">Ir para Pessoas</Button>
           <Typography.Title level={4}>Dados básicos</Typography.Title>
           <Form onValuesChange={() => setDirty(JSON.stringify(form.getFieldsValue(true)) !== baseline.current)} form={form} layout="vertical" onFinish={(values) => void handleSave(values)} requiredMark="optional">
             <Form.Item label="Nome completo" name="fullName" rules={[{ required: true, whitespace: true, message: "Informe o nome completo." }]}>

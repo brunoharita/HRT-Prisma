@@ -1,0 +1,3 @@
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+export default defineConfig({ root: "tests/ui", cacheDir: "../../tmp/vite-navigation-back", publicDir: "../../web/public", plugins: [{ name: "navigation-fixture", enforce: "pre", configureServer(server) { server.middlewares.use((req, _res, next) => { if (req.url === "/" || /^\/(profiles|vacancies|matching|verifications|users|knowledge|item-bank|settings)(\/|$)/.test(req.url ?? "")) req.url = "/navigation-back.html"; next(); }); }, transform(_code, id) { if (id.replaceAll("\\", "/").endsWith("/infrastructure/supabase/client.ts")) return "export const supabase={};"; } }, react()], server: { host: "127.0.0.1", port: 5699, strictPort: true, fs: { allow: ["../.."] } }, appType: "spa" });

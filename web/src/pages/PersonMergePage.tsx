@@ -2,7 +2,7 @@ import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftOutlined, CheckCircleOutlined, FileTextOutlined, SafetyCertificateOutlined, TeamOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, FileTextOutlined, SafetyCertificateOutlined, TeamOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Modal, Radio, Select, Skeleton, Tag, Typography } from "antd";
 import type { PersonIngestionWorkspace, PersonWorkspaceSummary, ProfileVersionView } from "../domain/personIngestion";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
@@ -87,7 +87,7 @@ export function PersonMergePage({ activeMembership, personId, onNavigate }: Pers
 
   if (loading) return <PrismaPage><Skeleton active paragraph={{ rows: 12 }} /></PrismaPage>;
   return <PrismaPage className="prisma-m53-page prisma-person-merge-page">
-    <Button icon={<ArrowLeftOutlined />} onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Voltar para a Central da Pessoa</Button>
+    <Button onClick={() => onNavigate(`/profiles/${personId}`)} type="text">Ir para a Central da Pessoa</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Mesclar Pessoas" description="Unifique cadastros duplicados com escolhas explícitas e preservação integral do histórico." />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Button onClick={(event) => { if (!focusNoticeTarget(".prisma-merge-conflicts input, .prisma-merge-target-picker input")) focusNoticeFields(event.currentTarget); }}>Revisar escolhas</Button>} /> : null}
     {source ? <>

@@ -1,9 +1,9 @@
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
+import { usePrismaScreenState } from "../ui/PrismaNavigation";
 import { SafetyCertificateFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ArrowLeftOutlined,
   CheckCircleOutlined,
   FileProtectOutlined,
   RightOutlined,
@@ -49,7 +49,7 @@ export function CompetencyVerificationPage({ activeMembership, needId, mode, onN
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [step, setStep] = useState<PrepareStep>(0);
+  const [step, setStep] = usePrismaScreenState<PrepareStep>(0);
   const [selectedLevel, setSelectedLevel] = useState<VerificationLevel>("advanced");
   const [definitionId, setDefinitionId] = useState<string | null>(null);
   const [saving, setSaving] = useState<PreparedAssessmentStatus | null>(null);
@@ -310,7 +310,7 @@ function PrepareFlow(props: {
       <PrismaPageHeader icon={<PrismaPageIcon />}
         title="Preparar Verificação"
         description="Defina como a verificação será construída."
-        actions={<Button icon={<ArrowLeftOutlined />} onClick={props.onBack}>Voltar para detalhes</Button>}
+        actions={<Button onClick={props.onBack}>Ir para detalhes</Button>}
       />
       {props.error ? <Alert message={props.error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar preparação</Button>} /> : null}
       {props.info ? <Alert message={props.info} showIcon type="success" /> : null}

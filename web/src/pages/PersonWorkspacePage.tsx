@@ -6,7 +6,6 @@ import { useViewState, useUnsavedChanges } from "../ui/PrismaNavigation";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import {
-  ArrowLeftOutlined,
   ArrowRightOutlined,
   BookOutlined,
   CalendarOutlined,
@@ -402,7 +401,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
             Modal.success({
               title: "Pessoa excluída definitivamente",
               content: "Banco e arquivos foram verificados. Posições, Knowledge compartilhado e Banco de Itens permaneceram preservados.",
-              okText: "Voltar para Pessoas",
+              okText: "Ir para Pessoas",
               onOk: () => onNavigate("/profiles"),
             });
           } catch (caught) {
@@ -453,8 +452,8 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
     return renderWorkspace({ documents: unavailable, history: unavailable, documentsPreview: unavailable });
   }
   if (loading) return <PrismaPage className="prisma-person-center"><PersonCenterSkeleton /></PrismaPage>;
-  if (!workspace || !viewModel) return <PrismaPage><Alert action={<Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="O Perfil atual, quando existente, permanece seguro. Volte à lista e abra a Central novamente." title={error ?? "Não foi possível carregar esta Pessoa."} showIcon type="error" /></PrismaPage>;
-  if (workspace.person.operationalStatus === "merged") return <PrismaPage className="prisma-m53-page"><Alert action={workspace.person.mergedIntoPersonId ? <Button onClick={() => onNavigate(`/profiles/${workspace.person.mergedIntoPersonId}`)} type="primary">Abrir cadastro principal</Button> : <Button onClick={() => onNavigate("/profiles")}>Voltar para Pessoas</Button>} description="Este cadastro foi incorporado a outra Pessoa. Seus documentos, versões e histórico permanecem preservados no cadastro principal." showIcon title={`${workspace.person.fullName} foi mesclado`} type="info" /></PrismaPage>;
+  if (!workspace || !viewModel) return <PrismaPage><Alert action={<Button onClick={() => onNavigate("/profiles")}>Ir para Pessoas</Button>} description="O Perfil atual, quando existente, permanece seguro. Volte à lista e abra a Central novamente." title={error ?? "Não foi possível carregar esta Pessoa."} showIcon type="error" /></PrismaPage>;
+  if (workspace.person.operationalStatus === "merged") return <PrismaPage className="prisma-m53-page"><Alert action={workspace.person.mergedIntoPersonId ? <Button onClick={() => onNavigate(`/profiles/${workspace.person.mergedIntoPersonId}`)} type="primary">Abrir cadastro principal</Button> : <Button onClick={() => onNavigate("/profiles")}>Ir para Pessoas</Button>} description="Este cadastro foi incorporado a outra Pessoa. Seus documentos, versões e histórico permanecem preservados no cadastro principal." showIcon title={`${workspace.person.fullName} foi mesclado`} type="info" /></PrismaPage>;
 
   const currentPage = workspace.pages.find((page) => page.pageNumber === selectedPage) ?? workspace.pages[0];
   const selectedDocument = workspace.selectedDocument;
@@ -604,7 +603,7 @@ function PersonCenterHeader({ model, lifecycle, operationalStatus, canDeletePers
 }) {
   return (
     <header className="prisma-person-center-header">
-      <Button className="prisma-person-center-header__back" icon={<ArrowLeftOutlined />} onClick={onBack} type="text">Voltar para Pessoas</Button>
+      <Button className="prisma-person-center-header__back" onClick={onBack} type="text">Ir para Pessoas</Button>
       <div className="prisma-person-center-header__main">
         <div className="prisma-person-center-header__identity">
           <div className="prisma-person-identity-name"><div className="prisma-canonical-avatar" aria-hidden="true">{model.identity.fullName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</div><Typography.Title level={1}>{model.identity.fullName}</Typography.Title></div>
