@@ -2,7 +2,7 @@ import { createServer } from "node:http";
 import { mkdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { Resend } from "resend";
-import { Forwarder, Store, PATH } from "./forwarder.mjs";
+import { Forwarder, Store, PATH, validTarget } from "./forwarder.mjs";
 
 export function createMailServer(forwarder, sha = "unknown") {
   const server = createServer(async (request, response) => {
@@ -33,11 +33,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   let config;
   try {
     config = JSON.parse(readFileSync("/run/secrets/mail_forwarder_config", "utf8"));
-    if (!/^re_[A-Za-z0-9_-]+$/.test(config.apiKey ?? "") || !config.webhookSecret?.startsWith("whsec_")) throw new Error();
+    if (!/^re_[A-Za-z0-9_-]+$/.test(config.apiKey ?? "") || !config.webhookSecret?.startsWith("whsec_") || !validTarget(config.forwardTo)) throw new Error();
   } catch { console.error("Protected mail configuration missing"); process.exit(1); }
   mkdirSync("/var/lib/hrt-mail", { recursive: true });
   const store = new Store("/var/lib/hrt-mail/receipts.sqlite");
-  const forwarder = new Forwarder({ store, resend: new Resend(config.apiKey, { baseUrl: "https://api.resend.com" }), webhookSecret: config.webhookSecret });
+  const forwarder = new Forwarder({ store, resend: new Resend(config.apiKey, { baseUrl: "https://api.resend.com" }), webhookSecret: config.webhookSecret, forwardTo: config.forwardTo });
   const server = createMailServer(forwarder, process.env.HRT_MAIL_SHA);
   const timer = setInterval(() => void forwarder.tick(), 2000);
   server.listen(3021, "0.0.0.0", () => console.log("HRT mail forwarder ready"));

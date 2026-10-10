@@ -1,10 +1,10 @@
 # Acordo: recebimento e encaminhamento HRT
 
-Versão1.0.0, agreed em09/10/2026. Fonte: PO confirmou todos os endereços do domínio para bruno.harita@gmail.com e ordenou “Pode implementar isso”. Baseline main2fe4e31c38f546ab6d2c9d0114120b66c7262ac9, Prisma2.3.0. Este movimento é infraestrutura de e-mail corporativo, sem nova versão da interface.
+Versão1.0.1, agreed em09/10/2026. Fonte: PO confirmou todos os endereços do domínio para seu Gmail pessoal e ordenou “Pode implementar isso”. Baseline main2fe4e31c38f546ab6d2c9d0114120b66c7262ac9, Prisma2.3.0. Este movimento é infraestrutura de e-mail corporativo, sem nova versão da interface. Delta1.0.1: anonimizar o destino nesta documentação e mantê-lo em config privada com binding SHA256 no código; D/P/F e comportamento permanecem iguais. O histórico do primeiro SHA publicado contém o endereço de configuração, ocorrência registrada no AoT.
 
 ## DEVE
 
-- D-01: receber qualquer endereço @hrtsolutions.com.br e encaminhar uma única cópia para bruno.harita@gmail.com, incluindo bruno.harita e suporte.
+- D-01: receber qualquer endereço @hrtsolutions.com.br e encaminhar uma única cópia para Gmail pessoal informado pelo PO, incluindo bruno.harita e suporte.
 - D-02: preservar conteúdo e anexos dentro dos limites dos provedores, identificar destinatário original e manter possibilidade de responder ao remetente original.
 - D-03: autenticar eventos assinados, confirmar o domínio no registro recebido do provider, destino fixo, persistir fila/recibos técnicos e controlar retry/deduplicação/reinício.
 - D-04: preservar todos os registros DNS existentes, envio de convites/chave restrita, TLS oportunista/tracking desabilitado e runtimes do Prisma; ativar MX somente após backend pronto.

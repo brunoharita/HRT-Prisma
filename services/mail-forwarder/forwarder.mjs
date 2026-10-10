@@ -3,7 +3,7 @@ import { DatabaseSync } from "node:sqlite";
 import PostalMime from "postal-mime";
 
 export const DOMAIN = "hrtsolutions.com.br";
-export const TARGET = "bruno.harita@gmail.com";
+export const TARGET_HASH = "75da2fda879b0967aa48f6ccdae88de3a6f44e6d23c8942e809a44e080cd1507";
 export const FROM = `HRT Solutions <encaminhamento@${DOMAIN}>`;
 export const PATH = "/webhooks/resend-inbound";
 export const SAFE_WINDOW = 24 * 60 * 60 * 1000 - 60_000;
@@ -65,7 +65,11 @@ export async function downloadRaw(url, { fetchImpl = fetch, signal } = {}) {
   return Buffer.concat(chunks, length);
 }
 
-export async function prepareMessage(email, raw) {
+export function validTarget(value) {
+  return typeof value === "string" && ADDRESS.test(value) && createHash("sha256").update(value).digest("hex") === TARGET_HASH;
+}
+
+export async function prepareMessage(email, raw, target) {
   const originalTo = recipients(email);
   if (!originalTo.length) throw fault("domain_mismatch");
   if (!Buffer.isBuffer(raw) || raw.length > MAX_RAW) throw fault("message_too_large");
@@ -79,7 +83,7 @@ export async function prepareMessage(email, raw) {
   }));
   // Only original MIME content is reused. Arbitrary incoming headers, links and instructions have no authority.
   return {
-    from: FROM, to: [TARGET], replyTo: [...new Set(replies)],
+    from: FROM, to: [target], replyTo: [...new Set(replies)],
     subject: parsed.subject || "(sem assunto)",
     text: parsed.text || undefined, html: parsed.html || undefined,
     ...(attachments.length ? { attachments } : {}),
@@ -89,9 +93,9 @@ export async function prepareMessage(email, raw) {
 }
 
 export class Forwarder {
-  constructor({ store, resend, webhookSecret, clock = Date.now, readRaw = downloadRaw, logger = console.log }) {
-    if (!webhookSecret?.startsWith("whsec_")) throw fault("configuration_missing");
-    Object.assign(this, { store, resend, webhookSecret, clock, readRaw, logger });
+  constructor({ store, resend, webhookSecret, forwardTo, clock = Date.now, readRaw = downloadRaw, logger = console.log }) {
+    if (!webhookSecret?.startsWith("whsec_") || !ADDRESS.test(forwardTo ?? "")) throw fault("configuration_missing");
+    Object.assign(this, { store, resend, webhookSecret, forwardTo, clock, readRaw, logger });
     this.busy = false;
   }
   ingest(raw, headers) {
@@ -128,7 +132,7 @@ export class Forwarder {
       if (response.error) throw fault(`provider_${safeProviderError(response.error)}`);
       if (response.data?.id !== job.id || !recipients(response.data).length) throw fault("domain_mismatch");
       const raw = await this.readRaw(response.data.raw?.download_url, { signal });
-      const message = await prepareMessage(response.data, raw);
+      const message = await prepareMessage(response.data, raw, this.forwardTo);
       const fingerprint = createHash("sha256").update(JSON.stringify(message)).digest("hex");
       if (job.fingerprint && fingerprint !== job.fingerprint) throw fault("payload_changed");
       this.store.update(job.id, { state: "sending", fingerprint, first_send: job.first_send ?? this.clock(), attempts: job.attempts + 1 });

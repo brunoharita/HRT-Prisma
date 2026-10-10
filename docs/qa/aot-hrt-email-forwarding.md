@@ -1,6 +1,6 @@
 # AoT: encaminhamento corporativo HRT
 
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.0 e execução correspondente, template aot-template.md. Baseline main2fe4e31, branch codex/hrt-email-forwarding, Prisma2.3.0 preservado. Em andamento: não declarar recebimento funcional antes da ativação/entrega.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspondente, template aot-template.md. Baseline main2fe4e31, branch codex/hrt-email-forwarding, Prisma2.3.0 preservado. Em andamento: não declarar recebimento funcional antes da ativação/entrega. Primeiro SHA funcionaldc13eee publicado em main/origin/VPS, CI branch38012158752/38012158817 e main38012271121/38012271133 success. Serviço healthy/zero reinícios, assinatura ausente401; seis containers preservam IDs/imagens/restarts. Receiving enabled, DKIM/CNAMEs verified e MX pending; sessão Registro.br expirou e aguarda login do PO.
 
 ## Matriz de acordos
 
@@ -26,7 +26,7 @@ F-01/F-02 preservados: nenhuma UI/template normativo novo, Gmail SMTP/Enviar com
 
 ## Desvios e limites
 
-Nenhum desvio de comportamento identificado na revisão local. Full access exigido pelo provider foi apresentado e concedido pelo PO antes da instalação. Docker local indisponível; QA executado em container isolado na VPS existente, readonly e networknone, sem dados/segredos/produto. Não há QA remoto separado. Limite raw20MiB, quotas compartilhadas; não garante Inbox, spam, autenticação do remetente original ou segurança dos anexos. Rota de forwarding não toma decisões de emprego e não usa IA/ledger.
+Nenhum desvio funcional identificado na revisão local. Ocorrência de privacidade: destino configurado entrou em texto claro no SHA públicodc13eee, antes da confirmação da visibilidade PUBLIC do remoto. Valor removido dos arquivos atuais e transferido para config privada com binding hash na correção1.0.1. PO informado; endereço não é credencial, mas continua no histórico publicado. Nenhum secret ou conteúdo recebido foi exposto, nenhuma reescrita/remoção de histórico realizada. Full access exigido pelo provider foi apresentado e concedido pelo PO antes da instalação. Docker local indisponível; QA executado em container isolado na VPS existente, readonly e networknone, sem dados/segredos/produto. Não há QA remoto separado. Limite raw20MiB, quotas compartilhadas; não garante Inbox, spam, autenticação do remetente original ou segurança dos anexos. Rota de forwarding não toma decisões de emprego e não usa IA/ledger.
 
 ## Validação e ambientes
 

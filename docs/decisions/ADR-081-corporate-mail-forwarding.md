@@ -1,6 +1,6 @@
 # ADR-081: encaminhamento corporativo determinístico
 
-09/10/2026. Decisão de produto aprovada: catch-all Resend para Gmail único; engenharia sob A-01 do agreement-hrt-email-forwarding v1.0.0. PO concedeu Full access explicitamente pelo fluxo de criação/cópia, separado da chave de convites.
+09/10/2026. Decisão de produto aprovada: catch-all Resend para Gmail único; engenharia sob A-01 do agreement-hrt-email-forwarding v1.0.1. PO concedeu Full access explicitamente pelo fluxo de criação/cópia, separado da chave de convites.
 
 Não existe capacidade de recebimento no Prisma. Reutilizar SMTP do Gmail ou a fila de candidatos misturaria finalidades e credenciais. O [Resend recomenda webhook e SDK/parser MIME](https://resend.com/docs/dashboard/receiving/forward-emails); o helper forward não preserva Reply-To nem identificação dos destinatários na API de envio (fonte oficial resend-node/receiving.ts consultada09/10). Escolhido o mesmo parser postal-mime usado pelo SDK, com envio pelo SDK oficial, Reply-To e cabeçalhos de encaminhamento explícitos. Nenhum parser próprio ou interpretação por IA.
 

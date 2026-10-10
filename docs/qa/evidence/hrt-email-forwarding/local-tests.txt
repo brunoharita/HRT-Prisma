@@ -1,22 +1,22 @@
 Already up to date
-Done in 1.5s using pnpm v11.19.0
-✔ envelope recipient controls domain scope, including Bcc and case (6.3699ms)
-✔ MIME text/html/inline attachments, original destination and Reply-To survive fixed forwarding (41.3759ms)
-✔ mail without Reply-To falls back to actual original From (1.859ms)
-✔ official SDK serializes attachments, Reply-To, fixed target and idempotency without redirects (29.9788ms)
-✔ signature absent, tampered, expired or payload-mutated fails closed (57.4785ms)
-✔ valid signed event persists only metadata; replay and injected destinations cannot send twice (51.0254ms)
-✔ invalid ID and signed different-domain events are not queued (36.8217ms)
-✔ API recipient confirmation prevents signed domain metadata from granting wrong email access (46.887ms)
-✔ concurrent ticks and callbacks process once (42.5772ms)
-✔ transport uncertainty retries unchanged idempotency key and payload after restart (81.3111ms)
-✔ sending state interrupted by crash recovers with same hash and key (87.5466ms)
-✔ expired uncertainty and altered content require reconciliation, never blind resend (64.7926ms)
-✔ provider rate limit persists retry, credential error blocks, and provider messages never appear (64.8312ms)
-✔ delivery relates only to own receipt; bounce cannot be overridden by late delivered event (65.9337ms)
-✔ raw download prohibits private/foreign targets and redirects, enforces streaming byte limit (36.1283ms)
-✔ HTTP rejects unsigned, wrong path/method and oversized requests; health exposes only metadata (237.5586ms)
-✔ container and server have no product credential, AI call, body log or arbitrary target configuration (2.0386ms)
+Done in 1.2s using pnpm v11.19.0
+✔ envelope recipient controls domain scope, including Bcc and case (4.8168ms)
+✔ MIME text/html/inline attachments, original destination and Reply-To survive fixed forwarding (12.2097ms)
+✔ mail without Reply-To falls back to actual original From (1.6361ms)
+✔ official SDK serializes attachments, Reply-To, fixed target and idempotency without redirects (14.481ms)
+✔ signature absent, tampered, expired or payload-mutated fails closed (32.2003ms)
+✔ valid signed event persists only metadata; replay and injected destinations cannot send twice (48.8768ms)
+✔ invalid ID and signed different-domain events are not queued (26.8819ms)
+✔ API recipient confirmation prevents signed domain metadata from granting wrong email access (25.4393ms)
+✔ concurrent ticks and callbacks process once (42.9838ms)
+✔ transport uncertainty retries unchanged idempotency key and payload after restart (58.1114ms)
+✔ sending state interrupted by crash recovers with same hash and key (46.2862ms)
+✔ expired uncertainty and altered content require reconciliation, never blind resend (36.9194ms)
+✔ provider rate limit persists retry, credential error blocks, and provider messages never appear (38.204ms)
+✔ delivery relates only to own receipt; bounce cannot be overridden by late delivered event (39.1547ms)
+✔ raw download prohibits private/foreign targets and redirects, enforces streaming byte limit (29.7283ms)
+✔ HTTP rejects unsigned, wrong path/method and oversized requests; health exposes only metadata (215.4917ms)
+✔ container and server have no product credential, AI call, body log or arbitrary target configuration (1.9805ms)
 ℹ tests 17
 ℹ suites 0
 ℹ pass 17
@@ -24,4 +24,4 @@ Done in 1.5s using pnpm v11.19.0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1587.958
+ℹ duration_ms 1081.2668

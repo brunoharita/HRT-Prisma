@@ -1,5 +1,6 @@
 """Install only the dedicated forwarding credential over SSH stdin. Never print secrets."""
 import json
+import hashlib
 import os
 import pathlib
 import re
@@ -10,6 +11,18 @@ ENDPOINT = "https://prisma.hrtsolutions.com.br/webhooks/resend-inbound"
 EVENTS = ["email.received", "email.delivered", "email.bounced", "email.failed", "email.complained"]
 CONFIG = pathlib.Path("/etc/prisma/hrt-mail-forwarder.json")
 STAGE = "host"
+TARGET_HASH = "75da2fda879b0967aa48f6ccdae88de3a6f44e6d23c8942e809a44e080cd1507"
+
+
+def write_config(value):
+    pending = CONFIG.with_suffix(".pending")
+    fd = os.open(str(pending), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o400)
+    with os.fdopen(fd, "w") as stream:
+        json.dump(value, stream)
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.chown(pending, 1000, 1000)
+    os.replace(pending, CONFIG)
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -21,13 +34,23 @@ def install():
     global STAGE
     if os.uname().nodename != "srv1038882":
         raise ValueError("unexpected_host")
-    key = sys.stdin.read().strip()
+    supplied = json.load(sys.stdin)
+    key = supplied.get("apiKey", "")
+    target = supplied.get("forwardTo", "")
     if not re.fullmatch(r"re_[A-Za-z0-9_-]+", key):
         raise ValueError("invalid_credential")
+    if hashlib.sha256(target.encode()).hexdigest() != TARGET_HASH:
+        raise ValueError("unauthorized_destination")
     os.umask(0o077)
     if CONFIG.exists():
-        if CONFIG.is_symlink() or json.loads(CONFIG.read_text()).get("apiKey") != key:
+        if CONFIG.is_symlink():
             raise ValueError("configuration_conflict")
+        existing = json.loads(CONFIG.read_text())
+        if existing.get("apiKey") != key or existing.get("forwardTo", target) != target:
+            raise ValueError("configuration_conflict")
+        if "forwardTo" not in existing:
+            existing["forwardTo"] = target
+            write_config(existing)
         print("PROTECTED_CONFIGURATION_ALREADY_INSTALLED")
         return
     opener = urllib.request.build_opener(NoRedirect())
@@ -59,14 +82,7 @@ def install():
     if not secret.startswith("whsec_"):
         raise ValueError("signing_secret_missing")
     STAGE = "protected_write"
-    pending = CONFIG.with_suffix(".pending")
-    fd = os.open(str(pending), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o400)
-    with os.fdopen(fd, "w") as stream:
-        json.dump({"apiKey": key, "webhookSecret": secret, "webhookId": hook["id"]}, stream)
-        stream.flush()
-        os.fsync(stream.fileno())
-    os.chown(pending, 1000, 1000)
-    os.replace(pending, CONFIG)
+    write_config({"apiKey": key, "webhookSecret": secret, "webhookId": hook["id"], "forwardTo": target})
     print(json.dumps({"installed": True, "webhookId": hook["id"], "bodyDownloaded": False, "emailSent": False}))
 
 

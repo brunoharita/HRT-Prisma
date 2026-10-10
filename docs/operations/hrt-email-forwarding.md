@@ -1,6 +1,6 @@
 # Recebimento e encaminhamento HRT
 
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.0, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para bruno.harita@gmail.com. Prisma2.3.0 mantido; serviço corporativo1.0.0 independente. Status antes do rollout: implementação/QA prontas, recebimento/MX ainda desativados.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.1 independente. Serviço já publicado/healthy no SHA inicialdc13eee, recebimento habilitado mas MX ainda pendente; não declarar entrega operacional.
 
 ## Fluxo
 
@@ -8,7 +8,7 @@ MX raiz Resend -> evento email.received -> HTTPS no Traefik existente -> hrt-mai
 
 Mensagens não são interpretadas nem executadas. SDK Resend6.32.1 e postal-mime2.7.6 (mesmo parser do SDK), Node24/SQLite nativo, lockfile isolado, Docker readonly/node/cap_drop/limites, secret privado e volume de recibos. API em endereço fixo HTTPS sem redirects; download MIME HTTPS somente em hosts Resend/AWS, máximo20MiB de mensagem bruta. Excesso permanece bloqueado no recibo e no provider, sem truncamento silencioso. Resend/Gmail têm limites adicionais e políticas de retenção próprias. Não há varredura antivírus própria: anexos permanecem conteúdo não confiável e são entregues para inspeção pelo Gmail/usuário.
 
-Webhook assinado é autenticado pelo SDK e os destinatários reconfirmados pela API. Destino fixo no código, sem campo configurável por mensagem. Recibo SQLite guarda somente UUIDs, tempos, estado, contagem, código técnico e hash, nunca corpo/anexos/assunto/e-mail/secret. Eventos repetidos não recriam job; worker serial impede concorrência; persistência antes da API e mesma idempotencyKey/payload permitem retomar após falha/reinício. Após24h menos60s de tentativa sem recibo ou mudança de hash, estado reconcile exige intervenção e consulta ao provider, sem reenvio cego. accepted significa aceito pelo Resend; delivered significa evento de entrega ao servidor destinatário, não garante Inbox ou ausência de spam. Eventos de outros envios não alteram jobs corporativos.
+Webhook assinado é autenticado pelo SDK e os destinatários reconfirmados pela API. Destino em config privada, validado contra SHA256 fixo no código, sem campo configurável por mensagem. Recibo SQLite guarda somente UUIDs, tempos, estado, contagem, código técnico e hash, nunca corpo/anexos/assunto/e-mail/secret. Eventos repetidos não recriam job; worker serial impede concorrência; persistência antes da API e mesma idempotencyKey/payload permitem retomar após falha/reinício. Após24h menos60s de tentativa sem recibo ou mudança de hash, estado reconcile exige intervenção e consulta ao provider, sem reenvio cego. accepted significa aceito pelo Resend; delivered significa evento de entrega ao servidor destinatário, não garante Inbox ou ausência de spam. Eventos de outros envios não alteram jobs corporativos.
 
 ## Credenciais e publicação
 

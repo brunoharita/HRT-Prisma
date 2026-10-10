@@ -5,10 +5,11 @@ import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { Resend } from "resend";
-import { Forwarder, Store, recipients, prepareMessage, downloadRaw, DOMAIN, TARGET, SAFE_WINDOW, PATH } from "./forwarder.mjs";
+import { Forwarder, Store, recipients, prepareMessage, downloadRaw, DOMAIN, SAFE_WINDOW, PATH, validTarget } from "./forwarder.mjs";
 import { createMailServer } from "./server.mjs";
 
 const ID = "11111111-1111-4111-8111-111111111111";
+const TARGET = "destination@example.org";
 const SENT = "22222222-2222-4222-8222-222222222222";
 const SECRET = `whsec_${Buffer.from("synthetic-test-secret-32-bytes!!!!").toString("base64")}`;
 const MIME = Buffer.from([
@@ -35,7 +36,7 @@ function fixture(t, overrides = {}) {
     receiving: { get: async () => ({ data: email, error: null }) },
     send: async (message, options) => { calls.push({ message, options }); return { data: { id: SENT }, error: null }; },
   } };
-  const forwarder = new Forwarder({ store, resend, webhookSecret: SECRET, readRaw: async () => MIME, clock: () => now, logger: value => logs.push(value), ...overrides });
+  const forwarder = new Forwarder({ store, resend, webhookSecret: SECRET, forwardTo: TARGET, readRaw: async () => MIME, clock: () => now, logger: value => logs.push(value), ...overrides });
   t.after(() => { store.close(); assert.ok(resolve(directory).startsWith(join(resolve(tmpdir()), "hrt-mail-test-"))); rmSync(directory, { recursive: true }); });
   return { forwarder, get store() { return store; }, resend, calls, logs, path, advance: value => { now += value; }, restart: () => { store.close(); store = new Store(path); forwarder.store = store; return store; } };
 }
@@ -46,7 +47,7 @@ test("envelope recipient controls domain scope, including Bcc and case", () => {
   assert.deepEqual(recipients({ to: [`a@evil${DOMAIN}`, `a@${DOMAIN}.evil`, `a@${DOMAIN}\r\nBcc: bad`] }), []);
 });
 test("MIME text/html/inline attachments, original destination and Reply-To survive fixed forwarding", async () => {
-  const message = await prepareMessage(email, MIME);
+  const message = await prepareMessage(email, MIME, TARGET);
   assert.deepEqual(message.to, [TARGET]); assert.deepEqual(message.replyTo, ["replies@example.org"]);
   assert.equal(message.subject, "Synthetic routing test"); assert.match(message.html, /cid:fixture/);
   assert.match(message.text, /attacker@example.org/); assert.equal(message.headers["X-Original-To"], `suporte@${DOMAIN}`);
@@ -55,7 +56,7 @@ test("MIME text/html/inline attachments, original destination and Reply-To survi
   assert.match(message.from, /encaminhamento@hrtsolutions\.com\.br/);
 });
 test("mail without Reply-To falls back to actual original From", async () => {
-  const message = await prepareMessage(email, Buffer.from(`From: sender@example.org\r\nTo: a@${DOMAIN}\r\n\r\nText`));
+  const message = await prepareMessage(email, Buffer.from(`From: sender@example.org\r\nTo: a@${DOMAIN}\r\n\r\nText`), TARGET);
   assert.deepEqual(message.replyTo, ["sender@example.org"]); assert.equal(message.subject, "(sem assunto)");
 });
 test("official SDK serializes attachments, Reply-To, fixed target and idempotency without redirects", async t => {
@@ -65,7 +66,7 @@ test("official SDK serializes attachments, Reply-To, fixed target and idempotenc
     return new Response(JSON.stringify({ id: SENT }), { headers: { "Content-Type": "application/json" } });
   });
   const sdk = new Resend("re_synthetic_test", { baseUrl: "https://api.resend.com" });
-  const result = await sdk.emails.send(await prepareMessage(email, MIME), { idempotencyKey: `hrt-forward/${ID}`, redirect: "error" });
+  const result = await sdk.emails.send(await prepareMessage(email, MIME, TARGET), { idempotencyKey: `hrt-forward/${ID}`, redirect: "error" });
   assert.equal(result.data.id, SENT); assert.equal(observed.url, "https://api.resend.com/emails");
   assert.equal(observed.options.redirect, "error");
   assert.equal(observed.options.headers.get("Idempotency-Key"), `hrt-forward/${ID}`);
@@ -172,6 +173,8 @@ test("HTTP rejects unsigned, wrong path/method and oversized requests; health ex
 test("container and server have no product credential, AI call, body log or arbitrary target configuration", () => {
   const server = readFileSync(new URL("./server.mjs", import.meta.url), "utf8");
   assert.equal(/supabase|openai|service_role/i.test(server), false);
+  assert.match(server, /validTarget\(config.forwardTo\)/);
+  for (const value of [TARGET, undefined, "", "recipient@evil.org", "bad\r\nBcc:someone@evil.org"]) assert.equal(validTarget(value), false);
   const compose = readFileSync(new URL("../../deploy/mail-forwarder.compose.yml", import.meta.url), "utf8");
   assert.match(compose, /read_only: true/); assert.match(compose, /no-new-privileges/);
   assert.equal(/parser-ia\.env|profile-synthesis\.env|TARGET:|FORWARD_TO:/.test(compose), false);
